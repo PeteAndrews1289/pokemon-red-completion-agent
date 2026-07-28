@@ -10,6 +10,13 @@ A run completes Pokémon Red only when the referee observes both:
 Entering the Champion room, winning an isolated battle, reporting eight badges, or reaching an
 adjacent map is insufficient.
 
+## Clean power-on
+
+The supported runtime starts PyBoy with its packaged DMG-compatible boot ROM, immutable verified
+game ROM bytes, blank cartridge RAM, no RTC input, no loaded state, and no human window input.
+PyBoy is stopped without saving. This proves a fresh emulator/game start; it does not claim
+cycle-identical timing to original Nintendo boot-ROM hardware.
+
 ## Frozen evaluation identity
 
 Before an official run begins, record:

@@ -5,6 +5,7 @@ import pytest
 from pokemon_red_completion.domain import GameMode
 from pokemon_red_completion.observation import (
     EVENT_FLAG_BYTES,
+    REDS_HOUSE_2F_NOOP_SCRIPT,
     Badge,
     EventFlag,
     MapId,
@@ -98,6 +99,23 @@ def test_reader_extracts_bounded_bag_and_event_state() -> None:
     assert raw.party_count == 6
     assert raw.bag_item_ids == (0x3F, 0x48)
     assert event_flag_is_set(raw.event_flags, EventFlag.BEAT_CHAMPION_RIVAL)
+
+
+def test_reader_encapsulates_bedroom_input_symbols() -> None:
+    memory = RecordingMemory(
+        {
+            RamAddress.JOY_IGNORE: 0,
+            RamAddress.REDS_HOUSE_2F_SCRIPT: REDS_HOUSE_2F_NOOP_SCRIPT,
+        }
+    )
+
+    input_state = PokemonRedStateReader(memory).read_bedroom_input_state()
+
+    assert input_state.ready
+    assert memory.reads == [
+        RamAddress.JOY_IGNORE,
+        RamAddress.REDS_HOUSE_2F_SCRIPT,
+    ]
 
 
 def test_semantic_tracker_requires_and_preserves_clean_run_evidence() -> None:

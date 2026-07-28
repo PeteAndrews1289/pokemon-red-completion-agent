@@ -9,8 +9,10 @@ from pokemon_red_completion.constants import SupportedRom
 from pokemon_red_completion.rom import (
     RomValidationError,
     fingerprint_rom,
+    fingerprint_rom_bytes,
     resolve_rom_path,
     verify_rom,
+    verify_rom_bytes,
 )
 
 
@@ -54,6 +56,22 @@ def test_verify_rom_requires_an_exact_identity(tmp_path: Path) -> None:
             rom_path,
             SupportedRom(title="WRONG", size_bytes=1, sha1="a", sha256="b"),
         )
+
+
+def test_emulator_bytes_are_verified_without_exposing_a_path() -> None:
+    payload = bytes(_synthetic_rom())
+    fingerprint = fingerprint_rom_bytes(payload)
+    expected = SupportedRom(
+        title=fingerprint.title,
+        size_bytes=fingerprint.size_bytes,
+        sha1=fingerprint.sha1,
+        sha256=fingerprint.sha256,
+    )
+
+    verified = verify_rom_bytes(payload, expected)
+
+    assert verified.filename == "<private>"
+    assert verified.public_dict() == fingerprint.public_dict()
 
 
 def test_resolve_rom_path_fails_closed(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:

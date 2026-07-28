@@ -1,0 +1,41 @@
+{
+  "bedroom": {
+    "battle_state": 0,
+    "location": "reds_house_2f",
+    "map_id": 38,
+    "mode": "overworld",
+    "party_count": 0,
+    "player_x": 3,
+    "player_y": 6
+  },
+  "clean_power_on": true,
+  "controller_released": true,
+  "emulator": {
+    "human_input": false,
+    "name": "PyBoy",
+    "save_on_exit": false,
+    "version": "2.7.0",
+    "window": "null"
+  },
+  "facts": [
+    "story:adventure_begun",
+    "system:clean_power_on"
+  ],
+  "frames_executed": 9828,
+  "initial_mode": "booting",
+  "input_ready": true,
+  "movement": {
+    "from_y": 6,
+    "to_y": 7,
+    "verified": true
+  },
+  "recorded_on": "2026-07-28",
+  "rom": {
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "size_bytes": 1048576,
+    "title": "POKEMON RED"
+  },
+  "schema": "bootstrap-smoke-v1",
+  "status": "ok"
+}

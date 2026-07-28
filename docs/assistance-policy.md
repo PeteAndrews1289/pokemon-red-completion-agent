@@ -17,3 +17,8 @@ disabled during official evaluation.
 The objective graph and deterministic action executor may remain present in a learned-stack run.
 They provide temporal abstraction and controller safety; they do not choose a specialist's learned
 battle or recovery action.
+
+A completed human run is not required to build the deterministic teacher chapter-by-chapter. A
+full clean teacher completion is this project's promotion gate before training or evaluating
+full-game composition. Completion claims are governed by their own clean-run evidence. The
+[Teaching and Data Plan](teaching-plan.md) defines the reference and demonstration boundary.
