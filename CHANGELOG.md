@@ -13,11 +13,11 @@
 - Added `opening --watch --speed 4` for a visible local run while preserving disabled human input,
   in-memory ROM handling, and no-save shutdown.
 - Added a continuous `play` command that keeps one clean emulator session alive through the lab
-  rival, both Route 1 crossings, Oak's Parcel, and the Pokédex.
-- Qualified 11/11 semantic checkpoints and 4/36 completion objectives across three identical
-  52,956-frame / 619-action clean runs.
-- Added fail-closed rival-victory, parcel-inventory, and Pokédex-delivery evidence gates plus an
-  explicit bounded safe stop that cannot be mistaken for game completion.
+  rival, both Route 1 crossings, Oak's Parcel, Viridian Forest, and Brock.
+- Qualified 21/21 semantic checkpoints and 6/36 completion objectives across three identical
+  121,247-frame / 1,554-action clean runs.
+- Added fail-closed rival, parcel, Pokédex, forest, Brock-identity, battle-readiness, badge, and
+  TM34 evidence gates plus an explicit bounded safe stop that cannot be mistaken for completion.
 - Added typed opening phases and fail-closed checks for maps, coordinates, scripts, events,
   controller masks, party state, and starter species.
 - Added a source-bound, sanitized receipt for three identical clean-start Squirtle runs.

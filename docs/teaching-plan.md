@@ -34,9 +34,9 @@ The bootstrap sequence was adapted from
 `0e2df37720eec7d148187eb1001bf2d9502aa4f6`. Private blind-run checkpoints and screenshots are not
 completion demonstrations and are not loaded by this project.
 
-The qualified bedroom-to-Pokédex route is new successor work. Its map dimensions, collision-safe
-corridors, warps, Pallet Town, Route 1, Viridian Mart, and Oak's Lab scripts, story events, party
-state, and inventory gates are derived from
+The qualified bedroom-to-Brock route is new successor work. Its map dimensions, collision-safe
+corridors, warps, Pallet Town, Route 1, Viridian Forest, Pewter Gym, and story, party, battle,
+badge, and inventory gates are derived from
 [`pret/pokered`](https://github.com/pret/pokered) commit
 `1e96034092686d006e863cace09e87273051a3d8`, then independently exercised against the exact
 supported ROM. The teacher checks the resulting semantic phase after each bounded action rather
@@ -44,10 +44,11 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **11/11 qualified checkpoints** through the
-Pokédex and therefore **4/36 completion objectives**. Three clean runs were identical at the
-52,956-frame / 619-action boundary. No behavioral-cloning, DAgger, badge, or full-game result is
-implied. The next teaching segment reaches Pewter City; Brock follows.
+The deterministic teacher currently verifies all **21/21 qualified checkpoints** through Brock
+and therefore **6/36 completion objectives**. Three clean runs were identical at the
+121,247-frame / 1,554-action boundary, including the live Brock battle and concurrent Boulder
+Badge plus TM34 evidence. No behavioral-cloning, DAgger, or full-game result is implied. The next
+teaching segment crosses Route 3 and Mt. Moon to Cerulean City.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -103,7 +104,7 @@ Screens, ROMs, saves, snapshots, and recordings remain private and content-addre
 2. Record and exactly replay the clean-start bedroom trace.
 3. Preserve the qualified **6/6** checkpoint segment through verified Squirtle. **Done.**
 4. Extend the same clean session through the lab rival, Oak's Parcel, and the Pokédex. **Done.**
-5. Extend and replay-qualify the route through Pewter City and Brock.
+5. Extend and replay-qualify the route through Pewter City and Brock. **Done.**
 6. Add perturbed starts and recoverable mistakes for each qualified skill.
 7. Train a small behavior-cloning baseline per skill.
 8. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts

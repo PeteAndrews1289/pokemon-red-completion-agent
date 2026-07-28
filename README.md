@@ -2,17 +2,17 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Pokédex qualified](https://img.shields.io/badge/status-Pok%C3%A9dex_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Boulder Badge qualified](https://img.shields.io/badge/status-Boulder_Badge_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **11/11 qualified
-> checkpoints** from clean power-on, defeats the lab rival, obtains and delivers Oak's Parcel, and
-> receives the Pokédex. That verifies **4/36 completion objectives**. Three clean runs produced the
-> same 52,956-frame, 619-action result. This is not a badge, learned-policy, or game-completion
-> claim. The next objective is reaching Pewter City, followed by Brock. See the
-> [sanitized three-run evidence receipt](docs/evidence/qualified-play-pokedex-2026-07-28.json).
+> **Current status:** one continuous deterministic teacher now reaches all **21/21 qualified
+> checkpoints** from clean power-on, crosses Viridian Forest, defeats Brock, and verifies the
+> Boulder Badge plus TM34. That establishes **6/36 completion objectives**. Three clean runs
+> produced the same 121,247-frame, 1,554-action result. This is a deterministic-teacher milestone,
+> not a learned-policy or game-completion claim. The next objective is Cerulean City. See the
+> [sanitized three-run evidence receipt](docs/evidence/qualified-play-brock-2026-07-28.json).
 
 ## The goal
 
@@ -144,11 +144,13 @@ its red close button. The same semantic gates choose every action, and the emula
 without saving.
 
 `play` is the recommended continuous command. It uses one clean emulator session for the opening,
-the verified rival win, both Route 1 crossings, the parcel handoff, and the Pokédex sequence. It
-stops automatically at the latest independently qualified boundary and reports that the game is
-not complete. The rival gate requires an observed trainer battle plus a level-6 Squirtle at full
-health; the final gate independently requires the Pokédex and parcel-delivery events, restored
-controls, and the parcel's removal from inventory.
+the verified rival win, both Route 1 crossings, the parcel handoff, Viridian Forest, and Brock. It
+stops automatically after the latest independently qualified objective and reports that the game
+is not complete. The forest segment deliberately trains against three verified Kakuna encounters
+and one mandatory Bug Catcher. The Brock gate requires a healthy level-9 Squirtle with Bubble and
+sufficient PP before interaction, an observed live Brock battle, and concurrent post-battle proof:
+the event flag, both Boulder Badge indicators, TM34's event and inventory presence, restored
+controls, and a surviving status-free Squirtle.
 
 The ROM, saves, snapshots, recordings, datasets, and model checkpoints are ignored and must remain
 outside Git. The visible window is not recorded or uploaded by the project. The supported revision
