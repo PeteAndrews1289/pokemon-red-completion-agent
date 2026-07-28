@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this completion harness or its evaluation methodology, please cite this repository."
+title: "Pokémon Red Completion Agent"
+type: software
+authors:
+  - family-names: Andrews
+    given-names: Peter
+repository-code: "https://github.com/PeteAndrews1289/pokemon-red-completion-agent"
+url: "https://github.com/PeteAndrews1289/pokemon-red-completion-agent"
+license: MIT
+date-released: 2026-07-28
+abstract: >-
+  A completion-first hierarchical agent for Pokémon Red that combines a verified objective graph,
+  deterministic navigation and interaction control, and progressively trained specialists.
+keywords:
+  - hierarchical agents
+  - imitation learning
+  - DAgger
+  - game AI
+  - reliability engineering

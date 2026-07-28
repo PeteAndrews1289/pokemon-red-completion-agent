@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pokemon-red-completion-agent"
+version = "0.1.0"
+description = "A completion-first hybrid agent for verified Pokemon Red play"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [
+  { name = "Peter Andrews Jr." },
+]
+keywords = [
+  "game-ai",
+  "hierarchical-agents",
+  "imitation-learning",
+  "pokemon-red",
+  "pyboy",
+  "reliability-engineering",
+]
+dependencies = []
+
+[project.optional-dependencies]
+emulator = [
+  "pyboy==2.7.0",
+]
+dev = [
+  "pytest>=8",
+  "ruff>=0.11",
+]
+
+[project.urls]
+Repository = "https://github.com/PeteAndrews1289/pokemon-red-completion-agent"
+Documentation = "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/tree/main/docs"
+Predecessor = "https://github.com/PeteAndrews1289/pokemon-red-ai"
+
+[project.scripts]
+pokemon-red-completion = "pokemon_red_completion.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "integration: requires a private, lawfully obtained Pokemon Red ROM",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "SIM", "UP"]

@@ -1,0 +1,39 @@
+name: Completion milestone
+description: Propose or qualify one bounded step toward verified game completion.
+title: "[Milestone]: "
+labels:
+  - milestone
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What machine-verifiable game outcome should this work produce?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Required evidence
+      description: List the state predicates, attempt denominator, and failure conditions.
+    validations:
+      required: true
+  - type: dropdown
+    id: assistance
+    attributes:
+      label: Assistance class
+      options:
+        - Deterministic teacher
+        - Hybrid learner
+        - Learned skill stack
+        - Distilled macro-policy
+        - Pixels-only ablation
+    validations:
+      required: true
+  - type: textarea
+    id: private_artifacts
+    attributes:
+      label: Private artifacts
+      description: Identify any ROM, save, snapshot, recording, dataset, or checkpoint kept outside Git.
+    validations:
+      required: true
