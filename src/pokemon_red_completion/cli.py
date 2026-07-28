@@ -14,6 +14,12 @@ from pokemon_red_completion.opening import (
     OpeningProgress,
     run_opening_chapter,
 )
+from pokemon_red_completion.play import (
+    QualifiedPlayError,
+    QualifiedPlayProgress,
+    QualifiedPlayReport,
+    run_qualified_play,
+)
 from pokemon_red_completion.rom import RomValidationError, resolve_rom_path, verify_rom
 from pokemon_red_completion.route import COMPLETION_QUEST
 
@@ -57,6 +63,26 @@ def _parser() -> argparse.ArgumentParser:
         choices=(1, 2, 4),
         help="Watched playback speed; requires --watch and defaults to 2.",
     )
+    play = subcommands.add_parser(
+        "play",
+        help="Run every currently qualified chapter, then stop at the verified boundary.",
+    )
+    play.add_argument(
+        "--rom",
+        type=Path,
+        help="Private ROM path; otherwise use POKEMON_RED_ROM.",
+    )
+    play.add_argument(
+        "--watch",
+        action="store_true",
+        help="Show a view-only local game window with human input disabled.",
+    )
+    play.add_argument(
+        "--speed",
+        type=int,
+        choices=(1, 2, 4),
+        help="Watched playback speed; requires --watch and defaults to 2.",
+    )
     return parser
 
 
@@ -82,6 +108,33 @@ def _print_opening_summary(report: OpeningChapterReport) -> None:
     )
 
 
+def _print_qualified_progress(progress: QualifiedPlayProgress) -> None:
+    print(
+        f"[{progress.completed}/{progress.total}] {progress.label}",
+        file=sys.stderr,
+        flush=True,
+    )
+
+
+def _print_qualified_summary(report: QualifiedPlayReport) -> None:
+    verified = len(report.verified_objectives)
+    total = len(COMPLETION_QUEST)
+    if report.next_objective is None:
+        next_step = "All declared objectives verified"
+    else:
+        next_step = COMPLETION_QUEST.objective(report.next_objective).title
+    print(
+        f"Objectives: {verified}/{total} verified | Next: {next_step}",
+        file=sys.stderr,
+        flush=True,
+    )
+    print(
+        "Safe stop: latest independently qualified boundary reached; the game is not complete.",
+        file=sys.stderr,
+        flush=True,
+    )
+
+
 def main(arguments: Sequence[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(arguments)
@@ -99,7 +152,11 @@ def main(arguments: Sequence[str] | None = None) -> int:
         print(json.dumps(payload, indent=2, ensure_ascii=False))
         return 0
 
-    if args.command == "opening" and args.speed is not None and not args.watch:
+    if (
+        args.command in {"opening", "play"}
+        and args.speed is not None
+        and not args.watch
+    ):
         parser.error("--speed requires --watch")
 
     try:
@@ -108,7 +165,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
             payload = verify_rom(rom_path).public_dict()
         elif args.command == "bootstrap":
             payload = run_bootstrap_smoke(rom_path).public_dict()
-        else:
+        elif args.command == "opening":
             report = run_opening_chapter(
                 rom_path,
                 watch=args.watch,
@@ -117,13 +174,30 @@ def main(arguments: Sequence[str] | None = None) -> int:
             )
             _print_opening_summary(report)
             payload = report.public_dict()
+        else:
+            qualified_report = run_qualified_play(
+                rom_path,
+                watch=args.watch,
+                speed=args.speed,
+                progress=_print_qualified_progress,
+            )
+            _print_qualified_summary(qualified_report)
+            payload = qualified_report.public_dict()
     except (
         BootstrapError,
         EmulatorError,
         OpeningChapterError,
+        QualifiedPlayError,
         RomValidationError,
     ) as error:
         parser.error(str(error))
+    except KeyboardInterrupt:
+        print(
+            "Stopped safely without saving. No success report was emitted.",
+            file=sys.stderr,
+            flush=True,
+        )
+        return 130
     print(json.dumps(payload, indent=2, sort_keys=True))
     return 0
 

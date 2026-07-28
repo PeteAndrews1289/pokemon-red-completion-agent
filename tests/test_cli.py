@@ -7,6 +7,7 @@ import pytest
 
 from pokemon_red_completion import cli
 from pokemon_red_completion.opening import OpeningChapterError, OpeningProgress
+from pokemon_red_completion.play import QualifiedPlayProgress
 
 
 def test_route_command_prints_validated_hall_of_fame_route(capsys) -> None:
@@ -195,4 +196,111 @@ def test_opening_command_reports_opening_errors(
     assert error.value.code == 2
     assert captured.out == ""
     assert "The opening teacher missed a verified gate." in captured.err
+    assert str(private_path) not in captured.err
+
+
+def test_play_command_runs_the_continuous_watched_boundary(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    class FakeReport:
+        verified_objectives = (
+            "power_on",
+            "begin_adventure",
+            "choose_starter",
+            "receive_pokedex",
+        )
+        next_objective = "reach_pewter"
+
+        def public_dict(self) -> dict[str, object]:
+            return {
+                "schema": "qualified-play-v1",
+                "status": "ok",
+                "game_complete": False,
+            }
+
+    private_path = Path("/private/Pokemon Red.gb")
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda argument: private_path)
+
+    def fake_run_qualified_play(
+        path: Path,
+        *,
+        watch: bool,
+        speed: int | None,
+        progress,
+    ) -> FakeReport:
+        assert path == private_path
+        assert watch is True
+        assert speed == 4
+        progress(
+            QualifiedPlayProgress(
+                checkpoint_id="bedroom_ready",
+                label="Bedroom input ready",
+                completed=1,
+                total=11,
+                frames_executed=9_804,
+            )
+        )
+        progress(
+            QualifiedPlayProgress(
+                checkpoint_id="pokedex_received",
+                label="Delivered the parcel and received the Pokédex",
+                completed=11,
+                total=11,
+                frames_executed=52_956,
+            )
+        )
+        return FakeReport()
+
+    monkeypatch.setattr(cli, "run_qualified_play", fake_run_qualified_play)
+
+    assert (
+        cli.main(
+            [
+                "play",
+                "--rom",
+                str(private_path),
+                "--watch",
+                "--speed",
+                "4",
+            ]
+        )
+        == 0
+    )
+
+    captured = capsys.readouterr()
+    assert json.loads(captured.out) == {
+        "game_complete": False,
+        "schema": "qualified-play-v1",
+        "status": "ok",
+    }
+    assert captured.err.splitlines() == [
+        "[1/11] Bedroom input ready",
+        "[11/11] Delivered the parcel and received the Pokédex",
+        "Objectives: 4/36 verified | Next: Reach Pewter City",
+        "Safe stop: latest independently qualified boundary reached; the game is not complete.",
+    ]
+    assert str(private_path) not in captured.out
+    assert str(private_path) not in captured.err
+
+
+def test_play_command_stops_cleanly_on_keyboard_interrupt(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    private_path = Path("/private/Pokemon Red.gb")
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda argument: private_path)
+
+    def interrupt(*args, **kwargs):
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr(cli, "run_qualified_play", interrupt)
+
+    assert cli.main(["play", "--rom", str(private_path)]) == 130
+
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == (
+        "Stopped safely without saving. No success report was emitted.\n"
+    )
     assert str(private_path) not in captured.err
