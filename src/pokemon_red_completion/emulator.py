@@ -50,6 +50,7 @@ class PyBoyBackend(Protocol):
 
 
 PyBoyFactory = Callable[..., PyBoyBackend]
+WindowEventPump = Callable[[], bool]
 
 
 def _load_pyboy_factory() -> PyBoyFactory:
@@ -60,6 +61,57 @@ def _load_pyboy_factory() -> PyBoyFactory:
             'PyBoy is optional. Install it with: python -m pip install -e ".[emulator]"'
         ) from error
     return PyBoy
+
+
+def _load_sdl2_window_pump() -> WindowEventPump:
+    """Build a view-only SDL event pump for watched runs.
+
+    PyBoy's ``no_input=True`` deliberately skips its window event loop along
+    with controller input. macOS needs that event loop for a window to become
+    visible and remain responsive, so watch mode drains SDL events itself
+    while forwarding none of them to the emulated controller.
+    """
+
+    try:
+        import sdl2
+        from sdl2.ext import get_events
+    except ImportError as error:
+        raise EmulatorDependencyError(
+            'SDL2 display support is unavailable. Reinstall with: '
+            'python -m pip install -e ".[emulator]"'
+        ) from error
+
+    raised = False
+
+    def pump() -> bool:
+        nonlocal raised
+        if not raised:
+            # A watched process owns one SDL window. Showing and raising it once
+            # makes the separate game view difficult to miss behind Terminal.
+            for window_id in range(1, 33):
+                window = sdl2.SDL_GetWindowFromID(window_id)
+                if window:
+                    sdl2.SDL_ShowWindow(window)
+                    sdl2.SDL_RaiseWindow(window)
+                    break
+            raised = True
+
+        for event in get_events():
+            if event.type == sdl2.SDL_QUIT:
+                return False
+            if (
+                event.type == sdl2.SDL_WINDOWEVENT
+                and event.window.event == sdl2.SDL_WINDOWEVENT_CLOSE
+            ):
+                return False
+            if (
+                event.type == sdl2.SDL_KEYUP
+                and event.key.keysym.sym == sdl2.SDLK_ESCAPE
+            ):
+                return False
+        return True
+
+    return pump
 
 
 class PyBoyAdapter:
@@ -99,6 +151,7 @@ class PyBoyAdapter:
         self._window_name = window_name
         self._speed = resolved_speed
         self._backend: PyBoyBackend | None = None
+        self._window_event_pump: WindowEventPump | None = None
         self._rom_stream: io.BytesIO | None = None
         self._fingerprint: RomFingerprint | None = None
         self._pressed_buttons: set[str] = set()
@@ -147,20 +200,25 @@ class PyBoyAdapter:
         fingerprint = verify_rom_bytes(payload)
         rom_stream = io.BytesIO(payload)
         factory = _load_pyboy_factory()
+        window_event_pump = _load_sdl2_window_pump() if self._watch else None
 
         backend: PyBoyBackend | None = None
         try:
-            backend = factory(
-                rom_stream,
-                ram_file=None,
-                rtc_file=None,
-                window=self._window_name,
-                no_input=True,
-                sound_volume=0,
-                sound_emulated=False,
-                log_level="ERROR",
-            )
+            backend_options: dict[str, Any] = {
+                "ram_file": None,
+                "rtc_file": None,
+                "window": self._window_name,
+                "no_input": True,
+                "sound_volume": 0,
+                "sound_emulated": False,
+                "log_level": "ERROR",
+            }
+            if self._watch:
+                backend_options["scale"] = 4
+            backend = factory(rom_stream, **backend_options)
             backend.set_emulation_speed(self._speed)
+            if window_event_pump is not None and not window_event_pump():
+                raise EmulatorEndedError("The watched game window was closed.")
         except Exception:
             if backend is not None:
                 with suppress(Exception):
@@ -169,6 +227,7 @@ class PyBoyAdapter:
             raise
 
         self._backend = backend
+        self._window_event_pump = window_event_pump
         self._rom_stream = rom_stream
         self._fingerprint = fingerprint
         self._logical_frame = 0
@@ -176,6 +235,7 @@ class PyBoyAdapter:
 
     def close(self) -> None:
         backend = self._backend
+        self._window_event_pump = None
         rom_stream = self._rom_stream
         self._backend = None
         self._rom_stream = None
@@ -235,6 +295,10 @@ class PyBoyAdapter:
             self._tick_backend(backend, frames, render=False)
             return
         for _ in range(frames):
+            if self._window_event_pump is None:
+                raise EmulatorError("Watched window event pump is unavailable.")
+            if not self._window_event_pump():
+                raise EmulatorEndedError("The watched game window was closed.")
             self._tick_backend(backend, 1, render=True)
 
     def _tick_backend(

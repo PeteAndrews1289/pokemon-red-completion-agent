@@ -139,7 +139,8 @@ not the ROM path or game assets.
 outside, Oak's trigger, starter-selection readiness, and verified Squirtle. It is headless and
 uncapped by default. `--watch --speed 4` instead opens a local PyBoy window at 4× speed and prints
 checkpoint progress before the final JSON report. Watch mode changes presentation only: keyboard
-input remains disabled, the same semantic gates choose every action, and the emulator still exits
+input remains disabled, while the window itself stays responsive and can be closed with Escape or
+its red close button. The same semantic gates choose every action, and the emulator still exits
 without saving.
 
 `play` is the recommended continuous command. It uses one clean emulator session for the opening,

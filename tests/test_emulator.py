@@ -95,6 +95,21 @@ def recording_factory(monkeypatch: pytest.MonkeyPatch) -> RecordingFactory:
     return factory
 
 
+@pytest.fixture
+def window_pump(monkeypatch: pytest.MonkeyPatch) -> list[bool]:
+    calls: list[bool] = []
+
+    def pump() -> bool:
+        calls.append(True)
+        return True
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.emulator._load_sdl2_window_pump",
+        lambda: pump,
+    )
+    return calls
+
+
 def test_adapter_uses_verified_stream_and_safe_backend_flags(
     tmp_path: Path,
     accept_test_rom: None,
@@ -165,6 +180,7 @@ def test_watch_mode_uses_safe_visible_backend_and_renders_each_frame(
     tmp_path: Path,
     accept_test_rom: None,
     recording_factory: RecordingFactory,
+    window_pump: list[bool],
 ) -> None:
     payload = b"private fixture bytes"
     rom_path = tmp_path / "fixture.gb"
@@ -183,6 +199,7 @@ def test_watch_mode_uses_safe_visible_backend_and_renders_each_frame(
             "sound_volume": 0,
             "sound_emulated": False,
             "log_level": "ERROR",
+            "scale": 4,
         }
         assert emulator.window_name == "SDL2"
         assert emulator.speed == 2
@@ -197,6 +214,7 @@ def test_watch_mode_uses_safe_visible_backend_and_renders_each_frame(
             (1, True, False),
             (1, True, False),
         ]
+        assert len(window_pump) == 4
 
     assert recording_factory.backend is not None
     assert recording_factory.backend.events[-1] == ("stop", False)
@@ -209,6 +227,7 @@ def test_watch_mode_accepts_only_supported_speed_presets(
     tmp_path: Path,
     accept_test_rom: None,
     recording_factory: RecordingFactory,
+    window_pump: list[bool],
 ) -> None:
     rom_path = tmp_path / "fixture.gb"
     rom_path.write_bytes(b"fixture")
@@ -217,6 +236,27 @@ def test_watch_mode_accepts_only_supported_speed_presets(
         assert emulator.speed == speed
         assert recording_factory.backend is not None
         assert recording_factory.backend.speed == speed
+
+
+def test_watch_mode_stops_when_the_viewer_closes(
+    tmp_path: Path,
+    accept_test_rom: None,
+    recording_factory: RecordingFactory,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    rom_path = tmp_path / "fixture.gb"
+    rom_path.write_bytes(b"fixture")
+    responses = iter((True, False))
+    monkeypatch.setattr(
+        "pokemon_red_completion.emulator._load_sdl2_window_pump",
+        lambda: lambda: next(responses),
+    )
+
+    with PyBoyAdapter(rom_path, watch=True) as emulator:
+        with pytest.raises(EmulatorEndedError, match="window was closed"):
+            emulator.tick(1)
+        assert recording_factory.backend is not None
+        assert recording_factory.backend.tick_calls == []
 
 
 @pytest.mark.parametrize("speed", [0, -1, 3, 5])
