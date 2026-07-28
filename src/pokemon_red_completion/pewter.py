@@ -174,6 +174,7 @@ class PewterTiming:
     brock_setup_pulses: int = 3
     max_brock_battle_pulses: int = 100
     max_brock_reward_pulses: int = 40
+    max_control_release_pulses: int = 10
 
     def __post_init__(self) -> None:
         for name, value in (
@@ -217,6 +218,7 @@ class PewterChapterReport:
     brock_victory_evidence: PewterChapterState
     reached_boundaries: tuple[TravelBoundary, ...]
     saw_brock_battle: bool
+    overworld_control_verified: bool
     frames_executed: int
     actions_executed: int
     controller_released: bool
@@ -235,6 +237,7 @@ class PewterChapterReport:
             and self.saw_brock_battle
             and self.brock_battle_evidence.brock_battle_snapshot
             and self.brock_victory_evidence.brock_victory_snapshot
+            and self.overworld_control_verified
             and self.brock_defeated.first_party_level is not None
             and self.brock_defeated.first_party_hp is not None
             and self.brock_defeated.first_party_hp > 0
@@ -289,6 +292,7 @@ class PewterChapterReport:
                     self.brock_victory_evidence.got_tm34
                     and self.brock_victory_evidence.tm34_in_bag
                 ),
+                "overworld_control_verified": self.overworld_control_verified,
                 "squirtle_level": self.brock_defeated.first_party_level,
                 "squirtle_hp": self.brock_defeated.first_party_hp,
                 "squirtle_max_hp": self.brock_defeated.first_party_max_hp,
@@ -566,24 +570,23 @@ def run_pewter_chapter(
         timing=timing,
         label="Brock",
     )
-    brock_defeated, brock_victory_evidence = _finish_brock_rewards(
+    _, first_victory = _finish_brock_rewards(
         chapter_executor,
         reader,
         tracker,
         timing,
     )
-    first_victory = brock_victory_evidence
-    _wait(chapter_executor, timing.final_stability_wait_frames)
-    stable_raw = reader.read()
-    stable_victory = reader.read_pewter_chapter_state(stable_raw)
-    if stable_victory != first_victory or not stable_victory.brock_victory_snapshot:
-        raise PewterChapterError("Brock victory did not remain stable across observations.")
+    brock_defeated, brock_victory_evidence = _release_and_probe_overworld_control(
+        chapter_executor,
+        reader,
+        timing,
+    )
+    if not first_victory.brock_victory_snapshot:
+        raise PewterChapterError("Brock victory disappeared before control restoration.")
     try:
-        tracker.observe(stable_victory)
+        tracker.observe(brock_victory_evidence)
     except PewterProgressError as error:
         raise PewterChapterError(str(error)) from error
-    brock_defeated = stable_raw
-    brock_victory_evidence = stable_victory
     _emit(progress, emulator, "brock_defeated", "Defeated Brock and received TM34", 10)
 
     report = PewterChapterReport(
@@ -603,6 +606,7 @@ def run_pewter_chapter(
         brock_victory_evidence=brock_victory_evidence,
         reached_boundaries=tracker.reached_boundaries,
         saw_brock_battle=tracker.saw_brock_battle,
+        overworld_control_verified=True,
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=chapter_executor.actions_executed,
         controller_released=not emulator.pressed_buttons,
@@ -784,6 +788,52 @@ def _finish_brock_rewards(
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         _wait(executor, timing.dialogue_wait_frames)
     raise PewterChapterError("Brock rewards failed their bounded semantic gate.")
+
+
+def _release_and_probe_overworld_control(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: PewterTiming,
+) -> tuple[RawGameState, PewterChapterState]:
+    """Clear residual reward text and prove that an overworld move is accepted."""
+    for _ in range(timing.max_control_release_pulses):
+        before = reader.read()
+        evidence = reader.read_pewter_chapter_state(before)
+        if not evidence.brock_victory_snapshot:
+            raise PewterChapterError(
+                "Brock evidence changed while restoring overworld control."
+            )
+        if before.map_id != MapId.PEWTER_GYM or before.player_x != 4:
+            raise PewterChapterError("Brock control probe left the expected Gym column.")
+
+        executor.execute(MacroAction(MacroActionKind.MOVE, "down"))
+        after = reader.read()
+        if (
+            after.map_id == MapId.PEWTER_GYM
+            and after.player_x == before.player_x
+            and after.player_y == (before.player_y or 0) + 1
+        ):
+            _wait(executor, timing.final_stability_wait_frames)
+            stable = reader.read()
+            stable_evidence = reader.read_pewter_chapter_state(stable)
+            if (
+                stable.player_x != after.player_x
+                or stable.player_y != after.player_y
+                or not stable_evidence.brock_victory_snapshot
+            ):
+                raise PewterChapterError(
+                    "Post-Brock overworld control did not remain stable."
+                )
+            return stable, stable_evidence
+        if (
+            after.map_id != before.map_id
+            or after.player_x != before.player_x
+            or after.player_y != before.player_y
+        ):
+            raise PewterChapterError("Brock control probe moved to an unexpected state.")
+        executor.execute(MacroAction(MacroActionKind.CONFIRM))
+        _wait(executor, timing.dialogue_wait_frames)
+    raise PewterChapterError("Brock reward text failed the bounded movement-control probe.")
 
 
 def _observe_boundary(

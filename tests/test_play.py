@@ -199,6 +199,7 @@ class _PewterEvidence:
                 "victory_verified": True,
                 "boulder_badge_verified": True,
                 "tm34_verified": True,
+                "overworld_control_verified": True,
                 "squirtle_level": 12,
                 "squirtle_hp": 27,
                 "squirtle_max_hp": 33,
@@ -287,11 +288,11 @@ def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
         label="Defeated Brock and received TM34",
         completed=21,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
-        frames_executed=121_247,
+        frames_executed=122_999,
     )
 
     assert progress.completed == progress.total == 21
-    assert progress.frames_executed == 121_247
+    assert progress.frames_executed == 122_999
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
 
@@ -400,8 +401,8 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "defeat_brock",
         ),
         next_objective="reach_cerulean",
-        frames_executed=121_247,
-        actions_executed=1_554,
+        frames_executed=122_999,
+        actions_executed=1_573,
         controller_released=True,
     )
 
@@ -602,6 +603,6 @@ def test_private_rom_reaches_verified_brock_without_adjacent_artifacts() -> None
         "defeat_brock",
     )
     assert report.next_objective == "reach_cerulean"
-    assert report.frames_executed == 121_247
-    assert report.actions_executed == 1_554
+    assert report.frames_executed == 122_999
+    assert report.actions_executed == 1_573
     assert before == after
