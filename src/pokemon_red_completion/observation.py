@@ -24,9 +24,13 @@ class RamAddress(IntEnum):
     """
 
     JOY_IGNORE = 0xCD6B
+    BATTLE_RESULT = 0xCF0B
     IS_IN_BATTLE = 0xD057
     PARTY_COUNT = 0xD163
     PARTY_SPECIES = 0xD164
+    PARTY_MON_1_HP = 0xD16C
+    PARTY_MON_1_LEVEL = 0xD18C
+    PARTY_MON_1_MAX_HP = 0xD18D
     NUM_BAG_ITEMS = 0xD31D
     BAG_ITEMS = 0xD31E
     OBTAINED_BADGES = 0xD356
@@ -36,6 +40,7 @@ class RamAddress(IntEnum):
     OAKS_LAB_SCRIPT = 0xD5F0
     PALLET_TOWN_SCRIPT = 0xD5F1
     REDS_HOUSE_2F_SCRIPT = 0xD60C
+    VIRIDIAN_MART_SCRIPT = 0xD60D
     STATUS_FLAGS_6 = 0xD732
     EVENT_FLAGS = 0xD747
 
@@ -52,9 +57,11 @@ class MapId(IntEnum):
     CINNABAR_ISLAND = 0x08
     INDIGO_PLATEAU = 0x09
     SAFFRON_CITY = 0x0A
+    ROUTE_1 = 0x0C
     REDS_HOUSE_1F = 0x25
     REDS_HOUSE_2F = 0x26
     OAKS_LAB = 0x28
+    VIRIDIAN_MART = 0x2A
     HALL_OF_FAME = 0x76
     CHAMPIONS_ROOM = 0x78
     INDIGO_PLATEAU_LOBBY = 0xAE
@@ -69,6 +76,7 @@ class EventFlag(IntEnum):
     GOT_POKEDEX = 0x025
     OAK_APPEARED_IN_PALLET = 0x027
     OAK_GOT_PARCEL = 0x038
+    GOT_OAKS_PARCEL = 0x039
     BEAT_VIRIDIAN_GYM_GIOVANNI = 0x051
     BEAT_BROCK = 0x077
     BEAT_MISTY = 0x0BF
@@ -95,6 +103,7 @@ class EventFlag(IntEnum):
 class ItemId(IntEnum):
     SECRET_KEY = 0x2B
     SS_TICKET = 0x3F
+    OAKS_PARCEL = 0x46
     SILPH_SCOPE = 0x48
     POKE_FLUTE = 0x49
     HM01_CUT = 0xC4
@@ -141,6 +150,10 @@ class RawGameState:
     bag_item_ids: tuple[int, ...] | None = None
     event_flags: bytes | None = None
     party_species_ids: tuple[int, ...] | None = None
+    first_party_level: int | None = None
+    first_party_hp: int | None = None
+    first_party_max_hp: int | None = None
+    battle_result: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -179,6 +192,84 @@ class OpeningControlState:
         return self.confirm_allowed and self.cancel_allowed and self.movement_allowed
 
 
+class OaksErrandPhase(StrEnum):
+    UNKNOWN = "unknown"
+    STARTER_READY = "starter_ready"
+    RIVAL_BATTLE = "rival_battle"
+    RIVAL_DEFEATED = "rival_defeated"
+    PARCEL_OBTAINED = "parcel_obtained"
+    POKEDEX_OBTAINED = "pokedex_obtained"
+
+
+@dataclass(frozen=True, slots=True)
+class OaksErrandState:
+    """Semantic controls and evidence for the bounded rival/parcel/Pokédex chapter."""
+
+    phase: OaksErrandPhase
+    joy_ignore: int
+    lab_script: int
+    mart_script: int
+    battled_rival: bool
+    got_oaks_parcel: bool
+    oak_got_parcel: bool
+    got_pokedex: bool
+    parcel_in_bag: bool
+    first_party_species: int | None
+    first_party_level: int | None
+    first_party_hp: int | None
+    first_party_max_hp: int | None
+    battle_result: int | None
+    map_id: int | None = None
+    battle_state: int | None = None
+
+    @property
+    def controls_ready(self) -> bool:
+        return self.joy_ignore == 0
+
+    @property
+    def rival_victory_snapshot(self) -> bool:
+        return (
+            self.phase is OaksErrandPhase.RIVAL_DEFEATED
+            and self.map_id == MapId.OAKS_LAB
+            and self.battle_state == 0
+            and self.lab_script == 18
+            and self.controls_ready
+            and self.battle_result == 0
+            and self.battled_rival
+            and self.first_party_species == SQUIRTLE_SPECIES_ID
+            and self.first_party_level == 6
+            and self.first_party_hp == 21
+            and self.first_party_max_hp == 21
+        )
+
+    @property
+    def parcel_snapshot(self) -> bool:
+        return (
+            self.phase is OaksErrandPhase.PARCEL_OBTAINED
+            and self.map_id == MapId.VIRIDIAN_MART
+            and self.battle_state == 0
+            and self.mart_script == 2
+            and self.controls_ready
+            and self.got_oaks_parcel
+            and self.parcel_in_bag
+        )
+
+    @property
+    def pokedex_snapshot(self) -> bool:
+        return (
+            self.phase is OaksErrandPhase.POKEDEX_OBTAINED
+            and self.map_id == MapId.OAKS_LAB
+            and self.battle_state == 0
+            and self.lab_script == 18
+            and self.controls_ready
+            and self.got_oaks_parcel
+            and self.oak_got_parcel
+            and self.got_pokedex
+            and not self.parcel_in_bag
+            and self.first_party_species == SQUIRTLE_SPECIES_ID
+        )
+
+
 class PokemonRedStateReader:
     def __init__(self, memory: ReadOnlyMemory) -> None:
         self._memory = memory
@@ -199,6 +290,15 @@ class PokemonRedStateReader:
             self._memory.read_u8(int(RamAddress.PARTY_SPECIES) + index)
             for index in range(party_count)
         )
+        first_party_level = (
+            self._memory.read_u8(RamAddress.PARTY_MON_1_LEVEL) if party_count else None
+        )
+        first_party_hp = (
+            self._read_u16_be(RamAddress.PARTY_MON_1_HP) if party_count else None
+        )
+        first_party_max_hp = (
+            self._read_u16_be(RamAddress.PARTY_MON_1_MAX_HP) if party_count else None
+        )
         events = bytes(
             self._memory.read_u8(int(RamAddress.EVENT_FLAGS) + index)
             for index in range(EVENT_FLAG_BYTES)
@@ -214,6 +314,10 @@ class PokemonRedStateReader:
             bag_item_ids=bag_items,
             event_flags=events,
             party_species_ids=party_species,
+            first_party_level=first_party_level,
+            first_party_hp=first_party_hp,
+            first_party_max_hp=first_party_max_hp,
+            battle_result=self._memory.read_u8(RamAddress.BATTLE_RESULT),
         )
 
     def read_bedroom_input_state(self) -> BedroomInputState:
@@ -285,6 +389,85 @@ class PokemonRedStateReader:
             first_party_species=first_species,
         )
 
+    def read_oaks_errand_state(self, raw: RawGameState) -> OaksErrandState:
+        """Translate pinned script, event, inventory, and party state into one phase."""
+        joy_ignore = self._memory.read_u8(RamAddress.JOY_IGNORE)
+        lab_script = self._memory.read_u8(RamAddress.OAKS_LAB_SCRIPT)
+        mart_script = self._memory.read_u8(RamAddress.VIRIDIAN_MART_SCRIPT)
+        battled_rival = _event(raw.event_flags, EventFlag.BATTLED_RIVAL_IN_OAKS_LAB)
+        got_oaks_parcel = _event(raw.event_flags, EventFlag.GOT_OAKS_PARCEL)
+        oak_got_parcel = _event(raw.event_flags, EventFlag.OAK_GOT_PARCEL)
+        got_pokedex = _event(raw.event_flags, EventFlag.GOT_POKEDEX)
+        parcel_in_bag = ItemId.OAKS_PARCEL in set(raw.bag_item_ids or ())
+        first_species = raw.party_species_ids[0] if raw.party_species_ids else None
+
+        phase = OaksErrandPhase.UNKNOWN
+        if (
+            raw.map_id == MapId.OAKS_LAB
+            and raw.battle_state == 0
+            and lab_script == 18
+            and joy_ignore == 0
+            and got_oaks_parcel
+            and oak_got_parcel
+            and got_pokedex
+            and not parcel_in_bag
+            and first_species == SQUIRTLE_SPECIES_ID
+        ):
+            phase = OaksErrandPhase.POKEDEX_OBTAINED
+        elif (
+            raw.map_id == MapId.VIRIDIAN_MART
+            and raw.battle_state == 0
+            and mart_script == 2
+            and joy_ignore == 0
+            and got_oaks_parcel
+            and parcel_in_bag
+        ):
+            phase = OaksErrandPhase.PARCEL_OBTAINED
+        elif (
+            raw.map_id == MapId.OAKS_LAB
+            and raw.battle_state == 0
+            and lab_script == 18
+            and joy_ignore == 0
+            and battled_rival
+            and first_species == SQUIRTLE_SPECIES_ID
+        ):
+            phase = OaksErrandPhase.RIVAL_DEFEATED
+        elif (
+            raw.map_id == MapId.OAKS_LAB
+            and raw.battle_state == 2
+            and lab_script == 12
+        ):
+            phase = OaksErrandPhase.RIVAL_BATTLE
+        elif (
+            raw.map_id == MapId.OAKS_LAB
+            and raw.party_count == 1
+            and first_species == SQUIRTLE_SPECIES_ID
+            and lab_script == OAKS_LAB_STARTER_OBTAINED_SCRIPT
+        ):
+            phase = OaksErrandPhase.STARTER_READY
+
+        return OaksErrandState(
+            phase=phase,
+            joy_ignore=joy_ignore,
+            lab_script=lab_script,
+            mart_script=mart_script,
+            battled_rival=battled_rival,
+            got_oaks_parcel=got_oaks_parcel,
+            oak_got_parcel=oak_got_parcel,
+            got_pokedex=got_pokedex,
+            parcel_in_bag=parcel_in_bag,
+            first_party_species=first_species,
+            first_party_level=raw.first_party_level,
+            first_party_hp=raw.first_party_hp,
+            first_party_max_hp=raw.first_party_max_hp,
+            battle_result=raw.battle_result,
+            map_id=raw.map_id,
+            battle_state=raw.battle_state,
+        )
+
+    def _read_u16_be(self, address: int) -> int:
+        return (self._memory.read_u8(address) << 8) | self._memory.read_u8(address + 1)
+
 
 def event_flag_is_set(event_flags: bytes | None, bit_index: int) -> bool:
     if bit_index < 0:
@@ -348,9 +531,11 @@ def location_label(map_id: int | None) -> str | None:
         MapId.CINNABAR_ISLAND: "cinnabar_island",
         MapId.INDIGO_PLATEAU: "indigo_plateau",
         MapId.SAFFRON_CITY: "saffron_city",
+        MapId.ROUTE_1: "route_1",
         MapId.REDS_HOUSE_1F: "reds_house_1f",
         MapId.REDS_HOUSE_2F: "reds_house_2f",
         MapId.OAKS_LAB: "oaks_lab",
+        MapId.VIRIDIAN_MART: "viridian_mart",
         MapId.HALL_OF_FAME: "hall_of_fame",
         MapId.CHAMPIONS_ROOM: "champions_room",
         MapId.INDIGO_PLATEAU_LOBBY: "indigo_plateau_lobby",

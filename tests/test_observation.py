@@ -11,7 +11,9 @@ from pokemon_red_completion.observation import (
     SQUIRTLE_SPECIES_ID,
     Badge,
     EventFlag,
+    ItemId,
     MapId,
+    OaksErrandPhase,
     OpeningPhase,
     PokemonRedStateReader,
     RamAddress,
@@ -121,6 +123,55 @@ def test_reader_extracts_bounded_bag_and_event_state() -> None:
     )
     assert raw.bag_item_ids == (0x3F, 0x48)
     assert event_flag_is_set(raw.event_flags, EventFlag.BEAT_CHAMPION_RIVAL)
+
+
+def test_reader_translates_the_stable_pokedex_gate_from_pinned_symbols() -> None:
+    events = _events(
+        EventFlag.BATTLED_RIVAL_IN_OAKS_LAB,
+        EventFlag.GOT_POKEDEX,
+        EventFlag.OAK_GOT_PARCEL,
+        EventFlag.GOT_OAKS_PARCEL,
+    )
+    values = {
+        RamAddress.STATUS_FLAGS_6: 1,
+        RamAddress.CURRENT_MAP: MapId.OAKS_LAB,
+        RamAddress.PLAYER_X: 5,
+        RamAddress.PLAYER_Y: 3,
+        RamAddress.PARTY_COUNT: 1,
+        RamAddress.PARTY_SPECIES: SQUIRTLE_SPECIES_ID,
+        RamAddress.PARTY_MON_1_HP: 0,
+        int(RamAddress.PARTY_MON_1_HP) + 1: 21,
+        RamAddress.PARTY_MON_1_LEVEL: 6,
+        RamAddress.PARTY_MON_1_MAX_HP: 0,
+        int(RamAddress.PARTY_MON_1_MAX_HP) + 1: 21,
+        RamAddress.NUM_BAG_ITEMS: 0,
+        RamAddress.IS_IN_BATTLE: 0,
+        RamAddress.BATTLE_RESULT: 0,
+        RamAddress.JOY_IGNORE: 0,
+        RamAddress.OAKS_LAB_SCRIPT: 18,
+        RamAddress.VIRIDIAN_MART_SCRIPT: 2,
+    }
+    values.update(
+        {
+            int(RamAddress.EVENT_FLAGS) + index: value
+            for index, value in enumerate(events)
+            if value
+        }
+    )
+    reader = PokemonRedStateReader(RecordingMemory(values))
+
+    raw = reader.read()
+    state = reader.read_oaks_errand_state(raw)
+
+    assert RamAddress.VIRIDIAN_MART_SCRIPT == 0xD60D
+    assert MapId.ROUTE_1 == 0x0C
+    assert MapId.VIRIDIAN_MART == 0x2A
+    assert EventFlag.GOT_OAKS_PARCEL == 0x039
+    assert ItemId.OAKS_PARCEL == 0x46
+    assert raw.first_party_level == 6
+    assert raw.first_party_hp == raw.first_party_max_hp == 21
+    assert state.phase is OaksErrandPhase.POKEDEX_OBTAINED
+    assert state.pokedex_snapshot
 
 
 def test_reader_encapsulates_bedroom_input_symbols() -> None:

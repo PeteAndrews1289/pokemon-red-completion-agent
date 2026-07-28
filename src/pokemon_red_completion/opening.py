@@ -9,6 +9,7 @@ attributed clean-power-on bootstrap; it did not publish this route.
 from __future__ import annotations
 
 from collections.abc import Callable
+from contextlib import nullcontext
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -236,8 +237,14 @@ def run_opening_chapter(
     new_game_timing: NewGameTiming = DEFAULT_NEW_GAME_TIMING,
     opening_timing: OpeningTiming = DEFAULT_OPENING_TIMING,
     progress: ProgressSink | None = None,
+    _emulator: PyBoyAdapter | None = None,
 ) -> OpeningChapterReport:
-    with PyBoyAdapter(rom_path, watch=watch, speed=speed) as emulator:
+    emulator_context = (
+        PyBoyAdapter(rom_path, watch=watch, speed=speed)
+        if _emulator is None
+        else nullcontext(_emulator)
+    )
+    with emulator_context as emulator:
         reader = PokemonRedStateReader(emulator)
         initial = reader.read()
         tracker = SemanticStateTracker(initial)
