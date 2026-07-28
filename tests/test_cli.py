@@ -209,12 +209,14 @@ def test_play_command_runs_the_continuous_watched_boundary(
             "begin_adventure",
             "choose_starter",
             "receive_pokedex",
+            "reach_pewter",
+            "defeat_brock",
         )
-        next_objective = "reach_pewter"
+        next_objective = "reach_cerulean"
 
         def public_dict(self) -> dict[str, object]:
             return {
-                "schema": "qualified-play-v1",
+                "schema": "qualified-play-v2",
                 "status": "ok",
                 "game_complete": False,
             }
@@ -237,17 +239,17 @@ def test_play_command_runs_the_continuous_watched_boundary(
                 checkpoint_id="bedroom_ready",
                 label="Bedroom input ready",
                 completed=1,
-                total=11,
+                total=21,
                 frames_executed=9_804,
             )
         )
         progress(
             QualifiedPlayProgress(
-                checkpoint_id="pokedex_received",
-                label="Delivered the parcel and received the Pokédex",
-                completed=11,
-                total=11,
-                frames_executed=52_956,
+                checkpoint_id="brock_defeated",
+                label="Defeated Brock and received TM34",
+                completed=21,
+                total=21,
+                frames_executed=121_247,
             )
         )
         return FakeReport()
@@ -271,13 +273,13 @@ def test_play_command_runs_the_continuous_watched_boundary(
     captured = capsys.readouterr()
     assert json.loads(captured.out) == {
         "game_complete": False,
-        "schema": "qualified-play-v1",
+        "schema": "qualified-play-v2",
         "status": "ok",
     }
     assert captured.err.splitlines() == [
-        "[1/11] Bedroom input ready",
-        "[11/11] Delivered the parcel and received the Pokédex",
-        "Objectives: 4/36 verified | Next: Reach Pewter City",
+        "[1/21] Bedroom input ready",
+        "[21/21] Defeated Brock and received TM34",
+        "Objectives: 6/36 verified | Next: Reach Cerulean City",
         "Safe stop: latest independently qualified boundary reached; the game is not complete.",
     ]
     assert str(private_path) not in captured.out

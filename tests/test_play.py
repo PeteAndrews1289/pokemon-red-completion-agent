@@ -147,6 +147,67 @@ def _pokedex_obtained() -> OaksErrandState:
     )
 
 
+class _PewterEvidence:
+    passed = True
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        return (
+            ("lab_exited", "Exited Oak's Lab after the Pokédex", _raw(MapId.PALLET_TOWN, 12, 12)),
+            (
+                "viridian_northbound",
+                "Reached Viridian City northbound",
+                _raw(MapId.VIRIDIAN_CITY, 21, 35),
+            ),
+            ("route_2_reached", "Reached Route 2", _raw(MapId.ROUTE_2, 8, 71)),
+            (
+                "forest_gate_reached",
+                "Reached Viridian Forest gate",
+                _raw(MapId.VIRIDIAN_FOREST_SOUTH_GATE, 4, 7),
+            ),
+            (
+                "forest_entered",
+                "Entered Viridian Forest",
+                _raw(MapId.VIRIDIAN_FOREST, 17, 47),
+            ),
+            (
+                "forest_cleared",
+                "Cleared Viridian Forest",
+                _raw(MapId.VIRIDIAN_FOREST_NORTH_GATE, 4, 7),
+            ),
+            ("pewter_reached", "Reached Pewter City", _raw(MapId.PEWTER_CITY, 18, 35)),
+            (
+                "pewter_gym_entered",
+                "Entered Pewter Gym battle-ready",
+                _raw(MapId.PEWTER_GYM, 4, 13),
+            ),
+            ("brock_battle", "Verified the live Brock battle", _raw(MapId.PEWTER_GYM, 4, 2)),
+            (
+                "brock_defeated",
+                "Defeated Brock and received TM34",
+                _raw(MapId.PEWTER_GYM, 4, 2),
+            ),
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "route": {
+                "ordered_boundaries_verified": 9,
+                "ordered_boundaries_total": 9,
+                "brock_battle_observed": True,
+            },
+            "brock": {
+                "victory_verified": True,
+                "boulder_badge_verified": True,
+                "tm34_verified": True,
+                "squirtle_level": 12,
+                "squirtle_hp": 27,
+                "squirtle_max_hp": 33,
+                "squirtle_status": 0,
+                "bubble_pp": 23,
+            },
+        }
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -220,17 +281,17 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 11
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 21
     progress = QualifiedPlayProgress(
-        checkpoint_id="pokedex_obtained",
-        label="Delivered Oak's Parcel and received the Pokédex",
-        completed=11,
+        checkpoint_id="brock_defeated",
+        label="Defeated Brock and received TM34",
+        completed=21,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
-        frames_executed=52_956,
+        frames_executed=121_247,
     )
 
-    assert progress.completed == progress.total == 11
-    assert progress.frames_executed == 52_956
+    assert progress.completed == progress.total == 21
+    assert progress.frames_executed == 121_247
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
 
@@ -315,6 +376,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         parcel_received=_raw(MapId.VIRIDIAN_MART, 2, 5),
         pallet_returned=_raw(MapId.PALLET_TOWN, 10, 0),
         pokedex_received=_raw(MapId.OAKS_LAB, 5, 3),
+        pewter=_PewterEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -325,6 +387,8 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "story:adventure_begun",
                 "party:starter_obtained",
                 "story:pokedex_received",
+                "location:pewter_city",
+                "badge:boulder",
             }
         ),
         verified_objectives=(
@@ -332,10 +396,12 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "begin_adventure",
             "choose_starter",
             "receive_pokedex",
+            "reach_pewter",
+            "defeat_brock",
         ),
-        next_objective="reach_pewter",
-        frames_executed=52_956,
-        actions_executed=619,
+        next_objective="reach_cerulean",
+        frames_executed=121_247,
+        actions_executed=1_554,
         controller_released=True,
     )
 
@@ -343,9 +409,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v1"
+    assert public["schema"] == "qualified-play-v2"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "receive_pokedex"
+    assert public["qualified_through"] == "defeat_brock"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -360,17 +426,29 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "parcel_received",
         "pallet_returned",
         "pokedex_received",
+        "lab_exited",
+        "viridian_northbound",
+        "route_2_reached",
+        "forest_gate_reached",
+        "forest_entered",
+        "forest_cleared",
+        "pewter_reached",
+        "pewter_gym_entered",
+        "brock_battle",
+        "brock_defeated",
     ]
     assert public["objective_progress"] == {
-        "verified": 4,
+        "verified": 6,
         "total": 36,
         "verified_ids": [
             "power_on",
             "begin_adventure",
             "choose_starter",
             "receive_pokedex",
+            "reach_pewter",
+            "defeat_brock",
         ],
-        "next": "reach_pewter",
+        "next": "reach_cerulean",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -502,7 +580,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_reaches_verified_pokedex_without_adjacent_artifacts() -> None:
+def test_private_rom_reaches_verified_brock_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -520,8 +598,10 @@ def test_private_rom_reaches_verified_pokedex_without_adjacent_artifacts() -> No
         "begin_adventure",
         "choose_starter",
         "receive_pokedex",
+        "reach_pewter",
+        "defeat_brock",
     )
-    assert report.next_objective == "reach_pewter"
-    assert report.frames_executed == 52_956
-    assert report.actions_executed == 619
+    assert report.next_objective == "reach_cerulean"
+    assert report.frames_executed == 121_247
+    assert report.actions_executed == 1_554
     assert before == after

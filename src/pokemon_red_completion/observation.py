@@ -23,12 +23,21 @@ class RamAddress(IntEnum):
     repository's exact ROM fingerprint gate passes.
     """
 
+    NPC_MOVEMENT_SCRIPT_TABLE = 0xCC57
+    ENGAGED_TRAINER_CLASS = 0xCD2D
+    SIMULATED_JOYPAD_INDEX = 0xCD38
     JOY_IGNORE = 0xCD6B
     BATTLE_RESULT = 0xCF0B
+    TRAINER_CLASS = 0xD031
     IS_IN_BATTLE = 0xD057
+    CURRENT_OPPONENT = 0xD059
+    GYM_LEADER_NUMBER = 0xD05C
     PARTY_COUNT = 0xD163
     PARTY_SPECIES = 0xD164
     PARTY_MON_1_HP = 0xD16C
+    PARTY_MON_1_STATUS = 0xD16F
+    PARTY_MON_1_MOVES = 0xD173
+    PARTY_MON_1_PP = 0xD188
     PARTY_MON_1_LEVEL = 0xD18C
     PARTY_MON_1_MAX_HP = 0xD18D
     NUM_BAG_ITEMS = 0xD31D
@@ -37,12 +46,21 @@ class RamAddress(IntEnum):
     CURRENT_MAP = 0xD35E
     PLAYER_Y = 0xD361
     PLAYER_X = 0xD362
+    PLAYER_MOVING_DIRECTION = 0xD528
     OAKS_LAB_SCRIPT = 0xD5F0
     PALLET_TOWN_SCRIPT = 0xD5F1
+    VIRIDIAN_CITY_SCRIPT = 0xD5F4
+    PEWTER_CITY_SCRIPT = 0xD5F7
+    PEWTER_GYM_SCRIPT = 0xD5FC
     REDS_HOUSE_2F_SCRIPT = 0xD60C
     VIRIDIAN_MART_SCRIPT = 0xD60D
+    VIRIDIAN_FOREST_SCRIPT = 0xD618
+    BEAT_GYM_FLAGS = 0xD72A
+    STATUS_FLAGS_5 = 0xD730
     STATUS_FLAGS_6 = 0xD732
+    MOVEMENT_FLAGS = 0xD736
     EVENT_FLAGS = 0xD747
+    CURRENT_MAP_SCRIPT = 0xDA39
 
 
 class MapId(IntEnum):
@@ -58,10 +76,18 @@ class MapId(IntEnum):
     INDIGO_PLATEAU = 0x09
     SAFFRON_CITY = 0x0A
     ROUTE_1 = 0x0C
+    ROUTE_2 = 0x0D
     REDS_HOUSE_1F = 0x25
     REDS_HOUSE_2F = 0x26
     OAKS_LAB = 0x28
+    VIRIDIAN_POKECENTER = 0x29
     VIRIDIAN_MART = 0x2A
+    VIRIDIAN_FOREST_NORTH_GATE = 0x2F
+    ROUTE_2_GATE = 0x31
+    VIRIDIAN_FOREST_SOUTH_GATE = 0x32
+    VIRIDIAN_FOREST = 0x33
+    PEWTER_GYM = 0x36
+    PEWTER_POKECENTER = 0x3A
     HALL_OF_FAME = 0x76
     CHAMPIONS_ROOM = 0x78
     INDIGO_PLATEAU_LOBBY = 0xAE
@@ -78,6 +104,7 @@ class EventFlag(IntEnum):
     OAK_GOT_PARCEL = 0x038
     GOT_OAKS_PARCEL = 0x039
     BEAT_VIRIDIAN_GYM_GIOVANNI = 0x051
+    GOT_TM34 = 0x076
     BEAT_BROCK = 0x077
     BEAT_MISTY = 0x0BF
     RESCUED_MR_FUJI = 0x117
@@ -109,6 +136,7 @@ class ItemId(IntEnum):
     HM01_CUT = 0xC4
     HM03_SURF = 0xC6
     HM04_STRENGTH = 0xC7
+    TM34_BIDE = 0xEA
 
 
 class Badge(IntFlag):
@@ -129,7 +157,13 @@ OAKS_LAB_STARTER_OBTAINED_SCRIPT = 10
 JOY_IGNORE_CONFIRM_MASK = 0x01
 JOY_IGNORE_CANCEL_MASK = 0x02
 JOY_IGNORE_MOVEMENT_MASK = 0xF0
+SCRIPTED_MOVEMENT_STATUS_MASK = (1 << 0) | (1 << 5) | (1 << 7)
+EXITING_DOOR_MOVEMENT_MASK = 1 << 1
 SQUIRTLE_SPECIES_ID = 0xB1
+BUBBLE_MOVE_ID = 0x91
+BROCK_OPPONENT_ID = 0xEA
+BROCK_TRAINER_CLASS_ID = 0x22
+BROCK_GYM_LEADER_NUMBER = 1
 PARTY_LIMIT = 6
 MAX_BAG_ITEMS = 20
 EVENT_FLAGS_END = 0xD886
@@ -153,7 +187,10 @@ class RawGameState:
     first_party_level: int | None = None
     first_party_hp: int | None = None
     first_party_max_hp: int | None = None
+    first_party_status: int | None = None
     battle_result: int | None = None
+    first_party_moves: tuple[int, ...] | None = None
+    first_party_pp: tuple[int, ...] | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -270,6 +307,306 @@ class OaksErrandState:
         )
 
 
+class TravelBoundary(StrEnum):
+    UNKNOWN = "unknown"
+    PALLET_LAB_EXTERIOR = "pallet_lab_exterior"
+    VIRIDIAN_SOUTH_EDGE = "viridian_south_edge"
+    ROUTE_2_SOUTH_EDGE = "route_2_south_edge"
+    FOREST_SOUTH_GATE = "forest_south_gate"
+    FOREST_SOUTH_ENTRY = "forest_south_entry"
+    FOREST_NORTH_GATE = "forest_north_gate"
+    ROUTE_2_NORTH_RETURN = "route_2_north_return"
+    PEWTER_SOUTH_EDGE = "pewter_south_edge"
+    PEWTER_GYM_ENTRANCE = "pewter_gym_entrance"
+
+
+class NorthboundPhase(StrEnum):
+    UNKNOWN = "unknown"
+    LAB_EXITED = "lab_exited"
+    VIRIDIAN_REACHED = "viridian_reached"
+    ROUTE_2_SOUTH_REACHED = "route_2_south_reached"
+    FOREST_GATE_REACHED = "forest_gate_reached"
+    FOREST_ENTERED = "forest_entered"
+    FOREST_CLEARED = "forest_cleared"
+    PEWTER_REACHED = "pewter_reached"
+    PEWTER_GYM_ENTERED = "pewter_gym_entered"
+    BROCK_BATTLE = "brock_battle"
+    BROCK_DEFEATED = "brock_defeated"
+
+
+@dataclass(frozen=True, slots=True)
+class InputReadiness:
+    joy_ignore: int
+    simulated_joypad_index: int
+    npc_movement_script_table: int
+    player_moving_direction: int
+    status_flags_5: int
+    movement_flags: int = 0
+
+    @property
+    def ready(self) -> bool:
+        return (
+            self.joy_ignore == 0
+            and self.simulated_joypad_index == 0
+            and self.npc_movement_script_table == 0
+            and self.player_moving_direction == 0
+            and not bool(self.status_flags_5 & SCRIPTED_MOVEMENT_STATUS_MASK)
+            and not bool(self.movement_flags & EXITING_DOOR_MOVEMENT_MASK)
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class PewterChapterState:
+    """Revision-bound semantic evidence for travel to Pewter and Brock."""
+
+    phase: NorthboundPhase
+    boundary: TravelBoundary
+    controls: InputReadiness
+    local_script: int
+    current_map_script: int
+    oak_lab_script: int
+    got_oaks_parcel: bool
+    oak_got_parcel: bool
+    got_pokedex: bool
+    parcel_in_bag: bool
+    beat_brock: bool
+    got_tm34: bool
+    tm34_in_bag: bool
+    boulder_badge: bool
+    boulder_badge_mirror: bool
+    current_opponent: int
+    trainer_class: int
+    engaged_trainer_class: int
+    gym_leader_number: int
+    map_id: int | None
+    player_x: int | None
+    player_y: int | None
+    party_count: int | None
+    first_party_species: int | None
+    first_party_hp: int | None
+    first_party_max_hp: int | None
+    first_party_level: int | None
+    battle_state: int | None
+    battle_result: int | None
+    first_party_status: int | None = None
+    first_party_moves: tuple[int, ...] | None = None
+    first_party_pp: tuple[int, ...] | None = None
+
+    @property
+    def post_pokedex_invariants(self) -> bool:
+        return (
+            self.got_oaks_parcel
+            and self.oak_got_parcel
+            and self.got_pokedex
+            and not self.parcel_in_bag
+            and self.oak_lab_script == 18
+            and self.party_count == 1
+            and self.first_party_species == SQUIRTLE_SPECIES_ID
+            and (self.first_party_hp or 0) > 0
+        )
+
+    @property
+    def stable_travel_snapshot(self) -> bool:
+        return (
+            self.unbeaten_brock_invariants
+            and self.battle_state == 0
+            and self.controls.ready
+            and self.current_map_script == 0
+        )
+
+    @property
+    def unbeaten_brock_invariants(self) -> bool:
+        return (
+            self.post_pokedex_invariants
+            and self.first_party_status == 0
+            and not self.beat_brock
+            and not self.got_tm34
+            and not self.tm34_in_bag
+            and not self.boulder_badge
+            and not self.boulder_badge_mirror
+        )
+
+    @property
+    def pewter_snapshot(self) -> bool:
+        return (
+            self.phase is NorthboundPhase.PEWTER_REACHED
+            and self.boundary is TravelBoundary.PEWTER_SOUTH_EDGE
+            and self.stable_travel_snapshot
+            and self.local_script == 0
+            and not self.beat_brock
+            and not self.boulder_badge
+            and not self.boulder_badge_mirror
+        )
+
+    @property
+    def travel_boundary_snapshot(self) -> bool:
+        if self.boundary is TravelBoundary.UNKNOWN or not self.stable_travel_snapshot:
+            return False
+        expected_script = {
+            TravelBoundary.PALLET_LAB_EXTERIOR: 5,
+            TravelBoundary.VIRIDIAN_SOUTH_EDGE: 0,
+            TravelBoundary.ROUTE_2_SOUTH_EDGE: 0,
+            TravelBoundary.FOREST_SOUTH_GATE: 0,
+            TravelBoundary.FOREST_SOUTH_ENTRY: 0,
+            TravelBoundary.FOREST_NORTH_GATE: 0,
+            TravelBoundary.ROUTE_2_NORTH_RETURN: 0,
+            TravelBoundary.PEWTER_SOUTH_EDGE: 0,
+            TravelBoundary.PEWTER_GYM_ENTRANCE: 0,
+        }[self.boundary]
+        return self.local_script == expected_script
+
+    @property
+    def brock_battle_snapshot(self) -> bool:
+        return (
+            self.phase is NorthboundPhase.BROCK_BATTLE
+            and self.map_id == MapId.PEWTER_GYM
+            and self.unbeaten_brock_invariants
+            and self.battle_state == 2
+            and self.local_script == 3
+            and self.current_map_script == 3
+            and self.current_opponent == BROCK_OPPONENT_ID
+            and self.trainer_class == BROCK_TRAINER_CLASS_ID
+            and self.engaged_trainer_class == BROCK_OPPONENT_ID
+            and self.gym_leader_number == BROCK_GYM_LEADER_NUMBER
+        )
+
+    @property
+    def brock_ready_snapshot(self) -> bool:
+        """Require a healthy, battle-capable Squirtle before challenging Brock."""
+        moves = self.first_party_moves or ()
+        pp = self.first_party_pp or ()
+        try:
+            bubble_slot = moves.index(BUBBLE_MOVE_ID)
+        except ValueError:
+            return False
+        bubble_pp = pp[bubble_slot] & 0x3F if bubble_slot < len(pp) else 0
+        return (
+            self.phase is NorthboundPhase.PEWTER_GYM_ENTERED
+            and self.boundary is TravelBoundary.PEWTER_GYM_ENTRANCE
+            and self.travel_boundary_snapshot
+            and not self.beat_brock
+            and not self.boulder_badge
+            and not self.boulder_badge_mirror
+            and self.first_party_status == 0
+            and (self.first_party_level or 0) >= 9
+            and (self.first_party_hp or 0) >= 19
+            and (self.first_party_max_hp or 0) >= (self.first_party_hp or 0)
+            and bubble_pp >= 4
+        )
+
+    @property
+    def brock_victory_snapshot(self) -> bool:
+        return (
+            self.phase is NorthboundPhase.BROCK_DEFEATED
+            and self.map_id == MapId.PEWTER_GYM
+            and self.post_pokedex_invariants
+            and self.battle_state == 0
+            and self.battle_result == 0
+            and self.beat_brock
+            and self.got_tm34
+            and self.tm34_in_bag
+            and self.boulder_badge
+            and self.boulder_badge_mirror
+            and self.local_script == 0
+            and self.current_map_script == 0
+            and self.controls.ready
+            and self.first_party_status == 0
+        )
+
+
+class PewterProgressError(ValueError):
+    """Raised when northbound evidence skips or contradicts a required boundary."""
+
+
+class PewterProgressTracker:
+    """Latch one ordered post-Pokédex proof without trusting a destination alone."""
+
+    _BOUNDARIES = (
+        TravelBoundary.PALLET_LAB_EXTERIOR,
+        TravelBoundary.VIRIDIAN_SOUTH_EDGE,
+        TravelBoundary.ROUTE_2_SOUTH_EDGE,
+        TravelBoundary.FOREST_SOUTH_GATE,
+        TravelBoundary.FOREST_SOUTH_ENTRY,
+        TravelBoundary.FOREST_NORTH_GATE,
+        TravelBoundary.ROUTE_2_NORTH_RETURN,
+        TravelBoundary.PEWTER_SOUTH_EDGE,
+        TravelBoundary.PEWTER_GYM_ENTRANCE,
+    )
+
+    def __init__(self, pokedex_state: OaksErrandState) -> None:
+        if not pokedex_state.pokedex_snapshot:
+            raise PewterProgressError(
+                "Northbound qualification must begin at the verified Pokédex boundary."
+            )
+        self._boundary_index = -1
+        self._saw_brock_ready = False
+        self._saw_brock_battle = False
+        self._brock_defeated = False
+
+    @property
+    def reached_boundaries(self) -> tuple[TravelBoundary, ...]:
+        return self._BOUNDARIES[: self._boundary_index + 1]
+
+    @property
+    def saw_brock_battle(self) -> bool:
+        return self._saw_brock_battle
+
+    @property
+    def saw_brock_ready(self) -> bool:
+        return self._saw_brock_ready
+
+    @property
+    def brock_defeated(self) -> bool:
+        return self._brock_defeated
+
+    def observe(self, state: PewterChapterState) -> NorthboundPhase:
+        if state.brock_victory_snapshot:
+            if not self._saw_brock_battle:
+                raise PewterProgressError(
+                    "Brock victory cannot qualify without the observed live battle."
+                )
+            self._brock_defeated = True
+            return NorthboundPhase.BROCK_DEFEATED
+
+        if state.brock_battle_snapshot:
+            if (
+                self._boundary_index != len(self._BOUNDARIES) - 1
+                or not self._saw_brock_ready
+            ):
+                raise PewterProgressError(
+                    "Brock battle appeared before the battle-ready gym-entry proof."
+                )
+            self._saw_brock_battle = True
+            return NorthboundPhase.BROCK_BATTLE
+
+        if state.boundary is TravelBoundary.UNKNOWN:
+            return state.phase
+        if not state.travel_boundary_snapshot:
+            raise PewterProgressError("Travel boundary failed its stable semantic snapshot.")
+
+        expected_index = self._boundary_index + 1
+        if (
+            self._boundary_index >= 0
+            and state.boundary is self._BOUNDARIES[self._boundary_index]
+        ):
+            return state.phase
+        if expected_index >= len(self._BOUNDARIES):
+            raise PewterProgressError("Unexpected travel boundary after Pewter Gym entry.")
+        if state.boundary is not self._BOUNDARIES[expected_index]:
+            raise PewterProgressError("Northbound evidence skipped a required travel boundary.")
+        if (
+            state.boundary is TravelBoundary.PEWTER_GYM_ENTRANCE
+            and not state.brock_ready_snapshot
+        ):
+            raise PewterProgressError(
+                "Pewter Gym entry failed the healthy Bubble-readiness gate."
+            )
+        self._boundary_index = expected_index
+        if state.boundary is TravelBoundary.PEWTER_GYM_ENTRANCE:
+            self._saw_brock_ready = True
+        return state.phase
+
+
 class PokemonRedStateReader:
     def __init__(self, memory: ReadOnlyMemory) -> None:
         self._memory = memory
@@ -299,6 +636,27 @@ class PokemonRedStateReader:
         first_party_max_hp = (
             self._read_u16_be(RamAddress.PARTY_MON_1_MAX_HP) if party_count else None
         )
+        first_party_status = (
+            self._memory.read_u8(RamAddress.PARTY_MON_1_STATUS)
+            if party_count
+            else None
+        )
+        first_party_moves = (
+            tuple(
+                self._memory.read_u8(int(RamAddress.PARTY_MON_1_MOVES) + index)
+                for index in range(4)
+            )
+            if party_count
+            else None
+        )
+        first_party_pp = (
+            tuple(
+                self._memory.read_u8(int(RamAddress.PARTY_MON_1_PP) + index)
+                for index in range(4)
+            )
+            if party_count
+            else None
+        )
         events = bytes(
             self._memory.read_u8(int(RamAddress.EVENT_FLAGS) + index)
             for index in range(EVENT_FLAG_BYTES)
@@ -317,7 +675,10 @@ class PokemonRedStateReader:
             first_party_level=first_party_level,
             first_party_hp=first_party_hp,
             first_party_max_hp=first_party_max_hp,
+            first_party_status=first_party_status,
             battle_result=self._memory.read_u8(RamAddress.BATTLE_RESULT),
+            first_party_moves=first_party_moves,
+            first_party_pp=first_party_pp,
         )
 
     def read_bedroom_input_state(self) -> BedroomInputState:
@@ -465,8 +826,175 @@ class PokemonRedStateReader:
             battle_state=raw.battle_state,
         )
 
+    def read_input_readiness(self) -> InputReadiness:
+        return InputReadiness(
+            joy_ignore=self._memory.read_u8(RamAddress.JOY_IGNORE),
+            simulated_joypad_index=self._memory.read_u8(
+                RamAddress.SIMULATED_JOYPAD_INDEX
+            ),
+            npc_movement_script_table=self._memory.read_u8(
+                RamAddress.NPC_MOVEMENT_SCRIPT_TABLE
+            ),
+            player_moving_direction=self._memory.read_u8(
+                RamAddress.PLAYER_MOVING_DIRECTION
+            ),
+            status_flags_5=self._memory.read_u8(RamAddress.STATUS_FLAGS_5),
+            movement_flags=self._memory.read_u8(RamAddress.MOVEMENT_FLAGS),
+        )
+
+    def read_pewter_chapter_state(self, raw: RawGameState) -> PewterChapterState:
+        """Translate route, script, battle, and badge evidence into one phase."""
+        controls = self.read_input_readiness()
+        got_oaks_parcel = _event(raw.event_flags, EventFlag.GOT_OAKS_PARCEL)
+        oak_got_parcel = _event(raw.event_flags, EventFlag.OAK_GOT_PARCEL)
+        got_pokedex = _event(raw.event_flags, EventFlag.GOT_POKEDEX)
+        beat_brock = _event(raw.event_flags, EventFlag.BEAT_BROCK)
+        got_tm34 = _event(raw.event_flags, EventFlag.GOT_TM34)
+        parcel_in_bag = ItemId.OAKS_PARCEL in set(raw.bag_item_ids or ())
+        tm34_in_bag = ItemId.TM34_BIDE in set(raw.bag_item_ids or ())
+        local_script = self._local_script(raw.map_id)
+        current_map_script = self._memory.read_u8(RamAddress.CURRENT_MAP_SCRIPT)
+        badge_bits = raw.badge_bits or 0
+        badge_mirror = self._memory.read_u8(RamAddress.BEAT_GYM_FLAGS)
+        boundary = _travel_boundary(raw)
+
+        phase = NorthboundPhase.UNKNOWN
+        if (
+            raw.map_id == MapId.PEWTER_GYM
+            and raw.battle_state == 0
+            and raw.battle_result == 0
+            and beat_brock
+            and got_tm34
+            and tm34_in_bag
+            and bool(badge_bits & Badge.BOULDER)
+            and bool(badge_mirror & Badge.BOULDER)
+            and local_script == 0
+            and current_map_script == 0
+            and controls.ready
+        ):
+            phase = NorthboundPhase.BROCK_DEFEATED
+        elif (
+            raw.map_id == MapId.PEWTER_GYM
+            and raw.battle_state == 2
+            and local_script == 3
+            and current_map_script == 3
+            and self._memory.read_u8(RamAddress.CURRENT_OPPONENT)
+            == BROCK_OPPONENT_ID
+            and self._memory.read_u8(RamAddress.TRAINER_CLASS)
+            == BROCK_TRAINER_CLASS_ID
+            and self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS)
+            == BROCK_OPPONENT_ID
+            and self._memory.read_u8(RamAddress.GYM_LEADER_NUMBER)
+            == BROCK_GYM_LEADER_NUMBER
+        ):
+            phase = NorthboundPhase.BROCK_BATTLE
+        elif boundary is TravelBoundary.PEWTER_GYM_ENTRANCE:
+            phase = NorthboundPhase.PEWTER_GYM_ENTERED
+        elif boundary is TravelBoundary.PEWTER_SOUTH_EDGE:
+            phase = NorthboundPhase.PEWTER_REACHED
+        elif boundary in {
+            TravelBoundary.ROUTE_2_NORTH_RETURN,
+            TravelBoundary.FOREST_NORTH_GATE,
+        }:
+            phase = NorthboundPhase.FOREST_CLEARED
+        elif boundary is TravelBoundary.FOREST_SOUTH_ENTRY:
+            phase = NorthboundPhase.FOREST_ENTERED
+        elif boundary is TravelBoundary.FOREST_SOUTH_GATE:
+            phase = NorthboundPhase.FOREST_GATE_REACHED
+        elif boundary is TravelBoundary.ROUTE_2_SOUTH_EDGE:
+            phase = NorthboundPhase.ROUTE_2_SOUTH_REACHED
+        elif boundary is TravelBoundary.VIRIDIAN_SOUTH_EDGE:
+            phase = NorthboundPhase.VIRIDIAN_REACHED
+        elif boundary is TravelBoundary.PALLET_LAB_EXTERIOR:
+            phase = NorthboundPhase.LAB_EXITED
+
+        return PewterChapterState(
+            phase=phase,
+            boundary=boundary,
+            controls=controls,
+            local_script=local_script,
+            current_map_script=current_map_script,
+            oak_lab_script=self._memory.read_u8(RamAddress.OAKS_LAB_SCRIPT),
+            got_oaks_parcel=got_oaks_parcel,
+            oak_got_parcel=oak_got_parcel,
+            got_pokedex=got_pokedex,
+            parcel_in_bag=parcel_in_bag,
+            beat_brock=beat_brock,
+            got_tm34=got_tm34,
+            tm34_in_bag=tm34_in_bag,
+            boulder_badge=bool(badge_bits & Badge.BOULDER),
+            boulder_badge_mirror=bool(badge_mirror & Badge.BOULDER),
+            current_opponent=self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
+            trainer_class=self._memory.read_u8(RamAddress.TRAINER_CLASS),
+            engaged_trainer_class=self._memory.read_u8(
+                RamAddress.ENGAGED_TRAINER_CLASS
+            ),
+            gym_leader_number=self._memory.read_u8(RamAddress.GYM_LEADER_NUMBER),
+            map_id=raw.map_id,
+            player_x=raw.player_x,
+            player_y=raw.player_y,
+            party_count=raw.party_count,
+            first_party_species=(
+                raw.party_species_ids[0] if raw.party_species_ids else None
+            ),
+            first_party_hp=raw.first_party_hp,
+            first_party_max_hp=raw.first_party_max_hp,
+            first_party_level=raw.first_party_level,
+            first_party_status=raw.first_party_status,
+            battle_state=raw.battle_state,
+            battle_result=raw.battle_result,
+            first_party_moves=raw.first_party_moves,
+            first_party_pp=raw.first_party_pp,
+        )
+
+    def _local_script(self, map_id: int | None) -> int:
+        address = {
+            MapId.OAKS_LAB: RamAddress.OAKS_LAB_SCRIPT,
+            MapId.PALLET_TOWN: RamAddress.PALLET_TOWN_SCRIPT,
+            MapId.VIRIDIAN_CITY: RamAddress.VIRIDIAN_CITY_SCRIPT,
+            MapId.VIRIDIAN_FOREST: RamAddress.VIRIDIAN_FOREST_SCRIPT,
+            MapId.PEWTER_CITY: RamAddress.PEWTER_CITY_SCRIPT,
+            MapId.PEWTER_GYM: RamAddress.PEWTER_GYM_SCRIPT,
+        }.get(map_id)
+        return self._memory.read_u8(address) if address is not None else 0
+
     def _read_u16_be(self, address: int) -> int:
         return (self._memory.read_u8(address) << 8) | self._memory.read_u8(address + 1)
+
+
+def _travel_boundary(raw: RawGameState) -> TravelBoundary:
+    position = (raw.map_id, raw.player_x, raw.player_y)
+    if position == (MapId.PALLET_TOWN, 12, 12):
+        return TravelBoundary.PALLET_LAB_EXTERIOR
+    if position == (MapId.VIRIDIAN_CITY, 21, 35):
+        return TravelBoundary.VIRIDIAN_SOUTH_EDGE
+    if (
+        raw.map_id == MapId.ROUTE_2
+        and raw.player_x in {7, 8, 9}
+        and raw.player_y == 71
+    ):
+        return TravelBoundary.ROUTE_2_SOUTH_EDGE
+    if position == (MapId.VIRIDIAN_FOREST_SOUTH_GATE, 4, 7):
+        return TravelBoundary.FOREST_SOUTH_GATE
+    if (
+        raw.map_id == MapId.VIRIDIAN_FOREST
+        and raw.player_x in {16, 17}
+        and raw.player_y == 47
+    ):
+        return TravelBoundary.FOREST_SOUTH_ENTRY
+    if raw.map_id == MapId.VIRIDIAN_FOREST_NORTH_GATE:
+        return TravelBoundary.FOREST_NORTH_GATE
+    if position == (MapId.ROUTE_2, 3, 11):
+        return TravelBoundary.ROUTE_2_NORTH_RETURN
+    if (
+        raw.map_id == MapId.PEWTER_CITY
+        and raw.player_x in {18, 19}
+        and raw.player_y == 35
+    ):
+        return TravelBoundary.PEWTER_SOUTH_EDGE
+    if position == (MapId.PEWTER_GYM, 4, 13):
+        return TravelBoundary.PEWTER_GYM_ENTRANCE
+    return TravelBoundary.UNKNOWN
 
 
 def event_flag_is_set(event_flags: bytes | None, bit_index: int) -> bool:
@@ -532,10 +1060,18 @@ def location_label(map_id: int | None) -> str | None:
         MapId.INDIGO_PLATEAU: "indigo_plateau",
         MapId.SAFFRON_CITY: "saffron_city",
         MapId.ROUTE_1: "route_1",
+        MapId.ROUTE_2: "route_2",
         MapId.REDS_HOUSE_1F: "reds_house_1f",
         MapId.REDS_HOUSE_2F: "reds_house_2f",
         MapId.OAKS_LAB: "oaks_lab",
+        MapId.VIRIDIAN_POKECENTER: "viridian_pokecenter",
         MapId.VIRIDIAN_MART: "viridian_mart",
+        MapId.VIRIDIAN_FOREST_NORTH_GATE: "viridian_forest_north_gate",
+        MapId.ROUTE_2_GATE: "route_2_gate",
+        MapId.VIRIDIAN_FOREST_SOUTH_GATE: "viridian_forest_south_gate",
+        MapId.VIRIDIAN_FOREST: "viridian_forest",
+        MapId.PEWTER_GYM: "pewter_gym",
+        MapId.PEWTER_POKECENTER: "pewter_pokecenter",
         MapId.HALL_OF_FAME: "hall_of_fame",
         MapId.CHAMPIONS_ROOM: "champions_room",
         MapId.INDIGO_PLATEAU_LOBBY: "indigo_plateau_lobby",

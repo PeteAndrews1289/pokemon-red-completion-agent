@@ -1,25 +1,40 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 import pytest
 
 from pokemon_red_completion.domain import GameMode
 from pokemon_red_completion.observation import (
+    BROCK_GYM_LEADER_NUMBER,
+    BROCK_OPPONENT_ID,
+    BROCK_TRAINER_CLASS_ID,
+    BUBBLE_MOVE_ID,
     EVENT_FLAG_BYTES,
+    EXITING_DOOR_MOVEMENT_MASK,
     OAKS_LAB_SELECTION_READY_SCRIPT,
     OAKS_LAB_STARTER_OBTAINED_SCRIPT,
     REDS_HOUSE_2F_NOOP_SCRIPT,
+    SCRIPTED_MOVEMENT_STATUS_MASK,
     SQUIRTLE_SPECIES_ID,
     Badge,
     EventFlag,
+    InputReadiness,
     ItemId,
     MapId,
+    NorthboundPhase,
     OaksErrandPhase,
+    OaksErrandState,
     OpeningPhase,
+    PewterChapterState,
+    PewterProgressError,
+    PewterProgressTracker,
     PokemonRedStateReader,
     RamAddress,
     RawGameState,
     SemanticStateError,
     SemanticStateTracker,
+    TravelBoundary,
     event_flag_is_set,
 )
 from pokemon_red_completion.referee import (
@@ -426,3 +441,648 @@ def test_event_lookup_rejects_negative_and_short_buffers() -> None:
     with pytest.raises(ValueError, match="cannot be negative"):
         event_flag_is_set(b"", -1)
     assert not event_flag_is_set(b"\x01", EventFlag.BEAT_CHAMPION_RIVAL)
+
+
+def _post_pokedex_raw(
+    map_id: MapId,
+    player_x: int,
+    player_y: int,
+    *,
+    battle_state: int = 0,
+    battle_result: int = 0,
+    beat_brock: bool = False,
+    got_tm34: bool = False,
+    badges: Badge | None = None,
+    parcel_in_bag: bool = False,
+    tm34_in_bag: bool = False,
+    party_count: int = 1,
+    first_party_hp: int = 21,
+    first_party_max_hp: int = 21,
+    first_party_level: int = 6,
+    first_party_moves: tuple[int, ...] | None = None,
+    first_party_pp: tuple[int, ...] | None = None,
+) -> RawGameState:
+    events = (
+        EventFlag.GOT_POKEDEX,
+        EventFlag.OAK_GOT_PARCEL,
+        EventFlag.GOT_OAKS_PARCEL,
+    )
+    if beat_brock:
+        events += (EventFlag.BEAT_BROCK,)
+    if got_tm34:
+        events += (EventFlag.GOT_TM34,)
+    bag_items = []
+    if parcel_in_bag:
+        bag_items.append(ItemId.OAKS_PARCEL)
+    if tm34_in_bag:
+        bag_items.append(ItemId.TM34_BIDE)
+    return RawGameState(
+        game_started=True,
+        map_id=int(map_id),
+        player_x=player_x,
+        player_y=player_y,
+        party_count=party_count,
+        battle_state=battle_state,
+        badge_bits=int(badges or Badge(0)),
+        bag_item_ids=tuple(bag_items),
+        event_flags=_events(*events),
+        party_species_ids=(SQUIRTLE_SPECIES_ID,) if party_count else (),
+        first_party_level=first_party_level if party_count else None,
+        first_party_hp=first_party_hp if party_count else None,
+        first_party_max_hp=first_party_max_hp if party_count else None,
+        first_party_status=0 if party_count else None,
+        battle_result=battle_result,
+        first_party_moves=first_party_moves if party_count else None,
+        first_party_pp=first_party_pp if party_count else None,
+    )
+
+
+def _pewter_memory(overrides: dict[int, int] | None = None) -> RecordingMemory:
+    values: dict[int, int] = {
+        RamAddress.JOY_IGNORE: 0,
+        RamAddress.SIMULATED_JOYPAD_INDEX: 0,
+        RamAddress.NPC_MOVEMENT_SCRIPT_TABLE: 0,
+        RamAddress.PLAYER_MOVING_DIRECTION: 0,
+        RamAddress.STATUS_FLAGS_5: 0,
+        RamAddress.MOVEMENT_FLAGS: 0,
+        RamAddress.CURRENT_MAP_SCRIPT: 0,
+        RamAddress.OAKS_LAB_SCRIPT: 18,
+        RamAddress.PALLET_TOWN_SCRIPT: 5,
+        RamAddress.VIRIDIAN_CITY_SCRIPT: 0,
+        RamAddress.VIRIDIAN_FOREST_SCRIPT: 0,
+        RamAddress.PEWTER_CITY_SCRIPT: 0,
+        RamAddress.PEWTER_GYM_SCRIPT: 0,
+        RamAddress.BEAT_GYM_FLAGS: 0,
+        RamAddress.CURRENT_OPPONENT: 0,
+        RamAddress.TRAINER_CLASS: 0,
+        RamAddress.ENGAGED_TRAINER_CLASS: 0,
+        RamAddress.GYM_LEADER_NUMBER: 0,
+    }
+    if overrides is not None:
+        values.update(overrides)
+    return RecordingMemory(values)
+
+
+def _stable_pewter_state() -> PewterChapterState:
+    raw = _post_pokedex_raw(MapId.PEWTER_CITY, 18, 35)
+    return PokemonRedStateReader(_pewter_memory()).read_pewter_chapter_state(raw)
+
+
+def _live_brock_state() -> PewterChapterState:
+    raw = _post_pokedex_raw(
+        MapId.PEWTER_GYM,
+        4,
+        2,
+        battle_state=2,
+    )
+    memory = _pewter_memory(
+        {
+            RamAddress.PEWTER_GYM_SCRIPT: 3,
+            RamAddress.CURRENT_MAP_SCRIPT: 3,
+            RamAddress.CURRENT_OPPONENT: BROCK_OPPONENT_ID,
+            RamAddress.TRAINER_CLASS: BROCK_TRAINER_CLASS_ID,
+            RamAddress.ENGAGED_TRAINER_CLASS: BROCK_OPPONENT_ID,
+            RamAddress.GYM_LEADER_NUMBER: BROCK_GYM_LEADER_NUMBER,
+        }
+    )
+    return PokemonRedStateReader(memory).read_pewter_chapter_state(raw)
+
+
+def _brock_ready_state() -> PewterChapterState:
+    raw = _post_pokedex_raw(
+        MapId.PEWTER_GYM,
+        4,
+        13,
+        first_party_hp=21,
+        first_party_max_hp=27,
+        first_party_level=9,
+        first_party_moves=(0x21, 0x27, BUBBLE_MOVE_ID, 0),
+        first_party_pp=(35, 30, 26, 0),
+    )
+    return PokemonRedStateReader(_pewter_memory()).read_pewter_chapter_state(raw)
+
+
+def _brock_victory_state() -> PewterChapterState:
+    raw = _post_pokedex_raw(
+        MapId.PEWTER_GYM,
+        4,
+        2,
+        beat_brock=True,
+        got_tm34=True,
+        badges=Badge.BOULDER,
+        tm34_in_bag=True,
+        first_party_hp=26,
+        first_party_max_hp=33,
+        first_party_level=12,
+        first_party_moves=(0x21, 0x27, BUBBLE_MOVE_ID, 0),
+        first_party_pp=(35, 30, 23, 0),
+    )
+    memory = _pewter_memory({RamAddress.BEAT_GYM_FLAGS: int(Badge.BOULDER)})
+    return PokemonRedStateReader(memory).read_pewter_chapter_state(raw)
+
+
+def test_pewter_chapter_symbols_are_exact_for_the_supported_revision() -> None:
+    assert {
+        address: int(address)
+        for address in (
+            RamAddress.NPC_MOVEMENT_SCRIPT_TABLE,
+            RamAddress.ENGAGED_TRAINER_CLASS,
+            RamAddress.SIMULATED_JOYPAD_INDEX,
+            RamAddress.TRAINER_CLASS,
+            RamAddress.IS_IN_BATTLE,
+            RamAddress.CURRENT_OPPONENT,
+            RamAddress.GYM_LEADER_NUMBER,
+            RamAddress.PARTY_MON_1_MOVES,
+            RamAddress.PARTY_MON_1_PP,
+            RamAddress.PLAYER_MOVING_DIRECTION,
+            RamAddress.VIRIDIAN_CITY_SCRIPT,
+            RamAddress.PEWTER_CITY_SCRIPT,
+            RamAddress.PEWTER_GYM_SCRIPT,
+            RamAddress.VIRIDIAN_FOREST_SCRIPT,
+            RamAddress.BEAT_GYM_FLAGS,
+            RamAddress.STATUS_FLAGS_5,
+            RamAddress.MOVEMENT_FLAGS,
+            RamAddress.CURRENT_MAP_SCRIPT,
+        )
+    } == {
+        address: expected
+        for address, expected in (
+            (RamAddress.NPC_MOVEMENT_SCRIPT_TABLE, 0xCC57),
+            (RamAddress.ENGAGED_TRAINER_CLASS, 0xCD2D),
+            (RamAddress.SIMULATED_JOYPAD_INDEX, 0xCD38),
+            (RamAddress.TRAINER_CLASS, 0xD031),
+            (RamAddress.IS_IN_BATTLE, 0xD057),
+            (RamAddress.CURRENT_OPPONENT, 0xD059),
+            (RamAddress.GYM_LEADER_NUMBER, 0xD05C),
+            (RamAddress.PARTY_MON_1_MOVES, 0xD173),
+            (RamAddress.PARTY_MON_1_PP, 0xD188),
+            (RamAddress.PLAYER_MOVING_DIRECTION, 0xD528),
+            (RamAddress.VIRIDIAN_CITY_SCRIPT, 0xD5F4),
+            (RamAddress.PEWTER_CITY_SCRIPT, 0xD5F7),
+            (RamAddress.PEWTER_GYM_SCRIPT, 0xD5FC),
+            (RamAddress.VIRIDIAN_FOREST_SCRIPT, 0xD618),
+            (RamAddress.BEAT_GYM_FLAGS, 0xD72A),
+            (RamAddress.STATUS_FLAGS_5, 0xD730),
+            (RamAddress.MOVEMENT_FLAGS, 0xD736),
+            (RamAddress.CURRENT_MAP_SCRIPT, 0xDA39),
+        )
+    }
+    assert {
+        map_id: int(map_id)
+        for map_id in (
+            MapId.ROUTE_2,
+            MapId.VIRIDIAN_FOREST_NORTH_GATE,
+            MapId.ROUTE_2_GATE,
+            MapId.VIRIDIAN_FOREST_SOUTH_GATE,
+            MapId.VIRIDIAN_FOREST,
+            MapId.PEWTER_GYM,
+        )
+    } == {
+        MapId.ROUTE_2: 0x0D,
+        MapId.VIRIDIAN_FOREST_NORTH_GATE: 0x2F,
+        MapId.ROUTE_2_GATE: 0x31,
+        MapId.VIRIDIAN_FOREST_SOUTH_GATE: 0x32,
+        MapId.VIRIDIAN_FOREST: 0x33,
+        MapId.PEWTER_GYM: 0x36,
+    }
+    assert EventFlag.GOT_POKEDEX == 0x025
+    assert EventFlag.OAK_GOT_PARCEL == 0x038
+    assert EventFlag.GOT_OAKS_PARCEL == 0x039
+    assert EventFlag.GOT_TM34 == 0x076
+    assert EventFlag.BEAT_BROCK == 0x077
+    brock_byte, brock_bit = divmod(int(EventFlag.BEAT_BROCK), 8)
+    assert int(RamAddress.EVENT_FLAGS) + brock_byte == 0xD755
+    assert 1 << brock_bit == 0x80
+    assert BROCK_OPPONENT_ID == 0xEA
+    assert BROCK_TRAINER_CLASS_ID == 0x22
+    assert BROCK_GYM_LEADER_NUMBER == 1
+    assert BUBBLE_MOVE_ID == 0x91
+    assert ItemId.TM34_BIDE == 0xEA
+
+
+def test_reader_encapsulates_the_exact_input_readiness_symbols() -> None:
+    memory = _pewter_memory()
+
+    controls = PokemonRedStateReader(memory).read_input_readiness()
+
+    assert controls.ready
+    assert memory.reads == [
+        RamAddress.JOY_IGNORE,
+        RamAddress.SIMULATED_JOYPAD_INDEX,
+        RamAddress.NPC_MOVEMENT_SCRIPT_TABLE,
+        RamAddress.PLAYER_MOVING_DIRECTION,
+        RamAddress.STATUS_FLAGS_5,
+        RamAddress.MOVEMENT_FLAGS,
+    ]
+    assert SCRIPTED_MOVEMENT_STATUS_MASK == 0xA1
+    assert EXITING_DOOR_MOVEMENT_MASK == 0x02
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    (
+        ("joy_ignore", 1),
+        ("simulated_joypad_index", 1),
+        ("npc_movement_script_table", 1),
+        ("player_moving_direction", 1),
+        ("status_flags_5", 1 << 0),
+        ("status_flags_5", 1 << 5),
+        ("status_flags_5", 1 << 7),
+        ("movement_flags", EXITING_DOOR_MOVEMENT_MASK),
+    ),
+)
+def test_input_readiness_rejects_each_blocking_field(
+    field: str,
+    value: int,
+) -> None:
+    ready = InputReadiness(0, 0, 0, 0, 0)
+
+    assert not replace(ready, **{field: value}).ready
+
+
+def test_input_readiness_ignores_unrelated_status_bits() -> None:
+    controls = InputReadiness(0, 0, 0, 0, 1 << 2)
+
+    assert controls.ready
+
+
+@pytest.mark.parametrize(
+    ("map_id", "x", "y", "boundary", "phase"),
+    (
+        (
+            MapId.PALLET_TOWN,
+            12,
+            12,
+            TravelBoundary.PALLET_LAB_EXTERIOR,
+            NorthboundPhase.LAB_EXITED,
+        ),
+        (
+            MapId.VIRIDIAN_CITY,
+            21,
+            35,
+            TravelBoundary.VIRIDIAN_SOUTH_EDGE,
+            NorthboundPhase.VIRIDIAN_REACHED,
+        ),
+        (
+            MapId.ROUTE_2,
+            7,
+            71,
+            TravelBoundary.ROUTE_2_SOUTH_EDGE,
+            NorthboundPhase.ROUTE_2_SOUTH_REACHED,
+        ),
+        (
+            MapId.ROUTE_2,
+            8,
+            71,
+            TravelBoundary.ROUTE_2_SOUTH_EDGE,
+            NorthboundPhase.ROUTE_2_SOUTH_REACHED,
+        ),
+        (
+            MapId.ROUTE_2,
+            9,
+            71,
+            TravelBoundary.ROUTE_2_SOUTH_EDGE,
+            NorthboundPhase.ROUTE_2_SOUTH_REACHED,
+        ),
+        (
+            MapId.VIRIDIAN_FOREST_SOUTH_GATE,
+            4,
+            7,
+            TravelBoundary.FOREST_SOUTH_GATE,
+            NorthboundPhase.FOREST_GATE_REACHED,
+        ),
+        (
+            MapId.VIRIDIAN_FOREST,
+            16,
+            47,
+            TravelBoundary.FOREST_SOUTH_ENTRY,
+            NorthboundPhase.FOREST_ENTERED,
+        ),
+        (
+            MapId.VIRIDIAN_FOREST,
+            17,
+            47,
+            TravelBoundary.FOREST_SOUTH_ENTRY,
+            NorthboundPhase.FOREST_ENTERED,
+        ),
+        (
+            MapId.VIRIDIAN_FOREST_NORTH_GATE,
+            4,
+            7,
+            TravelBoundary.FOREST_NORTH_GATE,
+            NorthboundPhase.FOREST_CLEARED,
+        ),
+        (
+            MapId.ROUTE_2,
+            3,
+            11,
+            TravelBoundary.ROUTE_2_NORTH_RETURN,
+            NorthboundPhase.FOREST_CLEARED,
+        ),
+        (
+            MapId.PEWTER_CITY,
+            18,
+            35,
+            TravelBoundary.PEWTER_SOUTH_EDGE,
+            NorthboundPhase.PEWTER_REACHED,
+        ),
+        (
+            MapId.PEWTER_CITY,
+            19,
+            35,
+            TravelBoundary.PEWTER_SOUTH_EDGE,
+            NorthboundPhase.PEWTER_REACHED,
+        ),
+        (
+            MapId.PEWTER_GYM,
+            4,
+            13,
+            TravelBoundary.PEWTER_GYM_ENTRANCE,
+            NorthboundPhase.PEWTER_GYM_ENTERED,
+        ),
+    ),
+)
+def test_pewter_chapter_translates_each_exact_travel_boundary(
+    map_id: MapId,
+    x: int,
+    y: int,
+    boundary: TravelBoundary,
+    phase: NorthboundPhase,
+) -> None:
+    raw = _post_pokedex_raw(map_id, x, y)
+
+    state = PokemonRedStateReader(_pewter_memory()).read_pewter_chapter_state(raw)
+
+    assert state.boundary is boundary
+    assert state.phase is phase
+    assert state.stable_travel_snapshot
+    assert state.travel_boundary_snapshot
+
+
+@pytest.mark.parametrize(
+    ("map_id", "x", "y"),
+    (
+        (MapId.PALLET_TOWN, 12, 11),
+        (MapId.VIRIDIAN_CITY, 20, 35),
+        (MapId.ROUTE_2, 6, 71),
+        (MapId.ROUTE_2, 8, 70),
+        (MapId.VIRIDIAN_FOREST_SOUTH_GATE, 5, 7),
+        (MapId.VIRIDIAN_FOREST, 15, 47),
+        (MapId.VIRIDIAN_FOREST, 16, 46),
+        (MapId.ROUTE_2, 4, 11),
+        (MapId.PEWTER_CITY, 17, 35),
+        (MapId.PEWTER_CITY, 18, 34),
+        (MapId.PEWTER_GYM, 5, 13),
+    ),
+)
+def test_pewter_chapter_rejects_nearby_non_boundary_positions(
+    map_id: MapId,
+    x: int,
+    y: int,
+) -> None:
+    raw = _post_pokedex_raw(map_id, x, y)
+
+    state = PokemonRedStateReader(_pewter_memory()).read_pewter_chapter_state(raw)
+
+    assert state.boundary is TravelBoundary.UNKNOWN
+    assert state.phase is NorthboundPhase.UNKNOWN
+
+
+@pytest.mark.parametrize(
+    "changes",
+    (
+        {"first_party_status": 8},
+        {"beat_brock": True},
+        {"got_tm34": True},
+        {"tm34_in_bag": True},
+        {"boulder_badge": True},
+        {"boulder_badge_mirror": True},
+    ),
+)
+def test_travel_boundaries_require_an_unbeaten_healthy_lineage(
+    changes: dict[str, object],
+) -> None:
+    state = _boundary_state(MapId.VIRIDIAN_CITY, 21, 35)
+
+    assert not replace(state, **changes).travel_boundary_snapshot
+
+
+def test_pewter_snapshot_requires_a_stable_unbeaten_post_pokedex_state() -> None:
+    state = _stable_pewter_state()
+
+    assert state.phase is NorthboundPhase.PEWTER_REACHED
+    assert state.boundary is TravelBoundary.PEWTER_SOUTH_EDGE
+    assert state.controls.ready
+    assert state.post_pokedex_invariants
+    assert state.stable_travel_snapshot
+    assert state.pewter_snapshot
+
+
+@pytest.mark.parametrize(
+    "changes",
+    (
+        {"phase": NorthboundPhase.UNKNOWN},
+        {"boundary": TravelBoundary.UNKNOWN},
+        {"controls": InputReadiness(1, 0, 0, 0, 0)},
+        {"local_script": 1},
+        {"current_map_script": 1},
+        {"oak_lab_script": 17},
+        {"got_oaks_parcel": False},
+        {"oak_got_parcel": False},
+        {"got_pokedex": False},
+        {"parcel_in_bag": True},
+        {"party_count": 2},
+        {"first_party_species": 0xB0},
+        {"first_party_hp": 0},
+        {"battle_state": 1},
+        {"beat_brock": True},
+        {"boulder_badge": True},
+        {"boulder_badge_mirror": True},
+    ),
+)
+def test_pewter_snapshot_rejects_each_one_field_near_miss(
+    changes: dict[str, object],
+) -> None:
+    assert not replace(_stable_pewter_state(), **changes).pewter_snapshot
+
+
+def test_reader_recognizes_only_the_exact_live_brock_identity() -> None:
+    state = _live_brock_state()
+
+    assert state.phase is NorthboundPhase.BROCK_BATTLE
+    assert state.brock_battle_snapshot
+    assert state.map_id == MapId.PEWTER_GYM
+    assert state.current_opponent == BROCK_OPPONENT_ID
+    assert state.trainer_class == BROCK_TRAINER_CLASS_ID
+    assert state.engaged_trainer_class == BROCK_OPPONENT_ID
+    assert state.gym_leader_number == BROCK_GYM_LEADER_NUMBER
+
+
+def test_brock_readiness_requires_a_healthy_squirtle_with_bubble_reserve() -> None:
+    state = _brock_ready_state()
+
+    assert state.brock_ready_snapshot
+
+
+@pytest.mark.parametrize(
+    "changes",
+    (
+        {"first_party_status": 8},
+        {"first_party_level": 8},
+        {"first_party_hp": 18},
+        {"first_party_max_hp": 14},
+        {"first_party_moves": (0x21, 0x27, 0, 0)},
+        {"first_party_pp": (35, 30, 3, 0)},
+    ),
+)
+def test_brock_readiness_rejects_each_party_near_miss(
+    changes: dict[str, object],
+) -> None:
+    state = _brock_ready_state()
+
+    assert not replace(state, **changes).brock_ready_snapshot
+
+
+@pytest.mark.parametrize(
+    "changes",
+    (
+        {"phase": NorthboundPhase.UNKNOWN},
+        {"map_id": MapId.PEWTER_CITY},
+        {"battle_state": 1},
+        {"local_script": 2},
+        {"current_map_script": 2},
+        {"oak_lab_script": 17},
+        {"got_oaks_parcel": False},
+        {"oak_got_parcel": False},
+        {"got_pokedex": False},
+        {"parcel_in_bag": True},
+        {"party_count": 2},
+        {"first_party_species": 0xB0},
+        {"first_party_hp": 0},
+        {"first_party_status": 8},
+        {"current_opponent": 0xCD},
+        {"trainer_class": 0x05},
+        {"engaged_trainer_class": 0xCD},
+        {"gym_leader_number": 0},
+        {"beat_brock": True},
+        {"got_tm34": True},
+        {"tm34_in_bag": True},
+        {"boulder_badge": True},
+        {"boulder_badge_mirror": True},
+    ),
+)
+def test_live_brock_identity_rejects_each_one_field_near_miss(
+    changes: dict[str, object],
+) -> None:
+    assert not replace(_live_brock_state(), **changes).brock_battle_snapshot
+
+
+def test_post_brock_victory_requires_the_full_concurrent_conjunction() -> None:
+    state = _brock_victory_state()
+
+    assert state.phase is NorthboundPhase.BROCK_DEFEATED
+    assert state.post_pokedex_invariants
+    assert state.controls.ready
+    assert state.brock_victory_snapshot
+
+
+@pytest.mark.parametrize(
+    "changes",
+    (
+        {"phase": NorthboundPhase.UNKNOWN},
+        {"map_id": MapId.PEWTER_CITY},
+        {"controls": InputReadiness(0, 1, 0, 0, 0)},
+        {"local_script": 3},
+        {"current_map_script": 3},
+        {"oak_lab_script": 17},
+        {"got_oaks_parcel": False},
+        {"oak_got_parcel": False},
+        {"got_pokedex": False},
+        {"parcel_in_bag": True},
+        {"party_count": 2},
+        {"first_party_species": 0xB0},
+        {"first_party_hp": 0},
+        {"first_party_status": 8},
+        {"battle_state": 2},
+        {"battle_result": 1},
+        {"beat_brock": False},
+        {"got_tm34": False},
+        {"tm34_in_bag": False},
+        {"boulder_badge": False},
+        {"boulder_badge_mirror": False},
+    ),
+)
+def test_post_brock_victory_rejects_each_one_field_near_miss(
+    changes: dict[str, object],
+) -> None:
+    assert not replace(_brock_victory_state(), **changes).brock_victory_snapshot
+
+
+def _pokedex_gate() -> OaksErrandState:
+    raw = _post_pokedex_raw(MapId.OAKS_LAB, 5, 3)
+    memory = _pewter_memory()
+    memory.values[RamAddress.VIRIDIAN_MART_SCRIPT] = 2
+    return PokemonRedStateReader(memory).read_oaks_errand_state(raw)
+
+
+def _boundary_state(
+    map_id: MapId,
+    x: int,
+    y: int,
+) -> PewterChapterState:
+    return PokemonRedStateReader(_pewter_memory()).read_pewter_chapter_state(
+        _post_pokedex_raw(map_id, x, y)
+    )
+
+
+def test_pewter_progress_tracker_requires_the_verified_pokedex_origin() -> None:
+    invalid = PokemonRedStateReader(_pewter_memory()).read_oaks_errand_state(
+        _post_pokedex_raw(MapId.PEWTER_CITY, 18, 35)
+    )
+
+    with pytest.raises(PewterProgressError, match="verified Pokédex boundary"):
+        PewterProgressTracker(invalid)
+
+
+def test_pewter_progress_tracker_latches_every_ordered_boundary_and_brock() -> None:
+    tracker = PewterProgressTracker(_pokedex_gate())
+    boundaries = (
+        (MapId.PALLET_TOWN, 12, 12),
+        (MapId.VIRIDIAN_CITY, 21, 35),
+        (MapId.ROUTE_2, 8, 71),
+        (MapId.VIRIDIAN_FOREST_SOUTH_GATE, 4, 7),
+        (MapId.VIRIDIAN_FOREST, 17, 47),
+        (MapId.VIRIDIAN_FOREST_NORTH_GATE, 4, 7),
+        (MapId.ROUTE_2, 3, 11),
+        (MapId.PEWTER_CITY, 18, 35),
+        (MapId.PEWTER_GYM, 4, 13),
+    )
+
+    for map_id, x, y in boundaries:
+        state = (
+            _brock_ready_state()
+            if map_id is MapId.PEWTER_GYM
+            else _boundary_state(map_id, x, y)
+        )
+        assert tracker.observe(state) is state.phase
+
+    assert tracker.reached_boundaries == tuple(TravelBoundary)[1:]
+    assert tracker.saw_brock_ready
+    assert tracker.observe(_live_brock_state()) is NorthboundPhase.BROCK_BATTLE
+    assert tracker.saw_brock_battle
+    assert tracker.observe(_brock_victory_state()) is NorthboundPhase.BROCK_DEFEATED
+    assert tracker.brock_defeated
+
+
+def test_pewter_progress_tracker_rejects_a_skipped_boundary() -> None:
+    tracker = PewterProgressTracker(_pokedex_gate())
+
+    with pytest.raises(PewterProgressError, match="skipped"):
+        tracker.observe(_boundary_state(MapId.VIRIDIAN_CITY, 21, 35))
+
+
+def test_pewter_progress_tracker_rejects_victory_without_live_battle() -> None:
+    tracker = PewterProgressTracker(_pokedex_gate())
+
+    with pytest.raises(PewterProgressError, match="observed live battle"):
+        tracker.observe(_brock_victory_state())
