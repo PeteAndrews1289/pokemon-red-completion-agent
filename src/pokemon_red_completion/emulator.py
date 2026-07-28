@@ -73,12 +73,10 @@ class PyBoyAdapter:
         *,
         window: str = "null",
         speed: int = 0,
-        factory: PyBoyFactory | None = None,
     ) -> None:
         self._rom_path = Path(rom_path)
         self._window = window
         self._speed = speed
-        self._factory = factory
         self._backend: PyBoyBackend | None = None
         self._rom_stream: io.BytesIO | None = None
         self._fingerprint: RomFingerprint | None = None
@@ -119,7 +117,7 @@ class PyBoyAdapter:
         payload = path.read_bytes()
         fingerprint = verify_rom_bytes(payload)
         rom_stream = io.BytesIO(payload)
-        factory = self._factory or _load_pyboy_factory()
+        factory = _load_pyboy_factory()
 
         backend: PyBoyBackend | None = None
         try:
@@ -178,8 +176,12 @@ class PyBoyAdapter:
         self.close()
 
     def read_u8(self, address: int) -> int:
-        if not isinstance(address, int) or isinstance(address, bool) or not 0 <= address <= 0xFFFF:
-            raise ValueError("Game Boy address must be an integer from 0x0000 to 0xFFFF")
+        if (
+            not isinstance(address, int)
+            or isinstance(address, bool)
+            or not 0xC000 <= address <= 0xDFFF
+        ):
+            raise ValueError("Address must be an integer in Work RAM (0xC000 to 0xDFFF)")
         return int(self._require_backend().memory[address])
 
     def press(self, button: str) -> None:

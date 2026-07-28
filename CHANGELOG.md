@@ -4,6 +4,7 @@
 
 - Added a lazy, optional PyBoy 2.7 adapter that receives only immutable verified ROM bytes.
 - Disabled human window input, adjacent save discovery, and save-on-exit in the private runtime.
+- Restricted observations to Work RAM and removed the public emulator-factory injection surface.
 - Adapted the predecessor's verified clean-power-on sequence behind the frame-safe executor.
 - Added a `bootstrap` command that reaches the input-ready bedroom and verifies one-tile movement.
 - Added the private integration gate and expanded the ROM-free suite from 42 to 52 tests.

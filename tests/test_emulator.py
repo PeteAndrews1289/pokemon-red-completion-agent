@@ -85,21 +85,28 @@ def accept_test_rom(monkeypatch: pytest.MonkeyPatch) -> None:
     )
 
 
+@pytest.fixture
+def recording_factory(monkeypatch: pytest.MonkeyPatch) -> RecordingFactory:
+    factory = RecordingFactory()
+    monkeypatch.setattr(
+        "pokemon_red_completion.emulator._load_pyboy_factory",
+        lambda: factory,
+    )
+    return factory
+
+
 def test_adapter_uses_verified_stream_and_safe_backend_flags(
     tmp_path: Path,
     accept_test_rom: None,
+    recording_factory: RecordingFactory,
 ) -> None:
     payload = b"private fixture bytes"
     rom_path = tmp_path / "fixture.gb"
     rom_path.write_bytes(payload)
-    factory = RecordingFactory()
 
-    with PyBoyAdapter(
-        rom_path,
-        factory=factory,
-    ) as emulator:
-        assert len(factory.calls) == 1
-        rom_stream, kwargs = factory.calls[0]
+    with PyBoyAdapter(rom_path) as emulator:
+        assert len(recording_factory.calls) == 1
+        rom_stream, kwargs = recording_factory.calls[0]
         assert isinstance(rom_stream, io.BytesIO)
         assert rom_stream.getvalue() == payload
         assert kwargs == {
@@ -113,23 +120,23 @@ def test_adapter_uses_verified_stream_and_safe_backend_flags(
         }
         assert emulator.read_u8(0xD732) == 0x12
         assert emulator.fingerprint.public_dict() == _fingerprint(payload).public_dict()
-        assert factory.backend is not None
-        assert factory.backend.speed == 0
+        assert recording_factory.backend is not None
+        assert recording_factory.backend.speed == 0
 
-    assert factory.backend is not None
-    assert factory.backend.events[-1] == ("stop", False)
+    assert recording_factory.backend is not None
+    assert recording_factory.backend.events[-1] == ("stop", False)
     assert rom_stream.closed
 
 
 def test_adapter_satisfies_frame_safe_controller_contract(
     tmp_path: Path,
     accept_test_rom: None,
+    recording_factory: RecordingFactory,
 ) -> None:
     rom_path = tmp_path / "fixture.gb"
     rom_path.write_bytes(b"fixture")
-    factory = RecordingFactory()
 
-    with PyBoyAdapter(rom_path, factory=factory) as emulator:
+    with PyBoyAdapter(rom_path) as emulator:
         executor = FrameSafeExecutor(
             emulator,
             ControllerTiming(press_frames=2, release_frames=3),
@@ -139,8 +146,8 @@ def test_adapter_satisfies_frame_safe_controller_contract(
         assert result.frames == 5
         assert emulator.frame_count == 5
         assert not emulator.pressed_buttons
-        assert factory.backend is not None
-        assert factory.backend.events == [
+        assert recording_factory.backend is not None
+        assert recording_factory.backend.events == [
             ("press", "right"),
             ("tick", 2),
             ("release", "right"),
@@ -151,18 +158,19 @@ def test_adapter_satisfies_frame_safe_controller_contract(
 def test_adapter_fails_closed_on_invalid_operations(
     tmp_path: Path,
     accept_test_rom: None,
+    recording_factory: RecordingFactory,
 ) -> None:
     rom_path = tmp_path / "fixture.gb"
     rom_path.write_bytes(b"fixture")
-    factory = RecordingFactory()
 
-    with PyBoyAdapter(rom_path, factory=factory) as emulator:
+    with PyBoyAdapter(rom_path) as emulator:
         with pytest.raises(ValueError, match="positive integer"):
             emulator.tick(0)
         with pytest.raises(ValueError, match="Unsupported button"):
             emulator.press("turbo")
-        with pytest.raises(ValueError, match="0x0000"):
-            emulator.read_u8(0x10000)
+        for forbidden_address in (-1, False, 0x0000, 0x8000, 0xA000, 0xFF00, 0x10000):
+            with pytest.raises(ValueError, match="Work RAM"):
+                emulator.read_u8(forbidden_address)
 
         emulator.press("a")
         with pytest.raises(EmulatorError, match="already pressed"):
@@ -171,18 +179,20 @@ def test_adapter_fails_closed_on_invalid_operations(
         with pytest.raises(EmulatorError, match="not pressed"):
             emulator.release("a")
 
-        assert factory.backend is not None
-        factory.backend.alive = False
+        assert recording_factory.backend is not None
+        recording_factory.backend.alive = False
         with pytest.raises(EmulatorEndedError, match="ended"):
             emulator.tick(1)
 
 
-def test_invalid_rom_is_rejected_before_backend_construction(tmp_path: Path) -> None:
+def test_invalid_rom_is_rejected_before_backend_construction(
+    tmp_path: Path,
+    recording_factory: RecordingFactory,
+) -> None:
     rom_path = tmp_path / "wrong.gb"
     rom_path.write_bytes(b"not the supported ROM")
-    factory = RecordingFactory()
 
     with pytest.raises(RomValidationError, match="Unsupported ROM revision"):
-        PyBoyAdapter(rom_path, factory=factory).start()
+        PyBoyAdapter(rom_path).start()
 
-    assert factory.calls == []
+    assert recording_factory.calls == []
