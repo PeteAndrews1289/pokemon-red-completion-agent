@@ -15,6 +15,8 @@ from pokemon_red_completion.rom import (
 )
 
 SUPPORTED_BUTTONS = frozenset({"a", "b", "start", "select", "up", "right", "down", "left"})
+WATCH_SPEEDS = frozenset({1, 2, 4})
+DEFAULT_WATCH_SPEED = 2
 
 
 class EmulatorError(RuntimeError):
@@ -61,22 +63,41 @@ def _load_pyboy_factory() -> PyBoyFactory:
 
 
 class PyBoyAdapter:
-    """No-save, headless PyBoy authority implementing memory and controller ports.
+    """No-save PyBoy authority implementing memory and controller ports.
 
     The verified ROM is provided as an in-memory stream. PyBoy therefore cannot
     discover or create sibling RAM/RTC files beside the user's private ROM.
+    Watch mode changes presentation only: human input remains disabled and the
+    adapter still stops without saving.
     """
 
     def __init__(
         self,
         rom_path: str | Path,
         *,
-        window: str = "null",
-        speed: int = 0,
+        watch: bool = False,
+        speed: int | None = None,
     ) -> None:
+        if not isinstance(watch, bool):
+            raise TypeError("watch must be a boolean")
+        if speed is not None and (not isinstance(speed, int) or isinstance(speed, bool)):
+            raise TypeError("speed must be an integer or None")
+        if watch:
+            resolved_speed = DEFAULT_WATCH_SPEED if speed is None else speed
+            if resolved_speed not in WATCH_SPEEDS:
+                choices = ", ".join(str(choice) for choice in sorted(WATCH_SPEEDS))
+                raise ValueError(f"watch speed must be one of: {choices}")
+            window_name = "SDL2"
+        else:
+            if speed is not None:
+                raise ValueError("speed is available only when watch=True")
+            resolved_speed = 0
+            window_name = "null"
+
         self._rom_path = Path(rom_path)
-        self._window = window
-        self._speed = speed
+        self._watch = watch
+        self._window_name = window_name
+        self._speed = resolved_speed
         self._backend: PyBoyBackend | None = None
         self._rom_stream: io.BytesIO | None = None
         self._fingerprint: RomFingerprint | None = None
@@ -103,6 +124,14 @@ class PyBoyAdapter:
         return frozenset(self._pressed_buttons)
 
     @property
+    def window_name(self) -> str:
+        return self._window_name
+
+    @property
+    def speed(self) -> int:
+        return self._speed
+
+    @property
     def pyboy_version(self) -> str:
         try:
             return version("pyboy")
@@ -125,7 +154,7 @@ class PyBoyAdapter:
                 rom_stream,
                 ram_file=None,
                 rtc_file=None,
-                window=self._window,
+                window=self._window_name,
                 no_input=True,
                 sound_volume=0,
                 sound_emulated=False,
@@ -201,7 +230,21 @@ class PyBoyAdapter:
     def tick(self, frames: int) -> None:
         if not isinstance(frames, int) or isinstance(frames, bool) or frames <= 0:
             raise ValueError("frames must be a positive integer")
-        alive = bool(self._require_backend().tick(frames, render=False, sound=False))
+        backend = self._require_backend()
+        if not self._watch:
+            self._tick_backend(backend, frames, render=False)
+            return
+        for _ in range(frames):
+            self._tick_backend(backend, 1, render=True)
+
+    def _tick_backend(
+        self,
+        backend: PyBoyBackend,
+        frames: int,
+        *,
+        render: bool,
+    ) -> None:
+        alive = bool(backend.tick(frames, render=render, sound=False))
         self._logical_frame += frames
         if not alive:
             raise EmulatorEndedError(

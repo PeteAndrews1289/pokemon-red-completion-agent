@@ -7,11 +7,11 @@
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** the private runtime now reaches the input-ready bedroom from clean power-on
-> and verifies autonomous one-tile movement. This is a runtime milestone, not a badge or game
-> completion claim. See the
-> [sanitized 2026-07-28 evidence receipt](docs/evidence/bootstrap-smoke-2026-07-28.json). The active
-> target is three clean-start runs through Brock.
+> **Current status:** the bounded deterministic teacher now reaches all **6/6 opening checkpoints**
+> from clean power-on and selects a semantically verified Squirtle. That verifies **3/36 completion
+> objectives**: clean power-on, beginning the adventure, and choosing the starter. This is not a
+> rival-battle, Pokédex, badge, learned-policy, or game-completion claim. The next chapter is Oak's
+> Parcel and the Pokédex, followed by Brock.
 
 ## The goal
 
@@ -123,6 +123,8 @@ export POKEMON_RED_ROM="/absolute/path/to/Pokemon Red.gb"
 
 pokemon-red-completion doctor
 pokemon-red-completion bootstrap
+pokemon-red-completion opening
+pokemon-red-completion opening --watch --speed 4
 ```
 
 `bootstrap` starts PyBoy headlessly from immutable verified ROM bytes, disables human window input,
@@ -130,9 +132,17 @@ loads no adjacent save data, reaches the bedroom with the built-in RED/BLUE name
 movement action, and exits without saving. Its JSON report contains hashes and semantic evidence,
 not the ROM path or game assets.
 
+`opening` runs the bounded teacher through six closed-loop checkpoints: bedroom input, downstairs,
+outside, Oak's trigger, starter-selection readiness, and verified Squirtle. It is headless and
+uncapped by default. `--watch --speed 4` instead opens a local PyBoy window at 4× speed and prints
+checkpoint progress before the final JSON report. Watch mode changes presentation only: keyboard
+input remains disabled, the same semantic gates choose every action, and the emulator still exits
+without saving.
+
 The ROM, saves, snapshots, recordings, datasets, and model checkpoints are ignored and must remain
-outside Git. The supported revision is identified by public hashes in the source; no game data is
-distributed.
+outside Git. The visible window is not recorded or uploaded by the project. The supported revision
+is identified by public hashes in the source; reports omit the private ROM path, and no game data
+is distributed.
 
 ## Evidence and project status
 
@@ -149,8 +159,11 @@ distributed.
 The design is informed by the author's concluded Pokémon Red AI study, the MIT-licensed
 [Continual Harness/PokéAgent](https://github.com/sethkarten/continual-harness), the
 [PyBoy](https://github.com/Baekalfen/PyBoy) emulator, and the
-[pret Pokémon Red disassembly](https://github.com/pret/pokered). Any imported or adapted code will
-be pinned and attributed before use.
+[pret Pokémon Red disassembly](https://github.com/pret/pokered). The qualified opening corridors,
+warps, events, and starter layout are pinned to pret/pokered commit
+`1e96034092686d006e863cace09e87273051a3d8`; the route was independently exercised against the
+supported private ROM. Any other imported or adapted code will be pinned and attributed before
+use.
 
 Pokémon is owned by Nintendo, Game Freak, and The Pokémon Company. This independent educational
 project is not affiliated with or endorsed by them.

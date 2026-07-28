@@ -8,8 +8,10 @@ therefore separates long-horizon quest planning from bounded control skills.
 ## Private runtime boundary
 
 The exact private ROM is read once, fingerprinted, and passed to PyBoy as an in-memory stream.
-PyBoy never receives the source path, cannot auto-load adjacent cartridge RAM, runs headlessly with
-human window input disabled, and always stops with saving disabled.
+PyBoy never receives the source path and cannot auto-load adjacent cartridge RAM. It runs
+headlessly by default; optional watch mode renders a local SDL window at a validated 1×, 2×, or 4×
+speed. Human window input remains disabled in both modes, and PyBoy always stops with saving
+disabled.
 
 The current PyBoy port exposes only two narrow capabilities:
 
@@ -18,17 +20,39 @@ The current PyBoy port exposes only two narrow capabilities:
 
 Cartridge ROM, VRAM, external cartridge RAM, I/O, and all other address regions fail closed. The
 declared actor interface does not permit RAM writes, state loading or saving, emulator-backend
-injection, or ROM-payload access. This is an enforced interface boundary within one Python process,
-not a sandbox for malicious code. Public reports omit the filename and path.
+injection, or ROM-payload access. Watch mode changes rendering only: it does not add controller
+authority, screenshots, recordings, or uploads. This is an enforced interface boundary within one
+Python process, not a sandbox for malicious code. Public reports omit the filename and path.
 
 ## Components
 
 ### Semantic state adapter
 
 The current implementation translates a small declared set of read-only Work RAM symbols into a
-versioned state object. Pregame scratch values are never treated as story progress. Unknown or
-inconsistent states fail closed. Future pixel, tile, or collision-data readers require separate,
-explicitly bounded ports before they can enter this adapter.
+versioned state object. Pregame scratch values are never treated as story progress. Opening-game
+map, event, script, controller-mask, party, and species fields are combined into typed phases; a
+map transition alone is not considered proof that control is ready. Unknown or inconsistent states
+fail closed. Future pixel, tile, or collision-data readers require separate, explicitly bounded
+ports before they can enter this adapter.
+
+### Qualified opening teacher
+
+The first bounded teacher covers six checkpoints from clean power-on through a verified Squirtle:
+
+1. bedroom input ready;
+2. Red's house first floor;
+3. stable Pallet Town exit;
+4. Professor Oak triggered;
+5. starter selection ready; and
+6. Squirtle present with the corresponding story event and controls restored.
+
+Every corridor step is reobserved, dialogue loops have fixed action budgets, and unexpected maps,
+coordinates, scripts, events, species, or controller masks fail closed. The corridors and semantic
+gates are derived from pret/pokered commit
+`1e96034092686d006e863cace09e87273051a3d8` and independently verified on the supported private ROM.
+The concluded predecessor supplied the separately attributed power-on bootstrap, not this route.
+Completing these **6/6 checkpoints** verifies **3/36 objectives**; it does not verify the lab rival,
+Oak's Parcel, the Pokédex, Brock, or the full game.
 
 ### Objective graph
 
@@ -63,7 +87,9 @@ Every specialist returns a bounded outcome: `success`, `retry`, `replan`, or `fa
 ### Executor
 
 Converts macro-actions into timed controller inputs. It is the only component allowed to press
-buttons. It records the requested action, observed transition, and actor identity.
+buttons. It records the requested action, observed transition, and actor identity. The opening
+command may also publish checkpoint progress to the terminal, while `--watch` renders the same
+execution locally without granting the viewer input authority.
 
 ### Referee
 

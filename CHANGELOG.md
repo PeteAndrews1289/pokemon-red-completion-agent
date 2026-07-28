@@ -8,7 +8,15 @@
 - Restricted observations to Work RAM and removed the public emulator-factory injection surface.
 - Adapted the predecessor's verified clean-power-on sequence behind the frame-safe executor.
 - Added a `bootstrap` command that reaches the input-ready bedroom and verifies one-tile movement.
-- Added the private integration gate and expanded the ROM-free suite from 42 to 53 tests.
+- Added a bounded `opening` teacher that verifies all 6/6 opening checkpoints and Squirtle,
+  establishing exactly 3/36 completion objectives.
+- Added `opening --watch --speed 4` for a visible local run while preserving disabled human input,
+  in-memory ROM handling, and no-save shutdown.
+- Added typed opening phases and fail-closed checks for maps, coordinates, scripts, events,
+  controller masks, party state, and starter species.
+- Pinned the new opening corridors and semantic gates to pret/pokered commit
+  `1e96034092686d006e863cace09e87273051a3d8`.
+- Added a private integration gate and expanded the ROM-free emulator coverage.
 - Documented the reference, behavioral cloning, DAgger, and private trajectory strategy.
 
 ## 0.1.0 — Completion foundation

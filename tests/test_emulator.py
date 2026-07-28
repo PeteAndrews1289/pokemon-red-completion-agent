@@ -33,6 +33,7 @@ class FakePyBoy:
         self.kwargs = kwargs
         self.memory = FakeMemory({0xD732: 0x12})
         self.events: list[tuple[str, str | int | bool]] = []
+        self.tick_calls: list[tuple[int, bool, bool]] = []
         self.speed: int | None = None
         self.alive = True
 
@@ -40,8 +41,7 @@ class FakePyBoy:
         self.speed = target_speed
 
     def tick(self, count: int, *, render: bool, sound: bool) -> bool:
-        assert not render
-        assert not sound
+        self.tick_calls.append((count, render, sound))
         self.events.append(("tick", count))
         return self.alive
 
@@ -120,6 +120,8 @@ def test_adapter_uses_verified_stream_and_safe_backend_flags(
         }
         assert emulator.read_u8(0xD732) == 0x12
         assert emulator.fingerprint.public_dict() == _fingerprint(payload).public_dict()
+        assert emulator.window_name == "null"
+        assert emulator.speed == 0
         assert recording_factory.backend is not None
         assert recording_factory.backend.speed == 0
 
@@ -153,6 +155,90 @@ def test_adapter_satisfies_frame_safe_controller_contract(
             ("release", "right"),
             ("tick", 3),
         ]
+        assert recording_factory.backend.tick_calls == [
+            (2, False, False),
+            (3, False, False),
+        ]
+
+
+def test_watch_mode_uses_safe_visible_backend_and_renders_each_frame(
+    tmp_path: Path,
+    accept_test_rom: None,
+    recording_factory: RecordingFactory,
+) -> None:
+    payload = b"private fixture bytes"
+    rom_path = tmp_path / "fixture.gb"
+    rom_path.write_bytes(payload)
+
+    with PyBoyAdapter(rom_path, watch=True) as emulator:
+        assert len(recording_factory.calls) == 1
+        rom_stream, kwargs = recording_factory.calls[0]
+        assert isinstance(rom_stream, io.BytesIO)
+        assert rom_stream.getvalue() == payload
+        assert kwargs == {
+            "ram_file": None,
+            "rtc_file": None,
+            "window": "SDL2",
+            "no_input": True,
+            "sound_volume": 0,
+            "sound_emulated": False,
+            "log_level": "ERROR",
+        }
+        assert emulator.window_name == "SDL2"
+        assert emulator.speed == 2
+        assert recording_factory.backend is not None
+        assert recording_factory.backend.speed == 2
+
+        emulator.tick(3)
+
+        assert emulator.frame_count == 3
+        assert recording_factory.backend.tick_calls == [
+            (1, True, False),
+            (1, True, False),
+            (1, True, False),
+        ]
+
+    assert recording_factory.backend is not None
+    assert recording_factory.backend.events[-1] == ("stop", False)
+    assert rom_stream.closed
+
+
+@pytest.mark.parametrize("speed", [1, 2, 4])
+def test_watch_mode_accepts_only_supported_speed_presets(
+    speed: int,
+    tmp_path: Path,
+    accept_test_rom: None,
+    recording_factory: RecordingFactory,
+) -> None:
+    rom_path = tmp_path / "fixture.gb"
+    rom_path.write_bytes(b"fixture")
+
+    with PyBoyAdapter(rom_path, watch=True, speed=speed) as emulator:
+        assert emulator.speed == speed
+        assert recording_factory.backend is not None
+        assert recording_factory.backend.speed == speed
+
+
+@pytest.mark.parametrize("speed", [0, -1, 3, 5])
+def test_watch_mode_rejects_unsupported_speed_presets(speed: int) -> None:
+    with pytest.raises(ValueError, match="watch speed must be one of: 1, 2, 4"):
+        PyBoyAdapter("fixture.gb", watch=True, speed=speed)
+
+
+@pytest.mark.parametrize("speed", [False, 1.5, "2"])
+def test_adapter_rejects_non_integer_speed(speed: object) -> None:
+    with pytest.raises(TypeError, match="speed must be an integer or None"):
+        PyBoyAdapter("fixture.gb", watch=True, speed=speed)  # type: ignore[arg-type]
+
+
+def test_headless_mode_rejects_speed_override() -> None:
+    with pytest.raises(ValueError, match="speed is available only when watch=True"):
+        PyBoyAdapter("fixture.gb", speed=1)
+
+
+def test_adapter_rejects_non_boolean_watch_mode() -> None:
+    with pytest.raises(TypeError, match="watch must be a boolean"):
+        PyBoyAdapter("fixture.gb", watch=1)  # type: ignore[arg-type]
 
 
 def test_adapter_fails_closed_on_invalid_operations(
