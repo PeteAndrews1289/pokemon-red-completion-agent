@@ -1,4 +1,14 @@
 {
+  "assistance": {
+    "class": "deterministic_teacher",
+    "human_controller_input": false,
+    "save_state_restore": false
+  },
+  "attempts": {
+    "failed": 0,
+    "passed": 1,
+    "total": 1
+  },
   "bedroom": {
     "battle_state": 0,
     "location": "reds_house_2f",
@@ -9,6 +19,34 @@
     "player_y": 6
   },
   "clean_power_on": true,
+  "configuration": {
+    "controller_timing": {
+      "press_frames": 8,
+      "release_frames": 16,
+      "wait_frames": 1
+    },
+    "emulator": {
+      "human_input": false,
+      "ram_input": "none",
+      "rtc_input": "none",
+      "save_on_exit": false,
+      "sound_emulated": false,
+      "speed": 0,
+      "window": "null"
+    },
+    "intro_timing": {
+      "boot_frames": 1800,
+      "final_wait_frames": 300,
+      "menu_move_wait_frames": 120,
+      "normal_wait_frames": 240
+    },
+    "movement_probe": {
+      "direction": "down",
+      "macro_action": "move"
+    },
+    "new_game_names": "built_in_red_blue"
+  },
+  "configuration_sha256": "642b428b8af201022af17aa93f0e5c20fd7f8c5a0942204cf3a34c85abddbe16",
   "controller_released": true,
   "emulator": {
     "human_input": false,
@@ -29,7 +67,9 @@
     "to_y": 7,
     "verified": true
   },
+  "python_version": "3.14.3",
   "recorded_on": "2026-07-28",
+  "receipt_schema": "bootstrap-evidence-v1",
   "rom": {
     "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
     "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
@@ -37,5 +77,9 @@
     "title": "POKEMON RED"
   },
   "schema": "bootstrap-smoke-v1",
+  "source": {
+    "git_commit": "0fb14ac7f287e92fe270b3811f1ef495cbc36194",
+    "worktree_dirty": false
+  },
   "status": "ok"
 }
