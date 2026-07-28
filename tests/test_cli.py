@@ -249,7 +249,7 @@ def test_play_command_runs_the_continuous_watched_boundary(
                 label="Defeated Brock and received TM34",
                 completed=21,
                 total=21,
-                frames_executed=121_247,
+                frames_executed=122_999,
             )
         )
         return FakeReport()

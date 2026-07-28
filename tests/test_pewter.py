@@ -201,8 +201,9 @@ def _report() -> PewterChapterReport:
         brock_victory_evidence=brock_victory,
         reached_boundaries=tuple(TravelBoundary)[1:],
         saw_brock_battle=True,
-        frames_executed=68_291,
-        actions_executed=935,
+        overworld_control_verified=True,
+        frames_executed=70_043,
+        actions_executed=954,
         controller_released=True,
     )
 
@@ -248,7 +249,7 @@ def test_pewter_progress_is_sanitized_and_immutable() -> None:
         label="Defeated Brock and received TM34",
         completed=PEWTER_CHECKPOINT_COUNT,
         total=PEWTER_CHECKPOINT_COUNT,
-        frames_executed=121_247,
+        frames_executed=122_999,
     )
 
     assert progress.completed == progress.total == 10
@@ -274,6 +275,7 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         "victory_verified": True,
         "boulder_badge_verified": True,
         "tm34_verified": True,
+        "overworld_control_verified": True,
         "squirtle_level": 12,
         "squirtle_hp": 27,
         "squirtle_max_hp": 33,
@@ -297,6 +299,7 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
     "changes",
     (
         {"saw_brock_battle": False},
+        {"overworld_control_verified": False},
         {"controller_released": False},
         {"reached_boundaries": tuple(TravelBoundary)[1:-1]},
         {"gym_entry_evidence": replace(_gym_ready(), first_party_hp=18)},
