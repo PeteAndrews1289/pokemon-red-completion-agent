@@ -17,9 +17,10 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: in progress — July 2026**
 
-Current qualification: **6/6 bounded opening checkpoints** and **3/36 completion objectives**,
-ending with a semantically verified Squirtle. This is not a rival, Pokédex, badge, learned-policy,
-or completion result.
+Current qualification: **11/11 bounded checkpoints** and **4/36 completion objectives**, ending
+with the lab rival defeated, Oak's Parcel delivered, the Pokédex received, and controls restored.
+Three clean runs reached the identical 52,956-frame / 619-action boundary. This is not a badge,
+learned-policy, or completion result.
 
 - [x] Build the no-save PyBoy bridge and read-only state adapter from pinned symbols.
 - [x] Add controller timing and one authoritative action executor.
@@ -27,12 +28,15 @@ or completion result.
 - [x] Qualify leaving home, Professor Oak's escort, and Squirtle selection through six closed-loop
   checkpoints.
 - [x] Add an optional visible watch mode that leaves human input and saving disabled.
-- [ ] Qualify the lab rival, Oak's Parcel delivery, and Pokédex objective.
+- [x] Qualify the lab rival, Oak's Parcel delivery, and Pokédex objective in one clean session.
+- [x] Add a continuous `play --watch` command with 11 visible semantic checkpoints and a safe,
+  explicit bounded stop.
 - [ ] Qualify the route to Pewter City and defeat Brock.
 - [ ] Replay every opening objective from multiple private timing perturbations.
 
-Next sequence: Oak's Parcel/Pokédex, then Brock. The qualified corridors and opening semantic gates
-are pinned to pret/pokered commit `1e96034092686d006e863cace09e87273051a3d8`.
+Next sequence: Pewter City, then Brock. The qualified corridors and semantic gates are pinned to
+pret/pokered commit `1e96034092686d006e863cace09e87273051a3d8`. See the
+[Pokédex three-run evidence receipt](evidence/qualified-play-pokedex-2026-07-28.json).
 
 Exit gate: three intervention-free clean-power-on runs defeat Brock with identical evidence rules.
 
