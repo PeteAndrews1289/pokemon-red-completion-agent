@@ -46,9 +46,10 @@ than treating the source route as proof of runtime success.
 
 The deterministic teacher currently verifies all **21/21 qualified checkpoints** through Brock
 and therefore **6/36 completion objectives**. Three clean runs were identical at the
-121,247-frame / 1,554-action boundary, including the live Brock battle and concurrent Boulder
-Badge plus TM34 evidence. No behavioral-cloning, DAgger, or full-game result is implied. The next
-teaching segment crosses Route 3 and Mt. Moon to Cerulean City.
+122,999-frame / 1,573-action boundary, including the live Brock battle, concurrent Boulder Badge
+plus TM34 evidence, and an accepted overworld movement probe after the reward text. No
+behavioral-cloning, DAgger, or full-game result is implied. The next teaching segment crosses
+Route 3 and Mt. Moon to Cerulean City.
 
 The same segment can run headlessly or be observed locally with:
 

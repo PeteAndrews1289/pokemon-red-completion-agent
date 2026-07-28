@@ -19,7 +19,7 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 Current qualification: **21/21 bounded checkpoints** and **6/36 completion objectives**, ending
 with Brock defeated, the Boulder Badge and TM34 verified, and controls restored. Three clean runs
-reached the identical 121,247-frame / 1,554-action boundary. This is a deterministic-teacher badge
+reached the identical 122,999-frame / 1,573-action boundary. This is a deterministic-teacher badge
 milestone, not a learned-policy or completion result.
 
 - [x] Build the no-save PyBoy bridge and read-only state adapter from pinned symbols.
