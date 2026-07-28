@@ -13,11 +13,12 @@ human window input disabled, and always stops with saving disabled.
 
 Only two narrow capabilities cross that boundary:
 
-- read one byte through the declared read-only memory adapter; and
+- read one byte from Game Boy Work RAM through the declared read-only memory adapter; and
 - press, release, or tick through the sole frame-safe executor.
 
-The actor cannot write RAM, load state, save state, or obtain the ROM payload. Public reports omit
-the filename and path.
+Cartridge ROM, VRAM, external cartridge RAM, I/O, and all other address regions fail closed. The
+actor cannot write RAM, load state, save state, inject an emulator backend, or obtain the ROM
+payload. Public reports omit the filename and path.
 
 ## Components
 
