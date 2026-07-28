@@ -2,13 +2,15 @@
 
 The route and semantic gates in this module are pinned to pret/pokered commit
 ``1e96034092686d006e863cace09e87273051a3d8``. It composes the existing
-opening chapter with the lab rival, Oak's Parcel, and Pokédex in one emulator
-session. It intentionally stops there; it is not a game-completion claim.
+opening chapter with the lab rival, Oak's Parcel, Pokédex, Viridian Forest,
+and Brock in one emulator session. It intentionally stops at the Boulder Badge;
+it is not a game-completion claim.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable
+from contextlib import nullcontext
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -35,11 +37,19 @@ from pokemon_red_completion.opening import (
     OpeningTiming,
     run_opening_chapter,
 )
+from pokemon_red_completion.pewter import (
+    PEWTER_CHECKPOINT_COUNT,
+    PewterChapterError,
+    PewterChapterReport,
+    PewterProgress,
+    run_pewter_chapter,
+)
 from pokemon_red_completion.rom import RomFingerprint
 from pokemon_red_completion.route import COMPLETION_QUEST
 
-QUALIFIED_PLAY_CHECKPOINT_COUNT = 11
-QUALIFIED_THROUGH_OBJECTIVE = "receive_pokedex"
+POKEDEX_CHECKPOINT_COUNT = 11
+QUALIFIED_PLAY_CHECKPOINT_COUNT = POKEDEX_CHECKPOINT_COUNT + PEWTER_CHECKPOINT_COUNT
+QUALIFIED_THROUGH_OBJECTIVE = "defeat_brock"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -164,6 +174,7 @@ class QualifiedPlayReport:
     parcel_received: RawGameState
     pallet_returned: RawGameState
     pokedex_received: RawGameState
+    pewter: PewterChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -185,6 +196,7 @@ class QualifiedPlayReport:
             )
             and is_parcel_verified(self.parcel_evidence)
             and is_pokedex_verified(self.pokedex_evidence)
+            and self.pewter.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -222,9 +234,11 @@ class QualifiedPlayReport:
                 "Delivered the parcel and received the Pokédex",
                 self.pokedex_received,
             ),
+            *self.pewter.checkpoints(),
         )
+        pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v1",
+            "schema": "qualified-play-v2",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -269,6 +283,8 @@ class QualifiedPlayReport:
                 "received_verified": is_pokedex_verified(self.pokedex_evidence),
                 "controls_ready": self.pokedex_evidence.controls_ready,
             },
+            "northbound": pewter["route"],
+            "brock": pewter["brock"],
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -319,9 +335,15 @@ def run_qualified_play(
     opening_timing: OpeningTiming = DEFAULT_OPENING_TIMING,
     play_timing: QualifiedPlayTiming = DEFAULT_QUALIFIED_PLAY_TIMING,
     progress: ProgressSink | None = None,
+    _emulator: PyBoyAdapter | None = None,
 ) -> QualifiedPlayReport:
     """Run every currently qualified objective in one clean, no-save session."""
-    with PyBoyAdapter(rom_path, watch=watch, speed=speed) as emulator:
+    emulator_context = (
+        PyBoyAdapter(rom_path, watch=watch, speed=speed)
+        if _emulator is None
+        else nullcontext(_emulator)
+    )
+    with emulator_context as emulator:
         opening = run_opening_chapter(
             rom_path,
             new_game_timing=new_game_timing,
@@ -432,11 +454,26 @@ def run_qualified_play(
             11,
         )
 
-        facts = opening.facts | semantic_facts(pokedex_raw)
+        try:
+            pewter = run_pewter_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_pewter_progress_bridge(progress),
+            )
+        except PewterChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
+        facts = (
+            opening.facts
+            | semantic_facts(pokedex_raw)
+            | semantic_facts(pewter.pewter_reached)
+            | semantic_facts(pewter.brock_defeated)
+        )
         state = GameState(
-            mode=game_mode(pokedex_raw),
+            mode=game_mode(pewter.brock_defeated),
             facts=facts,
-            location=location_label(pokedex_raw.map_id),
+            location=location_label(pewter.brock_defeated.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -456,6 +493,7 @@ def run_qualified_play(
             parcel_received=parcel_raw,
             pallet_returned=pallet_returned,
             pokedex_received=pokedex_raw,
+            pewter=pewter,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -593,6 +631,24 @@ def _opening_progress_bridge(sink: ProgressSink | None) -> Callable[[OpeningProg
     return emit
 
 
+def _pewter_progress_bridge(sink: ProgressSink | None) -> Callable[[PewterProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: PewterProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=POKEDEX_CHECKPOINT_COUNT + progress.completed,
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
 def _emit(
     sink: ProgressSink | None,
     emulator: PyBoyAdapter,
@@ -624,4 +680,4 @@ def _public_state(state: RawGameState) -> dict[str, object]:
     }
 
 
-assert OPENING_CHECKPOINT_COUNT < QUALIFIED_PLAY_CHECKPOINT_COUNT
+assert OPENING_CHECKPOINT_COUNT < POKEDEX_CHECKPOINT_COUNT < QUALIFIED_PLAY_CHECKPOINT_COUNT
