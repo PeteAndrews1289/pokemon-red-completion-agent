@@ -17,11 +17,22 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: in progress — July 2026**
 
+Current qualification: **6/6 bounded opening checkpoints** and **3/36 completion objectives**,
+ending with a semantically verified Squirtle. This is not a rival, Pokédex, badge, learned-policy,
+or completion result.
+
 - [x] Build the no-save PyBoy bridge and read-only state adapter from pinned symbols.
 - [x] Add controller timing and one authoritative action executor.
 - [x] Qualify clean power-on through the input-ready bedroom and one-tile movement probe.
-- [ ] Qualify leaving home, starter choice, Oak's Parcel, Pokédex, and Brock objectives.
+- [x] Qualify leaving home, Professor Oak's escort, and Squirtle selection through six closed-loop
+  checkpoints.
+- [x] Add an optional visible watch mode that leaves human input and saving disabled.
+- [ ] Qualify the lab rival, Oak's Parcel delivery, and Pokédex objective.
+- [ ] Qualify the route to Pewter City and defeat Brock.
 - [ ] Replay every opening objective from multiple private timing perturbations.
+
+Next sequence: Oak's Parcel/Pokédex, then Brock. The qualified corridors and opening semantic gates
+are pinned to pret/pokered commit `1e96034092686d006e863cace09e87273051a3d8`.
 
 Exit gate: three intervention-free clean-power-on runs defeat Brock with identical evidence rules.
 

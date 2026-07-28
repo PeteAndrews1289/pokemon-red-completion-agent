@@ -34,6 +34,31 @@ The bootstrap sequence was adapted from
 `0e2df37720eec7d148187eb1001bf2d9502aa4f6`. Private blind-run checkpoints and screenshots are not
 completion demonstrations and are not loaded by this project.
 
+The qualified bedroom-to-Squirtle route is new successor work. Its map dimensions, collision-safe
+corridors, warps, Pallet Town/Oak's Lab scripts, story events, and starter object positions are
+derived from
+[`pret/pokered`](https://github.com/pret/pokered) commit
+`1e96034092686d006e863cace09e87273051a3d8`, then independently exercised against the exact
+supported ROM. The teacher checks the resulting semantic phase after each bounded action rather
+than treating the source route as proof of runtime success.
+
+## Current qualified teaching segment
+
+The deterministic teacher currently verifies all **6/6 opening checkpoints** through Squirtle and
+therefore **3/36 completion objectives**. No behavioral-cloning, DAgger, badge, or full-game result
+is implied. The next teaching segment covers the lab rival within the Oak's Parcel/Pokédex chapter;
+Brock follows after that chapter is replay-qualified.
+
+The same segment can run headlessly or be observed locally with:
+
+```bash
+pokemon-red-completion opening --watch --speed 4
+```
+
+Watch mode does not provide a human controller, record the screen, expose the ROM path, load a
+save, or change the teacher. It renders the same bounded execution while checkpoint progress is
+printed to the terminal.
+
 ## What each learning stage needs
 
 ### Behavioral cloning
@@ -76,14 +101,16 @@ Screens, ROMs, saves, snapshots, and recordings remain private and content-addre
 
 1. Freeze the trajectory schema and logger.
 2. Record and exactly replay the clean-start bedroom trace.
-3. Extend the teacher through leaving home, Oak's lab, starter selection, and the rival battle.
-4. Add perturbed starts and recoverable mistakes for each qualified skill.
-5. Train a small behavior-cloning baseline per skill.
-6. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
+3. Preserve the qualified **6/6** checkpoint segment through verified Squirtle.
+4. Extend the teacher through the lab rival, Oak's Parcel delivery, and the Pokédex.
+5. Extend and replay-qualify the route through Brock.
+6. Add perturbed starts and recoverable mistakes for each qualified skill.
+7. Train a small behavior-cloning baseline per skill.
+8. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
    from the frozen perturbation suite for that skill.
-7. Extend the teacher chapter-by-chapter through Brock and then the full game.
-8. Produce multiple clean teacher completions with timing and RNG variation.
-9. Train full-game composition only after that coverage exists.
+9. Extend the teacher chapter-by-chapter through the remainder of the game.
+10. Produce multiple clean teacher completions with timing and RNG variation.
+11. Train full-game composition only after that coverage exists.
 
 The first current evaluation gate remains three intervention-free clean-power-on runs through
 Brock. A first Hall-of-Fame success is a milestone; reliability requires at least 8/10 frozen

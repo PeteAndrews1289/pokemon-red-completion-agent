@@ -2,11 +2,18 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from collections.abc import Sequence
 from pathlib import Path
 
 from pokemon_red_completion.bootstrap import BootstrapError, run_bootstrap_smoke
 from pokemon_red_completion.emulator import EmulatorError
+from pokemon_red_completion.opening import (
+    OpeningChapterError,
+    OpeningChapterReport,
+    OpeningProgress,
+    run_opening_chapter,
+)
 from pokemon_red_completion.rom import RomValidationError, resolve_rom_path, verify_rom
 from pokemon_red_completion.route import COMPLETION_QUEST
 
@@ -30,7 +37,49 @@ def _parser() -> argparse.ArgumentParser:
         type=Path,
         help="Private ROM path; otherwise use POKEMON_RED_ROM.",
     )
+    opening = subcommands.add_parser(
+        "opening",
+        help="Run the bounded clean-start teacher through a verified starter.",
+    )
+    opening.add_argument(
+        "--rom",
+        type=Path,
+        help="Private ROM path; otherwise use POKEMON_RED_ROM.",
+    )
+    opening.add_argument(
+        "--watch",
+        action="store_true",
+        help="Show a view-only local game window with human input disabled.",
+    )
+    opening.add_argument(
+        "--speed",
+        type=int,
+        choices=(1, 2, 4),
+        help="Watched playback speed; requires --watch and defaults to 2.",
+    )
     return parser
+
+
+def _print_opening_progress(progress: OpeningProgress) -> None:
+    print(
+        f"[{progress.completed}/{progress.total}] {progress.label}",
+        file=sys.stderr,
+        flush=True,
+    )
+
+
+def _print_opening_summary(report: OpeningChapterReport) -> None:
+    verified = len(report.verified_objectives)
+    total = len(COMPLETION_QUEST)
+    if report.next_objective is None:
+        next_step = "All declared objectives verified"
+    else:
+        next_step = COMPLETION_QUEST.objective(report.next_objective).title
+    print(
+        f"Objectives: {verified}/{total} verified | Next: {next_step}",
+        file=sys.stderr,
+        flush=True,
+    )
 
 
 def main(arguments: Sequence[str] | None = None) -> int:
@@ -50,13 +99,30 @@ def main(arguments: Sequence[str] | None = None) -> int:
         print(json.dumps(payload, indent=2, ensure_ascii=False))
         return 0
 
+    if args.command == "opening" and args.speed is not None and not args.watch:
+        parser.error("--speed requires --watch")
+
     try:
         rom_path = resolve_rom_path(args.rom)
         if args.command == "doctor":
             payload = verify_rom(rom_path).public_dict()
-        else:
+        elif args.command == "bootstrap":
             payload = run_bootstrap_smoke(rom_path).public_dict()
-    except (BootstrapError, EmulatorError, RomValidationError) as error:
+        else:
+            report = run_opening_chapter(
+                rom_path,
+                watch=args.watch,
+                speed=args.speed,
+                progress=_print_opening_progress,
+            )
+            _print_opening_summary(report)
+            payload = report.public_dict()
+    except (
+        BootstrapError,
+        EmulatorError,
+        OpeningChapterError,
+        RomValidationError,
+    ) as error:
         parser.error(str(error))
     print(json.dumps(payload, indent=2, sort_keys=True))
     return 0

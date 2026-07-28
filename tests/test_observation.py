@@ -5,10 +5,14 @@ import pytest
 from pokemon_red_completion.domain import GameMode
 from pokemon_red_completion.observation import (
     EVENT_FLAG_BYTES,
+    OAKS_LAB_SELECTION_READY_SCRIPT,
+    OAKS_LAB_STARTER_OBTAINED_SCRIPT,
     REDS_HOUSE_2F_NOOP_SCRIPT,
+    SQUIRTLE_SPECIES_ID,
     Badge,
     EventFlag,
     MapId,
+    OpeningPhase,
     PokemonRedStateReader,
     RamAddress,
     RawGameState,
@@ -47,18 +51,22 @@ def _raw(
     events: tuple[EventFlag, ...] = (),
     badges: Badge | None = None,
     party_count: int = 1,
+    party_species_ids: tuple[int, ...] | None = None,
     battle_state: int = 0,
+    player_x: int = 0,
+    player_y: int = 0,
 ) -> RawGameState:
     return RawGameState(
         game_started=True,
         map_id=int(map_id),
-        player_x=0,
-        player_y=0,
+        player_x=player_x,
+        player_y=player_y,
         party_count=party_count,
         battle_state=battle_state,
         badge_bits=int(badges or Badge(0)),
         bag_item_ids=(),
         event_flags=_events(*events),
+        party_species_ids=party_species_ids,
     )
 
 
@@ -85,6 +93,12 @@ def test_reader_extracts_bounded_bag_and_event_state() -> None:
             RamAddress.PLAYER_X: 4,
             RamAddress.PLAYER_Y: 7,
             RamAddress.PARTY_COUNT: 9,
+            RamAddress.PARTY_SPECIES: SQUIRTLE_SPECIES_ID,
+            int(RamAddress.PARTY_SPECIES) + 1: 0xB0,
+            int(RamAddress.PARTY_SPECIES) + 2: 0x15,
+            int(RamAddress.PARTY_SPECIES) + 3: 0x54,
+            int(RamAddress.PARTY_SPECIES) + 4: 0x99,
+            int(RamAddress.PARTY_SPECIES) + 5: 0x01,
             RamAddress.IS_IN_BATTLE: 0,
             RamAddress.OBTAINED_BADGES: int(Badge.BOULDER | Badge.CASCADE),
             RamAddress.NUM_BAG_ITEMS: 2,
@@ -97,6 +111,14 @@ def test_reader_extracts_bounded_bag_and_event_state() -> None:
     raw = PokemonRedStateReader(memory).read()
 
     assert raw.party_count == 6
+    assert raw.party_species_ids == (
+        SQUIRTLE_SPECIES_ID,
+        0xB0,
+        0x15,
+        0x54,
+        0x99,
+        0x01,
+    )
     assert raw.bag_item_ids == (0x3F, 0x48)
     assert event_flag_is_set(raw.event_flags, EventFlag.BEAT_CHAMPION_RIVAL)
 
@@ -116,6 +138,182 @@ def test_reader_encapsulates_bedroom_input_symbols() -> None:
         RamAddress.JOY_IGNORE,
         RamAddress.REDS_HOUSE_2F_SCRIPT,
     ]
+
+
+@pytest.mark.parametrize(
+    ("raw", "memory_values", "expected_phase"),
+    (
+        (
+            _raw(
+                map_id=MapId.REDS_HOUSE_2F,
+                party_count=0,
+                player_x=3,
+                player_y=6,
+            ),
+            {
+                RamAddress.JOY_IGNORE: 0,
+                RamAddress.REDS_HOUSE_2F_SCRIPT: REDS_HOUSE_2F_NOOP_SCRIPT,
+            },
+            OpeningPhase.BEDROOM_READY,
+        ),
+        (
+            _raw(
+                map_id=MapId.REDS_HOUSE_1F,
+                party_count=0,
+                player_x=7,
+                player_y=1,
+            ),
+            {RamAddress.JOY_IGNORE: 0},
+            OpeningPhase.DOWNSTAIRS,
+        ),
+        (
+            _raw(
+                map_id=MapId.PALLET_TOWN,
+                party_count=0,
+                player_x=5,
+                player_y=6,
+            ),
+            {
+                RamAddress.JOY_IGNORE: 0,
+                RamAddress.PALLET_TOWN_SCRIPT: 0,
+            },
+            OpeningPhase.PALLET_FREE,
+        ),
+        (
+            _raw(
+                map_id=MapId.PALLET_TOWN,
+                events=(EventFlag.OAK_APPEARED_IN_PALLET,),
+                party_count=0,
+                player_x=10,
+                player_y=1,
+            ),
+            {RamAddress.JOY_IGNORE: 0xFC},
+            OpeningPhase.OAK_ESCORT,
+        ),
+        (
+            _raw(
+                map_id=MapId.OAKS_LAB,
+                events=(
+                    EventFlag.FOLLOWED_OAK_INTO_LAB,
+                    EventFlag.FOLLOWED_OAK_INTO_LAB_2,
+                    EventFlag.OAK_ASKED_TO_CHOOSE_MON,
+                ),
+                party_count=0,
+                player_x=5,
+                player_y=3,
+            ),
+            {
+                RamAddress.JOY_IGNORE: 0,
+                RamAddress.OAKS_LAB_SCRIPT: OAKS_LAB_SELECTION_READY_SCRIPT,
+            },
+            OpeningPhase.STARTER_SELECTION_READY,
+        ),
+        (
+            _raw(
+                map_id=MapId.OAKS_LAB,
+                events=(EventFlag.GOT_STARTER,),
+                party_count=1,
+                party_species_ids=(SQUIRTLE_SPECIES_ID,),
+                player_x=7,
+                player_y=4,
+            ),
+            {
+                RamAddress.JOY_IGNORE: 0,
+                RamAddress.OAKS_LAB_SCRIPT: OAKS_LAB_STARTER_OBTAINED_SCRIPT,
+            },
+            OpeningPhase.STARTER_OBTAINED,
+        ),
+    ),
+)
+def test_opening_phase_translation_uses_semantic_gates(
+    raw: RawGameState,
+    memory_values: dict[int, int],
+    expected_phase: OpeningPhase,
+) -> None:
+    control = PokemonRedStateReader(RecordingMemory(memory_values)).read_opening_control_state(raw)
+
+    assert control.phase is expected_phase
+
+
+def test_opening_selection_gate_requires_both_follow_events_and_exact_script() -> None:
+    events_without_second_follow = (
+        EventFlag.FOLLOWED_OAK_INTO_LAB,
+        EventFlag.OAK_ASKED_TO_CHOOSE_MON,
+    )
+    raw = _raw(
+        map_id=MapId.OAKS_LAB,
+        events=events_without_second_follow,
+        party_count=0,
+        player_x=5,
+        player_y=3,
+    )
+    memory = RecordingMemory(
+        {
+            RamAddress.JOY_IGNORE: 0,
+            RamAddress.OAKS_LAB_SCRIPT: OAKS_LAB_SELECTION_READY_SCRIPT,
+        }
+    )
+
+    control = PokemonRedStateReader(memory).read_opening_control_state(raw)
+
+    assert control.phase is OpeningPhase.UNKNOWN
+    assert not control.followed_oak_into_lab
+    assert control.asked_to_choose
+
+
+@pytest.mark.parametrize(
+    ("player_x", "joy_ignore", "lab_script"),
+    (
+        (6, 0, OAKS_LAB_SELECTION_READY_SCRIPT),
+        (5, 0xF0, OAKS_LAB_SELECTION_READY_SCRIPT),
+        (5, 0, OAKS_LAB_SELECTION_READY_SCRIPT - 1),
+    ),
+)
+def test_opening_selection_gate_rejects_near_misses(
+    player_x: int,
+    joy_ignore: int,
+    lab_script: int,
+) -> None:
+    raw = _raw(
+        map_id=MapId.OAKS_LAB,
+        events=(
+            EventFlag.FOLLOWED_OAK_INTO_LAB,
+            EventFlag.FOLLOWED_OAK_INTO_LAB_2,
+            EventFlag.OAK_ASKED_TO_CHOOSE_MON,
+        ),
+        party_count=0,
+        player_x=player_x,
+        player_y=3,
+    )
+    memory = RecordingMemory(
+        {
+            RamAddress.JOY_IGNORE: joy_ignore,
+            RamAddress.OAKS_LAB_SCRIPT: lab_script,
+        }
+    )
+
+    control = PokemonRedStateReader(memory).read_opening_control_state(raw)
+
+    assert control.phase is OpeningPhase.UNKNOWN
+
+
+def test_opening_control_mask_is_translated_without_exposing_button_logic() -> None:
+    raw = _raw(
+        events=(EventFlag.OAK_APPEARED_IN_PALLET,),
+        party_count=0,
+        player_x=10,
+        player_y=1,
+    )
+
+    control = PokemonRedStateReader(
+        RecordingMemory({RamAddress.JOY_IGNORE: 0xFC})
+    ).read_opening_control_state(raw)
+
+    assert control.phase is OpeningPhase.OAK_ESCORT
+    assert control.confirm_allowed
+    assert control.cancel_allowed
+    assert not control.movement_allowed
+    assert not control.all_controls_allowed
 
 
 def test_semantic_tracker_requires_and_preserves_clean_run_evidence() -> None:
@@ -147,9 +345,7 @@ def test_semantic_tracker_requires_and_preserves_clean_run_evidence() -> None:
 def test_completion_requires_champion_event_and_hall_map_together() -> None:
     referee = CompletionReferee()
 
-    map_only_tracker = SemanticStateTracker(
-        RawGameState(False, None, None, None, None, None)
-    )
+    map_only_tracker = SemanticStateTracker(RawGameState(False, None, None, None, None, None))
     map_only = map_only_tracker.observe(_raw(map_id=MapId.HALL_OF_FAME))
     assert map_only.mode is GameMode.HALL_OF_FAME
     assert HALL_OF_FAME_FACT not in map_only.facts
