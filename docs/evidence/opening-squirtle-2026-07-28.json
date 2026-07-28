@@ -1,0 +1,163 @@
+{
+  "actions_executed": 178,
+  "assistance": {
+    "class": "deterministic_teacher",
+    "human_controller_input": false,
+    "save_state_restore": false
+  },
+  "attempts": {
+    "failed": 0,
+    "passed": 3,
+    "total": 3
+  },
+  "checkpoints": {
+    "all_verified": true,
+    "ids": [
+      "bedroom_ready",
+      "downstairs",
+      "outside",
+      "oak_triggered",
+      "selection_ready",
+      "starter_obtained"
+    ],
+    "verified": 6
+  },
+  "clean_power_on": true,
+  "configuration": {
+    "controller_timing": {
+      "press_frames": 8,
+      "release_frames": 16,
+      "wait_frames": 1
+    },
+    "emulator": {
+      "human_input": false,
+      "ram_input": "none",
+      "rtc_input": "none",
+      "save_on_exit": false,
+      "sound_emulated": false,
+      "speed": 0,
+      "window": "null"
+    },
+    "intro_timing": {
+      "boot_frames": 1800,
+      "final_wait_frames": 300,
+      "menu_move_wait_frames": 120,
+      "normal_wait_frames": 240
+    },
+    "new_game_names": "built_in_red_blue",
+    "opening_timing": {
+      "dialogue_wait_frames": 240,
+      "max_escort_pulses": 32,
+      "max_starter_cancel_pulses": 12,
+      "max_starter_confirm_pulses": 12,
+      "oak_trigger_wait_frames": 360,
+      "starter_text_wait_frames": 180,
+      "transition_wait_frames": 120
+    },
+    "pret_pokered_commit": "1e96034092686d006e863cace09e87273051a3d8",
+    "qualified_actions": {
+      "bedroom": [
+        "right",
+        "right",
+        "up",
+        "up",
+        "up",
+        "up",
+        "up",
+        "right",
+        "right"
+      ],
+      "house_1f": [
+        "left",
+        "down",
+        "down",
+        "down",
+        "down",
+        "down",
+        "down",
+        "left",
+        "left",
+        "left",
+        "down"
+      ],
+      "pallet_town": [
+        "right",
+        "right",
+        "right",
+        "up",
+        "up",
+        "up",
+        "up",
+        "right",
+        "right",
+        "up"
+      ],
+      "starter_approach": [
+        "down",
+        "right",
+        "right",
+        "face_up",
+        "interact"
+      ]
+    },
+    "starter": "squirtle"
+  },
+  "configuration_sha256": "559d1230fe01b0f74a9e63554a9c1c9858f0c5e65996780821c2b70aa93c2b6f",
+  "controller_released": true,
+  "emulator": {
+    "human_input": false,
+    "name": "PyBoy",
+    "save_on_exit": false,
+    "speed": 0,
+    "version": "2.7.0",
+    "window": "null"
+  },
+  "facts": [
+    "party:starter_obtained",
+    "story:adventure_begun",
+    "story:oak_lab_reached",
+    "story:starter_selection_ready",
+    "system:clean_power_on"
+  ],
+  "frames_executed": 21216,
+  "objective_progress": {
+    "next": "receive_pokedex",
+    "total": 36,
+    "verified": 3,
+    "verified_ids": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter"
+    ]
+  },
+  "python_version": "3.14.3",
+  "receipt_schema": "opening-evidence-v1",
+  "recorded_on": "2026-07-28",
+  "repeatability": {
+    "identical_action_count": true,
+    "identical_final_state": true,
+    "identical_frame_count": true
+  },
+  "rom": {
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "size_bytes": 1048576,
+    "title": "POKEMON RED"
+  },
+  "schema": "opening-chapter-v1",
+  "source": {
+    "git_commit": "898f015e297aae4f5d1ae3d200285e58f182d306",
+    "worktree_dirty": false
+  },
+  "starter": {
+    "controls_ready": true,
+    "event_verified": true,
+    "map_id": 40,
+    "party_count": 1,
+    "player_x": 7,
+    "player_y": 4,
+    "species": "squirtle",
+    "species_id": 177
+  },
+  "status": "ok"
+}

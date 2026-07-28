@@ -11,7 +11,8 @@ control, and progressively trained specialists.**
 > from clean power-on and selects a semantically verified Squirtle. That verifies **3/36 completion
 > objectives**: clean power-on, beginning the adventure, and choosing the starter. This is not a
 > rival-battle, Pokédex, badge, learned-policy, or game-completion claim. The next chapter is Oak's
-> Parcel and the Pokédex, followed by Brock.
+> Parcel and the Pokédex, followed by Brock. See the
+> [sanitized three-run evidence receipt](docs/evidence/opening-squirtle-2026-07-28.json).
 
 ## The goal
 
