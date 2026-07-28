@@ -23,7 +23,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 QUALIFIED_SOURCE_COMMIT = "0fb14ac7f287e92fe270b3811f1ef495cbc36194"
 OPENING_SOURCE_COMMIT = "898f015e297aae4f5d1ae3d200285e58f182d306"
 POKEDEX_SOURCE_COMMIT = "f6feaab2e4864b27efacfe319eb7ac53b50707a4"
-BROCK_SOURCE_COMMIT = "0021ef7a3d267a222e53d388928f0a5fa4221d01"
+BROCK_SOURCE_COMMIT = "4af043f400754d473f8e9cf3779065afff4dff67"
 BOOTSTRAP_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "bootstrap-smoke-2026-07-28.json"
 OPENING_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "opening-squirtle-2026-07-28.json"
 POKEDEX_RECEIPT = (
@@ -417,6 +417,7 @@ def test_brock_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["brock"] == {
         "boulder_badge_verified": True,
         "bubble_pp": 23,
+        "overworld_control_verified": True,
         "squirtle_hp": 27,
         "squirtle_level": 12,
         "squirtle_max_hp": 33,
@@ -444,8 +445,8 @@ def test_brock_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     }
     assert receipt["qualified_through"] == "defeat_brock"
     assert receipt["game_complete"] is False
-    assert receipt["frames_executed"] == 121_247
-    assert receipt["actions_executed"] == 1_554
+    assert receipt["frames_executed"] == 122_999
+    assert receipt["actions_executed"] == 1_573
     assert receipt["controller_released"] is True
 
     serialized = json.dumps(receipt)

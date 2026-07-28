@@ -10,7 +10,7 @@ control, and progressively trained specialists.**
 > **Current status:** one continuous deterministic teacher now reaches all **21/21 qualified
 > checkpoints** from clean power-on, crosses Viridian Forest, defeats Brock, and verifies the
 > Boulder Badge plus TM34. That establishes **6/36 completion objectives**. Three clean runs
-> produced the same 121,247-frame, 1,554-action result. This is a deterministic-teacher milestone,
+> produced the same 122,999-frame, 1,573-action result. This is a deterministic-teacher milestone,
 > not a learned-policy or game-completion claim. The next objective is Cerulean City. See the
 > [sanitized three-run evidence receipt](docs/evidence/qualified-play-brock-2026-07-28.json).
 
@@ -149,8 +149,8 @@ stops automatically after the latest independently qualified objective and repor
 is not complete. The forest segment deliberately trains against three verified Kakuna encounters
 and one mandatory Bug Catcher. The Brock gate requires a healthy level-9 Squirtle with Bubble and
 sufficient PP before interaction, an observed live Brock battle, and concurrent post-battle proof:
-the event flag, both Boulder Badge indicators, TM34's event and inventory presence, restored
-controls, and a surviving status-free Squirtle.
+the event flag, both Boulder Badge indicators, TM34's event and inventory presence, a successful
+post-dialogue movement probe, and a surviving status-free Squirtle.
 
 The ROM, saves, snapshots, recordings, datasets, and model checkpoints are ignored and must remain
 outside Git. The visible window is not recorded or uploaded by the project. The supported revision

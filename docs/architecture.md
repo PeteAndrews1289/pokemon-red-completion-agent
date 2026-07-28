@@ -77,8 +77,9 @@ Pokédex checkpoint requires both Pokédex and parcel-delivery events, the parce
 inventory, no battle, and restored controls. Before Brock, the teacher requires a healthy
 level-9 Squirtle with Bubble and a safe PP reserve. The final gate requires an observed live Brock
 battle followed by the Brock and TM34 events, TM34 in inventory, both Boulder Badge mirrors, zeroed
-Gym scripts, restored controls, and a surviving status-free Squirtle. The final state is observed
-again after an additional frame before qualification.
+Gym scripts, and a surviving status-free Squirtle. Because the game's reward text can outlive the
+script and control-mask bytes, the teacher then clears a bounded number of text pages and requires
+an actual accepted overworld movement followed by a stable reobservation before qualification.
 
 The corridors and semantic gates are derived from pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8` and independently verified on the supported private ROM.
