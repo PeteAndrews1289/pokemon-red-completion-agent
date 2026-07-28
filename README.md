@@ -2,17 +2,17 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Opening chapter](https://img.shields.io/badge/status-opening_chapter-2563eb.svg)](docs/roadmap.md)
+[![Status: Pokédex qualified](https://img.shields.io/badge/status-Pok%C3%A9dex_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** the bounded deterministic teacher now reaches all **6/6 opening checkpoints**
-> from clean power-on and selects a semantically verified Squirtle. That verifies **3/36 completion
-> objectives**: clean power-on, beginning the adventure, and choosing the starter. This is not a
-> rival-battle, Pokédex, badge, learned-policy, or game-completion claim. The next chapter is Oak's
-> Parcel and the Pokédex, followed by Brock. See the
-> [sanitized three-run evidence receipt](docs/evidence/opening-squirtle-2026-07-28.json).
+> **Current status:** one continuous deterministic teacher now reaches all **11/11 qualified
+> checkpoints** from clean power-on, defeats the lab rival, obtains and delivers Oak's Parcel, and
+> receives the Pokédex. That verifies **4/36 completion objectives**. Three clean runs produced the
+> same 52,956-frame, 619-action result. This is not a badge, learned-policy, or game-completion
+> claim. The next objective is reaching Pewter City, followed by Brock. See the
+> [sanitized three-run evidence receipt](docs/evidence/qualified-play-pokedex-2026-07-28.json).
 
 ## The goal
 
@@ -126,6 +126,8 @@ pokemon-red-completion doctor
 pokemon-red-completion bootstrap
 pokemon-red-completion opening
 pokemon-red-completion opening --watch --speed 4
+pokemon-red-completion play
+pokemon-red-completion play --watch --speed 4
 ```
 
 `bootstrap` starts PyBoy headlessly from immutable verified ROM bytes, disables human window input,
@@ -139,6 +141,13 @@ uncapped by default. `--watch --speed 4` instead opens a local PyBoy window at 4
 checkpoint progress before the final JSON report. Watch mode changes presentation only: keyboard
 input remains disabled, the same semantic gates choose every action, and the emulator still exits
 without saving.
+
+`play` is the recommended continuous command. It uses one clean emulator session for the opening,
+the verified rival win, both Route 1 crossings, the parcel handoff, and the Pokédex sequence. It
+stops automatically at the latest independently qualified boundary and reports that the game is
+not complete. The rival gate requires an observed trainer battle plus a level-6 Squirtle at full
+health; the final gate independently requires the Pokédex and parcel-delivery events, restored
+controls, and the parcel's removal from inventory.
 
 The ROM, saves, snapshots, recordings, datasets, and model checkpoints are ignored and must remain
 outside Git. The visible window is not recorded or uploaded by the project. The supported revision

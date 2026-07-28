@@ -1,0 +1,157 @@
+{
+  "actions_executed": 619,
+  "assistance": {
+    "class": "deterministic_teacher",
+    "human_controller_input": false,
+    "save_state_restore": false
+  },
+  "attempts": {
+    "failed": 0,
+    "passed": 3,
+    "total": 3
+  },
+  "checkpoints": {
+    "all_verified": true,
+    "ids": [
+      "bedroom_ready",
+      "downstairs",
+      "outside",
+      "oak_triggered",
+      "selection_ready",
+      "starter_obtained",
+      "rival_defeated",
+      "viridian_reached",
+      "parcel_received",
+      "pallet_returned",
+      "pokedex_received"
+    ],
+    "verified": 11
+  },
+  "clean_power_on": true,
+  "configuration": {
+    "controller_timing": {
+      "press_frames": 8,
+      "release_frames": 16,
+      "wait_frames": 1
+    },
+    "emulator": {
+      "human_input": false,
+      "ram_input": "none",
+      "rtc_input": "none",
+      "save_on_exit": false,
+      "sound_emulated": false,
+      "speed": 0,
+      "window": "null"
+    },
+    "intro_timing": {
+      "boot_frames": 1800,
+      "final_wait_frames": 300,
+      "menu_move_wait_frames": 120,
+      "normal_wait_frames": 240
+    },
+    "new_game_names": "built_in_red_blue",
+    "opening_timing": {
+      "dialogue_wait_frames": 240,
+      "max_escort_pulses": 32,
+      "max_starter_cancel_pulses": 12,
+      "max_starter_confirm_pulses": 12,
+      "oak_trigger_wait_frames": 360,
+      "starter_text_wait_frames": 180,
+      "transition_wait_frames": 120
+    },
+    "pret_pokered_commit": "1e96034092686d006e863cace09e87273051a3d8",
+    "qualified_play_timing": {
+      "battle_wait_frames": 180,
+      "dialogue_wait_frames": 240,
+      "mart_prompt_wait_frames": 240,
+      "max_parcel_pulses": 5,
+      "max_pokedex_pulses": 42,
+      "max_rival_pulses": 56,
+      "rival_trigger_wait_frames": 360,
+      "route_1_north_seed_wait_frames": 192,
+      "route_1_south_seed_wait_frames": 48,
+      "transition_wait_frames": 120
+    },
+    "route_encounter_policy": "fail_closed",
+    "starter": "squirtle"
+  },
+  "configuration_sha256": "18aa7adb66c9ecdda51b8646f28270ad40d62ffa5e5f4782b29f1511ecd6649c",
+  "controller_released": true,
+  "emulator": {
+    "human_input": false,
+    "name": "PyBoy",
+    "save_on_exit": false,
+    "speed": 0,
+    "version": "2.7.0",
+    "window": "null"
+  },
+  "facts": [
+    "party:starter_obtained",
+    "story:adventure_begun",
+    "story:oak_lab_reached",
+    "story:pokedex_received",
+    "story:starter_selection_ready",
+    "system:clean_power_on"
+  ],
+  "final_state": {
+    "battle_state": 0,
+    "location": "oaks_lab",
+    "map_id": 40,
+    "party_count": 1,
+    "player_x": 5,
+    "player_y": 3
+  },
+  "frames_executed": 52956,
+  "game_complete": false,
+  "objective_progress": {
+    "next": "reach_pewter",
+    "total": 36,
+    "verified": 4,
+    "verified_ids": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter",
+      "receive_pokedex"
+    ]
+  },
+  "parcel": {
+    "delivered_verified": true,
+    "present_after_delivery": false,
+    "received_verified": true
+  },
+  "pokedex": {
+    "controls_ready": true,
+    "received_verified": true
+  },
+  "python_version": "3.14.3",
+  "qualified_through": "receive_pokedex",
+  "receipt_schema": "qualified-play-evidence-v1",
+  "recorded_on": "2026-07-28",
+  "repeatability": {
+    "identical_action_count": true,
+    "identical_final_state": true,
+    "identical_frame_count": true
+  },
+  "rival": {
+    "hp": 21,
+    "level": 6,
+    "max_hp": 21,
+    "species": "squirtle",
+    "species_id": 177,
+    "trainer_battle_observed": true,
+    "victory_verified": true
+  },
+  "rom": {
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "size_bytes": 1048576,
+    "title": "POKEMON RED"
+  },
+  "safe_stop_reason": "latest_qualified_boundary",
+  "schema": "qualified-play-v1",
+  "source": {
+    "git_commit": "f6feaab2e4864b27efacfe319eb7ac53b50707a4",
+    "worktree_dirty": false
+  },
+  "status": "ok"
+}

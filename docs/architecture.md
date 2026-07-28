@@ -35,24 +35,41 @@ map transition alone is not considered proof that control is ready. Unknown or i
 fail closed. Future pixel, tile, or collision-data readers require separate, explicitly bounded
 ports before they can enter this adapter.
 
-### Qualified opening teacher
+### Qualified continuous teacher
 
-The first bounded teacher covers six checkpoints from clean power-on through a verified Squirtle:
+The current bounded teacher uses one emulator session for eleven checkpoints from clean power-on
+through the Pokédex:
 
 1. bedroom input ready;
 2. Red's house first floor;
 3. stable Pallet Town exit;
 4. Professor Oak triggered;
 5. starter selection ready; and
-6. Squirtle present with the corresponding story event and controls restored.
+6. Squirtle present with the corresponding story event and controls restored;
+7. the lab rival battle observed and won;
+8. stable arrival in Viridian City;
+9. Oak's Parcel present with the corresponding Mart event;
+10. safe return to Pallet Town; and
+11. the parcel delivered and Pokédex received with controls restored.
 
-Every corridor step is reobserved, dialogue loops have fixed action budgets, and unexpected maps,
-coordinates, scripts, events, species, or controller masks fail closed. The corridors and semantic
-gates are derived from pret/pokered commit
+The public `opening` command retains its six-checkpoint compatibility contract. The `play` command
+composes that opening with the next five checkpoints without restarting, loading state, or saving.
+Every action is reobserved, dialogue loops have fixed budgets, and unexpected battles, maps,
+coordinates, scripts, events, species, health, inventory, or controller masks fail closed. The
+Route 1 timing is qualified to avoid encounters; an encounter is treated as a failed attempt
+rather than silently invoking an unqualified generic battle policy.
+
+The rival event alone is insufficient because the game also sets it after a loss. The immutable
+victory checkpoint therefore requires a previously observed trainer-battle state, a winning battle
+result, stable lab script and controls, and a level-6 Squirtle restored to 21/21 HP. Likewise, the
+final checkpoint requires both Pokédex and parcel-delivery events, the parcel absent from inventory,
+no battle, and restored controls.
+
+The corridors and semantic gates are derived from pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8` and independently verified on the supported private ROM.
 The concluded predecessor supplied the separately attributed power-on bootstrap, not this route.
-Completing these **6/6 checkpoints** verifies **3/36 objectives**; it does not verify the lab rival,
-Oak's Parcel, the Pokédex, Brock, or the full game.
+Completing these **11/11 checkpoints** verifies **4/36 objectives**; it does not verify Brock, any
+learned policy, or the full game.
 
 ### Objective graph
 
