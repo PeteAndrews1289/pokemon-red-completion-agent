@@ -14,6 +14,7 @@
   in-memory ROM handling, and no-save shutdown.
 - Added typed opening phases and fail-closed checks for maps, coordinates, scripts, events,
   controller masks, party state, and starter species.
+- Added a source-bound, sanitized receipt for three identical clean-start Squirtle runs.
 - Pinned the new opening corridors and semantic gates to pret/pokered commit
   `1e96034092686d006e863cace09e87273051a3d8`.
 - Added a private integration gate and expanded the ROM-free emulator coverage.
