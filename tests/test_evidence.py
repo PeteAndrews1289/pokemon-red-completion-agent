@@ -15,6 +15,7 @@ from pokemon_red_completion.opening import (
     PRET_POKERED_COMMIT,
     SQUIRTLE_APPROACH,
 )
+from pokemon_red_completion.pewter import DEFAULT_PEWTER_TIMING
 from pokemon_red_completion.play import DEFAULT_QUALIFIED_PLAY_TIMING
 from pokemon_red_completion.provenance import GIT_COMMIT, canonical_sha256
 
@@ -22,10 +23,14 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 QUALIFIED_SOURCE_COMMIT = "0fb14ac7f287e92fe270b3811f1ef495cbc36194"
 OPENING_SOURCE_COMMIT = "898f015e297aae4f5d1ae3d200285e58f182d306"
 POKEDEX_SOURCE_COMMIT = "f6feaab2e4864b27efacfe319eb7ac53b50707a4"
+BROCK_SOURCE_COMMIT = "0021ef7a3d267a222e53d388928f0a5fa4221d01"
 BOOTSTRAP_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "bootstrap-smoke-2026-07-28.json"
 OPENING_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "opening-squirtle-2026-07-28.json"
 POKEDEX_RECEIPT = (
     PROJECT_ROOT / "docs" / "evidence" / "qualified-play-pokedex-2026-07-28.json"
+)
+BROCK_RECEIPT = (
+    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-brock-2026-07-28.json"
 )
 
 
@@ -318,6 +323,129 @@ def test_pokedex_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["game_complete"] is False
     assert receipt["frames_executed"] == 52_956
     assert receipt["actions_executed"] == 619
+    assert receipt["controller_released"] is True
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_brock_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
+    receipt = json.loads(BROCK_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["receipt_schema"] == "qualified-play-evidence-v2"
+    assert receipt["schema"] == "qualified-play-v2"
+    assert receipt["status"] == "ok"
+    assert receipt["attempts"] == {"failed": 0, "passed": 3, "total": 3}
+    assert receipt["assistance"] == {
+        "class": "deterministic_teacher",
+        "human_controller_input": False,
+        "save_state_restore": False,
+    }
+    assert receipt["source"] == {
+        "git_commit": BROCK_SOURCE_COMMIT,
+        "worktree_dirty": False,
+    }
+    assert GIT_COMMIT.fullmatch(receipt["source"]["git_commit"])
+    assert re.fullmatch(r"\d+\.\d+\.\d+", receipt["python_version"])
+    assert receipt["recorded_on"] == "2026-07-28"
+
+    intro = DEFAULT_NEW_GAME_TIMING
+    opening = DEFAULT_OPENING_TIMING
+    play = DEFAULT_QUALIFIED_PLAY_TIMING
+    pewter = DEFAULT_PEWTER_TIMING
+    expected_configuration = {
+        "controller_timing": {
+            "press_frames": intro.press_frames,
+            "release_frames": intro.release_frames,
+            "wait_frames": 1,
+        },
+        "emulator": {
+            "human_input": False,
+            "ram_input": "none",
+            "rtc_input": "none",
+            "save_on_exit": False,
+            "sound_emulated": False,
+            "speed": 0,
+            "window": "null",
+        },
+        "intro_timing": {
+            "boot_frames": intro.boot_frames,
+            "final_wait_frames": intro.final_wait_frames,
+            "menu_move_wait_frames": intro.menu_move_wait_frames,
+            "normal_wait_frames": intro.normal_wait_frames,
+        },
+        "new_game_names": "built_in_red_blue",
+        "opening_timing": {
+            name: getattr(opening, name)
+            for name in opening.__dataclass_fields__
+        },
+        "pewter_timing": {
+            name: getattr(pewter, name)
+            for name in pewter.__dataclass_fields__
+        },
+        "pret_pokered_commit": PRET_POKERED_COMMIT,
+        "qualified_play_timing": {
+            name: getattr(play, name)
+            for name in play.__dataclass_fields__
+        },
+        "route_encounter_policy": (
+            "fail_closed_except_three_verified_kakuna_and_one_bug_catcher"
+        ),
+        "starter": "squirtle",
+    }
+    assert receipt["configuration"] == expected_configuration
+    assert receipt["configuration_sha256"] == canonical_sha256(expected_configuration)
+    assert receipt["rom"] == {
+        "sha1": POKEMON_RED_US_REV_0.sha1,
+        "sha256": POKEMON_RED_US_REV_0.sha256,
+        "size_bytes": POKEMON_RED_US_REV_0.size_bytes,
+        "title": POKEMON_RED_US_REV_0.title,
+    }
+    assert receipt["checkpoints"]["verified"] == 21
+    assert receipt["checkpoints"]["all_verified"] is True
+    assert receipt["checkpoints"]["ids"][-2:] == [
+        "brock_battle",
+        "brock_defeated",
+    ]
+    assert receipt["northbound"] == {
+        "brock_battle_observed": True,
+        "ordered_boundaries_total": 9,
+        "ordered_boundaries_verified": 9,
+    }
+    assert receipt["brock"] == {
+        "boulder_badge_verified": True,
+        "bubble_pp": 23,
+        "squirtle_hp": 27,
+        "squirtle_level": 12,
+        "squirtle_max_hp": 33,
+        "squirtle_status": 0,
+        "tm34_verified": True,
+        "victory_verified": True,
+    }
+    assert receipt["objective_progress"] == {
+        "next": "reach_cerulean",
+        "total": 36,
+        "verified": 6,
+        "verified_ids": [
+            "power_on",
+            "begin_adventure",
+            "choose_starter",
+            "receive_pokedex",
+            "reach_pewter",
+            "defeat_brock",
+        ],
+    }
+    assert receipt["repeatability"] == {
+        "identical_action_count": True,
+        "identical_final_state": True,
+        "identical_frame_count": True,
+    }
+    assert receipt["qualified_through"] == "defeat_brock"
+    assert receipt["game_complete"] is False
+    assert receipt["frames_executed"] == 121_247
+    assert receipt["actions_executed"] == 1_554
     assert receipt["controller_released"] is True
 
     serialized = json.dumps(receipt)

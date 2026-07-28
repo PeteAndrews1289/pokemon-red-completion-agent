@@ -15,12 +15,12 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 ## Milestone 1 — verified opening chapter
 
-**Status: in progress — July 2026**
+**Status: complete — July 2026**
 
-Current qualification: **11/11 bounded checkpoints** and **4/36 completion objectives**, ending
-with the lab rival defeated, Oak's Parcel delivered, the Pokédex received, and controls restored.
-Three clean runs reached the identical 52,956-frame / 619-action boundary. This is not a badge,
-learned-policy, or completion result.
+Current qualification: **21/21 bounded checkpoints** and **6/36 completion objectives**, ending
+with Brock defeated, the Boulder Badge and TM34 verified, and controls restored. Three clean runs
+reached the identical 121,247-frame / 1,554-action boundary. This is a deterministic-teacher badge
+milestone, not a learned-policy or completion result.
 
 - [x] Build the no-save PyBoy bridge and read-only state adapter from pinned symbols.
 - [x] Add controller timing and one authoritative action executor.
@@ -31,16 +31,18 @@ learned-policy, or completion result.
 - [x] Qualify the lab rival, Oak's Parcel delivery, and Pokédex objective in one clean session.
 - [x] Add a continuous `play --watch` command with 11 visible semantic checkpoints and a safe,
   explicit bounded stop.
-- [ ] Qualify the route to Pewter City and defeat Brock.
-- [ ] Replay every opening objective from multiple private timing perturbations.
+- [x] Qualify the route to Pewter City and defeat Brock.
+- [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: Pewter City, then Brock. The qualified corridors and semantic gates are pinned to
-pret/pokered commit `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Pokédex three-run evidence receipt](evidence/qualified-play-pokedex-2026-07-28.json).
+Next sequence: Route 3, Mt. Moon, and Cerulean City. The qualified corridors and semantic gates are
+pinned to pret/pokered commit `1e96034092686d006e863cace09e87273051a3d8`. See the
+[Brock three-run evidence receipt](evidence/qualified-play-brock-2026-07-28.json).
 
 Exit gate: three intervention-free clean-power-on runs defeat Brock with identical evidence rules.
 
 ## Milestone 2 — deterministic expert
+
+**Status: in progress — July 2026**
 
 - Complete the route graph through all eight badges, Victory Road, Elite Four, and Hall of Fame.
 - Add navigation transitions, menus, inventory, party management, HM/puzzle, battle, and recovery

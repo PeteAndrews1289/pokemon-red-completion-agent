@@ -37,8 +37,8 @@ ports before they can enter this adapter.
 
 ### Qualified continuous teacher
 
-The current bounded teacher uses one emulator session for eleven checkpoints from clean power-on
-through the Pokédex:
+The current bounded teacher uses one emulator session for 21 checkpoints from clean power-on
+through Brock:
 
 1. bedroom input ready;
 2. Red's house first floor;
@@ -50,26 +50,41 @@ through the Pokédex:
 8. stable arrival in Viridian City;
 9. Oak's Parcel present with the corresponding Mart event;
 10. safe return to Pallet Town; and
-11. the parcel delivered and Pokédex received with controls restored.
+11. the parcel delivered and Pokédex received with controls restored;
+12. Oak's Lab exited after the Pokédex;
+13. Viridian City reached northbound;
+14. Route 2 reached;
+15. the Viridian Forest south gate reached;
+16. Viridian Forest entered;
+17. Viridian Forest cleared;
+18. Pewter City reached;
+19. Pewter Gym entered with a battle-ready Squirtle;
+20. Brock's live trainer battle identified; and
+21. Brock defeated with the Boulder Badge and TM34 concurrently verified.
 
 The public `opening` command retains its six-checkpoint compatibility contract. The `play` command
-composes that opening with the next five checkpoints without restarting, loading state, or saving.
-Every action is reobserved, dialogue loops have fixed budgets, and unexpected battles, maps,
-coordinates, scripts, events, species, health, inventory, or controller masks fail closed. The
-Route 1 timing is qualified to avoid encounters; an encounter is treated as a failed attempt
-rather than silently invoking an unqualified generic battle policy.
+composes all 21 checkpoints without restarting, loading state, or saving. Every action is
+reobserved, dialogue and battle loops have fixed budgets, and unexpected battles, maps,
+coordinates, scripts, events, species, health, inventory, move PP, or controller masks fail
+closed. Route 1 rejects every encounter. Viridian Forest permits only three intentionally seeded
+Kakuna training battles and the mandatory Bug Catcher, each with its own type, party, and bounded
+completion gates.
 
 The rival event alone is insufficient because the game also sets it after a loss. The immutable
 victory checkpoint therefore requires a previously observed trainer-battle state, a winning battle
 result, stable lab script and controls, and a level-6 Squirtle restored to 21/21 HP. Likewise, the
-final checkpoint requires both Pokédex and parcel-delivery events, the parcel absent from inventory,
-no battle, and restored controls.
+Pokédex checkpoint requires both Pokédex and parcel-delivery events, the parcel absent from
+inventory, no battle, and restored controls. Before Brock, the teacher requires a healthy
+level-9 Squirtle with Bubble and a safe PP reserve. The final gate requires an observed live Brock
+battle followed by the Brock and TM34 events, TM34 in inventory, both Boulder Badge mirrors, zeroed
+Gym scripts, restored controls, and a surviving status-free Squirtle. The final state is observed
+again after an additional frame before qualification.
 
 The corridors and semantic gates are derived from pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8` and independently verified on the supported private ROM.
 The concluded predecessor supplied the separately attributed power-on bootstrap, not this route.
-Completing these **11/11 checkpoints** verifies **4/36 objectives**; it does not verify Brock, any
-learned policy, or the full game.
+Completing these **21/21 checkpoints** verifies **6/36 objectives**; it does not verify any learned
+policy or the full game.
 
 ### Objective graph
 
