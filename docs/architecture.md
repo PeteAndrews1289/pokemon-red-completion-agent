@@ -5,6 +5,20 @@
 Pokémon Red contains several problems operating at radically different time scales. The system
 therefore separates long-horizon quest planning from bounded control skills.
 
+## Private runtime boundary
+
+The exact private ROM is read once, fingerprinted, and passed to PyBoy as an in-memory stream.
+PyBoy never receives the source path, cannot auto-load adjacent cartridge RAM, runs headlessly with
+human window input disabled, and always stops with saving disabled.
+
+Only two narrow capabilities cross that boundary:
+
+- read one byte through the declared read-only memory adapter; and
+- press, release, or tick through the sole frame-safe executor.
+
+The actor cannot write RAM, load state, save state, or obtain the ROM payload. Public reports omit
+the filename and path.
+
 ## Components
 
 ### Semantic state adapter

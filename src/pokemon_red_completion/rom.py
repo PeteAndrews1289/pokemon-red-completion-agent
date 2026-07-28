@@ -43,32 +43,36 @@ def resolve_rom_path(argument: str | Path | None) -> Path:
 
 
 def fingerprint_rom(path: Path) -> RomFingerprint:
-    sha1 = hashlib.sha1(usedforsecurity=False)
-    sha256 = hashlib.sha256()
+    return fingerprint_rom_bytes(path.read_bytes(), filename=path.name)
 
-    with path.open("rb") as rom_file:
-        header = rom_file.read(0x150)
-        rom_file.seek(0)
-        for chunk in iter(lambda: rom_file.read(1024 * 1024), b""):
-            sha1.update(chunk)
-            sha256.update(chunk)
 
+def fingerprint_rom_bytes(
+    payload: bytes,
+    *,
+    filename: str = "<private>",
+) -> RomFingerprint:
+    """Fingerprint the exact immutable bytes that will be passed to an emulator."""
+    if not isinstance(payload, bytes):
+        raise TypeError("payload must be bytes")
+
+    sha1 = hashlib.sha1(payload, usedforsecurity=False)
+    sha256 = hashlib.sha256(payload)
+    header = payload[:0x150]
     title_bytes = header[0x134:0x144]
     title = title_bytes.split(b"\x00", 1)[0].decode("ascii", errors="replace").strip()
     return RomFingerprint(
-        filename=path.name,
+        filename=filename,
         title=title,
-        size_bytes=path.stat().st_size,
+        size_bytes=len(payload),
         sha1=sha1.hexdigest(),
         sha256=sha256.hexdigest(),
     )
 
 
-def verify_rom(
-    path: Path,
+def verify_rom_fingerprint(
+    actual: RomFingerprint,
     expected: SupportedRom = POKEMON_RED_US_REV_0,
 ) -> RomFingerprint:
-    actual = fingerprint_rom(path)
     mismatches: list[str] = []
 
     if actual.title != expected.title:
@@ -86,3 +90,22 @@ def verify_rom(
             f"states are revision-specific: {'; '.join(mismatches)}"
         )
     return actual
+
+
+def verify_rom_bytes(
+    payload: bytes,
+    expected: SupportedRom = POKEMON_RED_US_REV_0,
+    *,
+    filename: str = "<private>",
+) -> RomFingerprint:
+    return verify_rom_fingerprint(
+        fingerprint_rom_bytes(payload, filename=filename),
+        expected,
+    )
+
+
+def verify_rom(
+    path: Path,
+    expected: SupportedRom = POKEMON_RED_US_REV_0,
+) -> RomFingerprint:
+    return verify_rom_bytes(path.read_bytes(), expected, filename=path.name)

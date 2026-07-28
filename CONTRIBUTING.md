@@ -19,5 +19,11 @@ Before opening a change:
    pytest -m "not integration"
    ```
 
+Private runtime changes should also pass:
+
+```bash
+POKEMON_RED_ROM="/absolute/path/to/Pokemon Red.gb" pytest -m integration
+```
+
 Training assistance is allowed, but it must be labeled. Evaluation changes may not silently add
 teacher actions, save-state restoration, online code modification, or human controller input.

@@ -15,10 +15,13 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 ## Milestone 1 — verified opening chapter
 
-- Build the read-only PyBoy state adapter from pinned pret symbols.
-- Add controller timing and one authoritative action executor.
-- Qualify new game, starter choice, Oak's Parcel, Pokédex, and Brock objectives.
-- Replay every opening objective from multiple private timing perturbations.
+**Status: in progress — July 2026**
+
+- [x] Build the no-save PyBoy bridge and read-only state adapter from pinned symbols.
+- [x] Add controller timing and one authoritative action executor.
+- [x] Qualify clean power-on through the input-ready bedroom and one-tile movement probe.
+- [ ] Qualify leaving home, starter choice, Oak's Parcel, Pokédex, and Brock objectives.
+- [ ] Replay every opening objective from multiple private timing perturbations.
 
 Exit gate: three intervention-free clean-power-on runs defeat Brock with identical evidence rules.
 

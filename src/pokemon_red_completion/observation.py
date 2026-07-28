@@ -23,6 +23,7 @@ class RamAddress(IntEnum):
     repository's exact ROM fingerprint gate passes.
     """
 
+    JOY_IGNORE = 0xCD6B
     IS_IN_BATTLE = 0xD057
     PARTY_COUNT = 0xD163
     NUM_BAG_ITEMS = 0xD31D
@@ -31,6 +32,7 @@ class RamAddress(IntEnum):
     CURRENT_MAP = 0xD35E
     PLAYER_Y = 0xD361
     PLAYER_X = 0xD362
+    REDS_HOUSE_2F_SCRIPT = 0xD60C
     STATUS_FLAGS_6 = 0xD732
     EVENT_FLAGS = 0xD747
 
@@ -47,6 +49,7 @@ class MapId(IntEnum):
     CINNABAR_ISLAND = 0x08
     INDIGO_PLATEAU = 0x09
     SAFFRON_CITY = 0x0A
+    REDS_HOUSE_2F = 0x26
     HALL_OF_FAME = 0x76
     CHAMPIONS_ROOM = 0x78
     INDIGO_PLATEAU_LOBBY = 0xAE
@@ -101,6 +104,7 @@ class Badge(IntFlag):
 
 
 GAME_TIMER_COUNTING_MASK = 0x01
+REDS_HOUSE_2F_NOOP_SCRIPT = 1
 PARTY_LIMIT = 6
 MAX_BAG_ITEMS = 20
 EVENT_FLAGS_END = 0xD886
@@ -120,6 +124,16 @@ class RawGameState:
     badge_bits: int | None = None
     bag_item_ids: tuple[int, ...] | None = None
     event_flags: bytes | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class BedroomInputState:
+    joy_ignore: int
+    map_script: int
+
+    @property
+    def ready(self) -> bool:
+        return self.joy_ignore == 0 and self.map_script == REDS_HOUSE_2F_NOOP_SCRIPT
 
 
 class PokemonRedStateReader:
@@ -151,6 +165,13 @@ class PokemonRedStateReader:
             badge_bits=self._memory.read_u8(RamAddress.OBTAINED_BADGES),
             bag_item_ids=bag_items,
             event_flags=events,
+        )
+
+    def read_bedroom_input_state(self) -> BedroomInputState:
+        """Read the two revision-specific input-readiness symbols for Red's bedroom."""
+        return BedroomInputState(
+            joy_ignore=self._memory.read_u8(RamAddress.JOY_IGNORE),
+            map_script=self._memory.read_u8(RamAddress.REDS_HOUSE_2F_SCRIPT),
         )
 
 
@@ -216,6 +237,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.CINNABAR_ISLAND: "cinnabar_island",
         MapId.INDIGO_PLATEAU: "indigo_plateau",
         MapId.SAFFRON_CITY: "saffron_city",
+        MapId.REDS_HOUSE_2F: "reds_house_2f",
         MapId.HALL_OF_FAME: "hall_of_fame",
         MapId.CHAMPIONS_ROOM: "champions_room",
         MapId.INDIGO_PLATEAU_LOBBY: "indigo_plateau_lobby",
