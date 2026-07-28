@@ -11,22 +11,24 @@ The exact private ROM is read once, fingerprinted, and passed to PyBoy as an in-
 PyBoy never receives the source path, cannot auto-load adjacent cartridge RAM, runs headlessly with
 human window input disabled, and always stops with saving disabled.
 
-Only two narrow capabilities cross that boundary:
+The current PyBoy port exposes only two narrow capabilities:
 
 - read one byte from Game Boy Work RAM through the declared read-only memory adapter; and
 - press, release, or tick through the sole frame-safe executor.
 
 Cartridge ROM, VRAM, external cartridge RAM, I/O, and all other address regions fail closed. The
-actor cannot write RAM, load state, save state, inject an emulator backend, or obtain the ROM
-payload. Public reports omit the filename and path.
+declared actor interface does not permit RAM writes, state loading or saving, emulator-backend
+injection, or ROM-payload access. This is an enforced interface boundary within one Python process,
+not a sandbox for malicious code. Public reports omit the filename and path.
 
 ## Components
 
 ### Semantic state adapter
 
-Translates pixels, tiles, collision data, and a small declared set of read-only RAM symbols into a
+The current implementation translates a small declared set of read-only Work RAM symbols into a
 versioned state object. Pregame scratch values are never treated as story progress. Unknown or
-inconsistent states fail closed.
+inconsistent states fail closed. Future pixel, tile, or collision-data readers require separate,
+explicitly bounded ports before they can enter this adapter.
 
 ### Objective graph
 
