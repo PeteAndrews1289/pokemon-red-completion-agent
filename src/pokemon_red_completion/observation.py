@@ -23,8 +23,15 @@ class RamAddress(IntEnum):
     repository's exact ROM fingerprint gate passes.
     """
 
+    TILE_MAP = 0xC3A0
+    TOP_MENU_ITEM_Y = 0xCC24
+    TOP_MENU_ITEM_X = 0xCC25
+    CURRENT_MENU_ITEM = 0xCC26
+    MENU_WATCHED_KEYS = 0xCC29
+    MENU_CURSOR_LOCATION = 0xCC30
     NPC_MOVEMENT_SCRIPT_TABLE = 0xCC57
     ENGAGED_TRAINER_CLASS = 0xCD2D
+    ENGAGED_TRAINER_SET = 0xCD2E
     SIMULATED_JOYPAD_INDEX = 0xCD38
     JOY_IGNORE = 0xCD6B
     BATTLE_RESULT = 0xCF0B
@@ -32,6 +39,7 @@ class RamAddress(IntEnum):
     IS_IN_BATTLE = 0xD057
     CURRENT_OPPONENT = 0xD059
     GYM_LEADER_NUMBER = 0xD05C
+    TRAINER_NUMBER = 0xD05D
     PARTY_COUNT = 0xD163
     PARTY_SPECIES = 0xD164
     PARTY_MON_1_HP = 0xD16C
@@ -51,9 +59,15 @@ class RamAddress(IntEnum):
     PALLET_TOWN_SCRIPT = 0xD5F1
     VIRIDIAN_CITY_SCRIPT = 0xD5F4
     PEWTER_CITY_SCRIPT = 0xD5F7
+    ROUTE_3_SCRIPT = 0xD5F8
+    ROUTE_4_SCRIPT = 0xD5F9
     PEWTER_GYM_SCRIPT = 0xD5FC
+    CERULEAN_GYM_SCRIPT = 0xD5FD
+    MT_MOON_1F_SCRIPT = 0xD606
+    MT_MOON_B2F_SCRIPT = 0xD607
     REDS_HOUSE_2F_SCRIPT = 0xD60C
     VIRIDIAN_MART_SCRIPT = 0xD60D
+    CERULEAN_CITY_SCRIPT = 0xD60F
     VIRIDIAN_FOREST_SCRIPT = 0xD618
     BEAT_GYM_FLAGS = 0xD72A
     STATUS_FLAGS_5 = 0xD730
@@ -77,6 +91,8 @@ class MapId(IntEnum):
     SAFFRON_CITY = 0x0A
     ROUTE_1 = 0x0C
     ROUTE_2 = 0x0D
+    ROUTE_3 = 0x0E
+    ROUTE_4 = 0x0F
     REDS_HOUSE_1F = 0x25
     REDS_HOUSE_2F = 0x26
     OAKS_LAB = 0x28
@@ -88,6 +104,12 @@ class MapId(IntEnum):
     VIRIDIAN_FOREST = 0x33
     PEWTER_GYM = 0x36
     PEWTER_POKECENTER = 0x3A
+    MT_MOON_1F = 0x3B
+    MT_MOON_B1F = 0x3C
+    MT_MOON_B2F = 0x3D
+    CERULEAN_POKECENTER = 0x40
+    CERULEAN_GYM = 0x41
+    MT_MOON_POKECENTER = 0x44
     HALL_OF_FAME = 0x76
     CHAMPIONS_ROOM = 0x78
     INDIGO_PLATEAU_LOBBY = 0xAE
@@ -106,6 +128,11 @@ class EventFlag(IntEnum):
     BEAT_VIRIDIAN_GYM_GIOVANNI = 0x051
     GOT_TM34 = 0x076
     BEAT_BROCK = 0x077
+    BEAT_CERULEAN_RIVAL = 0x098
+    BEAT_CERULEAN_ROCKET_THIEF = 0x0A7
+    BEAT_CERULEAN_GYM_TRAINER_0 = 0x0BA
+    BEAT_CERULEAN_GYM_TRAINER_1 = 0x0BB
+    GOT_TM11 = 0x0BE
     BEAT_MISTY = 0x0BF
     RESCUED_MR_FUJI = 0x117
     GOT_POKE_FLUTE = 0x128
@@ -115,7 +142,30 @@ class EventFlag(IntEnum):
     BEAT_KOGA = 0x259
     BEAT_BLAINE = 0x299
     BEAT_SABRINA = 0x361
+    BEAT_ROUTE_3_TRAINER_0 = 0x3E2
+    BEAT_ROUTE_3_TRAINER_1 = 0x3E3
+    BEAT_ROUTE_3_TRAINER_2 = 0x3E4
+    BEAT_ROUTE_3_TRAINER_3 = 0x3E5
+    BEAT_ROUTE_3_TRAINER_4 = 0x3E6
+    BEAT_ROUTE_3_TRAINER_5 = 0x3E7
+    BEAT_ROUTE_3_TRAINER_6 = 0x3E8
+    BEAT_ROUTE_3_TRAINER_7 = 0x3E9
+    BEAT_ROUTE_4_TRAINER_0 = 0x3F2
     GOT_SS_TICKET = 0x55C
+    BEAT_MT_MOON_1_TRAINER_0 = 0x571
+    BEAT_MT_MOON_1_TRAINER_1 = 0x572
+    BEAT_MT_MOON_1_TRAINER_2 = 0x573
+    BEAT_MT_MOON_1_TRAINER_3 = 0x574
+    BEAT_MT_MOON_1_TRAINER_4 = 0x575
+    BEAT_MT_MOON_1_TRAINER_5 = 0x576
+    BEAT_MT_MOON_1_TRAINER_6 = 0x577
+    BEAT_MT_MOON_EXIT_SUPER_NERD = 0x579
+    BEAT_MT_MOON_3_TRAINER_0 = 0x57A
+    BEAT_MT_MOON_3_TRAINER_1 = 0x57B
+    BEAT_MT_MOON_3_TRAINER_2 = 0x57C
+    BEAT_MT_MOON_3_TRAINER_3 = 0x57D
+    GOT_DOME_FOSSIL = 0x57E
+    GOT_HELIX_FOSSIL = 0x57F
     GOT_HM01 = 0x5E0
     BEAT_ROCKET_HIDEOUT_GIOVANNI = 0x6A7
     BEAT_SILPH_CO_GIOVANNI = 0x78F
@@ -128,6 +178,8 @@ class EventFlag(IntEnum):
 
 
 class ItemId(IntEnum):
+    DOME_FOSSIL = 0x29
+    HELIX_FOSSIL = 0x2A
     SECRET_KEY = 0x2B
     SS_TICKET = 0x3F
     OAKS_PARCEL = 0x46
@@ -136,6 +188,7 @@ class ItemId(IntEnum):
     HM01_CUT = 0xC4
     HM03_SURF = 0xC6
     HM04_STRENGTH = 0xC7
+    TM11_BUBBLEBEAM = 0xD3
     TM34_BIDE = 0xEA
 
 
@@ -160,10 +213,50 @@ JOY_IGNORE_MOVEMENT_MASK = 0xF0
 SCRIPTED_MOVEMENT_STATUS_MASK = (1 << 0) | (1 << 5) | (1 << 7)
 EXITING_DOOR_MOVEMENT_MASK = 1 << 1
 SQUIRTLE_SPECIES_ID = 0xB1
+WARTORTLE_SPECIES_ID = 0xB3
+BLASTOISE_SPECIES_ID = 0x1C
+SQUIRTLE_LINEAGE_SPECIES_IDS = frozenset(
+    {SQUIRTLE_SPECIES_ID, WARTORTLE_SPECIES_ID, BLASTOISE_SPECIES_ID}
+)
 BUBBLE_MOVE_ID = 0x91
 BROCK_OPPONENT_ID = 0xEA
 BROCK_TRAINER_CLASS_ID = 0x22
 BROCK_GYM_LEADER_NUMBER = 1
+MT_MOON_SUPER_NERD_OPPONENT_ID = 0xD0
+SUPER_NERD_TRAINER_CLASS_ID = 0x08
+MT_MOON_SUPER_NERD_TRAINER_NUMBER = 2
+YOUNGSTER_OPPONENT_ID = 0xC9
+YOUNGSTER_TRAINER_CLASS_ID = 0x01
+BUG_CATCHER_OPPONENT_ID = 0xCA
+BUG_CATCHER_TRAINER_CLASS_ID = 0x02
+ROUTE_3_REQUIRED_TRAINER_SPECS = (
+    (0, BUG_CATCHER_OPPONENT_ID, BUG_CATCHER_TRAINER_CLASS_ID, 4),
+    (1, YOUNGSTER_OPPONENT_ID, YOUNGSTER_TRAINER_CLASS_ID, 1),
+    (3, BUG_CATCHER_OPPONENT_ID, BUG_CATCHER_TRAINER_CLASS_ID, 5),
+    (6, BUG_CATCHER_OPPONENT_ID, BUG_CATCHER_TRAINER_CLASS_ID, 6),
+)
+ROCKET_OPPONENT_ID = 0xE6
+ROCKET_TRAINER_CLASS_ID = 0x1E
+# The collision-legal fossil route reaches Rocket1 from the B2F (21, 17)
+# entry. Header 0 / party 1 engages while Red is at (11, 19).
+MT_MOON_REQUIRED_ROCKET_TRAINER_INDEX = 0
+MT_MOON_REQUIRED_ROCKET_TRAINER_NUMBER = 1
+MT_MOON_REQUIRED_ROCKET_EVENT = EventFlag.BEAT_MT_MOON_3_TRAINER_0
+MT_MOON_REQUIRED_ROCKET_TRIGGER_X = 11
+MT_MOON_REQUIRED_ROCKET_TRIGGER_Y = 19
+MISTY_OPPONENT_ID = 0xEB
+MISTY_TRAINER_CLASS_ID = 0x23
+MISTY_TRAINER_NUMBER = 1
+MISTY_GYM_LEADER_NUMBER = 2
+MAIN_BATTLE_MENU_LEFT_SIGNATURE = (0x0E, 0x09, 0x11)
+MAIN_BATTLE_MENU_RIGHT_SIGNATURE = (0x0E, 0x0F, 0x21)
+MOVE_BATTLE_MENU_SIGNATURE = (0x0C, 0x05, 0xC7)
+FILLED_MENU_CURSOR_TILE = 0xED
+TILE_MAP_SIZE = 20 * 18
+MIN_BATTLE_COMMAND = 0
+MAX_BATTLE_COMMAND = 3
+MIN_MOVE_MENU_SLOT = 1
+MAX_MOVE_MENU_SLOT = 4
 PARTY_LIMIT = 6
 MAX_BAG_ITEMS = 20
 EVENT_FLAGS_END = 0xD886
@@ -353,6 +446,21 @@ class InputReadiness:
             and not bool(self.status_flags_5 & SCRIPTED_MOVEMENT_STATUS_MASK)
             and not bool(self.movement_flags & EXITING_DOOR_MOVEMENT_MASK)
         )
+
+
+class BattleMenuPhase(StrEnum):
+    UNKNOWN = "unknown"
+    MAIN = "main"
+    MOVE = "move"
+
+
+@dataclass(frozen=True, slots=True)
+class BattleMenuState:
+    """Revision-pinned menu meaning without exposing menu RAM to route code."""
+
+    phase: BattleMenuPhase
+    selected_move_slot: int | None = None
+    selected_main_command: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -607,6 +715,402 @@ class PewterProgressTracker:
         return state.phase
 
 
+class CeruleanBoundary(StrEnum):
+    UNKNOWN = "unknown"
+    ROUTE_3_WEST_ENTRY = "route_3_west_entry"
+    ROUTE_4_WEST_ENTRY = "route_4_west_entry"
+    MT_MOON_1F_ENTRY = "mt_moon_1f_entry"
+    MT_MOON_B1F_DESCENT = "mt_moon_b1f_descent"
+    MT_MOON_B2F_ENTRY = "mt_moon_b2f_entry"
+    MT_MOON_B1F_ASCENT = "mt_moon_b1f_ascent"
+    ROUTE_4_MT_MOON_EXIT = "route_4_mt_moon_exit"
+    CERULEAN_WEST_ENTRY = "cerulean_west_entry"
+
+
+class CeruleanPhase(StrEnum):
+    UNKNOWN = "unknown"
+    ROUTE_3_REACHED = "route_3_reached"
+    ROUTE_3_TRAINER_BATTLE = "route_3_trainer_battle"
+    ROUTE_4_REACHED = "route_4_reached"
+    MT_MOON_ENTERED = "mt_moon_entered"
+    MT_MOON_B1F_REACHED = "mt_moon_b1f_reached"
+    MT_MOON_B2F_REACHED = "mt_moon_b2f_reached"
+    REQUIRED_ROCKET_BATTLE = "required_rocket_battle"
+    REQUIRED_ROCKET_DEFEATED = "required_rocket_defeated"
+    SUPER_NERD_BATTLE = "super_nerd_battle"
+    SUPER_NERD_DEFEATED = "super_nerd_defeated"
+    FOSSIL_OBTAINED = "fossil_obtained"
+    MT_MOON_CLEARED = "mt_moon_cleared"
+    CERULEAN_REACHED = "cerulean_reached"
+
+
+@dataclass(frozen=True, slots=True)
+class CeruleanChapterState:
+    """Semantic evidence for the ordered Brock-to-Cerulean chapter."""
+
+    phase: CeruleanPhase
+    boundary: CeruleanBoundary
+    controls: InputReadiness
+    local_script: int
+    current_map_script: int
+    beat_brock: bool
+    got_tm34: bool
+    boulder_badge: bool
+    boulder_badge_mirror: bool
+    beat_route_3_trainer_0: bool
+    beat_route_3_trainer_1: bool
+    beat_route_3_trainer_3: bool
+    beat_route_3_trainer_6: bool
+    beat_required_rocket: bool
+    beat_super_nerd: bool
+    got_dome_fossil: bool
+    got_helix_fossil: bool
+    dome_fossil_in_bag: bool
+    helix_fossil_in_bag: bool
+    current_opponent: int
+    trainer_class: int
+    trainer_number: int
+    engaged_trainer_class: int
+    engaged_trainer_set: int
+    map_id: int | None
+    player_x: int | None
+    player_y: int | None
+    party_count: int | None
+    party_species_ids: tuple[int, ...] | None
+    first_party_hp: int | None
+    first_party_max_hp: int | None
+    first_party_status: int | None
+    battle_state: int | None
+    battle_result: int | None
+
+    @property
+    def post_brock_invariants(self) -> bool:
+        species = self.party_species_ids or ()
+        return (
+            self.beat_brock
+            and self.got_tm34
+            and self.boulder_badge
+            and self.boulder_badge_mirror
+            and 1 <= (self.party_count or 0) <= PARTY_LIMIT
+            and bool(species)
+            and species[0] in SQUIRTLE_LINEAGE_SPECIES_IDS
+            and 0 < (self.first_party_hp or 0) <= (self.first_party_max_hp or 0)
+        )
+
+    @property
+    def fossil_invariants(self) -> bool:
+        chose_exactly_one = self.got_dome_fossil ^ self.got_helix_fossil
+        corresponding_item = (
+            self.got_dome_fossil
+            and self.dome_fossil_in_bag
+            and not self.helix_fossil_in_bag
+        ) or (
+            self.got_helix_fossil
+            and self.helix_fossil_in_bag
+            and not self.dome_fossil_in_bag
+        )
+        return (
+            self.post_brock_invariants
+            and self.required_route_3_trainers_defeated
+            and self.beat_required_rocket
+            and self.beat_super_nerd
+            and chose_exactly_one
+            and corresponding_item
+        )
+
+    @property
+    def stable_overworld_snapshot(self) -> bool:
+        return (
+            self.post_brock_invariants
+            and self.battle_state == 0
+            and self.local_script == 0
+            and self.current_map_script == 0
+            and self.controls.ready
+        )
+
+    @property
+    def travel_boundary_snapshot(self) -> bool:
+        if (
+            self.boundary is CeruleanBoundary.UNKNOWN
+            or not self.stable_overworld_snapshot
+            or _cerulean_boundary_position(
+                self.map_id, self.player_x, self.player_y
+            )
+            is not self.boundary
+        ):
+            return False
+        pre_fossil = {
+            CeruleanBoundary.ROUTE_3_WEST_ENTRY,
+            CeruleanBoundary.ROUTE_4_WEST_ENTRY,
+            CeruleanBoundary.MT_MOON_1F_ENTRY,
+            CeruleanBoundary.MT_MOON_B1F_DESCENT,
+            CeruleanBoundary.MT_MOON_B2F_ENTRY,
+        }
+        if self.boundary is CeruleanBoundary.ROUTE_3_WEST_ENTRY:
+            return not self.got_dome_fossil and not self.got_helix_fossil
+        if self.boundary in pre_fossil:
+            return (
+                self.required_route_3_trainers_defeated
+                and not self.got_dome_fossil
+                and not self.got_helix_fossil
+            )
+        return self.fossil_invariants
+
+    @property
+    def required_route_3_trainer_events(self) -> tuple[bool, bool, bool, bool]:
+        return (
+            self.beat_route_3_trainer_0,
+            self.beat_route_3_trainer_1,
+            self.beat_route_3_trainer_3,
+            self.beat_route_3_trainer_6,
+        )
+
+    @property
+    def required_route_3_trainers_defeated(self) -> bool:
+        return all(self.required_route_3_trainer_events)
+
+    @property
+    def route_3_trainer_battle_index(self) -> int | None:
+        if (
+            self.phase is not CeruleanPhase.ROUTE_3_TRAINER_BATTLE
+            or self.map_id != MapId.ROUTE_3
+            or not self.post_brock_invariants
+            or self.battle_state != 2
+            or self.local_script != 2
+            or self.current_map_script != 2
+        ):
+            return None
+        for spec, defeated in zip(
+            ROUTE_3_REQUIRED_TRAINER_SPECS,
+            self.required_route_3_trainer_events,
+            strict=True,
+        ):
+            event_index, opponent, trainer_class, trainer_number = spec
+            if (
+                not defeated
+                and self.current_opponent == opponent
+                and self.trainer_class == trainer_class
+                and self.trainer_number == trainer_number
+                and self.engaged_trainer_class == opponent
+                and self.engaged_trainer_set == trainer_number
+            ):
+                return event_index
+        return None
+
+    @property
+    def route_3_trainer_battle_snapshot(self) -> bool:
+        return self.route_3_trainer_battle_index is not None
+
+    @property
+    def required_rocket_battle_snapshot(self) -> bool:
+        return (
+            self.phase is CeruleanPhase.REQUIRED_ROCKET_BATTLE
+            and self.map_id == MapId.MT_MOON_B2F
+            and self.post_brock_invariants
+            and self.battle_state == 2
+            and self.local_script == 2
+            and self.current_map_script == 2
+            and self.player_x == MT_MOON_REQUIRED_ROCKET_TRIGGER_X
+            and self.player_y == MT_MOON_REQUIRED_ROCKET_TRIGGER_Y
+            and not self.beat_required_rocket
+            and self.current_opponent == ROCKET_OPPONENT_ID
+            and self.trainer_class == ROCKET_TRAINER_CLASS_ID
+            and self.trainer_number == MT_MOON_REQUIRED_ROCKET_TRAINER_NUMBER
+            and self.engaged_trainer_class == ROCKET_OPPONENT_ID
+            and self.engaged_trainer_set
+            == MT_MOON_REQUIRED_ROCKET_TRAINER_NUMBER
+        )
+
+    @property
+    def super_nerd_battle_snapshot(self) -> bool:
+        return (
+            self.phase is CeruleanPhase.SUPER_NERD_BATTLE
+            and self.map_id == MapId.MT_MOON_B2F
+            and self.post_brock_invariants
+            and self.beat_required_rocket
+            and not self.beat_super_nerd
+            and self.battle_state == 2
+            and self.local_script == 3
+            and self.current_map_script == 3
+            and self.current_opponent == MT_MOON_SUPER_NERD_OPPONENT_ID
+            and self.trainer_class == SUPER_NERD_TRAINER_CLASS_ID
+            and self.trainer_number == MT_MOON_SUPER_NERD_TRAINER_NUMBER
+            and self.engaged_trainer_class == MT_MOON_SUPER_NERD_OPPONENT_ID
+            and self.engaged_trainer_set == MT_MOON_SUPER_NERD_TRAINER_NUMBER
+        )
+
+    @property
+    def fossil_snapshot(self) -> bool:
+        return (
+            self.phase is CeruleanPhase.FOSSIL_OBTAINED
+            and self.map_id == MapId.MT_MOON_B2F
+            and self.fossil_invariants
+            and self.stable_overworld_snapshot
+        )
+
+    @property
+    def cerulean_snapshot(self) -> bool:
+        return (
+            self.phase is CeruleanPhase.CERULEAN_REACHED
+            and self.boundary is CeruleanBoundary.CERULEAN_WEST_ENTRY
+            and self.travel_boundary_snapshot
+        )
+
+
+class CeruleanProgressError(ValueError):
+    """Raised when Brock-to-Cerulean evidence skips or contradicts a gate."""
+
+
+class CeruleanProgressTracker:
+    """Latch the exact route, mandatory battles, fossil, and Cerulean in order."""
+
+    _BOUNDARIES = (
+        CeruleanBoundary.ROUTE_3_WEST_ENTRY,
+        CeruleanBoundary.ROUTE_4_WEST_ENTRY,
+        CeruleanBoundary.MT_MOON_1F_ENTRY,
+        CeruleanBoundary.MT_MOON_B1F_DESCENT,
+        CeruleanBoundary.MT_MOON_B2F_ENTRY,
+        CeruleanBoundary.MT_MOON_B1F_ASCENT,
+        CeruleanBoundary.ROUTE_4_MT_MOON_EXIT,
+        CeruleanBoundary.CERULEAN_WEST_ENTRY,
+    )
+    _LAST_PRE_FOSSIL_INDEX = 4
+
+    def __init__(self, brock_state: PewterChapterState) -> None:
+        if not brock_state.brock_victory_snapshot:
+            raise CeruleanProgressError(
+                "Cerulean qualification must begin at the verified Brock boundary."
+            )
+        self._boundary_index = -1
+        self._route_3_trainer_index = -1
+        self._saw_required_rocket_battle = False
+        self._saw_super_nerd_battle = False
+        self._fossil_obtained = False
+
+    @property
+    def reached_boundaries(self) -> tuple[CeruleanBoundary, ...]:
+        return self._BOUNDARIES[: self._boundary_index + 1]
+
+    @property
+    def saw_required_rocket_battle(self) -> bool:
+        return self._saw_required_rocket_battle
+
+    @property
+    def observed_route_3_trainers(self) -> tuple[int, ...]:
+        return tuple(
+            spec[0]
+            for spec in ROUTE_3_REQUIRED_TRAINER_SPECS[
+                : self._route_3_trainer_index + 1
+            ]
+        )
+
+    @property
+    def saw_super_nerd_battle(self) -> bool:
+        return self._saw_super_nerd_battle
+
+    @property
+    def fossil_obtained(self) -> bool:
+        return self._fossil_obtained
+
+    def observe(self, state: CeruleanChapterState) -> CeruleanPhase:
+        if state.fossil_snapshot:
+            if not self._saw_super_nerd_battle:
+                raise CeruleanProgressError(
+                    "Fossil acquisition cannot qualify without the Super Nerd battle."
+                )
+            self._fossil_obtained = True
+            return CeruleanPhase.FOSSIL_OBTAINED
+
+        if state.super_nerd_battle_snapshot:
+            if (
+                self._boundary_index != self._LAST_PRE_FOSSIL_INDEX
+                or not self._saw_required_rocket_battle
+                or not state.beat_required_rocket
+            ):
+                raise CeruleanProgressError(
+                    "Super Nerd appeared before the required Mt. Moon Rocket proof."
+                )
+            self._saw_super_nerd_battle = True
+            return CeruleanPhase.SUPER_NERD_BATTLE
+
+        if state.required_rocket_battle_snapshot:
+            if self._boundary_index != self._LAST_PRE_FOSSIL_INDEX:
+                raise CeruleanProgressError(
+                    "Required Rocket appeared before the Mt. Moon B2F entry proof."
+                )
+            self._saw_required_rocket_battle = True
+            return CeruleanPhase.REQUIRED_ROCKET_BATTLE
+
+        if state.route_3_trainer_battle_snapshot:
+            if self._boundary_index != 0:
+                raise CeruleanProgressError(
+                    "Route 3 trainer appeared outside the verified Route 3 segment."
+                )
+            observed_event = state.route_3_trainer_battle_index
+            expected_position = self._route_3_trainer_index + 1
+            if (
+                self._route_3_trainer_index >= 0
+                and observed_event
+                == ROUTE_3_REQUIRED_TRAINER_SPECS[self._route_3_trainer_index][0]
+            ):
+                return CeruleanPhase.ROUTE_3_TRAINER_BATTLE
+            if expected_position >= len(ROUTE_3_REQUIRED_TRAINER_SPECS):
+                raise CeruleanProgressError(
+                    "Unexpected Route 3 trainer after all required battles."
+                )
+            expected_event = ROUTE_3_REQUIRED_TRAINER_SPECS[expected_position][0]
+            if observed_event != expected_event:
+                raise CeruleanProgressError(
+                    "Route 3 trainer evidence skipped or reordered a required battle."
+                )
+            if not all(
+                state.required_route_3_trainer_events[:expected_position]
+            ):
+                raise CeruleanProgressError(
+                    "Route 3 trainer event did not flip after its observed battle."
+                )
+            self._route_3_trainer_index = expected_position
+            return CeruleanPhase.ROUTE_3_TRAINER_BATTLE
+
+        if state.boundary is CeruleanBoundary.UNKNOWN:
+            return state.phase
+        if not state.travel_boundary_snapshot:
+            raise CeruleanProgressError(
+                "Cerulean-route boundary failed its stable semantic snapshot."
+            )
+
+        expected_index = self._boundary_index + 1
+        if (
+            self._boundary_index >= 0
+            and state.boundary is self._BOUNDARIES[self._boundary_index]
+        ):
+            return state.phase
+        if expected_index >= len(self._BOUNDARIES):
+            raise CeruleanProgressError("Unexpected boundary after Cerulean City entry.")
+        if state.boundary is not self._BOUNDARIES[expected_index]:
+            raise CeruleanProgressError("Cerulean evidence skipped a required boundary.")
+        if (
+            state.boundary is CeruleanBoundary.ROUTE_4_WEST_ENTRY
+            and (
+                self._route_3_trainer_index
+                != len(ROUTE_3_REQUIRED_TRAINER_SPECS) - 1
+                or not state.required_route_3_trainers_defeated
+            )
+        ):
+            raise CeruleanProgressError(
+                "Route 4 cannot qualify before all four required Route 3 battles."
+            )
+        if (
+            expected_index > self._LAST_PRE_FOSSIL_INDEX
+            and not self._fossil_obtained
+        ):
+            raise CeruleanProgressError(
+                "Mt. Moon exit cannot qualify before the fossil proof."
+            )
+        self._boundary_index = expected_index
+        return state.phase
+
+
 class PokemonRedStateReader:
     def __init__(self, memory: ReadOnlyMemory) -> None:
         self._memory = memory
@@ -826,6 +1330,66 @@ class PokemonRedStateReader:
             battle_state=raw.battle_state,
         )
 
+    def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+        """Translate the pinned battle-menu symbols into a safe semantic state.
+
+        In the pinned pret/pokered source, ``wTopMenuItemY``,
+        ``wTopMenuItemX``, and ``wMenuWatchedKeys`` distinguish these menus.
+        A live ``▶`` at ``wMenuCursorLocation`` proves that ``HandleMenuInput``
+        still owns the menu; selection replaces it with ``▷`` before the
+        signature bytes are cleared. ``wCurrentMenuItem`` is one-based only in
+        the move menu.
+        """
+        if raw.battle_state not in {1, 2}:
+            return BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+        signature = (
+            self._memory.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+            self._memory.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            self._memory.read_u8(RamAddress.MENU_WATCHED_KEYS),
+        )
+        if signature in {
+            MAIN_BATTLE_MENU_LEFT_SIGNATURE,
+            MAIN_BATTLE_MENU_RIGHT_SIGNATURE,
+        }:
+            selected_row = self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
+            if not 0 <= selected_row <= 1 or not self._active_menu_cursor():
+                return BattleMenuState(BattleMenuPhase.UNKNOWN)
+            selected_main_command = selected_row
+            if signature == MAIN_BATTLE_MENU_RIGHT_SIGNATURE:
+                selected_main_command += 2
+            if MIN_BATTLE_COMMAND <= selected_main_command <= MAX_BATTLE_COMMAND:
+                return BattleMenuState(
+                    BattleMenuPhase.MAIN,
+                    selected_main_command=selected_main_command,
+                )
+        if signature == MOVE_BATTLE_MENU_SIGNATURE:
+            selected_move_slot = self._memory.read_u8(
+                RamAddress.CURRENT_MENU_ITEM
+            )
+            if (
+                MIN_MOVE_MENU_SLOT <= selected_move_slot <= MAX_MOVE_MENU_SLOT
+                and self._active_menu_cursor()
+            ):
+                return BattleMenuState(
+                    BattleMenuPhase.MOVE,
+                    selected_move_slot=selected_move_slot,
+                )
+        return BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    def _active_menu_cursor(self) -> bool:
+        cursor_address = self._memory.read_u8(RamAddress.MENU_CURSOR_LOCATION)
+        cursor_address |= (
+            self._memory.read_u8(int(RamAddress.MENU_CURSOR_LOCATION) + 1) << 8
+        )
+        if not (
+            int(RamAddress.TILE_MAP)
+            <= cursor_address
+            < int(RamAddress.TILE_MAP) + TILE_MAP_SIZE
+        ):
+            return False
+        return self._memory.read_u8(cursor_address) == FILLED_MENU_CURSOR_TILE
+
     def read_input_readiness(self) -> InputReadiness:
         return InputReadiness(
             joy_ignore=self._memory.read_u8(RamAddress.JOY_IGNORE),
@@ -947,6 +1511,152 @@ class PokemonRedStateReader:
             first_party_pp=raw.first_party_pp,
         )
 
+    def read_cerulean_chapter_state(self, raw: RawGameState) -> CeruleanChapterState:
+        """Translate the pinned Route 3, Mt. Moon, and Cerulean evidence."""
+        controls = self.read_input_readiness()
+        local_script = self._local_script(raw.map_id)
+        current_map_script = self._memory.read_u8(RamAddress.CURRENT_MAP_SCRIPT)
+        boundary = _cerulean_boundary(raw)
+        items = set(raw.bag_item_ids or ())
+        badge_bits = raw.badge_bits or 0
+        badge_mirror = self._memory.read_u8(RamAddress.BEAT_GYM_FLAGS)
+
+        beat_brock = _event(raw.event_flags, EventFlag.BEAT_BROCK)
+        got_tm34 = _event(raw.event_flags, EventFlag.GOT_TM34)
+        required_route_3_events = (
+            _event(raw.event_flags, EventFlag.BEAT_ROUTE_3_TRAINER_0),
+            _event(raw.event_flags, EventFlag.BEAT_ROUTE_3_TRAINER_1),
+            _event(raw.event_flags, EventFlag.BEAT_ROUTE_3_TRAINER_3),
+            _event(raw.event_flags, EventFlag.BEAT_ROUTE_3_TRAINER_6),
+        )
+        beat_required_rocket = _event(
+            raw.event_flags, MT_MOON_REQUIRED_ROCKET_EVENT
+        )
+        beat_super_nerd = _event(
+            raw.event_flags, EventFlag.BEAT_MT_MOON_EXIT_SUPER_NERD
+        )
+        got_dome_fossil = _event(raw.event_flags, EventFlag.GOT_DOME_FOSSIL)
+        got_helix_fossil = _event(raw.event_flags, EventFlag.GOT_HELIX_FOSSIL)
+
+        current_opponent = self._memory.read_u8(RamAddress.CURRENT_OPPONENT)
+        trainer_class = self._memory.read_u8(RamAddress.TRAINER_CLASS)
+        trainer_number = self._memory.read_u8(RamAddress.TRAINER_NUMBER)
+        engaged_trainer_class = self._memory.read_u8(
+            RamAddress.ENGAGED_TRAINER_CLASS
+        )
+        engaged_trainer_set = self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET)
+        route_3_trainer_position = _required_route_3_trainer_position(
+            current_opponent,
+            trainer_class,
+            trainer_number,
+            engaged_trainer_class,
+            engaged_trainer_set,
+        )
+
+        phase = CeruleanPhase.UNKNOWN
+        if boundary is CeruleanBoundary.CERULEAN_WEST_ENTRY:
+            phase = CeruleanPhase.CERULEAN_REACHED
+        elif boundary in {
+            CeruleanBoundary.MT_MOON_B1F_ASCENT,
+            CeruleanBoundary.ROUTE_4_MT_MOON_EXIT,
+        }:
+            phase = CeruleanPhase.MT_MOON_CLEARED
+        elif (
+            raw.map_id == MapId.MT_MOON_B2F
+            and raw.battle_state == 0
+            and beat_super_nerd
+            and got_dome_fossil ^ got_helix_fossil
+            and local_script == 0
+            and current_map_script == 0
+            and controls.ready
+        ):
+            phase = CeruleanPhase.FOSSIL_OBTAINED
+        elif (
+            raw.map_id == MapId.MT_MOON_B2F
+            and raw.battle_state == 2
+            and local_script == 3
+            and current_map_script == 3
+            and current_opponent == MT_MOON_SUPER_NERD_OPPONENT_ID
+            and trainer_class == SUPER_NERD_TRAINER_CLASS_ID
+            and trainer_number == MT_MOON_SUPER_NERD_TRAINER_NUMBER
+        ):
+            phase = CeruleanPhase.SUPER_NERD_BATTLE
+        elif beat_super_nerd:
+            phase = CeruleanPhase.SUPER_NERD_DEFEATED
+        elif (
+            raw.map_id == MapId.MT_MOON_B2F
+            and raw.battle_state == 2
+            and local_script == 2
+            and current_map_script == 2
+            and raw.player_x == MT_MOON_REQUIRED_ROCKET_TRIGGER_X
+            and raw.player_y == MT_MOON_REQUIRED_ROCKET_TRIGGER_Y
+            and not beat_required_rocket
+            and current_opponent == ROCKET_OPPONENT_ID
+            and trainer_class == ROCKET_TRAINER_CLASS_ID
+            and trainer_number == MT_MOON_REQUIRED_ROCKET_TRAINER_NUMBER
+            and engaged_trainer_class == ROCKET_OPPONENT_ID
+            and engaged_trainer_set == MT_MOON_REQUIRED_ROCKET_TRAINER_NUMBER
+        ):
+            phase = CeruleanPhase.REQUIRED_ROCKET_BATTLE
+        elif beat_required_rocket:
+            phase = CeruleanPhase.REQUIRED_ROCKET_DEFEATED
+        elif (
+            raw.map_id == MapId.ROUTE_3
+            and raw.battle_state == 2
+            and local_script == 2
+            and current_map_script == 2
+            and route_3_trainer_position is not None
+            and not required_route_3_events[route_3_trainer_position]
+        ):
+            phase = CeruleanPhase.ROUTE_3_TRAINER_BATTLE
+        elif boundary is CeruleanBoundary.MT_MOON_B2F_ENTRY:
+            phase = CeruleanPhase.MT_MOON_B2F_REACHED
+        elif boundary is CeruleanBoundary.MT_MOON_B1F_DESCENT:
+            phase = CeruleanPhase.MT_MOON_B1F_REACHED
+        elif boundary is CeruleanBoundary.MT_MOON_1F_ENTRY:
+            phase = CeruleanPhase.MT_MOON_ENTERED
+        elif boundary is CeruleanBoundary.ROUTE_4_WEST_ENTRY:
+            phase = CeruleanPhase.ROUTE_4_REACHED
+        elif boundary is CeruleanBoundary.ROUTE_3_WEST_ENTRY:
+            phase = CeruleanPhase.ROUTE_3_REACHED
+
+        return CeruleanChapterState(
+            phase=phase,
+            boundary=boundary,
+            controls=controls,
+            local_script=local_script,
+            current_map_script=current_map_script,
+            beat_brock=beat_brock,
+            got_tm34=got_tm34,
+            boulder_badge=bool(badge_bits & Badge.BOULDER),
+            boulder_badge_mirror=bool(badge_mirror & Badge.BOULDER),
+            beat_route_3_trainer_0=required_route_3_events[0],
+            beat_route_3_trainer_1=required_route_3_events[1],
+            beat_route_3_trainer_3=required_route_3_events[2],
+            beat_route_3_trainer_6=required_route_3_events[3],
+            beat_required_rocket=beat_required_rocket,
+            beat_super_nerd=beat_super_nerd,
+            got_dome_fossil=got_dome_fossil,
+            got_helix_fossil=got_helix_fossil,
+            dome_fossil_in_bag=ItemId.DOME_FOSSIL in items,
+            helix_fossil_in_bag=ItemId.HELIX_FOSSIL in items,
+            current_opponent=current_opponent,
+            trainer_class=trainer_class,
+            trainer_number=trainer_number,
+            engaged_trainer_class=engaged_trainer_class,
+            engaged_trainer_set=engaged_trainer_set,
+            map_id=raw.map_id,
+            player_x=raw.player_x,
+            player_y=raw.player_y,
+            party_count=raw.party_count,
+            party_species_ids=raw.party_species_ids,
+            first_party_hp=raw.first_party_hp,
+            first_party_max_hp=raw.first_party_max_hp,
+            first_party_status=raw.first_party_status,
+            battle_state=raw.battle_state,
+            battle_result=raw.battle_result,
+        )
+
     def _local_script(self, map_id: int | None) -> int:
         address = {
             MapId.OAKS_LAB: RamAddress.OAKS_LAB_SCRIPT,
@@ -955,6 +1665,12 @@ class PokemonRedStateReader:
             MapId.VIRIDIAN_FOREST: RamAddress.VIRIDIAN_FOREST_SCRIPT,
             MapId.PEWTER_CITY: RamAddress.PEWTER_CITY_SCRIPT,
             MapId.PEWTER_GYM: RamAddress.PEWTER_GYM_SCRIPT,
+            MapId.ROUTE_3: RamAddress.ROUTE_3_SCRIPT,
+            MapId.ROUTE_4: RamAddress.ROUTE_4_SCRIPT,
+            MapId.MT_MOON_1F: RamAddress.MT_MOON_1F_SCRIPT,
+            MapId.MT_MOON_B2F: RamAddress.MT_MOON_B2F_SCRIPT,
+            MapId.CERULEAN_CITY: RamAddress.CERULEAN_CITY_SCRIPT,
+            MapId.CERULEAN_GYM: RamAddress.CERULEAN_GYM_SCRIPT,
         }.get(map_id)
         return self._memory.read_u8(address) if address is not None else 0
 
@@ -995,6 +1711,47 @@ def _travel_boundary(raw: RawGameState) -> TravelBoundary:
     if position == (MapId.PEWTER_GYM, 4, 13):
         return TravelBoundary.PEWTER_GYM_ENTRANCE
     return TravelBoundary.UNKNOWN
+
+
+def _cerulean_boundary(raw: RawGameState) -> CeruleanBoundary:
+    return _cerulean_boundary_position(raw.map_id, raw.player_x, raw.player_y)
+
+
+def _cerulean_boundary_position(
+    map_id: int | None, player_x: int | None, player_y: int | None
+) -> CeruleanBoundary:
+    position = (map_id, player_x, player_y)
+    return {
+        (MapId.ROUTE_3, 0, 9): CeruleanBoundary.ROUTE_3_WEST_ENTRY,
+        (MapId.ROUTE_3, 0, 10): CeruleanBoundary.ROUTE_3_WEST_ENTRY,
+        (MapId.ROUTE_4, 9, 17): CeruleanBoundary.ROUTE_4_WEST_ENTRY,
+        (MapId.MT_MOON_1F, 14, 35): CeruleanBoundary.MT_MOON_1F_ENTRY,
+        (MapId.MT_MOON_B1F, 5, 5): CeruleanBoundary.MT_MOON_B1F_DESCENT,
+        (MapId.MT_MOON_B2F, 21, 17): CeruleanBoundary.MT_MOON_B2F_ENTRY,
+        (MapId.MT_MOON_B1F, 23, 3): CeruleanBoundary.MT_MOON_B1F_ASCENT,
+        (MapId.ROUTE_4, 24, 6): CeruleanBoundary.ROUTE_4_MT_MOON_EXIT,
+        (MapId.CERULEAN_CITY, 0, 18): CeruleanBoundary.CERULEAN_WEST_ENTRY,
+    }.get(position, CeruleanBoundary.UNKNOWN)
+
+
+def _required_route_3_trainer_position(
+    current_opponent: int,
+    trainer_class: int,
+    trainer_number: int,
+    engaged_trainer_class: int,
+    engaged_trainer_set: int,
+) -> int | None:
+    for position, spec in enumerate(ROUTE_3_REQUIRED_TRAINER_SPECS):
+        _, opponent, expected_class, expected_number = spec
+        if (
+            current_opponent == opponent
+            and trainer_class == expected_class
+            and trainer_number == expected_number
+            and engaged_trainer_class == opponent
+            and engaged_trainer_set == expected_number
+        ):
+            return position
+    return None
 
 
 def event_flag_is_set(event_flags: bytes | None, bit_index: int) -> bool:
@@ -1061,6 +1818,8 @@ def location_label(map_id: int | None) -> str | None:
         MapId.SAFFRON_CITY: "saffron_city",
         MapId.ROUTE_1: "route_1",
         MapId.ROUTE_2: "route_2",
+        MapId.ROUTE_3: "route_3",
+        MapId.ROUTE_4: "route_4",
         MapId.REDS_HOUSE_1F: "reds_house_1f",
         MapId.REDS_HOUSE_2F: "reds_house_2f",
         MapId.OAKS_LAB: "oaks_lab",
@@ -1072,6 +1831,12 @@ def location_label(map_id: int | None) -> str | None:
         MapId.VIRIDIAN_FOREST: "viridian_forest",
         MapId.PEWTER_GYM: "pewter_gym",
         MapId.PEWTER_POKECENTER: "pewter_pokecenter",
+        MapId.MT_MOON_1F: "mt_moon_1f",
+        MapId.MT_MOON_B1F: "mt_moon_b1f",
+        MapId.MT_MOON_B2F: "mt_moon_b2f",
+        MapId.CERULEAN_POKECENTER: "cerulean_pokecenter",
+        MapId.CERULEAN_GYM: "cerulean_gym",
+        MapId.MT_MOON_POKECENTER: "mt_moon_pokecenter",
         MapId.HALL_OF_FAME: "hall_of_fame",
         MapId.CHAMPIONS_ROOM: "champions_room",
         MapId.INDIGO_PLATEAU_LOBBY: "indigo_plateau_lobby",

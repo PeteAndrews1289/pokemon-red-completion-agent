@@ -1,5 +1,13 @@
 # Teaching and data plan
 
+## Teacher role and final goal
+
+The deterministic player is the project's disclosed reference policy: it proves semantic gates,
+supplies demonstrations, labels corrections, and provides a safety baseline. The final goal is
+different: a learned/hybrid actor must decide what to do from semantic observations when it sees
+unseen timing/RNG schedules and variable positions, encounters, damage, or status. Replaying the
+teacher route, even perfectly, does not establish that capability.
+
 ## A complete run is not the starting requirement
 
 The deterministic teacher can be built and verified one chapter at a time. It needs an exact ROM,
@@ -73,6 +81,11 @@ Action-aligned examples for individual skills:
 - success, retry, recovery, or terminal label; and
 - both nominal and deliberately perturbed starts.
 
+Perturbations cover nearby legal positions, menu cursor state, encounter identity and timing,
+remaining HP and PP, damage rolls, status conditions, inventory/resource differences, and initial
+or inter-action timing offsets. Training snapshots may create targeted component states, but they
+are never counted as clean-start completion attempts.
+
 ### DAgger
 
 A queryable teacher, not a fixed recording. For learner-visited states the dataset records the
@@ -99,6 +112,42 @@ Three versioned artifact types remain outside Git:
 Decision tables should use Parquet. Manifests and sparse events should use canonical JSON or JSONL.
 Screens, ROMs, saves, snapshots, and recordings remain private and content-addressed.
 
+## Staged policy build
+
+1. Qualify each deterministic chapter from clean power-on and log semantic demonstrations.
+2. Re-run qualified chapters under declared timing/RNG schedules; collect natural encounter,
+   damage, status, resource, and route deviations.
+3. Add targeted training-only perturbations and record teacher recovery or abstention.
+4. Train and freeze goal-conditioned navigation, interaction, battle, puzzle, and recovery
+   specialists independently.
+5. Roll out the learners, aggregate teacher corrections with DAgger, and reserve selective RL for
+   specialist failures that remain after imitation.
+6. Train a planner that selects objectives and specialists from semantic state, not raw addresses,
+   frame numbers, trace indices, or privileged teacher state.
+7. Compose the frozen planner, specialists, action masks, executor, and referee; evaluate it with
+   teacher fallback disabled.
+
+The deterministic objective graph, action executor, and referee may remain as declared safety and
+verification infrastructure. A hybrid-policy result is learned only when no teacher or oracle
+chooses or replaces the actor's actions.
+
+## Evaluation sets and reporting
+
+Evaluation seeds are preregistered harness schedules for timing and perturbation; they are not a
+claim that Pokémon Red exposes a user-selectable seed. Training, tuning, and held-out seeds are
+disjoint.
+
+- **Exact teacher:** repeat the frozen clean-power-on route and report its own attempts,
+  checkpoints, actions, frames, recoveries, and terminal reasons.
+- **Perturbed teacher:** run preregistered timing/RNG schedules without restoration and report
+  outcomes stratified by observed encounters, damage, status, displaced positions, and recovery.
+- **Learned multi-seed:** run held-out clean starts with frozen weights and configuration,
+  teacher/oracle fallback disabled, and every attempt counted.
+
+Targeted snapshot-start specialist suites may measure position, battle, menu, and recovery
+coverage, but must be labeled component tests. Official full-game attempts start clean and never
+restore, rewind, or import state from another run.
+
 ## Collection order
 
 1. Freeze the trajectory schema and logger.
@@ -106,14 +155,16 @@ Screens, ROMs, saves, snapshots, and recordings remain private and content-addre
 3. Preserve the qualified **6/6** checkpoint segment through verified Squirtle. **Done.**
 4. Extend the same clean session through the lab rival, Oak's Parcel, and the Pokédex. **Done.**
 5. Extend and replay-qualify the route through Pewter City and Brock. **Done.**
-6. Add perturbed starts and recoverable mistakes for each qualified skill.
-7. Train a small behavior-cloning baseline per skill.
+6. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
+   qualified skill.
+7. Train a small behavior-cloning baseline per specialist.
 8. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
    from the frozen perturbation suite for that skill.
 9. Extend the teacher chapter-by-chapter through the remainder of the game.
 10. Produce multiple clean teacher completions with timing and RNG variation.
-11. Train full-game composition only after that coverage exists.
+11. Train the semantic planner and full-game composition only after that coverage exists.
+12. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
 The first current evaluation gate remains three intervention-free clean-power-on runs through
 Brock. A first Hall-of-Fame success is a milestone; reliability requires at least 8/10 frozen
-clean-start runs.
+clean-start runs. No learned robustness or multi-seed completion result is claimed yet.

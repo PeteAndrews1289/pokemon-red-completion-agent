@@ -1,5 +1,13 @@
 # Roadmap
 
+## End state
+
+The final deliverable is a learned/hybrid policy that chooses objectives and bounded skills from
+semantic observations, then adapts when timing, encounters, battle outcomes, status, or position
+differs from its demonstrations. The qualified deterministic player is a disclosed teacher and
+safety baseline for producing evidence and corrections. It is not the final model, and its results
+must not be reported as learned-policy results.
+
 ## Milestone 0 — completion foundation
 
 **Status: complete — July 2026**
@@ -47,7 +55,9 @@ Exit gate: three intervention-free clean-power-on runs defeat Brock with identic
 - Complete the route graph through all eight badges, Victory Road, Elite Four, and Hall of Fame.
 - Add navigation transitions, menus, inventory, party management, HM/puzzle, battle, and recovery
   specialists.
-- Record failure categories and deterministic recovery behavior.
+- Record failure categories, deterministic recovery behavior, and semantic action rationales.
+- Generate clean demonstrations plus corrected trajectories for timing, encounter, battle,
+  status, and nearby-position variations.
 
 Exit gate: the teacher completes at least three clean runs without save-state restoration.
 
@@ -55,8 +65,9 @@ Exit gate: the teacher completes at least three clean runs without save-state re
 
 - Record private teacher and recovery trajectories.
 - Publish schemas, aggregate statistics, and dataset cards without game assets.
-- Train goal-conditioned specialists with behavioral cloning.
-- Evaluate each specialist on held-out and deliberately perturbed states.
+- Train goal-conditioned navigation, interaction, battle, puzzle, and recovery specialists with
+  behavioral cloning.
+- Evaluate each specialist on held-out seeds and deliberately perturbed semantic states.
 
 Exit gate: learned specialists meet preregistered local reliability thresholds.
 
@@ -65,13 +76,35 @@ Exit gate: learned specialists meet preregistered local reliability thresholds.
 - Collect teacher corrections on learner-induced states.
 - Use snapshot curriculum RL only for skills below their imitation gates.
 - Freeze and promote specialists independently.
+- Train a semantic planner to select objectives and specialists without raw-memory or
+  demonstration-index inputs.
+- Exercise recovery from displaced positions, unexpected encounters, damage, status, and shifted
+  timing.
 
-Exit gate: a learned skill stack completes with teacher fallback disabled.
+Exit gate: a learned skill stack completes a held-out clean-start run with teacher fallback
+disabled and no save restoration.
 
 ## Milestone 5 — distilled completion
 
-- Train a local goal-conditioned macro-policy from the verified teacher and specialist dataset.
+- Train a local goal-conditioned macro-policy from qualified demonstrations, perturbations, and
+  learner corrections.
 - Remove the deterministic router while retaining the objective graph, safe executor, and referee.
-- Run a fixed held-out clean-start evaluation series.
+- Run a preregistered held-out multi-seed clean-start evaluation series with teacher fallback
+  disabled.
 
 Exit gate: at least one verified completion; reliability requires at least 8/10 preregistered runs.
+
+## Evidence lanes
+
+Results remain separate throughout the project:
+
+1. **Exact teacher repeat:** the frozen deterministic teacher repeats a clean route from power-on.
+2. **Perturbed teacher coverage:** the teacher is measured across preregistered timing/RNG seeds
+   and reports the encounter, damage, status, recovery, and position variation actually observed.
+3. **Learned multi-seed policy:** the learned/hybrid actor receives semantic observations and runs
+   held-out seeds with teacher/oracle fallback disabled.
+
+All full-game evaluation lanes count every declared attempt and forbid save-state restoration.
+Snapshot-based perturbation suites remain component-training evidence, not completion evidence.
+Only the third lane supports a claim about learned generalization, and that result has not yet
+been achieved.
