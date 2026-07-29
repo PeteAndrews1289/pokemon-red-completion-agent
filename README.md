@@ -2,12 +2,12 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Blaine qualified](https://img.shields.io/badge/status-Blaine_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Giovanni qualified](https://img.shields.io/badge/status-Giovanni_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **267/267 qualified
+> **Current status:** one continuous deterministic teacher now reaches all **275/275 qualified
 > checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
 > Tunnel, clears the Rocket Hideout and Pokémon Tower, rescues Mr. Fuji, receives the Poké Flute,
 > defeats the Route 12 Snorlax, crosses Routes 12–15, collects the Gold Teeth, obtains reusable
@@ -23,12 +23,15 @@ control, and progressively trained specialists.**
 > TM46 and the Marsh Badge, and returns fully healed. It then takes the bicycle-free Route 16
 > Cut lane, obtains HM02, teaches Fly to DUX, flies to Pallet, Surfs Route 21 without fighting a
 > trainer, reaches Cinnabar, recovers the Secret Key without fighting a Mansion trainer, answers
-> all six Gym quizzes, defeats Blaine, receives TM38 and the Volcano Badge, and heals. That
-> establishes **28/36 completion objectives** and seven badges. Three clean runs produced the same
-> 3,869,179-frame, 32,695-action result. This is an exact-route
+> all six Gym quizzes, defeats Blaine, receives TM38 and the Volcano Badge, and heals. It then
+> flies to Viridian, sells TM46 to reserve Giovanni's reward slot, clears the six required Gym
+> battles, restores the party, defeats Giovanni, receives TM27 and the Earth Badge, activates the
+> Route 22 rival gate, and heals with all eight badges. That establishes **29/36 completion
+> objectives**. Three clean runs produced the same 4,033,092-frame, 34,178-action result. This is
+> an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next graph-selected objective is defeating Giovanni. See the
-> [sanitized three-run Blaine evidence receipt](docs/evidence/qualified-play-blaine-2026-07-29.json).
+> game-completion claim. The next graph-selected objective is crossing Victory Road. See the
+> [sanitized three-run Giovanni evidence receipt](docs/evidence/qualified-play-giovanni-2026-07-29.json).
 
 ## The goal
 
@@ -182,6 +185,10 @@ It then obtains HM02 Fly, reaches Cinnabar by way of Pallet and Route 21, traver
 Mansion with one Max Repel and no trainer battles, recovers the Secret Key, clears all six Gym
 quizzes without a regular-trainer battle, defeats Blaine with Surf, receives TM38 plus both
 Volcano Badge lanes, and returns to a healed Cinnabar Center.
+It then flies to Viridian, frees one bag slot by selling TM46, solves the spinner floor, clears
+the six route-gating trainers with Strength and Ice Beam, heals before the leader, defeats
+Giovanni with Surf, verifies TM27, both Earth Badge lanes, and both Route 22 rival events, then
+returns to a healed Viridian Center with all eight badges.
 It stops automatically after the
 latest independently qualified objective and reports that the game is not complete. The forest
 segment deliberately trains against three verified Kakuna encounters and one mandatory Bug

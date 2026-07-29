@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **267/267 qualified checkpoints** through
-Blaine and therefore **28/36 completion objectives**. Three clean runs were identical at
-the 3,869,179-frame / 32,695-action boundary. The evidence includes the earlier Brock
+The deterministic teacher currently verifies all **275/275 qualified checkpoints** through
+Giovanni and therefore **29/36 completion objectives**. Three clean runs were identical at
+the 4,033,092-frame / 34,178-action boundary. The evidence includes the earlier Brock
 and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
@@ -128,7 +128,12 @@ reaches the island through Pallet and Route 21, and then uses a one-repel Mansio
 six optional trainer events untouched. It verifies the three statue-switch transitions, Secret
 Key inventory, all six source-correct quiz answers, Blaine's exact party and Surf-only policy,
 TM38, the victory event, both Volcano Badge lanes, and a fully healed terminal state. The next
-segment returns to Viridian Gym for Giovanni.
+segment flies to Viridian, sells TM46 to reserve the TM27 slot, and proves the exact six-trainer
+spinner-floor route. Strength and Ice Beam preserve Surf for the leader; a bounded Center return
+restores health and PP before Giovanni. The run then verifies Giovanni's five-member party,
+Surf-only policy, TM27, both Earth Badge lanes, both Route 22 rival events, all eight post-victory
+trainer toggles, and a fully healed eight-badge Viridian terminal. The next segment crosses Route
+22, Route 23, and Victory Road.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -248,6 +253,6 @@ restore, rewind, or import state from another run.
 21. Train the semantic planner and full-game composition only after that coverage exists.
 22. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
-The current evaluation gate is three intervention-free clean-power-on runs through Blaine.
+The current evaluation gate is three intervention-free clean-power-on runs through Giovanni.
 A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
 frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.

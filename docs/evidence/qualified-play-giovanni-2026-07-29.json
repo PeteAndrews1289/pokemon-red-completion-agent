@@ -1,0 +1,111 @@
+{
+  "schema": "qualified-play-v22-receipt",
+  "date": "2026-07-29",
+  "status": "ok",
+  "claim_scope": {
+    "qualified_through": "defeat_giovanni",
+    "game_complete": false,
+    "learned_policy": false,
+    "timing_or_rng_generalization": false
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "runs": 3,
+    "identical_reports": true,
+    "report_sha256": "5019471510435fdedaba50ba514dd72ed2fe19c73ad0401870f3459e59d735e5",
+    "frames_per_run": 4033092,
+    "actions_per_run": 34178
+  },
+  "progress": {
+    "checkpoints_verified": 275,
+    "checkpoints_total": 275,
+    "objectives_verified": 29,
+    "objectives_total": 36,
+    "next_objective": "cross_victory_road"
+  },
+  "giovanni_chapter": {
+    "frames": 163913,
+    "actions": 1483,
+    "inventory": {
+      "tm46_sold": true,
+      "tm27_quantity": 1,
+      "money_before": 50579,
+      "money_after": 65434
+    },
+    "gym": {
+      "trainer_events_before": [false, false, false, false, false, false, false, false],
+      "trainer_events_before_giovanni": [true, true, true, false, true, true, false, true],
+      "trainer_events_after": [true, true, true, true, true, true, true, true],
+      "required_battles": [
+        {
+          "label": "hiker_set_8",
+          "identity": [224, 224, 8],
+          "party": [[41, 38], [106, 38], [41, 38]],
+          "move_slots": [2, 2, 2, 2, 2, 2, 2]
+        },
+        {
+          "label": "blackbelt_set_6",
+          "identity": [224, 224, 6],
+          "party": [[106, 40], [41, 40]],
+          "move_slots": [2, 2, 2, 2, 2]
+        },
+        {
+          "label": "cooltrainer_set_9",
+          "identity": [231, 231, 9],
+          "party": [[97, 39], [118, 39]],
+          "move_slots": [3, 3]
+        },
+        {
+          "label": "tamer_set_3",
+          "identity": [222, 222, 3],
+          "party": [[18, 43]],
+          "move_slots": [3]
+        },
+        {
+          "label": "cooltrainer_set_10",
+          "identity": [231, 231, 10],
+          "party": [[18, 43]],
+          "move_slots": [3]
+        },
+        {
+          "label": "cooltrainer_set_1",
+          "identity": [231, 231, 1],
+          "party": [[167, 39], [7, 39]],
+          "move_slots": [3, 3, 3]
+        }
+      ]
+    },
+    "giovanni": {
+      "identity": [229, 229, 3],
+      "party": [[18, 45], [118, 42], [16, 44], [7, 45], [1, 50]],
+      "move_slots": [4, 4, 4, 4, 4]
+    },
+    "rewards": {
+      "tm27_event": true,
+      "giovanni_event": true,
+      "earth_badge": true,
+      "earth_badge_mirror": true,
+      "route22_rival_visible": true,
+      "route22_rival_wants_battle": true
+    },
+    "terminal": {
+      "map": 41,
+      "x": 3,
+      "y": 3,
+      "party_hp": [151, 52, 37],
+      "party_max_hp": [151, 52, 37],
+      "party_status": [0, 0, 0],
+      "lead_moves": [130, 70, 58, 57],
+      "lead_pp": [15, 15, 10, 15],
+      "controller_released": true
+    }
+  },
+  "privacy": {
+    "rom_path_included": false,
+    "rom_hash_included": false,
+    "save_state_included": false,
+    "personal_path_included": false
+  }
+}
