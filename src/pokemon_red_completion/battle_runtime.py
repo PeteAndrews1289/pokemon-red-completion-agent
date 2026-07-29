@@ -93,6 +93,7 @@ def run_adaptive_trainer_battle(
     required_move_id: int | None = None,
     timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
     label: str = "trainer battle",
+    unknown_cancel_interval: int = 3,
 ) -> RawGameState:
     """Finish one already-active trainer battle with semantic feedback.
 
@@ -112,6 +113,12 @@ def run_adaptive_trainer_battle(
         raise ValueError("expected_map must be an unsigned one-byte map id")
     if not isinstance(label, str) or not label:
         raise ValueError("label must be a non-empty string")
+    if (
+        not isinstance(unknown_cancel_interval, int)
+        or isinstance(unknown_cancel_interval, bool)
+        or unknown_cancel_interval <= 0
+    ):
+        raise ValueError("unknown_cancel_interval must be a positive integer")
     if required_move_id is not None and (
         not isinstance(required_move_id, int)
         or isinstance(required_move_id, bool)
@@ -158,7 +165,7 @@ def run_adaptive_trainer_battle(
                 executor,
                 MacroAction(
                     MacroActionKind.CANCEL
-                    if unknown_menu_pulses % 3 == 0
+                    if unknown_menu_pulses % unknown_cancel_interval == 0
                     else MacroActionKind.CONFIRM
                 ),
                 timing.dialogue_wait_frames,

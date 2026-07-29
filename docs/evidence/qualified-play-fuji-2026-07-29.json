@@ -1,0 +1,95 @@
+{
+  "receipt_schema": "qualified-play-evidence-v11",
+  "schema": "qualified-play-v11",
+  "status": "ok",
+  "attempts": {"failed": 0, "passed": 3, "total": 3},
+  "assistance": {
+    "class": "deterministic_teacher",
+    "human_controller_input": false,
+    "save_state_restore": false,
+    "learned_policy": false
+  },
+  "source": {
+    "git_commit": "760a33e",
+    "worktree_dirty": true
+  },
+  "recorded_on": "2026-07-29",
+  "extends_evidence": "qualified-play-scope-2026-07-29.json",
+  "configuration": {
+    "pret_pokered_commit": "1e96034092686d006e863cace09e87273051a3d8",
+    "starter": "squirtle",
+    "route_policy": "bounded_semantic_tower_route_with_normalized_safe_wild_flee",
+    "battle_policy": "required_move_id_pp_decrement_and_ten_exact_battle_identities",
+    "recovery_policy": "adaptive_two_potion_rival_recovery_plus_three_purified_zone_heals"
+  },
+  "checkpoints": {"all_verified": true, "verified": 170},
+  "tower_chapter": {
+    "trainer_sets": [5, 10, 14, 19, 21, 20, null, 19, 20, 21],
+    "opponents": [242, 245, 245, 245, 245, 245, 145, 230, 230, 230],
+    "selected_move_ids": [44, 61, 61, 61, 61, 61, 61, 44, 44, 61],
+    "selected_pp_spent": [11, 4, 2, 5, 2, 2, 1, 4, 5, 4],
+    "marowak_level": 30,
+    "optional_trainers_bypassed": 8,
+    "required_events_verified": 13,
+    "purified_zone": {
+      "event_observed": true,
+      "full_party_heals": 3
+    },
+    "required_pickups": {
+      "x_accuracy": true,
+      "rare_candy": true,
+      "poke_flute": true
+    },
+    "evolution": {
+      "before_species": [179, 64, 59],
+      "after_species": [28, 64, 59],
+      "party_order_preserved": true,
+      "lead_moves_preserved": true
+    },
+    "inventory": {
+      "super_potion_inventory_path": [2, 1, 0],
+      "super_potions_used": 2,
+      "super_potions_remaining": 0,
+      "money_remaining": 27437
+    },
+    "party": {
+      "species": [28, 64, 59],
+      "hp": [111, 52, 37],
+      "max_hp": [111, 52, 37],
+      "status": [0, 0, 0]
+    },
+    "frames_executed": 157197,
+    "actions_executed": 2372,
+    "controller_released": true
+  },
+  "objective_progress": {
+    "next": "reach_fuchsia",
+    "total": 36,
+    "verified": 17,
+    "verified_ids": [
+      "power_on", "begin_adventure", "choose_starter", "receive_pokedex",
+      "reach_pewter", "defeat_brock", "reach_cerulean", "help_bill",
+      "reach_vermilion", "obtain_cut", "defeat_misty", "defeat_surge",
+      "reach_lavender", "reach_celadon", "clear_rocket_hideout", "obtain_silph_scope",
+      "rescue_fuji"
+    ]
+  },
+  "repeatability": {
+    "identical_action_count": true,
+    "identical_final_state": true,
+    "identical_frame_count": true,
+    "identical_full_report": true,
+    "full_report_sha256": "5322994a19cf54a7dc17c109f26af2b4ec34db3e838b403830d6c9e1d18ae045"
+  },
+  "scope": {
+    "claim": "exact deterministic teacher repeat",
+    "timing_or_rng_generalization": false,
+    "learned_policy_generalization": false,
+    "game_complete": false
+  },
+  "qualified_through": "rescue_fuji",
+  "game_complete": false,
+  "frames_executed": 1142003,
+  "actions_executed": 16797,
+  "controller_released": true
+}

@@ -937,6 +937,8 @@ def _flee(
     emulator: EmulatorState,
     run: _RunState,
     timing: LavenderTiming,
+    *,
+    unknown_with_cancel: bool = False,
 ) -> None:
     before = reader.read()
     species = before.party_species_ids
@@ -945,11 +947,41 @@ def _flee(
     inventory = _bag(emulator)
     if before.battle_state != 1:
         raise LavenderChapterError("Wild flee requires an active wild battle.")
+    if unknown_with_cancel:
+        for _ in range(timing.flee_pulses):
+            if reader.read().battle_state == 0:
+                break
+            for kind, value, frames in _normalized_run_actions(timing):
+                _pulse(executor, kind, value, frames=frames)
+                if reader.read().battle_state == 0:
+                    break
+        else:
+            raise LavenderChapterError("Wild flee could not normalize and select RUN.")
+        for _ in range(timing.flee_pulses):
+            final = reader.read()
+            if final.battle_state == 0 and reader.read_input_readiness().ready:
+                _record_wild_flee_evidence(
+                    before,
+                    final,
+                    emulator,
+                    run,
+                    species,
+                    pp,
+                    hp,
+                    inventory,
+                )
+                return
+            _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
+        raise LavenderChapterError("Wild flee exceeded its bounded normalized dialogue.")
     for _ in range(timing.flee_pulses):
         raw = reader.read()
         menu = reader.read_battle_menu_state(raw)
         if menu.phase is BattleMenuPhase.UNKNOWN:
-            _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+            _pulse(
+                executor,
+                _unknown_flee_action(unknown_with_cancel),
+                frames=timing.wait_frames,
+            )
             continue
         if menu.phase is BattleMenuPhase.MOVE:
             _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
@@ -967,40 +999,75 @@ def _flee(
     for _ in range(timing.flee_pulses):
         final = reader.read()
         if final.battle_state == 0 and reader.read_input_readiness().ready:
-            party_ok = final.party_species_ids == species
-            pp_ok = final.first_party_pp == pp
-            final_hp = _party_hp(emulator)
-            hp_safe = all(
-                0 < after <= before_hp for before_hp, after in zip(hp, final_hp, strict=True)
+            _record_wild_flee_evidence(
+                before,
+                final,
+                emulator,
+                run,
+                species,
+                pp,
+                hp,
+                inventory,
             )
-            inventory_ok = _bag(emulator) == inventory
-            evidence = WildFleeEvidence(
-                int(before.map_id or 0),
-                int(before.player_x or 0),
-                int(before.player_y or 0),
-                int(before.enemy_species_id or 0),
-                int(before.enemy_level or 0),
-                party_ok,
-                pp_ok,
-                hp_safe,
-                inventory_ok,
-            )
-            if (
-                not party_ok
-                or not pp_ok
-                or not hp_safe
-                or not inventory_ok
-                or (final.first_party_hp or 0) <= 0
-            ):
-                raise LavenderChapterError(
-                    "Wild flee violated protected state: "
-                    f"hp={hp!r}->{final_hp!r}, party={party_ok}, "
-                    f"pp={pp_ok}, inventory={inventory_ok}."
-                )
-            run.wilds.append(evidence)
             return
         _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     raise LavenderChapterError("Wild flee exceeded its bounded dialogue.")
+
+
+def _unknown_flee_action(cancel_for_safety: bool) -> MacroActionKind:
+    return MacroActionKind.CANCEL if cancel_for_safety else MacroActionKind.CONFIRM
+
+
+def _normalized_run_actions(
+    timing: LavenderTiming,
+) -> tuple[tuple[MacroActionKind, str | None, int], ...]:
+    return (
+        (MacroActionKind.CANCEL, None, timing.wait_frames),
+        (MacroActionKind.MOVE, "down", timing.wait_frames),
+        (MacroActionKind.MOVE, "right", timing.wait_frames),
+        (MacroActionKind.CONFIRM, None, 240),
+    )
+
+
+def _record_wild_flee_evidence(
+    before: RawGameState,
+    final: RawGameState,
+    emulator: EmulatorState,
+    run: _RunState,
+    species: tuple[int, ...] | None,
+    pp: tuple[int, ...] | None,
+    hp: tuple[int, int, int],
+    inventory: dict[int, int],
+) -> None:
+    party_ok = final.party_species_ids == species
+    pp_ok = final.first_party_pp == pp
+    final_hp = _party_hp(emulator)
+    hp_safe = all(0 < after <= before_hp for before_hp, after in zip(hp, final_hp, strict=True))
+    inventory_ok = _bag(emulator) == inventory
+    evidence = WildFleeEvidence(
+        int(before.map_id or 0),
+        int(before.player_x or 0),
+        int(before.player_y or 0),
+        int(before.enemy_species_id or 0),
+        int(before.enemy_level or 0),
+        party_ok,
+        pp_ok,
+        hp_safe,
+        inventory_ok,
+    )
+    if (
+        not party_ok
+        or not pp_ok
+        or not hp_safe
+        or not inventory_ok
+        or (final.first_party_hp or 0) <= 0
+    ):
+        raise LavenderChapterError(
+            "Wild flee violated protected state: "
+            f"hp={hp!r}->{final_hp!r}, party={party_ok}, "
+            f"pp={pp_ok}, inventory={inventory_ok}."
+        )
+    run.wilds.append(evidence)
 
 
 def _use_repel(

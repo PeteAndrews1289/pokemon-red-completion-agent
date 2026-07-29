@@ -55,9 +55,10 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **143/143 qualified checkpoints** through
-the Silph Scope and therefore **16/36 completion objectives**. Three clean runs were identical
-at the 984,806-frame / 14,425-action boundary. The evidence includes the earlier Brock and Mt. Moon gates,
+The deterministic teacher currently verifies all **170/170 qualified checkpoints** through
+Mr. Fuji and the Poké Flute and therefore **17/36 completion objectives**. Three clean runs were
+identical at the 1,142,003-frame / 16,797-action boundary. The evidence includes the earlier Brock
+and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
 Badge and TM11 proof, plus the Rocket thief, TM28, Underground Path, exact Route 6 trainer events,
@@ -75,9 +76,12 @@ Center heal.
 The Hideout segment adds five exact trainer identities, eight optional-trainer bypass gates,
 the Lift Key and elevator, Giovanni, the Silph Scope, a PP-preserving field Dig return, and a
 second healed Celadon boundary. It also records the pinned source's known B1 entered-event bug.
-The boundary has a full-health, status-free Wartortle restored as party lead. No behavioral-
-cloning, DAgger, timing/RNG generalization, or full-game result is implied. The next teaching
-segment rescues Mr. Fuji.
+The Tower segment adds the exact scripted rival, five required Channelers, level-30 Marowak, three
+final Rockets, eight optional-trainer bypasses, three purified-zone heals, X Accuracy and Rare
+Candy progression pickups, both Fuji rescue mirrors, the Poké Flute, and the natural
+Wartortle-to-Blastoise evolution. The boundary has a full-health, status-free Blastoise restored
+as party lead. No behavioral-cloning, DAgger, timing/RNG generalization, or full-game result is
+implied. The next teaching segment wakes Snorlax and reaches Fuchsia City.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -183,16 +187,17 @@ restore, rewind, or import state from another run.
 11. Extend and replay-qualify Route 8, the west-east Underground Path, and stable Celadon City.
     **Done.**
 12. Extend and replay-qualify the Rocket Hideout, Giovanni, and Silph Scope. **Done.**
-13. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
+13. Extend and replay-qualify Pokémon Tower, Mr. Fuji, and the Poké Flute. **Done.**
+14. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
-14. Train a small behavior-cloning baseline per specialist.
-15. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
+15. Train a small behavior-cloning baseline per specialist.
+16. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
    from the frozen perturbation suite for that skill.
-16. Extend the teacher chapter-by-chapter through the remainder of the game.
-17. Produce multiple clean teacher completions with timing and RNG variation.
-18. Train the semantic planner and full-game composition only after that coverage exists.
-19. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
+17. Extend the teacher chapter-by-chapter through the remainder of the game.
+18. Produce multiple clean teacher completions with timing and RNG variation.
+19. Train the semantic planner and full-game composition only after that coverage exists.
+20. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
-The current evaluation gate is three intervention-free clean-power-on runs through the Silph Scope.
+The current evaluation gate is three intervention-free clean-power-on runs through the Poké Flute.
 A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
 frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.

@@ -578,6 +578,58 @@ class _HideoutEvidence:
         }
 
 
+class _TowerEvidence:
+    passed = True
+    final_raw = replace(
+        _raw(
+            MapId.LAVENDER_POKECENTER,
+            3,
+            3,
+            party_count=3,
+            party_species_ids=(0x1C, 0x40, 0x3B),
+        ),
+        badge_bits=int(Badge.BOULDER | Badge.CASCADE | Badge.THUNDER),
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "scope_ready",
+            "tower_2f",
+            "rival",
+            "tower_3f",
+            "tower_4f",
+            "purified_1",
+            "purified_2",
+            "purified_3",
+            "channelers",
+            "x_accuracy",
+            "rare_candy",
+            "marowak",
+            "rocket_19",
+            "rocket_20",
+            "rocket_21",
+            "fuji_rescued",
+            "poke_flute",
+            "tower_cleared",
+            "fuji_verified",
+            "flute_verified",
+            "resources_verified",
+            "objective_ready",
+            "semantic_gate",
+            "party_verified",
+            "controller_verified",
+            "lavender_stable",
+            "chapter_complete",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "rescue_fuji"}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -651,16 +703,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 143
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 170
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=143,
+        completed=170,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 143
+    assert progress.completed == progress.total == 170
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -755,6 +807,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         lavender=_LavenderEvidence(),  # type: ignore[arg-type]
         celadon=_CeladonEvidence(),  # type: ignore[arg-type]
         hideout=_HideoutEvidence(),  # type: ignore[arg-type]
+        tower=_TowerEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -777,6 +830,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "location:celadon_city",
                 "story:rocket_hideout_cleared",
                 "item:silph_scope",
+                "item:poke_flute",
             }
         ),
         verified_objectives=(
@@ -796,8 +850,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_celadon",
             "clear_rocket_hideout",
             "obtain_silph_scope",
+            "rescue_fuji",
         ),
-        next_objective="rescue_fuji",
+        next_objective="reach_fuchsia",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -807,9 +862,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v10"
+    assert public["schema"] == "qualified-play-v11"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "obtain_silph_scope"
+    assert public["qualified_through"] == "rescue_fuji"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -956,9 +1011,36 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "hideout_cleared",
         "scope_ready",
         "resources_verified",
+        "scope_ready",
+        "tower_2f",
+        "rival",
+        "tower_3f",
+        "tower_4f",
+        "purified_1",
+        "purified_2",
+        "purified_3",
+        "channelers",
+        "x_accuracy",
+        "rare_candy",
+        "marowak",
+        "rocket_19",
+        "rocket_20",
+        "rocket_21",
+        "fuji_rescued",
+        "poke_flute",
+        "tower_cleared",
+        "fuji_verified",
+        "flute_verified",
+        "resources_verified",
+        "objective_ready",
+        "semantic_gate",
+        "party_verified",
+        "controller_verified",
+        "lavender_stable",
+        "chapter_complete",
     ]
     assert public["objective_progress"] == {
-        "verified": 16,
+        "verified": 17,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -977,8 +1059,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_celadon",
             "clear_rocket_hideout",
             "obtain_silph_scope",
+            "rescue_fuji",
         ],
-        "next": "rescue_fuji",
+        "next": "reach_fuchsia",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -1110,7 +1193,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_reaches_verified_scope_without_adjacent_artifacts() -> None:
+def test_private_rom_rescues_fuji_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -1140,10 +1223,11 @@ def test_private_rom_reaches_verified_scope_without_adjacent_artifacts() -> None
         "reach_celadon",
         "clear_rocket_hideout",
         "obtain_silph_scope",
+        "rescue_fuji",
     )
-    assert report.next_objective == "rescue_fuji"
-    assert report.frames_executed == 984_806
-    assert report.actions_executed == 14_425
+    assert report.next_objective == "reach_fuchsia"
+    assert report.frames_executed == 1_142_003
+    assert report.actions_executed == 16_797
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -1239,4 +1323,42 @@ def test_private_rom_reaches_verified_scope_without_adjacent_artifacts() -> None
     assert report.hideout.party_hp == report.hideout.party_max_hp == (86, 52, 37)
     assert report.hideout.party_status == (0, 0, 0)
     assert report.hideout.money_remaining == 20_112
+    assert report.tower.passed
+    assert report.tower.frames_executed == 157_197
+    assert report.tower.actions_executed == 2_372
+    assert tuple(item.trainer_number for item in report.tower.battles) == (
+        5,
+        10,
+        14,
+        19,
+        21,
+        20,
+        None,
+        19,
+        20,
+        21,
+    )
+    assert tuple(item.selected_pp_spent for item in report.tower.battles) == (
+        11,
+        4,
+        2,
+        5,
+        2,
+        2,
+        1,
+        4,
+        5,
+        4,
+    )
+    assert report.tower.optional_events == (False,) * 8
+    assert report.tower.required_events == (True,) * 13
+    assert report.tower.purified_zone_event
+    assert report.tower.purified_heals == 3
+    assert report.tower.super_potion_inventory_path == (2, 1, 0)
+    assert report.tower.evolution_before == (0xB3, 0x40, 0x3B)
+    assert report.tower.evolution_after == (0x1C, 0x40, 0x3B)
+    assert report.tower.evolution_moves_preserved
+    assert report.tower.party_hp == report.tower.party_max_hp == (111, 52, 37)
+    assert report.tower.party_status == (0, 0, 0)
+    assert report.tower.money_remaining == 27_437
     assert before == after

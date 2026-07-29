@@ -25,9 +25,9 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **143/143 bounded checkpoints** and **16/36 completion objectives**, ending
-after clearing the Rocket Hideout, obtaining the Silph Scope, and healing the complete party in
-Celadon. Three clean runs reached the identical 984,806-frame / 14,425-action boundary.
+Current qualification: **170/170 bounded checkpoints** and **17/36 completion objectives**, ending
+after clearing Pokémon Tower, rescuing Mr. Fuji, receiving the Poké Flute, and healing the complete
+party in Lavender. Three clean runs reached the identical 1,142,003-frame / 16,797-action boundary.
 This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
@@ -57,16 +57,19 @@ learned-policy, timing/RNG-generalization, or completion result.
   west-east Underground Path and Route 7, and establish a stable Celadon Center boundary.
 - [x] Qualify the Game Corner switch, spinner mazes, Lift Key and elevator, both boss-door guards,
   Giovanni, the Silph Scope, field Dig return, and a healed Celadon boundary.
+- [x] Qualify the mandatory Pokémon Tower rival and Channelers, all three purified-zone heals,
+  level-30 Marowak, the three final Rockets, Mr. Fuji's rescue, the Poké Flute, and the natural
+  Wartortle-to-Blastoise evolution.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: return to Pokémon Tower and rescue Mr. Fuji.
+Next sequence: wake Snorlax and reach Fuchsia City.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Scope three-run evidence receipt](evidence/qualified-play-scope-2026-07-29.json).
+[Fuji three-run evidence receipt](evidence/qualified-play-fuji-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs obtain the Silph Scope with identical evidence
-rules.
+Exit gate: three intervention-free clean-power-on runs rescue Mr. Fuji and obtain the Poké Flute
+with identical evidence rules.
 
 ## Milestone 2 — deterministic expert
 

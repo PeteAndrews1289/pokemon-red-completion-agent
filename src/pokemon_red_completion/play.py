@@ -95,6 +95,13 @@ from pokemon_red_completion.surge import (
     SurgeProgress,
     run_surge_chapter,
 )
+from pokemon_red_completion.tower import (
+    TOWER_CHECKPOINT_COUNT,
+    TowerChapterError,
+    TowerChapterReport,
+    TowerProgress,
+    run_tower_chapter,
+)
 from pokemon_red_completion.vermilion import (
     VERMILION_CHECKPOINT_COUNT,
     VermilionChapterError,
@@ -115,8 +122,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + LAVENDER_CHECKPOINT_COUNT
     + CELADON_CHECKPOINT_COUNT
     + HIDEOUT_CHECKPOINT_COUNT
+    + TOWER_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "obtain_silph_scope"
+QUALIFIED_THROUGH_OBJECTIVE = "rescue_fuji"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -250,6 +258,7 @@ class QualifiedPlayReport:
     lavender: LavenderChapterReport
     celadon: CeladonChapterReport
     hideout: HideoutChapterReport
+    tower: TowerChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -280,6 +289,7 @@ class QualifiedPlayReport:
             and self.lavender.passed
             and self.celadon.passed
             and self.hideout.passed
+            and self.tower.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -326,10 +336,11 @@ class QualifiedPlayReport:
             *self.lavender.checkpoints(),
             *self.celadon.checkpoints(),
             *self.hideout.checkpoints(),
+            *self.tower.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v10",
+            "schema": "qualified-play-v11",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -384,6 +395,7 @@ class QualifiedPlayReport:
             "lavender_chapter": self.lavender.public_dict(),
             "celadon_chapter": self.celadon.public_dict(),
             "hideout_chapter": self.hideout.public_dict(),
+            "tower_chapter": self.tower.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -643,6 +655,16 @@ def run_qualified_play(
         except HideoutChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            tower = run_tower_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_tower_progress_bridge(progress),
+            )
+        except TowerChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -655,11 +677,12 @@ def run_qualified_play(
             | semantic_facts(lavender.final_raw)
             | semantic_facts(celadon.final_raw)
             | semantic_facts(hideout.final_raw)
+            | semantic_facts(tower.final_raw)
         )
         state = GameState(
-            mode=game_mode(hideout.final_raw),
+            mode=game_mode(tower.final_raw),
             facts=facts,
-            location=location_label(hideout.final_raw.map_id),
+            location=location_label(tower.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -688,6 +711,7 @@ def run_qualified_play(
             lavender=lavender,
             celadon=celadon,
             hideout=hideout,
+            tower=tower,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -1041,6 +1065,38 @@ def _hideout_progress_bridge(
                     + SURGE_CHECKPOINT_COUNT
                     + LAVENDER_CHECKPOINT_COUNT
                     + CELADON_CHECKPOINT_COUNT
+                    + progress.completed
+                ),
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _tower_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[TowerProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: TowerProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=(
+                    POKEDEX_CHECKPOINT_COUNT
+                    + PEWTER_CHECKPOINT_COUNT
+                    + CERULEAN_CHECKPOINT_COUNT
+                    + CASCADE_CHECKPOINT_COUNT
+                    + VERMILION_CHECKPOINT_COUNT
+                    + SS_ANNE_CHECKPOINT_COUNT
+                    + SURGE_CHECKPOINT_COUNT
+                    + LAVENDER_CHECKPOINT_COUNT
+                    + CELADON_CHECKPOINT_COUNT
+                    + HIDEOUT_CHECKPOINT_COUNT
                     + progress.completed
                 ),
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
