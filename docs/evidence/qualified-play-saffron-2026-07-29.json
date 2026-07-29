@@ -1,0 +1,69 @@
+{
+  "schema": "qualified-play-v17-receipt",
+  "date": "2026-07-29",
+  "status": "ok",
+  "claim_scope": {
+    "qualified_through": "reach_saffron",
+    "game_complete": false,
+    "learned_policy": false,
+    "timing_or_rng_generalization": false
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "runs": 3,
+    "identical_reports": true,
+    "report_sha256": "42f68a663ef3a6c078eccda0fc81b92bb91152009d953cc801377a921d93038c",
+    "frames_per_run": 2284226,
+    "actions_per_run": 26012
+  },
+  "progress": {
+    "checkpoints_verified": 235,
+    "checkpoints_total": 235,
+    "objectives_verified": 23,
+    "objectives_total": 36,
+    "next_objective": "liberate_silph"
+  },
+  "saffron_chapter": {
+    "frames": 61720,
+    "actions": 540,
+    "battle_free": true,
+    "vending_machine": {
+      "floor": "celadon_mart_roof",
+      "cursor": 0,
+      "item_id": 60,
+      "price": 200,
+      "money_before": 41545,
+      "money_after": 41345
+    },
+    "guard_handoff": {
+      "fresh_water_before": 0,
+      "fresh_water_after_purchase": 1,
+      "fresh_water_after_guard": 0,
+      "flag_before": 0,
+      "flag_after_consumption": 0,
+      "flag_after_dialogue": 64,
+      "consumed_before_global_access": true,
+      "soda_pop_absent": true,
+      "lemonade_absent": true
+    },
+    "terminal": {
+      "map": 182,
+      "x": 3,
+      "y": 3,
+      "party_hp": [130, 52, 37],
+      "party_max_hp": [130, 52, 37],
+      "party_status": [0, 0, 0],
+      "lead_pp": [15, 15, 20, 15],
+      "input_ready": true,
+      "controller_released": true
+    }
+  },
+  "privacy": {
+    "rom_path_included": false,
+    "rom_hash_included": false,
+    "save_state_included": false,
+    "personal_path_included": false
+  }
+}

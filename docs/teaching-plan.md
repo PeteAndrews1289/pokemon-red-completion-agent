@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **227/227 qualified checkpoints** through
-Erika and therefore **22/36 completion objectives**. Three clean runs were identical at
-the 2,222,506-frame / 25,472-action boundary. The evidence includes the earlier Brock
+The deterministic teacher currently verifies all **235/235 qualified checkpoints** through
+Saffron access and therefore **23/36 completion objectives**. Three clean runs were identical at
+the 2,284,226-frame / 26,012-action boundary. The evidence includes the earlier Brock
 and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
@@ -79,6 +79,12 @@ and input-readiness gates for every Cut and re-Cut, the two unavoidable Gym trai
 Erika's live identity, six Strength attacks, Rainbow Badge and TM21 mirrors, all seven deactivated
 Gym trainer events, and the natural level-42 Bite-to-Skull Bash transition before a final full
 Celadon Center heal.
+The Saffron segment adds the exact Department Store floor and stair sequence, roof vending cursor
+zero, one ¥200 Fresh Water purchase, exact reverse stair sequence, and a zero-battle Route 7 gate
+crossing. It separately observes Fresh Water removal while the shared guard flag is still false,
+then verifies that the flag becomes true only after dialogue completes. Soda Pop and Lemonade
+remain absent, the transient drink leaves no final inventory delta, and the terminal is a fully
+healed, input-ready Saffron Center boundary.
 The Hideout segment adds five exact trainer identities, eight optional-trainer bypass gates,
 the Lift Key and elevator, Giovanni, the Silph Scope, a PP-preserving field Dig return, and a
 second healed Celadon boundary. It also records the pinned source's known B1 entered-event bug.
@@ -101,7 +107,7 @@ the Bicycle, and field Surf requires the Soul Badge. The next teaching segment d
 The Strength segment returns the Gold Teeth to the Warden, verifies the Teeth-removal event before
 the HM04 reward event, retains reusable HM04, and teaches Strength over obsolete Tail Whip while
 preserving Bite, BubbleBeam, and Surf. It then returns to the same healed Fuchsia boundary without
-spending money or entering battle.
+spending money or entering battle. The next qualified teaching segment is Silph Co.
 
 The same segment can run headlessly or be observed locally with:
 

@@ -9,6 +9,7 @@ from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
 from pokemon_red_completion.cerulean import DEFAULT_CERULEAN_TIMING
 from pokemon_red_completion.constants import POKEMON_RED_US_REV_0
 from pokemon_red_completion.navigation import path_to_directions
+from pokemon_red_completion.observation import ItemId, MapId
 from pokemon_red_completion.opening import (
     BEDROOM_CORRIDOR,
     DEFAULT_OPENING_TIMING,
@@ -49,6 +50,9 @@ SURF_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-surf-2026-07
 KOGA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-koga-2026-07-29.json"
 STRENGTH_RECEIPT = (
     PROJECT_ROOT / "docs" / "evidence" / "qualified-play-strength-2026-07-29.json"
+)
+SAFFRON_RECEIPT = (
+    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-saffron-2026-07-29.json"
 )
 
 
@@ -1143,6 +1147,60 @@ def test_strength_receipt_is_repeatable_and_privacy_safe() -> None:
     assert receipt["frames_executed"] == 1_875_968
     assert receipt["actions_executed"] == 22_779
     assert receipt["controller_released"] is True
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_saffron_receipt_is_repeatable_ordered_and_privacy_safe() -> None:
+    receipt = json.loads(SAFFRON_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "qualified-play-v17-receipt"
+    assert receipt["status"] == "ok"
+    assert receipt["evaluation"] == {
+        "clean_power_on": True,
+        "human_input": False,
+        "save_state_restoration": False,
+        "runs": 3,
+        "identical_reports": True,
+        "report_sha256": (
+            "42f68a663ef3a6c078eccda0fc81b92bb91152009d953cc801377a921d93038c"
+        ),
+        "frames_per_run": 2_284_226,
+        "actions_per_run": 26_012,
+    }
+    assert receipt["progress"] == {
+        "checkpoints_verified": 235,
+        "checkpoints_total": 235,
+        "objectives_verified": 23,
+        "objectives_total": 36,
+        "next_objective": "liberate_silph",
+    }
+    chapter = receipt["saffron_chapter"]
+    assert chapter["vending_machine"] == {
+        "floor": "celadon_mart_roof",
+        "cursor": 0,
+        "item_id": int(ItemId.FRESH_WATER),
+        "price": 200,
+        "money_before": 41_545,
+        "money_after": 41_345,
+    }
+    assert chapter["guard_handoff"] == {
+        "fresh_water_before": 0,
+        "fresh_water_after_purchase": 1,
+        "fresh_water_after_guard": 0,
+        "flag_before": 0,
+        "flag_after_consumption": 0,
+        "flag_after_dialogue": 64,
+        "consumed_before_global_access": True,
+        "soda_pop_absent": True,
+        "lemonade_absent": True,
+    }
+    assert chapter["battle_free"] is True
+    assert chapter["terminal"]["map"] == int(MapId.SAFFRON_POKECENTER)
+    assert chapter["terminal"]["party_hp"] == chapter["terminal"]["party_max_hp"]
 
     serialized = json.dumps(receipt)
     assert "/Users/" not in serialized
