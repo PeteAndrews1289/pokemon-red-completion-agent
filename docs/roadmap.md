@@ -25,11 +25,11 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **36/36 bounded checkpoints** and **7/36 completion objectives**, ending
-at stable Cerulean City entry after Brock, all four required Route 3 trainers, both required Mt.
-Moon trainer battles, and the Helix Fossil. Three clean runs reached the identical 252,989-frame /
-3,604-action boundary. This is a deterministic-teacher milestone, not a learned-policy or
-completion result.
+Current qualification: **58/58 bounded checkpoints** and **9/36 completion objectives**, ending
+after helping Bill, obtaining the S.S. Ticket, defeating the mandatory Cerulean Gym trainer and
+Misty, and verifying the Cascade Badge and TM11. Three clean runs reached the identical
+434,510-frame / 5,936-action boundary. This is an exact deterministic-teacher milestone, not a
+learned-policy, timing/RNG-generalization, or completion result.
 
 - [x] Build the no-save PyBoy bridge and read-only state adapter from pinned symbols.
 - [x] Add controller timing and one authoritative action executor.
@@ -42,15 +42,16 @@ completion result.
   explicit bounded stop.
 - [x] Qualify the route to Pewter City and defeat Brock.
 - [x] Qualify Route 3, Mt. Moon's required battles and fossil choice, and Cerulean City.
+- [x] Qualify the Cerulean rival, Nugget Bridge, selected Route 25 trainers, Bill, the mandatory
+  Cerulean Gym trainer, and Misty.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: help Bill, obtain the S.S. Ticket, and qualify the Cerulean Gym strategy. The
-qualified corridors and semantic gates are pinned to pret/pokered commit
+Next sequence: reach Vermilion and qualify the S.S. Anne route. The qualified corridors and
+semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Cerulean three-run evidence receipt](evidence/qualified-play-cerulean-2026-07-28.json).
+[Misty three-run evidence receipt](evidence/qualified-play-misty-2026-07-28.json).
 
-Exit gate: three intervention-free clean-power-on runs reach Cerulean City with identical evidence
-rules.
+Exit gate: three intervention-free clean-power-on runs defeat Misty with identical evidence rules.
 
 ## Milestone 2 — deterministic expert
 

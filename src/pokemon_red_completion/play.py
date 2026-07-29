@@ -1,11 +1,10 @@
 """One clean, bounded run through the latest independently qualified objective.
 
 The route and semantic gates in this module are pinned to pret/pokered commit
-``1e96034092686d006e863cace09e87273051a3d8``. It composes the existing
-opening chapter with the lab rival, Oak's Parcel, Pokédex, Viridian Forest,
-and the deterministic teacher route through Brock, Mt. Moon, and Cerulean City
-in one emulator session. It intentionally stops at Cerulean; it is not a
-game-completion or learned-policy claim.
+``1e96034092686d006e863cace09e87273051a3d8``. It composes the opening, lab
+rival, Oak's Parcel, Pokédex, Viridian Forest, Brock, Mt. Moon, Bill, and Misty
+chapters in one emulator session. It intentionally stops after the latest
+repeat-qualified boundary; it is not a game-completion or learned-policy claim.
 """
 
 from __future__ import annotations
@@ -17,6 +16,13 @@ from pathlib import Path
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING, NewGameTiming
+from pokemon_red_completion.cascade import (
+    CASCADE_CHECKPOINT_COUNT,
+    CascadeChapterError,
+    CascadeChapterReport,
+    CascadeProgress,
+    run_cascade_chapter,
+)
 from pokemon_red_completion.cerulean import (
     CERULEAN_CHECKPOINT_COUNT,
     CeruleanChapterError,
@@ -60,8 +66,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     POKEDEX_CHECKPOINT_COUNT
     + PEWTER_CHECKPOINT_COUNT
     + CERULEAN_CHECKPOINT_COUNT
+    + CASCADE_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "reach_cerulean"
+QUALIFIED_THROUGH_OBJECTIVE = "defeat_misty"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -188,6 +195,7 @@ class QualifiedPlayReport:
     pokedex_received: RawGameState
     pewter: PewterChapterReport
     cerulean: CeruleanChapterReport
+    cascade: CascadeChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -211,6 +219,7 @@ class QualifiedPlayReport:
             and is_pokedex_verified(self.pokedex_evidence)
             and self.pewter.passed
             and self.cerulean.passed
+            and self.cascade.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -250,10 +259,11 @@ class QualifiedPlayReport:
             ),
             *self.pewter.checkpoints(),
             *self.cerulean.checkpoints(),
+            *self.cascade.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v3",
+            "schema": "qualified-play-v4",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -301,6 +311,7 @@ class QualifiedPlayReport:
             "northbound": pewter["route"],
             "brock": pewter["brock"],
             "cerulean_chapter": self.cerulean.public_dict(),
+            "cascade_chapter": self.cascade.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -490,17 +501,28 @@ def run_qualified_play(
         except CeruleanChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            cascade = run_cascade_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_cascade_progress_bridge(progress),
+            )
+        except CascadeChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
             | semantic_facts(pewter.pewter_reached)
             | semantic_facts(pewter.brock_defeated)
             | semantic_facts(cerulean.cerulean_reached)
+            | semantic_facts(cascade.final_raw)
         )
         state = GameState(
-            mode=game_mode(cerulean.cerulean_reached),
+            mode=game_mode(cascade.final_raw),
             facts=facts,
-            location=location_label(cerulean.cerulean_reached.map_id),
+            location=location_label(cascade.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -522,6 +544,7 @@ def run_qualified_play(
             pokedex_received=pokedex_raw,
             pewter=pewter,
             cerulean=cerulean,
+            cascade=cascade,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -701,6 +724,31 @@ def _cerulean_progress_bridge(
     return emit
 
 
+def _cascade_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[CascadeProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: CascadeProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=(
+                    POKEDEX_CHECKPOINT_COUNT
+                    + PEWTER_CHECKPOINT_COUNT
+                    + CERULEAN_CHECKPOINT_COUNT
+                    + progress.completed
+                ),
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
 def _emit(
     sink: ProgressSink | None,
     emulator: PyBoyAdapter,
@@ -736,5 +784,6 @@ assert (
     OPENING_CHECKPOINT_COUNT
     < POKEDEX_CHECKPOINT_COUNT
     < POKEDEX_CHECKPOINT_COUNT + PEWTER_CHECKPOINT_COUNT
+    < POKEDEX_CHECKPOINT_COUNT + PEWTER_CHECKPOINT_COUNT + CERULEAN_CHECKPOINT_COUNT
     < QUALIFIED_PLAY_CHECKPOINT_COUNT
 )

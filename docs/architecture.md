@@ -42,8 +42,8 @@ ports before they can enter this adapter.
 
 ### Qualified continuous teacher
 
-The current bounded teacher uses one emulator session for 36 checkpoints from clean power-on
-through Cerulean City:
+The current bounded teacher uses one emulator session for 58 checkpoints from clean power-on
+through Misty:
 
 1. bedroom input ready;
 2. Red's house first floor;
@@ -79,11 +79,33 @@ through Cerulean City:
 32. the fossil-guarding Super Nerd battle identified and defeated;
 33. the Helix Fossil event and matching inventory item verified;
 34. the legal B1F exit ladder reached;
-35. stable Route 4 exit from Mt. Moon verified; and
-36. stable Cerulean west entry verified.
+35. stable Route 4 exit from Mt. Moon verified;
+36. stable Cerulean west entry verified;
+37. the live Cerulean rival battle identified;
+38. the Cerulean rival defeated;
+39. Route 24 trainer 5 identified and defeated;
+40. Route 24 trainer 4 identified and defeated;
+41. Route 24 trainer 3 identified and defeated;
+42. Route 24 trainer 2 identified and defeated;
+43. Route 24 trainer 1 identified and defeated;
+44. the Nugget Rocket battle and reward identified;
+45. the Nugget Rocket defeated;
+46. selected Route 25 trainer 8 identified and defeated;
+47. selected Route 25 trainer 3 identified and defeated;
+48. selected Route 25 trainer 2 identified and defeated;
+49. selected Route 25 trainer 5 identified and defeated;
+50. Bill's request for help verified;
+51. Bill's cell separator used;
+52. Bill's human form restored;
+53. the S.S. Ticket received;
+54. Bill's House exited with the ticket;
+55. the mandatory Cerulean Gym trainer identified;
+56. the mandatory Cerulean Gym trainer defeated;
+57. Misty's live trainer battle identified; and
+58. Misty defeated with the Cascade Badge and TM11 concurrently verified.
 
 The public `opening` command retains its six-checkpoint compatibility contract. The `play` command
-composes all 36 checkpoints without restarting, loading state, or saving. Every action is
+composes all 58 checkpoints without restarting, loading state, or saving. Every action is
 reobserved, dialogue and battle loops have fixed budgets, and unexpected battles, maps,
 coordinates, scripts, events, species, health, inventory, move PP, or controller masks fail
 closed. Route 1 rejects every encounter. Viridian Forest permits only three intentionally seeded
@@ -101,17 +123,23 @@ battle followed by the Brock and TM34 events, TM34 in inventory, both Boulder Ba
 Gym scripts, and a surviving status-free Squirtle. Because the game's reward text can outlive the
 script and control-mask bytes, the teacher then clears a bounded number of text pages and requires
 an actual accepted overworld movement followed by a stable reobservation before qualification.
-The Cerulean chapter additionally requires all four selected Route 3 event transitions in order,
+The Mt. Moon chapter additionally requires all four selected Route 3 event transitions in order,
 live opponent/class/trainer identity for the required Rocket and Super Nerd, exactly one fossil
 event with its matching item, stable post-warp control on Route 4, and Cerulean arrival with a
-surviving status-free Wartortle. Misty is deliberately not labeled battle-ready before a strategy
-and resource threshold have been qualified by repeated successful runs.
+surviving status-free Wartortle. The Cascade chapter requires the live Cerulean rival, all five
+Route 24 trainers and the Nugget Rocket in order, four selected Route 25 trainer identities,
+Bill's request/transformation/ticket event chain, the mandatory Gym trainer, Misty's exact live
+trainer identity, and concurrent Cascade Badge and TM11 event, inventory, and badge mirrors.
+Adaptive move selection for the rival and Misty consumes bounded battle state, while the fixed
+required-trainer routines retain the already qualified deterministic strategy.
 
 The corridors and semantic gates are derived from pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8` and independently verified on the supported private ROM.
 The concluded predecessor supplied the separately attributed power-on bootstrap, not this route.
-Completing these **36/36 checkpoints** verifies **7/36 objectives**; it does not verify any learned
-policy or the full game.
+Completing these **58/58 checkpoints** verifies **9/36 objectives**. Three exact clean-power-on
+runs were identical at 434,510 frames and 5,936 actions. This verifies deterministic-teacher
+repeatability for that route; it does not verify a learned policy, held-out timing/RNG
+generalization, or the full game.
 
 The teacher remains useful after it reaches the Hall of Fame: it can generate labeled
 demonstrations, answer bounded DAgger queries, and attempt declared perturbation schedules. Teacher

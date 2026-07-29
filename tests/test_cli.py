@@ -212,12 +212,14 @@ def test_play_command_runs_the_continuous_watched_boundary(
             "reach_pewter",
             "defeat_brock",
             "reach_cerulean",
+            "help_bill",
+            "defeat_misty",
         )
-        next_objective = "help_bill"
+        next_objective = "reach_vermilion"
 
         def public_dict(self) -> dict[str, object]:
             return {
-                "schema": "qualified-play-v3",
+                "schema": "qualified-play-v4",
                 "status": "ok",
                 "game_complete": False,
             }
@@ -240,17 +242,17 @@ def test_play_command_runs_the_continuous_watched_boundary(
                 checkpoint_id="bedroom_ready",
                 label="Bedroom input ready",
                 completed=1,
-                total=36,
+                total=58,
                 frames_executed=9_804,
             )
         )
         progress(
             QualifiedPlayProgress(
-                checkpoint_id="cerulean_reached",
-                label="Reached Cerulean City",
-                completed=36,
-                total=36,
-                frames_executed=252_989,
+                checkpoint_id="misty_defeated",
+                label="Defeated Misty and verified the Cascade Badge and TM11",
+                completed=58,
+                total=58,
+                frames_executed=394_000,
             )
         )
         return FakeReport()
@@ -274,13 +276,13 @@ def test_play_command_runs_the_continuous_watched_boundary(
     captured = capsys.readouterr()
     assert json.loads(captured.out) == {
         "game_complete": False,
-        "schema": "qualified-play-v3",
+        "schema": "qualified-play-v4",
         "status": "ok",
     }
     assert captured.err.splitlines() == [
-        "[1/36] Bedroom input ready",
-        "[36/36] Reached Cerulean City",
-        "Objectives: 7/36 verified | Next: Help Bill and obtain the S.S. Ticket",
+        "[1/58] Bedroom input ready",
+        "[58/58] Defeated Misty and verified the Cascade Badge and TM11",
+        "Objectives: 9/36 verified | Next: Reach Vermilion City",
         "Safe stop: latest independently qualified boundary reached; the game is not complete.",
     ]
     assert str(private_path) not in captured.out

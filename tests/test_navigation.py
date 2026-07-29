@@ -43,6 +43,40 @@ def test_tie_breaking_is_stable() -> None:
     assert len(paths) == 1
 
 
+def test_directed_transition_models_a_one_way_ledge() -> None:
+    upper = Coordinate(1, 0)
+    lower = Coordinate(1, 1)
+    grid = GridMap(
+        width=3,
+        height=2,
+        blocked=frozenset(
+            {
+                Coordinate(0, 0),
+                Coordinate(2, 0),
+            }
+        ),
+        blocked_transitions=frozenset({(lower, upper)}),
+    )
+
+    assert shortest_path(grid, upper, lower) == (upper, lower)
+    with pytest.raises(NoPathError, match="No path"):
+        shortest_path(grid, lower, upper)
+
+
+@pytest.mark.parametrize(
+    "transition",
+    [
+        (Coordinate(-1, 0), Coordinate(0, 0)),
+        (Coordinate(0, 0), Coordinate(2, 0)),
+    ],
+)
+def test_invalid_directed_transition_fails_clearly(
+    transition: tuple[Coordinate, Coordinate],
+) -> None:
+    with pytest.raises(ValueError, match="adjacent in-bounds"):
+        GridMap(width=2, height=2, blocked_transitions=frozenset({transition}))
+
+
 def test_start_equal_to_goal_has_no_movement() -> None:
     start = Coordinate(1, 1)
 

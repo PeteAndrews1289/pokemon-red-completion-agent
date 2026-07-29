@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from pathlib import Path
 
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
+from pokemon_red_completion.cascade import DEFAULT_CASCADE_TIMING
 from pokemon_red_completion.cerulean import DEFAULT_CERULEAN_TIMING
 from pokemon_red_completion.constants import POKEMON_RED_US_REV_0
 from pokemon_red_completion.navigation import path_to_directions
@@ -36,6 +38,9 @@ BROCK_RECEIPT = (
 )
 CERULEAN_RECEIPT = (
     PROJECT_ROOT / "docs" / "evidence" / "qualified-play-cerulean-2026-07-28.json"
+)
+MISTY_RECEIPT = (
+    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-misty-2026-07-28.json"
 )
 
 
@@ -604,6 +609,138 @@ def test_cerulean_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["game_complete"] is False
     assert receipt["frames_executed"] == 252_989
     assert receipt["actions_executed"] == 3_604
+    assert receipt["controller_released"] is True
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_misty_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
+    receipt = json.loads(MISTY_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["receipt_schema"] == "qualified-play-evidence-v4"
+    assert receipt["schema"] == "qualified-play-v4"
+    assert receipt["status"] == "ok"
+    assert receipt["attempts"] == {"failed": 0, "passed": 3, "total": 3}
+    assert receipt["assistance"] == {
+        "class": "deterministic_teacher",
+        "human_controller_input": False,
+        "save_state_restore": False,
+        "learned_policy": False,
+    }
+    assert receipt["source"]["git_commit"] == "9137f20b2459128fee89c1fb47d468bd86059a6e"
+    assert GIT_COMMIT.fullmatch(receipt["source"]["git_commit"])
+    assert receipt["source"]["worktree_dirty"] is True
+
+    runtime_digest = hashlib.sha256()
+    for path in sorted((PROJECT_ROOT / "src").rglob("*.py")):
+        relative_path = path.relative_to(PROJECT_ROOT).as_posix()
+        runtime_digest.update(relative_path.encode())
+        runtime_digest.update(b"\0")
+        runtime_digest.update(path.read_bytes())
+        runtime_digest.update(b"\0")
+    assert receipt["source"]["runtime_snapshot_sha256"] == runtime_digest.hexdigest()
+
+    intro = DEFAULT_NEW_GAME_TIMING
+    cascade = DEFAULT_CASCADE_TIMING
+    battle_runtime = cascade.battle_runtime
+    expected_configuration = {
+        "battle_policy": (
+            "adaptive_cerulean_rival_and_misty_with_fixed_required_trainers"
+        ),
+        "cascade_timing": {
+            **{
+                name: getattr(cascade, name)
+                for name in cascade.__dataclass_fields__
+                if name != "battle_runtime"
+            },
+            "battle_runtime": {
+                name: getattr(battle_runtime, name)
+                for name in battle_runtime.__dataclass_fields__
+            },
+        },
+        "controller_timing": {
+            "press_frames": intro.press_frames,
+            "release_frames": intro.release_frames,
+            "wait_frames": 1,
+        },
+        "emulator": {
+            "human_input": False,
+            "ram_input": "none",
+            "rtc_input": "none",
+            "save_on_exit": False,
+            "sound_emulated": False,
+            "speed": 0,
+            "window": "null",
+        },
+        "pret_pokered_commit": PRET_POKERED_COMMIT,
+        "route_encounter_policy": (
+            "fail_closed_except_qualified_seeded_and_required_trainers"
+        ),
+        "starter": "squirtle",
+    }
+    assert receipt["configuration"] == expected_configuration
+    assert receipt["configuration_sha256"] == canonical_sha256(expected_configuration)
+    assert receipt["rom"] == {
+        "sha1": POKEMON_RED_US_REV_0.sha1,
+        "sha256": POKEMON_RED_US_REV_0.sha256,
+        "size_bytes": POKEMON_RED_US_REV_0.size_bytes,
+        "title": POKEMON_RED_US_REV_0.title,
+    }
+    assert receipt["checkpoints"]["verified"] == 58
+    assert receipt["checkpoints"]["all_verified"] is True
+    assert len(receipt["checkpoints"]["ids"]) == 58
+    assert receipt["checkpoints"]["ids"][-4:] == [
+        "cerulean_gym_trainer_battle",
+        "cerulean_gym_trainer_defeated",
+        "misty_battle",
+        "misty_defeated",
+    ]
+    assert receipt["cascade_chapter"]["cascade"] == {
+        "victory_verified": True,
+        "badge_verified": True,
+        "tm11_verified": True,
+        "ss_ticket_verified": True,
+        "wartortle_level": 24,
+        "wartortle_hp": 4,
+        "wartortle_max_hp": 66,
+        "wartortle_status": 0,
+    }
+    assert receipt["cascade_chapter"]["frames_executed"] == 181_521
+    assert receipt["cascade_chapter"]["actions_executed"] == 2_332
+    assert receipt["objective_progress"] == {
+        "next": "reach_vermilion",
+        "total": 36,
+        "verified": 9,
+        "verified_ids": [
+            "power_on",
+            "begin_adventure",
+            "choose_starter",
+            "receive_pokedex",
+            "reach_pewter",
+            "defeat_brock",
+            "reach_cerulean",
+            "help_bill",
+            "defeat_misty",
+        ],
+    }
+    assert receipt["repeatability"] == {
+        "identical_action_count": True,
+        "identical_final_state": True,
+        "identical_frame_count": True,
+    }
+    assert receipt["scope"] == {
+        "claim": "exact deterministic teacher repeat",
+        "timing_or_rng_generalization": False,
+        "learned_policy_generalization": False,
+        "game_complete": False,
+    }
+    assert receipt["qualified_through"] == "defeat_misty"
+    assert receipt["game_complete"] is False
+    assert receipt["frames_executed"] == 434_510
+    assert receipt["actions_executed"] == 5_936
     assert receipt["controller_released"] is True
 
     serialized = json.dumps(receipt)
