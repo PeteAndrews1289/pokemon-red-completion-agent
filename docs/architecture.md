@@ -5,6 +5,11 @@
 Pokémon Red contains several problems operating at radically different time scales. The system
 therefore separates long-horizon quest planning from bounded control skills.
 
+The target actor is a learned/hybrid policy: a semantic planner selects objectives and specialists,
+and trained specialists act on structured game state. The deterministic teacher is a disclosed
+data-generation and safety baseline, not the final actor. Neither planner nor specialists may use
+raw memory addresses, trace indices, or hidden teacher actions as decision inputs.
+
 ## Private runtime boundary
 
 The exact private ROM is read once, fingerprinted, and passed to PyBoy as an in-memory stream.
@@ -87,6 +92,10 @@ The concluded predecessor supplied the separately attributed power-on bootstrap,
 Completing these **21/21 checkpoints** verifies **6/36 objectives**; it does not verify any learned
 policy or the full game.
 
+The teacher remains useful after it reaches the Hall of Fame: it can generate labeled
+demonstrations, answer bounded DAgger queries, and attempt declared perturbation schedules. Teacher
+metrics stay in separate evidence from learned-policy metrics.
+
 ### Objective graph
 
 Represents the power-on-to-Hall-of-Fame route as a directed acyclic graph. Every objective declares:
@@ -107,6 +116,14 @@ Chooses one bounded specialist from the verified state and current objective. It
 buttons directly. A future trained router may replace the deterministic router behind the same
 interface.
 
+### Target semantic planner
+
+The final planner consumes the semantic observation, completion facts, resource state, and bounded
+specialist outcomes. It selects the next objective and specialist, replans after unexpected but
+legal transitions, and delegates stalls or unsafe resource states to recovery. Its held-out
+evaluation disables teacher/oracle fallback; the objective graph may still constrain invalid
+choices and the executor may still enforce action safety.
+
 ### Specialists
 
 - **Navigation:** deterministic A* over verified collision maps and transitions.
@@ -116,6 +133,10 @@ interface.
 - **Puzzle/HM:** explicit bounded controllers for game-specific interaction sequences.
 
 Every specialist returns a bounded outcome: `success`, `retry`, `replan`, or `fatal`.
+
+Learned specialists are trained first on qualified demonstrations, then on timing/RNG
+perturbations and learner-induced corrections. Promotion tests include unseen nearby positions,
+encounters, damage and status outcomes, menu state, and timing schedules.
 
 ### Executor
 
@@ -144,3 +165,9 @@ default per-button controller. Any live model call is recorded and changes the a
 Specialists are trained and promoted independently. Updating the battle policy cannot silently
 change navigation. A specialist is replaced only after frozen tests cover nominal, perturbed, and
 recovery states.
+
+Training may restore private snapshots to build targeted curricula. Full-game evaluation may not.
+Evidence is published in three non-interchangeable lanes: exact deterministic-teacher repeats,
+perturbed/multi-seed teacher coverage, and held-out learned/hybrid multi-seed runs. Only the last
+lane evaluates learned generalization, and it requires frozen weights, teacher fallback disabled,
+and no save-state restoration.

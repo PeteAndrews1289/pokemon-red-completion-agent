@@ -56,6 +56,28 @@ Source, prompts, route data, models, and configuration remain frozen until the r
 Process-crash recovery may be evaluated separately, but it is not a clean-run completion unless the
 game continues without restoring or rewinding emulator state.
 
+## Evaluation lanes
+
+Results from different actors and assistance conditions are never pooled:
+
+1. **Exact deterministic teacher:** a frozen route repeats from clean power-on. This establishes a
+   reproducible reference policy, not learning or robustness.
+2. **Perturbed/multi-seed teacher:** the frozen teacher runs preregistered timing/RNG schedules.
+   Reports include the encounters, positions, damage, status, resources, and recoveries actually
+   observed. This measures teacher coverage, not learned generalization.
+3. **Learned/hybrid multi-seed policy:** frozen model weights and configuration run held-out
+   timing/RNG schedules from clean power-on. Teacher/oracle fallback is disabled; the actor chooses
+   from semantic observations.
+
+Every full-game attempt in every lane starts clean, counts toward its declared denominator, and
+forbids save restoration, rollback, or cross-run memory. Training-only snapshot suites may test
+targeted nearby positions, menu states, encounters, damage, status, and recovery, but they are
+component evidence and cannot be reported as clean-run completion.
+
+The evaluation seed identifies a frozen harness schedule, including initial timing perturbation;
+it is not a claim that the cartridge exposes a user-facing seed. Training/tuning seeds and
+held-out evaluation seeds must be disjoint and declared before the evaluation series.
+
 ## Reporting
 
 Every declared attempt counts. Report:
@@ -65,6 +87,7 @@ Every declared attempt counts. Report:
 - objectives completed and recovery events;
 - battles, blackouts, loops, and restarts;
 - teacher/fallback usage;
+- evaluation lane, seed, timing schedule, and observed variation categories;
 - model calls, if any; and
 - exact final evidence.
 

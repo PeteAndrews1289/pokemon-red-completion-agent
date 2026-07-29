@@ -209,6 +209,100 @@ class _PewterEvidence:
         }
 
 
+class _CeruleanEvidence:
+    passed = True
+    cerulean_reached = _raw(MapId.CERULEAN_CITY, 0, 18)
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        return (
+            ("route_3_reached", "Reached Route 3 from Pewter", _raw(MapId.ROUTE_3, 1, 6)),
+            (
+                "route_3_trainer_0",
+                "Verified required Route 3 trainer 0",
+                _raw(MapId.ROUTE_3, 10, 6),
+            ),
+            (
+                "route_3_trainer_1",
+                "Verified required Route 3 trainer 1",
+                _raw(MapId.ROUTE_3, 13, 11),
+            ),
+            (
+                "route_3_trainer_3",
+                "Verified required Route 3 trainer 3",
+                _raw(MapId.ROUTE_3, 22, 4),
+            ),
+            (
+                "route_3_trainer_6",
+                "Verified required Route 3 trainer 6",
+                _raw(MapId.ROUTE_3, 47, 9),
+            ),
+            (
+                "route_4_reached",
+                "Cleared the required Route 3 trainers",
+                _raw(MapId.ROUTE_4, 0, 6),
+            ),
+            ("mt_moon_entered", "Entered Mt. Moon", _raw(MapId.MT_MOON_1F, 5, 31)),
+            (
+                "mt_moon_b1f",
+                "Reached the connected Mt. Moon B1F route",
+                _raw(MapId.MT_MOON_B1F, 5, 5),
+            ),
+            (
+                "mt_moon_b2f",
+                "Reached the fossil-side Mt. Moon B2F route",
+                _raw(MapId.MT_MOON_B2F, 21, 17),
+            ),
+            (
+                "required_rocket",
+                "Verified the unavoidable Team Rocket battle",
+                _raw(MapId.MT_MOON_B2F, 11, 19),
+            ),
+            (
+                "super_nerd",
+                "Verified the fossil-guarding Super Nerd battle",
+                _raw(MapId.MT_MOON_B2F, 13, 8),
+            ),
+            (
+                "helix_fossil",
+                "Obtained the Helix Fossil",
+                _raw(MapId.MT_MOON_B2F, 13, 7),
+            ),
+            (
+                "mt_moon_b1f_ascent",
+                "Reached the legal Mt. Moon exit ladder",
+                _raw(MapId.MT_MOON_B1F, 23, 3),
+            ),
+            (
+                "mt_moon_exited",
+                "Exited Mt. Moon onto Route 4",
+                _raw(MapId.ROUTE_4, 24, 6),
+            ),
+            ("cerulean_reached", "Reached Cerulean City", self.cerulean_reached),
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok",
+            "route": {
+                "ordered_boundaries_verified": 8,
+                "ordered_boundaries_total": 8,
+                "required_route_3_trainers": [0, 1, 3, 6],
+            },
+            "mt_moon": {
+                "required_rocket_battle_observed": True,
+                "super_nerd_battle_observed": True,
+                "helix_fossil_verified": True,
+            },
+            "cerulean": {
+                "arrival_verified": True,
+                "wartortle_level": 17,
+                "wartortle_hp": 26,
+                "wartortle_max_hp": 49,
+                "wartortle_status": 0,
+            },
+        }
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -282,17 +376,17 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 21
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 36
     progress = QualifiedPlayProgress(
-        checkpoint_id="brock_defeated",
-        label="Defeated Brock and received TM34",
-        completed=21,
+        checkpoint_id="cerulean_reached",
+        label="Reached Cerulean City",
+        completed=36,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
-        frames_executed=122_999,
+        frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 21
-    assert progress.frames_executed == 122_999
+    assert progress.completed == progress.total == 36
+    assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
 
@@ -378,6 +472,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         pallet_returned=_raw(MapId.PALLET_TOWN, 10, 0),
         pokedex_received=_raw(MapId.OAKS_LAB, 5, 3),
         pewter=_PewterEvidence(),  # type: ignore[arg-type]
+        cerulean=_CeruleanEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -390,6 +485,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "story:pokedex_received",
                 "location:pewter_city",
                 "badge:boulder",
+                "location:cerulean_city",
             }
         ),
         verified_objectives=(
@@ -399,10 +495,11 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "receive_pokedex",
             "reach_pewter",
             "defeat_brock",
+            "reach_cerulean",
         ),
-        next_objective="reach_cerulean",
-        frames_executed=122_999,
-        actions_executed=1_573,
+        next_objective="help_bill",
+        frames_executed=252_989,
+        actions_executed=3_604,
         controller_released=True,
     )
 
@@ -410,9 +507,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v2"
+    assert public["schema"] == "qualified-play-v3"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "defeat_brock"
+    assert public["qualified_through"] == "reach_cerulean"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -437,9 +534,24 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "pewter_gym_entered",
         "brock_battle",
         "brock_defeated",
+        "route_3_reached",
+        "route_3_trainer_0",
+        "route_3_trainer_1",
+        "route_3_trainer_3",
+        "route_3_trainer_6",
+        "route_4_reached",
+        "mt_moon_entered",
+        "mt_moon_b1f",
+        "mt_moon_b2f",
+        "required_rocket",
+        "super_nerd",
+        "helix_fossil",
+        "mt_moon_b1f_ascent",
+        "mt_moon_exited",
+        "cerulean_reached",
     ]
     assert public["objective_progress"] == {
-        "verified": 6,
+        "verified": 7,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -448,8 +560,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "receive_pokedex",
             "reach_pewter",
             "defeat_brock",
+            "reach_cerulean",
         ],
-        "next": "reach_cerulean",
+        "next": "help_bill",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -581,7 +694,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_reaches_verified_brock_without_adjacent_artifacts() -> None:
+def test_private_rom_reaches_verified_cerulean_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -601,8 +714,8 @@ def test_private_rom_reaches_verified_brock_without_adjacent_artifacts() -> None
         "receive_pokedex",
         "reach_pewter",
         "defeat_brock",
+        "reach_cerulean",
     )
-    assert report.next_objective == "reach_cerulean"
-    assert report.frames_executed == 122_999
-    assert report.actions_executed == 1_573
+    assert report.next_objective == "help_bill"
+    assert report.frames_executed == 252_989
     assert before == after
