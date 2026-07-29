@@ -23,6 +23,13 @@ from pokemon_red_completion.cascade import (
     CascadeProgress,
     run_cascade_chapter,
 )
+from pokemon_red_completion.celadon import (
+    CELADON_CHECKPOINT_COUNT,
+    CeladonChapterError,
+    CeladonChapterReport,
+    CeladonProgress,
+    run_celadon_chapter,
+)
 from pokemon_red_completion.cerulean import (
     CERULEAN_CHECKPOINT_COUNT,
     CeruleanChapterError,
@@ -99,8 +106,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + SS_ANNE_CHECKPOINT_COUNT
     + SURGE_CHECKPOINT_COUNT
     + LAVENDER_CHECKPOINT_COUNT
+    + CELADON_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "reach_lavender"
+QUALIFIED_THROUGH_OBJECTIVE = "reach_celadon"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -232,6 +240,7 @@ class QualifiedPlayReport:
     ss_anne: SSAnneChapterReport
     surge: SurgeChapterReport
     lavender: LavenderChapterReport
+    celadon: CeladonChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -260,6 +269,7 @@ class QualifiedPlayReport:
             and self.ss_anne.passed
             and self.surge.passed
             and self.lavender.passed
+            and self.celadon.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -304,10 +314,11 @@ class QualifiedPlayReport:
             *self.ss_anne.checkpoints(),
             *self.surge.checkpoints(),
             *self.lavender.checkpoints(),
+            *self.celadon.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v8",
+            "schema": "qualified-play-v9",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -360,6 +371,7 @@ class QualifiedPlayReport:
             "ss_anne_chapter": self.ss_anne.public_dict(),
             "surge_chapter": self.surge.public_dict(),
             "lavender_chapter": self.lavender.public_dict(),
+            "celadon_chapter": self.celadon.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -599,6 +611,16 @@ def run_qualified_play(
         except LavenderChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            celadon = run_celadon_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_celadon_progress_bridge(progress),
+            )
+        except CeladonChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -609,11 +631,12 @@ def run_qualified_play(
             | semantic_facts(ss_anne.final_raw)
             | semantic_facts(surge.final_raw)
             | semantic_facts(lavender.final_raw)
+            | semantic_facts(celadon.final_raw)
         )
         state = GameState(
-            mode=game_mode(lavender.final_raw),
+            mode=game_mode(celadon.final_raw),
             facts=facts,
-            location=location_label(lavender.final_raw.map_id),
+            location=location_label(celadon.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -640,6 +663,7 @@ def run_qualified_play(
             ss_anne=ss_anne,
             surge=surge,
             lavender=lavender,
+            celadon=celadon,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -932,6 +956,36 @@ def _lavender_progress_bridge(
                     + VERMILION_CHECKPOINT_COUNT
                     + SS_ANNE_CHECKPOINT_COUNT
                     + SURGE_CHECKPOINT_COUNT
+                    + progress.completed
+                ),
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _celadon_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[CeladonProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: CeladonProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=(
+                    POKEDEX_CHECKPOINT_COUNT
+                    + PEWTER_CHECKPOINT_COUNT
+                    + CERULEAN_CHECKPOINT_COUNT
+                    + CASCADE_CHECKPOINT_COUNT
+                    + VERMILION_CHECKPOINT_COUNT
+                    + SS_ANNE_CHECKPOINT_COUNT
+                    + SURGE_CHECKPOINT_COUNT
+                    + LAVENDER_CHECKPOINT_COUNT
                     + progress.completed
                 ),
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,

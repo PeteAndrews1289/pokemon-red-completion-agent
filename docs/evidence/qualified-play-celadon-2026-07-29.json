@@ -1,0 +1,124 @@
+{
+  "receipt_schema": "qualified-play-evidence-v9",
+  "schema": "qualified-play-v9",
+  "status": "ok",
+  "attempts": {
+    "failed": 0,
+    "passed": 3,
+    "total": 3
+  },
+  "assistance": {
+    "class": "deterministic_teacher",
+    "human_controller_input": false,
+    "save_state_restore": false,
+    "learned_policy": false
+  },
+  "source": {
+    "git_commit": "879e9154e12d02a5880122a76855d87bddac1ff8",
+    "worktree_dirty": true
+  },
+  "python_version": "3.14.3",
+  "recorded_on": "2026-07-29",
+  "extends_evidence": "qualified-play-lavender-2026-07-29.json",
+  "configuration": {
+    "pret_pokered_commit": "1e96034092686d006e863cace09e87273051a3d8",
+    "starter": "squirtle",
+    "route_policy": "bounded_semantic_route_with_same-step_retry_after_qualified_wild_flee",
+    "battle_policy": "required_bite_id_and_pp_decrement_for_the_single_required_route_8_trainer",
+    "recovery_policy": "preserve_four_super_potions_and_heal_the_complete_party_at_celadon_center",
+    "encounter_policy": "run_only_with_party_pp_hp_and_inventory_evidence"
+  },
+  "rom": {
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "size_bytes": 1048576,
+    "title": "POKEMON RED"
+  },
+  "checkpoints": {
+    "all_verified": true,
+    "verified": 124,
+    "celadon_ids": [
+      "lavender_ready",
+      "lavender_exited",
+      "route8_reached",
+      "route8_trainer8_battle",
+      "route8_trainer8_defeated",
+      "route8_entrance",
+      "route8_gate",
+      "west_east_tunnel",
+      "west_east_tunnel_crossed",
+      "route7_reached",
+      "celadon_reached",
+      "celadon_stable"
+    ]
+  },
+  "celadon_chapter": {
+    "trainer_battles": [
+      {
+        "label": "Route 8 Lass",
+        "map_id": 19,
+        "event": 1081,
+        "opponent": 203,
+        "class": 3,
+        "set": 16,
+        "move_id": 44,
+        "selected_pp_spent": 5
+      }
+    ],
+    "route_8_trainers_bypassed": [0, 1, 2, 3, 4, 5, 6, 7],
+    "wild_flees": 0,
+    "inventory": {
+      "super_potions_remaining": 4,
+      "repels_remaining": 0,
+      "money_remaining": 14631
+    },
+    "party": {
+      "species": [179, 64, 59],
+      "hp": [81, 52, 37],
+      "max_hp": [81, 52, 37],
+      "status": [0, 0, 0]
+    },
+    "frames_executed": 23641,
+    "actions_executed": 521,
+    "controller_released": true
+  },
+  "objective_progress": {
+    "next": "clear_rocket_hideout",
+    "total": 36,
+    "verified": 14,
+    "verified_ids": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter",
+      "receive_pokedex",
+      "reach_pewter",
+      "defeat_brock",
+      "reach_cerulean",
+      "help_bill",
+      "reach_vermilion",
+      "obtain_cut",
+      "defeat_misty",
+      "defeat_surge",
+      "reach_lavender",
+      "reach_celadon"
+    ]
+  },
+  "repeatability": {
+    "identical_action_count": true,
+    "identical_final_state": true,
+    "identical_frame_count": true,
+    "identical_full_report": true,
+    "full_report_sha256": "871438014f00c266277ba3ca7610bcef48385ca286a560e2124f9ae90678474e"
+  },
+  "scope": {
+    "claim": "exact deterministic teacher repeat",
+    "timing_or_rng_generalization": false,
+    "learned_policy_generalization": false,
+    "game_complete": false
+  },
+  "qualified_through": "reach_celadon",
+  "game_complete": false,
+  "frames_executed": 881649,
+  "actions_executed": 13234,
+  "controller_released": true
+}

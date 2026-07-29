@@ -131,6 +131,8 @@ class MapId(IntEnum):
     ROUTE_4 = 0x0F
     ROUTE_5 = 0x10
     ROUTE_6 = 0x11
+    ROUTE_7 = 0x12
+    ROUTE_8 = 0x13
     ROUTE_9 = 0x14
     ROUTE_10 = 0x15
     ROUTE_11 = 0x16
@@ -156,6 +158,8 @@ class MapId(IntEnum):
     MT_MOON_POKECENTER = 0x44
     UNDERGROUND_PATH_ROUTE_5 = 0x47
     UNDERGROUND_PATH_ROUTE_6 = 0x4A
+    UNDERGROUND_PATH_ROUTE_7 = 0x4D
+    UNDERGROUND_PATH_ROUTE_8 = 0x50
     DIGLETTS_CAVE_ROUTE_11 = 0x55
     BILLS_HOUSE = 0x58
     VERMILION_POKECENTER = 0x59
@@ -166,9 +170,11 @@ class MapId(IntEnum):
     SS_ANNE_2F = 0x60
     SS_ANNE_CAPTAINS_ROOM = 0x65
     UNDERGROUND_PATH_NORTH_SOUTH = 0x77
+    UNDERGROUND_PATH_WEST_EAST = 0x79
     ROCK_TUNNEL_POKECENTER = 0x51
     ROCK_TUNNEL_1F = 0x52
     LAVENDER_POKECENTER = 0x8D
+    CELADON_POKECENTER = 0x85
     ROCK_TUNNEL_B1F = 0xE8
     HALL_OF_FAME = 0x76
     CHAMPIONS_ROOM = 0x78
@@ -202,6 +208,15 @@ class EventFlag(IntEnum):
     BEAT_ROUTE_6_TRAINER_3 = 0x414
     BEAT_ROUTE_6_TRAINER_4 = 0x415
     BEAT_ROUTE_6_TRAINER_5 = 0x416
+    BEAT_ROUTE_8_TRAINER_0 = 0x431
+    BEAT_ROUTE_8_TRAINER_1 = 0x432
+    BEAT_ROUTE_8_TRAINER_2 = 0x433
+    BEAT_ROUTE_8_TRAINER_3 = 0x434
+    BEAT_ROUTE_8_TRAINER_4 = 0x435
+    BEAT_ROUTE_8_TRAINER_5 = 0x436
+    BEAT_ROUTE_8_TRAINER_6 = 0x437
+    BEAT_ROUTE_8_TRAINER_7 = 0x438
+    BEAT_ROUTE_8_TRAINER_8 = 0x439
     BEAT_ROUTE_9_TRAINER_0 = 0x441
     BEAT_ROUTE_9_TRAINER_8 = 0x449
     BEAT_ROUTE_10_TRAINER_2 = 0x453
@@ -3804,6 +3819,8 @@ def location_label(map_id: int | None) -> str | None:
         MapId.ROUTE_4: "route_4",
         MapId.ROUTE_5: "route_5",
         MapId.ROUTE_6: "route_6",
+        MapId.ROUTE_7: "route_7",
+        MapId.ROUTE_8: "route_8",
         MapId.ROUTE_9: "route_9",
         MapId.ROUTE_10: "route_10",
         MapId.ROUTE_24: "route_24",
@@ -3828,12 +3845,16 @@ def location_label(map_id: int | None) -> str | None:
         MapId.MT_MOON_POKECENTER: "mt_moon_pokecenter",
         MapId.UNDERGROUND_PATH_ROUTE_5: "underground_path_route_5",
         MapId.UNDERGROUND_PATH_ROUTE_6: "underground_path_route_6",
+        MapId.UNDERGROUND_PATH_ROUTE_7: "underground_path_route_7",
+        MapId.UNDERGROUND_PATH_ROUTE_8: "underground_path_route_8",
         MapId.BILLS_HOUSE: "bills_house",
         MapId.UNDERGROUND_PATH_NORTH_SOUTH: "underground_path_north_south",
+        MapId.UNDERGROUND_PATH_WEST_EAST: "underground_path_west_east",
         MapId.ROCK_TUNNEL_POKECENTER: "rock_tunnel_pokecenter",
         MapId.ROCK_TUNNEL_1F: "rock_tunnel_1f",
         MapId.ROCK_TUNNEL_B1F: "rock_tunnel_b1f",
         MapId.LAVENDER_POKECENTER: "lavender_pokecenter",
+        MapId.CELADON_POKECENTER: "celadon_pokecenter",
         MapId.HALL_OF_FAME: "hall_of_fame",
         MapId.CHAMPIONS_ROOM: "champions_room",
         MapId.INDIGO_PLATEAU_LOBBY: "indigo_plateau_lobby",
@@ -3865,6 +3886,7 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         MapId.LAVENDER_POKECENTER: "location:lavender_town",
         MapId.VERMILION_CITY: "location:vermilion_city",
         MapId.CELADON_CITY: "location:celadon_city",
+        MapId.CELADON_POKECENTER: "location:celadon_city",
         MapId.FUCHSIA_CITY: "location:fuchsia_city",
         MapId.CINNABAR_ISLAND: "location:cinnabar_island",
         MapId.SAFFRON_CITY: "location:saffron_city",

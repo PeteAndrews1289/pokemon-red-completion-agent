@@ -509,6 +509,37 @@ class _LavenderEvidence:
         return {"status": "ok", "objective": "reach_lavender"}
 
 
+class _CeladonEvidence:
+    passed = True
+    final_raw = replace(
+        _raw(MapId.CELADON_POKECENTER, 3, 3, party_count=3, party_species_ids=(0xB3, 0x40, 0x3B)),
+        badge_bits=int(Badge.BOULDER | Badge.CASCADE | Badge.THUNDER),
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "lavender_ready",
+            "lavender_exited",
+            "route8_reached",
+            "route8_trainer8_battle",
+            "route8_trainer8_defeated",
+            "route8_entrance",
+            "route8_gate",
+            "west_east_tunnel",
+            "west_east_tunnel_crossed",
+            "route7_reached",
+            "celadon_reached",
+            "celadon_stable",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "reach_celadon"}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -582,16 +613,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 112
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 124
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=112,
+        completed=124,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 112
+    assert progress.completed == progress.total == 124
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -684,6 +715,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         ss_anne=_SSAnneEvidence(),  # type: ignore[arg-type]
         surge=_SurgeEvidence(),  # type: ignore[arg-type]
         lavender=_LavenderEvidence(),  # type: ignore[arg-type]
+        celadon=_CeladonEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -703,6 +735,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "move:cut_available",
                 "badge:thunder",
                 "location:lavender_town",
+                "location:celadon_city",
             }
         ),
         verified_objectives=(
@@ -719,8 +752,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "obtain_cut",
             "defeat_surge",
             "reach_lavender",
+            "reach_celadon",
         ),
-        next_objective="reach_celadon",
+        next_objective="clear_rocket_hideout",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -730,9 +764,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v8"
+    assert public["schema"] == "qualified-play-v9"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "reach_lavender"
+    assert public["qualified_through"] == "reach_celadon"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -848,9 +882,21 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "rock_tunnel_cleared",
         "lavender_reached",
         "lavender_stable",
+        "lavender_ready",
+        "lavender_exited",
+        "route8_reached",
+        "route8_trainer8_battle",
+        "route8_trainer8_defeated",
+        "route8_entrance",
+        "route8_gate",
+        "west_east_tunnel",
+        "west_east_tunnel_crossed",
+        "route7_reached",
+        "celadon_reached",
+        "celadon_stable",
     ]
     assert public["objective_progress"] == {
-        "verified": 13,
+        "verified": 14,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -866,8 +912,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "obtain_cut",
             "defeat_surge",
             "reach_lavender",
+            "reach_celadon",
         ],
-        "next": "reach_celadon",
+        "next": "clear_rocket_hideout",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -999,7 +1046,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_reaches_verified_lavender_without_adjacent_artifacts() -> None:
+def test_private_rom_reaches_verified_celadon_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -1026,10 +1073,11 @@ def test_private_rom_reaches_verified_lavender_without_adjacent_artifacts() -> N
         "defeat_misty",
         "defeat_surge",
         "reach_lavender",
+        "reach_celadon",
     )
-    assert report.next_objective == "reach_celadon"
-    assert report.frames_executed == 858_008
-    assert report.actions_executed == 12_713
+    assert report.next_objective == "clear_rocket_hideout"
+    assert report.frames_executed == 881_649
+    assert report.actions_executed == 13_234
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -1099,4 +1147,16 @@ def test_private_rom_reaches_verified_lavender_without_adjacent_artifacts() -> N
     assert report.lavender.purchase_cost == 7_000
     assert report.lavender.money_remaining == 14_301
     assert report.lavender.route_10_trainer_2_bypassed
+    assert report.celadon.passed
+    assert report.celadon.frames_executed == 23_641
+    assert report.celadon.actions_executed == 521
+    assert len(report.celadon.trainers) == 1
+    assert report.celadon.trainers[0].selected_pp_spent == 5
+    assert report.celadon.route_8_events_before == (False,) * 9
+    assert report.celadon.route_8_events_after == (False,) * 8 + (True,)
+    assert report.celadon.party_hp == report.celadon.party_max_hp == (81, 52, 37)
+    assert report.celadon.party_status == (0, 0, 0)
+    assert report.celadon.super_potions_remaining == 4
+    assert report.celadon.repels_remaining == 0
+    assert report.celadon.money_remaining == 14_631
     assert before == after
