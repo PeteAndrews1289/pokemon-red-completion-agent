@@ -2,12 +2,12 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Cinnabar qualified](https://img.shields.io/badge/status-Cinnabar_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Blaine qualified](https://img.shields.io/badge/status-Blaine_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **259/259 qualified
+> **Current status:** one continuous deterministic teacher now reaches all **267/267 qualified
 > checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
 > Tunnel, clears the Rocket Hideout and Pokémon Tower, rescues Mr. Fuji, receives the Poké Flute,
 > defeats the Route 12 Snorlax, crosses Routes 12–15, collects the Gold Teeth, obtains reusable
@@ -22,11 +22,13 @@ control, and progressively trained specialists.**
 > It then traverses Saffron Gym without fighting a regular trainer, defeats Sabrina, receives
 > TM46 and the Marsh Badge, and returns fully healed. It then takes the bicycle-free Route 16
 > Cut lane, obtains HM02, teaches Fly to DUX, flies to Pallet, Surfs Route 21 without fighting a
-> trainer, and reaches a healed Cinnabar Center. That establishes **26/36 completion objectives**
-> and six badges. Three clean runs produced the same 3,648,870-frame, 30,910-action result. This is an exact-route
+> trainer, reaches Cinnabar, recovers the Secret Key without fighting a Mansion trainer, answers
+> all six Gym quizzes, defeats Blaine, receives TM38 and the Volcano Badge, and heals. That
+> establishes **28/36 completion objectives** and seven badges. Three clean runs produced the same
+> 3,869,179-frame, 32,695-action result. This is an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next graph-selected objective is obtaining the Secret Key. See the
-> [sanitized three-run Cinnabar evidence receipt](docs/evidence/qualified-play-cinnabar-2026-07-29.json).
+> game-completion claim. The next graph-selected objective is defeating Giovanni. See the
+> [sanitized three-run Blaine evidence receipt](docs/evidence/qualified-play-blaine-2026-07-29.json).
 
 ## The goal
 
@@ -176,6 +178,10 @@ receives the Master Ball, leaves optional Lapras untouched, and returns to a hea
 Center boundary.
 It then follows a live-qualified trainer-free Saffron Gym warp route, defeats Sabrina with a
 physical Strength and Ice Beam policy, verifies TM46 plus both Marsh Badge lanes, and heals.
+It then obtains HM02 Fly, reaches Cinnabar by way of Pallet and Route 21, traverses Pokémon
+Mansion with one Max Repel and no trainer battles, recovers the Secret Key, clears all six Gym
+quizzes without a regular-trainer battle, defeats Blaine with Surf, receives TM38 plus both
+Volcano Badge lanes, and returns to a healed Cinnabar Center.
 It stops automatically after the
 latest independently qualified objective and reports that the game is not complete. The forest
 segment deliberately trains against three verified Kakuna encounters and one mandatory Bug
