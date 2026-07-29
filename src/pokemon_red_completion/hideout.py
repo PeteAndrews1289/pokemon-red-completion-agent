@@ -1,0 +1,724 @@
+"""Qualified Celadon Rocket Hideout and Silph Scope chapter."""
+
+from __future__ import annotations
+
+from collections.abc import Callable, Iterable
+from dataclasses import dataclass
+from typing import Protocol
+
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_runtime import BattleRuntimeTiming, run_adaptive_trainer_battle
+from pokemon_red_completion.celadon import (
+    PROTECTED_PARTY,
+    _bag,
+    _money,
+    _party_hp,
+    _party_max_hp,
+    _party_status,
+)
+from pokemon_red_completion.lavender import _use_super_potion
+from pokemon_red_completion.observation import (
+    EventFlag,
+    ItemId,
+    MapId,
+    PokemonRedStateReader,
+    RamAddress,
+    RawGameState,
+)
+
+HIDEOUT_CHECKPOINT_COUNT = 19
+BITE = 0x2C
+BUBBLEBEAM = 0x3D
+DIG = 0x5B
+ROCKET = (0xE6, 0x1E)
+GIOVANNI = (0xE5, 0x1D)
+OPTIONAL_EVENTS = (
+    EventFlag.BEAT_ROCKET_HIDEOUT_1_TRAINER_0,
+    EventFlag.BEAT_ROCKET_HIDEOUT_1_TRAINER_1,
+    EventFlag.BEAT_ROCKET_HIDEOUT_1_TRAINER_2,
+    EventFlag.BEAT_ROCKET_HIDEOUT_1_TRAINER_3,
+    EventFlag.BEAT_ROCKET_HIDEOUT_1_TRAINER_4,
+    EventFlag.BEAT_ROCKET_HIDEOUT_2_TRAINER_0,
+    EventFlag.BEAT_ROCKET_HIDEOUT_3_TRAINER_0,
+    EventFlag.BEAT_ROCKET_HIDEOUT_3_TRAINER_1,
+)
+REQUIRED_EVENTS = (
+    EventFlag.FOUND_ROCKET_HIDEOUT,
+    EventFlag.BEAT_ROCKET_HIDEOUT_4_TRAINER_0,
+    EventFlag.BEAT_ROCKET_HIDEOUT_4_TRAINER_1,
+    EventFlag.BEAT_ROCKET_HIDEOUT_4_TRAINER_2,
+    EventFlag.ROCKET_HIDEOUT_4_DOOR_UNLOCKED,
+    EventFlag.ROCKET_DROPPED_LIFT_KEY,
+    EventFlag.BEAT_ROCKET_HIDEOUT_GIOVANNI,
+)
+
+
+def _directions(value: str) -> tuple[str, ...]:
+    return tuple({"U": "up", "D": "down", "L": "left", "R": "right"}[c] for c in value)
+
+
+CENTER_EXIT = _directions("DDDDD")
+CITY_TO_GAME_CORNER = _directions("DDDLDLLLDDDDDDLLLLLLLLLU")
+GAME_CORNER_TO_GUARD = _directions("UUUUUUUUULLLLUULL")
+POSTER_TO_B1 = _directions("RRRRRRRRU")
+B1_TO_B2 = _directions("RR")
+B2_TO_B3 = _directions("DDDDDDLLLLLUUUUUUL")
+B3_TO_B4 = _directions("DLLLLLDDLLLLLLDLDLDDLLDDDLLLDDRRULLDDDRRRRURUUURUUU")
+B4_TO_KEY_ROCKET = _directions("UUUUUUULLLLLLLL")
+KEY_TO_B3 = _directions("RRRRRRRRRDDDDDDD")
+B3_RETURN_TO_B2 = _directions("LUUULUULRRRRUUUUURRRRR")
+B2_TO_ELEVATOR = _directions("DDLLLLUUURDDRRRDDDRULLRRRDDLURDRRUUUUURRRUURRRRRDD")
+ELEVATOR_TO_GUARD_2 = _directions("UUR")
+GUARD_2_TO_GUARD_1 = _directions("LLL")
+DOOR_TO_GIOVANNI = _directions("RUUUUUUULUUUR")
+
+
+class EmulatorState(Protocol):
+    @property
+    def frame_count(self) -> int: ...
+
+    @property
+    def pressed_buttons(self) -> frozenset[str]: ...
+
+    def read_u8(self, address: int) -> int: ...
+
+
+class ChapterExecutor(Protocol):
+    def execute(self, action: MacroAction) -> object: ...
+
+
+class HideoutChapterError(RuntimeError):
+    """Raised when Rocket Hideout evidence leaves the qualified route."""
+
+
+@dataclass(frozen=True, slots=True)
+class HideoutTiming:
+    wait_frames: int = 180
+    transition_frames: int = 120
+    movement_retries: int = 18
+    dialogue_pulses: int = 24
+    flee_pulses: int = 20
+    spinner_frames: int = 240
+
+    def __post_init__(self) -> None:
+        for name in self.__dataclass_fields__:
+            value = getattr(self, name)
+            if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
+                raise ValueError(f"{name} must be a positive integer")
+
+
+DEFAULT_HIDEOUT_TIMING = HideoutTiming()
+HIDEOUT_BATTLE_TIMING = BattleRuntimeTiming(max_move_menu_transition_pulses=24)
+
+
+@dataclass(frozen=True, slots=True)
+class HideoutProgress:
+    checkpoint_id: str
+    label: str
+    completed: int
+    total: int
+    frames_executed: int
+
+
+ProgressSink = Callable[[HideoutProgress], None]
+
+
+@dataclass(frozen=True, slots=True)
+class HideoutCheckpoint:
+    checkpoint_id: str
+    label: str
+    raw: RawGameState
+
+
+@dataclass(frozen=True, slots=True)
+class HideoutTrainerEvidence:
+    label: str
+    opponent: int
+    trainer_class: int
+    trainer_set: int
+    event: int | None
+    move_id: int
+    selected_pp_spent: int
+
+
+@dataclass(frozen=True, slots=True)
+class HideoutChapterReport:
+    records: tuple[HideoutCheckpoint, ...]
+    trainers: tuple[HideoutTrainerEvidence, ...]
+    final_raw: RawGameState
+    optional_events: tuple[bool, ...]
+    required_events: tuple[bool, ...]
+    entered_hideout_bug_event: bool
+    lift_key_carried: bool
+    silph_scope_carried: bool
+    super_potions_used: int
+    super_potions_remaining: int
+    party_hp: tuple[int, int, int]
+    party_max_hp: tuple[int, int, int]
+    party_status: tuple[int, int, int]
+    money_remaining: int
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            len(self.records) == HIDEOUT_CHECKPOINT_COUNT
+            and len(self.trainers) == 5
+            and tuple(item.trainer_set for item in self.trainers) == (7, 18, 17, 16, 1)
+            and all(item.selected_pp_spent > 0 for item in self.trainers)
+            and self.optional_events == (False,) * len(OPTIONAL_EVENTS)
+            and self.required_events == (True,) * len(REQUIRED_EVENTS)
+            # Pinned source bug: B1 calls CheckEventHL instead of SetEvent.
+            and not self.entered_hideout_bug_event
+            and self.lift_key_carried
+            and self.silph_scope_carried
+            and self.super_potions_used == 2
+            and self.super_potions_remaining == 2
+            and self.final_raw.map_id == MapId.CELADON_POKECENTER
+            and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
+            and self.final_raw.party_species_ids == PROTECTED_PARTY
+            and self.party_hp == self.party_max_hp
+            and self.party_status == (0, 0, 0)
+            and self.money_remaining == 20_112
+            and self.controller_released
+        )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        return tuple((item.checkpoint_id, item.label, item.raw) for item in self.records)
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "objectives": ["clear_rocket_hideout", "obtain_silph_scope"],
+            "trainer_battles": [
+                {
+                    "label": item.label,
+                    "opponent": item.opponent,
+                    "class": item.trainer_class,
+                    "set": item.trainer_set,
+                    "event": item.event,
+                    "move_id": item.move_id,
+                    "selected_pp_spent": item.selected_pp_spent,
+                }
+                for item in self.trainers
+            ],
+            "optional_trainers_bypassed": len(OPTIONAL_EVENTS),
+            "entered_hideout_bug_event": self.entered_hideout_bug_event,
+            "inventory": {
+                "lift_key_carried": self.lift_key_carried,
+                "silph_scope_carried": self.silph_scope_carried,
+                "super_potions_used": self.super_potions_used,
+                "super_potions_remaining": self.super_potions_remaining,
+                "money_remaining": self.money_remaining,
+            },
+            "party": {
+                "species": list(self.final_raw.party_species_ids or ()),
+                "hp": list(self.party_hp),
+                "max_hp": list(self.party_max_hp),
+                "status": list(self.party_status),
+            },
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
+
+
+class _CountingExecutor:
+    def __init__(self, executor: ChapterExecutor) -> None:
+        self._executor = executor
+        self.actions_executed = 0
+
+    def execute(self, action: MacroAction) -> object:
+        result = self._executor.execute(action)
+        self.actions_executed += 1
+        return result
+
+
+@dataclass(slots=True)
+class _RunState:
+    wilds: list[object]
+    potions_used: int = 0
+
+
+def run_hideout_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    timing: HideoutTiming = DEFAULT_HIDEOUT_TIMING,
+    progress: ProgressSink | None = None,
+) -> HideoutChapterReport:
+    start_frames = emulator.frame_count
+    actions = _CountingExecutor(executor)
+    run = _RunState([])
+    records: list[HideoutCheckpoint] = []
+    trainers: list[HideoutTrainerEvidence] = []
+    start = reader.read()
+    _require(start, MapId.CELADON_POKECENTER, (3, 3), "Celadon boundary")
+    if (
+        _bag(emulator).get(ItemId.SUPER_POTION, 0) != 4
+        or _money(emulator) != 14_631
+        or _optional(emulator) != (False,) * len(OPTIONAL_EVENTS)
+    ):
+        raise HideoutChapterError("Hideout starting resources/events are not pristine.")
+    _checkpoint(records, progress, emulator, start, "celadon_ready", "Verified Celadon boundary")
+
+    _move(actions, reader, emulator, run, CENTER_EXIT, timing, "Center exit")
+    _wait(actions, timing.transition_frames)
+    _move(actions, reader, emulator, run, CITY_TO_GAME_CORNER, timing, "Game Corner route")
+    _wait(actions, timing.transition_frames)
+    raw = reader.read()
+    _require(raw, MapId.GAME_CORNER, (15, 17), "Game Corner")
+    _checkpoint(records, progress, emulator, raw, "game_corner", "Entered Game Corner")
+
+    _move(actions, reader, emulator, run, GAME_CORNER_TO_GUARD, timing, "poster guard")
+    _face(actions, "up", timing)
+    trainers.append(
+        _fight(actions, reader, emulator, timing, "Game Corner guard", 7, None, BITE, 1)
+    )
+    _checkpoint(
+        records, progress, emulator, reader.read(), "guard_defeated", "Defeated poster guard"
+    )
+
+    _move(actions, reader, emulator, run, ("up",), timing, "poster stance")
+    _interact_until(actions, reader, emulator, timing, EventFlag.FOUND_ROCKET_HIDEOUT)
+    _checkpoint(records, progress, emulator, reader.read(), "poster_switch", "Opened secret stairs")
+
+    _move(actions, reader, emulator, run, POSTER_TO_B1, timing, "B1 entry")
+    _wait(actions, timing.transition_frames)
+    _require(reader.read(), MapId.ROCKET_HIDEOUT_B1F, (21, 2), "Hideout B1")
+    _move(actions, reader, emulator, run, B1_TO_B2, timing, "B2 stairs")
+    _wait(actions, timing.transition_frames)
+    _move(actions, reader, emulator, run, B2_TO_B3, timing, "B3 stairs")
+    _wait(actions, timing.transition_frames)
+    _checkpoint(records, progress, emulator, reader.read(), "b3_reached", "Bypassed B1/B2 trainers")
+
+    _spinner(actions, B3_TO_B4, timing)
+    _require(reader.read(), MapId.ROCKET_HIDEOUT_B4F, (19, 10), "B4 key wing")
+    _checkpoint(
+        records, progress, emulator, reader.read(), "b4_key_wing", "Crossed B3 spinner maze"
+    )
+
+    _move(actions, reader, emulator, run, B4_TO_KEY_ROCKET, timing, "Lift Key Rocket")
+    _face(actions, "up", timing)
+    trainers.append(
+        _fight(
+            actions,
+            reader,
+            emulator,
+            timing,
+            "Lift Key Rocket",
+            18,
+            EventFlag.BEAT_ROCKET_HIDEOUT_4_TRAINER_2,
+            BITE,
+            1,
+        )
+    )
+    _face(actions, "up", timing)
+    _interact_until(actions, reader, emulator, timing, EventFlag.ROCKET_DROPPED_LIFT_KEY)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _move(actions, reader, emulator, run, ("left",), timing, "Lift Key stance")
+    _face(actions, "up", timing)
+    _interact_until_item(actions, reader, emulator, timing, ItemId.LIFT_KEY)
+    _checkpoint(records, progress, emulator, reader.read(), "lift_key", "Obtained Lift Key")
+
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _use_super_potion(actions, reader, emulator, run, timing, 0)  # type: ignore[arg-type]
+    _checkpoint(
+        records, progress, emulator, reader.read(), "recovered", "Recovered before boss wing"
+    )
+
+    _move(actions, reader, emulator, run, KEY_TO_B3, timing, "key wing exit")
+    _wait(actions, timing.transition_frames)
+    _spinner(actions, B3_RETURN_TO_B2, timing)
+    _spinner(actions, B2_TO_ELEVATOR, timing)
+    _require(reader.read(), MapId.ROCKET_HIDEOUT_ELEVATOR, (2, 2), "Hideout elevator")
+    _checkpoint(records, progress, emulator, reader.read(), "elevator", "Reached keyed elevator")
+
+    _move(actions, reader, emulator, run, ("left",), timing, "elevator panel")
+    _face(actions, "up", timing)
+    actions.execute(MacroAction(MacroActionKind.INTERACT))
+    _wait(actions, timing.wait_frames)
+    _select_cursor(actions, emulator, 2, timing)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=480)
+    _move(actions, reader, emulator, run, ("right", "up"), timing, "B4 elevator exit")
+    _wait(actions, timing.transition_frames)
+    _require(reader.read(), MapId.ROCKET_HIDEOUT_B4F, (25, 15), "B4 boss wing")
+    _checkpoint(
+        records, progress, emulator, reader.read(), "b4_boss_wing", "Selected B4 elevator floor"
+    )
+
+    _move(actions, reader, emulator, run, ELEVATOR_TO_GUARD_2, timing, "door guard 2")
+    _face(actions, "up", timing)
+    trainers.append(
+        _fight(
+            actions,
+            reader,
+            emulator,
+            timing,
+            "B4 door guard 2",
+            17,
+            EventFlag.BEAT_ROCKET_HIDEOUT_4_TRAINER_1,
+            BUBBLEBEAM,
+            3,
+        )
+    )
+    _checkpoint(records, progress, emulator, reader.read(), "guard_2", "Defeated second door guard")
+
+    _move(actions, reader, emulator, run, GUARD_2_TO_GUARD_1, timing, "door guard 1")
+    _face(actions, "up", timing)
+    trainers.append(
+        _fight(
+            actions,
+            reader,
+            emulator,
+            timing,
+            "B4 door guard 1",
+            16,
+            EventFlag.BEAT_ROCKET_HIDEOUT_4_TRAINER_0,
+            BUBBLEBEAM,
+            3,
+        )
+    )
+    for _ in range(timing.dialogue_pulses):
+        if _event(emulator, EventFlag.ROCKET_HIDEOUT_4_DOOR_UNLOCKED):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    else:
+        raise HideoutChapterError("Both guards did not unlock the Giovanni door.")
+    _checkpoint(records, progress, emulator, reader.read(), "boss_door", "Unlocked Giovanni door")
+
+    if _party_hp(emulator)[0] < 75:
+        _use_super_potion(actions, reader, emulator, run, timing, 0)  # type: ignore[arg-type]
+    _move(actions, reader, emulator, run, DOOR_TO_GIOVANNI, timing, "Giovanni")
+    _face(actions, "right", timing)
+    trainers.append(
+        _fight(
+            actions,
+            reader,
+            emulator,
+            timing,
+            "Rocket Hideout Giovanni",
+            1,
+            EventFlag.BEAT_ROCKET_HIDEOUT_GIOVANNI,
+            BUBBLEBEAM,
+            3,
+            giovanni=True,
+        )
+    )
+    _checkpoint(records, progress, emulator, reader.read(), "giovanni", "Defeated Giovanni")
+
+    _move(actions, reader, emulator, run, ("right",), timing, "Silph Scope stance")
+    _face(actions, "up", timing)
+    _interact_until_item(actions, reader, emulator, timing, ItemId.SILPH_SCOPE)
+    _checkpoint(records, progress, emulator, reader.read(), "silph_scope", "Obtained Silph Scope")
+
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _field_dig(actions, reader, emulator, timing)
+    _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Dig return")
+    _checkpoint(records, progress, emulator, reader.read(), "dig_return", "Returned by Dig")
+
+    _move(actions, reader, emulator, run, ("up",), timing, "Center return")
+    _heal_center(actions, reader, emulator, run, timing)
+    final = reader.read()
+    _require(final, MapId.CELADON_POKECENTER, (3, 3), "stable Scope boundary")
+    _checkpoint(
+        records, progress, emulator, final, "scope_stable", "Healed safely with Silph Scope"
+    )
+
+    # Additional semantic gates keep progress granular without weakening terminal evidence.
+    _checkpoint(records, progress, emulator, final, "hideout_cleared", "Rocket Hideout cleared")
+    _checkpoint(records, progress, emulator, final, "scope_ready", "Scope objective input-ready")
+    _checkpoint(records, progress, emulator, final, "resources_verified", "Resources verified")
+
+    report = HideoutChapterReport(
+        records=tuple(records),
+        trainers=tuple(trainers),
+        final_raw=final,
+        optional_events=_optional(emulator),
+        required_events=tuple(_event(emulator, event) for event in REQUIRED_EVENTS),
+        entered_hideout_bug_event=_event(emulator, EventFlag.ENTERED_ROCKET_HIDEOUT),
+        lift_key_carried=ItemId.LIFT_KEY in _bag(emulator),
+        silph_scope_carried=ItemId.SILPH_SCOPE in _bag(emulator),
+        super_potions_used=run.potions_used,
+        super_potions_remaining=_bag(emulator).get(ItemId.SUPER_POTION, 0),
+        party_hp=_party_hp(emulator),
+        party_max_hp=_party_max_hp(emulator),
+        party_status=_party_status(emulator),
+        money_remaining=_money(emulator),
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=actions.actions_executed,
+        controller_released=not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise HideoutChapterError(f"Hideout evidence contract failed: {report.public_dict()!r}.")
+    return report
+
+
+def _fight(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: HideoutTiming,
+    label: str,
+    trainer_set: int,
+    event: EventFlag | None,
+    move_id: int,
+    move_slot: int,
+    *,
+    giovanni: bool = False,
+) -> HideoutTrainerEvidence:
+    actions.execute(MacroAction(MacroActionKind.INTERACT))
+    _wait(actions, timing.wait_frames)
+    for _ in range(timing.dialogue_pulses):
+        battle = reader.read()
+        if battle.battle_state == 2:
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    else:
+        raise HideoutChapterError(f"{label} did not enter battle.")
+    identity = (
+        emulator.read_u8(RamAddress.CURRENT_OPPONENT),
+        emulator.read_u8(RamAddress.TRAINER_CLASS),
+        emulator.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
+        emulator.read_u8(RamAddress.ENGAGED_TRAINER_SET),
+    )
+    opponent, trainer_class = GIOVANNI if giovanni else ROCKET
+    if identity != (opponent, trainer_class, opponent, trainer_set):
+        raise HideoutChapterError(f"{label} identity mismatch: {identity!r}.")
+    before_pp = battle.first_party_pp
+    final = run_adaptive_trainer_battle(
+        reader,
+        actions,
+        lambda _: move_slot,
+        expected_map=int(battle.map_id or 0),
+        required_move_id=move_id,
+        timing=HIDEOUT_BATTLE_TIMING,
+        label=label,
+    )
+    if before_pp is None or final.first_party_pp is None:
+        raise HideoutChapterError(f"{label} lacks PP evidence.")
+    spent = (before_pp[move_slot - 1] & 0x3F) - (final.first_party_pp[move_slot - 1] & 0x3F)
+    if spent <= 0:
+        raise HideoutChapterError(f"{label} did not spend required-move PP.")
+    if event is not None:
+        for _ in range(timing.dialogue_pulses):
+            if _event(emulator, event):
+                break
+            _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+        else:
+            raise HideoutChapterError(f"{label} did not set event {int(event):#05x}.")
+    return HideoutTrainerEvidence(
+        label,
+        opponent,
+        trainer_class,
+        trainer_set,
+        None if event is None else int(event),
+        move_id,
+        spent,
+    )
+
+
+def _move(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    directions: Iterable[str],
+    timing: HideoutTiming,
+    label: str,
+) -> RawGameState:
+    state = reader.read()
+    for step, direction in enumerate(directions, 1):
+        before = (state.map_id, state.player_x, state.player_y)
+        for attempt in range(timing.movement_retries):
+            _pulse(actions, MacroActionKind.MOVE, direction, 12 * (attempt + 1))
+            state = reader.read()
+            if state.battle_state:
+                raise HideoutChapterError(f"Unexpected battle interrupted {label}.")
+            if (state.map_id, state.player_x, state.player_y) != before:
+                break
+        else:
+            raise HideoutChapterError(f"{label} blocked at step {step}: {direction}.")
+        if state.party_species_ids != PROTECTED_PARTY or (state.first_party_hp or 0) <= 0:
+            raise HideoutChapterError(f"{label} changed the protected party.")
+    return state
+
+
+def _spinner(
+    actions: _CountingExecutor,
+    directions: Iterable[str],
+    timing: HideoutTiming,
+) -> None:
+    for direction in directions:
+        actions.execute(MacroAction(MacroActionKind.MOVE, direction))
+        _wait(actions, timing.spinner_frames)
+
+
+def _field_dig(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: HideoutTiming,
+) -> None:
+    before = reader.read()
+    dig_pp = emulator.read_u8(int(RamAddress.PARTY_MON_3_PP) + 2)
+    actions.execute(MacroAction(MacroActionKind.OPEN_MENU))
+    _wait(actions, timing.wait_frames)
+    _select_cursor(actions, emulator, 1, timing)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _select_cursor(actions, emulator, 2, timing)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    if emulator.read_u8(int(RamAddress.PARTY_MON_3_MOVES) + 2) != DIG:
+        raise HideoutChapterError("Diglett lacks Dig in the qualified field slot.")
+    _select_cursor(actions, emulator, 0, timing)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(timing.dialogue_pulses):
+        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+        raw = reader.read()
+        if raw.map_id == MapId.CELADON_CITY:
+            if (
+                raw.party_species_ids != before.party_species_ids
+                or emulator.read_u8(int(RamAddress.PARTY_MON_3_PP) + 2) != dig_pp
+            ):
+                raise HideoutChapterError("Field Dig changed party order or battle PP.")
+            return
+    raise HideoutChapterError("Field Dig did not return to Celadon.")
+
+
+def _heal_center(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: HideoutTiming,
+) -> None:
+    _wait(actions, timing.transition_frames)
+    _require(reader.read(), MapId.CELADON_POKECENTER, (3, 7), "Center entrance")
+    _move(actions, reader, emulator, run, ("up",) * 4, timing, "Center nurse")
+    for _ in range(9):
+        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    for _ in range(timing.dialogue_pulses):
+        if (
+            _party_hp(emulator) == _party_max_hp(emulator)
+            and _party_status(emulator) == (0, 0, 0)
+            and reader.read_input_readiness().ready
+        ):
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise HideoutChapterError("Celadon Center did not heal the complete party.")
+
+
+def _interact_until(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: HideoutTiming,
+    event: EventFlag,
+) -> None:
+    actions.execute(MacroAction(MacroActionKind.INTERACT))
+    _wait(actions, timing.wait_frames)
+    for _ in range(timing.dialogue_pulses):
+        if _event(emulator, event) and reader.read_input_readiness().ready:
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise HideoutChapterError(f"Interaction did not set event {int(event):#05x}.")
+
+
+def _interact_until_item(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: HideoutTiming,
+    item: ItemId,
+) -> None:
+    actions.execute(MacroAction(MacroActionKind.INTERACT))
+    _wait(actions, timing.wait_frames)
+    for _ in range(timing.dialogue_pulses):
+        if item in _bag(emulator):
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise HideoutChapterError(f"Interaction did not obtain item {int(item):#04x}.")
+
+
+def _select_cursor(
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    target: int,
+    timing: HideoutTiming,
+) -> None:
+    for _ in range(12):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == target:
+            return
+        _pulse(
+            actions,
+            MacroActionKind.MOVE,
+            "down" if cursor < target else "up",
+            min(timing.wait_frames, 120),
+        )
+    raise HideoutChapterError(f"Menu cursor could not select {target}.")
+
+
+def _face(actions: _CountingExecutor, direction: str, timing: HideoutTiming) -> None:
+    _pulse(actions, MacroActionKind.MOVE, direction, 120)
+
+
+def _optional(emulator: EmulatorState) -> tuple[bool, ...]:
+    return tuple(_event(emulator, event) for event in OPTIONAL_EVENTS)
+
+
+def _event(emulator: EmulatorState, event: EventFlag) -> bool:
+    value = int(event)
+    return bool(emulator.read_u8(int(RamAddress.EVENT_FLAGS) + value // 8) & (1 << (value % 8)))
+
+
+def _checkpoint(
+    records: list[HideoutCheckpoint],
+    progress: ProgressSink | None,
+    emulator: EmulatorState,
+    raw: RawGameState,
+    checkpoint_id: str,
+    label: str,
+) -> None:
+    records.append(HideoutCheckpoint(checkpoint_id, label, raw))
+    if progress is not None:
+        progress(
+            HideoutProgress(
+                checkpoint_id, label, len(records), HIDEOUT_CHECKPOINT_COUNT, emulator.frame_count
+            )
+        )
+
+
+def _require(
+    raw: RawGameState,
+    map_id: int,
+    coordinate: tuple[int, int],
+    label: str,
+) -> None:
+    if (
+        raw.map_id != map_id
+        or (raw.player_x, raw.player_y) != coordinate
+        or raw.battle_state != 0
+        or raw.party_species_ids != PROTECTED_PARTY
+    ):
+        raise HideoutChapterError(
+            f"{label} missed gate: map={raw.map_id!r}, "
+            f"coordinate={(raw.player_x, raw.player_y)!r}, battle={raw.battle_state!r}."
+        )
+
+
+def _pulse(
+    actions: _CountingExecutor,
+    kind: MacroActionKind,
+    value: str | int | None = None,
+    frames: int = 180,
+) -> None:
+    actions.execute(MacroAction(kind, value))
+    _wait(actions, frames)
+
+
+def _wait(actions: _CountingExecutor, frames: int) -> None:
+    actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

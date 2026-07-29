@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **124/124 qualified checkpoints** through
-Celadon City and therefore **14/36 completion objectives**. Three clean runs were identical
-at the 881,649-frame / 13,234-action boundary. The evidence includes the earlier Brock and Mt. Moon gates,
+The deterministic teacher currently verifies all **143/143 qualified checkpoints** through
+the Silph Scope and therefore **16/36 completion objectives**. Three clean runs were identical
+at the 984,806-frame / 14,425-action boundary. The evidence includes the earlier Brock and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
 Badge and TM11 proof, plus the Rocket thief, TM28, Underground Path, exact Route 6 trainer events,
@@ -71,10 +71,13 @@ trainer identities with selected-move PP evidence, bounded sleep and wild-flee r
 optional Route 10 trainer bypass, and a full three-member Center heal. The Celadon segment adds
 the exact required Route 8 Lass identity and event transition, eight optional-trainer bypasses,
 the west-east Underground Path crossing, exact resource preservation, and a second full-party
-Center heal. The boundary has a
-full-health, status-free Wartortle restored as party lead. No
-behavioral-cloning, DAgger, timing/RNG generalization, or full-game result is implied. The next
-teaching segment clears the Rocket Hideout.
+Center heal.
+The Hideout segment adds five exact trainer identities, eight optional-trainer bypass gates,
+the Lift Key and elevator, Giovanni, the Silph Scope, a PP-preserving field Dig return, and a
+second healed Celadon boundary. It also records the pinned source's known B1 entered-event bug.
+The boundary has a full-health, status-free Wartortle restored as party lead. No behavioral-
+cloning, DAgger, timing/RNG generalization, or full-game result is implied. The next teaching
+segment rescues Mr. Fuji.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -179,16 +182,17 @@ restore, rewind, or import state from another run.
 10. Extend and replay-qualify Rock Tunnel and stable Lavender Town. **Done.**
 11. Extend and replay-qualify Route 8, the west-east Underground Path, and stable Celadon City.
     **Done.**
-12. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
+12. Extend and replay-qualify the Rocket Hideout, Giovanni, and Silph Scope. **Done.**
+13. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
-13. Train a small behavior-cloning baseline per specialist.
-14. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
+14. Train a small behavior-cloning baseline per specialist.
+15. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
    from the frozen perturbation suite for that skill.
-15. Extend the teacher chapter-by-chapter through the remainder of the game.
-16. Produce multiple clean teacher completions with timing and RNG variation.
-17. Train the semantic planner and full-game composition only after that coverage exists.
-18. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
+16. Extend the teacher chapter-by-chapter through the remainder of the game.
+17. Produce multiple clean teacher completions with timing and RNG variation.
+18. Train the semantic planner and full-game composition only after that coverage exists.
+19. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
-The current evaluation gate is three intervention-free clean-power-on runs through Celadon City.
+The current evaluation gate is three intervention-free clean-power-on runs through the Silph Scope.
 A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
 frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.

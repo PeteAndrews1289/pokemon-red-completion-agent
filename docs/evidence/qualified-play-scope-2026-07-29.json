@@ -1,0 +1,79 @@
+{
+  "receipt_schema": "qualified-play-evidence-v10",
+  "schema": "qualified-play-v10",
+  "status": "ok",
+  "attempts": {"failed": 0, "passed": 3, "total": 3},
+  "assistance": {
+    "class": "deterministic_teacher",
+    "human_controller_input": false,
+    "save_state_restore": false,
+    "learned_policy": false
+  },
+  "source": {
+    "git_commit": "26072cf",
+    "worktree_dirty": true
+  },
+  "recorded_on": "2026-07-29",
+  "extends_evidence": "qualified-play-celadon-2026-07-29.json",
+  "configuration": {
+    "pret_pokered_commit": "1e96034092686d006e863cace09e87273051a3d8",
+    "starter": "squirtle",
+    "route_policy": "bounded_semantic_route_with_explicit_spinner_and_elevator_state_machines",
+    "battle_policy": "required_move_id_and_pp_decrement_for_five_exact_trainer_identities",
+    "recovery_policy": "two_adaptive_super_potions_then_full_party_celadon_center_heal"
+  },
+  "checkpoints": {"all_verified": true, "verified": 143},
+  "hideout_chapter": {
+    "trainer_sets": [7, 18, 17, 16, 1],
+    "selected_pp_spent": [4, 5, 5, 3, 5],
+    "optional_trainers_bypassed": 8,
+    "required_events_verified": 7,
+    "entered_hideout_bug_event": false,
+    "known_source_bug": "B1 callback checks EVENT_ENTERED_ROCKET_HIDEOUT instead of setting it",
+    "inventory": {
+      "lift_key_carried": true,
+      "silph_scope_carried": true,
+      "super_potions_used": 2,
+      "super_potions_remaining": 2,
+      "money_remaining": 20112
+    },
+    "party": {
+      "species": [179, 64, 59],
+      "hp": [86, 52, 37],
+      "max_hp": [86, 52, 37],
+      "status": [0, 0, 0]
+    },
+    "frames_executed": 103157,
+    "actions_executed": 1191,
+    "controller_released": true
+  },
+  "objective_progress": {
+    "next": "rescue_fuji",
+    "total": 36,
+    "verified": 16,
+    "verified_ids": [
+      "power_on", "begin_adventure", "choose_starter", "receive_pokedex",
+      "reach_pewter", "defeat_brock", "reach_cerulean", "help_bill",
+      "reach_vermilion", "obtain_cut", "defeat_misty", "defeat_surge",
+      "reach_lavender", "reach_celadon", "clear_rocket_hideout", "obtain_silph_scope"
+    ]
+  },
+  "repeatability": {
+    "identical_action_count": true,
+    "identical_final_state": true,
+    "identical_frame_count": true,
+    "identical_full_report": true,
+    "full_report_sha256": "442dcaf7681532bbacc0c395770a34d4249bb2a04d2a21e80e2c04b8bc74c7e4"
+  },
+  "scope": {
+    "claim": "exact deterministic teacher repeat",
+    "timing_or_rng_generalization": false,
+    "learned_policy_generalization": false,
+    "game_complete": false
+  },
+  "qualified_through": "obtain_silph_scope",
+  "game_complete": false,
+  "frames_executed": 984806,
+  "actions_executed": 14425,
+  "controller_released": true
+}

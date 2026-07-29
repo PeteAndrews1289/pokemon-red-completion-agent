@@ -25,10 +25,9 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **124/124 bounded checkpoints** and **14/36 completion objectives**, ending
-after crossing Route 8 and the west-east Underground Path, reaching Celadon City, and healing the
-complete party. Three clean runs reached the identical
-881,649-frame / 13,234-action boundary.
+Current qualification: **143/143 bounded checkpoints** and **16/36 completion objectives**, ending
+after clearing the Rocket Hideout, obtaining the Silph Scope, and healing the complete party in
+Celadon. Three clean runs reached the identical 984,806-frame / 14,425-action boundary.
 This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
@@ -56,15 +55,17 @@ learned-policy, timing/RNG-generalization, or completion result.
   Center arrival.
 - [x] Qualify the single required Route 8 trainer, bypass all eight optional trainers, cross the
   west-east Underground Path and Route 7, and establish a stable Celadon Center boundary.
+- [x] Qualify the Game Corner switch, spinner mazes, Lift Key and elevator, both boss-door guards,
+  Giovanni, the Silph Scope, field Dig return, and a healed Celadon boundary.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: clear the Rocket Hideout and secure the Silph Scope.
+Next sequence: return to Pokémon Tower and rescue Mr. Fuji.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Celadon three-run evidence receipt](evidence/qualified-play-celadon-2026-07-29.json).
+[Scope three-run evidence receipt](evidence/qualified-play-scope-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs reach Celadon with identical evidence
+Exit gate: three intervention-free clean-power-on runs obtain the Silph Scope with identical evidence
 rules.
 
 ## Milestone 2 — deterministic expert
