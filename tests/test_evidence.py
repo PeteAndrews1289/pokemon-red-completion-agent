@@ -43,6 +43,7 @@ MISTY_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-misty-2026-
 VERMILION_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-vermilion-2026-07-28.json"
 SURGE_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-surge-2026-07-29.json"
 LAVENDER_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-lavender-2026-07-29.json"
+FUJI_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-fuji-2026-07-29.json"
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -891,6 +892,49 @@ def test_lavender_receipt_is_repeatable_and_privacy_safe() -> None:
     assert receipt["repeatability"]["full_report_sha256"] == (
         "2b6ed8dce8d913b89e6d4226ece3f73e0e7919f656476e19acea475b06949b89"
     )
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_fuji_receipt_is_repeatable_and_privacy_safe() -> None:
+    receipt = json.loads(FUJI_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["receipt_schema"] == "qualified-play-evidence-v11"
+    assert receipt["schema"] == "qualified-play-v11"
+    assert receipt["status"] == "ok"
+    assert receipt["attempts"] == {"failed": 0, "passed": 3, "total": 3}
+    assert receipt["checkpoints"] == {"all_verified": True, "verified": 170}
+    tower = receipt["tower_chapter"]
+    assert tower["trainer_sets"] == [5, 10, 14, 19, 21, 20, None, 19, 20, 21]
+    assert tower["selected_pp_spent"] == [11, 4, 2, 5, 2, 2, 1, 4, 5, 4]
+    assert tower["optional_trainers_bypassed"] == 8
+    assert tower["required_events_verified"] == 13
+    assert tower["purified_zone"] == {"event_observed": True, "full_party_heals": 3}
+    assert tower["evolution"] == {
+        "before_species": [179, 64, 59],
+        "after_species": [28, 64, 59],
+        "party_order_preserved": True,
+        "lead_moves_preserved": True,
+    }
+    assert tower["inventory"]["super_potion_inventory_path"] == [2, 1, 0]
+    assert tower["party"] == {
+        "species": [28, 64, 59],
+        "hp": [111, 52, 37],
+        "max_hp": [111, 52, 37],
+        "status": [0, 0, 0],
+    }
+    assert receipt["objective_progress"]["verified"] == 17
+    assert receipt["objective_progress"]["next"] == "reach_fuchsia"
+    assert receipt["repeatability"]["full_report_sha256"] == (
+        "5322994a19cf54a7dc17c109f26af2b4ec34db3e838b403830d6c9e1d18ae045"
+    )
+    assert receipt["qualified_through"] == "rescue_fuji"
+    assert receipt["frames_executed"] == 1_142_003
+    assert receipt["actions_executed"] == 16_797
+    assert receipt["controller_released"] is True
 
     serialized = json.dumps(receipt)
     assert "/Users/" not in serialized
