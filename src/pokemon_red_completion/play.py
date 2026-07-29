@@ -40,6 +40,13 @@ from pokemon_red_completion.cerulean import (
 from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import ExecutedAction, FrameSafeExecutor
+from pokemon_red_completion.hideout import (
+    HIDEOUT_CHECKPOINT_COUNT,
+    HideoutChapterError,
+    HideoutChapterReport,
+    HideoutProgress,
+    run_hideout_chapter,
+)
 from pokemon_red_completion.lavender import (
     LAVENDER_CHECKPOINT_COUNT,
     LavenderChapterError,
@@ -107,8 +114,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + SURGE_CHECKPOINT_COUNT
     + LAVENDER_CHECKPOINT_COUNT
     + CELADON_CHECKPOINT_COUNT
+    + HIDEOUT_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "reach_celadon"
+QUALIFIED_THROUGH_OBJECTIVE = "obtain_silph_scope"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -241,6 +249,7 @@ class QualifiedPlayReport:
     surge: SurgeChapterReport
     lavender: LavenderChapterReport
     celadon: CeladonChapterReport
+    hideout: HideoutChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -270,6 +279,7 @@ class QualifiedPlayReport:
             and self.surge.passed
             and self.lavender.passed
             and self.celadon.passed
+            and self.hideout.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -315,10 +325,11 @@ class QualifiedPlayReport:
             *self.surge.checkpoints(),
             *self.lavender.checkpoints(),
             *self.celadon.checkpoints(),
+            *self.hideout.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v9",
+            "schema": "qualified-play-v10",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -372,6 +383,7 @@ class QualifiedPlayReport:
             "surge_chapter": self.surge.public_dict(),
             "lavender_chapter": self.lavender.public_dict(),
             "celadon_chapter": self.celadon.public_dict(),
+            "hideout_chapter": self.hideout.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -621,6 +633,16 @@ def run_qualified_play(
         except CeladonChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            hideout = run_hideout_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_hideout_progress_bridge(progress),
+            )
+        except HideoutChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -632,11 +654,12 @@ def run_qualified_play(
             | semantic_facts(surge.final_raw)
             | semantic_facts(lavender.final_raw)
             | semantic_facts(celadon.final_raw)
+            | semantic_facts(hideout.final_raw)
         )
         state = GameState(
-            mode=game_mode(celadon.final_raw),
+            mode=game_mode(hideout.final_raw),
             facts=facts,
-            location=location_label(celadon.final_raw.map_id),
+            location=location_label(hideout.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -664,6 +687,7 @@ def run_qualified_play(
             surge=surge,
             lavender=lavender,
             celadon=celadon,
+            hideout=hideout,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -986,6 +1010,37 @@ def _celadon_progress_bridge(
                     + SS_ANNE_CHECKPOINT_COUNT
                     + SURGE_CHECKPOINT_COUNT
                     + LAVENDER_CHECKPOINT_COUNT
+                    + progress.completed
+                ),
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _hideout_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[HideoutProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: HideoutProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=(
+                    POKEDEX_CHECKPOINT_COUNT
+                    + PEWTER_CHECKPOINT_COUNT
+                    + CERULEAN_CHECKPOINT_COUNT
+                    + CASCADE_CHECKPOINT_COUNT
+                    + VERMILION_CHECKPOINT_COUNT
+                    + SS_ANNE_CHECKPOINT_COUNT
+                    + SURGE_CHECKPOINT_COUNT
+                    + LAVENDER_CHECKPOINT_COUNT
+                    + CELADON_CHECKPOINT_COUNT
                     + progress.completed
                 ),
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
