@@ -54,6 +54,9 @@ SILPH_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-silph-2026-
 SABRINA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-sabrina-2026-07-29.json"
 CINNABAR_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-cinnabar-2026-07-29.json"
 BLAINE_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-blaine-2026-07-29.json"
+GIOVANNI_RECEIPT = (
+    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-giovanni-2026-07-29.json"
+)
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -1408,6 +1411,78 @@ def test_blaine_receipt_is_repeatable_complete_and_privacy_safe() -> None:
         "volcano_badge": True,
         "volcano_badge_mirror": True,
     }
+    assert chapter["terminal"]["party_hp"] == chapter["terminal"]["party_max_hp"]
+    assert chapter["terminal"]["lead_pp"] == [15, 15, 10, 15]
+    assert chapter["terminal"]["controller_released"] is True
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_giovanni_receipt_is_repeatable_complete_and_privacy_safe() -> None:
+    receipt = json.loads(GIOVANNI_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "qualified-play-v22-receipt"
+    assert receipt["status"] == "ok"
+    assert receipt["claim_scope"] == {
+        "qualified_through": "defeat_giovanni",
+        "game_complete": False,
+        "learned_policy": False,
+        "timing_or_rng_generalization": False,
+    }
+    assert receipt["evaluation"] == {
+        "clean_power_on": True,
+        "human_input": False,
+        "save_state_restoration": False,
+        "runs": 3,
+        "identical_reports": True,
+        "report_sha256": "5019471510435fdedaba50ba514dd72ed2fe19c73ad0401870f3459e59d735e5",
+        "frames_per_run": 4_033_092,
+        "actions_per_run": 34_178,
+    }
+    assert receipt["progress"] == {
+        "checkpoints_verified": 275,
+        "checkpoints_total": 275,
+        "objectives_verified": 29,
+        "objectives_total": 36,
+        "next_objective": "cross_victory_road",
+    }
+    chapter = receipt["giovanni_chapter"]
+    assert chapter["frames"] == 163_913
+    assert chapter["actions"] == 1_483
+    assert chapter["inventory"] == {
+        "tm46_sold": True,
+        "tm27_quantity": 1,
+        "money_before": 50_579,
+        "money_after": 65_434,
+    }
+    assert chapter["gym"]["trainer_events_before"] == [False] * 8
+    assert chapter["gym"]["trainer_events_before_giovanni"] == [
+        True,
+        True,
+        True,
+        False,
+        True,
+        True,
+        False,
+        True,
+    ]
+    assert chapter["gym"]["trainer_events_after"] == [True] * 8
+    assert [battle["identity"] for battle in chapter["gym"]["required_battles"]] == [
+        [0xE0, 0xE0, 8],
+        [0xE0, 0xE0, 6],
+        [0xE7, 0xE7, 9],
+        [0xDE, 0xDE, 3],
+        [0xE7, 0xE7, 10],
+        [0xE7, 0xE7, 1],
+    ]
+    assert chapter["giovanni"] == {
+        "identity": [0xE5, 0xE5, 3],
+        "party": [[0x12, 45], [0x76, 42], [0x10, 44], [0x07, 45], [0x01, 50]],
+        "move_slots": [4] * 5,
+    }
+    assert all(chapter["rewards"].values())
     assert chapter["terminal"]["party_hp"] == chapter["terminal"]["party_max_hp"]
     assert chapter["terminal"]["lead_pp"] == [15, 15, 10, 15]
     assert chapter["terminal"]["controller_released"] is True

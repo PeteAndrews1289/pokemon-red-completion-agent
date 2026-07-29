@@ -25,10 +25,10 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **267/267 bounded checkpoints** and **28/36 completion objectives**, ending
-after the Secret Key, six trainer-free Cinnabar Gym quizzes, Blaine, TM38, the Volcano Badge, and
-a full Cinnabar heal. Three clean runs reached the identical
-3,869,179-frame / 32,695-action boundary.
+Current qualification: **275/275 bounded checkpoints** and **29/36 completion objectives**, ending
+after six required Viridian Gym battles, Giovanni, TM27, both Earth Badge lanes, both Route 22
+rival events, and a full Viridian heal. Three clean runs reached the identical
+4,033,092-frame / 34,178-action boundary.
 This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
@@ -76,15 +76,19 @@ learned-policy, timing/RNG-generalization, or completion result.
   destination, Route 21 wild-flee recovery, all nine trainer bypasses, and healed Cinnabar arrival.
 - [x] Qualify the one-repel Pokémon Mansion route, all optional-trainer bypasses, Secret Key,
   six correct Gym quizzes, Blaine, TM38, Volcano Badge, and post-battle recovery.
+- [x] Qualify Viridian Fly and inventory preparation, the spinner-floor route, six required Gym
+  trainers, pre-leader recovery, Giovanni's exact party, TM27, Earth Badge, and Route 22 rival
+  activation.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: return to Viridian Gym and defeat Giovanni for the eighth badge.
+Next sequence: defeat the Route 22 rival, pass all eight Route 23 badge gates, and cross Victory
+Road.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Blaine three-run evidence receipt](evidence/qualified-play-blaine-2026-07-29.json).
+[Giovanni three-run evidence receipt](evidence/qualified-play-giovanni-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs reach the healed post-Blaine Cinnabar
+Exit gate: three intervention-free clean-power-on runs reach the healed post-Giovanni Viridian
 Center boundary with identical evidence rules.
 
 ## Milestone 2 — deterministic expert

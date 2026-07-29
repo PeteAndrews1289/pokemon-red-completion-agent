@@ -913,6 +913,34 @@ class _BlaineEvidence:
         return {"status": "ok", "objectives": ["obtain_secret_key", "defeat_blaine"]}
 
 
+class _GiovanniEvidence:
+    passed = True
+    final_raw = replace(
+        _BlaineEvidence.final_raw,
+        map_id=MapId.VIRIDIAN_POKECENTER,
+        badge_bits=0xFF,
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "giovanni_ready",
+            "viridian_arrived",
+            "tm_slot_freed",
+            "viridian_gym_entered",
+            "viridian_trainers_cleared",
+            "giovanni_recovered",
+            "giovanni_defeated",
+            "giovanni_terminal",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objectives": ["defeat_giovanni"]}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -986,16 +1014,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 267
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 275
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=267,
+        completed=275,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 267
+    assert progress.completed == progress.total == 275
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -1101,6 +1129,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         sabrina=_SabrinaEvidence(),  # type: ignore[arg-type]
         cinnabar=_CinnabarEvidence(),  # type: ignore[arg-type]
         blaine=_BlaineEvidence(),  # type: ignore[arg-type]
+        giovanni=_GiovanniEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -1135,6 +1164,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "location:cinnabar_island",
                 "item:secret_key",
                 "badge:volcano",
+                "badge:earth",
             }
         ),
         verified_objectives=(
@@ -1166,8 +1196,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_cinnabar",
             "obtain_secret_key",
             "defeat_blaine",
+            "defeat_giovanni",
         ),
-        next_objective="defeat_giovanni",
+        next_objective="cross_victory_road",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -1177,9 +1208,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v21"
+    assert public["schema"] == "qualified-play-v22"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "defeat_blaine"
+    assert public["qualified_through"] == "defeat_giovanni"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -1450,9 +1481,17 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "blaine_defeated",
         "tm38_received",
         "blaine_terminal",
+        "giovanni_ready",
+        "viridian_arrived",
+        "tm_slot_freed",
+        "viridian_gym_entered",
+        "viridian_trainers_cleared",
+        "giovanni_recovered",
+        "giovanni_defeated",
+        "giovanni_terminal",
     ]
     assert public["objective_progress"] == {
-        "verified": 28,
+        "verified": 29,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1483,8 +1522,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_cinnabar",
             "obtain_secret_key",
             "defeat_blaine",
+            "defeat_giovanni",
         ],
-        "next": "defeat_giovanni",
+        "next": "cross_victory_road",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -1616,7 +1656,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_defeats_blaine_without_adjacent_artifacts() -> None:
+def test_private_rom_defeats_giovanni_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -1658,10 +1698,11 @@ def test_private_rom_defeats_blaine_without_adjacent_artifacts() -> None:
         "reach_cinnabar",
         "obtain_secret_key",
         "defeat_blaine",
+        "defeat_giovanni",
     )
-    assert report.next_objective == "defeat_giovanni"
-    assert report.frames_executed == 3_869_179
-    assert report.actions_executed == 32_695
+    assert report.next_objective == "cross_victory_road"
+    assert report.frames_executed == 4_033_092
+    assert report.actions_executed == 34_178
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -1958,4 +1999,26 @@ def test_private_rom_defeats_blaine_without_adjacent_artifacts() -> None:
     assert report.blaine.volcano_badge_mirror
     assert report.blaine.tm38_quantity == 1
     assert report.blaine.money_remaining == 50_579
+    assert report.giovanni.passed
+    assert report.giovanni.frames_executed == 163_913
+    assert report.giovanni.actions_executed == 1_483
+    assert report.giovanni.identity == (0xE5, 0xE5, 3)
+    assert report.giovanni.trainer_events_before == (False,) * 8
+    assert report.giovanni.trainer_events_before_giovanni == (
+        True,
+        True,
+        True,
+        False,
+        True,
+        True,
+        False,
+        True,
+    )
+    assert report.giovanni.trainer_events_after == (True,) * 8
+    assert report.giovanni.got_tm27
+    assert report.giovanni.beat_giovanni
+    assert report.giovanni.earth_badge
+    assert report.giovanni.earth_badge_mirror
+    assert report.giovanni.tm27_quantity == 1
+    assert report.giovanni.money_remaining == 65_434
     assert before == after
