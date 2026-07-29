@@ -25,10 +25,9 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **247/247 bounded checkpoints** and **24/36 completion objectives**, ending
-after the Card Key route, required Silph trainers, rival, Giovanni, and Master Ball, followed by a
-full heal in Saffron. Three clean runs reached the identical 3,323,717-frame / 29,473-action
-boundary.
+Current qualification: **253/253 bounded checkpoints** and **25/36 completion objectives**, ending
+after a trainer-free Saffron Gym warp route, Sabrina, TM46, the Marsh Badge, and a full Saffron
+heal. Three clean runs reached the identical 3,497,826-frame / 30,048-action boundary.
 This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
@@ -70,15 +69,17 @@ learned-policy, timing/RNG-generalization, or completion result.
   Badge, the Fresh Water guard handoff, and stable Saffron access.
 - [x] Qualify the Silph Card Key route, required trainers, rival and Giovanni battles, Master Ball,
   optional-Lapras bypass, and the permanent TM13 Ice Beam upgrade.
+- [x] Qualify the trainer-free Saffron Gym warp route, Sabrina, TM46, Marsh Badge, and post-battle
+  regular-trainer deactivation.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: defeat Sabrina for the Marsh Badge.
+Next sequence: reach Cinnabar Island.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Silph three-run evidence receipt](evidence/qualified-play-silph-2026-07-29.json).
+[Sabrina three-run evidence receipt](evidence/qualified-play-sabrina-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs reach the healed post-Silph Saffron Center
+Exit gate: three intervention-free clean-power-on runs reach the healed post-Sabrina Saffron Center
 boundary with identical evidence rules.
 
 ## Milestone 2 — deterministic expert

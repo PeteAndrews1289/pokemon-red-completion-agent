@@ -840,6 +840,28 @@ class _SilphEvidence:
         return {"status": "ok", "objective": "liberate_silph"}
 
 
+class _SabrinaEvidence:
+    passed = True
+    final_raw = replace(_SilphEvidence.final_raw, badge_bits=0x3F)
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "sabrina_ready",
+            "leader_reached",
+            "sabrina_defeated",
+            "marsh_badge",
+            "gym_exited",
+            "sabrina_terminal",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "defeat_sabrina"}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -913,16 +935,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 247
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 253
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=247,
+        completed=253,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 247
+    assert progress.completed == progress.total == 253
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -1025,6 +1047,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         erika=_ErikaEvidence(),  # type: ignore[arg-type]
         saffron=_SaffronEvidence(),  # type: ignore[arg-type]
         silph=_SilphEvidence(),  # type: ignore[arg-type]
+        sabrina=_SabrinaEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -1055,6 +1078,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "badge:rainbow",
                 "location:saffron_city",
                 "story:silph_co_liberated",
+                "badge:marsh",
             }
         ),
         verified_objectives=(
@@ -1082,8 +1106,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "defeat_erika",
             "reach_saffron",
             "liberate_silph",
+            "defeat_sabrina",
         ),
-        next_objective="defeat_sabrina",
+        next_objective="reach_cinnabar",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -1093,9 +1118,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v18"
+    assert public["schema"] == "qualified-play-v19"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "liberate_silph"
+    assert public["qualified_through"] == "defeat_sabrina"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -1346,9 +1371,15 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "silph_liberated",
         "master_ball",
         "silph_terminal",
+        "sabrina_ready",
+        "leader_reached",
+        "sabrina_defeated",
+        "marsh_badge",
+        "gym_exited",
+        "sabrina_terminal",
     ]
     assert public["objective_progress"] == {
-        "verified": 24,
+        "verified": 25,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1375,8 +1406,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "defeat_erika",
             "reach_saffron",
             "liberate_silph",
+            "defeat_sabrina",
         ],
-        "next": "defeat_sabrina",
+        "next": "reach_cinnabar",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -1508,7 +1540,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_liberates_silph_without_adjacent_artifacts() -> None:
+def test_private_rom_defeats_sabrina_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -1545,11 +1577,12 @@ def test_private_rom_liberates_silph_without_adjacent_artifacts() -> None:
         "obtain_strength",
         "reach_saffron",
         "liberate_silph",
+        "defeat_sabrina",
         "defeat_koga",
     )
-    assert report.next_objective == "defeat_sabrina"
-    assert report.frames_executed == 3_323_717
-    assert report.actions_executed == 29_473
+    assert report.next_objective == "reach_cinnabar"
+    assert report.frames_executed == 3_497_826
+    assert report.actions_executed == 30_048
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -1794,4 +1827,16 @@ def test_private_rom_liberates_silph_without_adjacent_artifacts() -> None:
     assert all(value for _, value in report.silph.required_events)
     assert report.silph.money_before == 41_345
     assert report.silph.money_after == 40_894
+    assert report.sabrina.passed
+    assert report.sabrina.frames_executed == 174_109
+    assert report.sabrina.actions_executed == 575
+    assert report.sabrina.identity == (0xF0, 0xF0, 1)
+    assert report.sabrina.trainer_events_before == (False,) * 7
+    assert report.sabrina.trainer_events_after == (True,) * 7
+    assert report.sabrina.got_tm46
+    assert report.sabrina.beat_sabrina
+    assert report.sabrina.marsh_badge
+    assert report.sabrina.marsh_badge_mirror
+    assert report.sabrina.tm46_quantity == 1
+    assert report.sabrina.hyper_potions_remaining == 6
     assert before == after
