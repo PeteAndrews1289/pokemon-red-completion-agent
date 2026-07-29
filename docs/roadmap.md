@@ -25,10 +25,10 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **196/196 bounded checkpoints** and **19/36 completion objectives**, ending
-after one Safari admission collects the Gold Teeth and HM03, teaches Surf over Water Gun, clears
-the Safari state through Time's Up, and heals in Fuchsia. Three clean runs reached the identical
-1,630,696-frame / 20,737-action boundary.
+Current qualification: **247/247 bounded checkpoints** and **24/36 completion objectives**, ending
+after the Card Key route, required Silph trainers, rival, Giovanni, and Master Ball, followed by a
+full heal in Saffron. Three clean runs reached the identical 3,323,717-frame / 29,473-action
+boundary.
 This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
@@ -66,15 +66,19 @@ learned-policy, timing/RNG-generalization, or completion result.
 - [x] Qualify one ₽500 Safari admission, the source-pinned Center/East/North/West route and
   elevation trap avoidance, six RUN-only encounters with 30 Balls retained, Gold Teeth and HM03,
   reusable-HM Surf teaching over slot-four Water Gun, and Time's Up cleanup.
+- [x] Qualify the mandatory Fuchsia Gym route, Koga, Soul Badge, HM04 Strength, Erika, Rainbow
+  Badge, the Fresh Water guard handoff, and stable Saffron access.
+- [x] Qualify the Silph Card Key route, required trainers, rival and Giovanni battles, Master Ball,
+  optional-Lapras bypass, and the permanent TM13 Ice Beam upgrade.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: defeat Erika for the Rainbow Badge.
+Next sequence: defeat Sabrina for the Marsh Badge.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Surf three-run evidence receipt](evidence/qualified-play-surf-2026-07-29.json).
+[Silph three-run evidence receipt](evidence/qualified-play-silph-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs reach the healed post-Surf Fuchsia Center
+Exit gate: three intervention-free clean-power-on runs reach the healed post-Silph Saffron Center
 boundary with identical evidence rules.
 
 ## Milestone 2 — deterministic expert
