@@ -1,10 +1,10 @@
 """One clean, bounded run through the latest independently qualified objective.
 
 The route and semantic gates in this module are pinned to pret/pokered commit
-``1e96034092686d006e863cace09e87273051a3d8``. It composes the opening, lab
-rival, Oak's Parcel, Pokédex, Viridian Forest, Brock, Mt. Moon, Bill, and Misty
-chapters in one emulator session. It intentionally stops after the latest
-repeat-qualified boundary; it is not a game-completion or learned-policy claim.
+``1e96034092686d006e863cace09e87273051a3d8``. It composes every qualified
+chapter from clean power-on through the latest stable boundary in one emulator
+session. It intentionally stops there; it is not a game-completion or
+learned-policy claim.
 """
 
 from __future__ import annotations
@@ -40,6 +40,13 @@ from pokemon_red_completion.cerulean import (
 from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import ExecutedAction, FrameSafeExecutor
+from pokemon_red_completion.fuchsia import (
+    FUCHSIA_CHECKPOINT_COUNT,
+    FuchsiaChapterError,
+    FuchsiaChapterReport,
+    FuchsiaProgress,
+    run_fuchsia_chapter,
+)
 from pokemon_red_completion.hideout import (
     HIDEOUT_CHECKPOINT_COUNT,
     HideoutChapterError,
@@ -123,8 +130,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + CELADON_CHECKPOINT_COUNT
     + HIDEOUT_CHECKPOINT_COUNT
     + TOWER_CHECKPOINT_COUNT
+    + FUCHSIA_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "rescue_fuji"
+QUALIFIED_THROUGH_OBJECTIVE = "reach_fuchsia"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -259,6 +267,7 @@ class QualifiedPlayReport:
     celadon: CeladonChapterReport
     hideout: HideoutChapterReport
     tower: TowerChapterReport
+    fuchsia: FuchsiaChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -290,6 +299,7 @@ class QualifiedPlayReport:
             and self.celadon.passed
             and self.hideout.passed
             and self.tower.passed
+            and self.fuchsia.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -337,10 +347,11 @@ class QualifiedPlayReport:
             *self.celadon.checkpoints(),
             *self.hideout.checkpoints(),
             *self.tower.checkpoints(),
+            *self.fuchsia.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v11",
+            "schema": "qualified-play-v12",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -396,6 +407,7 @@ class QualifiedPlayReport:
             "celadon_chapter": self.celadon.public_dict(),
             "hideout_chapter": self.hideout.public_dict(),
             "tower_chapter": self.tower.public_dict(),
+            "fuchsia_chapter": self.fuchsia.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -665,6 +677,16 @@ def run_qualified_play(
         except TowerChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            fuchsia = run_fuchsia_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_fuchsia_progress_bridge(progress),
+            )
+        except FuchsiaChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -678,11 +700,12 @@ def run_qualified_play(
             | semantic_facts(celadon.final_raw)
             | semantic_facts(hideout.final_raw)
             | semantic_facts(tower.final_raw)
+            | semantic_facts(fuchsia.final_raw)
         )
         state = GameState(
-            mode=game_mode(tower.final_raw),
+            mode=game_mode(fuchsia.final_raw),
             facts=facts,
-            location=location_label(tower.final_raw.map_id),
+            location=location_label(fuchsia.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -712,6 +735,7 @@ def run_qualified_play(
             celadon=celadon,
             hideout=hideout,
             tower=tower,
+            fuchsia=fuchsia,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -1097,6 +1121,39 @@ def _tower_progress_bridge(
                     + LAVENDER_CHECKPOINT_COUNT
                     + CELADON_CHECKPOINT_COUNT
                     + HIDEOUT_CHECKPOINT_COUNT
+                    + progress.completed
+                ),
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _fuchsia_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[FuchsiaProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: FuchsiaProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=(
+                    POKEDEX_CHECKPOINT_COUNT
+                    + PEWTER_CHECKPOINT_COUNT
+                    + CERULEAN_CHECKPOINT_COUNT
+                    + CASCADE_CHECKPOINT_COUNT
+                    + VERMILION_CHECKPOINT_COUNT
+                    + SS_ANNE_CHECKPOINT_COUNT
+                    + SURGE_CHECKPOINT_COUNT
+                    + LAVENDER_CHECKPOINT_COUNT
+                    + CELADON_CHECKPOINT_COUNT
+                    + HIDEOUT_CHECKPOINT_COUNT
+                    + TOWER_CHECKPOINT_COUNT
                     + progress.completed
                 ),
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,

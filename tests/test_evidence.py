@@ -44,6 +44,7 @@ VERMILION_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-vermili
 SURGE_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-surge-2026-07-29.json"
 LAVENDER_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-lavender-2026-07-29.json"
 FUJI_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-fuji-2026-07-29.json"
+FUCHSIA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-fuchsia-2026-07-29.json"
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -934,6 +935,54 @@ def test_fuji_receipt_is_repeatable_and_privacy_safe() -> None:
     assert receipt["qualified_through"] == "rescue_fuji"
     assert receipt["frames_executed"] == 1_142_003
     assert receipt["actions_executed"] == 16_797
+    assert receipt["controller_released"] is True
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_fuchsia_receipt_is_repeatable_and_privacy_safe() -> None:
+    receipt = json.loads(FUCHSIA_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["receipt_schema"] == "qualified-play-evidence-v12"
+    assert receipt["schema"] == "qualified-play-v12"
+    assert receipt["status"] == "ok"
+    assert receipt["attempts"] == {"failed": 0, "passed": 3, "total": 3}
+    assert receipt["checkpoints"] == {"all_verified": True, "verified": 184}
+    chapter = receipt["fuchsia_chapter"]
+    assert chapter["trainer_sets"] == [3, None, 2, 1, 12]
+    assert chapter["selected_pp_spent"] == [5, 4, 2, 4, 5]
+    assert chapter["required_events_verified"] == 5
+    assert chapter["optional_events_false"] == 35
+    assert chapter["optional_items_untouched"] == 5
+    assert chapter["wild_flees"] == 4
+    assert chapter["snorlax"] == {
+        "species": 132,
+        "level": 30,
+        "fight_event_before": False,
+        "fight_event_after": False,
+        "beat_event": True,
+        "object_tile_crossed": True,
+        "poke_flute_retained": True,
+    }
+    assert chapter["recovery"]["consumable_items_used"] == 0
+    assert chapter["recovery"]["bag_preserved"] is True
+    assert chapter["party"] == {
+        "species": [28, 64, 59],
+        "hp": [114, 52, 37],
+        "max_hp": [114, 52, 37],
+        "status": [0, 0, 0],
+    }
+    assert receipt["objective_progress"]["verified"] == 18
+    assert receipt["objective_progress"]["next"] == "obtain_surf"
+    assert receipt["repeatability"]["full_report_sha256"] == (
+        "2e6db96e0308777af8b34a8fec4f5d9405636d300e4f5918f55732e0ed40862b"
+    )
+    assert receipt["qualified_through"] == "reach_fuchsia"
+    assert receipt["frames_executed"] == 1_419_928
+    assert receipt["actions_executed"] == 19_073
     assert receipt["controller_released"] is True
 
     serialized = json.dumps(receipt)

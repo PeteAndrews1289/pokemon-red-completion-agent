@@ -136,6 +136,10 @@ class MapId(IntEnum):
     ROUTE_9 = 0x14
     ROUTE_10 = 0x15
     ROUTE_11 = 0x16
+    ROUTE_12 = 0x17
+    ROUTE_13 = 0x18
+    ROUTE_14 = 0x19
+    ROUTE_15 = 0x1A
     ROUTE_24 = 0x23
     ROUTE_25 = 0x24
     REDS_HOUSE_1F = 0x25
@@ -174,6 +178,7 @@ class MapId(IntEnum):
     ROCK_TUNNEL_POKECENTER = 0x51
     ROCK_TUNNEL_1F = 0x52
     LAVENDER_POKECENTER = 0x8D
+    FUCHSIA_POKECENTER = 0x9A
     POKEMON_TOWER_1F = 0x8E
     POKEMON_TOWER_2F = 0x8F
     POKEMON_TOWER_3F = 0x90
@@ -254,6 +259,47 @@ class EventFlag(IntEnum):
     BEAT_ROCK_TUNNEL_1_TRAINER_5 = 0x45E
     RESCUED_MR_FUJI = 0x117
     GOT_POKE_FLUTE = 0x128
+    GOT_TM39 = 0x480
+    BEAT_ROUTE_12_TRAINER_0 = 0x482
+    BEAT_ROUTE_12_TRAINER_1 = 0x483
+    BEAT_ROUTE_12_TRAINER_2 = 0x484
+    BEAT_ROUTE_12_TRAINER_3 = 0x485
+    BEAT_ROUTE_12_TRAINER_4 = 0x486
+    BEAT_ROUTE_12_TRAINER_5 = 0x487
+    BEAT_ROUTE_12_TRAINER_6 = 0x488
+    FIGHT_ROUTE12_SNORLAX = 0x48E
+    BEAT_ROUTE12_SNORLAX = 0x48F
+    BEAT_ROUTE_13_TRAINER_0 = 0x491
+    BEAT_ROUTE_13_TRAINER_1 = 0x492
+    BEAT_ROUTE_13_TRAINER_2 = 0x493
+    BEAT_ROUTE_13_TRAINER_3 = 0x494
+    BEAT_ROUTE_13_TRAINER_4 = 0x495
+    BEAT_ROUTE_13_TRAINER_5 = 0x496
+    BEAT_ROUTE_13_TRAINER_6 = 0x497
+    BEAT_ROUTE_13_TRAINER_7 = 0x498
+    BEAT_ROUTE_13_TRAINER_8 = 0x499
+    BEAT_ROUTE_13_TRAINER_9 = 0x49A
+    BEAT_ROUTE_14_TRAINER_0 = 0x4A1
+    BEAT_ROUTE_14_TRAINER_1 = 0x4A2
+    BEAT_ROUTE_14_TRAINER_2 = 0x4A3
+    BEAT_ROUTE_14_TRAINER_3 = 0x4A4
+    BEAT_ROUTE_14_TRAINER_4 = 0x4A5
+    BEAT_ROUTE_14_TRAINER_5 = 0x4A6
+    BEAT_ROUTE_14_TRAINER_6 = 0x4A7
+    BEAT_ROUTE_14_TRAINER_7 = 0x4A8
+    BEAT_ROUTE_14_TRAINER_8 = 0x4A9
+    BEAT_ROUTE_14_TRAINER_9 = 0x4AA
+    GOT_EXP_ALL = 0x4B0
+    BEAT_ROUTE_15_TRAINER_0 = 0x4B1
+    BEAT_ROUTE_15_TRAINER_1 = 0x4B2
+    BEAT_ROUTE_15_TRAINER_2 = 0x4B3
+    BEAT_ROUTE_15_TRAINER_3 = 0x4B4
+    BEAT_ROUTE_15_TRAINER_4 = 0x4B5
+    BEAT_ROUTE_15_TRAINER_5 = 0x4B6
+    BEAT_ROUTE_15_TRAINER_6 = 0x4B7
+    BEAT_ROUTE_15_TRAINER_7 = 0x4B8
+    BEAT_ROUTE_15_TRAINER_8 = 0x4B9
+    BEAT_ROUTE_15_TRAINER_9 = 0x4BA
     BEAT_POKEMON_TOWER_RIVAL = 0x0EF
     BEAT_POKEMONTOWER_3_TRAINER_0 = 0x0F1
     BEAT_POKEMONTOWER_3_TRAINER_1 = 0x0F2
@@ -358,13 +404,18 @@ class ItemId(IntEnum):
     OAKS_PARCEL = 0x46
     SILPH_SCOPE = 0x48
     POKE_FLUTE = 0x49
+    IRON = 0x25
     RARE_CANDY = 0x28
     X_ACCURACY = 0x2E
     LIFT_KEY = 0x4A
+    EXP_ALL = 0x4B
+    SUPER_ROD = 0x4E
     HM01_CUT = 0xC4
     HM03_SURF = 0xC6
     HM04_STRENGTH = 0xC7
     TM11_BUBBLEBEAM = 0xD3
+    TM16_PAY_DAY = 0xD8
+    TM20_RAGE = 0xDC
     TM24_THUNDERBOLT = 0xE0
     TM28_DIG = 0xE4
     TM34_BIDE = 0xEA
@@ -3875,6 +3926,10 @@ def location_label(map_id: int | None) -> str | None:
         MapId.ROUTE_8: "route_8",
         MapId.ROUTE_9: "route_9",
         MapId.ROUTE_10: "route_10",
+        MapId.ROUTE_12: "route_12",
+        MapId.ROUTE_13: "route_13",
+        MapId.ROUTE_14: "route_14",
+        MapId.ROUTE_15: "route_15",
         MapId.ROUTE_24: "route_24",
         MapId.ROUTE_25: "route_25",
         MapId.REDS_HOUSE_1F: "reds_house_1f",
@@ -3906,6 +3961,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.ROCK_TUNNEL_1F: "rock_tunnel_1f",
         MapId.ROCK_TUNNEL_B1F: "rock_tunnel_b1f",
         MapId.LAVENDER_POKECENTER: "lavender_pokecenter",
+        MapId.FUCHSIA_POKECENTER: "fuchsia_pokecenter",
         MapId.CELADON_POKECENTER: "celadon_pokecenter",
         MapId.GAME_CORNER: "game_corner",
         MapId.ROCKET_HIDEOUT_B1F: "rocket_hideout_b1f",
@@ -3946,6 +4002,7 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         MapId.CELADON_CITY: "location:celadon_city",
         MapId.CELADON_POKECENTER: "location:celadon_city",
         MapId.FUCHSIA_CITY: "location:fuchsia_city",
+        MapId.FUCHSIA_POKECENTER: "location:fuchsia_city",
         MapId.CINNABAR_ISLAND: "location:cinnabar_island",
         MapId.SAFFRON_CITY: "location:saffron_city",
     }
