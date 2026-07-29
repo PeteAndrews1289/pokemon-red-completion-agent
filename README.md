@@ -2,17 +2,18 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Boulder Badge qualified](https://img.shields.io/badge/status-Boulder_Badge_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Cerulean qualified](https://img.shields.io/badge/status-Cerulean_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **21/21 qualified
-> checkpoints** from clean power-on, crosses Viridian Forest, defeats Brock, and verifies the
-> Boulder Badge plus TM34. That establishes **6/36 completion objectives**. Three clean runs
-> produced the same 122,999-frame, 1,573-action result. This is a deterministic-teacher milestone,
-> not a learned-policy or game-completion claim. The next objective is Cerulean City. See the
-> [sanitized three-run evidence receipt](docs/evidence/qualified-play-brock-2026-07-28.json).
+> **Current status:** one continuous deterministic teacher now reaches all **36/36 qualified
+> checkpoints** from clean power-on, defeats Brock and the required Route 3/Mt. Moon trainers,
+> obtains the Helix Fossil, and reaches Cerulean City. That establishes **7/36 completion
+> objectives**. Three clean runs produced the same 252,989-frame, 3,604-action result. This is a
+> deterministic-teacher milestone, not a learned-policy or game-completion claim. The next
+> objective is helping Bill. See the
+> [sanitized three-run evidence receipt](docs/evidence/qualified-play-cerulean-2026-07-28.json).
 
 ## The goal
 
@@ -144,13 +145,13 @@ its red close button. The same semantic gates choose every action, and the emula
 without saving.
 
 `play` is the recommended continuous command. It uses one clean emulator session for the opening,
-the verified rival win, both Route 1 crossings, the parcel handoff, Viridian Forest, and Brock. It
-stops automatically after the latest independently qualified objective and reports that the game
-is not complete. The forest segment deliberately trains against three verified Kakuna encounters
-and one mandatory Bug Catcher. The Brock gate requires a healthy level-9 Squirtle with Bubble and
-sufficient PP before interaction, an observed live Brock battle, and concurrent post-battle proof:
-the event flag, both Boulder Badge indicators, TM34's event and inventory presence, a successful
-post-dialogue movement probe, and a surviving status-free Squirtle.
+the verified rival win, both Route 1 crossings, the parcel handoff, Viridian Forest, Brock, Route
+3, Mt. Moon, and Cerulean City. It stops automatically after the latest independently qualified
+objective and reports that the game is not complete. The forest segment deliberately trains
+against three verified Kakuna encounters and one mandatory Bug Catcher. Later gates require four
+specific Route 3 trainers, the unavoidable Team Rocket member and fossil-guarding Super Nerd,
+exactly one matching fossil event and inventory item, and a stable Cerulean west-entry snapshot.
+The current clean route arrives with a level-17, status-free Wartortle and the Helix Fossil.
 
 The ROM, saves, snapshots, recordings, datasets, and model checkpoints are ignored and must remain
 outside Git. The visible window is not recorded or uploaded by the project. The supported revision

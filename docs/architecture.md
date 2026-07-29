@@ -42,8 +42,8 @@ ports before they can enter this adapter.
 
 ### Qualified continuous teacher
 
-The current bounded teacher uses one emulator session for 21 checkpoints from clean power-on
-through Brock:
+The current bounded teacher uses one emulator session for 36 checkpoints from clean power-on
+through Cerulean City:
 
 1. bedroom input ready;
 2. Red's house first floor;
@@ -64,16 +64,32 @@ through Brock:
 17. Viridian Forest cleared;
 18. Pewter City reached;
 19. Pewter Gym entered with a battle-ready Squirtle;
-20. Brock's live trainer battle identified; and
-21. Brock defeated with the Boulder Badge and TM34 concurrently verified.
+20. Brock's live trainer battle identified;
+21. Brock defeated with the Boulder Badge and TM34 concurrently verified;
+22. Route 3 reached from Pewter;
+23. required Route 3 trainer 0 identified and defeated;
+24. required Route 3 trainer 1 identified and defeated;
+25. required Route 3 trainer 3 identified and defeated;
+26. required Route 3 trainer 6 identified and defeated;
+27. Route 4 reached after all four required events;
+28. Mt. Moon entered;
+29. the connected B1F route reached;
+30. the fossil-side B2F route reached;
+31. the unavoidable Team Rocket battle identified and defeated;
+32. the fossil-guarding Super Nerd battle identified and defeated;
+33. the Helix Fossil event and matching inventory item verified;
+34. the legal B1F exit ladder reached;
+35. stable Route 4 exit from Mt. Moon verified; and
+36. stable Cerulean west entry verified.
 
 The public `opening` command retains its six-checkpoint compatibility contract. The `play` command
-composes all 21 checkpoints without restarting, loading state, or saving. Every action is
+composes all 36 checkpoints without restarting, loading state, or saving. Every action is
 reobserved, dialogue and battle loops have fixed budgets, and unexpected battles, maps,
 coordinates, scripts, events, species, health, inventory, move PP, or controller masks fail
 closed. Route 1 rejects every encounter. Viridian Forest permits only three intentionally seeded
 Kakuna training battles and the mandatory Bug Catcher, each with its own type, party, and bounded
-completion gates.
+completion gates. Route 3 and Mt. Moon permit only the declared mandatory trainer identities;
+unexpected wild battles and trainer substitutions fail closed.
 
 The rival event alone is insufficient because the game also sets it after a loss. The immutable
 victory checkpoint therefore requires a previously observed trainer-battle state, a winning battle
@@ -85,11 +101,16 @@ battle followed by the Brock and TM34 events, TM34 in inventory, both Boulder Ba
 Gym scripts, and a surviving status-free Squirtle. Because the game's reward text can outlive the
 script and control-mask bytes, the teacher then clears a bounded number of text pages and requires
 an actual accepted overworld movement followed by a stable reobservation before qualification.
+The Cerulean chapter additionally requires all four selected Route 3 event transitions in order,
+live opponent/class/trainer identity for the required Rocket and Super Nerd, exactly one fossil
+event with its matching item, stable post-warp control on Route 4, and Cerulean arrival with a
+surviving status-free Wartortle. Misty is deliberately not labeled battle-ready before a strategy
+and resource threshold have been qualified by repeated successful runs.
 
 The corridors and semantic gates are derived from pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8` and independently verified on the supported private ROM.
 The concluded predecessor supplied the separately attributed power-on bootstrap, not this route.
-Completing these **21/21 checkpoints** verifies **6/36 objectives**; it does not verify any learned
+Completing these **36/36 checkpoints** verifies **7/36 objectives**; it does not verify any learned
 policy or the full game.
 
 The teacher remains useful after it reaches the Hall of Fame: it can generate labeled

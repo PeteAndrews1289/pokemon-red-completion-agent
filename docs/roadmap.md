@@ -21,14 +21,15 @@ must not be reported as learned-policy results.
 
 Exit gate: all foundation modules pass ROM-free CI and no document claims gameplay progress.
 
-## Milestone 1 — verified opening chapter
+## Milestone 1 — verified clean-start chapters
 
 **Status: complete — July 2026**
 
-Current qualification: **21/21 bounded checkpoints** and **6/36 completion objectives**, ending
-with Brock defeated, the Boulder Badge and TM34 verified, and controls restored. Three clean runs
-reached the identical 122,999-frame / 1,573-action boundary. This is a deterministic-teacher badge
-milestone, not a learned-policy or completion result.
+Current qualification: **36/36 bounded checkpoints** and **7/36 completion objectives**, ending
+at stable Cerulean City entry after Brock, all four required Route 3 trainers, both required Mt.
+Moon trainer battles, and the Helix Fossil. Three clean runs reached the identical 252,989-frame /
+3,604-action boundary. This is a deterministic-teacher milestone, not a learned-policy or
+completion result.
 
 - [x] Build the no-save PyBoy bridge and read-only state adapter from pinned symbols.
 - [x] Add controller timing and one authoritative action executor.
@@ -37,16 +38,19 @@ milestone, not a learned-policy or completion result.
   checkpoints.
 - [x] Add an optional visible watch mode that leaves human input and saving disabled.
 - [x] Qualify the lab rival, Oak's Parcel delivery, and Pokédex objective in one clean session.
-- [x] Add a continuous `play --watch` command with 11 visible semantic checkpoints and a safe,
+- [x] Add a continuous `play --watch` command with visible semantic checkpoints and a safe,
   explicit bounded stop.
 - [x] Qualify the route to Pewter City and defeat Brock.
+- [x] Qualify Route 3, Mt. Moon's required battles and fossil choice, and Cerulean City.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: Route 3, Mt. Moon, and Cerulean City. The qualified corridors and semantic gates are
-pinned to pret/pokered commit `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Brock three-run evidence receipt](evidence/qualified-play-brock-2026-07-28.json).
+Next sequence: help Bill, obtain the S.S. Ticket, and qualify the Cerulean Gym strategy. The
+qualified corridors and semantic gates are pinned to pret/pokered commit
+`1e96034092686d006e863cace09e87273051a3d8`. See the
+[Cerulean three-run evidence receipt](evidence/qualified-play-cerulean-2026-07-28.json).
 
-Exit gate: three intervention-free clean-power-on runs defeat Brock with identical evidence rules.
+Exit gate: three intervention-free clean-power-on runs reach Cerulean City with identical evidence
+rules.
 
 ## Milestone 2 — deterministic expert
 

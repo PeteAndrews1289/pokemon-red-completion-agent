@@ -1,0 +1,229 @@
+{
+  "receipt_schema": "qualified-play-evidence-v3",
+  "schema": "qualified-play-v3",
+  "status": "ok",
+  "attempts": {
+    "failed": 0,
+    "passed": 3,
+    "total": 3
+  },
+  "assistance": {
+    "class": "deterministic_teacher",
+    "human_controller_input": false,
+    "save_state_restore": false
+  },
+  "source": {
+    "git_commit": "30c58d555a5031cf50775943c21ad31c2239eb1a",
+    "worktree_dirty": false
+  },
+  "python_version": "3.14.3",
+  "recorded_on": "2026-07-28",
+  "configuration": {
+    "cerulean_timing": {
+      "b1f_exit_seed_wait_frames": 2,
+      "battle_wait_frames": 180,
+      "dialogue_wait_frames": 240,
+      "fight_menu_wait_frames": 120,
+      "final_stability_wait_frames": 1,
+      "fossil_dialogue_pulses": 4,
+      "heal_dialogue_pulses": 9,
+      "max_attack_start_pulses": 6,
+      "max_battle_pulses": 180,
+      "max_main_menu_pulses": 12,
+      "max_move_cursor_pulses": 5,
+      "max_trainer_intro_pulses": 12,
+      "move_cursor_wait_frames": 120,
+      "rocket_cleanup_pulses": 2,
+      "selected_move_wait_frames": 180,
+      "super_nerd_preselect_wait_frames": 1,
+      "transition_wait_frames": 120
+    },
+    "controller_timing": {
+      "press_frames": 8,
+      "release_frames": 16,
+      "wait_frames": 1
+    },
+    "emulator": {
+      "human_input": false,
+      "ram_input": "none",
+      "rtc_input": "none",
+      "save_on_exit": false,
+      "sound_emulated": false,
+      "speed": 0,
+      "window": "null"
+    },
+    "intro_timing": {
+      "boot_frames": 1800,
+      "final_wait_frames": 300,
+      "menu_move_wait_frames": 120,
+      "normal_wait_frames": 240
+    },
+    "new_game_names": "built_in_red_blue",
+    "opening_timing": {
+      "dialogue_wait_frames": 240,
+      "max_escort_pulses": 32,
+      "max_starter_cancel_pulses": 12,
+      "max_starter_confirm_pulses": 12,
+      "oak_trigger_wait_frames": 360,
+      "starter_text_wait_frames": 180,
+      "transition_wait_frames": 120
+    },
+    "pewter_timing": {
+      "battle_wait_frames": 180,
+      "brock_setup_pulses": 3,
+      "dialogue_wait_frames": 240,
+      "encounter_wait_frames": 240,
+      "fight_menu_wait_frames": 120,
+      "final_stability_wait_frames": 1,
+      "first_kakuna_seed_wait_frames": 467,
+      "forest_exit_seed_wait_frames": 2,
+      "max_attack_start_pulses": 20,
+      "max_battle_pulses": 120,
+      "max_brock_battle_pulses": 100,
+      "max_brock_reward_pulses": 40,
+      "max_control_release_pulses": 10,
+      "max_trainer_intro_pulses": 12,
+      "move_cursor_wait_frames": 60,
+      "pewter_seed_wait_frames": 1,
+      "route_1_seed_wait_frames": 6,
+      "second_kakuna_seed_wait_frames": 420,
+      "selected_move_wait_frames": 600,
+      "third_kakuna_seed_wait_frames": 2,
+      "transition_wait_frames": 120
+    },
+    "pret_pokered_commit": "1e96034092686d006e863cace09e87273051a3d8",
+    "qualified_play_timing": {
+      "battle_wait_frames": 180,
+      "dialogue_wait_frames": 240,
+      "mart_prompt_wait_frames": 240,
+      "max_parcel_pulses": 5,
+      "max_pokedex_pulses": 42,
+      "max_rival_pulses": 56,
+      "rival_trigger_wait_frames": 360,
+      "route_1_north_seed_wait_frames": 192,
+      "route_1_south_seed_wait_frames": 48,
+      "transition_wait_frames": 120
+    },
+    "route_encounter_policy": "fail_closed_except_three_verified_kakuna_and_required_trainers",
+    "starter": "squirtle"
+  },
+  "configuration_sha256": "391c063329dcad2adf9d0d8a15235601b0a899855f397e56b12d43d60a7b7a4e",
+  "rom": {
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "size_bytes": 1048576,
+    "title": "POKEMON RED"
+  },
+  "checkpoints": {
+    "all_verified": true,
+    "ids": [
+      "bedroom_ready",
+      "downstairs",
+      "outside",
+      "oak_triggered",
+      "selection_ready",
+      "starter_obtained",
+      "rival_defeated",
+      "viridian_reached",
+      "parcel_received",
+      "pallet_returned",
+      "pokedex_received",
+      "lab_exited",
+      "viridian_northbound",
+      "route_2_reached",
+      "forest_gate_reached",
+      "forest_entered",
+      "forest_cleared",
+      "pewter_reached",
+      "pewter_gym_entered",
+      "brock_battle",
+      "brock_defeated",
+      "route_3_reached",
+      "route_3_trainer_0",
+      "route_3_trainer_1",
+      "route_3_trainer_3",
+      "route_3_trainer_6",
+      "route_4_reached",
+      "mt_moon_entered",
+      "mt_moon_b1f",
+      "mt_moon_b2f",
+      "required_rocket",
+      "super_nerd",
+      "helix_fossil",
+      "mt_moon_b1f_ascent",
+      "mt_moon_exited",
+      "cerulean_reached"
+    ],
+    "verified": 36
+  },
+  "northbound": {
+    "brock_battle_observed": true,
+    "ordered_boundaries_total": 9,
+    "ordered_boundaries_verified": 9
+  },
+  "brock": {
+    "boulder_badge_verified": true,
+    "bubble_pp": 23,
+    "overworld_control_verified": true,
+    "squirtle_hp": 27,
+    "squirtle_level": 12,
+    "squirtle_max_hp": 33,
+    "squirtle_status": 0,
+    "tm34_verified": true,
+    "victory_verified": true
+  },
+  "cerulean_chapter": {
+    "route": {
+      "ordered_boundaries_total": 8,
+      "ordered_boundaries_verified": 8,
+      "required_route_3_trainers": [
+        0,
+        1,
+        3,
+        6
+      ]
+    },
+    "mt_moon": {
+      "helix_fossil_verified": true,
+      "required_rocket_battle_observed": true,
+      "super_nerd_battle_observed": true
+    },
+    "cerulean": {
+      "arrival_verified": true,
+      "map_id": 3,
+      "player_x": 0,
+      "player_y": 18,
+      "wartortle_hp": 26,
+      "wartortle_level": 17,
+      "wartortle_max_hp": 49,
+      "wartortle_status": 0
+    },
+    "frames_executed": 129990,
+    "actions_executed": 2031,
+    "controller_released": true
+  },
+  "objective_progress": {
+    "next": "help_bill",
+    "total": 36,
+    "verified": 7,
+    "verified_ids": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter",
+      "receive_pokedex",
+      "reach_pewter",
+      "defeat_brock",
+      "reach_cerulean"
+    ]
+  },
+  "repeatability": {
+    "identical_action_count": true,
+    "identical_final_state": true,
+    "identical_frame_count": true
+  },
+  "qualified_through": "reach_cerulean",
+  "game_complete": false,
+  "frames_executed": 252989,
+  "actions_executed": 3604,
+  "controller_released": true
+}
