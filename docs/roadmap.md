@@ -25,9 +25,10 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **184/184 bounded checkpoints** and **18/36 completion objectives**, ending
-after defeating the Route 12 Snorlax, crossing Routes 12–15, and healing the complete party in
-Fuchsia. Three clean runs reached the identical 1,419,928-frame / 19,073-action boundary.
+Current qualification: **196/196 bounded checkpoints** and **19/36 completion objectives**, ending
+after one Safari admission collects the Gold Teeth and HM03, teaches Surf over Water Gun, clears
+the Safari state through Time's Up, and heals in Fuchsia. Three clean runs reached the identical
+1,630,696-frame / 20,737-action boundary.
 This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
@@ -62,16 +63,19 @@ learned-policy, timing/RNG-generalization, or completion result.
   Wartortle-to-Blastoise evolution.
 - [x] Qualify the level-30 Route 12 Snorlax, four mandatory Route 12/13 trainers, every optional
   Route 12–15 bypass, a resource-neutral Lavender recovery, and stable Fuchsia Center arrival.
+- [x] Qualify one ₽500 Safari admission, the source-pinned Center/East/North/West route and
+  elevation trap avoidance, six RUN-only encounters with 30 Balls retained, Gold Teeth and HM03,
+  reusable-HM Surf teaching over slot-four Water Gun, and Time's Up cleanup.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: enter the Safari Zone and obtain HM03 Surf.
+Next sequence: defeat Erika for the Rainbow Badge.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Fuchsia three-run evidence receipt](evidence/qualified-play-fuchsia-2026-07-29.json).
+[Surf three-run evidence receipt](evidence/qualified-play-surf-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs reach a healed Fuchsia Center boundary
-with identical evidence rules.
+Exit gate: three intervention-free clean-power-on runs reach the healed post-Surf Fuchsia Center
+boundary with identical evidence rules.
 
 ## Milestone 2 — deterministic expert
 

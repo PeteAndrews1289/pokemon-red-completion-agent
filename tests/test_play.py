@@ -669,6 +669,34 @@ class _FuchsiaEvidence:
         return {"status": "ok", "objective": "reach_fuchsia"}
 
 
+class _SafariEvidence:
+    passed = True
+    final_raw = _FuchsiaEvidence.final_raw
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "surf_ready",
+            "gate",
+            "admitted",
+            "east",
+            "north",
+            "west",
+            "teeth_stance",
+            "teeth",
+            "hm03",
+            "surf",
+            "cleanup",
+            "stable",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "obtain_surf"}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -742,16 +770,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 184
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 196
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=184,
+        completed=196,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 184
+    assert progress.completed == progress.total == 196
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -848,6 +876,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         hideout=_HideoutEvidence(),  # type: ignore[arg-type]
         tower=_TowerEvidence(),  # type: ignore[arg-type]
         fuchsia=_FuchsiaEvidence(),  # type: ignore[arg-type]
+        safari=_SafariEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -872,6 +901,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "item:silph_scope",
                 "item:poke_flute",
                 "location:fuchsia_city",
+                "move:surf_available",
             }
         ),
         verified_objectives=(
@@ -893,8 +923,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "obtain_silph_scope",
             "rescue_fuji",
             "reach_fuchsia",
+            "obtain_surf",
         ),
-        next_objective="obtain_surf",
+        next_objective="defeat_erika",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -904,9 +935,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v12"
+    assert public["schema"] == "qualified-play-v13"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "reach_fuchsia"
+    assert public["qualified_through"] == "obtain_surf"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -1094,9 +1125,21 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "healed",
         "optionals",
         "fuchsia_stable",
+        "surf_ready",
+        "gate",
+        "admitted",
+        "east",
+        "north",
+        "west",
+        "teeth_stance",
+        "teeth",
+        "hm03",
+        "surf",
+        "cleanup",
+        "stable",
     ]
     assert public["objective_progress"] == {
-        "verified": 18,
+        "verified": 19,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1117,8 +1160,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "obtain_silph_scope",
             "rescue_fuji",
             "reach_fuchsia",
+            "obtain_surf",
         ],
-        "next": "obtain_surf",
+        "next": "defeat_erika",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -1282,10 +1326,11 @@ def test_private_rom_reaches_fuchsia_without_adjacent_artifacts() -> None:
         "obtain_silph_scope",
         "rescue_fuji",
         "reach_fuchsia",
+        "obtain_surf",
     )
-    assert report.next_objective == "obtain_surf"
-    assert report.frames_executed == 1_419_928
-    assert report.actions_executed == 19_073
+    assert report.next_objective == "defeat_erika"
+    assert report.frames_executed == 1_630_696
+    assert report.actions_executed == 20_737
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -1448,4 +1493,17 @@ def test_private_rom_reaches_fuchsia_without_adjacent_artifacts() -> None:
     assert report.fuchsia.party_hp == report.fuchsia.party_max_hp == (114, 52, 37)
     assert report.fuchsia.party_status == (0, 0, 0)
     assert report.fuchsia.money_remaining == 30_137
+    assert report.safari.passed
+    assert report.safari.frames_executed == 210_768
+    assert report.safari.actions_executed == 1_664
+    assert report.safari.counter_milestones == (500, 472, 376, 238, 228, 201, 0)
+    assert report.safari.balls_milestones == (30,) * 7
+    assert report.safari.encounters_fled == 6
+    assert report.safari.gold_teeth
+    assert report.safari.got_hm03
+    assert report.safari.hm03_retained
+    assert report.safari.moves_after == (0x2C, 0x27, 0x3D, 0x39)
+    assert report.safari.pp_after == (25, 30, 20, 15)
+    assert report.safari.safari_steps == report.safari.safari_balls == 0
+    assert report.safari.in_safari_zone is False
     assert before == after

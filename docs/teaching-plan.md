@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **184/184 qualified checkpoints** through
-Fuchsia City and therefore **18/36 completion objectives**. Three clean runs were identical at the
-1,419,928-frame / 19,073-action boundary. The evidence includes the earlier Brock
+The deterministic teacher currently verifies all **196/196 qualified checkpoints** through
+HM03 Surf and therefore **19/36 completion objectives**. Three clean runs were identical at the
+1,630,696-frame / 20,737-action boundary. The evidence includes the earlier Brock
 and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
@@ -83,8 +83,11 @@ Wartortle-to-Blastoise evolution. The boundary has a full-health, status-free Bl
 as party lead. The Fuchsia segment adds the exact Route 12 Snorlax wake/defeat/object transition,
 four mandatory Route 12/13 trainer identities, 35 optional-event and five optional-item bypasses,
 four bounded wild flees, and a disclosed resource-neutral Lavender recovery before the healed
-Fuchsia boundary. No behavioral-cloning, DAgger, timing/RNG generalization, or full-game result is
-implied. The next teaching segment enters the Safari Zone and obtains HM03 Surf.
+Fuchsia boundary. The Safari segment adds the exact one-admission fee and counters, the correct
+North-to-West elevation transition, six RUN-only encounters without catches or Ball use, Gold
+Teeth and reusable HM03 rewards, slot-four Water Gun replacement with Surf, and source-authorized
+Time's Up cleanup before another healed Fuchsia boundary. No behavioral-cloning, DAgger,
+timing/RNG generalization, or full-game result is implied. The next teaching segment defeats Erika.
 
 The same segment can run headlessly or be observed locally with:
 
