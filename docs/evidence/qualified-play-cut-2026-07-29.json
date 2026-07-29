@@ -1,0 +1,145 @@
+{
+  "receipt_schema": "qualified-play-evidence-v6",
+  "schema": "qualified-play-v6",
+  "status": "ok",
+  "attempts": {
+    "failed": 0,
+    "passed": 3,
+    "total": 3
+  },
+  "assistance": {
+    "class": "deterministic_teacher",
+    "human_controller_input": false,
+    "save_state_restore": false,
+    "learned_policy": false
+  },
+  "source": {
+    "git_commit": "37f84479d02981cc5b7b78ad3c764f26ed850572",
+    "worktree_dirty": true
+  },
+  "python_version": "3.14.3",
+  "recorded_on": "2026-07-29",
+  "extends_evidence": "qualified-play-vermilion-2026-07-28.json",
+  "configuration": {
+    "pret_pokered_commit": "1e96034092686d006e863cace09e87273051a3d8",
+    "starter": "squirtle",
+    "battle_policy": "adaptive_menu_observation_with_fixed_bite_slot_for_ss_anne_rival",
+    "captain_protocol": "face_interact_rub_gate_cancel_reface_interact_hm01_gate",
+    "controller_timing": {
+      "press_frames": 8,
+      "release_frames": 16,
+      "wait_frames": 1
+    },
+    "emulator": {
+      "human_input": false,
+      "ram_input": "none",
+      "rtc_input": "none",
+      "save_on_exit": false,
+      "sound_emulated": false,
+      "speed": 0,
+      "window": "null"
+    },
+    "ss_anne_timing": {
+      "transition_wait_frames": 120,
+      "dialogue_wait_frames": 240,
+      "rival_intro_wait_frames": 180,
+      "ticket_dialogue_pulses": 5,
+      "heal_dialogue_pulses": 9,
+      "rival_intro_pulses": 12,
+      "captain_rub_pulses": 6,
+      "captain_hm_pulses": 8,
+      "movement_retries": 10,
+      "movement_retry_wait_frames": 12,
+      "battle_max_runtime_pulses": 720
+    }
+  },
+  "rom": {
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "size_bytes": 1048576,
+    "title": "POKEMON RED"
+  },
+  "checkpoints": {
+    "all_verified": true,
+    "verified": 82,
+    "ss_anne_ids": [
+      "vermilion_ready",
+      "healed",
+      "dock_reached",
+      "ship_1f_reached",
+      "ship_2f_reached",
+      "rival_battle",
+      "rival_defeated",
+      "captain_room_reached",
+      "hm01_obtained"
+    ]
+  },
+  "ss_anne_chapter": {
+    "rival": {
+      "battle_observed": true,
+      "map_id": 96,
+      "x": 36,
+      "y": 8,
+      "local_script_during_battle": 2,
+      "current_opponent": 242,
+      "trainer_class": 42,
+      "trainer_number": 2,
+      "final_local_script": 4
+    },
+    "captain": {
+      "map_id": 101,
+      "x": 4,
+      "y": 3,
+      "rubbed_captains_back": true,
+      "got_hm01_event": true,
+      "hm01_in_bag": true,
+      "cut_semantic_fact": true
+    },
+    "final": {
+      "wartortle_level": 26,
+      "wartortle_hp": 12,
+      "wartortle_max_hp": 71,
+      "wartortle_status": 0,
+      "wartortle_pp": [14, 30, 30, 25]
+    },
+    "frames_executed": 29005,
+    "actions_executed": 410,
+    "controller_released": true
+  },
+  "objective_progress": {
+    "next": "defeat_surge",
+    "total": 36,
+    "verified": 11,
+    "verified_ids": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter",
+      "receive_pokedex",
+      "reach_pewter",
+      "defeat_brock",
+      "reach_cerulean",
+      "help_bill",
+      "reach_vermilion",
+      "obtain_cut",
+      "defeat_misty"
+    ]
+  },
+  "repeatability": {
+    "identical_action_count": true,
+    "identical_final_state": true,
+    "identical_frame_count": true,
+    "identical_semantic_digest": true,
+    "semantic_digest_sha256": "9d82bd9e9936c3d1f17d7cd288c8eca8e17270b7122e18bc5fbfa09bf5ddb195"
+  },
+  "scope": {
+    "claim": "exact deterministic teacher repeat",
+    "timing_or_rng_generalization": false,
+    "learned_policy_generalization": false,
+    "game_complete": false
+  },
+  "qualified_through": "obtain_cut",
+  "game_complete": false,
+  "frames_executed": 530927,
+  "actions_executed": 7652,
+  "controller_released": true
+}

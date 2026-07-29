@@ -42,8 +42,8 @@ ports before they can enter this adapter.
 
 ### Qualified continuous teacher
 
-The current bounded teacher uses one emulator session for 73 checkpoints from clean power-on
-through Vermilion:
+The current bounded teacher uses one emulator session for 82 checkpoints from clean power-on
+through HM01 Cut:
 
 1. bedroom input ready;
 2. Red's house first floor;
@@ -117,10 +117,19 @@ through Vermilion:
 70. the Jr. Trainer F defeated;
 71. the required lower Route 6 Jr. Trainer M battle identified;
 72. the Jr. Trainer M defeated; and
-73. stable Vermilion City arrival verified.
+73. stable Vermilion City arrival verified;
+74. the inherited Vermilion boundary reverified;
+75. Vermilion Center healing verified;
+76. the ticket guard passed and dock reached;
+77. the S.S. Anne boarded;
+78. the safe second-floor corridor reached;
+79. the required RIVAL2 battle identified;
+80. the rival defeated;
+81. the Captain's room reached; and
+82. the Captain rubbed and HM01 verified by event, inventory, and semantic fact.
 
 The public `opening` command retains its six-checkpoint compatibility contract. The `play` command
-composes all 73 checkpoints without restarting, loading state, or saving. Every action is
+composes all 82 checkpoints without restarting, loading state, or saving. Every action is
 reobserved, dialogue and battle loops have fixed budgets, and unexpected battles, maps,
 coordinates, scripts, events, species, health, inventory, move PP, or controller masks fail
 closed. Route 1 rejects every encounter. Viridian Forest permits only three intentionally seeded
@@ -152,12 +161,16 @@ Route 5 and Underground Path transition, the two lower Route 6 trainer identitie
 and stable Vermilion coordinates. A bounded heal-and-replay recovery records three exact wild
 Pidgey encounters, navigates to RUN from semantic menu state, and proves battle exit, restored
 control, a living status-free lead, unchanged full PP, and unchanged trainer events after each.
+The S.S. Anne chapter additionally requires the live RIVAL2 opponent/class/party identity, script
+transition from battle state 2 to defeated state 4, and a two-stage Captain protocol. The rub-only
+state is explicitly rejected: qualification requires the rub event, HM01 event, HM01 bag item,
+and derived Cut fact concurrently.
 
 The corridors and semantic gates are derived from pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8` and independently verified on the supported private ROM.
 The concluded predecessor supplied the separately attributed power-on bootstrap, not this route.
-Completing these **73/73 checkpoints** verifies **10/36 objectives**. Three exact clean-power-on
-runs were identical at 501,922 frames and 7,242 actions. This verifies deterministic-teacher
+Completing these **82/82 checkpoints** verifies **11/36 objectives**. Three exact clean-power-on
+runs were identical at 530,927 frames and 7,652 actions. This verifies deterministic-teacher
 repeatability for that route; it does not verify a learned policy, held-out timing/RNG
 generalization, or the full game.
 

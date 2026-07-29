@@ -42,9 +42,10 @@ The bootstrap sequence was adapted from
 `0e2df37720eec7d148187eb1001bf2d9502aa4f6`. Private blind-run checkpoints and screenshots are not
 completion demonstrations and are not loaded by this project.
 
-The qualified bedroom-to-Vermilion route is new successor work. Its map dimensions,
+The qualified bedroom-to-HM01 route is new successor work. Its map dimensions,
 collision-safe corridors, warps, Pallet Town, Route 1, Viridian Forest, Pewter Gym, Route 3, Mt.
-Moon, Nugget Bridge, Route 25, Bill, Cerulean Gym, Route 5, the Underground Path, Route 6, and
+Moon, Nugget Bridge, Route 25, Bill, Cerulean Gym, Route 5, the Underground Path, Route 6, the
+Vermilion harbor, and S.S. Anne, and
 story, party, battle, badge, fossil, and inventory gates are derived from
 [`pret/pokered`](https://github.com/pret/pokered) commit
 `1e96034092686d006e863cace09e87273051a3d8`, then independently exercised against the exact
@@ -53,15 +54,17 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **73/73 qualified checkpoints** through
-Vermilion and therefore **10/36 completion objectives**. Three clean runs were identical at the
-501,922-frame / 7,242-action boundary. The evidence includes the earlier Brock and Mt. Moon gates,
+The deterministic teacher currently verifies all **82/82 qualified checkpoints** through
+HM01 Cut and therefore **11/36 completion objectives**. Three clean runs were identical at the
+530,927-frame / 7,652-action boundary. The evidence includes the earlier Brock and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
 Badge and TM11 proof, plus the Rocket thief, TM28, Underground Path, exact Route 6 trainer events,
-and three explicitly verified wild-flee recoveries. The boundary has a surviving status-free
-level-25 Wartortle. No behavioral-cloning, DAgger, robustness, timing/RNG generalization, or
-full-game result is implied. The next teaching segment begins the S.S. Anne route and obtains Cut.
+three explicitly verified wild-flee recoveries, the live S.S. Anne rival, and concurrent raw
+Captain-rub event, HM01 event, inventory, and derived Cut-fact gates. The boundary has a surviving
+status-free level-26
+Wartortle. No behavioral-cloning, DAgger, robustness, timing/RNG generalization, or full-game
+result is implied. The next teaching segment teaches Cut and challenges Lt. Surge.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -161,16 +164,17 @@ restore, rewind, or import state from another run.
 5. Extend and replay-qualify the route through Pewter City and Brock. **Done.**
 6. Extend and replay-qualify Route 3, Mt. Moon, the Helix Fossil, and Cerulean City. **Done.**
 7. Extend and replay-qualify Misty through stable Vermilion City. **Done.**
-8. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
+8. Extend and replay-qualify the S.S. Anne rival and HM01 Cut. **Done.**
+9. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
-9. Train a small behavior-cloning baseline per specialist.
-10. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
+10. Train a small behavior-cloning baseline per specialist.
+11. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
    from the frozen perturbation suite for that skill.
-11. Extend the teacher chapter-by-chapter through the remainder of the game.
-12. Produce multiple clean teacher completions with timing and RNG variation.
-13. Train the semantic planner and full-game composition only after that coverage exists.
-14. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
+12. Extend the teacher chapter-by-chapter through the remainder of the game.
+13. Produce multiple clean teacher completions with timing and RNG variation.
+14. Train the semantic planner and full-game composition only after that coverage exists.
+15. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
-The current evaluation gate is three intervention-free clean-power-on runs through Vermilion
-City. A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
+The current evaluation gate is three intervention-free clean-power-on runs through HM01 Cut.
+A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
 frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.
