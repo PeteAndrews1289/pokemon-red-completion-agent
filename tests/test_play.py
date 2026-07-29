@@ -10,6 +10,7 @@ import pytest
 
 from pokemon_red_completion.observation import (
     SQUIRTLE_SPECIES_ID,
+    Badge,
     MapId,
     OaksErrandPhase,
     OaksErrandState,
@@ -429,6 +430,51 @@ class _SSAnneEvidence:
         }
 
 
+class _SurgeEvidence:
+    passed = True
+    final_raw = replace(
+        _raw(MapId.VERMILION_GYM, 5, 2),
+        badge_bits=int(Badge.BOULDER | Badge.CASCADE | Badge.THUNDER),
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "hm01_ready",
+            "healed",
+            "balls_purchased",
+            "spearow_encounter",
+            "spearow_captured",
+            "diglett_captured",
+            "dux_traded",
+            "cut_taught",
+            "diglett_dig_ready",
+            "gym_reached",
+            "first_switch",
+            "second_switch",
+            "surge_battle",
+            "surge_defeated",
+            "surge_reward_stable",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok",
+            "objective": "defeat_surge",
+            "battle": {"dig_attacks": 3, "wrong_move_count": 0},
+            "reward": {
+                "beat_lt_surge": True,
+                "got_tm24": True,
+                "tm24_in_bag": True,
+                "thunder_badge": True,
+                "thunder_badge_mirror": True,
+            },
+        }
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -502,16 +548,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 82
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 97
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=82,
+        completed=97,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 82
+    assert progress.completed == progress.total == 97
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -602,6 +648,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         cascade=_CascadeEvidence(),  # type: ignore[arg-type]
         vermilion=_VermilionEvidence(),  # type: ignore[arg-type]
         ss_anne=_SSAnneEvidence(),  # type: ignore[arg-type]
+        surge=_SurgeEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -619,6 +666,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "badge:cascade",
                 "location:vermilion_city",
                 "move:cut_available",
+                "badge:thunder",
             }
         ),
         verified_objectives=(
@@ -633,8 +681,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "defeat_misty",
             "reach_vermilion",
             "obtain_cut",
+            "defeat_surge",
         ),
-        next_objective="defeat_lt_surge",
+        next_objective="reach_lavender",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -644,9 +693,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v6"
+    assert public["schema"] == "qualified-play-v7"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "obtain_cut"
+    assert public["qualified_through"] == "defeat_surge"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -732,9 +781,24 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "rival_defeated",
         "captain_room_reached",
         "hm01_obtained",
+        "hm01_ready",
+        "healed",
+        "balls_purchased",
+        "spearow_encounter",
+        "spearow_captured",
+        "diglett_captured",
+        "dux_traded",
+        "cut_taught",
+        "diglett_dig_ready",
+        "gym_reached",
+        "first_switch",
+        "second_switch",
+        "surge_battle",
+        "surge_defeated",
+        "surge_reward_stable",
     ]
     assert public["objective_progress"] == {
-        "verified": 11,
+        "verified": 12,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -748,8 +812,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "defeat_misty",
             "reach_vermilion",
             "obtain_cut",
+            "defeat_surge",
         ],
-        "next": "defeat_lt_surge",
+        "next": "reach_lavender",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -881,7 +946,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_reaches_verified_hm01_without_adjacent_artifacts() -> None:
+def test_private_rom_reaches_verified_surge_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -906,10 +971,11 @@ def test_private_rom_reaches_verified_hm01_without_adjacent_artifacts() -> None:
         "reach_vermilion",
         "obtain_cut",
         "defeat_misty",
+        "defeat_surge",
     )
-    assert report.next_objective == "defeat_surge"
-    assert report.frames_executed == 530_927
-    assert report.actions_executed == 7_652
+    assert report.next_objective == "reach_lavender"
+    assert report.frames_executed == 635_637
+    assert report.actions_executed == 9_311
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -956,4 +1022,14 @@ def test_private_rom_reaches_verified_hm01_without_adjacent_artifacts() -> None:
         report.ss_anne.final_raw.first_party_status,
         report.ss_anne.final_raw.first_party_pp,
     ) == (MapId.SS_ANNE_CAPTAINS_ROOM, 4, 3, 26, 12, 71, 0, (14, 30, 30, 25))
+    assert report.surge.passed
+    assert report.surge.frames_executed == 104_710
+    assert report.surge.actions_executed == 1_659
+    assert report.surge.dig_attacks == 5
+    assert report.surge.wrong_move_count == 0
+    assert report.surge.super_potion_used is False
+    assert report.surge.final_raw.party_species_ids == (0xB3, 0x40, 0x3B)
+    assert report.surge.final_raw.first_party_hp == 71
+    assert report.surge.final_raw.first_party_max_hp == 71
+    assert report.surge.final_raw.first_party_status == 0
     assert before == after

@@ -90,6 +90,7 @@ def run_adaptive_trainer_battle(
     move_slot_policy: MoveSlotPolicy,
     *,
     expected_map: int,
+    required_move_id: int | None = None,
     timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
     label: str = "trainer battle",
 ) -> RawGameState:
@@ -111,6 +112,12 @@ def run_adaptive_trainer_battle(
         raise ValueError("expected_map must be an unsigned one-byte map id")
     if not isinstance(label, str) or not label:
         raise ValueError("label must be a non-empty string")
+    if required_move_id is not None and (
+        not isinstance(required_move_id, int)
+        or isinstance(required_move_id, bool)
+        or not 1 <= required_move_id <= 0xFF
+    ):
+        raise ValueError("required_move_id must be a non-zero one-byte move id")
 
     initial = reader.read()
     _require_present_state(initial, expected_map=expected_map, label=label)
@@ -195,6 +202,7 @@ def run_adaptive_trainer_battle(
             initial_menu=menu,
             slot=slot,
             initial_pp=initial_pp,
+            required_move_id=required_move_id,
             timing=timing,
             label=label,
         )
@@ -213,6 +221,7 @@ def _execute_policy_turn(
     initial_menu: BattleMenuState,
     slot: int,
     initial_pp: int,
+    required_move_id: int | None,
     timing: BattleRuntimeTiming,
     label: str,
 ) -> None:
@@ -314,6 +323,14 @@ def _execute_policy_turn(
         raise BattleRuntimeError(
             f"{label} could not select move slot {slot} inside its bound."
         )
+    if required_move_id is not None:
+        moves = raw.first_party_moves
+        if moves is None or len(moves) < slot or moves[slot - 1] != required_move_id:
+            observed = None if moves is None or len(moves) < slot else moves[slot - 1]
+            raise BattleRuntimeError(
+                f"{label} selected move id {observed!r}, "
+                f"expected {required_move_id:#04x} in slot {slot}."
+            )
     _confirm_attack_with_pp_gate(
         reader,
         executor,

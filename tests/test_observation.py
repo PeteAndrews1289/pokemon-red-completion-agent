@@ -34,6 +34,10 @@ from pokemon_red_completion.observation import (
     RawGameState,
     SemanticStateError,
     SemanticStateTracker,
+    SurgePhase,
+    SurgeProgressError,
+    SurgeProgressTracker,
+    SurgeState,
     TravelBoundary,
     event_flag_is_set,
 )
@@ -1086,3 +1090,31 @@ def test_pewter_progress_tracker_rejects_victory_without_live_battle() -> None:
 
     with pytest.raises(PewterProgressError, match="observed live battle"):
         tracker.observe(_brock_victory_state())
+
+
+def _surge_state(phase: SurgePhase, *, valid: bool = True) -> SurgeState:
+    return SurgeState(phase=phase, **{phase.value: valid})
+
+
+def test_surge_progress_tracker_requires_all_fourteen_gates() -> None:
+    tracker = SurgeProgressTracker()
+
+    for phase in SurgePhase:
+        assert tracker.observe(_surge_state(phase)) is phase
+
+    assert tracker.saw_live_battle
+
+
+def test_surge_progress_tracker_rejects_a_skipped_gate() -> None:
+    tracker = SurgeProgressTracker()
+    tracker.observe(_surge_state(SurgePhase.HM01_READY))
+
+    with pytest.raises(SurgeProgressError, match="skipped"):
+        tracker.observe(_surge_state(SurgePhase.BALLS_PURCHASED))
+
+
+def test_surge_progress_tracker_rejects_false_snapshot() -> None:
+    with pytest.raises(SurgeProgressError, match="failed"):
+        SurgeProgressTracker().observe(
+            _surge_state(SurgePhase.HM01_READY, valid=False)
+        )

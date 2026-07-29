@@ -27,6 +27,7 @@ class RamAddress(IntEnum):
     TOP_MENU_ITEM_Y = 0xCC24
     TOP_MENU_ITEM_X = 0xCC25
     CURRENT_MENU_ITEM = 0xCC26
+    LIST_SCROLL_OFFSET = 0xCC36
     MENU_WATCHED_KEYS = 0xCC29
     MENU_CURSOR_LOCATION = 0xCC30
     NPC_MOVEMENT_SCRIPT_TABLE = 0xCC57
@@ -38,6 +39,7 @@ class RamAddress(IntEnum):
     SIMULATED_JOYPAD_INDEX = 0xCD38
     JOY_IGNORE = 0xCD6B
     BATTLE_RESULT = 0xCF0B
+    TILE_IN_FRONT_OF_PLAYER = 0xCFC6
     ENEMY_SPECIES = 0xCFE5
     ENEMY_HP = 0xCFE6
     ENEMY_LEVEL = 0xCFF3
@@ -55,6 +57,13 @@ class RamAddress(IntEnum):
     PARTY_MON_1_PP = 0xD188
     PARTY_MON_1_LEVEL = 0xD18C
     PARTY_MON_1_MAX_HP = 0xD18D
+    PARTY_MON_2_MOVES = 0xD19F
+    PARTY_MON_2_PP = 0xD1B4
+    PARTY_MON_2_NICKNAME = 0xD2C0
+    PARTY_MON_3_MOVES = 0xD1CB
+    PARTY_MON_3_PP = 0xD1E0
+    PARTY_MON_3_LEVEL = 0xD1E4
+    PARTY_MON_3_NICKNAME = 0xD2CB
     NUM_BAG_ITEMS = 0xD31D
     BAG_ITEMS = 0xD31E
     OBTAINED_BADGES = 0xD356
@@ -86,6 +95,9 @@ class RamAddress(IntEnum):
     STATUS_FLAGS_5 = 0xD730
     STATUS_FLAGS_6 = 0xD732
     MOVEMENT_FLAGS = 0xD736
+    NPC_TRADE_FLAGS = 0xD737
+    VERMILION_GYM_FIRST_LOCK = 0xD743
+    VERMILION_GYM_SECOND_LOCK = 0xD744
     EVENT_FLAGS = 0xD747
     CURRENT_MAP_SCRIPT = 0xDA39
 
@@ -108,6 +120,7 @@ class MapId(IntEnum):
     ROUTE_4 = 0x0F
     ROUTE_5 = 0x10
     ROUTE_6 = 0x11
+    ROUTE_11 = 0x16
     ROUTE_24 = 0x23
     ROUTE_25 = 0x24
     REDS_HOUSE_1F = 0x25
@@ -130,8 +143,11 @@ class MapId(IntEnum):
     MT_MOON_POKECENTER = 0x44
     UNDERGROUND_PATH_ROUTE_5 = 0x47
     UNDERGROUND_PATH_ROUTE_6 = 0x4A
+    DIGLETTS_CAVE_ROUTE_11 = 0x55
     BILLS_HOUSE = 0x58
     VERMILION_POKECENTER = 0x59
+    VERMILION_MART = 0x5B
+    VERMILION_GYM = 0x5C
     VERMILION_DOCK = 0x5E
     SS_ANNE_1F = 0x5F
     SS_ANNE_2F = 0x60
@@ -140,6 +156,8 @@ class MapId(IntEnum):
     HALL_OF_FAME = 0x76
     CHAMPIONS_ROOM = 0x78
     INDIGO_PLATEAU_LOBBY = 0xAE
+    VERMILION_TRADE_HOUSE = 0xC4
+    DIGLETTS_CAVE = 0xC5
 
 
 class EventFlag(IntEnum):
@@ -169,6 +187,7 @@ class EventFlag(IntEnum):
     BEAT_ROUTE_6_TRAINER_5 = 0x416
     RESCUED_MR_FUJI = 0x117
     GOT_POKE_FLUTE = 0x128
+    GOT_TM24 = 0x166
     BEAT_LT_SURGE = 0x167
     BEAT_ERIKA = 0x1A9
     GOT_HM04 = 0x238
@@ -235,6 +254,8 @@ class EventFlag(IntEnum):
 
 
 class ItemId(IntEnum):
+    POKE_BALL = 0x04
+    SUPER_POTION = 0x13
     DOME_FOSSIL = 0x29
     HELIX_FOSSIL = 0x2A
     SECRET_KEY = 0x2B
@@ -247,6 +268,7 @@ class ItemId(IntEnum):
     HM03_SURF = 0xC6
     HM04_STRENGTH = 0xC7
     TM11_BUBBLEBEAM = 0xD3
+    TM24_THUNDERBOLT = 0xE0
     TM28_DIG = 0xE4
     TM34_BIDE = 0xEA
 
@@ -875,10 +897,7 @@ class PewterProgressTracker:
             return NorthboundPhase.BROCK_DEFEATED
 
         if state.brock_battle_snapshot:
-            if (
-                self._boundary_index != len(self._BOUNDARIES) - 1
-                or not self._saw_brock_ready
-            ):
+            if self._boundary_index != len(self._BOUNDARIES) - 1 or not self._saw_brock_ready:
                 raise PewterProgressError(
                     "Brock battle appeared before the battle-ready gym-entry proof."
                 )
@@ -891,22 +910,14 @@ class PewterProgressTracker:
             raise PewterProgressError("Travel boundary failed its stable semantic snapshot.")
 
         expected_index = self._boundary_index + 1
-        if (
-            self._boundary_index >= 0
-            and state.boundary is self._BOUNDARIES[self._boundary_index]
-        ):
+        if self._boundary_index >= 0 and state.boundary is self._BOUNDARIES[self._boundary_index]:
             return state.phase
         if expected_index >= len(self._BOUNDARIES):
             raise PewterProgressError("Unexpected travel boundary after Pewter Gym entry.")
         if state.boundary is not self._BOUNDARIES[expected_index]:
             raise PewterProgressError("Northbound evidence skipped a required travel boundary.")
-        if (
-            state.boundary is TravelBoundary.PEWTER_GYM_ENTRANCE
-            and not state.brock_ready_snapshot
-        ):
-            raise PewterProgressError(
-                "Pewter Gym entry failed the healthy Bubble-readiness gate."
-            )
+        if state.boundary is TravelBoundary.PEWTER_GYM_ENTRANCE and not state.brock_ready_snapshot:
+            raise PewterProgressError("Pewter Gym entry failed the healthy Bubble-readiness gate.")
         self._boundary_index = expected_index
         if state.boundary is TravelBoundary.PEWTER_GYM_ENTRANCE:
             self._saw_brock_ready = True
@@ -999,14 +1010,8 @@ class CeruleanChapterState:
     def fossil_invariants(self) -> bool:
         chose_exactly_one = self.got_dome_fossil ^ self.got_helix_fossil
         corresponding_item = (
-            self.got_dome_fossil
-            and self.dome_fossil_in_bag
-            and not self.helix_fossil_in_bag
-        ) or (
-            self.got_helix_fossil
-            and self.helix_fossil_in_bag
-            and not self.dome_fossil_in_bag
-        )
+            self.got_dome_fossil and self.dome_fossil_in_bag and not self.helix_fossil_in_bag
+        ) or (self.got_helix_fossil and self.helix_fossil_in_bag and not self.dome_fossil_in_bag)
         return (
             self.post_brock_invariants
             and self.required_route_3_trainers_defeated
@@ -1031,9 +1036,7 @@ class CeruleanChapterState:
         if (
             self.boundary is CeruleanBoundary.UNKNOWN
             or not self.stable_overworld_snapshot
-            or _cerulean_boundary_position(
-                self.map_id, self.player_x, self.player_y
-            )
+            or _cerulean_boundary_position(self.map_id, self.player_x, self.player_y)
             is not self.boundary
         ):
             return False
@@ -1115,8 +1118,7 @@ class CeruleanChapterState:
             and self.trainer_class == ROCKET_TRAINER_CLASS_ID
             and self.trainer_number == MT_MOON_REQUIRED_ROCKET_TRAINER_NUMBER
             and self.engaged_trainer_class == ROCKET_OPPONENT_ID
-            and self.engaged_trainer_set
-            == MT_MOON_REQUIRED_ROCKET_TRAINER_NUMBER
+            and self.engaged_trainer_set == MT_MOON_REQUIRED_ROCKET_TRAINER_NUMBER
         )
 
     @property
@@ -1196,10 +1198,7 @@ class CeruleanProgressTracker:
     @property
     def observed_route_3_trainers(self) -> tuple[int, ...]:
         return tuple(
-            spec[0]
-            for spec in ROUTE_3_REQUIRED_TRAINER_SPECS[
-                : self._route_3_trainer_index + 1
-            ]
+            spec[0] for spec in ROUTE_3_REQUIRED_TRAINER_SPECS[: self._route_3_trainer_index + 1]
         )
 
     @property
@@ -1248,8 +1247,7 @@ class CeruleanProgressTracker:
             expected_position = self._route_3_trainer_index + 1
             if (
                 self._route_3_trainer_index >= 0
-                and observed_event
-                == ROUTE_3_REQUIRED_TRAINER_SPECS[self._route_3_trainer_index][0]
+                and observed_event == ROUTE_3_REQUIRED_TRAINER_SPECS[self._route_3_trainer_index][0]
             ):
                 return CeruleanPhase.ROUTE_3_TRAINER_BATTLE
             if expected_position >= len(ROUTE_3_REQUIRED_TRAINER_SPECS):
@@ -1261,9 +1259,7 @@ class CeruleanProgressTracker:
                 raise CeruleanProgressError(
                     "Route 3 trainer evidence skipped or reordered a required battle."
                 )
-            if not all(
-                state.required_route_3_trainer_events[:expected_position]
-            ):
+            if not all(state.required_route_3_trainer_events[:expected_position]):
                 raise CeruleanProgressError(
                     "Route 3 trainer event did not flip after its observed battle."
                 )
@@ -1278,33 +1274,21 @@ class CeruleanProgressTracker:
             )
 
         expected_index = self._boundary_index + 1
-        if (
-            self._boundary_index >= 0
-            and state.boundary is self._BOUNDARIES[self._boundary_index]
-        ):
+        if self._boundary_index >= 0 and state.boundary is self._BOUNDARIES[self._boundary_index]:
             return state.phase
         if expected_index >= len(self._BOUNDARIES):
             raise CeruleanProgressError("Unexpected boundary after Cerulean City entry.")
         if state.boundary is not self._BOUNDARIES[expected_index]:
             raise CeruleanProgressError("Cerulean evidence skipped a required boundary.")
-        if (
-            state.boundary is CeruleanBoundary.ROUTE_4_WEST_ENTRY
-            and (
-                self._route_3_trainer_index
-                != len(ROUTE_3_REQUIRED_TRAINER_SPECS) - 1
-                or not state.required_route_3_trainers_defeated
-            )
+        if state.boundary is CeruleanBoundary.ROUTE_4_WEST_ENTRY and (
+            self._route_3_trainer_index != len(ROUTE_3_REQUIRED_TRAINER_SPECS) - 1
+            or not state.required_route_3_trainers_defeated
         ):
             raise CeruleanProgressError(
                 "Route 4 cannot qualify before all four required Route 3 battles."
             )
-        if (
-            expected_index > self._LAST_PRE_FOSSIL_INDEX
-            and not self._fossil_obtained
-        ):
-            raise CeruleanProgressError(
-                "Mt. Moon exit cannot qualify before the fossil proof."
-            )
+        if expected_index > self._LAST_PRE_FOSSIL_INDEX and not self._fossil_obtained:
+            raise CeruleanProgressError("Mt. Moon exit cannot qualify before the fossil proof.")
         self._boundary_index = expected_index
         return state.phase
 
@@ -1829,9 +1813,7 @@ class CascadeProgressTracker:
     def observed_route_24_trainers(self) -> tuple[int, ...]:
         return tuple(
             spec[0]
-            for spec in ROUTE_24_REQUIRED_TRAINER_SPECS[
-                : self._route_24_trainer_position + 1
-            ]
+            for spec in ROUTE_24_REQUIRED_TRAINER_SPECS[: self._route_24_trainer_position + 1]
         )
 
     @property
@@ -1846,9 +1828,7 @@ class CascadeProgressTracker:
     def observed_route_25_trainers(self) -> tuple[int, ...]:
         return tuple(
             spec[0]
-            for spec in ROUTE_25_REQUIRED_TRAINER_SPECS[
-                : self._route_25_trainer_position + 1
-            ]
+            for spec in ROUTE_25_REQUIRED_TRAINER_SPECS[: self._route_25_trainer_position + 1]
         )
 
     @property
@@ -1918,9 +1898,7 @@ class CascadeProgressTracker:
             if self._bill_stage == 4:
                 return CascadePhase.SS_TICKET_OBTAINED
             if self._bill_stage != 3:
-                raise CascadeProgressError(
-                    "S.S. Ticket appeared before Bill was restored."
-                )
+                raise CascadeProgressError("S.S. Ticket appeared before Bill was restored.")
             self._bill_stage = 4
             return CascadePhase.SS_TICKET_OBTAINED
 
@@ -1938,9 +1916,7 @@ class CascadeProgressTracker:
             if self._bill_stage == 2:
                 return CascadePhase.BILL_CELL_SEPARATOR_USED
             if self._bill_stage != 1:
-                raise CascadeProgressError(
-                    "Bill's cell separator event skipped the help request."
-                )
+                raise CascadeProgressError("Bill's cell separator event skipped the help request.")
             self._bill_stage = 2
             return CascadePhase.BILL_CELL_SEPARATOR_USED
 
@@ -1953,8 +1929,7 @@ class CascadeProgressTracker:
                 )
             if (
                 not self._nugget_rocket_defeated
-                or self._route_25_trainer_position
-                != len(ROUTE_25_REQUIRED_TRAINER_SPECS) - 1
+                or self._route_25_trainer_position != len(ROUTE_25_REQUIRED_TRAINER_SPECS) - 1
                 or not state.route_25_trainers_defeated
             ):
                 raise CascadeProgressError(
@@ -1970,9 +1945,7 @@ class CascadeProgressTracker:
                 )
             observed_event = state.route_25_trainer_battle_index
             current_event = (
-                ROUTE_25_REQUIRED_TRAINER_SPECS[
-                    self._route_25_trainer_position
-                ][0]
+                ROUTE_25_REQUIRED_TRAINER_SPECS[self._route_25_trainer_position][0]
                 if self._route_25_trainer_position >= 0
                 else None
             )
@@ -2005,8 +1978,7 @@ class CascadeProgressTracker:
         if state.nugget_rocket_battle_snapshot:
             if (
                 not self._rival_defeated
-                or self._route_24_trainer_position
-                != len(ROUTE_24_REQUIRED_TRAINER_SPECS) - 1
+                or self._route_24_trainer_position != len(ROUTE_24_REQUIRED_TRAINER_SPECS) - 1
                 or not state.route_24_trainers_defeated
             ):
                 raise CascadeProgressError(
@@ -2022,9 +1994,7 @@ class CascadeProgressTracker:
                 )
             observed_event = state.route_24_trainer_battle_index
             current_event = (
-                ROUTE_24_REQUIRED_TRAINER_SPECS[
-                    self._route_24_trainer_position
-                ][0]
+                ROUTE_24_REQUIRED_TRAINER_SPECS[self._route_24_trainer_position][0]
                 if self._route_24_trainer_position >= 0
                 else None
             )
@@ -2048,9 +2018,7 @@ class CascadeProgressTracker:
 
         if state.rival_victory_snapshot:
             if not self._saw_rival_battle:
-                raise CascadeProgressError(
-                    "Cerulean rival victory lacks the observed live battle."
-                )
+                raise CascadeProgressError("Cerulean rival victory lacks the observed live battle.")
             self._rival_defeated = True
             return CascadePhase.RIVAL_DEFEATED
 
@@ -2286,8 +2254,7 @@ class VermilionState:
             and self.stable_snapshot
             and self.beat_rocket_thief
             and self.tm28_in_bag
-            and self.route_6_trainer_events
-            == (False, False, False, True, True, False)
+            and self.route_6_trainer_events == (False, False, False, True, True, False)
         )
 
     @property
@@ -2301,13 +2268,11 @@ class VermilionState:
             and self.current_map_script == 2
             and self.player_x == 9
             and self.player_y == 30
-            and self.route_6_trainer_events
-            == (False, False, False, False, False, False)
+            and self.route_6_trainer_events == (False, False, False, False, False, False)
             and self.current_opponent == ROUTE_6_JR_TRAINER_F_OPPONENT_ID
             and self.trainer_class == ROUTE_6_JR_TRAINER_F_CLASS_ID
             and self.trainer_number == ROUTE_6_JR_TRAINER_F_NUMBER
-            and self.engaged_trainer_class
-            == ROUTE_6_JR_TRAINER_F_OPPONENT_ID
+            and self.engaged_trainer_class == ROUTE_6_JR_TRAINER_F_OPPONENT_ID
             and self.engaged_trainer_set == ROUTE_6_JR_TRAINER_F_NUMBER
         )
 
@@ -2319,8 +2284,7 @@ class VermilionState:
             and self.player_x == 9
             and self.player_y == 30
             and self.stable_snapshot
-            and self.route_6_trainer_events
-            == (False, False, False, False, True, False)
+            and self.route_6_trainer_events == (False, False, False, False, True, False)
             and self.battle_result == 0
         )
 
@@ -2335,13 +2299,11 @@ class VermilionState:
             and self.current_map_script == 2
             and self.player_x == 9
             and self.player_y == 31
-            and self.route_6_trainer_events
-            == (False, False, False, False, True, False)
+            and self.route_6_trainer_events == (False, False, False, False, True, False)
             and self.current_opponent == ROUTE_6_JR_TRAINER_M_OPPONENT_ID
             and self.trainer_class == ROUTE_6_JR_TRAINER_M_CLASS_ID
             and self.trainer_number == ROUTE_6_JR_TRAINER_M_NUMBER
-            and self.engaged_trainer_class
-            == ROUTE_6_JR_TRAINER_M_OPPONENT_ID
+            and self.engaged_trainer_class == ROUTE_6_JR_TRAINER_M_OPPONENT_ID
             and self.engaged_trainer_set == ROUTE_6_JR_TRAINER_M_NUMBER
         )
 
@@ -2353,8 +2315,7 @@ class VermilionState:
             and self.player_x == 9
             and self.player_y == 31
             and self.stable_snapshot
-            and self.route_6_trainer_events
-            == (False, False, False, True, True, False)
+            and self.route_6_trainer_events == (False, False, False, True, True, False)
             and self.battle_result == 0
         )
 
@@ -2404,26 +2365,14 @@ class VermilionProgressTracker:
             VermilionPhase.ROCKET_THIEF_BATTLE: "rocket_thief_battle_snapshot",
             VermilionPhase.TM28_OBTAINED: "tm28_snapshot",
             VermilionPhase.ROUTE_5_REACHED: "route_5_snapshot",
-            VermilionPhase.UNDERGROUND_NORTH_ENTRANCE: (
-                "underground_north_entrance_snapshot"
-            ),
+            VermilionPhase.UNDERGROUND_NORTH_ENTRANCE: ("underground_north_entrance_snapshot"),
             VermilionPhase.UNDERGROUND_TUNNEL: "underground_tunnel_snapshot",
-            VermilionPhase.UNDERGROUND_SOUTH_ENTRANCE: (
-                "underground_south_entrance_snapshot"
-            ),
+            VermilionPhase.UNDERGROUND_SOUTH_ENTRANCE: ("underground_south_entrance_snapshot"),
             VermilionPhase.ROUTE_6_REACHED: "route_6_snapshot",
-            VermilionPhase.ROUTE_6_TRAINER_F_BATTLE: (
-                "route_6_trainer_f_battle_snapshot"
-            ),
-            VermilionPhase.ROUTE_6_TRAINER_F_DEFEATED: (
-                "route_6_trainer_f_defeated_snapshot"
-            ),
-            VermilionPhase.ROUTE_6_TRAINER_M_BATTLE: (
-                "route_6_trainer_m_battle_snapshot"
-            ),
-            VermilionPhase.ROUTE_6_TRAINER_M_DEFEATED: (
-                "route_6_trainer_m_defeated_snapshot"
-            ),
+            VermilionPhase.ROUTE_6_TRAINER_F_BATTLE: ("route_6_trainer_f_battle_snapshot"),
+            VermilionPhase.ROUTE_6_TRAINER_F_DEFEATED: ("route_6_trainer_f_defeated_snapshot"),
+            VermilionPhase.ROUTE_6_TRAINER_M_BATTLE: ("route_6_trainer_m_battle_snapshot"),
+            VermilionPhase.ROUTE_6_TRAINER_M_DEFEATED: ("route_6_trainer_m_defeated_snapshot"),
             VermilionPhase.VERMILION_REACHED: "vermilion_snapshot",
         }.get(state.phase)
         if snapshot_name is None:
@@ -2434,9 +2383,7 @@ class VermilionProgressTracker:
             )
 
         expected_index = self._phase_index + 1
-        if self._phase_index >= 0 and state.phase is self._ORDERED_PHASES[
-            self._phase_index
-        ]:
+        if self._phase_index >= 0 and state.phase is self._ORDERED_PHASES[self._phase_index]:
             return state.phase
         if expected_index >= len(self._ORDERED_PHASES):
             raise VermilionProgressError("Unexpected boundary after Route 6.")
@@ -2444,13 +2391,8 @@ class VermilionProgressTracker:
             raise VermilionProgressError(
                 "Vermilion-route evidence skipped a required semantic boundary."
             )
-        if (
-            state.phase is VermilionPhase.TM28_OBTAINED
-            and not self._saw_rocket_battle
-        ):
-            raise VermilionProgressError(
-                "Rocket thief victory lacks the observed live battle."
-            )
+        if state.phase is VermilionPhase.TM28_OBTAINED and not self._saw_rocket_battle:
+            raise VermilionProgressError("Rocket thief victory lacks the observed live battle.")
         if state.phase is VermilionPhase.ROCKET_THIEF_BATTLE:
             self._saw_rocket_battle = True
         self._phase_index = expected_index
@@ -2666,9 +2608,7 @@ class SSAnneProgressTracker:
 
     def __init__(self, vermilion_state: VermilionState) -> None:
         if not vermilion_state.vermilion_snapshot:
-            raise SSAnneProgressError(
-                "S.S. Anne qualification must begin at verified Vermilion."
-            )
+            raise SSAnneProgressError("S.S. Anne qualification must begin at verified Vermilion.")
         self._phase_index = -1
         self._saw_rival_battle = False
 
@@ -2694,28 +2634,102 @@ class SSAnneProgressTracker:
             raise SSAnneProgressError(
                 f"{state.phase.value} failed its source-pinned semantic snapshot."
             )
-        if (
-            self._phase_index >= 0
-            and state.phase is self._ORDERED_PHASES[self._phase_index]
-        ):
+        if self._phase_index >= 0 and state.phase is self._ORDERED_PHASES[self._phase_index]:
             return state.phase
         expected_index = self._phase_index + 1
         if (
             expected_index >= len(self._ORDERED_PHASES)
             or state.phase is not self._ORDERED_PHASES[expected_index]
         ):
-            raise SSAnneProgressError(
-                "S.S. Anne evidence skipped a required semantic boundary."
-            )
-        if (
-            state.phase is SSAnnePhase.RIVAL_DEFEATED
-            and not self._saw_rival_battle
-        ):
-            raise SSAnneProgressError(
-                "S.S. Anne rival victory lacks the observed live battle."
-            )
+            raise SSAnneProgressError("S.S. Anne evidence skipped a required semantic boundary.")
+        if state.phase is SSAnnePhase.RIVAL_DEFEATED and not self._saw_rival_battle:
+            raise SSAnneProgressError("S.S. Anne rival victory lacks the observed live battle.")
         if state.phase is SSAnnePhase.RIVAL_BATTLE:
             self._saw_rival_battle = True
+        self._phase_index = expected_index
+        return state.phase
+
+
+class SurgePhase(StrEnum):
+    """Ordered semantic gates from HM01 through the Thunder Badge."""
+
+    HM01_READY = "hm01_ready"
+    HEALED = "healed"
+    BALLS_PURCHASED = "balls_purchased"
+    SPEAROW_ENCOUNTER = "spearow_encounter"
+    SPEAROW_CAPTURED = "spearow_captured"
+    DIGLETT_CAPTURED = "diglett_captured"
+    DUX_TRADED = "dux_traded"
+    CUT_TAUGHT = "cut_taught"
+    DIG_TAUGHT = "dig_taught"
+    GYM_REACHED = "gym_reached"
+    FIRST_SWITCH = "first_switch"
+    SECOND_SWITCH = "second_switch"
+    SURGE_BATTLE = "surge_battle"
+    SURGE_DEFEATED = "surge_defeated"
+    REWARD_STABLE = "reward_stable"
+
+
+@dataclass(frozen=True, slots=True)
+class SurgeState:
+    """ROM-free evidence consumed by the ordered Surge progress tracker."""
+
+    phase: SurgePhase
+    hm01_ready: bool = False
+    healed: bool = False
+    balls_purchased: bool = False
+    spearow_encounter: bool = False
+    spearow_captured: bool = False
+    diglett_captured: bool = False
+    dux_traded: bool = False
+    cut_taught: bool = False
+    dig_taught: bool = False
+    gym_reached: bool = False
+    first_switch: bool = False
+    second_switch: bool = False
+    surge_battle: bool = False
+    surge_defeated: bool = False
+    reward_stable: bool = False
+
+    def phase_snapshot(self) -> bool:
+        return bool(getattr(self, self.phase.value))
+
+
+class SurgeProgressError(ValueError):
+    """Raised when Surge evidence skips or contradicts a required gate."""
+
+
+class SurgeProgressTracker:
+    """Require all fourteen Surge chapter gates in source-pinned order."""
+
+    _ORDERED_PHASES = tuple(SurgePhase)
+
+    def __init__(self) -> None:
+        self._phase_index = -1
+        self._saw_live_battle = False
+
+    @property
+    def saw_live_battle(self) -> bool:
+        return self._saw_live_battle
+
+    def observe(self, state: SurgeState) -> SurgePhase:
+        if not state.phase_snapshot():
+            raise SurgeProgressError(f"{state.phase.value} failed its semantic snapshot.")
+        expected_index = self._phase_index + 1
+        if self._phase_index >= 0 and state.phase is self._ORDERED_PHASES[self._phase_index]:
+            return state.phase
+        if (
+            expected_index >= len(self._ORDERED_PHASES)
+            or state.phase is not self._ORDERED_PHASES[expected_index]
+        ):
+            raise SurgeProgressError("Surge evidence skipped a required semantic gate.")
+        if state.phase is SurgePhase.SURGE_BATTLE:
+            self._saw_live_battle = True
+        if (
+            state.phase in {SurgePhase.SURGE_DEFEATED, SurgePhase.REWARD_STABLE}
+            and not self._saw_live_battle
+        ):
+            raise SurgeProgressError("Surge victory lacks an observed live leader battle.")
         self._phase_index = expected_index
         return state.phase
 
@@ -2743,16 +2757,12 @@ class PokemonRedStateReader:
         first_party_level = (
             self._memory.read_u8(RamAddress.PARTY_MON_1_LEVEL) if party_count else None
         )
-        first_party_hp = (
-            self._read_u16_be(RamAddress.PARTY_MON_1_HP) if party_count else None
-        )
+        first_party_hp = self._read_u16_be(RamAddress.PARTY_MON_1_HP) if party_count else None
         first_party_max_hp = (
             self._read_u16_be(RamAddress.PARTY_MON_1_MAX_HP) if party_count else None
         )
         first_party_status = (
-            self._memory.read_u8(RamAddress.PARTY_MON_1_STATUS)
-            if party_count
-            else None
+            self._memory.read_u8(RamAddress.PARTY_MON_1_STATUS) if party_count else None
         )
         first_party_moves = (
             tuple(
@@ -2764,8 +2774,7 @@ class PokemonRedStateReader:
         )
         first_party_pp = (
             tuple(
-                self._memory.read_u8(int(RamAddress.PARTY_MON_1_PP) + index)
-                for index in range(4)
+                self._memory.read_u8(int(RamAddress.PARTY_MON_1_PP) + index) for index in range(4)
             )
             if party_count
             else None
@@ -2798,19 +2807,13 @@ class PokemonRedStateReader:
             enemy_level=self._memory.read_u8(RamAddress.ENEMY_LEVEL),
             enemy_max_hp=self._read_u16_be(RamAddress.ENEMY_MAX_HP),
             player_attack_stage=(
-                self._memory.read_u8(RamAddress.PLAYER_ATTACK_STAGE)
-                if battle_state
-                else None
+                self._memory.read_u8(RamAddress.PLAYER_ATTACK_STAGE) if battle_state else None
             ),
             player_accuracy_stage=(
-                self._memory.read_u8(RamAddress.PLAYER_ACCURACY_STAGE)
-                if battle_state
-                else None
+                self._memory.read_u8(RamAddress.PLAYER_ACCURACY_STAGE) if battle_state else None
             ),
             enemy_defense_stage=(
-                self._memory.read_u8(RamAddress.ENEMY_DEFENSE_STAGE)
-                if battle_state
-                else None
+                self._memory.read_u8(RamAddress.ENEMY_DEFENSE_STAGE) if battle_state else None
             ),
         )
 
@@ -2926,11 +2929,7 @@ class PokemonRedStateReader:
             and first_species == SQUIRTLE_SPECIES_ID
         ):
             phase = OaksErrandPhase.RIVAL_DEFEATED
-        elif (
-            raw.map_id == MapId.OAKS_LAB
-            and raw.battle_state == 2
-            and lab_script == 12
-        ):
+        elif raw.map_id == MapId.OAKS_LAB and raw.battle_state == 2 and lab_script == 12:
             phase = OaksErrandPhase.RIVAL_BATTLE
         elif (
             raw.map_id == MapId.OAKS_LAB
@@ -2993,9 +2992,7 @@ class PokemonRedStateReader:
                     selected_main_command=selected_main_command,
                 )
         if signature == MOVE_BATTLE_MENU_SIGNATURE:
-            selected_move_slot = self._memory.read_u8(
-                RamAddress.CURRENT_MENU_ITEM
-            )
+            selected_move_slot = self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
             if (
                 MIN_MOVE_MENU_SLOT <= selected_move_slot <= MAX_MOVE_MENU_SLOT
                 and self._active_menu_cursor()
@@ -3008,13 +3005,9 @@ class PokemonRedStateReader:
 
     def _active_menu_cursor(self) -> bool:
         cursor_address = self._memory.read_u8(RamAddress.MENU_CURSOR_LOCATION)
-        cursor_address |= (
-            self._memory.read_u8(int(RamAddress.MENU_CURSOR_LOCATION) + 1) << 8
-        )
+        cursor_address |= self._memory.read_u8(int(RamAddress.MENU_CURSOR_LOCATION) + 1) << 8
         if not (
-            int(RamAddress.TILE_MAP)
-            <= cursor_address
-            < int(RamAddress.TILE_MAP) + TILE_MAP_SIZE
+            int(RamAddress.TILE_MAP) <= cursor_address < int(RamAddress.TILE_MAP) + TILE_MAP_SIZE
         ):
             return False
         return self._memory.read_u8(cursor_address) == FILLED_MENU_CURSOR_TILE
@@ -3022,15 +3015,9 @@ class PokemonRedStateReader:
     def read_input_readiness(self) -> InputReadiness:
         return InputReadiness(
             joy_ignore=self._memory.read_u8(RamAddress.JOY_IGNORE),
-            simulated_joypad_index=self._memory.read_u8(
-                RamAddress.SIMULATED_JOYPAD_INDEX
-            ),
-            npc_movement_script_table=self._memory.read_u8(
-                RamAddress.NPC_MOVEMENT_SCRIPT_TABLE
-            ),
-            player_moving_direction=self._memory.read_u8(
-                RamAddress.PLAYER_MOVING_DIRECTION
-            ),
+            simulated_joypad_index=self._memory.read_u8(RamAddress.SIMULATED_JOYPAD_INDEX),
+            npc_movement_script_table=self._memory.read_u8(RamAddress.NPC_MOVEMENT_SCRIPT_TABLE),
+            player_moving_direction=self._memory.read_u8(RamAddress.PLAYER_MOVING_DIRECTION),
             status_flags_5=self._memory.read_u8(RamAddress.STATUS_FLAGS_5),
             movement_flags=self._memory.read_u8(RamAddress.MOVEMENT_FLAGS),
         )
@@ -3071,14 +3058,10 @@ class PokemonRedStateReader:
             and raw.battle_state == 2
             and local_script == 3
             and current_map_script == 3
-            and self._memory.read_u8(RamAddress.CURRENT_OPPONENT)
-            == BROCK_OPPONENT_ID
-            and self._memory.read_u8(RamAddress.TRAINER_CLASS)
-            == BROCK_TRAINER_CLASS_ID
-            and self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS)
-            == BROCK_OPPONENT_ID
-            and self._memory.read_u8(RamAddress.GYM_LEADER_NUMBER)
-            == BROCK_GYM_LEADER_NUMBER
+            and self._memory.read_u8(RamAddress.CURRENT_OPPONENT) == BROCK_OPPONENT_ID
+            and self._memory.read_u8(RamAddress.TRAINER_CLASS) == BROCK_TRAINER_CLASS_ID
+            and self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS) == BROCK_OPPONENT_ID
+            and self._memory.read_u8(RamAddress.GYM_LEADER_NUMBER) == BROCK_GYM_LEADER_NUMBER
         ):
             phase = NorthboundPhase.BROCK_BATTLE
         elif boundary is TravelBoundary.PEWTER_GYM_ENTRANCE:
@@ -3119,17 +3102,13 @@ class PokemonRedStateReader:
             boulder_badge_mirror=bool(badge_mirror & Badge.BOULDER),
             current_opponent=self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
             trainer_class=self._memory.read_u8(RamAddress.TRAINER_CLASS),
-            engaged_trainer_class=self._memory.read_u8(
-                RamAddress.ENGAGED_TRAINER_CLASS
-            ),
+            engaged_trainer_class=self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
             gym_leader_number=self._memory.read_u8(RamAddress.GYM_LEADER_NUMBER),
             map_id=raw.map_id,
             player_x=raw.player_x,
             player_y=raw.player_y,
             party_count=raw.party_count,
-            first_party_species=(
-                raw.party_species_ids[0] if raw.party_species_ids else None
-            ),
+            first_party_species=(raw.party_species_ids[0] if raw.party_species_ids else None),
             first_party_hp=raw.first_party_hp,
             first_party_max_hp=raw.first_party_max_hp,
             first_party_level=raw.first_party_level,
@@ -3158,21 +3137,15 @@ class PokemonRedStateReader:
             _event(raw.event_flags, EventFlag.BEAT_ROUTE_3_TRAINER_3),
             _event(raw.event_flags, EventFlag.BEAT_ROUTE_3_TRAINER_6),
         )
-        beat_required_rocket = _event(
-            raw.event_flags, MT_MOON_REQUIRED_ROCKET_EVENT
-        )
-        beat_super_nerd = _event(
-            raw.event_flags, EventFlag.BEAT_MT_MOON_EXIT_SUPER_NERD
-        )
+        beat_required_rocket = _event(raw.event_flags, MT_MOON_REQUIRED_ROCKET_EVENT)
+        beat_super_nerd = _event(raw.event_flags, EventFlag.BEAT_MT_MOON_EXIT_SUPER_NERD)
         got_dome_fossil = _event(raw.event_flags, EventFlag.GOT_DOME_FOSSIL)
         got_helix_fossil = _event(raw.event_flags, EventFlag.GOT_HELIX_FOSSIL)
 
         current_opponent = self._memory.read_u8(RamAddress.CURRENT_OPPONENT)
         trainer_class = self._memory.read_u8(RamAddress.TRAINER_CLASS)
         trainer_number = self._memory.read_u8(RamAddress.TRAINER_NUMBER)
-        engaged_trainer_class = self._memory.read_u8(
-            RamAddress.ENGAGED_TRAINER_CLASS
-        )
+        engaged_trainer_class = self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS)
         engaged_trainer_set = self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET)
         route_3_trainer_position = _required_route_3_trainer_position(
             current_opponent,
@@ -3296,24 +3269,18 @@ class PokemonRedStateReader:
         badge_mirror = self._memory.read_u8(RamAddress.BEAT_GYM_FLAGS)
 
         route_24_events = tuple(
-            _event(raw.event_flags, spec[1])
-            for spec in ROUTE_24_REQUIRED_TRAINER_SPECS
+            _event(raw.event_flags, spec[1]) for spec in ROUTE_24_REQUIRED_TRAINER_SPECS
         )
         route_25_events = tuple(
-            _event(raw.event_flags, spec[1])
-            for spec in ROUTE_25_REQUIRED_TRAINER_SPECS
+            _event(raw.event_flags, spec[1]) for spec in ROUTE_25_REQUIRED_TRAINER_SPECS
         )
         state = CascadeState(
             phase=CascadePhase.UNKNOWN,
             controls=controls,
             local_script=local_script,
             current_map_script=current_map_script,
-            prior_chapter_complete=_cascade_prior_chapter_complete(
-                raw, items, badge_mirror
-            ),
-            beat_cerulean_rival=_event(
-                raw.event_flags, EventFlag.BEAT_CERULEAN_RIVAL
-            ),
+            prior_chapter_complete=_cascade_prior_chapter_complete(raw, items, badge_mirror),
+            beat_cerulean_rival=_event(raw.event_flags, EventFlag.BEAT_CERULEAN_RIVAL),
             route_24_trainer_events=(
                 route_24_events[0],
                 route_24_events[1],
@@ -3323,9 +3290,7 @@ class PokemonRedStateReader:
             ),
             got_nugget=_event(raw.event_flags, EventFlag.GOT_NUGGET),
             nugget_in_bag=ItemId.NUGGET in items,
-            beat_route_24_rocket=_event(
-                raw.event_flags, EventFlag.BEAT_ROUTE_24_ROCKET
-            ),
+            beat_route_24_rocket=_event(raw.event_flags, EventFlag.BEAT_ROUTE_24_ROCKET),
             route_25_trainer_events=(
                 route_25_events[0],
                 route_25_events[1],
@@ -3356,15 +3321,9 @@ class PokemonRedStateReader:
             current_opponent=self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
             trainer_class=self._memory.read_u8(RamAddress.TRAINER_CLASS),
             trainer_number=self._memory.read_u8(RamAddress.TRAINER_NUMBER),
-            engaged_trainer_class=self._memory.read_u8(
-                RamAddress.ENGAGED_TRAINER_CLASS
-            ),
-            engaged_trainer_set=self._memory.read_u8(
-                RamAddress.ENGAGED_TRAINER_SET
-            ),
-            gym_leader_number=self._memory.read_u8(
-                RamAddress.GYM_LEADER_NUMBER
-            ),
+            engaged_trainer_class=self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
+            engaged_trainer_set=self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET),
+            gym_leader_number=self._memory.read_u8(RamAddress.GYM_LEADER_NUMBER),
             map_id=raw.map_id,
             player_x=raw.player_x,
             player_y=raw.player_y,
@@ -3447,12 +3406,8 @@ class PokemonRedStateReader:
             controls=controls,
             local_script=local_script,
             current_map_script=current_map_script,
-            prior_chapter_complete=_vermilion_prior_chapter_complete(
-                raw, items, badge_mirror
-            ),
-            beat_rocket_thief=_event(
-                raw.event_flags, EventFlag.BEAT_CERULEAN_ROCKET_THIEF
-            ),
+            prior_chapter_complete=_vermilion_prior_chapter_complete(raw, items, badge_mirror),
+            beat_rocket_thief=_event(raw.event_flags, EventFlag.BEAT_CERULEAN_ROCKET_THIEF),
             tm28_in_bag=ItemId.TM28_DIG in items,
             route_6_trainer_events=(
                 route_6_events[0],
@@ -3465,12 +3420,8 @@ class PokemonRedStateReader:
             current_opponent=self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
             trainer_class=self._memory.read_u8(RamAddress.TRAINER_CLASS),
             trainer_number=self._memory.read_u8(RamAddress.TRAINER_NUMBER),
-            engaged_trainer_class=self._memory.read_u8(
-                RamAddress.ENGAGED_TRAINER_CLASS
-            ),
-            engaged_trainer_set=self._memory.read_u8(
-                RamAddress.ENGAGED_TRAINER_SET
-            ),
+            engaged_trainer_class=self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
+            engaged_trainer_set=self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET),
             map_id=raw.map_id,
             player_x=raw.player_x,
             player_y=raw.player_y,
@@ -3543,21 +3494,15 @@ class PokemonRedStateReader:
                 items,
                 self._memory.read_u8(RamAddress.BEAT_GYM_FLAGS),
             ),
-            rubbed_captains_back=_event(
-                raw.event_flags, EventFlag.RUBBED_CAPTAINS_BACK
-            ),
+            rubbed_captains_back=_event(raw.event_flags, EventFlag.RUBBED_CAPTAINS_BACK),
             got_hm01=_event(raw.event_flags, EventFlag.GOT_HM01),
             hm01_in_bag=ItemId.HM01_CUT in items,
             cut_fact="move:cut_available" in semantic_facts(raw),
             current_opponent=self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
             trainer_class=self._memory.read_u8(RamAddress.TRAINER_CLASS),
             trainer_number=self._memory.read_u8(RamAddress.TRAINER_NUMBER),
-            engaged_trainer_class=self._memory.read_u8(
-                RamAddress.ENGAGED_TRAINER_CLASS
-            ),
-            engaged_trainer_set=self._memory.read_u8(
-                RamAddress.ENGAGED_TRAINER_SET
-            ),
+            engaged_trainer_class=self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
+            engaged_trainer_set=self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET),
             map_id=raw.map_id,
             player_x=raw.player_x,
             player_y=raw.player_y,
@@ -3620,29 +3565,17 @@ def _travel_boundary(raw: RawGameState) -> TravelBoundary:
         return TravelBoundary.PALLET_LAB_EXTERIOR
     if position == (MapId.VIRIDIAN_CITY, 21, 35):
         return TravelBoundary.VIRIDIAN_SOUTH_EDGE
-    if (
-        raw.map_id == MapId.ROUTE_2
-        and raw.player_x in {7, 8, 9}
-        and raw.player_y == 71
-    ):
+    if raw.map_id == MapId.ROUTE_2 and raw.player_x in {7, 8, 9} and raw.player_y == 71:
         return TravelBoundary.ROUTE_2_SOUTH_EDGE
     if position == (MapId.VIRIDIAN_FOREST_SOUTH_GATE, 4, 7):
         return TravelBoundary.FOREST_SOUTH_GATE
-    if (
-        raw.map_id == MapId.VIRIDIAN_FOREST
-        and raw.player_x in {16, 17}
-        and raw.player_y == 47
-    ):
+    if raw.map_id == MapId.VIRIDIAN_FOREST and raw.player_x in {16, 17} and raw.player_y == 47:
         return TravelBoundary.FOREST_SOUTH_ENTRY
     if raw.map_id == MapId.VIRIDIAN_FOREST_NORTH_GATE:
         return TravelBoundary.FOREST_NORTH_GATE
     if position == (MapId.ROUTE_2, 3, 11):
         return TravelBoundary.ROUTE_2_NORTH_RETURN
-    if (
-        raw.map_id == MapId.PEWTER_CITY
-        and raw.player_x in {18, 19}
-        and raw.player_y == 35
-    ):
+    if raw.map_id == MapId.PEWTER_CITY and raw.player_x in {18, 19} and raw.player_y == 35:
         return TravelBoundary.PEWTER_SOUTH_EDGE
     if position == (MapId.PEWTER_GYM, 4, 13):
         return TravelBoundary.PEWTER_GYM_ENTRANCE
@@ -3690,9 +3623,7 @@ def _required_route_3_trainer_position(
     return None
 
 
-def _cascade_prior_chapter_complete(
-    raw: RawGameState, items: set[int], badge_mirror: int
-) -> bool:
+def _cascade_prior_chapter_complete(raw: RawGameState, items: set[int], badge_mirror: int) -> bool:
     got_dome_fossil = _event(raw.event_flags, EventFlag.GOT_DOME_FOSSIL)
     got_helix_fossil = _event(raw.event_flags, EventFlag.GOT_HELIX_FOSSIL)
     corresponding_fossil = (
@@ -3755,9 +3686,7 @@ def _vermilion_prior_chapter_complete(
     )
 
 
-def _ss_anne_prior_chapter_complete(
-    raw: RawGameState, items: set[int], badge_mirror: int
-) -> bool:
+def _ss_anne_prior_chapter_complete(raw: RawGameState, items: set[int], badge_mirror: int) -> bool:
     return (
         _vermilion_prior_chapter_complete(raw, items, badge_mirror)
         and _event(raw.event_flags, EventFlag.BEAT_CERULEAN_ROCKET_THIEF)

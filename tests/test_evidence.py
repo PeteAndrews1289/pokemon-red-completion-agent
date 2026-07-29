@@ -57,6 +57,7 @@ MISTY_RECEIPT = (
 VERMILION_RECEIPT = (
     PROJECT_ROOT / "docs" / "evidence" / "qualified-play-vermilion-2026-07-28.json"
 )
+SURGE_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-surge-2026-07-29.json"
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -848,6 +849,47 @@ def test_vermilion_receipt_is_source_bound_repeatable_and_privacy_safe() -> None
     assert receipt["game_complete"] is False
     assert receipt["frames_executed"] == 501_922
     assert receipt["actions_executed"] == 7_242
+    assert receipt["controller_released"] is True
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_surge_receipt_is_repeatable_and_privacy_safe() -> None:
+    receipt = json.loads(SURGE_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["receipt_schema"] == "qualified-play-evidence-v7"
+    assert receipt["schema"] == "qualified-play-v7"
+    assert receipt["status"] == "ok"
+    assert receipt["attempts"] == {"failed": 0, "passed": 3, "total": 3}
+    assert receipt["checkpoints"]["all_verified"] is True
+    assert receipt["checkpoints"]["verified"] == 97
+    assert len(receipt["checkpoints"]["surge_ids"]) == 15
+    assert receipt["surge_chapter"]["battle"] == {
+        "dig_attacks": 5,
+        "wrong_move_count": 0,
+    }
+    assert receipt["surge_chapter"]["reward"] == {
+        "beat_lt_surge": True,
+        "got_tm24": True,
+        "tm24_in_bag": True,
+        "thunder_badge": True,
+        "thunder_badge_mirror": True,
+    }
+    assert receipt["surge_chapter"]["recovery"] == {
+        "super_potion_used": False,
+        "lead_hp": 71,
+        "lead_max_hp": 71,
+        "status": 0,
+    }
+    assert receipt["objective_progress"]["verified"] == 12
+    assert receipt["objective_progress"]["next"] == "reach_lavender"
+    assert receipt["qualified_through"] == "defeat_surge"
+    assert receipt["game_complete"] is False
+    assert receipt["frames_executed"] == 635_637
+    assert receipt["actions_executed"] == 9_311
     assert receipt["controller_released"] is True
 
     serialized = json.dumps(receipt)
