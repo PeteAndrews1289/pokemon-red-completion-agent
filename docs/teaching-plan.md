@@ -42,9 +42,9 @@ The bootstrap sequence was adapted from
 `0e2df37720eec7d148187eb1001bf2d9502aa4f6`. Private blind-run checkpoints and screenshots are not
 completion demonstrations and are not loaded by this project.
 
-The qualified bedroom-to-Brock route is new successor work. Its map dimensions, collision-safe
-corridors, warps, Pallet Town, Route 1, Viridian Forest, Pewter Gym, and story, party, battle,
-badge, and inventory gates are derived from
+The qualified bedroom-to-Cerulean route is new successor work. Its map dimensions,
+collision-safe corridors, warps, Pallet Town, Route 1, Viridian Forest, Pewter Gym, Route 3, Mt.
+Moon, and story, party, battle, badge, fossil, and inventory gates are derived from
 [`pret/pokered`](https://github.com/pret/pokered) commit
 `1e96034092686d006e863cace09e87273051a3d8`, then independently exercised against the exact
 supported ROM. The teacher checks the resulting semantic phase after each bounded action rather
@@ -52,12 +52,13 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **21/21 qualified checkpoints** through Brock
-and therefore **6/36 completion objectives**. Three clean runs were identical at the
-122,999-frame / 1,573-action boundary, including the live Brock battle, concurrent Boulder Badge
-plus TM34 evidence, and an accepted overworld movement probe after the reward text. No
-behavioral-cloning, DAgger, or full-game result is implied. The next teaching segment crosses
-Route 3 and Mt. Moon to Cerulean City.
+The deterministic teacher currently verifies all **36/36 qualified checkpoints** through
+Cerulean City and therefore **7/36 completion objectives**. Three clean runs were identical at the
+252,989-frame / 3,604-action boundary. The evidence includes Brock's live battle and rewards, four
+required Route 3 trainers, the required Rocket and Super Nerd battles, the Helix Fossil event plus
+inventory item, and stable Cerulean entry with a status-free level-17 Wartortle. No
+behavioral-cloning, DAgger, robustness, or full-game result is implied. The next teaching segment
+helps Bill and qualifies the Cerulean Gym strategy from repeated successful runs.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -155,16 +156,17 @@ restore, rewind, or import state from another run.
 3. Preserve the qualified **6/6** checkpoint segment through verified Squirtle. **Done.**
 4. Extend the same clean session through the lab rival, Oak's Parcel, and the Pokédex. **Done.**
 5. Extend and replay-qualify the route through Pewter City and Brock. **Done.**
-6. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
+6. Extend and replay-qualify Route 3, Mt. Moon, the Helix Fossil, and Cerulean City. **Done.**
+7. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
-7. Train a small behavior-cloning baseline per specialist.
-8. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
+8. Train a small behavior-cloning baseline per specialist.
+9. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
    from the frozen perturbation suite for that skill.
-9. Extend the teacher chapter-by-chapter through the remainder of the game.
-10. Produce multiple clean teacher completions with timing and RNG variation.
-11. Train the semantic planner and full-game composition only after that coverage exists.
-12. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
+10. Extend the teacher chapter-by-chapter through the remainder of the game.
+11. Produce multiple clean teacher completions with timing and RNG variation.
+12. Train the semantic planner and full-game composition only after that coverage exists.
+13. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
 The first current evaluation gate remains three intervention-free clean-power-on runs through
-Brock. A first Hall-of-Fame success is a milestone; reliability requires at least 8/10 frozen
-clean-start runs. No learned robustness or multi-seed completion result is claimed yet.
+Cerulean City. A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
+frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.
