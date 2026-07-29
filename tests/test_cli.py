@@ -213,13 +213,14 @@ def test_play_command_runs_the_continuous_watched_boundary(
             "defeat_brock",
             "reach_cerulean",
             "help_bill",
+            "reach_vermilion",
             "defeat_misty",
         )
-        next_objective = "reach_vermilion"
+        next_objective = "obtain_cut"
 
         def public_dict(self) -> dict[str, object]:
             return {
-                "schema": "qualified-play-v4",
+                "schema": "qualified-play-v5",
                 "status": "ok",
                 "game_complete": False,
             }
@@ -242,17 +243,17 @@ def test_play_command_runs_the_continuous_watched_boundary(
                 checkpoint_id="bedroom_ready",
                 label="Bedroom input ready",
                 completed=1,
-                total=58,
+                total=73,
                 frames_executed=9_804,
             )
         )
         progress(
             QualifiedPlayProgress(
-                checkpoint_id="misty_defeated",
-                label="Defeated Misty and verified the Cascade Badge and TM11",
-                completed=58,
-                total=58,
-                frames_executed=394_000,
+                checkpoint_id="vermilion_reached",
+                label="Reached stable Vermilion City",
+                completed=73,
+                total=73,
+                frames_executed=501_922,
             )
         )
         return FakeReport()
@@ -276,13 +277,13 @@ def test_play_command_runs_the_continuous_watched_boundary(
     captured = capsys.readouterr()
     assert json.loads(captured.out) == {
         "game_complete": False,
-        "schema": "qualified-play-v4",
+        "schema": "qualified-play-v5",
         "status": "ok",
     }
     assert captured.err.splitlines() == [
-        "[1/58] Bedroom input ready",
-        "[58/58] Defeated Misty and verified the Cascade Badge and TM11",
-        "Objectives: 9/36 verified | Next: Reach Vermilion City",
+        "[1/73] Bedroom input ready",
+        "[73/73] Reached stable Vermilion City",
+        "Objectives: 10/36 verified | Next: Obtain HM01 Cut aboard the S.S. Anne",
         "Safe stop: latest independently qualified boundary reached; the game is not complete.",
     ]
     assert str(private_path) not in captured.out

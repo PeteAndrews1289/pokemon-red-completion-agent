@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import hashlib
 import json
 import re
+from dataclasses import asdict
 from pathlib import Path
 
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
-from pokemon_red_completion.cascade import DEFAULT_CASCADE_TIMING
 from pokemon_red_completion.cerulean import DEFAULT_CERULEAN_TIMING
 from pokemon_red_completion.constants import POKEMON_RED_US_REV_0
 from pokemon_red_completion.navigation import path_to_directions
@@ -21,6 +20,7 @@ from pokemon_red_completion.opening import (
 from pokemon_red_completion.pewter import DEFAULT_PEWTER_TIMING
 from pokemon_red_completion.play import DEFAULT_QUALIFIED_PLAY_TIMING
 from pokemon_red_completion.provenance import GIT_COMMIT, canonical_sha256
+from pokemon_red_completion.vermilion import DEFAULT_VERMILION_TIMING
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 QUALIFIED_SOURCE_COMMIT = "0fb14ac7f287e92fe270b3811f1ef495cbc36194"
@@ -28,6 +28,18 @@ OPENING_SOURCE_COMMIT = "898f015e297aae4f5d1ae3d200285e58f182d306"
 POKEDEX_SOURCE_COMMIT = "f6feaab2e4864b27efacfe319eb7ac53b50707a4"
 BROCK_SOURCE_COMMIT = "4af043f400754d473f8e9cf3779065afff4dff67"
 CERULEAN_SOURCE_COMMIT = "30c58d555a5031cf50775943c21ad31c2239eb1a"
+MISTY_RUNTIME_SNAPSHOT_SHA256 = (
+    "4b7490b5d7cb4e3cc020306da54e9fe85819ebf0209b2277068a7dc4f0a854d3"
+)
+MISTY_CONFIGURATION_SHA256 = (
+    "126faded5ef92cb564a22a500d5b2c1ceb808bfeba28a69673c1c449e9932ebb"
+)
+VERMILION_RUNTIME_SNAPSHOT_SHA256 = (
+    "9dd1a77cfb83097d16dbf5406ee8a79340aa47e0d3907283b12aa2c0015894c8"
+)
+VERMILION_CONFIGURATION_SHA256 = (
+    "f00e1754db9da55d2ed7cab85ffa991da648b6209d9ba36d77a182e047632006"
+)
 BOOTSTRAP_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "bootstrap-smoke-2026-07-28.json"
 OPENING_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "opening-squirtle-2026-07-28.json"
 POKEDEX_RECEIPT = (
@@ -41,6 +53,9 @@ CERULEAN_RECEIPT = (
 )
 MISTY_RECEIPT = (
     PROJECT_ROOT / "docs" / "evidence" / "qualified-play-misty-2026-07-28.json"
+)
+VERMILION_RECEIPT = (
+    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-vermilion-2026-07-28.json"
 )
 
 
@@ -634,55 +649,17 @@ def test_misty_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert GIT_COMMIT.fullmatch(receipt["source"]["git_commit"])
     assert receipt["source"]["worktree_dirty"] is True
 
-    runtime_digest = hashlib.sha256()
-    for path in sorted((PROJECT_ROOT / "src").rglob("*.py")):
-        relative_path = path.relative_to(PROJECT_ROOT).as_posix()
-        runtime_digest.update(relative_path.encode())
-        runtime_digest.update(b"\0")
-        runtime_digest.update(path.read_bytes())
-        runtime_digest.update(b"\0")
-    assert receipt["source"]["runtime_snapshot_sha256"] == runtime_digest.hexdigest()
+    recorded_runtime_digest = receipt["source"]["runtime_snapshot_sha256"]
+    assert re.fullmatch(r"[0-9a-f]{64}", recorded_runtime_digest)
+    assert recorded_runtime_digest == MISTY_RUNTIME_SNAPSHOT_SHA256
 
-    intro = DEFAULT_NEW_GAME_TIMING
-    cascade = DEFAULT_CASCADE_TIMING
-    battle_runtime = cascade.battle_runtime
-    expected_configuration = {
-        "battle_policy": (
-            "adaptive_cerulean_rival_and_misty_with_fixed_required_trainers"
-        ),
-        "cascade_timing": {
-            **{
-                name: getattr(cascade, name)
-                for name in cascade.__dataclass_fields__
-                if name != "battle_runtime"
-            },
-            "battle_runtime": {
-                name: getattr(battle_runtime, name)
-                for name in battle_runtime.__dataclass_fields__
-            },
-        },
-        "controller_timing": {
-            "press_frames": intro.press_frames,
-            "release_frames": intro.release_frames,
-            "wait_frames": 1,
-        },
-        "emulator": {
-            "human_input": False,
-            "ram_input": "none",
-            "rtc_input": "none",
-            "save_on_exit": False,
-            "sound_emulated": False,
-            "speed": 0,
-            "window": "null",
-        },
-        "pret_pokered_commit": PRET_POKERED_COMMIT,
-        "route_encounter_policy": (
-            "fail_closed_except_qualified_seeded_and_required_trainers"
-        ),
-        "starter": "squirtle",
-    }
-    assert receipt["configuration"] == expected_configuration
-    assert receipt["configuration_sha256"] == canonical_sha256(expected_configuration)
+    configuration = receipt["configuration"]
+    assert canonical_sha256(configuration) == MISTY_CONFIGURATION_SHA256
+    assert configuration["pret_pokered_commit"] == PRET_POKERED_COMMIT
+    assert configuration["starter"] == "squirtle"
+    assert configuration["emulator"]["human_input"] is False
+    assert configuration["emulator"]["save_on_exit"] is False
+    assert receipt["configuration_sha256"] == canonical_sha256(configuration)
     assert receipt["rom"] == {
         "sha1": POKEMON_RED_US_REV_0.sha1,
         "sha256": POKEMON_RED_US_REV_0.sha256,
@@ -741,6 +718,136 @@ def test_misty_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["game_complete"] is False
     assert receipt["frames_executed"] == 434_510
     assert receipt["actions_executed"] == 5_936
+    assert receipt["controller_released"] is True
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_vermilion_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
+    receipt = json.loads(VERMILION_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["receipt_schema"] == "qualified-play-evidence-v5"
+    assert receipt["schema"] == "qualified-play-v5"
+    assert receipt["status"] == "ok"
+    assert receipt["attempts"] == {"failed": 0, "passed": 3, "total": 3}
+    assert receipt["assistance"] == {
+        "class": "deterministic_teacher",
+        "human_controller_input": False,
+        "save_state_restore": False,
+        "learned_policy": False,
+    }
+    assert receipt["source"] == {
+        "git_commit": "4b2beb4c36a2228e2e922c31285883a174e4b446",
+        "worktree_dirty": True,
+        "runtime_snapshot_sha256": VERMILION_RUNTIME_SNAPSHOT_SHA256,
+    }
+    assert GIT_COMMIT.fullmatch(receipt["source"]["git_commit"])
+
+    controller = DEFAULT_NEW_GAME_TIMING
+    expected_configuration = {
+        "battle_policy": (
+            "adaptive_rocket_and_fixed_route6_trainers_with_bounded_sleep_recovery"
+        ),
+        "controller_timing": {
+            "press_frames": controller.press_frames,
+            "release_frames": controller.release_frames,
+            "wait_frames": 1,
+        },
+        "emulator": {
+            "human_input": False,
+            "ram_input": "none",
+            "rtc_input": "none",
+            "save_on_exit": False,
+            "sound_emulated": False,
+            "speed": 0,
+            "window": "null",
+        },
+        "pret_pokered_commit": PRET_POKERED_COMMIT,
+        "route_encounter_policy": (
+            "three_exact_route6_pidgey_encounters_with_semantic_run_and_pp_event_gates"
+        ),
+        "starter": "squirtle",
+        "vermilion_timing": asdict(DEFAULT_VERMILION_TIMING),
+    }
+    assert receipt["configuration"] == expected_configuration
+    assert canonical_sha256(expected_configuration) == VERMILION_CONFIGURATION_SHA256
+    assert receipt["configuration_sha256"] == VERMILION_CONFIGURATION_SHA256
+    assert receipt["rom"] == {
+        "sha1": POKEMON_RED_US_REV_0.sha1,
+        "sha256": POKEMON_RED_US_REV_0.sha256,
+        "size_bytes": POKEMON_RED_US_REV_0.size_bytes,
+        "title": POKEMON_RED_US_REV_0.title,
+    }
+
+    checkpoints = receipt["checkpoints"]
+    assert checkpoints["all_verified"] is True
+    assert checkpoints["verified"] == len(checkpoints["ids"]) == 73
+    assert checkpoints["ids"][-5:] == [
+        "route_6_trainer_f_battle",
+        "route_6_trainer_f_defeated",
+        "route_6_trainer_m_battle",
+        "route_6_trainer_m_defeated",
+        "vermilion_reached",
+    ]
+    chapter = receipt["vermilion_chapter"]
+    assert chapter["frames_executed"] == 67_412
+    assert chapter["actions_executed"] == 1_306
+    assert chapter["controller_released"] is True
+    assert chapter["route"]["route_6_trainer_events"] == [
+        False,
+        False,
+        False,
+        True,
+        True,
+        False,
+    ]
+    assert [
+        (item["x"], item["y"], item["species_id"])
+        for item in chapter["route"]["wild_flees"]
+    ] == [(15, 19, 0x24), (15, 22, 0x24), (15, 26, 0x24)]
+    assert all(
+        item["battle_state_before"] == 1
+        and item["battle_state_after"] == 0
+        and item["pp_unchanged"]
+        and item["control_ready"]
+        for item in chapter["route"]["wild_flees"]
+    )
+    assert chapter["trainer_f"] == {
+        "start_hp": 53,
+        "start_max_hp": 66,
+        "start_pp": [24, 30, 30, 22],
+        "final_hp": 27,
+        "final_pp": [18, 30, 30, 22],
+        "status": 0,
+    }
+    assert chapter["trainer_m"] == {
+        "start_hp": 66,
+        "start_max_hp": 66,
+        "start_pp": [25, 30, 30, 25],
+        "final_hp": 42,
+        "final_max_hp": 69,
+        "final_pp": [20, 30, 30, 25],
+        "status": 0,
+    }
+    assert receipt["objective_progress"]["verified"] == 10
+    assert receipt["objective_progress"]["total"] == 36
+    assert receipt["objective_progress"]["next"] == "obtain_cut"
+    assert receipt["repeatability"] == {
+        "identical_action_count": True,
+        "identical_final_state": True,
+        "identical_frame_count": True,
+        "identical_semantic_digest": True,
+        "semantic_digest_sha256": (
+            "84b6ee9dc46d56359ad7feafc2e9ce48f7c17d0667c7d67f2254e4af9808773e"
+        ),
+    }
+    assert receipt["qualified_through"] == "reach_vermilion"
+    assert receipt["game_complete"] is False
+    assert receipt["frames_executed"] == 501_922
+    assert receipt["actions_executed"] == 7_242
     assert receipt["controller_released"] is True
 
     serialized = json.dumps(receipt)

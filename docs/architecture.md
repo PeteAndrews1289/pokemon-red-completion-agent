@@ -42,8 +42,8 @@ ports before they can enter this adapter.
 
 ### Qualified continuous teacher
 
-The current bounded teacher uses one emulator session for 58 checkpoints from clean power-on
-through Misty:
+The current bounded teacher uses one emulator session for 73 checkpoints from clean power-on
+through Vermilion:
 
 1. bedroom input ready;
 2. Red's house first floor;
@@ -101,11 +101,26 @@ through Misty:
 54. Bill's House exited with the ticket;
 55. the mandatory Cerulean Gym trainer identified;
 56. the mandatory Cerulean Gym trainer defeated;
-57. Misty's live trainer battle identified; and
-58. Misty defeated with the Cascade Badge and TM11 concurrently verified.
+57. Misty's live trainer battle identified;
+58. Misty defeated with the Cascade Badge and TM11 concurrently verified;
+59. the clean Misty victory boundary reverified;
+60. the robbed Cerulean house entered;
+61. the rear robbery exit reached;
+62. the Cerulean Rocket thief battle identified;
+63. the Rocket thief defeated with TM28 verified;
+64. Route 5 reached;
+65. the north Underground Path building entered;
+66. the north-south Underground Path tunnel entered;
+67. the south Underground Path building reached;
+68. Route 6 reached;
+69. the required lower Route 6 Jr. Trainer F battle identified;
+70. the Jr. Trainer F defeated;
+71. the required lower Route 6 Jr. Trainer M battle identified;
+72. the Jr. Trainer M defeated; and
+73. stable Vermilion City arrival verified.
 
 The public `opening` command retains its six-checkpoint compatibility contract. The `play` command
-composes all 58 checkpoints without restarting, loading state, or saving. Every action is
+composes all 73 checkpoints without restarting, loading state, or saving. Every action is
 reobserved, dialogue and battle loops have fixed budgets, and unexpected battles, maps,
 coordinates, scripts, events, species, health, inventory, move PP, or controller masks fail
 closed. Route 1 rejects every encounter. Viridian Forest permits only three intentionally seeded
@@ -131,13 +146,18 @@ Route 24 trainers and the Nugget Rocket in order, four selected Route 25 trainer
 Bill's request/transformation/ticket event chain, the mandatory Gym trainer, Misty's exact live
 trainer identity, and concurrent Cascade Badge and TM11 event, inventory, and badge mirrors.
 Adaptive move selection for the rival and Misty consumes bounded battle state, while the fixed
-required-trainer routines retain the already qualified deterministic strategy.
+required-trainer routines retain the already qualified deterministic strategy. The Vermilion
+chapter additionally requires the Rocket thief's exact trainer identity and TM28 reward, every
+Route 5 and Underground Path transition, the two lower Route 6 trainer identities and event order,
+and stable Vermilion coordinates. A bounded heal-and-replay recovery records three exact wild
+Pidgey encounters, navigates to RUN from semantic menu state, and proves battle exit, restored
+control, a living status-free lead, unchanged full PP, and unchanged trainer events after each.
 
 The corridors and semantic gates are derived from pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8` and independently verified on the supported private ROM.
 The concluded predecessor supplied the separately attributed power-on bootstrap, not this route.
-Completing these **58/58 checkpoints** verifies **9/36 objectives**. Three exact clean-power-on
-runs were identical at 434,510 frames and 5,936 actions. This verifies deterministic-teacher
+Completing these **73/73 checkpoints** verifies **10/36 objectives**. Three exact clean-power-on
+runs were identical at 501,922 frames and 7,242 actions. This verifies deterministic-teacher
 repeatability for that route; it does not verify a learned policy, held-out timing/RNG
 generalization, or the full game.
 

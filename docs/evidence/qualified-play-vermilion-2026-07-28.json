@@ -1,0 +1,260 @@
+{
+  "receipt_schema": "qualified-play-evidence-v5",
+  "schema": "qualified-play-v5",
+  "status": "ok",
+  "attempts": {
+    "failed": 0,
+    "passed": 3,
+    "total": 3
+  },
+  "assistance": {
+    "class": "deterministic_teacher",
+    "human_controller_input": false,
+    "save_state_restore": false,
+    "learned_policy": false
+  },
+  "source": {
+    "git_commit": "4b2beb4c36a2228e2e922c31285883a174e4b446",
+    "worktree_dirty": true,
+    "runtime_snapshot_sha256": "9dd1a77cfb83097d16dbf5406ee8a79340aa47e0d3907283b12aa2c0015894c8"
+  },
+  "python_version": "3.14.3",
+  "recorded_on": "2026-07-28",
+  "extends_evidence": "qualified-play-misty-2026-07-28.json",
+  "configuration": {
+    "battle_policy": "adaptive_rocket_and_fixed_route6_trainers_with_bounded_sleep_recovery",
+    "controller_timing": {
+      "press_frames": 8,
+      "release_frames": 16,
+      "wait_frames": 1
+    },
+    "emulator": {
+      "human_input": false,
+      "ram_input": "none",
+      "rtc_input": "none",
+      "save_on_exit": false,
+      "sound_emulated": false,
+      "speed": 0,
+      "window": "null"
+    },
+    "pret_pokered_commit": "1e96034092686d006e863cace09e87273051a3d8",
+    "route_encounter_policy": "three_exact_route6_pidgey_encounters_with_semantic_run_and_pp_event_gates",
+    "starter": "squirtle",
+    "vermilion_timing": {
+      "transition_wait_frames": 120,
+      "dialogue_wait_frames": 240,
+      "rocket_seed_wait_frames": 41,
+      "heal_dialogue_pulses": 9,
+      "rocket_reward_pulses": 10,
+      "route_6_cleanup_pulses": 5,
+      "max_trainer_intro_pulses": 48,
+      "movement_retries": 10,
+      "movement_retry_wait_frames": 12,
+      "battle_runtime": {
+        "dialogue_wait_frames": 180,
+        "menu_wait_frames": 120,
+        "attack_wait_frames": 180,
+        "completion_wait_frames": 1,
+        "max_runtime_pulses": 720,
+        "max_main_navigation_pulses": 6,
+        "max_move_menu_transition_pulses": 6,
+        "max_move_navigation_pulses": 6,
+        "max_pp_confirmation_pulses": 8,
+        "max_attack_confirmation_pulses": 4,
+        "max_post_attack_transition_pulses": 12,
+        "max_sleep_recovery_pulses": 16,
+        "required_ready_reads": 2
+      }
+    }
+  },
+  "configuration_sha256": "f00e1754db9da55d2ed7cab85ffa991da648b6209d9ba36d77a182e047632006",
+  "rom": {
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "size_bytes": 1048576,
+    "title": "POKEMON RED"
+  },
+  "checkpoints": {
+    "all_verified": true,
+    "verified": 73,
+    "ids": [
+      "bedroom_ready",
+      "downstairs",
+      "outside",
+      "oak_triggered",
+      "selection_ready",
+      "starter_obtained",
+      "rival_defeated",
+      "viridian_reached",
+      "parcel_received",
+      "pallet_returned",
+      "pokedex_received",
+      "lab_exited",
+      "viridian_northbound",
+      "route_2_reached",
+      "forest_gate_reached",
+      "forest_entered",
+      "forest_cleared",
+      "pewter_reached",
+      "pewter_gym_entered",
+      "brock_battle",
+      "brock_defeated",
+      "route_3_reached",
+      "route_3_trainer_0",
+      "route_3_trainer_1",
+      "route_3_trainer_3",
+      "route_3_trainer_6",
+      "route_4_reached",
+      "mt_moon_entered",
+      "mt_moon_b1f",
+      "mt_moon_b2f",
+      "required_rocket",
+      "super_nerd",
+      "helix_fossil",
+      "mt_moon_b1f_ascent",
+      "mt_moon_exited",
+      "cerulean_reached",
+      "cerulean_rival_battle",
+      "cerulean_rival_defeated",
+      "route_24_trainer_5",
+      "route_24_trainer_4",
+      "route_24_trainer_3",
+      "route_24_trainer_2",
+      "route_24_trainer_1",
+      "nugget_rocket_battle",
+      "nugget_rocket_defeated",
+      "route_25_trainer_8",
+      "route_25_trainer_3",
+      "route_25_trainer_2",
+      "route_25_trainer_5",
+      "bill_requested_help",
+      "bill_cell_separator_used",
+      "bill_restored",
+      "ss_ticket_obtained",
+      "bills_house_left",
+      "cerulean_gym_trainer_battle",
+      "cerulean_gym_trainer_defeated",
+      "misty_battle",
+      "misty_defeated",
+      "misty_ready",
+      "trashed_house_entered",
+      "robbery_rear_exit",
+      "rocket_thief_battle",
+      "tm28_obtained",
+      "route_5_reached",
+      "underground_north_entrance",
+      "underground_tunnel",
+      "underground_south_entrance",
+      "route_6_reached",
+      "route_6_trainer_f_battle",
+      "route_6_trainer_f_defeated",
+      "route_6_trainer_m_battle",
+      "route_6_trainer_m_defeated",
+      "vermilion_reached"
+    ]
+  },
+  "vermilion_chapter": {
+    "route": {
+      "rocket_battle_observed": true,
+      "tm28_verified": true,
+      "route_6_trainer_events": [false, false, false, true, true, false],
+      "wild_flees": [
+        {
+          "map_id": 17,
+          "x": 15,
+          "y": 19,
+          "species_id": 36,
+          "battle_state_before": 1,
+          "battle_state_after": 0,
+          "pp_unchanged": true,
+          "control_ready": true
+        },
+        {
+          "map_id": 17,
+          "x": 15,
+          "y": 22,
+          "species_id": 36,
+          "battle_state_before": 1,
+          "battle_state_after": 0,
+          "pp_unchanged": true,
+          "control_ready": true
+        },
+        {
+          "map_id": 17,
+          "x": 15,
+          "y": 26,
+          "species_id": 36,
+          "battle_state_before": 1,
+          "battle_state_after": 0,
+          "pp_unchanged": true,
+          "control_ready": true
+        }
+      ],
+      "vermilion_map_id": 5,
+      "vermilion_x": 19,
+      "vermilion_y": 0
+    },
+    "trainer_f": {
+      "start_hp": 53,
+      "start_max_hp": 66,
+      "start_pp": [24, 30, 30, 22],
+      "final_hp": 27,
+      "final_pp": [18, 30, 30, 22],
+      "status": 0
+    },
+    "trainer_m": {
+      "start_hp": 66,
+      "start_max_hp": 66,
+      "start_pp": [25, 30, 30, 25],
+      "final_hp": 42,
+      "final_max_hp": 69,
+      "final_pp": [20, 30, 30, 25],
+      "status": 0
+    },
+    "final": {
+      "wartortle_level": 25,
+      "wartortle_hp": 42,
+      "wartortle_max_hp": 69,
+      "wartortle_status": 0,
+      "wartortle_pp": [20, 30, 30, 25]
+    },
+    "frames_executed": 67412,
+    "actions_executed": 1306,
+    "controller_released": true
+  },
+  "objective_progress": {
+    "next": "obtain_cut",
+    "total": 36,
+    "verified": 10,
+    "verified_ids": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter",
+      "receive_pokedex",
+      "reach_pewter",
+      "defeat_brock",
+      "reach_cerulean",
+      "help_bill",
+      "reach_vermilion",
+      "defeat_misty"
+    ]
+  },
+  "repeatability": {
+    "identical_action_count": true,
+    "identical_final_state": true,
+    "identical_frame_count": true,
+    "identical_semantic_digest": true,
+    "semantic_digest_sha256": "84b6ee9dc46d56359ad7feafc2e9ce48f7c17d0667c7d67f2254e4af9808773e"
+  },
+  "scope": {
+    "claim": "exact deterministic teacher repeat",
+    "timing_or_rng_generalization": false,
+    "learned_policy_generalization": false,
+    "game_complete": false
+  },
+  "qualified_through": "reach_vermilion",
+  "game_complete": false,
+  "frames_executed": 501922,
+  "actions_executed": 7242,
+  "controller_released": true
+}

@@ -353,6 +353,47 @@ class _CascadeEvidence:
         }
 
 
+class _VermilionEvidence:
+    passed = True
+    final_raw = _raw(MapId.VERMILION_CITY, 19, 0)
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "misty_ready",
+            "trashed_house_entered",
+            "robbery_rear_exit",
+            "rocket_thief_battle",
+            "tm28_obtained",
+            "route_5_reached",
+            "underground_north_entrance",
+            "underground_tunnel",
+            "underground_south_entrance",
+            "route_6_reached",
+            "route_6_trainer_f_battle",
+            "route_6_trainer_f_defeated",
+            "route_6_trainer_m_battle",
+            "route_6_trainer_m_defeated",
+            "vermilion_reached",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok",
+            "route": {
+                "rocket_battle_observed": True,
+                "tm28_verified": True,
+                "route_6_trainer_events": [False, False, False, True, True, False],
+                "vermilion_map_id": MapId.VERMILION_CITY,
+                "vermilion_x": 19,
+                "vermilion_y": 0,
+            },
+        }
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -426,16 +467,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 58
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 73
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=58,
+        completed=73,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 58
+    assert progress.completed == progress.total == 73
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -524,6 +565,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         pewter=_PewterEvidence(),  # type: ignore[arg-type]
         cerulean=_CeruleanEvidence(),  # type: ignore[arg-type]
         cascade=_CascadeEvidence(),  # type: ignore[arg-type]
+        vermilion=_VermilionEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -539,6 +581,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "location:cerulean_city",
                 "item:ss_ticket",
                 "badge:cascade",
+                "location:vermilion_city",
             }
         ),
         verified_objectives=(
@@ -551,8 +594,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_cerulean",
             "help_bill",
             "defeat_misty",
+            "reach_vermilion",
         ),
-        next_objective="reach_vermilion",
+        next_objective="obtain_cut",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -562,9 +606,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v4"
+    assert public["schema"] == "qualified-play-v5"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "defeat_misty"
+    assert public["qualified_through"] == "reach_vermilion"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -626,9 +670,24 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "cerulean_gym_trainer_defeated",
         "misty_battle",
         "misty_defeated",
+        "misty_ready",
+        "trashed_house_entered",
+        "robbery_rear_exit",
+        "rocket_thief_battle",
+        "tm28_obtained",
+        "route_5_reached",
+        "underground_north_entrance",
+        "underground_tunnel",
+        "underground_south_entrance",
+        "route_6_reached",
+        "route_6_trainer_f_battle",
+        "route_6_trainer_f_defeated",
+        "route_6_trainer_m_battle",
+        "route_6_trainer_m_defeated",
+        "vermilion_reached",
     ]
     assert public["objective_progress"] == {
-        "verified": 9,
+        "verified": 10,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -640,8 +699,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_cerulean",
             "help_bill",
             "defeat_misty",
+            "reach_vermilion",
         ],
-        "next": "reach_vermilion",
+        "next": "obtain_cut",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -773,7 +833,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_reaches_verified_misty_without_adjacent_artifacts() -> None:
+def test_private_rom_reaches_verified_vermilion_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -795,13 +855,41 @@ def test_private_rom_reaches_verified_misty_without_adjacent_artifacts() -> None
         "defeat_brock",
         "reach_cerulean",
         "help_bill",
+        "reach_vermilion",
         "defeat_misty",
     )
-    assert report.next_objective == "reach_vermilion"
-    assert report.frames_executed == 434_510
-    assert report.actions_executed == 5_936
+    assert report.next_objective == "obtain_cut"
+    assert report.frames_executed == 501_922
+    assert report.actions_executed == 7_242
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
     assert report.cascade.final_evidence.ss_ticket_in_bag
+    assert report.vermilion.passed
+    assert report.vermilion.frames_executed == 67_412
+    assert report.vermilion.actions_executed == 1_306
+    assert report.vermilion.final_evidence.vermilion_snapshot
+    assert report.vermilion.final_evidence.route_6_trainer_events == (
+        False,
+        False,
+        False,
+        True,
+        True,
+        False,
+    )
+    assert [
+        (item.player_x, item.player_y, item.enemy_species_id)
+        for item in report.vermilion.route_6_wild_flees
+    ] == [(15, 19, 0x24), (15, 22, 0x24), (15, 26, 0x24)]
+    assert all(item.verified for item in report.vermilion.route_6_wild_flees)
+    assert (
+        report.vermilion.final_raw.map_id,
+        report.vermilion.final_raw.player_x,
+        report.vermilion.final_raw.player_y,
+        report.vermilion.final_raw.first_party_level,
+        report.vermilion.final_raw.first_party_hp,
+        report.vermilion.final_raw.first_party_max_hp,
+        report.vermilion.final_raw.first_party_status,
+        report.vermilion.final_raw.first_party_pp,
+    ) == (5, 19, 0, 25, 42, 69, 0, (20, 30, 30, 25))
     assert before == after
