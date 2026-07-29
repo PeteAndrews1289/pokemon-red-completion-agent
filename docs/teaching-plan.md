@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **235/235 qualified checkpoints** through
-Saffron access and therefore **23/36 completion objectives**. Three clean runs were identical at
-the 2,284,226-frame / 26,012-action boundary. The evidence includes the earlier Brock
+The deterministic teacher currently verifies all **247/247 qualified checkpoints** through
+Silph Co. and therefore **24/36 completion objectives**. Three clean runs were identical at
+the 3,323,717-frame / 29,473-action boundary. The evidence includes the earlier Brock
 and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
@@ -103,11 +103,17 @@ timing/RNG generalization, or full-game result is implied. The Koga segment adds
 mandatory-trainer minimum, two Center recoveries, six-trainer post-victory deactivation, Koga's
 live identity, Soul Badge raw and mirror bits, retained TM06, and a final healed Fuchsia boundary.
 Koga must precede the return to Erika here: Route 15 is one-way eastbound, Cycling Road requires
-the Bicycle, and field Surf requires the Soul Badge. The next teaching segment defeats Erika.
+the Bicycle, and field Surf requires the Soul Badge.
 The Strength segment returns the Gold Teeth to the Warden, verifies the Teeth-removal event before
 the HM04 reward event, retains reusable HM04, and teaches Strength over obsolete Tail Whip while
 preserving Bite, BubbleBeam, and Surf. It then returns to the same healed Fuchsia boundary without
-spending money or entering battle. The next qualified teaching segment is Silph Co.
+spending money or entering battle.
+The Silph segment buys a bounded Max Repel and Hyper Potion reserve, uses the live Celadon roof
+sprite position to obtain TM13 without claiming the other rewards, teaches Ice Beam over
+BubbleBeam, and follows the source-pinned Card Key and warp route. It verifies the required 5F and
+3F Rockets, both unlocked doors, rival, 11F Rocket, Giovanni, and Master Ball events; leaves the
+optional Lapras untouched; and returns with a healed, status-free party to Saffron Center. The next
+qualified teaching segment is Sabrina.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -227,6 +233,6 @@ restore, rewind, or import state from another run.
 21. Train the semantic planner and full-game composition only after that coverage exists.
 22. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
-The current evaluation gate is three intervention-free clean-power-on runs through HM04 Strength.
+The current evaluation gate is three intervention-free clean-power-on runs through Silph Co.
 A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
 frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.

@@ -761,9 +761,7 @@ class _ErikaEvidence:
     passed = True
     final_raw = replace(
         _StrengthEvidence.final_raw,
-        badge_bits=int(
-            Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL
-        ),
+        badge_bits=int(Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL),
     )
 
     def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
@@ -812,6 +810,34 @@ class _SaffronEvidence:
 
     def public_dict(self) -> dict[str, object]:
         return {"status": "ok", "objective": "reach_saffron"}
+
+
+class _SilphEvidence:
+    passed = True
+    final_raw = _SaffronEvidence.final_raw
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "silph_ready",
+            "silph_supplied",
+            "card_key",
+            "third_floor_door",
+            "rival_ready",
+            "silph_rival",
+            "eleventh_ready",
+            "eleventh_rocket",
+            "eleventh_door",
+            "silph_liberated",
+            "master_ball",
+            "silph_terminal",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "liberate_silph"}
 
 
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
@@ -887,16 +913,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 235
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 247
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=235,
+        completed=247,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 235
+    assert progress.completed == progress.total == 247
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -995,9 +1021,10 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         fuchsia=_FuchsiaEvidence(),  # type: ignore[arg-type]
         safari=_SafariEvidence(),  # type: ignore[arg-type]
         koga=_KogaEvidence(),  # type: ignore[arg-type]
-            strength=_StrengthEvidence(),  # type: ignore[arg-type]
-            erika=_ErikaEvidence(),  # type: ignore[arg-type]
-            saffron=_SaffronEvidence(),  # type: ignore[arg-type]
+        strength=_StrengthEvidence(),  # type: ignore[arg-type]
+        erika=_ErikaEvidence(),  # type: ignore[arg-type]
+        saffron=_SaffronEvidence(),  # type: ignore[arg-type]
+        silph=_SilphEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -1024,9 +1051,10 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "location:fuchsia_city",
                 "move:surf_available",
                 "move:strength_available",
-                    "badge:soul",
-                    "badge:rainbow",
-                    "location:saffron_city",
+                "badge:soul",
+                "badge:rainbow",
+                "location:saffron_city",
+                "story:silph_co_liberated",
             }
         ),
         verified_objectives=(
@@ -1050,11 +1078,12 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_fuchsia",
             "obtain_surf",
             "obtain_strength",
-                "defeat_koga",
-                "defeat_erika",
-                "reach_saffron",
-            ),
-            next_objective="liberate_silph",
+            "defeat_koga",
+            "defeat_erika",
+            "reach_saffron",
+            "liberate_silph",
+        ),
+        next_objective="defeat_sabrina",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -1064,9 +1093,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v17"
+    assert public["schema"] == "qualified-play-v18"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "reach_saffron"
+    assert public["qualified_through"] == "liberate_silph"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -1305,9 +1334,21 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "guards_bribed",
         "saffron_entered",
         "saffron_stable",
+        "silph_ready",
+        "silph_supplied",
+        "card_key",
+        "third_floor_door",
+        "rival_ready",
+        "silph_rival",
+        "eleventh_ready",
+        "eleventh_rocket",
+        "eleventh_door",
+        "silph_liberated",
+        "master_ball",
+        "silph_terminal",
     ]
     assert public["objective_progress"] == {
-        "verified": 23,
+        "verified": 24,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1333,8 +1374,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "defeat_koga",
             "defeat_erika",
             "reach_saffron",
+            "liberate_silph",
         ],
-        "next": "liberate_silph",
+        "next": "defeat_sabrina",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -1466,7 +1508,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_reaches_saffron_without_adjacent_artifacts() -> None:
+def test_private_rom_liberates_silph_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -1502,11 +1544,12 @@ def test_private_rom_reaches_saffron_without_adjacent_artifacts() -> None:
         "defeat_erika",
         "obtain_strength",
         "reach_saffron",
+        "liberate_silph",
         "defeat_koga",
     )
-    assert report.next_objective == "liberate_silph"
-    assert report.frames_executed == 2_284_226
-    assert report.actions_executed == 26_012
+    assert report.next_objective == "defeat_sabrina"
+    assert report.frames_executed == 3_323_717
+    assert report.actions_executed == 29_473
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -1735,4 +1778,20 @@ def test_private_rom_reaches_saffron_without_adjacent_artifacts() -> None:
         report.saffron.final_raw.player_x,
         report.saffron.final_raw.player_y,
     ) == (3, 3)
+    assert report.silph.passed
+    assert report.silph.frames_executed == 1_039_491
+    assert report.silph.actions_executed == 3_461
+    assert report.silph.tm13_event
+    assert report.silph.tm13_transfer_before_event
+    assert report.silph.other_roof_rewards_untouched
+    assert report.silph.upgraded_moves == (0x82, 0x46, 0x3A, 0x39)
+    assert report.silph.upgraded_pp == (15, 15, 10, 15)
+    assert report.silph.rival_potions_used == 0
+    assert report.silph.hyper_potions_remaining == 6
+    assert report.silph.max_repel_remaining == 0
+    assert report.silph.card_key_quantity == 1
+    assert report.silph.master_ball_quantity == 1
+    assert all(value for _, value in report.silph.required_events)
+    assert report.silph.money_before == 41_345
+    assert report.silph.money_after == 40_894
     assert before == after

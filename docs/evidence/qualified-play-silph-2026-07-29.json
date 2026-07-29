@@ -1,0 +1,81 @@
+{
+  "schema": "qualified-play-v18-receipt",
+  "date": "2026-07-29",
+  "status": "ok",
+  "claim_scope": {
+    "qualified_through": "liberate_silph",
+    "game_complete": false,
+    "learned_policy": false,
+    "timing_or_rng_generalization": false
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "runs": 3,
+    "identical_reports": true,
+    "report_sha256": "7ac303e831446a617b3c7b8eccca2fd7379749bf2e32216f0b42e91cd85ecde3",
+    "frames_per_run": 3323717,
+    "actions_per_run": 29473
+  },
+  "progress": {
+    "checkpoints_verified": 247,
+    "checkpoints_total": 247,
+    "objectives_verified": 24,
+    "objectives_total": 36,
+    "next_objective": "defeat_sabrina"
+  },
+  "silph_chapter": {
+    "frames": 1039491,
+    "actions": 3461,
+    "money_before": 41345,
+    "money_after": 40894,
+    "ice_beam_upgrade": {
+      "max_repel_bought": 1,
+      "max_repel_remaining": 0,
+      "fresh_water_remaining": 0,
+      "tm13_event": true,
+      "tm13_transfer_before_event": true,
+      "other_roof_rewards_untouched": true,
+      "tm13_remaining": 0,
+      "moves": [130, 70, 58, 57],
+      "pp": [15, 15, 10, 15]
+    },
+    "supply": {
+      "hyper_potions_bought": 6,
+      "used_by_rival_policy": 0,
+      "remaining": 6
+    },
+    "required_events": {
+      "0x702": true,
+      "0x709": true,
+      "0x722": true,
+      "0x740": true,
+      "0x784": true,
+      "0x788": true,
+      "0x78d": true,
+      "0x78f": true
+    },
+    "key_items": {
+      "card_key": 1,
+      "master_ball": 1
+    },
+    "optional_lapras_untouched": true,
+    "terminal": {
+      "map": 182,
+      "x": 3,
+      "y": 3,
+      "party_status": [0, 0, 0],
+      "lead_moves": [130, 70, 58, 57],
+      "lead_pp": [15, 15, 10, 15],
+      "input_ready": true,
+      "controller_released": true
+    }
+  },
+  "privacy": {
+    "rom_path_included": false,
+    "rom_hash_included": false,
+    "save_state_included": false,
+    "personal_path_included": false
+  }
+}

@@ -2,12 +2,12 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Saffron qualified](https://img.shields.io/badge/status-Saffron_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Silph qualified](https://img.shields.io/badge/status-Silph_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **235/235 qualified
+> **Current status:** one continuous deterministic teacher now reaches all **247/247 qualified
 > checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
 > Tunnel, clears the Rocket Hideout and Pokémon Tower, rescues Mr. Fuji, receives the Poké Flute,
 > defeats the Route 12 Snorlax, crosses Routes 12–15, collects the Gold Teeth, obtains reusable
@@ -16,12 +16,14 @@ control, and progressively trained specialists.**
 > Teeth, receives reusable HM04, teaches Strength over Tail Whip, returns east across Routes
 > 15–12, defeats the two required Celadon Gym trainers and Erika, receives the Rainbow Badge and
 > TM21, learns Skull Bash over Bite at level 42, buys one Fresh Water from the Celadon roof,
-> gives it to the Route 7 guard, and reaches a healed Saffron boundary. That establishes **23/36
-> completion objectives**. Three clean runs produced the same 2,284,226-frame, 26,012-action
-> result. This is an exact-route
+> gives it to the Route 7 guard, reaches Saffron, obtains the Card Key, defeats the required
+> Silph trainers, rival, and Giovanni, receives the Master Ball, and returns to a healed Saffron
+> boundary. It also buys and teaches TM13 Ice Beam while leaving optional Lapras untouched.
+> That establishes **24/36 completion objectives**. Three clean runs produced the same
+> 3,323,717-frame, 29,473-action result. This is an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next graph-selected objective is liberating Silph Co. See the
-> [sanitized three-run Saffron evidence receipt](docs/evidence/qualified-play-saffron-2026-07-29.json).
+> game-completion claim. The next graph-selected objective is defeating Sabrina. See the
+> [sanitized three-run Silph evidence receipt](docs/evidence/qualified-play-silph-2026-07-29.json).
 
 ## The goal
 
@@ -165,6 +167,10 @@ the complete party in Fuchsia Center.
 It then returns to Celadon, defeats Erika, buys exactly one Fresh Water on the Department Store
 roof, proves the guard consumes it before the global Saffron-access flag is set, crosses the
 Route 7 gate without battle, and heals in Saffron Center.
+It then buys a bounded recovery reserve, obtains and teaches TM13 Ice Beam, enters Silph Co.,
+obtains the Card Key, clears the required warp route and trainers, defeats the rival and Giovanni,
+receives the Master Ball, leaves optional Lapras untouched, and returns to a healed Saffron
+Center boundary.
 It stops automatically after the
 latest independently qualified objective and reports that the game is not complete. The forest
 segment deliberately trains against three verified Kakuna encounters and one mandatory Bug
