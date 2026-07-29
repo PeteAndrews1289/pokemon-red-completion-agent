@@ -46,6 +46,7 @@ LAVENDER_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-lavender
 FUJI_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-fuji-2026-07-29.json"
 FUCHSIA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-fuchsia-2026-07-29.json"
 SURF_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-surf-2026-07-29.json"
+KOGA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-koga-2026-07-29.json"
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -1035,6 +1036,58 @@ def test_surf_receipt_is_repeatable_and_privacy_safe() -> None:
     assert receipt["qualified_through"] == "obtain_surf"
     assert receipt["frames_executed"] == 1_630_696
     assert receipt["actions_executed"] == 20_737
+    assert receipt["controller_released"] is True
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_koga_receipt_is_repeatable_and_privacy_safe() -> None:
+    receipt = json.loads(KOGA_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["receipt_schema"] == "qualified-play-evidence-v14"
+    assert receipt["schema"] == "qualified-play-v14"
+    assert receipt["status"] == "ok"
+    assert receipt["attempts"] == {"failed": 0, "passed": 3, "total": 3}
+    assert receipt["checkpoints"] == {"all_verified": True, "verified": 207}
+    chapter = receipt["koga_chapter"]
+    assert [item["trainer_number"] for item in chapter["mandatory_trainers"]] == [3, 2, 4]
+    assert [item["surf_pp_spent"] for item in chapter["mandatory_trainers"]] == [6, 5, 5]
+    assert chapter["trainer_events_before_koga"] == [
+        False,
+        True,
+        False,
+        False,
+        True,
+        True,
+    ]
+    assert chapter["optional_trainers_undefeated_before_koga"] == 3
+    assert chapter["recoveries_before_koga"] == 2
+    assert chapter["koga"]["surf_pp_spent"] == 8
+    assert chapter["koga"]["no_faint"] is True
+    assert chapter["rewards"] == {
+        "beat_koga_event": True,
+        "soul_badge": True,
+        "soul_badge_mirror": True,
+        "got_tm06_event": True,
+        "tm06_toxic_retained": True,
+        "all_six_regular_trainers_deactivated": True,
+    }
+    assert chapter["terminal"]["party_hp"] == chapter["terminal"]["party_max_hp"] == [
+        124,
+        52,
+        37,
+    ]
+    assert receipt["objective_progress"]["verified"] == 20
+    assert receipt["objective_progress"]["next"] == "defeat_erika"
+    assert receipt["repeatability"]["full_report_sha256"] == (
+        "4d5c1589f9e31a8fec5b1d3a5a9af58951c9250763fea5a386d77dc4cb7ae226"
+    )
+    assert receipt["qualified_through"] == "defeat_koga"
+    assert receipt["frames_executed"] == 1_782_032
+    assert receipt["actions_executed"] == 22_053
     assert receipt["controller_released"] is True
 
     serialized = json.dumps(receipt)

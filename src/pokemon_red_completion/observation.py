@@ -181,6 +181,7 @@ class MapId(IntEnum):
     ROCK_TUNNEL_1F = 0x52
     LAVENDER_POKECENTER = 0x8D
     FUCHSIA_POKECENTER = 0x9A
+    FUCHSIA_GYM = 0x9D
     SAFARI_ZONE_GATE = 0x9C
     POKEMON_TOWER_1F = 0x8E
     POKEMON_TOWER_2F = 0x8F
@@ -332,7 +333,14 @@ class EventFlag(IntEnum):
     BEAT_LT_SURGE = 0x167
     BEAT_ERIKA = 0x1A9
     GOT_HM04 = 0x238
+    GOT_TM06 = 0x258
     BEAT_KOGA = 0x259
+    BEAT_FUCHSIA_GYM_TRAINER_0 = 0x25A
+    BEAT_FUCHSIA_GYM_TRAINER_1 = 0x25B
+    BEAT_FUCHSIA_GYM_TRAINER_2 = 0x25C
+    BEAT_FUCHSIA_GYM_TRAINER_3 = 0x25D
+    BEAT_FUCHSIA_GYM_TRAINER_4 = 0x25E
+    BEAT_FUCHSIA_GYM_TRAINER_5 = 0x25F
     BEAT_BLAINE = 0x299
     BEAT_SABRINA = 0x361
     BEAT_ROUTE_3_TRAINER_0 = 0x3E2
@@ -424,6 +432,7 @@ class ItemId(IntEnum):
     HM01_CUT = 0xC4
     HM03_SURF = 0xC6
     HM04_STRENGTH = 0xC7
+    TM06_TOXIC = 0xCE
     TM11_BUBBLEBEAM = 0xD3
     TM16_PAY_DAY = 0xD8
     TM20_RAGE = 0xDC
@@ -3973,6 +3982,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.ROCK_TUNNEL_B1F: "rock_tunnel_b1f",
         MapId.LAVENDER_POKECENTER: "lavender_pokecenter",
         MapId.FUCHSIA_POKECENTER: "fuchsia_pokecenter",
+        MapId.FUCHSIA_GYM: "fuchsia_gym",
         MapId.CELADON_POKECENTER: "celadon_pokecenter",
         MapId.GAME_CORNER: "game_corner",
         MapId.ROCKET_HIDEOUT_B1F: "rocket_hideout_b1f",
@@ -4014,6 +4024,7 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         MapId.CELADON_POKECENTER: "location:celadon_city",
         MapId.FUCHSIA_CITY: "location:fuchsia_city",
         MapId.FUCHSIA_POKECENTER: "location:fuchsia_city",
+        MapId.FUCHSIA_GYM: "location:fuchsia_city",
         MapId.CINNABAR_ISLAND: "location:cinnabar_island",
         MapId.SAFFRON_CITY: "location:saffron_city",
     }
