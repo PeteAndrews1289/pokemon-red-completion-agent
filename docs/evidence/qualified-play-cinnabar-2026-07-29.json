@@ -1,0 +1,109 @@
+{
+  "schema": "qualified-play-v20-receipt",
+  "date": "2026-07-29",
+  "status": "ok",
+  "claim_scope": {
+    "qualified_through": "reach_cinnabar",
+    "game_complete": false,
+    "learned_policy": false,
+    "timing_or_rng_generalization": false
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "runs": 3,
+    "identical_reports": true,
+    "report_sha256": "77bb810300445c6e297352768e03e6cbec1bdc288e42bae055bd38fd2bb0d0f2",
+    "frames_per_run": 3648870,
+    "actions_per_run": 30910
+  },
+  "progress": {
+    "checkpoints_verified": 259,
+    "checkpoints_total": 259,
+    "objectives_verified": 26,
+    "objectives_total": 36,
+    "next_objective": "obtain_secret_key"
+  },
+  "cinnabar_chapter": {
+    "frames": 151044,
+    "actions": 862,
+    "bicycle_required": false,
+    "route16_cut_lane": true,
+    "rare_candy": {
+      "quantity_before": 1,
+      "quantity_after": 0,
+      "bag_slots_before": 20,
+      "bag_slots_after": 19,
+      "lead_stats_before": [45, 139, 139, 98, 109, 90, 104],
+      "lead_stats_after": [46, 142, 142, 100, 112, 92, 106]
+    },
+    "hm02": {
+      "item_and_event_same_pulse": true,
+      "event": true,
+      "quantity": 1,
+      "dux_moves_before": [64, 28, 15, 31],
+      "dux_moves_after": [64, 28, 15, 19],
+      "dux_pp_after": [35, 15, 30, 15]
+    },
+    "fly": {
+      "default_destination": "pallet_town",
+      "departure": [27, 7, 6],
+      "arrival": [0, 5, 6]
+    },
+    "route21": {
+      "moves": 93,
+      "trainer_events_before": [false, false, false, false, false, false, false, false, false],
+      "trainer_events_after": [false, false, false, false, false, false, false, false, false],
+      "trainer_battles": 0,
+      "wild_flees": [
+        {
+          "position": [4, 12],
+          "species": 165,
+          "level": 21,
+          "party_preserved": true,
+          "pp_preserved": true,
+          "hp_safe": true,
+          "inventory_preserved": true
+        },
+        {
+          "position": [3, 52],
+          "species": 24,
+          "level": 10,
+          "party_preserved": true,
+          "pp_preserved": true,
+          "hp_safe": true,
+          "inventory_preserved": true
+        },
+        {
+          "position": [3, 77],
+          "species": 24,
+          "level": 10,
+          "party_preserved": true,
+          "pp_preserved": true,
+          "hp_safe": true,
+          "inventory_preserved": true
+        }
+      ]
+    },
+    "terminal": {
+      "map": 171,
+      "x": 3,
+      "y": 3,
+      "party_hp": [142, 52, 37],
+      "party_max_hp": [142, 52, 37],
+      "party_status": [0, 0, 0],
+      "lead_moves": [130, 70, 58, 57],
+      "lead_pp": [15, 15, 10, 15],
+      "dux_moves": [64, 28, 15, 19],
+      "dux_pp": [35, 15, 30, 15],
+      "controller_released": true
+    }
+  },
+  "privacy": {
+    "rom_path_included": false,
+    "rom_hash_included": false,
+    "save_state_included": false,
+    "personal_path_included": false
+  }
+}

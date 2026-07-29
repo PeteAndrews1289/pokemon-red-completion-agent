@@ -52,6 +52,7 @@ STRENGTH_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-strength
 SAFFRON_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-saffron-2026-07-29.json"
 SILPH_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-silph-2026-07-29.json"
 SABRINA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-sabrina-2026-07-29.json"
+CINNABAR_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-cinnabar-2026-07-29.json"
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -1301,6 +1302,56 @@ def test_sabrina_receipt_is_repeatable_complete_and_privacy_safe() -> None:
     }
     assert chapter["terminal"]["party_hp"] == chapter["terminal"]["party_max_hp"]
     assert chapter["terminal"]["lead_pp"] == [15, 15, 10, 15]
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_cinnabar_receipt_is_repeatable_complete_and_privacy_safe() -> None:
+    receipt = json.loads(CINNABAR_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "qualified-play-v20-receipt"
+    assert receipt["status"] == "ok"
+    assert receipt["claim_scope"]["qualified_through"] == "reach_cinnabar"
+    assert receipt["evaluation"] == {
+        "clean_power_on": True,
+        "human_input": False,
+        "save_state_restoration": False,
+        "runs": 3,
+        "identical_reports": True,
+        "report_sha256": "77bb810300445c6e297352768e03e6cbec1bdc288e42bae055bd38fd2bb0d0f2",
+        "frames_per_run": 3_648_870,
+        "actions_per_run": 30_910,
+    }
+    assert receipt["progress"] == {
+        "checkpoints_verified": 259,
+        "checkpoints_total": 259,
+        "objectives_verified": 26,
+        "objectives_total": 36,
+        "next_objective": "obtain_secret_key",
+    }
+    chapter = receipt["cinnabar_chapter"]
+    assert chapter["bicycle_required"] is False
+    assert chapter["route16_cut_lane"] is True
+    assert chapter["hm02"]["item_and_event_same_pulse"] is True
+    assert chapter["hm02"]["dux_moves_after"] == [0x40, 0x1C, 0x0F, 0x13]
+    assert chapter["route21"]["trainer_events_before"] == [False] * 9
+    assert chapter["route21"]["trainer_events_after"] == [False] * 9
+    assert chapter["route21"]["trainer_battles"] == 0
+    assert [
+        (item["position"], item["species"], item["level"])
+        for item in chapter["route21"]["wild_flees"]
+    ] == [([4, 12], 0xA5, 21), ([3, 52], 0x18, 10), ([3, 77], 0x18, 10)]
+    assert all(
+        item["party_preserved"]
+        and item["pp_preserved"]
+        and item["hp_safe"]
+        and item["inventory_preserved"]
+        for item in chapter["route21"]["wild_flees"]
+    )
+    assert chapter["terminal"]["party_hp"] == chapter["terminal"]["party_max_hp"]
+    assert chapter["terminal"]["controller_released"] is True
     serialized = json.dumps(receipt)
     assert "/Users/" not in serialized
     assert "Downloads" not in serialized

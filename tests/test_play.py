@@ -862,6 +862,33 @@ class _SabrinaEvidence:
         return {"status": "ok", "objective": "defeat_sabrina"}
 
 
+class _CinnabarEvidence:
+    passed = True
+    final_raw = replace(
+        _SabrinaEvidence.final_raw,
+        map_id=MapId.CINNABAR_POKECENTER,
+        player_x=3,
+        player_y=3,
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "cinnabar_ready",
+            "fly_house_reached",
+            "fly_taught",
+            "pallet_reached",
+            "cinnabar_reached",
+            "cinnabar_terminal",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "reach_cinnabar"}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -935,16 +962,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 253
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 259
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=253,
+        completed=259,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 253
+    assert progress.completed == progress.total == 259
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -1048,6 +1075,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         saffron=_SaffronEvidence(),  # type: ignore[arg-type]
         silph=_SilphEvidence(),  # type: ignore[arg-type]
         sabrina=_SabrinaEvidence(),  # type: ignore[arg-type]
+        cinnabar=_CinnabarEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -1079,6 +1107,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "location:saffron_city",
                 "story:silph_co_liberated",
                 "badge:marsh",
+                "location:cinnabar_island",
             }
         ),
         verified_objectives=(
@@ -1107,8 +1136,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_saffron",
             "liberate_silph",
             "defeat_sabrina",
+            "reach_cinnabar",
         ),
-        next_objective="reach_cinnabar",
+        next_objective="obtain_secret_key",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -1118,9 +1148,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v19"
+    assert public["schema"] == "qualified-play-v20"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "defeat_sabrina"
+    assert public["qualified_through"] == "reach_cinnabar"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -1377,9 +1407,15 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "marsh_badge",
         "gym_exited",
         "sabrina_terminal",
+        "cinnabar_ready",
+        "fly_house_reached",
+        "fly_taught",
+        "pallet_reached",
+        "cinnabar_reached",
+        "cinnabar_terminal",
     ]
     assert public["objective_progress"] == {
-        "verified": 25,
+        "verified": 26,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1407,8 +1443,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_saffron",
             "liberate_silph",
             "defeat_sabrina",
+            "reach_cinnabar",
         ],
-        "next": "reach_cinnabar",
+        "next": "obtain_secret_key",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -1540,7 +1577,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_defeats_sabrina_without_adjacent_artifacts() -> None:
+def test_private_rom_reaches_cinnabar_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -1579,10 +1616,11 @@ def test_private_rom_defeats_sabrina_without_adjacent_artifacts() -> None:
         "liberate_silph",
         "defeat_sabrina",
         "defeat_koga",
+        "reach_cinnabar",
     )
-    assert report.next_objective == "reach_cinnabar"
-    assert report.frames_executed == 3_497_826
-    assert report.actions_executed == 30_048
+    assert report.next_objective == "obtain_secret_key"
+    assert report.frames_executed == 3_648_870
+    assert report.actions_executed == 30_910
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -1839,4 +1877,29 @@ def test_private_rom_defeats_sabrina_without_adjacent_artifacts() -> None:
     assert report.sabrina.marsh_badge_mirror
     assert report.sabrina.tm46_quantity == 1
     assert report.sabrina.hyper_potions_remaining == 6
+    assert report.cinnabar.passed
+    assert report.cinnabar.frames_executed == 151_044
+    assert report.cinnabar.actions_executed == 862
+    assert report.cinnabar.lead_stats_before == (45, 139, 139, 98, 109, 90, 104)
+    assert report.cinnabar.lead_stats_after == (46, 142, 142, 100, 112, 92, 106)
+    assert report.cinnabar.hm02_item_before_event
+    assert report.cinnabar.got_hm02
+    assert report.cinnabar.dux_moves_after == (0x40, 0x1C, 0x0F, 0x13)
+    assert report.cinnabar.dux_pp_after == (35, 15, 30, 15)
+    assert report.cinnabar.route21_events_before == (False,) * 9
+    assert report.cinnabar.route21_events_after == (False,) * 9
+    assert report.cinnabar.wild_battles == 3
+    assert [
+        (item.x, item.y, item.species, item.level) for item in report.cinnabar.wild_flees
+    ] == [(4, 12, 0xA5, 21), (3, 52, 0x18, 10), (3, 77, 0x18, 10)]
+    assert all(
+        item.party_preserved
+        and item.pp_preserved
+        and item.hp_safe
+        and item.inventory_preserved
+        for item in report.cinnabar.wild_flees
+    )
+    assert report.cinnabar.trainer_battles == 0
+    assert report.cinnabar.party_hp == report.cinnabar.party_max_hp == (142, 52, 37)
+    assert report.cinnabar.party_status == (0, 0, 0)
     assert before == after

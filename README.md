@@ -2,12 +2,12 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Sabrina qualified](https://img.shields.io/badge/status-Sabrina_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Cinnabar qualified](https://img.shields.io/badge/status-Cinnabar_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **253/253 qualified
+> **Current status:** one continuous deterministic teacher now reaches all **259/259 qualified
 > checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
 > Tunnel, clears the Rocket Hideout and Pokémon Tower, rescues Mr. Fuji, receives the Poké Flute,
 > defeats the Route 12 Snorlax, crosses Routes 12–15, collects the Gold Teeth, obtains reusable
@@ -20,12 +20,13 @@ control, and progressively trained specialists.**
 > Silph trainers, rival, and Giovanni, receives the Master Ball, and returns to a healed Saffron
 > boundary. It also buys and teaches TM13 Ice Beam while leaving optional Lapras untouched.
 > It then traverses Saffron Gym without fighting a regular trainer, defeats Sabrina, receives
-> TM46 and the Marsh Badge, and returns fully healed. That establishes **25/36 completion
-> objectives** and six badges. Three clean runs produced the same 3,497,826-frame,
-> 30,048-action result. This is an exact-route
+> TM46 and the Marsh Badge, and returns fully healed. It then takes the bicycle-free Route 16
+> Cut lane, obtains HM02, teaches Fly to DUX, flies to Pallet, Surfs Route 21 without fighting a
+> trainer, and reaches a healed Cinnabar Center. That establishes **26/36 completion objectives**
+> and six badges. Three clean runs produced the same 3,648,870-frame, 30,910-action result. This is an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next graph-selected objective is reaching Cinnabar Island. See the
-> [sanitized three-run Sabrina evidence receipt](docs/evidence/qualified-play-sabrina-2026-07-29.json).
+> game-completion claim. The next graph-selected objective is obtaining the Secret Key. See the
+> [sanitized three-run Cinnabar evidence receipt](docs/evidence/qualified-play-cinnabar-2026-07-29.json).
 
 ## The goal
 
