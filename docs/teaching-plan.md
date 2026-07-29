@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **259/259 qualified checkpoints** through
-Cinnabar and therefore **26/36 completion objectives**. Three clean runs were identical at
-the 3,648,870-frame / 30,910-action boundary. The evidence includes the earlier Brock
+The deterministic teacher currently verifies all **267/267 qualified checkpoints** through
+Blaine and therefore **28/36 completion objectives**. Three clean runs were identical at
+the 3,869,179-frame / 32,695-action boundary. The evidence includes the earlier Brock
 and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
@@ -123,7 +123,12 @@ The Sabrina segment live-qualifies the warp-pad sequence while all seven regular
 remain false, then verifies Sabrina's exact identity and four-member party. Strength handles the
 three Psychic targets while Ice Beam handles Venomoth; the run uses no potion, suffers no faint or
 persistent status, receives TM46 and both Marsh Badge lanes, observes all seven post-victory
-trainer toggles, and returns fully healed to Saffron Center. The next segment reaches Cinnabar.
+trainer toggles, and returns fully healed to Saffron Center. The Cinnabar segment obtains Fly,
+reaches the island through Pallet and Route 21, and then uses a one-repel Mansion route with all
+six optional trainer events untouched. It verifies the three statue-switch transitions, Secret
+Key inventory, all six source-correct quiz answers, Blaine's exact party and Surf-only policy,
+TM38, the victory event, both Volcano Badge lanes, and a fully healed terminal state. The next
+segment returns to Viridian Gym for Giovanni.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -243,6 +248,6 @@ restore, rewind, or import state from another run.
 21. Train the semantic planner and full-game composition only after that coverage exists.
 22. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
-The current evaluation gate is three intervention-free clean-power-on runs through Sabrina.
+The current evaluation gate is three intervention-free clean-power-on runs through Blaine.
 A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
 frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.

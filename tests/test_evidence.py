@@ -53,6 +53,7 @@ SAFFRON_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-saffron-2
 SILPH_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-silph-2026-07-29.json"
 SABRINA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-sabrina-2026-07-29.json"
 CINNABAR_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-cinnabar-2026-07-29.json"
+BLAINE_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-blaine-2026-07-29.json"
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -1351,6 +1352,64 @@ def test_cinnabar_receipt_is_repeatable_complete_and_privacy_safe() -> None:
         for item in chapter["route21"]["wild_flees"]
     )
     assert chapter["terminal"]["party_hp"] == chapter["terminal"]["party_max_hp"]
+    assert chapter["terminal"]["controller_released"] is True
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_blaine_receipt_is_repeatable_complete_and_privacy_safe() -> None:
+    receipt = json.loads(BLAINE_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "qualified-play-v21-receipt"
+    assert receipt["status"] == "ok"
+    assert receipt["claim_scope"] == {
+        "qualified_through": "defeat_blaine",
+        "game_complete": False,
+        "learned_policy": False,
+        "timing_or_rng_generalization": False,
+    }
+    assert receipt["evaluation"] == {
+        "clean_power_on": True,
+        "human_input": False,
+        "save_state_restoration": False,
+        "runs": 3,
+        "identical_reports": True,
+        "report_sha256": "f26bcfbd2051fffcbd32eee6186acef215f22fb2c7aeec53139eae07d8749b3b",
+        "frames_per_run": 3_869_179,
+        "actions_per_run": 32_695,
+    }
+    assert receipt["progress"] == {
+        "checkpoints_verified": 267,
+        "checkpoints_total": 267,
+        "objectives_verified": 28,
+        "objectives_total": 36,
+        "next_objective": "defeat_giovanni",
+    }
+    chapter = receipt["blaine_chapter"]
+    assert chapter["frames"] == 220_309
+    assert chapter["actions"] == 1_785
+    assert chapter["mansion"]["switch_trace"] == [False, True, False, True]
+    assert chapter["mansion"]["optional_trainers_before"] == [False] * 6
+    assert chapter["mansion"]["optional_trainers_after"] == [False] * 6
+    assert chapter["mansion"]["secret_key_quantity"] == 1
+    assert chapter["mansion"]["wild_battles"] == 0
+    assert chapter["quiz"]["answers"] == ["yes", "no", "no", "no", "yes", "no"]
+    assert chapter["quiz"]["gate_events_after"] == [False] + [True] * 6
+    assert chapter["quiz"]["trainer_events_before"] == [False] * 7
+    assert chapter["battle"]["identity"] == [0xEF, 0xEF, 1]
+    assert chapter["battle"]["party"] == [[0x21, 42], [0xA3, 40], [0xA4, 42], [0x14, 47]]
+    assert chapter["battle"]["move_slots"] == [4] * 5
+    assert chapter["rewards"] == {
+        "tm38_quantity": 1,
+        "tm38_event": True,
+        "blaine_event": True,
+        "volcano_badge": True,
+        "volcano_badge_mirror": True,
+    }
+    assert chapter["terminal"]["party_hp"] == chapter["terminal"]["party_max_hp"]
+    assert chapter["terminal"]["lead_pp"] == [15, 15, 10, 15]
     assert chapter["terminal"]["controller_released"] is True
     serialized = json.dumps(receipt)
     assert "/Users/" not in serialized

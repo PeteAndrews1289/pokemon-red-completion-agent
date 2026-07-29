@@ -1,0 +1,81 @@
+{
+  "schema": "qualified-play-v21-receipt",
+  "date": "2026-07-29",
+  "status": "ok",
+  "claim_scope": {
+    "qualified_through": "defeat_blaine",
+    "game_complete": false,
+    "learned_policy": false,
+    "timing_or_rng_generalization": false
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "runs": 3,
+    "identical_reports": true,
+    "report_sha256": "f26bcfbd2051fffcbd32eee6186acef215f22fb2c7aeec53139eae07d8749b3b",
+    "frames_per_run": 3869179,
+    "actions_per_run": 32695
+  },
+  "progress": {
+    "checkpoints_verified": 267,
+    "checkpoints_total": 267,
+    "objectives_verified": 28,
+    "objectives_total": 36,
+    "next_objective": "defeat_giovanni"
+  },
+  "blaine_chapter": {
+    "frames": 220309,
+    "actions": 1785,
+    "mansion": {
+      "switch_trace": [false, true, false, true],
+      "optional_trainers_before": [false, false, false, false, false, false],
+      "optional_trainers_after": [false, false, false, false, false, false],
+      "secret_key_quantity": 1,
+      "wild_battles": 0
+    },
+    "quiz": {
+      "answers": ["yes", "no", "no", "no", "yes", "no"],
+      "gate_events_after": [false, true, true, true, true, true, true],
+      "trainer_events_before": [false, false, false, false, false, false, false]
+    },
+    "battle": {
+      "identity": [239, 239, 1],
+      "party": [[33, 42], [163, 40], [164, 42], [20, 47]],
+      "move_slots": [4, 4, 4, 4, 4],
+      "regular_trainers_after": [true, true, true, true, true, true, true]
+    },
+    "rewards": {
+      "tm38_quantity": 1,
+      "tm38_event": true,
+      "blaine_event": true,
+      "volcano_badge": true,
+      "volcano_badge_mirror": true
+    },
+    "inventory": {
+      "x_accuracy_sold": true,
+      "bide_sold": true,
+      "max_repel_bought": 1,
+      "money_before": 45151,
+      "money_after": 50579
+    },
+    "terminal": {
+      "map": 171,
+      "x": 3,
+      "y": 3,
+      "party_hp": [142, 52, 37],
+      "party_max_hp": [142, 52, 37],
+      "party_status": [0, 0, 0],
+      "lead_moves": [130, 70, 58, 57],
+      "lead_pp": [15, 15, 10, 15],
+      "controller_released": true
+    }
+  },
+  "privacy": {
+    "rom_path_included": false,
+    "rom_hash_included": false,
+    "save_state_included": false,
+    "personal_path_included": false
+  }
+}

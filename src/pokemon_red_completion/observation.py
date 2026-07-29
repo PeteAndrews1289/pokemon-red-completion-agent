@@ -213,7 +213,10 @@ class MapId(IntEnum):
     ROUTE_15_GATE_1F = 0xB8
     ROUTE_16_GATE_1F = 0xBA
     ROUTE_16_FLY_HOUSE = 0xBC
+    POKEMON_MANSION_1F = 0xA5
+    CINNABAR_GYM = 0xA6
     CINNABAR_POKECENTER = 0xAB
+    CINNABAR_MART = 0xAC
     ROCKET_HIDEOUT_B1F = 0xC7
     ROCKET_HIDEOUT_B2F = 0xC8
     ROCKET_HIDEOUT_B3F = 0xC9
@@ -226,6 +229,9 @@ class MapId(IntEnum):
     SILPH_CO_9F = 0xE9
     SILPH_CO_11F = 0xEB
     SILPH_CO_ELEVATOR = 0xEC
+    POKEMON_MANSION_2F = 0xD6
+    POKEMON_MANSION_3F = 0xD7
+    POKEMON_MANSION_B1F = 0xD8
     SAFARI_ZONE_EAST = 0xD9
     SAFARI_ZONE_NORTH = 0xDA
     SAFARI_ZONE_WEST = 0xDB
@@ -389,7 +395,24 @@ class EventFlag(IntEnum):
     BEAT_FUCHSIA_GYM_TRAINER_3 = 0x25D
     BEAT_FUCHSIA_GYM_TRAINER_4 = 0x25E
     BEAT_FUCHSIA_GYM_TRAINER_5 = 0x25F
+    MANSION_SWITCH_ON = 0x278
+    BEAT_MANSION_1_TRAINER_0 = 0x289
+    GOT_TM38 = 0x298
     BEAT_BLAINE = 0x299
+    BEAT_CINNABAR_GYM_TRAINER_0 = 0x29A
+    BEAT_CINNABAR_GYM_TRAINER_1 = 0x29B
+    BEAT_CINNABAR_GYM_TRAINER_2 = 0x29C
+    BEAT_CINNABAR_GYM_TRAINER_3 = 0x29D
+    BEAT_CINNABAR_GYM_TRAINER_4 = 0x29E
+    BEAT_CINNABAR_GYM_TRAINER_5 = 0x29F
+    BEAT_CINNABAR_GYM_TRAINER_6 = 0x2A0
+    CINNABAR_GYM_GATE_0_UNLOCKED = 0x2A8
+    CINNABAR_GYM_GATE_1_UNLOCKED = 0x2A9
+    CINNABAR_GYM_GATE_2_UNLOCKED = 0x2AA
+    CINNABAR_GYM_GATE_3_UNLOCKED = 0x2AB
+    CINNABAR_GYM_GATE_4_UNLOCKED = 0x2AC
+    CINNABAR_GYM_GATE_5_UNLOCKED = 0x2AD
+    CINNABAR_GYM_GATE_6_UNLOCKED = 0x2AE
     GOT_TM46 = 0x360
     BEAT_SABRINA = 0x361
     BEAT_SAFFRON_GYM_TRAINER_0 = 0x362
@@ -471,6 +494,11 @@ class EventFlag(IntEnum):
     BEAT_SILPH_CO_11F_TRAINER_0 = 0x784
     SILPH_CO_11_UNLOCKED_DOOR = 0x788
     GOT_MASTER_BALL = 0x78D
+    BEAT_MANSION_2_TRAINER_0 = 0x801
+    BEAT_MANSION_3_TRAINER_0 = 0x811
+    BEAT_MANSION_3_TRAINER_1 = 0x812
+    BEAT_MANSION_4_TRAINER_0 = 0x821
+    BEAT_MANSION_4_TRAINER_1 = 0x822
 
 
 class ItemId(IntEnum):
@@ -510,6 +538,7 @@ class ItemId(IntEnum):
     TM24_THUNDERBOLT = 0xE0
     TM28_DIG = 0xE4
     TM34_BIDE = 0xEA
+    TM38_FIRE_BLAST = 0xEE
     FRESH_WATER = 0x3C
     SODA_POP = 0x3D
     LEMONADE = 0x3E
@@ -4105,6 +4134,12 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         MapId.FUCHSIA_GYM: "location:fuchsia_city",
         MapId.CINNABAR_ISLAND: "location:cinnabar_island",
         MapId.CINNABAR_POKECENTER: "location:cinnabar_island",
+        MapId.CINNABAR_MART: "location:cinnabar_island",
+        MapId.CINNABAR_GYM: "location:cinnabar_island",
+        MapId.POKEMON_MANSION_1F: "location:cinnabar_island",
+        MapId.POKEMON_MANSION_2F: "location:cinnabar_island",
+        MapId.POKEMON_MANSION_3F: "location:cinnabar_island",
+        MapId.POKEMON_MANSION_B1F: "location:cinnabar_island",
         MapId.SAFFRON_CITY: "location:saffron_city",
         MapId.SAFFRON_POKECENTER: "location:saffron_city",
     }
