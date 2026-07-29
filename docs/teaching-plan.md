@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **207/207 qualified checkpoints** through
-Koga and therefore **20/36 completion objectives**. Three clean runs were identical at the
-1,782,032-frame / 22,053-action boundary. The evidence includes the earlier Brock
+The deterministic teacher currently verifies all **215/215 qualified checkpoints** through
+HM04 Strength and therefore **21/36 completion objectives**. Three clean runs were identical at
+the 1,875,968-frame / 22,779-action boundary. The evidence includes the earlier Brock
 and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
@@ -92,6 +92,10 @@ mandatory-trainer minimum, two Center recoveries, six-trainer post-victory deact
 live identity, Soul Badge raw and mirror bits, retained TM06, and a final healed Fuchsia boundary.
 Koga must precede the return to Erika here: Route 15 is one-way eastbound, Cycling Road requires
 the Bicycle, and field Surf requires the Soul Badge. The next teaching segment defeats Erika.
+The Strength segment returns the Gold Teeth to the Warden, verifies the Teeth-removal event before
+the HM04 reward event, retains reusable HM04, and teaches Strength over obsolete Tail Whip while
+preserving Bite, BubbleBeam, and Surf. It then returns to the same healed Fuchsia boundary without
+spending money or entering battle.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -199,7 +203,8 @@ restore, rewind, or import state from another run.
 12. Extend and replay-qualify the Rocket Hideout, Giovanni, and Silph Scope. **Done.**
 13. Extend and replay-qualify Pokémon Tower, Mr. Fuji, and the Poké Flute. **Done.**
 14. Extend and replay-qualify Route 12 Snorlax through stable Fuchsia Center. **Done.**
-15. Extend and replay-qualify the Safari Zone, HM03 Surf, Fuchsia Gym, and Koga. **Done.**
+15. Extend and replay-qualify the Safari Zone, HM03 Surf, Fuchsia Gym, Koga, and HM04 Strength.
+    **Done.**
 16. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
 17. Train a small behavior-cloning baseline per specialist.
@@ -210,6 +215,6 @@ restore, rewind, or import state from another run.
 21. Train the semantic planner and full-game composition only after that coverage exists.
 22. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
-The current evaluation gate is three intervention-free clean-power-on runs through Koga.
+The current evaluation gate is three intervention-free clean-power-on runs through HM04 Strength.
 A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
 frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.

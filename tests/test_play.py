@@ -733,6 +733,30 @@ class _KogaEvidence:
         }
 
 
+class _StrengthEvidence:
+    passed = True
+    final_raw = _KogaEvidence.final_raw
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "strength_ready",
+            "warden_house",
+            "warden_stance",
+            "teeth_given",
+            "hm04",
+            "strength",
+            "center_return",
+            "strength_stable",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "obtain_strength"}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -806,16 +830,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 207
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 215
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=207,
+        completed=215,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 207
+    assert progress.completed == progress.total == 215
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -914,6 +938,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         fuchsia=_FuchsiaEvidence(),  # type: ignore[arg-type]
         safari=_SafariEvidence(),  # type: ignore[arg-type]
         koga=_KogaEvidence(),  # type: ignore[arg-type]
+        strength=_StrengthEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -939,6 +964,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "item:poke_flute",
                 "location:fuchsia_city",
                 "move:surf_available",
+                "move:strength_available",
                 "badge:soul",
             }
         ),
@@ -962,6 +988,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "rescue_fuji",
             "reach_fuchsia",
             "obtain_surf",
+            "obtain_strength",
             "defeat_koga",
         ),
         next_objective="defeat_erika",
@@ -974,9 +1001,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v14"
+    assert public["schema"] == "qualified-play-v15"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "defeat_koga"
+    assert public["qualified_through"] == "obtain_strength"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -1187,9 +1214,17 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "koga_defeated",
         "rewards",
         "koga_stable",
+        "strength_ready",
+        "warden_house",
+        "warden_stance",
+        "teeth_given",
+        "hm04",
+        "strength",
+        "center_return",
+        "strength_stable",
     ]
     assert public["objective_progress"] == {
-        "verified": 20,
+        "verified": 21,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1211,6 +1246,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "rescue_fuji",
             "reach_fuchsia",
             "obtain_surf",
+            "obtain_strength",
             "defeat_koga",
         ],
         "next": "defeat_erika",
@@ -1378,11 +1414,12 @@ def test_private_rom_reaches_fuchsia_without_adjacent_artifacts() -> None:
         "rescue_fuji",
         "reach_fuchsia",
         "obtain_surf",
+        "obtain_strength",
         "defeat_koga",
     )
     assert report.next_objective == "defeat_erika"
-    assert report.frames_executed == 1_782_032
-    assert report.actions_executed == 22_053
+    assert report.frames_executed == 1_875_968
+    assert report.actions_executed == 22_779
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -1579,4 +1616,16 @@ def test_private_rom_reaches_fuchsia_without_adjacent_artifacts() -> None:
     assert report.koga.party_hp == report.koga.party_max_hp == (124, 52, 37)
     assert report.koga.party_status == (0, 0, 0)
     assert report.koga.surf_pp == 15
+    assert report.strength.passed
+    assert report.strength.frames_executed == 93_936
+    assert report.strength.actions_executed == 726
+    assert report.strength.gave_gold_teeth
+    assert report.strength.got_hm04
+    assert report.strength.gold_teeth_removed
+    assert report.strength.hm04_retained
+    assert report.strength.moves_before == (0x2C, 0x27, 0x3D, 0x39)
+    assert report.strength.moves_after == (0x2C, 0x46, 0x3D, 0x39)
+    assert report.strength.pp_after == (25, 15, 20, 15)
+    assert report.strength.party_hp == report.strength.party_max_hp == (124, 52, 37)
+    assert report.strength.party_status == (0, 0, 0)
     assert before == after

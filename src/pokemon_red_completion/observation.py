@@ -181,6 +181,7 @@ class MapId(IntEnum):
     ROCK_TUNNEL_1F = 0x52
     LAVENDER_POKECENTER = 0x8D
     FUCHSIA_POKECENTER = 0x9A
+    WARDENS_HOUSE = 0x9B
     FUCHSIA_GYM = 0x9D
     SAFARI_ZONE_GATE = 0x9C
     POKEMON_TOWER_1F = 0x8E
@@ -333,6 +334,7 @@ class EventFlag(IntEnum):
     BEAT_LT_SURGE = 0x167
     BEAT_ERIKA = 0x1A9
     GOT_HM04 = 0x238
+    GAVE_GOLD_TEETH = 0x239
     GOT_TM06 = 0x258
     BEAT_KOGA = 0x259
     BEAT_FUCHSIA_GYM_TRAINER_0 = 0x25A
@@ -3982,6 +3984,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.ROCK_TUNNEL_B1F: "rock_tunnel_b1f",
         MapId.LAVENDER_POKECENTER: "lavender_pokecenter",
         MapId.FUCHSIA_POKECENTER: "fuchsia_pokecenter",
+        MapId.WARDENS_HOUSE: "wardens_house",
         MapId.FUCHSIA_GYM: "fuchsia_gym",
         MapId.CELADON_POKECENTER: "celadon_pokecenter",
         MapId.GAME_CORNER: "game_corner",
@@ -4024,6 +4027,7 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         MapId.CELADON_POKECENTER: "location:celadon_city",
         MapId.FUCHSIA_CITY: "location:fuchsia_city",
         MapId.FUCHSIA_POKECENTER: "location:fuchsia_city",
+        MapId.WARDENS_HOUSE: "location:fuchsia_city",
         MapId.FUCHSIA_GYM: "location:fuchsia_city",
         MapId.CINNABAR_ISLAND: "location:cinnabar_island",
         MapId.SAFFRON_CITY: "location:saffron_city",
