@@ -109,6 +109,13 @@ from pokemon_red_completion.ss_anne import (
     SSAnneProgress,
     run_ss_anne_chapter,
 )
+from pokemon_red_completion.strength import (
+    STRENGTH_CHECKPOINT_COUNT,
+    StrengthChapterError,
+    StrengthChapterReport,
+    StrengthProgress,
+    run_strength_chapter,
+)
 from pokemon_red_completion.surge import (
     SURGE_CHECKPOINT_COUNT,
     SurgeChapterError,
@@ -147,8 +154,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + FUCHSIA_CHECKPOINT_COUNT
     + SAFARI_CHECKPOINT_COUNT
     + KOGA_CHECKPOINT_COUNT
+    + STRENGTH_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "defeat_koga"
+QUALIFIED_THROUGH_OBJECTIVE = "obtain_strength"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -286,6 +294,7 @@ class QualifiedPlayReport:
     fuchsia: FuchsiaChapterReport
     safari: SafariChapterReport
     koga: KogaChapterReport
+    strength: StrengthChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -320,6 +329,7 @@ class QualifiedPlayReport:
             and self.fuchsia.passed
             and self.safari.passed
             and self.koga.passed
+            and self.strength.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -370,10 +380,11 @@ class QualifiedPlayReport:
             *self.fuchsia.checkpoints(),
             *self.safari.checkpoints(),
             *self.koga.checkpoints(),
+            *self.strength.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v14",
+            "schema": "qualified-play-v15",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -432,6 +443,7 @@ class QualifiedPlayReport:
             "fuchsia_chapter": self.fuchsia.public_dict(),
             "safari_chapter": self.safari.public_dict(),
             "koga_chapter": self.koga.public_dict(),
+            "strength_chapter": self.strength.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -731,6 +743,16 @@ def run_qualified_play(
         except KogaChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            strength = run_strength_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_strength_progress_bridge(progress),
+            )
+        except StrengthChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -747,11 +769,12 @@ def run_qualified_play(
             | semantic_facts(fuchsia.final_raw)
             | semantic_facts(safari.final_raw)
             | semantic_facts(koga.final_raw)
+            | semantic_facts(strength.final_raw)
         )
         state = GameState(
-            mode=game_mode(koga.final_raw),
+            mode=game_mode(strength.final_raw),
             facts=facts,
-            location=location_label(koga.final_raw.map_id),
+            location=location_label(strength.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -784,6 +807,7 @@ def run_qualified_play(
             fuchsia=fuchsia,
             safari=safari,
             koga=koga,
+            strength=strength,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -1271,6 +1295,42 @@ def _koga_progress_bridge(
                     + TOWER_CHECKPOINT_COUNT
                     + FUCHSIA_CHECKPOINT_COUNT
                     + SAFARI_CHECKPOINT_COUNT
+                    + progress.completed
+                ),
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _strength_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[StrengthProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: StrengthProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=(
+                    POKEDEX_CHECKPOINT_COUNT
+                    + PEWTER_CHECKPOINT_COUNT
+                    + CERULEAN_CHECKPOINT_COUNT
+                    + CASCADE_CHECKPOINT_COUNT
+                    + VERMILION_CHECKPOINT_COUNT
+                    + SS_ANNE_CHECKPOINT_COUNT
+                    + SURGE_CHECKPOINT_COUNT
+                    + LAVENDER_CHECKPOINT_COUNT
+                    + CELADON_CHECKPOINT_COUNT
+                    + HIDEOUT_CHECKPOINT_COUNT
+                    + TOWER_CHECKPOINT_COUNT
+                    + FUCHSIA_CHECKPOINT_COUNT
+                    + SAFARI_CHECKPOINT_COUNT
+                    + KOGA_CHECKPOINT_COUNT
                     + progress.completed
                 ),
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,

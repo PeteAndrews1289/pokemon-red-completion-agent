@@ -47,6 +47,9 @@ FUJI_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-fuji-2026-07
 FUCHSIA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-fuchsia-2026-07-29.json"
 SURF_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-surf-2026-07-29.json"
 KOGA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-koga-2026-07-29.json"
+STRENGTH_RECEIPT = (
+    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-strength-2026-07-29.json"
+)
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -1088,6 +1091,57 @@ def test_koga_receipt_is_repeatable_and_privacy_safe() -> None:
     assert receipt["qualified_through"] == "defeat_koga"
     assert receipt["frames_executed"] == 1_782_032
     assert receipt["actions_executed"] == 22_053
+    assert receipt["controller_released"] is True
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_strength_receipt_is_repeatable_and_privacy_safe() -> None:
+    receipt = json.loads(STRENGTH_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["receipt_schema"] == "qualified-play-evidence-v15"
+    assert receipt["schema"] == "qualified-play-v15"
+    assert receipt["status"] == "ok"
+    assert receipt["attempts"] == {"failed": 0, "passed": 3, "total": 3}
+    assert receipt["checkpoints"] == {"all_verified": True, "verified": 215}
+    chapter = receipt["strength_chapter"]
+    assert chapter["reward_sequence"] == [
+        {
+            "step": 1,
+            "gave_gold_teeth_event": True,
+            "got_hm04_event": False,
+            "gold_teeth_removed": True,
+            "hm04_present": False,
+        },
+        {
+            "step": 2,
+            "gave_gold_teeth_event": True,
+            "got_hm04_event": True,
+            "gold_teeth_removed": True,
+            "hm04_present": True,
+        },
+    ]
+    assert chapter["strength"] == {
+        "move_id": 70,
+        "replaced_move_id": 39,
+        "slot": 2,
+        "moves_before": [44, 39, 61, 57],
+        "moves_after": [44, 70, 61, 57],
+        "pp_after": [25, 15, 20, 15],
+        "hm04_reusable_and_retained": True,
+    }
+    assert chapter["money_before"] == chapter["money_remaining"] == 37_489
+    assert receipt["objective_progress"]["verified"] == 21
+    assert receipt["objective_progress"]["next"] == "defeat_erika"
+    assert receipt["repeatability"]["full_report_sha256"] == (
+        "2234503e670b5a2740cf37e61d421b113166fb07595e8009e8e0f86801714c3e"
+    )
+    assert receipt["qualified_through"] == "obtain_strength"
+    assert receipt["frames_executed"] == 1_875_968
+    assert receipt["actions_executed"] == 22_779
     assert receipt["controller_released"] is True
 
     serialized = json.dumps(receipt)
