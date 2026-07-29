@@ -25,10 +25,10 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **112/112 bounded checkpoints** and **13/36 completion objectives**, ending
-after clearing Route 9 and all nine mandatory Rock Tunnel trainers, reaching Lavender Town, and
-healing the complete party. Three clean runs reached the identical
-858,008-frame / 12,713-action boundary.
+Current qualification: **124/124 bounded checkpoints** and **14/36 completion objectives**, ending
+after crossing Route 8 and the west-east Underground Path, reaching Celadon City, and healing the
+complete party. Three clean runs reached the identical
+881,649-frame / 13,234-action boundary.
 This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
@@ -54,15 +54,17 @@ learned-policy, timing/RNG-generalization, or completion result.
 - [x] Qualify BubbleBeam preparation, exact tunnel supplies, Route 9, all mandatory Rock Tunnel
   trainers, bounded wild-flee recovery, the optional Route 10 trainer bypass, and stable Lavender
   Center arrival.
+- [x] Qualify the single required Route 8 trainer, bypass all eight optional trainers, cross the
+  west-east Underground Path and Route 7, and establish a stable Celadon Center boundary.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: reach Celadon City.
+Next sequence: clear the Rocket Hideout and secure the Silph Scope.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Lavender three-run evidence receipt](evidence/qualified-play-lavender-2026-07-29.json).
+[Celadon three-run evidence receipt](evidence/qualified-play-celadon-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs reach Lavender with identical evidence
+Exit gate: three intervention-free clean-power-on runs reach Celadon with identical evidence
 rules.
 
 ## Milestone 2 — deterministic expert

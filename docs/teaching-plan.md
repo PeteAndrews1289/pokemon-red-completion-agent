@@ -42,11 +42,11 @@ The bootstrap sequence was adapted from
 `0e2df37720eec7d148187eb1001bf2d9502aa4f6`. Private blind-run checkpoints and screenshots are not
 completion demonstrations and are not loaded by this project.
 
-The qualified bedroom-to-Lavender route is new successor work. Its map dimensions,
+The qualified bedroom-to-Celadon route is new successor work. Its map dimensions,
 collision-safe corridors, warps, Pallet Town, Route 1, Viridian Forest, Pewter Gym, Route 3, Mt.
 Moon, Nugget Bridge, Route 25, Bill, Cerulean Gym, Route 5, the Underground Path, Route 6, the
 Vermilion harbor, S.S. Anne, Route 11, Diglett's Cave, Vermilion Gym, Route 9, Route 10,
-Rock Tunnel, and Lavender Town, and
+Rock Tunnel, Lavender Town, Route 8, the west-east Underground Path, Route 7, and Celadon City, and
 story, party, battle, badge, fossil, and inventory gates are derived from
 [`pret/pokered`](https://github.com/pret/pokered) commit
 `1e96034092686d006e863cace09e87273051a3d8`, then independently exercised against the exact
@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **112/112 qualified checkpoints** through
-Lavender Town and therefore **13/36 completion objectives**. Three clean runs were identical
-at the 858,008-frame / 12,713-action boundary. The evidence includes the earlier Brock and Mt. Moon gates,
+The deterministic teacher currently verifies all **124/124 qualified checkpoints** through
+Celadon City and therefore **14/36 completion objectives**. Three clean runs were identical
+at the 881,649-frame / 13,234-action boundary. The evidence includes the earlier Brock and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
 Badge and TM11 proof, plus the Rocket thief, TM28, Underground Path, exact Route 6 trainer events,
@@ -68,10 +68,13 @@ or exactly consumed TM28 Dig, the live variable `D743`/`D744` electric-lock puzz
 Surge victory, TM24, Thunder Badge, mirrored badge, restored-lead, and released-control proof.
 The Lavender segment adds exact BubbleBeam and supply gates, 11 mandatory Route 9/Rock Tunnel
 trainer identities with selected-move PP evidence, bounded sleep and wild-flee recovery, an
-optional Route 10 trainer bypass, and a full three-member Center heal. The boundary has a
+optional Route 10 trainer bypass, and a full three-member Center heal. The Celadon segment adds
+the exact required Route 8 Lass identity and event transition, eight optional-trainer bypasses,
+the west-east Underground Path crossing, exact resource preservation, and a second full-party
+Center heal. The boundary has a
 full-health, status-free Wartortle restored as party lead. No
 behavioral-cloning, DAgger, timing/RNG generalization, or full-game result is implied. The next
-teaching segment reaches Celadon City.
+teaching segment clears the Rocket Hideout.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -173,17 +176,19 @@ restore, rewind, or import state from another run.
 7. Extend and replay-qualify Misty through stable Vermilion City. **Done.**
 8. Extend and replay-qualify the S.S. Anne rival and HM01 Cut. **Done.**
 9. Extend and replay-qualify the DUX/Diglett party, Vermilion Gym puzzle, and Lt. Surge. **Done.**
-10. Extend and replay-qualify Rock Tunnel and stable Lavender Town.
-11. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
+10. Extend and replay-qualify Rock Tunnel and stable Lavender Town. **Done.**
+11. Extend and replay-qualify Route 8, the west-east Underground Path, and stable Celadon City.
+    **Done.**
+12. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
-12. Train a small behavior-cloning baseline per specialist.
-13. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
+13. Train a small behavior-cloning baseline per specialist.
+14. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
    from the frozen perturbation suite for that skill.
-14. Extend the teacher chapter-by-chapter through the remainder of the game.
-15. Produce multiple clean teacher completions with timing and RNG variation.
-16. Train the semantic planner and full-game composition only after that coverage exists.
-17. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
+15. Extend the teacher chapter-by-chapter through the remainder of the game.
+16. Produce multiple clean teacher completions with timing and RNG variation.
+17. Train the semantic planner and full-game composition only after that coverage exists.
+18. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
-The current evaluation gate is three intervention-free clean-power-on runs through Lt. Surge.
+The current evaluation gate is three intervention-free clean-power-on runs through Celadon City.
 A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
 frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.

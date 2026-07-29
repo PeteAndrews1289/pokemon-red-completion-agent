@@ -40,6 +40,8 @@ from pokemon_red_completion.observation import (
     SurgeState,
     TravelBoundary,
     event_flag_is_set,
+    location_label,
+    semantic_facts,
 )
 from pokemon_red_completion.referee import (
     CHAMPION_DEFEATED_FACT,
@@ -89,6 +91,13 @@ def _raw(
         event_flags=_events(*events),
         party_species_ids=party_species_ids,
     )
+
+
+def test_celadon_center_has_public_location_and_objective_fact() -> None:
+    raw = _raw(map_id=MapId.CELADON_POKECENTER, player_x=3, player_y=3)
+
+    assert location_label(raw.map_id) == "celadon_pokecenter"
+    assert "location:celadon_city" in semantic_facts(raw)
 
 
 def test_reader_hides_pregame_scratch_state() -> None:
