@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **253/253 qualified checkpoints** through
-Sabrina and therefore **25/36 completion objectives**. Three clean runs were identical at
-the 3,497,826-frame / 30,048-action boundary. The evidence includes the earlier Brock
+The deterministic teacher currently verifies all **259/259 qualified checkpoints** through
+Cinnabar and therefore **26/36 completion objectives**. Three clean runs were identical at
+the 3,648,870-frame / 30,910-action boundary. The evidence includes the earlier Brock
 and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
@@ -104,6 +104,12 @@ mandatory-trainer minimum, two Center recoveries, six-trainer post-victory deact
 live identity, Soul Badge raw and mirror bits, retained TM06, and a final healed Fuchsia boundary.
 Koga must precede the return to Erika here: Route 15 is one-way eastbound, Cycling Road requires
 the Bicycle, and field Surf requires the Soul Badge.
+The Cinnabar segment uses Route 16's upper Cut lane without a Bicycle, consumes the retained Rare
+Candy to make one bag slot, proves the HM02 item/event transfer on the same dialogue pulse, teaches
+Fly over DUX's obsolete Leer, and verifies the default Pallet destination. From Pallet it activates
+Surf, follows a 93-move Route 21 corridor, safely flees one Rattata and two Tentacool encounters,
+leaves all nine optional trainer events false, and terminates healed and input-ready in Cinnabar
+Center.
 The Strength segment returns the Gold Teeth to the Warden, verifies the Teeth-removal event before
 the HM04 reward event, retains reusable HM04, and teaches Strength over obsolete Tail Whip while
 preserving Bite, BubbleBeam, and Surf. It then returns to the same healed Fuchsia boundary without

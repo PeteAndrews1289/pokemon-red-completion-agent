@@ -71,15 +71,17 @@ learned-policy, timing/RNG-generalization, or completion result.
   optional-Lapras bypass, and the permanent TM13 Ice Beam upgrade.
 - [x] Qualify the trainer-free Saffron Gym warp route, Sabrina, TM46, Marsh Badge, and post-battle
   regular-trainer deactivation.
+- [x] Qualify the bicycle-free Route 16 Cut lane, HM02 transfer, DUX Fly teaching, Pallet Fly
+  destination, Route 21 wild-flee recovery, all nine trainer bypasses, and healed Cinnabar arrival.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: reach Cinnabar Island.
+Next sequence: recover the Secret Key from Pokémon Mansion.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Sabrina three-run evidence receipt](evidence/qualified-play-sabrina-2026-07-29.json).
+[Cinnabar three-run evidence receipt](evidence/qualified-play-cinnabar-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs reach the healed post-Sabrina Saffron Center
+Exit gate: three intervention-free clean-power-on runs reach the healed Cinnabar Center
 boundary with identical evidence rules.
 
 ## Milestone 2 — deterministic expert

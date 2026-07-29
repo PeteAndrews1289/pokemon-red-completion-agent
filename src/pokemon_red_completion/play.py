@@ -37,6 +37,13 @@ from pokemon_red_completion.cerulean import (
     CeruleanProgress,
     run_cerulean_chapter,
 )
+from pokemon_red_completion.cinnabar import (
+    CINNABAR_CHECKPOINT_COUNT,
+    CinnabarChapterError,
+    CinnabarChapterReport,
+    CinnabarProgress,
+    run_cinnabar_chapter,
+)
 from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.erika import (
@@ -187,8 +194,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + SAFFRON_CHECKPOINT_COUNT
     + SILPH_CHECKPOINT_COUNT
     + SABRINA_CHECKPOINT_COUNT
+    + CINNABAR_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "defeat_sabrina"
+QUALIFIED_THROUGH_OBJECTIVE = "reach_cinnabar"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -331,6 +339,7 @@ class QualifiedPlayReport:
     saffron: SaffronChapterReport
     silph: SilphChapterReport
     sabrina: SabrinaChapterReport
+    cinnabar: CinnabarChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -370,6 +379,7 @@ class QualifiedPlayReport:
             and self.saffron.passed
             and self.silph.passed
             and self.sabrina.passed
+            and self.cinnabar.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -425,10 +435,11 @@ class QualifiedPlayReport:
             *self.saffron.checkpoints(),
             *self.silph.checkpoints(),
             *self.sabrina.checkpoints(),
+            *self.cinnabar.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v19",
+            "schema": "qualified-play-v20",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -492,6 +503,7 @@ class QualifiedPlayReport:
             "saffron_chapter": self.saffron.public_dict(),
             "silph_chapter": self.silph.public_dict(),
             "sabrina_chapter": self.sabrina.public_dict(),
+            "cinnabar_chapter": self.cinnabar.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -841,6 +853,16 @@ def run_qualified_play(
         except SabrinaChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            cinnabar = run_cinnabar_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_cinnabar_progress_bridge(progress),
+            )
+        except CinnabarChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -862,11 +884,12 @@ def run_qualified_play(
             | semantic_facts(saffron.final_raw)
             | semantic_facts(silph.final_raw)
             | semantic_facts(sabrina.final_raw)
+            | semantic_facts(cinnabar.final_raw)
         )
         state = GameState(
-            mode=game_mode(sabrina.final_raw),
+            mode=game_mode(cinnabar.final_raw),
             facts=facts,
-            location=location_label(sabrina.final_raw.map_id),
+            location=location_label(cinnabar.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -904,6 +927,7 @@ def run_qualified_play(
             saffron=saffron,
             silph=silph,
             sabrina=sabrina,
+            cinnabar=cinnabar,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -1564,6 +1588,28 @@ def _sabrina_progress_bridge(
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
                 - SABRINA_CHECKPOINT_COUNT
+                + progress.completed,
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _cinnabar_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[CinnabarProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: CinnabarProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CINNABAR_CHECKPOINT_COUNT
                 + progress.completed,
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
                 frames_executed=progress.frames_executed,

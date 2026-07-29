@@ -143,6 +143,8 @@ class MapId(IntEnum):
     ROUTE_13 = 0x18
     ROUTE_14 = 0x19
     ROUTE_15 = 0x1A
+    ROUTE_16 = 0x1B
+    ROUTE_21 = 0x20
     ROUTE_24 = 0x23
     ROUTE_25 = 0x24
     REDS_HOUSE_1F = 0x25
@@ -209,6 +211,9 @@ class MapId(IntEnum):
     SILPH_CO_1F = 0xB5
     SAFFRON_POKECENTER = 0xB6
     ROUTE_15_GATE_1F = 0xB8
+    ROUTE_16_GATE_1F = 0xBA
+    ROUTE_16_FLY_HOUSE = 0xBC
+    CINNABAR_POKECENTER = 0xAB
     ROCKET_HIDEOUT_B1F = 0xC7
     ROCKET_HIDEOUT_B2F = 0xC8
     ROCKET_HIDEOUT_B3F = 0xC9
@@ -254,6 +259,16 @@ class EventFlag(IntEnum):
     GOT_TM11 = 0x0BE
     BEAT_MISTY = 0x0BF
     GOT_TM13 = 0x18C
+    GOT_HM02 = 0x4CE
+    BEAT_ROUTE_21_TRAINER_0 = 0x511
+    BEAT_ROUTE_21_TRAINER_1 = 0x512
+    BEAT_ROUTE_21_TRAINER_2 = 0x513
+    BEAT_ROUTE_21_TRAINER_3 = 0x514
+    BEAT_ROUTE_21_TRAINER_4 = 0x515
+    BEAT_ROUTE_21_TRAINER_5 = 0x516
+    BEAT_ROUTE_21_TRAINER_6 = 0x517
+    BEAT_ROUTE_21_TRAINER_7 = 0x518
+    BEAT_ROUTE_21_TRAINER_8 = 0x519
     BEAT_ROUTE_6_TRAINER_0 = 0x411
     BEAT_ROUTE_6_TRAINER_1 = 0x412
     BEAT_ROUTE_6_TRAINER_2 = 0x413
@@ -482,6 +497,7 @@ class ItemId(IntEnum):
     EXP_ALL = 0x4B
     SUPER_ROD = 0x4E
     HM01_CUT = 0xC4
+    HM02_FLY = 0xC5
     HM03_SURF = 0xC6
     HM04_STRENGTH = 0xC7
     TM06_TOXIC = 0xCE
@@ -3992,6 +4008,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.CELADON_CITY: "celadon_city",
         MapId.FUCHSIA_CITY: "fuchsia_city",
         MapId.CINNABAR_ISLAND: "cinnabar_island",
+        MapId.CINNABAR_POKECENTER: "cinnabar_pokecenter",
         MapId.INDIGO_PLATEAU: "indigo_plateau",
         MapId.SAFFRON_CITY: "saffron_city",
         MapId.SAFFRON_POKECENTER: "saffron_pokecenter",
@@ -4087,6 +4104,7 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         MapId.WARDENS_HOUSE: "location:fuchsia_city",
         MapId.FUCHSIA_GYM: "location:fuchsia_city",
         MapId.CINNABAR_ISLAND: "location:cinnabar_island",
+        MapId.CINNABAR_POKECENTER: "location:cinnabar_island",
         MapId.SAFFRON_CITY: "location:saffron_city",
         MapId.SAFFRON_POKECENTER: "location:saffron_city",
     }
