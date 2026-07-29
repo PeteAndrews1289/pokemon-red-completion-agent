@@ -102,6 +102,13 @@ from pokemon_red_completion.pewter import (
 )
 from pokemon_red_completion.rom import RomFingerprint
 from pokemon_red_completion.route import COMPLETION_QUEST
+from pokemon_red_completion.sabrina import (
+    SABRINA_CHECKPOINT_COUNT,
+    SabrinaChapterError,
+    SabrinaChapterReport,
+    SabrinaProgress,
+    run_sabrina_chapter,
+)
 from pokemon_red_completion.safari import (
     SAFARI_CHECKPOINT_COUNT,
     SafariChapterError,
@@ -179,8 +186,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + ERIKA_CHECKPOINT_COUNT
     + SAFFRON_CHECKPOINT_COUNT
     + SILPH_CHECKPOINT_COUNT
+    + SABRINA_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "liberate_silph"
+QUALIFIED_THROUGH_OBJECTIVE = "defeat_sabrina"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -322,6 +330,7 @@ class QualifiedPlayReport:
     erika: ErikaChapterReport
     saffron: SaffronChapterReport
     silph: SilphChapterReport
+    sabrina: SabrinaChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -360,6 +369,7 @@ class QualifiedPlayReport:
             and self.erika.passed
             and self.saffron.passed
             and self.silph.passed
+            and self.sabrina.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -414,10 +424,11 @@ class QualifiedPlayReport:
             *self.erika.checkpoints(),
             *self.saffron.checkpoints(),
             *self.silph.checkpoints(),
+            *self.sabrina.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v18",
+            "schema": "qualified-play-v19",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -480,6 +491,7 @@ class QualifiedPlayReport:
             "erika_chapter": self.erika.public_dict(),
             "saffron_chapter": self.saffron.public_dict(),
             "silph_chapter": self.silph.public_dict(),
+            "sabrina_chapter": self.sabrina.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -819,6 +831,16 @@ def run_qualified_play(
         except SilphChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            sabrina = run_sabrina_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_sabrina_progress_bridge(progress),
+            )
+        except SabrinaChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -839,11 +861,12 @@ def run_qualified_play(
             | semantic_facts(erika.final_raw)
             | semantic_facts(saffron.final_raw)
             | semantic_facts(silph.final_raw)
+            | semantic_facts(sabrina.final_raw)
         )
         state = GameState(
-            mode=game_mode(silph.final_raw),
+            mode=game_mode(sabrina.final_raw),
             facts=facts,
-            location=location_label(silph.final_raw.map_id),
+            location=location_label(sabrina.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -880,6 +903,7 @@ def run_qualified_play(
             erika=erika,
             saffron=saffron,
             silph=silph,
+            sabrina=sabrina,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -1519,6 +1543,28 @@ def _silph_progress_bridge(
                     + SAFFRON_CHECKPOINT_COUNT
                     + progress.completed
                 ),
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _sabrina_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[SabrinaProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: SabrinaProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - SABRINA_CHECKPOINT_COUNT
+                + progress.completed,
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
                 frames_executed=progress.frames_executed,
             )

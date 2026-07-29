@@ -51,6 +51,7 @@ KOGA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-koga-2026-07
 STRENGTH_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-strength-2026-07-29.json"
 SAFFRON_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-saffron-2026-07-29.json"
 SILPH_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-silph-2026-07-29.json"
+SABRINA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-sabrina-2026-07-29.json"
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -1258,6 +1259,48 @@ def test_silph_receipt_is_repeatable_complete_and_privacy_safe() -> None:
     assert chapter["terminal"]["map"] == int(MapId.SAFFRON_POKECENTER)
     assert chapter["terminal"]["controller_released"] is True
 
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_sabrina_receipt_is_repeatable_complete_and_privacy_safe() -> None:
+    receipt = json.loads(SABRINA_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "qualified-play-v19-receipt"
+    assert receipt["status"] == "ok"
+    assert receipt["evaluation"]["runs"] == 3
+    assert receipt["evaluation"]["identical_reports"] is True
+    assert receipt["evaluation"]["report_sha256"] == (
+        "e575b1411adab8a6ff9f80b533988f20e98c6a67a365fa7f1304be666a170655"
+    )
+    assert receipt["evaluation"]["frames_per_run"] == 3_497_826
+    assert receipt["evaluation"]["actions_per_run"] == 30_048
+    assert receipt["progress"] == {
+        "checkpoints_verified": 253,
+        "checkpoints_total": 253,
+        "objectives_verified": 25,
+        "objectives_total": 36,
+        "next_objective": "reach_cinnabar",
+    }
+    chapter = receipt["sabrina_chapter"]
+    assert chapter["trainer_free_warp_route"] is True
+    assert chapter["regular_trainer_events_before"] == [False] * 7
+    assert chapter["identity"] == [0xF0, 0xF0, 1]
+    assert chapter["party"] == [[0x26, 38], [0x2A, 37], [0x77, 38], [0x95, 43]]
+    assert chapter["move_slots"] == [2, 2, 3, 3, 3, 2]
+    assert chapter["faints"] == chapter["persistent_status"] == chapter["hyper_potions_used"] == 0
+    assert chapter["rewards"] == {
+        "tm46_quantity": 1,
+        "tm46_event": True,
+        "sabrina_event": True,
+        "marsh_badge": True,
+        "marsh_badge_mirror": True,
+        "regular_trainers_deactivated": True,
+    }
+    assert chapter["terminal"]["party_hp"] == chapter["terminal"]["party_max_hp"]
+    assert chapter["terminal"]["lead_pp"] == [15, 15, 10, 15]
     serialized = json.dumps(receipt)
     assert "/Users/" not in serialized
     assert "Downloads" not in serialized

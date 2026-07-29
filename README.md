@@ -2,12 +2,12 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Silph qualified](https://img.shields.io/badge/status-Silph_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Sabrina qualified](https://img.shields.io/badge/status-Sabrina_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **247/247 qualified
+> **Current status:** one continuous deterministic teacher now reaches all **253/253 qualified
 > checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
 > Tunnel, clears the Rocket Hideout and Pokémon Tower, rescues Mr. Fuji, receives the Poké Flute,
 > defeats the Route 12 Snorlax, crosses Routes 12–15, collects the Gold Teeth, obtains reusable
@@ -19,11 +19,13 @@ control, and progressively trained specialists.**
 > gives it to the Route 7 guard, reaches Saffron, obtains the Card Key, defeats the required
 > Silph trainers, rival, and Giovanni, receives the Master Ball, and returns to a healed Saffron
 > boundary. It also buys and teaches TM13 Ice Beam while leaving optional Lapras untouched.
-> That establishes **24/36 completion objectives**. Three clean runs produced the same
-> 3,323,717-frame, 29,473-action result. This is an exact-route
+> It then traverses Saffron Gym without fighting a regular trainer, defeats Sabrina, receives
+> TM46 and the Marsh Badge, and returns fully healed. That establishes **25/36 completion
+> objectives** and six badges. Three clean runs produced the same 3,497,826-frame,
+> 30,048-action result. This is an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next graph-selected objective is defeating Sabrina. See the
-> [sanitized three-run Silph evidence receipt](docs/evidence/qualified-play-silph-2026-07-29.json).
+> game-completion claim. The next graph-selected objective is reaching Cinnabar Island. See the
+> [sanitized three-run Sabrina evidence receipt](docs/evidence/qualified-play-sabrina-2026-07-29.json).
 
 ## The goal
 
@@ -171,6 +173,8 @@ It then buys a bounded recovery reserve, obtains and teaches TM13 Ice Beam, ente
 obtains the Card Key, clears the required warp route and trainers, defeats the rival and Giovanni,
 receives the Master Ball, leaves optional Lapras untouched, and returns to a healed Saffron
 Center boundary.
+It then follows a live-qualified trainer-free Saffron Gym warp route, defeats Sabrina with a
+physical Strength and Ice Beam policy, verifies TM46 plus both Marsh Badge lanes, and heals.
 It stops automatically after the
 latest independently qualified objective and reports that the game is not complete. The forest
 segment deliberately trains against three verified Kakuna encounters and one mandatory Bug

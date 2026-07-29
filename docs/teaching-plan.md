@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **247/247 qualified checkpoints** through
-Silph Co. and therefore **24/36 completion objectives**. Three clean runs were identical at
-the 3,323,717-frame / 29,473-action boundary. The evidence includes the earlier Brock
+The deterministic teacher currently verifies all **253/253 qualified checkpoints** through
+Sabrina and therefore **25/36 completion objectives**. Three clean runs were identical at
+the 3,497,826-frame / 30,048-action boundary. The evidence includes the earlier Brock
 and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
@@ -112,8 +112,12 @@ The Silph segment buys a bounded Max Repel and Hyper Potion reserve, uses the li
 sprite position to obtain TM13 without claiming the other rewards, teaches Ice Beam over
 BubbleBeam, and follows the source-pinned Card Key and warp route. It verifies the required 5F and
 3F Rockets, both unlocked doors, rival, 11F Rocket, Giovanni, and Master Ball events; leaves the
-optional Lapras untouched; and returns with a healed, status-free party to Saffron Center. The next
-qualified teaching segment is Sabrina.
+optional Lapras untouched; and returns with a healed, status-free party to Saffron Center.
+The Sabrina segment live-qualifies the warp-pad sequence while all seven regular-trainer events
+remain false, then verifies Sabrina's exact identity and four-member party. Strength handles the
+three Psychic targets while Ice Beam handles Venomoth; the run uses no potion, suffers no faint or
+persistent status, receives TM46 and both Marsh Badge lanes, observes all seven post-victory
+trainer toggles, and returns fully healed to Saffron Center. The next segment reaches Cinnabar.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -233,6 +237,6 @@ restore, rewind, or import state from another run.
 21. Train the semantic planner and full-game composition only after that coverage exists.
 22. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
-The current evaluation gate is three intervention-free clean-power-on runs through Silph Co.
+The current evaluation gate is three intervention-free clean-power-on runs through Sabrina.
 A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
 frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.

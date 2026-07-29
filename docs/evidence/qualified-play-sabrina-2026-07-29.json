@@ -1,0 +1,71 @@
+{
+  "schema": "qualified-play-v19-receipt",
+  "date": "2026-07-29",
+  "status": "ok",
+  "claim_scope": {
+    "qualified_through": "defeat_sabrina",
+    "game_complete": false,
+    "learned_policy": false,
+    "timing_or_rng_generalization": false
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "runs": 3,
+    "identical_reports": true,
+    "report_sha256": "e575b1411adab8a6ff9f80b533988f20e98c6a67a365fa7f1304be666a170655",
+    "frames_per_run": 3497826,
+    "actions_per_run": 30048
+  },
+  "progress": {
+    "checkpoints_verified": 253,
+    "checkpoints_total": 253,
+    "objectives_verified": 25,
+    "objectives_total": 36,
+    "next_objective": "reach_cinnabar"
+  },
+  "sabrina_chapter": {
+    "frames": 174109,
+    "actions": 575,
+    "trainer_free_warp_route": true,
+    "regular_trainer_events_before": [false, false, false, false, false, false, false],
+    "identity": [240, 240, 1],
+    "party": [[38, 38], [42, 37], [119, 38], [149, 43]],
+    "move_slots": [2, 2, 3, 3, 3, 2],
+    "lead_hp_before": 139,
+    "lead_hp_after_battle": 94,
+    "battle_pp_after": [15, 12, 7, 15],
+    "persistent_status": 0,
+    "faints": 0,
+    "hyper_potions_used": 0,
+    "hyper_potions_remaining": 6,
+    "money_before": 40894,
+    "money_after": 45151,
+    "rewards": {
+      "tm46_quantity": 1,
+      "tm46_event": true,
+      "sabrina_event": true,
+      "marsh_badge": true,
+      "marsh_badge_mirror": true,
+      "regular_trainers_deactivated": true
+    },
+    "terminal": {
+      "map": 182,
+      "x": 3,
+      "y": 3,
+      "party_hp": [139, 52, 37],
+      "party_max_hp": [139, 52, 37],
+      "party_status": [0, 0, 0],
+      "lead_moves": [130, 70, 58, 57],
+      "lead_pp": [15, 15, 10, 15],
+      "controller_released": true
+    }
+  },
+  "privacy": {
+    "rom_path_included": false,
+    "rom_hash_included": false,
+    "save_state_included": false,
+    "personal_path_included": false
+  }
+}
