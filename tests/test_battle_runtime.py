@@ -29,6 +29,7 @@ READY = InputReadiness(0, 0, 0, 0, 0, 0)
 NOT_READY = InputReadiness(1, 0, 0, 0, 0, 0)
 TAIL_WHIP_MOVE_ID = 0x27
 BUBBLE_MOVE_ID = 0x91
+DIG_MOVE_ID = 0x5B
 
 
 def _raw(
@@ -105,6 +106,30 @@ class FakeRuntime:
             self.on_action(action)
 
 
+def test_runtime_rejects_selected_slot_when_required_move_id_differs() -> None:
+    runtime = FakeRuntime()
+
+    def expose_move_menu(action: MacroAction) -> None:
+        if action.kind is MacroActionKind.CONFIRM:
+            runtime.menu = BattleMenuState(
+                BattleMenuPhase.MOVE,
+                selected_move_slot=1,
+            )
+
+    runtime.on_action = expose_move_menu
+
+    with pytest.raises(BattleRuntimeError, match="selected move id"):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda _raw: 1,
+            expected_map=MapId.CERULEAN_CITY,
+            required_move_id=DIG_MOVE_ID,
+        )
+
+    assert runtime.raw.first_party_pp == (35, 30, 30, 11)
+
+
 class AdaptiveRivalSimulation(FakeRuntime):
     """Two-opponent battle with bounded dialogue and post-battle cleanup."""
 
@@ -179,9 +204,7 @@ class AdaptiveRivalSimulation(FakeRuntime):
                     enemy_hp=20,
                     player_attack_stage=6,
                     enemy_defense_stage=(
-                        self.raw.enemy_defense_stage
-                        if self.bulbasaur_tail_whipped
-                        else 7
+                        self.raw.enemy_defense_stage if self.bulbasaur_tail_whipped else 7
                     ),
                 )
                 self.menu = BattleMenuState(
@@ -266,11 +289,7 @@ class OffSlotSleepPPSimulation(SleepRecoverySimulation):
 
 
 def _non_wait_actions(runtime: FakeRuntime) -> list[MacroAction]:
-    return [
-        action
-        for action in runtime.actions
-        if action.kind is not MacroActionKind.WAIT
-    ]
+    return [action for action in runtime.actions if action.kind is not MacroActionKind.WAIT]
 
 
 def test_adaptive_controller_recovers_a_decreasing_sleep_counter() -> None:
@@ -327,9 +346,7 @@ def test_adaptive_controller_rechecks_species_and_switches_water_gun_to_tackle()
     assert final.first_party_hp == 26
     assert final.first_party_pp == (34, 29, 30, 10)
     moves = [
-        action.value
-        for action in _non_wait_actions(runtime)
-        if action.kind is MacroActionKind.MOVE
+        action.value for action in _non_wait_actions(runtime) if action.kind is MacroActionKind.MOVE
     ]
     assert moves == ["down", "down", "down", "down"]
     assert runtime.controls.ready
@@ -361,10 +378,7 @@ def test_policy_is_called_once_while_main_cursor_moves_to_fight() -> None:
         BULBASAUR_SPECIES_ID,
         BULBASAUR_SPECIES_ID,
     ]
-    assert [
-        action.value
-        for action in _non_wait_actions(runtime)[:2]
-    ] == ["up", "left"]
+    assert [action.value for action in _non_wait_actions(runtime)[:2]] == ["up", "left"]
 
 
 def test_unknown_semantic_screens_survive_level_up_and_move_learning_dialogue() -> None:
@@ -382,9 +396,7 @@ def test_unknown_semantic_screens_survive_level_up_and_move_learning_dialogue() 
 
     assert final.battle_state == 0
     assert runtime.defeated_opponents == 2
-    assert sum(
-        action.kind is MacroActionKind.CONFIRM for action in runtime.actions
-    ) >= 14
+    assert sum(action.kind is MacroActionKind.CONFIRM for action in runtime.actions) >= 14
 
 
 @pytest.mark.parametrize("slot", [0, 5, True])
@@ -455,19 +467,13 @@ def test_stale_main_after_pp_decrement_uses_cancel_without_spending_twice() -> N
     def resolve_stale_main(action: MacroAction) -> None:
         if action.kind is MacroActionKind.WAIT:
             return
-        if (
-            action.kind is MacroActionKind.CONFIRM
-            and runtime.menu.phase is BattleMenuPhase.MAIN
-        ):
+        if action.kind is MacroActionKind.CONFIRM and runtime.menu.phase is BattleMenuPhase.MAIN:
             runtime.menu = BattleMenuState(
                 BattleMenuPhase.MOVE,
                 selected_move_slot=1,
             )
             return
-        if (
-            action.kind is MacroActionKind.CONFIRM
-            and runtime.menu.phase is BattleMenuPhase.MOVE
-        ):
+        if action.kind is MacroActionKind.CONFIRM and runtime.menu.phase is BattleMenuPhase.MOVE:
             pp = list(runtime.raw.first_party_pp or ())
             pp[0] -= 1
             runtime.raw = replace(runtime.raw, first_party_pp=tuple(pp))
@@ -480,10 +486,7 @@ def test_stale_main_after_pp_decrement_uses_cancel_without_spending_twice() -> N
             runtime.raw = replace(runtime.raw, enemy_hp=10)
             runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
             return
-        if (
-            action.kind is MacroActionKind.CONFIRM
-            and runtime.menu.phase is BattleMenuPhase.UNKNOWN
-        ):
+        if action.kind is MacroActionKind.CONFIRM and runtime.menu.phase is BattleMenuPhase.UNKNOWN:
             runtime.raw = replace(runtime.raw, battle_state=0)
             runtime.controls = READY
 
@@ -506,9 +509,7 @@ def test_stale_main_after_pp_decrement_uses_cancel_without_spending_twice() -> N
     assert final.first_party_pp == (34, 30, 30, 11)
     non_wait = _non_wait_actions(runtime)
     assert MacroAction(MacroActionKind.CANCEL) in non_wait
-    assert sum(
-        action.kind is MacroActionKind.CONFIRM for action in non_wait
-    ) == 3
+    assert sum(action.kind is MacroActionKind.CONFIRM for action in non_wait) == 3
 
 
 def test_main_menu_requires_live_enemy_hp_evidence() -> None:
@@ -554,10 +555,7 @@ def test_attack_requires_persistent_pp_decrement() -> None:
     runtime = FakeRuntime()
 
     def ignore_attack(action: MacroAction) -> None:
-        if (
-            action.kind is MacroActionKind.CONFIRM
-            and runtime.menu.phase is BattleMenuPhase.MAIN
-        ):
+        if action.kind is MacroActionKind.CONFIRM and runtime.menu.phase is BattleMenuPhase.MAIN:
             runtime.menu = BattleMenuState(
                 BattleMenuPhase.MOVE,
                 selected_move_slot=1,
@@ -579,11 +577,7 @@ def test_attack_requires_persistent_pp_decrement() -> None:
             timing=timing,
         )
 
-    confirms = [
-        action
-        for action in runtime.actions
-        if action.kind is MacroActionKind.CONFIRM
-    ]
+    confirms = [action for action in runtime.actions if action.kind is MacroActionKind.CONFIRM]
     assert len(confirms) == 3
 
 
@@ -654,9 +648,7 @@ def test_faster_enemy_attack_text_is_confirmed_until_latched_move_spends_pp() ->
     assert final.first_party_pp == (34, 30, 30, 11)
     assert opponent_text_pulses == 0
     assert [
-        action.kind
-        for action in runtime.actions
-        if action.kind is MacroActionKind.CONFIRM
+        action.kind for action in runtime.actions if action.kind is MacroActionKind.CONFIRM
     ] == [MacroActionKind.CONFIRM] * 4
 
 
@@ -701,9 +693,7 @@ def test_pp_proof_waits_out_delayed_move_menu_without_confirming_twice() -> None
 
     assert final.battle_state == 0
     assert delayed_waits == 3
-    assert sum(
-        action.kind is MacroActionKind.CONFIRM for action in runtime.actions
-    ) == 2
+    assert sum(action.kind is MacroActionKind.CONFIRM for action in runtime.actions) == 2
 
 
 def test_last_pp_can_be_spent_when_decrement_reaches_zero() -> None:
@@ -826,9 +816,7 @@ def test_invalid_semantic_menu_fails_closed(menu: BattleMenuState) -> None:
 
 
 def test_unlatched_move_menu_is_cancelled_before_policy_or_pp_change() -> None:
-    runtime = FakeRuntime(
-        menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
-    )
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
     policy_observations: list[tuple[BattleMenuPhase, tuple[int, ...] | None]] = []
 
     def on_action(action: MacroAction) -> None:

@@ -42,8 +42,8 @@ ports before they can enter this adapter.
 
 ### Qualified continuous teacher
 
-The current bounded teacher uses one emulator session for 82 checkpoints from clean power-on
-through HM01 Cut:
+The current bounded teacher uses one emulator session for 97 checkpoints from clean power-on
+through the Thunder Badge:
 
 1. bedroom input ready;
 2. Red's house first floor;
@@ -126,10 +126,25 @@ through HM01 Cut:
 79. the required RIVAL2 battle identified;
 80. the rival defeated;
 81. the Captain's room reached; and
-82. the Captain rubbed and HM01 verified by event, inventory, and semantic fact.
+82. the Captain rubbed and HM01 verified by event, inventory, and semantic fact;
+83. the HM01-ready Captain boundary reverified;
+84. Wartortle healed before the capture route;
+85. ten Poké Balls and one recovery Super Potion purchased;
+86. a source-valid Route 11 Spearow encounter identified;
+87. Spearow captured;
+88. a source-valid Diglett captured in Diglett's Cave;
+89. Spearow traded for DUX;
+90. reusable HM01 Cut taught to DUX;
+91. natural or TM-taught Dig verified on Diglett;
+92. Vermilion Gym entered through the cut tree;
+93. the first electric lock opened;
+94. both electric locks opened;
+95. the live Lt. Surge battle identified;
+96. all three Lt. Surge Pokémon defeated using only Dig; and
+97. the Thunder Badge, TM24, reward events, restored lead, and released control verified.
 
 The public `opening` command retains its six-checkpoint compatibility contract. The `play` command
-composes all 82 checkpoints without restarting, loading state, or saving. Every action is
+composes all 97 checkpoints without restarting, loading state, or saving. Every action is
 reobserved, dialogue and battle loops have fixed budgets, and unexpected battles, maps,
 coordinates, scripts, events, species, health, inventory, move PP, or controller masks fail
 closed. Route 1 rejects every encounter. Viridian Forest permits only three intentionally seeded
@@ -166,11 +181,18 @@ transition from battle state 2 to defeated state 4, and a two-stage Captain prot
 state is explicitly rejected: qualification requires the rub event, HM01 event, HM01 bag item,
 and derived Cut fact concurrently.
 
+The Surge chapter adds bounded capture recovery for Spearow, trades it for the Cut specialist DUX,
+and captures Diglett as the Ground specialist. It verifies natural Dig or consumes TM28 exactly
+once, discovers safe routes for the live `D743`/`D744` electric-lock pair, and fails closed unless
+the live Surge identity, Dig-only PP evidence, victory event, TM24, Thunder Badge, mirrored badge
+bit, restored Wartortle lead, and released control all agree.
+
 The corridors and semantic gates are derived from pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8` and independently verified on the supported private ROM.
 The concluded predecessor supplied the separately attributed power-on bootstrap, not this route.
-Completing these **82/82 checkpoints** verifies **11/36 objectives**. Three exact clean-power-on
-runs were identical at 530,927 frames and 7,652 actions. This verifies deterministic-teacher
+Completing these **97/97 checkpoints** verifies **12/36 objectives**. Three exact clean-power-on
+runs were identical at 635,637 frames and 9,311 actions. The next objective is traversing Rock
+Tunnel and reaching Lavender Town. This verifies deterministic-teacher
 repeatability for that route; it does not verify a learned policy, held-out timing/RNG
 generalization, or the full game.
 

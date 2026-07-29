@@ -67,6 +67,13 @@ from pokemon_red_completion.ss_anne import (
     SSAnneProgress,
     run_ss_anne_chapter,
 )
+from pokemon_red_completion.surge import (
+    SURGE_CHECKPOINT_COUNT,
+    SurgeChapterError,
+    SurgeChapterReport,
+    SurgeProgress,
+    run_surge_chapter,
+)
 from pokemon_red_completion.vermilion import (
     VERMILION_CHECKPOINT_COUNT,
     VermilionChapterError,
@@ -83,8 +90,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + CASCADE_CHECKPOINT_COUNT
     + VERMILION_CHECKPOINT_COUNT
     + SS_ANNE_CHECKPOINT_COUNT
+    + SURGE_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "obtain_cut"
+QUALIFIED_THROUGH_OBJECTIVE = "defeat_surge"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -214,6 +222,7 @@ class QualifiedPlayReport:
     cascade: CascadeChapterReport
     vermilion: VermilionChapterReport
     ss_anne: SSAnneChapterReport
+    surge: SurgeChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -240,6 +249,7 @@ class QualifiedPlayReport:
             and self.cascade.passed
             and self.vermilion.passed
             and self.ss_anne.passed
+            and self.surge.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -282,10 +292,11 @@ class QualifiedPlayReport:
             *self.cascade.checkpoints(),
             *self.vermilion.checkpoints(),
             *self.ss_anne.checkpoints(),
+            *self.surge.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v6",
+            "schema": "qualified-play-v7",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -336,6 +347,7 @@ class QualifiedPlayReport:
             "cascade_chapter": self.cascade.public_dict(),
             "vermilion_chapter": self.vermilion.public_dict(),
             "ss_anne_chapter": self.ss_anne.public_dict(),
+            "surge_chapter": self.surge.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -555,6 +567,16 @@ def run_qualified_play(
         except SSAnneChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            surge = run_surge_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_surge_progress_bridge(progress),
+            )
+        except SurgeChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -563,11 +585,12 @@ def run_qualified_play(
             | semantic_facts(cerulean.cerulean_reached)
             | semantic_facts(vermilion.final_raw)
             | semantic_facts(ss_anne.final_raw)
+            | semantic_facts(surge.final_raw)
         )
         state = GameState(
-            mode=game_mode(ss_anne.final_raw),
+            mode=game_mode(surge.final_raw),
             facts=facts,
-            location=location_label(ss_anne.final_raw.map_id),
+            location=location_label(surge.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -592,6 +615,7 @@ def run_qualified_play(
             cascade=cascade,
             vermilion=vermilion,
             ss_anne=ss_anne,
+            surge=surge,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -627,11 +651,7 @@ def _defeat_lab_rival(
         if pulse == timing.max_rival_pulses:
             break
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
-        wait_frames = (
-            timing.battle_wait_frames
-            if raw.battle_state
-            else timing.dialogue_wait_frames
-        )
+        wait_frames = timing.battle_wait_frames if raw.battle_state else timing.dialogue_wait_frames
         _wait(executor, wait_frames)
     raise QualifiedPlayError("The lab rival failed the bounded verified-victory gate.")
 
@@ -679,15 +699,11 @@ def _move(
     state = reader.read()
     for step, direction in enumerate(directions, start=1):
         if state.battle_state:
-            raise QualifiedPlayError(
-                f"Unexpected battle interrupted {label} before step {step}."
-            )
+            raise QualifiedPlayError(f"Unexpected battle interrupted {label} before step {step}.")
         executor.execute(MacroAction(MacroActionKind.MOVE, direction))
         state = reader.read()
         if state.battle_state:
-            raise QualifiedPlayError(
-                f"Unexpected battle interrupted {label} at step {step}."
-            )
+            raise QualifiedPlayError(f"Unexpected battle interrupted {label} at step {step}.")
     return state
 
 
@@ -758,11 +774,7 @@ def _cerulean_progress_bridge(
             QualifiedPlayProgress(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
-                completed=(
-                    POKEDEX_CHECKPOINT_COUNT
-                    + PEWTER_CHECKPOINT_COUNT
-                    + progress.completed
-                ),
+                completed=(POKEDEX_CHECKPOINT_COUNT + PEWTER_CHECKPOINT_COUNT + progress.completed),
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
                 frames_executed=progress.frames_executed,
             )
@@ -839,6 +851,34 @@ def _ss_anne_progress_bridge(
                     + CERULEAN_CHECKPOINT_COUNT
                     + CASCADE_CHECKPOINT_COUNT
                     + VERMILION_CHECKPOINT_COUNT
+                    + progress.completed
+                ),
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _surge_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[SurgeProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: SurgeProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=(
+                    POKEDEX_CHECKPOINT_COUNT
+                    + PEWTER_CHECKPOINT_COUNT
+                    + CERULEAN_CHECKPOINT_COUNT
+                    + CASCADE_CHECKPOINT_COUNT
+                    + VERMILION_CHECKPOINT_COUNT
+                    + SS_ANNE_CHECKPOINT_COUNT
                     + progress.completed
                 ),
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,

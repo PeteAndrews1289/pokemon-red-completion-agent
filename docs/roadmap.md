@@ -25,9 +25,10 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **82/82 bounded checkpoints** and **11/36 completion objectives**, ending
-after boarding the S.S. Anne, defeating the required rival, rubbing the Captain's back, and
-obtaining HM01 Cut. Three clean runs reached the identical 530,927-frame / 7,652-action boundary.
+Current qualification: **97/97 bounded checkpoints** and **12/36 completion objectives**, ending
+after obtaining HM01, building the Cut-and-Dig party, solving Vermilion Gym, defeating Lt. Surge,
+and verifying the Thunder Badge and TM24. Three clean runs reached the identical
+635,637-frame / 9,311-action boundary.
 This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
@@ -48,15 +49,18 @@ learned-policy, timing/RNG-generalization, or completion result.
   trainers, bounded wild-encounter recovery, and stable Vermilion arrival.
 - [x] Qualify the Vermilion harbor, S.S. Anne corridors, required rival battle, Captain interaction,
   and four-field HM01 Cut evidence.
+- [x] Qualify bounded Spearow and Diglett capture, the DUX trade, Cut and Dig preparation, the
+  variable Gym switch puzzle, a Dig-only Lt. Surge win, TM24, and mirrored Thunder Badge evidence.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: teach Cut, enter the Vermilion Gym, solve its switch puzzle, and defeat Lt. Surge.
+Next sequence: traverse Rock Tunnel and reach Lavender Town.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[HM01 Cut three-run evidence receipt](evidence/qualified-play-cut-2026-07-29.json).
+[Thunder Badge three-run evidence receipt](evidence/qualified-play-surge-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs obtain HM01 with identical evidence rules.
+Exit gate: three intervention-free clean-power-on runs defeat Lt. Surge with identical evidence
+rules.
 
 ## Milestone 2 — deterministic expert
 
