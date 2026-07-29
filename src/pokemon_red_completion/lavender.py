@@ -1,0 +1,1526 @@
+"""Qualified Thunder-Badge-to-Lavender traversal for pinned Pokémon Red.
+
+The route is intentionally explicit.  It proves every unavoidable trainer
+identity and event bit, treats random encounters as bounded recoverable
+interruptions, and finishes only after the complete protected party is healed
+inside Lavender's Pokémon Center.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Callable, Iterable
+from dataclasses import dataclass
+from typing import Protocol
+
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_runtime import run_adaptive_trainer_battle
+from pokemon_red_completion.observation import (
+    Badge,
+    BattleMenuPhase,
+    EventFlag,
+    ItemId,
+    MapId,
+    PokemonRedStateReader,
+    RamAddress,
+    RawGameState,
+)
+from pokemon_red_completion.surge import _swap_party_lead
+
+LAVENDER_CHECKPOINT_COUNT = 15
+WARTORTLE = 0xB3
+DUX = 0x40
+DIGLETT = 0x3B
+BITE = 0x2C
+BUBBLEBEAM = 0x3D
+PECK = 0x40
+CUT = 0x0F
+PROTECTED_PARTY = (WARTORTLE, DUX, DIGLETT)
+SUPER_POTION_PRICE = 700
+REPEL_PRICE = 350
+TUNNEL_RECOVERY_THRESHOLD = 55
+TRAVERSAL_RECOVERY_THRESHOLD = 30
+
+
+def _directions(value: str) -> tuple[str, ...]:
+    return tuple({"U": "up", "D": "down", "L": "left", "R": "right"}[c] for c in value)
+
+
+GYM_EXIT = _directions("DDDDRDDDDDDLDDDDDD")
+VERMILION_TREE_STANCE = _directions("RRRU")
+TREE_TO_CENTER = _directions("UUUURRRUUUUUUUUUULLLLLLLU")
+CENTER_EXIT = _directions("DDDDD")
+VERMILION_CENTER_TO_MART = _directions("R" * 10 + "D" * 10 + "RRU")
+VERMILION_TO_ROUTE_6 = _directions("LL" + "U" * 10 + "LL" + "U" * 5)
+ROUTE_6_TO_SOUTH_GATE = _directions("U" * 7 + "R" * 5 + "U" * 14 + "R" * 3 + "U")
+SOUTH_GATE_TO_TUNNEL = _directions("UURU")
+TUNNEL_TO_NORTH_GATE = _directions("U" * 37 + "R" * 3)
+NORTH_GATE_EXIT = _directions("DDDD")
+ROUTE_5_TO_CERULEAN_TREE = _directions("LL" + "U" * 35 + "L" * 6)
+CERULEAN_TREE_TO_ROUTE_9 = _directions("D" + "R" * 17 + "U" * 12 + "R" * 4)
+ROUTE_9_TREE_STANCE = _directions("U" + "R" * 4)
+
+_ROUTE_9 = "RRRRRRRDDDRRRRRRRRURRRRRRRRRDRRRRRRRRRRRRUUUUUULLUURRRRRURRRRRRRDDDDRRRRRRRRR"
+ROUTE_9_TO_TRAINER_0_STANCE = _directions(_ROUTE_9[:8])
+ROUTE_9_TRAINER_0_TRIGGER = _directions(_ROUTE_9[8:9])
+ROUTE_9_TRAINER_0_TO_8 = _directions(_ROUTE_9[9:45])
+ROUTE_9_AFTER_TRAINER_8 = _directions(_ROUTE_9[45:])
+ROUTE_10_TO_CENTER = _directions("R" * 12 + "DDD" + "RR" + "D" * 8 + "LLLU")
+ROCK_CENTER_TO_TUNNEL = _directions("D" * 6 + "L" * 9 + "U" * 8 + "R" * 6)
+
+TUNNEL_TO_1F_TRAINER_3 = _directions("DDDDRRRRRD")
+TUNNEL_1F_TO_B1 = _directions("DRRRDRRRRRRRRRRRUUUUUUURRR")
+B1_TO_TRAINER_7 = _directions("D" * 6 + "L" * 7)
+B1_TO_TRAINER_5_STANCE = _directions("LULLLLLLLLU")
+B1_TRAINER_5_TRIGGER = _directions("U")
+B1_TO_TRAINER_3 = _directions("UUUURRRUURU")
+B1_TO_TRAINER_4 = _directions("UUUUURRRRRRRRRRRUUUUULL")
+B1_TO_1F_WEST = _directions("LUUUULUUULU")
+ONE_F_WEST_TO_B1 = _directions("RDDDDDDRRRRRDDDDDRRRUUURRR")
+B1_TO_TRAINER_0 = _directions("DDLLLLLLDLLLLLL")
+B1_TO_TRAINER_1 = _directions("LUUULLLL")
+B1_TO_1F_EAST = _directions("RURUDDLLLUUUUUUUULL")
+ONE_F_TO_TRAINER_4 = _directions("DDDLLLD")
+ONE_F_TO_TRAINER_5 = _directions("DRRRDDDDDDLLLLLLLLLLULLLLL")
+ONE_F_TO_SOUTH_EXIT = _directions("LLLDDDDDDLLLL")
+ROUTE_10_TO_LAVENDER = _directions(
+    "R" * 7 + "D" * 6 + "U" + "D" * 3 + "DD" + "L" * 4 + "D" * 3 + "LL" + "D" * 4
+)
+LAVENDER_TO_CENTER = _directions("DDLDDDDLLLLLU")
+
+
+class EmulatorState(Protocol):
+    @property
+    def frame_count(self) -> int: ...
+
+    @property
+    def pressed_buttons(self) -> frozenset[str]: ...
+
+    def read_u8(self, address: int) -> int: ...
+
+
+class ChapterExecutor(Protocol):
+    def execute(self, action: MacroAction) -> object: ...
+
+
+class LavenderChapterError(RuntimeError):
+    """Raised when the qualified Lavender route loses semantic evidence."""
+
+
+@dataclass(frozen=True, slots=True)
+class LavenderTiming:
+    wait_frames: int = 180
+    transition_frames: int = 120
+    movement_retries: int = 18
+    dialogue_pulses: int = 24
+    flee_pulses: int = 20
+
+    def __post_init__(self) -> None:
+        for name in self.__dataclass_fields__:
+            value = getattr(self, name)
+            if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
+                raise ValueError(f"{name} must be a positive integer")
+
+
+DEFAULT_LAVENDER_TIMING = LavenderTiming()
+
+
+@dataclass(frozen=True, slots=True)
+class LavenderProgress:
+    checkpoint_id: str
+    label: str
+    completed: int
+    total: int
+    frames_executed: int
+
+
+ProgressSink = Callable[[LavenderProgress], None]
+
+
+@dataclass(frozen=True, slots=True)
+class LavenderCheckpoint:
+    checkpoint_id: str
+    label: str
+    raw: RawGameState
+
+
+@dataclass(frozen=True, slots=True)
+class TrainerEvidence:
+    label: str
+    map_id: int
+    event: int
+    opponent: int
+    trainer_class: int
+    trainer_set: int
+    move_id: int
+    selected_pp_spent: int
+
+
+@dataclass(frozen=True, slots=True)
+class WildFleeEvidence:
+    map_id: int
+    x: int
+    y: int
+    species: int
+    level: int
+    party_preserved: bool
+    pp_preserved: bool
+    hp_safe: bool
+    inventory_preserved: bool
+
+
+@dataclass(frozen=True, slots=True)
+class LavenderChapterReport:
+    records: tuple[LavenderCheckpoint, ...]
+    trainers: tuple[TrainerEvidence, ...]
+    wild_flees: tuple[WildFleeEvidence, ...]
+    final_raw: RawGameState
+    party_hp: tuple[int, int, int]
+    party_max_hp: tuple[int, int, int]
+    party_status: tuple[int, int, int]
+    repels_purchased: int
+    repels_used: int
+    super_potions_purchased: int
+    super_potions_used: int
+    super_potions_remaining: int
+    purchase_cost: int
+    money_remaining: int
+    route_10_trainer_2_bypassed: bool
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            len(self.records) == LAVENDER_CHECKPOINT_COUNT
+            and len(self.trainers) == 11
+            and len({item.event for item in self.trainers}) == 11
+            and all(item.selected_pp_spent > 0 for item in self.trainers)
+            and all(
+                item.party_preserved
+                and item.pp_preserved
+                and item.hp_safe
+                and item.inventory_preserved
+                for item in self.wild_flees
+            )
+            and self.final_raw.map_id == MapId.LAVENDER_POKECENTER
+            and self.final_raw.party_species_ids == PROTECTED_PARTY
+            and self.final_raw.battle_state == 0
+            and self.party_hp == self.party_max_hp
+            and self.party_status == (0, 0, 0)
+            and self.repels_purchased == self.repels_used == 4
+            and self.super_potions_purchased == 8
+            and self.super_potions_used + self.super_potions_remaining == 9
+            and self.purchase_cost == 8 * SUPER_POTION_PRICE + 4 * REPEL_PRICE
+            and self.money_remaining >= 0
+            and self.route_10_trainer_2_bypassed
+            and self.controller_released
+        )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        return tuple((item.checkpoint_id, item.label, item.raw) for item in self.records)
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "objective": "reach_lavender",
+            "trainer_battles": [
+                {
+                    "label": item.label,
+                    "map_id": item.map_id,
+                    "event": item.event,
+                    "opponent": item.opponent,
+                    "class": item.trainer_class,
+                    "set": item.trainer_set,
+                    "move_id": item.move_id,
+                    "selected_pp_spent": item.selected_pp_spent,
+                }
+                for item in self.trainers
+            ],
+            "wild_flees": len(self.wild_flees),
+            "inventory": {
+                "repels_purchased": self.repels_purchased,
+                "repels_used": self.repels_used,
+                "super_potions_purchased": self.super_potions_purchased,
+                "super_potions_used": self.super_potions_used,
+                "super_potions_remaining": self.super_potions_remaining,
+                "purchase_cost": self.purchase_cost,
+                "money_remaining": self.money_remaining,
+            },
+            "route_10_trainer_2_bypassed": self.route_10_trainer_2_bypassed,
+            "party": {
+                "species": list(self.final_raw.party_species_ids or ()),
+                "hp": list(self.party_hp),
+                "max_hp": list(self.party_max_hp),
+                "status": list(self.party_status),
+            },
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
+
+
+class _CountingExecutor:
+    def __init__(self, executor: ChapterExecutor) -> None:
+        self._executor = executor
+        self.actions_executed = 0
+
+    def execute(self, action: MacroAction) -> object:
+        result = self._executor.execute(action)
+        self.actions_executed += 1
+        return result
+
+
+@dataclass(slots=True)
+class _RunState:
+    wilds: list[WildFleeEvidence]
+    trainers: list[TrainerEvidence]
+    repels_used: int = 0
+    potions_used: int = 0
+
+
+def run_lavender_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    timing: LavenderTiming = DEFAULT_LAVENDER_TIMING,
+    progress: ProgressSink | None = None,
+) -> LavenderChapterReport:
+    """Continue the verified Surge boundary to a stable Lavender Center."""
+
+    start_frames = emulator.frame_count
+    actions = _CountingExecutor(executor)
+    run = _RunState([], [])
+    records: list[LavenderCheckpoint] = []
+
+    start = reader.read()
+    _require(
+        start,
+        MapId.VERMILION_GYM,
+        (5, 2),
+        "Surge terminal boundary",
+        party=PROTECTED_PARTY,
+    )
+    if not (start.badge_bits or 0) & Badge.THUNDER:
+        raise LavenderChapterError("Lavender chapter requires the Thunder Badge.")
+    initial_sp = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    initial_repel = _bag(emulator).get(ItemId.REPEL, 0)
+    if initial_sp != 1 or initial_repel != 0:
+        raise LavenderChapterError(
+            f"Unexpected starting recovery inventory: SP={initial_sp}, Repel={initial_repel}."
+        )
+    _checkpoint(records, progress, emulator, start, "surge_ready", "Verified Surge boundary")
+
+    _move(actions, reader, emulator, run, GYM_EXIT, timing, "Vermilion Gym exit")
+    _wait(actions, timing.transition_frames)
+    gym_exited = reader.read()
+    _require(gym_exited, MapId.VERMILION_CITY, (12, 20), "Gym exterior")
+    _checkpoint(records, progress, emulator, gym_exited, "gym_exited", "Exited Vermilion Gym")
+
+    _move(actions, reader, emulator, run, VERMILION_TREE_STANCE, timing, "second tree stance")
+    _face_blocked(actions, reader, emulator, "up", 0x3D, timing, "second Gym tree")
+    _use_cut(actions, reader, emulator, "up", timing)
+    cut = reader.read()
+    _require(cut, MapId.VERMILION_CITY, (15, 18), "second Cut passage")
+    _checkpoint(records, progress, emulator, cut, "second_cut", "Cleared the second Gym tree")
+
+    _move(actions, reader, emulator, run, TREE_TO_CENTER, timing, "Vermilion Center")
+    _wait(actions, timing.transition_frames)
+    _heal_center(actions, reader, emulator, timing, MapId.VERMILION_POKECENTER)
+    healed = reader.read()
+    _checkpoint(records, progress, emulator, healed, "healed", "Healed before Rock Tunnel")
+
+    _teach_tm11(actions, reader, emulator, timing)
+    bubblebeam = reader.read()
+    if bubblebeam.first_party_moves != (BITE, 0x27, BUBBLEBEAM, 0x37):
+        raise LavenderChapterError(f"TM11 produced wrong moves: {bubblebeam.first_party_moves!r}.")
+    _checkpoint(records, progress, emulator, bubblebeam, "bubblebeam", "Taught BubbleBeam")
+
+    _move(actions, reader, emulator, run, CENTER_EXIT, timing, "Vermilion Center exit")
+    _wait(actions, timing.transition_frames)
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        VERMILION_CENTER_TO_MART,
+        timing,
+        "Vermilion Mart",
+    )
+    _wait(actions, timing.transition_frames)
+    _require(reader.read(), MapId.VERMILION_MART, (3, 7), "Mart entrance")
+    purchase_cost = _purchase_supplies(actions, reader, emulator, timing)
+    supplies = reader.read()
+    if _bag(emulator).get(ItemId.SUPER_POTION) != 9 or _bag(emulator).get(ItemId.REPEL) != 4:
+        raise LavenderChapterError("Mart purchase did not produce nine SP and four Repels.")
+    _checkpoint(records, progress, emulator, supplies, "supplies", "Purchased tunnel supplies")
+
+    mart_position = reader.read()
+    if (
+        mart_position.map_id != MapId.VERMILION_MART
+        or mart_position.player_x != 2
+        or mart_position.player_y is None
+        or not 5 <= mart_position.player_y <= 7
+    ):
+        raise LavenderChapterError("Mart menu closure lost the qualified exit column.")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        _directions("R" + "D" * (8 - mart_position.player_y)),
+        timing,
+        "Vermilion Mart exit",
+    )
+    _wait(actions, timing.transition_frames)
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        VERMILION_TO_ROUTE_6,
+        timing,
+        "Route 6 return",
+    )
+    _wait(actions, timing.transition_frames)
+    _use_repel(actions, reader, emulator, run, timing)
+    _move(actions, reader, emulator, run, ROUTE_6_TO_SOUTH_GATE, timing, "Route 6 gate")
+    _wait(actions, timing.transition_frames)
+    _move(actions, reader, emulator, run, SOUTH_GATE_TO_TUNNEL, timing, "Underground Path")
+    _wait(actions, timing.transition_frames)
+    _move(actions, reader, emulator, run, TUNNEL_TO_NORTH_GATE, timing, "Underground Path north")
+    _wait(actions, timing.transition_frames)
+    _move(actions, reader, emulator, run, NORTH_GATE_EXIT, timing, "Route 5 exit")
+    _wait(actions, timing.transition_frames)
+    reverse = reader.read()
+    _require(reverse, MapId.ROUTE_5, (17, 28), "Route 5 Underground exit")
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reverse,
+        "reverse_underground",
+        "Traversed Underground Path in reverse",
+    )
+
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        ROUTE_5_TO_CERULEAN_TREE,
+        timing,
+        "Cerulean east tree",
+        auto_repel=True,
+    )
+    _face_blocked(actions, reader, emulator, "up", 0x3D, timing, "Cerulean tree")
+    _use_cut(actions, reader, emulator, "up", timing)
+    cerulean_cut = reader.read()
+    _require(cerulean_cut, MapId.CERULEAN_CITY, (19, 28), "Cerulean Cut passage")
+    _checkpoint(records, progress, emulator, cerulean_cut, "cerulean_cut", "Opened Route 9 access")
+
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        CERULEAN_TREE_TO_ROUTE_9,
+        timing,
+        "Route 9 entry",
+    )
+    _wait(actions, timing.transition_frames)
+    _move(actions, reader, emulator, run, ROUTE_9_TREE_STANCE, timing, "Route 9 tree")
+    _face_blocked(actions, reader, emulator, "right", 0x3D, timing, "Route 9 tree")
+    _use_cut(actions, reader, emulator, "right", timing)
+    route9_cut = reader.read()
+    _require(route9_cut, MapId.ROUTE_9, (5, 8), "Route 9 Cut passage")
+    _checkpoint(records, progress, emulator, route9_cut, "route9_cut", "Cleared Route 9 tree")
+
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        ROUTE_9_TO_TRAINER_0_STANCE,
+        timing,
+        "Route 9 trainer 0 stance",
+    )
+    _swap(actions, reader, emulator, DUX, "Route 9 DUX lead")
+    _trainer(
+        actions,
+        reader,
+        emulator,
+        run,
+        ROUTE_9_TRAINER_0_TRIGGER,
+        timing,
+        "Route 9 trainer 0",
+        MapId.ROUTE_9,
+        EventFlag.BEAT_ROUTE_9_TRAINER_0,
+        0xCE,
+        0x06,
+        5,
+        PECK,
+        1,
+    )
+    _swap(actions, reader, emulator, WARTORTLE, "Route 9 Wartortle restoration")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        ROUTE_9_TRAINER_0_TO_8,
+        timing,
+        "Route 9 trainer 8 route",
+        auto_repel=True,
+    )
+    _trainer(
+        actions,
+        reader,
+        emulator,
+        run,
+        (),
+        timing,
+        "Route 9 trainer 8",
+        MapId.ROUTE_9,
+        EventFlag.BEAT_ROUTE_9_TRAINER_8,
+        0xCA,
+        0x02,
+        14,
+        BITE,
+        1,
+        already_triggered=True,
+    )
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        ROUTE_9_AFTER_TRAINER_8,
+        timing,
+        "Route 9 east",
+        auto_repel=True,
+    )
+    route9_done = reader.read()
+    _require(route9_done, MapId.ROUTE_10, (0, 8), "Route 10 north")
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        route9_done,
+        "route9_trainers",
+        "Defeated both mandatory Route 9 trainers",
+    )
+
+    _move(actions, reader, emulator, run, ROUTE_10_TO_CENTER, timing, "Rock Tunnel Center")
+    _wait(actions, timing.transition_frames)
+    _heal_center(actions, reader, emulator, timing, MapId.ROCK_TUNNEL_POKECENTER)
+    rock_center = reader.read()
+    _checkpoint(records, progress, emulator, rock_center, "rock_center", "Healed at Route 10")
+
+    _move(actions, reader, emulator, run, CENTER_EXIT, timing, "Rock Center exit")
+    _wait(actions, timing.transition_frames)
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        ROCK_CENTER_TO_TUNNEL,
+        timing,
+        "Rock Tunnel entrance",
+    )
+    _clear_field_text(actions, reader, timing)
+    _use_repel(actions, reader, emulator, run, timing)
+    _move(actions, reader, emulator, run, ("up",), timing, "Rock Tunnel entry")
+    _wait(actions, timing.transition_frames)
+    tunnel_entered = reader.read()
+    _require(tunnel_entered, MapId.ROCK_TUNNEL_1F, (15, 3), "Rock Tunnel 1F")
+    _checkpoint(
+        records, progress, emulator, tunnel_entered, "tunnel_entered", "Entered Rock Tunnel"
+    )
+
+    _trainer(
+        actions,
+        reader,
+        emulator,
+        run,
+        TUNNEL_TO_1F_TRAINER_3,
+        timing,
+        "Rock Tunnel 1F trainer 3",
+        MapId.ROCK_TUNNEL_1F,
+        EventFlag.BEAT_ROCK_TUNNEL_1_TRAINER_3,
+        0xCF,
+        0x07,
+        7,
+        BUBBLEBEAM,
+        3,
+    )
+    _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
+    _move(actions, reader, emulator, run, TUNNEL_1F_TO_B1, timing, "first B1 ladder")
+    _wait(actions, timing.transition_frames)
+    _trainer(
+        actions,
+        reader,
+        emulator,
+        run,
+        B1_TO_TRAINER_7,
+        timing,
+        "Rock Tunnel B1F trainer 7",
+        MapId.ROCK_TUNNEL_B1F,
+        EventFlag.BEAT_ROCK_TUNNEL_2_TRAINER_7,
+        0xCF,
+        0x07,
+        5,
+        BITE,
+        1,
+    )
+    _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        B1_TO_TRAINER_5_STANCE,
+        timing,
+        "B1 trainer 5 stance",
+    )
+    _swap(actions, reader, emulator, DUX, "B1 DUX lead")
+    _trainer(
+        actions,
+        reader,
+        emulator,
+        run,
+        B1_TRAINER_5_TRIGGER,
+        timing,
+        "Rock Tunnel B1F trainer 5",
+        MapId.ROCK_TUNNEL_B1F,
+        EventFlag.BEAT_ROCK_TUNNEL_2_TRAINER_5,
+        0xCE,
+        0x06,
+        10,
+        PECK,
+        1,
+    )
+    _heal_if_below(actions, reader, emulator, run, timing, 1, TRAVERSAL_RECOVERY_THRESHOLD)
+    _swap(actions, reader, emulator, WARTORTLE, "B1 Wartortle restoration")
+    _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
+    _trainer(
+        actions,
+        reader,
+        emulator,
+        run,
+        B1_TO_TRAINER_3,
+        timing,
+        "Rock Tunnel B1F trainer 3",
+        MapId.ROCK_TUNNEL_B1F,
+        EventFlag.BEAT_ROCK_TUNNEL_2_TRAINER_3,
+        0xCF,
+        0x07,
+        4,
+        BUBBLEBEAM,
+        3,
+    )
+    _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
+    _trainer(
+        actions,
+        reader,
+        emulator,
+        run,
+        B1_TO_TRAINER_4,
+        timing,
+        "Rock Tunnel B1F trainer 4",
+        MapId.ROCK_TUNNEL_B1F,
+        EventFlag.BEAT_ROCK_TUNNEL_2_TRAINER_4,
+        0xD1,
+        0x09,
+        10,
+        BUBBLEBEAM,
+        3,
+    )
+    _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
+    _move(actions, reader, emulator, run, B1_TO_1F_WEST, timing, "B1 west ladder")
+    _wait(actions, timing.transition_frames)
+    _move(actions, reader, emulator, run, ONE_F_WEST_TO_B1, timing, "1F west traverse")
+    _wait(actions, timing.transition_frames)
+    _trainer(
+        actions,
+        reader,
+        emulator,
+        run,
+        B1_TO_TRAINER_0,
+        timing,
+        "Rock Tunnel B1F trainer 0",
+        MapId.ROCK_TUNNEL_B1F,
+        EventFlag.BEAT_ROCK_TUNNEL_2_TRAINER_0,
+        0xCE,
+        0x06,
+        9,
+        BITE,
+        1,
+    )
+    _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
+    _trainer(
+        actions,
+        reader,
+        emulator,
+        run,
+        B1_TO_TRAINER_1,
+        timing,
+        "Rock Tunnel B1F trainer 1",
+        MapId.ROCK_TUNNEL_B1F,
+        EventFlag.BEAT_ROCK_TUNNEL_2_TRAINER_1,
+        0xD1,
+        0x09,
+        9,
+        BUBBLEBEAM,
+        3,
+    )
+    _heal_if_below(actions, reader, emulator, run, timing, 1, TRAVERSAL_RECOVERY_THRESHOLD)
+    _move(actions, reader, emulator, run, B1_TO_1F_EAST, timing, "B1 east ladder")
+    _wait(actions, timing.transition_frames)
+    _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
+    _trainer(
+        actions,
+        reader,
+        emulator,
+        run,
+        ONE_F_TO_TRAINER_4,
+        timing,
+        "Rock Tunnel 1F trainer 4",
+        MapId.ROCK_TUNNEL_1F,
+        EventFlag.BEAT_ROCK_TUNNEL_1_TRAINER_4,
+        0xCE,
+        0x06,
+        17,
+        BITE,
+        1,
+    )
+    _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
+    _trainer(
+        actions,
+        reader,
+        emulator,
+        run,
+        ONE_F_TO_TRAINER_5,
+        timing,
+        "Rock Tunnel 1F trainer 5",
+        MapId.ROCK_TUNNEL_1F,
+        EventFlag.BEAT_ROCK_TUNNEL_1_TRAINER_5,
+        0xCE,
+        0x06,
+        18,
+        BITE,
+        1,
+    )
+    _heal_if_below(actions, reader, emulator, run, timing, 0, TRAVERSAL_RECOVERY_THRESHOLD)
+    _move(actions, reader, emulator, run, ONE_F_TO_SOUTH_EXIT, timing, "Rock Tunnel exit")
+    _wait(actions, timing.transition_frames)
+    tunnel_cleared = reader.read()
+    _require(tunnel_cleared, MapId.ROUTE_10, (8, 54), "Rock Tunnel south exit")
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        tunnel_cleared,
+        "rock_tunnel_cleared",
+        "Cleared all nine mandatory tunnel trainers",
+    )
+
+    if _event(emulator, EventFlag.BEAT_ROUTE_10_TRAINER_2):
+        raise LavenderChapterError("Optional Route 10 trainer 2 was already defeated.")
+    _move(actions, reader, emulator, run, ROUTE_10_TO_LAVENDER, timing, "Lavender approach")
+    _wait(actions, timing.transition_frames)
+    lavender = reader.read()
+    _require(lavender, MapId.LAVENDER_TOWN, (9, 0), "Lavender north entrance")
+    if _event(emulator, EventFlag.BEAT_ROUTE_10_TRAINER_2):
+        raise LavenderChapterError("Route 10 bypass defeated optional trainer 2.")
+    if _party_hp(emulator)[1] <= 0:
+        raise LavenderChapterError("DUX did not survive the qualified poisoned traversal.")
+    _checkpoint(records, progress, emulator, lavender, "lavender_reached", "Reached Lavender Town")
+
+    _move(actions, reader, emulator, run, LAVENDER_TO_CENTER, timing, "Lavender Center")
+    _wait(actions, timing.transition_frames)
+    _heal_center(actions, reader, emulator, timing, MapId.LAVENDER_POKECENTER)
+    final = reader.read()
+    hp = _party_hp(emulator)
+    max_hp = _party_max_hp(emulator)
+    status = _party_status(emulator)
+    if (
+        final.party_species_ids != PROTECTED_PARTY
+        or hp != max_hp
+        or status != (0, 0, 0)
+        or not reader.read_input_readiness().ready
+    ):
+        raise LavenderChapterError("Lavender Center failed the full-party stable gate.")
+    _checkpoint(records, progress, emulator, final, "lavender_stable", "Healed safely in Lavender")
+
+    report = LavenderChapterReport(
+        records=tuple(records),
+        trainers=tuple(run.trainers),
+        wild_flees=tuple(run.wilds),
+        final_raw=final,
+        party_hp=hp,
+        party_max_hp=max_hp,
+        party_status=status,
+        repels_purchased=4,
+        repels_used=run.repels_used,
+        super_potions_purchased=8,
+        super_potions_used=run.potions_used,
+        super_potions_remaining=_bag(emulator).get(ItemId.SUPER_POTION, 0),
+        purchase_cost=purchase_cost,
+        money_remaining=_money(emulator),
+        route_10_trainer_2_bypassed=not _event(emulator, EventFlag.BEAT_ROUTE_10_TRAINER_2),
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=actions.actions_executed,
+        controller_released=not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise LavenderChapterError("Lavender chapter failed its evidence contract.")
+    return report
+
+
+def _trainer(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    route: Iterable[str],
+    timing: LavenderTiming,
+    label: str,
+    map_id: int,
+    event: EventFlag,
+    opponent: int,
+    trainer_class: int,
+    trainer_set: int,
+    move_id: int,
+    move_slot: int,
+    *,
+    already_triggered: bool = False,
+) -> None:
+    if _event(emulator, event):
+        raise LavenderChapterError(f"{label} event was already set.")
+    if not already_triggered:
+        _move(
+            executor,
+            reader,
+            emulator,
+            run,
+            route,
+            timing,
+            label,
+            allow_trainer=True,
+        )
+    battle = _enter_trainer_battle(executor, reader, timing, label)
+    identity = (
+        emulator.read_u8(RamAddress.CURRENT_OPPONENT),
+        emulator.read_u8(RamAddress.TRAINER_CLASS),
+        emulator.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
+        emulator.read_u8(RamAddress.ENGAGED_TRAINER_SET),
+    )
+    expected_identity = (opponent, trainer_class, opponent, trainer_set)
+    if battle.map_id != map_id or identity != expected_identity:
+        raise LavenderChapterError(f"{label} identity mismatch: observed {identity!r}.")
+    before_pp = battle.first_party_pp
+    final = run_adaptive_trainer_battle(
+        reader,
+        executor,
+        lambda _: move_slot,
+        expected_map=int(map_id),
+        required_move_id=move_id,
+        label=label,
+    )
+    if not _event(emulator, event):
+        raise LavenderChapterError(f"{label} did not set event {int(event):#05x}.")
+    if before_pp is None or final.first_party_pp is None:
+        raise LavenderChapterError(f"{label} lacks PP evidence.")
+    spent = (before_pp[move_slot - 1] & 0x3F) - (final.first_party_pp[move_slot - 1] & 0x3F)
+    if spent <= 0:
+        raise LavenderChapterError(f"{label} did not spend selected-move PP.")
+    run.trainers.append(
+        TrainerEvidence(
+            label,
+            int(map_id),
+            int(event),
+            opponent,
+            trainer_class,
+            trainer_set,
+            move_id,
+            spent,
+        )
+    )
+
+
+def _move(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    directions: Iterable[str],
+    timing: LavenderTiming,
+    label: str,
+    *,
+    allow_trainer: bool = False,
+    auto_repel: bool = False,
+) -> RawGameState:
+    route = tuple(directions)
+    state = reader.read()
+    history: list[tuple[int | None, int | None, int | None]] = [
+        (state.map_id, state.player_x, state.player_y)
+    ]
+    for step, direction in enumerate(route, 1):
+        if auto_repel and emulator.read_u8(RamAddress.REPEL_REMAINING_STEPS) == 0:
+            _clear_field_text(executor, reader, timing)
+            if _bag(emulator).get(ItemId.REPEL, 0):
+                _use_repel(executor, reader, emulator, run, timing)
+        before = (state.map_id, state.player_x, state.player_y)
+        for attempt in range(timing.movement_retries):
+            _pulse(executor, MacroActionKind.MOVE, direction, 12 * (attempt + 1))
+            state = reader.read()
+            if state.battle_state == 1:
+                _flee(executor, reader, emulator, run, timing)
+                state = reader.read()
+                after = (state.map_id, state.player_x, state.player_y)
+                if after != before:
+                    history.append(after)
+                    break
+                continue
+            if state.battle_state == 2:
+                if allow_trainer and step == len(route):
+                    return state
+                raise LavenderChapterError(
+                    f"Unexpected trainer interrupted {label} at step {step}."
+                )
+            after = (state.map_id, state.player_x, state.player_y)
+            if after != before:
+                history.append(after)
+                break
+            if not reader.read_input_readiness().ready:
+                _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+                state = reader.read()
+                if state.battle_state == 2 and allow_trainer and step == len(route):
+                    return state
+        else:
+            if allow_trainer and step == len(route):
+                return state
+            raise LavenderChapterError(
+                f"{label} blocked at step {step}: {direction}, "
+                f"{(state.map_id, state.player_x, state.player_y)!r}, history={history!r}."
+            )
+        if (
+            state.first_party_hp == 0
+            or state.party_species_ids is None
+            or sorted(state.party_species_ids) != sorted(PROTECTED_PARTY)
+        ):
+            raise LavenderChapterError(f"{label} changed the protected lead/party.")
+    return state
+
+
+def _enter_trainer_battle(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: LavenderTiming,
+    label: str,
+) -> RawGameState:
+    for _ in range(timing.dialogue_pulses):
+        raw = reader.read()
+        if raw.battle_state == 2:
+            return raw
+        if raw.battle_state == 1:
+            raise LavenderChapterError(f"A wild battle replaced {label}.")
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise LavenderChapterError(f"{label} did not enter a trainer battle.")
+
+
+def _flee(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: LavenderTiming,
+) -> None:
+    before = reader.read()
+    species = before.party_species_ids
+    pp = before.first_party_pp
+    hp = _party_hp(emulator)
+    inventory = _bag(emulator)
+    if before.battle_state != 1:
+        raise LavenderChapterError("Wild flee requires an active wild battle.")
+    for _ in range(timing.flee_pulses):
+        raw = reader.read()
+        menu = reader.read_battle_menu_state(raw)
+        if menu.phase is BattleMenuPhase.UNKNOWN:
+            _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+            continue
+        if menu.phase is BattleMenuPhase.MOVE:
+            _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
+            continue
+        command = menu.selected_main_command
+        if command == 3:
+            break
+        direction = {0: "right", 1: "right", 2: "down"}.get(command)
+        if direction is None:
+            raise LavenderChapterError("Wild flee exposed an invalid main-menu cursor.")
+        _pulse(executor, MacroActionKind.MOVE, direction, timing.wait_frames)
+    else:
+        raise LavenderChapterError("Wild flee could not select RUN.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+    for _ in range(timing.flee_pulses):
+        final = reader.read()
+        if final.battle_state == 0 and reader.read_input_readiness().ready:
+            party_ok = final.party_species_ids == species
+            pp_ok = final.first_party_pp == pp
+            final_hp = _party_hp(emulator)
+            hp_safe = all(
+                0 < after <= before_hp for before_hp, after in zip(hp, final_hp, strict=True)
+            )
+            inventory_ok = _bag(emulator) == inventory
+            evidence = WildFleeEvidence(
+                int(before.map_id or 0),
+                int(before.player_x or 0),
+                int(before.player_y or 0),
+                int(before.enemy_species_id or 0),
+                int(before.enemy_level or 0),
+                party_ok,
+                pp_ok,
+                hp_safe,
+                inventory_ok,
+            )
+            if (
+                not party_ok
+                or not pp_ok
+                or not hp_safe
+                or not inventory_ok
+                or (final.first_party_hp or 0) <= 0
+            ):
+                raise LavenderChapterError(
+                    "Wild flee violated protected state: "
+                    f"hp={hp!r}->{final_hp!r}, party={party_ok}, "
+                    f"pp={pp_ok}, inventory={inventory_ok}."
+                )
+            run.wilds.append(evidence)
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise LavenderChapterError("Wild flee exceeded its bounded dialogue.")
+
+
+def _use_repel(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: LavenderTiming,
+) -> None:
+    before = _bag(emulator).get(ItemId.REPEL, 0)
+    if before <= 0 or emulator.read_u8(RamAddress.REPEL_REMAINING_STEPS) != 0:
+        raise LavenderChapterError("Repel use lacked an expired effect and carried item.")
+    _use_bag_item(executor, reader, emulator, timing, ItemId.REPEL)
+    if (
+        _bag(emulator).get(ItemId.REPEL, 0) != before - 1
+        or emulator.read_u8(RamAddress.REPEL_REMAINING_STEPS) == 0
+    ):
+        raise LavenderChapterError("Repel did not consume exactly one item and activate.")
+    run.repels_used += 1
+
+
+def _heal_if_below(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: LavenderTiming,
+    party_index: int,
+    threshold: int,
+) -> bool:
+    hp = _party_hp(emulator)[party_index]
+    if hp <= 0:
+        raise LavenderChapterError(f"Recovery target {party_index} has fainted.")
+    if hp > threshold:
+        return False
+    _use_super_potion(executor, reader, emulator, run, timing, party_index)
+    return True
+
+
+def _use_super_potion(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: LavenderTiming,
+    party_index: int,
+) -> None:
+    hp_addresses = (
+        RamAddress.PARTY_MON_1_HP,
+        RamAddress.PARTY_MON_2_HP,
+        RamAddress.PARTY_MON_3_HP,
+    )
+    max_addresses = (
+        RamAddress.PARTY_MON_1_MAX_HP,
+        RamAddress.PARTY_MON_2_MAX_HP,
+        RamAddress.PARTY_MON_3_MAX_HP,
+    )
+    before_hp = _u16(emulator, hp_addresses[party_index])
+    max_hp = _u16(emulator, max_addresses[party_index])
+    before_qty = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    if not 0 < before_hp < max_hp or before_qty <= 0:
+        raise LavenderChapterError(
+            f"Potion target {party_index} lacks damage/item evidence: {before_hp}/{max_hp}."
+        )
+    _open_bag(executor, emulator, timing)
+    _select_bag_item(executor, emulator, ItemId.SUPER_POTION, timing)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+    _select_cursor(executor, emulator, party_index, timing)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+    expected = min(max_hp, before_hp + 50)
+    for _ in range(timing.dialogue_pulses):
+        if (
+            _u16(emulator, hp_addresses[party_index]) == expected
+            and _bag(emulator).get(ItemId.SUPER_POTION, 0) == before_qty - 1
+        ):
+            _close_menus(executor, reader, timing)
+            run.potions_used += 1
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise LavenderChapterError("Super Potion missed its HP/quantity proof.")
+
+
+def _use_bag_item(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: LavenderTiming,
+    item: int,
+) -> None:
+    before = _bag(emulator).get(item, 0)
+    _open_bag(executor, emulator, timing)
+    _select_bag_item(executor, emulator, item, timing)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+    for _ in range(timing.dialogue_pulses):
+        if _bag(emulator).get(item, 0) == before - 1:
+            _close_menus(executor, reader, timing)
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise LavenderChapterError(f"Bag item {int(item):#04x} was not consumed.")
+
+
+def _teach_tm11(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: LavenderTiming,
+) -> None:
+    _open_bag(executor, emulator, timing)
+    _select_bag_item(executor, emulator, ItemId.TM11_BUBBLEBEAM, timing)
+    for _ in range(timing.dialogue_pulses):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (0, 1):
+            break
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    else:
+        raise LavenderChapterError("TM11 did not reach party selection.")
+    _select_cursor(executor, emulator, 0, timing)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(timing.dialogue_pulses):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (5, 8):
+            break
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    else:
+        raise LavenderChapterError("TM11 did not reach move deletion.")
+    _select_cursor(executor, emulator, 2, timing)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(timing.dialogue_pulses):
+        raw = reader.read()
+        if raw.first_party_moves == (
+            BITE,
+            0x27,
+            BUBBLEBEAM,
+            0x37,
+        ) and ItemId.TM11_BUBBLEBEAM not in _bag(emulator):
+            _close_menus(executor, reader, timing)
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise LavenderChapterError("TM11 did not replace Bubble and consume the TM.")
+
+
+def _purchase_supplies(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: LavenderTiming,
+) -> int:
+    money_before = _money(emulator)
+    _move(executor, reader, emulator, _RunState([], []), _directions("UUL"), timing, "Mart clerk")
+    _pulse(executor, MacroActionKind.MOVE, "left", 60)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _buy_mart_item(
+        executor,
+        emulator,
+        timing,
+        absolute_index=1,
+        item=ItemId.SUPER_POTION,
+        quantity=8,
+        target_bag_quantity=9,
+    )
+    _buy_mart_item(
+        executor,
+        emulator,
+        timing,
+        absolute_index=5,
+        item=ItemId.REPEL,
+        quantity=4,
+        target_bag_quantity=4,
+    )
+    _close_menus(executor, reader, timing)
+    money_after = _money(emulator)
+    expected_cost = 8 * SUPER_POTION_PRICE + 4 * REPEL_PRICE
+    if money_before - money_after != expected_cost:
+        raise LavenderChapterError(
+            f"Mart money gate expected {expected_cost}, observed {money_before - money_after}."
+        )
+    return expected_cost
+
+
+def _buy_mart_item(
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+    timing: LavenderTiming,
+    *,
+    absolute_index: int,
+    item: int,
+    quantity: int,
+    target_bag_quantity: int,
+) -> None:
+    for _ in range(12):
+        current = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        if current == absolute_index:
+            break
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if current < absolute_index else "up",
+            120,
+        )
+    else:
+        raise LavenderChapterError(f"Mart could not select inventory index {absolute_index}.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(12):
+        selected = emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM)
+        current_quantity = emulator.read_u8(RamAddress.SHOP_QUANTITY)
+        if selected == item and current_quantity == quantity:
+            break
+        if selected != item:
+            raise LavenderChapterError(f"Mart selected {selected:#04x}, expected {int(item):#04x}.")
+        _pulse(executor, MacroActionKind.MOVE, "up", 120)
+    else:
+        raise LavenderChapterError(f"Mart quantity selector missed {quantity}.")
+    for _ in range(timing.dialogue_pulses):
+        if _bag(emulator).get(item, 0) == target_bag_quantity:
+            _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise LavenderChapterError(f"Mart did not purchase {quantity} of {int(item):#04x}.")
+
+
+def _heal_center(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: LavenderTiming,
+    map_id: int,
+) -> None:
+    _wait(executor, timing.transition_frames)
+    raw = reader.read()
+    if raw.map_id != map_id:
+        raise LavenderChapterError(f"Expected Center map {int(map_id):#04x}, got {raw.map_id!r}.")
+    _move(
+        executor,
+        reader,
+        emulator,
+        _RunState([], []),
+        ("up",) * 4,
+        timing,
+        "Center nurse",
+    )
+    for _ in range(9):
+        _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+    for _ in range(timing.dialogue_pulses):
+        if (
+            _party_hp(emulator) == _party_max_hp(emulator)
+            and _party_status(emulator) == (0, 0, 0)
+            and reader.read_input_readiness().ready
+        ):
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise LavenderChapterError("Pokémon Center did not heal the complete party.")
+
+
+def _use_cut(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    direction: str,
+    timing: LavenderTiming,
+) -> None:
+    before = emulator.read_u8(RamAddress.TILE_IN_FRONT_OF_PLAYER)
+    if before != 0x3D:
+        raise LavenderChapterError("Cut lacked a cuttable tree in front.")
+    executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
+    _wait(executor, timing.wait_frames)
+    _select_cursor(executor, emulator, 1, timing)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _select_cursor(executor, emulator, 1, timing)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _select_cursor(executor, emulator, 0, timing)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(timing.dialogue_pulses):
+        if (
+            emulator.read_u8(RamAddress.TILE_IN_FRONT_OF_PLAYER) != 0x3D
+            and reader.read_input_readiness().ready
+        ):
+            break
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    else:
+        raise LavenderChapterError("Cut did not clear the tree.")
+    _move(
+        executor,
+        reader,
+        emulator,
+        _RunState([], []),
+        (direction,),
+        timing,
+        "Cut passage",
+    )
+
+
+def _face_blocked(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    direction: str,
+    tile: int,
+    timing: LavenderTiming,
+    label: str,
+) -> None:
+    before = reader.read()
+    _pulse(executor, MacroActionKind.MOVE, direction, 120)
+    after = reader.read()
+    if (after.player_x, after.player_y) != (before.player_x, before.player_y) or emulator.read_u8(
+        RamAddress.TILE_IN_FRONT_OF_PLAYER
+    ) != tile:
+        raise LavenderChapterError(f"{label} orientation probe failed.")
+
+
+def _swap(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    species: int,
+    label: str,
+) -> None:
+    try:
+        _swap_party_lead(emulator, executor, reader, species, label)
+    except Exception as error:
+        raise LavenderChapterError(str(error)) from error
+
+
+def _open_bag(
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+    timing: LavenderTiming,
+) -> None:
+    executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
+    _wait(executor, timing.wait_frames)
+    _select_cursor(executor, emulator, 2, timing)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+
+
+def _select_bag_item(
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+    item: int,
+    timing: LavenderTiming,
+) -> None:
+    for _ in range(24):
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        items = tuple(_bag(emulator))
+        if absolute < len(items) and items[absolute] == item:
+            return
+        _pulse(executor, MacroActionKind.MOVE, "down", 120)
+    raise LavenderChapterError(f"Could not select bag item {int(item):#04x}.")
+
+
+def _select_cursor(
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+    target: int,
+    timing: LavenderTiming,
+) -> None:
+    for _ in range(12):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == target:
+            return
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if cursor < target else "up",
+            min(timing.wait_frames, 120),
+        )
+    raise LavenderChapterError(f"Menu cursor could not select {target}.")
+
+
+def _close_menus(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: LavenderTiming,
+) -> None:
+    # The generic input-ready flags are also true in several field menus, so
+    # readiness alone cannot prove that ITEM/party screens were closed.
+    for _ in range(4):
+        _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
+    for _ in range(6):
+        if reader.read_input_readiness().ready:
+            return
+        _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
+    raise LavenderChapterError("Menu closure did not restore field input.")
+
+
+def _clear_field_text(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: LavenderTiming,
+) -> None:
+    for _ in range(timing.dialogue_pulses):
+        raw = reader.read()
+        if raw.battle_state == 0 and reader.read_input_readiness().ready:
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise LavenderChapterError("Field dialogue did not restore input.")
+
+
+def _checkpoint(
+    records: list[LavenderCheckpoint],
+    progress: ProgressSink | None,
+    emulator: EmulatorState,
+    raw: RawGameState,
+    checkpoint_id: str,
+    label: str,
+) -> None:
+    records.append(LavenderCheckpoint(checkpoint_id, label, raw))
+    if progress is not None:
+        progress(
+            LavenderProgress(
+                checkpoint_id,
+                label,
+                len(records),
+                LAVENDER_CHECKPOINT_COUNT,
+                emulator.frame_count,
+            )
+        )
+
+
+def _require(
+    raw: RawGameState,
+    map_id: int,
+    coordinate: tuple[int, int],
+    label: str,
+    *,
+    party: tuple[int, ...] | None = None,
+) -> None:
+    if (
+        raw.map_id != map_id
+        or (raw.player_x, raw.player_y) != coordinate
+        or raw.battle_state != 0
+        or (party is not None and raw.party_species_ids != party)
+    ):
+        raise LavenderChapterError(
+            f"{label} missed gate: map={raw.map_id!r}, "
+            f"coordinate={(raw.player_x, raw.player_y)!r}, battle={raw.battle_state!r}, "
+            f"party={raw.party_species_ids!r}."
+        )
+
+
+def _bag(emulator: EmulatorState) -> dict[int, int]:
+    return {
+        emulator.read_u8(int(RamAddress.BAG_ITEMS) + index * 2): emulator.read_u8(
+            int(RamAddress.BAG_ITEMS) + index * 2 + 1
+        )
+        for index in range(emulator.read_u8(RamAddress.NUM_BAG_ITEMS))
+    }
+
+
+def _money(emulator: EmulatorState) -> int:
+    value = 0
+    for offset in range(3):
+        packed = emulator.read_u8(int(RamAddress.PLAYER_MONEY) + offset)
+        high, low = packed >> 4, packed & 0x0F
+        if high > 9 or low > 9:
+            raise LavenderChapterError(f"Player money contains invalid BCD byte {packed:#04x}.")
+        value = value * 100 + high * 10 + low
+    return value
+
+
+def _event(emulator: EmulatorState, event: EventFlag) -> bool:
+    value = int(event)
+    return bool(emulator.read_u8(int(RamAddress.EVENT_FLAGS) + value // 8) & (1 << (value % 8)))
+
+
+def _u16(emulator: EmulatorState, address: int) -> int:
+    return emulator.read_u8(address) * 0x100 + emulator.read_u8(address + 1)
+
+
+def _party_hp(emulator: EmulatorState) -> tuple[int, int, int]:
+    return tuple(
+        _u16(emulator, address)
+        for address in (
+            RamAddress.PARTY_MON_1_HP,
+            RamAddress.PARTY_MON_2_HP,
+            RamAddress.PARTY_MON_3_HP,
+        )
+    )
+
+
+def _party_max_hp(emulator: EmulatorState) -> tuple[int, int, int]:
+    return tuple(
+        _u16(emulator, address)
+        for address in (
+            RamAddress.PARTY_MON_1_MAX_HP,
+            RamAddress.PARTY_MON_2_MAX_HP,
+            RamAddress.PARTY_MON_3_MAX_HP,
+        )
+    )
+
+
+def _party_status(emulator: EmulatorState) -> tuple[int, int, int]:
+    return tuple(
+        emulator.read_u8(address)
+        for address in (
+            RamAddress.PARTY_MON_1_STATUS,
+            RamAddress.PARTY_MON_2_STATUS,
+            RamAddress.PARTY_MON_3_STATUS,
+        )
+    )
+
+
+def _pulse(
+    executor: _CountingExecutor,
+    kind: MacroActionKind,
+    value: str | int | None = None,
+    frames: int = 180,
+) -> None:
+    executor.execute(MacroAction(kind, value))
+    _wait(executor, frames)
+
+
+def _wait(executor: _CountingExecutor, frames: int) -> None:
+    executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

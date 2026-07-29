@@ -285,8 +285,7 @@ def run_surge_chapter(
     raw = reader.read()
     _gate(
         raw,
-        _bag(emulator).get(ItemId.POKE_BALL) == 10
-        and _bag(emulator).get(ItemId.SUPER_POTION) == 1,
+        _bag(emulator).get(ItemId.POKE_BALL) == 10 and _bag(emulator).get(ItemId.SUPER_POTION) == 1,
         tracker,
         SurgePhase.BALLS_PURCHASED,
         "balls_purchased",
@@ -913,9 +912,7 @@ def _use_bubble_once(
                 cleared = reader.read()
                 if cleared.battle_state == 0:
                     if cleared.party_species_ids != encounter.party_species_ids:
-                        raise SurgeChapterError(
-                            "Bubble knockout changed the protected party."
-                        )
+                        raise SurgeChapterError("Bubble knockout changed the protected party.")
                     return False
             raise SurgeChapterError("Bubble knockout did not clear its battle dialogue.")
         if reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN:
@@ -1160,10 +1157,9 @@ def _prepare_diglett_dig(
         raise SurgeChapterError("TM28 could not select party-slot-three Diglett.")
     _pulse(executor, MacroActionKind.CONFIRM)
     for _ in range(20):
-        if (
-            DIG_MOVE_ID in _read_four(emulator, RamAddress.PARTY_MON_3_MOVES)
-            and ItemId.TM28_DIG not in _bag_ids(emulator)
-        ):
+        if DIG_MOVE_ID in _read_four(
+            emulator, RamAddress.PARTY_MON_3_MOVES
+        ) and ItemId.TM28_DIG not in _bag_ids(emulator):
             return
         _pulse(executor, MacroActionKind.CONFIRM)
     raise SurgeChapterError("TM28 did not teach Dig and consume exactly one TM.")
@@ -1258,11 +1254,7 @@ def _swap_party_lead(
     else:
         raise SurgeChapterError(f"{label} could not select its party slot.")
     _pulse(executor, MacroActionKind.CONFIRM)
-    target_moves = (
-        _read_four(emulator, RamAddress.PARTY_MON_3_MOVES)
-        if target_index == 2
-        else before.first_party_moves or ()
-    )
+    target_moves = _party_moves_for_index(emulator, before, target_index)
     field_move_count = sum(move in {CUT_MOVE_ID, DIG_MOVE_ID} for move in target_moves)
     for _ in range(field_move_count + 1):
         _pulse(executor, MacroActionKind.MOVE, "down", 120)
@@ -1283,6 +1275,26 @@ def _swap_party_lead(
     if not after.party_species_ids or after.party_species_ids[0] != species_id:
         raise SurgeChapterError(f"{label} failed its party-order gate.")
     return after
+
+
+def _party_moves_for_index(
+    emulator: EmulatorState,
+    state: RawGameState,
+    party_index: int,
+) -> tuple[int, ...]:
+    """Read moves from the selected party struct, never from the current lead."""
+
+    if party_index == 0:
+        return state.first_party_moves or ()
+    addresses = {
+        1: RamAddress.PARTY_MON_2_MOVES,
+        2: RamAddress.PARTY_MON_3_MOVES,
+    }
+    try:
+        address = addresses[party_index]
+    except KeyError as error:
+        raise SurgeChapterError(f"Unsupported party move index {party_index}.") from error
+    return _read_four(emulator, address)
 
 
 def _swap_party_slots(

@@ -39,6 +39,8 @@ class RamAddress(IntEnum):
     SIMULATED_JOYPAD_INDEX = 0xCD38
     JOY_IGNORE = 0xCD6B
     BATTLE_RESULT = 0xCF0B
+    SHOP_SELECTED_ITEM = 0xCF91
+    SHOP_QUANTITY = 0xCF96
     TILE_IN_FRONT_OF_PLAYER = 0xCFC6
     ENEMY_SPECIES = 0xCFE5
     ENEMY_HP = 0xCFE6
@@ -49,6 +51,8 @@ class RamAddress(IntEnum):
     CURRENT_OPPONENT = 0xD059
     GYM_LEADER_NUMBER = 0xD05C
     TRAINER_NUMBER = 0xD05D
+    REPEL_REMAINING_STEPS = 0xD0DB
+    PLAYER_MONEY = 0xD347
     PARTY_COUNT = 0xD163
     PARTY_SPECIES = 0xD164
     PARTY_MON_1_HP = 0xD16C
@@ -57,12 +61,19 @@ class RamAddress(IntEnum):
     PARTY_MON_1_PP = 0xD188
     PARTY_MON_1_LEVEL = 0xD18C
     PARTY_MON_1_MAX_HP = 0xD18D
+    PARTY_MON_2_HP = 0xD198
+    PARTY_MON_2_STATUS = 0xD19B
     PARTY_MON_2_MOVES = 0xD19F
     PARTY_MON_2_PP = 0xD1B4
+    PARTY_MON_2_LEVEL = 0xD1B8
+    PARTY_MON_2_MAX_HP = 0xD1B9
     PARTY_MON_2_NICKNAME = 0xD2C0
+    PARTY_MON_3_HP = 0xD1C4
+    PARTY_MON_3_STATUS = 0xD1C7
     PARTY_MON_3_MOVES = 0xD1CB
     PARTY_MON_3_PP = 0xD1E0
     PARTY_MON_3_LEVEL = 0xD1E4
+    PARTY_MON_3_MAX_HP = 0xD1E5
     PARTY_MON_3_NICKNAME = 0xD2CB
     NUM_BAG_ITEMS = 0xD31D
     BAG_ITEMS = 0xD31E
@@ -120,6 +131,8 @@ class MapId(IntEnum):
     ROUTE_4 = 0x0F
     ROUTE_5 = 0x10
     ROUTE_6 = 0x11
+    ROUTE_9 = 0x14
+    ROUTE_10 = 0x15
     ROUTE_11 = 0x16
     ROUTE_24 = 0x23
     ROUTE_25 = 0x24
@@ -153,6 +166,10 @@ class MapId(IntEnum):
     SS_ANNE_2F = 0x60
     SS_ANNE_CAPTAINS_ROOM = 0x65
     UNDERGROUND_PATH_NORTH_SOUTH = 0x77
+    ROCK_TUNNEL_POKECENTER = 0x51
+    ROCK_TUNNEL_1F = 0x52
+    LAVENDER_POKECENTER = 0x8D
+    ROCK_TUNNEL_B1F = 0xE8
     HALL_OF_FAME = 0x76
     CHAMPIONS_ROOM = 0x78
     INDIGO_PLATEAU_LOBBY = 0xAE
@@ -185,6 +202,12 @@ class EventFlag(IntEnum):
     BEAT_ROUTE_6_TRAINER_3 = 0x414
     BEAT_ROUTE_6_TRAINER_4 = 0x415
     BEAT_ROUTE_6_TRAINER_5 = 0x416
+    BEAT_ROUTE_9_TRAINER_0 = 0x441
+    BEAT_ROUTE_9_TRAINER_8 = 0x449
+    BEAT_ROUTE_10_TRAINER_2 = 0x453
+    BEAT_ROCK_TUNNEL_1_TRAINER_3 = 0x45C
+    BEAT_ROCK_TUNNEL_1_TRAINER_4 = 0x45D
+    BEAT_ROCK_TUNNEL_1_TRAINER_5 = 0x45E
     RESCUED_MR_FUJI = 0x117
     GOT_POKE_FLUTE = 0x128
     GOT_TM24 = 0x166
@@ -251,11 +274,18 @@ class EventFlag(IntEnum):
     BEAT_AGATHA = 0x8F1
     BEAT_LANCE = 0x8FE
     BEAT_CHAMPION_RIVAL = 0x901
+    BEAT_ROCK_TUNNEL_2_TRAINER_0 = 0x9B1
+    BEAT_ROCK_TUNNEL_2_TRAINER_1 = 0x9B2
+    BEAT_ROCK_TUNNEL_2_TRAINER_3 = 0x9B4
+    BEAT_ROCK_TUNNEL_2_TRAINER_4 = 0x9B5
+    BEAT_ROCK_TUNNEL_2_TRAINER_5 = 0x9B6
+    BEAT_ROCK_TUNNEL_2_TRAINER_7 = 0x9B8
 
 
 class ItemId(IntEnum):
     POKE_BALL = 0x04
     SUPER_POTION = 0x13
+    REPEL = 0x1E
     DOME_FOSSIL = 0x29
     HELIX_FOSSIL = 0x2A
     SECRET_KEY = 0x2B
@@ -3774,6 +3804,8 @@ def location_label(map_id: int | None) -> str | None:
         MapId.ROUTE_4: "route_4",
         MapId.ROUTE_5: "route_5",
         MapId.ROUTE_6: "route_6",
+        MapId.ROUTE_9: "route_9",
+        MapId.ROUTE_10: "route_10",
         MapId.ROUTE_24: "route_24",
         MapId.ROUTE_25: "route_25",
         MapId.REDS_HOUSE_1F: "reds_house_1f",
@@ -3798,6 +3830,10 @@ def location_label(map_id: int | None) -> str | None:
         MapId.UNDERGROUND_PATH_ROUTE_6: "underground_path_route_6",
         MapId.BILLS_HOUSE: "bills_house",
         MapId.UNDERGROUND_PATH_NORTH_SOUTH: "underground_path_north_south",
+        MapId.ROCK_TUNNEL_POKECENTER: "rock_tunnel_pokecenter",
+        MapId.ROCK_TUNNEL_1F: "rock_tunnel_1f",
+        MapId.ROCK_TUNNEL_B1F: "rock_tunnel_b1f",
+        MapId.LAVENDER_POKECENTER: "lavender_pokecenter",
         MapId.HALL_OF_FAME: "hall_of_fame",
         MapId.CHAMPIONS_ROOM: "champions_room",
         MapId.INDIGO_PLATEAU_LOBBY: "indigo_plateau_lobby",
@@ -3826,6 +3862,7 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         MapId.PEWTER_CITY: "location:pewter_city",
         MapId.CERULEAN_CITY: "location:cerulean_city",
         MapId.LAVENDER_TOWN: "location:lavender_town",
+        MapId.LAVENDER_POKECENTER: "location:lavender_town",
         MapId.VERMILION_CITY: "location:vermilion_city",
         MapId.CELADON_CITY: "location:celadon_city",
         MapId.FUCHSIA_CITY: "location:fuchsia_city",

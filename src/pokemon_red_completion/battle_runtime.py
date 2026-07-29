@@ -71,7 +71,7 @@ class BattleRuntimeTiming:
     max_pp_confirmation_pulses: int = 6
     max_attack_confirmation_pulses: int = 3
     max_post_attack_transition_pulses: int = 12
-    max_sleep_recovery_pulses: int = 16
+    max_sleep_recovery_pulses: int = 48
     required_ready_reads: int = 2
 
     def __post_init__(self) -> None:
@@ -125,6 +125,7 @@ def run_adaptive_trainer_battle(
         raise BattleRuntimeError(f"{label} must start in an active trainer battle.")
 
     ready_reads = 0
+    unknown_menu_pulses = 0
     for _ in range(timing.max_runtime_pulses):
         raw = reader.read()
         _require_present_state(raw, expected_map=expected_map, label=label)
@@ -152,12 +153,18 @@ def run_adaptive_trainer_battle(
         ready_reads = 0
         menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
         if menu.phase is BattleMenuPhase.UNKNOWN:
+            unknown_menu_pulses += 1
             _pulse(
                 executor,
-                MacroAction(MacroActionKind.CONFIRM),
+                MacroAction(
+                    MacroActionKind.CANCEL
+                    if unknown_menu_pulses % 3 == 0
+                    else MacroActionKind.CONFIRM
+                ),
                 timing.dialogue_wait_frames,
             )
             continue
+        unknown_menu_pulses = 0
         if menu.phase is BattleMenuPhase.MOVE:
             initial_pp = raw.first_party_pp
             _pulse(
@@ -185,9 +192,7 @@ def run_adaptive_trainer_battle(
                 )
             continue
         if raw.enemy_hp is None:
-            raise BattleRuntimeError(
-                f"{label} lacks live enemy HP evidence at the MAIN menu."
-            )
+            raise BattleRuntimeError(f"{label} lacks live enemy HP evidence at the MAIN menu.")
         if raw.enemy_hp <= 0:
             _wait(executor, timing.dialogue_wait_frames)
             continue
@@ -268,10 +273,7 @@ def _execute_policy_turn(
         if menu.phase is BattleMenuPhase.MOVE:
             move_menu = menu
             break
-        if (
-            menu.phase is BattleMenuPhase.MAIN
-            and menu.selected_main_command == _FIGHT_COMMAND
-        ):
+        if menu.phase is BattleMenuPhase.MAIN and menu.selected_main_command == _FIGHT_COMMAND:
             _pulse(
                 executor,
                 MacroAction(MacroActionKind.CONFIRM),
@@ -294,6 +296,11 @@ def _execute_policy_turn(
             label=label,
         ):
             return
+        if (raw.first_party_status or 0) != 0 and raw.first_party_pp == initial_raw.first_party_pp:
+            # A status-suppressed turn (notably full paralysis) may consume
+            # FIGHT before the move menu becomes observable.  An unchanged
+            # PP vector proves that no move was substituted or spent.
+            return
         raise BattleRuntimeError(f"{label} never exposed a semantic move menu.")
 
     menu = move_menu
@@ -315,14 +322,10 @@ def _execute_policy_turn(
         _require_active_trainer_state(raw, expected_map=expected_map, label=label)
         menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
     else:
-        raise BattleRuntimeError(
-            f"{label} could not select move slot {slot} inside its bound."
-        )
+        raise BattleRuntimeError(f"{label} could not select move slot {slot} inside its bound.")
 
     if menu.selected_move_slot != slot:
-        raise BattleRuntimeError(
-            f"{label} could not select move slot {slot} inside its bound."
-        )
+        raise BattleRuntimeError(f"{label} could not select move slot {slot} inside its bound.")
     if required_move_id is not None:
         moves = raw.first_party_moves
         if moves is None or len(moves) < slot or moves[slot - 1] != required_move_id:
@@ -384,9 +387,7 @@ def _confirm_attack_with_pp_gate(
             )
             return
         if current_pp != initial_pp:
-            raise BattleRuntimeError(
-                f"{label} move slot {slot} changed PP by an invalid amount."
-            )
+            raise BattleRuntimeError(f"{label} move slot {slot} changed PP by an invalid amount.")
         if raw.battle_state != _TRAINER_BATTLE_STATE:
             raise BattleRuntimeError(
                 f"{label} ended without the required move-slot {slot} PP decrement."
@@ -395,9 +396,7 @@ def _confirm_attack_with_pp_gate(
         menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
         if menu.phase is BattleMenuPhase.MOVE:
             if menu.selected_move_slot != slot:
-                raise BattleRuntimeError(
-                    f"{label} changed move cursor before its PP decrement."
-                )
+                raise BattleRuntimeError(f"{label} changed move cursor before its PP decrement.")
             if confirmation_count >= timing.max_attack_confirmation_pulses:
                 break
             confirmation_count += 1
@@ -414,13 +413,15 @@ def _confirm_attack_with_pp_gate(
                 timing.attack_wait_frames,
             )
             continue
-        raise BattleRuntimeError(
-            f"{label} left move selection without its required PP decrement."
-        )
+        if menu.phase is BattleMenuPhase.MAIN and raw.first_party_pp == initial_raw.first_party_pp:
+            # A suppressed turn can return to MAIN without spending PP.
+            # Persistent causes such as paralysis appear in the status byte,
+            # while volatile causes such as confusion do not.  The unchanged
+            # complete PP vector proves that no alternate move was used.
+            return
+        raise BattleRuntimeError(f"{label} left move selection without its required PP decrement.")
 
-    raise BattleRuntimeError(
-        f"{label} failed its bounded move-slot {slot} PP-decrement gate."
-    )
+    raise BattleRuntimeError(f"{label} failed its bounded move-slot {slot} PP-decrement gate.")
 
 
 def _recover_sleep_transition(
@@ -452,9 +453,7 @@ def _recover_sleep_transition(
                 f"{label} changed PP during sleep recovery without a selected attack."
             )
         if raw.first_party_pp != initial_pp_vector:
-            raise BattleRuntimeError(
-                f"{label} changed an off-slot PP value during sleep recovery."
-            )
+            raise BattleRuntimeError(f"{label} changed an off-slot PP value during sleep recovery.")
 
         _pulse(
             executor,
@@ -473,17 +472,17 @@ def _recover_sleep_transition(
                 )
             return True
         if current_count > previous_count:
-            raise BattleRuntimeError(
-                f"{label} sleep counter increased during bounded recovery."
-            )
+            raise BattleRuntimeError(f"{label} sleep counter increased during bounded recovery.")
         saw_decrease = saw_decrease or current_count < previous_count
         previous_count = current_count
 
     if not saw_decrease:
-        raise BattleRuntimeError(
-            f"{label} sleep counter never decreased during bounded recovery."
-        )
-    raise BattleRuntimeError(f"{label} exceeded its bounded sleep recovery.")
+        raise BattleRuntimeError(f"{label} sleep counter never decreased during bounded recovery.")
+    menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+    raise BattleRuntimeError(
+        f"{label} exceeded its bounded sleep recovery: "
+        f"sleep={previous_count}, hp={raw.first_party_hp}, phase={menu.phase.value}."
+    )
 
 
 def _await_selected_turn_effect(
@@ -542,9 +541,7 @@ def _await_selected_turn_effect(
         return
     if _selected_turn_effect_observed(initial_raw, raw):
         return
-    raise BattleRuntimeError(
-        f"{label} never exposed the selected turn's semantic effect."
-    )
+    raise BattleRuntimeError(f"{label} never exposed the selected turn's semantic effect.")
 
 
 def _selected_turn_effect_observed(
@@ -664,9 +661,7 @@ def _require_present_state(
     if raw.battle_state == _WILD_BATTLE_STATE:
         raise BattleRuntimeError(f"{label} changed to an unexpected wild battle.")
     if raw.battle_state not in {0, _TRAINER_BATTLE_STATE}:
-        raise BattleRuntimeError(
-            f"{label} exposed unsupported battle state {raw.battle_state!r}."
-        )
+        raise BattleRuntimeError(f"{label} exposed unsupported battle state {raw.battle_state!r}.")
 
 
 def _pulse(

@@ -42,8 +42,8 @@ ports before they can enter this adapter.
 
 ### Qualified continuous teacher
 
-The current bounded teacher uses one emulator session for 97 checkpoints from clean power-on
-through the Thunder Badge:
+The current bounded teacher uses one emulator session for 112 checkpoints from clean power-on
+through stable Lavender Town:
 
 1. bedroom input ready;
 2. Red's house first floor;
@@ -141,10 +141,25 @@ through the Thunder Badge:
 94. both electric locks opened;
 95. the live Lt. Surge battle identified;
 96. all three Lt. Surge Pokémon defeated using only Dig; and
-97. the Thunder Badge, TM24, reward events, restored lead, and released control verified.
+97. the Thunder Badge, TM24, reward events, restored lead, and released control verified;
+98. the clean Surge boundary reverified;
+99. Vermilion Gym exited;
+100. the second Gym tree cleared;
+101. the party healed before Rock Tunnel;
+102. BubbleBeam taught to Wartortle;
+103. the exact tunnel recovery reserve purchased;
+104. the Underground Path traversed northbound;
+105. Route 9 access opened with Cut;
+106. the Route 9 tree cleared;
+107. both mandatory Route 9 trainers defeated;
+108. the Route 10 Pokémon Center heal verified;
+109. Rock Tunnel entered;
+110. all nine mandatory Rock Tunnel trainers defeated;
+111. Lavender Town reached while bypassing the optional south Route 10 trainer; and
+112. the complete party healed with stable input in Lavender Center.
 
 The public `opening` command retains its six-checkpoint compatibility contract. The `play` command
-composes all 97 checkpoints without restarting, loading state, or saving. Every action is
+composes all 112 checkpoints without restarting, loading state, or saving. Every action is
 reobserved, dialogue and battle loops have fixed budgets, and unexpected battles, maps,
 coordinates, scripts, events, species, health, inventory, move PP, or controller masks fail
 closed. Route 1 rejects every encounter. Viridian Forest permits only three intentionally seeded
@@ -187,12 +202,21 @@ once, discovers safe routes for the live `D743`/`D744` electric-lock pair, and f
 the live Surge identity, Dig-only PP evidence, victory event, TM24, Thunder Badge, mirrored badge
 bit, restored Wartortle lead, and released control all agree.
 
+The Lavender chapter teaches BubbleBeam, verifies an exact $7,000 Mart purchase, and uses adaptive
+55-HP recovery gates backed by nine total Super Potions. Each of the 11 mandatory Route 9 and Rock
+Tunnel battles requires live opponent/class/set identity, its exact event transition, and PP spent
+from the declared move. Long Sing sleep sequences remain bounded while no-move turns preserve PP.
+Qualified wild escapes preserve party order, move PP, safe positive HP, and inventory, and an
+encounter that does not advance position causes the same intended movement step to be retried.
+The final Route 10 route proves the optional trainer event remains unset before requiring a
+full-health, status-free three-member party and released controls in Lavender Center.
+
 The corridors and semantic gates are derived from pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8` and independently verified on the supported private ROM.
 The concluded predecessor supplied the separately attributed power-on bootstrap, not this route.
-Completing these **97/97 checkpoints** verifies **12/36 objectives**. Three exact clean-power-on
-runs were identical at 635,637 frames and 9,311 actions. The next objective is traversing Rock
-Tunnel and reaching Lavender Town. This verifies deterministic-teacher
+Completing these **112/112 checkpoints** verifies **13/36 objectives**. Three exact clean-power-on
+runs were identical at 858,008 frames and 12,713 actions. The next objective is reaching Celadon
+City. This verifies deterministic-teacher
 repeatability for that route; it does not verify a learned policy, held-out timing/RNG
 generalization, or the full game.
 

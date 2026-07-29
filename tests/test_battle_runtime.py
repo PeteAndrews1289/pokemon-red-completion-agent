@@ -236,9 +236,10 @@ class AdaptiveRivalSimulation(FakeRuntime):
 
 
 class SleepRecoverySimulation(FakeRuntime):
-    def __init__(self) -> None:
+    def __init__(self, *, sleep_dialogue_pulses: int = 0) -> None:
         super().__init__()
         self.sleep_started = False
+        self.sleep_dialogue_pulses = sleep_dialogue_pulses
 
     def execute(self, action: MacroAction) -> None:
         self.actions.append(action)
@@ -262,6 +263,9 @@ class SleepRecoverySimulation(FakeRuntime):
                 self.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
             return
         if self.menu.phase is BattleMenuPhase.UNKNOWN:
+            if self.sleep_dialogue_pulses:
+                self.sleep_dialogue_pulses -= 1
+                return
             count = (self.raw.first_party_status or 0) & 0x07
             next_count = 1 if count == 4 else 0
             self.raw = replace(self.raw, first_party_status=next_count)
@@ -307,6 +311,23 @@ def test_adaptive_controller_recovers_a_decreasing_sleep_counter() -> None:
     assert final.first_party_status == 0
     assert final.first_party_pp == (34, 30, 30, 11)
     assert MacroAction(MacroActionKind.CANCEL) in runtime.actions
+
+
+def test_adaptive_controller_bounds_but_survives_a_long_sing_sequence() -> None:
+    runtime = SleepRecoverySimulation(sleep_dialogue_pulses=30)
+
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        lambda raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
+        timing=BattleRuntimeTiming(max_move_menu_transition_pulses=1),
+    )
+
+    assert final.battle_state == 0
+    assert final.first_party_status == 0
+    assert final.first_party_pp == (34, 30, 30, 11)
+    assert runtime.sleep_dialogue_pulses == 0
 
 
 def test_sleep_recovery_rejects_an_off_slot_pp_decrement() -> None:
@@ -880,7 +901,38 @@ def test_unknown_menu_is_bounded_dialogue_not_unbounded_button_spam() -> None:
     assert [action.kind for action in runtime.actions] == [
         MacroActionKind.CONFIRM,
         MacroActionKind.WAIT,
-    ] * 3
+        MacroActionKind.CONFIRM,
+        MacroActionKind.WAIT,
+        MacroActionKind.CANCEL,
+        MacroActionKind.WAIT,
+    ]
+
+
+def test_status_suppressed_turn_can_return_without_spending_pp() -> None:
+    runtime = FakeRuntime(raw=replace(_raw(), first_party_status=0x40))
+    confirmations = 0
+
+    def suppress_then_finish(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        else:
+            runtime.raw = replace(runtime.raw, battle_state=0)
+            runtime.controls = READY
+
+    runtime.on_action = suppress_then_finish
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        lambda _raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
+    )
+
+    assert final.battle_state == 0
+    assert final.first_party_pp == (35, 30, 30, 11)
 
 
 def test_completion_rechecks_living_lead_before_returning() -> None:

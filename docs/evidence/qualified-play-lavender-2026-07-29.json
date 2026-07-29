@@ -1,0 +1,131 @@
+{
+  "receipt_schema": "qualified-play-evidence-v8",
+  "schema": "qualified-play-v8",
+  "status": "ok",
+  "attempts": {
+    "failed": 0,
+    "passed": 3,
+    "total": 3
+  },
+  "assistance": {
+    "class": "deterministic_teacher",
+    "human_controller_input": false,
+    "save_state_restore": false,
+    "learned_policy": false
+  },
+  "source": {
+    "git_commit": "bcd49c39c15998db9368b9adf7cd5683cab9eb56",
+    "worktree_dirty": true
+  },
+  "python_version": "3.14.3",
+  "recorded_on": "2026-07-29",
+  "extends_evidence": "qualified-play-surge-2026-07-29.json",
+  "configuration": {
+    "pret_pokered_commit": "1e96034092686d006e863cace09e87273051a3d8",
+    "starter": "squirtle",
+    "route_policy": "bounded_semantic_route_with_same-step_retry_after_qualified_wild_flee",
+    "battle_policy": "required_move_id_and_pp_decrement_per_trainer_with_bounded_sleep_recovery",
+    "recovery_policy": "nine_total_super_potions_with_55_hp_trainer_threshold_and_exact_inventory_money_gates",
+    "encounter_policy": "run_only_with_party_pp_hp_and_inventory_evidence"
+  },
+  "rom": {
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "size_bytes": 1048576,
+    "title": "POKEMON RED"
+  },
+  "checkpoints": {
+    "all_verified": true,
+    "verified": 112,
+    "lavender_ids": [
+      "surge_ready",
+      "gym_exited",
+      "second_cut",
+      "healed",
+      "bubblebeam",
+      "supplies",
+      "reverse_underground",
+      "cerulean_cut",
+      "route9_cut",
+      "route9_trainers",
+      "rock_center",
+      "tunnel_entered",
+      "rock_tunnel_cleared",
+      "lavender_reached",
+      "lavender_stable"
+    ]
+  },
+  "lavender_chapter": {
+    "trainer_battles": [
+      {"label": "Route 9 trainer 0", "map_id": 20, "event": 1089, "opponent": 206, "class": 6, "set": 5, "move_id": 64, "selected_pp_spent": 10},
+      {"label": "Route 9 trainer 8", "map_id": 20, "event": 1097, "opponent": 202, "class": 2, "set": 14, "move_id": 44, "selected_pp_spent": 6},
+      {"label": "Rock Tunnel 1F trainer 3", "map_id": 82, "event": 1116, "opponent": 207, "class": 7, "set": 7, "move_id": 61, "selected_pp_spent": 5},
+      {"label": "Rock Tunnel B1F trainer 7", "map_id": 232, "event": 2488, "opponent": 207, "class": 7, "set": 5, "move_id": 44, "selected_pp_spent": 5},
+      {"label": "Rock Tunnel B1F trainer 5", "map_id": 232, "event": 2486, "opponent": 206, "class": 6, "set": 10, "move_id": 64, "selected_pp_spent": 6},
+      {"label": "Rock Tunnel B1F trainer 3", "map_id": 232, "event": 2484, "opponent": 207, "class": 7, "set": 4, "move_id": 61, "selected_pp_spent": 2},
+      {"label": "Rock Tunnel B1F trainer 4", "map_id": 232, "event": 2485, "opponent": 209, "class": 9, "set": 10, "move_id": 61, "selected_pp_spent": 1},
+      {"label": "Rock Tunnel B1F trainer 0", "map_id": 232, "event": 2481, "opponent": 206, "class": 6, "set": 9, "move_id": 44, "selected_pp_spent": 6},
+      {"label": "Rock Tunnel B1F trainer 1", "map_id": 232, "event": 2482, "opponent": 209, "class": 9, "set": 9, "move_id": 61, "selected_pp_spent": 3},
+      {"label": "Rock Tunnel 1F trainer 4", "map_id": 82, "event": 1117, "opponent": 206, "class": 6, "set": 17, "move_id": 44, "selected_pp_spent": 5},
+      {"label": "Rock Tunnel 1F trainer 5", "map_id": 82, "event": 1118, "opponent": 206, "class": 6, "set": 18, "move_id": 44, "selected_pp_spent": 6}
+    ],
+    "wild_flees": 8,
+    "inventory": {
+      "money_remaining": 14301,
+      "purchase_cost": 7000,
+      "repels_purchased": 4,
+      "repels_used": 4,
+      "super_potions_purchased": 8,
+      "super_potions_remaining": 4,
+      "super_potions_used": 5
+    },
+    "party": {
+      "species": [179, 64, 59],
+      "hp": [79, 52, 37],
+      "max_hp": [79, 52, 37],
+      "status": [0, 0, 0]
+    },
+    "route_10_trainer_2_bypassed": true,
+    "frames_executed": 222371,
+    "actions_executed": 3402,
+    "controller_released": true
+  },
+  "objective_progress": {
+    "next": "reach_celadon",
+    "total": 36,
+    "verified": 13,
+    "verified_ids": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter",
+      "receive_pokedex",
+      "reach_pewter",
+      "defeat_brock",
+      "reach_cerulean",
+      "help_bill",
+      "reach_vermilion",
+      "obtain_cut",
+      "defeat_misty",
+      "defeat_surge",
+      "reach_lavender"
+    ]
+  },
+  "repeatability": {
+    "identical_action_count": true,
+    "identical_final_state": true,
+    "identical_frame_count": true,
+    "identical_full_report": true,
+    "full_report_sha256": "2b6ed8dce8d913b89e6d4226ece3f73e0e7919f656476e19acea475b06949b89"
+  },
+  "scope": {
+    "claim": "exact deterministic teacher repeat",
+    "timing_or_rng_generalization": false,
+    "learned_policy_generalization": false,
+    "game_complete": false
+  },
+  "qualified_through": "reach_lavender",
+  "game_complete": false,
+  "frames_executed": 858008,
+  "actions_executed": 12713,
+  "controller_released": true
+}
