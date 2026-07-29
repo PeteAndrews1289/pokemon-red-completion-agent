@@ -45,6 +45,7 @@ SURGE_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-surge-2026-
 LAVENDER_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-lavender-2026-07-29.json"
 FUJI_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-fuji-2026-07-29.json"
 FUCHSIA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-fuchsia-2026-07-29.json"
+SURF_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-surf-2026-07-29.json"
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -983,6 +984,57 @@ def test_fuchsia_receipt_is_repeatable_and_privacy_safe() -> None:
     assert receipt["qualified_through"] == "reach_fuchsia"
     assert receipt["frames_executed"] == 1_419_928
     assert receipt["actions_executed"] == 19_073
+    assert receipt["controller_released"] is True
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_surf_receipt_is_repeatable_and_privacy_safe() -> None:
+    receipt = json.loads(SURF_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["receipt_schema"] == "qualified-play-evidence-v13"
+    assert receipt["schema"] == "qualified-play-v13"
+    assert receipt["status"] == "ok"
+    assert receipt["attempts"] == {"failed": 0, "passed": 3, "total": 3}
+    assert receipt["checkpoints"] == {"all_verified": True, "verified": 196}
+    chapter = receipt["safari_chapter"]
+    assert chapter["admission_fee"] == 500
+    assert chapter["initial_internal_steps"] == 502
+    assert chapter["center_entry_steps"] == 500
+    assert chapter["step_milestones"] == [500, 472, 376, 238, 228, 201, 0]
+    assert chapter["balls_milestones"] == [30] * 7
+    assert chapter["safari_encounters_run"] == 6
+    assert chapter["safari_balls_thrown"] == 0
+    assert chapter["pokemon_caught"] == 0
+    assert chapter["optional_items_collected"] == 0
+    assert chapter["gold_teeth_collected"] is True
+    assert chapter["got_hm03_event"] is True
+    assert chapter["hm03_reusable_and_retained"] is True
+    assert chapter["surf"] == {
+        "move_id": 57,
+        "replaced_move_id": 55,
+        "slot": 4,
+        "moves_before": [44, 39, 61, 55],
+        "moves_after": [44, 39, 61, 57],
+        "pp_after": [25, 30, 20, 15],
+    }
+    assert chapter["cleanup"] == {
+        "mechanism": "times_up",
+        "safari_steps": 0,
+        "safari_balls": 0,
+        "in_safari_zone": False,
+    }
+    assert receipt["objective_progress"]["verified"] == 19
+    assert receipt["objective_progress"]["next"] == "defeat_erika"
+    assert receipt["repeatability"]["full_report_sha256"] == (
+        "47b107378496fc42a9d68ef5c1cb404617bfbe47d310d743439bc0ece6344978"
+    )
+    assert receipt["qualified_through"] == "obtain_surf"
+    assert receipt["frames_executed"] == 1_630_696
+    assert receipt["actions_executed"] == 20_737
     assert receipt["controller_released"] is True
 
     serialized = json.dumps(receipt)

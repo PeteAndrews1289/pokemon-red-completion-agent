@@ -2,20 +2,21 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Fuchsia qualified](https://img.shields.io/badge/status-Fuchsia_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Surf qualified](https://img.shields.io/badge/status-Surf_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **184/184 qualified
+> **Current status:** one continuous deterministic teacher now reaches all **196/196 qualified
 > checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
 > Tunnel, clears the Rocket Hideout and Pokémon Tower, rescues Mr. Fuji, receives the Poké Flute,
-> defeats the Route 12 Snorlax, crosses Routes 12–15, and heals safely in Fuchsia City. That
-> establishes **18/36 completion objectives**. Three clean runs produced the same
-> 1,419,928-frame, 19,073-action result. This is an exact-route
+> defeats the Route 12 Snorlax, crosses Routes 12–15, collects the Gold Teeth, obtains reusable
+> HM03, teaches Surf over Water Gun, and clears the Safari session through Time's Up. That
+> establishes **19/36 completion objectives**. Three clean runs produced the same
+> 1,630,696-frame, 20,737-action result. This is an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next objective is obtaining HM03 Surf. See the
-> [sanitized three-run Fuchsia evidence receipt](docs/evidence/qualified-play-fuchsia-2026-07-29.json).
+> game-completion claim. The next objective is defeating Erika. See the
+> [sanitized three-run Surf evidence receipt](docs/evidence/qualified-play-surf-2026-07-29.json).
 
 ## The goal
 

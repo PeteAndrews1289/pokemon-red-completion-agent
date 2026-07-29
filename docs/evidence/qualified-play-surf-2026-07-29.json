@@ -1,0 +1,94 @@
+{
+  "receipt_schema": "qualified-play-evidence-v13",
+  "schema": "qualified-play-v13",
+  "status": "ok",
+  "attempts": {"failed": 0, "passed": 3, "total": 3},
+  "assistance": {
+    "class": "deterministic_teacher",
+    "human_controller_input": false,
+    "save_state_restore": false,
+    "learned_policy": false
+  },
+  "source": {
+    "git_commit": "9c52082",
+    "worktree_dirty": true
+  },
+  "recorded_on": "2026-07-29",
+  "extends_evidence": "qualified-play-fuchsia-2026-07-29.json",
+  "configuration": {
+    "pret_pokered_commit": "1e96034092686d006e863cace09e87273051a3d8",
+    "starter": "squirtle",
+    "route_policy": "one_admission_source_pinned_safari_route_with_west_elevation_trap_avoidance",
+    "encounter_policy": "bounded_safari_run_with_zero_ball_bag_party_or_hp_change",
+    "cleanup_policy": "collision_safe_two_tile_times_up_loop_and_gate_script_cleanup"
+  },
+  "checkpoints": {"all_verified": true, "verified": 196},
+  "safari_chapter": {
+    "admission_fee": 500,
+    "initial_internal_steps": 502,
+    "center_entry_steps": 500,
+    "step_milestones": [500, 472, 376, 238, 228, 201, 0],
+    "balls_milestones": [30, 30, 30, 30, 30, 30, 30],
+    "safari_encounters_run": 6,
+    "safari_balls_thrown": 0,
+    "pokemon_caught": 0,
+    "optional_items_collected": 0,
+    "gold_teeth_collected": true,
+    "got_hm03_event": true,
+    "hm03_reusable_and_retained": true,
+    "surf": {
+      "move_id": 57,
+      "replaced_move_id": 55,
+      "slot": 4,
+      "moves_before": [44, 39, 61, 55],
+      "moves_after": [44, 39, 61, 57],
+      "pp_after": [25, 30, 20, 15]
+    },
+    "cleanup": {
+      "mechanism": "times_up",
+      "safari_steps": 0,
+      "safari_balls": 0,
+      "in_safari_zone": false
+    },
+    "party": {
+      "species": [28, 64, 59],
+      "hp": [114, 52, 37],
+      "max_hp": [114, 52, 37],
+      "status": [0, 0, 0]
+    },
+    "money_remaining": 29637,
+    "frames_executed": 210768,
+    "actions_executed": 1664,
+    "controller_released": true
+  },
+  "objective_progress": {
+    "next": "defeat_erika",
+    "total": 36,
+    "verified": 19,
+    "verified_ids": [
+      "power_on", "begin_adventure", "choose_starter", "receive_pokedex",
+      "reach_pewter", "defeat_brock", "reach_cerulean", "help_bill",
+      "reach_vermilion", "obtain_cut", "defeat_misty", "defeat_surge",
+      "reach_lavender", "reach_celadon", "clear_rocket_hideout", "obtain_silph_scope",
+      "rescue_fuji", "reach_fuchsia", "obtain_surf"
+    ]
+  },
+  "repeatability": {
+    "identical_action_count": true,
+    "identical_final_state": true,
+    "identical_frame_count": true,
+    "identical_full_report": true,
+    "full_report_sha256": "47b107378496fc42a9d68ef5c1cb404617bfbe47d310d743439bc0ece6344978"
+  },
+  "scope": {
+    "claim": "exact deterministic teacher repeat",
+    "timing_or_rng_generalization": false,
+    "learned_policy_generalization": false,
+    "game_complete": false
+  },
+  "qualified_through": "obtain_surf",
+  "game_complete": false,
+  "frames_executed": 1630696,
+  "actions_executed": 20737,
+  "controller_released": true
+}
