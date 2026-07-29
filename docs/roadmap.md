@@ -25,10 +25,10 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **73/73 bounded checkpoints** and **10/36 completion objectives**, ending
-after defeating Misty and the Cerulean Rocket thief, traversing the Underground Path, clearing the
-two required lower Route 6 trainers, and reaching stable Vermilion City. Three clean runs reached
-the identical 501,922-frame / 7,242-action boundary. This is an exact deterministic-teacher milestone, not a
+Current qualification: **82/82 bounded checkpoints** and **11/36 completion objectives**, ending
+after boarding the S.S. Anne, defeating the required rival, rubbing the Captain's back, and
+obtaining HM01 Cut. Three clean runs reached the identical 530,927-frame / 7,652-action boundary.
+This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
 - [x] Build the no-save PyBoy bridge and read-only state adapter from pinned symbols.
@@ -46,15 +46,17 @@ learned-policy, timing/RNG-generalization, or completion result.
   Cerulean Gym trainer, and Misty.
 - [x] Qualify the Cerulean Rocket thief, Route 5, the Underground Path, the required lower Route 6
   trainers, bounded wild-encounter recovery, and stable Vermilion arrival.
+- [x] Qualify the Vermilion harbor, S.S. Anne corridors, required rival battle, Captain interaction,
+  and four-field HM01 Cut evidence.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: qualify the S.S. Anne route and obtain HM01 Cut. The qualified corridors and
+Next sequence: teach Cut, enter the Vermilion Gym, solve its switch puzzle, and defeat Lt. Surge.
+The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Vermilion three-run evidence receipt](evidence/qualified-play-vermilion-2026-07-28.json).
+[HM01 Cut three-run evidence receipt](evidence/qualified-play-cut-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs reach Vermilion with identical evidence
-rules.
+Exit gate: three intervention-free clean-power-on runs obtain HM01 with identical evidence rules.
 
 ## Milestone 2 — deterministic expert
 

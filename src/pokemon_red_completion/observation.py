@@ -80,6 +80,8 @@ class RamAddress(IntEnum):
     CERULEAN_CITY_SCRIPT = 0xD60F
     VIRIDIAN_FOREST_SCRIPT = 0xD618
     BILLS_HOUSE_SCRIPT = 0xD661
+    VERMILION_CITY_SCRIPT = 0xD62A
+    SS_ANNE_2F_SCRIPT = 0xD665
     BEAT_GYM_FLAGS = 0xD72A
     STATUS_FLAGS_5 = 0xD730
     STATUS_FLAGS_6 = 0xD732
@@ -129,6 +131,11 @@ class MapId(IntEnum):
     UNDERGROUND_PATH_ROUTE_5 = 0x47
     UNDERGROUND_PATH_ROUTE_6 = 0x4A
     BILLS_HOUSE = 0x58
+    VERMILION_POKECENTER = 0x59
+    VERMILION_DOCK = 0x5E
+    SS_ANNE_1F = 0x5F
+    SS_ANNE_2F = 0x60
+    SS_ANNE_CAPTAINS_ROOM = 0x65
     UNDERGROUND_PATH_NORTH_SOUTH = 0x77
     HALL_OF_FAME = 0x76
     CHAMPIONS_ROOM = 0x78
@@ -216,6 +223,7 @@ class EventFlag(IntEnum):
     GOT_DOME_FOSSIL = 0x57E
     GOT_HELIX_FOSSIL = 0x57F
     GOT_HM01 = 0x5E0
+    RUBBED_CAPTAINS_BACK = 0x5E1
     BEAT_ROCKET_HIDEOUT_GIOVANNI = 0x6A7
     BEAT_SILPH_CO_GIOVANNI = 0x78F
     GOT_HM03 = 0x880
@@ -297,6 +305,11 @@ HIKER_OPPONENT_ID = 0xD1
 HIKER_TRAINER_CLASS_ID = 0x09
 RIVAL1_OPPONENT_ID = 0xE1
 RIVAL1_TRAINER_CLASS_ID = 0x19
+RIVAL2_OPPONENT_ID = 0xF2
+RIVAL2_TRAINER_CLASS_ID = 0x2A
+SS_ANNE_RIVAL_TRAINER_NUMBER = 2
+SS_ANNE_RIVAL_ENGAGED_CLASS = 0x17
+SS_ANNE_RIVAL_ENGAGED_SET = 7
 CERULEAN_RIVAL_TRAINER_NUMBER = 8
 CERULEAN_RIVAL_TRIGGER_Y = 6
 CERULEAN_RIVAL_TRIGGER_XS = frozenset({20, 21})
@@ -2444,6 +2457,269 @@ class VermilionProgressTracker:
         return state.phase
 
 
+class SSAnnePhase(StrEnum):
+    """Source-pinned semantic phases from Vermilion City through HM01."""
+
+    UNKNOWN = "unknown"
+    VERMILION_READY = "vermilion_ready"
+    HEALED = "healed"
+    DOCK_REACHED = "dock_reached"
+    SHIP_1F_REACHED = "ship_1f_reached"
+    SHIP_2F_REACHED = "ship_2f_reached"
+    RIVAL_BATTLE = "rival_battle"
+    RIVAL_DEFEATED = "rival_defeated"
+    CAPTAIN_ROOM_REACHED = "captain_room_reached"
+    HM01_OBTAINED = "hm01_obtained"
+
+
+@dataclass(frozen=True, slots=True)
+class SSAnneState:
+    """ROM-free evidence for the S.S. Anne rival and Captain reward."""
+
+    phase: SSAnnePhase
+    controls: InputReadiness
+    local_script: int
+    current_map_script: int
+    prior_chapter_complete: bool
+    rubbed_captains_back: bool
+    got_hm01: bool
+    hm01_in_bag: bool
+    cut_fact: bool
+    current_opponent: int
+    trainer_class: int
+    trainer_number: int
+    engaged_trainer_class: int
+    engaged_trainer_set: int
+    map_id: int | None
+    player_x: int | None
+    player_y: int | None
+    party_count: int | None
+    party_species_ids: tuple[int, ...] | None
+    first_party_hp: int | None
+    first_party_max_hp: int | None
+    first_party_status: int | None
+    first_party_pp: tuple[int, ...] | None
+    battle_state: int | None
+    battle_result: int | None
+
+    @property
+    def foundation_invariants(self) -> bool:
+        species = self.party_species_ids or ()
+        return (
+            self.prior_chapter_complete
+            and 1 <= (self.party_count or 0) <= PARTY_LIMIT
+            and bool(species)
+            and species[0] in SQUIRTLE_LINEAGE_SPECIES_IDS
+            and 0 < (self.first_party_hp or 0) <= (self.first_party_max_hp or 0)
+            and self.first_party_status == 0
+        )
+
+    @property
+    def stable_snapshot(self) -> bool:
+        return (
+            self.foundation_invariants
+            and self.battle_state == 0
+            and self.current_map_script == 0
+            and self.controls.ready
+        )
+
+    @property
+    def no_cut_evidence(self) -> bool:
+        return (
+            not self.rubbed_captains_back
+            and not self.got_hm01
+            and not self.hm01_in_bag
+            and not self.cut_fact
+        )
+
+    @property
+    def vermilion_ready_snapshot(self) -> bool:
+        return (
+            self.phase is SSAnnePhase.VERMILION_READY
+            and self.map_id == MapId.VERMILION_CITY
+            and (self.player_x, self.player_y) == (19, 0)
+            and self.local_script == 0
+            and self.stable_snapshot
+            and self.no_cut_evidence
+        )
+
+    @property
+    def healed_snapshot(self) -> bool:
+        return (
+            self.phase is SSAnnePhase.HEALED
+            and self.map_id == MapId.VERMILION_POKECENTER
+            and (self.player_x, self.player_y) == (3, 3)
+            and self.local_script == 0
+            and self.stable_snapshot
+            and self.first_party_hp == self.first_party_max_hp
+            and all((pp & 0x3F) > 0 for pp in (self.first_party_pp or ()))
+            and self.no_cut_evidence
+        )
+
+    @property
+    def dock_snapshot(self) -> bool:
+        return (
+            self.phase is SSAnnePhase.DOCK_REACHED
+            and self.map_id == MapId.VERMILION_DOCK
+            and (self.player_x, self.player_y) == (14, 0)
+            and self.local_script == 0
+            and self.stable_snapshot
+            and self.no_cut_evidence
+        )
+
+    @property
+    def ship_1f_snapshot(self) -> bool:
+        return (
+            self.phase is SSAnnePhase.SHIP_1F_REACHED
+            and self.map_id == MapId.SS_ANNE_1F
+            and (self.player_x, self.player_y) == (27, 0)
+            and self.local_script == 0
+            and self.stable_snapshot
+            and self.no_cut_evidence
+        )
+
+    @property
+    def ship_2f_snapshot(self) -> bool:
+        return (
+            self.phase is SSAnnePhase.SHIP_2F_REACHED
+            and self.map_id == MapId.SS_ANNE_2F
+            and (self.player_x, self.player_y) == (2, 4)
+            and self.local_script == 0
+            and self.stable_snapshot
+            and self.no_cut_evidence
+        )
+
+    @property
+    def rival_battle_snapshot(self) -> bool:
+        return (
+            self.phase is SSAnnePhase.RIVAL_BATTLE
+            and self.map_id == MapId.SS_ANNE_2F
+            and (self.player_x, self.player_y) == (36, 8)
+            and self.foundation_invariants
+            and self.battle_state == 2
+            and self.local_script == 2
+            and self.current_map_script == 0
+            and self.current_opponent == RIVAL2_OPPONENT_ID
+            and self.trainer_class == RIVAL2_TRAINER_CLASS_ID
+            and self.trainer_number == SS_ANNE_RIVAL_TRAINER_NUMBER
+            and self.engaged_trainer_class == SS_ANNE_RIVAL_ENGAGED_CLASS
+            and self.engaged_trainer_set == SS_ANNE_RIVAL_ENGAGED_SET
+            and self.no_cut_evidence
+        )
+
+    @property
+    def rival_defeated_snapshot(self) -> bool:
+        return (
+            self.phase is SSAnnePhase.RIVAL_DEFEATED
+            and self.map_id == MapId.SS_ANNE_2F
+            and (self.player_x, self.player_y) == (36, 8)
+            and self.local_script == 4
+            and self.stable_snapshot
+            and self.battle_result == 0
+            and self.no_cut_evidence
+        )
+
+    @property
+    def captain_room_snapshot(self) -> bool:
+        return (
+            self.phase is SSAnnePhase.CAPTAIN_ROOM_REACHED
+            and self.map_id == MapId.SS_ANNE_CAPTAINS_ROOM
+            and (self.player_x, self.player_y) == (0, 7)
+            and self.local_script == 0
+            and self.stable_snapshot
+            and self.no_cut_evidence
+        )
+
+    @property
+    def hm01_snapshot(self) -> bool:
+        return (
+            self.phase is SSAnnePhase.HM01_OBTAINED
+            and self.map_id == MapId.SS_ANNE_CAPTAINS_ROOM
+            and (self.player_x, self.player_y) == (4, 3)
+            and self.local_script == 0
+            and self.stable_snapshot
+            and self.rubbed_captains_back
+            and self.got_hm01
+            and self.hm01_in_bag
+            and self.cut_fact
+        )
+
+
+class SSAnneProgressError(ValueError):
+    """Raised when S.S. Anne evidence skips or contradicts a required gate."""
+
+
+class SSAnneProgressTracker:
+    """Latch the live rival battle before accepting Captain/HM01 evidence."""
+
+    _ORDERED_PHASES = (
+        SSAnnePhase.VERMILION_READY,
+        SSAnnePhase.HEALED,
+        SSAnnePhase.DOCK_REACHED,
+        SSAnnePhase.SHIP_1F_REACHED,
+        SSAnnePhase.SHIP_2F_REACHED,
+        SSAnnePhase.RIVAL_BATTLE,
+        SSAnnePhase.RIVAL_DEFEATED,
+        SSAnnePhase.CAPTAIN_ROOM_REACHED,
+        SSAnnePhase.HM01_OBTAINED,
+    )
+
+    def __init__(self, vermilion_state: VermilionState) -> None:
+        if not vermilion_state.vermilion_snapshot:
+            raise SSAnneProgressError(
+                "S.S. Anne qualification must begin at verified Vermilion."
+            )
+        self._phase_index = -1
+        self._saw_rival_battle = False
+
+    @property
+    def saw_rival_battle(self) -> bool:
+        return self._saw_rival_battle
+
+    def observe(self, state: SSAnneState) -> SSAnnePhase:
+        snapshot_name = {
+            SSAnnePhase.VERMILION_READY: "vermilion_ready_snapshot",
+            SSAnnePhase.HEALED: "healed_snapshot",
+            SSAnnePhase.DOCK_REACHED: "dock_snapshot",
+            SSAnnePhase.SHIP_1F_REACHED: "ship_1f_snapshot",
+            SSAnnePhase.SHIP_2F_REACHED: "ship_2f_snapshot",
+            SSAnnePhase.RIVAL_BATTLE: "rival_battle_snapshot",
+            SSAnnePhase.RIVAL_DEFEATED: "rival_defeated_snapshot",
+            SSAnnePhase.CAPTAIN_ROOM_REACHED: "captain_room_snapshot",
+            SSAnnePhase.HM01_OBTAINED: "hm01_snapshot",
+        }.get(state.phase)
+        if snapshot_name is None:
+            return SSAnnePhase.UNKNOWN
+        if not getattr(state, snapshot_name):
+            raise SSAnneProgressError(
+                f"{state.phase.value} failed its source-pinned semantic snapshot."
+            )
+        if (
+            self._phase_index >= 0
+            and state.phase is self._ORDERED_PHASES[self._phase_index]
+        ):
+            return state.phase
+        expected_index = self._phase_index + 1
+        if (
+            expected_index >= len(self._ORDERED_PHASES)
+            or state.phase is not self._ORDERED_PHASES[expected_index]
+        ):
+            raise SSAnneProgressError(
+                "S.S. Anne evidence skipped a required semantic boundary."
+            )
+        if (
+            state.phase is SSAnnePhase.RIVAL_DEFEATED
+            and not self._saw_rival_battle
+        ):
+            raise SSAnneProgressError(
+                "S.S. Anne rival victory lacks the observed live battle."
+            )
+        if state.phase is SSAnnePhase.RIVAL_BATTLE:
+            self._saw_rival_battle = True
+        self._phase_index = expected_index
+        return state.phase
+
+
 class PokemonRedStateReader:
     def __init__(self, memory: ReadOnlyMemory) -> None:
         self._memory = memory
@@ -3253,6 +3529,64 @@ class PokemonRedStateReader:
                 return candidate
         return state
 
+    def read_ss_anne_state(self, raw: RawGameState) -> SSAnneState:
+        """Translate pinned harbor, rival, Captain, and HM01 evidence."""
+        controls = self.read_input_readiness()
+        items = set(raw.bag_item_ids or ())
+        state = SSAnneState(
+            phase=SSAnnePhase.UNKNOWN,
+            controls=controls,
+            local_script=self._local_script(raw.map_id),
+            current_map_script=self._memory.read_u8(RamAddress.CURRENT_MAP_SCRIPT),
+            prior_chapter_complete=_ss_anne_prior_chapter_complete(
+                raw,
+                items,
+                self._memory.read_u8(RamAddress.BEAT_GYM_FLAGS),
+            ),
+            rubbed_captains_back=_event(
+                raw.event_flags, EventFlag.RUBBED_CAPTAINS_BACK
+            ),
+            got_hm01=_event(raw.event_flags, EventFlag.GOT_HM01),
+            hm01_in_bag=ItemId.HM01_CUT in items,
+            cut_fact="move:cut_available" in semantic_facts(raw),
+            current_opponent=self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
+            trainer_class=self._memory.read_u8(RamAddress.TRAINER_CLASS),
+            trainer_number=self._memory.read_u8(RamAddress.TRAINER_NUMBER),
+            engaged_trainer_class=self._memory.read_u8(
+                RamAddress.ENGAGED_TRAINER_CLASS
+            ),
+            engaged_trainer_set=self._memory.read_u8(
+                RamAddress.ENGAGED_TRAINER_SET
+            ),
+            map_id=raw.map_id,
+            player_x=raw.player_x,
+            player_y=raw.player_y,
+            party_count=raw.party_count,
+            party_species_ids=raw.party_species_ids,
+            first_party_hp=raw.first_party_hp,
+            first_party_max_hp=raw.first_party_max_hp,
+            first_party_status=raw.first_party_status,
+            first_party_pp=raw.first_party_pp,
+            battle_state=raw.battle_state,
+            battle_result=raw.battle_result,
+        )
+        phase_snapshots = (
+            (SSAnnePhase.HM01_OBTAINED, "hm01_snapshot"),
+            (SSAnnePhase.CAPTAIN_ROOM_REACHED, "captain_room_snapshot"),
+            (SSAnnePhase.RIVAL_DEFEATED, "rival_defeated_snapshot"),
+            (SSAnnePhase.RIVAL_BATTLE, "rival_battle_snapshot"),
+            (SSAnnePhase.SHIP_2F_REACHED, "ship_2f_snapshot"),
+            (SSAnnePhase.SHIP_1F_REACHED, "ship_1f_snapshot"),
+            (SSAnnePhase.DOCK_REACHED, "dock_snapshot"),
+            (SSAnnePhase.HEALED, "healed_snapshot"),
+            (SSAnnePhase.VERMILION_READY, "vermilion_ready_snapshot"),
+        )
+        for phase, snapshot_name in phase_snapshots:
+            candidate = replace(state, phase=phase)
+            if getattr(candidate, snapshot_name):
+                return candidate
+        return state
+
     def _local_script(self, map_id: int | None) -> int:
         address = {
             MapId.OAKS_LAB: RamAddress.OAKS_LAB_SCRIPT,
@@ -3271,6 +3605,8 @@ class PokemonRedStateReader:
             MapId.ROUTE_24: RamAddress.ROUTE_24_SCRIPT,
             MapId.ROUTE_25: RamAddress.ROUTE_25_SCRIPT,
             MapId.BILLS_HOUSE: RamAddress.BILLS_HOUSE_SCRIPT,
+            MapId.VERMILION_CITY: RamAddress.VERMILION_CITY_SCRIPT,
+            MapId.SS_ANNE_2F: RamAddress.SS_ANNE_2F_SCRIPT,
         }.get(map_id)
         return self._memory.read_u8(address) if address is not None else 0
 
@@ -3416,6 +3752,28 @@ def _vermilion_prior_chapter_complete(
         and ItemId.TM11_BUBBLEBEAM in items
         and bool((raw.badge_bits or 0) & Badge.CASCADE)
         and bool(badge_mirror & Badge.CASCADE)
+    )
+
+
+def _ss_anne_prior_chapter_complete(
+    raw: RawGameState, items: set[int], badge_mirror: int
+) -> bool:
+    return (
+        _vermilion_prior_chapter_complete(raw, items, badge_mirror)
+        and _event(raw.event_flags, EventFlag.BEAT_CERULEAN_ROCKET_THIEF)
+        and ItemId.TM28_DIG in items
+        and tuple(
+            _event(raw.event_flags, event)
+            for event in (
+                EventFlag.BEAT_ROUTE_6_TRAINER_0,
+                EventFlag.BEAT_ROUTE_6_TRAINER_1,
+                EventFlag.BEAT_ROUTE_6_TRAINER_2,
+                EventFlag.BEAT_ROUTE_6_TRAINER_3,
+                EventFlag.BEAT_ROUTE_6_TRAINER_4,
+                EventFlag.BEAT_ROUTE_6_TRAINER_5,
+            )
+        )
+        == (False, False, False, True, True, False)
     )
 
 

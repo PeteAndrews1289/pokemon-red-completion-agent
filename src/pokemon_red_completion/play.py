@@ -60,6 +60,13 @@ from pokemon_red_completion.pewter import (
 )
 from pokemon_red_completion.rom import RomFingerprint
 from pokemon_red_completion.route import COMPLETION_QUEST
+from pokemon_red_completion.ss_anne import (
+    SS_ANNE_CHECKPOINT_COUNT,
+    SSAnneChapterError,
+    SSAnneChapterReport,
+    SSAnneProgress,
+    run_ss_anne_chapter,
+)
 from pokemon_red_completion.vermilion import (
     VERMILION_CHECKPOINT_COUNT,
     VermilionChapterError,
@@ -75,8 +82,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + CERULEAN_CHECKPOINT_COUNT
     + CASCADE_CHECKPOINT_COUNT
     + VERMILION_CHECKPOINT_COUNT
+    + SS_ANNE_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "reach_vermilion"
+QUALIFIED_THROUGH_OBJECTIVE = "obtain_cut"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -205,6 +213,7 @@ class QualifiedPlayReport:
     cerulean: CeruleanChapterReport
     cascade: CascadeChapterReport
     vermilion: VermilionChapterReport
+    ss_anne: SSAnneChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -230,6 +239,7 @@ class QualifiedPlayReport:
             and self.cerulean.passed
             and self.cascade.passed
             and self.vermilion.passed
+            and self.ss_anne.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -271,10 +281,11 @@ class QualifiedPlayReport:
             *self.cerulean.checkpoints(),
             *self.cascade.checkpoints(),
             *self.vermilion.checkpoints(),
+            *self.ss_anne.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v5",
+            "schema": "qualified-play-v6",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -324,6 +335,7 @@ class QualifiedPlayReport:
             "cerulean_chapter": self.cerulean.public_dict(),
             "cascade_chapter": self.cascade.public_dict(),
             "vermilion_chapter": self.vermilion.public_dict(),
+            "ss_anne_chapter": self.ss_anne.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -533,6 +545,16 @@ def run_qualified_play(
         except VermilionChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            ss_anne = run_ss_anne_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_ss_anne_progress_bridge(progress),
+            )
+        except SSAnneChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -540,11 +562,12 @@ def run_qualified_play(
             | semantic_facts(pewter.brock_defeated)
             | semantic_facts(cerulean.cerulean_reached)
             | semantic_facts(vermilion.final_raw)
+            | semantic_facts(ss_anne.final_raw)
         )
         state = GameState(
-            mode=game_mode(vermilion.final_raw),
+            mode=game_mode(ss_anne.final_raw),
             facts=facts,
-            location=location_label(vermilion.final_raw.map_id),
+            location=location_label(ss_anne.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -568,6 +591,7 @@ def run_qualified_play(
             cerulean=cerulean,
             cascade=cascade,
             vermilion=vermilion,
+            ss_anne=ss_anne,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -788,6 +812,33 @@ def _vermilion_progress_bridge(
                     + PEWTER_CHECKPOINT_COUNT
                     + CERULEAN_CHECKPOINT_COUNT
                     + CASCADE_CHECKPOINT_COUNT
+                    + progress.completed
+                ),
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _ss_anne_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[SSAnneProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: SSAnneProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=(
+                    POKEDEX_CHECKPOINT_COUNT
+                    + PEWTER_CHECKPOINT_COUNT
+                    + CERULEAN_CHECKPOINT_COUNT
+                    + CASCADE_CHECKPOINT_COUNT
+                    + VERMILION_CHECKPOINT_COUNT
                     + progress.completed
                 ),
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
