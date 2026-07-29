@@ -757,6 +757,39 @@ class _StrengthEvidence:
         return {"status": "ok", "objective": "obtain_strength"}
 
 
+class _ErikaEvidence:
+    passed = True
+    final_raw = replace(
+        _StrengthEvidence.final_raw,
+        badge_bits=int(
+            Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL
+        ),
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "erika_ready",
+            "celadon_arrived",
+            "celadon_ready",
+            "gym_entered",
+            "lass_defeated",
+            "cooltrainer_defeated",
+            "gym_recovered",
+            "erika_stance",
+            "erika_battle",
+            "erika_defeated",
+            "rainbow_received",
+            "erika_stable",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "defeat_erika"}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -830,16 +863,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 215
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 227
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=215,
+        completed=227,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 215
+    assert progress.completed == progress.total == 227
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -938,7 +971,8 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         fuchsia=_FuchsiaEvidence(),  # type: ignore[arg-type]
         safari=_SafariEvidence(),  # type: ignore[arg-type]
         koga=_KogaEvidence(),  # type: ignore[arg-type]
-        strength=_StrengthEvidence(),  # type: ignore[arg-type]
+            strength=_StrengthEvidence(),  # type: ignore[arg-type]
+            erika=_ErikaEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -965,7 +999,8 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "location:fuchsia_city",
                 "move:surf_available",
                 "move:strength_available",
-                "badge:soul",
+                    "badge:soul",
+                    "badge:rainbow",
             }
         ),
         verified_objectives=(
@@ -989,9 +1024,10 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_fuchsia",
             "obtain_surf",
             "obtain_strength",
-            "defeat_koga",
-        ),
-        next_objective="defeat_erika",
+                "defeat_koga",
+                "defeat_erika",
+            ),
+            next_objective="reach_saffron",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -1001,9 +1037,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v15"
+    assert public["schema"] == "qualified-play-v16"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "obtain_strength"
+    assert public["qualified_through"] == "defeat_erika"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -1222,9 +1258,21 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "strength",
         "center_return",
         "strength_stable",
+        "erika_ready",
+        "celadon_arrived",
+        "celadon_ready",
+        "gym_entered",
+        "lass_defeated",
+        "cooltrainer_defeated",
+        "gym_recovered",
+        "erika_stance",
+        "erika_battle",
+        "erika_defeated",
+        "rainbow_received",
+        "erika_stable",
     ]
     assert public["objective_progress"] == {
-        "verified": 21,
+        "verified": 22,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1248,8 +1296,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "obtain_surf",
             "obtain_strength",
             "defeat_koga",
+            "defeat_erika",
         ],
-        "next": "defeat_erika",
+        "next": "reach_saffron",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True

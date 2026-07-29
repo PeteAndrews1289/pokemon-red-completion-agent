@@ -1,0 +1,90 @@
+from dataclasses import fields, replace
+
+import pytest
+
+from pokemon_red_completion.erika import (
+    DEFAULT_ERIKA_TIMING,
+    ERIKA_CHECKPOINT_COUNT,
+    ERIKA_CLASS,
+    ERIKA_OPPONENT,
+    STRENGTH,
+    ErikaChapterReport,
+    ErikaCheckpoint,
+    ErikaTiming,
+)
+from pokemon_red_completion.observation import Badge, ItemId, MapId, RawGameState
+from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+
+
+def _terminal() -> RawGameState:
+    return RawGameState(
+        game_started=True,
+        map_id=MapId.CELADON_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=3,
+        battle_state=0,
+        badge_bits=0x1F,
+        party_species_ids=TOWER_FINAL_PARTY,
+        first_party_level=42,
+        first_party_hp=130,
+        first_party_max_hp=130,
+        first_party_status=0,
+        first_party_moves=(0x82, STRENGTH, 0x3D, 0x39),
+        first_party_pp=(15, 15, 20, 15),
+    )
+
+
+def test_erika_timing_is_positive_and_bounded() -> None:
+    assert all(
+        isinstance(getattr(DEFAULT_ERIKA_TIMING, field.name), int)
+        and getattr(DEFAULT_ERIKA_TIMING, field.name) > 0
+        for field in fields(ErikaTiming)
+    )
+    for field in fields(ErikaTiming):
+        with pytest.raises(ValueError, match=field.name):
+            replace(DEFAULT_ERIKA_TIMING, **{field.name: 0})
+
+
+def test_erika_report_qualifies_level_42_move_learning_and_terminal() -> None:
+    raw = _terminal()
+    report = ErikaChapterReport(
+        records=tuple(
+            ErikaCheckpoint(str(index), str(index), raw) for index in range(ERIKA_CHECKPOINT_COUNT)
+        ),
+        final_raw=raw,
+        erika_identity=(ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1),
+        strength_pp_spent=6,
+        moves_before=(0x2C, STRENGTH, 0x3D, 0x39),
+        moves_after=(0x82, STRENGTH, 0x3D, 0x39),
+        money_before=37_489,
+        money_after=41_545,
+        badge_bits=0x1F,
+        beat_gym_flags=int(
+            Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL
+        ),
+        got_tm21=True,
+        beat_erika=True,
+        gym_events_before=(False,) * 7,
+        gym_events_after=(True,) * 7,
+        optional_route_events_before=(False,) * 20,
+        optional_route_events_after=(False,) * 20,
+        final_bag=((int(ItemId.TM21_MEGA_DRAIN), 1),),
+        party_hp=(130, 52, 37),
+        party_max_hp=(130, 52, 37),
+        party_status=(0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+    learning = report.public_dict()["erika"]["level_42_move_learning"]
+    assert learning == {
+        "slot": 1,
+        "replaced_move_id": 0x2C,
+        "learned_move_id": 0x82,
+        "moves_before": [0x2C, STRENGTH, 0x3D, 0x39],
+        "moves_after": [0x82, STRENGTH, 0x3D, 0x39],
+        "learned_move_pp": 15,
+    }
