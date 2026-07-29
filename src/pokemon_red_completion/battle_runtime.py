@@ -395,6 +395,11 @@ def _confirm_attack_with_pp_gate(
             return
         if current_pp != initial_pp:
             raise BattleRuntimeError(f"{label} move slot {slot} changed PP by an invalid amount.")
+        if raw.enemy_hp == 0 and raw.first_party_pp == initial_raw.first_party_pp:
+            # An opponent can move first and faint from recoil or
+            # Selfdestruct before the cursor-proven move executes. The full
+            # unchanged PP vector proves that no player move was substituted.
+            return
         if raw.battle_state != _TRAINER_BATTLE_STATE:
             raise BattleRuntimeError(
                 f"{label} ended without the required move-slot {slot} PP decrement."

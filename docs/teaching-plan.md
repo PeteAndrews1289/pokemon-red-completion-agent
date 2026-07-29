@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **170/170 qualified checkpoints** through
-Mr. Fuji and the Poké Flute and therefore **17/36 completion objectives**. Three clean runs were
-identical at the 1,142,003-frame / 16,797-action boundary. The evidence includes the earlier Brock
+The deterministic teacher currently verifies all **184/184 qualified checkpoints** through
+Fuchsia City and therefore **18/36 completion objectives**. Three clean runs were identical at the
+1,419,928-frame / 19,073-action boundary. The evidence includes the earlier Brock
 and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
@@ -80,8 +80,11 @@ The Tower segment adds the exact scripted rival, five required Channelers, level
 final Rockets, eight optional-trainer bypasses, three purified-zone heals, X Accuracy and Rare
 Candy progression pickups, both Fuji rescue mirrors, the Poké Flute, and the natural
 Wartortle-to-Blastoise evolution. The boundary has a full-health, status-free Blastoise restored
-as party lead. No behavioral-cloning, DAgger, timing/RNG generalization, or full-game result is
-implied. The next teaching segment wakes Snorlax and reaches Fuchsia City.
+as party lead. The Fuchsia segment adds the exact Route 12 Snorlax wake/defeat/object transition,
+four mandatory Route 12/13 trainer identities, 35 optional-event and five optional-item bypasses,
+four bounded wild flees, and a disclosed resource-neutral Lavender recovery before the healed
+Fuchsia boundary. No behavioral-cloning, DAgger, timing/RNG generalization, or full-game result is
+implied. The next teaching segment enters the Safari Zone and obtains HM03 Surf.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -188,16 +191,17 @@ restore, rewind, or import state from another run.
     **Done.**
 12. Extend and replay-qualify the Rocket Hideout, Giovanni, and Silph Scope. **Done.**
 13. Extend and replay-qualify Pokémon Tower, Mr. Fuji, and the Poké Flute. **Done.**
-14. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
+14. Extend and replay-qualify Route 12 Snorlax through stable Fuchsia Center. **Done.**
+15. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
-15. Train a small behavior-cloning baseline per specialist.
-16. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
+16. Train a small behavior-cloning baseline per specialist.
+17. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
    from the frozen perturbation suite for that skill.
-17. Extend the teacher chapter-by-chapter through the remainder of the game.
-18. Produce multiple clean teacher completions with timing and RNG variation.
-19. Train the semantic planner and full-game composition only after that coverage exists.
-20. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
+18. Extend the teacher chapter-by-chapter through the remainder of the game.
+19. Produce multiple clean teacher completions with timing and RNG variation.
+20. Train the semantic planner and full-game composition only after that coverage exists.
+21. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
-The current evaluation gate is three intervention-free clean-power-on runs through the Poké Flute.
+The current evaluation gate is three intervention-free clean-power-on runs through Fuchsia Center.
 A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
 frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.

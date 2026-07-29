@@ -2,19 +2,20 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Mr. Fuji qualified](https://img.shields.io/badge/status-Mr._Fuji_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Fuchsia qualified](https://img.shields.io/badge/status-Fuchsia_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **170/170 qualified
+> **Current status:** one continuous deterministic teacher now reaches all **184/184 qualified
 > checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
 > Tunnel, clears the Rocket Hideout and Pokémon Tower, rescues Mr. Fuji, receives the Poké Flute,
-> and heals safely in Lavender Town. That establishes **17/36 completion objectives**. Three clean
-> runs produced the same 1,142,003-frame, 16,797-action result. This is an exact-route
+> defeats the Route 12 Snorlax, crosses Routes 12–15, and heals safely in Fuchsia City. That
+> establishes **18/36 completion objectives**. Three clean runs produced the same
+> 1,419,928-frame, 19,073-action result. This is an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next objective is reaching Fuchsia City. See the
-> [sanitized three-run Fuji evidence receipt](docs/evidence/qualified-play-fuji-2026-07-29.json).
+> game-completion claim. The next objective is obtaining HM03 Surf. See the
+> [sanitized three-run Fuchsia evidence receipt](docs/evidence/qualified-play-fuchsia-2026-07-29.json).
 
 ## The goal
 
@@ -152,7 +153,9 @@ Vermilion City, the S.S. Anne through HM01, Vermilion Gym through the Thunder Ba
 Rock Tunnel, Lavender Town, Route 8, the west-east Underground Path, Route 7, and Celadon City.
 It then reveals and clears the Rocket Hideout, defeats Giovanni, obtains the Silph Scope, crosses
 Pokémon Tower, calms Marowak, rescues Mr. Fuji, receives the Poké Flute, and heals in Lavender
-Center.
+Center. It then wakes and defeats the level-30 Route 12 Snorlax, clears the four mandatory
+Route 12/13 trainers, bypasses every other Route 12–15 trainer and progression pickup, and heals
+the complete party in Fuchsia Center.
 It stops automatically after the
 latest independently qualified objective and reports that the game is not complete. The forest
 segment deliberately trains against three verified Kakuna encounters and one mandatory Bug
@@ -184,6 +187,10 @@ and qualifies the natural Wartortle-to-Blastoise evolution without changing part
 Its adaptive battle and navigation selection reacts to bounded state, but the
 three-run result evaluates one frozen teacher route and does not yet show held-out timing or RNG
 generalization.
+The Fuchsia chapter verifies the Poké Flute wake transition, exact Snorlax species and level,
+defeat event, removed-object tile, and retained Flute; records five exact battle PP receipts;
+performs a disclosed resource-neutral Lavender Center recovery; flees four bounded wild
+encounters; and proves 35 optional events plus five optional items remain untouched.
 
 The ROM, saves, snapshots, recordings, datasets, and model checkpoints are ignored and must remain
 outside Git. The visible window is not recorded or uploaded by the project. The supported revision

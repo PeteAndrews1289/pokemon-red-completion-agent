@@ -630,6 +630,45 @@ class _TowerEvidence:
         return {"status": "ok", "objective": "rescue_fuji"}
 
 
+class _FuchsiaEvidence:
+    passed = True
+    final_raw = replace(
+        _raw(
+            MapId.FUCHSIA_POKECENTER,
+            3,
+            3,
+            party_count=3,
+            party_species_ids=(0x1C, 0x40, 0x3B),
+        ),
+        badge_bits=int(Badge.BOULDER | Badge.CASCADE | Badge.THUNDER),
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "fuji_ready",
+            "route12",
+            "fisher",
+            "snorlax",
+            "recovered",
+            "rocker",
+            "route13_pair",
+            "route13_clear",
+            "route14_clear",
+            "route15_clear",
+            "fuchsia",
+            "healed",
+            "optionals",
+            "fuchsia_stable",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "reach_fuchsia"}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -703,16 +742,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 170
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 184
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=170,
+        completed=184,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 170
+    assert progress.completed == progress.total == 184
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -808,6 +847,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         celadon=_CeladonEvidence(),  # type: ignore[arg-type]
         hideout=_HideoutEvidence(),  # type: ignore[arg-type]
         tower=_TowerEvidence(),  # type: ignore[arg-type]
+        fuchsia=_FuchsiaEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -831,6 +871,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "story:rocket_hideout_cleared",
                 "item:silph_scope",
                 "item:poke_flute",
+                "location:fuchsia_city",
             }
         ),
         verified_objectives=(
@@ -851,8 +892,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "clear_rocket_hideout",
             "obtain_silph_scope",
             "rescue_fuji",
+            "reach_fuchsia",
         ),
-        next_objective="reach_fuchsia",
+        next_objective="obtain_surf",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -862,9 +904,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v11"
+    assert public["schema"] == "qualified-play-v12"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "rescue_fuji"
+    assert public["qualified_through"] == "reach_fuchsia"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -1038,9 +1080,23 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "controller_verified",
         "lavender_stable",
         "chapter_complete",
+        "fuji_ready",
+        "route12",
+        "fisher",
+        "snorlax",
+        "recovered",
+        "rocker",
+        "route13_pair",
+        "route13_clear",
+        "route14_clear",
+        "route15_clear",
+        "fuchsia",
+        "healed",
+        "optionals",
+        "fuchsia_stable",
     ]
     assert public["objective_progress"] == {
-        "verified": 17,
+        "verified": 18,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1060,8 +1116,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "clear_rocket_hideout",
             "obtain_silph_scope",
             "rescue_fuji",
+            "reach_fuchsia",
         ],
-        "next": "reach_fuchsia",
+        "next": "obtain_surf",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -1193,7 +1250,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_rescues_fuji_without_adjacent_artifacts() -> None:
+def test_private_rom_reaches_fuchsia_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -1224,10 +1281,11 @@ def test_private_rom_rescues_fuji_without_adjacent_artifacts() -> None:
         "clear_rocket_hideout",
         "obtain_silph_scope",
         "rescue_fuji",
+        "reach_fuchsia",
     )
-    assert report.next_objective == "reach_fuchsia"
-    assert report.frames_executed == 1_142_003
-    assert report.actions_executed == 16_797
+    assert report.next_objective == "obtain_surf"
+    assert report.frames_executed == 1_419_928
+    assert report.actions_executed == 19_073
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -1361,4 +1419,33 @@ def test_private_rom_rescues_fuji_without_adjacent_artifacts() -> None:
     assert report.tower.party_hp == report.tower.party_max_hp == (111, 52, 37)
     assert report.tower.party_status == (0, 0, 0)
     assert report.tower.money_remaining == 27_437
+    assert report.fuchsia.passed
+    assert report.fuchsia.frames_executed == 277_925
+    assert report.fuchsia.actions_executed == 2_276
+    assert tuple(item.trainer_number for item in report.fuchsia.battles) == (
+        3,
+        None,
+        2,
+        1,
+        12,
+    )
+    assert tuple(item.selected_pp_spent for item in report.fuchsia.battles) == (
+        5,
+        4,
+        2,
+        4,
+        5,
+    )
+    assert report.fuchsia.required_events == (True,) * 5
+    assert report.fuchsia.optional_events == (False,) * 35
+    assert report.fuchsia.optional_items_carried == (False,) * 5
+    assert report.fuchsia.flute_retained
+    assert report.fuchsia.snorlax_fight_before is False
+    assert report.fuchsia.snorlax_fight_after is False
+    assert report.fuchsia.snorlax_object_tile_crossed
+    assert report.fuchsia.wild_flees == 4
+    assert report.fuchsia.initial_bag == report.fuchsia.final_bag
+    assert report.fuchsia.party_hp == report.fuchsia.party_max_hp == (114, 52, 37)
+    assert report.fuchsia.party_status == (0, 0, 0)
+    assert report.fuchsia.money_remaining == 30_137
     assert before == after

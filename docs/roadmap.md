@@ -25,9 +25,9 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **170/170 bounded checkpoints** and **17/36 completion objectives**, ending
-after clearing Pokémon Tower, rescuing Mr. Fuji, receiving the Poké Flute, and healing the complete
-party in Lavender. Three clean runs reached the identical 1,142,003-frame / 16,797-action boundary.
+Current qualification: **184/184 bounded checkpoints** and **18/36 completion objectives**, ending
+after defeating the Route 12 Snorlax, crossing Routes 12–15, and healing the complete party in
+Fuchsia. Three clean runs reached the identical 1,419,928-frame / 19,073-action boundary.
 This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
@@ -60,15 +60,17 @@ learned-policy, timing/RNG-generalization, or completion result.
 - [x] Qualify the mandatory Pokémon Tower rival and Channelers, all three purified-zone heals,
   level-30 Marowak, the three final Rockets, Mr. Fuji's rescue, the Poké Flute, and the natural
   Wartortle-to-Blastoise evolution.
+- [x] Qualify the level-30 Route 12 Snorlax, four mandatory Route 12/13 trainers, every optional
+  Route 12–15 bypass, a resource-neutral Lavender recovery, and stable Fuchsia Center arrival.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: wake Snorlax and reach Fuchsia City.
+Next sequence: enter the Safari Zone and obtain HM03 Surf.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Fuji three-run evidence receipt](evidence/qualified-play-fuji-2026-07-29.json).
+[Fuchsia three-run evidence receipt](evidence/qualified-play-fuchsia-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs rescue Mr. Fuji and obtain the Poké Flute
+Exit gate: three intervention-free clean-power-on runs reach a healed Fuchsia Center boundary
 with identical evidence rules.
 
 ## Milestone 2 — deterministic expert

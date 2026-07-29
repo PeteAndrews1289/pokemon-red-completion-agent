@@ -481,6 +481,34 @@ def test_transient_main_menu_with_zero_enemy_hp_never_calls_policy() -> None:
     assert all(action.kind is MacroActionKind.WAIT for action in runtime.actions)
 
 
+def test_opponent_recoil_ko_before_selected_move_preserves_pp() -> None:
+    runtime = FakeRuntime()
+
+    def recoil_before_player_move(action: MacroAction) -> None:
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        if runtime.menu.phase is BattleMenuPhase.MAIN:
+            runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+        elif runtime.menu.phase is BattleMenuPhase.MOVE:
+            runtime.raw = replace(runtime.raw, enemy_hp=0)
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        elif runtime.raw.enemy_hp == 0:
+            runtime.raw = replace(runtime.raw, battle_state=0)
+            runtime.controls = READY
+
+    runtime.on_action = recoil_before_player_move
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        lambda _raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
+        required_move_id=TACKLE_MOVE_ID,
+    )
+
+    assert final.battle_state == 0
+    assert final.first_party_pp == (35, 30, 30, 11)
+
+
 def test_stale_main_after_pp_decrement_uses_cancel_without_spending_twice() -> None:
     runtime = FakeRuntime()
     policy_calls = 0
