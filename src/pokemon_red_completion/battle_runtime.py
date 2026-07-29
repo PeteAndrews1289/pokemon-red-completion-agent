@@ -71,6 +71,7 @@ class BattleRuntimeTiming:
     max_pp_confirmation_pulses: int = 6
     max_attack_confirmation_pulses: int = 3
     max_post_attack_transition_pulses: int = 12
+    max_sleep_recovery_pulses: int = 16
     required_ready_reads: int = 2
 
     def __post_init__(self) -> None:
@@ -151,9 +152,31 @@ def run_adaptive_trainer_battle(
             )
             continue
         if menu.phase is BattleMenuPhase.MOVE:
-            raise BattleRuntimeError(
-                f"{label} exposed an unexpected move menu before a policy decision."
+            initial_pp = raw.first_party_pp
+            _pulse(
+                executor,
+                MacroAction(MacroActionKind.CANCEL),
+                timing.menu_wait_frames,
             )
+            normalized = reader.read()
+            _require_active_trainer_state(
+                normalized,
+                expected_map=expected_map,
+                label=label,
+            )
+            if normalized.first_party_pp != initial_pp:
+                raise BattleRuntimeError(
+                    f"{label} changed PP while normalizing an unlatched move menu."
+                )
+            normalized_menu = _validated_menu(
+                reader.read_battle_menu_state(normalized),
+                label=label,
+            )
+            if normalized_menu.phase is not BattleMenuPhase.MAIN:
+                raise BattleRuntimeError(
+                    f"{label} failed to cancel an unlatched move menu to MAIN."
+                )
+            continue
         if raw.enemy_hp is None:
             raise BattleRuntimeError(
                 f"{label} lacks live enemy HP evidence at the MAIN menu."
@@ -251,6 +274,17 @@ def _execute_policy_turn(
             continue
         raise BattleRuntimeError(f"{label} exposed an invalid FIGHT-menu transition.")
     if move_menu is None:
+        if _recover_sleep_transition(
+            reader,
+            executor,
+            expected_map=expected_map,
+            slot=slot,
+            initial_pp=initial_pp,
+            initial_pp_vector=initial_raw.first_party_pp,
+            timing=timing,
+            label=label,
+        ):
+            return
         raise BattleRuntimeError(f"{label} never exposed a semantic move menu.")
 
     menu = move_menu
@@ -370,6 +404,69 @@ def _confirm_attack_with_pp_gate(
     raise BattleRuntimeError(
         f"{label} failed its bounded move-slot {slot} PP-decrement gate."
     )
+
+
+def _recover_sleep_transition(
+    reader: BattleStateReader,
+    executor: BattleActionExecutor,
+    *,
+    expected_map: int,
+    slot: int,
+    initial_pp: int,
+    initial_pp_vector: tuple[int, ...] | None,
+    timing: BattleRuntimeTiming,
+    label: str,
+) -> bool:
+    """Recover only the Gen I sleep countdown that suppresses move selection."""
+
+    raw = reader.read()
+    sleep_count = (raw.first_party_status or 0) & 0x07
+    if sleep_count == 0:
+        return False
+
+    previous_count = sleep_count
+    saw_decrease = False
+    for _ in range(timing.max_sleep_recovery_pulses):
+        _require_active_trainer_state(raw, expected_map=expected_map, label=label)
+        if (raw.first_party_hp or 0) <= 0:
+            raise BattleRuntimeError(f"{label} fainted during sleep recovery.")
+        if _current_pp(raw, slot=slot, label=label, require_usable=False) != initial_pp:
+            raise BattleRuntimeError(
+                f"{label} changed PP during sleep recovery without a selected attack."
+            )
+        if raw.first_party_pp != initial_pp_vector:
+            raise BattleRuntimeError(
+                f"{label} changed an off-slot PP value during sleep recovery."
+            )
+
+        _pulse(
+            executor,
+            MacroAction(MacroActionKind.CONFIRM),
+            timing.dialogue_wait_frames,
+        )
+        raw = reader.read()
+        current_count = (raw.first_party_status or 0) & 0x07
+        if current_count == 0:
+            menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+            if menu.phase is BattleMenuPhase.MOVE:
+                _pulse(
+                    executor,
+                    MacroAction(MacroActionKind.CANCEL),
+                    timing.menu_wait_frames,
+                )
+            return True
+        if current_count > previous_count:
+            raise BattleRuntimeError(
+                f"{label} sleep counter increased during bounded recovery."
+            )
+        saw_decrease = saw_decrease or current_count < previous_count
+        previous_count = current_count
+
+    if not saw_decrease:
+        raise BattleRuntimeError(
+            f"{label} sleep counter never decreased during bounded recovery."
+        )
+    raise BattleRuntimeError(f"{label} exceeded its bounded sleep recovery.")
 
 
 def _await_selected_turn_effect(

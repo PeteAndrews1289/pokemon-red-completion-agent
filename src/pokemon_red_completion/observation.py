@@ -70,6 +70,7 @@ class RamAddress(IntEnum):
     ROUTE_4_SCRIPT = 0xD5F9
     PEWTER_GYM_SCRIPT = 0xD5FC
     CERULEAN_GYM_SCRIPT = 0xD5FD
+    ROUTE_6_SCRIPT = 0xD600
     ROUTE_24_SCRIPT = 0xD602
     ROUTE_25_SCRIPT = 0xD603
     MT_MOON_1F_SCRIPT = 0xD606
@@ -103,6 +104,8 @@ class MapId(IntEnum):
     ROUTE_2 = 0x0D
     ROUTE_3 = 0x0E
     ROUTE_4 = 0x0F
+    ROUTE_5 = 0x10
+    ROUTE_6 = 0x11
     ROUTE_24 = 0x23
     ROUTE_25 = 0x24
     REDS_HOUSE_1F = 0x25
@@ -119,10 +122,14 @@ class MapId(IntEnum):
     MT_MOON_1F = 0x3B
     MT_MOON_B1F = 0x3C
     MT_MOON_B2F = 0x3D
+    CERULEAN_TRASHED_HOUSE = 0x3E
     CERULEAN_POKECENTER = 0x40
     CERULEAN_GYM = 0x41
     MT_MOON_POKECENTER = 0x44
+    UNDERGROUND_PATH_ROUTE_5 = 0x47
+    UNDERGROUND_PATH_ROUTE_6 = 0x4A
     BILLS_HOUSE = 0x58
+    UNDERGROUND_PATH_NORTH_SOUTH = 0x77
     HALL_OF_FAME = 0x76
     CHAMPIONS_ROOM = 0x78
     INDIGO_PLATEAU_LOBBY = 0xAE
@@ -147,6 +154,12 @@ class EventFlag(IntEnum):
     BEAT_CERULEAN_GYM_TRAINER_1 = 0x0BB
     GOT_TM11 = 0x0BE
     BEAT_MISTY = 0x0BF
+    BEAT_ROUTE_6_TRAINER_0 = 0x411
+    BEAT_ROUTE_6_TRAINER_1 = 0x412
+    BEAT_ROUTE_6_TRAINER_2 = 0x413
+    BEAT_ROUTE_6_TRAINER_3 = 0x414
+    BEAT_ROUTE_6_TRAINER_4 = 0x415
+    BEAT_ROUTE_6_TRAINER_5 = 0x416
     RESCUED_MR_FUJI = 0x117
     GOT_POKE_FLUTE = 0x128
     BEAT_LT_SURGE = 0x167
@@ -226,6 +239,7 @@ class ItemId(IntEnum):
     HM03_SURF = 0xC6
     HM04_STRENGTH = 0xC7
     TM11_BUBBLEBEAM = 0xD3
+    TM28_DIG = 0xE4
     TM34_BIDE = 0xEA
 
 
@@ -403,6 +417,15 @@ CERULEAN_GYM_REQUIRED_TRAINER_TRIGGER_X = 5
 CERULEAN_GYM_REQUIRED_TRAINER_TRIGGER_Y = 3
 MISTY_TRIGGER_X = 5
 MISTY_TRIGGER_Y = 2
+CERULEAN_ROCKET_TRAINER_NUMBER = 5
+CERULEAN_ROCKET_TRIGGER_X = 30
+CERULEAN_ROCKET_TRIGGER_YS = frozenset({7, 9})
+ROUTE_6_JR_TRAINER_F_OPPONENT_ID = 0xCE
+ROUTE_6_JR_TRAINER_F_CLASS_ID = 0x06
+ROUTE_6_JR_TRAINER_F_NUMBER = 3
+ROUTE_6_JR_TRAINER_M_OPPONENT_ID = 0xCD
+ROUTE_6_JR_TRAINER_M_CLASS_ID = 0x05
+ROUTE_6_JR_TRAINER_M_NUMBER = 5
 MAIN_BATTLE_MENU_LEFT_SIGNATURE = (0x0E, 0x09, 0x11)
 MAIN_BATTLE_MENU_RIGHT_SIGNATURE = (0x0E, 0x0F, 0x21)
 MOVE_BATTLE_MENU_SIGNATURE = (0x0C, 0x05, 0xC7)
@@ -2034,6 +2057,393 @@ class CascadeProgressTracker:
         return CascadePhase.UNKNOWN
 
 
+class VermilionPhase(StrEnum):
+    """Source-pinned semantic phases from Misty toward Vermilion City."""
+
+    UNKNOWN = "unknown"
+    MISTY_READY = "misty_ready"
+    TRASHED_HOUSE_ENTERED = "trashed_house_entered"
+    ROBBERY_REAR_EXIT = "robbery_rear_exit"
+    ROCKET_THIEF_BATTLE = "rocket_thief_battle"
+    TM28_OBTAINED = "tm28_obtained"
+    ROUTE_5_REACHED = "route_5_reached"
+    UNDERGROUND_NORTH_ENTRANCE = "underground_north_entrance"
+    UNDERGROUND_TUNNEL = "underground_tunnel"
+    UNDERGROUND_SOUTH_ENTRANCE = "underground_south_entrance"
+    ROUTE_6_REACHED = "route_6_reached"
+    ROUTE_6_TRAINER_F_BATTLE = "route_6_trainer_f_battle"
+    ROUTE_6_TRAINER_F_DEFEATED = "route_6_trainer_f_defeated"
+    ROUTE_6_TRAINER_M_BATTLE = "route_6_trainer_m_battle"
+    ROUTE_6_TRAINER_M_DEFEATED = "route_6_trainer_m_defeated"
+    VERMILION_REACHED = "vermilion_reached"
+
+
+@dataclass(frozen=True, slots=True)
+class VermilionState:
+    """Semantic evidence for the robbery and Underground Path route."""
+
+    phase: VermilionPhase
+    controls: InputReadiness
+    local_script: int
+    current_map_script: int
+    prior_chapter_complete: bool
+    beat_rocket_thief: bool
+    tm28_in_bag: bool
+    route_6_trainer_events: tuple[bool, bool, bool, bool, bool, bool]
+    current_opponent: int
+    trainer_class: int
+    trainer_number: int
+    engaged_trainer_class: int
+    engaged_trainer_set: int
+    map_id: int | None
+    player_x: int | None
+    player_y: int | None
+    party_count: int | None
+    party_species_ids: tuple[int, ...] | None
+    first_party_hp: int | None
+    first_party_max_hp: int | None
+    first_party_status: int | None
+    battle_state: int | None
+    battle_result: int | None
+
+    @property
+    def foundation_invariants(self) -> bool:
+        species = self.party_species_ids or ()
+        return (
+            self.prior_chapter_complete
+            and 1 <= (self.party_count or 0) <= PARTY_LIMIT
+            and bool(species)
+            and species[0] in SQUIRTLE_LINEAGE_SPECIES_IDS
+            and 0 < (self.first_party_hp or 0) <= (self.first_party_max_hp or 0)
+            and self.first_party_status == 0
+        )
+
+    @property
+    def stable_snapshot(self) -> bool:
+        return (
+            self.foundation_invariants
+            and self.battle_state == 0
+            and self.local_script == 0
+            and self.current_map_script == 0
+            and self.controls.ready
+        )
+
+    @property
+    def misty_ready_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.MISTY_READY
+            and self.map_id == MapId.CERULEAN_GYM
+            and self.player_x == MISTY_TRIGGER_X
+            and self.player_y == MISTY_TRIGGER_Y
+            and self.stable_snapshot
+            and not self.beat_rocket_thief
+            and not self.tm28_in_bag
+            and not any(self.route_6_trainer_events)
+        )
+
+    @property
+    def trashed_house_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.TRASHED_HOUSE_ENTERED
+            and self.map_id == MapId.CERULEAN_TRASHED_HOUSE
+            and self.player_x == 2
+            and self.player_y == 7
+            and self.stable_snapshot
+            and not self.beat_rocket_thief
+            and not self.tm28_in_bag
+        )
+
+    @property
+    def robbery_rear_exit_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.ROBBERY_REAR_EXIT
+            and self.map_id == MapId.CERULEAN_CITY
+            and self.player_x == 27
+            and self.player_y == 9
+            and self.stable_snapshot
+            and not self.beat_rocket_thief
+            and not self.tm28_in_bag
+        )
+
+    @property
+    def rocket_thief_battle_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.ROCKET_THIEF_BATTLE
+            and self.map_id == MapId.CERULEAN_CITY
+            and self.foundation_invariants
+            and self.battle_state == 2
+            and self.local_script == 4
+            and self.current_map_script == 0
+            and self.player_x == CERULEAN_ROCKET_TRIGGER_X
+            and self.player_y in CERULEAN_ROCKET_TRIGGER_YS
+            and not self.beat_rocket_thief
+            and not self.tm28_in_bag
+            and self.current_opponent == ROCKET_OPPONENT_ID
+            and self.trainer_class == ROCKET_TRAINER_CLASS_ID
+            and self.trainer_number == CERULEAN_ROCKET_TRAINER_NUMBER
+            and self.engaged_trainer_class == ROCKET_OPPONENT_ID
+            and self.engaged_trainer_set == CERULEAN_ROCKET_TRAINER_NUMBER
+        )
+
+    @property
+    def tm28_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.TM28_OBTAINED
+            and self.map_id == MapId.CERULEAN_CITY
+            and self.player_x == CERULEAN_ROCKET_TRIGGER_X
+            and self.player_y in CERULEAN_ROCKET_TRIGGER_YS
+            and self.stable_snapshot
+            and self.beat_rocket_thief
+            and self.tm28_in_bag
+            and self.battle_result == 0
+        )
+
+    @property
+    def route_5_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.ROUTE_5_REACHED
+            and self.map_id == MapId.ROUTE_5
+            and self.player_x == 3
+            and self.player_y == 0
+            and self.stable_snapshot
+            and self.beat_rocket_thief
+            and self.tm28_in_bag
+            and not any(self.route_6_trainer_events)
+        )
+
+    @property
+    def underground_north_entrance_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.UNDERGROUND_NORTH_ENTRANCE
+            and self.map_id == MapId.UNDERGROUND_PATH_ROUTE_5
+            and self.player_x == 3
+            and self.player_y == 7
+            and self.stable_snapshot
+            and self.beat_rocket_thief
+            and self.tm28_in_bag
+            and not any(self.route_6_trainer_events)
+        )
+
+    @property
+    def underground_tunnel_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.UNDERGROUND_TUNNEL
+            and self.map_id == MapId.UNDERGROUND_PATH_NORTH_SOUTH
+            and self.player_x == 5
+            and self.player_y == 4
+            and self.stable_snapshot
+            and self.beat_rocket_thief
+            and self.tm28_in_bag
+            and not any(self.route_6_trainer_events)
+        )
+
+    @property
+    def underground_south_entrance_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.UNDERGROUND_SOUTH_ENTRANCE
+            and self.map_id == MapId.UNDERGROUND_PATH_ROUTE_6
+            and self.player_x == 4
+            and self.player_y == 4
+            and self.stable_snapshot
+            and self.beat_rocket_thief
+            and self.tm28_in_bag
+            and not any(self.route_6_trainer_events)
+        )
+
+    @property
+    def route_6_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.ROUTE_6_REACHED
+            and self.map_id == MapId.ROUTE_6
+            and self.player_x == 17
+            and self.player_y == 14
+            and self.stable_snapshot
+            and self.beat_rocket_thief
+            and self.tm28_in_bag
+            and not any(self.route_6_trainer_events)
+        )
+
+    @property
+    def vermilion_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.VERMILION_REACHED
+            and self.map_id == MapId.VERMILION_CITY
+            and self.player_x == 19
+            and self.player_y == 0
+            and self.stable_snapshot
+            and self.beat_rocket_thief
+            and self.tm28_in_bag
+            and self.route_6_trainer_events
+            == (False, False, False, True, True, False)
+        )
+
+    @property
+    def route_6_trainer_f_battle_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.ROUTE_6_TRAINER_F_BATTLE
+            and self.map_id == MapId.ROUTE_6
+            and self.foundation_invariants
+            and self.battle_state == 2
+            and self.local_script == 2
+            and self.current_map_script == 2
+            and self.player_x == 9
+            and self.player_y == 30
+            and self.route_6_trainer_events
+            == (False, False, False, False, False, False)
+            and self.current_opponent == ROUTE_6_JR_TRAINER_F_OPPONENT_ID
+            and self.trainer_class == ROUTE_6_JR_TRAINER_F_CLASS_ID
+            and self.trainer_number == ROUTE_6_JR_TRAINER_F_NUMBER
+            and self.engaged_trainer_class
+            == ROUTE_6_JR_TRAINER_F_OPPONENT_ID
+            and self.engaged_trainer_set == ROUTE_6_JR_TRAINER_F_NUMBER
+        )
+
+    @property
+    def route_6_trainer_f_defeated_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.ROUTE_6_TRAINER_F_DEFEATED
+            and self.map_id == MapId.ROUTE_6
+            and self.player_x == 9
+            and self.player_y == 30
+            and self.stable_snapshot
+            and self.route_6_trainer_events
+            == (False, False, False, False, True, False)
+            and self.battle_result == 0
+        )
+
+    @property
+    def route_6_trainer_m_battle_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.ROUTE_6_TRAINER_M_BATTLE
+            and self.map_id == MapId.ROUTE_6
+            and self.foundation_invariants
+            and self.battle_state == 2
+            and self.local_script == 2
+            and self.current_map_script == 2
+            and self.player_x == 9
+            and self.player_y == 31
+            and self.route_6_trainer_events
+            == (False, False, False, False, True, False)
+            and self.current_opponent == ROUTE_6_JR_TRAINER_M_OPPONENT_ID
+            and self.trainer_class == ROUTE_6_JR_TRAINER_M_CLASS_ID
+            and self.trainer_number == ROUTE_6_JR_TRAINER_M_NUMBER
+            and self.engaged_trainer_class
+            == ROUTE_6_JR_TRAINER_M_OPPONENT_ID
+            and self.engaged_trainer_set == ROUTE_6_JR_TRAINER_M_NUMBER
+        )
+
+    @property
+    def route_6_trainer_m_defeated_snapshot(self) -> bool:
+        return (
+            self.phase is VermilionPhase.ROUTE_6_TRAINER_M_DEFEATED
+            and self.map_id == MapId.ROUTE_6
+            and self.player_x == 9
+            and self.player_y == 31
+            and self.stable_snapshot
+            and self.route_6_trainer_events
+            == (False, False, False, True, True, False)
+            and self.battle_result == 0
+        )
+
+
+class VermilionProgressError(ValueError):
+    """Raised when Misty-to-Route-6 evidence skips or contradicts a gate."""
+
+
+class VermilionProgressTracker:
+    """Latch the robbery battle and source-ordered travel boundaries."""
+
+    _ORDERED_PHASES = (
+        VermilionPhase.MISTY_READY,
+        VermilionPhase.TRASHED_HOUSE_ENTERED,
+        VermilionPhase.ROBBERY_REAR_EXIT,
+        VermilionPhase.ROCKET_THIEF_BATTLE,
+        VermilionPhase.TM28_OBTAINED,
+        VermilionPhase.ROUTE_5_REACHED,
+        VermilionPhase.UNDERGROUND_NORTH_ENTRANCE,
+        VermilionPhase.UNDERGROUND_TUNNEL,
+        VermilionPhase.UNDERGROUND_SOUTH_ENTRANCE,
+        VermilionPhase.ROUTE_6_REACHED,
+        VermilionPhase.ROUTE_6_TRAINER_F_BATTLE,
+        VermilionPhase.ROUTE_6_TRAINER_F_DEFEATED,
+        VermilionPhase.ROUTE_6_TRAINER_M_BATTLE,
+        VermilionPhase.ROUTE_6_TRAINER_M_DEFEATED,
+        VermilionPhase.VERMILION_REACHED,
+    )
+
+    def __init__(self, misty_state: CascadeState) -> None:
+        if not misty_state.misty_victory_snapshot:
+            raise VermilionProgressError(
+                "Vermilion qualification must begin at verified Misty victory."
+            )
+        self._phase_index = -1
+        self._saw_rocket_battle = False
+
+    @property
+    def saw_rocket_battle(self) -> bool:
+        return self._saw_rocket_battle
+
+    def observe(self, state: VermilionState) -> VermilionPhase:
+        snapshot_name = {
+            VermilionPhase.MISTY_READY: "misty_ready_snapshot",
+            VermilionPhase.TRASHED_HOUSE_ENTERED: "trashed_house_snapshot",
+            VermilionPhase.ROBBERY_REAR_EXIT: "robbery_rear_exit_snapshot",
+            VermilionPhase.ROCKET_THIEF_BATTLE: "rocket_thief_battle_snapshot",
+            VermilionPhase.TM28_OBTAINED: "tm28_snapshot",
+            VermilionPhase.ROUTE_5_REACHED: "route_5_snapshot",
+            VermilionPhase.UNDERGROUND_NORTH_ENTRANCE: (
+                "underground_north_entrance_snapshot"
+            ),
+            VermilionPhase.UNDERGROUND_TUNNEL: "underground_tunnel_snapshot",
+            VermilionPhase.UNDERGROUND_SOUTH_ENTRANCE: (
+                "underground_south_entrance_snapshot"
+            ),
+            VermilionPhase.ROUTE_6_REACHED: "route_6_snapshot",
+            VermilionPhase.ROUTE_6_TRAINER_F_BATTLE: (
+                "route_6_trainer_f_battle_snapshot"
+            ),
+            VermilionPhase.ROUTE_6_TRAINER_F_DEFEATED: (
+                "route_6_trainer_f_defeated_snapshot"
+            ),
+            VermilionPhase.ROUTE_6_TRAINER_M_BATTLE: (
+                "route_6_trainer_m_battle_snapshot"
+            ),
+            VermilionPhase.ROUTE_6_TRAINER_M_DEFEATED: (
+                "route_6_trainer_m_defeated_snapshot"
+            ),
+            VermilionPhase.VERMILION_REACHED: "vermilion_snapshot",
+        }.get(state.phase)
+        if snapshot_name is None:
+            return VermilionPhase.UNKNOWN
+        if not getattr(state, snapshot_name):
+            raise VermilionProgressError(
+                f"{state.phase.value} failed its source-pinned semantic snapshot."
+            )
+
+        expected_index = self._phase_index + 1
+        if self._phase_index >= 0 and state.phase is self._ORDERED_PHASES[
+            self._phase_index
+        ]:
+            return state.phase
+        if expected_index >= len(self._ORDERED_PHASES):
+            raise VermilionProgressError("Unexpected boundary after Route 6.")
+        if state.phase is not self._ORDERED_PHASES[expected_index]:
+            raise VermilionProgressError(
+                "Vermilion-route evidence skipped a required semantic boundary."
+            )
+        if (
+            state.phase is VermilionPhase.TM28_OBTAINED
+            and not self._saw_rocket_battle
+        ):
+            raise VermilionProgressError(
+                "Rocket thief victory lacks the observed live battle."
+            )
+        if state.phase is VermilionPhase.ROCKET_THIEF_BATTLE:
+            self._saw_rocket_battle = True
+        self._phase_index = expected_index
+        return state.phase
+
+
 class PokemonRedStateReader:
     def __init__(self, memory: ReadOnlyMemory) -> None:
         self._memory = memory
@@ -2738,6 +3148,111 @@ class PokemonRedStateReader:
                 return candidate
         return state
 
+    def read_vermilion_state(self, raw: RawGameState) -> VermilionState:
+        """Translate the pinned robbery and Underground Path evidence."""
+        controls = self.read_input_readiness()
+        local_script = self._local_script(raw.map_id)
+        current_map_script = self._memory.read_u8(RamAddress.CURRENT_MAP_SCRIPT)
+        items = set(raw.bag_item_ids or ())
+        badge_mirror = self._memory.read_u8(RamAddress.BEAT_GYM_FLAGS)
+        route_6_events = tuple(
+            _event(raw.event_flags, event)
+            for event in (
+                EventFlag.BEAT_ROUTE_6_TRAINER_0,
+                EventFlag.BEAT_ROUTE_6_TRAINER_1,
+                EventFlag.BEAT_ROUTE_6_TRAINER_2,
+                EventFlag.BEAT_ROUTE_6_TRAINER_3,
+                EventFlag.BEAT_ROUTE_6_TRAINER_4,
+                EventFlag.BEAT_ROUTE_6_TRAINER_5,
+            )
+        )
+        state = VermilionState(
+            phase=VermilionPhase.UNKNOWN,
+            controls=controls,
+            local_script=local_script,
+            current_map_script=current_map_script,
+            prior_chapter_complete=_vermilion_prior_chapter_complete(
+                raw, items, badge_mirror
+            ),
+            beat_rocket_thief=_event(
+                raw.event_flags, EventFlag.BEAT_CERULEAN_ROCKET_THIEF
+            ),
+            tm28_in_bag=ItemId.TM28_DIG in items,
+            route_6_trainer_events=(
+                route_6_events[0],
+                route_6_events[1],
+                route_6_events[2],
+                route_6_events[3],
+                route_6_events[4],
+                route_6_events[5],
+            ),
+            current_opponent=self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
+            trainer_class=self._memory.read_u8(RamAddress.TRAINER_CLASS),
+            trainer_number=self._memory.read_u8(RamAddress.TRAINER_NUMBER),
+            engaged_trainer_class=self._memory.read_u8(
+                RamAddress.ENGAGED_TRAINER_CLASS
+            ),
+            engaged_trainer_set=self._memory.read_u8(
+                RamAddress.ENGAGED_TRAINER_SET
+            ),
+            map_id=raw.map_id,
+            player_x=raw.player_x,
+            player_y=raw.player_y,
+            party_count=raw.party_count,
+            party_species_ids=raw.party_species_ids,
+            first_party_hp=raw.first_party_hp,
+            first_party_max_hp=raw.first_party_max_hp,
+            first_party_status=raw.first_party_status,
+            battle_state=raw.battle_state,
+            battle_result=raw.battle_result,
+        )
+        phase_snapshots = (
+            (VermilionPhase.VERMILION_REACHED, "vermilion_snapshot"),
+            (
+                VermilionPhase.ROUTE_6_TRAINER_M_DEFEATED,
+                "route_6_trainer_m_defeated_snapshot",
+            ),
+            (
+                VermilionPhase.ROUTE_6_TRAINER_M_BATTLE,
+                "route_6_trainer_m_battle_snapshot",
+            ),
+            (
+                VermilionPhase.ROUTE_6_TRAINER_F_DEFEATED,
+                "route_6_trainer_f_defeated_snapshot",
+            ),
+            (
+                VermilionPhase.ROUTE_6_TRAINER_F_BATTLE,
+                "route_6_trainer_f_battle_snapshot",
+            ),
+            (VermilionPhase.ROUTE_6_REACHED, "route_6_snapshot"),
+            (
+                VermilionPhase.UNDERGROUND_SOUTH_ENTRANCE,
+                "underground_south_entrance_snapshot",
+            ),
+            (VermilionPhase.UNDERGROUND_TUNNEL, "underground_tunnel_snapshot"),
+            (
+                VermilionPhase.UNDERGROUND_NORTH_ENTRANCE,
+                "underground_north_entrance_snapshot",
+            ),
+            (VermilionPhase.ROUTE_5_REACHED, "route_5_snapshot"),
+            (VermilionPhase.TM28_OBTAINED, "tm28_snapshot"),
+            (
+                VermilionPhase.ROCKET_THIEF_BATTLE,
+                "rocket_thief_battle_snapshot",
+            ),
+            (VermilionPhase.ROBBERY_REAR_EXIT, "robbery_rear_exit_snapshot"),
+            (
+                VermilionPhase.TRASHED_HOUSE_ENTERED,
+                "trashed_house_snapshot",
+            ),
+            (VermilionPhase.MISTY_READY, "misty_ready_snapshot"),
+        )
+        for phase, snapshot_name in phase_snapshots:
+            candidate = replace(state, phase=phase)
+            if getattr(candidate, snapshot_name):
+                return candidate
+        return state
+
     def _local_script(self, map_id: int | None) -> int:
         address = {
             MapId.OAKS_LAB: RamAddress.OAKS_LAB_SCRIPT,
@@ -2752,6 +3267,7 @@ class PokemonRedStateReader:
             MapId.MT_MOON_B2F: RamAddress.MT_MOON_B2F_SCRIPT,
             MapId.CERULEAN_CITY: RamAddress.CERULEAN_CITY_SCRIPT,
             MapId.CERULEAN_GYM: RamAddress.CERULEAN_GYM_SCRIPT,
+            MapId.ROUTE_6: RamAddress.ROUTE_6_SCRIPT,
             MapId.ROUTE_24: RamAddress.ROUTE_24_SCRIPT,
             MapId.ROUTE_25: RamAddress.ROUTE_25_SCRIPT,
             MapId.BILLS_HOUSE: RamAddress.BILLS_HOUSE_SCRIPT,
@@ -2874,6 +3390,35 @@ def _cascade_prior_chapter_complete(
     )
 
 
+def _vermilion_prior_chapter_complete(
+    raw: RawGameState, items: set[int], badge_mirror: int
+) -> bool:
+    return (
+        _cascade_prior_chapter_complete(raw, items, badge_mirror)
+        and all(
+            _event(raw.event_flags, event)
+            for event in (
+                EventFlag.BEAT_CERULEAN_RIVAL,
+                EventFlag.GOT_NUGGET,
+                EventFlag.BEAT_ROUTE_24_ROCKET,
+                EventFlag.BILL_SAID_USE_CELL_SEPARATOR,
+                EventFlag.USED_CELL_SEPARATOR_ON_BILL,
+                EventFlag.MET_BILL,
+                EventFlag.MET_BILL_2,
+                EventFlag.GOT_SS_TICKET,
+                EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING,
+                EventFlag.BEAT_CERULEAN_GYM_TRAINER_0,
+                EventFlag.GOT_TM11,
+                EventFlag.BEAT_MISTY,
+            )
+        )
+        and ItemId.SS_TICKET in items
+        and ItemId.TM11_BUBBLEBEAM in items
+        and bool((raw.badge_bits or 0) & Badge.CASCADE)
+        and bool(badge_mirror & Badge.CASCADE)
+    )
+
+
 def event_flag_is_set(event_flags: bytes | None, bit_index: int) -> bool:
     if bit_index < 0:
         raise ValueError("event bit index cannot be negative")
@@ -2940,6 +3485,8 @@ def location_label(map_id: int | None) -> str | None:
         MapId.ROUTE_2: "route_2",
         MapId.ROUTE_3: "route_3",
         MapId.ROUTE_4: "route_4",
+        MapId.ROUTE_5: "route_5",
+        MapId.ROUTE_6: "route_6",
         MapId.ROUTE_24: "route_24",
         MapId.ROUTE_25: "route_25",
         MapId.REDS_HOUSE_1F: "reds_house_1f",
@@ -2956,10 +3503,14 @@ def location_label(map_id: int | None) -> str | None:
         MapId.MT_MOON_1F: "mt_moon_1f",
         MapId.MT_MOON_B1F: "mt_moon_b1f",
         MapId.MT_MOON_B2F: "mt_moon_b2f",
+        MapId.CERULEAN_TRASHED_HOUSE: "cerulean_trashed_house",
         MapId.CERULEAN_POKECENTER: "cerulean_pokecenter",
         MapId.CERULEAN_GYM: "cerulean_gym",
         MapId.MT_MOON_POKECENTER: "mt_moon_pokecenter",
+        MapId.UNDERGROUND_PATH_ROUTE_5: "underground_path_route_5",
+        MapId.UNDERGROUND_PATH_ROUTE_6: "underground_path_route_6",
         MapId.BILLS_HOUSE: "bills_house",
+        MapId.UNDERGROUND_PATH_NORTH_SOUTH: "underground_path_north_south",
         MapId.HALL_OF_FAME: "hall_of_fame",
         MapId.CHAMPIONS_ROOM: "champions_room",
         MapId.INDIGO_PLATEAU_LOBBY: "indigo_plateau_lobby",

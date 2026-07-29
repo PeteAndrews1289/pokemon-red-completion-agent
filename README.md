@@ -2,18 +2,19 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Misty qualified](https://img.shields.io/badge/status-Misty_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Vermilion qualified](https://img.shields.io/badge/status-Vermilion_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **58/58 qualified
-> checkpoints** from clean power-on, helps Bill, obtains the S.S. Ticket, defeats Misty, and
-> verifies the Cascade Badge and TM11. That establishes **9/36 completion objectives**. Three
-> clean runs produced the same 434,510-frame, 5,936-action result. This is an exact-route
+> **Current status:** one continuous deterministic teacher now reaches all **73/73 qualified
+> checkpoints** from clean power-on, defeats Misty and the Cerulean Rocket thief, traverses the
+> Underground Path, clears the required Route 6 trainers, and reaches stable Vermilion City.
+> That establishes **10/36 completion objectives**. Three clean runs produced the same
+> 501,922-frame, 7,242-action result. This is an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next objective is reaching Vermilion. See the
-> [sanitized three-run evidence receipt](docs/evidence/qualified-play-misty-2026-07-28.json).
+> game-completion claim. The next objective is obtaining HM01 Cut aboard the S.S. Anne. See the
+> [sanitized three-run evidence receipt](docs/evidence/qualified-play-vermilion-2026-07-28.json).
 
 ## The goal
 
@@ -146,15 +147,18 @@ without saving.
 
 `play` is the recommended continuous command. It uses one clean emulator session for the opening,
 the verified rival win, both Route 1 crossings, the parcel handoff, Viridian Forest, Brock, Route
-3, Mt. Moon, Cerulean City, Nugget Bridge, Bill, and Misty. It stops automatically after the
+3, Mt. Moon, Cerulean City, Nugget Bridge, Bill, Misty, Route 5, the Underground Path, Route 6,
+and Vermilion City. It stops automatically after the
 latest independently qualified objective and reports that the game is not complete. The forest
 segment deliberately trains against three verified Kakuna encounters and one mandatory Bug
 Catcher. Later gates require the declared trainer identities and event order, Bill's complete
 transformation and S.S. Ticket sequence, the mandatory Cerulean Gym trainer, Misty's live trainer
-identity, and concurrent Cascade Badge and TM11 evidence. The current exact route ends with a
-level-24, status-free Wartortle. Its adaptive rival and Misty move selection reacts to bounded
-battle state, but the three-run result evaluates one frozen teacher route and does not yet show
-held-out timing or RNG generalization.
+identity, the Cerulean Rocket thief and TM28, and both required lower Route 6 trainers. A bounded
+heal-and-replay recovery explicitly records and flees three exact Route 6 Pidgey encounters while
+proving unchanged PP and trainer events. The current exact route ends with a level-25,
+status-free Wartortle in Vermilion. Its adaptive battle selection reacts to bounded state, but the
+three-run result evaluates one frozen teacher route and does not yet show held-out timing or RNG
+generalization.
 
 The ROM, saves, snapshots, recordings, datasets, and model checkpoints are ignored and must remain
 outside Git. The visible window is not recorded or uploaded by the project. The supported revision

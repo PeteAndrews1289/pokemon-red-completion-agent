@@ -25,10 +25,10 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **58/58 bounded checkpoints** and **9/36 completion objectives**, ending
-after helping Bill, obtaining the S.S. Ticket, defeating the mandatory Cerulean Gym trainer and
-Misty, and verifying the Cascade Badge and TM11. Three clean runs reached the identical
-434,510-frame / 5,936-action boundary. This is an exact deterministic-teacher milestone, not a
+Current qualification: **73/73 bounded checkpoints** and **10/36 completion objectives**, ending
+after defeating Misty and the Cerulean Rocket thief, traversing the Underground Path, clearing the
+two required lower Route 6 trainers, and reaching stable Vermilion City. Three clean runs reached
+the identical 501,922-frame / 7,242-action boundary. This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
 - [x] Build the no-save PyBoy bridge and read-only state adapter from pinned symbols.
@@ -44,14 +44,17 @@ learned-policy, timing/RNG-generalization, or completion result.
 - [x] Qualify Route 3, Mt. Moon's required battles and fossil choice, and Cerulean City.
 - [x] Qualify the Cerulean rival, Nugget Bridge, selected Route 25 trainers, Bill, the mandatory
   Cerulean Gym trainer, and Misty.
+- [x] Qualify the Cerulean Rocket thief, Route 5, the Underground Path, the required lower Route 6
+  trainers, bounded wild-encounter recovery, and stable Vermilion arrival.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: reach Vermilion and qualify the S.S. Anne route. The qualified corridors and
+Next sequence: qualify the S.S. Anne route and obtain HM01 Cut. The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Misty three-run evidence receipt](evidence/qualified-play-misty-2026-07-28.json).
+[Vermilion three-run evidence receipt](evidence/qualified-play-vermilion-2026-07-28.json).
 
-Exit gate: three intervention-free clean-power-on runs defeat Misty with identical evidence rules.
+Exit gate: three intervention-free clean-power-on runs reach Vermilion with identical evidence
+rules.
 
 ## Milestone 2 — deterministic expert
 

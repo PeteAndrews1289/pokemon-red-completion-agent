@@ -20,6 +20,12 @@
   selected Route 25 trainers, Bill, the mandatory Cerulean Gym trainer, and Misty.
 - Qualified 58/58 semantic checkpoints and 9/36 completion objectives across three identical
   434,510-frame / 5,936-action clean runs, with Cascade Badge, TM11, and S.S. Ticket evidence.
+- Extended the same no-save session through the Cerulean Rocket thief, TM28, Route 5, the
+  Underground Path, both required lower Route 6 trainers, and stable Vermilion City.
+- Added bounded sleep recovery, a full-heal replay, and semantic RUN navigation that explicitly
+  verifies three exact Route 6 Pidgey encounters without changing PP or trainer events.
+- Qualified 73/73 semantic checkpoints and 10/36 completion objectives across three identical
+  501,922-frame / 7,242-action clean runs, with a sanitized v5 evidence receipt.
 - Added fail-closed rival, parcel, Pokédex, forest, Brock-identity, battle-readiness, badge, and
   TM34 and post-dialogue movement evidence gates plus an explicit bounded safe stop that cannot be
   mistaken for completion.

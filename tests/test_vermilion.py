@@ -1,0 +1,455 @@
+from __future__ import annotations
+
+from dataclasses import replace
+from types import SimpleNamespace
+
+import pytest
+
+import pokemon_red_completion.vermilion as vermilion
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.observation import (
+    CERULEAN_ROCKET_TRAINER_NUMBER,
+    ROCKET_OPPONENT_ID,
+    ROCKET_TRAINER_CLASS_ID,
+    ROUTE_6_JR_TRAINER_F_CLASS_ID,
+    ROUTE_6_JR_TRAINER_F_NUMBER,
+    ROUTE_6_JR_TRAINER_F_OPPONENT_ID,
+    ROUTE_6_JR_TRAINER_M_CLASS_ID,
+    ROUTE_6_JR_TRAINER_M_NUMBER,
+    ROUTE_6_JR_TRAINER_M_OPPONENT_ID,
+    WARTORTLE_SPECIES_ID,
+    BattleMenuPhase,
+    BattleMenuState,
+    InputReadiness,
+    MapId,
+    RawGameState,
+    VermilionPhase,
+    VermilionState,
+)
+
+READY = InputReadiness(0, 0, 0, 0, 0, 0)
+NO_TRAINERS = (False, False, False, False, False, False)
+
+
+def _evidence(**changes: object) -> VermilionState:
+    base = VermilionState(
+        phase=VermilionPhase.MISTY_READY,
+        controls=READY,
+        local_script=0,
+        current_map_script=0,
+        prior_chapter_complete=True,
+        beat_rocket_thief=False,
+        tm28_in_bag=False,
+        route_6_trainer_events=NO_TRAINERS,
+        current_opponent=0,
+        trainer_class=0,
+        trainer_number=0,
+        engaged_trainer_class=0,
+        engaged_trainer_set=0,
+        map_id=MapId.CERULEAN_GYM,
+        player_x=5,
+        player_y=2,
+        party_count=1,
+        party_species_ids=(WARTORTLE_SPECIES_ID,),
+        first_party_hp=4,
+        first_party_max_hp=66,
+        first_party_status=0,
+        battle_state=0,
+        battle_result=0,
+    )
+    return replace(base, **changes)
+
+
+def _ordered_evidence() -> tuple[VermilionState, ...]:
+    persistent = {"beat_rocket_thief": True, "tm28_in_bag": True}
+    return (
+        _evidence(),
+        _evidence(
+            phase=VermilionPhase.TRASHED_HOUSE_ENTERED,
+            map_id=MapId.CERULEAN_TRASHED_HOUSE,
+            player_x=2,
+            player_y=7,
+        ),
+        _evidence(
+            phase=VermilionPhase.ROBBERY_REAR_EXIT,
+            map_id=MapId.CERULEAN_CITY,
+            player_x=27,
+            player_y=9,
+        ),
+        _evidence(
+            phase=VermilionPhase.ROCKET_THIEF_BATTLE,
+            map_id=MapId.CERULEAN_CITY,
+            player_x=30,
+            player_y=9,
+            local_script=4,
+            battle_state=2,
+            current_opponent=ROCKET_OPPONENT_ID,
+            trainer_class=ROCKET_TRAINER_CLASS_ID,
+            trainer_number=CERULEAN_ROCKET_TRAINER_NUMBER,
+            engaged_trainer_class=ROCKET_OPPONENT_ID,
+            engaged_trainer_set=CERULEAN_ROCKET_TRAINER_NUMBER,
+        ),
+        _evidence(
+            phase=VermilionPhase.TM28_OBTAINED,
+            map_id=MapId.CERULEAN_CITY,
+            player_x=30,
+            player_y=9,
+            **persistent,
+        ),
+        _evidence(
+            phase=VermilionPhase.ROUTE_5_REACHED,
+            map_id=MapId.ROUTE_5,
+            player_x=3,
+            player_y=0,
+            **persistent,
+        ),
+        _evidence(
+            phase=VermilionPhase.UNDERGROUND_NORTH_ENTRANCE,
+            map_id=MapId.UNDERGROUND_PATH_ROUTE_5,
+            player_x=3,
+            player_y=7,
+            **persistent,
+        ),
+        _evidence(
+            phase=VermilionPhase.UNDERGROUND_TUNNEL,
+            map_id=MapId.UNDERGROUND_PATH_NORTH_SOUTH,
+            player_x=5,
+            player_y=4,
+            **persistent,
+        ),
+        _evidence(
+            phase=VermilionPhase.UNDERGROUND_SOUTH_ENTRANCE,
+            map_id=MapId.UNDERGROUND_PATH_ROUTE_6,
+            player_x=4,
+            player_y=4,
+            **persistent,
+        ),
+        _evidence(
+            phase=VermilionPhase.ROUTE_6_REACHED,
+            map_id=MapId.ROUTE_6,
+            player_x=17,
+            player_y=14,
+            **persistent,
+        ),
+        _evidence(
+            phase=VermilionPhase.ROUTE_6_TRAINER_F_BATTLE,
+            map_id=MapId.ROUTE_6,
+            player_x=9,
+            player_y=30,
+            local_script=2,
+            current_map_script=2,
+            battle_state=2,
+            current_opponent=ROUTE_6_JR_TRAINER_F_OPPONENT_ID,
+            trainer_class=ROUTE_6_JR_TRAINER_F_CLASS_ID,
+            trainer_number=ROUTE_6_JR_TRAINER_F_NUMBER,
+            engaged_trainer_class=ROUTE_6_JR_TRAINER_F_OPPONENT_ID,
+            engaged_trainer_set=ROUTE_6_JR_TRAINER_F_NUMBER,
+            **persistent,
+        ),
+        _evidence(
+            phase=VermilionPhase.ROUTE_6_TRAINER_F_DEFEATED,
+            map_id=MapId.ROUTE_6,
+            player_x=9,
+            player_y=30,
+            route_6_trainer_events=(False, False, False, False, True, False),
+            **persistent,
+        ),
+        _evidence(
+            phase=VermilionPhase.ROUTE_6_TRAINER_M_BATTLE,
+            map_id=MapId.ROUTE_6,
+            player_x=9,
+            player_y=31,
+            local_script=2,
+            current_map_script=2,
+            battle_state=2,
+            route_6_trainer_events=(False, False, False, False, True, False),
+            current_opponent=ROUTE_6_JR_TRAINER_M_OPPONENT_ID,
+            trainer_class=ROUTE_6_JR_TRAINER_M_CLASS_ID,
+            trainer_number=ROUTE_6_JR_TRAINER_M_NUMBER,
+            engaged_trainer_class=ROUTE_6_JR_TRAINER_M_OPPONENT_ID,
+            engaged_trainer_set=ROUTE_6_JR_TRAINER_M_NUMBER,
+            **persistent,
+        ),
+        _evidence(
+            phase=VermilionPhase.ROUTE_6_TRAINER_M_DEFEATED,
+            map_id=MapId.ROUTE_6,
+            player_x=9,
+            player_y=31,
+            route_6_trainer_events=(False, False, False, True, True, False),
+            **persistent,
+        ),
+        _evidence(
+            phase=VermilionPhase.VERMILION_REACHED,
+            map_id=MapId.VERMILION_CITY,
+            player_x=19,
+            player_y=0,
+            first_party_hp=14,
+            route_6_trainer_events=(False, False, False, True, True, False),
+            **persistent,
+        ),
+    )
+
+
+def _raw(state: VermilionState) -> RawGameState:
+    return RawGameState(
+        game_started=True,
+        map_id=state.map_id,
+        player_x=state.player_x,
+        player_y=state.player_y,
+        party_count=state.party_count,
+        battle_state=state.battle_state,
+        party_species_ids=state.party_species_ids,
+        first_party_hp=state.first_party_hp,
+        first_party_max_hp=state.first_party_max_hp,
+        first_party_status=state.first_party_status,
+        battle_result=state.battle_result,
+    )
+
+
+class ScriptedReader:
+    def __init__(self, states: tuple[VermilionState, ...]) -> None:
+        self.states = states
+        self.index = 0
+
+    def read(self) -> RawGameState:
+        return _raw(self.states[min(self.index, len(self.states) - 1)])
+
+    def read_cascade_state(self, raw: RawGameState) -> object:
+        return SimpleNamespace(misty_victory_snapshot=True)
+
+    def read_vermilion_state(self, raw: RawGameState) -> VermilionState:
+        state = self.states[self.index]
+        self.index += 1
+        return state
+
+
+class FakeEmulator:
+    frame_count = 123
+    pressed_buttons = frozenset()
+
+
+class FakeExecutor:
+    def execute(self, action: object) -> object:
+        return action
+
+
+def test_runner_records_all_fifteen_ordered_semantic_boundaries(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    reader = ScriptedReader(_ordered_evidence())
+    progress: list[vermilion.VermilionProgress] = []
+    monkeypatch.setattr(vermilion, "_move", lambda *args, **kwargs: reader.read())
+    monkeypatch.setattr(vermilion, "_wait", lambda *args, **kwargs: None)
+    monkeypatch.setattr(vermilion, "_heal", lambda *args, **kwargs: None)
+    monkeypatch.setattr(
+        vermilion,
+        "_enter_trainer_battle",
+        lambda *args, **kwargs: reader.read(),
+    )
+    monkeypatch.setattr(vermilion, "_battle", lambda *args, **kwargs: reader.read())
+    monkeypatch.setattr(
+        vermilion,
+        "_backtrack_heal_and_replay",
+        lambda *args, **kwargs: tuple(
+            vermilion.Route6WildFleeEvidence(
+                initial_battle_state=1,
+                final_battle_state=0,
+                map_id=MapId.ROUTE_6,
+                player_x=x,
+                player_y=y,
+                enemy_species_id=species,
+                initial_pp=(24, 30, 30, 22),
+                final_pp=(24, 30, 30, 22),
+                final_hp=66,
+                final_status=0,
+                trainer_events=(False, False, False, False, True, False),
+                control_ready=True,
+            )
+            for x, y, species in vermilion.QUALIFIED_ROUTE_6_WILDS
+        ),
+    )
+    monkeypatch.setattr(
+        vermilion,
+        "_confirm_pulses",
+        lambda *args, **kwargs: None,
+    )
+    observed_events: list[tuple[bool, ...]] = []
+    monkeypatch.setattr(
+        vermilion,
+        "_require_route_6_events",
+        lambda _reader, expected, _label: observed_events.append(expected),
+    )
+
+    report = vermilion.run_vermilion_chapter(
+        FakeEmulator(),
+        reader,  # type: ignore[arg-type]
+        FakeExecutor(),
+        progress=progress.append,
+    )
+
+    assert report.passed
+    assert len(report.records) == vermilion.VERMILION_CHECKPOINT_COUNT == 15
+    assert [record.evidence.phase for record in report.records] == [
+        state.phase for state in _ordered_evidence()
+    ]
+    assert [item.completed for item in progress] == list(range(1, 16))
+    assert observed_events == [
+        (False, False, False, False, True, False),
+        (False, False, False, True, True, False),
+    ]
+    assert report.final_raw.map_id == MapId.VERMILION_CITY
+    assert (report.final_raw.player_x, report.final_raw.player_y) == (19, 0)
+
+
+def test_live_route_constants_preserve_the_qualified_corridors() -> None:
+    assert vermilion._directions(
+        "R" * 3 + "D" * 9 + "R" * 3 + "D" * 13 + "L" * 23 + "D" * 5
+    ) == vermilion.ROCKET_TO_ROUTE_5_DIRECTIONS
+    assert vermilion._directions(
+        "D" * 27 + "R" * 12 + "D" + "R" * 2 + "U"
+    ) == vermilion.ROUTE_5_TO_UNDERGROUND_DIRECTIONS
+    assert vermilion._directions(
+        "D" * 37 + "L" * 3
+    ) == vermilion.UNDERGROUND_TUNNEL_DIRECTIONS
+    assert vermilion._directions(
+        "L" * 2 + "D" * 15 + "L" * 7 + "R" + "D"
+    ) == vermilion.ROUTE_6_TO_FIRST_TRAINER_DIRECTIONS
+    assert (
+        vermilion._directions("D" * 5)
+        == vermilion.VERMILION_ENTRY_DIRECTIONS
+    )
+
+
+def test_rocket_policy_uses_water_gun_after_the_sleep_bound() -> None:
+    machop = RawGameState(
+        True,
+        MapId.CERULEAN_CITY,
+        30,
+        9,
+        1,
+        2,
+        enemy_species_id=0x6A,
+        enemy_hp=53,
+    )
+    drowzee = replace(machop, enemy_species_id=0x30, enemy_hp=50)
+
+    assert vermilion._choose_rocket_move(machop) == 4
+    assert vermilion._choose_rocket_move(drowzee) == 1
+    assert vermilion._choose_rocket_move(replace(drowzee, enemy_hp=11)) == 4
+
+
+class WildFleeSimulation:
+    def __init__(self, *, mutate_pp: bool = False) -> None:
+        self.battle_state = 1
+        self.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        self.pp = (25, 30, 30, 25)
+        self.mutate_pp = mutate_pp
+        self.actions: list[MacroAction] = []
+
+    def read(self) -> RawGameState:
+        return RawGameState(
+            game_started=True,
+            map_id=MapId.ROUTE_6,
+            player_x=15,
+            player_y=19,
+            party_count=1,
+            battle_state=self.battle_state,
+            first_party_hp=66,
+            first_party_max_hp=66,
+            first_party_status=0,
+            first_party_pp=self.pp,
+            enemy_species_id=0x24 if self.battle_state else None,
+            enemy_hp=20 if self.battle_state else None,
+        )
+
+    def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+        return self.menu
+
+    def read_input_readiness(self) -> InputReadiness:
+        return READY if self.battle_state == 0 else replace(READY, joy_ignore=1)
+
+    def read_vermilion_state(self, raw: RawGameState) -> VermilionState:
+        return _evidence(
+            map_id=MapId.ROUTE_6,
+            player_x=15,
+            player_y=19,
+            route_6_trainer_events=(
+                False,
+                False,
+                False,
+                False,
+                True,
+                False,
+            ),
+        )
+
+    def execute(self, action: MacroAction) -> object:
+        self.actions.append(action)
+        kind = action.kind
+        value = action.value
+        if kind is MacroActionKind.CONFIRM and self.menu.phase is BattleMenuPhase.UNKNOWN:
+            self.menu = BattleMenuState(
+                BattleMenuPhase.MAIN,
+                selected_main_command=0,
+            )
+        elif kind is MacroActionKind.MOVE and value == "right":
+            self.menu = BattleMenuState(
+                BattleMenuPhase.MAIN,
+                selected_main_command=2,
+            )
+        elif kind is MacroActionKind.MOVE and value == "down":
+            self.menu = BattleMenuState(
+                BattleMenuPhase.MAIN,
+                selected_main_command=3,
+            )
+        elif (
+            kind is MacroActionKind.CONFIRM
+            and self.menu.selected_main_command == 3
+        ):
+            self.battle_state = 0
+            if self.mutate_pp:
+                self.pp = (25, 29, 30, 25)
+            self.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        return action
+
+
+def test_wild_flee_navigates_observed_run_menu_and_proves_resources() -> None:
+    simulation = WildFleeSimulation()
+    encounter = simulation.read()
+
+    evidence = vermilion._flee_qualified_route_6_wild(
+        vermilion._CountingExecutor(simulation),
+        simulation,  # type: ignore[arg-type]
+        vermilion.DEFAULT_VERMILION_TIMING,
+        encounter,
+    )
+
+    moves = [
+        action.value
+        for action in simulation.actions
+        if action.kind is MacroActionKind.MOVE
+    ]
+    assert moves == ["right", "down"]
+    assert evidence.qualified_step_7_pidgey
+    assert evidence.initial_pp == evidence.final_pp == (25, 30, 30, 25)
+    assert evidence.control_ready
+
+
+def test_wild_flee_rejects_any_pp_change() -> None:
+    simulation = WildFleeSimulation(mutate_pp=True)
+
+    with pytest.raises(
+        vermilion.VermilionChapterError,
+        match="post-RUN semantic evidence",
+    ):
+        vermilion._flee_qualified_route_6_wild(
+            vermilion._CountingExecutor(simulation),
+            simulation,  # type: ignore[arg-type]
+            vermilion.DEFAULT_VERMILION_TIMING,
+            simulation.read(),
+        )
+
+
+def test_vermilion_timing_rejects_nonpositive_bounds() -> None:
+    with pytest.raises(ValueError, match="movement_retries"):
+        vermilion.VermilionTiming(movement_retries=0)

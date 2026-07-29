@@ -212,12 +212,95 @@ class AdaptiveRivalSimulation(FakeRuntime):
             )
 
 
+class SleepRecoverySimulation(FakeRuntime):
+    def __init__(self) -> None:
+        super().__init__()
+        self.sleep_started = False
+
+    def execute(self, action: MacroAction) -> None:
+        self.actions.append(action)
+        if action.kind is MacroActionKind.WAIT:
+            return
+        if action.kind is MacroActionKind.CANCEL:
+            assert self.menu.phase is BattleMenuPhase.MOVE
+            self.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+            return
+        if action.kind is not MacroActionKind.CONFIRM:
+            raise AssertionError(f"unsupported sleep simulation action {action.kind}")
+        if self.raw.battle_state == 0:
+            self.controls = READY
+            return
+        if self.menu.phase is BattleMenuPhase.MAIN:
+            if not self.sleep_started:
+                self.sleep_started = True
+                self.raw = replace(self.raw, first_party_status=4)
+                self.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+            else:
+                self.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+            return
+        if self.menu.phase is BattleMenuPhase.UNKNOWN:
+            count = (self.raw.first_party_status or 0) & 0x07
+            next_count = 1 if count == 4 else 0
+            self.raw = replace(self.raw, first_party_status=next_count)
+            if next_count == 0:
+                self.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+            return
+        pp = list(self.raw.first_party_pp or ())
+        pp[0] -= 1
+        self.raw = replace(self.raw, first_party_pp=tuple(pp), battle_state=0, enemy_hp=0)
+        self.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+
+class OffSlotSleepPPSimulation(SleepRecoverySimulation):
+    def execute(self, action: MacroAction) -> None:
+        recovering = (
+            action.kind is MacroActionKind.CONFIRM
+            and self.menu.phase is BattleMenuPhase.UNKNOWN
+            and bool((self.raw.first_party_status or 0) & 0x07)
+        )
+        super().execute(action)
+        if recovering:
+            pp = list(self.raw.first_party_pp or ())
+            pp[3] -= 1
+            self.raw = replace(self.raw, first_party_pp=tuple(pp))
+
+
 def _non_wait_actions(runtime: FakeRuntime) -> list[MacroAction]:
     return [
         action
         for action in runtime.actions
         if action.kind is not MacroActionKind.WAIT
     ]
+
+
+def test_adaptive_controller_recovers_a_decreasing_sleep_counter() -> None:
+    runtime = SleepRecoverySimulation()
+
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        lambda raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
+        timing=BattleRuntimeTiming(max_move_menu_transition_pulses=1),
+    )
+
+    assert final.battle_state == 0
+    assert final.first_party_status == 0
+    assert final.first_party_pp == (34, 30, 30, 11)
+    assert MacroAction(MacroActionKind.CANCEL) in runtime.actions
+
+
+def test_sleep_recovery_rejects_an_off_slot_pp_decrement() -> None:
+    runtime = OffSlotSleepPPSimulation()
+
+    with pytest.raises(BattleRuntimeError, match="off-slot PP"):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda raw: 1,
+            expected_map=MapId.CERULEAN_CITY,
+            timing=BattleRuntimeTiming(max_move_menu_transition_pulses=1),
+        )
 
 
 def test_adaptive_controller_rechecks_species_and_switches_water_gun_to_tackle() -> None:
@@ -742,27 +825,55 @@ def test_invalid_semantic_menu_fails_closed(menu: BattleMenuState) -> None:
     assert runtime.actions == []
 
 
-def test_unexpected_valid_move_menu_fails_without_policy_guessing() -> None:
+def test_unlatched_move_menu_is_cancelled_before_policy_or_pp_change() -> None:
     runtime = FakeRuntime(
         menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
     )
-    policy_calls = 0
+    policy_observations: list[tuple[BattleMenuPhase, tuple[int, ...] | None]] = []
 
-    def policy(_raw: RawGameState) -> int:
-        nonlocal policy_calls
-        policy_calls += 1
+    def on_action(action: MacroAction) -> None:
+        if action.kind is MacroActionKind.WAIT:
+            return
+        if action.kind is MacroActionKind.CANCEL:
+            runtime.menu = BattleMenuState(
+                BattleMenuPhase.MAIN,
+                selected_main_command=0,
+            )
+            return
+        if runtime.menu.phase is BattleMenuPhase.MAIN:
+            runtime.menu = BattleMenuState(
+                BattleMenuPhase.MOVE,
+                selected_move_slot=1,
+            )
+            return
+        pp = list(runtime.raw.first_party_pp or ())
+        pp[0] -= 1
+        runtime.raw = replace(
+            runtime.raw,
+            battle_state=0,
+            enemy_hp=0,
+            first_party_pp=tuple(pp),
+        )
+        runtime.controls = READY
+
+    runtime.on_action = on_action
+
+    def policy(raw: RawGameState) -> int:
+        policy_observations.append((runtime.menu.phase, raw.first_party_pp))
         return 1
 
-    with pytest.raises(BattleRuntimeError, match="unexpected move menu"):
-        run_adaptive_trainer_battle(
-            runtime,
-            runtime,
-            policy,
-            expected_map=MapId.CERULEAN_CITY,
-        )
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        policy,
+        expected_map=MapId.CERULEAN_CITY,
+    )
 
-    assert policy_calls == 0
-    assert runtime.actions == []
+    assert final.battle_state == 0
+    assert policy_observations == [(BattleMenuPhase.MAIN, (35, 30, 30, 11))]
+    non_wait = _non_wait_actions(runtime)
+    assert non_wait[0] == MacroAction(MacroActionKind.CANCEL)
+    assert final.first_party_pp == (34, 30, 30, 11)
 
 
 def test_unknown_menu_is_bounded_dialogue_not_unbounded_button_spam() -> None:
