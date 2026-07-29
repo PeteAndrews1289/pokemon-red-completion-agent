@@ -102,6 +102,7 @@ class RamAddress(IntEnum):
     BILLS_HOUSE_SCRIPT = 0xD661
     VERMILION_CITY_SCRIPT = 0xD62A
     SS_ANNE_2F_SCRIPT = 0xD665
+    STATUS_FLAGS_1 = 0xD728
     BEAT_GYM_FLAGS = 0xD72A
     STATUS_FLAGS_5 = 0xD730
     STATUS_FLAGS_6 = 0xD732
@@ -196,6 +197,14 @@ class MapId(IntEnum):
     CELADON_POKECENTER = 0x85
     CELADON_GYM = 0x86
     GAME_CORNER = 0x87
+    CELADON_MART_1F = 0x7A
+    CELADON_MART_2F = 0x7B
+    CELADON_MART_3F = 0x7C
+    CELADON_MART_4F = 0x7D
+    CELADON_MART_ROOF = 0x7E
+    CELADON_MART_5F = 0x88
+    ROUTE_7_GATE = 0x4C
+    SAFFRON_POKECENTER = 0xB6
     ROUTE_15_GATE_1F = 0xB8
     ROCKET_HIDEOUT_B1F = 0xC7
     ROCKET_HIDEOUT_B2F = 0xC8
@@ -453,6 +462,9 @@ class ItemId(IntEnum):
     TM24_THUNDERBOLT = 0xE0
     TM28_DIG = 0xE4
     TM34_BIDE = 0xEA
+    FRESH_WATER = 0x3C
+    SODA_POP = 0x3D
+    LEMONADE = 0x3E
 
 
 class Badge(IntFlag):
@@ -3950,6 +3962,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.CINNABAR_ISLAND: "cinnabar_island",
         MapId.INDIGO_PLATEAU: "indigo_plateau",
         MapId.SAFFRON_CITY: "saffron_city",
+        MapId.SAFFRON_POKECENTER: "saffron_pokecenter",
         MapId.ROUTE_1: "route_1",
         MapId.ROUTE_2: "route_2",
         MapId.ROUTE_3: "route_3",
@@ -4043,6 +4056,7 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         MapId.FUCHSIA_GYM: "location:fuchsia_city",
         MapId.CINNABAR_ISLAND: "location:cinnabar_island",
         MapId.SAFFRON_CITY: "location:saffron_city",
+        MapId.SAFFRON_POKECENTER: "location:saffron_city",
     }
     if raw.map_id in map_facts:
         facts.add(map_facts[MapId(raw.map_id)])

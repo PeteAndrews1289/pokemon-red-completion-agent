@@ -2,12 +2,12 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Rainbow qualified](https://img.shields.io/badge/status-Rainbow_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Saffron qualified](https://img.shields.io/badge/status-Saffron_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **227/227 qualified
+> **Current status:** one continuous deterministic teacher now reaches all **235/235 qualified
 > checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
 > Tunnel, clears the Rocket Hideout and Pokémon Tower, rescues Mr. Fuji, receives the Poké Flute,
 > defeats the Route 12 Snorlax, crosses Routes 12–15, collects the Gold Teeth, obtains reusable
@@ -15,12 +15,13 @@ control, and progressively trained specialists.**
 > three mandatory Fuchsia Gym trainers and Koga, retains the Soul Badge and TM06, returns the Gold
 > Teeth, receives reusable HM04, teaches Strength over Tail Whip, returns east across Routes
 > 15–12, defeats the two required Celadon Gym trainers and Erika, receives the Rainbow Badge and
-> TM21, and learns Skull Bash over Bite at level 42. That establishes **22/36 completion
-> objectives**. Three clean runs produced the same 2,222,506-frame, 25,472-action
+> TM21, learns Skull Bash over Bite at level 42, buys one Fresh Water from the Celadon roof,
+> gives it to the Route 7 guard, and reaches a healed Saffron boundary. That establishes **23/36
+> completion objectives**. Three clean runs produced the same 2,284,226-frame, 26,012-action
 > result. This is an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next graph-selected objective is reaching Saffron. See the
-> [sanitized three-run Erika evidence receipt](docs/evidence/qualified-play-erika-2026-07-29.json).
+> game-completion claim. The next graph-selected objective is liberating Silph Co. See the
+> [sanitized three-run Saffron evidence receipt](docs/evidence/qualified-play-saffron-2026-07-29.json).
 
 ## The goal
 
@@ -161,6 +162,9 @@ Pokémon Tower, calms Marowak, rescues Mr. Fuji, receives the Poké Flute, and h
 Center. It then wakes and defeats the level-30 Route 12 Snorlax, clears the four mandatory
 Route 12/13 trainers, bypasses every other Route 12–15 trainer and progression pickup, and heals
 the complete party in Fuchsia Center.
+It then returns to Celadon, defeats Erika, buys exactly one Fresh Water on the Department Store
+roof, proves the guard consumes it before the global Saffron-access flag is set, crosses the
+Route 7 gate without battle, and heals in Saffron Center.
 It stops automatically after the
 latest independently qualified objective and reports that the game is not complete. The forest
 segment deliberately trains against three verified Kakuna encounters and one mandatory Bug

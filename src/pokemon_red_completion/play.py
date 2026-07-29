@@ -109,6 +109,13 @@ from pokemon_red_completion.safari import (
     SafariProgress,
     run_safari_chapter,
 )
+from pokemon_red_completion.saffron import (
+    SAFFRON_CHECKPOINT_COUNT,
+    SaffronChapterError,
+    SaffronChapterReport,
+    SaffronProgress,
+    run_saffron_chapter,
+)
 from pokemon_red_completion.ss_anne import (
     SS_ANNE_CHECKPOINT_COUNT,
     SSAnneChapterError,
@@ -163,8 +170,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + KOGA_CHECKPOINT_COUNT
     + STRENGTH_CHECKPOINT_COUNT
     + ERIKA_CHECKPOINT_COUNT
+    + SAFFRON_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "defeat_erika"
+QUALIFIED_THROUGH_OBJECTIVE = "reach_saffron"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -304,6 +312,7 @@ class QualifiedPlayReport:
     koga: KogaChapterReport
     strength: StrengthChapterReport
     erika: ErikaChapterReport
+    saffron: SaffronChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -340,6 +349,7 @@ class QualifiedPlayReport:
             and self.koga.passed
             and self.strength.passed
             and self.erika.passed
+            and self.saffron.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -392,10 +402,11 @@ class QualifiedPlayReport:
             *self.koga.checkpoints(),
             *self.strength.checkpoints(),
             *self.erika.checkpoints(),
+            *self.saffron.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v16",
+            "schema": "qualified-play-v17",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -456,6 +467,7 @@ class QualifiedPlayReport:
             "koga_chapter": self.koga.public_dict(),
             "strength_chapter": self.strength.public_dict(),
             "erika_chapter": self.erika.public_dict(),
+            "saffron_chapter": self.saffron.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -775,6 +787,16 @@ def run_qualified_play(
         except ErikaChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            saffron = run_saffron_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_saffron_progress_bridge(progress),
+            )
+        except SaffronChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -793,11 +815,12 @@ def run_qualified_play(
             | semantic_facts(koga.final_raw)
             | semantic_facts(strength.final_raw)
             | semantic_facts(erika.final_raw)
+            | semantic_facts(saffron.final_raw)
         )
         state = GameState(
-            mode=game_mode(erika.final_raw),
+            mode=game_mode(saffron.final_raw),
             facts=facts,
-            location=location_label(erika.final_raw.map_id),
+            location=location_label(saffron.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -832,6 +855,7 @@ def run_qualified_play(
             koga=koga,
             strength=strength,
             erika=erika,
+            saffron=saffron,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -1392,6 +1416,44 @@ def _erika_progress_bridge(
                     + SAFARI_CHECKPOINT_COUNT
                     + KOGA_CHECKPOINT_COUNT
                     + STRENGTH_CHECKPOINT_COUNT
+                    + progress.completed
+                ),
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _saffron_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[SaffronProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: SaffronProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=(
+                    POKEDEX_CHECKPOINT_COUNT
+                    + PEWTER_CHECKPOINT_COUNT
+                    + CERULEAN_CHECKPOINT_COUNT
+                    + CASCADE_CHECKPOINT_COUNT
+                    + VERMILION_CHECKPOINT_COUNT
+                    + SS_ANNE_CHECKPOINT_COUNT
+                    + SURGE_CHECKPOINT_COUNT
+                    + LAVENDER_CHECKPOINT_COUNT
+                    + CELADON_CHECKPOINT_COUNT
+                    + HIDEOUT_CHECKPOINT_COUNT
+                    + TOWER_CHECKPOINT_COUNT
+                    + FUCHSIA_CHECKPOINT_COUNT
+                    + SAFARI_CHECKPOINT_COUNT
+                    + KOGA_CHECKPOINT_COUNT
+                    + STRENGTH_CHECKPOINT_COUNT
+                    + ERIKA_CHECKPOINT_COUNT
                     + progress.completed
                 ),
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,

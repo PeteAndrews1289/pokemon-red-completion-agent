@@ -790,6 +790,30 @@ class _ErikaEvidence:
         return {"status": "ok", "objective": "defeat_erika"}
 
 
+class _SaffronEvidence:
+    passed = True
+    final_raw = replace(_ErikaEvidence.final_raw, map_id=MapId.SAFFRON_POKECENTER)
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "saffron_ready",
+            "roof_reached",
+            "water_bought",
+            "gate_reached",
+            "drink_consumed",
+            "guards_bribed",
+            "saffron_entered",
+            "saffron_stable",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "reach_saffron"}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -863,16 +887,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 227
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 235
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=227,
+        completed=235,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 227
+    assert progress.completed == progress.total == 235
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -973,6 +997,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         koga=_KogaEvidence(),  # type: ignore[arg-type]
             strength=_StrengthEvidence(),  # type: ignore[arg-type]
             erika=_ErikaEvidence(),  # type: ignore[arg-type]
+            saffron=_SaffronEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -1001,6 +1026,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "move:strength_available",
                     "badge:soul",
                     "badge:rainbow",
+                    "location:saffron_city",
             }
         ),
         verified_objectives=(
@@ -1026,8 +1052,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "obtain_strength",
                 "defeat_koga",
                 "defeat_erika",
+                "reach_saffron",
             ),
-            next_objective="reach_saffron",
+            next_objective="liberate_silph",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -1037,9 +1064,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v16"
+    assert public["schema"] == "qualified-play-v17"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "defeat_erika"
+    assert public["qualified_through"] == "reach_saffron"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -1270,9 +1297,17 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "erika_defeated",
         "rainbow_received",
         "erika_stable",
+        "saffron_ready",
+        "roof_reached",
+        "water_bought",
+        "gate_reached",
+        "drink_consumed",
+        "guards_bribed",
+        "saffron_entered",
+        "saffron_stable",
     ]
     assert public["objective_progress"] == {
-        "verified": 22,
+        "verified": 23,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1297,8 +1332,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "obtain_strength",
             "defeat_koga",
             "defeat_erika",
+            "reach_saffron",
         ],
-        "next": "reach_saffron",
+        "next": "liberate_silph",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -1430,7 +1466,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_reaches_fuchsia_without_adjacent_artifacts() -> None:
+def test_private_rom_reaches_saffron_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -1463,12 +1499,14 @@ def test_private_rom_reaches_fuchsia_without_adjacent_artifacts() -> None:
         "rescue_fuji",
         "reach_fuchsia",
         "obtain_surf",
+        "defeat_erika",
         "obtain_strength",
+        "reach_saffron",
         "defeat_koga",
     )
-    assert report.next_objective == "defeat_erika"
-    assert report.frames_executed == 1_875_968
-    assert report.actions_executed == 22_779
+    assert report.next_objective == "liberate_silph"
+    assert report.frames_executed == 2_284_226
+    assert report.actions_executed == 26_012
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -1677,4 +1715,24 @@ def test_private_rom_reaches_fuchsia_without_adjacent_artifacts() -> None:
     assert report.strength.pp_after == (25, 15, 20, 15)
     assert report.strength.party_hp == report.strength.party_max_hp == (124, 52, 37)
     assert report.strength.party_status == (0, 0, 0)
+    assert report.erika.passed
+    assert report.saffron.passed
+    assert report.saffron.money_before == 41_545
+    assert report.saffron.money_after_purchase == report.saffron.money_after == 41_345
+    assert (
+        report.saffron.fresh_water_before,
+        report.saffron.fresh_water_after_purchase,
+        report.saffron.fresh_water_after_guard,
+    ) == (0, 1, 0)
+    assert (
+        report.saffron.guard_flag_before,
+        report.saffron.guard_flag_after_consumption,
+        report.saffron.guard_flag_after_dialogue,
+    ) == (0, 0, 64)
+    assert report.saffron.battle_free
+    assert report.saffron.final_raw.map_id == MapId.SAFFRON_POKECENTER
+    assert (
+        report.saffron.final_raw.player_x,
+        report.saffron.final_raw.player_y,
+    ) == (3, 3)
     assert before == after
