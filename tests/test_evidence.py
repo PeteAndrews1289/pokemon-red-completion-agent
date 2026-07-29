@@ -28,36 +28,21 @@ OPENING_SOURCE_COMMIT = "898f015e297aae4f5d1ae3d200285e58f182d306"
 POKEDEX_SOURCE_COMMIT = "f6feaab2e4864b27efacfe319eb7ac53b50707a4"
 BROCK_SOURCE_COMMIT = "4af043f400754d473f8e9cf3779065afff4dff67"
 CERULEAN_SOURCE_COMMIT = "30c58d555a5031cf50775943c21ad31c2239eb1a"
-MISTY_RUNTIME_SNAPSHOT_SHA256 = (
-    "4b7490b5d7cb4e3cc020306da54e9fe85819ebf0209b2277068a7dc4f0a854d3"
-)
-MISTY_CONFIGURATION_SHA256 = (
-    "126faded5ef92cb564a22a500d5b2c1ceb808bfeba28a69673c1c449e9932ebb"
-)
+MISTY_RUNTIME_SNAPSHOT_SHA256 = "4b7490b5d7cb4e3cc020306da54e9fe85819ebf0209b2277068a7dc4f0a854d3"
+MISTY_CONFIGURATION_SHA256 = "126faded5ef92cb564a22a500d5b2c1ceb808bfeba28a69673c1c449e9932ebb"
 VERMILION_RUNTIME_SNAPSHOT_SHA256 = (
     "9dd1a77cfb83097d16dbf5406ee8a79340aa47e0d3907283b12aa2c0015894c8"
 )
-VERMILION_CONFIGURATION_SHA256 = (
-    "f00e1754db9da55d2ed7cab85ffa991da648b6209d9ba36d77a182e047632006"
-)
+VERMILION_CONFIGURATION_SHA256 = "f00e1754db9da55d2ed7cab85ffa991da648b6209d9ba36d77a182e047632006"
 BOOTSTRAP_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "bootstrap-smoke-2026-07-28.json"
 OPENING_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "opening-squirtle-2026-07-28.json"
-POKEDEX_RECEIPT = (
-    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-pokedex-2026-07-28.json"
-)
-BROCK_RECEIPT = (
-    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-brock-2026-07-28.json"
-)
-CERULEAN_RECEIPT = (
-    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-cerulean-2026-07-28.json"
-)
-MISTY_RECEIPT = (
-    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-misty-2026-07-28.json"
-)
-VERMILION_RECEIPT = (
-    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-vermilion-2026-07-28.json"
-)
+POKEDEX_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-pokedex-2026-07-28.json"
+BROCK_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-brock-2026-07-28.json"
+CERULEAN_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-cerulean-2026-07-28.json"
+MISTY_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-misty-2026-07-28.json"
+VERMILION_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-vermilion-2026-07-28.json"
 SURGE_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-surge-2026-07-29.json"
+LAVENDER_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-lavender-2026-07-29.json"
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -289,15 +274,9 @@ def test_pokedex_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
             "normal_wait_frames": intro.normal_wait_frames,
         },
         "new_game_names": "built_in_red_blue",
-        "opening_timing": {
-            name: getattr(opening, name)
-            for name in opening.__dataclass_fields__
-        },
+        "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
         "pret_pokered_commit": PRET_POKERED_COMMIT,
-        "qualified_play_timing": {
-            name: getattr(play, name)
-            for name in play.__dataclass_fields__
-        },
+        "qualified_play_timing": {name: getattr(play, name) for name in play.__dataclass_fields__},
         "route_encounter_policy": "fail_closed",
         "starter": "squirtle",
     }
@@ -403,22 +382,11 @@ def test_brock_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
             "normal_wait_frames": intro.normal_wait_frames,
         },
         "new_game_names": "built_in_red_blue",
-        "opening_timing": {
-            name: getattr(opening, name)
-            for name in opening.__dataclass_fields__
-        },
-        "pewter_timing": {
-            name: getattr(pewter, name)
-            for name in pewter.__dataclass_fields__
-        },
+        "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
+        "pewter_timing": {name: getattr(pewter, name) for name in pewter.__dataclass_fields__},
         "pret_pokered_commit": PRET_POKERED_COMMIT,
-        "qualified_play_timing": {
-            name: getattr(play, name)
-            for name in play.__dataclass_fields__
-        },
-        "route_encounter_policy": (
-            "fail_closed_except_three_verified_kakuna_and_one_bug_catcher"
-        ),
+        "qualified_play_timing": {name: getattr(play, name) for name in play.__dataclass_fields__},
+        "route_encounter_policy": ("fail_closed_except_three_verified_kakuna_and_one_bug_catcher"),
         "starter": "squirtle",
     }
     assert receipt["configuration"] == expected_configuration
@@ -528,23 +496,13 @@ def test_cerulean_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
             "normal_wait_frames": intro.normal_wait_frames,
         },
         "new_game_names": "built_in_red_blue",
-        "opening_timing": {
-            name: getattr(opening, name)
-            for name in opening.__dataclass_fields__
-        },
-        "pewter_timing": {
-            name: getattr(pewter, name)
-            for name in pewter.__dataclass_fields__
-        },
+        "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
+        "pewter_timing": {name: getattr(pewter, name) for name in pewter.__dataclass_fields__},
         "cerulean_timing": {
-            name: getattr(cerulean, name)
-            for name in cerulean.__dataclass_fields__
+            name: getattr(cerulean, name) for name in cerulean.__dataclass_fields__
         },
         "pret_pokered_commit": PRET_POKERED_COMMIT,
-        "qualified_play_timing": {
-            name: getattr(play, name)
-            for name in play.__dataclass_fields__
-        },
+        "qualified_play_timing": {name: getattr(play, name) for name in play.__dataclass_fields__},
         "route_encounter_policy": (
             "fail_closed_except_three_verified_kakuna_and_required_trainers"
         ),
@@ -749,9 +707,7 @@ def test_vermilion_receipt_is_source_bound_repeatable_and_privacy_safe() -> None
 
     controller = DEFAULT_NEW_GAME_TIMING
     expected_configuration = {
-        "battle_policy": (
-            "adaptive_rocket_and_fixed_route6_trainers_with_bounded_sleep_recovery"
-        ),
+        "battle_policy": ("adaptive_rocket_and_fixed_route6_trainers_with_bounded_sleep_recovery"),
         "controller_timing": {
             "press_frames": controller.press_frames,
             "release_frames": controller.release_frames,
@@ -806,8 +762,7 @@ def test_vermilion_receipt_is_source_bound_repeatable_and_privacy_safe() -> None
         False,
     ]
     assert [
-        (item["x"], item["y"], item["species_id"])
-        for item in chapter["route"]["wild_flees"]
+        (item["x"], item["y"], item["species_id"]) for item in chapter["route"]["wild_flees"]
     ] == [(15, 19, 0x24), (15, 22, 0x24), (15, 26, 0x24)]
     assert all(
         item["battle_state_before"] == 1
@@ -891,6 +846,51 @@ def test_surge_receipt_is_repeatable_and_privacy_safe() -> None:
     assert receipt["frames_executed"] == 635_637
     assert receipt["actions_executed"] == 9_311
     assert receipt["controller_released"] is True
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_lavender_receipt_is_repeatable_and_privacy_safe() -> None:
+    receipt = json.loads(LAVENDER_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["receipt_schema"] == "qualified-play-evidence-v8"
+    assert receipt["schema"] == "qualified-play-v8"
+    assert receipt["status"] == "ok"
+    assert receipt["attempts"] == {"failed": 0, "passed": 3, "total": 3}
+    assert receipt["checkpoints"]["all_verified"] is True
+    assert receipt["checkpoints"]["verified"] == 112
+    assert len(receipt["checkpoints"]["lavender_ids"]) == 15
+    assert len(receipt["lavender_chapter"]["trainer_battles"]) == 11
+    assert receipt["lavender_chapter"]["wild_flees"] == 8
+    assert receipt["lavender_chapter"]["inventory"] == {
+        "money_remaining": 14_301,
+        "purchase_cost": 7_000,
+        "repels_purchased": 4,
+        "repels_used": 4,
+        "super_potions_purchased": 8,
+        "super_potions_remaining": 4,
+        "super_potions_used": 5,
+    }
+    assert receipt["lavender_chapter"]["party"] == {
+        "hp": [79, 52, 37],
+        "max_hp": [79, 52, 37],
+        "species": [179, 64, 59],
+        "status": [0, 0, 0],
+    }
+    assert receipt["lavender_chapter"]["route_10_trainer_2_bypassed"] is True
+    assert receipt["objective_progress"]["verified"] == 13
+    assert receipt["objective_progress"]["next"] == "reach_celadon"
+    assert receipt["qualified_through"] == "reach_lavender"
+    assert receipt["game_complete"] is False
+    assert receipt["frames_executed"] == 858_008
+    assert receipt["actions_executed"] == 12_713
+    assert receipt["controller_released"] is True
+    assert receipt["repeatability"]["full_report_sha256"] == (
+        "2b6ed8dce8d913b89e6d4226ece3f73e0e7919f656476e19acea475b06949b89"
+    )
 
     serialized = json.dumps(receipt)
     assert "/Users/" not in serialized

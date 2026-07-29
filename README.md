@@ -2,18 +2,18 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Thunder Badge qualified](https://img.shields.io/badge/status-Thunder_Badge_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Lavender qualified](https://img.shields.io/badge/status-Lavender_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **97/97 qualified
-> checkpoints** from clean power-on, obtains HM01, builds a Cut-and-Dig party, solves Vermilion
-> Gym, and defeats Lt. Surge. That establishes **12/36 completion objectives**. Three clean runs
-> produced the same 635,637-frame, 9,311-action result. This is an exact-route
+> **Current status:** one continuous deterministic teacher now reaches all **112/112 qualified
+> checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
+> Tunnel, and heals safely in Lavender Town. That establishes **13/36 completion objectives**.
+> Three clean runs produced the same 858,008-frame, 12,713-action result. This is an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next objective is reaching Lavender Town through Rock Tunnel. See the
-> [sanitized three-run Thunder Badge evidence receipt](docs/evidence/qualified-play-surge-2026-07-29.json).
+> game-completion claim. The next objective is reaching Celadon City. See the
+> [sanitized three-run Lavender evidence receipt](docs/evidence/qualified-play-lavender-2026-07-29.json).
 
 ## The goal
 
@@ -147,7 +147,8 @@ without saving.
 `play` is the recommended continuous command. It uses one clean emulator session for the opening,
 the verified rival win, both Route 1 crossings, the parcel handoff, Viridian Forest, Brock, Route
 3, Mt. Moon, Cerulean City, Nugget Bridge, Bill, Misty, Route 5, the Underground Path, Route 6,
-Vermilion City, the S.S. Anne through HM01, and Vermilion Gym through the Thunder Badge. It stops automatically after the
+Vermilion City, the S.S. Anne through HM01, Vermilion Gym through the Thunder Badge, Route 9,
+Rock Tunnel, and Lavender Town. It stops automatically after the
 latest independently qualified objective and reports that the game is not complete. The forest
 segment deliberately trains against three verified Kakuna encounters and one mandatory Bug
 Catcher. Later gates require the declared trainer identities and event order, Bill's complete
@@ -159,6 +160,10 @@ identity, a live win, the Captain's rub event, the separate HM01 event, HM01 inv
 and the derived Cut fact. The Surge chapter buys bounded capture and recovery supplies, captures
 Spearow and a source-valid Diglett, trades for DUX, teaches Cut and Dig when needed, adapts to the
 live Gym switch pair, and verifies a Dig-only Surge win plus TM24 and mirrored badge evidence.
+The Lavender chapter teaches BubbleBeam, purchases an exact recovery reserve, proves all 11
+required Route 9/Rock Tunnel trainer identities and PP decrements, retries a movement step only
+after a qualified wild flee, bypasses the optional south Route 10 trainer, and heals the complete
+three-Pokémon party in Lavender Center.
 The current exact route ends with a full-health, status-free Wartortle restored as party lead.
 Its adaptive battle and navigation selection reacts to bounded state, but the
 three-run result evaluates one frozen teacher route and does not yet show held-out timing or RNG

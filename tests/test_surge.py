@@ -24,6 +24,7 @@ from pokemon_red_completion.surge import (
     SurgeChapterReport,
     SurgeCheckpoint,
     SurgeTiming,
+    _party_moves_for_index,
     _plan_gym_can_path,
     _run_dig_battle,
 )
@@ -79,6 +80,25 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert DIG_MOVE_ID == 0x5B
     assert DUX_NICKNAME == (0x83, 0x94, 0x97, 0x50)
     assert SURGE_CHECKPOINT_COUNT == 15
+
+
+class _PartyMoveMemory:
+    def __init__(self) -> None:
+        self.values = {
+            0xD19F: 0x40,
+            0xD1A0: 0x1C,
+            0xD1A1: 0x0F,
+            0xD1A2: 0x1F,
+        }
+
+    def read_u8(self, address: int) -> int:
+        return self.values.get(address, 0)
+
+
+def test_party_move_lookup_reads_dux_struct_instead_of_lead_moves() -> None:
+    raw = replace(_raw(), first_party_moves=(44, 39, 61, 55))
+
+    assert _party_moves_for_index(_PartyMoveMemory(), raw, 1) == (0x40, 0x1C, 0x0F, 0x1F)
 
 
 def test_surge_timing_is_positive_and_bounded() -> None:

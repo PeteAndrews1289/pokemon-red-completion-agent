@@ -42,10 +42,11 @@ The bootstrap sequence was adapted from
 `0e2df37720eec7d148187eb1001bf2d9502aa4f6`. Private blind-run checkpoints and screenshots are not
 completion demonstrations and are not loaded by this project.
 
-The qualified bedroom-to-Thunder-Badge route is new successor work. Its map dimensions,
+The qualified bedroom-to-Lavender route is new successor work. Its map dimensions,
 collision-safe corridors, warps, Pallet Town, Route 1, Viridian Forest, Pewter Gym, Route 3, Mt.
 Moon, Nugget Bridge, Route 25, Bill, Cerulean Gym, Route 5, the Underground Path, Route 6, the
-Vermilion harbor, S.S. Anne, Route 11, Diglett's Cave, and Vermilion Gym, and
+Vermilion harbor, S.S. Anne, Route 11, Diglett's Cave, Vermilion Gym, Route 9, Route 10,
+Rock Tunnel, and Lavender Town, and
 story, party, battle, badge, fossil, and inventory gates are derived from
 [`pret/pokered`](https://github.com/pret/pokered) commit
 `1e96034092686d006e863cace09e87273051a3d8`, then independently exercised against the exact
@@ -54,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **97/97 qualified checkpoints** through
-the Thunder Badge and therefore **12/36 completion objectives**. Three clean runs were identical
-at the 635,637-frame / 9,311-action boundary. The evidence includes the earlier Brock and Mt. Moon gates,
+The deterministic teacher currently verifies all **112/112 qualified checkpoints** through
+Lavender Town and therefore **13/36 completion objectives**. Three clean runs were identical
+at the 858,008-frame / 12,713-action boundary. The evidence includes the earlier Brock and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
 Badge and TM11 proof, plus the Rocket thief, TM28, Underground Path, exact Route 6 trainer events,
@@ -65,9 +66,12 @@ Captain-rub event, HM01 event, inventory, and derived Cut-fact gates. The Surge 
 bounded Spearow capture and the DUX trade, a source-valid Diglett Ground specialist with natural
 or exactly consumed TM28 Dig, the live variable `D743`/`D744` electric-lock puzzle, and concurrent
 Surge victory, TM24, Thunder Badge, mirrored badge, restored-lead, and released-control proof.
-The boundary has a full-health, status-free Wartortle restored as party lead. No
+The Lavender segment adds exact BubbleBeam and supply gates, 11 mandatory Route 9/Rock Tunnel
+trainer identities with selected-move PP evidence, bounded sleep and wild-flee recovery, an
+optional Route 10 trainer bypass, and a full three-member Center heal. The boundary has a
+full-health, status-free Wartortle restored as party lead. No
 behavioral-cloning, DAgger, timing/RNG generalization, or full-game result is implied. The next
-teaching segment traverses Rock Tunnel and reaches Lavender Town.
+teaching segment reaches Celadon City.
 
 The same segment can run headlessly or be observed locally with:
 
