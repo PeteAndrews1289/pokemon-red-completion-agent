@@ -1,0 +1,107 @@
+{
+  "receipt_schema": "qualified-play-evidence-v14",
+  "schema": "qualified-play-v14",
+  "status": "ok",
+  "attempts": {"failed": 0, "passed": 3, "total": 3},
+  "assistance": {
+    "class": "deterministic_teacher",
+    "human_controller_input": false,
+    "save_state_restore": false,
+    "learned_policy": false
+  },
+  "source": {
+    "git_commit": "58ce3ea",
+    "worktree_dirty": true
+  },
+  "recorded_on": "2026-07-29",
+  "extends_evidence": "qualified-play-surf-2026-07-29.json",
+  "configuration": {
+    "pret_pokered_commit": "1e96034092686d006e863cace09e87273051a3d8",
+    "starter": "squirtle",
+    "route_policy": "minimum_three_trainer_fuchsia_gym_route",
+    "battle_policy": "adaptive_slot_four_surf_with_no_items_and_no_faints",
+    "recovery_policy": "two_pre_koga_center_heals_and_one_terminal_center_heal"
+  },
+  "geographic_dependency": {
+    "reason": "post-Surf Fuchsia cannot legally return to Celadon before Soul Badge",
+    "route15_return": "one_way_blocked",
+    "cycling_road": "bicycle_required",
+    "surf": "soul_badge_required"
+  },
+  "checkpoints": {"all_verified": true, "verified": 207},
+  "koga_chapter": {
+    "mandatory_trainers": [
+      {"label": "Juggler 3", "opponent": 221, "trainer_class": 21, "trainer_number": 3, "event": 603, "surf_pp_spent": 6, "hp_after": 84, "max_hp_after": 117, "status_after": 0},
+      {"label": "Tamer 2", "opponent": 222, "trainer_class": 22, "trainer_number": 2, "event": 606, "surf_pp_spent": 5, "hp_after": 66, "max_hp_after": 120, "status_after": 64},
+      {"label": "Juggler 4", "opponent": 221, "trainer_class": 21, "trainer_number": 4, "event": 607, "surf_pp_spent": 5, "hp_after": 102, "max_hp_after": 120, "status_after": 0}
+    ],
+    "trainer_events_before_koga": [false, true, false, false, true, true],
+    "optional_trainers_undefeated_before_koga": 3,
+    "recoveries_before_koga": 2,
+    "mart_purchases": 0,
+    "consumables_used": 0,
+    "koga": {
+      "opponent": 238,
+      "trainer_class": 38,
+      "trainer_number": 1,
+      "party": ["Koffing L37", "Muk L39", "Koffing L37", "Weezing L43"],
+      "surf_pp_spent": 8,
+      "hp_after": 107,
+      "max_hp_after": 124,
+      "status_after": 0,
+      "no_faint": true
+    },
+    "rewards": {
+      "beat_koga_event": true,
+      "soul_badge": true,
+      "soul_badge_mirror": true,
+      "got_tm06_event": true,
+      "tm06_toxic_retained": true,
+      "all_six_regular_trainers_deactivated": true
+    },
+    "terminal": {
+      "location": "Fuchsia Pokecenter",
+      "coordinate": [3, 3],
+      "party_species": [28, 64, 59],
+      "party_hp": [124, 52, 37],
+      "party_max_hp": [124, 52, 37],
+      "party_status": [0, 0, 0],
+      "surf_pp": 15
+    },
+    "money_before": 29637,
+    "money_remaining": 37489,
+    "frames_executed": 151336,
+    "actions_executed": 1316,
+    "controller_released": true
+  },
+  "objective_progress": {
+    "next": "defeat_erika",
+    "total": 36,
+    "verified": 20,
+    "verified_ids": [
+      "power_on", "begin_adventure", "choose_starter", "receive_pokedex",
+      "reach_pewter", "defeat_brock", "reach_cerulean", "help_bill",
+      "reach_vermilion", "obtain_cut", "defeat_misty", "defeat_surge",
+      "reach_lavender", "reach_celadon", "clear_rocket_hideout", "obtain_silph_scope",
+      "rescue_fuji", "reach_fuchsia", "obtain_surf", "defeat_koga"
+    ]
+  },
+  "repeatability": {
+    "identical_action_count": true,
+    "identical_final_state": true,
+    "identical_frame_count": true,
+    "identical_full_report": true,
+    "full_report_sha256": "4d5c1589f9e31a8fec5b1d3a5a9af58951c9250763fea5a386d77dc4cb7ae226"
+  },
+  "scope": {
+    "claim": "exact deterministic teacher repeat",
+    "timing_or_rng_generalization": false,
+    "learned_policy_generalization": false,
+    "game_complete": false
+  },
+  "qualified_through": "defeat_koga",
+  "game_complete": false,
+  "frames_executed": 1782032,
+  "actions_executed": 22053,
+  "controller_released": true
+}

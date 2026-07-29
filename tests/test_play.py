@@ -697,6 +697,42 @@ class _SafariEvidence:
         return {"status": "ok", "objective": "obtain_surf"}
 
 
+class _KogaEvidence:
+    passed = True
+    final_raw = replace(
+        _SafariEvidence.final_raw,
+        badge_bits=int(Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.SOUL),
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "koga_ready",
+            "gym_entry",
+            "juggler3",
+            "tamer2",
+            "recovery1",
+            "juggler4",
+            "recovery2",
+            "koga_stance",
+            "koga_defeated",
+            "rewards",
+            "koga_stable",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok",
+            "objective": "defeat_koga",
+            "geographic_dependency": {
+                "reason": "post-Surf Fuchsia cannot legally return to Celadon before Soul Badge",
+            },
+        }
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -770,16 +806,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 196
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 207
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=196,
+        completed=207,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 196
+    assert progress.completed == progress.total == 207
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -877,6 +913,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         tower=_TowerEvidence(),  # type: ignore[arg-type]
         fuchsia=_FuchsiaEvidence(),  # type: ignore[arg-type]
         safari=_SafariEvidence(),  # type: ignore[arg-type]
+        koga=_KogaEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -902,6 +939,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "item:poke_flute",
                 "location:fuchsia_city",
                 "move:surf_available",
+                "badge:soul",
             }
         ),
         verified_objectives=(
@@ -924,6 +962,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "rescue_fuji",
             "reach_fuchsia",
             "obtain_surf",
+            "defeat_koga",
         ),
         next_objective="defeat_erika",
         frames_executed=394_000,
@@ -935,9 +974,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v13"
+    assert public["schema"] == "qualified-play-v14"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "obtain_surf"
+    assert public["qualified_through"] == "defeat_koga"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -1137,9 +1176,20 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "surf",
         "cleanup",
         "stable",
+        "koga_ready",
+        "gym_entry",
+        "juggler3",
+        "tamer2",
+        "recovery1",
+        "juggler4",
+        "recovery2",
+        "koga_stance",
+        "koga_defeated",
+        "rewards",
+        "koga_stable",
     ]
     assert public["objective_progress"] == {
-        "verified": 19,
+        "verified": 20,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1161,6 +1211,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "rescue_fuji",
             "reach_fuchsia",
             "obtain_surf",
+            "defeat_koga",
         ],
         "next": "defeat_erika",
     }
@@ -1327,10 +1378,11 @@ def test_private_rom_reaches_fuchsia_without_adjacent_artifacts() -> None:
         "rescue_fuji",
         "reach_fuchsia",
         "obtain_surf",
+        "defeat_koga",
     )
     assert report.next_objective == "defeat_erika"
-    assert report.frames_executed == 1_630_696
-    assert report.actions_executed == 20_737
+    assert report.frames_executed == 1_782_032
+    assert report.actions_executed == 22_053
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -1506,4 +1558,25 @@ def test_private_rom_reaches_fuchsia_without_adjacent_artifacts() -> None:
     assert report.safari.pp_after == (25, 30, 20, 15)
     assert report.safari.safari_steps == report.safari.safari_balls == 0
     assert report.safari.in_safari_zone is False
+    assert report.koga.passed
+    assert report.koga.frames_executed == 151_336
+    assert report.koga.actions_executed == 1_316
+    assert tuple(item.selected_pp_spent for item in report.koga.battles) == (6, 5, 5, 8)
+    assert tuple(item.hp_after for item in report.koga.battles) == (84, 66, 102, 107)
+    assert report.koga.trainer_events_before_koga == (
+        False,
+        True,
+        False,
+        False,
+        True,
+        True,
+    )
+    assert report.koga.trainer_events_after_koga == (True,) * 6
+    assert report.koga.got_tm06
+    assert report.koga.beat_koga
+    assert report.koga.soul_badge
+    assert report.koga.soul_badge_mirror
+    assert report.koga.party_hp == report.koga.party_max_hp == (124, 52, 37)
+    assert report.koga.party_status == (0, 0, 0)
+    assert report.koga.surf_pp == 15
     assert before == after

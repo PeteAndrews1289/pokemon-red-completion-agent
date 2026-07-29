@@ -1,0 +1,682 @@
+"""Qualified Fuchsia Gym and Koga chapter.
+
+The post-Safari boundary cannot return east across Route 15, cannot use the
+Cycling Road without the Bicycle, and cannot Surf before earning the Soul
+Badge.  Koga is therefore the legal geographic prerequisite for returning to
+Celadon to finish Erika.
+"""
+
+from __future__ import annotations
+
+from collections import Counter
+from collections.abc import Callable, Iterable
+from dataclasses import dataclass
+from typing import Protocol
+
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_runtime import BattleRuntimeTiming, run_adaptive_trainer_battle
+from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
+from pokemon_red_completion.observation import (
+    Badge,
+    EventFlag,
+    ItemId,
+    MapId,
+    PokemonRedStateReader,
+    RamAddress,
+    RawGameState,
+)
+from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+
+KOGA_CHECKPOINT_COUNT = 11
+SURF = 0x39
+SURF_SLOT = 4
+KOGA_OPPONENT = 0xEE
+KOGA_TRAINER_CLASS = 0x26
+KOGA_TRAINER_NUMBER = 1
+
+
+def _directions(value: str) -> tuple[str, ...]:
+    return tuple({"U": "up", "D": "down", "L": "left", "R": "right"}[item] for item in value)
+
+
+CENTER_TO_GYM = _directions("DDDDDLLLLLLLLLLLLLLU")
+GYM_TO_JUGGLER3 = _directions("URRRRRUUUUUUULU")
+JUGGLER3_TO_TAMER2 = _directions("UUUU")
+TAMER2_TO_CENTER = _directions(
+    "DDDDDDDDRDDDDDLLLLDRRRRRRRRRRRRRRUUUU"
+)
+CENTER_TO_JUGGLER4 = CENTER_TO_GYM + _directions(
+    "URRRRRUUUUUUUUUUUUUUULLLLLLLLDDRDDLDD"
+)
+JUGGLER4_TO_CENTER = _directions(
+    "UURUULUURRRRRRRRDDDDDDDDDDDDDDDDLLLLLDRRRRRRRRRRRRRRUUUU"
+)
+CENTER_TO_KOGA = CENTER_TO_GYM + _directions(
+    "URRRRRUUUUUUUUUUUUUUULLLLLLLLDDRDDLDDDDRRDDR"
+)
+KOGA_TO_CENTER = _directions(
+    "LUULLUUUURUULUURRRRRRRRDDDDDDDDDDDDDDDDLLLLL"
+    "DRRRRRRRRRRRRRRUUUU"
+)
+
+REGULAR_TRAINER_EVENTS = (
+    EventFlag.BEAT_FUCHSIA_GYM_TRAINER_0,
+    EventFlag.BEAT_FUCHSIA_GYM_TRAINER_1,
+    EventFlag.BEAT_FUCHSIA_GYM_TRAINER_2,
+    EventFlag.BEAT_FUCHSIA_GYM_TRAINER_3,
+    EventFlag.BEAT_FUCHSIA_GYM_TRAINER_4,
+    EventFlag.BEAT_FUCHSIA_GYM_TRAINER_5,
+)
+MANDATORY_TRAINER_EVENTS = (
+    EventFlag.BEAT_FUCHSIA_GYM_TRAINER_1,
+    EventFlag.BEAT_FUCHSIA_GYM_TRAINER_4,
+    EventFlag.BEAT_FUCHSIA_GYM_TRAINER_5,
+)
+OPTIONAL_TRAINER_EVENTS = tuple(
+    event for event in REGULAR_TRAINER_EVENTS if event not in MANDATORY_TRAINER_EVENTS
+)
+
+
+class EmulatorState(Protocol):
+    @property
+    def frame_count(self) -> int: ...
+
+    @property
+    def pressed_buttons(self) -> frozenset[str]: ...
+
+    def read_u8(self, address: int) -> int: ...
+
+
+class ChapterExecutor(Protocol):
+    def execute(self, action: MacroAction) -> object: ...
+
+
+class KogaChapterError(RuntimeError):
+    """Raised when the Fuchsia Gym evidence contract fails."""
+
+
+@dataclass(frozen=True, slots=True)
+class KogaTiming:
+    wait_frames: int = 180
+    movement_frames: int = 240
+    movement_retries: int = 18
+    dialogue_pulses: int = 48
+    heal_pulses: int = 20
+
+    def __post_init__(self) -> None:
+        for name in self.__dataclass_fields__:
+            value = getattr(self, name)
+            if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
+                raise ValueError(f"{name} must be a positive integer")
+
+
+DEFAULT_KOGA_TIMING = KogaTiming()
+KOGA_BATTLE_TIMING = BattleRuntimeTiming(
+    max_runtime_pulses=720,
+    max_move_menu_transition_pulses=24,
+    max_pp_confirmation_pulses=12,
+    max_attack_confirmation_pulses=6,
+    max_post_attack_transition_pulses=24,
+)
+
+
+@dataclass(frozen=True, slots=True)
+class KogaProgress:
+    checkpoint_id: str
+    label: str
+    completed: int
+    total: int
+    frames_executed: int
+
+
+ProgressSink = Callable[[KogaProgress], None]
+
+
+@dataclass(frozen=True, slots=True)
+class KogaCheckpoint:
+    checkpoint_id: str
+    label: str
+    raw: RawGameState
+
+
+@dataclass(frozen=True, slots=True)
+class KogaBattleEvidence:
+    label: str
+    opponent: int
+    trainer_class: int
+    trainer_number: int
+    event: int
+    selected_pp_spent: int
+    hp_after: int
+    max_hp_after: int
+    status_after: int
+
+
+@dataclass(frozen=True, slots=True)
+class KogaChapterReport:
+    records: tuple[KogaCheckpoint, ...]
+    battles: tuple[KogaBattleEvidence, ...]
+    final_raw: RawGameState
+    initial_bag: tuple[tuple[int, int], ...]
+    final_bag: tuple[tuple[int, int], ...]
+    initial_money: int
+    final_money: int
+    trainer_events_before_koga: tuple[bool, ...]
+    trainer_events_after_koga: tuple[bool, ...]
+    got_tm06: bool
+    beat_koga: bool
+    soul_badge: bool
+    soul_badge_mirror: bool
+    party_hp: tuple[int, int, int]
+    party_max_hp: tuple[int, int, int]
+    party_status: tuple[int, int, int]
+    surf_pp: int
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        expected_bag = tuple(
+            sorted((*self.initial_bag, (int(ItemId.TM06_TOXIC), 1)))
+        )
+        return (
+            len(self.records) == KOGA_CHECKPOINT_COUNT
+            and tuple(item.trainer_number for item in self.battles) == (3, 2, 4, 1)
+            and tuple(item.selected_pp_spent for item in self.battles) == (6, 5, 5, 8)
+            and tuple(item.hp_after for item in self.battles) == (84, 66, 102, 107)
+            and tuple(item.max_hp_after for item in self.battles) == (117, 120, 120, 124)
+            and tuple(item.status_after for item in self.battles) == (0, 0x40, 0, 0)
+            and self.trainer_events_before_koga == (False, True, False, False, True, True)
+            and self.trainer_events_after_koga == (True,) * 6
+            and self.got_tm06
+            and self.beat_koga
+            and self.soul_badge
+            and self.soul_badge_mirror
+            and all(item != int(ItemId.TM06_TOXIC) for item, _ in self.initial_bag)
+            and self.final_bag == expected_bag
+            and self.initial_money == 29_637
+            and self.final_money == 37_489
+            and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
+            and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
+            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and self.party_hp == self.party_max_hp == (124, 52, 37)
+            and self.party_status == (0, 0, 0)
+            and self.surf_pp == 15
+            and self.controller_released
+        )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        return tuple((item.checkpoint_id, item.label, item.raw) for item in self.records)
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "objective": "defeat_koga",
+            "geographic_dependency": {
+                "reason": "post-Surf Fuchsia cannot legally return to Celadon before Soul Badge",
+                "route15_return": "one_way_blocked",
+                "cycling_road": "bicycle_required",
+                "surf": "soul_badge_required",
+                "unblocks": "Surf route toward the western Kanto network",
+            },
+            "mandatory_trainers": [
+                {
+                    "label": item.label,
+                    "opponent": item.opponent,
+                    "trainer_class": item.trainer_class,
+                    "trainer_number": item.trainer_number,
+                    "event": item.event,
+                    "move_id": SURF,
+                    "selected_pp_spent": item.selected_pp_spent,
+                }
+                for item in self.battles[:-1]
+            ],
+            "recoveries": {
+                "pokemon_center_visits_before_koga": 2,
+                "mart_purchases": 0,
+                "consumables_used": 0,
+            },
+            "koga": {
+                "opponent": self.battles[-1].opponent,
+                "trainer_class": self.battles[-1].trainer_class,
+                "trainer_number": self.battles[-1].trainer_number,
+                "party": ["Koffing L37", "Muk L39", "Koffing L37", "Weezing L43"],
+                "surf_pp_spent": self.battles[-1].selected_pp_spent,
+                "no_faint": all(value > 0 for value in self.party_hp),
+            },
+            "rewards": {
+                "beat_koga_event": self.beat_koga,
+                "soul_badge": self.soul_badge,
+                "soul_badge_mirror": self.soul_badge_mirror,
+                "got_tm06_event": self.got_tm06,
+                "tm06_toxic_retained": (int(ItemId.TM06_TOXIC), 1) in self.final_bag,
+                "regular_trainers_deactivated": self.trainer_events_after_koga == (True,) * 6,
+            },
+            "money_remaining": self.final_money,
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
+
+
+class _CountingExecutor:
+    def __init__(self, executor: ChapterExecutor) -> None:
+        self._executor = executor
+        self.actions_executed = 0
+
+    def execute(self, action: MacroAction) -> object:
+        result = self._executor.execute(action)
+        self.actions_executed += 1
+        return result
+
+
+def run_koga_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    timing: KogaTiming = DEFAULT_KOGA_TIMING,
+    progress: ProgressSink | None = None,
+) -> KogaChapterReport:
+    start_frames = emulator.frame_count
+    actions = _CountingExecutor(executor)
+    records: list[KogaCheckpoint] = []
+    battles: list[KogaBattleEvidence] = []
+    initial = reader.read()
+    _require(initial, MapId.FUCHSIA_POKECENTER, (3, 3), "Surf boundary")
+    initial_bag = _bag_tuple(emulator)
+    initial_money = _money(emulator)
+    if initial.first_party_moves is None or initial.first_party_moves[SURF_SLOT - 1] != SURF:
+        raise KogaChapterError("Koga input lacks Surf in slot four.")
+    if any(_event(emulator, event) for event in REGULAR_TRAINER_EVENTS):
+        raise KogaChapterError("Fuchsia Gym trainers were not pristine at chapter start.")
+    if _event(emulator, EventFlag.BEAT_KOGA) or _event(emulator, EventFlag.GOT_TM06):
+        raise KogaChapterError("Koga reward events were already set.")
+    if any(item == int(ItemId.TM06_TOXIC) for item, _ in initial_bag):
+        raise KogaChapterError("TM06 was already present at chapter start.")
+    _checkpoint(records, progress, emulator, initial, "koga_ready", "Surf-ready Fuchsia boundary")
+
+    _move(actions, reader, CENTER_TO_GYM, timing, "Fuchsia Gym entry")
+    _require(reader.read(), MapId.FUCHSIA_GYM, (4, 17), "Fuchsia Gym entry")
+    _checkpoint(records, progress, emulator, reader.read(), "gym_entry", "Entered Fuchsia Gym")
+
+    _move(actions, reader, GYM_TO_JUGGLER3, timing, "Juggler 3 sight line")
+    battles.append(
+        _fight(
+            actions,
+            reader,
+            emulator,
+            timing,
+            "Juggler 3",
+            (0xDD, 0x15, 3),
+            EventFlag.BEAT_FUCHSIA_GYM_TRAINER_1,
+                6,
+        )
+    )
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "juggler3",
+        "Defeated mandatory Juggler 3",
+    )
+
+    _move(actions, reader, JUGGLER3_TO_TAMER2, timing, "Tamer 2 sight line")
+    battles.append(
+        _fight(
+            actions,
+            reader,
+            emulator,
+            timing,
+            "Tamer 2",
+            (0xDE, 0x16, 2),
+            EventFlag.BEAT_FUCHSIA_GYM_TRAINER_4,
+            5,
+        )
+    )
+    _checkpoint(records, progress, emulator, reader.read(), "tamer2", "Defeated mandatory Tamer 2")
+
+    _move(actions, reader, TAMER2_TO_CENTER, timing, "first Fuchsia recovery")
+    _heal_center(actions, reader, emulator, timing)
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "recovery1",
+        "Healed after east Gym pair",
+    )
+
+    _move(actions, reader, CENTER_TO_JUGGLER4, timing, "Juggler 4 sight line")
+    battles.append(
+        _fight(
+            actions,
+            reader,
+            emulator,
+            timing,
+            "Juggler 4",
+            (0xDD, 0x15, 4),
+            EventFlag.BEAT_FUCHSIA_GYM_TRAINER_5,
+            5,
+        )
+    )
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "juggler4",
+        "Defeated mandatory Juggler 4",
+    )
+
+    trainer_events_before_koga = tuple(
+        _event(emulator, event) for event in REGULAR_TRAINER_EVENTS
+    )
+    if trainer_events_before_koga != (False, True, False, False, True, True):
+        raise KogaChapterError(
+            f"Minimum-trainer gate changed: {trainer_events_before_koga!r}."
+        )
+    _move(actions, reader, JUGGLER4_TO_CENTER, timing, "second Fuchsia recovery")
+    _heal_center(actions, reader, emulator, timing)
+    _checkpoint(records, progress, emulator, reader.read(), "recovery2", "Healed before Koga")
+
+    _move(actions, reader, CENTER_TO_KOGA, timing, "Koga stance")
+    _require(reader.read(), MapId.FUCHSIA_GYM, (4, 11), "Koga stance")
+    _checkpoint(records, progress, emulator, reader.read(), "koga_stance", "Reached Koga")
+
+    _pulse(actions, MacroActionKind.MOVE, "up", frames=120)
+    actions.execute(MacroAction(MacroActionKind.INTERACT))
+    bag_before_koga = _bag_tuple(emulator)
+    battles.append(
+        _fight(
+            actions,
+            reader,
+            emulator,
+            timing,
+            "Koga",
+            (KOGA_OPPONENT, KOGA_TRAINER_CLASS, KOGA_TRAINER_NUMBER),
+            EventFlag.BEAT_KOGA,
+            8,
+            clear_text=False,
+        )
+    )
+    _checkpoint(records, progress, emulator, reader.read(), "koga_defeated", "Defeated Koga")
+
+    _clear_text(actions, reader, timing)
+    trainer_events_after_koga = tuple(
+        _event(emulator, event) for event in REGULAR_TRAINER_EVENTS
+    )
+    got_tm06 = _event(emulator, EventFlag.GOT_TM06)
+    beat_koga = _event(emulator, EventFlag.BEAT_KOGA)
+    soul_badge = bool(emulator.read_u8(RamAddress.OBTAINED_BADGES) & int(Badge.SOUL))
+    soul_badge_mirror = bool(
+        emulator.read_u8(RamAddress.BEAT_GYM_FLAGS) & int(Badge.SOUL)
+    )
+    if (
+        _bag_tuple(emulator)
+        != tuple(sorted((*bag_before_koga, (int(ItemId.TM06_TOXIC), 1))))
+        or not got_tm06
+        or not beat_koga
+        or not soul_badge
+        or not soul_badge_mirror
+        or trainer_events_after_koga != (True,) * 6
+    ):
+        raise KogaChapterError("Koga reward or trainer-deactivation gate failed.")
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "rewards",
+        "Verified Soul Badge and TM06",
+    )
+
+    _move(actions, reader, KOGA_TO_CENTER, timing, "post-Koga recovery")
+    _heal_center(actions, reader, emulator, timing)
+    final = reader.read()
+    _require(final, MapId.FUCHSIA_POKECENTER, (3, 3), "stable Koga boundary")
+    _checkpoint(records, progress, emulator, final, "koga_stable", "Stable healed Fuchsia boundary")
+
+    report = KogaChapterReport(
+        tuple(records),
+        tuple(battles),
+        final,
+        initial_bag,
+        _bag_tuple(emulator),
+        initial_money,
+        _money(emulator),
+        trainer_events_before_koga,
+        trainer_events_after_koga,
+        got_tm06,
+        beat_koga,
+        soul_badge,
+        soul_badge_mirror,
+        _party_hp(emulator),
+        _party_max_hp(emulator),
+        _party_status(emulator),
+        int((final.first_party_pp or (0, 0, 0, 0))[SURF_SLOT - 1] & 0x3F),
+        emulator.frame_count - start_frames,
+        actions.actions_executed,
+        not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise KogaChapterError("Koga chapter failed its public evidence contract.")
+    return report
+
+
+def _fight(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: KogaTiming,
+    label: str,
+    identity: tuple[int, int, int],
+    event: EventFlag,
+    exact_spent: int,
+    *,
+    clear_text: bool = True,
+) -> KogaBattleEvidence:
+    battle = _settle_trainer_identity(actions, reader, emulator, timing, label, identity)
+    before_pp = battle.first_party_pp
+    final = run_adaptive_trainer_battle(
+        reader,
+        actions,
+        lambda _: SURF_SLOT,
+        expected_map=MapId.FUCHSIA_GYM,
+        required_move_id=SURF,
+        timing=KOGA_BATTLE_TIMING,
+        label=label,
+        unknown_cancel_interval=3,
+    )
+    if before_pp is None or final.first_party_pp is None:
+        raise KogaChapterError(f"{label} lacks PP evidence.")
+    spent = (before_pp[SURF_SLOT - 1] & 0x3F) - (
+        final.first_party_pp[SURF_SLOT - 1] & 0x3F
+    )
+    hp = _party_hp(emulator)
+    max_hp = _party_max_hp(emulator)
+    status = _party_status(emulator)
+    if clear_text:
+        _clear_text(actions, reader, timing)
+    if spent != exact_spent or not _event(emulator, event) or any(value <= 0 for value in hp):
+        raise KogaChapterError(
+            f"{label} evidence mismatch: spent={spent}, event={_event(emulator, event)}, hp={hp!r}."
+        )
+    return KogaBattleEvidence(
+        label,
+        identity[0],
+        identity[1],
+        identity[2],
+        int(event),
+        spent,
+        hp[0],
+        max_hp[0],
+        status[0],
+    )
+
+
+def _settle_trainer_identity(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: KogaTiming,
+    label: str,
+    identity: tuple[int, int, int],
+) -> RawGameState:
+    for _ in range(timing.dialogue_pulses):
+        raw = reader.read()
+        observed = (
+            emulator.read_u8(RamAddress.CURRENT_OPPONENT),
+            emulator.read_u8(RamAddress.TRAINER_CLASS),
+            emulator.read_u8(RamAddress.TRAINER_NUMBER),
+        )
+        if raw.battle_state == 2 and observed == identity and (raw.enemy_hp or 0) > 0:
+            return raw
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise KogaChapterError(f"{label} identity did not settle to {identity!r}.")
+
+
+def _move(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    timing: KogaTiming,
+    label: str,
+) -> None:
+    state = reader.read()
+    for step, direction in enumerate(directions, 1):
+        before = (state.map_id, state.player_x, state.player_y)
+        for _ in range(timing.movement_retries):
+            _pulse(actions, MacroActionKind.MOVE, direction, frames=timing.movement_frames)
+            state = reader.read()
+            if state.battle_state:
+                raise KogaChapterError(f"{label} entered an unexpected battle at step {step}.")
+            if (state.map_id, state.player_x, state.player_y) != before:
+                break
+            if not reader.read_input_readiness().ready:
+                _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+                state = reader.read()
+        else:
+            raise KogaChapterError(
+                f"{label} blocked at step {step}: {direction}; "
+                f"{(state.map_id, state.player_x, state.player_y)!r}."
+            )
+        if state.party_species_ids != TOWER_FINAL_PARTY:
+            raise KogaChapterError(f"{label} changed the qualified party.")
+
+
+def _heal_center(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: KogaTiming,
+) -> None:
+    approach = reader.read()
+    _move(
+        actions,
+        reader,
+        _nurse_approach_directions(approach),
+        timing,
+        "Fuchsia nurse approach",
+    )
+    _require(reader.read(), MapId.FUCHSIA_POKECENTER, (3, 3), "Fuchsia nurse")
+    actions.execute(MacroAction(MacroActionKind.INTERACT))
+    for _ in range(timing.heal_pulses):
+        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+        if (
+            _party_hp(emulator) == _party_max_hp(emulator)
+            and _party_status(emulator) == (0, 0, 0)
+            and (
+                (reader.read().first_party_pp or (0, 0, 0, 0))[SURF_SLOT - 1]
+                & 0x3F
+            )
+            == 15
+        ):
+            _clear_text(actions, reader, timing)
+            return
+    raise KogaChapterError("Fuchsia Center did not restore the complete party and Surf PP.")
+
+
+def _nurse_approach_directions(raw: RawGameState) -> tuple[str, ...]:
+    if raw.map_id != MapId.FUCHSIA_POKECENTER or raw.player_x != 3:
+        return ()
+    if raw.player_y == 4:
+        return ("up",)
+    return ()
+
+
+def _clear_text(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: KogaTiming,
+) -> None:
+    for _ in range(6):
+        _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
+    if not reader.read_input_readiness().ready:
+        raise KogaChapterError("Dialogue did not return input authority.")
+
+
+def _event(emulator: EmulatorState, event: EventFlag) -> bool:
+    value = int(event)
+    return bool(
+        emulator.read_u8(int(RamAddress.EVENT_FLAGS) + value // 8)
+        & (1 << (value % 8))
+    )
+
+
+def _bag_tuple(emulator: EmulatorState) -> tuple[tuple[int, int], ...]:
+    return tuple(
+        sorted((int(item), count) for item, count in Counter(_bag(emulator)).items())
+    )
+
+
+def _require(
+    raw: RawGameState,
+    map_id: int,
+    coordinate: tuple[int, int],
+    label: str,
+) -> None:
+    if (
+        raw.map_id != map_id
+        or (raw.player_x, raw.player_y) != coordinate
+        or raw.battle_state != 0
+        or raw.party_species_ids != TOWER_FINAL_PARTY
+    ):
+        raise KogaChapterError(
+            f"{label} missed gate: map={raw.map_id!r}, "
+            f"coordinate={(raw.player_x, raw.player_y)!r}, battle={raw.battle_state!r}."
+        )
+
+
+def _checkpoint(
+    records: list[KogaCheckpoint],
+    progress: ProgressSink | None,
+    emulator: EmulatorState,
+    raw: RawGameState,
+    checkpoint_id: str,
+    label: str,
+) -> None:
+    records.append(KogaCheckpoint(checkpoint_id, label, raw))
+    if progress is not None:
+        progress(
+            KogaProgress(
+                checkpoint_id,
+                label,
+                len(records),
+                KOGA_CHECKPOINT_COUNT,
+                emulator.frame_count,
+            )
+        )
+
+
+def _pulse(
+    actions: _CountingExecutor,
+    kind: MacroActionKind,
+    value: str | int | None = None,
+    *,
+    frames: int,
+) -> None:
+    actions.execute(MacroAction(kind, value))
+    actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
