@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **215/215 qualified checkpoints** through
-HM04 Strength and therefore **21/36 completion objectives**. Three clean runs were identical at
-the 1,875,968-frame / 22,779-action boundary. The evidence includes the earlier Brock
+The deterministic teacher currently verifies all **227/227 qualified checkpoints** through
+Erika and therefore **22/36 completion objectives**. Three clean runs were identical at
+the 2,222,506-frame / 25,472-action boundary. The evidence includes the earlier Brock
 and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
@@ -73,6 +73,12 @@ optional Route 10 trainer bypass, and a full three-member Center heal. The Celad
 the exact required Route 8 Lass identity and event transition, eight optional-trainer bypasses,
 the west-east Underground Path crossing, exact resource preservation, and a second full-party
 Center heal.
+The Erika segment adds the complete collision-qualified reverse traversal from Fuchsia through
+Routes 15–12 and the west-east Underground Path, explicit wild-flee recovery, tile-transition
+and input-readiness gates for every Cut and re-Cut, the two unavoidable Gym trainer identities,
+Erika's live identity, six Strength attacks, Rainbow Badge and TM21 mirrors, all seven deactivated
+Gym trainer events, and the natural level-42 Bite-to-Skull Bash transition before a final full
+Celadon Center heal.
 The Hideout segment adds five exact trainer identities, eight optional-trainer bypass gates,
 the Lift Key and elevator, Giovanni, the Silph Scope, a PP-preserving field Dig return, and a
 second healed Celadon boundary. It also records the pinned source's known B1 entered-event bug.

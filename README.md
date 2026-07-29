@@ -2,23 +2,25 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Strength qualified](https://img.shields.io/badge/status-Strength_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Rainbow qualified](https://img.shields.io/badge/status-Rainbow_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **215/215 qualified
+> **Current status:** one continuous deterministic teacher now reaches all **227/227 qualified
 > checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
 > Tunnel, clears the Rocket Hideout and Pokémon Tower, rescues Mr. Fuji, receives the Poké Flute,
 > defeats the Route 12 Snorlax, crosses Routes 12–15, collects the Gold Teeth, obtains reusable
 > HM03, teaches Surf over Water Gun, clears the Safari session through Time's Up, defeats the
 > three mandatory Fuchsia Gym trainers and Koga, retains the Soul Badge and TM06, returns the Gold
-> Teeth, receives reusable HM04, and teaches Strength over Tail Whip. That establishes **21/36
-> completion objectives**. Three clean runs produced the same 1,875,968-frame, 22,779-action
+> Teeth, receives reusable HM04, teaches Strength over Tail Whip, returns east across Routes
+> 15–12, defeats the two required Celadon Gym trainers and Erika, receives the Rainbow Badge and
+> TM21, and learns Skull Bash over Bite at level 42. That establishes **22/36 completion
+> objectives**. Three clean runs produced the same 2,222,506-frame, 25,472-action
 > result. This is an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next objective is defeating Erika. See the
-> [sanitized three-run Strength evidence receipt](docs/evidence/qualified-play-strength-2026-07-29.json).
+> game-completion claim. The next graph-selected objective is reaching Saffron. See the
+> [sanitized three-run Erika evidence receipt](docs/evidence/qualified-play-erika-2026-07-29.json).
 
 ## The goal
 

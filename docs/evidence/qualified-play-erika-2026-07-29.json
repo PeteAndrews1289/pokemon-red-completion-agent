@@ -1,0 +1,83 @@
+{
+  "schema": "qualified-play-v16-receipt",
+  "date": "2026-07-29",
+  "status": "ok",
+  "claim_scope": {
+    "qualified_through": "defeat_erika",
+    "game_complete": false,
+    "learned_policy": false,
+    "timing_or_rng_generalization": false
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "runs": 3,
+    "identical_reports": true,
+    "report_sha256": "4e497e50411913cad602b348ed7661b63c8dea11d0c7f5d271ebac3868e257fd",
+    "frames_per_run": 2222506,
+    "actions_per_run": 25472
+  },
+  "progress": {
+    "checkpoints_verified": 227,
+    "checkpoints_total": 227,
+    "objectives_verified": 22,
+    "objectives_total": 36,
+    "next_objective": "reach_saffron"
+  },
+  "erika_chapter": {
+    "frames": 346538,
+    "actions": 2693,
+    "route": {
+      "from": "Fuchsia Pokemon Center",
+      "to": "Celadon Pokemon Center",
+      "optional_route_14_trainers_defeated": 0,
+      "optional_route_15_trainers_defeated": 0
+    },
+    "required_gym_trainers": [
+      {"opponent": 203, "class": 3, "set": 17},
+      {"opponent": 232, "class": 32, "set": 1}
+    ],
+    "leader": {
+      "opponent": 237,
+      "class": 37,
+      "set": 1,
+      "strength_move_id": 70,
+      "strength_uses": 6
+    },
+    "move_learning": {
+      "level": 42,
+      "slot": 1,
+      "replaced_move_id": 44,
+      "learned_move_id": 130,
+      "moves_before": [44, 70, 61, 57],
+      "moves_after": [130, 70, 61, 57],
+      "terminal_pp": [15, 15, 20, 15]
+    },
+    "rewards": {
+      "obtained_badges": 31,
+      "beat_gym_flags": 31,
+      "beat_erika": true,
+      "got_tm21": true,
+      "tm21_item_id": 221,
+      "money": 41545,
+      "all_celadon_gym_trainers_deactivated": true
+    },
+    "terminal": {
+      "map": 133,
+      "x": 3,
+      "y": 3,
+      "party_hp": [130, 52, 37],
+      "party_max_hp": [130, 52, 37],
+      "party_status": [0, 0, 0],
+      "input_ready": true,
+      "controller_released": true
+    }
+  },
+  "privacy": {
+    "rom_path_included": false,
+    "rom_hash_included": false,
+    "save_state_included": false,
+    "personal_path_included": false
+  }
+}

@@ -39,6 +39,13 @@ from pokemon_red_completion.cerulean import (
 )
 from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.emulator import PyBoyAdapter
+from pokemon_red_completion.erika import (
+    ERIKA_CHECKPOINT_COUNT,
+    ErikaChapterError,
+    ErikaChapterReport,
+    ErikaProgress,
+    run_erika_chapter,
+)
 from pokemon_red_completion.executor import ExecutedAction, FrameSafeExecutor
 from pokemon_red_completion.fuchsia import (
     FUCHSIA_CHECKPOINT_COUNT,
@@ -155,8 +162,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + SAFARI_CHECKPOINT_COUNT
     + KOGA_CHECKPOINT_COUNT
     + STRENGTH_CHECKPOINT_COUNT
+    + ERIKA_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "obtain_strength"
+QUALIFIED_THROUGH_OBJECTIVE = "defeat_erika"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -295,6 +303,7 @@ class QualifiedPlayReport:
     safari: SafariChapterReport
     koga: KogaChapterReport
     strength: StrengthChapterReport
+    erika: ErikaChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -330,6 +339,7 @@ class QualifiedPlayReport:
             and self.safari.passed
             and self.koga.passed
             and self.strength.passed
+            and self.erika.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -381,10 +391,11 @@ class QualifiedPlayReport:
             *self.safari.checkpoints(),
             *self.koga.checkpoints(),
             *self.strength.checkpoints(),
+            *self.erika.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v15",
+            "schema": "qualified-play-v16",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -444,6 +455,7 @@ class QualifiedPlayReport:
             "safari_chapter": self.safari.public_dict(),
             "koga_chapter": self.koga.public_dict(),
             "strength_chapter": self.strength.public_dict(),
+            "erika_chapter": self.erika.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -753,6 +765,16 @@ def run_qualified_play(
         except StrengthChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            erika = run_erika_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_erika_progress_bridge(progress),
+            )
+        except ErikaChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -770,11 +792,12 @@ def run_qualified_play(
             | semantic_facts(safari.final_raw)
             | semantic_facts(koga.final_raw)
             | semantic_facts(strength.final_raw)
+            | semantic_facts(erika.final_raw)
         )
         state = GameState(
-            mode=game_mode(strength.final_raw),
+            mode=game_mode(erika.final_raw),
             facts=facts,
-            location=location_label(strength.final_raw.map_id),
+            location=location_label(erika.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -808,6 +831,7 @@ def run_qualified_play(
             safari=safari,
             koga=koga,
             strength=strength,
+            erika=erika,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -1331,6 +1355,43 @@ def _strength_progress_bridge(
                     + FUCHSIA_CHECKPOINT_COUNT
                     + SAFARI_CHECKPOINT_COUNT
                     + KOGA_CHECKPOINT_COUNT
+                    + progress.completed
+                ),
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _erika_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[ErikaProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: ErikaProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=(
+                    POKEDEX_CHECKPOINT_COUNT
+                    + PEWTER_CHECKPOINT_COUNT
+                    + CERULEAN_CHECKPOINT_COUNT
+                    + CASCADE_CHECKPOINT_COUNT
+                    + VERMILION_CHECKPOINT_COUNT
+                    + SS_ANNE_CHECKPOINT_COUNT
+                    + SURGE_CHECKPOINT_COUNT
+                    + LAVENDER_CHECKPOINT_COUNT
+                    + CELADON_CHECKPOINT_COUNT
+                    + HIDEOUT_CHECKPOINT_COUNT
+                    + TOWER_CHECKPOINT_COUNT
+                    + FUCHSIA_CHECKPOINT_COUNT
+                    + SAFARI_CHECKPOINT_COUNT
+                    + KOGA_CHECKPOINT_COUNT
+                    + STRENGTH_CHECKPOINT_COUNT
                     + progress.completed
                 ),
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
