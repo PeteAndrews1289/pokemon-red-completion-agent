@@ -42,9 +42,10 @@ The bootstrap sequence was adapted from
 `0e2df37720eec7d148187eb1001bf2d9502aa4f6`. Private blind-run checkpoints and screenshots are not
 completion demonstrations and are not loaded by this project.
 
-The qualified bedroom-to-Cerulean route is new successor work. Its map dimensions,
+The qualified bedroom-to-Misty route is new successor work. Its map dimensions,
 collision-safe corridors, warps, Pallet Town, Route 1, Viridian Forest, Pewter Gym, Route 3, Mt.
-Moon, and story, party, battle, badge, fossil, and inventory gates are derived from
+Moon, Nugget Bridge, Route 25, Bill, Cerulean Gym, and story, party, battle, badge, fossil, and
+inventory gates are derived from
 [`pret/pokered`](https://github.com/pret/pokered) commit
 `1e96034092686d006e863cace09e87273051a3d8`, then independently exercised against the exact
 supported ROM. The teacher checks the resulting semantic phase after each bounded action rather
@@ -52,13 +53,14 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **36/36 qualified checkpoints** through
-Cerulean City and therefore **7/36 completion objectives**. Three clean runs were identical at the
-252,989-frame / 3,604-action boundary. The evidence includes Brock's live battle and rewards, four
-required Route 3 trainers, the required Rocket and Super Nerd battles, the Helix Fossil event plus
-inventory item, and stable Cerulean entry with a status-free level-17 Wartortle. No
-behavioral-cloning, DAgger, robustness, or full-game result is implied. The next teaching segment
-helps Bill and qualifies the Cerulean Gym strategy from repeated successful runs.
+The deterministic teacher currently verifies all **58/58 qualified checkpoints** through Misty
+and therefore **9/36 completion objectives**. Three clean runs were identical at the
+434,510-frame / 5,936-action boundary. The evidence includes the earlier Brock and Mt. Moon gates,
+the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
+S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
+Badge and TM11 proof with a surviving status-free level-24 Wartortle. No behavioral-cloning,
+DAgger, robustness, timing/RNG generalization, or full-game result is implied. The next teaching
+segment reaches Vermilion and begins the S.S. Anne route.
 
 The same segment can run headlessly or be observed locally with:
 

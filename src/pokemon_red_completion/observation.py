@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import IntEnum, IntFlag, StrEnum
 from typing import Protocol
 
@@ -30,11 +30,18 @@ class RamAddress(IntEnum):
     MENU_WATCHED_KEYS = 0xCC29
     MENU_CURSOR_LOCATION = 0xCC30
     NPC_MOVEMENT_SCRIPT_TABLE = 0xCC57
+    PLAYER_ATTACK_STAGE = 0xCD1A
+    PLAYER_ACCURACY_STAGE = 0xCD1E
+    ENEMY_DEFENSE_STAGE = 0xCD2F
     ENGAGED_TRAINER_CLASS = 0xCD2D
     ENGAGED_TRAINER_SET = 0xCD2E
     SIMULATED_JOYPAD_INDEX = 0xCD38
     JOY_IGNORE = 0xCD6B
     BATTLE_RESULT = 0xCF0B
+    ENEMY_SPECIES = 0xCFE5
+    ENEMY_HP = 0xCFE6
+    ENEMY_LEVEL = 0xCFF3
+    ENEMY_MAX_HP = 0xCFF4
     TRAINER_CLASS = 0xD031
     IS_IN_BATTLE = 0xD057
     CURRENT_OPPONENT = 0xD059
@@ -63,12 +70,15 @@ class RamAddress(IntEnum):
     ROUTE_4_SCRIPT = 0xD5F9
     PEWTER_GYM_SCRIPT = 0xD5FC
     CERULEAN_GYM_SCRIPT = 0xD5FD
+    ROUTE_24_SCRIPT = 0xD602
+    ROUTE_25_SCRIPT = 0xD603
     MT_MOON_1F_SCRIPT = 0xD606
     MT_MOON_B2F_SCRIPT = 0xD607
     REDS_HOUSE_2F_SCRIPT = 0xD60C
     VIRIDIAN_MART_SCRIPT = 0xD60D
     CERULEAN_CITY_SCRIPT = 0xD60F
     VIRIDIAN_FOREST_SCRIPT = 0xD618
+    BILLS_HOUSE_SCRIPT = 0xD661
     BEAT_GYM_FLAGS = 0xD72A
     STATUS_FLAGS_5 = 0xD730
     STATUS_FLAGS_6 = 0xD732
@@ -93,6 +103,8 @@ class MapId(IntEnum):
     ROUTE_2 = 0x0D
     ROUTE_3 = 0x0E
     ROUTE_4 = 0x0F
+    ROUTE_24 = 0x23
+    ROUTE_25 = 0x24
     REDS_HOUSE_1F = 0x25
     REDS_HOUSE_2F = 0x26
     OAKS_LAB = 0x28
@@ -110,6 +122,7 @@ class MapId(IntEnum):
     CERULEAN_POKECENTER = 0x40
     CERULEAN_GYM = 0x41
     MT_MOON_POKECENTER = 0x44
+    BILLS_HOUSE = 0x58
     HALL_OF_FAME = 0x76
     CHAMPIONS_ROOM = 0x78
     INDIGO_PLATEAU_LOBBY = 0xAE
@@ -151,7 +164,30 @@ class EventFlag(IntEnum):
     BEAT_ROUTE_3_TRAINER_6 = 0x3E8
     BEAT_ROUTE_3_TRAINER_7 = 0x3E9
     BEAT_ROUTE_4_TRAINER_0 = 0x3F2
+    GOT_NUGGET = 0x540
+    BEAT_ROUTE_24_ROCKET = 0x541
+    BEAT_ROUTE_24_TRAINER_0 = 0x542
+    BEAT_ROUTE_24_TRAINER_1 = 0x543
+    BEAT_ROUTE_24_TRAINER_2 = 0x544
+    BEAT_ROUTE_24_TRAINER_3 = 0x545
+    BEAT_ROUTE_24_TRAINER_4 = 0x546
+    BEAT_ROUTE_24_TRAINER_5 = 0x547
+    NUGGET_REWARD_AVAILABLE = 0x549
+    MET_BILL = 0x550
+    BEAT_ROUTE_25_TRAINER_0 = 0x551
+    BEAT_ROUTE_25_TRAINER_1 = 0x552
+    BEAT_ROUTE_25_TRAINER_2 = 0x553
+    BEAT_ROUTE_25_TRAINER_3 = 0x554
+    BEAT_ROUTE_25_TRAINER_4 = 0x555
+    BEAT_ROUTE_25_TRAINER_5 = 0x556
+    BEAT_ROUTE_25_TRAINER_6 = 0x557
+    BEAT_ROUTE_25_TRAINER_7 = 0x558
+    BEAT_ROUTE_25_TRAINER_8 = 0x559
+    USED_CELL_SEPARATOR_ON_BILL = 0x55B
     GOT_SS_TICKET = 0x55C
+    MET_BILL_2 = 0x55D
+    BILL_SAID_USE_CELL_SEPARATOR = 0x55E
+    LEFT_BILLS_HOUSE_AFTER_HELPING = 0x55F
     BEAT_MT_MOON_1_TRAINER_0 = 0x571
     BEAT_MT_MOON_1_TRAINER_1 = 0x572
     BEAT_MT_MOON_1_TRAINER_2 = 0x573
@@ -181,6 +217,7 @@ class ItemId(IntEnum):
     DOME_FOSSIL = 0x29
     HELIX_FOSSIL = 0x2A
     SECRET_KEY = 0x2B
+    NUGGET = 0x31
     SS_TICKET = 0x3F
     OAKS_PARCEL = 0x46
     SILPH_SCOPE = 0x48
@@ -212,12 +249,19 @@ JOY_IGNORE_CANCEL_MASK = 0x02
 JOY_IGNORE_MOVEMENT_MASK = 0xF0
 SCRIPTED_MOVEMENT_STATUS_MASK = (1 << 0) | (1 << 5) | (1 << 7)
 EXITING_DOOR_MOVEMENT_MASK = 1 << 1
+ABRA_SPECIES_ID = 0x94
+PIDGEOTTO_SPECIES_ID = 0x96
+BULBASAUR_SPECIES_ID = 0x99
+RATTATA_SPECIES_ID = 0xA5
 SQUIRTLE_SPECIES_ID = 0xB1
 WARTORTLE_SPECIES_ID = 0xB3
 BLASTOISE_SPECIES_ID = 0x1C
 SQUIRTLE_LINEAGE_SPECIES_IDS = frozenset(
     {SQUIRTLE_SPECIES_ID, WARTORTLE_SPECIES_ID, BLASTOISE_SPECIES_ID}
 )
+TACKLE_MOVE_ID = 0x21
+TAIL_WHIP_MOVE_ID = 0x27
+WATER_GUN_MOVE_ID = 0x37
 BUBBLE_MOVE_ID = 0x91
 BROCK_OPPONENT_ID = 0xEA
 BROCK_TRAINER_CLASS_ID = 0x22
@@ -229,6 +273,19 @@ YOUNGSTER_OPPONENT_ID = 0xC9
 YOUNGSTER_TRAINER_CLASS_ID = 0x01
 BUG_CATCHER_OPPONENT_ID = 0xCA
 BUG_CATCHER_TRAINER_CLASS_ID = 0x02
+LASS_OPPONENT_ID = 0xCB
+LASS_TRAINER_CLASS_ID = 0x03
+JR_TRAINER_M_OPPONENT_ID = 0xCD
+JR_TRAINER_M_TRAINER_CLASS_ID = 0x05
+JR_TRAINER_F_OPPONENT_ID = 0xCE
+JR_TRAINER_F_TRAINER_CLASS_ID = 0x06
+HIKER_OPPONENT_ID = 0xD1
+HIKER_TRAINER_CLASS_ID = 0x09
+RIVAL1_OPPONENT_ID = 0xE1
+RIVAL1_TRAINER_CLASS_ID = 0x19
+CERULEAN_RIVAL_TRAINER_NUMBER = 8
+CERULEAN_RIVAL_TRIGGER_Y = 6
+CERULEAN_RIVAL_TRIGGER_XS = frozenset({20, 21})
 ROUTE_3_REQUIRED_TRAINER_SPECS = (
     (0, BUG_CATCHER_OPPONENT_ID, BUG_CATCHER_TRAINER_CLASS_ID, 4),
     (1, YOUNGSTER_OPPONENT_ID, YOUNGSTER_TRAINER_CLASS_ID, 1),
@@ -244,10 +301,108 @@ MT_MOON_REQUIRED_ROCKET_TRAINER_NUMBER = 1
 MT_MOON_REQUIRED_ROCKET_EVENT = EventFlag.BEAT_MT_MOON_3_TRAINER_0
 MT_MOON_REQUIRED_ROCKET_TRIGGER_X = 11
 MT_MOON_REQUIRED_ROCKET_TRIGGER_Y = 19
+# The selected northbound bridge route alternates lanes around the five
+# trainers. Each tuple is:
+# (object/header index, event, opponent, class, party number, player x, player y).
+ROUTE_24_REQUIRED_TRAINER_SPECS = (
+    (
+        5,
+        EventFlag.BEAT_ROUTE_24_TRAINER_5,
+        BUG_CATCHER_OPPONENT_ID,
+        BUG_CATCHER_TRAINER_CLASS_ID,
+        9,
+        10,
+        31,
+    ),
+    (
+        4,
+        EventFlag.BEAT_ROUTE_24_TRAINER_4,
+        LASS_OPPONENT_ID,
+        LASS_TRAINER_CLASS_ID,
+        8,
+        11,
+        28,
+    ),
+    (
+        3,
+        EventFlag.BEAT_ROUTE_24_TRAINER_3,
+        YOUNGSTER_OPPONENT_ID,
+        YOUNGSTER_TRAINER_CLASS_ID,
+        4,
+        10,
+        25,
+    ),
+    (
+        2,
+        EventFlag.BEAT_ROUTE_24_TRAINER_2,
+        LASS_OPPONENT_ID,
+        LASS_TRAINER_CLASS_ID,
+        7,
+        11,
+        22,
+    ),
+    (
+        1,
+        EventFlag.BEAT_ROUTE_24_TRAINER_1,
+        JR_TRAINER_M_OPPONENT_ID,
+        JR_TRAINER_M_TRAINER_CLASS_ID,
+        3,
+        10,
+        19,
+    ),
+)
+ROUTE_24_ROCKET_TRAINER_NUMBER = 6
+ROUTE_24_ROCKET_TRIGGER_X = 10
+ROUTE_24_ROCKET_TRIGGER_Y = 15
+# The collision-qualified Route 25 line deliberately avoids five optional
+# trainers. These are the four live battles on the selected path to Bill.
+ROUTE_25_REQUIRED_TRAINER_SPECS = (
+    (
+        8,
+        EventFlag.BEAT_ROUTE_25_TRAINER_8,
+        HIKER_OPPONENT_ID,
+        HIKER_TRAINER_CLASS_ID,
+        4,
+        15,
+        7,
+    ),
+    (
+        3,
+        EventFlag.BEAT_ROUTE_25_TRAINER_3,
+        LASS_OPPONENT_ID,
+        LASS_TRAINER_CLASS_ID,
+        9,
+        20,
+        8,
+    ),
+    (
+        2,
+        EventFlag.BEAT_ROUTE_25_TRAINER_2,
+        JR_TRAINER_M_OPPONENT_ID,
+        JR_TRAINER_M_TRAINER_CLASS_ID,
+        2,
+        24,
+        6,
+    ),
+    (
+        5,
+        EventFlag.BEAT_ROUTE_25_TRAINER_5,
+        LASS_OPPONENT_ID,
+        LASS_TRAINER_CLASS_ID,
+        10,
+        37,
+        5,
+    ),
+)
 MISTY_OPPONENT_ID = 0xEB
 MISTY_TRAINER_CLASS_ID = 0x23
 MISTY_TRAINER_NUMBER = 1
 MISTY_GYM_LEADER_NUMBER = 2
+CERULEAN_GYM_REQUIRED_TRAINER_NUMBER = 1
+CERULEAN_GYM_REQUIRED_TRAINER_TRIGGER_X = 5
+CERULEAN_GYM_REQUIRED_TRAINER_TRIGGER_Y = 3
+MISTY_TRIGGER_X = 5
+MISTY_TRIGGER_Y = 2
 MAIN_BATTLE_MENU_LEFT_SIGNATURE = (0x0E, 0x09, 0x11)
 MAIN_BATTLE_MENU_RIGHT_SIGNATURE = (0x0E, 0x0F, 0x21)
 MOVE_BATTLE_MENU_SIGNATURE = (0x0C, 0x05, 0xC7)
@@ -284,6 +439,13 @@ class RawGameState:
     battle_result: int | None = None
     first_party_moves: tuple[int, ...] | None = None
     first_party_pp: tuple[int, ...] | None = None
+    enemy_species_id: int | None = None
+    enemy_hp: int | None = None
+    enemy_level: int | None = None
+    enemy_max_hp: int | None = None
+    player_attack_stage: int | None = None
+    player_accuracy_stage: int | None = None
+    enemy_defense_stage: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -1111,6 +1273,767 @@ class CeruleanProgressTracker:
         return state.phase
 
 
+class CascadePhase(StrEnum):
+    """Source-pinned semantic phases from Cerulean arrival through Misty."""
+
+    UNKNOWN = "unknown"
+    CERULEAN_READY = "cerulean_ready"
+    RIVAL_BATTLE = "rival_battle"
+    RIVAL_DEFEATED = "rival_defeated"
+    ROUTE_24_TRAINER_BATTLE = "route_24_trainer_battle"
+    NUGGET_ROCKET_BATTLE = "nugget_rocket_battle"
+    NUGGET_ROCKET_DEFEATED = "nugget_rocket_defeated"
+    ROUTE_25_TRAINER_BATTLE = "route_25_trainer_battle"
+    BILL_REQUESTED_HELP = "bill_requested_help"
+    BILL_CELL_SEPARATOR_USED = "bill_cell_separator_used"
+    BILL_RESTORED = "bill_restored"
+    SS_TICKET_OBTAINED = "ss_ticket_obtained"
+    BILLS_HOUSE_LEFT = "bills_house_left"
+    CERULEAN_GYM_TRAINER_BATTLE = "cerulean_gym_trainer_battle"
+    CERULEAN_GYM_TRAINER_DEFEATED = "cerulean_gym_trainer_defeated"
+    MISTY_BATTLE = "misty_battle"
+    MISTY_DEFEATED = "misty_defeated"
+
+
+@dataclass(frozen=True, slots=True)
+class CascadeState:
+    """Semantic evidence for the Cerulean rival, Bill, and Cascade Badge."""
+
+    phase: CascadePhase
+    controls: InputReadiness
+    local_script: int
+    current_map_script: int
+    prior_chapter_complete: bool
+    beat_cerulean_rival: bool
+    route_24_trainer_events: tuple[bool, bool, bool, bool, bool]
+    got_nugget: bool
+    nugget_in_bag: bool
+    beat_route_24_rocket: bool
+    route_25_trainer_events: tuple[bool, bool, bool, bool]
+    bill_said_use_cell_separator: bool
+    used_cell_separator_on_bill: bool
+    met_bill: bool
+    met_bill_2: bool
+    got_ss_ticket: bool
+    ss_ticket_in_bag: bool
+    left_bills_house_after_helping: bool
+    beat_cerulean_gym_trainer_0: bool
+    beat_misty: bool
+    got_tm11: bool
+    tm11_in_bag: bool
+    cascade_badge: bool
+    cascade_badge_mirror: bool
+    current_opponent: int
+    trainer_class: int
+    trainer_number: int
+    engaged_trainer_class: int
+    engaged_trainer_set: int
+    gym_leader_number: int
+    map_id: int | None
+    player_x: int | None
+    player_y: int | None
+    party_count: int | None
+    party_species_ids: tuple[int, ...] | None
+    first_party_hp: int | None
+    first_party_max_hp: int | None
+    first_party_status: int | None
+    battle_state: int | None
+    battle_result: int | None
+
+    @property
+    def foundation_invariants(self) -> bool:
+        species = self.party_species_ids or ()
+        return (
+            self.prior_chapter_complete
+            and 1 <= (self.party_count or 0) <= PARTY_LIMIT
+            and bool(species)
+            and species[0] in SQUIRTLE_LINEAGE_SPECIES_IDS
+            and 0 < (self.first_party_hp or 0) <= (self.first_party_max_hp or 0)
+        )
+
+    @property
+    def stable_snapshot(self) -> bool:
+        return (
+            self.foundation_invariants
+            and self.battle_state == 0
+            and self.local_script == 0
+            and self.current_map_script == 0
+            and self.controls.ready
+        )
+
+    @property
+    def no_cascade_progress(self) -> bool:
+        return (
+            not self.beat_cerulean_rival
+            and not any(self.route_24_trainer_events)
+            and not self.got_nugget
+            and not self.nugget_in_bag
+            and not self.beat_route_24_rocket
+            and not any(self.route_25_trainer_events)
+            and not self.bill_said_use_cell_separator
+            and not self.used_cell_separator_on_bill
+            and not self.met_bill
+            and not self.met_bill_2
+            and not self.got_ss_ticket
+            and not self.ss_ticket_in_bag
+            and not self.left_bills_house_after_helping
+            and not self.beat_cerulean_gym_trainer_0
+            and not self.beat_misty
+            and not self.got_tm11
+            and not self.tm11_in_bag
+            and not self.cascade_badge
+            and not self.cascade_badge_mirror
+        )
+
+    @property
+    def cerulean_start_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.CERULEAN_READY
+            and self.map_id == MapId.CERULEAN_CITY
+            and self.player_x == 0
+            and self.player_y == 18
+            and self.stable_snapshot
+            and self.no_cascade_progress
+        )
+
+    @property
+    def rival_battle_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.RIVAL_BATTLE
+            and self.map_id == MapId.CERULEAN_CITY
+            and self.foundation_invariants
+            and self.battle_state == 2
+            and self.local_script == 2
+            # Cerulean City's custom script table never mirrors its local
+            # index through wCurMapScript.
+            and self.current_map_script == 0
+            and self.player_x in CERULEAN_RIVAL_TRIGGER_XS
+            and self.player_y == CERULEAN_RIVAL_TRIGGER_Y
+            and not self.beat_cerulean_rival
+            and self.current_opponent == RIVAL1_OPPONENT_ID
+            and self.trainer_class == RIVAL1_TRAINER_CLASS_ID
+            and self.trainer_number == CERULEAN_RIVAL_TRAINER_NUMBER
+        )
+
+    @property
+    def rival_victory_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.RIVAL_DEFEATED
+            and self.map_id == MapId.CERULEAN_CITY
+            and self.stable_snapshot
+            and self.battle_result == 0
+            and self.beat_cerulean_rival
+        )
+
+    @property
+    def route_24_trainers_defeated(self) -> bool:
+        return all(self.route_24_trainer_events)
+
+    @property
+    def route_24_trainer_battle_index(self) -> int | None:
+        if (
+            self.phase is not CascadePhase.ROUTE_24_TRAINER_BATTLE
+            or self.map_id != MapId.ROUTE_24
+            or not self.foundation_invariants
+            or not self.beat_cerulean_rival
+            or self.battle_state != 2
+            or self.local_script != 2
+            or self.current_map_script != 2
+        ):
+            return None
+        for spec, defeated in zip(
+            ROUTE_24_REQUIRED_TRAINER_SPECS,
+            self.route_24_trainer_events,
+            strict=True,
+        ):
+            (
+                event_index,
+                _,
+                opponent,
+                expected_class,
+                expected_number,
+                expected_x,
+                expected_y,
+            ) = spec
+            if (
+                not defeated
+                and self.current_opponent == opponent
+                and self.trainer_class == expected_class
+                and self.trainer_number == expected_number
+                and self.engaged_trainer_class == opponent
+                and self.engaged_trainer_set == expected_number
+                and self.player_x == expected_x
+                and self.player_y == expected_y
+            ):
+                return event_index
+        return None
+
+    @property
+    def route_24_trainer_battle_snapshot(self) -> bool:
+        return self.route_24_trainer_battle_index is not None
+
+    @property
+    def nugget_rocket_battle_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.NUGGET_ROCKET_BATTLE
+            and self.map_id == MapId.ROUTE_24
+            and self.foundation_invariants
+            and self.beat_cerulean_rival
+            and self.route_24_trainers_defeated
+            and self.got_nugget
+            and self.nugget_in_bag
+            and not self.beat_route_24_rocket
+            and self.battle_state == 2
+            and self.local_script == 3
+            and self.current_map_script == 3
+            and self.player_x == ROUTE_24_ROCKET_TRIGGER_X
+            and self.player_y == ROUTE_24_ROCKET_TRIGGER_Y
+            and self.current_opponent == ROCKET_OPPONENT_ID
+            and self.trainer_class == ROCKET_TRAINER_CLASS_ID
+            and self.trainer_number == ROUTE_24_ROCKET_TRAINER_NUMBER
+            and self.engaged_trainer_class == ROCKET_OPPONENT_ID
+            and self.engaged_trainer_set == ROUTE_24_ROCKET_TRAINER_NUMBER
+        )
+
+    @property
+    def nugget_rocket_victory_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.NUGGET_ROCKET_DEFEATED
+            and self.map_id == MapId.ROUTE_24
+            and self.stable_snapshot
+            and self.battle_result == 0
+            and self.beat_cerulean_rival
+            and self.route_24_trainers_defeated
+            and self.got_nugget
+            and self.nugget_in_bag
+            and self.beat_route_24_rocket
+        )
+
+    @property
+    def route_25_trainers_defeated(self) -> bool:
+        return all(self.route_25_trainer_events)
+
+    @property
+    def route_25_trainer_battle_index(self) -> int | None:
+        if (
+            self.phase is not CascadePhase.ROUTE_25_TRAINER_BATTLE
+            or self.map_id != MapId.ROUTE_25
+            or not self.foundation_invariants
+            or not self.beat_cerulean_rival
+            or not self.route_24_trainers_defeated
+            or not self.got_nugget
+            or not self.beat_route_24_rocket
+            or self.battle_state != 2
+            or self.local_script != 2
+            or self.current_map_script != 2
+        ):
+            return None
+        for spec, defeated in zip(
+            ROUTE_25_REQUIRED_TRAINER_SPECS,
+            self.route_25_trainer_events,
+            strict=True,
+        ):
+            (
+                event_index,
+                _,
+                opponent,
+                expected_class,
+                expected_number,
+                expected_x,
+                expected_y,
+            ) = spec
+            if (
+                not defeated
+                and self.current_opponent == opponent
+                and self.trainer_class == expected_class
+                and self.trainer_number == expected_number
+                and self.engaged_trainer_class == opponent
+                and self.engaged_trainer_set == expected_number
+                and self.player_x == expected_x
+                and self.player_y == expected_y
+            ):
+                return event_index
+        return None
+
+    @property
+    def route_25_trainer_battle_snapshot(self) -> bool:
+        return self.route_25_trainer_battle_index is not None
+
+    @property
+    def bill_route_invariants(self) -> bool:
+        return (
+            self.foundation_invariants
+            and self.beat_cerulean_rival
+            and self.route_24_trainers_defeated
+            and self.got_nugget
+            and self.beat_route_24_rocket
+            and self.route_25_trainers_defeated
+        )
+
+    @property
+    def bill_requested_help_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.BILL_REQUESTED_HELP
+            and self.map_id == MapId.BILLS_HOUSE
+            and self.bill_route_invariants
+            and self.battle_state == 0
+            and self.local_script == 3
+            and self.current_map_script == 0
+            and self.controls.ready
+            and self.bill_said_use_cell_separator
+            and not self.used_cell_separator_on_bill
+            and not self.met_bill
+            and not self.met_bill_2
+            and not self.got_ss_ticket
+            and not self.left_bills_house_after_helping
+        )
+
+    @property
+    def bill_cell_separator_used_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.BILL_CELL_SEPARATOR_USED
+            and self.map_id == MapId.BILLS_HOUSE
+            and self.bill_route_invariants
+            and self.battle_state == 0
+            and self.local_script in {3, 4}
+            and self.current_map_script == 0
+            and self.bill_said_use_cell_separator
+            and self.used_cell_separator_on_bill
+            and not self.met_bill
+            and not self.met_bill_2
+            and not self.got_ss_ticket
+            and not self.left_bills_house_after_helping
+        )
+
+    @property
+    def bill_restored_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.BILL_RESTORED
+            and self.map_id == MapId.BILLS_HOUSE
+            and self.bill_route_invariants
+            and self.stable_snapshot
+            and self.bill_said_use_cell_separator
+            and self.used_cell_separator_on_bill
+            and self.met_bill
+            and self.met_bill_2
+            and not self.got_ss_ticket
+            and not self.left_bills_house_after_helping
+        )
+
+    @property
+    def ss_ticket_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.SS_TICKET_OBTAINED
+            and self.map_id == MapId.BILLS_HOUSE
+            and self.bill_route_invariants
+            and self.stable_snapshot
+            and self.bill_said_use_cell_separator
+            and self.used_cell_separator_on_bill
+            and self.met_bill
+            and self.met_bill_2
+            and self.got_ss_ticket
+            and self.ss_ticket_in_bag
+            and not self.left_bills_house_after_helping
+        )
+
+    @property
+    def bills_house_left_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.BILLS_HOUSE_LEFT
+            and self.map_id == MapId.ROUTE_25
+            and self.player_x == 45
+            and self.player_y == 4
+            and self.bill_route_invariants
+            and self.stable_snapshot
+            and self.bill_said_use_cell_separator
+            and self.used_cell_separator_on_bill
+            and self.met_bill
+            and self.met_bill_2
+            and self.got_ss_ticket
+            and self.ss_ticket_in_bag
+            and self.left_bills_house_after_helping
+        )
+
+    @property
+    def bill_completion_invariants(self) -> bool:
+        return (
+            self.bill_route_invariants
+            and self.bill_said_use_cell_separator
+            and self.used_cell_separator_on_bill
+            and self.met_bill
+            and self.met_bill_2
+            and self.got_ss_ticket
+            and self.ss_ticket_in_bag
+            and self.left_bills_house_after_helping
+        )
+
+    @property
+    def cerulean_gym_trainer_battle_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.CERULEAN_GYM_TRAINER_BATTLE
+            and self.map_id == MapId.CERULEAN_GYM
+            and self.bill_completion_invariants
+            and self.foundation_invariants
+            and self.battle_state == 2
+            and self.local_script == 2
+            and self.current_map_script == 2
+            and self.player_x == CERULEAN_GYM_REQUIRED_TRAINER_TRIGGER_X
+            and self.player_y == CERULEAN_GYM_REQUIRED_TRAINER_TRIGGER_Y
+            and not self.beat_cerulean_gym_trainer_0
+            and not self.beat_misty
+            and not self.got_tm11
+            and not self.tm11_in_bag
+            and not self.cascade_badge
+            and not self.cascade_badge_mirror
+            and self.current_opponent == JR_TRAINER_F_OPPONENT_ID
+            and self.trainer_class == JR_TRAINER_F_TRAINER_CLASS_ID
+            and self.trainer_number == CERULEAN_GYM_REQUIRED_TRAINER_NUMBER
+            and self.engaged_trainer_class == JR_TRAINER_F_OPPONENT_ID
+            and self.engaged_trainer_set == CERULEAN_GYM_REQUIRED_TRAINER_NUMBER
+        )
+
+    @property
+    def cerulean_gym_trainer_victory_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.CERULEAN_GYM_TRAINER_DEFEATED
+            and self.map_id == MapId.CERULEAN_GYM
+            and self.bill_completion_invariants
+            and self.stable_snapshot
+            and self.battle_result == 0
+            and self.beat_cerulean_gym_trainer_0
+            and not self.beat_misty
+            and not self.got_tm11
+            and not self.tm11_in_bag
+            and not self.cascade_badge
+            and not self.cascade_badge_mirror
+            and self.first_party_status == 0
+        )
+
+    @property
+    def gym_route_invariants(self) -> bool:
+        return self.bill_completion_invariants and self.beat_cerulean_gym_trainer_0
+
+    @property
+    def misty_battle_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.MISTY_BATTLE
+            and self.map_id == MapId.CERULEAN_GYM
+            and self.gym_route_invariants
+            and self.foundation_invariants
+            and self.battle_state == 2
+            and self.local_script == 3
+            # Misty's custom gym script advances locally but does not update
+            # the mirrored current-map script used by ordinary trainers.
+            and self.current_map_script == 0
+            and self.player_x == MISTY_TRIGGER_X
+            and self.player_y == MISTY_TRIGGER_Y
+            and not self.beat_misty
+            and not self.got_tm11
+            and not self.tm11_in_bag
+            and not self.cascade_badge
+            and not self.cascade_badge_mirror
+            and self.current_opponent == MISTY_OPPONENT_ID
+            and self.trainer_class == MISTY_TRAINER_CLASS_ID
+            and self.trainer_number == MISTY_TRAINER_NUMBER
+            and self.engaged_trainer_class == MISTY_OPPONENT_ID
+            and self.engaged_trainer_set == MISTY_TRAINER_NUMBER
+            and self.gym_leader_number == MISTY_GYM_LEADER_NUMBER
+        )
+
+    @property
+    def misty_victory_snapshot(self) -> bool:
+        return (
+            self.phase is CascadePhase.MISTY_DEFEATED
+            and self.map_id == MapId.CERULEAN_GYM
+            and self.gym_route_invariants
+            and self.stable_snapshot
+            and self.battle_result == 0
+            and self.beat_misty
+            and self.got_tm11
+            and self.tm11_in_bag
+            and self.cascade_badge
+            and self.cascade_badge_mirror
+            and self.first_party_status == 0
+        )
+
+
+class CascadeProgressError(ValueError):
+    """Raised when rival-to-Cascade evidence skips or contradicts a gate."""
+
+
+class CascadeProgressTracker:
+    """Latch the exact live battles and Bill event transitions in order."""
+
+    def __init__(self, cerulean_state: CeruleanChapterState) -> None:
+        if not cerulean_state.cerulean_snapshot:
+            raise CascadeProgressError(
+                "Cascade qualification must begin at verified Cerulean arrival."
+            )
+        self._saw_rival_battle = False
+        self._rival_defeated = False
+        self._route_24_trainer_position = -1
+        self._saw_nugget_rocket_battle = False
+        self._nugget_rocket_defeated = False
+        self._route_25_trainer_position = -1
+        self._bill_stage = 0
+        self._saw_cerulean_gym_trainer_battle = False
+        self._cerulean_gym_trainer_defeated = False
+        self._saw_misty_battle = False
+        self._misty_defeated = False
+
+    @property
+    def saw_rival_battle(self) -> bool:
+        return self._saw_rival_battle
+
+    @property
+    def rival_defeated(self) -> bool:
+        return self._rival_defeated
+
+    @property
+    def observed_route_24_trainers(self) -> tuple[int, ...]:
+        return tuple(
+            spec[0]
+            for spec in ROUTE_24_REQUIRED_TRAINER_SPECS[
+                : self._route_24_trainer_position + 1
+            ]
+        )
+
+    @property
+    def saw_nugget_rocket_battle(self) -> bool:
+        return self._saw_nugget_rocket_battle
+
+    @property
+    def nugget_rocket_defeated(self) -> bool:
+        return self._nugget_rocket_defeated
+
+    @property
+    def observed_route_25_trainers(self) -> tuple[int, ...]:
+        return tuple(
+            spec[0]
+            for spec in ROUTE_25_REQUIRED_TRAINER_SPECS[
+                : self._route_25_trainer_position + 1
+            ]
+        )
+
+    @property
+    def bills_house_left(self) -> bool:
+        return self._bill_stage >= 5
+
+    @property
+    def saw_cerulean_gym_trainer_battle(self) -> bool:
+        return self._saw_cerulean_gym_trainer_battle
+
+    @property
+    def cerulean_gym_trainer_defeated(self) -> bool:
+        return self._cerulean_gym_trainer_defeated
+
+    @property
+    def saw_misty_battle(self) -> bool:
+        return self._saw_misty_battle
+
+    @property
+    def misty_defeated(self) -> bool:
+        return self._misty_defeated
+
+    def observe(self, state: CascadeState) -> CascadePhase:
+        if state.misty_victory_snapshot:
+            if not self._saw_misty_battle:
+                raise CascadeProgressError(
+                    "Misty victory cannot qualify without the observed live battle."
+                )
+            self._misty_defeated = True
+            return CascadePhase.MISTY_DEFEATED
+
+        if state.misty_battle_snapshot:
+            if not self._cerulean_gym_trainer_defeated:
+                raise CascadeProgressError(
+                    "Misty appeared before the required Cerulean Gym trainer victory."
+                )
+            self._saw_misty_battle = True
+            return CascadePhase.MISTY_BATTLE
+
+        if state.cerulean_gym_trainer_victory_snapshot:
+            if not self._saw_cerulean_gym_trainer_battle:
+                raise CascadeProgressError(
+                    "Cerulean Gym trainer victory lacks the observed live battle."
+                )
+            self._cerulean_gym_trainer_defeated = True
+            return CascadePhase.CERULEAN_GYM_TRAINER_DEFEATED
+
+        if state.cerulean_gym_trainer_battle_snapshot:
+            if self._bill_stage != 5:
+                raise CascadeProgressError(
+                    "Cerulean Gym trainer appeared before Bill's Route 25 exit proof."
+                )
+            self._saw_cerulean_gym_trainer_battle = True
+            return CascadePhase.CERULEAN_GYM_TRAINER_BATTLE
+
+        if state.bills_house_left_snapshot:
+            if self._bill_stage == 5:
+                return CascadePhase.BILLS_HOUSE_LEFT
+            if self._bill_stage != 4:
+                raise CascadeProgressError(
+                    "Bill's Route 25 exit appeared before the S.S. Ticket proof."
+                )
+            self._bill_stage = 5
+            return CascadePhase.BILLS_HOUSE_LEFT
+
+        if state.ss_ticket_snapshot:
+            if self._bill_stage == 4:
+                return CascadePhase.SS_TICKET_OBTAINED
+            if self._bill_stage != 3:
+                raise CascadeProgressError(
+                    "S.S. Ticket appeared before Bill was restored."
+                )
+            self._bill_stage = 4
+            return CascadePhase.SS_TICKET_OBTAINED
+
+        if state.bill_restored_snapshot:
+            if self._bill_stage == 3:
+                return CascadePhase.BILL_RESTORED
+            if self._bill_stage != 2:
+                raise CascadeProgressError(
+                    "Bill's restored form appeared before the cell separator proof."
+                )
+            self._bill_stage = 3
+            return CascadePhase.BILL_RESTORED
+
+        if state.bill_cell_separator_used_snapshot:
+            if self._bill_stage == 2:
+                return CascadePhase.BILL_CELL_SEPARATOR_USED
+            if self._bill_stage != 1:
+                raise CascadeProgressError(
+                    "Bill's cell separator event skipped the help request."
+                )
+            self._bill_stage = 2
+            return CascadePhase.BILL_CELL_SEPARATOR_USED
+
+        if state.bill_requested_help_snapshot:
+            if self._bill_stage == 1:
+                return CascadePhase.BILL_REQUESTED_HELP
+            if self._bill_stage != 0:
+                raise CascadeProgressError(
+                    "Bill's help request regressed after a later Bill proof."
+                )
+            if (
+                not self._nugget_rocket_defeated
+                or self._route_25_trainer_position
+                != len(ROUTE_25_REQUIRED_TRAINER_SPECS) - 1
+                or not state.route_25_trainers_defeated
+            ):
+                raise CascadeProgressError(
+                    "Bill appeared before all four selected Route 25 battles."
+                )
+            self._bill_stage = 1
+            return CascadePhase.BILL_REQUESTED_HELP
+
+        if state.route_25_trainer_battle_snapshot:
+            if not self._nugget_rocket_defeated:
+                raise CascadeProgressError(
+                    "Route 25 trainer appeared before the Nugget Rocket victory."
+                )
+            observed_event = state.route_25_trainer_battle_index
+            current_event = (
+                ROUTE_25_REQUIRED_TRAINER_SPECS[
+                    self._route_25_trainer_position
+                ][0]
+                if self._route_25_trainer_position >= 0
+                else None
+            )
+            if observed_event == current_event:
+                return CascadePhase.ROUTE_25_TRAINER_BATTLE
+            expected_position = self._route_25_trainer_position + 1
+            if expected_position >= len(ROUTE_25_REQUIRED_TRAINER_SPECS):
+                raise CascadeProgressError(
+                    "Unexpected Route 25 trainer after the selected battles."
+                )
+            if observed_event != ROUTE_25_REQUIRED_TRAINER_SPECS[expected_position][0]:
+                raise CascadeProgressError(
+                    "Route 25 trainer evidence skipped or reordered a selected battle."
+                )
+            if not all(state.route_25_trainer_events[:expected_position]):
+                raise CascadeProgressError(
+                    "A Route 25 trainer event did not flip after its live battle."
+                )
+            self._route_25_trainer_position = expected_position
+            return CascadePhase.ROUTE_25_TRAINER_BATTLE
+
+        if state.nugget_rocket_victory_snapshot:
+            if not self._saw_nugget_rocket_battle:
+                raise CascadeProgressError(
+                    "Nugget Rocket victory lacks the observed live Rocket battle."
+                )
+            self._nugget_rocket_defeated = True
+            return CascadePhase.NUGGET_ROCKET_DEFEATED
+
+        if state.nugget_rocket_battle_snapshot:
+            if (
+                not self._rival_defeated
+                or self._route_24_trainer_position
+                != len(ROUTE_24_REQUIRED_TRAINER_SPECS) - 1
+                or not state.route_24_trainers_defeated
+            ):
+                raise CascadeProgressError(
+                    "Nugget Rocket appeared before all five bridge trainers."
+                )
+            self._saw_nugget_rocket_battle = True
+            return CascadePhase.NUGGET_ROCKET_BATTLE
+
+        if state.route_24_trainer_battle_snapshot:
+            if not self._rival_defeated:
+                raise CascadeProgressError(
+                    "Route 24 trainer appeared before the Cerulean rival victory."
+                )
+            observed_event = state.route_24_trainer_battle_index
+            current_event = (
+                ROUTE_24_REQUIRED_TRAINER_SPECS[
+                    self._route_24_trainer_position
+                ][0]
+                if self._route_24_trainer_position >= 0
+                else None
+            )
+            if observed_event == current_event:
+                return CascadePhase.ROUTE_24_TRAINER_BATTLE
+            expected_position = self._route_24_trainer_position + 1
+            if expected_position >= len(ROUTE_24_REQUIRED_TRAINER_SPECS):
+                raise CascadeProgressError(
+                    "Unexpected Route 24 trainer after all five bridge battles."
+                )
+            if observed_event != ROUTE_24_REQUIRED_TRAINER_SPECS[expected_position][0]:
+                raise CascadeProgressError(
+                    "Route 24 trainer evidence skipped or reordered a bridge battle."
+                )
+            if not all(state.route_24_trainer_events[:expected_position]):
+                raise CascadeProgressError(
+                    "A Route 24 trainer event did not flip after its live battle."
+                )
+            self._route_24_trainer_position = expected_position
+            return CascadePhase.ROUTE_24_TRAINER_BATTLE
+
+        if state.rival_victory_snapshot:
+            if not self._saw_rival_battle:
+                raise CascadeProgressError(
+                    "Cerulean rival victory lacks the observed live battle."
+                )
+            self._rival_defeated = True
+            return CascadePhase.RIVAL_DEFEATED
+
+        if state.rival_battle_snapshot:
+            if self._saw_rival_battle:
+                return CascadePhase.RIVAL_BATTLE
+            self._saw_rival_battle = True
+            return CascadePhase.RIVAL_BATTLE
+
+        if state.cerulean_start_snapshot:
+            return CascadePhase.CERULEAN_READY
+
+        if state.phase is not CascadePhase.UNKNOWN:
+            raise CascadeProgressError(
+                f"{state.phase.value} failed its source-pinned semantic snapshot."
+            )
+        return CascadePhase.UNKNOWN
+
+
 class PokemonRedStateReader:
     def __init__(self, memory: ReadOnlyMemory) -> None:
         self._memory = memory
@@ -1165,13 +2088,14 @@ class PokemonRedStateReader:
             self._memory.read_u8(int(RamAddress.EVENT_FLAGS) + index)
             for index in range(EVENT_FLAG_BYTES)
         )
+        battle_state = self._memory.read_u8(RamAddress.IS_IN_BATTLE)
         return RawGameState(
             game_started=True,
             map_id=self._memory.read_u8(RamAddress.CURRENT_MAP),
             player_x=self._memory.read_u8(RamAddress.PLAYER_X),
             player_y=self._memory.read_u8(RamAddress.PLAYER_Y),
             party_count=party_count,
-            battle_state=self._memory.read_u8(RamAddress.IS_IN_BATTLE),
+            battle_state=battle_state,
             badge_bits=self._memory.read_u8(RamAddress.OBTAINED_BADGES),
             bag_item_ids=bag_items,
             event_flags=events,
@@ -1183,6 +2107,25 @@ class PokemonRedStateReader:
             battle_result=self._memory.read_u8(RamAddress.BATTLE_RESULT),
             first_party_moves=first_party_moves,
             first_party_pp=first_party_pp,
+            enemy_species_id=self._memory.read_u8(RamAddress.ENEMY_SPECIES),
+            enemy_hp=self._read_u16_be(RamAddress.ENEMY_HP),
+            enemy_level=self._memory.read_u8(RamAddress.ENEMY_LEVEL),
+            enemy_max_hp=self._read_u16_be(RamAddress.ENEMY_MAX_HP),
+            player_attack_stage=(
+                self._memory.read_u8(RamAddress.PLAYER_ATTACK_STAGE)
+                if battle_state
+                else None
+            ),
+            player_accuracy_stage=(
+                self._memory.read_u8(RamAddress.PLAYER_ACCURACY_STAGE)
+                if battle_state
+                else None
+            ),
+            enemy_defense_stage=(
+                self._memory.read_u8(RamAddress.ENEMY_DEFENSE_STAGE)
+                if battle_state
+                else None
+            ),
         )
 
     def read_bedroom_input_state(self) -> BedroomInputState:
@@ -1657,6 +2600,144 @@ class PokemonRedStateReader:
             battle_result=raw.battle_result,
         )
 
+    def read_cascade_state(self, raw: RawGameState) -> CascadeState:
+        """Translate the pinned Cerulean rival, Bill, and Misty evidence."""
+        controls = self.read_input_readiness()
+        local_script = self._local_script(raw.map_id)
+        current_map_script = self._memory.read_u8(RamAddress.CURRENT_MAP_SCRIPT)
+        items = set(raw.bag_item_ids or ())
+        badge_bits = raw.badge_bits or 0
+        badge_mirror = self._memory.read_u8(RamAddress.BEAT_GYM_FLAGS)
+
+        route_24_events = tuple(
+            _event(raw.event_flags, spec[1])
+            for spec in ROUTE_24_REQUIRED_TRAINER_SPECS
+        )
+        route_25_events = tuple(
+            _event(raw.event_flags, spec[1])
+            for spec in ROUTE_25_REQUIRED_TRAINER_SPECS
+        )
+        state = CascadeState(
+            phase=CascadePhase.UNKNOWN,
+            controls=controls,
+            local_script=local_script,
+            current_map_script=current_map_script,
+            prior_chapter_complete=_cascade_prior_chapter_complete(
+                raw, items, badge_mirror
+            ),
+            beat_cerulean_rival=_event(
+                raw.event_flags, EventFlag.BEAT_CERULEAN_RIVAL
+            ),
+            route_24_trainer_events=(
+                route_24_events[0],
+                route_24_events[1],
+                route_24_events[2],
+                route_24_events[3],
+                route_24_events[4],
+            ),
+            got_nugget=_event(raw.event_flags, EventFlag.GOT_NUGGET),
+            nugget_in_bag=ItemId.NUGGET in items,
+            beat_route_24_rocket=_event(
+                raw.event_flags, EventFlag.BEAT_ROUTE_24_ROCKET
+            ),
+            route_25_trainer_events=(
+                route_25_events[0],
+                route_25_events[1],
+                route_25_events[2],
+                route_25_events[3],
+            ),
+            bill_said_use_cell_separator=_event(
+                raw.event_flags, EventFlag.BILL_SAID_USE_CELL_SEPARATOR
+            ),
+            used_cell_separator_on_bill=_event(
+                raw.event_flags, EventFlag.USED_CELL_SEPARATOR_ON_BILL
+            ),
+            met_bill=_event(raw.event_flags, EventFlag.MET_BILL),
+            met_bill_2=_event(raw.event_flags, EventFlag.MET_BILL_2),
+            got_ss_ticket=_event(raw.event_flags, EventFlag.GOT_SS_TICKET),
+            ss_ticket_in_bag=ItemId.SS_TICKET in items,
+            left_bills_house_after_helping=_event(
+                raw.event_flags, EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING
+            ),
+            beat_cerulean_gym_trainer_0=_event(
+                raw.event_flags, EventFlag.BEAT_CERULEAN_GYM_TRAINER_0
+            ),
+            beat_misty=_event(raw.event_flags, EventFlag.BEAT_MISTY),
+            got_tm11=_event(raw.event_flags, EventFlag.GOT_TM11),
+            tm11_in_bag=ItemId.TM11_BUBBLEBEAM in items,
+            cascade_badge=bool(badge_bits & Badge.CASCADE),
+            cascade_badge_mirror=bool(badge_mirror & Badge.CASCADE),
+            current_opponent=self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
+            trainer_class=self._memory.read_u8(RamAddress.TRAINER_CLASS),
+            trainer_number=self._memory.read_u8(RamAddress.TRAINER_NUMBER),
+            engaged_trainer_class=self._memory.read_u8(
+                RamAddress.ENGAGED_TRAINER_CLASS
+            ),
+            engaged_trainer_set=self._memory.read_u8(
+                RamAddress.ENGAGED_TRAINER_SET
+            ),
+            gym_leader_number=self._memory.read_u8(
+                RamAddress.GYM_LEADER_NUMBER
+            ),
+            map_id=raw.map_id,
+            player_x=raw.player_x,
+            player_y=raw.player_y,
+            party_count=raw.party_count,
+            party_species_ids=raw.party_species_ids,
+            first_party_hp=raw.first_party_hp,
+            first_party_max_hp=raw.first_party_max_hp,
+            first_party_status=raw.first_party_status,
+            battle_state=raw.battle_state,
+            battle_result=raw.battle_result,
+        )
+        phase_snapshots = (
+            (CascadePhase.MISTY_DEFEATED, "misty_victory_snapshot"),
+            (CascadePhase.MISTY_BATTLE, "misty_battle_snapshot"),
+            (
+                CascadePhase.CERULEAN_GYM_TRAINER_DEFEATED,
+                "cerulean_gym_trainer_victory_snapshot",
+            ),
+            (
+                CascadePhase.CERULEAN_GYM_TRAINER_BATTLE,
+                "cerulean_gym_trainer_battle_snapshot",
+            ),
+            (CascadePhase.BILLS_HOUSE_LEFT, "bills_house_left_snapshot"),
+            (CascadePhase.SS_TICKET_OBTAINED, "ss_ticket_snapshot"),
+            (CascadePhase.BILL_RESTORED, "bill_restored_snapshot"),
+            (
+                CascadePhase.BILL_CELL_SEPARATOR_USED,
+                "bill_cell_separator_used_snapshot",
+            ),
+            (
+                CascadePhase.BILL_REQUESTED_HELP,
+                "bill_requested_help_snapshot",
+            ),
+            (
+                CascadePhase.ROUTE_25_TRAINER_BATTLE,
+                "route_25_trainer_battle_snapshot",
+            ),
+            (
+                CascadePhase.NUGGET_ROCKET_DEFEATED,
+                "nugget_rocket_victory_snapshot",
+            ),
+            (
+                CascadePhase.NUGGET_ROCKET_BATTLE,
+                "nugget_rocket_battle_snapshot",
+            ),
+            (
+                CascadePhase.ROUTE_24_TRAINER_BATTLE,
+                "route_24_trainer_battle_snapshot",
+            ),
+            (CascadePhase.RIVAL_DEFEATED, "rival_victory_snapshot"),
+            (CascadePhase.RIVAL_BATTLE, "rival_battle_snapshot"),
+            (CascadePhase.CERULEAN_READY, "cerulean_start_snapshot"),
+        )
+        for phase, snapshot_name in phase_snapshots:
+            candidate = replace(state, phase=phase)
+            if getattr(candidate, snapshot_name):
+                return candidate
+        return state
+
     def _local_script(self, map_id: int | None) -> int:
         address = {
             MapId.OAKS_LAB: RamAddress.OAKS_LAB_SCRIPT,
@@ -1671,6 +2752,9 @@ class PokemonRedStateReader:
             MapId.MT_MOON_B2F: RamAddress.MT_MOON_B2F_SCRIPT,
             MapId.CERULEAN_CITY: RamAddress.CERULEAN_CITY_SCRIPT,
             MapId.CERULEAN_GYM: RamAddress.CERULEAN_GYM_SCRIPT,
+            MapId.ROUTE_24: RamAddress.ROUTE_24_SCRIPT,
+            MapId.ROUTE_25: RamAddress.ROUTE_25_SCRIPT,
+            MapId.BILLS_HOUSE: RamAddress.BILLS_HOUSE_SCRIPT,
         }.get(map_id)
         return self._memory.read_u8(address) if address is not None else 0
 
@@ -1754,6 +2838,42 @@ def _required_route_3_trainer_position(
     return None
 
 
+def _cascade_prior_chapter_complete(
+    raw: RawGameState, items: set[int], badge_mirror: int
+) -> bool:
+    got_dome_fossil = _event(raw.event_flags, EventFlag.GOT_DOME_FOSSIL)
+    got_helix_fossil = _event(raw.event_flags, EventFlag.GOT_HELIX_FOSSIL)
+    corresponding_fossil = (
+        got_dome_fossil
+        and ItemId.DOME_FOSSIL in items
+        and not got_helix_fossil
+        and ItemId.HELIX_FOSSIL not in items
+    ) or (
+        got_helix_fossil
+        and ItemId.HELIX_FOSSIL in items
+        and not got_dome_fossil
+        and ItemId.DOME_FOSSIL not in items
+    )
+    return (
+        _event(raw.event_flags, EventFlag.BEAT_BROCK)
+        and _event(raw.event_flags, EventFlag.GOT_TM34)
+        and bool((raw.badge_bits or 0) & Badge.BOULDER)
+        and bool(badge_mirror & Badge.BOULDER)
+        and all(
+            _event(raw.event_flags, event)
+            for event in (
+                EventFlag.BEAT_ROUTE_3_TRAINER_0,
+                EventFlag.BEAT_ROUTE_3_TRAINER_1,
+                EventFlag.BEAT_ROUTE_3_TRAINER_3,
+                EventFlag.BEAT_ROUTE_3_TRAINER_6,
+                MT_MOON_REQUIRED_ROCKET_EVENT,
+                EventFlag.BEAT_MT_MOON_EXIT_SUPER_NERD,
+            )
+        )
+        and corresponding_fossil
+    )
+
+
 def event_flag_is_set(event_flags: bytes | None, bit_index: int) -> bool:
     if bit_index < 0:
         raise ValueError("event bit index cannot be negative")
@@ -1820,6 +2940,8 @@ def location_label(map_id: int | None) -> str | None:
         MapId.ROUTE_2: "route_2",
         MapId.ROUTE_3: "route_3",
         MapId.ROUTE_4: "route_4",
+        MapId.ROUTE_24: "route_24",
+        MapId.ROUTE_25: "route_25",
         MapId.REDS_HOUSE_1F: "reds_house_1f",
         MapId.REDS_HOUSE_2F: "reds_house_2f",
         MapId.OAKS_LAB: "oaks_lab",
@@ -1837,6 +2959,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.CERULEAN_POKECENTER: "cerulean_pokecenter",
         MapId.CERULEAN_GYM: "cerulean_gym",
         MapId.MT_MOON_POKECENTER: "mt_moon_pokecenter",
+        MapId.BILLS_HOUSE: "bills_house",
         MapId.HALL_OF_FAME: "hall_of_fame",
         MapId.CHAMPIONS_ROOM: "champions_room",
         MapId.INDIGO_PLATEAU_LOBBY: "indigo_plateau_lobby",

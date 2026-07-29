@@ -36,6 +36,7 @@ class GridMap:
     width: int
     height: int
     blocked: frozenset[Coordinate] = frozenset()
+    blocked_transitions: frozenset[tuple[Coordinate, Coordinate]] = frozenset()
 
     def __post_init__(self) -> None:
         if self.width <= 0 or self.height <= 0:
@@ -43,6 +44,20 @@ class GridMap:
         outside = sorted(point for point in self.blocked if not self.contains(point))
         if outside:
             raise ValueError(f"Blocked coordinates outside the grid: {outside!r}")
+        invalid_transitions = sorted(
+            (start, end)
+            for start, end in self.blocked_transitions
+            if (
+                not self.contains(start)
+                or not self.contains(end)
+                or start.manhattan_distance(end) != 1
+            )
+        )
+        if invalid_transitions:
+            raise ValueError(
+                "Blocked transitions must connect adjacent in-bounds coordinates: "
+                f"{invalid_transitions!r}"
+            )
 
     def contains(self, point: Coordinate) -> bool:
         return 0 <= point.x < self.width and 0 <= point.y < self.height
@@ -71,6 +86,8 @@ class GridMap:
         for direction in Direction:
             dx, dy = direction.delta
             candidate = Coordinate(point.x + dx, point.y + dy)
+            if (point, candidate) in self.blocked_transitions:
+                continue
             if self.is_walkable(
                 candidate,
                 goal=goal,

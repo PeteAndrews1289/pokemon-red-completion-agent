@@ -303,6 +303,56 @@ class _CeruleanEvidence:
         }
 
 
+class _CascadeEvidence:
+    passed = True
+    final_raw = _raw(MapId.CERULEAN_GYM, 5, 2)
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "cerulean_rival_battle",
+            "cerulean_rival_defeated",
+            "route_24_trainer_5",
+            "route_24_trainer_4",
+            "route_24_trainer_3",
+            "route_24_trainer_2",
+            "route_24_trainer_1",
+            "nugget_rocket_battle",
+            "nugget_rocket_defeated",
+            "route_25_trainer_8",
+            "route_25_trainer_3",
+            "route_25_trainer_2",
+            "route_25_trainer_5",
+            "bill_requested_help",
+            "bill_cell_separator_used",
+            "bill_restored",
+            "ss_ticket_obtained",
+            "bills_house_left",
+            "cerulean_gym_trainer_battle",
+            "cerulean_gym_trainer_defeated",
+            "misty_battle",
+            "misty_defeated",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok",
+            "route": {
+                "route_24_trainers": [5, 4, 3, 2, 1],
+                "route_25_trainers": [8, 3, 2, 5],
+            },
+            "cascade": {
+                "victory_verified": True,
+                "badge_verified": True,
+                "tm11_verified": True,
+                "ss_ticket_verified": True,
+            },
+        }
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -376,16 +426,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 36
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 58
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=36,
+        completed=58,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 36
+    assert progress.completed == progress.total == 58
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -473,6 +523,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         pokedex_received=_raw(MapId.OAKS_LAB, 5, 3),
         pewter=_PewterEvidence(),  # type: ignore[arg-type]
         cerulean=_CeruleanEvidence(),  # type: ignore[arg-type]
+        cascade=_CascadeEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -486,6 +537,8 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "location:pewter_city",
                 "badge:boulder",
                 "location:cerulean_city",
+                "item:ss_ticket",
+                "badge:cascade",
             }
         ),
         verified_objectives=(
@@ -496,10 +549,12 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_pewter",
             "defeat_brock",
             "reach_cerulean",
+            "help_bill",
+            "defeat_misty",
         ),
-        next_objective="help_bill",
-        frames_executed=252_989,
-        actions_executed=3_604,
+        next_objective="reach_vermilion",
+        frames_executed=394_000,
+        actions_executed=5_704,
         controller_released=True,
     )
 
@@ -507,9 +562,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v3"
+    assert public["schema"] == "qualified-play-v4"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "reach_cerulean"
+    assert public["qualified_through"] == "defeat_misty"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -549,9 +604,31 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "mt_moon_b1f_ascent",
         "mt_moon_exited",
         "cerulean_reached",
+        "cerulean_rival_battle",
+        "cerulean_rival_defeated",
+        "route_24_trainer_5",
+        "route_24_trainer_4",
+        "route_24_trainer_3",
+        "route_24_trainer_2",
+        "route_24_trainer_1",
+        "nugget_rocket_battle",
+        "nugget_rocket_defeated",
+        "route_25_trainer_8",
+        "route_25_trainer_3",
+        "route_25_trainer_2",
+        "route_25_trainer_5",
+        "bill_requested_help",
+        "bill_cell_separator_used",
+        "bill_restored",
+        "ss_ticket_obtained",
+        "bills_house_left",
+        "cerulean_gym_trainer_battle",
+        "cerulean_gym_trainer_defeated",
+        "misty_battle",
+        "misty_defeated",
     ]
     assert public["objective_progress"] == {
-        "verified": 7,
+        "verified": 9,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -561,8 +638,10 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_pewter",
             "defeat_brock",
             "reach_cerulean",
+            "help_bill",
+            "defeat_misty",
         ],
-        "next": "help_bill",
+        "next": "reach_vermilion",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -694,7 +773,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_reaches_verified_cerulean_without_adjacent_artifacts() -> None:
+def test_private_rom_reaches_verified_misty_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -715,7 +794,14 @@ def test_private_rom_reaches_verified_cerulean_without_adjacent_artifacts() -> N
         "reach_pewter",
         "defeat_brock",
         "reach_cerulean",
+        "help_bill",
+        "defeat_misty",
     )
-    assert report.next_objective == "help_bill"
-    assert report.frames_executed == 252_989
+    assert report.next_objective == "reach_vermilion"
+    assert report.frames_executed == 434_510
+    assert report.actions_executed == 5_936
+    assert report.cascade.final_evidence.misty_victory_snapshot
+    assert report.cascade.final_evidence.cascade_badge
+    assert report.cascade.final_evidence.tm11_in_bag
+    assert report.cascade.final_evidence.ss_ticket_in_bag
     assert before == after

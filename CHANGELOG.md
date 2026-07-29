@@ -16,6 +16,10 @@
   rival, both Route 1 crossings, Oak's Parcel, Viridian Forest, and Brock.
 - Qualified 21/21 semantic checkpoints and 6/36 completion objectives across three identical
   122,999-frame / 1,573-action clean runs.
+- Extended the continuous deterministic teacher through the Cerulean rival, Nugget Bridge,
+  selected Route 25 trainers, Bill, the mandatory Cerulean Gym trainer, and Misty.
+- Qualified 58/58 semantic checkpoints and 9/36 completion objectives across three identical
+  434,510-frame / 5,936-action clean runs, with Cascade Badge, TM11, and S.S. Ticket evidence.
 - Added fail-closed rival, parcel, Pokédex, forest, Brock-identity, battle-readiness, badge, and
   TM34 and post-dialogue movement evidence gates plus an explicit bounded safe stop that cannot be
   mistaken for completion.
