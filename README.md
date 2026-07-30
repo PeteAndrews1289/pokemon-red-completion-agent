@@ -2,12 +2,12 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Giovanni qualified](https://img.shields.io/badge/status-Giovanni_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Victory Road qualified](https://img.shields.io/badge/status-Victory_Road_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **275/275 qualified
+> **Current status:** one continuous deterministic teacher now reaches all **284/284 qualified
 > checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
 > Tunnel, clears the Rocket Hideout and Pokémon Tower, rescues Mr. Fuji, receives the Poké Flute,
 > defeats the Route 12 Snorlax, crosses Routes 12–15, collects the Gold Teeth, obtains reusable
@@ -26,12 +26,15 @@ control, and progressively trained specialists.**
 > all six Gym quizzes, defeats Blaine, receives TM38 and the Volcano Badge, and heals. It then
 > flies to Viridian, sells TM46 to reserve Giovanni's reward slot, clears the six required Gym
 > battles, restores the party, defeats Giovanni, receives TM27 and the Earth Badge, activates the
-> Route 22 rival gate, and heals with all eight badges. That establishes **29/36 completion
-> objectives**. Three clean runs produced the same 4,033,092-frame, 34,178-action result. This is
+> Route 22 rival gate, and heals with all eight badges. It then teaches Toxic over its obsolete
+> opening move, resupplies in Saffron, defeats the final Route 22 rival with live HP-aware
+> recovery, passes every Route 23 badge gate, solves all three floors of Victory Road, and reaches
+> Indigo Plateau fully healed with an Elite Four reserve. That establishes **30/36 completion
+> objectives**. Three clean runs produced the same 4,427,245-frame, 37,535-action result. This is
 > an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next graph-selected objective is crossing Victory Road. See the
-> [sanitized three-run Giovanni evidence receipt](docs/evidence/qualified-play-giovanni-2026-07-29.json).
+> game-completion claim. The next graph-selected objective is defeating Lorelei. See the
+> [sanitized three-run Victory Road evidence receipt](docs/evidence/qualified-play-victory-road-2026-07-29.json).
 
 ## The goal
 
@@ -189,6 +192,10 @@ It then flies to Viridian, frees one bag slot by selling TM46, solves the spinne
 the six route-gating trainers with Strength and Ice Beam, heals before the leader, defeats
 Giovanni with Surf, verifies TM27, both Earth Badge lanes, and both Route 22 rival events, then
 returns to a healed Viridian Center with all eight badges.
+It then teaches Toxic, prepares a bounded Saffron recovery and repel reserve, defeats the final
+Route 22 rival with state-aware healing, verifies all seven remaining Route 23 badge checks,
+solves every Strength boulder and switch in Victory Road, reaches Indigo Plateau, heals, and buys
+the declared Full Restore, Revive, Hyper Potion, and Max Repel reserve.
 It stops automatically after the
 latest independently qualified objective and reports that the game is not complete. The forest
 segment deliberately trains against three verified Kakuna encounters and one mandatory Bug

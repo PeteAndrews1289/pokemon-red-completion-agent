@@ -25,10 +25,10 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **275/275 bounded checkpoints** and **29/36 completion objectives**, ending
-after six required Viridian Gym battles, Giovanni, TM27, both Earth Badge lanes, both Route 22
-rival events, and a full Viridian heal. Three clean runs reached the identical
-4,033,092-frame / 34,178-action boundary.
+Current qualification: **284/284 bounded checkpoints** and **30/36 completion objectives**, ending
+after the final Route 22 rival, every Route 23 badge gate, all Victory Road boulder switches, an
+Indigo Plateau heal, and the declared Elite Four supply purchase. Three clean runs reached the
+identical 4,427,245-frame / 37,535-action boundary.
 This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
@@ -79,17 +79,20 @@ learned-policy, timing/RNG-generalization, or completion result.
 - [x] Qualify Viridian Fly and inventory preparation, the spinner-floor route, six required Gym
   trainers, pre-leader recovery, Giovanni's exact party, TM27, Earth Badge, and Route 22 rival
   activation.
+- [x] Qualify Toxic preparation, the final Route 22 rival with bounded live recovery, all Route 23
+  badge checks, every Victory Road Strength switch and boulder drop, Indigo healing, and Elite Four
+  supplies.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: defeat the Route 22 rival, pass all eight Route 23 badge gates, and cross Victory
-Road.
+Next sequence: defeat Lorelei, Bruno, Agatha, and Lance, then defeat the Champion and verify the
+Hall of Fame.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Giovanni three-run evidence receipt](evidence/qualified-play-giovanni-2026-07-29.json).
+[Victory Road three-run evidence receipt](evidence/qualified-play-victory-road-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs reach the healed post-Giovanni Viridian
-Center boundary with identical evidence rules.
+Exit gate: three intervention-free clean-power-on runs reach the healed, supplied Indigo Plateau
+boundary with identical evidence rules.
 
 ## Milestone 2 — deterministic expert
 

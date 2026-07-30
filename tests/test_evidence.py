@@ -57,6 +57,9 @@ BLAINE_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-blaine-202
 GIOVANNI_RECEIPT = (
     PROJECT_ROOT / "docs" / "evidence" / "qualified-play-giovanni-2026-07-29.json"
 )
+VICTORY_ROAD_RECEIPT = (
+    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-victory-road-2026-07-29.json"
+)
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -1486,6 +1489,58 @@ def test_giovanni_receipt_is_repeatable_complete_and_privacy_safe() -> None:
     assert chapter["terminal"]["party_hp"] == chapter["terminal"]["party_max_hp"]
     assert chapter["terminal"]["lead_pp"] == [15, 15, 10, 15]
     assert chapter["terminal"]["controller_released"] is True
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_victory_road_receipt_is_repeatable_complete_and_privacy_safe() -> None:
+    receipt = json.loads(VICTORY_ROAD_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "qualified-play-v23-receipt"
+    assert receipt["status"] == "ok"
+    assert receipt["claim_scope"] == {
+        "qualified_through": "cross_victory_road",
+        "game_complete": False,
+        "learned_policy": False,
+        "timing_or_rng_generalization": False,
+    }
+    assert receipt["evaluation"] == {
+        "clean_power_on": True,
+        "human_input": False,
+        "save_state_restoration": False,
+        "runs": 3,
+        "identical_reports": True,
+        "frames_per_run": 4_427_245,
+        "actions_per_run": 37_535,
+        "rom_adjacent_artifacts_unchanged": True,
+    }
+    assert receipt["progress"] == {
+        "checkpoints_verified": 284,
+        "checkpoints_total": 284,
+        "objectives_verified": 30,
+        "objectives_total": 36,
+        "next_objective": "defeat_lorelei",
+    }
+    chapter = receipt["victory_road_chapter"]
+    assert chapter["frames"] == 394_153
+    assert chapter["actions"] == 3_357
+    assert chapter["route22_rival"]["party"] == [
+        [0x97, 47],
+        [0x12, 45],
+        [0x16, 45],
+        [0x21, 47],
+        [0x95, 50],
+        [0x9A, 53],
+    ]
+    assert chapter["route23"]["remaining_badge_checks"] == [True] * 7
+    assert all(chapter["victory_road"].values())
+    terminal = chapter["terminal"]
+    assert terminal["party_hp"] == terminal["party_max_hp"] == [157, 52, 37]
+    assert terminal["lead_moves"] == [0x5C, 0x46, 0x3A, 0x39]
+    assert terminal["lead_pp"] == [10, 15, 10, 15]
+    assert terminal["controller_released"] is True
     serialized = json.dumps(receipt)
     assert "/Users/" not in serialized
     assert "Downloads" not in serialized

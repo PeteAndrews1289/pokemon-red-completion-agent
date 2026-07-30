@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **275/275 qualified checkpoints** through
-Giovanni and therefore **29/36 completion objectives**. Three clean runs were identical at
-the 4,033,092-frame / 34,178-action boundary. The evidence includes the earlier Brock
+The deterministic teacher currently verifies all **284/284 qualified checkpoints** through
+Victory Road and therefore **30/36 completion objectives**. Three clean runs were identical at
+the 4,427,245-frame / 37,535-action boundary. The evidence includes the earlier Brock
 and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
@@ -243,16 +243,18 @@ restore, rewind, or import state from another run.
 14. Extend and replay-qualify Route 12 Snorlax through stable Fuchsia Center. **Done.**
 15. Extend and replay-qualify the Safari Zone, HM03 Surf, Fuchsia Gym, Koga, and HM04 Strength.
     **Done.**
-16. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
+16. Extend and replay-qualify all remaining badges, the final Route 22 rival, Route 23, Victory
+    Road, and Indigo Plateau preparation. **Done.**
+17. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
-17. Train a small behavior-cloning baseline per specialist.
-18. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
+18. Train a small behavior-cloning baseline per specialist.
+19. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
    from the frozen perturbation suite for that skill.
-19. Extend the teacher chapter-by-chapter through the remainder of the game.
-20. Produce multiple clean teacher completions with timing and RNG variation.
-21. Train the semantic planner and full-game composition only after that coverage exists.
-22. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
+20. Extend the teacher through the Elite Four, Champion, and Hall of Fame.
+21. Produce multiple clean teacher completions with timing and RNG variation.
+22. Train the semantic planner and full-game composition only after that coverage exists.
+23. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
-The current evaluation gate is three intervention-free clean-power-on runs through Giovanni.
+The current evaluation gate is three intervention-free clean-power-on runs through Victory Road.
 A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
 frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.
