@@ -1,0 +1,127 @@
+{
+  "schema": "private-battle-decision-receipt-v1",
+  "recorded_on": "2026-07-30",
+  "evidence_lane": "deterministic_teacher_adaptive_battle_decisions",
+  "claim_scope": {
+    "game_complete": true,
+    "adaptive_battle_decision_labels": true,
+    "all_battle_decisions_labeled": false,
+    "model_ready_dataset": false,
+    "learned_policy": false,
+    "transfer_result": false
+  },
+  "source": {
+    "git_commit": "fb6a7b9ab73daf202e8ca74e5537d449ce4b466e",
+    "worktree_dirty": false
+  },
+  "runtime": {
+    "emulator_name": "PyBoy",
+    "emulator_version": "2.7.0",
+    "python_version": "3.14.3"
+  },
+  "rom": {
+    "title": "POKEMON RED",
+    "size_bytes": 1048576,
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+  },
+  "objective_graph_sha256": "fd0dd3395f15145ee32822e12f73644e4987c9ec362a6e874ac09dd29c5aba18",
+  "configuration_sha256": "40a29b6fd8a29c85991dea44043968333e1756501074fb3b1e2b2410c0119aac",
+  "collection": {
+    "assistance_class": "teacher",
+    "start_type": "clean_power_on",
+    "human_input": false,
+    "save_restore_used": false,
+    "perturbation_schedule": "none",
+    "seed_protocol": "native_power_on_rng",
+    "series_id": "red-teacher-nominal-v1",
+    "attempt_counted": true,
+    "split_partition": "unassigned"
+  },
+  "episode": {
+    "episode_id": "red-teacher-f5be924ec2104a8f96a1c8c860f808ef",
+    "status": "complete",
+    "storage": "private_external_volume",
+    "distributed": false,
+    "manifest_sha256": "3ed9e3f7cfccb9dcf2e1f0c11b6a53f687854e35bf1766f66c44e8ebfe07a750",
+    "streams": {
+      "episode": 1,
+      "decisions": 422,
+      "events": 300,
+      "executions": 41330,
+      "snapshots": 14760
+    },
+    "total_records": 56813,
+    "total_bytes": 39291235
+  },
+  "gameplay": {
+    "checkpoints_verified": 299,
+    "checkpoints_total": 299,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "frames_executed": 4796436,
+    "actions_executed": 41330,
+    "qualified_through": "enter_hall_of_fame",
+    "controller_released": true
+  },
+  "decision_audit": {
+    "decision_type": "battle_move_selection",
+    "policy_id": "pokemon-red-qualified-teacher-v1",
+    "skill_id": "pokemon.core:battle:move_selection",
+    "action_kind": "select_move",
+    "slot_indexing": "zero_based",
+    "decision_records": 422,
+    "unique_decision_snapshots": 421,
+    "battle_locations_observed": 32,
+    "shared_runtime_call_sites_covered": 22,
+    "slot_counts": {
+      "0": 208,
+      "1": 50,
+      "2": 87,
+      "3": 77
+    },
+    "linked_execution_records": 3022,
+    "unlinked_execution_records": 38308,
+    "execution_span_actions": {
+      "minimum": 4,
+      "maximum": 44,
+      "mean": 7.161
+    },
+    "all_decisions_have_linked_executions": true,
+    "first_execution_step_matches_decision": true,
+    "first_execution_snapshot_matches_decision": true,
+    "linked_execution_spans_are_contiguous": true,
+    "duplicate_snapshot_groups": 1,
+    "conflicting_actions_for_duplicate_snapshots": 0
+  },
+  "integrity_audit": {
+    "manifest_file_sizes_and_hashes_verified": true,
+    "decision_ids_and_indices_verified": true,
+    "execution_ids_and_indices_verified": true,
+    "snapshot_content_hashes_verified": true,
+    "snapshot_references_verified": true,
+    "adjacent_state_hash_transitions_verified": 41329,
+    "checkpoint_sequence_verified": true,
+    "terminal_record_verified": true,
+    "source_identity_verified": true,
+    "configuration_hash_verified": true
+  },
+  "privacy_audit": {
+    "private_paths_absent": true,
+    "rom_filename_absent": true,
+    "raw_memory_absent": true,
+    "event_flag_bytes_absent": true,
+    "save_states_absent": true,
+    "screenshots_absent": true,
+    "teacher_encounter_labels_absent": true,
+    "decision_snapshots_use_policy_adapter": true
+  },
+  "limitations": {
+    "single_nominal_teacher_episode": true,
+    "adaptive_runtime_only": true,
+    "custom_battle_controllers_labeled": false,
+    "perturbed_examples": 0,
+    "held_out_evaluation_attempts": 0,
+    "description": "This is an integrity-checked adaptive battle decision trace, not a complete battle dataset or learned-policy result. Custom battle controllers, item and switch choices, perturbed states, held-out splits, and learned evaluation remain future work."
+  }
+}

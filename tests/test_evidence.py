@@ -62,6 +62,9 @@ LORELEI_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-lorelei-2
 TRAJECTORY_FOUNDATION_RECEIPT = (
     PROJECT_ROOT / "docs" / "evidence" / "private-trajectory-foundation-2026-07-30.json"
 )
+BATTLE_DECISION_RECEIPT = (
+    PROJECT_ROOT / "docs" / "evidence" / "private-battle-decisions-2026-07-30.json"
+)
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -1647,6 +1650,94 @@ def test_trajectory_foundation_receipt_is_integrity_scoped_and_privacy_safe() ->
     )
     assert all(receipt["privacy_audit"].values())
     assert receipt["limitations"]["decision_records"] == 0
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "/Volumes/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_battle_decision_receipt_is_linked_limited_and_privacy_safe() -> None:
+    receipt = json.loads(BATTLE_DECISION_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "private-battle-decision-receipt-v1"
+    assert receipt["recorded_on"] == "2026-07-30"
+    assert receipt["evidence_lane"] == "deterministic_teacher_adaptive_battle_decisions"
+    assert receipt["claim_scope"] == {
+        "game_complete": True,
+        "adaptive_battle_decision_labels": True,
+        "all_battle_decisions_labeled": False,
+        "model_ready_dataset": False,
+        "learned_policy": False,
+        "transfer_result": False,
+    }
+    assert receipt["source"] == {
+        "git_commit": "fb6a7b9ab73daf202e8ca74e5537d449ce4b466e",
+        "worktree_dirty": False,
+    }
+    assert receipt["rom"] == {
+        "title": POKEMON_RED_US_REV_0.title,
+        "size_bytes": POKEMON_RED_US_REV_0.size_bytes,
+        "sha1": POKEMON_RED_US_REV_0.sha1,
+        "sha256": POKEMON_RED_US_REV_0.sha256,
+    }
+    assert receipt["episode"]["status"] == "complete"
+    assert receipt["episode"]["distributed"] is False
+    assert receipt["episode"]["streams"] == {
+        "episode": 1,
+        "decisions": 422,
+        "events": 300,
+        "executions": 41_330,
+        "snapshots": 14_760,
+    }
+    assert receipt["episode"]["total_records"] == 56_813
+    assert receipt["episode"]["total_bytes"] == 39_291_235
+    assert receipt["gameplay"] == {
+        "checkpoints_verified": 299,
+        "checkpoints_total": 299,
+        "objectives_verified": 36,
+        "objectives_total": 36,
+        "frames_executed": 4_796_436,
+        "actions_executed": 41_330,
+        "qualified_through": "enter_hall_of_fame",
+        "controller_released": True,
+    }
+
+    decision_audit = receipt["decision_audit"]
+    assert decision_audit["decision_records"] == 422
+    assert decision_audit["unique_decision_snapshots"] == 421
+    assert decision_audit["battle_locations_observed"] == 32
+    assert decision_audit["shared_runtime_call_sites_covered"] == 22
+    assert sum(decision_audit["slot_counts"].values()) == 422
+    assert (
+        decision_audit["linked_execution_records"]
+        + decision_audit["unlinked_execution_records"]
+        == 41_330
+    )
+    assert decision_audit["conflicting_actions_for_duplicate_snapshots"] == 0
+    assert all(
+        decision_audit[key]
+        for key in (
+            "all_decisions_have_linked_executions",
+            "first_execution_step_matches_decision",
+            "first_execution_snapshot_matches_decision",
+            "linked_execution_spans_are_contiguous",
+        )
+    )
+
+    assert receipt["integrity_audit"]["adjacent_state_hash_transitions_verified"] == 41_329
+    assert all(
+        value
+        for key, value in receipt["integrity_audit"].items()
+        if key != "adjacent_state_hash_transitions_verified"
+    )
+    assert all(receipt["privacy_audit"].values())
+    assert receipt["limitations"]["single_nominal_teacher_episode"] is True
+    assert receipt["limitations"]["adaptive_runtime_only"] is True
+    assert receipt["limitations"]["custom_battle_controllers_labeled"] is False
+    assert receipt["limitations"]["perturbed_examples"] == 0
+    assert receipt["limitations"]["held_out_evaluation_attempts"] == 0
 
     serialized = json.dumps(receipt)
     assert "/Users/" not in serialized

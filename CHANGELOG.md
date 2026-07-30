@@ -16,6 +16,8 @@
   persisting raw game state or teacher-only encounter labels.
 - Recorded and audited the first private full-game control trajectory: 41,330 executions, 300
   events, and 14,760 deduplicated semantic snapshots across all 299 checkpoints.
+- Recorded and audited the first private adaptive battle decision trajectory: 422 move choices
+  across 32 battle locations, linked to 3,022 executor actions with exact first-state hashes.
 - Documented the measured cross-game transfer goal and its Red, near-transfer, and
   cross-generation promotion gates.
 

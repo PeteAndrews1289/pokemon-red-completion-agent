@@ -117,7 +117,7 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 - [x] Add fail-closed, path-free private episode storage for a separately mounted volume.
 - [x] Record and integrity-audit the first private clean-start teacher control trajectory.
 - [x] Add policy-safe battle move decision spans for the shared adaptive battle runtime.
-- [ ] Record and audit a clean-start trajectory containing adaptive battle decision labels.
+- [x] Record and audit a clean-start trajectory containing adaptive battle decision labels.
 - [ ] Record perturbed teacher corrections and recovery trajectories.
 - Publish schemas, aggregate statistics, and dataset cards without game assets.
 - Train goal-conditioned navigation, interaction, battle, puzzle, and recovery specialists with
@@ -131,6 +131,13 @@ policy snapshots across all 299 checkpoints. Its manifest, references, state-has
 provenance, terminal record, and privacy invariants passed audit. See the
 [sanitized receipt](evidence/private-trajectory-foundation-2026-07-30.json). It contains no
 specialist decision records yet and is not described as a finished behavioral-cloning dataset.
+
+The second private trace adds 422 adaptive battle move decisions across 32 battle locations and
+links them to 3,022 contiguous executor actions. Every decision begins at the same step and
+policy-snapshot hash as its first execution. The
+[sanitized battle-decision receipt](evidence/private-battle-decisions-2026-07-30.json) keeps this
+lane explicitly incomplete: custom battle controllers, perturbed corrections, frozen splits, and
+learned evaluation remain pending.
 
 ## Milestone 4 — DAgger and selective RL
 

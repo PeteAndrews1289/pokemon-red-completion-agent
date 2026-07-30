@@ -249,6 +249,8 @@ behavioral-cloning claim is made.
 - [Cross-game transfer plan](docs/transfer-learning.md) — shared ontology and promotion gates
 - [First trajectory receipt](docs/evidence/private-trajectory-foundation-2026-07-30.json) —
   sanitized integrity, privacy, and scope evidence
+- [First battle-decision receipt](docs/evidence/private-battle-decisions-2026-07-30.json) —
+  422 privacy-safe adaptive move labels with exact execution linkage
 - [Optional upstream baseline](docs/upstream-baseline.md) — pinned, isolated comparison boundary
 - [Contributing](CONTRIBUTING.md) — safety and evidence requirements
 
