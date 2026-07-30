@@ -433,3 +433,136 @@ def test_recording_failures_do_not_change_delegate_results_or_errors() -> None:
         failing.execute(FakeAction("confirm", 1))
     assert caught.value is original
     assert failing.recording_failures == 1
+
+
+def test_decision_scope_records_once_and_links_every_execution_in_the_span() -> None:
+    first = _snapshot(hp=20)
+    second = _snapshot(hp=18)
+    third = _snapshot(hp=14)
+    fourth = _snapshot(hp=13)
+    snapshots = SequencedSnapshots(first, second, second, third, third, fourth)
+    result = FakeResult(("a",), 3)
+    sink = InMemoryTrajectorySink()
+    recorder = RecordingExecutor(
+        delegate=SuccessfulExecutor(result),
+        snapshot_provider=snapshots,
+        sink=sink,
+        episode_id="episode-scoped",
+        start_step_index=4,
+    )
+    decision = DecisionRecord(
+        decision_id="episode-scoped:decision:0",
+        episode_id="episode-scoped",
+        step_index=4,
+        snapshot=first,
+        context=DecisionContext(actor="teacher"),
+        decision_type="battle_move_selection",
+        action={"kind": "select_move", "slot_index": 0},
+    )
+
+    with recorder.decision_scope(decision):
+        recorder.execute(FakeAction("confirm", 1))
+        recorder.execute(FakeAction("move", 1))
+    recorder.execute(FakeAction("wait", 1))
+
+    assert sink.decisions == (decision,)
+    assert [record.decision_id for record in sink.executions] == [
+        decision.decision_id,
+        decision.decision_id,
+        None,
+    ]
+    assert recorder.recording_failures == 0
+
+
+def test_decision_scope_resets_after_controller_exception() -> None:
+    before = _snapshot(hp=20)
+    after = _snapshot(hp=19)
+    sink = InMemoryTrajectorySink()
+    recorder = RecordingExecutor(
+        delegate=SuccessfulExecutor(FakeResult(("a",), 1)),
+        snapshot_provider=SequencedSnapshots(before, after),
+        sink=sink,
+        episode_id="episode-reset",
+    )
+    decision = DecisionRecord(
+        decision_id="episode-reset:decision:0",
+        episode_id="episode-reset",
+        step_index=0,
+        snapshot=before,
+        context=DecisionContext(actor="teacher"),
+        decision_type="battle_move_selection",
+        action={"kind": "select_move", "slot_index": 0},
+    )
+
+    with pytest.raises(PrivateFailure), recorder.decision_scope(decision):
+        raise PrivateFailure("controller stopped before execution")
+
+    recorder.execute(FakeAction("confirm", 1))
+    assert sink.executions[0].decision_id is None
+    assert recorder.recording_failures == 1
+
+
+class BrokenDecisionSink(InMemoryTrajectorySink):
+    def record_decision(self, record: DecisionRecord) -> None:
+        raise RuntimeError("decision storage unavailable")
+
+
+def test_broken_decision_recording_is_fail_open_but_blocks_promotion() -> None:
+    before = _snapshot(hp=20)
+    after = _snapshot(hp=19)
+    result = FakeResult(("a",), 1)
+    sink = BrokenDecisionSink()
+    recorder = RecordingExecutor(
+        delegate=SuccessfulExecutor(result),
+        snapshot_provider=SequencedSnapshots(before, after),
+        sink=sink,
+        episode_id="episode-broken-decision",
+    )
+
+    with recorder.decision_scope(
+        lambda: DecisionRecord(
+            decision_id="episode-broken-decision:decision:0",
+            episode_id="episode-broken-decision",
+            step_index=0,
+            snapshot=before,
+            context=DecisionContext(actor="teacher"),
+            decision_type="battle_move_selection",
+            action={"kind": "select_move", "slot_index": 0},
+        )
+    ):
+        returned = recorder.execute(FakeAction("confirm", 1))
+
+    assert returned is result
+    assert sink.executions[0].decision_id is None
+    assert recorder.recording_failures == 1
+
+
+def test_decision_scope_rejects_a_changed_first_execution_observation() -> None:
+    decision_snapshot = _snapshot(hp=20)
+    changed_before = _snapshot(hp=19)
+    changed_after = _snapshot(hp=18)
+    result = FakeResult(("a",), 1)
+    sink = InMemoryTrajectorySink()
+    recorder = RecordingExecutor(
+        delegate=SuccessfulExecutor(result),
+        snapshot_provider=SequencedSnapshots(changed_before, changed_after),
+        sink=sink,
+        episode_id="episode-changed-observation",
+    )
+    decision = DecisionRecord(
+        decision_id="episode-changed-observation:decision:0",
+        episode_id="episode-changed-observation",
+        step_index=0,
+        snapshot=decision_snapshot,
+        context=DecisionContext(actor="teacher"),
+        decision_type="battle_move_selection",
+        action={"kind": "select_move", "slot_index": 0},
+    )
+
+    with recorder.decision_scope(decision):
+        returned = recorder.execute(FakeAction("confirm", 1))
+
+    assert returned is result
+    assert sink.decisions == (decision,)
+    assert sink.executions == ()
+    assert recorder.recording_failures == 1

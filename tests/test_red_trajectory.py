@@ -4,6 +4,7 @@ from dataclasses import replace
 
 import pytest
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     BattleMenuState,
@@ -12,12 +13,19 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.red_trajectory import (
+    POKEMON_BATTLE_MOVE_SKILL_ID,
     POKEMON_CORE_ONTOLOGY_ID,
     POKEMON_RED_ADAPTER_ID,
     POKEMON_RED_GAME_ID,
+    POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
+    PokemonRedBattleDecisionObserver,
     PokemonRedObservationEncoder,
 )
-from pokemon_red_completion.trajectory import canonical_json
+from pokemon_red_completion.trajectory import (
+    InMemoryTrajectorySink,
+    RecordingExecutor,
+    canonical_json,
+)
 
 
 class _Reader:
@@ -315,3 +323,117 @@ def test_adapter_classifies_common_area_kinds(
     ).snapshot()
 
     assert snapshot.to_dict()["features"]["world"]["area_kind"] == expected_kind
+
+
+class _UnusedExecutor:
+    def execute(self, action: object) -> object:
+        return action
+
+
+def test_battle_observer_records_a_policy_safe_zero_based_move_target() -> None:
+    raw = replace(
+        _raw(),
+        battle_state=2,
+        event_flags=b"\xff\x00private-referee-state",
+        enemy_species_id=0x99,
+        enemy_level=7,
+        enemy_hp=11,
+        enemy_max_hp=22,
+    )
+    encoder = PokemonRedObservationEncoder(
+        _Reader(
+            raw,
+            BattleMenuState(
+                BattleMenuPhase.MAIN,
+                selected_main_command=0,
+            ),
+        )
+    )
+    sink = InMemoryTrajectorySink()
+    recorder = RecordingExecutor(
+        delegate=_UnusedExecutor(),
+        snapshot_provider=encoder,
+        sink=sink,
+        episode_id="red-teacher-test",
+        start_step_index=17,
+    )
+    observer = PokemonRedBattleDecisionObserver(
+        encoder=encoder,
+        recorder=recorder,
+    )
+
+    with observer.decision_scope(
+        policy_state=raw,
+        policy_menu=BattleMenuState(
+            BattleMenuPhase.MAIN,
+            selected_main_command=0,
+        ),
+        selected_slot=2,
+    ):
+        recorder.execute(MacroAction(MacroActionKind.WAIT))
+
+    assert recorder.recording_failures == 0
+    assert len(sink.decisions) == 1
+    decision = sink.decisions[0]
+    assert decision.decision_id == "red-teacher-test:decision:0"
+    assert decision.step_index == 17
+    assert decision.decision_type == "battle_move_selection"
+    assert decision.action == {"kind": "select_move", "slot_index": 1}
+    assert decision.context.to_dict() == {
+        "schema_version": 1,
+        "objective_id": None,
+        "policy_id": POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
+        "actor": "deterministic_teacher",
+        "metadata": {"skill_id": POKEMON_BATTLE_MOVE_SKILL_ID},
+    }
+    payload = decision.snapshot.to_dict()
+    assert payload["mode"] == "battle"
+    assert payload["features"]["menu"] == {
+        "kind": "battle_main",
+        "selected_command_index": 0,
+    }
+    serialized = canonical_json(decision)
+    assert "event_flags" not in serialized
+    assert "private-referee-state" not in serialized
+
+
+def test_event_flags_cannot_change_a_battle_decision_snapshot_hash() -> None:
+    raw = replace(
+        _raw(),
+        battle_state=2,
+        enemy_species_id=0x99,
+        enemy_hp=11,
+    )
+    menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    first = PokemonRedObservationEncoder(
+        _Reader(replace(raw, event_flags=b"\x00"), menu)
+    ).snapshot()
+    second = PokemonRedObservationEncoder(
+        _Reader(replace(raw, event_flags=b"\xff" * 64), menu)
+    ).snapshot()
+
+    assert first.sha256 == second.sha256
+
+
+def test_snapshot_from_raw_uses_the_exact_policy_state_instead_of_rereading() -> None:
+    policy_state = replace(
+        _raw(),
+        battle_state=2,
+        first_party_hp=17,
+        enemy_species_id=0x99,
+        enemy_hp=11,
+    )
+    menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    reader = _Reader(
+        replace(policy_state, first_party_hp=1, enemy_hp=1),
+        menu,
+    )
+
+    snapshot = PokemonRedObservationEncoder(reader).snapshot_from_raw(
+        policy_state,
+        battle_menu=menu,
+    )
+
+    features = snapshot.to_dict()["features"]
+    assert features["party"]["lead"]["hp"] == 17
+    assert features["battle"]["opponent_hp"] == 11

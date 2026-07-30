@@ -234,8 +234,10 @@ It places a tamper-evident sentinel there but never creates a missing mount poin
 uninitialized, same-device, symlinked, Git-controlled, or overlapping destinations. It also
 requires an identified, clean Git checkout so every accepted episode names the exact source
 commit. Output contains only a path-free episode identifier and aggregate summary. The first
-recorder is an executor-aligned teacher trace; specialist-level decision labels and perturbed
-recovery examples are added before behavioral-cloning claims are made.
+recorder is an executor-aligned teacher trace. The next layer records zero-based battle move
+decisions from the shared adaptive runtime and links their full execution spans; custom battle
+controllers, perturbed recovery examples, and held-out labels still remain before any
+behavioral-cloning claim is made.
 
 ## Evidence and project status
 

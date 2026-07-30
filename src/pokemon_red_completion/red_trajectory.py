@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from contextlib import AbstractContextManager
+from dataclasses import dataclass, field
 from typing import Protocol
 
+from pokemon_red_completion.actions import MacroAction
+from pokemon_red_completion.executor import ExecutedAction
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     BattleMenuState,
@@ -14,11 +17,18 @@ from pokemon_red_completion.observation import (
     RawGameState,
     location_label,
 )
-from pokemon_red_completion.trajectory import SemanticSnapshot
+from pokemon_red_completion.trajectory import (
+    DecisionContext,
+    DecisionRecord,
+    RecordingExecutor,
+    SemanticSnapshot,
+)
 
 POKEMON_CORE_ONTOLOGY_ID = "pokemon.core.v1"
 POKEMON_RED_ADAPTER_ID = "pokemon.red.gb.us.rev0.v1"
 POKEMON_RED_GAME_ID = "pokemon.mainline:red:gb:us:rev0"
+POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID = "pokemon-red-qualified-teacher-v1"
+POKEMON_BATTLE_MOVE_SKILL_ID = "pokemon.core:battle:move_selection"
 
 
 class RedSemanticReader(Protocol):
@@ -49,8 +59,26 @@ class PokemonRedObservationEncoder:
 
     def snapshot(self) -> SemanticSnapshot:
         raw = self.reader.read()
+        return self.snapshot_from_raw(raw)
+
+    def snapshot_from_raw(
+        self,
+        raw: RawGameState,
+        *,
+        battle_menu: BattleMenuState | None = None,
+    ) -> SemanticSnapshot:
+        """Encode the exact policy observation without rereading raw game state."""
+
+        if not isinstance(raw, RawGameState):
+            raise TypeError("raw must be a RawGameState")
         controls = self.reader.read_input_readiness()
-        battle_menu = self.reader.read_battle_menu_state(raw)
+        observed_battle_menu = (
+            self.reader.read_battle_menu_state(raw)
+            if battle_menu is None
+            else battle_menu
+        )
+        if not isinstance(observed_battle_menu, BattleMenuState):
+            raise TypeError("battle_menu must be a BattleMenuState")
         mode = _observable_mode(raw, controls)
         location = _map_label(raw.map_id) if raw.game_started else None
         input_ready = raw.game_started and mode != "terminal" and controls.ready
@@ -116,7 +144,7 @@ class PokemonRedObservationEncoder:
                 if in_battle
                 else None
             ),
-            "menu": _known_battle_menu(raw, battle_menu),
+            "menu": _known_battle_menu(raw, observed_battle_menu),
         }
         return SemanticSnapshot(
             game_id=POKEMON_RED_GAME_ID,
@@ -124,6 +152,99 @@ class PokemonRedObservationEncoder:
             location=_area_ref(location),
             facts=_observable_concepts(raw),
             features=features,
+        )
+
+
+@dataclass(slots=True)
+class PokemonRedBattleDecisionObserver:
+    """Create privacy-safe battle-move labels at the shared policy boundary."""
+
+    encoder: PokemonRedObservationEncoder
+    recorder: RecordingExecutor[MacroAction, ExecutedAction]
+    _next_decision_index: int = field(default=0, init=False)
+
+    def decision_scope(
+        self,
+        *,
+        policy_state: RawGameState,
+        policy_menu: BattleMenuState,
+        selected_slot: int,
+    ) -> AbstractContextManager[None]:
+        """Return a fail-open span linking one move choice to its executions."""
+
+        # Observable world features remain part of the general policy view and
+        # may be ablated explicitly by a battle-specialist training export.
+        return self.recorder.decision_scope(
+            lambda: self._build_decision(
+                policy_state=policy_state,
+                policy_menu=policy_menu,
+                selected_slot=selected_slot,
+            )
+        )
+
+    def _build_decision(
+        self,
+        *,
+        policy_state: RawGameState,
+        policy_menu: BattleMenuState,
+        selected_slot: int,
+    ) -> DecisionRecord:
+        if (
+            not isinstance(selected_slot, int)
+            or isinstance(selected_slot, bool)
+            or not 1 <= selected_slot <= 4
+        ):
+            raise ValueError("selected_slot must be a one-based move slot")
+
+        decision_index = self._next_decision_index
+        self._next_decision_index += 1
+        snapshot = self.encoder.snapshot_from_raw(
+            policy_state,
+            battle_menu=policy_menu,
+        )
+        payload = snapshot.to_dict()
+        features = payload["features"]
+        if not isinstance(features, dict):
+            raise ValueError("battle decision snapshot lacks semantic features")
+        menu = features.get("menu")
+        if not isinstance(menu, dict) or menu.get("kind") != "battle_main":
+            raise ValueError("battle decision snapshot must expose the main battle menu")
+        party = features.get("party")
+        if not isinstance(party, dict):
+            raise ValueError("battle decision snapshot lacks party features")
+        lead = party.get("lead")
+        if not isinstance(lead, dict):
+            raise ValueError("battle decision snapshot lacks lead-party features")
+        moves = lead.get("moves")
+        if not isinstance(moves, list):
+            raise ValueError("battle decision snapshot lacks move features")
+        slot_index = selected_slot - 1
+        selected_moves = [
+            move
+            for move in moves
+            if isinstance(move, dict) and move.get("slot_index") == slot_index
+        ]
+        if len(selected_moves) != 1:
+            raise ValueError("selected battle move is absent from the policy snapshot")
+        pp = selected_moves[0].get("pp")
+        if not isinstance(pp, int) or isinstance(pp, bool) or pp <= 0:
+            raise ValueError("selected battle move lacks usable PP")
+
+        return DecisionRecord(
+            decision_id=f"{self.recorder.episode_id}:decision:{decision_index}",
+            episode_id=self.recorder.episode_id,
+            step_index=self.recorder.next_step_index,
+            snapshot=snapshot,
+            context=DecisionContext(
+                policy_id=POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
+                actor="deterministic_teacher",
+                metadata={"skill_id": POKEMON_BATTLE_MOVE_SKILL_ID},
+            ),
+            decision_type="battle_move_selection",
+            action={
+                "kind": "select_move",
+                "slot_index": slot_index,
+            },
         )
 
 

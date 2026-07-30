@@ -7,6 +7,9 @@ the revision-pinned observation adapter.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
+from contextlib import AbstractContextManager, contextmanager, nullcontext
+from contextvars import ContextVar
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -48,6 +51,24 @@ class MoveSlotPolicy(Protocol):
     def __call__(self, state: RawGameState, /) -> int: ...
 
 
+class BattleDecisionObserver(Protocol):
+    """Encode a validated policy choice without persisting privileged raw state."""
+
+    def decision_scope(
+        self,
+        *,
+        policy_state: RawGameState,
+        policy_menu: BattleMenuState,
+        selected_slot: int,
+    ) -> AbstractContextManager[None]: ...
+
+
+_BATTLE_DECISION_OBSERVER: ContextVar[BattleDecisionObserver | None] = ContextVar(
+    "pokemon_red_battle_decision_observer",
+    default=None,
+)
+
+
 class BattleRuntimeError(RuntimeError):
     """Raised when a trainer battle loses required semantic evidence."""
 
@@ -82,6 +103,21 @@ class BattleRuntimeTiming:
 
 
 DEFAULT_BATTLE_RUNTIME_TIMING = BattleRuntimeTiming()
+
+
+@contextmanager
+def bind_battle_decision_observer(
+    observer: BattleDecisionObserver,
+) -> Iterator[None]:
+    """Install one concurrency-local observer for the duration of a recorded run."""
+
+    if not hasattr(observer, "decision_scope") or not callable(observer.decision_scope):
+        raise TypeError("observer must provide decision_scope")
+    token = _BATTLE_DECISION_OBSERVER.set(observer)
+    try:
+        yield
+    finally:
+        _BATTLE_DECISION_OBSERVER.reset(token)
 
 
 def run_adaptive_trainer_battle(
@@ -206,21 +242,42 @@ def run_adaptive_trainer_battle(
 
         slot = _choose_usable_slot(move_slot_policy, raw, label=label)
         initial_pp = _current_pp(raw, slot=slot, label=label)
-        _execute_policy_turn(
-            reader,
-            executor,
-            expected_map=expected_map,
-            initial_raw=raw,
-            initial_menu=menu,
-            slot=slot,
-            initial_pp=initial_pp,
-            required_move_id=required_move_id,
-            timing=timing,
-            label=label,
-        )
+        with _battle_decision_scope(
+            policy_state=raw,
+            policy_menu=menu,
+            selected_slot=slot,
+        ):
+            _execute_policy_turn(
+                reader,
+                executor,
+                expected_map=expected_map,
+                initial_raw=raw,
+                initial_menu=menu,
+                slot=slot,
+                initial_pp=initial_pp,
+                required_move_id=required_move_id,
+                timing=timing,
+                label=label,
+            )
 
     raise BattleRuntimeTimeoutError(
         f"{label} exceeded {timing.max_runtime_pulses} bounded runtime pulses."
+    )
+
+
+def _battle_decision_scope(
+    *,
+    policy_state: RawGameState,
+    policy_menu: BattleMenuState,
+    selected_slot: int,
+) -> AbstractContextManager[None]:
+    observer = _BATTLE_DECISION_OBSERVER.get()
+    if observer is None:
+        return nullcontext()
+    return observer.decision_scope(
+        policy_state=policy_state,
+        policy_menu=policy_menu,
+        selected_slot=selected_slot,
     )
 
 

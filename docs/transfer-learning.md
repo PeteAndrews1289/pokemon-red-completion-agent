@@ -68,10 +68,13 @@ semantic events. Descendants of one clean run or training snapshot inherit the s
 partition, preventing nearby snapshot branches or DAgger corrections from leaking into held-out
 evaluation.
 
-The first recorder version intentionally captures executor-aligned control traces plus semantic
-state and checkpoints. Higher-level decision spans are added at specialist policy boundaries,
-starting with battle move selection. Executor traces alone are not described as a finished
-behavioral-cloning dataset because dialogue pulses and waits would otherwise dominate it.
+The first recorder version captures executor-aligned control traces plus semantic state and
+checkpoints. The second layer adds higher-level decision spans at the shared adaptive battle move
+boundary: the model-facing snapshot contains only the Pokémon observation adapter's policy view,
+while one zero-based move target links to every executor action used to carry out that turn.
+Custom battle controllers and perturbed corrections remain separate follow-up coverage. Executor
+traces alone are not described as a finished behavioral-cloning dataset because dialogue pulses
+and waits would otherwise dominate it.
 
 ## Promotion ladder
 

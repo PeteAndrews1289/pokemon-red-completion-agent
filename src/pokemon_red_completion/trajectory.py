@@ -12,7 +12,8 @@ import hashlib
 import json
 import math
 import re
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Iterator, Mapping, Sequence
+from contextlib import contextmanager
 from dataclasses import dataclass, field, fields, is_dataclass
 from enum import StrEnum
 from pathlib import PurePath
@@ -563,6 +564,7 @@ class InMemoryTrajectorySink:
 
 
 ActionEncoder: TypeAlias = Callable[[ActionT], Mapping[str, object]]
+DecisionFactory: TypeAlias = Callable[[], DecisionRecord]
 
 
 def _default_action_encoder(action: object) -> Mapping[str, object]:
@@ -601,6 +603,9 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
     start_step_index: int = 0
     _next_step_index: int = field(init=False)
     _recording_failures: int = field(default=0, init=False)
+    _active_decision_id: str | None = field(default=None, init=False)
+    _active_decision_step_index: int | None = field(default=None, init=False)
+    _active_decision_snapshot_sha256: str | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
         _require_non_empty(self.episode_id, name="episode_id")
@@ -619,12 +624,70 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
 
         return self._recording_failures
 
+    @contextmanager
+    def decision_scope(
+        self,
+        decision: DecisionRecord | DecisionFactory,
+    ) -> Iterator[None]:
+        """Record and link one high-level decision to all executions in its span.
+
+        A callable may be supplied when constructing the decision requires a
+        live observation. Decision construction, validation, or sink failures
+        remain observational: the controller body still runs, while
+        ``recording_failures`` prevents the episode from being promoted.
+        """
+
+        if self._active_decision_id is not None:
+            self._recording_failures += 1
+            yield
+            return
+
+        try:
+            record = decision() if callable(decision) else decision
+            if not isinstance(record, DecisionRecord):
+                raise TypeError("decision must produce a DecisionRecord")
+            if record.episode_id != self.episode_id:
+                raise TrajectoryValidationError(
+                    "decision episode_id must match the recording executor"
+                )
+            if record.step_index != self._next_step_index:
+                raise TrajectoryValidationError(
+                    "decision step_index must match the next execution step"
+                )
+            self.sink.record_decision(record)
+        except Exception:
+            self._recording_failures += 1
+            yield
+            return
+
+        self._active_decision_id = record.decision_id
+        self._active_decision_step_index = record.step_index
+        self._active_decision_snapshot_sha256 = record.snapshot_sha256
+        try:
+            yield
+        finally:
+            if self._next_step_index == record.step_index:
+                self._recording_failures += 1
+            self._active_decision_id = None
+            self._active_decision_step_index = None
+            self._active_decision_snapshot_sha256 = None
+
     def execute(self, action: ActionT, *, decision_id: str | None = None) -> ResultT:
         step_index = self._next_step_index
         before: SemanticSnapshot | None = None
         encoded_action: Mapping[str, JSONValue] | None = None
+        effective_decision_id: str | None = None
         try:
             _require_optional_label(decision_id, name="decision_id")
+            if (
+                decision_id is not None
+                and self._active_decision_id is not None
+                and decision_id != self._active_decision_id
+            ):
+                raise TrajectoryValidationError(
+                    "explicit decision_id conflicts with the active decision scope"
+                )
+            effective_decision_id = decision_id or self._active_decision_id
             encoded_action = _freeze_mapping(
                 self.action_encoder(action),
                 path="action",
@@ -633,6 +696,13 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
             if not isinstance(candidate, SemanticSnapshot):
                 raise TypeError("snapshot provider must return SemanticSnapshot")
             before = candidate
+            if (
+                step_index == self._active_decision_step_index
+                and before.sha256 != self._active_decision_snapshot_sha256
+            ):
+                raise TrajectoryValidationError(
+                    "decision snapshot must match its first execution observation"
+                )
         except Exception:
             # Recording is observational; it must never prevent controller work.
             self._recording_failures += 1
@@ -645,7 +715,7 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
             if before is not None and encoded_action is not None:
                 self._record_error(
                     step_index=step_index,
-                    decision_id=decision_id,
+                    decision_id=effective_decision_id,
                     action=encoded_action,
                     before=before,
                     error=error,
@@ -655,7 +725,7 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
             if before is not None and encoded_action is not None:
                 self._record_success(
                     step_index=step_index,
-                    decision_id=decision_id,
+                    decision_id=effective_decision_id,
                     action=encoded_action,
                     before=before,
                     result=result,

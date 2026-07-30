@@ -9,7 +9,7 @@ session. It is a deterministic teacher baseline, not a learned-policy claim.
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable
-from contextlib import nullcontext
+from contextlib import ExitStack, nullcontext
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
@@ -22,6 +22,7 @@ from pokemon_red_completion.agatha import (
     AgathaProgress,
     run_agatha_chapter,
 )
+from pokemon_red_completion.battle_runtime import bind_battle_decision_observer
 from pokemon_red_completion.blaine import (
     BLAINE_CHECKPOINT_COUNT,
     BlaineChapterError,
@@ -156,7 +157,10 @@ from pokemon_red_completion.pewter import (
     PewterProgress,
     run_pewter_chapter,
 )
-from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
+from pokemon_red_completion.red_trajectory import (
+    PokemonRedBattleDecisionObserver,
+    PokemonRedObservationEncoder,
+)
 from pokemon_red_completion.rom import RomFingerprint
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.sabrina import (
@@ -672,7 +676,8 @@ def run_qualified_play(
         if _emulator is None
         else nullcontext(_emulator)
     )
-    with emulator_context as emulator:
+    with ExitStack() as stack:
+        emulator = stack.enter_context(emulator_context)
         reader = PokemonRedStateReader(emulator)
         base_executor: QualifiedExecutor = FrameSafeExecutor(
             emulator,
@@ -682,13 +687,22 @@ def run_qualified_play(
         recording_failures = [0]
         effective_progress = progress
         if trajectory_sink is not None and trajectory_episode_id is not None:
+            snapshot_encoder = PokemonRedObservationEncoder.from_state_reader(reader)
             recording_executor = RecordingExecutor(
                 delegate=base_executor,
-                snapshot_provider=PokemonRedObservationEncoder.from_state_reader(reader),
+                snapshot_provider=snapshot_encoder,
                 sink=trajectory_sink,
                 episode_id=trajectory_episode_id,
             )
             base_executor = recording_executor
+            stack.enter_context(
+                bind_battle_decision_observer(
+                    PokemonRedBattleDecisionObserver(
+                        encoder=snapshot_encoder,
+                        recorder=recording_executor,
+                    )
+                )
+            )
             effective_progress = _trajectory_progress_bridge(
                 progress,
                 trajectory_sink,

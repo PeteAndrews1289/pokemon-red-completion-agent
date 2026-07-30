@@ -47,13 +47,13 @@ from pokemon_red_completion.red_trajectory import (
     POKEMON_CORE_ONTOLOGY_ID,
     POKEMON_RED_ADAPTER_ID,
     POKEMON_RED_GAME_ID,
+    POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
 )
 from pokemon_red_completion.rom import RomValidationError, resolve_rom_path, verify_rom
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.trajectory_io import EpisodeTrajectorySink
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
-RECORDING_POLICY_ID = "pokemon-red-qualified-teacher-v1"
 RECORDING_SERIES_ID = "red-teacher-nominal-v1"
 
 
@@ -273,7 +273,7 @@ def _recording_metadata(
         "ontology_id": POKEMON_CORE_ONTOLOGY_ID,
         "policy": {
             "actor": "deterministic_teacher",
-            "policy_id": RECORDING_POLICY_ID,
+            "policy_id": POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
             "source_version": __version__,
         },
         "source": source.public_dict(),

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager
 from dataclasses import replace
 
 import pytest
@@ -11,6 +12,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeError,
     BattleRuntimeTimeoutError,
     BattleRuntimeTiming,
+    bind_battle_decision_observer,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.observation import (
@@ -23,6 +25,15 @@ from pokemon_red_completion.observation import (
     InputReadiness,
     MapId,
     RawGameState,
+)
+from pokemon_red_completion.red_trajectory import (
+    PokemonRedBattleDecisionObserver,
+    PokemonRedObservationEncoder,
+)
+from pokemon_red_completion.trajectory import (
+    InMemoryTrajectorySink,
+    RecordingExecutor,
+    canonical_json,
 )
 
 READY = InputReadiness(0, 0, 0, 0, 0, 0)
@@ -104,6 +115,29 @@ class FakeRuntime:
         self.actions.append(action)
         if self.on_action is not None:
             self.on_action(action)
+
+
+class RecordingDecisionObserver:
+    def __init__(self, runtime: FakeRuntime) -> None:
+        self.runtime = runtime
+        self.entries: list[tuple[int, int]] = []
+        self.exits: list[int] = []
+
+    @contextmanager
+    def decision_scope(
+        self,
+        *,
+        policy_state: RawGameState,
+        policy_menu: BattleMenuState,
+        selected_slot: int,
+    ) -> Iterator[None]:
+        assert policy_state is self.runtime.raw
+        assert policy_menu is self.runtime.menu
+        self.entries.append((selected_slot, len(self.runtime.actions)))
+        try:
+            yield
+        finally:
+            self.exits.append(len(self.runtime.actions))
 
 
 def test_runtime_rejects_selected_slot_when_required_move_id_differs() -> None:
@@ -377,6 +411,77 @@ def test_adaptive_controller_rechecks_species_and_switches_water_gun_to_tackle()
         MacroActionKind.CONFIRM,
         MacroActionKind.WAIT,
     }
+
+
+def test_battle_decision_observer_scopes_each_validated_policy_turn() -> None:
+    runtime = AdaptiveRivalSimulation()
+    observer = RecordingDecisionObserver(runtime)
+
+    with bind_battle_decision_observer(observer):
+        final = run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            choose_cerulean_rival_move_slot,
+            expected_map=MapId.CERULEAN_CITY,
+            label="Cerulean rival",
+        )
+
+    assert final.battle_state == 0
+    assert [entry[0] for entry in observer.entries] == [4, 2, 1]
+    assert len(observer.exits) == len(observer.entries)
+    assert all(
+        exit_action_count > entry[1]
+        for entry, exit_action_count in zip(observer.entries, observer.exits, strict=True)
+    )
+
+    unobserved = AdaptiveRivalSimulation()
+    run_adaptive_trainer_battle(
+        unobserved,
+        unobserved,
+        choose_cerulean_rival_move_slot,
+        expected_map=MapId.CERULEAN_CITY,
+    )
+    assert len(observer.entries) == 3
+
+
+def test_adaptive_battle_records_linked_privacy_safe_decision_spans() -> None:
+    runtime = AdaptiveRivalSimulation()
+    encoder = PokemonRedObservationEncoder(runtime)
+    sink = InMemoryTrajectorySink()
+    recorder = RecordingExecutor(
+        delegate=runtime,
+        snapshot_provider=encoder,
+        sink=sink,
+        episode_id="battle-episode",
+    )
+    observer = PokemonRedBattleDecisionObserver(
+        encoder=encoder,
+        recorder=recorder,
+    )
+
+    with bind_battle_decision_observer(observer):
+        final = run_adaptive_trainer_battle(
+            runtime,
+            recorder,
+            choose_cerulean_rival_move_slot,
+            expected_map=MapId.CERULEAN_CITY,
+            label="private encounter label",
+        )
+
+    assert final.battle_state == 0
+    assert recorder.recording_failures == 0
+    assert len(sink.executions) == len(runtime.actions)
+    assert [decision.action["slot_index"] for decision in sink.decisions] == [3, 1, 0]
+    assert all("private encounter label" not in canonical_json(item) for item in sink.decisions)
+    for decision in sink.decisions:
+        linked = [
+            execution
+            for execution in sink.executions
+            if execution.decision_id == decision.decision_id
+        ]
+        assert linked
+        assert linked[0].step_index == decision.step_index
+        assert linked[0].before_sha256 == decision.snapshot_sha256
 
 
 def test_policy_is_called_once_while_main_cursor_moves_to_fight() -> None:

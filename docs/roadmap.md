@@ -116,6 +116,8 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 - [x] Define the versioned, game-neutral semantic trajectory contract and Pokémon Red adapter.
 - [x] Add fail-closed, path-free private episode storage for a separately mounted volume.
 - [x] Record and integrity-audit the first private clean-start teacher control trajectory.
+- [x] Add policy-safe battle move decision spans for the shared adaptive battle runtime.
+- [ ] Record and audit a clean-start trajectory containing adaptive battle decision labels.
 - [ ] Record perturbed teacher corrections and recovery trajectories.
 - Publish schemas, aggregate statistics, and dataset cards without game assets.
 - Train goal-conditioned navigation, interaction, battle, puzzle, and recovery specialists with
