@@ -27,6 +27,7 @@ savestates/
 runs/
 datasets/
 checkpoints/
+models/
 recordings/
 trajectories/
 videos/

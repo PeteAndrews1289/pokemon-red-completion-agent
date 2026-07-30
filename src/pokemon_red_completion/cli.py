@@ -44,6 +44,7 @@ from pokemon_red_completion.provenance import (
     require_clean_source,
 )
 from pokemon_red_completion.red_trajectory import (
+    POKEMON_BATTLE_MOVE_SKILL_ID,
     POKEMON_CORE_ONTOLOGY_ID,
     POKEMON_RED_ADAPTER_ID,
     POKEMON_RED_GAME_ID,
@@ -82,6 +83,57 @@ def _parser() -> argparse.ArgumentParser:
         type=Path,
         required=True,
         help="Explicit absolute path to an existing external directory.",
+    )
+    learn = subcommands.add_parser(
+        "learn",
+        help="Train or inspect private learned-policy artifacts.",
+    )
+    learn_commands = learn.add_subparsers(dest="learn_command", required=True)
+    learn_battle = learn_commands.add_parser(
+        "battle",
+        help="Build the transferable battle move-ranking specialist.",
+    )
+    learn_battle_commands = learn_battle.add_subparsers(
+        dest="learn_battle_command",
+        required=True,
+    )
+    learn_battle_train = learn_battle_commands.add_parser(
+        "train",
+        help="Train the battle ranker from an integrity-checked private episode.",
+    )
+    learn_battle_train.add_argument(
+        "--private-root",
+        type=Path,
+        required=True,
+        help="Explicit absolute path to the initialized private artifact root.",
+    )
+    learn_battle_train.add_argument(
+        "--episode-id",
+        required=True,
+        help="Safe identifier of the completed private teacher episode.",
+    )
+    learn_battle_train.add_argument(
+        "--diagnostic",
+        action="store_true",
+        help="Acknowledge that one unassigned lineage cannot support a held-out claim.",
+    )
+    learn_battle_train.add_argument(
+        "--folds",
+        type=int,
+        default=5,
+        help="Whole-battle diagnostic fold count (default: 5).",
+    )
+    learn_battle_train.add_argument(
+        "--epochs",
+        type=int,
+        default=300,
+        help="Deterministic optimizer epochs (default: 300).",
+    )
+    learn_battle_train.add_argument(
+        "--seed",
+        type=int,
+        default=1289,
+        help="Deterministic training seed (default: 1289).",
     )
     doctor = subcommands.add_parser("doctor", help="Verify the private ROM identity.")
     doctor.add_argument("--rom", type=Path, help="Private ROM path; otherwise use POKEMON_RED_ROM.")
@@ -306,6 +358,126 @@ def _recording_metadata(
     }
 
 
+def _run_battle_learning(
+    parser: argparse.ArgumentParser,
+    args: argparse.Namespace,
+) -> dict[str, object]:
+    """Run the optional learning stack without making NumPy a base CLI dependency."""
+
+    if not args.diagnostic:
+        parser.error(
+            "The current single-lineage trainer requires --diagnostic; "
+            "it cannot produce held-out evidence."
+        )
+    try:
+        from pokemon_red_completion.battle_dataset import (
+            BattleDatasetError,
+            BattleDecisionProvenance,
+            load_battle_episode,
+        )
+        from pokemon_red_completion.battle_model import BattleModelValidationError
+        from pokemon_red_completion.battle_semantics import (
+            BattleFeatureError,
+            BattleFeatureProjector,
+        )
+        from pokemon_red_completion.battle_training import (
+            BattleTrainingConfig,
+            BattleTrainingError,
+            train_diagnostic_battle_ranker,
+        )
+        from pokemon_red_completion.red_battle_catalog import (
+            PRET_POKERED_COMMIT as BATTLE_CATALOG_SOURCE_COMMIT,
+        )
+        from pokemon_red_completion.red_battle_catalog import PokemonRedBattleCatalog
+    except ModuleNotFoundError as error:
+        if error.name == "numpy":
+            parser.error('Battle learning requires the optional "learning" dependencies.')
+        raise
+
+    try:
+        source = detect_source_identity(REPOSITORY_ROOT, include_untracked=True)
+        require_clean_source(source)
+        private_root = open_private_root(
+            args.private_root,
+            repository_root=REPOSITORY_ROOT,
+        )
+        reader = private_root.open_episode(args.episode_id)
+        projector = BattleFeatureProjector(PokemonRedBattleCatalog())
+        dataset = load_battle_episode(
+            reader,
+            projector,
+            required_provenance=BattleDecisionProvenance(
+                actor="deterministic_teacher",
+                policy_id=POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
+                skill_id=POKEMON_BATTLE_MOVE_SKILL_ID,
+            ),
+        )
+        if dataset.promotion_eligible:
+            raise BattleTrainingError(
+                "This command is diagnostic-only; use the future preassigned evaluation lane "
+                "for promotion evidence."
+            )
+        config = BattleTrainingConfig(
+            seed=args.seed,
+            folds=args.folds,
+            epochs=args.epochs,
+        )
+        result = train_diagnostic_battle_ranker(dataset, config=config)
+        artifact_id = f"red-battle-ranker-{uuid.uuid4().hex}"
+        writer = private_root.begin_artifact(artifact_id, kind="battle_model")
+        with writer:
+            writer.append(
+                "model",
+                {
+                    "record_type": "battle_model",
+                    "model": result.model.to_dict(),
+                    "model_sha256": result.model_sha256,
+                    "source": source.public_dict(),
+                    "source_episode_manifest_sha256": dataset.manifest_sha256,
+                },
+            )
+            writer.append(
+                "training",
+                {
+                    "record_type": "battle_training",
+                    "catalog": {
+                        "game": "pokemon_red_us_rev0",
+                        "pret_pokered_commit": BATTLE_CATALOG_SOURCE_COMMIT,
+                    },
+                    "configuration": config.public_dict(),
+                    "dataset": dataset.public_summary(),
+                },
+            )
+            writer.append(
+                "metrics",
+                {
+                    "record_type": "battle_diagnostic_metrics",
+                    "receipt": result.public_receipt(),
+                },
+            )
+        payload = result.public_receipt()
+        payload["source"] = source.public_dict()
+        payload["private_artifact"] = writer.summary.public_dict()
+        return payload
+    except (
+        BattleDatasetError,
+        BattleFeatureError,
+        BattleModelValidationError,
+        BattleTrainingError,
+        EvaluationIdentityError,
+        PrivateArtifactError,
+    ) as error:
+        parser.error(
+            _public_error_message(
+                error,
+                private_paths=(args.private_root,),
+            )
+        )
+    except OSError:
+        parser.error("Private learning input/output failed; no model was published.")
+    raise AssertionError("argparse error unexpectedly returned")
+
+
 def main(arguments: Sequence[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(arguments)
@@ -337,6 +509,11 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 sort_keys=True,
             )
         )
+        return 0
+
+    if args.command == "learn":
+        payload = _run_battle_learning(parser, args)
+        print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
 
     if args.command in {"opening", "play", "record"} and args.speed is not None and not args.watch:

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import stat
 from pathlib import Path
 
@@ -216,6 +215,178 @@ def test_episode_never_overwrites_a_final_or_partial_artifact(tmp_path: Path) ->
         store.begin_episode("occupied")
 
 
+def test_atomic_no_replace_rename_preserves_an_existing_destination(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "source"
+    destination = tmp_path / "destination"
+    source.mkdir()
+    destination.mkdir()
+    (source / "source-marker").write_text("source", encoding="ascii")
+    (destination / "destination-marker").write_text("destination", encoding="ascii")
+
+    with pytest.raises(OSError):
+        private_artifacts_module._rename_no_replace(source, destination)
+
+    assert (source / "source-marker").read_text(encoding="ascii") == "source"
+    assert (destination / "destination-marker").read_text(encoding="ascii") == "destination"
+
+
+def test_atomic_no_replace_rename_preserves_an_empty_destination_inode(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "source"
+    destination = tmp_path / "destination"
+    source.mkdir()
+    destination.mkdir()
+    (source / "source-marker").write_text("source", encoding="ascii")
+    source_inode = source.stat().st_ino
+    destination_inode = destination.stat().st_ino
+
+    with pytest.raises(OSError):
+        private_artifacts_module._rename_no_replace(source, destination)
+
+    assert source.stat().st_ino == source_inode
+    assert (source / "source-marker").read_text(encoding="ascii") == "source"
+    assert destination.stat().st_ino == destination_inode
+    assert list(destination.iterdir()) == []
+
+
+def test_atomic_no_replace_rename_fails_closed_on_an_unsupported_platform(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    source = tmp_path / "source"
+    destination = tmp_path / "destination"
+    source.mkdir()
+    monkeypatch.setattr(private_artifacts_module.sys, "platform", "unsupported")
+
+    with pytest.raises(OSError, match="unsupported"):
+        private_artifacts_module._rename_no_replace(source, destination)
+
+    assert source.is_dir()
+    assert not destination.exists()
+
+
+def test_episode_existing_final_is_detected_before_complete_manifest_sealing(
+    tmp_path: Path,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    writer = store.begin_episode("late-collision")
+    writer.append("actions", {"step": 0})
+    destination = root / "late-collision"
+    destination.mkdir()
+    (destination / "marker").write_text("untouched", encoding="ascii")
+
+    with pytest.raises(PrivateArtifactError, match="refusing to overwrite"):
+        writer.complete()
+
+    assert (destination / "marker").read_text(encoding="ascii") == "untouched"
+    assert not (root / "late-collision.partial" / "manifest.json").exists()
+    writer.abort("test_cleanup")
+
+
+def test_episode_atomic_publish_race_preserves_destination_and_retains_failure(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    writer = store.begin_episode("publish-race")
+    writer.append("actions", {"step": 0})
+    real_rename = private_artifacts_module._rename_no_replace
+    destination = root / "publish-race"
+
+    def collide_at_publication(source: Path, target: Path) -> None:
+        if target == destination:
+            target.mkdir()
+            (target / "marker").write_text("untouched", encoding="ascii")
+        real_rename(source, target)
+
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_rename_no_replace",
+        collide_at_publication,
+    )
+    with pytest.raises(PrivateArtifactError, match="unable to publish"):
+        writer.complete()
+
+    assert (destination / "marker").read_text(encoding="ascii") == "untouched"
+    assert not (root / "publish-race.partial").exists()
+    failed = root / "publish-race.failed.partial"
+    manifest = json.loads((failed / "manifest.json").read_text(encoding="ascii"))
+    unpublished = json.loads((failed / "manifest.unpublished.json").read_text(encoding="ascii"))
+    assert manifest["status"] == "failed"
+    assert manifest["reason_code"] == "publication_failed"
+    assert unpublished["status"] == "complete"
+
+
+def test_episode_atomic_publish_race_preserves_an_empty_destination_inode(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    writer = store.begin_episode("empty-publish-race")
+    writer.append("actions", {"step": 0})
+    real_rename = private_artifacts_module._rename_no_replace
+    destination = root / "empty-publish-race"
+    destination_inodes: list[int] = []
+
+    def collide_with_empty_destination(source: Path, target: Path) -> None:
+        if target == destination:
+            target.mkdir()
+            destination_inodes.append(target.stat().st_ino)
+        real_rename(source, target)
+
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_rename_no_replace",
+        collide_with_empty_destination,
+    )
+    with pytest.raises(PrivateArtifactError, match="unable to publish"):
+        writer.complete()
+
+    assert len(destination_inodes) == 1
+    assert destination.stat().st_ino == destination_inodes[0]
+    assert list(destination.iterdir()) == []
+    assert not (root / "empty-publish-race.partial").exists()
+    failed = root / "empty-publish-race.failed.partial"
+    manifest = json.loads((failed / "manifest.json").read_text(encoding="ascii"))
+    assert manifest["status"] == "failed"
+    assert manifest["reason_code"] == "publication_failed"
+
+
+def test_episode_atomic_failed_publish_race_preserves_destination_marker(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    writer = store.begin_episode("failed-race")
+    writer.append("actions", {"step": 0})
+    real_rename = private_artifacts_module._rename_no_replace
+    destination = root / "failed-race.failed.partial"
+
+    def collide_at_failed_publication(source: Path, target: Path) -> None:
+        if target == destination:
+            target.mkdir()
+            (target / "marker").write_text("untouched", encoding="ascii")
+        real_rename(source, target)
+
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_rename_no_replace",
+        collide_at_failed_publication,
+    )
+    with pytest.raises(PrivateArtifactError, match="unable to retain"):
+        writer.abort("test_failure")
+
+    assert (destination / "marker").read_text(encoding="ascii") == "untouched"
+    partial = root / "failed-race.partial"
+    manifest = json.loads((partial / "manifest.json").read_text(encoding="ascii"))
+    assert manifest["status"] == "failed"
+    assert manifest["reason_code"] == "test_failure"
+    assert writer.summary.status == "failed"
+
+
 @pytest.mark.parametrize(
     "record",
     [
@@ -312,7 +483,7 @@ def test_publish_rename_failure_becomes_an_explicit_failed_artifact(
     root, _, store = _make_store(tmp_path)
     writer = store.begin_episode("publish-failure")
     writer.append("actions", {"action": "start", "step": 0})
-    real_rename = os.rename
+    real_rename = private_artifacts_module._rename_no_replace
 
     def fail_completed_publish(source, destination, *args, **kwargs):
         if (
@@ -322,7 +493,11 @@ def test_publish_rename_failure_becomes_an_explicit_failed_artifact(
             raise OSError(f"cannot rename private location {source}")
         return real_rename(source, destination, *args, **kwargs)
 
-    monkeypatch.setattr(os, "rename", fail_completed_publish)
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_rename_no_replace",
+        fail_completed_publish,
+    )
     with (
         pytest.raises(
             PrivateArtifactError,

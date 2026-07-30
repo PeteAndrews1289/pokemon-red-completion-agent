@@ -121,6 +121,12 @@ ruff check .
 pytest -m "not integration"
 ```
 
+Battle-learning development additionally uses the optional NumPy dependency:
+
+```bash
+python -m pip install -e ".[dev,learning]"
+```
+
 ## Private emulator setup
 
 PyBoy integration is optional so public tests remain redistribution-safe:
@@ -247,6 +253,8 @@ behavioral-cloning claim is made.
 - [Assistance policy](docs/assistance-policy.md) — permitted training and evaluation resources
 - [Teaching and data plan](docs/teaching-plan.md) — references, demonstrations, and DAgger order
 - [Cross-game transfer plan](docs/transfer-learning.md) — shared ontology and promotion gates
+- [Battle-learning design](docs/battle-learning.md) — private data boundary, feature schema, model,
+  and split rules
 - [First trajectory receipt](docs/evidence/private-trajectory-foundation-2026-07-30.json) —
   sanitized integrity, privacy, and scope evidence
 - [First battle-decision receipt](docs/evidence/private-battle-decisions-2026-07-30.json) —

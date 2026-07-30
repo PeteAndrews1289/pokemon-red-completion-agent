@@ -33,7 +33,9 @@ def test_public_tree_rejects_private_suffixes_and_symlinks(tmp_path: Path) -> No
 
 
 def test_training_trajectory_formats_and_directory_are_always_private() -> None:
-    assert {"trajectories", "datasets", "recordings"}.issubset(PRIVATE_DIRECTORY_NAMES)
+    assert {"trajectories", "datasets", "models", "recordings"}.issubset(
+        PRIVATE_DIRECTORY_NAMES
+    )
     assert {".jsonl", ".parquet", ".arrow", ".npy", ".npz", ".pkl"}.issubset(PRIVATE_SUFFIXES)
 
 

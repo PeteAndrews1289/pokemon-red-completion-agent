@@ -118,6 +118,9 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 - [x] Record and integrity-audit the first private clean-start teacher control trajectory.
 - [x] Add policy-safe battle move decision spans for the shared adaptive battle runtime.
 - [x] Record and audit a clean-start trajectory containing adaptive battle decision labels.
+- [x] Add an integrity-checked private episode reader and typed private model-artifact writer.
+- [x] Add the pinned Red mechanics projector and slot-equivariant masked battle ranker.
+- [ ] Run and publish the aggregate first single-lineage battle diagnostic.
 - [ ] Record perturbed teacher corrections and recovery trajectories.
 - Publish schemas, aggregate statistics, and dataset cards without game assets.
 - Train goal-conditioned navigation, interaction, battle, puzzle, and recovery specialists with

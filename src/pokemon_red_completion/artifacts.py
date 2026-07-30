@@ -31,6 +31,7 @@ PRIVATE_DIRECTORY_NAMES = {
     ".venv",
     "checkpoints",
     "datasets",
+    "models",
     "recordings",
     "roms",
     "runs",

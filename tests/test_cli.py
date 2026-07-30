@@ -100,6 +100,181 @@ def test_private_data_init_redacts_private_root_from_errors(
     assert str(private_root) not in captured.err
 
 
+def test_battle_learning_requires_explicit_diagnostic_acknowledgement(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    def fail_if_rom_resolved(argument: object) -> None:
+        pytest.fail(f"ROM resolution was unexpectedly attempted for {argument!r}")
+
+    monkeypatch.setattr(cli, "resolve_rom_path", fail_if_rom_resolved)
+
+    with pytest.raises(SystemExit) as error:
+        cli.main(
+            [
+                "learn",
+                "battle",
+                "train",
+                "--private-root",
+                "/private/external",
+                "--episode-id",
+                "episode-001",
+            ]
+        )
+
+    captured = capsys.readouterr()
+    assert error.value.code == 2
+    assert captured.out == ""
+    assert "requires --diagnostic" in captured.err
+
+
+def test_battle_learning_writes_only_a_private_typed_model_artifact(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    from pokemon_red_completion import battle_dataset, battle_training
+
+    private_root_path = Path("/private/external/trajectories")
+    observed: dict[str, object] = {"records": []}
+
+    class FakeSummary:
+        def public_dict(self) -> dict[str, object]:
+            return {
+                "schema": "private-json-artifact-summary-v1",
+                "artifact_id": "red-battle-ranker-fixed",
+                "kind": "battle_model",
+                "status": "complete",
+                "stream_records": {"metrics": 1, "model": 1, "training": 1},
+                "total_records": 3,
+                "total_bytes": 2048,
+                "manifest_sha256": "c" * 64,
+            }
+
+    class FakeWriter:
+        summary = FakeSummary()
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args: object) -> bool:
+            return False
+
+        def append(self, stream: str, record: object) -> None:
+            cast_records = observed["records"]
+            assert isinstance(cast_records, list)
+            cast_records.append((stream, record))
+
+    fake_writer = FakeWriter()
+
+    class FakeRoot:
+        def open_episode(self, episode_id: str) -> object:
+            observed["episode_id"] = episode_id
+            return object()
+
+        def begin_artifact(self, artifact_id: str, *, kind: str) -> FakeWriter:
+            observed.update(artifact_id=artifact_id, artifact_kind=kind)
+            return fake_writer
+
+    fake_dataset = SimpleNamespace(
+        promotion_eligible=False,
+        manifest_sha256="a" * 64,
+        public_summary=lambda: {
+            "schema": "battle-episode-dataset-summary-v1",
+            "decisions": 422,
+            "promotion_eligible": False,
+        },
+    )
+    fake_model = SimpleNamespace(to_dict=lambda: {"model_id": "masked-linear", "weights": [1.0]})
+
+    class FakeResult:
+        model = fake_model
+        model_sha256 = "b" * 64
+
+        def public_receipt(self) -> dict[str, object]:
+            return {
+                "schema": "battle-imitation-diagnostic-v1",
+                "status": "complete",
+                "qualification": {
+                    "promotion_eligible": False,
+                    "held_out_evaluation": False,
+                },
+            }
+
+    def fake_open_private_root(root: Path, *, repository_root: Path) -> FakeRoot:
+        observed.update(private_root=root, repository_root=repository_root)
+        return FakeRoot()
+
+    def fake_load(
+        reader: object,
+        projector: object,
+        *,
+        required_provenance: object,
+    ) -> object:
+        observed.update(
+            reader=reader,
+            projector=projector,
+            required_provenance=required_provenance,
+        )
+        return fake_dataset
+
+    def fake_train(dataset: object, *, config: object) -> FakeResult:
+        observed.update(dataset=dataset, config=config)
+        return FakeResult()
+
+    monkeypatch.setattr(
+        cli,
+        "detect_source_identity",
+        lambda *args, **kwargs: SourceIdentity("d" * 40, False),
+    )
+    monkeypatch.setattr(cli, "open_private_root", fake_open_private_root)
+    monkeypatch.setattr(battle_dataset, "load_battle_episode", fake_load)
+    monkeypatch.setattr(battle_training, "train_diagnostic_battle_ranker", fake_train)
+    monkeypatch.setattr(
+        cli.uuid,
+        "uuid4",
+        lambda: SimpleNamespace(hex="fixed"),
+    )
+    monkeypatch.setattr(
+        cli,
+        "resolve_rom_path",
+        lambda argument: pytest.fail("learning must not resolve a ROM"),
+    )
+
+    assert (
+        cli.main(
+            [
+                "learn",
+                "battle",
+                "train",
+                "--private-root",
+                str(private_root_path),
+                "--episode-id",
+                "episode-001",
+                "--diagnostic",
+                "--epochs",
+                "25",
+            ]
+        )
+        == 0
+    )
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    assert payload["qualification"]["held_out_evaluation"] is False
+    assert payload["source"] == {"git_commit": "d" * 40, "worktree_dirty": False}
+    assert payload["private_artifact"]["kind"] == "battle_model"
+    assert str(private_root_path) not in captured.out
+    assert captured.err == ""
+    assert observed["episode_id"] == "episode-001"
+    assert observed["artifact_id"] == "red-battle-ranker-fixed"
+    assert observed["artifact_kind"] == "battle_model"
+    assert [stream for stream, _ in observed["records"]] == [
+        "model",
+        "training",
+        "metrics",
+    ]
+
+
 def test_bootstrap_command_prints_only_public_report(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
