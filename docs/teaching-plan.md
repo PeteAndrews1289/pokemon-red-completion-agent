@@ -237,7 +237,8 @@ restore, rewind, or import state from another run.
 ## Collection order
 
 1. Freeze the first trajectory schema, private writer, and Pokémon Red adapter. **Done.**
-2. Record and exactly replay the clean-start bedroom trace.
+2. Record and exactly replay the clean-start bedroom trace. **Done as part of the first full
+   control trajectory.**
 3. Preserve the qualified **6/6** checkpoint segment through verified Squirtle. **Done.**
 4. Extend the same clean session through the lab rival, Oak's Parcel, and the Pokédex. **Done.**
 5. Extend and replay-qualify the route through Pewter City and Brock. **Done.**

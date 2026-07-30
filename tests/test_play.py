@@ -1890,7 +1890,7 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     )
     assert report.next_objective is None
     assert report.frames_executed == 4_796_436
-    assert report.actions_executed == 41_316
+    assert report.actions_executed == 41_330
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -1939,7 +1939,7 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     ) == (MapId.SS_ANNE_CAPTAINS_ROOM, 4, 3, 26, 12, 71, 0, (14, 30, 30, 25))
     assert report.surge.passed
     assert report.surge.frames_executed == 104_710
-    assert report.surge.actions_executed == 1_659
+    assert report.surge.actions_executed == 1_673
     assert report.surge.dig_attacks == 5
     assert report.surge.wrong_move_count == 0
     assert report.surge.super_potion_used is False

@@ -115,13 +115,20 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 
 - [x] Define the versioned, game-neutral semantic trajectory contract and Pokémon Red adapter.
 - [x] Add fail-closed, path-free private episode storage for a separately mounted volume.
-- [ ] Record private teacher and recovery trajectories.
+- [x] Record and integrity-audit the first private clean-start teacher control trajectory.
+- [ ] Record perturbed teacher corrections and recovery trajectories.
 - Publish schemas, aggregate statistics, and dataset cards without game assets.
 - Train goal-conditioned navigation, interaction, battle, puzzle, and recovery specialists with
   behavioral cloning.
 - Evaluate each specialist on held-out seeds and deliberately perturbed semantic states.
 
 Exit gate: learned specialists meet preregistered local reliability thresholds.
+
+The first private control trace contains 41,330 executions, 300 events, and 14,760 deduplicated
+policy snapshots across all 299 checkpoints. Its manifest, references, state-hash chain,
+provenance, terminal record, and privacy invariants passed audit. See the
+[sanitized receipt](evidence/private-trajectory-foundation-2026-07-30.json). It contains no
+specialist decision records yet and is not described as a finished behavioral-cloning dataset.
 
 ## Milestone 4 — DAgger and selective RL
 

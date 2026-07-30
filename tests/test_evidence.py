@@ -54,14 +54,13 @@ SILPH_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-silph-2026-
 SABRINA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-sabrina-2026-07-29.json"
 CINNABAR_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-cinnabar-2026-07-29.json"
 BLAINE_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-blaine-2026-07-29.json"
-GIOVANNI_RECEIPT = (
-    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-giovanni-2026-07-29.json"
-)
+GIOVANNI_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-giovanni-2026-07-29.json"
 VICTORY_ROAD_RECEIPT = (
     PROJECT_ROOT / "docs" / "evidence" / "qualified-play-victory-road-2026-07-29.json"
 )
-LORELEI_RECEIPT = (
-    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-lorelei-2026-07-29.json"
+LORELEI_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-lorelei-2026-07-29.json"
+TRAJECTORY_FOUNDATION_RECEIPT = (
+    PROJECT_ROOT / "docs" / "evidence" / "private-trajectory-foundation-2026-07-30.json"
 )
 
 
@@ -1597,5 +1596,60 @@ def test_lorelei_receipt_is_repeatable_complete_and_privacy_safe() -> None:
     assert terminal["controller_released"] is True
     serialized = json.dumps(receipt)
     assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_trajectory_foundation_receipt_is_integrity_scoped_and_privacy_safe() -> None:
+    receipt = json.loads(TRAJECTORY_FOUNDATION_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "private-trajectory-foundation-receipt-v1"
+    assert receipt["recorded_on"] == "2026-07-30"
+    assert receipt["evidence_lane"] == "deterministic_teacher_control_trace"
+    assert receipt["claim_scope"] == {
+        "game_complete": True,
+        "learned_policy": False,
+        "transfer_result": False,
+        "model_ready_dataset": False,
+    }
+    assert GIT_COMMIT.fullmatch(receipt["source"]["git_commit"])
+    assert receipt["source"]["worktree_dirty"] is False
+    assert receipt["rom"] == {
+        "title": POKEMON_RED_US_REV_0.title,
+        "size_bytes": POKEMON_RED_US_REV_0.size_bytes,
+        "sha1": POKEMON_RED_US_REV_0.sha1,
+        "sha256": POKEMON_RED_US_REV_0.sha256,
+    }
+    assert receipt["episode"]["status"] == "complete"
+    assert receipt["episode"]["distributed"] is False
+    assert receipt["episode"]["streams"] == {
+        "episode": 1,
+        "events": 300,
+        "executions": 41_330,
+        "snapshots": 14_760,
+    }
+    assert receipt["episode"]["total_records"] == 56_391
+    assert receipt["gameplay"] == {
+        "checkpoints_verified": 299,
+        "checkpoints_total": 299,
+        "objectives_verified": 36,
+        "objectives_total": 36,
+        "frames_executed": 4_796_436,
+        "actions_executed": 41_330,
+        "qualified_through": "enter_hall_of_fame",
+        "controller_released": True,
+    }
+    assert receipt["integrity_audit"]["adjacent_state_hash_transitions_verified"] == 41_329
+    assert all(
+        value
+        for key, value in receipt["integrity_audit"].items()
+        if key != "adjacent_state_hash_transitions_verified"
+    )
+    assert all(receipt["privacy_audit"].values())
+    assert receipt["limitations"]["decision_records"] == 0
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "/Volumes/" not in serialized
     assert "Downloads" not in serialized
     assert ".gb" not in serialized

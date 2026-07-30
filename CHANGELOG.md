@@ -11,6 +11,8 @@
   finalization, path-free manifests, and public-safe summaries.
 - Added continuous teacher instrumentation from clean power-on through the Hall of Fame, with
   semantic checkpoints and controller actions linked in one episode.
+- Recorded and audited the first private full-game control trajectory: 41,330 executions, 300
+  events, and 14,760 deduplicated semantic snapshots across all 299 checkpoints.
 - Documented the measured cross-game transfer goal and its Red, near-transfer, and
   cross-generation promotion gates.
 

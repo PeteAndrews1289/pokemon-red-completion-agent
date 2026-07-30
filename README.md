@@ -15,6 +15,11 @@ control, and progressively trained specialists.**
 > verified deterministic-teacher completion—not a learned-policy or unseen-seed generalization
 > claim. See the
 > [sanitized three-run completion receipt](docs/evidence/qualified-play-hall-of-fame-2026-07-29.json).
+> The first private, integrity-audited trajectory reproduced the same terminal in 4,796,436 frames
+> while recording **41,330 executor actions**, **300 events**, and **14,760 deduplicated semantic
+> snapshots**. The 14-action difference closes a previously uncounted menu-control path; it is not
+> a route change. See the
+> [sanitized trajectory-foundation receipt](docs/evidence/private-trajectory-foundation-2026-07-30.json).
 
 ## The goal
 
@@ -240,6 +245,8 @@ recovery examples are added before behavioral-cloning claims are made.
 - [Assistance policy](docs/assistance-policy.md) — permitted training and evaluation resources
 - [Teaching and data plan](docs/teaching-plan.md) — references, demonstrations, and DAgger order
 - [Cross-game transfer plan](docs/transfer-learning.md) — shared ontology and promotion gates
+- [First trajectory receipt](docs/evidence/private-trajectory-foundation-2026-07-30.json) —
+  sanitized integrity, privacy, and scope evidence
 - [Optional upstream baseline](docs/upstream-baseline.md) — pinned, isolated comparison boundary
 - [Contributing](CONTRIBUTING.md) — safety and evidence requirements
 
