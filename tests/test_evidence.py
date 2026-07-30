@@ -60,6 +60,9 @@ GIOVANNI_RECEIPT = (
 VICTORY_ROAD_RECEIPT = (
     PROJECT_ROOT / "docs" / "evidence" / "qualified-play-victory-road-2026-07-29.json"
 )
+LORELEI_RECEIPT = (
+    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-lorelei-2026-07-29.json"
+)
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -1540,6 +1543,57 @@ def test_victory_road_receipt_is_repeatable_complete_and_privacy_safe() -> None:
     assert terminal["party_hp"] == terminal["party_max_hp"] == [157, 52, 37]
     assert terminal["lead_moves"] == [0x5C, 0x46, 0x3A, 0x39]
     assert terminal["lead_pp"] == [10, 15, 10, 15]
+    assert terminal["controller_released"] is True
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_lorelei_receipt_is_repeatable_complete_and_privacy_safe() -> None:
+    receipt = json.loads(LORELEI_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "qualified-play-v24-receipt"
+    assert receipt["claim_scope"] == {
+        "qualified_through": "defeat_lorelei",
+        "game_complete": False,
+        "learned_policy": False,
+        "timing_or_rng_generalization": False,
+    }
+    assert receipt["evaluation"] == {
+        "clean_power_on": True,
+        "human_input": False,
+        "save_state_restoration": False,
+        "runs": 3,
+        "identical_reports": True,
+        "frames_per_run": 4_496_270,
+        "actions_per_run": 38_258,
+        "rom_adjacent_artifacts_unchanged": True,
+    }
+    assert receipt["progress"] == {
+        "checkpoints_verified": 287,
+        "checkpoints_total": 287,
+        "objectives_verified": 31,
+        "objectives_total": 36,
+        "next_objective": "defeat_bruno",
+    }
+    chapter = receipt["lorelei_chapter"]
+    assert chapter["frames"] == 69_025
+    assert chapter["actions"] == 723
+    assert chapter["party"] == [
+        [0x78, 54],
+        [0x8B, 53],
+        [0x08, 54],
+        [0x48, 56],
+        [0x13, 56],
+    ]
+    assert chapter["recovery"]["hyper_potions_used"] == 3
+    assert chapter["recovery"]["full_restores_used"] == 2
+    terminal = chapter["terminal"]
+    assert terminal["party_hp"] == terminal["party_max_hp"] == [160, 52, 37]
+    assert terminal["party_status"] == [0, 0, 0]
+    assert terminal["lead_moves"] == [0x5C, 0x46, 0x3A, 0x39]
+    assert terminal["lead_pp"] == [7, 0, 10, 9]
     assert terminal["controller_released"] is True
     serialized = json.dumps(receipt)
     assert "/Users/" not in serialized

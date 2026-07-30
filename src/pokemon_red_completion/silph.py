@@ -1041,10 +1041,29 @@ def _battle_hyper_potion(
     emulator: EmulatorState,
     timing: SilphTiming,
 ) -> None:
+    _battle_healing_item(
+        reader,
+        actions,
+        emulator,
+        timing,
+        ItemId.HYPER_POTION,
+    )
+
+
+def _battle_healing_item(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    timing: SilphTiming,
+    item: ItemId,
+) -> None:
+    if item not in {ItemId.HYPER_POTION, ItemId.FULL_RESTORE}:
+        raise ValueError("battle healing item must be Hyper Potion or Full Restore")
+    label = item.name.replace("_", " ").title()
     raw = reader.read()
     menu = reader.read_battle_menu_state(raw)
     if raw.battle_state != 2 or menu.phase is not BattleMenuPhase.MAIN:
-        raise SilphChapterError("Hyper Potion gate requires the trainer MAIN menu.")
+        raise SilphChapterError(f"{label} gate requires the trainer MAIN menu.")
     command = menu.selected_main_command
     if command == 0:
         _pulse(
@@ -1082,12 +1101,12 @@ def _battle_hyper_potion(
     selected = reader.read_battle_menu_state(reader.read())
     if selected.selected_main_command != 1:
         raise SilphChapterError("Could not select the English ITEM battle command.")
-    before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
+    before = _bag(emulator).get(item, 0)
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.battle_item_frames)
     _select_bag_item(
         actions,  # type: ignore[arg-type]
         emulator,
-        ItemId.HYPER_POTION,
+        item,
         LavenderTiming(wait_frames=timing.menu_frames),
     )
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.battle_item_frames)
@@ -1114,10 +1133,10 @@ def _battle_hyper_potion(
             break
         _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.battle_item_frames)
     else:
-        raise SilphChapterError("Hyper Potion did not return to the MAIN battle menu.")
-    after = _bag(emulator).get(ItemId.HYPER_POTION, 0)
+        raise SilphChapterError(f"{label} did not return to the MAIN battle menu.")
+    after = _bag(emulator).get(item, 0)
     if before - after != 1:
-        raise SilphChapterError("Hyper Potion quantity did not decrement exactly once.")
+        raise SilphChapterError(f"{label} quantity did not decrement exactly once.")
 
 
 def _heal_detour_from_seventh(

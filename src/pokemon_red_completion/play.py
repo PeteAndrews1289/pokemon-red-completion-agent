@@ -96,6 +96,13 @@ from pokemon_red_completion.lavender import (
     LavenderProgress,
     run_lavender_chapter,
 )
+from pokemon_red_completion.lorelei import (
+    LORELEI_CHECKPOINT_COUNT,
+    LoreleiChapterError,
+    LoreleiChapterReport,
+    LoreleiProgress,
+    run_lorelei_chapter,
+)
 from pokemon_red_completion.observation import (
     MapId,
     OaksErrandPhase,
@@ -219,8 +226,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + BLAINE_CHECKPOINT_COUNT
     + GIOVANNI_CHECKPOINT_COUNT
     + VICTORY_ROAD_CHECKPOINT_COUNT
+    + LORELEI_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "cross_victory_road"
+QUALIFIED_THROUGH_OBJECTIVE = "defeat_lorelei"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -367,6 +375,7 @@ class QualifiedPlayReport:
     blaine: BlaineChapterReport
     giovanni: GiovanniChapterReport
     victory_road: VictoryRoadChapterReport
+    lorelei: LoreleiChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -410,6 +419,7 @@ class QualifiedPlayReport:
             and self.blaine.passed
             and self.giovanni.passed
             and self.victory_road.passed
+            and self.lorelei.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -469,10 +479,11 @@ class QualifiedPlayReport:
             *self.blaine.checkpoints(),
             *self.giovanni.checkpoints(),
             *self.victory_road.checkpoints(),
+            *self.lorelei.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v23",
+            "schema": "qualified-play-v24",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -540,6 +551,7 @@ class QualifiedPlayReport:
             "blaine_chapter": self.blaine.public_dict(),
             "giovanni_chapter": self.giovanni.public_dict(),
             "victory_road_chapter": self.victory_road.public_dict(),
+            "lorelei_chapter": self.lorelei.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -929,6 +941,16 @@ def run_qualified_play(
         except VictoryRoadChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            lorelei = run_lorelei_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_lorelei_progress_bridge(progress),
+            )
+        except LoreleiChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -954,11 +976,12 @@ def run_qualified_play(
             | semantic_facts(blaine.final_raw)
             | semantic_facts(giovanni.final_raw)
             | semantic_facts(victory_road.final_raw)
+            | semantic_facts(lorelei.final_raw)
         )
         state = GameState(
-            mode=game_mode(victory_road.final_raw),
+            mode=game_mode(lorelei.final_raw),
             facts=facts,
-            location=location_label(victory_road.final_raw.map_id),
+            location=location_label(lorelei.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -1000,6 +1023,7 @@ def run_qualified_play(
             blaine=blaine,
             giovanni=giovanni,
             victory_road=victory_road,
+            lorelei=lorelei,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -1659,6 +1683,7 @@ def _sabrina_progress_bridge(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - LORELEI_CHECKPOINT_COUNT
                 - VICTORY_ROAD_CHECKPOINT_COUNT
                 - GIOVANNI_CHECKPOINT_COUNT
                 - BLAINE_CHECKPOINT_COUNT
@@ -1757,7 +1782,30 @@ def _victory_road_progress_bridge(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - LORELEI_CHECKPOINT_COUNT
                 - VICTORY_ROAD_CHECKPOINT_COUNT
+                + progress.completed,
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _lorelei_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[LoreleiProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: LoreleiProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - LORELEI_CHECKPOINT_COUNT
                 + progress.completed,
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
                 frames_executed=progress.frames_executed,

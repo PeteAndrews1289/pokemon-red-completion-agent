@@ -1,0 +1,56 @@
+{
+  "schema": "qualified-play-v24-receipt",
+  "date": "2026-07-29",
+  "status": "ok",
+  "claim_scope": {
+    "qualified_through": "defeat_lorelei",
+    "game_complete": false,
+    "learned_policy": false,
+    "timing_or_rng_generalization": false
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "runs": 3,
+    "identical_reports": true,
+    "frames_per_run": 4496270,
+    "actions_per_run": 38258,
+    "rom_adjacent_artifacts_unchanged": true
+  },
+  "progress": {
+    "checkpoints_verified": 287,
+    "checkpoints_total": 287,
+    "objectives_verified": 31,
+    "objectives_total": 36,
+    "next_objective": "defeat_bruno"
+  },
+  "lorelei_chapter": {
+    "frames": 69025,
+    "actions": 723,
+    "party": [[120, 54], [139, 53], [8, 54], [72, 56], [19, 56]],
+    "recovery": {
+      "hyper_potions_used": 3,
+      "full_restores_used": 2,
+      "status_aware": true,
+      "bidirectional_bag_navigation": true
+    },
+    "terminal": {
+      "map": 246,
+      "x": 4,
+      "y": 5,
+      "party_hp": [160, 52, 37],
+      "party_max_hp": [160, 52, 37],
+      "party_status": [0, 0, 0],
+      "lead_moves": [92, 70, 58, 57],
+      "lead_pp": [7, 0, 10, 9],
+      "controller_released": true
+    }
+  },
+  "privacy": {
+    "rom_path_included": false,
+    "rom_hash_included": false,
+    "save_state_included": false,
+    "personal_path_included": false
+  }
+}

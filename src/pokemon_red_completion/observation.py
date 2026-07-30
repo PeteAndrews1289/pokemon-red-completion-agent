@@ -249,6 +249,8 @@ class MapId(IntEnum):
     ROUTE_22_GATE = 0xC1
     VICTORY_ROAD_2F = 0xC2
     VICTORY_ROAD_3F = 0xC6
+    LORELEIS_ROOM = 0xF5
+    BRUNOS_ROOM = 0xF6
     VERMILION_TRADE_HOUSE = 0xC4
     DIGLETTS_CAVE = 0xC5
 
@@ -4134,6 +4136,8 @@ def location_label(map_id: int | None) -> str | None:
         MapId.HALL_OF_FAME: "hall_of_fame",
         MapId.CHAMPIONS_ROOM: "champions_room",
         MapId.INDIGO_PLATEAU_LOBBY: "indigo_plateau_lobby",
+        MapId.LORELEIS_ROOM: "loreleis_room",
+        MapId.BRUNOS_ROOM: "brunos_room",
     }.get(map_id, f"map_{map_id:02x}")
 
 

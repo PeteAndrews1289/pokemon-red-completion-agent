@@ -55,9 +55,9 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **284/284 qualified checkpoints** through
-Victory Road and therefore **30/36 completion objectives**. Three clean runs were identical at
-the 4,427,245-frame / 37,535-action boundary. The evidence includes the earlier Brock
+The deterministic teacher currently verifies all **287/287 qualified checkpoints** through
+Lorelei and therefore **31/36 completion objectives**. Three clean runs were identical at
+the 4,496,270-frame / 38,258-action Bruno-room boundary. The evidence includes the earlier Brock
 and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
@@ -133,7 +133,9 @@ spinner-floor route. Strength and Ice Beam preserve Surf for the leader; a bound
 restores health and PP before Giovanni. The run then verifies Giovanni's five-member party,
 Surf-only policy, TM27, both Earth Badge lanes, both Route 22 rival events, all eight post-victory
 trainer toggles, and a fully healed eight-badge Viridian terminal. The next segment crosses Route
-22, Route 23, and Victory Road.
+22, Route 23, and Victory Road. The Lorelei segment then verifies her exact five-member party,
+uses semantic HP and status gates for bounded Hyper Potion and Full Restore recovery, preserves
+Toxic when the clean run reaches level 52, and terminates fully healed in Bruno's room.
 
 The same segment can run headlessly or be observed locally with:
 

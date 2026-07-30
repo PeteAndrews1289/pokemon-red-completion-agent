@@ -25,10 +25,10 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **284/284 bounded checkpoints** and **30/36 completion objectives**, ending
-after the final Route 22 rival, every Route 23 badge gate, all Victory Road boulder switches, an
-Indigo Plateau heal, and the declared Elite Four supply purchase. Three clean runs reached the
-identical 4,427,245-frame / 37,535-action boundary.
+Current qualification: **287/287 bounded checkpoints** and **31/36 completion objectives**, ending
+after the final Route 22 rival, every Route 23 badge gate, all Victory Road boulder switches,
+Indigo Plateau preparation, and a qualified Lorelei victory. Three clean runs reached the
+identical 4,496,270-frame / 38,258-action Bruno-room boundary.
 This is an exact deterministic-teacher milestone, not a
 learned-policy, timing/RNG-generalization, or completion result.
 
@@ -82,16 +82,18 @@ learned-policy, timing/RNG-generalization, or completion result.
 - [x] Qualify Toxic preparation, the final Route 22 rival with bounded live recovery, all Route 23
   badge checks, every Victory Road Strength switch and boulder drop, Indigo healing, and Elite Four
   supplies.
+- [x] Qualify Lorelei's exact party, item-cursor recovery, status-aware healing, retained Toxic,
+  and a fully healed Bruno-room boundary.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: defeat Lorelei, Bruno, Agatha, and Lance, then defeat the Champion and verify the
+Next sequence: defeat Bruno, Agatha, and Lance, then defeat the Champion and verify the
 Hall of Fame.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Victory Road three-run evidence receipt](evidence/qualified-play-victory-road-2026-07-29.json).
+[Lorelei three-run evidence receipt](evidence/qualified-play-lorelei-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs reach the healed, supplied Indigo Plateau
+Exit gate: three intervention-free clean-power-on runs reach the healed Bruno-room
 boundary with identical evidence rules.
 
 ## Milestone 2 — deterministic expert

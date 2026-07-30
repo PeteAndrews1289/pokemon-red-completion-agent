@@ -971,6 +971,26 @@ class _VictoryRoadEvidence:
         return {"status": "ok", "objective": "cross_victory_road"}
 
 
+class _LoreleiEvidence:
+    passed = True
+    final_raw = replace(
+        _VictoryRoadEvidence.final_raw,
+        map_id=MapId.BRUNOS_ROOM,
+        player_x=4,
+        player_y=5,
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = ("lorelei_ready", "lorelei_entered", "lorelei_defeated")
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "defeat_lorelei"}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -1044,16 +1064,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 284
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 287
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=284,
+        completed=287,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 284
+    assert progress.completed == progress.total == 287
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -1161,6 +1181,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             blaine=_BlaineEvidence(),  # type: ignore[arg-type]
             giovanni=_GiovanniEvidence(),  # type: ignore[arg-type]
             victory_road=_VictoryRoadEvidence(),  # type: ignore[arg-type]
+            lorelei=_LoreleiEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -1197,6 +1218,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "badge:volcano",
                     "badge:earth",
                     "story:victory_road_cleared",
+                    "league:lorelei_defeated",
             }
         ),
         verified_objectives=(
@@ -1230,8 +1252,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "defeat_blaine",
                 "defeat_giovanni",
                 "cross_victory_road",
+                "defeat_lorelei",
             ),
-            next_objective="defeat_lorelei",
+            next_objective="defeat_bruno",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -1241,9 +1264,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v23"
+    assert public["schema"] == "qualified-play-v24"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "cross_victory_road"
+    assert public["qualified_through"] == "defeat_lorelei"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -1531,9 +1554,12 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "vr3_hole",
         "vr2_final",
         "indigo_ready",
+        "lorelei_ready",
+        "lorelei_entered",
+        "lorelei_defeated",
     ]
     assert public["objective_progress"] == {
-        "verified": 30,
+        "verified": 31,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1566,8 +1592,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "defeat_blaine",
             "defeat_giovanni",
             "cross_victory_road",
+            "defeat_lorelei",
         ],
-        "next": "defeat_lorelei",
+        "next": "defeat_bruno",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -1699,7 +1726,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_crosses_victory_road_without_adjacent_artifacts() -> None:
+def test_private_rom_defeats_lorelei_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -1743,10 +1770,11 @@ def test_private_rom_crosses_victory_road_without_adjacent_artifacts() -> None:
         "defeat_blaine",
         "defeat_giovanni",
         "cross_victory_road",
+        "defeat_lorelei",
     )
-    assert report.next_objective == "defeat_lorelei"
-    assert report.frames_executed == 4_427_245
-    assert report.actions_executed == 37_535
+    assert report.next_objective == "defeat_bruno"
+    assert report.frames_executed == 4_496_270
+    assert report.actions_executed == 38_258
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
