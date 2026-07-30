@@ -2,12 +2,12 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Victory Road qualified](https://img.shields.io/badge/status-Victory_Road_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Lorelei qualified](https://img.shields.io/badge/status-Lorelei_qualified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **284/284 qualified
+> **Current status:** one continuous deterministic teacher now reaches all **287/287 qualified
 > checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
 > Tunnel, clears the Rocket Hideout and Pokémon Tower, rescues Mr. Fuji, receives the Poké Flute,
 > defeats the Route 12 Snorlax, crosses Routes 12–15, collects the Gold Teeth, obtains reusable
@@ -29,12 +29,14 @@ control, and progressively trained specialists.**
 > Route 22 rival gate, and heals with all eight badges. It then teaches Toxic over its obsolete
 > opening move, resupplies in Saffron, defeats the final Route 22 rival with live HP-aware
 > recovery, passes every Route 23 badge gate, solves all three floors of Victory Road, and reaches
-> Indigo Plateau fully healed with an Elite Four reserve. That establishes **30/36 completion
-> objectives**. Three clean runs produced the same 4,427,245-frame, 37,535-action result. This is
+> Indigo Plateau fully healed with an Elite Four reserve. It then defeats Lorelei's exact
+> five-member party with state-aware Toxic, Strength, Surf, Hydro Pump, and bounded recovery,
+> clears paralysis when required, and reaches Bruno's room fully healed. That establishes **31/36
+> completion objectives**. Three clean runs produced the same 4,496,270-frame, 38,258-action result. This is
 > an exact-route
 > deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next graph-selected objective is defeating Lorelei. See the
-> [sanitized three-run Victory Road evidence receipt](docs/evidence/qualified-play-victory-road-2026-07-29.json).
+> game-completion claim. The next graph-selected objective is defeating Bruno. See the
+> [sanitized three-run Lorelei evidence receipt](docs/evidence/qualified-play-lorelei-2026-07-29.json).
 
 ## The goal
 
