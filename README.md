@@ -130,6 +130,12 @@ pokemon-red-completion opening
 pokemon-red-completion opening --watch --speed 4
 pokemon-red-completion play
 pokemon-red-completion play --watch --speed 4
+
+# One-time setup for an existing directory on a separate private volume:
+pokemon-red-completion private-data init --private-root /absolute/private/trajectory-directory
+
+# Record one full teacher episode there:
+pokemon-red-completion record --private-root /absolute/private/trajectory-directory
 ```
 
 `bootstrap` starts PyBoy headlessly from immutable verified ROM bytes, disables human window input,
@@ -218,6 +224,14 @@ outside Git. The visible window is not recorded or uploaded by the project. The 
 is identified by public hashes in the source; reports omit the private ROM path, and no game data
 is distributed.
 
+`private-data init` deliberately requires an existing directory on a separately mounted volume.
+It places a tamper-evident sentinel there but never creates a missing mount point. `record` refuses
+uninitialized, same-device, symlinked, Git-controlled, or overlapping destinations. It also
+requires an identified, clean Git checkout so every accepted episode names the exact source
+commit. Output contains only a path-free episode identifier and aggregate summary. The first
+recorder is an executor-aligned teacher trace; specialist-level decision labels and perturbed
+recovery examples are added before behavioral-cloning claims are made.
+
 ## Evidence and project status
 
 - [Roadmap](docs/roadmap.md) — milestone gates and current implementation status
@@ -225,6 +239,7 @@ is distributed.
 - [Architecture](docs/architecture.md) — authority and subsystem boundaries
 - [Assistance policy](docs/assistance-policy.md) — permitted training and evaluation resources
 - [Teaching and data plan](docs/teaching-plan.md) — references, demonstrations, and DAgger order
+- [Cross-game transfer plan](docs/transfer-learning.md) — shared ontology and promotion gates
 - [Optional upstream baseline](docs/upstream-baseline.md) — pinned, isolated comparison boundary
 - [Contributing](CONTRIBUTING.md) — safety and evidence requirements
 

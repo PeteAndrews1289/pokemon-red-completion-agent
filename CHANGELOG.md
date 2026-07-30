@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Added a versioned, game-neutral trajectory schema for semantic observations, decisions,
+  executions, and sparse events.
+- Added a thin Pokémon Red observation adapter that keeps revision-specific RAM details below the
+  shared Pokémon ontology boundary and separates policy observations from privileged
+  teacher/referee evidence.
+- Added fail-closed private episode storage with an explicit external-volume sentinel, atomic
+  finalization, path-free manifests, and public-safe summaries.
+- Added continuous teacher instrumentation from clean power-on through the Hall of Fame, with
+  semantic checkpoints and controller actions linked in one episode.
+- Documented the measured cross-game transfer goal and its Red, near-transfer, and
+  cross-generation promotion gates.
+
 ## 0.2.0 — Deterministic expert
 
 - Completed three identical clean-power-on runs through all 299 checkpoints, all 36 objectives,

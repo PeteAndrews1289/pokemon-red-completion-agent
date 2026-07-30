@@ -938,12 +938,9 @@ def _throw_ball(
         items = tuple(_bag(emulator))
         if absolute < len(items) and items[absolute] == ItemId.POKE_BALL:
             break
-        emulator.press("down")
-        try:
-            emulator.tick(8)
-        finally:
-            emulator.release("down")
-        emulator.tick(90)
+        # Preserve the former 98-frame pulse while keeping all controller I/O
+        # inside the authoritative executor: 8 pressed + 16 released + 74 wait.
+        _pulse(executor, MacroActionKind.MOVE, "down", frames=74)
     else:
         raise SurgeChapterError("Could not select Poké Ball by absolute bag index.")
     _pulse(executor, MacroActionKind.CONFIRM, frames=360)

@@ -12,6 +12,7 @@ from collections.abc import Callable
 from contextlib import nullcontext
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.bootstrap import (
@@ -218,8 +219,12 @@ class OpeningChapterReport:
         }
 
 
+class OpeningExecutor(Protocol):
+    def execute(self, action: MacroAction) -> ExecutedAction: ...
+
+
 class _CountingExecutor:
-    def __init__(self, executor: FrameSafeExecutor) -> None:
+    def __init__(self, executor: OpeningExecutor) -> None:
         self._executor = executor
         self.actions_executed = 0
 
@@ -238,6 +243,7 @@ def run_opening_chapter(
     opening_timing: OpeningTiming = DEFAULT_OPENING_TIMING,
     progress: ProgressSink | None = None,
     _emulator: PyBoyAdapter | None = None,
+    _executor: OpeningExecutor | None = None,
 ) -> OpeningChapterReport:
     emulator_context = (
         PyBoyAdapter(rom_path, watch=watch, speed=speed)
@@ -249,7 +255,7 @@ def run_opening_chapter(
         initial = reader.read()
         tracker = SemanticStateTracker(initial)
         executor = _CountingExecutor(
-            FrameSafeExecutor(emulator, new_game_timing.controller_timing())
+            _executor or FrameSafeExecutor(emulator, new_game_timing.controller_timing())
         )
 
         play_new_game_intro(executor, timing=new_game_timing)

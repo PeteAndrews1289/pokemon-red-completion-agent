@@ -13,11 +13,18 @@ PRIVATE_SUFFIXES = {
     ".ram",
     ".rtc",
     ".state",
+    ".arrow",
     ".ckpt",
+    ".jsonl",
+    ".npy",
+    ".npz",
     ".onnx",
+    ".parquet",
+    ".pkl",
     ".pt",
     ".pth",
     ".safetensors",
+    ".zst",
 }
 PRIVATE_DIRECTORY_NAMES = {
     ".git",
@@ -30,6 +37,7 @@ PRIVATE_DIRECTORY_NAMES = {
     "saves",
     "savestates",
     "screenshots",
+    "trajectories",
     "videos",
 }
 TEXT_SUFFIXES = {

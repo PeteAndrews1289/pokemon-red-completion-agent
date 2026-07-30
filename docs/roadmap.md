@@ -111,7 +111,11 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 
 ## Milestone 3 — demonstration learner
 
-- Record private teacher and recovery trajectories.
+**Status: in progress — July 2026**
+
+- [x] Define the versioned, game-neutral semantic trajectory contract and Pokémon Red adapter.
+- [x] Add fail-closed, path-free private episode storage for a separately mounted volume.
+- [ ] Record private teacher and recovery trajectories.
 - Publish schemas, aggregate statistics, and dataset cards without game assets.
 - Train goal-conditioned navigation, interaction, battle, puzzle, and recovery specialists with
   behavioral cloning.
@@ -141,6 +145,17 @@ disabled and no save restoration.
   disabled.
 
 Exit gate: at least one verified completion; reliability requires at least 8/10 preregistered runs.
+
+## Milestone 6 — cross-game transfer
+
+- Freeze a Pokémon-mainline semantic ontology that excludes revision-specific privileged state.
+- Implement a second game adapter without changing the shared policy interfaces.
+- Measure zero-shot behavior, few-shot adaptation, and training from scratch on the same tasks.
+- Progress from a closely related title to a later-generation title only after the transfer
+  protocol and leakage controls pass review.
+
+Exit gate: a model reuses Pokémon Red training to reach preregistered objectives in a held-out
+Pokémon title with less new data than the from-scratch baseline.
 
 ## Evidence lanes
 

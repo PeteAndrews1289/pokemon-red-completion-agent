@@ -156,11 +156,15 @@ printed to the terminal.
 
 Action-aligned examples for individual skills:
 
-- semantic observation and current objective;
+- policy-observable semantic state plus a separately stored teacher objective label;
 - macro-action plus button press/release duration;
 - resulting observation and event delta;
 - success, retry, recovery, or terminal label; and
 - both nominal and deliberately perturbed starts.
+
+Hidden story flags and completion-referee evidence may label examples, but they are never model
+features. Dataset exports keep the policy view and privileged annotation view separate and test
+that changing annotation-only state cannot change the policy observation hash.
 
 Perturbations cover nearby legal positions, menu cursor state, encounter identity and timing,
 remaining HP and PP, damage rolls, status conditions, inventory/resource differences, and initial
@@ -190,7 +194,8 @@ Three versioned artifact types remain outside Git:
 - **Sparse event log:** map, objective, badge, party, item, battle, checkpoint, recovery, and
   terminal transitions.
 
-Decision tables should use Parquet. Manifests and sparse events should use canonical JSON or JSONL.
+Recorder v1 uses canonical JSONL for inspectable, append-only episode streams. Columnar Parquet
+training views are derived from validated episodes later; they are not the source of record.
 Screens, ROMs, saves, snapshots, and recordings remain private and content-addressed.
 
 ## Staged policy build
@@ -231,7 +236,7 @@ restore, rewind, or import state from another run.
 
 ## Collection order
 
-1. Freeze the trajectory schema and logger.
+1. Freeze the first trajectory schema, private writer, and Pokémon Red adapter. **Done.**
 2. Record and exactly replay the clean-start bedroom trace.
 3. Preserve the qualified **6/6** checkpoint segment through verified Squirtle. **Done.**
 4. Extend the same clean session through the lab rival, Oak's Parcel, and the Pokédex. **Done.**

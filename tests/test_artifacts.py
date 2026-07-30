@@ -3,6 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 
 from pokemon_red_completion.artifacts import (
+    PRIVATE_DIRECTORY_NAMES,
+    PRIVATE_SUFFIXES,
     inspect_public_tree,
     inspect_tracked_tree,
     sensitive_text_reasons,
@@ -13,12 +15,8 @@ def test_sensitive_text_detects_secrets_and_private_home_paths() -> None:
     private_path = "/" + "Users" + "/alice/private/run.json"
     token = "gh" + "p_" + "abcdefghijklmnopqrstuvwxyz123456"
 
-    assert sensitive_text_reasons(private_path) == (
-        "private home-directory path",
-    )
-    assert sensitive_text_reasons(f"token={token}") == (
-        "GitHub token",
-    )
+    assert sensitive_text_reasons(private_path) == ("private home-directory path",)
+    assert sensitive_text_reasons(f"token={token}") == ("GitHub token",)
     assert sensitive_text_reasons("/Users/example/project") == ()
 
 
@@ -32,6 +30,11 @@ def test_public_tree_rejects_private_suffixes_and_symlinks(tmp_path: Path) -> No
 
     assert ("accidental.state", "private artifact suffix") in reasons
     assert ("link.md", "symbolic links are not publishable") in reasons
+
+
+def test_training_trajectory_formats_and_directory_are_always_private() -> None:
+    assert {"trajectories", "datasets", "recordings"}.issubset(PRIVATE_DIRECTORY_NAMES)
+    assert {".jsonl", ".parquet", ".arrow", ".npy", ".npz", ".pkl"}.issubset(PRIVATE_SUFFIXES)
 
 
 def test_ignored_runtime_directories_are_not_scanned_as_public_content(tmp_path: Path) -> None:

@@ -12,6 +12,7 @@ from collections.abc import Callable, Iterable
 from contextlib import nullcontext
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.agatha import (
@@ -155,6 +156,7 @@ from pokemon_red_completion.pewter import (
     PewterProgress,
     run_pewter_chapter,
 )
+from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 from pokemon_red_completion.rom import RomFingerprint
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.sabrina import (
@@ -212,6 +214,11 @@ from pokemon_red_completion.tower import (
     TowerChapterReport,
     TowerProgress,
     run_tower_chapter,
+)
+from pokemon_red_completion.trajectory import (
+    RecordingExecutor,
+    SparseEvent,
+    TrajectorySink,
 )
 from pokemon_red_completion.vermilion import (
     VERMILION_CHECKPOINT_COUNT,
@@ -612,8 +619,12 @@ class QualifiedPlayReport:
         }
 
 
+class QualifiedExecutor(Protocol):
+    def execute(self, action: MacroAction) -> ExecutedAction: ...
+
+
 class _CountingExecutor:
-    def __init__(self, executor: FrameSafeExecutor) -> None:
+    def __init__(self, executor: QualifiedExecutor) -> None:
         self._executor = executor
         self.actions_executed = 0
 
@@ -649,26 +660,53 @@ def run_qualified_play(
     opening_timing: OpeningTiming = DEFAULT_OPENING_TIMING,
     play_timing: QualifiedPlayTiming = DEFAULT_QUALIFIED_PLAY_TIMING,
     progress: ProgressSink | None = None,
+    trajectory_sink: TrajectorySink | None = None,
+    trajectory_episode_id: str | None = None,
     _emulator: PyBoyAdapter | None = None,
 ) -> QualifiedPlayReport:
     """Run every currently qualified objective in one clean, no-save session."""
+    if (trajectory_sink is None) != (trajectory_episode_id is None):
+        raise ValueError("trajectory_sink and trajectory_episode_id must be provided together")
     emulator_context = (
         PyBoyAdapter(rom_path, watch=watch, speed=speed)
         if _emulator is None
         else nullcontext(_emulator)
     )
     with emulator_context as emulator:
+        reader = PokemonRedStateReader(emulator)
+        base_executor: QualifiedExecutor = FrameSafeExecutor(
+            emulator,
+            new_game_timing.controller_timing(),
+        )
+        recording_executor: RecordingExecutor[MacroAction, ExecutedAction] | None = None
+        recording_failures = [0]
+        effective_progress = progress
+        if trajectory_sink is not None and trajectory_episode_id is not None:
+            recording_executor = RecordingExecutor(
+                delegate=base_executor,
+                snapshot_provider=PokemonRedObservationEncoder.from_state_reader(reader),
+                sink=trajectory_sink,
+                episode_id=trajectory_episode_id,
+            )
+            base_executor = recording_executor
+            effective_progress = _trajectory_progress_bridge(
+                progress,
+                trajectory_sink,
+                trajectory_episode_id,
+                recording_executor,
+                recording_failures,
+            )
+        progress = effective_progress
+
         opening = run_opening_chapter(
             rom_path,
             new_game_timing=new_game_timing,
             opening_timing=opening_timing,
-            progress=_opening_progress_bridge(progress),
+            progress=_opening_progress_bridge(effective_progress),
             _emulator=emulator,
+            _executor=base_executor,
         )
-        reader = PokemonRedStateReader(emulator)
-        executor = _CountingExecutor(
-            FrameSafeExecutor(emulator, new_game_timing.controller_timing())
-        )
+        executor = _CountingExecutor(base_executor)
 
         _move(executor, reader, LAB_RIVAL_TRIGGER_DIRECTIONS, "lab rival trigger")
         _expect_position(reader.read(), MapId.OAKS_LAB, 4, 6, "lab rival trigger")
@@ -1132,6 +1170,44 @@ def run_qualified_play(
         )
         if not report.passed:
             raise QualifiedPlayError("Qualified play evidence failed its public contract.")
+        if (
+            trajectory_sink is not None
+            and trajectory_episode_id is not None
+            and recording_executor is not None
+        ):
+            try:
+                trajectory_sink.record_event(
+                    SparseEvent(
+                        event_id=f"{trajectory_episode_id}:terminal",
+                        episode_id=trajectory_episode_id,
+                        step_index=recording_executor.next_step_index,
+                        kind="terminal",
+                        payload={
+                            "status": "complete",
+                            "game_complete": True,
+                            "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
+                            "objectives_verified": len(verified_objectives),
+                            "objectives_total": len(COMPLETION_QUEST),
+                            "frames": report.frames_executed,
+                            "actions": report.actions_executed,
+                            "controller_released": report.controller_released,
+                        },
+                    )
+                )
+            except Exception:
+                recording_failures[0] += 1
+            failures = recording_failures[0] + recording_executor.recording_failures
+            if failures:
+                raise QualifiedPlayError(
+                    f"Trajectory recording lost {failures} record(s); "
+                    "the private episode was not promoted."
+                )
+            try:
+                trajectory_sink.finalize()
+            except Exception as error:
+                raise QualifiedPlayError(
+                    "Trajectory finalization failed; the private episode was not promoted."
+                ) from error
         return report
 
 
@@ -2027,6 +2103,40 @@ def _champion_progress_bridge(
                 frames_executed=progress.frames_executed,
             )
         )
+
+    return emit
+
+
+def _trajectory_progress_bridge(
+    downstream: ProgressSink | None,
+    sink: TrajectorySink,
+    episode_id: str,
+    recorder: RecordingExecutor[MacroAction, ExecutedAction],
+    recording_failures: list[int],
+) -> ProgressSink:
+    def emit(progress: QualifiedPlayProgress) -> None:
+        if downstream is not None:
+            downstream(progress)
+        try:
+            sink.record_event(
+                SparseEvent(
+                    event_id=(
+                        f"{episode_id}:checkpoint:{progress.completed}:{progress.checkpoint_id}"
+                    ),
+                    episode_id=episode_id,
+                    step_index=recorder.next_step_index,
+                    kind="checkpoint",
+                    payload={
+                        "checkpoint_id": progress.checkpoint_id,
+                        "label": progress.label,
+                        "completed": progress.completed,
+                        "total": progress.total,
+                        "frames": progress.frames_executed,
+                    },
+                )
+            )
+        except Exception:
+            recording_failures[0] += 1
 
     return emit
 

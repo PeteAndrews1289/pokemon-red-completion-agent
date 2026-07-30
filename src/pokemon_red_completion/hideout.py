@@ -293,7 +293,14 @@ def run_hideout_chapter(
     _wait(actions, timing.transition_frames)
     _move(actions, reader, emulator, run, B2_TO_B3, timing, "B3 stairs")
     _wait(actions, timing.transition_frames)
-    _checkpoint(records, progress, emulator, reader.read(), "b3_reached", "Bypassed B1/B2 trainers")
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "b3_reached",
+        "Bypassed B1 and B2 trainers",
+    )
 
     _spinner(actions, B3_TO_B4, timing)
     _require(reader.read(), MapId.ROCKET_HIDEOUT_B4F, (19, 10), "B4 key wing")

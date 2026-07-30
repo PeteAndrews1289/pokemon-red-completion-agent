@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import ast
+from pathlib import Path
+
 import pytest
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
@@ -79,3 +82,23 @@ def test_invalid_direction_is_rejected_before_controller_input() -> None:
         FrameSafeExecutor(controller).execute(MacroAction(MacroActionKind.MOVE, "north"))
 
     assert controller.events == []
+
+
+def test_only_emulator_and_executor_modules_call_controller_primitives() -> None:
+    package = Path(__file__).resolve().parents[1] / "src" / "pokemon_red_completion"
+    allowed = {"emulator.py", "executor.py"}
+    violations: list[str] = []
+
+    for source_path in sorted(package.glob("*.py")):
+        if source_path.name in allowed:
+            continue
+        tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
+        for node in ast.walk(tree):
+            if (
+                isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Attribute)
+                and node.func.attr in {"press", "release", "tick"}
+            ):
+                violations.append(f"{source_path.name}:{node.lineno}:{node.func.attr}")
+
+    assert violations == []
