@@ -15,6 +15,8 @@ from pokemon_red_completion.runtime_identity import (
     RuntimeIdentityError,
     build_runtime_identity,
     build_runtime_identity_from,
+    is_canonical_distribution_inventory_name,
+    is_runtime_identity_public_document,
 )
 
 
@@ -83,6 +85,10 @@ def test_active_runtime_identity_is_path_free_canonical_and_content_addressed() 
     assert payload["pyboy"]["distribution_name"] == "pyboy"
     assert payload["pyboy"]["distribution_version"] == "2.7.0"
     assert identity.pyboy_files
+    assert is_runtime_identity_public_document(payload) is True
+    missing_schema = dict(payload)
+    del missing_schema["schema"]
+    assert is_runtime_identity_public_document(missing_schema) is False
     assert identity.sha256 == hashlib.sha256(canonical).hexdigest()
     assert canonical.endswith(b"\n")
     assert canonical == (
@@ -101,6 +107,44 @@ def test_active_runtime_identity_is_path_free_canonical_and_content_addressed() 
     assert all(".." not in file.name.split("/") for file in identity.pyboy_files)
     assert all("__pycache__" not in file.name for file in identity.pyboy_files)
     assert all(not file.name.casefold().endswith((".pyc", ".pyo")) for file in identity.pyboy_files)
+
+
+@pytest.mark.parametrize(
+    "name",
+    (
+        "pyboy/api/constants.py",
+        "pyboy-2.7.0.dist-info/licenses/LICENSE.md",
+        "console_scripts/up-3/pyboy",
+    ),
+)
+def test_canonical_distribution_inventory_name_accepts_safe_logical_names(
+    name: str,
+) -> None:
+    assert is_canonical_distribution_inventory_name(name) is True
+
+
+@pytest.mark.parametrize(
+    "name",
+    (
+        "/Users/example/pyboy.py",
+        r"C:\Users\example\pyboy.py",
+        "~/pyboy.py",
+        "file:pyboy/runtime.py",
+        "../pyboy/runtime.py",
+        "pyboy/../runtime.py",
+        "pyboy/./runtime.py",
+        "pyboy//runtime.py",
+        r"pyboy\private.py",
+        "pyboy/runtimé.py",
+        "Users/example/Downloads/private.gb",
+        "private/api-token.txt",
+        b"pyboy/runtime.py",
+    ),
+)
+def test_canonical_distribution_inventory_name_rejects_location_or_traversal(
+    name: object,
+) -> None:
+    assert is_canonical_distribution_inventory_name(name) is False
 
 
 def test_explicit_identity_sorts_files_excludes_caches_and_hashes_exact_bytes(

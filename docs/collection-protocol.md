@@ -16,6 +16,15 @@ As of the commit that introduces this protocol, the schedule dry run and all twe
 slots are unexecuted. The registry is a prospective plan, not an outcome or held-out result. It
 contains no trajectory, ROM, snapshot, private path, or completion evidence.
 
+One invocation against the superseded registry
+`24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
+the episode header or emulator startup because the path-free serializer rejected a canonical
+relative PyBoy inventory name. Its failed private artifact is retained, but it contains no
+gameplay, schedule application, campaign seal, or declared-slot outcome. This revision permits
+only validated location-free distribution inventory names at the exact structural runtime field;
+absolute paths, traversal, spoofed keys, and every other path-bearing field remain invalid. The
+registry below supersedes that preflight-only identity.
+
 The exact source and configuration commit must be committed and pushed to GitHub before the
 schedule dry run or any declared attempt begins. The command verifies that the clean local commit
 is reachable from a remote-tracking branch. The registry loader resolves that commit once, reads
@@ -59,13 +68,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6337` |
-| Registry SHA-256 | `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` |
-| Source bundle SHA-256 | `56d376c46f8957a2fedc4fbb1cc90955ba68655b90c400016197430d75c039b8` |
+| Registry SHA-256 | `465560309807bbe797a6d88301676344494b463f73f0e53e1a35e73c47a248dd` |
+| Source bundle SHA-256 | `4934c4c220c4eec1b93ee559f67b9ea9752d86b759ab9ff1e862f6886a765175` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `8bd53bd6c33ca16878b7643e2fc5da5bd12cc67ac0412fe40053dd7b962d97bc` |
+| Teacher execution SHA-256 | `43499f0791b74ba372ebc0939043b1e0042e3145e659717fea6e01817db8ae3a` |
 | Dry-run schedule SHA-256 | `4c33d545f61735f331e645d1e1e70bbfba1bc083e004c7b4748025258af33a98` |
-| Slot `01` assignment ID | `74cb9583b4cee0a0b6fc83a2c46fe3cb4cfb57c885fb1b42715d1d71583f987b` |
+| Slot `01` assignment ID | `4756dd3f626eb5ffe1f2c6c8c46b3a34aa0a11dcc3dbbe42040409146e642622` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

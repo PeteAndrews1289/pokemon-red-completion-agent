@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 from dataclasses import dataclass
@@ -9,6 +10,10 @@ from types import MappingProxyType
 import pytest
 
 from pokemon_red_completion.actions import MacroActionKind
+from pokemon_red_completion.runtime_identity import (
+    PYBOY_INVENTORY_SCHEMA,
+    RUNTIME_IDENTITY_SCHEMA,
+)
 from pokemon_red_completion.trajectory import (
     TRAJECTORY_SCHEMA_VERSION,
     DecisionContext,
@@ -98,6 +103,107 @@ def test_json_safety_rejects_unsafe_values_recursively(
             game_id="example",
             mode="overworld",
             features={"outer": [{"nested": unsafe}]},
+        )
+
+
+def _runtime_metadata(inventory_name: str) -> dict[str, object]:
+    files = [
+        {
+            "name": inventory_name,
+            "bytes": 7,
+            "sha256": "a" * 64,
+        }
+    ]
+    inventory = {
+        "schema": PYBOY_INVENTORY_SCHEMA,
+        "distribution_name": "pyboy",
+        "distribution_version": "2.7.0",
+        "files": files,
+    }
+    inventory_sha256 = hashlib.sha256(
+        (
+            json.dumps(
+                inventory,
+                allow_nan=False,
+                ensure_ascii=True,
+                separators=(",", ":"),
+                sort_keys=True,
+            )
+            + "\n"
+        ).encode("ascii")
+    ).hexdigest()
+    return {
+        "runtime": {
+            "schema": RUNTIME_IDENTITY_SCHEMA,
+            "python": {
+                "implementation": "CPython",
+                "version": "3.14.3",
+                "executable_sha256": "b" * 64,
+            },
+            "pyboy": {
+                "distribution_name": "pyboy",
+                "distribution_version": "2.7.0",
+                "files": files,
+                "inventory_sha256": inventory_sha256,
+            },
+        }
+    }
+
+
+def test_json_safety_accepts_only_canonical_runtime_inventory_logical_names() -> None:
+    metadata = _runtime_metadata("pyboy/api/constants.py")
+
+    assert json.loads(canonical_json(metadata)) == metadata
+
+
+@pytest.mark.parametrize(
+    "inventory_name",
+    (
+        "/Users/example/pyboy.py",
+        r"C:\Users\example\pyboy.py",
+        "~/pyboy.py",
+        "file:pyboy/runtime.py",
+        "../pyboy/runtime.py",
+        "pyboy/../runtime.py",
+        "pyboy/./runtime.py",
+        "pyboy//runtime.py",
+        r"pyboy\private.py",
+        "pyboy/runtimé.py",
+        "Users/example/Downloads/private.gb",
+        "private/api-token.txt",
+    ),
+)
+def test_json_safety_rejects_unsafe_runtime_inventory_names(
+    inventory_name: str,
+) -> None:
+    with pytest.raises(TrajectoryValidationError, match="path-like text"):
+        canonical_json(_runtime_metadata(inventory_name))
+
+
+def test_json_safety_keeps_relative_paths_strict_outside_runtime_inventory() -> None:
+    with pytest.raises(TrajectoryValidationError, match="path-like text"):
+        canonical_json({"source": "pyboy/runtime.py"})
+
+    with pytest.raises(TrajectoryValidationError, match="path-like text"):
+        canonical_json(
+            {
+                "runtime.pyboy.files[0].name": "pyboy/runtime.py",
+            }
+        )
+
+    with pytest.raises(TrajectoryValidationError, match="path-like text"):
+        canonical_json(
+            {
+                "runtime": {
+                    "pyboy": {
+                        "files": [
+                            {
+                                "name": "pyboy/runtime.py",
+                            }
+                        ]
+                    }
+                }
+            }
         )
 
 

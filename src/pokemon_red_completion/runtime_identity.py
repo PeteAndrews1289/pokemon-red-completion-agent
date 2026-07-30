@@ -9,6 +9,7 @@ import platform
 import re
 import stat
 import sys
+from collections.abc import Mapping
 from contextlib import suppress
 from dataclasses import dataclass
 from importlib import metadata
@@ -27,10 +28,129 @@ _READ_CHUNK_BYTES = 1024 * 1024
 _SAFE_COMPONENT = re.compile(r"[A-Za-z0-9_][A-Za-z0-9._+~-]{0,254}\Z")
 _SAFE_VERSION = re.compile(r"[A-Za-z0-9][A-Za-z0-9._+!-]{0,127}\Z")
 _NORMALIZE_DISTRIBUTION = re.compile(r"[-_.]+")
+_HEX_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+_PYBOY_DIST_INFO = re.compile(
+    r"pyboy-[A-Za-z0-9][A-Za-z0-9._+!-]{0,127}\.dist-info\Z"
+)
+_CONSOLE_SCRIPT_PARENT = re.compile(r"up-[1-9][0-9]*\Z")
 
 
 class RuntimeIdentityError(RuntimeError):
     """Raised when the executable runtime cannot be frozen without ambiguity."""
+
+
+def is_canonical_distribution_inventory_name(value: object) -> bool:
+    """Return whether ``value`` is one canonical, PyBoy-scoped logical name."""
+
+    if type(value) is not str:  # noqa: E721
+        return False
+    try:
+        value.encode("ascii")
+        canonical = _canonical_inventory_name(
+            value,
+            console_scripts=frozenset(),
+        )
+    except (RuntimeIdentityError, UnicodeEncodeError):
+        return False
+    if canonical != value:
+        return False
+    parts = value.split("/")
+    root = parts[0].casefold()
+    return (
+        (root == "pyboy" and len(parts) >= 2)
+        or (
+            _PYBOY_DIST_INFO.fullmatch(root) is not None
+            and len(parts) >= 2
+        )
+        or (
+            root == "console_scripts"
+            and len(parts) == 3
+            and _CONSOLE_SCRIPT_PARENT.fullmatch(parts[1]) is not None
+            and parts[2].casefold() in {"pyboy", "pyboy.exe"}
+        )
+    )
+
+
+def is_runtime_identity_public_document(value: object) -> bool:
+    """Validate the complete path-free runtime mapping accepted in metadata."""
+
+    if not isinstance(value, Mapping) or set(value) != {"schema", "python", "pyboy"}:
+        return False
+    if value.get("schema") != RUNTIME_IDENTITY_SCHEMA:
+        return False
+    python = value.get("python")
+    pyboy = value.get("pyboy")
+    if (
+        not isinstance(python, Mapping)
+        or set(python) != {"implementation", "version", "executable_sha256"}
+        or python.get("implementation") != "CPython"
+        or type(python.get("version")) is not str  # noqa: E721
+        or _SAFE_VERSION.fullmatch(python["version"]) is None
+        or type(python.get("executable_sha256")) is not str  # noqa: E721
+        or _HEX_SHA256.fullmatch(python["executable_sha256"]) is None
+    ):
+        return False
+    if (
+        not isinstance(pyboy, Mapping)
+        or set(pyboy)
+        != {
+            "distribution_name",
+            "distribution_version",
+            "files",
+            "inventory_sha256",
+        }
+        or pyboy.get("distribution_name") != _DISTRIBUTION_NAME
+        or type(pyboy.get("distribution_version")) is not str  # noqa: E721
+        or _SAFE_VERSION.fullmatch(pyboy["distribution_version"]) is None
+        or type(pyboy.get("inventory_sha256")) is not str  # noqa: E721
+        or _HEX_SHA256.fullmatch(pyboy["inventory_sha256"]) is None
+    ):
+        return False
+    files = pyboy.get("files")
+    if (
+        not isinstance(files, list)
+        or not files
+        or len(files) > _MAX_DISTRIBUTION_FILES
+    ):
+        return False
+    normalized_files: list[dict[str, object]] = []
+    names: list[str] = []
+    total_bytes = 0
+    for file in files:
+        if (
+            not isinstance(file, Mapping)
+            or set(file) != {"name", "bytes", "sha256"}
+            or not is_canonical_distribution_inventory_name(file.get("name"))
+            or type(file.get("bytes")) is not int  # noqa: E721
+            or not 0 <= file["bytes"] <= _MAX_DISTRIBUTION_FILE_BYTES
+            or type(file.get("sha256")) is not str  # noqa: E721
+            or _HEX_SHA256.fullmatch(file["sha256"]) is None
+        ):
+            return False
+        total_bytes += file["bytes"]
+        if total_bytes > _MAX_DISTRIBUTION_TOTAL_BYTES:
+            return False
+        name = file["name"]
+        names.append(name)
+        normalized_files.append(
+            {
+                "name": name,
+                "bytes": file["bytes"],
+                "sha256": file["sha256"],
+            }
+        )
+    if names != sorted(names) or len(set(names)) != len(names):
+        return False
+    inventory = {
+        "schema": PYBOY_INVENTORY_SCHEMA,
+        "distribution_name": _DISTRIBUTION_NAME,
+        "distribution_version": pyboy["distribution_version"],
+        "files": normalized_files,
+    }
+    return (
+        hashlib.sha256(_canonical_json_line(inventory)).hexdigest()
+        == pyboy["inventory_sha256"]
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -169,6 +289,10 @@ def _distribution_inventory(distribution: Any) -> tuple[RuntimeFileIdentity, ...
         if _excluded_cache_entry(raw_name):
             continue
         name = _canonical_inventory_name(raw_name, console_scripts=console_scripts)
+        if not is_canonical_distribution_inventory_name(name):
+            raise RuntimeIdentityError(
+                "PyBoy distribution inventory name is outside its logical namespace"
+            )
         if name in names:
             raise RuntimeIdentityError("PyBoy distribution inventory contains duplicate names")
         names.add(name)

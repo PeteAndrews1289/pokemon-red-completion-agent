@@ -20,10 +20,16 @@ from pathlib import PurePath
 from types import MappingProxyType
 from typing import Generic, Protocol, TypeAlias, TypeVar, cast
 
+from pokemon_red_completion.runtime_identity import (
+    is_canonical_distribution_inventory_name,
+    is_runtime_identity_public_document,
+)
+
 TRAJECTORY_SCHEMA_VERSION = 1
 
 JSONScalar: TypeAlias = None | bool | int | float | str
 JSONValue: TypeAlias = JSONScalar | tuple["JSONValue", ...] | Mapping[str, "JSONValue"]
+_PathToken: TypeAlias = str | int
 
 # Fingerprints are compared after punctuation is removed and case is folded.
 # Hashes such as ``rom_sha256`` are deliberately not reserved: a public digest
@@ -119,10 +125,21 @@ def _is_reserved_sensitive_key(key: str) -> bool:
     )
 
 
+def _is_runtime_inventory_name_field(path_tokens: tuple[_PathToken, ...]) -> bool:
+    return (
+        len(path_tokens) == 5
+        and path_tokens[:3] == ("runtime", "pyboy", "files")
+        and type(path_tokens[3]) is int  # noqa: E721
+        and path_tokens[4] == "name"
+    )
+
+
 def _freeze_json(
     value: object,
     *,
     path: str,
+    path_tokens: tuple[_PathToken, ...] = (),
+    allow_runtime_inventory_names: bool = False,
     active_containers: set[int] | None = None,
 ) -> JSONValue:
     """Validate and recursively freeze one JSON-safe value."""
@@ -134,12 +151,17 @@ def _freeze_json(
     if isinstance(value, StrEnum):
         value = str(value)
     if type(value) is str:  # noqa: E721
-        if (
+        path_like = (
             "/" in value
             or "\\" in value
             or value.startswith("~")
             or value.casefold().startswith("file:")
             or _WINDOWS_DRIVE_PATH.search(value)
+        )
+        if path_like and not (
+            allow_runtime_inventory_names
+            and _is_runtime_inventory_name_field(path_tokens)
+            and is_canonical_distribution_inventory_name(value)
         ):
             raise TrajectoryValidationError(f"{path} contains path-like text")
         return value
@@ -169,6 +191,8 @@ def _freeze_json(
                 frozen[key] = _freeze_json(
                     item,
                     path=f"{path}.{key}",
+                    path_tokens=(*path_tokens, key),
+                    allow_runtime_inventory_names=allow_runtime_inventory_names,
                     active_containers=active_containers,
                 )
             return MappingProxyType(frozen)
@@ -185,6 +209,8 @@ def _freeze_json(
                 _freeze_json(
                     item,
                     path=f"{path}[{index}]",
+                    path_tokens=(*path_tokens, index),
+                    allow_runtime_inventory_names=allow_runtime_inventory_names,
                     active_containers=active_containers,
                 )
                 for index, item in enumerate(value)
@@ -200,7 +226,7 @@ def _freeze_json(
 def _freeze_mapping(value: object, *, path: str) -> Mapping[str, JSONValue]:
     if not isinstance(value, Mapping):
         raise TrajectoryValidationError(f"{path} must be a mapping")
-    frozen = _freeze_json(value, path=path)
+    frozen = _freeze_json(value, path=path, path_tokens=(path,))
     if not isinstance(frozen, Mapping):  # pragma: no cover - guarded above
         raise AssertionError("mapping validation returned a non-mapping")
     return frozen
@@ -486,7 +512,17 @@ def _canonical_document(value: object) -> object:
         ),
     ):
         value = value.to_dict()
-    return _thaw_json(_freeze_json(value, path="$"))
+    allow_runtime_inventory_names = (
+        isinstance(value, Mapping)
+        and is_runtime_identity_public_document(value.get("runtime"))
+    )
+    return _thaw_json(
+        _freeze_json(
+            value,
+            path="$",
+            allow_runtime_inventory_names=allow_runtime_inventory_names,
+        )
+    )
 
 
 def canonical_json(value: object) -> str:

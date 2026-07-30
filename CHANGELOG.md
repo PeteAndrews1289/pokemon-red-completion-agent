@@ -60,6 +60,11 @@
 - Added `record --collection-run` with deterministic episode identities and source-bound private
   metadata. The exact source/configuration commit must be committed and pushed before any run; as
   of the protocol commit, the dry run and all twelve declared slots remain unexecuted.
+- Retained and disclosed a superseded-registry preflight that stopped before emulator startup
+  when the privacy boundary rejected a location-free PyBoy inventory name. Runtime inventory
+  names now use one shared canonical relative-name validator at only the exact episode-header
+  field; absolute paths, traversal, spoofed keys, typed artifacts, and sealed records remain
+  fail-closed.
 - Documented the measured cross-game transfer goal and its Red, near-transfer, and
   cross-generation promotion gates.
 

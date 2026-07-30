@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
@@ -11,6 +12,11 @@ import pytest
 from pokemon_red_completion.private_artifacts import (
     EpisodeWriter,
     initialize_private_root,
+)
+from pokemon_red_completion.runtime_identity import (
+    PYBOY_INVENTORY_SCHEMA,
+    RuntimeFileIdentity,
+    RuntimeIdentity,
 )
 from pokemon_red_completion.trajectory import (
     DecisionContext,
@@ -45,6 +51,42 @@ def _sink(writer: _MemoryWriter | None = None) -> EpisodeTrajectorySink:
 
 
 def _write_header(sink: EpisodeTrajectorySink) -> None:
+    files = (
+        RuntimeFileIdentity("console_scripts/up-3/pyboy", 7, "b" * 64),
+        RuntimeFileIdentity(
+            "pyboy-2.7.0.dist-info/licenses/LICENSE.md",
+            13,
+            "d" * 64,
+        ),
+        RuntimeFileIdentity("pyboy/api/constants.py", 11, "c" * 64),
+    )
+    inventory = {
+        "schema": PYBOY_INVENTORY_SCHEMA,
+        "distribution_name": "pyboy",
+        "distribution_version": "2.7.0",
+        "files": [file.public_dict() for file in files],
+    }
+    inventory_sha256 = hashlib.sha256(
+        (
+            json.dumps(
+                inventory,
+                allow_nan=False,
+                ensure_ascii=True,
+                separators=(",", ":"),
+                sort_keys=True,
+            )
+            + "\n"
+        ).encode("ascii")
+    ).hexdigest()
+    runtime = RuntimeIdentity(
+        python_implementation="CPython",
+        python_version="3.14.3",
+        python_executable_sha256="a" * 64,
+        pyboy_distribution_name="pyboy",
+        pyboy_distribution_version="2.7.0",
+        pyboy_files=files,
+        pyboy_inventory_sha256=inventory_sha256,
+    )
     sink.write_episode_header(
         metadata={
             "adapter_id": "pokemon.red.v1",
@@ -58,6 +100,7 @@ def _write_header(sink: EpisodeTrajectorySink) -> None:
                 "assistance_class": "teacher",
                 "start_type": "clean_power_on",
             },
+            "runtime": runtime.public_dict(),
         }
     )
 
@@ -178,6 +221,13 @@ def test_episode_sink_writes_content_addressed_path_free_streams(tmp_path: Path)
     assert header["episode_id"] == EPISODE_ID
     assert header["game_id"] == GAME_ID
     assert header["metadata"]["policy"]["policy_id"] == "teacher.v0.2.0"
+    assert [
+        file["name"] for file in header["metadata"]["runtime"]["pyboy"]["files"]
+    ] == [
+        "console_scripts/up-3/pyboy",
+        "pyboy-2.7.0.dist-info/licenses/LICENSE.md",
+        "pyboy/api/constants.py",
+    ]
 
     decision_row = json.loads((final / "decisions.jsonl").read_text(encoding="ascii"))
     execution_row = json.loads((final / "executions.jsonl").read_text(encoding="ascii"))

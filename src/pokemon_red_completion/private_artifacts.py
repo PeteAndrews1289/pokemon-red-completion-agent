@@ -18,6 +18,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from pokemon_red_completion.runtime_identity import (
+    is_canonical_distribution_inventory_name,
+    is_runtime_identity_public_document,
+)
+
 PRIVATE_ROOT_SENTINEL = ".pokemon-red-completion-private-root.json"
 PRIVATE_ROOT_FORMAT = "pokemon-red-completion-private-root"
 EPISODE_FORMAT = "pokemon-red-completion-episode-jsonl"
@@ -798,7 +803,13 @@ class EpisodeWriter:
         """Append one canonical JSON object to a named JSONL stream."""
         self._require_active()
         _validate_stream_name(stream)
-        payload = _canonical_record(record)
+        payload = _canonical_record(
+            record,
+            allow_runtime_inventory_names=_is_trajectory_episode_header(
+                stream,
+                record,
+            ),
+        )
 
         target = self._streams.get(stream)
         if target is None:
@@ -2294,16 +2305,58 @@ def _validate_stream_name(stream: str) -> None:
         raise PrivateArtifactError("manifest is a reserved stream name")
 
 
-def _canonical_record(record: Mapping[str, object]) -> bytes:
+def _is_trajectory_episode_header(
+    stream: str,
+    record: Mapping[str, object],
+) -> bool:
+    return (
+        stream == "episode"
+        and set(record) == {
+            "record_type",
+            "trajectory_schema",
+            "episode_id",
+            "game_id",
+            "metadata",
+        }
+        and record.get("record_type") == "episode"
+        and record.get("trajectory_schema") == "pokemon.trajectory.v1"
+        and isinstance(record.get("metadata"), Mapping)
+        and is_runtime_identity_public_document(record["metadata"].get("runtime"))
+    )
+
+
+def _is_runtime_inventory_name_field(path_tokens: tuple[str | int, ...]) -> bool:
+    return (
+        len(path_tokens) == 6
+        and path_tokens[:4] == ("metadata", "runtime", "pyboy", "files")
+        and type(path_tokens[4]) is int  # noqa: E721
+        and path_tokens[5] == "name"
+    )
+
+
+def _canonical_record(
+    record: Mapping[str, object],
+    *,
+    allow_runtime_inventory_names: bool = False,
+) -> bytes:
     if not isinstance(record, Mapping):
         raise PrivateArtifactError("episode records must be JSON objects")
-    normalized = _normalize_json(record)
+    normalized = _normalize_json(
+        record,
+        path_tokens=(),
+        allow_runtime_inventory_names=allow_runtime_inventory_names,
+    )
     if not isinstance(normalized, dict):
         raise PrivateArtifactError("episode records must be JSON objects")
     return _canonical_json_line(normalized)
 
 
-def _normalize_json(value: object) -> object:
+def _normalize_json(
+    value: object,
+    *,
+    path_tokens: tuple[str | int, ...],
+    allow_runtime_inventory_names: bool,
+) -> object:
     if value is None or isinstance(value, (bool, int)):
         return value
     if isinstance(value, float):
@@ -2311,7 +2364,12 @@ def _normalize_json(value: object) -> object:
             raise PrivateArtifactError("episode records require finite numeric values")
         return value
     if isinstance(value, str):
-        _reject_path_text(value)
+        if not (
+            allow_runtime_inventory_names
+            and _is_runtime_inventory_name_field(path_tokens)
+            and is_canonical_distribution_inventory_name(value)
+        ):
+            _reject_path_text(value)
         return value
     if isinstance(value, os.PathLike):
         raise PrivateArtifactError("episode records may not contain filesystem paths")
@@ -2321,10 +2379,21 @@ def _normalize_json(value: object) -> object:
             if not isinstance(key, str):
                 raise PrivateArtifactError("episode record keys must be strings")
             _reject_path_key(key)
-            normalized[key] = _normalize_json(item)
+            normalized[key] = _normalize_json(
+                item,
+                path_tokens=(*path_tokens, key),
+                allow_runtime_inventory_names=allow_runtime_inventory_names,
+            )
         return normalized
     if isinstance(value, Sequence) and not isinstance(value, (bytes, bytearray, str)):
-        return [_normalize_json(item) for item in value]
+        return [
+            _normalize_json(
+                item,
+                path_tokens=(*path_tokens, index),
+                allow_runtime_inventory_names=allow_runtime_inventory_names,
+            )
+            for index, item in enumerate(value)
+        ]
     raise PrivateArtifactError("episode records contain a non-JSON value")
 
 

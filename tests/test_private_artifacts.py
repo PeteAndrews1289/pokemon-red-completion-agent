@@ -14,6 +14,10 @@ from pokemon_red_completion.private_artifacts import (
     initialize_private_root,
     open_private_root,
 )
+from pokemon_red_completion.runtime_identity import (
+    PYBOY_INVENTORY_SCHEMA,
+    RUNTIME_IDENTITY_SCHEMA,
+)
 
 
 def _separate_devices(root: Path, repository: Path):
@@ -38,6 +42,56 @@ def _make_store(tmp_path: Path):
 
 def _mode(path: Path) -> int:
     return stat.S_IMODE(path.stat().st_mode)
+
+
+def _episode_header_with_runtime_name(name: str) -> dict[str, object]:
+    files = [
+        {
+            "name": name,
+            "bytes": 7,
+            "sha256": "a" * 64,
+        }
+    ]
+    inventory = {
+        "schema": PYBOY_INVENTORY_SCHEMA,
+        "distribution_name": "pyboy",
+        "distribution_version": "2.7.0",
+        "files": files,
+    }
+    inventory_sha256 = hashlib.sha256(
+        (
+            json.dumps(
+                inventory,
+                allow_nan=False,
+                ensure_ascii=True,
+                separators=(",", ":"),
+                sort_keys=True,
+            )
+            + "\n"
+        ).encode("ascii")
+    ).hexdigest()
+    return {
+        "record_type": "episode",
+        "trajectory_schema": "pokemon.trajectory.v1",
+        "episode_id": "episode-runtime",
+        "game_id": "pokemon.mainline:red",
+        "metadata": {
+            "runtime": {
+                "schema": RUNTIME_IDENTITY_SCHEMA,
+                "python": {
+                    "implementation": "CPython",
+                    "version": "3.14.3",
+                    "executable_sha256": "b" * 64,
+                },
+                "pyboy": {
+                    "distribution_name": "pyboy",
+                    "distribution_version": "2.7.0",
+                    "files": files,
+                    "inventory_sha256": inventory_sha256,
+                },
+            }
+        },
+    }
 
 
 def test_initialization_requires_an_explicit_existing_root(tmp_path: Path) -> None:
@@ -613,6 +667,45 @@ def test_collection_session_is_exclusive_and_releases_without_storing_a_path(
         assert reopened.active
 
 
+def test_episode_runtime_inventory_exception_requires_exact_header_envelope(
+    tmp_path: Path,
+) -> None:
+    _, _, store = _make_store(tmp_path)
+    valid = _episode_header_with_runtime_name("pyboy/runtime.py")
+    cases = (
+        ("events", valid),
+        (
+            "episode",
+            {
+                **valid,
+                "trajectory_schema": "unexpected.trajectory.v1",
+            },
+        ),
+        (
+            "episode",
+            {
+                **valid,
+                "unexpected": True,
+            },
+        ),
+        (
+            "episode",
+            {
+                **valid,
+                "metadata": {
+                    "runtime.pyboy.files[0].name": "pyboy/runtime.py",
+                },
+            },
+        ),
+    )
+
+    for index, (stream, record) in enumerate(cases):
+        writer = store.begin_episode(f"episode-envelope-{index}")
+        with pytest.raises(PrivateArtifactError, match="filesystem path"):
+            writer.append(stream, record)
+        writer.abort("expected_failure")
+
+
 def test_sealed_record_is_canonical_private_idempotent_and_immutable(
     tmp_path: Path,
 ) -> None:
@@ -675,6 +768,12 @@ def test_sealed_record_rejects_path_content_and_recovers_after_a_stale_temp(
             record_id,
             kind="collection_outcome",
             record={"private_path": str(root)},
+        )
+    with pytest.raises(PrivateArtifactError, match="filesystem path"):
+        store.publish_sealed_record(
+            record_id,
+            kind="collection_outcome",
+            record={"logical_name": "pyboy/runtime.py"},
         )
 
     real_rename = private_artifacts_module._rename_no_replace
