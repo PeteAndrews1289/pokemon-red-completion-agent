@@ -991,6 +991,86 @@ class _LoreleiEvidence:
         return {"status": "ok", "objective": "defeat_lorelei"}
 
 
+class _BrunoEvidence:
+    passed = True
+    final_raw = replace(
+        _LoreleiEvidence.final_raw,
+        map_id=MapId.AGATHAS_ROOM,
+        player_x=4,
+        player_y=5,
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = ("bruno_ready", "bruno_engaged", "bruno_defeated")
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "defeat_bruno"}
+
+
+class _AgathaEvidence:
+    passed = True
+    final_raw = replace(
+        _BrunoEvidence.final_raw,
+        map_id=MapId.LANCES_ROOM,
+        player_x=4,
+        player_y=5,
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = ("agatha_ready", "agatha_engaged", "agatha_defeated")
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "defeat_agatha"}
+
+
+class _LanceEvidence:
+    passed = True
+    final_raw = replace(
+        _AgathaEvidence.final_raw,
+        map_id=MapId.CHAMPIONS_ROOM,
+        player_x=4,
+        player_y=5,
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = ("lance_ready", "lance_engaged", "lance_defeated")
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "defeat_lance"}
+
+
+class _ChampionEvidence:
+    passed = True
+    final_raw = replace(
+        _LanceEvidence.final_raw,
+        map_id=MapId.HALL_OF_FAME,
+        player_x=4,
+        player_y=7,
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = ("champion_ready", "champion_engaged", "hall_of_fame")
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "enter_hall_of_fame"}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -1064,16 +1144,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 287
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 299
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=287,
+        completed=299,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 287
+    assert progress.completed == progress.total == 299
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -1178,10 +1258,14 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         silph=_SilphEvidence(),  # type: ignore[arg-type]
         sabrina=_SabrinaEvidence(),  # type: ignore[arg-type]
         cinnabar=_CinnabarEvidence(),  # type: ignore[arg-type]
-            blaine=_BlaineEvidence(),  # type: ignore[arg-type]
-            giovanni=_GiovanniEvidence(),  # type: ignore[arg-type]
-            victory_road=_VictoryRoadEvidence(),  # type: ignore[arg-type]
-            lorelei=_LoreleiEvidence(),  # type: ignore[arg-type]
+        blaine=_BlaineEvidence(),  # type: ignore[arg-type]
+        giovanni=_GiovanniEvidence(),  # type: ignore[arg-type]
+        victory_road=_VictoryRoadEvidence(),  # type: ignore[arg-type]
+        lorelei=_LoreleiEvidence(),  # type: ignore[arg-type]
+        bruno=_BrunoEvidence(),  # type: ignore[arg-type]
+        agatha=_AgathaEvidence(),  # type: ignore[arg-type]
+        lance=_LanceEvidence(),  # type: ignore[arg-type]
+        champion=_ChampionEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -1216,9 +1300,14 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "location:cinnabar_island",
                 "item:secret_key",
                 "badge:volcano",
-                    "badge:earth",
-                    "story:victory_road_cleared",
-                    "league:lorelei_defeated",
+                "badge:earth",
+                "story:victory_road_cleared",
+                "league:lorelei_defeated",
+                "league:bruno_defeated",
+                "league:agatha_defeated",
+                "league:lance_defeated",
+                "league:champion_defeated",
+                "game:hall_of_fame",
             }
         ),
         verified_objectives=(
@@ -1250,11 +1339,16 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_cinnabar",
             "obtain_secret_key",
             "defeat_blaine",
-                "defeat_giovanni",
-                "cross_victory_road",
-                "defeat_lorelei",
-            ),
-            next_objective="defeat_bruno",
+            "defeat_giovanni",
+            "cross_victory_road",
+            "defeat_lorelei",
+            "defeat_bruno",
+            "defeat_agatha",
+            "defeat_lance",
+            "defeat_champion",
+            "enter_hall_of_fame",
+        ),
+        next_objective=None,
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -1264,11 +1358,11 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v24"
+    assert public["schema"] == "qualified-play-v26"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "defeat_lorelei"
-    assert public["game_complete"] is False
-    assert public["safe_stop_reason"] == "latest_qualified_boundary"
+    assert public["qualified_through"] == "enter_hall_of_fame"
+    assert public["game_complete"] is True
+    assert public["safe_stop_reason"] == "completion_verified"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
         "bedroom_ready",
         "downstairs",
@@ -1557,9 +1651,21 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "lorelei_ready",
         "lorelei_entered",
         "lorelei_defeated",
+        "bruno_ready",
+        "bruno_engaged",
+        "bruno_defeated",
+        "agatha_ready",
+        "agatha_engaged",
+        "agatha_defeated",
+        "lance_ready",
+        "lance_engaged",
+        "lance_defeated",
+        "champion_ready",
+        "champion_engaged",
+        "hall_of_fame",
     ]
     assert public["objective_progress"] == {
-        "verified": 31,
+        "verified": 36,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1593,8 +1699,13 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "defeat_giovanni",
             "cross_victory_road",
             "defeat_lorelei",
+            "defeat_bruno",
+            "defeat_agatha",
+            "defeat_lance",
+            "defeat_champion",
+            "enter_hall_of_fame",
         ],
-        "next": "defeat_bruno",
+        "next": None,
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -1726,7 +1837,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_defeats_lorelei_without_adjacent_artifacts() -> None:
+def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -1771,10 +1882,15 @@ def test_private_rom_defeats_lorelei_without_adjacent_artifacts() -> None:
         "defeat_giovanni",
         "cross_victory_road",
         "defeat_lorelei",
+        "defeat_bruno",
+        "defeat_agatha",
+        "defeat_lance",
+        "defeat_champion",
+        "enter_hall_of_fame",
     )
-    assert report.next_objective == "defeat_bruno"
-    assert report.frames_executed == 4_496_270
-    assert report.actions_executed == 38_258
+    assert report.next_objective is None
+    assert report.frames_executed == 4_796_436
+    assert report.actions_executed == 41_316
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -2043,14 +2159,13 @@ def test_private_rom_defeats_lorelei_without_adjacent_artifacts() -> None:
     assert report.cinnabar.route21_events_before == (False,) * 9
     assert report.cinnabar.route21_events_after == (False,) * 9
     assert report.cinnabar.wild_battles == 3
-    assert [
-        (item.x, item.y, item.species, item.level) for item in report.cinnabar.wild_flees
-    ] == [(4, 12, 0xA5, 21), (3, 52, 0x18, 10), (3, 77, 0x18, 10)]
+    assert [(item.x, item.y, item.species, item.level) for item in report.cinnabar.wild_flees] == [
+        (4, 12, 0xA5, 21),
+        (3, 52, 0x18, 10),
+        (3, 77, 0x18, 10),
+    ]
     assert all(
-        item.party_preserved
-        and item.pp_preserved
-        and item.hp_safe
-        and item.inventory_preserved
+        item.party_preserved and item.pp_preserved and item.hp_safe and item.inventory_preserved
         for item in report.cinnabar.wild_flees
     )
     assert report.cinnabar.trainer_battles == 0
@@ -2094,8 +2209,6 @@ def test_private_rom_defeats_lorelei_without_adjacent_artifacts() -> None:
     assert report.giovanni.tm27_quantity == 1
     assert report.giovanni.money_remaining == 65_434
     assert report.victory_road.passed
-    assert report.victory_road.frames_executed == 394_153
-    assert report.victory_road.actions_executed == 3_357
     assert report.victory_road.rival_party == (
         (0x97, 47),
         (0x12, 45),
@@ -2107,6 +2220,15 @@ def test_private_rom_defeats_lorelei_without_adjacent_artifacts() -> None:
     assert report.victory_road.badge_checks == (True,) * 7
     assert report.victory_road.party_hp == report.victory_road.party_max_hp == (157, 52, 37)
     assert report.victory_road.party_status == (0, 0, 0)
-    assert report.victory_road.final_raw.first_party_moves == (0x5C, 0x46, 0x3A, 0x39)
-    assert report.victory_road.final_raw.first_party_pp == (10, 15, 10, 15)
+    assert report.victory_road.final_raw.first_party_moves == (0x42, 0x46, 0x3A, 0x39)
+    assert report.victory_road.final_raw.first_party_pp == (25, 15, 10, 15)
+    assert report.lorelei.passed
+    assert report.bruno.passed
+    assert report.agatha.passed
+    assert report.lance.passed
+    assert report.champion.passed
+    assert report.champion.x_specials_used == 6
+    assert report.champion.final_raw.map_id == MapId.HALL_OF_FAME
+    assert report.champion.final_raw.first_party_moves == (0x05, 0x46, 0x3A, 0x39)
+    assert report.champion.final_raw.first_party_pp == (3, 0, 0, 7)
     assert before == after

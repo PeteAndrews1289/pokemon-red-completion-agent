@@ -53,6 +53,9 @@ def test_victory_road_source_ids_are_exact() -> None:
     assert EventFlag.VICTORY_ROAD_1F_BOULDER_ON_SWITCH == 0x917
     assert ItemId.FULL_RESTORE == 0x10
     assert ItemId.REVIVE == 0x35
+    assert ItemId.TM01_MEGA_PUNCH == 0xC9
+    assert ItemId.TM09_TAKE_DOWN == 0xD1
+    assert ItemId.TM17_SUBMISSION == 0xD9
 
 
 def test_route22_rival_receipt_matches_source_party_and_policy() -> None:

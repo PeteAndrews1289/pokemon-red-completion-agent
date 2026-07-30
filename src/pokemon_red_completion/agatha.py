@@ -1,9 +1,4 @@
-"""Qualified Indigo Plateau and Lorelei chapter.
-
-Room coordinates and trainer data are pinned to pret/pokered commit
-``1e96034092686d006e863cace09e87273051a3d8`` and verified against the
-supported English Pokémon Red ROM.
-"""
+"""Qualified Agatha chapter for the pinned Pokémon Red runtime."""
 
 from __future__ import annotations
 
@@ -17,18 +12,27 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
 )
+from pokemon_red_completion.blaine import _select_cursor
 from pokemon_red_completion.celadon import (
     _bag,
     _party_hp,
     _party_max_hp,
     _party_status,
 )
-from pokemon_red_completion.lavender import DEFAULT_LAVENDER_TIMING, _use_bag_item
+from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
+from pokemon_red_completion.lavender import (
+    DEFAULT_LAVENDER_TIMING,
+    _close_menus,
+    _open_bag,
+    _select_bag_item,
+    _use_bag_item,
+)
 from pokemon_red_completion.observation import (
     EventFlag,
     ItemId,
     MapId,
     PokemonRedStateReader,
+    RamAddress,
     RawGameState,
 )
 from pokemon_red_completion.silph import (
@@ -45,29 +49,16 @@ from pokemon_red_completion.victory_road import (
     _settle_confirm,
 )
 
-LORELEI_CHECKPOINT_COUNT = 3
-LORELEI_RNG_DELAY_FRAMES = 1
-LORELEI_PARTY = (
-    (0x78, 54),
-    (0x8B, 53),
-    (0x08, 54),
-    (0x48, 56),
-    (0x13, 56),
+AGATHA_CHECKPOINT_COUNT = 3
+AGATHA_RNG_DELAY_FRAMES = 1
+AGATHA_PARTY = (
+    (0x0E, 56),
+    (0x82, 56),
+    (0x93, 55),
+    (0x2D, 58),
+    (0x0E, 60),
 )
-INDIGO_TO_LORELEI = (
-    "up",
-    "up",
-    "up",
-    "right",
-    "right",
-    "right",
-    "right",
-    "up",
-    "right",
-    "right",
-    "up",
-)
-LORELEI_APPROACH = ("right", "up", "up")
+AGATHA_APPROACH = ("right", "up", "up")
 
 
 class EmulatorState(Protocol):
@@ -84,12 +75,12 @@ class ChapterExecutor(Protocol):
     def execute(self, action: MacroAction) -> object: ...
 
 
-class LoreleiChapterError(RuntimeError):
-    """Raised when the Lorelei evidence contract fails."""
+class AgathaChapterError(RuntimeError):
+    """Raised when the Agatha evidence contract fails."""
 
 
 @dataclass(frozen=True, slots=True)
-class LoreleiProgress:
+class AgathaProgress:
     checkpoint_id: str
     label: str
     completed: int
@@ -97,18 +88,18 @@ class LoreleiProgress:
     frames_executed: int
 
 
-ProgressSink = Callable[[LoreleiProgress], None]
+ProgressSink = Callable[[AgathaProgress], None]
 
 
 @dataclass(frozen=True, slots=True)
-class LoreleiCheckpoint:
+class AgathaCheckpoint:
     checkpoint_id: str
     label: str
     raw: RawGameState
 
 
 @dataclass(frozen=True, slots=True)
-class LoreleiTurn:
+class AgathaTurn:
     species: int
     level: int
     enemy_hp: int
@@ -119,10 +110,10 @@ class LoreleiTurn:
 
 
 @dataclass(frozen=True, slots=True)
-class LoreleiChapterReport:
-    records: tuple[LoreleiCheckpoint, ...]
+class AgathaChapterReport:
+    records: tuple[AgathaCheckpoint, ...]
     final_raw: RawGameState
-    turns: tuple[LoreleiTurn, ...]
+    turns: tuple[AgathaTurn, ...]
     party: tuple[tuple[int, int], ...]
     hyper_potions_used: int
     full_restores_used: int
@@ -136,16 +127,13 @@ class LoreleiChapterReport:
     @property
     def passed(self) -> bool:
         return (
-            len(self.records) == LORELEI_CHECKPOINT_COUNT
-            and self.party == LORELEI_PARTY
+            len(self.records) == AGATHA_CHECKPOINT_COUNT
+            and self.party == AGATHA_PARTY
             and _turns_valid(self.turns)
-            and self.hyper_potions_used <= 11
-            and self.full_restores_used <= 11
-            and _event(self.final_raw, EventFlag.BEAT_LORELEI)
-            and self.final_raw.map_id == MapId.BRUNOS_ROOM
+            and _event(self.final_raw, EventFlag.BEAT_AGATHA)
+            and self.final_raw.map_id == MapId.LANCES_ROOM
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.party_hp[0] >= 80
-            and self.party_hp[1:] == self.party_max_hp[1:]
+            and self.party_hp == self.party_max_hp
             and self.party_status == (0, 0, 0)
             and self.controller_released
         )
@@ -156,7 +144,7 @@ class LoreleiChapterReport:
     def public_dict(self) -> dict[str, object]:
         return {
             "status": "ok" if self.passed else "failed",
-            "objective": "defeat_lorelei",
+            "objective": "defeat_agatha",
             "party": [list(item) for item in self.party],
             "turns": [
                 {
@@ -180,6 +168,7 @@ class LoreleiChapterReport:
                 "party_hp": list(self.party_hp),
                 "party_max_hp": list(self.party_max_hp),
                 "party_status": list(self.party_status),
+                "moves": list(self.final_raw.first_party_moves or ()),
                 "pp": list(self.final_raw.first_party_pp or ()),
             },
             "frames_executed": self.frames_executed,
@@ -188,49 +177,39 @@ class LoreleiChapterReport:
         }
 
 
-def run_lorelei_chapter(
+def run_agatha_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
     executor: ChapterExecutor,
     *,
     progress: ProgressSink | None = None,
-) -> LoreleiChapterReport:
+) -> AgathaChapterReport:
     start_frames = emulator.frame_count
     actions = _CountingExecutor(executor)
-    records: list[LoreleiCheckpoint] = []
+    records: list[AgathaCheckpoint] = []
     initial = reader.read()
     if (
-        initial.map_id != MapId.INDIGO_PLATEAU_LOBBY
-        or (initial.player_x, initial.player_y) != (2, 5)
+        initial.map_id != MapId.AGATHAS_ROOM
+        or (initial.player_x, initial.player_y) != (4, 5)
         or initial.party_species_ids != TOWER_FINAL_PARTY
-        or initial.first_party_moves != (0x42, 0x46, 0x3A, 0x39)
-        or _bag(emulator).get(ItemId.FULL_RESTORE, 0) != 11
-        or _bag(emulator).get(ItemId.FULL_HEAL, 0) != 10
-        or _bag(emulator).get(ItemId.HYPER_POTION, 0) != 11
-        or _event(initial, EventFlag.BEAT_LORELEI)
+        or not _event(initial, EventFlag.BEAT_BRUNO)
+        or _event(initial, EventFlag.BEAT_AGATHA)
     ):
-        raise LoreleiChapterError("Lorelei input boundary is not qualified.")
-    _checkpoint(records, progress, emulator, initial, "lorelei_ready", "Lorelei supplies ready")
-    actions.execute(MacroAction(MacroActionKind.WAIT, repeat=LORELEI_RNG_DELAY_FRAMES))
+        raise AgathaChapterError("Agatha input boundary is not qualified.")
+    _checkpoint(records, progress, emulator, initial, "agatha_ready", "Agatha room ready")
+    actions.execute(MacroAction(MacroActionKind.WAIT, repeat=AGATHA_RNG_DELAY_FRAMES))
 
-    _move(actions, reader, INDIGO_TO_LORELEI, "Lorelei room entry")
-    entered = reader.read()
-    if entered.map_id != MapId.LORELEIS_ROOM or (
-        entered.player_x,
-        entered.player_y,
-    ) != (4, 5):
-        raise LoreleiChapterError("Lorelei room entry did not reach its scripted boundary.")
-    _checkpoint(records, progress, emulator, entered, "lorelei_entered", "Entered Lorelei's room")
-    _move(actions, reader, LORELEI_APPROACH, "Lorelei approach")
+    _move(actions, reader, AGATHA_APPROACH, "Agatha approach")
     _pulse(actions, MacroActionKind.INTERACT)
     for _ in range(40):
         if reader.read().battle_state == 2:
             break
         _pulse(actions, MacroActionKind.CONFIRM)
     else:
-        raise LoreleiChapterError("Lorelei battle did not start.")
+        raise AgathaChapterError("Agatha battle did not start.")
+    _checkpoint(records, progress, emulator, reader.read(), "agatha_engaged", "Engaged Agatha")
 
-    turns: list[LoreleiTurn] = []
+    turns: list[AgathaTurn] = []
 
     class _HealBoundary(Exception):
         pass
@@ -238,20 +217,18 @@ def run_lorelei_chapter(
     def policy(raw: RawGameState) -> int:
         hp = raw.first_party_hp or 0
         status = raw.first_party_status or 0
-        if hp < 80 or status:
+        if hp < 70 or status:
             raise _HealBoundary
-        species = raw.enemy_species_id or 0
         pp = raw.first_party_pp or (0, 0, 0, 0)
-        if species != 0x08 and pp[0] > 0:
+        species = raw.enemy_species_id or 0
+        if species in {0x82, 0x2D} and pp[0] > 0:
             slot = 1
-        elif pp[1] > 0:
-            slot = 2
-        elif pp[3] > 0:
-            slot = 4
-        else:
+        elif pp[2] > 0:
             slot = 3
+        else:
+            slot = 4
         turns.append(
-            LoreleiTurn(
+            AgathaTurn(
                 species,
                 raw.enemy_level or 0,
                 raw.enemy_hp or 0,
@@ -271,17 +248,17 @@ def run_lorelei_chapter(
                 reader,
                 actions,
                 policy,
-                expected_map=MapId.LORELEIS_ROOM,
+                expected_map=MapId.AGATHAS_ROOM,
                 timing=BattleRuntimeTiming(
-                    max_runtime_pulses=1600,
-                    max_pp_confirmation_pulses=12,
-                    max_post_attack_transition_pulses=24,
+                    max_runtime_pulses=2000,
+                    max_sleep_recovery_pulses=96,
+                    max_post_attack_transition_pulses=30,
                 ),
-                label="Lorelei",
+                label="Agatha",
             )
         except BattleRuntimeError as error:
             if not isinstance(error.__cause__, _HealBoundary):
-                raise LoreleiChapterError("Lorelei battle runtime failed.") from error
+                raise AgathaChapterError("Agatha battle runtime failed.") from error
             raw = reader.read()
             if (raw.first_party_status or 0) and (raw.first_party_hp or 0) >= 70:
                 item = ItemId.FULL_HEAL
@@ -290,9 +267,7 @@ def run_lorelei_chapter(
             else:
                 item = ItemId.HYPER_POTION
             if _bag(emulator).get(item, 0) == 0:
-                raise LoreleiChapterError(
-                    "Lorelei exhausted the bounded recovery reserve."
-                ) from error
+                raise AgathaChapterError("Agatha exhausted the recovery reserve.") from error
             try:
                 _battle_healing_item(
                     reader,
@@ -302,12 +277,12 @@ def run_lorelei_chapter(
                     item,
                 )
             except SilphChapterError as healing_error:
-                raise LoreleiChapterError("Lorelei recovery failed.") from healing_error
+                raise AgathaChapterError("Agatha recovery failed.") from healing_error
 
-    for _ in range(4):
-        _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(20):
+        _pulse(actions, MacroActionKind.CANCEL)
     _settle_confirm(actions, reader, 40)
-    if _party_hp(emulator)[0] < _party_max_hp(emulator)[0] or _party_status(emulator)[0]:
+    if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
         try:
             item = (
                 ItemId.FULL_RESTORE
@@ -322,15 +297,16 @@ def run_lorelei_chapter(
                 item,
             )
         except Exception as error:
-            raise LoreleiChapterError("Post-Lorelei recovery failed.") from error
+            raise AgathaChapterError("Post-Agatha recovery failed.") from error
     defeated = reader.read()
-    if not _event(defeated, EventFlag.BEAT_LORELEI):
-        raise LoreleiChapterError("Lorelei event did not set after battle.")
-    _checkpoint(records, progress, emulator, defeated, "lorelei_defeated", "Defeated Lorelei")
-    _move(actions, reader, ("left", "up", "up", "up", "up"), "Bruno room entry")
+    if not _event(defeated, EventFlag.BEAT_AGATHA):
+        raise AgathaChapterError("Agatha event did not set after battle.")
+    _checkpoint(records, progress, emulator, defeated, "agatha_defeated", "Defeated Agatha")
+    _teach_take_down(actions, reader, emulator)
+    _move(actions, reader, ("left", "up", "up", "up", "up"), "Lance room entry")
     final = reader.read()
 
-    report = LoreleiChapterReport(
+    report = AgathaChapterReport(
         records=tuple(records),
         final_raw=final,
         turns=tuple(turns),
@@ -345,46 +321,87 @@ def run_lorelei_chapter(
         controller_released=not emulator.pressed_buttons,
     )
     if not report.passed:
-        raise LoreleiChapterError(f"Lorelei terminal evidence failed: {report!r}.")
+        raise AgathaChapterError(f"Agatha terminal evidence failed: {report!r}.")
     return report
 
 
 def _checkpoint(
-    records: list[LoreleiCheckpoint],
+    records: list[AgathaCheckpoint],
     progress: ProgressSink | None,
     emulator: EmulatorState,
     raw: RawGameState,
     checkpoint_id: str,
     label: str,
 ) -> None:
-    records.append(LoreleiCheckpoint(checkpoint_id, label, raw))
+    records.append(AgathaCheckpoint(checkpoint_id, label, raw))
     if progress is not None:
         progress(
-            LoreleiProgress(
+            AgathaProgress(
                 checkpoint_id,
                 label,
                 len(records),
-                LORELEI_CHECKPOINT_COUNT,
+                AGATHA_CHECKPOINT_COUNT,
                 emulator.frame_count,
             )
         )
 
 
-def _encounter_party(turns: Iterable[LoreleiTurn]) -> tuple[tuple[int, int], ...]:
+def _encounter_party(turns: Iterable[AgathaTurn]) -> tuple[tuple[int, int], ...]:
     result: list[tuple[int, int]] = []
     for turn in turns:
         identity = (turn.species, turn.level)
-        if not result or result[-1] != identity:
+        if identity not in result:
             result.append(identity)
     return tuple(result)
 
 
-def _turns_valid(turns: Iterable[LoreleiTurn]) -> bool:
+def _turns_valid(turns: Iterable[AgathaTurn]) -> bool:
     items = tuple(turns)
     return bool(items) and all(
-        item.species in {species for species, _ in LORELEI_PARTY}
-        and item.move_slot in {1, 2, 3, 4}
-        and item.lead_hp >= 80
-        and item.lead_status == 0
+        item.move_slot in {1, 3, 4} and item.lead_hp >= 70 and item.lead_status == 0
         for item in items
     )
+
+
+def _teach_take_down(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    _open_bag(actions, emulator, DEFAULT_LAVENDER_TIMING)
+    _select_bag_item(
+        actions,
+        emulator,
+        ItemId.TM09_TAKE_DOWN,
+        DEFAULT_LAVENDER_TIMING,
+    )
+    for _ in range(24):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (0, 1):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM)
+    else:
+        raise AgathaChapterError("TM09 did not reach party selection.")
+    _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(24):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (5, 8):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM)
+    else:
+        raise AgathaChapterError("TM09 did not reach move deletion.")
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(24):
+        raw = reader.read()
+        if raw.first_party_moves == (0x24, 0x46, 0x3A, 0x39) and ItemId.TM09_TAKE_DOWN not in _bag(
+            emulator
+        ):
+            _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+            return
+        _pulse(actions, MacroActionKind.CONFIRM)
+    raise AgathaChapterError("TM09 did not replace Mega Punch.")

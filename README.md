@@ -2,41 +2,19 @@
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Lorelei qualified](https://img.shields.io/badge/status-Lorelei_qualified-16a34a.svg)](docs/roadmap.md)
+[![Status: Hall of Fame verified](https://img.shields.io/badge/status-Hall_of_Fame_verified-16a34a.svg)](docs/roadmap.md)
 
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
-> **Current status:** one continuous deterministic teacher now reaches all **287/287 qualified
-> checkpoints** from clean power-on, obtains HM01, defeats Lt. Surge, clears Route 9 and Rock
-> Tunnel, clears the Rocket Hideout and Pokémon Tower, rescues Mr. Fuji, receives the Poké Flute,
-> defeats the Route 12 Snorlax, crosses Routes 12–15, collects the Gold Teeth, obtains reusable
-> HM03, teaches Surf over Water Gun, clears the Safari session through Time's Up, defeats the
-> three mandatory Fuchsia Gym trainers and Koga, retains the Soul Badge and TM06, returns the Gold
-> Teeth, receives reusable HM04, teaches Strength over Tail Whip, returns east across Routes
-> 15–12, defeats the two required Celadon Gym trainers and Erika, receives the Rainbow Badge and
-> TM21, learns Skull Bash over Bite at level 42, buys one Fresh Water from the Celadon roof,
-> gives it to the Route 7 guard, reaches Saffron, obtains the Card Key, defeats the required
-> Silph trainers, rival, and Giovanni, receives the Master Ball, and returns to a healed Saffron
-> boundary. It also buys and teaches TM13 Ice Beam while leaving optional Lapras untouched.
-> It then traverses Saffron Gym without fighting a regular trainer, defeats Sabrina, receives
-> TM46 and the Marsh Badge, and returns fully healed. It then takes the bicycle-free Route 16
-> Cut lane, obtains HM02, teaches Fly to DUX, flies to Pallet, Surfs Route 21 without fighting a
-> trainer, reaches Cinnabar, recovers the Secret Key without fighting a Mansion trainer, answers
-> all six Gym quizzes, defeats Blaine, receives TM38 and the Volcano Badge, and heals. It then
-> flies to Viridian, sells TM46 to reserve Giovanni's reward slot, clears the six required Gym
-> battles, restores the party, defeats Giovanni, receives TM27 and the Earth Badge, activates the
-> Route 22 rival gate, and heals with all eight badges. It then teaches Toxic over its obsolete
-> opening move, resupplies in Saffron, defeats the final Route 22 rival with live HP-aware
-> recovery, passes every Route 23 badge gate, solves all three floors of Victory Road, and reaches
-> Indigo Plateau fully healed with an Elite Four reserve. It then defeats Lorelei's exact
-> five-member party with state-aware Toxic, Strength, Surf, Hydro Pump, and bounded recovery,
-> clears paralysis when required, and reaches Bruno's room fully healed. That establishes **31/36
-> completion objectives**. Three clean runs produced the same 4,496,270-frame, 38,258-action result. This is
-> an exact-route
-> deterministic-teacher milestone, not a learned-policy, timing/RNG-generalization, or
-> game-completion claim. The next graph-selected objective is defeating Bruno. See the
-> [sanitized three-run Lorelei evidence receipt](docs/evidence/qualified-play-lorelei-2026-07-29.json).
+> **Current status:** the deterministic teacher completes Pokémon Red from clean power-on through
+> the Hall of Fame in one uninterrupted, no-save-restore emulator session. Three independent runs
+> produced the same **299/299 checkpoints**, **36/36 objectives**, **4,796,436 frames**, and
+> **41,316 actions**, with human input disabled and the controller released at termination. The
+> terminal gate requires the Champion-defeated event and Hall-of-Fame map concurrently. This is a
+> verified deterministic-teacher completion—not a learned-policy or unseen-seed generalization
+> claim. See the
+> [sanitized three-run completion receipt](docs/evidence/qualified-play-hall-of-fame-2026-07-29.json).
 
 ## The goal
 
@@ -197,9 +175,10 @@ returns to a healed Viridian Center with all eight badges.
 It then teaches Toxic, prepares a bounded Saffron recovery and repel reserve, defeats the final
 Route 22 rival with state-aware healing, verifies all seven remaining Route 23 badge checks,
 solves every Strength boulder and switch in Victory Road, reaches Indigo Plateau, heals, and buys
-the declared Full Restore, Revive, Hyper Potion, and Max Repel reserve.
-It stops automatically after the
-latest independently qualified objective and reports that the game is not complete. The forest
+the declared Full Restore, Full Heal, Hyper Potion, X Special, and Max Repel reserve.
+It then defeats Lorelei, Bruno, Agatha, Lance, and the Champion, enters the Hall of Fame, and
+reports completion only when the Champion event and Hall-of-Fame map are simultaneously true.
+The forest
 segment deliberately trains against three verified Kakuna encounters and one mandatory Bug
 Catcher. Later gates require the declared trainer identities and event order, Bill's complete
 transformation and S.S. Ticket sequence, the mandatory Cerulean Gym trainer, Misty's live trainer

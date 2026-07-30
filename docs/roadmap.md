@@ -25,12 +25,10 @@ Exit gate: all foundation modules pass ROM-free CI and no document claims gamepl
 
 **Status: complete — July 2026**
 
-Current qualification: **287/287 bounded checkpoints** and **31/36 completion objectives**, ending
-after the final Route 22 rival, every Route 23 badge gate, all Victory Road boulder switches,
-Indigo Plateau preparation, and a qualified Lorelei victory. Three clean runs reached the
-identical 4,496,270-frame / 38,258-action Bruno-room boundary.
-This is an exact deterministic-teacher milestone, not a
-learned-policy, timing/RNG-generalization, or completion result.
+Current qualification: **299/299 bounded checkpoints** and **36/36 completion objectives**,
+ending with concurrent Champion-defeated and Hall-of-Fame verification. Three clean-power-on,
+no-restore runs reached the identical 4,796,436-frame / 41,316-action terminal. This is an exact
+deterministic-teacher completion, not a learned-policy or timing/RNG-generalization result.
 
 - [x] Build the no-save PyBoy bridge and read-only state adapter from pinned symbols.
 - [x] Add controller timing and one authoritative action executor.
@@ -84,30 +82,32 @@ learned-policy, timing/RNG-generalization, or completion result.
   supplies.
 - [x] Qualify Lorelei's exact party, item-cursor recovery, status-aware healing, retained Toxic,
   and a fully healed Bruno-room boundary.
+- [x] Qualify Bruno, Agatha, and Lance with exact trainer-party reconstruction, bounded recovery,
+  PP-aware move selection, and fully healed room transitions.
+- [x] Qualify the Champion with six verified X Special uses, exact six-member party
+  reconstruction, bounded recovery, and concurrent Champion-event plus Hall-of-Fame proof.
 - [x] Replay every qualified objective across three clean-power-on runs.
 
-Next sequence: defeat Bruno, Agatha, and Lance, then defeat the Champion and verify the
-Hall of Fame.
 The qualified corridors and
 semantic gates are pinned to pret/pokered commit
 `1e96034092686d006e863cace09e87273051a3d8`. See the
-[Lorelei three-run evidence receipt](evidence/qualified-play-lorelei-2026-07-29.json).
+[Hall-of-Fame three-run evidence receipt](evidence/qualified-play-hall-of-fame-2026-07-29.json).
 
-Exit gate: three intervention-free clean-power-on runs reach the healed Bruno-room
-boundary with identical evidence rules.
+Exit gate met: three intervention-free clean-power-on runs reached the Hall of Fame with identical
+evidence.
 
 ## Milestone 2 — deterministic expert
 
-**Status: in progress — July 2026**
+**Status: complete — July 2026**
 
-- Complete the route graph through all eight badges, Victory Road, Elite Four, and Hall of Fame.
-- Add navigation transitions, menus, inventory, party management, HM/puzzle, battle, and recovery
+- [x] Complete the route graph through all eight badges, Victory Road, Elite Four, and Hall of Fame.
+- [x] Add navigation transitions, menus, inventory, party management, HM/puzzle, battle, and recovery
   specialists.
-- Record failure categories, deterministic recovery behavior, and semantic action rationales.
-- Generate clean demonstrations plus corrected trajectories for timing, encounter, battle,
-  status, and nearby-position variations.
+- [x] Record failure categories, deterministic recovery behavior, and semantic action rationales.
+- [ ] Generate clean demonstrations plus corrected trajectories for timing, encounter, battle,
+  status, and nearby-position variations. This continues as Milestone 3 dataset work.
 
-Exit gate: the teacher completes at least three clean runs without save-state restoration.
+Exit gate met: the teacher completed three identical clean runs without save-state restoration.
 
 ## Milestone 3 — demonstration learner
 
