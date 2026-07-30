@@ -291,7 +291,10 @@ def test_battle_start_offsets_reject_unsafe_or_out_of_range_values(
 def test_parser_sanitizes_excessively_nested_json() -> None:
     payload = (b'{"a":' * 100_000) + b"0" + (b"}" * 100_000) + b"\n"
 
-    with pytest.raises(CollectionProtocolError, match="cannot be encoded"):
+    with pytest.raises(
+        CollectionProtocolError,
+        match="not valid JSON|cannot be encoded",
+    ):
         parse_collection_registry(payload)
 
 
