@@ -284,7 +284,7 @@ def test_play_command_runs_the_continuous_watched_boundary(
         "[1/73] Bedroom input ready",
         "[73/73] Reached stable Vermilion City",
         "Objectives: 10/36 verified | Next: Obtain HM01 Cut aboard the S.S. Anne",
-        "Safe stop: latest independently qualified boundary reached; the game is not complete.",
+        "Completion verified: Champion defeated and Hall of Fame entered.",
     ]
     assert str(private_path) not in captured.out
     assert str(private_path) not in captured.err

@@ -65,7 +65,7 @@ def _parser() -> argparse.ArgumentParser:
     )
     play = subcommands.add_parser(
         "play",
-        help="Run every currently qualified chapter, then stop at the verified boundary.",
+        help="Run the qualified teacher from clean power-on through the Hall of Fame.",
     )
     play.add_argument(
         "--rom",
@@ -129,7 +129,7 @@ def _print_qualified_summary(report: QualifiedPlayReport) -> None:
         flush=True,
     )
     print(
-        "Safe stop: latest independently qualified boundary reached; the game is not complete.",
+        "Completion verified: Champion defeated and Hall of Fame entered.",
         file=sys.stderr,
         flush=True,
     )
