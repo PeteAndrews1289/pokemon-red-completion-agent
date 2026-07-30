@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.2.0 — Deterministic expert
+
+- Completed three identical clean-power-on runs through all 299 checkpoints, all 36 objectives,
+  the Champion-defeated event, and the Hall of Fame without human input or save-state restoration.
 - Added a lazy, optional PyBoy 2.7 adapter that verifies the private ROM and gives PyBoy only an
   in-memory stream created from exact fingerprint-verified bytes.
 - Disabled human window input, adjacent save discovery, and save-on-exit in the private runtime.

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pokemon-red-completion-agent"
-version = "0.1.0"
+version = "0.2.0"
 description = "A completion-first hybrid agent for verified Pokemon Red play"
 readme = "README.md"
 requires-python = ">=3.11"
