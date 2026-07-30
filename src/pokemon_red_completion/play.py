@@ -186,6 +186,13 @@ from pokemon_red_completion.vermilion import (
     VermilionProgress,
     run_vermilion_chapter,
 )
+from pokemon_red_completion.victory_road import (
+    VICTORY_ROAD_CHECKPOINT_COUNT,
+    VictoryRoadChapterError,
+    VictoryRoadChapterReport,
+    VictoryRoadProgress,
+    run_victory_road_chapter,
+)
 
 POKEDEX_CHECKPOINT_COUNT = 11
 QUALIFIED_PLAY_CHECKPOINT_COUNT = (
@@ -211,8 +218,9 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + CINNABAR_CHECKPOINT_COUNT
     + BLAINE_CHECKPOINT_COUNT
     + GIOVANNI_CHECKPOINT_COUNT
+    + VICTORY_ROAD_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "defeat_giovanni"
+QUALIFIED_THROUGH_OBJECTIVE = "cross_victory_road"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -358,6 +366,7 @@ class QualifiedPlayReport:
     cinnabar: CinnabarChapterReport
     blaine: BlaineChapterReport
     giovanni: GiovanniChapterReport
+    victory_road: VictoryRoadChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -400,6 +409,7 @@ class QualifiedPlayReport:
             and self.cinnabar.passed
             and self.blaine.passed
             and self.giovanni.passed
+            and self.victory_road.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -458,10 +468,11 @@ class QualifiedPlayReport:
             *self.cinnabar.checkpoints(),
             *self.blaine.checkpoints(),
             *self.giovanni.checkpoints(),
+            *self.victory_road.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v22",
+            "schema": "qualified-play-v23",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": False,
@@ -528,6 +539,7 @@ class QualifiedPlayReport:
             "cinnabar_chapter": self.cinnabar.public_dict(),
             "blaine_chapter": self.blaine.public_dict(),
             "giovanni_chapter": self.giovanni.public_dict(),
+            "victory_road_chapter": self.victory_road.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -907,6 +919,16 @@ def run_qualified_play(
         except GiovanniChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            victory_road = run_victory_road_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_victory_road_progress_bridge(progress),
+            )
+        except VictoryRoadChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -931,11 +953,12 @@ def run_qualified_play(
             | semantic_facts(cinnabar.final_raw)
             | semantic_facts(blaine.final_raw)
             | semantic_facts(giovanni.final_raw)
+            | semantic_facts(victory_road.final_raw)
         )
         state = GameState(
-            mode=game_mode(giovanni.final_raw),
+            mode=game_mode(victory_road.final_raw),
             facts=facts,
-            location=location_label(giovanni.final_raw.map_id),
+            location=location_label(victory_road.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -976,6 +999,7 @@ def run_qualified_play(
             cinnabar=cinnabar,
             blaine=blaine,
             giovanni=giovanni,
+            victory_road=victory_road,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -1635,6 +1659,7 @@ def _sabrina_progress_bridge(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - VICTORY_ROAD_CHECKPOINT_COUNT
                 - GIOVANNI_CHECKPOINT_COUNT
                 - BLAINE_CHECKPOINT_COUNT
                 - CINNABAR_CHECKPOINT_COUNT
@@ -1660,6 +1685,7 @@ def _cinnabar_progress_bridge(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - VICTORY_ROAD_CHECKPOINT_COUNT
                 - GIOVANNI_CHECKPOINT_COUNT
                 - BLAINE_CHECKPOINT_COUNT
                 - CINNABAR_CHECKPOINT_COUNT
@@ -1684,6 +1710,7 @@ def _blaine_progress_bridge(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - VICTORY_ROAD_CHECKPOINT_COUNT
                 - GIOVANNI_CHECKPOINT_COUNT
                 - BLAINE_CHECKPOINT_COUNT
                 + progress.completed,
@@ -1707,7 +1734,30 @@ def _giovanni_progress_bridge(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - VICTORY_ROAD_CHECKPOINT_COUNT
                 - GIOVANNI_CHECKPOINT_COUNT
+                + progress.completed,
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _victory_road_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[VictoryRoadProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: VictoryRoadProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - VICTORY_ROAD_CHECKPOINT_COUNT
                 + progress.completed,
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
                 frames_executed=progress.frames_executed,

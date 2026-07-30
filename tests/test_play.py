@@ -941,6 +941,36 @@ class _GiovanniEvidence:
         return {"status": "ok", "objectives": ["defeat_giovanni"]}
 
 
+class _VictoryRoadEvidence:
+    passed = True
+    final_raw = replace(
+        _GiovanniEvidence.final_raw,
+        map_id=MapId.INDIGO_PLATEAU_LOBBY,
+        player_x=2,
+        player_y=5,
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "victory_road_ready",
+            "route22_rival",
+            "victory_supplied",
+            "badge_corridor",
+            "vr1_switch",
+            "vr2_switch",
+            "vr3_hole",
+            "vr2_final",
+            "indigo_ready",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "cross_victory_road"}
+
+
 def test_qualified_play_direction_sequences_are_source_stable() -> None:
     assert LAB_RIVAL_TRIGGER_DIRECTIONS == (
         "down",
@@ -1014,16 +1044,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 275
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 284
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=275,
+        completed=284,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 275
+    assert progress.completed == progress.total == 284
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -1128,8 +1158,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         silph=_SilphEvidence(),  # type: ignore[arg-type]
         sabrina=_SabrinaEvidence(),  # type: ignore[arg-type]
         cinnabar=_CinnabarEvidence(),  # type: ignore[arg-type]
-        blaine=_BlaineEvidence(),  # type: ignore[arg-type]
-        giovanni=_GiovanniEvidence(),  # type: ignore[arg-type]
+            blaine=_BlaineEvidence(),  # type: ignore[arg-type]
+            giovanni=_GiovanniEvidence(),  # type: ignore[arg-type]
+            victory_road=_VictoryRoadEvidence(),  # type: ignore[arg-type]
         rival_evidence=_rival_victory(),
         parcel_evidence=_parcel_obtained(),
         pokedex_evidence=_pokedex_obtained(),
@@ -1164,7 +1195,8 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
                 "location:cinnabar_island",
                 "item:secret_key",
                 "badge:volcano",
-                "badge:earth",
+                    "badge:earth",
+                    "story:victory_road_cleared",
             }
         ),
         verified_objectives=(
@@ -1196,9 +1228,10 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "reach_cinnabar",
             "obtain_secret_key",
             "defeat_blaine",
-            "defeat_giovanni",
-        ),
-        next_objective="cross_victory_road",
+                "defeat_giovanni",
+                "cross_victory_road",
+            ),
+            next_objective="defeat_lorelei",
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
@@ -1208,9 +1241,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
-    assert public["schema"] == "qualified-play-v22"
+    assert public["schema"] == "qualified-play-v23"
     assert public["status"] == "ok"
-    assert public["qualified_through"] == "defeat_giovanni"
+    assert public["qualified_through"] == "cross_victory_road"
     assert public["game_complete"] is False
     assert public["safe_stop_reason"] == "latest_qualified_boundary"
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
@@ -1489,9 +1522,18 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "giovanni_recovered",
         "giovanni_defeated",
         "giovanni_terminal",
+        "victory_road_ready",
+        "route22_rival",
+        "victory_supplied",
+        "badge_corridor",
+        "vr1_switch",
+        "vr2_switch",
+        "vr3_hole",
+        "vr2_final",
+        "indigo_ready",
     ]
     assert public["objective_progress"] == {
-        "verified": 29,
+        "verified": 30,
         "total": 36,
         "verified_ids": [
             "power_on",
@@ -1523,8 +1565,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "obtain_secret_key",
             "defeat_blaine",
             "defeat_giovanni",
+            "cross_victory_road",
         ],
-        "next": "cross_victory_road",
+        "next": "defeat_lorelei",
     }
     assert public["rival"]["trainer_battle_observed"] is True
     assert public["rival"]["victory_verified"] is True
@@ -1656,7 +1699,7 @@ def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
 
 
 @pytest.mark.integration
-def test_private_rom_defeats_giovanni_without_adjacent_artifacts() -> None:
+def test_private_rom_crosses_victory_road_without_adjacent_artifacts() -> None:
     raw_path = os.environ.get("POKEMON_RED_ROM")
     if not raw_path:
         pytest.skip("Set POKEMON_RED_ROM to run the private integration test")
@@ -1699,10 +1742,11 @@ def test_private_rom_defeats_giovanni_without_adjacent_artifacts() -> None:
         "obtain_secret_key",
         "defeat_blaine",
         "defeat_giovanni",
+        "cross_victory_road",
     )
-    assert report.next_objective == "cross_victory_road"
-    assert report.frames_executed == 4_033_092
-    assert report.actions_executed == 34_178
+    assert report.next_objective == "defeat_lorelei"
+    assert report.frames_executed == 4_427_245
+    assert report.actions_executed == 37_535
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -2021,4 +2065,20 @@ def test_private_rom_defeats_giovanni_without_adjacent_artifacts() -> None:
     assert report.giovanni.earth_badge_mirror
     assert report.giovanni.tm27_quantity == 1
     assert report.giovanni.money_remaining == 65_434
+    assert report.victory_road.passed
+    assert report.victory_road.frames_executed == 394_153
+    assert report.victory_road.actions_executed == 3_357
+    assert report.victory_road.rival_party == (
+        (0x97, 47),
+        (0x12, 45),
+        (0x16, 45),
+        (0x21, 47),
+        (0x95, 50),
+        (0x9A, 53),
+    )
+    assert report.victory_road.badge_checks == (True,) * 7
+    assert report.victory_road.party_hp == report.victory_road.party_max_hp == (157, 52, 37)
+    assert report.victory_road.party_status == (0, 0, 0)
+    assert report.victory_road.final_raw.first_party_moves == (0x5C, 0x46, 0x3A, 0x39)
+    assert report.victory_road.final_raw.first_party_pp == (10, 15, 10, 15)
     assert before == after
