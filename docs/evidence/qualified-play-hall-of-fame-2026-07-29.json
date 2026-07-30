@@ -1,0 +1,48 @@
+{
+  "schema": "qualified-play-v26-receipt",
+  "date": "2026-07-29",
+  "status": "ok",
+  "claim_scope": {
+    "qualified_through": "enter_hall_of_fame",
+    "game_complete": true,
+    "learned_policy": false,
+    "timing_or_rng_generalization": false
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "runs": 3,
+    "identical_reports": true,
+    "frames_per_run": 4796436,
+    "actions_per_run": 41316
+  },
+  "progress": {
+    "checkpoints_verified": 299,
+    "checkpoints_total": 299,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "next_objective": null
+  },
+  "terminal": {
+    "map": 118,
+    "location": "hall_of_fame",
+    "x": 4,
+    "y": 7,
+    "champion_event": true,
+    "hall_of_fame": true,
+    "controller_released": true
+  },
+  "champion_chapter": {
+    "party": [[151, 61], [149, 59], [1, 61], [22, 61], [20, 63], [154, 65]],
+    "x_specials_used": 6,
+    "lead_moves": [5, 70, 58, 57],
+    "lead_pp": [3, 0, 0, 7]
+  },
+  "privacy": {
+    "rom_path_included": false,
+    "rom_hash_included": false,
+    "save_state_included": false,
+    "personal_path_included": false
+  }
+}

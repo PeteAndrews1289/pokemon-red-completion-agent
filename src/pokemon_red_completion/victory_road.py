@@ -47,6 +47,16 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.saffron import (
+    CITY_TO_MART,
+    MART_1F_TO_2F,
+    MART_2F_TO_1F,
+    MART_3F_TO_2F,
+    MART_3F_TO_4F,
+    MART_4F_TO_3F,
+    MART_4F_TO_5F,
+    MART_TO_CITY,
+)
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _battle_hyper_potion
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
@@ -84,33 +94,22 @@ def _directions(value: str) -> tuple[str, ...]:
 
 CENTER_TO_ROUTE_22 = _directions("DDDDDLLUUUUUUUULLLLLULLLLLLLLLLLLLLLLL")
 ROUTE_22_TO_RIVAL = _directions("LLDDDLLLLUUULLUUUUL")
-SAFFRON_TO_MART = _directions(
-    "RRRRRDRURRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUULLLLLLLULLLLU"
-)
+SAFFRON_TO_MART = _directions("RRRRRDRURRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUULLLLLLLULLLLU")
 VIRIDIAN_TO_ROUTE_22 = _directions("LLUUUUUUUULLLLLULLLLLLLLLLLLLLLLL")
-ROUTE_22_TO_GATE = _directions(
-    "LLDDDLLLLLULUUUUUULLLLLLLLLLDDDDDDLLLLLLLLLLLLLLLLUURRRRRRUUUULLLU"
-)
+ROUTE_22_TO_GATE = _directions("LLDDDLLLLLULUUUUUULLLLLLLLLLDDDDDDLLLLLLLLLLLLLLLLUURRRRRRUUUULLLU")
 THUNDER_APPROACH = _directions("UUUURRRRRRRUUUUUUUULLLLLUUUUL")
 RAINBOW_APPROACH = _directions("UUURUUUUUUUUUURR")
 MARSH_APPROACH = _directions("UUUUUUUUUULLL")
 VOLCANO_APPROACH = _directions("UUUUUUUUUUUUURUUUUUURRUUUUUUUUUL")
 EARTH_APPROACH = _directions("DRRURUUUUUUUULLLLUULUUUUUUUUUULLLL")
-VR1_TO_2F = _directions(
-    "LDDLLLLLLLDDLLLLUUUURRRRRRUUUUUULLLLDDLLLLUUULUUUUL"
-)
-VR2_TO_3F = _directions(
-    "RUUUUURRUUURRRRRRRRRDDDDRRRDDRRRRDDRRRRRRRUUUUULLLLLUUUU"
-)
+VR1_TO_2F = _directions("LDDLLLLLLLDDLLLLUUUURRRRRRUUUUUULLLLDDLLLLUUULUUUUL")
+VR2_TO_3F = _directions("RUUUUURRUUURRRRRRRRRDDDDRRRDDRRRRDDRRRRRRRUUUUULLLLLUUUU")
 VR3_SWITCH_TO_HOLE = _directions(
-    "UUURRRRURRRRRRRRRRRRRRDDDDDLLLUULLLLLLLDDDDDDLLLLLUULLLL"
-    "DDDDDDDRRRRRRRRRRDRRRURRRRRRR"
+    "UUURRRRURRRRRRRRRRRRRRDDDDDLLLUULLLLLLLDDDDDDLLLLLUULLLLDDDDDDDRRRRRRRRRRDRRRURRRRRRR"
 )
 VR2_FINAL_TO_3F = _directions("RRRRRUURRRRRRRRRR")
 VR3_SOUTHEAST_TO_2F = _directions("UUUUUULU")
-ROUTE_23_TO_INDIGO = _directions(
-    "RRRRUUUUUUUUUUUULLLLUUUUUUUUUULUUUULLLUUUUUUU"
-)
+ROUTE_23_TO_INDIGO = _directions("RRRRUUUUUUUUUUUULLLLUUUUUUUUUULUUUULLLUUUUUUU")
 
 
 class EmulatorState(Protocol):
@@ -174,8 +173,9 @@ class VictoryRoadChapterReport:
     vr3_hole_set: bool
     vr2_switch2_set: bool
     full_restores: int
-    revives: int
+    full_heals: int
     hyper_potions: int
+    x_specials: int
     max_repels: int
     tm27_sold: bool
     tm38_sold: bool
@@ -201,9 +201,10 @@ class VictoryRoadChapterReport:
             and self.vr3_switch_set
             and self.vr3_hole_set
             and self.vr2_switch2_set
-            and self.full_restores == 8
-            and self.revives == 10
+            and self.full_restores == 11
+            and self.full_heals == 10
             and self.hyper_potions == 11
+            and self.x_specials == 6
             and self.max_repels == 8
             and self.tm27_sold
             and self.tm38_sold
@@ -212,8 +213,8 @@ class VictoryRoadChapterReport:
             and (self.final_raw.player_x, self.final_raw.player_y) == (2, 5)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
             and self.final_raw.first_party_level == 51
-            and self.final_raw.first_party_moves == (0x5C, 0x46, 0x3A, 0x39)
-            and self.final_raw.first_party_pp == (10, 15, 10, 15)
+            and self.final_raw.first_party_moves == (0x42, 0x46, 0x3A, 0x39)
+            and self.final_raw.first_party_pp == (25, 15, 10, 15)
             and self.party_hp == self.party_max_hp == (157, 52, 37)
             and self.party_status == (0, 0, 0)
             and self.controller_released
@@ -251,8 +252,9 @@ class VictoryRoadChapterReport:
             },
             "indigo_supplies": {
                 "full_restores": self.full_restores,
-                "revives": self.revives,
+                "full_heals": self.full_heals,
                 "hyper_potions": self.hyper_potions,
+                "x_specials": self.x_specials,
                 "max_repels": self.max_repels,
                 "money_remaining": self.money_remaining,
             },
@@ -455,7 +457,12 @@ def run_victory_road_chapter(
             target_bag_quantity=11,
         )
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    _sell_current_bag_item(actions, emulator, ItemId.TM24_THUNDERBOLT)
+    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    _sell_current_bag_item(actions, emulator, ItemId.TM21_MEGA_DRAIN)
+    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     _move(actions, reader, ("right", "down", "down", "down"), "Saffron recovery Mart exit")
+    _acquire_and_teach_submission(actions, reader, emulator)
     _field_fly(actions, reader, emulator, "up", MapId.VIRIDIAN_CITY)
     _move_with_wilds(
         actions,
@@ -484,9 +491,7 @@ def run_victory_road_chapter(
         _step(actions, reader, "up", "Route 23 entry")
     _require(reader.read(), MapId.ROUTE_23, (7, 139), "Route 23 entry")
 
-    _move_with_wilds(
-        actions, reader, emulator, wild_run, ("up", "up"), "Cascade gate approach"
-    )
+    _move_with_wilds(actions, reader, emulator, wild_run, ("up", "up"), "Cascade gate approach")
     _pass_badge_gate(
         actions,
         reader,
@@ -495,9 +500,7 @@ def run_victory_road_chapter(
         ("up",),
         EventFlag.PASSED_CASCADE_BADGE_CHECK,
     )
-    _move_with_wilds(
-        actions, reader, emulator, wild_run, THUNDER_APPROACH, "Thunder gate approach"
-    )
+    _move_with_wilds(actions, reader, emulator, wild_run, THUNDER_APPROACH, "Thunder gate approach")
     _pass_badge_gate(
         actions,
         reader,
@@ -506,9 +509,7 @@ def run_victory_road_chapter(
         ("right", "up"),
         EventFlag.PASSED_THUNDER_BADGE_CHECK,
     )
-    _move_with_wilds(
-        actions, reader, emulator, wild_run, RAINBOW_APPROACH, "Rainbow gate approach"
-    )
+    _move_with_wilds(actions, reader, emulator, wild_run, RAINBOW_APPROACH, "Rainbow gate approach")
     _pass_badge_gate(
         actions,
         reader,
@@ -517,25 +518,17 @@ def run_victory_road_chapter(
         ("left", "up"),
         EventFlag.PASSED_RAINBOW_BADGE_CHECK,
     )
-    _move_with_wilds(
-        actions, reader, emulator, wild_run, ("up", "left"), "Route 23 Surf shore"
-    )
+    _move_with_wilds(actions, reader, emulator, wild_run, ("up", "left"), "Route 23 Surf shore")
     _field_surf(actions, reader, emulator)
-    _move_with_wilds(
-        actions, reader, emulator, wild_run, ("up",) * 6, "Soul gate approach"
-    )
+    _move_with_wilds(actions, reader, emulator, wild_run, ("up",) * 6, "Soul gate approach")
     _pass_badge_gate(
         actions, reader, emulator, wild_run, ("up",), EventFlag.PASSED_SOUL_BADGE_CHECK
     )
-    _move_with_wilds(
-        actions, reader, emulator, wild_run, MARSH_APPROACH, "Marsh gate approach"
-    )
+    _move_with_wilds(actions, reader, emulator, wild_run, MARSH_APPROACH, "Marsh gate approach")
     _pass_badge_gate(
         actions, reader, emulator, wild_run, ("up",), EventFlag.PASSED_MARSH_BADGE_CHECK
     )
-    _move_with_wilds(
-        actions, reader, emulator, wild_run, VOLCANO_APPROACH, "Volcano gate approach"
-    )
+    _move_with_wilds(actions, reader, emulator, wild_run, VOLCANO_APPROACH, "Volcano gate approach")
     _pass_badge_gate(
         actions,
         reader,
@@ -544,9 +537,7 @@ def run_victory_road_chapter(
         ("up",),
         EventFlag.PASSED_VOLCANO_BADGE_CHECK,
     )
-    _move_with_wilds(
-        actions, reader, emulator, wild_run, EARTH_APPROACH, "Earth gate approach"
-    )
+    _move_with_wilds(actions, reader, emulator, wild_run, EARTH_APPROACH, "Earth gate approach")
     _pass_badge_gate(
         actions, reader, emulator, wild_run, ("up",), EventFlag.PASSED_EARTH_BADGE_CHECK
     )
@@ -665,6 +656,8 @@ def run_victory_road_chapter(
     _require(reader.read(), MapId.INDIGO_PLATEAU_LOBBY, (2, 5), "Indigo clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
     _sell_current_bag_item(actions, emulator, ItemId.TM38_FIRE_BLAST)
+    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    _sell_current_bag_item(actions, emulator, ItemId.NUGGET)
     _pulse(actions, MacroActionKind.CANCEL)
     _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
@@ -674,15 +667,15 @@ def run_victory_road_chapter(
         DEFAULT_LAVENDER_TIMING,
         absolute_index=2,
         item=ItemId.FULL_RESTORE,
-        quantity=8,
-        target_bag_quantity=8,
+        quantity=11,
+        target_bag_quantity=11,
     )
     _buy_mart_item(
         actions,
         emulator,
         DEFAULT_LAVENDER_TIMING,
-        absolute_index=5,
-        item=ItemId.REVIVE,
+        absolute_index=4,
+        item=ItemId.FULL_HEAL,
         quantity=10,
         target_bag_quantity=10,
     )
@@ -704,8 +697,9 @@ def run_victory_road_chapter(
         vr3_hole_set=vr3_hole,
         vr2_switch2_set=vr2_switch2,
         full_restores=final_bag.get(ItemId.FULL_RESTORE, 0),
-        revives=final_bag.get(ItemId.REVIVE, 0),
+        full_heals=final_bag.get(ItemId.FULL_HEAL, 0),
         hyper_potions=final_bag.get(ItemId.HYPER_POTION, 0),
+        x_specials=final_bag.get(ItemId.X_SPECIAL, 0),
         max_repels=final_bag.get(ItemId.MAX_REPEL, 0),
         tm27_sold=ItemId.TM27_FISSURE not in final_bag,
         tm38_sold=ItemId.TM38_FIRE_BLAST not in final_bag,
@@ -742,8 +736,7 @@ def _defeat_route22_rival(
         try:
             slot = (
                 1
-                if species == 0x9A
-                and (raw.first_party_pp or (0, 0, 0, 0))[0] == 10
+                if species == 0x9A and (raw.first_party_pp or (0, 0, 0, 0))[0] == 10
                 else RIVAL_POLICY[species]
             )
         except KeyError as error:
@@ -846,9 +839,8 @@ def _teach_toxic(
     _pulse(actions, MacroActionKind.CONFIRM)
     for _ in range(24):
         raw = reader.read()
-        if (
-            raw.first_party_moves == (0x5C, 0x46, 0x3A, 0x39)
-            and ItemId.TM06_TOXIC not in _bag(emulator)
+        if raw.first_party_moves == (0x5C, 0x46, 0x3A, 0x39) and ItemId.TM06_TOXIC not in _bag(
+            emulator
         ):
             _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
             return
@@ -861,6 +853,140 @@ def _teach_toxic(
     )
 
 
+def _acquire_and_teach_submission(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    _field_fly(actions, reader, emulator, ("down",) * 4, MapId.CELADON_CITY)
+    _move(actions, reader, CITY_TO_MART, "Celadon Mart entry")
+    _require(reader.read(), MapId.CELADON_MART_1F, (16, 7), "Celadon Mart 1F")
+    _move(actions, reader, MART_1F_TO_2F, "Celadon Mart 2F")
+    _require(reader.read(), MapId.CELADON_MART_2F, (12, 2), "Celadon Mart 2F")
+    _move(actions, reader, _directions("LLLDDDLLL"), "TM17 clerk")
+    _require(reader.read(), MapId.CELADON_MART_2F, (6, 5), "TM17 clerk")
+    _pulse(actions, MacroActionKind.MOVE, "up", 120)
+    _pulse(actions, MacroActionKind.INTERACT)
+    _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _buy_mart_item(
+        actions,
+        emulator,
+        DEFAULT_LAVENDER_TIMING,
+        absolute_index=8,
+        item=ItemId.TM17_SUBMISSION,
+        quantity=1,
+        target_bag_quantity=1,
+    )
+    _buy_mart_item(
+        actions,
+        emulator,
+        DEFAULT_LAVENDER_TIMING,
+        absolute_index=7,
+        item=ItemId.TM09_TAKE_DOWN,
+        quantity=1,
+        target_bag_quantity=1,
+    )
+    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    _teach_submission(actions, reader, emulator)
+    _pulse(actions, MacroActionKind.MOVE, "up", 120)
+    _pulse(actions, MacroActionKind.INTERACT)
+    _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _buy_mart_item(
+        actions,
+        emulator,
+        DEFAULT_LAVENDER_TIMING,
+        absolute_index=5,
+        item=ItemId.TM01_MEGA_PUNCH,
+        quantity=2,
+        target_bag_quantity=2,
+    )
+    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    _move(actions, reader, _directions("RRRUUURRRRRRRU"), "Celadon Mart 3F")
+    _require(reader.read(), MapId.CELADON_MART_3F, (16, 2), "Celadon Mart 3F")
+    _move(actions, reader, MART_3F_TO_4F, "Celadon Mart 4F")
+    _require(reader.read(), MapId.CELADON_MART_4F, (12, 2), "Celadon Mart 4F")
+    _move(actions, reader, MART_4F_TO_5F, "Celadon Mart 5F")
+    _require(reader.read(), MapId.CELADON_MART_5F, (16, 2), "Celadon Mart 5F")
+    _move(
+        actions,
+        reader,
+        ("left",) * 8 + ("down",) * 4 + ("left",) * 3 + ("up",),
+        "X Special clerk",
+    )
+    _pulse(actions, MacroActionKind.MOVE, "up", 120)
+    _pulse(actions, MacroActionKind.INTERACT)
+    _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _buy_mart_item(
+        actions,
+        emulator,
+        DEFAULT_LAVENDER_TIMING,
+        absolute_index=6,
+        item=ItemId.X_SPECIAL,
+        quantity=6,
+        target_bag_quantity=6,
+    )
+    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    _move(
+        actions,
+        reader,
+        ("down",) + ("right",) * 3 + ("up",) * 4 + ("right",) * 8 + ("up",),
+        "Celadon Mart 4F return",
+    )
+    _move(actions, reader, MART_4F_TO_3F, "Celadon Mart 3F return")
+    _move(actions, reader, MART_3F_TO_2F, "Celadon Mart 2F return")
+    _move(actions, reader, MART_2F_TO_1F, "Celadon Mart return")
+    _require(reader.read(), MapId.CELADON_MART_1F, (12, 2), "Celadon Mart 1F return")
+    _move(actions, reader, MART_TO_CITY, "Celadon Mart exit")
+    _require(reader.read(), MapId.CELADON_CITY, (10, 14), "Celadon Mart exit")
+
+
+def _teach_submission(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    _open_bag(actions, emulator, DEFAULT_LAVENDER_TIMING)
+    _select_bag_item(
+        actions,
+        emulator,
+        ItemId.TM17_SUBMISSION,
+        DEFAULT_LAVENDER_TIMING,
+    )
+    for _ in range(24):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (0, 1) and _menu_cursor_active(emulator):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM)
+    else:
+        raise VictoryRoadChapterError("TM17 did not reach party selection.")
+    _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(24):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (5, 8) and _menu_cursor_active(emulator):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM)
+    else:
+        raise VictoryRoadChapterError("TM17 did not reach move deletion.")
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(24):
+        raw = reader.read()
+        if raw.first_party_moves == (0x42, 0x46, 0x3A, 0x39) and ItemId.TM17_SUBMISSION not in _bag(
+            emulator
+        ):
+            _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+            return
+        _pulse(actions, MacroActionKind.CONFIRM)
+    raise VictoryRoadChapterError("TM17 did not replace Toxic.")
+
+
 def _battle_sacrifice(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
@@ -868,6 +994,7 @@ def _battle_sacrifice(
     party_index: int,
     *,
     heal_lead: bool,
+    healing_item: ItemId = ItemId.HYPER_POTION,
 ) -> bool:
     if _party_hp(emulator)[party_index] <= 0:
         raise VictoryRoadChapterError("Route 22 pivot target had already fainted.")
@@ -897,11 +1024,11 @@ def _battle_sacrifice(
     if heal_lead and pivot_ready:
         _select_battle_main_command(actions, reader, 1)
         _pulse(actions, MacroActionKind.CONFIRM)
-        before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
+        before = _bag(emulator).get(healing_item, 0)
         _select_bag_item(
             actions,
             emulator,
-            ItemId.HYPER_POTION,
+            healing_item,
             DEFAULT_LAVENDER_TIMING,
         )
         _pulse(actions, MacroActionKind.CONFIRM)
@@ -917,7 +1044,7 @@ def _battle_sacrifice(
             ):
                 break
             _pulse(actions, MacroActionKind.CONFIRM)
-        if before - _bag(emulator).get(ItemId.HYPER_POTION, 0) != 1:
+        if before - _bag(emulator).get(healing_item, 0) != 1:
             raise VictoryRoadChapterError("Route 22 pivot recovery did not spend one item.")
         potion_spent = True
 
@@ -1017,7 +1144,7 @@ def _field_fly(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
-    town_direction: str,
+    town_direction: str | Iterable[str],
     expected_map: MapId,
 ) -> None:
     _pulse(actions, MacroActionKind.OPEN_MENU)
@@ -1027,7 +1154,9 @@ def _field_fly(
     _pulse(actions, MacroActionKind.CONFIRM)
     _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
-    _pulse(actions, MacroActionKind.MOVE, town_direction, 120)
+    directions = (town_direction,) if isinstance(town_direction, str) else tuple(town_direction)
+    for direction in directions:
+        _pulse(actions, MacroActionKind.MOVE, direction, 120)
     _pulse(actions, MacroActionKind.CONFIRM, frames=240)
     for _ in range(12):
         if reader.read().map_id == expected_map:
@@ -1101,10 +1230,12 @@ def _heal(
 ) -> None:
     for _ in range(9):
         _pulse(actions, MacroActionKind.CONFIRM)
+    moves = reader.read().first_party_moves or ()
+    expected_pp = (25, 15, 10, 15) if moves and moves[0] == 0x42 else (10, 15, 10, 15)
     if (
         _party_hp(emulator) != _party_max_hp(emulator)
         or _party_status(emulator) != (0, 0, 0)
-        or reader.read().first_party_pp != (10, 15, 10, 15)
+        or reader.read().first_party_pp != expected_pp
     ):
         raise VictoryRoadChapterError("Pokémon Center did not restore the qualified party.")
     for _ in range(6):

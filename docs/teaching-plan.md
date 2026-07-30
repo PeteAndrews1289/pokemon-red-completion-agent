@@ -55,10 +55,11 @@ than treating the source route as proof of runtime success.
 
 ## Current qualified teaching segment
 
-The deterministic teacher currently verifies all **287/287 qualified checkpoints** through
-Lorelei and therefore **31/36 completion objectives**. Three clean runs were identical at
-the 4,496,270-frame / 38,258-action Bruno-room boundary. The evidence includes the earlier Brock
-and Mt. Moon gates,
+The deterministic teacher now verifies all **299/299 qualified checkpoints** and **36/36
+completion objectives** through the Hall of Fame. Three clean-power-on runs were identical at
+4,796,436 frames and 41,316 actions, without save-state restoration or human input. The terminal
+gate requires the Champion-defeated event and Hall-of-Fame map concurrently. The evidence includes
+the earlier Brock and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
 Badge and TM11 proof, plus the Rocket thief, TM28, Underground Path, exact Route 6 trainer events,
@@ -133,9 +134,11 @@ spinner-floor route. Strength and Ice Beam preserve Surf for the leader; a bound
 restores health and PP before Giovanni. The run then verifies Giovanni's five-member party,
 Surf-only policy, TM27, both Earth Badge lanes, both Route 22 rival events, all eight post-victory
 trainer toggles, and a fully healed eight-badge Viridian terminal. The next segment crosses Route
-22, Route 23, and Victory Road. The Lorelei segment then verifies her exact five-member party,
-uses semantic HP and status gates for bounded Hyper Potion and Full Restore recovery, preserves
-Toxic when the clean run reaches level 52, and terminates fully healed in Bruno's room.
+22, Route 23, and Victory Road. The Elite Four segment verifies each exact trainer party, uses
+semantic HP, status, PP, and enemy-position gates for bounded recovery and move selection, and
+performs the required between-room move changes. The Champion segment consumes six verified
+X Specials, reconstructs the exact six-member party without mistaking trainer healing for a
+switch, and terminates only after concurrent Champion-event and Hall-of-Fame verification.
 
 The same segment can run headlessly or be observed locally with:
 
@@ -252,11 +255,12 @@ restore, rewind, or import state from another run.
 18. Train a small behavior-cloning baseline per specialist.
 19. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
    from the frozen perturbation suite for that skill.
-20. Extend the teacher through the Elite Four, Champion, and Hall of Fame.
+20. Extend the teacher through the Elite Four, Champion, and Hall of Fame. **Done.**
 21. Produce multiple clean teacher completions with timing and RNG variation.
 22. Train the semantic planner and full-game composition only after that coverage exists.
 23. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
-The current evaluation gate is three intervention-free clean-power-on runs through Victory Road.
-A first Hall-of-Fame success is a milestone; reliability requires at least 8/10
-frozen clean-start runs. No learned robustness or multi-seed completion result is claimed yet.
+The deterministic-teacher gate of three intervention-free clean-power-on Hall-of-Fame runs is
+complete. Learned reliability still requires at least 8/10 frozen clean-start runs on the
+preregistered held-out evaluation. No learned robustness or multi-seed completion result is
+claimed yet.

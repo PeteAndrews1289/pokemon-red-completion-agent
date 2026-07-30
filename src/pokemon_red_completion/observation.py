@@ -45,6 +45,7 @@ class RamAddress(IntEnum):
     TILE_IN_FRONT_OF_PLAYER = 0xCFC6
     ENEMY_SPECIES = 0xCFE5
     ENEMY_HP = 0xCFE6
+    ENEMY_MON_PARTY_POS = 0xCFE8
     ENEMY_LEVEL = 0xCFF3
     ENEMY_MAX_HP = 0xCFF4
     TRAINER_CLASS = 0xD031
@@ -157,6 +158,7 @@ class MapId(IntEnum):
     VIRIDIAN_MART = 0x2A
     VIRIDIAN_GYM = 0x2D
     VICTORY_ROAD_1F = 0x6C
+    LANCES_ROOM = 0x71
     VIRIDIAN_FOREST_NORTH_GATE = 0x2F
     ROUTE_2_GATE = 0x31
     VIRIDIAN_FOREST_SOUTH_GATE = 0x32
@@ -251,6 +253,7 @@ class MapId(IntEnum):
     VICTORY_ROAD_3F = 0xC6
     LORELEIS_ROOM = 0xF5
     BRUNOS_ROOM = 0xF6
+    AGATHAS_ROOM = 0xF7
     VERMILION_TRADE_HOUSE = 0xC4
     DIGLETTS_CAVE = 0xC5
 
@@ -555,7 +558,9 @@ class ItemId(IntEnum):
     IRON = 0x25
     RARE_CANDY = 0x28
     X_ACCURACY = 0x2E
+    X_SPECIAL = 0x44
     CARD_KEY = 0x30
+    FULL_HEAL = 0x34
     REVIVE = 0x35
     LIFT_KEY = 0x4A
     EXP_ALL = 0x4B
@@ -565,9 +570,12 @@ class ItemId(IntEnum):
     HM03_SURF = 0xC6
     HM04_STRENGTH = 0xC7
     TM06_TOXIC = 0xCE
+    TM01_MEGA_PUNCH = 0xC9
+    TM09_TAKE_DOWN = 0xD1
     TM11_BUBBLEBEAM = 0xD3
     TM13_ICE_BEAM = 0xD5
     TM16_PAY_DAY = 0xD8
+    TM17_SUBMISSION = 0xD9
     TM20_RAGE = 0xDC
     TM21_MEGA_DRAIN = 0xDD
     TM27_FISSURE = 0xE3
@@ -4133,11 +4141,13 @@ def location_label(map_id: int | None) -> str | None:
         MapId.ROCKET_HIDEOUT_B3F: "rocket_hideout_b3f",
         MapId.ROCKET_HIDEOUT_B4F: "rocket_hideout_b4f",
         MapId.ROCKET_HIDEOUT_ELEVATOR: "rocket_hideout_elevator",
+        MapId.LANCES_ROOM: "lances_room",
         MapId.HALL_OF_FAME: "hall_of_fame",
         MapId.CHAMPIONS_ROOM: "champions_room",
         MapId.INDIGO_PLATEAU_LOBBY: "indigo_plateau_lobby",
         MapId.LORELEIS_ROOM: "loreleis_room",
         MapId.BRUNOS_ROOM: "brunos_room",
+        MapId.AGATHAS_ROOM: "agathas_room",
     }.get(map_id, f"map_{map_id:02x}")
 
 

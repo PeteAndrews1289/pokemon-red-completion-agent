@@ -1,10 +1,9 @@
-"""One clean, bounded run through the latest independently qualified objective.
+"""One clean, bounded run from power-on through the Hall of Fame.
 
 The route and semantic gates in this module are pinned to pret/pokered commit
 ``1e96034092686d006e863cace09e87273051a3d8``. It composes every qualified
-chapter from clean power-on through the latest stable boundary in one emulator
-session. It intentionally stops there; it is not a game-completion or
-learned-policy claim.
+chapter from clean power-on through verified game completion in one emulator
+session. It is a deterministic teacher baseline, not a learned-policy claim.
 """
 
 from __future__ import annotations
@@ -15,6 +14,13 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.agatha import (
+    AGATHA_CHECKPOINT_COUNT,
+    AgathaChapterError,
+    AgathaChapterReport,
+    AgathaProgress,
+    run_agatha_chapter,
+)
 from pokemon_red_completion.blaine import (
     BLAINE_CHECKPOINT_COUNT,
     BlaineChapterError,
@@ -23,6 +29,13 @@ from pokemon_red_completion.blaine import (
     run_blaine_chapter,
 )
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING, NewGameTiming
+from pokemon_red_completion.bruno import (
+    BRUNO_CHECKPOINT_COUNT,
+    BrunoChapterError,
+    BrunoChapterReport,
+    BrunoProgress,
+    run_bruno_chapter,
+)
 from pokemon_red_completion.cascade import (
     CASCADE_CHECKPOINT_COUNT,
     CascadeChapterError,
@@ -43,6 +56,13 @@ from pokemon_red_completion.cerulean import (
     CeruleanChapterReport,
     CeruleanProgress,
     run_cerulean_chapter,
+)
+from pokemon_red_completion.champion import (
+    CHAMPION_CHECKPOINT_COUNT,
+    ChampionChapterError,
+    ChampionChapterReport,
+    ChampionProgress,
+    run_champion_chapter,
 )
 from pokemon_red_completion.cinnabar import (
     CINNABAR_CHECKPOINT_COUNT,
@@ -88,6 +108,13 @@ from pokemon_red_completion.koga import (
     KogaChapterReport,
     KogaProgress,
     run_koga_chapter,
+)
+from pokemon_red_completion.lance import (
+    LANCE_CHECKPOINT_COUNT,
+    LanceChapterError,
+    LanceChapterReport,
+    LanceProgress,
+    run_lance_chapter,
 )
 from pokemon_red_completion.lavender import (
     LAVENDER_CHECKPOINT_COUNT,
@@ -227,8 +254,12 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + GIOVANNI_CHECKPOINT_COUNT
     + VICTORY_ROAD_CHECKPOINT_COUNT
     + LORELEI_CHECKPOINT_COUNT
+    + BRUNO_CHECKPOINT_COUNT
+    + AGATHA_CHECKPOINT_COUNT
+    + LANCE_CHECKPOINT_COUNT
+    + CHAMPION_CHECKPOINT_COUNT
 )
-QUALIFIED_THROUGH_OBJECTIVE = "defeat_lorelei"
+QUALIFIED_THROUGH_OBJECTIVE = "enter_hall_of_fame"
 
 LAB_RIVAL_TRIGGER_DIRECTIONS = ("down", "left", "left", "left", "down")
 LAB_EXIT_DIRECTIONS = ("down",) * 6
@@ -376,6 +407,10 @@ class QualifiedPlayReport:
     giovanni: GiovanniChapterReport
     victory_road: VictoryRoadChapterReport
     lorelei: LoreleiChapterReport
+    bruno: BrunoChapterReport
+    agatha: AgathaChapterReport
+    lance: LanceChapterReport
+    champion: ChampionChapterReport
     rival_evidence: OaksErrandState
     parcel_evidence: OaksErrandState
     pokedex_evidence: OaksErrandState
@@ -420,6 +455,10 @@ class QualifiedPlayReport:
             and self.giovanni.passed
             and self.victory_road.passed
             and self.lorelei.passed
+            and self.bruno.passed
+            and self.agatha.passed
+            and self.lance.passed
+            and self.champion.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
         )
@@ -480,14 +519,18 @@ class QualifiedPlayReport:
             *self.giovanni.checkpoints(),
             *self.victory_road.checkpoints(),
             *self.lorelei.checkpoints(),
+            *self.bruno.checkpoints(),
+            *self.agatha.checkpoints(),
+            *self.lance.checkpoints(),
+            *self.champion.checkpoints(),
         )
         pewter = self.pewter.public_dict()
         return {
-            "schema": "qualified-play-v24",
+            "schema": "qualified-play-v26",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
-            "game_complete": False,
-            "safe_stop_reason": "latest_qualified_boundary",
+            "game_complete": True,
+            "safe_stop_reason": "completion_verified",
             "rom": self.rom.public_dict(),
             "emulator": {
                 "name": "PyBoy",
@@ -552,6 +595,10 @@ class QualifiedPlayReport:
             "giovanni_chapter": self.giovanni.public_dict(),
             "victory_road_chapter": self.victory_road.public_dict(),
             "lorelei_chapter": self.lorelei.public_dict(),
+            "bruno_chapter": self.bruno.public_dict(),
+            "agatha_chapter": self.agatha.public_dict(),
+            "lance_chapter": self.lance.public_dict(),
+            "champion_chapter": self.champion.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -951,6 +998,46 @@ def run_qualified_play(
         except LoreleiChapterError as error:
             raise QualifiedPlayError(str(error)) from error
 
+        try:
+            bruno = run_bruno_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_bruno_progress_bridge(progress),
+            )
+        except BrunoChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
+        try:
+            agatha = run_agatha_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_agatha_progress_bridge(progress),
+            )
+        except AgathaChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
+        try:
+            lance = run_lance_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_lance_progress_bridge(progress),
+            )
+        except LanceChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
+        try:
+            champion = run_champion_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_champion_progress_bridge(progress),
+            )
+        except ChampionChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
         facts = (
             opening.facts
             | semantic_facts(pokedex_raw)
@@ -977,11 +1064,15 @@ def run_qualified_play(
             | semantic_facts(giovanni.final_raw)
             | semantic_facts(victory_road.final_raw)
             | semantic_facts(lorelei.final_raw)
+            | semantic_facts(bruno.final_raw)
+            | semantic_facts(agatha.final_raw)
+            | semantic_facts(lance.final_raw)
+            | semantic_facts(champion.final_raw)
         )
         state = GameState(
-            mode=game_mode(lorelei.final_raw),
+            mode=game_mode(champion.final_raw),
             facts=facts,
-            location=location_label(lorelei.final_raw.map_id),
+            location=location_label(champion.final_raw.map_id),
         )
         verified_objectives = tuple(
             objective.id
@@ -1024,6 +1115,10 @@ def run_qualified_play(
             giovanni=giovanni,
             victory_road=victory_road,
             lorelei=lorelei,
+            bruno=bruno,
+            agatha=agatha,
+            lance=lance,
+            champion=champion,
             rival_evidence=rival_evidence,
             parcel_evidence=parcel_evidence,
             pokedex_evidence=pokedex_evidence,
@@ -1683,6 +1778,10 @@ def _sabrina_progress_bridge(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CHAMPION_CHECKPOINT_COUNT
+                - LANCE_CHECKPOINT_COUNT
+                - AGATHA_CHECKPOINT_COUNT
+                - BRUNO_CHECKPOINT_COUNT
                 - LORELEI_CHECKPOINT_COUNT
                 - VICTORY_ROAD_CHECKPOINT_COUNT
                 - GIOVANNI_CHECKPOINT_COUNT
@@ -1710,6 +1809,11 @@ def _cinnabar_progress_bridge(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CHAMPION_CHECKPOINT_COUNT
+                - LANCE_CHECKPOINT_COUNT
+                - AGATHA_CHECKPOINT_COUNT
+                - BRUNO_CHECKPOINT_COUNT
+                - LORELEI_CHECKPOINT_COUNT
                 - VICTORY_ROAD_CHECKPOINT_COUNT
                 - GIOVANNI_CHECKPOINT_COUNT
                 - BLAINE_CHECKPOINT_COUNT
@@ -1735,6 +1839,11 @@ def _blaine_progress_bridge(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CHAMPION_CHECKPOINT_COUNT
+                - LANCE_CHECKPOINT_COUNT
+                - AGATHA_CHECKPOINT_COUNT
+                - BRUNO_CHECKPOINT_COUNT
+                - LORELEI_CHECKPOINT_COUNT
                 - VICTORY_ROAD_CHECKPOINT_COUNT
                 - GIOVANNI_CHECKPOINT_COUNT
                 - BLAINE_CHECKPOINT_COUNT
@@ -1759,6 +1868,11 @@ def _giovanni_progress_bridge(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CHAMPION_CHECKPOINT_COUNT
+                - LANCE_CHECKPOINT_COUNT
+                - AGATHA_CHECKPOINT_COUNT
+                - BRUNO_CHECKPOINT_COUNT
+                - LORELEI_CHECKPOINT_COUNT
                 - VICTORY_ROAD_CHECKPOINT_COUNT
                 - GIOVANNI_CHECKPOINT_COUNT
                 + progress.completed,
@@ -1782,6 +1896,10 @@ def _victory_road_progress_bridge(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CHAMPION_CHECKPOINT_COUNT
+                - LANCE_CHECKPOINT_COUNT
+                - AGATHA_CHECKPOINT_COUNT
+                - BRUNO_CHECKPOINT_COUNT
                 - LORELEI_CHECKPOINT_COUNT
                 - VICTORY_ROAD_CHECKPOINT_COUNT
                 + progress.completed,
@@ -1805,7 +1923,105 @@ def _lorelei_progress_bridge(
                 checkpoint_id=progress.checkpoint_id,
                 label=progress.label,
                 completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CHAMPION_CHECKPOINT_COUNT
+                - LANCE_CHECKPOINT_COUNT
+                - AGATHA_CHECKPOINT_COUNT
+                - BRUNO_CHECKPOINT_COUNT
                 - LORELEI_CHECKPOINT_COUNT
+                + progress.completed,
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _bruno_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[BrunoProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: BrunoProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CHAMPION_CHECKPOINT_COUNT
+                - LANCE_CHECKPOINT_COUNT
+                - AGATHA_CHECKPOINT_COUNT
+                - BRUNO_CHECKPOINT_COUNT
+                + progress.completed,
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _agatha_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[AgathaProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: AgathaProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CHAMPION_CHECKPOINT_COUNT
+                - LANCE_CHECKPOINT_COUNT
+                - AGATHA_CHECKPOINT_COUNT
+                + progress.completed,
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _lance_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[LanceProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: LanceProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CHAMPION_CHECKPOINT_COUNT
+                - LANCE_CHECKPOINT_COUNT
+                + progress.completed,
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _champion_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[ChampionProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: ChampionProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CHAMPION_CHECKPOINT_COUNT
                 + progress.completed,
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
                 frames_executed=progress.frames_executed,

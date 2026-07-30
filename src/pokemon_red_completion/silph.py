@@ -1057,8 +1057,8 @@ def _battle_healing_item(
     timing: SilphTiming,
     item: ItemId,
 ) -> None:
-    if item not in {ItemId.HYPER_POTION, ItemId.FULL_RESTORE}:
-        raise ValueError("battle healing item must be Hyper Potion or Full Restore")
+    if item not in {ItemId.HYPER_POTION, ItemId.FULL_RESTORE, ItemId.FULL_HEAL}:
+        raise ValueError("battle healing item must be Hyper Potion, Full Restore, or Full Heal")
     label = item.name.replace("_", " ").title()
     raw = reader.read()
     menu = reader.read_battle_menu_state(raw)
