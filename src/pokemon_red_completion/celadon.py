@@ -12,7 +12,12 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import run_adaptive_trainer_battle
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    RequiredMovePolicy,
+    run_adaptive_trainer_battle,
+)
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     EventFlag,
@@ -22,6 +27,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 
 CELADON_CHECKPOINT_COUNT = 12
 WARTORTLE = 0xB3
@@ -296,6 +302,12 @@ def run_celadon_chapter(
         actions,
         lambda _: 1,
         expected_map=int(MapId.ROUTE_8),
+        intent=BattleIntent(
+            "reach_celadon",
+            battle_plan_id=RedBattlePlanId.CELADON_ROUTE_8_LASS,
+            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+            required_move_ref=pokemon_red_move_ref(BITE),
+        ),
         required_move_id=BITE,
         label="Route 8 Lass",
     )

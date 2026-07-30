@@ -15,7 +15,11 @@ from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Protocol
 
-from pokemon_red_completion.battle_semantics import BattleFeatureBatch, BattleFeatureProjector
+from pokemon_red_completion.battle_semantics import (
+    BattleFeatureBatch,
+    BattleFeatureProjector,
+    BattleMovePolicyContext,
+)
 from pokemon_red_completion.trajectory import canonical_sha256
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -67,6 +71,7 @@ class BattleDecisionExample:
     features: BattleFeatureBatch
     chosen_candidate_index: int
     policy_goal_observed: bool
+    policy_context: BattleMovePolicyContext | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.decision_id, str) or not self.decision_id:
@@ -84,6 +89,10 @@ class BattleDecisionExample:
             raise BattleDatasetError("battle example has an invalid chosen candidate")
         if not self.features.legal_mask[self.chosen_candidate_index]:
             raise BattleDatasetError("teacher selected an illegal battle candidate")
+        if self.policy_goal_observed is not (self.policy_context is not None):
+            raise BattleDatasetError(
+                "battle policy context presence must match its observation status"
+            )
 
 
 @dataclass(frozen=True, slots=True)
@@ -101,8 +110,16 @@ class BattleEpisodeDataset:
     diagnostic_reasons: tuple[str, ...]
 
     @property
-    def promotion_eligible(self) -> bool:
+    def episode_qualified(self) -> bool:
+        """Whether this episode is structurally usable in its declared data lane."""
+
         return not self.diagnostic_reasons
+
+    @property
+    def promotion_eligible(self) -> bool:
+        """A single episode can never establish held-out specialist promotion."""
+
+        return False
 
     @property
     def snapshot_hashes(self) -> frozenset[str]:
@@ -114,18 +131,31 @@ class BattleEpisodeDataset:
 
     def public_summary(self) -> dict[str, object]:
         slot_counts = [0, 0, 0, 0]
+        forced_choice_decisions = 0
+        free_choice_decisions = 0
+        unobserved_context_decisions = 0
         for example in self.examples:
             slot = example.features.slot_indices[example.chosen_candidate_index]
             if 0 <= slot < len(slot_counts):
                 slot_counts[slot] += 1
+            if example.policy_context is not None and example.policy_context.forced_choice:
+                forced_choice_decisions += 1
+            elif example.policy_context is not None:
+                free_choice_decisions += 1
+            else:
+                unobserved_context_decisions += 1
         return {
             "schema": "battle-episode-dataset-summary-v1",
             "decisions": len(self.examples),
             "groups": len(self.group_ids),
             "manifest_sha256": self.manifest_sha256,
             "partition": self.partition,
+            "episode_qualified": self.episode_qualified,
             "promotion_eligible": self.promotion_eligible,
             "diagnostic_reasons": list(self.diagnostic_reasons),
+            "forced_choice_decisions": forced_choice_decisions,
+            "free_choice_decisions": free_choice_decisions,
+            "unobserved_context_decisions": unobserved_context_decisions,
             "slot_counts": slot_counts,
         }
 
@@ -142,7 +172,7 @@ class DiagnosticFold:
 
 @dataclass(frozen=True, slots=True)
 class PartitionAudit:
-    """Aggregate-only result of checking immutable cross-episode partitions."""
+    """Aggregate-only structural check that cannot establish promotion."""
 
     episode_count: int
     root_lineage_count: int
@@ -191,9 +221,7 @@ def load_battle_episode(
         policy.get("actor") != required_provenance.actor
         or policy.get("policy_id") != required_provenance.policy_id
     ):
-        raise BattleDatasetError(
-            "episode provenance does not match the required imitation teacher"
-        )
+        raise BattleDatasetError("episode provenance does not match the required imitation teacher")
     split = _mapping(metadata.get("split"), subject="episode split metadata")
     partition = _non_empty_string(split.get("partition"), subject="episode partition")
     if partition not in _PARTITIONS:
@@ -245,12 +273,6 @@ def load_battle_episode(
             subject="decision snapshot digest",
         )
         snapshot = snapshots[snapshot_sha256]
-        batch = projector.project(snapshot)
-        if feature_names is None:
-            feature_names = tuple(batch.feature_names)
-        elif tuple(batch.feature_names) != feature_names:
-            raise BattleDatasetError("battle feature schema changed within one episode")
-
         action = _mapping(decision.get("action"), subject="battle decision action")
         if action.get("kind") != "select_move":
             raise BattleDatasetError("battle decision has an unsupported action")
@@ -258,14 +280,6 @@ def load_battle_episode(
             action.get("slot_index"),
             subject="selected move slot",
         )
-        candidate_matches = [
-            index
-            for index, slot_index in enumerate(batch.slot_indices)
-            if slot_index == selected_slot
-        ]
-        if len(candidate_matches) != 1:
-            raise BattleDatasetError("selected move is absent from the projected candidates")
-        chosen_candidate_index = candidate_matches[0]
 
         context = _mapping(decision.get("context"), subject="decision context")
         context_schema_version = context.get("schema_version")
@@ -275,11 +289,30 @@ def load_battle_episode(
             context.get("metadata"),
             subject="decision context metadata",
         )
-        policy_goal_observed = context.get("objective_id") is not None or any(
-            key in context_metadata
-            for key in ("battle_goal", "required_move_semantics", "resource_constraint")
+        policy_context = _observed_policy_context(
+            context=context,
+            context_metadata=context_metadata,
+            snapshot=snapshot,
+            selected_slot=selected_slot,
         )
+        policy_goal_observed = policy_context is not None
         missing_policy_goal = missing_policy_goal or not policy_goal_observed
+        batch = projector.project(
+            snapshot,
+            policy_context=policy_context,
+        )
+        if feature_names is None:
+            feature_names = tuple(batch.feature_names)
+        elif tuple(batch.feature_names) != feature_names:
+            raise BattleDatasetError("battle feature schema changed within one episode")
+        candidate_matches = [
+            index
+            for index, slot_index in enumerate(batch.slot_indices)
+            if slot_index == selected_slot
+        ]
+        if len(candidate_matches) != 1:
+            raise BattleDatasetError("selected move is absent from the projected candidates")
+        chosen_candidate_index = candidate_matches[0]
         group_id, group_source = _battle_group(
             context_metadata=context_metadata,
             snapshot=snapshot,
@@ -295,6 +328,7 @@ def load_battle_episode(
                 features=batch,
                 chosen_candidate_index=chosen_candidate_index,
                 policy_goal_observed=policy_goal_observed,
+                policy_context=policy_context,
             )
         )
 
@@ -372,18 +406,26 @@ def grouped_diagnostic_folds(
 def audit_preassigned_partitions(
     datasets: Sequence[BattleEpisodeDataset],
 ) -> PartitionAudit:
-    """Reject lineage or exact-snapshot leakage across immutable partitions."""
+    """Check structural partition leakage without authenticating collection assignments."""
 
     if not datasets:
         raise BattleDatasetError("partition audit requires at least one episode")
     roots: dict[str, str] = {}
     snapshots_by_partition: dict[str, set[str]] = defaultdict(set)
     partition_counts: dict[str, int] = defaultdict(int)
-    reasons: set[str] = set()
+    reasons: set[str] = {"promotion_protocol_not_authenticated"}
+    episode_ids: set[str] = set()
+    manifest_ids: set[str] = set()
 
     expected_game = datasets[0].game_id
     expected_features = datasets[0].feature_names
     for dataset in datasets:
+        if dataset.episode_id in episode_ids:
+            reasons.add("duplicate_episode_identity")
+        episode_ids.add(dataset.episode_id)
+        if dataset.manifest_sha256 in manifest_ids:
+            reasons.add("duplicate_episode_manifest")
+        manifest_ids.add(dataset.manifest_sha256)
         if dataset.game_id != expected_game:
             reasons.add("mixed_game_ids")
         if dataset.feature_names != expected_features:
@@ -407,14 +449,12 @@ def audit_preassigned_partitions(
             snapshot_overlap.update(
                 snapshots_by_partition[left].intersection(snapshots_by_partition[right])
             )
-    if snapshot_overlap:
-        reasons.add("snapshot_partition_overlap")
     return PartitionAudit(
         episode_count=len(datasets),
         root_lineage_count=len(roots),
         partition_counts=tuple(sorted(partition_counts.items())),
         snapshot_overlap_count=len(snapshot_overlap),
-        promotion_eligible=not reasons,
+        promotion_eligible=False,
         reasons=tuple(sorted(reasons)),
     )
 
@@ -506,6 +546,78 @@ def _battle_group(
         _opaque_digest({"location": location, "x": x, "y": y}),
         "diagnostic_area_position",
     )
+
+
+def _observed_policy_context(
+    *,
+    context: Mapping[str, object],
+    context_metadata: Mapping[str, object],
+    snapshot: Mapping[str, object],
+    selected_slot: int,
+) -> BattleMovePolicyContext | None:
+    objective_id = context.get("objective_id")
+    battle_plan_id = context_metadata.get("battle_plan_id")
+    if (
+        not isinstance(objective_id, str)
+        or _SAFE_ID.fullmatch(objective_id) is None
+        or not isinstance(battle_plan_id, str)
+        or _SAFE_ID.fullmatch(battle_plan_id) is None
+        or context_metadata.get("battle_goal") != "win"
+    ):
+        return None
+    policy = context_metadata.get("battle_policy_context")
+    if not isinstance(policy, Mapping) or set(policy) != {
+        "goal",
+        "move_policy",
+        "required_move_ref",
+    }:
+        return None
+    recovery_marker = context_metadata.get("teacher_recovery_marker")
+    if recovery_marker not in {"none", "bounded_recovery"}:
+        return None
+    goal = policy.get("goal")
+    move_policy = policy.get("move_policy")
+    required_move_ref = policy.get("required_move_ref")
+    if goal != "win" or move_policy not in {"any_usable", "exact_required"}:
+        return None
+    if move_policy == "any_usable":
+        if required_move_ref is not None:
+            return None
+        return BattleMovePolicyContext(
+            goal="win",
+            move_policy="any_usable",
+            required_move_ref=None,
+        )
+    if not isinstance(required_move_ref, str) or not required_move_ref:
+        return None
+
+    features = snapshot.get("features")
+    if not isinstance(features, Mapping):
+        return None
+    party = features.get("party")
+    if not isinstance(party, Mapping):
+        return None
+    lead = party.get("lead")
+    if not isinstance(lead, Mapping):
+        return None
+    moves = lead.get("moves")
+    if not isinstance(moves, list):
+        return None
+    selected = [
+        move
+        for move in moves
+        if isinstance(move, Mapping) and move.get("slot_index") == selected_slot
+    ]
+    if len(selected) != 1 or selected[0].get("move_ref") != required_move_ref:
+        return None
+    try:
+        return BattleMovePolicyContext(
+            goal="win",
+            move_policy="exact_required",
+            required_move_ref=required_move_ref,
+        )
+    except ValueError:
+        return None
 
 
 def _opaque_digest(value: Mapping[str, object]) -> str:

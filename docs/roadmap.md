@@ -121,6 +121,30 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 - [x] Add an integrity-checked private episode reader and typed private model-artifact writer.
 - [x] Add the pinned Red mechanics projector and slot-equivariant masked battle ranker.
 - [x] Run and publish the aggregate first single-lineage battle diagnostic.
+- [x] Record explicit physical battle instances, stable route-plan identities, planner goals,
+  required-move semantics, and descriptive recovery markers at the policy boundary.
+- [x] Add feature schema v2 with `constraint.matches_required_move` and separate free-choice,
+  forced-choice, and unobserved-context metrics.
+- [x] Preregister five train, two validation, and five test root lineages with immutable,
+  single-attempt global and partition-local slots plus content-addressed 63-battle timing
+  schedules.
+- [x] Bind the registry to exact canonical roster, schedule, assignment, sidecar, executable
+  source, teacher behavior, objective graph, and teacher execution identities.
+- [x] Make planned recording verify exact battle order, apply each offset once before policy
+  inference, emit per-battle and terminal schedule attestations, and fail closed on missing,
+  extra, substituted, incomplete, or reordered battles.
+- [x] Add a registry-declared, disjoint, unassigned, non-counted 63-battle schedule dry run.
+- [x] Add a private campaign seal and immutable outcome ledger that counts complete, failed,
+  interrupted, and invalid slot outcomes with durable reasons.
+- [x] Pin the exact pushed source commit, live source bytes, CPython binary, and installed PyBoy
+  inventory; authenticate schedule events against actual WAIT executions; and add safe campaign
+  status/recovery reporting.
+- [x] Require a re-audited immutable dry-run qualification before every counted slot and durably
+  persist the one-shot episode claim before emulator execution.
+- [ ] Commit and push the exact source/configuration state, then successfully complete the 63/63
+  schedule dry run before slot `01`.
+- [ ] Collect every declared train and validation lineage without opening the test partition.
+- [ ] Freeze the selected battle model and thresholds, then evaluate the five test roots once.
 - [ ] Record perturbed teacher corrections and recovery trajectories.
 - Publish schemas, aggregate statistics, and dataset cards without game assets.
 - Train goal-conditioned navigation, interaction, battle, puzzle, and recovery specialists with
@@ -150,6 +174,22 @@ performance result. The
 [sanitized diagnostic receipt](evidence/private-battle-imitation-diagnostic-2026-07-30.json) keeps
 the claim narrow: this is one unassigned root lineage with inferred groups and incomplete
 planner-goal context, not held-out evaluation or a learned gameplay rollout.
+
+Future recordings now have explicit context and are governed by the
+[committed collection protocol](collection-protocol.md). Its twelve prospective assignments and
+timing schedules have not yet run. Their current v2 feature view distinguishes free move choices
+from exact teacher-required choices; future receipts report both separately because forced-choice
+accuracy is constraint compliance, not autonomous battle judgment. The recovery marker remains
+descriptive only and does not yet define a recovery learner's inputs or budget.
+
+The protocol also requires a successful, non-counted 63/63 schedule rehearsal before slot `01`,
+and its one-shot ledger preserves failures and power interruptions as consumed outcomes. Exact
+identity, manifest, assignment, schedule, and lineage reuse is hard leakage. Repeated
+policy-visible semantic states are report-only because distinct hidden timing histories can
+naturally converge on the same observation; novel-visible-state performance is reported
+separately. Preregistration and runtime enforcement are infrastructure, not held-out evidence; as
+of the protocol commit, the dry run and all twelve slots are unexecuted, and the test partition
+remains unopened until a model and its selection rules are frozen.
 
 ## Milestone 4 — DAgger and selective RL
 

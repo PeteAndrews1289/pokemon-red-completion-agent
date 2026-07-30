@@ -7,13 +7,20 @@ the revision-pinned observation adapter.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterator
 from contextlib import AbstractContextManager, contextmanager, nullcontext
 from contextvars import ContextVar
 from dataclasses import dataclass
+from enum import StrEnum
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_schedule import (
+    BattleStartScheduleController,
+    bound_battle_start_schedule,
+)
+from pokemon_red_completion.collection_protocol import BattleStartOffset
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     BattleMenuState,
@@ -27,6 +34,9 @@ _FIGHT_COMMAND = 0
 _CURRENT_PP_MASK = 0x3F
 _MIN_MOVE_SLOT = 1
 _MAX_MOVE_SLOT = 4
+_OBJECTIVE_ID = re.compile(r"^[a-z][a-z0-9_]*$")
+_BATTLE_PLAN_ID = re.compile(r"^[a-z0-9][a-z0-9._-]{0,95}$")
+_SEMANTIC_REF = re.compile(r"^[a-z0-9][a-z0-9._:-]{0,159}$")
 
 
 class BattleActionExecutor(Protocol):
@@ -46,13 +56,97 @@ class BattleStateReader(Protocol):
 
 
 class MoveSlotPolicy(Protocol):
-    """A pure policy that chooses a one-based move slot from current evidence."""
+    """Legacy pure policy that chooses a one-based move slot from raw state."""
 
     def __call__(self, state: RawGameState, /) -> int: ...
 
 
+class BattleGoal(StrEnum):
+    """Game-neutral outcome requested by the actor for one battle."""
+
+    WIN = "win"
+
+
+class RequiredMovePolicy(StrEnum):
+    """Whether the actor may rank any usable move or must use one declared move."""
+
+    ANY_USABLE = "any_usable"
+    EXACT_REQUIRED = "exact_required"
+
+
+class BattleResourcePolicy(StrEnum):
+    """Actor-visible resource policy for one battle."""
+
+    NO_ADDITIONAL_CONSTRAINT = "none"
+    BOUNDED_RECOVERY = "bounded_recovery"
+
+
+@dataclass(frozen=True, slots=True)
+class BattleIntent:
+    """Inference-available objective and constraints for a battle policy."""
+
+    objective_id: str
+    battle_plan_id: str
+    goal: BattleGoal = BattleGoal.WIN
+    required_move_policy: RequiredMovePolicy = RequiredMovePolicy.ANY_USABLE
+    required_move_ref: str | None = None
+    resource_policy: BattleResourcePolicy = BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.objective_id, str)
+            or _OBJECTIVE_ID.fullmatch(self.objective_id) is None
+        ):
+            raise ValueError("objective_id must be a lowercase semantic objective id")
+        if (
+            not isinstance(self.battle_plan_id, str)
+            or _BATTLE_PLAN_ID.fullmatch(self.battle_plan_id) is None
+        ):
+            raise ValueError("battle_plan_id must be a safe public battle identity")
+        if not isinstance(self.goal, BattleGoal):
+            raise TypeError("goal must be a BattleGoal")
+        if not isinstance(self.required_move_policy, RequiredMovePolicy):
+            raise TypeError("required_move_policy must be a RequiredMovePolicy")
+        if self.required_move_policy is RequiredMovePolicy.ANY_USABLE:
+            if self.required_move_ref is not None:
+                raise ValueError("an unconstrained battle intent cannot name a required move")
+        elif (
+            not isinstance(self.required_move_ref, str)
+            or _SEMANTIC_REF.fullmatch(self.required_move_ref) is None
+        ):
+            raise ValueError("an exact battle intent requires a safe semantic move reference")
+        if not isinstance(self.resource_policy, BattleResourcePolicy):
+            raise TypeError("resource_policy must be a BattleResourcePolicy")
+
+
+@dataclass(frozen=True, slots=True)
+class BattlePolicyObservation:
+    """Raw battle evidence paired with the planner intent available at inference."""
+
+    state: RawGameState
+    intent: BattleIntent | None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.state, RawGameState):
+            raise TypeError("state must be a RawGameState")
+        if self.intent is not None and not isinstance(self.intent, BattleIntent):
+            raise TypeError("intent must be a BattleIntent or None")
+
+
+class IntentAwareMoveSlotPolicy(Protocol):
+    """Policy interface for learned rankers that consume planner constraints."""
+
+    def choose_move(self, observation: BattlePolicyObservation, /) -> int: ...
+
+
 class BattleDecisionObserver(Protocol):
     """Encode a validated policy choice without persisting privileged raw state."""
+
+    def note_instrumentation_failure(self) -> None: ...
+
+    def battle_started(self, *, intent: BattleIntent | None) -> None: ...
+
+    def battle_finished(self) -> None: ...
 
     def decision_scope(
         self,
@@ -60,11 +154,33 @@ class BattleDecisionObserver(Protocol):
         policy_state: RawGameState,
         policy_menu: BattleMenuState,
         selected_slot: int,
+        intent: BattleIntent | None,
     ) -> AbstractContextManager[None]: ...
+
+
+class BattleScheduleObserver(Protocol):
+    """Record collection-harness applications without action authority."""
+
+    def note_instrumentation_failure(self) -> None: ...
+
+    def offset_applied(
+        self,
+        *,
+        intent: BattleIntent,
+        offset: BattleStartOffset,
+        before_state: RawGameState,
+        before_menu: BattleMenuState,
+        after_state: RawGameState,
+        after_menu: BattleMenuState,
+    ) -> None: ...
 
 
 _BATTLE_DECISION_OBSERVER: ContextVar[BattleDecisionObserver | None] = ContextVar(
     "pokemon_red_battle_decision_observer",
+    default=None,
+)
+_BATTLE_SCHEDULE_OBSERVER: ContextVar[BattleScheduleObserver | None] = ContextVar(
+    "pokemon_red_battle_schedule_observer",
     default=None,
 )
 
@@ -111,13 +227,35 @@ def bind_battle_decision_observer(
 ) -> Iterator[None]:
     """Install one concurrency-local observer for the duration of a recorded run."""
 
-    if not hasattr(observer, "decision_scope") or not callable(observer.decision_scope):
-        raise TypeError("observer must provide decision_scope")
+    for method_name in ("battle_started", "battle_finished", "decision_scope"):
+        method = getattr(observer, method_name, None)
+        if not callable(method):
+            raise TypeError(f"observer must provide {method_name}")
+    if not callable(getattr(observer, "note_instrumentation_failure", None)):
+        raise TypeError("observer must provide note_instrumentation_failure")
     token = _BATTLE_DECISION_OBSERVER.set(observer)
     try:
         yield
     finally:
         _BATTLE_DECISION_OBSERVER.reset(token)
+
+
+@contextmanager
+def bind_battle_schedule_observer(
+    observer: BattleScheduleObserver,
+) -> Iterator[None]:
+    """Install one private metadata observer for schedule attestations."""
+
+    for method_name in ("note_instrumentation_failure", "offset_applied"):
+        if not callable(getattr(observer, method_name, None)):
+            raise TypeError(f"schedule observer must provide {method_name}")
+    if _BATTLE_SCHEDULE_OBSERVER.get() is not None:
+        raise BattleRuntimeError("a battle schedule observer is already bound")
+    token = _BATTLE_SCHEDULE_OBSERVER.set(observer)
+    try:
+        yield
+    finally:
+        _BATTLE_SCHEDULE_OBSERVER.reset(token)
 
 
 def run_adaptive_trainer_battle(
@@ -126,6 +264,7 @@ def run_adaptive_trainer_battle(
     move_slot_policy: MoveSlotPolicy,
     *,
     expected_map: int,
+    intent: BattleIntent | None = None,
     required_move_id: int | None = None,
     timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
     label: str = "trainer battle",
@@ -161,19 +300,35 @@ def run_adaptive_trainer_battle(
         or not 1 <= required_move_id <= 0xFF
     ):
         raise ValueError("required_move_id must be a non-zero one-byte move id")
+    if intent is not None and not isinstance(intent, BattleIntent):
+        raise TypeError("intent must be a BattleIntent or None")
+    if intent is not None:
+        exact_required = intent.required_move_policy is RequiredMovePolicy.EXACT_REQUIRED
+        if exact_required is not (required_move_id is not None):
+            raise ValueError("intent required_move_policy must agree with required_move_id")
 
     initial = reader.read()
     _require_present_state(initial, expected_map=expected_map, label=label)
     if initial.battle_state != _TRAINER_BATTLE_STATE:
         raise BattleRuntimeError(f"{label} must start in an active trainer battle.")
+    battle_start_schedule = bound_battle_start_schedule()
+    if battle_start_schedule is not None:
+        battle_start_schedule.start_or_resume(intent)
+    _battle_observation_started(intent=intent)
 
     ready_reads = 0
     unknown_menu_pulses = 0
+    battle_exit_notified = False
     for _ in range(timing.max_runtime_pulses):
         raw = reader.read()
         _require_present_state(raw, expected_map=expected_map, label=label)
 
         if raw.battle_state == 0:
+            if not battle_exit_notified:
+                if battle_start_schedule is not None:
+                    battle_start_schedule.finish(intent)
+                _battle_observation_finished()
+                battle_exit_notified = True
             if reader.read_input_readiness().ready:
                 ready_reads += 1
                 if ready_reads >= timing.required_ready_reads:
@@ -240,12 +395,28 @@ def run_adaptive_trainer_battle(
             _wait(executor, timing.dialogue_wait_frames)
             continue
 
-        slot = _choose_usable_slot(move_slot_policy, raw, label=label)
+        raw, menu = _apply_battle_start_offset(
+            battle_start_schedule,
+            reader=reader,
+            executor=executor,
+            intent=intent,
+            expected_map=expected_map,
+            policy_state=raw,
+            policy_menu=menu,
+            label=label,
+        )
+        slot = _choose_usable_slot(
+            move_slot_policy,
+            raw,
+            intent=intent,
+            label=label,
+        )
         initial_pp = _current_pp(raw, slot=slot, label=label)
         with _battle_decision_scope(
             policy_state=raw,
             policy_menu=menu,
             selected_slot=slot,
+            intent=intent,
         ):
             _execute_policy_turn(
                 reader,
@@ -260,9 +431,77 @@ def run_adaptive_trainer_battle(
                 label=label,
             )
 
+    # A bounded one-pulse caller may end the battle inside its final policy
+    # action. Close schedule/observer lifecycle state even though the caller
+    # still receives the timeout and remains responsible for post-battle
+    # readiness/dialogue handling.
+    final_raw = reader.read()
+    _require_present_state(final_raw, expected_map=expected_map, label=label)
+    if final_raw.battle_state == 0:
+        if battle_start_schedule is not None:
+            battle_start_schedule.finish(intent)
+        _battle_observation_finished()
+
     raise BattleRuntimeTimeoutError(
         f"{label} exceeded {timing.max_runtime_pulses} bounded runtime pulses."
     )
+
+
+def _apply_battle_start_offset(
+    schedule: BattleStartScheduleController | None,
+    *,
+    reader: BattleStateReader,
+    executor: BattleActionExecutor,
+    intent: BattleIntent | None,
+    expected_map: int,
+    policy_state: RawGameState,
+    policy_menu: BattleMenuState,
+    label: str,
+) -> tuple[RawGameState, BattleMenuState]:
+    """Apply one collection-only WAIT before the first policy decision."""
+
+    if schedule is None:
+        return policy_state, policy_menu
+    offset = schedule.claim_at_main(intent)
+    if offset is None:
+        return policy_state, policy_menu
+    try:
+        if offset.frames:
+            executor.execute(MacroAction(MacroActionKind.WAIT, repeat=offset.frames))
+        refreshed = reader.read()
+        _require_active_trainer_state(
+            refreshed,
+            expected_map=expected_map,
+            label=label,
+        )
+        refreshed_menu = _validated_menu(
+            reader.read_battle_menu_state(refreshed),
+            label=label,
+        )
+        if refreshed_menu.phase is not BattleMenuPhase.MAIN:
+            raise BattleRuntimeError(f"{label} left the MAIN menu during its battle-start offset.")
+        if refreshed.enemy_hp is None or refreshed.enemy_hp <= 0:
+            raise BattleRuntimeError(
+                f"{label} lost live enemy evidence during its battle-start offset."
+            )
+        if refreshed != policy_state or refreshed_menu != policy_menu:
+            raise BattleRuntimeError(
+                f"{label} changed policy-visible state during its battle-start offset."
+            )
+        schedule.mark_applied(intent, offset)
+        if intent is not None:
+            _observe_schedule_offset(
+                intent=intent,
+                offset=offset,
+                before_state=policy_state,
+                before_menu=policy_menu,
+                after_state=refreshed,
+                after_menu=refreshed_menu,
+            )
+        return refreshed, refreshed_menu
+    except Exception:
+        schedule.mark_failed()
+        raise
 
 
 def _battle_decision_scope(
@@ -270,15 +509,120 @@ def _battle_decision_scope(
     policy_state: RawGameState,
     policy_menu: BattleMenuState,
     selected_slot: int,
+    intent: BattleIntent | None,
 ) -> AbstractContextManager[None]:
+    """Contain observer lifecycle failures without altering actor behavior."""
+
     observer = _BATTLE_DECISION_OBSERVER.get()
     if observer is None:
         return nullcontext()
-    return observer.decision_scope(
+    return _fail_open_battle_decision_scope(
+        observer,
         policy_state=policy_state,
         policy_menu=policy_menu,
         selected_slot=selected_slot,
+        intent=intent,
     )
+
+
+@contextmanager
+def _fail_open_battle_decision_scope(
+    observer: BattleDecisionObserver,
+    *,
+    policy_state: RawGameState,
+    policy_menu: BattleMenuState,
+    selected_slot: int,
+    intent: BattleIntent | None,
+) -> Iterator[None]:
+    try:
+        manager = observer.decision_scope(
+            policy_state=policy_state,
+            policy_menu=policy_menu,
+            selected_slot=selected_slot,
+            intent=intent,
+        )
+        manager.__enter__()
+    except Exception:
+        _note_observer_failure(observer)
+        yield
+        return
+
+    try:
+        yield
+    except BaseException as actor_error:
+        try:
+            manager.__exit__(
+                type(actor_error),
+                actor_error,
+                actor_error.__traceback__,
+            )
+        except Exception:
+            _note_observer_failure(observer)
+        raise
+    else:
+        try:
+            manager.__exit__(None, None, None)
+        except Exception:
+            _note_observer_failure(observer)
+
+
+def _battle_observation_started(*, intent: BattleIntent | None) -> None:
+    observer = _BATTLE_DECISION_OBSERVER.get()
+    if observer is None:
+        return
+    try:
+        observer.battle_started(intent=intent)
+    except Exception:
+        # Recording is observational and must never replace actor behavior.
+        _note_observer_failure(observer)
+        return
+
+
+def _battle_observation_finished() -> None:
+    observer = _BATTLE_DECISION_OBSERVER.get()
+    if observer is None:
+        return
+    try:
+        observer.battle_finished()
+    except Exception:
+        # Recording is observational and must never replace actor behavior.
+        _note_observer_failure(observer)
+        return
+
+
+def _note_observer_failure(observer: BattleDecisionObserver) -> None:
+    try:
+        observer.note_instrumentation_failure()
+    except Exception:
+        return
+
+
+def _observe_schedule_offset(
+    *,
+    intent: BattleIntent,
+    offset: BattleStartOffset,
+    before_state: RawGameState,
+    before_menu: BattleMenuState,
+    after_state: RawGameState,
+    after_menu: BattleMenuState,
+) -> None:
+    observer = _BATTLE_SCHEDULE_OBSERVER.get()
+    if observer is None:
+        return
+    try:
+        observer.offset_applied(
+            intent=intent,
+            offset=offset,
+            before_state=before_state,
+            before_menu=before_menu,
+            after_state=after_state,
+            after_menu=after_menu,
+        )
+    except Exception:
+        try:
+            observer.note_instrumentation_failure()
+        except Exception:
+            return
 
 
 def _execute_policy_turn(
@@ -629,13 +973,18 @@ def _selected_turn_effect_observed(
 
 
 def _choose_usable_slot(
-    policy: MoveSlotPolicy,
+    policy: MoveSlotPolicy | IntentAwareMoveSlotPolicy,
     raw: RawGameState,
     *,
+    intent: BattleIntent | None,
     label: str,
 ) -> int:
     try:
-        slot = policy(raw)
+        choose_with_intent = getattr(policy, "choose_move", None)
+        if callable(choose_with_intent):
+            slot = choose_with_intent(BattlePolicyObservation(raw, intent))
+        else:
+            slot = policy(raw)  # type: ignore[operator]
     except Exception as error:
         raise BattleRuntimeError(
             f"{label} move-slot policy rejected the current MAIN-menu turn."

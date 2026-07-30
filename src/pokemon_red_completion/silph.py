@@ -12,7 +12,10 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -396,7 +399,14 @@ def run_silph_chapter(
     _move(actions, reader, FIFTH_FLOOR_TO_WARP, timing)
     _move(actions, reader, ("down", "up", "down", "down"), timing)
     _await_trainer_battle(actions, reader, timing)
-    _run_battle(reader, actions, 4, MapId.SILPH_CO_5F, "Silph 5F Rocket")
+    _run_battle(
+        reader,
+        actions,
+        4,
+        MapId.SILPH_CO_5F,
+        "Silph 5F Rocket",
+        RedBattlePlanId.SILPH_5F_ROCKET,
+    )
     _require_event(emulator, EventFlag.BEAT_SILPH_CO_5F_TRAINER_0)
     _move(actions, reader, CARD_KEY_APPROACH, timing)
     _interact(actions, timing.dialogue_frames)
@@ -412,7 +422,14 @@ def run_silph_chapter(
     _move(actions, reader, ELEVATOR_EXIT, timing)
     _move(actions, reader, THIRD_FLOOR_GUARD, timing)
     _await_trainer_battle(actions, reader, timing)
-    _run_battle(reader, actions, 4, MapId.SILPH_CO_3F, "Silph 3F Rocket")
+    _run_battle(
+        reader,
+        actions,
+        4,
+        MapId.SILPH_CO_3F,
+        "Silph 3F Rocket",
+        RedBattlePlanId.SILPH_3F_ROCKET,
+    )
     _require_event(emulator, EventFlag.BEAT_SILPH_CO_3F_TRAINER_0)
     _move(actions, reader, ("down",), timing)
     _move(actions, reader, ("left",), timing)
@@ -462,7 +479,14 @@ def run_silph_chapter(
 
     _move(actions, reader, ("down",) * 10, timing)
     _await_trainer_battle(actions, reader, timing)
-    _run_battle(reader, actions, 4, MapId.SILPH_CO_11F, "Silph 11F Rocket")
+    _run_battle(
+        reader,
+        actions,
+        4,
+        MapId.SILPH_CO_11F,
+        "Silph 11F Rocket",
+        RedBattlePlanId.SILPH_11F_ROCKET,
+    )
     _require_event(emulator, EventFlag.BEAT_SILPH_CO_11F_TRAINER_0)
     _checkpoint(
         records,
@@ -488,7 +512,14 @@ def run_silph_chapter(
 
     _move(actions, reader, ("up", "up"), timing)
     _await_trainer_battle(actions, reader, timing)
-    _run_battle(reader, actions, 4, MapId.SILPH_CO_11F, "Silph Giovanni")
+    _run_battle(
+        reader,
+        actions,
+        4,
+        MapId.SILPH_CO_11F,
+        "Silph Giovanni",
+        RedBattlePlanId.SILPH_11F_GIOVANNI,
+    )
     _require_event(emulator, EventFlag.BEAT_SILPH_CO_GIOVANNI)
     _checkpoint(
         records,
@@ -965,12 +996,21 @@ def _run_battle(
     move_slot: int,
     map_id: int,
     label: str,
+    battle_plan_id: str,
+    resource_policy: BattleResourcePolicy = (
+        BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
+    ),
 ) -> None:
     run_adaptive_trainer_battle(
         reader,
         actions,
         lambda _: move_slot,
         expected_map=int(map_id),
+        intent=BattleIntent(
+            "liberate_silph",
+            battle_plan_id=battle_plan_id,
+            resource_policy=resource_policy,
+        ),
         timing=BattleRuntimeTiming(max_runtime_pulses=720),
         label=label,
         unknown_cancel_interval=3,
@@ -987,6 +1027,7 @@ def _run_until(
     policy: Callable[[RawGameState], int],
     pause: Callable[[RawGameState], bool],
     label: str,
+    battle_plan_id: str,
 ) -> bool:
     def guarded(raw: RawGameState) -> int:
         if pause(raw):
@@ -999,6 +1040,11 @@ def _run_until(
             actions,
             guarded,
             expected_map=int(MapId.SILPH_CO_7F),
+            intent=BattleIntent(
+                "liberate_silph",
+                battle_plan_id=battle_plan_id,
+                resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+            ),
             timing=BattleRuntimeTiming(max_runtime_pulses=720),
             label=label,
             unknown_cancel_interval=3,
@@ -1027,12 +1073,21 @@ def _run_rival_with_potions(
         policy,
         lambda raw: raw.enemy_species_id == 154,
         "Silph rival to Venusaur",
+        RedBattlePlanId.SILPH_7F_RIVAL,
     )
     if completed:
         raise SilphChapterError("Rival battle ended before the Venusaur gate.")
     if (reader.read().first_party_hp or 0) < 110:
         _battle_hyper_potion(reader, actions, emulator, timing)
-    _run_battle(reader, actions, 3, MapId.SILPH_CO_7F, "Silph rival Venusaur")
+    _run_battle(
+        reader,
+        actions,
+        3,
+        MapId.SILPH_CO_7F,
+        "Silph rival Venusaur",
+        RedBattlePlanId.SILPH_7F_RIVAL,
+        BattleResourcePolicy.BOUNDED_RECOVERY,
+    )
 
 
 def _battle_hyper_potion(

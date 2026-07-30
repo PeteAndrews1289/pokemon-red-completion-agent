@@ -7,7 +7,10 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -249,6 +252,11 @@ def run_agatha_chapter(
                 actions,
                 policy,
                 expected_map=MapId.AGATHAS_ROOM,
+                intent=BattleIntent(
+                    "defeat_agatha",
+                    battle_plan_id=RedBattlePlanId.LEAGUE_AGATHA,
+                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                ),
                 timing=BattleRuntimeTiming(
                     max_runtime_pulses=2000,
                     max_sleep_recovery_pulses=96,

@@ -7,8 +7,10 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleActionExecutor,
+    BattleIntent,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -410,6 +412,7 @@ def run_vermilion_chapter(
         MapId.CERULEAN_CITY,
         timing,
         "Rocket thief",
+        RedBattlePlanId.VERMILION_ROCKET_THIEF,
     )
     _confirm_pulses(
         chapter_executor,
@@ -549,6 +552,7 @@ def run_vermilion_chapter(
         MapId.ROUTE_6,
         timing,
         "Route 6 Jr Trainer F",
+        RedBattlePlanId.VERMILION_ROUTE_6_JR_TRAINER_F,
     )
     _confirm_pulses(
         chapter_executor,
@@ -607,6 +611,7 @@ def run_vermilion_chapter(
         MapId.ROUTE_6,
         timing,
         "Route 6 Jr Trainer M",
+        RedBattlePlanId.VERMILION_ROUTE_6_JR_TRAINER_M,
     )
     _confirm_pulses(
         chapter_executor,
@@ -1141,6 +1146,7 @@ def _battle(
     expected_map: MapId,
     timing: VermilionTiming,
     label: str,
+    battle_plan_id: str,
 ) -> RawGameState:
     try:
         return run_adaptive_trainer_battle(
@@ -1148,6 +1154,10 @@ def _battle(
             executor,
             policy,
             expected_map=expected_map,
+            intent=BattleIntent(
+                "reach_vermilion",
+                battle_plan_id=battle_plan_id,
+            ),
             timing=timing.battle_runtime,
             label=label,
         )

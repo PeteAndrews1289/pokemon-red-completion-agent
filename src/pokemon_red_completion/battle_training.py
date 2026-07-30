@@ -111,6 +111,11 @@ class BattleDiagnosticResult:
     majority_accuracy: float
     training_accuracy: float
     legal_choice_rate: float
+    free_choice_decisions: int
+    forced_choice_decisions: int
+    unobserved_context_decisions: int
+    free_choice_accuracy: float | None
+    forced_choice_accuracy: float | None
     model_sha256: str
     promotion_eligible: bool
     reasons: tuple[str, ...]
@@ -124,6 +129,9 @@ class BattleDiagnosticResult:
                 "groups": self.groups,
                 "source_episodes": 1,
                 "source_root_lineages": 1,
+                "free_choice_decisions": self.free_choice_decisions,
+                "forced_choice_decisions": self.forced_choice_decisions,
+                "unobserved_context_decisions": self.unobserved_context_decisions,
             },
             "dataset_manifest_sha256": self.dataset_manifest_sha256,
             "model": {
@@ -142,6 +150,8 @@ class BattleDiagnosticResult:
                 "majority_accuracy": self.majority_accuracy,
                 "training_accuracy": self.training_accuracy,
                 "legal_choice_rate": self.legal_choice_rate,
+                "free_choice_accuracy": self.free_choice_accuracy,
+                "forced_choice_accuracy": self.forced_choice_accuracy,
                 "folds": [fold.public_dict() for fold in self.folds],
             },
             "qualification": {
@@ -177,6 +187,11 @@ def train_diagnostic_battle_ranker(
     true_slots: list[int] = []
     predicted_slots: list[int] = []
     baseline_slots: list[int] = []
+    free_true_slots: list[int] = []
+    free_predicted_slots: list[int] = []
+    forced_true_slots: list[int] = []
+    forced_predicted_slots: list[int] = []
+    unobserved_context_decisions = 0
     total_loss = 0.0
     total_test = 0
     legal_predictions = 0
@@ -210,6 +225,14 @@ def train_diagnostic_battle_ranker(
             fold_predictions.append(predicted_slot)
             fold_truth.append(true_slot)
             fold_baseline.append(baseline_slot)
+            if example.policy_context is None:
+                unobserved_context_decisions += 1
+            elif example.policy_context.forced_choice:
+                forced_true_slots.append(true_slot)
+                forced_predicted_slots.append(predicted_slot)
+            else:
+                free_true_slots.append(true_slot)
+                free_predicted_slots.append(predicted_slot)
             if choice.usable_mask[predicted_candidate]:
                 legal_predictions += 1
 
@@ -262,6 +285,17 @@ def train_diagnostic_battle_ranker(
         majority_accuracy=_accuracy(true_slots, baseline_slots),
         training_accuracy=choice_accuracy(final_model, choices),
         legal_choice_rate=legal_predictions / total_test,
+        free_choice_decisions=len(free_true_slots),
+        forced_choice_decisions=len(forced_true_slots),
+        unobserved_context_decisions=unobserved_context_decisions,
+        free_choice_accuracy=_optional_accuracy(
+            free_true_slots,
+            free_predicted_slots,
+        ),
+        forced_choice_accuracy=_optional_accuracy(
+            forced_true_slots,
+            forced_predicted_slots,
+        ),
         model_sha256=hashlib.sha256(model_json).hexdigest(),
         promotion_eligible=False,
         reasons=tuple(sorted(reasons)),
@@ -326,6 +360,15 @@ def _accuracy(truth: Sequence[int], predictions: Sequence[int]) -> float:
         raise BattleTrainingError("accuracy requires equally sized non-empty sequences")
     correct = sum(actual == predicted for actual, predicted in zip(truth, predictions, strict=True))
     return correct / len(truth)
+
+
+def _optional_accuracy(
+    truth: Sequence[int],
+    predictions: Sequence[int],
+) -> float | None:
+    if not truth and not predictions:
+        return None
+    return _accuracy(truth, predictions)
 
 
 def _per_label_recall(

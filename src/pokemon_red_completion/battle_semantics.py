@@ -15,7 +15,7 @@ from typing import Protocol
 
 from pokemon_red_completion.trajectory import SemanticSnapshot
 
-FEATURE_SCHEMA_ID = "pokemon.core.battle.move-ranker.v1"
+FEATURE_SCHEMA_ID = "pokemon.core.battle.move-ranker.v2"
 MAX_LEVEL = 100.0
 MAX_STAGE_MAGNITUDE = 6.0
 MAX_MOVE_POWER = 255.0
@@ -102,15 +102,46 @@ _INTERACTION_FEATURE_NAMES = (
     "interaction.fixed_damage_x_player_level",
     "interaction.pp_x_effective_power",
 )
+_CONSTRAINT_FEATURE_NAMES = ("constraint.matches_required_move",)
 FEATURE_NAMES = (
     *_STATE_FEATURE_NAMES,
     *_MOVE_FEATURE_NAMES,
     *_INTERACTION_FEATURE_NAMES,
+    *_CONSTRAINT_FEATURE_NAMES,
 )
 
 
 class BattleFeatureError(ValueError):
     """Raised when a snapshot cannot safely produce the fixed feature view."""
+
+
+@dataclass(frozen=True, slots=True)
+class BattleMovePolicyContext:
+    """Inference-available move-choice goal and candidate constraint."""
+
+    goal: str
+    move_policy: str
+    required_move_ref: str | None
+
+    def __post_init__(self) -> None:
+        if self.goal != "win":
+            raise ValueError("battle move policy goal must be win")
+        if self.move_policy not in {"any_usable", "exact_required"}:
+            raise ValueError("battle move policy constraint is unsupported")
+        if self.move_policy == "any_usable":
+            if self.required_move_ref is not None:
+                raise ValueError("an unconstrained move policy cannot name a required move")
+        elif (
+            not isinstance(self.required_move_ref, str)
+            or not self.required_move_ref
+            or "/" in self.required_move_ref
+            or "\\" in self.required_move_ref
+        ):
+            raise ValueError("an exact move policy requires a safe semantic move reference")
+
+    @property
+    def forced_choice(self) -> bool:
+        return self.move_policy == "exact_required"
 
 
 @dataclass(frozen=True, slots=True)
@@ -228,7 +259,14 @@ class BattleFeatureProjector:
         self,
         snapshot: SemanticSnapshot | Mapping[str, object],
         /,
+        *,
+        policy_context: BattleMovePolicyContext | None = None,
     ) -> BattleFeatureBatch:
+        if policy_context is not None and not isinstance(
+            policy_context,
+            BattleMovePolicyContext,
+        ):
+            raise TypeError("policy_context must be a BattleMovePolicyContext or None")
         payload = snapshot.to_dict() if isinstance(snapshot, SemanticSnapshot) else snapshot
         root = _require_mapping(payload, name="snapshot")
         if root.get("mode") != "battle":
@@ -296,6 +334,7 @@ class BattleFeatureProjector:
         raw_moves = _sequence_field(lead, "moves")
         candidates: list[tuple[int, float, tuple[float, ...]]] = []
         seen_slots: set[int] = set()
+        required_move_matched = False
         for raw_move in raw_moves:
             move_view = _require_mapping(raw_move, name="party.lead.moves[]")
             slot_index = _integer_field(move_view, "slot_index", minimum=0, maximum=3)
@@ -303,7 +342,14 @@ class BattleFeatureProjector:
                 raise BattleFeatureError("move slot indices must be unique")
             seen_slots.add(slot_index)
             current_pp = float(_integer_field(move_view, "pp", minimum=0, maximum=63))
-            move = self.catalog.resolve_move(_string_field(move_view, "move_ref"))
+            move_ref = _string_field(move_view, "move_ref")
+            move = self.catalog.resolve_move(move_ref)
+            matches_required_move = float(
+                policy_context is not None
+                and policy_context.forced_choice
+                and move_ref == policy_context.required_move_ref
+            )
+            required_move_matched = required_move_matched or bool(matches_required_move)
             if current_pp > 0 and "counter" in move.effect_flags:
                 raise BattleFeatureError("Counter requires prior-turn received-damage semantics")
             stab = float(move.type_name in player_species.types)
@@ -353,10 +399,21 @@ class BattleFeatureProjector:
                 (
                     slot_index,
                     current_pp,
-                    (*state_values, *move_values, *interaction_values),
+                    (
+                        *state_values,
+                        *move_values,
+                        *interaction_values,
+                        matches_required_move,
+                    ),
                 )
             )
 
+        if (
+            policy_context is not None
+            and policy_context.forced_choice
+            and not required_move_matched
+        ):
+            raise BattleFeatureError("required move is absent from the candidate set")
         candidates.sort(key=lambda candidate: candidate[0])
         return BattleFeatureBatch(
             feature_names=FEATURE_NAMES,

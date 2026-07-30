@@ -14,7 +14,13 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import BattleRuntimeTiming, run_adaptive_trainer_battle
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRuntimeTiming,
+    RequiredMovePolicy,
+    run_adaptive_trainer_battle,
+)
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
 from pokemon_red_completion.observation import (
     Badge,
@@ -25,6 +31,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
 KOGA_CHECKPOINT_COUNT = 11
@@ -311,7 +318,8 @@ def run_koga_chapter(
             "Juggler 3",
             (0xDD, 0x15, 3),
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_1,
-                6,
+            6,
+            RedBattlePlanId.KOGA_JUGGLER_3,
         )
     )
     _checkpoint(
@@ -334,6 +342,7 @@ def run_koga_chapter(
             (0xDE, 0x16, 2),
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_4,
             5,
+            RedBattlePlanId.KOGA_TAMER_2,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "tamer2", "Defeated mandatory Tamer 2")
@@ -360,6 +369,7 @@ def run_koga_chapter(
             (0xDD, 0x15, 4),
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_5,
             5,
+            RedBattlePlanId.KOGA_JUGGLER_4,
         )
     )
     _checkpoint(
@@ -399,6 +409,7 @@ def run_koga_chapter(
             (KOGA_OPPONENT, KOGA_TRAINER_CLASS, KOGA_TRAINER_NUMBER),
             EventFlag.BEAT_KOGA,
             8,
+            RedBattlePlanId.KOGA_LEADER,
             clear_text=False,
         )
     )
@@ -475,6 +486,7 @@ def _fight(
     identity: tuple[int, int, int],
     event: EventFlag,
     exact_spent: int,
+    battle_plan_id: str,
     *,
     clear_text: bool = True,
 ) -> KogaBattleEvidence:
@@ -485,6 +497,12 @@ def _fight(
         actions,
         lambda _: SURF_SLOT,
         expected_map=MapId.FUCHSIA_GYM,
+        intent=BattleIntent(
+            "defeat_koga",
+            battle_plan_id=battle_plan_id,
+            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+            required_move_ref=pokemon_red_move_ref(SURF),
+        ),
         required_move_id=SURF,
         timing=KOGA_BATTLE_TIMING,
         label=label,

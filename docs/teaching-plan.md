@@ -187,16 +187,44 @@ DAgger rather than applied to the entire game at once.
 
 Three versioned artifact types remain outside Git:
 
-- **Episode manifest:** ROM, source, configuration, teacher and policy hashes; assistance class;
-  seed; start type; outcome; terminal reason; attempt denominator; and completion evidence.
+- **Episode manifest:** ROM, source bundle, teacher behavior, objective graph, execution, registry,
+  assignment, schedule, runtime, and policy hashes; assistance class; global and partition-local
+  slot ordinals; seed; start type; outcome; terminal reason; attempt denominator; and completion
+  evidence.
 - **Decision table:** emulator frame; structured observation; objective and skill; macro and
-  primitive action; duration; teacher label; next-state hash; event delta; and recovery state.
+  primitive action; duration; teacher label; next-state hash; event delta; v2 battle policy
+  context; and a descriptive recovery marker.
 - **Sparse event log:** map, objective, badge, party, item, battle, checkpoint, recovery, and
-  terminal transitions.
+  terminal transitions. Scheduled runs additionally record one
+  `battle_start_offset_applied` attestation for each of the 63 stable battle IDs and a terminal
+  63/63 schedule attestation.
 
 Recorder v1 uses canonical JSONL for inspectable, append-only episode streams. Columnar Parquet
 training views are derived from validated episodes later; they are not the source of record.
 Screens, ROMs, saves, snapshots, and recordings remain private and content-addressed.
+
+A separate private campaign seal binds the registry, exact pushed source commit, live source
+bundle, behavior, objective graph, teacher execution, CPython/PyBoy runtime, ROM, and full slot
+roster before the first counted slot. Immutable per-slot outcome records and
+a path-free ledger preserve `complete`, `failed`, `interrupted`, and `invalid` results with their
+rationales. An orphan partial after a power loss becomes `interrupted` unless reconciliation can
+prove that a complete valid manifest had already been written.
+
+The recorder audits the durable episode before reporting success: each positive battle offset must
+link to its exact WAIT execution and frame count, while a zero offset must not invent an execution.
+The campaign status command can reconcile the same artifacts after a power loss without beginning
+a new slot.
+
+The successful non-counted rehearsal publishes a separate immutable qualification bound to its
+source, runtime, ROM, schedule, episode, manifest, and 63/63 audit. A counted slot cannot create its
+campaign seal or episode namespace until that qualification is reopened and re-audited. The slot's
+partial episode directory is then synchronously persisted before emulator execution begins, making
+the one-attempt claim durable across power loss.
+
+The battle feature view is `pokemon.core.battle.move-ranker.v2`. It retains the inference-available
+goal and move-policy context and adds `constraint.matches_required_move`. Exact-required and
+free-choice decisions are counted and scored separately. The `teacher_recovery_marker` is
+descriptive only: it is not a model feature, recovery budget, or sufficient recovery-policy label.
 
 ## Staged policy build
 
@@ -223,6 +251,11 @@ Evaluation seeds are preregistered harness schedules for timing and perturbation
 claim that Pokémon Red exposes a user-selectable seed. Training, tuning, and held-out seeds are
 disjoint.
 
+Before collection, the exact source/configuration/registry commit must be committed and pushed.
+The registry's disjoint, unassigned, non-counted schedule dry run must then complete and attest all
+63 battles before slot `01`. It is excluded from train, validation, test, and every performance
+denominator.
+
 - **Exact teacher:** repeat the frozen clean-power-on route and report its own attempts,
   checkpoints, actions, frames, recoveries, and terminal reasons.
 - **Perturbed teacher:** run preregistered timing/RNG schedules without restoration and report
@@ -233,6 +266,18 @@ disjoint.
 Targeted snapshot-start specialist suites may measure position, battle, menu, and recovery
 coverage, but must be labeled component tests. Official full-game attempts start clean and never
 restore, rewind, or import state from another run.
+
+Every declared slot has one attempt. Completion, failure, invalid evidence, and interruption all
+consume it and remain in the ledger denominator with an explicit reason; an outcome cannot be
+replaced after inspection. A protocol-wide restart requires a new registry version.
+
+Battle reports separate `free_choice_accuracy` from `forced_choice_accuracy` and include the
+unobserved-context count. Forced-choice accuracy measures obedience to an exact move constraint,
+not autonomous action selection, and cannot substitute for the free-choice result. Reports also
+disclose cross-partition policy-visible snapshot overlap and novel-visible-state performance.
+Visible semantic overlap is report-only because distinct hidden timing histories can converge on
+the same observation; copied episode identities, manifests, assignments, schedules, or root
+lineages remain hard leakage.
 
 ## Collection order
 
@@ -256,15 +301,21 @@ restore, rewind, or import state from another run.
     **Done.**
 16. Extend and replay-qualify all remaining badges, the final Route 22 rival, Route 23, Victory
     Road, and Indigo Plateau preparation. **Done.**
-17. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
+17. Freeze explicit adaptive-battle identities, planner context, and prospective train,
+   validation, and test timing schedules, including exact execution identities, one-shot ledger
+   accounting, and global plus partition-local slots. **Done as protocol infrastructure.**
+18. Commit and push the exact source/configuration state, then complete the disjoint, unassigned,
+   non-counted 63/63 schedule dry run before slot `01`. **Pending; as of the protocol commit,
+   neither the dry run nor any declared slot has executed.**
+19. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
-18. Train a small behavior-cloning baseline per specialist.
-19. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
+20. Train a small behavior-cloning baseline per specialist.
+21. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
    from the frozen perturbation suite for that skill.
-20. Extend the teacher through the Elite Four, Champion, and Hall of Fame. **Done.**
-21. Produce multiple clean teacher completions with timing and RNG variation.
-22. Train the semantic planner and full-game composition only after that coverage exists.
-23. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
+22. Extend the teacher through the Elite Four, Champion, and Hall of Fame. **Done.**
+23. Produce multiple clean teacher completions with timing and RNG variation.
+24. Train the semantic planner and full-game composition only after that coverage exists.
+25. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
 The deterministic-teacher gate of three intervention-free clean-power-on Hall-of-Fame runs is
 complete. Learned reliability still requires at least 8/10 frozen clean-start runs on the

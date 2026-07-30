@@ -48,7 +48,7 @@ class _Reader:
                     "partition": partition,
                     "regime": "within_game",
                     "root_lineage_id": root_lineage_id,
-                }
+                },
             },
         }
         self._streams = {
@@ -154,7 +154,14 @@ def _records(
         }
         if explicit_groups:
             metadata["battle_instance_id"] = f"battle-{index}"
-            metadata["battle_goal"] = "maximize_expected_damage"
+            metadata["battle_plan_id"] = f"battle-{index:03d}-test"
+            metadata["battle_goal"] = "win"
+            metadata["battle_policy_context"] = {
+                "goal": "win",
+                "move_policy": "any_usable",
+                "required_move_ref": None,
+            }
+            metadata["teacher_recovery_marker"] = "none"
         decisions.append(
             {
                 "record_type": "decision",
@@ -168,7 +175,7 @@ def _records(
                     "schema_version": 1,
                     "actor": PROVENANCE.actor,
                     "policy_id": PROVENANCE.policy_id,
-                    "objective_id": None,
+                    "objective_id": "defeat_test_trainer" if explicit_groups else None,
                     "metadata": metadata,
                 },
                 "action": {"kind": "select_move", "slot_index": 1},
@@ -200,21 +207,91 @@ def test_loader_joins_exact_snapshots_and_keeps_route_fields_out_of_features() -
         "policy_goal_not_fully_observed",
         "unassigned_root_lineage",
     )
+    assert dataset.episode_qualified is False
     assert dataset.promotion_eligible is False
     assert all(
         forbidden not in name
         for name in dataset.feature_names
-        for forbidden in ("area", "badge", "decision", "location", "position", "slot")
+        for forbidden in (
+            "area",
+            "assignment",
+            "badge",
+            "battle_plan",
+            "decision",
+            "harness",
+            "location",
+            "partition",
+            "position",
+            "run_id",
+            "schedule",
+            "slot",
+        )
     )
 
 
 def test_explicit_groups_goals_and_preassigned_partition_remove_diagnostic_reasons() -> None:
     dataset = _load(_records(partition="train", explicit_groups=True))
 
-    assert dataset.promotion_eligible is True
+    assert dataset.episode_qualified is True
+    assert dataset.promotion_eligible is False
     assert dataset.diagnostic_reasons == ()
     assert {example.group_source for example in dataset.examples} == {"explicit_battle_instance"}
     assert all(example.policy_goal_observed for example in dataset.examples)
+
+
+@pytest.mark.parametrize(
+    ("location", "field", "value"),
+    [
+        ("context", "objective_id", None),
+        ("metadata", "battle_plan_id", None),
+        ("metadata", "battle_goal", None),
+        ("metadata", "battle_policy_context", None),
+        ("metadata", "teacher_recovery_marker", None),
+    ],
+)
+def test_null_or_incomplete_policy_context_never_qualifies(
+    location: str,
+    field: str,
+    value: object,
+) -> None:
+    reader = _records(count=1, partition="train", explicit_groups=True)
+    context = reader._streams["decisions"][0]["context"]
+    assert isinstance(context, dict)
+    target = context if location == "context" else context["metadata"]
+    assert isinstance(target, dict)
+    target[field] = value
+
+    dataset = _load(reader)
+
+    assert dataset.promotion_eligible is False
+    assert "policy_goal_not_fully_observed" in dataset.diagnostic_reasons
+    assert dataset.examples[0].policy_goal_observed is False
+
+
+def test_exact_required_context_must_name_the_selected_semantic_move() -> None:
+    reader = _records(count=1, partition="train", explicit_groups=True)
+    context = reader._streams["decisions"][0]["context"]
+    assert isinstance(context, dict)
+    metadata = context["metadata"]
+    assert isinstance(metadata, dict)
+    metadata["battle_policy_context"] = {
+        "goal": "win",
+        "move_policy": "exact_required",
+        "required_move_ref": "pokemon.red.gb.us.rev0:move:055",
+    }
+
+    qualified = _load(reader)
+    assert qualified.episode_qualified is True
+    assert qualified.promotion_eligible is False
+    assert qualified.examples[0].policy_goal_observed is True
+
+    policy_context = metadata["battle_policy_context"]
+    assert isinstance(policy_context, dict)
+    policy_context["required_move_ref"] = "pokemon.red.gb.us.rev0:move:033"
+    mismatched = _load(reader)
+    assert mismatched.episode_qualified is False
+    assert mismatched.promotion_eligible is False
+    assert "policy_goal_not_fully_observed" in mismatched.diagnostic_reasons
 
 
 def test_grouped_folds_are_deterministic_complete_and_group_disjoint() -> None:
@@ -321,7 +398,44 @@ def test_partition_audit_rejects_missing_splits_and_cross_partition_leakage() ->
     overlapping = audit_preassigned_partitions((train, validation, test))
     assert overlapping.promotion_eligible is False
     assert overlapping.snapshot_overlap_count == 10
-    assert "snapshot_partition_overlap" in overlapping.reasons
+    assert "snapshot_partition_overlap" not in overlapping.reasons
+    assert "duplicate_episode_manifest" in overlapping.reasons
 
     missing = audit_preassigned_partitions((train,))
     assert {"missing_validation_partition", "missing_test_partition"}.issubset(missing.reasons)
+
+
+def test_partition_audit_never_claims_promotion_without_registry_authentication() -> None:
+    train = _load(_records(partition="train", explicit_groups=True))
+    validation = replace(
+        _load(_records(partition="validation", explicit_groups=True)),
+        episode_id="episode-002",
+        manifest_sha256="b" * 64,
+        root_lineage_id="episode-002",
+    )
+    test = replace(
+        _load(_records(partition="test", explicit_groups=True)),
+        episode_id="episode-003",
+        manifest_sha256="c" * 64,
+        root_lineage_id="episode-003",
+    )
+    validation = replace(
+        validation,
+        examples=tuple(
+            replace(example, snapshot_sha256=f"{index + 100:064x}")
+            for index, example in enumerate(validation.examples)
+        ),
+    )
+    test = replace(
+        test,
+        examples=tuple(
+            replace(example, snapshot_sha256=f"{index + 200:064x}")
+            for index, example in enumerate(test.examples)
+        ),
+    )
+
+    audit = audit_preassigned_partitions((train, validation, test))
+
+    assert audit.snapshot_overlap_count == 0
+    assert audit.promotion_eligible is False
+    assert audit.reasons == ("promotion_protocol_not_authenticated",)

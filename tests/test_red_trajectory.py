@@ -5,6 +5,11 @@ from dataclasses import replace
 import pytest
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleResourcePolicy,
+    RequiredMovePolicy,
+)
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     BattleMenuState,
@@ -12,6 +17,7 @@ from pokemon_red_completion.observation import (
     MapId,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.red_trajectory import (
     POKEMON_BATTLE_MOVE_SKILL_ID,
     POKEMON_CORE_ONTOLOGY_ID,
@@ -26,6 +32,8 @@ from pokemon_red_completion.trajectory import (
     RecordingExecutor,
     canonical_json,
 )
+
+TEST_BATTLE_PLAN_ID = "battle-001-test"
 
 
 class _Reader:
@@ -361,6 +369,14 @@ def test_battle_observer_records_a_policy_safe_zero_based_move_target() -> None:
         encoder=encoder,
         recorder=recorder,
     )
+    intent = BattleIntent(
+        "defeat_rival",
+        TEST_BATTLE_PLAN_ID,
+        required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+        required_move_ref=pokemon_red_move_ref(0x27),
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+    )
+    observer.battle_started(intent=intent)
 
     with observer.decision_scope(
         policy_state=raw,
@@ -369,6 +385,7 @@ def test_battle_observer_records_a_policy_safe_zero_based_move_target() -> None:
             selected_main_command=0,
         ),
         selected_slot=2,
+        intent=intent,
     ):
         recorder.execute(MacroAction(MacroActionKind.WAIT))
 
@@ -381,10 +398,21 @@ def test_battle_observer_records_a_policy_safe_zero_based_move_target() -> None:
     assert decision.action == {"kind": "select_move", "slot_index": 1}
     assert decision.context.to_dict() == {
         "schema_version": 1,
-        "objective_id": None,
+        "objective_id": "defeat_rival",
         "policy_id": POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
         "actor": "deterministic_teacher",
-        "metadata": {"skill_id": POKEMON_BATTLE_MOVE_SKILL_ID},
+        "metadata": {
+            "skill_id": POKEMON_BATTLE_MOVE_SKILL_ID,
+            "battle_instance_id": "red-teacher-test:battle:0",
+            "battle_plan_id": TEST_BATTLE_PLAN_ID,
+            "battle_goal": "win",
+            "battle_policy_context": {
+                "goal": "win",
+                "move_policy": "exact_required",
+                "required_move_ref": "pokemon.red.gb.us.rev0:move:039",
+            },
+            "teacher_recovery_marker": "bounded_recovery",
+        },
     }
     payload = decision.snapshot.to_dict()
     assert payload["mode"] == "battle"
@@ -395,6 +423,83 @@ def test_battle_observer_records_a_policy_safe_zero_based_move_target() -> None:
     serialized = canonical_json(decision)
     assert "event_flags" not in serialized
     assert "private-referee-state" not in serialized
+
+
+def test_battle_observer_rejects_changed_intent_during_reentry() -> None:
+    raw = replace(
+        _raw(),
+        battle_state=2,
+        enemy_species_id=0x99,
+        enemy_hp=11,
+    )
+    encoder = PokemonRedObservationEncoder(
+        _Reader(
+            raw,
+            BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0),
+        )
+    )
+    recorder = RecordingExecutor(
+        delegate=_UnusedExecutor(),
+        snapshot_provider=encoder,
+        sink=InMemoryTrajectorySink(),
+        episode_id="intent-reentry-test",
+    )
+    observer = PokemonRedBattleDecisionObserver(
+        encoder=encoder,
+        recorder=recorder,
+    )
+    observer.battle_started(intent=BattleIntent("defeat_rival", TEST_BATTLE_PLAN_ID))
+
+    with pytest.raises(ValueError, match="intent changed"):
+        observer.battle_started(intent=BattleIntent("defeat_rival", "battle-002-test"))
+    assert recorder.recording_failures == 0
+
+
+def test_battle_observer_assigns_a_new_ordinal_after_observed_finish() -> None:
+    raw = replace(
+        _raw(),
+        battle_state=2,
+        enemy_species_id=0x99,
+        enemy_hp=11,
+    )
+    menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    encoder = PokemonRedObservationEncoder(_Reader(raw, menu))
+    sink = InMemoryTrajectorySink()
+    recorder = RecordingExecutor(
+        delegate=_UnusedExecutor(),
+        snapshot_provider=encoder,
+        sink=sink,
+        episode_id="battle-ordinal-test",
+    )
+    observer = PokemonRedBattleDecisionObserver(
+        encoder=encoder,
+        recorder=recorder,
+    )
+    intent = BattleIntent("defeat_rival", TEST_BATTLE_PLAN_ID)
+
+    observer.battle_started(intent=intent)
+    with observer.decision_scope(
+        policy_state=raw,
+        policy_menu=menu,
+        selected_slot=1,
+        intent=intent,
+    ):
+        recorder.execute(MacroAction(MacroActionKind.WAIT))
+    observer.battle_finished()
+    observer.battle_started(intent=intent)
+    with observer.decision_scope(
+        policy_state=raw,
+        policy_menu=menu,
+        selected_slot=1,
+        intent=intent,
+    ):
+        recorder.execute(MacroAction(MacroActionKind.WAIT))
+
+    assert recorder.recording_failures == 0
+    assert [decision.context.metadata["battle_instance_id"] for decision in sink.decisions] == [
+        "battle-ordinal-test:battle:0",
+        "battle-ordinal-test:battle:1",
+    ]
 
 
 def test_event_flags_cannot_change_a_battle_decision_snapshot_hash() -> None:

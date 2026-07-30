@@ -8,7 +8,13 @@ from dataclasses import dataclass, field
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import BattleRuntimeTiming, run_adaptive_trainer_battle
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRuntimeTiming,
+    RequiredMovePolicy,
+    run_adaptive_trainer_battle,
+)
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
@@ -25,6 +31,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
 FUCHSIA_CHECKPOINT_COUNT = 14
@@ -340,6 +347,7 @@ def run_fuchsia_chapter(
             BUBBLEBEAM,
             3,
             5,
+            RedBattlePlanId.FUCHSIA_ROUTE_12_FISHER,
             trigger_direction="right",
         )
     )
@@ -392,6 +400,7 @@ def run_fuchsia_chapter(
             BITE,
             1,
             2,
+            RedBattlePlanId.FUCHSIA_ROUTE_12_ROCKER,
             trigger_direction="down",
         )
     )
@@ -410,6 +419,7 @@ def run_fuchsia_chapter(
             BITE,
             1,
             4,
+            RedBattlePlanId.FUCHSIA_ROUTE_13_BIRD_KEEPER_1,
             trigger_direction="up",
         )
     )
@@ -426,6 +436,7 @@ def run_fuchsia_chapter(
             BITE,
             1,
             5,
+            RedBattlePlanId.FUCHSIA_ROUTE_13_JR_TRAINER_F_1,
             interact_direction="up",
         )
     )
@@ -491,6 +502,7 @@ def _fight_trainer(
     move_id: int,
     move_slot: int,
     exact_spent: int,
+    battle_plan_id: str,
     *,
     trigger_direction: str | None = None,
     interact_direction: str | None = None,
@@ -515,6 +527,12 @@ def _fight_trainer(
         actions,
         lambda _: move_slot,
         expected_map=int(battle.map_id or 0),
+        intent=BattleIntent(
+            "reach_fuchsia",
+            battle_plan_id=battle_plan_id,
+            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+            required_move_ref=pokemon_red_move_ref(move_id),
+        ),
         required_move_id=move_id,
         timing=FUCHSIA_BATTLE_TIMING,
         label=label,

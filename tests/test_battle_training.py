@@ -75,6 +75,11 @@ def test_diagnostic_training_is_deterministic_grouped_and_never_promotable() -> 
     assert first.legal_choice_rate == 1.0
     assert first.accuracy > first.majority_accuracy
     assert first.promotion_eligible is False
+    assert first.free_choice_decisions == 0
+    assert first.forced_choice_decisions == 0
+    assert first.unobserved_context_decisions == 20
+    assert first.free_choice_accuracy is None
+    assert first.forced_choice_accuracy is None
     assert "grouped_cross_validation_is_not_held_out" in first.reasons
     assert "single_recorded_root_lineage" in first.reasons
     assert sum(fold.test_decisions for fold in first.folds) == 20
@@ -85,6 +90,7 @@ def test_diagnostic_training_is_deterministic_grouped_and_never_promotable() -> 
     assert receipt["qualification"]["learned_policy_rollout"] is False
     assert receipt["model"]["serialization"] == "canonical_json"
     assert receipt["scope"]["source_root_lineages"] == 1
+    assert receipt["scope"]["unobserved_context_decisions"] == 20
 
 
 @pytest.mark.parametrize(

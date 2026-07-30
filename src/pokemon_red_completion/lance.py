@@ -7,7 +7,10 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -258,6 +261,11 @@ def run_lance_chapter(
                 actions,
                 policy,
                 expected_map=MapId.LANCES_ROOM,
+                intent=BattleIntent(
+                    "defeat_lance",
+                    battle_plan_id=RedBattlePlanId.LEAGUE_LANCE,
+                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                ),
                 timing=BattleRuntimeTiming(
                     max_runtime_pulses=1800,
                     max_post_attack_transition_pulses=30,

@@ -7,9 +7,12 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    RequiredMovePolicy,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import (
@@ -31,6 +34,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
 ERIKA_CHECKPOINT_COUNT = 12
@@ -311,7 +315,14 @@ def run_erika_chapter(
     _move(actions, reader, emulator, ("up",) * 6, timing, "Lass trigger", allow_trigger=True)
     _enter_battle(actions, reader, timing, "Celadon Gym Lass")
     _require_identity(emulator, (0xCB, 0x03, 0xCB, 17), "Celadon Gym Lass")
-    _battle(reader, actions, MapId.CELADON_GYM, timing, "Celadon Gym Lass")
+    _battle(
+        reader,
+        actions,
+        MapId.CELADON_GYM,
+        timing,
+        "Celadon Gym Lass",
+        RedBattlePlanId.ERIKA_CELADON_GYM_LASS,
+    )
     _checkpoint(records, progress, emulator, reader.read(), "lass_defeated", "Defeated Gym Lass")
 
     _move(actions, reader, emulator, _directions("UUUR"), timing, "inner tree")
@@ -327,7 +338,14 @@ def run_erika_chapter(
     )
     _enter_battle(actions, reader, timing, "Celadon Gym Cooltrainer")
     _require_identity(emulator, (0xE8, 0x20, 0xE8, 1), "Celadon Gym Cooltrainer")
-    _battle(reader, actions, MapId.CELADON_GYM, timing, "Celadon Gym Cooltrainer")
+    _battle(
+        reader,
+        actions,
+        MapId.CELADON_GYM,
+        timing,
+        "Celadon Gym Cooltrainer",
+        RedBattlePlanId.ERIKA_CELADON_GYM_COOLTRAINER,
+    )
     _checkpoint(
         records,
         progress,
@@ -375,7 +393,14 @@ def run_erika_chapter(
     _require_identity(emulator, (ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1), "Erika")
     _checkpoint(records, progress, emulator, reader.read(), "erika_battle", "Verified Erika")
     before_pp = reader.read().first_party_pp
-    _battle(reader, actions, MapId.CELADON_GYM, timing, "Erika")
+    _battle(
+        reader,
+        actions,
+        MapId.CELADON_GYM,
+        timing,
+        "Erika",
+        RedBattlePlanId.ERIKA_LEADER,
+    )
     after_pp = reader.read().first_party_pp
     if before_pp is None or after_pp is None:
         raise ErikaChapterError("Erika battle lacks PP evidence.")
@@ -521,7 +546,7 @@ def _select_menu(actions, emulator, target, maximum, timing) -> None:
     raise ErikaChapterError("Menu cursor missed its semantic target.")
 
 
-def _battle(reader, actions, map_id, timing, label) -> None:
+def _battle(reader, actions, map_id, timing, label, battle_plan_id: str) -> None:
     if label == "Erika":
         # Bound the leader fight to one observed runtime phase per call. This
         # lets the chapter distinguish Wrap recovery (CANCEL while level 41)
@@ -535,6 +560,12 @@ def _battle(reader, actions, map_id, timing, label) -> None:
                     actions,
                     lambda _: 2,
                     expected_map=int(map_id),
+                    intent=BattleIntent(
+                        "defeat_erika",
+                        battle_plan_id=battle_plan_id,
+                        required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+                        required_move_ref=pokemon_red_move_ref(STRENGTH),
+                    ),
                     required_move_id=STRENGTH,
                     timing=BattleRuntimeTiming(max_runtime_pulses=1),
                     label=label,
@@ -562,6 +593,12 @@ def _battle(reader, actions, map_id, timing, label) -> None:
                 actions,
                 lambda _: 2,
                 expected_map=int(map_id),
+                intent=BattleIntent(
+                    "defeat_erika",
+                    battle_plan_id=battle_plan_id,
+                    required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+                    required_move_ref=pokemon_red_move_ref(STRENGTH),
+                ),
                 required_move_id=STRENGTH,
                 timing=BattleRuntimeTiming(max_runtime_pulses=960),
                 label=label,

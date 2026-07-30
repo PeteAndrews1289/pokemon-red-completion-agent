@@ -12,7 +12,12 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import run_adaptive_trainer_battle
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    RequiredMovePolicy,
+    run_adaptive_trainer_battle,
+)
 from pokemon_red_completion.celadon import (
     DEFAULT_CELADON_TIMING,
     _bag,
@@ -40,6 +45,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
@@ -463,6 +469,12 @@ def run_blaine_chapter(
         actions,
         policy,
         expected_map=MapId.CINNABAR_GYM,
+        intent=BattleIntent(
+            "defeat_blaine",
+            battle_plan_id=RedBattlePlanId.BLAINE_LEADER,
+            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+            required_move_ref=pokemon_red_move_ref(SURF_MOVE_ID),
+        ),
         required_move_id=SURF_MOVE_ID,
         label="Blaine",
     )

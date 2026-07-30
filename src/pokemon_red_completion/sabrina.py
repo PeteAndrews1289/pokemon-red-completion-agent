@@ -9,7 +9,10 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -354,6 +357,11 @@ def _run_until_sabrina(
             actions,
             guarded,
             expected_map=int(MapId.SAFFRON_GYM),
+            intent=BattleIntent(
+                "defeat_sabrina",
+                battle_plan_id=RedBattlePlanId.SABRINA_LEADER,
+                resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+            ),
             timing=BattleRuntimeTiming(max_runtime_pulses=720),
             label=label,
             unknown_cancel_interval=3,

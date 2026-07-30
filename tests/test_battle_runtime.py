@@ -7,14 +7,26 @@ from dataclasses import replace
 import pytest
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_plan import RED_BATTLE_PLAN_IDS
 from pokemon_red_completion.battle_policy import choose_cerulean_rival_move_slot
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattlePolicyObservation,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTimeoutError,
     BattleRuntimeTiming,
+    RequiredMovePolicy,
     bind_battle_decision_observer,
+    bind_battle_schedule_observer,
     run_adaptive_trainer_battle,
 )
+from pokemon_red_completion.battle_schedule import (
+    BattleScheduleError,
+    BattleStartScheduleController,
+    bind_battle_start_schedule,
+)
+from pokemon_red_completion.collection_protocol import BattleStartOffset
 from pokemon_red_completion.observation import (
     BULBASAUR_SPECIES_ID,
     PIDGEOTTO_SPECIES_ID,
@@ -26,8 +38,10 @@ from pokemon_red_completion.observation import (
     MapId,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.red_trajectory import (
     PokemonRedBattleDecisionObserver,
+    PokemonRedBattleScheduleObserver,
     PokemonRedObservationEncoder,
 )
 from pokemon_red_completion.trajectory import (
@@ -41,6 +55,8 @@ NOT_READY = InputReadiness(1, 0, 0, 0, 0, 0)
 TAIL_WHIP_MOVE_ID = 0x27
 BUBBLE_MOVE_ID = 0x91
 DIG_MOVE_ID = 0x5B
+TEST_BATTLE_PLAN_ID = "battle-001-test"
+SCHEDULED_BATTLE_PLAN_ID = RED_BATTLE_PLAN_IDS[0]
 
 
 def _raw(
@@ -83,6 +99,19 @@ def _raw(
     )
 
 
+def _scheduled_offsets(
+    *,
+    first_frames: int,
+) -> tuple[BattleStartOffset, ...]:
+    return tuple(
+        BattleStartOffset(
+            battle_plan_id,
+            first_frames if index == 0 else 0,
+        )
+        for index, battle_plan_id in enumerate(RED_BATTLE_PLAN_IDS)
+    )
+
+
 class FakeRuntime:
     def __init__(
         self,
@@ -117,11 +146,37 @@ class FakeRuntime:
             self.on_action(action)
 
 
+class ImmediateBattleExitRuntime(FakeRuntime):
+    """Expose one active initial read followed by an exit before any policy turn."""
+
+    def __init__(self) -> None:
+        super().__init__(controls=READY)
+        self.reads = 0
+
+    def read(self) -> RawGameState:
+        self.reads += 1
+        if self.reads == 2:
+            self.raw = replace(self.raw, battle_state=0)
+        return self.raw
+
+
 class RecordingDecisionObserver:
     def __init__(self, runtime: FakeRuntime) -> None:
         self.runtime = runtime
+        self.starts: list[BattleIntent | None] = []
+        self.finishes = 0
+        self.failures = 0
         self.entries: list[tuple[int, int]] = []
         self.exits: list[int] = []
+
+    def note_instrumentation_failure(self) -> None:
+        self.failures += 1
+
+    def battle_started(self, *, intent: BattleIntent | None) -> None:
+        self.starts.append(intent)
+
+    def battle_finished(self) -> None:
+        self.finishes += 1
 
     @contextmanager
     def decision_scope(
@@ -130,14 +185,48 @@ class RecordingDecisionObserver:
         policy_state: RawGameState,
         policy_menu: BattleMenuState,
         selected_slot: int,
+        intent: BattleIntent | None,
     ) -> Iterator[None]:
         assert policy_state is self.runtime.raw
         assert policy_menu is self.runtime.menu
+        assert intent is not None and intent.objective_id == "help_bill"
         self.entries.append((selected_slot, len(self.runtime.actions)))
         try:
             yield
         finally:
             self.exits.append(len(self.runtime.actions))
+
+
+class FailingLifecycleObserver:
+    def __init__(self, failure_phase: str) -> None:
+        self.failure_phase = failure_phase
+        self.failures = 0
+
+    def note_instrumentation_failure(self) -> None:
+        self.failures += 1
+
+    def battle_started(self, *, intent: BattleIntent | None) -> None:
+        del intent
+
+    def battle_finished(self) -> None:
+        return
+
+    def decision_scope(self, **kwargs: object):
+        del kwargs
+        failure_phase = self.failure_phase
+
+        class Manager:
+            def __enter__(self) -> None:
+                if failure_phase == "enter":
+                    raise RuntimeError("observer enter failed")
+
+            def __exit__(self, *args: object) -> bool:
+                del args
+                if failure_phase == "exit":
+                    raise RuntimeError("observer exit failed")
+                return False
+
+        return Manager()
 
 
 def test_runtime_rejects_selected_slot_when_required_move_id_differs() -> None:
@@ -164,6 +253,46 @@ def test_runtime_rejects_selected_slot_when_required_move_id_differs() -> None:
     assert runtime.raw.first_party_pp == (35, 30, 30, 11)
 
 
+@pytest.mark.parametrize(
+    ("intent", "required_move_id"),
+    (
+        (
+            BattleIntent(
+                "defeat_rival",
+                TEST_BATTLE_PLAN_ID,
+                required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+                required_move_ref=pokemon_red_move_ref(TACKLE_MOVE_ID),
+            ),
+            None,
+        ),
+        (BattleIntent("defeat_rival", TEST_BATTLE_PLAN_ID), TACKLE_MOVE_ID),
+    ),
+)
+def test_explicit_move_policy_must_agree_with_required_move_id(
+    intent: BattleIntent,
+    required_move_id: int | None,
+) -> None:
+    runtime = FakeRuntime()
+
+    with pytest.raises(ValueError, match="required_move_policy must agree"):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda _raw: 1,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=intent,
+            required_move_id=required_move_id,
+        )
+
+    assert runtime.actions == []
+
+
+@pytest.mark.parametrize("battle_plan_id", ["", "Unsafe", "../battle", "battle id"])
+def test_battle_intent_requires_a_safe_public_plan_id(battle_plan_id: str) -> None:
+    with pytest.raises(ValueError, match="safe public battle identity"):
+        BattleIntent("defeat_rival", battle_plan_id)
+
+
 class AdaptiveRivalSimulation(FakeRuntime):
     """Two-opponent battle with bounded dialogue and post-battle cleanup."""
 
@@ -184,6 +313,11 @@ class AdaptiveRivalSimulation(FakeRuntime):
         self.completion_dialogues = completion_dialogues
         self.defeated_opponents = 0
         self.bulbasaur_tail_whipped = False
+        self.read_calls = 0
+
+    def read(self) -> RawGameState:
+        self.read_calls += 1
+        return super().read()
 
     def execute(self, action: MacroAction) -> None:
         self.actions.append(action)
@@ -413,9 +547,255 @@ def test_adaptive_controller_rechecks_species_and_switches_water_gun_to_tackle()
     }
 
 
+def test_intent_aware_policy_receives_the_predeclared_planner_context() -> None:
+    runtime = AdaptiveRivalSimulation()
+    intent = BattleIntent("help_bill", TEST_BATTLE_PLAN_ID)
+
+    class IntentAwarePolicy:
+        def __init__(self) -> None:
+            self.observations: list[BattlePolicyObservation] = []
+
+        def choose_move(self, observation: BattlePolicyObservation) -> int:
+            self.observations.append(observation)
+            return choose_cerulean_rival_move_slot(observation.state)
+
+    policy = IntentAwarePolicy()
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        policy,
+        expected_map=MapId.CERULEAN_CITY,
+        intent=intent,
+    )
+
+    assert final.battle_state == 0
+    assert len(policy.observations) == 3
+    assert all(observation.intent == intent for observation in policy.observations)
+
+
+def test_preregistered_offset_runs_before_policy_on_the_refreshed_state() -> None:
+    runtime = AdaptiveRivalSimulation()
+    controller = BattleStartScheduleController(_scheduled_offsets(first_frames=7))
+    policy_observations: list[tuple[int | None, int, tuple[MacroAction, ...]]] = []
+    scheduled_wait_seen = False
+
+    original_execute = runtime.execute
+
+    def execute(action: MacroAction) -> None:
+        nonlocal scheduled_wait_seen
+        original_execute(action)
+        if action == MacroAction(MacroActionKind.WAIT, repeat=7):
+            scheduled_wait_seen = True
+            runtime.raw = replace(runtime.raw)
+
+    runtime.execute = execute  # type: ignore[method-assign]
+
+    def policy(raw: RawGameState) -> int:
+        policy_observations.append((raw.enemy_hp, runtime.read_calls, tuple(runtime.actions)))
+        return choose_cerulean_rival_move_slot(raw)
+
+    with bind_battle_start_schedule(controller):
+        final = run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            policy,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=BattleIntent("help_bill", SCHEDULED_BATTLE_PLAN_ID),
+        )
+
+    assert scheduled_wait_seen is True
+    assert final.battle_state == 0
+    assert runtime.actions[0] == MacroAction(MacroActionKind.WAIT, repeat=7)
+    assert policy_observations[0][0] == 20
+    assert policy_observations[0][1] >= 3
+    assert policy_observations[0][2][0] == MacroAction(
+        MacroActionKind.WAIT,
+        repeat=7,
+    )
+    assert controller.finished_count == 1
+    assert controller.failed is False
+
+
+def test_zero_offset_rereads_without_emitting_a_zero_repeat_wait() -> None:
+    baseline = AdaptiveRivalSimulation()
+    run_adaptive_trainer_battle(
+        baseline,
+        baseline,
+        choose_cerulean_rival_move_slot,
+        expected_map=MapId.CERULEAN_CITY,
+    )
+
+    scheduled = AdaptiveRivalSimulation()
+    controller = BattleStartScheduleController(_scheduled_offsets(first_frames=0))
+    with bind_battle_start_schedule(controller):
+        run_adaptive_trainer_battle(
+            scheduled,
+            scheduled,
+            choose_cerulean_rival_move_slot,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=BattleIntent("help_bill", SCHEDULED_BATTLE_PLAN_ID),
+        )
+
+    assert scheduled.actions == baseline.actions
+    assert scheduled.read_calls == baseline.read_calls + 1
+    assert controller.finished_count == 1
+
+
+def test_preregistered_offset_is_not_reapplied_across_runtime_reentry() -> None:
+    runtime = AdaptiveRivalSimulation()
+    controller = BattleStartScheduleController(_scheduled_offsets(first_frames=7))
+    intent = BattleIntent(
+        "help_bill",
+        SCHEDULED_BATTLE_PLAN_ID,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+    )
+
+    with bind_battle_start_schedule(controller):
+        with pytest.raises(BattleRuntimeTimeoutError, match="bounded runtime pulses"):
+            run_adaptive_trainer_battle(
+                runtime,
+                runtime,
+                choose_cerulean_rival_move_slot,
+                expected_map=MapId.CERULEAN_CITY,
+                intent=intent,
+                timing=replace(BattleRuntimeTiming(), max_runtime_pulses=1),
+            )
+        final = run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            choose_cerulean_rival_move_slot,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=intent,
+        )
+
+    assert final.battle_state == 0
+    assert runtime.actions.count(MacroAction(MacroActionKind.WAIT, repeat=7)) == 1
+    assert controller.finished_count == 1
+    assert controller.failed is False
+
+
+@pytest.mark.parametrize("failure", ["menu", "enemy", "visible_drift"])
+def test_preregistered_offset_fails_if_main_menu_evidence_changes(
+    failure: str,
+) -> None:
+    runtime = FakeRuntime()
+    controller = BattleStartScheduleController(_scheduled_offsets(first_frames=7))
+    policy_calls = 0
+
+    def invalidate_after_wait(action: MacroAction) -> None:
+        if action != MacroAction(MacroActionKind.WAIT, repeat=7):
+            return
+        if failure == "menu":
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        elif failure == "enemy":
+            runtime.raw = replace(runtime.raw, enemy_hp=0)
+        else:
+            runtime.raw = replace(runtime.raw, enemy_hp=19)
+
+    runtime.on_action = invalidate_after_wait
+
+    def policy(_raw: RawGameState) -> int:
+        nonlocal policy_calls
+        policy_calls += 1
+        return 1
+
+    with (
+        bind_battle_start_schedule(controller),
+        pytest.raises(BattleRuntimeError, match="battle-start offset"),
+    ):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            policy,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=BattleIntent("help_bill", SCHEDULED_BATTLE_PLAN_ID),
+        )
+
+    assert policy_calls == 0
+    assert controller.failed is True
+    assert runtime.actions == [MacroAction(MacroActionKind.WAIT, repeat=7)]
+
+
+def test_final_move_closes_schedule_and_observer_before_one_pulse_timeout() -> None:
+    runtime = FakeRuntime()
+    observer = RecordingDecisionObserver(runtime)
+    controller = BattleStartScheduleController(_scheduled_offsets(first_frames=0))
+    intent = BattleIntent("help_bill", SCHEDULED_BATTLE_PLAN_ID)
+
+    def execute(action: MacroAction) -> None:
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        if runtime.menu.phase is BattleMenuPhase.MAIN:
+            runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+            return
+        if runtime.menu.phase is BattleMenuPhase.MOVE:
+            pp = list(runtime.raw.first_party_pp or ())
+            pp[0] -= 1
+            runtime.raw = replace(
+                runtime.raw,
+                battle_state=0,
+                enemy_hp=0,
+                first_party_pp=tuple(pp),
+            )
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    runtime.on_action = execute
+    with (
+        bind_battle_start_schedule(controller),
+        bind_battle_decision_observer(observer),
+        pytest.raises(BattleRuntimeTimeoutError, match="bounded runtime pulses"),
+    ):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda _raw: 1,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=intent,
+            timing=replace(BattleRuntimeTiming(), max_runtime_pulses=1),
+        )
+
+    assert runtime.raw.battle_state == 0
+    assert controller.finished_count == 1
+    assert controller.failed is False
+    assert observer.finishes == 1
+    assert observer.failures == 0
+
+
+def test_preregistered_schedule_rejects_missing_or_wrong_battle_intent() -> None:
+    missing = FakeRuntime()
+    missing_controller = BattleStartScheduleController(_scheduled_offsets(first_frames=0))
+    with (
+        bind_battle_start_schedule(missing_controller),
+        pytest.raises(BattleScheduleError, match="missing an explicit intent"),
+    ):
+        run_adaptive_trainer_battle(
+            missing,
+            missing,
+            lambda _raw: 1,
+            expected_map=MapId.CERULEAN_CITY,
+        )
+    assert missing.actions == []
+
+    wrong = FakeRuntime()
+    wrong_controller = BattleStartScheduleController(_scheduled_offsets(first_frames=0))
+    with (
+        bind_battle_start_schedule(wrong_controller),
+        pytest.raises(BattleScheduleError, match="order"),
+    ):
+        run_adaptive_trainer_battle(
+            wrong,
+            wrong,
+            lambda _raw: 1,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=BattleIntent("help_bill", RED_BATTLE_PLAN_IDS[1]),
+        )
+    assert wrong.actions == []
+
+
 def test_battle_decision_observer_scopes_each_validated_policy_turn() -> None:
     runtime = AdaptiveRivalSimulation()
     observer = RecordingDecisionObserver(runtime)
+    intent = BattleIntent("help_bill", TEST_BATTLE_PLAN_ID)
 
     with bind_battle_decision_observer(observer):
         final = run_adaptive_trainer_battle(
@@ -423,10 +803,13 @@ def test_battle_decision_observer_scopes_each_validated_policy_turn() -> None:
             runtime,
             choose_cerulean_rival_move_slot,
             expected_map=MapId.CERULEAN_CITY,
+            intent=intent,
             label="Cerulean rival",
         )
 
     assert final.battle_state == 0
+    assert observer.starts == [intent]
+    assert observer.finishes == 1
     assert [entry[0] for entry in observer.entries] == [4, 2, 1]
     assert len(observer.exits) == len(observer.entries)
     assert all(
@@ -444,6 +827,26 @@ def test_battle_decision_observer_scopes_each_validated_policy_turn() -> None:
     assert len(observer.entries) == 3
 
 
+@pytest.mark.parametrize("failure_phase", ["enter", "exit"])
+def test_observer_context_lifecycle_failures_never_interrupt_the_actor(
+    failure_phase: str,
+) -> None:
+    runtime = AdaptiveRivalSimulation()
+    observer = FailingLifecycleObserver(failure_phase)
+
+    with bind_battle_decision_observer(observer):
+        final = run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            choose_cerulean_rival_move_slot,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=BattleIntent("help_bill", TEST_BATTLE_PLAN_ID),
+        )
+
+    assert final.battle_state == 0
+    assert observer.failures == 3
+
+
 def test_adaptive_battle_records_linked_privacy_safe_decision_spans() -> None:
     runtime = AdaptiveRivalSimulation()
     encoder = PokemonRedObservationEncoder(runtime)
@@ -458,6 +861,7 @@ def test_adaptive_battle_records_linked_privacy_safe_decision_spans() -> None:
         encoder=encoder,
         recorder=recorder,
     )
+    intent = BattleIntent("help_bill", TEST_BATTLE_PLAN_ID)
 
     with bind_battle_decision_observer(observer):
         final = run_adaptive_trainer_battle(
@@ -465,6 +869,7 @@ def test_adaptive_battle_records_linked_privacy_safe_decision_spans() -> None:
             recorder,
             choose_cerulean_rival_move_slot,
             expected_map=MapId.CERULEAN_CITY,
+            intent=intent,
             label="private encounter label",
         )
 
@@ -473,6 +878,28 @@ def test_adaptive_battle_records_linked_privacy_safe_decision_spans() -> None:
     assert len(sink.executions) == len(runtime.actions)
     assert [decision.action["slot_index"] for decision in sink.decisions] == [3, 1, 0]
     assert all("private encounter label" not in canonical_json(item) for item in sink.decisions)
+    assert {decision.context.metadata["battle_instance_id"] for decision in sink.decisions} == {
+        "battle-episode:battle:0"
+    }
+    assert all(decision.context.objective_id == "help_bill" for decision in sink.decisions)
+    assert all(
+        decision.context.metadata["battle_plan_id"] == TEST_BATTLE_PLAN_ID
+        for decision in sink.decisions
+    )
+    assert all(decision.context.metadata["battle_goal"] == "win" for decision in sink.decisions)
+    assert all(
+        decision.context.metadata["battle_policy_context"]
+        == {
+            "goal": "win",
+            "move_policy": "any_usable",
+            "required_move_ref": None,
+        }
+        for decision in sink.decisions
+    )
+    assert all(
+        decision.context.metadata["teacher_recovery_marker"] == "none"
+        for decision in sink.decisions
+    )
     for decision in sink.decisions:
         linked = [
             execution
@@ -482,6 +909,220 @@ def test_adaptive_battle_records_linked_privacy_safe_decision_spans() -> None:
         assert linked
         assert linked[0].step_index == decision.step_index
         assert linked[0].before_sha256 == decision.snapshot_sha256
+
+
+def test_scheduled_wait_is_recorded_outside_the_policy_decision_span() -> None:
+    runtime = AdaptiveRivalSimulation()
+    encoder = PokemonRedObservationEncoder(runtime)
+    sink = InMemoryTrajectorySink()
+    recorder = RecordingExecutor(
+        delegate=runtime,
+        snapshot_provider=encoder,
+        sink=sink,
+        episode_id="scheduled-battle-episode",
+    )
+    observer = PokemonRedBattleDecisionObserver(
+        encoder=encoder,
+        recorder=recorder,
+    )
+    controller = BattleStartScheduleController(_scheduled_offsets(first_frames=7))
+    schedule_observer = PokemonRedBattleScheduleObserver(
+        encoder=encoder,
+        recorder=recorder,
+        sink=sink,
+        schedule_sha256=controller.schedule_sha256,
+    )
+    intent = BattleIntent("help_bill", SCHEDULED_BATTLE_PLAN_ID)
+
+    with (
+        bind_battle_start_schedule(controller),
+        bind_battle_decision_observer(observer),
+        bind_battle_schedule_observer(schedule_observer),
+    ):
+        final = run_adaptive_trainer_battle(
+            runtime,
+            recorder,
+            choose_cerulean_rival_move_slot,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=intent,
+        )
+
+    assert final.battle_state == 0
+    assert recorder.recording_failures == 0
+    assert sink.executions[0].action == {
+        "kind": "wait",
+        "repeat": 7,
+        "value": None,
+    }
+    assert sink.executions[0].decision_id is None
+    assert sink.decisions[0].step_index > sink.executions[0].step_index
+    schedule_events = [
+        event for event in sink.events if event.kind == "battle_start_offset_applied"
+    ]
+    assert len(schedule_events) == 1
+    assert schedule_events[0].payload["battle_ordinal"] == 1
+    assert schedule_events[0].payload["battle_plan_id"] == SCHEDULED_BATTLE_PLAN_ID
+    assert schedule_events[0].payload["frames"] == 7
+    assert schedule_events[0].payload["execution_step_index"] == 0
+    assert (
+        schedule_events[0].payload["before_snapshot_sha256"]
+        == schedule_events[0].payload["after_snapshot_sha256"]
+    )
+    assert schedule_events[0].payload["schedule_sha256"] == controller.schedule_sha256
+    assert controller.finished_count == 1
+
+
+def test_zero_offset_has_an_attestation_without_a_fake_execution() -> None:
+    runtime = AdaptiveRivalSimulation()
+    encoder = PokemonRedObservationEncoder(runtime)
+    sink = InMemoryTrajectorySink()
+    recorder = RecordingExecutor(
+        delegate=runtime,
+        snapshot_provider=encoder,
+        sink=sink,
+        episode_id="zero-offset-episode",
+    )
+    decision_observer = PokemonRedBattleDecisionObserver(
+        encoder=encoder,
+        recorder=recorder,
+    )
+    controller = BattleStartScheduleController(_scheduled_offsets(first_frames=0))
+    schedule_observer = PokemonRedBattleScheduleObserver(
+        encoder=encoder,
+        recorder=recorder,
+        sink=sink,
+        schedule_sha256=controller.schedule_sha256,
+    )
+
+    with (
+        bind_battle_start_schedule(controller),
+        bind_battle_decision_observer(decision_observer),
+        bind_battle_schedule_observer(schedule_observer),
+    ):
+        run_adaptive_trainer_battle(
+            runtime,
+            recorder,
+            choose_cerulean_rival_move_slot,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=BattleIntent("help_bill", SCHEDULED_BATTLE_PLAN_ID),
+        )
+
+    event = next(
+        event for event in sink.events if event.kind == "battle_start_offset_applied"
+    )
+    assert event.payload["frames"] == 0
+    assert event.payload["execution_step_index"] is None
+    assert all(
+        execution.action != {"kind": "wait", "repeat": 0, "value": None}
+        for execution in sink.executions
+    )
+
+
+def test_recorded_battle_without_explicit_intent_fails_closed() -> None:
+    runtime = AdaptiveRivalSimulation()
+    encoder = PokemonRedObservationEncoder(runtime)
+    sink = InMemoryTrajectorySink()
+    recorder = RecordingExecutor(
+        delegate=runtime,
+        snapshot_provider=encoder,
+        sink=sink,
+        episode_id="missing-intent-episode",
+    )
+    observer = PokemonRedBattleDecisionObserver(
+        encoder=encoder,
+        recorder=recorder,
+    )
+
+    with bind_battle_decision_observer(observer):
+        final = run_adaptive_trainer_battle(
+            runtime,
+            recorder,
+            choose_cerulean_rival_move_slot,
+            expected_map=MapId.CERULEAN_CITY,
+        )
+
+    assert final.battle_state == 0
+    assert sink.decisions == ()
+    assert recorder.recording_failures == 4
+    assert len(sink.executions) == len(runtime.actions)
+
+
+def test_reentry_intent_mismatch_is_counted_even_without_another_decision() -> None:
+    runtime = ImmediateBattleExitRuntime()
+    encoder = PokemonRedObservationEncoder(runtime)
+    sink = InMemoryTrajectorySink()
+    recorder = RecordingExecutor(
+        delegate=runtime,
+        snapshot_provider=encoder,
+        sink=sink,
+        episode_id="mismatched-reentry-episode",
+    )
+    observer = PokemonRedBattleDecisionObserver(
+        encoder=encoder,
+        recorder=recorder,
+    )
+    observer.battle_started(intent=BattleIntent("help_bill", TEST_BATTLE_PLAN_ID))
+
+    with bind_battle_decision_observer(observer):
+        final = run_adaptive_trainer_battle(
+            runtime,
+            recorder,
+            choose_cerulean_rival_move_slot,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=BattleIntent("defeat_misty", TEST_BATTLE_PLAN_ID),
+            timing=replace(BattleRuntimeTiming(), required_ready_reads=1),
+        )
+
+    assert final.battle_state == 0
+    assert sink.decisions == ()
+    assert recorder.recording_failures == 1
+    assert runtime.actions == []
+
+
+def test_battle_instance_id_survives_bounded_runtime_reentry() -> None:
+    runtime = AdaptiveRivalSimulation()
+    encoder = PokemonRedObservationEncoder(runtime)
+    sink = InMemoryTrajectorySink()
+    recorder = RecordingExecutor(
+        delegate=runtime,
+        snapshot_provider=encoder,
+        sink=sink,
+        episode_id="retry-episode",
+    )
+    observer = PokemonRedBattleDecisionObserver(
+        encoder=encoder,
+        recorder=recorder,
+    )
+    intent = BattleIntent(
+        "help_bill",
+        TEST_BATTLE_PLAN_ID,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+    )
+
+    with bind_battle_decision_observer(observer):
+        with pytest.raises(BattleRuntimeTimeoutError, match="bounded runtime pulses"):
+            run_adaptive_trainer_battle(
+                runtime,
+                recorder,
+                choose_cerulean_rival_move_slot,
+                expected_map=MapId.CERULEAN_CITY,
+                intent=intent,
+                timing=replace(BattleRuntimeTiming(), max_runtime_pulses=1),
+            )
+        final = run_adaptive_trainer_battle(
+            runtime,
+            recorder,
+            choose_cerulean_rival_move_slot,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=intent,
+        )
+
+    assert final.battle_state == 0
+    assert recorder.recording_failures == 0
+    assert len(sink.decisions) == 3
+    assert {decision.context.metadata["battle_instance_id"] for decision in sink.decisions} == {
+        "retry-episode:battle:0"
+    }
 
 
 def test_policy_is_called_once_while_main_cursor_moves_to_fight() -> None:

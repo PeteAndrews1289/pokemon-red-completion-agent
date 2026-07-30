@@ -10,6 +10,7 @@ from pokemon_red_completion.battle_semantics import (
     MAX_EFFECTIVE_POWER,
     BattleFeatureError,
     BattleFeatureProjector,
+    BattleMovePolicyContext,
 )
 from pokemon_red_completion.red_battle_catalog import (
     RED_BATTLE_CATALOG,
@@ -112,8 +113,8 @@ def test_projector_builds_fixed_transferable_candidate_vectors() -> None:
 
     assert batch.schema_id == FEATURE_SCHEMA_ID
     assert batch.feature_names == FEATURE_NAMES
-    assert len(batch.feature_names) == 100
-    assert batch.feature_names[-11:] == (
+    assert len(batch.feature_names) == 101
+    assert batch.feature_names[-12:-1] == (
         "interaction.physical_x_player_attack_stage",
         "interaction.physical_x_opponent_defense_stage",
         "interaction.physical_x_player_burn",
@@ -126,6 +127,7 @@ def test_projector_builds_fixed_transferable_candidate_vectors() -> None:
         "interaction.fixed_damage_x_player_level",
         "interaction.pp_x_effective_power",
     )
+    assert batch.feature_names[-1] == "constraint.matches_required_move"
     assert batch.slot_indices == (0, 1, 2)
     assert batch.current_pp == (12.0, 0.0, 30.0)
     assert batch.legal_mask == (True, False, True)
@@ -171,6 +173,35 @@ def test_projector_builds_fixed_transferable_candidate_vectors() -> None:
     assert _value(batch, 0, "interaction.pp_x_effective_power") == pytest.approx(
         (12 / 15) * (380 / MAX_EFFECTIVE_POWER)
     )
+
+
+def test_exact_move_constraint_marks_only_the_predeclared_candidate() -> None:
+    context = BattleMovePolicyContext(
+        goal="win",
+        move_policy="exact_required",
+        required_move_ref="pokemon.red.gb.us.rev0:move:039",
+    )
+
+    batch = BattleFeatureProjector(RED_BATTLE_CATALOG).project(
+        _snapshot(),
+        policy_context=context,
+    )
+
+    assert [
+        _value(batch, index, "constraint.matches_required_move")
+        for index in range(len(batch.candidate_vectors))
+    ] == [0.0, 0.0, 1.0]
+
+    missing = BattleMovePolicyContext(
+        goal="win",
+        move_policy="exact_required",
+        required_move_ref="pokemon.red.gb.us.rev0:move:033",
+    )
+    with pytest.raises(BattleFeatureError, match="required move is absent"):
+        BattleFeatureProjector(RED_BATTLE_CATALOG).project(
+            _snapshot(),
+            policy_context=missing,
+        )
 
     assert _value(batch, 1, "move.stab") == 1.0
     assert _value(batch, 1, "move.type_effectiveness_fraction") == 0.125

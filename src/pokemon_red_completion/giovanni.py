@@ -12,7 +12,12 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import run_adaptive_trainer_battle
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    RequiredMovePolicy,
+    run_adaptive_trainer_battle,
+)
 from pokemon_red_completion.blaine import _select_cursor
 from pokemon_red_completion.celadon import (
     _bag,
@@ -31,6 +36,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
 GIOVANNI_CHECKPOINT_COUNT = 8
@@ -351,19 +357,51 @@ def run_giovanni_chapter(
     _move(actions, reader, GYM_ENTRY_TO_HIKER, "Hiker approach")
     _require(reader.read(), MapId.VIRIDIAN_GYM, (11, 1), "Hiker approach")
     _face_and_interact(actions, "left")
-    receipts.append(_finish_trainer(actions, reader, emulator, REQUIRED_TRAINERS[0]))
+    receipts.append(
+        _finish_trainer(
+            actions,
+            reader,
+            emulator,
+            REQUIRED_TRAINERS[0],
+            RedBattlePlanId.GIOVANNI_HIKER_SET_8,
+        )
+    )
 
     _move(actions, reader, HIKER_TO_BLACKBELT, "Blackbelt approach")
     _require(reader.read(), MapId.VIRIDIAN_GYM, (12, 11), "Blackbelt approach")
     _pulse(actions, MacroActionKind.INTERACT)
-    receipts.append(_finish_trainer(actions, reader, emulator, REQUIRED_TRAINERS[1]))
+    receipts.append(
+        _finish_trainer(
+            actions,
+            reader,
+            emulator,
+            REQUIRED_TRAINERS[1],
+            RedBattlePlanId.GIOVANNI_BLACKBELT_SET_6,
+        )
+    )
 
     _trigger_line_battle(actions, reader, BLACKBELT_TO_COOLTRAINER_9, "Cooltrainer set 9")
-    receipts.append(_finish_trainer(actions, reader, emulator, REQUIRED_TRAINERS[2]))
+    receipts.append(
+        _finish_trainer(
+            actions,
+            reader,
+            emulator,
+            REQUIRED_TRAINERS[2],
+            RedBattlePlanId.GIOVANNI_COOLTRAINER_SET_9,
+        )
+    )
 
     _move(actions, reader, COOLTRAINER_9_TO_TAMER[:-1], "Tamer approach")
     _trigger_line_battle(actions, reader, COOLTRAINER_9_TO_TAMER[-1:], "Tamer set 3")
-    receipts.append(_finish_trainer(actions, reader, emulator, REQUIRED_TRAINERS[3]))
+    receipts.append(
+        _finish_trainer(
+            actions,
+            reader,
+            emulator,
+            REQUIRED_TRAINERS[3],
+            RedBattlePlanId.GIOVANNI_TAMER_SET_3,
+        )
+    )
 
     _move(actions, reader, TAMER_TO_COOLTRAINER_10[:-1], "Cooltrainer set 10 approach")
     _trigger_line_battle(
@@ -372,12 +410,28 @@ def run_giovanni_chapter(
         TAMER_TO_COOLTRAINER_10[-1:],
         "Cooltrainer set 10",
     )
-    receipts.append(_finish_trainer(actions, reader, emulator, REQUIRED_TRAINERS[4]))
+    receipts.append(
+        _finish_trainer(
+            actions,
+            reader,
+            emulator,
+            REQUIRED_TRAINERS[4],
+            RedBattlePlanId.GIOVANNI_COOLTRAINER_SET_10,
+        )
+    )
 
     _move(actions, reader, COOLTRAINER_10_TO_COOLTRAINER_1[:-1], "Gym gate approach")
     _require(reader.read(), MapId.VIRIDIAN_GYM, (6, 4), "Gym gate approach")
     _face_and_interact(actions, "down")
-    receipts.append(_finish_trainer(actions, reader, emulator, REQUIRED_TRAINERS[5]))
+    receipts.append(
+        _finish_trainer(
+            actions,
+            reader,
+            emulator,
+            REQUIRED_TRAINERS[5],
+            RedBattlePlanId.GIOVANNI_COOLTRAINER_SET_1,
+        )
+    )
 
     trainer_before_giovanni = _events(emulator, GYM_TRAINER_EVENTS)
     if trainer_before_giovanni != REQUIRED_TRAINER_EVENTS:
@@ -422,7 +476,13 @@ def run_giovanni_chapter(
     identity = _identity(emulator)
     if identity != (GIOVANNI_OPPONENT, GIOVANNI_TRAINER_CLASS, GIOVANNI_TRAINER_SET):
         raise GiovanniChapterError(f"Unexpected Giovanni identity: {identity!r}.")
-    turns = _run_policy_battle(actions, reader, 4, "Giovanni")
+    turns = _run_policy_battle(
+        actions,
+        reader,
+        4,
+        "Giovanni",
+        RedBattlePlanId.GIOVANNI_LEADER,
+    )
     if _encounter_party(turns) != GIOVANNI_PARTY:
         raise GiovanniChapterError(f"Giovanni party or Surf policy changed: {turns!r}.")
     _checkpoint(
@@ -550,6 +610,7 @@ def _finish_trainer(
         tuple[tuple[int, int], ...],
         int,
     ],
+    battle_plan_id: str,
 ) -> TrainerReceipt:
     label, expected_identity, expected_party, move_slot = expected
     _await_trainer_battle(actions, reader, label)
@@ -558,14 +619,20 @@ def _finish_trainer(
         raise GiovanniChapterError(
             f"{label} identity changed: expected {expected_identity!r}, got {identity!r}."
         )
-    turns = _run_policy_battle(actions, reader, move_slot, label)
+    turns = _run_policy_battle(actions, reader, move_slot, label, battle_plan_id)
     receipt = TrainerReceipt(label, identity, expected_party, turns)
     if not receipt.passed:
         raise GiovanniChapterError(f"{label} party or move policy changed: {turns!r}.")
     return receipt
 
 
-def _run_policy_battle(actions, reader, move_slot: int, label: str) -> tuple[GiovanniTurn, ...]:
+def _run_policy_battle(
+    actions,
+    reader,
+    move_slot: int,
+    label: str,
+    battle_plan_id: str,
+) -> tuple[GiovanniTurn, ...]:
     turns: list[GiovanniTurn] = []
 
     def policy(raw: RawGameState) -> int:
@@ -587,6 +654,14 @@ def _run_policy_battle(actions, reader, move_slot: int, label: str) -> tuple[Gio
         actions,
         policy,
         expected_map=MapId.VIRIDIAN_GYM,
+        intent=BattleIntent(
+            "defeat_giovanni",
+            battle_plan_id=battle_plan_id,
+            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+            required_move_ref=pokemon_red_move_ref(
+                {2: 0x46, 3: ICE_BEAM_MOVE_ID, 4: SURF_MOVE_ID}[move_slot]
+            ),
+        ),
         required_move_id={2: 0x46, 3: ICE_BEAM_MOVE_ID, 4: SURF_MOVE_ID}[move_slot],
         label=label,
     )

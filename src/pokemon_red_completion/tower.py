@@ -7,7 +7,13 @@ from dataclasses import dataclass, field, replace
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import BattleRuntimeTiming, run_adaptive_trainer_battle
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRuntimeTiming,
+    RequiredMovePolicy,
+    run_adaptive_trainer_battle,
+)
 from pokemon_red_completion.celadon import (
     PROTECTED_PARTY,
     _bag,
@@ -30,6 +36,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 
 TOWER_CHECKPOINT_COUNT = 27
 BITE = 0x2C
@@ -369,6 +376,7 @@ def run_tower_chapter(
             EventFlag.BEAT_POKEMON_TOWER_RIVAL,
             BITE,
             1,
+            RedBattlePlanId.TOWER_RIVAL,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "rival", "Defeated mandatory rival")
@@ -393,6 +401,7 @@ def run_tower_chapter(
             EventFlag.BEAT_POKEMONTOWER_4_TRAINER_1,
             BUBBLEBEAM,
             3,
+            RedBattlePlanId.TOWER_4F_CHANNELER,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "tower_4f", "Cleared 4F Channeler")
@@ -414,6 +423,7 @@ def run_tower_chapter(
             EventFlag.BEAT_POKEMONTOWER_5_TRAINER_0,
             BUBBLEBEAM,
             3,
+            RedBattlePlanId.TOWER_5F_CHANNELER,
         )
     )
     _move(actions, reader, emulator, run, TOWER_5_REHEAL, timing, "purified return")
@@ -435,6 +445,7 @@ def run_tower_chapter(
             EventFlag.BEAT_POKEMONTOWER_6_TRAINER_0,
             BUBBLEBEAM,
             3,
+            RedBattlePlanId.TOWER_6F_CHANNELER_19,
         )
     )
     _move(actions, reader, emulator, run, TOWER_6_CHANNELER_21, timing, "6F Channeler 21")
@@ -450,6 +461,7 @@ def run_tower_chapter(
             EventFlag.BEAT_POKEMONTOWER_6_TRAINER_2,
             BUBBLEBEAM,
             3,
+            RedBattlePlanId.TOWER_6F_CHANNELER_21,
         )
     )
     _move(actions, reader, emulator, run, TOWER_6_TO_5, timing, "6F recovery descent")
@@ -471,6 +483,7 @@ def run_tower_chapter(
             EventFlag.BEAT_POKEMONTOWER_6_TRAINER_1,
             BUBBLEBEAM,
             3,
+            RedBattlePlanId.TOWER_6F_CHANNELER_20,
         )
     )
     _checkpoint(
@@ -502,6 +515,7 @@ def run_tower_chapter(
             EventFlag.BEAT_POKEMONTOWER_7_TRAINER_0,
             BITE,
             1,
+            RedBattlePlanId.TOWER_7F_ROCKET_19,
             interact_direction="up",
             run=run,
         )
@@ -520,6 +534,7 @@ def run_tower_chapter(
             EventFlag.BEAT_POKEMONTOWER_7_TRAINER_1,
             BITE,
             1,
+            RedBattlePlanId.TOWER_7F_ROCKET_20,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "rocket_20", "Defeated second Rocket")
@@ -537,6 +552,7 @@ def run_tower_chapter(
             EventFlag.BEAT_POKEMONTOWER_7_TRAINER_2,
             BUBBLEBEAM,
             3,
+            RedBattlePlanId.TOWER_7F_ROCKET_21,
             clear_after=False,
             battle_timing=TOWER_EVOLUTION_BATTLE_TIMING,
             unknown_cancel_interval=5,
@@ -635,6 +651,7 @@ def _fight(
     event: EventFlag,
     move_id: int,
     move_slot: int,
+    battle_plan_id: str,
     *,
     interact_direction: str | None = None,
     clear_after: bool = True,
@@ -671,6 +688,12 @@ def _fight(
         actions,
         lambda _: move_slot,
         expected_map=int(battle.map_id or 0),
+        intent=BattleIntent(
+            "rescue_fuji",
+            battle_plan_id=battle_plan_id,
+            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+            required_move_ref=pokemon_red_move_ref(move_id),
+        ),
         required_move_id=move_id,
         timing=battle_timing,
         label=label,

@@ -12,7 +12,10 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -777,6 +780,11 @@ def _defeat_route22_rival(
                 actions,
                 health_aware_policy,
                 expected_map=MapId.ROUTE_22,
+                intent=BattleIntent(
+                    "cross_victory_road",
+                    battle_plan_id=RedBattlePlanId.VICTORY_ROAD_ROUTE_22_RIVAL,
+                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                ),
                 timing=BattleRuntimeTiming(max_runtime_pulses=720),
                 label="Route 22 rival",
             )

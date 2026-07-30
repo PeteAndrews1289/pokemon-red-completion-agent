@@ -13,7 +13,12 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import run_adaptive_trainer_battle
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    RequiredMovePolicy,
+    run_adaptive_trainer_battle,
+)
 from pokemon_red_completion.observation import (
     Badge,
     BattleMenuPhase,
@@ -24,6 +29,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.surge import _swap_party_lead
 
 LAVENDER_CHECKPOINT_COUNT = 15
@@ -462,6 +468,7 @@ def run_lavender_chapter(
         5,
         PECK,
         1,
+        RedBattlePlanId.LAVENDER_ROUTE_9_TRAINER_0,
     )
     _swap(actions, reader, emulator, WARTORTLE, "Route 9 Wartortle restoration")
     _move(
@@ -489,6 +496,7 @@ def run_lavender_chapter(
         14,
         BITE,
         1,
+        RedBattlePlanId.LAVENDER_ROUTE_9_TRAINER_8,
         already_triggered=True,
     )
     _move(
@@ -554,6 +562,7 @@ def run_lavender_chapter(
         7,
         BUBBLEBEAM,
         3,
+        RedBattlePlanId.LAVENDER_ROCK_TUNNEL_1F_TRAINER_3,
     )
     _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
     _move(actions, reader, emulator, run, TUNNEL_1F_TO_B1, timing, "first B1 ladder")
@@ -573,6 +582,7 @@ def run_lavender_chapter(
         5,
         BITE,
         1,
+        RedBattlePlanId.LAVENDER_ROCK_TUNNEL_B1F_TRAINER_7,
     )
     _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
     _move(
@@ -600,6 +610,7 @@ def run_lavender_chapter(
         10,
         PECK,
         1,
+        RedBattlePlanId.LAVENDER_ROCK_TUNNEL_B1F_TRAINER_5,
     )
     _heal_if_below(actions, reader, emulator, run, timing, 1, TRAVERSAL_RECOVERY_THRESHOLD)
     _swap(actions, reader, emulator, WARTORTLE, "B1 Wartortle restoration")
@@ -619,6 +630,7 @@ def run_lavender_chapter(
         4,
         BUBBLEBEAM,
         3,
+        RedBattlePlanId.LAVENDER_ROCK_TUNNEL_B1F_TRAINER_3,
     )
     _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
     _trainer(
@@ -636,6 +648,7 @@ def run_lavender_chapter(
         10,
         BUBBLEBEAM,
         3,
+        RedBattlePlanId.LAVENDER_ROCK_TUNNEL_B1F_TRAINER_4,
     )
     _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
     _move(actions, reader, emulator, run, B1_TO_1F_WEST, timing, "B1 west ladder")
@@ -657,6 +670,7 @@ def run_lavender_chapter(
         9,
         BITE,
         1,
+        RedBattlePlanId.LAVENDER_ROCK_TUNNEL_B1F_TRAINER_0,
     )
     _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
     _trainer(
@@ -674,6 +688,7 @@ def run_lavender_chapter(
         9,
         BUBBLEBEAM,
         3,
+        RedBattlePlanId.LAVENDER_ROCK_TUNNEL_B1F_TRAINER_1,
     )
     _heal_if_below(actions, reader, emulator, run, timing, 1, TRAVERSAL_RECOVERY_THRESHOLD)
     _move(actions, reader, emulator, run, B1_TO_1F_EAST, timing, "B1 east ladder")
@@ -694,6 +709,7 @@ def run_lavender_chapter(
         17,
         BITE,
         1,
+        RedBattlePlanId.LAVENDER_ROCK_TUNNEL_1F_TRAINER_4,
     )
     _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
     _trainer(
@@ -711,6 +727,7 @@ def run_lavender_chapter(
         18,
         BITE,
         1,
+        RedBattlePlanId.LAVENDER_ROCK_TUNNEL_1F_TRAINER_5,
     )
     _heal_if_below(actions, reader, emulator, run, timing, 0, TRAVERSAL_RECOVERY_THRESHOLD)
     _move(actions, reader, emulator, run, ONE_F_TO_SOUTH_EXIT, timing, "Rock Tunnel exit")
@@ -794,6 +811,7 @@ def _trainer(
     trainer_set: int,
     move_id: int,
     move_slot: int,
+    battle_plan_id: str,
     *,
     already_triggered: bool = False,
 ) -> None:
@@ -826,6 +844,12 @@ def _trainer(
         executor,
         lambda _: move_slot,
         expected_map=int(map_id),
+        intent=BattleIntent(
+            "reach_lavender",
+            battle_plan_id=battle_plan_id,
+            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+            required_move_ref=pokemon_red_move_ref(move_id),
+        ),
         required_move_id=move_id,
         label=label,
     )

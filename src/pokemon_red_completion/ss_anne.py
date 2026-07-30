@@ -7,7 +7,9 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -262,6 +264,10 @@ def run_ss_anne_chapter(
             chapter_executor,
             lambda _state: 1,
             expected_map=MapId.SS_ANNE_2F,
+            intent=BattleIntent(
+                "obtain_cut",
+                battle_plan_id=RedBattlePlanId.SS_ANNE_RIVAL,
+            ),
             timing=timing.battle_runtime,
             label="S.S. Anne rival",
         )

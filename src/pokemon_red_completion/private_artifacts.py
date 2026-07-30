@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ctypes
 import errno
+import fcntl
 import hashlib
 import json
 import math
@@ -10,6 +11,7 @@ import re
 import stat
 import subprocess
 import sys
+import uuid
 from collections.abc import Callable, Iterator, Mapping, Sequence
 from contextlib import suppress
 from dataclasses import dataclass
@@ -20,14 +22,17 @@ PRIVATE_ROOT_SENTINEL = ".pokemon-red-completion-private-root.json"
 PRIVATE_ROOT_FORMAT = "pokemon-red-completion-private-root"
 EPISODE_FORMAT = "pokemon-red-completion-episode-jsonl"
 PRIVATE_JSON_ARTIFACT_FORMAT = "pokemon-red-completion-private-artifact-jsonl"
+PRIVATE_SEALED_RECORD_FORMAT = "pokemon-red-completion-private-sealed-record"
 PRIVATE_ARTIFACT_SCHEMA_VERSION = 1
 _PRIVATE_DIRECTORY_MODE = 0o700
 _PRIVATE_FILE_MODE = 0o600
 _MAX_MANIFEST_BYTES = 1024 * 1024
+_MAX_SEALED_RECORD_BYTES = 1024 * 1024
 _MAX_JSONL_LINE_BYTES = 16 * 1024 * 1024
 _MAX_EPISODE_BYTES = 512 * 1024 * 1024
 _READER_VALIDATION_TOKEN = object()
 _WRITER_VALIDATION_TOKEN = object()
+_SESSION_VALIDATION_TOKEN = object()
 
 _SENTINEL_BYTES = (
     json.dumps(
@@ -63,6 +68,75 @@ GitWorktreeProbe = Callable[[Path], bool]
 
 class PrivateArtifactError(RuntimeError):
     """Raised when private artifacts cannot be handled without weakening isolation."""
+
+
+@dataclass(frozen=True, slots=True)
+class SealedRecordSummary:
+    """Path-free identity and integrity data for one immutable private record."""
+
+    record_id: str
+    kind: str
+    record_sha256: str
+    manifest_sha256: str
+    total_bytes: int
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "private-sealed-record-summary-v1",
+            "record_id": self.record_id,
+            "kind": self.kind,
+            "record_sha256": self.record_sha256,
+            "manifest_sha256": self.manifest_sha256,
+            "total_bytes": self.total_bytes,
+        }
+
+
+class PrivateSealedRecord:
+    """An immutable in-memory view of one fully verified private record."""
+
+    __slots__ = ("_payload", "_summary")
+
+    def __init__(self, *, payload: bytes, summary: SealedRecordSummary) -> None:
+        self._payload = payload
+        self._summary = summary
+
+    def __repr__(self) -> str:
+        return (
+            "PrivateSealedRecord("
+            f"record_id={self._summary.record_id!r}, "
+            f"kind={self._summary.kind!r}, validated=True)"
+        )
+
+    @property
+    def summary(self) -> SealedRecordSummary:
+        return self._summary
+
+    def read(self) -> dict[str, object]:
+        """Return a fresh mapping so callers cannot mutate the verified snapshot."""
+
+        value = json.loads(self._payload.decode("ascii"))
+        if not isinstance(value, dict):  # Defensive: construction already proves this.
+            raise PrivateArtifactError("sealed private record is not a JSON object")
+        return value
+
+
+@dataclass(frozen=True, slots=True)
+class EpisodeArtifactState:
+    """Path-free terminal or recoverable state of one deterministic episode ID."""
+
+    episode_id: str
+    status: str
+    reason_code: str | None = None
+    manifest_sha256: str | None = None
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "private-episode-artifact-state-v1",
+            "episode_id": self.episode_id,
+            "status": self.status,
+            "reason_code": self.reason_code,
+            "manifest_sha256": self.manifest_sha256,
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -162,10 +236,127 @@ class PrivateArtifactRoot:
     def __repr__(self) -> str:
         return "PrivateArtifactRoot(validated=True)"
 
+    def collection_session(self, collection_id: str) -> CollectionSession:
+        """Return an exclusive collection session without exposing its lock location."""
+
+        _validate_artifact_id(collection_id)
+        self._revalidate()
+        return CollectionSession(
+            _validation_token=_SESSION_VALIDATION_TOKEN,
+            store=self,
+            collection_id=collection_id,
+        )
+
+    def publish_sealed_record(
+        self,
+        record_id: str,
+        *,
+        kind: str,
+        record: Mapping[str, object],
+    ) -> PrivateSealedRecord:
+        """Publish one small immutable record, idempotently only for identical bytes.
+
+        A unique partial directory is used for each publication attempt. A process
+        interruption can therefore leave evidence behind without permanently
+        blocking reconstruction of the same deterministic final record.
+        """
+
+        _validate_artifact_id(record_id)
+        _validate_artifact_kind(kind)
+        self._revalidate()
+        payload = _canonical_record(record)
+        if len(payload) > _MAX_SEALED_RECORD_BYTES:
+            raise PrivateArtifactError("sealed private record exceeds the allowed size")
+
+        existing = self.find_sealed_record(record_id, expected_kind=kind)
+        if existing is not None:
+            if existing._payload != payload:
+                raise PrivateArtifactError(
+                    "sealed private record already exists with different content"
+                )
+            return existing
+
+        for suffix in (".partial", ".failed.partial", ".interrupted.partial"):
+            if _lexists(self._root / f"{record_id}{suffix}"):
+                raise PrivateArtifactError(
+                    "sealed private record identity collides with another private artifact"
+                )
+
+        temporary = self._root / (f".{record_id}.sealed-{uuid.uuid4().hex}.partial")
+        final = self._root / record_id
+        try:
+            os.mkdir(temporary, mode=_PRIVATE_DIRECTORY_MODE)
+            os.chmod(temporary, _PRIVATE_DIRECTORY_MODE)
+            _write_exclusive_file(
+                temporary / "record.json",
+                payload,
+                mode=_PRIVATE_FILE_MODE,
+            )
+            manifest = {
+                "bytes": len(payload),
+                "format": PRIVATE_SEALED_RECORD_FORMAT,
+                "kind": kind,
+                "record_id": record_id,
+                "record_sha256": hashlib.sha256(payload).hexdigest(),
+                "schema_version": PRIVATE_ARTIFACT_SCHEMA_VERSION,
+                "status": "complete",
+            }
+            _write_exclusive_file(
+                temporary / "manifest.json",
+                _canonical_json_line(manifest),
+                mode=_PRIVATE_FILE_MODE,
+            )
+            _fsync_directory(temporary)
+            _rename_no_replace(temporary, final)
+            _fsync_directory(self._root)
+        except FileExistsError:
+            existing = self.find_sealed_record(record_id, expected_kind=kind)
+            if existing is not None and existing._payload == payload:
+                return existing
+            raise PrivateArtifactError(
+                "sealed private record already exists with different content"
+            ) from None
+        except PrivateArtifactError:
+            raise
+        except OSError:
+            existing = self.find_sealed_record(record_id, expected_kind=kind)
+            if existing is not None and existing._payload == payload:
+                return existing
+            raise PrivateArtifactError("unable to publish the sealed private record") from None
+        return _open_private_sealed_record(self._root, record_id, expected_kind=kind)
+
+    def find_sealed_record(
+        self,
+        record_id: str,
+        *,
+        expected_kind: str | None = None,
+    ) -> PrivateSealedRecord | None:
+        """Open a verified immutable record, or return ``None`` when it is absent."""
+
+        _validate_artifact_id(record_id)
+        if expected_kind is not None:
+            _validate_artifact_kind(expected_kind)
+        self._revalidate()
+        if not _lexists(self._root / record_id):
+            return None
+        return _open_private_sealed_record(
+            self._root,
+            record_id,
+            expected_kind=expected_kind,
+        )
+
+    def inspect_episode_state(self, episode_id: str) -> EpisodeArtifactState:
+        """Inspect a deterministic episode namespace without returning its location."""
+
+        _validate_episode_id(episode_id)
+        self._revalidate()
+        return _inspect_episode_artifact_state(self._root, episode_id)
+
     def begin_episode(self, episode_id: str) -> EpisodeWriter:
         """Create a new, exclusive partial episode.
 
-        An existing final, partial, or failed artifact is never reused or overwritten.
+        An existing final, partial, failed, or interrupted artifact is never reused
+        or overwritten.
         """
         _validate_episode_id(episode_id)
         self._revalidate()
@@ -173,7 +364,8 @@ class PrivateArtifactRoot:
         partial = self._root / f"{episode_id}.partial"
         final = self._root / episode_id
         failed = self._root / f"{episode_id}.failed.partial"
-        if any(_lexists(candidate) for candidate in (partial, final, failed)):
+        interrupted = self._root / f"{episode_id}.interrupted.partial"
+        if any(_lexists(candidate) for candidate in (partial, final, failed, interrupted)):
             raise PrivateArtifactError("episode id is already present; refusing to overwrite")
 
         try:
@@ -185,6 +377,17 @@ class PrivateArtifactRoot:
             ) from error
         except OSError as error:
             raise PrivateArtifactError("unable to create the private partial episode") from error
+
+        try:
+            # The partial namespace is the durable, one-shot attempt claim. Persist
+            # both its own metadata and the parent directory entry before returning
+            # control to a caller that may start emulator execution.
+            _fsync_directory(partial)
+            _fsync_directory(self._root)
+        except PrivateArtifactError:
+            # Retain the visible partial so an in-process reconciliation fails
+            # closed. The public error deliberately contains no private location.
+            raise PrivateArtifactError("unable to durably claim the private episode") from None
 
         return EpisodeWriter(
             episode_id=episode_id,
@@ -261,6 +464,192 @@ class PrivateArtifactRoot:
             git_worktree_probe=self._git_worktree_probe,
         )
         _validate_sentinel(self._root)
+
+    def _recover_interrupted_episode(
+        self,
+        episode_id: str,
+    ) -> EpisodeArtifactState:
+        self._revalidate()
+        state = _inspect_episode_artifact_state(self._root, episode_id)
+        if state.status != "partial":
+            return state
+
+        partial = self._root / f"{episode_id}.partial"
+        try:
+            complete = _validate_episode_directory_state(
+                self._root,
+                partial.name,
+                episode_id=episode_id,
+                expected_status="complete",
+            )
+        except PrivateArtifactError:
+            complete = None
+        if complete is not None:
+            try:
+                _rename_no_replace(partial, self._root / episode_id)
+                _fsync_directory(self._root)
+            except (OSError, PrivateArtifactError):
+                return self._stable_recovery_state(episode_id)
+            return complete
+
+        try:
+            failed = _validate_episode_directory_state(
+                self._root,
+                partial.name,
+                episode_id=episode_id,
+                expected_status="failed",
+            )
+        except PrivateArtifactError:
+            failed = None
+        if failed is not None:
+            try:
+                _rename_no_replace(
+                    partial,
+                    self._root / f"{episode_id}.failed.partial",
+                )
+                _fsync_directory(self._root)
+            except (OSError, PrivateArtifactError):
+                return self._stable_recovery_state(episode_id)
+            return failed
+
+        interrupted = self._root / f"{episode_id}.interrupted.partial"
+        try:
+            _require_private_directory(partial, subject="partial episode")
+            _rename_no_replace(partial, interrupted)
+            _fsync_directory(self._root)
+        except (OSError, PrivateArtifactError):
+            return self._stable_recovery_state(episode_id)
+        return EpisodeArtifactState(
+            episode_id,
+            "interrupted",
+            reason_code="process_interrupted",
+        )
+
+    def _stable_recovery_state(self, episode_id: str) -> EpisodeArtifactState:
+        """Return only a re-observed terminal state after a failed transition."""
+
+        try:
+            state = self.inspect_episode_state(episode_id)
+        except PrivateArtifactError:
+            raise PrivateArtifactError(
+                "unable to establish a stable recovered episode state"
+            ) from None
+        if state.status in {"complete", "failed", "interrupted", "invalid"}:
+            return state
+        raise PrivateArtifactError("unable to establish a stable recovered episode state")
+
+
+class CollectionSession:
+    """Exclusive, path-free recovery authority for one collection campaign."""
+
+    __slots__ = ("_collection_id", "_descriptor", "_state", "_store")
+
+    def __init__(
+        self,
+        *,
+        _validation_token: object,
+        store: PrivateArtifactRoot,
+        collection_id: str,
+    ) -> None:
+        if _validation_token is not _SESSION_VALIDATION_TOKEN:
+            raise PrivateArtifactError(
+                "collection sessions must be created from a validated private root"
+            )
+        self._store = store
+        self._collection_id = collection_id
+        self._descriptor = -1
+        self._state = "ready"
+
+    def __repr__(self) -> str:
+        return f"CollectionSession(collection_id={self._collection_id!r}, state={self._state!r})"
+
+    @property
+    def collection_id(self) -> str:
+        return self._collection_id
+
+    @property
+    def active(self) -> bool:
+        return self._state == "active"
+
+    def __enter__(self) -> CollectionSession:
+        if self._state != "ready":
+            raise PrivateArtifactError("collection session cannot be entered again")
+        self._store._revalidate()
+        digest = hashlib.sha256(self._collection_id.encode("ascii")).hexdigest()
+        lock_file = self._store._root / f".collection-{digest}.lock"
+        flags = os.O_RDWR | os.O_CREAT
+        if hasattr(os, "O_CLOEXEC"):
+            flags |= os.O_CLOEXEC
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = -1
+        try:
+            descriptor = os.open(lock_file, flags, _PRIVATE_FILE_MODE)
+            metadata = os.fstat(descriptor)
+            if not stat.S_ISREG(metadata.st_mode) or metadata.st_nlink != 1:
+                raise PrivateArtifactError("collection lock failed validation")
+            os.fchmod(descriptor, _PRIVATE_FILE_MODE)
+            try:
+                fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError:
+                raise PrivateArtifactError("collection is already active") from None
+        except PrivateArtifactError:
+            if descriptor >= 0:
+                with suppress(OSError):
+                    os.close(descriptor)
+            raise
+        except OSError as error:
+            if descriptor >= 0:
+                with suppress(OSError):
+                    os.close(descriptor)
+            if error.errno in (errno.EACCES, errno.EAGAIN):
+                raise PrivateArtifactError("collection is already active") from None
+            raise PrivateArtifactError("unable to acquire the collection session") from None
+        self._descriptor = descriptor
+        self._state = "active"
+        return self
+
+    def __exit__(
+        self,
+        exception_type: type[BaseException] | None,
+        exception: BaseException | None,
+        traceback: object,
+    ) -> bool:
+        del exception_type, exception, traceback
+        if self._state == "active":
+            with suppress(OSError):
+                fcntl.flock(self._descriptor, fcntl.LOCK_UN)
+            try:
+                os.close(self._descriptor)
+            except OSError:
+                self._descriptor = -1
+                self._state = "closed"
+                raise PrivateArtifactError("unable to close the collection session") from None
+            self._descriptor = -1
+            self._state = "closed"
+        return False
+
+    def inspect_episode(self, episode_id: str) -> EpisodeArtifactState:
+        self._require_active()
+        return self._store.inspect_episode_state(episode_id)
+
+    def recover_interrupted_episode(self, episode_id: str) -> EpisodeArtifactState:
+        """Seal an orphan partial as complete, failed, or permanently interrupted."""
+
+        self._require_active()
+        _validate_episode_id(episode_id)
+        return self._store._recover_interrupted_episode(episode_id)
+
+    def require_store(self, store: PrivateArtifactRoot) -> None:
+        """Fail unless this active session authorizes recovery in ``store``."""
+
+        self._require_active()
+        if self._store is not store:
+            raise PrivateArtifactError("collection session belongs to another private root")
+
+    def _require_active(self) -> None:
+        if self._state != "active":
+            raise PrivateArtifactError("collection session is not active")
 
 
 class PrivateEpisodeReader:
@@ -993,6 +1382,314 @@ def open_private_root(
     )
 
 
+def _open_private_sealed_record(
+    root: Path,
+    record_id: str,
+    *,
+    expected_kind: str | None,
+) -> PrivateSealedRecord:
+    root_descriptor = -1
+    record_descriptor = -1
+    try:
+        root_descriptor = os.open(root, _directory_read_flags())
+        expected_directory = _entry_metadata(root_descriptor, record_id)
+        if expected_directory is None:
+            raise PrivateArtifactError("sealed private record is absent")
+        if (
+            not stat.S_ISDIR(expected_directory.st_mode)
+            or stat.S_IMODE(expected_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+        ):
+            raise PrivateArtifactError("sealed private record directory is unsafe")
+        record_descriptor = os.open(
+            record_id,
+            _directory_read_flags(),
+            dir_fd=root_descriptor,
+        )
+        opened_directory = _fstat(
+            record_descriptor,
+            subject="sealed private record directory",
+        )
+        if (
+            not _same_file(expected_directory, opened_directory)
+            or not stat.S_ISDIR(opened_directory.st_mode)
+            or stat.S_IMODE(opened_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+        ):
+            raise PrivateArtifactError("sealed private record changed while opening")
+        if _directory_entries(record_descriptor) != {"manifest.json", "record.json"}:
+            raise PrivateArtifactError("sealed private record contents do not match its format")
+
+        manifest_bytes = _read_private_entry(
+            record_descriptor,
+            "manifest.json",
+            subject="sealed record manifest",
+            maximum_bytes=_MAX_MANIFEST_BYTES,
+        )
+        manifest = _decode_canonical_json_object(
+            manifest_bytes,
+            subject="sealed record manifest",
+            maximum_bytes=_MAX_MANIFEST_BYTES,
+        )
+        _require_exact_keys(
+            manifest,
+            {
+                "bytes",
+                "format",
+                "kind",
+                "record_id",
+                "record_sha256",
+                "schema_version",
+                "status",
+            },
+            subject="sealed record manifest",
+        )
+        if manifest["format"] != PRIVATE_SEALED_RECORD_FORMAT:
+            raise PrivateArtifactError("sealed private record format is unsupported")
+        if manifest["schema_version"] != PRIVATE_ARTIFACT_SCHEMA_VERSION:
+            raise PrivateArtifactError("sealed private record schema is unsupported")
+        if manifest["status"] != "complete" or manifest["record_id"] != record_id:
+            raise PrivateArtifactError("sealed private record identity is invalid")
+        kind = manifest["kind"]
+        if not isinstance(kind, str):
+            raise PrivateArtifactError("sealed private record kind is invalid")
+        try:
+            _validate_artifact_kind(kind)
+        except PrivateArtifactError:
+            raise PrivateArtifactError("sealed private record kind is invalid") from None
+        if expected_kind is not None and kind != expected_kind:
+            raise PrivateArtifactError("sealed private record kind does not match")
+        size = _manifest_integer(manifest, "bytes")
+        if size <= 0 or size > _MAX_SEALED_RECORD_BYTES:
+            raise PrivateArtifactError("sealed private record size is invalid")
+        record_sha256 = manifest["record_sha256"]
+        if (
+            not isinstance(record_sha256, str)
+            or re.fullmatch(r"[0-9a-f]{64}", record_sha256) is None
+        ):
+            raise PrivateArtifactError("sealed private record digest is invalid")
+        payload = _read_private_entry(
+            record_descriptor,
+            "record.json",
+            subject="sealed private record",
+            maximum_bytes=_MAX_SEALED_RECORD_BYTES,
+            expected_bytes=size,
+        )
+        if hashlib.sha256(payload).hexdigest() != record_sha256:
+            raise PrivateArtifactError("sealed private record failed its integrity check")
+        value = _decode_canonical_json_object(
+            payload,
+            subject="sealed private record",
+            maximum_bytes=_MAX_SEALED_RECORD_BYTES,
+        )
+        if _canonical_record(value) != payload:
+            raise PrivateArtifactError("sealed private record contains unsafe values")
+        final_directory = _fstat(
+            record_descriptor,
+            subject="sealed private record directory",
+        )
+        if not _same_file(opened_directory, final_directory) or _directory_entries(
+            record_descriptor
+        ) != {"manifest.json", "record.json"}:
+            raise PrivateArtifactError("sealed private record changed during validation")
+        return PrivateSealedRecord(
+            payload=payload,
+            summary=SealedRecordSummary(
+                record_id=record_id,
+                kind=kind,
+                record_sha256=record_sha256,
+                manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(),
+                total_bytes=size,
+            ),
+        )
+    except PrivateArtifactError:
+        raise
+    except OSError:
+        raise PrivateArtifactError("unable to inspect the sealed private record") from None
+    finally:
+        for descriptor in (record_descriptor, root_descriptor):
+            if descriptor >= 0:
+                with suppress(OSError):
+                    os.close(descriptor)
+
+
+def _inspect_episode_artifact_state(
+    root: Path,
+    episode_id: str,
+) -> EpisodeArtifactState:
+    candidates = {
+        "complete": root / episode_id,
+        "partial": root / f"{episode_id}.partial",
+        "failed": root / f"{episode_id}.failed.partial",
+        "interrupted": root / f"{episode_id}.interrupted.partial",
+    }
+    present = [status for status, candidate in candidates.items() if _lexists(candidate)]
+    if not present:
+        return EpisodeArtifactState(episode_id, "absent")
+    if len(present) != 1:
+        return EpisodeArtifactState(
+            episode_id,
+            "invalid",
+            reason_code="ambiguous_episode_state",
+        )
+
+    status = present[0]
+    candidate = candidates[status]
+    if status in {"partial", "interrupted"}:
+        try:
+            _require_private_directory(candidate, subject=f"{status} episode")
+        except PrivateArtifactError:
+            return EpisodeArtifactState(
+                episode_id,
+                "invalid",
+                reason_code=f"invalid_{status}_artifact",
+            )
+        return EpisodeArtifactState(
+            episode_id,
+            status,
+            reason_code=("process_interrupted" if status == "interrupted" else None),
+        )
+
+    try:
+        return _validate_episode_directory_state(
+            root,
+            candidate.name,
+            episode_id=episode_id,
+            expected_status=status,
+        )
+    except PrivateArtifactError:
+        return EpisodeArtifactState(
+            episode_id,
+            "invalid",
+            reason_code=f"invalid_{status}_artifact",
+        )
+
+
+def _validate_episode_directory_state(
+    root: Path,
+    directory_name: str,
+    *,
+    episode_id: str,
+    expected_status: str,
+) -> EpisodeArtifactState:
+    root_descriptor = -1
+    episode_descriptor = -1
+    try:
+        root_descriptor = os.open(root, _directory_read_flags())
+        expected_directory = _entry_metadata(root_descriptor, directory_name)
+        if expected_directory is None:
+            raise PrivateArtifactError("episode artifact is absent")
+        if (
+            not stat.S_ISDIR(expected_directory.st_mode)
+            or stat.S_IMODE(expected_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+        ):
+            raise PrivateArtifactError("episode artifact directory is unsafe")
+        episode_descriptor = os.open(
+            directory_name,
+            _directory_read_flags(),
+            dir_fd=root_descriptor,
+        )
+        opened_directory = _fstat(
+            episode_descriptor,
+            subject="episode artifact directory",
+        )
+        if (
+            not _same_file(expected_directory, opened_directory)
+            or not stat.S_ISDIR(opened_directory.st_mode)
+            or stat.S_IMODE(opened_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+        ):
+            raise PrivateArtifactError("episode artifact changed while opening")
+
+        manifest_bytes = _read_private_entry(
+            episode_descriptor,
+            "manifest.json",
+            subject="episode manifest",
+            maximum_bytes=_MAX_MANIFEST_BYTES,
+        )
+        manifest, files = _validate_episode_manifest(
+            manifest_bytes,
+            episode_id=episode_id,
+            expected_status=expected_status,
+        )
+        expected_entries = {"manifest.json", *(file.filename for file in files)}
+        entries = _directory_entries(episode_descriptor)
+        unpublished = "manifest.unpublished.json" in entries
+        if unpublished:
+            if expected_status != "failed" or manifest.get("reason_code") != "publication_failed":
+                raise PrivateArtifactError("episode artifact has an unexpected unpublished seal")
+            expected_entries.add("manifest.unpublished.json")
+        if entries != expected_entries:
+            raise PrivateArtifactError(
+                "episode artifact contents do not exactly match its manifest"
+            )
+
+        for file in files:
+            payload = _read_private_entry(
+                episode_descriptor,
+                file.filename,
+                subject="episode stream",
+                maximum_bytes=_MAX_EPISODE_BYTES,
+                expected_bytes=file.size,
+            )
+            if hashlib.sha256(payload).hexdigest() != file.sha256:
+                raise PrivateArtifactError("episode stream failed its integrity check")
+            _validate_jsonl_payload(payload, expected_records=file.records)
+
+        if unpublished:
+            unpublished_payload = _read_private_entry(
+                episode_descriptor,
+                "manifest.unpublished.json",
+                subject="unpublished episode manifest",
+                maximum_bytes=_MAX_MANIFEST_BYTES,
+            )
+            _, unpublished_files = _validate_episode_manifest(
+                unpublished_payload,
+                episode_id=episode_id,
+                expected_status="complete",
+            )
+            if unpublished_files != files:
+                raise PrivateArtifactError(
+                    "unpublished episode manifest does not match failed streams"
+                )
+
+        if _directory_entries(episode_descriptor) != expected_entries:
+            raise PrivateArtifactError("episode artifact changed during validation")
+        final_directory = _fstat(
+            episode_descriptor,
+            subject="episode artifact directory",
+        )
+        if (
+            not _same_file(opened_directory, final_directory)
+            or stat.S_IMODE(final_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+        ):
+            raise PrivateArtifactError("episode artifact changed during validation")
+        return EpisodeArtifactState(
+            episode_id=episode_id,
+            status=expected_status,
+            reason_code=(str(manifest["reason_code"]) if expected_status == "failed" else None),
+            manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(),
+        )
+    except PrivateArtifactError:
+        raise
+    except OSError:
+        raise PrivateArtifactError("unable to inspect the episode artifact") from None
+    finally:
+        for descriptor in (episode_descriptor, root_descriptor):
+            if descriptor >= 0:
+                with suppress(OSError):
+                    os.close(descriptor)
+
+
+def _require_private_directory(path: Path, *, subject: str) -> None:
+    try:
+        metadata = path.lstat()
+    except OSError:
+        raise PrivateArtifactError(f"{subject} cannot be inspected") from None
+    if (
+        not stat.S_ISDIR(metadata.st_mode)
+        or stat.S_IMODE(metadata.st_mode) != _PRIVATE_DIRECTORY_MODE
+    ):
+        raise PrivateArtifactError(f"{subject} is not a regular private directory")
+
+
 def _open_private_episode(root: Path, episode_id: str) -> PrivateEpisodeReader:
     root_descriptor = -1
     episode_descriptor = -1
@@ -1003,6 +1700,8 @@ def _open_private_episode(root: Path, episode_id: str) -> PrivateEpisodeReader:
             raise PrivateArtifactError("episode is still partial and cannot be read")
         if _entry_metadata(root_descriptor, f"{episode_id}.failed.partial") is not None:
             raise PrivateArtifactError("failed episode cannot be read")
+        if _entry_metadata(root_descriptor, f"{episode_id}.interrupted.partial") is not None:
+            raise PrivateArtifactError("interrupted episode cannot be read")
 
         expected_directory = _entry_metadata(root_descriptor, episode_id)
         if expected_directory is None:
@@ -1111,21 +1810,39 @@ def _validate_complete_manifest(
     *,
     episode_id: str,
 ) -> tuple[dict[str, object], tuple[_EpisodeFile, ...]]:
+    return _validate_episode_manifest(
+        payload,
+        episode_id=episode_id,
+        expected_status="complete",
+    )
+
+
+def _validate_episode_manifest(
+    payload: bytes,
+    *,
+    episode_id: str,
+    expected_status: str,
+) -> tuple[dict[str, object], tuple[_EpisodeFile, ...]]:
+    if expected_status not in {"complete", "failed"}:
+        raise PrivateArtifactError("episode manifest expected status is unsupported")
     manifest = _decode_canonical_json_object(
         payload,
         subject="episode manifest",
         maximum_bytes=_MAX_MANIFEST_BYTES,
     )
+    expected_keys = {
+        "episode_id",
+        "files",
+        "format",
+        "schema_version",
+        "status",
+        "totals",
+    }
+    if expected_status == "failed":
+        expected_keys.add("reason_code")
     _require_exact_keys(
         manifest,
-        {
-            "episode_id",
-            "files",
-            "format",
-            "schema_version",
-            "status",
-            "totals",
-        },
+        expected_keys,
         subject="episode manifest",
     )
     if manifest["format"] != EPISODE_FORMAT:
@@ -1136,10 +1853,14 @@ def _validate_complete_manifest(
         or manifest["schema_version"] != PRIVATE_ARTIFACT_SCHEMA_VERSION
     ):
         raise PrivateArtifactError("episode manifest schema version is unsupported")
-    if manifest["status"] != "complete":
-        raise PrivateArtifactError("episode manifest is not complete")
+    if manifest["status"] != expected_status:
+        raise PrivateArtifactError("episode manifest status does not match its artifact")
     if manifest["episode_id"] != episode_id:
         raise PrivateArtifactError("episode manifest identity does not match the requested episode")
+    if expected_status == "failed":
+        reason_code = manifest["reason_code"]
+        if not isinstance(reason_code, str) or _SAFE_REASON.fullmatch(reason_code) is None:
+            raise PrivateArtifactError("episode manifest failure reason is invalid")
 
     raw_files = manifest["files"]
     if not isinstance(raw_files, list):

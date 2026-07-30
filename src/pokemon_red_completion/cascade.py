@@ -14,8 +14,10 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_policy import choose_cerulean_rival_move_slot
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -373,6 +375,10 @@ def run_cascade_chapter(
         MapId.CERULEAN_CITY,
         timing,
         "Cerulean rival",
+        BattleIntent(
+            "help_bill",
+            battle_plan_id=RedBattlePlanId.CASCADE_CERULEAN_RIVAL,
+        ),
     )
     _confirm_pulses(
         chapter_executor,
@@ -735,6 +741,10 @@ def run_cascade_chapter(
         MapId.CERULEAN_GYM,
         timing,
         "Misty",
+        BattleIntent(
+            "defeat_misty",
+            battle_plan_id=RedBattlePlanId.CASCADE_MISTY,
+        ),
     )
     _confirm_pulses(
         chapter_executor,
@@ -1014,6 +1024,7 @@ def _run_battle(
     expected_map: MapId,
     timing: CascadeTiming,
     label: str,
+    intent: BattleIntent,
 ) -> RawGameState:
     try:
         return run_adaptive_trainer_battle(
@@ -1021,6 +1032,7 @@ def _run_battle(
             executor,
             policy,
             expected_map=expected_map,
+            intent=intent,
             timing=timing.battle_runtime,
             label=label,
         )

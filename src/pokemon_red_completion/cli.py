@@ -2,19 +2,43 @@ from __future__ import annotations
 
 import argparse
 import json
-import platform
 import sys
 import uuid
 from collections.abc import Sequence
 from dataclasses import asdict
-from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
 from pokemon_red_completion import __version__
+from pokemon_red_completion.battle_schedule import BattleScheduleError
 from pokemon_red_completion.bootstrap import (
     DEFAULT_NEW_GAME_TIMING,
     BootstrapError,
     run_bootstrap_smoke,
+)
+from pokemon_red_completion.collection_ledger import (
+    CollectionCampaignIdentity,
+    CollectionLedgerError,
+    CollectionOutcomeLedger,
+    CollectionSlot,
+    find_dry_run_qualification,
+    publish_dry_run_qualification,
+    require_dry_run_qualification,
+)
+from pokemon_red_completion.collection_protocol import (
+    BATTLE_START_SCHEDULE_SCHEMA,
+    BattleStartOffset,
+    CollectionAssignment,
+    CollectionExecution,
+    CollectionProtocolError,
+    CollectionRegistry,
+    ScheduleDryRun,
+    battle_start_offsets_sha256,
+    collection_document_sha256,
+    committed_source_bundle_sha256,
+    load_committed_collection_registry,
+    objective_graph_document,
+    teacher_behavior_configuration,
+    working_source_bundle_sha256,
 )
 from pokemon_red_completion.emulator import EmulatorError
 from pokemon_red_completion.opening import (
@@ -34,6 +58,7 @@ from pokemon_red_completion.play import (
 )
 from pokemon_red_completion.private_artifacts import (
     PrivateArtifactError,
+    PrivateArtifactRoot,
     initialize_private_root,
     open_private_root,
 )
@@ -42,6 +67,7 @@ from pokemon_red_completion.provenance import (
     canonical_sha256,
     detect_source_identity,
     require_clean_source,
+    require_published_source,
 )
 from pokemon_red_completion.red_trajectory import (
     POKEMON_BATTLE_MOVE_SKILL_ID,
@@ -51,7 +77,15 @@ from pokemon_red_completion.red_trajectory import (
     POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
 )
 from pokemon_red_completion.rom import RomValidationError, resolve_rom_path, verify_rom
-from pokemon_red_completion.route import COMPLETION_QUEST
+from pokemon_red_completion.route import COMPLETION_QUEST, completion_route_payload
+from pokemon_red_completion.runtime_identity import (
+    RuntimeIdentityError,
+    build_runtime_identity,
+)
+from pokemon_red_completion.schedule_audit import (
+    ScheduleAttestationError,
+    audit_schedule_attestations,
+)
 from pokemon_red_completion.trajectory_io import EpisodeTrajectorySink
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
@@ -83,6 +117,29 @@ def _parser() -> argparse.ArgumentParser:
         type=Path,
         required=True,
         help="Explicit absolute path to an existing external directory.",
+    )
+    collection = subcommands.add_parser(
+        "collection",
+        help="Inspect the immutable held-out collection campaign.",
+    )
+    collection_commands = collection.add_subparsers(
+        dest="collection_command",
+        required=True,
+    )
+    collection_status = collection_commands.add_parser(
+        "status",
+        help="Reconcile power-loss artifacts and print a path-free slot ledger.",
+    )
+    collection_status.add_argument(
+        "--private-root",
+        type=Path,
+        required=True,
+        help="Explicit absolute path to the initialized private artifact root.",
+    )
+    collection_status.add_argument(
+        "--rom",
+        type=Path,
+        help="Private ROM path; otherwise use POKEMON_RED_ROM.",
     )
     learn = subcommands.add_parser(
         "learn",
@@ -212,6 +269,22 @@ def _parser() -> argparse.ArgumentParser:
         choices=(1, 2, 4),
         help="Watched playback speed; requires --watch and defaults to 2.",
     )
+    recording_mode = record.add_mutually_exclusive_group()
+    recording_mode.add_argument(
+        "--collection-run",
+        help=(
+            "Declared run ID from the committed held-out collection registry; "
+            "omit for an unassigned diagnostic recording."
+        ),
+    )
+    recording_mode.add_argument(
+        "--schedule-dry-run",
+        action="store_true",
+        help=(
+            "Run the fixed unassigned 63-battle schedule rehearsal without "
+            "consuming a held-out collection slot."
+        ),
+    )
     return parser
 
 
@@ -278,17 +351,98 @@ def _public_error_message(
     return message
 
 
-def _completion_route_payload() -> list[dict[str, object]]:
-    return [
-        {
-            "id": objective.id,
-            "title": objective.title,
-            "specialist": objective.specialist.value,
-            "prerequisites": sorted(objective.prerequisites),
-            "completion_facts": sorted(objective.completion_facts),
-        }
-        for objective in COMPLETION_QUEST.topological_order()
-    ]
+def _collection_slots(registry: CollectionRegistry) -> tuple[CollectionSlot, ...]:
+    """Derive the exact single-attempt ledger roster from the frozen registry."""
+
+    slots: list[CollectionSlot] = []
+    for run in registry.runs:
+        assignment = registry.assignment(run.run_id)
+        slots.append(
+            CollectionSlot(
+                assignment_id=assignment.assignment_id,
+                episode_id=assignment.episode_id,
+                root_lineage_id=assignment.root_lineage_id,
+                run_id=assignment.run_id,
+                partition=assignment.partition,
+                harness_seed=assignment.harness_seed,
+                schedule_sha256=assignment.schedule_sha256,
+                offsets=assignment.offsets,
+                battle_count=len(assignment.offsets),
+                collection_ordinal=assignment.collection_slot_ordinal,
+                collection_total=assignment.declared_collection_slots,
+                partition_ordinal=assignment.partition_slot_ordinal,
+                partition_total=assignment.declared_partition_slots,
+            )
+        )
+    return tuple(slots)
+
+
+def _campaign_identity(
+    registry: CollectionRegistry,
+    metadata: dict[str, object],
+) -> CollectionCampaignIdentity:
+    """Bind private campaign accounting to the exact runtime and ROM identities."""
+
+    rom_identity = metadata.get("rom_identity")
+    source = metadata.get("source")
+    if not isinstance(rom_identity, dict):
+        raise CollectionLedgerError("recording metadata has no ROM identity")
+    if not isinstance(source, dict):
+        raise CollectionLedgerError("recording metadata has no source identity")
+    runtime_sha256 = metadata.get("runtime_sha256")
+    if not isinstance(runtime_sha256, str):
+        raise CollectionLedgerError("recording metadata has no runtime identity")
+    return CollectionCampaignIdentity(
+        collection_id=registry.collection_id,
+        registry_sha256=registry.registry_sha256,
+        source_commit=str(source.get("git_commit")),
+        source_bundle_sha256=registry.execution.source_bundle_sha256,
+        behavior_configuration_sha256=(
+            registry.execution.behavior_configuration_sha256
+        ),
+        objective_graph_sha256=registry.execution.objective_graph_sha256,
+        teacher_execution_sha256=registry.execution.teacher_execution_sha256,
+        runtime_sha256=runtime_sha256,
+        rom_sha1=str(rom_identity.get("sha1")),
+        rom_sha256=str(rom_identity.get("sha256")),
+    )
+
+
+def _capture_private_recording(
+    private_root: PrivateArtifactRoot,
+    *,
+    rom_path: Path,
+    episode_id: str,
+    metadata: dict[str, object],
+    watch: bool,
+    speed: int | None,
+    battle_start_offsets: tuple[BattleStartOffset, ...] | None,
+) -> tuple[QualifiedPlayReport, dict[str, object]]:
+    writer = private_root.begin_episode(episode_id)
+    with writer:
+        trajectory_sink = EpisodeTrajectorySink(
+            writer,
+            episode_id=episode_id,
+            game_id=POKEMON_RED_GAME_ID,
+        )
+        trajectory_sink.write_episode_header(metadata=metadata)
+        report = run_qualified_play(
+            rom_path,
+            watch=watch,
+            speed=speed,
+            progress=_print_qualified_progress,
+            trajectory_sink=trajectory_sink,
+            trajectory_episode_id=episode_id,
+            battle_start_offsets=battle_start_offsets,
+        )
+    if battle_start_offsets is not None:
+        audit_schedule_attestations(
+            private_root.open_episode(episode_id),
+            episode_id=episode_id,
+            offsets=battle_start_offsets,
+            schedule_sha256=battle_start_offsets_sha256(battle_start_offsets),
+        )
+    return report, writer.summary.public_dict()
 
 
 def _recording_metadata(
@@ -297,29 +451,206 @@ def _recording_metadata(
     episode_id: str,
     watch: bool,
     speed: int | None,
+    assignment: CollectionAssignment | None = None,
+    execution: CollectionExecution | None = None,
+    schedule_dry_run: ScheduleDryRun | None = None,
 ) -> dict[str, object]:
+    if assignment is not None and schedule_dry_run is not None:
+        raise ValueError("assignment and schedule_dry_run are mutually exclusive")
+    if assignment is not None and (
+        not isinstance(assignment, CollectionAssignment) or episode_id != assignment.episode_id
+    ):
+        raise ValueError("assignment must match the planned episode identity")
+    if schedule_dry_run is not None and not isinstance(schedule_dry_run, ScheduleDryRun):
+        raise TypeError("schedule_dry_run must be a ScheduleDryRun")
+    if (assignment is not None or schedule_dry_run is not None) and not isinstance(
+        execution,
+        CollectionExecution,
+    ):
+        raise ValueError("scheduled recording requires a frozen execution contract")
     source = detect_source_identity(REPOSITORY_ROOT, include_untracked=True)
     require_clean_source(source)
+    if assignment is not None or schedule_dry_run is not None:
+        if execution.source_commit is None:
+            raise EvaluationIdentityError(
+                "Scheduled collection requires a registry loaded from one exact commit."
+            )
+        if source.git_commit != execution.source_commit:
+            raise EvaluationIdentityError(
+                "The source commit changed after the collection registry was loaded."
+            )
+        require_published_source(REPOSITORY_ROOT, source)
     fingerprint = verify_rom(rom_path)
-    try:
-        pyboy_version = version("pyboy")
-    except PackageNotFoundError:
-        pyboy_version = "unavailable"
+    runtime_identity = build_runtime_identity()
+    pyboy_version = runtime_identity.pyboy_distribution_version
 
+    behavior_configuration = teacher_behavior_configuration(
+        pyboy_version=pyboy_version,
+        new_game_timing=asdict(DEFAULT_NEW_GAME_TIMING),
+        opening_timing=asdict(DEFAULT_OPENING_TIMING),
+        play_timing=asdict(DEFAULT_QUALIFIED_PLAY_TIMING),
+        pret_pokered_commit=PRET_POKERED_COMMIT,
+    )
+    behavior_configuration_sha256 = collection_document_sha256(
+        behavior_configuration
+    )
+    route = completion_route_payload()
+    objective_graph_sha256 = collection_document_sha256(
+        objective_graph_document(route)
+    )
+    source_bundle_sha256: str | None = None
+    if execution is not None:
+        source_bundle_sha256 = committed_source_bundle_sha256(
+            REPOSITORY_ROOT,
+            revision=(
+                execution.source_commit
+                if execution.source_commit is not None
+                else "HEAD"
+            ),
+        )
+        working_bundle_sha256 = working_source_bundle_sha256(REPOSITORY_ROOT)
+        if (
+            behavior_configuration_sha256
+            != execution.behavior_configuration_sha256
+            or behavior_configuration != execution.behavior_configuration_dict()
+            or objective_graph_sha256 != execution.objective_graph_sha256
+            or source_bundle_sha256 != execution.source_bundle_sha256
+            or working_bundle_sha256 != execution.source_bundle_sha256
+        ):
+            raise EvaluationIdentityError(
+                "The local teacher execution does not match the frozen collection contract."
+            )
+        if assignment is not None or schedule_dry_run is not None:
+            current_source = detect_source_identity(
+                REPOSITORY_ROOT,
+                include_untracked=True,
+            )
+            require_clean_source(current_source)
+            if current_source != source:
+                raise EvaluationIdentityError(
+                    "The source identity changed while preparing collection."
+                )
+
+    runtime = runtime_identity.public_dict()
     configuration = {
-        "schema": "qualified-teacher-configuration-v1",
-        "pret_pokered_commit": PRET_POKERED_COMMIT,
-        "new_game_timing": asdict(DEFAULT_NEW_GAME_TIMING),
-        "opening_timing": asdict(DEFAULT_OPENING_TIMING),
-        "play_timing": asdict(DEFAULT_QUALIFIED_PLAY_TIMING),
-        "emulator": {
-            "human_input": False,
-            "save_on_exit": False,
+        "schema": "qualified-teacher-configuration-v2",
+        "behavior_configuration": behavior_configuration,
+        "behavior_configuration_sha256": behavior_configuration_sha256,
+        "presentation": {
             "watch": watch,
             "speed": speed if watch else 0,
         },
     }
-    route = _completion_route_payload()
+    scheduled_offsets = (
+        assignment.offsets
+        if assignment is not None
+        else schedule_dry_run.offsets
+        if schedule_dry_run is not None
+        else None
+    )
+    if scheduled_offsets is not None:
+        schedule_sha256 = (
+            assignment.schedule_sha256
+            if assignment is not None
+            else schedule_dry_run.schedule_sha256
+        )
+        configuration["battle_start_schedule"] = {
+            "offsets": [offset.public_dict() for offset in scheduled_offsets],
+            "schedule_sha256": schedule_sha256,
+            "schema": BATTLE_START_SCHEDULE_SCHEMA,
+        }
+        if assignment is not None:
+            configuration["battle_start_schedule"].update(
+                {
+                    "assignment_id": assignment.assignment_id,
+                    "registry_sha256": assignment.registry_sha256,
+                }
+            )
+        else:
+            configuration["battle_start_schedule"].update(
+                {
+                    "dry_run_id": schedule_dry_run.dry_run_id,
+                    "purpose": "schedule_integration_dry_run",
+                    "registry_sha256": schedule_dry_run.registry_sha256,
+                    "teacher_execution_sha256": (
+                        execution.teacher_execution_sha256
+                    ),
+                }
+            )
+    if assignment is None:
+        if schedule_dry_run is None:
+            collection: dict[str, object] = {
+                "assistance_class": "teacher",
+                "start_type": "clean_power_on",
+                "human_input": False,
+                "save_restore_used": False,
+                "perturbation_schedule": "none",
+                "seed_protocol": "native_power_on_rng",
+                "attempt": {
+                    "counted": True,
+                    "series_id": RECORDING_SERIES_ID,
+                },
+            }
+        else:
+            collection = {
+                "assistance_class": "teacher",
+                "attempt": {"counted": False},
+                "dry_run_id": schedule_dry_run.dry_run_id,
+                "execution": {
+                    "behavior_configuration_sha256": (
+                        execution.behavior_configuration_sha256
+                    ),
+                    "objective_graph_sha256": execution.objective_graph_sha256,
+                    "source_bundle_sha256": execution.source_bundle_sha256,
+                    "teacher_execution_sha256": (
+                        execution.teacher_execution_sha256
+                    ),
+                },
+                "harness_seed": schedule_dry_run.harness_seed,
+                "human_input": False,
+                "perturbation_schedule": "fixed_schedule_integration_dry_run",
+                "purpose": "schedule_integration_dry_run",
+                "registry_sha256": schedule_dry_run.registry_sha256,
+                "save_restore_used": False,
+                "schedule": {
+                    "schedule_sha256": schedule_dry_run.schedule_sha256,
+                    "schema": BATTLE_START_SCHEDULE_SCHEMA,
+                },
+                "seed_protocol": "committed_diagnostic_harness_seed",
+                "start_type": "clean_power_on",
+            }
+        split: dict[str, object] = {
+            "partition": "unassigned",
+            "regime": "within_game",
+            "root_lineage_id": episode_id,
+        }
+    else:
+        assignment_metadata = assignment.metadata_dict()
+        split_value = assignment_metadata.pop("split")
+        if not isinstance(split_value, dict):
+            raise TypeError("assignment split metadata must be a mapping")
+        split = split_value
+        collection = {
+            "assistance_class": "teacher",
+            "start_type": "clean_power_on",
+            "human_input": False,
+            "save_restore_used": False,
+            "perturbation_schedule": "preregistered_battle_start_offsets",
+            "seed_protocol": "committed_harness_seed",
+            **assignment_metadata,
+        }
+        configuration["assignment_configuration_sha256"] = (
+            collection_document_sha256(
+                {
+                    "assignment_id": assignment.assignment_id,
+                    "behavior_configuration_sha256": (
+                        assignment.behavior_configuration_sha256
+                    ),
+                    "schedule_sha256": assignment.schedule_sha256,
+                    "schema": "pokemon-red-assignment-configuration-v1",
+                }
+            )
+        )
     return {
         "adapter_id": POKEMON_RED_ADAPTER_ID,
         "ontology_id": POKEMON_CORE_ONTOLOGY_ID,
@@ -329,32 +660,15 @@ def _recording_metadata(
             "source_version": __version__,
         },
         "source": source.public_dict(),
-        "runtime": {
-            "python_version": platform.python_version(),
-            "emulator_name": "PyBoy",
-            "emulator_version": pyboy_version,
-        },
+        "source_bundle_sha256": source_bundle_sha256,
+        "runtime": runtime,
+        "runtime_sha256": runtime_identity.sha256,
         "rom_identity": fingerprint.public_dict(),
-        "objective_graph_sha256": canonical_sha256(route),
+        "objective_graph_sha256": objective_graph_sha256,
         "configuration": configuration,
         "configuration_sha256": canonical_sha256(configuration),
-        "collection": {
-            "assistance_class": "teacher",
-            "start_type": "clean_power_on",
-            "human_input": False,
-            "save_restore_used": False,
-            "perturbation_schedule": "none",
-            "seed_protocol": "native_power_on_rng",
-            "attempt": {
-                "counted": True,
-                "series_id": RECORDING_SERIES_ID,
-            },
-        },
-        "split": {
-            "partition": "unassigned",
-            "regime": "within_game",
-            "root_lineage_id": episode_id,
-        },
+        "collection": collection,
+        "split": split,
     }
 
 
@@ -397,6 +711,14 @@ def _run_battle_learning(
     try:
         source = detect_source_identity(REPOSITORY_ROOT, include_untracked=True)
         require_clean_source(source)
+        registry = load_committed_collection_registry(REPOSITORY_ROOT)
+        if any(
+            registry.assignment(run.run_id).episode_id == args.episode_id
+            for run in registry.runs
+        ):
+            raise BattleTrainingError(
+                "This diagnostic command cannot open a preregistered collection episode."
+            )
         private_root = open_private_root(
             args.private_root,
             repository_root=REPOSITORY_ROOT,
@@ -412,7 +734,12 @@ def _run_battle_learning(
                 skill_id=POKEMON_BATTLE_MOVE_SKILL_ID,
             ),
         )
-        if dataset.promotion_eligible:
+        if dataset.partition != "unassigned":
+            raise BattleTrainingError(
+                "This diagnostic command accepts only unassigned episodes; "
+                "preassigned train, validation, and test episodes are sealed from this lane."
+            )
+        if dataset.episode_qualified:
             raise BattleTrainingError(
                 "This command is diagnostic-only; use the future preassigned evaluation lane "
                 "for promotion evidence."
@@ -464,6 +791,7 @@ def _run_battle_learning(
         BattleFeatureError,
         BattleModelValidationError,
         BattleTrainingError,
+        CollectionProtocolError,
         EvaluationIdentityError,
         PrivateArtifactError,
     ) as error:
@@ -482,7 +810,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(arguments)
     if args.command == "route":
-        payload = _completion_route_payload()
+        payload = completion_route_payload()
         print(json.dumps(payload, indent=2, ensure_ascii=False))
         return 0
 
@@ -522,7 +850,62 @@ def main(arguments: Sequence[str] | None = None) -> int:
     rom_path: Path | None = None
     try:
         rom_path = resolve_rom_path(args.rom)
-        if args.command == "doctor":
+        if args.command == "collection":
+            registry = load_committed_collection_registry(REPOSITORY_ROOT)
+            assignment = registry.assignment(registry.runs[0].run_id)
+            metadata = _recording_metadata(
+                rom_path,
+                episode_id=assignment.episode_id,
+                watch=False,
+                speed=None,
+                assignment=assignment,
+                execution=registry.execution,
+            )
+            private_root = open_private_root(
+                args.private_root,
+                repository_root=REPOSITORY_ROOT,
+            )
+            slots = _collection_slots(registry)
+            identity = _campaign_identity(registry, metadata)
+            with private_root.collection_session(registry.collection_id) as session:
+                dry_run_qualification = find_dry_run_qualification(
+                    private_root,
+                    identity,
+                    registry.schedule_dry_run,
+                )
+                ledger = CollectionOutcomeLedger.open_existing(
+                    store=private_root,
+                    session=session,
+                    identity=identity,
+                    slots=slots,
+                )
+                receipt = ledger.public_receipt() if ledger is not None else None
+            payload = {
+                "schema": "pokemon-red-collection-status-v1",
+                "campaign_started": receipt is not None,
+                "collection_id": registry.collection_id,
+                "registry_sha256": registry.registry_sha256,
+                "declared_slots": len(slots),
+                "dry_run_qualified": dry_run_qualification is not None,
+                "dry_run_qualification": (
+                    dry_run_qualification.public_dict()
+                    if dry_run_qualification is not None
+                    else None
+                ),
+                "counts": (
+                    receipt["counts"]
+                    if receipt is not None
+                    else {
+                        "complete": 0,
+                        "failed": 0,
+                        "interrupted": 0,
+                        "invalid": 0,
+                        "pending": len(slots),
+                    }
+                ),
+                "ledger": receipt,
+            }
+        elif args.command == "doctor":
             payload = verify_rom(rom_path).public_dict()
         elif args.command == "bootstrap":
             payload = run_bootstrap_smoke(rom_path).public_dict()
@@ -545,32 +928,119 @@ def main(arguments: Sequence[str] | None = None) -> int:
             _print_qualified_summary(qualified_report)
             payload = qualified_report.public_dict()
         else:
-            episode_id = f"red-teacher-{uuid.uuid4().hex}"
+            assignment = None
+            schedule_dry_run = None
+            registry = None
+            if args.collection_run is not None or args.schedule_dry_run:
+                registry = load_committed_collection_registry(REPOSITORY_ROOT)
+            if args.collection_run is not None and registry is not None:
+                assignment = registry.assignment(args.collection_run)
+            elif args.schedule_dry_run and registry is not None:
+                schedule_dry_run = registry.schedule_dry_run
+            episode_id = (
+                assignment.episode_id
+                if assignment is not None
+                else (
+                    f"red-dry-run-{uuid.uuid4().hex}"
+                    if schedule_dry_run is not None
+                    else f"red-teacher-{uuid.uuid4().hex}"
+                )
+            )
             metadata = _recording_metadata(
                 rom_path,
                 episode_id=episode_id,
                 watch=args.watch,
                 speed=args.speed,
+                assignment=assignment,
+                execution=(registry.execution if registry is not None else None),
+                schedule_dry_run=schedule_dry_run,
             )
             private_root = open_private_root(
                 args.private_root,
                 repository_root=REPOSITORY_ROOT,
             )
-            writer = private_root.begin_episode(episode_id)
-            with writer:
-                trajectory_sink = EpisodeTrajectorySink(
-                    writer,
+            battle_start_offsets = (
+                assignment.offsets
+                if assignment is not None
+                else schedule_dry_run.offsets
+                if schedule_dry_run is not None
+                else None
+            )
+            dry_run_qualification = None
+            if assignment is not None and registry is not None:
+                slots = _collection_slots(registry)
+                slot = slots[assignment.collection_slot_ordinal - 1]
+                if slot.assignment_id != assignment.assignment_id:
+                    raise CollectionLedgerError(
+                        "collection slot does not match the selected assignment"
+                    )
+                identity = _campaign_identity(registry, metadata)
+                with private_root.collection_session(registry.collection_id) as session:
+                    require_dry_run_qualification(
+                        private_root,
+                        identity,
+                        registry.schedule_dry_run,
+                    )
+                    ledger = CollectionOutcomeLedger.open_or_seal(
+                        store=private_root,
+                        session=session,
+                        identity=identity,
+                        slots=slots,
+                    )
+                    ledger.reconcile()
+                    ledger.require_pending(slot)
+                    report_completed = False
+                    try:
+                        qualified_report, episode_summary = _capture_private_recording(
+                            private_root,
+                            rom_path=rom_path,
+                            episode_id=episode_id,
+                            metadata=metadata,
+                            watch=args.watch,
+                            speed=args.speed,
+                            battle_start_offsets=battle_start_offsets,
+                        )
+                        report_completed = True
+                    finally:
+                        outcome = ledger.reconcile_slot(slot)
+                    if (
+                        report_completed
+                        and (
+                            outcome is None
+                            or outcome.status != "complete"
+                            or not outcome.game_complete
+                        )
+                    ):
+                        raise CollectionLedgerError(
+                            "completed collection run failed outcome verification"
+                        )
+            elif schedule_dry_run is not None and registry is not None:
+                identity = _campaign_identity(registry, metadata)
+                with private_root.collection_session(registry.collection_id):
+                    qualified_report, episode_summary = _capture_private_recording(
+                        private_root,
+                        rom_path=rom_path,
+                        episode_id=episode_id,
+                        metadata=metadata,
+                        watch=args.watch,
+                        speed=args.speed,
+                        battle_start_offsets=battle_start_offsets,
+                    )
+                    dry_run_qualification = publish_dry_run_qualification(
+                        private_root,
+                        identity,
+                        schedule_dry_run,
+                        episode_id,
+                    )
+            else:
+                qualified_report, episode_summary = _capture_private_recording(
+                    private_root,
+                    rom_path=rom_path,
                     episode_id=episode_id,
-                    game_id=POKEMON_RED_GAME_ID,
-                )
-                trajectory_sink.write_episode_header(metadata=metadata)
-                qualified_report = run_qualified_play(
-                    rom_path,
+                    metadata=metadata,
                     watch=args.watch,
                     speed=args.speed,
-                    progress=_print_qualified_progress,
-                    trajectory_sink=trajectory_sink,
-                    trajectory_episode_id=episode_id,
+                    battle_start_offsets=battle_start_offsets,
                 )
             _print_qualified_summary(qualified_report)
             public_play = qualified_report.public_dict()
@@ -578,16 +1048,25 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 "schema": "private-trajectory-recording-v1",
                 "status": "ok",
                 "game_complete": bool(public_play.get("game_complete")),
-                "episode": writer.summary.public_dict(),
+                "episode": episode_summary,
             }
+            if dry_run_qualification is not None:
+                payload["dry_run_qualification"] = (
+                    dry_run_qualification.public_dict()
+                )
     except (
         BootstrapError,
+        BattleScheduleError,
+        CollectionLedgerError,
+        CollectionProtocolError,
         EmulatorError,
         EvaluationIdentityError,
         OpeningChapterError,
         PrivateArtifactError,
         QualifiedPlayError,
         RomValidationError,
+        RuntimeIdentityError,
+        ScheduleAttestationError,
     ) as error:
         parser.error(
             _public_error_message(

@@ -12,7 +12,10 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -272,6 +275,11 @@ def run_lorelei_chapter(
                 actions,
                 policy,
                 expected_map=MapId.LORELEIS_ROOM,
+                intent=BattleIntent(
+                    "defeat_lorelei",
+                    battle_plan_id=RedBattlePlanId.LEAGUE_LORELEI,
+                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                ),
                 timing=BattleRuntimeTiming(
                     max_runtime_pulses=1600,
                     max_pp_confirmation_pulses=12,

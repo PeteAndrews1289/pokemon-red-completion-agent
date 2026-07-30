@@ -152,6 +152,21 @@ pokemon-red-completion private-data init --private-root /absolute/private/trajec
 
 # Record one full teacher episode there:
 pokemon-red-completion record --private-root /absolute/private/trajectory-directory
+
+# After the exact source/config commit is committed and pushed, run the required
+# unassigned, non-counted 63-battle schedule rehearsal before slot 01:
+pokemon-red-completion record \
+  --private-root /absolute/private/trajectory-directory \
+  --schedule-dry-run
+
+# Only after that rehearsal succeeds, consume one declared training slot:
+pokemon-red-completion record \
+  --private-root /absolute/private/trajectory-directory \
+  --collection-run red-battle-v1-01-train
+
+# Inspect all twelve slots and reconcile a power-loss partial without starting a run:
+pokemon-red-completion collection status \
+  --private-root /absolute/private/trajectory-directory
 ```
 
 `bootstrap` starts PyBoy headlessly from immutable verified ROM bytes, disables human window input,
@@ -250,9 +265,31 @@ decisions from the shared adaptive runtime and links their full execution spans.
 single-lineage battle-imitation diagnostic groups 422 decisions into 63 encounter proxies and
 reaches 72.5% teacher-choice agreement versus a 50.5% fold-local majority-slot baseline. A hard
 legality and PP mask makes all outputs valid by construction; that safety invariant is not a
-learned success metric. This is not battle win rate or a learned gameplay rollout. Explicit battle
-instances and goals, custom battle controllers, perturbed corrections, and lineages assigned
-before collection still remain before any held-out or promoted-policy claim.
+learned success metric. This is not battle win rate or a learned gameplay rollout.
+
+New recordings bind each adaptive decision to an explicit physical battle instance, one of 63
+stable public battle-plan identities, planner objective, win goal, and required-move policy. The
+current `pokemon.core.battle.move-ranker.v2` schema adds
+`constraint.matches_required_move`; receipts report free-choice and forced-choice accuracy
+separately so constraint-following cannot be mistaken for autonomous move selection. The recorded
+teacher recovery marker is descriptive only, is not a model feature, and does not yet encode a
+typed recovery budget.
+
+The committed collection protocol preregisters twelve immutable one-attempt root-lineage
+slots—five train, two validation, and five test—with partition-local ordinals and a different
+63-battle timing schedule for each. The exact source/configuration commit must be committed and
+pushed before collection. A registry-declared, unassigned, non-counted dry run must then attest all
+63 schedule applications before slot `01`. Counted runs emit per-battle and terminal schedule
+attestations; a private campaign seal and outcome ledger preserve every success, failure,
+interruption, and invalid result. An interruption consumes its slot rather than authorizing a
+rerun. The successful rehearsal produces an immutable private qualification that every counted
+run reopens and audits before it can seal the campaign or create an episode. That episode start is
+synchronously persisted before play, so a shutdown cannot erase a one-shot attempt claim.
+Policy-visible semantic overlap across partitions is disclosed but is not hard leakage by
+itself; copied identities, manifests, assignments, schedules, or lineages are.
+
+As of the protocol commit, neither the dry run nor any of the twelve declared slots has executed,
+so there is still no held-out or promoted-policy result.
 
 ## Evidence and project status
 
@@ -264,6 +301,8 @@ before collection still remain before any held-out or promoted-policy claim.
 - [Cross-game transfer plan](docs/transfer-learning.md) — shared ontology and promotion gates
 - [Battle-learning design](docs/battle-learning.md) — private data boundary, feature schema, model,
   and split rules
+- [Preregistered battle collection](docs/collection-protocol.md) — frozen route identities,
+  train/validation/test assignments, and timing derivation
 - [First trajectory receipt](docs/evidence/private-trajectory-foundation-2026-07-30.json) —
   sanitized integrity, privacy, and scope evidence
 - [First battle-decision receipt](docs/evidence/private-battle-decisions-2026-07-30.json) —

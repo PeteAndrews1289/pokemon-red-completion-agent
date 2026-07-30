@@ -215,6 +215,58 @@ def test_episode_never_overwrites_a_final_or_partial_artifact(tmp_path: Path) ->
         store.begin_episode("occupied")
 
 
+def test_begin_episode_durably_claims_the_partial_before_return(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    synchronized: list[Path] = []
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_fsync_directory",
+        lambda path: synchronized.append(path),
+    )
+
+    writer = store.begin_episode("durable-claim")
+
+    partial = root / "durable-claim.partial"
+    assert partial.is_dir()
+    assert synchronized == [partial, root]
+    writer.abort("test_cleanup")
+
+
+def test_begin_episode_sync_failure_retains_a_path_free_consumed_claim(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    partial = root / "failed-durable-claim.partial"
+    synchronized: list[Path] = []
+
+    def fail_parent_sync(path: Path) -> None:
+        synchronized.append(path)
+        if path == root:
+            raise PrivateArtifactError(f"cannot synchronize private location {path}")
+
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_fsync_directory",
+        fail_parent_sync,
+    )
+
+    with pytest.raises(
+        PrivateArtifactError,
+        match="unable to durably claim the private episode",
+    ) as raised:
+        store.begin_episode("failed-durable-claim")
+
+    assert synchronized == [partial, root]
+    assert str(tmp_path) not in str(raised.value)
+    assert store.inspect_episode_state("failed-durable-claim").status == "partial"
+    with pytest.raises(PrivateArtifactError, match="refusing to overwrite"):
+        store.begin_episode("failed-durable-claim")
+
+
 def test_atomic_no_replace_rename_preserves_an_existing_destination(
     tmp_path: Path,
 ) -> None:
@@ -541,3 +593,243 @@ def test_episode_directory_renames_are_synchronized_at_the_root(
     writer.append("actions", {"step": 0})
     writer.abort("test_failure")
     assert synchronized[-1] == root
+
+
+def test_collection_session_is_exclusive_and_releases_without_storing_a_path(
+    tmp_path: Path,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    first = store.collection_session("red-battle-heldout-v1")
+    second = store.collection_session("red-battle-heldout-v1")
+
+    with first:
+        assert first.active
+        assert str(root) not in repr(first)
+        with pytest.raises(PrivateArtifactError, match="already active"), second:
+            pass
+
+    assert not first.active
+    with store.collection_session("red-battle-heldout-v1") as reopened:
+        assert reopened.active
+
+
+def test_sealed_record_is_canonical_private_idempotent_and_immutable(
+    tmp_path: Path,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    record = {
+        "schema": "collection-seal-test-v1",
+        "collection_id": "red-battle-heldout-v1",
+        "registry_sha256": "a" * 64,
+    }
+
+    first = store.publish_sealed_record(
+        "seal-" + "b" * 64,
+        kind="collection_seal",
+        record=record,
+    )
+    repeated = store.publish_sealed_record(
+        "seal-" + "b" * 64,
+        kind="collection_seal",
+        record=record,
+    )
+
+    assert first.read() == record
+    changed = first.read()
+    changed["collection_id"] = "changed"
+    assert first.read() == record
+    assert repeated.summary == first.summary
+    directory = root / ("seal-" + "b" * 64)
+    assert _mode(directory) == 0o700
+    assert _mode(directory / "manifest.json") == 0o600
+    assert _mode(directory / "record.json") == 0o600
+    assert (directory / "record.json").read_bytes() == (
+        json.dumps(record, ensure_ascii=True, separators=(",", ":"), sort_keys=True).encode("ascii")
+        + b"\n"
+    )
+    assert str(root) not in json.dumps(first.summary.public_dict())
+
+    with pytest.raises(PrivateArtifactError, match="different content"):
+        store.publish_sealed_record(
+            "seal-" + "b" * 64,
+            kind="collection_seal",
+            record={**record, "registry_sha256": "c" * 64},
+        )
+    assert (
+        store.find_sealed_record(
+            "seal-" + "b" * 64,
+            expected_kind="collection_seal",
+        ).read()
+        == record
+    )
+
+
+def test_sealed_record_rejects_path_content_and_recovers_after_a_stale_temp(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    record_id = "outcome-" + "d" * 64
+    with pytest.raises(PrivateArtifactError, match="filesystem path"):
+        store.publish_sealed_record(
+            record_id,
+            kind="collection_outcome",
+            record={"private_path": str(root)},
+        )
+
+    real_rename = private_artifacts_module._rename_no_replace
+
+    def interrupt_publish(source: Path, destination: Path) -> None:
+        if destination.name == record_id:
+            raise OSError("simulated power loss")
+        real_rename(source, destination)
+
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_rename_no_replace",
+        interrupt_publish,
+    )
+    with pytest.raises(PrivateArtifactError, match="unable to publish"):
+        store.publish_sealed_record(
+            record_id,
+            kind="collection_outcome",
+            record={"schema": "outcome-test-v1", "status": "failed"},
+        )
+    assert store.find_sealed_record(record_id) is None
+    assert any(entry.name.startswith(f".{record_id}.sealed-") for entry in root.iterdir())
+
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_rename_no_replace",
+        real_rename,
+    )
+    published = store.publish_sealed_record(
+        record_id,
+        kind="collection_outcome",
+        record={"schema": "outcome-test-v1", "status": "failed"},
+    )
+    assert published.read()["status"] == "failed"
+
+
+def test_orphan_partial_is_permanently_classified_as_interrupted(
+    tmp_path: Path,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    store.begin_episode("planned-power-loss")
+
+    assert store.inspect_episode_state("planned-power-loss").status == "partial"
+    with store.collection_session("red-battle-heldout-v1") as session:
+        recovered = session.recover_interrupted_episode("planned-power-loss")
+
+    assert recovered.status == "interrupted"
+    assert recovered.reason_code == "process_interrupted"
+    assert not (root / "planned-power-loss.partial").exists()
+    assert (root / "planned-power-loss.interrupted.partial").is_dir()
+    with pytest.raises(PrivateArtifactError, match="refusing to overwrite"):
+        store.begin_episode("planned-power-loss")
+    with pytest.raises(PrivateArtifactError, match="interrupted"):
+        store.open_episode("planned-power-loss")
+
+
+def test_recovery_promotes_sealed_complete_and_failed_partial_directories(
+    tmp_path: Path,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    with store.begin_episode("sealed-complete") as writer:
+        writer.append("events", {"kind": "terminal"})
+    (root / "sealed-complete").rename(root / "sealed-complete.partial")
+
+    failed_writer = store.begin_episode("sealed-failed")
+    failed_writer.append("events", {"kind": "start"})
+    failed_writer.abort("qualified_play_error")
+    (root / "sealed-failed.failed.partial").rename(root / "sealed-failed.partial")
+
+    with store.collection_session("red-battle-heldout-v1") as session:
+        complete = session.recover_interrupted_episode("sealed-complete")
+        failed = session.recover_interrupted_episode("sealed-failed")
+
+    assert complete.status == "complete"
+    assert complete.manifest_sha256 is not None
+    assert (root / "sealed-complete").is_dir()
+    assert store.open_episode("sealed-complete").summary.status == "complete"
+    assert failed.status == "failed"
+    assert failed.reason_code == "qualified_play_error"
+    assert failed.manifest_sha256 is not None
+    assert (root / "sealed-failed.failed.partial").is_dir()
+
+
+@pytest.mark.parametrize(
+    ("status", "reason_code"),
+    (
+        ("complete", None),
+        ("failed", "test_failure"),
+        ("interrupted", "process_interrupted"),
+    ),
+)
+def test_recovery_reinspects_a_terminal_rename_after_parent_sync_failure(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    status: str,
+    reason_code: str | None,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    episode_id = f"recovery-sync-{status}"
+    if status == "complete":
+        with store.begin_episode(episode_id) as writer:
+            writer.append("events", {"kind": "terminal"})
+        (root / episode_id).rename(root / f"{episode_id}.partial")
+    elif status == "failed":
+        writer = store.begin_episode(episode_id)
+        writer.append("events", {"kind": "start"})
+        writer.abort("test_failure")
+        (root / f"{episode_id}.failed.partial").rename(root / f"{episode_id}.partial")
+    else:
+        store.begin_episode(episode_id)
+
+    real_sync = private_artifacts_module._fsync_directory
+    synchronized: list[Path] = []
+
+    def fail_recovery_sync(path: Path) -> None:
+        synchronized.append(path)
+        if path == root:
+            raise PrivateArtifactError("simulated parent synchronization failure")
+        real_sync(path)
+
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_fsync_directory",
+        fail_recovery_sync,
+    )
+
+    with store.collection_session("red-battle-heldout-v1") as session:
+        recovered = session.recover_interrupted_episode(episode_id)
+
+    assert synchronized == [root]
+    assert recovered.status == status
+    assert recovered.reason_code == reason_code
+    assert store.inspect_episode_state(episode_id) == recovered
+
+
+def test_recovery_leaves_a_retryable_partial_unclassified_after_rename_failure(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _, _, store = _make_store(tmp_path)
+    episode_id = "retryable-recovery"
+    store.begin_episode(episode_id)
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_rename_no_replace",
+        lambda source, destination: (_ for _ in ()).throw(OSError("simulated pre-rename failure")),
+    )
+
+    with (
+        store.collection_session("red-battle-heldout-v1") as session,
+        pytest.raises(
+            PrivateArtifactError,
+            match="unable to establish a stable recovered episode state",
+        ),
+    ):
+        session.recover_interrupted_episode(episode_id)
+
+    assert store.inspect_episode_state(episode_id).status == "partial"

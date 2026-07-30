@@ -24,6 +24,42 @@
   agreement versus a 50.5% fold-local majority baseline across 422 decisions and 63 inferred
   encounter groups, with hard-masked legal outputs and explicit single-lineage non-promotion
   limits.
+- Added explicit physical battle instances, 63 stable route-plan identities, planner goals,
+  required-move semantics, and a descriptive teacher recovery marker to future adaptive decision
+  records.
+- Added the `pokemon.core.battle.move-ranker.v2` context feature
+  `constraint.matches_required_move`, with separate free-choice, forced-choice, and
+  unobserved-context counts and accuracies. Legacy v1 diagnostic artifacts remain readable.
+- Preregistered twelve immutable, single-attempt battle-collection roots—five train, two
+  validation, and five test—with global and partition-local slot ordinals and content-addressed
+  63-battle timing schedules.
+- Bound the registry to canonical newline hashes for the exact roster, expanded schedules,
+  assignments, registry sidecar, executable source bundle, teacher behavior, objective graph, and
+  complete teacher execution identity.
+- Added a strict collection harness that applies each declared `WAIT` once at the first stable
+  main battle menu, rereads the semantic state before policy inference, and emits per-battle plus
+  terminal 63/63 schedule attestations.
+- Added a registry-declared `record --schedule-dry-run` whose seed and schedule are disjoint from
+  all twelve slots. It is unassigned, non-counted, and must pass before slot `01`.
+- Added private campaign sealing and immutable outcome-ledger accounting so a complete, failed,
+  interrupted, or invalid attempt consumes exactly one slot with a durable reason instead of
+  permitting outcome-dependent reruns.
+- Added path-free runtime identity for the exact CPython binary and installed PyBoy file
+  inventory, live-versus-committed source verification, pushed-commit enforcement, and a
+  power-loss-aware `collection status` command.
+- Added a durable schedule audit that authenticates every positive offset against its recorded
+  WAIT execution and content-addressed snapshot, every zero offset against the absence of a fake
+  execution, and all records against the production trajectory schemas.
+- Added an immutable, identity-bound dry-run qualification that is re-audited before any counted
+  slot can seal the campaign or begin, while keeping the rehearsal outside every denominator.
+- Made the deterministic episode namespace a synchronously persisted start claim so a power loss
+  cannot make an already-started one-shot attempt appear absent.
+- Updated partition auditing to treat copied identities, manifests, assignments, schedules, and
+  root lineages as hard leakage while reporting naturally repeated policy-visible semantic
+  snapshots separately.
+- Added `record --collection-run` with deterministic episode identities and source-bound private
+  metadata. The exact source/configuration commit must be committed and pushed before any run; as
+  of the protocol commit, the dry run and all twelve declared slots remain unexecuted.
 - Documented the measured cross-game transfer goal and its Red, near-transfer, and
   cross-generation promotion gates.
 

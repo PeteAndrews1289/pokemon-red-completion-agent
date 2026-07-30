@@ -624,6 +624,11 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
 
         return self._recording_failures
 
+    def note_instrumentation_failure(self) -> None:
+        """Make the episode ineligible for promotion without raising into the actor."""
+
+        self._recording_failures += 1
+
     @contextmanager
     def decision_scope(
         self,

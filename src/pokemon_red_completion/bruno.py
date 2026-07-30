@@ -12,7 +12,10 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -261,6 +264,11 @@ def run_bruno_chapter(
                 actions,
                 policy,
                 expected_map=MapId.BRUNOS_ROOM,
+                intent=BattleIntent(
+                    "defeat_bruno",
+                    battle_plan_id=RedBattlePlanId.LEAGUE_BRUNO,
+                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                ),
                 timing=BattleRuntimeTiming(max_runtime_pulses=1200),
                 label="Bruno",
             )

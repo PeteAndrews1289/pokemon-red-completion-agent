@@ -1830,6 +1830,14 @@ def test_pokedex_gate_accepts_stable_delivery_after_escape_result_overwrite() ->
     assert is_pokedex_verified(_pokedex_obtained())
 
 
+def test_battle_start_offsets_require_private_recording() -> None:
+    with pytest.raises(ValueError, match="require private trajectory recording"):
+        run_qualified_play(
+            Path("/private/Pokemon Red.gb"),
+            battle_start_offsets=(),
+        )
+
+
 def _adjacent_artifact_identity(path: Path) -> tuple[bool, str | None]:
     if not path.exists():
         return False, None

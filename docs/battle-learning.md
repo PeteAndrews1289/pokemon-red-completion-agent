@@ -12,6 +12,65 @@ held-out test. The episode may be used to validate the reader, feature projectio
 format, and whole-battle diagnostic grouping. Promotion requires newly recorded lineages assigned
 to train, validation, and test before collection.
 
+## Preregistered collection
+
+The prospective
+[battle collection registry](collection-protocol.md) freezes twelve root-lineage slots before
+recording: five train, two validation, and five sealed test slots. Each partition has its own
+one-based slot sequence (`1/5`–`5/5`, `1/2`–`2/2`, and `1/5`–`5/5`) as well as a global
+`1/12`–`12/12` sequence. Every assignment derives a deterministic private episode and root
+lineage from the authenticated registry, execution identity, partition, harness seed, and complete
+schedule digest.
+
+Each full run expects the same 63 stable public adaptive-battle identities in route order. A
+versioned SHA-256 derivation gives every identity a preregistered 0–255-frame timing offset. At the
+first stable main battle menu, before the policy is called, the collection harness claims that
+offset; the battle runtime emits the WAIT through the normal executor, rereads and revalidates the
+semantic state, and then supplies the refreshed observation to the policy. Retries within the same
+physical battle never reapply it. Missing, extra, substituted, reordered, partially applied, or
+unfinished battles fail the planned run.
+
+Every applied offset is privately attested with its roster ordinal, plan ID, frame count, schedule
+digest, before/after policy-snapshot hashes, and the linked `WAIT` execution index when the offset
+is positive. The terminal event must attest a complete 63/63 schedule. These records prove that a
+scheduled run used its committed offsets rather than merely carrying the expected metadata.
+
+The harness seed is not presented as a user-selectable cartridge seed. It is a reproducible
+collection timing input that changes hidden battle RNG timing. Run, seed, partition, schedule, and
+battle-plan identities remain metadata and are not move-ranker features.
+
+The exact source/configuration commit must be committed and pushed before any execution. A
+registry-declared, disjoint `--schedule-dry-run` must then successfully attest all 63 battles
+before slot `01`. That rehearsal is `unassigned`, has `attempt.counted=false`, and is excluded from
+every partition and performance denominator. As of the protocol commit, neither the dry run nor
+any of the twelve declared slots has executed.
+
+Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
+schedule, episode, manifest, and 63/63 offline audit. Every counted slot reopens and re-audits that
+episode before campaign sealing, while the rehearsal remains outside the attempt ledger.
+
+A private campaign seal fixes the registry, exact pushed source commit, executable source,
+behavior, objective graph, teacher execution, CPython/PyBoy runtime, ROM, and twelve-slot roster
+identities before the first counted attempt. Its immutable outcome
+ledger gives each assignment one attempt and records `complete`, `failed`, `interrupted`, or
+`invalid` with a reason. A failure or power interruption consumes the slot; it cannot be silently
+rerun after the outcome is known. Reconciliation may recover an already valid complete manifest
+after a process interruption, but an orphan partial is an `interrupted` outcome. Restarting a
+campaign requires a new registry version. The deterministic partial episode directory is
+synchronously persisted before the emulator starts, making that one-attempt claim durable across
+power loss.
+
+After publication, the recorder rereads the private episode and proves each positive timing offset
+against its exact WAIT execution, frame count, and before/after state hashes. Zero offsets must
+have no execution link. The path-free `collection status` command performs the same reconciliation
+without starting a new attempt.
+
+An individual episode may be structurally qualified for its assigned data lane, but it is never
+labeled promotion-eligible by itself. Promotion is a corpus-and-rollout decision after the frozen
+cross-lineage protocol, not an episode property. The current aggregate partition audit is likewise
+structural only and deliberately reports promotion ineligible until a registry-aware corpus audit
+authenticates every frozen assignment, schedule attestation, identity, and one-shot outcome.
+
 ## Private input and output
 
 Training opens an episode only through the validated private-artifact root. Before any row is
@@ -45,12 +104,29 @@ Counter is cataloged explicitly, but a selectable Counter candidate fails closed
 semantic observation exposes prior-turn received damage. A zero-PP Counter remains present only as
 a masked, unusable candidate.
 
-Each available move becomes one candidate under the fixed
-`pokemon.core.battle.move-ranker.v1` schema. Candidate-relative values include STAB,
-effectiveness, effective power, PP, and bounded interactions between move mechanics and the
-observed battle state. Local species IDs, local move IDs, menu slots, area, coordinates, badges,
-trajectory IDs, teacher identity, objectives, future outcomes, and referee-only evidence are not
-model features. The chosen candidate is mapped back to its current menu slot only after inference.
+Each available move becomes one candidate under the current
+`pokemon.core.battle.move-ranker.v2` schema. Candidate-relative values include STAB,
+effectiveness, effective power, PP, bounded interactions between move mechanics and the observed
+battle state, and `constraint.matches_required_move`. The policy context contains goal `win`, a
+move policy of `any_usable` or `exact_required`, and either no required move or its semantic
+reference. The same context available at inference is retained with each example and supplied to
+the projector.
+
+An `exact_required` decision is a forced choice; an `any_usable` decision is a free choice. The
+constraint feature lets the model represent the distinction rather than learning it from hidden
+route identity. Local species IDs, local move IDs, menu slots, area, coordinates, badges,
+trajectory IDs, teacher identity, objective IDs, future outcomes, and referee-only evidence are
+not model features. The chosen candidate is mapped back to its current menu slot only after
+inference.
+
+The loader retains schema-v1 support for historical diagnostic artifacts. New recordings and
+models use v2. The published 72.5% receipt is a historical v1 single-lineage diagnostic and must
+not be retroactively presented as v2 context-stratified evidence.
+
+The recorded `teacher_recovery_marker` values, `none` and `bounded_recovery`, are descriptive
+metadata only. The marker is validated when context is loaded but is not projected as a model
+feature. It does not encode a typed recovery budget or action envelope and cannot qualify a
+recovery-policy learner.
 
 ## Model and diagnostic split
 
@@ -64,6 +140,8 @@ The current diagnostic groups all turns at the same battle encounter proxy and k
 inside one fold. It never performs a random decision-row split. Reported metrics include:
 
 - exact teacher-choice agreement;
+- free-choice and forced-choice decision counts and accuracies;
+- the count of decisions whose policy context was not observed;
 - macro F1 and per-slot recall;
 - listwise cross-entropy;
 - legal-choice rate;
@@ -73,7 +151,9 @@ inside one fold. It never performs a random decision-row split. Reported metrics
 This grouped result is still interpolation evidence from one recorded playthrough. It is not a
 held-out seed result, a learned battle rollout, or evidence of full-game completion.
 The [first aggregate diagnostic](evidence/private-battle-imitation-diagnostic-2026-07-30.json)
-reports 72.5% teacher-choice agreement across 422 decisions while retaining those limits.
+reports 72.5% teacher-choice agreement across 422 decisions under the historical v1 schema while
+retaining those limits. In future v2 reports, forced-choice accuracy measures compliance with a
+declared move constraint and cannot inflate or replace the autonomous free-choice result.
 
 ## Promotion protocol
 
@@ -83,11 +163,19 @@ A promotable battle specialist requires:
 2. all descendants of a root lineage inheriting its partition;
 3. explicit battle-instance grouping and any legitimate planner goal or resource constraint that
    will also exist during inference;
-4. no root-lineage or exact-snapshot overlap across partitions;
+4. no episode, manifest, assignment, schedule, or root-lineage reuse across partitions;
 5. a frozen model and confidence threshold selected without opening the test partition;
-6. zero illegal or zero-PP selections;
-7. materially better held-out agreement and cross-entropy than declared baselines; and
-8. battle rollouts with teacher fallback disabled, reported separately from imitation agreement.
+6. separately reported free-choice, forced-choice, and novel-visible-state metrics;
+7. zero illegal or zero-PP selections;
+8. materially better held-out agreement and cross-entropy than declared baselines; and
+9. battle rollouts with teacher fallback disabled, reported separately from imitation agreement.
+
+Cross-partition overlap in policy-visible semantic snapshot hashes is reported, not treated as
+hard leakage by itself: distinct hidden timing/RNG histories can produce the same visible state.
+The audit still fails copied episode identities, manifests, assignments, schedules, or root
+lineages. Reports disclose visible-overlap counts and performance on novel visible states so the
+reader can judge how much evaluation state was genuinely new without permitting outcome-dependent
+replacement of a slot.
 
 The final test remains sealed until the feature schema, optimizer, and promotion thresholds are
 frozen. Cross-game transfer will hold an entire second title out and compare reuse of the Red model

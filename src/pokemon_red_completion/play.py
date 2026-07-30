@@ -22,7 +22,14 @@ from pokemon_red_completion.agatha import (
     AgathaProgress,
     run_agatha_chapter,
 )
-from pokemon_red_completion.battle_runtime import bind_battle_decision_observer
+from pokemon_red_completion.battle_runtime import (
+    bind_battle_decision_observer,
+    bind_battle_schedule_observer,
+)
+from pokemon_red_completion.battle_schedule import (
+    BattleStartScheduleController,
+    bind_battle_start_schedule,
+)
 from pokemon_red_completion.blaine import (
     BLAINE_CHECKPOINT_COUNT,
     BlaineChapterError,
@@ -73,6 +80,7 @@ from pokemon_red_completion.cinnabar import (
     CinnabarProgress,
     run_cinnabar_chapter,
 )
+from pokemon_red_completion.collection_protocol import BattleStartOffset
 from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.erika import (
@@ -159,6 +167,7 @@ from pokemon_red_completion.pewter import (
 )
 from pokemon_red_completion.red_trajectory import (
     PokemonRedBattleDecisionObserver,
+    PokemonRedBattleScheduleObserver,
     PokemonRedObservationEncoder,
 )
 from pokemon_red_completion.rom import RomFingerprint
@@ -666,17 +675,27 @@ def run_qualified_play(
     progress: ProgressSink | None = None,
     trajectory_sink: TrajectorySink | None = None,
     trajectory_episode_id: str | None = None,
+    battle_start_offsets: tuple[BattleStartOffset, ...] | None = None,
     _emulator: PyBoyAdapter | None = None,
 ) -> QualifiedPlayReport:
     """Run every currently qualified objective in one clean, no-save session."""
     if (trajectory_sink is None) != (trajectory_episode_id is None):
         raise ValueError("trajectory_sink and trajectory_episode_id must be provided together")
+    if battle_start_offsets is not None and trajectory_sink is None:
+        raise ValueError("battle_start_offsets require private trajectory recording")
+    battle_start_schedule = (
+        BattleStartScheduleController(battle_start_offsets)
+        if battle_start_offsets is not None
+        else None
+    )
     emulator_context = (
         PyBoyAdapter(rom_path, watch=watch, speed=speed)
         if _emulator is None
         else nullcontext(_emulator)
     )
     with ExitStack() as stack:
+        if battle_start_schedule is not None:
+            stack.enter_context(bind_battle_start_schedule(battle_start_schedule))
         emulator = stack.enter_context(emulator_context)
         reader = PokemonRedStateReader(emulator)
         base_executor: QualifiedExecutor = FrameSafeExecutor(
@@ -703,6 +722,17 @@ def run_qualified_play(
                     )
                 )
             )
+            if battle_start_schedule is not None:
+                stack.enter_context(
+                    bind_battle_schedule_observer(
+                        PokemonRedBattleScheduleObserver(
+                            encoder=snapshot_encoder,
+                            recorder=recording_executor,
+                            sink=trajectory_sink,
+                            schedule_sha256=battle_start_schedule.schedule_sha256,
+                        )
+                    )
+                )
             effective_progress = _trajectory_progress_bridge(
                 progress,
                 trajectory_sink,
@@ -1184,6 +1214,8 @@ def run_qualified_play(
         )
         if not report.passed:
             raise QualifiedPlayError("Qualified play evidence failed its public contract.")
+        if battle_start_schedule is not None:
+            battle_start_schedule.require_complete()
         if (
             trajectory_sink is not None
             and trajectory_episode_id is not None
@@ -1205,6 +1237,18 @@ def run_qualified_play(
                             "frames": report.frames_executed,
                             "actions": report.actions_executed,
                             "controller_released": report.controller_released,
+                            "battle_start_schedule": (
+                                {
+                                    "complete": True,
+                                    "expected_battles": battle_start_schedule.expected_count,
+                                    "finished_battles": battle_start_schedule.finished_count,
+                                    "schedule_sha256": (
+                                        battle_start_schedule.schedule_sha256
+                                    ),
+                                }
+                                if battle_start_schedule is not None
+                                else None
+                            ),
                         },
                     )
                 )

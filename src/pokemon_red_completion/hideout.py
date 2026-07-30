@@ -7,7 +7,13 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import BattleRuntimeTiming, run_adaptive_trainer_battle
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRuntimeTiming,
+    RequiredMovePolicy,
+    run_adaptive_trainer_battle,
+)
 from pokemon_red_completion.celadon import (
     PROTECTED_PARTY,
     _bag,
@@ -25,6 +31,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 
 HIDEOUT_CHECKPOINT_COUNT = 19
 BITE = 0x2C
@@ -276,7 +283,18 @@ def run_hideout_chapter(
     _move(actions, reader, emulator, run, GAME_CORNER_TO_GUARD, timing, "poster guard")
     _face(actions, "up", timing)
     trainers.append(
-        _fight(actions, reader, emulator, timing, "Game Corner guard", 7, None, BITE, 1)
+        _fight(
+            actions,
+            reader,
+            emulator,
+            timing,
+            "Game Corner guard",
+            7,
+            None,
+            BITE,
+            1,
+            RedBattlePlanId.HIDEOUT_GAME_CORNER_GUARD,
+        )
     )
     _checkpoint(
         records, progress, emulator, reader.read(), "guard_defeated", "Defeated poster guard"
@@ -321,6 +339,7 @@ def run_hideout_chapter(
             EventFlag.BEAT_ROCKET_HIDEOUT_4_TRAINER_2,
             BITE,
             1,
+            RedBattlePlanId.HIDEOUT_LIFT_KEY_ROCKET,
         )
     )
     _face(actions, "up", timing)
@@ -370,6 +389,7 @@ def run_hideout_chapter(
             EventFlag.BEAT_ROCKET_HIDEOUT_4_TRAINER_1,
             BUBBLEBEAM,
             3,
+            RedBattlePlanId.HIDEOUT_B4_DOOR_GUARD_2,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "guard_2", "Defeated second door guard")
@@ -387,6 +407,7 @@ def run_hideout_chapter(
             EventFlag.BEAT_ROCKET_HIDEOUT_4_TRAINER_0,
             BUBBLEBEAM,
             3,
+            RedBattlePlanId.HIDEOUT_B4_DOOR_GUARD_1,
         )
     )
     for _ in range(timing.dialogue_pulses):
@@ -412,6 +433,7 @@ def run_hideout_chapter(
             EventFlag.BEAT_ROCKET_HIDEOUT_GIOVANNI,
             BUBBLEBEAM,
             3,
+            RedBattlePlanId.HIDEOUT_GIOVANNI,
             giovanni=True,
         )
     )
@@ -474,6 +496,7 @@ def _fight(
     event: EventFlag | None,
     move_id: int,
     move_slot: int,
+    battle_plan_id: str,
     *,
     giovanni: bool = False,
 ) -> HideoutTrainerEvidence:
@@ -501,6 +524,12 @@ def _fight(
         actions,
         lambda _: move_slot,
         expected_map=int(battle.map_id or 0),
+        intent=BattleIntent(
+            "clear_rocket_hideout",
+            battle_plan_id=battle_plan_id,
+            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+            required_move_ref=pokemon_red_move_ref(move_id),
+        ),
         required_move_id=move_id,
         timing=HIDEOUT_BATTLE_TIMING,
         label=label,
