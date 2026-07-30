@@ -1,0 +1,144 @@
+{
+  "schema": "battle-imitation-diagnostic-v1",
+  "recorded_on": "2026-07-30",
+  "evidence_lane": "single_lineage_grouped_battle_imitation_diagnostic",
+  "claim_scope": {
+    "battle_imitation_model_trained": true,
+    "same_lineage_grouped_diagnostic": true,
+    "held_out_evaluation": false,
+    "learned_policy_rollout": false,
+    "learned_full_game_completion": false,
+    "promotion_eligible": false,
+    "transfer_result": false
+  },
+  "status": "complete",
+  "scope": {
+    "decisions": 422,
+    "groups": 63,
+    "source_episodes": 1,
+    "source_root_lineages": 1
+  },
+  "dataset_manifest_sha256": "3ed9e3f7cfccb9dcf2e1f0c11b6a53f687854e35bf1766f66c44e8ebfe07a750",
+  "model": {
+    "model_id": "pokemon.core.battle.masked-linear-ranker.v1",
+    "feature_schema_id": "pokemon.core.battle.move-ranker.v1",
+    "feature_count": 100,
+    "sha256": "0051da799e6d95b64bde2a3c09ed46d34b43aaf61660217c77f7fd635ddf950a",
+    "serialization": "canonical_json"
+  },
+  "training": {
+    "seed": 1289,
+    "folds": 5,
+    "epochs": 300,
+    "learning_rate": 0.03,
+    "l2": 0.0001,
+    "split_unit": "diagnostic_battle_group"
+  },
+  "metrics": {
+    "accuracy": 0.7251184834123223,
+    "macro_f1": 0.6830197450601863,
+    "per_slot_recall": [
+      0.8605769230769231,
+      0.74,
+      0.4942528735632184,
+      0.6103896103896104
+    ],
+    "cross_entropy": 0.7131798266065661,
+    "majority_accuracy": 0.504739336492891,
+    "training_accuracy": 0.8056872037914692,
+    "legal_choice_rate": 1.0,
+    "folds": [
+      {
+        "fold_index": 0,
+        "train_decisions": 337,
+        "test_decisions": 85,
+        "train_groups": 51,
+        "test_groups": 12,
+        "accuracy": 0.6588235294117647,
+        "cross_entropy": 0.7859594101860107,
+        "majority_accuracy": 0.5882352941176471
+      },
+      {
+        "fold_index": 1,
+        "train_decisions": 337,
+        "test_decisions": 85,
+        "train_groups": 51,
+        "test_groups": 12,
+        "accuracy": 0.8117647058823529,
+        "cross_entropy": 0.677667240016898,
+        "majority_accuracy": 0.6235294117647059
+      },
+      {
+        "fold_index": 2,
+        "train_decisions": 338,
+        "test_decisions": 84,
+        "train_groups": 50,
+        "test_groups": 13,
+        "accuracy": 0.5833333333333334,
+        "cross_entropy": 0.8236010302364283,
+        "majority_accuracy": 0.42857142857142855
+      },
+      {
+        "fold_index": 3,
+        "train_decisions": 338,
+        "test_decisions": 84,
+        "train_groups": 50,
+        "test_groups": 13,
+        "accuracy": 0.9166666666666666,
+        "cross_entropy": 0.3596113660777685,
+        "majority_accuracy": 0.5238095238095238
+      },
+      {
+        "fold_index": 4,
+        "train_decisions": 338,
+        "test_decisions": 84,
+        "train_groups": 50,
+        "test_groups": 13,
+        "accuracy": 0.6547619047619048,
+        "cross_entropy": 0.9186164317896561,
+        "majority_accuracy": 0.35714285714285715
+      }
+    ]
+  },
+  "qualification": {
+    "promotion_eligible": false,
+    "held_out_evaluation": false,
+    "learned_policy_rollout": false,
+    "reasons": [
+      "grouped_cross_validation_is_not_held_out",
+      "inferred_battle_groups",
+      "policy_goal_not_fully_observed",
+      "single_recorded_root_lineage",
+      "unassigned_root_lineage"
+    ]
+  },
+  "source": {
+    "git_commit": "2d8f711092d6a279a9143b6f9db41a840461a4c3",
+    "worktree_dirty": false
+  },
+  "private_artifact": {
+    "artifact_id": "red-battle-ranker-8e12f910fad2422c8d494771740d351d",
+    "kind": "battle_model",
+    "status": "complete",
+    "schema": "private-json-artifact-summary-v1",
+    "stream_records": {
+      "metrics": 1,
+      "model": 1,
+      "training": 1
+    },
+    "total_records": 3,
+    "total_bytes": 8251,
+    "manifest_sha256": "a9173fe9aa8139584e23c8abb5d7c912d1d2c3242204a48c3d67810870d0022c"
+  },
+  "limitations": {
+    "single_nominal_teacher_episode": true,
+    "unassigned_root_lineage": true,
+    "inferred_battle_groups": true,
+    "adaptive_runtime_decisions_only": true,
+    "all_battle_decisions_labeled": false,
+    "policy_goal_not_fully_observed": true,
+    "held_out_root_lineages": 0,
+    "learned_policy_rollouts": 0,
+    "description": "This measures agreement with teacher move choices inside grouped folds from one recorded lineage. It is not battle win rate, held-out seed evaluation, a learned gameplay rollout, full-game learned completion, or cross-game transfer evidence."
+  }
+}

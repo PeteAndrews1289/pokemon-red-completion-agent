@@ -65,6 +65,12 @@ TRAJECTORY_FOUNDATION_RECEIPT = (
 BATTLE_DECISION_RECEIPT = (
     PROJECT_ROOT / "docs" / "evidence" / "private-battle-decisions-2026-07-30.json"
 )
+BATTLE_IMITATION_RECEIPT = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "private-battle-imitation-diagnostic-2026-07-30.json"
+)
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -1744,3 +1750,139 @@ def test_battle_decision_receipt_is_linked_limited_and_privacy_safe() -> None:
     assert "/Volumes/" not in serialized
     assert "Downloads" not in serialized
     assert ".gb" not in serialized
+
+
+def test_battle_imitation_receipt_is_diagnostic_aggregate_and_privacy_safe() -> None:
+    receipt = json.loads(BATTLE_IMITATION_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "battle-imitation-diagnostic-v1"
+    assert receipt["recorded_on"] == "2026-07-30"
+    assert receipt["evidence_lane"] == "single_lineage_grouped_battle_imitation_diagnostic"
+    assert receipt["status"] == "complete"
+    assert receipt["claim_scope"] == {
+        "battle_imitation_model_trained": True,
+        "same_lineage_grouped_diagnostic": True,
+        "held_out_evaluation": False,
+        "learned_policy_rollout": False,
+        "learned_full_game_completion": False,
+        "promotion_eligible": False,
+        "transfer_result": False,
+    }
+    assert receipt["scope"] == {
+        "decisions": 422,
+        "groups": 63,
+        "source_episodes": 1,
+        "source_root_lineages": 1,
+    }
+    assert receipt["dataset_manifest_sha256"] == (
+        "3ed9e3f7cfccb9dcf2e1f0c11b6a53f687854e35bf1766f66c44e8ebfe07a750"
+    )
+    assert receipt["model"] == {
+        "model_id": "pokemon.core.battle.masked-linear-ranker.v1",
+        "feature_schema_id": "pokemon.core.battle.move-ranker.v1",
+        "feature_count": 100,
+        "sha256": "0051da799e6d95b64bde2a3c09ed46d34b43aaf61660217c77f7fd635ddf950a",
+        "serialization": "canonical_json",
+    }
+    assert receipt["training"] == {
+        "seed": 1289,
+        "folds": 5,
+        "epochs": 300,
+        "learning_rate": 0.03,
+        "l2": 0.0001,
+        "split_unit": "diagnostic_battle_group",
+    }
+
+    metrics = receipt["metrics"]
+    assert metrics["accuracy"] == 0.7251184834123223
+    assert metrics["macro_f1"] == 0.6830197450601863
+    assert metrics["per_slot_recall"] == [
+        0.8605769230769231,
+        0.74,
+        0.4942528735632184,
+        0.6103896103896104,
+    ]
+    assert metrics["cross_entropy"] == 0.7131798266065661
+    assert metrics["majority_accuracy"] == 0.504739336492891
+    assert metrics["training_accuracy"] == 0.8056872037914692
+    assert metrics["legal_choice_rate"] == 1.0
+    assert metrics["accuracy"] > metrics["majority_accuracy"]
+    folds = metrics["folds"]
+    assert [fold["fold_index"] for fold in folds] == list(range(5))
+    assert [fold["accuracy"] for fold in folds] == [
+        0.6588235294117647,
+        0.8117647058823529,
+        0.5833333333333334,
+        0.9166666666666666,
+        0.6547619047619048,
+    ]
+    assert [fold["cross_entropy"] for fold in folds] == [
+        0.7859594101860107,
+        0.677667240016898,
+        0.8236010302364283,
+        0.3596113660777685,
+        0.9186164317896561,
+    ]
+    assert [fold["majority_accuracy"] for fold in folds] == [
+        0.5882352941176471,
+        0.6235294117647059,
+        0.42857142857142855,
+        0.5238095238095238,
+        0.35714285714285715,
+    ]
+    assert sum(fold["test_decisions"] for fold in folds) == 422
+    assert sum(fold["test_groups"] for fold in folds) == 63
+
+    assert receipt["qualification"] == {
+        "promotion_eligible": False,
+        "held_out_evaluation": False,
+        "learned_policy_rollout": False,
+        "reasons": [
+            "grouped_cross_validation_is_not_held_out",
+            "inferred_battle_groups",
+            "policy_goal_not_fully_observed",
+            "single_recorded_root_lineage",
+            "unassigned_root_lineage",
+        ],
+    }
+    assert receipt["source"] == {
+        "git_commit": "2d8f711092d6a279a9143b6f9db41a840461a4c3",
+        "worktree_dirty": False,
+    }
+    artifact = receipt["private_artifact"]
+    assert artifact == {
+        "artifact_id": "red-battle-ranker-8e12f910fad2422c8d494771740d351d",
+        "kind": "battle_model",
+        "status": "complete",
+        "schema": "private-json-artifact-summary-v1",
+        "stream_records": {"metrics": 1, "model": 1, "training": 1},
+        "total_records": 3,
+        "total_bytes": 8251,
+        "manifest_sha256": (
+            "a9173fe9aa8139584e23c8abb5d7c912d1d2c3242204a48c3d67810870d0022c"
+        ),
+    }
+
+    limitations = receipt["limitations"]
+    assert limitations["single_nominal_teacher_episode"] is True
+    assert limitations["unassigned_root_lineage"] is True
+    assert limitations["inferred_battle_groups"] is True
+    assert limitations["adaptive_runtime_decisions_only"] is True
+    assert limitations["all_battle_decisions_labeled"] is False
+    assert limitations["policy_goal_not_fully_observed"] is True
+    assert limitations["held_out_root_lineages"] == 0
+    assert limitations["learned_policy_rollouts"] == 0
+
+    serialized = json.dumps(receipt)
+    for forbidden in (
+        "/Users/",
+        "/Volumes/",
+        "Downloads",
+        ".gb",
+        ".jsonl",
+        '"weights"',
+        "candidate_vectors",
+        "decision_id",
+        "snapshot_sha256",
+    ):
+        assert forbidden not in serialized

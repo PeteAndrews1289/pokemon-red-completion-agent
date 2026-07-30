@@ -20,6 +20,11 @@ control, and progressively trained specialists.**
 > snapshots**. The 14-action difference closes a previously uncounted menu-control path; it is not
 > a route change. See the
 > [sanitized trajectory-foundation receipt](docs/evidence/private-trajectory-foundation-2026-07-30.json).
+> A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
+> **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
+> every output valid by construction. This is a grouped diagnostic from one lineage, not a learned
+> gameplay rollout or held-out result. See the
+> [sanitized battle-imitation receipt](docs/evidence/private-battle-imitation-diagnostic-2026-07-30.json).
 
 ## The goal
 
@@ -241,9 +246,13 @@ uninitialized, same-device, symlinked, Git-controlled, or overlapping destinatio
 requires an identified, clean Git checkout so every accepted episode names the exact source
 commit. Output contains only a path-free episode identifier and aggregate summary. The first
 recorder is an executor-aligned teacher trace. The next layer records zero-based battle move
-decisions from the shared adaptive runtime and links their full execution spans; custom battle
-controllers, perturbed recovery examples, and held-out labels still remain before any
-behavioral-cloning claim is made.
+decisions from the shared adaptive runtime and links their full execution spans. The first
+single-lineage battle-imitation diagnostic groups 422 decisions into 63 encounter proxies and
+reaches 72.5% teacher-choice agreement versus a 50.5% fold-local majority-slot baseline. A hard
+legality and PP mask makes all outputs valid by construction; that safety invariant is not a
+learned success metric. This is not battle win rate or a learned gameplay rollout. Explicit battle
+instances and goals, custom battle controllers, perturbed corrections, and lineages assigned
+before collection still remain before any held-out or promoted-policy claim.
 
 ## Evidence and project status
 
@@ -259,6 +268,8 @@ behavioral-cloning claim is made.
   sanitized integrity, privacy, and scope evidence
 - [First battle-decision receipt](docs/evidence/private-battle-decisions-2026-07-30.json) —
   422 privacy-safe adaptive move labels with exact execution linkage
+- [First battle-imitation diagnostic](docs/evidence/private-battle-imitation-diagnostic-2026-07-30.json) —
+  aggregate same-lineage teacher-choice agreement with explicit non-promotion limits
 - [Optional upstream baseline](docs/upstream-baseline.md) — pinned, isolated comparison boundary
 - [Contributing](CONTRIBUTING.md) — safety and evidence requirements
 

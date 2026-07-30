@@ -18,6 +18,12 @@
   events, and 14,760 deduplicated semantic snapshots across all 299 checkpoints.
 - Recorded and audited the first private adaptive battle decision trajectory: 422 move choices
   across 32 battle locations, linked to 3,022 executor actions with exact first-state hashes.
+- Added an integrity-checked private reader, typed model-artifact writer, pinned Generation I
+  mechanics projector, and slot-equivariant masked battle ranker.
+- Trained and published the first aggregate battle-imitation diagnostic: 72.5% teacher-choice
+  agreement versus a 50.5% fold-local majority baseline across 422 decisions and 63 inferred
+  encounter groups, with hard-masked legal outputs and explicit single-lineage non-promotion
+  limits.
 - Documented the measured cross-game transfer goal and its Red, near-transfer, and
   cross-generation promotion gates.
 

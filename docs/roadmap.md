@@ -120,7 +120,7 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 - [x] Record and audit a clean-start trajectory containing adaptive battle decision labels.
 - [x] Add an integrity-checked private episode reader and typed private model-artifact writer.
 - [x] Add the pinned Red mechanics projector and slot-equivariant masked battle ranker.
-- [ ] Run and publish the aggregate first single-lineage battle diagnostic.
+- [x] Run and publish the aggregate first single-lineage battle diagnostic.
 - [ ] Record perturbed teacher corrections and recovery trajectories.
 - Publish schemas, aggregate statistics, and dataset cards without game assets.
 - Train goal-conditioned navigation, interaction, battle, puzzle, and recovery specialists with
@@ -141,6 +141,15 @@ policy-snapshot hash as its first execution. The
 [sanitized battle-decision receipt](evidence/private-battle-decisions-2026-07-30.json) keeps this
 lane explicitly incomplete: custom battle controllers, perturbed corrections, frozen splits, and
 learned evaluation remain pending.
+
+The first battle-imitation diagnostic trains a 100-feature shared move ranker on those 422
+decisions, grouped into 63 encounter proxies. Five-fold agreement is 72.5% versus a 50.5%
+fold-local majority-slot baseline and macro F1 is 0.683. A hard mask makes every prediction a
+legal positive-PP choice by construction; that 100% rate is a safety invariant, not a learned
+performance result. The
+[sanitized diagnostic receipt](evidence/private-battle-imitation-diagnostic-2026-07-30.json) keeps
+the claim narrow: this is one unassigned root lineage with inferred groups and incomplete
+planner-goal context, not held-out evaluation or a learned gameplay rollout.
 
 ## Milestone 4 — DAgger and selective RL
 

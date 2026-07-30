@@ -41,6 +41,10 @@ species from revision-local references into shared mechanics:
 - broad move effects such as status, stat changes, recoil, charge, healing, draining, trapping,
   fixed damage, and multi-hit behavior.
 
+Counter is cataloged explicitly, but a selectable Counter candidate fails closed until the
+semantic observation exposes prior-turn received damage. A zero-PP Counter remains present only as
+a masked, unusable candidate.
+
 Each available move becomes one candidate under the fixed
 `pokemon.core.battle.move-ranker.v1` schema. Candidate-relative values include STAB,
 effectiveness, effective power, PP, and bounded interactions between move mechanics and the
@@ -68,6 +72,8 @@ inside one fold. It never performs a random decision-row split. Reported metrics
 
 This grouped result is still interpolation evidence from one recorded playthrough. It is not a
 held-out seed result, a learned battle rollout, or evidence of full-game completion.
+The [first aggregate diagnostic](evidence/private-battle-imitation-diagnostic-2026-07-30.json)
+reports 72.5% teacher-choice agreement across 422 decisions while retaining those limits.
 
 ## Promotion protocol
 
