@@ -158,6 +158,11 @@ Several failures have already produced general improvements:
 | The late-pivot Champion policy was evaluated across all 255 byte-sized start offsets. | The previous policy changes were locally plausible but had no verified Hall-of-Fame terminal. | Offset 150 produced the first passing revised-lineage terminal: four X Specials and three Full Restores used, the lead at 113 HP, one helper at full HP, 16 Submission PP remaining, the Champion event set, and the Hall of Fame entered. It remains diagnostic until clean-power replay confirms all 299 checkpoints. |
 | The locally qualified Champion policy was replayed from clean power rather than from its diagnostic boundary. | A passing late-game snapshot could not establish that the complete revised route was reproducible. | The uninterrupted replay passed all 299 checkpoints and 36 objectives, entered the Hall of Fame in 5,163,657 frames and 43,005 actions, and reproduced the same totals on a second clean rehearsal. This closes the revised teacher-completion gate; it does not close the learned-agent or held-out-generalization gates. |
 | The first registry-bound, uncounted 63-battle schedule rehearsal changed the Route 25 trainer-5 timing and the lead fainted at checkpoint 49/299. | Reproducibility on the default timing lineage did not imply robustness to the preregistered offset schedule. | The failure was retained as held-out diagnostic evidence. The campaign remains unopened, all twelve declared slots remain pending, and no dry-run qualification exists. Route 25 recovery must be hardened before the schedule rehearsal is attempted again under a newly published source identity. |
+| A required attack was disabled during a held-out trainer battle even though other legal attacks remained. | The teacher confused “preferred” with “required on every turn.” | Battle policies now rank legal fallback moves from live PP and Disable state, while the post-battle contract separately proves that the strategically required move was used at least once. |
+| A legally captured level-15 Spearow survived the capture contract but produced an underpowered DUX after the in-game trade. | Capture success alone did not prove fitness for a Pokémon's later assigned role. | The capture planner now accepts the level-17 encounter needed by the downstream battle plan, turning party acquisition into a long-horizon capability contract. |
+| A level-up prompt in the Rocket Hideout threatened to replace Bite with Withdraw. | Generic prompt handling could silently destroy a later required capability. | Move-learning decisions now preserve the declared move set and verify it after the battle instead of assuming every level-up prompt should be accepted or declined identically. |
+| The Tower rival needed different attacks against Pidgeotto, Growlithe, and the rest of the party, plus bounded recovery on the changed damage lineage. | One preferred move and one historical healing point were insufficient for a multi-opponent battle. | The rival policy now chooses from live opponent identity, legal move state, HP, and inventory, and can spend a tightly bounded recovery reserve before proving its terminal contract. |
+| Pokémon Tower 6F put the lead to sleep and attacked through seven sleeping turns. | HP-only recovery could not solve loss of control caused by status. | A legal Awakening is now purchased as a conditional contingency and the battle runtime can distinguish status recovery from healing. This fix is still undergoing clean-power validation. |
 
 ### Current schedule-hardening work
 
@@ -167,7 +172,7 @@ new qualification: the source is still changing, the registry still identifies t
 commit, and the official failed rehearsal remains the public result until a clean, committed
 replacement passes.
 
-The diagnostic has nevertheless advanced from Route 25 to Rock Tunnel and exposed several useful
+The diagnostic has nevertheless advanced from Route 25 to Pokémon Tower and exposed several useful
 causal links:
 
 - Route 25 now chooses attacks from the opposing trainer's party rather than using one historical
@@ -180,8 +185,12 @@ causal links:
   being evaluated against its actual Surge role rather than one historical encounter level.
 - DUX's Route 9 demonstration now uses bounded in-battle recovery under live HP evidence. The next
   Route 9 battle selects BubbleBeam because the held-out opponent disabled Bite.
-- With those changes, the first remaining failure moved to Rock Tunnel 1F trainer 4, where the
-  current lead can still faint under the declared timing schedule.
+- Rock Tunnel and the Rocket Hideout now pass the diagnostic schedule with adaptive legal moves,
+  retained resource evidence, and protection against an unwanted level-up move replacement.
+- Pokémon Tower's rival now passes with opponent-aware attacks and bounded recovery. The current
+  frontier is the 6F Channeler battle: the exact trace showed sleep—not insufficient damage or PP—
+  as the cause of the faint. A conditional Awakening path has been added and is being replayed from
+  clean power before it can be described as qualified.
 
 These changes remain **diagnostic work in progress**. They will be simplified, covered by the full
 ROM-free suite, replayed on the default lineage, committed and pushed, bound into a regenerated
@@ -335,8 +344,10 @@ The revised teacher has passed broad source validation, and its source-bound col
 was committed and pushed as source commit `58c3dbd`. The first uncounted schedule rehearsal stopped
 at Route 25 trainer 5 (checkpoint 49/299) after the changed battle timing caused the lead to faint.
 The private status audit confirms `campaign_started=false`, no dry-run qualification, and all
-twelve declared slots still pending. The next task is to harden this held-out failure, republish a
-new source-bound registry, and repeat the uncounted rehearsal.
+twelve declared slots still pending. Uncommitted diagnostic work has since advanced the same
+schedule to Pokémon Tower, but that progress is not counted as a qualifying run. The next task is
+to finish hardening the full held-out schedule, pass both default and declared clean-power
+rehearsals, republish a source-bound registry, and only then open collection.
 
 No learned model has yet completed the game. Collection, frozen training, held-out Red evaluation,
 and the first cross-game transfer experiment remain subsequent gates.
