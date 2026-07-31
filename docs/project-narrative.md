@@ -1,0 +1,354 @@
+# Project Narrative: From a Completed Run to a Transferable Pokémon Agent
+
+> **Living engineering record — updated July 31, 2026.** This document separates verified
+> historical results from work on the current robustness branch. It will be updated at each
+> collection, training, evaluation, and transfer gate.
+
+## Executive summary
+
+This project asks a harder question than “can software finish Pokémon Red?”:
+
+> Can a system turn one verified solution into reusable game-playing knowledge, remain reliable
+> when timing and encounters change, and reduce the amount of teaching required for the next
+> Pokémon game?
+
+The project began with a completion-first deterministic teacher. That teacher reached the Hall of
+Fame from clean power-on in three uninterrupted runs, each proving 299/299 semantic checkpoints and
+36/36 objectives. It established that the route, controller, state adapter, and completion referee
+could solve the full game without save-state restoration or human input.
+
+The revised robustness lineage has now independently repeated that result from clean power-on. Its
+first qualifying rehearsal reached the same 299/299 checkpoints and 36/36 objectives in 5,163,657
+frames and 43,005 controller actions. The different totals reflect the intentionally changed route,
+resource plan, recoveries, and battle decisions described below; they do not replace or rewrite the
+historical receipt.
+
+That result is the foundation, not the final claim. A deterministic route can still contain hidden
+assumptions about random encounters, damage rolls, move-learning prompts, menu state, or collision
+tiles. The current phase deliberately changes early decisions and reruns the game from clean power
+to expose those assumptions. Each failure is converted into a semantic observation, bounded
+recovery rule, transferable feature, or stronger evaluation gate before model training begins.
+
+The intended result is a learned/hybrid agent that understands objectives and bounded skills rather
+than memorizing a four-million-frame button sequence.
+
+## The problem
+
+Pokémon Red is a useful long-horizon benchmark because success requires several kinds of reasoning
+to work together:
+
+- story and prerequisite planning across eight badges;
+- navigation across connected maps;
+- dialogue, inventory, party, PC, and shop menus;
+- battle decisions under HP, PP, status, accuracy, and opponent variation;
+- captures, trades, HMs, field moves, and puzzles;
+- resource planning over many hours of gameplay; and
+- an independent definition of completion.
+
+A system can appear busy without becoming competent. The predecessor project generated 8.24
+million actions and discovered seven milestones, but its frozen evaluation retained no durable
+skills. The successor therefore made reliable completion and evidence quality the first
+requirements, then placed learning behind explicit reliability gates.
+
+## Phase 1: establish a trustworthy reference solution
+
+The first deliverable was a deterministic teacher that could complete the game legally and prove
+what it had accomplished.
+
+The teacher:
+
+- starts from clean emulator power-on;
+- uses a privately supplied, fingerprinted ROM;
+- sends every input through one frame-safe executor;
+- reads validated semantic state rather than changing game memory;
+- never restores a save state during a qualifying run;
+- verifies objectives as persistent game facts rather than inferred screen text; and
+- requires the Champion-defeated event and Hall-of-Fame location concurrently.
+
+Three independent teacher runs reached the same terminal with:
+
+- **299/299 semantic checkpoints**;
+- **36/36 completion objectives**;
+- **4,796,436 emulated frames**; and
+- **41,316 controller actions**.
+
+The public evidence receipt is
+[qualified-play-hall-of-fame-2026-07-29.json](evidence/qualified-play-hall-of-fame-2026-07-29.json).
+The first private trajectory was separately integrity-audited and summarized in
+[private-trajectory-foundation-2026-07-30.json](evidence/private-trajectory-foundation-2026-07-30.json).
+
+### What the completed run gave us
+
+The completed run provided much more than proof that the game was beatable:
+
+- a complete objective graph and legal route;
+- 299 useful supervision boundaries;
+- action-aligned demonstrations;
+- battle, navigation, menu, puzzle, and recovery examples;
+- exact resource and party invariants between chapters;
+- an independent referee for future learner evaluation; and
+- a baseline against which every changed lineage can be compared.
+
+### What it did not prove
+
+The completed run did **not** prove that a learned model could finish the game, that the teacher was
+robust to unseen timing, or that knowledge would transfer to another Pokémon title. One successful
+lineage can hide brittle assumptions. Those claims require separate training and held-out
+evaluation.
+
+## Phase 2: turn brittle assumptions into reusable capabilities
+
+The robustness phase restarts from clean power after every source change and stops at the first
+failure. Diagnostic snapshots may be used to qualify a local fix, but a diagnostic restore never
+counts as a clean run. The complete source must subsequently replay from power-on without restoring
+that state.
+
+Several failures have already produced general improvements:
+
+| Observation from a changed run | Hidden assumption | Resulting improvement |
+| --- | --- | --- |
+| The Cerulean rival could exhaust the original healing reserve. | One successful battle seed was treated as sufficient. | The legal reserve was raised to 14 Potions and tested across all 256 timing offsets, producing 256/256 wins. |
+| Adding the legal Zubat/TM01 route changed later battle timing. | Downstream actions implicitly depended on the original RNG lineage. | Chapter boundaries now verify party, move, item, and control facts after the new legal route. |
+| Wartortle learned Bite at level 24. | Generic dialogue handling declined a strategically required move-learning prompt. | The Rocket battle now accepts Bite at its exact level-up boundary and verifies the persistent move set. |
+| Correctly learning Bite changed the Rocket and S.S. Anne matchups. | Move choices were tied to old slot contents instead of live species and move evidence. | Policies now use species-specific, PP-checked choices, including a one-use Bite latch against Drowzee and Bite against Kadabra. |
+| Changed battle cadence produced wild encounters in several Route 6 segments. | A few traversal segments treated any wild encounter as fatal. | Every Route 6 grass segment now shares a bounded flee routine that proves unchanged PP, party, status, trainer events, and restored control. |
+| The old Tackle capture line no longer existed after learning Bite. | Spearow capture was coupled to a historical move set. | Water Gun was live-qualified against a level-15 Spearow: 41 to 2 HP, exactly one PP spent, no damage to Wartortle, and capture with one Ball. |
+| The new capture cadence changed Diglett Cave encounters. | One cave-entry delay was assumed to remain stable. | All 256 waits were scanned on the exact new lineage; 153 succeeded. Wait 199 was selected from the widest contiguous passing window, 195–203. |
+| A Vermilion Gym can route encountered an unmodeled collision. | The pure shortest path assumed a complete collision map. | Can navigation now discovers blocked tiles, replans from observed coordinates, and derives the final facing direction semantically. |
+| Rock Tunnel selected a move whose PP never decreased. | A disabled move still appeared usable to the policy. | The pinned `wPlayerDisabledMove` state is now decoded into disabled slot and remaining turns, recorded in trajectories, represented in the game-neutral battle feature schema, and removed from the model’s legal action mask. |
+| Switching to Diglett solved a difficult Rock Tunnel battle but Blastoise later reached Erika one level short of learning Skull Bash. | A locally successful substitution was assumed to preserve the long-horizon experience budget. | The teacher now keeps the required experience on Wartortle/Blastoise, uses bounded field recovery, and verifies that the required level-up move is actually installed rather than merely accepting a dialogue sequence. |
+| Adding a Parlyz Heal changed Route 9 timing enough for DUX to faint. | A legal inventory change was assumed not to affect downstream battle RNG. | The purchase is followed by an explicitly qualified timing boundary, while the item itself is a conditional reserve audited as purchased, used, and remaining. The route no longer forces a cure when live status evidence says none is needed. |
+| The safer Rock Tunnel lineage retained one additional Super Potion, but Giovanni then defeated a merely healthy—not fully healed—lead. | A fixed HP threshold discarded useful surplus and was too weak for a changed damage lineage. | The additional legal reserve is carried forward and used to restore the lead fully before Giovanni; the complete inventory and economy lineage is verified at every later chapter boundary. |
+| The eastbound Route 8 sequence hit newly observed collision coordinates. | A button string encoded one historical path instead of the map's traversability constraints. | The sequence was replaced by a source-derived 60×18 collision model and a semantic planner that excludes undefeated trainers and their sightlines. The new route passed clean-power validation and entered Pokémon Tower. |
+| Pokémon Tower consumed more healing than the original lineage. | Later chapters inherited an exact Super Potion count from one run. | Recovery now uses the legal supply adaptively at three verified boundaries, records the reserve transition `(3, 2, 1, 0)`, and checks the resulting economy rather than assuming the old damage rolls. |
+| Battles reached Fuchsia and Koga with different legal PP totals, including a disabled Surf that spent no PP. | Exact PP receipts treated one move sequence as the only valid victory. | Chapter contracts now use battle-specific PP bounds while still requiring victory, legal moves, expected story events, party integrity, and bounded resource use. |
+| The Safari Zone produced two encounters instead of the historical six. | Encounter count was mistaken for an objective. | The contract now accepts a bounded number of successfully fled encounters and verifies the actual goals: HM03, the Gold Teeth, unchanged party resources, and restored overworld control. |
+| The revised experience lineage reached Erika at level 41 without Skull Bash and lost with the boss nearly defeated. | A required move was expected to appear naturally at an old level-up boundary. | The retained Pokémon Tower Rare Candy is now used immediately before Erika, the move-deletion prompt is detected explicitly, Bite is replaced with Skull Bash, and the item, level, and persistent move set are all verified. |
+| A moving Saffron NPC swallowed part of a fixed street route, and an attempted detour entered an unintended house. | “Walkable” city tiles were treated as interchangeable even when some are door warps. | Saffron travel now observes every step, replans around live collisions, permanently excludes all unintended door coordinates, and enters the Center or Gym only from a verified outside stance. |
+| The Celadon rooftop girl repeatedly moved between approach, facing, and interaction. | A long post-step wait was harmless for static objects but allowed a walking NPC to escape. | Rooftop pursuit now uses short observed steps, rereads the NPC’s live coordinates, faces and interacts immediately, and proves that dialogue opened before handing control to the reward routine. |
+| Sabrina used Disable after Strength had already been selected, then Venomoth inflicted a supported status. | PP loss was treated as the only valid selected-turn outcome, and every intermediate turn was expected to be status-free. | The shared runtime now recognizes opponent-first Disable through unchanged PP plus the live disabled slot, replans to a legal move, and permits only explicitly handled sleep/paralysis states while still requiring a fully healed terminal. |
+| Sabrina was defeated and awarded the Marsh Badge, but could not transfer TM46. | Winning the battle was treated as sufficient even though the 20-slot bag was full. | The teacher now stores the spent S.S. Ticket and Lift Key in RED's PC before the Gym, proving an 18-slot boundary that reserves space for both TM46 and the following HM02 reward. |
+| Route 16 produced a wild encounter on the way to the Fly house. | Only the later Route 21 water route was expected to encounter wild Pokémon. | The Fly-house route now uses the same bounded flee evidence as other stochastic traversal: no trainer battle, unchanged party/PP/inventory, safe HP, and restored field control. |
+| The Secret Key interaction began while a late Mansion field message was still settling. | Reaching the correct coordinate was treated as proof that the item prompt was immediately ready. | Item collection now first proves restored field input, establishes the source-pinned approach, and uses a bounded semantic wait for the key to enter the bag. |
+| The single Mansion Repel expired before the Secret Key and a wild encounter occurred. | Zero encounters was treated as part of the objective even though the route and inventory remained valid. | The Mansion contract now permits at most two verified wild flees while still requiring every optional trainer untouched, the exact switch trace, preserved party/PP/inventory, and safe HP. |
+| The revised experience lineage needed six legal Surf decisions against Giovanni instead of the historical five and finished one level higher. | An exact action count and terminal level were used as proxies for battle correctness. | Giovanni now requires the exact party transition, legal Surf-only decisions, all required trainer receipts, Earth Badge/TM27 mirrors, and a fully healed level-50 terminal without assuming one damage sequence. |
+| Lance consumed both helper Pokémon, and field use of Revive stalled in the item submenu. | Selecting an item was treated as equivalent to selecting “USE” and reaching the party menu. | Field recovery now proves each menu transition, revives the selected party member, and verifies both item decrement and living-party evidence before continuing. |
+| The revised Elite Four lineage exhausted healing supplies immediately before the Champion. | Winning each battle was optimized locally, without reserving the final recovery needed by the next objective. | Indigo purchasing, battle recovery, helper pivots, and the Lance terminal now form one resource contract; the last Full Restore is reserved in battle and spent only to establish the Champion input boundary. |
+| Lorelei could knock out the lead from above the old 80-HP threshold after a legal shop change altered timing. | A historical damage threshold was treated as a general safety guarantee. | Lorelei now uses a higher observed safety margin and earlier bounded recovery, while preserving both helpers for the later fights where sacrifice pivots are budgeted. |
+| The original Champion strategy spent six turns raising Special after Surf and Ice Beam had already run out of PP. | A generally useful setup action was selected without checking whether any remaining attack could benefit from it. | The original setup was removed. Later controlled tests separated offense from defense: the current policy uses four X Specials to reduce incoming special damage without paying for all six setup turns, while a separate physical move reserve, full helpers, and healing contract protect and exploit the setup. |
+| Take Down supplied late-game PP but recoil converted every successful hit into additional healing demand. | Move power and PP were optimized independently of the shared Elite Four healing budget. | The legal TM plan now reloads Mega Punch and Mega Kick between fights, using replaceable move slots while respecting that Surf and Strength are permanent HMs. |
+| Selling one obsolete item at a time was insufficient to finance the final reserve. | The economy helper handled item identity but not legal stack quantities. | Indigo preparation can now sell bounded stacks of obsolete Poké Balls and Max Repels, verifies each quantity transition, and converts unused exploration supplies into healing and move capacity. |
+| Agatha can switch between two members of the same species. | Species and level alone were assumed to identify which opposing party member was active. | The observer now records the opponent's party position, allowing switch sequences and repeated species to be reconstructed without relying on presentation order. |
+| The newest clean lineage reached Agatha but stalled during a recovery transition at the original one-frame offset. | A locally valid recovery policy still encountered a bad battle/menu timing lineage. | The exact chapter input was scanned across all 255 nonzero byte offsets: 191 completed, and offset 85 was selected from the widest passing window, 80–91. This remains a diagnostic qualification until clean-power replay proves it end to end. |
+| Qualifying earlier Elite Four battles repeatedly changed Lance's exact input lineage. | A locally qualified Lance offset was treated as reusable after upstream timing and inventory changed. | Lance is rescanned only from the exact current input through battle, recovery, helper revival, and TM installation. On the newest six-boost lineage, 105 of 255 offsets passed the full-helper terminal. Offset 40 used one Full Restore and the five available Hyper Potions, leaving ten Full Restores, full helpers, and 39 attacks for the Champion. |
+| All 255 Champion offsets appeared to exhaust recovery even though a Full Restore remained. | The status branch selected a Full Heal without checking whether one was still in the bag. | Champion recovery now checks live availability and legally falls back to a Full Restore; the apparent economy failure was separated from the underlying inventory-selection bug. |
+| Nine Full Restores still could not compensate for only 25 fresh Champion attacks. | Healing reserve was optimized without proving that the final move set had enough accurate PP to defeat six opponents. | The revised purchase plan skips Mega Kick, buys a second Submission TM, and preserves the 16-PP Mega Punch left by the selected Lance lineage. Installing Submission over the exhausted Ice Beam creates 41 Champion attacks, with Submission prioritized against Rhydon. |
+| The first clean replay with the revised TM purchases reached Lorelei but exhausted her recovery reserve. | A strategically equivalent shop change was assumed not to alter the first Elite Four battle's RNG lineage. | The run remains a failed rehearsal. From its exact clean-power input, 201 of 255 offsets completed Lorelei. Offset 45 was selected near the center of a passing window and tied for the lowest total recovery use: three Hyper Potions and one Full Restore. |
+| Champion recovery pivots entered at half health and could faint before healing the lead. | “Alive” was treated as sufficient evidence that a helper could perform its planned role. | The Lance terminal now requires both revived helpers at full HP. The remaining Hyper Potion and one Full Restore are spent in the field, where healing is safe, so each helper can establish an actual in-battle recovery window. |
+| The legal X Special purchase selected the right item and quantity but could not add it to the bag. | Money and item quantity were checked, but the 20-slot unique-item limit was not included in the purchase precondition. | The spent Silph Scope is now archived through RED's PC during the existing Saffron Center stop, creating a verified free slot before late TM and battle-item shopping. |
+| The first clean run with the archived Scope and two X Specials passed Lorelei but lost at Bruno's old timing. | The additional legal menu sequence shifted the second Elite Four battle even though its direct inputs remained valid. | From the exact new Bruno input, 201 of 255 offsets passed. Offset 75 was chosen inside a ten-offset passing window and completed without spending any recovery item. |
+| The new Lorelei lineage passed but spent nine healing items, leaving too little reserve for the Champion. | A passing chapter was selected before optimizing its effect on the full Elite Four resource horizon. | The exact two–X Special input was rescanned: 198 offsets passed, and offset 218 used only three Hyper Potions and one Full Restore. This saves five healing items relative to the prior passing offset. |
+| The resource-efficient Lorelei choice shifted Bruno again. | The previous Bruno qualification belonged to the higher-spend Lorelei lineage. | On the exact new input, 200 of 255 Bruno offsets passed. Offset 185 was the only passing result that consumed no healing item, preserving all twelve Full Restores and eight Hyper Potions for the final three Elite Four battles. |
+| Increasing the Champion defense reserve from two to six X Specials shifted Lorelei yet again. | Resource conclusions from the two-item purchase timing were incorrectly assumed to survive the six-item timing. | On the exact six-boost input, 196 of 255 Lorelei offsets passed. Offset 119 used four Hyper Potions and no Full Restores, preserving all 13 Full Restores for the rest of the Elite Four. |
+| Ten Full Restores still produced no Champion pass, and several attempts exhausted the bag without advancing. | Damage taken during a healing turn could leave the lead below the threshold, causing another immediate heal and a recovery loop. | Champion recovery now uses the Lance-proven progress latch: after any recovery, the policy must take one legal attack before it may heal again. |
+| Champion inputs retained four Strength PP but spent less-accurate Mega Punch first. | Move priority considered remaining PP but not accuracy when two attacks had the same base power. | The final policy now spends 100%-accurate Strength before 85%-accurate Mega Punch, while retaining Submission priority against Rhydon. |
+| Delaying X Special setup until Alakazam was tactically appealing but produced widespread item-menu failures during the opponent transition. | A strategy-level timing change crossed an unreliable presentation boundary. | The delayed setup was rejected after 91 of 255 offsets failed in the X Special transition alone. Setup returns to the stable battle-opening boundary while the improved move allocation is retained. |
+| The clean run reached species `0x9A`, which was mislabeled as Arcanine in the working narrative. | A local internal species ID was interpreted from memory instead of the pinned species table. | The record now correctly identifies the final Pokémon as Venusaur. Submission is used against Rhydon and Arcanine so limited recoil-free Strength and Mega Punch PP remain available for the flying, Psychic, and final Grass/Poison matchups. |
+| Full-health helper pivots were consumed by the first two low-HP events, leaving none for Arcanine or Venusaur. | Recovery treated every battle phase as equally dangerous instead of budgeting scarce safe turns across the opponent party. | Direct Full Restores handle the first four opponents; the two helper sacrifice pivots are now reserved for opponent party positions four and five, where a protected recovery turn has the greatest terminal value. |
+| The late-pivot Champion policy was evaluated across all 255 byte-sized start offsets. | The previous policy changes were locally plausible but had no verified Hall-of-Fame terminal. | Offset 150 produced the first passing revised-lineage terminal: four X Specials and three Full Restores used, the lead at 113 HP, one helper at full HP, 16 Submission PP remaining, the Champion event set, and the Hall of Fame entered. It remains diagnostic until clean-power replay confirms all 299 checkpoints. |
+| The locally qualified Champion policy was replayed from clean power rather than from its diagnostic boundary. | A passing late-game snapshot could not establish that the complete revised route was reproducible. | The uninterrupted replay passed all 299 checkpoints and 36 objectives, entered the Hall of Fame in 5,163,657 frames and 43,005 actions, and reproduced the same totals on a second clean rehearsal. This closes the revised teacher-completion gate; it does not close the learned-agent or held-out-generalization gates. |
+
+This process is intentionally slower than patching a single run with a save-state restore. It
+produces a better teacher, more useful correction data, and a stronger model interface.
+
+## What is being built
+
+The repository contains three related products, with deliberately different evidence standards:
+
+1. **A completion referee and semantic game interface.** These turn emulator state into durable
+   facts such as badges, inventory, party condition, opponent state, map position, and objective
+   completion.
+2. **A robust deterministic teacher.** This supplies legal demonstrations, correction examples,
+   chapter contracts, and a known-good recovery path. It is training infrastructure, not the
+   learned-agent claim.
+3. **A learned/hybrid agent.** This will select objectives and bounded skills from semantic state,
+   first in Red and then behind a small adapter in a second Pokémon game.
+
+This distinction matters: improving the teacher increases the quality and diversity of the
+dataset, but only a frozen model completing held-out runs will count as learned-agent completion.
+
+## Learning architecture
+
+The system separates long-horizon planning from bounded execution:
+
+1. A semantic state adapter translates revision-specific RAM into validated facts.
+2. An objective graph tracks story prerequisites and durable progress.
+3. A router selects a bounded navigation, interaction, battle, inventory, puzzle, or recovery
+   skill.
+4. A frame-safe executor owns controller input.
+5. A recorder stores semantic observations, decisions, outcomes, and teacher corrections.
+6. An independent referee determines whether completion actually occurred.
+
+The model is not asked to rediscover controller timing from raw frames. It chooses meaningful
+macro-actions under explicit constraints, while deterministic infrastructure handles exact input
+delivery and verifies effects.
+
+### Current learned component
+
+The first slot-equivariant battle ranker reached 72.5% teacher-choice agreement against a 50.5%
+fold-local majority baseline across 422 recorded decisions. Its legality and PP mask prevents
+invalid outputs by construction. This is a diagnostic from one teacher lineage, not a full learned
+gameplay rollout. See
+[private-battle-imitation-diagnostic-2026-07-30.json](evidence/private-battle-imitation-diagnostic-2026-07-30.json).
+
+The battle feature schema is deliberately game-neutral. Candidate moves are represented by
+mechanics such as power, accuracy, category, type, STAB, effectiveness, PP, status effects, stage
+interactions, and whether the move is currently disabled. Route names, local move IDs, and fixed
+slot positions are excluded from the transferable vector.
+
+## Evaluation discipline
+
+The project keeps several claims separate:
+
+- **Teacher completion:** deterministic expert reaches the Hall of Fame.
+- **Hybrid completion:** one or more learned specialists operate inside teacher scaffolding.
+- **Learned-module evaluation:** a frozen specialist passes its own held-out suite.
+- **Learned-stack completion:** frozen learned specialists compose across the full game.
+- **Transfer evaluation:** a model trained on Red improves learning efficiency on another game.
+
+Official evaluation uses frozen source, configuration, partitions, and model weights. Training,
+validation, test, and dry-run schedules are declared before collection. Failed attempts remain in
+the denominator; diagnostic snapshot probes do not silently become clean-run evidence.
+
+The next collection gate is:
+
+1. one uninterrupted rehearsal of the finalized teacher;
+2. regeneration and verification of the source-bound collection registry;
+3. five clean training trajectories;
+4. two held-out validation trajectories;
+5. frozen model training; and
+6. held-out full-game evaluation.
+
+## Transfer to other Pokémon games
+
+The goal is not to author another complete route for every title.
+
+Knowledge expected to transfer includes:
+
+- battle mechanics and legal-action masking;
+- type, status, PP, healing, and party-resource reasoning;
+- menu and dialogue skills;
+- exploration and collision-aware navigation;
+- objective prerequisites and persistent-event verification; and
+- recovery from unexpected encounters, damage, status, and displaced positions.
+
+Another game still needs a small adapter that maps its local memory and mechanics into the shared
+ontology. A game such as Pokémon Silver also introduces new maps, objectives, Pokémon, and
+mechanics, so reliable zero-shot completion from Red alone is not assumed.
+
+The planned transfer experiment is:
+
+1. run the frozen Red-trained specialists on the target game without target-game training;
+2. measure which skills transfer and where they abstain or fail;
+3. provide targeted demonstrations and teacher corrections only for missing knowledge;
+4. fine-tune under a frozen target-game validation split; and
+5. compare the amount of target-game data and intervention with the original Red effort.
+
+Success means each new game requires less hand-authored scaffolding—not that one Red trajectory
+magically contains Silver’s story.
+
+## What worked
+
+- Completion-first design created a reliable source of demonstrations and corrections.
+- Semantic checkpoints made long failures local and diagnosable.
+- Clean-power replay exposed assumptions that snapshot-only testing would miss.
+- Source-pinned RAM observations turned vague screen behavior into testable facts.
+- Hard legality masks prevented the learned battle ranker from emitting impossible actions.
+- A private/public evidence split preserved reproducibility without redistributing copyrighted
+  game data.
+- Failure-first iteration produced reusable recovery behavior rather than a growing list of timing
+  hacks.
+- Treating the Elite Four as one continuous resource-planning problem exposed solutions that
+  per-battle optimization missed.
+- Exact diagnostic snapshots made it practical to test bounded timing variation locally, while
+  clean-power replay remained the only accepted end-to-end proof.
+
+## What did not work
+
+- Millions of unguided actions did not create cumulative competence in the predecessor.
+- One deterministic lineage did not establish robustness.
+- Fixed move slots broke when a legal level-up changed Wartortle’s move set.
+- Exact encounter counts broke when earlier battles consumed RNG differently.
+- Assuming a complete collision map broke on a legitimate Gym path.
+- Treating PP as the only move-legality signal failed when Disable left PP intact.
+- Treating a battle substitution as resource-neutral failed because experience is a long-horizon
+  resource just like HP, PP, money, and inventory.
+- Treating successful menu actions as timing-neutral failed because their frames can change every
+  downstream damage, status, and encounter outcome.
+- Continuing to press confirmation after an unexpected TM result could consume another item; TM
+  teaching now fails closed as soon as the intended item disappears.
+- Spending setup turns without checking the remaining attacking PP failed at the Champion.
+- Using recoil moves to solve a PP shortage merely moved the shortage into the healing budget.
+
+## Current status and honest limitations
+
+The historical deterministic teacher completion remains verified. The current robustness branch
+has also completed an uninterrupted clean-power replay with **299/299 checkpoints**, **36/36
+objectives**, **5,163,657 frames**, and **43,005 controller actions**. A second clean rehearsal
+reproduced those exact totals. Both runs used the complete revised route: archived obsolete
+inventory, rebalanced Elite Four purchases, live opponent-party identity, resource-aware
+recoveries, full-health helper pivots, four X Specials, and a physically usable Champion move
+reserve. Diagnostic states were used while developing and qualifying local fixes, but neither
+qualifying completion restored one.
+
+The revised teacher has passed broad source validation, and its source-bound collection registry
+has been regenerated locally. The registry becomes the public preregistration anchor only after
+the exact source/configuration commit is committed and pushed; no schedule rehearsal or declared
+collection slot has been consumed.
+
+No learned model has yet completed the game. Collection, frozen training, held-out Red evaluation,
+and the first cross-game transfer experiment remain subsequent gates.
+
+The full learned-system and transfer claims remain pending. In particular:
+
+- the current battle ranker has not completed the game;
+- the required five training and two validation trajectories have not yet been collected on the
+  finalized source;
+- held-out full-game completion has not yet been demonstrated; and
+- cross-game transfer has not yet been measured.
+
+These limitations are part of the public project record rather than hidden behind the completed
+teacher result.
+
+## Engineering and portfolio takeaways
+
+This project demonstrates:
+
+- long-horizon system decomposition;
+- emulator integration and deterministic control;
+- semantic state modeling from a pinned external codebase;
+- graph-based planning and collision-aware navigation;
+- closed-loop verification and fail-closed safety;
+- dataset contracts, integrity manifests, and leakage-resistant partitions;
+- behavioral cloning, legality-constrained ranking, and correction-driven training;
+- reproducible evaluation design; and
+- honest separation of baseline, hybrid, learned, and transfer claims.
+
+A concise interview description is:
+
+> I built a completion-first Pokémon Red agent that verified the entire game through 299 semantic
+> checkpoints, then used clean replays under changed timing and battle lineages to turn brittle
+> assumptions into reusable observations and recovery skills. The system records private semantic
+> trajectories, trains legality-constrained specialists, and is designed to measure how much of
+> that knowledge reduces the teaching required for the next Pokémon game.
+
+## Related documentation
+
+- [Architecture](architecture.md)
+- [Roadmap](roadmap.md)
+- [Teaching and Data Plan](teaching-plan.md)
+- [Battle Learning](battle-learning.md)
+- [Transfer Learning](transfer-learning.md)
+- [Collection Protocol](collection-protocol.md)
+- [Completion Contract](completion-contract.md)
+- [Assistance Policy](assistance-policy.md)

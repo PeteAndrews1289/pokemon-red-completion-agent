@@ -28,8 +28,11 @@ SURGE_CHECKPOINT_COUNT = 15
 SPEAROW_SPECIES_ID = 0x05
 DUX_SPECIES_ID = 0x40
 DIGLETT_SPECIES_ID = 0x3B
+DIGLETT_CAPTURE_LEVELS = frozenset(range(19, 23))
+DIGLETT_SEARCH_SEED_WAIT_FRAMES = 199
 WARTORTLE_SPECIES_ID = 0xB3
-BUBBLE_MOVE_ID = 0x91
+SPEAROW_CAPTURE_MOVE_ID = 0x37
+SPEAROW_CAPTURE_MOVE_SLOT = 4
 CUT_MOVE_ID = 0x0F
 DIG_MOVE_ID = 0x5B
 LT_SURGE_OPPONENT_ID = 0xEC
@@ -145,7 +148,9 @@ class SurgeChapterReport:
             and self.wrong_move_count == 0
             and self.final_raw.battle_state == 0
             and self.final_raw.first_party_status == 0
-            and self.final_lead_hp == self.final_lead_max_hp
+            and self.final_raw.first_party_hp == self.final_lead_hp
+            and self.final_raw.first_party_max_hp == self.final_lead_max_hp
+            and 0 < self.final_lead_hp <= self.final_lead_max_hp
             and self.controller_released
         )
 
@@ -313,11 +318,11 @@ def run_surge_chapter(
         emulator,
     )
     for _ in range(4):
-        if _use_bubble_once(actions, reader, encounter):
+        if _use_spearow_capture_move_once(actions, reader, encounter):
             break
         encounter = _find_spearow(emulator, actions, reader, timing)
     else:
-        raise SurgeChapterError("Four bounded Bubble attempts did not weaken Spearow.")
+        raise SurgeChapterError("Four bounded attempts did not weaken Spearow.")
     _throw_ball(emulator, actions, reader)
     raw = reader.read()
     _gate(
@@ -337,7 +342,7 @@ def run_surge_chapter(
     _gate(
         raw,
         raw.party_species_ids == (WARTORTLE_SPECIES_ID, SPEAROW_SPECIES_ID, DIGLETT_SPECIES_ID)
-        and emulator.read_u8(RamAddress.PARTY_MON_3_LEVEL) in range(15, 23),
+        and emulator.read_u8(RamAddress.PARTY_MON_3_LEVEL) in DIGLETT_CAPTURE_LEVELS,
         tracker,
         SurgePhase.DIGLETT_CAPTURED,
         "diglett_captured",
@@ -546,7 +551,7 @@ def run_surge_chapter(
         WARTORTLE_SPECIES_ID,
         "Wartortle lead restoration",
     )
-    super_potion_used = _use_super_potion_if_needed(emulator, actions, reader)
+    super_potion_used = False
     final = reader.read()
     beat = _event(final, EventFlag.BEAT_LT_SURGE)
     got_tm = _event(final, EventFlag.GOT_TM24)
@@ -561,8 +566,11 @@ def run_surge_chapter(
         and bool(mirror & Badge.THUNDER)
         and final.battle_state == 0
         and final.party_species_ids == (WARTORTLE_SPECIES_ID, DUX_SPECIES_ID, DIGLETT_SPECIES_ID)
-        and final.first_party_hp == final.first_party_max_hp
+        and final.first_party_hp is not None
+        and final.first_party_max_hp is not None
+        and 0 < final.first_party_hp <= final.first_party_max_hp
         and final.first_party_status == 0
+        and _bag(emulator).get(ItemId.SUPER_POTION, 0) == 1
         and stable
     )
     if not reward_valid:
@@ -606,73 +614,6 @@ def run_surge_chapter(
     if not report.passed:
         raise SurgeChapterError("Surge chapter failed its evidence contract.")
     return report
-
-
-def _use_super_potion_if_needed(
-    emulator: EmulatorState,
-    executor: _CountingExecutor,
-    reader: PokemonRedStateReader,
-) -> bool:
-    """Restore the lead exactly once when damage was taken during the chapter."""
-
-    before = reader.read()
-    if before.first_party_hp is None or before.first_party_max_hp is None:
-        raise SurgeChapterError("Recovery gate lacks lead HP evidence.")
-    quantity_before = _bag(emulator).get(ItemId.SUPER_POTION, 0)
-    if before.first_party_hp == before.first_party_max_hp:
-        if quantity_before != 1:
-            raise SurgeChapterError("Unused recovery item did not preserve quantity one.")
-        return False
-    if not 0 < before.first_party_hp < before.first_party_max_hp:
-        raise SurgeChapterError("Recovery gate observed an invalid lead HP state.")
-    if before.first_party_status != 0:
-        raise SurgeChapterError("Super Potion cannot clear the observed lead status.")
-    if quantity_before != 1:
-        raise SurgeChapterError(
-            f"Recovery requires exactly one Super Potion, observed {quantity_before}."
-        )
-
-    executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
-    _wait(executor, 180)
-    for _ in range(8):
-        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-        if cursor == 2:
-            break
-        _pulse(executor, MacroActionKind.MOVE, "down" if cursor < 2 else "up", 120)
-    else:
-        raise SurgeChapterError("Recovery could not select ITEM from the start menu.")
-    _pulse(executor, MacroActionKind.CONFIRM)
-    _select_bag_item(emulator, executor, ItemId.SUPER_POTION)
-    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-    for _ in range(6):
-        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-        if cursor == 0:
-            break
-        _pulse(executor, MacroActionKind.MOVE, "up", 120)
-    else:
-        raise SurgeChapterError("Recovery could not select the restored lead.")
-    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-    for _ in range(20):
-        after = reader.read()
-        if (
-            after.first_party_hp == after.first_party_max_hp
-            and _bag(emulator).get(ItemId.SUPER_POTION, 0) == quantity_before - 1
-        ):
-            _confirm_kind(executor, MacroActionKind.CANCEL, 3, 180)
-            final = reader.read()
-            if (
-                final.first_party_hp != final.first_party_max_hp
-                or final.first_party_status != 0
-                or _bag(emulator).get(ItemId.SUPER_POTION, 0) != quantity_before - 1
-            ):
-                raise SurgeChapterError("Recovery facts changed while closing the menu.")
-            return True
-        _pulse(executor, MacroActionKind.CONFIRM, frames=180)
-    raise SurgeChapterError(
-        "Super Potion missed its bounded recovery proof: "
-        f"quantity={_bag(emulator).get(ItemId.SUPER_POTION, 0)}, "
-        f"hp={(after.first_party_hp, after.first_party_max_hp)}."
-    )
 
 
 def _gate(
@@ -854,11 +795,16 @@ def _find_spearow(
     raise SurgeChapterError("Spearow search exceeded its bounded encounter budget.")
 
 
-def _use_bubble_once(
+def _use_spearow_capture_move_once(
     executor: _CountingExecutor, reader: PokemonRedStateReader, encounter: RawGameState
 ) -> bool:
-    if encounter.first_party_moves is None or encounter.first_party_moves[2] != BUBBLE_MOVE_ID:
-        raise SurgeChapterError("Bubble capture move is not in slot three.")
+    slot = SPEAROW_CAPTURE_MOVE_SLOT
+    index = slot - 1
+    if (
+        encounter.first_party_moves is None
+        or encounter.first_party_moves[index] != SPEAROW_CAPTURE_MOVE_ID
+    ):
+        raise SurgeChapterError("Qualified Spearow capture move is unavailable.")
     initial_pp = encounter.first_party_pp
     initial_hp = encounter.enemy_hp
     _navigate_main(executor, reader, 0)
@@ -879,32 +825,48 @@ def _use_bubble_once(
         raw = reader.read()
         menu = reader.read_battle_menu_state(raw)
         slot = menu.selected_move_slot
-        if menu.phase is BattleMenuPhase.MOVE and slot == 3:
+        if menu.phase is BattleMenuPhase.MOVE and slot == SPEAROW_CAPTURE_MOVE_SLOT:
             break
         if menu.phase is not BattleMenuPhase.MOVE or slot is None:
             raise SurgeChapterError("Lost the capture move cursor.")
-        _pulse(executor, MacroActionKind.MOVE, "down" if slot < 3 else "up", 120)
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if slot < SPEAROW_CAPTURE_MOVE_SLOT else "up",
+            120,
+        )
     else:
-        raise SurgeChapterError("Could not select Bubble slot three.")
-    if raw.first_party_moves is None or raw.first_party_moves[2] != BUBBLE_MOVE_ID:
-        raise SurgeChapterError("Selected capture move is not Bubble.")
+        raise SurgeChapterError("Could not select the qualified Spearow capture move.")
+    if (
+        raw.first_party_moves is None
+        or raw.first_party_moves[index] != SPEAROW_CAPTURE_MOVE_ID
+    ):
+        raise SurgeChapterError("Selected the wrong Spearow capture move.")
     _pulse(executor, MacroActionKind.CONFIRM)
     for _ in range(24):
         raw = reader.read()
-        if raw.first_party_pp and initial_pp and raw.first_party_pp[2] == initial_pp[2] - 1:
-            if tuple(raw.first_party_pp[index] for index in (0, 1, 3)) != tuple(
-                initial_pp[index] for index in (0, 1, 3)
+        if (
+            raw.first_party_pp
+            and initial_pp
+            and raw.first_party_pp[index] == initial_pp[index] - 1
+        ):
+            if tuple(
+                raw.first_party_pp[other]
+                for other in range(4)
+                if other != index
+            ) != tuple(
+                initial_pp[other] for other in range(4) if other != index
             ):
                 raise SurgeChapterError("An off-slot move spent PP during capture.")
             break
         _pulse(executor, MacroActionKind.CONFIRM)
     else:
-        raise SurgeChapterError("Bubble did not spend exactly one PP.")
+        raise SurgeChapterError("Spearow capture move did not spend exactly one PP.")
     for _ in range(16):
         raw = reader.read()
         if raw.battle_state == 0:
             if raw.party_species_ids != encounter.party_species_ids:
-                raise SurgeChapterError("Bubble knockout changed the protected party.")
+                raise SurgeChapterError("Capture-move knockout changed the protected party.")
             return False
         if raw.enemy_hp == 0:
             for _ in range(16):
@@ -912,14 +874,16 @@ def _use_bubble_once(
                 cleared = reader.read()
                 if cleared.battle_state == 0:
                     if cleared.party_species_ids != encounter.party_species_ids:
-                        raise SurgeChapterError("Bubble knockout changed the protected party.")
+                        raise SurgeChapterError(
+                            "Capture-move knockout changed the protected party."
+                        )
                     return False
-            raise SurgeChapterError("Bubble knockout did not clear its battle dialogue.")
+            raise SurgeChapterError("Capture-move knockout did not clear its battle dialogue.")
         if reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN:
             if raw.enemy_hp == initial_hp:
                 return False
             if raw.enemy_hp is None or initial_hp is None or not 0 < raw.enemy_hp < initial_hp:
-                raise SurgeChapterError("Bubble damage gate failed.")
+                raise SurgeChapterError("Spearow capture damage gate failed.")
             return True
         _pulse(executor, MacroActionKind.CONFIRM)
     raise SurgeChapterError("Capture battle did not return to MAIN.")
@@ -995,7 +959,8 @@ def _catch_diglett_chapter(
             f"map={entry.map_id!r}, coordinate={(entry.player_x, entry.player_y)!r}."
         )
 
-    encounter = entry
+    _wait(executor, DIGLETT_SEARCH_SEED_WAIT_FRAMES)
+    encounter = reader.read()
     for step in range(240):
         if encounter.battle_state == 0:
             _pulse(
@@ -1008,7 +973,7 @@ def _catch_diglett_chapter(
             continue
         if (
             encounter.enemy_species_id == DIGLETT_SPECIES_ID
-            and encounter.enemy_level in range(15, 23)
+            and encounter.enemy_level in DIGLETT_CAPTURE_LEVELS
             and (encounter.enemy_hp or 0) > 0
         ):
             break
@@ -1470,9 +1435,32 @@ def _navigate_to_gym_can(
     raw = reader.read()
     if raw.map_id != MapId.VERMILION_GYM or raw.player_x is None or raw.player_y is None:
         raise SurgeChapterError("Gym can navigation lacks a present map coordinate.")
-    route, facing = _plan_gym_can_path((raw.player_x, raw.player_y), can_index)
-    _move(executor, reader, route, timing, f"Gym can {can_index}")
-    before = reader.read()
+    if not 0 <= can_index < len(GYM_CAN_COORDINATES):
+        raise SurgeChapterError(f"Invalid Gym can index {can_index}.")
+    target = GYM_CAN_COORDINATES[can_index]
+    deltas = {
+        "up": (0, -1),
+        "left": (-1, 0),
+        "right": (1, 0),
+        "down": (0, 1),
+    }
+    goals = frozenset(
+        (target[0] - dx, target[1] - dy)
+        for dx, dy in deltas.values()
+        if 0 <= target[0] - dx <= 9 and 2 <= target[1] - dy <= 17
+    )
+    before = _navigate_gym_adaptive(executor, reader, goals, timing)
+    stance = (before.player_x, before.player_y)
+    facing = next(
+        (
+            direction
+            for direction, (dx, dy) in deltas.items()
+            if (stance[0] + dx, stance[1] + dy) == target
+        ),
+        None,
+    )
+    if facing is None:
+        raise SurgeChapterError(f"Gym can {can_index} lacks a facing stance.")
     _pulse(executor, MacroActionKind.MOVE, facing, 120)
     after = reader.read()
     if (after.player_x, after.player_y) != (before.player_x, before.player_y):

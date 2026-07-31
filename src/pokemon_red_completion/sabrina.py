@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
+from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
@@ -41,6 +42,9 @@ from pokemon_red_completion.silph import (
     _heal,
     _interact,
     _move,
+    _move_verified,
+    _navigate_saffron_coordinate,
+    _pulse,
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
@@ -50,7 +54,16 @@ SABRINA_TRAINER_CLASS = 0xF0
 SABRINA_TRAINER_SET = 1
 SABRINA_PARTY = ((0x26, 38), (0x2A, 37), (0x77, 38), (0x95, 43))
 REGULAR_TRAINER_EVENTS = tuple(range(0x362, 0x369))
+PC_DEPOSIT_ITEMS = (ItemId.SS_TICKET, ItemId.LIFT_KEY)
 HYPER_POTION_THRESHOLD = 70
+MAX_SABRINA_HYPER_POTIONS = 3
+SABRINA_BATTLE_TIMING = BattleRuntimeTiming(
+    max_runtime_pulses=720,
+    max_move_menu_transition_pulses=24,
+    max_pp_confirmation_pulses=12,
+    max_attack_confirmation_pulses=6,
+    max_post_attack_transition_pulses=24,
+)
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -132,7 +145,7 @@ class SabrinaChapterReport:
             len(self.records) == SABRINA_CHECKPOINT_COUNT
             and self.identity == (SABRINA_OPPONENT, SABRINA_TRAINER_CLASS, SABRINA_TRAINER_SET)
             and _encounter_party(self.turns) == SABRINA_PARTY
-            and tuple(turn.move_slot for turn in self.turns) == (2, 2, 3, 3, 3, 2)
+            and all(_sabrina_turn_is_allowed(turn) for turn in self.turns)
             and self.trainer_events_before == (False,) * 7
             and self.trainer_events_after == (True,) * 7
             and self.got_tm46
@@ -140,10 +153,11 @@ class SabrinaChapterReport:
             and self.marsh_badge
             and self.marsh_badge_mirror
             and self.tm46_quantity == 1
-            and 0 <= self.hyper_potions_used <= 1
+            and 0 <= self.hyper_potions_used <= MAX_SABRINA_HYPER_POTIONS
             and self.hyper_potions_remaining == self.hyper_potions_before - self.hyper_potions_used
             and self.money_remaining == self.initial_money + 4_257
             and all(turn.lead_hp > 0 for turn in self.turns)
+            and all(_sabrina_status_is_supported(turn.lead_status) for turn in self.turns)
             and self.final_raw.map_id == MapId.SAFFRON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.battle_state == 0
@@ -209,8 +223,11 @@ def run_sabrina_chapter(
     ):
         raise SabrinaChapterError("Sabrina input boundary is not pristine.")
     _checkpoint(records, progress, emulator, initial, "sabrina_ready", "Sabrina plan ready")
+    _store_obsolete_key_items(actions, reader, emulator, timing)
 
-    _move(actions, reader, CENTER_TO_GYM, timing)
+    _move_verified(actions, reader, CENTER_EXIT, timing, "Saffron Center exit")
+    _navigate_saffron_coordinate(actions, reader, timing, (34, 4), "Saffron Gym")
+    _move_verified(actions, reader, ("up",), timing, "Saffron Gym entry")
     _require(reader.read(), MapId.SAFFRON_GYM, (8, 17), "Saffron Gym entrance")
     trainer_events_before = tuple(_event(emulator, event) for event in REGULAR_TRAINER_EVENTS)
     if trainer_events_before != (False,) * 7:
@@ -242,7 +259,7 @@ def run_sabrina_chapter(
     turns: list[SabrinaTurn] = []
 
     def policy(raw: RawGameState) -> int:
-        slot = 3 if raw.enemy_species_id == 0x77 else 2
+        slot = _sabrina_move_slot(raw)
         turns.append(
             SabrinaTurn(
                 raw.enemy_species_id or 0,
@@ -267,22 +284,52 @@ def run_sabrina_chapter(
         )
         if complete:
             break
-        if hyper_before - _bag(emulator).get(ItemId.HYPER_POTION, 0) >= 1:
-            raise SabrinaChapterError("Sabrina recovery exceeded one Hyper Potion.")
+        if (
+            hyper_before - _bag(emulator).get(ItemId.HYPER_POTION, 0)
+            >= MAX_SABRINA_HYPER_POTIONS
+        ):
+            raise SabrinaChapterError(
+                f"Sabrina recovery exceeded {MAX_SABRINA_HYPER_POTIONS} Hyper Potions."
+            )
         _battle_hyper_potion(reader, actions, emulator, timing)
 
     if _encounter_party(turns) != SABRINA_PARTY:
         raise SabrinaChapterError(f"Sabrina party or turn policy changed: {turns!r}.")
-    if any(turn.lead_status for turn in turns):
+    if any(not _sabrina_status_is_supported(turn.lead_status) for turn in turns):
         raise SabrinaChapterError("Sabrina policy encountered an unsupported persistent status.")
     _checkpoint(records, progress, emulator, reader.read(), "sabrina_defeated", "Defeated Sabrina")
 
-    got_tm46 = _event(emulator, EventFlag.GOT_TM46)
-    beat_sabrina = _event(emulator, EventFlag.BEAT_SABRINA)
-    trainer_events_after = tuple(_event(emulator, event) for event in REGULAR_TRAINER_EVENTS)
-    marsh_badge = bool(emulator.read_u8(RamAddress.OBTAINED_BADGES) & Badge.MARSH)
-    marsh_badge_mirror = bool(emulator.read_u8(RamAddress.BEAT_GYM_FLAGS) & Badge.MARSH)
-    tm46_quantity = _bag(emulator).get(ItemId.TM46_PSYWAVE, 0)
+    for _ in range(64):
+        got_tm46 = _event(emulator, EventFlag.GOT_TM46)
+        beat_sabrina = _event(emulator, EventFlag.BEAT_SABRINA)
+        trainer_events_after = tuple(
+            _event(emulator, event) for event in REGULAR_TRAINER_EVENTS
+        )
+        marsh_badge = bool(emulator.read_u8(RamAddress.OBTAINED_BADGES) & Badge.MARSH)
+        marsh_badge_mirror = bool(emulator.read_u8(RamAddress.BEAT_GYM_FLAGS) & Badge.MARSH)
+        tm46_quantity = _bag(emulator).get(ItemId.TM46_PSYWAVE, 0)
+        if (
+            got_tm46
+            and beat_sabrina
+            and trainer_events_after == (True,) * 7
+            and marsh_badge
+            and marsh_badge_mirror
+            and tm46_quantity == 1
+            and reader.read_input_readiness().ready
+        ):
+            break
+        _interact(actions, timing.dialogue_frames)
+    else:
+        readiness = reader.read_input_readiness()
+        raw = reader.read()
+        raise SabrinaChapterError(
+            "Sabrina rewards did not settle inside the dialogue bound: "
+            f"got_tm46={got_tm46}, beat_sabrina={beat_sabrina}, "
+            f"trainer_events={trainer_events_after!r}, marsh_badge={marsh_badge}, "
+            f"marsh_badge_mirror={marsh_badge_mirror}, tm46_quantity={tm46_quantity}, "
+            f"input_ready={readiness.ready}, map={raw.map_id!r}, "
+            f"position={(raw.player_x, raw.player_y)!r}, battle={raw.battle_state}."
+        )
     if not (
         got_tm46
         and beat_sabrina
@@ -297,7 +344,8 @@ def run_sabrina_chapter(
     _move(actions, reader, SABRINA_TO_CITY, timing)
     _require(reader.read(), MapId.SAFFRON_CITY, (34, 4), "Saffron Gym exit")
     _checkpoint(records, progress, emulator, reader.read(), "gym_exited", "Exited Saffron Gym")
-    _move(actions, reader, CITY_TO_CENTER, timing)
+    _navigate_saffron_coordinate(actions, reader, timing, (9, 30), "Saffron Center")
+    _move_verified(actions, reader, ("up",), timing, "Saffron Center entry")
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "Saffron Center entry")
     _move(actions, reader, ("up",) * 4, timing)
     _heal(actions, timing)
@@ -362,7 +410,7 @@ def _run_until_sabrina(
                 battle_plan_id=RedBattlePlanId.SABRINA_LEADER,
                 resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
             ),
-            timing=BattleRuntimeTiming(max_runtime_pulses=720),
+            timing=SABRINA_BATTLE_TIMING,
             label=label,
             unknown_cancel_interval=3,
         )
@@ -382,6 +430,135 @@ def _encounter_party(
         if not party or party[-1] != member:
             party.append(member)
     return tuple(party)
+
+
+def _sabrina_move_slot(raw: RawGameState) -> int:
+    priorities = (3, 2, 4) if raw.enemy_species_id == 0x77 else (2, 4, 3)
+    pp = raw.first_party_pp or ()
+    for slot in priorities:
+        if (
+            len(pp) >= slot
+            and pp[slot - 1] & 0x3F
+            and not (
+                raw.player_disabled_move_slot == slot
+                and (raw.player_disable_turns or 0) > 0
+            )
+        ):
+            return slot
+    raise SabrinaChapterError("Sabrina policy has no legal move with PP.")
+
+
+def _sabrina_turn_is_allowed(turn: SabrinaTurn) -> bool:
+    allowed = {2, 3, 4}
+    return turn.move_slot in allowed
+
+
+def _sabrina_status_is_supported(status: int) -> bool:
+    return status == 0 or 1 <= status <= 7 or status == 0x40
+
+
+def _store_obsolete_key_items(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SilphTiming,
+) -> None:
+    before = _bag(emulator)
+    if len(before) != 20 or any(before.get(item, 0) != 1 for item in PC_DEPOSIT_ITEMS):
+        raise SabrinaChapterError(
+            "Sabrina inventory cleanup requires a full bag with the spent Ticket and Lift Key."
+        )
+
+    _move(actions, reader, ("down",) + ("right",) * 10, timing)
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (13, 4), "Saffron PC approach")
+    for item in PC_DEPOSIT_ITEMS:
+        _deposit_pc_item(actions, reader, emulator, item, timing)
+    returned = reader.read()
+    after = _bag(emulator)
+    if (
+        returned.map_id != MapId.SAFFRON_POKECENTER
+        or (returned.player_x, returned.player_y) != (13, 4)
+        or not reader.read_input_readiness().ready
+        or len(after) != 18
+        or any(item in after for item in PC_DEPOSIT_ITEMS)
+    ):
+        raise SabrinaChapterError("Saffron PC cleanup did not restore an 18-slot field boundary.")
+    _move(actions, reader, ("left",) * 10 + ("up",), timing)
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), "Saffron PC return")
+
+
+def _deposit_pc_item(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    item: ItemId,
+    timing: SilphTiming,
+) -> None:
+    _pulse(actions, MacroActionKind.MOVE, timing, "up", timing.menu_frames)
+    _pulse(actions, MacroActionKind.INTERACT, timing, frames=timing.menu_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    _select_menu_cursor(actions, emulator, 1, timing)
+    for _ in range(3):
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
+        raise SabrinaChapterError("Saffron PC did not expose WITHDRAW ITEM.")
+    _pulse(actions, MacroActionKind.MOVE, timing, "down", timing.menu_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    _select_bag_list_item(actions, emulator, item, timing)
+    for _ in range(3):
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    if item in _bag(emulator):
+        raise SabrinaChapterError(f"Saffron PC did not store {item.name}.")
+    for _ in range(4):
+        _pulse(actions, MacroActionKind.CANCEL, timing, frames=timing.menu_frames)
+    if not reader.read_input_readiness().ready:
+        raise SabrinaChapterError(f"Saffron PC did not close after storing {item.name}.")
+
+
+def _select_menu_cursor(
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    target: int,
+    timing: SilphTiming,
+) -> None:
+    for _ in range(16):
+        current = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if current == target:
+            return
+        _pulse(
+            actions,
+            MacroActionKind.MOVE,
+            timing,
+            "down" if current < target else "up",
+            timing.menu_frames,
+        )
+    raise SabrinaChapterError(f"Menu could not select cursor {target}.")
+
+
+def _select_bag_list_item(
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    item: ItemId,
+    timing: SilphTiming,
+) -> None:
+    for _ in range(24):
+        items = tuple(_bag(emulator))
+        if item not in items:
+            raise SabrinaChapterError(f"Required PC item {item.name} is unavailable.")
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        target = items.index(item)
+        if absolute == target:
+            return
+        _pulse(
+            actions,
+            MacroActionKind.MOVE,
+            timing,
+            "down" if absolute < target else "up",
+            timing.menu_frames,
+        )
+    raise SabrinaChapterError(f"Could not select PC item {item.name}.")
 
 
 def _checkpoint(

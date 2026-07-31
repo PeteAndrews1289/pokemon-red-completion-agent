@@ -49,7 +49,8 @@ from pokemon_red_completion.victory_road import (
 )
 
 LORELEI_CHECKPOINT_COUNT = 3
-LORELEI_RNG_DELAY_FRAMES = 1
+LORELEI_RNG_DELAY_FRAMES = 119
+LORELEI_SAFE_HP = 110
 LORELEI_PARTY = (
     (0x78, 54),
     (0x8B, 53),
@@ -143,11 +144,11 @@ class LoreleiChapterReport:
             and self.party == LORELEI_PARTY
             and _turns_valid(self.turns)
             and self.hyper_potions_used <= 11
-            and self.full_restores_used <= 11
+            and self.full_restores_used <= 12
             and _event(self.final_raw, EventFlag.BEAT_LORELEI)
             and self.final_raw.map_id == MapId.BRUNOS_ROOM
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.party_hp[0] >= 80
+            and self.party_hp[0] >= LORELEI_SAFE_HP
             and self.party_hp[1:] == self.party_max_hp[1:]
             and self.party_status == (0, 0, 0)
             and self.controller_released
@@ -207,8 +208,8 @@ def run_lorelei_chapter(
         or (initial.player_x, initial.player_y) != (2, 5)
         or initial.party_species_ids != TOWER_FINAL_PARTY
         or initial.first_party_moves != (0x42, 0x46, 0x3A, 0x39)
-        or _bag(emulator).get(ItemId.FULL_RESTORE, 0) != 11
-        or _bag(emulator).get(ItemId.FULL_HEAL, 0) != 10
+        or _bag(emulator).get(ItemId.FULL_RESTORE, 0) != 13
+        or _bag(emulator).get(ItemId.FULL_HEAL, 0) != 3
         or _bag(emulator).get(ItemId.HYPER_POTION, 0) != 11
         or _event(initial, EventFlag.BEAT_LORELEI)
     ):
@@ -241,7 +242,7 @@ def run_lorelei_chapter(
     def policy(raw: RawGameState) -> int:
         hp = raw.first_party_hp or 0
         status = raw.first_party_status or 0
-        if hp < 80 or status:
+        if hp < LORELEI_SAFE_HP or status:
             raise _HealBoundary
         species = raw.enemy_species_id or 0
         pp = raw.first_party_pp or (0, 0, 0, 0)
@@ -296,7 +297,11 @@ def run_lorelei_chapter(
             elif raw.first_party_status or 0:
                 item = ItemId.FULL_RESTORE
             else:
-                item = ItemId.HYPER_POTION
+                item = (
+                    ItemId.HYPER_POTION
+                    if _bag(emulator).get(ItemId.HYPER_POTION, 0)
+                    else ItemId.FULL_RESTORE
+                )
             if _bag(emulator).get(item, 0) == 0:
                 raise LoreleiChapterError(
                     "Lorelei exhausted the bounded recovery reserve."
@@ -392,7 +397,7 @@ def _turns_valid(turns: Iterable[LoreleiTurn]) -> bool:
     return bool(items) and all(
         item.species in {species for species, _ in LORELEI_PARTY}
         and item.move_slot in {1, 2, 3, 4}
-        and item.lead_hp >= 80
+        and item.lead_hp >= LORELEI_SAFE_HP
         and item.lead_status == 0
         for item in items
     )

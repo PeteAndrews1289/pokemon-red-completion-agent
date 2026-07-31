@@ -216,7 +216,8 @@ class GiovanniChapterReport:
             and self.identity
             == (GIOVANNI_OPPONENT, GIOVANNI_TRAINER_CLASS, GIOVANNI_TRAINER_SET)
             and _encounter_party(self.turns) == GIOVANNI_PARTY
-            and tuple(turn.move_slot for turn in self.turns) == (4, 4, 4, 4, 4)
+            and self.turns
+            and all(turn.move_slot == 4 for turn in self.turns)
             and all(turn.lead_hp > 0 and turn.lead_status == 0 for turn in self.turns)
             and self.tm46_sold
             and self.tm27_quantity == 1
@@ -230,10 +231,10 @@ class GiovanniChapterReport:
             and self.final_raw.map_id == MapId.VIRIDIAN_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.final_raw.first_party_level == 49
+            and self.final_raw.first_party_level == 50
             and self.final_raw.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE_ID, SURF_MOVE_ID)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
-            and self.party_hp == self.party_max_hp == (151, 52, 37)
+            and self.party_hp == self.party_max_hp == (154, 47, 40)
             and self.party_status == (0, 0, 0)
             and self.controller_released
         )

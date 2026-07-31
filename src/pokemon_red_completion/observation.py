@@ -24,6 +24,7 @@ class RamAddress(IntEnum):
     """
 
     TILE_MAP = 0xC3A0
+    PLAYER_FACING_DIRECTION = 0xC109
     TOP_MENU_ITEM_Y = 0xCC24
     TOP_MENU_ITEM_X = 0xCC25
     CURRENT_MENU_ITEM = 0xCC26
@@ -51,12 +52,14 @@ class RamAddress(IntEnum):
     TRAINER_CLASS = 0xD031
     IS_IN_BATTLE = 0xD057
     CURRENT_OPPONENT = 0xD059
+    PLAYER_DISABLED_MOVE = 0xD06D
     GYM_LEADER_NUMBER = 0xD05C
     TRAINER_NUMBER = 0xD05D
     REPEL_REMAINING_STEPS = 0xD0DB
     PLAYER_MONEY = 0xD347
     PARTY_COUNT = 0xD163
     PARTY_SPECIES = 0xD164
+    PARTY_MON_1 = 0xD16B
     PARTY_MON_1_HP = 0xD16C
     PARTY_MON_1_STATUS = 0xD16F
     PARTY_MON_1_MOVES = 0xD173
@@ -84,6 +87,7 @@ class RamAddress(IntEnum):
     PLAYER_Y = 0xD361
     PLAYER_X = 0xD362
     PLAYER_MOVING_DIRECTION = 0xD528
+    TOGGLEABLE_OBJECT_FLAGS = 0xD5A6
     OAKS_LAB_SCRIPT = 0xD5F0
     PALLET_TOWN_SCRIPT = 0xD5F1
     VIRIDIAN_CITY_SCRIPT = 0xD5F4
@@ -164,6 +168,7 @@ class MapId(IntEnum):
     VIRIDIAN_FOREST_SOUTH_GATE = 0x32
     VIRIDIAN_FOREST = 0x33
     PEWTER_GYM = 0x36
+    PEWTER_MART = 0x38
     PEWTER_POKECENTER = 0x3A
     MT_MOON_1F = 0x3B
     MT_MOON_B1F = 0x3C
@@ -541,9 +546,11 @@ class EventFlag(IntEnum):
 class ItemId(IntEnum):
     MASTER_BALL = 0x01
     POKE_BALL = 0x04
+    PARLYZ_HEAL = 0x0F
     FULL_RESTORE = 0x10
     SUPER_POTION = 0x13
     HYPER_POTION = 0x12
+    POTION = 0x14
     REPEL = 0x1E
     MAX_REPEL = 0x39
     DOME_FOSSIL = 0x29
@@ -571,6 +578,7 @@ class ItemId(IntEnum):
     HM04_STRENGTH = 0xC7
     TM06_TOXIC = 0xCE
     TM01_MEGA_PUNCH = 0xC9
+    TM05_MEGA_KICK = 0xCD
     TM09_TAKE_DOWN = 0xD1
     TM11_BUBBLEBEAM = 0xD3
     TM13_ICE_BEAM = 0xD5
@@ -613,6 +621,7 @@ ABRA_SPECIES_ID = 0x94
 PIDGEOTTO_SPECIES_ID = 0x96
 BULBASAUR_SPECIES_ID = 0x99
 RATTATA_SPECIES_ID = 0xA5
+ZUBAT_SPECIES_ID = 0x6B
 SQUIRTLE_SPECIES_ID = 0xB1
 WARTORTLE_SPECIES_ID = 0xB3
 BLASTOISE_SPECIES_ID = 0x1C
@@ -621,6 +630,7 @@ SQUIRTLE_LINEAGE_SPECIES_IDS = frozenset(
 )
 TACKLE_MOVE_ID = 0x21
 TAIL_WHIP_MOVE_ID = 0x27
+MEGA_PUNCH_MOVE_ID = 0x05
 WATER_GUN_MOVE_ID = 0x37
 BUBBLE_MOVE_ID = 0x91
 BROCK_OPPONENT_ID = 0xEA
@@ -820,6 +830,8 @@ class RawGameState:
     player_attack_stage: int | None = None
     player_accuracy_stage: int | None = None
     enemy_defense_stage: int | None = None
+    player_disabled_move_slot: int | None = None
+    player_disable_turns: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -3100,6 +3112,10 @@ class PokemonRedStateReader:
             for index in range(EVENT_FLAG_BYTES)
         )
         battle_state = self._memory.read_u8(RamAddress.IS_IN_BATTLE)
+        disabled_move = (
+            self._memory.read_u8(RamAddress.PLAYER_DISABLED_MOVE) if battle_state else 0
+        )
+        disabled_slot = (disabled_move >> 4) & 0x0F
         return RawGameState(
             game_started=True,
             map_id=self._memory.read_u8(RamAddress.CURRENT_MAP),
@@ -3131,6 +3147,10 @@ class PokemonRedStateReader:
             enemy_defense_stage=(
                 self._memory.read_u8(RamAddress.ENEMY_DEFENSE_STAGE) if battle_state else None
             ),
+            player_disabled_move_slot=(
+                disabled_slot if battle_state and 1 <= disabled_slot <= 4 else None
+            ),
+            player_disable_turns=(disabled_move & 0x0F) if battle_state else None,
         )
 
     def read_bedroom_input_state(self) -> BedroomInputState:

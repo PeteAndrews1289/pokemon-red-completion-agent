@@ -22,6 +22,12 @@ from pokemon_red_completion.celadon import (
     _party_max_hp,
     _party_status,
 )
+from pokemon_red_completion.economy import (
+    CELADON_MONEY,
+    HIDEOUT_MONEY,
+    HIDEOUT_SUPER_POTION_RESERVE,
+    LAVENDER_SUPER_POTION_RESERVE,
+)
 from pokemon_red_completion.lavender import _use_super_potion
 from pokemon_red_completion.observation import (
     EventFlag,
@@ -182,13 +188,13 @@ class HideoutChapterReport:
             and self.lift_key_carried
             and self.silph_scope_carried
             and self.super_potions_used == 2
-            and self.super_potions_remaining == 2
+            and self.super_potions_remaining == HIDEOUT_SUPER_POTION_RESERVE
             and self.final_raw.map_id == MapId.CELADON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == PROTECTED_PARTY
             and self.party_hp == self.party_max_hp
             and self.party_status == (0, 0, 0)
-            and self.money_remaining == 20_112
+            and self.money_remaining == HIDEOUT_MONEY
             and self.controller_released
         )
 
@@ -265,8 +271,8 @@ def run_hideout_chapter(
     start = reader.read()
     _require(start, MapId.CELADON_POKECENTER, (3, 3), "Celadon boundary")
     if (
-        _bag(emulator).get(ItemId.SUPER_POTION, 0) != 4
-        or _money(emulator) != 14_631
+        _bag(emulator).get(ItemId.SUPER_POTION, 0) != LAVENDER_SUPER_POTION_RESERVE
+        or _money(emulator) != CELADON_MONEY
         or _optional(emulator) != (False,) * len(OPTIONAL_EVENTS)
     ):
         raise HideoutChapterError("Hideout starting resources/events are not pristine.")
@@ -418,7 +424,7 @@ def run_hideout_chapter(
         raise HideoutChapterError("Both guards did not unlock the Giovanni door.")
     _checkpoint(records, progress, emulator, reader.read(), "boss_door", "Unlocked Giovanni door")
 
-    if _party_hp(emulator)[0] < 75:
+    if _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:
         _use_super_potion(actions, reader, emulator, run, timing, 0)  # type: ignore[arg-type]
     _move(actions, reader, emulator, run, DOOR_TO_GIOVANNI, timing, "Giovanni")
     _face(actions, "right", timing)

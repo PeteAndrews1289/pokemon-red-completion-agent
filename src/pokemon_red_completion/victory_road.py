@@ -50,6 +50,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.sabrina import SabrinaChapterError, _deposit_pc_item
 from pokemon_red_completion.saffron import (
     CITY_TO_MART,
     MART_1F_TO_2F,
@@ -177,11 +178,13 @@ class VictoryRoadChapterReport:
     vr2_switch2_set: bool
     full_restores: int
     full_heals: int
+    revives: int
     hyper_potions: int
     x_specials: int
     max_repels: int
     tm27_sold: bool
     tm38_sold: bool
+    tm28_sold: bool
     tm06_consumed: bool
     party_hp: tuple[int, int, int]
     party_max_hp: tuple[int, int, int]
@@ -204,13 +207,15 @@ class VictoryRoadChapterReport:
             and self.vr3_switch_set
             and self.vr3_hole_set
             and self.vr2_switch2_set
-            and self.full_restores == 11
-            and self.full_heals == 10
+            and self.full_restores == 13
+            and self.full_heals == 3
+            and self.revives == 2
             and self.hyper_potions == 11
             and self.x_specials == 6
-            and self.max_repels == 8
+            and self.max_repels == 0
             and self.tm27_sold
             and self.tm38_sold
+            and self.tm28_sold
             and self.tm06_consumed
             and self.final_raw.map_id == MapId.INDIGO_PLATEAU_LOBBY
             and (self.final_raw.player_x, self.final_raw.player_y) == (2, 5)
@@ -218,7 +223,7 @@ class VictoryRoadChapterReport:
             and self.final_raw.first_party_level == 51
             and self.final_raw.first_party_moves == (0x42, 0x46, 0x3A, 0x39)
             and self.final_raw.first_party_pp == (25, 15, 10, 15)
-            and self.party_hp == self.party_max_hp == (157, 52, 37)
+            and self.party_hp == self.party_max_hp == (157, 47, 40)
             and self.party_status == (0, 0, 0)
             and self.controller_released
         )
@@ -256,6 +261,7 @@ class VictoryRoadChapterReport:
             "indigo_supplies": {
                 "full_restores": self.full_restores,
                 "full_heals": self.full_heals,
+                "revives": self.revives,
                 "hyper_potions": self.hyper_potions,
                 "x_specials": self.x_specials,
                 "max_repels": self.max_repels,
@@ -305,7 +311,7 @@ def run_victory_road_chapter(
         or not _event(initial, EventFlag.SECOND_ROUTE_22_RIVAL_BATTLE)
         or not _event(initial, EventFlag.ROUTE_22_RIVAL_WANTS_BATTLE)
         or _event(initial, EventFlag.BEAT_ROUTE_22_RIVAL_2ND_BATTLE)
-        or _bag(emulator).get(ItemId.HYPER_POTION, 0) != 6
+        or not 1 <= _bag(emulator).get(ItemId.HYPER_POTION, 0) <= 6
     ):
         raise VictoryRoadChapterError("Victory Road input boundary is not qualified.")
     _checkpoint(
@@ -440,6 +446,7 @@ def run_victory_road_chapter(
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "Saffron recovery entry")
     _move(actions, reader, ("up",) * 4, "Saffron recovery nurse")
     _heal(actions, reader, emulator)
+    _archive_silph_scope(actions, reader, emulator)
     _move(actions, reader, ("down",) * 5, "Saffron recovery exit")
     _move(actions, reader, SAFFRON_TO_MART, "Saffron recovery Mart")
     _require(reader.read(), MapId.SAFFRON_MART, (3, 7), "Saffron recovery Mart entry")
@@ -456,8 +463,8 @@ def run_victory_road_chapter(
             DEFAULT_LAVENDER_TIMING,
             absolute_index=1,
             item=ItemId.HYPER_POTION,
-            quantity=11 - current_hyper,
-            target_bag_quantity=11,
+        quantity=11 - current_hyper,
+        target_bag_quantity=11,
         )
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     _sell_current_bag_item(actions, emulator, ItemId.TM24_THUNDERBOLT)
@@ -661,6 +668,12 @@ def run_victory_road_chapter(
     _sell_current_bag_item(actions, emulator, ItemId.TM38_FIRE_BLAST)
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     _sell_current_bag_item(actions, emulator, ItemId.NUGGET)
+    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    _sell_current_bag_item(actions, emulator, ItemId.TM28_DIG)
+    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    _sell_bag_stack(actions, emulator, ItemId.MAX_REPEL, 8)
+    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    _sell_bag_stack(actions, emulator, ItemId.POKE_BALL, 8)
     _pulse(actions, MacroActionKind.CANCEL)
     _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
@@ -670,8 +683,8 @@ def run_victory_road_chapter(
         DEFAULT_LAVENDER_TIMING,
         absolute_index=2,
         item=ItemId.FULL_RESTORE,
-        quantity=11,
-        target_bag_quantity=11,
+        quantity=13,
+        target_bag_quantity=13,
     )
     _buy_mart_item(
         actions,
@@ -679,8 +692,17 @@ def run_victory_road_chapter(
         DEFAULT_LAVENDER_TIMING,
         absolute_index=4,
         item=ItemId.FULL_HEAL,
-        quantity=10,
-        target_bag_quantity=10,
+        quantity=3,
+        target_bag_quantity=3,
+    )
+    _buy_mart_item(
+        actions,
+        emulator,
+        DEFAULT_LAVENDER_TIMING,
+        absolute_index=5,
+        item=ItemId.REVIVE,
+        quantity=2,
+        target_bag_quantity=2,
     )
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     final = reader.read()
@@ -701,11 +723,13 @@ def run_victory_road_chapter(
         vr2_switch2_set=vr2_switch2,
         full_restores=final_bag.get(ItemId.FULL_RESTORE, 0),
         full_heals=final_bag.get(ItemId.FULL_HEAL, 0),
+        revives=final_bag.get(ItemId.REVIVE, 0),
         hyper_potions=final_bag.get(ItemId.HYPER_POTION, 0),
         x_specials=final_bag.get(ItemId.X_SPECIAL, 0),
         max_repels=final_bag.get(ItemId.MAX_REPEL, 0),
         tm27_sold=ItemId.TM27_FISSURE not in final_bag,
         tm38_sold=ItemId.TM38_FIRE_BLAST not in final_bag,
+        tm28_sold=ItemId.TM28_DIG not in final_bag,
         tm06_consumed=ItemId.TM06_TOXIC not in final_bag,
         party_hp=_party_hp(emulator),
         party_max_hp=_party_max_hp(emulator),
@@ -759,18 +783,24 @@ def _defeat_route22_rival(
     class _HealBoundary(Exception):
         pass
 
+    potions_used = 0
+    recovery_reserve = _bag(emulator).get(ItemId.HYPER_POTION, 0)
+    last_recovery_turn = -1
+
     def health_aware_policy(raw: RawGameState) -> int:
         venusaur_threshold = 100 if next_sacrifice < 3 else 50
         heal_threshold = {
             0x95: 140,
             0x9A: venusaur_threshold,
-        }.get(raw.enemy_species_id or 0, 0)
-        if (raw.first_party_hp or 0) < heal_threshold:
+        }.get(raw.enemy_species_id or 0, 140)
+        if (
+            (raw.first_party_hp or 0) < heal_threshold
+            and len(turns) != last_recovery_turn
+            and potions_used < recovery_reserve
+        ):
             raise _HealBoundary
         return policy(raw)
 
-    potions_used = 0
-    recovery_reserve = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     next_sacrifice = 1
     pivot_heals = 0
     while reader.read().battle_state:
@@ -813,6 +843,7 @@ def _defeat_route22_rival(
                 _battle_hyper_potion(reader, actions, emulator, DEFAULT_SILPH_TIMING)
                 potion_spent = True
             potions_used += int(potion_spent)
+            last_recovery_turn = len(turns)
     _settle_confirm(actions, reader, 30)
     return tuple(turns), potions_used
 
@@ -883,8 +914,8 @@ def _acquire_and_teach_submission(
         DEFAULT_LAVENDER_TIMING,
         absolute_index=8,
         item=ItemId.TM17_SUBMISSION,
-        quantity=1,
-        target_bag_quantity=1,
+        quantity=2,
+        target_bag_quantity=2,
     )
     _buy_mart_item(
         actions,
@@ -986,13 +1017,49 @@ def _teach_submission(
     _pulse(actions, MacroActionKind.CONFIRM)
     for _ in range(24):
         raw = reader.read()
-        if raw.first_party_moves == (0x42, 0x46, 0x3A, 0x39) and ItemId.TM17_SUBMISSION not in _bag(
-            emulator
+        if (
+            raw.first_party_moves == (0x42, 0x46, 0x3A, 0x39)
+            and _bag(emulator).get(ItemId.TM17_SUBMISSION, 0) == 1
         ):
             _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
             return
         _pulse(actions, MacroActionKind.CONFIRM)
     raise VictoryRoadChapterError("TM17 did not replace Toxic.")
+
+
+def _archive_silph_scope(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    if _bag(emulator).get(ItemId.SILPH_SCOPE, 0) != 1:
+        raise VictoryRoadChapterError("Late-game PC cleanup requires the spent Silph Scope.")
+    _move(
+        actions,
+        reader,
+        ("down",) + ("right",) * 10,
+        "Saffron PC approach",
+    )
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (13, 4), "Saffron PC approach")
+    try:
+        _deposit_pc_item(
+            actions,
+            reader,
+            emulator,
+            ItemId.SILPH_SCOPE,
+            DEFAULT_SILPH_TIMING,
+        )
+    except SabrinaChapterError as error:
+        raise VictoryRoadChapterError("Late-game PC cleanup failed.") from error
+    if ItemId.SILPH_SCOPE in _bag(emulator):
+        raise VictoryRoadChapterError("Late-game PC cleanup retained the Silph Scope.")
+    _move(
+        actions,
+        reader,
+        ("left",) * 10 + ("up",),
+        "Saffron PC return",
+    )
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), "Saffron PC return")
 
 
 def _battle_sacrifice(
@@ -1080,11 +1147,16 @@ def _battle_sacrifice(
             f"menu={reader.read_battle_menu_state(reader.read())!r}."
         )
 
-    for _ in range(1):
+    for _ in range(24):
+        if (
+            emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) <= 2
+            and _menu_cursor_active(emulator)
+        ):
+            break
         _pulse(actions, MacroActionKind.CONFIRM)
-    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) > 2:
+    else:
         raise VictoryRoadChapterError(
-            "Route 22 forced-switch cursor was not a party slot: "
+            "Route 22 forced-switch party menu did not settle: "
             f"current={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
             f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}."
         )
@@ -1105,6 +1177,49 @@ def _battle_sacrifice(
         f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
         f"menu={reader.read_battle_menu_state(reader.read())!r}."
     )
+
+
+def _sell_bag_stack(
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    item: ItemId,
+    quantity: int,
+) -> None:
+    if _bag(emulator).get(item, 0) != quantity:
+        raise VictoryRoadChapterError(
+            f"Expected {quantity} {item.name} items at the Indigo sale boundary."
+        )
+    _pulse(actions, MacroActionKind.INTERACT)
+    _pulse(actions, MacroActionKind.MOVE, "down")
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
+        raise VictoryRoadChapterError("Indigo shop did not select SELL.")
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(24):
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        if absolute < len(_bag(emulator)) and tuple(_bag(emulator))[absolute] == item:
+            break
+        _pulse(actions, MacroActionKind.MOVE, "down", 120)
+    else:
+        raise VictoryRoadChapterError(f"Indigo sell list could not select {item.name}.")
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(quantity + 2):
+        if (
+            emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM) == item
+            and emulator.read_u8(RamAddress.SHOP_QUANTITY) == quantity
+        ):
+            break
+        _pulse(actions, MacroActionKind.MOVE, "up", 120)
+    else:
+        raise VictoryRoadChapterError(
+            f"Indigo sale quantity selector missed {quantity} {item.name}."
+        )
+    for _ in range(24):
+        if item not in _bag(emulator):
+            return
+        _pulse(actions, MacroActionKind.CONFIRM)
+    raise VictoryRoadChapterError(f"Indigo did not sell the {item.name} stack.")
 
 
 def _select_battle_main_command(

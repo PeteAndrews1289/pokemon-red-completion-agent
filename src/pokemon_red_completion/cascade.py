@@ -18,6 +18,7 @@ from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_policy import choose_cerulean_rival_move_slot
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -28,21 +29,47 @@ from pokemon_red_completion.cerulean import (
     _finish_battle,
     _select_battle_move,
 )
+from pokemon_red_completion.economy import CERULEAN_RIVAL_POTION_RESERVE
 from pokemon_red_completion.misty_policy import choose_misty_move_slot
 from pokemon_red_completion.observation import (
+    ABRA_SPECIES_ID,
+    BUBBLE_MOVE_ID,
+    BULBASAUR_SPECIES_ID,
+    MEGA_PUNCH_MOVE_ID,
+    PIDGEOTTO_SPECIES_ID,
+    RATTATA_SPECIES_ID,
     ROUTE_24_REQUIRED_TRAINER_SPECS,
     ROUTE_25_REQUIRED_TRAINER_SPECS,
+    WARTORTLE_SPECIES_ID,
+    ZUBAT_SPECIES_ID,
+    BattleMenuPhase,
     CascadePhase,
     CascadeProgressError,
     CascadeProgressTracker,
     CascadeState,
     CeruleanChapterState,
+    ItemId,
     MapId,
     PokemonRedStateReader,
+    RamAddress,
     RawGameState,
 )
 
 CASCADE_CHECKPOINT_COUNT = 22
+CERULEAN_RIVAL_BATTLE_PLAN_ID = RedBattlePlanId.CASCADE_CERULEAN_RIVAL
+MISTY_BATTLE_PLAN_ID = RedBattlePlanId.CASCADE_MISTY
+CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS = {
+    PIDGEOTTO_SPECIES_ID: 25,
+    ABRA_SPECIES_ID: 30,
+    RATTATA_SPECIES_ID: 25,
+    BULBASAUR_SPECIES_ID: 30,
+}
+CERULEAN_RIVAL_MAX_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE
+POTION_HEAL_AMOUNT = 20
+TM01_FIELD_MENU_CLOSE_PULSES = 2
+ROUTE_24_RECOVERY_POTION_RESERVE = 1
+FIELD_ITEM_MENU_CLOSE_PULSES = 4
+CERULEAN_GYM_TRAINER_MOVE_SLOT = 3
 ROUTE_24_REQUIRED_TRAINER_INDEXES = tuple(
     spec[0] for spec in ROUTE_24_REQUIRED_TRAINER_SPECS
 )
@@ -58,6 +85,8 @@ def _directions(compact: str) -> tuple[str, ...]:
 
 CERULEAN_TO_CENTER_DIRECTIONS = _directions("DD" + "R" * 19 + "UUU")
 CENTER_HEAL_APPROACH_DIRECTIONS = _directions("UUUU")
+CENTER_HEAL_TO_PC_DIRECTIONS = _directions("D" + "R" * 10)
+CENTER_PC_TO_HEAL_DIRECTIONS = _directions("L" * 10 + "U")
 CENTER_EXIT_DIRECTIONS = _directions("DDDDD")
 CENTER_TO_RIVAL_STAGING_DIRECTIONS = _directions(
     "LLUU" + "L" * 9 + "U" * 4 + "R" * 12 + "U" * 5
@@ -134,6 +163,8 @@ class EmulatorState(Protocol):
 
     @property
     def pressed_buttons(self) -> frozenset[str]: ...
+
+    def read_u8(self, address: int) -> int: ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -335,13 +366,39 @@ def run_cascade_chapter(
 
     _move(chapter_executor, reader, CERULEAN_TO_CENTER_DIRECTIONS, "Cerulean Center")
     _wait(chapter_executor, timing.transition_wait_frames)
-    _heal(chapter_executor, reader, timing)
+    _heal(
+        chapter_executor,
+        reader,
+        timing,
+        emulator=emulator,
+        withdraw_pc_potion=True,
+    )
+    _teach_cerulean_rival_mega_punch(
+        reader,
+        chapter_executor,
+        emulator,
+        timing,
+    )
     _move(
         chapter_executor,
         reader,
         CENTER_TO_RIVAL_STAGING_DIRECTIONS,
         "Cerulean rival staging",
     )
+    rival_staging = reader.read()
+    if (
+        rival_staging.map_id != MapId.CERULEAN_CITY
+        or (rival_staging.player_x, rival_staging.player_y) != (20, 7)
+        or rival_staging.battle_state != 0
+        or rival_staging.party_species_ids
+        != (WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+        or rival_staging.first_party_moves
+        != (0x21, 0x27, MEGA_PUNCH_MOVE_ID, 0x37)
+        or _bag_quantity(emulator, ItemId.POTION)
+        != CERULEAN_RIVAL_MAX_POTION_RESERVE
+        or _bag_quantity(emulator, ItemId.TM01_MEGA_PUNCH) != 0
+    ):
+        raise CascadeChapterError("Cerulean rival staging missed its bounded reserve gate.")
     _wait(chapter_executor, timing.rival_seed_wait_frames)
     _move(
         chapter_executor,
@@ -368,17 +425,11 @@ def run_cascade_chapter(
         progress,
         emulator,
     )
-    _run_battle(
+    _run_cerulean_rival_with_potion(
         reader,
         chapter_executor,
-        choose_cerulean_rival_move_slot,
-        MapId.CERULEAN_CITY,
+        emulator,
         timing,
-        "Cerulean rival",
-        BattleIntent(
-            "help_bill",
-            battle_plan_id=RedBattlePlanId.CASCADE_CERULEAN_RIVAL,
-        ),
     )
     _confirm_pulses(
         chapter_executor,
@@ -411,7 +462,13 @@ def run_cascade_chapter(
             "rival recovery NPC correction",
         )
         _wait(chapter_executor, timing.transition_wait_frames)
-    _heal(chapter_executor, reader, timing)
+    _heal(
+        chapter_executor,
+        reader,
+        timing,
+        emulator=emulator,
+        cleanup_rival_resources=True,
+    )
     _enter_route_24(chapter_executor, reader, timing)
 
     route_24_prefix: tuple[str, ...] = ()
@@ -505,6 +562,11 @@ def run_cascade_chapter(
         "Defeated the Nugget Rocket",
         records,
         progress,
+        emulator,
+    )
+    _use_route_24_recovery_potion(
+        reader,
+        chapter_executor,
         emulator,
     )
     _recover_route_24(
@@ -670,7 +732,7 @@ def run_cascade_chapter(
     _run_fixed_slot_battle(
         reader,
         chapter_executor,
-        1,
+        CERULEAN_GYM_TRAINER_MOVE_SLOT,
         MapId.CERULEAN_GYM,
         timing,
         "Cerulean Gym trainer",
@@ -743,7 +805,7 @@ def run_cascade_chapter(
         "Misty",
         BattleIntent(
             "defeat_misty",
-            battle_plan_id=RedBattlePlanId.CASCADE_MISTY,
+            battle_plan_id=MISTY_BATTLE_PLAN_ID,
         ),
     )
     _confirm_pulses(
@@ -824,6 +886,10 @@ def _heal(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
     timing: CascadeTiming,
+    *,
+    emulator: EmulatorState | None = None,
+    withdraw_pc_potion: bool = False,
+    cleanup_rival_resources: bool = False,
 ) -> None:
     raw = reader.read()
     if raw.map_id != MapId.CERULEAN_POKECENTER:
@@ -853,8 +919,370 @@ def _heal(
         or not all(value > 0 for value in learned_pp)
     ):
         raise CascadeChapterError("Cerulean healing failed its persistent gate.")
+    if withdraw_pc_potion:
+        if emulator is None:
+            raise CascadeChapterError("Cerulean PC withdrawal requires emulator evidence.")
+        _withdraw_cerulean_rival_potion(executor, reader, emulator, timing)
+    if cleanup_rival_resources:
+        if emulator is None:
+            raise CascadeChapterError("Cerulean rival cleanup requires emulator evidence.")
+        _store_cerulean_rival_resources(executor, reader, emulator, timing)
     _move(executor, reader, CENTER_EXIT_DIRECTIONS, "Cerulean Center exit")
     _wait(executor, timing.transition_wait_frames)
+
+
+def _withdraw_cerulean_rival_potion(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CascadeTiming,
+) -> None:
+    """Withdraw the guaranteed new-game Potion from RED's PC exactly once."""
+
+    before = reader.read()
+    before_count = emulator.read_u8(RamAddress.NUM_BAG_ITEMS)
+    if (
+        before.map_id != MapId.CERULEAN_POKECENTER
+        or (before.player_x, before.player_y) != (3, 3)
+        or before.battle_state != 0
+        or not reader.read_input_readiness().ready
+        or not 0 <= before_count < 20
+        or _bag_quantity(emulator, ItemId.POTION)
+        != CERULEAN_RIVAL_MAX_POTION_RESERVE - 1
+    ):
+        raise CascadeChapterError("Cerulean PC Potion withdrawal has an invalid starting gate.")
+
+    _move(
+        executor,
+        reader,
+        CENTER_HEAL_TO_PC_DIRECTIONS,
+        "Cerulean PC approach",
+    )
+    _pc_pulse(executor, MacroActionKind.MOVE, "up", timing)
+    faced = reader.read()
+    if (
+        (faced.player_x, faced.player_y) != (13, 4)
+        or emulator.read_u8(RamAddress.PLAYER_FACING_DIRECTION) != 0x04
+    ):
+        raise CascadeChapterError("Cerulean PC approach missed its pinned interaction gate.")
+
+    _pc_pulse(executor, MacroActionKind.INTERACT, None, timing)
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    for _ in range(4):
+        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) == 1:
+            break
+        _pc_pulse(executor, MacroActionKind.MOVE, "down", timing)
+    else:
+        raise CascadeChapterError("Cerulean PC could not select RED's PC.")
+
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
+        raise CascadeChapterError("Cerulean PC did not expose WITHDRAW ITEM.")
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    if (
+        _bag_quantity(emulator, ItemId.POTION)
+        != CERULEAN_RIVAL_MAX_POTION_RESERVE
+        or emulator.read_u8(RamAddress.NUM_BAG_ITEMS) != before_count
+    ):
+        raise CascadeChapterError("Cerulean PC did not withdraw exactly one Potion.")
+
+    for _ in range(4):
+        _pc_pulse(executor, MacroActionKind.CANCEL, None, timing)
+    returned = reader.read()
+    if (
+        returned.map_id != MapId.CERULEAN_POKECENTER
+        or (returned.player_x, returned.player_y) != (13, 4)
+        or returned.battle_state != 0
+        or not reader.read_input_readiness().ready
+        or _bag_quantity(emulator, ItemId.POTION)
+        != CERULEAN_RIVAL_MAX_POTION_RESERVE
+    ):
+        raise CascadeChapterError("Cerulean PC did not return stable field control.")
+
+    _move(
+        executor,
+        reader,
+        CENTER_PC_TO_HEAL_DIRECTIONS,
+        "Cerulean PC return",
+    )
+    back_at_heal_route = reader.read()
+    if (
+        back_at_heal_route.map_id != MapId.CERULEAN_POKECENTER
+        or (back_at_heal_route.player_x, back_at_heal_route.player_y) != (3, 3)
+        or _bag_quantity(emulator, ItemId.POTION)
+        != CERULEAN_RIVAL_MAX_POTION_RESERVE
+    ):
+        raise CascadeChapterError("Cerulean PC return missed the bounded healing route.")
+
+
+def _teach_cerulean_rival_mega_punch(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    timing: CascadeTiming,
+) -> None:
+    """Teach the legally collected TM01 into the former Bubble slot."""
+
+    before = reader.read()
+    if (
+        before.map_id != MapId.CERULEAN_CITY
+        or before.battle_state != 0
+        or before.party_species_ids != (WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+        or before.first_party_moves is None
+        or before.first_party_moves[2] != BUBBLE_MOVE_ID
+        or _bag_quantity(emulator, ItemId.TM01_MEGA_PUNCH) != 1
+    ):
+        raise CascadeChapterError("TM01 teaching has an invalid starting gate.")
+
+    executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
+    _wait(executor, timing.dialogue_wait_frames)
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == 2:
+            break
+        _pc_pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if cursor < 2 else "up",
+            timing,
+        )
+    else:
+        raise CascadeChapterError("TM01 teaching could not select ITEM.")
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    _select_bag_item(executor, emulator, ItemId.TM01_MEGA_PUNCH, timing)
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+
+    for _ in range(24):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (0, 1):
+            break
+        _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    else:
+        raise CascadeChapterError("TM01 teaching did not reach party selection.")
+
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == 0:
+            break
+        _pc_pulse(executor, MacroActionKind.MOVE, "up", timing)
+    else:
+        raise CascadeChapterError("TM01 teaching could not select Wartortle.")
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+
+    for _ in range(24):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (5, 8):
+            break
+        _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    else:
+        raise CascadeChapterError("TM01 teaching did not reach move deletion.")
+
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == 2:
+            break
+        _pc_pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if cursor < 2 else "up",
+            timing,
+        )
+    else:
+        raise CascadeChapterError("TM01 teaching could not select Bubble slot three.")
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+
+    for _ in range(24):
+        learned = reader.read()
+        if (
+            learned.first_party_moves
+            == (
+                before.first_party_moves[0],
+                before.first_party_moves[1],
+                MEGA_PUNCH_MOVE_ID,
+                before.first_party_moves[3],
+            )
+            and _bag_quantity(emulator, ItemId.TM01_MEGA_PUNCH) == 0
+        ):
+            break
+        _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    else:
+        raise CascadeChapterError("TM01 did not replace Bubble and consume the item.")
+
+    for _ in range(TM01_FIELD_MENU_CLOSE_PULSES):
+        _pc_pulse(executor, MacroActionKind.CANCEL, None, timing)
+    for _ in range(12):
+        if reader.read_input_readiness().ready:
+            return
+        _pc_pulse(executor, MacroActionKind.CANCEL, None, timing)
+    raise CascadeChapterError("TM01 teaching did not restore field control.")
+
+
+def _store_cerulean_rival_resources(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CascadeTiming,
+) -> None:
+    """Deposit the helper and all but one guaranteed Route 24 recovery Potion."""
+
+    before = reader.read()
+    lead_before = _read_bytes(emulator, RamAddress.PARTY_MON_1, 44)
+    money_before = _read_bytes(emulator, RamAddress.PLAYER_MONEY, 3)
+    bag_before = _bag_entries(emulator)
+    if (
+        before.map_id != MapId.CERULEAN_POKECENTER
+        or (before.player_x, before.player_y) != (3, 3)
+        or before.battle_state != 0
+        or before.party_species_ids != (WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+        or not reader.read_input_readiness().ready
+    ):
+        raise CascadeChapterError("Cerulean rival cleanup has an invalid starting gate.")
+
+    _move(executor, reader, CENTER_HEAL_TO_PC_DIRECTIONS, "Cerulean cleanup PC")
+    _pc_pulse(executor, MacroActionKind.MOVE, "up", timing)
+    _pc_pulse(executor, MacroActionKind.INTERACT, None, timing)
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
+        raise CascadeChapterError("Cerulean cleanup did not open the generic PC menu.")
+
+    for _ in range(3):
+        _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
+        raise CascadeChapterError("Cerulean cleanup did not open SOMEONE'S PC.")
+    _pc_pulse(executor, MacroActionKind.MOVE, "down", timing)
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    _pc_pulse(executor, MacroActionKind.MOVE, "down", timing)
+    _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
+        raise CascadeChapterError("Cerulean cleanup did not select helper DEPOSIT.")
+    for _ in range(3):
+        _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+
+    after_helper = reader.read()
+    if (
+        after_helper.party_species_ids != (WARTORTLE_SPECIES_ID,)
+        or _read_bytes(emulator, RamAddress.PARTY_MON_1, 44) != lead_before
+        or _read_bytes(emulator, RamAddress.PLAYER_MONEY, 3) != money_before
+        or _bag_entries(emulator) != bag_before
+    ):
+        raise CascadeChapterError("Cerulean cleanup changed protected state while storing Zubat.")
+
+    _pc_pulse(executor, MacroActionKind.CANCEL, None, timing)
+    _pc_pulse(executor, MacroActionKind.CANCEL, None, timing)
+    remaining = _bag_quantity(emulator, ItemId.POTION)
+    if not 1 <= remaining <= CERULEAN_RIVAL_MAX_POTION_RESERVE:
+        raise CascadeChapterError(
+            "Cerulean rival cleanup lacks the guaranteed Route 24 recovery Potion."
+        )
+    to_store = remaining - ROUTE_24_RECOVERY_POTION_RESERVE
+    if to_store:
+        _pc_pulse(executor, MacroActionKind.MOVE, "down", timing)
+        for _ in range(3):
+            _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
+            raise CascadeChapterError("Cerulean cleanup did not open RED'S PC.")
+        _pc_pulse(executor, MacroActionKind.MOVE, "down", timing)
+        _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+        _select_pc_item(executor, emulator, ItemId.POTION, timing)
+        _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+        for _ in range(to_store - 1):
+            _pc_pulse(executor, MacroActionKind.MOVE, "up", timing)
+        _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+        _pc_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+        if (
+            _bag_quantity(emulator, ItemId.POTION)
+            != ROUTE_24_RECOVERY_POTION_RESERVE
+        ):
+            raise CascadeChapterError(
+                "Cerulean cleanup did not retain exactly one recovery Potion."
+            )
+        for _ in range(3):
+            _pc_pulse(executor, MacroActionKind.CANCEL, None, timing)
+    else:
+        _pc_pulse(executor, MacroActionKind.CANCEL, None, timing)
+
+    returned = reader.read()
+    if (
+        returned.map_id != MapId.CERULEAN_POKECENTER
+        or (returned.player_x, returned.player_y) != (13, 4)
+        or returned.battle_state != 0
+        or returned.party_species_ids != (WARTORTLE_SPECIES_ID,)
+        or _read_bytes(emulator, RamAddress.PARTY_MON_1, 44) != lead_before
+        or _read_bytes(emulator, RamAddress.PLAYER_MONEY, 3) != money_before
+        or _bag_quantity(emulator, ItemId.POTION)
+        != ROUTE_24_RECOVERY_POTION_RESERVE
+        or not reader.read_input_readiness().ready
+    ):
+        raise CascadeChapterError("Cerulean cleanup did not restore stable field control.")
+    _move(executor, reader, CENTER_PC_TO_HEAL_DIRECTIONS, "Cerulean cleanup return")
+    final = reader.read()
+    if (
+        final.map_id != MapId.CERULEAN_POKECENTER
+        or (final.player_x, final.player_y) != (3, 3)
+        or final.party_species_ids != (WARTORTLE_SPECIES_ID,)
+    ):
+        raise CascadeChapterError("Cerulean cleanup missed the bounded healing route.")
+
+
+def _select_pc_item(
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    item: ItemId,
+    timing: CascadeTiming,
+) -> None:
+    for _ in range(24):
+        items = tuple(item_id for item_id, _ in _bag_entries(emulator))
+        if item not in items:
+            raise CascadeChapterError(f"Required PC item {int(item):#04x} is unavailable.")
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        target = items.index(item)
+        if absolute == target:
+            return
+        _pc_pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if absolute < target else "up",
+            timing,
+        )
+    raise CascadeChapterError(f"Could not select PC item {int(item):#04x}.")
+
+
+def _bag_entries(emulator: EmulatorState) -> tuple[tuple[int, int], ...]:
+    return tuple(
+        (
+            emulator.read_u8(int(RamAddress.BAG_ITEMS) + index * 2),
+            emulator.read_u8(int(RamAddress.BAG_ITEMS) + index * 2 + 1),
+        )
+        for index in range(emulator.read_u8(RamAddress.NUM_BAG_ITEMS))
+    )
+
+
+def _read_bytes(
+    emulator: EmulatorState,
+    address: RamAddress,
+    length: int,
+) -> tuple[int, ...]:
+    return tuple(emulator.read_u8(int(address) + offset) for offset in range(length))
+
+
+def _pc_pulse(
+    executor: _CountingChapterExecutor,
+    kind: MacroActionKind,
+    value: str | None,
+    timing: CascadeTiming,
+) -> None:
+    executor.execute(MacroAction(kind, value))
+    _wait(executor, timing.dialogue_wait_frames)
 
 
 def _enter_route_24(
@@ -959,6 +1387,108 @@ def _recover_route_24(
     _wait(executor, timing.transition_wait_frames)
 
 
+def _use_route_24_recovery_potion(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+) -> None:
+    """Consume the one retained Potion before the poisoned Route 24 return."""
+
+    before = reader.read()
+    if (
+        before.map_id != MapId.ROUTE_24
+        or before.battle_state != 0
+        or before.party_species_ids != (WARTORTLE_SPECIES_ID,)
+        or before.first_party_hp is None
+        or before.first_party_max_hp is None
+        or not 0 < before.first_party_hp < before.first_party_max_hp
+        or _bag_quantity(emulator, ItemId.POTION)
+        != ROUTE_24_RECOVERY_POTION_RESERVE
+        or not reader.read_input_readiness().ready
+    ):
+        raise CascadeChapterError("Route 24 recovery Potion has an invalid starting gate.")
+
+    executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
+    _wait(executor, 180)
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == 2:
+            break
+        executor.execute(
+            MacroAction(
+                MacroActionKind.MOVE,
+                "down" if cursor < 2 else "up",
+            )
+        )
+        _wait(executor, 120)
+    else:
+        raise CascadeChapterError("Route 24 recovery could not select ITEM.")
+
+    executor.execute(MacroAction(MacroActionKind.CONFIRM))
+    _wait(executor, 180)
+    for _ in range(24):
+        items = _bag_item_ids(emulator)
+        if ItemId.POTION not in items:
+            raise CascadeChapterError("Route 24 recovery lost its retained Potion.")
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        target = items.index(ItemId.POTION)
+        if absolute == target:
+            break
+        executor.execute(
+            MacroAction(
+                MacroActionKind.MOVE,
+                "down" if absolute < target else "up",
+            )
+        )
+        _wait(executor, 120)
+    else:
+        raise CascadeChapterError("Route 24 recovery could not select its Potion.")
+
+    executor.execute(MacroAction(MacroActionKind.CONFIRM))
+    _wait(executor, 180)
+    executor.execute(MacroAction(MacroActionKind.CONFIRM))
+    _wait(executor, 240)
+    expected_hp = min(
+        before.first_party_max_hp,
+        before.first_party_hp + POTION_HEAL_AMOUNT,
+    )
+    for _ in range(24):
+        current = reader.read()
+        if (
+            current.first_party_hp == expected_hp
+            and _bag_quantity(emulator, ItemId.POTION) == 0
+        ):
+            break
+        executor.execute(MacroAction(MacroActionKind.CONFIRM))
+        _wait(executor, 180)
+    else:
+        raise CascadeChapterError("Route 24 recovery Potion missed its exact heal gate.")
+
+    for _ in range(FIELD_ITEM_MENU_CLOSE_PULSES):
+        executor.execute(MacroAction(MacroActionKind.CANCEL))
+        _wait(executor, 180)
+    for _ in range(6):
+        if reader.read_input_readiness().ready:
+            break
+        executor.execute(MacroAction(MacroActionKind.CANCEL))
+        _wait(executor, 180)
+    else:
+        raise CascadeChapterError("Route 24 recovery Potion did not restore field control.")
+
+    final = reader.read()
+    if (
+        final.map_id != MapId.ROUTE_24
+        or final.battle_state != 0
+        or final.party_species_ids != (WARTORTLE_SPECIES_ID,)
+        or final.first_party_hp != expected_hp
+        or _bag_quantity(emulator, ItemId.POTION) != 0
+        or not reader.read_input_readiness().ready
+    ):
+        raise CascadeChapterError("Route 24 recovery Potion failed its persistent gate.")
+
+
 def _enter_gym(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
@@ -1038,6 +1568,383 @@ def _run_battle(
         )
     except BattleRuntimeError as error:
         raise CascadeChapterError(str(error)) from error
+
+
+class _PauseForCeruleanRivalPotion(Exception):
+    pass
+
+
+class _PauseForCeruleanRivalAccuracyReset(Exception):
+    pass
+
+
+def _run_cerulean_rival_with_potion(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    timing: CascadeTiming,
+) -> RawGameState:
+    """Use the fixed Potion reserve only at stable semantic gates."""
+
+    starting_reserve = _bag_quantity(emulator, ItemId.POTION)
+    if not 1 <= starting_reserve <= CERULEAN_RIVAL_MAX_POTION_RESERVE:
+        raise CascadeChapterError(
+            "Cerulean rival recovery reserve is outside its fixed bound."
+        )
+    intent = BattleIntent(
+        "help_bill",
+        battle_plan_id=CERULEAN_RIVAL_BATTLE_PLAN_ID,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+    )
+    accuracy_reset_complete = False
+
+    def guarded_policy(raw: RawGameState) -> int:
+        if (
+            _bag_quantity(emulator, ItemId.POTION) > 0
+            and _should_use_cerulean_rival_potion(raw)
+        ):
+            raise _PauseForCeruleanRivalPotion
+        if raw.enemy_species_id == ABRA_SPECIES_ID and not accuracy_reset_complete:
+            raise _PauseForCeruleanRivalAccuracyReset
+        return choose_cerulean_rival_move_slot(raw)
+
+    recoveries = 0
+    while True:
+        try:
+            return run_adaptive_trainer_battle(
+                reader,
+                executor,
+                guarded_policy,
+                expected_map=MapId.CERULEAN_CITY,
+                intent=intent,
+                timing=timing.battle_runtime,
+                label="Cerulean rival",
+            )
+        except BattleRuntimeError as error:
+            if isinstance(error.__cause__, _PauseForCeruleanRivalAccuracyReset):
+                _reset_cerulean_rival_accuracy(reader, executor, emulator, timing)
+                accuracy_reset_complete = True
+                continue
+            if not isinstance(error.__cause__, _PauseForCeruleanRivalPotion):
+                raise CascadeChapterError(str(error)) from error
+        _use_cerulean_rival_potion(reader, executor, emulator, timing)
+        recoveries += 1
+        if recoveries > starting_reserve:
+            raise CascadeChapterError("Cerulean rival exceeded its fixed recovery reserve.")
+
+
+def _should_use_cerulean_rival_potion(raw: RawGameState) -> bool:
+    hp = raw.first_party_hp
+    max_hp = raw.first_party_max_hp
+    if (
+        hp is None
+        or max_hp is None
+        or hp <= 0
+        or hp > max_hp
+        or raw.enemy_species_id not in CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS
+    ):
+        raise ValueError("Cerulean rival recovery lacks valid live HP/species evidence.")
+    return hp <= CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS[raw.enemy_species_id]
+
+
+def _reset_cerulean_rival_accuracy(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    timing: CascadeTiming,
+) -> None:
+    """Switch out and back during Abra to clear Pidgeotto's accuracy drops."""
+
+    before = reader.read()
+    before_menu = reader.read_battle_menu_state(before)
+    before_party_hp = _rival_party_hp(emulator)
+    before_pp = before.first_party_pp
+    before_enemy_hp = before.enemy_hp
+    if (
+        before.battle_state != 2
+        or before.enemy_species_id != ABRA_SPECIES_ID
+        or before_menu.phase is not BattleMenuPhase.MAIN
+        or before.party_species_ids != (WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+        or emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) != 0
+        or before_pp is None
+        or before_enemy_hp is None
+        or before.player_accuracy_stage is None
+        or not 1 <= before.player_accuracy_stage <= 7
+    ):
+        raise CascadeChapterError("Cerulean rival accuracy reset has an invalid starting gate.")
+
+    _switch_cerulean_rival_party_slot(
+        reader,
+        executor,
+        emulator,
+        timing,
+        target_index=1,
+    )
+    helper = reader.read()
+    if (
+        emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) != 1
+        or helper.player_accuracy_stage != 7
+        or helper.enemy_species_id != ABRA_SPECIES_ID
+        or helper.enemy_hp != before_enemy_hp
+        or _rival_party_hp(emulator) != before_party_hp
+        or helper.first_party_pp != before_pp
+    ):
+        raise CascadeChapterError("Cerulean rival helper switch changed protected battle state.")
+
+    _switch_cerulean_rival_party_slot(
+        reader,
+        executor,
+        emulator,
+        timing,
+        target_index=0,
+    )
+    returned = reader.read()
+    if (
+        emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) != 0
+        or returned.player_accuracy_stage != 7
+        or returned.enemy_species_id != ABRA_SPECIES_ID
+        or returned.enemy_hp != before_enemy_hp
+        or _rival_party_hp(emulator) != before_party_hp
+        or returned.first_party_pp != before_pp
+    ):
+        raise CascadeChapterError("Cerulean rival accuracy reset changed protected battle state.")
+
+
+def _switch_cerulean_rival_party_slot(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    timing: CascadeTiming,
+    *,
+    target_index: int,
+) -> None:
+    raw = reader.read()
+    menu = reader.read_battle_menu_state(raw)
+    if (
+        target_index not in {0, 1}
+        or raw.battle_state != 2
+        or raw.enemy_species_id != ABRA_SPECIES_ID
+        or menu.phase is not BattleMenuPhase.MAIN
+    ):
+        raise CascadeChapterError("Cerulean rival party switch lacks a stable MAIN-menu gate.")
+
+    _navigate_rival_main_command(executor, menu.selected_main_command, 2, timing)
+    _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == target_index:
+            break
+        _battle_pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if cursor < target_index else "up",
+            timing,
+        )
+    else:
+        raise CascadeChapterError("Cerulean rival could not select the intended party slot.")
+
+    _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
+        raise CascadeChapterError("Cerulean rival party submenu did not select SWITCH.")
+    _battle_pulse(
+        executor,
+        MacroActionKind.CONFIRM,
+        None,
+        timing,
+        frames=timing.battle_runtime.dialogue_wait_frames,
+    )
+    for pulse in range(48):
+        settled = reader.read()
+        settled_menu = reader.read_battle_menu_state(settled)
+        if (
+            settled.battle_state == 2
+            and settled.enemy_species_id == ABRA_SPECIES_ID
+            and settled_menu.phase is BattleMenuPhase.MAIN
+            and emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) == target_index
+        ):
+            return
+        _battle_pulse(
+            executor,
+            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            None,
+            timing,
+            frames=timing.battle_runtime.dialogue_wait_frames,
+        )
+    raise CascadeChapterError("Cerulean rival party switch did not return to MAIN.")
+
+
+def _navigate_rival_main_command(
+    executor: _CountingChapterExecutor,
+    current: int | None,
+    target: int,
+    timing: CascadeTiming,
+) -> None:
+    if target != 2:
+        raise CascadeChapterError("Cerulean rival main-menu target is unsupported.")
+    directions = {
+        0: ("right",),
+        1: ("up", "right"),
+        2: (),
+        3: ("up",),
+    }.get(current)
+    if directions is None:
+        raise CascadeChapterError("Cerulean rival exposed an invalid main battle cursor.")
+    for direction in directions:
+        _battle_pulse(executor, MacroActionKind.MOVE, direction, timing)
+
+
+def _rival_party_hp(emulator: EmulatorState) -> tuple[int, int]:
+    return (
+        _read_u16(emulator, RamAddress.PARTY_MON_1_HP),
+        _read_u16(emulator, RamAddress.PARTY_MON_2_HP),
+    )
+
+
+def _read_u16(emulator: EmulatorState, address: RamAddress) -> int:
+    return (
+        emulator.read_u8(int(address)) * 0x100
+        + emulator.read_u8(int(address) + 1)
+    )
+
+
+def _use_cerulean_rival_potion(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    timing: CascadeTiming,
+) -> None:
+    before = reader.read()
+    menu = reader.read_battle_menu_state(before)
+    before_quantity = _bag_quantity(emulator, ItemId.POTION)
+    if (
+        before.battle_state != 2
+        or menu.phase is not BattleMenuPhase.MAIN
+        or before.first_party_hp is None
+        or before.first_party_max_hp is None
+        or not 0 < before.first_party_hp < before.first_party_max_hp
+        or not 1 <= before_quantity <= CERULEAN_RIVAL_MAX_POTION_RESERVE
+    ):
+        raise CascadeChapterError(
+            "Cerulean rival Potion recovery requires one item and a damaged living lead "
+            "at the trainer MAIN menu."
+        )
+
+    command = menu.selected_main_command
+    if command == 0:
+        _battle_pulse(executor, MacroActionKind.MOVE, "down", timing)
+    elif command == 2:
+        _battle_pulse(executor, MacroActionKind.MOVE, "left", timing)
+        _battle_pulse(executor, MacroActionKind.MOVE, "down", timing)
+    elif command == 3:
+        _battle_pulse(executor, MacroActionKind.MOVE, "left", timing)
+    elif command != 1:
+        raise CascadeChapterError("Cerulean rival exposed an invalid battle command cursor.")
+
+    selected = reader.read_battle_menu_state(reader.read())
+    if selected.phase is not BattleMenuPhase.MAIN or selected.selected_main_command != 1:
+        raise CascadeChapterError("Cerulean rival recovery could not select ITEM.")
+    _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+    _select_bag_item(executor, emulator, ItemId.POTION, timing)
+    _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing)
+
+    for _ in range(6):
+        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) == 0:
+            break
+        _battle_pulse(executor, MacroActionKind.MOVE, "up", timing)
+    else:
+        raise CascadeChapterError("Cerulean rival recovery could not select the party lead.")
+
+    executor.execute(MacroAction(MacroActionKind.CONFIRM))
+    expected_healed_hp = min(
+        before.first_party_max_hp,
+        before.first_party_hp + POTION_HEAL_AMOUNT,
+    )
+    current = reader.read()
+    saw_exact_heal = (
+        current.first_party_hp == expected_healed_hp
+        and _bag_quantity(emulator, ItemId.POTION) == before_quantity - 1
+    )
+    for _ in range(30):
+        _wait(executor, timing.battle_runtime.dialogue_wait_frames)
+        current = reader.read()
+        if current.first_party_hp == expected_healed_hp:
+            saw_exact_heal = True
+        if (
+            saw_exact_heal
+            and _bag_quantity(emulator, ItemId.POTION) == before_quantity - 1
+            and current.battle_state == 2
+            and current.first_party_hp is not None
+            and current.first_party_hp > 0
+            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+        ):
+            return
+        if current.battle_state != 2 or (current.first_party_hp or 0) <= 0:
+            raise CascadeChapterError(
+                "Cerulean rival recovery lost the active living battle before returning "
+                "to MAIN."
+            )
+        executor.execute(MacroAction(MacroActionKind.CANCEL))
+    raise CascadeChapterError(
+        "Cerulean rival Potion missed its bounded heal, quantity, or MAIN-menu proof."
+    )
+
+
+def _select_bag_item(
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    item: ItemId,
+    timing: CascadeTiming,
+) -> None:
+    for _ in range(24):
+        items = _bag_item_ids(emulator)
+        if item not in items:
+            raise CascadeChapterError(f"Required bag item {int(item):#04x} is unavailable.")
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        target = items.index(item)
+        if absolute == target:
+            return
+        _battle_pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if absolute < target else "up",
+            timing,
+        )
+    raise CascadeChapterError(f"Could not select bag item {int(item):#04x}.")
+
+
+def _bag_item_ids(emulator: EmulatorState) -> tuple[int, ...]:
+    count = emulator.read_u8(RamAddress.NUM_BAG_ITEMS)
+    if not 0 <= count <= 20:
+        raise CascadeChapterError("Bag item count is outside the supported bound.")
+    return tuple(
+        emulator.read_u8(int(RamAddress.BAG_ITEMS) + index * 2)
+        for index in range(count)
+    )
+
+
+def _bag_quantity(emulator: EmulatorState, item: ItemId) -> int:
+    items = _bag_item_ids(emulator)
+    if item not in items:
+        return 0
+    index = items.index(item)
+    return emulator.read_u8(int(RamAddress.BAG_ITEMS) + index * 2 + 1)
+
+
+def _battle_pulse(
+    executor: _CountingChapterExecutor,
+    kind: MacroActionKind,
+    value: str | None,
+    timing: CascadeTiming,
+    *,
+    frames: int | None = None,
+) -> None:
+    executor.execute(MacroAction(kind, value))
+    _wait(
+        executor,
+        timing.battle_runtime.menu_wait_frames if frames is None else frames,
+    )
 
 
 def _advance_dialogue_phases(

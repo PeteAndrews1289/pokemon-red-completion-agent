@@ -20,6 +20,7 @@ from pokemon_red_completion.battle_runtime import (
 )
 from pokemon_red_completion.celadon import (
     DEFAULT_CELADON_TIMING,
+    CeladonWildFleeEvidence,
     _bag,
     _flee,
     _money,
@@ -164,6 +165,7 @@ class BlaineChapterReport:
     mansion_switch_trace: tuple[bool, ...]
     mansion_trainer_events_before: tuple[bool, ...]
     mansion_trainer_events_after: tuple[bool, ...]
+    mansion_wild_flees: tuple[CeladonWildFleeEvidence, ...]
     secret_key_quantity: int
     quiz_answers: tuple[bool, ...]
     gym_gate_events_after_quizzes: tuple[bool, ...]
@@ -195,6 +197,14 @@ class BlaineChapterReport:
             and self.mansion_switch_trace == (False, True, False, True)
             and self.mansion_trainer_events_before == (False,) * 6
             and self.mansion_trainer_events_after == (False,) * 6
+            and len(self.mansion_wild_flees) <= 2
+            and all(
+                item.party_preserved
+                and item.pp_preserved
+                and item.hp_safe
+                and item.inventory_preserved
+                for item in self.mansion_wild_flees
+            )
             and self.secret_key_quantity == 1
             and self.quiz_answers == QUIZ_ANSWERS
             and self.gym_gate_events_after_quizzes == (False,) + (True,) * 6
@@ -216,10 +226,10 @@ class BlaineChapterReport:
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.final_raw.first_party_level == 46
+            and self.final_raw.first_party_level == 47
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, SURF_MOVE_ID)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
-            and self.party_hp == self.party_max_hp == (142, 52, 37)
+            and self.party_hp == self.party_max_hp == (145, 47, 40)
             and self.party_status == (0, 0, 0)
             and self.controller_released
         )
@@ -235,6 +245,19 @@ class BlaineChapterReport:
                 "switch_trace": list(self.mansion_switch_trace),
                 "optional_trainers_before": list(self.mansion_trainer_events_before),
                 "optional_trainers_after": list(self.mansion_trainer_events_after),
+                "wild_flees": [
+                    {
+                        "map": item.map_id,
+                        "position": [item.x, item.y],
+                        "species": item.species,
+                        "level": item.level,
+                        "party_preserved": item.party_preserved,
+                        "pp_preserved": item.pp_preserved,
+                        "hp_safe": item.hp_safe,
+                        "inventory_preserved": item.inventory_preserved,
+                    }
+                    for item in self.mansion_wild_flees
+                ],
                 "secret_key": self.secret_key_quantity,
             },
             "quiz": {
@@ -381,8 +404,6 @@ def run_blaine_chapter(
     )
     _require(reader.read(), MapId.POKEMON_MANSION_B1F, (5, 14), "Secret Key approach")
     _pick_up_secret_key(actions, reader, emulator)
-    if wilds:
-        raise BlaineChapterError(f"Qualified one-repel Mansion route encountered wilds: {wilds!r}.")
     mansion_after = _events(emulator, MANSION_TRAINER_EVENTS)
     if mansion_after != mansion_before:
         raise BlaineChapterError("Mansion route changed an optional trainer event.")
@@ -531,6 +552,7 @@ def run_blaine_chapter(
         mansion_switch_trace=tuple(switch_trace),
         mansion_trainer_events_before=mansion_before,
         mansion_trainer_events_after=mansion_after,
+        mansion_wild_flees=tuple(wilds),
         secret_key_quantity=_bag(emulator).get(ItemId.SECRET_KEY, 0),
         quiz_answers=QUIZ_ANSWERS,
         gym_gate_events_after_quizzes=gates_after,
@@ -607,7 +629,7 @@ def _move_mansion(
     emulator,
     route: Iterable[str],
     label: str,
-) -> tuple[object, ...]:
+) -> tuple[CeladonWildFleeEvidence, ...]:
     run = _RunState([])
     for index, direction in enumerate(tuple(route), 1):
         before = reader.read()
@@ -650,8 +672,15 @@ def _toggle_statue(actions, reader, emulator, *, expected: bool) -> None:
 
 def _pick_up_secret_key(actions, reader, emulator) -> None:
     before = len(_bag(emulator))
+    for _ in range(8):
+        if reader.read_input_readiness().ready:
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    else:
+        raise BlaineChapterError("Secret Key approach did not settle field text.")
     _pulse(actions, MacroActionKind.MOVE, "up", 120)
-    for _ in range(10):
+    _pulse(actions, MacroActionKind.INTERACT)
+    for _ in range(32):
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
         if (
             _bag(emulator).get(ItemId.SECRET_KEY, 0) == 1
@@ -660,7 +689,12 @@ def _pick_up_secret_key(actions, reader, emulator) -> None:
             if len(_bag(emulator)) != before + 1:
                 raise BlaineChapterError("Secret Key changed an unexpected bag slot count.")
             return
-    raise BlaineChapterError("Secret Key did not enter the bag.")
+    raw = reader.read()
+    raise BlaineChapterError(
+        "Secret Key did not enter the bag: "
+        f"bag_slots={len(_bag(emulator))}, input_ready={reader.read_input_readiness().ready}, "
+        f"map={raw.map_id!r}, position={(raw.player_x, raw.player_y)!r}."
+    )
 
 
 def _field_dig(actions, reader, emulator) -> None:

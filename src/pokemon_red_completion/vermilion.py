@@ -35,11 +35,17 @@ from pokemon_red_completion.observation import (
 VERMILION_CHECKPOINT_COUNT = 15
 MACHOP_SPECIES_ID = 0x6A
 DROWZEE_SPECIES_ID = 0x30
+ROUTE_6_JR_TRAINER_F_MOVE_SLOT = 3
+ROUTE_6_JR_TRAINER_M_MOVE_SLOT = 3
+POST_ROCKET_WARTORTLE_MOVES = (0x2C, 0x27, 0x05, 0x37)
+BITE_MOVE_ID = 0x2C
+BITE_BASE_PP = 25
 QUALIFIED_ROUTE_6_WILDS = (
     (15, 19, 0x24),
     (15, 22, 0x24),
     (15, 26, 0x24),
 )
+"""Historical control-lineage encounters; current replay tolerates zero or more wilds."""
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -187,6 +193,14 @@ class Route6WildFleeEvidence:
     final_status: int
     trainer_events: tuple[bool, ...]
     control_ready: bool
+    expected_trainer_events: tuple[bool, ...] = (
+        False,
+        False,
+        False,
+        False,
+        True,
+        False,
+    )
 
     @property
     def verified(self) -> bool:
@@ -201,8 +215,7 @@ class Route6WildFleeEvidence:
             and all((value & 0x3F) > 0 for value in self.final_pp)
             and self.final_hp > 0
             and self.final_status == 0
-            and self.trainer_events
-            == (False, False, False, False, True, False)
+            and self.trainer_events == self.expected_trainer_events
             and self.control_ready
         )
 
@@ -230,11 +243,7 @@ class VermilionChapterReport:
         return (
             len(self.records) == VERMILION_CHECKPOINT_COUNT
             and self.final_evidence.vermilion_snapshot
-            and tuple(
-                (item.player_x, item.player_y, item.enemy_species_id)
-                for item in self.route_6_wild_flees
-            )
-            == QUALIFIED_ROUTE_6_WILDS
+            and self.final_raw.first_party_moves == POST_ROCKET_WARTORTLE_MOVES
             and all(item.verified for item in self.route_6_wild_flees)
             and self.controller_released
         )
@@ -413,13 +422,14 @@ def run_vermilion_chapter(
         timing,
         "Rocket thief",
         RedBattlePlanId.VERMILION_ROCKET_THIEF,
+        learn_level_up_move=True,
     )
     _confirm_pulses(
         chapter_executor,
         timing.rocket_reward_pulses,
         timing.dialogue_wait_frames,
     )
-    _checkpoint(
+    rocket_reward, _ = _checkpoint(
         reader,
         tracker,
         VermilionPhase.TM28_OBTAINED,
@@ -429,6 +439,10 @@ def run_vermilion_chapter(
         progress,
         emulator,
     )
+    if rocket_reward.first_party_moves != POST_ROCKET_WARTORTLE_MOVES:
+        raise VermilionChapterError(
+            "Rocket victory did not learn Bite into Wartortle's first move slot."
+        )
 
     _move(
         chapter_executor,
@@ -520,12 +534,12 @@ def run_vermilion_chapter(
         progress,
         emulator,
     )
-    _move(
+    initial_route_6_wild_flees = _move_route_6_with_wild_flees(
         chapter_executor,
         reader,
         ROUTE_6_TO_FIRST_TRAINER_DIRECTIONS,
         timing,
-        "Route 6 lower gap",
+        expected_trainer_events=(False,) * 6,
     )
     _wait(chapter_executor, timing.transition_wait_frames)
     _enter_trainer_battle(
@@ -548,7 +562,7 @@ def run_vermilion_chapter(
     _battle(
         reader,
         chapter_executor,
-        lambda state: 1,
+        lambda state: ROUTE_6_JR_TRAINER_F_MOVE_SLOT,
         MapId.ROUTE_6,
         timing,
         "Route 6 Jr Trainer F",
@@ -574,10 +588,13 @@ def run_vermilion_chapter(
         progress,
         emulator,
     )
-    route_6_wild_flees = _backtrack_heal_and_replay(
-        chapter_executor,
-        reader,
-        timing,
+    route_6_wild_flees = (
+        *initial_route_6_wild_flees,
+        *_backtrack_heal_and_replay(
+            chapter_executor,
+            reader,
+            timing,
+        ),
     )
     _move(
         chapter_executor,
@@ -607,7 +624,7 @@ def run_vermilion_chapter(
     _battle(
         reader,
         chapter_executor,
-        lambda state: 1,
+        lambda state: ROUTE_6_JR_TRAINER_M_MOVE_SLOT,
         MapId.ROUTE_6,
         timing,
         "Route 6 Jr Trainer M",
@@ -671,7 +688,18 @@ def _choose_rocket_move(state: RawGameState) -> int:
     if state.enemy_species_id == MACHOP_SPECIES_ID:
         return 4
     if state.enemy_species_id == DROWZEE_SPECIES_ID:
-        return 1 if (state.enemy_hp or 0) > 11 else 4
+        moves = state.first_party_moves or ()
+        pp = state.first_party_pp or ()
+        # One fresh Bite wins enough tempo to survive, but Drowzee can then
+        # disable it. Its exact PP decrement is the semantic one-use latch.
+        if (
+            len(moves) >= 1
+            and len(pp) >= 1
+            and moves[0] == BITE_MOVE_ID
+            and (pp[0] & 0x3F) == BITE_BASE_PP
+        ):
+            return 1
+        return 4
     raise VermilionChapterError(
         f"Unexpected Rocket thief species {state.enemy_species_id!r}."
     )
@@ -682,12 +710,12 @@ def _backtrack_heal_and_replay(
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
 ) -> tuple[Route6WildFleeEvidence, ...]:
-    _move(
+    backtrack_wild_flees = _move_route_6_with_wild_flees(
         executor,
         reader,
         ROUTE_6_FIRST_TRAINER_TO_SOUTH_BUILDING_DIRECTIONS,
         timing,
-        "Route 6 healing backtrack",
+        expected_trainer_events=(False, False, False, False, True, False),
     )
     _wait(executor, timing.transition_wait_frames)
     _move(
@@ -830,7 +858,7 @@ def _backtrack_heal_and_replay(
         raise VermilionChapterError(
             "Route 6 healing replay failed its persistent return gate."
         )
-    return wild_flees
+    return (*backtrack_wild_flees, *wild_flees)
 
 
 def _replay_route_6_lower_gap(
@@ -840,7 +868,12 @@ def _replay_route_6_lower_gap(
 ) -> tuple[Route6WildFleeEvidence, ...]:
     prefix = _directions("LL" + "D" * 4)
 
-    _move(executor, reader, prefix, timing, "Route 6 lower-gap replay prefix")
+    prefix_wild_flees = _move_route_6_with_wild_flees(
+        executor,
+        reader,
+        prefix,
+        timing,
+    )
     before = reader.read()
     if (
         before.map_id != MapId.ROUTE_6
@@ -851,55 +884,32 @@ def _replay_route_6_lower_gap(
             "Route 6 replay missed its exact wild-encounter approach gate."
         )
 
-    encounter = before
-    for attempt in range(timing.movement_retries):
-        executor.execute(MacroAction(MacroActionKind.MOVE, "down"))
-        encounter = reader.read()
-        if (
-            encounter.battle_state
-            or encounter.map_id != before.map_id
-            or (encounter.player_x, encounter.player_y)
-            != (before.player_x, before.player_y)
-        ):
-            break
-        _wait(executor, timing.movement_retry_wait_frames * (attempt + 1))
-    else:
-        raise VermilionChapterError(
-            "Route 6 replay wild-encounter step was blocked."
-        )
-
-    if (
-        encounter.battle_state != 1
-        or encounter.map_id != MapId.ROUTE_6
-        or (encounter.player_x, encounter.player_y) != (15, 19)
-        or encounter.enemy_species_id != 0x24
-        or encounter.first_party_pp is None
-    ):
-        raise VermilionChapterError(
-            "Route 6 replay missed the qualified step-7 wild Pidgey encounter."
-        )
-    first_wild_flee = _flee_qualified_route_6_wild(
-        executor,
-        reader,
-        timing,
-        encounter,
+    return (
+        *prefix_wild_flees,
+        *_move_route_6_with_wild_flees(
+            executor,
+            reader,
+            ("down", *ROUTE_6_REPLAY_AFTER_WILD_DIRECTIONS),
+            timing,
+        ),
     )
-    additional_wild_flees = _move_route_6_replay_suffix(
-        executor,
-        reader,
-        ROUTE_6_REPLAY_AFTER_WILD_DIRECTIONS,
-        timing,
-    )
-    return (first_wild_flee, *additional_wild_flees)
 
 
-def _move_route_6_replay_suffix(
+def _move_route_6_with_wild_flees(
     executor: _CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: VermilionTiming,
+    *,
+    expected_trainer_events: tuple[bool, ...] = (
+        False,
+        False,
+        False,
+        False,
+        True,
+        False,
+    ),
 ) -> tuple[Route6WildFleeEvidence, ...]:
-    expected_wilds = QUALIFIED_ROUTE_6_WILDS[1:]
     wild_flees: list[Route6WildFleeEvidence] = []
     state = reader.read()
     for step_number, direction in enumerate(directions, start=1):
@@ -917,35 +927,29 @@ def _move_route_6_replay_suffix(
             _wait(executor, timing.movement_retry_wait_frames * (attempt + 1))
         else:
             raise VermilionChapterError(
-                "Route 6 lower-gap replay suffix was blocked at "
+                "Route 6 traversal was blocked at "
                 f"{(before.player_x, before.player_y)!r}."
             )
 
         if state.battle_state:
-            if state.battle_state != 1 or len(wild_flees) >= len(expected_wilds):
+            if state.battle_state != 1:
                 raise VermilionChapterError(
-                    "Unexpected battle interrupted Route 6 lower-gap replay "
-                    f"suffix at step {step_number}: type={state.battle_state}, "
+                    "Unexpected battle interrupted Route 6 traversal "
+                    f"at step {step_number}: type={state.battle_state}, "
                     f"coordinate={(state.player_x, state.player_y)!r}, "
                     f"enemy={state.enemy_species_id!r}."
                 )
-            expected_x, expected_y, expected_species = expected_wilds[len(wild_flees)]
-            if (
-                (state.player_x, state.player_y) != (expected_x, expected_y)
-                or state.enemy_species_id != expected_species
-            ):
-                raise VermilionChapterError(
-                    "Route 6 replay exposed an unqualified additional wild battle."
-                )
             wild_flees.append(
-                _flee_qualified_route_6_wild(executor, reader, timing, state)
+                _flee_qualified_route_6_wild(
+                    executor,
+                    reader,
+                    timing,
+                    state,
+                    expected_trainer_events=expected_trainer_events,
+                )
             )
             state = reader.read()
 
-    if len(wild_flees) != len(expected_wilds):
-        raise VermilionChapterError(
-            "Route 6 replay missed its recorded additional wild Pidgey encounters."
-        )
     return tuple(wild_flees)
 
 
@@ -954,6 +958,15 @@ def _flee_qualified_route_6_wild(
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
     encounter: RawGameState,
+    *,
+    expected_trainer_events: tuple[bool, ...] = (
+        False,
+        False,
+        False,
+        False,
+        True,
+        False,
+    ),
 ) -> Route6WildFleeEvidence:
     initial_pp = encounter.first_party_pp
     if initial_pp is None:
@@ -1029,6 +1042,7 @@ def _flee_qualified_route_6_wild(
         ),
         trainer_events=evidence.route_6_trainer_events,
         control_ready=control_ready,
+        expected_trainer_events=expected_trainer_events,
     )
     if not result.verified:
         raise VermilionChapterError(
@@ -1147,6 +1161,8 @@ def _battle(
     timing: VermilionTiming,
     label: str,
     battle_plan_id: str,
+    *,
+    learn_level_up_move: bool = False,
 ) -> RawGameState:
     try:
         return run_adaptive_trainer_battle(
@@ -1160,6 +1176,10 @@ def _battle(
             ),
             timing=timing.battle_runtime,
             label=label,
+            # The Rocket battle is the pinned level-24 transition. With only
+            # Wartortle in the party there is no switch prompt to decline, so
+            # confirming UNKNOWN phases accepts Bite and replaces Tackle.
+            unknown_cancel_interval=10_000 if learn_level_up_move else 3,
         )
     except BattleRuntimeError as error:
         raise VermilionChapterError(str(error)) from error

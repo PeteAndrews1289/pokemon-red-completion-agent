@@ -113,7 +113,7 @@ def test_projector_builds_fixed_transferable_candidate_vectors() -> None:
 
     assert batch.schema_id == FEATURE_SCHEMA_ID
     assert batch.feature_names == FEATURE_NAMES
-    assert len(batch.feature_names) == 101
+    assert len(batch.feature_names) == 102
     assert batch.feature_names[-12:-1] == (
         "interaction.physical_x_player_attack_stage",
         "interaction.physical_x_opponent_defense_stage",
@@ -145,6 +145,7 @@ def test_projector_builds_fixed_transferable_candidate_vectors() -> None:
     assert _value(batch, 0, "state.opponent_type.flying") == 1.0
 
     assert _value(batch, 0, "move.pp_fraction") == pytest.approx(12 / 15)
+    assert _value(batch, 0, "move.disabled") == 0.0
     assert _value(batch, 0, "move.power_fraction") == pytest.approx(95 / 255)
     assert _value(batch, 0, "move.accuracy") == 1.0
     assert _value(batch, 0, "move.category.special") == 1.0
@@ -173,6 +174,20 @@ def test_projector_builds_fixed_transferable_candidate_vectors() -> None:
     assert _value(batch, 0, "interaction.pp_x_effective_power") == pytest.approx(
         (12 / 15) * (380 / MAX_EFFECTIVE_POWER)
     )
+
+
+def test_disabled_move_is_featured_and_removed_from_the_legal_mask() -> None:
+    snapshot = _snapshot()
+    battle = _battle(snapshot)
+    battle["player_disabled_move_slot"] = 1
+    battle["player_disable_turns"] = 6
+
+    batch = BattleFeatureProjector(RED_BATTLE_CATALOG).project(snapshot)
+
+    assert batch.current_pp == (12.0, 0.0, 30.0)
+    assert batch.legal_mask == (False, False, True)
+    assert _value(batch, 0, "move.disabled") == 1.0
+    assert _value(batch, 1, "move.disabled") == 0.0
 
 
 def test_exact_move_constraint_marks_only_the_predeclared_candidate() -> None:

@@ -11,6 +11,7 @@ from pokemon_red_completion.battle_policy import (
 from pokemon_red_completion.observation import (
     ABRA_SPECIES_ID,
     BULBASAUR_SPECIES_ID,
+    MEGA_PUNCH_MOVE_ID,
     PIDGEOTTO_SPECIES_ID,
     RATTATA_SPECIES_ID,
     TACKLE_MOVE_ID,
@@ -26,7 +27,7 @@ def _rival_battle(
     moves: tuple[int, ...] | None = (
         TACKLE_MOVE_ID,
         TAIL_WHIP_MOVE_ID,
-        0x91,
+        MEGA_PUNCH_MOVE_ID,
         WATER_GUN_MOVE_ID,
     ),
     pp: tuple[int, ...] | None = (35, 30, 30, 11),
@@ -50,6 +51,7 @@ def _rival_battle(
 
 def test_move_ids_match_the_pinned_pokered_source() -> None:
     assert TACKLE_MOVE_ID == 0x21
+    assert MEGA_PUNCH_MOVE_ID == 0x05
     assert WATER_GUN_MOVE_ID == 0x37
 
 
@@ -72,9 +74,27 @@ def test_non_bulbasaur_opponents_select_water_gun_slot_four(
     assert choose_cerulean_rival_move_slot(_rival_battle(enemy_species_id=enemy_species_id)) == 4
 
 
-def test_bulbasaur_selects_tackle_slot_one() -> None:
+@pytest.mark.parametrize(
+    "enemy_species_id",
+    [PIDGEOTTO_SPECIES_ID, ABRA_SPECIES_ID, RATTATA_SPECIES_ID],
+)
+def test_non_bulbasaur_opponents_fall_back_to_tackle_when_water_gun_is_empty(
+    enemy_species_id: int,
+) -> None:
     assert (
-        choose_cerulean_rival_move_slot(_rival_battle(enemy_species_id=BULBASAUR_SPECIES_ID)) == 1
+        choose_cerulean_rival_move_slot(
+            _rival_battle(
+                enemy_species_id=enemy_species_id,
+                pp=(35, 30, 30, 0),
+            )
+        )
+        == 1
+    )
+
+
+def test_bulbasaur_selects_mega_punch_slot_three_after_defense_drop() -> None:
+    assert (
+        choose_cerulean_rival_move_slot(_rival_battle(enemy_species_id=BULBASAUR_SPECIES_ID)) == 3
     )
 
 
@@ -105,6 +125,18 @@ def test_bulbasaur_selects_one_tail_whip_while_defense_is_neutral() -> None:
                 enemy_species_id=BULBASAUR_SPECIES_ID,
                 player_attack_stage=6,
                 enemy_defense_stage=6,
+            )
+        )
+        == 3
+    )
+
+
+def test_bulbasaur_falls_back_to_tackle_when_mega_punch_is_empty() -> None:
+    assert (
+        choose_cerulean_rival_move_slot(
+            _rival_battle(
+                enemy_species_id=BULBASAUR_SPECIES_ID,
+                pp=(35, 30, 0, 11),
             )
         )
         == 1
@@ -161,8 +193,8 @@ def test_policy_fails_closed_for_species_outside_the_qualified_rival_party(
         (PIDGEOTTO_SPECIES_ID, None, 4),
         (PIDGEOTTO_SPECIES_ID, (), 4),
         (PIDGEOTTO_SPECIES_ID, (TACKLE_MOVE_ID,), 4),
-        (BULBASAUR_SPECIES_ID, None, 1),
-        (BULBASAUR_SPECIES_ID, (), 1),
+        (BULBASAUR_SPECIES_ID, None, 3),
+        (BULBASAUR_SPECIES_ID, (), 3),
     ],
 )
 def test_policy_fails_closed_without_required_move_slot_evidence(
@@ -197,8 +229,8 @@ def test_policy_fails_closed_without_required_move_slot_evidence(
         (
             BULBASAUR_SPECIES_ID,
             (WATER_GUN_MOVE_ID, 0x27, 0x91, WATER_GUN_MOVE_ID),
-            TACKLE_MOVE_ID,
-            1,
+            MEGA_PUNCH_MOVE_ID,
+            3,
         ),
     ],
 )
@@ -223,8 +255,8 @@ def test_policy_rejects_wrong_move_or_wrong_slot(
         (PIDGEOTTO_SPECIES_ID, None, 4),
         (PIDGEOTTO_SPECIES_ID, (), 4),
         (PIDGEOTTO_SPECIES_ID, (35,), 4),
-        (BULBASAUR_SPECIES_ID, None, 1),
-        (BULBASAUR_SPECIES_ID, (), 1),
+        (BULBASAUR_SPECIES_ID, None, 3),
+        (BULBASAUR_SPECIES_ID, (), 3),
     ],
 )
 def test_policy_fails_closed_without_required_pp_slot_evidence(
@@ -242,10 +274,10 @@ def test_policy_fails_closed_without_required_pp_slot_evidence(
 @pytest.mark.parametrize(
     ("enemy_species_id", "pp", "expected_slot"),
     [
-        (PIDGEOTTO_SPECIES_ID, (35, 30, 30, 0), 4),
-        (PIDGEOTTO_SPECIES_ID, (35, 30, 30, 0x40), 4),
-        (BULBASAUR_SPECIES_ID, (0, 30, 30, 11), 1),
-        (BULBASAUR_SPECIES_ID, (0xC0, 30, 30, 11), 1),
+        (PIDGEOTTO_SPECIES_ID, (0, 30, 30, 0), 1),
+        (PIDGEOTTO_SPECIES_ID, (0xC0, 30, 30, 0x40), 1),
+        (BULBASAUR_SPECIES_ID, (0, 30, 0, 11), 1),
+        (BULBASAUR_SPECIES_ID, (0xC0, 30, 0xC0, 11), 1),
     ],
 )
 def test_policy_rejects_zero_current_pp_even_with_pp_up_bits(
@@ -266,10 +298,10 @@ def test_policy_checks_only_the_selected_move_pp() -> None:
         choose_cerulean_rival_move_slot(
             _rival_battle(
                 enemy_species_id=BULBASAUR_SPECIES_ID,
-                pp=(0xC1, 0, 0, 0),
+                pp=(0, 0, 0xC1, 0),
             )
         )
-        == 1
+        == 3
     )
     assert (
         choose_cerulean_rival_move_slot(

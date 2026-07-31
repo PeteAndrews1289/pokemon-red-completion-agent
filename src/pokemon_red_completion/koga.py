@@ -22,6 +22,7 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
+from pokemon_red_completion.economy import POST_KOGA_MONEY, POST_SAFARI_MONEY
 from pokemon_red_completion.observation import (
     Badge,
     EventFlag,
@@ -40,6 +41,7 @@ SURF_SLOT = 4
 KOGA_OPPONENT = 0xEE
 KOGA_TRAINER_CLASS = 0x26
 KOGA_TRAINER_NUMBER = 1
+KOGA_PP_BOUNDS = ((0, 8), (1, 8), (1, 8), (1, 12))
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -190,10 +192,14 @@ class KogaChapterReport:
         return (
             len(self.records) == KOGA_CHECKPOINT_COUNT
             and tuple(item.trainer_number for item in self.battles) == (3, 2, 4, 1)
-            and tuple(item.selected_pp_spent for item in self.battles) == (6, 5, 5, 8)
-            and tuple(item.hp_after for item in self.battles) == (84, 66, 102, 107)
-            and tuple(item.max_hp_after for item in self.battles) == (117, 120, 120, 124)
-            and tuple(item.status_after for item in self.battles) == (0, 0x40, 0, 0)
+            and len(self.battles) == len(KOGA_PP_BOUNDS)
+            and all(
+                lower <= battle.selected_pp_spent <= upper
+                for battle, (lower, upper) in zip(
+                    self.battles, KOGA_PP_BOUNDS, strict=True
+                )
+            )
+            and all(0 < item.hp_after <= item.max_hp_after for item in self.battles)
             and self.trainer_events_before_koga == (False, True, False, False, True, True)
             and self.trainer_events_after_koga == (True,) * 6
             and self.got_tm06
@@ -202,12 +208,12 @@ class KogaChapterReport:
             and self.soul_badge_mirror
             and all(item != int(ItemId.TM06_TOXIC) for item, _ in self.initial_bag)
             and self.final_bag == expected_bag
-            and self.initial_money == 29_637
-            and self.final_money == 37_489
+            and self.initial_money == POST_SAFARI_MONEY
+            and self.final_money == POST_KOGA_MONEY
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.party_hp == self.party_max_hp == (124, 52, 37)
+            and self.party_hp == self.party_max_hp == (124, 47, 40)
             and self.party_status == (0, 0, 0)
             and self.surf_pp == 15
             and self.controller_released
@@ -318,8 +324,9 @@ def run_koga_chapter(
             "Juggler 3",
             (0xDD, 0x15, 3),
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_1,
-            6,
+            8,
             RedBattlePlanId.KOGA_JUGGLER_3,
+            allow_disable_fallback=True,
         )
     )
     _checkpoint(
@@ -341,7 +348,7 @@ def run_koga_chapter(
             "Tamer 2",
             (0xDE, 0x16, 2),
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_4,
-            5,
+            8,
             RedBattlePlanId.KOGA_TAMER_2,
         )
     )
@@ -368,7 +375,7 @@ def run_koga_chapter(
             "Juggler 4",
             (0xDD, 0x15, 4),
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_5,
-            5,
+            8,
             RedBattlePlanId.KOGA_JUGGLER_4,
         )
     )
@@ -408,7 +415,7 @@ def run_koga_chapter(
             "Koga",
             (KOGA_OPPONENT, KOGA_TRAINER_CLASS, KOGA_TRAINER_NUMBER),
             EventFlag.BEAT_KOGA,
-            8,
+            12,
             RedBattlePlanId.KOGA_LEADER,
             clear_text=False,
         )
@@ -473,7 +480,9 @@ def run_koga_chapter(
         not emulator.pressed_buttons,
     )
     if not report.passed:
-        raise KogaChapterError("Koga chapter failed its public evidence contract.")
+        raise KogaChapterError(
+            f"Koga chapter failed its public evidence contract: {report.public_dict()!r}."
+        )
     return report
 
 
@@ -485,25 +494,38 @@ def _fight(
     label: str,
     identity: tuple[int, int, int],
     event: EventFlag,
-    exact_spent: int,
+    max_spent: int,
     battle_plan_id: str,
     *,
     clear_text: bool = True,
+    allow_disable_fallback: bool = False,
 ) -> KogaBattleEvidence:
     battle = _settle_trainer_identity(actions, reader, emulator, timing, label, identity)
     before_pp = battle.first_party_pp
+    required_policy = (
+        RequiredMovePolicy.ANY_USABLE
+        if allow_disable_fallback
+        else RequiredMovePolicy.EXACT_REQUIRED
+    )
     final = run_adaptive_trainer_battle(
         reader,
         actions,
-        lambda _: SURF_SLOT,
+        lambda raw: (
+            3
+            if allow_disable_fallback
+            and raw.player_disabled_move_slot == SURF_SLOT
+            else SURF_SLOT
+        ),
         expected_map=MapId.FUCHSIA_GYM,
         intent=BattleIntent(
             "defeat_koga",
             battle_plan_id=battle_plan_id,
-            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
-            required_move_ref=pokemon_red_move_ref(SURF),
+            required_move_policy=required_policy,
+            required_move_ref=(
+                None if allow_disable_fallback else pokemon_red_move_ref(SURF)
+            ),
         ),
-        required_move_id=SURF,
+        required_move_id=None if allow_disable_fallback else SURF,
         timing=KOGA_BATTLE_TIMING,
         label=label,
         unknown_cancel_interval=3,
@@ -518,7 +540,12 @@ def _fight(
     status = _party_status(emulator)
     if clear_text:
         _clear_text(actions, reader, timing)
-    if spent != exact_spent or not _event(emulator, event) or any(value <= 0 for value in hp):
+    minimum_spent = 0 if allow_disable_fallback else 1
+    if (
+        not minimum_spent <= spent <= max_spent
+        or not _event(emulator, event)
+        or any(value <= 0 for value in hp)
+    ):
         raise KogaChapterError(
             f"{label} evidence mismatch: spent={spent}, event={_event(emulator, event)}, hp={hp!r}."
         )

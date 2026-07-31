@@ -6,34 +6,59 @@ from typing import cast
 
 import pytest
 
+import pokemon_red_completion.cascade as cascade_module
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_runtime import (
+    BattleResourcePolicy,
+    BattleRuntimeError,
+)
 from pokemon_red_completion.cascade import (
     BILL_EXIT_DIRECTIONS,
     BILL_PC_TO_HUMAN_DIRECTIONS,
     BILL_RETURN_WAIT_SEGMENTS,
     BILL_TO_CENTER_SEGMENTS,
     CASCADE_CHECKPOINT_COUNT,
+    CENTER_HEAL_TO_PC_DIRECTIONS,
+    CENTER_PC_TO_HEAL_DIRECTIONS,
     CENTER_TO_RIVAL_STAGING_DIRECTIONS,
     CENTER_TO_ROUTE_24_STAGING_CORRECTION_DIRECTIONS,
+    CERULEAN_GYM_TRAINER_MOVE_SLOT,
+    CERULEAN_RIVAL_MAX_POTION_RESERVE,
+    CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS,
     DEFAULT_CASCADE_TIMING,
+    FIELD_ITEM_MENU_CLOSE_PULSES,
     GYM_TRAINER_DIRECTIONS,
     GYM_TRAINER_TO_MISTY_DIRECTIONS,
     RIVAL_CENTER_NPC_CORRECTION_DIRECTIONS,
     RIVAL_TRIGGER_DIRECTIONS,
+    ROUTE_24_RECOVERY_POTION_RESERVE,
     ROUTE_24_REQUIRED_TRAINER_INDEXES,
     ROUTE_24_TRAINER_SEGMENTS,
     ROUTE_25_REQUIRED_TRAINER_INDEXES,
     ROUTE_25_TRAINER_SEGMENTS,
+    TM01_FIELD_MENU_CLOSE_PULSES,
+    CascadeChapterError,
     CascadeChapterReport,
     CascadeCheckpoint,
     CascadeProgress,
     CascadeTiming,
     _reverse_directions,
+    _run_cerulean_rival_with_potion,
+    _should_use_cerulean_rival_potion,
+    _use_cerulean_rival_potion,
+    _use_route_24_recovery_potion,
 )
 from pokemon_red_completion.observation import (
+    ABRA_SPECIES_ID,
+    PIDGEOTTO_SPECIES_ID,
     WARTORTLE_SPECIES_ID,
+    BattleMenuPhase,
+    BattleMenuState,
     CascadeState,
     CeruleanChapterState,
+    ItemId,
     MapId,
+    RamAddress,
     RawGameState,
 )
 
@@ -52,6 +77,21 @@ class _FinalEvidence:
     ss_ticket_in_bag = True
 
 
+class _MemoryEmulator:
+    frame_count = 0
+    pressed_buttons = frozenset()
+
+    def __init__(self, potion_quantity: int) -> None:
+        self.memory = {
+            int(RamAddress.NUM_BAG_ITEMS): int(potion_quantity > 0),
+            int(RamAddress.BAG_ITEMS): int(ItemId.POTION),
+            int(RamAddress.BAG_ITEMS) + 1: potion_quantity,
+        }
+
+    def read_u8(self, address: int) -> int:
+        return self.memory.get(int(address), 0)
+
+
 def _raw() -> RawGameState:
     return RawGameState(
         game_started=True,
@@ -61,11 +101,11 @@ def _raw() -> RawGameState:
         party_count=1,
         battle_state=0,
         party_species_ids=(WARTORTLE_SPECIES_ID,),
-        first_party_level=24,
-        first_party_hp=18,
-        first_party_max_hp=66,
-        first_party_status=0,
-        battle_result=0,
+    first_party_level=24,
+    first_party_hp=18,
+    first_party_max_hp=66,
+    first_party_status=0,
+    battle_result=0,
     )
 
 
@@ -123,8 +163,14 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
         14,
     )
     assert len(CENTER_TO_RIVAL_STAGING_DIRECTIONS) == 34
+    assert _reverse_directions(
+        CENTER_HEAL_TO_PC_DIRECTIONS
+    ) == CENTER_PC_TO_HEAL_DIRECTIONS
     assert CENTER_TO_ROUTE_24_STAGING_CORRECTION_DIRECTIONS == ("left",)
     assert RIVAL_TRIGGER_DIRECTIONS == ("up",)
+    assert TM01_FIELD_MENU_CLOSE_PULSES == 2
+    assert ROUTE_24_RECOVERY_POTION_RESERVE == 1
+    assert CERULEAN_GYM_TRAINER_MOVE_SLOT == 3
     assert RIVAL_CENTER_NPC_CORRECTION_DIRECTIONS == (
         "down",
         "right",
@@ -198,6 +244,258 @@ def test_cascade_timing_rejects_unbounded_scalar_values(invalid: object) -> None
 def test_cascade_timing_rejects_a_non_runtime_battle_controller() -> None:
     with pytest.raises(ValueError, match="battle_runtime"):
         replace(DEFAULT_CASCADE_TIMING, battle_runtime=object())
+
+
+def test_cerulean_rival_recovery_waits_for_a_semantic_risk_gate() -> None:
+    pidgeotto_threshold = CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS[
+        PIDGEOTTO_SPECIES_ID
+    ]
+    pidgeotto = replace(
+        _raw(),
+        battle_state=2,
+        enemy_species_id=PIDGEOTTO_SPECIES_ID,
+        first_party_hp=pidgeotto_threshold + 1,
+        first_party_max_hp=49,
+    )
+
+    assert not _should_use_cerulean_rival_potion(pidgeotto)
+    assert _should_use_cerulean_rival_potion(
+        replace(pidgeotto, first_party_hp=pidgeotto_threshold)
+    )
+    assert not _should_use_cerulean_rival_potion(
+        replace(
+            pidgeotto,
+            enemy_species_id=ABRA_SPECIES_ID,
+            first_party_hp=48,
+        )
+    )
+    assert _should_use_cerulean_rival_potion(
+        replace(
+            pidgeotto,
+            enemy_species_id=ABRA_SPECIES_ID,
+            first_party_hp=CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS[
+                ABRA_SPECIES_ID
+            ],
+        )
+    )
+
+
+@pytest.mark.parametrize(
+    "change",
+    (
+        {"first_party_hp": 0},
+        {"first_party_hp": None},
+        {"first_party_hp": 50},
+        {"first_party_max_hp": None},
+        {"enemy_species_id": None},
+    ),
+)
+def test_cerulean_rival_recovery_rejects_ambiguous_live_evidence(
+    change: dict[str, object],
+) -> None:
+    base = replace(
+        _raw(),
+        battle_state=2,
+        enemy_species_id=PIDGEOTTO_SPECIES_ID,
+        first_party_hp=22,
+        first_party_max_hp=49,
+    )
+    raw = replace(base, **change)
+
+    with pytest.raises(ValueError, match="valid live HP/species"):
+        _should_use_cerulean_rival_potion(raw)
+
+
+def test_cerulean_rival_recovery_reuses_one_bounded_intent(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    emulator = _MemoryEmulator(potion_quantity=2)
+    final = replace(_raw(), first_party_hp=19, first_party_max_hp=51)
+    intents = []
+    calls = 0
+
+    def fake_runtime(*args: object, **kwargs: object) -> RawGameState:
+        nonlocal calls
+        del args
+        calls += 1
+        intents.append(kwargs["intent"])
+        if calls == 1:
+            try:
+                raise cascade_module._PauseForCeruleanRivalPotion
+            except cascade_module._PauseForCeruleanRivalPotion as pause:
+                raise BattleRuntimeError("paused for recovery") from pause
+        return final
+
+    def fake_use(*args: object) -> None:
+        del args
+        quantity_address = int(RamAddress.BAG_ITEMS) + 1
+        emulator.memory[quantity_address] -= 1
+
+    monkeypatch.setattr(cascade_module, "run_adaptive_trainer_battle", fake_runtime)
+    monkeypatch.setattr(cascade_module, "_use_cerulean_rival_potion", fake_use)
+
+    observed = _run_cerulean_rival_with_potion(
+        cast(object, object()),
+        cast(object, object()),
+        emulator,
+        DEFAULT_CASCADE_TIMING,
+    )
+
+    assert observed is final
+    assert calls == 2
+    assert intents[0] is intents[1]
+    assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 1
+
+
+def test_cerulean_rival_recovery_latches_the_transient_exact_heal(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    emulator = _MemoryEmulator(potion_quantity=2)
+
+    class Reader:
+        state = replace(
+            _raw(),
+            battle_state=2,
+            enemy_species_id=PIDGEOTTO_SPECIES_ID,
+            first_party_hp=10,
+            first_party_max_hp=50,
+        )
+        phase = BattleMenuPhase.MAIN
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(
+                self.phase,
+                selected_main_command=1
+                if self.phase is BattleMenuPhase.MAIN
+                else None,
+            )
+
+    reader = Reader()
+
+    class Executor:
+        actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+            if len(self.actions) == 1:
+                reader.state = replace(reader.state, first_party_hp=30)
+                reader.phase = BattleMenuPhase.UNKNOWN
+                emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = 1
+
+    executor = Executor()
+    waits = 0
+
+    def fake_wait(*args: object) -> None:
+        nonlocal waits
+        del args
+        waits += 1
+        if waits == 1:
+            reader.state = replace(reader.state, first_party_hp=22)
+        elif executor.actions[-1].kind is MacroActionKind.CANCEL:
+            reader.phase = BattleMenuPhase.MAIN
+
+    monkeypatch.setattr(cascade_module, "_battle_pulse", lambda *args: None)
+    monkeypatch.setattr(cascade_module, "_select_bag_item", lambda *args: None)
+    monkeypatch.setattr(cascade_module, "_wait", fake_wait)
+
+    _use_cerulean_rival_potion(
+        cast(object, reader),
+        cast(object, executor),
+        emulator,
+        DEFAULT_CASCADE_TIMING,
+    )
+
+    assert tuple(action.kind for action in executor.actions) == (
+        MacroActionKind.CONFIRM,
+        MacroActionKind.CANCEL,
+    )
+    assert reader.state.first_party_hp == 22
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 1
+
+
+def test_route_24_recovery_consumes_the_retained_field_potion() -> None:
+    emulator = _MemoryEmulator(potion_quantity=1)
+    emulator.memory[int(RamAddress.CURRENT_MENU_ITEM)] = 2
+
+    class Reader:
+        state = replace(
+            _raw(),
+            map_id=MapId.ROUTE_24,
+            first_party_hp=7,
+            first_party_max_hp=59,
+            first_party_status=8,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_input_readiness(self) -> object:
+            return type("Ready", (), {"ready": True})()
+
+    reader = Reader()
+
+    class Executor:
+        actions: list[MacroAction] = []
+        confirms = 0
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+            if action.kind is not MacroActionKind.CONFIRM:
+                return
+            self.confirms += 1
+            if self.confirms == 1:
+                emulator.memory[int(RamAddress.CURRENT_MENU_ITEM)] = 0
+            elif self.confirms == 3:
+                reader.state = replace(reader.state, first_party_hp=27)
+                emulator.memory[int(RamAddress.NUM_BAG_ITEMS)] = 0
+
+    executor = Executor()
+    _use_route_24_recovery_potion(
+        reader,  # type: ignore[arg-type]
+        executor,  # type: ignore[arg-type]
+        emulator,
+    )
+
+    assert reader.state.first_party_hp == 27
+    assert emulator.read_u8(RamAddress.NUM_BAG_ITEMS) == 0
+    assert sum(
+        action.kind is MacroActionKind.CANCEL for action in executor.actions
+    ) == FIELD_ITEM_MENU_CLOSE_PULSES
+
+
+@pytest.mark.parametrize(
+    "quantity",
+    (0, CERULEAN_RIVAL_MAX_POTION_RESERVE + 1),
+)
+def test_cerulean_rival_recovery_rejects_an_invalid_fixed_reserve(
+    quantity: int,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    emulator = _MemoryEmulator(potion_quantity=quantity)
+    called = False
+
+    def fake_runtime(*args: object, **kwargs: object) -> RawGameState:
+        nonlocal called
+        del args, kwargs
+        called = True
+        return _raw()
+
+    monkeypatch.setattr(cascade_module, "run_adaptive_trainer_battle", fake_runtime)
+
+    with pytest.raises(CascadeChapterError, match="outside its fixed bound"):
+        _run_cerulean_rival_with_potion(
+            cast(object, object()),
+            cast(object, object()),
+            emulator,
+            DEFAULT_CASCADE_TIMING,
+        )
+
+    assert not called
 
 
 def test_progress_and_checkpoint_records_are_immutable() -> None:

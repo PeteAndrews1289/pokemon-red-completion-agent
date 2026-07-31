@@ -801,6 +801,16 @@ def _confirm_attack_with_pp_gate(
             # Selfdestruct before the cursor-proven move executes. The full
             # unchanged PP vector proves that no player move was substituted.
             return
+        if (
+            raw.player_disabled_move_slot == slot
+            and (raw.player_disable_turns or 0) > 0
+            and raw.first_party_pp == initial_raw.first_party_pp
+        ):
+            # A faster opponent can use Disable after the player selects a
+            # move. The selected turn is suppressed without spending PP; the
+            # outer loop must return to MAIN and let the policy choose a
+            # different legal slot.
+            return
         if raw.battle_state != _TRAINER_BATTLE_STATE:
             raise BattleRuntimeError(
                 f"{label} ended without the required move-slot {slot} PP decrement."
@@ -1003,6 +1013,13 @@ def _choose_usable_slot(
     if moves is None or len(moves) <= index or moves[index] == 0:
         raise BattleRuntimeError(
             f"{label} move-slot policy selected slot {slot} without move evidence."
+        )
+    if (
+        raw.player_disabled_move_slot == slot
+        and (raw.player_disable_turns or 0) > 0
+    ):
+        raise BattleRuntimeError(
+            f"{label} move-slot policy selected disabled slot {slot}."
         )
     _current_pp(raw, slot=slot, label=label)
     return slot

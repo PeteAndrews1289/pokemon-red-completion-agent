@@ -1,0 +1,32 @@
+from pokemon_red_completion.economy import (
+    CERULEAN_RIVAL_POTION_RESERVE,
+    HIDEOUT_SUPER_POTION_RESERVE,
+    LAVENDER_MONEY,
+    LAVENDER_SUPER_POTION_RESERVE,
+    PEWTER_POKE_BALL_PRICE,
+    PEWTER_POTION_PRICE,
+    PEWTER_POTION_PURCHASE_QUANTITY,
+    PEWTER_SUPPLY_COST,
+    TOWER_SUPER_POTION_RESERVE,
+    TUNNEL_STATUS_SUPPLY_COST,
+)
+
+
+def test_pewter_purchase_builds_the_proven_rival_reserve() -> None:
+    assert PEWTER_POTION_PURCHASE_QUANTITY == 13
+    assert CERULEAN_RIVAL_POTION_RESERVE == PEWTER_POTION_PURCHASE_QUANTITY + 1
+    assert PEWTER_SUPPLY_COST == (
+        PEWTER_POKE_BALL_PRICE
+        + PEWTER_POTION_PRICE * PEWTER_POTION_PURCHASE_QUANTITY
+    )
+    assert PEWTER_SUPPLY_COST == 4_100
+
+
+def test_revised_route_preserves_the_unused_lavender_recovery_reserve() -> None:
+    assert TUNNEL_STATUS_SUPPLY_COST == 200
+    assert LAVENDER_MONEY == 10_003
+    assert (
+        LAVENDER_SUPER_POTION_RESERVE,
+        HIDEOUT_SUPER_POTION_RESERVE,
+        TOWER_SUPER_POTION_RESERVE,
+    ) == (5, 3, 0)

@@ -20,6 +20,13 @@ control, and progressively trained specialists.**
 > snapshots**. The 14-action difference closes a previously uncounted menu-control path; it is not
 > a route change. See the
 > [sanitized trajectory-foundation receipt](docs/evidence/private-trajectory-foundation-2026-07-30.json).
+> The subsequent robustness lineage has now also completed two clean-power rehearsals with the
+> same **299/299 checkpoints**, **36/36 objectives**, **5,163,657 frames**, and **43,005 actions**.
+> Those different totals reflect the deliberately changed route, recovery, economy, and battle
+> policy documented in the [Project Narrative](docs/project-narrative.md); they do not rewrite the
+> historical receipt. Broad validation has passed and the source-bound collection registry has
+> been regenerated; committing and pushing that exact identity is the remaining publication gate
+> before the uncounted schedule rehearsal and collection.
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
 > **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned
@@ -55,6 +62,10 @@ This successor changes the objective and architecture:
 3. use deterministic solutions for pathfinding, menus, and verification;
 4. train bounded specialists where learned decisions are valuable; and
 5. replace teacher components only after learned alternatives pass frozen reliability gates.
+
+For the full engineering story—including what the completed run established, which assumptions
+failed under changed lineages, how those failures became reusable capabilities, and what remains
+unproven—see the [Project Narrative](docs/project-narrative.md).
 
 ## Architecture
 

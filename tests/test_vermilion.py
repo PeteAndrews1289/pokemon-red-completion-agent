@@ -202,6 +202,7 @@ def _raw(state: VermilionState) -> RawGameState:
         first_party_hp=state.first_party_hp,
         first_party_max_hp=state.first_party_max_hp,
         first_party_status=state.first_party_status,
+        first_party_moves=vermilion.POST_ROCKET_WARTORTLE_MOVES,
         battle_result=state.battle_result,
     )
 
@@ -239,6 +240,11 @@ def test_runner_records_all_fifteen_ordered_semantic_boundaries(
     reader = ScriptedReader(_ordered_evidence())
     progress: list[vermilion.VermilionProgress] = []
     monkeypatch.setattr(vermilion, "_move", lambda *args, **kwargs: reader.read())
+    monkeypatch.setattr(
+        vermilion,
+        "_move_route_6_with_wild_flees",
+        lambda *args, **kwargs: (),
+    )
     monkeypatch.setattr(vermilion, "_wait", lambda *args, **kwargs: None)
     monkeypatch.setattr(vermilion, "_heal", lambda *args, **kwargs: None)
     monkeypatch.setattr(
@@ -288,6 +294,7 @@ def test_runner_records_all_fifteen_ordered_semantic_boundaries(
     )
 
     assert report.passed
+    assert replace(report, route_6_wild_flees=()).passed
     assert len(report.records) == vermilion.VERMILION_CHECKPOINT_COUNT == 15
     assert [record.evidence.phase for record in report.records] == [
         state.phase for state in _ordered_evidence()
@@ -302,9 +309,44 @@ def test_runner_records_all_fifteen_ordered_semantic_boundaries(
 
 
 def test_live_route_constants_preserve_the_qualified_corridors() -> None:
+    assert vermilion.ROUTE_6_JR_TRAINER_F_MOVE_SLOT == 3
+    assert vermilion.ROUTE_6_JR_TRAINER_M_MOVE_SLOT == 3
     assert vermilion._directions(
         "R" * 3 + "D" * 9 + "R" * 3 + "D" * 13 + "L" * 23 + "D" * 5
     ) == vermilion.ROCKET_TO_ROUTE_5_DIRECTIONS
+
+
+@pytest.mark.parametrize(
+    ("learn_level_up_move", "expected_interval"),
+    ((False, 3), (True, 10_000)),
+)
+def test_battle_only_suppresses_unknown_cancels_for_level_up_learning(
+    monkeypatch: pytest.MonkeyPatch,
+    learn_level_up_move: bool,
+    expected_interval: int,
+) -> None:
+    observed: dict[str, object] = {}
+    terminal = _raw(_evidence())
+
+    def fake_runtime(*args: object, **kwargs: object) -> RawGameState:
+        observed.update(kwargs)
+        return terminal
+
+    monkeypatch.setattr(vermilion, "run_adaptive_trainer_battle", fake_runtime)
+
+    result = vermilion._battle(
+        object(),  # type: ignore[arg-type]
+        FakeExecutor(),
+        lambda _: 1,
+        MapId.CERULEAN_CITY,
+        vermilion.DEFAULT_VERMILION_TIMING,
+        "battle",
+        "battle-plan",
+        learn_level_up_move=learn_level_up_move,
+    )
+
+    assert result is terminal
+    assert observed["unknown_cancel_interval"] == expected_interval
     assert vermilion._directions(
         "D" * 27 + "R" * 12 + "D" + "R" * 2 + "U"
     ) == vermilion.ROUTE_5_TO_UNDERGROUND_DIRECTIONS
@@ -320,7 +362,7 @@ def test_live_route_constants_preserve_the_qualified_corridors() -> None:
     )
 
 
-def test_rocket_policy_uses_water_gun_after_the_sleep_bound() -> None:
+def test_rocket_policy_uses_exactly_one_bite_against_drowzee() -> None:
     machop = RawGameState(
         True,
         MapId.CERULEAN_CITY,
@@ -330,20 +372,40 @@ def test_rocket_policy_uses_water_gun_after_the_sleep_bound() -> None:
         2,
         enemy_species_id=0x6A,
         enemy_hp=53,
+        first_party_moves=vermilion.POST_ROCKET_WARTORTLE_MOVES,
+        first_party_pp=(25, 30, 20, 25),
     )
     drowzee = replace(machop, enemy_species_id=0x30, enemy_hp=50)
 
     assert vermilion._choose_rocket_move(machop) == 4
     assert vermilion._choose_rocket_move(drowzee) == 1
-    assert vermilion._choose_rocket_move(replace(drowzee, enemy_hp=11)) == 4
+    assert (
+        vermilion._choose_rocket_move(
+            replace(drowzee, enemy_hp=24, first_party_pp=(24, 30, 20, 23))
+        )
+        == 4
+    )
 
 
 class WildFleeSimulation:
-    def __init__(self, *, mutate_pp: bool = False) -> None:
+    def __init__(
+        self,
+        *,
+        mutate_pp: bool = False,
+        trainer_events: tuple[bool, ...] = (
+            False,
+            False,
+            False,
+            False,
+            True,
+            False,
+        ),
+    ) -> None:
         self.battle_state = 1
         self.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
         self.pp = (25, 30, 30, 25)
         self.mutate_pp = mutate_pp
+        self.trainer_events = trainer_events
         self.actions: list[MacroAction] = []
 
     def read(self) -> RawGameState:
@@ -373,14 +435,7 @@ class WildFleeSimulation:
             map_id=MapId.ROUTE_6,
             player_x=15,
             player_y=19,
-            route_6_trainer_events=(
-                False,
-                False,
-                False,
-                False,
-                True,
-                False,
-            ),
+            route_6_trainer_events=self.trainer_events,
         )
 
     def execute(self, action: MacroAction) -> object:
@@ -433,6 +488,21 @@ def test_wild_flee_navigates_observed_run_menu_and_proves_resources() -> None:
     assert evidence.qualified_step_7_pidgey
     assert evidence.initial_pp == evidence.final_pp == (25, 30, 30, 25)
     assert evidence.control_ready
+
+
+def test_wild_flee_accepts_pretrainer_route_6_event_state() -> None:
+    simulation = WildFleeSimulation(trainer_events=(False,) * 6)
+
+    evidence = vermilion._flee_qualified_route_6_wild(
+        vermilion._CountingExecutor(simulation),
+        simulation,  # type: ignore[arg-type]
+        vermilion.DEFAULT_VERMILION_TIMING,
+        simulation.read(),
+        expected_trainer_events=(False,) * 6,
+    )
+
+    assert evidence.verified
+    assert evidence.trainer_events == evidence.expected_trainer_events == (False,) * 6
 
 
 def test_wild_flee_rejects_any_pp_change() -> None:

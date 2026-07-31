@@ -27,6 +27,10 @@ from pokemon_red_completion.celadon import (
     _party_max_hp,
     _party_status,
 )
+from pokemon_red_completion.economy import (
+    POST_SAFFRON_PURCHASE_MONEY,
+    POST_SILPH_MONEY,
+)
 from pokemon_red_completion.lavender import (
     LavenderTiming,
     _buy_mart_item,
@@ -77,6 +81,21 @@ ROOF_GIRL_Y = 0xC224
 ROOF_GIRL_X = 0xC225
 ROOF_NERD_Y = 0xC214
 ROOF_NERD_X = 0xC215
+SAFFRON_CITY_SIZE = (40, 36)
+SAFFRON_CENTER_APPROACH = (9, 30)
+SAFFRON_WARP_COORDINATES = frozenset(
+    {
+        (7, 5),
+        (26, 3),
+        (34, 3),
+        (13, 11),
+        (25, 11),
+        (18, 21),
+        (9, 29),
+        (29, 29),
+    }
+)
+ROOF_STEP_FRAMES = 24
 ROOF_WALKABLE = frozenset(
     (x, y)
     for y, row in enumerate(
@@ -176,6 +195,7 @@ class SilphChapterError(RuntimeError):
 @dataclass(frozen=True, slots=True)
 class SilphTiming:
     movement_frames: int = 720
+    movement_retries: int = 4
     menu_frames: int = 240
     battle_item_menu_frames: int = 120
     battle_item_frames: int = 180
@@ -254,8 +274,8 @@ class SilphChapterReport:
             and self.tm13_after_teaching == 0
             and self.upgraded_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
             and self.upgraded_pp == (15, 15, 10, 15)
-            and self.money_before == 41_345
-            and self.money_after == 40_894
+            and self.money_before == POST_SAFFRON_PURCHASE_MONEY
+            and self.money_after == POST_SILPH_MONEY
             and 0 <= self.rival_potions_used <= 1
             and self.hyper_potions_remaining
             == HYPER_POTION_PURCHASE_QUANTITY - self.rival_potions_used
@@ -364,10 +384,10 @@ def run_silph_chapter(
     ):
         raise SilphChapterError("Silph supply purchase failed.")
     _require(reader.read(), MapId.SAFFRON_MART, (2, 5), "Saffron clerk return")
-    _move(actions, reader, CLERK_TO_EXIT, timing)
-    _move(actions, reader, ("down",), timing)
-    _move(actions, reader, _reverse(CITY_TO_MART_APPROACH), timing)
-    _move(actions, reader, ("up",), timing)
+    _move_verified(actions, reader, CLERK_TO_EXIT, timing, "Saffron Mart exit approach")
+    _move_verified(actions, reader, ("down",), timing, "Saffron Mart exit warp")
+    _navigate_saffron_center_approach(actions, reader, timing)
+    _move_verified(actions, reader, ("up",), timing, "Saffron Center entry")
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "Saffron supply return")
     _move(actions, reader, ("up",) * 4, timing)
     _use_bag_item(  # type: ignore[arg-type]
@@ -687,21 +707,36 @@ def _acquire_and_teach_ice_beam(
         raise SilphChapterError("Vending dialogue did not restore field input.")
 
     _interact_with_roof_girl(actions, reader, emulator, timing)
+    intermediate_transfer_observed = False
     transfer_before_event = False
-    for _ in range(240):
+    for _ in range(480):
         water = _bag(emulator).get(ItemId.FRESH_WATER, 0)
         tm13 = _bag(emulator).get(ItemId.TM13_ICE_BEAM, 0)
         event = _event(emulator, EventFlag.GOT_TM13)
         if water == 0 and tm13 == 1 and not event:
+            intermediate_transfer_observed = True
+        if event and water == 0 and tm13 == 1:
+            # The pinned CeladonMartRoof script removes the drink, gives TM13,
+            # prints the reward text, and only then sets EVENT_GOT_TM13. Host
+            # sampling may observe that intermediate state or both writes may
+            # settle between consecutive observations.
             transfer_before_event = True
-        if event and water == 0 and tm13 == 1 and transfer_before_event:
             break
         _pulse(actions, MacroActionKind.CONFIRM, timing, frames=1)
     else:
-        raise SilphChapterError("Rooftop girl did not exchange Fresh Water for TM13.")
+        raise SilphChapterError(
+            "Rooftop girl did not exchange Fresh Water for TM13: "
+            f"water={water}, tm13={tm13}, event={event}, "
+            f"intermediate={intermediate_transfer_observed}."
+        )
     if _event(emulator, 0x18D) or _event(emulator, 0x18E):
         raise SilphChapterError("A non-Ice-Beam rooftop reward event changed.")
 
+    _clear_field_text(  # type: ignore[arg-type]
+        actions,
+        reader,
+        LavenderTiming(wait_frames=timing.menu_frames),
+    )
     _teach_ice_beam(actions, reader, emulator, timing)
     _navigate_roof_to(actions, reader, emulator, (12, 3), timing)
     _return_roof_to_saffron(actions, reader, timing)
@@ -771,7 +806,7 @@ def _interact_with_roof_girl(
     emulator: EmulatorState,
     timing: SilphTiming,
 ) -> None:
-    for _ in range(64):
+    for _ in range(256):
         raw = reader.read()
         if raw.map_id != MapId.CELADON_MART_ROOF:
             raise SilphChapterError("Rooftop girl approach left the roof.")
@@ -780,18 +815,13 @@ def _interact_with_roof_girl(
         adjacent = frozenset(_adjacent_roof_tiles(girl))
         if player in adjacent:
             direction = _direction_between(player, girl)
-            _pulse(actions, MacroActionKind.MOVE, timing, direction, timing.movement_frames)
-            current = reader.read()
-            current_player = (current.player_x or 0, current.player_y or 0)
-            current_girl = _roof_girl_coordinate(emulator)
-            if (
-                current_player == player
-                and abs(current_player[0] - current_girl[0])
-                + abs(current_player[1] - current_girl[1])
-                == 1
-            ):
-                _interact(actions, timing.menu_frames)
+            _pulse(actions, MacroActionKind.MOVE, timing, direction, 1)
+            _interact(actions, timing.menu_frames)
+            if not reader.read_input_readiness().ready:
                 return
+            # The walking NPC can move during even this short facing pulse.
+            # Reobserve her rather than planning from the stale coordinate.
+            continue
         path = _bounded_roof_path(
             player,
             adjacent,
@@ -801,7 +831,7 @@ def _interact_with_roof_girl(
             raise SilphChapterError(
                 f"No collision-safe rooftop path from {player!r} to girl {girl!r}."
             )
-        _move(actions, reader, (path[0],), timing)
+        _pulse(actions, MacroActionKind.MOVE, timing, path[0], ROOF_STEP_FRAMES)
     raise SilphChapterError("Could not reach a live adjacent stance for the rooftop girl.")
 
 
@@ -812,7 +842,7 @@ def _navigate_roof_to(
     target: tuple[int, int],
     timing: SilphTiming,
 ) -> None:
-    for _ in range(64):
+    for _ in range(256):
         raw = reader.read()
         player = (raw.player_x or 0, raw.player_y or 0)
         if player == target:
@@ -823,7 +853,7 @@ def _navigate_roof_to(
             raise SilphChapterError(
                 f"No collision-safe rooftop path from {player!r} to {target!r}."
             )
-        _move(actions, reader, (path[0],), timing)
+        _pulse(actions, MacroActionKind.MOVE, timing, path[0], ROOF_STEP_FRAMES)
     raise SilphChapterError(
         f"Could not navigate from the rooftop girl to {target!r}; "
         f"girl={_roof_girl_coordinate(emulator)!r}."
@@ -1297,6 +1327,138 @@ def _move(
         if state.battle_state:
             break
     return state
+
+
+def _move_verified(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    timing: SilphTiming,
+    label: str,
+) -> RawGameState:
+    """Advance only after each requested step has an observed world-state effect."""
+    state = reader.read()
+    for index, direction in enumerate(tuple(directions), 1):
+        before = state
+        for _ in range(timing.movement_retries):
+            state = _move(actions, reader, (direction,), timing)
+            if state.battle_state:
+                raise SilphChapterError(f"{label} entered an unexpected battle.")
+            if (
+                state.map_id != before.map_id
+                or state.player_x != before.player_x
+                or state.player_y != before.player_y
+            ):
+                break
+        else:
+            raise SilphChapterError(
+                f"{label} blocked at step {index}: {direction}; "
+                f"{(state.map_id, state.player_x, state.player_y)!r}."
+            )
+    return state
+
+
+def _plan_saffron_center_approach(
+    start: tuple[int, int],
+    blocked: frozenset[tuple[int, int]] = frozenset(),
+) -> tuple[str, ...]:
+    return _plan_saffron_route(start, SAFFRON_CENTER_APPROACH, blocked)
+
+
+def _plan_saffron_route(
+    start: tuple[int, int],
+    target: tuple[int, int],
+    blocked: frozenset[tuple[int, int]] = frozenset(),
+) -> tuple[str, ...]:
+    width, height = SAFFRON_CITY_SIZE
+    if not 0 <= start[0] < width or not 0 <= start[1] < height:
+        raise SilphChapterError(f"Saffron planner started out of bounds at {start!r}.")
+    if not 0 <= target[0] < width or not 0 <= target[1] < height:
+        raise SilphChapterError(f"Saffron planner target is out of bounds at {target!r}.")
+    queue = deque([(start, ())])
+    visited = {start}
+    steps = (
+        ("left", (-1, 0)),
+        ("down", (0, 1)),
+        ("right", (1, 0)),
+        ("up", (0, -1)),
+    )
+    while queue:
+        coordinate, route = queue.popleft()
+        if coordinate == target:
+            return route
+        for direction, (dx, dy) in steps:
+            candidate = (coordinate[0] + dx, coordinate[1] + dy)
+            if (
+                candidate in visited
+                or candidate in blocked
+                or candidate in SAFFRON_WARP_COORDINATES
+                or not 0 <= candidate[0] < width
+                or not 0 <= candidate[1] < height
+            ):
+                continue
+            visited.add(candidate)
+            queue.append((candidate, (*route, direction)))
+    raise SilphChapterError(
+        "Saffron Center has no route after collision discoveries "
+        f"{sorted(blocked)!r}."
+    )
+
+
+def _navigate_saffron_center_approach(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SilphTiming,
+) -> RawGameState:
+    return _navigate_saffron_coordinate(
+        actions,
+        reader,
+        timing,
+        SAFFRON_CENTER_APPROACH,
+        "Saffron Center",
+    )
+
+
+def _navigate_saffron_coordinate(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SilphTiming,
+    target: tuple[int, int],
+    label: str,
+) -> RawGameState:
+    """Discover static and moving Saffron obstacles while approaching a target."""
+    state = reader.read()
+    if (
+        state.map_id != MapId.SAFFRON_CITY
+        or state.player_x is None
+        or state.player_y is None
+    ):
+        raise SilphChapterError("Saffron navigator lacks its city entry coordinate.")
+    discovered_blocked: set[tuple[int, int]] = set()
+    deltas = {"up": (0, -1), "left": (-1, 0), "right": (1, 0), "down": (0, 1)}
+    for _ in range(500):
+        start = (state.player_x, state.player_y)
+        if start == target:
+            return state
+        route = _plan_saffron_route(start, target, frozenset(discovered_blocked))
+        direction = route[0]
+        dx, dy = deltas[direction]
+        candidate = (start[0] + dx, start[1] + dy)
+        for _ in range(timing.movement_retries):
+            state = _move(actions, reader, (direction,), timing)
+            if state.battle_state:
+                raise SilphChapterError("Saffron navigation entered an unexpected battle.")
+            if state.map_id != MapId.SAFFRON_CITY:
+                raise SilphChapterError(
+                    f"Saffron navigation entered unexpected map {state.map_id!r}."
+                )
+            if (state.player_x, state.player_y) != start:
+                break
+        else:
+            discovered_blocked.add(candidate)
+    raise SilphChapterError(
+        f"{label} navigation exceeded its bounded collision discoveries."
+    )
 
 
 def _require(

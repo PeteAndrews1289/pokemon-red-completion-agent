@@ -15,6 +15,9 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.observation import (
+    MEGA_PUNCH_MOVE_ID,
+    PIDGEOTTO_SPECIES_ID,
+    WATER_GUN_MOVE_ID,
     MapId,
     PokemonRedStateReader,
     RawGameState,
@@ -25,6 +28,18 @@ from pokemon_red_completion.observation import (
 )
 
 SS_ANNE_CHECKPOINT_COUNT = 9
+RATICATE_SPECIES_ID = 0xA6
+KADABRA_SPECIES_ID = 0x26
+IVYSAUR_SPECIES_ID = 0x09
+BITE_MOVE_ID = 0x2C
+SS_ANNE_RIVAL_SPECIES_IDS = frozenset(
+    {
+        PIDGEOTTO_SPECIES_ID,
+        RATICATE_SPECIES_ID,
+        KADABRA_SPECIES_ID,
+        IVYSAUR_SPECIES_ID,
+    }
+)
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -262,7 +277,7 @@ def run_ss_anne_chapter(
         run_adaptive_trainer_battle(
             reader,
             chapter_executor,
-            lambda _state: 1,
+            _choose_ss_anne_rival_move,
             expected_map=MapId.SS_ANNE_2F,
             intent=BattleIntent(
                 "obtain_cut",
@@ -379,6 +394,37 @@ def _enter_rival_battle(
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         _wait(executor, timing.rival_intro_wait_frames)
     raise SSAnneChapterError("The rival intro missed its bounded battle gate.")
+
+
+def _choose_ss_anne_rival_move(state: RawGameState) -> int:
+    """Choose a usable species-specific move for the live RIVAL2 party."""
+
+    if (
+        state.battle_state != 2
+        or state.map_id != MapId.SS_ANNE_2F
+        or state.enemy_species_id not in SS_ANNE_RIVAL_SPECIES_IDS
+    ):
+        raise SSAnneChapterError("S.S. Anne rival policy lacks pinned battle evidence.")
+    if state.enemy_species_id == RATICATE_SPECIES_ID:
+        slot, expected_move = 4, WATER_GUN_MOVE_ID
+    elif state.enemy_species_id == KADABRA_SPECIES_ID:
+        slot, expected_move = 1, BITE_MOVE_ID
+    else:
+        slot, expected_move = 3, MEGA_PUNCH_MOVE_ID
+    moves = state.first_party_moves
+    pp = state.first_party_pp
+    if (
+        moves is None
+        or pp is None
+        or len(moves) < slot
+        or len(pp) < slot
+        or moves[slot - 1] != expected_move
+        or pp[slot - 1] & 0x3F == 0
+    ):
+        raise SSAnneChapterError(
+            f"S.S. Anne rival policy lacks usable move {expected_move:#04x} in slot {slot}."
+        )
+    return slot
 
 
 def _checkpoint(

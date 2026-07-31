@@ -12,7 +12,7 @@ from pokemon_red_completion.observation import EventFlag, MapId
 
 def test_bruno_source_contract_is_exact() -> None:
     assert BRUNO_CHECKPOINT_COUNT == 3
-    assert BRUNO_RNG_DELAY_FRAMES == 15
+    assert BRUNO_RNG_DELAY_FRAMES == 185
     assert BRUNO_APPROACH == ("right", "up", "up")
     assert MapId.BRUNOS_ROOM == 0xF6
     assert MapId.AGATHAS_ROOM == 0xF7

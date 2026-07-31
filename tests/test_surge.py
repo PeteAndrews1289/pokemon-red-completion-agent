@@ -15,15 +15,20 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.surge import (
     DEFAULT_SURGE_TIMING,
     DIG_MOVE_ID,
+    DIGLETT_CAPTURE_LEVELS,
+    DIGLETT_SEARCH_SEED_WAIT_FRAMES,
     DUX_NICKNAME,
     GYM_CAN_COORDINATES,
     LT_SURGE_OPPONENT_ID,
     LT_SURGE_TRAINER_CLASS_ID,
     LT_SURGE_TRAINER_SET,
+    SPEAROW_CAPTURE_MOVE_ID,
+    SPEAROW_CAPTURE_MOVE_SLOT,
     SURGE_CHECKPOINT_COUNT,
     SurgeChapterReport,
     SurgeCheckpoint,
     SurgeTiming,
+    _navigate_to_gym_can,
     _party_moves_for_index,
     _plan_gym_can_path,
     _run_dig_battle,
@@ -49,7 +54,7 @@ def _raw() -> RawGameState:
 
 
 def _report() -> SurgeChapterReport:
-    raw = _raw()
+    raw = replace(_raw(), first_party_hp=73)
     records = tuple(
         SurgeCheckpoint(f"gate_{index}", f"Gate {index}", raw)
         for index in range(SURGE_CHECKPOINT_COUNT)
@@ -78,6 +83,9 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert LT_SURGE_TRAINER_CLASS_ID == 0x24
     assert LT_SURGE_TRAINER_SET == 1
     assert DIG_MOVE_ID == 0x5B
+    assert frozenset({19, 20, 21, 22}) == DIGLETT_CAPTURE_LEVELS
+    assert DIGLETT_SEARCH_SEED_WAIT_FRAMES == 199
+    assert (SPEAROW_CAPTURE_MOVE_ID, SPEAROW_CAPTURE_MOVE_SLOT) == (0x37, 4)
     assert DUX_NICKNAME == (0x83, 0x94, 0x97, 0x50)
     assert SURGE_CHECKPOINT_COUNT == 15
 
@@ -132,10 +140,23 @@ def test_surge_report_requires_every_terminal_reward_gate() -> None:
         replace(report, wrong_move_count=1),
         replace(report, final_raw=replace(report.final_raw, battle_state=2)),
         replace(report, final_raw=replace(report.final_raw, first_party_status=4)),
-        replace(report, final_lead_hp=72),
+        replace(report, final_lead_hp=0),
+        replace(report, final_lead_hp=74),
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid_reports)
+
+
+def test_surge_report_allows_safe_damage_for_immediate_center_recovery() -> None:
+    report = _report()
+    damaged = replace(
+        report,
+        final_raw=replace(report.final_raw, first_party_hp=21),
+        final_lead_hp=21,
+        super_potion_used=False,
+    )
+
+    assert damaged.passed
 
 
 def test_surge_public_report_exposes_zero_wrong_moves() -> None:
@@ -236,3 +257,51 @@ def test_gym_planner_supports_variable_switch_pairs(first: int, second: int) -> 
         second_stance[0] + second_delta[0],
         second_stance[1] + second_delta[1],
     ) == GYM_CAN_COORDINATES[second]
+
+
+class _GymCollisionRuntime:
+    def __init__(self) -> None:
+        self.coordinate = (4, 17)
+        self.hit_dynamic_block = False
+
+    def read(self) -> RawGameState:
+        return replace(
+            _raw(),
+            map_id=MapId.VERMILION_GYM,
+            player_x=self.coordinate[0],
+            player_y=self.coordinate[1],
+            battle_state=0,
+        )
+
+    def execute(self, action: MacroAction) -> None:
+        if action.kind is not MacroActionKind.MOVE or action.value is None:
+            return
+        deltas = {
+            "up": (0, -1),
+            "down": (0, 1),
+            "left": (-1, 0),
+            "right": (1, 0),
+        }
+        dx, dy = deltas[action.value]
+        candidate = (self.coordinate[0] + dx, self.coordinate[1] + dy)
+        if candidate == (3, 14):
+            self.hit_dynamic_block = True
+            return
+        if candidate in GYM_CAN_COORDINATES:
+            return
+        self.coordinate = candidate
+
+
+def test_gym_can_navigation_discovers_collision_and_replans() -> None:
+    runtime = _GymCollisionRuntime()
+
+    final = _navigate_to_gym_can(
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        6,
+        SurgeTiming(),
+    )
+
+    target = GYM_CAN_COORDINATES[6]
+    assert runtime.hit_dynamic_block
+    assert abs((final.player_x or 0) - target[0]) + abs((final.player_y or 0) - target[1]) == 1

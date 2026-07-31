@@ -5,15 +5,16 @@ from pokemon_red_completion.champion import (
     CHAMPION_SAFE_HP,
     ChampionTurn,
     _encounter_party,
+    _select_recovery_item,
     _turns_valid,
 )
-from pokemon_red_completion.observation import EventFlag, MapId
+from pokemon_red_completion.observation import EventFlag, ItemId, MapId
 
 
 def test_champion_source_contract_is_exact() -> None:
     assert CHAMPION_CHECKPOINT_COUNT == 3
-    assert CHAMPION_RNG_DELAY_FRAMES == 25
-    assert CHAMPION_SAFE_HP == 40
+    assert CHAMPION_RNG_DELAY_FRAMES == 150
+    assert CHAMPION_SAFE_HP == 90
     assert MapId.CHAMPIONS_ROOM == 0x78
     assert MapId.HALL_OF_FAME == 0x76
     assert EventFlag.BEAT_CHAMPION_RIVAL == 0x901
@@ -43,3 +44,22 @@ def test_champion_receipt_reconstructs_party_and_policy() -> None:
     )
     assert _encounter_party(turns) == CHAMPION_PARTY
     assert _turns_valid(turns)
+
+
+def test_champion_status_recovery_falls_back_to_full_restore() -> None:
+    assert (
+        _select_recovery_item(
+            CHAMPION_SAFE_HP,
+            1,
+            {ItemId.FULL_RESTORE: 2},
+        )
+        is ItemId.FULL_RESTORE
+    )
+    assert (
+        _select_recovery_item(
+            CHAMPION_SAFE_HP,
+            1,
+            {ItemId.FULL_HEAL: 1, ItemId.FULL_RESTORE: 2},
+        )
+        is ItemId.FULL_HEAL
+    )

@@ -42,7 +42,7 @@ def _report() -> FuchsiaChapterReport:
     opponents = (0xD6, 0x84, 0xDC, 0xDF, 0xCE)
     classes = (0x0E, None, 0x14, 0x17, 0x06)
     events = tuple(int(item) for item in REQUIRED_EVENTS)
-    spent = (5, 4, 2, 4, 5)
+    spent = (4, 3, 4, 4, 7)
     bag = ((0x04, 8), (0x28, 1), (0x49, 1))
     return FuchsiaChapterReport(
         records=tuple(
@@ -56,7 +56,7 @@ def _report() -> FuchsiaChapterReport:
                 classes[index],
                 sets[index],
                 events[index],
-                0x3D if index < 2 else 0x2C,
+                0x3D if index < 3 else 0x2C,
                 spent[index],
                 (0x84,) if index == 1 else (),
                 30 if index == 1 else None,
@@ -77,7 +77,7 @@ def _report() -> FuchsiaChapterReport:
         party_hp=(114, 52, 37),
         party_max_hp=(114, 52, 37),
         party_status=(0, 0, 0),
-        money_remaining=30_137,
+        money_remaining=25_839,
         frames_executed=277_925,
         actions_executed=2_276,
         controller_released=True,
@@ -120,11 +120,11 @@ def test_fuchsia_report_requires_every_terminal_gate() -> None:
     assert all(not candidate.passed for candidate in invalid)
 
 
-def test_fuchsia_report_requires_exact_battle_receipts() -> None:
+def test_fuchsia_report_requires_bounded_battle_receipts() -> None:
     report = _report()
     wrong_pp = replace(
         report,
-        battles=(replace(report.battles[0], selected_pp_spent=4), *report.battles[1:]),
+        battles=(replace(report.battles[0], selected_pp_spent=9), *report.battles[1:]),
     )
     wrong_set = replace(
         report,

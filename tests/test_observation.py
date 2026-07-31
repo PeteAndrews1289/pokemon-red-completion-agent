@@ -153,6 +153,23 @@ def test_reader_extracts_bounded_bag_and_event_state() -> None:
     assert event_flag_is_set(raw.event_flags, EventFlag.BEAT_CHAMPION_RIVAL)
 
 
+def test_reader_exposes_pinned_player_disable_slot_and_turns() -> None:
+    memory = RecordingMemory(
+        {
+            RamAddress.STATUS_FLAGS_6: 1,
+            RamAddress.IS_IN_BATTLE: 2,
+            RamAddress.PARTY_COUNT: 1,
+            RamAddress.PLAYER_DISABLED_MOVE: 0x16,
+        }
+    )
+
+    raw = PokemonRedStateReader(memory).read()
+
+    assert RamAddress.PLAYER_DISABLED_MOVE == 0xD06D
+    assert raw.player_disabled_move_slot == 1
+    assert raw.player_disable_turns == 6
+
+
 def test_reader_translates_the_stable_pokedex_gate_from_pinned_symbols() -> None:
     events = _events(
         EventFlag.BATTLED_RIVAL_IN_OAKS_LAB,
@@ -192,8 +209,11 @@ def test_reader_translates_the_stable_pokedex_gate_from_pinned_symbols() -> None
     state = reader.read_oaks_errand_state(raw)
 
     assert RamAddress.VIRIDIAN_MART_SCRIPT == 0xD60D
+    assert RamAddress.PLAYER_FACING_DIRECTION == 0xC109
     assert MapId.ROUTE_1 == 0x0C
     assert MapId.VIRIDIAN_MART == 0x2A
+    assert MapId.PEWTER_MART == 0x38
+    assert ItemId.POTION == 0x14
     assert EventFlag.GOT_OAKS_PARCEL == 0x039
     assert ItemId.OAKS_PARCEL == 0x46
     assert raw.first_party_level == 6

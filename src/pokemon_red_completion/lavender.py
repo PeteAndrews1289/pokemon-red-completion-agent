@@ -42,7 +42,9 @@ PECK = 0x40
 CUT = 0x0F
 PROTECTED_PARTY = (WARTORTLE, DUX, DIGLETT)
 SUPER_POTION_PRICE = 700
+PARLYZ_HEAL_PRICE = 200
 REPEL_PRICE = 350
+POST_MART_RNG_ALIGNMENT_FRAMES = 40
 TUNNEL_RECOVERY_THRESHOLD = 55
 TRAVERSAL_RECOVERY_THRESHOLD = 30
 
@@ -185,6 +187,9 @@ class LavenderChapterReport:
     party_status: tuple[int, int, int]
     repels_purchased: int
     repels_used: int
+    parlyz_heals_purchased: int
+    parlyz_heals_used: int
+    parlyz_heals_remaining: int
     super_potions_purchased: int
     super_potions_used: int
     super_potions_remaining: int
@@ -215,9 +220,13 @@ class LavenderChapterReport:
             and self.party_hp == self.party_max_hp
             and self.party_status == (0, 0, 0)
             and self.repels_purchased == self.repels_used == 4
+            and self.parlyz_heals_purchased == 1
+            and self.parlyz_heals_used + self.parlyz_heals_remaining
+            == self.parlyz_heals_purchased
             and self.super_potions_purchased == 8
             and self.super_potions_used + self.super_potions_remaining == 9
-            and self.purchase_cost == 8 * SUPER_POTION_PRICE + 4 * REPEL_PRICE
+            and self.purchase_cost
+            == 8 * SUPER_POTION_PRICE + PARLYZ_HEAL_PRICE + 4 * REPEL_PRICE
             and self.money_remaining >= 0
             and self.route_10_trainer_2_bypassed
             and self.controller_released
@@ -247,6 +256,9 @@ class LavenderChapterReport:
             "inventory": {
                 "repels_purchased": self.repels_purchased,
                 "repels_used": self.repels_used,
+                "parlyz_heals_purchased": self.parlyz_heals_purchased,
+                "parlyz_heals_used": self.parlyz_heals_used,
+                "parlyz_heals_remaining": self.parlyz_heals_remaining,
                 "super_potions_purchased": self.super_potions_purchased,
                 "super_potions_used": self.super_potions_used,
                 "super_potions_remaining": self.super_potions_remaining,
@@ -282,6 +294,7 @@ class _RunState:
     wilds: list[WildFleeEvidence]
     trainers: list[TrainerEvidence]
     repels_used: int = 0
+    parlyz_heals_used: int = 0
     potions_used: int = 0
 
 
@@ -357,9 +370,18 @@ def run_lavender_chapter(
     _wait(actions, timing.transition_frames)
     _require(reader.read(), MapId.VERMILION_MART, (3, 7), "Mart entrance")
     purchase_cost = _purchase_supplies(actions, reader, emulator, timing)
+    # The extra purchase adds 728 frames. Complete the third 256-frame timing
+    # interval so the already qualified Route 9 battle schedule is preserved.
+    _wait(actions, POST_MART_RNG_ALIGNMENT_FRAMES)
     supplies = reader.read()
-    if _bag(emulator).get(ItemId.SUPER_POTION) != 9 or _bag(emulator).get(ItemId.REPEL) != 4:
-        raise LavenderChapterError("Mart purchase did not produce nine SP and four Repels.")
+    if (
+        _bag(emulator).get(ItemId.SUPER_POTION) != 9
+        or _bag(emulator).get(ItemId.PARLYZ_HEAL) != 1
+        or _bag(emulator).get(ItemId.REPEL) != 4
+    ):
+        raise LavenderChapterError(
+            "Mart purchase did not produce nine SP, one Parlyz Heal, and four Repels."
+        )
     _checkpoint(records, progress, emulator, supplies, "supplies", "Purchased tunnel supplies")
 
     mart_position = reader.read()
@@ -668,8 +690,8 @@ def run_lavender_chapter(
         0xCE,
         0x06,
         9,
-        BITE,
-        1,
+        BUBBLEBEAM,
+        3,
         RedBattlePlanId.LAVENDER_ROCK_TUNNEL_B1F_TRAINER_0,
     )
     _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
@@ -693,7 +715,7 @@ def run_lavender_chapter(
     _heal_if_below(actions, reader, emulator, run, timing, 1, TRAVERSAL_RECOVERY_THRESHOLD)
     _move(actions, reader, emulator, run, B1_TO_1F_EAST, timing, "B1 east ladder")
     _wait(actions, timing.transition_frames)
-    _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
+    _heal_if_below(actions, reader, emulator, run, timing, 0, 64)
     _trainer(
         actions,
         reader,
@@ -711,7 +733,8 @@ def run_lavender_chapter(
         1,
         RedBattlePlanId.LAVENDER_ROCK_TUNNEL_1F_TRAINER_4,
     )
-    _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
+    _heal_if_below(actions, reader, emulator, run, timing, 0, 64)
+    _cure_paralysis_if_present(actions, reader, emulator, run, timing)
     _trainer(
         actions,
         reader,
@@ -781,6 +804,9 @@ def run_lavender_chapter(
         party_status=status,
         repels_purchased=4,
         repels_used=run.repels_used,
+        parlyz_heals_purchased=1,
+        parlyz_heals_used=run.parlyz_heals_used,
+        parlyz_heals_remaining=_bag(emulator).get(ItemId.PARLYZ_HEAL, 0),
         super_potions_purchased=8,
         super_potions_used=run.potions_used,
         super_potions_remaining=_bag(emulator).get(ItemId.SUPER_POTION, 0),
@@ -1175,6 +1201,34 @@ def _use_super_potion(
     raise LavenderChapterError("Super Potion missed its HP/quantity proof.")
 
 
+def _cure_paralysis_if_present(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: LavenderTiming,
+) -> None:
+    before_status = _party_status(emulator)[0]
+    if before_status == 0:
+        return
+    if not before_status & 0x40:
+        raise LavenderChapterError(
+            f"Tunnel lead has an unsupported status condition: {before_status:#04x}."
+        )
+    before_qty = _bag(emulator).get(ItemId.PARLYZ_HEAL, 0)
+    if before_qty != 1:
+        raise LavenderChapterError(
+            "Parlyz Heal gate requires a paralyzed lead and exactly one carried item."
+        )
+    _use_bag_item(executor, reader, emulator, timing, ItemId.PARLYZ_HEAL)
+    if (
+        _party_status(emulator)[0] != 0
+        or _bag(emulator).get(ItemId.PARLYZ_HEAL, 0) != 0
+    ):
+        raise LavenderChapterError("Parlyz Heal did not cure the lead and consume exactly once.")
+    run.parlyz_heals_used += 1
+
+
 def _use_bag_item(
     executor: _CountingExecutor,
     reader: PokemonRedStateReader,
@@ -1227,14 +1281,19 @@ def _teach_tm11(
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     for _ in range(timing.dialogue_pulses):
         raw = reader.read()
-        if raw.first_party_moves == (
-            BITE,
-            0x27,
-            BUBBLEBEAM,
-            0x37,
-        ) and ItemId.TM11_BUBBLEBEAM not in _bag(emulator):
-            _close_menus(executor, reader, timing)
-            return
+        if ItemId.TM11_BUBBLEBEAM not in _bag(emulator):
+            if raw.first_party_moves == (
+                BITE,
+                0x27,
+                BUBBLEBEAM,
+                0x37,
+            ):
+                _close_menus(executor, reader, timing)
+                return
+            raise LavenderChapterError(
+                "TM11 was consumed but produced unexpected moves: "
+                f"{raw.first_party_moves!r}."
+            )
         _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     raise LavenderChapterError("TM11 did not replace Bubble and consume the TM.")
 
@@ -1263,6 +1322,15 @@ def _purchase_supplies(
         executor,
         emulator,
         timing,
+        absolute_index=4,
+        item=ItemId.PARLYZ_HEAL,
+        quantity=1,
+        target_bag_quantity=1,
+    )
+    _buy_mart_item(
+        executor,
+        emulator,
+        timing,
         absolute_index=5,
         item=ItemId.REPEL,
         quantity=4,
@@ -1270,7 +1338,7 @@ def _purchase_supplies(
     )
     _close_menus(executor, reader, timing)
     money_after = _money(emulator)
-    expected_cost = 8 * SUPER_POTION_PRICE + 4 * REPEL_PRICE
+    expected_cost = 8 * SUPER_POTION_PRICE + PARLYZ_HEAL_PRICE + 4 * REPEL_PRICE
     if money_before - money_after != expected_cost:
         raise LavenderChapterError(
             f"Mart money gate expected {expected_cost}, observed {money_before - money_after}."
@@ -1303,7 +1371,7 @@ def _buy_mart_item(
     else:
         raise LavenderChapterError(f"Mart could not select inventory index {absolute_index}.")
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    for _ in range(12):
+    for _ in range(max(12, quantity + 1)):
         selected = emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM)
         current_quantity = emulator.read_u8(RamAddress.SHOP_QUANTITY)
         if selected == item and current_quantity == quantity:

@@ -17,6 +17,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeTimeoutError,
     BattleRuntimeTiming,
     RequiredMovePolicy,
+    _confirm_attack_with_pp_gate,
     bind_battle_decision_observer,
     bind_battle_schedule_observer,
     run_adaptive_trainer_battle,
@@ -54,6 +55,7 @@ READY = InputReadiness(0, 0, 0, 0, 0, 0)
 NOT_READY = InputReadiness(1, 0, 0, 0, 0, 0)
 TAIL_WHIP_MOVE_ID = 0x27
 BUBBLE_MOVE_ID = 0x91
+MEGA_PUNCH_MOVE_ID = 0x05
 DIG_MOVE_ID = 0x5B
 TEST_BATTLE_PLAN_ID = "battle-001-test"
 SCHEDULED_BATTLE_PLAN_ID = RED_BATTLE_PLAN_IDS[0]
@@ -70,7 +72,7 @@ def _raw(
     moves: tuple[int, ...] | None = (
         TACKLE_MOVE_ID,
         TAIL_WHIP_MOVE_ID,
-        BUBBLE_MOVE_ID,
+        MEGA_PUNCH_MOVE_ID,
         WATER_GUN_MOVE_ID,
     ),
     pp: tuple[int, ...] | None = (35, 30, 30, 11),
@@ -511,7 +513,7 @@ def test_sleep_recovery_rejects_an_off_slot_pp_decrement() -> None:
         )
 
 
-def test_adaptive_controller_rechecks_species_and_switches_water_gun_to_tackle() -> None:
+def test_adaptive_controller_rechecks_species_and_switches_water_gun_to_mega_punch() -> None:
     runtime = AdaptiveRivalSimulation()
     policy_species: list[int | None] = []
 
@@ -533,11 +535,11 @@ def test_adaptive_controller_rechecks_species_and_switches_water_gun_to_tackle()
     ]
     assert final.battle_state == 0
     assert final.first_party_hp == 26
-    assert final.first_party_pp == (34, 29, 30, 10)
+    assert final.first_party_pp == (35, 29, 29, 10)
     moves = [
         action.value for action in _non_wait_actions(runtime) if action.kind is MacroActionKind.MOVE
     ]
-    assert moves == ["down", "down", "down", "down"]
+    assert moves == ["down", "down", "down", "down", "down", "down"]
     assert runtime.controls.ready
     assert runtime.actions[-1] == MacroAction(MacroActionKind.WAIT)
     assert {action.kind for action in runtime.actions} <= {
@@ -810,7 +812,7 @@ def test_battle_decision_observer_scopes_each_validated_policy_turn() -> None:
     assert final.battle_state == 0
     assert observer.starts == [intent]
     assert observer.finishes == 1
-    assert [entry[0] for entry in observer.entries] == [4, 2, 1]
+    assert [entry[0] for entry in observer.entries] == [4, 2, 3]
     assert len(observer.exits) == len(observer.entries)
     assert all(
         exit_action_count > entry[1]
@@ -876,7 +878,7 @@ def test_adaptive_battle_records_linked_privacy_safe_decision_spans() -> None:
     assert final.battle_state == 0
     assert recorder.recording_failures == 0
     assert len(sink.executions) == len(runtime.actions)
-    assert [decision.action["slot_index"] for decision in sink.decisions] == [3, 1, 0]
+    assert [decision.action["slot_index"] for decision in sink.decisions] == [3, 1, 2]
     assert all("private encounter label" not in canonical_json(item) for item in sink.decisions)
     assert {decision.context.metadata["battle_instance_id"] for decision in sink.decisions} == {
         "battle-episode:battle:0"
@@ -1707,6 +1709,40 @@ def test_status_suppressed_turn_can_return_without_spending_pp() -> None:
 
     assert final.battle_state == 0
     assert final.first_party_pp == (35, 30, 30, 11)
+
+
+def test_faster_opponent_disable_suppresses_selected_turn_without_pp() -> None:
+    runtime = FakeRuntime(
+        menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+    )
+    initial = runtime.raw
+
+    def disable_selected_move(action: MacroAction) -> None:
+        if action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(
+                runtime.raw,
+                player_disabled_move_slot=1,
+                player_disable_turns=3,
+            )
+            runtime.menu = BattleMenuState(
+                BattleMenuPhase.MAIN,
+                selected_main_command=0,
+            )
+
+    runtime.on_action = disable_selected_move
+    _confirm_attack_with_pp_gate(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        initial_raw=initial,
+        slot=1,
+        initial_pp=35,
+        timing=BattleRuntimeTiming(),
+        label="faster Disable",
+    )
+
+    assert runtime.raw.first_party_pp == initial.first_party_pp
+    assert runtime.raw.player_disabled_move_slot == 1
 
 
 def test_completion_rechecks_living_lead_before_returning() -> None:

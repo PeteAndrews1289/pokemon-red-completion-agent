@@ -178,6 +178,51 @@ def test_rival_victory_cannot_be_inferred_without_live_battle() -> None:
         tracker.observe(_ordered_states()[6])
 
 
+@pytest.mark.parametrize(
+    ("species", "slot"),
+    (
+        (ss_anne.PIDGEOTTO_SPECIES_ID, 3),
+        (ss_anne.RATICATE_SPECIES_ID, 4),
+        (ss_anne.KADABRA_SPECIES_ID, 1),
+        (ss_anne.IVYSAUR_SPECIES_ID, 3),
+    ),
+)
+def test_ss_anne_rival_policy_uses_the_live_qualified_species_mapping(
+    species: int,
+    slot: int,
+) -> None:
+    state = ss_anne.RawGameState(
+        game_started=True,
+        map_id=MapId.SS_ANNE_2F,
+        player_x=36,
+        player_y=8,
+        party_count=1,
+        battle_state=2,
+        enemy_species_id=species,
+        first_party_moves=(0x2C, 0x27, 0x05, 0x37),
+        first_party_pp=(25, 30, 20, 25),
+    )
+
+    assert ss_anne._choose_ss_anne_rival_move(state) == slot
+
+
+def test_ss_anne_rival_policy_rejects_missing_move_evidence() -> None:
+    state = ss_anne.RawGameState(
+        game_started=True,
+        map_id=MapId.SS_ANNE_2F,
+        player_x=36,
+        player_y=8,
+        party_count=1,
+        battle_state=2,
+        enemy_species_id=ss_anne.RATICATE_SPECIES_ID,
+        first_party_moves=(0x21, 0x27, 0x05, 0),
+        first_party_pp=(35, 30, 20, 0),
+    )
+
+    with pytest.raises(ss_anne.SSAnneChapterError, match="usable move"):
+        ss_anne._choose_ss_anne_rival_move(state)
+
+
 def test_live_route_constants_preserve_only_confirmed_corridors() -> None:
     assert ss_anne._directions("DDDLDDLLLLLLLUU") == ss_anne.VERMILION_TO_CENTER_DIRECTIONS
     assert ss_anne._directions(

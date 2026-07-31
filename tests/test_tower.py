@@ -15,12 +15,16 @@ from pokemon_red_completion.tower import (
     DEFAULT_TOWER_TIMING,
     OPTIONAL_EVENTS,
     REQUIRED_EVENTS,
+    ROUTE_8_EAST_GOAL,
+    ROUTE_8_SAFE_ROW_MASKS,
     TOWER_CHECKPOINT_COUNT,
     TOWER_LAVENDER_TIMING,
     TowerBattleEvidence,
     TowerChapterReport,
     TowerCheckpoint,
     TowerTiming,
+    _plan_route_8_east,
+    _route_8_coordinate_is_safe,
     _scripted_trainer_identity,
 )
 
@@ -86,13 +90,13 @@ def _report() -> TowerChapterReport:
         evolution_moves_preserved=True,
         purified_zone_event=True,
         purified_heals=3,
-        super_potions_used=2,
+        super_potions_used=3,
         super_potions_remaining=0,
-        super_potion_inventory_path=(2, 1, 0),
+        super_potion_inventory_path=(3, 2, 1, 0),
         party_hp=(111, 52, 37),
         party_max_hp=(111, 52, 37),
         party_status=(0, 0, 0),
-        money_remaining=27_437,
+        money_remaining=23_139,
         frames_executed=100,
         actions_executed=50,
         controller_released=True,
@@ -117,6 +121,23 @@ def test_tower_timing_is_positive_and_bounded() -> None:
     )
 
 
+def test_route_8_planner_uses_the_source_derived_trainer_safe_map() -> None:
+    assert len(ROUTE_8_SAFE_ROW_MASKS) == 18
+    route = _plan_route_8_east((13, 5))
+    assert "".join(direction[0].upper() for direction in route) == (
+        "RRRDDDDDDDRRRRRRRRRRRRUUUUURURRRRRRRRRRRR"
+        "DRRRRRDDDDDRRRRDRRRRRUUUUURRRR"
+    )
+    coordinate = (13, 5)
+    deltas = {"up": (0, -1), "left": (-1, 0), "right": (1, 0), "down": (0, 1)}
+    for direction in route:
+        dx, dy = deltas[direction]
+        coordinate = (coordinate[0] + dx, coordinate[1] + dy)
+        assert _route_8_coordinate_is_safe(coordinate)
+    assert coordinate == ROUTE_8_EAST_GOAL
+    assert not _route_8_coordinate_is_safe((51, 12))
+
+
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
 def test_tower_timing_rejects_invalid_bounds(invalid: object) -> None:
     for field in fields(TowerTiming):
@@ -139,9 +160,9 @@ def test_tower_report_requires_every_terminal_gate() -> None:
         replace(report, evolution_moves_preserved=False),
         replace(report, purified_zone_event=False),
         replace(report, purified_heals=2),
-        replace(report, super_potions_remaining=2),
+        replace(report, super_potions_remaining=1),
         replace(report, party_hp=(110, 52, 37)),
-        replace(report, money_remaining=27_438),
+        replace(report, money_remaining=23_338),
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)

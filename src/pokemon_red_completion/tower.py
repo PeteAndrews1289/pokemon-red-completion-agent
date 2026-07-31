@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import deque
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field, replace
 from typing import Protocol
@@ -21,6 +22,11 @@ from pokemon_red_completion.celadon import (
     _party_hp,
     _party_max_hp,
     _party_status,
+)
+from pokemon_red_completion.economy import (
+    HIDEOUT_SUPER_POTION_RESERVE,
+    TOWER_MONEY,
+    TOWER_SUPER_POTION_RESERVE,
 )
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
@@ -85,9 +91,27 @@ ROUTE_7_GATE = _directions("UUUU")
 WEST_GATE_TO_TUNNEL = _directions("RUU")
 UNDERGROUND_EAST = _directions("UUU" + "R" * 45)
 EAST_GATE_EXIT = _directions("DDDD")
-ROUTE_8_EAST = _directions(
-    "RRRUURRRRRDDDDDDDRRUUURRRRRRURRRRRRRRRRRRDRRRRRDDDDDRRRRDRRUUUUURRRRRRRR"
+ROUTE_8_SAFE_ROW_MASKS = (
+    0x000000000000000,
+    0x000000000000000,
+    0x0007BFFFFBF0000,
+    0x0007BFFF8810000,
+    0x0007BFFC3BDFFE0,
+    0x0F87BFFF83DDEE0,
+    0x0F87BFFE3BDC0E0,
+    0x0F87F003F81DFE0,
+    0xFF87E3F1FBDC003,
+    0x0F87EFFDFBDDF03,
+    0x0F87F3F1FFDFF03,
+    0x0F87EFFDFC1FC00,
+    0x0F7FE3F3FFFFFE0,
+    0x0FFBEFFEFFFFFE0,
+    0x0FFBE001FFFFFE0,
+    0x0FFBEFFDFFFFFE0,
+    0x000000000000000,
+    0x000000000000000,
 )
+ROUTE_8_EAST_GOAL = (59, 8)
 LAVENDER_TO_TOWER = _directions("UURRRRRRRRRRRRRRU")
 TOWER_1_TO_2 = _directions("UUUUUUUURRRRRRRR")
 TOWER_2_RIVAL = _directions("UULULUL")
@@ -241,15 +265,21 @@ class TowerChapterReport:
             and self.evolution_moves_preserved
             and self.purified_zone_event
             and self.purified_heals == 3
-            and self.super_potions_used == 2
-            and self.super_potions_remaining == 0
-            and self.super_potion_inventory_path == (2, 1, 0)
+            and self.super_potions_used == 3
+            and self.super_potions_remaining == TOWER_SUPER_POTION_RESERVE
+            and self.super_potion_inventory_path
+            == (
+                HIDEOUT_SUPER_POTION_RESERVE,
+                HIDEOUT_SUPER_POTION_RESERVE - 1,
+                HIDEOUT_SUPER_POTION_RESERVE - 2,
+                TOWER_SUPER_POTION_RESERVE,
+            )
             and self.final_raw.map_id == MapId.LAVENDER_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
             and self.party_hp == self.party_max_hp
             and self.party_status == (0, 0, 0)
-            and self.money_remaining == 27_437
+            and self.money_remaining == TOWER_MONEY
             and self.controller_released
         )
 
@@ -325,7 +355,9 @@ class _RunState:
     purified_heals: int = 0
     purified_zone_event_seen: bool = False
     evolved: bool = False
-    potion_inventory: list[int] = field(default_factory=lambda: [2])
+    potion_inventory: list[int] = field(
+        default_factory=lambda: [HIDEOUT_SUPER_POTION_RESERVE]
+    )
 
 
 def run_tower_chapter(
@@ -342,7 +374,10 @@ def run_tower_chapter(
     records: list[TowerCheckpoint] = []
     battles: list[TowerBattleEvidence] = []
     _require(reader.read(), MapId.CELADON_POKECENTER, (3, 3), "Scope boundary")
-    if ItemId.SILPH_SCOPE not in _bag(emulator) or _bag(emulator).get(ItemId.SUPER_POTION) != 2:
+    if (
+        ItemId.SILPH_SCOPE not in _bag(emulator)
+        or _bag(emulator).get(ItemId.SUPER_POTION) != HIDEOUT_SUPER_POTION_RESERVE
+    ):
         raise TowerChapterError("Tower input lacks the qualified Scope resources.")
     _checkpoint(records, progress, emulator, reader.read(), "scope_ready", "Silph Scope ready")
 
@@ -354,7 +389,10 @@ def run_tower_chapter(
         (WEST_GATE_TO_TUNNEL, "west underground gate"),
         (UNDERGROUND_EAST, "Underground Path"),
         (EAST_GATE_EXIT, "east underground gate"),
-        (ROUTE_8_EAST, "Route 8 east"),
+    ):
+        _move(actions, reader, emulator, run, route, timing, label)
+    _navigate_route_8_east(actions, reader, emulator, run, timing)
+    for route, label in (
         (LAVENDER_TO_TOWER, "Lavender Tower entry"),
         (TOWER_1_TO_2, "Tower 2F"),
     ):
@@ -448,6 +486,9 @@ def run_tower_chapter(
             RedBattlePlanId.TOWER_6F_CHANNELER_19,
         )
     )
+    if _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:
+        _use_super_potion(actions, reader, emulator, run, DEFAULT_LAVENDER_TIMING, 0)
+        run.potion_inventory.append(_bag(emulator).get(ItemId.SUPER_POTION, 0))
     _move(actions, reader, emulator, run, TOWER_6_CHANNELER_21, timing, "6F Channeler 21")
     battles.append(
         _fight(
@@ -521,6 +562,9 @@ def run_tower_chapter(
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "rocket_19", "Defeated first Rocket")
+    if _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:
+        _use_super_potion(actions, reader, emulator, run, DEFAULT_LAVENDER_TIMING, 0)
+        run.potion_inventory.append(_bag(emulator).get(ItemId.SUPER_POTION, 0))
     _move(actions, reader, emulator, run, TOWER_7_ROCKET_2, timing, "second Rocket")
     battles.append(
         _fight(
@@ -786,6 +830,118 @@ def _fight_marowak(
         spent,
         30,
     )
+
+
+def _route_8_coordinate_is_safe(coordinate: tuple[int, int]) -> bool:
+    x, y = coordinate
+    return (
+        0 <= y < len(ROUTE_8_SAFE_ROW_MASKS)
+        and 0 <= x < 60
+        and bool(ROUTE_8_SAFE_ROW_MASKS[y] & (1 << x))
+    )
+
+
+def _plan_route_8_east(
+    start: tuple[int, int],
+    blocked: frozenset[tuple[int, int]] = frozenset(),
+) -> tuple[str, ...]:
+    if not 0 <= start[0] < 60 or not 0 <= start[1] < 18:
+        raise TowerChapterError(f"Route 8 planner started out of bounds at {start!r}.")
+    queue = deque([(start, ())])
+    visited = {start}
+    steps = (
+        ("right", (1, 0)),
+        ("up", (0, -1)),
+        ("down", (0, 1)),
+        ("left", (-1, 0)),
+    )
+    while queue:
+        coordinate, route = queue.popleft()
+        if coordinate == ROUTE_8_EAST_GOAL:
+            return route
+        for direction, (dx, dy) in steps:
+            candidate = (coordinate[0] + dx, coordinate[1] + dy)
+            if (
+                candidate in visited
+                or candidate in blocked
+                or not _route_8_coordinate_is_safe(candidate)
+            ):
+                continue
+            visited.add(candidate)
+            queue.append((candidate, (*route, direction)))
+    raise TowerChapterError(
+        f"Route 8 has no trainer-safe path from {start!r} after discoveries "
+        f"{sorted(blocked)!r}."
+    )
+
+
+def _navigate_route_8_east(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: TowerTiming,
+) -> RawGameState:
+    """Replan over the source-derived collision map without optional trainers."""
+
+    state = reader.read()
+    if (
+        state.map_id != MapId.ROUTE_8
+        or state.player_x is None
+        or state.player_y is None
+    ):
+        raise TowerChapterError("Adaptive Route 8 navigation lacks its entry coordinate.")
+    discovered_blocked: set[tuple[int, int]] = set()
+    deltas = {"up": (0, -1), "left": (-1, 0), "right": (1, 0), "down": (0, 1)}
+    for _ in range(180):
+        start = (state.player_x, state.player_y)
+        if start == ROUTE_8_EAST_GOAL:
+            final = _move(
+                actions,
+                reader,
+                emulator,
+                run,
+                ("right",),
+                timing,
+                "Route 8 Lavender boundary",
+            )
+            if final.map_id != MapId.LAVENDER_TOWN:
+                raise TowerChapterError("Route 8 east goal did not enter Lavender Town.")
+            return final
+        route = _plan_route_8_east(start, frozenset(discovered_blocked))
+        direction = route[0]
+        dx, dy = deltas[direction]
+        candidate = (start[0] + dx, start[1] + dy)
+        for attempt in range(timing.movement_retries):
+            _pulse(actions, MacroActionKind.MOVE, direction, frames=12 * (attempt + 1))
+            state = reader.read()
+            if state.battle_state == 1:
+                _flee(
+                    actions,
+                    reader,
+                    emulator,
+                    run,
+                    TOWER_LAVENDER_TIMING,
+                    unknown_with_cancel=True,
+                )
+                state = reader.read()
+            if state.battle_state == 2:
+                raise TowerChapterError(
+                    "Adaptive Route 8 navigation entered an optional trainer battle."
+                )
+            if (state.player_x, state.player_y) != start:
+                break
+            if not reader.read_input_readiness().ready:
+                _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+                state = reader.read()
+        else:
+            discovered_blocked.add(candidate)
+        expected_party = TOWER_FINAL_PARTY if run.evolved else PROTECTED_PARTY
+        if state.party_species_ids != expected_party or (state.first_party_hp or 0) <= 0:
+            raise TowerChapterError(
+                "Adaptive Route 8 navigation changed the protected party."
+            )
+    raise TowerChapterError("Adaptive Route 8 navigation exceeded its bounded discoveries.")
 
 
 def _move(

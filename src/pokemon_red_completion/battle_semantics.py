@@ -15,7 +15,7 @@ from typing import Protocol
 
 from pokemon_red_completion.trajectory import SemanticSnapshot
 
-FEATURE_SCHEMA_ID = "pokemon.core.battle.move-ranker.v2"
+FEATURE_SCHEMA_ID = "pokemon.core.battle.move-ranker.v3"
 MAX_LEVEL = 100.0
 MAX_STAGE_MAGNITUDE = 6.0
 MAX_MOVE_POWER = 255.0
@@ -78,6 +78,7 @@ _STATE_FEATURE_NAMES = (
 )
 _MOVE_FEATURE_NAMES = (
     "move.pp_fraction",
+    "move.disabled",
     "move.power_fraction",
     "move.accuracy",
     *(f"move.category.{category}" for category in MOVE_CATEGORIES),
@@ -245,8 +246,8 @@ class BattleFeatureBatch:
         for pp, legal in zip(self.current_pp, self.legal_mask, strict=True):
             if not math.isfinite(pp) or pp < 0:
                 raise ValueError("current_pp must contain finite non-negative values")
-            if legal is not (pp > 0):
-                raise ValueError("legal_mask must be derived exactly from current_pp")
+            if legal and pp == 0:
+                raise ValueError("a zero-PP candidate cannot be legal")
 
 
 @dataclass(frozen=True, slots=True)
@@ -313,6 +314,17 @@ class BattleFeatureProjector:
             _integer_field(battle, "opponent_defense_stage", minimum=-6, maximum=6)
             / MAX_STAGE_MAGNITUDE
         )
+        disabled_slot_value = battle.get("player_disabled_move_slot")
+        disabled_slot = (
+            None
+            if disabled_slot_value is None
+            else _integer_field(
+                battle,
+                "player_disabled_move_slot",
+                minimum=1,
+                maximum=4,
+            )
+        )
         state_values = (
             player_hp_ratio,
             opponent_hp_ratio,
@@ -332,7 +344,7 @@ class BattleFeatureProjector:
             raise AssertionError("state feature schema width drifted")
 
         raw_moves = _sequence_field(lead, "moves")
-        candidates: list[tuple[int, float, tuple[float, ...]]] = []
+        candidates: list[tuple[int, float, bool, tuple[float, ...]]] = []
         seen_slots: set[int] = set()
         required_move_matched = False
         for raw_move in raw_moves:
@@ -342,6 +354,7 @@ class BattleFeatureProjector:
                 raise BattleFeatureError("move slot indices must be unique")
             seen_slots.add(slot_index)
             current_pp = float(_integer_field(move_view, "pp", minimum=0, maximum=63))
+            disabled = float(disabled_slot == slot_index + 1)
             move_ref = _string_field(move_view, "move_ref")
             move = self.catalog.resolve_move(move_ref)
             matches_required_move = float(
@@ -367,6 +380,7 @@ class BattleFeatureProjector:
             physical = float(move.category == "physical")
             move_values = (
                 pp_fraction,
+                disabled,
                 power_fraction,
                 float(move.accuracy),
                 *(_one_hot(move.category, MOVE_CATEGORIES)),
@@ -399,6 +413,7 @@ class BattleFeatureProjector:
                 (
                     slot_index,
                     current_pp,
+                    bool(disabled),
                     (
                         *state_values,
                         *move_values,
@@ -417,8 +432,10 @@ class BattleFeatureProjector:
         candidates.sort(key=lambda candidate: candidate[0])
         return BattleFeatureBatch(
             feature_names=FEATURE_NAMES,
-            candidate_vectors=tuple(candidate[2] for candidate in candidates),
-            legal_mask=tuple(candidate[1] > 0 for candidate in candidates),
+            candidate_vectors=tuple(candidate[3] for candidate in candidates),
+            legal_mask=tuple(
+                candidate[1] > 0 and not candidate[2] for candidate in candidates
+            ),
             current_pp=tuple(candidate[1] for candidate in candidates),
             slot_indices=tuple(candidate[0] for candidate in candidates),
         )

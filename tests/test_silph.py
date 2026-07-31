@@ -1,15 +1,27 @@
 from dataclasses import fields, replace
+from types import SimpleNamespace
 
 import pytest
 
+from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.observation import Badge, EventFlag, MapId, RawGameState
 from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
+    ROOF_GIRL_X,
+    ROOF_GIRL_Y,
+    ROOF_NERD_X,
+    ROOF_NERD_Y,
+    SAFFRON_CENTER_APPROACH,
+    SAFFRON_WARP_COORDINATES,
     SILPH_CHECKPOINT_COUNT,
     THIRD_FLOOR_GUARD,
     SilphChapterReport,
     SilphCheckpoint,
     SilphTiming,
+    _interact_with_roof_girl,
+    _move_verified,
+    _plan_saffron_center_approach,
+    _plan_saffron_route,
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
@@ -50,8 +62,8 @@ def _report() -> SilphChapterReport:
             SilphCheckpoint(str(index), str(index), raw) for index in range(SILPH_CHECKPOINT_COUNT)
         ),
         final_raw=raw,
-        money_before=41_345,
-        money_after=40_894,
+        money_before=37_047,
+        money_after=36_596,
         tm13_event=True,
         tm13_transfer_before_event=True,
         other_roof_rewards_untouched=True,
@@ -81,6 +93,122 @@ def test_silph_timing_is_positive_and_bounded() -> None:
         assert getattr(DEFAULT_SILPH_TIMING, field.name) > 0
         with pytest.raises(ValueError, match=field.name):
             replace(DEFAULT_SILPH_TIMING, **{field.name: 0})
+
+
+def test_silph_verified_movement_retries_a_swallowed_input() -> None:
+    states = iter(
+        (
+            replace(_terminal(), map_id=MapId.SAFFRON_MART, player_x=2, player_y=5),
+            replace(_terminal(), map_id=MapId.SAFFRON_MART, player_x=2, player_y=5),
+            replace(_terminal(), map_id=MapId.SAFFRON_MART, player_x=2, player_y=5),
+            replace(_terminal(), map_id=MapId.SAFFRON_MART, player_x=2, player_y=5),
+            replace(_terminal(), map_id=MapId.SAFFRON_MART, player_x=3, player_y=5),
+            replace(_terminal(), map_id=MapId.SAFFRON_MART, player_x=3, player_y=5),
+            replace(_terminal(), map_id=MapId.SAFFRON_MART, player_x=3, player_y=6),
+            replace(_terminal(), map_id=MapId.SAFFRON_MART, player_x=3, player_y=6),
+            replace(_terminal(), map_id=MapId.SAFFRON_MART, player_x=3, player_y=7),
+        )
+    )
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return next(states)
+
+    class Executor:
+        def execute(self, _action: object) -> None:
+            return None
+
+    final = _move_verified(
+        Executor(),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        ("right", "down", "down"),
+        replace(DEFAULT_SILPH_TIMING, movement_frames=1),
+        "test route",
+    )
+
+    assert (final.map_id, final.player_x, final.player_y) == (MapId.SAFFRON_MART, 3, 7)
+
+
+def test_silph_saffron_planner_detours_around_discovered_npc() -> None:
+    direct = _plan_saffron_center_approach((25, 12))
+    assert len(direct) == 34
+    assert direct[0] == "left"
+
+    blocked = frozenset({(20, 12)})
+    detour = _plan_saffron_center_approach((25, 12), blocked)
+    coordinate = (25, 12)
+    deltas = {"up": (0, -1), "down": (0, 1), "left": (-1, 0), "right": (1, 0)}
+    visited = {coordinate}
+    for direction in detour:
+        dx, dy = deltas[direction]
+        coordinate = (coordinate[0] + dx, coordinate[1] + dy)
+        visited.add(coordinate)
+
+    assert coordinate == SAFFRON_CENTER_APPROACH
+    assert blocked.isdisjoint(visited)
+
+
+def test_silph_saffron_planner_supports_gym_target() -> None:
+    route = _plan_saffron_route((9, 30), (34, 4), frozenset({(18, 30)}))
+    coordinate = (9, 30)
+    deltas = {"up": (0, -1), "down": (0, 1), "left": (-1, 0), "right": (1, 0)}
+    visited = {coordinate}
+    for direction in route:
+        dx, dy = deltas[direction]
+        coordinate = (coordinate[0] + dx, coordinate[1] + dy)
+        visited.add(coordinate)
+
+    assert coordinate == (34, 4)
+    assert SAFFRON_WARP_COORDINATES.isdisjoint(visited)
+
+
+def test_roof_girl_interaction_retries_until_dialogue_opens() -> None:
+    raw = replace(
+        _terminal(),
+        map_id=MapId.CELADON_MART_ROOF,
+        player_x=4,
+        player_y=5,
+    )
+
+    class Reader:
+        readiness_calls = 0
+
+        def read(self) -> RawGameState:
+            return raw
+
+        def read_input_readiness(self) -> object:
+            self.readiness_calls += 1
+            return SimpleNamespace(ready=self.readiness_calls == 1)
+
+    class Emulator:
+        def read_u8(self, address: int) -> int:
+            return {
+                ROOF_GIRL_X: 9,
+                ROOF_GIRL_Y: 9,
+                ROOF_NERD_X: 14,
+                ROOF_NERD_Y: 8,
+            }[address]
+
+    class Executor:
+        def __init__(self) -> None:
+            self.actions: list[object] = []
+
+        def execute(self, action: object) -> None:
+            self.actions.append(action)
+
+    executor = Executor()
+    _interact_with_roof_girl(
+        executor,  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        Emulator(),  # type: ignore[arg-type]
+        replace(DEFAULT_SILPH_TIMING, movement_frames=1, menu_frames=1),
+    )
+
+    interactions = sum(
+        getattr(action, "kind", None) is MacroActionKind.INTERACT
+        for action in executor.actions
+    )
+    assert interactions == 2
 
 
 def test_silph_report_proves_required_story_and_terminal() -> None:

@@ -123,6 +123,8 @@ def test_red_encoder_normalizes_battle_state_without_raw_memory() -> None:
         player_attack_stage=8,
         player_accuracy_stage=6,
         enemy_defense_stage=7,
+        player_disabled_move_slot=3,
+        player_disable_turns=4,
     )
     encoder = PokemonRedObservationEncoder(
         _Reader(
@@ -150,6 +152,8 @@ def test_red_encoder_normalizes_battle_state_without_raw_memory() -> None:
         "player_attack_stage": 1,
         "player_accuracy_stage": -1,
         "opponent_defense_stage": 0,
+        "player_disabled_move_slot": 3,
+        "player_disable_turns": 4,
     }
     assert features["menu"] == {
         "kind": "battle_move",

@@ -13,15 +13,22 @@ from pokemon_red_completion.cerulean import (
     DEFAULT_CERULEAN_TIMING,
     GYM_EXIT_APPROACH_DIRECTIONS,
     MT_MOON_1F_DIRECTIONS,
-    MT_MOON_1F_SEED_WAITS,
+    MT_MOON_1F_POST_TM_SEED_WAITS,
+    MT_MOON_1F_PRE_TM_SEED_WAITS,
     MT_MOON_B1F_DIRECTIONS,
     MT_MOON_B1F_EXIT_DIRECTIONS,
+    MT_MOON_B1F_EXIT_SEED_WAIT,
     MT_MOON_B1F_SEED_WAITS,
     MT_MOON_B2F_EXIT_DIRECTIONS,
+    MT_MOON_B2F_EXIT_SEED_WAIT,
     MT_MOON_B2F_SEED_WAITS,
     MT_MOON_B2F_TO_ROCKET_DIRECTIONS,
+    MT_MOON_ZUBAT_PRE_THROW_WAIT,
+    MT_MOON_ZUBAT_SEED_WAIT,
     PEWTER_TO_CENTER_DIRECTIONS,
+    POST_KO_SWITCH_DECLINE_PULSES,
     ROCKET_TO_SUPER_NERD_DIRECTIONS,
+    ROUTE_3_REJOIN_SEED_WAIT,
     ROUTE_3_REMAINDER_DIRECTIONS,
     ROUTE_3_REQUIRED_TRAINER_INDEXES,
     ROUTE_3_TRAINER_SEGMENTS,
@@ -33,6 +40,7 @@ from pokemon_red_completion.cerulean import (
     CeruleanProgress,
     CeruleanTiming,
     _CountingChapterExecutor,
+    _finish_battle,
     _move_with_seed_waits,
     _pp_at,
     _reverse_directions,
@@ -527,20 +535,30 @@ def test_cerulean_route_is_pinned_at_critical_segments() -> None:
     assert tuple(map(len, ROUTE_3_TRAINER_SEGMENTS)) == (15, 3, 7, 8)
     assert len(ROUTE_3_REMAINDER_DIRECTIONS) == 60
     assert len(MT_MOON_1F_DIRECTIONS) == 103
-    assert MT_MOON_1F_SEED_WAITS == (
-        (14, 2),
-        (34, 1),
-        (35, 1),
-        (78, 2),
-        (100, 2),
+    assert MT_MOON_1F_PRE_TM_SEED_WAITS == (
+        (1, 220),
+        (10, 2),
+        (30, 1),
+        (31, 1),
     )
+    assert MT_MOON_1F_POST_TM_SEED_WAITS == ((6, 2), (28, 2))
     assert len(MT_MOON_B1F_DIRECTIONS) == 28
-    assert MT_MOON_B1F_SEED_WAITS == ((14, 1),)
+    assert MT_MOON_B1F_SEED_WAITS == ((1, 2), (14, 1))
     assert len(MT_MOON_B2F_TO_ROCKET_DIRECTIONS) == 75
-    assert MT_MOON_B2F_SEED_WAITS == ((19, 1), (29, 2), (65, 2))
+    assert MT_MOON_B2F_SEED_WAITS == (
+        (1, 9),
+        (19, 1),
+        (29, 2),
+        (65, 2),
+    )
     assert len(ROCKET_TO_SUPER_NERD_DIRECTIONS) == 15
     assert len(MT_MOON_B2F_EXIT_DIRECTIONS) == 18
+    assert MT_MOON_B2F_EXIT_SEED_WAIT == 1
     assert len(MT_MOON_B1F_EXIT_DIRECTIONS) == 4
+    assert MT_MOON_B1F_EXIT_SEED_WAIT == 1
+    assert MT_MOON_ZUBAT_SEED_WAIT == 155
+    assert MT_MOON_ZUBAT_PRE_THROW_WAIT == 3
+    assert ROUTE_3_REJOIN_SEED_WAIT == 8
     assert len(ROUTE_4_FIRST_LEDGE_APPROACH_DIRECTIONS) == 20
     assert len(ROUTE_4_MIDDLE_DIRECTIONS) == 39
     assert len(ROUTE_4_FINAL_APPROACH_DIRECTIONS) == 10
@@ -583,6 +601,118 @@ def test_cerulean_helpers_use_one_based_pp_and_exact_reverse_routes() -> None:
         "left",
         "down",
     )
+
+
+def test_battle_completion_declines_switch_without_cancelling_evolution() -> None:
+    class Reader:
+        state = replace(
+            _raw(MapId.MT_MOON_B2F, 21, 17),
+            battle_state=2,
+            enemy_hp=0,
+            party_count=2,
+            party_species_ids=(SQUIRTLE_SPECIES_ID, 0x6B),
+            first_party_level=16,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return READY
+
+    reader = Reader()
+
+    class Executor:
+        actions: list[MacroAction] = []
+        confirms = 0
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+            if action.kind is not MacroActionKind.CONFIRM:
+                return
+            self.confirms += 1
+            if self.confirms == 1:
+                reader.state = replace(
+                    reader.state,
+                    party_species_ids=(WARTORTLE_SPECIES_ID, 0x6B),
+                )
+            elif self.confirms == 2:
+                reader.state = replace(reader.state, battle_state=0)
+
+    executor = Executor()
+    final = _finish_battle(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        DEFAULT_CERULEAN_TIMING,
+        MapId.MT_MOON_B2F,
+        "evolution regression",
+    )
+
+    inputs = [
+        action.kind
+        for action in executor.actions
+        if action.kind is not MacroActionKind.WAIT
+    ]
+    assert inputs[:POST_KO_SWITCH_DECLINE_PULSES] == [
+        MacroActionKind.CANCEL
+    ] * POST_KO_SWITCH_DECLINE_PULSES
+    assert inputs[POST_KO_SWITCH_DECLINE_PULSES:] == [
+        MacroActionKind.CONFIRM,
+        MacroActionKind.CONFIRM,
+        MacroActionKind.CONFIRM,
+    ]
+    assert final.party_species_ids == (WARTORTLE_SPECIES_ID, 0x6B)
+
+
+def test_battle_completion_does_not_decline_a_nonexistent_single_party_switch() -> None:
+    class Reader:
+        state = replace(
+            _raw(MapId.ROUTE_3, 12, 6),
+            battle_state=2,
+            enemy_hp=0,
+            party_count=1,
+            party_species_ids=(SQUIRTLE_SPECIES_ID,),
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return READY
+
+    reader = Reader()
+
+    class Executor:
+        actions: list[MacroAction] = []
+        confirms = 0
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+            if action.kind is MacroActionKind.CONFIRM:
+                self.confirms += 1
+                if self.confirms == 1:
+                    reader.state = replace(reader.state, battle_state=0)
+
+    executor = Executor()
+    _finish_battle(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        DEFAULT_CERULEAN_TIMING,
+        MapId.ROUTE_3,
+        "single-party regression",
+    )
+
+    assert MacroActionKind.CANCEL not in {
+        action.kind for action in executor.actions
+    }
 
 
 def test_route_3_victory_sequence_rejects_skips() -> None:

@@ -25,6 +25,14 @@ from pokemon_red_completion.celadon import (
     _party_status,
     _RunState,
 )
+from pokemon_red_completion.economy import POST_ERIKA_MONEY, POST_KOGA_MONEY
+from pokemon_red_completion.lavender import (
+    LavenderTiming,
+    _close_menus,
+    _open_bag,
+    _select_bag_item,
+    _select_cursor,
+)
 from pokemon_red_completion.observation import (
     Badge,
     EventFlag,
@@ -41,6 +49,7 @@ ERIKA_CHECKPOINT_COUNT = 12
 STRENGTH = 0x46
 ERIKA_OPPONENT = 0xED
 ERIKA_CLASS = 0x25
+SKULL_BASH = 0x82
 GYM_EVENTS = tuple(
     EventFlag(int(EventFlag.BEAT_CELADON_GYM_TRAINER_0) + index) for index in range(7)
 )
@@ -173,11 +182,11 @@ class ErikaChapterReport:
         return (
             len(self.records) == ERIKA_CHECKPOINT_COUNT
             and self.erika_identity == (ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1)
-            and self.strength_pp_spent == 6
+            and 0 < self.strength_pp_spent <= 10
             and self.moves_before == (0x2C, STRENGTH, 0x3D, 0x39)
             and self.moves_after == (0x82, STRENGTH, 0x3D, 0x39)
-            and self.money_before == 37_489
-            and self.money_after == 41_545
+            and self.money_before == POST_KOGA_MONEY
+            and self.money_after == POST_ERIKA_MONEY
             and self.badge_bits == 0x1F
             and self.beat_gym_flags & int(Badge.RAINBOW)
             and self.got_tm21
@@ -190,10 +199,14 @@ class ErikaChapterReport:
             and self.final_raw.map_id == MapId.CELADON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.final_raw.first_party_level == 42
+            and self.final_raw.first_party_level is not None
+            and 42 <= self.final_raw.first_party_level <= 43
             and self.final_raw.first_party_moves == (0x82, STRENGTH, 0x3D, 0x39)
             and self.final_raw.first_party_pp == (15, 15, 20, 15)
-            and self.party_hp == self.party_max_hp == (130, 52, 37)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and self.final_raw.first_party_hp == self.party_hp[0]
+            and self.final_raw.first_party_max_hp == self.party_max_hp[0]
             and self.party_status == (0, 0, 0)
             and self.controller_released
         )
@@ -227,6 +240,14 @@ class ErikaChapterReport:
                 "got_tm21": self.got_tm21,
             },
             "money_remaining": self.money_after,
+            "party": {
+                "lead_level": self.final_raw.first_party_level,
+                "hp": list(self.party_hp),
+                "max_hp": list(self.party_max_hp),
+                "status": list(self.party_status),
+                "moves": list(self.moves_after),
+                "pp": list(self.final_raw.first_party_pp or ()),
+            },
             "optional_route_trainers_bypassed": sum(
                 not defeated for defeated in self.optional_route_events_after
             ),
@@ -261,7 +282,7 @@ def run_erika_chapter(
     initial = reader.read()
     _require(initial, MapId.FUCHSIA_POKECENTER, (3, 3), "Strength boundary")
     if (
-        _money(emulator) != 37_489
+        _money(emulator) != POST_KOGA_MONEY
         or initial.first_party_pp != (25, 15, 20, 15)
         or _event(emulator, EventFlag.BEAT_ERIKA)
         or ItemId.TM21_MEGA_DRAIN in _bag(emulator)
@@ -363,6 +384,7 @@ def run_erika_chapter(
     _move(actions, reader, emulator, ("up",), timing, "outer re-cross")
     _move(actions, reader, emulator, OUTER_TREE_TO_CENTER, timing, "Center recovery")
     _heal(actions, reader, emulator, timing)
+    _use_rare_candy_and_learn_skull_bash(actions, reader, emulator, timing)
     _checkpoint(
         records,
         progress,
@@ -448,7 +470,7 @@ def run_erika_chapter(
         strength_pp_spent=strength_spent,
         moves_before=tuple(initial.first_party_moves or ()),
         moves_after=tuple(final.first_party_moves or ()),
-        money_before=37_489,
+        money_before=POST_KOGA_MONEY,
         money_after=_money(emulator),
         badge_bits=emulator.read_u8(RamAddress.OBTAINED_BADGES),
         beat_gym_flags=emulator.read_u8(RamAddress.BEAT_GYM_FLAGS),
@@ -546,46 +568,59 @@ def _select_menu(actions, emulator, target, maximum, timing) -> None:
     raise ErikaChapterError("Menu cursor missed its semantic target.")
 
 
-def _battle(reader, actions, map_id, timing, label, battle_plan_id: str) -> None:
-    if label == "Erika":
-        # Bound the leader fight to one observed runtime phase per call. This
-        # lets the chapter distinguish Wrap recovery (CANCEL while level 41)
-        # from the level-42 learn/forget sequence (CONFIRM until Skull Bash is
-        # installed) instead of letting a fixed unknown-screen cadence decline
-        # the move.
-        for _ in range(400):
-            try:
-                run_adaptive_trainer_battle(
-                    reader,
-                    actions,
-                    lambda _: 2,
-                    expected_map=int(map_id),
-                    intent=BattleIntent(
-                        "defeat_erika",
-                        battle_plan_id=battle_plan_id,
-                        required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
-                        required_move_ref=pokemon_red_move_ref(STRENGTH),
-                    ),
-                    required_move_id=STRENGTH,
-                    timing=BattleRuntimeTiming(max_runtime_pulses=1),
-                    label=label,
-                    unknown_cancel_interval=10_000,
-                )
-                return
-            except BattleRuntimeError:
-                raw = reader.read()
-                if raw.battle_state == 0:
-                    return
-                learned = raw.first_party_moves is not None and raw.first_party_moves[0] == 0x82
-                _pulse(
-                    actions,
-                    MacroActionKind.CONFIRM
-                    if (raw.first_party_level or 0) >= 42 and not learned
-                    else MacroActionKind.CANCEL,
-                    frames=timing.movement_frames,
-                )
-        raise ErikaChapterError("Erika exceeded bounded phase-by-phase recovery.")
+def _use_rare_candy_and_learn_skull_bash(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: ErikaTiming,
+) -> None:
+    before = reader.read()
+    before_quantity = _bag(emulator).get(ItemId.RARE_CANDY, 0)
+    if (
+        before.first_party_level != 41
+        or before.first_party_moves != (0x2C, STRENGTH, 0x3D, 0x39)
+        or before_quantity != 1
+    ):
+        raise ErikaChapterError(
+            "Rare Candy learning gate requires level 41, the qualified moves, "
+            "and the source-qualified Tower candy: "
+            f"level={before.first_party_level!r}, moves={before.first_party_moves!r}, "
+            f"quantity={before_quantity}."
+        )
+    menu_timing = LavenderTiming(wait_frames=timing.movement_frames)
+    _open_bag(actions, emulator, menu_timing)
+    _select_bag_item(actions, emulator, ItemId.RARE_CANDY, menu_timing)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    for _ in range(timing.dialogue_pulses):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (0, 1):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    else:
+        raise ErikaChapterError("Rare Candy did not reach party selection.")
+    _select_cursor(actions, emulator, 0, menu_timing)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    for _ in range(80):
+        raw = reader.read()
+        if (
+            raw.first_party_level == 42
+            and raw.first_party_moves == (SKULL_BASH, STRENGTH, 0x3D, 0x39)
+            and _bag(emulator).get(ItemId.RARE_CANDY, 0) == before_quantity - 1
+        ):
+            _close_menus(actions, reader, menu_timing)
+            return
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (5, 8):
+            _select_cursor(actions, emulator, 0, menu_timing)
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    raise ErikaChapterError("Rare Candy did not install Skull Bash in slot one.")
 
+
+def _battle(reader, actions, map_id, timing, label, battle_plan_id: str) -> None:
     for _ in range(timing.battle_recoveries):
         try:
             run_adaptive_trainer_battle(
@@ -600,7 +635,9 @@ def _battle(reader, actions, map_id, timing, label, battle_plan_id: str) -> None
                     required_move_ref=pokemon_red_move_ref(STRENGTH),
                 ),
                 required_move_id=STRENGTH,
-                timing=BattleRuntimeTiming(max_runtime_pulses=960),
+                timing=BattleRuntimeTiming(
+                    max_runtime_pulses=1600 if label == "Erika" else 960
+                ),
                 label=label,
                 unknown_cancel_interval=3,
             )

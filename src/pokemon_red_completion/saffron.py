@@ -14,6 +14,10 @@ from pokemon_red_completion.celadon import (
     _party_max_hp,
     _party_status,
 )
+from pokemon_red_completion.economy import (
+    POST_ERIKA_MONEY,
+    POST_SAFFRON_PURCHASE_MONEY,
+)
 from pokemon_red_completion.observation import (
     ItemId,
     MapId,
@@ -136,8 +140,10 @@ class SaffronChapterReport:
         final_bag = dict(self.bag_after)
         return (
             len(self.records) == SAFFRON_CHECKPOINT_COUNT
-            and self.money_before == 41_545
-            and self.money_after_purchase == self.money_after == 41_345
+            and self.money_before == POST_ERIKA_MONEY
+            and self.money_after_purchase
+            == self.money_after
+            == POST_SAFFRON_PURCHASE_MONEY
             and self.vending_cursor == 0
             and self.fresh_water_before == 0
             and self.fresh_water_after_purchase == 1
@@ -153,10 +159,14 @@ class SaffronChapterReport:
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.battle_state == 0
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.final_raw.first_party_level == 42
+            and self.final_raw.first_party_level is not None
+            and 42 <= self.final_raw.first_party_level <= 43
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3D, 0x39)
             and self.final_raw.first_party_pp == (15, 15, 20, 15)
-            and self.party_hp == self.party_max_hp == (130, 52, 37)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and self.final_raw.first_party_hp == self.party_hp[0]
+            and self.final_raw.first_party_max_hp == self.party_max_hp[0]
             and self.party_status == (0, 0, 0)
             and self.battle_free
             and self.controller_released
@@ -191,6 +201,14 @@ class SaffronChapterReport:
             "other_guard_drinks_absent": {
                 "soda_pop": int(ItemId.SODA_POP) not in dict(self.bag_after),
                 "lemonade": int(ItemId.LEMONADE) not in dict(self.bag_after),
+            },
+            "party": {
+                "lead_level": self.final_raw.first_party_level,
+                "hp": list(self.party_hp),
+                "max_hp": list(self.party_max_hp),
+                "status": list(self.party_status),
+                "moves": list(self.final_raw.first_party_moves or ()),
+                "pp": list(self.final_raw.first_party_pp or ()),
             },
             "battle_free": self.battle_free,
             "frames_executed": self.frames_executed,
@@ -227,7 +245,7 @@ def run_saffron_chapter(
     initial_money = _money(emulator)
     initial_flag = emulator.read_u8(RamAddress.STATUS_FLAGS_1)
     if (
-        initial_money != 41_545
+        initial_money != POST_ERIKA_MONEY
         or initial_bag.get(ItemId.FRESH_WATER, 0)
         or initial_bag.get(ItemId.SODA_POP, 0)
         or initial_bag.get(ItemId.LEMONADE, 0)

@@ -47,13 +47,15 @@ from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 from pokemon_red_completion.victory_road import (
     _CountingExecutor,
     _event,
+    _menu_cursor_active,
     _move,
     _pulse,
     _settle_confirm,
 )
 
 AGATHA_CHECKPOINT_COUNT = 3
-AGATHA_RNG_DELAY_FRAMES = 1
+AGATHA_RNG_DELAY_FRAMES = 85
+AGATHA_SAFE_HP = 100
 AGATHA_PARTY = (
     (0x0E, 56),
     (0x82, 56),
@@ -110,6 +112,7 @@ class AgathaTurn:
     lead_status: int
     pp: tuple[int, int, int, int]
     move_slot: int
+    party_position: int = 0
 
 
 @dataclass(frozen=True, slots=True)
@@ -158,6 +161,7 @@ class AgathaChapterReport:
                     "lead_status": item.lead_status,
                     "pp": list(item.pp),
                     "move_slot": item.move_slot,
+                    "party_position": item.party_position,
                 }
                 for item in self.turns
             ],
@@ -220,16 +224,18 @@ def run_agatha_chapter(
     def policy(raw: RawGameState) -> int:
         hp = raw.first_party_hp or 0
         status = raw.first_party_status or 0
-        if hp < 70 or status:
+        if hp < AGATHA_SAFE_HP or status:
             raise _HealBoundary
         pp = raw.first_party_pp or (0, 0, 0, 0)
         species = raw.enemy_species_id or 0
         if species in {0x82, 0x2D} and pp[0] > 0:
             slot = 1
+        elif pp[3] > 0:
+            slot = 4
         elif pp[2] > 0:
             slot = 3
         else:
-            slot = 4
+            slot = 1
         turns.append(
             AgathaTurn(
                 species,
@@ -239,6 +245,7 @@ def run_agatha_chapter(
                 status,
                 pp,
                 slot,
+                emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS),
             )
         )
         return slot
@@ -268,12 +275,20 @@ def run_agatha_chapter(
             if not isinstance(error.__cause__, _HealBoundary):
                 raise AgathaChapterError("Agatha battle runtime failed.") from error
             raw = reader.read()
-            if (raw.first_party_status or 0) and (raw.first_party_hp or 0) >= 70:
+            if (
+                (raw.first_party_status or 0)
+                and (raw.first_party_hp or 0) >= 120
+                and _bag(emulator).get(ItemId.FULL_HEAL, 0)
+            ):
                 item = ItemId.FULL_HEAL
             elif raw.first_party_status or 0:
                 item = ItemId.FULL_RESTORE
             else:
-                item = ItemId.HYPER_POTION
+                item = (
+                    ItemId.HYPER_POTION
+                    if _bag(emulator).get(ItemId.HYPER_POTION, 0)
+                    else ItemId.FULL_RESTORE
+                )
             if _bag(emulator).get(item, 0) == 0:
                 raise AgathaChapterError("Agatha exhausted the recovery reserve.") from error
             try:
@@ -285,7 +300,14 @@ def run_agatha_chapter(
                     item,
                 )
             except SilphChapterError as healing_error:
-                raise AgathaChapterError("Agatha recovery failed.") from healing_error
+                current = reader.read()
+                raise AgathaChapterError(
+                    "Agatha recovery failed: "
+                    f"party_hp={_party_hp(emulator)!r}, "
+                    f"enemy={(current.enemy_species_id, current.enemy_hp, current.enemy_level)!r}, "
+                    f"lead_status={current.first_party_status!r}, "
+                    f"pp={current.first_party_pp!r}, bag={_bag(emulator)!r}."
+                ) from healing_error
 
     for _ in range(20):
         _pulse(actions, MacroActionKind.CANCEL)
@@ -355,18 +377,18 @@ def _checkpoint(
 
 
 def _encounter_party(turns: Iterable[AgathaTurn]) -> tuple[tuple[int, int], ...]:
-    result: list[tuple[int, int]] = []
+    positions: dict[int, tuple[int, int]] = {}
     for turn in turns:
-        identity = (turn.species, turn.level)
-        if identity not in result:
-            result.append(identity)
-    return tuple(result)
+        positions.setdefault(turn.party_position, (turn.species, turn.level))
+    return tuple(positions[position] for position in sorted(positions))
 
 
 def _turns_valid(turns: Iterable[AgathaTurn]) -> bool:
     items = tuple(turns)
     return bool(items) and all(
-        item.move_slot in {1, 3, 4} and item.lead_hp >= 70 and item.lead_status == 0
+        item.move_slot in {1, 3, 4}
+        and item.lead_hp >= AGATHA_SAFE_HP
+        and item.lead_status == 0
         for item in items
     )
 
@@ -375,12 +397,17 @@ def _teach_take_down(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
+    *,
+    expected_remaining: int = 0,
+    expected_moves: tuple[int, int, int, int] = (0x24, 0x46, 0x3A, 0x39),
+    replacement_slot: int = 0,
+    item: ItemId = ItemId.TM09_TAKE_DOWN,
 ) -> None:
     _open_bag(actions, emulator, DEFAULT_LAVENDER_TIMING)
     _select_bag_item(
         actions,
         emulator,
-        ItemId.TM09_TAKE_DOWN,
+        item,
         DEFAULT_LAVENDER_TIMING,
     )
     for _ in range(24):
@@ -398,18 +425,21 @@ def _teach_take_down(
         if (
             emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
             emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
-        ) == (5, 8):
+        ) == (5, 8) and _menu_cursor_active(emulator):
             break
         _pulse(actions, MacroActionKind.CONFIRM)
     else:
         raise AgathaChapterError("TM09 did not reach move deletion.")
+    for _ in range(replacement_slot):
+        _pulse(actions, MacroActionKind.MOVE, "down")
     _pulse(actions, MacroActionKind.CONFIRM)
     for _ in range(24):
         raw = reader.read()
-        if raw.first_party_moves == (0x24, 0x46, 0x3A, 0x39) and ItemId.TM09_TAKE_DOWN not in _bag(
-            emulator
+        if (
+            raw.first_party_moves == expected_moves
+            and _bag(emulator).get(item, 0) == expected_remaining
         ):
             _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
             return
         _pulse(actions, MacroActionKind.CONFIRM)
-    raise AgathaChapterError("TM09 did not replace Mega Punch.")
+    raise AgathaChapterError("TM09 did not install Take Down in the requested slot.")

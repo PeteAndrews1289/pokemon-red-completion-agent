@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.agatha import AgathaChapterError, _teach_take_down
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
@@ -24,7 +25,10 @@ from pokemon_red_completion.celadon import (
 )
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
-    _use_bag_item,
+    _close_menus,
+    _open_bag,
+    _select_bag_item,
+    _select_cursor,
 )
 from pokemon_red_completion.observation import (
     EventFlag,
@@ -41,6 +45,8 @@ from pokemon_red_completion.silph import (
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 from pokemon_red_completion.victory_road import (
+    VictoryRoadChapterError,
+    _battle_sacrifice,
     _CountingExecutor,
     _event,
     _move,
@@ -57,8 +63,8 @@ LANCE_PARTY = (
     (0x42, 62),
 )
 LANCE_APPROACH = ("up",) * 9
-LANCE_SAFE_HP = 110
-LANCE_RNG_DELAY_FRAMES = 1
+LANCE_SAFE_HP = 120
+LANCE_RNG_DELAY_FRAMES = 40
 
 
 class EmulatorState(Protocol):
@@ -135,8 +141,9 @@ class LanceChapterReport:
             and _event(self.final_raw, EventFlag.BEAT_LANCE)
             and self.final_raw.map_id == MapId.CHAMPIONS_ROOM
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.final_raw.first_party_moves == (0x05, 0x46, 0x3A, 0x39)
-            and self.party_hp == self.party_max_hp
+            and self.final_raw.first_party_moves == (0x05, 0x46, 0x42, 0x39)
+            and self.party_hp[0] >= LANCE_SAFE_HP
+            and self.party_hp[1:] == self.party_max_hp[1:]
             and self.party_status == (0, 0, 0)
             and self.controller_released
         )
@@ -206,6 +213,15 @@ def run_lance_chapter(
         raise LanceChapterError("Lance entrance autowalk did not settle.")
     _checkpoint(records, progress, emulator, ready, "lance_ready", "Lance room ready")
 
+    try:
+        _teach_mega_punch(
+            actions,
+            reader,
+            emulator,
+            expected_remaining=0,
+        )
+    except BrunoChapterError as error:
+        raise LanceChapterError("Lance Mega Punch reload failed.") from error
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=LANCE_RNG_DELAY_FRAMES))
     _move(actions, reader, LANCE_APPROACH[:-1], "Lance approach")
     _pulse(actions, MacroActionKind.MOVE, "up", 240)
@@ -222,21 +238,38 @@ def run_lance_chapter(
     class _HealBoundary(Exception):
         pass
 
+    last_recovery_turn = -1
+
     def policy(raw: RawGameState) -> int:
         hp = raw.first_party_hp or 0
         status = raw.first_party_status or 0
-        if hp < LANCE_SAFE_HP or status:
+        hp_recovery = bool(
+            _bag(emulator).get(ItemId.HYPER_POTION, 0)
+            or _bag(emulator).get(ItemId.FULL_RESTORE, 0) > 1
+        )
+        status_recovery = bool(
+            _bag(emulator).get(ItemId.FULL_HEAL, 0)
+            or _bag(emulator).get(ItemId.FULL_RESTORE, 0)
+        )
+        if (
+            ((hp < LANCE_SAFE_HP and hp_recovery) or (status and status_recovery))
+            and len(turns) != last_recovery_turn
+        ):
             raise _HealBoundary
         species = raw.enemy_species_id or 0
         pp = raw.first_party_pp or (0, 0, 0, 0)
-        if species == 0xAB and pp[3] > 0:
+        if species in {0x59, 0x42} and pp[2] > 0:
+            slot = 3
+        elif species == 0xAB and pp[3] > 0:
             slot = 4
-        elif pp[1] > 0:
-            slot = 2
         elif pp[0] > 0:
             slot = 1
-        else:
+        elif pp[1] > 0:
+            slot = 2
+        elif pp[3] > 0:
             slot = 4
+        else:
+            slot = 3
         turns.append(
             LanceTurn(
                 species,
@@ -254,6 +287,7 @@ def run_lance_chapter(
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
     heal_before = _bag(emulator).get(ItemId.FULL_HEAL, 0)
+    next_sacrifice = 1
     while reader.read().battle_state:
         try:
             run_adaptive_trainer_battle(
@@ -274,46 +308,89 @@ def run_lance_chapter(
             )
         except BattleRuntimeError as error:
             if not isinstance(error.__cause__, _HealBoundary):
-                raise LanceChapterError("Lance battle runtime failed.") from error
+                raw = reader.read()
+                raise LanceChapterError(
+                    "Lance battle runtime failed: "
+                    f"party_hp={_party_hp(emulator)!r}, "
+                    f"enemy={(raw.enemy_species_id, raw.enemy_hp, raw.enemy_level)!r}, "
+                    f"lead_status={raw.first_party_status!r}, "
+                    f"pp={raw.first_party_pp!r}, turns={len(turns)}."
+                ) from error
             raw = reader.read()
-            if (raw.first_party_status or 0) and (raw.first_party_hp or 0) >= 90:
+            if (
+                (raw.first_party_status or 0)
+                and (raw.first_party_hp or 0) >= 90
+                and _bag(emulator).get(ItemId.FULL_HEAL, 0)
+            ):
                 item = ItemId.FULL_HEAL
-            elif raw.first_party_status or 0:
+            elif (raw.first_party_status or 0) and _bag(emulator).get(
+                ItemId.FULL_RESTORE, 0
+            ):
                 item = ItemId.FULL_RESTORE
             elif _bag(emulator).get(ItemId.HYPER_POTION, 0):
                 item = ItemId.HYPER_POTION
-            else:
+            elif _bag(emulator).get(ItemId.FULL_RESTORE, 0) > 1:
                 item = ItemId.FULL_RESTORE
+            else:
+                item = ItemId.FULL_HEAL
             if _bag(emulator).get(item, 0) == 0:
-                raise LanceChapterError("Lance exhausted the recovery reserve.") from error
-            try:
-                _battle_healing_item(
-                    reader,
-                    actions,
-                    emulator,
-                    DEFAULT_SILPH_TIMING,
-                    item,
-                )
-            except SilphChapterError as healing_error:
-                raise LanceChapterError("Lance recovery failed.") from healing_error
+                raise LanceChapterError(
+                    "Lance exhausted the selected recovery reserve: "
+                    f"item={item.name}, bag={_bag(emulator)!r}, "
+                    f"party_hp={_party_hp(emulator)!r}."
+                ) from error
+            if (
+                (raw.first_party_hp or 0) < LANCE_SAFE_HP
+                and next_sacrifice < 3
+                and _party_hp(emulator)[next_sacrifice] > 0
+            ):
+                try:
+                    _battle_sacrifice(
+                        actions,
+                        reader,
+                        emulator,
+                        next_sacrifice,
+                        heal_lead=True,
+                        healing_item=item,
+                    )
+                except VictoryRoadChapterError as pivot_error:
+                    raise LanceChapterError("Lance recovery pivot failed.") from pivot_error
+                next_sacrifice += 1
+            else:
+                try:
+                    _battle_healing_item(
+                        reader,
+                        actions,
+                        emulator,
+                        DEFAULT_SILPH_TIMING,
+                        item,
+                    )
+                except SilphChapterError as healing_error:
+                    raise LanceChapterError("Lance recovery failed.") from healing_error
+            last_recovery_turn = len(turns)
 
     for _ in range(20):
         _pulse(actions, MacroActionKind.CANCEL)
     _settle_confirm(actions, reader, 40)
+    _recover_fainted_helpers(actions, reader, emulator)
     _field_recover(actions, reader, emulator)
+    _field_recover_helpers(actions, reader, emulator)
     defeated = reader.read()
     if not _event(defeated, EventFlag.BEAT_LANCE):
         raise LanceChapterError("Lance event did not set after battle.")
     _checkpoint(records, progress, emulator, defeated, "lance_defeated", "Defeated Lance")
     try:
-        _teach_mega_punch(
+        _teach_take_down(
             actions,
             reader,
             emulator,
             expected_remaining=0,
+            expected_moves=(0x05, 0x46, 0x42, 0x39),
+            replacement_slot=2,
+            item=ItemId.TM17_SUBMISSION,
         )
-    except BrunoChapterError as error:
-        raise LanceChapterError("Champion Mega Punch reload failed.") from error
+    except AgathaChapterError as error:
+        raise LanceChapterError("Champion Submission reload failed.") from error
     _move(actions, reader, ("left", "up", "up", "up"), "Champion room entry")
     final = reader.read()
 
@@ -351,19 +428,98 @@ def _field_recover(
         item = ItemId.FULL_RESTORE
     elif hp < max_hp and _bag(emulator).get(ItemId.HYPER_POTION, 0):
         item = ItemId.HYPER_POTION
-    elif status:
+    elif status and _bag(emulator).get(ItemId.FULL_HEAL, 0):
         item = ItemId.FULL_HEAL
-    else:
+    elif hp < LANCE_SAFE_HP and _bag(emulator).get(ItemId.FULL_RESTORE, 0):
         item = ItemId.FULL_RESTORE
-    _use_bag_item(
+    elif status:
+        raise LanceChapterError("Lance left an uncured status with no recovery item.")
+    elif hp < LANCE_SAFE_HP:
+        raise LanceChapterError(
+            f"Lance left the lead below its safety margin without recovery: {hp}/{max_hp}."
+        )
+    else:
+        return
+    _use_field_item_on_party(
         actions,
         reader,
         emulator,
-        DEFAULT_LAVENDER_TIMING,
         item,
+        0,
     )
-    if _party_hp(emulator)[0] != max_hp or _party_status(emulator)[0]:
+    if (
+        _party_hp(emulator)[0] < LANCE_SAFE_HP
+        or _party_status(emulator)[0]
+    ):
         _field_recover(actions, reader, emulator)
+
+
+def _recover_fainted_helpers(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    for party_index in (1, 2):
+        if _party_hp(emulator)[party_index] == 0:
+            _use_field_item_on_party(
+                actions,
+                reader,
+                emulator,
+                ItemId.REVIVE,
+                party_index,
+            )
+    if not all(hp > 0 for hp in _party_hp(emulator)[1:]):
+        raise LanceChapterError("Lance helper recovery did not revive the full party.")
+
+
+def _field_recover_helpers(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    for party_index in (1, 2):
+        hp = _party_hp(emulator)[party_index]
+        max_hp = _party_max_hp(emulator)[party_index]
+        if hp == max_hp:
+            continue
+        item = (
+            ItemId.HYPER_POTION
+            if _bag(emulator).get(ItemId.HYPER_POTION, 0)
+            else ItemId.FULL_RESTORE
+        )
+        _use_field_item_on_party(
+            actions,
+            reader,
+            emulator,
+            item,
+            party_index,
+        )
+    if _party_hp(emulator)[1:] != _party_max_hp(emulator)[1:]:
+        raise LanceChapterError("Lance helper recovery did not fully heal the party.")
+
+
+def _use_field_item_on_party(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    item: ItemId,
+    party_index: int,
+) -> None:
+    before = _bag(emulator).get(item, 0)
+    if before <= 0:
+        raise LanceChapterError(f"Lance helper recovery exhausted {item.name}.")
+    _open_bag(actions, emulator, DEFAULT_LAVENDER_TIMING)
+    _select_bag_item(actions, emulator, item, DEFAULT_LAVENDER_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    _select_cursor(actions, emulator, party_index, DEFAULT_LAVENDER_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(24):
+        if _bag(emulator).get(item, 0) == before - 1:
+            _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+            return
+        _pulse(actions, MacroActionKind.CONFIRM)
+    raise LanceChapterError(f"Lance helper recovery did not consume {item.name}.")
 
 
 def _checkpoint(
@@ -410,8 +566,8 @@ def _turns_valid(turns: Iterable[LanceTurn]) -> bool:
     items = tuple(turns)
     return bool(items) and all(
         item.species in {species for species, _ in LANCE_PARTY}
-        and item.move_slot in {1, 2, 4}
-        and item.lead_hp >= LANCE_SAFE_HP
+        and item.move_slot in {1, 2, 3, 4}
+        and item.lead_hp > 0
         and item.lead_status == 0
         for item in items
     )

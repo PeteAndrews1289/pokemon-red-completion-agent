@@ -57,8 +57,8 @@ def test_erika_report_qualifies_level_42_move_learning_and_terminal() -> None:
         strength_pp_spent=6,
         moves_before=(0x2C, STRENGTH, 0x3D, 0x39),
         moves_after=(0x82, STRENGTH, 0x3D, 0x39),
-        money_before=37_489,
-        money_after=41_545,
+            money_before=33_191,
+            money_after=37_247,
         badge_bits=0x1F,
         beat_gym_flags=int(
             Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL
@@ -70,8 +70,8 @@ def test_erika_report_qualifies_level_42_move_learning_and_terminal() -> None:
         optional_route_events_before=(False,) * 20,
         optional_route_events_after=(False,) * 20,
         final_bag=((int(ItemId.TM21_MEGA_DRAIN), 1),),
-        party_hp=(130, 52, 37),
-        party_max_hp=(130, 52, 37),
+        party_hp=(130, 47, 40),
+        party_max_hp=(130, 47, 40),
         party_status=(0, 0, 0),
         frames_executed=1,
         actions_executed=1,
@@ -88,3 +88,44 @@ def test_erika_report_qualifies_level_42_move_learning_and_terminal() -> None:
         "moves_after": [0x82, STRENGTH, 0x3D, 0x39],
         "learned_move_pp": 15,
     }
+
+
+def test_erika_report_accepts_post_battle_level_and_rejects_incomplete_heal() -> None:
+    raw = replace(
+        _terminal(),
+        first_party_level=43,
+        first_party_hp=133,
+        first_party_max_hp=133,
+    )
+    report = ErikaChapterReport(
+        records=tuple(
+            ErikaCheckpoint(str(index), str(index), raw) for index in range(ERIKA_CHECKPOINT_COUNT)
+        ),
+        final_raw=raw,
+        erika_identity=(ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1),
+        strength_pp_spent=6,
+        moves_before=(0x2C, STRENGTH, 0x3D, 0x39),
+        moves_after=(0x82, STRENGTH, 0x3D, 0x39),
+        money_before=33_191,
+        money_after=37_247,
+        badge_bits=0x1F,
+        beat_gym_flags=int(
+            Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL
+        ),
+        got_tm21=True,
+        beat_erika=True,
+        gym_events_before=(False,) * 7,
+        gym_events_after=(True,) * 7,
+        optional_route_events_before=(False,) * 20,
+        optional_route_events_after=(False,) * 20,
+        final_bag=((int(ItemId.TM21_MEGA_DRAIN), 1),),
+        party_hp=(133, 47, 40),
+        party_max_hp=(133, 47, 40),
+        party_status=(0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert not replace(report, party_hp=(132, 47, 40)).passed

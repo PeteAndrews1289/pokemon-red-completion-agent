@@ -62,9 +62,9 @@ def _report() -> CeladonChapterReport:
         party_hp=(81, 52, 37),
         party_max_hp=(81, 52, 37),
         party_status=(0, 0, 0),
-        super_potions_remaining=4,
+        super_potions_remaining=5,
         repels_remaining=0,
-        money_remaining=14_631,
+        money_remaining=10_333,
         frames_executed=100,
         actions_executed=50,
         controller_released=True,
@@ -97,8 +97,8 @@ def test_celadon_report_requires_exact_trainer_resources_and_party_gates() -> No
         replace(report, route_8_events_after=(False,) * 9),
         replace(report, party_hp=(80, 52, 37)),
         replace(report, party_status=(0, 8, 0)),
-        replace(report, super_potions_remaining=3),
-        replace(report, money_remaining=14_630),
+        replace(report, super_potions_remaining=4),
+        replace(report, money_remaining=10_532),
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)
@@ -119,9 +119,9 @@ def test_celadon_public_report_exposes_exact_route_evidence() -> None:
         "selected_pp_spent": 5,
     }]
     assert public["inventory"] == {
-        "super_potions_remaining": 4,
+        "super_potions_remaining": 5,
         "repels_remaining": 0,
-        "money_remaining": 14_631,
+        "money_remaining": 10_333,
     }
 
 

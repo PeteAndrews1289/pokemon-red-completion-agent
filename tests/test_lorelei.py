@@ -3,6 +3,8 @@ from pokemon_red_completion.lorelei import (
     LORELEI_APPROACH,
     LORELEI_CHECKPOINT_COUNT,
     LORELEI_PARTY,
+    LORELEI_RNG_DELAY_FRAMES,
+    LORELEI_SAFE_HP,
     LoreleiTurn,
     _encounter_party,
     _turns_valid,
@@ -12,6 +14,7 @@ from pokemon_red_completion.observation import EventFlag, MapId
 
 def test_lorelei_routes_are_live_qualified() -> None:
     assert LORELEI_CHECKPOINT_COUNT == 3
+    assert LORELEI_RNG_DELAY_FRAMES == 119
     assert INDIGO_TO_LORELEI == (
         "up",
         "up",
@@ -43,7 +46,7 @@ def test_lorelei_source_ids_and_party_are_exact() -> None:
 
 def test_lorelei_receipt_reconstructs_party_and_rejects_unsafe_turns() -> None:
     turns = tuple(
-        LoreleiTurn(species, level, 1, 80, 0, (1, 1, 1, 1), 2)
+        LoreleiTurn(species, level, 1, LORELEI_SAFE_HP, 0, (1, 1, 1, 1), 2)
         for species, level in LORELEI_PARTY
     )
     assert _encounter_party(turns) == LORELEI_PARTY

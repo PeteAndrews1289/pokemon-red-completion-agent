@@ -49,8 +49,8 @@ def _report() -> SafariChapterReport:
         final_raw=raw,
         initial_bag=initial_bag,
         final_bag=final_bag,
-        initial_money=30_137,
-        final_money=29_637,
+        initial_money=25_839,
+        final_money=25_339,
         counter_milestones=(500, 472, 376, 238, 228, 201, 0),
         balls_milestones=(30,) * 7,
         gold_teeth=True,
@@ -93,7 +93,7 @@ def test_safari_report_requires_every_terminal_gate() -> None:
     assert report.passed
     invalid = (
         replace(report, records=report.records[:-1]),
-        replace(report, final_money=29_638),
+        replace(report, final_money=25_538),
         replace(report, counter_milestones=(500, 472, 376, 238, 228, 200, 0)),
         replace(report, balls_milestones=(30, 30, 29, 30, 30, 30, 30)),
         replace(report, gold_teeth=False),
@@ -104,7 +104,7 @@ def test_safari_report_requires_every_terminal_gate() -> None:
         replace(report, safari_balls=30),
         replace(report, moves_after=(0x39, 0x27, 0x3D, 0x37)),
         replace(report, pp_after=(25, 30, 20, 25)),
-        replace(report, encounters_fled=5),
+        replace(report, encounters_fled=21),
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)

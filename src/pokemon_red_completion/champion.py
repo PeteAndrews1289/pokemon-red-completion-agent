@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -36,6 +36,8 @@ from pokemon_red_completion.silph import (
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 from pokemon_red_completion.victory_road import (
+    VictoryRoadChapterError,
+    _battle_sacrifice,
     _CountingExecutor,
     _event,
     _pulse,
@@ -43,8 +45,8 @@ from pokemon_red_completion.victory_road import (
 )
 
 CHAMPION_CHECKPOINT_COUNT = 3
-CHAMPION_RNG_DELAY_FRAMES = 25
-CHAMPION_SAFE_HP = 40
+CHAMPION_RNG_DELAY_FRAMES = 150
+CHAMPION_SAFE_HP = 90
 CHAMPION_PARTY = (
     (0x97, 61),
     (0x95, 59),
@@ -126,7 +128,7 @@ class ChampionChapterReport:
             len(self.records) == CHAMPION_CHECKPOINT_COUNT
             and self.party == CHAMPION_PARTY
             and _turns_valid(self.turns)
-            and self.x_specials_used == 6
+            and self.x_specials_used == 4
             and _event(self.final_raw, EventFlag.BEAT_CHAMPION_RIVAL)
             and self.final_raw.map_id == MapId.HALL_OF_FAME
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
@@ -235,18 +237,22 @@ def run_champion_chapter(
     def policy(raw: RawGameState) -> int:
         hp = raw.first_party_hp or 0
         status = raw.first_party_status or 0
-        if hp < CHAMPION_SAFE_HP or status:
+        if (hp < CHAMPION_SAFE_HP or status) and len(turns) != last_recovery_turn:
             raise _HealBoundary
-        if boosts_used < 6:
+        if boosts_used < 4:
             raise _BoostBoundary
         pp = raw.first_party_pp or (0, 0, 0, 0)
         species = raw.enemy_species_id or 0
-        if species in {0x01, 0x14} and pp[3] > 0:
+        if species in {0x01, 0x14} and pp[2] > 0:
+            slot = 3
+        elif species in {0x01, 0x14} and pp[3] > 0:
             slot = 4
-        elif pp[0] > 0:
-            slot = 1
         elif pp[1] > 0:
             slot = 2
+        elif pp[0] > 0:
+            slot = 1
+        elif pp[2] > 0:
+            slot = 3
         else:
             slot = 4
         turns.append(
@@ -267,6 +273,8 @@ def run_champion_chapter(
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
     heal_before = _bag(emulator).get(ItemId.FULL_HEAL, 0)
     x_special_before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
+    next_sacrifice = 1
+    last_recovery_turn = -1
     while True:
         raw = reader.read()
         if _completed(raw):
@@ -299,26 +307,54 @@ def run_champion_chapter(
                 boosts_used += 1
                 continue
             if not isinstance(error.__cause__, _HealBoundary):
-                raise ChampionChapterError("Champion battle runtime failed.") from error
+                current = reader.read()
+                raise ChampionChapterError(
+                    "Champion battle runtime failed: "
+                    f"party_hp={_party_hp(emulator)!r}, "
+                    f"enemy={(current.enemy_species_id, current.enemy_hp, current.enemy_level)!r}, "
+                    f"lead_status={current.first_party_status!r}, "
+                    f"pp={current.first_party_pp!r}, "
+                    f"bag={_bag(emulator)!r}."
+                ) from error
             current = reader.read()
-            if (current.first_party_status or 0) and (
-                current.first_party_hp or 0
-            ) >= CHAMPION_SAFE_HP:
-                item = ItemId.FULL_HEAL
-            else:
-                item = ItemId.FULL_RESTORE
-            if _bag(emulator).get(item, 0) == 0:
+            inventory = _bag(emulator)
+            item = _select_recovery_item(
+                current.first_party_hp or 0,
+                current.first_party_status or 0,
+                inventory,
+            )
+            if item is None:
                 raise ChampionChapterError("Champion exhausted the recovery reserve.") from error
-            try:
-                _battle_healing_item(
-                    reader,
-                    actions,
-                    emulator,
-                    DEFAULT_SILPH_TIMING,
-                    item,
-                )
-            except SilphChapterError as healing_error:
-                raise ChampionChapterError("Champion recovery failed.") from healing_error
+            if (
+                (current.first_party_hp or 0) < CHAMPION_SAFE_HP
+                and emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS) >= 4
+                and next_sacrifice < 3
+                and _party_hp(emulator)[next_sacrifice] > 0
+            ):
+                try:
+                    _battle_sacrifice(
+                        actions,
+                        reader,
+                        emulator,
+                        next_sacrifice,
+                        heal_lead=True,
+                        healing_item=item,
+                    )
+                except VictoryRoadChapterError as pivot_error:
+                    raise ChampionChapterError("Champion recovery pivot failed.") from pivot_error
+                next_sacrifice += 1
+            else:
+                try:
+                    _battle_healing_item(
+                        reader,
+                        actions,
+                        emulator,
+                        DEFAULT_SILPH_TIMING,
+                        item,
+                    )
+                except SilphChapterError as healing_error:
+                    raise ChampionChapterError("Champion recovery failed.") from healing_error
+            last_recovery_turn = len(turns)
 
     final = reader.read()
     _checkpoint(
@@ -390,6 +426,18 @@ def _completed(raw: RawGameState) -> bool:
     return raw.map_id == MapId.HALL_OF_FAME and _event(raw, EventFlag.BEAT_CHAMPION_RIVAL)
 
 
+def _select_recovery_item(
+    hp: int,
+    status: int,
+    inventory: Mapping[ItemId, int],
+) -> ItemId | None:
+    if status and hp >= CHAMPION_SAFE_HP and inventory.get(ItemId.FULL_HEAL, 0):
+        return ItemId.FULL_HEAL
+    if inventory.get(ItemId.FULL_RESTORE, 0):
+        return ItemId.FULL_RESTORE
+    return None
+
+
 def _encounter_party(
     turns: Iterable[ChampionTurn],
 ) -> tuple[tuple[int, int], ...]:
@@ -406,7 +454,7 @@ def _turns_valid(turns: Iterable[ChampionTurn]) -> bool:
     items = tuple(turns)
     return bool(items) and all(
         item.species in {species for species, _ in CHAMPION_PARTY}
-        and item.move_slot in {1, 2, 4}
+        and item.move_slot in {1, 2, 3, 4}
         and item.lead_hp >= CHAMPION_SAFE_HP
         and item.lead_status == 0
         for item in items

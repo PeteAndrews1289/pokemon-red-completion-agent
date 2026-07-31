@@ -18,6 +18,11 @@ from pokemon_red_completion.battle_runtime import (
     RequiredMovePolicy,
     run_adaptive_trainer_battle,
 )
+from pokemon_red_completion.economy import (
+    CELADON_MONEY,
+    LAVENDER_MONEY,
+    LAVENDER_SUPER_POTION_RESERVE,
+)
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     EventFlag,
@@ -179,9 +184,9 @@ class CeladonChapterReport:
             and self.final_raw.battle_state == 0
             and self.party_hp == self.party_max_hp
             and self.party_status == (0, 0, 0)
-            and self.super_potions_remaining == 4
+            and self.super_potions_remaining == LAVENDER_SUPER_POTION_RESERVE
             and self.repels_remaining == 0
-            and self.money_remaining == 14_631
+            and self.money_remaining == CELADON_MONEY
             and self.controller_released
         )
 
@@ -546,7 +551,7 @@ def _heal_center(
 def _require_resources(emulator: EmulatorState) -> None:
     bag = _bag(emulator)
     resources = (bag.get(ItemId.SUPER_POTION, 0), bag.get(ItemId.REPEL, 0), _money(emulator))
-    if resources != (4, 0, 14_301):
+    if resources != (LAVENDER_SUPER_POTION_RESERVE, 0, LAVENDER_MONEY):
         raise CeladonChapterError(f"Unexpected starting resources: {resources!r}.")
     if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
         raise CeladonChapterError("Lavender boundary party was not fully healed.")

@@ -60,7 +60,7 @@ def _report() -> KogaChapterReport:
         (int(ItemId.HM03_SURF), 1),
     )
     battles = (
-        KogaBattleEvidence("Juggler 3", 0xDD, 0x15, 3, 0x25B, 6, 84, 117, 0),
+        KogaBattleEvidence("Juggler 3", 0xDD, 0x15, 3, 0x25B, 5, 84, 117, 0),
         KogaBattleEvidence("Tamer 2", 0xDE, 0x16, 2, 0x25E, 5, 66, 120, 0x40),
         KogaBattleEvidence("Juggler 4", 0xDD, 0x15, 4, 0x25F, 5, 102, 120, 0),
         KogaBattleEvidence(
@@ -69,7 +69,7 @@ def _report() -> KogaChapterReport:
             KOGA_TRAINER_CLASS,
             KOGA_TRAINER_NUMBER,
             int(EventFlag.BEAT_KOGA),
-            8,
+            9,
             107,
             124,
             0,
@@ -84,16 +84,16 @@ def _report() -> KogaChapterReport:
         final_raw=raw,
         initial_bag=initial_bag,
         final_bag=tuple(sorted((*initial_bag, (int(ItemId.TM06_TOXIC), 1)))),
-        initial_money=29_637,
-        final_money=37_489,
+        initial_money=25_339,
+        final_money=33_191,
         trainer_events_before_koga=(False, True, False, False, True, True),
         trainer_events_after_koga=(True,) * 6,
         got_tm06=True,
         beat_koga=True,
         soul_badge=True,
         soul_badge_mirror=True,
-        party_hp=(124, 52, 37),
-        party_max_hp=(124, 52, 37),
+        party_hp=(124, 47, 40),
+        party_max_hp=(124, 47, 40),
         party_status=(0, 0, 0),
         surf_pp=15,
         frames_executed=120_000,
@@ -124,13 +124,21 @@ def test_koga_report_requires_every_terminal_gate() -> None:
     invalid = (
         replace(report, records=report.records[:-1]),
         replace(report, battles=report.battles[:-1]),
+        replace(
+            report,
+            battles=(replace(report.battles[0], hp_after=0), *report.battles[1:]),
+        ),
+        replace(
+            report,
+            battles=(replace(report.battles[0], selected_pp_spent=9), *report.battles[1:]),
+        ),
         replace(report, trainer_events_before_koga=(True,) * 6),
         replace(report, trainer_events_after_koga=(True,) * 5 + (False,)),
         replace(report, got_tm06=False),
         replace(report, beat_koga=False),
         replace(report, soul_badge=False),
         replace(report, soul_badge_mirror=False),
-        replace(report, final_money=37_488),
+        replace(report, final_money=33_388),
         replace(report, surf_pp=14),
         replace(report, controller_released=False),
     )
@@ -154,7 +162,7 @@ def test_koga_public_report_is_honest_about_geography_and_minimum_trainers() -> 
         "mart_purchases": 0,
         "consumables_used": 0,
     }
-    assert public["koga"]["surf_pp_spent"] == 8
+    assert public["koga"]["surf_pp_spent"] == 9
     assert public["rewards"]["regular_trainers_deactivated"] is True
 
 
