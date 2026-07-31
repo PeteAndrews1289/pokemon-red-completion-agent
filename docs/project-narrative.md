@@ -157,6 +157,7 @@ Several failures have already produced general improvements:
 | Full-health helper pivots were consumed by the first two low-HP events, leaving none for Arcanine or Venusaur. | Recovery treated every battle phase as equally dangerous instead of budgeting scarce safe turns across the opponent party. | Direct Full Restores handle the first four opponents; the two helper sacrifice pivots are now reserved for opponent party positions four and five, where a protected recovery turn has the greatest terminal value. |
 | The late-pivot Champion policy was evaluated across all 255 byte-sized start offsets. | The previous policy changes were locally plausible but had no verified Hall-of-Fame terminal. | Offset 150 produced the first passing revised-lineage terminal: four X Specials and three Full Restores used, the lead at 113 HP, one helper at full HP, 16 Submission PP remaining, the Champion event set, and the Hall of Fame entered. It remains diagnostic until clean-power replay confirms all 299 checkpoints. |
 | The locally qualified Champion policy was replayed from clean power rather than from its diagnostic boundary. | A passing late-game snapshot could not establish that the complete revised route was reproducible. | The uninterrupted replay passed all 299 checkpoints and 36 objectives, entered the Hall of Fame in 5,163,657 frames and 43,005 actions, and reproduced the same totals on a second clean rehearsal. This closes the revised teacher-completion gate; it does not close the learned-agent or held-out-generalization gates. |
+| The first registry-bound, uncounted 63-battle schedule rehearsal changed the Route 25 trainer-5 timing and the lead fainted at checkpoint 49/299. | Reproducibility on the default timing lineage did not imply robustness to the preregistered offset schedule. | The failure was retained as held-out diagnostic evidence. The campaign remains unopened, all twelve declared slots remain pending, and no dry-run qualification exists. Route 25 recovery must be hardened before the schedule rehearsal is attempted again under a newly published source identity. |
 
 This process is intentionally slower than patching a single run with a save-state restore. It
 produces a better teacher, more useful correction data, and a stronger model interface.
@@ -302,9 +303,11 @@ reserve. Diagnostic states were used while developing and qualifying local fixes
 qualifying completion restored one.
 
 The revised teacher has passed broad source validation, and its source-bound collection registry
-has been regenerated locally. The registry becomes the public preregistration anchor only after
-the exact source/configuration commit is committed and pushed; no schedule rehearsal or declared
-collection slot has been consumed.
+was committed and pushed as source commit `58c3dbd`. The first uncounted schedule rehearsal stopped
+at Route 25 trainer 5 (checkpoint 49/299) after the changed battle timing caused the lead to faint.
+The private status audit confirms `campaign_started=false`, no dry-run qualification, and all
+twelve declared slots still pending. The next task is to harden this held-out failure, republish a
+new source-bound registry, and repeat the uncounted rehearsal.
 
 No learned model has yet completed the game. Collection, frozen training, held-out Red evaluation,
 and the first cross-game transfer experiment remain subsequent gates.

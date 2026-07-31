@@ -24,9 +24,10 @@ control, and progressively trained specialists.**
 > same **299/299 checkpoints**, **36/36 objectives**, **5,163,657 frames**, and **43,005 actions**.
 > Those different totals reflect the deliberately changed route, recovery, economy, and battle
 > policy documented in the [Project Narrative](docs/project-narrative.md); they do not rewrite the
-> historical receipt. Broad validation has passed and the source-bound collection registry has
-> been regenerated; committing and pushing that exact identity is the remaining publication gate
-> before the uncounted schedule rehearsal and collection.
+> historical receipt. Broad validation passed and the source-bound collection registry was
+> published at commit `58c3dbd`. Its first uncounted 63-battle schedule rehearsal exposed a
+> held-out Route 25 failure at checkpoint 49/299; the campaign remains unopened and all twelve
+> declared collection slots remain pending. That failure is now the next robustness target.
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
 > **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned
