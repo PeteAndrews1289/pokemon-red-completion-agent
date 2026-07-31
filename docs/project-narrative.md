@@ -159,6 +159,35 @@ Several failures have already produced general improvements:
 | The locally qualified Champion policy was replayed from clean power rather than from its diagnostic boundary. | A passing late-game snapshot could not establish that the complete revised route was reproducible. | The uninterrupted replay passed all 299 checkpoints and 36 objectives, entered the Hall of Fame in 5,163,657 frames and 43,005 actions, and reproduced the same totals on a second clean rehearsal. This closes the revised teacher-completion gate; it does not close the learned-agent or held-out-generalization gates. |
 | The first registry-bound, uncounted 63-battle schedule rehearsal changed the Route 25 trainer-5 timing and the lead fainted at checkpoint 49/299. | Reproducibility on the default timing lineage did not imply robustness to the preregistered offset schedule. | The failure was retained as held-out diagnostic evidence. The campaign remains unopened, all twelve declared slots remain pending, and no dry-run qualification exists. Route 25 recovery must be hardened before the schedule rehearsal is attempted again under a newly published source identity. |
 
+### Current schedule-hardening work
+
+The working branch has since replayed the same declared dry-run offsets in an in-memory diagnostic
+that does not consume an official collection slot. That work is intentionally not presented as a
+new qualification: the source is still changing, the registry still identifies the last published
+commit, and the official failed rehearsal remains the public result until a clean, committed
+replacement passes.
+
+The diagnostic has nevertheless advanced from Route 25 to Rock Tunnel and exposed several useful
+causal links:
+
+- Route 25 now chooses attacks from the opposing trainer's party rather than using one historical
+  slot everywhere. A single legally purchased Antidote provides conditional field recovery when
+  the held-out lineage produces poison; if no poison is present, the item is not consumed.
+- The S.S. Anne rival policy now ranks legal fallback attacks when Disable removes its preferred
+  move, using the observed disabled slot rather than failing on an otherwise winnable state.
+- Capture planning now accounts for downstream responsibilities. The Spearow chosen for the DUX
+  trade must be strong enough for its later required battles, and the Diglett acceptance window is
+  being evaluated against its actual Surge role rather than one historical encounter level.
+- DUX's Route 9 demonstration now uses bounded in-battle recovery under live HP evidence. The next
+  Route 9 battle selects BubbleBeam because the held-out opponent disabled Bite.
+- With those changes, the first remaining failure moved to Rock Tunnel 1F trainer 4, where the
+  current lead can still faint under the declared timing schedule.
+
+These changes remain **diagnostic work in progress**. They will be simplified, covered by the full
+ROM-free suite, replayed on the default lineage, committed and pushed, bound into a regenerated
+registry, and then subjected to the official uncounted schedule rehearsal. Only that final
+rehearsal can reopen the collection gate.
+
 This process is intentionally slower than patching a single run with a save-state restore. It
 produces a better teacher, more useful correction data, and a stronger model interface.
 

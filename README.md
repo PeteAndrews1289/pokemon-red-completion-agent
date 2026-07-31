@@ -27,7 +27,10 @@ control, and progressively trained specialists.**
 > historical receipt. Broad validation passed and the source-bound collection registry was
 > published at commit `58c3dbd`. Its first uncounted 63-battle schedule rehearsal exposed a
 > held-out Route 25 failure at checkpoint 49/299; the campaign remains unopened and all twelve
-> declared collection slots remain pending. That failure is now the next robustness target.
+> declared collection slots remain pending. Uncommitted diagnostic hardening now carries the same
+> declared offsets through Route 25, the S.S. Anne, Vermilion, and Route 9 before stopping in Rock
+> Tunnel. This is progress evidence, not a replacement qualification; see the living narrative for
+> the exact distinction.
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
 > **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned
