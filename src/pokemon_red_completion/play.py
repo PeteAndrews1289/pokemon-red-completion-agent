@@ -1256,9 +1256,12 @@ def run_qualified_play(
                 recording_failures[0] += 1
             failures = recording_failures[0] + recording_executor.recording_failures
             if failures:
+                reasons = dict(recording_executor.recording_failure_reasons)
+                if recording_failures[0]:
+                    reasons["sparse_event"] = recording_failures[0]
                 raise QualifiedPlayError(
                     f"Trajectory recording lost {failures} record(s); "
-                    "the private episode was not promoted."
+                    f"categories={reasons!r}; the private episode was not promoted."
                 )
             try:
                 trajectory_sink.finalize()

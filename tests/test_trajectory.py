@@ -527,6 +527,7 @@ def test_recording_failures_do_not_change_delegate_results_or_errors() -> None:
 
     assert successful.execute(FakeAction("move", 1)) is result
     assert successful.recording_failures == 1
+    assert successful.recording_failure_reasons == {"execution_success_record": 1}
 
     original = PrivateFailure("controller failure")
     failing = RecordingExecutor(
@@ -539,6 +540,7 @@ def test_recording_failures_do_not_change_delegate_results_or_errors() -> None:
         failing.execute(FakeAction("confirm", 1))
     assert caught.value is original
     assert failing.recording_failures == 1
+    assert failing.recording_failure_reasons == {"execution_error_record": 1}
 
 
 def test_decision_scope_records_once_and_links_every_execution_in_the_span() -> None:

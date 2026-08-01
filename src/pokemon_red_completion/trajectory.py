@@ -639,6 +639,7 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
     start_step_index: int = 0
     _next_step_index: int = field(init=False)
     _recording_failures: int = field(default=0, init=False)
+    _recording_failure_reasons: dict[str, int] = field(default_factory=dict, init=False)
     _active_decision_id: str | None = field(default=None, init=False)
     _active_decision_step_index: int | None = field(default=None, init=False)
     _active_decision_snapshot_sha256: str | None = field(default=None, init=False)
@@ -660,10 +661,22 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
 
         return self._recording_failures
 
+    @property
+    def recording_failure_reasons(self) -> Mapping[str, int]:
+        """Return fixed, privacy-safe instrumentation failure categories."""
+
+        return dict(self._recording_failure_reasons)
+
+    def _note_failure(self, reason: str) -> None:
+        self._recording_failures += 1
+        self._recording_failure_reasons[reason] = (
+            self._recording_failure_reasons.get(reason, 0) + 1
+        )
+
     def note_instrumentation_failure(self) -> None:
         """Make the episode ineligible for promotion without raising into the actor."""
 
-        self._recording_failures += 1
+        self._note_failure("observer_callback")
 
     @contextmanager
     def decision_scope(
@@ -679,7 +692,7 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
         """
 
         if self._active_decision_id is not None:
-            self._recording_failures += 1
+            self._note_failure("nested_decision_scope")
             yield
             return
 
@@ -697,7 +710,7 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
                 )
             self.sink.record_decision(record)
         except Exception:
-            self._recording_failures += 1
+            self._note_failure("decision_record")
             yield
             return
 
@@ -708,7 +721,7 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
             yield
         finally:
             if self._next_step_index == record.step_index:
-                self._recording_failures += 1
+                self._note_failure("decision_without_execution")
             self._active_decision_id = None
             self._active_decision_step_index = None
             self._active_decision_snapshot_sha256 = None
@@ -746,7 +759,7 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
                 )
         except Exception:
             # Recording is observational; it must never prevent controller work.
-            self._recording_failures += 1
+            self._note_failure("execution_before")
             before = None
             encoded_action = None
 
@@ -804,7 +817,7 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
             self.sink.record_execution(record)
         except Exception:
             # Preserve successful delegate behavior even if instrumentation fails.
-            self._recording_failures += 1
+            self._note_failure("execution_success_record")
             return
 
     def _record_error(
@@ -834,5 +847,5 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
             self.sink.record_execution(record)
         except Exception:
             # Never replace the delegate's original exception with recorder failure.
-            self._recording_failures += 1
+            self._note_failure("execution_error_record")
             return
