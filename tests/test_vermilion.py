@@ -255,6 +255,11 @@ def test_runner_records_all_fifteen_ordered_semantic_boundaries(
     monkeypatch.setattr(vermilion, "_battle", lambda *args, **kwargs: reader.read())
     monkeypatch.setattr(
         vermilion,
+        "_run_route_6_trainer_f_with_potion",
+        lambda *args, **kwargs: reader.read(),
+    )
+    monkeypatch.setattr(
+        vermilion,
         "_backtrack_heal_and_replay",
         lambda *args, **kwargs: tuple(
             vermilion.Route6WildFleeEvidence(

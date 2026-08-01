@@ -1144,16 +1144,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 299
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 301
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=299,
+        completed=301,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 299
+    assert progress.completed == progress.total == 301
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -2189,8 +2189,8 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     assert report.agatha.passed
     assert report.lance.passed
     assert report.champion.passed
-    assert report.champion.x_specials_used == 4
+    assert report.champion.x_specials_used == 6
     assert report.champion.final_raw.map_id == MapId.HALL_OF_FAME
-    assert report.champion.final_raw.first_party_moves == (0x05, 0x46, 0x42, 0x39)
+    assert report.champion.final_raw.first_party_moves == (0x05, 0x46, 0x7E, 0x39)
     assert report.champion.final_raw.first_party_pp == (0, 0, 16, 0)
     assert before == after

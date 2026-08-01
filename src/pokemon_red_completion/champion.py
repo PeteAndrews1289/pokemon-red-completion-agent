@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.agatha import AGATHA_X_SPECIAL_USE
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
@@ -16,10 +17,12 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import _bag, _party_hp, _party_status
+from pokemon_red_completion.lance import LANCE_X_SPECIAL_USE
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _select_bag_item,
 )
+from pokemon_red_completion.lorelei import LoreleiChapterError, _battle_x_accuracy
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     EventFlag,
@@ -36,6 +39,7 @@ from pokemon_red_completion.silph import (
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 from pokemon_red_completion.victory_road import (
+    INDIGO_X_SPECIAL_RESERVE,
     VictoryRoadChapterError,
     _battle_sacrifice,
     _CountingExecutor,
@@ -47,6 +51,10 @@ from pokemon_red_completion.victory_road import (
 CHAMPION_CHECKPOINT_COUNT = 3
 CHAMPION_RNG_DELAY_FRAMES = 150
 CHAMPION_SAFE_HP = 90
+CHAMPION_RHYDON_SAFE_HP = 50
+CHAMPION_GYARADOS_FINISH_SAFE_HP = 50
+CHAMPION_ARCANINE_FINISH_SAFE_HP = 50
+CHAMPION_FULL_RESTORE_INPUT_RESERVE = 1
 CHAMPION_PARTY = (
     (0x97, 61),
     (0x95, 59),
@@ -115,6 +123,7 @@ class ChampionChapterReport:
     hyper_potions_used: int
     full_restores_used: int
     full_heals_used: int
+    x_accuracy_used: int
     x_specials_used: int
     party_hp: tuple[int, int, int]
     party_status: tuple[int, int, int]
@@ -128,7 +137,8 @@ class ChampionChapterReport:
             len(self.records) == CHAMPION_CHECKPOINT_COUNT
             and self.party == CHAMPION_PARTY
             and _turns_valid(self.turns)
-            and self.x_specials_used == 4
+            and self.x_accuracy_used == 1
+            and self.x_specials_used == 6
             and _event(self.final_raw, EventFlag.BEAT_CHAMPION_RIVAL)
             and self.final_raw.map_id == MapId.HALL_OF_FAME
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
@@ -160,6 +170,7 @@ class ChampionChapterReport:
                 "hyper_potions_used": self.hyper_potions_used,
                 "full_restores_used": self.full_restores_used,
                 "full_heals_used": self.full_heals_used,
+                "x_accuracy_used": self.x_accuracy_used,
                 "x_specials_used": self.x_specials_used,
             },
             "terminal": {
@@ -198,9 +209,17 @@ def run_champion_chapter(
         or initial.party_species_ids != TOWER_FINAL_PARTY
         or not _event(initial, EventFlag.BEAT_LANCE)
         or _event(initial, EventFlag.BEAT_CHAMPION_RIVAL)
-        or _bag(emulator).get(ItemId.X_SPECIAL, 0) != 6
+        or initial.first_party_moves != (0x05, 0x46, 0x3B, 0x39)
+        or _bag(emulator).get(ItemId.X_ACCURACY, 0) != 1
+        or _bag(emulator).get(ItemId.X_SPECIAL, 0)
+        != INDIGO_X_SPECIAL_RESERVE - AGATHA_X_SPECIAL_USE - LANCE_X_SPECIAL_USE
+        or _bag(emulator).get(ItemId.FULL_RESTORE, 0)
+        < CHAMPION_FULL_RESTORE_INPUT_RESERVE
     ):
-        raise ChampionChapterError("Champion input boundary is not qualified.")
+        raise ChampionChapterError(
+            "Champion input boundary is not qualified: "
+            f"party_hp={_party_hp(emulator)!r}, bag={_bag(emulator)!r}."
+        )
     _checkpoint(
         records,
         progress,
@@ -234,27 +253,37 @@ def run_champion_chapter(
     class _BoostBoundary(Exception):
         pass
 
+    class _PivotBoundary(Exception):
+        pass
+
+    class _AccuracyBoundary(Exception):
+        pass
+
     def policy(raw: RawGameState) -> int:
         hp = raw.first_party_hp or 0
         status = raw.first_party_status or 0
-        if (hp < CHAMPION_SAFE_HP or status) and len(turns) != last_recovery_turn:
+        inventory = _bag(emulator)
+        if accuracy_used == 0:
+            raise _AccuracyBoundary
+        if (
+            (hp < _champion_recovery_threshold(raw) or status)
+            and _champion_recovery_available(status, inventory)
+            and len(turns) != last_recovery_turn
+        ):
             raise _HealBoundary
-        if boosts_used < 4:
+        if _champion_pivot_due(
+            raw,
+            inventory=inventory,
+            party_hp=_party_hp(emulator),
+            next_sacrifice=next_sacrifice,
+            party_position=emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS),
+        ):
+            raise _PivotBoundary
+        if boosts_used < 6:
             raise _BoostBoundary
-        pp = raw.first_party_pp or (0, 0, 0, 0)
         species = raw.enemy_species_id or 0
-        if species in {0x01, 0x14} and pp[2] > 0:
-            slot = 3
-        elif species in {0x01, 0x14} and pp[3] > 0:
-            slot = 4
-        elif pp[1] > 0:
-            slot = 2
-        elif pp[0] > 0:
-            slot = 1
-        elif pp[2] > 0:
-            slot = 3
-        else:
-            slot = 4
+        pp = raw.first_party_pp or (0, 0, 0, 0)
+        slot = _champion_move_slot(raw)
         turns.append(
             ChampionTurn(
                 species=species,
@@ -272,7 +301,9 @@ def run_champion_chapter(
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
     heal_before = _bag(emulator).get(ItemId.FULL_HEAL, 0)
+    accuracy_before = _bag(emulator).get(ItemId.X_ACCURACY, 0)
     x_special_before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
+    accuracy_used = 0
     next_sacrifice = 1
     last_recovery_turn = -1
     while True:
@@ -302,9 +333,33 @@ def run_champion_chapter(
         except BattleRuntimeError as error:
             if _completed(reader.read()):
                 break
+            if isinstance(error.__cause__, _AccuracyBoundary):
+                try:
+                    _battle_x_accuracy(reader, actions, emulator)
+                except LoreleiChapterError as accuracy_error:
+                    raise ChampionChapterError(
+                        "Champion X Accuracy setup failed."
+                    ) from accuracy_error
+                accuracy_used += 1
+                continue
             if isinstance(error.__cause__, _BoostBoundary):
                 _battle_x_special(reader, actions, emulator)
                 boosts_used += 1
+                continue
+            if isinstance(error.__cause__, _PivotBoundary):
+                try:
+                    _battle_sacrifice(
+                        actions,
+                        reader,
+                        emulator,
+                        next_sacrifice,
+                        heal_lead=False,
+                    )
+                except VictoryRoadChapterError as pivot_error:
+                    raise ChampionChapterError(
+                        "Champion exhausted-reserve pivot failed."
+                    ) from pivot_error
+                next_sacrifice += 1
                 continue
             if not isinstance(error.__cause__, _HealBoundary):
                 current = reader.read()
@@ -314,7 +369,7 @@ def run_champion_chapter(
                     f"enemy={(current.enemy_species_id, current.enemy_hp, current.enemy_level)!r}, "
                     f"lead_status={current.first_party_status!r}, "
                     f"pp={current.first_party_pp!r}, "
-                    f"bag={_bag(emulator)!r}."
+                    f"bag={_bag(emulator)!r}, turns={turns!r}."
                 ) from error
             current = reader.read()
             inventory = _bag(emulator)
@@ -324,15 +379,24 @@ def run_champion_chapter(
                 inventory,
             )
             if item is None:
-                raise ChampionChapterError("Champion exhausted the recovery reserve.") from error
+                raise ChampionChapterError(
+                    "Champion exhausted the recovery reserve: "
+                    f"party_hp={_party_hp(emulator)!r}, "
+                    f"enemy={(current.enemy_species_id, current.enemy_hp, current.enemy_level)!r}, "
+                    f"lead_status={current.first_party_status!r}, "
+                    f"pp={current.first_party_pp!r}, "
+                    f"boosts_used={boosts_used!r}, "
+                    f"bag={inventory!r}, "
+                    f"turns={turns!r}."
+                ) from error
             if (
-                (current.first_party_hp or 0) < CHAMPION_SAFE_HP
-                and emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS) >= 4
+                (current.first_party_hp or 0) < _champion_recovery_threshold(current)
+                and emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS) >= 5
                 and next_sacrifice < 3
                 and _party_hp(emulator)[next_sacrifice] > 0
             ):
                 try:
-                    _battle_sacrifice(
+                    recovery_spent = _battle_sacrifice(
                         actions,
                         reader,
                         emulator,
@@ -343,6 +407,8 @@ def run_champion_chapter(
                 except VictoryRoadChapterError as pivot_error:
                     raise ChampionChapterError("Champion recovery pivot failed.") from pivot_error
                 next_sacrifice += 1
+                if not recovery_spent:
+                    continue
             else:
                 try:
                     _battle_healing_item(
@@ -373,6 +439,7 @@ def run_champion_chapter(
         hyper_potions_used=hyper_before - _bag(emulator).get(ItemId.HYPER_POTION, 0),
         full_restores_used=restore_before - _bag(emulator).get(ItemId.FULL_RESTORE, 0),
         full_heals_used=heal_before - _bag(emulator).get(ItemId.FULL_HEAL, 0),
+        x_accuracy_used=accuracy_before - _bag(emulator).get(ItemId.X_ACCURACY, 0),
         x_specials_used=x_special_before - _bag(emulator).get(ItemId.X_SPECIAL, 0),
         party_hp=_party_hp(emulator),
         party_status=_party_status(emulator),
@@ -438,6 +505,64 @@ def _select_recovery_item(
     return None
 
 
+def _champion_move_slot(raw: RawGameState) -> int:
+    """Spend the five accurate Blizzard PP after Pidgeot."""
+    pp = raw.first_party_pp or (0, 0, 0, 0)
+    species = raw.enemy_species_id or 0
+    priorities = (2, 1, 3, 4) if species == 0x97 else (3, 2, 1, 4)
+    for slot in priorities:
+        if pp[slot - 1] > 0:
+            return slot
+    raise ChampionChapterError("Champion has no usable move PP.")
+
+
+def _champion_recovery_threshold(raw: RawGameState) -> int:
+    """Reserve recovery against Rhydon's low-pressure, Rest-heavy matchup."""
+    if raw.enemy_species_id == 0x9A:
+        # The final Venusaur can erase more than the generic safety margin in
+        # one turn.  Once recovery is gone this threshold activates the two
+        # explicitly bounded helper pivots instead of accepting a lethal hit.
+        return raw.first_party_max_hp or CHAMPION_SAFE_HP
+    if raw.enemy_species_id == 0x01:
+        return CHAMPION_RHYDON_SAFE_HP
+    if raw.enemy_species_id == 0x16 and (raw.enemy_hp or 0) <= 50:
+        return CHAMPION_GYARADOS_FINISH_SAFE_HP
+    if raw.enemy_species_id == 0x16:
+        return raw.first_party_max_hp or CHAMPION_SAFE_HP
+    if raw.enemy_species_id == 0x14 and (raw.enemy_hp or 0) <= 30:
+        return CHAMPION_ARCANINE_FINISH_SAFE_HP
+    return CHAMPION_SAFE_HP
+
+
+def _champion_recovery_available(
+    status: int,
+    inventory: Mapping[ItemId, int],
+) -> bool:
+    return bool(
+        inventory.get(ItemId.FULL_RESTORE, 0)
+        or (status and inventory.get(ItemId.FULL_HEAL, 0))
+    )
+
+
+def _champion_pivot_due(
+    raw: RawGameState,
+    *,
+    inventory: Mapping[ItemId, int],
+    party_hp: tuple[int, int, int],
+    next_sacrifice: int,
+    party_position: int,
+) -> bool:
+    hp = raw.first_party_hp or 0
+    status = raw.first_party_status or 0
+    return (
+        (hp < _champion_recovery_threshold(raw) or bool(status))
+        and not _champion_recovery_available(status, inventory)
+        and party_position >= 5
+        and next_sacrifice < len(party_hp)
+        and party_hp[next_sacrifice] > 0
+    )
+
+
 def _encounter_party(
     turns: Iterable[ChampionTurn],
 ) -> tuple[tuple[int, int], ...]:
@@ -455,7 +580,7 @@ def _turns_valid(turns: Iterable[ChampionTurn]) -> bool:
     return bool(items) and all(
         item.species in {species for species, _ in CHAMPION_PARTY}
         and item.move_slot in {1, 2, 3, 4}
-        and item.lead_hp >= CHAMPION_SAFE_HP
+        and item.lead_hp > 0
         and item.lead_status == 0
         for item in items
     )

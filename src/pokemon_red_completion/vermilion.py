@@ -11,6 +11,7 @@ from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleActionExecutor,
     BattleIntent,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -18,11 +19,18 @@ from pokemon_red_completion.battle_runtime import (
 from pokemon_red_completion.cascade import (
     CENTER_EXIT_DIRECTIONS,
     CENTER_HEAL_APPROACH_DIRECTIONS,
+    DEFAULT_CASCADE_TIMING,
     GYM_TO_CENTER_DIRECTIONS,
     GYM_TRAINER_TO_EXIT_DIRECTIONS,
+    SS_ANNE_RIVAL_POTION_RESERVE,
+    VERMILION_ROUTE_6_POTION_RESERVE,
+    CascadeChapterError,
+    _bag_quantity,
+    _use_cerulean_rival_potion,
 )
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
+    ItemId,
     MapId,
     PokemonRedStateReader,
     RawGameState,
@@ -107,6 +115,8 @@ class EmulatorState(Protocol):
 
     @property
     def pressed_buttons(self) -> frozenset[str]: ...
+
+    def read_u8(self, address: int) -> int: ...
 
 
 class ChapterExecutor(BattleActionExecutor, Protocol):
@@ -559,13 +569,11 @@ def run_vermilion_chapter(
         progress,
         emulator,
     )
-    _battle(
+    _run_route_6_trainer_f_with_potion(
         reader,
         chapter_executor,
-        lambda state: ROUTE_6_JR_TRAINER_F_MOVE_SLOT,
-        MapId.ROUTE_6,
+        emulator,
         timing,
-        "Route 6 Jr Trainer F",
         RedBattlePlanId.VERMILION_ROUTE_6_JR_TRAINER_F,
     )
     _confirm_pulses(
@@ -1151,6 +1159,109 @@ def _enter_trainer_battle(
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         _wait(executor, timing.dialogue_wait_frames)
     raise VermilionChapterError(f"{label} missed its bounded battle gate.")
+
+
+class _PauseForRoute6Potion(Exception):
+    pass
+
+
+def _run_route_6_trainer_f_with_potion(
+    reader: PokemonRedStateReader,
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+    timing: VermilionTiming,
+    battle_plan_id: str,
+) -> RawGameState:
+    """Spend one Route 6 Potion while preserving the S.S. Anne reserve."""
+
+    if _bag_quantity(emulator, ItemId.POTION) != VERMILION_ROUTE_6_POTION_RESERVE:
+        raise VermilionChapterError("Route 6 lacks its two-Potion recovery boundary.")
+
+    def guarded_policy(raw: RawGameState) -> int:
+        if (
+            _bag_quantity(emulator, ItemId.POTION) == VERMILION_ROUTE_6_POTION_RESERVE
+            and raw.first_party_hp is not None
+            and 0 < raw.first_party_hp <= 40
+        ):
+            raise _PauseForRoute6Potion
+        return _choose_route_6_trainer_f_move(raw)
+
+    used_potion = False
+    while True:
+        try:
+            result = run_adaptive_trainer_battle(
+                reader,
+                executor,
+                guarded_policy,
+                expected_map=MapId.ROUTE_6,
+                intent=BattleIntent(
+                    "reach_vermilion",
+                    battle_plan_id=battle_plan_id,
+                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                ),
+                timing=timing.battle_runtime,
+                label="Route 6 Jr Trainer F",
+                unknown_cancel_interval=3,
+            )
+        except BattleRuntimeError as error:
+            if not isinstance(error.__cause__, _PauseForRoute6Potion):
+                raise VermilionChapterError(str(error)) from error
+            if used_potion:
+                raise VermilionChapterError(
+                    "Route 6 requested more than one Potion recovery."
+                ) from error
+            try:
+                _use_cerulean_rival_potion(
+                    reader,
+                    executor,
+                    emulator,
+                    DEFAULT_CASCADE_TIMING,
+                )
+            except CascadeChapterError as recovery_error:
+                raise VermilionChapterError(str(recovery_error)) from recovery_error
+            used_potion = True
+            continue
+
+        if (
+            not used_potion
+            or _bag_quantity(emulator, ItemId.POTION)
+            != SS_ANNE_RIVAL_POTION_RESERVE
+        ):
+            raise VermilionChapterError(
+                "Route 6 did not consume exactly one planned Potion."
+            )
+        return result
+
+
+def _choose_route_6_trainer_f_move(raw: RawGameState) -> int:
+    """Prefer power at neutral accuracy and Bite after Sand-Attack or near a KO."""
+
+    moves = raw.first_party_moves
+    pp = raw.first_party_pp
+    if moves is None or pp is None or raw.enemy_hp is None:
+        raise VermilionChapterError("Route 6 move policy lacks live battle evidence.")
+    lowered_accuracy = (
+        raw.player_accuracy_stage is not None and raw.player_accuracy_stage < 7
+    )
+    candidates = (
+        (1, BITE_MOVE_ID),
+        (3, POST_ROCKET_WARTORTLE_MOVES[2]),
+        (4, POST_ROCKET_WARTORTLE_MOVES[3]),
+    ) if lowered_accuracy or raw.enemy_hp <= 10 else (
+        (3, POST_ROCKET_WARTORTLE_MOVES[2]),
+        (1, BITE_MOVE_ID),
+        (4, POST_ROCKET_WARTORTLE_MOVES[3]),
+    )
+    for slot, expected_move in candidates:
+        if (
+            len(moves) >= slot
+            and len(pp) >= slot
+            and moves[slot - 1] == expected_move
+            and pp[slot - 1] & 0x3F
+            and raw.player_disabled_move_slot != slot
+        ):
+            return slot
+    raise VermilionChapterError("Route 6 move policy lacks a usable ranked attack.")
 
 
 def _battle(

@@ -13,6 +13,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    recovery_action_due,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.blaine import _select_cursor
@@ -31,6 +32,7 @@ from pokemon_red_completion.lavender import (
     _use_bag_item,
 )
 from pokemon_red_completion.observation import (
+    BattleMenuPhase,
     EventFlag,
     ItemId,
     MapId,
@@ -45,11 +47,13 @@ from pokemon_red_completion.silph import (
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 from pokemon_red_completion.victory_road import (
+    INDIGO_X_SPECIAL_RESERVE,
     _CountingExecutor,
     _event,
     _menu_cursor_active,
     _move,
     _pulse,
+    _select_battle_main_command,
     _settle_confirm,
 )
 
@@ -64,6 +68,12 @@ AGATHA_PARTY = (
     (0x0E, 60),
 )
 AGATHA_APPROACH = ("right", "up", "up")
+# Surf and Ice Beam are the only attacks in the League set that can damage
+# Agatha's Ghost-types.  Preserve a single Surf for Lance's Aerodactyl and
+# spend the rest here so Ice Beam remains available for Lance's dragons.
+AGATHA_SURF_RESERVE = 1
+AGATHA_X_SPECIAL_USE = 1
+AGATHA_ELIXIR_USE = 1
 
 
 class EmulatorState(Protocol):
@@ -123,6 +133,7 @@ class AgathaChapterReport:
     party: tuple[tuple[int, int], ...]
     hyper_potions_used: int
     full_restores_used: int
+    x_specials_used: int
     party_hp: tuple[int, int, int]
     party_max_hp: tuple[int, int, int]
     party_status: tuple[int, int, int]
@@ -136,6 +147,7 @@ class AgathaChapterReport:
             len(self.records) == AGATHA_CHECKPOINT_COUNT
             and self.party == AGATHA_PARTY
             and _turns_valid(self.turns)
+            and self.x_specials_used == AGATHA_X_SPECIAL_USE
             and _event(self.final_raw, EventFlag.BEAT_AGATHA)
             and self.final_raw.map_id == MapId.LANCES_ROOM
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
@@ -168,6 +180,7 @@ class AgathaChapterReport:
             "recovery": {
                 "hyper_potions_used": self.hyper_potions_used,
                 "full_restores_used": self.full_restores_used,
+                "x_specials_used": self.x_specials_used,
             },
             "terminal": {
                 "map": int(self.final_raw.map_id),
@@ -201,9 +214,11 @@ def run_agatha_chapter(
         or initial.party_species_ids != TOWER_FINAL_PARTY
         or not _event(initial, EventFlag.BEAT_BRUNO)
         or _event(initial, EventFlag.BEAT_AGATHA)
+        or _bag(emulator).get(ItemId.X_SPECIAL, 0) != INDIGO_X_SPECIAL_RESERVE
     ):
         raise AgathaChapterError("Agatha input boundary is not qualified.")
     _checkpoint(records, progress, emulator, initial, "agatha_ready", "Agatha room ready")
+    _use_field_elixir(actions, reader, emulator)
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=AGATHA_RNG_DELAY_FRAMES))
 
     _move(actions, reader, AGATHA_APPROACH, "Agatha approach")
@@ -221,21 +236,28 @@ def run_agatha_chapter(
     class _HealBoundary(Exception):
         pass
 
+    class _BoostBoundary(Exception):
+        pass
+
+    last_recovery_turn = -1
+    boosts_used = 0
+
     def policy(raw: RawGameState) -> int:
+        if boosts_used < AGATHA_X_SPECIAL_USE:
+            raise _BoostBoundary
         hp = raw.first_party_hp or 0
         status = raw.first_party_status or 0
-        if hp < AGATHA_SAFE_HP or status:
+        if recovery_action_due(
+            hp=hp,
+            status=status,
+            safe_hp=AGATHA_SAFE_HP,
+            decisions_made=len(turns),
+            last_recovery_decision=last_recovery_turn,
+        ):
             raise _HealBoundary
-        pp = raw.first_party_pp or (0, 0, 0, 0)
         species = raw.enemy_species_id or 0
-        if species in {0x82, 0x2D} and pp[0] > 0:
-            slot = 1
-        elif pp[3] > 0:
-            slot = 4
-        elif pp[2] > 0:
-            slot = 3
-        else:
-            slot = 1
+        pp = raw.first_party_pp or (0, 0, 0, 0)
+        slot = _agatha_move_slot(raw)
         turns.append(
             AgathaTurn(
                 species,
@@ -252,6 +274,7 @@ def run_agatha_chapter(
 
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
+    x_special_before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
     while reader.read().battle_state:
         try:
             run_adaptive_trainer_battle(
@@ -272,6 +295,10 @@ def run_agatha_chapter(
                 label="Agatha",
             )
         except BattleRuntimeError as error:
+            if isinstance(error.__cause__, _BoostBoundary):
+                _battle_x_special(reader, actions, emulator)
+                boosts_used += 1
+                continue
             if not isinstance(error.__cause__, _HealBoundary):
                 raise AgathaChapterError("Agatha battle runtime failed.") from error
             raw = reader.read()
@@ -308,6 +335,7 @@ def run_agatha_chapter(
                     f"lead_status={current.first_party_status!r}, "
                     f"pp={current.first_party_pp!r}, bag={_bag(emulator)!r}."
                 ) from healing_error
+            last_recovery_turn = len(turns)
 
     for _ in range(20):
         _pulse(actions, MacroActionKind.CANCEL)
@@ -343,6 +371,7 @@ def run_agatha_chapter(
         party=_encounter_party(turns),
         hyper_potions_used=hyper_before - _bag(emulator).get(ItemId.HYPER_POTION, 0),
         full_restores_used=restore_before - _bag(emulator).get(ItemId.FULL_RESTORE, 0),
+        x_specials_used=x_special_before - _bag(emulator).get(ItemId.X_SPECIAL, 0),
         party_hp=_party_hp(emulator),
         party_max_hp=_party_max_hp(emulator),
         party_status=_party_status(emulator),
@@ -386,11 +415,97 @@ def _encounter_party(turns: Iterable[AgathaTurn]) -> tuple[tuple[int, int], ...]
 def _turns_valid(turns: Iterable[AgathaTurn]) -> bool:
     items = tuple(turns)
     return bool(items) and all(
-        item.move_slot in {1, 3, 4}
-        and item.lead_hp >= AGATHA_SAFE_HP
-        and item.lead_status == 0
+        item.move_slot in {1, 2, 3, 4}
+        and item.lead_hp > 0
         for item in items
     )
+
+
+def _agatha_move_slot(raw: RawGameState) -> int:
+    species = raw.enemy_species_id or 0
+    pp = raw.first_party_pp or ()
+    surf_pp = (pp[3] & 0x3F) if len(pp) >= 4 else 0
+    surf_disabled = (
+        raw.player_disabled_move_slot == 4
+        and (raw.player_disable_turns or 0) > 0
+    )
+    if species in {0x82, 0x2D}:
+        priorities = (1, 4, 3, 2)
+    elif surf_pp > AGATHA_SURF_RESERVE and not surf_disabled:
+        priorities = (4, 3, 1, 2)
+    else:
+        priorities = (3, 4, 1, 2)
+    for slot in priorities:
+        if (
+            len(pp) >= slot
+            and pp[slot - 1] & 0x3F
+            and not (
+                raw.player_disabled_move_slot == slot
+                and (raw.player_disable_turns or 0) > 0
+            )
+        ):
+            return slot
+    raise AgathaChapterError("Agatha policy has no legal move with PP.")
+
+
+def _battle_x_special(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    *,
+    item: ItemId = ItemId.X_SPECIAL,
+) -> None:
+    raw = reader.read()
+    if (
+        raw.battle_state != 2
+        or reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN
+    ):
+        raise AgathaChapterError(f"{item.name} requires the trainer MAIN menu.")
+    before = _bag(emulator).get(item, 0)
+    if before == 0:
+        raise AgathaChapterError(f"{item.name} reserve was exhausted.")
+    _select_battle_main_command(actions, reader, 1)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _select_bag_item(actions, emulator, item, DEFAULT_LAVENDER_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(30):
+        current = reader.read()
+        if (
+            current.battle_state == 2
+            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+        ):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM)
+    else:
+        raise AgathaChapterError(f"{item.name} did not return to the MAIN menu.")
+    if before - _bag(emulator).get(item, 0) != 1:
+        raise AgathaChapterError(f"{item.name} did not decrement exactly once.")
+
+
+def _use_field_elixir(actions, reader, emulator) -> None:
+    before = _bag(emulator).get(ItemId.ELIXIR, 0)
+    if before != AGATHA_ELIXIR_USE:
+        raise AgathaChapterError(f"Agatha Elixir reserve mismatch: {before!r}.")
+    _open_bag(actions, emulator, DEFAULT_LAVENDER_TIMING)
+    _select_bag_item(actions, emulator, ItemId.ELIXIR, DEFAULT_LAVENDER_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    _select_cursor(actions, emulator, 0, DEFAULT_LAVENDER_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(24):
+        if _bag(emulator).get(ItemId.ELIXIR, 0) == 0:
+            _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+            pp = tuple(value & 0x3F for value in (reader.read().first_party_pp or ()))
+            if (
+                len(pp) != 4
+                or not all(value > 0 for value in pp)
+                or pp[2] != 10
+                or pp[3] <= AGATHA_SURF_RESERVE
+            ):
+                raise AgathaChapterError(f"Agatha Elixir reload failed: pp={pp!r}.")
+            return
+        _pulse(actions, MacroActionKind.CONFIRM)
+    raise AgathaChapterError("Agatha Elixir did not restore the lead move PP.")
 
 
 def _teach_take_down(
@@ -418,7 +533,7 @@ def _teach_take_down(
             break
         _pulse(actions, MacroActionKind.CONFIRM)
     else:
-        raise AgathaChapterError("TM09 did not reach party selection.")
+        raise AgathaChapterError(f"{item.name} did not reach party selection.")
     _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
     for _ in range(24):
@@ -429,7 +544,7 @@ def _teach_take_down(
             break
         _pulse(actions, MacroActionKind.CONFIRM)
     else:
-        raise AgathaChapterError("TM09 did not reach move deletion.")
+        raise AgathaChapterError(f"{item.name} did not reach move deletion.")
     for _ in range(replacement_slot):
         _pulse(actions, MacroActionKind.MOVE, "down")
     _pulse(actions, MacroActionKind.CONFIRM)
@@ -442,4 +557,8 @@ def _teach_take_down(
             _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
             return
         _pulse(actions, MacroActionKind.CONFIRM)
-    raise AgathaChapterError("TM09 did not install Take Down in the requested slot.")
+    raise AgathaChapterError(
+        f"{item.name} did not install the expected move set: "
+        f"actual={reader.read().first_party_moves!r}, expected={expected_moves!r}, "
+        f"remaining={_bag(emulator).get(item, 0)}, expected_remaining={expected_remaining}."
+    )

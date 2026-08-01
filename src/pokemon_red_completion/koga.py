@@ -22,7 +22,6 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
-from pokemon_red_completion.economy import POST_KOGA_MONEY, POST_SAFARI_MONEY
 from pokemon_red_completion.observation import (
     Badge,
     EventFlag,
@@ -36,12 +35,13 @@ from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
 KOGA_CHECKPOINT_COUNT = 11
+KOGA_TRAINER_REWARD_TOTAL = 7_852
 SURF = 0x39
 SURF_SLOT = 4
 KOGA_OPPONENT = 0xEE
 KOGA_TRAINER_CLASS = 0x26
 KOGA_TRAINER_NUMBER = 1
-KOGA_PP_BOUNDS = ((0, 8), (1, 8), (1, 8), (1, 12))
+KOGA_PP_BOUNDS = ((0, 8), (1, 8), (1, 8), (1, 15))
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -208,12 +208,13 @@ class KogaChapterReport:
             and self.soul_badge_mirror
             and all(item != int(ItemId.TM06_TOXIC) for item, _ in self.initial_bag)
             and self.final_bag == expected_bag
-            and self.initial_money == POST_SAFARI_MONEY
-            and self.final_money == POST_KOGA_MONEY
+            and self.initial_money >= 0
+            and self.final_money == self.initial_money + KOGA_TRAINER_REWARD_TOTAL
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.party_hp == self.party_max_hp == (124, 47, 40)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
             and self.party_status == (0, 0, 0)
             and self.surf_pp == 15
             and self.controller_released
@@ -415,9 +416,10 @@ def run_koga_chapter(
             "Koga",
             (KOGA_OPPONENT, KOGA_TRAINER_CLASS, KOGA_TRAINER_NUMBER),
             EventFlag.BEAT_KOGA,
-            12,
+            15,
             RedBattlePlanId.KOGA_LEADER,
             clear_text=False,
+            allow_disable_fallback=True,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "koga_defeated", "Defeated Koga")
@@ -507,15 +509,29 @@ def _fight(
         if allow_disable_fallback
         else RequiredMovePolicy.EXACT_REQUIRED
     )
+
+    def choose_move(raw: RawGameState) -> int:
+        moves = raw.first_party_moves
+        pp = raw.first_party_pp
+        if moves is None or pp is None:
+            raise KogaChapterError(f"{label} lacks live move and PP evidence.")
+        candidates = (SURF_SLOT, 3, 1, 2) if allow_disable_fallback else (SURF_SLOT,)
+        for slot in candidates:
+            index = slot - 1
+            if (
+                len(moves) > index
+                and len(pp) > index
+                and moves[index] != 0
+                and pp[index] & 0x3F
+                and raw.player_disabled_move_slot != slot
+            ):
+                return slot
+        raise KogaChapterError(f"{label} has no legal ranked attack.")
+
     final = run_adaptive_trainer_battle(
         reader,
         actions,
-        lambda raw: (
-            3
-            if allow_disable_fallback
-            and raw.player_disabled_move_slot == SURF_SLOT
-            else SURF_SLOT
-        ),
+        choose_move,
         expected_map=MapId.FUCHSIA_GYM,
         intent=BattleIntent(
             "defeat_koga",

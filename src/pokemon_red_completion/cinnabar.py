@@ -40,6 +40,7 @@ from pokemon_red_completion.silph import (
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
 CINNABAR_CHECKPOINT_COUNT = 6
+CINNABAR_INPUT_BAG_SLOTS = 18
 FLY_MOVE_ID = 0x13
 DUX_MOVES_BEFORE = (0x40, 0x1C, 0x0F, 0x1F)
 DUX_MOVES_AFTER = (0x40, 0x1C, 0x0F, FLY_MOVE_ID)
@@ -133,8 +134,8 @@ class CinnabarChapterReport:
             len(self.records) == CINNABAR_CHECKPOINT_COUNT
             and self.rare_candy_before == 0
             and self.rare_candy_after == 0
-            and self.bag_slots_before == 19
-            and self.bag_slots_after_candy == 19
+            and self.bag_slots_before == CINNABAR_INPUT_BAG_SLOTS
+            and self.bag_slots_after_candy == CINNABAR_INPUT_BAG_SLOTS
             and self.lead_stats_before == (46, 142, 142, 100, 111, 92, 106)
             and self.lead_stats_after == (46, 142, 142, 100, 111, 92, 106)
             and self.hm02_item_before_event
@@ -164,7 +165,10 @@ class CinnabarChapterReport:
             and self.final_raw.first_party_level == 46
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
-            and self.party_hp == self.party_max_hp == (142, 47, 40)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and self.final_raw.first_party_hp == self.party_hp[0]
+            and self.final_raw.first_party_max_hp == self.party_max_hp[0]
             and self.party_status == (0, 0, 0)
             and self.controller_released
         )

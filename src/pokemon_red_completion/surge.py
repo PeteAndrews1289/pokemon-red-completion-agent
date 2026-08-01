@@ -26,13 +26,15 @@ from pokemon_red_completion.observation import (
 
 SURGE_CHECKPOINT_COUNT = 15
 SPEAROW_SPECIES_ID = 0x05
+SPEAROW_CAPTURE_LEVELS = frozenset({17})
 DUX_SPECIES_ID = 0x40
 DIGLETT_SPECIES_ID = 0x3B
-DIGLETT_CAPTURE_LEVELS = frozenset(range(19, 23))
+DIGLETT_CAPTURE_LEVELS = frozenset(range(17, 23))
 DIGLETT_SEARCH_SEED_WAIT_FRAMES = 199
 WARTORTLE_SPECIES_ID = 0xB3
 SPEAROW_CAPTURE_MOVE_ID = 0x37
 SPEAROW_CAPTURE_MOVE_SLOT = 4
+SPEAROW_WEAKEN_ATTEMPT_LIMIT = 12
 CUT_MOVE_ID = 0x0F
 DIG_MOVE_ID = 0x5B
 LT_SURGE_OPPONENT_ID = 0xEC
@@ -83,8 +85,8 @@ class SurgeTiming:
     wait_frames: int = 180
     transition_frames: int = 120
     movement_retries: int = 14
-    encounter_steps: int = 600
-    encounter_limit: int = 24
+    encounter_steps: int = 1800
+    encounter_limit: int = 72
     battle_pulses: int = 720
     reward_pulses: int = 40
 
@@ -308,7 +310,7 @@ def run_surge_chapter(
         encounter,
         encounter.battle_state == 1
         and encounter.enemy_species_id == SPEAROW_SPECIES_ID
-        and encounter.enemy_level in {13, 15, 17},
+        and encounter.enemy_level in SPEAROW_CAPTURE_LEVELS,
         tracker,
         SurgePhase.SPEAROW_ENCOUNTER,
         "spearow_encounter",
@@ -317,12 +319,14 @@ def run_surge_chapter(
         progress,
         emulator,
     )
-    for _ in range(4):
+    for _ in range(SPEAROW_WEAKEN_ATTEMPT_LIMIT):
         if _use_spearow_capture_move_once(actions, reader, encounter):
             break
         encounter = _find_spearow(emulator, actions, reader, timing)
     else:
-        raise SurgeChapterError("Four bounded attempts did not weaken Spearow.")
+        raise SurgeChapterError(
+            f"{SPEAROW_WEAKEN_ATTEMPT_LIMIT} bounded attempts did not weaken Spearow."
+        )
     _throw_ball(emulator, actions, reader)
     raw = reader.read()
     _gate(
@@ -785,14 +789,22 @@ def _find_spearow(
         encounters += 1
         if encounters > timing.encounter_limit:
             break
-        if raw.enemy_species_id == SPEAROW_SPECIES_ID and raw.enemy_level in {13, 15, 17}:
+        if (
+            raw.enemy_species_id == SPEAROW_SPECIES_ID
+            and raw.enemy_level in SPEAROW_CAPTURE_LEVELS
+        ):
             return raw
         balls = _bag(emulator).get(ItemId.POKE_BALL)
         _flee(executor, reader, raw)
         if _bag(emulator).get(ItemId.POKE_BALL) != balls:
             raise SurgeChapterError("Non-target flee changed Poké Balls.")
         raw = reader.read()
-    raise SurgeChapterError("Spearow search exceeded its bounded encounter budget.")
+    raise SurgeChapterError(
+        "Spearow search exceeded its bounded encounter budget: "
+        f"steps={timing.encounter_steps}, encounters={encounters}, "
+        f"encounter_limit={timing.encounter_limit}, "
+        f"last_species={raw.enemy_species_id}, last_level={raw.enemy_level}."
+    )
 
 
 def _use_spearow_capture_move_once(
@@ -961,15 +973,43 @@ def _catch_diglett_chapter(
 
     _wait(executor, DIGLETT_SEARCH_SEED_WAIT_FRAMES)
     encounter = reader.read()
-    for step in range(240):
+    rejected_encounters: list[tuple[int | None, int | None]] = []
+    bounce_direction: str | None = None
+    direction_delta = {
+        "up": (0, -1),
+        "right": (1, 0),
+        "down": (0, 1),
+        "left": (-1, 0),
+    }
+    opposite = {"up": "down", "right": "left", "down": "up", "left": "right"}
+    warp_tiles = {(5, 5), (37, 31)}
+    for _ in range(timing.encounter_steps):
         if encounter.battle_state == 0:
-            _pulse(
-                executor,
-                MacroActionKind.MOVE,
-                "left" if step % 2 == 0 else "right",
-                60,
+            directions = (
+                (bounce_direction,)
+                if bounce_direction is not None
+                else ("up", "right", "down", "left")
             )
-            encounter = reader.read()
+            moved = False
+            for direction in directions:
+                if encounter.player_x is None or encounter.player_y is None:
+                    raise SurgeChapterError("Diglett search lacks live coordinates.")
+                dx, dy = direction_delta[direction]
+                if (encounter.player_x + dx, encounter.player_y + dy) in warp_tiles:
+                    continue
+                before_position = (encounter.player_x, encounter.player_y)
+                _pulse(executor, MacroActionKind.MOVE, direction, 60)
+                encounter = reader.read()
+                if encounter.map_id != MapId.DIGLETTS_CAVE:
+                    raise SurgeChapterError("Diglett search crossed an excluded cave warp.")
+                if (encounter.player_x, encounter.player_y) != before_position:
+                    bounce_direction = opposite[direction]
+                    moved = True
+                    break
+            if not moved:
+                bounce_direction = None
+                _wait(executor, 60)
+                encounter = reader.read()
             continue
         if (
             encounter.enemy_species_id == DIGLETT_SPECIES_ID
@@ -977,10 +1017,15 @@ def _catch_diglett_chapter(
             and (encounter.enemy_hp or 0) > 0
         ):
             break
+        rejected_encounters.append((encounter.enemy_species_id, encounter.enemy_level))
         _flee(executor, reader, encounter)
         encounter = reader.read()
     else:
-        raise SurgeChapterError("Diglett search exceeded its bounded encounter steps.")
+        raise SurgeChapterError(
+            "Diglett search exceeded its bounded encounter steps: "
+            f"rejected={rejected_encounters!r}, "
+            f"position={(encounter.player_x, encounter.player_y)!r}."
+        )
     _throw_until_caught_diglett(emulator, executor, reader)
     raw = reader.read()
     if (
@@ -1483,7 +1528,9 @@ def _solve_switches(
     _navigate_to_gym_can(executor, reader, first, timing)
     _pulse(executor, MacroActionKind.CONFIRM, frames=240)
     second = emulator.read_u8(RamAddress.VERMILION_GYM_SECOND_LOCK)
-    if not 0 <= second <= 14 or second == first:
+    # The pinned Gen I source has a documented underflow bug that can select
+    # can 0 as the second lock even when can 0 was also the first lock.
+    if not 0 <= second <= 14:
         raise SurgeChapterError(f"Unexpected qualified switch pair {(first, second)}.")
     _confirm_kind(executor, MacroActionKind.CANCEL, 4, 180)
     raw = reader.read()

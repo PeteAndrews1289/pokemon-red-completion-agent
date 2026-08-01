@@ -84,6 +84,7 @@ def _report() -> TowerChapterReport:
         required_events=(True,) * len(REQUIRED_EVENTS),
         x_accuracy_carried=True,
         rare_candy_carried=True,
+        elixir_carried=True,
         poke_flute_carried=True,
         evolution_before=(0xB3, 0x40, 0x3B),
         evolution_after=(0x1C, 0x40, 0x3B),
@@ -91,12 +92,13 @@ def _report() -> TowerChapterReport:
         purified_zone_event=True,
         purified_heals=3,
         super_potions_used=3,
-        super_potions_remaining=0,
-        super_potion_inventory_path=(3, 2, 1, 0),
+        super_potions_remaining=3,
+        super_potion_inventory_path=(6, 5, 4, 3),
         party_hp=(111, 52, 37),
         party_max_hp=(111, 52, 37),
         party_status=(0, 0, 0),
-        money_remaining=23_139,
+        money_before=10_814,
+        money_remaining=18_139,
         frames_executed=100,
         actions_executed=50,
         controller_released=True,
@@ -155,6 +157,7 @@ def test_tower_report_requires_every_terminal_gate() -> None:
         replace(report, required_events=(False,) + report.required_events[1:]),
         replace(report, x_accuracy_carried=False),
         replace(report, rare_candy_carried=False),
+        replace(report, elixir_carried=False),
         replace(report, poke_flute_carried=False),
         replace(report, evolution_after=(0xB3, 0x40, 0x3B)),
         replace(report, evolution_moves_preserved=False),
@@ -162,10 +165,22 @@ def test_tower_report_requires_every_terminal_gate() -> None:
         replace(report, purified_heals=2),
         replace(report, super_potions_remaining=1),
         replace(report, party_hp=(110, 52, 37)),
+        replace(report, money_before=-1),
         replace(report, money_remaining=23_338),
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)
+
+
+def test_tower_report_accepts_a_conserved_surplus_inventory_path() -> None:
+    report = replace(
+        _report(),
+        super_potions_used=3,
+        super_potions_remaining=4,
+        super_potion_inventory_path=(7, 6, 5, 4),
+    )
+
+    assert report.passed
 
 
 def test_tower_report_requires_selected_move_evidence_and_marowak_level() -> None:
@@ -198,6 +213,7 @@ def test_tower_public_report_discloses_route_assistance() -> None:
     assert public["required_pickups"] == {
         "x_accuracy": True,
         "rare_candy": True,
+        "elixir": True,
         "poke_flute": True,
     }
 

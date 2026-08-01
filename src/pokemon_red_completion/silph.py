@@ -27,10 +27,6 @@ from pokemon_red_completion.celadon import (
     _party_max_hp,
     _party_status,
 )
-from pokemon_red_completion.economy import (
-    POST_SAFFRON_PURCHASE_MONEY,
-    POST_SILPH_MONEY,
-)
 from pokemon_red_completion.lavender import (
     LavenderTiming,
     _buy_mart_item,
@@ -39,7 +35,6 @@ from pokemon_red_completion.lavender import (
     _open_bag,
     _select_bag_item,
     _select_cursor,
-    _use_bag_item,
 )
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
@@ -49,6 +44,9 @@ from pokemon_red_completion.observation import (
     PokemonRedStateReader,
     RamAddress,
     RawGameState,
+)
+from pokemon_red_completion.saffron import (
+    CITY_TO_MART as CELADON_CENTER_EXIT_TO_MART,
 )
 from pokemon_red_completion.saffron import (
     CITY_TO_ROUTE_7,
@@ -66,14 +64,16 @@ from pokemon_red_completion.saffron import (
     MART_TO_CITY,
     ROOF_TO_5F,
     ROOF_TO_VENDING,
-    ROUTE_7_TO_GATE,
     SAFFRON_TO_CENTER,
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
 SILPH_CHECKPOINT_COUNT = 12
-HYPER_POTION_PURCHASE_QUANTITY = 6
+SILPH_NET_MONEY_DELTA = -1_951
+SILPH_PREINSTALLED_TM13_NET_MONEY_DELTA = SILPH_NET_MONEY_DELTA + FRESH_WATER_PRICE
+HYPER_POTION_PURCHASE_QUANTITY = 7
 HYPER_POTION_PRICE = 1_500
+SILPH_PC_DEPOSIT_ITEMS = (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
 STATUS_FLAGS_4 = 0xD72E
 GOT_LAPRAS_MASK = 0x01
 ICE_BEAM_MOVE = 0x3A
@@ -96,6 +96,7 @@ SAFFRON_WARP_COORDINATES = frozenset(
     }
 )
 ROOF_STEP_FRAMES = 24
+ROOF_PURSUIT_STEP_FRAMES = 24
 ROOF_WALKABLE = frozenset(
     (x, y)
     for y, row in enumerate(
@@ -158,8 +159,10 @@ ROUTE_7_GATE_TO_WEST = ("left",) * 4
 # reversible. This source-derived path crosses the lower opening at y=8 and
 # returns north through the x=4 corridor instead.
 ROUTE_7_WEST_TO_CONNECTION = _directions("LLLUULLLLUUUUUULLLLD")
+ROUTE_7_CONNECTION_TO_GATE = _reverse(ROUTE_7_WEST_TO_CONNECTION)
 ROUTE_7_CONNECTION_TO_CELADON_CITY = _reverse(CITY_TO_ROUTE_7)
 CELADON_CITY_TO_MART = ("up",)
+CELADON_MART_EXIT_TO_CENTER = _reverse(CELADON_CENTER_EXIT_TO_MART[:-1]) + ("up",)
 ROOF_TO_SAFFRON_CENTER = (
     ROOF_TO_5F
     + MART_5F_TO_4F
@@ -168,7 +171,7 @@ ROOF_TO_SAFFRON_CENTER = (
     + MART_2F_TO_1F
     + MART_TO_CITY
     + CITY_TO_ROUTE_7
-    + ROUTE_7_TO_GATE
+    + ROUTE_7_CONNECTION_TO_GATE
     + GATE_TO_SAFFRON
     + SAFFRON_TO_CENTER
 )
@@ -240,6 +243,7 @@ class SilphChapterReport:
     money_before: int
     money_after: int
     tm13_event: bool
+    tm13_preinstalled: bool
     tm13_transfer_before_event: bool
     other_roof_rewards_untouched: bool
     fresh_water_after_reward: int
@@ -247,8 +251,10 @@ class SilphChapterReport:
     upgraded_moves: tuple[int, int, int, int]
     upgraded_pp: tuple[int, int, int, int]
     rival_potions_used: int
+    rival_x_special_used: int
     hyper_potions_remaining: int
     max_repel_remaining: int
+    route_items_archived: bool
     card_key_quantity: int
     master_ball_quantity: int
     required_events: tuple[tuple[int, bool], ...]
@@ -268,18 +274,27 @@ class SilphChapterReport:
             len(self.records) == SILPH_CHECKPOINT_COUNT
             and all(events.values())
             and self.tm13_event
-            and self.tm13_transfer_before_event
+            and (self.tm13_preinstalled or self.tm13_transfer_before_event)
+            and not (self.tm13_preinstalled and self.tm13_transfer_before_event)
             and self.other_roof_rewards_untouched
             and self.fresh_water_after_reward == 0
             and self.tm13_after_teaching == 0
             and self.upgraded_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
             and self.upgraded_pp == (15, 15, 10, 15)
-            and self.money_before == POST_SAFFRON_PURCHASE_MONEY
-            and self.money_after == POST_SILPH_MONEY
+            and self.money_before >= 0
+            and self.money_after
+            == self.money_before
+            + (
+                SILPH_PREINSTALLED_TM13_NET_MONEY_DELTA
+                if self.tm13_preinstalled
+                else SILPH_NET_MONEY_DELTA
+            )
             and 0 <= self.rival_potions_used <= 1
+            and self.rival_x_special_used == 1
             and self.hyper_potions_remaining
             == HYPER_POTION_PURCHASE_QUANTITY - self.rival_potions_used
             and self.max_repel_remaining == 0
+            and self.route_items_archived
             and self.card_key_quantity == 1
             and self.master_ball_quantity == 1
             and self.lapras_flag_before & GOT_LAPRAS_MASK == 0
@@ -304,6 +319,7 @@ class SilphChapterReport:
             "objective": "liberate_silph",
             "ice_beam_upgrade": {
                 "tm13_event": self.tm13_event,
+                "preinstalled_before_silph": self.tm13_preinstalled,
                 "item_transfer_before_event": self.tm13_transfer_before_event,
                 "other_roof_rewards_untouched": self.other_roof_rewards_untouched,
                 "fresh_water_remaining": self.fresh_water_after_reward,
@@ -314,9 +330,14 @@ class SilphChapterReport:
             "supply": {
                 "hyper_potions_bought": HYPER_POTION_PURCHASE_QUANTITY,
                 "used_by_rival_policy": self.rival_potions_used,
+                "x_special_used_by_rival_policy": self.rival_x_special_used,
                 "remaining": self.hyper_potions_remaining,
-                "max_repel_bought": 1,
+                "max_repel_bought": 0,
                 "max_repel_remaining": self.max_repel_remaining,
+            },
+            "inventory_capacity": {
+                "archived_before_silph": [item.name for item in SILPH_PC_DEPOSIT_ITEMS],
+                "transition_verified": self.route_items_archived,
             },
             "required_events": {f"{event:#05x}": value for event, value in self.required_events},
             "key_items": {
@@ -358,30 +379,57 @@ def run_silph_chapter(
     money_before = _money(emulator)
     lapras_before = emulator.read_u8(STATUS_FLAGS_4)
     initial_bag = _bag(emulator)
+    tm13_preinstalled = (
+        _event(emulator, EventFlag.GOT_TM13)
+        and initial.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
+        and initial.first_party_pp == (15, 15, 10, 15)
+    )
     if (
         initial_bag.get(ItemId.CARD_KEY, 0)
         or initial_bag.get(ItemId.MASTER_BALL, 0)
         or initial_bag.get(ItemId.HYPER_POTION, 0)
         or initial_bag.get(ItemId.FRESH_WATER, 0)
         or initial_bag.get(ItemId.TM13_ICE_BEAM, 0)
-        or _event(emulator, EventFlag.GOT_TM13)
+        or (_event(emulator, EventFlag.GOT_TM13) and not tm13_preinstalled)
         or _event(emulator, 0x18D)
         or _event(emulator, 0x18E)
         or lapras_before & GOT_LAPRAS_MASK
     ):
         raise SilphChapterError("Silph input boundary is not pristine.")
     _checkpoint(records, progress, emulator, initial, "silph_ready", "Silph plan ready")
+    route_items_archived = _store_spent_route_items(actions, reader, emulator, timing)
+
+    # The roof exchange temporarily needs one free bag slot. Complete and
+    # consume that item chain before adding the Hyper Potion stack.
+    if tm13_preinstalled:
+        upgraded = reader.read()
+        tm13_transfer_ordered = False
+    else:
+        upgraded, tm13_transfer_ordered = _acquire_and_teach_ice_beam(
+            actions,
+            reader,
+            emulator,
+            timing,
+        )
+
+    # X Special is a Silph-rival resource, not part of Erika's earlier TM13
+    # preparation.  Keep its purchase inside this chapter so the shared
+    # Celadon Ice Beam route remains deterministic for Erika.
+    _acquire_silph_x_special(actions, reader, emulator, timing)
 
     _move(actions, reader, CENTER_EXIT, timing)
-    _move(actions, reader, CITY_TO_MART_APPROACH, timing)
-    _move(actions, reader, MART_DOOR, timing)
+    _navigate_saffron_coordinate(
+        actions,
+        reader,
+        timing,
+        (25, 12),
+        "Saffron Mart",
+    )
+    _move_verified(actions, reader, MART_DOOR, timing, "Saffron Mart entry")
     _require(reader.read(), MapId.SAFFRON_MART, (3, 7), "Saffron Mart")
     _move(actions, reader, MART_TO_CLERK, timing)
     _buy_supplies(actions, reader, emulator, timing)
-    if (
-        _bag(emulator).get(ItemId.HYPER_POTION, 0) != HYPER_POTION_PURCHASE_QUANTITY
-        or _bag(emulator).get(ItemId.MAX_REPEL, 0) != 1
-    ):
+    if _bag(emulator).get(ItemId.HYPER_POTION, 0) != HYPER_POTION_PURCHASE_QUANTITY:
         raise SilphChapterError("Silph supply purchase failed.")
     _require(reader.read(), MapId.SAFFRON_MART, (2, 5), "Saffron clerk return")
     _move_verified(actions, reader, CLERK_TO_EXIT, timing, "Saffron Mart exit approach")
@@ -390,15 +438,6 @@ def run_silph_chapter(
     _move_verified(actions, reader, ("up",), timing, "Saffron Center entry")
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "Saffron supply return")
     _move(actions, reader, ("up",) * 4, timing)
-    _use_bag_item(  # type: ignore[arg-type]
-        actions,
-        reader,
-        emulator,
-        LavenderTiming(wait_frames=timing.menu_frames),
-        ItemId.MAX_REPEL,
-    )
-
-    upgraded, tm13_transfer_ordered = _acquire_and_teach_ice_beam(actions, reader, emulator, timing)
     _checkpoint(
         records,
         progress,
@@ -474,6 +513,7 @@ def run_silph_chapter(
     _move(actions, reader, _directions("ULL"), timing)
     _await_trainer_battle(actions, reader, timing)
     potion_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
+    x_special_before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
     _run_rival_with_potions(reader, actions, emulator, timing)
     potion_after = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     _require_event(emulator, EventFlag.BEAT_SILPH_CO_RIVAL)
@@ -618,6 +658,7 @@ def run_silph_chapter(
         money_before=money_before,
         money_after=_money(emulator),
         tm13_event=_event(emulator, EventFlag.GOT_TM13),
+        tm13_preinstalled=tm13_preinstalled,
         tm13_transfer_before_event=tm13_transfer_ordered,
         other_roof_rewards_untouched=not _event(emulator, 0x18D) and not _event(emulator, 0x18E),
         fresh_water_after_reward=_bag(emulator).get(ItemId.FRESH_WATER, 0),
@@ -625,8 +666,10 @@ def run_silph_chapter(
         upgraded_moves=upgraded.first_party_moves or (),
         upgraded_pp=upgraded.first_party_pp or (),
         rival_potions_used=potion_before - potion_after,
+        rival_x_special_used=x_special_before - _bag(emulator).get(ItemId.X_SPECIAL, 0),
         hyper_potions_remaining=_bag(emulator).get(ItemId.HYPER_POTION, 0),
         max_repel_remaining=_bag(emulator).get(ItemId.MAX_REPEL, 0),
+        route_items_archived=route_items_archived,
         card_key_quantity=_bag(emulator).get(ItemId.CARD_KEY, 0),
         master_ball_quantity=_bag(emulator).get(ItemId.MASTER_BALL, 0),
         required_events=required,
@@ -674,6 +717,212 @@ def _acquire_and_teach_ice_beam(
                 break
             _move(actions, reader, route[-2:], timing)
         _require(reader.read(), map_id, coordinate, label)
+    transfer_before_event = _acquire_and_teach_ice_beam_on_roof(
+        actions,
+        reader,
+        emulator,
+        timing,
+        money_before=money_before,
+    )
+    _navigate_roof_to(actions, reader, emulator, (12, 3), timing)
+    _return_roof_to_saffron(actions, reader, timing)
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "Saffron Center return")
+    _move(actions, reader, ("up",) * 4, timing)
+    _heal(actions, timing)
+    for _ in range(24):
+        upgraded = reader.read()
+        if (
+            _party_hp(emulator) == _party_max_hp(emulator)
+            and _party_status(emulator) == (0, 0, 0)
+            and upgraded.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
+            and upgraded.first_party_pp == (15, 15, 10, 15)
+            and reader.read_input_readiness().ready
+        ):
+            return upgraded, transfer_before_event
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    raise SilphChapterError("Ice Beam upgrade did not reach the healed Saffron boundary.")
+
+
+def acquire_and_teach_ice_beam_from_celadon_center(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    *,
+    timing: SilphTiming = DEFAULT_SILPH_TIMING,
+) -> tuple[RawGameState, bool]:
+    """Install Ice Beam at the Celadon preparation boundary and return healed."""
+
+    _require(reader.read(), MapId.CELADON_POKECENTER, (3, 3), "Celadon Ice Beam boundary")
+    money_before = _money(emulator)
+    _move(actions, reader, CENTER_EXIT, timing)
+    _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exit")
+    _move(actions, reader, CELADON_CENTER_EXIT_TO_MART, timing)
+    _require(reader.read(), MapId.CELADON_MART_1F, (16, 7), "Celadon Mart 1F")
+    for route, map_id, coordinate, label in (
+        (MART_1F_TO_2F, MapId.CELADON_MART_2F, (12, 2), "Celadon Mart 2F"),
+        (MART_2F_TO_3F, MapId.CELADON_MART_3F, (16, 2), "Celadon Mart 3F"),
+        (MART_3F_TO_4F, MapId.CELADON_MART_4F, (12, 2), "Celadon Mart 4F"),
+        (MART_4F_TO_5F, MapId.CELADON_MART_5F, (16, 2), "Celadon Mart 5F"),
+        (MART_5F_TO_ROOF, MapId.CELADON_MART_ROOF, (15, 3), "Celadon Mart roof"),
+    ):
+        _move(actions, reader, route, timing)
+        for _ in range(4):
+            if reader.read().map_id == map_id:
+                break
+            _move(actions, reader, route[-2:], timing)
+        _require(reader.read(), map_id, coordinate, label)
+    transfer_before_event = _acquire_and_teach_ice_beam_on_roof(
+        actions,
+        reader,
+        emulator,
+        timing,
+        money_before=money_before,
+    )
+    _navigate_roof_to(actions, reader, emulator, (12, 3), timing)
+    _move(actions, reader, ROOF_TO_5F, timing)
+    _require(reader.read(), MapId.CELADON_MART_5F, (12, 2), "roof to Mart 5F")
+    for route, map_id, coordinate, label in (
+        (MART_5F_TO_4F, MapId.CELADON_MART_4F, (16, 2), "Mart 4F return"),
+        (MART_4F_TO_3F, MapId.CELADON_MART_3F, (12, 2), "Mart 3F return"),
+        (MART_3F_TO_2F, MapId.CELADON_MART_2F, (16, 2), "Mart 2F return"),
+        (MART_2F_TO_1F, MapId.CELADON_MART_1F, (12, 2), "Mart 1F return"),
+        (MART_TO_CITY, MapId.CELADON_CITY, (10, 14), "Celadon Mart exit"),
+    ):
+        _move(actions, reader, route, timing)
+        for _ in range(4):
+            if reader.read().map_id == map_id:
+                break
+            _move(actions, reader, route[-2:], timing)
+        _require(reader.read(), map_id, coordinate, label)
+    _move(actions, reader, CELADON_MART_EXIT_TO_CENTER, timing)
+    _require(reader.read(), MapId.CELADON_POKECENTER, (3, 7), "Celadon Center return")
+    _move(actions, reader, ("up",) * 4, timing)
+    _heal(actions, timing)
+    for _ in range(24):
+        upgraded = reader.read()
+        if (
+            _party_hp(emulator) == _party_max_hp(emulator)
+            and _party_status(emulator) == (0, 0, 0)
+            and upgraded.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
+            and upgraded.first_party_pp == (15, 15, 10, 15)
+            and reader.read_input_readiness().ready
+        ):
+            return upgraded, transfer_before_event
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    raise SilphChapterError("Ice Beam upgrade did not reach the healed Celadon boundary.")
+
+
+def _buy_silph_x_special(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SilphTiming,
+) -> None:
+    menu_timing = LavenderTiming(wait_frames=timing.menu_frames)
+    _require(reader.read(), MapId.CELADON_MART_5F, (16, 2), "Silph X Special boundary")
+    _move_verified(
+        actions,
+        reader,
+        _directions("LLLLLLLLDDDDLLLU"),
+        timing,
+        "X Special clerk approach",
+    )
+    _require(reader.read(), MapId.CELADON_MART_5F, (5, 5), "X Special clerk approach")
+    _pulse(actions, MacroActionKind.MOVE, timing, "up", timing.menu_frames)
+    # The clerk is reached across the counter: this pulse faces north but the
+    # counter correctly keeps the player at (5, 5).
+    _require(reader.read(), MapId.CELADON_MART_5F, (5, 5), "X Special clerk stance")
+    _interact(actions, timing.menu_frames)
+    _select_cursor(actions, emulator, 0, menu_timing)  # type: ignore[arg-type]
+    _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    _buy_mart_item(
+        actions,  # type: ignore[arg-type]
+        emulator,
+        menu_timing,
+        absolute_index=6,
+        item=ItemId.X_SPECIAL,
+        quantity=2,
+        target_bag_quantity=2,
+    )
+    _close_menus(actions, reader, menu_timing)  # type: ignore[arg-type]
+    _move_verified(
+        actions,
+        reader,
+        _directions("DRRRUUUURRRRRRRR"),
+        timing,
+        "X Special clerk return",
+    )
+    _require(reader.read(), MapId.CELADON_MART_5F, (16, 2), "Silph X Special return")
+
+
+def _acquire_silph_x_special(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SilphTiming,
+) -> None:
+    """Buy the Silph and Sabrina X Specials and restore the Center boundary."""
+
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), "Silph X Special start")
+    _move(actions, reader, SAFFRON_CENTER_TO_ROUTE_7_GATE, timing)
+    _require(reader.read(), MapId.ROUTE_7_GATE, (3, 4), "X Special Route 7 gate east side")
+    _move(actions, reader, ROUTE_7_GATE_TO_WEST, timing)
+    _require(reader.read(), MapId.ROUTE_7, (11, 10), "X Special Route 7 gate west exit")
+    _move(actions, reader, ROUTE_7_WEST_TO_CONNECTION, timing)
+    _require(reader.read(), MapId.ROUTE_7, (0, 3), "X Special Route 7 west connection")
+    _move(actions, reader, ROUTE_7_CONNECTION_TO_CELADON_CITY, timing)
+    _require(reader.read(), MapId.CELADON_CITY, (10, 14), "X Special Celadon City")
+    _move(actions, reader, CELADON_CITY_TO_MART, timing)
+    _require(reader.read(), MapId.CELADON_MART_1F, (16, 7), "X Special Mart 1F")
+    for route, map_id, coordinate, label in (
+        (MART_1F_TO_2F, MapId.CELADON_MART_2F, (12, 2), "X Special Mart 2F"),
+        (MART_2F_TO_3F, MapId.CELADON_MART_3F, (16, 2), "X Special Mart 3F"),
+        (MART_3F_TO_4F, MapId.CELADON_MART_4F, (12, 2), "X Special Mart 4F"),
+        (MART_4F_TO_5F, MapId.CELADON_MART_5F, (16, 2), "X Special Mart 5F"),
+    ):
+        _move_verified(actions, reader, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+    _buy_silph_x_special(actions, reader, emulator, timing)
+    for route, map_id, coordinate, label in (
+        (("up",), MapId.CELADON_MART_4F, (16, 2), "X Special Mart 4F return"),
+        (MART_4F_TO_3F, MapId.CELADON_MART_3F, (12, 2), "X Special Mart 3F return"),
+        (MART_3F_TO_2F, MapId.CELADON_MART_2F, (16, 2), "X Special Mart 2F return"),
+        (MART_2F_TO_1F, MapId.CELADON_MART_1F, (12, 2), "X Special Mart 1F return"),
+        (MART_TO_CITY, MapId.CELADON_CITY, (10, 14), "X Special Celadon Mart exit"),
+    ):
+        _move_verified(actions, reader, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+    _move(actions, reader, _directions("RRRRU"), timing)
+    _confirm_many(actions, 3, timing.menu_frames)
+    _clear_field_text(  # type: ignore[arg-type]
+        actions,
+        reader,
+        LavenderTiming(wait_frames=timing.menu_frames),
+    )
+    _move(actions, reader, ("up",) * 2 + ("right",) * 36, timing)
+    _require(reader.read(), MapId.ROUTE_7, (0, 3), "X Special Route 7 return")
+    _move(actions, reader, ROUTE_7_CONNECTION_TO_GATE, timing)
+    _require(reader.read(), MapId.ROUTE_7, (11, 10), "X Special Route 7 gate exterior")
+    _move(actions, reader, ("right",), timing)
+    _require(reader.read(), MapId.ROUTE_7_GATE, (0, 4), "X Special Route 7 gate return")
+    _move(actions, reader, ("right",) * 3 + GATE_TO_SAFFRON, timing)
+    _require(reader.read(), MapId.SAFFRON_CITY, (1, 18), "X Special Saffron west entry")
+    _move(actions, reader, SAFFRON_TO_CENTER, timing)
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "X Special Saffron return")
+    _move(actions, reader, ("up",) * 4, timing)
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), "X Special restored boundary")
+    if _bag(emulator).get(ItemId.X_SPECIAL, 0) != 2:
+        raise SilphChapterError("Silph X Special purchase failed.")
+
+
+def _acquire_and_teach_ice_beam_on_roof(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SilphTiming,
+    *,
+    money_before: int,
+) -> bool:
     _require(reader.read(), MapId.CELADON_MART_ROOF, (15, 3), "Celadon Mart roof")
     _move(actions, reader, ROOF_TO_VENDING, timing)
     _require(reader.read(), MapId.CELADON_MART_ROOF, (12, 3), "roof vending stance")
@@ -738,23 +987,108 @@ def _acquire_and_teach_ice_beam(
         LavenderTiming(wait_frames=timing.menu_frames),
     )
     _teach_ice_beam(actions, reader, emulator, timing)
-    _navigate_roof_to(actions, reader, emulator, (12, 3), timing)
-    _return_roof_to_saffron(actions, reader, timing)
-    _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "Saffron Center return")
-    _move(actions, reader, ("up",) * 4, timing)
-    _heal(actions, timing)
-    for _ in range(24):
-        upgraded = reader.read()
-        if (
-            _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
-            and upgraded.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
-            and upgraded.first_party_pp == (15, 15, 10, 15)
-            and reader.read_input_readiness().ready
-        ):
-            return upgraded, transfer_before_event
+    return transfer_before_event
+
+
+def _store_spent_route_items(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SilphTiming,
+) -> bool:
+    before = _bag(emulator)
+    if len(before) != 19 or any(before.get(item, 0) != 1 for item in SILPH_PC_DEPOSIT_ITEMS):
+        raise SilphChapterError(
+            "Silph capacity cleanup requires a 19-slot bag with the spent route items."
+        )
+    _move(actions, reader, ("down",) + ("right",) * 10, timing)
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (13, 4), "pre-Silph PC approach")
+    for item in SILPH_PC_DEPOSIT_ITEMS:
+        _deposit_pc_item(actions, reader, emulator, item, timing)
+    after = _bag(emulator)
+    if (
+        len(after) != 16
+        or any(item in after for item in SILPH_PC_DEPOSIT_ITEMS)
+        or not reader.read_input_readiness().ready
+    ):
+        raise SilphChapterError("Pre-Silph PC cleanup did not establish a 16-slot bag boundary.")
+    _move(actions, reader, ("left",) * 10 + ("up",), timing)
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), "pre-Silph PC return")
+    return True
+
+
+def _deposit_pc_item(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    item: ItemId,
+    timing: SilphTiming,
+) -> None:
+    _pulse(actions, MacroActionKind.MOVE, timing, "up", timing.menu_frames)
+    _pulse(actions, MacroActionKind.INTERACT, timing, frames=timing.menu_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    _select_pc_menu_cursor(actions, emulator, 1, timing)
+    for _ in range(3):
         _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
-    raise SilphChapterError("Ice Beam upgrade did not reach the healed Saffron boundary.")
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
+        raise SilphChapterError("Saffron PC did not expose WITHDRAW ITEM.")
+    _pulse(actions, MacroActionKind.MOVE, timing, "down", timing.menu_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    _select_pc_bag_item(actions, emulator, item, timing)
+    for _ in range(3):
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    if item in _bag(emulator):
+        raise SilphChapterError(f"Saffron PC did not store {item.name}.")
+    for _ in range(4):
+        _pulse(actions, MacroActionKind.CANCEL, timing, frames=timing.menu_frames)
+    if not reader.read_input_readiness().ready:
+        raise SilphChapterError(f"Saffron PC did not close after storing {item.name}.")
+
+
+def _select_pc_menu_cursor(
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    target: int,
+    timing: SilphTiming,
+) -> None:
+    for _ in range(16):
+        current = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if current == target:
+            return
+        _pulse(
+            actions,
+            MacroActionKind.MOVE,
+            timing,
+            "down" if current < target else "up",
+            timing.menu_frames,
+        )
+    raise SilphChapterError(f"PC menu could not select cursor {target}.")
+
+
+def _select_pc_bag_item(
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    item: ItemId,
+    timing: SilphTiming,
+) -> None:
+    for _ in range(24):
+        items = tuple(_bag(emulator))
+        if item not in items:
+            raise SilphChapterError(f"Required PC item {item.name} is unavailable.")
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        target = items.index(item)
+        if absolute == target:
+            return
+        _pulse(
+            actions,
+            MacroActionKind.MOVE,
+            timing,
+            "down" if absolute < target else "up",
+            timing.menu_frames,
+        )
+    raise SilphChapterError(f"Could not select PC item {item.name}.")
 
 
 def _return_roof_to_saffron(
@@ -785,7 +1119,13 @@ def _return_roof_to_saffron(
     )
     _move(actions, reader, ("up",) * 2 + ("right",) * 36, timing)
     _require(reader.read(), MapId.ROUTE_7, (0, 3), "Route 7 return")
-    _move(actions, reader, ROUTE_7_TO_GATE, timing)
+    # The original eastbound shortcut crosses the one-way south ledge at
+    # (9, 3). Reusing it after the changed rooftop cadence can collide above
+    # the ledge and consume the remainder of a fixed route. Reverse the
+    # source-derived lower-corridor path instead; it contains no ledge jump.
+    _move(actions, reader, ROUTE_7_CONNECTION_TO_GATE, timing)
+    _require(reader.read(), MapId.ROUTE_7, (11, 10), "Route 7 gate exterior")
+    _move(actions, reader, ("right",), timing)
     _require(reader.read(), MapId.ROUTE_7_GATE, (0, 4), "Route 7 gate return")
     _move(actions, reader, ("right",) * 3 + GATE_TO_SAFFRON, timing)
     _require(reader.read(), MapId.SAFFRON_CITY, (1, 18), "Saffron west entry")
@@ -805,8 +1145,19 @@ def _interact_with_roof_girl(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
+    *,
+    reward_started: Callable[[], bool] | None = None,
 ) -> None:
-    for _ in range(256):
+    if reward_started is None:
+        def observed_reward_started() -> bool:
+            return (
+                _bag(emulator).get(ItemId.FRESH_WATER, 0) == 0
+                or _bag(emulator).get(ItemId.TM13_ICE_BEAM, 0) == 1
+                or _event(emulator, EventFlag.GOT_TM13)
+            )
+    else:
+        observed_reward_started = reward_started
+    for attempt in range(1024):
         raw = reader.read()
         if raw.map_id != MapId.CELADON_MART_ROOF:
             raise SilphChapterError("Rooftop girl approach left the roof.")
@@ -816,11 +1167,24 @@ def _interact_with_roof_girl(
         if player in adjacent:
             direction = _direction_between(player, girl)
             _pulse(actions, MacroActionKind.MOVE, timing, direction, 1)
+            # A one-frame facing pulse is enough for a walking object to move.
+            # Only send A when the fresh observation still has the girl on the
+            # tile being faced; otherwise resume pursuit from the new state.
+            faced_raw = reader.read()
+            faced_player = (faced_raw.player_x or 0, faced_raw.player_y or 0)
+            faced_girl = _roof_girl_coordinate(emulator)
+            if (
+                faced_player not in _adjacent_roof_tiles(faced_girl)
+                or _direction_between(faced_player, faced_girl) != direction
+            ):
+                continue
             _interact(actions, timing.menu_frames)
-            if not reader.read_input_readiness().ready:
+            if observed_reward_started() or not reader.read_input_readiness().ready:
                 return
-            # The walking NPC can move during even this short facing pulse.
-            # Reobserve her rather than planning from the stale coordinate.
+            # Text-box state is not represented by InputReadiness on every
+            # frame. If dialogue did open, another observed A press advances
+            # it; the inventory/event transition above is the authoritative
+            # success signal. If the NPC moved, the next iteration replans.
             continue
         path = _bounded_roof_path(
             player,
@@ -831,8 +1195,22 @@ def _interact_with_roof_girl(
             raise SilphChapterError(
                 f"No collision-safe rooftop path from {player!r} to girl {girl!r}."
             )
-        _pulse(actions, MacroActionKind.MOVE, timing, path[0], ROOF_STEP_FRAMES)
-    raise SilphChapterError("Could not reach a live adjacent stance for the rooftop girl.")
+        # Break deterministic lockstep when both sprites keep advancing on the
+        # same movement cadence. The varying bounded wait changes only the
+        # pursuit phase; every subsequent step is still replanned from RAM.
+        _pulse(
+            actions,
+            MacroActionKind.WAIT,
+            timing,
+            frames=1 + attempt % 11,
+        )
+        _pulse(actions, MacroActionKind.MOVE, timing, path[0], ROOF_PURSUIT_STEP_FRAMES)
+    final = reader.read()
+    raise SilphChapterError(
+        "Could not reach a live adjacent stance for the rooftop girl: "
+        f"player={(final.player_x, final.player_y)!r}, "
+        f"girl={_roof_girl_coordinate(emulator)!r}."
+    )
 
 
 def _navigate_roof_to(
@@ -974,15 +1352,6 @@ def _buy_supplies(
         quantity=HYPER_POTION_PURCHASE_QUANTITY,
         target_bag_quantity=HYPER_POTION_PURCHASE_QUANTITY,
     )
-    _buy_mart_item(
-        actions,  # type: ignore[arg-type]
-        emulator,
-        lavender_timing,
-        absolute_index=2,
-        item=ItemId.MAX_REPEL,
-        quantity=1,
-        target_bag_quantity=1,
-    )
     _close_menus(
         actions,  # type: ignore[arg-type]
         reader,
@@ -1023,7 +1392,7 @@ def _select_elevator_floor(
 def _run_battle(
     reader: PokemonRedStateReader,
     actions: _CountingExecutor,
-    move_slot: int,
+    move_slot: int | Callable[[RawGameState], int],
     map_id: int,
     label: str,
     battle_plan_id: str,
@@ -1031,10 +1400,11 @@ def _run_battle(
         BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
     ),
 ) -> None:
+    policy = move_slot if callable(move_slot) else lambda _: move_slot
     run_adaptive_trainer_battle(
         reader,
         actions,
-        lambda _: move_slot,
+        policy,
         expected_map=int(map_id),
         intent=BattleIntent(
             "liberate_silph",
@@ -1092,32 +1462,67 @@ def _run_rival_with_potions(
     emulator: EmulatorState,
     timing: SilphTiming,
 ) -> None:
-    def policy(raw: RawGameState) -> int:
-        if raw.enemy_species_id in {151, 154}:
-            return 3
-        return 2 if raw.enemy_species_id == 22 else 4
-
+    potion_start = _bag(emulator).get(ItemId.HYPER_POTION, 0)
+    _battle_x_special(reader, actions, emulator, timing)
     completed = _run_until(
         reader,
         actions,
-        policy,
+        _silph_rival_move_slot,
         lambda raw: raw.enemy_species_id == 154,
         "Silph rival to Venusaur",
         RedBattlePlanId.SILPH_7F_RIVAL,
     )
     if completed:
         raise SilphChapterError("Rival battle ended before the Venusaur gate.")
-    if (reader.read().first_party_hp or 0) < 110:
+    venusaur = reader.read()
+    if (venusaur.first_party_hp or 0) < (venusaur.first_party_max_hp or 110):
+        _battle_hyper_potion(reader, actions, emulator, timing)
+    else:
+        completed = _run_until(
+            reader,
+            actions,
+            _silph_rival_move_slot,
+            lambda raw: (
+                raw.enemy_species_id == 154
+                and (raw.first_party_hp or 0) < (raw.first_party_max_hp or 110)
+                and _bag(emulator).get(ItemId.HYPER_POTION, 0) == potion_start
+            ),
+            "Silph rival Venusaur recovery gate",
+            RedBattlePlanId.SILPH_7F_RIVAL,
+        )
+        if completed:
+            return
         _battle_hyper_potion(reader, actions, emulator, timing)
     _run_battle(
         reader,
         actions,
-        3,
+        _silph_rival_move_slot,
         MapId.SILPH_CO_7F,
         "Silph rival Venusaur",
         RedBattlePlanId.SILPH_7F_RIVAL,
         BattleResourcePolicy.BOUNDED_RECOVERY,
     )
+
+
+def _silph_rival_move_slot(raw: RawGameState) -> int:
+    if raw.enemy_species_id in {151, 154}:
+        priorities = (3, 4, 2, 1)
+    elif raw.enemy_species_id == 22:
+        priorities = (2, 4, 3, 1)
+    else:
+        priorities = (4, 2, 3, 1)
+    pp = raw.first_party_pp or ()
+    for slot in priorities:
+        if (
+            len(pp) >= slot
+            and pp[slot - 1] & 0x3F
+            and not (
+                raw.player_disabled_move_slot == slot
+                and (raw.player_disable_turns or 0) > 0
+            )
+        ):
+            return slot
+    raise SilphChapterError("Silph rival policy has no legal move with PP.")
 
 
 def _battle_hyper_potion(
@@ -1133,6 +1538,59 @@ def _battle_hyper_potion(
         timing,
         ItemId.HYPER_POTION,
     )
+
+
+def _battle_x_special(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    timing: SilphTiming,
+) -> None:
+    for _ in range(timing.max_script_pulses):
+        raw = reader.read()
+        menu = reader.read_battle_menu_state(raw)
+        if raw.battle_state != 2:
+            raise SilphChapterError("Silph X Special left the trainer battle intro.")
+        if menu.phase is BattleMenuPhase.MAIN:
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.dialogue_frames)
+    else:
+        raise SilphChapterError("Silph X Special did not reach the trainer MAIN menu.")
+    command = menu.selected_main_command
+    if command == 0:
+        _pulse(actions, MacroActionKind.MOVE, timing, "down", timing.battle_item_menu_frames)
+    elif command == 2:
+        _pulse(actions, MacroActionKind.MOVE, timing, "left", timing.battle_item_menu_frames)
+        _pulse(actions, MacroActionKind.MOVE, timing, "down", timing.battle_item_menu_frames)
+    elif command == 3:
+        _pulse(actions, MacroActionKind.MOVE, timing, "left", timing.battle_item_menu_frames)
+    elif command != 1:
+        raise SilphChapterError("Silph X Special exposed an invalid battle command cursor.")
+    if reader.read_battle_menu_state(reader.read()).selected_main_command != 1:
+        raise SilphChapterError("Silph X Special could not select ITEM.")
+    before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
+    if before < 1:
+        raise SilphChapterError(f"Silph X Special reserve mismatch: {before!r}.")
+    _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.battle_item_frames)
+    _select_bag_item(
+        actions,  # type: ignore[arg-type]
+        emulator,
+        ItemId.X_SPECIAL,
+        LavenderTiming(wait_frames=timing.menu_frames),
+    )
+    _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.battle_item_frames)
+    for _ in range(24):
+        current = reader.read()
+        if (
+            current.battle_state == 2
+            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+        ):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.battle_item_frames)
+    else:
+        raise SilphChapterError("Silph X Special did not return to MAIN.")
+    if _bag(emulator).get(ItemId.X_SPECIAL, 0) != before - 1:
+        raise SilphChapterError("Silph X Special did not decrement exactly once.")
 
 
 def _battle_healing_item(

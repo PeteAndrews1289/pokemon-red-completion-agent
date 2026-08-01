@@ -57,7 +57,7 @@ def test_lorelei_receipt_reconstructs_party_and_rejects_unsafe_turns() -> None:
                 LORELEI_PARTY[0][0],
                 LORELEI_PARTY[0][1],
                 1,
-                79,
+                LORELEI_SAFE_HP - 1,
                 0,
                 (1, 1, 1, 1),
                 2,

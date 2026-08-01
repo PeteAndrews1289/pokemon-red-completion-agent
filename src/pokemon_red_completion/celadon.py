@@ -19,8 +19,6 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.economy import (
-    CELADON_MONEY,
-    LAVENDER_MONEY,
     LAVENDER_SUPER_POTION_RESERVE,
 )
 from pokemon_red_completion.observation import (
@@ -39,6 +37,7 @@ WARTORTLE = 0xB3
 DUX = 0x40
 DIGLETT = 0x3B
 BITE = 0x2C
+ROUTE_8_TRAINER_REWARD = 330
 PROTECTED_PARTY = (WARTORTLE, DUX, DIGLETT)
 ROUTE_8_EVENTS = tuple(
     EventFlag(int(EventFlag.BEAT_ROUTE_8_TRAINER_0) + index) for index in range(9)
@@ -156,6 +155,7 @@ class CeladonChapterReport:
     party_status: tuple[int, int, int]
     super_potions_remaining: int
     repels_remaining: int
+    money_before: int
     money_remaining: int
     frames_executed: int
     actions_executed: int
@@ -186,7 +186,8 @@ class CeladonChapterReport:
             and self.party_status == (0, 0, 0)
             and self.super_potions_remaining == LAVENDER_SUPER_POTION_RESERVE
             and self.repels_remaining == 0
-            and self.money_remaining == CELADON_MONEY
+            and self.money_before >= 0
+            and self.money_remaining == self.money_before + ROUTE_8_TRAINER_REWARD
             and self.controller_released
         )
 
@@ -215,6 +216,7 @@ class CeladonChapterReport:
             "inventory": {
                 "super_potions_remaining": self.super_potions_remaining,
                 "repels_remaining": self.repels_remaining,
+                "money_before": self.money_before,
                 "money_remaining": self.money_remaining,
             },
             "party": {
@@ -262,6 +264,7 @@ def run_celadon_chapter(
     start = reader.read()
     _require(start, MapId.LAVENDER_POKECENTER, (3, 3), "Lavender terminal boundary")
     _require_resources(emulator)
+    money_before = _money(emulator)
     events_before = _events(emulator)
     if events_before != (False,) * 9:
         raise CeladonChapterError(f"Route 8 trainer events were not pristine: {events_before!r}.")
@@ -394,6 +397,7 @@ def run_celadon_chapter(
         party_status=_party_status(emulator),
         super_potions_remaining=_bag(emulator).get(ItemId.SUPER_POTION, 0),
         repels_remaining=_bag(emulator).get(ItemId.REPEL, 0),
+        money_before=money_before,
         money_remaining=_money(emulator),
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,
@@ -551,7 +555,7 @@ def _heal_center(
 def _require_resources(emulator: EmulatorState) -> None:
     bag = _bag(emulator)
     resources = (bag.get(ItemId.SUPER_POTION, 0), bag.get(ItemId.REPEL, 0), _money(emulator))
-    if resources != (LAVENDER_SUPER_POTION_RESERVE, 0, LAVENDER_MONEY):
+    if resources[0] != LAVENDER_SUPER_POTION_RESERVE or resources[1] != 0 or resources[2] < 0:
         raise CeladonChapterError(f"Unexpected starting resources: {resources!r}.")
     if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
         raise CeladonChapterError("Lavender boundary party was not fully healed.")

@@ -149,6 +149,7 @@ class PokemonRedObservationEncoder:
                     "opponent_defense_stage": _normalize_stage(raw.enemy_defense_stage),
                     "player_disabled_move_slot": raw.player_disabled_move_slot,
                     "player_disable_turns": raw.player_disable_turns,
+                    "opponent_using_trapping_move": raw.enemy_using_trapping_move,
                 }
                 if in_battle
                 else None

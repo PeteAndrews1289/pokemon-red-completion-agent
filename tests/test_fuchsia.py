@@ -14,6 +14,7 @@ from pokemon_red_completion.fuchsia import (
     FuchsiaChapterReport,
     FuchsiaCheckpoint,
     FuchsiaTiming,
+    _snorlax_move_slot,
 )
 from pokemon_red_completion.observation import EventFlag, MapId, RawGameState
 
@@ -136,6 +137,28 @@ def test_fuchsia_report_requires_bounded_battle_receipts() -> None:
     )
     assert not wrong_pp.passed
     assert not wrong_set.passed
+
+
+def test_snorlax_receipt_accepts_held_out_damage_roll_spend() -> None:
+    report = _report()
+    battles = list(report.battles)
+    battles[1] = replace(battles[1], selected_pp_spent=8)
+
+    assert replace(report, battles=tuple(battles)).passed
+
+
+def test_snorlax_policy_falls_back_after_bubblebeam_is_exhausted() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.ROUTE_12,
+        player_x=11,
+        player_y=62,
+        party_count=3,
+        battle_state=1,
+        first_party_pp=(14, 30, 0, 25),
+    )
+    assert _snorlax_move_slot(raw) == 1
+    assert _snorlax_move_slot(replace(raw, first_party_pp=(14, 30, 1, 25))) == 3
 
 
 def test_fuchsia_public_report_discloses_assistance_and_optionals() -> None:

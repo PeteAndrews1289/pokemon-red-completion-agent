@@ -37,6 +37,7 @@ from pokemon_red_completion.silph import (
     SilphTiming,
     _await_trainer_battle,
     _battle_hyper_potion,
+    _battle_x_special,
     _CountingExecutor,
     _event,
     _heal,
@@ -54,9 +55,12 @@ SABRINA_TRAINER_CLASS = 0xF0
 SABRINA_TRAINER_SET = 1
 SABRINA_PARTY = ((0x26, 38), (0x2A, 37), (0x77, 38), (0x95, 43))
 REGULAR_TRAINER_EVENTS = tuple(range(0x362, 0x369))
-PC_DEPOSIT_ITEMS = (ItemId.SS_TICKET, ItemId.LIFT_KEY)
+PC_DEPOSIT_ITEMS = (ItemId.SILPH_SCOPE, ItemId.CARD_KEY)
 HYPER_POTION_THRESHOLD = 70
-MAX_SABRINA_HYPER_POTIONS = 3
+ALAKAZAM_HYPER_POTION_THRESHOLD = 110
+# The next chapter restocks before its first required battle, so Sabrina may
+# consume the complete held-out reserve when her Alakazam damage requires it.
+MAX_SABRINA_HYPER_POTIONS = 7
 SABRINA_BATTLE_TIMING = BattleRuntimeTiming(
     max_runtime_pulses=720,
     max_move_menu_transition_pulses=24,
@@ -256,6 +260,8 @@ def run_sabrina_chapter(
     if identity != (SABRINA_OPPONENT, SABRINA_TRAINER_CLASS, SABRINA_TRAINER_SET):
         raise SabrinaChapterError(f"Unexpected Sabrina identity: {identity!r}.")
 
+    _battle_x_special(reader, actions, emulator, timing)
+
     turns: list[SabrinaTurn] = []
 
     def policy(raw: RawGameState) -> int:
@@ -279,7 +285,7 @@ def run_sabrina_chapter(
             reader,
             actions,
             policy,
-            lambda raw: 0 < (raw.first_party_hp or 0) < HYPER_POTION_THRESHOLD,
+            _sabrina_recovery_required,
             "Sabrina",
         )
         if complete:
@@ -457,6 +463,15 @@ def _sabrina_status_is_supported(status: int) -> bool:
     return status == 0 or 1 <= status <= 7 or status == 0x40
 
 
+def _sabrina_recovery_required(raw: RawGameState) -> bool:
+    threshold = (
+        ALAKAZAM_HYPER_POTION_THRESHOLD
+        if raw.enemy_species_id == 0x95
+        else HYPER_POTION_THRESHOLD
+    )
+    return 0 < (raw.first_party_hp or 0) < threshold
+
+
 def _store_obsolete_key_items(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
@@ -466,7 +481,7 @@ def _store_obsolete_key_items(
     before = _bag(emulator)
     if len(before) != 20 or any(before.get(item, 0) != 1 for item in PC_DEPOSIT_ITEMS):
         raise SabrinaChapterError(
-            "Sabrina inventory cleanup requires a full bag with the spent Ticket and Lift Key."
+            "Sabrina inventory cleanup requires a full bag with the spent Scope and Card Key."
         )
 
     _move(actions, reader, ("down",) + ("right",) * 10, timing)

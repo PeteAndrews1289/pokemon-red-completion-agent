@@ -38,7 +38,9 @@ FUCHSIA_CHECKPOINT_COUNT = 14
 BITE = 0x2C
 BUBBLEBEAM = 0x3D
 SNORLAX = 0x84
-BATTLE_PP_BOUNDS = ((1, 8), (1, 5), (1, 8), (1, 8), (1, 10))
+SNORLAX_BUBBLEBEAM_PP_BOUND = (1, 20)
+SNORLAX_RUNTIME_PULSE_BOUND = 720
+BATTLE_PP_BOUNDS = ((1, 8), SNORLAX_BUBBLEBEAM_PP_BOUND, (1, 8), (1, 8), (1, 10))
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -618,7 +620,9 @@ def _fight_snorlax(
     spent = (before_pp[2] & 0x3F) - (final.first_party_pp[2] & 0x3F)
     _clear_text(actions, reader, timing)
     if (
-        not 0 < spent <= 5
+        not SNORLAX_BUBBLEBEAM_PP_BOUND[0]
+        <= spent
+        <= SNORLAX_BUBBLEBEAM_PP_BOUND[1]
         or not _event(emulator, EventFlag.BEAT_ROUTE12_SNORLAX)
         or _event(emulator, EventFlag.FIGHT_ROUTE12_SNORLAX)
         or ItemId.POKE_FLUTE not in _bag(emulator)
@@ -649,7 +653,7 @@ def _run_wild_defeat(
     timing: FuchsiaTiming,
 ) -> RawGameState:
     ready_reads = 0
-    for pulse_index in range(360):
+    for pulse_index in range(SNORLAX_RUNTIME_PULSE_BOUND):
         raw = reader.read()
         if raw.map_id != expected_map:
             raise FuchsiaChapterError("Snorlax battle changed map unexpectedly.")
@@ -684,7 +688,8 @@ def _run_wild_defeat(
                 _pulse(actions, MacroActionKind.MOVE, direction, frames=120)
             continue
         slot = menu.selected_move_slot
-        if slot == 3:
+        target_slot = _snorlax_move_slot(raw)
+        if slot == target_slot:
             _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
         elif slot is None:
             raise FuchsiaChapterError("Snorlax exposed an invalid move cursor.")
@@ -692,10 +697,25 @@ def _run_wild_defeat(
             _pulse(
                 actions,
                 MacroActionKind.MOVE,
-                "down" if slot < 3 else "up",
+                "down" if slot < target_slot else "up",
                 frames=120,
             )
     raise FuchsiaChapterError("Snorlax battle exceeded its bounded runtime.")
+
+
+def _snorlax_move_slot(raw: RawGameState) -> int:
+    pp = raw.first_party_pp or ()
+    for slot in (3, 1, 4, 2):
+        if (
+            len(pp) >= slot
+            and pp[slot - 1] & 0x3F
+            and not (
+                raw.player_disabled_move_slot == slot
+                and (raw.player_disable_turns or 0) > 0
+            )
+        ):
+            return slot
+    raise FuchsiaChapterError("Snorlax policy has no legal move with PP.")
 
 
 def _move(

@@ -52,6 +52,7 @@ class RamAddress(IntEnum):
     TRAINER_CLASS = 0xD031
     IS_IN_BATTLE = 0xD057
     CURRENT_OPPONENT = 0xD059
+    ENEMY_BATTLE_STATUS_1 = 0xD067
     PLAYER_DISABLED_MOVE = 0xD06D
     GYM_LEADER_NUMBER = 0xD05C
     TRAINER_NUMBER = 0xD05D
@@ -176,6 +177,7 @@ class MapId(IntEnum):
     CERULEAN_TRASHED_HOUSE = 0x3E
     CERULEAN_POKECENTER = 0x40
     CERULEAN_GYM = 0x41
+    CERULEAN_MART = 0x43
     MT_MOON_POKECENTER = 0x44
     UNDERGROUND_PATH_ROUTE_5 = 0x47
     UNDERGROUND_PATH_ROUTE_6 = 0x4A
@@ -208,6 +210,7 @@ class MapId(IntEnum):
     POKEMON_TOWER_6F = 0x93
     POKEMON_TOWER_7F = 0x94
     MR_FUJIS_HOUSE = 0x95
+    LAVENDER_MART = 0x96
     CELADON_POKECENTER = 0x85
     CELADON_GYM = 0x86
     GAME_CORNER = 0x87
@@ -546,6 +549,8 @@ class EventFlag(IntEnum):
 class ItemId(IntEnum):
     MASTER_BALL = 0x01
     POKE_BALL = 0x04
+    ANTIDOTE = 0x0B
+    AWAKENING = 0x0E
     PARLYZ_HEAL = 0x0F
     FULL_RESTORE = 0x10
     SUPER_POTION = 0x13
@@ -559,6 +564,7 @@ class ItemId(IntEnum):
     NUGGET = 0x31
     SS_TICKET = 0x3F
     GOLD_TEETH = 0x40
+    X_ATTACK = 0x41
     OAKS_PARCEL = 0x46
     SILPH_SCOPE = 0x48
     POKE_FLUTE = 0x49
@@ -572,6 +578,7 @@ class ItemId(IntEnum):
     LIFT_KEY = 0x4A
     EXP_ALL = 0x4B
     SUPER_ROD = 0x4E
+    ELIXIR = 0x52
     HM01_CUT = 0xC4
     HM02_FLY = 0xC5
     HM03_SURF = 0xC6
@@ -582,6 +589,7 @@ class ItemId(IntEnum):
     TM09_TAKE_DOWN = 0xD1
     TM11_BUBBLEBEAM = 0xD3
     TM13_ICE_BEAM = 0xD5
+    TM14_BLIZZARD = 0xD6
     TM16_PAY_DAY = 0xD8
     TM17_SUBMISSION = 0xD9
     TM20_RAGE = 0xDC
@@ -832,6 +840,7 @@ class RawGameState:
     enemy_defense_stage: int | None = None
     player_disabled_move_slot: int | None = None
     player_disable_turns: int | None = None
+    enemy_using_trapping_move: bool | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -3151,6 +3160,11 @@ class PokemonRedStateReader:
                 disabled_slot if battle_state and 1 <= disabled_slot <= 4 else None
             ),
             player_disable_turns=(disabled_move & 0x0F) if battle_state else None,
+            enemy_using_trapping_move=(
+                bool(self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_1) & (1 << 5))
+                if battle_state
+                else None
+            ),
         )
 
     def read_bedroom_input_state(self) -> BedroomInputState:
@@ -4151,6 +4165,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.ROCK_TUNNEL_1F: "rock_tunnel_1f",
         MapId.ROCK_TUNNEL_B1F: "rock_tunnel_b1f",
         MapId.LAVENDER_POKECENTER: "lavender_pokecenter",
+        MapId.LAVENDER_MART: "lavender_mart",
         MapId.FUCHSIA_POKECENTER: "fuchsia_pokecenter",
         MapId.WARDENS_HOUSE: "wardens_house",
         MapId.FUCHSIA_GYM: "fuchsia_gym",
@@ -4194,6 +4209,7 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         MapId.CERULEAN_CITY: "location:cerulean_city",
         MapId.LAVENDER_TOWN: "location:lavender_town",
         MapId.LAVENDER_POKECENTER: "location:lavender_town",
+        MapId.LAVENDER_MART: "location:lavender_town",
         MapId.VERMILION_CITY: "location:vermilion_city",
         MapId.CELADON_CITY: "location:celadon_city",
         MapId.CELADON_POKECENTER: "location:celadon_city",

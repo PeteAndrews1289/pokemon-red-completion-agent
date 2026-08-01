@@ -18,6 +18,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    recovery_action_due,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.blaine import _select_cursor
@@ -69,6 +70,8 @@ BRUNO_PARTY = (
 BRUNO_APPROACH = ("right", "up", "up")
 BRUNO_RNG_DELAY_FRAMES = 185
 BRUNO_SAFE_HP = 90
+BRUNO_HITMONLEE_SAFE_HP = 120
+BRUNO_LANCE_SURF_RESERVE = 1
 
 
 class EmulatorState(Protocol):
@@ -225,15 +228,25 @@ def run_bruno_chapter(
     class _HealBoundary(Exception):
         pass
 
+    last_recovery_turn = -1
+
     def policy(raw: RawGameState) -> int:
         hp = raw.first_party_hp or 0
         status = raw.first_party_status or 0
-        if hp < BRUNO_SAFE_HP or status:
+        if recovery_action_due(
+            hp=hp,
+            status=status,
+            safe_hp=_bruno_recovery_threshold(raw),
+            decisions_made=len(turns),
+            last_recovery_decision=last_recovery_turn,
+        ):
             raise _HealBoundary
         species = raw.enemy_species_id or 0
         pp = raw.first_party_pp or (0, 0, 0, 0)
-        if species == 0x22:
+        if species == 0x22 and pp[3] > BRUNO_LANCE_SURF_RESERVE:
             slot = 4
+        elif species == 0x22 and pp[2] > 0:
+            slot = 3
         elif pp[0] > 0:
             slot = 1
         elif pp[1] > 0:
@@ -274,7 +287,15 @@ def run_bruno_chapter(
             )
         except BattleRuntimeError as error:
             if not isinstance(error.__cause__, _HealBoundary):
-                raise BrunoChapterError("Bruno battle runtime failed.") from error
+                current = reader.read()
+                raise BrunoChapterError(
+                    "Bruno battle runtime failed: "
+                    f"party_hp={_party_hp(emulator)!r}, "
+                    f"enemy={(current.enemy_species_id, current.enemy_hp, current.enemy_level)!r}, "
+                    f"lead_status={current.first_party_status!r}, "
+                    f"pp={current.first_party_pp!r}, "
+                    f"bag={_bag(emulator)!r}, turns={turns!r}."
+                ) from error
             raw = reader.read()
             if (raw.first_party_status or 0) and (raw.first_party_hp or 0) >= BRUNO_SAFE_HP:
                 item = ItemId.FULL_HEAL
@@ -298,6 +319,7 @@ def run_bruno_chapter(
                 )
             except SilphChapterError as healing_error:
                 raise BrunoChapterError("Bruno recovery failed.") from healing_error
+            last_recovery_turn = len(turns)
 
     for _ in range(5):
         _pulse(actions, MacroActionKind.CONFIRM)
@@ -377,9 +399,20 @@ def _encounter_party(turns: Iterable[BrunoTurn]) -> tuple[tuple[int, int], ...]:
 def _turns_valid(turns: Iterable[BrunoTurn]) -> bool:
     items = tuple(turns)
     return bool(items) and all(
-        item.move_slot in {1, 2, 3, 4} and item.lead_hp >= 70 and item.lead_status == 0
+        item.move_slot in {1, 2, 3, 4} and item.lead_hp > 0 and item.lead_status == 0
         for item in items
     )
+
+
+def _bruno_recovery_threshold(raw: RawGameState) -> int:
+    if raw.enemy_species_id == 0x7E:
+        # Machamp's high-roll Submission can exceed the generic margin from
+        # otherwise healthy HP.  The stocked Hyper Potions make a full-health
+        # boundary safer than accepting a one-turn knockout window.
+        return raw.first_party_max_hp or BRUNO_HITMONLEE_SAFE_HP
+    if raw.enemy_species_id == 0x2B:
+        return BRUNO_HITMONLEE_SAFE_HP
+    return BRUNO_SAFE_HP
 
 
 def _teach_mega_punch(
@@ -430,4 +463,9 @@ def _teach_mega_punch(
             _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
             return
         _pulse(actions, MacroActionKind.CONFIRM)
-    raise BrunoChapterError("TM01 did not replace Submission.")
+    raise BrunoChapterError(
+        "TM01 did not install the expected move set: "
+        f"actual={reader.read().first_party_moves!r}, expected={expected_moves!r}, "
+        f"remaining={_bag(emulator).get(ItemId.TM01_MEGA_PUNCH, 0)!r}, "
+        f"expected_remaining={expected_remaining!r}."
+    )

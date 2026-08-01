@@ -30,6 +30,11 @@ ending with concurrent Champion-defeated and Hall-of-Fame verification. Three cl
 no-restore runs reached the identical 4,796,436-frame / 41,316-action terminal. This is an exact
 deterministic-teacher completion, not a learned-policy or timing/RNG-generalization result.
 
+The later robustness lineage adds a reusable Mansion training block and has independently passed
+two clean-power runs at **301/301 checkpoints** and **36/36 objectives**. Each replay trained the
+lead from level 46 to 55 with 115 wild wins, five healing trips, and zero faints, then reached the
+same Champion-plus-Hall-of-Fame terminal in 6,581,531 frames and 54,261 actions.
+
 - [x] Build the no-save PyBoy bridge and read-only state adapter from pinned symbols.
 - [x] Add controller timing and one authoritative action executor.
 - [x] Qualify clean power-on through the input-ready bedroom and one-tile movement probe.

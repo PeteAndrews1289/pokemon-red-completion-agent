@@ -8,15 +8,15 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.celadon import (
+    DEFAULT_CELADON_TIMING,
+    CeladonChapterError,
     _bag,
+    _flee,
     _money,
     _party_hp,
     _party_max_hp,
     _party_status,
-)
-from pokemon_red_completion.economy import (
-    POST_ERIKA_MONEY,
-    POST_SAFFRON_PURCHASE_MONEY,
+    _RunState,
 )
 from pokemon_red_completion.observation import (
     ItemId,
@@ -140,10 +140,10 @@ class SaffronChapterReport:
         final_bag = dict(self.bag_after)
         return (
             len(self.records) == SAFFRON_CHECKPOINT_COUNT
-            and self.money_before == POST_ERIKA_MONEY
+            and self.money_before >= FRESH_WATER_PRICE
             and self.money_after_purchase
             == self.money_after
-            == POST_SAFFRON_PURCHASE_MONEY
+            == self.money_before - FRESH_WATER_PRICE
             and self.vending_cursor == 0
             and self.fresh_water_before == 0
             and self.fresh_water_after_purchase == 1
@@ -161,8 +161,8 @@ class SaffronChapterReport:
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
             and self.final_raw.first_party_level is not None
             and 42 <= self.final_raw.first_party_level <= 43
-            and self.final_raw.first_party_moves == (0x82, 0x46, 0x3D, 0x39)
-            and self.final_raw.first_party_pp == (15, 15, 20, 15)
+            and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)
+            and self.final_raw.first_party_pp == (15, 15, 10, 15)
             and self.party_hp == self.party_max_hp
             and all(hp > 0 for hp in self.party_hp)
             and self.final_raw.first_party_hp == self.party_hp[0]
@@ -245,7 +245,7 @@ def run_saffron_chapter(
     initial_money = _money(emulator)
     initial_flag = emulator.read_u8(RamAddress.STATUS_FLAGS_1)
     if (
-        initial_money != POST_ERIKA_MONEY
+        initial_money < FRESH_WATER_PRICE
         or initial_bag.get(ItemId.FRESH_WATER, 0)
         or initial_bag.get(ItemId.SODA_POP, 0)
         or initial_bag.get(ItemId.LEMONADE, 0)
@@ -264,11 +264,11 @@ def run_saffron_chapter(
         (MART_5F_TO_ROOF, MapId.CELADON_MART_ROOF, (15, 3), "mart_roof"),
     )
     for route, map_id, coordinate, label in legs:
-        _move(actions, reader, route, timing, label)
+        _move(actions, reader, emulator, route, timing, label)
         _require(reader.read(), map_id, coordinate, label)
     _checkpoint(records, progress, emulator, reader.read(), "roof_reached", "Reached vending roof")
 
-    _move(actions, reader, ROOF_TO_VENDING, timing, "vending stance")
+    _move(actions, reader, emulator, ROOF_TO_VENDING, timing, "vending stance")
     _require(reader.read(), MapId.CELADON_MART_ROOF, (12, 3), "vending stance")
     actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
     _wait(actions, timing.movement_frames)
@@ -305,15 +305,23 @@ def run_saffron_chapter(
         (ROUTE_7_TO_GATE, MapId.ROUTE_7_GATE, (0, 4), "route_7_gate"),
     )
     for route, map_id, coordinate, label in return_legs:
-        _move(actions, reader, route, timing, label)
+        _move(actions, reader, emulator, route, timing, label)
         _require(reader.read(), map_id, coordinate, label)
     _checkpoint(records, progress, emulator, reader.read(), "gate_reached", "Reached Route 7 guard")
 
-    _move(actions, reader, ("right", "right"), timing, "guard approach")
+    _move(actions, reader, emulator, ("right", "right"), timing, "guard approach")
     _require(reader.read(), MapId.ROUTE_7_GATE, (2, 4), "guard approach")
     if _bag(emulator).get(ItemId.FRESH_WATER, 0) != 1:
         raise SaffronChapterError("Fresh Water missing before guard trigger.")
-    _move(actions, reader, ("right",), timing, "guard trigger", allow_script=True)
+    _move(
+        actions,
+        reader,
+        emulator,
+        ("right",),
+        timing,
+        "guard trigger",
+        allow_script=True,
+    )
     _require(reader.read(), MapId.ROUTE_7_GATE, (3, 4), "guard trigger")
     fresh_water_after_guard = _bag(emulator).get(ItemId.FRESH_WATER, 0)
     flag_after_consumption = emulator.read_u8(RamAddress.STATUS_FLAGS_1)
@@ -345,7 +353,7 @@ def run_saffron_chapter(
         "Global guard access set",
     )
 
-    _move(actions, reader, GATE_TO_SAFFRON, timing, "Saffron crossing")
+    _move(actions, reader, emulator, GATE_TO_SAFFRON, timing, "Saffron crossing")
     _require(reader.read(), MapId.SAFFRON_CITY, (1, 18), "Saffron entry")
     _checkpoint(
         records,
@@ -356,9 +364,9 @@ def run_saffron_chapter(
         "Entered Saffron City",
     )
 
-    _move(actions, reader, SAFFRON_TO_CENTER, timing, "Saffron Center")
+    _move(actions, reader, emulator, SAFFRON_TO_CENTER, timing, "Saffron Center")
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "Saffron Center entry")
-    _move(actions, reader, ("up",) * 4, timing, "Saffron nurse")
+    _move(actions, reader, emulator, ("up",) * 4, timing, "Saffron nurse")
     for _ in range(9):
         _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
     for _ in range(timing.heal_pulses):
@@ -366,7 +374,7 @@ def run_saffron_chapter(
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
             and _party_status(emulator) == (0, 0, 0)
-            and raw.first_party_pp == (15, 15, 20, 15)
+            and raw.first_party_pp == (15, 15, 10, 15)
             and reader.read_input_readiness().ready
         ):
             break
@@ -407,6 +415,7 @@ def run_saffron_chapter(
 def _move(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
+    emulator: EmulatorState,
     route: Iterable[str],
     timing: SaffronTiming,
     label: str,
@@ -419,8 +428,22 @@ def _move(
             actions.execute(MacroAction(MacroActionKind.MOVE, direction))
             _wait(actions, timing.movement_frames)
             after = reader.read()
-            if after.battle_state:
-                raise SaffronChapterError(f"{label} entered an unexpected battle.")
+            if after.battle_state == 1:
+                try:
+                    _flee(
+                        actions,  # type: ignore[arg-type]
+                        reader,
+                        emulator,
+                        _RunState([]),
+                        DEFAULT_CELADON_TIMING,
+                    )
+                except CeladonChapterError as error:
+                    raise SaffronChapterError(
+                        f"{label} could not recover from a wild battle: {error}"
+                    ) from error
+                after = reader.read()
+            if after.battle_state == 2:
+                raise SaffronChapterError(f"{label} entered an unexpected trainer battle.")
             moved = (
                 after.map_id != before.map_id
                 or after.player_x != before.player_x

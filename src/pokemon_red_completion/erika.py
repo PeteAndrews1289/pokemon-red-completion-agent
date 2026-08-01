@@ -25,7 +25,6 @@ from pokemon_red_completion.celadon import (
     _party_status,
     _RunState,
 )
-from pokemon_red_completion.economy import POST_ERIKA_MONEY, POST_KOGA_MONEY
 from pokemon_red_completion.lavender import (
     LavenderTiming,
     _close_menus,
@@ -42,8 +41,17 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
-from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+from pokemon_red_completion.silph import (
+    DEFAULT_SILPH_TIMING,
+    ICE_BEAM_MOVE,
+    SilphChapterError,
+    _deposit_pc_item,
+    acquire_and_teach_ice_beam_from_celadon_center,
+)
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+
+ERIKA_TRAINER_REWARD_TOTAL = 4_056
+ERIKA_ICE_BEAM_PREPARATION_COST = 200
 
 ERIKA_CHECKPOINT_COUNT = 12
 STRENGTH = 0x46
@@ -157,6 +165,9 @@ class ErikaChapterReport:
     final_raw: RawGameState
     erika_identity: tuple[int, int, int, int]
     strength_pp_spent: int
+    ice_beam_pp_spent: int
+    got_tm13: bool
+    tm13_transfer_before_event: bool
     moves_before: tuple[int, ...]
     moves_after: tuple[int, ...]
     money_before: int
@@ -182,11 +193,17 @@ class ErikaChapterReport:
         return (
             len(self.records) == ERIKA_CHECKPOINT_COUNT
             and self.erika_identity == (ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1)
-            and 0 < self.strength_pp_spent <= 10
+            and 0 <= self.strength_pp_spent <= 10
+            and 0 < self.ice_beam_pp_spent <= 10
+            and self.got_tm13
+            and self.tm13_transfer_before_event
             and self.moves_before == (0x2C, STRENGTH, 0x3D, 0x39)
-            and self.moves_after == (0x82, STRENGTH, 0x3D, 0x39)
-            and self.money_before == POST_KOGA_MONEY
-            and self.money_after == POST_ERIKA_MONEY
+            and self.moves_after == (0x82, STRENGTH, ICE_BEAM_MOVE, 0x39)
+            and self.money_before >= 0
+            and self.money_after
+            == self.money_before
+            + ERIKA_TRAINER_REWARD_TOTAL
+            - ERIKA_ICE_BEAM_PREPARATION_COST
             and self.badge_bits == 0x1F
             and self.beat_gym_flags & int(Badge.RAINBOW)
             and self.got_tm21
@@ -196,13 +213,16 @@ class ErikaChapterReport:
             and self.optional_route_events_before == (False,) * 20
             and self.optional_route_events_after == (False,) * 20
             and dict(self.final_bag).get(int(ItemId.TM21_MEGA_DRAIN)) == 1
+            and int(ItemId.POKE_FLUTE) not in dict(self.final_bag)
+            and int(ItemId.TM13_ICE_BEAM) not in dict(self.final_bag)
+            and int(ItemId.FRESH_WATER) not in dict(self.final_bag)
             and self.final_raw.map_id == MapId.CELADON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
             and self.final_raw.first_party_level is not None
             and 42 <= self.final_raw.first_party_level <= 43
-            and self.final_raw.first_party_moves == (0x82, STRENGTH, 0x3D, 0x39)
-            and self.final_raw.first_party_pp == (15, 15, 20, 15)
+            and self.final_raw.first_party_moves == (0x82, STRENGTH, ICE_BEAM_MOVE, 0x39)
+            and self.final_raw.first_party_pp == (15, 15, 10, 15)
             and self.party_hp == self.party_max_hp
             and all(hp > 0 for hp in self.party_hp)
             and self.final_raw.first_party_hp == self.party_hp[0]
@@ -224,6 +244,13 @@ class ErikaChapterReport:
                 "set": self.erika_identity[3],
                 "strength_move_id": STRENGTH,
                 "strength_pp_spent": self.strength_pp_spent,
+                "ice_beam_move_id": ICE_BEAM_MOVE,
+                "ice_beam_pp_spent": self.ice_beam_pp_spent,
+                "ice_beam_preparation": {
+                    "tm13_event": self.got_tm13,
+                    "transfer_before_event": self.tm13_transfer_before_event,
+                    "cost": ERIKA_ICE_BEAM_PREPARATION_COST,
+                },
                 "level_42_move_learning": {
                     "slot": 1,
                     "replaced_move_id": 0x2C,
@@ -240,6 +267,7 @@ class ErikaChapterReport:
                 "got_tm21": self.got_tm21,
             },
             "money_remaining": self.money_after,
+            "poke_flute_archived": int(ItemId.POKE_FLUTE) not in dict(self.final_bag),
             "party": {
                 "lead_level": self.final_raw.first_party_level,
                 "hp": list(self.party_hp),
@@ -282,12 +310,15 @@ def run_erika_chapter(
     initial = reader.read()
     _require(initial, MapId.FUCHSIA_POKECENTER, (3, 3), "Strength boundary")
     if (
-        _money(emulator) != POST_KOGA_MONEY
+        _money(emulator) < 0
         or initial.first_party_pp != (25, 15, 20, 15)
         or _event(emulator, EventFlag.BEAT_ERIKA)
         or ItemId.TM21_MEGA_DRAIN in _bag(emulator)
+        or ItemId.TM13_ICE_BEAM in _bag(emulator)
+        or _event(emulator, EventFlag.GOT_TM13)
     ):
         raise ErikaChapterError("Erika input boundary is not pristine.")
+    money_before = _money(emulator)
     events_before = _gym_events(emulator)
     optional_events_before = _optional_route_events(emulator)
     _checkpoint(records, progress, emulator, initial, "erika_ready", "Strength boundary ready")
@@ -323,6 +354,35 @@ def run_erika_chapter(
         "Reached Celadon Center",
     )
     _heal(actions, reader, emulator, timing)
+    if _bag(emulator).get(ItemId.POKE_FLUTE, 0) != 1:
+        raise ErikaChapterError("Celadon cleanup requires the spent Poké Flute.")
+    _move(
+        actions,
+        reader,
+        emulator,
+        ("down",) + ("right",) * 10,
+        timing,
+        "Celadon PC approach",
+    )
+    try:
+        _deposit_pc_item(
+            actions,  # type: ignore[arg-type]
+            reader,
+            emulator,
+            ItemId.POKE_FLUTE,
+            DEFAULT_SILPH_TIMING,
+        )
+    except SilphChapterError as error:
+        raise ErikaChapterError("Celadon Poké Flute cleanup failed.") from error
+    _move(
+        actions,
+        reader,
+        emulator,
+        ("left",) * 10 + ("up",),
+        timing,
+        "Celadon PC return",
+    )
+    _require(reader.read(), MapId.CELADON_POKECENTER, (3, 3), "Celadon PC return")
     _checkpoint(records, progress, emulator, reader.read(), "celadon_ready", "Healed in Celadon")
 
     _move(actions, reader, emulator, CENTER_EXIT, timing, "Center exit")
@@ -385,6 +445,14 @@ def run_erika_chapter(
     _move(actions, reader, emulator, OUTER_TREE_TO_CENTER, timing, "Center recovery")
     _heal(actions, reader, emulator, timing)
     _use_rare_candy_and_learn_skull_bash(actions, reader, emulator, timing)
+    try:
+        _, tm13_transfer_before_event = acquire_and_teach_ice_beam_from_celadon_center(
+            actions,  # type: ignore[arg-type]
+            reader,
+            emulator,
+        )
+    except SilphChapterError as error:
+        raise ErikaChapterError(f"Erika Ice Beam preparation failed: {error}") from error
     _checkpoint(
         records,
         progress,
@@ -427,6 +495,7 @@ def run_erika_chapter(
     if before_pp is None or after_pp is None:
         raise ErikaChapterError("Erika battle lacks PP evidence.")
     strength_spent = (before_pp[1] & 0x3F) - (after_pp[1] & 0x3F)
+    ice_beam_spent = (before_pp[2] & 0x3F) - (after_pp[2] & 0x3F)
     _checkpoint(records, progress, emulator, reader.read(), "erika_defeated", "Defeated Erika")
 
     for _ in range(timing.dialogue_pulses):
@@ -468,9 +537,12 @@ def run_erika_chapter(
         final_raw=final,
         erika_identity=identity,
         strength_pp_spent=strength_spent,
+        ice_beam_pp_spent=ice_beam_spent,
+        got_tm13=_event(emulator, EventFlag.GOT_TM13),
+        tm13_transfer_before_event=tm13_transfer_before_event,
         moves_before=tuple(initial.first_party_moves or ()),
         moves_after=tuple(final.first_party_moves or ()),
-        money_before=POST_KOGA_MONEY,
+        money_before=money_before,
         money_after=_money(emulator),
         badge_bits=emulator.read_u8(RamAddress.OBTAINED_BADGES),
         beat_gym_flags=emulator.read_u8(RamAddress.BEAT_GYM_FLAGS),
@@ -525,7 +597,12 @@ def _move(
             if allow_trigger and index == len(route):
                 return
         else:
-            raise ErikaChapterError(f"{label} blocked at step {index}/{len(route)}.")
+            current = reader.read()
+            raise ErikaChapterError(
+                f"{label} blocked at step {index}/{len(route)}: "
+                f"direction={direction}, map={current.map_id!r}, "
+                f"coordinate={(current.player_x, current.player_y)!r}."
+            )
 
 
 def _cut(actions, reader, emulator, timing, facing, expected_tile, label) -> None:
@@ -621,20 +698,21 @@ def _use_rare_candy_and_learn_skull_bash(
 
 
 def _battle(reader, actions, map_id, timing, label, battle_plan_id: str) -> None:
+    last_error: BattleRuntimeError | None = None
     for _ in range(timing.battle_recoveries):
         try:
             run_adaptive_trainer_battle(
                 reader,
                 actions,
-                lambda _: 2,
+                _erika_move_slot,
                 expected_map=int(map_id),
                 intent=BattleIntent(
                     "defeat_erika",
                     battle_plan_id=battle_plan_id,
-                    required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
-                    required_move_ref=pokemon_red_move_ref(STRENGTH),
+                    required_move_policy=RequiredMovePolicy.ANY_USABLE,
+                    required_move_ref=None,
                 ),
-                required_move_id=STRENGTH,
+                required_move_id=None,
                 timing=BattleRuntimeTiming(
                     max_runtime_pulses=1600 if label == "Erika" else 960
                 ),
@@ -642,10 +720,32 @@ def _battle(reader, actions, map_id, timing, label, battle_plan_id: str) -> None
                 unknown_cancel_interval=3,
             )
             return
-        except BattleRuntimeError:
+        except BattleRuntimeError as error:
+            last_error = error
             if reader.read().battle_state == 0:
                 return
-    raise ErikaChapterError(f"{label} exceeded bounded battle recoveries.")
+    raise ErikaChapterError(
+        f"{label} exceeded bounded battle recoveries: {last_error}."
+    )
+
+
+def _erika_move_slot(raw: RawGameState) -> int:
+    moves = raw.first_party_moves
+    pp = raw.first_party_pp
+    if moves is None or pp is None:
+        raise ErikaChapterError("Erika battle lacks live move and PP evidence.")
+    ranking = (3, 2, 1, 4) if len(moves) > 2 and moves[2] == ICE_BEAM_MOVE else (2, 1, 4, 3)
+    for slot in ranking:
+        index = slot - 1
+        if (
+            len(moves) > index
+            and len(pp) > index
+            and moves[index] != 0
+            and pp[index] & 0x3F
+            and raw.player_disabled_move_slot != slot
+        ):
+            return slot
+    raise ErikaChapterError("Erika battle has no usable ranked move.")
 
 
 def _enter_battle(actions, reader, timing, label) -> None:

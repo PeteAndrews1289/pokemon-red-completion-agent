@@ -17,6 +17,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     RequiredMovePolicy,
     run_adaptive_trainer_battle,
+    run_adaptive_wild_battle,
 )
 from pokemon_red_completion.celadon import (
     DEFAULT_CELADON_TIMING,
@@ -49,12 +50,34 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.training import (
+    TrainingDirective,
+    TrainingObservation,
+    TrainingPolicy,
+    TrainingReport,
+    choose_training_directive,
+    choose_training_move_slot,
+)
 
-BLAINE_CHECKPOINT_COUNT = 8
+BLAINE_CHECKPOINT_COUNT = 9
+BLAINE_CAPACITY_SALE_ITEM = ItemId.ANTIDOTE
+BLAINE_INPUT_BAG_SLOTS = 19
+BLAINE_MONEY_DELTA = 5_003
+BLAINE_MAX_WILD_FLEES = 3
 BLAINE_OPPONENT = 0xEF
 BLAINE_TRAINER_CLASS = 0xEF
 BLAINE_TRAINER_SET = 1
 BLAINE_PARTY = ((0x21, 42), (0xA3, 40), (0xA4, 42), (0x14, 47))
+MANSION_TRAINING_POLICY = TrainingPolicy(
+    target_level=55,
+    preferred_move_slots=(4, 2, 3, 1),
+    retreat_hp_ratio=0.45,
+    reserve_total_pp=2,
+    max_enemy_level_delta=0,
+    max_battles=180,
+    max_steps=15_000,
+    max_healing_trips=24,
+)
 SURF_MOVE_ID = 0x39
 MANSION_TRAINER_EVENTS = (
     EventFlag.BEAT_MANSION_1_TRAINER_0,
@@ -82,6 +105,14 @@ def _directions(value: str) -> tuple[str, ...]:
 
 CENTER_TO_MART = ("down",) * 5 + ("right",) * 4 + ("up",)
 MART_TO_MANSION = _directions("RDDDRRRUUUUUUULULLLLLLLLLLLU")
+CENTER_TO_MANSION = (
+    ("down",) * 5
+    + ("right",) * 7
+    + ("up",) * 7
+    + ("left", "up")
+    + ("left",) * 11
+    + ("up",)
+)
 MANSION_1F_TO_3F = _directions("U" * 17 + "RRRURRUUUUUULLUUULL")
 MANSION_3F_TO_STATUE = _directions("RRRRRDDDDL")
 MANSION_3F_TO_B1F = _directions("RRRRDDDDRDRDDDLLLDDDDDDRRRRRRRRDDD")
@@ -166,7 +197,9 @@ class BlaineChapterReport:
     mansion_trainer_events_before: tuple[bool, ...]
     mansion_trainer_events_after: tuple[bool, ...]
     mansion_wild_flees: tuple[CeladonWildFleeEvidence, ...]
+    training: TrainingReport
     secret_key_quantity: int
+    tm14_quantity: int
     quiz_answers: tuple[bool, ...]
     gym_gate_events_after_quizzes: tuple[bool, ...]
     gym_trainer_events_before: tuple[bool, ...]
@@ -178,7 +211,7 @@ class BlaineChapterReport:
     volcano_badge: bool
     volcano_badge_mirror: bool
     tm38_quantity: int
-    x_accuracy_sold: bool
+    x_accuracy_retained: bool
     bide_sold: bool
     max_repel_bought: int
     initial_money: int
@@ -197,7 +230,7 @@ class BlaineChapterReport:
             and self.mansion_switch_trace == (False, True, False, True)
             and self.mansion_trainer_events_before == (False,) * 6
             and self.mansion_trainer_events_after == (False,) * 6
-            and len(self.mansion_wild_flees) <= 2
+            and len(self.mansion_wild_flees) <= BLAINE_MAX_WILD_FLEES
             and all(
                 item.party_preserved
                 and item.pp_preserved
@@ -205,31 +238,38 @@ class BlaineChapterReport:
                 and item.inventory_preserved
                 for item in self.mansion_wild_flees
             )
+            and self.training.passed
+            and self.training.area_id == "pokemon_mansion_1f"
             and self.secret_key_quantity == 1
+            and self.tm14_quantity == 1
             and self.quiz_answers == QUIZ_ANSWERS
             and self.gym_gate_events_after_quizzes == (False,) + (True,) * 6
             and self.gym_trainer_events_before == (False,) * 7
             and self.gym_trainer_events_after == (True,) * 7
             and self.identity == (BLAINE_OPPONENT, BLAINE_TRAINER_CLASS, BLAINE_TRAINER_SET)
             and _encounter_party(self.turns) == BLAINE_PARTY
-            and tuple(turn.move_slot for turn in self.turns) == (4, 4, 4, 4, 4)
+            and bool(self.turns)
+            and all(turn.move_slot == 4 for turn in self.turns)
             and all(turn.lead_hp > 0 and turn.lead_status == 0 for turn in self.turns)
             and self.got_tm38
             and self.beat_blaine
             and self.volcano_badge
             and self.volcano_badge_mirror
             and self.tm38_quantity == 1
-            and self.x_accuracy_sold
+            and self.x_accuracy_retained
             and self.bide_sold
             and self.max_repel_bought == 1
-            and self.money_remaining == self.initial_money + 5_428
+            and self.money_remaining == self.initial_money + BLAINE_MONEY_DELTA
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.final_raw.first_party_level == 47
+            and (self.final_raw.first_party_level or 0) >= MANSION_TRAINING_POLICY.target_level
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, SURF_MOVE_ID)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
-            and self.party_hp == self.party_max_hp == (145, 47, 40)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and self.final_raw.first_party_hp == self.party_hp[0]
+            and self.final_raw.first_party_max_hp == self.party_max_hp[0]
             and self.party_status == (0, 0, 0)
             and self.controller_released
         )
@@ -259,6 +299,17 @@ class BlaineChapterReport:
                     for item in self.mansion_wild_flees
                 ],
                 "secret_key": self.secret_key_quantity,
+                "tm14_blizzard": self.tm14_quantity,
+                "training": {
+                    "area": self.training.area_id,
+                    "levels": [self.training.starting_level, self.training.final_level],
+                    "target_level": self.training.target_level,
+                    "battles_won": self.training.battles_won,
+                    "battles_fled": self.training.battles_fled,
+                    "steps": self.training.steps_taken,
+                    "healing_trips": self.training.healing_trips,
+                    "fainted": self.training.fainted,
+                },
             },
             "quiz": {
                 "answers": ["yes" if answer else "no" for answer in self.quiz_answers],
@@ -279,7 +330,7 @@ class BlaineChapterReport:
                 "volcano_badge_mirror": self.volcano_badge_mirror,
             },
             "inventory": {
-                "x_accuracy_sold": self.x_accuracy_sold,
+                "x_accuracy_retained": self.x_accuracy_retained,
                 "bide_sold": self.bide_sold,
                 "max_repel_bought": self.max_repel_bought,
                 "money": [self.initial_money, self.money_remaining],
@@ -330,7 +381,7 @@ def run_blaine_chapter(
     ):
         raise BlaineChapterError("Mansion/Blaine input boundary is not pristine.")
     if (
-        len(initial_bag) != 20
+        len(initial_bag) != BLAINE_INPUT_BAG_SLOTS
         or initial_bag.get(ItemId.X_ACCURACY, 0) != 1
         or initial_bag.get(ItemId.TM34_BIDE, 0) != 1
     ):
@@ -347,9 +398,13 @@ def run_blaine_chapter(
     _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart entry")
     _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
-    _sell_current_bag_item(actions, reader, emulator, ItemId.X_ACCURACY)
-    if _bag(emulator).get(ItemId.X_ACCURACY, 0):
-        raise BlaineChapterError("X Accuracy sale did not settle.")
+    _sell_current_bag_item(actions, reader, emulator, BLAINE_CAPACITY_SALE_ITEM)
+    if _bag(emulator).get(BLAINE_CAPACITY_SALE_ITEM, 0):
+        raise BlaineChapterError("Obsolete Antidote sale did not settle.")
+    # The consumed Silph X Special leaves one extra free slot in this lineage.
+    # Retain TM21 here so TM14 plus the Secret Key still fill the bag and keep
+    # Blaine's delayed-TM38 reward boundary meaningful. Stay in the sell menu
+    # so _buy_repel can return directly to the clerk's BUY/SELL menu.
     _buy_repel(actions, reader, emulator)
     _use_bag_item(actions, reader, emulator, DEFAULT_LAVENDER_TIMING, ItemId.MAX_REPEL)
     if (
@@ -383,6 +438,15 @@ def run_blaine_chapter(
     _require(reader.read(), MapId.POKEMON_MANSION_B1F, (18, 26), "B1F south statue")
     _toggle_statue(actions, reader, emulator, expected=False)
     switch_trace.append(False)
+    _move(actions, reader, ("right",), "Mansion TM14 approach")
+    _pick_up_mansion_item(
+        actions,
+        reader,
+        emulator,
+        ItemId.TM14_BLIZZARD,
+        "TM14 Blizzard",
+    )
+    _move(actions, reader, ("left",), "Mansion south statue return")
 
     wilds += _move_mansion(
         actions,
@@ -431,6 +495,16 @@ def run_blaine_chapter(
         reader.read(),
         "mansion_returned",
         "Returned safely from Mansion",
+    )
+
+    training = _run_mansion_training(actions, reader, emulator)
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "mansion_training_complete",
+        "Trained safely in Pokémon Mansion",
     )
 
     _move(actions, reader, ("down",) * 5 + GYM_ENTRY_ROUTE, "Cinnabar Gym")
@@ -553,7 +627,9 @@ def run_blaine_chapter(
         mansion_trainer_events_before=mansion_before,
         mansion_trainer_events_after=mansion_after,
         mansion_wild_flees=tuple(wilds),
+        training=training,
         secret_key_quantity=_bag(emulator).get(ItemId.SECRET_KEY, 0),
+        tm14_quantity=_bag(emulator).get(ItemId.TM14_BLIZZARD, 0),
         quiz_answers=QUIZ_ANSWERS,
         gym_gate_events_after_quizzes=gates_after,
         gym_trainer_events_before=gym_before,
@@ -565,7 +641,7 @@ def run_blaine_chapter(
         volcano_badge=bool(final.badge_bits & Badge.VOLCANO),
         volcano_badge_mirror=bool(emulator.read_u8(RamAddress.BEAT_GYM_FLAGS) & Badge.VOLCANO),
         tm38_quantity=_bag(emulator).get(ItemId.TM38_FIRE_BLAST, 0),
-        x_accuracy_sold=ItemId.X_ACCURACY not in _bag(emulator),
+        x_accuracy_retained=_bag(emulator).get(ItemId.X_ACCURACY, 0) == 1,
         bide_sold=ItemId.TM34_BIDE not in _bag(emulator),
         max_repel_bought=1,
         initial_money=initial_money,
@@ -697,7 +773,30 @@ def _pick_up_secret_key(actions, reader, emulator) -> None:
     )
 
 
-def _field_dig(actions, reader, emulator) -> None:
+def _pick_up_mansion_item(actions, reader, emulator, item: ItemId, label: str) -> None:
+    before = len(_bag(emulator))
+    _pulse(actions, MacroActionKind.MOVE, "up", 120)
+    _pulse(actions, MacroActionKind.INTERACT)
+    for _ in range(24):
+        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+        if _bag(emulator).get(item, 0) == 1 and reader.read_input_readiness().ready:
+            if len(_bag(emulator)) != before + 1:
+                raise BlaineChapterError(f"{label} changed an unexpected bag slot count.")
+            return
+    raw = reader.read()
+    raise BlaineChapterError(
+        f"{label} did not enter the bag: map={raw.map_id!r}, "
+        f"position={(raw.player_x, raw.player_y)!r}, bag={_bag(emulator)!r}."
+    )
+
+
+def _field_dig(
+    actions,
+    reader,
+    emulator,
+    *,
+    expected_map: MapId | tuple[MapId, ...] = MapId.SAFFRON_CITY,
+) -> RawGameState:
     before_bag = _bag(emulator)
     before_hp = _party_hp(emulator)
     before_status = _party_status(emulator)
@@ -711,12 +810,21 @@ def _field_dig(actions, reader, emulator) -> None:
         raise BlaineChapterError("Diglett no longer exposes Dig in field slot zero.")
     _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_HIDEOUT_TIMING.wait_frames)
+    expected_maps = (
+        (expected_map,) if isinstance(expected_map, MapId) else tuple(expected_map)
+    )
     for _ in range(DEFAULT_HIDEOUT_TIMING.dialogue_pulses):
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-        if reader.read().map_id == MapId.SAFFRON_CITY:
+        if reader.read().map_id in expected_maps:
             break
     else:
-        raise BlaineChapterError("Field Dig did not return to Saffron.")
+        actual = reader.read()
+        names = ", ".join(item.name for item in expected_maps)
+        raise BlaineChapterError(
+            f"Field Dig did not return to one of {names}: "
+            f"map={actual.map_id!r}, position="
+            f"{(actual.player_x, actual.player_y)!r}, battle={actual.battle_state!r}."
+        )
     if (
         _bag(emulator) != before_bag
         or _party_hp(emulator) != before_hp
@@ -724,6 +832,139 @@ def _field_dig(actions, reader, emulator) -> None:
         or emulator.read_u8(int(RamAddress.PARTY_MON_3_PP) + 2) != before_pp
     ):
         raise BlaineChapterError("Field Dig changed protected party or inventory state.")
+    return reader.read()
+
+
+def _training_dig_to_cinnabar(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    destination = _field_dig(
+        actions,
+        reader,
+        emulator,
+        expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY),
+    )
+    if destination.map_id == MapId.SAFFRON_CITY:
+        _require(destination, MapId.SAFFRON_CITY, (9, 30), "training Dig fallback")
+        _field_fly_to_cinnabar(actions, reader, emulator)
+    _require(reader.read(), MapId.CINNABAR_ISLAND, (11, 12), "training Dig return")
+
+
+def _run_mansion_training(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> TrainingReport:
+    policy = MANSION_TRAINING_POLICY
+    initial = reader.read()
+    starting_level = initial.first_party_level or 0
+    battles_won = 0
+    battles_fled = 0
+    steps = 0
+    healing_trips = 0
+    flee_run = _RunState([])
+
+    def observation(raw: RawGameState) -> TrainingObservation:
+        return TrainingObservation(
+            level=raw.first_party_level or 0,
+            hp=raw.first_party_hp or 0,
+            max_hp=raw.first_party_max_hp or 0,
+            pp=raw.first_party_pp or (),
+            in_battle=raw.battle_state == 1,
+            status=raw.first_party_status or 0,
+            enemy_level=raw.enemy_level,
+            battles_completed=battles_won,
+            steps_taken=steps,
+            healing_trips=healing_trips,
+        )
+
+    while True:
+        raw = reader.read()
+        directive = choose_training_directive(observation(raw), policy)
+        if directive is TrainingDirective.STOP:
+            if (raw.first_party_level or 0) < policy.target_level:
+                raise BlaineChapterError(
+                    "Mansion training exhausted a safety bound before its target: "
+                    f"level={raw.first_party_level}, battles={battles_won}, "
+                    f"steps={steps}, healing_trips={healing_trips}."
+                )
+            break
+
+        if raw.battle_state == 1:
+            if directive is TrainingDirective.FLEE:
+                _flee(actions, reader, emulator, flee_run, DEFAULT_CELADON_TIMING)
+                battles_fled += 1
+                continue
+            if directive is not TrainingDirective.FIGHT:
+                raise BlaineChapterError(f"Invalid in-battle training directive {directive}.")
+            run_adaptive_wild_battle(
+                reader,
+                actions,
+                lambda state: choose_training_move_slot(
+                    state.first_party_pp or (), policy.preferred_move_slots
+                ),
+                expected_map=MapId.POKEMON_MANSION_1F,
+                label="Pokémon Mansion training encounter",
+            )
+            battles_won += 1
+            continue
+
+        if directive is TrainingDirective.RETURN_TO_HEAL:
+            if healing_trips >= policy.max_healing_trips:
+                raise BlaineChapterError("Mansion training exhausted its healing-trip bound.")
+            _training_dig_to_cinnabar(actions, reader, emulator)
+            _move(actions, reader, ("up",), "training Center entry")
+            _require(reader.read(), MapId.CINNABAR_POKECENTER, (3, 7), "training Center")
+            _move(actions, reader, ("up",) * 4, "training nurse")
+            _heal(actions, reader, emulator)
+            healing_trips += 1
+            _move(actions, reader, CENTER_TO_MANSION, "training return to Mansion")
+            _require(
+                reader.read(),
+                MapId.POKEMON_MANSION_1F,
+                (5, 27),
+                "training Mansion entrance",
+            )
+            continue
+
+        if directive is not TrainingDirective.SEEK_ENCOUNTER:
+            raise BlaineChapterError(f"Invalid field training directive {directive}.")
+        if raw.map_id == MapId.CINNABAR_POKECENTER:
+            _move(actions, reader, CENTER_TO_MANSION, "training first Mansion trip")
+            _require(
+                reader.read(),
+                MapId.POKEMON_MANSION_1F,
+                (5, 27),
+                "training Mansion entrance",
+            )
+            continue
+        if raw.map_id != MapId.POKEMON_MANSION_1F:
+            raise BlaineChapterError(
+                f"Mansion training left its qualified area: {raw.map_id!r}."
+            )
+        direction = "down" if (raw.player_y or 0) <= 20 else "up"
+        _pulse(actions, MacroActionKind.MOVE, direction, 240)
+        steps += 1
+
+    _training_dig_to_cinnabar(actions, reader, emulator)
+    _move(actions, reader, ("up",), "final training Center entry")
+    _require(reader.read(), MapId.CINNABAR_POKECENTER, (3, 7), "final training Center")
+    _move(actions, reader, ("up",) * 4, "final training nurse")
+    _heal(actions, reader, emulator)
+    final = reader.read()
+    return TrainingReport(
+        area_id="pokemon_mansion_1f",
+        starting_level=starting_level,
+        target_level=policy.target_level,
+        final_level=final.first_party_level or 0,
+        battles_won=battles_won,
+        battles_fled=battles_fled,
+        steps_taken=steps,
+        healing_trips=healing_trips + 1,
+        fainted=any(hp == 0 for hp in _party_hp(emulator)),
+    )
 
 
 def _field_fly_to_cinnabar(actions, reader, emulator) -> None:

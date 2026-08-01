@@ -10,14 +10,23 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
+)
+from pokemon_red_completion.cascade import (
+    DEFAULT_CASCADE_TIMING,
+    SS_ANNE_RIVAL_POTION_RESERVE,
+    CascadeChapterError,
+    _bag_quantity,
+    _use_cerulean_rival_potion,
 )
 from pokemon_red_completion.observation import (
     MEGA_PUNCH_MOVE_ID,
     PIDGEOTTO_SPECIES_ID,
     WATER_GUN_MOVE_ID,
+    ItemId,
     MapId,
     PokemonRedStateReader,
     RawGameState,
@@ -80,6 +89,8 @@ class EmulatorState(Protocol):
 
     @property
     def pressed_buttons(self) -> frozenset[str]: ...
+
+    def read_u8(self, address: int) -> int: ...
 
 
 class ChapterExecutor(Protocol):
@@ -273,21 +284,12 @@ def run_ss_anne_chapter(
         reader, tracker, SSAnnePhase.RIVAL_BATTLE, "rival_battle",
         "Verified the live S.S. Anne RIVAL2 battle", records, progress, emulator,
     )
-    try:
-        run_adaptive_trainer_battle(
-            reader,
-            chapter_executor,
-            _choose_ss_anne_rival_move,
-            expected_map=MapId.SS_ANNE_2F,
-            intent=BattleIntent(
-                "obtain_cut",
-                battle_plan_id=RedBattlePlanId.SS_ANNE_RIVAL,
-            ),
-            timing=timing.battle_runtime,
-            label="S.S. Anne rival",
-        )
-    except BattleRuntimeError as error:
-        raise SSAnneChapterError(str(error)) from error
+    _run_ss_anne_rival_with_potion(
+        reader,
+        chapter_executor,
+        emulator,
+        timing,
+    )
     _checkpoint(
         reader, tracker, SSAnnePhase.RIVAL_DEFEATED, "rival_defeated",
         "Defeated the S.S. Anne rival", records, progress, emulator,
@@ -396,6 +398,72 @@ def _enter_rival_battle(
     raise SSAnneChapterError("The rival intro missed its bounded battle gate.")
 
 
+class _PauseForSSAnneRivalPotion(Exception):
+    pass
+
+
+def _run_ss_anne_rival_with_potion(
+    reader: PokemonRedStateReader,
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+    timing: SSAnneTiming,
+) -> RawGameState:
+    """Spend the retained Potion once at a live, bounded HP threshold."""
+
+    if _bag_quantity(emulator, ItemId.POTION) != SS_ANNE_RIVAL_POTION_RESERVE:
+        raise SSAnneChapterError("S.S. Anne rival lacks its retained Potion reserve.")
+
+    def guarded_policy(raw: RawGameState) -> int:
+        if (
+            _bag_quantity(emulator, ItemId.POTION) == SS_ANNE_RIVAL_POTION_RESERVE
+            and raw.first_party_hp is not None
+            and 0 < raw.first_party_hp <= 40
+        ):
+            raise _PauseForSSAnneRivalPotion
+        return _choose_ss_anne_rival_move(raw)
+
+    used_potion = False
+    while True:
+        try:
+            result = run_adaptive_trainer_battle(
+                reader,
+                executor,
+                guarded_policy,
+                expected_map=MapId.SS_ANNE_2F,
+                intent=BattleIntent(
+                    "obtain_cut",
+                    battle_plan_id=RedBattlePlanId.SS_ANNE_RIVAL,
+                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                ),
+                timing=timing.battle_runtime,
+                label="S.S. Anne rival",
+            )
+        except BattleRuntimeError as error:
+            if not isinstance(error.__cause__, _PauseForSSAnneRivalPotion):
+                raise SSAnneChapterError(str(error)) from error
+            if used_potion:
+                raise SSAnneChapterError(
+                    "S.S. Anne rival requested more than one Potion recovery."
+                ) from error
+            try:
+                _use_cerulean_rival_potion(
+                    reader,
+                    executor,
+                    emulator,
+                    DEFAULT_CASCADE_TIMING,
+                )
+            except CascadeChapterError as recovery_error:
+                raise SSAnneChapterError(str(recovery_error)) from recovery_error
+            used_potion = True
+            continue
+
+        if not used_potion or _bag_quantity(emulator, ItemId.POTION) != 0:
+            raise SSAnneChapterError(
+                "S.S. Anne rival did not consume exactly one planned Potion."
+            )
+        return result
+
+
 def _choose_ss_anne_rival_move(state: RawGameState) -> int:
     """Choose a usable species-specific move for the live RIVAL2 party."""
 
@@ -406,25 +474,42 @@ def _choose_ss_anne_rival_move(state: RawGameState) -> int:
     ):
         raise SSAnneChapterError("S.S. Anne rival policy lacks pinned battle evidence.")
     if state.enemy_species_id == RATICATE_SPECIES_ID:
-        slot, expected_move = 4, WATER_GUN_MOVE_ID
+        candidates = (
+            (4, WATER_GUN_MOVE_ID),
+            (3, MEGA_PUNCH_MOVE_ID),
+            (1, BITE_MOVE_ID),
+        )
     elif state.enemy_species_id == KADABRA_SPECIES_ID:
-        slot, expected_move = 1, BITE_MOVE_ID
+        candidates = (
+            (1, BITE_MOVE_ID),
+            (3, MEGA_PUNCH_MOVE_ID),
+            (4, WATER_GUN_MOVE_ID),
+        )
+    elif state.enemy_species_id == IVYSAUR_SPECIES_ID:
+        candidates = (
+            (3, MEGA_PUNCH_MOVE_ID),
+            (1, BITE_MOVE_ID),
+            (4, WATER_GUN_MOVE_ID),
+        )
     else:
-        slot, expected_move = 3, MEGA_PUNCH_MOVE_ID
+        candidates = (
+            (3, MEGA_PUNCH_MOVE_ID),
+            (4, WATER_GUN_MOVE_ID),
+            (1, BITE_MOVE_ID),
+        )
     moves = state.first_party_moves
     pp = state.first_party_pp
-    if (
-        moves is None
-        or pp is None
-        or len(moves) < slot
-        or len(pp) < slot
-        or moves[slot - 1] != expected_move
-        or pp[slot - 1] & 0x3F == 0
-    ):
-        raise SSAnneChapterError(
-            f"S.S. Anne rival policy lacks usable move {expected_move:#04x} in slot {slot}."
-        )
-    return slot
+    if moves is not None and pp is not None:
+        for slot, expected_move in candidates:
+            if (
+                len(moves) >= slot
+                and len(pp) >= slot
+                and moves[slot - 1] == expected_move
+                and pp[slot - 1] & 0x3F
+                and state.player_disabled_move_slot != slot
+            ):
+                return slot
+    raise SSAnneChapterError("S.S. Anne rival policy lacks a usable ranked attack.")
 
 
 def _checkpoint(

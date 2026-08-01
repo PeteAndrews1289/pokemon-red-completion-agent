@@ -49,8 +49,8 @@ def _report() -> StrengthChapterReport:
         final_raw=raw,
         initial_bag=initial_bag,
         final_bag=final_bag,
-        initial_money=33_191,
-        final_money=33_191,
+        initial_money=28_191,
+        final_money=28_191,
         gave_gold_teeth=True,
         got_hm04=True,
         gold_teeth_removed=True,
@@ -94,6 +94,7 @@ def test_strength_report_requires_every_terminal_gate() -> None:
         replace(report, hm04_retained=False),
         replace(report, moves_after=EXPECTED_MOVES_BEFORE),
         replace(report, pp_after=(25, 30, 20, 15)),
+        replace(report, party_hp=(123, 47, 40)),
         replace(report, final_money=37_488),
         replace(report, controller_released=False),
     )

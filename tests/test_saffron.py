@@ -31,8 +31,8 @@ def _terminal() -> RawGameState:
         first_party_hp=130,
         first_party_max_hp=130,
         first_party_status=0,
-        first_party_moves=(0x82, 0x46, 0x3D, 0x39),
-        first_party_pp=(15, 15, 20, 15),
+        first_party_moves=(0x82, 0x46, 0x3A, 0x39),
+        first_party_pp=(15, 15, 10, 15),
     )
 
 
@@ -56,9 +56,9 @@ def test_saffron_report_proves_purchase_handoff_order_and_terminal() -> None:
             for index in range(SAFFRON_CHECKPOINT_COUNT)
         ),
         final_raw=raw,
-            money_before=37_247,
-            money_after_purchase=37_247 - FRESH_WATER_PRICE,
-            money_after=37_047,
+            money_before=32_247,
+            money_after_purchase=32_247 - FRESH_WATER_PRICE,
+            money_after=32_047,
         vending_cursor=0,
         fresh_water_before=0,
         fresh_water_after_purchase=1,
@@ -101,9 +101,9 @@ def test_saffron_report_accepts_level_43_healed_lineage() -> None:
             for index in range(SAFFRON_CHECKPOINT_COUNT)
         ),
         final_raw=raw,
-        money_before=37_247,
-        money_after_purchase=37_047,
-        money_after=37_047,
+        money_before=32_247,
+        money_after_purchase=32_047,
+        money_after=32_047,
         vending_cursor=0,
         fresh_water_before=0,
         fresh_water_after_purchase=1,
@@ -144,9 +144,9 @@ def test_saffron_report_rejects_missing_evidence(field_name: str, value: object)
             for index in range(SAFFRON_CHECKPOINT_COUNT)
         ),
         final_raw=raw,
-        money_before=37_247,
-        money_after_purchase=37_047,
-        money_after=37_047,
+        money_before=32_247,
+        money_after_purchase=32_047,
+        money_after=32_047,
         vending_cursor=0,
         fresh_water_before=0,
         fresh_water_after_purchase=1,

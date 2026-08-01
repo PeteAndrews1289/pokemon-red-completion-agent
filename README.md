@@ -31,6 +31,12 @@ control, and progressively trained specialists.**
 > declared offsets through Route 25, the S.S. Anne, Vermilion, and Route 9 before stopping in Rock
 > Tunnel. This is progress evidence, not a replacement qualification; see the living narrative for
 > the exact distinction.
+> The current robustness branch now adds a bounded, semantic Pokémon Mansion training skill. Two
+> clean-power replays reproduced **301/301 checkpoints**, **36/36 objectives**, **6,581,531
+> frames**, and **54,261 actions**, ending with the Champion event and Hall-of-Fame map together.
+> In each run the lead trained from level 46 to 55 through 115 wild wins, 1,862 bounded encounter
+> steps, five healing trips, and zero faints; it reached Indigo at level 58 and the Hall of Fame at
+> level 61. This is still deterministic-teacher evidence, not a learned-policy claim.
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
 > **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned

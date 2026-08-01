@@ -7,7 +7,9 @@ import pytest
 import pokemon_red_completion.lavender as lavender_module
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.lavender import (
+    BATTLE_RECOVERY_THRESHOLD,
     DEFAULT_LAVENDER_TIMING,
+    FINAL_TUNNEL_RECOVERY_THRESHOLD,
     LAVENDER_CHECKPOINT_COUNT,
     PROTECTED_PARTY,
     LavenderChapterReport,
@@ -64,13 +66,13 @@ def _report() -> LavenderChapterReport:
         party_status=(0, 0, 0),
         repels_purchased=4,
         repels_used=4,
-        parlyz_heals_purchased=1,
+        parlyz_heals_purchased=2,
         parlyz_heals_used=1,
-        parlyz_heals_remaining=0,
-        super_potions_purchased=8,
+        parlyz_heals_remaining=1,
+        super_potions_purchased=13,
         super_potions_used=4,
-        super_potions_remaining=5,
-        purchase_cost=7200,
+        super_potions_remaining=10,
+        purchase_cost=10900,
         money_remaining=1234,
         route_10_trainer_2_bypassed=True,
         frames_executed=100,
@@ -85,6 +87,44 @@ def test_lavender_timing_is_positive_and_bounded() -> None:
         isinstance(getattr(DEFAULT_LAVENDER_TIMING, field.name), int)
         and getattr(DEFAULT_LAVENDER_TIMING, field.name) > 0
         for field in fields(LavenderTiming)
+    )
+
+
+def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
+    assert BATTLE_RECOVERY_THRESHOLD == 40
+    assert FINAL_TUNNEL_RECOVERY_THRESHOLD == 90
+
+
+def test_final_tunnel_policy_spends_bite_evidence_then_exploits_with_bubblebeam() -> None:
+    assert lavender_module._ranked_lavender_move_slots(
+        move_slot=1,
+        starting_selected_pp=25,
+        current_selected_pp=25,
+        finish_with_bubblebeam=True,
+    ) == (1, 3, 4)
+    assert lavender_module._ranked_lavender_move_slots(
+        move_slot=1,
+        starting_selected_pp=25,
+        current_selected_pp=24,
+        finish_with_bubblebeam=True,
+    ) == (3, 1, 4)
+
+
+def test_field_recovery_skips_a_full_hp_target_even_above_its_maximum(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    runtime = object()
+    monkeypatch.setattr(lavender_module, "_party_hp", lambda _emulator: (60, 20, 20))
+    monkeypatch.setattr(lavender_module, "_party_max_hp", lambda _emulator: (60, 40, 40))
+
+    assert not lavender_module._heal_if_below(
+        runtime,
+        runtime,
+        runtime,
+        lavender_module._RunState([], []),
+        LavenderTiming(),
+        0,
+        90,
     )
 
 
@@ -107,9 +147,9 @@ def test_lavender_report_requires_all_route_resource_and_party_gates() -> None:
         replace(report, party_status=(0, 8, 0)),
         replace(report, repels_used=3),
         replace(report, parlyz_heals_used=0),
-        replace(report, parlyz_heals_remaining=1, parlyz_heals_purchased=2),
+        replace(report, parlyz_heals_remaining=0),
         replace(report, super_potions_remaining=3),
-        replace(report, purchase_cost=7199),
+        replace(report, purchase_cost=10899),
         replace(report, route_10_trainer_2_bypassed=False),
         replace(report, controller_released=False),
     )
@@ -124,13 +164,13 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
     assert public["inventory"] == {
         "repels_purchased": 4,
         "repels_used": 4,
-        "parlyz_heals_purchased": 1,
+        "parlyz_heals_purchased": 2,
         "parlyz_heals_used": 1,
-        "parlyz_heals_remaining": 0,
-        "super_potions_purchased": 8,
+        "parlyz_heals_remaining": 1,
+        "super_potions_purchased": 13,
         "super_potions_used": 4,
-        "super_potions_remaining": 5,
-        "purchase_cost": 7200,
+        "super_potions_remaining": 10,
+        "purchase_cost": 10900,
         "money_remaining": 1234,
     }
     assert public["route_10_trainer_2_bypassed"] is True

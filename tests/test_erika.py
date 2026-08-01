@@ -2,6 +2,7 @@ from dataclasses import fields, replace
 
 import pytest
 
+import pokemon_red_completion.erika as erika_module
 from pokemon_red_completion.erika import (
     DEFAULT_ERIKA_TIMING,
     ERIKA_CHECKPOINT_COUNT,
@@ -30,8 +31,8 @@ def _terminal() -> RawGameState:
         first_party_hp=130,
         first_party_max_hp=130,
         first_party_status=0,
-        first_party_moves=(0x82, STRENGTH, 0x3D, 0x39),
-        first_party_pp=(15, 15, 20, 15),
+        first_party_moves=(0x82, STRENGTH, 0x3A, 0x39),
+        first_party_pp=(15, 15, 10, 15),
     )
 
 
@@ -54,11 +55,14 @@ def test_erika_report_qualifies_level_42_move_learning_and_terminal() -> None:
         ),
         final_raw=raw,
         erika_identity=(ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1),
-        strength_pp_spent=6,
+        strength_pp_spent=0,
+        ice_beam_pp_spent=3,
+        got_tm13=True,
+        tm13_transfer_before_event=True,
         moves_before=(0x2C, STRENGTH, 0x3D, 0x39),
-        moves_after=(0x82, STRENGTH, 0x3D, 0x39),
-            money_before=33_191,
-            money_after=37_247,
+        moves_after=(0x82, STRENGTH, 0x3A, 0x39),
+        money_before=28_191,
+        money_after=32_047,
         badge_bits=0x1F,
         beat_gym_flags=int(
             Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL
@@ -85,7 +89,7 @@ def test_erika_report_qualifies_level_42_move_learning_and_terminal() -> None:
         "replaced_move_id": 0x2C,
         "learned_move_id": 0x82,
         "moves_before": [0x2C, STRENGTH, 0x3D, 0x39],
-        "moves_after": [0x82, STRENGTH, 0x3D, 0x39],
+        "moves_after": [0x82, STRENGTH, 0x3A, 0x39],
         "learned_move_pp": 15,
     }
 
@@ -103,11 +107,14 @@ def test_erika_report_accepts_post_battle_level_and_rejects_incomplete_heal() ->
         ),
         final_raw=raw,
         erika_identity=(ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1),
-        strength_pp_spent=6,
+        strength_pp_spent=0,
+        ice_beam_pp_spent=3,
+        got_tm13=True,
+        tm13_transfer_before_event=True,
         moves_before=(0x2C, STRENGTH, 0x3D, 0x39),
-        moves_after=(0x82, STRENGTH, 0x3D, 0x39),
-        money_before=33_191,
-        money_after=37_247,
+        moves_after=(0x82, STRENGTH, 0x3A, 0x39),
+        money_before=28_191,
+        money_after=32_047,
         badge_bits=0x1F,
         beat_gym_flags=int(
             Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL
@@ -129,3 +136,13 @@ def test_erika_report_accepts_post_battle_level_and_rejects_incomplete_heal() ->
 
     assert report.passed
     assert not replace(report, party_hp=(132, 47, 40)).passed
+
+
+def test_erika_policy_falls_back_when_strength_is_disabled() -> None:
+    raw = replace(
+        _terminal(),
+        battle_state=2,
+        player_disabled_move_slot=2,
+    )
+
+    assert erika_module._erika_move_slot(raw) == 3

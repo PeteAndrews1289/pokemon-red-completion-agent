@@ -58,12 +58,13 @@ def _report() -> HideoutChapterReport:
         entered_hideout_bug_event=False,
         lift_key_carried=True,
         silph_scope_carried=True,
-        super_potions_used=2,
-        super_potions_remaining=3,
+        super_potions_used=3,
+        super_potions_remaining=7,
         party_hp=(86, 52, 37),
         party_max_hp=(86, 52, 37),
         party_status=(0, 0, 0),
-        money_remaining=15_814,
+        money_before=5_333,
+        money_remaining=10_814,
         frames_executed=100,
         actions_executed=50,
         controller_released=True,
@@ -97,11 +98,22 @@ def test_hideout_report_requires_source_bug_and_all_terminal_gates() -> None:
         replace(report, entered_hideout_bug_event=True),
         replace(report, lift_key_carried=False),
         replace(report, silph_scope_carried=False),
-        replace(report, super_potions_remaining=2),
+        replace(report, super_potions_remaining=5),
         replace(report, party_hp=(85, 52, 37)),
+        replace(report, money_remaining=10_813),
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)
+
+
+def test_hideout_report_accepts_conserved_surplus_recovery_inventory() -> None:
+    report = replace(
+        _report(),
+        super_potions_used=2,
+        super_potions_remaining=8,
+    )
+
+    assert report.passed
 
 
 def test_hideout_public_report_discloses_bug_and_assistance_scope() -> None:
@@ -113,7 +125,8 @@ def test_hideout_public_report_discloses_bug_and_assistance_scope() -> None:
     assert public["inventory"] == {
         "lift_key_carried": True,
         "silph_scope_carried": True,
-        "super_potions_used": 2,
-        "super_potions_remaining": 3,
-        "money_remaining": 15_814,
+        "super_potions_used": 3,
+        "super_potions_remaining": 7,
+        "money_before": 5_333,
+        "money_remaining": 10_814,
     }

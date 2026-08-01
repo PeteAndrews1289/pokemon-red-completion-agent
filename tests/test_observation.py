@@ -170,6 +170,22 @@ def test_reader_exposes_pinned_player_disable_slot_and_turns() -> None:
     assert raw.player_disable_turns == 6
 
 
+def test_reader_exposes_pinned_enemy_trapping_status() -> None:
+    memory = RecordingMemory(
+        {
+            RamAddress.STATUS_FLAGS_6: 1,
+            RamAddress.IS_IN_BATTLE: 2,
+            RamAddress.PARTY_COUNT: 1,
+            RamAddress.ENEMY_BATTLE_STATUS_1: 1 << 5,
+        }
+    )
+
+    raw = PokemonRedStateReader(memory).read()
+
+    assert RamAddress.ENEMY_BATTLE_STATUS_1 == 0xD067
+    assert raw.enemy_using_trapping_move is True
+
+
 def test_reader_translates_the_stable_pokedex_gate_from_pinned_symbols() -> None:
     events = _events(
         EventFlag.BATTLED_RIVAL_IN_OAKS_LAB,

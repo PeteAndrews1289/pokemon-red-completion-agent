@@ -22,8 +22,10 @@ from pokemon_red_completion.surge import (
     LT_SURGE_OPPONENT_ID,
     LT_SURGE_TRAINER_CLASS_ID,
     LT_SURGE_TRAINER_SET,
+    SPEAROW_CAPTURE_LEVELS,
     SPEAROW_CAPTURE_MOVE_ID,
     SPEAROW_CAPTURE_MOVE_SLOT,
+    SPEAROW_WEAKEN_ATTEMPT_LIMIT,
     SURGE_CHECKPOINT_COUNT,
     SurgeChapterReport,
     SurgeCheckpoint,
@@ -83,9 +85,11 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert LT_SURGE_TRAINER_CLASS_ID == 0x24
     assert LT_SURGE_TRAINER_SET == 1
     assert DIG_MOVE_ID == 0x5B
-    assert frozenset({19, 20, 21, 22}) == DIGLETT_CAPTURE_LEVELS
+    assert frozenset({17, 18, 19, 20, 21, 22}) == DIGLETT_CAPTURE_LEVELS
     assert DIGLETT_SEARCH_SEED_WAIT_FRAMES == 199
     assert (SPEAROW_CAPTURE_MOVE_ID, SPEAROW_CAPTURE_MOVE_SLOT) == (0x37, 4)
+    assert frozenset({17}) == SPEAROW_CAPTURE_LEVELS
+    assert SPEAROW_WEAKEN_ATTEMPT_LIMIT == 12
     assert DUX_NICKNAME == (0x83, 0x94, 0x97, 0x50)
     assert SURGE_CHECKPOINT_COUNT == 15
 
@@ -111,6 +115,8 @@ def test_party_move_lookup_reads_dux_struct_instead_of_lead_moves() -> None:
 
 def test_surge_timing_is_positive_and_bounded() -> None:
     assert SurgeTiming() == DEFAULT_SURGE_TIMING
+    assert DEFAULT_SURGE_TIMING.encounter_steps == 1800
+    assert DEFAULT_SURGE_TIMING.encounter_limit == 72
     assert all(
         isinstance(getattr(DEFAULT_SURGE_TIMING, field.name), int)
         and getattr(DEFAULT_SURGE_TIMING, field.name) > 0

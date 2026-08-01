@@ -158,6 +158,7 @@ Several failures have already produced general improvements:
 | The late-pivot Champion policy was evaluated across all 255 byte-sized start offsets. | The previous policy changes were locally plausible but had no verified Hall-of-Fame terminal. | Offset 150 produced the first passing revised-lineage terminal: four X Specials and three Full Restores used, the lead at 113 HP, one helper at full HP, 16 Submission PP remaining, the Champion event set, and the Hall of Fame entered. It remains diagnostic until clean-power replay confirms all 299 checkpoints. |
 | The locally qualified Champion policy was replayed from clean power rather than from its diagnostic boundary. | A passing late-game snapshot could not establish that the complete revised route was reproducible. | The uninterrupted replay passed all 299 checkpoints and 36 objectives, entered the Hall of Fame in 5,163,657 frames and 43,005 actions, and reproduced the same totals on a second clean rehearsal. This closes the revised teacher-completion gate; it does not close the learned-agent or held-out-generalization gates. |
 | The first registry-bound, uncounted 63-battle schedule rehearsal changed the Route 25 trainer-5 timing and the lead fainted at checkpoint 49/299. | Reproducibility on the default timing lineage did not imply robustness to the preregistered offset schedule. | The failure was retained as held-out diagnostic evidence. The campaign remains unopened, all twelve declared slots remain pending, and no dry-run qualification exists. Route 25 recovery must be hardened before the schedule rehearsal is attempted again under a newly published source identity. |
+| The newest PP-hardened lineage defeated Agatha and Lance, then reached the Champion at checkpoint 299/300 but fell to the level-65 Venusaur after exhausting Blizzard. | Late-game tactics were compensating for a strategic level deficit. Experience had been treated as a side effect of the route rather than a planned, reusable resource. | A game-neutral training policy now chooses when to seek an encounter, fight, flee, return to heal, and stop. Its first Red adapter uses the Pokémon Mansion's level 28–39 encounters, Cinnabar healing, and Dig-based recovery to train the lead to level 55 before the final gyms. The adapter is bounded by battle, step, healing-trip, HP, status, PP, and enemy-level rules and emits a training receipt. |
 | A required attack was disabled during a held-out trainer battle even though other legal attacks remained. | The teacher confused “preferred” with “required on every turn.” | Battle policies now rank legal fallback moves from live PP and Disable state, while the post-battle contract separately proves that the strategically required move was used at least once. |
 | A legally captured level-15 Spearow survived the capture contract but produced an underpowered DUX after the in-game trade. | Capture success alone did not prove fitness for a Pokémon's later assigned role. | The capture planner now accepts the level-17 encounter needed by the downstream battle plan, turning party acquisition into a long-horizon capability contract. |
 | A level-up prompt in the Rocket Hideout threatened to replace Bite with Withdraw. | Generic prompt handling could silently destroy a later required capability. | Move-learning decisions now preserve the declared move set and verify it after the battle instead of assuming every level-up prompt should be accepted or declined identically. |
@@ -172,7 +173,9 @@ new qualification: the source is still changing, the registry still identifies t
 commit, and the official failed rehearsal remains the public result until a clean, committed
 replacement passes.
 
-The diagnostic has nevertheless advanced from Route 25 to Pokémon Tower and exposed several useful
+The diagnostic has nevertheless advanced from Route 25 through Koga, the Safari Zone, Strength,
+and the Saffron shopping boundary. Its current frontier is the Celadon rooftop reward interaction
+that supplies Ice Beam before Silph Co. This work has exposed several useful
 causal links:
 
 - Route 25 now chooses attacks from the opposing trainer's party rather than using one historical
@@ -187,10 +190,31 @@ causal links:
   Route 9 battle selects BubbleBeam because the held-out opponent disabled Bite.
 - Rock Tunnel and the Rocket Hideout now pass the diagnostic schedule with adaptive legal moves,
   retained resource evidence, and protection against an unwanted level-up move replacement.
-- Pokémon Tower's rival now passes with opponent-aware attacks and bounded recovery. The current
-  frontier is the 6F Channeler battle: the exact trace showed sleep—not insufficient damage or PP—
-  as the cause of the faint. A conditional Awakening path has been added and is being replayed from
-  clean power before it can be described as qualified.
+- The Rock Tunnel lineage can consume a different number of healing items without invalidating the
+  rest of the route. Lavender now performs a legal adaptive refill to a declared reserve, and later
+  chapters prove item conservation and minimum supply rather than inheriting one exact historical
+  count.
+- Pokémon Tower's rival and Channeler battles now pass with opponent-aware attacks, bounded
+  recovery, and status-aware item use. The trace also corrected a Generation I decoding error:
+  status bit `0x40` means paralysis, while sleep is encoded by the low three bits. The runtime now
+  chooses Parlyz Heal or Awakening from the actual status and proves a one-item decrement.
+- Koga can disable Surf before it is used. The policy now ranks legal moves from live PP and Disable
+  state instead of repeatedly selecting the preferred slot, while the chapter contract separately
+  proves victory, badge progress, and a fully healed party.
+- Several exact companion-HP tuples were artifacts of one damage lineage. Koga and Strength now use
+  semantic terminal gates—all required party members present, alive, status-free, and fully healed—
+  so harmless battle variation no longer masquerades as failure.
+- Saffron's moving pedestrians can invalidate a fixed walk string. The Mart approach now observes
+  the player's coordinates and replans around live collisions before proving the intended door
+  entry.
+- The 20-slot bag made an individually legal purchase sequence globally impossible. Silph
+  preparation now acquires, exchanges, and teaches the temporary Fresh Water/TM13 items before
+  purchasing the Hyper Potion stack; an unnecessary Max Repel was also removed. This turns bag
+  capacity and subgoal ordering into explicit planning constraints.
+- The current failure is not a battle or route failure but interception of a randomly walking
+  rooftop NPC. The ongoing fix uses observed player/NPC coordinates and bounded pursuit rather than
+  assuming the NPC remains on the tile where she was first seen. It will not be called stable until
+  the complete held-out lineage passes from power-on.
 
 These changes remain **diagnostic work in progress**. They will be simplified, covered by the full
 ROM-free suite, replayed on the default lineage, committed and pushed, bound into a regenerated
@@ -352,6 +376,14 @@ rehearsals, republish a source-bound registry, and only then open collection.
 No learned model has yet completed the game. Collection, frozen training, held-out Red evaluation,
 and the first cross-game transfer experiment remain subsequent gates.
 
+The current working branch adds one semantic checkpoint for the bounded Mansion training block.
+Two uninterrupted clean-power replays reproduced **301/301 checkpoints**, **36/36 objectives**,
+**6,581,531 frames**, and **54,261 actions**. In both runs the lead trained from level 46 to 55
+through 115 wild wins, 1,862 encounter steps, five healing trips, and zero faints; it reached
+Indigo at level 58 and entered the Hall of Fame at level 61. The final terminal retained all three
+party members alive. This proves the new deterministic-teacher lineage and the reusable training
+adapter; it does not prove that a learned policy can choose the target, area, or recovery cycle.
+
 The full learned-system and transfer claims remain pending. In particular:
 
 - the current battle ranker has not completed the game;
@@ -379,9 +411,10 @@ This project demonstrates:
 
 A concise interview description is:
 
-> I built a completion-first Pokémon Red agent that verified the entire game through 299 semantic
+> I built a completion-first Pokémon Red agent that verified the entire game through 301 semantic
 > checkpoints, then used clean replays under changed timing and battle lineages to turn brittle
-> assumptions into reusable observations and recovery skills. The system records private semantic
+> assumptions into reusable observations, recovery, and bounded experience-training skills. The
+> system records private semantic
 > trajectories, trains legality-constrained specialists, and is designed to measure how much of
 > that knowledge reduces the teaching required for the next Pokémon game.
 

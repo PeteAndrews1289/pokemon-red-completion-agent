@@ -1,20 +1,30 @@
 from pokemon_red_completion.champion import (
+    CHAMPION_ARCANINE_FINISH_SAFE_HP,
     CHAMPION_CHECKPOINT_COUNT,
+    CHAMPION_FULL_RESTORE_INPUT_RESERVE,
+    CHAMPION_GYARADOS_FINISH_SAFE_HP,
     CHAMPION_PARTY,
+    CHAMPION_RHYDON_SAFE_HP,
     CHAMPION_RNG_DELAY_FRAMES,
     CHAMPION_SAFE_HP,
     ChampionTurn,
+    _champion_move_slot,
+    _champion_pivot_due,
+    _champion_recovery_available,
+    _champion_recovery_threshold,
     _encounter_party,
     _select_recovery_item,
     _turns_valid,
 )
-from pokemon_red_completion.observation import EventFlag, ItemId, MapId
+from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGameState
 
 
 def test_champion_source_contract_is_exact() -> None:
     assert CHAMPION_CHECKPOINT_COUNT == 3
     assert CHAMPION_RNG_DELAY_FRAMES == 150
     assert CHAMPION_SAFE_HP == 90
+    assert CHAMPION_FULL_RESTORE_INPUT_RESERVE == 1
+    assert CHAMPION_RHYDON_SAFE_HP == 50
     assert MapId.CHAMPIONS_ROOM == 0x78
     assert MapId.HALL_OF_FAME == 0x76
     assert EventFlag.BEAT_CHAMPION_RIVAL == 0x901
@@ -62,4 +72,99 @@ def test_champion_status_recovery_falls_back_to_full_restore() -> None:
             {ItemId.FULL_HEAL: 1, ItemId.FULL_RESTORE: 2},
         )
         is ItemId.FULL_HEAL
+    )
+
+
+def test_champion_move_ranking_distinguishes_late_matchups() -> None:
+    def raw(
+        species: int,
+        *,
+        enemy_hp: int = 100,
+        pp: tuple[int, int, int, int] = (5, 15, 15, 0),
+    ) -> RawGameState:
+        return RawGameState(
+            game_started=True,
+            map_id=MapId.CHAMPIONS_ROOM,
+            player_x=4,
+            player_y=3,
+            party_count=3,
+            battle_state=2,
+            enemy_species_id=species,
+            enemy_hp=enemy_hp,
+            first_party_pp=pp,
+            first_party_max_hp=171,
+        )
+
+    assert _champion_move_slot(raw(0x97, pp=(5, 10, 15, 0))) == 2
+    assert _champion_move_slot(raw(0x95)) == 3
+    assert _champion_move_slot(raw(0x01, pp=(5, 10, 15, 0))) == 3
+    assert _champion_move_slot(raw(0x14)) == 3
+    assert _champion_move_slot(raw(0x14, pp=(5, 0, 0, 3))) == 1
+    assert _champion_move_slot(raw(0x16, enemy_hp=31, pp=(5, 15, 15, 3))) == 3
+    assert _champion_move_slot(raw(0x16, enemy_hp=196, pp=(5, 15, 15, 3))) == 3
+    assert _champion_move_slot(raw(0x9A, pp=(5, 15, 15, 3))) == 3
+    assert _champion_recovery_threshold(raw(0x01)) == CHAMPION_RHYDON_SAFE_HP
+    assert _champion_recovery_threshold(raw(0x14)) == CHAMPION_SAFE_HP
+    assert (
+        _champion_recovery_threshold(raw(0x16, enemy_hp=31))
+        == CHAMPION_GYARADOS_FINISH_SAFE_HP
+    )
+    assert _champion_recovery_threshold(raw(0x16, enemy_hp=196)) == 171
+    assert _champion_recovery_threshold(raw(0x9A)) == 171
+    assert (
+        _champion_recovery_threshold(raw(0x14, enemy_hp=24))
+        == CHAMPION_ARCANINE_FINISH_SAFE_HP
+    )
+
+
+def test_champion_only_requests_available_recovery() -> None:
+    assert not _champion_recovery_available(0, {})
+    assert not _champion_recovery_available(0, {ItemId.FULL_HEAL: 3})
+    assert _champion_recovery_available(1, {ItemId.FULL_HEAL: 1})
+    assert _champion_recovery_available(0, {ItemId.FULL_RESTORE: 1})
+
+
+def test_champion_pivots_living_helper_when_recovery_is_exhausted() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.CHAMPIONS_ROOM,
+        player_x=4,
+        player_y=3,
+        party_count=3,
+        battle_state=2,
+        enemy_species_id=0x16,
+        enemy_hp=161,
+        first_party_hp=46,
+    )
+    assert _champion_pivot_due(
+        raw,
+        inventory={},
+        party_hp=(46, 55, 39),
+        next_sacrifice=1,
+        party_position=5,
+    )
+    assert not _champion_pivot_due(
+        raw,
+        inventory={ItemId.FULL_RESTORE: 1},
+        party_hp=(46, 55, 39),
+        next_sacrifice=1,
+        party_position=5,
+    )
+    assert not _champion_pivot_due(
+        raw,
+        inventory={},
+        party_hp=(46, 55, 39),
+        next_sacrifice=1,
+        party_position=3,
+    )
+
+
+def test_champion_receipt_accepts_live_low_hp_decision() -> None:
+    turns = tuple(
+        ChampionTurn(species, level, 1, 1, 0, (1, 1, 1, 1), 1, position)
+        for position, (species, level) in enumerate(CHAMPION_PARTY)
+    )
+    assert _turns_valid(turns)
+    assert not _turns_valid(
+        (ChampionTurn(0x97, 61, 1, 0, 0, (1, 1, 1, 1), 1, 0),)
     )

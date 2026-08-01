@@ -26,8 +26,13 @@ from pokemon_red_completion.celadon import (
     _party_max_hp,
     _party_status,
 )
-from pokemon_red_completion.lavender import DEFAULT_LAVENDER_TIMING, _use_bag_item
+from pokemon_red_completion.lavender import (
+    DEFAULT_LAVENDER_TIMING,
+    _select_bag_item,
+    _use_bag_item,
+)
 from pokemon_red_completion.observation import (
+    BattleMenuPhase,
     EventFlag,
     ItemId,
     MapId,
@@ -41,16 +46,23 @@ from pokemon_red_completion.silph import (
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 from pokemon_red_completion.victory_road import (
+    INDIGO_FULL_RESTORE_RESERVE,
+    INDIGO_X_SPECIAL_RESERVE,
     _CountingExecutor,
     _event,
     _move,
     _pulse,
+    _select_battle_main_command,
     _settle_confirm,
 )
 
 LORELEI_CHECKPOINT_COUNT = 3
 LORELEI_RNG_DELAY_FRAMES = 119
-LORELEI_SAFE_HP = 110
+# Leave enough room for the strongest observed post-menu hit without forcing
+# an item after every multi-turn Clamp sequence.  A higher threshold can
+# deadlock into heal/Clamp/heal while the lead is otherwise healthy enough to
+# finish the matchup.
+LORELEI_SAFE_HP = 70
 LORELEI_PARTY = (
     (0x78, 54),
     (0x8B, 53),
@@ -128,6 +140,7 @@ class LoreleiChapterReport:
     final_raw: RawGameState
     turns: tuple[LoreleiTurn, ...]
     party: tuple[tuple[int, int], ...]
+    x_accuracy_used: int
     hyper_potions_used: int
     full_restores_used: int
     party_hp: tuple[int, int, int]
@@ -143,6 +156,7 @@ class LoreleiChapterReport:
             len(self.records) == LORELEI_CHECKPOINT_COUNT
             and self.party == LORELEI_PARTY
             and _turns_valid(self.turns)
+            and self.x_accuracy_used == 1
             and self.hyper_potions_used <= 11
             and self.full_restores_used <= 12
             and _event(self.final_raw, EventFlag.BEAT_LORELEI)
@@ -175,6 +189,7 @@ class LoreleiChapterReport:
                 for item in self.turns
             ],
             "recovery": {
+                "x_accuracy_used": self.x_accuracy_used,
                 "hyper_potions_used": self.hyper_potions_used,
                 "full_restores_used": self.full_restores_used,
             },
@@ -208,9 +223,11 @@ def run_lorelei_chapter(
         or (initial.player_x, initial.player_y) != (2, 5)
         or initial.party_species_ids != TOWER_FINAL_PARTY
         or initial.first_party_moves != (0x42, 0x46, 0x3A, 0x39)
-        or _bag(emulator).get(ItemId.FULL_RESTORE, 0) != 13
+        or _bag(emulator).get(ItemId.FULL_RESTORE, 0) != INDIGO_FULL_RESTORE_RESERVE
         or _bag(emulator).get(ItemId.FULL_HEAL, 0) != 3
         or _bag(emulator).get(ItemId.HYPER_POTION, 0) != 11
+        or _bag(emulator).get(ItemId.X_ACCURACY, 0) != 3
+        or _bag(emulator).get(ItemId.X_SPECIAL, 0) != INDIGO_X_SPECIAL_RESERVE
         or _event(initial, EventFlag.BEAT_LORELEI)
     ):
         raise LoreleiChapterError("Lorelei input boundary is not qualified.")
@@ -239,9 +256,16 @@ def run_lorelei_chapter(
     class _HealBoundary(Exception):
         pass
 
+    class _AccuracyBoundary(Exception):
+        pass
+
+    accuracy_used = 0
+
     def policy(raw: RawGameState) -> int:
         hp = raw.first_party_hp or 0
         status = raw.first_party_status or 0
+        if accuracy_used == 0:
+            raise _AccuracyBoundary
         if hp < LORELEI_SAFE_HP or status:
             raise _HealBoundary
         species = raw.enemy_species_id or 0
@@ -269,6 +293,7 @@ def run_lorelei_chapter(
 
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
+    accuracy_before = _bag(emulator).get(ItemId.X_ACCURACY, 0)
     while reader.read().battle_state:
         try:
             run_adaptive_trainer_battle(
@@ -289,6 +314,10 @@ def run_lorelei_chapter(
                 label="Lorelei",
             )
         except BattleRuntimeError as error:
+            if isinstance(error.__cause__, _AccuracyBoundary):
+                _battle_x_accuracy(reader, actions, emulator)
+                accuracy_used += 1
+                continue
             if not isinstance(error.__cause__, _HealBoundary):
                 raise LoreleiChapterError("Lorelei battle runtime failed.") from error
             raw = reader.read()
@@ -303,8 +332,13 @@ def run_lorelei_chapter(
                     else ItemId.FULL_RESTORE
                 )
             if _bag(emulator).get(item, 0) == 0:
+                inventory = _bag(emulator)
                 raise LoreleiChapterError(
-                    "Lorelei exhausted the bounded recovery reserve."
+                    "Lorelei exhausted the bounded recovery reserve: "
+                    f"hp={raw.first_party_hp}/{raw.first_party_max_hp}, "
+                    f"status={raw.first_party_status}, enemy="
+                    f"{(raw.enemy_species_id, raw.enemy_hp, raw.enemy_max_hp)!r}, "
+                    f"pp={raw.first_party_pp!r}, bag={inventory!r}."
                 ) from error
             try:
                 _battle_healing_item(
@@ -348,6 +382,7 @@ def run_lorelei_chapter(
         final_raw=final,
         turns=tuple(turns),
         party=_encounter_party(turns),
+        x_accuracy_used=accuracy_before - _bag(emulator).get(ItemId.X_ACCURACY, 0),
         hyper_potions_used=hyper_before - _bag(emulator).get(ItemId.HYPER_POTION, 0),
         full_restores_used=restore_before - _bag(emulator).get(ItemId.FULL_RESTORE, 0),
         party_hp=_party_hp(emulator),
@@ -360,6 +395,43 @@ def run_lorelei_chapter(
     if not report.passed:
         raise LoreleiChapterError(f"Lorelei terminal evidence failed: {report!r}.")
     return report
+
+
+def _battle_x_accuracy(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+) -> None:
+    raw = reader.read()
+    if (
+        raw.battle_state != 2
+        or reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN
+    ):
+        raise LoreleiChapterError("X Accuracy gate requires the trainer MAIN menu.")
+    before = _bag(emulator).get(ItemId.X_ACCURACY, 0)
+    if before < 1:
+        raise LoreleiChapterError("Lorelei requires an X Accuracy.")
+    _select_battle_main_command(actions, reader, 1)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _select_bag_item(
+        actions,
+        emulator,
+        ItemId.X_ACCURACY,
+        DEFAULT_LAVENDER_TIMING,
+    )
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(30):
+        current = reader.read()
+        if (
+            current.battle_state == 2
+            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+        ):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM)
+    else:
+        raise LoreleiChapterError("X Accuracy did not return to the MAIN battle menu.")
+    if before - _bag(emulator).get(ItemId.X_ACCURACY, 0) != 1:
+        raise LoreleiChapterError("X Accuracy quantity did not decrement exactly once.")
 
 
 def _checkpoint(

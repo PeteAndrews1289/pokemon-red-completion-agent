@@ -4,16 +4,18 @@ from types import SimpleNamespace
 import pytest
 
 from pokemon_red_completion.actions import MacroActionKind
-from pokemon_red_completion.observation import Badge, EventFlag, MapId, RawGameState
+from pokemon_red_completion.observation import Badge, EventFlag, ItemId, MapId, RawGameState
 from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
     ROOF_GIRL_X,
     ROOF_GIRL_Y,
     ROOF_NERD_X,
     ROOF_NERD_Y,
+    ROUTE_7_CONNECTION_TO_GATE,
     SAFFRON_CENTER_APPROACH,
     SAFFRON_WARP_COORDINATES,
     SILPH_CHECKPOINT_COUNT,
+    SILPH_PC_DEPOSIT_ITEMS,
     THIRD_FLOOR_GUARD,
     SilphChapterReport,
     SilphCheckpoint,
@@ -22,6 +24,7 @@ from pokemon_red_completion.silph import (
     _move_verified,
     _plan_saffron_center_approach,
     _plan_saffron_route,
+    _silph_rival_move_slot,
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
@@ -62,9 +65,10 @@ def _report() -> SilphChapterReport:
             SilphCheckpoint(str(index), str(index), raw) for index in range(SILPH_CHECKPOINT_COUNT)
         ),
         final_raw=raw,
-        money_before=37_047,
-        money_after=36_596,
+        money_before=32_047,
+        money_after=30_096,
         tm13_event=True,
+        tm13_preinstalled=False,
         tm13_transfer_before_event=True,
         other_roof_rewards_untouched=True,
         fresh_water_after_reward=0,
@@ -72,8 +76,10 @@ def _report() -> SilphChapterReport:
         upgraded_moves=(0x82, 0x46, 0x3A, 0x39),
         upgraded_pp=(15, 15, 10, 15),
         rival_potions_used=0,
-        hyper_potions_remaining=6,
+        rival_x_special_used=1,
+        hyper_potions_remaining=7,
         max_repel_remaining=0,
+        route_items_archived=True,
         card_key_quantity=1,
         master_ball_quantity=1,
         required_events=tuple((int(event), True) for event in events),
@@ -89,6 +95,7 @@ def _report() -> SilphChapterReport:
 
 
 def test_silph_timing_is_positive_and_bounded() -> None:
+    assert SILPH_PC_DEPOSIT_ITEMS == (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
     for field in fields(SilphTiming):
         assert getattr(DEFAULT_SILPH_TIMING, field.name) > 0
         with pytest.raises(ValueError, match=field.name):
@@ -162,6 +169,46 @@ def test_silph_saffron_planner_supports_gym_target() -> None:
     assert SAFFRON_WARP_COORDINATES.isdisjoint(visited)
 
 
+def test_route_7_return_uses_reversible_lower_corridor() -> None:
+    coordinate = (0, 3)
+    deltas = {"up": (0, -1), "down": (0, 1), "left": (-1, 0), "right": (1, 0)}
+    visited = {coordinate}
+    for direction in ROUTE_7_CONNECTION_TO_GATE:
+        dx, dy = deltas[direction]
+        coordinate = coordinate[0] + dx, coordinate[1] + dy
+        visited.add(coordinate)
+
+    assert coordinate == (11, 10)
+    assert (9, 3) not in visited
+    assert (4, 8) in visited
+
+
+def test_silph_rival_policy_uses_live_disable_and_pp() -> None:
+    surf_disabled = replace(
+        _terminal(),
+        enemy_species_id=0x10,
+        first_party_pp=(15, 15, 10, 15),
+        player_disabled_move_slot=4,
+        player_disable_turns=3,
+    )
+    assert _silph_rival_move_slot(surf_disabled) == 2
+
+    ice_beam_disabled = replace(
+        surf_disabled,
+        enemy_species_id=154,
+        player_disabled_move_slot=3,
+    )
+    assert _silph_rival_move_slot(ice_beam_disabled) == 4
+
+    surf_empty = replace(
+        surf_disabled,
+        player_disabled_move_slot=0,
+        player_disable_turns=0,
+        first_party_pp=(15, 15, 10, 0),
+    )
+    assert _silph_rival_move_slot(surf_empty) == 2
+
+
 def test_roof_girl_interaction_retries_until_dialogue_opens() -> None:
     raw = replace(
         _terminal(),
@@ -202,6 +249,7 @@ def test_roof_girl_interaction_retries_until_dialogue_opens() -> None:
         Reader(),  # type: ignore[arg-type]
         Emulator(),  # type: ignore[arg-type]
         replace(DEFAULT_SILPH_TIMING, movement_frames=1, menu_frames=1),
+        reward_started=lambda: False,
     )
 
     interactions = sum(
@@ -211,14 +259,68 @@ def test_roof_girl_interaction_retries_until_dialogue_opens() -> None:
     assert interactions == 2
 
 
+def test_roof_girl_interaction_accepts_reward_evidence_when_readiness_stays_true() -> None:
+    raw = replace(
+        _terminal(),
+        map_id=MapId.CELADON_MART_ROOF,
+        player_x=4,
+        player_y=5,
+    )
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return raw
+
+        def read_input_readiness(self) -> object:
+            return SimpleNamespace(ready=True)
+
+    class Emulator:
+        def read_u8(self, address: int) -> int:
+            return {
+                ROOF_GIRL_X: 9,
+                ROOF_GIRL_Y: 9,
+                ROOF_NERD_X: 14,
+                ROOF_NERD_Y: 8,
+            }[address]
+
+    class Executor:
+        def __init__(self) -> None:
+            self.actions: list[object] = []
+
+        def execute(self, action: object) -> None:
+            self.actions.append(action)
+
+    executor = Executor()
+
+    def reward_started() -> bool:
+        return (
+            sum(
+                getattr(action, "kind", None) is MacroActionKind.INTERACT
+                for action in executor.actions
+            )
+            >= 3
+        )
+
+    _interact_with_roof_girl(
+        executor,  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        Emulator(),  # type: ignore[arg-type]
+        replace(DEFAULT_SILPH_TIMING, movement_frames=1, menu_frames=1),
+        reward_started=reward_started,
+    )
+
+    assert reward_started()
+
+
 def test_silph_report_proves_required_story_and_terminal() -> None:
     report = _report()
     assert report.passed
     assert report.public_dict()["supply"] == {
-        "hyper_potions_bought": 6,
+        "hyper_potions_bought": 7,
         "used_by_rival_policy": 0,
-        "remaining": 6,
-        "max_repel_bought": 1,
+        "x_special_used_by_rival_policy": 1,
+        "remaining": 7,
+        "max_repel_bought": 0,
         "max_repel_remaining": 0,
     }
     assert THIRD_FLOOR_GUARD == (
@@ -233,12 +335,25 @@ def test_silph_report_proves_required_story_and_terminal() -> None:
     )
 
 
+def test_silph_report_accepts_the_pre_erika_ice_beam_upgrade() -> None:
+    report = replace(
+        _report(),
+        money_after=30_296,
+        tm13_preinstalled=True,
+        tm13_transfer_before_event=False,
+    )
+
+    assert report.passed
+    assert report.public_dict()["ice_beam_upgrade"]["preinstalled_before_silph"] is True
+
+
 @pytest.mark.parametrize(
     ("field_name", "value"),
     (
         ("rival_potions_used", 2),
         ("hyper_potions_remaining", 4),
         ("max_repel_remaining", 1),
+        ("route_items_archived", False),
         ("tm13_event", False),
         ("tm13_transfer_before_event", False),
         ("other_roof_rewards_untouched", False),

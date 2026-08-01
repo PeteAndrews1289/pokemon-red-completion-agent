@@ -1,7 +1,12 @@
 from pokemon_red_completion.blaine import (
+    BLAINE_CAPACITY_SALE_ITEM,
     BLAINE_CHECKPOINT_COUNT,
+    BLAINE_INPUT_BAG_SLOTS,
+    BLAINE_MAX_WILD_FLEES,
+    BLAINE_MONEY_DELTA,
     BLAINE_PARTY,
     BLAINE_TO_GYM_EXIT,
+    CENTER_TO_MANSION,
     GYM_GATE_EVENTS,
     GYM_QUIZ_ROUTES,
     GYM_RETURN_TO_BLAINE,
@@ -11,6 +16,7 @@ from pokemon_red_completion.blaine import (
     MANSION_B1F_TO_NORTH_STATUE,
     MANSION_B1F_TO_SECRET_KEY,
     MANSION_TRAINER_EVENTS,
+    MANSION_TRAINING_POLICY,
     QUIZ_ANSWERS,
     QUIZ_TEXT_PULSES,
     BlaineTurn,
@@ -20,7 +26,7 @@ from pokemon_red_completion.observation import EventFlag, ItemId, MapId
 
 
 def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
-    assert BLAINE_CHECKPOINT_COUNT == 8
+    assert BLAINE_CHECKPOINT_COUNT == 9
     assert len(MANSION_1F_TO_3F) == 36
     assert len(MANSION_3F_TO_B1F) == 34
     assert len(MANSION_B1F_TO_NORTH_STATUE) == 54
@@ -29,6 +35,21 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert QUIZ_ANSWERS == (True, False, False, False, True, False)
     assert QUIZ_TEXT_PULSES == (9, 10, 9, 11, 11, 9)
     assert len(BLAINE_TO_GYM_EXIT) == len(GYM_RETURN_TO_BLAINE) == 59
+    assert BLAINE_CAPACITY_SALE_ITEM is ItemId.ANTIDOTE
+    assert BLAINE_INPUT_BAG_SLOTS == 19
+    assert BLAINE_MONEY_DELTA == 5_003
+    assert BLAINE_MAX_WILD_FLEES == 3
+    assert CENTER_TO_MANSION == (
+        ("down",) * 5
+        + ("right",) * 7
+        + ("up",) * 7
+        + ("left", "up")
+        + ("left",) * 11
+        + ("up",)
+    )
+    assert MANSION_TRAINING_POLICY.target_level == 55
+    assert MANSION_TRAINING_POLICY.preferred_move_slots == (4, 2, 3, 1)
+    assert MANSION_TRAINING_POLICY.max_battles == 180
 
 
 def test_blaine_source_ids_are_exact() -> None:
@@ -39,6 +60,7 @@ def test_blaine_source_ids_are_exact() -> None:
     assert MapId.POKEMON_MANSION_3F == 0xD7
     assert MapId.POKEMON_MANSION_B1F == 0xD8
     assert ItemId.SECRET_KEY == 0x2B
+    assert ItemId.TM14_BLIZZARD == 0xD6
     assert ItemId.TM38_FIRE_BLAST == 0xEE
     assert EventFlag.MANSION_SWITCH_ON == 0x278
     assert EventFlag.GOT_TM38 == 0x298

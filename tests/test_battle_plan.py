@@ -133,6 +133,7 @@ _EXPECTED_SOURCE_MEMBER_LEDGER = {
         "SILPH_11F_GIOVANNI",
         "SILPH_7F_RIVAL",
         "SILPH_7F_RIVAL",
+        "SILPH_7F_RIVAL",
     ),
     "sabrina.py": ("SABRINA_LEADER",),
     "blaine.py": ("BLAINE_LEADER",),

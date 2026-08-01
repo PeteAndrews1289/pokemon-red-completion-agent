@@ -1,8 +1,12 @@
+from dataclasses import replace
+
 from pokemon_red_completion.observation import ItemId, MapId, RawGameState
 from pokemon_red_completion.sabrina import (
+    ALAKAZAM_HYPER_POTION_THRESHOLD,
     CENTER_TO_GYM,
     CITY_TO_CENTER,
     GYM_TO_SABRINA,
+    MAX_SABRINA_HYPER_POTIONS,
     PC_DEPOSIT_ITEMS,
     SABRINA_BATTLE_TIMING,
     SABRINA_PARTY,
@@ -10,6 +14,7 @@ from pokemon_red_completion.sabrina import (
     SabrinaTurn,
     _encounter_party,
     _sabrina_move_slot,
+    _sabrina_recovery_required,
 )
 
 
@@ -48,7 +53,8 @@ def test_sabrina_routes_are_source_and_live_stable() -> None:
     assert len(CITY_TO_CENTER) == 62
     assert SABRINA_BATTLE_TIMING.max_attack_confirmation_pulses == 6
     assert SABRINA_BATTLE_TIMING.max_pp_confirmation_pulses == 12
-    assert PC_DEPOSIT_ITEMS == (ItemId.SS_TICKET, ItemId.LIFT_KEY)
+    assert MAX_SABRINA_HYPER_POTIONS == 7
+    assert PC_DEPOSIT_ITEMS == (ItemId.SILPH_SCOPE, ItemId.CARD_KEY)
 
 
 def test_sabrina_turn_receipts_preserve_party_transitions() -> None:
@@ -62,6 +68,25 @@ def test_sabrina_turn_receipts_preserve_party_transitions() -> None:
     )
     assert _encounter_party(turns) == SABRINA_PARTY
     assert tuple(turn.move_slot for turn in turns) == (2, 2, 3, 3, 3, 2)
+
+
+def test_sabrina_uses_a_larger_observed_safety_margin_for_alakazam() -> None:
+    assert ALAKAZAM_HYPER_POTION_THRESHOLD == 110
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.SAFFRON_GYM,
+        player_x=9,
+        player_y=8,
+        party_count=3,
+        battle_state=2,
+        first_party_hp=90,
+    )
+    assert not _sabrina_recovery_required(
+        replace(raw, enemy_species_id=0x26)
+    )
+    assert _sabrina_recovery_required(
+        replace(raw, enemy_species_id=0x95)
+    )
 
 
 def test_sabrina_policy_avoids_a_live_disabled_move() -> None:

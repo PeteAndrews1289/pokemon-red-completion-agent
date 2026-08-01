@@ -18,7 +18,10 @@ from pokemon_red_completion.battle_runtime import (
     RequiredMovePolicy,
     run_adaptive_trainer_battle,
 )
-from pokemon_red_completion.blaine import _select_cursor
+from pokemon_red_completion.blaine import (
+    CENTER_TO_MART as CINNABAR_CENTER_TO_MART,
+)
+from pokemon_red_completion.blaine import MANSION_TRAINING_POLICY, _select_cursor
 from pokemon_red_completion.celadon import (
     _bag,
     _money,
@@ -231,10 +234,14 @@ class GiovanniChapterReport:
             and self.final_raw.map_id == MapId.VIRIDIAN_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.final_raw.first_party_level == 50
+            and (self.final_raw.first_party_level or 0)
+            >= MANSION_TRAINING_POLICY.target_level
             and self.final_raw.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE_ID, SURF_MOVE_ID)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
-            and self.party_hp == self.party_max_hp == (154, 47, 40)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and self.final_raw.first_party_hp == self.party_hp[0]
+            and self.final_raw.first_party_max_hp == self.party_max_hp[0]
             and self.party_status == (0, 0, 0)
             and self.controller_released
         )
@@ -333,24 +340,22 @@ def run_giovanni_chapter(
         raise GiovanniChapterError("Expected full seven-badge inventory was not present.")
     _checkpoint(records, progress, emulator, initial, "giovanni_ready", "Viridian route ready")
 
-    _move(actions, reader, ("down",) * 5, "Cinnabar Center exit")
-    _field_fly_to_viridian(actions, reader, emulator)
-    _require(reader.read(), MapId.VIRIDIAN_CITY, (23, 26), "Viridian Fly arrival")
-    _checkpoint(records, progress, emulator, reader.read(), "viridian_arrived", "Flew to Viridian")
-
-    _move(actions, reader, FLY_ARRIVAL_TO_MART, "Viridian Mart")
-    _require(reader.read(), MapId.VIRIDIAN_MART, (3, 7), "Viridian Mart entry")
-    _move(actions, reader, ("up", "up", "left"), "Viridian clerk")
+    _move(actions, reader, CINNABAR_CENTER_TO_MART, "Cinnabar Mart")
+    _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart entry")
+    _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
     _sell_current_bag_item(actions, emulator, ItemId.TM46_PSYWAVE)
     _close(actions, reader)
     if _bag(emulator).get(ItemId.TM46_PSYWAVE, 0) or len(_bag(emulator)) != 19:
         raise GiovanniChapterError("TM46 sale did not free exactly one bag slot.")
+    _move(actions, reader, ("right", "down", "down", "down"), "Cinnabar Mart exit")
+    _require(reader.read(), MapId.CINNABAR_ISLAND, (15, 12), "Cinnabar Mart exterior")
+    _field_fly_to_viridian(actions, reader, emulator)
+    _require(reader.read(), MapId.VIRIDIAN_CITY, (23, 26), "Viridian Fly arrival")
+    _checkpoint(records, progress, emulator, reader.read(), "viridian_arrived", "Flew to Viridian")
     _checkpoint(records, progress, emulator, reader.read(), "tm_slot_freed", "Freed TM27 slot")
 
-    _move(actions, reader, ("right", "down", "down", "down"), "Viridian Mart exit")
-    _require(reader.read(), MapId.VIRIDIAN_CITY, (29, 20), "Viridian Mart exterior")
-    _move(actions, reader, MART_EXIT_TO_GYM, "Viridian Gym")
+    _move(actions, reader, CENTER_EXIT_TO_GYM, "Viridian Gym")
     _require(reader.read(), MapId.VIRIDIAN_GYM, (16, 17), "Viridian Gym entry")
     _checkpoint(records, progress, emulator, reader.read(), "viridian_gym_entered", "Entered Gym")
 

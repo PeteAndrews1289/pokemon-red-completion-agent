@@ -20,7 +20,9 @@ from pokemon_red_completion.battle_runtime import (
     _confirm_attack_with_pp_gate,
     bind_battle_decision_observer,
     bind_battle_schedule_observer,
+    recovery_action_due,
     run_adaptive_trainer_battle,
+    run_adaptive_wild_battle,
 )
 from pokemon_red_completion.battle_schedule import (
     BattleScheduleError,
@@ -160,6 +162,26 @@ class ImmediateBattleExitRuntime(FakeRuntime):
         if self.reads == 2:
             self.raw = replace(self.raw, battle_state=0)
         return self.raw
+
+
+def test_wild_runtime_accepts_truthful_wild_state_and_restores_trainer_default() -> None:
+    wild = ImmediateBattleExitRuntime()
+    wild.raw = replace(wild.raw, battle_state=1)
+    final = run_adaptive_wild_battle(
+        wild,
+        wild,
+        lambda _raw: 4,
+        expected_map=MapId.CERULEAN_CITY,
+    )
+    assert final.battle_state == 0
+
+    trainer = ImmediateBattleExitRuntime()
+    assert run_adaptive_trainer_battle(
+        trainer,
+        trainer,
+        lambda _raw: 4,
+        expected_map=MapId.CERULEAN_CITY,
+    ).battle_state == 0
 
 
 class RecordingDecisionObserver:
@@ -1257,6 +1279,54 @@ def test_opponent_recoil_ko_before_selected_move_preserves_pp() -> None:
     assert final.first_party_pp == (35, 30, 30, 11)
 
 
+def test_wild_selfdestruct_exit_can_preserve_selected_move_pp() -> None:
+    runtime = FakeRuntime(raw=_raw(battle_state=1))
+
+    def selfdestruct_before_player_move(action: MacroAction) -> None:
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        if runtime.menu.phase is BattleMenuPhase.MAIN:
+            runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+        elif runtime.menu.phase is BattleMenuPhase.MOVE:
+            runtime.raw = replace(runtime.raw, battle_state=0)
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+            runtime.controls = READY
+
+    runtime.on_action = selfdestruct_before_player_move
+    final = run_adaptive_wild_battle(
+        runtime,
+        runtime,
+        lambda _raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
+    )
+
+    assert final.battle_state == 0
+    assert final.first_party_pp == (35, 30, 30, 11)
+
+
+def test_trainer_exit_without_selected_move_pp_still_fails_closed() -> None:
+    runtime = FakeRuntime()
+
+    def unexplained_exit(action: MacroAction) -> None:
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        if runtime.menu.phase is BattleMenuPhase.MAIN:
+            runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+        elif runtime.menu.phase is BattleMenuPhase.MOVE:
+            runtime.raw = replace(runtime.raw, battle_state=0)
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+            runtime.controls = READY
+
+    runtime.on_action = unexplained_exit
+    with pytest.raises(BattleRuntimeError, match="ended without"):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda _raw: 1,
+            expected_map=MapId.CERULEAN_CITY,
+        )
+
+
 def test_stale_main_after_pp_decrement_uses_cancel_without_spending_twice() -> None:
     runtime = FakeRuntime()
     policy_calls = 0
@@ -1405,6 +1475,10 @@ def test_attack_rejects_pp_change_larger_than_one() -> None:
             lambda _raw: 1,
             expected_map=MapId.CERULEAN_CITY,
         )
+
+
+def test_default_pp_confirmation_window_covers_long_status_dialogue() -> None:
+    assert BattleRuntimeTiming().max_pp_confirmation_pulses == 12
 
 
 def test_faster_enemy_attack_text_is_confirmed_until_latched_move_spends_pp() -> None:
@@ -1711,6 +1785,37 @@ def test_status_suppressed_turn_can_return_without_spending_pp() -> None:
     assert final.first_party_pp == (35, 30, 30, 11)
 
 
+def test_enemy_trapping_turn_can_suppress_move_selection_without_spending_pp() -> None:
+    runtime = FakeRuntime(raw=replace(_raw(), enemy_using_trapping_move=True))
+    confirmations = 0
+
+    def trap_then_finish(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        else:
+            runtime.raw = replace(
+                runtime.raw,
+                battle_state=0,
+                enemy_using_trapping_move=None,
+            )
+            runtime.controls = READY
+
+    runtime.on_action = trap_then_finish
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        lambda _raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
+    )
+
+    assert final.battle_state == 0
+    assert final.first_party_pp == (35, 30, 30, 11)
+
+
 def test_faster_opponent_disable_suppresses_selected_turn_without_pp() -> None:
     runtime = FakeRuntime(
         menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
@@ -1745,6 +1850,33 @@ def test_faster_opponent_disable_suppresses_selected_turn_without_pp() -> None:
     assert runtime.raw.player_disabled_move_slot == 1
 
 
+def test_faster_opponent_trapping_move_suppresses_selected_turn_without_pp() -> None:
+    runtime = FakeRuntime(
+        menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+    )
+    initial = runtime.raw
+
+    def trap_before_selected_move(action: MacroAction) -> None:
+        if action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(runtime.raw, enemy_using_trapping_move=True)
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    runtime.on_action = trap_before_selected_move
+    _confirm_attack_with_pp_gate(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        initial_raw=initial,
+        slot=1,
+        initial_pp=35,
+        timing=BattleRuntimeTiming(),
+        label="faster trapping move",
+    )
+
+    assert runtime.raw.first_party_pp == initial.first_party_pp
+    assert runtime.raw.enemy_using_trapping_move is True
+
+
 def test_completion_rechecks_living_lead_before_returning() -> None:
     runtime = FakeRuntime(
         raw=_raw(battle_state=0, hp=0),
@@ -1758,6 +1890,30 @@ def test_completion_rechecks_living_lead_before_returning() -> None:
             lambda _raw: 1,
             expected_map=MapId.CERULEAN_CITY,
         )
+
+
+def test_recovery_gate_requires_an_actor_decision_between_items() -> None:
+    assert recovery_action_due(
+        hp=40,
+        status=0,
+        safe_hp=100,
+        decisions_made=5,
+        last_recovery_decision=4,
+    )
+    assert not recovery_action_due(
+        hp=40,
+        status=0,
+        safe_hp=100,
+        decisions_made=5,
+        last_recovery_decision=5,
+    )
+    assert not recovery_action_due(
+        hp=120,
+        status=0x40,
+        safe_hp=100,
+        decisions_made=5,
+        last_recovery_decision=5,
+    )
 
 
 @pytest.mark.parametrize(

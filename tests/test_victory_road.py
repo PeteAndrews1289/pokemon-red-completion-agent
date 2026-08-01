@@ -1,15 +1,23 @@
-from pokemon_red_completion.observation import EventFlag, ItemId, MapId
+from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGameState
 from pokemon_red_completion.victory_road import (
     BADGE_CHECK_EVENTS,
     CENTER_TO_ROUTE_22,
     EARTH_APPROACH,
+    INDIGO_FULL_RESTORE_RESERVE,
+    INDIGO_X_SPECIAL_PURCHASE,
+    INDIGO_X_SPECIAL_RESERVE,
     RIVAL_PARTY,
     RIVAL_POLICY,
+    ROUTE_22_DEFAULT_HEAL_THRESHOLD,
+    ROUTE_22_PROACTIVE_PIVOT_SPECIES,
     ROUTE_22_TO_GATE,
     ROUTE_22_TO_RIVAL,
+    ROUTE_22_VENUSAUR_HEAL_THRESHOLD,
     ROUTE_23_TO_INDIGO,
     SAFFRON_TO_MART,
     VICTORY_ROAD_CHECKPOINT_COUNT,
+    VICTORY_ROAD_INPUT_HYPER_POTION_BOUNDS,
+    VICTORY_ROAD_MAX_REPEL_PURCHASE,
     VIRIDIAN_TO_ROUTE_22,
     VR1_TO_2F,
     VR2_FINAL_TO_3F,
@@ -18,6 +26,8 @@ from pokemon_red_completion.victory_road import (
     VR3_SWITCH_TO_HOLE,
     RivalTurn,
     _encounter_party,
+    _rival_moves_valid,
+    _route22_rival_move_slot,
 )
 
 
@@ -35,6 +45,11 @@ def test_victory_road_routes_are_live_qualified() -> None:
     assert len(VR2_FINAL_TO_3F) == 17
     assert len(VR3_SOUTHEAST_TO_2F) == 8
     assert len(ROUTE_23_TO_INDIGO) == 45
+    assert VICTORY_ROAD_MAX_REPEL_PURCHASE == 2
+    assert VICTORY_ROAD_INPUT_HYPER_POTION_BOUNDS == (0, 7)
+    assert INDIGO_FULL_RESTORE_RESERVE == 10
+    assert INDIGO_X_SPECIAL_RESERVE == 8
+    assert INDIGO_X_SPECIAL_PURCHASE == 8
 
 
 def test_victory_road_source_ids_are_exact() -> None:
@@ -64,4 +79,35 @@ def test_route22_rival_receipt_matches_source_party_and_policy() -> None:
         for species, level in RIVAL_PARTY
     )
     assert _encounter_party(turns) == RIVAL_PARTY
-    assert tuple(turn.move_slot for turn in turns) == (3, 4, 3, 4, 4, 3)
+    assert tuple(turn.move_slot for turn in turns) == (3, 4, 3, 4, 2, 3)
+    assert _rival_moves_valid(turns)
+    assert ROUTE_22_DEFAULT_HEAL_THRESHOLD == 100
+    assert frozenset({0x9A}) == ROUTE_22_PROACTIVE_PIVOT_SPECIES
+    assert ROUTE_22_VENUSAUR_HEAL_THRESHOLD == 120
+
+
+def test_route22_rival_policy_uses_physical_alakazam_attack_and_disable_fallback() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.ROUTE_22,
+        player_x=30,
+        player_y=5,
+        party_count=3,
+        battle_state=2,
+        enemy_species_id=0x95,
+        first_party_pp=(10, 15, 10, 15),
+    )
+    assert _route22_rival_move_slot(raw) == 2
+    disabled = RawGameState(
+        game_started=True,
+        map_id=MapId.ROUTE_22,
+        player_x=30,
+        player_y=5,
+        party_count=3,
+        battle_state=2,
+        enemy_species_id=0x95,
+        first_party_pp=(10, 15, 10, 15),
+        player_disabled_move_slot=2,
+        player_disable_turns=3,
+    )
+    assert _route22_rival_move_slot(disabled) == 4

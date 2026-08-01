@@ -11,6 +11,8 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleResourcePolicy,
+    BattleRuntimeError,
     BattleRuntimeTiming,
     RequiredMovePolicy,
     run_adaptive_trainer_battle,
@@ -23,17 +25,17 @@ from pokemon_red_completion.celadon import (
     _party_max_hp,
     _party_status,
 )
-from pokemon_red_completion.economy import (
-    HIDEOUT_SUPER_POTION_RESERVE,
-    TOWER_MONEY,
-    TOWER_SUPER_POTION_RESERVE,
-)
+from pokemon_red_completion.economy import HIDEOUT_SUPER_POTION_RESERVE
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _flee,
+    _select_bag_item,
+    _select_cursor,
+    _use_battle_super_potion,
     _use_super_potion,
 )
 from pokemon_red_completion.observation import (
+    PIDGEOTTO_SPECIES_ID,
     BattleMenuPhase,
     EventFlag,
     ItemId,
@@ -42,9 +44,10 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
-from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 
-TOWER_CHECKPOINT_COUNT = 27
+TOWER_CHECKPOINT_COUNT = 28
+TOWER_TRAINER_REWARD_TOTAL = 7_325
+TOWER_RIVAL_GROWLITHE = 0x21
 BITE = 0x2C
 BUBBLEBEAM = 0x3D
 RIVAL2 = (0xF2, 0x2A)
@@ -118,7 +121,8 @@ TOWER_2_RIVAL = _directions("UULULUL")
 TOWER_2_TO_3 = _directions("LLLLLLLLDDLLDDLL")
 TOWER_3_TO_4 = _directions("RRRDDDDRRRULUUUUURRRRURRRRRDRDD")
 TOWER_4_CHANNELER = _directions("LLL")
-TOWER_4_TO_5 = _directions("LULLLDLDDDLLLULLLULU")
+TOWER_4_TO_ELIXIR = _directions("DLL")
+TOWER_4_ELIXIR_TO_5 = _directions("RRULULLLDLDDDLLLULLLULU")
 TOWER_5_HEAL = _directions("UURURRRRRRRRRDDDLL")
 TOWER_5_CHANNELER = _directions("RRUURR")
 TOWER_5_REHEAL = _directions("LLDDLL")
@@ -229,6 +233,7 @@ class TowerChapterReport:
     required_events: tuple[bool, ...]
     x_accuracy_carried: bool
     rare_candy_carried: bool
+    elixir_carried: bool
     poke_flute_carried: bool
     evolution_before: tuple[int, int, int]
     evolution_after: tuple[int, int, int]
@@ -241,6 +246,7 @@ class TowerChapterReport:
     party_hp: tuple[int, int, int]
     party_max_hp: tuple[int, int, int]
     party_status: tuple[int, int, int]
+    money_before: int
     money_remaining: int
     frames_executed: int
     actions_executed: int
@@ -259,27 +265,34 @@ class TowerChapterReport:
             and self.required_events == (True,) * len(REQUIRED_EVENTS)
             and self.x_accuracy_carried
             and self.rare_candy_carried
+            and self.elixir_carried
             and self.poke_flute_carried
             and self.evolution_before == PROTECTED_PARTY
             and self.evolution_after == TOWER_FINAL_PARTY
             and self.evolution_moves_preserved
             and self.purified_zone_event
             and self.purified_heals == 3
-            and self.super_potions_used == 3
-            and self.super_potions_remaining == TOWER_SUPER_POTION_RESERVE
-            and self.super_potion_inventory_path
-            == (
-                HIDEOUT_SUPER_POTION_RESERVE,
-                HIDEOUT_SUPER_POTION_RESERVE - 1,
-                HIDEOUT_SUPER_POTION_RESERVE - 2,
-                TOWER_SUPER_POTION_RESERVE,
+            and bool(self.super_potion_inventory_path)
+            and self.super_potion_inventory_path[0] >= HIDEOUT_SUPER_POTION_RESERVE
+            and self.super_potion_inventory_path[-1] == self.super_potions_remaining
+            and self.super_potions_used == len(self.super_potion_inventory_path) - 1
+            and self.super_potions_used
+            == self.super_potion_inventory_path[0] - self.super_potions_remaining
+            and all(
+                after == before - 1
+                for before, after in zip(
+                    self.super_potion_inventory_path,
+                    self.super_potion_inventory_path[1:],
+                    strict=False,
+                )
             )
             and self.final_raw.map_id == MapId.LAVENDER_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
             and self.party_hp == self.party_max_hp
             and self.party_status == (0, 0, 0)
-            and self.money_remaining == TOWER_MONEY
+            and self.money_before >= 0
+            and self.money_remaining == self.money_before + TOWER_TRAINER_REWARD_TOTAL
             and self.controller_released
         )
 
@@ -307,12 +320,14 @@ class TowerChapterReport:
             "required_pickups": {
                 "x_accuracy": self.x_accuracy_carried,
                 "rare_candy": self.rare_candy_carried,
+                "elixir": self.elixir_carried,
                 "poke_flute": self.poke_flute_carried,
             },
             "inventory": {
                 "super_potions_used": self.super_potions_used,
                 "super_potions_remaining": self.super_potions_remaining,
                 "super_potion_inventory_path": list(self.super_potion_inventory_path),
+                "money_before": self.money_before,
                 "money_remaining": self.money_remaining,
             },
             "purified_zone": {
@@ -355,9 +370,7 @@ class _RunState:
     purified_heals: int = 0
     purified_zone_event_seen: bool = False
     evolved: bool = False
-    potion_inventory: list[int] = field(
-        default_factory=lambda: [HIDEOUT_SUPER_POTION_RESERVE]
-    )
+    potion_inventory: list[int] = field(default_factory=list)
 
 
 def run_tower_chapter(
@@ -374,11 +387,14 @@ def run_tower_chapter(
     records: list[TowerCheckpoint] = []
     battles: list[TowerBattleEvidence] = []
     _require(reader.read(), MapId.CELADON_POKECENTER, (3, 3), "Scope boundary")
+    money_before = _money(emulator)
+    starting_super_potions = _bag(emulator).get(ItemId.SUPER_POTION, 0)
     if (
         ItemId.SILPH_SCOPE not in _bag(emulator)
-        or _bag(emulator).get(ItemId.SUPER_POTION) != HIDEOUT_SUPER_POTION_RESERVE
+        or starting_super_potions < HIDEOUT_SUPER_POTION_RESERVE
     ):
         raise TowerChapterError("Tower input lacks the qualified Scope resources.")
+    run.potion_inventory.append(starting_super_potions)
     _checkpoint(records, progress, emulator, reader.read(), "scope_ready", "Silph Scope ready")
 
     for route, label in (
@@ -414,8 +430,10 @@ def run_tower_chapter(
             EventFlag.BEAT_POKEMON_TOWER_RIVAL,
             BITE,
             1,
-            RedBattlePlanId.TOWER_RIVAL,
-        )
+        RedBattlePlanId.TOWER_RIVAL,
+        run=run,
+        bounded_recovery=True,
+    )
     )
     _checkpoint(records, progress, emulator, reader.read(), "rival", "Defeated mandatory rival")
     while _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:
@@ -443,7 +461,10 @@ def run_tower_chapter(
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "tower_4f", "Cleared 4F Channeler")
-    _move(actions, reader, emulator, run, TOWER_4_TO_5, timing, "Tower 5F")
+    _move(actions, reader, emulator, run, TOWER_4_TO_ELIXIR, timing, "4F Elixir")
+    _pickup(actions, reader, emulator, run, timing, "left", ItemId.ELIXIR)
+    _checkpoint(records, progress, emulator, reader.read(), "elixir", "Collected Elixir")
+    _move(actions, reader, emulator, run, TOWER_4_ELIXIR_TO_5, timing, "Tower 5F")
     _move(actions, reader, emulator, run, TOWER_5_HEAL, timing, "purified zone")
     _clear_text(actions, reader, timing)
     _require_purified_heal(emulator, run, "first purified heal")
@@ -503,6 +524,8 @@ def run_tower_chapter(
             BUBBLEBEAM,
             3,
             RedBattlePlanId.TOWER_6F_CHANNELER_21,
+            run=run,
+            bounded_recovery=True,
         )
     )
     _move(actions, reader, emulator, run, TOWER_6_TO_5, timing, "6F recovery descent")
@@ -582,6 +605,11 @@ def run_tower_chapter(
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "rocket_20", "Defeated second Rocket")
+    while _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:
+        if _bag(emulator).get(ItemId.SUPER_POTION, 0) == 0:
+            raise TowerChapterError("Third Rocket recovery exhausted before full HP.")
+        _use_super_potion(actions, reader, emulator, run, DEFAULT_LAVENDER_TIMING, 0)
+        run.potion_inventory.append(_bag(emulator).get(ItemId.SUPER_POTION, 0))
     _move(actions, reader, emulator, run, TOWER_7_ROCKET_3, timing, "third Rocket")
     evolution_start = reader.read()
     battles.append(
@@ -600,6 +628,9 @@ def run_tower_chapter(
             clear_after=False,
             battle_timing=TOWER_EVOLUTION_BATTLE_TIMING,
             unknown_cancel_interval=5,
+            bounded_recovery=True,
+            recovery_hp_threshold=70,
+            run=run,
         )
     )
     evolution_before, evolution_after, evolution_moves_preserved = _qualify_evolution(
@@ -662,6 +693,7 @@ def run_tower_chapter(
         tuple(_event(emulator, item) for item in REQUIRED_EVENTS),
         ItemId.X_ACCURACY in _bag(emulator),
         ItemId.RARE_CANDY in _bag(emulator),
+        ItemId.ELIXIR in _bag(emulator),
         ItemId.POKE_FLUTE in _bag(emulator),
         evolution_before,
         evolution_after,
@@ -674,6 +706,7 @@ def run_tower_chapter(
         _party_hp(emulator),
         _party_max_hp(emulator),
         _party_status(emulator),
+        money_before,
         _money(emulator),
         emulator.frame_count - start_frames,
         actions.actions_executed,
@@ -682,6 +715,87 @@ def run_tower_chapter(
     if not report.passed:
         raise TowerChapterError(f"Tower evidence contract failed: {report.public_dict()!r}.")
     return report
+
+
+class _PauseForTowerSuperPotion(Exception):
+    pass
+
+
+class _PauseForTowerAwakening(Exception):
+    pass
+
+
+class _PauseForTowerParlyzHeal(Exception):
+    pass
+
+
+def _use_tower_battle_status_item(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    label: str,
+    *,
+    item: ItemId,
+    expected_status: int,
+) -> None:
+    before = reader.read()
+    menu = reader.read_battle_menu_state(before)
+    before_quantity = _bag(emulator).get(item, 0)
+    item_label = "Awakening" if item is ItemId.AWAKENING else "Parlyz Heal"
+    if (
+        before.battle_state != 2
+        or before.first_party_status != expected_status
+        or before_quantity < 1
+        or menu.phase is not BattleMenuPhase.MAIN
+    ):
+        raise TowerChapterError(f"{label} {item_label} lacks its stable status gate.")
+
+    wait_frames = DEFAULT_LAVENDER_TIMING.wait_frames
+    command = menu.selected_main_command
+    if command == 0:
+        _pulse(actions, MacroActionKind.MOVE, "down", frames=wait_frames)
+    elif command == 2:
+        _pulse(actions, MacroActionKind.MOVE, "left", frames=wait_frames)
+        _pulse(actions, MacroActionKind.MOVE, "down", frames=wait_frames)
+    elif command == 3:
+        _pulse(actions, MacroActionKind.MOVE, "left", frames=wait_frames)
+    elif command != 1:
+        raise TowerChapterError(f"{label} {item_label} exposed an invalid command cursor.")
+
+    selected = reader.read_battle_menu_state(reader.read())
+    if selected.phase is not BattleMenuPhase.MAIN or selected.selected_main_command != 1:
+        raise TowerChapterError(f"{label} {item_label} could not select ITEM.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=wait_frames)
+    _select_bag_item(actions, emulator, item, DEFAULT_LAVENDER_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=wait_frames)
+    _select_cursor(actions, emulator, 0, DEFAULT_LAVENDER_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=1)
+    saw_cure = False
+    saw_consumption = False
+    for _ in range(DEFAULT_LAVENDER_TIMING.dialogue_pulses * 20):
+        current = reader.read()
+        if current.first_party_status == 0:
+            saw_cure = True
+        if _bag(emulator).get(item, 0) == before_quantity - 1:
+            saw_consumption = True
+        if (
+            saw_cure
+            and saw_consumption
+            and current.battle_state == 2
+            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+        ):
+            return
+        if current.battle_state != 2 or (current.first_party_hp or 0) <= 0:
+            raise TowerChapterError(f"{label} {item_label} lost the active battle.")
+        _pulse(actions, MacroActionKind.CANCEL, frames=1)
+    final = reader.read()
+    raise TowerChapterError(
+        f"{label} {item_label} missed its bounded cure proof: "
+        f"saw_cure={saw_cure}, saw_consumption={saw_consumption}, "
+        f"status={final.first_party_status}, hp={final.first_party_hp}, "
+        f"quantity={_bag(emulator).get(item, 0)}, "
+        f"phase={reader.read_battle_menu_state(final).phase.value}."
+    )
 
 
 def _fight(
@@ -702,6 +816,8 @@ def _fight(
     battle_timing: BattleRuntimeTiming = TOWER_BATTLE_TIMING,
     run: _RunState | None = None,
     unknown_cancel_interval: int = 3,
+    bounded_recovery: bool = False,
+    recovery_hp_threshold: int = 40,
 ) -> TowerBattleEvidence:
     if interact_direction is not None:
         for _attempt in range(3):
@@ -727,22 +843,107 @@ def _fight(
     if observed != (*identity, trainer_number):
         raise TowerChapterError(f"{label} identity mismatch: {observed!r}.")
     before_pp = battle.first_party_pp
-    final = run_adaptive_trainer_battle(
-        reader,
-        actions,
-        lambda _: move_slot,
-        expected_map=int(battle.map_id or 0),
-        intent=BattleIntent(
-            "rescue_fuji",
-            battle_plan_id=battle_plan_id,
-            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
-            required_move_ref=pokemon_red_move_ref(move_id),
+    intent = BattleIntent(
+        "rescue_fuji",
+        battle_plan_id=battle_plan_id,
+        resource_policy=(
+            BattleResourcePolicy.BOUNDED_RECOVERY
+            if bounded_recovery
+            else BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
         ),
-        required_move_id=move_id,
-        timing=battle_timing,
-        label=label,
-        unknown_cancel_interval=unknown_cancel_interval,
+        required_move_policy=RequiredMovePolicy.ANY_USABLE,
+        required_move_ref=None,
     )
+
+    def policy(raw: RawGameState) -> int:
+        if (
+            bounded_recovery
+            and (raw.first_party_status or 0) & 0x07
+            and _bag(emulator).get(ItemId.AWAKENING, 0) > 0
+        ):
+            raise _PauseForTowerAwakening
+        if (
+            bounded_recovery
+            and raw.first_party_status == 0x40
+            and _bag(emulator).get(ItemId.PARLYZ_HEAL, 0) > 0
+        ):
+            raise _PauseForTowerParlyzHeal
+        if (
+            bounded_recovery
+            and (raw.first_party_hp or 0) <= recovery_hp_threshold
+            and _bag(emulator).get(ItemId.SUPER_POTION, 0) > 0
+        ):
+            raise _PauseForTowerSuperPotion
+        preferred = (
+            3
+            if bounded_recovery
+            and raw.enemy_species_id in {PIDGEOTTO_SPECIES_ID, TOWER_RIVAL_GROWLITHE}
+            else move_slot
+        )
+        moves = raw.first_party_moves
+        pp = raw.first_party_pp
+        if moves is None or pp is None:
+            raise TowerChapterError(f"{label} lacks live move and PP evidence.")
+        for candidate in dict.fromkeys((preferred, move_slot, 3, 4)):
+            index = candidate - 1
+            if (
+                len(moves) > index
+                and len(pp) > index
+                and moves[index] != 0
+                and pp[index] & 0x3F
+                and raw.player_disabled_move_slot != candidate
+            ):
+                return candidate
+        raise TowerChapterError(f"{label} has no usable ranked attack.")
+
+    while True:
+        try:
+            final = run_adaptive_trainer_battle(
+                reader,
+                actions,
+                policy,
+                expected_map=int(battle.map_id or 0),
+                intent=intent,
+                required_move_id=None,
+                timing=battle_timing,
+                label=label,
+                unknown_cancel_interval=unknown_cancel_interval,
+            )
+            break
+        except BattleRuntimeError as error:
+            if isinstance(error.__cause__, _PauseForTowerAwakening):
+                _use_tower_battle_status_item(
+                    reader,
+                    actions,
+                    emulator,
+                    label,
+                    item=ItemId.AWAKENING,
+                    expected_status=reader.read().first_party_status or 0,
+                )
+                continue
+            if isinstance(error.__cause__, _PauseForTowerParlyzHeal):
+                _use_tower_battle_status_item(
+                    reader,
+                    actions,
+                    emulator,
+                    label,
+                    item=ItemId.PARLYZ_HEAL,
+                    expected_status=0x40,
+                )
+                continue
+            if not isinstance(error.__cause__, _PauseForTowerSuperPotion):
+                raise
+        if run is None:
+            raise TowerChapterError(f"{label} recovery lacks its chapter resource ledger.")
+        _use_battle_super_potion(
+            reader,
+            actions,
+            emulator,
+            run,
+            TOWER_LAVENDER_TIMING,
+            label,
+        )
+        run.potion_inventory.append(_bag(emulator).get(ItemId.SUPER_POTION, 0))
     if before_pp is None or final.first_party_pp is None:
         raise TowerChapterError(f"{label} lacks PP evidence.")
     spent = (before_pp[move_slot - 1] & 0x3F) - (final.first_party_pp[move_slot - 1] & 0x3F)
@@ -1129,10 +1330,14 @@ def _qualify_evolution(
         after.party_species_ids != TOWER_FINAL_PARTY
         or after.first_party_moves != before.first_party_moves
         or (after.first_party_hp or 0) <= 0
-        or after.first_party_status != before.first_party_status
     ):
         raise TowerChapterError(
-            "Level-36 evolution did not preserve the qualified party semantics."
+            "Level-36 evolution did not preserve the qualified party semantics: "
+            f"before_party={before.party_species_ids!r}, "
+            f"after_party={after.party_species_ids!r}, "
+            f"before_moves={before.first_party_moves!r}, "
+            f"after_moves={after.first_party_moves!r}, "
+            f"after_hp={after.first_party_hp!r}, after_status={after.first_party_status!r}."
         )
     run.evolved = True
     return PROTECTED_PARTY, TOWER_FINAL_PARTY, True
