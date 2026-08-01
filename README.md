@@ -50,8 +50,9 @@ control, and progressively trained specialists.**
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the
 > party and all twelve PC boxes through a bounded read-only port. Registration, living retention,
-> and level 100 remain separate gates. Acquisition routes, general PC execution, and the
-> completionist teacher remain future work. The first uninterrupted Hall-of-Fame census measured
+> and level 100 remain separate gates. Exact deposit/withdraw execution now exists; switch-box
+> control, acquisition routes, and the completionist teacher remain future work. The first
+> uninterrupted Hall-of-Fame census measured
 > **12 owned, 85 seen, 7 living, and 0 at level 100**, with all twelve boxes verified; see the
 > [sanitized collection-census receipt](docs/evidence/qualified-play-collection-census-2026-08-01.json).
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
@@ -74,6 +75,12 @@ Reach the Hall of Fame from clean power-on with:
 Training may use walkthrough knowledge, read-only game state, demonstrations, private snapshots,
 teacher corrections, and local reinforcement learning. Those resources are disclosed rather than
 presented as learning from nothing.
+
+The ambition beyond this first contract is deliberately larger: finish each supported Pokémon
+title, satisfy its published solo-game 100% contract, and—only in a separate completionist
+curriculum—retain every obtainable species at level 100. Unsupported online services, expired
+events, version exclusives, and trade-only requirements stay visible as exclusions instead of
+being hidden behind the phrase “100%.”
 
 ## Why this project exists
 

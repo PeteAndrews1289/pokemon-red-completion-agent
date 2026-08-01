@@ -28,6 +28,7 @@ from pokemon_red_completion.observation import (
     InputReadiness,
     ItemId,
     MapId,
+    MenuCursorState,
     NorthboundPhase,
     OaksErrandPhase,
     OaksErrandState,
@@ -219,6 +220,29 @@ def test_reader_cross_checks_current_box_species_and_levels() -> None:
         species_ids=(0x54, 0x3A),
         levels=(44, 73),
     )
+
+
+def test_reader_exposes_semantic_linear_menu_cursor_state() -> None:
+    memory = RecordingMemory(
+        {
+            RamAddress.CURRENT_MENU_ITEM: 2,
+            RamAddress.LIST_SCROLL_OFFSET: 5,
+            RamAddress.MAX_MENU_ITEM: 4,
+            RamAddress.TOP_MENU_ITEM_X: 10,
+            RamAddress.TOP_MENU_ITEM_Y: 12,
+        }
+    )
+
+    state = PokemonRedStateReader(memory).read_menu_cursor_state()
+
+    assert state == MenuCursorState(
+        selected_visible_index=2,
+        scroll_offset=5,
+        maximum_visible_index=4,
+        top_x=10,
+        top_y=12,
+    )
+    assert state.selected_absolute_index == 7
 
 
 def test_reader_rejects_incoherent_current_box_memory() -> None:

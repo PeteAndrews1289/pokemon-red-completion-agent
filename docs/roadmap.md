@@ -170,8 +170,10 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   saved-box SRAM banks without exposing raw addresses to the planner.
 - [x] Replay the full teacher and publish the first terminal census: 12/124 owned, 85/124 seen,
   7/124 living, and 0/124 at level 100, with all twelve boxes verified.
-- [ ] Add deposit/withdraw/switch-box controls and independently verify one retained living
-  specimen for every target species.
+- [x] Add bounded, transition-verified Bill's PC deposit and withdraw controls, and replace the
+  route's one hard-coded helper deposit with the reusable storage specialist.
+- [ ] Add verified switch-box control and independently retain one living specimen for every
+  target species.
 - [ ] Implement source-pinned encounter, gift, evolution, and resource routes for all 124 targets.
 - [ ] Qualify the 124-species Pokédex-registration gate, living-collection gate, and level-100
   living-collection gate as three separate uninterrupted-run claims.

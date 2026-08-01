@@ -928,6 +928,35 @@ class RedBoxCollectionState:
 
 
 @dataclass(frozen=True, slots=True)
+class MenuCursorState:
+    """Revision-decoded position and geometry of one live linear menu."""
+
+    selected_visible_index: int
+    scroll_offset: int
+    maximum_visible_index: int
+    top_x: int
+    top_y: int
+
+    def __post_init__(self) -> None:
+        for name in (
+            "selected_visible_index",
+            "scroll_offset",
+            "maximum_visible_index",
+            "top_x",
+            "top_y",
+        ):
+            value = getattr(self, name)
+            if type(value) is not int or value < 0:
+                raise ValueError(f"{name} must be a non-negative integer")
+        if self.selected_visible_index > self.maximum_visible_index:
+            raise ValueError("selected menu index cannot exceed its visible maximum")
+
+    @property
+    def selected_absolute_index(self) -> int:
+        return self.selected_visible_index + self.scroll_offset
+
+
+@dataclass(frozen=True, slots=True)
 class RawGameState:
     """Revision-specific state read from a single emulator observation."""
 
@@ -3483,6 +3512,17 @@ class PokemonRedStateReader:
             boxes=tuple(saved_boxes),
             current_box_index=current_box.box_index,
             storage_initialized=True,
+        )
+
+    def read_menu_cursor_state(self) -> MenuCursorState:
+        """Translate Red's current linear-menu cursor fields."""
+
+        return MenuCursorState(
+            selected_visible_index=self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM),
+            scroll_offset=self._memory.read_u8(RamAddress.LIST_SCROLL_OFFSET),
+            maximum_visible_index=self._memory.read_u8(RamAddress.MAX_MENU_ITEM),
+            top_x=self._memory.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            top_y=self._memory.read_u8(RamAddress.TOP_MENU_ITEM_Y),
         )
 
     def read_bedroom_input_state(self) -> BedroomInputState:

@@ -40,6 +40,12 @@ trades and version exclusives remain visible exceptions. This completionist run 
 capture, storage, evolution, resource, and grinding demonstrations; it does not replace capped and
 randomized evaluations of actual battle competence.
 
+The north star now has four explicit rungs: finish the story, master the transferable skills,
+satisfy the title-specific 100% contract, and finally retain every obtainable species at level
+100. “Every Pokémon game” is treated as a sequence of supported adapters and measured transfer
+experiments—not as a claim that one Red route automatically solves later mechanics, or that expired
+events and unavailable network services can be wished away.
+
 ### The collection denominator is now explicit
 
 “Catch them all” is ambiguous on one unmodified Red save: version exclusives, trade evolutions,
@@ -54,8 +60,10 @@ Pokédex; a specimen is still retained across the party and PC; and that retaine
 reached level 100. The emulator adapter can read the owned/seen flags and strictly cross-check the
 party plus all twelve boxes. Red keeps the active box in Work RAM and the other boxes across two
 checksummed save-RAM banks; the adapter mirrors that design through a narrow read-only port and
-never exposes bank numbers or addresses to the planner. It cannot yet execute general storage
-operations or the 124 acquisition/evolution routes. Consequently, living-collection and level-100
+never exposes bank numbers or addresses to the planner. A bounded storage specialist can now open
+Bill's PC, deposit or withdraw an exact species slot, and prove the resulting party/box transition;
+the live route's Zubat deposit uses that specialist. Switch-box execution and the 124
+acquisition/evolution routes remain open. Consequently, living-collection and level-100
 qualification remain explicitly unverified. This is infrastructure for the stretch goal, not a
 claim that the stretch goal has been completed.
 

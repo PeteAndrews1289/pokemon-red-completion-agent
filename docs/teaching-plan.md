@@ -169,6 +169,18 @@ Teaching therefore targets a **balanced six-member party** instead:
 
 ## Collection curriculum and multi-game north star
 
+The curriculum uses four cumulative, independently reported tiers:
+
+1. **Finish** — complete the story and reach the title's verified terminal.
+2. **Master** — finish with reusable party, battle, recovery, navigation, and resource skills.
+3. **Complete** — satisfy the title-specific 100% contract, including every legitimately
+   obtainable species and supported optional objective.
+4. **Perfect collection** — retain every obtainable species and train every retained specimen to
+   level 100.
+
+This ordering makes level 100 a genuine completeness proof without letting brute-force experience
+grinding masquerade as the ability to understand a new game.
+
 The balanced Hall-of-Fame route is the prerequisite, not the final collection target. After that
 route qualifies, Red gains a separate completionist curriculum that surveys every encounter area,
 catches every species legitimately obtainable in the supported Red cartridge, performs every
@@ -192,12 +204,14 @@ evaluation retains level caps and variable matchups so overwhelming levels canno
 battle competence.
 
 The project north star is a learned/hybrid agent that can reach a declared 100% contract across
-Pokémon titles. Shared policies own exploration, battling, catching, party building, grinding,
+every technically supported main-series Pokémon title. Shared policies own exploration, battling,
+catching, party building, grinding,
 evolution, inventory, economy, recovery, and collection planning. Generation adapters describe
 mechanics such as abilities, breeding, and battle-system changes; game adapters provide maps,
 encounters, story dependencies, puzzles, and title-specific optional objectives. Transfer is
 measured by how much less title-specific teaching the next game requires, not by assuming Red's
-exact route will solve it.
+exact route will solve it. Each title publishes exclusions for requirements that cannot be
+performed in its evaluation environment, such as unavailable events or retired online services.
 
 The rules are expressed against the game-neutral party contract—membership, species, active-party
 position, level, health, status, moves, power points, experience, and the derived team metrics—so
