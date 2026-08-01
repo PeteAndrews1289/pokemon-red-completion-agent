@@ -378,6 +378,7 @@ def run_koga_chapter(
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_5,
             8,
             RedBattlePlanId.KOGA_JUGGLER_4,
+            allow_disable_fallback=True,
         )
     )
     _checkpoint(
@@ -511,22 +512,10 @@ def _fight(
     )
 
     def choose_move(raw: RawGameState) -> int:
-        moves = raw.first_party_moves
-        pp = raw.first_party_pp
-        if moves is None or pp is None:
-            raise KogaChapterError(f"{label} lacks live move and PP evidence.")
-        candidates = (SURF_SLOT, 3, 1, 2) if allow_disable_fallback else (SURF_SLOT,)
-        for slot in candidates:
-            index = slot - 1
-            if (
-                len(moves) > index
-                and len(pp) > index
-                and moves[index] != 0
-                and pp[index] & 0x3F
-                and raw.player_disabled_move_slot != slot
-            ):
-                return slot
-        raise KogaChapterError(f"{label} has no legal ranked attack.")
+        try:
+            return _koga_move_slot(raw, allow_disable_fallback=allow_disable_fallback)
+        except KogaChapterError as error:
+            raise KogaChapterError(f"{label}: {error}") from error
 
     final = run_adaptive_trainer_battle(
         reader,
@@ -576,6 +565,27 @@ def _fight(
         max_hp[0],
         status[0],
     )
+
+
+def _koga_move_slot(raw: RawGameState, *, allow_disable_fallback: bool) -> int:
+    """Choose Surf or the first legal reserve attack after Gen I Disable."""
+
+    moves = raw.first_party_moves
+    pp = raw.first_party_pp
+    if moves is None or pp is None:
+        raise KogaChapterError("battle lacks live move and PP evidence")
+    candidates = (SURF_SLOT, 3, 1, 2) if allow_disable_fallback else (SURF_SLOT,)
+    for slot in candidates:
+        index = slot - 1
+        if (
+            len(moves) > index
+            and len(pp) > index
+            and moves[index] != 0
+            and pp[index] & 0x3F
+            and raw.player_disabled_move_slot != slot
+        ):
+            return slot
+    raise KogaChapterError("battle has no legal ranked attack")
 
 
 def _settle_trainer_identity(

@@ -17,9 +17,11 @@ from pokemon_red_completion.koga import (
     OPTIONAL_TRAINER_EVENTS,
     REGULAR_TRAINER_EVENTS,
     KogaBattleEvidence,
+    KogaChapterError,
     KogaChapterReport,
     KogaCheckpoint,
     KogaTiming,
+    _koga_move_slot,
     _nurse_approach_directions,
 )
 from pokemon_red_completion.observation import (
@@ -201,6 +203,14 @@ def test_koga_nurse_approach_normalizes_the_adjacent_ready_tile() -> None:
         )
         == ()
     )
+
+
+def test_koga_disable_fallback_uses_a_legal_ranked_reserve_attack() -> None:
+    raw = replace(_raw(), player_disabled_move_slot=4)
+
+    assert _koga_move_slot(raw, allow_disable_fallback=True) == 3
+    with pytest.raises(KogaChapterError, match="no legal ranked attack"):
+        _koga_move_slot(raw, allow_disable_fallback=False)
 
 
 def test_koga_source_addresses_and_ids_are_pinned() -> None:
