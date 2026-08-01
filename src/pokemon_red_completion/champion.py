@@ -501,7 +501,9 @@ def _battle_x_special(
                 return
             if at_main and not consumed:
                 break
-            _pulse(actions, MacroActionKind.CONFIRM)
+            # Use the safe text-advance button: B cannot reopen ITEM if the
+            # battle menu returns during the input pulse.
+            _pulse(actions, MacroActionKind.CANCEL)
         else:
             raise ChampionChapterError(
                 "X Special use did not settle: "

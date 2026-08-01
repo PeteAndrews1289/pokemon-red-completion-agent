@@ -492,7 +492,10 @@ def _battle_x_special(
                 return
             if at_main and not consumed:
                 break
-            _pulse(actions, MacroActionKind.CONFIRM)
+            # B advances battle text but is inert on the restored MAIN menu.
+            # A can spill across the final text boundary and immediately reopen
+            # ITEM, consuming a second boost before the next observation.
+            _pulse(actions, MacroActionKind.CANCEL)
         else:
             raise AgathaChapterError(
                 f"{item.name} use did not settle: before={before}, "

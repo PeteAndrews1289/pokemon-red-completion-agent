@@ -1,4 +1,5 @@
 import pokemon_red_completion.agatha as agatha_module
+from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.agatha import (
     AGATHA_APPROACH,
     AGATHA_CHECKPOINT_COUNT,
@@ -131,6 +132,7 @@ def test_battle_x_item_reselects_after_unconsumed_turn(monkeypatch) -> None:
         "item_selected": False,
         "attempts": 0,
         "quantity": 8,
+        "text_advances": [],
     }
 
     class Reader:
@@ -158,7 +160,7 @@ def test_battle_x_item_reselects_after_unconsumed_turn(monkeypatch) -> None:
         state["item_selected"] = True
 
     def pulse(*args, **kwargs) -> None:
-        del args, kwargs
+        del kwargs
         if state["item_selected"]:
             state["item_selected"] = False
             state["attempts"] += 1
@@ -166,6 +168,7 @@ def test_battle_x_item_reselects_after_unconsumed_turn(monkeypatch) -> None:
             if state["attempts"] == 2:
                 state["quantity"] -= 1
         elif not state["at_main"]:
+            state["text_advances"].append(args[1])
             state["at_main"] = True
 
     monkeypatch.setattr(
@@ -181,3 +184,4 @@ def test_battle_x_item_reselects_after_unconsumed_turn(monkeypatch) -> None:
 
     assert state["attempts"] == 2
     assert state["quantity"] == 7
+    assert state["text_advances"] == [MacroActionKind.CANCEL, MacroActionKind.CANCEL]
