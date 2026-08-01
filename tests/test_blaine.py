@@ -1,4 +1,5 @@
 from pokemon_red_completion.blaine import (
+    BLAINE_ANTIDOTE_SALE_VALUE,
     BLAINE_CAPACITY_SALE_ITEM,
     BLAINE_CHECKPOINT_COUNT,
     BLAINE_INPUT_BAG_SLOT_BOUNDS,
@@ -20,8 +21,8 @@ from pokemon_red_completion.blaine import (
     QUIZ_ANSWERS,
     QUIZ_TEXT_PULSES,
     BlaineTurn,
+    _blaine_antidote_capacity_plan,
     _encounter_party,
-    _retain_antidote_for_full_reward,
 )
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId
 
@@ -39,6 +40,7 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert BLAINE_CAPACITY_SALE_ITEM is ItemId.ANTIDOTE
     assert BLAINE_INPUT_BAG_SLOT_BOUNDS == (18, 19)
     assert BLAINE_MONEY_DELTA == 5_003
+    assert BLAINE_ANTIDOTE_SALE_VALUE == 50
     assert BLAINE_MAX_WILD_FLEES == 3
     assert CENTER_TO_MANSION == (
         ("down",) * 5
@@ -53,9 +55,10 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert MANSION_TRAINING_POLICY.max_battles == 180
 
 
-def test_blaine_retains_antidote_only_when_needed_to_fill_the_reward_boundary() -> None:
-    assert _retain_antidote_for_full_reward(18)
-    assert not _retain_antidote_for_full_reward(19)
+def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -> None:
+    assert _blaine_antidote_capacity_plan(18, 0) == (False, False)
+    assert _blaine_antidote_capacity_plan(18, 1) == (False, True)
+    assert _blaine_antidote_capacity_plan(19, 1) == (True, False)
 
 
 def test_blaine_source_ids_are_exact() -> None:

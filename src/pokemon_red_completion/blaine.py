@@ -63,6 +63,7 @@ BLAINE_CHECKPOINT_COUNT = 9
 BLAINE_CAPACITY_SALE_ITEM = ItemId.ANTIDOTE
 BLAINE_INPUT_BAG_SLOT_BOUNDS = (18, 19)
 BLAINE_MONEY_DELTA = 5_003
+BLAINE_ANTIDOTE_SALE_VALUE = 50
 BLAINE_MAX_WILD_FLEES = 3
 BLAINE_OPPONENT = 0xEF
 BLAINE_TRAINER_CLASS = 0xEF
@@ -213,6 +214,7 @@ class BlaineChapterReport:
     tm38_quantity: int
     x_accuracy_retained: bool
     bide_sold: bool
+    antidote_sold: bool
     max_repel_bought: int
     initial_money: int
     money_remaining: int
@@ -259,7 +261,10 @@ class BlaineChapterReport:
             and self.x_accuracy_retained
             and self.bide_sold
             and self.max_repel_bought == 1
-            and self.money_remaining == self.initial_money + BLAINE_MONEY_DELTA
+            and self.money_remaining
+            == self.initial_money
+            + BLAINE_MONEY_DELTA
+            - (0 if self.antidote_sold else BLAINE_ANTIDOTE_SALE_VALUE)
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
@@ -332,6 +337,7 @@ class BlaineChapterReport:
             "inventory": {
                 "x_accuracy_retained": self.x_accuracy_retained,
                 "bide_sold": self.bide_sold,
+                "antidote_sold": self.antidote_sold,
                 "max_repel_bought": self.max_repel_bought,
                 "money": [self.initial_money, self.money_remaining],
             },
@@ -386,7 +392,7 @@ def run_blaine_chapter(
         <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]
         or initial_bag.get(ItemId.X_ACCURACY, 0) != 1
         or initial_bag.get(ItemId.TM34_BIDE, 0) != 1
-        or initial_bag.get(ItemId.ANTIDOTE, 0) != 1
+        or initial_bag.get(ItemId.ANTIDOTE, 0) not in (0, 1)
     ):
         raise BlaineChapterError("Cinnabar input inventory lacks the qualified capacity items.")
     mansion_before = _events(emulator, MANSION_TRAINER_EVENTS)
@@ -401,13 +407,16 @@ def run_blaine_chapter(
     _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart entry")
     _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
-    retained_capacity_antidote = _retain_antidote_for_full_reward(len(initial_bag))
-    if retained_capacity_antidote:
-        _open_sell_menu(actions, emulator)
-    else:
+    sell_antidote_early, sell_antidote_late = _blaine_antidote_capacity_plan(
+        len(initial_bag),
+        initial_bag.get(ItemId.ANTIDOTE, 0),
+    )
+    if sell_antidote_early:
         _sell_current_bag_item(actions, reader, emulator, BLAINE_CAPACITY_SALE_ITEM)
         if _bag(emulator).get(BLAINE_CAPACITY_SALE_ITEM, 0):
             raise BlaineChapterError("Obsolete Antidote sale did not settle.")
+    else:
+        _open_sell_menu(actions, emulator)
     # The consumed Silph X Special leaves one extra free slot in this lineage.
     # Retain TM21 here so TM14 plus the Secret Key still fill the bag and keep
     # Blaine's delayed-TM38 reward boundary meaningful. Stay in the sell menu
@@ -603,7 +612,7 @@ def run_blaine_chapter(
     _sell_current_bag_item(actions, reader, emulator, ItemId.TM34_BIDE)
     if _bag(emulator).get(ItemId.TM34_BIDE, 0):
         raise BlaineChapterError("TM34 Bide sale did not settle.")
-    if retained_capacity_antidote:
+    if sell_antidote_late:
         _close(actions, reader)
         _sell_current_bag_item(actions, reader, emulator, BLAINE_CAPACITY_SALE_ITEM)
         if _bag(emulator).get(BLAINE_CAPACITY_SALE_ITEM, 0):
@@ -655,6 +664,7 @@ def run_blaine_chapter(
         tm38_quantity=_bag(emulator).get(ItemId.TM38_FIRE_BLAST, 0),
         x_accuracy_retained=_bag(emulator).get(ItemId.X_ACCURACY, 0) == 1,
         bide_sold=ItemId.TM34_BIDE not in _bag(emulator),
+        antidote_sold=(sell_antidote_early or sell_antidote_late),
         max_repel_bought=1,
         initial_money=initial_money,
         money_remaining=_money(emulator),
@@ -699,12 +709,20 @@ def _open_sell_menu(actions, emulator) -> None:
     _pulse(actions, MacroActionKind.CONFIRM)
 
 
-def _retain_antidote_for_full_reward(input_slots: int) -> bool:
-    """Use the Antidote as a temporary filler when an earlier stack vanished."""
+def _blaine_antidote_capacity_plan(
+    input_slots: int,
+    antidote_quantity: int,
+) -> tuple[bool, bool]:
+    """Return whether to sell the optional Antidote before or after Blaine."""
 
     if not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= input_slots <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]:
         raise BlaineChapterError(f"Unsupported Blaine input capacity: {input_slots} slots.")
-    return input_slots == BLAINE_INPUT_BAG_SLOT_BOUNDS[0]
+    if antidote_quantity not in (0, 1) or (input_slots == 19 and antidote_quantity != 1):
+        raise BlaineChapterError(
+            "Unsupported Blaine Antidote capacity: "
+            f"slots={input_slots}, quantity={antidote_quantity}."
+        )
+    return input_slots == 19, input_slots == 18 and antidote_quantity == 1
 
 
 def _buy_repel(actions, reader, emulator) -> None:
