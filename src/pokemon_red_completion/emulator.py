@@ -32,7 +32,7 @@ class EmulatorEndedError(EmulatorError):
 
 
 class MemoryView(Protocol):
-    def __getitem__(self, address: int) -> int: ...
+    def __getitem__(self, address: int | tuple[int, int]) -> int: ...
 
 
 class PyBoyBackend(Protocol):
@@ -77,7 +77,7 @@ def _load_sdl2_window_pump() -> WindowEventPump:
         from sdl2.ext import get_events
     except ImportError as error:
         raise EmulatorDependencyError(
-            'SDL2 display support is unavailable. Reinstall with: '
+            "SDL2 display support is unavailable. Reinstall with: "
             'python -m pip install -e ".[emulator]"'
         ) from error
 
@@ -104,10 +104,7 @@ def _load_sdl2_window_pump() -> WindowEventPump:
                 and event.window.event == sdl2.SDL_WINDOWEVENT_CLOSE
             ):
                 return False
-            if (
-                event.type == sdl2.SDL_KEYUP
-                and event.key.keysym.sym == sdl2.SDLK_ESCAPE
-            ):
+            if event.type == sdl2.SDL_KEYUP and event.key.keysym.sym == sdl2.SDLK_ESCAPE:
                 return False
         return True
 
@@ -272,6 +269,20 @@ class PyBoyAdapter:
         ):
             raise ValueError("Address must be an integer in Work RAM (0xC000 to 0xDFFF)")
         return int(self._require_backend().memory[address])
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        """Read one byte from Red's two dedicated saved-box SRAM banks.
+
+        This is intentionally narrower than a general cartridge-memory port:
+        only banks 2 and 3, which the pinned Red source reserves for boxes
+        1–12, are visible. There is no corresponding write operation.
+        """
+
+        if type(bank) is not int or bank not in (2, 3):
+            raise ValueError("Collection SRAM bank must be 2 or 3")
+        if type(address) is not int or not 0xA000 <= address <= 0xBFFF:
+            raise ValueError("Collection SRAM address must be between 0xA000 and 0xBFFF")
+        return int(self._require_backend().memory[bank, address])
 
     def press(self, button: str) -> None:
         normalized = self._validated_button(button)

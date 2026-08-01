@@ -182,7 +182,9 @@ class CollectionDirective(StrEnum):
     ACQUIRE_SPECIES = "acquire_species"
     SWITCH_BOX = "switch_box"
     MAKE_STORAGE_ROOM = "make_storage_room"
-    ROTATE_FOR_TRAINING = "rotate_for_training"
+    DEPOSIT_SPECIES = "deposit_species"
+    WITHDRAW_SPECIES = "withdraw_species"
+    RETRIEVE_DAYCARE = "retrieve_daycare"
     TRAIN_SPECIES = "train_species"
     STOP = "stop"
 
@@ -193,6 +195,7 @@ class CollectionDecision:
     reason: str
     species_ref: str | None = None
     box_index: int | None = None
+    goal_species_ref: str | None = None
 
 
 def summarize_collection(
@@ -271,10 +274,67 @@ def plan_collection(
             for specimen in observation.specimens
         )
         if not in_party:
+            stored = max(
+                (
+                    specimen
+                    for specimen in observation.specimens
+                    if specimen.species_ref == species_ref
+                ),
+                key=lambda specimen: specimen.level,
+            )
+            if stored.location is CollectionLocation.DAYCARE:
+                return CollectionDecision(
+                    CollectionDirective.RETRIEVE_DAYCARE,
+                    f"retrieve the weakest target from daycare at level {level}",
+                    species_ref=species_ref,
+                    goal_species_ref=species_ref,
+                )
+            if observation.party_size >= observation.party_limit:
+                if not observation.current_box_has_room:
+                    next_box = observation.next_box_with_room
+                    if next_box is None:
+                        return CollectionDecision(
+                            CollectionDirective.MAKE_STORAGE_ROOM,
+                            "the party and every box are full before training rotation",
+                            species_ref=species_ref,
+                            goal_species_ref=species_ref,
+                        )
+                    return CollectionDecision(
+                        CollectionDirective.SWITCH_BOX,
+                        "select a box with room before depositing a training replacement",
+                        species_ref=species_ref,
+                        box_index=next_box,
+                        goal_species_ref=species_ref,
+                    )
+                deposit = max(
+                    (
+                        specimen
+                        for specimen in observation.specimens
+                        if specimen.location is CollectionLocation.PARTY
+                    ),
+                    key=lambda specimen: (specimen.level, specimen.species_ref),
+                )
+                return CollectionDecision(
+                    CollectionDirective.DEPOSIT_SPECIES,
+                    "deposit the highest-level party member to open a training slot",
+                    species_ref=deposit.species_ref,
+                    box_index=observation.current_box_index,
+                    goal_species_ref=species_ref,
+                )
+            if stored.container_index != observation.current_box_index:
+                return CollectionDecision(
+                    CollectionDirective.SWITCH_BOX,
+                    "select the box containing the weakest training target",
+                    species_ref=species_ref,
+                    box_index=stored.container_index,
+                    goal_species_ref=species_ref,
+                )
             return CollectionDecision(
-                CollectionDirective.ROTATE_FOR_TRAINING,
+                CollectionDirective.WITHDRAW_SPECIES,
                 f"withdraw the weakest target at level {level}",
                 species_ref=species_ref,
+                box_index=observation.current_box_index,
+                goal_species_ref=species_ref,
             )
         return CollectionDecision(
             CollectionDirective.TRAIN_SPECIES,

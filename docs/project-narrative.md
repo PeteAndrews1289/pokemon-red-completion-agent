@@ -52,10 +52,19 @@ moving it after a run.
 It also distinguishes three facts that are often conflated: a species was registered in the
 Pokédex; a specimen is still retained across the party and PC; and that retained specimen has
 reached level 100. The emulator adapter can read the owned/seen flags and strictly cross-check the
-party plus current box. It cannot yet enumerate all twelve boxes, perform storage operations, or
-execute the 124 acquisition/evolution routes. Consequently, living-collection and level-100
+party plus all twelve boxes. Red keeps the active box in Work RAM and the other boxes across two
+checksummed save-RAM banks; the adapter mirrors that design through a narrow read-only port and
+never exposes bank numbers or addresses to the planner. It cannot yet execute general storage
+operations or the 124 acquisition/evolution routes. Consequently, living-collection and level-100
 qualification remain explicitly unverified. This is infrastructure for the stretch goal, not a
 claim that the stretch goal has been completed.
+
+The first uninterrupted clean-power census then completed the same 312-checkpoint Hall-of-Fame
+route and measured the gap directly: **12 of 124** targets had historical owned flags, **85** had
+been seen, **7** remained living, and **0** were level 100. Box 1 held the deposited level-7 Zubat;
+the other six living specimens formed the final party. All twelve boxes were accounted for, and
+the adapter correctly recognized that the save had never performed its first box change. See the
+[sanitized collection-census receipt](evidence/qualified-play-collection-census-2026-08-01.json).
 
 The current phase makes one further correction. The qualified route completed the game by
 overleveling a single Pokémon, which is a legitimate way to finish Red but a poor thing to imitate:

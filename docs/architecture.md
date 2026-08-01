@@ -18,12 +18,15 @@ headlessly by default; optional watch mode renders a local SDL window at a valid
 speed. Human window input remains disabled in both modes, and PyBoy always stops with saving
 disabled.
 
-The current PyBoy port exposes only two narrow capabilities:
+The current PyBoy port exposes only three narrow capabilities:
 
-- read one byte from Game Boy Work RAM through the declared read-only memory adapter; and
+- read one byte from Game Boy Work RAM through the declared read-only memory adapter;
+- read one byte from Red's dedicated saved-box SRAM banks 2–3 through a separate read-only port;
+  and
 - press, release, or tick through the sole frame-safe executor.
 
-Cartridge ROM, VRAM, external cartridge RAM, I/O, and all other address regions fail closed. The
+Cartridge ROM, VRAM, saved data outside the two box banks, I/O, and all other address regions fail
+closed. The
 declared actor interface does not permit RAM writes, state loading or saving, emulator-backend
 injection, or ROM-payload access. Watch mode changes rendering only: it does not add controller
 authority, screenshots, recordings, or uploads. This is an enforced interface boundary within one
@@ -261,10 +264,11 @@ missing species, make storage room, switch boxes, rotate a specimen into trainin
 stop only after the declared gate is met.
 
 The Red adapter binds National Pokédex numbers to the pinned cartridge's internal species IDs and
-reads the 151-bit seen/owned tables. Party and current-box structures are cross-checked against
-their species arrays and fail closed on disagreement. Because only the current PC box is visible
-to this first adapter, it may report partial evidence but may not certify the living or level-100
-collection gates until an all-box reader is implemented.
+reads the 151-bit seen/owned tables. Party and box structures are cross-checked against their
+species arrays and fail closed on disagreement. A full census overlays the active Work-RAM box on
+the two source-defined saved-box banks, validates both bank and per-box checksums after storage is
+initialized, and recognizes the source-defined logically empty state before the first box change.
+Only this complete census may certify the living or level-100 collection gates.
 
 ### Specialists
 

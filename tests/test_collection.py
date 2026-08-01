@@ -170,8 +170,10 @@ def test_training_rotates_the_weakest_target_from_storage_then_trains_it() -> No
         box_counts=(3, 0),
     )
     rotate = plan_collection(_contract(), boxed)
-    assert rotate.directive is CollectionDirective.ROTATE_FOR_TRAINING
+    assert rotate.directive is CollectionDirective.WITHDRAW_SPECIES
     assert rotate.species_ref == B
+    assert rotate.box_index == 0
+    assert rotate.goal_species_ref == B
 
     party = _observation(
         owned=boxed.owned_species,
@@ -186,6 +188,62 @@ def test_training_rotates_the_weakest_target_from_storage_then_trains_it() -> No
     train = plan_collection(_contract(), party)
     assert train.directive is CollectionDirective.TRAIN_SPECIES
     assert train.species_ref == B
+
+
+def test_training_rotation_deposits_before_switching_to_a_stored_target() -> None:
+    party = tuple(
+        _specimen(
+            species_ref,
+            level,
+            location=CollectionLocation.PARTY,
+            slot_index=index,
+        )
+        for index, (species_ref, level) in enumerate(
+            (
+                (A, 100),
+                (C, 90),
+                ("pokemon:test:p1", 80),
+                ("pokemon:test:p2", 70),
+                ("pokemon:test:p3", 60),
+                ("pokemon:test:p4", 50),
+            )
+        )
+    )
+    observation = _observation(
+        owned=frozenset((A, B, C)),
+        specimens=(*party, _specimen(B, 40, container_index=1)),
+        party_size=6,
+        box_counts=(5, 1),
+        current_box_index=0,
+    )
+
+    decision = plan_collection(_contract(), observation)
+
+    assert decision.directive is CollectionDirective.DEPOSIT_SPECIES
+    assert decision.species_ref == A
+    assert decision.box_index == 0
+    assert decision.goal_species_ref == B
+
+
+def test_training_rotation_switches_to_the_target_box_after_a_slot_is_open() -> None:
+    observation = _observation(
+        owned=frozenset((A, B, C)),
+        specimens=(
+            _specimen(A, 100, location=CollectionLocation.PARTY),
+            _specimen(B, 40, container_index=1),
+            _specimen(C, 100),
+        ),
+        party_size=1,
+        box_counts=(1, 1),
+        current_box_index=0,
+    )
+
+    decision = plan_collection(_contract(), observation)
+
+    assert decision.directive is CollectionDirective.SWITCH_BOX
+    assert decision.species_ref == B
+    assert decision.box_index == 1
+    assert decision.goal_species_ref == B
 
 
 def test_stop_requires_every_target_to_be_living_owned_and_level_100() -> None:

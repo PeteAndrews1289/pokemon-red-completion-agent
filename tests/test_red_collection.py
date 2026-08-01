@@ -1,16 +1,24 @@
 import pytest
 
 from pokemon_red_completion.collection import CollectionExclusionReason, CollectionLocation
-from pokemon_red_completion.observation import RedCurrentBoxState, RedPokedexState
+from pokemon_red_completion.observation import (
+    RED_BOX_LIMIT,
+    RedBoxCollectionState,
+    RedCurrentBoxState,
+    RedPokedexState,
+)
 from pokemon_red_completion.party import PartyMemberObservation, PartyObservation
 from pokemon_red_completion.red_collection import (
     NATIONAL_DEX_SIZE_GENERATION_ONE,
     RED_SOLO_COLLECTION_CONTRACT,
     RED_SOLO_LIVING_DEX_TARGET_COUNT,
+    red_all_living_specimens,
+    red_collection_observation,
     red_internal_species_number,
     red_species_number,
     red_species_ref,
     red_visible_living_specimens,
+    summarize_red_collection,
     summarize_red_pokedex,
 )
 
@@ -118,3 +126,82 @@ def test_visible_living_inventory_combines_party_and_current_box() -> None:
         CollectionLocation.BOX,
     )
     assert specimens[-1].container_index == 3
+
+
+def test_all_box_projection_builds_a_game_neutral_collection_observation() -> None:
+    party = PartyObservation(
+        members=(PartyMemberObservation(slot=1, species_id=0x1C, level=88, hp=200, max_hp=200),)
+    )
+    boxes = RedBoxCollectionState(
+        boxes=tuple(
+            RedCurrentBoxState(7, (0x3A, 0x40), (73, 50))
+            if index == 7
+            else RedCurrentBoxState(index, (), ())
+            for index in range(RED_BOX_LIMIT)
+        ),
+        current_box_index=2,
+        storage_initialized=True,
+    )
+    pokedex = RedPokedexState(
+        owned_species=frozenset((9, 25, 83, 86)),
+        seen_species=frozenset((9, 25, 83, 86)),
+    )
+
+    specimens = red_all_living_specimens(party, boxes)
+    observation = red_collection_observation(pokedex, party, boxes)
+    progress = summarize_red_collection(pokedex, party, boxes)
+
+    assert tuple(red_species_number(item.species_ref) for item in specimens) == (9, 86, 83)
+    assert observation.box_counts == (0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0)
+    assert observation.current_box_index == 2
+    assert progress.collection.pokedex_owned_count == 4
+    assert progress.collection.living_count == 3
+    assert progress.collection.level_cap_count == 0
+    assert progress.public_dict()["all_boxes_verified"] is True
+    assert progress.public_dict()["living_collection_verified"] is False
+
+
+def test_full_level_100_census_is_the_only_way_to_pass_all_collection_gates() -> None:
+    targets = tuple(
+        red_species_number(species_ref)
+        for species_ref in RED_SOLO_COLLECTION_CONTRACT.target_species
+    )
+    internal_by_national = {
+        red_internal_species_number(internal_id): internal_id
+        for internal_id in range(1, 191)
+        if _is_real_red_species(internal_id)
+    }
+    box_states = []
+    for box_index in range(RED_BOX_LIMIT):
+        chunk = targets[box_index * 20 : (box_index + 1) * 20]
+        box_states.append(
+            RedCurrentBoxState(
+                box_index=box_index,
+                species_ids=tuple(internal_by_national[number] for number in chunk),
+                levels=(100,) * len(chunk),
+            )
+        )
+    boxes = RedBoxCollectionState(
+        boxes=tuple(box_states),
+        current_box_index=0,
+        storage_initialized=True,
+    )
+    pokedex = RedPokedexState(
+        owned_species=frozenset(targets),
+        seen_species=frozenset(targets),
+    )
+
+    progress = summarize_red_collection(pokedex, PartyObservation(), boxes)
+
+    assert progress.collection.passed
+    assert progress.public_dict()["pokedex_target_complete"] is True
+    assert progress.public_dict()["living_collection_verified"] is True
+    assert progress.public_dict()["level_100_collection_verified"] is True
+
+
+def _is_real_red_species(internal_id: int) -> bool:
+    try:
+        red_internal_species_number(internal_id)
+    except ValueError:
+        return False
+    return True

@@ -180,9 +180,11 @@ For the declared Squirtle, Helix Fossil, Hitmonlee, and Jolteon lineage, the exe
 partitions all 151 National Pokédex entries into 124 obtainable targets and 27 named exclusions.
 Progress is deliberately reported through three non-interchangeable gates: registered as owned in
 the Pokédex, presently retained as a living specimen, and presently retained at level 100. The Red
-adapter can now read the Pokédex and cross-check the party plus current PC box. It cannot yet scan
-all twelve boxes, so the latter two gates remain false rather than being inferred from historical
-Pokédex flags.
+adapter now reads the Pokédex and performs a checksum-verified census of the party plus all twelve
+PC boxes. It overlays the active Work-RAM box on the saved-box banks exactly as the game does and
+treats the other eleven boxes as logically empty before the game's first box change. The latter
+two gates are therefore measurable, but remain false until the actual collection and training
+curricula satisfy them.
 
 Level-100 collection is deliberately a separate teacher mode. It supplies abundant capture,
 storage, evolution, resource-restocking, and long-horizon grinding examples, but ordinary learner

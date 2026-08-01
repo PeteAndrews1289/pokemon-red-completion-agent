@@ -166,8 +166,12 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   version, trade, mutually exclusive gift, fossil, starter, evolution, or event exclusions.
 - [x] Add game-neutral collection planning plus fail-closed Red readers for seen/owned Pokédex
   flags and the visible party/current PC box.
-- [ ] Add all-box inspection, deposit/withdraw/switch-box controls, and independently verify one
-  retained living specimen for every target species.
+- [x] Add checksum-verified all-box inspection across the active Work-RAM box and both dedicated
+  saved-box SRAM banks without exposing raw addresses to the planner.
+- [x] Replay the full teacher and publish the first terminal census: 12/124 owned, 85/124 seen,
+  7/124 living, and 0/124 at level 100, with all twelve boxes verified.
+- [ ] Add deposit/withdraw/switch-box controls and independently verify one retained living
+  specimen for every target species.
 - [ ] Implement source-pinned encounter, gift, evolution, and resource routes for all 124 targets.
 - [ ] Qualify the 124-species Pokédex-registration gate, living-collection gate, and level-100
   living-collection gate as three separate uninterrupted-run claims.

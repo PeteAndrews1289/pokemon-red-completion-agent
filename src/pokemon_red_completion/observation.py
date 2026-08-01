@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 from enum import IntEnum, IntFlag, StrEnum
-from typing import Protocol
+from typing import Protocol, runtime_checkable
 
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.referee import CHAMPION_DEFEATED_FACT
@@ -13,6 +13,13 @@ class ReadOnlyMemory(Protocol):
     """The deliberately non-mutating memory surface available to the adapter."""
 
     def read_u8(self, address: int) -> int: ...
+
+
+@runtime_checkable
+class ReadOnlyCartridgeRam(Protocol):
+    """Narrow read-only access to banked cartridge RAM."""
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int: ...
 
 
 class RamAddress(IntEnum):
@@ -847,6 +854,11 @@ RED_BOX_CAPACITY = 20
 RED_BOX_STRUCT_STRIDE = 33
 RED_BOX_SPECIES_OFFSET = 0
 RED_BOX_LEVEL_OFFSET = 3
+RED_BOX_DATA_BYTES = 0x462
+RED_BOXES_PER_SRAM_BANK = 6
+RED_BOX_SRAM_BASE = 0xA000
+RED_BOX_SRAM_BANKS = (2, 3)
+RED_BOX_CHANGED_MASK = 0x80
 
 
 @dataclass(frozen=True, slots=True)
@@ -887,6 +899,32 @@ class RedCurrentBoxState:
             raise ValueError("box species IDs must be positive integers")
         if any(type(level) is not int or not 1 <= level <= 100 for level in self.levels):
             raise ValueError("box levels must be between 1 and 100")
+
+
+@dataclass(frozen=True, slots=True)
+class RedBoxCollectionState:
+    """A complete, checksum-verified view of all twelve PC boxes."""
+
+    boxes: tuple[RedCurrentBoxState, ...]
+    current_box_index: int
+    storage_initialized: bool
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.storage_initialized, bool):
+            raise TypeError("storage_initialized must be a boolean")
+        if (
+            type(self.current_box_index) is not int
+            or not 0 <= self.current_box_index < RED_BOX_LIMIT
+        ):
+            raise ValueError("current_box_index must identify one of Red's twelve boxes")
+        if len(self.boxes) != RED_BOX_LIMIT:
+            raise ValueError("box collection must contain all twelve boxes")
+        if tuple(box.box_index for box in self.boxes) != tuple(range(RED_BOX_LIMIT)):
+            raise ValueError("box collection must be ordered from box zero through eleven")
+
+    @property
+    def counts(self) -> tuple[int, ...]:
+        return tuple(len(box.species_ids) for box in self.boxes)
 
 
 @dataclass(frozen=True, slots=True)
@@ -3251,28 +3289,18 @@ class PokemonRedStateReader:
         active_party_index = (
             self._memory.read_u8(RamAddress.PLAYER_MON_NUMBER) if battle_state else None
         )
-        if (
-            active_party_index is not None
-            and 0 <= active_party_index < party_count
-        ):
-            active_base = (
-                int(RamAddress.PARTY_MON_1)
-                + active_party_index * PARTY_STRUCT_STRIDE
-            )
-            active_party_species_id = self._memory.read_u8(
-                active_base + PARTY_SPECIES_OFFSET
-            )
+        if active_party_index is not None and 0 <= active_party_index < party_count:
+            active_base = int(RamAddress.PARTY_MON_1) + active_party_index * PARTY_STRUCT_STRIDE
+            active_party_species_id = self._memory.read_u8(active_base + PARTY_SPECIES_OFFSET)
             active_party_level = self._memory.read_u8(active_base + PARTY_LEVEL_OFFSET)
             active_party_hp = self._read_u16_be(active_base + PARTY_HP_OFFSET)
             active_party_max_hp = self._read_u16_be(active_base + PARTY_MAX_HP_OFFSET)
             active_party_status = self._memory.read_u8(active_base + PARTY_STATUS_OFFSET)
             active_party_moves = tuple(
-                self._memory.read_u8(active_base + PARTY_MOVES_OFFSET + index)
-                for index in range(4)
+                self._memory.read_u8(active_base + PARTY_MOVES_OFFSET + index) for index in range(4)
             )
             active_party_pp = tuple(
-                self._memory.read_u8(active_base + PARTY_PP_OFFSET + index)
-                for index in range(4)
+                self._memory.read_u8(active_base + PARTY_PP_OFFSET + index) for index in range(4)
             )
         else:
             active_party_index = None
@@ -3287,9 +3315,7 @@ class PokemonRedStateReader:
             self._memory.read_u8(int(RamAddress.EVENT_FLAGS) + index)
             for index in range(EVENT_FLAG_BYTES)
         )
-        disabled_move = (
-            self._memory.read_u8(RamAddress.PLAYER_DISABLED_MOVE) if battle_state else 0
-        )
+        disabled_move = self._memory.read_u8(RamAddress.PLAYER_DISABLED_MOVE) if battle_state else 0
         disabled_slot = (disabled_move >> 4) & 0x0F
         return RawGameState(
             game_started=True,
@@ -3394,6 +3420,69 @@ class PokemonRedStateReader:
             box_index=box_index,
             species_ids=species_ids,
             levels=levels,
+        )
+
+    def read_all_box_states(self) -> RedBoxCollectionState:
+        """Read all twelve boxes without exposing banked bytes to a planner.
+
+        Red keeps the active box in Work RAM. After the first in-game box
+        change, the other eleven boxes live in two checksummed SRAM banks and
+        the active box's SRAM slot is deliberately marked empty. Before that
+        first change, the source defines every non-active box as logically
+        empty even though their backing SRAM has not been initialized.
+        """
+
+        current_box = self.read_current_box_state()
+        raw_box_number = self._memory.read_u8(RamAddress.CURRENT_BOX_NUMBER)
+        storage_initialized = bool(raw_box_number & RED_BOX_CHANGED_MASK)
+        if not storage_initialized:
+            return RedBoxCollectionState(
+                boxes=tuple(
+                    current_box
+                    if box_index == current_box.box_index
+                    else RedCurrentBoxState(box_index, (), ())
+                    for box_index in range(RED_BOX_LIMIT)
+                ),
+                current_box_index=current_box.box_index,
+                storage_initialized=False,
+            )
+
+        if not isinstance(self._memory, ReadOnlyCartridgeRam):
+            raise SemanticStateError(
+                "all-box inspection requires the bounded read-only cartridge-RAM port"
+            )
+
+        saved_boxes: list[RedCurrentBoxState] = []
+        for bank_offset, bank in enumerate(RED_BOX_SRAM_BANKS):
+            bank_payload = bytes(
+                self._memory.read_cartridge_ram_u8(
+                    bank,
+                    RED_BOX_SRAM_BASE + offset,
+                )
+                for offset in range(RED_BOXES_PER_SRAM_BANK * RED_BOX_DATA_BYTES)
+            )
+            checksum_base = RED_BOX_SRAM_BASE + len(bank_payload)
+            expected_bank_checksum = self._memory.read_cartridge_ram_u8(bank, checksum_base)
+            if _red_box_checksum(bank_payload) != expected_bank_checksum:
+                raise SemanticStateError(f"saved box SRAM bank {bank} failed its checksum")
+
+            for bank_box_index in range(RED_BOXES_PER_SRAM_BANK):
+                box_index = bank_offset * RED_BOXES_PER_SRAM_BANK + bank_box_index
+                start = bank_box_index * RED_BOX_DATA_BYTES
+                payload = bank_payload[start : start + RED_BOX_DATA_BYTES]
+                expected_box_checksum = self._memory.read_cartridge_ram_u8(
+                    bank,
+                    checksum_base + 1 + bank_box_index,
+                )
+                if _red_box_checksum(payload) != expected_box_checksum:
+                    raise SemanticStateError(f"saved box {box_index + 1} failed its checksum")
+                saved_boxes.append(_decode_saved_red_box(box_index, payload))
+
+        saved_boxes[current_box.box_index] = current_box
+        return RedBoxCollectionState(
+            boxes=tuple(saved_boxes),
+            current_box_index=current_box.box_index,
+            storage_initialized=True,
         )
 
     def read_bedroom_input_state(self) -> BedroomInputState:
@@ -4516,6 +4605,42 @@ def _decode_pokedex_flags(payload: bytes) -> frozenset[int]:
         national_number
         for national_number in range(1, POKEDEX_SPECIES_COUNT + 1)
         if payload[(national_number - 1) // 8] & (1 << ((national_number - 1) % 8))
+    )
+
+
+def _red_box_checksum(payload: bytes) -> int:
+    """Match Red's complemented one-byte ``CalcCheckSum`` routine."""
+
+    return (~sum(payload)) & 0xFF
+
+
+def _decode_saved_red_box(box_index: int, payload: bytes) -> RedCurrentBoxState:
+    if len(payload) != RED_BOX_DATA_BYTES:
+        raise ValueError(f"saved Red box must contain exactly {RED_BOX_DATA_BYTES} bytes")
+    count = payload[0]
+    if count > RED_BOX_CAPACITY:
+        raise SemanticStateError(
+            f"saved box {box_index + 1} reports {count} Pokémon, "
+            f"above Red's {RED_BOX_CAPACITY}-slot limit"
+        )
+    species_ids = tuple(payload[1 : 1 + count])
+    structures_base = 1 + RED_BOX_CAPACITY + 1
+    struct_species = tuple(
+        payload[structures_base + index * RED_BOX_STRUCT_STRIDE + RED_BOX_SPECIES_OFFSET]
+        for index in range(count)
+    )
+    if species_ids != struct_species:
+        raise SemanticStateError(
+            f"saved box {box_index + 1} species list disagrees with its Pokémon structures"
+        )
+    levels = tuple(
+        payload[structures_base + index * RED_BOX_STRUCT_STRIDE + RED_BOX_LEVEL_OFFSET]
+        for index in range(count)
+    )
+    return RedCurrentBoxState(
+        box_index=box_index,
+        species_ids=species_ids,
+        levels=levels,
     )
 
 

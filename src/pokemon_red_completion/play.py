@@ -173,7 +173,12 @@ from pokemon_red_completion.pewter import (
     PewterProgress,
     run_pewter_chapter,
 )
-from pokemon_red_completion.red_collection import summarize_red_pokedex
+from pokemon_red_completion.red_collection import (
+    RedCollectionProgress,
+    summarize_red_collection,
+    summarize_red_pokedex,
+)
+from pokemon_red_completion.red_party import PokemonRedPartyReader
 from pokemon_red_completion.red_trajectory import (
     PokemonRedBattleDecisionObserver,
     PokemonRedBattleScheduleObserver,
@@ -453,6 +458,7 @@ class QualifiedPlayReport:
     actions_executed: int
     controller_released: bool
     pokedex_state: RedPokedexState | None = None
+    collection_progress: RedCollectionProgress | None = None
 
     @property
     def passed(self) -> bool:
@@ -563,10 +569,10 @@ class QualifiedPlayReport:
             "received_verified": is_pokedex_verified(self.pokedex_evidence),
             "controls_ready": self.pokedex_evidence.controls_ready,
         }
-        if self.pokedex_state is not None:
-            pokedex["collection_progress"] = summarize_red_pokedex(
-                self.pokedex_state
-            ).public_dict()
+        if self.collection_progress is not None:
+            pokedex["collection_progress"] = self.collection_progress.public_dict()
+        elif self.pokedex_state is not None:
+            pokedex["collection_progress"] = summarize_red_pokedex(self.pokedex_state).public_dict()
         return {
             "schema": "qualified-play-v26",
             "status": "ok" if self.passed else "failed",
@@ -1194,6 +1200,9 @@ def run_qualified_play(
         )
         available = COMPLETION_QUEST.available_objectives(state)
         next_objective = available[0].id if available else None
+        final_pokedex = reader.read_pokedex_state()
+        final_boxes = reader.read_all_box_states()
+        final_party = PokemonRedPartyReader(emulator).read()
         report = QualifiedPlayReport(
             rom=emulator.fingerprint,
             pyboy_version=emulator.pyboy_version,
@@ -1243,7 +1252,12 @@ def run_qualified_play(
             frames_executed=emulator.frame_count,
             actions_executed=opening.actions_executed + executor.actions_executed,
             controller_released=not emulator.pressed_buttons,
-            pokedex_state=reader.read_pokedex_state(),
+            pokedex_state=final_pokedex,
+            collection_progress=summarize_red_collection(
+                final_pokedex,
+                final_party,
+                final_boxes,
+            ),
         )
         if not report.passed:
             raise QualifiedPlayError("Qualified play evidence failed its public contract.")
@@ -1275,9 +1289,7 @@ def run_qualified_play(
                                     "complete": True,
                                     "expected_battles": battle_start_schedule.expected_count,
                                     "finished_battles": battle_start_schedule.finished_count,
-                                    "schedule_sha256": (
-                                        battle_start_schedule.schedule_sha256
-                                    ),
+                                    "schedule_sha256": (battle_start_schedule.schedule_sha256),
                                 }
                                 if battle_start_schedule is not None
                                 else None

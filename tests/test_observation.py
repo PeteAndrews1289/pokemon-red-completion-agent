@@ -15,7 +15,11 @@ from pokemon_red_completion.observation import (
     OAKS_LAB_SELECTION_READY_SCRIPT,
     OAKS_LAB_STARTER_OBTAINED_SCRIPT,
     POKEDEX_FLAG_BYTES,
+    RED_BOX_DATA_BYTES,
+    RED_BOX_LIMIT,
+    RED_BOX_SRAM_BASE,
     RED_BOX_STRUCT_STRIDE,
+    RED_BOXES_PER_SRAM_BANK,
     REDS_HOUSE_2F_NOOP_SCRIPT,
     SCRIPTED_MOVEMENT_STATUS_MASK,
     SQUIRTLE_SPECIES_ID,
@@ -34,6 +38,7 @@ from pokemon_red_completion.observation import (
     PokemonRedStateReader,
     RamAddress,
     RawGameState,
+    RedBoxCollectionState,
     RedCurrentBoxState,
     RedPokedexState,
     SemanticStateError,
@@ -62,6 +67,49 @@ class RecordingMemory:
     def read_u8(self, address: int) -> int:
         self.reads.append(int(address))
         return self.values.get(int(address), 0)
+
+
+class BankedRecordingMemory(RecordingMemory):
+    def __init__(
+        self,
+        values: dict[int, int],
+        cartridge_values: dict[tuple[int, int], int],
+    ) -> None:
+        super().__init__(values)
+        self.cartridge_values = cartridge_values
+        self.cartridge_reads: list[tuple[int, int]] = []
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        self.cartridge_reads.append((bank, address))
+        return self.cartridge_values.get((bank, address), 0)
+
+
+def _saved_box_banks(
+    boxes: dict[int, tuple[tuple[int, ...], tuple[int, ...]]],
+) -> dict[tuple[int, int], int]:
+    values: dict[tuple[int, int], int] = {}
+    for bank_offset, bank in enumerate((2, 3)):
+        bank_payload = bytearray(RED_BOXES_PER_SRAM_BANK * RED_BOX_DATA_BYTES)
+        for bank_box_index in range(RED_BOXES_PER_SRAM_BANK):
+            box_index = bank_offset * RED_BOXES_PER_SRAM_BANK + bank_box_index
+            species_ids, levels = boxes.get(box_index, ((), ()))
+            start = bank_box_index * RED_BOX_DATA_BYTES
+            bank_payload[start] = len(species_ids)
+            for slot_index, (species_id, level) in enumerate(zip(species_ids, levels, strict=True)):
+                bank_payload[start + 1 + slot_index] = species_id
+                structure = start + 22 + slot_index * RED_BOX_STRUCT_STRIDE
+                bank_payload[structure] = species_id
+                bank_payload[structure + 3] = level
+        for offset, value in enumerate(bank_payload):
+            if value:
+                values[(bank, RED_BOX_SRAM_BASE + offset)] = value
+        checksum_base = RED_BOX_SRAM_BASE + len(bank_payload)
+        values[(bank, checksum_base)] = (~sum(bank_payload)) & 0xFF
+        for bank_box_index in range(RED_BOXES_PER_SRAM_BANK):
+            start = bank_box_index * RED_BOX_DATA_BYTES
+            payload = bank_payload[start : start + RED_BOX_DATA_BYTES]
+            values[(bank, checksum_base + 1 + bank_box_index)] = (~sum(payload)) & 0xFF
+    return values
 
 
 def _events(*events: EventFlag) -> bytes:
@@ -186,6 +234,75 @@ def test_reader_rejects_incoherent_current_box_memory() -> None:
 
     with pytest.raises(SemanticStateError, match="species list disagrees"):
         PokemonRedStateReader(memory).read_current_box_state()
+
+
+def test_all_box_reader_treats_uninitialized_backing_boxes_as_logically_empty() -> None:
+    memory = RecordingMemory(
+        {
+            RamAddress.CURRENT_BOX_NUMBER: 2,
+            RamAddress.CURRENT_BOX_COUNT: 1,
+            RamAddress.CURRENT_BOX_SPECIES: 0x54,
+            RamAddress.CURRENT_BOX_MONS: 0x54,
+            int(RamAddress.CURRENT_BOX_MONS) + 3: 44,
+        }
+    )
+
+    state = PokemonRedStateReader(memory).read_all_box_states()
+
+    assert state == RedBoxCollectionState(
+        boxes=tuple(
+            RedCurrentBoxState(2, (0x54,), (44,))
+            if index == 2
+            else RedCurrentBoxState(index, (), ())
+            for index in range(RED_BOX_LIMIT)
+        ),
+        current_box_index=2,
+        storage_initialized=False,
+    )
+    assert state.counts == (0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+
+def test_all_box_reader_verifies_saved_banks_and_overlays_the_live_box() -> None:
+    cartridge_values = _saved_box_banks(
+        {
+            0: ((0x54,), (44,)),
+            7: ((0x3A, 0x40), (73, 50)),
+        }
+    )
+    memory = BankedRecordingMemory(
+        {
+            RamAddress.CURRENT_BOX_NUMBER: 0x82,
+            RamAddress.CURRENT_BOX_COUNT: 1,
+            RamAddress.CURRENT_BOX_SPECIES: 0x1C,
+            RamAddress.CURRENT_BOX_MONS: 0x1C,
+            int(RamAddress.CURRENT_BOX_MONS) + 3: 88,
+        },
+        cartridge_values,
+    )
+
+    state = PokemonRedStateReader(memory).read_all_box_states()
+
+    assert state.storage_initialized
+    assert state.boxes[0] == RedCurrentBoxState(0, (0x54,), (44,))
+    assert state.boxes[2] == RedCurrentBoxState(2, (0x1C,), (88,))
+    assert state.boxes[7] == RedCurrentBoxState(7, (0x3A, 0x40), (73, 50))
+    assert state.counts == (1, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0)
+
+
+def test_all_box_reader_rejects_missing_port_and_corrupt_checksum() -> None:
+    work_ram = {
+        RamAddress.CURRENT_BOX_NUMBER: 0x80,
+        RamAddress.CURRENT_BOX_COUNT: 0,
+    }
+    with pytest.raises(SemanticStateError, match="cartridge-RAM port"):
+        PokemonRedStateReader(RecordingMemory(work_ram)).read_all_box_states()
+
+    cartridge_values = _saved_box_banks({})
+    cartridge_values[(2, RED_BOX_SRAM_BASE)] = 1
+    with pytest.raises(SemanticStateError, match="bank 2 failed"):
+        PokemonRedStateReader(
+            BankedRecordingMemory(work_ram, cartridge_values)
+        ).read_all_box_states()
 
 
 def test_reader_extracts_bounded_bag_and_event_state() -> None:
@@ -331,11 +448,7 @@ def test_reader_translates_the_stable_pokedex_gate_from_pinned_symbols() -> None
         RamAddress.VIRIDIAN_MART_SCRIPT: 2,
     }
     values.update(
-        {
-            int(RamAddress.EVENT_FLAGS) + index: value
-            for index, value in enumerate(events)
-            if value
-        }
+        {int(RamAddress.EVENT_FLAGS) + index: value for index, value in enumerate(events) if value}
     )
     reader = PokemonRedStateReader(RecordingMemory(values))
 
@@ -1227,9 +1340,7 @@ def test_pewter_progress_tracker_latches_every_ordered_boundary_and_brock() -> N
 
     for map_id, x, y in boundaries:
         state = (
-            _brock_ready_state()
-            if map_id is MapId.PEWTER_GYM
-            else _boundary_state(map_id, x, y)
+            _brock_ready_state() if map_id is MapId.PEWTER_GYM else _boundary_state(map_id, x, y)
         )
         assert tracker.observe(state) is state.phase
 
@@ -1278,6 +1389,4 @@ def test_surge_progress_tracker_rejects_a_skipped_gate() -> None:
 
 def test_surge_progress_tracker_rejects_false_snapshot() -> None:
     with pytest.raises(SurgeProgressError, match="failed"):
-        SurgeProgressTracker().observe(
-            _surge_state(SurgePhase.HM01_READY, valid=False)
-        )
+        SurgeProgressTracker().observe(_surge_state(SurgePhase.HM01_READY, valid=False))

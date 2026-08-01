@@ -16,10 +16,10 @@ from pokemon_red_completion.rom import RomFingerprint, RomValidationError
 
 
 class FakeMemory:
-    def __init__(self, values: dict[int, int] | None = None) -> None:
+    def __init__(self, values: dict[int | tuple[int, int], int] | None = None) -> None:
         self.values = values or {}
 
-    def __getitem__(self, address: int) -> int:
+    def __getitem__(self, address: int | tuple[int, int]) -> int:
         return self.values.get(address, 0)
 
 
@@ -297,6 +297,17 @@ def test_adapter_fails_closed_on_invalid_operations(
         for forbidden_address in (-1, False, 0x0000, 0x8000, 0xA000, 0xFF00, 0x10000):
             with pytest.raises(ValueError, match="Work RAM"):
                 emulator.read_u8(forbidden_address)
+
+        recording_factory.backend.memory.values[(2, 0xA000)] = 0x34
+        recording_factory.backend.memory.values[(3, 0xBFFF)] = 0x56
+        assert emulator.read_cartridge_ram_u8(2, 0xA000) == 0x34
+        assert emulator.read_cartridge_ram_u8(3, 0xBFFF) == 0x56
+        for bank in (-1, 0, 1, 4, True):
+            with pytest.raises(ValueError, match="bank must be 2 or 3"):
+                emulator.read_cartridge_ram_u8(bank, 0xA000)
+        for address in (-1, 0x9FFF, 0xC000, 0x10000, True):
+            with pytest.raises(ValueError, match="between 0xA000 and 0xBFFF"):
+                emulator.read_cartridge_ram_u8(2, address)
 
         emulator.press("a")
         with pytest.raises(EmulatorError, match="already pressed"):

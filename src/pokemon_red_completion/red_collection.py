@@ -16,9 +16,12 @@ from .collection import (
     CollectionExclusion,
     CollectionExclusionReason,
     CollectionLocation,
+    CollectionObservation,
+    CollectionReport,
     LivingSpecimen,
+    summarize_collection,
 )
-from .observation import RedCurrentBoxState, RedPokedexState
+from .observation import RedBoxCollectionState, RedCurrentBoxState, RedPokedexState
 from .party import PartyObservation
 
 RED_COLLECTION_GAME_ID = "pokemon.mainline:red:gb:us:rev0"
@@ -302,6 +305,55 @@ def red_visible_living_specimens(
     return tuple(specimens)
 
 
+def red_all_living_specimens(
+    party: PartyObservation,
+    collection: RedBoxCollectionState,
+) -> tuple[LivingSpecimen, ...]:
+    """Project the party and checksum-verified twelve-box census."""
+
+    specimens = [
+        LivingSpecimen(
+            species_ref=red_species_ref(red_internal_species_number(member.species_id)),
+            level=member.level,
+            location=CollectionLocation.PARTY,
+            slot_index=index,
+        )
+        for index, member in enumerate(party.members)
+    ]
+    for box in collection.boxes:
+        specimens.extend(
+            LivingSpecimen(
+                species_ref=red_species_ref(red_internal_species_number(species_id)),
+                level=level,
+                location=CollectionLocation.BOX,
+                container_index=box.box_index,
+                slot_index=slot_index,
+            )
+            for slot_index, (species_id, level) in enumerate(
+                zip(box.species_ids, box.levels, strict=True)
+            )
+        )
+    return tuple(specimens)
+
+
+def red_collection_observation(
+    pokedex: RedPokedexState,
+    party: PartyObservation,
+    collection: RedBoxCollectionState,
+) -> CollectionObservation:
+    """Build the game-neutral global collection state from Red observations."""
+
+    return CollectionObservation(
+        owned_species=frozenset(red_species_ref(number) for number in pokedex.owned_species),
+        specimens=red_all_living_specimens(party, collection),
+        party_size=len(party.members),
+        party_limit=6,
+        box_counts=collection.counts,
+        current_box_index=collection.current_box_index,
+        box_capacity=20,
+    )
+
+
 def _exclusion(
     national_dex_number: int,
     reason: CollectionExclusionReason,
@@ -409,6 +461,48 @@ class RedPokedexProgress:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class RedCollectionProgress:
+    """Full Pokédex, living-storage, and level-cap progress for Red."""
+
+    pokedex: RedPokedexProgress
+    collection: CollectionReport
+    box_counts: tuple[int, ...]
+    current_box_index: int
+    storage_initialized: bool
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "contract": "red-solo-living-dex-level-100-v1",
+            "target": self.collection.target_count,
+            "owned": self.collection.pokedex_owned_count,
+            "seen": len(self.pokedex.seen_target_numbers),
+            "living": self.collection.living_count,
+            "level_100": self.collection.level_cap_count,
+            "missing_owned": [
+                red_species_number(species_ref) for species_ref in self.collection.missing_owned
+            ],
+            "missing_living": [
+                red_species_number(species_ref) for species_ref in self.collection.missing_living
+            ],
+            "underleveled": [
+                {
+                    "national_dex_number": red_species_number(species_ref),
+                    "level": level,
+                }
+                for species_ref, level in self.collection.underleveled
+            ],
+            "excluded_owned": list(self.pokedex.excluded_owned_numbers),
+            "box_counts": list(self.box_counts),
+            "current_box": self.current_box_index + 1,
+            "storage_initialized": self.storage_initialized,
+            "all_boxes_verified": True,
+            "pokedex_target_complete": not self.collection.missing_owned,
+            "living_collection_verified": not self.collection.missing_living,
+            "level_100_collection_verified": self.collection.passed,
+        }
+
+
 def summarize_red_pokedex(state: RedPokedexState) -> RedPokedexProgress:
     """Project Red's flags onto the 124-species single-save target denominator."""
 
@@ -428,4 +522,21 @@ def summarize_red_pokedex(state: RedPokedexState) -> RedPokedexProgress:
             number for number in target_numbers if number not in state.owned_species
         ),
         excluded_owned_numbers=tuple(sorted(state.owned_species - target_set)),
+    )
+
+
+def summarize_red_collection(
+    pokedex: RedPokedexState,
+    party: PartyObservation,
+    boxes: RedBoxCollectionState,
+) -> RedCollectionProgress:
+    """Evaluate all three Red completionist gates from one coherent census."""
+
+    observation = red_collection_observation(pokedex, party, boxes)
+    return RedCollectionProgress(
+        pokedex=summarize_red_pokedex(pokedex),
+        collection=summarize_collection(RED_SOLO_COLLECTION_CONTRACT, observation),
+        box_counts=boxes.counts,
+        current_box_index=boxes.current_box_index,
+        storage_initialized=boxes.storage_initialized,
     )
