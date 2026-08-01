@@ -66,7 +66,7 @@ from pokemon_red_completion.saffron import (
     ROOF_TO_VENDING,
     SAFFRON_TO_CENTER,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 SILPH_CHECKPOINT_COUNT = 12
 SILPH_NET_MONEY_DELTA = -1_951
@@ -304,7 +304,7 @@ class SilphChapterReport:
             and self.final_raw.map_id == MapId.SAFFRON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.battle_state == 0
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.final_raw.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
             and self.party_hp == self.party_max_hp

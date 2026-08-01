@@ -25,7 +25,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 SAFFRON_CHECKPOINT_COUNT = 8
 FRESH_WATER_PRICE = 200
@@ -158,7 +158,7 @@ class SaffronChapterReport:
             and self.final_raw.map_id == MapId.SAFFRON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.battle_state == 0
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.final_raw.first_party_level is not None
             and 42 <= self.final_raw.first_party_level <= 43
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)

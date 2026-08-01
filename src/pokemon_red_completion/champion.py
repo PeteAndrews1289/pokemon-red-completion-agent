@@ -37,7 +37,7 @@ from pokemon_red_completion.silph import (
     SilphChapterError,
     _battle_healing_item,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
     INDIGO_X_SPECIAL_RESERVE,
     VictoryRoadChapterError,
@@ -141,7 +141,7 @@ class ChampionChapterReport:
             and self.x_specials_used == 6
             and _event(self.final_raw, EventFlag.BEAT_CHAMPION_RIVAL)
             and self.final_raw.map_id == MapId.HALL_OF_FAME
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.controller_released
         )
 
@@ -206,7 +206,7 @@ def run_champion_chapter(
     if (
         initial.map_id != MapId.CHAMPIONS_ROOM
         or (initial.player_x, initial.player_y) != (4, 3)
-        or initial.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(initial.party_species_ids)
         or not _event(initial, EventFlag.BEAT_LANCE)
         or _event(initial, EventFlag.BEAT_CHAMPION_RIVAL)
         or initial.first_party_moves != (0x05, 0x46, 0x3B, 0x39)

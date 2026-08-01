@@ -17,7 +17,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 SAFARI_CHECKPOINT_COUNT = 12
 WATER_GUN = 0x37
@@ -168,7 +168,7 @@ class SafariChapterReport:
             and self.final_bag == expected_final_bag
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
             and self.party_status == (0, 0, 0)
             and self.controller_released
@@ -475,7 +475,7 @@ def _move(
                 f"{label} blocked at step {step}: {direction}; "
                 f"{(state.map_id, state.player_x, state.player_y)!r}."
             )
-        if state.party_species_ids != TOWER_FINAL_PARTY or _balls(emulator) not in {0, 30}:
+        if not party_core_intact(state.party_species_ids) or _balls(emulator) not in {0, 30}:
             raise SafariChapterError(f"{label} changed party or Safari Balls.")
     return encounters
 
@@ -574,7 +574,7 @@ def _require(raw: RawGameState, map_id: int, coordinate: tuple[int, int], label:
         raw.map_id != map_id
         or (raw.player_x, raw.player_y) != coordinate
         or raw.battle_state != 0
-        or raw.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(raw.party_species_ids)
     ):
         raise SafariChapterError(
             f"{label} missed gate: map={raw.map_id!r}, "

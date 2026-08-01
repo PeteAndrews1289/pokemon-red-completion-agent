@@ -32,7 +32,7 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 FUCHSIA_CHECKPOINT_COUNT = 14
 BITE = 0x2C
@@ -251,7 +251,7 @@ class FuchsiaChapterReport:
             and self.initial_bag == self.final_bag
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
             and self.party_status == (0, 0, 0)
             and self.controller_released
@@ -758,7 +758,7 @@ def _move(
                 f"{label} blocked at step {step}: {direction}; "
                 f"map={state.map_id!r}, coordinate={(state.player_x, state.player_y)!r}."
             )
-        if state.party_species_ids != TOWER_FINAL_PARTY or (state.first_party_hp or 0) <= 0:
+        if not party_core_intact(state.party_species_ids) or (state.first_party_hp or 0) <= 0:
             raise FuchsiaChapterError(
                 f"{label} changed the protected party: {state.party_species_ids!r}, "
                 f"lead_hp={state.first_party_hp!r}."
@@ -829,7 +829,7 @@ def _require(
         raw.map_id != map_id
         or (raw.player_x, raw.player_y) != coordinate
         or raw.battle_state != 0
-        or raw.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(raw.party_species_ids)
     ):
         raise FuchsiaChapterError(
             f"{label} missed gate: map={raw.map_id!r}, "

@@ -37,7 +37,7 @@ from pokemon_red_completion.silph import (
     ROUTE_7_WEST_TO_CONNECTION,
     SAFFRON_CENTER_TO_ROUTE_7_GATE,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 CINNABAR_CHECKPOINT_COUNT = 6
 CINNABAR_MAX_INPUT_BAG_SLOTS = 19
@@ -163,7 +163,7 @@ class CinnabarChapterReport:
             and self.trainer_battles == 0
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.final_raw.first_party_level == 46
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
@@ -615,7 +615,7 @@ def _require(raw, map_id: int, position: tuple[int, int], label: str) -> None:
         raw.map_id != int(map_id)
         or (raw.player_x, raw.player_y) != position
         or raw.battle_state != 0
-        or raw.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(raw.party_species_ids)
     ):
         raise CinnabarChapterError(
             f"{label} failed: map={raw.map_id:#04x}, "

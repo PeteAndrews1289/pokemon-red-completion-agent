@@ -48,7 +48,7 @@ from pokemon_red_completion.silph import (
     SilphChapterError,
     _battle_healing_item,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
     VictoryRoadChapterError,
     _battle_sacrifice,
@@ -155,7 +155,7 @@ class LanceChapterReport:
             and self.x_specials_used == LANCE_X_SPECIAL_USE
             and _event(self.final_raw, EventFlag.BEAT_LANCE)
             and self.final_raw.map_id == MapId.CHAMPIONS_ROOM
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.final_raw.first_party_moves == (0x05, 0x46, 0x3B, 0x39)
             and all(hp > 0 for hp in self.party_hp)
             and self.party_status == (0, 0, 0)
@@ -219,7 +219,7 @@ def run_lance_chapter(
     initial = reader.read()
     if (
         initial.map_id != MapId.LANCES_ROOM
-        or initial.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(initial.party_species_ids)
         or not _event(initial, EventFlag.BEAT_AGATHA)
         or _event(initial, EventFlag.BEAT_LANCE)
         or _bag(emulator).get(ItemId.ELIXIR, 0) != 0

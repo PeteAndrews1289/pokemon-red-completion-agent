@@ -44,7 +44,7 @@ from pokemon_red_completion.silph import (
     SilphChapterError,
     _battle_healing_item,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
     INDIGO_FULL_RESTORE_RESERVE,
     INDIGO_X_SPECIAL_RESERVE,
@@ -161,7 +161,7 @@ class LoreleiChapterReport:
             and self.full_restores_used <= 12
             and _event(self.final_raw, EventFlag.BEAT_LORELEI)
             and self.final_raw.map_id == MapId.BRUNOS_ROOM
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp[0] >= LORELEI_SAFE_HP
             and self.party_hp[1:] == self.party_max_hp[1:]
             and self.party_status == (0, 0, 0)
@@ -221,7 +221,7 @@ def run_lorelei_chapter(
     if (
         initial.map_id != MapId.INDIGO_PLATEAU_LOBBY
         or (initial.player_x, initial.player_y) != (2, 5)
-        or initial.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(initial.party_species_ids)
         or initial.first_party_moves != (0x42, 0x46, 0x3A, 0x39)
         or _bag(emulator).get(ItemId.FULL_RESTORE, 0) != INDIGO_FULL_RESTORE_RESERVE
         or _bag(emulator).get(ItemId.FULL_HEAL, 0) != 3

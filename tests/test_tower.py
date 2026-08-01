@@ -18,6 +18,7 @@ from pokemon_red_completion.tower import (
     ROUTE_8_EAST_GOAL,
     ROUTE_8_SAFE_ROW_MASKS,
     TOWER_CHECKPOINT_COUNT,
+    TOWER_FINAL_PARTY,
     TOWER_LAVENDER_TIMING,
     TowerBattleEvidence,
     TowerChapterReport,
@@ -26,6 +27,7 @@ from pokemon_red_completion.tower import (
     _plan_route_8_east,
     _route_8_coordinate_is_safe,
     _scripted_trainer_identity,
+    party_core_intact,
 )
 
 
@@ -239,3 +241,33 @@ def test_scripted_rival_identity_ignores_stale_engaged_set() -> None:
             return self.values[address]
 
     assert _scripted_trainer_identity(Memory()) == (0xF2, 0x2A, 5)
+
+
+def test_party_core_intact_detects_loss_reorder_and_substitution() -> None:
+    """The guard must still catch every failure exact equality caught."""
+
+    assert party_core_intact(TOWER_FINAL_PARTY)
+    assert not party_core_intact(None)
+    assert not party_core_intact(())
+    # a lost member
+    assert not party_core_intact(TOWER_FINAL_PARTY[:2])
+    # a reordered core
+    assert not party_core_intact((TOWER_FINAL_PARTY[1], TOWER_FINAL_PARTY[0], TOWER_FINAL_PARTY[2]))
+    # a substituted member
+    assert not party_core_intact((TOWER_FINAL_PARTY[0], 0x99, TOWER_FINAL_PARTY[2]))
+    # an unevolved lead
+    assert not party_core_intact((0xB3, TOWER_FINAL_PARTY[1], TOWER_FINAL_PARTY[2]))
+
+
+def test_party_core_intact_allows_the_balanced_roster_to_recruit() -> None:
+    """Appending members must not trip a guard that exists to catch losses."""
+
+    assert party_core_intact((*TOWER_FINAL_PARTY, 0x84))
+    assert party_core_intact((*TOWER_FINAL_PARTY, 0x84, 0x68, 0x2B))
+    # growth still cannot hide damage to the core
+    assert not party_core_intact((TOWER_FINAL_PARTY[0], 0x84, TOWER_FINAL_PARTY[2]))
+
+
+def test_party_core_intact_accepts_an_explicit_core() -> None:
+    assert party_core_intact((0x1C, 0x84), core=(0x1C,))
+    assert not party_core_intact((0x84, 0x1C), core=(0x1C,))

@@ -45,7 +45,7 @@ from pokemon_red_completion.silph import (
     SilphChapterError,
     _battle_healing_item,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
     INDIGO_X_SPECIAL_RESERVE,
     _CountingExecutor,
@@ -150,7 +150,7 @@ class AgathaChapterReport:
             and self.x_specials_used == AGATHA_X_SPECIAL_USE
             and _event(self.final_raw, EventFlag.BEAT_AGATHA)
             and self.final_raw.map_id == MapId.LANCES_ROOM
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
             and self.party_status == (0, 0, 0)
             and self.controller_released
@@ -211,7 +211,7 @@ def run_agatha_chapter(
     if (
         initial.map_id != MapId.AGATHAS_ROOM
         or (initial.player_x, initial.player_y) != (4, 5)
-        or initial.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(initial.party_species_ids)
         or not _event(initial, EventFlag.BEAT_BRUNO)
         or _event(initial, EventFlag.BEAT_AGATHA)
         or _bag(emulator).get(ItemId.X_SPECIAL, 0) != INDIGO_X_SPECIAL_RESERVE

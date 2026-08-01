@@ -68,7 +68,7 @@ from pokemon_red_completion.saffron import (
     MART_TO_CITY,
 )
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _battle_hyper_potion
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 VICTORY_ROAD_CHECKPOINT_COUNT = 9
 RIVAL_PARTY = (
@@ -245,7 +245,7 @@ class VictoryRoadChapterReport:
             and self.tm06_consumed
             and self.final_raw.map_id == MapId.INDIGO_PLATEAU_LOBBY
             and (self.final_raw.player_x, self.final_raw.player_y) == (2, 5)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and (self.final_raw.first_party_level or 0)
             >= MANSION_TRAINING_POLICY.target_level
             and self.final_raw.first_party_moves == (0x42, 0x46, 0x3A, 0x39)

@@ -47,7 +47,7 @@ from pokemon_red_completion.silph import (
     _navigate_saffron_coordinate,
     _pulse,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 SABRINA_CHECKPOINT_COUNT = 6
 SABRINA_OPPONENT = 0xF0
@@ -165,7 +165,7 @@ class SabrinaChapterReport:
             and self.final_raw.map_id == MapId.SAFFRON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.battle_state == 0
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
             and self.party_status == (0, 0, 0)
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)

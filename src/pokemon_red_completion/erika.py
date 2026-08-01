@@ -48,7 +48,7 @@ from pokemon_red_completion.silph import (
     _deposit_pc_item,
     acquire_and_teach_ice_beam_from_celadon_center,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 ERIKA_TRAINER_REWARD_TOTAL = 4_056
 ERIKA_ICE_BEAM_PREPARATION_COST = 200
@@ -218,7 +218,7 @@ class ErikaChapterReport:
             and int(ItemId.FRESH_WATER) not in dict(self.final_bag)
             and self.final_raw.map_id == MapId.CELADON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.final_raw.first_party_level is not None
             and 42 <= self.final_raw.first_party_level <= 43
             and self.final_raw.first_party_moves == (0x82, STRENGTH, ICE_BEAM_MOVE, 0x39)
@@ -804,7 +804,7 @@ def _require(raw, map_id, coordinate, label) -> None:
         raw.map_id != map_id
         or (raw.player_x, raw.player_y) != coordinate
         or raw.battle_state != 0
-        or raw.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(raw.party_species_ids)
     ):
         raise ErikaChapterError(
             f"{label} missed gate: map={raw.map_id}, "

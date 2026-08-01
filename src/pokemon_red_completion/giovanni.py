@@ -40,7 +40,7 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 GIOVANNI_CHECKPOINT_COUNT = 8
 GIOVANNI_OPPONENT = 0xE5
@@ -233,7 +233,7 @@ class GiovanniChapterReport:
             and self.money_remaining == self.initial_money + 14_855
             and self.final_raw.map_id == MapId.VIRIDIAN_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and (self.final_raw.first_party_level or 0)
             >= MANSION_TRAINING_POLICY.target_level
             and self.final_raw.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE_ID, SURF_MOVE_ID)

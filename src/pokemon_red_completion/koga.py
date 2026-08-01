@@ -32,7 +32,7 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 KOGA_CHECKPOINT_COUNT = 11
 KOGA_TRAINER_REWARD_TOTAL = 7_852
@@ -212,7 +212,7 @@ class KogaChapterReport:
             and self.final_money == self.initial_money + KOGA_TRAINER_REWARD_TOTAL
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
             and all(hp > 0 for hp in self.party_hp)
             and self.party_status == (0, 0, 0)
@@ -634,7 +634,7 @@ def _move(
                 f"{label} blocked at step {step}: {direction}; "
                 f"{(state.map_id, state.player_x, state.player_y)!r}."
             )
-        if state.party_species_ids != TOWER_FINAL_PARTY:
+        if not party_core_intact(state.party_species_ids):
             raise KogaChapterError(f"{label} changed the qualified party.")
 
 
@@ -713,7 +713,7 @@ def _require(
         raw.map_id != map_id
         or (raw.player_x, raw.player_y) != coordinate
         or raw.battle_state != 0
-        or raw.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(raw.party_species_ids)
     ):
         raise KogaChapterError(
             f"{label} missed gate: map={raw.map_id!r}, "

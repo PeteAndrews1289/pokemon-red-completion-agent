@@ -56,6 +56,28 @@ ROCKET = (0xE6, 0x1E)
 MAROWAK = 0x91
 TOWER_FINAL_PARTY = (0x1C, PROTECTED_PARTY[1], PROTECTED_PARTY[2])
 
+
+def party_core_intact(
+    observed: tuple[int, ...] | None,
+    core: tuple[int, ...] = TOWER_FINAL_PARTY,
+) -> bool:
+    """Whether the qualified core party is still present, in order, at the front.
+
+    The route's protected-party guard exists to catch a *lost* or *reordered*
+    member, an unexpected evolution, or a wiped party.  It was originally written
+    as exact tuple equality, which also forbade the party ever growing—an
+    accident of the single-carry route rather than a safety property.
+
+    Matching on the leading members preserves every failure this guard was built
+    to detect while allowing the balanced roster to recruit into the open slots.
+    A party that is shorter than the core, has substituted a member, or has
+    reordered one still fails.
+    """
+
+    if observed is None:
+        return False
+    return tuple(observed[: len(core)]) == tuple(core)
+
 OPTIONAL_EVENTS = (
     EventFlag.BEAT_POKEMONTOWER_3_TRAINER_0,
     EventFlag.BEAT_POKEMONTOWER_3_TRAINER_1,

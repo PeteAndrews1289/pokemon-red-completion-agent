@@ -49,7 +49,7 @@ from pokemon_red_completion.silph import (
     SilphChapterError,
     _battle_healing_item,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
     _CountingExecutor,
     _event,
@@ -145,7 +145,7 @@ class BrunoChapterReport:
             and _turns_valid(self.turns)
             and _event(self.final_raw, EventFlag.BEAT_BRUNO)
             and self.final_raw.map_id == MapId.AGATHAS_ROOM
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
             and self.party_status == (0, 0, 0)
             and self.controller_released
@@ -204,7 +204,7 @@ def run_bruno_chapter(
     if (
         initial.map_id != MapId.BRUNOS_ROOM
         or (initial.player_x, initial.player_y) != (4, 5)
-        or initial.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(initial.party_species_ids)
         or not _event(initial, EventFlag.BEAT_LORELEI)
         or _event(initial, EventFlag.BEAT_BRUNO)
     ):

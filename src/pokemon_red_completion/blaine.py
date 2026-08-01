@@ -49,7 +49,7 @@ from pokemon_red_completion.observation import (
 )
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.training import (
     TrainingDirective,
     TrainingObservation,
@@ -267,7 +267,7 @@ class BlaineChapterReport:
             - (0 if self.antidote_sold else BLAINE_ANTIDOTE_SALE_VALUE)
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and (self.final_raw.first_party_level or 0) >= MANSION_TRAINING_POLICY.target_level
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, SURF_MOVE_ID)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
