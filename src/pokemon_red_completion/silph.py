@@ -887,9 +887,10 @@ def _acquire_silph_x_special(
         (("up",), MapId.CELADON_MART_4F, (16, 2), "X Special Mart 4F return"),
         (MART_4F_TO_3F, MapId.CELADON_MART_3F, (12, 2), "X Special Mart 3F return"),
         (MART_3F_TO_2F, MapId.CELADON_MART_2F, (16, 2), "X Special Mart 2F return"),
-        (MART_2F_TO_1F, MapId.CELADON_MART_1F, (12, 2), "X Special Mart 1F return"),
         (MART_TO_CITY, MapId.CELADON_CITY, (10, 14), "X Special Celadon Mart exit"),
     ):
+        if map_id == MapId.CELADON_CITY:
+            _return_mart_2f_to_1f(actions, reader, timing)
         _move_verified(actions, reader, route, timing, label)
         _require(reader.read(), map_id, coordinate, label)
     _move(actions, reader, _directions("RRRRU"), timing)
@@ -1827,6 +1828,39 @@ def _move_verified(
                 f"{(state.map_id, state.player_x, state.player_y)!r}."
             )
     return state
+
+
+def _return_mart_2f_to_1f(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SilphTiming,
+) -> None:
+    """Reach the 2F down staircase despite a customer occupying its top row."""
+
+    _require(reader.read(), MapId.CELADON_MART_2F, (16, 2), "X Special Mart 2F return")
+    while True:
+        state = reader.read()
+        if state.player_x == 12:
+            break
+        try:
+            _move_verified(actions, reader, ("left",), timing, "X Special Mart 2F top row")
+        except SilphChapterError:
+            state = reader.read()
+            detour = _mart_2f_return_detour((state.player_x or 0, state.player_y or 0))
+            _move_verified(actions, reader, detour, timing, "X Special Mart 2F customer detour")
+            break
+    _require(reader.read(), MapId.CELADON_MART_2F, (12, 2), "X Special Mart 2F stairs")
+    _move_verified(actions, reader, ("up",), timing, "X Special Mart 1F return")
+    _require(reader.read(), MapId.CELADON_MART_1F, (12, 2), "X Special Mart 1F return")
+
+
+def _mart_2f_return_detour(start: tuple[int, int]) -> tuple[str, ...]:
+    """Route below a blocked customer tile and back to the down staircase."""
+
+    x, y = start
+    if y != 2 or not 12 < x <= 16:
+        raise SilphChapterError(f"Mart 2F detour started outside its safe corridor: {start!r}.")
+    return ("down",) + ("left",) * (x - 12) + ("up",)
 
 
 def _plan_saffron_center_approach(
