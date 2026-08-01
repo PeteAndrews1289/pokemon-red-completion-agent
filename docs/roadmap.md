@@ -35,6 +35,10 @@ two clean-power runs at **301/301 checkpoints** and **36/36 objectives**. Each r
 lead from level 46 to 55 with 115 wild wins, five healing trips, and zero faints, then reached the
 same Champion-plus-Hall-of-Fame terminal in 6,581,531 frames and 54,261 actions.
 
+The newest balanced lineage adds the Celadon Eevee gift, Thunder Stone purchase, and Jolteon
+evolution. It passes **303/303 checkpoints** and **36/36 objectives** from clean power with five
+members, zero training faints, a final level band of 77–82, and 372,194 teacher actions.
+
 - [x] Build the no-save PyBoy bridge and read-only state adapter from pinned symbols.
 - [x] Add controller timing and one authoritative action executor.
 - [x] Qualify clean power-on through the input-ready bedroom and one-tile movement probe.
@@ -152,8 +156,8 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   from clean power through the Hall of Fame.
 - [x] Catch Route 12 Snorlax with bounded recovery and capture decisions, raise the live balance
   contract to four members, and qualify all 301 checkpoints through the Hall of Fame.
-- [ ] Add acquisition chapters for Jolteon and Hitmonlee and raise the live training contract from
-  four members to six.
+- [x] Add the Eevee/Thunder Stone/Jolteon acquisition and raise the live training contract to five.
+- [ ] Add the Hitmonlee acquisition and raise the live training contract from five members to six.
 - [ ] Replay the six-member balanced-team route from clean power-on and qualify it against the
   completion contract.
 - [ ] Commit and push the exact source/configuration state, then successfully complete the 63/63
@@ -201,9 +205,9 @@ Dataset quality now also depends on party composition. The historical recordings
 with one overleveled lead, which makes most battle labels trivially correct and teaches nothing
 about switching or matchup selection. The current branch adds a game-neutral six-member party
 contract, derived team metrics, and a reusable balanced-training policy. Its first live
-clean-power integration catches Snorlax, rotates and trains the route's current four-member party
-through the Hall of Fame, and enforces a level-50 floor plus five-level spread. Acquiring and
-qualifying Jolteon and Hitmonlee is still outstanding. The
+clean-power integration catches Snorlax, obtains and evolves Jolteon, rotates and trains the
+route's current five-member party through the Hall of Fame, and enforces a level-50 floor plus
+five-level spread. Acquiring and qualifying Hitmonlee is still outstanding. The
 single-carry lineage remains preserved as route evidence. See the
 [Project Narrative](project-narrative.md) for the reasoning and the outstanding route work.
 

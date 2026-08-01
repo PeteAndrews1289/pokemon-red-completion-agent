@@ -1,6 +1,6 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-> **Living engineering record — updated July 31, 2026.** This document separates verified
+> **Living engineering record — updated August 1, 2026.** This document separates verified
 > historical results from work on the current robustness branch. It will be updated at each
 > collection, training, evaluation, and transfer gate.
 
@@ -31,6 +31,14 @@ recovery rule, transferable feature, or stronger evaluation gate before model tr
 
 The intended result is a learned/hybrid agent that understands objectives and bounded skills rather
 than memorizing a four-million-frame button sequence.
+
+The long-term target is broader still: a general Pokémon agent that can satisfy a published 100%
+completion contract for each supported title. For Red, the stretch contract means owning every
+species legitimately obtainable in the cartridge, completing every available evolution, and
+training the living collection to level 100. Impossible solo-ROM requirements such as external
+trades and version exclusives remain visible exceptions. This completionist run is a source of
+capture, storage, evolution, resource, and grinding demonstrations; it does not replace capped and
+randomized evaluations of actual battle competence.
 
 The current phase makes one further correction. The qualified route completed the game by
 overleveling a single Pokémon, which is a legitimate way to finish Red but a poor thing to imitate:
@@ -291,7 +299,7 @@ The declared roster binds six species to six species-neutral roles:
 | Lead attacker | Blastoise | Already the starter lineage |
 | Speed control | Dugtrio | Evolves from the Diglett the Vermilion chapter already captures |
 | Field utility | DUX (Farfetch'd) | Already obtained by the Vermilion trade |
-| Special sweeper | Jolteon | Reachable; **not yet acquired** |
+| Special sweeper | Jolteon | **Acquired and evolved** through the Celadon gift/stone route |
 | Bulky absorber | Snorlax | **Caught and retained** through the Hall of Fame |
 | Physical sweeper | Hitmonlee | Reachable via the Saffron Fighting Dojo; **not yet acquired** |
 
@@ -513,6 +521,14 @@ trip remains bounded. A lean six-Full-Restore League reserve was sufficient thro
 and left 3,814 money. This qualifies the deterministic teacher and reusable training/capture
 mechanisms; it is not yet the target six-member curriculum or a learned-policy completion claim.
 
+The next qualified lineage adds Eevee through Celadon Mansion's rear entrance, purchases and
+consumes a Thunder Stone, and retains Jolteon as the fifth member. Its uninterrupted clean-power
+run passes **303/303 checkpoints** and **36/36 objectives**. The stricter zero-faint Mansion block
+uses semantic matchup, HP, damaging-PP, recovery, and party-order gates; it finishes with all five
+members between levels 77 and 82 before clearing the remainder of the game. The complete teacher
+run executes 372,194 actions. This qualifies a five-member deterministic curriculum, not a learned
+rollout or six-member result.
+
 The full learned-system and transfer claims remain pending. In particular:
 
 - the current battle ranker has not completed the game;
@@ -520,10 +536,10 @@ The full learned-system and transfer claims remain pending. In particular:
   finalized source;
 - held-out full-game completion has not yet been demonstrated;
 - cross-game transfer has not yet been measured;
-- two declared roster members—Jolteon and Hitmonlee—are not acquired by an existing chapter; and
-- the live balanced-training phase currently qualifies four members; its six-member level floor,
+- one declared roster member—Hitmonlee—is not acquired by an existing chapter; and
+- the live balanced-training phase currently qualifies five members; its six-member level floor,
   spread ceiling, recruitment sequence, and area-selection behavior remain unvalidated until the
-  missing acquisition chapters land.
+  missing acquisition chapter lands.
 
 These limitations are part of the public project record rather than hidden behind the completed
 teacher result.

@@ -62,7 +62,8 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert MANSION_TRAINING_POLICY.target_level == 55
     assert MANSION_TRAINING_POLICY.preferred_move_slots == (4, 2, 3, 1)
     assert MANSION_TRAINING_POLICY.max_battles == 180
-    assert MANSION_TEAM_POLICY.required_size == 4
+    assert MANSION_TEAM_POLICY.required_size == 5
+    assert MANSION_TEAM_POLICY.max_battles == 4_000
 
 
 def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -> None:

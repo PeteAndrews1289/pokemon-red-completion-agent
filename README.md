@@ -37,12 +37,13 @@ control, and progressively trained specialists.**
 > In each run the lead trained from level 46 to 55 through 115 wild wins, 1,862 bounded encounter
 > steps, five healing trips, and zero faints; it reached Indigo at level 58 and the Hall of Fame at
 > level 61. This is still deterministic-teacher evidence, not a learned-policy claim.
-> The balanced-team curriculum branch now catches the Route 12 Snorlax with a bounded semantic
-> capture policy, rotates all four current members through verified switch-participation and direct
-> training, and completes a clean-power **301/301-checkpoint, 36/36-objective** Hall-of-Fame run.
-> The four-member block enforces level 50+, a maximum five-level spread, no faints, bounded healing,
-> and an explicitly budgeted League inventory. Acquiring Jolteon and Hitmonlee, qualifying all six
-> members, and training the learned policy remain open.
+> The balanced-team curriculum branch now catches Route 12 Snorlax, obtains Eevee through the
+> Celadon Mansion rear route, buys a Thunder Stone, and evolves Jolteon. Its newest uninterrupted
+> clean-power run completes **303/303 checkpoints** and **36/36 objectives** with five members.
+> The zero-faint training block stops with every member at level 77–82, satisfying the strict
+> five-level spread before the same lineage clears Giovanni, Victory Road, the Elite Four, the
+> Champion, and Hall of Fame in **372,194 actions**. Hitmonlee, the six-member replay, collection,
+> and learned-policy training remain open.
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
 > **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned

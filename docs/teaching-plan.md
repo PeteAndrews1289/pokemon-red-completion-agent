@@ -167,6 +167,28 @@ Teaching therefore targets a **balanced six-member party** instead:
 - hold the party within a five-level spread at major training boundaries; and
 - permit temporary deviations only when progression requires them, with the reason recorded.
 
+## Collection curriculum and multi-game north star
+
+The balanced Hall-of-Fame route is the prerequisite, not the final collection target. After that
+route qualifies, Red gains a separate completionist curriculum that surveys every encounter area,
+catches every species legitimately obtainable in the supported Red cartridge, performs every
+available evolution, manages the active party and PC as one living collection, and trains every
+owned species to level 100. Trade- and version-exclusive gaps are reported explicitly rather than
+silently claimed as solo-cartridge completions.
+
+Level-100 collection is deliberately a separate teacher mode. It supplies abundant capture,
+storage, evolution, resource-restocking, and long-horizon grinding examples, but ordinary learner
+evaluation retains level caps and variable matchups so overwhelming levels cannot substitute for
+battle competence.
+
+The project north star is a learned/hybrid agent that can reach a declared 100% contract across
+Pokémon titles. Shared policies own exploration, battling, catching, party building, grinding,
+evolution, inventory, economy, recovery, and collection planning. Generation adapters describe
+mechanics such as abilities, breeding, and battle-system changes; game adapters provide maps,
+encounters, story dependencies, puzzles, and title-specific optional objectives. Transfer is
+measured by how much less title-specific teaching the next game requires, not by assuming Red's
+exact route will solve it.
+
 The rules are expressed against the game-neutral party contract—membership, species, active-party
 position, level, health, status, moves, power points, experience, and the derived team metrics—so
 the same policy can be evaluated in a second title behind a small adapter. Only the species
@@ -177,13 +199,13 @@ bound respectively to the lead-attacker, speed-control, field-utility, special-s
 bulky-absorber, and physical-sweeper roles. Any substitution must record why it was made; the
 roster type rejects an unexplained one.
 
-The live integration now catches Route 12 Snorlax, rotates four members through bounded switch
-participation, meets the level-floor and spread contract, and reaches the Hall of Fame from clean
-power. Two consequences remain before that proof becomes the intended six-member teacher:
+The live integration now catches Route 12 Snorlax, receives Eevee, evolves Jolteon, rotates five
+members through bounded switch participation, meets the level-floor and spread contract at levels
+77–82 with zero faints, and reaches the Hall of Fame from clean power through 303 checkpoints. One
+acquisition consequence remains before that proof becomes the intended six-member teacher:
 
-1. Jolteon and Hitmonlee have no acquisition chapter.
-2. The live training policy must raise its required party size from four to six and qualify the
-   resulting level floor and spread.
+1. Hitmonlee still needs a Fighting Dojo acquisition chapter, followed by a six-member replay of
+   the same level-floor and spread contract.
 
 Existing recorded demonstrations still describe single-carry play because the new balanced
 lineage has not yet been collected. Any dataset card derived from those recordings must say so.

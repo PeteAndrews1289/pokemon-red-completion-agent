@@ -130,7 +130,7 @@ def _reverse(route: Iterable[str]) -> tuple[str, ...]:
 CENTER_EXIT = _directions("DDDDD")
 CITY_TO_MART_APPROACH = _directions("RRRRRDRRRRRRRRRRRRURRRRRRRRRRUUUUUUUUUUUUUUUUUULLLLLLLLLLL")
 MART_DOOR = ("up",)
-MART_TO_CLERK = _directions("ULU")
+MART_TO_CLERK = _directions("UUL")
 CLERK_TO_EXIT = _directions("RDD")
 MART_TO_SILPH = _directions("DRRRRRRRRRRRDDDDDDDDDDDLLLLLLLLLLLLLLLLLLU")
 CENTER_TO_SILPH = _directions("LLLLLLUUUUUUUURRRRRRRRRRRRRRRU")
@@ -1356,9 +1356,34 @@ def _buy_supplies(
     timing: SilphTiming,
 ) -> None:
     lavender_timing = LavenderTiming(wait_frames=timing.menu_frames)
-    _pulse(actions, MacroActionKind.MOVE, timing, "left", timing.menu_frames)
-    _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
-    _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    for _ in range(timing.movement_retries):
+        _pulse(actions, MacroActionKind.MOVE, timing, "left", timing.menu_frames)
+        raw = reader.read()
+        if (
+            raw.map_id == MapId.SAFFRON_MART
+            and (raw.player_x, raw.player_y) == (2, 5)
+            and emulator.read_u8(RamAddress.PLAYER_FACING_DIRECTION) == 0x08
+        ):
+            break
+    else:
+        raw = reader.read()
+        raise SilphChapterError(
+            "Saffron clerk interaction stance was not established: "
+            f"position={(raw.player_x, raw.player_y)!r}, "
+            f"facing={emulator.read_u8(RamAddress.PLAYER_FACING_DIRECTION):#04x}, "
+            f"front={emulator.read_u8(RamAddress.TILE_IN_FRONT_OF_PLAYER):#04x}, "
+            f"joy_ignore={emulator.read_u8(RamAddress.JOY_IGNORE):#04x}."
+        )
+    _pulse(actions, MacroActionKind.INTERACT, timing, frames=timing.menu_frames)
+    for _ in range(8):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (5, 4):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    else:
+        raise SilphChapterError("Saffron clerk did not open the priced item list.")
     _buy_mart_item(
         actions,  # type: ignore[arg-type]
         emulator,

@@ -1676,7 +1676,15 @@ def _buy_mart_item(
             120,
         )
     else:
-        raise LavenderChapterError(f"Mart could not select inventory index {absolute_index}.")
+        raise LavenderChapterError(
+            f"Mart could not select inventory index {absolute_index}; "
+            f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
+            f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}, "
+            f"max={emulator.read_u8(RamAddress.MAX_MENU_ITEM)}, "
+            f"top=({emulator.read_u8(RamAddress.TOP_MENU_ITEM_X)}, "
+            f"{emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y)}), "
+            f"selected={emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM):#04x}."
+        )
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     for _ in range(max(12, quantity + 1)):
         selected = emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM)

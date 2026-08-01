@@ -18,6 +18,21 @@ from pokemon_red_completion.celadon import (
     _party_status,
     _RunState,
 )
+from pokemon_red_completion.lavender import (
+    DEFAULT_LAVENDER_TIMING,
+    LavenderChapterError,
+    _buy_mart_item,
+    _close_menus,
+    _open_bag,
+    _select_bag_item,
+    _select_cursor,
+)
+from pokemon_red_completion.navigation import (
+    Coordinate,
+    GridMap,
+    path_to_directions,
+    shortest_path,
+)
 from pokemon_red_completion.observation import (
     ItemId,
     MapId,
@@ -27,9 +42,30 @@ from pokemon_red_completion.observation import (
 )
 from pokemon_red_completion.tower import party_core_intact
 
-SAFFRON_CHECKPOINT_COUNT = 8
+SAFFRON_CHECKPOINT_COUNT = 10
 FRESH_WATER_PRICE = 200
+THUNDER_STONE_PRICE = 2100
 GUARD_DRINK_FLAG = 0x40
+EEVEE = 0x66
+JOLTEON = 0x68
+ROOF_HOUSE_GRID = GridMap(
+    width=8,
+    height=8,
+    blocked=frozenset(
+        {
+            *(Coordinate(x, 0) for x in range(8)),
+            Coordinate(7, 1),
+            Coordinate(3, 3),
+            Coordinate(4, 3),
+            Coordinate(3, 4),
+            Coordinate(4, 4),
+            Coordinate(0, 6),
+            Coordinate(7, 6),
+            Coordinate(0, 7),
+            Coordinate(7, 7),
+        }
+    ),
+)
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -37,10 +73,29 @@ def _directions(value: str) -> tuple[str, ...]:
 
 
 CENTER_EXIT = _directions("DDDDD")
+CITY_TO_MANSION_REAR = _directions("RRRUUUUULLLLLLLLLLLLUUULLLLLLLLDDU")
+MANSION_1F_REAR_STAIRS = _directions("L")
+MANSION_2F_REAR_STAIRS = _directions("RR")
+MANSION_3F_REAR_STAIRS = _directions("LL")
+MANSION_ROOF_TO_HOUSE = _directions("RRDDDDDDLLU")
+ROOF_HOUSE_TO_EEVEE = _directions("RRUURUUUL")
+EEVEE_TO_ROOF_HOUSE_EXIT = _directions("RDDDLLLDDD")
+MANSION_ROOF_TO_3F = _directions("RRUUUUUUULL")
+MANSION_3F_TO_2F = _directions("RR")
+MANSION_2F_TO_1F = _directions("LL")
+MANSION_1F_TO_CITY = _directions("RRU")
+MANSION_REAR_TO_CENTER_EXTERIOR_24 = _directions(
+    "RURRRRRRRRDDRRRRRRRRRRRDDDDDDLLL"
+)
+MANSION_REAR_TO_CENTER_EXTERIOR_25 = _directions(
+    "URRRRRRRRDDRRRRRRRRRRRDDDDDDLLL"
+)
 CITY_TO_MART = _directions("DDDLLLLLLLLLLLLLLLLLLLLLLDLLLLLLLLLU")
 MART_1F_TO_2F = _directions("UUUULULLLU")
 MART_2F_TO_3F = _directions("LLLDDDRRRRRURUURU")
 MART_3F_TO_4F = _directions("LLLLU")
+MART_4F_TO_STONE_CLERK = _directions("LLLLLLLLLLLDDDRRRR")
+STONE_CLERK_TO_MART_4F_STAIRS = _directions("LLLLUUURRRRRRRRRRR")
 MART_4F_TO_5F = _directions("RRRRU")
 MART_5F_TO_ROOF = _directions("LLLLU")
 ROOF_TO_VENDING = _directions("LLL")
@@ -116,6 +171,7 @@ class SaffronChapterReport:
     records: tuple[SaffronCheckpoint, ...]
     final_raw: RawGameState
     money_before: int
+    money_after_stone: int
     money_after_purchase: int
     money_after: int
     vending_cursor: int
@@ -127,6 +183,8 @@ class SaffronChapterReport:
     guard_flag_after_dialogue: int
     bag_before: tuple[tuple[int, int], ...]
     bag_after: tuple[tuple[int, int], ...]
+    party_before: tuple[int, ...]
+    party_after: tuple[int, ...]
     party_hp: tuple[int, ...]
     party_max_hp: tuple[int, ...]
     party_status: tuple[int, ...]
@@ -140,10 +198,11 @@ class SaffronChapterReport:
         final_bag = dict(self.bag_after)
         return (
             len(self.records) == SAFFRON_CHECKPOINT_COUNT
-            and self.money_before >= FRESH_WATER_PRICE
+            and self.money_before >= THUNDER_STONE_PRICE + FRESH_WATER_PRICE
+            and self.money_after_stone == self.money_before - THUNDER_STONE_PRICE
             and self.money_after_purchase
             == self.money_after
-            == self.money_before - FRESH_WATER_PRICE
+            == self.money_before - THUNDER_STONE_PRICE - FRESH_WATER_PRICE
             and self.vending_cursor == 0
             and self.fresh_water_before == 0
             and self.fresh_water_after_purchase == 1
@@ -152,6 +211,7 @@ class SaffronChapterReport:
             and self.guard_flag_after_consumption & GUARD_DRINK_FLAG == 0
             and self.guard_flag_after_dialogue & GUARD_DRINK_FLAG
             and self.bag_before == self.bag_after
+            and int(ItemId.THUNDER_STONE) not in final_bag
             and int(ItemId.FRESH_WATER) not in final_bag
             and int(ItemId.SODA_POP) not in final_bag
             and int(ItemId.LEMONADE) not in final_bag
@@ -159,6 +219,10 @@ class SaffronChapterReport:
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.battle_state == 0
             and party_core_intact(self.final_raw.party_species_ids)
+            and len(self.party_after) == len(self.party_before) + 1
+            and self.party_after[:-1] == self.party_before
+            and self.party_after[-1] == JOLTEON
+            and EEVEE not in self.party_after
             and self.final_raw.first_party_level is not None
             and 42 <= self.final_raw.first_party_level <= 43
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)
@@ -186,6 +250,16 @@ class SaffronChapterReport:
                 "price": FRESH_WATER_PRICE,
                 "money_before": self.money_before,
                 "money_after": self.money_after_purchase,
+            },
+            "jolteon_recruitment": {
+                "gift_species": EEVEE,
+                "gift_level": 25,
+                "stone_item_id": int(ItemId.THUNDER_STONE),
+                "stone_price": THUNDER_STONE_PRICE,
+                "money_after_stone": self.money_after_stone,
+                "party_before": list(self.party_before),
+                "party_after": list(self.party_after),
+                "evolved_species": JOLTEON,
             },
             "guard_handoff": {
                 "fresh_water": [
@@ -243,6 +317,7 @@ def run_saffron_chapter(
     _require(initial, MapId.CELADON_POKECENTER, (3, 3), "Erika boundary")
     initial_bag = _bag(emulator)
     initial_money = _money(emulator)
+    party_before = tuple(initial.party_species_ids or ())
     initial_flag = emulator.read_u8(RamAddress.STATUS_FLAGS_1)
     if (
         initial_money < FRESH_WATER_PRICE
@@ -254,8 +329,123 @@ def run_saffron_chapter(
         raise SaffronChapterError("Saffron input boundary is not pristine.")
     _checkpoint(records, progress, emulator, initial, "saffron_ready", "Rainbow boundary ready")
 
+    _move(actions, reader, emulator, CENTER_EXIT, timing, "Celadon Center exit")
+    _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exterior")
+    _move(
+        actions,
+        reader,
+        emulator,
+        CITY_TO_MANSION_REAR,
+        timing,
+        "Celadon Mansion rear entrance",
+    )
+    if (
+        reader.read().map_id == MapId.CELADON_CITY
+        and (reader.read().player_x, reader.read().player_y) == (25, 3)
+    ):
+        _move(
+            actions,
+            reader,
+            emulator,
+            ("down", "left"),
+            timing,
+            "Celadon Mansion left rear door",
+        )
+    if reader.read().map_id == MapId.CELADON_CITY:
+        actions.execute(MacroAction(MacroActionKind.INTERACT))
+        _wait(actions, timing.movement_frames)
+    _require(reader.read(), MapId.CELADON_MANSION_1F, (3, 1), "Mansion rear entrance")
+    mansion_legs = (
+        (
+            MANSION_1F_REAR_STAIRS,
+            MapId.CELADON_MANSION_2F,
+            (2, 1),
+            "Mansion rear second floor",
+        ),
+        (
+            MANSION_2F_REAR_STAIRS,
+            MapId.CELADON_MANSION_3F,
+            (4, 1),
+            "Mansion rear third floor",
+        ),
+        (
+            MANSION_3F_REAR_STAIRS,
+            MapId.CELADON_MANSION_ROOF,
+            (2, 2),
+            "Mansion rear roof",
+        ),
+        (
+            MANSION_ROOF_TO_HOUSE,
+            MapId.CELADON_MANSION_ROOF_HOUSE,
+            (2, 7),
+            "Mansion roof house",
+        ),
+        (
+            ROOF_HOUSE_TO_EEVEE,
+            MapId.CELADON_MANSION_ROOF_HOUSE,
+            (4, 2),
+            "Eevee gift stance",
+        ),
+    )
+    for route, map_id, coordinate, label in mansion_legs:
+        _move(actions, reader, emulator, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+    _receive_eevee(actions, reader, emulator, party_before, timing)
+    _checkpoint(records, progress, emulator, reader.read(), "eevee_received", "Received Eevee")
+
+    exit_legs = (
+        (
+            EEVEE_TO_ROOF_HOUSE_EXIT,
+            MapId.CELADON_MANSION_ROOF,
+            (2, 8),
+            "Eevee room exit",
+        ),
+        (
+            MANSION_ROOF_TO_3F,
+            MapId.CELADON_MANSION_3F,
+            (2, 1),
+            "Mansion roof descent",
+        ),
+        (
+            MANSION_3F_TO_2F,
+            MapId.CELADON_MANSION_2F,
+            (4, 1),
+            "Mansion third-floor descent",
+        ),
+        (
+            MANSION_2F_TO_1F,
+            MapId.CELADON_MANSION_1F,
+            (2, 1),
+            "Mansion second-floor descent",
+        ),
+        (
+            MANSION_1F_TO_CITY,
+            MapId.CELADON_CITY,
+            (25, 3),
+            "Mansion rear exit",
+        ),
+    )
+    for route, map_id, coordinate, label in exit_legs:
+        _move(actions, reader, emulator, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+    mansion_exit = reader.read()
+    rear_to_center = (
+        MANSION_REAR_TO_CENTER_EXTERIOR_24
+        if (mansion_exit.player_x, mansion_exit.player_y) == (24, 3)
+        else MANSION_REAR_TO_CENTER_EXTERIOR_25
+    )
+    _move(
+        actions,
+        reader,
+        emulator,
+        rear_to_center,
+        timing,
+        "Mansion rear to Celadon Center exterior",
+    )
+    _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exterior return")
+
+    money_after_stone: int | None = None
     legs = (
-        (CENTER_EXIT, MapId.CELADON_CITY, (41, 10), "center_exit"),
         (CITY_TO_MART, MapId.CELADON_MART_1F, (16, 7), "mart_1f"),
         (MART_1F_TO_2F, MapId.CELADON_MART_2F, (12, 2), "mart_2f"),
         (MART_2F_TO_3F, MapId.CELADON_MART_3F, (16, 2), "mart_3f"),
@@ -266,21 +456,41 @@ def run_saffron_chapter(
     for route, map_id, coordinate, label in legs:
         _move(actions, reader, emulator, route, timing, label)
         _require(reader.read(), map_id, coordinate, label)
+        if map_id == MapId.CELADON_MART_4F:
+            money_after_stone = _purchase_thunder_stone(
+                actions, reader, emulator, timing
+            )
+            _evolve_eevee(actions, reader, emulator, timing)
+            _checkpoint(
+                records,
+                progress,
+                emulator,
+                reader.read(),
+                "jolteon_evolved",
+                "Evolved Eevee into Jolteon",
+            )
     _checkpoint(records, progress, emulator, reader.read(), "roof_reached", "Reached vending roof")
 
     _move(actions, reader, emulator, ROOF_TO_VENDING, timing, "vending stance")
     _require(reader.read(), MapId.CELADON_MART_ROOF, (12, 3), "vending stance")
+    # The machine is directly above the stance tile.  A downward input walks
+    # away from it and can silently invalidate the purchase sequence.
     actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
     _wait(actions, timing.movement_frames)
     _require(reader.read(), MapId.CELADON_MART_ROOF, (12, 3), "vending facing")
     actions.execute(MacroAction(MacroActionKind.INTERACT))
     _wait(actions, timing.movement_frames)
+    # The first prompt is vending-machine dialogue, not the drink list.  The
+    # cursor address still contains the earlier stone-shop selection until this
+    # prompt is acknowledged.
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    _select_cursor(actions, emulator, 0, DEFAULT_LAVENDER_TIMING)
     vending_cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
     if vending_cursor != 0:
         raise SaffronChapterError(f"Fresh Water was not vending cursor zero: {vending_cursor}.")
     for _ in range(timing.vending_pulses):
         if (
-            _money(emulator) == initial_money - FRESH_WATER_PRICE
+            _money(emulator) == money_after_stone - FRESH_WATER_PRICE
             and _bag(emulator).get(ItemId.FRESH_WATER, 0) == 1
         ):
             break
@@ -384,10 +594,14 @@ def run_saffron_chapter(
     final = reader.read()
     _checkpoint(records, progress, emulator, final, "saffron_stable", "Healed Saffron boundary")
 
+    if money_after_stone is None:
+        raise SaffronChapterError("Thunder Stone purchase was not observed.")
+
     report = SaffronChapterReport(
         records=tuple(records),
         final_raw=final,
         money_before=initial_money,
+        money_after_stone=money_after_stone,
         money_after_purchase=money_after_purchase,
         money_after=_money(emulator),
         vending_cursor=vending_cursor,
@@ -399,6 +613,8 @@ def run_saffron_chapter(
         guard_flag_after_dialogue=final_flag,
         bag_before=tuple(sorted(initial_bag.items())),
         bag_after=tuple(sorted(_bag(emulator).items())),
+        party_before=party_before,
+        party_after=tuple(final.party_species_ids or ()),
         party_hp=_party_hp(emulator),
         party_max_hp=_party_max_hp(emulator),
         party_status=_party_status(emulator),
@@ -410,6 +626,160 @@ def run_saffron_chapter(
     if not report.passed:
         raise SaffronChapterError(f"Saffron evidence contract failed: {report.public_dict()!r}.")
     return report
+
+
+def _receive_eevee(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    party_before: tuple[int, ...],
+    timing: SaffronTiming,
+) -> None:
+    expected = (*party_before, EEVEE)
+    stances = (
+        (Coordinate(4, 2), "down"),
+        (Coordinate(5, 3), "left"),
+        (Coordinate(4, 5), "up"),
+    )
+    for stance, facing in stances:
+        raw = reader.read()
+        current = Coordinate(raw.player_x or 0, raw.player_y or 0)
+        route = path_to_directions(shortest_path(ROOF_HOUSE_GRID, current, stance))
+        _move(
+            actions,
+            reader,
+            emulator,
+            tuple(str(direction) for direction in route),
+            timing,
+            f"Eevee interaction stance {stance.x},{stance.y}",
+        )
+        actions.execute(MacroAction(MacroActionKind.MOVE, facing))
+        _wait(actions, timing.movement_frames)
+        actions.execute(MacroAction(MacroActionKind.INTERACT))
+        _wait(actions, timing.movement_frames)
+        for _ in range(16):
+            party = tuple(reader.read().party_species_ids or ())
+            if party == expected and reader.read_input_readiness().ready:
+                _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+                return
+            action = (
+                MacroActionKind.CANCEL
+                if len(party) == len(expected)
+                else MacroActionKind.CONFIRM
+            )
+            _pulse(actions, action, frames=timing.movement_frames)
+        for _ in range(4):
+            _pulse(actions, MacroActionKind.CANCEL, frames=timing.movement_frames)
+    raw = reader.read()
+    raise SaffronChapterError(
+        f"Celadon Mansion Eevee gift did not settle: party="
+        f"{tuple(raw.party_species_ids or ())!r}, "
+        f"position={(raw.map_id, raw.player_x, raw.player_y)!r}."
+    )
+
+
+def _purchase_thunder_stone(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SaffronTiming,
+) -> int:
+    before_money = _money(emulator)
+    if _bag(emulator).get(ItemId.THUNDER_STONE, 0):
+        raise SaffronChapterError("Thunder Stone unexpectedly existed before purchase.")
+    _move(
+        actions,
+        reader,
+        emulator,
+        MART_4F_TO_STONE_CLERK,
+        timing,
+        "evolution-stone clerk",
+    )
+    # The clerk is behind a two-tile counter. Gen I lets the player interact
+    # across it from (5, 5); (5, 6) is a counter tile, not a walkable stance.
+    _require(reader.read(), MapId.CELADON_MART_4F, (5, 5), "evolution-stone clerk")
+    actions.execute(MacroAction(MacroActionKind.MOVE, "down"))
+    _wait(actions, timing.movement_frames)
+    _open_mart_buy_list(actions, emulator, DEFAULT_LAVENDER_TIMING.wait_frames)
+    try:
+        _buy_mart_item(
+            actions,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            absolute_index=2,
+            item=ItemId.THUNDER_STONE,
+            quantity=1,
+            target_bag_quantity=1,
+        )
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    except LavenderChapterError as error:
+        raise SaffronChapterError(f"Thunder Stone purchase failed: {error}") from error
+    after_money = _money(emulator)
+    if (
+        _bag(emulator).get(ItemId.THUNDER_STONE, 0) != 1
+        or before_money - after_money != THUNDER_STONE_PRICE
+    ):
+        raise SaffronChapterError("Thunder Stone economy proof failed.")
+    _move(
+        actions,
+        reader,
+        emulator,
+        STONE_CLERK_TO_MART_4F_STAIRS,
+        timing,
+        "fourth-floor stair return",
+    )
+    _require(reader.read(), MapId.CELADON_MART_4F, (12, 2), "fourth-floor stair return")
+    return after_money
+
+
+def _open_mart_buy_list(
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    wait_frames: int,
+) -> None:
+    """Advance clerk dialogue until the priced item list is actually active."""
+
+    for _ in range(8):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (5, 4):
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, frames=wait_frames)
+    raise SaffronChapterError("Mart dialogue did not reach the priced item list.")
+
+
+def _evolve_eevee(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SaffronTiming,
+) -> None:
+    before = tuple(reader.read().party_species_ids or ())
+    if not before or before[-1] != EEVEE:
+        raise SaffronChapterError(f"Evolution target is not Eevee: {before!r}.")
+    try:
+        _open_bag(actions, emulator, DEFAULT_LAVENDER_TIMING)
+        _select_bag_item(actions, emulator, ItemId.THUNDER_STONE, DEFAULT_LAVENDER_TIMING)
+        _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
+        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+        _select_cursor(actions, emulator, len(before) - 1, DEFAULT_LAVENDER_TIMING)
+        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+        for _ in range(64):
+            party = tuple(reader.read().party_species_ids or ())
+            if (
+                party == (*before[:-1], JOLTEON)
+                and _bag(emulator).get(ItemId.THUNDER_STONE, 0) == 0
+            ):
+                _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+                return
+            _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    except LavenderChapterError as error:
+        raise SaffronChapterError(f"Eevee evolution menu failed: {error}") from error
+    raise SaffronChapterError(
+        f"Thunder Stone did not evolve Eevee: "
+        f"{tuple(reader.read().party_species_ids or ())!r}."
+    )
 
 
 def _move(

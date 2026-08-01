@@ -55,6 +55,7 @@ GIOVANNI_PARTY = (
 )
 SURF_MOVE_ID = 0x39
 ICE_BEAM_MOVE_ID = 0x3A
+HYDRO_PUMP_MOVE_ID = 0x38
 GYM_TRAINER_EVENTS = tuple(
     EventFlag(int(EventFlag.BEAT_VIRIDIAN_GYM_TRAINER_0) + offset)
     for offset in range(8)
@@ -236,8 +237,9 @@ class GiovanniChapterReport:
             and party_core_intact(self.final_raw.party_species_ids)
             and (self.final_raw.first_party_level or 0)
             >= MANSION_TRAINING_POLICY.target_level
-            and self.final_raw.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE_ID, SURF_MOVE_ID)
-            and self.final_raw.first_party_pp == (15, 15, 10, 15)
+            and self.final_raw.first_party_moves
+            == (HYDRO_PUMP_MOVE_ID, 0x46, ICE_BEAM_MOVE_ID, SURF_MOVE_ID)
+            and self.final_raw.first_party_pp == (5, 15, 10, 15)
             and self.party_hp == self.party_max_hp
             and all(hp > 0 for hp in self.party_hp)
             and self.final_raw.first_party_hp == self.party_hp[0]
@@ -697,7 +699,7 @@ def _heal(actions, reader, emulator) -> None:
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
             and all(status == 0 for status in _party_status(emulator))
-            and reader.read().first_party_pp == (15, 15, 10, 15)
+            and reader.read().first_party_pp == (5, 15, 10, 15)
         ):
             break
     _close(actions, reader)

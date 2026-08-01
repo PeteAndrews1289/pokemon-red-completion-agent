@@ -88,6 +88,8 @@ BLAINE_OPPONENT = 0xEF
 BLAINE_TRAINER_CLASS = 0xEF
 BLAINE_TRAINER_SET = 1
 BLAINE_PARTY = ((0x21, 42), (0xA3, 40), (0xA4, 42), (0x14, 47))
+HYDRO_PUMP_MOVE_ID = 0x38
+JOLTEON_SPECIES_ID = 0x68
 MANSION_TRAINING_POLICY = TrainingPolicy(
     target_level=55,
     preferred_move_slots=(4, 2, 3, 1),
@@ -100,29 +102,27 @@ MANSION_TRAINING_POLICY = TrainingPolicy(
 )
 #: Balance contract for the Mansion block.
 #:
-#: ``required_size`` tracks the party the current route actually assembles, not
-#: the six-member roster, so the policy trains what is present instead of asking
-#: to recruit members no chapter obtains yet.  Raise it as acquisition chapters
-#: land.
+#: ``required_size`` tracks the party the current route actually assembles. The
+#: Eevee/Jolteon acquisition makes this a five-member contract; the Fighting
+#: Dojo chapter will raise it to the final six-member roster.
 MANSION_TEAM_POLICY = BalancedTeamPolicy(
     minimum_level=50,
     maximum_level_spread=5,
-    required_size=4,
-    retreat_hp_ratio=0.55,
+    required_size=5,
+    retreat_hp_ratio=0.90,
     # The lead-only block reserved 2 PP because it ran barely a hundred battles
     # at an overwhelming level advantage.  Team training runs far longer, so it
     # returns to heal with a real margin instead of fighting to exhaustion and
     # discovering mid-battle that its last slot is Disabled.
     reserve_total_pp=16,
     max_enemy_level_delta=0,
-    minimum_direct_level_advantage=8,
-    # The first four-member clean run safely put everyone above level 50 after
-    # 1,200 battles, but the 57--71 spread still failed the five-level balance
-    # contract.  Keep that contract strict and provide enough bounded work for
-    # the three lagging members to close the measured gap.
-    max_battles=2_400,
-    max_steps=240_000,
-    max_healing_trips=320,
+    minimum_direct_level_advantage=15,
+    # The qualified five-member run reached levels 77--82 within this allowance.
+    # Keep the contract strict and retain enough headroom for encounter variance
+    # rather than weakening the balance evidence.
+    max_battles=4_000,
+    max_steps=400_000,
+    max_healing_trips=800,
     max_faints=0,
 )
 BATTLE_PARTY_MENU_COMMAND = 2
@@ -149,6 +149,10 @@ TRAINING_MOVE_IDS = {
     # Snorlax replaces its early Headbutt as the long curriculum accepts
     # Body Slam, Double-Edge, and Hyper Beam level-up prompts.
     SNORLAX_SPECIES_ID: (0x1D, 0x22, 0x26, 0x3F),
+    # Prefer Jolteon's natural Electric and coverage progression and stop for
+    # healing once those damaging moves are spent; its status moves must not
+    # be mistaken for a usable attack reserve.
+    JOLTEON_SPECIES_ID: (0x57, 0x54, 0x18, 0x2A, 0x62),
 }
 RED_DIRECT_LEVEL_ADVANTAGE = {
     DUX_SPECIES_ID: 15,
@@ -161,6 +165,7 @@ TRAINING_ATTACK_PP_RESERVE = {
     DIGLETT_SPECIES_ID: 2,
     DUGTRIO_SPECIES_ID: 2,
     SNORLAX_SPECIES_ID: 2,
+    JOLTEON_SPECIES_ID: 5,
 }
 MANSION_TRAINER_EVENTS = (
     EventFlag.BEAT_MANSION_1_TRAINER_0,
@@ -357,8 +362,9 @@ class BlaineChapterReport:
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
             and (self.final_raw.first_party_level or 0) >= MANSION_TRAINING_POLICY.target_level
-            and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, SURF_MOVE_ID)
-            and self.final_raw.first_party_pp == (15, 15, 10, 15)
+            and self.final_raw.first_party_moves
+            == (HYDRO_PUMP_MOVE_ID, 0x46, 0x3A, SURF_MOVE_ID)
+            and self.final_raw.first_party_pp == (5, 15, 10, 15)
             and self.party_hp == self.party_max_hp
             and all(hp > 0 for hp in self.party_hp)
             and self.final_raw.first_party_hp == self.party_hp[0]
@@ -637,7 +643,11 @@ def run_blaine_chapter(
     )
 
     team_readiness, team_battles, team_healing_trips = _run_mansion_team_balancing(
-        actions, reader, emulator
+        actions,
+        reader,
+        emulator,
+        progress_sink=progress,
+        completed_checkpoint_count=len(records),
     )
 
     _move(actions, reader, ("down",) * 5 + GYM_ENTRY_ROUTE, "Cinnabar Gym")
@@ -1081,6 +1091,9 @@ def _run_mansion_team_balancing(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
+    *,
+    progress_sink: ProgressSink | None = None,
+    completed_checkpoint_count: int = 0,
 ) -> tuple[object, int, int]:
     """Raise the party with safe participation followed by direct training.
 
@@ -1100,6 +1113,20 @@ def _run_mansion_team_balancing(
     healing_trips = 0
     flee_run = _RunState([])
 
+    def emit_progress() -> None:
+        if progress_sink is None or battles == 0 or battles % 250:
+            return
+        levels = tuple(member.level for member in party_reader.read().members)
+        progress_sink(
+            BlaineProgress(
+                "mansion_team_training_progress",
+                f"Balanced team training: {battles} battles, levels {levels}",
+                completed_checkpoint_count,
+                BLAINE_CHECKPOINT_COUNT,
+                emulator.frame_count,
+            )
+        )
+
     while True:
         party = party_reader.read()
         progress = TeamTrainingProgress(
@@ -1113,6 +1140,13 @@ def _run_mansion_team_balancing(
             TeamTrainingDirective.STOP,
             TeamTrainingDirective.RECRUIT_MEMBER,
         }:
+            readiness = summarize_team_readiness(party, policy)
+            if not readiness.passed:
+                raise BlaineChapterError(
+                    f"Team training stopped before readiness: {decision.reason}; "
+                    f"battles={battles}, steps={steps}, heals={healing_trips}, "
+                    f"levels={tuple(member.level for member in party.members)!r}."
+                )
             break
 
         raw = reader.read()
@@ -1165,6 +1199,7 @@ def _run_mansion_team_balancing(
                 )
                 if not battle_continues:
                     battles += 1
+                    emit_progress()
                     continue
             if reader.read().battle_state != 1:
                 continue
@@ -1176,6 +1211,7 @@ def _run_mansion_team_balancing(
                 label="Pokémon Mansion team training encounter",
             )
             battles += 1
+            emit_progress()
             continue
 
         if decision.directive is TeamTrainingDirective.RESTORE_TEAM or escort_unsafe:
@@ -1614,7 +1650,7 @@ def _heal(actions, reader, emulator) -> None:
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
             and all(status == 0 for status in _party_status(emulator))
-            and reader.read().first_party_pp == (15, 15, 10, 15)
+            and reader.read().first_party_pp in {(15, 15, 10, 15), (5, 15, 10, 15)}
         ):
             break
     _close(actions, reader)
@@ -1653,11 +1689,31 @@ def _close(actions, reader) -> None:
 
 def _select_cursor(actions, emulator, target: int, timing) -> None:
     for _ in range(20):
+        top = (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        )
+        if target == 1 and top == (5, 12):
+            # A long training lineage can finish a party reorder while the
+            # selected Pokémon's field-command submenu is still settling.
+            # Close back to the field and reopen START before selecting
+            # POKéMON; directional input is ignored by that stale submenu.
+            for _ in range(4):
+                _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
+            _pulse(actions, MacroActionKind.OPEN_MENU, frames=timing.wait_frames)
+            continue
         current = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
         if current == target:
             return
         _pulse(actions, MacroActionKind.MOVE, "down" if current < target else "up", 120)
-    raise BlaineChapterError(f"Menu could not select cursor {target}.")
+    raise BlaineChapterError(
+        f"Menu could not select cursor {target}: "
+        f"current={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
+        f"max={emulator.read_u8(RamAddress.MAX_MENU_ITEM)}, "
+        f"top=({emulator.read_u8(RamAddress.TOP_MENU_ITEM_X)}, "
+        f"{emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y)}), "
+        f"watched={emulator.read_u8(RamAddress.MENU_WATCHED_KEYS):#04x}."
+    )
 
 
 def _pulse(actions, kind: MacroActionKind, value: str | None = None, frames: int = 180) -> None:
