@@ -22,7 +22,7 @@ one-based slot sequence (`1/5`–`5/5`, `1/2`–`2/2`, and `1/5`–`5/5`) as wel
 lineage from the authenticated registry, execution identity, partition, harness seed, and complete
 schedule digest.
 
-Each full run expects the same 63 stable public adaptive-battle identities in route order. A
+Each full run expects the same 68 stable public adaptive-battle identities in route order. A
 versioned SHA-256 derivation gives every identity a preregistered 0–255-frame timing offset. At the
 first stable main battle menu, before the policy is called, the collection harness claims that
 offset; the battle runtime emits the WAIT through the normal executor, rereads and revalidates the
@@ -32,7 +32,7 @@ unfinished battles fail the planned run.
 
 Every applied offset is privately attested with its roster ordinal, plan ID, frame count, schedule
 digest, before/after policy-snapshot hashes, and the linked `WAIT` execution index when the offset
-is positive. The terminal event must attest a complete 63/63 schedule. These records prove that a
+is positive. The terminal event must attest a complete 68/68 schedule. These records prove that a
 scheduled run used its committed offsets rather than merely carrying the expected metadata.
 
 The harness seed is not presented as a user-selectable cartridge seed. It is a reproducible
@@ -40,13 +40,13 @@ collection timing input that changes hidden battle RNG timing. Run, seed, partit
 battle-plan identities remain metadata and are not move-ranker features.
 
 The exact source/configuration commit must be committed and pushed before any execution. A
-registry-declared, disjoint `--schedule-dry-run` must then successfully attest all 63 battles
+registry-declared, disjoint `--schedule-dry-run` must then successfully attest all 68 battles
 before slot `01`. That rehearsal is `unassigned`, has `attempt.counted=false`, and is excluded from
 every partition and performance denominator. As of the protocol commit, neither the dry run nor
 any of the twelve declared slots has executed.
 
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
-schedule, episode, manifest, and 63/63 offline audit. Every counted slot reopens and re-audits that
+schedule, episode, manifest, and 68/68 offline audit. Every counted slot reopens and re-audits that
 episode before campaign sealing, while the rehearsal remains outside the attempt ledger.
 
 A private campaign seal fixes the registry, exact pushed source commit, executable source,

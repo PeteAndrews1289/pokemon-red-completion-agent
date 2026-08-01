@@ -285,6 +285,7 @@ def run_adaptive_trainer_battle(
     timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
     label: str = "trainer battle",
     unknown_cancel_interval: int = 3,
+    transient_zero_pp_main_is_dialogue: bool = False,
 ) -> RawGameState:
     """Finish one already-active trainer battle with semantic feedback.
 
@@ -310,6 +311,8 @@ def run_adaptive_trainer_battle(
         or unknown_cancel_interval <= 0
     ):
         raise ValueError("unknown_cancel_interval must be a positive integer")
+    if not isinstance(transient_zero_pp_main_is_dialogue, bool):
+        raise TypeError("transient_zero_pp_main_is_dialogue must be a bool")
     if required_move_id is not None and (
         not isinstance(required_move_id, int)
         or isinstance(required_move_id, bool)
@@ -385,6 +388,22 @@ def run_adaptive_trainer_battle(
             )
             continue
         unknown_menu_pulses = 0
+        if (
+            transient_zero_pp_main_is_dialogue
+            and raw.battler_pp is not None
+            and raw.battler_pp
+            and all((pp & 0x3F) == 0 for pp in raw.battler_pp)
+        ):
+            # Gen I's choose-a-move-to-forget screen briefly reuses battle-menu
+            # state while exposing no battler PP.  A caller that deliberately
+            # accepts a level-up move may opt into treating only this impossible
+            # combat snapshot as dialogue and confirm the default first slot.
+            _pulse(
+                executor,
+                MacroAction(MacroActionKind.CONFIRM),
+                timing.dialogue_wait_frames,
+            )
+            continue
         if menu.phase is BattleMenuPhase.MOVE:
             initial_pp = raw.battler_pp
             _pulse(
@@ -478,6 +497,7 @@ def run_adaptive_wild_battle(
     timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
     label: str = "wild battle",
     unknown_cancel_interval: int = 3,
+    transient_zero_pp_main_is_dialogue: bool = False,
 ) -> RawGameState:
     """Finish one active wild battle using the same semantic turn controller.
 
@@ -496,6 +516,7 @@ def run_adaptive_wild_battle(
             timing=timing,
             label=label,
             unknown_cancel_interval=unknown_cancel_interval,
+            transient_zero_pp_main_is_dialogue=transient_zero_pp_main_is_dialogue,
         )
     finally:
         _ACTIVE_BATTLE_STATE.reset(token)

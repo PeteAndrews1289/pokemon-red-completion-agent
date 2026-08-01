@@ -62,12 +62,10 @@ class PartyReadError(RuntimeError):
 
 #: The declared balanced roster for Pokémon Red.
 #:
-#: Each role is bound to a species the qualified route can already reach or is
-#: a direct evolution of one it reaches: Blastoise is the starter, Dugtrio
-#: evolves from the Diglett the Vermilion chapter already captures, and DUX is
-#: the Farfetch'd that chapter already trades for.  Jolteon, Snorlax, and
-#: Hitmonlee are reachable but are *not* yet acquired by the current route; see
-#: ``docs/project-narrative.md`` for the acquisition work this implies.
+#: Each role is bound to a species the route recruits before its long-form
+#: balancing block: Blastoise is the starter, Dugtrio evolves from the captured
+#: Diglett, DUX is the traded Farfetch'd, Eevee evolves into Jolteon, Snorlax is
+#: caught on Route 12, and the Fighting Dojo gift supplies Hitmonlee.
 #:
 #: No slot is a substitution, so no slot carries a substitution reason.  Any
 #: future deviation must set ``is_substitution`` and record why.

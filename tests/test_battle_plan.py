@@ -55,6 +55,11 @@ EXPECTED_RED_BATTLE_PLAN_IDS = (
     "battle-046-silph-7f-rival",
     "battle-047-silph-11f-rocket",
     "battle-048-silph-11f-giovanni",
+    "battle-064-dojo-blackbelt-set-5",
+    "battle-065-dojo-blackbelt-set-3",
+    "battle-066-dojo-blackbelt-set-4",
+    "battle-067-dojo-blackbelt-set-2",
+    "battle-068-dojo-karate-master",
     "battle-049-sabrina-leader",
     "battle-050-blaine-leader",
     "battle-051-giovanni-hiker-set-8",
@@ -84,6 +89,7 @@ _ROUTE_MODULES = (
     "koga.py",
     "erika.py",
     "silph.py",
+    "dojo.py",
     "sabrina.py",
     "blaine.py",
     "giovanni.py",
@@ -135,6 +141,13 @@ _EXPECTED_SOURCE_MEMBER_LEDGER = {
         "SILPH_7F_RIVAL",
         "SILPH_7F_RIVAL",
     ),
+    "dojo.py": (
+        "DOJO_BLACKBELT_SET_5",
+        "DOJO_BLACKBELT_SET_3",
+        "DOJO_BLACKBELT_SET_4",
+        "DOJO_BLACKBELT_SET_2",
+        "DOJO_KARATE_MASTER",
+    ),
     "sabrina.py": ("SABRINA_LEADER",),
     "blaine.py": ("BLAINE_LEADER",),
     "giovanni.py": tuple(
@@ -149,16 +162,15 @@ _EXPECTED_SOURCE_MEMBER_LEDGER = {
 }
 
 
-def test_full_adaptive_battle_route_has_63_ordered_unique_public_ids() -> None:
+def test_full_adaptive_battle_route_has_68_ordered_unique_public_ids() -> None:
     assert RED_BATTLE_PLAN_IDS == EXPECTED_RED_BATTLE_PLAN_IDS
-    assert len(RED_BATTLE_PLAN_IDS) == 63
-    assert len(set(RED_BATTLE_PLAN_IDS)) == 63
-    assert tuple(sorted(RED_BATTLE_PLAN_IDS)) == RED_BATTLE_PLAN_IDS
+    assert len(RED_BATTLE_PLAN_IDS) == 68
+    assert len(set(RED_BATTLE_PLAN_IDS)) == 68
     assert all(
         re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,95}", battle_plan_id)
         for battle_plan_id in RED_BATTLE_PLAN_IDS
     )
-    assert tuple(item.value for item in RedBattlePlanId) == RED_BATTLE_PLAN_IDS
+    assert set(item.value for item in RedBattlePlanId) == set(RED_BATTLE_PLAN_IDS)
 
 
 def test_every_planned_battle_is_referenced_by_the_production_route() -> None:

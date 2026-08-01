@@ -141,7 +141,7 @@ class CinnabarChapterReport:
             )
             and len(self.lead_stats_before) == 7
             and self.lead_stats_before == self.lead_stats_after
-            and self.lead_stats_before[0] == 46
+            and self.lead_stats_before[0] == 47
             and all(value > 0 for value in self.lead_stats_before[1:])
             and self.hm02_item_before_event
             and self.got_hm02
@@ -167,7 +167,7 @@ class CinnabarChapterReport:
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
-            and self.final_raw.first_party_level == 46
+            and self.final_raw.first_party_level == 47
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
             and self.party_hp == self.party_max_hp

@@ -54,6 +54,7 @@ from pokemon_red_completion.red_party import (
     BLASTOISE_SPECIES_ID,
     DUGTRIO_SPECIES_ID,
     DUX_SPECIES_ID,
+    HITMONLEE_SPECIES_ID,
     SNORLAX_SPECIES_ID,
     PokemonRedPartyReader,
 )
@@ -89,6 +90,11 @@ BLAINE_TRAINER_CLASS = 0xEF
 BLAINE_TRAINER_SET = 1
 BLAINE_PARTY = ((0x21, 42), (0xA3, 40), (0xA4, 42), (0x14, 47))
 HYDRO_PUMP_MOVE_ID = 0x38
+HYDRO_PUMP_LEARN_LEVEL = 52
+# No trainer switch prompt can occur in this wild-only block.  Keeping CANCEL
+# outside the bounded runtime therefore accepts Blastoise's level-52 Hydro Pump
+# prompt and its default slot-one replacement instead of silently declining it.
+MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL = 10_000
 JOLTEON_SPECIES_ID = 0x68
 MANSION_TRAINING_POLICY = TrainingPolicy(
     target_level=55,
@@ -102,13 +108,12 @@ MANSION_TRAINING_POLICY = TrainingPolicy(
 )
 #: Balance contract for the Mansion block.
 #:
-#: ``required_size`` tracks the party the current route actually assembles. The
-#: Eevee/Jolteon acquisition makes this a five-member contract; the Fighting
-#: Dojo chapter will raise it to the final six-member roster.
+#: ``required_size`` tracks the complete declared roster assembled before this
+#: long-form balancing block.
 MANSION_TEAM_POLICY = BalancedTeamPolicy(
     minimum_level=50,
     maximum_level_spread=5,
-    required_size=5,
+    required_size=6,
     retreat_hp_ratio=0.90,
     # The lead-only block reserved 2 PP because it ran barely a hundred battles
     # at an overwhelming level advantage.  Team training runs far longer, so it
@@ -117,12 +122,12 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
     reserve_total_pp=16,
     max_enemy_level_delta=0,
     minimum_direct_level_advantage=15,
-    # The qualified five-member run reached levels 77--82 within this allowance.
-    # Keep the contract strict and retain enough headroom for encounter variance
-    # rather than weakening the balance evidence.
-    max_battles=4_000,
-    max_steps=400_000,
-    max_healing_trips=800,
+    # The first six-member zero-faint measurement reached levels 79--86 after
+    # 5,000 wins, two levels outside the strict spread. Retain the contract and
+    # add measured headroom rather than weakening the balance evidence.
+    max_battles=5_500,
+    max_steps=500_000,
+    max_healing_trips=1_000,
     max_faints=0,
 )
 BATTLE_PARTY_MENU_COMMAND = 2
@@ -153,6 +158,8 @@ TRAINING_MOVE_IDS = {
     # healing once those damaging moves are spent; its status moves must not
     # be mistaken for a usable attack reserve.
     JOLTEON_SPECIES_ID: (0x57, 0x54, 0x18, 0x2A, 0x62),
+    # Hitmonlee begins with Double Kick and grows into its natural kick suite.
+    HITMONLEE_SPECIES_ID: (0x18, 0x1B, 0x1A, 0x88, 0x19),
 }
 RED_DIRECT_LEVEL_ADVANTAGE = {
     DUX_SPECIES_ID: 15,
@@ -166,7 +173,12 @@ TRAINING_ATTACK_PP_RESERVE = {
     DUGTRIO_SPECIES_ID: 2,
     SNORLAX_SPECIES_ID: 2,
     JOLTEON_SPECIES_ID: 5,
+    HITMONLEE_SPECIES_ID: 5,
 }
+# Muk can outlast a trainee's weak coverage and turn a safe starting-HP check
+# into a long attritional knockout. It is fled rather than feeding still more
+# experience to the already-high Blastoise escort.
+MANSION_ESCORT_ENEMY_SPECIES = frozenset({0x88})
 MANSION_TRAINER_EVENTS = (
     EventFlag.BEAT_MANSION_1_TRAINER_0,
     EventFlag.BEAT_MANSION_2_TRAINER_0,
@@ -375,6 +387,67 @@ class BlaineChapterReport:
 
     def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
         return tuple((item.checkpoint_id, item.label, item.raw) for item in self.records)
+
+    def failed_terminal_checks(self) -> tuple[str, ...]:
+        """Name terminal invariants that failed without dumping the full run receipt."""
+
+        checks = {
+            "checkpoint_count": len(self.records) == BLAINE_CHECKPOINT_COUNT,
+            "mansion_switches": self.mansion_switch_trace == (False, True, False, True),
+            "mansion_trainers_before": self.mansion_trainer_events_before == (False,) * 6,
+            "mansion_trainers_after": self.mansion_trainer_events_after == (False,) * 6,
+            "mansion_flee_count": len(self.mansion_wild_flees) <= BLAINE_MAX_WILD_FLEES,
+            "mansion_flee_safety": all(
+                item.party_preserved
+                and item.pp_preserved
+                and item.hp_safe
+                and item.inventory_preserved
+                for item in self.mansion_wild_flees
+            ),
+            "lead_training": self.training.passed
+            and self.training.area_id == "pokemon_mansion_1f",
+            "team_readiness": self.team_readiness is not None
+            and self.team_readiness.passed,
+            "mansion_items": self.secret_key_quantity == 1 and self.tm14_quantity == 1,
+            "quiz_answers": self.quiz_answers == QUIZ_ANSWERS,
+            "quiz_gates": self.gym_gate_events_after_quizzes == (False,) + (True,) * 6,
+            "gym_trainers_before": self.gym_trainer_events_before == (False,) * 7,
+            "gym_trainers_after": self.gym_trainer_events_after == (True,) * 7,
+            "blaine_identity": self.identity
+            == (BLAINE_OPPONENT, BLAINE_TRAINER_CLASS, BLAINE_TRAINER_SET),
+            "blaine_party": _encounter_party(self.turns) == BLAINE_PARTY,
+            "blaine_turns": bool(self.turns)
+            and all(turn.move_slot == 4 for turn in self.turns)
+            and all(turn.lead_hp > 0 and turn.lead_status == 0 for turn in self.turns),
+            "rewards": self.got_tm38
+            and self.beat_blaine
+            and self.volcano_badge
+            and self.volcano_badge_mirror
+            and self.tm38_quantity == 1,
+            "inventory": self.x_accuracy_retained
+            and self.bide_sold
+            and self.max_repel_bought in (1, 2),
+            "money": self.money_remaining
+            == self.initial_money
+            + BLAINE_MONEY_DELTA
+            - (self.max_repel_bought - 1) * MAX_REPEL_PRICE
+            - (0 if self.antidote_sold else BLAINE_ANTIDOTE_SALE_VALUE),
+            "location": self.final_raw.map_id == MapId.CINNABAR_POKECENTER
+            and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3),
+            "party_core": party_core_intact(self.final_raw.party_species_ids),
+            "lead_level": (self.final_raw.first_party_level or 0)
+            >= MANSION_TRAINING_POLICY.target_level,
+            "lead_moves": self.final_raw.first_party_moves
+            == (HYDRO_PUMP_MOVE_ID, 0x46, 0x3A, SURF_MOVE_ID),
+            "lead_pp": self.final_raw.first_party_pp == (5, 15, 10, 15),
+            "party_health": self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and self.final_raw.first_party_hp == self.party_hp[0]
+            and self.final_raw.first_party_max_hp == self.party_max_hp[0]
+            and all(status == 0 for status in self.party_status),
+            "controller": self.controller_released,
+        }
+        return tuple(name for name, passed in checks.items() if not passed)
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -801,7 +874,10 @@ def run_blaine_chapter(
         team_training_healing_trips=team_healing_trips,
     )
     if not report.passed:
-        raise BlaineChapterError(f"Blaine terminal evidence failed: {report!r}.")
+        raise BlaineChapterError(
+            "Blaine terminal evidence failed: "
+            f"checks={report.failed_terminal_checks()!r}; report={report!r}."
+        )
     return report
 
 
@@ -1075,9 +1151,12 @@ def _red_training_matchup_acceptable(
     trainee: PartyMemberObservation,
     enemy_level: int | None,
     policy: BalancedTeamPolicy,
+    enemy_species: int | None = None,
 ) -> bool:
     """Apply Red-specific risk margins after the portable level gate."""
 
+    if enemy_species in MANSION_ESCORT_ENEMY_SPECIES:
+        return False
     if not is_matchup_acceptable(trainee, enemy_level, policy):
         return False
     required_advantage = RED_DIRECT_LEVEL_ADVANTAGE.get(
@@ -1173,8 +1252,16 @@ def _run_mansion_team_balancing(
                 raise BlaineChapterError(
                     "A Mansion encounter began without the selected trainee in front."
                 )
+            if raw.enemy_species_id in MANSION_ESCORT_ENEMY_SPECIES:
+                _flee(actions, reader, emulator, flee_run, DEFAULT_CELADON_TIMING)
+                continue
             trainee_fights = (
-                _red_training_matchup_acceptable(trainee, raw.enemy_level, policy)
+                _red_training_matchup_acceptable(
+                    trainee,
+                    raw.enemy_level,
+                    policy,
+                    raw.enemy_species_id,
+                )
                 and _training_attack_pp(trainee)
                 > _training_attack_pp_reserve(trainee, policy)
             )
@@ -1536,6 +1623,8 @@ def _run_mansion_training(
                 ),
                 expected_map=MapId.POKEMON_MANSION_1F,
                 label="Pokémon Mansion training encounter",
+                unknown_cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+                transient_zero_pp_main_is_dialogue=True,
             )
             battles_won += 1
             continue

@@ -14,10 +14,12 @@ from pokemon_red_completion.blaine import (
     GYM_QUIZ_ROUTES,
     GYM_RETURN_TO_BLAINE,
     GYM_TRAINER_EVENTS,
+    HYDRO_PUMP_LEARN_LEVEL,
     MANSION_1F_TO_3F,
     MANSION_3F_TO_B1F,
     MANSION_B1F_TO_NORTH_STATUE,
     MANSION_B1F_TO_SECRET_KEY,
+    MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
     MANSION_TEAM_POLICY,
     MANSION_TRAINER_EVENTS,
     MANSION_TRAINING_POLICY,
@@ -60,10 +62,12 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
         + ("up",)
     )
     assert MANSION_TRAINING_POLICY.target_level == 55
+    assert HYDRO_PUMP_LEARN_LEVEL == 52
+    assert MANSION_TRAINING_POLICY.max_battles < MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL
     assert MANSION_TRAINING_POLICY.preferred_move_slots == (4, 2, 3, 1)
     assert MANSION_TRAINING_POLICY.max_battles == 180
-    assert MANSION_TEAM_POLICY.required_size == 5
-    assert MANSION_TEAM_POLICY.max_battles == 4_000
+    assert MANSION_TEAM_POLICY.required_size == 6
+    assert MANSION_TEAM_POLICY.max_battles == 5_500
 
 
 def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -> None:
@@ -136,6 +140,7 @@ def test_red_training_matchup_requires_extra_margin_for_dux() -> None:
 
     assert _red_training_matchup_acceptable(dux, 30, policy)
     assert not _red_training_matchup_acceptable(dux, 31, policy)
+    assert not _red_training_matchup_acceptable(dux, 20, policy, 0x88)
     assert _training_attack_pp_reserve(dux, policy) == 6
 
     dugtrio = replace(dux, species_id=0x76, moves=(MoveObservation(0x5B, 10),))

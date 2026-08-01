@@ -301,7 +301,7 @@ The declared roster binds six species to six species-neutral roles:
 | Field utility | DUX (Farfetch'd) | Already obtained by the Vermilion trade |
 | Special sweeper | Jolteon | **Acquired and evolved** through the Celadon gift/stone route |
 | Bulky absorber | Snorlax | **Caught and retained** through the Hall of Fame |
-| Physical sweeper | Hitmonlee | Reachable via the Saffron Fighting Dojo; **not yet acquired** |
+| Physical sweeper | Hitmonlee | **Acquired** after defeating all five Fighting Dojo trainers |
 
 No slot is a substitution, so no slot carries a substitution reason. The roster type rejects any
 future substitution that does not record why it was made, so a roster change cannot enter the
@@ -521,13 +521,18 @@ trip remains bounded. A lean six-Full-Restore League reserve was sufficient thro
 and left 3,814 money. This qualifies the deterministic teacher and reusable training/capture
 mechanisms; it is not yet the target six-member curriculum or a learned-policy completion claim.
 
-The next qualified lineage adds Eevee through Celadon Mansion's rear entrance, purchases and
-consumes a Thunder Stone, and retains Jolteon as the fifth member. Its uninterrupted clean-power
-run passes **303/303 checkpoints** and **36/36 objectives**. The stricter zero-faint Mansion block
-uses semantic matchup, HP, damaging-PP, recovery, and party-order gates; it finishes with all five
-members between levels 77 and 82 before clearing the remainder of the game. The complete teacher
-run executes 372,194 actions. This qualifies a five-member deterministic curriculum, not a learned
-rollout or six-member result.
+The next qualified lineage added Eevee through Celadon Mansion's rear entrance, purchased and
+consumed a Thunder Stone, and retained Jolteon as the fifth member. It established the first
+five-member balanced result and exposed the remaining roster gap.
+
+The current lineage closes that gap with a source-pinned Fighting Dojo chapter. It defeats each
+Blackbelt and the Karate Master, records their exact identities and parties, chooses Hitmonlee,
+heals all six members, and proves physical field control before continuing. Its uninterrupted
+clean-power run passes **312/312 checkpoints** and **36/36 objectives**. The zero-faint Mansion
+block uses semantic matchup, HP, damaging-PP, recovery, move-learning, and party-order gates; it
+qualifies after **5,445 wild wins** and **529 healing trips**, with all six members between levels
+82 and 87. The complete teacher run executes **516,338 actions** before entering the Hall of Fame.
+This qualifies the six-member deterministic curriculum, not a learned-policy rollout.
 
 The full learned-system and transfer claims remain pending. In particular:
 
@@ -536,10 +541,9 @@ The full learned-system and transfer claims remain pending. In particular:
   finalized source;
 - held-out full-game completion has not yet been demonstrated;
 - cross-game transfer has not yet been measured;
-- one declared roster member—Hitmonlee—is not acquired by an existing chapter; and
-- the live balanced-training phase currently qualifies five members; its six-member level floor,
-  spread ceiling, recruitment sequence, and area-selection behavior remain unvalidated until the
-  missing acquisition chapter lands.
+- the finalized six-member trajectories have not yet been collected; and
+- no learned policy has yet reproduced the teacher's full-game completion or demonstrated transfer
+  to another Pokémon title.
 
 These limitations are part of the public project record rather than hidden behind the completed
 teacher result.

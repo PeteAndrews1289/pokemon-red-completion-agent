@@ -1,0 +1,62 @@
+{
+  "schema": "qualified-play-balanced-six-v1-receipt",
+  "date": "2026-08-01",
+  "status": "ok",
+  "claim_scope": {
+    "qualified_through": "enter_hall_of_fame",
+    "game_complete": true,
+    "balanced_six_member_teacher": true,
+    "learned_policy": false,
+    "timing_or_rng_generalization": false,
+    "cross_game_transfer": false
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "runs": 1,
+    "actions": 516338
+  },
+  "progress": {
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "next_objective": null
+  },
+  "roster": [
+    "Blastoise",
+    "DUX (Farfetch'd)",
+    "Dugtrio",
+    "Snorlax",
+    "Jolteon",
+    "Hitmonlee"
+  ],
+  "fighting_dojo": {
+    "trainers_defeated": 5,
+    "gift_selected": "Hitmonlee",
+    "six_member_control_boundary_verified": true
+  },
+  "balanced_training": {
+    "area": "pokemon_mansion_1f",
+    "battles_won": 5445,
+    "healing_trips": 529,
+    "minimum_level": 82,
+    "maximum_level": 87,
+    "level_spread": 5,
+    "faints": 0,
+    "hydro_pump_learned": true
+  },
+  "terminal": {
+    "location": "hall_of_fame",
+    "champion_event": true,
+    "hall_of_fame": true,
+    "controller_released": true
+  },
+  "privacy": {
+    "rom_path_included": false,
+    "rom_hash_included": false,
+    "save_state_included": false,
+    "personal_path_included": false
+  }
+}

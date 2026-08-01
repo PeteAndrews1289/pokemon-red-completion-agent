@@ -840,9 +840,38 @@ class _SilphEvidence:
         return {"status": "ok", "objective": "liberate_silph"}
 
 
+class _DojoEvidence:
+    passed = True
+    final_raw = replace(
+        _SilphEvidence.final_raw,
+        party_count=6,
+        party_species_ids=(0x1C, 0x40, 0x76, 0x84, 0x68, 0x2B),
+    )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        checkpoint_ids = (
+            "dojo_ready",
+            "dojo_entered",
+            "dojo_trainer_1",
+            "dojo_trainer_2",
+            "dojo_trainer_3",
+            "dojo_trainer_4",
+            "karate_master",
+            "hitmonlee_received",
+            "dojo_terminal",
+        )
+        return tuple(
+            (checkpoint_id, checkpoint_id.replace("_", " ").title(), self.final_raw)
+            for checkpoint_id in checkpoint_ids
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {"status": "ok", "objective": "recruit_hitmonlee"}
+
+
 class _SabrinaEvidence:
     passed = True
-    final_raw = replace(_SilphEvidence.final_raw, badge_bits=0x3F)
+    final_raw = replace(_DojoEvidence.final_raw, badge_bits=0x3F)
 
     def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
         checkpoint_ids = (
@@ -1144,16 +1173,16 @@ def test_qualified_play_timing_rejects_unbounded_values(invalid: object) -> None
 
 
 def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
-    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 303
+    assert QUALIFIED_PLAY_CHECKPOINT_COUNT == 312
     progress = QualifiedPlayProgress(
         checkpoint_id="cerulean_reached",
         label="Reached Cerulean City",
-        completed=303,
+        completed=312,
         total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
         frames_executed=252_989,
     )
 
-    assert progress.completed == progress.total == 303
+    assert progress.completed == progress.total == 312
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
@@ -1256,6 +1285,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         erika=_ErikaEvidence(),  # type: ignore[arg-type]
         saffron=_SaffronEvidence(),  # type: ignore[arg-type]
         silph=_SilphEvidence(),  # type: ignore[arg-type]
+        dojo=_DojoEvidence(),  # type: ignore[arg-type]
         sabrina=_SabrinaEvidence(),  # type: ignore[arg-type]
         cinnabar=_CinnabarEvidence(),  # type: ignore[arg-type]
         blaine=_BlaineEvidence(),  # type: ignore[arg-type]
@@ -1611,6 +1641,15 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "silph_liberated",
         "master_ball",
         "silph_terminal",
+        "dojo_ready",
+        "dojo_entered",
+        "dojo_trainer_1",
+        "dojo_trainer_2",
+        "dojo_trainer_3",
+        "dojo_trainer_4",
+        "karate_master",
+        "hitmonlee_received",
+        "dojo_terminal",
         "sabrina_ready",
         "leader_reached",
         "sabrina_defeated",

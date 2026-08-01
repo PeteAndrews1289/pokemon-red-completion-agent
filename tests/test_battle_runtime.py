@@ -1810,6 +1810,42 @@ def test_unknown_menu_is_bounded_dialogue_not_unbounded_button_spam() -> None:
     ]
 
 
+def test_opted_in_zero_pp_main_snapshot_is_confirmed_as_move_learning_dialogue() -> None:
+    runtime = FakeRuntime(raw=_raw(pp=(0, 0, 0, 0)))
+    policy_calls = 0
+
+    def on_action(action: MacroAction) -> None:
+        if action.kind is MacroActionKind.WAIT:
+            return
+        if runtime.raw.first_party_pp == (0, 0, 0, 0):
+            assert action.kind is MacroActionKind.CONFIRM
+            runtime.raw = replace(runtime.raw, first_party_pp=(5, 15, 10, 15))
+            return
+        if runtime.menu.phase is BattleMenuPhase.MAIN:
+            runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+            return
+        runtime.raw = replace(runtime.raw, battle_state=0, enemy_hp=0)
+        runtime.controls = READY
+
+    def policy(_raw: RawGameState) -> int:
+        nonlocal policy_calls
+        policy_calls += 1
+        return 1
+
+    runtime.on_action = on_action
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        policy,
+        expected_map=MapId.CERULEAN_CITY,
+        transient_zero_pp_main_is_dialogue=True,
+    )
+
+    assert final.battle_state == 0
+    assert policy_calls == 1
+    assert _non_wait_actions(runtime)[0] == MacroAction(MacroActionKind.CONFIRM)
+
+
 def test_status_suppressed_turn_can_return_without_spending_pp() -> None:
     runtime = FakeRuntime(raw=replace(_raw(), first_party_status=0x40))
     confirmations = 0

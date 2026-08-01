@@ -6,11 +6,11 @@ The public
 [`red-battle-collection-v1.json`](../configs/red-battle-collection-v1.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
-- 63 stable public battle-plan identities in exact qualified-route order;
+- 68 stable public battle-plan identities in exact qualified-route order;
 - five `train`, two `validation`, and five `test` root-lineage slots;
 - partition-local ordinals `1/5` through `5/5`, `1/2` through `2/2`, and `1/5`
   through `5/5`, in addition to global collection ordinals `1/12` through `12/12`; and
-- one unique 63-offset timing schedule and one attempt for each slot.
+- one unique 68-offset timing schedule and one attempt for each slot.
 
 As of the commit that introduces this protocol, the schedule dry run and all twelve declared
 slots are unexecuted. The registry is a prospective plan, not an outcome or held-out result. It
@@ -87,13 +87,13 @@ The roster digest is:
 
 ```text
 D({
-  "battle_plan_ids": [the exact 63 IDs in qualified route order],
+  "battle_plan_ids": [the exact 68 IDs in qualified route order],
   "schema": "pokemon-red-battle-plan-roster-v1"
 })
 ```
 
-The array must equal the 63-entry `RED_BATTLE_PLAN_IDS` tuple exactly. A missing, duplicated,
-substituted, or reordered ID is invalid even if the array length remains 63.
+The array must equal the 68-entry `RED_BATTLE_PLAN_IDS` tuple exactly. A missing, duplicated,
+substituted, or reordered ID is invalid even if the array length remains 68.
 
 For each roster ID, `sha256-mod-v1` derives a frame offset from 0 through 255. The SHA-256 input is
 the following exact byte concatenation:
@@ -114,7 +114,7 @@ D({
   "offsets": [
     {"battle_plan_id": ID_01, "frames": OFFSET_01},
     ...,
-    {"battle_plan_id": ID_63, "frames": OFFSET_63}
+    {"battle_plan_id": ID_68, "frames": OFFSET_68}
   ],
   "schema": "pokemon-red-battle-start-offset-v1"
 })
@@ -251,21 +251,21 @@ pokemon-red-completion record \
 ```
 
 It is a clean-power-on, full-route rehearsal using the same frozen execution contract and the same
-63-ID instrumentation path, but the fixed seed `9101` and its distinct schedule. Its metadata is
+68-ID instrumentation path, but the fixed seed `9101` and its distinct schedule. Its metadata is
 `partition=unassigned` and `attempt.counted=false`, and explicitly binds the registry, source
 commit, source bundle, behavior, objective graph, and teacher-execution digests. It must not enter
 train, validation, or test data, and it must not enter any performance denominator. A normal
 unplanned recording is not a substitute.
 
-The dry run must finish successfully and attest all 63 offsets before slot `01` starts. A failed
+The dry run must finish successfully and attest all 68 offsets before slot `01` starts. A failed
 dry run does not consume a declared slot, but collection must pause until the defect is corrected.
 Any correction to a frozen input must be committed, pushed, and reflected in a regenerated
 registry and sidecar before repeating the dry run.
 
-After the complete episode and all 63 attestations pass their offline audit, the recorder publishes
+After the complete episode and all 68 attestations pass their offline audit, the recorder publishes
 a separate immutable dry-run qualification in private storage. It binds the registry, exact source
 commit and execution digests, CPython/PyBoy runtime, ROM hashes, dry seed and schedule, episode ID,
-manifest digest, and 63/63 audit receipt. Before any counted slot can create the campaign seal or
+manifest digest, and 68/68 audit receipt. Before any counted slot can create the campaign seal or
 episode namespace, the command reopens that referenced episode and reruns the audit under the same
 exclusive collection session. Absence, identity drift, replacement, or malformed evidence fails
 closed. This qualification is not a campaign outcome and never enters an evaluation denominator.
@@ -285,7 +285,7 @@ Each application produces exactly one private `battle_start_offset_applied` even
   `WAIT` execution.
 
 The terminal event must contain a `battle_start_schedule` attestation with `complete=true`,
-`expected_battles=63`, `finished_battles=63`, and the same schedule digest. Duplicate or unknown
+`expected_battles=68`, `finished_battles=68`, and the same schedule digest. Duplicate or unknown
 IDs, intent changes, schedule mismatch, reordering, substitution, partial application, an extra
 battle, or an unfinished schedule fails the attempt.
 

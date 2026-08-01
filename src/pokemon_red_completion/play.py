@@ -81,6 +81,13 @@ from pokemon_red_completion.cinnabar import (
     run_cinnabar_chapter,
 )
 from pokemon_red_completion.collection_protocol import BattleStartOffset
+from pokemon_red_completion.dojo import (
+    DOJO_CHECKPOINT_COUNT,
+    DojoChapterError,
+    DojoChapterReport,
+    DojoProgress,
+    run_dojo_chapter,
+)
 from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.erika import (
@@ -268,6 +275,7 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + ERIKA_CHECKPOINT_COUNT
     + SAFFRON_CHECKPOINT_COUNT
     + SILPH_CHECKPOINT_COUNT
+    + DOJO_CHECKPOINT_COUNT
     + SABRINA_CHECKPOINT_COUNT
     + CINNABAR_CHECKPOINT_COUNT
     + BLAINE_CHECKPOINT_COUNT
@@ -421,6 +429,7 @@ class QualifiedPlayReport:
     erika: ErikaChapterReport
     saffron: SaffronChapterReport
     silph: SilphChapterReport
+    dojo: DojoChapterReport
     sabrina: SabrinaChapterReport
     cinnabar: CinnabarChapterReport
     blaine: BlaineChapterReport
@@ -469,6 +478,7 @@ class QualifiedPlayReport:
             and self.erika.passed
             and self.saffron.passed
             and self.silph.passed
+            and self.dojo.passed
             and self.sabrina.passed
             and self.cinnabar.passed
             and self.blaine.passed
@@ -533,6 +543,7 @@ class QualifiedPlayReport:
             *self.erika.checkpoints(),
             *self.saffron.checkpoints(),
             *self.silph.checkpoints(),
+            *self.dojo.checkpoints(),
             *self.sabrina.checkpoints(),
             *self.cinnabar.checkpoints(),
             *self.blaine.checkpoints(),
@@ -609,6 +620,7 @@ class QualifiedPlayReport:
             "erika_chapter": self.erika.public_dict(),
             "saffron_chapter": self.saffron.public_dict(),
             "silph_chapter": self.silph.public_dict(),
+            "dojo_chapter": self.dojo.public_dict(),
             "sabrina_chapter": self.sabrina.public_dict(),
             "cinnabar_chapter": self.cinnabar.public_dict(),
             "blaine_chapter": self.blaine.public_dict(),
@@ -1021,6 +1033,16 @@ def run_qualified_play(
             raise QualifiedPlayError(str(error)) from error
 
         try:
+            dojo = run_dojo_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_dojo_progress_bridge(progress),
+            )
+        except DojoChapterError as error:
+            raise QualifiedPlayError(str(error)) from error
+
+        try:
             sabrina = run_sabrina_chapter(
                 emulator,
                 reader,
@@ -1140,6 +1162,7 @@ def run_qualified_play(
             | semantic_facts(erika.final_raw)
             | semantic_facts(saffron.final_raw)
             | semantic_facts(silph.final_raw)
+            | semantic_facts(dojo.final_raw)
             | semantic_facts(sabrina.final_raw)
             | semantic_facts(cinnabar.final_raw)
             | semantic_facts(blaine.final_raw)
@@ -1191,6 +1214,7 @@ def run_qualified_play(
             erika=erika,
             saffron=saffron,
             silph=silph,
+            dojo=dojo,
             sabrina=sabrina,
             cinnabar=cinnabar,
             blaine=blaine,
@@ -1925,6 +1949,38 @@ def _sabrina_progress_bridge(
                 - BLAINE_CHECKPOINT_COUNT
                 - CINNABAR_CHECKPOINT_COUNT
                 - SABRINA_CHECKPOINT_COUNT
+                + progress.completed,
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
+def _dojo_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[DojoProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: DojoProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CHAMPION_CHECKPOINT_COUNT
+                - LANCE_CHECKPOINT_COUNT
+                - AGATHA_CHECKPOINT_COUNT
+                - BRUNO_CHECKPOINT_COUNT
+                - LORELEI_CHECKPOINT_COUNT
+                - VICTORY_ROAD_CHECKPOINT_COUNT
+                - GIOVANNI_CHECKPOINT_COUNT
+                - BLAINE_CHECKPOINT_COUNT
+                - CINNABAR_CHECKPOINT_COUNT
+                - SABRINA_CHECKPOINT_COUNT
+                - DOJO_CHECKPOINT_COUNT
                 + progress.completed,
                 total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
                 frames_executed=progress.frames_executed,

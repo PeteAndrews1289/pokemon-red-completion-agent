@@ -199,13 +199,12 @@ bound respectively to the lead-attacker, speed-control, field-utility, special-s
 bulky-absorber, and physical-sweeper roles. Any substitution must record why it was made; the
 roster type rejects an unexplained one.
 
-The live integration now catches Route 12 Snorlax, receives Eevee, evolves Jolteon, rotates five
-members through bounded switch participation, meets the level-floor and spread contract at levels
-77–82 with zero faints, and reaches the Hall of Fame from clean power through 303 checkpoints. One
-acquisition consequence remains before that proof becomes the intended six-member teacher:
-
-1. Hitmonlee still needs a Fighting Dojo acquisition chapter, followed by a six-member replay of
-   the same level-floor and spread contract.
+The live integration now catches Route 12 Snorlax, receives Eevee, evolves Jolteon, defeats the
+five Fighting Dojo trainers, chooses Hitmonlee, and rotates all six members through bounded switch
+participation. Its clean-power proof meets the level-floor and spread contract at levels 82–87
+with zero faints and reaches the Hall of Fame through 312 checkpoints. The deterministic teacher
+is therefore ready to generate the finalized six-member demonstrations; the learned policy has
+not yet earned a completion claim.
 
 Existing recorded demonstrations still describe single-carry play because the new balanced
 lineage has not yet been collected. Any dataset card derived from those recordings must say so.
@@ -256,8 +255,8 @@ Three versioned artifact types remain outside Git:
   context; and a descriptive recovery marker.
 - **Sparse event log:** map, objective, badge, party, item, battle, checkpoint, recovery, and
   terminal transitions. Scheduled runs additionally record one
-  `battle_start_offset_applied` attestation for each of the 63 stable battle IDs and a terminal
-  63/63 schedule attestation.
+  `battle_start_offset_applied` attestation for each of the 68 stable battle IDs and a terminal
+  68/68 schedule attestation.
 
 Recorder v1 uses canonical JSONL for inspectable, append-only episode streams. Columnar Parquet
 training views are derived from validated episodes later; they are not the source of record.
@@ -276,7 +275,7 @@ The campaign status command can reconcile the same artifacts after a power loss 
 a new slot.
 
 The successful non-counted rehearsal publishes a separate immutable qualification bound to its
-source, runtime, ROM, schedule, episode, manifest, and 63/63 audit. A counted slot cannot create its
+source, runtime, ROM, schedule, episode, manifest, and 68/68 audit. A counted slot cannot create its
 campaign seal or episode namespace until that qualification is reopened and re-audited. The slot's
 partial episode directory is then synchronously persisted before emulator execution begins, making
 the one-attempt claim durable across power loss.
@@ -313,7 +312,7 @@ disjoint.
 
 Before collection, the exact source/configuration/registry commit must be committed and pushed.
 The registry's disjoint, unassigned, non-counted schedule dry run must then complete and attest all
-63 battles before slot `01`. It is excluded from train, validation, test, and every performance
+68 battles before slot `01`. It is excluded from train, validation, test, and every performance
 denominator.
 
 - **Exact teacher:** repeat the frozen clean-power-on route and report its own attempts,
@@ -366,7 +365,7 @@ lineages remain hard leakage.
    validation, and test timing schedules, including exact execution identities, one-shot ledger
    accounting, and global plus partition-local slots. **Done as protocol infrastructure.**
 18. Commit and push the exact source/configuration state, then complete the disjoint, unassigned,
-   non-counted 63/63 schedule dry run before slot `01`. **Pending; as of the protocol commit,
+   non-counted 68/68 schedule dry run before slot `01`. **Pending; as of the current branch,
    neither the dry run nor any declared slot has executed.**
 19. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.

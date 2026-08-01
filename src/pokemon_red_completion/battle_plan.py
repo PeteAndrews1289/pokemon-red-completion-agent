@@ -6,7 +6,7 @@ from enum import StrEnum
 
 
 class RedBattlePlanId(StrEnum):
-    """One preregistered physical trainer battle in full-run route order."""
+    """One stable public identity for a preregistered trainer battle."""
 
     CASCADE_CERULEAN_RIVAL = "battle-001-cascade-cerulean-rival"
     CASCADE_MISTY = "battle-002-cascade-misty"
@@ -71,6 +71,24 @@ class RedBattlePlanId(StrEnum):
     LEAGUE_AGATHA = "battle-061-league-agatha"
     LEAGUE_LANCE = "battle-062-league-lance"
     LEAGUE_CHAMPION = "battle-063-league-champion"
+    DOJO_BLACKBELT_SET_5 = "battle-064-dojo-blackbelt-set-5"
+    DOJO_BLACKBELT_SET_3 = "battle-065-dojo-blackbelt-set-3"
+    DOJO_BLACKBELT_SET_4 = "battle-066-dojo-blackbelt-set-4"
+    DOJO_BLACKBELT_SET_2 = "battle-067-dojo-blackbelt-set-2"
+    DOJO_KARATE_MASTER = "battle-068-dojo-karate-master"
 
 
-RED_BATTLE_PLAN_IDS: tuple[str, ...] = tuple(item.value for item in RedBattlePlanId)
+# Keep existing public IDs immutable while placing later-added route battles in
+# their actual execution order. The collection schedule binds this tuple.
+RED_BATTLE_PLAN_IDS: tuple[str, ...] = (
+    *(item.value for item in RedBattlePlanId if not item.name.startswith("DOJO_")),
+)
+RED_BATTLE_PLAN_IDS = (
+    *RED_BATTLE_PLAN_IDS[:48],
+    RedBattlePlanId.DOJO_BLACKBELT_SET_5.value,
+    RedBattlePlanId.DOJO_BLACKBELT_SET_3.value,
+    RedBattlePlanId.DOJO_BLACKBELT_SET_4.value,
+    RedBattlePlanId.DOJO_BLACKBELT_SET_2.value,
+    RedBattlePlanId.DOJO_KARATE_MASTER.value,
+    *RED_BATTLE_PLAN_IDS[48:],
+)

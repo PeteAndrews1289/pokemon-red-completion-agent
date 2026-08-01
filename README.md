@@ -37,13 +37,15 @@ control, and progressively trained specialists.**
 > In each run the lead trained from level 46 to 55 through 115 wild wins, 1,862 bounded encounter
 > steps, five healing trips, and zero faints; it reached Indigo at level 58 and the Hall of Fame at
 > level 61. This is still deterministic-teacher evidence, not a learned-policy claim.
-> The balanced-team curriculum branch now catches Route 12 Snorlax, obtains Eevee through the
-> Celadon Mansion rear route, buys a Thunder Stone, and evolves Jolteon. Its newest uninterrupted
-> clean-power run completes **303/303 checkpoints** and **36/36 objectives** with five members.
-> The zero-faint training block stops with every member at level 77–82, satisfying the strict
-> five-level spread before the same lineage clears Giovanni, Victory Road, the Elite Four, the
-> Champion, and Hall of Fame in **372,194 actions**. Hitmonlee, the six-member replay, collection,
-> and learned-policy training remain open.
+> The balanced-team curriculum now catches Route 12 Snorlax, obtains and evolves Jolteon, clears
+> all five Fighting Dojo trainers, and chooses Hitmonlee to complete its declared six-member
+> roster. Its newest uninterrupted clean-power run completes **312/312 checkpoints** and **36/36
+> objectives**. The zero-faint training block stops after 5,445 wins and 529 healing trips with
+> every member at level 82–87, satisfying the strict five-level spread before the same lineage
+> clears Giovanni, Victory Road, the Elite Four, the Champion, and Hall of Fame in **516,338
+> actions**. This qualifies the deterministic six-member teacher; collection and learned-policy
+> evaluation remain open. See the
+> [sanitized six-member receipt](docs/evidence/qualified-play-balanced-six-2026-08-01.json).
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
 > **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned
@@ -182,7 +184,7 @@ pokemon-red-completion private-data init --private-root /absolute/private/trajec
 pokemon-red-completion record --private-root /absolute/private/trajectory-directory
 
 # After the exact source/config commit is committed and pushed, run the required
-# unassigned, non-counted 63-battle schedule rehearsal before slot 01:
+# unassigned, non-counted 68-battle schedule rehearsal before slot 01:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
   --schedule-dry-run
@@ -296,7 +298,7 @@ reaches 72.5% teacher-choice agreement versus a 50.5% fold-local majority-slot b
 legality and PP mask makes all outputs valid by construction; that safety invariant is not a
 learned success metric. This is not battle win rate or a learned gameplay rollout.
 
-New recordings bind each adaptive decision to an explicit physical battle instance, one of 63
+New recordings bind each adaptive decision to an explicit physical battle instance, one of 68
 stable public battle-plan identities, planner objective, win goal, and required-move policy. The
 current `pokemon.core.battle.move-ranker.v2` schema adds
 `constraint.matches_required_move`; receipts report free-choice and forced-choice accuracy
@@ -306,9 +308,9 @@ typed recovery budget.
 
 The committed collection protocol preregisters twelve immutable one-attempt root-lineage
 slots—five train, two validation, and five test—with partition-local ordinals and a different
-63-battle timing schedule for each. The exact source/configuration commit must be committed and
+68-battle timing schedule for each. The exact source/configuration commit must be committed and
 pushed before collection. A registry-declared, unassigned, non-counted dry run must then attest all
-63 schedule applications before slot `01`. Counted runs emit per-battle and terminal schedule
+68 schedule applications before slot `01`. Counted runs emit per-battle and terminal schedule
 attestations; a private campaign seal and outcome ledger preserve every success, failure,
 interruption, and invalid result. An interruption consumes its slot rather than authorizing a
 rerun. The successful rehearsal produces an immutable private qualification that every counted

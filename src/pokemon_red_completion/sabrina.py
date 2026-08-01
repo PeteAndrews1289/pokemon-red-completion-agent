@@ -19,6 +19,7 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
+from pokemon_red_completion.dojo import _prove_center_field_control
 from pokemon_red_completion.observation import (
     Badge,
     EventFlag,
@@ -355,6 +356,7 @@ def run_sabrina_chapter(
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "Saffron Center entry")
     _move(actions, reader, ("up",) * 4, timing)
     _heal(actions, timing)
+    _prove_center_field_control(actions, reader, timing)
     final = reader.read()
     _require(final, MapId.SAFFRON_POKECENTER, (3, 3), "healed Sabrina boundary")
     _checkpoint(records, progress, emulator, final, "sabrina_terminal", "Healed Sabrina boundary")
