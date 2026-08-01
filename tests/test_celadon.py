@@ -15,8 +15,12 @@ from pokemon_red_completion.celadon import (
     CeladonCheckpoint,
     CeladonTiming,
     Route8TrainerEvidence,
+    _party_hp,
+    _party_max_hp,
+    _party_status,
 )
-from pokemon_red_completion.observation import EventFlag, MapId, RawGameState
+from pokemon_red_completion.observation import EventFlag, MapId, RamAddress, RawGameState
+from pokemon_red_completion.red_party import PARTY_STRUCT_STRIDE
 
 
 def _raw() -> RawGameState:
@@ -70,6 +74,30 @@ def _report() -> CeladonChapterReport:
         actions_executed=50,
         controller_released=True,
     )
+
+
+def test_whole_party_receipts_read_all_six_struct_slots() -> None:
+    memory: dict[int, int] = {int(RamAddress.PARTY_COUNT): 6}
+    hp = (81, 52, 37, 140, 95, 110)
+    maximum = (90, 60, 45, 150, 100, 120)
+    status = (0, 8, 0, 64, 0, 0)
+    for index, (current, total, condition) in enumerate(
+        zip(hp, maximum, status, strict=True)
+    ):
+        stride = index * PARTY_STRUCT_STRIDE
+        for address, value in (
+            (int(RamAddress.PARTY_MON_1_HP) + stride, current),
+            (int(RamAddress.PARTY_MON_1_MAX_HP) + stride, total),
+        ):
+            memory[address] = value >> 8
+            memory[address + 1] = value & 0xFF
+        memory[int(RamAddress.PARTY_MON_1_STATUS) + stride] = condition
+
+    emulator = type("Memory", (), {"read_u8": lambda _self, address: memory.get(int(address), 0)})()
+
+    assert _party_hp(emulator) == hp
+    assert _party_max_hp(emulator) == maximum
+    assert _party_status(emulator) == status
 
 
 def test_celadon_timing_is_positive_and_bounded() -> None:

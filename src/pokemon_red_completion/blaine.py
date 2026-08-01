@@ -54,6 +54,7 @@ from pokemon_red_completion.red_party import (
     BLASTOISE_SPECIES_ID,
     DUGTRIO_SPECIES_ID,
     DUX_SPECIES_ID,
+    SNORLAX_SPECIES_ID,
     PokemonRedPartyReader,
 )
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
@@ -78,9 +79,10 @@ from pokemon_red_completion.training import (
 
 BLAINE_CHECKPOINT_COUNT = 9
 BLAINE_CAPACITY_SALE_ITEM = ItemId.ANTIDOTE
-BLAINE_INPUT_BAG_SLOT_BOUNDS = (18, 19)
+BLAINE_INPUT_BAG_SLOT_BOUNDS = (17, 19)
 BLAINE_MONEY_DELTA = 5_003
 BLAINE_ANTIDOTE_SALE_VALUE = 50
+MAX_REPEL_PRICE = 700
 BLAINE_MAX_WILD_FLEES = 3
 BLAINE_OPPONENT = 0xEF
 BLAINE_TRAINER_CLASS = 0xEF
@@ -105,7 +107,7 @@ MANSION_TRAINING_POLICY = TrainingPolicy(
 MANSION_TEAM_POLICY = BalancedTeamPolicy(
     minimum_level=50,
     maximum_level_spread=5,
-    required_size=3,
+    required_size=4,
     retreat_hp_ratio=0.55,
     # The lead-only block reserved 2 PP because it ran barely a hundred battles
     # at an overwhelming level advantage.  Team training runs far longer, so it
@@ -114,13 +116,13 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
     reserve_total_pp=16,
     max_enemy_level_delta=0,
     minimum_direct_level_advantage=8,
-    # A measured 900-battle run safely raised the three-member core above the
-    # level floor, but stopped at levels 60--69.  Keep the five-level contract
-    # strict and extend the bounded budget so the lagging members can finish
-    # closing that gap instead of weakening the definition of "balanced".
-    max_battles=1_200,
-    max_steps=120_000,
-    max_healing_trips=160,
+    # The first four-member clean run safely put everyone above level 50 after
+    # 1,200 battles, but the 57--71 spread still failed the five-level balance
+    # contract.  Keep that contract strict and provide enough bounded work for
+    # the three lagging members to close the measured gap.
+    max_battles=2_400,
+    max_steps=240_000,
+    max_healing_trips=320,
     max_faints=0,
 )
 BATTLE_PARTY_MENU_COMMAND = 2
@@ -144,6 +146,9 @@ TRAINING_MOVE_IDS = {
     DUX_SPECIES_ID: (CUT_MOVE_ID, 0x40, FLY_MOVE_ID),
     DIGLETT_SPECIES_ID: (DIG,),
     DUGTRIO_SPECIES_ID: (DIG,),
+    # Snorlax replaces its early Headbutt as the long curriculum accepts
+    # Body Slam, Double-Edge, and Hyper Beam level-up prompts.
+    SNORLAX_SPECIES_ID: (0x1D, 0x22, 0x26, 0x3F),
 }
 RED_DIRECT_LEVEL_ADVANTAGE = {
     DUX_SPECIES_ID: 15,
@@ -155,6 +160,7 @@ TRAINING_ATTACK_PP_RESERVE = {
     DUX_SPECIES_ID: 6,
     DIGLETT_SPECIES_ID: 2,
     DUGTRIO_SPECIES_ID: 2,
+    SNORLAX_SPECIES_ID: 2,
 }
 MANSION_TRAINER_EVENTS = (
     EventFlag.BEAT_MANSION_1_TRAINER_0,
@@ -294,9 +300,9 @@ class BlaineChapterReport:
     max_repel_bought: int
     initial_money: int
     money_remaining: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     frames_executed: int
     actions_executed: int
     controller_released: bool
@@ -341,10 +347,11 @@ class BlaineChapterReport:
             and self.tm38_quantity == 1
             and self.x_accuracy_retained
             and self.bide_sold
-            and self.max_repel_bought == 1
+            and self.max_repel_bought in (1, 2)
             and self.money_remaining
             == self.initial_money
             + BLAINE_MONEY_DELTA
+            - (self.max_repel_bought - 1) * MAX_REPEL_PRICE
             - (0 if self.antidote_sold else BLAINE_ANTIDOTE_SALE_VALUE)
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
@@ -356,7 +363,7 @@ class BlaineChapterReport:
             and all(hp > 0 for hp in self.party_hp)
             and self.final_raw.first_party_hp == self.party_hp[0]
             and self.final_raw.first_party_max_hp == self.party_max_hp[0]
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
         )
 
@@ -492,7 +499,14 @@ def run_blaine_chapter(
         or initial_bag.get(ItemId.TM34_BIDE, 0) != 1
         or initial_bag.get(ItemId.ANTIDOTE, 0) not in (0, 1, 2)
     ):
-        raise BlaineChapterError("Cinnabar input inventory lacks the qualified capacity items.")
+        raise BlaineChapterError(
+            "Cinnabar input inventory lacks the qualified capacity items: "
+            f"slots={len(initial_bag)}, "
+            f"x_accuracy={initial_bag.get(ItemId.X_ACCURACY, 0)}, "
+            f"bide={initial_bag.get(ItemId.TM34_BIDE, 0)}, "
+            f"antidote={initial_bag.get(ItemId.ANTIDOTE, 0)}, "
+            f"items={tuple(int(item) for item in initial_bag)}."
+        )
     mansion_before = _events(emulator, MANSION_TRAINER_EVENTS)
     if mansion_before != (False,) * 6:
         raise BlaineChapterError("A Pokémon Mansion trainer was already defeated.")
@@ -519,13 +533,14 @@ def run_blaine_chapter(
     # Retain TM21 here so TM14 plus the Secret Key still fill the bag and keep
     # Blaine's delayed-TM38 reward boundary meaningful. Stay in the sell menu
     # so _buy_repel can return directly to the clerk's BUY/SELL menu.
-    _buy_repel(actions, reader, emulator)
+    repel_purchase_quantity = 2 if len(initial_bag) == 17 else 1
+    _buy_repel(actions, reader, emulator, quantity=repel_purchase_quantity)
     _use_bag_item(actions, reader, emulator, DEFAULT_LAVENDER_TIMING, ItemId.MAX_REPEL)
     if (
-        _bag(emulator).get(ItemId.MAX_REPEL, 0)
+        _bag(emulator).get(ItemId.MAX_REPEL, 0) != repel_purchase_quantity - 1
         or emulator.read_u8(RamAddress.REPEL_REMAINING_STEPS) != 250
     ):
-        raise BlaineChapterError("Max Repel did not activate from a one-item purchase.")
+        raise BlaineChapterError("Max Repel purchase did not leave its capacity filler.")
 
     _move(actions, reader, MART_TO_MANSION, "Cinnabar Mart to Mansion")
     _require(reader.read(), MapId.POKEMON_MANSION_1F, (5, 27), "Mansion entrance")
@@ -762,7 +777,7 @@ def run_blaine_chapter(
         x_accuracy_retained=_bag(emulator).get(ItemId.X_ACCURACY, 0) == 1,
         bide_sold=ItemId.TM34_BIDE not in _bag(emulator),
         antidote_sold=sell_antidote_early,
-        max_repel_bought=1,
+        max_repel_bought=repel_purchase_quantity,
         initial_money=initial_money,
         money_remaining=_money(emulator),
         party_hp=_party_hp(emulator),
@@ -827,7 +842,7 @@ def _sell_antidote_before_mansion(
     return input_slots == 19
 
 
-def _buy_repel(actions, reader, emulator) -> None:
+def _buy_repel(actions, reader, emulator, *, quantity: int = 1) -> None:
     _pulse(actions, MacroActionKind.CANCEL)
     _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
@@ -837,8 +852,8 @@ def _buy_repel(actions, reader, emulator) -> None:
         DEFAULT_LAVENDER_TIMING,
         absolute_index=3,
         item=ItemId.MAX_REPEL,
-        quantity=1,
-        target_bag_quantity=1,
+        quantity=quantity,
+        target_bag_quantity=quantity,
     )
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
 
@@ -1019,7 +1034,7 @@ def _team_training_move_slot(state: RawGameState) -> int:
         for slot in MANSION_TRAINING_POLICY.preferred_move_slots
         if slot != disabled and slot not in preferred_slots
     )
-    slots = preferred_slots if preferred_move_ids else fallback_slots
+    slots = preferred_slots or fallback_slots
     return choose_training_move_slot(pp, slots)
 
 
@@ -1598,7 +1613,7 @@ def _heal(actions, reader, emulator) -> None:
         _pulse(actions, MacroActionKind.CONFIRM)
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
+            and all(status == 0 for status in _party_status(emulator))
             and reader.read().first_party_pp == (15, 15, 10, 15)
         ):
             break

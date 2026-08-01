@@ -275,9 +275,9 @@ class TowerChapterReport:
     super_potions_used: int
     super_potions_remaining: int
     super_potion_inventory_path: tuple[int, ...]
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     money_before: int
     money_remaining: int
     frames_executed: int
@@ -322,7 +322,7 @@ class TowerChapterReport:
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.money_before >= 0
             and self.money_remaining == self.money_before + TOWER_TRAINER_REWARD_TOTAL
             and self.controller_released
@@ -1327,7 +1327,9 @@ def _heal_center(
     _move(actions, reader, emulator, run, ("up",) * 4, timing, "Lavender nurse")
     for _ in range(16):
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-        if _party_hp(emulator) == _party_max_hp(emulator) and _party_status(emulator) == (0, 0, 0):
+        if _party_hp(emulator) == _party_max_hp(emulator) and all(
+            status == 0 for status in _party_status(emulator)
+        ):
             _clear_text(actions, reader, timing)
             return
     raise TowerChapterError("Lavender Center did not heal the party.")
@@ -1380,7 +1382,9 @@ def _require_purified_heal(
     run: _RunState,
     label: str,
 ) -> None:
-    if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
+    if _party_hp(emulator) != _party_max_hp(emulator) or any(
+        status != 0 for status in _party_status(emulator)
+    ):
         raise TowerChapterError(f"{label} did not restore the complete party.")
     if not _event(emulator, EventFlag.IN_PURIFIED_ZONE):
         raise TowerChapterError(f"{label} did not set the purified-zone event.")

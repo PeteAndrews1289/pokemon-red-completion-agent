@@ -32,6 +32,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_party import PARTY_STRUCT_STRIDE
 from pokemon_red_completion.surge import _swap_party_lead
 
 LAVENDER_CHECKPOINT_COUNT = 15
@@ -190,9 +191,9 @@ class LavenderChapterReport:
     trainers: tuple[TrainerEvidence, ...]
     wild_flees: tuple[WildFleeEvidence, ...]
     final_raw: RawGameState
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     repels_purchased: int
     repels_used: int
     parlyz_heals_purchased: int
@@ -226,7 +227,7 @@ class LavenderChapterReport:
             and self.final_raw.party_species_ids == PROTECTED_PARTY
             and self.final_raw.battle_state == 0
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.repels_purchased == self.repels_used == 4
             and self.parlyz_heals_purchased >= 1
             and self.parlyz_heals_used + self.parlyz_heals_remaining
@@ -1720,7 +1721,7 @@ def _heal_center(
     for _ in range(timing.dialogue_pulses):
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
+            and all(status == 0 for status in _party_status(emulator))
             and reader.read_input_readiness().ready
         ):
             return
@@ -1952,36 +1953,30 @@ def _u16(emulator: EmulatorState, address: int) -> int:
     return emulator.read_u8(address) * 0x100 + emulator.read_u8(address + 1)
 
 
-def _party_hp(emulator: EmulatorState) -> tuple[int, int, int]:
+def _party_size(emulator: EmulatorState) -> int:
+    return min(emulator.read_u8(RamAddress.PARTY_COUNT), 6)
+
+
+def _party_hp(emulator: EmulatorState) -> tuple[int, ...]:
     return tuple(
-        _u16(emulator, address)
-        for address in (
-            RamAddress.PARTY_MON_1_HP,
-            RamAddress.PARTY_MON_2_HP,
-            RamAddress.PARTY_MON_3_HP,
-        )
+        _u16(emulator, int(RamAddress.PARTY_MON_1_HP) + index * PARTY_STRUCT_STRIDE)
+        for index in range(_party_size(emulator))
     )
 
 
-def _party_max_hp(emulator: EmulatorState) -> tuple[int, int, int]:
+def _party_max_hp(emulator: EmulatorState) -> tuple[int, ...]:
     return tuple(
-        _u16(emulator, address)
-        for address in (
-            RamAddress.PARTY_MON_1_MAX_HP,
-            RamAddress.PARTY_MON_2_MAX_HP,
-            RamAddress.PARTY_MON_3_MAX_HP,
-        )
+        _u16(emulator, int(RamAddress.PARTY_MON_1_MAX_HP) + index * PARTY_STRUCT_STRIDE)
+        for index in range(_party_size(emulator))
     )
 
 
-def _party_status(emulator: EmulatorState) -> tuple[int, int, int]:
+def _party_status(emulator: EmulatorState) -> tuple[int, ...]:
     return tuple(
-        emulator.read_u8(address)
-        for address in (
-            RamAddress.PARTY_MON_1_STATUS,
-            RamAddress.PARTY_MON_2_STATUS,
-            RamAddress.PARTY_MON_3_STATUS,
+        emulator.read_u8(
+            int(RamAddress.PARTY_MON_1_STATUS) + index * PARTY_STRUCT_STRIDE
         )
+        for index in range(_party_size(emulator))
     )
 
 

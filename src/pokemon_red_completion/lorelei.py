@@ -143,9 +143,9 @@ class LoreleiChapterReport:
     x_accuracy_used: int
     hyper_potions_used: int
     full_restores_used: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     frames_executed: int
     actions_executed: int
     controller_released: bool
@@ -164,7 +164,7 @@ class LoreleiChapterReport:
             and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp[0] >= LORELEI_SAFE_HP
             and self.party_hp[1:] == self.party_max_hp[1:]
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
         )
 

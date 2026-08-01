@@ -292,7 +292,7 @@ The declared roster binds six species to six species-neutral roles:
 | Speed control | Dugtrio | Evolves from the Diglett the Vermilion chapter already captures |
 | Field utility | DUX (Farfetch'd) | Already obtained by the Vermilion trade |
 | Special sweeper | Jolteon | Reachable; **not yet acquired** |
-| Bulky absorber | Snorlax | Currently *defeated* on Route 12; must be **caught** instead |
+| Bulky absorber | Snorlax | **Caught and retained** through the Hall of Fame |
 | Physical sweeper | Hitmonlee | Reachable via the Saffron Fighting Dojo; **not yet acquired** |
 
 No slot is a substitution, so no slot carries a substitution reason. The roster type rejects any
@@ -504,12 +504,14 @@ party ever growing. That was an artifact of the single-carry route rather than a
 and it now matches on the leading members instead, so a lost, reordered, or substituted core still
 fails while the open slots become recruitable.
 
-The first clean-power balanced-team lineage now reaches the Hall of Fame. It reproduces all 36
-completion objectives in **17,136,283 frames** and **152,288 controller actions** after 1,106
-bounded team-training battles and 99 healing trips. The route's current three-Pokémon party reached
-levels 65--70, satisfying the exact five-level spread contract with every member healthy. This is a
-qualification of the deterministic teacher and the reusable team-training mechanism, not yet the
-target six-member curriculum or evidence that a learned policy can complete the game.
+The first clean-power balanced-team lineage reached the Hall of Fame with three members. The next
+qualified lineage adds a semantic Route 12 capture planner, catches Snorlax in five throws, and
+then completes all **301/301 checkpoints** and **36/36 completion objectives** with four members.
+Before Blaine, the teacher trains the whole active party until every member is at least level 50,
+the largest level gap is no more than five, nobody is fainted, and every battle, step, and healing
+trip remains bounded. A lean six-Full-Restore League reserve was sufficient through the Champion
+and left 3,814 money. This qualifies the deterministic teacher and reusable training/capture
+mechanisms; it is not yet the target six-member curriculum or a learned-policy completion claim.
 
 The full learned-system and transfer claims remain pending. In particular:
 
@@ -518,11 +520,10 @@ The full learned-system and transfer claims remain pending. In particular:
   finalized source;
 - held-out full-game completion has not yet been demonstrated;
 - cross-game transfer has not yet been measured;
-- three declared roster members—Jolteon, Snorlax, and Hitmonlee—are not acquired by any existing
-  chapter, and Route 12's Snorlax is currently defeated rather than caught; and
-- the live balanced-training phase currently operates on the route's three-member party; its
-  six-member level floor, spread ceiling, recruitment sequence, and area-selection behavior remain
-  unvalidated until the missing acquisition chapters land.
+- two declared roster members—Jolteon and Hitmonlee—are not acquired by an existing chapter; and
+- the live balanced-training phase currently qualifies four members; its six-member level floor,
+  spread ceiling, recruitment sequence, and area-selection behavior remain unvalidated until the
+  missing acquisition chapters land.
 
 These limitations are part of the public project record rather than hidden behind the completed
 teacher result.

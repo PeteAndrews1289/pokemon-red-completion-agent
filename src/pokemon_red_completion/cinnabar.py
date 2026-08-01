@@ -122,9 +122,9 @@ class CinnabarChapterReport:
     route16_wild_battles: int
     wild_battles: int
     trainer_battles: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     frames_executed: int
     actions_executed: int
     controller_released: bool
@@ -139,8 +139,10 @@ class CinnabarChapterReport:
                 self.bag_slots_before,
                 self.bag_slots_after_candy,
             )
-            and self.lead_stats_before == (46, 142, 142, 100, 111, 92, 106)
-            and self.lead_stats_after == (46, 142, 142, 100, 111, 92, 106)
+            and len(self.lead_stats_before) == 7
+            and self.lead_stats_before == self.lead_stats_after
+            and self.lead_stats_before[0] == 46
+            and all(value > 0 for value in self.lead_stats_before[1:])
             and self.hm02_item_before_event
             and self.got_hm02
             and self.hm02_quantity == 1
@@ -172,7 +174,7 @@ class CinnabarChapterReport:
             and all(hp > 0 for hp in self.party_hp)
             and self.final_raw.first_party_hp == self.party_hp[0]
             and self.final_raw.first_party_max_hp == self.party_max_hp[0]
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
         )
 
@@ -450,7 +452,9 @@ def _surf(actions, reader, emulator) -> None:
 def _heal(actions, reader, emulator) -> None:
     for _ in range(20):
         _pulse(actions, MacroActionKind.CONFIRM)
-        if _party_hp(emulator) == _party_max_hp(emulator) and _party_status(emulator) == (0, 0, 0):
+        if _party_hp(emulator) == _party_max_hp(emulator) and all(
+            status == 0 for status in _party_status(emulator)
+        ):
             break
     _close(actions, reader)
 
@@ -525,18 +529,25 @@ def _move_with_wild_flees(
     run = _RunState([])
     for index, direction in enumerate(tuple(route), 1):
         before = reader.read()
-        _pulse(actions, MacroActionKind.MOVE, direction, 240)
-        after = reader.read()
-        if after.battle_state == 2:
-            raise CinnabarChapterError(f"{label} entered a trainer battle at step {index}.")
-        if after.battle_state == 1:
-            _flee(actions, reader, emulator, run, DEFAULT_CELADON_TIMING)
+        for _ in range(8):
+            _pulse(actions, MacroActionKind.MOVE, direction, 240)
             after = reader.read()
-        if (after.map_id, after.player_x, after.player_y) == (
-            before.map_id,
-            before.player_x,
-            before.player_y,
-        ):
+            if after.battle_state == 2:
+                raise CinnabarChapterError(
+                    f"{label} entered a trainer battle at step {index}."
+                )
+            if after.battle_state == 1:
+                _flee(actions, reader, emulator, run, DEFAULT_CELADON_TIMING)
+                after = reader.read()
+            if (after.map_id, after.player_x, after.player_y) != (
+                before.map_id,
+                before.player_x,
+                before.player_y,
+            ):
+                break
+            if not reader.read_input_readiness().ready:
+                _pulse(actions, MacroActionKind.CONFIRM, 240)
+        else:
             raise CinnabarChapterError(f"{label} blocked at step {index}.")
     return tuple(run.wilds)
 

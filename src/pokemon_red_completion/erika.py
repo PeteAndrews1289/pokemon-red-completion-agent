@@ -14,6 +14,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeTiming,
     RequiredMovePolicy,
     run_adaptive_trainer_battle,
+    run_adaptive_wild_battle,
 )
 from pokemon_red_completion.celadon import (
     DEFAULT_CELADON_TIMING,
@@ -34,6 +35,7 @@ from pokemon_red_completion.lavender import (
 )
 from pokemon_red_completion.observation import (
     Badge,
+    BattleMenuPhase,
     EventFlag,
     ItemId,
     MapId,
@@ -64,6 +66,14 @@ GYM_EVENTS = tuple(
 OPTIONAL_ROUTE_EVENTS = tuple(
     EventFlag(int(EventFlag.BEAT_ROUTE_14_TRAINER_0) + index) for index in range(10)
 ) + tuple(EventFlag(int(EventFlag.BEAT_ROUTE_15_TRAINER_0) + index) for index in range(10))
+BATTLE_PARTY_MENU_COMMAND = 2
+PARTY_SUBMENU_SWITCH = 0
+BATTLE_COMMAND_COORDINATES = {
+    0: (0, 0),
+    1: (0, 1),
+    2: (1, 0),
+    3: (1, 1),
+}
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -159,6 +169,15 @@ class ErikaCheckpoint:
     raw: RawGameState
 
 
+@dataclass(slots=True)
+class _RouteTrainingState:
+    """Live receipt for the bounded level prerequisite taught on the route."""
+
+    starting_level: int
+    target_level: int
+    battles_won: int = 0
+
+
 @dataclass(frozen=True, slots=True)
 class ErikaChapterReport:
     records: tuple[ErikaCheckpoint, ...]
@@ -181,12 +200,16 @@ class ErikaChapterReport:
     optional_route_events_before: tuple[bool, ...]
     optional_route_events_after: tuple[bool, ...]
     final_bag: tuple[tuple[int, int], ...]
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    route_training_start_level: int = 39
+    route_training_target_level: int = 39
+    route_training_final_level: int = 39
+    route_training_battles: int = 0
 
     @property
     def passed(self) -> bool:
@@ -227,8 +250,15 @@ class ErikaChapterReport:
             and all(hp > 0 for hp in self.party_hp)
             and self.final_raw.first_party_hp == self.party_hp[0]
             and self.final_raw.first_party_max_hp == self.party_max_hp[0]
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
+            and self.route_training_start_level <= self.route_training_target_level
+            and self.route_training_final_level >= self.route_training_target_level
+            and self.route_training_battles >= 0
+            and (
+                self.route_training_battles > 0
+                or self.route_training_start_level >= self.route_training_target_level
+            )
         )
 
     def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
@@ -279,6 +309,15 @@ class ErikaChapterReport:
             "optional_route_trainers_bypassed": sum(
                 not defeated for defeated in self.optional_route_events_after
             ),
+            "route_training": {
+                "starting_level": self.route_training_start_level,
+                "target_level": self.route_training_target_level,
+                "final_level": self.route_training_final_level,
+                "battles_won": self.route_training_battles,
+                "requirement_met": (
+                    self.route_training_final_level >= self.route_training_target_level
+                ),
+            },
             "frames_executed": self.frames_executed,
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
@@ -321,6 +360,15 @@ def run_erika_chapter(
     money_before = _money(emulator)
     events_before = _gym_events(emulator)
     optional_events_before = _optional_route_events(emulator)
+    if initial.first_party_level is None:
+        raise ErikaChapterError("Route training lacks a live lead level.")
+    route_training = _RouteTrainingState(
+        starting_level=initial.first_party_level,
+        # Reach the actual move-learning prerequisite before entering the Gym.
+        # The two required trainers then add useful progress within level 41
+        # without making the route depend on their exact experience yield.
+        target_level=max(initial.first_party_level, 41),
+    )
     _checkpoint(records, progress, emulator, initial, "erika_ready", "Strength boundary ready")
 
     route_legs = (
@@ -343,8 +391,42 @@ def run_erika_chapter(
         (CELADON_CENTER_ENTRY, MapId.CELADON_POKECENTER, (3, 7), "celadon_center"),
     )
     for route, map_id, coordinate, label in route_legs:
-        _move(actions, reader, emulator, route, timing, label)
+        training_leg = route_training if label in {
+            "fuchsia_exited",
+            "route15_west",
+            "route15_gate",
+            "route15_east",
+        } else None
+        _move(
+            actions,
+            reader,
+            emulator,
+            route,
+            timing,
+            label,
+            route_training=training_leg,
+        )
         _require(reader.read(), map_id, coordinate, label)
+        if label == "route15_east":
+            _run_route15_training(
+                actions,
+                reader,
+                emulator,
+                timing,
+                route_training,
+            )
+    route_training_final_level = reader.read().first_party_level
+    if (
+        route_training_final_level is None
+        or route_training_final_level < route_training.target_level
+    ):
+        raise ErikaChapterError(
+            "The bounded route-training lesson did not satisfy its level prerequisite: "
+            f"start={route_training.starting_level}, "
+            f"target={route_training.target_level}, "
+            f"final={route_training_final_level!r}, "
+            f"battles={route_training.battles_won}."
+        )
     _checkpoint(
         records,
         progress,
@@ -559,6 +641,10 @@ def run_erika_chapter(
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,
         controller_released=not emulator.pressed_buttons,
+        route_training_start_level=route_training.starting_level,
+        route_training_target_level=route_training.target_level,
+        route_training_final_level=route_training_final_level,
+        route_training_battles=route_training.battles_won,
     )
     if not report.passed:
         raise ErikaChapterError(f"Erika evidence contract failed: {report.public_dict()!r}.")
@@ -574,6 +660,7 @@ def _move(
     label: str,
     *,
     allow_trigger: bool = False,
+    route_training: _RouteTrainingState | None = None,
 ) -> None:
     route = tuple(route)
     for index, direction in enumerate(route, 1):
@@ -582,12 +669,50 @@ def _move(
             _pulse(actions, MacroActionKind.MOVE, direction, frames=timing.movement_frames)
             after = reader.read()
             if after.battle_state == 1:
-                _flee(actions, reader, emulator, _RunState([]), DEFAULT_CELADON_TIMING)
+                level = after.first_party_level
+                if (
+                    route_training is not None
+                    and level is not None
+                ):
+                    battle_continues = True
+                    if not _route_training_safe(after):
+                        battle_continues = _switch_route_training_escort(
+                            actions, reader, emulator
+                        )
+                    if battle_continues:
+                        try:
+                            run_adaptive_wild_battle(
+                                reader,
+                                actions,
+                                _route_training_move_slot,
+                                expected_map=int(after.map_id),
+                                label="bounded route level training",
+                            )
+                        except BattleRuntimeError as error:
+                            raise ErikaChapterError(
+                                f"Route training failed its bounded battle: {error}"
+                            ) from error
+                    route_training.battles_won += 1
+                else:
+                    _flee(actions, reader, emulator, _RunState([]), DEFAULT_CELADON_TIMING)
                 after = reader.read()
             if after.battle_state == 2:
                 if allow_trigger and index == len(route):
                     return
                 raise ErikaChapterError(f"Unexpected trainer during {label}.")
+            if (
+                (after.map_id, after.player_x, after.player_y)
+                == (before.map_id, before.player_x, before.player_y)
+                and not reader.read_input_readiness().ready
+            ):
+                # Extra training changes when an earlier Repel expires.  Clear
+                # that semantic field message instead of encoding its old step.
+                _pulse(
+                    actions,
+                    MacroActionKind.CONFIRM,
+                    frames=timing.movement_frames,
+                )
+                continue
             if (after.map_id, after.player_x, after.player_y) != (
                 before.map_id,
                 before.player_x,
@@ -603,6 +728,238 @@ def _move(
                 f"direction={direction}, map={current.map_id!r}, "
                 f"coordinate={(current.player_x, current.player_y)!r}."
             )
+
+
+def _route_training_safe(raw: RawGameState) -> bool:
+    """Require enough live health and attacking PP before choosing to train."""
+
+    hp = raw.battler_hp
+    maximum = raw.battler_max_hp
+    moves = raw.battler_moves or ()
+    pp = raw.battler_pp or ()
+    attacking_slots = (4, 3, 1)
+    return (
+        hp is not None
+        and maximum is not None
+        and maximum > 0
+        and hp / maximum >= 0.35
+        and any(
+            len(moves) >= slot
+            and len(pp) >= slot
+            and moves[slot - 1] != 0
+            and pp[slot - 1] & 0x3F
+            for slot in attacking_slots
+        )
+    )
+
+
+def _route_training_move_slot(raw: RawGameState) -> int:
+    """Prefer strong attacks while preserving Strength for field navigation."""
+
+    moves = raw.battler_moves or ()
+    pp = raw.battler_pp or ()
+    ranking = (4, 3, 1, 2) if (raw.active_party_index or 0) == 0 else (1, 4, 3, 2)
+    for slot in ranking:
+        if (
+            len(moves) >= slot
+            and len(pp) >= slot
+            and moves[slot - 1] != 0
+            and pp[slot - 1] & 0x3F
+            and raw.player_disabled_move_slot != slot
+        ):
+            return slot
+    raise ErikaChapterError("Route training has no usable move.")
+
+
+def _switch_route_training_escort(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> bool:
+    """Share experience with the healthiest reserve when the lead needs relief."""
+
+    raw = reader.read()
+    species = raw.party_species_ids or ()
+    hp = _party_hp(emulator)
+    maximum = _party_max_hp(emulator)
+    status = _party_status(emulator)
+    candidates = tuple(
+        index
+        for index in range(1, len(species))
+        if hp[index] > 0
+        and maximum[index] > 0
+        and hp[index] / maximum[index] >= 0.45
+        and status[index] == 0
+    )
+    if raw.battle_state != 1 or not candidates:
+        raise ErikaChapterError(
+            "Route training has no healthy reserve for safe shared experience."
+        )
+    # Absolute durability matters more than percentage here: the freshly
+    # caught Snorlax is the qualified absorber, while Diglett can be at full
+    # health and still be knocked out by one Route 15 attack.
+    target_index = max(candidates, key=lambda index: (maximum[index], hp[index]))
+
+    for pulse in range(48):
+        raw = reader.read()
+        menu = reader.read_battle_menu_state(raw)
+        if raw.battle_state == 1 and menu.phase is BattleMenuPhase.MAIN:
+            break
+        if raw.battle_state == 0:
+            raise ErikaChapterError("Route-training encounter ended before the safe switch.")
+        _pulse(
+            actions,
+            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
+    else:
+        raise ErikaChapterError("Route-training battle menu did not settle for a switch.")
+
+    for pulse in range(16):
+        menu = reader.read_battle_menu_state(reader.read())
+        if (
+            menu.phase is BattleMenuPhase.MAIN
+            and menu.selected_main_command == BATTLE_PARTY_MENU_COMMAND
+        ):
+            break
+        if menu.phase is not BattleMenuPhase.MAIN:
+            _pulse(
+                actions,
+                MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+                frames=120,
+            )
+            continue
+        direction = _battle_command_direction(
+            menu.selected_main_command,
+            BATTLE_PARTY_MENU_COMMAND,
+        )
+        if direction is None:
+            raise ErikaChapterError("Route-training command cursor is invalid.")
+        _pulse(actions, MacroActionKind.MOVE, direction, frames=120)
+    else:
+        raise ErikaChapterError("Route training could not select its healthy reserve.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == target_index:
+            break
+        _pulse(
+            actions,
+            MacroActionKind.MOVE,
+            "down" if cursor < target_index else "up",
+            frames=120,
+        )
+    else:
+        raise ErikaChapterError("Route training could not reach the reserve party slot.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    for _ in range(8):
+        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) == PARTY_SUBMENU_SWITCH:
+            break
+        _pulse(actions, MacroActionKind.MOVE, "up", frames=120)
+    else:
+        raise ErikaChapterError("Route training could not select SWITCH.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+
+    for pulse in range(48):
+        settled = reader.read()
+        menu = reader.read_battle_menu_state(settled)
+        if (
+            settled.battle_state == 1
+            and menu.phase is BattleMenuPhase.MAIN
+            and emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) == target_index
+        ):
+            return True
+        if settled.battle_state == 0:
+            for _ in range(48):
+                if reader.read_input_readiness().ready:
+                    return False
+                _pulse(actions, MacroActionKind.CONFIRM, frames=120)
+            raise ErikaChapterError(
+                "Route-training battle ended during the reserve switch but field "
+                "control did not settle."
+            )
+        _pulse(
+            actions,
+            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
+    raise ErikaChapterError("Route-training reserve switch did not settle.")
+
+
+def _battle_command_direction(current: int | None, target: int) -> str | None:
+    if current not in BATTLE_COMMAND_COORDINATES or target not in BATTLE_COMMAND_COORDINATES:
+        return None
+    current_x, current_y = BATTLE_COMMAND_COORDINATES[current]
+    target_x, target_y = BATTLE_COMMAND_COORDINATES[target]
+    if current_x != target_x:
+        return "right" if current_x < target_x else "left"
+    if current_y != target_y:
+        return "down" if current_y < target_y else "up"
+    return None
+
+
+def _run_route15_training(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: ErikaTiming,
+    training: _RouteTrainingState,
+) -> None:
+    """Seek encounters in a safe grass patch until the prerequisite is met.
+
+    Route 15's gate exit is at ``(14, 9)``.  The unobstructed patch beginning at
+    x=20 is clear of every optional trainer and lets the teacher alternate two
+    grass tiles without encoding a particular encounter schedule.
+    """
+
+    _require(reader.read(), MapId.ROUTE_15, (14, 9), "Route 15 training origin")
+    _move(
+        actions,
+        reader,
+        emulator,
+        ("right",) * 6,
+        timing,
+        "Route 15 training patch",
+        route_training=training,
+    )
+    for step in range(512):
+        level = reader.read().first_party_level
+        if level is not None and level >= training.target_level:
+            break
+        _move(
+            actions,
+            reader,
+            emulator,
+            ("right" if step % 2 == 0 else "left",),
+            timing,
+            "Route 15 training search",
+            route_training=training,
+        )
+    else:
+        raise ErikaChapterError(
+            "Route 15 training exhausted 512 bounded grass steps before meeting "
+            f"level {training.target_level}."
+        )
+
+    raw = reader.read()
+    if raw.map_id != MapId.ROUTE_15 or raw.player_x is None:
+        raise ErikaChapterError("Route 15 training lost its field position.")
+    if not 20 <= raw.player_x <= 21 or raw.player_y != 9:
+        raise ErikaChapterError(
+            "Route 15 training left its qualified grass pair: "
+            f"{(raw.player_x, raw.player_y)!r}."
+        )
+    _move(
+        actions,
+        reader,
+        emulator,
+        ("left",) * (raw.player_x - 14),
+        timing,
+        "Route 15 training return",
+        route_training=training,
+    )
+    _require(reader.read(), MapId.ROUTE_15, (14, 9), "Route 15 training return")
 
 
 def _cut(actions, reader, emulator, timing, facing, expected_tile, label) -> None:
@@ -764,7 +1121,7 @@ def _heal(actions, reader, emulator, timing) -> None:
     for _ in range(timing.heal_pulses):
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
+            and all(status == 0 for status in _party_status(emulator))
             and reader.read_input_readiness().ready
         ):
             return

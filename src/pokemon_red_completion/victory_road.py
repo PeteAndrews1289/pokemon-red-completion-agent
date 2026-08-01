@@ -99,7 +99,7 @@ ROUTE_22_VENUSAUR_HEAL_THRESHOLD = 120
 ROUTE_22_DEFAULT_HEAL_THRESHOLD = 100
 ROUTE_22_PROACTIVE_PIVOT_SPECIES = frozenset({0x9A})
 VICTORY_ROAD_MAX_REPEL_PURCHASE = 2
-INDIGO_FULL_RESTORE_RESERVE = 10
+INDIGO_FULL_RESTORE_RESERVE = 6
 INDIGO_X_SPECIAL_RESERVE = 8
 INDIGO_X_SPECIAL_PURCHASE = 8
 VICTORY_ROAD_INPUT_HYPER_POTION_BOUNDS = (0, 7)
@@ -210,9 +210,9 @@ class VictoryRoadChapterReport:
     tm38_sold: bool
     tm28_sold: bool
     tm06_consumed: bool
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     money_remaining: int
     frames_executed: int
     actions_executed: int
@@ -254,7 +254,7 @@ class VictoryRoadChapterReport:
             and all(hp > 0 for hp in self.party_hp)
             and self.final_raw.first_party_hp == self.party_hp[0]
             and self.final_raw.first_party_max_hp == self.party_max_hp[0]
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
         )
 
@@ -412,15 +412,17 @@ def run_victory_road_chapter(
         quantity=hyper_purchase,
         target_bag_quantity=11,
     )
-    _buy_mart_item(
-        actions,
-        emulator,
-        DEFAULT_LAVENDER_TIMING,
-        absolute_index=2,
-        item=ItemId.MAX_REPEL,
-        quantity=VICTORY_ROAD_MAX_REPEL_PURCHASE,
-        target_bag_quantity=VICTORY_ROAD_MAX_REPEL_PURCHASE,
-    )
+    current_repels = _bag(emulator).get(ItemId.MAX_REPEL, 0)
+    if current_repels < VICTORY_ROAD_MAX_REPEL_PURCHASE:
+        _buy_mart_item(
+            actions,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            absolute_index=2,
+            item=ItemId.MAX_REPEL,
+            quantity=VICTORY_ROAD_MAX_REPEL_PURCHASE - current_repels,
+            target_bag_quantity=VICTORY_ROAD_MAX_REPEL_PURCHASE,
+        )
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     supplied = reader.read()
     if (
@@ -1387,7 +1389,7 @@ def _heal(
     expected_pp = (25, 15, 10, 15) if moves and moves[0] == 0x42 else (10, 15, 10, 15)
     if (
         _party_hp(emulator) != _party_max_hp(emulator)
-        or _party_status(emulator) != (0, 0, 0)
+        or any(status != 0 for status in _party_status(emulator))
         or reader.read().first_party_pp != expected_pp
     ):
         raise VictoryRoadChapterError("Pokémon Center did not restore the qualified party.")

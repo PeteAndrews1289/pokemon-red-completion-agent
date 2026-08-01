@@ -166,7 +166,22 @@ def test_koga_public_report_is_honest_about_geography_and_minimum_trainers() -> 
         "consumables_used": 0,
     }
     assert public["koga"]["surf_pp_spent"] == 9
+    assert public["koga"]["terminal_mutual_ko"] is False
+    assert public["koga"]["party_restored_at_boundary"] is True
     assert public["rewards"]["regular_trainers_deactivated"] is True
+
+
+def test_koga_report_records_a_recovered_terminal_mutual_ko() -> None:
+    report = _report()
+    recovered_battle = replace(
+        report.battles[-1],
+        hp_after=0,
+        terminal_mutual_ko=True,
+    )
+    recovered = replace(report, battles=(*report.battles[:-1], recovered_battle))
+
+    assert recovered.passed
+    assert recovered.public_dict()["koga"]["terminal_mutual_ko"] is True
 
 
 def test_koga_routes_and_minimum_trainer_set_are_pinned() -> None:

@@ -177,9 +177,9 @@ class HideoutChapterReport:
     silph_scope_carried: bool
     super_potions_used: int
     super_potions_remaining: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     money_before: int
     money_remaining: int
     frames_executed: int
@@ -206,7 +206,7 @@ class HideoutChapterReport:
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.party_species_ids == PROTECTED_PARTY
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.money_before >= 0
             and self.money_remaining == self.money_before + HIDEOUT_TRAINER_REWARD_TOTAL
             and self.controller_released
@@ -795,7 +795,7 @@ def _heal_center(
     for _ in range(timing.dialogue_pulses):
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
+            and all(status == 0 for status in _party_status(emulator))
             and reader.read_input_readiness().ready
         ):
             return

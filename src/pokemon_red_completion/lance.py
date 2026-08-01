@@ -137,9 +137,9 @@ class LanceChapterReport:
     x_accuracy_used: int
     x_attacks_used: int
     x_specials_used: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     frames_executed: int
     actions_executed: int
     controller_released: bool
@@ -158,7 +158,7 @@ class LanceChapterReport:
             and party_core_intact(self.final_raw.party_species_ids)
             and self.final_raw.first_party_moves == (0x05, 0x46, 0x3B, 0x39)
             and all(hp > 0 for hp in self.party_hp)
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
         )
 
@@ -659,8 +659,8 @@ def _encounter_party(turns: Iterable[LanceTurn]) -> tuple[tuple[int, int], ...]:
 
 
 def _next_lance_helper(
-    party_hp: tuple[int, int, int],
-    party_max_hp: tuple[int, int, int] | None = None,
+    party_hp: tuple[int, ...],
+    party_max_hp: tuple[int, ...] | None = None,
 ) -> int | None:
     """Return a living weak helper, never a trained teammate, for recovery."""
 

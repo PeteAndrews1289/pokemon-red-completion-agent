@@ -138,9 +138,9 @@ class SafariChapterReport:
     moves_after: tuple[int, ...]
     pp_after: tuple[int, ...]
     encounters_fled: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     frames_executed: int
     actions_executed: int
     controller_released: bool
@@ -170,7 +170,7 @@ class SafariChapterReport:
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
         )
 
@@ -364,7 +364,9 @@ def run_safari_chapter(
     encounters += _move(actions, reader, emulator, ("up",) * 4, timing, "Fuchsia nurse")
     for _ in range(timing.dialogue_pulses):
         _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-        if _party_hp(emulator) == _party_max_hp(emulator) and _party_status(emulator) == (0, 0, 0):
+        if _party_hp(emulator) == _party_max_hp(emulator) and all(
+            status == 0 for status in _party_status(emulator)
+        ):
             break
     for _ in range(6):
         _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)

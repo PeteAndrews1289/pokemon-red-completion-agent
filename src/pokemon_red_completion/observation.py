@@ -548,6 +548,8 @@ class EventFlag(IntEnum):
 
 class ItemId(IntEnum):
     MASTER_BALL = 0x01
+    ULTRA_BALL = 0x02
+    GREAT_BALL = 0x03
     POKE_BALL = 0x04
     ANTIDOTE = 0x0B
     AWAKENING = 0x0E

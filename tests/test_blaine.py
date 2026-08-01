@@ -18,6 +18,7 @@ from pokemon_red_completion.blaine import (
     MANSION_3F_TO_B1F,
     MANSION_B1F_TO_NORTH_STATUE,
     MANSION_B1F_TO_SECRET_KEY,
+    MANSION_TEAM_POLICY,
     MANSION_TRAINER_EVENTS,
     MANSION_TRAINING_POLICY,
     QUIZ_ANSWERS,
@@ -46,7 +47,7 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert QUIZ_TEXT_PULSES == (9, 10, 9, 11, 11, 9)
     assert len(BLAINE_TO_GYM_EXIT) == len(GYM_RETURN_TO_BLAINE) == 59
     assert BLAINE_CAPACITY_SALE_ITEM is ItemId.ANTIDOTE
-    assert BLAINE_INPUT_BAG_SLOT_BOUNDS == (18, 19)
+    assert BLAINE_INPUT_BAG_SLOT_BOUNDS == (17, 19)
     assert BLAINE_MONEY_DELTA == 5_003
     assert BLAINE_ANTIDOTE_SALE_VALUE == 50
     assert BLAINE_MAX_WILD_FLEES == 3
@@ -61,9 +62,11 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert MANSION_TRAINING_POLICY.target_level == 55
     assert MANSION_TRAINING_POLICY.preferred_move_slots == (4, 2, 3, 1)
     assert MANSION_TRAINING_POLICY.max_battles == 180
+    assert MANSION_TEAM_POLICY.required_size == 4
 
 
 def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -> None:
+    assert not _sell_antidote_before_mansion(17, 1)
     assert not _sell_antidote_before_mansion(18, 0)
     assert not _sell_antidote_before_mansion(18, 1)
     assert not _sell_antidote_before_mansion(18, 2)
@@ -97,6 +100,14 @@ def test_team_training_selects_damaging_moves_for_the_active_species() -> None:
             active_party_pp=(35, 15, 30, 15),
         )
     ) == 3
+    assert _team_training_move_slot(
+        replace(
+            base,
+            active_party_species_id=0x84,
+            active_party_moves=(0x22, 0x85, 0x9C, 0),
+            active_party_pp=(15, 4, 10, 0),
+        )
+    ) == 1
     assert _team_training_move_slot(
         replace(
             base,

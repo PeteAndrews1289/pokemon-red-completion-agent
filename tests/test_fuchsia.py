@@ -25,9 +25,9 @@ def _raw() -> RawGameState:
         map_id=MapId.FUCHSIA_POKECENTER,
         player_x=3,
         player_y=3,
-        party_count=3,
+        party_count=4,
         battle_state=0,
-        party_species_ids=(0x1C, 0x40, 0x3B),
+        party_species_ids=(0x1C, 0x40, 0x3B, 0x84),
         first_party_level=37,
         first_party_hp=114,
         first_party_max_hp=114,
@@ -44,7 +44,8 @@ def _report() -> FuchsiaChapterReport:
     classes = (0x0E, None, 0x14, 0x17, 0x06)
     events = tuple(int(item) for item in REQUIRED_EVENTS)
     spent = (4, 3, 4, 4, 7)
-    bag = ((0x04, 8), (0x28, 1), (0x49, 1))
+    initial_bag = ((0x04, 8), (0x28, 1), (0x49, 1))
+    final_bag = initial_bag
     return FuchsiaChapterReport(
         records=tuple(
             FuchsiaCheckpoint(f"gate_{index}", f"Gate {index}", raw)
@@ -61,6 +62,11 @@ def _report() -> FuchsiaChapterReport:
                 spent[index],
                 (0x84,) if index == 1 else (),
                 30 if index == 1 else None,
+                index == 1,
+                1 if index == 1 else 0,
+                1 if index == 1 else 0,
+                (0x1C, 0x40, 0x3B) if index == 1 else (),
+                (0x1C, 0x40, 0x3B, 0x84) if index == 1 else (),
             )
             for index in range(5)
         ),
@@ -73,11 +79,11 @@ def _report() -> FuchsiaChapterReport:
         snorlax_fight_after=False,
         snorlax_object_tile_crossed=True,
         wild_flees=4,
-        initial_bag=bag,
-        final_bag=bag,
-        party_hp=(114, 52, 37),
-        party_max_hp=(114, 52, 37),
-        party_status=(0, 0, 0),
+        initial_bag=initial_bag,
+        final_bag=final_bag,
+        party_hp=(114, 52, 37, 135),
+        party_max_hp=(114, 52, 37, 135),
+        party_status=(0, 0, 0, 0),
         money_remaining=25_839,
         frames_executed=277_925,
         actions_executed=2_276,
@@ -115,7 +121,8 @@ def test_fuchsia_report_requires_every_terminal_gate() -> None:
         replace(report, snorlax_fight_after=True),
         replace(report, snorlax_object_tile_crossed=False),
         replace(report, final_bag=report.final_bag[:-1]),
-        replace(report, party_hp=(113, 52, 37)),
+        replace(report, party_hp=(113, 52, 37, 135)),
+        replace(report, party_status=(0, 0, 0, 0x08)),
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)
@@ -175,6 +182,11 @@ def test_fuchsia_public_report_discloses_assistance_and_optionals() -> None:
         "beat_event": True,
         "object_tile_crossed": True,
         "flute_retained": True,
+        "captured": True,
+        "throws_used": 1,
+        "recovery_items_used": 1,
+        "party_before": [0x1C, 0x40, 0x3B],
+        "party_after": [0x1C, 0x40, 0x3B, 0x84],
     }
 
 

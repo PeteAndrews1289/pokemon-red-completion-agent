@@ -136,9 +136,9 @@ class SabrinaChapterReport:
     hyper_potions_remaining: int
     initial_money: int
     money_remaining: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     controller_released: bool
     frames_executed: int
     actions_executed: int
@@ -167,7 +167,7 @@ class SabrinaChapterReport:
             and self.final_raw.battle_state == 0
             and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
             and self.controller_released

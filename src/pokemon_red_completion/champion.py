@@ -125,8 +125,8 @@ class ChampionChapterReport:
     full_heals_used: int
     x_accuracy_used: int
     x_specials_used: int
-    party_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     frames_executed: int
     actions_executed: int
     controller_released: bool
@@ -576,7 +576,7 @@ def _champion_pivot_due(
     raw: RawGameState,
     *,
     inventory: Mapping[ItemId, int],
-    party_hp: tuple[int, int, int],
+    party_hp: tuple[int, ...],
     next_sacrifice: int,
     party_position: int,
 ) -> bool:

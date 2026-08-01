@@ -37,12 +37,12 @@ control, and progressively trained specialists.**
 > In each run the lead trained from level 46 to 55 through 115 wild wins, 1,862 bounded encounter
 > steps, five healing trips, and zero faints; it reached Indigo at level 58 and the Hall of Fame at
 > level 61. This is still deterministic-teacher evidence, not a learned-policy claim.
-> The balanced-team curriculum branch now also completes a clean-power Hall-of-Fame run while
-> rotating the route's current three-member party through verified switch-participation and direct
-> training. Its 1,106 bounded battles and 99 healing trips produced a healthy level 65--70 team,
-> meeting the exact five-level spread contract in **17,136,283 frames** and **152,288 actions**.
-> This validates the training mechanism on Blastoise, DUX, and Dugtrio; catching Snorlax, acquiring
-> Jolteon and Hitmonlee, qualifying all six members, and training the learned policy remain open.
+> The balanced-team curriculum branch now catches the Route 12 Snorlax with a bounded semantic
+> capture policy, rotates all four current members through verified switch-participation and direct
+> training, and completes a clean-power **301/301-checkpoint, 36/36-objective** Hall-of-Fame run.
+> The four-member block enforces level 50+, a maximum five-level spread, no faints, bounded healing,
+> and an explicitly budgeted League inventory. Acquiring Jolteon and Hitmonlee, qualifying all six
+> members, and training the learned policy remain open.
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
 > **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned
@@ -216,9 +216,9 @@ Vermilion City, the S.S. Anne through HM01, Vermilion Gym through the Thunder Ba
 Rock Tunnel, Lavender Town, Route 8, the west-east Underground Path, Route 7, and Celadon City.
 It then reveals and clears the Rocket Hideout, defeats Giovanni, obtains the Silph Scope, crosses
 Pokémon Tower, calms Marowak, rescues Mr. Fuji, receives the Poké Flute, and heals in Lavender
-Center. It then wakes and defeats the level-30 Route 12 Snorlax, clears the four mandatory
-Route 12/13 trainers, bypasses every other Route 12–15 trainer and progression pickup, and heals
-the complete party in Fuchsia Center.
+Center. It then wakes and catches the level-30 Route 12 Snorlax with a bounded Great Ball/Poké Ball
+policy, clears the four mandatory Route 12/13 trainers, bypasses every other Route 12–15 trainer
+and progression pickup, and heals the complete party in Fuchsia Center.
 It then returns to Celadon, defeats Erika, buys exactly one Fresh Water on the Department Store
 roof, proves the guard consumes it before the global Saffron-access flag is set, crosses the
 Route 7 gate without battle, and heals in Saffron Center.
@@ -273,7 +273,8 @@ Its adaptive battle and navigation selection reacts to bounded state, but the
 three-run result evaluates one frozen teacher route and does not yet show held-out timing or RNG
 generalization.
 The Fuchsia chapter verifies the Poké Flute wake transition, exact Snorlax species and level,
-defeat event, removed-object tile, and retained Flute; records five exact battle PP receipts;
+capture, party growth, event transition, removed-object tile, and retained Flute; records five
+exact battle PP receipts;
 performs a disclosed resource-neutral Lavender Center recovery; flees four bounded wild
 encounters; and proves 35 optional events plus five optional items remain untouched.
 

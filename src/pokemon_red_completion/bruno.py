@@ -130,9 +130,9 @@ class BrunoChapterReport:
     party: tuple[tuple[int, int], ...]
     hyper_potions_used: int
     full_restores_used: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     frames_executed: int
     actions_executed: int
     controller_released: bool
@@ -147,7 +147,7 @@ class BrunoChapterReport:
             and self.final_raw.map_id == MapId.AGATHAS_ROOM
             and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
         )
 
@@ -324,7 +324,9 @@ def run_bruno_chapter(
     for _ in range(5):
         _pulse(actions, MacroActionKind.CONFIRM)
     _settle_confirm(actions, reader, 40)
-    if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
+    if _party_hp(emulator) != _party_max_hp(emulator) or any(
+        status != 0 for status in _party_status(emulator)
+    ):
         try:
             item = (
                 ItemId.FULL_RESTORE

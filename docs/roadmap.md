@@ -148,12 +148,14 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   persist the one-shot episode claim before emulator execution.
 - [x] Add a game-neutral six-member party observation contract, derived team metrics, and a
   reusable balanced-training policy, with a Red adapter binding the declared roster.
-- [x] Integrate bounded switch-participation training for the route's existing three-member party
-  and replay it from clean power through the Hall of Fame.
-- [ ] Add acquisition chapters for the unacquired roster members, catch the Route 12 Snorlax
-  instead of defeating it, and raise the live training contract from three members to six.
-- [ ] Replay the balanced-team route from clean power-on and qualify it against the completion
-  contract.
+- [x] Integrate bounded switch-participation training for the route's existing party and replay it
+  from clean power through the Hall of Fame.
+- [x] Catch Route 12 Snorlax with bounded recovery and capture decisions, raise the live balance
+  contract to four members, and qualify all 301 checkpoints through the Hall of Fame.
+- [ ] Add acquisition chapters for Jolteon and Hitmonlee and raise the live training contract from
+  four members to six.
+- [ ] Replay the six-member balanced-team route from clean power-on and qualify it against the
+  completion contract.
 - [ ] Commit and push the exact source/configuration state, then successfully complete the 63/63
   schedule dry run before slot `01`.
 - [ ] Collect every declared train and validation lineage without opening the test partition.
@@ -199,8 +201,9 @@ Dataset quality now also depends on party composition. The historical recordings
 with one overleveled lead, which makes most battle labels trivially correct and teaches nothing
 about switching or matchup selection. The current branch adds a game-neutral six-member party
 contract, derived team metrics, and a reusable balanced-training policy. Its first live
-clean-power integration rotates and trains the route's existing three-member party through the
-Hall of Fame; acquiring and qualifying the remaining three members is still outstanding. The
+clean-power integration catches Snorlax, rotates and trains the route's current four-member party
+through the Hall of Fame, and enforces a level-50 floor plus five-level spread. Acquiring and
+qualifying Jolteon and Hitmonlee is still outstanding. The
 single-carry lineage remains preserved as route evidence. See the
 [Project Narrative](project-narrative.md) for the reasoning and the outstanding route work.
 

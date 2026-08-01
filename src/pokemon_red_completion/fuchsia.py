@@ -15,9 +15,23 @@ from pokemon_red_completion.battle_runtime import (
     RequiredMovePolicy,
     run_adaptive_trainer_battle,
 )
+from pokemon_red_completion.capture import (
+    CaptureDirective,
+    CaptureObservation,
+    CapturePolicy,
+    plan_capture,
+)
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
 from pokemon_red_completion.lavender import (
+    CENTER_EXIT,
     DEFAULT_LAVENDER_TIMING,
+    LAVENDER_CENTER_TO_MART,
+    LAVENDER_MART_TO_CENTER,
+    LAVENDER_MART_TO_CLERK,
+    LAVENDER_MART_TO_TOWN,
+    LavenderChapterError,
+    _buy_mart_item,
+    _close_menus,
     _flee,
     _open_bag,
     _select_bag_item,
@@ -32,6 +46,7 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+from pokemon_red_completion.red_party import PokemonRedPartyReader
 from pokemon_red_completion.tower import party_core_intact
 
 FUCHSIA_CHECKPOINT_COUNT = 14
@@ -40,6 +55,22 @@ BUBBLEBEAM = 0x3D
 SNORLAX = 0x84
 SNORLAX_BUBBLEBEAM_PP_BOUND = (1, 20)
 SNORLAX_RUNTIME_PULSE_BOUND = 720
+SNORLAX_GREAT_BALL_RESERVE = 10
+SNORLAX_SUPER_POTION_RESERVE = 2
+GREAT_BALL_PRICE = 600
+SUPER_POTION_PRICE = 700
+SNORLAX_CAPTURE_POLICY = CapturePolicy(
+    # Snorlax can heal itself with Rest.  A high threshold permits one safe
+    # weakening hit from full health but never chases that healing into a
+    # low-health knockout, including after a critical hit changes damage.
+    throw_at_or_below_hp_ratio=0.90,
+    prefer_status_first=False,
+    # Ten newly purchased Great Balls are backed by the remaining Route 11
+    # Poké Balls, avoiding an oversized temporary purchase while retaining a
+    # larger total attempt budget.
+    max_throws=18,
+    retreat_hp_ratio=0.35,
+)
 BATTLE_PP_BOUNDS = ((1, 8), SNORLAX_BUBBLEBEAM_PP_BOUND, (1, 8), (1, 8), (1, 10))
 
 
@@ -204,6 +235,11 @@ class FuchsiaBattleEvidence:
     selected_pp_spent: int
     enemy_species: tuple[int, ...] = ()
     enemy_level: int | None = None
+    captured: bool = False
+    balls_used: int = 0
+    recovery_items_used: int = 0
+    party_before: tuple[int, ...] = ()
+    party_after: tuple[int, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -221,9 +257,9 @@ class FuchsiaChapterReport:
     wild_flees: int
     initial_bag: tuple[tuple[int, int], ...]
     final_bag: tuple[tuple[int, int], ...]
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     money_remaining: int
     frames_executed: int
     actions_executed: int
@@ -248,12 +284,30 @@ class FuchsiaChapterReport:
             and not self.snorlax_fight_before
             and not self.snorlax_fight_after
             and self.snorlax_object_tile_crossed
-            and self.initial_bag == self.final_bag
+            and self.battles[1].captured
+            and 1 <= self.battles[1].balls_used <= SNORLAX_CAPTURE_POLICY.max_throws
+            and self.battles[1].party_after
+            == self.battles[1].party_before + (SNORLAX,)
+            and _bag_quantity(self.final_bag, ItemId.GREAT_BALL) == 0
+            and _bag_quantity(self.final_bag, ItemId.SUPER_POTION) == 0
+            and self.battles[1].balls_used <= SNORLAX_CAPTURE_POLICY.max_throws
+            and self.battles[1].recovery_items_used <= SNORLAX_SUPER_POTION_RESERVE
+            and _bag_quantity(self.initial_bag, ItemId.POKE_BALL)
+            - _bag_quantity(self.final_bag, ItemId.POKE_BALL)
+            == max(0, self.battles[1].balls_used - SNORLAX_GREAT_BALL_RESERVE)
+            and _without_bag_items(
+                self.initial_bag,
+                (ItemId.GREAT_BALL, ItemId.SUPER_POTION, ItemId.POKE_BALL),
+            )
+            == _without_bag_items(
+                self.final_bag,
+                (ItemId.GREAT_BALL, ItemId.SUPER_POTION, ItemId.POKE_BALL),
+            )
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
         )
 
@@ -286,6 +340,11 @@ class FuchsiaChapterReport:
                 "beat_event": self.required_events[2],
                 "object_tile_crossed": self.snorlax_object_tile_crossed,
                 "flute_retained": self.flute_retained,
+                "captured": self.battles[1].captured,
+                "throws_used": self.battles[1].balls_used,
+                "recovery_items_used": self.battles[1].recovery_items_used,
+                "party_before": list(self.battles[1].party_before),
+                "party_after": list(self.battles[1].party_after),
             },
             "optional_events_false": len(OPTIONAL_EVENTS),
             "optional_items_untouched": len(OPTIONAL_ITEMS),
@@ -340,6 +399,8 @@ def run_fuchsia_chapter(
         raise FuchsiaChapterError("Fuchsia input lacks the qualified Poké Flute.")
     _checkpoint(records, progress, emulator, start, "fuji_ready", "Poké Flute ready")
 
+    _purchase_snorlax_capture_reserve(actions, reader, emulator, run, timing)
+
     _move(actions, reader, emulator, run, LAVENDER_TO_ROUTE12, timing, "Route 12 entry")
     _require(reader.read(), MapId.ROUTE_12, (9, 0), "Route 12 entry")
     _checkpoint(records, progress, emulator, reader.read(), "route12", "Reached Route 12")
@@ -366,7 +427,14 @@ def run_fuchsia_chapter(
     snorlax_fight_before = _event(emulator, EventFlag.FIGHT_ROUTE12_SNORLAX)
     battles.append(_fight_snorlax(actions, reader, emulator, timing))
     snorlax_fight_after = _event(emulator, EventFlag.FIGHT_ROUTE12_SNORLAX)
-    _checkpoint(records, progress, emulator, reader.read(), "snorlax", "Defeated Route 12 Snorlax")
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "snorlax",
+        f"Caught Route 12 Snorlax in {battles[-1].balls_used} throw(s)",
+    )
     _move(
         actions,
         reader,
@@ -378,6 +446,7 @@ def run_fuchsia_chapter(
     )
     _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 3), "Lavender recovery nurse")
     _heal_at_nurse(actions, reader, emulator, timing)
+    _sell_capture_surplus(actions, reader, emulator, run, timing)
     _checkpoint(records, progress, emulator, reader.read(), "recovered", "Healed after Snorlax")
     _move(
         actions,
@@ -613,8 +682,16 @@ def _fight_snorlax(
         _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     else:
         raise FuchsiaChapterError("Poké Flute did not wake the level-30 Route 12 Snorlax.")
+    party_before = raw.party_species_ids or ()
     before_pp = raw.first_party_pp
-    final = _run_wild_defeat(actions, reader, int(MapId.ROUTE_12), timing)
+    final, balls_used, recovery_items_used = _run_wild_capture(
+        actions,
+        reader,
+        emulator,
+        int(MapId.ROUTE_12),
+        timing,
+        party_before,
+    )
     if before_pp is None or final.first_party_pp is None:
         raise FuchsiaChapterError("Snorlax battle lacks PP evidence.")
     spent = (before_pp[2] & 0x3F) - (final.first_party_pp[2] & 0x3F)
@@ -628,7 +705,7 @@ def _fight_snorlax(
         or ItemId.POKE_FLUTE not in _bag(emulator)
     ):
         raise FuchsiaChapterError(
-            "Snorlax defeat lacks exact PP/event/item evidence: "
+            "Snorlax capture lacks exact PP/event/item evidence: "
             f"spent={spent}, beat={_event(emulator, EventFlag.BEAT_ROUTE12_SNORLAX)}, "
             f"fight={_event(emulator, EventFlag.FIGHT_ROUTE12_SNORLAX)}, "
             f"flute={ItemId.POKE_FLUTE in _bag(emulator)}."
@@ -643,31 +720,276 @@ def _fight_snorlax(
         spent,
         (SNORLAX,),
         30,
+        True,
+        balls_used,
+        recovery_items_used,
+        party_before,
+        final.party_species_ids or (),
     )
 
 
-def _run_wild_defeat(
+def _purchase_snorlax_capture_reserve(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: FuchsiaTiming,
+) -> None:
+    """Buy a bounded reliable-ball reserve before the static encounter."""
+
+    before_money = _money(emulator)
+    before_balls = _bag(emulator).get(ItemId.GREAT_BALL, 0)
+    before_potions = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    if before_balls:
+        raise FuchsiaChapterError("Fuchsia input unexpectedly already carries Great Balls.")
+    _move(actions, reader, emulator, run, CENTER_EXIT, timing, "Lavender Center exit")
+    _require(reader.read(), MapId.LAVENDER_TOWN, (3, 6), "Lavender Center exterior")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        LAVENDER_CENTER_TO_MART,
+        timing,
+        "Lavender capture-supply Mart",
+    )
+    _require(reader.read(), MapId.LAVENDER_MART, (3, 7), "Lavender Mart entrance")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        LAVENDER_MART_TO_CLERK,
+        timing,
+        "Lavender Mart clerk",
+    )
+    _pulse(actions, MacroActionKind.MOVE, "left", frames=60)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
+    try:
+        _buy_mart_item(
+            actions,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            absolute_index=0,
+            item=ItemId.GREAT_BALL,
+            quantity=SNORLAX_GREAT_BALL_RESERVE,
+            target_bag_quantity=SNORLAX_GREAT_BALL_RESERVE,
+        )
+        _buy_mart_item(
+            actions,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            absolute_index=1,
+            item=ItemId.SUPER_POTION,
+            quantity=SNORLAX_SUPER_POTION_RESERVE,
+            target_bag_quantity=before_potions + SNORLAX_SUPER_POTION_RESERVE,
+        )
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    except LavenderChapterError as error:
+        raise FuchsiaChapterError(f"Could not buy the Snorlax capture reserve: {error}") from error
+    expected_cost = (
+        SNORLAX_GREAT_BALL_RESERVE * GREAT_BALL_PRICE
+        + SNORLAX_SUPER_POTION_RESERVE * SUPER_POTION_PRICE
+    )
+    if (
+        _bag(emulator).get(ItemId.GREAT_BALL, 0) != SNORLAX_GREAT_BALL_RESERVE
+        or _bag(emulator).get(ItemId.SUPER_POTION, 0)
+        != before_potions + SNORLAX_SUPER_POTION_RESERVE
+        or before_money - _money(emulator) != expected_cost
+    ):
+        raise FuchsiaChapterError("Snorlax capture-reserve economy proof failed.")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        LAVENDER_MART_TO_TOWN,
+        timing,
+        "Lavender Mart exit",
+    )
+    _require(reader.read(), MapId.LAVENDER_TOWN, (15, 14), "Lavender Mart exterior")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        LAVENDER_MART_TO_CENTER,
+        timing,
+        "Lavender Center return",
+    )
+    _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 7), "Lavender Center return")
+    _move(actions, reader, emulator, run, ("up",) * 4, timing, "Lavender nurse return")
+    _heal_at_nurse(actions, reader, emulator, timing)
+    _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 3), "capture-ready boundary")
+
+
+def _sell_capture_surplus(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: FuchsiaTiming,
+) -> None:
+    """Recover capture spending and free both temporary bag slots."""
+
+    surplus = tuple(
+        (item, _bag(emulator).get(item, 0))
+        for item in (ItemId.GREAT_BALL, ItemId.SUPER_POTION)
+        if _bag(emulator).get(item, 0)
+    )
+    before_money = _money(emulator)
+    _move(actions, reader, emulator, run, CENTER_EXIT, timing, "post-capture Center exit")
+    _require(reader.read(), MapId.LAVENDER_TOWN, (3, 6), "post-capture Center exterior")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        LAVENDER_CENTER_TO_MART,
+        timing,
+        "post-capture Lavender Mart",
+    )
+    _require(reader.read(), MapId.LAVENDER_MART, (3, 7), "post-capture Mart entrance")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        LAVENDER_MART_TO_CLERK,
+        timing,
+        "post-capture Mart clerk",
+    )
+    _pulse(actions, MacroActionKind.MOVE, "left", frames=60)
+    for item, quantity in surplus:
+        _sell_capture_stack(actions, emulator, item, quantity, timing)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    expected_proceeds = sum(
+        quantity * (GREAT_BALL_PRICE if item is ItemId.GREAT_BALL else SUPER_POTION_PRICE) // 2
+        for item, quantity in surplus
+    )
+    if (
+        any(_bag(emulator).get(item, 0) for item, _ in surplus)
+        or _money(emulator) - before_money != expected_proceeds
+    ):
+        raise FuchsiaChapterError("Post-capture sale missed its inventory/economy proof.")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        LAVENDER_MART_TO_TOWN,
+        timing,
+        "post-capture Mart exit",
+    )
+    _require(reader.read(), MapId.LAVENDER_TOWN, (15, 14), "post-capture Mart exterior")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        LAVENDER_MART_TO_CENTER,
+        timing,
+        "post-capture Center return",
+    )
+    _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 7), "post-capture Center return")
+    _move(actions, reader, emulator, run, ("up",) * 4, timing, "post-capture nurse stance")
+    _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 3), "post-capture route boundary")
+
+
+def _sell_capture_stack(
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    item: ItemId,
+    quantity: int,
+    timing: FuchsiaTiming,
+) -> None:
+    _pulse(actions, MacroActionKind.INTERACT, frames=timing.wait_frames)
+    _pulse(actions, MacroActionKind.MOVE, "down", frames=120)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
+        raise FuchsiaChapterError("Lavender shop did not select SELL.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(24):
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        items = tuple(_bag(emulator))
+        if absolute < len(items) and items[absolute] == item:
+            break
+        _pulse(actions, MacroActionKind.MOVE, "down", frames=120)
+    else:
+        raise FuchsiaChapterError(f"Sell list could not select {item.name}.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(quantity + 2):
+        if (
+            emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM) == item
+            and emulator.read_u8(RamAddress.SHOP_QUANTITY) == quantity
+        ):
+            break
+        _pulse(actions, MacroActionKind.MOVE, "up", frames=120)
+    else:
+        raise FuchsiaChapterError(f"Sale quantity missed {quantity} {item.name}.")
+    for _ in range(24):
+        if _bag(emulator).get(item, 0) == 0:
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise FuchsiaChapterError(f"Lavender Mart did not sell the {item.name} stack.")
+
+
+def _run_wild_capture(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
     expected_map: int,
     timing: FuchsiaTiming,
-) -> RawGameState:
-    ready_reads = 0
+    party_before: tuple[int, ...],
+) -> tuple[RawGameState, int, int]:
+    throws_used = 0
+    recovery_items_used = 0
+    starting_balls = sum(
+        _bag(emulator).get(item, 0)
+        for item in (ItemId.GREAT_BALL, ItemId.POKE_BALL)
+    )
     for pulse_index in range(SNORLAX_RUNTIME_PULSE_BOUND):
         raw = reader.read()
+        balls_remaining = sum(
+            _bag(emulator).get(item, 0)
+            for item in (ItemId.GREAT_BALL, ItemId.POKE_BALL)
+        )
+        observed_throws = starting_balls - balls_remaining
+        if observed_throws < throws_used or observed_throws > SNORLAX_CAPTURE_POLICY.max_throws:
+            raise FuchsiaChapterError("Snorlax ball accounting left its bounded budget.")
+        throws_used = observed_throws
         if raw.map_id != expected_map:
             raise FuchsiaChapterError("Snorlax battle changed map unexpectedly.")
         if raw.battle_state == 0:
-            if reader.read_input_readiness().ready:
-                ready_reads += 1
-                if ready_reads >= 2:
-                    return raw
-                _wait(actions, 1)
-            else:
-                ready_reads = 0
-                _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+            expected_party = party_before + (SNORLAX,)
+            if raw.party_species_ids == expected_party:
+                if (
+                    starting_balls
+                    - sum(
+                        _bag(emulator).get(item, 0)
+                        for item in (ItemId.GREAT_BALL, ItemId.POKE_BALL)
+                    )
+                    != throws_used
+                ):
+                    raise FuchsiaChapterError(
+                        "Snorlax ball accounting drifted after capture."
+                    )
+                if reader.read_input_readiness().ready:
+                    return raw, throws_used, recovery_items_used
+                _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
+                continue
+            if _event(emulator, EventFlag.BEAT_ROUTE12_SNORLAX):
+                raise FuchsiaChapterError(
+                    "Route 12 Snorlax was knocked out instead of captured: "
+                    f"throws={throws_used}, enemy_hp={raw.enemy_hp!r}."
+                )
+            # A successful Gen I capture briefly clears battle state before the
+            # nickname/party-transfer dialogue commits the new member.
+            _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
             continue
-        if raw.battle_state != 1 or (raw.first_party_hp or 0) <= 0:
+        if raw.battle_state != 1 or (raw.battler_hp or 0) <= 0:
             raise FuchsiaChapterError("Snorlax battle lost the qualified lead.")
         menu = reader.read_battle_menu_state(raw)
         if menu.phase is BattleMenuPhase.UNKNOWN:
@@ -678,14 +1000,28 @@ def _run_wild_defeat(
             )
             continue
         if menu.phase is BattleMenuPhase.MAIN:
-            command = menu.selected_main_command
-            if command == 0:
+            decision = plan_capture(
+                _snorlax_capture_observation(raw, emulator, throws_used),
+                SNORLAX_CAPTURE_POLICY,
+            )
+            if decision.directive is CaptureDirective.WEAKEN_TARGET:
+                _navigate_battle_main(actions, menu.selected_main_command, 0)
                 _pulse(actions, MacroActionKind.CONFIRM, frames=120)
+            elif decision.directive is CaptureDirective.THROW_BALL:
+                _navigate_battle_main(actions, menu.selected_main_command, 1)
+                _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+                ball = (
+                    ItemId.GREAT_BALL
+                    if _bag(emulator).get(ItemId.GREAT_BALL, 0)
+                    else ItemId.POKE_BALL
+                )
+                _select_battle_bag_item(actions, emulator, ball)
+                _pulse(actions, MacroActionKind.CONFIRM, frames=360)
+            elif decision.directive is CaptureDirective.RESTORE_CATCHER:
+                _restore_capture_catcher(actions, reader, emulator, raw, timing)
+                recovery_items_used += 1
             else:
-                direction = {1: "up", 2: "left", 3: "up"}.get(command)
-                if direction is None:
-                    raise FuchsiaChapterError("Snorlax exposed an invalid battle command.")
-                _pulse(actions, MacroActionKind.MOVE, direction, frames=120)
+                raise FuchsiaChapterError(f"Snorlax capture stopped: {decision.reason}.")
             continue
         slot = menu.selected_move_slot
         target_slot = _snorlax_move_slot(raw)
@@ -701,6 +1037,144 @@ def _run_wild_defeat(
                 frames=120,
             )
     raise FuchsiaChapterError("Snorlax battle exceeded its bounded runtime.")
+
+
+def _snorlax_capture_observation(
+    raw: RawGameState,
+    emulator: EmulatorState,
+    throws_used: int,
+) -> CaptureObservation:
+    if (
+        raw.enemy_species_id != SNORLAX
+        or raw.enemy_level != 30
+        or raw.enemy_hp is None
+        or raw.enemy_max_hp is None
+        or raw.active_party_index is None
+    ):
+        raise FuchsiaChapterError("Snorlax capture observation lost live battle identity.")
+    party = PokemonRedPartyReader(emulator).read()
+    if not 0 <= raw.active_party_index < len(party.members):
+        raise FuchsiaChapterError("Snorlax capture exposed an invalid active party slot.")
+    return CaptureObservation(
+        target_species_id=raw.enemy_species_id,
+        target_level=raw.enemy_level,
+        target_hp=raw.enemy_hp,
+        target_max_hp=raw.enemy_max_hp,
+        catcher=party.members[raw.active_party_index],
+        balls_available=sum(
+            _bag(emulator).get(item, 0)
+            for item in (ItemId.GREAT_BALL, ItemId.POKE_BALL)
+        ),
+        party_has_room=len(party.members) < 6,
+        throws_used=throws_used,
+    )
+
+
+def _navigate_battle_main(
+    actions: _CountingExecutor,
+    selected_command: int | None,
+    target_command: int,
+) -> None:
+    if selected_command is None or not 0 <= selected_command <= 3:
+        raise FuchsiaChapterError("Snorlax exposed an invalid battle command cursor.")
+    directions = {
+        0: {1: "up", 2: "left", 3: "up"},
+        1: {0: "down", 2: "left", 3: "left"},
+        2: {0: "right", 1: "right", 3: "up"},
+        3: {0: "right", 1: "right", 2: "down"},
+    }
+    if selected_command == target_command:
+        return
+    direction = directions.get(target_command, {}).get(selected_command)
+    if direction is None:
+        raise FuchsiaChapterError("Snorlax battle-menu navigation is invalid.")
+    _pulse(actions, MacroActionKind.MOVE, direction, frames=120)
+
+
+def _select_battle_bag_item(
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    item: int,
+) -> None:
+    """Select one carried item using the battle bag's scrolling semantics."""
+
+    for _ in range(24):
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        items = tuple(_bag(emulator))
+        if item not in items:
+            raise FuchsiaChapterError(f"Battle bag item {int(item):#04x} is unavailable.")
+        if absolute < len(items) and items[absolute] == item:
+            return
+        _pulse(actions, MacroActionKind.MOVE, "down", frames=74)
+    raise FuchsiaChapterError(f"Could not select battle bag item {int(item):#04x}.")
+
+
+def _restore_capture_catcher(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    raw: RawGameState,
+    timing: FuchsiaTiming,
+) -> None:
+    """Spend one planned potion while preserving every party member."""
+
+    target = raw.active_party_index
+    if target is None:
+        raise FuchsiaChapterError("Snorlax recovery lost the active catcher slot.")
+    before_items = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    if before_items <= 0:
+        raise FuchsiaChapterError("Snorlax recovery exhausted its Super Potion reserve.")
+    for pulse_index in range(24):
+        menu = reader.read_battle_menu_state(reader.read())
+        if menu.phase is BattleMenuPhase.MAIN and menu.selected_main_command == 1:
+            break
+        if menu.phase is BattleMenuPhase.MAIN:
+            _navigate_battle_main(actions, menu.selected_main_command, 1)
+        else:
+            _pulse(
+                actions,
+                MacroActionKind.CANCEL if pulse_index % 5 == 4 else MacroActionKind.CONFIRM,
+                frames=timing.wait_frames,
+            )
+    else:
+        raise FuchsiaChapterError("Snorlax recovery could not select ITEM.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _select_battle_bag_item(actions, emulator, ItemId.SUPER_POTION)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(12):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == target:
+            break
+        _pulse(
+            actions,
+            MacroActionKind.MOVE,
+            "down" if cursor < target else "up",
+            frames=120,
+        )
+    else:
+        raise FuchsiaChapterError("Snorlax recovery could not select its catcher slot.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for pulse_index in range(32):
+        settled = reader.read()
+        if (
+            settled.battle_state == 1
+            and settled.active_party_index == target
+            and (settled.battler_hp or 0) > 0
+            and reader.read_battle_menu_state(settled).phase is BattleMenuPhase.MAIN
+        ):
+            if _bag(emulator).get(ItemId.SUPER_POTION, 0) != before_items - 1:
+                raise FuchsiaChapterError(
+                    "Snorlax recovery did not consume exactly one Super Potion."
+                )
+            return
+        _pulse(
+            actions,
+            MacroActionKind.CANCEL if pulse_index % 5 == 4 else MacroActionKind.CONFIRM,
+            frames=timing.wait_frames,
+        )
+    raise FuchsiaChapterError("Snorlax recovery did not settle safely.")
 
 
 def _snorlax_move_slot(raw: RawGameState) -> int:
@@ -777,7 +1251,9 @@ def _heal_center(
     _move(actions, reader, emulator, run, ("up",) * 4, timing, "Fuchsia nurse")
     for _ in range(20):
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-        if _party_hp(emulator) == _party_max_hp(emulator) and _party_status(emulator) == (0, 0, 0):
+        if _party_hp(emulator) == _party_max_hp(emulator) and all(
+            status == 0 for status in _party_status(emulator)
+        ):
             _clear_text(actions, reader, timing)
             return
     raise FuchsiaChapterError("Fuchsia Center did not heal the complete party.")
@@ -791,7 +1267,9 @@ def _heal_at_nurse(
 ) -> None:
     for _ in range(20):
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-        if _party_hp(emulator) == _party_max_hp(emulator) and _party_status(emulator) == (0, 0, 0):
+        if _party_hp(emulator) == _party_max_hp(emulator) and all(
+            status == 0 for status in _party_status(emulator)
+        ):
             _clear_text(actions, reader, timing)
             return
     raise FuchsiaChapterError("Lavender recovery did not heal the complete party.")
@@ -817,6 +1295,17 @@ def _bag_tuple(emulator: EmulatorState) -> tuple[tuple[int, int], ...]:
     return tuple(
         sorted((int(item), quantity) for item, quantity in Counter(_bag(emulator)).items())
     )
+
+
+def _bag_quantity(bag: tuple[tuple[int, int], ...], item: int) -> int:
+    return next((quantity for bag_item, quantity in bag if bag_item == int(item)), 0)
+
+
+def _without_bag_items(
+    bag: tuple[tuple[int, int], ...], items: tuple[int, ...]
+) -> tuple[tuple[int, int], ...]:
+    excluded = {int(item) for item in items}
+    return tuple(entry for entry in bag if entry[0] not in excluded)
 
 
 def _require(

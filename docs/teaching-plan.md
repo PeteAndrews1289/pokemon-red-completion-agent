@@ -177,13 +177,12 @@ bound respectively to the lead-attacker, speed-control, field-utility, special-s
 bulky-absorber, and physical-sweeper roles. Any substitution must record why it was made; the
 roster type rejects an unexplained one.
 
-The first live integration now rotates the route's existing three members through bounded switch
-participation and reaches the Hall of Fame from clean power. Three consequences remain before that
-proof becomes the intended six-member teacher:
+The live integration now catches Route 12 Snorlax, rotates four members through bounded switch
+participation, meets the level-floor and spread contract, and reaches the Hall of Fame from clean
+power. Two consequences remain before that proof becomes the intended six-member teacher:
 
 1. Jolteon and Hitmonlee have no acquisition chapter.
-2. Route 12's Snorlax is currently defeated; the balanced roster requires catching it.
-3. The live training policy must raise its required party size from three to six and qualify the
+2. The live training policy must raise its required party size from four to six and qualify the
    resulting level floor and spread.
 
 Existing recorded demonstrations still describe single-carry play because the new balanced
@@ -335,7 +334,8 @@ lineages remain hard leakage.
     **Done.**
 12. Extend and replay-qualify the Rocket Hideout, Giovanni, and Silph Scope. **Done.**
 13. Extend and replay-qualify Pokémon Tower, Mr. Fuji, and the Poké Flute. **Done.**
-14. Extend and replay-qualify Route 12 Snorlax through stable Fuchsia Center. **Done.**
+14. Extend and replay-qualify a bounded Route 12 Snorlax capture through stable Fuchsia Center.
+    **Done.**
 15. Extend and replay-qualify the Safari Zone, HM03 Surf, Fuchsia Gym, Koga, and HM04 Strength.
     **Done.**
 16. Extend and replay-qualify all remaining badges, the final Route 22 rival, Route 23, Victory

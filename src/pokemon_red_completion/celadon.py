@@ -31,6 +31,7 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+from pokemon_red_completion.red_party import PARTY_STRUCT_STRIDE
 
 CELADON_CHECKPOINT_COUNT = 12
 WARTORTLE = 0xB3
@@ -150,9 +151,9 @@ class CeladonChapterReport:
     route_8_events_before: tuple[bool, ...]
     route_8_events_after: tuple[bool, ...]
     final_raw: RawGameState
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     super_potions_remaining: int
     repels_remaining: int
     money_before: int
@@ -183,7 +184,7 @@ class CeladonChapterReport:
             and self.final_raw.party_species_ids == PROTECTED_PARTY
             and self.final_raw.battle_state == 0
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.super_potions_remaining == LAVENDER_SUPER_POTION_RESERVE
             and self.repels_remaining == 0
             and self.money_before >= 0
@@ -544,7 +545,7 @@ def _heal_center(
     for _ in range(timing.dialogue_pulses):
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
+            and all(status == 0 for status in _party_status(emulator))
             and reader.read_input_readiness().ready
         ):
             return
@@ -557,7 +558,9 @@ def _require_resources(emulator: EmulatorState) -> None:
     resources = (bag.get(ItemId.SUPER_POTION, 0), bag.get(ItemId.REPEL, 0), _money(emulator))
     if resources[0] != LAVENDER_SUPER_POTION_RESERVE or resources[1] != 0 or resources[2] < 0:
         raise CeladonChapterError(f"Unexpected starting resources: {resources!r}.")
-    if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
+    if _party_hp(emulator) != _party_max_hp(emulator) or any(
+        status != 0 for status in _party_status(emulator)
+    ):
         raise CeladonChapterError("Lavender boundary party was not fully healed.")
 
 
@@ -628,26 +631,33 @@ def _u16(emulator: EmulatorState, address: int) -> int:
     return emulator.read_u8(address) * 0x100 + emulator.read_u8(address + 1)
 
 
-def _party_hp(emulator: EmulatorState) -> tuple[int, int, int]:
-    return tuple(_u16(emulator, address) for address in (
-        RamAddress.PARTY_MON_1_HP, RamAddress.PARTY_MON_2_HP, RamAddress.PARTY_MON_3_HP
-    ))
+def _party_size(emulator: EmulatorState) -> int:
+    """Return the bounded live party size used by whole-party receipts."""
+
+    return min(emulator.read_u8(RamAddress.PARTY_COUNT), 6)
 
 
-def _party_max_hp(emulator: EmulatorState) -> tuple[int, int, int]:
-    return tuple(_u16(emulator, address) for address in (
-        RamAddress.PARTY_MON_1_MAX_HP,
-        RamAddress.PARTY_MON_2_MAX_HP,
-        RamAddress.PARTY_MON_3_MAX_HP,
-    ))
+def _party_hp(emulator: EmulatorState) -> tuple[int, ...]:
+    return tuple(
+        _u16(emulator, int(RamAddress.PARTY_MON_1_HP) + index * PARTY_STRUCT_STRIDE)
+        for index in range(_party_size(emulator))
+    )
 
 
-def _party_status(emulator: EmulatorState) -> tuple[int, int, int]:
-    return tuple(emulator.read_u8(address) for address in (
-        RamAddress.PARTY_MON_1_STATUS,
-        RamAddress.PARTY_MON_2_STATUS,
-        RamAddress.PARTY_MON_3_STATUS,
-    ))
+def _party_max_hp(emulator: EmulatorState) -> tuple[int, ...]:
+    return tuple(
+        _u16(emulator, int(RamAddress.PARTY_MON_1_MAX_HP) + index * PARTY_STRUCT_STRIDE)
+        for index in range(_party_size(emulator))
+    )
+
+
+def _party_status(emulator: EmulatorState) -> tuple[int, ...]:
+    return tuple(
+        emulator.read_u8(
+            int(RamAddress.PARTY_MON_1_STATUS) + index * PARTY_STRUCT_STRIDE
+        )
+        for index in range(_party_size(emulator))
+    )
 
 
 def _pulse(

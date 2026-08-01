@@ -127,9 +127,9 @@ class SaffronChapterReport:
     guard_flag_after_dialogue: int
     bag_before: tuple[tuple[int, int], ...]
     bag_after: tuple[tuple[int, int], ...]
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     battle_free: bool
     frames_executed: int
     actions_executed: int
@@ -167,7 +167,7 @@ class SaffronChapterReport:
             and all(hp > 0 for hp in self.party_hp)
             and self.final_raw.first_party_hp == self.party_hp[0]
             and self.final_raw.first_party_max_hp == self.party_max_hp[0]
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.battle_free
             and self.controller_released
         )
@@ -373,7 +373,7 @@ def run_saffron_chapter(
         raw = reader.read()
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
+            and all(status == 0 for status in _party_status(emulator))
             and raw.first_party_pp == (15, 15, 10, 15)
             and reader.read_input_readiness().ready
         ):

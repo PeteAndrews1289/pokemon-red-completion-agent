@@ -262,9 +262,9 @@ class SilphChapterReport:
     required_events: tuple[tuple[int, bool], ...]
     lapras_flag_before: int
     lapras_flag_after: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     controller_released: bool
     frames_executed: int
     actions_executed: int
@@ -308,7 +308,7 @@ class SilphChapterReport:
             and self.final_raw.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
         )
 
@@ -735,7 +735,7 @@ def _acquire_and_teach_ice_beam(
         upgraded = reader.read()
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
+            and all(status == 0 for status in _party_status(emulator))
             and upgraded.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
             and upgraded.first_party_pp == (15, 15, 10, 15)
             and reader.read_input_readiness().ready
@@ -804,7 +804,7 @@ def acquire_and_teach_ice_beam_from_celadon_center(
         upgraded = reader.read()
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
+            and all(status == 0 for status in _party_status(emulator))
             and upgraded.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
             and upgraded.first_party_pp == (15, 15, 10, 15)
             and reader.read_input_readiness().ready
