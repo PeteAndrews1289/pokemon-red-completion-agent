@@ -408,30 +408,56 @@ def _battle_x_accuracy(
         or reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN
     ):
         raise LoreleiChapterError("X Accuracy gate requires the trainer MAIN menu.")
-    before = _bag(emulator).get(ItemId.X_ACCURACY, 0)
-    if before < 1:
+    initial = _bag(emulator).get(ItemId.X_ACCURACY, 0)
+    if initial < 1:
         raise LoreleiChapterError("Lorelei requires an X Accuracy.")
-    _select_battle_main_command(actions, reader, 1)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    _select_bag_item(
-        actions,
-        emulator,
-        ItemId.X_ACCURACY,
-        DEFAULT_LAVENDER_TIMING,
-    )
-    _pulse(actions, MacroActionKind.CONFIRM)
-    for _ in range(30):
-        current = reader.read()
-        if (
-            current.battle_state == 2
-            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
-        ):
-            break
+    for attempt in range(2):
+        before = _bag(emulator).get(ItemId.X_ACCURACY, 0)
+        _select_battle_main_command(actions, reader, 1)
         _pulse(actions, MacroActionKind.CONFIRM)
-    else:
-        raise LoreleiChapterError("X Accuracy did not return to the MAIN battle menu.")
-    if before - _bag(emulator).get(ItemId.X_ACCURACY, 0) != 1:
-        raise LoreleiChapterError("X Accuracy quantity did not decrement exactly once.")
+        _select_bag_item(
+            actions,
+            emulator,
+            ItemId.X_ACCURACY,
+            DEFAULT_LAVENDER_TIMING,
+        )
+        _pulse(actions, MacroActionKind.CONFIRM)
+        consumed = False
+        for _ in range(30):
+            current = reader.read()
+            after = _bag(emulator).get(ItemId.X_ACCURACY, 0)
+            if after == before - 1:
+                consumed = True
+            elif after != before:
+                raise LoreleiChapterError(
+                    "X Accuracy changed by an invalid quantity: "
+                    f"before={before}, after={after}."
+                )
+            at_main = (
+                current.battle_state == 2
+                and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+            )
+            if consumed and at_main:
+                if initial - after != 1:
+                    raise LoreleiChapterError(
+                        "X Accuracy cumulative use was invalid: "
+                        f"initial={initial}, after={after}."
+                    )
+                return
+            if at_main and not consumed:
+                break
+            _pulse(actions, MacroActionKind.CONFIRM)
+        else:
+            raise LoreleiChapterError(
+                "X Accuracy use did not settle: "
+                f"before={before}, after={_bag(emulator).get(ItemId.X_ACCURACY, 0)}."
+            )
+        if attempt == 0:
+            continue
+    raise LoreleiChapterError(
+        "X Accuracy was not consumed after two bounded selections: "
+        f"initial={initial}, after={_bag(emulator).get(ItemId.X_ACCURACY, 0)}."
+    )
 
 
 def _checkpoint(

@@ -1,3 +1,4 @@
+import pokemon_red_completion.agatha as agatha_module
 from pokemon_red_completion.agatha import (
     AGATHA_APPROACH,
     AGATHA_CHECKPOINT_COUNT,
@@ -9,10 +10,18 @@ from pokemon_red_completion.agatha import (
     AGATHA_X_SPECIAL_USE,
     AgathaTurn,
     _agatha_move_slot,
+    _battle_x_special,
     _encounter_party,
     _turns_valid,
 )
-from pokemon_red_completion.observation import EventFlag, MapId, RawGameState
+from pokemon_red_completion.observation import (
+    BattleMenuPhase,
+    BattleMenuState,
+    EventFlag,
+    ItemId,
+    MapId,
+    RawGameState,
+)
 
 
 def test_agatha_source_contract_is_exact() -> None:
@@ -114,3 +123,61 @@ def test_agatha_policy_uses_live_legal_pp_fallbacks() -> None:
         first_party_pp=(3, 5, 12, AGATHA_SURF_RESERVE),
     )
     assert _agatha_move_slot(reserve) == 3
+
+
+def test_battle_x_item_reselects_after_unconsumed_turn(monkeypatch) -> None:
+    state = {
+        "at_main": True,
+        "item_selected": False,
+        "attempts": 0,
+        "quantity": 8,
+    }
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return RawGameState(
+                game_started=True,
+                map_id=MapId.AGATHAS_ROOM,
+                player_x=5,
+                player_y=3,
+                party_count=3,
+                battle_state=2,
+            )
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(
+                BattleMenuPhase.MAIN if state["at_main"] else BattleMenuPhase.UNKNOWN
+            )
+
+    class Emulator:
+        pass
+
+    def select_item(*args) -> None:
+        del args
+        state["item_selected"] = True
+
+    def pulse(*args, **kwargs) -> None:
+        del args, kwargs
+        if state["item_selected"]:
+            state["item_selected"] = False
+            state["attempts"] += 1
+            state["at_main"] = False
+            if state["attempts"] == 2:
+                state["quantity"] -= 1
+        elif not state["at_main"]:
+            state["at_main"] = True
+
+    monkeypatch.setattr(
+        agatha_module,
+        "_bag",
+        lambda emulator: {ItemId.X_SPECIAL: state["quantity"]},
+    )
+    monkeypatch.setattr(agatha_module, "_select_battle_main_command", lambda *args: None)
+    monkeypatch.setattr(agatha_module, "_select_bag_item", select_item)
+    monkeypatch.setattr(agatha_module, "_pulse", pulse)
+
+    _battle_x_special(Reader(), object(), Emulator())
+
+    assert state["attempts"] == 2
+    assert state["quantity"] == 7

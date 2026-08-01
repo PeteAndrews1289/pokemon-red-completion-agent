@@ -461,25 +461,49 @@ def _battle_x_special(
         or reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN
     ):
         raise AgathaChapterError(f"{item.name} requires the trainer MAIN menu.")
-    before = _bag(emulator).get(item, 0)
-    if before == 0:
+    initial = _bag(emulator).get(item, 0)
+    if initial == 0:
         raise AgathaChapterError(f"{item.name} reserve was exhausted.")
-    _select_battle_main_command(actions, reader, 1)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    _select_bag_item(actions, emulator, item, DEFAULT_LAVENDER_TIMING)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    for _ in range(30):
-        current = reader.read()
-        if (
-            current.battle_state == 2
-            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
-        ):
-            break
+    for attempt in range(2):
+        before = _bag(emulator).get(item, 0)
+        _select_battle_main_command(actions, reader, 1)
         _pulse(actions, MacroActionKind.CONFIRM)
-    else:
-        raise AgathaChapterError(f"{item.name} did not return to the MAIN menu.")
-    if before - _bag(emulator).get(item, 0) != 1:
-        raise AgathaChapterError(f"{item.name} did not decrement exactly once.")
+        _select_bag_item(actions, emulator, item, DEFAULT_LAVENDER_TIMING)
+        _pulse(actions, MacroActionKind.CONFIRM)
+        consumed = False
+        for _ in range(30):
+            current = reader.read()
+            after = _bag(emulator).get(item, 0)
+            if after == before - 1:
+                consumed = True
+            elif after != before:
+                raise AgathaChapterError(
+                    f"{item.name} changed by an invalid quantity: before={before}, after={after}."
+                )
+            at_main = (
+                current.battle_state == 2
+                and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+            )
+            if consumed and at_main:
+                if initial - after != 1:
+                    raise AgathaChapterError(
+                        f"{item.name} cumulative use was invalid: initial={initial}, after={after}."
+                    )
+                return
+            if at_main and not consumed:
+                break
+            _pulse(actions, MacroActionKind.CONFIRM)
+        else:
+            raise AgathaChapterError(
+                f"{item.name} use did not settle: before={before}, "
+                f"after={_bag(emulator).get(item, 0)}."
+            )
+        if attempt == 0:
+            continue
+    raise AgathaChapterError(
+        f"{item.name} was not consumed after two bounded selections: "
+        f"initial={initial}, after={_bag(emulator).get(item, 0)}."
+    )
 
 
 def _use_field_elixir(actions, reader, emulator) -> None:
