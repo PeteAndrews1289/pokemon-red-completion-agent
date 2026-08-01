@@ -32,6 +32,13 @@ recovery rule, transferable feature, or stronger evaluation gate before model tr
 The intended result is a learned/hybrid agent that understands objectives and bounded skills rather
 than memorizing a four-million-frame button sequence.
 
+The current phase makes one further correction. The qualified route completed the game by
+overleveling a single Pokémon, which is a legitimate way to finish Red but a poor thing to imitate:
+it hides the battle decisions the agent is supposed to learn, concentrates all risk in one party
+member, and does not transfer to another title. The project is therefore moving to a balanced
+six-member team with complementary roles and a bounded level spread. The single-carry route is
+preserved unchanged as teacher and route evidence.
+
 ## The problem
 
 Pokémon Red is a useful long-horizon benchmark because success requires several kinds of reasoning
@@ -224,6 +231,82 @@ rehearsal can reopen the collection gate.
 This process is intentionally slower than patching a single run with a save-state restore. It
 produces a better teacher, more useful correction data, and a stronger model interface.
 
+## Phase 3: from a single carry to a balanced team
+
+### Why the completed route is the wrong thing to imitate
+
+The qualified route finishes the game, twice, across 301 checkpoints. It does so by training one
+Pokémon far beyond everything it meets: the lead entered the Mansion block at level 46, left at 55,
+reached Indigo at 58, and entered the Hall of Fame at 61 while the rest of the party stayed small
+enough to be irrelevant. Every recorded battle decision was therefore made from a position where
+almost any legal move wins.
+
+That is excellent *route* evidence and it remains in the repository unchanged. It is poor
+*teaching* evidence, for three reasons:
+
+1. **It hides the decision the agent needs to learn.** When one member outclasses the field,
+   matchup selection, switching, and type reasoning stop mattering. A behavior-cloning dataset
+   collected from that route mostly teaches "attack with the strongest move," because that label
+   was almost always correct.
+2. **It makes progress depend on a single point of failure.** The first held-out rehearsal stopped
+   at Route 25 checkpoint 49/299 precisely because changed battle timing let the lead faint. A
+   route with one carry has no depth to absorb that variance; a balanced party does.
+3. **It does not transfer.** "Overlevel the starter" is a Red-specific exploit of a specific level
+   curve. "Keep six complementary members within a few levels of each other" is a strategy a
+   player would carry into any mainline title, which is exactly the kind of knowledge
+   [Milestone 6](roadmap.md) needs.
+
+The single-carry route was never a stated design goal. It was the cheapest way to satisfy a
+completion contract that only measured *whether* the game ended, and it is being replaced now
+because the project has moved from proving completion to producing transferable training data.
+
+### The target policy
+
+The agent should acquire and retain a full six-member party with complementary roles, train every
+final member to at least level 50 before the Elite Four, prefer training whoever is furthest
+behind, and hold the party within a five-level spread at major training boundaries. Temporary
+deviations are permitted when progression genuinely requires them, but each one must be recorded
+with its reason rather than silently weakening the rule.
+
+### Reusable concepts, not Red coordinates
+
+The new layer is deliberately split so the policy can outlive Pokémon Red:
+
+- `party.py` is the **game-neutral observation contract**. It describes party membership, species,
+  active-party position, level, health, status condition, moves and remaining power points, and
+  experience, plus the derived team metrics a planner actually reasons over: minimum and maximum
+  level, level spread, average level, fainted count, incomplete-party state, and the weakest
+  *trainable* member. It contains no addresses, coordinates, or revision-specific identifiers.
+- `team_training.py` is the **reusable balanced-training policy**. It decides whether to recruit,
+  restore, switch, train, or stop; selects a safe grinding area from encounter level bands; accepts
+  or rejects a matchup; and emits a portable readiness receipt. Its rules are expressed in levels,
+  roles, and health—never in map tiles.
+- `red_party.py` is the **only Red-specific piece**. It projects the game's 44-byte party structure
+  into the neutral contract and binds each role to a species.
+
+The declared roster binds six species to six species-neutral roles:
+
+| Role | Species | Status in the current route |
+| --- | --- | --- |
+| Lead attacker | Blastoise | Already the starter lineage |
+| Speed control | Dugtrio | Evolves from the Diglett the Vermilion chapter already captures |
+| Field utility | DUX (Farfetch'd) | Already obtained by the Vermilion trade |
+| Special sweeper | Jolteon | Reachable; **not yet acquired** |
+| Bulky absorber | Snorlax | Currently *defeated* on Route 12; must be **caught** instead |
+| Physical sweeper | Hitmonlee | Reachable via the Saffron Fighting Dojo; **not yet acquired** |
+
+No slot is a substitution, so no slot carries a substitution reason. The roster type rejects any
+future substitution that does not record why it was made, so a roster change cannot enter the
+repository unexplained.
+
+### What this phase does *not* yet claim
+
+This increment adds observation, metrics, policy, and adapter with unit coverage. It does not add
+the acquisition chapters the roster implies, it has not run under the emulator, and it has not
+produced any trajectory. The three unacquired members and the Route 12 catch-instead-of-defeat
+change are route work that must follow, and the current 301-checkpoint route remains the qualified
+teacher until a balanced-team route independently replaces it.
+
 ## What is being built
 
 The repository contains three related products, with deliberately different evidence standards:
@@ -384,13 +467,22 @@ Indigo at level 58 and entered the Hall of Fame at level 61. The final terminal 
 party members alive. This proves the new deterministic-teacher lineage and the reusable training
 adapter; it does not prove that a learned policy can choose the target, area, or recovery cycle.
 
+The balanced-team layer described in Phase 3 is now implemented as an observation contract, derived
+team metrics, a reusable training policy, and a Red party adapter, all covered by ROM-free unit
+tests. Nothing in that layer has run under the emulator, and no balanced-team route exists yet. The
+301-checkpoint single-carry route remains the only qualified teacher.
+
 The full learned-system and transfer claims remain pending. In particular:
 
 - the current battle ranker has not completed the game;
 - the required five training and two validation trajectories have not yet been collected on the
   finalized source;
-- held-out full-game completion has not yet been demonstrated; and
-- cross-game transfer has not yet been measured.
+- held-out full-game completion has not yet been demonstrated;
+- cross-game transfer has not yet been measured;
+- three declared roster members—Jolteon, Snorlax, and Hitmonlee—are not acquired by any existing
+  chapter, and Route 12's Snorlax is currently defeated rather than caught; and
+- the balanced-training policy has never chosen a real action, so its level floor, spread ceiling,
+  and area-selection rules are unvalidated against live encounter data.
 
 These limitations are part of the public project record rather than hidden behind the completed
 teacher result.

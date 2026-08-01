@@ -146,6 +146,12 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   status/recovery reporting.
 - [x] Require a re-audited immutable dry-run qualification before every counted slot and durably
   persist the one-shot episode claim before emulator execution.
+- [x] Add a game-neutral six-member party observation contract, derived team metrics, and a
+  reusable balanced-training policy, with a Red adapter binding the declared roster.
+- [ ] Add acquisition chapters for the unacquired roster members, catch the Route 12 Snorlax
+  instead of defeating it, and rotate training across the party rather than the lead.
+- [ ] Replay the balanced-team route from clean power-on and qualify it against the completion
+  contract.
 - [ ] Commit and push the exact source/configuration state, then successfully complete the 63/63
   schedule dry run before slot `01`.
 - [ ] Collect every declared train and validation lineage without opening the test partition.
@@ -186,6 +192,15 @@ timing schedules have not yet run. Their current v2 feature view distinguishes f
 from exact teacher-required choices; future receipts report both separately because forced-choice
 accuracy is constraint compliance, not autonomous battle judgment. The recovery marker remains
 descriptive only and does not yet define a recovery learner's inputs or budget.
+
+Dataset quality now also depends on party composition. The qualified route completes the game with
+one overleveled lead, which makes most recorded battle labels trivially correct and teaches nothing
+about switching or matchup selection. The current branch adds a game-neutral six-member party
+contract, derived team metrics, and a reusable balanced-training policy so demonstrations can be
+collected from a team held within a five-level spread above a level-50 floor. That layer is
+unit-tested but has not run under the emulator; the single-carry route remains the qualified
+teacher and is preserved as route evidence. See the
+[Project Narrative](project-narrative.md) for the reasoning and the outstanding route work.
 
 The protocol also requires a successful, non-counted 63/63 schedule rehearsal before slot `01`,
 and its one-shot ledger preserves failures and power interruptions as consumed outcomes. Exact

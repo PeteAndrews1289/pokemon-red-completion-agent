@@ -150,6 +150,42 @@ Watch mode does not provide a human controller, record the screen, expose the RO
 save, or change the teacher. It renders the same bounded execution while checkpoint progress is
 printed to the terminal.
 
+## Party composition and what the demonstrations teach
+
+The qualified segment above completes the game with one overleveled lead. That satisfies the
+completion contract, but it degrades every dataset derived from it: when a single member outclasses
+every opponent, the teacher's move label is almost always "use the strongest attack," and the
+switching, matchup, and resource decisions a learner needs to acquire never appear in the data.
+A single carry also concentrates all route risk in one Pokémon, which is how the first held-out
+schedule rehearsal ended at Route 25.
+
+Teaching therefore targets a **balanced six-member party** instead:
+
+- acquire and retain six members with complementary roles;
+- train every final member to at least level 50 before the Elite Four;
+- always train the lowest-level suitable member;
+- hold the party within a five-level spread at major training boundaries; and
+- permit temporary deviations only when progression requires them, with the reason recorded.
+
+The rules are expressed against the game-neutral party contract—membership, species, active-party
+position, level, health, status, moves, power points, experience, and the derived team metrics—so
+the same policy can be evaluated in a second title behind a small adapter. Only the species
+bindings are Red-specific.
+
+The declared Red roster is Blastoise, Dugtrio, DUX (Farfetch'd), Jolteon, Snorlax, and Hitmonlee,
+bound respectively to the lead-attacker, speed-control, field-utility, special-sweeper,
+bulky-absorber, and physical-sweeper roles. Any substitution must record why it was made; the
+roster type rejects an unexplained one.
+
+Three consequences for the teaching route are outstanding and are not yet implemented:
+
+1. Jolteon and Hitmonlee have no acquisition chapter.
+2. Route 12's Snorlax is currently defeated; the balanced roster requires catching it.
+3. Training blocks must select and rotate a trainee rather than assuming the lead is the target.
+
+Until those land, the recorded demonstrations still describe single-carry play, and any dataset
+card derived from them must say so.
+
 ## What each learning stage needs
 
 ### Behavioral cloning
