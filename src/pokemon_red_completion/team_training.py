@@ -1,0 +1,483 @@
+"""Reusable balanced-team training policy.
+
+The project's qualified route trained one overleveled carry and let the rest of
+the party idle.  That route is durable teacher evidence, but it teaches a habit
+a transferable agent should not learn: it makes progress depend on a single
+Pokémon surviving every remaining battle.
+
+This policy replaces that habit with a portable rule set—fill the party, keep
+every member above a level floor, keep the spread between members small, and
+always train whoever is furthest behind.  Like
+:mod:`pokemon_red_completion.training`, it decides *why* to fight, heal, switch,
+or stop; game adapters remain responsible for navigation, menus, and battle
+execution.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Iterable, Sequence
+from dataclasses import dataclass
+from enum import StrEnum
+
+from .party import (
+    MAX_LEVEL,
+    MIN_LEVEL,
+    PARTY_SLOT_LIMIT,
+    PartyMemberObservation,
+    PartyObservation,
+    PartyRole,
+    StatusCondition,
+)
+
+LEAD_SLOT = 1
+
+
+class TeamTrainingDirective(StrEnum):
+    """One semantic action requested by the balanced-team policy."""
+
+    RECRUIT_MEMBER = "recruit_member"
+    RESTORE_TEAM = "restore_team"
+    SWITCH_TRAINEE = "switch_trainee"
+    TRAIN_MEMBER = "train_member"
+    STOP = "stop"
+
+
+@dataclass(frozen=True, slots=True)
+class RosterSlot:
+    """One planned party position, bound to a role and a concrete species.
+
+    ``substitution_reason`` documents why this species replaced the roster's
+    default choice.  A substitution without a recorded reason is rejected so a
+    roster change can never enter the repository unexplained.
+    """
+
+    role: PartyRole
+    species_id: int
+    is_substitution: bool = False
+    substitution_reason: str | None = None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.role, PartyRole):
+            raise TypeError("role must be a PartyRole")
+        if type(self.species_id) is not int or self.species_id <= 0:
+            raise ValueError("species_id must be a positive integer")
+        if self.is_substitution and not (self.substitution_reason or "").strip():
+            raise ValueError("a roster substitution requires a recorded reason")
+        if not self.is_substitution and self.substitution_reason is not None:
+            raise ValueError("substitution_reason is only meaningful for a substitution")
+
+
+@dataclass(frozen=True, slots=True)
+class TeamRosterPlan:
+    """The intended six-member roster expressed as roles plus species bindings."""
+
+    slots: tuple[RosterSlot, ...]
+
+    def __post_init__(self) -> None:
+        if not self.slots:
+            raise ValueError("a roster plan needs at least one slot")
+        if len(self.slots) > PARTY_SLOT_LIMIT:
+            raise ValueError(f"a roster plan cannot exceed {PARTY_SLOT_LIMIT} slots")
+        if any(not isinstance(slot, RosterSlot) for slot in self.slots):
+            raise TypeError("slots must contain RosterSlot entries")
+        roles = [slot.role for slot in self.slots]
+        if len(set(roles)) != len(roles):
+            raise ValueError("a roster plan cannot repeat a role")
+        species = [slot.species_id for slot in self.slots]
+        if len(set(species)) != len(species):
+            raise ValueError("a roster plan cannot repeat a species")
+
+    @property
+    def species_ids(self) -> tuple[int, ...]:
+        """Every planned species, in roster order."""
+
+        return tuple(slot.species_id for slot in self.slots)
+
+    @property
+    def substitutions(self) -> tuple[RosterSlot, ...]:
+        """Every slot that deviates from the roster's default choice."""
+
+        return tuple(slot for slot in self.slots if slot.is_substitution)
+
+    def missing_from(self, party: PartyObservation) -> tuple[RosterSlot, ...]:
+        """Roster slots whose species is not currently in the active party."""
+
+        present = set(party.species_ids())
+        return tuple(slot for slot in self.slots if slot.species_id not in present)
+
+    def unplanned_in(self, party: PartyObservation) -> tuple[int, ...]:
+        """Species present in the party that the roster plan does not name."""
+
+        planned = set(self.species_ids)
+        return tuple(
+            species for species in party.species_ids() if species not in planned
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class TrainingException:
+    """A recorded, temporary allowance to proceed while a rule is unmet.
+
+    Progression sometimes has to come before balance—for example when a badge
+    is required to reach the only safe training area.  Each allowance carries a
+    reason so the deviation appears in evidence instead of silently weakening
+    the policy.
+    """
+
+    reason: str
+    allows_incomplete_party: bool = False
+    allows_level_shortfall: bool = False
+    allows_level_spread: bool = False
+
+    def __post_init__(self) -> None:
+        if not self.reason.strip():
+            raise ValueError("a training exception requires a non-empty reason")
+        if not any(
+            (
+                self.allows_incomplete_party,
+                self.allows_level_shortfall,
+                self.allows_level_spread,
+            )
+        ):
+            raise ValueError("a training exception must allow at least one deviation")
+
+
+@dataclass(frozen=True, slots=True)
+class BalancedTeamPolicy:
+    """Stop, safety, balance, and opponent-selection rules for a whole team."""
+
+    minimum_level: int = 50
+    maximum_level_spread: int = 5
+    required_size: int = PARTY_SLOT_LIMIT
+    retreat_hp_ratio: float = 0.45
+    reserve_total_pp: int = 2
+    max_enemy_level_delta: int = 4
+    max_battles: int = 400
+    max_steps: int = 40_000
+    max_healing_trips: int = 40
+    max_faints: int = 3
+
+    def __post_init__(self) -> None:
+        if not MIN_LEVEL < self.minimum_level <= MAX_LEVEL:
+            raise ValueError(f"minimum_level must be between 2 and {MAX_LEVEL}")
+        if type(self.maximum_level_spread) is not int or self.maximum_level_spread < 0:
+            raise ValueError("maximum_level_spread must be a non-negative integer")
+        if not 1 <= self.required_size <= PARTY_SLOT_LIMIT:
+            raise ValueError(f"required_size must be between 1 and {PARTY_SLOT_LIMIT}")
+        if not 0 < self.retreat_hp_ratio < 1:
+            raise ValueError("retreat_hp_ratio must be between zero and one")
+        for name in (
+            "reserve_total_pp",
+            "max_enemy_level_delta",
+            "max_battles",
+            "max_steps",
+            "max_healing_trips",
+            "max_faints",
+        ):
+            value = getattr(self, name)
+            if type(value) is not int or value < 0:
+                raise ValueError(f"{name} must be a non-negative integer")
+
+
+@dataclass(frozen=True, slots=True)
+class TeamTrainingProgress:
+    """Bounded effort already spent inside one training block."""
+
+    battles_completed: int = 0
+    steps_taken: int = 0
+    healing_trips: int = 0
+    faints: int = 0
+
+    def __post_init__(self) -> None:
+        for name in ("battles_completed", "steps_taken", "healing_trips", "faints"):
+            value = getattr(self, name)
+            if type(value) is not int or value < 0:
+                raise ValueError(f"{name} must be a non-negative integer")
+
+
+@dataclass(frozen=True, slots=True)
+class TeamTrainingDecision:
+    """One directive plus the reasoning that produced it."""
+
+    directive: TeamTrainingDirective
+    reason: str
+    target_slot: int | None = None
+    exception_reason: str | None = None
+
+    @property
+    def used_exception(self) -> bool:
+        """Whether a recorded allowance influenced this decision."""
+
+        return self.exception_reason is not None
+
+
+@dataclass(frozen=True, slots=True)
+class GrindingArea:
+    """A candidate training area described by its encounter level band."""
+
+    area_id: str
+    minimum_encounter_level: int
+    maximum_encounter_level: int
+    has_nearby_healer: bool = True
+
+    def __post_init__(self) -> None:
+        if not self.area_id.strip():
+            raise ValueError("area_id must be a non-empty semantic label")
+        for name in ("minimum_encounter_level", "maximum_encounter_level"):
+            value = getattr(self, name)
+            if type(value) is not int or not MIN_LEVEL <= value <= MAX_LEVEL:
+                raise ValueError(f"{name} must be a valid level")
+        if self.maximum_encounter_level < self.minimum_encounter_level:
+            raise ValueError("maximum_encounter_level cannot be below the minimum")
+
+
+@dataclass(frozen=True, slots=True)
+class BalancedTeamReport:
+    """Portable receipt describing whether a team met the balance contract."""
+
+    required_size: int
+    minimum_level: int
+    maximum_level_spread: int
+    observed_size: int
+    observed_minimum_level: int | None
+    observed_level_spread: int | None
+    fainted_count: int
+    exception_reasons: tuple[str, ...] = ()
+
+    @property
+    def has_full_party(self) -> bool:
+        """Whether every required party position is filled."""
+
+        return self.observed_size >= self.required_size
+
+    @property
+    def meets_level_floor(self) -> bool:
+        """Whether the weakest member reached the required level."""
+
+        return (
+            self.observed_minimum_level is not None
+            and self.observed_minimum_level >= self.minimum_level
+        )
+
+    @property
+    def is_balanced(self) -> bool:
+        """Whether the level spread sits inside the allowed maximum."""
+
+        return (
+            self.observed_level_spread is not None
+            and self.observed_level_spread <= self.maximum_level_spread
+        )
+
+    @property
+    def passed(self) -> bool:
+        """Whether the team satisfies every balance rule with nobody fainted."""
+
+        return (
+            self.has_full_party
+            and self.meets_level_floor
+            and self.is_balanced
+            and self.fainted_count == 0
+        )
+
+
+def _member_is_unsafe(
+    member: PartyMemberObservation,
+    policy: BalancedTeamPolicy,
+) -> bool:
+    return (
+        member.is_fainted
+        or member.hp_ratio <= policy.retreat_hp_ratio
+        or member.status is not StatusCondition.HEALTHY
+        or member.total_pp <= policy.reserve_total_pp
+    )
+
+
+def _exhausted_bound(
+    progress: TeamTrainingProgress,
+    policy: BalancedTeamPolicy,
+) -> str | None:
+    if progress.battles_completed >= policy.max_battles:
+        return "battle budget exhausted"
+    if progress.steps_taken >= policy.max_steps:
+        return "step budget exhausted"
+    if progress.healing_trips >= policy.max_healing_trips:
+        return "healing budget exhausted"
+    if progress.faints > policy.max_faints:
+        return "faint budget exhausted"
+    return None
+
+
+def plan_team_training(
+    party: PartyObservation,
+    policy: BalancedTeamPolicy,
+    progress: TeamTrainingProgress | None = None,
+    exception: TrainingException | None = None,
+) -> TeamTrainingDecision:
+    """Choose the next semantic action for a balanced-team training block.
+
+    The order of reasoning is deliberate: bounded effort stops the block first,
+    an unusable team is restored before anything else, a short roster is filled
+    before levels are chased, and a team that already satisfies the contract
+    stops instead of grinding for no reason.
+    """
+
+    progress = progress or TeamTrainingProgress()
+    exhausted = _exhausted_bound(progress, policy)
+    if exhausted is not None:
+        return TeamTrainingDecision(TeamTrainingDirective.STOP, exhausted)
+
+    if not party.members:
+        return TeamTrainingDecision(
+            TeamTrainingDirective.RECRUIT_MEMBER,
+            "party is empty",
+            target_slot=LEAD_SLOT,
+        )
+
+    if party.fainted_count or party.is_wiped_out:
+        return TeamTrainingDecision(
+            TeamTrainingDirective.RESTORE_TEAM,
+            f"{party.fainted_count} member(s) fainted"
+            if party.fainted_count
+            else "no member can currently act",
+        )
+
+    if party.size < policy.required_size:
+        if exception is None or not exception.allows_incomplete_party:
+            return TeamTrainingDecision(
+                TeamTrainingDirective.RECRUIT_MEMBER,
+                f"party holds {party.size} of {policy.required_size} members",
+                target_slot=party.size + 1,
+            )
+        allowed_incomplete: str | None = exception.reason
+    else:
+        allowed_incomplete = None
+
+    below_floor = party.members_below_level(policy.minimum_level)
+    if below_floor and exception is not None and exception.allows_level_shortfall:
+        below_floor = ()
+        allowed_shortfall: str | None = exception.reason
+    else:
+        allowed_shortfall = None
+
+    spread = party.level_spread
+    over_spread = spread is not None and spread > policy.maximum_level_spread
+    if over_spread and exception is not None and exception.allows_level_spread:
+        over_spread = False
+        allowed_spread: str | None = exception.reason
+    else:
+        allowed_spread = None
+
+    granted = next(
+        (
+            reason
+            for reason in (allowed_incomplete, allowed_shortfall, allowed_spread)
+            if reason is not None
+        ),
+        None,
+    )
+
+    if not below_floor and not over_spread:
+        return TeamTrainingDecision(
+            TeamTrainingDirective.STOP,
+            "party meets the level floor and spread contract",
+            exception_reason=granted,
+        )
+
+    trainee = party.weakest_trainable_member
+    if trainee is None:
+        return TeamTrainingDecision(
+            TeamTrainingDirective.RESTORE_TEAM,
+            "no member can currently gain experience",
+            exception_reason=granted,
+        )
+
+    if _member_is_unsafe(trainee, policy):
+        return TeamTrainingDecision(
+            TeamTrainingDirective.RESTORE_TEAM,
+            f"slot {trainee.slot} is not safe to train",
+            target_slot=trainee.slot,
+            exception_reason=granted,
+        )
+
+    if trainee.slot != LEAD_SLOT:
+        return TeamTrainingDecision(
+            TeamTrainingDirective.SWITCH_TRAINEE,
+            f"slot {trainee.slot} is the weakest trainable member",
+            target_slot=trainee.slot,
+            exception_reason=granted,
+        )
+
+    reason = (
+        f"slot {trainee.slot} is below the level floor"
+        if below_floor
+        else f"slot {trainee.slot} trails the party by more than {policy.maximum_level_spread}"
+    )
+    return TeamTrainingDecision(
+        TeamTrainingDirective.TRAIN_MEMBER,
+        reason,
+        target_slot=trainee.slot,
+        exception_reason=granted,
+    )
+
+
+def is_matchup_acceptable(
+    trainee: PartyMemberObservation,
+    enemy_level: int | None,
+    policy: BalancedTeamPolicy,
+) -> bool:
+    """Whether a trainee should engage an opponent rather than disengage.
+
+    An unknown opponent level is treated as unacceptable so the policy fails
+    toward safety instead of gambling on an unobserved encounter.
+    """
+
+    if enemy_level is None:
+        return False
+    if _member_is_unsafe(trainee, policy):
+        return False
+    return enemy_level <= trainee.level + policy.max_enemy_level_delta
+
+
+def choose_grinding_area(
+    areas: Iterable[GrindingArea],
+    trainee: PartyMemberObservation,
+    policy: BalancedTeamPolicy,
+    require_healer: bool = True,
+) -> GrindingArea | None:
+    """Pick the fastest training area whose encounters stay inside the safety band.
+
+    Areas whose strongest encounter could exceed the trainee's tolerance are
+    rejected outright.  Among the safe remainder the highest minimum encounter
+    level wins, because it yields the most experience per battle; ties resolve
+    on the area label so the choice is reproducible.
+    """
+
+    ceiling = trainee.level + policy.max_enemy_level_delta
+    safe = [
+        area
+        for area in areas
+        if area.maximum_encounter_level <= ceiling
+        and (area.has_nearby_healer or not require_healer)
+    ]
+    if not safe:
+        return None
+    return max(safe, key=lambda area: (area.minimum_encounter_level, area.area_id))
+
+
+def summarize_team_readiness(
+    party: PartyObservation,
+    policy: BalancedTeamPolicy,
+    exception_reasons: Sequence[str] = (),
+) -> BalancedTeamReport:
+    """Build a portable receipt describing the team against the balance contract."""
+
+    return BalancedTeamReport(
+        required_size=policy.required_size,
+        minimum_level=policy.minimum_level,
+        maximum_level_spread=policy.maximum_level_spread,
+        observed_size=party.size,
+        observed_minimum_level=party.minimum_level,
+        observed_level_spread=party.level_spread,
+        fainted_count=party.fainted_count,
+        exception_reasons=tuple(exception_reasons),
+    )
