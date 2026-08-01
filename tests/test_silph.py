@@ -24,6 +24,7 @@ from pokemon_red_completion.silph import (
     _move_verified,
     _plan_saffron_center_approach,
     _plan_saffron_route,
+    _silph_capacity_ready,
     _silph_rival_move_slot,
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
@@ -100,6 +101,19 @@ def test_silph_timing_is_positive_and_bounded() -> None:
         assert getattr(DEFAULT_SILPH_TIMING, field.name) > 0
         with pytest.raises(ValueError, match=field.name):
             replace(DEFAULT_SILPH_TIMING, **{field.name: 0})
+
+
+def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:
+    route_items = {item: 1 for item in SILPH_PC_DEPOSIT_ITEMS}
+
+    assert _silph_capacity_ready({**route_items, **{1000 + index: 1 for index in range(15)}})
+    assert _silph_capacity_ready({**route_items, **{1000 + index: 1 for index in range(16)}})
+    assert not _silph_capacity_ready(
+        {**route_items, **{1000 + index: 1 for index in range(17)}}
+    )
+    assert not _silph_capacity_ready(
+        {item: quantity for item, quantity in route_items.items() if item is not ItemId.SS_TICKET}
+    )
 
 
 def test_silph_verified_movement_retries_a_swallowed_input() -> None:

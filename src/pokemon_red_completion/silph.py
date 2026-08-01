@@ -7,7 +7,7 @@ pret/pokered commit ``1e96034092686d006e863cace09e87273051a3d8``.
 from __future__ import annotations
 
 from collections import deque
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -997,24 +997,37 @@ def _store_spent_route_items(
     timing: SilphTiming,
 ) -> bool:
     before = _bag(emulator)
-    if len(before) != 19 or any(before.get(item, 0) != 1 for item in SILPH_PC_DEPOSIT_ITEMS):
+    # A held-out battle schedule may consume the final item in a recovery
+    # stack, legitimately reducing the number of occupied slots.  Capacity is
+    # the semantic requirement: depositing these three obsolete route items
+    # must leave at most sixteen slots so the roof reward, supplies, Card Key,
+    # and Master Ball can all be received later.
+    if not _silph_capacity_ready(before):
         raise SilphChapterError(
-            "Silph capacity cleanup requires a 19-slot bag with the spent route items."
+            "Silph capacity cleanup lacks room or the three spent route items."
         )
+    expected_slots = len(before) - len(SILPH_PC_DEPOSIT_ITEMS)
     _move(actions, reader, ("down",) + ("right",) * 10, timing)
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (13, 4), "pre-Silph PC approach")
     for item in SILPH_PC_DEPOSIT_ITEMS:
         _deposit_pc_item(actions, reader, emulator, item, timing)
     after = _bag(emulator)
     if (
-        len(after) != 16
+        len(after) != expected_slots
+        or len(after) > 16
         or any(item in after for item in SILPH_PC_DEPOSIT_ITEMS)
         or not reader.read_input_readiness().ready
     ):
-        raise SilphChapterError("Pre-Silph PC cleanup did not establish a 16-slot bag boundary.")
+        raise SilphChapterError("Pre-Silph PC cleanup did not establish safe bag capacity.")
     _move(actions, reader, ("left",) * 10 + ("up",), timing)
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), "pre-Silph PC return")
     return True
+
+
+def _silph_capacity_ready(bag: Mapping[object, int]) -> bool:
+    """Prove that archiving three route items will leave sixteenth-slot capacity."""
+
+    return len(bag) <= 19 and all(bag.get(item, 0) == 1 for item in SILPH_PC_DEPOSIT_ITEMS)
 
 
 def _deposit_pc_item(
