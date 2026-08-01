@@ -13,6 +13,7 @@ from pokemon_red_completion.sabrina import (
     SABRINA_TO_CITY,
     SabrinaTurn,
     _encounter_party,
+    _sabrina_capacity_ready,
     _sabrina_move_slot,
     _sabrina_recovery_required,
 )
@@ -55,6 +56,17 @@ def test_sabrina_routes_are_source_and_live_stable() -> None:
     assert SABRINA_BATTLE_TIMING.max_pp_confirmation_pulses == 12
     assert MAX_SABRINA_HYPER_POTIONS == 7
     assert PC_DEPOSIT_ITEMS == (ItemId.SILPH_SCOPE, ItemId.CARD_KEY)
+
+
+def test_sabrina_capacity_accepts_a_consumed_recovery_stack() -> None:
+    key_items = {item: 1 for item in PC_DEPOSIT_ITEMS}
+
+    assert _sabrina_capacity_ready({**key_items, **{1000 + index: 1 for index in range(17)}})
+    assert _sabrina_capacity_ready({**key_items, **{1000 + index: 1 for index in range(18)}})
+    assert not _sabrina_capacity_ready(
+        {**key_items, **{1000 + index: 1 for index in range(19)}}
+    )
+    assert not _sabrina_capacity_ready({ItemId.SILPH_SCOPE: 1})
 
 
 def test_sabrina_turn_receipts_preserve_party_transitions() -> None:

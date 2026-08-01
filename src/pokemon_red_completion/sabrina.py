@@ -6,7 +6,7 @@ pinned to pret/pokered commit ``1e96034092686d006e863cace09e87273051a3d8``.
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 
 from pokemon_red_completion.actions import MacroActionKind
@@ -479,10 +479,11 @@ def _store_obsolete_key_items(
     timing: SilphTiming,
 ) -> None:
     before = _bag(emulator)
-    if len(before) != 20 or any(before.get(item, 0) != 1 for item in PC_DEPOSIT_ITEMS):
+    if not _sabrina_capacity_ready(before):
         raise SabrinaChapterError(
-            "Sabrina inventory cleanup requires a full bag with the spent Scope and Card Key."
+            "Sabrina inventory cleanup lacks safe capacity or its spent key items."
         )
+    expected_slots = len(before) - len(PC_DEPOSIT_ITEMS)
 
     _move(actions, reader, ("down",) + ("right",) * 10, timing)
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (13, 4), "Saffron PC approach")
@@ -494,12 +495,19 @@ def _store_obsolete_key_items(
         returned.map_id != MapId.SAFFRON_POKECENTER
         or (returned.player_x, returned.player_y) != (13, 4)
         or not reader.read_input_readiness().ready
-        or len(after) != 18
+        or len(after) != expected_slots
+        or len(after) > 18
         or any(item in after for item in PC_DEPOSIT_ITEMS)
     ):
-        raise SabrinaChapterError("Saffron PC cleanup did not restore an 18-slot field boundary.")
+        raise SabrinaChapterError("Saffron PC cleanup did not restore safe field capacity.")
     _move(actions, reader, ("left",) * 10 + ("up",), timing)
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), "Saffron PC return")
+
+
+def _sabrina_capacity_ready(bag: Mapping[object, int]) -> bool:
+    """Prove that archiving two obsolete keys leaves room for the Gym reward."""
+
+    return len(bag) <= 20 and all(bag.get(item, 0) == 1 for item in PC_DEPOSIT_ITEMS)
 
 
 def _deposit_pc_item(
