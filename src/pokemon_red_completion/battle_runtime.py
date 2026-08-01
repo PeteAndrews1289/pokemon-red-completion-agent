@@ -386,7 +386,7 @@ def run_adaptive_trainer_battle(
             continue
         unknown_menu_pulses = 0
         if menu.phase is BattleMenuPhase.MOVE:
-            initial_pp = raw.first_party_pp
+            initial_pp = raw.battler_pp
             _pulse(
                 executor,
                 MacroAction(MacroActionKind.CANCEL),
@@ -398,7 +398,7 @@ def run_adaptive_trainer_battle(
                 expected_map=expected_map,
                 label=label,
             )
-            if normalized.first_party_pp != initial_pp:
+            if normalized.battler_pp != initial_pp:
                 raise BattleRuntimeError(
                     f"{label} changed PP while normalizing an unlatched move menu."
                 )
@@ -758,17 +758,17 @@ def _execute_policy_turn(
             expected_map=expected_map,
             slot=slot,
             initial_pp=initial_pp,
-            initial_pp_vector=initial_raw.first_party_pp,
+            initial_pp_vector=initial_raw.battler_pp,
             timing=timing,
             label=label,
         ):
             return
-        if (raw.first_party_status or 0) != 0 and raw.first_party_pp == initial_raw.first_party_pp:
+        if (raw.battler_status or 0) != 0 and raw.battler_pp == initial_raw.battler_pp:
             # A status-suppressed turn (notably full paralysis) may consume
             # FIGHT before the move menu becomes observable.  An unchanged
             # PP vector proves that no move was substituted or spent.
             return
-        if raw.enemy_using_trapping_move and raw.first_party_pp == initial_raw.first_party_pp:
+        if raw.enemy_using_trapping_move and raw.battler_pp == initial_raw.battler_pp:
             # Gen I trapping moves such as Bind suppress the trapped player's
             # move selection on continuation turns. The pinned enemy battle
             # status bit proves this is a forced no-action turn; the unchanged
@@ -800,7 +800,7 @@ def _execute_policy_turn(
     if menu.selected_move_slot != slot:
         raise BattleRuntimeError(f"{label} could not select move slot {slot} inside its bound.")
     if required_move_id is not None:
-        moves = raw.first_party_moves
+        moves = raw.battler_moves
         if moves is None or len(moves) < slot or moves[slot - 1] != required_move_id:
             observed = None if moves is None or len(moves) < slot else moves[slot - 1]
             raise BattleRuntimeError(
@@ -861,7 +861,7 @@ def _confirm_attack_with_pp_gate(
             return
         if current_pp != initial_pp:
             raise BattleRuntimeError(f"{label} move slot {slot} changed PP by an invalid amount.")
-        if raw.enemy_hp == 0 and raw.first_party_pp == initial_raw.first_party_pp:
+        if raw.enemy_hp == 0 and raw.battler_pp == initial_raw.battler_pp:
             # An opponent can move first and faint from recoil or
             # Selfdestruct before the cursor-proven move executes. The full
             # unchanged PP vector proves that no player move was substituted.
@@ -869,14 +869,14 @@ def _confirm_attack_with_pp_gate(
         if (
             raw.player_disabled_move_slot == slot
             and (raw.player_disable_turns or 0) > 0
-            and raw.first_party_pp == initial_raw.first_party_pp
+            and raw.battler_pp == initial_raw.battler_pp
         ):
             # A faster opponent can use Disable after the player selects a
             # move. The selected turn is suppressed without spending PP; the
             # outer loop must return to MAIN and let the policy choose a
             # different legal slot.
             return
-        if raw.enemy_using_trapping_move and raw.first_party_pp == initial_raw.first_party_pp:
+        if raw.enemy_using_trapping_move and raw.battler_pp == initial_raw.battler_pp:
             # A faster opponent can begin a Gen I trapping sequence after the
             # player selected a move. The selected turn is forcibly suppressed;
             # unchanged full PP proves no player move executed or was replaced.
@@ -885,7 +885,7 @@ def _confirm_attack_with_pp_gate(
         if (
             expected_battle_state == _WILD_BATTLE_STATE
             and raw.battle_state == 0
-            and raw.first_party_pp == initial_raw.first_party_pp
+            and raw.battler_pp == initial_raw.battler_pp
         ):
             # Wild opponents can end the battle with Selfdestruct or recoil
             # before the cursor-proven player move executes. Unlike a trainer
@@ -917,7 +917,7 @@ def _confirm_attack_with_pp_gate(
                 timing.attack_wait_frames,
             )
             continue
-        if menu.phase is BattleMenuPhase.MAIN and raw.first_party_pp == initial_raw.first_party_pp:
+        if menu.phase is BattleMenuPhase.MAIN and raw.battler_pp == initial_raw.battler_pp:
             # A suppressed turn can return to MAIN without spending PP.
             # Persistent causes such as paralysis appear in the status byte,
             # while volatile causes such as confusion do not.  The unchanged
@@ -927,9 +927,9 @@ def _confirm_attack_with_pp_gate(
 
     raise BattleRuntimeError(
         f"{label} failed its bounded move-slot {slot} PP-decrement gate: "
-        f"initial_pp={initial_pp}, current_pp={raw.first_party_pp}, "
-        f"hp={raw.first_party_hp}/{raw.first_party_max_hp}, "
-        f"status={raw.first_party_status}, menu="
+        f"initial_pp={initial_pp}, current_pp={raw.battler_pp}, "
+        f"hp={raw.battler_hp}/{raw.battler_max_hp}, "
+        f"status={raw.battler_status}, menu="
         f"{_validated_menu(reader.read_battle_menu_state(raw), label=label).phase.value}, "
         f"enemy_trapping="
         f"{raw.enemy_using_trapping_move}, battle_state={raw.battle_state}."
@@ -950,7 +950,7 @@ def _recover_sleep_transition(
     """Recover only the Gen I sleep countdown that suppresses move selection."""
 
     raw = reader.read()
-    sleep_count = (raw.first_party_status or 0) & 0x07
+    sleep_count = (raw.battler_status or 0) & 0x07
     if sleep_count == 0:
         return False
 
@@ -958,13 +958,13 @@ def _recover_sleep_transition(
     saw_decrease = False
     for _ in range(timing.max_sleep_recovery_pulses):
         _require_active_trainer_state(raw, expected_map=expected_map, label=label)
-        if (raw.first_party_hp or 0) <= 0:
+        if (raw.battler_hp or 0) <= 0:
             raise BattleRuntimeError(f"{label} fainted during sleep recovery.")
         if _current_pp(raw, slot=slot, label=label, require_usable=False) != initial_pp:
             raise BattleRuntimeError(
                 f"{label} changed PP during sleep recovery without a selected attack."
             )
-        if raw.first_party_pp != initial_pp_vector:
+        if raw.battler_pp != initial_pp_vector:
             raise BattleRuntimeError(f"{label} changed an off-slot PP value during sleep recovery.")
 
         _pulse(
@@ -973,7 +973,7 @@ def _recover_sleep_transition(
             timing.dialogue_wait_frames,
         )
         raw = reader.read()
-        current_count = (raw.first_party_status or 0) & 0x07
+        current_count = (raw.battler_status or 0) & 0x07
         if current_count == 0:
             menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
             if menu.phase is BattleMenuPhase.MOVE:
@@ -993,7 +993,7 @@ def _recover_sleep_transition(
     menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
     raise BattleRuntimeError(
         f"{label} exceeded its bounded sleep recovery: "
-        f"sleep={previous_count}, hp={raw.first_party_hp}, phase={menu.phase.value}."
+        f"sleep={previous_count}, hp={raw.battler_hp}, phase={menu.phase.value}."
     )
 
 
@@ -1064,8 +1064,8 @@ def _selected_turn_effect_observed(
         current.enemy_species_id != initial.enemy_species_id
         or current.enemy_hp != initial.enemy_hp
         or current.enemy_defense_stage != initial.enemy_defense_stage
-        or current.first_party_hp != initial.first_party_hp
-        or current.first_party_status != initial.first_party_status
+        or current.battler_hp != initial.battler_hp
+        or current.battler_status != initial.battler_status
         or current.player_attack_stage != initial.player_attack_stage
         or current.player_accuracy_stage != initial.player_accuracy_stage
     )
@@ -1097,7 +1097,7 @@ def _choose_usable_slot(
             f"{label} move-slot policy returned invalid one-based slot {slot!r}."
         )
 
-    moves = raw.first_party_moves
+    moves = raw.battler_moves
     index = slot - 1
     if moves is None or len(moves) <= index or moves[index] == 0:
         raise BattleRuntimeError(
@@ -1121,7 +1121,7 @@ def _current_pp(
     label: str,
     require_usable: bool = True,
 ) -> int:
-    pp = raw.first_party_pp
+    pp = raw.battler_pp
     index = slot - 1
     if pp is None or len(pp) <= index:
         raise BattleRuntimeError(f"{label} lacks PP evidence for move slot {slot}.")
@@ -1180,15 +1180,15 @@ def _require_present_state(
         raise BattleRuntimeError(
             f"{label} left expected map {expected_map:#04x} for {raw.map_id!r}."
         )
-    if raw.party_count is None or raw.party_count <= 0 or raw.first_party_hp is None:
-        raise BattleRuntimeError(f"{label} lacks living party-lead evidence.")
-    if raw.first_party_hp <= 0:
+    if raw.party_count is None or raw.party_count <= 0 or raw.battler_hp is None:
+        raise BattleRuntimeError(f"{label} lacks living active-battler evidence.")
+    if raw.battler_hp <= 0:
         raise BattleRuntimeError(
-            f"{label} party lead fainted: hp={raw.first_party_hp}/"
-            f"{raw.first_party_max_hp}, status={raw.first_party_status}, "
+            f"{label} active battler fainted: hp={raw.battler_hp}/"
+            f"{raw.battler_max_hp}, status={raw.battler_status}, "
             f"enemy_species={raw.enemy_species_id}, enemy_hp={raw.enemy_hp}/"
             f"{raw.enemy_max_hp}, enemy_trapping={raw.enemy_using_trapping_move}, "
-            f"pp={raw.first_party_pp}."
+            f"pp={raw.battler_pp}."
         )
     expected_battle_state = _ACTIVE_BATTLE_STATE.get()
     if (

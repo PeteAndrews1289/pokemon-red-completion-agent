@@ -34,6 +34,9 @@ class ProtectedRecoveryError(RuntimeError):
     """Raised when a protected lead recovery leaves its bounded battle state."""
 
 
+PROTECTED_RECOVERY_MAX_ATTACK_PULSES = 96
+
+
 def first_living_reserve(party_hp: tuple[int, ...]) -> int | None:
     """Return the first living non-lead party slot, if one exists."""
 
@@ -47,14 +50,15 @@ def protected_lead_recovery(
     party_index: int,
     *,
     heal_lead: bool = True,
+    preserve_reserve: bool = False,
     healing_item: ItemId,
     wait_frames: int = 180,
 ) -> bool:
-    """Sacrifice one reserve and optionally heal the lead behind the pivot.
+    """Pivot through one reserve and optionally heal the protected lead.
 
-    Returns whether exactly one healing item was spent.  A reserve can faint on
-    the switch-in before the item turn; callers can then retry with another
-    living reserve or select a different recovery policy.
+    Returns whether exactly one healing item was spent. A reserve can faint on
+    the switch-in before the item turn; a reserve that survives the bounded
+    attack window is switched back out instead of being required to faint.
     """
 
     party = _party_hp(emulator)
@@ -109,7 +113,21 @@ def protected_lead_recovery(
             )
         potion_spent = True
 
-    for pulse_index in range(64):
+    if preserve_reserve and _party_hp(emulator)[party_index] > 0:
+        _restore_lead_after_surviving_pivot(
+            actions,
+            reader,
+            emulator,
+            party_index,
+            wait_frames,
+        )
+        return potion_spent
+
+    # The original single-carry route used deliberately weak reserves that
+    # fainted quickly. Balanced-team reserves can survive substantially longer;
+    # keep the operation bounded, but give a healthy teammate enough turns to
+    # absorb the same recovery sequence without a false timeout.
+    for pulse_index in range(PROTECTED_RECOVERY_MAX_ATTACK_PULSES):
         if _party_hp(emulator)[party_index] == 0:
             break
         raw = reader.read()
@@ -128,9 +146,14 @@ def protected_lead_recovery(
                 wait_frames=wait_frames,
             )
     else:
-        raise ProtectedRecoveryError(
-            f"Reserve did not absorb a bounded attack: party_hp={_party_hp(emulator)!r}."
+        _restore_lead_after_surviving_pivot(
+            actions,
+            reader,
+            emulator,
+            party_index,
+            wait_frames,
         )
+        return potion_spent
 
     for _ in range(24):
         if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) <= 2 and _menu_cursor_active(emulator):
@@ -149,6 +172,58 @@ def protected_lead_recovery(
             return potion_spent
         _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
     raise ProtectedRecoveryError("Protected recovery did not restore the lead battler.")
+
+
+def _restore_lead_after_surviving_pivot(
+    actions: ActionExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    party_index: int,
+    wait_frames: int,
+) -> None:
+    """Return a still-living reserve to the party after bounded recovery."""
+
+    for pulse_index in range(32):
+        raw = reader.read()
+        if raw.battle_state != 2:
+            raise ProtectedRecoveryError(
+                "Surviving recovery pivot left its trainer battle."
+            )
+        if reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN:
+            break
+        _pulse(
+            actions,
+            MacroActionKind.CANCEL if pulse_index % 4 == 3 else MacroActionKind.CONFIRM,
+            wait_frames=wait_frames,
+        )
+    else:
+        raise ProtectedRecoveryError("Surviving recovery pivot did not reach MAIN.")
+
+    _select_battle_main_command(actions, reader, 2, wait_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+    _select_cursor(actions, emulator, 0, wait_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+    for _ in range(32):
+        raw = reader.read()
+        if raw.battle_state != 2:
+            raise ProtectedRecoveryError(
+                "Battle ended while restoring the lead after a surviving pivot."
+            )
+        if _party_hp(emulator)[0] == 0:
+            raise ProtectedRecoveryError(
+                "Protected lead fainted while returning after a surviving pivot."
+            )
+        if (
+            emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) == 0
+            and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
+        ):
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+    raise ProtectedRecoveryError(
+        "Protected recovery did not switch back from its surviving reserve: "
+        f"party_index={party_index}, party_hp={_party_hp(emulator)!r}."
+    )
 
 
 def _select_battle_main_command(

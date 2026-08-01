@@ -177,14 +177,17 @@ bound respectively to the lead-attacker, speed-control, field-utility, special-s
 bulky-absorber, and physical-sweeper roles. Any substitution must record why it was made; the
 roster type rejects an unexplained one.
 
-Three consequences for the teaching route are outstanding and are not yet implemented:
+The first live integration now rotates the route's existing three members through bounded switch
+participation and reaches the Hall of Fame from clean power. Three consequences remain before that
+proof becomes the intended six-member teacher:
 
 1. Jolteon and Hitmonlee have no acquisition chapter.
 2. Route 12's Snorlax is currently defeated; the balanced roster requires catching it.
-3. Training blocks must select and rotate a trainee rather than assuming the lead is the target.
+3. The live training policy must raise its required party size from three to six and qualify the
+   resulting level floor and spread.
 
-Until those land, the recorded demonstrations still describe single-carry play, and any dataset
-card derived from them must say so.
+Existing recorded demonstrations still describe single-carry play because the new balanced
+lineage has not yet been collected. Any dataset card derived from those recordings must say so.
 
 ## What each learning stage needs
 

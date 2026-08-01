@@ -55,16 +55,22 @@ CHANNELER = (0xF5, 0x2D)
 ROCKET = (0xE6, 0x1E)
 MAROWAK = 0x91
 TOWER_FINAL_PARTY = (0x1C, PROTECTED_PARTY[1], PROTECTED_PARTY[2])
+DUGTRIO_SPECIES_ID = 0x76
+BALANCED_CORE_PARTIES = (
+    TOWER_FINAL_PARTY,
+    (TOWER_FINAL_PARTY[0], TOWER_FINAL_PARTY[1], DUGTRIO_SPECIES_ID),
+)
 
 
 def party_core_intact(
     observed: tuple[int, ...] | None,
-    core: tuple[int, ...] = TOWER_FINAL_PARTY,
+    core: tuple[int, ...] | None = None,
 ) -> bool:
     """Whether the qualified core party is still present, in order, at the front.
 
     The route's protected-party guard exists to catch a *lost* or *reordered*
-    member, an unexpected evolution, or a wiped party.  It was originally written
+    member, an unexpected species change, or a wiped party.  Diglett's planned
+    evolution into Dugtrio is the sole accepted core evolution. It was originally written
     as exact tuple equality, which also forbade the party ever growing—an
     accident of the single-carry route rather than a safety property.
 
@@ -74,9 +80,13 @@ def party_core_intact(
     reordered one still fails.
     """
 
-    if observed is None:
+    if not observed:
         return False
-    return tuple(observed[: len(core)]) == tuple(core)
+    candidates = BALANCED_CORE_PARTIES if core is None else (core,)
+    return any(
+        tuple(observed[: len(candidate)]) == tuple(candidate)
+        for candidate in candidates
+    )
 
 OPTIONAL_EVENTS = (
     EventFlag.BEAT_POKEMONTOWER_3_TRAINER_0,

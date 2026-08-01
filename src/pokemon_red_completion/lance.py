@@ -369,7 +369,9 @@ def run_lance_chapter(
                 boosts_used += 1
                 continue
             if isinstance(error.__cause__, _AerodactylPivotBoundary):
-                helper_index = _next_lance_helper(_party_hp(emulator))
+                helper_index = _next_lance_helper(
+                    _party_hp(emulator), _party_max_hp(emulator)
+                )
                 if helper_index is None:
                     # The trained lineage can reach Aerodactyl after both
                     # helpers have already absorbed earlier variance. Mark
@@ -423,7 +425,9 @@ def run_lance_chapter(
                     f"item={item.name}, bag={_bag(emulator)!r}, "
                     f"party_hp={_party_hp(emulator)!r}."
                 ) from error
-            helper_index = _next_lance_helper(_party_hp(emulator))
+            helper_index = _next_lance_helper(
+                _party_hp(emulator), _party_max_hp(emulator)
+            )
             if (
                 (raw.first_party_hp or 0) < _lance_recovery_threshold(raw)
                 and helper_index is not None
@@ -654,10 +658,21 @@ def _encounter_party(turns: Iterable[LanceTurn]) -> tuple[tuple[int, int], ...]:
     return tuple(result)
 
 
-def _next_lance_helper(party_hp: tuple[int, int, int]) -> int | None:
-    """Return the first living non-lead party slot available for recovery."""
+def _next_lance_helper(
+    party_hp: tuple[int, int, int],
+    party_max_hp: tuple[int, int, int] | None = None,
+) -> int | None:
+    """Return a living weak helper, never a trained teammate, for recovery."""
 
-    return next((index for index, hp in enumerate(party_hp[1:], start=1) if hp > 0), None)
+    return next(
+        (
+            index
+            for index, hp in enumerate(party_hp[1:], start=1)
+            if hp > 0
+            and (party_max_hp is None or party_max_hp[index] <= 100)
+        ),
+        None,
+    )
 
 
 def _lance_recovery_threshold(raw: RawGameState) -> int:

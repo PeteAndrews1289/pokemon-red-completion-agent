@@ -148,8 +148,10 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   persist the one-shot episode claim before emulator execution.
 - [x] Add a game-neutral six-member party observation contract, derived team metrics, and a
   reusable balanced-training policy, with a Red adapter binding the declared roster.
+- [x] Integrate bounded switch-participation training for the route's existing three-member party
+  and replay it from clean power through the Hall of Fame.
 - [ ] Add acquisition chapters for the unacquired roster members, catch the Route 12 Snorlax
-  instead of defeating it, and rotate training across the party rather than the lead.
+  instead of defeating it, and raise the live training contract from three members to six.
 - [ ] Replay the balanced-team route from clean power-on and qualify it against the completion
   contract.
 - [ ] Commit and push the exact source/configuration state, then successfully complete the 63/63
@@ -193,13 +195,13 @@ from exact teacher-required choices; future receipts report both separately beca
 accuracy is constraint compliance, not autonomous battle judgment. The recovery marker remains
 descriptive only and does not yet define a recovery learner's inputs or budget.
 
-Dataset quality now also depends on party composition. The qualified route completes the game with
-one overleveled lead, which makes most recorded battle labels trivially correct and teaches nothing
+Dataset quality now also depends on party composition. The historical recordings complete the game
+with one overleveled lead, which makes most battle labels trivially correct and teaches nothing
 about switching or matchup selection. The current branch adds a game-neutral six-member party
-contract, derived team metrics, and a reusable balanced-training policy so demonstrations can be
-collected from a team held within a five-level spread above a level-50 floor. That layer is
-unit-tested but has not run under the emulator; the single-carry route remains the qualified
-teacher and is preserved as route evidence. See the
+contract, derived team metrics, and a reusable balanced-training policy. Its first live
+clean-power integration rotates and trains the route's existing three-member party through the
+Hall of Fame; acquiring and qualifying the remaining three members is still outstanding. The
+single-carry lineage remains preserved as route evidence. See the
 [Project Narrative](project-narrative.md) for the reasoning and the outstanding route work.
 
 The protocol also requires a successful, non-counted 63/63 schedule rehearsal before slot `01`,

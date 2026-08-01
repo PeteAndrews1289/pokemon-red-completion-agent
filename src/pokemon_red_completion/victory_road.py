@@ -467,7 +467,13 @@ def run_victory_road_chapter(
         or not _event(rival_raw, EventFlag.BEAT_ROUTE_22_RIVAL_2ND_BATTLE)
         or _event(rival_raw, EventFlag.ROUTE_22_RIVAL_WANTS_BATTLE)
     ):
-        raise VictoryRoadChapterError("Route 22 rival evidence changed.")
+        raise VictoryRoadChapterError(
+            "Route 22 rival evidence changed: "
+            f"party={rival_party!r}, defeated="
+            f"{_event(rival_raw, EventFlag.BEAT_ROUTE_22_RIVAL_2ND_BATTLE)!r}, "
+            f"wants_battle="
+            f"{_event(rival_raw, EventFlag.ROUTE_22_RIVAL_WANTS_BATTLE)!r}."
+        )
     _checkpoint(
         records,
         progress,
@@ -861,6 +867,11 @@ def _defeat_route22_rival(
             and species not in pivoted_species
             and next_sacrifice < 3
         ):
+            # Preserve the observed opponent and intended move in the receipt
+            # before yielding to recovery. With a stronger reserve the pivot
+            # itself can end the battle, leaving no later MAIN-menu turn on
+            # which to record this final species.
+            policy(raw)
             raise _PivotBoundary
         heal_threshold = {
             0x95: 140,
@@ -1181,6 +1192,7 @@ def _battle_sacrifice(
     heal_lead: bool,
     healing_item: ItemId = ItemId.HYPER_POTION,
 ) -> bool:
+    before = _bag(emulator).get(healing_item, 0)
     try:
         return protected_lead_recovery(
             actions,
@@ -1188,10 +1200,25 @@ def _battle_sacrifice(
             emulator,
             party_index,
             heal_lead=heal_lead,
+            preserve_reserve=_party_max_hp(emulator)[party_index] > 100,
             healing_item=healing_item,
             wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
         )
     except ProtectedRecoveryError as error:
+        raw = reader.read()
+        spent = before - _bag(emulator).get(healing_item, 0)
+        # A stronger balanced party can finish the rival battle while the old
+        # single-carry route is still inside its bounded pivot sequence.  That
+        # is a successful terminal transition, not a recovery failure, but it
+        # is accepted only with the immutable rival-win flag, a surviving
+        # party member, and an exact zero-or-one item delta.
+        if (
+            raw.battle_state == 0
+            and _event(raw, EventFlag.BEAT_ROUTE_22_RIVAL_2ND_BATTLE)
+            and any(hp > 0 for hp in _party_hp(emulator))
+            and spent in (0, 1)
+        ):
+            return bool(spent)
         raise VictoryRoadChapterError(f"Route 22 protected recovery failed: {error}") from error
 
 

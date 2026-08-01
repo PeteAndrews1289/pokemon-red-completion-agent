@@ -48,15 +48,21 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
-from pokemon_red_completion.party import StatusCondition
+from pokemon_red_completion.party import PartyMemberObservation, StatusCondition
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
-from pokemon_red_completion.red_party import PokemonRedPartyReader
+from pokemon_red_completion.red_party import (
+    BLASTOISE_SPECIES_ID,
+    DUGTRIO_SPECIES_ID,
+    DUX_SPECIES_ID,
+    PokemonRedPartyReader,
+)
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
 from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
     BalancedTeamReport,
     TeamTrainingDirective,
     TeamTrainingProgress,
+    is_matchup_acceptable,
     plan_team_training,
     summarize_team_readiness,
 )
@@ -107,14 +113,49 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
     # discovering mid-battle that its last slot is Disabled.
     reserve_total_pp=16,
     max_enemy_level_delta=0,
-    max_battles=600,
-    max_steps=60_000,
-    max_healing_trips=80,
+    minimum_direct_level_advantage=8,
+    # A measured 900-battle run safely raised the three-member core above the
+    # level floor, but stopped at levels 60--69.  Keep the five-level contract
+    # strict and extend the bounded budget so the lagging members can finish
+    # closing that gap instead of weakening the definition of "balanced".
+    max_battles=1_200,
+    max_steps=120_000,
+    max_healing_trips=160,
     max_faints=0,
 )
 BATTLE_PARTY_MENU_COMMAND = 2
 PARTY_SUBMENU_SWITCH = 0
+BATTLE_COMMAND_COORDINATES = {
+    0: (0, 0),
+    1: (0, 1),
+    2: (1, 0),
+    3: (1, 1),
+}
+DIGLETT_SPECIES_ID = 0x3B
+CUT_MOVE_ID = 0x0F
+FLY_MOVE_ID = 0x13
 SURF_MOVE_ID = 0x39
+STRENGTH_MOVE_ID = 0x46
+FIELD_MOVE_IDS = frozenset(
+    {CUT_MOVE_ID, DIG, FLY_MOVE_ID, SURF_MOVE_ID, STRENGTH_MOVE_ID}
+)
+TRAINING_MOVE_IDS = {
+    BLASTOISE_SPECIES_ID: (SURF_MOVE_ID, 0x3A, STRENGTH_MOVE_ID, 0x82),
+    DUX_SPECIES_ID: (CUT_MOVE_ID, 0x40, FLY_MOVE_ID),
+    DIGLETT_SPECIES_ID: (DIG,),
+    DUGTRIO_SPECIES_ID: (DIG,),
+}
+RED_DIRECT_LEVEL_ADVANTAGE = {
+    DUX_SPECIES_ID: 15,
+    DIGLETT_SPECIES_ID: 8,
+    DUGTRIO_SPECIES_ID: 8,
+}
+TRAINING_ATTACK_PP_RESERVE = {
+    BLASTOISE_SPECIES_ID: 16,
+    DUX_SPECIES_ID: 6,
+    DIGLETT_SPECIES_ID: 2,
+    DUGTRIO_SPECIES_ID: 2,
+}
 MANSION_TRAINER_EVENTS = (
     EventFlag.BEAT_MANSION_1_TRAINER_0,
     EventFlag.BEAT_MANSION_2_TRAINER_0,
@@ -280,6 +321,8 @@ class BlaineChapterReport:
             )
             and self.training.passed
             and self.training.area_id == "pokemon_mansion_1f"
+            and self.team_readiness is not None
+            and self.team_readiness.passed
             and self.secret_key_quantity == 1
             and self.tm14_quantity == 1
             and self.quiz_answers == QUIZ_ANSWERS
@@ -962,10 +1005,61 @@ def _team_training_move_slot(state: RawGameState) -> int:
     """
 
     disabled = state.player_disabled_move_slot or 0
-    slots = tuple(
-        slot for slot in MANSION_TRAINING_POLICY.preferred_move_slots if slot != disabled
+    moves = state.battler_moves or ()
+    pp = state.battler_pp or ()
+    preferred_move_ids = TRAINING_MOVE_IDS.get(state.active_party_species_id or 0, ())
+    preferred_slots = tuple(
+        index + 1
+        for move_id in preferred_move_ids
+        for index, observed in enumerate(moves)
+        if observed == move_id and index + 1 != disabled
     )
-    return choose_training_move_slot(state.first_party_pp or (), slots)
+    fallback_slots = tuple(
+        slot
+        for slot in MANSION_TRAINING_POLICY.preferred_move_slots
+        if slot != disabled and slot not in preferred_slots
+    )
+    slots = preferred_slots if preferred_move_ids else fallback_slots
+    return choose_training_move_slot(pp, slots)
+
+
+def _training_attack_pp(member: PartyMemberObservation) -> int:
+    """Remaining PP on moves that can actually damage a training opponent."""
+
+    damaging = set(TRAINING_MOVE_IDS.get(member.species_id, ()))
+    if not damaging:
+        return member.total_pp
+    return sum(
+        move.current_pp for move in member.known_moves if move.move_id in damaging
+    )
+
+
+def _training_attack_pp_reserve(
+    member: PartyMemberObservation,
+    policy: BalancedTeamPolicy,
+) -> int:
+    """Keep a reserve proportional to the fighter's qualified damaging pool."""
+
+    return TRAINING_ATTACK_PP_RESERVE.get(
+        member.species_id,
+        policy.reserve_total_pp,
+    )
+
+
+def _red_training_matchup_acceptable(
+    trainee: PartyMemberObservation,
+    enemy_level: int | None,
+    policy: BalancedTeamPolicy,
+) -> bool:
+    """Apply Red-specific risk margins after the portable level gate."""
+
+    if not is_matchup_acceptable(trainee, enemy_level, policy):
+        return False
+    required_advantage = RED_DIRECT_LEVEL_ADVANTAGE.get(
+        trainee.species_id,
+        policy.minimum_direct_level_advantage,
+    )
+    return enemy_level is not None and trainee.level - enemy_level >= required_advantage
 
 
 def _run_mansion_team_balancing(
@@ -973,17 +1067,19 @@ def _run_mansion_team_balancing(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> tuple[object, int, int]:
-    """Raise the rest of the party toward the balance contract by switch training.
+    """Raise the party with safe participation followed by direct training.
 
-    This phase deliberately reports instead of raising when it runs out of
-    bounded effort.  The route has never trained anything but the lead, so the
-    real starting levels of the other members are unmeasured; failing the whole
-    chapter on the first attempt would destroy a working run to learn a number.
-    The returned receipt carries what was actually achieved.
+    The weakest member is moved to the front before an encounter. If the
+    matchup is above its safety ceiling, it switches out to Blastoise so the
+    incoming escort absorbs the opponent's turn while both receive experience.
+    Once the trainee can safely face the observed opponent, it fights directly
+    so the escort does not continue widening the level spread.
     """
 
     policy = MANSION_TEAM_POLICY
     party_reader = PokemonRedPartyReader(emulator)
+    if BLASTOISE_SPECIES_ID not in party_reader.read().species_ids():
+        raise BlaineChapterError("Team training lacks its qualified Blastoise escort.")
     battles = 0
     steps = 0
     healing_trips = 0
@@ -1005,31 +1101,56 @@ def _run_mansion_team_balancing(
             break
 
         raw = reader.read()
-        lead = party.lead
-        # The trainee only participates; the lead does the fighting, so the
-        # lead's own safety gates every engagement.  Checking only the trainee
-        # let a nearly-dead lead keep entering battles until it fainted.
-        lead_unsafe = (
-            lead is None
-            or lead.is_fainted
-            or lead.hp_ratio <= policy.retreat_hp_ratio
-            or lead.status is not StatusCondition.HEALTHY
-            or lead.total_pp <= policy.reserve_total_pp
+        escort = next(
+            (
+                member
+                for member in party.members
+                if member.species_id == BLASTOISE_SPECIES_ID
+            ),
+            None,
         )
-        if raw.battle_state == 1 and lead_unsafe:
-            _flee(actions, reader, emulator, flee_run, DEFAULT_CELADON_TIMING)
-            continue
+        if escort is None:
+            raise BlaineChapterError("Team training lost its Blastoise escort.")
+        escort_unsafe = (
+            escort.is_fainted
+            or escort.hp_ratio <= policy.retreat_hp_ratio
+            or escort.status is not StatusCondition.HEALTHY
+            or _training_attack_pp(escort)
+            <= _training_attack_pp_reserve(escort, policy)
+        )
         if raw.battle_state == 1:
             trainee = party.weakest_trainable_member
-            if (
-                trainee is not None
-                and trainee.slot != 1
-                and decision.directive is not TeamTrainingDirective.RESTORE_TEAM
-                and _switch_active_battler(
-                    actions, reader, emulator, target_index=trainee.slot - 1
+            if trainee is None or trainee.slot != 1:
+                raise BlaineChapterError(
+                    "A Mansion encounter began without the selected trainee in front."
                 )
-            ):
-                _switch_active_battler(actions, reader, emulator, target_index=0)
+            trainee_fights = (
+                _red_training_matchup_acceptable(trainee, raw.enemy_level, policy)
+                and _training_attack_pp(trainee)
+                > _training_attack_pp_reserve(trainee, policy)
+            )
+            fighter = trainee if trainee_fights else escort
+            fighter_unsafe = (
+                fighter.is_fainted
+                or fighter.hp_ratio <= policy.retreat_hp_ratio
+                or fighter.status is not StatusCondition.HEALTHY
+                or _training_attack_pp(fighter)
+                <= _training_attack_pp_reserve(fighter, policy)
+            )
+            if fighter_unsafe:
+                _flee(actions, reader, emulator, flee_run, DEFAULT_CELADON_TIMING)
+                continue
+            if not trainee_fights:
+                battle_continues = _switch_active_battler(
+                    actions,
+                    reader,
+                    emulator,
+                    target_index=escort.slot - 1,
+                    label="Blastoise escort",
+                )
+                if not battle_continues:
+                    battles += 1
+                    continue
             if reader.read().battle_state != 1:
                 continue
             run_adaptive_wild_battle(
@@ -1042,9 +1163,10 @@ def _run_mansion_team_balancing(
             battles += 1
             continue
 
-        if decision.directive is TeamTrainingDirective.RESTORE_TEAM or lead_unsafe:
+        if decision.directive is TeamTrainingDirective.RESTORE_TEAM or escort_unsafe:
             if healing_trips >= policy.max_healing_trips:
                 break
+            _restore_training_core_order(actions, reader, emulator)
             _training_dig_to_cinnabar(actions, reader, emulator)
             _move(actions, reader, ("up",), "team training Center entry")
             _require(reader.read(), MapId.CINNABAR_POKECENTER, (3, 7), "team training Center")
@@ -1071,6 +1193,19 @@ def _run_mansion_team_balancing(
             continue
         if raw.map_id != MapId.POKEMON_MANSION_1F:
             break
+        trainee = party.weakest_trainable_member
+        if trainee is None:
+            break
+        if trainee.slot != 1:
+            _swap_field_party_slots(
+                actions,
+                reader,
+                emulator,
+                first_index=0,
+                second_index=trainee.slot - 1,
+                label=f"place trainee slot {trainee.slot} in front",
+            )
+            continue
         direction = "down" if (raw.player_y or 0) <= 20 else "up"
         _pulse(actions, MacroActionKind.MOVE, direction, 240)
         steps += 1
@@ -1078,6 +1213,7 @@ def _run_mansion_team_balancing(
     # The chapter continues from the Cinnabar Center, so this phase has to hand
     # the player back there however its loop happened to end.
     if reader.read().map_id == MapId.POKEMON_MANSION_1F:
+        _restore_training_core_order(actions, reader, emulator)
         _training_dig_to_cinnabar(actions, reader, emulator)
         _move(actions, reader, ("up",), "team training final Center entry")
         _require(
@@ -1086,7 +1222,87 @@ def _run_mansion_team_balancing(
         _move(actions, reader, ("up",) * 4, "team training final nurse")
         _heal(actions, reader, emulator)
         healing_trips += 1
+    _restore_training_core_order(actions, reader, emulator)
     return summarize_team_readiness(party_reader.read(), policy), battles, healing_trips
+
+
+def _restore_training_core_order(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    """Restore the qualified core after temporary field training swaps."""
+
+    party_reader = PokemonRedPartyReader(emulator)
+    observed = party_reader.read().species_ids()
+    ground_member = (
+        DUGTRIO_SPECIES_ID
+        if DUGTRIO_SPECIES_ID in observed
+        else DIGLETT_SPECIES_ID
+    )
+    desired_core = (BLASTOISE_SPECIES_ID, DUX_SPECIES_ID, ground_member)
+    if any(species not in observed for species in desired_core):
+        raise BlaineChapterError(
+            f"Cannot restore the qualified training core from {observed!r}."
+        )
+    for target_index, species_id in enumerate(desired_core):
+        current = party_reader.read().species_ids()
+        if current[target_index] == species_id:
+            continue
+        source_index = current.index(species_id)
+        _swap_field_party_slots(
+            actions,
+            reader,
+            emulator,
+            first_index=source_index,
+            second_index=target_index,
+            label=f"restore core species {species_id:#04x}",
+        )
+
+
+def _swap_field_party_slots(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    *,
+    first_index: int,
+    second_index: int,
+    label: str,
+) -> None:
+    """Swap two field-party positions while proving the exact resulting order."""
+
+    party_reader = PokemonRedPartyReader(emulator)
+    before = party_reader.read()
+    if not 0 <= first_index < before.size or not 0 <= second_index < before.size:
+        raise BlaineChapterError(f"{label} requested an invalid party position.")
+    if first_index == second_index:
+        return
+    expected = list(before.species_ids())
+    expected[first_index], expected[second_index] = expected[second_index], expected[first_index]
+    selected = before.members[first_index]
+    field_move_count = sum(
+        move.move_id in FIELD_MOVE_IDS for move in selected.known_moves
+    )
+
+    _pulse(actions, MacroActionKind.OPEN_MENU)
+    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _select_cursor(actions, emulator, first_index, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(field_move_count + 1):
+        _pulse(actions, MacroActionKind.MOVE, "down", 120)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != field_move_count + 1:
+        raise BlaineChapterError(f"{label} could not select the field SWITCH command.")
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _select_cursor(actions, emulator, second_index, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _close(actions, reader)
+
+    observed = party_reader.read().species_ids()
+    if observed != tuple(expected):
+        raise BlaineChapterError(
+            f"{label} produced party order {observed!r}, expected {tuple(expected)!r}."
+        )
 
 
 def _switch_active_battler(
@@ -1095,30 +1311,59 @@ def _switch_active_battler(
     emulator: EmulatorState,
     *,
     target_index: int,
+    label: str,
 ) -> bool:
     """Send a different party member into the active wild battle.
 
-    Returns whether the switch completed.  Experience in this generation is
-    shared by every member that was sent out, so a trainee only has to appear
-    once per battle—it never has to land a hit.  That keeps move selection,
-    which reads the lead's slot, correct while still crediting the trainee.
+    Experience in this generation is shared by every member that was sent out,
+    so a trainee only has to appear once per battle—it never has to land a hit.
+    The transition fails closed with its exact menu stage so a missed switch
+    can never be counted as training evidence.
     """
 
     raw = reader.read()
-    menu = reader.read_battle_menu_state(raw)
-    if raw.battle_state != 1 or menu.phase is not BattleMenuPhase.MAIN:
-        return False
+    if not 0 <= target_index < len(raw.party_species_ids or ()) or raw.battle_state != 1:
+        raise BlaineChapterError(f"Cannot switch to {label} outside a live wild battle.")
+    for pulse in range(48):
+        raw = reader.read()
+        menu = reader.read_battle_menu_state(raw)
+        if raw.battle_state == 1 and menu.phase is BattleMenuPhase.MAIN:
+            break
+        if raw.battle_state == 0:
+            raise BlaineChapterError(f"Battle ended before switching to {label}.")
+        _pulse(
+            actions,
+            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
+    else:
+        raise BlaineChapterError(f"Battle menu did not settle before switching to {label}.")
     if emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) == target_index:
         return True
 
-    for _ in range(8):
-        command = reader.read_battle_menu_state(reader.read()).selected_main_command
-        if command == BATTLE_PARTY_MENU_COMMAND:
+    for pulse in range(16):
+        menu = reader.read_battle_menu_state(reader.read())
+        if (
+            menu.phase is BattleMenuPhase.MAIN
+            and menu.selected_main_command == BATTLE_PARTY_MENU_COMMAND
+        ):
             break
-        _pulse(actions, MacroActionKind.MOVE, "down" if command < 2 else "up", 120)
+        if menu.phase is not BattleMenuPhase.MAIN:
+            _pulse(
+                actions,
+                MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+                frames=120,
+            )
+            continue
+        direction = _battle_command_direction(
+            menu.selected_main_command, BATTLE_PARTY_MENU_COMMAND
+        )
+        if direction is None:
+            raise BlaineChapterError(f"Battle command cursor is invalid while selecting {label}.")
+        _pulse(actions, MacroActionKind.MOVE, direction, 120)
     else:
-        return False
-    _pulse(actions, MacroActionKind.CONFIRM, frames=180)
+        raise BlaineChapterError(f"Could not open the party menu for {label}.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
 
     for _ in range(8):
         cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
@@ -1126,23 +1371,63 @@ def _switch_active_battler(
             break
         _pulse(actions, MacroActionKind.MOVE, "down" if cursor < target_index else "up", 120)
     else:
-        return False
-    _pulse(actions, MacroActionKind.CONFIRM, frames=180)
-    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != PARTY_SUBMENU_SWITCH:
-        return False
+        raise BlaineChapterError(f"Could not select the party slot for {label}.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == PARTY_SUBMENU_SWITCH:
+            break
+        _pulse(actions, MacroActionKind.MOVE, "up", 120)
+    else:
+        raise BlaineChapterError(f"Could not select SWITCH for {label}.")
     _pulse(actions, MacroActionKind.CONFIRM, frames=240)
 
-    for _ in range(48):
+    for pulse in range(48):
         settled = reader.read()
+        menu = reader.read_battle_menu_state(settled)
         if (
             settled.battle_state == 1
+            and menu.phase is BattleMenuPhase.MAIN
             and emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) == target_index
         ):
             return True
+        party_hp = _party_hp(emulator)
+        if target_index < len(party_hp) and party_hp[target_index] == 0:
+            raise BlaineChapterError(f"{label.capitalize()} fainted during the switch.")
         if settled.battle_state == 0:
-            return False
-        _pulse(actions, MacroActionKind.CONFIRM, frames=120)
-    return False
+            for _ in range(48):
+                if reader.read_input_readiness().ready:
+                    return False
+                _pulse(actions, MacroActionKind.CONFIRM, frames=120)
+            raise BlaineChapterError(
+                f"Battle ended safely while switching to {label}, but field input did not settle."
+            )
+        _pulse(
+            actions,
+            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
+    raise BlaineChapterError(f"Switch to {label} did not return to the battle menu.")
+
+
+def _battle_command_direction(current: int | None, target: int) -> str | None:
+    """Return one D-pad step toward a command in Red's two-column battle menu."""
+
+    if current not in BATTLE_COMMAND_COORDINATES:
+        return None
+    if target not in BATTLE_COMMAND_COORDINATES:
+        return None
+    current_x, current_y = BATTLE_COMMAND_COORDINATES[current]
+    target_x, target_y = BATTLE_COMMAND_COORDINATES[target]
+    if current_x < target_x:
+        return "right"
+    if current_x > target_x:
+        return "left"
+    if current_y < target_y:
+        return "down"
+    if current_y > target_y:
+        return "up"
+    return None
 
 
 def _run_mansion_training(

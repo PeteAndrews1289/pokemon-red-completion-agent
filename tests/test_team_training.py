@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 import pytest
 
 from pokemon_red_completion.party import (
@@ -279,6 +281,13 @@ def test_matchup_selection_rejects_overmatched_and_unknown_opponents() -> None:
     assert not is_matchup_acceptable(member(1, 50, hp=40), 50, POLICY)
 
 
+def test_matchup_selection_can_require_a_direct_combat_level_margin() -> None:
+    cautious = replace(POLICY, minimum_direct_level_advantage=8)
+
+    assert is_matchup_acceptable(member(1, 38), 30, cautious)
+    assert not is_matchup_acceptable(member(1, 37), 30, cautious)
+
+
 def test_grinding_area_selection_prefers_the_fastest_safe_band() -> None:
     areas = (
         GrindingArea("slow_but_safe", 20, 24),
@@ -355,6 +364,7 @@ def test_empty_party_receipt_fails_every_gate() -> None:
         ("maximum_level_spread", -1, "maximum_level_spread"),
         ("required_size", 7, "required_size"),
         ("retreat_hp_ratio", 0.0, "retreat_hp_ratio"),
+        ("minimum_direct_level_advantage", -1, "minimum_direct_level_advantage"),
         ("max_faints", -1, "max_faints"),
     ),
 )

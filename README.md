@@ -37,6 +37,12 @@ control, and progressively trained specialists.**
 > In each run the lead trained from level 46 to 55 through 115 wild wins, 1,862 bounded encounter
 > steps, five healing trips, and zero faints; it reached Indigo at level 58 and the Hall of Fame at
 > level 61. This is still deterministic-teacher evidence, not a learned-policy claim.
+> The balanced-team curriculum branch now also completes a clean-power Hall-of-Fame run while
+> rotating the route's current three-member party through verified switch-participation and direct
+> training. Its 1,106 bounded battles and 99 healing trips produced a healthy level 65--70 team,
+> meeting the exact five-level spread contract in **17,136,283 frames** and **152,288 actions**.
+> This validates the training mechanism on Blastoise, DUX, and Dugtrio; catching Snorlax, acquiring
+> Jolteon and Hitmonlee, qualifying all six members, and training the learned policy remain open.
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
 > **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned

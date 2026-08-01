@@ -1438,6 +1438,38 @@ def test_policy_choice_requires_move_and_usable_pp_evidence(
     assert runtime.actions == []
 
 
+def test_policy_and_safety_gates_use_the_current_active_battler() -> None:
+    active = replace(
+        _raw(),
+        active_party_index=1,
+        active_party_hp=18,
+        active_party_max_hp=52,
+        active_party_status=0,
+        active_party_moves=(0, TAIL_WHIP_MOVE_ID, BUBBLE_MOVE_ID, WATER_GUN_MOVE_ID),
+        active_party_pp=(0, 30, 30, 11),
+    )
+    runtime = FakeRuntime(raw=active)
+
+    with pytest.raises(BattleRuntimeError, match="move evidence"):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda _raw: 1,
+            expected_map=MapId.CERULEAN_CITY,
+        )
+
+    assert runtime.actions == []
+
+    runtime = FakeRuntime(raw=replace(active, active_party_hp=0))
+    with pytest.raises(BattleRuntimeError, match="active battler fainted"):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda _raw: 2,
+            expected_map=MapId.CERULEAN_CITY,
+        )
+
+
 def test_attack_requires_persistent_pp_decrement() -> None:
     runtime = FakeRuntime()
 
@@ -1626,8 +1658,8 @@ def test_last_pp_can_be_spent_when_decrement_reaches_zero() -> None:
         (_raw(battle_state=1), "wild battle"),
         (_raw(battle_state=0), "must start"),
         (_raw(map_id=MapId.ROUTE_24), "left expected map"),
-        (_raw(hp=0), "party lead fainted"),
-        (_raw(party_count=0, hp=None), "lacks living party-lead evidence"),
+        (_raw(hp=0), "active battler fainted"),
+        (_raw(party_count=0, hp=None), "lacks living active-battler evidence"),
     ],
 )
 def test_initial_gate_fails_closed(
@@ -1652,7 +1684,7 @@ def test_initial_gate_fails_closed(
     [
         ({"battle_state": 1}, "wild battle"),
         ({"map_id": MapId.ROUTE_24}, "left expected map"),
-        ({"first_party_hp": 0}, "party lead fainted"),
+        ({"first_party_hp": 0}, "active battler fainted"),
     ],
 )
 def test_runtime_gate_rechecks_wild_map_and_hp_after_every_pulse(
@@ -1903,7 +1935,7 @@ def test_completion_rechecks_living_lead_before_returning() -> None:
         controls=READY,
     )
 
-    with pytest.raises(BattleRuntimeError, match="party lead fainted"):
+    with pytest.raises(BattleRuntimeError, match="active battler fainted"):
         run_adaptive_trainer_battle(
             runtime,
             runtime,

@@ -55,6 +55,7 @@ def test_lance_recovery_selects_any_living_helper() -> None:
     assert _next_lance_helper((80, 0, 39)) == 2
     assert _next_lance_helper((80, 25, 39)) == 1
     assert _next_lance_helper((80, 0, 0)) is None
+    assert _next_lance_helper((180, 120, 140), (220, 174, 158)) is None
 
 
 def test_lance_low_pp_finisher_requires_full_health() -> None:

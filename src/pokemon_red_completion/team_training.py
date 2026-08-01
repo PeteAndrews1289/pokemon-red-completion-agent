@@ -152,6 +152,7 @@ class BalancedTeamPolicy:
     retreat_hp_ratio: float = 0.45
     reserve_total_pp: int = 2
     max_enemy_level_delta: int = 4
+    minimum_direct_level_advantage: int = 0
     max_battles: int = 400
     max_steps: int = 40_000
     max_healing_trips: int = 40
@@ -169,6 +170,7 @@ class BalancedTeamPolicy:
         for name in (
             "reserve_total_pp",
             "max_enemy_level_delta",
+            "minimum_direct_level_advantage",
             "max_battles",
             "max_steps",
             "max_healing_trips",
@@ -435,7 +437,12 @@ def is_matchup_acceptable(
         return False
     if _member_is_unsafe(trainee, policy):
         return False
-    return enemy_level <= trainee.level + policy.max_enemy_level_delta
+    safety_ceiling = (
+        trainee.level - policy.minimum_direct_level_advantage
+        if policy.minimum_direct_level_advantage
+        else trainee.level + policy.max_enemy_level_delta
+    )
+    return enemy_level <= safety_ceiling
 
 
 def choose_grinding_area(

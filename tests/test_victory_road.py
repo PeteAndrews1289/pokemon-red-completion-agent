@@ -1,3 +1,10 @@
+import pytest
+
+import pokemon_red_completion.victory_road as victory_road
+from pokemon_red_completion.battle_recovery import (
+    PROTECTED_RECOVERY_MAX_ATTACK_PULSES,
+    ProtectedRecoveryError,
+)
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGameState
 from pokemon_red_completion.victory_road import (
     BADGE_CHECK_EVENTS,
@@ -25,10 +32,96 @@ from pokemon_red_completion.victory_road import (
     VR3_SOUTHEAST_TO_2F,
     VR3_SWITCH_TO_HOLE,
     RivalTurn,
+    VictoryRoadChapterError,
+    _battle_sacrifice,
     _encounter_party,
     _rival_moves_valid,
     _route22_rival_move_slot,
 )
+
+
+class _RecoveryReader:
+    def __init__(self, raw: RawGameState) -> None:
+        self.raw = raw
+
+    def read(self) -> RawGameState:
+        return self.raw
+
+
+def _raw_with_event(event: EventFlag) -> RawGameState:
+    flags = bytearray(int(event) // 8 + 1)
+    flags[int(event) // 8] |= 1 << (int(event) % 8)
+    return RawGameState(
+        game_started=True,
+        map_id=MapId.ROUTE_22,
+        player_x=30,
+        player_y=5,
+        party_count=3,
+        battle_state=0,
+        event_flags=bytes(flags),
+    )
+
+
+def _failed_recovery(*_args, **_kwargs):
+    raise ProtectedRecoveryError("Protected recovery left its trainer battle.")
+
+
+def test_route22_recovery_accepts_verified_battle_ending_pivot(monkeypatch) -> None:
+    quantities = iter((4, 3))
+    monkeypatch.setattr(
+        victory_road,
+        "_bag",
+        lambda _emulator: {ItemId.HYPER_POTION: next(quantities)},
+    )
+    monkeypatch.setattr(victory_road, "_party_hp", lambda _emulator: (120, 0, 90))
+    monkeypatch.setattr(victory_road, "_party_max_hp", lambda _emulator: (180, 60, 90))
+    monkeypatch.setattr(
+        victory_road,
+        "protected_lead_recovery",
+        _failed_recovery,
+    )
+
+    assert _battle_sacrifice(
+        object(),
+        _RecoveryReader(_raw_with_event(EventFlag.BEAT_ROUTE_22_RIVAL_2ND_BATTLE)),
+        object(),
+        1,
+        heal_lead=True,
+    )
+
+
+def test_route22_recovery_rejects_unverified_battle_exit(monkeypatch) -> None:
+    quantities = iter((4, 4))
+    monkeypatch.setattr(
+        victory_road,
+        "_bag",
+        lambda _emulator: {ItemId.HYPER_POTION: next(quantities)},
+    )
+    monkeypatch.setattr(victory_road, "_party_hp", lambda _emulator: (120, 0, 90))
+    monkeypatch.setattr(victory_road, "_party_max_hp", lambda _emulator: (180, 60, 90))
+    monkeypatch.setattr(victory_road, "protected_lead_recovery", _failed_recovery)
+    raw = _raw_with_event(EventFlag.BEAT_ROUTE_22_RIVAL_2ND_BATTLE)
+    flags = bytearray(raw.event_flags)
+    flags[int(EventFlag.BEAT_ROUTE_22_RIVAL_2ND_BATTLE) // 8] = 0
+
+    with pytest.raises(VictoryRoadChapterError, match="protected recovery failed"):
+        _battle_sacrifice(
+            object(),
+            _RecoveryReader(
+                RawGameState(
+                    game_started=True,
+                    map_id=MapId.ROUTE_22,
+                    player_x=30,
+                    player_y=5,
+                    party_count=3,
+                    battle_state=0,
+                    event_flags=bytes(flags),
+                )
+            ),
+            object(),
+            1,
+            heal_lead=True,
+        )
 
 
 def test_victory_road_routes_are_live_qualified() -> None:
@@ -50,6 +143,7 @@ def test_victory_road_routes_are_live_qualified() -> None:
     assert INDIGO_FULL_RESTORE_RESERVE == 10
     assert INDIGO_X_SPECIAL_RESERVE == 8
     assert INDIGO_X_SPECIAL_PURCHASE == 8
+    assert PROTECTED_RECOVERY_MAX_ATTACK_PULSES == 96
 
 
 def test_victory_road_source_ids_are_exact() -> None:

@@ -186,6 +186,50 @@ def test_reader_exposes_pinned_enemy_trapping_status() -> None:
     assert raw.enemy_using_trapping_move is True
 
 
+def test_reader_exposes_the_active_battler_without_overwriting_the_field_lead() -> None:
+    second_base = int(RamAddress.PARTY_MON_1) + 44
+    memory = RecordingMemory(
+        {
+            RamAddress.STATUS_FLAGS_6: 1,
+            RamAddress.IS_IN_BATTLE: 1,
+            RamAddress.PARTY_COUNT: 2,
+            RamAddress.PARTY_SPECIES: SQUIRTLE_SPECIES_ID,
+            int(RamAddress.PARTY_SPECIES) + 1: 0x40,
+            RamAddress.PARTY_MON_1: SQUIRTLE_SPECIES_ID,
+            RamAddress.PARTY_MON_1_LEVEL: 30,
+            RamAddress.PARTY_MON_1_HP: 0,
+            int(RamAddress.PARTY_MON_1_HP) + 1: 80,
+            RamAddress.PARTY_MON_1_MAX_HP: 0,
+            int(RamAddress.PARTY_MON_1_MAX_HP) + 1: 90,
+            RamAddress.PLAYER_MON_NUMBER: 1,
+            second_base: 0x40,
+            second_base + 1: 0,
+            second_base + 2: 42,
+            second_base + 4: 0x40,
+            second_base + 8: 0x40,
+            second_base + 9: 0x1C,
+            second_base + 29: 20,
+            second_base + 30: 15,
+            second_base + 33: 20,
+            second_base + 34: 0,
+            second_base + 35: 52,
+        }
+    )
+
+    raw = PokemonRedStateReader(memory).read()
+
+    assert raw.first_party_level == 30
+    assert raw.first_party_hp == 80
+    assert raw.active_party_index == 1
+    assert raw.active_party_species_id == 0x40
+    assert raw.battler_level == 20
+    assert raw.battler_hp == 42
+    assert raw.battler_max_hp == 52
+    assert raw.battler_status == 0x40
+    assert raw.battler_moves == (0x40, 0x1C, 0, 0)
+    assert raw.battler_pp == (20, 15, 0, 0)
+
+
 def test_reader_translates_the_stable_pokedex_gate_from_pinned_symbols() -> None:
     events = _events(
         EventFlag.BATTLED_RIVAL_IN_OAKS_LAB,

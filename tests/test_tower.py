@@ -264,6 +264,7 @@ def test_party_core_intact_allows_the_balanced_roster_to_recruit() -> None:
 
     assert party_core_intact((*TOWER_FINAL_PARTY, 0x84))
     assert party_core_intact((*TOWER_FINAL_PARTY, 0x84, 0x68, 0x2B))
+    assert party_core_intact((TOWER_FINAL_PARTY[0], TOWER_FINAL_PARTY[1], 0x76))
     # growth still cannot hide damage to the core
     assert not party_core_intact((TOWER_FINAL_PARTY[0], 0x84, TOWER_FINAL_PARTY[2]))
 

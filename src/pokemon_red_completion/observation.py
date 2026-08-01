@@ -805,6 +805,14 @@ MAX_BATTLE_COMMAND = 3
 MIN_MOVE_MENU_SLOT = 1
 MAX_MOVE_MENU_SLOT = 4
 PARTY_LIMIT = 6
+PARTY_STRUCT_STRIDE = 44
+PARTY_SPECIES_OFFSET = 0
+PARTY_HP_OFFSET = 1
+PARTY_STATUS_OFFSET = 4
+PARTY_MOVES_OFFSET = 8
+PARTY_PP_OFFSET = 29
+PARTY_LEVEL_OFFSET = 33
+PARTY_MAX_HP_OFFSET = 34
 MAX_BAG_ITEMS = 20
 EVENT_FLAGS_END = 0xD886
 EVENT_FLAG_BYTES = EVENT_FLAGS_END - int(RamAddress.EVENT_FLAGS)
@@ -841,6 +849,58 @@ class RawGameState:
     player_disabled_move_slot: int | None = None
     player_disable_turns: int | None = None
     enemy_using_trapping_move: bool | None = None
+    active_party_index: int | None = None
+    active_party_species_id: int | None = None
+    active_party_level: int | None = None
+    active_party_hp: int | None = None
+    active_party_max_hp: int | None = None
+    active_party_status: int | None = None
+    active_party_moves: tuple[int, ...] | None = None
+    active_party_pp: tuple[int, ...] | None = None
+
+    @property
+    def battler_level(self) -> int | None:
+        """The active battler's level, falling back to the field lead."""
+
+        return self.active_party_level or self.first_party_level
+
+    @property
+    def battler_hp(self) -> int | None:
+        """The active battler's HP, falling back to the field lead."""
+
+        return self.active_party_hp if self.active_party_hp is not None else self.first_party_hp
+
+    @property
+    def battler_max_hp(self) -> int | None:
+        """The active battler's maximum HP, falling back to the field lead."""
+
+        return (
+            self.active_party_max_hp
+            if self.active_party_max_hp is not None
+            else self.first_party_max_hp
+        )
+
+    @property
+    def battler_status(self) -> int | None:
+        """The active battler's persistent status, falling back to the field lead."""
+
+        return (
+            self.active_party_status
+            if self.active_party_status is not None
+            else self.first_party_status
+        )
+
+    @property
+    def battler_moves(self) -> tuple[int, ...] | None:
+        """The active battler's moves, falling back to the field lead."""
+
+        return self.active_party_moves or self.first_party_moves
+
+    @property
+    def battler_pp(self) -> tuple[int, ...] | None:
+        """The active battler's PP, falling back to the field lead."""
+
+        return self.active_party_pp or self.first_party_pp
 
 
 @dataclass(frozen=True, slots=True)
@@ -3116,11 +3176,46 @@ class PokemonRedStateReader:
             if party_count
             else None
         )
+        battle_state = self._memory.read_u8(RamAddress.IS_IN_BATTLE)
+        active_party_index = (
+            self._memory.read_u8(RamAddress.PLAYER_MON_NUMBER) if battle_state else None
+        )
+        if (
+            active_party_index is not None
+            and 0 <= active_party_index < party_count
+        ):
+            active_base = (
+                int(RamAddress.PARTY_MON_1)
+                + active_party_index * PARTY_STRUCT_STRIDE
+            )
+            active_party_species_id = self._memory.read_u8(
+                active_base + PARTY_SPECIES_OFFSET
+            )
+            active_party_level = self._memory.read_u8(active_base + PARTY_LEVEL_OFFSET)
+            active_party_hp = self._read_u16_be(active_base + PARTY_HP_OFFSET)
+            active_party_max_hp = self._read_u16_be(active_base + PARTY_MAX_HP_OFFSET)
+            active_party_status = self._memory.read_u8(active_base + PARTY_STATUS_OFFSET)
+            active_party_moves = tuple(
+                self._memory.read_u8(active_base + PARTY_MOVES_OFFSET + index)
+                for index in range(4)
+            )
+            active_party_pp = tuple(
+                self._memory.read_u8(active_base + PARTY_PP_OFFSET + index)
+                for index in range(4)
+            )
+        else:
+            active_party_index = None
+            active_party_species_id = None
+            active_party_level = None
+            active_party_hp = None
+            active_party_max_hp = None
+            active_party_status = None
+            active_party_moves = None
+            active_party_pp = None
         events = bytes(
             self._memory.read_u8(int(RamAddress.EVENT_FLAGS) + index)
             for index in range(EVENT_FLAG_BYTES)
         )
-        battle_state = self._memory.read_u8(RamAddress.IS_IN_BATTLE)
         disabled_move = (
             self._memory.read_u8(RamAddress.PLAYER_DISABLED_MOVE) if battle_state else 0
         )
@@ -3165,6 +3260,14 @@ class PokemonRedStateReader:
                 if battle_state
                 else None
             ),
+            active_party_index=active_party_index,
+            active_party_species_id=active_party_species_id,
+            active_party_level=active_party_level,
+            active_party_hp=active_party_hp,
+            active_party_max_hp=active_party_max_hp,
+            active_party_status=active_party_status,
+            active_party_moves=active_party_moves,
+            active_party_pp=active_party_pp,
         )
 
     def read_bedroom_input_state(self) -> BedroomInputState:

@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 from pokemon_red_completion.blaine import (
     BLAINE_ANTIDOTE_SALE_VALUE,
     BLAINE_CAPACITY_SALE_ITEM,
@@ -21,10 +23,16 @@ from pokemon_red_completion.blaine import (
     QUIZ_ANSWERS,
     QUIZ_TEXT_PULSES,
     BlaineTurn,
+    _battle_command_direction,
     _encounter_party,
+    _red_training_matchup_acceptable,
     _sell_antidote_before_mansion,
+    _team_training_move_slot,
+    _training_attack_pp_reserve,
 )
-from pokemon_red_completion.observation import EventFlag, ItemId, MapId
+from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGameState
+from pokemon_red_completion.party import MoveObservation, PartyMemberObservation
+from pokemon_red_completion.team_training import BalancedTeamPolicy
 
 
 def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
@@ -60,6 +68,66 @@ def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -
     assert not _sell_antidote_before_mansion(18, 1)
     assert not _sell_antidote_before_mansion(18, 2)
     assert _sell_antidote_before_mansion(19, 1)
+
+
+def test_team_training_navigates_the_two_column_battle_menu() -> None:
+    assert _battle_command_direction(0, 2) == "right"
+    assert _battle_command_direction(1, 2) == "right"
+    assert _battle_command_direction(3, 2) == "up"
+    assert _battle_command_direction(2, 2) is None
+    assert _battle_command_direction(None, 2) is None
+
+
+def test_team_training_selects_damaging_moves_for_the_active_species() -> None:
+    base = RawGameState(True, MapId.POKEMON_MANSION_1F, 5, 20, 3, 1)
+
+    assert _team_training_move_slot(
+        replace(
+            base,
+            active_party_species_id=0x1C,
+            active_party_moves=(0x82, 0x46, 0x3A, 0x39),
+            active_party_pp=(15, 15, 10, 15),
+        )
+    ) == 4
+    assert _team_training_move_slot(
+        replace(
+            base,
+            active_party_species_id=0x40,
+            active_party_moves=(0x40, 0x1C, 0x0F, 0x13),
+            active_party_pp=(35, 15, 30, 15),
+        )
+    ) == 3
+    assert _team_training_move_slot(
+        replace(
+            base,
+            active_party_species_id=0x3B,
+            active_party_moves=(0x0A, 0x2D, 0x5B, 0x1C),
+            active_party_pp=(35, 40, 10, 15),
+        )
+    ) == 3
+
+
+def test_red_training_matchup_requires_extra_margin_for_dux() -> None:
+    dux = PartyMemberObservation(
+        slot=1,
+        species_id=0x40,
+        level=45,
+        hp=100,
+        max_hp=100,
+        moves=(MoveObservation(0x0F, 30),),
+    )
+    policy = BalancedTeamPolicy(
+        required_size=3,
+        max_enemy_level_delta=0,
+        minimum_direct_level_advantage=8,
+    )
+
+    assert _red_training_matchup_acceptable(dux, 30, policy)
+    assert not _red_training_matchup_acceptable(dux, 31, policy)
+    assert _training_attack_pp_reserve(dux, policy) == 6
+
+    dugtrio = replace(dux, species_id=0x76, moves=(MoveObservation(0x5B, 10),))
+    assert _training_attack_pp_reserve(dugtrio, policy) == 2
 
 
 def test_blaine_source_ids_are_exact() -> None:
