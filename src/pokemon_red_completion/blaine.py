@@ -40,6 +40,7 @@ from pokemon_red_completion.lavender import (
 )
 from pokemon_red_completion.observation import (
     Badge,
+    BattleMenuPhase,
     EventFlag,
     ItemId,
     MapId,
@@ -47,8 +48,18 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.party import StatusCondition
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+from pokemon_red_completion.red_party import PokemonRedPartyReader
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
+from pokemon_red_completion.team_training import (
+    BalancedTeamPolicy,
+    BalancedTeamReport,
+    TeamTrainingDirective,
+    TeamTrainingProgress,
+    plan_team_training,
+    summarize_team_readiness,
+)
 from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.training import (
     TrainingDirective,
@@ -79,6 +90,30 @@ MANSION_TRAINING_POLICY = TrainingPolicy(
     max_steps=15_000,
     max_healing_trips=24,
 )
+#: Balance contract for the Mansion block.
+#:
+#: ``required_size`` tracks the party the current route actually assembles, not
+#: the six-member roster, so the policy trains what is present instead of asking
+#: to recruit members no chapter obtains yet.  Raise it as acquisition chapters
+#: land.
+MANSION_TEAM_POLICY = BalancedTeamPolicy(
+    minimum_level=50,
+    maximum_level_spread=5,
+    required_size=3,
+    retreat_hp_ratio=0.55,
+    # The lead-only block reserved 2 PP because it ran barely a hundred battles
+    # at an overwhelming level advantage.  Team training runs far longer, so it
+    # returns to heal with a real margin instead of fighting to exhaustion and
+    # discovering mid-battle that its last slot is Disabled.
+    reserve_total_pp=16,
+    max_enemy_level_delta=0,
+    max_battles=600,
+    max_steps=60_000,
+    max_healing_trips=80,
+    max_faints=0,
+)
+BATTLE_PARTY_MENU_COMMAND = 2
+PARTY_SUBMENU_SWITCH = 0
 SURF_MOVE_ID = 0x39
 MANSION_TRAINER_EVENTS = (
     EventFlag.BEAT_MANSION_1_TRAINER_0,
@@ -224,6 +259,9 @@ class BlaineChapterReport:
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    team_readiness: BalancedTeamReport | None = None
+    team_training_battles: int = 0
+    team_training_healing_trips: int = 0
 
     @property
     def passed(self) -> bool:
@@ -305,6 +343,23 @@ class BlaineChapterReport:
                 ],
                 "secret_key": self.secret_key_quantity,
                 "tm14_blizzard": self.tm14_quantity,
+                "team_balance": {
+                    "minimum_level": (
+                        self.team_readiness.observed_minimum_level
+                        if self.team_readiness
+                        else None
+                    ),
+                    "level_spread": (
+                        self.team_readiness.observed_level_spread
+                        if self.team_readiness
+                        else None
+                    ),
+                    "passed": (
+                        self.team_readiness.passed if self.team_readiness else None
+                    ),
+                    "battles": self.team_training_battles,
+                    "healing_trips": self.team_training_healing_trips,
+                },
                 "training": {
                     "area": self.training.area_id,
                     "levels": [self.training.starting_level, self.training.final_level],
@@ -523,6 +578,10 @@ def run_blaine_chapter(
         "Trained safely in Pokémon Mansion",
     )
 
+    team_readiness, team_battles, team_healing_trips = _run_mansion_team_balancing(
+        actions, reader, emulator
+    )
+
     _move(actions, reader, ("down",) * 5 + GYM_ENTRY_ROUTE, "Cinnabar Gym")
     _require(reader.read(), MapId.CINNABAR_GYM, (16, 17), "Cinnabar Gym entrance")
     gym_before = _events(emulator, GYM_TRAINER_EVENTS)
@@ -669,6 +728,9 @@ def run_blaine_chapter(
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,
         controller_released=not emulator.pressed_buttons,
+        team_readiness=team_readiness,
+        team_training_battles=team_battles,
+        team_training_healing_trips=team_healing_trips,
     )
     if not report.passed:
         raise BlaineChapterError(f"Blaine terminal evidence failed: {report!r}.")
@@ -889,6 +951,198 @@ def _training_dig_to_cinnabar(
         _require(destination, MapId.SAFFRON_CITY, (9, 30), "training Dig fallback")
         _field_fly_to_cinnabar(actions, reader, emulator)
     _require(reader.read(), MapId.CINNABAR_ISLAND, (11, 12), "training Dig return")
+
+
+def _team_training_move_slot(state: RawGameState) -> int:
+    """Pick a training move, skipping any slot the opponent has Disabled.
+
+    The lead-only block was short enough never to meet Disable.  Team training
+    runs many more encounters, so the fallback slot can be locked out; treating
+    a disabled slot as available made the battle runtime reject the choice.
+    """
+
+    disabled = state.player_disabled_move_slot or 0
+    slots = tuple(
+        slot for slot in MANSION_TRAINING_POLICY.preferred_move_slots if slot != disabled
+    )
+    return choose_training_move_slot(state.first_party_pp or (), slots)
+
+
+def _run_mansion_team_balancing(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> tuple[object, int, int]:
+    """Raise the rest of the party toward the balance contract by switch training.
+
+    This phase deliberately reports instead of raising when it runs out of
+    bounded effort.  The route has never trained anything but the lead, so the
+    real starting levels of the other members are unmeasured; failing the whole
+    chapter on the first attempt would destroy a working run to learn a number.
+    The returned receipt carries what was actually achieved.
+    """
+
+    policy = MANSION_TEAM_POLICY
+    party_reader = PokemonRedPartyReader(emulator)
+    battles = 0
+    steps = 0
+    healing_trips = 0
+    flee_run = _RunState([])
+
+    while True:
+        party = party_reader.read()
+        progress = TeamTrainingProgress(
+            battles_completed=battles,
+            steps_taken=steps,
+            healing_trips=healing_trips,
+            faints=party.fainted_count,
+        )
+        decision = plan_team_training(party, policy, progress)
+        if decision.directive in {
+            TeamTrainingDirective.STOP,
+            TeamTrainingDirective.RECRUIT_MEMBER,
+        }:
+            break
+
+        raw = reader.read()
+        lead = party.lead
+        # The trainee only participates; the lead does the fighting, so the
+        # lead's own safety gates every engagement.  Checking only the trainee
+        # let a nearly-dead lead keep entering battles until it fainted.
+        lead_unsafe = (
+            lead is None
+            or lead.is_fainted
+            or lead.hp_ratio <= policy.retreat_hp_ratio
+            or lead.status is not StatusCondition.HEALTHY
+            or lead.total_pp <= policy.reserve_total_pp
+        )
+        if raw.battle_state == 1 and lead_unsafe:
+            _flee(actions, reader, emulator, flee_run, DEFAULT_CELADON_TIMING)
+            continue
+        if raw.battle_state == 1:
+            trainee = party.weakest_trainable_member
+            if (
+                trainee is not None
+                and trainee.slot != 1
+                and decision.directive is not TeamTrainingDirective.RESTORE_TEAM
+                and _switch_active_battler(
+                    actions, reader, emulator, target_index=trainee.slot - 1
+                )
+            ):
+                _switch_active_battler(actions, reader, emulator, target_index=0)
+            if reader.read().battle_state != 1:
+                continue
+            run_adaptive_wild_battle(
+                reader,
+                actions,
+                _team_training_move_slot,
+                expected_map=MapId.POKEMON_MANSION_1F,
+                label="Pokémon Mansion team training encounter",
+            )
+            battles += 1
+            continue
+
+        if decision.directive is TeamTrainingDirective.RESTORE_TEAM or lead_unsafe:
+            if healing_trips >= policy.max_healing_trips:
+                break
+            _training_dig_to_cinnabar(actions, reader, emulator)
+            _move(actions, reader, ("up",), "team training Center entry")
+            _require(reader.read(), MapId.CINNABAR_POKECENTER, (3, 7), "team training Center")
+            _move(actions, reader, ("up",) * 4, "team training nurse")
+            _heal(actions, reader, emulator)
+            healing_trips += 1
+            _move(actions, reader, CENTER_TO_MANSION, "team training return")
+            _require(
+                reader.read(),
+                MapId.POKEMON_MANSION_1F,
+                (5, 27),
+                "team training Mansion entrance",
+            )
+            continue
+
+        if raw.map_id == MapId.CINNABAR_POKECENTER:
+            _move(actions, reader, CENTER_TO_MANSION, "team training first Mansion trip")
+            _require(
+                reader.read(),
+                MapId.POKEMON_MANSION_1F,
+                (5, 27),
+                "team training Mansion entrance",
+            )
+            continue
+        if raw.map_id != MapId.POKEMON_MANSION_1F:
+            break
+        direction = "down" if (raw.player_y or 0) <= 20 else "up"
+        _pulse(actions, MacroActionKind.MOVE, direction, 240)
+        steps += 1
+
+    # The chapter continues from the Cinnabar Center, so this phase has to hand
+    # the player back there however its loop happened to end.
+    if reader.read().map_id == MapId.POKEMON_MANSION_1F:
+        _training_dig_to_cinnabar(actions, reader, emulator)
+        _move(actions, reader, ("up",), "team training final Center entry")
+        _require(
+            reader.read(), MapId.CINNABAR_POKECENTER, (3, 7), "team training final Center"
+        )
+        _move(actions, reader, ("up",) * 4, "team training final nurse")
+        _heal(actions, reader, emulator)
+        healing_trips += 1
+    return summarize_team_readiness(party_reader.read(), policy), battles, healing_trips
+
+
+def _switch_active_battler(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    *,
+    target_index: int,
+) -> bool:
+    """Send a different party member into the active wild battle.
+
+    Returns whether the switch completed.  Experience in this generation is
+    shared by every member that was sent out, so a trainee only has to appear
+    once per battle—it never has to land a hit.  That keeps move selection,
+    which reads the lead's slot, correct while still crediting the trainee.
+    """
+
+    raw = reader.read()
+    menu = reader.read_battle_menu_state(raw)
+    if raw.battle_state != 1 or menu.phase is not BattleMenuPhase.MAIN:
+        return False
+    if emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) == target_index:
+        return True
+
+    for _ in range(8):
+        command = reader.read_battle_menu_state(reader.read()).selected_main_command
+        if command == BATTLE_PARTY_MENU_COMMAND:
+            break
+        _pulse(actions, MacroActionKind.MOVE, "down" if command < 2 else "up", 120)
+    else:
+        return False
+    _pulse(actions, MacroActionKind.CONFIRM, frames=180)
+
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == target_index:
+            break
+        _pulse(actions, MacroActionKind.MOVE, "down" if cursor < target_index else "up", 120)
+    else:
+        return False
+    _pulse(actions, MacroActionKind.CONFIRM, frames=180)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != PARTY_SUBMENU_SWITCH:
+        return False
+    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+
+    for _ in range(48):
+        settled = reader.read()
+        if (
+            settled.battle_state == 1
+            and emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) == target_index
+        ):
+            return True
+        if settled.battle_state == 0:
+            return False
+        _pulse(actions, MacroActionKind.CONFIRM, frames=120)
+    return False
 
 
 def _run_mansion_training(
