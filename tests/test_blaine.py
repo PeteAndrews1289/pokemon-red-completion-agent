@@ -21,8 +21,8 @@ from pokemon_red_completion.blaine import (
     QUIZ_ANSWERS,
     QUIZ_TEXT_PULSES,
     BlaineTurn,
-    _blaine_antidote_capacity_plan,
     _encounter_party,
+    _sell_antidote_before_mansion,
 )
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId
 
@@ -56,9 +56,10 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
 
 
 def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -> None:
-    assert _blaine_antidote_capacity_plan(18, 0) == (False, False)
-    assert _blaine_antidote_capacity_plan(18, 1) == (False, True)
-    assert _blaine_antidote_capacity_plan(19, 1) == (True, False)
+    assert not _sell_antidote_before_mansion(18, 0)
+    assert not _sell_antidote_before_mansion(18, 1)
+    assert not _sell_antidote_before_mansion(18, 2)
+    assert _sell_antidote_before_mansion(19, 1)
 
 
 def test_blaine_source_ids_are_exact() -> None:

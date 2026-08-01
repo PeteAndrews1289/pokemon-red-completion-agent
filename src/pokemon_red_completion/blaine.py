@@ -392,7 +392,7 @@ def run_blaine_chapter(
         <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]
         or initial_bag.get(ItemId.X_ACCURACY, 0) != 1
         or initial_bag.get(ItemId.TM34_BIDE, 0) != 1
-        or initial_bag.get(ItemId.ANTIDOTE, 0) not in (0, 1)
+        or initial_bag.get(ItemId.ANTIDOTE, 0) not in (0, 1, 2)
     ):
         raise BlaineChapterError("Cinnabar input inventory lacks the qualified capacity items.")
     mansion_before = _events(emulator, MANSION_TRAINER_EVENTS)
@@ -407,7 +407,7 @@ def run_blaine_chapter(
     _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart entry")
     _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
-    sell_antidote_early, sell_antidote_late = _blaine_antidote_capacity_plan(
+    sell_antidote_early = _sell_antidote_before_mansion(
         len(initial_bag),
         initial_bag.get(ItemId.ANTIDOTE, 0),
     )
@@ -612,11 +612,6 @@ def run_blaine_chapter(
     _sell_current_bag_item(actions, reader, emulator, ItemId.TM34_BIDE)
     if _bag(emulator).get(ItemId.TM34_BIDE, 0):
         raise BlaineChapterError("TM34 Bide sale did not settle.")
-    if sell_antidote_late:
-        _close(actions, reader)
-        _sell_current_bag_item(actions, reader, emulator, BLAINE_CAPACITY_SALE_ITEM)
-        if _bag(emulator).get(BLAINE_CAPACITY_SALE_ITEM, 0):
-            raise BlaineChapterError("Deferred Antidote sale did not settle.")
     _close(actions, reader)
     _move(actions, reader, MART_TO_GYM, "Mart to Cinnabar Gym")
     _require(reader.read(), MapId.CINNABAR_GYM, (16, 16), "Gym reward return")
@@ -664,7 +659,7 @@ def run_blaine_chapter(
         tm38_quantity=_bag(emulator).get(ItemId.TM38_FIRE_BLAST, 0),
         x_accuracy_retained=_bag(emulator).get(ItemId.X_ACCURACY, 0) == 1,
         bide_sold=ItemId.TM34_BIDE not in _bag(emulator),
-        antidote_sold=(sell_antidote_early or sell_antidote_late),
+        antidote_sold=sell_antidote_early,
         max_repel_bought=1,
         initial_money=initial_money,
         money_remaining=_money(emulator),
@@ -709,20 +704,22 @@ def _open_sell_menu(actions, emulator) -> None:
     _pulse(actions, MacroActionKind.CONFIRM)
 
 
-def _blaine_antidote_capacity_plan(
+def _sell_antidote_before_mansion(
     input_slots: int,
     antidote_quantity: int,
-) -> tuple[bool, bool]:
-    """Return whether to sell the optional Antidote before or after Blaine."""
+) -> bool:
+    """Sell the Antidote only when the 19-slot lineage needs one free slot."""
 
     if not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= input_slots <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]:
         raise BlaineChapterError(f"Unsupported Blaine input capacity: {input_slots} slots.")
-    if antidote_quantity not in (0, 1) or (input_slots == 19 and antidote_quantity != 1):
+    if antidote_quantity not in (0, 1, 2) or (
+        input_slots == 19 and antidote_quantity != 1
+    ):
         raise BlaineChapterError(
             "Unsupported Blaine Antidote capacity: "
             f"slots={input_slots}, quantity={antidote_quantity}."
         )
-    return input_slots == 19, input_slots == 18 and antidote_quantity == 1
+    return input_slots == 19
 
 
 def _buy_repel(actions, reader, emulator) -> None:
