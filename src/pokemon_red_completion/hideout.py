@@ -8,6 +8,11 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import (
+    ProtectedRecoveryError,
+    first_living_reserve,
+    protected_lead_recovery,
+)
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleResourcePolicy,
@@ -616,7 +621,7 @@ def _run_hideout_giovanni_with_recovery(
     move_slot: int,
     battle_plan_id: str,
 ) -> RawGameState:
-    """Use ranked legal attacks and one bounded recovery policy against Giovanni."""
+    """Use ranked legal attacks and bounded, protected recovery against Giovanni."""
 
     starting_reserve = _bag(emulator).get(ItemId.SUPER_POTION, 0)
     must_attack_after_recovery = False
@@ -674,6 +679,25 @@ def _run_hideout_giovanni_with_recovery(
                     f"hp={failed.first_party_hp}/{failed.first_party_max_hp}, "
                     f"recoveries={recoveries}."
                 ) from error
+        helper_index = first_living_reserve(_party_hp(emulator))
+        if helper_index is not None:
+            try:
+                potion_spent = protected_lead_recovery(
+                    actions,
+                    reader,
+                    emulator,
+                    helper_index,
+                    heal_lead=True,
+                    healing_item=ItemId.SUPER_POTION,
+                    wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
+                )
+            except ProtectedRecoveryError as error:
+                raise HideoutChapterError(
+                    f"Giovanni protected recovery failed with party slot {helper_index}."
+                ) from error
+            recoveries += int(potion_spent)
+            continue
+
         _use_battle_super_potion(
             reader,
             actions,

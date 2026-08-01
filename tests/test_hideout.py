@@ -4,6 +4,7 @@ from dataclasses import fields, replace
 
 import pytest
 
+from pokemon_red_completion.battle_recovery import first_living_reserve
 from pokemon_red_completion.hideout import (
     DEFAULT_HIDEOUT_TIMING,
     HIDEOUT_CHECKPOINT_COUNT,
@@ -78,6 +79,13 @@ def test_hideout_timing_is_positive_and_bounded() -> None:
         and getattr(DEFAULT_HIDEOUT_TIMING, field.name) > 0
         for field in fields(HideoutTiming)
     )
+
+
+def test_protected_recovery_selects_only_a_living_non_lead_party_member() -> None:
+    assert first_living_reserve((40, 52, 37)) == 1
+    assert first_living_reserve((40, 0, 37)) == 2
+    assert first_living_reserve((40, 0, 0)) is None
+    assert first_living_reserve((40,)) is None
 
 
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))

@@ -13,6 +13,13 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import (
+    ProtectedRecoveryError,
+    protected_lead_recovery,
+)
+from pokemon_red_completion.battle_recovery import (
+    _select_battle_main_command as _select_shared_battle_main_command,
+)
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleResourcePolicy,
@@ -42,7 +49,6 @@ from pokemon_red_completion.lavender import (
     _use_bag_item,
 )
 from pokemon_red_completion.observation import (
-    BattleMenuPhase,
     EventFlag,
     ItemId,
     MapId,
@@ -1175,112 +1181,18 @@ def _battle_sacrifice(
     heal_lead: bool,
     healing_item: ItemId = ItemId.HYPER_POTION,
 ) -> bool:
-    if _party_hp(emulator)[party_index] <= 0:
-        raise VictoryRoadChapterError("Route 22 pivot target had already fainted.")
-    _select_battle_main_command(actions, reader, 2)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    _select_cursor(actions, emulator, party_index, DEFAULT_HIDEOUT_TIMING)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    _pulse(actions, MacroActionKind.CONFIRM)
-
-    pivot_ready = False
-    for pulse_index in range(24):
-        if _party_hp(emulator)[party_index] == 0:
-            break
-        raw = reader.read()
-        if (
-            raw.battle_state == 2
-            and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
-        ):
-            pivot_ready = True
-            break
-        _pulse(
+    try:
+        return protected_lead_recovery(
             actions,
-            MacroActionKind.CANCEL if pulse_index % 4 == 3 else MacroActionKind.CONFIRM,
-        )
-
-    potion_spent = False
-    if heal_lead and pivot_ready:
-        _select_battle_main_command(actions, reader, 1)
-        _pulse(actions, MacroActionKind.CONFIRM)
-        before = _bag(emulator).get(healing_item, 0)
-        _select_bag_item(
-            actions,
+            reader,
             emulator,
-            healing_item,
-            DEFAULT_LAVENDER_TIMING,
+            party_index,
+            heal_lead=heal_lead,
+            healing_item=healing_item,
+            wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
         )
-        _pulse(actions, MacroActionKind.CONFIRM)
-        _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
-        _pulse(actions, MacroActionKind.CONFIRM)
-        for _ in range(24):
-            if _party_hp(emulator)[party_index] == 0:
-                break
-            raw = reader.read()
-            if (
-                raw.battle_state == 2
-                and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
-            ):
-                break
-            _pulse(actions, MacroActionKind.CONFIRM)
-        if before - _bag(emulator).get(healing_item, 0) != 1:
-            raise VictoryRoadChapterError("Route 22 pivot recovery did not spend one item.")
-        potion_spent = True
-
-    for pulse_index in range(64):
-        if _party_hp(emulator)[party_index] == 0:
-            break
-        raw = reader.read()
-        if raw.battle_state != 2:
-            raise VictoryRoadChapterError("Route 22 pivot left its trainer battle.")
-        menu = reader.read_battle_menu_state(raw)
-        if menu.phase is BattleMenuPhase.MAIN:
-            _select_battle_main_command(actions, reader, 0)
-            _pulse(actions, MacroActionKind.CONFIRM)
-            _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
-            _pulse(actions, MacroActionKind.CONFIRM)
-        else:
-            _pulse(
-                actions,
-                MacroActionKind.CANCEL if pulse_index % 4 == 3 else MacroActionKind.CONFIRM,
-            )
-    else:
-        raise VictoryRoadChapterError(
-            "Route 22 pivot did not absorb a bounded attack: "
-            f"party_hp={_party_hp(emulator)!r}, "
-            f"menu={reader.read_battle_menu_state(reader.read())!r}."
-        )
-
-    for _ in range(24):
-        if (
-            emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) <= 2
-            and _menu_cursor_active(emulator)
-        ):
-            break
-        _pulse(actions, MacroActionKind.CONFIRM)
-    else:
-        raise VictoryRoadChapterError(
-            "Route 22 forced-switch party menu did not settle: "
-            f"current={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
-            f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}."
-        )
-    _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    for _ in range(24):
-        raw = reader.read()
-        if (
-            raw.battle_state == 2
-            and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
-        ):
-            return potion_spent
-        _pulse(actions, MacroActionKind.CONFIRM)
-    raise VictoryRoadChapterError(
-        "Route 22 pivot did not restore Blastoise: "
-        f"party_hp={_party_hp(emulator)!r}, "
-        f"active={emulator.read_u8(RamAddress.PLAYER_MON_NUMBER)}, "
-        f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
-        f"menu={reader.read_battle_menu_state(reader.read())!r}."
-    )
+    except ProtectedRecoveryError as error:
+        raise VictoryRoadChapterError(f"Route 22 protected recovery failed: {error}") from error
 
 
 def _sell_bag_stack(
@@ -1329,45 +1241,29 @@ def _sell_bag_stack(
     raise VictoryRoadChapterError(f"Indigo did not sell the {item.name} stack.")
 
 
-def _select_battle_main_command(
-    actions: _CountingExecutor,
-    reader: PokemonRedStateReader,
-    target: int,
-) -> None:
-    coordinates = {0: (0, 0), 1: (0, 1), 2: (1, 0), 3: (1, 1)}
-    for pulse_index in range(24):
-        menu = reader.read_battle_menu_state(reader.read())
-        if menu.phase is not BattleMenuPhase.MAIN:
-            _pulse(
-                actions,
-                MacroActionKind.CANCEL if pulse_index % 4 == 3 else MacroActionKind.CONFIRM,
-            )
-            continue
-        current = menu.selected_main_command
-        if current == target:
-            return
-        if current not in coordinates:
-            raise VictoryRoadChapterError("Route 22 battle command cursor was invalid.")
-        x, y = coordinates[current]
-        target_x, target_y = coordinates[target]
-        direction = (
-            "right"
-            if x < target_x
-            else "left"
-            if x > target_x
-            else "down"
-            if y < target_y
-            else "up"
-        )
-        _pulse(actions, MacroActionKind.MOVE, direction, 120)
-    raise VictoryRoadChapterError("Route 22 battle command cursor did not settle.")
-
-
 def _menu_cursor_active(emulator: EmulatorState) -> bool:
     address = emulator.read_u8(RamAddress.MENU_CURSOR_LOCATION)
     address |= emulator.read_u8(int(RamAddress.MENU_CURSOR_LOCATION) + 1) << 8
     tile_map = int(RamAddress.TILE_MAP)
     return tile_map <= address < tile_map + 360 and emulator.read_u8(address) == 0xED
+
+
+def _select_battle_main_command(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    target: int,
+) -> None:
+    """Compatibility wrapper around the shared battle-command selector."""
+
+    try:
+        _select_shared_battle_main_command(
+            actions,
+            reader,
+            target,
+            DEFAULT_HIDEOUT_TIMING.wait_frames,
+        )
+    except ProtectedRecoveryError as error:
+        raise VictoryRoadChapterError(str(error)) from error
 
 
 def _field_fly(
