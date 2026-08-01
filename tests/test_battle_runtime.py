@@ -535,6 +535,26 @@ def test_sleep_recovery_rejects_an_off_slot_pp_decrement() -> None:
         )
 
 
+def test_actor_error_propagation_is_not_counted_as_observer_loss() -> None:
+    runtime = OffSlotSleepPPSimulation()
+    observer = RecordingDecisionObserver(runtime)
+
+    with (
+        bind_battle_decision_observer(observer),
+        pytest.raises(BattleRuntimeError, match="off-slot PP"),
+    ):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda raw: 1,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=BattleIntent("help_bill", TEST_BATTLE_PLAN_ID),
+            timing=BattleRuntimeTiming(max_move_menu_transition_pulses=1),
+        )
+
+    assert observer.failures == 0
+
+
 def test_adaptive_controller_rechecks_species_and_switches_water_gun_to_mega_punch() -> None:
     runtime = AdaptiveRivalSimulation()
     policy_species: list[int | None] = []

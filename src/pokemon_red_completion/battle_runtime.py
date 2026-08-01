@@ -610,8 +610,13 @@ def _fail_open_battle_decision_scope(
                 actor_error,
                 actor_error.__traceback__,
             )
-        except Exception:
-            _note_observer_failure(observer)
+        except BaseException as exit_error:
+            # A generator-based context manager re-raises the actor's own
+            # exception after running its cleanup.  That is normal propagation,
+            # not lost instrumentation.  Only a distinct exit failure makes the
+            # episode ineligible for promotion.
+            if exit_error is not actor_error:
+                _note_observer_failure(observer)
         raise
     else:
         try:
