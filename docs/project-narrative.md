@@ -299,6 +299,33 @@ No slot is a substitution, so no slot carries a substitution reason. The roster 
 future substitution that does not record why it was made, so a roster change cannot enter the
 repository unexplained.
 
+### Empirical confirmation from the first clean-power run on this branch
+
+Running the qualified route from clean power-on against the supported ROM produced two findings
+that were not visible from the code alone.
+
+**Route 21 was tied to one encounter sequence.** The crossing failed at step 26 of 91 with
+"Route 21 blocked". The corridor was not obstructed. A surfing encounter can consume a movement
+step without advancing the player, and the traversal treated any non-advancing step as a blocked
+tile, so it only succeeded when the encounters fell exactly where the original recording saw them.
+The chapter's other mover already retried each step up to eight times; Route 21 did not. Giving it
+the same bounded retry makes the traversal depend on the corridor rather than on the encounters,
+and the run then proceeds. This is a small fix, but it is the exact failure shape the project
+exists to remove: a fixed sequence standing in for a decision.
+
+**The single carry then lost the Champion.** With Route 21 crossed, the same run reached the final
+battle and lost it. The receipt is unambiguous: the lead fought every one of the Champion's six
+Pokémon (`party_position` 0 through 5), exhausted its third move to zero PP, and fainted to the
+last one at `hp=0/197` while the rest of the party sat at 26 and 18 HP. Two members were never
+viable contributors; they were carried.
+
+That is the single-carry design failing on its own terms, in the place it was always going to
+fail. It also explains why this route can pass on one RNG trajectory and lose on another: a lead
+that must win six consecutive fights on a finite PP budget has no margin, so a different damage
+roll changes the outcome. A balanced six-member party is not a stylistic preference here—it is the
+mechanism that turns a marginal, RNG-sensitive win into a repeatable one, which is precisely what
+held-out evaluation across unseen timing schedules will require.
+
 ### What this phase does *not* yet claim
 
 This increment adds observation, metrics, policy, and adapter with unit coverage. It does not add
@@ -468,9 +495,21 @@ party members alive. This proves the new deterministic-teacher lineage and the r
 adapter; it does not prove that a learned policy can choose the target, area, or recovery cycle.
 
 The balanced-team layer described in Phase 3 is now implemented as an observation contract, derived
-team metrics, a reusable training policy, and a Red party adapter, all covered by ROM-free unit
-tests. Nothing in that layer has run under the emulator, and no balanced-team route exists yet. The
-301-checkpoint single-carry route remains the only qualified teacher.
+team metrics, a reusable training policy, a bounded capture policy, and a Red party adapter, all
+covered by ROM-free unit tests. None of that layer has been called from the route yet, and no
+balanced-team route exists.
+
+The protected-party guard no longer blocks one: it was exact tuple equality, which forbade the
+party ever growing. That was an artifact of the single-carry route rather than a safety property,
+and it now matches on the leading members instead, so a lost, reordered, or substituted core still
+fails while the open slots become recruitable.
+
+**The qualified route does not currently reach the Hall of Fame on this branch.** A clean-power run
+against the supported ROM stops in the Champion battle after the lead exhausts a move and faints.
+The earlier Route 21 stop has been fixed; this one has not, and the honest reading is that it is
+the single-carry design reaching its limit rather than a defect in any one chapter. Until a run
+reproduces the terminal, the 301-checkpoint claim should be treated as historical evidence from a
+prior lineage, not as the current state of this branch.
 
 The full learned-system and transfer claims remain pending. In particular:
 
