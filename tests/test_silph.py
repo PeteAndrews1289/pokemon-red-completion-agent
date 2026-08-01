@@ -21,7 +21,7 @@ from pokemon_red_completion.silph import (
     SilphCheckpoint,
     SilphTiming,
     _interact_with_roof_girl,
-    _mart_2f_return_detour,
+    _mart_2f_return_detour_step,
     _move_verified,
     _plan_saffron_center_approach,
     _plan_saffron_route,
@@ -118,9 +118,10 @@ def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:
 
 
 def test_mart_2f_return_detours_below_a_customer_blocking_the_top_row() -> None:
-    assert _mart_2f_return_detour((15, 2)) == ("down", "left", "left", "left", "up")
+    assert _mart_2f_return_detour_step((15, 2)) == ("down",)
+    assert _mart_2f_return_detour_step((14, 3)) == ("down",)
     with pytest.raises(Exception, match="outside its safe corridor"):
-        _mart_2f_return_detour((15, 3))
+        _mart_2f_return_detour_step((15, 6))
 
 
 def test_silph_verified_movement_retries_a_swallowed_input() -> None:

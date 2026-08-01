@@ -1846,21 +1846,30 @@ def _return_mart_2f_to_1f(
             _move_verified(actions, reader, ("left",), timing, "X Special Mart 2F top row")
         except SilphChapterError:
             state = reader.read()
-            detour = _mart_2f_return_detour((state.player_x or 0, state.player_y or 0))
+            detour = _mart_2f_return_detour_step((state.player_x or 0, state.player_y or 0))
             _move_verified(actions, reader, detour, timing, "X Special Mart 2F customer detour")
-            break
+    state = reader.read()
+    if state.player_y is None or state.player_y < 2:
+        raise SilphChapterError("X Special Mart 2F return left its safe aisle.")
+    _move_verified(
+        actions,
+        reader,
+        ("up",) * (state.player_y - 2),
+        timing,
+        "X Special Mart 2F staircase column",
+    )
     _require(reader.read(), MapId.CELADON_MART_2F, (12, 2), "X Special Mart 2F stairs")
     _move_verified(actions, reader, ("up",), timing, "X Special Mart 1F return")
     _require(reader.read(), MapId.CELADON_MART_1F, (12, 2), "X Special Mart 1F return")
 
 
-def _mart_2f_return_detour(start: tuple[int, int]) -> tuple[str, ...]:
-    """Route below a blocked customer tile and back to the down staircase."""
+def _mart_2f_return_detour_step(start: tuple[int, int]) -> tuple[str, ...]:
+    """Drop one aisle when another customer blocks the route to the staircase."""
 
     x, y = start
-    if y != 2 or not 12 < x <= 16:
+    if not 12 < x <= 16 or not 2 <= y < 6:
         raise SilphChapterError(f"Mart 2F detour started outside its safe corridor: {start!r}.")
-    return ("down",) + ("left",) * (x - 12) + ("up",)
+    return ("down",)
 
 
 def _plan_saffron_center_approach(
