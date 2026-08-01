@@ -1,6 +1,6 @@
 from pokemon_red_completion.cinnabar import (
     CINNABAR_CHECKPOINT_COUNT,
-    CINNABAR_INPUT_BAG_SLOTS,
+    CINNABAR_MAX_INPUT_BAG_SLOTS,
     CINNABAR_TO_CENTER,
     DUX_MOVES_AFTER,
     DUX_MOVES_BEFORE,
@@ -10,6 +10,7 @@ from pokemon_red_completion.cinnabar import (
     ROUTE_21_EVENTS,
     ROUTE_21_TO_CINNABAR,
     TREE_TO_FLY_HOUSE,
+    _cinnabar_bag_capacity_preserved,
 )
 from pokemon_red_completion.observation import (
     EventFlag,
@@ -23,7 +24,7 @@ from pokemon_red_completion.observation import (
 
 def test_cinnabar_routes_and_field_move_contract_are_pinned() -> None:
     assert CINNABAR_CHECKPOINT_COUNT == 6
-    assert CINNABAR_INPUT_BAG_SLOTS == 18
+    assert CINNABAR_MAX_INPUT_BAG_SLOTS == 19
     assert len(TREE_TO_FLY_HOUSE) == 37
     assert len(PALLET_TO_SHORE) == 13
     assert len(ROUTE_21_TO_CINNABAR) == 93
@@ -35,6 +36,14 @@ def test_cinnabar_routes_and_field_move_contract_are_pinned() -> None:
     assert DUX_MOVES_AFTER == (0x40, 0x1C, 0x0F, 0x13)
     assert DUX_PP_BEFORE == (35, 15, 30, 20)
     assert DUX_PP_AFTER == (35, 15, 30, 15)
+
+
+def test_cinnabar_capacity_allows_a_consumed_recovery_stack_before_hm02() -> None:
+    assert _cinnabar_bag_capacity_preserved(17, 17)
+    assert _cinnabar_bag_capacity_preserved(18, 18)
+    assert _cinnabar_bag_capacity_preserved(19, 19)
+    assert not _cinnabar_bag_capacity_preserved(20, 20)
+    assert not _cinnabar_bag_capacity_preserved(17, 18)
 
 
 def test_cinnabar_source_ids_are_exact() -> None:

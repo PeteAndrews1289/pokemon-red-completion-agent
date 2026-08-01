@@ -40,7 +40,7 @@ from pokemon_red_completion.silph import (
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
 CINNABAR_CHECKPOINT_COUNT = 6
-CINNABAR_INPUT_BAG_SLOTS = 18
+CINNABAR_MAX_INPUT_BAG_SLOTS = 19
 FLY_MOVE_ID = 0x13
 DUX_MOVES_BEFORE = (0x40, 0x1C, 0x0F, 0x1F)
 DUX_MOVES_AFTER = (0x40, 0x1C, 0x0F, FLY_MOVE_ID)
@@ -134,8 +134,10 @@ class CinnabarChapterReport:
             len(self.records) == CINNABAR_CHECKPOINT_COUNT
             and self.rare_candy_before == 0
             and self.rare_candy_after == 0
-            and self.bag_slots_before == CINNABAR_INPUT_BAG_SLOTS
-            and self.bag_slots_after_candy == CINNABAR_INPUT_BAG_SLOTS
+            and _cinnabar_bag_capacity_preserved(
+                self.bag_slots_before,
+                self.bag_slots_after_candy,
+            )
             and self.lead_stats_before == (46, 142, 142, 100, 111, 92, 106)
             and self.lead_stats_after == (46, 142, 142, 100, 111, 92, 106)
             and self.hm02_item_before_event
@@ -237,6 +239,12 @@ def _wild_flee_public(item: CeladonWildFleeEvidence) -> dict[str, object]:
         "hp_safe": item.hp_safe,
         "inventory_preserved": item.inventory_preserved,
     }
+
+
+def _cinnabar_bag_capacity_preserved(before: int, after_optional_candy: int) -> bool:
+    """Require one free HM02 slot while allowing a consumed recovery stack."""
+
+    return 0 < before <= CINNABAR_MAX_INPUT_BAG_SLOTS and after_optional_candy == before
 
 
 class _CountingExecutor:
