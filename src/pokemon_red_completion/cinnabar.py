@@ -57,6 +57,7 @@ CELADON_TO_ROUTE_16_TREE = _directions("DDDD" + "L" * 16)
 TREE_TO_FLY_HOUSE = _directions("UUUULLLLLULLLLLLLLLLDLLLLDLLLLLLLLLLU")
 PALLET_TO_SHORE = _directions("DDLL" + "D" * 9)
 ROUTE_21_TO_CINNABAR = _directions("D" * 17 + "RDL" + "D" * 5 + "L" + "D" * 67)
+ROUTE_21_STEP_ATTEMPTS = 8
 CINNABAR_TO_CENTER = _directions("D" * 12 + "R" * 8 + "U")
 
 
@@ -476,24 +477,41 @@ def _move(actions, reader, route: Iterable[str], label: str, *, frames: int = 24
 def _move_route21(
     actions, reader, emulator, route: Iterable[str]
 ) -> tuple[CeladonWildFleeEvidence, ...]:
+    """Cross Route 21, absorbing however many wild encounters actually occur.
+
+    A surfing encounter can consume a movement step without advancing the
+    player.  Treating that as a blocked tile made the crossing depend on the
+    exact encounter sequence one recorded run happened to see, so a different
+    RNG schedule failed a corridor that was never obstructed.  Each step now
+    retries under the same bounded budget :func:`_move` already uses, which
+    makes the traversal depend on the corridor rather than on the encounters.
+    """
+
     run = _RunState([])
-    for index, direction in enumerate(tuple(route), 1):
+    steps = tuple(route)
+    for index, direction in enumerate(steps, 1):
         before = reader.read()
-        _pulse(actions, MacroActionKind.MOVE, direction, 240)
-        after = reader.read()
-        if after.battle_state == 2:
-            raise CinnabarChapterError(f"Route 21 entered a trainer battle at step {index}.")
-        if after.battle_state == 1:
-            _flee(actions, reader, emulator, run, DEFAULT_CELADON_TIMING)
+        for _ in range(ROUTE_21_STEP_ATTEMPTS):
+            _pulse(actions, MacroActionKind.MOVE, direction, 240)
             after = reader.read()
-        if (after.map_id, after.player_x, after.player_y) == (
-            before.map_id,
-            before.player_x,
-            before.player_y,
-        ):
-            raise CinnabarChapterError(f"Route 21 blocked at step {index}.")
-        if _events(emulator) != (False,) * 9:
-            raise CinnabarChapterError("Route 21 changed an optional trainer event.")
+            if after.battle_state == 2:
+                raise CinnabarChapterError(f"Route 21 entered a trainer battle at step {index}.")
+            if after.battle_state == 1:
+                _flee(actions, reader, emulator, run, DEFAULT_CELADON_TIMING)
+                after = reader.read()
+            if _events(emulator) != (False,) * 9:
+                raise CinnabarChapterError("Route 21 changed an optional trainer event.")
+            if (after.map_id, after.player_x, after.player_y) != (
+                before.map_id,
+                before.player_x,
+                before.player_y,
+            ):
+                break
+        else:
+            raise CinnabarChapterError(
+                f"Route 21 blocked at step {index}/{len(steps)} after "
+                f"{ROUTE_21_STEP_ATTEMPTS} attempts."
+            )
     return tuple(run.wilds)
 
 
