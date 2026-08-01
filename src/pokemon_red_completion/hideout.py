@@ -695,6 +695,7 @@ def _run_hideout_giovanni_with_recovery(
                 raise HideoutChapterError(
                     f"Giovanni protected recovery failed with party slot {helper_index}."
                 ) from error
+            run.potions_used += int(potion_spent)
             recoveries += int(potion_spent)
             continue
 
