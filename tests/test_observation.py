@@ -14,6 +14,8 @@ from pokemon_red_completion.observation import (
     EXITING_DOOR_MOVEMENT_MASK,
     OAKS_LAB_SELECTION_READY_SCRIPT,
     OAKS_LAB_STARTER_OBTAINED_SCRIPT,
+    POKEDEX_FLAG_BYTES,
+    RED_BOX_STRUCT_STRIDE,
     REDS_HOUSE_2F_NOOP_SCRIPT,
     SCRIPTED_MOVEMENT_STATUS_MASK,
     SQUIRTLE_SPECIES_ID,
@@ -32,6 +34,8 @@ from pokemon_red_completion.observation import (
     PokemonRedStateReader,
     RamAddress,
     RawGameState,
+    RedCurrentBoxState,
+    RedPokedexState,
     SemanticStateError,
     SemanticStateTracker,
     SurgePhase,
@@ -112,6 +116,76 @@ def test_reader_hides_pregame_scratch_state() -> None:
 
     assert raw == RawGameState(False, None, None, None, None, None)
     assert memory.reads == [RamAddress.STATUS_FLAGS_6]
+
+
+def test_reader_decodes_owned_and_seen_national_pokedex_flags() -> None:
+    values: dict[int, int] = {}
+
+    def mark(address: RamAddress, national_number: int) -> None:
+        byte_index, bit_index = divmod(national_number - 1, 8)
+        target = int(address) + byte_index
+        values[target] = values.get(target, 0) | (1 << bit_index)
+
+    for national_number in (1, 9, 106, 151):
+        mark(RamAddress.POKEDEX_OWNED, national_number)
+        mark(RamAddress.POKEDEX_SEEN, national_number)
+    mark(RamAddress.POKEDEX_SEEN, 150)
+    memory = RecordingMemory(values)
+
+    state = PokemonRedStateReader(memory).read_pokedex_state()
+
+    assert state == RedPokedexState(
+        owned_species=frozenset((1, 9, 106, 151)),
+        seen_species=frozenset((1, 9, 106, 150, 151)),
+    )
+    assert memory.reads == [
+        *(int(RamAddress.POKEDEX_OWNED) + index for index in range(POKEDEX_FLAG_BYTES)),
+        *(int(RamAddress.POKEDEX_SEEN) + index for index in range(POKEDEX_FLAG_BYTES)),
+    ]
+
+
+def test_pokedex_state_rejects_owned_species_that_are_not_seen() -> None:
+    with pytest.raises(ValueError, match="owned species"):
+        RedPokedexState(
+            owned_species=frozenset((25,)),
+            seen_species=frozenset(),
+        )
+
+
+def test_reader_cross_checks_current_box_species_and_levels() -> None:
+    values = {
+        RamAddress.CURRENT_BOX_NUMBER: 0x82,
+        RamAddress.CURRENT_BOX_COUNT: 2,
+        int(RamAddress.CURRENT_BOX_SPECIES): 0x54,
+        int(RamAddress.CURRENT_BOX_SPECIES) + 1: 0x3A,
+        int(RamAddress.CURRENT_BOX_MONS): 0x54,
+        int(RamAddress.CURRENT_BOX_MONS) + 3: 44,
+        int(RamAddress.CURRENT_BOX_MONS) + RED_BOX_STRUCT_STRIDE: 0x3A,
+        int(RamAddress.CURRENT_BOX_MONS) + RED_BOX_STRUCT_STRIDE + 3: 73,
+    }
+
+    state = PokemonRedStateReader(RecordingMemory(values)).read_current_box_state()
+
+    assert state == RedCurrentBoxState(
+        box_index=2,
+        species_ids=(0x54, 0x3A),
+        levels=(44, 73),
+    )
+
+
+def test_reader_rejects_incoherent_current_box_memory() -> None:
+    memory = RecordingMemory(
+        {
+            RamAddress.CURRENT_BOX_NUMBER: 0,
+            RamAddress.CURRENT_BOX_COUNT: 1,
+            RamAddress.CURRENT_BOX_SPECIES: 0x54,
+            RamAddress.CURRENT_BOX_MONS: 0x3A,
+            int(RamAddress.CURRENT_BOX_MONS) + 3: 44,
+        }
+    )
+
+    with pytest.raises(SemanticStateError, match="species list disagrees"):
+        PokemonRedStateReader(memory).read_current_box_state()
 
 
 def test_reader_extracts_bounded_bag_and_event_state() -> None:

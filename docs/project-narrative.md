@@ -40,6 +40,23 @@ trades and version exclusives remain visible exceptions. This completionist run 
 capture, storage, evolution, resource, and grinding demonstrations; it does not replace capped and
 randomized evaluations of actual battle competence.
 
+### The collection denominator is now explicit
+
+“Catch them all” is ambiguous on one unmodified Red save: version exclusives, trade evolutions,
+mutually exclusive starters, fossils, Fighting Dojo gifts, Eevee branches, and event-only Mew
+cannot all coexist without external transfer or save branching. The implementation now partitions
+all 151 species into **124 obtainable targets** and **27 named exclusions** for the qualified
+Squirtle/Helix/Hitmonlee/Jolteon lineage. That makes the denominator reviewable instead of quietly
+moving it after a run.
+
+It also distinguishes three facts that are often conflated: a species was registered in the
+Pokédex; a specimen is still retained across the party and PC; and that retained specimen has
+reached level 100. The emulator adapter can read the owned/seen flags and strictly cross-check the
+party plus current box. It cannot yet enumerate all twelve boxes, perform storage operations, or
+execute the 124 acquisition/evolution routes. Consequently, living-collection and level-100
+qualification remain explicitly unverified. This is infrastructure for the stretch goal, not a
+claim that the stretch goal has been completed.
+
 The current phase makes one further correction. The qualified route completed the game by
 overleveling a single Pokémon, which is a legitimate way to finish Red but a poor thing to imitate:
 it hides the battle decisions the agent is supposed to learn, concentrates all risk in one party

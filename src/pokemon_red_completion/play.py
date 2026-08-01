@@ -153,6 +153,7 @@ from pokemon_red_completion.observation import (
     OaksErrandState,
     PokemonRedStateReader,
     RawGameState,
+    RedPokedexState,
     game_mode,
     location_label,
     semantic_facts,
@@ -172,6 +173,7 @@ from pokemon_red_completion.pewter import (
     PewterProgress,
     run_pewter_chapter,
 )
+from pokemon_red_completion.red_collection import summarize_red_pokedex
 from pokemon_red_completion.red_trajectory import (
     PokemonRedBattleDecisionObserver,
     PokemonRedBattleScheduleObserver,
@@ -450,6 +452,7 @@ class QualifiedPlayReport:
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    pokedex_state: RedPokedexState | None = None
 
     @property
     def passed(self) -> bool:
@@ -556,6 +559,14 @@ class QualifiedPlayReport:
             *self.champion.checkpoints(),
         )
         pewter = self.pewter.public_dict()
+        pokedex = {
+            "received_verified": is_pokedex_verified(self.pokedex_evidence),
+            "controls_ready": self.pokedex_evidence.controls_ready,
+        }
+        if self.pokedex_state is not None:
+            pokedex["collection_progress"] = summarize_red_pokedex(
+                self.pokedex_state
+            ).public_dict()
         return {
             "schema": "qualified-play-v26",
             "status": "ok" if self.passed else "failed",
@@ -598,10 +609,7 @@ class QualifiedPlayReport:
                 "delivered_verified": self.pokedex_evidence.oak_got_parcel,
                 "present_after_delivery": self.pokedex_evidence.parcel_in_bag,
             },
-            "pokedex": {
-                "received_verified": is_pokedex_verified(self.pokedex_evidence),
-                "controls_ready": self.pokedex_evidence.controls_ready,
-            },
+            "pokedex": pokedex,
             "northbound": pewter["route"],
             "brock": pewter["brock"],
             "cerulean_chapter": self.cerulean.public_dict(),
@@ -1235,6 +1243,7 @@ def run_qualified_play(
             frames_executed=emulator.frame_count,
             actions_executed=opening.actions_executed + executor.actions_executed,
             controller_released=not emulator.pressed_buttons,
+            pokedex_state=reader.read_pokedex_state(),
         )
         if not report.passed:
             raise QualifiedPlayError("Qualified play evidence failed its public contract.")

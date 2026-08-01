@@ -46,6 +46,11 @@ control, and progressively trained specialists.**
 > actions**. This qualifies the deterministic six-member teacher; collection and learned-policy
 > evaluation remain open. See the
 > [sanitized six-member receipt](docs/evidence/qualified-play-balanced-six-2026-08-01.json).
+> The completionist foundation now defines an auditable **124-species** Red-only target and names
+> all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
+> It reads the cartridge's seen/owned Pokédex flags and the visible party/current PC box, while
+> refusing to claim a living collection or level-100 collection until every box can be inspected.
+> Acquisition routes and the completionist teacher remain future work.
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
 > **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned

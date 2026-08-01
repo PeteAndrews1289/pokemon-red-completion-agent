@@ -17,6 +17,7 @@ from pokemon_red_completion.observation import (
     OpeningControlState,
     OpeningPhase,
     RawGameState,
+    RedPokedexState,
 )
 from pokemon_red_completion.opening import OpeningChapterReport
 from pokemon_red_completion.play import (
@@ -1382,6 +1383,10 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         frames_executed=394_000,
         actions_executed=5_704,
         controller_released=True,
+        pokedex_state=RedPokedexState(
+            owned_species=frozenset((7, 8, 9, 106)),
+            seen_species=frozenset((7, 8, 9, 25, 106)),
+        ),
     )
 
     public = report.public_dict()
@@ -1756,6 +1761,23 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     assert public["pokedex"] == {
         "received_verified": True,
         "controls_ready": True,
+        "collection_progress": {
+            "contract": "red-solo-living-dex-level-100-v1",
+            "target": 124,
+            "owned": 4,
+            "seen": 5,
+            "missing": [
+                number
+                for number in range(1, 151)
+                if number not in {1, 2, 3, 4, 5, 6, 7, 8, 9, 27, 28, 37, 38, 52, 53,
+                                  65, 68, 69, 70, 71, 76, 94, 106, 107, 126, 127, 134,
+                                  136, 140, 141}
+            ],
+            "excluded_owned": [],
+            "pokedex_target_complete": False,
+            "living_collection_verified": False,
+            "level_100_collection_verified": False,
+        },
     }
     for private_key in (
         "/private",

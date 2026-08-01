@@ -82,12 +82,15 @@ class RamAddress(IntEnum):
     PARTY_MON_3_LEVEL = 0xD1E4
     PARTY_MON_3_MAX_HP = 0xD1E5
     PARTY_MON_3_NICKNAME = 0xD2CB
+    POKEDEX_OWNED = 0xD2F7
+    POKEDEX_SEEN = 0xD30A
     NUM_BAG_ITEMS = 0xD31D
     BAG_ITEMS = 0xD31E
     OBTAINED_BADGES = 0xD356
     CURRENT_MAP = 0xD35E
     PLAYER_Y = 0xD361
     PLAYER_X = 0xD362
+    CURRENT_BOX_NUMBER = 0xD5A0
     PLAYER_MOVING_DIRECTION = 0xD528
     TOGGLEABLE_OBJECT_FLAGS = 0xD5A6
     OAKS_LAB_SCRIPT = 0xD5F0
@@ -122,6 +125,9 @@ class RamAddress(IntEnum):
     SAFARI_STEPS = 0xD70D
     CURRENT_MAP_SCRIPT = 0xDA39
     SAFARI_BALLS = 0xDA47
+    CURRENT_BOX_COUNT = 0xDA80
+    CURRENT_BOX_SPECIES = 0xDA81
+    CURRENT_BOX_MONS = 0xDA96
 
 
 class MapId(IntEnum):
@@ -834,6 +840,53 @@ PARTY_MAX_HP_OFFSET = 34
 MAX_BAG_ITEMS = 20
 EVENT_FLAGS_END = 0xD886
 EVENT_FLAG_BYTES = EVENT_FLAGS_END - int(RamAddress.EVENT_FLAGS)
+POKEDEX_SPECIES_COUNT = 151
+POKEDEX_FLAG_BYTES = 19
+RED_BOX_LIMIT = 12
+RED_BOX_CAPACITY = 20
+RED_BOX_STRUCT_STRIDE = 33
+RED_BOX_SPECIES_OFFSET = 0
+RED_BOX_LEVEL_OFFSET = 3
+
+
+@dataclass(frozen=True, slots=True)
+class RedPokedexState:
+    """National Pokédex ownership and sighting flags from the supported Red revision."""
+
+    owned_species: frozenset[int]
+    seen_species: frozenset[int]
+
+    def __post_init__(self) -> None:
+        for name in ("owned_species", "seen_species"):
+            species = getattr(self, name)
+            if any(
+                type(number) is not int or not 1 <= number <= POKEDEX_SPECIES_COUNT
+                for number in species
+            ):
+                raise ValueError(f"{name} must contain National Pokédex numbers 1 through 151")
+        if not self.owned_species <= self.seen_species:
+            raise ValueError("every owned species must also be marked seen")
+
+
+@dataclass(frozen=True, slots=True)
+class RedCurrentBoxState:
+    """The currently loaded Bill's PC box using internal Red species identifiers."""
+
+    box_index: int
+    species_ids: tuple[int, ...]
+    levels: tuple[int, ...]
+
+    def __post_init__(self) -> None:
+        if type(self.box_index) is not int or not 0 <= self.box_index < RED_BOX_LIMIT:
+            raise ValueError("box_index must identify one of Red's twelve boxes")
+        if len(self.species_ids) != len(self.levels):
+            raise ValueError("box species and levels must have equal lengths")
+        if len(self.species_ids) > RED_BOX_CAPACITY:
+            raise ValueError("a Red box cannot contain more than twenty Pokémon")
+        if any(type(species) is not int or species <= 0 for species in self.species_ids):
+            raise ValueError("box species IDs must be positive integers")
+        if any(type(level) is not int or not 1 <= level <= 100 for level in self.levels):
+            raise ValueError("box levels must be between 1 and 100")
 
 
 @dataclass(frozen=True, slots=True)
@@ -3288,6 +3341,61 @@ class PokemonRedStateReader:
             active_party_pp=active_party_pp,
         )
 
+    def read_pokedex_state(self) -> RedPokedexState:
+        """Decode Red's two 151-bit National Pokédex flag arrays."""
+
+        owned = bytes(
+            self._memory.read_u8(int(RamAddress.POKEDEX_OWNED) + index)
+            for index in range(POKEDEX_FLAG_BYTES)
+        )
+        seen = bytes(
+            self._memory.read_u8(int(RamAddress.POKEDEX_SEEN) + index)
+            for index in range(POKEDEX_FLAG_BYTES)
+        )
+        return RedPokedexState(
+            owned_species=_decode_pokedex_flags(owned),
+            seen_species=_decode_pokedex_flags(seen),
+        )
+
+    def read_current_box_state(self) -> RedCurrentBoxState:
+        """Read and cross-check the current 20-slot Bill's PC box."""
+
+        count = self._memory.read_u8(RamAddress.CURRENT_BOX_COUNT)
+        if count > RED_BOX_CAPACITY:
+            raise SemanticStateError(
+                f"current box reports {count} Pokémon, above Red's {RED_BOX_CAPACITY}-slot limit"
+            )
+        box_index = self._memory.read_u8(RamAddress.CURRENT_BOX_NUMBER) & 0x7F
+        species_ids = tuple(
+            self._memory.read_u8(int(RamAddress.CURRENT_BOX_SPECIES) + index)
+            for index in range(count)
+        )
+        struct_species = tuple(
+            self._memory.read_u8(
+                int(RamAddress.CURRENT_BOX_MONS)
+                + index * RED_BOX_STRUCT_STRIDE
+                + RED_BOX_SPECIES_OFFSET
+            )
+            for index in range(count)
+        )
+        if species_ids != struct_species:
+            raise SemanticStateError(
+                "current box species list disagrees with its boxed Pokémon structures"
+            )
+        levels = tuple(
+            self._memory.read_u8(
+                int(RamAddress.CURRENT_BOX_MONS)
+                + index * RED_BOX_STRUCT_STRIDE
+                + RED_BOX_LEVEL_OFFSET
+            )
+            for index in range(count)
+        )
+        return RedCurrentBoxState(
+            box_index=box_index,
+            species_ids=species_ids,
+            levels=levels,
+        )
+
     def read_bedroom_input_state(self) -> BedroomInputState:
         """Read the two revision-specific input-readiness symbols for Red's bedroom."""
         return BedroomInputState(
@@ -4399,6 +4507,16 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
     if raw.map_id == MapId.HALL_OF_FAME and _event(events, EventFlag.BEAT_CHAMPION_RIVAL):
         facts.add(HALL_OF_FAME_FACT)
     return frozenset(facts)
+
+
+def _decode_pokedex_flags(payload: bytes) -> frozenset[int]:
+    if len(payload) != POKEDEX_FLAG_BYTES:
+        raise ValueError(f"Pokédex flags must contain exactly {POKEDEX_FLAG_BYTES} bytes")
+    return frozenset(
+        national_number
+        for national_number in range(1, POKEDEX_SPECIES_COUNT + 1)
+        if payload[(national_number - 1) // 8] & (1 << ((national_number - 1) % 8))
+    )
 
 
 def _event(events: bytes | None, event: EventFlag) -> bool:

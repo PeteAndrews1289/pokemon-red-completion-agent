@@ -252,6 +252,20 @@ legal transitions, and delegates stalls or unsafe resource states to recovery. I
 evaluation disables teacher/oracle fallback; the objective graph may still constrain invalid
 choices and the executor may still enforce action safety.
 
+### Collection planner
+
+The game-neutral collection layer treats Pokédex registration, present ownership, and target-level
+training as separate facts. Its contract partitions the title's full species universe into
+obtainable targets and explicit exclusions, then emits one bounded directive at a time: acquire a
+missing species, make storage room, switch boxes, rotate a specimen into training, train it, or
+stop only after the declared gate is met.
+
+The Red adapter binds National Pokédex numbers to the pinned cartridge's internal species IDs and
+reads the 151-bit seen/owned tables. Party and current-box structures are cross-checked against
+their species arrays and fail closed on disagreement. Because only the current PC box is visible
+to this first adapter, it may report partial evidence but may not certify the living or level-100
+collection gates until an all-box reader is implemented.
+
 ### Specialists
 
 - **Navigation:** deterministic A* over verified collision maps and transitions.

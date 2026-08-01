@@ -176,6 +176,14 @@ available evolution, manages the active party and PC as one living collection, a
 owned species to level 100. Trade- and version-exclusive gaps are reported explicitly rather than
 silently claimed as solo-cartridge completions.
 
+For the declared Squirtle, Helix Fossil, Hitmonlee, and Jolteon lineage, the executable contract
+partitions all 151 National Pokédex entries into 124 obtainable targets and 27 named exclusions.
+Progress is deliberately reported through three non-interchangeable gates: registered as owned in
+the Pokédex, presently retained as a living specimen, and presently retained at level 100. The Red
+adapter can now read the Pokédex and cross-check the party plus current PC box. It cannot yet scan
+all twelve boxes, so the latter two gates remain false rather than being inferred from historical
+Pokédex flags.
+
 Level-100 collection is deliberately a separate teacher mode. It supplies abundant capture,
 storage, evolution, resource-restocking, and long-horizon grinding examples, but ordinary learner
 evaluation retains level caps and variable matchups so overwhelming levels cannot substitute for
