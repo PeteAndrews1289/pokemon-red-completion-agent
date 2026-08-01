@@ -81,6 +81,8 @@ ROOF_GIRL_Y = 0xC224
 ROOF_GIRL_X = 0xC225
 ROOF_NERD_Y = 0xC214
 ROOF_NERD_X = 0xC215
+MART_2F_GIRL_Y = 0xC244
+MART_2F_GIRL_X = 0xC245
 SAFFRON_CITY_SIZE = (40, 36)
 SAFFRON_CENTER_APPROACH = (9, 30)
 SAFFRON_WARP_COORDINATES = frozenset(
@@ -890,7 +892,7 @@ def _acquire_silph_x_special(
         (MART_TO_CITY, MapId.CELADON_CITY, (10, 14), "X Special Celadon Mart exit"),
     ):
         if map_id == MapId.CELADON_CITY:
-            _return_mart_2f_to_1f(actions, reader, timing)
+            _return_mart_2f_to_1f(actions, reader, emulator, timing)
         _move_verified(actions, reader, route, timing, label)
         _require(reader.read(), map_id, coordinate, label)
     _move(actions, reader, _directions("RRRRU"), timing)
@@ -1833,43 +1835,51 @@ def _move_verified(
 def _return_mart_2f_to_1f(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
+    emulator: EmulatorState,
     timing: SilphTiming,
 ) -> None:
-    """Reach the 2F down staircase despite a customer occupying its top row."""
+    """Wait for the vertical customer, then cross the only open top aisle."""
 
     _require(reader.read(), MapId.CELADON_MART_2F, (16, 2), "X Special Mart 2F return")
-    while True:
+    for _ in range(32):
         state = reader.read()
         if state.player_x == 12:
             break
+        if (state.player_x, state.player_y) == (15, 2):
+            _wait_for_mart_2f_customer(actions, emulator)
         try:
             _move_verified(actions, reader, ("left",), timing, "X Special Mart 2F top row")
-        except SilphChapterError:
-            state = reader.read()
-            detour = _mart_2f_return_detour_step((state.player_x or 0, state.player_y or 0))
-            _move_verified(actions, reader, detour, timing, "X Special Mart 2F customer detour")
-    state = reader.read()
-    if state.player_y is None or state.player_y < 2:
-        raise SilphChapterError("X Special Mart 2F return left its safe aisle.")
-    _move_verified(
-        actions,
-        reader,
-        ("up",) * (state.player_y - 2),
-        timing,
-        "X Special Mart 2F staircase column",
-    )
+        except SilphChapterError as error:
+            current = reader.read()
+            if (current.map_id, current.player_x, current.player_y) != (
+                MapId.CELADON_MART_2F,
+                15,
+                2,
+            ):
+                raise error
+            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=17))
+    else:
+        raise SilphChapterError("X Special Mart 2F customer did not clear the top aisle.")
     _require(reader.read(), MapId.CELADON_MART_2F, (12, 2), "X Special Mart 2F stairs")
     _move_verified(actions, reader, ("up",), timing, "X Special Mart 1F return")
     _require(reader.read(), MapId.CELADON_MART_1F, (12, 2), "X Special Mart 1F return")
 
 
-def _mart_2f_return_detour_step(start: tuple[int, int]) -> tuple[str, ...]:
-    """Drop one aisle when another customer blocks the route to the staircase."""
+def _wait_for_mart_2f_customer(
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+) -> None:
+    """Observe the pinned vertical NPC rather than sampling it at a fixed cadence."""
 
-    x, y = start
-    if not 12 < x <= 16 or not 2 <= y < 6:
-        raise SilphChapterError(f"Mart 2F detour started outside its safe corridor: {start!r}.")
-    return ("down",)
+    for _ in range(2_048):
+        if _mart_2f_girl_coordinate(emulator) != (14, 2):
+            return
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
+    raise SilphChapterError("Celadon Mart 2F customer did not clear the top aisle.")
+
+
+def _mart_2f_girl_coordinate(emulator: EmulatorState) -> tuple[int, int]:
+    return emulator.read_u8(MART_2F_GIRL_X) - 4, emulator.read_u8(MART_2F_GIRL_Y) - 4
 
 
 def _plan_saffron_center_approach(
