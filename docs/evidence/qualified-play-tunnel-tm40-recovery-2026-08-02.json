@@ -1,0 +1,65 @@
+{
+  "schema": "pokemon-red-qualified-play-receipt-v1",
+  "recorded_on": "2026-08-02",
+  "status": "passed",
+  "claim_scope": "One uninterrupted clean-power deterministic-teacher run qualified the prepared DUX Rock Tunnel assignments, the Safari Zone TM40 Skull Bash lesson, semantic single-use battle recovery, the balanced six-member curriculum, and Hall-of-Fame completion. The collection rehearsal, counted train/validation runs, learned-policy rollout, obtainable Pokédex completion, level-100 collection, and cross-game transfer remain open.",
+  "source_identity": {
+    "collection_registry_sha256": "28704f41edabe43c55fbb2c9ac33af46fa5a01b03efeec0f328c22e3bfe0d786",
+    "source_bundle_sha256": "5d303b7a93c7e446e4c4844ea8049b03092d46b238c0ede6ef275fac162bc472",
+    "teacher_execution_sha256": "f62d9cfa92fd308f9ec58ef6ec7e210a60e7e2813c2d354f0b32425bfce182a2"
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "exact_source_teacher_executions": 1
+  },
+  "completion": {
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 762318
+  },
+  "qualified_lessons": {
+    "prepared_dux_final_tunnel_trainers": true,
+    "tower_rare_candy_evolution": true,
+    "safari_tm40_collected": true,
+    "tm40_skull_bash_taught": true,
+    "sabrina_hyper_potions_used": 1,
+    "duplicate_battle_item_consumption": false
+  },
+  "balanced_team": {
+    "curriculum_battles_won": 4236,
+    "minimum_level": 77,
+    "level_spread": 5,
+    "contract_passed": true
+  },
+  "collection_boundary": {
+    "uncounted_schedule_rehearsal_passed": false,
+    "counted_slots_consumed": 0,
+    "declared_slots_pending": 12,
+    "sealed_test_partition_opened": false,
+    "candidate_model_fitted": false,
+    "learned_policy_rollout_completed": false
+  },
+  "validation": {
+    "public_tests_passed": 1464,
+    "integration_execution_passed": true,
+    "integration_tests_deselected": 3,
+    "lint_passed": true,
+    "documentation_links_passed": true,
+    "public_artifact_check_passed": true,
+    "registry_regeneration_check_passed": true
+  },
+  "privacy": {
+    "rom_bytes_included": false,
+    "save_data_included": false,
+    "private_paths_included": false,
+    "screenshots_included": false,
+    "model_weights_included": false,
+    "trajectory_rows_included": false
+  }
+}

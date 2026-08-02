@@ -12,6 +12,7 @@ from pokemon_red_completion.economy import (
     PEWTER_POTION_PURCHASE_QUANTITY,
     PEWTER_SUPPLY_COST,
     TOWER_SUPER_POTION_RESERVE,
+    TUNNEL_BALANCED_TEAM_RECOVERY_COST,
     TUNNEL_STATUS_SUPPLY_COST,
 )
 
@@ -31,10 +32,11 @@ def test_revised_route_preserves_the_unused_lavender_recovery_reserve() -> None:
     assert CERULEAN_STATUS_SUPPLY_COST == 400
     assert CERULEAN_SUPPLY_COST == 1_300
     assert TUNNEL_STATUS_SUPPLY_COST == 200
-    assert LAVENDER_TOP_UP_SUPPLY_COST == 5_100
-    assert LAVENDER_MONEY == 3_603
+    assert TUNNEL_BALANCED_TEAM_RECOVERY_COST == 2_800
+    assert LAVENDER_TOP_UP_SUPPLY_COST == 5_800
+    assert LAVENDER_MONEY == 103
     assert (
         LAVENDER_SUPER_POTION_RESERVE,
         HIDEOUT_SUPER_POTION_RESERVE,
         TOWER_SUPER_POTION_RESERVE,
-    ) == (11, 6, 0)
+    ) == (12, 6, 0)

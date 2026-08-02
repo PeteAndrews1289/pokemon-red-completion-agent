@@ -878,6 +878,13 @@ def _confirm_attack_with_pp_gate(
                 label=label,
             )
             return
+        if _selected_move_identity_replaced(initial_raw, raw, slot=slot):
+            # At high emulator speeds, a terminal wild-battle attack, level-up,
+            # and accepted move replacement can all complete inside the first
+            # attack wait.  The new non-zero move identity in the exact selected
+            # slot is then stronger semantic evidence than the overwritten PP
+            # counter, whose old one-point decrement is no longer observable.
+            return
         if current_pp != initial_pp:
             raise BattleRuntimeError(f"{label} move slot {slot} changed PP by an invalid amount.")
         if raw.enemy_hp == 0 and raw.battler_pp == initial_raw.battler_pp:
@@ -952,6 +959,32 @@ def _confirm_attack_with_pp_gate(
         f"{_validated_menu(reader.read_battle_menu_state(raw), label=label).phase.value}, "
         f"enemy_trapping="
         f"{raw.enemy_using_trapping_move}, battle_state={raw.battle_state}."
+    )
+
+
+def _selected_move_identity_replaced(
+    initial_raw: RawGameState,
+    current_raw: RawGameState,
+    *,
+    slot: int,
+) -> bool:
+    """Recognize an accepted level-up move that overwrote the selected slot."""
+
+    before_moves = initial_raw.battler_moves
+    after_moves = current_raw.battler_moves
+    after_pp = current_raw.battler_pp
+    index = slot - 1
+    return bool(
+        before_moves is not None
+        and after_moves is not None
+        and after_pp is not None
+        and len(before_moves) > index
+        and len(after_moves) > index
+        and len(after_pp) > index
+        and before_moves[index] != 0
+        and after_moves[index] != 0
+        and before_moves[index] != after_moves[index]
+        and (after_pp[index] & 0x3F) > 0
     )
 
 

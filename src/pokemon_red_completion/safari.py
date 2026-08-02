@@ -128,6 +128,7 @@ class SafariChapterReport:
     final_money: int
     counter_milestones: tuple[int, ...]
     balls_milestones: tuple[int, ...]
+    got_tm40_skull_bash: bool
     gold_teeth: bool
     got_hm03: bool
     hm03_retained: bool
@@ -148,13 +149,21 @@ class SafariChapterReport:
     @property
     def passed(self) -> bool:
         expected_final_bag = tuple(
-            sorted((*self.initial_bag, (int(ItemId.GOLD_TEETH), 1), (int(ItemId.HM03_SURF), 1)))
+            sorted(
+                (
+                    *self.initial_bag,
+                    (int(ItemId.GOLD_TEETH), 1),
+                    (int(ItemId.HM03_SURF), 1),
+                    (int(ItemId.TM40_SKULL_BASH), 1),
+                )
+            )
         )
         return (
             len(self.records) == SAFARI_CHECKPOINT_COUNT
             and self.initial_money - self.final_money == 500
             and self.counter_milestones == (500, 472, 376, 238, 228, 201, 0)
             and self.balls_milestones == (30,) * 7
+            and self.got_tm40_skull_bash
             and self.gold_teeth
             and self.got_hm03
             and self.hm03_retained
@@ -194,6 +203,7 @@ class SafariChapterReport:
                 "encounters_fled": self.encounters_fled,
             },
             "rewards": {
+                "tm40_skull_bash": self.got_tm40_skull_bash,
                 "gold_teeth": self.gold_teeth,
                 "got_hm03_event": self.got_hm03,
                 "hm03_reusable_and_retained": self.hm03_retained,
@@ -383,6 +393,7 @@ def run_safari_chapter(
         _money(emulator),
         tuple(milestones),
         tuple(ball_milestones),
+        ItemId.TM40_SKULL_BASH in _bag(emulator),
         ItemId.GOLD_TEETH in _bag(emulator),
         _event(emulator, EventFlag.GOT_HM03),
         ItemId.HM03_SURF in _bag(emulator),
@@ -468,6 +479,14 @@ def _move(
                 encounters += 1
                 state = reader.read()
             if (state.map_id, state.player_x, state.player_y) != before:
+                if (
+                    label == "Reached West through correct elevation"
+                    and state.map_id == MapId.SAFARI_ZONE_NORTH
+                    and (state.player_x, state.player_y) == (19, 6)
+                    and ItemId.TM40_SKULL_BASH not in _bag(emulator)
+                ):
+                    _pickup_tm40_skull_bash(actions, reader, emulator, timing)
+                    state = reader.read()
                 break
             if not reader.read_input_readiness().ready:
                 _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
@@ -480,6 +499,33 @@ def _move(
         if not party_core_intact(state.party_species_ids) or _balls(emulator) not in {0, 30}:
             raise SafariChapterError(f"{label} changed party or Safari Balls.")
     return encounters
+
+
+def _pickup_tm40_skull_bash(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SafariTiming,
+) -> None:
+    """Collect the source-pinned North-area TM without spending a Safari step."""
+
+    before_steps = _steps(emulator)
+    _pulse(actions, MacroActionKind.MOVE, "down", frames=timing.wait_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(timing.dialogue_pulses):
+        if ItemId.TM40_SKULL_BASH in _bag(emulator):
+            for _ in range(4):
+                _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
+            final = reader.read()
+            if (
+                final.map_id != MapId.SAFARI_ZONE_NORTH
+                or (final.player_x, final.player_y) != (19, 6)
+                or _steps(emulator) != before_steps
+            ):
+                raise SafariChapterError("TM40 pickup changed the qualified Safari route.")
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise SafariChapterError("North-area TM40 Skull Bash pickup failed.")
 
 
 def _flee_safari(

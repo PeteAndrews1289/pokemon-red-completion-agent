@@ -632,6 +632,7 @@ class ItemId(IntEnum):
     TM28_DIG = 0xE4
     TM34_BIDE = 0xEA
     TM38_FIRE_BLAST = 0xEE
+    TM40_SKULL_BASH = 0xF0
     FRESH_WATER = 0x3C
     SODA_POP = 0x3D
     LEMONADE = 0x3E

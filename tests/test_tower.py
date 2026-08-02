@@ -17,10 +17,13 @@ from pokemon_red_completion.tower import (
     REQUIRED_EVENTS,
     ROUTE_8_EAST_GOAL,
     ROUTE_8_SAFE_ROW_MASKS,
+    TOWER_5F_MIN_SUPER_POTION_RESERVE,
+    TOWER_6F_PAIR_FIELD_RECOVERY_HP_THRESHOLD,
     TOWER_CHECKPOINT_COUNT,
     TOWER_FINAL_PARTY,
     TOWER_LAVENDER_TIMING,
     TOWER_RIVAL_FIELD_RECOVERY_HP_THRESHOLD,
+    TOWER_ROCKET_FIELD_RECOVERY_HP_THRESHOLD,
     TowerBattleEvidence,
     TowerChapterReport,
     TowerCheckpoint,
@@ -86,7 +89,7 @@ def _report() -> TowerChapterReport:
         optional_events=(False,) * len(OPTIONAL_EVENTS),
         required_events=(True,) * len(REQUIRED_EVENTS),
         x_accuracy_carried=True,
-        rare_candy_carried=True,
+        rare_candy_used_for_evolution=True,
         elixir_carried=True,
         poke_flute_carried=True,
         evolution_before=(0xB3, 0x40, 0x3B),
@@ -118,6 +121,9 @@ def test_tower_timing_is_positive_and_bounded() -> None:
     assert DEFAULT_LAVENDER_TIMING.flee_pulses == 20
     assert TOWER_LAVENDER_TIMING.flee_pulses == 64
     assert TOWER_RIVAL_FIELD_RECOVERY_HP_THRESHOLD == 55
+    assert TOWER_5F_MIN_SUPER_POTION_RESERVE == 1
+    assert TOWER_6F_PAIR_FIELD_RECOVERY_HP_THRESHOLD == 40
+    assert TOWER_ROCKET_FIELD_RECOVERY_HP_THRESHOLD == 30
     assert _unknown_flee_action(cancel_for_safety=True) is MacroActionKind.CANCEL
     assert _normalized_run_actions(TOWER_LAVENDER_TIMING) == (
         (MacroActionKind.CANCEL, None, TOWER_LAVENDER_TIMING.wait_frames),
@@ -160,7 +166,7 @@ def test_tower_report_requires_every_terminal_gate() -> None:
         replace(report, optional_events=(True,) + report.optional_events[1:]),
         replace(report, required_events=(False,) + report.required_events[1:]),
         replace(report, x_accuracy_carried=False),
-        replace(report, rare_candy_carried=False),
+        replace(report, rare_candy_used_for_evolution=False),
         replace(report, elixir_carried=False),
         replace(report, poke_flute_carried=False),
         replace(report, evolution_after=(0xB3, 0x40, 0x3B)),

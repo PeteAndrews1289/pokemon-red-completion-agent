@@ -423,7 +423,11 @@ lineages remain hard leakage.
    at checkpoint 109/312. Neither attempt consumed a declared slot; all twelve remain pending while
    the type-aware move, full-party sleep pivot, Tower reserve, Sabrina recovery, and one-turn
    Mansion grinding fixes are committed and pushed after their successful 312/312 clean-power
-   Hall-of-Fame replay.**
+   Hall-of-Fame replay. The first rehearsal of that source cleared Route 24 and Route 25 but
+   exposed a remaining Wrap lock at checkpoint 109/312; it consumed no slot. The prepared DUX/Peck
+   assignment for both final Grass trainers, Safari TM40 lesson, and semantic battle-item
+   confirmation have now passed a new 312/312-checkpoint clean-power Hall-of-Fame replay. The
+   exact source is being frozen for the next uncounted rehearsal; no declared slot is open.**
 19. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
 20. Train a small behavior-cloning baseline per specialist.

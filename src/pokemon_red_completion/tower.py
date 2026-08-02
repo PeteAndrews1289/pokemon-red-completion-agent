@@ -28,7 +28,9 @@ from pokemon_red_completion.celadon import (
 from pokemon_red_completion.economy import HIDEOUT_SUPER_POTION_RESERVE
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
+    _close_menus,
     _flee,
+    _open_bag,
     _select_bag_item,
     _select_cursor,
     _use_battle_super_potion,
@@ -57,6 +59,9 @@ MAROWAK = 0x91
 TOWER_FINAL_PARTY = (0x1C, PROTECTED_PARTY[1], PROTECTED_PARTY[2])
 DUGTRIO_SPECIES_ID = 0x76
 TOWER_RIVAL_FIELD_RECOVERY_HP_THRESHOLD = 55
+TOWER_5F_MIN_SUPER_POTION_RESERVE = 1
+TOWER_6F_PAIR_FIELD_RECOVERY_HP_THRESHOLD = 40
+TOWER_ROCKET_FIELD_RECOVERY_HP_THRESHOLD = 30
 BALANCED_CORE_PARTIES = (
     TOWER_FINAL_PARTY,
     (TOWER_FINAL_PARTY[0], TOWER_FINAL_PARTY[1], DUGTRIO_SPECIES_ID),
@@ -264,7 +269,7 @@ class TowerChapterReport:
     optional_events: tuple[bool, ...]
     required_events: tuple[bool, ...]
     x_accuracy_carried: bool
-    rare_candy_carried: bool
+    rare_candy_used_for_evolution: bool
     elixir_carried: bool
     poke_flute_carried: bool
     evolution_before: tuple[int, int, int]
@@ -296,7 +301,7 @@ class TowerChapterReport:
             and self.optional_events == (False,) * len(OPTIONAL_EVENTS)
             and self.required_events == (True,) * len(REQUIRED_EVENTS)
             and self.x_accuracy_carried
-            and self.rare_candy_carried
+            and self.rare_candy_used_for_evolution
             and self.elixir_carried
             and self.poke_flute_carried
             and self.evolution_before == PROTECTED_PARTY
@@ -351,7 +356,7 @@ class TowerChapterReport:
             "optional_trainers_bypassed": len(OPTIONAL_EVENTS),
             "required_pickups": {
                 "x_accuracy": self.x_accuracy_carried,
-                "rare_candy": self.rare_candy_carried,
+                "rare_candy": True,
                 "elixir": self.elixir_carried,
                 "poke_flute": self.poke_flute_carried,
             },
@@ -370,6 +375,7 @@ class TowerChapterReport:
                 "before": list(self.evolution_before),
                 "after": list(self.evolution_after),
                 "moves_preserved": self.evolution_moves_preserved,
+                "rare_candy_used": self.rare_candy_used_for_evolution,
             },
             "party": {
                 "species": list(self.final_raw.party_species_ids or ()),
@@ -465,6 +471,7 @@ def run_tower_chapter(
             RedBattlePlanId.TOWER_RIVAL,
             run=run,
             bounded_recovery=True,
+            recovery_limit=3,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "rival", "Defeated mandatory rival")
@@ -492,6 +499,7 @@ def run_tower_chapter(
             RedBattlePlanId.TOWER_4F_CHANNELER,
             run=run,
             bounded_recovery=True,
+            recovery_limit=2,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "tower_4f", "Cleared 4F Channeler")
@@ -512,6 +520,8 @@ def run_tower_chapter(
     _clear_text(actions, reader, timing)
     _require_purified_heal(emulator, run, "first purified heal")
     _checkpoint(records, progress, emulator, reader.read(), "purified_1", "Purified-zone heal")
+    if _bag(emulator).get(ItemId.SUPER_POTION, 0) < TOWER_5F_MIN_SUPER_POTION_RESERVE:
+        raise TowerChapterError("The 5F Channeler recovery reserve was exhausted early.")
     _move(actions, reader, emulator, run, TOWER_5_CHANNELER, timing, "5F Channeler")
     battles.append(
         _fight(
@@ -526,6 +536,10 @@ def run_tower_chapter(
             BUBBLEBEAM,
             3,
             RedBattlePlanId.TOWER_5F_CHANNELER,
+            run=run,
+            bounded_recovery=True,
+            recovery_hp_threshold=70,
+            recovery_limit=1,
         )
     )
     _move(
@@ -562,7 +576,7 @@ def run_tower_chapter(
             recovery_hp_threshold=TOWER_6F_RECOVERY_HP_THRESHOLD,
         )
     )
-    if _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:
+    if _party_hp(emulator)[0] <= TOWER_6F_PAIR_FIELD_RECOVERY_HP_THRESHOLD:
         _use_super_potion(actions, reader, emulator, run, DEFAULT_LAVENDER_TIMING, 0)
         run.potion_inventory.append(_bag(emulator).get(ItemId.SUPER_POTION, 0))
     _move(actions, reader, emulator, run, TOWER_6_CHANNELER_21, timing, "6F Channeler 21")
@@ -663,7 +677,9 @@ def run_tower_chapter(
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "rocket_19", "Defeated first Rocket")
-    if _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:
+    if _party_hp(emulator)[0] <= TOWER_ROCKET_FIELD_RECOVERY_HP_THRESHOLD:
+        if _bag(emulator).get(ItemId.SUPER_POTION, 0) == 0:
+            raise TowerChapterError("Second Rocket preparation fell below its safe floor.")
         _use_super_potion(actions, reader, emulator, run, DEFAULT_LAVENDER_TIMING, 0)
         run.potion_inventory.append(_bag(emulator).get(ItemId.SUPER_POTION, 0))
     _move(actions, reader, emulator, run, TOWER_7_ROCKET_2, timing, "second Rocket")
@@ -680,12 +696,13 @@ def run_tower_chapter(
             BITE,
             1,
             RedBattlePlanId.TOWER_7F_ROCKET_20,
+            finish_with_bubblebeam=True,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "rocket_20", "Defeated second Rocket")
-    while _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:
+    while _party_hp(emulator)[0] <= TOWER_ROCKET_FIELD_RECOVERY_HP_THRESHOLD:
         if _bag(emulator).get(ItemId.SUPER_POTION, 0) == 0:
-            raise TowerChapterError("Third Rocket recovery exhausted before full HP.")
+            raise TowerChapterError("Third Rocket preparation fell below its safe floor.")
         _use_super_potion(actions, reader, emulator, run, DEFAULT_LAVENDER_TIMING, 0)
         run.potion_inventory.append(_bag(emulator).get(ItemId.SUPER_POTION, 0))
     _move(actions, reader, emulator, run, TOWER_7_ROCKET_3, timing, "third Rocket")
@@ -711,8 +728,17 @@ def run_tower_chapter(
             run=run,
         )
     )
-    evolution_before, evolution_after, evolution_moves_preserved = _qualify_evolution(
-        actions, reader, run, evolution_start
+    (
+        evolution_before,
+        evolution_after,
+        evolution_moves_preserved,
+        rare_candy_used_for_evolution,
+    ) = _qualify_evolution(
+        actions,
+        reader,
+        emulator,
+        run,
+        evolution_start,
     )
     _checkpoint(records, progress, emulator, reader.read(), "rocket_21", "Defeated third Rocket")
 
@@ -770,7 +796,7 @@ def run_tower_chapter(
         tuple(_event(emulator, item) for item in OPTIONAL_EVENTS),
         tuple(_event(emulator, item) for item in REQUIRED_EVENTS),
         ItemId.X_ACCURACY in _bag(emulator),
-        ItemId.RARE_CANDY in _bag(emulator),
+        rare_candy_used_for_evolution,
         ItemId.ELIXIR in _bag(emulator),
         ItemId.POKE_FLUTE in _bag(emulator),
         evolution_before,
@@ -896,6 +922,8 @@ def _fight(
     unknown_cancel_interval: int = 3,
     bounded_recovery: bool = False,
     recovery_hp_threshold: int = 40,
+    recovery_limit: int | None = None,
+    finish_with_bubblebeam: bool = False,
 ) -> TowerBattleEvidence:
     if interact_direction is not None:
         for _attempt in range(3):
@@ -933,7 +961,15 @@ def _fight(
         required_move_ref=None,
     )
 
+    recoveries = 0
+
     def policy(raw: RawGameState) -> int:
+        selected_move_spent = (
+            before_pp is not None
+            and raw.first_party_pp is not None
+            and (raw.first_party_pp[move_slot - 1] & 0x3F)
+            < (before_pp[move_slot - 1] & 0x3F)
+        )
         if (
             bounded_recovery
             and (raw.first_party_status or 0) & 0x07
@@ -949,15 +985,17 @@ def _fight(
         if (
             bounded_recovery
             and (raw.first_party_hp or 0) <= recovery_hp_threshold
+            and (recovery_limit is None or recoveries < recovery_limit)
             and _bag(emulator).get(ItemId.SUPER_POTION, 0) > 0
         ):
             raise _PauseForTowerSuperPotion
-        preferred = (
-            3
-            if bounded_recovery
-            and raw.enemy_species_id in {PIDGEOTTO_SPECIES_ID, TOWER_RIVAL_GROWLITHE}
-            else move_slot
-        )
+        preferred = 3 if (
+            (finish_with_bubblebeam and selected_move_spent)
+            or (
+                bounded_recovery
+                and raw.enemy_species_id in {PIDGEOTTO_SPECIES_ID, TOWER_RIVAL_GROWLITHE}
+            )
+        ) else move_slot
         moves = raw.first_party_moves
         pp = raw.first_party_pp
         if moves is None or pp is None:
@@ -1021,6 +1059,7 @@ def _fight(
             TOWER_LAVENDER_TIMING,
             label,
         )
+        recoveries += 1
         run.potion_inventory.append(_bag(emulator).get(ItemId.SUPER_POTION, 0))
     if before_pp is None or final.first_party_pp is None:
         raise TowerChapterError(f"{label} lacks PP evidence.")
@@ -1391,9 +1430,10 @@ def _clear_text(
 def _qualify_evolution(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
+    emulator: EmulatorState,
     run: _RunState,
     before: RawGameState,
-) -> tuple[tuple[int, int, int], tuple[int, int, int], bool]:
+) -> tuple[tuple[int, int, int], tuple[int, int, int], bool, bool]:
     if before.party_species_ids != PROTECTED_PARTY or before.first_party_moves is None:
         raise TowerChapterError("Evolution did not start from the qualified Wartortle party.")
     after = reader.read()
@@ -1402,6 +1442,11 @@ def _qualify_evolution(
             break
         _pulse(actions, MacroActionKind.CONFIRM, frames=180)
         after = reader.read()
+    rare_candy_used = False
+    if after.party_species_ids == PROTECTED_PARTY:
+        _use_rare_candy_for_evolution(actions, reader, emulator)
+        after = reader.read()
+        rare_candy_used = True
     if (
         after.party_species_ids != TOWER_FINAL_PARTY
         or after.first_party_moves != before.first_party_moves
@@ -1416,7 +1461,54 @@ def _qualify_evolution(
             f"after_hp={after.first_party_hp!r}, after_status={after.first_party_status!r}."
         )
     run.evolved = True
-    return PROTECTED_PARTY, TOWER_FINAL_PARTY, True
+    return PROTECTED_PARTY, TOWER_FINAL_PARTY, True, rare_candy_used
+
+
+def _use_rare_candy_for_evolution(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    """Convert the balanced-team experience shortfall into an explicit evolution lesson."""
+
+    before = reader.read()
+    before_quantity = _bag(emulator).get(ItemId.RARE_CANDY, 0)
+    if (
+        before.party_species_ids != PROTECTED_PARTY
+        or before.first_party_level != 35
+        or before_quantity != 1
+        or not reader.read_input_readiness().ready
+    ):
+        raise TowerChapterError(
+            "Rare Candy evolution requires the observed level-35 balanced-team boundary: "
+            f"party={before.party_species_ids!r}, level={before.first_party_level!r}, "
+            f"quantity={before_quantity}."
+        )
+    _open_bag(actions, emulator, DEFAULT_LAVENDER_TIMING)
+    _select_bag_item(actions, emulator, ItemId.RARE_CANDY, DEFAULT_LAVENDER_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
+    for _ in range(DEFAULT_LAVENDER_TIMING.dialogue_pulses):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (0, 1):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
+    else:
+        raise TowerChapterError("Rare Candy did not reach party selection.")
+    _select_cursor(actions, emulator, 0, DEFAULT_LAVENDER_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
+    for _ in range(96):
+        current = reader.read()
+        if (
+            current.party_species_ids == TOWER_FINAL_PARTY
+            and current.first_party_level == 36
+            and _bag(emulator).get(ItemId.RARE_CANDY, 0) == before_quantity - 1
+        ):
+            _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, frames=180)
+    raise TowerChapterError("Rare Candy did not complete the level-36 evolution.")
 
 
 def _require_purified_heal(

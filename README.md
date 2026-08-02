@@ -384,10 +384,21 @@ gate and fainted the lead. Neither rehearsal qualified or consumed a declared sl
 clean diagnostics hardened the tunnel with type-aware attacks and a prepared DUX sleep pivot,
 removed a wasteful Tower top-off, broke an Alakazam healing loop, and excluded two-turn Fly from
 the one-turn Mansion grinding policy. The combined source then passed an uninterrupted clean-power
-replay at **312/312 checkpoints**, entering the Hall of Fame after **84,632,189 frames**. It must
-still be committed, pushed, and bound to a regenerated registry before the rehearsal is retried.
+replay at **312/312 checkpoints**, entering the Hall of Fame after **84,632,189 frames**. It was
+then committed, pushed, and bound to a regenerated registry before the rehearsal was retried.
 All twelve slots remain pending and the test partition remains unopened, so there is still no
 held-out or promoted-policy result.
+
+The first rehearsal of that published source cleared the former Route 24 and Route 25 failures,
+then stopped at checkpoint 109/312 when Bellsprout began Wrap with 20/57 HP and trapped Wartortle
+until it fainted. The failed uncounted rehearsal consumed no campaign slot. The working repair now
+uses the already-qualified DUX Grass-specialist role for both final 1F trainers, preserves Peck PP
+evidence, restores Wartortle before exiting the tunnel, adds a legal Safari Zone TM40 lesson, and
+makes battle-item confirmation semantic rather than timing-only. The exact combined source has now
+passed a new uninterrupted **312/312-checkpoint**, **36/36-objective** clean-power replay through
+the Hall of Fame in **762,318 actions**. Its Mansion curriculum won **4,236 battles** with a
+six-member minimum level of **77** and a five-level spread. The regenerated source identity is the
+next uncounted rehearsal candidate; all twelve counted slots remain pending.
 
 ## Evidence and project status
 

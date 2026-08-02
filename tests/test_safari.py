@@ -39,7 +39,14 @@ def _report() -> SafariChapterReport:
     raw = _raw()
     initial_bag = ((0x04, 8), (0x28, 1), (0x49, 1))
     final_bag = tuple(
-        sorted((*initial_bag, (int(ItemId.GOLD_TEETH), 1), (int(ItemId.HM03_SURF), 1)))
+        sorted(
+            (
+                *initial_bag,
+                (int(ItemId.GOLD_TEETH), 1),
+                (int(ItemId.HM03_SURF), 1),
+                (int(ItemId.TM40_SKULL_BASH), 1),
+            )
+        )
     )
     return SafariChapterReport(
         records=tuple(
@@ -53,6 +60,7 @@ def _report() -> SafariChapterReport:
         final_money=25_339,
         counter_milestones=(500, 472, 376, 238, 228, 201, 0),
         balls_milestones=(30,) * 7,
+        got_tm40_skull_bash=True,
         gold_teeth=True,
         got_hm03=True,
         hm03_retained=True,
@@ -96,6 +104,7 @@ def test_safari_report_requires_every_terminal_gate() -> None:
         replace(report, final_money=25_538),
         replace(report, counter_milestones=(500, 472, 376, 238, 228, 200, 0)),
         replace(report, balls_milestones=(30, 30, 29, 30, 30, 30, 30)),
+        replace(report, got_tm40_skull_bash=False),
         replace(report, gold_teeth=False),
         replace(report, got_hm03=False),
         replace(report, hm03_retained=False),
@@ -121,6 +130,7 @@ def test_safari_public_report_discloses_one_admission_and_reusable_hm() -> None:
         "single_admission": True,
     }
     assert public["rewards"]["hm03_reusable_and_retained"] is True
+    assert public["rewards"]["tm40_skull_bash"] is True
     assert public["surf"]["slot"] == 4
     assert public["cleanup"]["mechanism"] == "times_up"
 
@@ -133,6 +143,7 @@ def test_safari_source_addresses_and_ids_are_pinned() -> None:
     assert EventFlag.GOT_HM03 == 0x880
     assert ItemId.GOLD_TEETH == 0x40
     assert ItemId.HM03_SURF == 0xC6
+    assert ItemId.TM40_SKULL_BASH == 0xF0
     assert MapId.SAFARI_ZONE_GATE == 0x9C
     assert MapId.SAFARI_ZONE_EAST == 0xD9
     assert MapId.SAFARI_ZONE_NORTH == 0xDA

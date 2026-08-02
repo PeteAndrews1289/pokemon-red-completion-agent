@@ -281,7 +281,8 @@ class ErikaChapterReport:
                     "transfer_before_event": self.tm13_transfer_before_event,
                     "cost": ERIKA_ICE_BEAM_PREPARATION_COST,
                 },
-                "level_42_move_learning": {
+                "skull_bash_preparation": {
+                    "source": "Safari Zone North TM40",
                     "slot": 1,
                     "replaced_move_id": 0x2C,
                     "learned_move_id": 0x82,
@@ -364,9 +365,8 @@ def run_erika_chapter(
         raise ErikaChapterError("Route training lacks a live lead level.")
     route_training = _RouteTrainingState(
         starting_level=initial.first_party_level,
-        # Reach the actual move-learning prerequisite before entering the Gym.
-        # The two required trainers then add useful progress within level 41
-        # without making the route depend on their exact experience yield.
+        # Stop at the already-qualified level-41 training boundary. The Safari
+        # lesson supplies TM40, avoiding an unsafe extra wild-grind cycle.
         target_level=max(initial.first_party_level, 41),
     )
     _checkpoint(records, progress, emulator, initial, "erika_ready", "Strength boundary ready")
@@ -526,7 +526,7 @@ def run_erika_chapter(
     _move(actions, reader, emulator, ("up",), timing, "outer re-cross")
     _move(actions, reader, emulator, OUTER_TREE_TO_CENTER, timing, "Center recovery")
     _heal(actions, reader, emulator, timing)
-    _use_rare_candy_and_learn_skull_bash(actions, reader, emulator, timing)
+    _teach_tm40_skull_bash(actions, reader, emulator, timing)
     try:
         _, tm13_transfer_before_event = acquire_and_teach_ice_beam_from_celadon_center(
             actions,  # type: ignore[arg-type]
@@ -962,6 +962,68 @@ def _run_route15_training(
     _require(reader.read(), MapId.ROUTE_15, (14, 9), "Route 15 training return")
 
 
+def _teach_tm40_skull_bash(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: ErikaTiming,
+) -> None:
+    before = reader.read()
+    if (
+        before.first_party_level is None
+        or before.first_party_level < 41
+        or before.first_party_moves != (0x2C, STRENGTH, 0x3D, 0x39)
+        or _bag(emulator).get(ItemId.TM40_SKULL_BASH, 0) != 1
+        or ItemId.RARE_CANDY in _bag(emulator)
+    ):
+        raise ErikaChapterError(
+            "TM40 Skull Bash lesson lacks its qualified boundary: "
+            f"level={before.first_party_level!r}, moves={before.first_party_moves!r}, "
+            f"tm40={_bag(emulator).get(ItemId.TM40_SKULL_BASH, 0)}, "
+            f"rare_candy={_bag(emulator).get(ItemId.RARE_CANDY, 0)}."
+        )
+
+    menu_timing = LavenderTiming(wait_frames=timing.movement_frames)
+    _open_bag(actions, emulator, menu_timing)  # type: ignore[arg-type]
+    _select_bag_item(  # type: ignore[arg-type]
+        actions, emulator, ItemId.TM40_SKULL_BASH, menu_timing
+    )
+    for _ in range(24):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (0, 1):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    else:
+        raise ErikaChapterError("TM40 did not reach party selection.")
+    _select_cursor(actions, emulator, 0, menu_timing)  # type: ignore[arg-type]
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    for _ in range(24):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (5, 8):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    else:
+        raise ErikaChapterError("TM40 did not reach move deletion.")
+    _select_cursor(actions, emulator, 0, menu_timing)  # type: ignore[arg-type]
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    for _ in range(24):
+        raw = reader.read()
+        if raw.first_party_moves == (
+            SKULL_BASH,
+            STRENGTH,
+            0x3D,
+            0x39,
+        ) and ItemId.TM40_SKULL_BASH not in _bag(emulator):
+            _close_menus(actions, reader, menu_timing)  # type: ignore[arg-type]
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    raise ErikaChapterError("TM40 did not replace Bite and consume the TM.")
+
+
 def _cut(actions, reader, emulator, timing, facing, expected_tile, label) -> None:
     before = reader.read()
     _pulse(actions, MacroActionKind.MOVE, facing, frames=timing.movement_frames)
@@ -1000,58 +1062,6 @@ def _select_menu(actions, emulator, target, maximum, timing) -> None:
             frames=timing.movement_frames,
         )
     raise ErikaChapterError("Menu cursor missed its semantic target.")
-
-
-def _use_rare_candy_and_learn_skull_bash(
-    actions: _CountingExecutor,
-    reader: PokemonRedStateReader,
-    emulator: EmulatorState,
-    timing: ErikaTiming,
-) -> None:
-    before = reader.read()
-    before_quantity = _bag(emulator).get(ItemId.RARE_CANDY, 0)
-    if (
-        before.first_party_level != 41
-        or before.first_party_moves != (0x2C, STRENGTH, 0x3D, 0x39)
-        or before_quantity != 1
-    ):
-        raise ErikaChapterError(
-            "Rare Candy learning gate requires level 41, the qualified moves, "
-            "and the source-qualified Tower candy: "
-            f"level={before.first_party_level!r}, moves={before.first_party_moves!r}, "
-            f"quantity={before_quantity}."
-        )
-    menu_timing = LavenderTiming(wait_frames=timing.movement_frames)
-    _open_bag(actions, emulator, menu_timing)
-    _select_bag_item(actions, emulator, ItemId.RARE_CANDY, menu_timing)
-    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
-    for _ in range(timing.dialogue_pulses):
-        if (
-            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
-            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
-        ) == (0, 1):
-            break
-        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
-    else:
-        raise ErikaChapterError("Rare Candy did not reach party selection.")
-    _select_cursor(actions, emulator, 0, menu_timing)
-    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
-    for _ in range(80):
-        raw = reader.read()
-        if (
-            raw.first_party_level == 42
-            and raw.first_party_moves == (SKULL_BASH, STRENGTH, 0x3D, 0x39)
-            and _bag(emulator).get(ItemId.RARE_CANDY, 0) == before_quantity - 1
-        ):
-            _close_menus(actions, reader, menu_timing)
-            return
-        if (
-            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
-            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
-        ) == (5, 8):
-            _select_cursor(actions, emulator, 0, menu_timing)
-        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
-    raise ErikaChapterError("Rare Candy did not install Skull Bash in slot one.")
 
 
 def _battle(reader, actions, map_id, timing, label, battle_plan_id: str) -> None:

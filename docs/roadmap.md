@@ -270,9 +270,18 @@ the second rehearsal then exposed a trapping-move recovery gap at checkpoint 109
 consumed a declared slot. Clean diagnostics have since cleared the repaired tunnel, Tower, and
 Sabrina policies, isolated two-turn Fly from the one-turn Mansion grinding contract, and recognized
 level-up move replacement as a valid post-attack observation. The combined source passed a new
-312/312 clean-power Hall-of-Fame replay and is awaiting publication before rehearsal. All twelve
+312/312 clean-power Hall-of-Fame replay and was published before rehearsal. All twelve
 slots remain pending, and the test partition remains unopened until a model and its selection
 rules are frozen.
+
+The first rehearsal of the published combined source cleared Route 24 and Route 25, then exposed a
+remaining Wrap lock at Rock Tunnel checkpoint 109/312. It consumed no slot. The working repair
+assigns both final Grass-heavy trainers to the prepared DUX/Peck specialist, restores the story
+lead afterward, acquires Safari Zone TM40 for the later Skull Bash lesson, and prevents duplicate
+battle-item confirmations. The exact revised source has now completed a clean-power
+**312/312-checkpoint**, **36/36-objective** Hall-of-Fame replay in **762,318 actions**. Its
+six-member Mansion curriculum recorded **4,236 wins**, a level-77 floor, and a five-level spread.
+Registry freeze and the next uncounted 68-battle rehearsal are the current gates.
 
 ## Milestone 4 — DAgger and selective RL
 

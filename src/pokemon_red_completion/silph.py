@@ -1658,6 +1658,8 @@ def _battle_healing_item(
     emulator: EmulatorState,
     timing: SilphTiming,
     item: ItemId,
+    *,
+    _retry: bool = False,
 ) -> None:
     if item not in {ItemId.HYPER_POTION, ItemId.FULL_RESTORE, ItemId.FULL_HEAL}:
         raise ValueError("battle healing item must be Hyper Potion, Full Restore, or Full Heal")
@@ -1733,12 +1735,42 @@ def _battle_healing_item(
             and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
         ):
             break
-        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.battle_item_frames)
+        # Sample after each single-frame acknowledgement. A long wait here can
+        # miss the brief return to MAIN, issue another confirmation into ITEM,
+        # and consume a second potion before the verifier observes the bag.
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=1)
     else:
         raise SilphChapterError(f"{label} did not return to the MAIN battle menu.")
     after = _bag(emulator).get(item, 0)
-    if before - after != 1:
-        raise SilphChapterError(f"{label} quantity did not decrement exactly once.")
+    if before - after == 1:
+        return
+    current = reader.read()
+    current_menu = reader.read_battle_menu_state(current)
+    if (
+        before == after
+        and not _retry
+        and current.battle_state == 2
+        and current_menu.phase is BattleMenuPhase.MAIN
+        and 0 < (current.first_party_hp or 0) < (current.first_party_max_hp or 0)
+    ):
+        # A long battle animation can occasionally return to MAIN without the
+        # party-target confirmation registering. Retry the complete semantic
+        # item action once; the unchanged quantity proves no item was spent.
+        _battle_healing_item(
+            reader,
+            actions,
+            emulator,
+            timing,
+            item,
+            _retry=True,
+        )
+        return
+    raise SilphChapterError(
+        f"{label} quantity did not decrement exactly once: "
+        f"before={before}, after={after}, retry={_retry}, "
+        f"hp={current.first_party_hp}/{current.first_party_max_hp}, "
+        f"phase={current_menu.phase.value}."
+    )
 
 
 def _heal_detour_from_seventh(

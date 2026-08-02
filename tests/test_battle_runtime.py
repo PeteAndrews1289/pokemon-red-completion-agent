@@ -2030,6 +2030,36 @@ def test_pp_proof_accepts_an_observed_level_up_move_replacement() -> None:
     assert runtime.raw.first_party_pp[0] == 5
 
 
+def test_pp_proof_accepts_move_replacement_inside_the_first_accelerated_wait() -> None:
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
+    initial = runtime.raw
+
+    def learn_move_during_wait(action: MacroAction) -> None:
+        if action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(
+                runtime.raw,
+                battle_state=0,
+                first_party_moves=(0x82, TAIL_WHIP_MOVE_ID, MEGA_PUNCH_MOVE_ID, WATER_GUN_MOVE_ID),
+                first_party_pp=(15, 30, 30, 11),
+            )
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    runtime.on_action = learn_move_during_wait
+    _confirm_attack_with_pp_gate(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        initial_raw=initial,
+        slot=1,
+        initial_pp=35,
+        timing=BattleRuntimeTiming(),
+        label="accelerated level-up move replacement",
+    )
+
+    assert runtime.raw.first_party_moves[0] == 0x82
+    assert runtime.raw.first_party_pp[0] == 15
+
+
 def test_completion_rechecks_living_lead_before_returning() -> None:
     runtime = FakeRuntime(
         raw=_raw(battle_state=0, hp=0),

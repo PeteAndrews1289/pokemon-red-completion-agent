@@ -47,7 +47,7 @@ def test_erika_timing_is_positive_and_bounded() -> None:
             replace(DEFAULT_ERIKA_TIMING, **{field.name: 0})
 
 
-def test_erika_report_qualifies_level_42_move_learning_and_terminal() -> None:
+def test_erika_report_qualifies_tm40_move_learning_and_terminal() -> None:
     raw = _terminal()
     report = ErikaChapterReport(
         records=tuple(
@@ -83,8 +83,9 @@ def test_erika_report_qualifies_level_42_move_learning_and_terminal() -> None:
     )
 
     assert report.passed
-    learning = report.public_dict()["erika"]["level_42_move_learning"]
+    learning = report.public_dict()["erika"]["skull_bash_preparation"]
     assert learning == {
+        "source": "Safari Zone North TM40",
         "slot": 1,
         "replaced_move_id": 0x2C,
         "learned_move_id": 0x82,

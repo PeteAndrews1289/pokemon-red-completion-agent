@@ -9,10 +9,13 @@ from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.lavender import (
     BATTLE_RECOVERY_THRESHOLD,
     DEFAULT_LAVENDER_TIMING,
+    DUX_BATTLE_RECOVERY_THRESHOLD,
     FINAL_TUNNEL_GRASS_SPECIES,
     FINAL_TUNNEL_RECOVERY_THRESHOLD,
     LAVENDER_CHECKPOINT_COUNT,
     PROTECTED_PARTY,
+    ROUTE_9_MIN_SUPER_POTION_RESERVE,
+    TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD,
     LavenderChapterReport,
     LavenderCheckpoint,
     LavenderTiming,
@@ -70,10 +73,10 @@ def _report() -> LavenderChapterReport:
         parlyz_heals_purchased=2,
         parlyz_heals_used=1,
         parlyz_heals_remaining=1,
-        super_potions_purchased=14,
+        super_potions_purchased=15,
         super_potions_used=4,
-        super_potions_remaining=11,
-        purchase_cost=11600,
+        super_potions_remaining=12,
+        purchase_cost=12300,
         money_remaining=1234,
         route_10_trainer_2_bypassed=True,
         frames_executed=100,
@@ -93,6 +96,9 @@ def test_lavender_timing_is_positive_and_bounded() -> None:
 
 def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert BATTLE_RECOVERY_THRESHOLD == 40
+    assert DUX_BATTLE_RECOVERY_THRESHOLD == 20
+    assert ROUTE_9_MIN_SUPER_POTION_RESERVE == 4
+    assert TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD == 72
     assert FINAL_TUNNEL_RECOVERY_THRESHOLD == 90
 
 
@@ -103,6 +109,7 @@ def test_final_tunnel_policy_spends_bite_evidence_then_exploits_with_bubblebeam(
         current_selected_pp=25,
         finish_with_bubblebeam=True,
         enemy_species_id=0xA9,
+        active_party_index=0,
     ) == (1, 3, 4)
     assert lavender_module._ranked_lavender_move_slots(
         move_slot=1,
@@ -110,6 +117,7 @@ def test_final_tunnel_policy_spends_bite_evidence_then_exploits_with_bubblebeam(
         current_selected_pp=24,
         finish_with_bubblebeam=True,
         enemy_species_id=0xA9,
+        active_party_index=1,
     ) == (3, 1, 4)
     for species in FINAL_TUNNEL_GRASS_SPECIES:
         assert lavender_module._ranked_lavender_move_slots(
@@ -118,30 +126,76 @@ def test_final_tunnel_policy_spends_bite_evidence_then_exploits_with_bubblebeam(
             current_selected_pp=24,
             finish_with_bubblebeam=True,
             enemy_species_id=species,
+            active_party_index=0,
         ) == (1, 3, 4)
 
 
-def test_sleeping_lead_pivots_only_to_a_living_dux_against_final_grass() -> None:
-    sleeping = replace(
+def test_final_tunnel_role_pivot_tracks_enemy_type_and_live_reserves() -> None:
+    grass_against_wartortle = replace(
         _raw(),
-        active_party_index=0,
-        active_party_status=1,
+        active_party_index=1,
         enemy_species_id=0xB9,
     )
 
-    assert lavender_module._should_pivot_sleeping_lead(sleeping, (50, 30, 20), True)
-    assert not lavender_module._should_pivot_sleeping_lead(sleeping, (50, 0, 20), True)
-    assert not lavender_module._should_pivot_sleeping_lead(sleeping, (50, 30, 20), False)
-    assert not lavender_module._should_pivot_sleeping_lead(
-        replace(sleeping, active_party_status=0),
+    assert lavender_module._final_tunnel_pivot_target(
+        grass_against_wartortle,
         (50, 30, 20),
         True,
-    )
-    assert not lavender_module._should_pivot_sleeping_lead(
-        replace(sleeping, enemy_species_id=0xA9),
+    ) == 0
+    assert lavender_module._final_tunnel_pivot_target(
+        replace(grass_against_wartortle, active_party_index=0),
         (50, 30, 20),
         True,
+    ) is None
+    assert lavender_module._final_tunnel_pivot_target(
+        replace(grass_against_wartortle, active_party_index=0, enemy_species_id=0x04),
+        (50, 30, 20),
+        True,
+    ) == 1
+    assert lavender_module._final_tunnel_pivot_target(
+        grass_against_wartortle,
+        (0, 30, 20),
+        True,
+    ) is None
+    assert lavender_module._final_tunnel_pivot_target(
+        grass_against_wartortle,
+        (50, 30, 20),
+        False,
+    ) is None
+
+
+def test_dux_finisher_pivot_requires_a_living_reserve_and_nearly_won_matchup() -> None:
+    opportunity = replace(
+        _raw(),
+        active_party_index=0,
+        enemy_hp=20,
     )
+
+    assert lavender_module._dux_finisher_pivot_target(
+        opportunity,
+        (73, 30, 20),
+        True,
+    ) == 1
+    assert lavender_module._dux_finisher_pivot_target(
+        opportunity,
+        (73, 29, 20),
+        True,
+    ) is None
+    assert lavender_module._dux_finisher_pivot_target(
+        replace(opportunity, enemy_hp=21),
+        (73, 30, 20),
+        True,
+    ) is None
+    assert lavender_module._dux_finisher_pivot_target(
+        opportunity,
+        (73, 0, 20),
+        True,
+    ) is None
+    assert lavender_module._dux_finisher_pivot_target(
+        opportunity,
+        (73, 30, 20),
+        False,
+    ) is None
 
 
 def test_final_sleep_reserve_is_prepared_then_restores_the_story_lead(
@@ -175,7 +229,7 @@ def test_final_sleep_reserve_is_prepared_then_restores_the_story_lead(
 
     assert calls == [
         ("swap", lavender_module.DUX),
-        ("heal", (0, FINAL_TUNNEL_RECOVERY_THRESHOLD)),
+        ("heal", (0, lavender_module.TRAVERSAL_RECOVERY_THRESHOLD)),
         ("cure", None),
         ("swap", lavender_module.WARTORTLE),
     ]
@@ -295,10 +349,10 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
         "parlyz_heals_purchased": 2,
         "parlyz_heals_used": 1,
         "parlyz_heals_remaining": 1,
-        "super_potions_purchased": 14,
+        "super_potions_purchased": 15,
         "super_potions_used": 4,
-        "super_potions_remaining": 11,
-        "purchase_cost": 11600,
+        "super_potions_remaining": 12,
+        "purchase_cost": 12300,
         "money_remaining": 1234,
     }
     assert public["route_10_trainer_2_bypassed"] is True
