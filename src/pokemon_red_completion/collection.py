@@ -74,12 +74,19 @@ class LivingSpecimen:
 
 @dataclass(frozen=True, slots=True)
 class CollectionContract:
-    """A complete partition of a game's species universe into targets and exclusions."""
+    """Registration and living-retention targets for one game lineage.
+
+    ``target_species`` is the historical registration goal.  The optional
+    ``living_target_species`` is the subset that can coexist on the save.  It
+    defaults to the registration target for games without consumptive unique
+    evolutions.
+    """
 
     game_id: str
     species_universe: tuple[str, ...]
     target_species: tuple[str, ...]
     exclusions: tuple[CollectionExclusion, ...]
+    living_target_species: tuple[str, ...] | None = None
     target_level: int = MAX_LEVEL
 
     def __post_init__(self) -> None:
@@ -105,6 +112,25 @@ class CollectionContract:
             raise ValueError("target species and exclusions must be disjoint")
         if targets | excluded_set != universe:
             raise ValueError("targets and exclusions must partition the species universe")
+        living_targets = self.resolved_living_target_species
+        if not living_targets:
+            raise ValueError("living_target_species must not be empty")
+        if len(living_targets) != len(set(living_targets)):
+            raise ValueError("living_target_species must not contain duplicates")
+        for species_ref in living_targets:
+            _require_species_ref(species_ref)
+        if not set(living_targets) <= targets:
+            raise ValueError("living targets must be a subset of registration targets")
+
+    @property
+    def resolved_living_target_species(self) -> tuple[str, ...]:
+        """Return the explicit living target or the backward-compatible default."""
+
+        return (
+            self.target_species
+            if self.living_target_species is None
+            else self.living_target_species
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -164,6 +190,7 @@ class CollectionReport:
     """Auditable progress against one completion contract."""
 
     target_count: int
+    living_target_count: int
     pokedex_owned_count: int
     living_count: int
     level_cap_count: int
@@ -205,9 +232,11 @@ def summarize_collection(
     """Compare Pokédex history and living specimens with the declared targets."""
 
     targets = set(contract.target_species)
+    living_target_species = contract.resolved_living_target_species
+    living_targets = set(living_target_species)
     living_levels: dict[str, int] = {}
     for specimen in observation.specimens:
-        if specimen.species_ref in targets:
+        if specimen.species_ref in living_targets:
             living_levels[specimen.species_ref] = max(
                 specimen.level,
                 living_levels.get(specimen.species_ref, 0),
@@ -216,15 +245,16 @@ def summarize_collection(
         species for species in contract.target_species if species not in observation.owned_species
     )
     missing_living = tuple(
-        species for species in contract.target_species if species not in living_levels
+        species for species in living_target_species if species not in living_levels
     )
     underleveled = tuple(
         (species, living_levels[species])
-        for species in contract.target_species
+        for species in living_target_species
         if species in living_levels and living_levels[species] < contract.target_level
     )
     return CollectionReport(
         target_count=len(contract.target_species),
+        living_target_count=len(living_target_species),
         pokedex_owned_count=len(targets & observation.owned_species),
         living_count=len(living_levels),
         level_cap_count=sum(level >= contract.target_level for level in living_levels.values()),
@@ -267,7 +297,7 @@ def plan_collection(
     if report.underleveled:
         species_ref, level = min(
             report.underleveled,
-            key=lambda item: (item[1], contract.target_species.index(item[0])),
+            key=lambda item: (item[1], contract.resolved_living_target_species.index(item[0])),
         )
         in_party = any(
             specimen.species_ref == species_ref and specimen.location is CollectionLocation.PARTY
@@ -344,7 +374,7 @@ def plan_collection(
 
     return CollectionDecision(
         CollectionDirective.STOP,
-        f"all {report.target_count} living targets reached level {contract.target_level}",
+        f"all {report.living_target_count} living targets reached level {contract.target_level}",
     )
 
 

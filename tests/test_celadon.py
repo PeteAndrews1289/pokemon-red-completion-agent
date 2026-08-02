@@ -5,7 +5,7 @@ from dataclasses import fields, replace
 import pytest
 
 import pokemon_red_completion.celadon as celadon_module
-from pokemon_red_completion.actions import MacroActionKind
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.celadon import (
     BITE,
     CELADON_CHECKPOINT_COUNT,
@@ -15,11 +15,21 @@ from pokemon_red_completion.celadon import (
     CeladonCheckpoint,
     CeladonTiming,
     Route8TrainerEvidence,
+    _CountingExecutor,
+    _flee,
     _party_hp,
     _party_max_hp,
     _party_status,
+    _RunState,
 )
-from pokemon_red_completion.observation import EventFlag, MapId, RamAddress, RawGameState
+from pokemon_red_completion.observation import (
+    BattleMenuPhase,
+    BattleMenuState,
+    EventFlag,
+    MapId,
+    RamAddress,
+    RawGameState,
+)
 from pokemon_red_completion.red_party import PARTY_STRUCT_STRIDE
 
 
@@ -81,9 +91,7 @@ def test_whole_party_receipts_read_all_six_struct_slots() -> None:
     hp = (81, 52, 37, 140, 95, 110)
     maximum = (90, 60, 45, 150, 100, 120)
     status = (0, 8, 0, 64, 0, 0)
-    for index, (current, total, condition) in enumerate(
-        zip(hp, maximum, status, strict=True)
-    ):
+    for index, (current, total, condition) in enumerate(zip(hp, maximum, status, strict=True)):
         stride = index * PARTY_STRUCT_STRIDE
         for address, value in (
             (int(RamAddress.PARTY_MON_1_HP) + stride, current),
@@ -138,16 +146,18 @@ def test_celadon_public_report_exposes_exact_route_evidence() -> None:
     public = _report().public_dict()
     assert public["status"] == "ok"
     assert public["route_8_trainers_bypassed"] == list(range(8))
-    assert public["trainer_battles"] == [{
-        "label": "Route 8 Lass",
-        "map_id": MapId.ROUTE_8,
-        "event": EventFlag.BEAT_ROUTE_8_TRAINER_8,
-        "opponent": 0xCB,
-        "class": 0x03,
-        "set": 16,
-        "move_id": BITE,
-        "selected_pp_spent": 5,
-    }]
+    assert public["trainer_battles"] == [
+        {
+            "label": "Route 8 Lass",
+            "map_id": MapId.ROUTE_8,
+            "event": EventFlag.BEAT_ROUTE_8_TRAINER_8,
+            "opponent": 0xCB,
+            "class": 0x03,
+            "set": 16,
+            "move_id": BITE,
+            "selected_pp_spent": 5,
+        }
+    ]
     assert public["inventory"] == {
         "super_potions_remaining": 10,
         "repels_remaining": 0,
@@ -161,9 +171,7 @@ def test_move_retries_the_same_step_after_a_no_movement_wild_flee(
 ) -> None:
     class Runtime:
         def __init__(self) -> None:
-            self.raw = replace(
-                _raw(), map_id=MapId.ROUTE_8, player_x=1, player_y=1, battle_state=0
-            )
+            self.raw = replace(_raw(), map_id=MapId.ROUTE_8, player_x=1, player_y=1, battle_state=0)
             self.move_pulses = 0
 
         def execute(self, action: object) -> None:
@@ -198,3 +206,57 @@ def test_move_retries_the_same_step_after_a_no_movement_wild_flee(
     )
     assert runtime.move_pulses == 2
     assert (final.player_x, final.player_y) == (2, 1)
+
+
+def test_wild_flee_reselects_run_after_a_failed_escape(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Runtime:
+        def __init__(self) -> None:
+            self.raw = replace(
+                _raw(),
+                map_id=MapId.ROUTE_8,
+                battle_state=1,
+                enemy_species_id=25,
+                enemy_level=22,
+            )
+            self.phase = BattleMenuPhase.MAIN
+            self.run_attempts = 0
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is not MacroActionKind.CONFIRM:
+                return
+            if self.phase is BattleMenuPhase.MAIN:
+                self.run_attempts += 1
+                if self.run_attempts == 1:
+                    self.phase = BattleMenuPhase.UNKNOWN
+                else:
+                    self.raw = replace(self.raw, battle_state=0)
+            elif self.phase is BattleMenuPhase.UNKNOWN:
+                self.phase = BattleMenuPhase.MAIN
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(self.phase, selected_main_command=3)
+
+        def read_input_readiness(self) -> object:
+            return type("Ready", (), {"ready": True})()
+
+    runtime = Runtime()
+    monkeypatch.setattr(celadon_module, "_party_hp", lambda _emulator: (80,))
+    monkeypatch.setattr(celadon_module, "_bag", lambda _emulator: {1: 1})
+    run = _RunState([])
+
+    _flee(
+        _CountingExecutor(runtime),
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        run,
+        CeladonTiming(flee_pulses=8),
+    )
+
+    assert runtime.run_attempts == 2
+    assert len(run.wilds) == 1
+    assert run.wilds[0].hp_safe

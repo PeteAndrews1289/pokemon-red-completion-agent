@@ -333,9 +333,7 @@ def run_adaptive_trainer_battle(
         kind = "trainer" if expected_battle_state == _TRAINER_BATTLE_STATE else "wild"
         raise BattleRuntimeError(f"{label} must start in an active {kind} battle.")
     battle_start_schedule = (
-        bound_battle_start_schedule()
-        if expected_battle_state == _TRAINER_BATTLE_STATE
-        else None
+        bound_battle_start_schedule() if expected_battle_state == _TRAINER_BATTLE_STATE else None
     )
     if battle_start_schedule is not None:
         battle_start_schedule.start_or_resume(intent)
@@ -978,6 +976,15 @@ def _recover_sleep_transition(
     previous_count = sleep_count
     saw_decrease = False
     for _ in range(timing.max_sleep_recovery_pulses):
+        if _ACTIVE_BATTLE_STATE.get() == _WILD_BATTLE_STATE and raw.battle_state == 0:
+            _require_present_state(raw, expected_map=expected_map, label=label)
+            if (raw.battler_hp or 0) <= 0:
+                raise BattleRuntimeError(f"{label} fainted as the wild battle ended during sleep.")
+            if raw.battler_pp != initial_pp_vector:
+                raise BattleRuntimeError(
+                    f"{label} changed PP as the wild battle ended during sleep recovery."
+                )
+            return True
         _require_active_trainer_state(raw, expected_map=expected_map, label=label)
         if (raw.battler_hp or 0) <= 0:
             raise BattleRuntimeError(f"{label} fainted during sleep recovery.")
@@ -1124,13 +1131,8 @@ def _choose_usable_slot(
         raise BattleRuntimeError(
             f"{label} move-slot policy selected slot {slot} without move evidence."
         )
-    if (
-        raw.player_disabled_move_slot == slot
-        and (raw.player_disable_turns or 0) > 0
-    ):
-        raise BattleRuntimeError(
-            f"{label} move-slot policy selected disabled slot {slot}."
-        )
+    if raw.player_disabled_move_slot == slot and (raw.player_disable_turns or 0) > 0:
+        raise BattleRuntimeError(f"{label} move-slot policy selected disabled slot {slot}.")
     _current_pp(raw, slot=slot, label=label)
     return slot
 
@@ -1212,10 +1214,7 @@ def _require_present_state(
             f"pp={raw.battler_pp}."
         )
     expected_battle_state = _ACTIVE_BATTLE_STATE.get()
-    if (
-        expected_battle_state == _TRAINER_BATTLE_STATE
-        and raw.battle_state == _WILD_BATTLE_STATE
-    ):
+    if expected_battle_state == _TRAINER_BATTLE_STATE and raw.battle_state == _WILD_BATTLE_STATE:
         raise BattleRuntimeError(f"{label} changed to an unexpected wild battle.")
     if raw.battle_state not in {0, expected_battle_state}:
         raise BattleRuntimeError(f"{label} exposed unsupported battle state {raw.battle_state!r}.")

@@ -23,6 +23,7 @@ from pokemon_red_completion.blaine import (
     MANSION_TEAM_POLICY,
     MANSION_TRAINER_EVENTS,
     MANSION_TRAINING_POLICY,
+    MANSION_VOLATILE_ENEMY_SPECIES,
     QUIZ_ANSWERS,
     QUIZ_TEXT_PULSES,
     BlaineTurn,
@@ -54,12 +55,7 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert BLAINE_ANTIDOTE_SALE_VALUE == 50
     assert BLAINE_MAX_WILD_FLEES == 3
     assert CENTER_TO_MANSION == (
-        ("down",) * 5
-        + ("right",) * 7
-        + ("up",) * 7
-        + ("left", "up")
-        + ("left",) * 11
-        + ("up",)
+        ("down",) * 5 + ("right",) * 7 + ("up",) * 7 + ("left", "up") + ("left",) * 11 + ("up",)
     )
     assert MANSION_TRAINING_POLICY.target_level == 55
     assert HYDRO_PUMP_LEARN_LEVEL == 52
@@ -67,7 +63,8 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert MANSION_TRAINING_POLICY.preferred_move_slots == (4, 2, 3, 1)
     assert MANSION_TRAINING_POLICY.max_battles == 180
     assert MANSION_TEAM_POLICY.required_size == 6
-    assert MANSION_TEAM_POLICY.max_battles == 5_500
+    assert MANSION_TEAM_POLICY.max_battles == 7_000
+    assert frozenset({0x37, 0x8F}) == MANSION_VOLATILE_ENEMY_SPECIES
 
 
 def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -> None:
@@ -89,38 +86,50 @@ def test_team_training_navigates_the_two_column_battle_menu() -> None:
 def test_team_training_selects_damaging_moves_for_the_active_species() -> None:
     base = RawGameState(True, MapId.POKEMON_MANSION_1F, 5, 20, 3, 1)
 
-    assert _team_training_move_slot(
-        replace(
-            base,
-            active_party_species_id=0x1C,
-            active_party_moves=(0x82, 0x46, 0x3A, 0x39),
-            active_party_pp=(15, 15, 10, 15),
+    assert (
+        _team_training_move_slot(
+            replace(
+                base,
+                active_party_species_id=0x1C,
+                active_party_moves=(0x82, 0x46, 0x3A, 0x39),
+                active_party_pp=(15, 15, 10, 15),
+            )
         )
-    ) == 4
-    assert _team_training_move_slot(
-        replace(
-            base,
-            active_party_species_id=0x40,
-            active_party_moves=(0x40, 0x1C, 0x0F, 0x13),
-            active_party_pp=(35, 15, 30, 15),
+        == 4
+    )
+    assert (
+        _team_training_move_slot(
+            replace(
+                base,
+                active_party_species_id=0x40,
+                active_party_moves=(0x40, 0x1C, 0x0F, 0x13),
+                active_party_pp=(35, 15, 30, 15),
+            )
         )
-    ) == 3
-    assert _team_training_move_slot(
-        replace(
-            base,
-            active_party_species_id=0x84,
-            active_party_moves=(0x22, 0x85, 0x9C, 0),
-            active_party_pp=(15, 4, 10, 0),
+        == 3
+    )
+    assert (
+        _team_training_move_slot(
+            replace(
+                base,
+                active_party_species_id=0x84,
+                active_party_moves=(0x22, 0x85, 0x9C, 0),
+                active_party_pp=(15, 4, 10, 0),
+            )
         )
-    ) == 1
-    assert _team_training_move_slot(
-        replace(
-            base,
-            active_party_species_id=0x3B,
-            active_party_moves=(0x0A, 0x2D, 0x5B, 0x1C),
-            active_party_pp=(35, 40, 10, 15),
+        == 1
+    )
+    assert (
+        _team_training_move_slot(
+            replace(
+                base,
+                active_party_species_id=0x3B,
+                active_party_moves=(0x0A, 0x2D, 0x5B, 0x1C),
+                active_party_pp=(35, 40, 10, 15),
+            )
         )
-    ) == 3
+        == 3
+    )
 
 
 def test_red_training_matchup_requires_extra_margin_for_dux() -> None:

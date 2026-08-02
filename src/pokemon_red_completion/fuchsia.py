@@ -89,16 +89,13 @@ FISHER_TO_SNORLAX = _directions(
     "DDDLLLLLLDDDDDDRRRDRRDDDRRRRDDDDDDRDDDLLLLLLUUUULLLDDDDDDDRRRRRDDDDD"
 )
 SNORLAX_TO_LAVENDER = (
-    _reverse(FISHER_TO_SNORLAX)
-    + _reverse(ROUTE12_FISHER)
-    + _reverse(LAVENDER_TO_ROUTE12)
+    _reverse(FISHER_TO_SNORLAX) + _reverse(ROUTE12_FISHER) + _reverse(LAVENDER_TO_ROUTE12)
 )
 LAVENDER_TO_SNORLAX = LAVENDER_TO_ROUTE12 + ROUTE12_FISHER + FISHER_TO_SNORLAX
 SNORLAX_OBJECT_TILE = _directions("D")
 SNORLAX_TO_ROCKER = _directions("DDRDDDDDDDDRRDR")
 ROCKER_TO_ROUTE13 = _directions(
-    "RDDDDDLLLLLLLLLLDDDDRRRRRDDDDDDDLLLDDLDDRRRRRDRRRDDDDDLDDDDDDLL"
-    "DDDDDDDDDDDDLD"
+    "RDDDDDLLLLLLLLLLDDDDRRRRRDDDDDDDLLLDDLDDRRRRRDRRRDDDDDLDDDDDDLLDDDDDDDDDDDDLD"
 )
 ROUTE13_TRAINER_PAIR = _directions("DLL")
 ROUTE13_TO_FUCHSIA = _directions(
@@ -107,8 +104,7 @@ ROUTE13_TO_FUCHSIA = _directions(
     "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL"
 )
 FUCHSIA_TO_CENTER = _directions(
-    "DLLDLLLLLLLLLLLLDLDDLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDRRRRRRR"
-    "UUUURRRRRRRRRRRU"
+    "DLLDLLLLLLLLLLLLDLDDLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDRRRRRRRUUUURRRRRRRRRRRU"
 )
 
 REQUIRED_EVENTS = (
@@ -272,9 +268,7 @@ class FuchsiaChapterReport:
             and len(self.battles) == len(BATTLE_PP_BOUNDS)
             and all(
                 lower <= battle.selected_pp_spent <= upper
-                for battle, (lower, upper) in zip(
-                    self.battles, BATTLE_PP_BOUNDS, strict=True
-                )
+                for battle, (lower, upper) in zip(self.battles, BATTLE_PP_BOUNDS, strict=True)
             )
             and tuple(item.trainer_number for item in self.battles) == (3, None, 2, 1, 12)
             and self.required_events == (True,) * len(REQUIRED_EVENTS)
@@ -286,8 +280,7 @@ class FuchsiaChapterReport:
             and self.snorlax_object_tile_crossed
             and self.battles[1].captured
             and 1 <= self.battles[1].balls_used <= SNORLAX_CAPTURE_POLICY.max_throws
-            and self.battles[1].party_after
-            == self.battles[1].party_before + (SNORLAX,)
+            and self.battles[1].party_after == self.battles[1].party_before + (SNORLAX,)
             and _bag_quantity(self.final_bag, ItemId.GREAT_BALL) == 0
             and _bag_quantity(self.final_bag, ItemId.SUPER_POTION) == 0
             and self.battles[1].balls_used <= SNORLAX_CAPTURE_POLICY.max_throws
@@ -459,10 +452,10 @@ def run_fuchsia_chapter(
     )
     _require(reader.read(), MapId.ROUTE_12, (10, 61), "removed Snorlax north stance")
     _move(actions, reader, emulator, run, SNORLAX_OBJECT_TILE, timing, "removed Snorlax tile")
-    snorlax_object_tile_crossed = (
-        reader.read().map_id == MapId.ROUTE_12
-        and (reader.read().player_x, reader.read().player_y) == (10, 62)
-    )
+    snorlax_object_tile_crossed = reader.read().map_id == MapId.ROUTE_12 and (
+        reader.read().player_x,
+        reader.read().player_y,
+    ) == (10, 62)
     if not snorlax_object_tile_crossed:
         raise FuchsiaChapterError("Removed Snorlax object tile did not become traversable.")
     _move(actions, reader, emulator, run, SNORLAX_TO_ROCKER, timing, "Route 12 Rocker")
@@ -596,9 +589,7 @@ def _fight_trainer(
         identity[1],
         identity[2] if observed_trainer_number is None else observed_trainer_number,
     )
-    battle = _settle_trainer_identity(
-        actions, reader, emulator, timing, label, observed_identity
-    )
+    battle = _settle_trainer_identity(actions, reader, emulator, timing, label, observed_identity)
     before_pp = battle.first_party_pp
     final = run_adaptive_trainer_battle(
         reader,
@@ -697,9 +688,7 @@ def _fight_snorlax(
     spent = (before_pp[2] & 0x3F) - (final.first_party_pp[2] & 0x3F)
     _clear_text(actions, reader, timing)
     if (
-        not SNORLAX_BUBBLEBEAM_PP_BOUND[0]
-        <= spent
-        <= SNORLAX_BUBBLEBEAM_PP_BOUND[1]
+        not SNORLAX_BUBBLEBEAM_PP_BOUND[0] <= spent <= SNORLAX_BUBBLEBEAM_PP_BOUND[1]
         or not _event(emulator, EventFlag.BEAT_ROUTE12_SNORLAX)
         or _event(emulator, EventFlag.FIGHT_ROUTE12_SNORLAX)
         or ItemId.POKE_FLUTE not in _bag(emulator)
@@ -947,14 +936,12 @@ def _run_wild_capture(
     throws_used = 0
     recovery_items_used = 0
     starting_balls = sum(
-        _bag(emulator).get(item, 0)
-        for item in (ItemId.GREAT_BALL, ItemId.POKE_BALL)
+        _bag(emulator).get(item, 0) for item in (ItemId.GREAT_BALL, ItemId.POKE_BALL)
     )
     for pulse_index in range(SNORLAX_RUNTIME_PULSE_BOUND):
         raw = reader.read()
         balls_remaining = sum(
-            _bag(emulator).get(item, 0)
-            for item in (ItemId.GREAT_BALL, ItemId.POKE_BALL)
+            _bag(emulator).get(item, 0) for item in (ItemId.GREAT_BALL, ItemId.POKE_BALL)
         )
         observed_throws = starting_balls - balls_remaining
         if observed_throws < throws_used or observed_throws > SNORLAX_CAPTURE_POLICY.max_throws:
@@ -973,9 +960,7 @@ def _run_wild_capture(
                     )
                     != throws_used
                 ):
-                    raise FuchsiaChapterError(
-                        "Snorlax ball accounting drifted after capture."
-                    )
+                    raise FuchsiaChapterError("Snorlax ball accounting drifted after capture.")
                 if reader.read_input_readiness().ready:
                     return raw, throws_used, recovery_items_used
                 _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
@@ -1062,8 +1047,7 @@ def _snorlax_capture_observation(
         target_max_hp=raw.enemy_max_hp,
         catcher=party.members[raw.active_party_index],
         balls_available=sum(
-            _bag(emulator).get(item, 0)
-            for item in (ItemId.GREAT_BALL, ItemId.POKE_BALL)
+            _bag(emulator).get(item, 0) for item in (ItemId.GREAT_BALL, ItemId.POKE_BALL)
         ),
         party_has_room=len(party.members) < 6,
         throws_used=throws_used,
@@ -1107,7 +1091,13 @@ def _select_battle_bag_item(
             raise FuchsiaChapterError(f"Battle bag item {int(item):#04x} is unavailable.")
         if absolute < len(items) and items[absolute] == item:
             return
-        _pulse(actions, MacroActionKind.MOVE, "down", frames=74)
+        target = items.index(item)
+        _pulse(
+            actions,
+            MacroActionKind.MOVE,
+            "down" if absolute < target else "up",
+            frames=74,
+        )
     raise FuchsiaChapterError(f"Could not select battle bag item {int(item):#04x}.")
 
 
@@ -1183,10 +1173,7 @@ def _snorlax_move_slot(raw: RawGameState) -> int:
         if (
             len(pp) >= slot
             and pp[slot - 1] & 0x3F
-            and not (
-                raw.player_disabled_move_slot == slot
-                and (raw.player_disable_turns or 0) > 0
-            )
+            and not (raw.player_disabled_move_slot == slot and (raw.player_disable_turns or 0) > 0)
         ):
             return slot
     raise FuchsiaChapterError("Snorlax policy has no legal move with PP.")

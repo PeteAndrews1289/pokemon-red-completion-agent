@@ -21,6 +21,7 @@ from pokemon_red_completion.battle_runtime import (
 )
 from pokemon_red_completion.celadon import (
     DEFAULT_CELADON_TIMING,
+    CeladonTiming,
     CeladonWildFleeEvidence,
     _bag,
     _flee,
@@ -85,6 +86,7 @@ BLAINE_MONEY_DELTA = 5_003
 BLAINE_ANTIDOTE_SALE_VALUE = 50
 MAX_REPEL_PRICE = 700
 BLAINE_MAX_WILD_FLEES = 3
+MANSION_TRAINING_FLEE_TIMING = CeladonTiming(flee_pulses=96)
 BLAINE_OPPONENT = 0xEF
 BLAINE_TRAINER_CLASS = 0xEF
 BLAINE_TRAINER_SET = 1
@@ -122,10 +124,11 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
     reserve_total_pp=16,
     max_enemy_level_delta=0,
     minimum_direct_level_advantage=15,
-    # The first six-member zero-faint measurement reached levels 79--86 after
-    # 5,000 wins, two levels outside the strict spread. Retain the contract and
-    # add measured headroom rather than weakening the balance evidence.
-    max_battles=5_500,
+    # Clean-power measurements have needed between 5,445 wins (levels 82--87)
+    # and more than 5,500 wins (levels 82--91) because escort participation is
+    # encounter-dependent. Retain the strict spread and zero-faint contract and
+    # provide measured headroom for the slower lineage.
+    max_battles=7_000,
     max_steps=500_000,
     max_healing_trips=1_000,
     max_faints=0,
@@ -143,9 +146,7 @@ CUT_MOVE_ID = 0x0F
 FLY_MOVE_ID = 0x13
 SURF_MOVE_ID = 0x39
 STRENGTH_MOVE_ID = 0x46
-FIELD_MOVE_IDS = frozenset(
-    {CUT_MOVE_ID, DIG, FLY_MOVE_ID, SURF_MOVE_ID, STRENGTH_MOVE_ID}
-)
+FIELD_MOVE_IDS = frozenset({CUT_MOVE_ID, DIG, FLY_MOVE_ID, SURF_MOVE_ID, STRENGTH_MOVE_ID})
 TRAINING_MOVE_IDS = {
     BLASTOISE_SPECIES_ID: (SURF_MOVE_ID, 0x3A, STRENGTH_MOVE_ID, 0x82),
     DUX_SPECIES_ID: (CUT_MOVE_ID, 0x40, FLY_MOVE_ID),
@@ -179,6 +180,12 @@ TRAINING_ATTACK_PP_RESERVE = {
 # into a long attritional knockout. It is fled rather than feeding still more
 # experience to the already-high Blastoise escort.
 MANSION_ESCORT_ENEMY_SPECIES = frozenset({0x88})
+# Koffing and Weezing can end an encounter with Selfdestruct while a trainee is
+# switching to the escort.  A terminal double knockout used to bypass the
+# normal post-battle faint assertion because the switch itself ended battle.
+# At the qualified training levels the lead has a decisive escape advantage,
+# so these encounters are fled before any switch can expose the escort.
+MANSION_VOLATILE_ENEMY_SPECIES = frozenset({0x37, 0x8F})
 MANSION_TRAINER_EVENTS = (
     EventFlag.BEAT_MANSION_1_TRAINER_0,
     EventFlag.BEAT_MANSION_2_TRAINER_0,
@@ -188,12 +195,10 @@ MANSION_TRAINER_EVENTS = (
     EventFlag.BEAT_MANSION_4_TRAINER_1,
 )
 GYM_TRAINER_EVENTS = tuple(
-    EventFlag(int(EventFlag.BEAT_CINNABAR_GYM_TRAINER_0) + offset)
-    for offset in range(7)
+    EventFlag(int(EventFlag.BEAT_CINNABAR_GYM_TRAINER_0) + offset) for offset in range(7)
 )
 GYM_GATE_EVENTS = tuple(
-    EventFlag(int(EventFlag.CINNABAR_GYM_GATE_0_UNLOCKED) + offset)
-    for offset in range(7)
+    EventFlag(int(EventFlag.CINNABAR_GYM_GATE_0_UNLOCKED) + offset) for offset in range(7)
 )
 QUIZ_ANSWERS = (True, False, False, False, True, False)
 QUIZ_TEXT_PULSES = (9, 10, 9, 11, 11, 9)
@@ -206,20 +211,13 @@ def _directions(value: str) -> tuple[str, ...]:
 CENTER_TO_MART = ("down",) * 5 + ("right",) * 4 + ("up",)
 MART_TO_MANSION = _directions("RDDDRRRUUUUUUULULLLLLLLLLLLU")
 CENTER_TO_MANSION = (
-    ("down",) * 5
-    + ("right",) * 7
-    + ("up",) * 7
-    + ("left", "up")
-    + ("left",) * 11
-    + ("up",)
+    ("down",) * 5 + ("right",) * 7 + ("up",) * 7 + ("left", "up") + ("left",) * 11 + ("up",)
 )
 MANSION_1F_TO_3F = _directions("U" * 17 + "RRRURRUUUUUULLUUULL")
 MANSION_3F_TO_STATUE = _directions("RRRRRDDDDL")
 MANSION_3F_TO_B1F = _directions("RRRRDDDDRDRDDDLLLDDDDDDRRRRRRRRDDD")
 MANSION_B1F_TO_STATUE = _directions("UUUUUUULLLLLLDDDRDDDDLDDDDR")
-MANSION_B1F_TO_NORTH_STATUE = _directions(
-    "LUUUULLLLLUUUUUUURRRRRRRRRRRRDDDRRUUUUUUUUUUUULUULLLLL"
-)
+MANSION_B1F_TO_NORTH_STATUE = _directions("LUUUULLLLLUUUUUUURRRRRRRRRRRRDDDRRUUUUUUUUUUUULUULLLLL")
 MANSION_B1F_TO_SECRET_KEY = _directions("RRRRDDLLLLLLLLLLLLLLLLLLLLDDDDDDDDR")
 GYM_ENTRY_ROUTE = _directions("RRRRRRRUUUUUUUUU")
 GYM_QUIZ_ROUTES = (
@@ -231,13 +229,9 @@ GYM_QUIZ_ROUTES = (
     _directions("RURRUUUULLUL"),
 )
 QUIZ_6_TO_BLAINE = _directions("RURRUUUL")
-BLAINE_TO_GYM_EXIT = _directions(
-    "RRDDDDDDDDDDDDRRRRUURURRUUUUUUUUUUUURRRRRRDDDDDDDDDDDDDLLDD"
-)
+BLAINE_TO_GYM_EXIT = _directions("RRDDDDDDDDDDDDRRRRUURURRUUUUUUUUUUUURRRRRRDDDDDDDDDDDDDLLDD")
 MART_TO_GYM = _directions("RDDDRRRUUUUUUUUUU")
-GYM_RETURN_TO_BLAINE = _directions(
-    "UURRUUUUUUUUUUUUULLLLLLDDDDDDDDDDDDLLDLDDLLLLUUUUUUUUUUUULL"
-)
+GYM_RETURN_TO_BLAINE = _directions("UURRUUUUUUUUUUUUULLLLLLDDDDDDDDDDDDLLDLDDLLLLUUUUUUUUUUUULL")
 GYM_EXIT_TO_CENTER = ("down",) * 8 + ("left",) * 7 + ("up",)
 
 
@@ -374,8 +368,7 @@ class BlaineChapterReport:
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
             and (self.final_raw.first_party_level or 0) >= MANSION_TRAINING_POLICY.target_level
-            and self.final_raw.first_party_moves
-            == (HYDRO_PUMP_MOVE_ID, 0x46, 0x3A, SURF_MOVE_ID)
+            and self.final_raw.first_party_moves == (HYDRO_PUMP_MOVE_ID, 0x46, 0x3A, SURF_MOVE_ID)
             and self.final_raw.first_party_pp == (5, 15, 10, 15)
             and self.party_hp == self.party_max_hp
             and all(hp > 0 for hp in self.party_hp)
@@ -404,10 +397,8 @@ class BlaineChapterReport:
                 and item.inventory_preserved
                 for item in self.mansion_wild_flees
             ),
-            "lead_training": self.training.passed
-            and self.training.area_id == "pokemon_mansion_1f",
-            "team_readiness": self.team_readiness is not None
-            and self.team_readiness.passed,
+            "lead_training": self.training.passed and self.training.area_id == "pokemon_mansion_1f",
+            "team_readiness": self.team_readiness is not None and self.team_readiness.passed,
             "mansion_items": self.secret_key_quantity == 1 and self.tm14_quantity == 1,
             "quiz_answers": self.quiz_answers == QUIZ_ANSWERS,
             "quiz_gates": self.gym_gate_events_after_quizzes == (False,) + (True,) * 6,
@@ -474,18 +465,12 @@ class BlaineChapterReport:
                 "tm14_blizzard": self.tm14_quantity,
                 "team_balance": {
                     "minimum_level": (
-                        self.team_readiness.observed_minimum_level
-                        if self.team_readiness
-                        else None
+                        self.team_readiness.observed_minimum_level if self.team_readiness else None
                     ),
                     "level_spread": (
-                        self.team_readiness.observed_level_spread
-                        if self.team_readiness
-                        else None
+                        self.team_readiness.observed_level_spread if self.team_readiness else None
                     ),
-                    "passed": (
-                        self.team_readiness.passed if self.team_readiness else None
-                    ),
+                    "passed": (self.team_readiness.passed if self.team_readiness else None),
                     "battles": self.team_training_battles,
                     "healing_trips": self.team_training_healing_trips,
                 },
@@ -571,9 +556,7 @@ def run_blaine_chapter(
     ):
         raise BlaineChapterError("Mansion/Blaine input boundary is not pristine.")
     if (
-        not BLAINE_INPUT_BAG_SLOT_BOUNDS[0]
-        <= len(initial_bag)
-        <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]
+        not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= len(initial_bag) <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]
         or initial_bag.get(ItemId.X_ACCURACY, 0) != 1
         or initial_bag.get(ItemId.TM34_BIDE, 0) != 1
         or initial_bag.get(ItemId.ANTIDOTE, 0) not in (0, 1, 2)
@@ -918,9 +901,7 @@ def _sell_antidote_before_mansion(
 
     if not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= input_slots <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]:
         raise BlaineChapterError(f"Unsupported Blaine input capacity: {input_slots} slots.")
-    if antidote_quantity not in (0, 1, 2) or (
-        input_slots == 19 and antidote_quantity != 1
-    ):
+    if antidote_quantity not in (0, 1, 2) or (input_slots == 19 and antidote_quantity != 1):
         raise BlaineChapterError(
             "Unsupported Blaine Antidote capacity: "
             f"slots={input_slots}, quantity={antidote_quantity}."
@@ -1003,10 +984,7 @@ def _pick_up_secret_key(actions, reader, emulator) -> None:
     _pulse(actions, MacroActionKind.INTERACT)
     for _ in range(32):
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-        if (
-            _bag(emulator).get(ItemId.SECRET_KEY, 0) == 1
-            and reader.read_input_readiness().ready
-        ):
+        if _bag(emulator).get(ItemId.SECRET_KEY, 0) == 1 and reader.read_input_readiness().ready:
             if len(_bag(emulator)) != before + 1:
                 raise BlaineChapterError("Secret Key changed an unexpected bag slot count.")
             return
@@ -1055,9 +1033,7 @@ def _field_dig(
         raise BlaineChapterError("Diglett no longer exposes Dig in field slot zero.")
     _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_HIDEOUT_TIMING.wait_frames)
-    expected_maps = (
-        (expected_map,) if isinstance(expected_map, MapId) else tuple(expected_map)
-    )
+    expected_maps = (expected_map,) if isinstance(expected_map, MapId) else tuple(expected_map)
     for _ in range(DEFAULT_HIDEOUT_TIMING.dialogue_pulses):
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
         if reader.read().map_id in expected_maps:
@@ -1130,9 +1106,7 @@ def _training_attack_pp(member: PartyMemberObservation) -> int:
     damaging = set(TRAINING_MOVE_IDS.get(member.species_id, ()))
     if not damaging:
         return member.total_pp
-    return sum(
-        move.current_pp for move in member.known_moves if move.move_id in damaging
-    )
+    return sum(move.current_pp for move in member.known_moves if move.move_id in damaging)
 
 
 def _training_attack_pp_reserve(
@@ -1230,11 +1204,7 @@ def _run_mansion_team_balancing(
 
         raw = reader.read()
         escort = next(
-            (
-                member
-                for member in party.members
-                if member.species_id == BLASTOISE_SPECIES_ID
-            ),
+            (member for member in party.members if member.species_id == BLASTOISE_SPECIES_ID),
             None,
         )
         if escort is None:
@@ -1243,8 +1213,7 @@ def _run_mansion_team_balancing(
             escort.is_fainted
             or escort.hp_ratio <= policy.retreat_hp_ratio
             or escort.status is not StatusCondition.HEALTHY
-            or _training_attack_pp(escort)
-            <= _training_attack_pp_reserve(escort, policy)
+            or _training_attack_pp(escort) <= _training_attack_pp_reserve(escort, policy)
         )
         if raw.battle_state == 1:
             trainee = party.weakest_trainable_member
@@ -1252,29 +1221,44 @@ def _run_mansion_team_balancing(
                 raise BlaineChapterError(
                     "A Mansion encounter began without the selected trainee in front."
                 )
-            if raw.enemy_species_id in MANSION_ESCORT_ENEMY_SPECIES:
-                _flee(actions, reader, emulator, flee_run, DEFAULT_CELADON_TIMING)
+            if raw.enemy_species_id in MANSION_VOLATILE_ENEMY_SPECIES:
+                _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
+                _require_zero_faints(party_reader, "volatile-matchup escape")
                 continue
-            trainee_fights = (
-                _red_training_matchup_acceptable(
-                    trainee,
-                    raw.enemy_level,
-                    policy,
-                    raw.enemy_species_id,
-                )
-                and _training_attack_pp(trainee)
-                > _training_attack_pp_reserve(trainee, policy)
-            )
+            if raw.enemy_species_id in MANSION_ESCORT_ENEMY_SPECIES:
+                if escort_unsafe:
+                    raise BlaineChapterError(
+                        "An excluded Mansion matchup began without a safe escape escort."
+                    )
+                if not _switch_active_battler(
+                    actions,
+                    reader,
+                    emulator,
+                    target_index=escort.slot - 1,
+                    label="Blastoise escape escort",
+                ):
+                    raise BlaineChapterError(
+                        "Excluded Mansion encounter ended during the escape switch."
+                    )
+                _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
+                _require_zero_faints(party_reader, "excluded-matchup escape")
+                continue
+            trainee_fights = _red_training_matchup_acceptable(
+                trainee,
+                raw.enemy_level,
+                policy,
+                raw.enemy_species_id,
+            ) and _training_attack_pp(trainee) > _training_attack_pp_reserve(trainee, policy)
             fighter = trainee if trainee_fights else escort
             fighter_unsafe = (
                 fighter.is_fainted
                 or fighter.hp_ratio <= policy.retreat_hp_ratio
                 or fighter.status is not StatusCondition.HEALTHY
-                or _training_attack_pp(fighter)
-                <= _training_attack_pp_reserve(fighter, policy)
+                or _training_attack_pp(fighter) <= _training_attack_pp_reserve(fighter, policy)
             )
             if fighter_unsafe:
-                _flee(actions, reader, emulator, flee_run, DEFAULT_CELADON_TIMING)
+                _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
+                _require_zero_faints(party_reader, "unsafe-matchup escape")
                 continue
             if not trainee_fights:
                 battle_continues = _switch_active_battler(
@@ -1285,6 +1269,7 @@ def _run_mansion_team_balancing(
                     label="Blastoise escort",
                 )
                 if not battle_continues:
+                    _require_zero_faints(party_reader, "terminal escort switch")
                     battles += 1
                     emit_progress()
                     continue
@@ -1297,6 +1282,7 @@ def _run_mansion_team_balancing(
                 expected_map=MapId.POKEMON_MANSION_1F,
                 label="Pokémon Mansion team training encounter",
             )
+            _require_zero_faints(party_reader, "completed training battle")
             battles += 1
             emit_progress()
             continue
@@ -1354,14 +1340,24 @@ def _run_mansion_team_balancing(
         _restore_training_core_order(actions, reader, emulator)
         _training_dig_to_cinnabar(actions, reader, emulator)
         _move(actions, reader, ("up",), "team training final Center entry")
-        _require(
-            reader.read(), MapId.CINNABAR_POKECENTER, (3, 7), "team training final Center"
-        )
+        _require(reader.read(), MapId.CINNABAR_POKECENTER, (3, 7), "team training final Center")
         _move(actions, reader, ("up",) * 4, "team training final nurse")
         _heal(actions, reader, emulator)
         healing_trips += 1
     _restore_training_core_order(actions, reader, emulator)
     return summarize_team_readiness(party_reader.read(), policy), battles, healing_trips
+
+
+def _require_zero_faints(party_reader: PokemonRedPartyReader, context: str) -> None:
+    party = party_reader.read()
+    if party.fainted_count:
+        state = tuple(
+            (member.species_id, member.level, member.hp, member.max_hp, member.status.value)
+            for member in party.members
+        )
+        raise BlaineChapterError(
+            f"Team training recorded a faint after {context}: party={state!r}."
+        )
 
 
 def _restore_training_core_order(
@@ -1373,16 +1369,10 @@ def _restore_training_core_order(
 
     party_reader = PokemonRedPartyReader(emulator)
     observed = party_reader.read().species_ids()
-    ground_member = (
-        DUGTRIO_SPECIES_ID
-        if DUGTRIO_SPECIES_ID in observed
-        else DIGLETT_SPECIES_ID
-    )
+    ground_member = DUGTRIO_SPECIES_ID if DUGTRIO_SPECIES_ID in observed else DIGLETT_SPECIES_ID
     desired_core = (BLASTOISE_SPECIES_ID, DUX_SPECIES_ID, ground_member)
     if any(species not in observed for species in desired_core):
-        raise BlaineChapterError(
-            f"Cannot restore the qualified training core from {observed!r}."
-        )
+        raise BlaineChapterError(f"Cannot restore the qualified training core from {observed!r}.")
     for target_index, species_id in enumerate(desired_core):
         current = party_reader.read().species_ids()
         if current[target_index] == species_id:
@@ -1418,9 +1408,7 @@ def _swap_field_party_slots(
     expected = list(before.species_ids())
     expected[first_index], expected[second_index] = expected[second_index], expected[first_index]
     selected = before.members[first_index]
-    field_move_count = sum(
-        move.move_id in FIELD_MOVE_IDS for move in selected.known_moves
-    )
+    field_move_count = sum(move.move_id in FIELD_MOVE_IDS for move in selected.known_moves)
 
     _pulse(actions, MacroActionKind.OPEN_MENU)
     _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
@@ -1493,9 +1481,7 @@ def _switch_active_battler(
                 frames=120,
             )
             continue
-        direction = _battle_command_direction(
-            menu.selected_main_command, BATTLE_PARTY_MENU_COMMAND
-        )
+        direction = _battle_command_direction(menu.selected_main_command, BATTLE_PARTY_MENU_COMMAND)
         if direction is None:
             raise BlaineChapterError(f"Battle command cursor is invalid while selecting {label}.")
         _pulse(actions, MacroActionKind.MOVE, direction, 120)
@@ -1610,7 +1596,7 @@ def _run_mansion_training(
 
         if raw.battle_state == 1:
             if directive is TrainingDirective.FLEE:
-                _flee(actions, reader, emulator, flee_run, DEFAULT_CELADON_TIMING)
+                _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
                 battles_fled += 1
                 continue
             if directive is not TrainingDirective.FIGHT:
@@ -1659,9 +1645,7 @@ def _run_mansion_training(
             )
             continue
         if raw.map_id != MapId.POKEMON_MANSION_1F:
-            raise BlaineChapterError(
-                f"Mansion training left its qualified area: {raw.map_id!r}."
-            )
+            raise BlaineChapterError(f"Mansion training left its qualified area: {raw.map_id!r}.")
         direction = "down" if (raw.player_y or 0) <= 20 else "up"
         _pulse(actions, MacroActionKind.MOVE, direction, 240)
         steps += 1

@@ -25,8 +25,11 @@ GENERIC_PC_MENU_POSITION = (1, 2)
 GENERIC_PC_MENU_MAXIMA = frozenset((3, 4))
 DEPOSIT_WITHDRAW_MENU_POSITION = (10, 12)
 DEPOSIT_WITHDRAW_MENU_MAXIMUM = 2
+CHANGE_BOX_MENU_POSITION = (12, 1)
+CHANGE_BOX_MENU_MAXIMUM = 11
 PARTY_LIMIT = 6
 BOX_CAPACITY = 20
+BOX_COUNT = 12
 
 
 class RedPCStorageError(RuntimeError):
@@ -94,6 +97,25 @@ class RedPCWithdrawReport:
             and self.party_after == (*self.party_before, self.species_id)
             and self.box_after
             == self.box_before[:target_index] + self.box_before[target_index + 1 :]
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class RedPCSwitchBoxReport:
+    previous_box_index: int
+    current_box_index: int
+    box_species_before: tuple[tuple[int, ...], ...]
+    box_species_after: tuple[tuple[int, ...], ...]
+    storage_initialized_before: bool
+    storage_initialized_after: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            self.previous_box_index != self.current_box_index
+            and len(self.box_species_before) == BOX_COUNT
+            and self.box_species_after == self.box_species_before
+            and self.storage_initialized_after
         )
 
 
@@ -185,6 +207,7 @@ def deposit_party_member(
             )
             if not report.passed or box_after.box_index != box_before.box_index:
                 raise RedPCStorageError("deposit result failed its immutable transition gate")
+            _return_to_bills_pc_menu(actions, reader, timing=timing)
             return report
         _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
     raise RedPCStorageError(
@@ -254,11 +277,77 @@ def withdraw_box_member(
             )
             if not report.passed or box_after.box_index != box_before.box_index:
                 raise RedPCStorageError("withdraw result failed its immutable transition gate")
+            _return_to_bills_pc_menu(actions, reader, timing=timing)
             return report
         _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
     raise RedPCStorageError(
         f"withdraw did not reach its bounded transition: party={party_after!r}, "
         f"box={box_after.species_ids!r}"
+    )
+
+
+def switch_box(
+    actions: ActionExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    target_box_index: int,
+    timing: RedPCStorageTiming = DEFAULT_STORAGE_TIMING,
+) -> RedPCSwitchBoxReport:
+    """Switch to one exact zero-based PC box and prove the collection was preserved."""
+
+    if type(target_box_index) is not int or not 0 <= target_box_index < BOX_COUNT:
+        raise ValueError(f"target_box_index must be between 0 and {BOX_COUNT - 1}")
+
+    collection_before = reader.read_all_box_states()
+    previous_box_index = collection_before.current_box_index
+    if target_box_index == previous_box_index:
+        raise RedPCStorageError(f"box {target_box_index + 1} is already current")
+
+    _require_bills_pc_menu(reader.read_menu_cursor_state())
+    _select_absolute_index(actions, reader, BILLS_PC_CHANGE_BOX_INDEX, timing=timing)
+    _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+
+    # Red warns that changing boxes saves the game. The two-choice prompt opens
+    # on Yes; its preceding text can span more than one input page.
+    for _ in range(timing.max_dialogue_pulses + 1):
+        change_menu = reader.read_menu_cursor_state()
+        if (
+            (change_menu.top_x, change_menu.top_y) == CHANGE_BOX_MENU_POSITION
+            and change_menu.maximum_visible_index == CHANGE_BOX_MENU_MAXIMUM
+        ):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+    else:
+        raise RedPCStorageError(f"change-box menu did not open: {change_menu!r}")
+    if change_menu.selected_absolute_index != previous_box_index:
+        raise RedPCStorageError(
+            f"change-box menu selected {change_menu.selected_absolute_index + 1}, "
+            f"expected current box {previous_box_index + 1}"
+        )
+
+    _select_absolute_index(actions, reader, target_box_index, timing=timing)
+    _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+
+    for _ in range(timing.max_dialogue_pulses + 1):
+        current = reader.read_current_box_state()
+        if current.box_index == target_box_index:
+            collection_after = reader.read_all_box_states()
+            report = RedPCSwitchBoxReport(
+                previous_box_index=previous_box_index,
+                current_box_index=collection_after.current_box_index,
+                box_species_before=tuple(box.species_ids for box in collection_before.boxes),
+                box_species_after=tuple(box.species_ids for box in collection_after.boxes),
+                storage_initialized_before=collection_before.storage_initialized,
+                storage_initialized_after=collection_after.storage_initialized,
+            )
+            if not report.passed:
+                raise RedPCStorageError("box switch failed its collection-preservation gate")
+            _return_to_bills_pc_menu(actions, reader, timing=timing)
+            return report
+        _wait(actions, timing=timing)
+    raise RedPCStorageError(
+        f"box switch did not select box {target_box_index + 1}; "
+        f"current box is {current.box_index + 1}"
     )
 
 
@@ -269,6 +358,23 @@ def _require_bills_pc_menu(state: MenuCursorState) -> None:
         or state.scroll_offset != 0
     ):
         raise RedPCStorageError(f"Bill's PC main menu is unavailable: {state!r}")
+
+
+def _return_to_bills_pc_menu(
+    actions: ActionExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    timing: RedPCStorageTiming,
+) -> None:
+    for _ in range(timing.max_dialogue_pulses + 1):
+        state = reader.read_menu_cursor_state()
+        try:
+            _require_bills_pc_menu(state)
+        except RedPCStorageError:
+            _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+        else:
+            return
+    raise RedPCStorageError("storage operation did not return to Bill's PC menu")
 
 
 def _select_absolute_index(
@@ -301,4 +407,8 @@ def _pulse(
     timing: RedPCStorageTiming,
 ) -> None:
     actions.execute(MacroAction(kind, value))
+    _wait(actions, timing=timing)
+
+
+def _wait(actions: ActionExecutor, *, timing: RedPCStorageTiming) -> None:
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.wait_frames))

@@ -176,12 +176,15 @@ def test_wild_runtime_accepts_truthful_wild_state_and_restores_trainer_default()
     assert final.battle_state == 0
 
     trainer = ImmediateBattleExitRuntime()
-    assert run_adaptive_trainer_battle(
-        trainer,
-        trainer,
-        lambda _raw: 4,
-        expected_map=MapId.CERULEAN_CITY,
-    ).battle_state == 0
+    assert (
+        run_adaptive_trainer_battle(
+            trainer,
+            trainer,
+            lambda _raw: 4,
+            expected_map=MapId.CERULEAN_CITY,
+        ).battle_state
+        == 0
+    )
 
 
 class RecordingDecisionObserver:
@@ -484,6 +487,21 @@ class OffSlotSleepPPSimulation(SleepRecoverySimulation):
             self.raw = replace(self.raw, first_party_pp=tuple(pp))
 
 
+class TerminalWildSleepSimulation(SleepRecoverySimulation):
+    def execute(self, action: MacroAction) -> None:
+        ending_sleep_turn = (
+            action.kind is MacroActionKind.CONFIRM
+            and self.menu.phase is BattleMenuPhase.UNKNOWN
+            and bool((self.raw.first_party_status or 0) & 0x07)
+        )
+        if ending_sleep_turn:
+            self.actions.append(action)
+            self.raw = replace(self.raw, battle_state=0, enemy_hp=0)
+            self.controls = READY
+            return
+        super().execute(action)
+
+
 def _non_wait_actions(runtime: FakeRuntime) -> list[MacroAction]:
     return [action for action in runtime.actions if action.kind is not MacroActionKind.WAIT]
 
@@ -533,6 +551,23 @@ def test_sleep_recovery_rejects_an_off_slot_pp_decrement() -> None:
             expected_map=MapId.CERULEAN_CITY,
             timing=BattleRuntimeTiming(max_move_menu_transition_pulses=1),
         )
+
+
+def test_wild_battle_may_end_without_pp_while_sleep_recovery_is_active() -> None:
+    runtime = TerminalWildSleepSimulation()
+    runtime.raw = replace(runtime.raw, battle_state=1)
+
+    final = run_adaptive_wild_battle(
+        runtime,
+        runtime,
+        lambda raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
+        timing=BattleRuntimeTiming(max_move_menu_transition_pulses=1),
+    )
+
+    assert final.battle_state == 0
+    assert final.first_party_hp == 26
+    assert final.first_party_pp == (35, 30, 30, 11)
 
 
 def test_actor_error_propagation_is_not_counted_as_observer_loss() -> None:
@@ -1051,9 +1086,7 @@ def test_zero_offset_has_an_attestation_without_a_fake_execution() -> None:
             intent=BattleIntent("help_bill", SCHEDULED_BATTLE_PLAN_ID),
         )
 
-    event = next(
-        event for event in sink.events if event.kind == "battle_start_offset_applied"
-    )
+    event = next(event for event in sink.events if event.kind == "battle_start_offset_applied")
     assert event.payload["frames"] == 0
     assert event.payload["execution_step_index"] is None
     assert all(
@@ -1905,9 +1938,7 @@ def test_enemy_trapping_turn_can_suppress_move_selection_without_spending_pp() -
 
 
 def test_faster_opponent_disable_suppresses_selected_turn_without_pp() -> None:
-    runtime = FakeRuntime(
-        menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
-    )
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
     initial = runtime.raw
 
     def disable_selected_move(action: MacroAction) -> None:
@@ -1939,9 +1970,7 @@ def test_faster_opponent_disable_suppresses_selected_turn_without_pp() -> None:
 
 
 def test_faster_opponent_trapping_move_suppresses_selected_turn_without_pp() -> None:
-    runtime = FakeRuntime(
-        menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
-    )
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
     initial = runtime.raw
 
     def trap_before_selected_move(action: MacroAction) -> None:

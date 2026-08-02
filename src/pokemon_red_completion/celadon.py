@@ -52,9 +52,7 @@ def _directions(value: str) -> tuple[str, ...]:
 CENTER_EXIT = _directions("DDDDD")
 LAVENDER_TO_ROUTE_8 = _directions("LLLDDL")
 ROUTE_8_TRAINER_TRIGGER = _directions("LLLLDDDDDLLLLLU")
-ROUTE_8_AFTER_TRAINER = _directions(
-    "LLLLUUUUULLLLLULLLLLLLLLLLLDLDDDDDLLLLLLLLLLLLUUUUULL"
-)
+ROUTE_8_AFTER_TRAINER = _directions("LLLLUUUUULLLLLULLLLLLLLLLLLDLDDDDDLLLLLLLLLLLLUUUUULL")
 ROUTE_8_TO_GATE = _directions("UUULU")
 GATE_TO_TUNNEL = _directions("RUUU")
 TUNNEL_TO_ROUTE_7_GATE = _directions("DDD" + "L" * 45)
@@ -200,16 +198,18 @@ class CeladonChapterReport:
         return {
             "status": "ok" if self.passed else "failed",
             "objective": "reach_celadon",
-            "trainer_battles": [{
-                "label": trainer.label,
-                "map_id": trainer.map_id,
-                "event": trainer.event,
-                "opponent": trainer.opponent,
-                "class": trainer.trainer_class,
-                "set": trainer.trainer_set,
-                "move_id": trainer.move_id,
-                "selected_pp_spent": trainer.selected_pp_spent,
-            }],
+            "trainer_battles": [
+                {
+                    "label": trainer.label,
+                    "map_id": trainer.map_id,
+                    "event": trainer.event,
+                    "opponent": trainer.opponent,
+                    "class": trainer.trainer_class,
+                    "set": trainer.trainer_set,
+                    "move_id": trainer.move_id,
+                    "selected_pp_spent": trainer.selected_pp_spent,
+                }
+            ],
             "route_8_trainers_bypassed": [
                 index for index, defeated in enumerate(self.route_8_events_after) if not defeated
             ],
@@ -326,12 +326,22 @@ def run_celadon_chapter(
     if spent <= 0 or _events(emulator) != (False,) * 8 + (True,):
         raise CeladonChapterError("Route 8 Lass missed its move/event transition proof.")
     trainer = Route8TrainerEvidence(
-        "Route 8 Lass", int(MapId.ROUTE_8), int(EventFlag.BEAT_ROUTE_8_TRAINER_8),
-        0xCB, 0x03, 16, BITE, spent,
+        "Route 8 Lass",
+        int(MapId.ROUTE_8),
+        int(EventFlag.BEAT_ROUTE_8_TRAINER_8),
+        0xCB,
+        0x03,
+        16,
+        BITE,
+        spent,
     )
     _checkpoint(
-        records, progress, emulator, final_battle,
-        "route8_trainer8_defeated", "Defeated only the required Route 8 trainer",
+        records,
+        progress,
+        emulator,
+        final_battle,
+        "route8_trainer8_defeated",
+        "Defeated only the required Route 8 trainer",
     )
 
     _move(actions, reader, emulator, run, ROUTE_8_AFTER_TRAINER, timing, "Route 8 westbound")
@@ -364,8 +374,12 @@ def run_celadon_chapter(
     raw = reader.read()
     _require(raw, MapId.UNDERGROUND_PATH_ROUTE_7, (4, 4), "Route 7 gate")
     _checkpoint(
-        records, progress, emulator, raw,
-        "west_east_tunnel_crossed", "Crossed the west-east Underground Path",
+        records,
+        progress,
+        emulator,
+        raw,
+        "west_east_tunnel_crossed",
+        "Crossed the west-east Underground Path",
     )
 
     _move(actions, reader, emulator, run, ROUTE_7_GATE_EXIT, timing, "Route 7 gate exit")
@@ -490,8 +504,56 @@ def _flee(
     hp, inventory = _party_hp(emulator), _bag(emulator)
     if before.battle_state != 1:
         raise CeladonChapterError("Wild flee requires an active wild battle.")
+    trace: list[tuple[int, str, int | None, int | None, int | None]] = []
     for _ in range(timing.flee_pulses):
-        menu = reader.read_battle_menu_state(reader.read())
+        final = reader.read()
+        if final.battle_state == 0 and reader.read_input_readiness().ready:
+            final_hp = _party_hp(emulator)
+            evidence = CeladonWildFleeEvidence(
+                int(before.map_id or 0),
+                int(before.player_x or 0),
+                int(before.player_y or 0),
+                int(before.enemy_species_id or 0),
+                int(before.enemy_level or 0),
+                final.party_species_ids == species,
+                final.first_party_pp == pp,
+                all(0 < after <= prior for prior, after in zip(hp, final_hp, strict=True)),
+                _bag(emulator) == inventory,
+            )
+            if not all(
+                (
+                    evidence.party_preserved,
+                    evidence.pp_preserved,
+                    evidence.hp_safe,
+                    evidence.inventory_preserved,
+                )
+            ):
+                raise CeladonChapterError("Wild flee violated protected state.")
+            run.wilds.append(evidence)
+            return
+        if final.battle_state != 1:
+            trace.append(
+                (
+                    final.battle_state,
+                    "field-transition",
+                    None,
+                    final.first_party_hp,
+                    final.enemy_hp,
+                )
+            )
+            _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+            continue
+        menu = reader.read_battle_menu_state(final)
+        trace.append(
+            (
+                final.battle_state,
+                menu.phase.value,
+                menu.selected_main_command,
+                final.first_party_hp,
+                final.enemy_hp,
+            )
+        )
+        del trace[:-12]
         if menu.phase is BattleMenuPhase.UNKNOWN:
             _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
             continue
@@ -500,34 +562,13 @@ def _flee(
             continue
         command = menu.selected_main_command
         if command == 3:
-            break
+            _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+            continue
         direction = {0: "right", 1: "right", 2: "down"}.get(command)
         if direction is None:
             raise CeladonChapterError("Wild flee exposed an invalid main-menu cursor.")
         _pulse(executor, MacroActionKind.MOVE, direction, timing.wait_frames)
-    else:
-        raise CeladonChapterError("Wild flee could not select RUN.")
-    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-    for _ in range(timing.flee_pulses):
-        final = reader.read()
-        if final.battle_state == 0 and reader.read_input_readiness().ready:
-            final_hp = _party_hp(emulator)
-            evidence = CeladonWildFleeEvidence(
-                int(before.map_id or 0), int(before.player_x or 0), int(before.player_y or 0),
-                int(before.enemy_species_id or 0), int(before.enemy_level or 0),
-                final.party_species_ids == species, final.first_party_pp == pp,
-                all(0 < after <= prior for prior, after in zip(hp, final_hp, strict=True)),
-                _bag(emulator) == inventory,
-            )
-            if not all((
-                evidence.party_preserved, evidence.pp_preserved,
-                evidence.hp_safe, evidence.inventory_preserved,
-            )):
-                raise CeladonChapterError("Wild flee violated protected state.")
-            run.wilds.append(evidence)
-            return
-        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    raise CeladonChapterError("Wild flee exceeded its bounded dialogue.")
+    raise CeladonChapterError(f"Wild flee exceeded its bounded dialogue: trace={trace!r}.")
 
 
 def _heal_center(
@@ -574,9 +615,11 @@ def _checkpoint(
 ) -> None:
     records.append(CeladonCheckpoint(checkpoint_id, label, raw))
     if progress is not None:
-        progress(CeladonProgress(
-            checkpoint_id, label, len(records), CELADON_CHECKPOINT_COUNT, emulator.frame_count
-        ))
+        progress(
+            CeladonProgress(
+                checkpoint_id, label, len(records), CELADON_CHECKPOINT_COUNT, emulator.frame_count
+            )
+        )
 
 
 def _require(
@@ -653,9 +696,7 @@ def _party_max_hp(emulator: EmulatorState) -> tuple[int, ...]:
 
 def _party_status(emulator: EmulatorState) -> tuple[int, ...]:
     return tuple(
-        emulator.read_u8(
-            int(RamAddress.PARTY_MON_1_STATUS) + index * PARTY_STRUCT_STRIDE
-        )
+        emulator.read_u8(int(RamAddress.PARTY_MON_1_STATUS) + index * PARTY_STRUCT_STRIDE)
         for index in range(_party_size(emulator))
     )
 

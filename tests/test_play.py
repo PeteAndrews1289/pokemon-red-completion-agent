@@ -1762,7 +1762,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         "received_verified": True,
         "controls_ready": True,
         "collection_progress": {
-            "contract": "red-solo-living-dex-level-100-v1",
+            "contract": "red-solo-perfect-save-level-100-v2",
             "target": 124,
             "owned": 4,
             "seen": 5,

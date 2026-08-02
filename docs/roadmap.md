@@ -162,21 +162,30 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 - [x] Add the Hitmonlee acquisition and raise the live training contract from five members to six.
 - [x] Replay the six-member balanced-team route from clean power-on and qualify it against the
   completion contract.
-- [x] Define the Red one-save/no-link collection contract: 124 obtainable targets and 27 explicit
-  version, trade, mutually exclusive gift, fossil, starter, evolution, or event exclusions.
+- [x] Define the Red one-save/no-link collection contract: 124 obtainable Pokédex registrations,
+  120 coexisting living targets, and 27 explicit version, trade, mutually exclusive gift, fossil,
+  starter, evolution, or event exclusions.
 - [x] Add game-neutral collection planning plus fail-closed Red readers for seen/owned Pokédex
   flags and the visible party/current PC box.
 - [x] Add checksum-verified all-box inspection across the active Work-RAM box and both dedicated
   saved-box SRAM banks without exposing raw addresses to the planner.
 - [x] Replay the full teacher and publish the first terminal census: 12/124 owned, 85/124 seen,
-  7/124 living, and 0/124 at level 100, with all twelve boxes verified.
+  7/120 living, and 0/120 at level 100, with all twelve boxes verified.
 - [x] Add bounded, transition-verified Bill's PC deposit and withdraw controls, and replace the
   route's one hard-coded helper deposit with the reusable storage specialist.
-- [ ] Add verified switch-box control and independently retain one living specimen for every
-  target species.
+- [x] Add bounded, verified switch-box control and exercise a reversible Box 1→2→1 cycle without
+  losing a stored specimen.
+- [x] Replay the corrected contract and storage cycle from clean power through Hall of Fame:
+  312/312 checkpoints, 36/36 objectives, storage initialized, all boxes verified, and a terminal
+  12/124 registered, 7/120 living, 0/120 level-100 census.
+- [ ] Independently retain one living specimen for all 120 coexisting targets.
 - [ ] Implement source-pinned encounter, gift, evolution, and resource routes for all 124 targets.
-- [ ] Qualify the 124-species Pokédex-registration gate, living-collection gate, and level-100
-  living-collection gate as three separate uninterrupted-run claims.
+- [ ] Qualify the 124-species Pokédex-registration gate, 120-species living-collection gate, and
+  120-species level-100 gate as three separate uninterrupted-run claims.
+- [ ] Add title profiles for later generations, then measure zero-shot and fine-tuned transfer on
+  unseen seeds before claiming support for another game.
+- [ ] Build a multi-save, multi-version portfolio contract for species that cannot coexist or be
+  obtained in one lineage, with unavailable event/service requirements reported explicitly.
 - [ ] Commit and push the exact source/configuration state, then successfully complete the 68/68
   schedule dry run before slot `01`.
 - [ ] Collect every declared train and validation lineage without opening the test partition.

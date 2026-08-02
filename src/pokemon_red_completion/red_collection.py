@@ -26,7 +26,8 @@ from .party import PartyObservation
 
 RED_COLLECTION_GAME_ID = "pokemon.mainline:red:gb:us:rev0"
 NATIONAL_DEX_SIZE_GENERATION_ONE = 151
-RED_SOLO_LIVING_DEX_TARGET_COUNT = 124
+RED_SOLO_POKEDEX_TARGET_COUNT = 124
+RED_SOLO_LIVING_TARGET_COUNT = 120
 
 # National Pokédex number for each one-based internal species index. Zero is a
 # MissingNo. hole. Derived from ``data/pokemon/dex_order.asm`` at the pinned
@@ -408,6 +409,7 @@ RED_SOLO_EXCLUSIONS = tuple(
 )
 
 _EXCLUDED_REFS = frozenset(item.species_ref for item in RED_SOLO_EXCLUSIONS)
+_CONSUMED_UNIQUE_FORM_NUMBERS = frozenset({7, 8, 133, 138})
 RED_SOLO_COLLECTION_CONTRACT = CollectionContract(
     game_id=RED_COLLECTION_GAME_ID,
     species_universe=tuple(
@@ -419,11 +421,19 @@ RED_SOLO_COLLECTION_CONTRACT = CollectionContract(
         if red_species_ref(number) not in _EXCLUDED_REFS
     ),
     exclusions=RED_SOLO_EXCLUSIONS,
+    living_target_species=tuple(
+        red_species_ref(number)
+        for number in range(1, NATIONAL_DEX_SIZE_GENERATION_ONE + 1)
+        if red_species_ref(number) not in _EXCLUDED_REFS
+        and number not in _CONSUMED_UNIQUE_FORM_NUMBERS
+    ),
     target_level=100,
 )
 
-if len(RED_SOLO_COLLECTION_CONTRACT.target_species) != RED_SOLO_LIVING_DEX_TARGET_COUNT:
-    raise AssertionError("Red solo living-Pokédex target must contain exactly 124 species")
+if len(RED_SOLO_COLLECTION_CONTRACT.target_species) != RED_SOLO_POKEDEX_TARGET_COUNT:
+    raise AssertionError("Red solo Pokédex target must contain exactly 124 species")
+if len(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species) != RED_SOLO_LIVING_TARGET_COUNT:
+    raise AssertionError("Red solo living target must contain exactly 120 coexisting species")
 
 
 @dataclass(frozen=True, slots=True)
@@ -437,7 +447,7 @@ class RedPokedexProgress:
 
     @property
     def target_count(self) -> int:
-        return RED_SOLO_LIVING_DEX_TARGET_COUNT
+        return RED_SOLO_POKEDEX_TARGET_COUNT
 
     @property
     def owned_target_count(self) -> int:
@@ -449,7 +459,7 @@ class RedPokedexProgress:
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "contract": "red-solo-living-dex-level-100-v1",
+            "contract": "red-solo-perfect-save-level-100-v2",
             "target": self.target_count,
             "owned": self.owned_target_count,
             "seen": len(self.seen_target_numbers),
@@ -473,8 +483,9 @@ class RedCollectionProgress:
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "contract": "red-solo-living-dex-level-100-v1",
+            "contract": "red-solo-perfect-save-level-100-v2",
             "target": self.collection.target_count,
+            "living_target": self.collection.living_target_count,
             "owned": self.collection.pokedex_owned_count,
             "seen": len(self.pokedex.seen_target_numbers),
             "living": self.collection.living_count,

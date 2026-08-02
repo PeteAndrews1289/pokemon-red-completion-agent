@@ -4,6 +4,8 @@ from dataclasses import fields, replace
 
 import pytest
 
+import pokemon_red_completion.fuchsia as fuchsia_module
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.fuchsia import (
     DEFAULT_FUCHSIA_TIMING,
     FUCHSIA_CHECKPOINT_COUNT,
@@ -14,9 +16,10 @@ from pokemon_red_completion.fuchsia import (
     FuchsiaChapterReport,
     FuchsiaCheckpoint,
     FuchsiaTiming,
+    _select_battle_bag_item,
     _snorlax_move_slot,
 )
-from pokemon_red_completion.observation import EventFlag, MapId, RawGameState
+from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RamAddress, RawGameState
 
 
 def _raw() -> RawGameState:
@@ -35,6 +38,43 @@ def _raw() -> RawGameState:
         first_party_moves=(0x2C, 0x27, 0x3D, 0x37),
         first_party_pp=(25, 30, 20, 25),
     )
+
+
+def test_battle_bag_selection_can_move_backward_after_a_ball_throw(monkeypatch) -> None:
+    class Emulator:
+        cursor = 2
+
+        def read_u8(self, address: int) -> int:
+            if address == RamAddress.CURRENT_MENU_ITEM:
+                return self.cursor
+            if address == RamAddress.LIST_SCROLL_OFFSET:
+                return 0
+            raise AssertionError(f"unexpected read: {address:#06x}")
+
+    class Executor:
+        actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+            if action.kind is MacroActionKind.MOVE:
+                emulator.cursor += 1 if action.value == "down" else -1
+
+    emulator = Emulator()
+    executor = Executor()
+    monkeypatch.setattr(
+        fuchsia_module,
+        "_bag",
+        lambda _emulator: {
+            ItemId.GREAT_BALL: 1,
+            ItemId.SUPER_POTION: 2,
+            ItemId.POKE_BALL: 3,
+        },
+    )
+
+    _select_battle_bag_item(executor, emulator, ItemId.SUPER_POTION)  # type: ignore[arg-type]
+
+    moves = [action for action in executor.actions if action.kind is MacroActionKind.MOVE]
+    assert tuple(action.value for action in moves) == ("up",)
 
 
 def _report() -> FuchsiaChapterReport:

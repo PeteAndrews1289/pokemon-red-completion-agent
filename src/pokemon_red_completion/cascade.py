@@ -59,6 +59,7 @@ from pokemon_red_completion.red_pc_storage import (
     RedPCStorageTiming,
     deposit_party_member,
     open_bills_pc,
+    switch_box,
 )
 
 CASCADE_CHECKPOINT_COUNT = 22
@@ -1139,10 +1140,24 @@ def _store_cerulean_rival_resources(
             expected_species_id=ZUBAT_SPECIES_ID,
             timing=storage_timing,
         )
+        switch_out_report = switch_box(
+            executor,
+            reader,
+            target_box_index=1,
+            timing=storage_timing,
+        )
+        switch_back_report = switch_box(
+            executor,
+            reader,
+            target_box_index=0,
+            timing=storage_timing,
+        )
     except RedPCStorageError as error:
-        raise CascadeChapterError("Cerulean helper deposit failed.") from error
+        raise CascadeChapterError(f"Cerulean helper storage failed: {error}") from error
     if not deposit_report.passed:
         raise CascadeChapterError("Cerulean helper deposit lacked a verified transition.")
+    if not switch_out_report.passed or not switch_back_report.passed:
+        raise CascadeChapterError("Cerulean helper storage cycle lacked a verified transition.")
 
     after_helper = reader.read()
     if (
@@ -1159,7 +1174,6 @@ def _store_cerulean_rival_resources(
             f"bag_before={bag_before!r}, bag_after={_bag_entries(emulator)!r}."
         )
 
-    _pc_pulse(executor, MacroActionKind.CANCEL, None, timing)
     _pc_pulse(executor, MacroActionKind.CANCEL, None, timing)
     remaining = _bag_quantity(emulator, ItemId.POTION)
     if not ROUTE_24_RECOVERY_POTION_RESERVE <= remaining <= CERULEAN_RIVAL_MAX_POTION_RESERVE:

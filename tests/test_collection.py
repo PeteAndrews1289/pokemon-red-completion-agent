@@ -94,6 +94,7 @@ def test_report_distinguishes_historical_ownership_living_retention_and_level_ca
     )
 
     assert report.target_count == 3
+    assert report.living_target_count == 3
     assert report.pokedex_owned_count == 2
     assert report.living_count == 2
     assert report.level_cap_count == 1
@@ -101,6 +102,39 @@ def test_report_distinguishes_historical_ownership_living_retention_and_level_ca
     assert report.missing_living == (A,)
     assert report.underleveled == ((B, 45),)
     assert not report.passed
+
+
+def test_contract_can_separate_registration_from_coexisting_living_targets() -> None:
+    contract = CollectionContract(
+        game_id="pokemon.test",
+        species_universe=(A, B, C, D),
+        target_species=(A, B, C),
+        exclusions=(CollectionExclusion(D, CollectionExclusionReason.VERSION_EXCLUSIVE),),
+        living_target_species=(B, C),
+    )
+    report = summarize_collection(
+        contract,
+        _observation(
+            owned=frozenset((A, B, C)),
+            specimens=(_specimen(B, 100), _specimen(C, 100)),
+            box_counts=(2, 0),
+        ),
+    )
+
+    assert report.target_count == 3
+    assert report.living_target_count == 2
+    assert report.passed
+
+
+def test_contract_rejects_living_targets_outside_registration_goal() -> None:
+    with pytest.raises(ValueError, match="subset"):
+        CollectionContract(
+            game_id="pokemon.test",
+            species_universe=(A, B),
+            target_species=(A,),
+            exclusions=(CollectionExclusion(B, CollectionExclusionReason.EVENT_ONLY),),
+            living_target_species=(B,),
+        )
 
 
 def test_missing_living_species_is_reacquired_even_when_its_dex_flag_survived() -> None:

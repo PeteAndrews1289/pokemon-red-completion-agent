@@ -162,7 +162,8 @@ schedule rehearsal ended at Route 25.
 Teaching therefore targets a **balanced six-member party** instead:
 
 - acquire and retain six members with complementary roles;
-- train every final member to at least level 50 before the Elite Four;
+- train every final member to at least level 50 and satisfy the five-level spread before the Elite
+  Four (the current Mansion specialist separately targets level 55 for its active trainee);
 - always train the lowest-level suitable member;
 - hold the party within a five-level spread at major training boundaries; and
 - permit temporary deviations only when progression requires them, with the reason recorded.
@@ -175,8 +176,8 @@ The curriculum uses four cumulative, independently reported tiers:
 2. **Master** — finish with reusable party, battle, recovery, navigation, and resource skills.
 3. **Complete** — satisfy the title-specific 100% contract, including every legitimately
    obtainable species and supported optional objective.
-4. **Perfect collection** — retain every obtainable species and train every retained specimen to
-   level 100.
+4. **Perfect collection** — retain every species that can coexist in the declared save lineage and
+   train every retained specimen to level 100.
 
 This ordering makes level 100 a genuine completeness proof without letting brute-force experience
 grinding masquerade as the ability to understand a new game.
@@ -185,13 +186,16 @@ The balanced Hall-of-Fame route is the prerequisite, not the final collection ta
 route qualifies, Red gains a separate completionist curriculum that surveys every encounter area,
 catches every species legitimately obtainable in the supported Red cartridge, performs every
 available evolution, manages the active party and PC as one living collection, and trains every
-owned species to level 100. Trade- and version-exclusive gaps are reported explicitly rather than
-silently claimed as solo-cartridge completions.
+coexisting target to level 100. Trade- and version-exclusive gaps are reported explicitly rather
+than silently claimed as solo-cartridge completions.
 
 For the declared Squirtle, Helix Fossil, Hitmonlee, and Jolteon lineage, the executable contract
-partitions all 151 National Pokédex entries into 124 obtainable targets and 27 named exclusions.
-Progress is deliberately reported through three non-interchangeable gates: registered as owned in
-the Pokédex, presently retained as a living specimen, and presently retained at level 100. The Red
+partitions all 151 National Pokédex entries into 124 obtainable registrations and 27 named
+exclusions. Four registered earlier forms cannot coexist after evolving the route's unique
+Squirtle, Eevee, and Helix Fossil specimens, so the living and level-100 gates use an honest
+120-species denominator. Progress is deliberately reported through three non-interchangeable
+gates: registered as owned in the Pokédex, presently retained as a living specimen, and presently
+retained at level 100. The Red
 adapter now reads the Pokédex and performs a checksum-verified census of the party plus all twelve
 PC boxes. It overlays the active Work-RAM box on the saved-box banks exactly as the game does and
 treats the other eleven boxes as logically empty before the game's first box change. The latter
@@ -212,6 +216,12 @@ encounters, story dependencies, puzzles, and title-specific optional objectives.
 measured by how much less title-specific teaching the next game requires, not by assuming Red's
 exact route will solve it. Each title publishes exclusions for requirements that cannot be
 performed in its evaluation environment, such as unavailable events or retired online services.
+
+“Every Pokémon game” is not one universal ROM script. Each supported title must pass four frozen
+evaluations: story completion on unseen seeds, its published perfect-save contract, its maximal
+coexisting level-100 collection, and transfer efficiency relative to training from scratch. A
+portfolio layer may combine multiple legitimate save lineages and versions for all-species
+coverage, but it cannot retroactively turn an unavailable event into a completed objective.
 
 The rules are expressed against the game-neutral party contract—membership, species, active-party
 position, level, health, status, moves, power points, experience, and the derived team metrics—so

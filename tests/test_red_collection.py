@@ -11,7 +11,8 @@ from pokemon_red_completion.party import PartyMemberObservation, PartyObservatio
 from pokemon_red_completion.red_collection import (
     NATIONAL_DEX_SIZE_GENERATION_ONE,
     RED_SOLO_COLLECTION_CONTRACT,
-    RED_SOLO_LIVING_DEX_TARGET_COUNT,
+    RED_SOLO_LIVING_TARGET_COUNT,
+    RED_SOLO_POKEDEX_TARGET_COUNT,
     red_all_living_specimens,
     red_collection_observation,
     red_internal_species_number,
@@ -27,12 +28,18 @@ def test_red_solo_contract_accounts_for_every_generation_one_species() -> None:
     contract = RED_SOLO_COLLECTION_CONTRACT
 
     assert len(contract.species_universe) == NATIONAL_DEX_SIZE_GENERATION_ONE == 151
-    assert len(contract.target_species) == RED_SOLO_LIVING_DEX_TARGET_COUNT == 124
+    assert len(contract.target_species) == RED_SOLO_POKEDEX_TARGET_COUNT == 124
+    assert len(contract.resolved_living_target_species) == RED_SOLO_LIVING_TARGET_COUNT == 120
     assert len(contract.exclusions) == 27
     assert contract.target_level == 100
     assert set(contract.target_species).isdisjoint(
         exclusion.species_ref for exclusion in contract.exclusions
     )
+    assert {
+        red_species_number(species_ref)
+        for species_ref in contract.target_species
+        if species_ref not in contract.resolved_living_target_species
+    } == {7, 8, 133, 138}
 
 
 def test_red_solo_contract_keeps_the_route_choices_and_excludes_alternatives() -> None:
@@ -161,8 +168,12 @@ def test_all_box_projection_builds_a_game_neutral_collection_observation() -> No
     assert progress.public_dict()["living_collection_verified"] is False
 
 
-def test_full_level_100_census_is_the_only_way_to_pass_all_collection_gates() -> None:
+def test_maximal_coexisting_level_100_census_passes_all_collection_gates() -> None:
     targets = tuple(
+        red_species_number(species_ref)
+        for species_ref in RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species
+    )
+    registered_targets = tuple(
         red_species_number(species_ref)
         for species_ref in RED_SOLO_COLLECTION_CONTRACT.target_species
     )
@@ -187,13 +198,15 @@ def test_full_level_100_census_is_the_only_way_to_pass_all_collection_gates() ->
         storage_initialized=True,
     )
     pokedex = RedPokedexState(
-        owned_species=frozenset(targets),
-        seen_species=frozenset(targets),
+        owned_species=frozenset(registered_targets),
+        seen_species=frozenset(registered_targets),
     )
 
     progress = summarize_red_collection(pokedex, PartyObservation(), boxes)
 
     assert progress.collection.passed
+    assert progress.collection.target_count == 124
+    assert progress.collection.living_target_count == 120
     assert progress.public_dict()["pokedex_target_complete"] is True
     assert progress.public_dict()["living_collection_verified"] is True
     assert progress.public_dict()["level_100_collection_verified"] is True

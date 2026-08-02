@@ -211,6 +211,7 @@ class TowerTiming:
 
 DEFAULT_TOWER_TIMING = TowerTiming()
 TOWER_LAVENDER_TIMING = replace(DEFAULT_LAVENDER_TIMING, flee_pulses=64)
+TOWER_6F_RECOVERY_HP_THRESHOLD = 60
 TOWER_BATTLE_TIMING = BattleRuntimeTiming(
     max_move_menu_transition_pulses=24,
     max_pp_confirmation_pulses=12,
@@ -537,6 +538,9 @@ def run_tower_chapter(
             BUBBLEBEAM,
             3,
             RedBattlePlanId.TOWER_6F_CHANNELER_19,
+            run=run,
+            bounded_recovery=True,
+            recovery_hp_threshold=TOWER_6F_RECOVERY_HP_THRESHOLD,
         )
     )
     if _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:

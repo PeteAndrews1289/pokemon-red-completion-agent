@@ -33,9 +33,9 @@ The intended result is a learned/hybrid agent that understands objectives and bo
 than memorizing a four-million-frame button sequence.
 
 The long-term target is broader still: a general Pokémon agent that can satisfy a published 100%
-completion contract for each supported title. For Red, the stretch contract means owning every
-species legitimately obtainable in the cartridge, completing every available evolution, and
-training the living collection to level 100. Impossible solo-ROM requirements such as external
+completion contract for each supported title. For Red, the stretch contract means registering
+every species legitimately obtainable in the cartridge, completing every available evolution,
+and training the maximal coexisting living collection to level 100. Impossible solo-ROM requirements such as external
 trades and version exclusives remain visible exceptions. This completionist run is a source of
 capture, storage, evolution, resource, and grinding demonstrations; it does not replace capped and
 randomized evaluations of actual battle competence.
@@ -51,9 +51,11 @@ events and unavailable network services can be wished away.
 “Catch them all” is ambiguous on one unmodified Red save: version exclusives, trade evolutions,
 mutually exclusive starters, fossils, Fighting Dojo gifts, Eevee branches, and event-only Mew
 cannot all coexist without external transfer or save branching. The implementation now partitions
-all 151 species into **124 obtainable targets** and **27 named exclusions** for the qualified
-Squirtle/Helix/Hitmonlee/Jolteon lineage. That makes the denominator reviewable instead of quietly
-moving it after a run.
+all 151 species into **124 obtainable registrations** and **27 named exclusions** for the
+qualified Squirtle/Helix/Hitmonlee/Jolteon lineage. Evolving the unique Squirtle, Eevee, and Helix
+Fossil specimens consumes Squirtle, Wartortle, Eevee, and Omanyte, so the largest legitimate
+simultaneous living collection in that lineage is **120 species**. That makes both denominators
+reviewable instead of quietly moving them after a run.
 
 It also distinguishes three facts that are often conflated: a species was registered in the
 Pokédex; a specimen is still retained across the party and PC; and that retained specimen has
@@ -62,17 +64,31 @@ party plus all twelve boxes. Red keeps the active box in Work RAM and the other 
 checksummed save-RAM banks; the adapter mirrors that design through a narrow read-only port and
 never exposes bank numbers or addresses to the planner. A bounded storage specialist can now open
 Bill's PC, deposit or withdraw an exact species slot, and prove the resulting party/box transition;
-the live route's Zubat deposit uses that specialist. Switch-box execution and the 124
-acquisition/evolution routes remain open. Consequently, living-collection and level-100
+the live route's Zubat deposit uses that specialist. It can now also traverse the multi-page save
+warning, initialize storage, switch among all twelve boxes, and prove that the complete collection
+was preserved. The 124 registration routes and 120-species retention/training curriculum remain
+open. Consequently, living-collection and level-100
 qualification remain explicitly unverified. This is infrastructure for the stretch goal, not a
 claim that the stretch goal has been completed.
 
 The first uninterrupted clean-power census then completed the same 312-checkpoint Hall-of-Fame
 route and measured the gap directly: **12 of 124** targets had historical owned flags, **85** had
-been seen, **7** remained living, and **0** were level 100. Box 1 held the deposited level-7 Zubat;
+been seen, **7 of 120** living targets remained, and **0 of 120** were level 100. Box 1 held the deposited level-7 Zubat;
 the other six living specimens formed the final party. All twelve boxes were accounted for, and
 the adapter correctly recognized that the save had never performed its first box change. See the
 [sanitized collection-census receipt](evidence/qualified-play-collection-census-2026-08-01.json).
+
+The corrected foundation was then replayed from clean power with executable box switching enabled.
+It initialized all twelve boxes, deposited Zubat, switched Box 1→2→1 through the game's multi-page
+save warning, and proved that no specimen disappeared. Long-form training exposed and repaired
+three seed-sensitive assumptions: terminal Selfdestruct during an escort switch, insufficient
+headroom in the battle budget, and a wild opponent ending battle while sleep recovery was active.
+The final uninterrupted run passed **312/312 checkpoints** and **36/36 objectives**, trained for
+**6,493 zero-faint wins**, passed the team gate at levels **88–93**, defeated the Champion, and
+entered the Hall of Fame. Its terminal census was **12/124 registered, 7/120 living, and 0/120 at
+level 100**, with storage initialized and all boxes verified. The
+[sanitized perfect-save foundation receipt](evidence/qualified-play-perfect-save-foundation-2026-08-01.json)
+records that result without ROM bytes, save data, or private paths.
 
 The current phase makes one further correction. The qualified route completed the game by
 overleveling a single Pokémon, which is a legitimate way to finish Red but a poor thing to imitate:
@@ -305,8 +321,9 @@ because the project has moved from proving completion to producing transferable 
 ### The target policy
 
 The agent should acquire and retain a full six-member party with complementary roles, train every
-final member to at least level 50 before the Elite Four, prefer training whoever is furthest
-behind, and hold the party within a five-level spread at major training boundaries. Temporary
+final member past the level-50 floor before the Elite Four (the current Mansion specialist targets
+level 55), prefer training whoever is furthest behind, and hold the party within a five-level
+spread at major training boundaries. Temporary
 deviations are permitted when progression genuinely requires them, but each one must be recorded
 with its reason rather than silently weakening the rule.
 

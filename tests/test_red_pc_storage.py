@@ -7,6 +7,7 @@ from pokemon_red_completion.observation import (
     MapId,
     MenuCursorState,
     RawGameState,
+    RedBoxCollectionState,
     RedCurrentBoxState,
 )
 from pokemon_red_completion.red_pc_storage import (
@@ -14,6 +15,7 @@ from pokemon_red_completion.red_pc_storage import (
     RedPCStorageTiming,
     deposit_party_member,
     open_bills_pc,
+    switch_box,
     withdraw_box_member,
 )
 
@@ -123,6 +125,17 @@ def test_deposit_rejects_last_member_and_wrong_slot_before_input() -> None:
         )
     assert executor.actions == []
 
+    reader.raw = _raw(WARTORTLE, ZUBAT)
+    with pytest.raises(RedPCStorageError, match="does not contain"):
+        deposit_party_member(
+            executor,
+            reader,  # type: ignore[arg-type]
+            party_slot=2,
+            expected_species_id=0x54,
+            timing=RedPCStorageTiming(wait_frames=1),
+        )
+    assert executor.actions == []
+
 
 class _WithdrawExecutor:
     def __init__(self, reader: _Reader) -> None:
@@ -201,16 +214,101 @@ def test_withdraw_rejects_full_party_and_wrong_species_before_input() -> None:
         )
     assert executor.actions == []
 
-    reader.raw = _raw(WARTORTLE, ZUBAT)
-    with pytest.raises(RedPCStorageError, match="does not contain"):
-        deposit_party_member(
+
+class _SwitchBoxExecutor:
+    def __init__(self, reader: _Reader, *, preserve_collection: bool = True) -> None:
+        self.reader = reader
+        self.preserve_collection = preserve_collection
+        self.actions: list[MacroAction] = []
+        self.phase = "bills"
+
+    def execute(self, action: MacroAction) -> None:
+        self.actions.append(action)
+        if action.kind is MacroActionKind.WAIT:
+            return
+        if action.kind is MacroActionKind.MOVE:
+            selected = self.reader.menu.selected_visible_index
+            selected += 1 if action.value == "down" else -1
+            self.reader.menu = replace(self.reader.menu, selected_visible_index=selected)
+            return
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        if self.phase == "bills":
+            assert self.reader.menu.selected_absolute_index == 3
+            self.phase = "warning"
+        elif self.phase == "warning":
+            self.phase = "choice"
+            self.reader.menu = MenuCursorState(0, 0, 11, 12, 1)
+        elif self.phase == "choice":
+            target = self.reader.menu.selected_absolute_index
+            boxes = list(self.reader.collection.boxes)
+            if not self.preserve_collection:
+                boxes[0] = RedCurrentBoxState(0, (), ())
+            self.reader.box = boxes[target]
+            self.reader.collection = RedBoxCollectionState(
+                boxes=tuple(boxes),
+                current_box_index=target,
+                storage_initialized=True,
+            )
+            self.reader.menu = MenuCursorState(3, 0, 4, 1, 2)
+            self.phase = "complete"
+
+
+def _collection(*, current_box_index: int = 0) -> RedBoxCollectionState:
+    boxes = [RedCurrentBoxState(index, (), ()) for index in range(12)]
+    boxes[0] = RedCurrentBoxState(0, (ZUBAT,), (7,))
+    return RedBoxCollectionState(
+        boxes=tuple(boxes),
+        current_box_index=current_box_index,
+        storage_initialized=False,
+    )
+
+
+def test_switch_box_initializes_storage_and_preserves_every_box() -> None:
+    reader = _Reader()
+    reader.box = RedCurrentBoxState(0, (ZUBAT,), (7,))
+    reader.collection = _collection()
+    reader.read_all_box_states = lambda: reader.collection  # type: ignore[method-assign]
+    executor = _SwitchBoxExecutor(reader)
+
+    report = switch_box(
+        executor,
+        reader,  # type: ignore[arg-type]
+        target_box_index=7,
+        timing=RedPCStorageTiming(wait_frames=1),
+    )
+
+    assert report.passed
+    assert report.previous_box_index == 0
+    assert report.current_box_index == 7
+    assert not report.storage_initialized_before
+    assert report.storage_initialized_after
+    assert report.box_species_after[0] == (ZUBAT,)
+
+
+def test_switch_box_rejects_current_box_and_collection_loss() -> None:
+    reader = _Reader()
+    reader.box = RedCurrentBoxState(0, (ZUBAT,), (7,))
+    reader.collection = _collection()
+    reader.read_all_box_states = lambda: reader.collection  # type: ignore[method-assign]
+    executor = _SwitchBoxExecutor(reader)
+    with pytest.raises(RedPCStorageError, match="already current"):
+        switch_box(
             executor,
             reader,  # type: ignore[arg-type]
-            party_slot=2,
-            expected_species_id=0x54,
+            target_box_index=0,
             timing=RedPCStorageTiming(wait_frames=1),
         )
     assert executor.actions == []
+
+    lossy_executor = _SwitchBoxExecutor(reader, preserve_collection=False)
+    with pytest.raises(RedPCStorageError, match="collection-preservation"):
+        switch_box(
+            lossy_executor,
+            reader,  # type: ignore[arg-type]
+            target_box_index=1,
+            timing=RedPCStorageTiming(wait_frames=1),
+        )
 
 
 def test_open_bills_pc_verifies_generic_and_bills_menu_boundaries() -> None:
