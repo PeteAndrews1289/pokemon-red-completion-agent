@@ -1,0 +1,75 @@
+{
+  "schema": "pokemon-red-reusable-wild-source-receipt-v1",
+  "recorded_on": "2026-08-02",
+  "status": "passed",
+  "claim_scope": "One uninterrupted clean-power deterministic-teacher run bound the game-neutral source-survey executor to live Route 1 observations and controls, retained Pidgey and Rattata in the qualified order, reproduced the exact completionist balanced-team lineage, and passed the complete private integration contract. Viridian Forest, the remaining collection, learned-policy completion, and cross-game transfer remain open.",
+  "source_identity": {
+    "collection_registry_sha256": "feaa0c9467254d9015cdd6a773c3b459d0b8c9edfa3ea6ba875270a4f1c72f1c",
+    "source_bundle_sha256": "200518165fb07ce9be371617d7d9070ebe207fb3e2dc3fd8ba4e97ad0568cb6d",
+    "teacher_execution_sha256": "e80f71ea9313769267f65368b1a026981c6647067bedc431a2c767e534a6ed8e"
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "adjacent_private_artifacts_unchanged": true,
+    "runs": 1
+  },
+  "reusable_source_controller": {
+    "live_game_neutral_executor": true,
+    "global_pokedex_observation": true,
+    "global_party_observation": true,
+    "all_twelve_boxes_checksum_verified": true,
+    "semantic_directives": [
+      "seek_encounter",
+      "capture_encounter",
+      "flee_encounter",
+      "switch_box",
+      "make_storage_room",
+      "stop"
+    ],
+    "capture_requirement_order_supported": true,
+    "route_1_capture_order": [16, 19],
+    "semantic_action_bound": 2000,
+    "encounter_bound": 72,
+    "route_leg_bound": 12,
+    "viridian_endpoint_normalized": true
+  },
+  "source_priority": {
+    "route_agnostic": true,
+    "counts_downstream_duplicate_roots": true,
+    "next_reachable_source": "wild:ViridianForest:grass",
+    "next_reachable_missing_root_specimens": 6,
+    "next_reachable_species_quantities": {
+      "10": 1,
+      "11": 2,
+      "14": 2,
+      "25": 1
+    }
+  },
+  "completion": {
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "frames_executed": 83835201,
+    "actions_executed": 758430
+  },
+  "validation": {
+    "public_tests_passed": 1441,
+    "private_integration_tests_passed": 1,
+    "private_integration_tests_deselected": 42,
+    "lint_passed": true,
+    "documentation_links_passed": true,
+    "public_artifact_check_passed": true,
+    "registry_regeneration_check_passed": true
+  },
+  "privacy": {
+    "rom_bytes_included": false,
+    "save_data_included": false,
+    "private_paths_included": false,
+    "screenshots_included": false
+  }
+}

@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.collection import CollectionObservation
 from pokemon_red_completion.observation import (
     Badge,
     BattleMenuPhase,
@@ -27,6 +28,19 @@ from pokemon_red_completion.pewter import (
     ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
     VIRIDIAN_TO_ROUTE_2_DIRECTIONS,
 )
+from pokemon_red_completion.red_acquisition import (
+    RedAreaExecutionError,
+    RedAreaExecutionPolicy,
+    RedAreaExecutionReport,
+    run_red_area_survey,
+)
+from pokemon_red_completion.red_collection import (
+    red_collection_observation,
+    red_internal_species_number,
+    red_species_number,
+    red_species_ref,
+)
+from pokemon_red_completion.red_party import PokemonRedPartyReader
 from pokemon_red_completion.red_pc_storage import (
     RedPCStorageError,
     RedPCStorageTiming,
@@ -1193,46 +1207,25 @@ def _survey_route_1(
     executor: _CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
-) -> None:
+) -> RedAreaExecutionReport:
     """Catch and retain Route 1's two wild species through live encounters."""
 
-    missing = {PIDGEY_SPECIES_ID, RATTATA_SPECIES_ID}
-    reverse_route = _inverse_directions(ROUTE_1_TO_VIRIDIAN_DIRECTIONS)
-    endpoint = "north"
-    for _leg in range(12):
-        directions = reverse_route if endpoint == "north" else ROUTE_1_TO_VIRIDIAN_DIRECTIONS
-        endpoint = "south" if endpoint == "north" else "north"
-        for direction in directions:
-            raw = _survey_step(executor, reader, direction, timing)
-            if not raw.battle_state:
-                continue
-            next_target = (
-                PIDGEY_SPECIES_ID
-                if PIDGEY_SPECIES_ID in missing
-                else RATTATA_SPECIES_ID
-            )
-            if missing and raw.enemy_species_id == next_target:
-                _throw_until_caught_route_1(
-                    emulator,
-                    executor,
-                    reader,
-                    raw.enemy_species_id,
-                )
-                missing.remove(raw.enemy_species_id)
-            else:
-                balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
-                _flee(executor, reader, raw)
-                if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
-                    raise SurgeChapterError("Route 1 flee changed Poké Balls.")
-        if not missing and endpoint == "north":
-            break
-    if missing:
-        raise SurgeChapterError(f"Route 1 survey missed species {sorted(missing)!r}.")
-    if endpoint == "south":
-        for direction in ROUTE_1_TO_VIRIDIAN_DIRECTIONS:
-            raw = _survey_step(executor, reader, direction, timing)
-            if raw.battle_state:
-                _flee(executor, reader, raw)
+    live = _RouteOneLiveSurveyExecutor(emulator, executor, reader, timing)
+    try:
+        report = run_red_area_survey(
+            "wild:Route1:grass",
+            live,
+            policy=RedAreaExecutionPolicy(
+                max_actions=2_000,
+                max_encounters=72,
+                capture_in_requirement_order=True,
+            ),
+        )
+        live.finish_at_viridian_end()
+    except RedAreaExecutionError as error:
+        raise SurgeChapterError(f"Route 1 semantic survey failed: {error}") from error
+    if not report.passed or report.captures != 2:
+        raise SurgeChapterError(f"Route 1 semantic survey lacked two captures: {report!r}.")
     raw = reader.read()
     if raw.map_id == MapId.ROUTE_1 and raw.player_y == 0:
         raw = _move_until_map(
@@ -1258,6 +1251,120 @@ def _survey_route_1(
     owned = reader.read_pokedex_state().owned_species
     if not {16, 19} <= owned:
         raise SurgeChapterError(f"Route 1 captures lack Pokédex ownership: {sorted(owned)!r}.")
+    return report
+
+
+class _RouteOneLiveSurveyExecutor:
+    """Bind the game-neutral area loop to Route 1's qualified live corridor."""
+
+    def __init__(
+        self,
+        emulator: EmulatorState,
+        executor: _CountingExecutor,
+        reader: PokemonRedStateReader,
+        timing: SurgeTiming,
+    ) -> None:
+        self._emulator = emulator
+        self._executor = executor
+        self._reader = reader
+        self._timing = timing
+        self._party_reader = PokemonRedPartyReader(emulator)
+        self._endpoint = "north"
+        self._directions: deque[str] = deque()
+        self._completed_legs = 0
+
+    def read_collection(self) -> CollectionObservation:
+        return red_collection_observation(
+            self._reader.read_pokedex_state(),
+            self._party_reader.read(),
+            self._reader.read_all_box_states(),
+        )
+
+    def encountered_species_ref(self) -> str | None:
+        raw = self._reader.read()
+        if not raw.battle_state:
+            return None
+        if raw.enemy_species_id is None:
+            raise RedAreaExecutionError("Route 1 battle lacks an enemy species")
+        try:
+            return red_species_ref(red_internal_species_number(raw.enemy_species_id))
+        except ValueError as error:
+            raise RedAreaExecutionError(
+                f"Route 1 battle exposed invalid species {raw.enemy_species_id:#04x}"
+            ) from error
+
+    def seek_encounter(self) -> None:
+        if self.encountered_species_ref() is not None:
+            raise RedAreaExecutionError("Route 1 cannot seek during an encounter")
+        if not self._directions:
+            self._start_leg()
+        direction = self._directions.popleft()
+        _survey_step(self._executor, self._reader, direction, self._timing)
+        if not self._directions:
+            self._endpoint = "south" if self._endpoint == "north" else "north"
+            self._completed_legs += 1
+
+    def capture_encounter(self, species_ref: str) -> None:
+        encountered = self.encountered_species_ref()
+        if encountered != species_ref:
+            raise RedAreaExecutionError(
+                f"Route 1 capture expected {species_ref}, encountered {encountered}"
+            )
+        national_number = red_species_number(species_ref)
+        expected_internal = {
+            16: PIDGEY_SPECIES_ID,
+            19: RATTATA_SPECIES_ID,
+        }.get(national_number)
+        if expected_internal is None:
+            raise RedAreaExecutionError(f"Route 1 cannot retain {species_ref}")
+        _throw_until_caught_route_1(
+            self._emulator,
+            self._executor,
+            self._reader,
+            expected_internal,
+        )
+
+    def flee_encounter(self) -> None:
+        raw = self._reader.read()
+        if not raw.battle_state:
+            raise RedAreaExecutionError("Route 1 cannot flee without an encounter")
+        balls = _bag(self._emulator).get(ItemId.POKE_BALL, 0)
+        _flee(self._executor, self._reader, raw)
+        if _bag(self._emulator).get(ItemId.POKE_BALL, 0) != balls:
+            raise RedAreaExecutionError("Route 1 flee changed Poké Balls")
+
+    def switch_box(self, box_index: int) -> None:
+        raise RedAreaExecutionError(
+            f"Route 1 cannot switch to box {box_index} without leaving the source"
+        )
+
+    def finish_at_viridian_end(self) -> None:
+        """Normalize an early survey stop to Route 1's qualified north endpoint."""
+
+        maximum_steps = len(ROUTE_1_TO_VIRIDIAN_DIRECTIONS) * 2
+        for _ in range(maximum_steps):
+            if not self._directions and self._endpoint == "north":
+                return
+            if not self._directions:
+                self._start_leg()
+            direction = self._directions.popleft()
+            raw = _survey_step(self._executor, self._reader, direction, self._timing)
+            if raw.battle_state:
+                self.flee_encounter()
+            if not self._directions:
+                self._endpoint = "south" if self._endpoint == "north" else "north"
+                self._completed_legs += 1
+        raise RedAreaExecutionError("Route 1 could not normalize to its Viridian endpoint")
+
+    def _start_leg(self) -> None:
+        if self._completed_legs >= 12:
+            raise RedAreaExecutionError("Route 1 exceeded twelve bounded survey legs")
+        directions = (
+            _inverse_directions(ROUTE_1_TO_VIRIDIAN_DIRECTIONS)
+            if self._endpoint == "north"
+            else ROUTE_1_TO_VIRIDIAN_DIRECTIONS
+        )
+        self._directions.extend(directions)
 
 
 def _survey_step(

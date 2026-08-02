@@ -111,6 +111,26 @@ qualifies one ordinary-wild source end to end; it does not qualify the remaining
 the complete collection. See the
 [sanitized Route 1 acquisition receipt](evidence/qualified-play-route1-acquisition-2026-08-02.json).
 
+That first live slice initially duplicated its capture-selection loop inside the Surge chapter.
+It proved the route, but it did not yet prove that the game-neutral source-survey controller could
+drive a real cartridge. The chapter now supplies a narrow live adapter instead: global collection
+observations come from the Pokédex, the active party, and a checksum-verified census of all twelve
+boxes; live enemy identity is translated into the shared species ontology; and the reusable loop
+chooses seek, capture, flee, box handling, or stop. A declared requirement order preserves the
+qualified Pidgey-then-Rattata lineage without hiding the actual encounter identity. The adapter
+also bounds encounter count and route legs and normalizes an early successful stop back to the
+Viridian endpoint.
+
+The acquisition graph now emits a route-agnostic priority list that counts missing root specimens,
+not just distinct species. That distinction makes Viridian Forest worth six retained specimens:
+Caterpie, two Metapod, two Kakuna, and Pikachu. Seafoam Islands 1F also has six globally, but the
+chapter planner may combine the neutral ranking with current reachability and resource cost; the
+Forest is therefore the next early-game live slice. The refactor reproduced the existing terminal
+exactly—**312/312 checkpoints**, **36/36 objectives**, **83,835,201 frames**, and **758,430
+actions**—and passed the full private integration test without changing adjacent save artifacts.
+See the
+[sanitized reusable-source receipt](evidence/qualified-play-reusable-wild-source-2026-08-02.json).
+
 The current phase makes one further correction. The qualified route completed the game by
 overleveling a single Pokémon, which is a legitimate way to finish Red but a poor thing to imitate:
 it hides the battle decisions the agent is supposed to learn, concentrates all risk in one party

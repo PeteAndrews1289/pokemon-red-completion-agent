@@ -75,6 +75,14 @@ control, and progressively trained specialists.**
 > **14/124 registered, 9/120 living, and 0/120 at level 100**. This is one complete acquisition
 > slice, not a claim that the remaining collection or learned agent is finished. See the
 > [sanitized Route 1 receipt](docs/evidence/qualified-play-route1-acquisition-2026-08-02.json).
+> Route 1 now runs through the same reusable semantic source-survey controller as the game-neutral
+> planner rather than a chapter-local target loop. The live adapter reads the Pokédex, full party,
+> and all twelve verified boxes; preserves a declared capture order when deterministic downstream
+> storage requires one; and proves bounded seek, capture, flee, progress, and endpoint-normalization
+> behavior. A new route-agnostic priority view counts duplicate root specimens required by later
+> evolutions. The refactored lineage reproduced the exact **83,835,201 frames** and **758,430
+> actions** and passed the complete private integration contract. See the
+> [sanitized reusable-source receipt](docs/evidence/qualified-play-reusable-wild-source-2026-08-02.json).
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
 > **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned

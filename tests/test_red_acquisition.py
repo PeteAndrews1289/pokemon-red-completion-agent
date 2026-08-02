@@ -28,6 +28,7 @@ from pokemon_red_completion.red_acquisition import (
     RedAreaExecutionPolicy,
     plan_red_acquisition,
     plan_red_area_encounter,
+    rank_red_sources,
     run_red_area_survey,
     summarize_red_area_survey,
 )
@@ -280,6 +281,49 @@ def test_route_one_survey_targets_pidgey_and_rattata_semantically() -> None:
     assert complete.complete
 
 
+def test_source_priority_counts_duplicate_roots_and_filters_acquisition_kind() -> None:
+    priorities = rank_red_sources(
+        _observation(16, 19),
+        kinds=frozenset({RedAcquisitionKind.WILD}),
+    )
+
+    assert priorities[0].source_id == "wild:SeafoamIslands1F:grass"
+    assert priorities[0].missing_specimen_count == 6
+    assert tuple(red_species_number(ref) for ref in priorities[0].missing_species_refs) == (
+        42,
+        54,
+        55,
+        90,
+        116,
+    )
+    forest = next(
+        item for item in priorities if item.source_id == "wild:ViridianForest:grass"
+    )
+    assert forest.missing_specimen_count == 6
+    assert tuple(red_species_number(ref) for ref in forest.missing_species_refs) == (
+        10,
+        11,
+        14,
+        25,
+    )
+    assert all(item.kind is RedAcquisitionKind.WILD for item in priorities)
+    assert all(item.source_id != "wild:Route1:grass" for item in priorities)
+
+
+def test_source_priority_shrinks_as_required_specimens_are_retained() -> None:
+    forest = next(
+        item
+        for item in rank_red_sources(
+            _observation(10, 11, 14, 25),
+            kinds=frozenset({RedAcquisitionKind.WILD}),
+        )
+        if item.source_id == "wild:ViridianForest:grass"
+    )
+
+    assert forest.missing_specimen_count == 2
+    assert tuple(red_species_number(ref) for ref in forest.missing_species_refs) == (11, 14)
+
+
 def test_area_survey_requires_duplicate_root_specimens_for_downstream_evolution() -> None:
     empty = summarize_red_area_survey("wild:Route14:grass", _observation())
     one_pidgeotto = summarize_red_area_survey("wild:Route14:grass", _observation(17))
@@ -313,6 +357,25 @@ def test_area_controller_seeks_catches_flees_and_stops_from_semantic_state() -> 
     assert catch.directive is RedAreaDirective.CAPTURE_ENCOUNTER
     assert flee.directive is RedAreaDirective.FLEE_ENCOUNTER
     assert stop.directive is RedAreaDirective.STOP
+
+
+def test_area_controller_can_preserve_a_declared_capture_order() -> None:
+    defer_rattata = plan_red_area_encounter(
+        "wild:Route1:grass",
+        _observation(),
+        encountered_species_ref=red_species_ref(19),
+        required_species_ref=red_species_ref(16),
+    )
+    catch_rattata = plan_red_area_encounter(
+        "wild:Route1:grass",
+        _observation(16),
+        encountered_species_ref=red_species_ref(19),
+        required_species_ref=red_species_ref(19),
+    )
+
+    assert defer_rattata.directive is RedAreaDirective.FLEE_ENCOUNTER
+    assert "order" in defer_rattata.reason
+    assert catch_rattata.directive is RedAreaDirective.CAPTURE_ENCOUNTER
 
 
 def test_area_controller_rotates_full_storage_before_seeking() -> None:

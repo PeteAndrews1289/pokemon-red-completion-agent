@@ -8,6 +8,11 @@ from pathlib import Path
 
 import pytest
 
+from pokemon_red_completion.fuchsia import (
+    SNORLAX,
+    SNORLAX_CAPTURE_POLICY,
+    SNORLAX_SUPER_POTION_RESERVE,
+)
 from pokemon_red_completion.observation import (
     SQUIRTLE_SPECIES_ID,
     Badge,
@@ -37,6 +42,7 @@ from pokemon_red_completion.play import (
     run_qualified_play,
 )
 from pokemon_red_completion.rom import RomFingerprint
+from pokemon_red_completion.saffron import FRESH_WATER_PRICE, THUNDER_STONE_PRICE
 
 
 def _raw(
@@ -1958,12 +1964,11 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
         "enter_hall_of_fame",
     )
     assert report.next_objective is None
-    # Balanced-team lineage: the Mansion block now trains the whole party by
-    # switch participation instead of only the lead, so the totals are larger
-    # than the single-carry lineage's 5,163,657 frames / 43,005 actions.  Those
-    # historical figures describe a different route and are not rewritten here.
-    assert report.frames_executed == 17_136_283
-    assert report.actions_executed == 152_288
+    # Completionist balanced-team lineage: live Route 1 acquisition, verified
+    # all-box census, and the zero-faint six-member training block intentionally
+    # make these totals much larger than the historical single-carry route.
+    assert report.frames_executed == 83_835_201
+    assert report.actions_executed == 758_430
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -2044,7 +2049,7 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
         for item in report.lavender.wild_flees
     )
     assert report.lavender.party_hp == report.lavender.party_max_hp
-    assert report.lavender.party_status == (0, 0, 0)
+    assert all(status == 0 for status in report.lavender.party_status)
     assert report.lavender.repels_used == 4
     assert (
         report.lavender.parlyz_heals_used + report.lavender.parlyz_heals_remaining
@@ -2058,7 +2063,7 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     assert report.celadon.route_8_events_before == (False,) * 9
     assert report.celadon.route_8_events_after == (False,) * 8 + (True,)
     assert report.celadon.party_hp == report.celadon.party_max_hp
-    assert report.celadon.party_status == (0, 0, 0)
+    assert all(status == 0 for status in report.celadon.party_status)
     assert report.celadon.repels_remaining == 0
     assert report.celadon.money_remaining > 0
     assert report.hideout.passed
@@ -2069,7 +2074,7 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     assert report.hideout.lift_key_carried
     assert report.hideout.silph_scope_carried
     assert report.hideout.party_hp == report.hideout.party_max_hp
-    assert report.hideout.party_status == (0, 0, 0)
+    assert all(status == 0 for status in report.hideout.party_status)
     assert report.hideout.money_remaining > 0
     assert report.tower.passed
     assert tuple(item.trainer_number for item in report.tower.battles) == (
@@ -2101,7 +2106,7 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     assert report.tower.evolution_after == (0x1C, 0x40, 0x3B)
     assert report.tower.evolution_moves_preserved
     assert report.tower.party_hp == report.tower.party_max_hp
-    assert report.tower.party_status == (0, 0, 0)
+    assert all(status == 0 for status in report.tower.party_status)
     assert report.tower.money_remaining > 0
     assert report.fuchsia.passed
     assert tuple(item.trainer_number for item in report.fuchsia.battles) == (
@@ -2120,9 +2125,13 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     assert report.fuchsia.snorlax_fight_after is False
     assert report.fuchsia.snorlax_object_tile_crossed
     assert 0 <= report.fuchsia.wild_flees <= 4
-    assert report.fuchsia.initial_bag == report.fuchsia.final_bag
+    snorlax = report.fuchsia.battles[1]
+    assert snorlax.captured
+    assert 1 <= snorlax.balls_used <= SNORLAX_CAPTURE_POLICY.max_throws
+    assert snorlax.recovery_items_used <= SNORLAX_SUPER_POTION_RESERVE
+    assert snorlax.party_after == snorlax.party_before + (SNORLAX,)
     assert report.fuchsia.party_hp == report.fuchsia.party_max_hp
-    assert report.fuchsia.party_status == (0, 0, 0)
+    assert all(status == 0 for status in report.fuchsia.party_status)
     assert report.fuchsia.money_remaining > 0
     assert report.safari.passed
     assert report.safari.counter_milestones == (500, 472, 376, 238, 228, 201, 0)
@@ -2152,7 +2161,7 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     assert report.koga.soul_badge
     assert report.koga.soul_badge_mirror
     assert report.koga.party_hp == report.koga.party_max_hp
-    assert report.koga.party_status == (0, 0, 0)
+    assert all(status == 0 for status in report.koga.party_status)
     assert report.koga.surf_pp == 15
     assert report.strength.passed
     assert report.strength.gave_gold_teeth
@@ -2163,10 +2172,17 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     assert report.strength.moves_after == (0x2C, 0x46, 0x3D, 0x39)
     assert report.strength.pp_after == (25, 15, 20, 15)
     assert report.strength.party_hp == report.strength.party_max_hp
-    assert report.strength.party_status == (0, 0, 0)
+    assert all(status == 0 for status in report.strength.party_status)
     assert report.erika.passed
     assert report.saffron.passed
-    assert report.saffron.money_before - report.saffron.money_after_purchase == 200
+    assert (
+        report.saffron.money_before - report.saffron.money_after_stone
+        == THUNDER_STONE_PRICE
+    )
+    assert (
+        report.saffron.money_after_stone - report.saffron.money_after_purchase
+        == FRESH_WATER_PRICE
+    )
     assert report.saffron.money_after_purchase == report.saffron.money_after
     assert (
         report.saffron.fresh_water_before,
@@ -2229,7 +2245,7 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     )
     assert report.cinnabar.trainer_battles == 0
     assert report.cinnabar.party_hp == report.cinnabar.party_max_hp
-    assert report.cinnabar.party_status == (0, 0, 0)
+    assert all(status == 0 for status in report.cinnabar.party_status)
     assert report.blaine.passed
     assert report.blaine.mansion_switch_trace == (False, True, False, True)
     assert report.blaine.mansion_trainer_events_after == (False,) * 6
@@ -2274,7 +2290,7 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     )
     assert report.victory_road.badge_checks == (True,) * 7
     assert report.victory_road.party_hp == report.victory_road.party_max_hp
-    assert report.victory_road.party_status == (0, 0, 0)
+    assert all(status == 0 for status in report.victory_road.party_status)
     assert report.victory_road.final_raw.first_party_moves == (0x42, 0x46, 0x3A, 0x39)
     assert report.victory_road.final_raw.first_party_pp == (25, 15, 10, 15)
     assert report.lorelei.passed

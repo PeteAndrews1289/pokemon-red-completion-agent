@@ -248,6 +248,26 @@ class RedAreaSurvey:
 
 
 @dataclass(frozen=True, slots=True)
+class RedSourcePriority:
+    """One incomplete direct source ranked by remaining collection value."""
+
+    source_id: str
+    kind: RedAcquisitionKind
+    missing_species_refs: tuple[str, ...]
+    missing_specimen_count: int
+
+    def __post_init__(self) -> None:
+        if not self.source_id.strip():
+            raise ValueError("source_id must not be empty")
+        if not isinstance(self.kind, RedAcquisitionKind):
+            raise TypeError("kind must be a RedAcquisitionKind")
+        if not self.missing_species_refs:
+            raise ValueError("source priority must contain a missing species")
+        if type(self.missing_specimen_count) is not int or self.missing_specimen_count <= 0:
+            raise ValueError("missing_specimen_count must be a positive integer")
+
+
+@dataclass(frozen=True, slots=True)
 class RedAreaDecision:
     directive: RedAreaDirective
     source_id: str
@@ -280,12 +300,15 @@ class RedAreaExecutor(Protocol):
 class RedAreaExecutionPolicy:
     max_actions: int = 2_000
     max_encounters: int = 400
+    capture_in_requirement_order: bool = False
 
     def __post_init__(self) -> None:
         for name in ("max_actions", "max_encounters"):
             value = getattr(self, name)
             if type(value) is not int or value <= 0:
                 raise ValueError(f"{name} must be a positive integer")
+        if type(self.capture_in_requirement_order) is not bool:
+            raise TypeError("capture_in_requirement_order must be a bool")
 
 
 @dataclass(frozen=True, slots=True)
@@ -353,11 +376,68 @@ def summarize_red_area_survey(
     return RedAreaSurvey(source_id, requirements)
 
 
+def rank_red_sources(
+    observation: CollectionObservation,
+    *,
+    kinds: frozenset[RedAcquisitionKind] | None = None,
+    catalog: RedAcquisitionCatalog | None = None,
+) -> tuple[RedSourcePriority, ...]:
+    """Rank incomplete direct sources by useful retained specimens.
+
+    The ranking is intentionally route-agnostic.  A chapter planner may filter
+    it by acquisition kind and then combine it with reachability and resource
+    costs.  Counting downstream-required duplicate roots makes a source with,
+    for example, two required Metapod specimens more valuable than a naive
+    one-species-per-source count would report.
+    """
+
+    catalog = catalog or RED_ACQUISITION_CATALOG
+    selected_kinds = frozenset(RedAcquisitionKind) if kinds is None else kinds
+    if not selected_kinds:
+        return ()
+    if any(not isinstance(kind, RedAcquisitionKind) for kind in selected_kinds):
+        raise TypeError("kinds must contain only RedAcquisitionKind values")
+
+    source_kinds: dict[str, RedAcquisitionKind] = {}
+    for method in catalog.methods:
+        if method.transforms_precursor or method.kind not in selected_kinds:
+            continue
+        previous = source_kinds.setdefault(method.source_id, method.kind)
+        if previous is not method.kind:
+            raise ValueError("one direct source cannot mix acquisition kinds")
+
+    priorities: list[RedSourcePriority] = []
+    for source_id, kind in source_kinds.items():
+        survey = summarize_red_area_survey(source_id, observation, catalog)
+        missing = tuple(item for item in survey.requirements if item.missing_count)
+        if not missing:
+            continue
+        priorities.append(
+            RedSourcePriority(
+                source_id=source_id,
+                kind=kind,
+                missing_species_refs=tuple(item.species_ref for item in missing),
+                missing_specimen_count=sum(item.missing_count for item in missing),
+            )
+        )
+    return tuple(
+        sorted(
+            priorities,
+            key=lambda item: (
+                -item.missing_specimen_count,
+                -len(item.missing_species_refs),
+                item.source_id,
+            ),
+        )
+    )
+
+
 def plan_red_area_encounter(
     source_id: str,
     observation: CollectionObservation,
     *,
     encountered_species_ref: str | None = None,
+    required_species_ref: str | None = None,
     catalog: RedAcquisitionCatalog | None = None,
 ) -> RedAreaDecision:
     """Seek, catch, flee, rotate storage, or stop within one source survey."""
@@ -373,6 +453,17 @@ def plan_red_area_encounter(
             "every root specimen assigned to this source is retained",
         )
     if encountered_species_ref is not None:
+        if (
+            required_species_ref is not None
+            and encountered_species_ref != required_species_ref
+        ):
+            return RedAreaDecision(
+                RedAreaDirective.FLEE_ENCOUNTER,
+                source_id,
+                encountered_species_ref,
+                None,
+                f"capture order currently requires {required_species_ref}",
+            )
         requirement = next(
             (item for item in survey.requirements if item.species_ref == encountered_species_ref),
             None,
@@ -449,10 +540,17 @@ def run_red_area_survey(
     for action_count in range(policy.max_actions + 1):
         observation = executor.read_collection()
         encountered = executor.encountered_species_ref()
+        survey = summarize_red_area_survey(source_id, observation, catalog)
+        required_species_ref = (
+            survey.missing_species_refs[0]
+            if policy.capture_in_requirement_order and survey.missing_species_refs
+            else None
+        )
         decision = plan_red_area_encounter(
             source_id,
             observation,
             encountered_species_ref=encountered,
+            required_species_ref=required_species_ref,
             catalog=catalog,
         )
         if decision.directive is RedAreaDirective.STOP:

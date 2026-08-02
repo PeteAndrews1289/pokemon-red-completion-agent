@@ -188,6 +188,11 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 - [x] Bind the source-survey executor to live Route 1 movement, capture menus, Pokédex flags, and
   PC storage, then replay Pidgey/Rattata acquisition through all 312 checkpoints and the Hall of
   Fame from clean power.
+- [x] Replace Route 1's chapter-local target loop with the reusable source-survey executor backed
+  by global Pokédex, party, and all-box observations; add duplicate-aware source ranking and replay
+  the exact 83,835,201-frame / 758,430-action lineage through the complete integration contract.
+- [ ] Bind the reusable wild-source controller to Viridian Forest and retain the six downstream
+  root specimens: Caterpie, two Metapod, two Kakuna, and Pikachu.
 - [ ] Independently retain one living specimen for all 120 coexisting targets.
 - [ ] Implement the remaining map-specific encounter, fishing, Safari, gift, static, prize,
   fossil, trade, evolution, and resource executors for all catalog methods.
