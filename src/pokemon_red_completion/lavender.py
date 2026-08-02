@@ -45,6 +45,7 @@ PECK = 0x40
 CUT = 0x0F
 PROTECTED_PARTY = (WARTORTLE, DUX, DIGLETT)
 SUPER_POTION_PRICE = 700
+NUGGET_SALE_PROCEEDS = 5_000
 PARLYZ_HEAL_PRICE = 200
 REPEL_PRICE = 350
 POST_MART_RNG_ALIGNMENT_FRAMES = 80
@@ -230,8 +231,7 @@ class LavenderChapterReport:
             and all(status == 0 for status in self.party_status)
             and self.repels_purchased == self.repels_used == 4
             and self.parlyz_heals_purchased >= 1
-            and self.parlyz_heals_used + self.parlyz_heals_remaining
-            == self.parlyz_heals_purchased
+            and self.parlyz_heals_used + self.parlyz_heals_remaining == self.parlyz_heals_purchased
             and self.super_potions_purchased >= 8
             and self.super_potions_used + self.super_potions_remaining
             == self.super_potions_purchased + 1
@@ -1187,6 +1187,7 @@ def _flee(
     timing: LavenderTiming,
     *,
     unknown_with_cancel: bool = False,
+    allow_purified_zone_heal: bool = False,
 ) -> None:
     before = reader.read()
     species = before.party_species_ids
@@ -1217,6 +1218,7 @@ def _flee(
                     pp,
                     hp,
                     inventory,
+                    allow_purified_zone_heal=allow_purified_zone_heal,
                 )
                 return
             _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
@@ -1256,6 +1258,7 @@ def _flee(
                 pp,
                 hp,
                 inventory,
+                allow_purified_zone_heal=allow_purified_zone_heal,
             )
             return
         _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
@@ -1286,11 +1289,23 @@ def _record_wild_flee_evidence(
     pp: tuple[int, ...] | None,
     hp: tuple[int, int, int],
     inventory: dict[int, int],
+    *,
+    allow_purified_zone_heal: bool = False,
 ) -> None:
     party_ok = final.party_species_ids == species
-    pp_ok = final.first_party_pp == pp
+    pp_preserved = final.first_party_pp == pp
     final_hp = _party_hp(emulator)
-    hp_safe = all(0 < after <= before_hp for before_hp, after in zip(hp, final_hp, strict=True))
+    hp_preserved = all(
+        0 < after <= before_hp for before_hp, after in zip(hp, final_hp, strict=True)
+    )
+    purified_zone_heal = (
+        allow_purified_zone_heal
+        and _event(emulator, EventFlag.IN_PURIFIED_ZONE)
+        and final_hp == _party_max_hp(emulator)
+        and all(status == 0 for status in _party_status(emulator))
+    )
+    pp_ok = pp_preserved or purified_zone_heal
+    hp_safe = hp_preserved or purified_zone_heal
     inventory_ok = _bag(emulator) == inventory
     evidence = WildFleeEvidence(
         int(before.map_id or 0),
@@ -1313,7 +1328,8 @@ def _record_wild_flee_evidence(
         raise LavenderChapterError(
             "Wild flee violated protected state: "
             f"hp={hp!r}->{final_hp!r}, party={party_ok}, "
-            f"pp={pp_ok}, inventory={inventory_ok}."
+            f"pp_preserved={pp_preserved}, inventory={inventory_ok}, "
+            f"purified_zone_heal={purified_zone_heal}."
         )
     run.wilds.append(evidence)
 
@@ -1432,13 +1448,8 @@ def _cure_tunnel_status_if_present(
             f"{label} gate requires its supported status and a carried item."
         )
     _use_bag_item(executor, reader, emulator, timing, item)
-    if (
-        _party_status(emulator)[0] != 0
-        or _bag(emulator).get(item, 0) != before_qty - 1
-    ):
-        raise LavenderChapterError(
-            f"{label} did not cure the lead and consume exactly once."
-        )
+    if _party_status(emulator)[0] != 0 or _bag(emulator).get(item, 0) != before_qty - 1:
+        raise LavenderChapterError(f"{label} did not cure the lead and consume exactly once.")
     if item is ItemId.PARLYZ_HEAL:
         run.parlyz_heals_used += 1
 
@@ -1505,8 +1516,7 @@ def _teach_tm11(
                 _close_menus(executor, reader, timing)
                 return
             raise LavenderChapterError(
-                "TM11 was consumed but produced unexpected moves: "
-                f"{raw.first_party_moves!r}."
+                f"TM11 was consumed but produced unexpected moves: {raw.first_party_moves!r}."
             )
         _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     raise LavenderChapterError("TM11 did not replace Bubble and consume the TM.")
@@ -1521,6 +1531,17 @@ def _purchase_supplies(
     money_before = _money(emulator)
     _move(executor, reader, emulator, _RunState([], []), _directions("UUL"), timing, "Mart clerk")
     _pulse(executor, MacroActionKind.MOVE, "left", 60)
+    # The expanded early collection needs a larger legal Ball reserve.  Liquidate
+    # the Nugget at the first shop where that cash is needed instead of weakening
+    # the Rock Tunnel healing and repel contract.
+    _sell_single_mart_item(
+        executor,
+        reader,
+        emulator,
+        timing,
+        ItemId.NUGGET,
+        expected_proceeds=NUGGET_SALE_PROCEEDS,
+    )
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _buy_mart_item(
@@ -1553,11 +1574,56 @@ def _purchase_supplies(
     _close_menus(executor, reader, timing)
     money_after = _money(emulator)
     expected_cost = 8 * SUPER_POTION_PRICE + PARLYZ_HEAL_PRICE + 4 * REPEL_PRICE
-    if money_before - money_after != expected_cost:
+    if money_before + NUGGET_SALE_PROCEEDS - money_after != expected_cost:
         raise LavenderChapterError(
-            f"Mart money gate expected {expected_cost}, observed {money_before - money_after}."
+            "Mart money gate did not preserve the sale/purchase ledger: "
+            f"sale={NUGGET_SALE_PROCEEDS}, cost={expected_cost}, "
+            f"before={money_before}, after={money_after}."
         )
     return expected_cost
+
+
+def _sell_single_mart_item(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: LavenderTiming,
+    item: ItemId,
+    *,
+    expected_proceeds: int,
+) -> None:
+    """Sell one declared inventory item and prove both sides of the ledger."""
+
+    if _bag(emulator).get(item, 0) != 1:
+        raise LavenderChapterError(f"Expected one {item.name} for the declared sale.")
+    money_before = _money(emulator)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _pulse(executor, MacroActionKind.MOVE, "down", frames=120)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
+        raise LavenderChapterError("Lavender shop did not select SELL.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(24):
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        items = tuple(_bag(emulator))
+        if absolute < len(items) and items[absolute] == item:
+            break
+        _pulse(executor, MacroActionKind.MOVE, "down", frames=120)
+    else:
+        raise LavenderChapterError(f"Sell list could not select {item.name}.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(timing.dialogue_pulses):
+        if _bag(emulator).get(item, 0) == 0:
+            _close_menus(executor, reader, timing)
+            proceeds = _money(emulator) - money_before
+            if proceeds != expected_proceeds:
+                raise LavenderChapterError(
+                    f"{item.name} sale expected {expected_proceeds}, observed {proceeds}."
+                )
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise LavenderChapterError(f"Lavender Mart did not sell {item.name}.")
 
 
 def _top_up_lavender_supplies(
@@ -1707,7 +1773,12 @@ def _buy_mart_item(
             _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
             return
         _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    raise LavenderChapterError(f"Mart did not purchase {quantity} of {int(item):#04x}.")
+    raise LavenderChapterError(
+        f"Mart did not purchase {quantity} of {int(item):#04x}: "
+        f"money={_money(emulator)}, bag={_bag(emulator)!r}, "
+        f"selected={emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM):#04x}, "
+        f"shop_quantity={emulator.read_u8(RamAddress.SHOP_QUANTITY)}."
+    )
 
 
 def _heal_center(
@@ -1987,9 +2058,7 @@ def _party_max_hp(emulator: EmulatorState) -> tuple[int, ...]:
 
 def _party_status(emulator: EmulatorState) -> tuple[int, ...]:
     return tuple(
-        emulator.read_u8(
-            int(RamAddress.PARTY_MON_1_STATUS) + index * PARTY_STRUCT_STRIDE
-        )
+        emulator.read_u8(int(RamAddress.PARTY_MON_1_STATUS) + index * PARTY_STRUCT_STRIDE)
         for index in range(_party_size(emulator))
     )
 

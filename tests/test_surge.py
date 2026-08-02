@@ -13,15 +13,20 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.surge import (
+    CATERPIE_SPECIES_ID,
+    COLLECTION_POKE_BALL_TARGET,
     DEFAULT_SURGE_TIMING,
     DIG_MOVE_ID,
     DIGLETT_CAPTURE_LEVELS,
     DIGLETT_SEARCH_SEED_WAIT_FRAMES,
     DUX_NICKNAME,
     GYM_CAN_COORDINATES,
+    KAKUNA_SPECIES_ID,
     LT_SURGE_OPPONENT_ID,
     LT_SURGE_TRAINER_CLASS_ID,
     LT_SURGE_TRAINER_SET,
+    METAPOD_SPECIES_ID,
+    PIKACHU_SPECIES_ID,
     SPEAROW_CAPTURE_LEVELS,
     SPEAROW_CAPTURE_MOVE_ID,
     SPEAROW_CAPTURE_MOVE_SLOT,
@@ -30,6 +35,7 @@ from pokemon_red_completion.surge import (
     SurgeChapterReport,
     SurgeCheckpoint,
     SurgeTiming,
+    _LiveWildCorridorSurveyExecutor,
     _navigate_to_gym_can,
     _party_moves_for_index,
     _plan_gym_can_path,
@@ -92,6 +98,45 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert SPEAROW_WEAKEN_ATTEMPT_LIMIT == 12
     assert DUX_NICKNAME == (0x83, 0x94, 0x97, 0x50)
     assert SURGE_CHECKPOINT_COUNT == 15
+    assert COLLECTION_POKE_BALL_TARGET == 25
+    assert (
+        CATERPIE_SPECIES_ID,
+        METAPOD_SPECIES_ID,
+        KAKUNA_SPECIES_ID,
+        PIKACHU_SPECIES_ID,
+    ) == (0x7B, 0x7C, 0x71, 0x54)
+
+
+@pytest.mark.parametrize(
+    ("overrides", "message"),
+    [
+        ({"label": " "}, "label must not be empty"),
+        ({"forward_directions": ()}, "requires movement directions"),
+        ({"starting_endpoint": "east"}, "must be south or north"),
+        ({"max_legs": 0}, "must be a positive integer"),
+        ({"max_legs": True}, "must be a positive integer"),
+    ],
+)
+def test_live_wild_corridor_rejects_ambiguous_source_contracts(
+    overrides: dict[str, object],
+    message: str,
+) -> None:
+    arguments: dict[str, object] = {
+        "label": "Viridian Forest",
+        "forward_directions": ("up",),
+        "starting_endpoint": "south",
+        "max_legs": 64,
+    }
+    arguments.update(overrides)
+
+    with pytest.raises(ValueError, match=message):
+        _LiveWildCorridorSurveyExecutor(
+            object(),
+            object(),
+            object(),
+            DEFAULT_SURGE_TIMING,
+            **arguments,
+        )
 
 
 class _PartyMoveMemory:

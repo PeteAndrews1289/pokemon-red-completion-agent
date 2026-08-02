@@ -1924,6 +1924,26 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     report = run_qualified_play(rom_path)
 
     after = tuple(_adjacent_artifact_identity(path) for path in adjacent)
+    print(
+        "qualification_metrics="
+        + json.dumps(
+            {
+                "frames_executed": report.frames_executed,
+                "actions_executed": report.actions_executed,
+                "collection_progress": (
+                    {
+                        "owned": report.collection_progress.collection.pokedex_owned_count,
+                        "living": report.collection_progress.collection.living_count,
+                        "level_100": report.collection_progress.collection.level_cap_count,
+                        "box_counts": report.collection_progress.box_counts,
+                    }
+                    if report.collection_progress is not None
+                    else None
+                ),
+            },
+            sort_keys=True,
+        )
+    )
     assert report.passed
     assert report.verified_objectives == (
         "power_on",
@@ -1967,8 +1987,15 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     # Completionist balanced-team lineage: live Route 1 acquisition, verified
     # all-box census, and the zero-faint six-member training block intentionally
     # make these totals much larger than the historical single-carry route.
-    assert report.frames_executed == 83_835_201
-    assert report.actions_executed == 758_430
+    assert report.frames_executed == 83_619_428
+    assert report.actions_executed == 765_088
+    assert report.collection_progress is not None
+    assert report.collection_progress.collection.target_count == 124
+    assert report.collection_progress.collection.living_target_count == 120
+    assert report.collection_progress.collection.pokedex_owned_count == 18
+    assert report.collection_progress.collection.living_count == 13
+    assert report.collection_progress.collection.level_cap_count == 0
+    assert report.collection_progress.box_counts == (9,) + (0,) * 11
     assert report.cascade.final_evidence.misty_victory_snapshot
     assert report.cascade.final_evidence.cascade_badge
     assert report.cascade.final_evidence.tm11_in_bag
@@ -2146,7 +2173,10 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     assert report.safari.in_safari_zone is False
     assert report.koga.passed
     assert all(item.selected_pp_spent > 0 for item in report.koga.battles)
-    assert all(item.hp_after > 0 for item in report.koga.battles)
+    assert all(
+        item.hp_after > 0 or (item.terminal_mutual_ko and item.hp_after == 0)
+        for item in report.koga.battles
+    )
     assert report.koga.trainer_events_before_koga == (
         False,
         True,

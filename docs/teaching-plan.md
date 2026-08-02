@@ -413,7 +413,9 @@ lineages remain hard leakage.
     Road, and Indigo Plateau preparation. **Done.**
 17. Freeze explicit adaptive-battle identities, planner context, and prospective train,
    validation, and test timing schedules, including exact execution identities, one-shot ledger
-   accounting, and global plus partition-local slots. **Done as protocol infrastructure.**
+   accounting, global plus partition-local slots, and an authenticated fitting lane that consumes
+   only complete train/validation outcomes while leaving test sealed. **Done as protocol
+   infrastructure; the fitting lane has not executed because collection is pending.**
 18. Commit and push the exact source/configuration state, then complete the disjoint, unassigned,
    non-counted 68/68 schedule dry run before slot `01`. **Pending; as of the current branch,
    neither the dry run nor any declared slot has executed.**

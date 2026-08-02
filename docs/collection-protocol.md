@@ -362,3 +362,6 @@ Disjoint preregistered lineages are necessary but not sufficient for promotion. 
 uses train and validation only; the five test slots remain unopened until the feature schema,
 model, thresholds, and analysis rules are frozen. Promotion additionally requires a
 registry-authenticated corpus audit and learned battle rollouts with teacher fallback disabled.
+The implemented `learn battle fit` command enforces that boundary: it requires all seven learning
+outcomes, rejects any consumed test slot before loading a dataset, and publishes only a private
+candidate plus aggregate validation evidence. It has not executed while the campaign is pending.

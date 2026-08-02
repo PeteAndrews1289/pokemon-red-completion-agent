@@ -67,9 +67,14 @@ without starting a new attempt.
 
 An individual episode may be structurally qualified for its assigned data lane, but it is never
 labeled promotion-eligible by itself. Promotion is a corpus-and-rollout decision after the frozen
-cross-lineage protocol, not an episode property. The current aggregate partition audit is likewise
-structural only and deliberately reports promotion ineligible until a registry-aware corpus audit
-authenticates every frozen assignment, schedule attestation, identity, and one-shot outcome.
+cross-lineage protocol, not an episode property. The formal fitting lane now authenticates the
+campaign seal, rehearsal qualification, exact assignment, schedule evidence, one-shot outcome,
+manifest, split, and root identity for all five train and two validation episodes. It refuses to
+open any test episode, fits only the train roots, and reports validation accuracy, cross-entropy,
+legal-choice rate, free/forced-choice metrics, visible-state overlap, novel-visible performance,
+and a validation-only confidence threshold. Its candidate remains promotion-ineligible until the
+weights and threshold are frozen, the five test roots are evaluated once, and learned rollouts
+pass separately. The lane is implemented but has not executed because collection is still pending.
 
 ## Private input and output
 
@@ -87,6 +92,14 @@ typed artifact. The artifact uses canonical JSON rather than pickle or another e
 is written with private permissions, and is published by an exclusive atomic rename only after its
 manifest and streams are synchronized. Model directories and common model formats remain blocked
 from Git.
+
+After the five train and two validation outcomes are complete, the authenticated command is:
+
+```bash
+pokemon-red-completion learn battle fit --private-root /absolute/private/trajectory-directory
+```
+
+It has no test-episode argument. Test data cannot enter model fitting or threshold selection.
 
 ## Transferable feature view
 

@@ -192,6 +192,33 @@ def _parser() -> argparse.ArgumentParser:
         default=1289,
         help="Deterministic training seed (default: 1289).",
     )
+    learn_battle_fit = learn_battle_commands.add_parser(
+        "fit",
+        help="Fit from all authenticated train roots and select on validation roots.",
+    )
+    learn_battle_fit.add_argument(
+        "--private-root",
+        type=Path,
+        required=True,
+        help="Explicit absolute path to the initialized private artifact root.",
+    )
+    learn_battle_fit.add_argument(
+        "--rom",
+        type=Path,
+        help="Private ROM path; otherwise use POKEMON_RED_ROM.",
+    )
+    learn_battle_fit.add_argument(
+        "--epochs",
+        type=int,
+        default=300,
+        help="Frozen deterministic optimizer epochs (default: 300).",
+    )
+    learn_battle_fit.add_argument(
+        "--seed",
+        type=int,
+        default=1289,
+        help="Frozen deterministic training seed (default: 1289).",
+    )
     doctor = subcommands.add_parser("doctor", help="Verify the private ROM identity.")
     doctor.add_argument("--rom", type=Path, help="Private ROM path; otherwise use POKEMON_RED_ROM.")
     bootstrap = subcommands.add_parser(
@@ -281,7 +308,7 @@ def _parser() -> argparse.ArgumentParser:
         "--schedule-dry-run",
         action="store_true",
         help=(
-            "Run the fixed unassigned 63-battle schedule rehearsal without "
+            "Run the fixed unassigned 68-battle schedule rehearsal without "
             "consuming a held-out collection slot."
         ),
     )
@@ -678,6 +705,8 @@ def _run_battle_learning(
 ) -> dict[str, object]:
     """Run the optional learning stack without making NumPy a base CLI dependency."""
 
+    if args.learn_battle_command == "fit":
+        return _run_preassigned_battle_learning(parser, args)
     if not args.diagnostic:
         parser.error(
             "The current single-lineage trainer requires --diagnostic; "
@@ -741,8 +770,8 @@ def _run_battle_learning(
             )
         if dataset.episode_qualified:
             raise BattleTrainingError(
-                "This command is diagnostic-only; use the future preassigned evaluation lane "
-                "for promotion evidence."
+                "This command is diagnostic-only; use battle fit after the declared train and "
+                "validation roots complete."
             )
         config = BattleTrainingConfig(
             seed=args.seed,
@@ -799,6 +828,207 @@ def _run_battle_learning(
             _public_error_message(
                 error,
                 private_paths=(args.private_root,),
+            )
+        )
+    except OSError:
+        parser.error("Private learning input/output failed; no model was published.")
+    raise AssertionError("argparse error unexpectedly returned")
+
+
+def _run_preassigned_battle_learning(
+    parser: argparse.ArgumentParser,
+    args: argparse.Namespace,
+) -> dict[str, object]:
+    """Authenticate the frozen campaign and fit without opening its test rows."""
+
+    try:
+        from pokemon_red_completion.battle_dataset import (
+            BattleDatasetError,
+            BattleDecisionProvenance,
+            BattleEpisodeDataset,
+            load_battle_episode,
+        )
+        from pokemon_red_completion.battle_model import BattleModelValidationError
+        from pokemon_red_completion.battle_semantics import (
+            BattleFeatureError,
+            BattleFeatureProjector,
+        )
+        from pokemon_red_completion.battle_training import (
+            BattleTrainingConfig,
+            BattleTrainingError,
+            train_preassigned_battle_ranker,
+        )
+        from pokemon_red_completion.red_battle_catalog import (
+            PRET_POKERED_COMMIT as BATTLE_CATALOG_SOURCE_COMMIT,
+        )
+        from pokemon_red_completion.red_battle_catalog import PokemonRedBattleCatalog
+    except ModuleNotFoundError as error:
+        if error.name == "numpy":
+            parser.error('Battle learning requires the optional "learning" dependencies.')
+        raise
+
+    rom_path: Path | None = None
+    try:
+        rom_path = resolve_rom_path(args.rom)
+        source = detect_source_identity(REPOSITORY_ROOT, include_untracked=True)
+        require_clean_source(source)
+        registry = load_committed_collection_registry(REPOSITORY_ROOT)
+        slots = _collection_slots(registry)
+        train_slots = tuple(slot for slot in slots if slot.partition == "train")
+        validation_slots = tuple(
+            slot for slot in slots if slot.partition == "validation"
+        )
+        test_slots = tuple(slot for slot in slots if slot.partition == "test")
+        if (len(train_slots), len(validation_slots), len(test_slots)) != (5, 2, 5):
+            raise BattleTrainingError(
+                "The frozen campaign must declare five train, two validation, and five test roots."
+            )
+        first_assignment = registry.assignment(registry.runs[0].run_id)
+        metadata = _recording_metadata(
+            rom_path,
+            episode_id=first_assignment.episode_id,
+            watch=False,
+            speed=None,
+            assignment=first_assignment,
+            execution=registry.execution,
+        )
+        identity = _campaign_identity(registry, metadata)
+        private_root = open_private_root(
+            args.private_root,
+            repository_root=REPOSITORY_ROOT,
+        )
+        projector = BattleFeatureProjector(PokemonRedBattleCatalog())
+        provenance = BattleDecisionProvenance(
+            actor="deterministic_teacher",
+            policy_id=POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
+            skill_id=POKEMON_BATTLE_MOVE_SKILL_ID,
+        )
+        datasets: dict[str, BattleEpisodeDataset] = {}
+        with private_root.collection_session(registry.collection_id) as session:
+            if (
+                find_dry_run_qualification(
+                    private_root,
+                    identity,
+                    registry.schedule_dry_run,
+                )
+                is None
+            ):
+                raise BattleTrainingError(
+                    "The exact 68-battle schedule rehearsal is not qualified."
+                )
+            ledger = CollectionOutcomeLedger.open_existing(
+                store=private_root,
+                session=session,
+                identity=identity,
+                slots=slots,
+            )
+            if ledger is None:
+                raise BattleTrainingError("The frozen collection campaign has not started.")
+            outcomes = {
+                outcome.slot.assignment_id: outcome for outcome in ledger.reconcile()
+            }
+            if any(slot.assignment_id in outcomes for slot in test_slots):
+                raise BattleTrainingError(
+                    "The test partition must remain unopened until the model is frozen."
+                )
+            for slot in (*train_slots, *validation_slots):
+                outcome = outcomes.get(slot.assignment_id)
+                if (
+                    outcome is None
+                    or outcome.status != "complete"
+                    or outcome.episode_manifest_sha256 is None
+                ):
+                    raise BattleTrainingError(
+                        "Every declared train and validation root must complete before fitting."
+                    )
+                dataset = load_battle_episode(
+                    private_root.open_episode(slot.episode_id),
+                    projector,
+                    required_provenance=provenance,
+                )
+                if (
+                    dataset.episode_id != slot.episode_id
+                    or dataset.root_lineage_id != slot.root_lineage_id
+                    or dataset.partition != slot.partition
+                    or dataset.regime != "within_game"
+                    or dataset.manifest_sha256 != outcome.episode_manifest_sha256
+                ):
+                    raise BattleTrainingError(
+                        "A loaded battle dataset contradicts its authenticated campaign slot."
+                    )
+                datasets[slot.assignment_id] = dataset
+
+        config = BattleTrainingConfig(
+            seed=args.seed,
+            epochs=args.epochs,
+        )
+        result = train_preassigned_battle_ranker(
+            tuple(datasets[slot.assignment_id] for slot in train_slots),
+            tuple(datasets[slot.assignment_id] for slot in validation_slots),
+            config=config,
+        )
+        artifact_id = f"red-battle-candidate-{uuid.uuid4().hex}"
+        writer = private_root.begin_artifact(artifact_id, kind="battle_model")
+        with writer:
+            writer.append(
+                "model",
+                {
+                    "record_type": "battle_model_candidate",
+                    "model": result.model.to_dict(),
+                    "model_sha256": result.model_sha256,
+                    "source": source.public_dict(),
+                    "collection_id": registry.collection_id,
+                    "registry_sha256": registry.registry_sha256,
+                    "corpus_manifest_roster_sha256": (
+                        result.corpus_manifest_roster_sha256
+                    ),
+                },
+            )
+            writer.append(
+                "training",
+                {
+                    "record_type": "battle_preassigned_training",
+                    "catalog": {
+                        "game": "pokemon_red_us_rev0",
+                        "pret_pokered_commit": BATTLE_CATALOG_SOURCE_COMMIT,
+                    },
+                    "configuration": config.public_dict(
+                        split_unit="preassigned_root_lineage"
+                    ),
+                    "collection_id": registry.collection_id,
+                    "registry_sha256": registry.registry_sha256,
+                    "scope": result.public_receipt()["scope"],
+                },
+            )
+            writer.append(
+                "metrics",
+                {
+                    "record_type": "battle_preassigned_validation_metrics",
+                    "receipt": result.public_receipt(),
+                },
+            )
+        payload = result.public_receipt()
+        payload["source"] = source.public_dict()
+        payload["registry_sha256"] = registry.registry_sha256
+        payload["private_artifact"] = writer.summary.public_dict()
+        return payload
+    except (
+        BattleDatasetError,
+        BattleFeatureError,
+        BattleModelValidationError,
+        BattleTrainingError,
+        CollectionLedgerError,
+        CollectionProtocolError,
+        EvaluationIdentityError,
+        PrivateArtifactError,
+        RomValidationError,
+        RuntimeIdentityError,
+        ScheduleAttestationError,
+    ) as error:
+        parser.error(
+            _public_error_message(
+                error,
+                private_paths=(args.private_root, rom_path),
             )
         )
     except OSError:

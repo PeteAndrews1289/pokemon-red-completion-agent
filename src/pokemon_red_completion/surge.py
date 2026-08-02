@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections import deque
+from collections import Counter, deque
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
@@ -25,7 +25,10 @@ from pokemon_red_completion.observation import (
     event_flag_is_set,
 )
 from pokemon_red_completion.pewter import (
+    FOREST_GATE_TO_FOREST_DIRECTIONS,
+    FOREST_ROUTE_DIRECTIONS,
     ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
+    ROUTE_2_TO_FOREST_GATE_DIRECTIONS,
     VIRIDIAN_TO_ROUTE_2_DIRECTIONS,
 )
 from pokemon_red_completion.red_acquisition import (
@@ -37,7 +40,6 @@ from pokemon_red_completion.red_acquisition import (
 from pokemon_red_completion.red_collection import (
     red_collection_observation,
     red_internal_species_number,
-    red_species_number,
     red_species_ref,
 )
 from pokemon_red_completion.red_party import PokemonRedPartyReader
@@ -58,6 +60,11 @@ DIGLETT_SEARCH_SEED_WAIT_FRAMES = 199
 WARTORTLE_SPECIES_ID = 0xB3
 PIDGEY_SPECIES_ID = 0x24
 RATTATA_SPECIES_ID = 0xA5
+CATERPIE_SPECIES_ID = 0x7B
+METAPOD_SPECIES_ID = 0x7C
+KAKUNA_SPECIES_ID = 0x71
+PIKACHU_SPECIES_ID = 0x54
+COLLECTION_POKE_BALL_TARGET = 25
 SPEAROW_CAPTURE_MOVE_ID = 0x37
 SPEAROW_CAPTURE_MOVE_SLOT = 4
 SPEAROW_WEAKEN_ATTEMPT_LIMIT = 12
@@ -285,15 +292,23 @@ def run_surge_chapter(
     _pulse(actions, MacroActionKind.MOVE, "left", 60)
     _confirm(actions, 4, 180)
     _confirm(actions, 2, 240)
-    for _ in range(60):
+    for _ in range(180):
         quantity = _bag(emulator).get(ItemId.POKE_BALL, 0)
-        if quantity == 10:
+        if quantity == COLLECTION_POKE_BALL_TARGET:
             break
-        if not 1 <= quantity < 10:
+        if not 1 <= quantity < COLLECTION_POKE_BALL_TARGET:
             raise SurgeChapterError(f"Unexpected Poké Ball quantity {quantity}.")
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
     else:
-        raise SurgeChapterError("Repeated single-ball purchase missed quantity ten.")
+        money_bytes = tuple(
+            emulator.read_u8(int(RamAddress.PLAYER_MONEY) + offset) for offset in range(3)
+        )
+        raise SurgeChapterError(
+            "Repeated single-ball purchase missed collection reserve: "
+            f"target={COLLECTION_POKE_BALL_TARGET}, "
+            f"quantity={_bag(emulator).get(ItemId.POKE_BALL, 0)}, "
+            f"money_bytes={money_bytes!r}."
+        )
     _pulse(actions, MacroActionKind.CONFIRM, frames=240)
     _pulse(actions, MacroActionKind.MOVE, "down", 180)
     if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
@@ -318,11 +333,12 @@ def run_surge_chapter(
     raw = reader.read()
     _gate(
         raw,
-        _bag(emulator).get(ItemId.POKE_BALL) == 10 and _bag(emulator).get(ItemId.SUPER_POTION) == 1,
+        _bag(emulator).get(ItemId.POKE_BALL) == COLLECTION_POKE_BALL_TARGET
+        and _bag(emulator).get(ItemId.SUPER_POTION) == 1,
         tracker,
         SurgePhase.BALLS_PURCHASED,
         "balls_purchased",
-        "Purchased ten Poké Balls and one recovery Super Potion",
+        f"Purchased {COLLECTION_POKE_BALL_TARGET} Poké Balls and one recovery Super Potion",
         records,
         progress,
         emulator,
@@ -358,7 +374,7 @@ def run_surge_chapter(
     _gate(
         raw,
         raw.party_species_ids == (WARTORTLE_SPECIES_ID, SPEAROW_SPECIES_ID)
-        and _bag(emulator).get(ItemId.POKE_BALL) == 9,
+        and _bag(emulator).get(ItemId.POKE_BALL) == COLLECTION_POKE_BALL_TARGET - 1,
         tracker,
         SurgePhase.SPEAROW_CAPTURED,
         "spearow_captured",
@@ -698,7 +714,11 @@ def _require(
         or (raw.player_x, raw.player_y) != coordinate
         or raw.battle_state != battle
     ):
-        raise SurgeChapterError(f"{label} missed map/coordinate/battle gate.")
+        raise SurgeChapterError(
+            f"{label} missed map/coordinate/battle gate: "
+            f"expected={(map_id, *coordinate, battle)!r}, "
+            f"actual={(raw.map_id, raw.player_x, raw.player_y, raw.battle_state)!r}."
+        )
 
 
 def _move(
@@ -813,10 +833,7 @@ def _find_spearow(
         encounters += 1
         if encounters > timing.encounter_limit:
             break
-        if (
-            raw.enemy_species_id == SPEAROW_SPECIES_ID
-            and raw.enemy_level in SPEAROW_CAPTURE_LEVELS
-        ):
+        if raw.enemy_species_id == SPEAROW_SPECIES_ID and raw.enemy_level in SPEAROW_CAPTURE_LEVELS:
             return raw
         balls = _bag(emulator).get(ItemId.POKE_BALL)
         _flee(executor, reader, raw)
@@ -873,24 +890,13 @@ def _use_spearow_capture_move_once(
         )
     else:
         raise SurgeChapterError("Could not select the qualified Spearow capture move.")
-    if (
-        raw.first_party_moves is None
-        or raw.first_party_moves[index] != SPEAROW_CAPTURE_MOVE_ID
-    ):
+    if raw.first_party_moves is None or raw.first_party_moves[index] != SPEAROW_CAPTURE_MOVE_ID:
         raise SurgeChapterError("Selected the wrong Spearow capture move.")
     _pulse(executor, MacroActionKind.CONFIRM)
     for _ in range(24):
         raw = reader.read()
-        if (
-            raw.first_party_pp
-            and initial_pp
-            and raw.first_party_pp[index] == initial_pp[index] - 1
-        ):
-            if tuple(
-                raw.first_party_pp[other]
-                for other in range(4)
-                if other != index
-            ) != tuple(
+        if raw.first_party_pp and initial_pp and raw.first_party_pp[index] == initial_pp[index] - 1:
+            if tuple(raw.first_party_pp[other] for other in range(4) if other != index) != tuple(
                 initial_pp[other] for other in range(4) if other != index
             ):
                 raise SurgeChapterError("An off-slot move spent PP during capture.")
@@ -1158,6 +1164,7 @@ def _run_route_1_collection_detour(
         "Viridian southbound",
     )
     _survey_route_1(emulator, executor, reader, timing)
+    _run_viridian_forest_collection(emulator, executor, reader, timing)
     _move(
         executor,
         reader,
@@ -1167,18 +1174,12 @@ def _run_route_1_collection_detour(
     )
     _traverse_route_2_to_cave_house(emulator, executor, reader, timing)
     raw = reader.read()
-    if (
-        raw.map_id != MapId.DIGLETTS_CAVE_ROUTE_2
-        or raw.player_x is None
-        or raw.player_y is None
-    ):
+    if raw.map_id != MapId.DIGLETTS_CAVE_ROUTE_2 or raw.player_x is None or raw.player_y is None:
         raise SurgeChapterError("Route 2 return missed Diglett's Cave house.")
     _move(
         executor,
         reader,
-        _directions(
-            "U" * max(raw.player_y - 4, 0) + "R" * max(4 - raw.player_x, 0)
-        ),
+        _directions("U" * max(raw.player_y - 4, 0) + "R" * max(4 - raw.player_x, 0)),
         timing,
         "Route 2 cave re-entry",
     )
@@ -1186,7 +1187,7 @@ def _run_route_1_collection_detour(
     if reader.read().map_id != MapId.DIGLETTS_CAVE:
         raise SurgeChapterError("Route 2 return did not enter Diglett's Cave.")
     _field_dig_to_vermilion(emulator, executor, reader, timing)
-    _store_route_1_specimens(emulator, executor, reader, timing)
+    _store_wild_collection_specimens(emulator, executor, reader, timing)
     _move(
         executor,
         reader,
@@ -1210,7 +1211,16 @@ def _survey_route_1(
 ) -> RedAreaExecutionReport:
     """Catch and retain Route 1's two wild species through live encounters."""
 
-    live = _RouteOneLiveSurveyExecutor(emulator, executor, reader, timing)
+    live = _LiveWildCorridorSurveyExecutor(
+        emulator,
+        executor,
+        reader,
+        timing,
+        label="Route 1",
+        forward_directions=ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
+        starting_endpoint="north",
+        max_legs=12,
+    )
     try:
         report = run_red_area_survey(
             "wild:Route1:grass",
@@ -1221,14 +1231,15 @@ def _survey_route_1(
                 capture_in_requirement_order=True,
             ),
         )
-        live.finish_at_viridian_end()
+        live.finish_at_starting_endpoint()
     except RedAreaExecutionError as error:
         raise SurgeChapterError(f"Route 1 semantic survey failed: {error}") from error
     if not report.passed or report.captures != 2:
         raise SurgeChapterError(f"Route 1 semantic survey lacked two captures: {report!r}.")
     raw = reader.read()
-    if raw.map_id == MapId.ROUTE_1 and raw.player_y == 0:
-        raw = _move_until_map(
+    if raw.map_id == MapId.ROUTE_1:
+        raw = _move_until_map_fleeing_wild(
+            emulator,
             executor,
             reader,
             "up",
@@ -1254,8 +1265,295 @@ def _survey_route_1(
     return report
 
 
-class _RouteOneLiveSurveyExecutor:
-    """Bind the game-neutral area loop to Route 1's qualified live corridor."""
+def _run_viridian_forest_collection(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SurgeTiming,
+) -> RedAreaExecutionReport:
+    """Retain Forest evolution roots and restore Viridian's south boundary."""
+
+    _move_fleeing_wild(
+        emulator,
+        executor,
+        reader,
+        VIRIDIAN_TO_ROUTE_2_DIRECTIONS,
+        timing,
+        "Viridian Forest Route 2 approach",
+    )
+    _move_fleeing_wild(
+        emulator,
+        executor,
+        reader,
+        ROUTE_2_TO_FOREST_GATE_DIRECTIONS,
+        timing,
+        "Viridian Forest south-gate approach",
+    )
+    _wait(executor, timing.transition_frames)
+    _require(
+        reader.read(),
+        MapId.VIRIDIAN_FOREST_SOUTH_GATE,
+        (4, 7),
+        0,
+        "Viridian Forest south gate",
+    )
+    _move(
+        executor,
+        reader,
+        FOREST_GATE_TO_FOREST_DIRECTIONS,
+        timing,
+        "Viridian Forest entrance",
+    )
+    _wait(executor, timing.transition_frames)
+    raw = reader.read()
+    if raw.map_id != MapId.VIRIDIAN_FOREST or raw.player_x not in {16, 17} or raw.player_y != 47:
+        raise SurgeChapterError(
+            "Viridian Forest collection missed its south entrance: "
+            f"map={raw.map_id!r}, coordinate={(raw.player_x, raw.player_y)!r}."
+        )
+
+    live = _LiveWildCorridorSurveyExecutor(
+        emulator,
+        executor,
+        reader,
+        timing,
+        label="Viridian Forest",
+        forward_directions=FOREST_ROUTE_DIRECTIONS,
+        starting_endpoint="south",
+        max_legs=64,
+    )
+    try:
+        report = run_red_area_survey(
+            "wild:ViridianForest:grass",
+            live,
+            policy=RedAreaExecutionPolicy(
+                max_actions=20_000,
+                max_encounters=1_000,
+                capture_in_requirement_order=True,
+            ),
+        )
+        live.finish_at_starting_endpoint()
+    except RedAreaExecutionError as error:
+        raise SurgeChapterError(f"Viridian Forest semantic survey failed: {error}") from error
+    if not report.passed or report.captures != 6:
+        raise SurgeChapterError(f"Viridian Forest semantic survey lacked six captures: {report!r}.")
+
+    raw = reader.read()
+    for _ in range(4):
+        if raw.map_id == MapId.VIRIDIAN_FOREST and raw.player_x in {16, 17} and raw.player_y == 47:
+            break
+        raw = _survey_step(executor, reader, "down", timing, "Viridian Forest endpoint")
+        if raw.battle_state:
+            live.flee_encounter()
+            raw = reader.read()
+    else:
+        raise SurgeChapterError(
+            "Viridian Forest could not normalize its physical south endpoint: "
+            f"map={raw.map_id!r}, coordinate={(raw.player_x, raw.player_y)!r}."
+        )
+    expected_party = (
+        WARTORTLE_SPECIES_ID,
+        DUX_SPECIES_ID,
+        DIGLETT_SPECIES_ID,
+        PIDGEY_SPECIES_ID,
+        RATTATA_SPECIES_ID,
+        CATERPIE_SPECIES_ID,
+    )
+    if (
+        raw.map_id != MapId.VIRIDIAN_FOREST
+        or raw.player_x not in {16, 17}
+        or raw.player_y != 47
+        or raw.party_species_ids != expected_party
+    ):
+        raise SurgeChapterError(
+            "Viridian Forest survey missed its south living gate: "
+            f"map={raw.map_id!r}, coordinate={(raw.player_x, raw.player_y)!r}, "
+            f"party={raw.party_species_ids!r}."
+        )
+    owned = reader.read_pokedex_state().owned_species
+    if not {10, 11, 14, 25} <= owned:
+        raise SurgeChapterError(
+            f"Viridian Forest captures lack Pokédex ownership: {sorted(owned)!r}."
+        )
+
+    # The south warp is not directionally symmetric: entering the Forest consumes
+    # the gate's final north step, while returning materializes at the top of the
+    # gate.  Normalize each side from live coordinates instead of replaying the
+    # inverse entrance trace and assuming the warp consumed an ordinary tile.
+    if raw.player_x == 16:
+        raw = _survey_step(
+            executor,
+            reader,
+            "right",
+            timing,
+            "Viridian Forest south-door column",
+        )
+        if raw.battle_state:
+            live.flee_encounter()
+            raw = reader.read()
+    if raw.map_id != MapId.VIRIDIAN_FOREST or (raw.player_x, raw.player_y) != (17, 47):
+        raise SurgeChapterError(
+            "Viridian Forest could not align with its south door: "
+            f"map={raw.map_id!r}, coordinate={(raw.player_x, raw.player_y)!r}."
+        )
+    raw = _move_until_map_fleeing_wild(
+        emulator,
+        executor,
+        reader,
+        "down",
+        MapId.VIRIDIAN_FOREST_SOUTH_GATE,
+        timing,
+        "Viridian Forest south exit",
+    )
+    _wait(executor, timing.transition_frames)
+    raw = reader.read()
+    if raw.player_x is None or raw.player_y is None:
+        raise SurgeChapterError("Viridian Forest return gate lacks live coordinates.")
+    gate_directions = (
+        *(("left",) * max(0, raw.player_x - 4)),
+        *(("right",) * max(0, 4 - raw.player_x)),
+        *(("down",) * max(0, 7 - raw.player_y)),
+        *(("up",) * max(0, raw.player_y - 7)),
+    )
+    raw = _move(
+        executor,
+        reader,
+        gate_directions,
+        timing,
+        "Viridian Forest return-gate normalization",
+    )
+    _require(
+        raw,
+        MapId.VIRIDIAN_FOREST_SOUTH_GATE,
+        (4, 7),
+        0,
+        "Viridian Forest return gate",
+    )
+    _move_fleeing_wild(
+        emulator,
+        executor,
+        reader,
+        _inverse_directions(ROUTE_2_TO_FOREST_GATE_DIRECTIONS),
+        timing,
+        "Viridian Forest Route 2 return",
+    )
+    _move_fleeing_wild(
+        emulator,
+        executor,
+        reader,
+        _inverse_directions(VIRIDIAN_TO_ROUTE_2_DIRECTIONS),
+        timing,
+        "Viridian Forest Viridian return",
+        stop_at_map=MapId.VIRIDIAN_CITY,
+    )
+    _wait(executor, timing.transition_frames)
+    raw = reader.read()
+    if (
+        raw.map_id != MapId.VIRIDIAN_CITY
+        or raw.player_x is None
+        or raw.player_y is None
+        or raw.player_x > 19
+        or raw.player_y > 2
+    ):
+        raise SurgeChapterError(
+            "Viridian Forest return missed the settled north boundary: "
+            f"map={raw.map_id!r}, coordinate={(raw.player_x, raw.player_y)!r}."
+        )
+    raw = _move(
+        executor,
+        reader,
+        (
+            *(("down",) * (2 - raw.player_y)),
+            *(("right",) * (19 - raw.player_x)),
+        ),
+        timing,
+        "Viridian north-boundary normalization",
+    )
+    _require(raw, MapId.VIRIDIAN_CITY, (19, 2), 0, "Viridian north route column")
+    raw = _move(
+        executor,
+        reader,
+        _directions("D" * 26 + "R" + "DD" + "R" + "D" * 5),
+        timing,
+        "Viridian south-boundary restoration",
+    )
+    _require(raw, MapId.VIRIDIAN_CITY, (21, 35), 0, "Viridian south-boundary restoration")
+    return report
+
+
+def _move_fleeing_wild(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    timing: SurgeTiming,
+    label: str,
+    *,
+    stop_at_map: int | None = None,
+) -> RawGameState:
+    """Follow a known corridor while safely dismissing incidental encounters.
+
+    A map terminal may end the trace early because Generation I door and edge
+    warps do not consume movement symmetrically in both directions.
+    """
+
+    pending = deque(directions)
+    raw = reader.read()
+    maximum_attempts = len(pending) + timing.encounter_limit
+    for _ in range(maximum_attempts):
+        if stop_at_map is not None and raw.map_id == stop_at_map:
+            return raw
+        if not pending:
+            if stop_at_map is not None:
+                raise SurgeChapterError(f"{label} missed map {stop_at_map:#04x}.")
+            return raw
+        before = reader.read()
+        direction = pending[0]
+        raw = _survey_step(executor, reader, direction, timing, label)
+        if raw.map_id != before.map_id or (raw.player_x, raw.player_y) != (
+            before.player_x,
+            before.player_y,
+        ):
+            pending.popleft()
+        if raw.battle_state:
+            balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+            _flee(executor, reader, raw)
+            if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
+                raise SurgeChapterError(f"{label} flee changed Poké Balls.")
+            raw = reader.read()
+        if stop_at_map is not None and raw.map_id == stop_at_map:
+            return raw
+    if stop_at_map is not None:
+        raise SurgeChapterError(f"{label} missed map {stop_at_map:#04x}.")
+    raise SurgeChapterError(f"{label} exceeded its movement/encounter bound.")
+
+
+def _move_until_map_fleeing_wild(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    direction: str,
+    target_map: int,
+    timing: SurgeTiming,
+    label: str,
+) -> RawGameState:
+    """Reach an adjacent map while dismissing encounters on the boundary tiles."""
+
+    for _ in range(24):
+        raw = reader.read()
+        if raw.map_id == target_map:
+            return raw
+        raw = _survey_step(executor, reader, direction, timing, label)
+        if raw.battle_state:
+            balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+            _flee(executor, reader, raw)
+            if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
+                raise SurgeChapterError(f"{label} flee changed Poké Balls.")
+    raise SurgeChapterError(f"{label} missed map {target_map:#04x}.")
+
+
+class _LiveWildCorridorSurveyExecutor:
+    """Bind a reversible two-endpoint wild corridor to the shared area loop."""
 
     def __init__(
         self,
@@ -1263,13 +1561,30 @@ class _RouteOneLiveSurveyExecutor:
         executor: _CountingExecutor,
         reader: PokemonRedStateReader,
         timing: SurgeTiming,
+        *,
+        label: str,
+        forward_directions: tuple[str, ...],
+        starting_endpoint: str,
+        max_legs: int,
     ) -> None:
+        if not label.strip():
+            raise ValueError("live wild corridor label must not be empty")
+        if not forward_directions:
+            raise ValueError("live wild corridor requires movement directions")
+        if starting_endpoint not in {"south", "north"}:
+            raise ValueError("starting_endpoint must be south or north")
+        if type(max_legs) is not int or max_legs <= 0:
+            raise ValueError("max_legs must be a positive integer")
         self._emulator = emulator
         self._executor = executor
         self._reader = reader
         self._timing = timing
+        self._label = label
+        self._forward_directions = forward_directions
+        self._starting_endpoint = starting_endpoint
+        self._max_legs = max_legs
         self._party_reader = PokemonRedPartyReader(emulator)
-        self._endpoint = "north"
+        self._endpoint = starting_endpoint
         self._directions: deque[str] = deque()
         self._completed_legs = 0
 
@@ -1285,86 +1600,104 @@ class _RouteOneLiveSurveyExecutor:
         if not raw.battle_state:
             return None
         if raw.enemy_species_id is None:
-            raise RedAreaExecutionError("Route 1 battle lacks an enemy species")
+            raise RedAreaExecutionError(f"{self._label} battle lacks an enemy species")
         try:
             return red_species_ref(red_internal_species_number(raw.enemy_species_id))
         except ValueError as error:
             raise RedAreaExecutionError(
-                f"Route 1 battle exposed invalid species {raw.enemy_species_id:#04x}"
+                f"{self._label} battle exposed invalid species {raw.enemy_species_id:#04x}"
             ) from error
 
     def seek_encounter(self) -> None:
         if self.encountered_species_ref() is not None:
-            raise RedAreaExecutionError("Route 1 cannot seek during an encounter")
+            raise RedAreaExecutionError(f"{self._label} cannot seek during an encounter")
         if not self._directions:
             self._start_leg()
-        direction = self._directions.popleft()
-        _survey_step(self._executor, self._reader, direction, self._timing)
-        if not self._directions:
-            self._endpoint = "south" if self._endpoint == "north" else "north"
-            self._completed_legs += 1
+        self._advance_one_direction()
 
     def capture_encounter(self, species_ref: str) -> None:
         encountered = self.encountered_species_ref()
         if encountered != species_ref:
             raise RedAreaExecutionError(
-                f"Route 1 capture expected {species_ref}, encountered {encountered}"
+                f"{self._label} capture expected {species_ref}, encountered {encountered}"
             )
-        national_number = red_species_number(species_ref)
-        expected_internal = {
-            16: PIDGEY_SPECIES_ID,
-            19: RATTATA_SPECIES_ID,
-        }.get(national_number)
-        if expected_internal is None:
-            raise RedAreaExecutionError(f"Route 1 cannot retain {species_ref}")
-        _throw_until_caught_route_1(
+        raw = self._reader.read()
+        if raw.enemy_species_id is None:
+            raise RedAreaExecutionError(f"{self._label} capture lacks an enemy species")
+        _throw_until_caught_wild(
             self._emulator,
             self._executor,
             self._reader,
-            expected_internal,
+            raw.enemy_species_id,
+            self._label,
         )
 
     def flee_encounter(self) -> None:
         raw = self._reader.read()
         if not raw.battle_state:
-            raise RedAreaExecutionError("Route 1 cannot flee without an encounter")
+            raise RedAreaExecutionError(f"{self._label} cannot flee without an encounter")
         balls = _bag(self._emulator).get(ItemId.POKE_BALL, 0)
         _flee(self._executor, self._reader, raw)
         if _bag(self._emulator).get(ItemId.POKE_BALL, 0) != balls:
-            raise RedAreaExecutionError("Route 1 flee changed Poké Balls")
+            raise RedAreaExecutionError(f"{self._label} flee changed Poké Balls")
 
     def switch_box(self, box_index: int) -> None:
         raise RedAreaExecutionError(
-            f"Route 1 cannot switch to box {box_index} without leaving the source"
+            f"{self._label} cannot switch to box {box_index} without leaving the source"
         )
 
-    def finish_at_viridian_end(self) -> None:
-        """Normalize an early survey stop to Route 1's qualified north endpoint."""
+    def finish_at_starting_endpoint(self) -> None:
+        """Normalize an early successful stop to the corridor's starting end."""
 
-        maximum_steps = len(ROUTE_1_TO_VIRIDIAN_DIRECTIONS) * 2
-        for _ in range(maximum_steps):
-            if not self._directions and self._endpoint == "north":
+        maximum_attempts = len(self._forward_directions) * 2 + 240
+        for _ in range(maximum_attempts):
+            if not self._directions and self._endpoint == self._starting_endpoint:
                 return
             if not self._directions:
                 self._start_leg()
-            direction = self._directions.popleft()
-            raw = _survey_step(self._executor, self._reader, direction, self._timing)
+            raw = self._advance_one_direction()
             if raw.battle_state:
                 self.flee_encounter()
+        raise RedAreaExecutionError(f"{self._label} could not normalize to its starting endpoint")
+
+    def _start_leg(self) -> None:
+        if self._completed_legs >= self._max_legs:
+            raise RedAreaExecutionError(
+                f"{self._label} exceeded {self._max_legs} bounded survey legs"
+            )
+        directions = (
+            _inverse_directions(self._forward_directions)
+            if self._endpoint == "north"
+            else self._forward_directions
+        )
+        self._directions.extend(directions)
+
+    def _advance_one_direction(self) -> RawGameState:
+        """Consume a route step only when its tile movement actually completed."""
+
+        before = self._reader.read()
+        direction = self._directions[0]
+        raw = _survey_step(
+            self._executor,
+            self._reader,
+            direction,
+            self._timing,
+            self._label,
+        )
+        moved = raw.map_id != before.map_id or (raw.player_x, raw.player_y) != (
+            before.player_x,
+            before.player_y,
+        )
+        if moved:
+            self._directions.popleft()
             if not self._directions:
                 self._endpoint = "south" if self._endpoint == "north" else "north"
                 self._completed_legs += 1
-        raise RedAreaExecutionError("Route 1 could not normalize to its Viridian endpoint")
-
-    def _start_leg(self) -> None:
-        if self._completed_legs >= 12:
-            raise RedAreaExecutionError("Route 1 exceeded twelve bounded survey legs")
-        directions = (
-            _inverse_directions(ROUTE_1_TO_VIRIDIAN_DIRECTIONS)
-            if self._endpoint == "north"
-            else ROUTE_1_TO_VIRIDIAN_DIRECTIONS
-        )
-        self._directions.extend(directions)
+        elif not raw.battle_state:
+            raise RedAreaExecutionError(
+                f"{self._label} route step neither moved nor entered battle"
+            )
+        return raw
 
 
 def _survey_step(
@@ -1372,6 +1705,7 @@ def _survey_step(
     reader: PokemonRedStateReader,
     direction: str,
     timing: SurgeTiming,
+    label: str,
 ) -> RawGameState:
     before = reader.read()
     for attempt in range(timing.movement_retries):
@@ -1384,30 +1718,30 @@ def _survey_step(
         ):
             return raw
     raise SurgeChapterError(
-        f"Route 1 survey blocked moving {direction} at "
+        f"{label} survey blocked moving {direction} at "
         f"{(before.map_id, before.player_x, before.player_y)!r}."
     )
 
 
-def _throw_until_caught_route_1(
+def _throw_until_caught_wild(
     emulator: EmulatorState,
     executor: _CountingExecutor,
     reader: PokemonRedStateReader,
     species_id: int | None,
+    label: str,
 ) -> None:
-    if species_id not in {PIDGEY_SPECIES_ID, RATTATA_SPECIES_ID}:
-        raise SurgeChapterError("Route 1 capture received an invalid target.")
-    party_before = reader.read().party_species_ids or ()
+    if species_id is None:
+        raise SurgeChapterError(f"{label} capture received no target species.")
     starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
     for _ in range(starting_balls):
         _navigate_main(executor, reader, 1)
         _pulse(executor, MacroActionKind.CONFIRM)
         _select_bag_item(emulator, executor, ItemId.POKE_BALL)
         _pulse(executor, MacroActionKind.CONFIRM, frames=360)
-        for _ in range(32):
+        for _ in range(48):
             raw = reader.read()
-            if raw.battle_state == 0 and raw.party_species_ids == (*party_before, species_id):
-                _confirm_kind(executor, MacroActionKind.CANCEL, 3, 180)
+            if raw.battle_state == 0:
+                _confirm_kind(executor, MacroActionKind.CANCEL, 6, 180)
                 return
             if (
                 raw.battle_state == 1
@@ -1416,18 +1750,18 @@ def _throw_until_caught_route_1(
                 break
             _pulse(executor, MacroActionKind.CONFIRM)
     raise SurgeChapterError(
-        f"Route 1 capture exhausted its bounded Poké Balls for {species_id:#04x}."
+        f"{label} capture exhausted its bounded Poké Balls for {species_id:#04x}."
     )
 
 
-def _store_route_1_specimens(
+def _store_wild_collection_specimens(
     emulator: EmulatorState,
     executor: _CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> None:
     raw = reader.read()
-    _require(raw, MapId.VERMILION_CITY, (11, 4), 0, "Route 1 Dig return")
+    _require(raw, MapId.VERMILION_CITY, (11, 4), 0, "wild collection Dig return")
     _move(executor, reader, ("up",), timing, "Vermilion Center")
     _wait(executor, timing.transition_frames)
     _require(reader.read(), MapId.VERMILION_POKECENTER, (3, 7), 0, "Vermilion Center entry")
@@ -1449,24 +1783,49 @@ def _store_route_1_specimens(
             expected_species_id=RATTATA_SPECIES_ID,
             timing=storage_timing,
         )
+        caterpie = deposit_party_member(
+            executor,
+            reader,
+            party_slot=4,
+            expected_species_id=CATERPIE_SPECIES_ID,
+            timing=storage_timing,
+        )
     except RedPCStorageError as error:
-        raise SurgeChapterError(f"Route 1 specimen storage failed: {error}") from error
-    if not pidgey.passed or not rattata.passed:
-        raise SurgeChapterError("Route 1 storage lacked exact deposit transitions.")
-    box = reader.read_current_box_state()
-    if box.species_ids[-2:] != (PIDGEY_SPECIES_ID, RATTATA_SPECIES_ID):
-        raise SurgeChapterError(f"Route 1 specimens are absent from the current box: {box!r}.")
+        raise SurgeChapterError(f"Wild collection specimen storage failed: {error}") from error
+    if not pidgey.passed or not rattata.passed or not caterpie.passed:
+        raise SurgeChapterError("Wild collection storage lacked exact deposit transitions.")
+    observation = red_collection_observation(
+        reader.read_pokedex_state(),
+        PokemonRedPartyReader(emulator).read(),
+        reader.read_all_box_states(),
+    )
+    living = Counter(item.species_ref for item in observation.specimens)
+    required = {10: 1, 11: 2, 14: 2, 16: 1, 19: 1, 25: 1}
+    missing = {
+        number: quantity - living[red_species_ref(number)]
+        for number, quantity in required.items()
+        if living[red_species_ref(number)] < quantity
+    }
+    if missing or reader.read().party_species_ids != (
+        WARTORTLE_SPECIES_ID,
+        DUX_SPECIES_ID,
+        DIGLETT_SPECIES_ID,
+    ):
+        raise SurgeChapterError(
+            "Wild collection storage missed its living gate: "
+            f"missing={missing!r}, party={reader.read().party_species_ids!r}."
+        )
     _confirm_kind(executor, MacroActionKind.CANCEL, 5, 180)
     _move(
         executor,
         reader,
         _directions("L" * 4 + "D" + "L" * 4 + "DLUU" + "L" + "D" * 4),
         timing,
-        "Vermilion Center exit",
+        "Vermilion Center collection exit",
     )
     _wait(executor, timing.transition_frames)
     if reader.read().map_id != MapId.VERMILION_CITY:
-        raise SurgeChapterError("Route 1 storage did not restore Vermilion field control.")
+        raise SurgeChapterError("Wild collection storage did not restore Vermilion field control.")
 
 
 def _approach_vermilion_pc(
@@ -1572,9 +1931,7 @@ def _traverse_route_2_to_viridian(
             recent.append(position)
             continue
         if raw.map_id != MapId.ROUTE_2:
-            raise SurgeChapterError(
-                f"Route 2 traversal reached an unexpected map {raw.map_id!r}."
-            )
+            raise SurgeChapterError(f"Route 2 traversal reached an unexpected map {raw.map_id!r}.")
         if raw.battle_state:
             balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
             _flee(executor, reader, raw)
@@ -1750,9 +2107,7 @@ def _traverse_route_2_to_cave_house(
             position = (raw.player_x, raw.player_y)
             continue
         if raw.map_id != MapId.ROUTE_2:
-            raise SurgeChapterError(
-                f"Northbound Route 2 traversal reached map {raw.map_id!r}."
-            )
+            raise SurgeChapterError(f"Northbound Route 2 traversal reached map {raw.map_id!r}.")
         if raw.battle_state:
             balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
             _flee(executor, reader, raw)
@@ -1769,9 +2124,7 @@ def _traverse_route_2_to_cave_house(
         else:
             path = route_to_frontier(position)
             if len(path) < 2:
-                raise SurgeChapterError(
-                    f"Northbound Route 2 traversal exhausted at {position!r}."
-                )
+                raise SurgeChapterError(f"Northbound Route 2 traversal exhausted at {position!r}.")
             direction = edges[position][path[1]]
         _pulse(executor, MacroActionKind.MOVE, direction, 60)
         moved = reader.read()
@@ -1805,8 +2158,7 @@ def _traverse_route_2_to_cave_house(
                 (
                     name
                     for name, delta in deltas.items()
-                    if delta
-                    == (position[0] - next_position[0], position[1] - next_position[1])
+                    if delta == (position[0] - next_position[0], position[1] - next_position[1])
                 ),
                 None,
             )
@@ -1887,9 +2239,7 @@ def _traverse_cave_to_route_2(
                 raise SurgeChapterError("Route 2 cave traversal exhausted its reachable map.")
             parent = stack[-2]
             dx, dy = parent[0] - position[0], parent[1] - position[1]
-            direction = next(
-                name for name, delta in deltas.items() if delta == (dx, dy)
-            )
+            direction = next(name for name, delta in deltas.items() if delta == (dx, dy))
         else:
             tried.add(direction)
         _pulse(executor, MacroActionKind.MOVE, direction, 60)

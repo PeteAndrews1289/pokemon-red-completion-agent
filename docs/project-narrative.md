@@ -131,6 +131,26 @@ actions**—and passed the full private integration test without changing adjace
 See the
 [sanitized reusable-source receipt](evidence/qualified-play-reusable-wild-source-2026-08-02.json).
 
+The next live slice reused that same controller in Viridian Forest rather than adding another
+chapter-local capture loop. The adapter legally financed a larger early Ball reserve, dismissed
+irrelevant encounters, retained Caterpie, two Metapod, two Kakuna, and Pikachu in the dependency
+order required by later evolutions, normalized the asymmetric Forest and Viridian return warps,
+and deposited the three party-visible collection specimens without losing the duplicates sent
+directly to Box 1. Two independent clean-power runs then reproduced **312/312 checkpoints**,
+**36/36 objectives**, **83,619,428 frames**, and **765,088 actions** through the Hall of Fame.
+The terminal save contains 15 specimens across party and storage, representing **13 distinct
+living target species**, with **18/124 registrations** and **0/120 level-100 targets**. This is a
+qualified second ordinary-wild source, not the full acquisition curriculum.
+
+Qualification also exposed a different kind of missing bridge: the existing learning command was
+intentionally diagnostic-only and rejected preregistered episodes. The formal lane now requires
+the exact campaign and rehearsal identities, complete one-shot outcomes for all five train and two
+validation roots, and an untouched five-root test partition. It trains only on the train roots,
+selects against validation, reports free-choice and forced-choice behavior separately, discloses
+visible-state overlap and novel-visible performance, chooses a validation-only confidence
+threshold, and writes a canonical private candidate artifact. A weak candidate remains recorded
+but cannot be frozen. No such candidate exists yet because the collection campaign has not opened.
+
 The current phase makes one further correction. The qualified route completed the game by
 overleveling a single Pokémon, which is a legitimate way to finish Red but a poor thing to imitate:
 it hides the battle decisions the agent is supposed to learn, concentrates all risk in one party
@@ -565,6 +585,32 @@ magically contains Silver’s story.
 
 ## Current status and honest limitations
 
+The active lineage now combines the complete story route, a six-member balanced curriculum,
+checksum-verified storage, the Red-only perfect-save contract, and two live ordinary-wild
+collection sources. It begins from clean power, restores no save state, keeps all six story
+members alive, verifies all **312 semantic checkpoints** and **36 objectives**, defeats the
+Champion, and enters the Hall of Fame.
+
+The newest route catches Pidgey and Rattata on Route 1, then retains Caterpie, two Metapod, two
+Kakuna, and Pikachu in Viridian Forest. Two independent runs reproduced **83,619,428 frames** and
+**765,088 actions** exactly. The terminal contract reads **18/124 registered**, **13/120 distinct
+living**, and **0/120 level 100**, with nine specimens in Box 1 and the six-member story party
+intact. The duplicate Metapod and Kakuna roots are physically retained without inflating the
+distinct-species count.
+
+The formal learner now requires complete one-shot outcomes for all five train and two validation
+roots under the exact campaign identity. It fits only training, selects on validation, leaves all
+five test roots unopened, and publishes a private canonical candidate with legality, baseline,
+cross-entropy, free/forced-choice, visible-overlap, novel-visible, and confidence evidence. It has
+not executed because the new source/configuration bundle and 68/68 rehearsal are still pending;
+the campaign remains unopened and all twelve collection slots remain unconsumed. No learned model
+has completed the game.
+
+### Historical qualification snapshots
+
+The paragraphs below preserve the order in which earlier lineages were qualified. Statements such
+as “current branch” describe their milestone at that time; the synopsis above is authoritative.
+
 The historical deterministic teacher completion remains verified. The current robustness branch
 has also completed an uninterrupted clean-power replay with **299/299 checkpoints**, **36/36
 objectives**, **5,163,657 frames**, and **43,005 controller actions**. A second clean rehearsal
@@ -633,7 +679,6 @@ The full learned-system and transfer claims remain pending. In particular:
   finalized source;
 - held-out full-game completion has not yet been demonstrated;
 - cross-game transfer has not yet been measured;
-- the finalized six-member trajectories have not yet been collected; and
 - no learned policy has yet reproduced the teacher's full-game completion or demonstrated transfer
   to another Pokémon title.
 
@@ -656,12 +701,13 @@ This project demonstrates:
 
 A concise interview description is:
 
-> I built a completion-first Pokémon Red agent that verified the entire game through 301 semantic
-> checkpoints, then used clean replays under changed timing and battle lineages to turn brittle
-> assumptions into reusable observations, recovery, and bounded experience-training skills. The
-> system records private semantic
-> trajectories, trains legality-constrained specialists, and is designed to measure how much of
-> that knowledge reduces the teaching required for the next Pokémon game.
+> I built a completion-first Pokémon Red system that reaches the Hall of Fame through 312 verified
+> semantic checkpoints with a balanced six-member party, then turned replay failures into reusable
+> navigation, capture, storage, recovery, and experience-training skills. It now measures a
+> 124-registration/120-living completion contract, records integrity-checked private
+> demonstrations, and keeps train, validation, and test roots sealed before fitting
+> legality-constrained specialists. The next experiment measures whether those game-neutral skills
+> reduce how much teaching a second Pokémon title needs.
 
 ## Related documentation
 

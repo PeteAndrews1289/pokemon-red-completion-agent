@@ -77,6 +77,12 @@ ROUTE1_ACQUISITION_RECEIPT = (
     / "evidence"
     / "qualified-play-route1-acquisition-2026-08-02.json"
 )
+VIRIDIAN_FOREST_RECEIPT = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "qualified-play-viridian-forest-2026-08-02.json"
+)
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -1947,3 +1953,75 @@ def test_route1_acquisition_receipt_is_narrow_complete_and_privacy_safe() -> Non
     assert "/Volumes/" not in serialized
     assert "Downloads" not in serialized
     assert ".gb" not in serialized
+
+
+def test_viridian_forest_receipt_is_source_bound_narrow_and_privacy_safe() -> None:
+    receipt = json.loads(VIRIDIAN_FOREST_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "pokemon-red-viridian-forest-receipt-v1"
+    assert receipt["status"] == "passed"
+    assert receipt["source_identity"] == {
+        "collection_registry_sha256": (
+            "a97026d9e25edb9b0baf0b4945b0aeb10c8f7e62a4d524ab4ceafd5792ce4c4b"
+        ),
+        "source_bundle_sha256": (
+            "2045f27313a02d9ac3e44feaff886f1020d01408bd2a17a8b6e0df173f2ae9fa"
+        ),
+        "teacher_execution_sha256": (
+            "82895df18df8d3e38902c7d25d6e27d8a08ba202e164c7f881c8b929f5694210"
+        ),
+    }
+    assert receipt["evaluation"] == {
+        "clean_power_on": True,
+        "human_input": False,
+        "save_state_restoration": False,
+        "adjacent_private_artifacts_unchanged": True,
+        "exact_source_teacher_executions": 2,
+    }
+    assert receipt["viridian_forest_acquisition"] == {
+        "live_emulator_execution": True,
+        "reusable_semantic_source_controller": True,
+        "global_pokedex_observation": True,
+        "global_party_observation": True,
+        "all_twelve_boxes_observed": True,
+        "species_quantities": {"10": 1, "11": 2, "14": 2, "25": 1},
+        "physical_specimens_retained": 6,
+        "distinct_species_retained": 4,
+        "exact_party_deposit_transitions_verified": 3,
+        "duplicate_specimens_sent_directly_to_storage": 3,
+        "forest_and_gate_warps_normalized": True,
+        "story_party_restored": True,
+    }
+    assert receipt["completion"] == {
+        "checkpoints_verified": 312,
+        "checkpoints_total": 312,
+        "objectives_verified": 36,
+        "objectives_total": 36,
+        "champion_defeated": True,
+        "hall_of_fame_entered": True,
+        "frames_executed": 83_619_428,
+        "actions_executed": 765_088,
+    }
+    assert receipt["terminal_collection"] == {
+        "pokedex_registered_targets": 18,
+        "distinct_living_target_species": 13,
+        "level_100_targets": 0,
+        "physical_specimens": 15,
+        "party_count": 6,
+        "box_counts": [9, *(0 for _ in range(11))],
+        "all_boxes_verified": True,
+        "storage_initialized": True,
+    }
+    assert receipt["learning_boundary"] == {
+        "formal_train_validation_fitter_implemented": True,
+        "candidate_model_fitted": False,
+        "sealed_test_partition_opened": False,
+        "learned_policy_rollout_completed": False,
+    }
+    assert receipt["validation"]["public_tests_passed"] == 1456
+    assert receipt["validation"]["private_integration_tests_passed"] == 1
+    assert not any(receipt["privacy"].values())
+
+    serialized = json.dumps(receipt)
+    for forbidden in ("/Users/", "/Volumes/", "Downloads", ".gb", ".jsonl"):
+        assert forbidden not in serialized

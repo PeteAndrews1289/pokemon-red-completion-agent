@@ -83,6 +83,15 @@ control, and progressively trained specialists.**
 > evolutions. The refactored lineage reproduced the exact **83,835,201 frames** and **758,430
 > actions** and passed the complete private integration contract. See the
 > [sanitized reusable-source receipt](docs/evidence/qualified-play-reusable-wild-source-2026-08-02.json).
+> The same reusable controller now also surveys Viridian Forest, retaining Caterpie, two Metapod,
+> two Kakuna, and Pikachu before returning to the story route. Two independent clean-power replays
+> reproduced **312/312 checkpoints**, **36/36 objectives**, **83,619,428 frames**, and **765,088
+> actions** through the Hall of Fame. The terminal census is **18/124 registered, 13/120 distinct
+> living species, and 0/120 at level 100**, with nine specimens in Box 1 and the six-member story
+> party intact. Fifteen specimens are physically retained; the duplicate Metapod and Kakuna roots
+> intentionally do not inflate the distinct-species count. This qualifies the Forest source, not
+> the remaining collection or a learned completion agent. See the
+> [sanitized Viridian Forest receipt](docs/evidence/qualified-play-viridian-forest-2026-08-02.json).
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
 > **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned
@@ -237,6 +246,10 @@ pokemon-red-completion record \
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
   --collection-run red-battle-v1-01-train
+
+# After all five train and two validation roots complete, fit without opening test:
+pokemon-red-completion learn battle fit \
+  --private-root /absolute/private/trajectory-directory
 
 # Inspect all twelve slots and reconcile a power-loss partial without starting a run:
 pokemon-red-completion collection status \

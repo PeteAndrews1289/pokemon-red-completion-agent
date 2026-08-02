@@ -191,8 +191,9 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 - [x] Replace Route 1's chapter-local target loop with the reusable source-survey executor backed
   by global Pokédex, party, and all-box observations; add duplicate-aware source ranking and replay
   the exact 83,835,201-frame / 758,430-action lineage through the complete integration contract.
-- [ ] Bind the reusable wild-source controller to Viridian Forest and retain the six downstream
-  root specimens: Caterpie, two Metapod, two Kakuna, and Pikachu.
+- [x] Bind the reusable wild-source controller to Viridian Forest; retain Caterpie, two Metapod,
+  two Kakuna, and Pikachu; and reproduce the complete 83,619,428-frame / 765,088-action lineage
+  twice through all 312 checkpoints and the Hall of Fame.
 - [ ] Independently retain one living specimen for all 120 coexisting targets.
 - [ ] Implement the remaining map-specific encounter, fishing, Safari, gift, static, prize,
   fossil, trade, evolution, and resource executors for all catalog methods.
@@ -202,6 +203,10 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   unseen seeds before claiming support for another game.
 - [ ] Build a multi-save, multi-version portfolio contract for species that cannot coexist or be
   obtained in one lineage, with unavailable event/service requirements reported explicitly.
+- [x] Add the authenticated five-train/two-validation battle fitting lane: require complete
+  one-shot outcomes, leave all five test roots unopened, disclose visible-state overlap and
+  novel-visible performance, select a validation-only confidence threshold, and publish a private
+  canonical candidate that remains promotion-ineligible until test and rollout evaluation.
 - [ ] Commit and push the exact source/configuration state, then successfully complete the 68/68
   schedule dry run before slot `01`.
 - [ ] Collect every declared train and validation lineage without opening the test partition.

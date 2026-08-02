@@ -81,10 +81,11 @@ from pokemon_red_completion.training import (
 
 BLAINE_CHECKPOINT_COUNT = 9
 BLAINE_CAPACITY_SALE_ITEM = ItemId.ANTIDOTE
-BLAINE_INPUT_BAG_SLOT_BOUNDS = (17, 19)
+BLAINE_INPUT_BAG_SLOT_BOUNDS = (16, 19)
 BLAINE_MONEY_DELTA = 5_003
 BLAINE_ANTIDOTE_SALE_VALUE = 50
 MAX_REPEL_PRICE = 700
+ULTRA_BALL_PRICE = 1_200
 BLAINE_MAX_WILD_FLEES = 3
 MANSION_TRAINING_FLEE_TIMING = CeladonTiming(flee_pulses=96)
 BLAINE_OPPONENT = 0xEF
@@ -326,6 +327,8 @@ class BlaineChapterReport:
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    capacity_ultra_ball_bought: bool = False
+    initial_bag_slot_count: int = 17
     team_readiness: BalancedTeamReport | None = None
     team_training_battles: int = 0
     team_training_healing_trips: int = 0
@@ -368,11 +371,18 @@ class BlaineChapterReport:
             and self.x_accuracy_retained
             and self.bide_sold
             and self.max_repel_bought in (1, 2)
+            and self.initial_bag_slot_count
+            in range(
+                BLAINE_INPUT_BAG_SLOT_BOUNDS[0],
+                BLAINE_INPUT_BAG_SLOT_BOUNDS[1] + 1,
+            )
+            and self.capacity_ultra_ball_bought == (self.initial_bag_slot_count == 16)
             and self.money_remaining
             == self.initial_money
             + BLAINE_MONEY_DELTA
             - (self.max_repel_bought - 1) * MAX_REPEL_PRICE
             - (0 if self.antidote_sold else BLAINE_ANTIDOTE_SALE_VALUE)
+            - (ULTRA_BALL_PRICE if self.capacity_ultra_ball_bought else 0)
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
@@ -431,7 +441,8 @@ class BlaineChapterReport:
             == self.initial_money
             + BLAINE_MONEY_DELTA
             - (self.max_repel_bought - 1) * MAX_REPEL_PRICE
-            - (0 if self.antidote_sold else BLAINE_ANTIDOTE_SALE_VALUE),
+            - (0 if self.antidote_sold else BLAINE_ANTIDOTE_SALE_VALUE)
+            - (ULTRA_BALL_PRICE if self.capacity_ultra_ball_bought else 0),
             "location": self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3),
             "party_core": party_core_intact(self.final_raw.party_species_ids),
@@ -604,8 +615,15 @@ def run_blaine_chapter(
     # Retain TM21 here so TM14 plus the Secret Key still fill the bag and keep
     # Blaine's delayed-TM38 reward boundary meaningful. Stay in the sell menu
     # so _buy_repel can return directly to the clerk's BUY/SELL menu.
-    repel_purchase_quantity = 2 if len(initial_bag) == 17 else 1
-    _buy_repel(actions, reader, emulator, quantity=repel_purchase_quantity)
+    capacity_ultra_ball_bought = len(initial_bag) == 16
+    repel_purchase_quantity = 2 if len(initial_bag) in {16, 17} else 1
+    _buy_repel(
+        actions,
+        reader,
+        emulator,
+        quantity=repel_purchase_quantity,
+        buy_ultra_ball=capacity_ultra_ball_bought,
+    )
     _use_bag_item(actions, reader, emulator, DEFAULT_LAVENDER_TIMING, ItemId.MAX_REPEL)
     if (
         _bag(emulator).get(ItemId.MAX_REPEL, 0) != repel_purchase_quantity - 1
@@ -861,6 +879,10 @@ def run_blaine_chapter(
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,
         controller_released=not emulator.pressed_buttons,
+        capacity_ultra_ball_bought=(
+            capacity_ultra_ball_bought and _bag(emulator).get(ItemId.ULTRA_BALL, 0) == 1
+        ),
+        initial_bag_slot_count=len(initial_bag),
         team_readiness=team_readiness,
         team_training_battles=team_battles,
         team_training_healing_trips=team_healing_trips,
@@ -918,10 +940,27 @@ def _sell_antidote_before_mansion(
     return input_slots == 19
 
 
-def _buy_repel(actions, reader, emulator, *, quantity: int = 1) -> None:
+def _buy_repel(
+    actions,
+    reader,
+    emulator,
+    *,
+    quantity: int = 1,
+    buy_ultra_ball: bool = False,
+) -> None:
     _pulse(actions, MacroActionKind.CANCEL)
     _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
+    if buy_ultra_ball:
+        _buy_mart_item(
+            actions,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            absolute_index=0,
+            item=ItemId.ULTRA_BALL,
+            quantity=1,
+            target_bag_quantity=1,
+        )
     _buy_mart_item(
         actions,
         emulator,

@@ -128,6 +128,63 @@ def test_field_recovery_skips_a_full_hp_target_even_above_its_maximum(
     )
 
 
+def test_wild_flee_accepts_only_declared_purified_zone_restoration(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    emulator = object()
+    before = replace(
+        _raw(),
+        map_id=MapId.POKEMON_TOWER_5F,
+        player_x=11,
+        player_y=9,
+        battle_state=1,
+        first_party_hp=65,
+        first_party_max_hp=91,
+        first_party_pp=(18, 30, 13, 25),
+    )
+    final = replace(
+        before,
+        battle_state=0,
+        first_party_hp=91,
+        first_party_pp=(25, 30, 20, 25),
+    )
+    monkeypatch.setattr(lavender_module, "_party_hp", lambda _emulator: (91, 49, 36))
+    monkeypatch.setattr(lavender_module, "_party_max_hp", lambda _emulator: (91, 49, 36))
+    monkeypatch.setattr(lavender_module, "_party_status", lambda _emulator: (0, 0, 0))
+    monkeypatch.setattr(lavender_module, "_bag", lambda _emulator: {})
+    monkeypatch.setattr(lavender_module, "_event", lambda _emulator, _event: True)
+
+    rejected = lavender_module._RunState([], [])
+    with pytest.raises(lavender_module.LavenderChapterError, match="purified_zone_heal=False"):
+        lavender_module._record_wild_flee_evidence(
+            before,
+            final,
+            emulator,
+            rejected,
+            before.party_species_ids,
+            before.first_party_pp,
+            (65, 49, 36),
+            {},
+        )
+
+    accepted = lavender_module._RunState([], [])
+    lavender_module._record_wild_flee_evidence(
+        before,
+        final,
+        emulator,
+        accepted,
+        before.party_species_ids,
+        before.first_party_pp,
+        (65, 49, 36),
+        {},
+        allow_purified_zone_heal=True,
+    )
+
+    assert len(accepted.wilds) == 1
+    assert accepted.wilds[0].pp_preserved
+    assert accepted.wilds[0].hp_safe
+
+
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
 def test_lavender_timing_rejects_invalid_bounds(invalid: object) -> None:
     for field in fields(LavenderTiming):

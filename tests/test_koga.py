@@ -132,7 +132,7 @@ def test_koga_report_requires_every_terminal_gate() -> None:
         ),
         replace(
             report,
-            battles=(replace(report.battles[0], selected_pp_spent=9), *report.battles[1:]),
+            battles=(replace(report.battles[0], selected_pp_spent=16), *report.battles[1:]),
         ),
         replace(report, trainer_events_before_koga=(True,) * 6),
         replace(report, trainer_events_after_koga=(True,) * 5 + (False,)),
@@ -212,12 +212,7 @@ def test_koga_nurse_approach_normalizes_the_adjacent_ready_tile() -> None:
     assert _nurse_approach_directions(nurse) == ()
     assert _nurse_approach_directions(replace(nurse, player_y=4)) == ("up",)
     assert _nurse_approach_directions(replace(nurse, player_x=2, player_y=4)) == ()
-    assert (
-        _nurse_approach_directions(
-            replace(nurse, map_id=MapId.FUCHSIA_CITY, player_y=4)
-        )
-        == ()
-    )
+    assert _nurse_approach_directions(replace(nurse, map_id=MapId.FUCHSIA_CITY, player_y=4)) == ()
 
 
 def test_koga_disable_fallback_uses_a_legal_ranked_reserve_attack() -> None:
@@ -233,9 +228,7 @@ def test_koga_source_addresses_and_ids_are_pinned() -> None:
     assert RamAddress.BEAT_GYM_FLAGS == 0xD72A
     assert EventFlag.GOT_TM06 == 0x258
     assert EventFlag.BEAT_KOGA == 0x259
-    assert tuple(int(event) for event in REGULAR_TRAINER_EVENTS) == tuple(
-        range(0x25A, 0x260)
-    )
+    assert tuple(int(event) for event in REGULAR_TRAINER_EVENTS) == tuple(range(0x25A, 0x260))
     assert ItemId.TM06_TOXIC == 0xCE
     assert MapId.FUCHSIA_GYM == 0x9D
     assert Badge.SOUL == 0x10

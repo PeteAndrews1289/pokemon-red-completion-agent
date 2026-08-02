@@ -246,8 +246,7 @@ class VictoryRoadChapterReport:
             and self.final_raw.map_id == MapId.INDIGO_PLATEAU_LOBBY
             and (self.final_raw.player_x, self.final_raw.player_y) == (2, 5)
             and party_core_intact(self.final_raw.party_species_ids)
-            and (self.final_raw.first_party_level or 0)
-            >= MANSION_TRAINING_POLICY.target_level
+            and (self.final_raw.first_party_level or 0) >= MANSION_TRAINING_POLICY.target_level
             and self.final_raw.first_party_moves == (0x42, 0x46, 0x3A, 0x39)
             and self.final_raw.first_party_pp == (25, 15, 10, 15)
             and self.party_hp == self.party_max_hp
@@ -507,8 +506,8 @@ def run_victory_road_chapter(
             DEFAULT_LAVENDER_TIMING,
             absolute_index=1,
             item=ItemId.HYPER_POTION,
-        quantity=11 - current_hyper,
-        target_bag_quantity=11,
+            quantity=11 - current_hyper,
+            target_bag_quantity=11,
         )
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     _sell_current_bag_item(actions, emulator, ItemId.TM24_THUNDERBOLT)
@@ -711,8 +710,11 @@ def run_victory_road_chapter(
     _move(actions, reader, _directions("LLLLUUL"), "Indigo clerk")
     _require(reader.read(), MapId.INDIGO_PLATEAU_LOBBY, (2, 5), "Indigo clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
-    _sell_current_bag_item(actions, emulator, ItemId.NUGGET)
-    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    # The completionist lineage may liquidate the Nugget earlier to finance its
+    # larger capture reserve without reducing the Rock Tunnel safety inventory.
+    if ItemId.NUGGET in _bag(emulator):
+        _sell_current_bag_item(actions, emulator, ItemId.NUGGET)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     # A lower-level held-out Diglett legally consumed TM28 to learn Dig before
     # Surge. The default lineage carries the unused TM here. Sell it only when
     # present; either path has already proved the same durable Dig capability.
@@ -721,6 +723,9 @@ def run_victory_road_chapter(
         _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     if ItemId.TM17_SUBMISSION in _bag(emulator):
         _sell_current_bag_item(actions, emulator, ItemId.TM17_SUBMISSION)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    if ItemId.ULTRA_BALL in _bag(emulator):
+        _sell_current_bag_item(actions, emulator, ItemId.ULTRA_BALL)
         _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     obsolete_super_potions = _bag(emulator).get(ItemId.SUPER_POTION, 0)
     if obsolete_super_potions:
@@ -744,10 +749,10 @@ def run_victory_road_chapter(
             _sell_bag_stack(actions, emulator, obsolete_cure, quantity)
             _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     poke_balls_sold = _bag(emulator).get(ItemId.POKE_BALL, 0)
-    if not 1 <= poke_balls_sold <= 8:
+    if not 1 <= poke_balls_sold <= 25:
         raise VictoryRoadChapterError(
-            "Indigo cleanup expected one to eight remaining Poké Balls after the "
-            f"bounded Diglett capture, got {poke_balls_sold}."
+            "Indigo cleanup expected one to twenty-five remaining Poké Balls after the "
+            f"bounded collection route, got {poke_balls_sold}."
         )
     _sell_bag_stack(actions, emulator, ItemId.POKE_BALL, poke_balls_sold)
     _pulse(actions, MacroActionKind.CANCEL)
@@ -1505,10 +1510,7 @@ def _route22_rival_move_slot(raw: RawGameState) -> int:
         if (
             len(pp) >= slot
             and pp[slot - 1] & 0x3F
-            and not (
-                raw.player_disabled_move_slot == slot
-                and (raw.player_disable_turns or 0) > 0
-            )
+            and not (raw.player_disabled_move_slot == slot and (raw.player_disable_turns or 0) > 0)
         ):
             return slot
     raise VictoryRoadChapterError("Route 22 rival policy has no legal move with PP.")

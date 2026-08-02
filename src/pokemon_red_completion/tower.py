@@ -83,10 +83,8 @@ def party_core_intact(
     if not observed:
         return False
     candidates = BALANCED_CORE_PARTIES if core is None else (core,)
-    return any(
-        tuple(observed[: len(candidate)]) == tuple(candidate)
-        for candidate in candidates
-    )
+    return any(tuple(observed[: len(candidate)]) == tuple(candidate) for candidate in candidates)
+
 
 OPTIONAL_EVENTS = (
     EventFlag.BEAT_POKEMONTOWER_3_TRAINER_0,
@@ -463,10 +461,10 @@ def run_tower_chapter(
             EventFlag.BEAT_POKEMON_TOWER_RIVAL,
             BITE,
             1,
-        RedBattlePlanId.TOWER_RIVAL,
-        run=run,
-        bounded_recovery=True,
-    )
+            RedBattlePlanId.TOWER_RIVAL,
+            run=run,
+            bounded_recovery=True,
+        )
     )
     _checkpoint(records, progress, emulator, reader.read(), "rival", "Defeated mandatory rival")
     while _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:
@@ -500,7 +498,16 @@ def run_tower_chapter(
     _pickup(actions, reader, emulator, run, timing, "left", ItemId.ELIXIR)
     _checkpoint(records, progress, emulator, reader.read(), "elixir", "Collected Elixir")
     _move(actions, reader, emulator, run, TOWER_4_ELIXIR_TO_5, timing, "Tower 5F")
-    _move(actions, reader, emulator, run, TOWER_5_HEAL, timing, "purified zone")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        TOWER_5_HEAL,
+        timing,
+        "purified zone",
+        allow_purified_zone_heal=True,
+    )
     _clear_text(actions, reader, timing)
     _require_purified_heal(emulator, run, "first purified heal")
     _checkpoint(records, progress, emulator, reader.read(), "purified_1", "Purified-zone heal")
@@ -520,7 +527,16 @@ def run_tower_chapter(
             RedBattlePlanId.TOWER_5F_CHANNELER,
         )
     )
-    _move(actions, reader, emulator, run, TOWER_5_REHEAL, timing, "purified return")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        TOWER_5_REHEAL,
+        timing,
+        "purified return",
+        allow_purified_zone_heal=True,
+    )
     _clear_text(actions, reader, timing)
     _require_purified_heal(emulator, run, "second purified heal")
     _checkpoint(records, progress, emulator, reader.read(), "purified_2", "Re-healed after 5F")
@@ -567,7 +583,16 @@ def run_tower_chapter(
         )
     )
     _move(actions, reader, emulator, run, TOWER_6_TO_5, timing, "6F recovery descent")
-    _move(actions, reader, emulator, run, TOWER_5_RETURN_HEAL, timing, "third purified heal")
+    _move(
+        actions,
+        reader,
+        emulator,
+        run,
+        TOWER_5_RETURN_HEAL,
+        timing,
+        "third purified heal",
+        allow_purified_zone_heal=True,
+    )
     _clear_text(actions, reader, timing)
     _require_purified_heal(emulator, run, "third purified heal")
     _checkpoint(records, progress, emulator, reader.read(), "purified_3", "Recovered after 6F pair")
@@ -606,6 +631,16 @@ def run_tower_chapter(
     battles.append(_fight_marowak(actions, reader, emulator, timing))
     _checkpoint(records, progress, emulator, reader.read(), "marowak", "Calmed Marowak")
 
+    # Marowak and the changed collection/economy lineage can leave the lead in
+    # a state where Rocket 19's Gyarados has a lethal damage roll before the old
+    # post-battle recovery point.  Restore the lead in the field, then retain a
+    # bounded in-battle recovery policy for the variable opponent sequence.
+    while _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:
+        if _bag(emulator).get(ItemId.SUPER_POTION, 0) == 0:
+            raise TowerChapterError("Rocket 19 preparation exhausted before full HP.")
+        _use_super_potion(actions, reader, emulator, run, DEFAULT_LAVENDER_TIMING, 0)
+        run.potion_inventory.append(_bag(emulator).get(ItemId.SUPER_POTION, 0))
+
     _move(actions, reader, emulator, run, TOWER_7_ROCKET_1, timing, "Tower 7F")
     battles.append(
         _fight(
@@ -622,6 +657,8 @@ def run_tower_chapter(
             RedBattlePlanId.TOWER_7F_ROCKET_19,
             interact_direction="up",
             run=run,
+            bounded_recovery=True,
+            recovery_hp_threshold=70,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "rocket_19", "Defeated first Rocket")
@@ -1111,8 +1148,7 @@ def _plan_route_8_east(
             visited.add(candidate)
             queue.append((candidate, (*route, direction)))
     raise TowerChapterError(
-        f"Route 8 has no trainer-safe path from {start!r} after discoveries "
-        f"{sorted(blocked)!r}."
+        f"Route 8 has no trainer-safe path from {start!r} after discoveries {sorted(blocked)!r}."
     )
 
 
@@ -1126,11 +1162,7 @@ def _navigate_route_8_east(
     """Replan over the source-derived collision map without optional trainers."""
 
     state = reader.read()
-    if (
-        state.map_id != MapId.ROUTE_8
-        or state.player_x is None
-        or state.player_y is None
-    ):
+    if state.map_id != MapId.ROUTE_8 or state.player_x is None or state.player_y is None:
         raise TowerChapterError("Adaptive Route 8 navigation lacks its entry coordinate.")
     discovered_blocked: set[tuple[int, int]] = set()
     deltas = {"up": (0, -1), "left": (-1, 0), "right": (1, 0), "down": (0, 1)}
@@ -1179,9 +1211,7 @@ def _navigate_route_8_east(
             discovered_blocked.add(candidate)
         expected_party = TOWER_FINAL_PARTY if run.evolved else PROTECTED_PARTY
         if state.party_species_ids != expected_party or (state.first_party_hp or 0) <= 0:
-            raise TowerChapterError(
-                "Adaptive Route 8 navigation changed the protected party."
-            )
+            raise TowerChapterError("Adaptive Route 8 navigation changed the protected party.")
     raise TowerChapterError("Adaptive Route 8 navigation exceeded its bounded discoveries.")
 
 
@@ -1193,6 +1223,8 @@ def _move(
     directions: Iterable[str],
     timing: TowerTiming,
     label: str,
+    *,
+    allow_purified_zone_heal: bool = False,
 ) -> RawGameState:
     state = reader.read()
     for step, direction in enumerate(directions, 1):
@@ -1208,6 +1240,7 @@ def _move(
                     run,
                     TOWER_LAVENDER_TIMING,
                     unknown_with_cancel=True,
+                    allow_purified_zone_heal=allow_purified_zone_heal,
                 )
                 state = reader.read()
             if state.battle_state == 2:

@@ -321,6 +321,12 @@ Specialists are trained and promoted independently. Updating the battle policy c
 change navigation. A specialist is replaced only after frozen tests cover nominal, perturbed, and
 recovery states.
 
+The first formal battle lane authenticates the campaign ledger before reading examples. It
+requires all five train and two validation roots to have complete, schedule-audited one-shot
+outcomes; refuses any consumed test slot; fits only train; and selects metrics and confidence on
+validation. The output is a private canonical candidate, not a promoted runtime policy. Test roots
+remain inaccessible to this command and learned rollouts remain a separate gate.
+
 Training may restore private snapshots to build targeted curricula. Full-game evaluation may not.
 Evidence is published in three non-interchangeable lanes: exact deterministic-teacher repeats,
 perturbed/multi-seed teacher coverage, and held-out learned/hybrid multi-seed runs. Only the last

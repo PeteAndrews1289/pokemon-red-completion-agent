@@ -412,6 +412,268 @@ def test_battle_learning_requires_explicit_diagnostic_acknowledgement(
     assert "requires --diagnostic" in captured.err
 
 
+def test_preassigned_battle_fit_requires_a_clean_source_before_private_data(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    private_rom = Path("/private/Pokemon Red.gb")
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda _argument: private_rom)
+    monkeypatch.setattr(
+        cli,
+        "detect_source_identity",
+        lambda *args, **kwargs: SourceIdentity("d" * 40, True),
+    )
+    monkeypatch.setattr(
+        cli,
+        "open_private_root",
+        lambda *args, **kwargs: pytest.fail("dirty source must fail before private data opens"),
+    )
+
+    with pytest.raises(SystemExit) as error:
+        cli.main(
+            [
+                "learn",
+                "battle",
+                "fit",
+                "--private-root",
+                "/private/external/trajectories",
+                "--rom",
+                str(private_rom),
+            ]
+        )
+
+    captured = capsys.readouterr()
+    assert error.value.code == 2
+    assert captured.out == ""
+    assert "clean worktree" in captured.err
+
+
+def test_preassigned_battle_fit_refuses_an_opened_test_partition(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    registry = _collection_registry()
+    test_slot = next(slot for slot in cli._collection_slots(registry) if slot.partition == "test")
+    private_rom = Path("/private/Pokemon Red.gb")
+
+    class FakeSession:
+        def __enter__(self) -> object:
+            return object()
+
+        def __exit__(self, *args: object) -> bool:
+            return False
+
+    class FakeRoot:
+        def collection_session(self, collection_id: str) -> FakeSession:
+            assert collection_id == registry.collection_id
+            return FakeSession()
+
+        def open_episode(self, episode_id: str) -> object:
+            pytest.fail(f"test refusal must happen before opening {episode_id}")
+
+    class FakeLedger:
+        def reconcile(self) -> tuple[object, ...]:
+            return (SimpleNamespace(slot=test_slot),)
+
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda _argument: private_rom)
+    monkeypatch.setattr(
+        cli,
+        "detect_source_identity",
+        lambda *args, **kwargs: SourceIdentity("d" * 40, False),
+    )
+    monkeypatch.setattr(cli, "require_clean_source", lambda _source: None)
+    monkeypatch.setattr(
+        cli,
+        "load_committed_collection_registry",
+        lambda _root: registry,
+    )
+    monkeypatch.setattr(cli, "_recording_metadata", lambda *args, **kwargs: {})
+    monkeypatch.setattr(cli, "_campaign_identity", lambda *args, **kwargs: object())
+    monkeypatch.setattr(cli, "open_private_root", lambda *args, **kwargs: FakeRoot())
+    monkeypatch.setattr(cli, "find_dry_run_qualification", lambda *args, **kwargs: object())
+    monkeypatch.setattr(
+        cli.CollectionOutcomeLedger,
+        "open_existing",
+        lambda *args, **kwargs: FakeLedger(),
+    )
+
+    with pytest.raises(SystemExit) as error:
+        cli.main(
+            [
+                "learn",
+                "battle",
+                "fit",
+                "--private-root",
+                "/private/external/trajectories",
+                "--rom",
+                str(private_rom),
+            ]
+        )
+
+    captured = capsys.readouterr()
+    assert error.value.code == 2
+    assert captured.out == ""
+    assert "test partition must remain unopened" in captured.err
+
+
+def test_preassigned_battle_fit_authenticates_seven_roots_and_publishes_candidate(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    from pokemon_red_completion import battle_dataset, battle_training
+
+    registry = _collection_registry()
+    slots = cli._collection_slots(registry)
+    learning_slots = tuple(slot for slot in slots if slot.partition != "test")
+    manifests = {
+        slot.assignment_id: canonical_sha256({"slot": slot.assignment_id})
+        for slot in learning_slots
+    }
+    private_rom = Path("/private/Pokemon Red.gb")
+    observed: dict[str, object] = {"opened": [], "streams": []}
+
+    class FakeSession:
+        def __enter__(self) -> object:
+            return object()
+
+        def __exit__(self, *args: object) -> bool:
+            return False
+
+    class FakeSummary:
+        def public_dict(self) -> dict[str, object]:
+            return {"kind": "battle_model", "status": "complete"}
+
+    class FakeWriter:
+        summary = FakeSummary()
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args: object) -> bool:
+            return False
+
+        def append(self, stream: str, record: object) -> None:
+            cast_streams = observed["streams"]
+            assert isinstance(cast_streams, list)
+            cast_streams.append((stream, record))
+
+    class FakeRoot:
+        def collection_session(self, collection_id: str) -> FakeSession:
+            assert collection_id == registry.collection_id
+            return FakeSession()
+
+        def open_episode(self, episode_id: str) -> object:
+            cast_opened = observed["opened"]
+            assert isinstance(cast_opened, list)
+            cast_opened.append(episode_id)
+            return SimpleNamespace(episode_id=episode_id)
+
+        def begin_artifact(self, artifact_id: str, *, kind: str) -> FakeWriter:
+            observed.update(artifact_id=artifact_id, artifact_kind=kind)
+            return FakeWriter()
+
+    class FakeLedger:
+        def reconcile(self) -> tuple[object, ...]:
+            return tuple(
+                SimpleNamespace(
+                    slot=slot,
+                    status="complete",
+                    episode_manifest_sha256=manifests[slot.assignment_id],
+                )
+                for slot in learning_slots
+            )
+
+    fake_model = SimpleNamespace(to_dict=lambda: {"weights": [1.0]})
+
+    class FakeResult:
+        model = fake_model
+        model_sha256 = "a" * 64
+        corpus_manifest_roster_sha256 = "b" * 64
+
+        def public_receipt(self) -> dict[str, object]:
+            return {
+                "schema": "battle-imitation-preassigned-validation-v1",
+                "scope": {"train_episodes": 5, "validation_episodes": 2},
+                "qualification": {
+                    "freeze_eligible": True,
+                    "test_partition_opened": False,
+                },
+            }
+
+    slot_by_episode = {slot.episode_id: slot for slot in learning_slots}
+
+    def fake_load(reader: object, *args: object, **kwargs: object) -> object:
+        episode_id = reader.episode_id
+        slot = slot_by_episode[episode_id]
+        return SimpleNamespace(
+            episode_id=episode_id,
+            root_lineage_id=slot.root_lineage_id,
+            partition=slot.partition,
+            regime="within_game",
+            manifest_sha256=manifests[slot.assignment_id],
+        )
+
+    def fake_train(train: tuple[object, ...], validation: tuple[object, ...], **kwargs: object):
+        assert len(train) == 5
+        assert len(validation) == 2
+        return FakeResult()
+
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda _argument: private_rom)
+    monkeypatch.setattr(
+        cli,
+        "detect_source_identity",
+        lambda *args, **kwargs: SourceIdentity("d" * 40, False),
+    )
+    monkeypatch.setattr(cli, "require_clean_source", lambda _source: None)
+    monkeypatch.setattr(
+        cli,
+        "load_committed_collection_registry",
+        lambda _root: registry,
+    )
+    monkeypatch.setattr(cli, "_recording_metadata", lambda *args, **kwargs: {})
+    monkeypatch.setattr(cli, "_campaign_identity", lambda *args, **kwargs: object())
+    monkeypatch.setattr(cli, "open_private_root", lambda *args, **kwargs: FakeRoot())
+    monkeypatch.setattr(cli, "find_dry_run_qualification", lambda *args, **kwargs: object())
+    monkeypatch.setattr(
+        cli.CollectionOutcomeLedger,
+        "open_existing",
+        lambda *args, **kwargs: FakeLedger(),
+    )
+    monkeypatch.setattr(battle_dataset, "load_battle_episode", fake_load)
+    monkeypatch.setattr(battle_training, "train_preassigned_battle_ranker", fake_train)
+    monkeypatch.setattr(cli.uuid, "uuid4", lambda: SimpleNamespace(hex="fixed"))
+
+    assert (
+        cli.main(
+            [
+                "learn",
+                "battle",
+                "fit",
+                "--private-root",
+                "/private/external/trajectories",
+                "--rom",
+                str(private_rom),
+                "--epochs",
+                "25",
+            ]
+        )
+        == 0
+    )
+
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["qualification"]["freeze_eligible"]
+    assert payload["qualification"]["test_partition_opened"] is False
+    assert len(observed["opened"]) == 7
+    assert set(observed["opened"]) == {slot.episode_id for slot in learning_slots}
+    assert observed["artifact_id"] == "red-battle-candidate-fixed"
+    assert observed["artifact_kind"] == "battle_model"
+    assert [stream for stream, _ in observed["streams"]] == [
+        "model",
+        "training",
+        "metrics",
+    ]
+
+
 def test_battle_learning_writes_only_a_private_typed_model_artifact(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],

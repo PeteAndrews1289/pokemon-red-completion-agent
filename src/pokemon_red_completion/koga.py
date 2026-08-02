@@ -42,7 +42,10 @@ SURF_SLOT = 4
 KOGA_OPPONENT = 0xEE
 KOGA_TRAINER_CLASS = 0x26
 KOGA_TRAINER_NUMBER = 1
-KOGA_PP_BOUNDS = ((0, 8), (1, 8), (1, 8), (1, 15))
+# Disable can legally force Juggler 3 onto reserve moves and extend the battle.
+# Bound its Surf consumption by the carried 15-PP pool rather than one historical
+# eight-turn outcome; the remaining fights retain their tighter qualified limits.
+KOGA_PP_BOUNDS = ((0, 15), (1, 8), (1, 8), (1, 15))
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -52,22 +55,11 @@ def _directions(value: str) -> tuple[str, ...]:
 CENTER_TO_GYM = _directions("DDDDDLLLLLLLLLLLLLLU")
 GYM_TO_JUGGLER3 = _directions("URRRRRUUUUUUULU")
 JUGGLER3_TO_TAMER2 = _directions("UUUU")
-TAMER2_TO_CENTER = _directions(
-    "DDDDDDDDRDDDDDLLLLDRRRRRRRRRRRRRRUUUU"
-)
-CENTER_TO_JUGGLER4 = CENTER_TO_GYM + _directions(
-    "URRRRRUUUUUUUUUUUUUUULLLLLLLLDDRDDLDD"
-)
-JUGGLER4_TO_CENTER = _directions(
-    "UURUULUURRRRRRRRDDDDDDDDDDDDDDDDLLLLLDRRRRRRRRRRRRRRUUUU"
-)
-CENTER_TO_KOGA = CENTER_TO_GYM + _directions(
-    "URRRRRUUUUUUUUUUUUUUULLLLLLLLDDRDDLDDDDRRDDR"
-)
-KOGA_TO_CENTER = _directions(
-    "LUULLUUUURUULUURRRRRRRRDDDDDDDDDDDDDDDDLLLLL"
-    "DRRRRRRRRRRRRRRUUUU"
-)
+TAMER2_TO_CENTER = _directions("DDDDDDDDRDDDDDLLLLDRRRRRRRRRRRRRRUUUU")
+CENTER_TO_JUGGLER4 = CENTER_TO_GYM + _directions("URRRRRUUUUUUUUUUUUUUULLLLLLLLDDRDDLDD")
+JUGGLER4_TO_CENTER = _directions("UURUULUURRRRRRRRDDDDDDDDDDDDDDDDLLLLLDRRRRRRRRRRRRRRUUUU")
+CENTER_TO_KOGA = CENTER_TO_GYM + _directions("URRRRRUUUUUUUUUUUUUUULLLLLLLLDDRDDLDDDDRRDDR")
+KOGA_TO_CENTER = _directions("LUULLUUUURUULUURRRRRRRRDDDDDDDDDDDDDDDDLLLLLDRRRRRRRRRRRRRRUUUU")
 
 REGULAR_TRAINER_EVENTS = (
     EventFlag.BEAT_FUCHSIA_GYM_TRAINER_0,
@@ -188,18 +180,14 @@ class KogaChapterReport:
 
     @property
     def passed(self) -> bool:
-        expected_bag = tuple(
-            sorted((*self.initial_bag, (int(ItemId.TM06_TOXIC), 1)))
-        )
+        expected_bag = tuple(sorted((*self.initial_bag, (int(ItemId.TM06_TOXIC), 1))))
         return (
             len(self.records) == KOGA_CHECKPOINT_COUNT
             and tuple(item.trainer_number for item in self.battles) == (3, 2, 4, 1)
             and len(self.battles) == len(KOGA_PP_BOUNDS)
             and all(
                 lower <= battle.selected_pp_spent <= upper
-                for battle, (lower, upper) in zip(
-                    self.battles, KOGA_PP_BOUNDS, strict=True
-                )
+                for battle, (lower, upper) in zip(self.battles, KOGA_PP_BOUNDS, strict=True)
             )
             and all(
                 0 < item.hp_after <= item.max_hp_after
@@ -336,7 +324,7 @@ def run_koga_chapter(
             "Juggler 3",
             (0xDD, 0x15, 3),
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_1,
-            8,
+            KOGA_PP_BOUNDS[0][1],
             RedBattlePlanId.KOGA_JUGGLER_3,
             allow_disable_fallback=True,
         )
@@ -401,13 +389,9 @@ def run_koga_chapter(
         "Defeated mandatory Juggler 4",
     )
 
-    trainer_events_before_koga = tuple(
-        _event(emulator, event) for event in REGULAR_TRAINER_EVENTS
-    )
+    trainer_events_before_koga = tuple(_event(emulator, event) for event in REGULAR_TRAINER_EVENTS)
     if trainer_events_before_koga != (False, True, False, False, True, True):
-        raise KogaChapterError(
-            f"Minimum-trainer gate changed: {trainer_events_before_koga!r}."
-        )
+        raise KogaChapterError(f"Minimum-trainer gate changed: {trainer_events_before_koga!r}.")
     _move(actions, reader, JUGGLER4_TO_CENTER, timing, "second Fuchsia recovery")
     _heal_center(actions, reader, emulator, timing)
     _checkpoint(records, progress, emulator, reader.read(), "recovery2", "Healed before Koga")
@@ -437,31 +421,26 @@ def run_koga_chapter(
     _checkpoint(records, progress, emulator, reader.read(), "koga_defeated", "Defeated Koga")
 
     _clear_text(actions, reader, timing)
-    trainer_events_after_koga = tuple(
-        _event(emulator, event) for event in REGULAR_TRAINER_EVENTS
-    )
+    trainer_events_after_koga = tuple(_event(emulator, event) for event in REGULAR_TRAINER_EVENTS)
     got_tm06 = _event(emulator, EventFlag.GOT_TM06)
     beat_koga = _event(emulator, EventFlag.BEAT_KOGA)
     soul_badge = bool(emulator.read_u8(RamAddress.OBTAINED_BADGES) & int(Badge.SOUL))
-    soul_badge_mirror = bool(
-        emulator.read_u8(RamAddress.BEAT_GYM_FLAGS) & int(Badge.SOUL)
-    )
+    soul_badge_mirror = bool(emulator.read_u8(RamAddress.BEAT_GYM_FLAGS) & int(Badge.SOUL))
     if (
-        _bag_tuple(emulator)
-        != tuple(sorted((*bag_before_koga, (int(ItemId.TM06_TOXIC), 1))))
+        _bag_tuple(emulator) != tuple(sorted((*bag_before_koga, (int(ItemId.TM06_TOXIC), 1))))
         or not got_tm06
         or not beat_koga
         or not soul_badge
         or not soul_badge_mirror
         or trainer_events_after_koga != (True,) * 6
     ):
-            raise KogaChapterError(
-                "Koga reward or trainer-deactivation gate failed: "
-                f"bag_before={bag_before_koga!r}, bag_after={_bag_tuple(emulator)!r}, "
-                f"events={(got_tm06, beat_koga)!r}, "
-                f"badges={(soul_badge, soul_badge_mirror)!r}, "
-                f"trainers={trainer_events_after_koga!r}."
-            )
+        raise KogaChapterError(
+            "Koga reward or trainer-deactivation gate failed: "
+            f"bag_before={bag_before_koga!r}, bag_after={_bag_tuple(emulator)!r}, "
+            f"events={(got_tm06, beat_koga)!r}, "
+            f"badges={(soul_badge, soul_badge_mirror)!r}, "
+            f"trainers={trainer_events_after_koga!r}."
+        )
     _checkpoint(
         records,
         progress,
@@ -545,9 +524,7 @@ def _fight(
                 "defeat_koga",
                 battle_plan_id=battle_plan_id,
                 required_move_policy=required_policy,
-                required_move_ref=(
-                    None if allow_disable_fallback else pokemon_red_move_ref(SURF)
-                ),
+                required_move_ref=(None if allow_disable_fallback else pokemon_red_move_ref(SURF)),
             ),
             required_move_id=None if allow_disable_fallback else SURF,
             timing=KOGA_BATTLE_TIMING,
@@ -568,9 +545,7 @@ def _fight(
         terminal_mutual_ko = True
     if before_pp is None or final.first_party_pp is None:
         raise KogaChapterError(f"{label} lacks PP evidence.")
-    spent = (before_pp[SURF_SLOT - 1] & 0x3F) - (
-        final.first_party_pp[SURF_SLOT - 1] & 0x3F
-    )
+    spent = (before_pp[SURF_SLOT - 1] & 0x3F) - (final.first_party_pp[SURF_SLOT - 1] & 0x3F)
     hp = _party_hp(emulator)
     max_hp = _party_max_hp(emulator)
     status = _party_status(emulator)
@@ -582,11 +557,7 @@ def _fight(
         or not _event(emulator, event)
         or (
             any(value <= 0 for value in hp)
-            and not (
-                terminal_mutual_ko
-                and hp[0] == 0
-                and all(value > 0 for value in hp[1:])
-            )
+            and not (terminal_mutual_ko and hp[0] == 0 and all(value > 0 for value in hp[1:]))
         )
     ):
         raise KogaChapterError(
@@ -734,11 +705,7 @@ def _heal_center(
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
             and all(status == 0 for status in _party_status(emulator))
-            and (
-                (reader.read().first_party_pp or (0, 0, 0, 0))[SURF_SLOT - 1]
-                & 0x3F
-            )
-            == 15
+            and ((reader.read().first_party_pp or (0, 0, 0, 0))[SURF_SLOT - 1] & 0x3F) == 15
         ):
             _clear_text(actions, reader, timing)
             return
@@ -766,16 +733,11 @@ def _clear_text(
 
 def _event(emulator: EmulatorState, event: EventFlag) -> bool:
     value = int(event)
-    return bool(
-        emulator.read_u8(int(RamAddress.EVENT_FLAGS) + value // 8)
-        & (1 << (value % 8))
-    )
+    return bool(emulator.read_u8(int(RamAddress.EVENT_FLAGS) + value // 8) & (1 << (value % 8)))
 
 
 def _bag_tuple(emulator: EmulatorState) -> tuple[tuple[int, int], ...]:
-    return tuple(
-        sorted((int(item), count) for item, count in Counter(_bag(emulator)).items())
-    )
+    return tuple(sorted((int(item), count) for item, count in Counter(_bag(emulator)).items()))
 
 
 def _require(
