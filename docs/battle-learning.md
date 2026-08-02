@@ -42,8 +42,11 @@ battle-plan identities remain metadata and are not move-ranker features.
 The exact source/configuration commit must be committed and pushed before any execution. A
 registry-declared, disjoint `--schedule-dry-run` must then successfully attest all 68 battles
 before slot `01`. That rehearsal is `unassigned`, has `attempt.counted=false`, and is excluded from
-every partition and performance denominator. As of the protocol commit, neither the dry run nor
-any of the twelve declared slots has executed.
+every partition and performance denominator. The first Forest-lineage rehearsal applied the
+declared Cerulean-rival offset and exposed a moving-NPC collision at the Route 24 entrance at
+checkpoint 38/312. It did not qualify or consume a campaign slot; all twelve declared slots remain
+pending while the observation-driven corridor fix receives a new source identity and clean-power
+qualification.
 
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
 schedule, episode, manifest, and 68/68 offline audit. Every counted slot reopens and re-audits that

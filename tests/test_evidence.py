@@ -1962,13 +1962,13 @@ def test_viridian_forest_receipt_is_source_bound_narrow_and_privacy_safe() -> No
     assert receipt["status"] == "passed"
     assert receipt["source_identity"] == {
         "collection_registry_sha256": (
-            "a97026d9e25edb9b0baf0b4945b0aeb10c8f7e62a4d524ab4ceafd5792ce4c4b"
+            "ca50411f02fe0ea2e6be75f38f1f081253ef150e82cc58449241ed533269dde5"
         ),
         "source_bundle_sha256": (
-            "2045f27313a02d9ac3e44feaff886f1020d01408bd2a17a8b6e0df173f2ae9fa"
+            "50ac06a5fc586844cf51e6a1c82ca7ba9a61fa103ddbb8c98e2ce10b35eee7bb"
         ),
         "teacher_execution_sha256": (
-            "82895df18df8d3e38902c7d25d6e27d8a08ba202e164c7f881c8b929f5694210"
+            "81e90e1ee77c4419f7dfb01f126a96d792f73d548d653922d8796d310dd5e05e"
         ),
     }
     assert receipt["evaluation"] == {
@@ -1976,7 +1976,7 @@ def test_viridian_forest_receipt_is_source_bound_narrow_and_privacy_safe() -> No
         "human_input": False,
         "save_state_restoration": False,
         "adjacent_private_artifacts_unchanged": True,
-        "exact_source_teacher_executions": 2,
+        "exact_source_teacher_executions": 1,
     }
     assert receipt["viridian_forest_acquisition"] == {
         "live_emulator_execution": True,
@@ -2018,7 +2018,7 @@ def test_viridian_forest_receipt_is_source_bound_narrow_and_privacy_safe() -> No
         "sealed_test_partition_opened": False,
         "learned_policy_rollout_completed": False,
     }
-    assert receipt["validation"]["public_tests_passed"] == 1456
+    assert receipt["validation"]["public_tests_passed"] == 1458
     assert receipt["validation"]["private_integration_tests_passed"] == 1
     assert not any(receipt["privacy"].values())
 

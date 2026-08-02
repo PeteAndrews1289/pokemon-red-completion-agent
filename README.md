@@ -376,8 +376,10 @@ synchronously persisted before play, so a shutdown cannot erase a one-shot attem
 Policy-visible semantic overlap across partitions is disclosed but is not hard leakage by
 itself; copied identities, manifests, assignments, schedules, or lineages are.
 
-As of the protocol commit, neither the dry run nor any of the twelve declared slots has executed,
-so there is still no held-out or promoted-policy result.
+The first Forest-lineage rehearsal applied its declared Cerulean-rival offset, then exposed a
+moving-NPC collision at the Route 24 entrance at checkpoint 38/312. It did not qualify or consume a
+declared slot. All twelve slots remain pending and the test partition remains unopened, so there
+is still no held-out or promoted-policy result.
 
 ## Evidence and project status
 

@@ -417,8 +417,9 @@ lineages remain hard leakage.
    only complete train/validation outcomes while leaving test sealed. **Done as protocol
    infrastructure; the fitting lane has not executed because collection is pending.**
 18. Commit and push the exact source/configuration state, then complete the disjoint, unassigned,
-   non-counted 68/68 schedule dry run before slot `01`. **Pending; as of the current branch,
-   neither the dry run nor any declared slot has executed.**
+   non-counted 68/68 schedule dry run before slot `01`. **Pending; the first Forest-lineage
+   rehearsal exposed a Route 24 moving-NPC collision at checkpoint 38/312 and consumed no declared
+   slot. All twelve slots remain pending while the bounded observation-driven fix is requalified.**
 19. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
 20. Train a small behavior-cloning baseline per specialist.

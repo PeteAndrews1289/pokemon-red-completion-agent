@@ -263,9 +263,10 @@ and its one-shot ledger preserves failures and power interruptions as consumed o
 identity, manifest, assignment, schedule, and lineage reuse is hard leakage. Repeated
 policy-visible semantic states are report-only because distinct hidden timing histories can
 naturally converge on the same observation; novel-visible-state performance is reported
-separately. Preregistration and runtime enforcement are infrastructure, not held-out evidence; as
-of the protocol commit, the dry run and all twelve slots are unexecuted, and the test partition
-remains unopened until a model and its selection rules are frozen.
+separately. Preregistration and runtime enforcement are infrastructure, not held-out evidence. The
+first Forest-lineage rehearsal exposed a Route 24 moving-NPC collision at checkpoint 38/312
+without consuming a declared slot. All twelve slots remain pending, and the test partition remains
+unopened until a model and its selection rules are frozen.
 
 ## Milestone 4 — DAgger and selective RL
 

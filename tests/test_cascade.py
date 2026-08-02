@@ -31,6 +31,7 @@ from pokemon_red_completion.cascade import (
     GYM_TRAINER_TO_MISTY_DIRECTIONS,
     RIVAL_CENTER_NPC_CORRECTION_DIRECTIONS,
     RIVAL_TRIGGER_DIRECTIONS,
+    ROUTE_24_AFTER_NPC_DIRECTIONS,
     ROUTE_24_RECOVERY_POTION_RESERVE,
     ROUTE_24_REQUIRED_TRAINER_INDEXES,
     ROUTE_24_TRAINER_SEGMENTS,
@@ -45,6 +46,7 @@ from pokemon_red_completion.cascade import (
     CascadeTiming,
     _cerulean_return_blocked_detour,
     _cerulean_return_direction,
+    _cross_route_24_npc,
     _reverse_directions,
     _run_cerulean_rival_with_potion,
     _should_use_cerulean_rival_potion,
@@ -170,6 +172,11 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
         CENTER_HEAL_TO_PC_DIRECTIONS
     ) == CENTER_PC_TO_HEAL_DIRECTIONS
     assert CENTER_TO_ROUTE_24_STAGING_CORRECTION_DIRECTIONS == ("left",)
+    assert (
+        *("up" for _ in range(4)),
+        *("right" for _ in range(12)),
+        *("up" for _ in range(13)),
+    ) == ROUTE_24_AFTER_NPC_DIRECTIONS
     assert RIVAL_TRIGGER_DIRECTIONS == ("up",)
     assert TM01_FIELD_MENU_CLOSE_PULSES == 2
     assert ROUTE_24_RECOVERY_POTION_RESERVE == 4
@@ -219,6 +226,58 @@ def test_reverse_directions_is_exact_and_involutive() -> None:
 
     assert reversed_route == ("right", "up", "left", "left", "down")
     assert _reverse_directions(reversed_route) == route
+
+
+class _Route24CrossingReader:
+    def __init__(self, *, blocked_pulses: int) -> None:
+        self.x = 16
+        self.y = 16
+        self.blocked_pulses = blocked_pulses
+
+    def read(self) -> RawGameState:
+        return replace(
+            _raw(),
+            map_id=MapId.CERULEAN_CITY,
+            player_x=self.x,
+            player_y=self.y,
+            first_party_hp=51,
+        )
+
+
+class _Route24CrossingExecutor:
+    def __init__(self, reader: _Route24CrossingReader) -> None:
+        self.reader = reader
+        self.left_pulses = 0
+
+    def execute(self, action: MacroAction) -> None:
+        if action.kind is not MacroActionKind.MOVE or action.value != "left":
+            return
+        self.left_pulses += 1
+        if self.reader.blocked_pulses:
+            self.reader.blocked_pulses -= 1
+        else:
+            self.reader.x -= 1
+
+
+def test_route_24_npc_crossing_retries_blocked_inputs_until_live_progress() -> None:
+    reader = _Route24CrossingReader(blocked_pulses=5)
+    executor = _Route24CrossingExecutor(reader)
+
+    _cross_route_24_npc(executor, reader, DEFAULT_CASCADE_TIMING)
+
+    assert (reader.x, reader.y) == (8, 16)
+    assert executor.left_pulses == 13
+
+
+def test_route_24_npc_crossing_fails_closed_when_progress_never_occurs() -> None:
+    reader = _Route24CrossingReader(blocked_pulses=10_000)
+    executor = _Route24CrossingExecutor(reader)
+
+    with pytest.raises(CascadeChapterError, match="exhausted its bounded progress retries"):
+        _cross_route_24_npc(executor, reader, DEFAULT_CASCADE_TIMING)
+
+    assert (reader.x, reader.y) == (16, 16)
+    assert executor.left_pulses == 40
 
 
 def test_cascade_timing_defaults_are_positive_and_pin_qualified_delays() -> None:

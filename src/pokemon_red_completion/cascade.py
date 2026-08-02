@@ -107,6 +107,7 @@ RIVAL_CENTER_NPC_CORRECTION_DIRECTIONS = _directions("DRRRU")
 CENTER_TO_ROUTE_24_WAIT_STAGING_DIRECTIONS = _directions("LLUUL")
 CENTER_TO_ROUTE_24_STAGING_CORRECTION_DIRECTIONS = ("left",)
 CENTER_TO_ROUTE_24_DIRECTIONS = _directions("L" * 8 + "U" * 4 + "R" * 12 + "U" * 13)
+ROUTE_24_AFTER_NPC_DIRECTIONS = CENTER_TO_ROUTE_24_DIRECTIONS[8:]
 ROUTE_24_TRAINER_SEGMENTS = tuple(
     _directions(segment) for segment in ("U" * 4, "UURU", "UULU", "UURU", "UULU")
 )
@@ -1412,36 +1413,61 @@ def _enter_route_24(
         staging = reader.read()
     if staging.map_id != MapId.CERULEAN_CITY or staging.player_x != 16 or staging.player_y != 16:
         raise CascadeChapterError("Route 24 NPC wait missed its stable Cerulean staging tile.")
-    for attempt in range(1, timing.max_route_24_npc_attempts + 1):
-        wait_frames = timing.route_24_npc_wait_frames if attempt == 1 else attempt - 2
-        if wait_frames:
-            _wait(executor, wait_frames)
-        _move(
-            executor,
-            reader,
-            CENTER_TO_ROUTE_24_DIRECTIONS,
-            f"Route 24 entry attempt {attempt}",
-        )
-        _wait(executor, timing.transition_wait_frames)
-        reached = reader.read()
-        if reached.map_id == MapId.ROUTE_24 and reached.player_x == 10 and reached.player_y == 35:
-            return
+    _wait(executor, timing.route_24_npc_wait_frames)
+    _cross_route_24_npc(executor, reader, timing)
+    _move(
+        executor,
+        reader,
+        ROUTE_24_AFTER_NPC_DIRECTIONS,
+        "Route 24 post-NPC entry corridor",
+    )
+    _wait(executor, timing.transition_wait_frames)
+    reached = reader.read()
+    if reached.map_id != MapId.ROUTE_24 or (reached.player_x, reached.player_y) != (10, 35):
+        raise CascadeChapterError("Route 24 NPC crossing missed its bounded semantic entry gate.")
+
+
+def _cross_route_24_npc(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: CascadeTiming,
+) -> None:
+    """Reach the west corridor by observing progress instead of consuming blocked inputs."""
+
+    target_x = 8
+    expected_y = 16
+    required_steps = 8
+    retry_budget = timing.max_route_24_npc_attempts * required_steps
+    for pulse in range(1, required_steps + retry_budget + 1):
+        before = reader.read()
         if (
-            reached.map_id != MapId.CERULEAN_CITY
-            or reached.player_x != 17
-            or reached.player_y != 16
+            before.map_id != MapId.CERULEAN_CITY
+            or before.player_y != expected_y
+            or not target_x <= before.player_x <= 16
         ):
-            break
-        _move(
+            raise CascadeChapterError(
+                "Route 24 NPC crossing left its bounded west corridor: "
+                f"position={(before.map_id, before.player_x, before.player_y)!r}."
+            )
+        if before.player_x == target_x:
+            return
+        after = _move(
             executor,
             reader,
-            CENTER_TO_ROUTE_24_STAGING_CORRECTION_DIRECTIONS,
-            "Route 24 retry staging correction",
+            ("left",),
+            f"Route 24 NPC crossing pulse {pulse}",
         )
-        corrected = reader.read()
-        if corrected.player_x != 16 or corrected.player_y != 16:
-            break
-    raise CascadeChapterError("Route 24 NPC crossing missed its bounded semantic entry gate.")
+        if (
+            after.map_id != MapId.CERULEAN_CITY
+            or after.player_y != expected_y
+            or after.player_x not in {before.player_x, before.player_x - 1}
+        ):
+            raise CascadeChapterError(
+                "Route 24 NPC crossing made an invalid corridor transition: "
+                f"before={(before.player_x, before.player_y)!r}, "
+                f"after={(after.map_id, after.player_x, after.player_y)!r}."
+            )
+    raise CascadeChapterError("Route 24 NPC crossing exhausted its bounded progress retries.")
 
 
 def _recover_route_24(
