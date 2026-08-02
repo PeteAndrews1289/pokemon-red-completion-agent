@@ -58,9 +58,7 @@ def test_weakened_target_without_status_gets_a_status_first() -> None:
 
 
 def test_weakened_and_statused_target_is_thrown_at() -> None:
-    decision = plan_capture(
-        encounter(target_hp=20, target_status=StatusCondition.SLEEP), POLICY
-    )
+    decision = plan_capture(encounter(target_hp=20, target_status=StatusCondition.SLEEP), POLICY)
     assert decision.directive is CaptureDirective.THROW_BALL
     assert "18% health" in decision.reason
 
@@ -104,9 +102,7 @@ def test_unsafe_catcher_is_restored_before_more_damage(
         ({"throws_used": 20}, "throw budget"),
     ),
 )
-def test_terminal_conditions_abandon_the_attempt(
-    changes: dict[str, object], expected: str
-) -> None:
+def test_terminal_conditions_abandon_the_attempt(changes: dict[str, object], expected: str) -> None:
     decision = plan_capture(encounter(**changes), POLICY)
     assert decision.directive is CaptureDirective.ABANDON
     assert decision.is_terminal
@@ -114,10 +110,28 @@ def test_terminal_conditions_abandon_the_attempt(
 
 
 def test_a_fainted_target_outranks_every_other_terminal_reason() -> None:
-    decision = plan_capture(
-        encounter(target_hp=0, party_has_room=False, balls_available=0), POLICY
-    )
+    decision = plan_capture(encounter(target_hp=0, party_has_room=False, balls_available=0), POLICY)
     assert "target fainted" in decision.reason
+
+
+def test_full_party_can_capture_into_verified_storage() -> None:
+    decision = plan_capture(
+        encounter(
+            target_hp=20,
+            party_has_room=False,
+            storage_has_room=True,
+            target_status=StatusCondition.SLEEP,
+        ),
+        POLICY,
+    )
+
+    assert decision.directive is CaptureDirective.THROW_BALL
+
+
+@pytest.mark.parametrize("field", ("party_has_room", "storage_has_room"))
+def test_observation_requires_boolean_capacity_flags(field: str) -> None:
+    with pytest.raises(TypeError, match=field):
+        encounter(**{field: 1})
 
 
 def test_ball_reserve_estimate_scales_the_throw_budget() -> None:

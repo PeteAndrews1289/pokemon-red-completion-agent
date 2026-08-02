@@ -53,7 +53,10 @@ control, and progressively trained specialists.**
 > and level 100 remain separate gates. Because unique Squirtle, Eevee, and Helix Fossil evolutions
 > consume four earlier forms, the honest maximum is **120 simultaneously living level-100
 > species**, not 124. Exact deposit, withdraw, and verified switch-box execution now exist;
-> acquisition routes and the completionist teacher remain future work. The first
+> a source-pinned catalog now covers all **124 registrations** through **102 direct methods** and
+> **22 transformations**, derives the necessary duplicate precursors and evolution-item budget,
+> and drives a bounded semantic area-survey loop. Map-specific live execution beyond the already
+> qualified gifts, trades, captures, evolution, and storage actions remains future work. The first
 > uninterrupted Hall-of-Fame census measured
 > **12 owned, 85 seen, 7 living, and 0 at level 100**, with all twelve boxes verified; see the
 > [sanitized collection-census receipt](docs/evidence/qualified-play-collection-census-2026-08-01.json).

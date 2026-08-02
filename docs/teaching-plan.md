@@ -202,6 +202,22 @@ treats the other eleven boxes as logically empty before the game's first box cha
 two gates are therefore measurable, but remain false until the actual collection and training
 curricula satisfy them.
 
+The Red acquisition adapter now gives every one of the 124 registration targets exactly one
+canonical method at the pinned pret/pokered revision: 67 ordinary wild sources, 11 Safari sources,
+7 fishing sources, 4 gifts, 5 static encounters, 2 Game Corner prizes, 2 fossils, 4 in-game trades,
+and 22 evolutions. Starting from the 120 living targets and propagating every evolution/trade
+dependency produces **120 root specimens across 98 source species**. This catches subtle duplicate
+requirements that “one of each” misses: two Pidgeotto, two Spearow, two Abra, two Slowbro, three
+Poliwhirl, and three Dratini. It also derives the finite stone budget—3 Moon, 2 Leaf, 3 Water,
+1 Fire, and 1 Thunder Stone—before route execution can consume an irreplaceable resource.
+
+A bounded semantic area executor now consumes that graph. It seeks encounters, captures only a
+species still required at that source, flees non-progress encounters, catches into verified PC
+space when the party is full, switches boxes before the next search when needed, and proves each
+capture increased the coherent living census by exactly one. Its Route 1 simulation covers the
+complete Pidgey/Rattata loop and a Box 1→2 rotation. This is ROM-free executor qualification, not
+yet evidence that the live game traversed and captured those two species.
+
 Level-100 collection is deliberately a separate teacher mode. It supplies abundant capture,
 storage, evolution, resource-restocking, and long-horizon grinding examples, but ordinary learner
 evaluation retains level caps and variable matchups so overwhelming levels cannot substitute for

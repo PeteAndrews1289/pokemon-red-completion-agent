@@ -90,6 +90,22 @@ level 100**, with storage initialized and all boxes verified. The
 [sanitized perfect-save foundation receipt](evidence/qualified-play-perfect-save-foundation-2026-08-01.json)
 records that result without ROM bytes, save data, or private paths.
 
+The next layer replaces the vague phrase “add 124 routes” with a complete dependency graph. At the
+pinned pret/pokered revision, each target now has one canonical ordinary-wild, Safari, fishing,
+gift, static, prize, fossil, in-game-trade, or evolution method. The graph contains **102 direct
+methods and 22 transformations**. Propagating the 120 living targets backward through consumed
+precursors proves that the save needs 120 root specimens from 98 source species—not merely one
+capture per Pokédex number—and that those paths register all 124 targets along the way. The same
+calculation exposes scarce resources before execution: 3 Moon Stones, 2 Leaf Stones, 3 Water
+Stones, 1 Fire Stone, and 1 Thunder Stone.
+
+The first reusable source-survey executor is also implemented. In a ROM-free Route 1 simulation it
+fled an irrelevant Spearow, retained Pidgey into the final slot of a full PC box, switched to the
+next box without changing the census, retained Rattata there, and stopped only after both
+downstream requirements were satisfied. The generic capture policy now permits this full-party
+flow only when verified storage has room. This proves the planner/executor/storage contract; the
+live Route 1 movement and capture-menu adapter remains the next qualification boundary.
+
 The current phase makes one further correction. The qualified route completed the game by
 overleveling a single Pokémon, which is a legitimate way to finish Red but a poor thing to imitate:
 it hides the battle decisions the agent is supposed to learn, concentrates all risk in one party

@@ -270,6 +270,15 @@ the two source-defined saved-box banks, validates both bank and per-box checksum
 initialized, and recognizes the source-defined logically empty state before the first box change.
 Only this complete census may certify the living or level-100 collection gates.
 
+The acquisition adapter maps each Red target to one source-pinned method and models evolution and
+in-game trade as precursor-consuming transformations. Backward demand propagation begins at the
+coexisting living target set, so area surveys know exact retained quantities rather than treating
+one historical Pokédex flag as sufficient. The bounded source-survey loop sees only semantic
+collection state, a source identity, and an optional encountered species. It may seek, capture,
+flee, switch boxes, request storage recovery, or stop; a capture is accepted only when the coherent
+census gains exactly one requested specimen and the encounter ends. Map movement, battle menus,
+and controller timing remain responsibilities of the Red executor adapter.
+
 ### Specialists
 
 - **Navigation:** deterministic A* over verified collision maps and transitions.

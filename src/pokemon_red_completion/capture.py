@@ -58,6 +58,7 @@ class CaptureObservation:
     catcher: PartyMemberObservation
     balls_available: int
     party_has_room: bool
+    storage_has_room: bool = False
     target_status: StatusCondition = StatusCondition.HEALTHY
     throws_used: int = 0
 
@@ -74,6 +75,9 @@ class CaptureObservation:
             raise TypeError("catcher must be a PartyMemberObservation")
         if not isinstance(self.target_status, StatusCondition):
             raise TypeError("target_status must be a StatusCondition")
+        for name in ("party_has_room", "storage_has_room"):
+            if type(getattr(self, name)) is not bool:
+                raise TypeError(f"{name} must be a bool")
         for name in ("balls_available", "throws_used"):
             value = getattr(self, name)
             if type(value) is not int or value < 0:
@@ -123,8 +127,11 @@ def plan_capture(
             CaptureDirective.ABANDON,
             "target fainted before it could be caught",
         )
-    if not observation.party_has_room:
-        return CaptureDecision(CaptureDirective.ABANDON, "party has no open slot")
+    if not observation.party_has_room and not observation.storage_has_room:
+        return CaptureDecision(
+            CaptureDirective.ABANDON,
+            "no open slot exists in either the party or verified storage",
+        )
     if observation.balls_available <= 0:
         return CaptureDecision(CaptureDirective.ABANDON, "no balls remain")
     if observation.throws_used >= policy.max_throws:

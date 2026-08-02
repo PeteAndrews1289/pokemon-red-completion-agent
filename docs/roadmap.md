@@ -178,8 +178,18 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 - [x] Replay the corrected contract and storage cycle from clean power through Hall of Fame:
   312/312 checkpoints, 36/36 objectives, storage initialized, all boxes verified, and a terminal
   12/124 registered, 7/120 living, 0/120 level-100 census.
+- [x] Add a pinned 124-target acquisition graph with 67 ordinary wild, 11 Safari, 7 fishing,
+  17 gift/static/prize/fossil/trade, and 22 evolution methods; prove that its 120 root specimens
+  incidentally register every target and derive all duplicate precursors and evolution items.
+- [x] Add a bounded semantic source-survey executor that seeks, captures into a full-party PC,
+  flees irrelevant encounters, rotates full boxes, verifies one-specimen progress, and stops only
+  when the source's downstream quantity requirements are retained; qualify it in ROM-free Route 1
+  simulation.
+- [ ] Bind the source-survey executor to live Route 1 movement, capture menus, Pokédex flags, and
+  PC storage, then replay Pidgey/Rattata acquisition from a declared clean-power lineage.
 - [ ] Independently retain one living specimen for all 120 coexisting targets.
-- [ ] Implement source-pinned encounter, gift, evolution, and resource routes for all 124 targets.
+- [ ] Implement the remaining map-specific encounter, fishing, Safari, gift, static, prize,
+  fossil, trade, evolution, and resource executors for all catalog methods.
 - [ ] Qualify the 124-species Pokédex-registration gate, 120-species living-collection gate, and
   120-species level-100 gate as three separate uninterrupted-run claims.
 - [ ] Add title profiles for later generations, then measure zero-shot and fine-tuned transfer on
