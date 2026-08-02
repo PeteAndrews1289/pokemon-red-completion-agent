@@ -185,8 +185,9 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   flees irrelevant encounters, rotates full boxes, verifies one-specimen progress, and stops only
   when the source's downstream quantity requirements are retained; qualify it in ROM-free Route 1
   simulation.
-- [ ] Bind the source-survey executor to live Route 1 movement, capture menus, Pokédex flags, and
-  PC storage, then replay Pidgey/Rattata acquisition from a declared clean-power lineage.
+- [x] Bind the source-survey executor to live Route 1 movement, capture menus, Pokédex flags, and
+  PC storage, then replay Pidgey/Rattata acquisition through all 312 checkpoints and the Hall of
+  Fame from clean power.
 - [ ] Independently retain one living specimen for all 120 coexisting targets.
 - [ ] Implement the remaining map-specific encounter, fishing, Safari, gift, static, prize,
   fossil, trade, evolution, and resource executors for all catalog methods.

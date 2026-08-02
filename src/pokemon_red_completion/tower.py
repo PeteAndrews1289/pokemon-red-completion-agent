@@ -491,6 +491,8 @@ def run_tower_chapter(
             BUBBLEBEAM,
             3,
             RedBattlePlanId.TOWER_4F_CHANNELER,
+            run=run,
+            bounded_recovery=True,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "tower_4f", "Cleared 4F Channeler")
@@ -584,6 +586,8 @@ def run_tower_chapter(
             BUBBLEBEAM,
             3,
             RedBattlePlanId.TOWER_6F_CHANNELER_20,
+            run=run,
+            bounded_recovery=True,
         )
     )
     _checkpoint(

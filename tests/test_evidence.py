@@ -71,6 +71,12 @@ BATTLE_IMITATION_RECEIPT = (
     / "evidence"
     / "private-battle-imitation-diagnostic-2026-07-30.json"
 )
+ROUTE1_ACQUISITION_RECEIPT = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "qualified-play-route1-acquisition-2026-08-02.json"
+)
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -1886,3 +1892,58 @@ def test_battle_imitation_receipt_is_diagnostic_aggregate_and_privacy_safe() -> 
         "snapshot_sha256",
     ):
         assert forbidden not in serialized
+
+
+def test_route1_acquisition_receipt_is_narrow_complete_and_privacy_safe() -> None:
+    receipt = json.loads(ROUTE1_ACQUISITION_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "pokemon-red-route1-acquisition-receipt-v1"
+    assert receipt["status"] == "passed"
+    assert receipt["evaluation"] == {
+        "clean_power_on": True,
+        "human_input": False,
+        "save_state_restoration": False,
+        "runs": 1,
+    }
+    assert receipt["route_1_acquisition"] == {
+        "live_emulator_execution": True,
+        "species_captured_in_order": [16, 19],
+        "pokedex_owned_flags_verified": [16, 19],
+        "exact_pc_deposit_transitions_verified": 2,
+        "current_box_tail_verified": [16, 19],
+        "party_restored_to_story_roster": True,
+        "vermilion_gym_route_restored": True,
+    }
+    assert receipt["balanced_training"] == {
+        "battle_budget": 7000,
+        "healing_trip_budget": 1250,
+        "faints": 0,
+        "minimum_level_at_gate": 77,
+        "maximum_level_at_gate": 82,
+        "level_spread_at_gate": 5,
+    }
+    assert receipt["completion"] == {
+        "checkpoints_verified": 312,
+        "checkpoints_total": 312,
+        "objectives_verified": 36,
+        "objectives_total": 36,
+        "champion_defeated": True,
+        "hall_of_fame_entered": True,
+        "actions_executed": 758430,
+    }
+    assert receipt["terminal_collection"] == {
+        "all_boxes_verified": True,
+        "storage_initialized": True,
+        "pokedex_registered_targets": 14,
+        "living_targets": 9,
+        "level_100_targets": 0,
+        "pokedex_target_complete": False,
+        "living_collection_verified": False,
+        "level_100_collection_verified": False,
+    }
+    assert not any(receipt["privacy"].values())
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "/Volumes/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized

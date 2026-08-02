@@ -20,6 +20,7 @@ from pokemon_red_completion.blaine import (
     MANSION_B1F_TO_NORTH_STATUE,
     MANSION_B1F_TO_SECRET_KEY,
     MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+    MANSION_MAX_CONSECUTIVE_FLEES,
     MANSION_TEAM_POLICY,
     MANSION_TRAINER_EVENTS,
     MANSION_TRAINING_POLICY,
@@ -64,6 +65,8 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert MANSION_TRAINING_POLICY.max_battles == 180
     assert MANSION_TEAM_POLICY.required_size == 6
     assert MANSION_TEAM_POLICY.max_battles == 7_000
+    assert MANSION_TEAM_POLICY.max_healing_trips == 1_250
+    assert MANSION_MAX_CONSECUTIVE_FLEES == 32
     assert frozenset({0x37, 0x8F}) == MANSION_VOLATILE_ENEMY_SPECIES
 
 
@@ -154,6 +157,26 @@ def test_red_training_matchup_requires_extra_margin_for_dux() -> None:
 
     dugtrio = replace(dux, species_id=0x76, moves=(MoveObservation(0x5B, 10),))
     assert _training_attack_pp_reserve(dugtrio, policy) == 2
+
+
+def test_red_training_matchup_routes_volatile_species_to_the_safe_escort() -> None:
+    trainee = PartyMemberObservation(
+        slot=1,
+        species_id=0x40,
+        level=80,
+        hp=100,
+        max_hp=100,
+        moves=(MoveObservation(0x0F, 30),),
+    )
+    policy = BalancedTeamPolicy(required_size=3)
+
+    for enemy_species in MANSION_VOLATILE_ENEMY_SPECIES:
+        assert not _red_training_matchup_acceptable(
+            trainee,
+            enemy_level=30,
+            policy=policy,
+            enemy_species=enemy_species,
+        )
 
 
 def test_blaine_source_ids_are_exact() -> None:

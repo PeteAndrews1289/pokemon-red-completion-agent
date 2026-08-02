@@ -140,6 +140,7 @@ _EXPECTED_SOURCE_MEMBER_LEDGER = {
         "SILPH_7F_RIVAL",
         "SILPH_7F_RIVAL",
         "SILPH_7F_RIVAL",
+        "SILPH_7F_RIVAL",
     ),
     "dojo.py": (
         "DOJO_BLACKBELT_SET_5",

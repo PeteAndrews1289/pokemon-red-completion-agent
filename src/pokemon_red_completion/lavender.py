@@ -47,7 +47,7 @@ PROTECTED_PARTY = (WARTORTLE, DUX, DIGLETT)
 SUPER_POTION_PRICE = 700
 PARLYZ_HEAL_PRICE = 200
 REPEL_PRICE = 350
-POST_MART_RNG_ALIGNMENT_FRAMES = 40
+POST_MART_RNG_ALIGNMENT_FRAMES = 80
 TUNNEL_RECOVERY_THRESHOLD = 55
 TRAVERSAL_RECOVERY_THRESHOLD = 30
 BATTLE_RECOVERY_THRESHOLD = 40
@@ -1352,6 +1352,12 @@ def _heal_if_below(
         raise LavenderChapterError(f"Recovery target {party_index} has fainted.")
     if hp >= max_hp or hp > threshold:
         return False
+    if _bag(emulator).get(ItemId.SUPER_POTION, 0) <= 0:
+        if hp > BATTLE_RECOVERY_THRESHOLD:
+            return False
+        raise LavenderChapterError(
+            f"Recovery target {party_index} is unsafe without a Super Potion: {hp}/{max_hp}."
+        )
     _use_super_potion(executor, reader, emulator, run, timing, party_index)
     return True
 

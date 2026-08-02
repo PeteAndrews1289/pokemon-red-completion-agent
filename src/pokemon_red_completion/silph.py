@@ -291,7 +291,7 @@ class SilphChapterReport:
                 if self.tm13_preinstalled
                 else SILPH_NET_MONEY_DELTA
             )
-            and 0 <= self.rival_potions_used <= 1
+            and 0 <= self.rival_potions_used <= 2
             and self.rival_x_special_used == 1
             and self.hyper_potions_remaining
             == HYPER_POTION_PURCHASE_QUANTITY - self.rival_potions_used
@@ -520,7 +520,7 @@ def run_silph_chapter(
     potion_after = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     _require_event(emulator, EventFlag.BEAT_SILPH_CO_RIVAL)
     rival_potions_used = potion_before - potion_after
-    if not 0 <= rival_potions_used <= 1:
+    if not 0 <= rival_potions_used <= 2:
         raise SilphChapterError(
             f"Rival policy consumed an invalid number of Hyper Potions: {rival_potions_used}."
         )
@@ -1534,12 +1534,30 @@ def _run_rival_with_potions(
         if completed:
             return
         _battle_hyper_potion(reader, actions, emulator, timing)
+    already_used = potion_start - _bag(emulator).get(ItemId.HYPER_POTION, 0)
+    for recovery in range(max(0, 2 - already_used)):
+        completed = _run_until(
+            reader,
+            actions,
+            _silph_rival_move_slot,
+            lambda raw: (
+                raw.enemy_species_id == 154
+                and 0 < (raw.first_party_hp or 0) <= 60
+            ),
+            f"Silph rival Venusaur bounded recovery {recovery + 1}",
+            RedBattlePlanId.SILPH_7F_RIVAL,
+        )
+        if completed:
+            return
+        if _bag(emulator).get(ItemId.HYPER_POTION, 0) <= 0:
+            break
+        _battle_hyper_potion(reader, actions, emulator, timing)
     _run_battle(
         reader,
         actions,
         _silph_rival_move_slot,
         MapId.SILPH_CO_7F,
-        "Silph rival Venusaur",
+        "Silph rival Venusaur exhausted recovery",
         RedBattlePlanId.SILPH_7F_RIVAL,
         BattleResourcePolicy.BOUNDED_RECOVERY,
     )

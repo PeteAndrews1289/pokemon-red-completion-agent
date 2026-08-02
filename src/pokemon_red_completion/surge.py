@@ -23,6 +23,16 @@ from pokemon_red_completion.observation import (
     SurgeState,
     event_flag_is_set,
 )
+from pokemon_red_completion.pewter import (
+    ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
+    VIRIDIAN_TO_ROUTE_2_DIRECTIONS,
+)
+from pokemon_red_completion.red_pc_storage import (
+    RedPCStorageError,
+    RedPCStorageTiming,
+    deposit_party_member,
+    open_bills_pc,
+)
 
 SURGE_CHECKPOINT_COUNT = 15
 SPEAROW_SPECIES_ID = 0x05
@@ -32,6 +42,8 @@ DIGLETT_SPECIES_ID = 0x3B
 DIGLETT_CAPTURE_LEVELS = frozenset(range(17, 23))
 DIGLETT_SEARCH_SEED_WAIT_FRAMES = 199
 WARTORTLE_SPECIES_ID = 0xB3
+PIDGEY_SPECIES_ID = 0x24
+RATTATA_SPECIES_ID = 0xA5
 SPEAROW_CAPTURE_MOVE_ID = 0x37
 SPEAROW_CAPTURE_MOVE_SLOT = 4
 SPEAROW_WEAKEN_ATTEMPT_LIMIT = 12
@@ -472,9 +484,7 @@ def run_surge_chapter(
         emulator,
     )
 
-    _confirm_kind(actions, MacroActionKind.CANCEL, 2, 180)
-    _move(actions, reader, _directions("LDDD"), timing, "trade house exit")
-    _move(actions, reader, _directions("DDD"), timing, "Gym tree")
+    _run_route_1_collection_detour(emulator, actions, reader, timing)
     _cut_tree(emulator, actions, reader)
     _move(actions, reader, _directions("DDLLLU"), timing, "Gym entry")
     _wait(actions, timing.transition_frames)
@@ -1070,6 +1080,739 @@ def _catch_diglett_chapter(
     return reader.read() if returned.map_id == MapId.ROUTE_11 else returned
 
 
+def _run_route_1_collection_detour(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SurgeTiming,
+) -> None:
+    """Acquire Route 1's species, store them, and restore the Gym-tree boundary."""
+
+    _confirm_kind(executor, MacroActionKind.CANCEL, 2, 180)
+    _move(executor, reader, _directions("LDDD"), timing, "trade house exit")
+    _move(
+        executor,
+        reader,
+        _directions("R" * 8 + "D" + "R" * 5 + "U" + "RRD" + "R" * 14 + "UU"),
+        timing,
+        "Route 11 cave return",
+    )
+    _wait(executor, timing.transition_frames)
+    raw = reader.read()
+    if raw.map_id != MapId.DIGLETTS_CAVE_ROUTE_11:
+        raise SurgeChapterError(
+            f"Route 2 probe missed the Route 11 gate: map={raw.map_id!r}, "
+            f"coordinate={(raw.player_x, raw.player_y)!r}."
+        )
+    if raw.player_x is None or raw.player_y is None:
+        raise SurgeChapterError("Route 2 probe lacks Route 11 gate coordinates.")
+    _move(
+        executor,
+        reader,
+        _directions("U" * max(raw.player_y - 4, 0) + "R" * max(4 - raw.player_x, 0)),
+        timing,
+        "Route 11 cave entry",
+    )
+    _wait(executor, timing.transition_frames)
+    raw = reader.read()
+    if raw.map_id != MapId.DIGLETTS_CAVE or raw.player_x is None or raw.player_y is None:
+        raise SurgeChapterError(f"Route 2 probe missed Diglett's Cave: {raw!r}")
+    _traverse_cave_to_route_2(emulator, executor, reader, timing)
+    _wait(executor, timing.transition_frames)
+    raw = reader.read()
+    if raw.map_id != MapId.DIGLETTS_CAVE_ROUTE_2:
+        raise SurgeChapterError(f"Route 2 probe missed its cave house: {raw!r}")
+    _move(executor, reader, _directions("LDDD"), timing, "Route 2 cave-house exit")
+    _move_until_map(
+        executor,
+        reader,
+        "down",
+        MapId.ROUTE_2,
+        timing,
+        "Route 2 exterior",
+    )
+    _wait(executor, timing.transition_frames)
+    _traverse_route_2_to_viridian(emulator, executor, reader, timing)
+    _wait(executor, timing.transition_frames)
+    raw = reader.read()
+    _require(raw, MapId.VIRIDIAN_CITY, (19, 0), 0, "Route 2 south return")
+    _move(
+        executor,
+        reader,
+        ("left", *_inverse_directions(VIRIDIAN_TO_ROUTE_2_DIRECTIONS)),
+        timing,
+        "Viridian southbound",
+    )
+    _survey_route_1(emulator, executor, reader, timing)
+    _move(
+        executor,
+        reader,
+        VIRIDIAN_TO_ROUTE_2_DIRECTIONS,
+        timing,
+        "Viridian north return",
+    )
+    _traverse_route_2_to_cave_house(emulator, executor, reader, timing)
+    raw = reader.read()
+    if (
+        raw.map_id != MapId.DIGLETTS_CAVE_ROUTE_2
+        or raw.player_x is None
+        or raw.player_y is None
+    ):
+        raise SurgeChapterError("Route 2 return missed Diglett's Cave house.")
+    _move(
+        executor,
+        reader,
+        _directions(
+            "U" * max(raw.player_y - 4, 0) + "R" * max(4 - raw.player_x, 0)
+        ),
+        timing,
+        "Route 2 cave re-entry",
+    )
+    _wait(executor, timing.transition_frames)
+    if reader.read().map_id != MapId.DIGLETTS_CAVE:
+        raise SurgeChapterError("Route 2 return did not enter Diglett's Cave.")
+    _field_dig_to_vermilion(emulator, executor, reader, timing)
+    _store_route_1_specimens(emulator, executor, reader, timing)
+    _move(
+        executor,
+        reader,
+        _directions("DDD" + "R" * 5 + "DDRR" + "D" * 5 + "LLLDDD"),
+        timing,
+        "Vermilion Center to Gym tree",
+    )
+    _require(reader.read(), MapId.VERMILION_CITY, (15, 17), 0, "Gym tree detour return")
+
+
+def _inverse_directions(directions: Iterable[str]) -> tuple[str, ...]:
+    opposite = {"up": "down", "down": "up", "left": "right", "right": "left"}
+    return tuple(opposite[direction] for direction in reversed(tuple(directions)))
+
+
+def _survey_route_1(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SurgeTiming,
+) -> None:
+    """Catch and retain Route 1's two wild species through live encounters."""
+
+    missing = {PIDGEY_SPECIES_ID, RATTATA_SPECIES_ID}
+    reverse_route = _inverse_directions(ROUTE_1_TO_VIRIDIAN_DIRECTIONS)
+    endpoint = "north"
+    for _leg in range(12):
+        directions = reverse_route if endpoint == "north" else ROUTE_1_TO_VIRIDIAN_DIRECTIONS
+        endpoint = "south" if endpoint == "north" else "north"
+        for direction in directions:
+            raw = _survey_step(executor, reader, direction, timing)
+            if not raw.battle_state:
+                continue
+            next_target = (
+                PIDGEY_SPECIES_ID
+                if PIDGEY_SPECIES_ID in missing
+                else RATTATA_SPECIES_ID
+            )
+            if missing and raw.enemy_species_id == next_target:
+                _throw_until_caught_route_1(
+                    emulator,
+                    executor,
+                    reader,
+                    raw.enemy_species_id,
+                )
+                missing.remove(raw.enemy_species_id)
+            else:
+                balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+                _flee(executor, reader, raw)
+                if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
+                    raise SurgeChapterError("Route 1 flee changed Poké Balls.")
+        if not missing and endpoint == "north":
+            break
+    if missing:
+        raise SurgeChapterError(f"Route 1 survey missed species {sorted(missing)!r}.")
+    if endpoint == "south":
+        for direction in ROUTE_1_TO_VIRIDIAN_DIRECTIONS:
+            raw = _survey_step(executor, reader, direction, timing)
+            if raw.battle_state:
+                _flee(executor, reader, raw)
+    raw = reader.read()
+    if raw.map_id == MapId.ROUTE_1 and raw.player_y == 0:
+        raw = _move_until_map(
+            executor,
+            reader,
+            "up",
+            MapId.VIRIDIAN_CITY,
+            timing,
+            "Route 1 north transition",
+        )
+    if raw.map_id != MapId.VIRIDIAN_CITY or raw.party_species_ids != (
+        WARTORTLE_SPECIES_ID,
+        DUX_SPECIES_ID,
+        DIGLETT_SPECIES_ID,
+        PIDGEY_SPECIES_ID,
+        RATTATA_SPECIES_ID,
+    ):
+        raise SurgeChapterError(
+            "Route 1 survey missed its Viridian living gate: "
+            f"map={raw.map_id!r}, coordinate={(raw.player_x, raw.player_y)!r}, "
+            f"party={raw.party_species_ids!r}."
+        )
+    owned = reader.read_pokedex_state().owned_species
+    if not {16, 19} <= owned:
+        raise SurgeChapterError(f"Route 1 captures lack Pokédex ownership: {sorted(owned)!r}.")
+
+
+def _survey_step(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    direction: str,
+    timing: SurgeTiming,
+) -> RawGameState:
+    before = reader.read()
+    for attempt in range(timing.movement_retries):
+        _pulse(executor, MacroActionKind.MOVE, direction, 12 * (attempt + 1))
+        raw = reader.read()
+        if (
+            raw.battle_state
+            or raw.map_id != before.map_id
+            or (raw.player_x, raw.player_y) != (before.player_x, before.player_y)
+        ):
+            return raw
+    raise SurgeChapterError(
+        f"Route 1 survey blocked moving {direction} at "
+        f"{(before.map_id, before.player_x, before.player_y)!r}."
+    )
+
+
+def _throw_until_caught_route_1(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    species_id: int | None,
+) -> None:
+    if species_id not in {PIDGEY_SPECIES_ID, RATTATA_SPECIES_ID}:
+        raise SurgeChapterError("Route 1 capture received an invalid target.")
+    party_before = reader.read().party_species_ids or ()
+    starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+    for _ in range(starting_balls):
+        _navigate_main(executor, reader, 1)
+        _pulse(executor, MacroActionKind.CONFIRM)
+        _select_bag_item(emulator, executor, ItemId.POKE_BALL)
+        _pulse(executor, MacroActionKind.CONFIRM, frames=360)
+        for _ in range(32):
+            raw = reader.read()
+            if raw.battle_state == 0 and raw.party_species_ids == (*party_before, species_id):
+                _confirm_kind(executor, MacroActionKind.CANCEL, 3, 180)
+                return
+            if (
+                raw.battle_state == 1
+                and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
+            ):
+                break
+            _pulse(executor, MacroActionKind.CONFIRM)
+    raise SurgeChapterError(
+        f"Route 1 capture exhausted its bounded Poké Balls for {species_id:#04x}."
+    )
+
+
+def _store_route_1_specimens(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SurgeTiming,
+) -> None:
+    raw = reader.read()
+    _require(raw, MapId.VERMILION_CITY, (11, 4), 0, "Route 1 Dig return")
+    _move(executor, reader, ("up",), timing, "Vermilion Center")
+    _wait(executor, timing.transition_frames)
+    _require(reader.read(), MapId.VERMILION_POKECENTER, (3, 7), 0, "Vermilion Center entry")
+    _approach_vermilion_pc(executor, reader, timing)
+    storage_timing = RedPCStorageTiming(wait_frames=timing.wait_frames)
+    try:
+        open_bills_pc(executor, reader, timing=storage_timing)
+        pidgey = deposit_party_member(
+            executor,
+            reader,
+            party_slot=4,
+            expected_species_id=PIDGEY_SPECIES_ID,
+            timing=storage_timing,
+        )
+        rattata = deposit_party_member(
+            executor,
+            reader,
+            party_slot=4,
+            expected_species_id=RATTATA_SPECIES_ID,
+            timing=storage_timing,
+        )
+    except RedPCStorageError as error:
+        raise SurgeChapterError(f"Route 1 specimen storage failed: {error}") from error
+    if not pidgey.passed or not rattata.passed:
+        raise SurgeChapterError("Route 1 storage lacked exact deposit transitions.")
+    box = reader.read_current_box_state()
+    if box.species_ids[-2:] != (PIDGEY_SPECIES_ID, RATTATA_SPECIES_ID):
+        raise SurgeChapterError(f"Route 1 specimens are absent from the current box: {box!r}.")
+    _confirm_kind(executor, MacroActionKind.CANCEL, 5, 180)
+    _move(
+        executor,
+        reader,
+        _directions("L" * 4 + "D" + "L" * 4 + "DLUU" + "L" + "D" * 4),
+        timing,
+        "Vermilion Center exit",
+    )
+    _wait(executor, timing.transition_frames)
+    if reader.read().map_id != MapId.VERMILION_CITY:
+        raise SurgeChapterError("Route 1 storage did not restore Vermilion field control.")
+
+
+def _approach_vermilion_pc(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SurgeTiming,
+) -> None:
+    _move(
+        executor,
+        reader,
+        _directions("UUURDDRU" + "R" * 4 + "U" + "R" * 4),
+        timing,
+        "Vermilion PC safe corridor",
+    )
+    _require(reader.read(), MapId.VERMILION_POKECENTER, (13, 4), 0, "Vermilion PC")
+    _pulse(executor, MacroActionKind.MOVE, "up", 60)
+
+
+def _field_dig_to_vermilion(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SurgeTiming,
+) -> None:
+    before = reader.read()
+    executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
+    _wait(executor, timing.wait_frames)
+    while emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
+        _pulse(executor, MacroActionKind.MOVE, "up", 120)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    while emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 2:
+        _pulse(executor, MacroActionKind.MOVE, "down", 120)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    if DIG_MOVE_ID not in _read_four(emulator, RamAddress.PARTY_MON_3_MOVES):
+        raise SurgeChapterError("Diglett lost Dig before the Route 1 return.")
+    while emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
+        _pulse(executor, MacroActionKind.MOVE, "up", 120)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(timing.reward_pulses):
+        _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+        raw = reader.read()
+        if raw.map_id == MapId.VERMILION_CITY:
+            if raw.party_species_ids != before.party_species_ids:
+                raise SurgeChapterError("Route 1 Dig return changed the protected party.")
+            return
+    raw = reader.read()
+    raise SurgeChapterError(
+        "Route 1 Dig did not return to Vermilion: "
+        f"map={raw.map_id!r}, coordinate={(raw.player_x, raw.player_y)!r}, "
+        f"party={raw.party_species_ids!r}, ready={reader.read_input_readiness().ready}."
+    )
+
+
+def _traverse_route_2_to_viridian(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SurgeTiming,
+) -> tuple[tuple[int, int], ...]:
+    """Explore Route 2's Cut corridor and return its proven coordinate trail."""
+
+    raw = reader.read()
+    if raw.map_id != MapId.ROUTE_2 or raw.player_x is None or raw.player_y is None:
+        raise SurgeChapterError("Route 2 traversal lacks its exterior entry gate.")
+    entry = (raw.player_x, raw.player_y)
+    stack = [entry]
+    visited = {entry}
+    parents: dict[tuple[int, int], tuple[int, int] | None] = {entry: None}
+    recent: deque[tuple[int, int]] = deque((entry,), maxlen=24)
+    attempted: dict[tuple[int, int], set[str]] = {}
+    deltas = {
+        "down": (0, 1),
+        "right": (1, 0),
+        "left": (-1, 0),
+        "up": (0, -1),
+    }
+    excluded = {
+        (12, 9),
+        (15, 19),
+        (3, 11),
+        (3, 43),
+    }
+    for _ in range(timing.encounter_steps):
+        raw = reader.read()
+        if raw.map_id == MapId.VIRIDIAN_CITY:
+            return tuple(stack)
+        if raw.map_id == MapId.ROUTE_2_GATE:
+            _move_until_map(
+                executor,
+                reader,
+                "down",
+                MapId.ROUTE_2,
+                timing,
+                "Route 2 bypass gate",
+            )
+            raw = reader.read()
+            if raw.player_x is None or raw.player_y is None:
+                raise SurgeChapterError("Route 2 gate return lacks coordinates.")
+            position = (raw.player_x, raw.player_y)
+            stack = [position]
+            visited.add(position)
+            parents[position] = None
+            recent.append(position)
+            continue
+        if raw.map_id != MapId.ROUTE_2:
+            raise SurgeChapterError(
+                f"Route 2 traversal reached an unexpected map {raw.map_id!r}."
+            )
+        if raw.battle_state:
+            balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+            _flee(executor, reader, raw)
+            if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
+                raise SurgeChapterError("Route 2 flee changed Poké Balls.")
+            continue
+        if raw.player_x is None or raw.player_y is None:
+            raise SurgeChapterError("Route 2 traversal lacks live coordinates.")
+        position = (raw.player_x, raw.player_y)
+        if position != stack[-1]:
+            raise SurgeChapterError(f"Route 2 traversal lost its search stack at {position!r}.")
+        tried = attempted.setdefault(position, set())
+        direction = next(
+            (
+                candidate
+                for candidate, delta in deltas.items()
+                if candidate not in tried
+                and (position[0] + delta[0], position[1] + delta[1]) not in visited
+                and (position[0] + delta[0], position[1] + delta[1]) not in excluded
+                and position[0] + delta[0] >= 9
+            ),
+            None,
+        )
+        backtracking = direction is None
+        if backtracking:
+            if len(stack) == 1:
+                raise SurgeChapterError("Route 2 traversal exhausted its reachable corridor.")
+            parent = stack[-2]
+            dx, dy = parent[0] - position[0], parent[1] - position[1]
+            try:
+                direction = next(name for name, delta in deltas.items() if delta == (dx, dy))
+            except StopIteration as error:
+                raise SurgeChapterError(
+                    "Route 2 traversal cannot reverse a one-way transition: "
+                    f"position={position!r}, parent={parent!r}, recent={tuple(recent)!r}."
+                ) from error
+        else:
+            tried.add(direction)
+        _pulse(executor, MacroActionKind.MOVE, direction, 60)
+        moved = reader.read()
+        if (
+            moved.map_id == MapId.ROUTE_2
+            and not moved.battle_state
+            and (moved.player_x, moved.player_y) == position
+            and emulator.read_u8(RamAddress.TILE_IN_FRONT_OF_PLAYER) == 0x3D
+        ):
+            _cut_tree_facing(emulator, executor, reader, direction, timing, "Route 2 Cut")
+            moved = reader.read()
+        if moved.battle_state:
+            balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+            _flee(executor, reader, moved)
+            if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
+                raise SurgeChapterError("Route 2 flee changed Poké Balls.")
+            moved = reader.read()
+        if moved.map_id != MapId.ROUTE_2:
+            continue
+        next_position = (moved.player_x, moved.player_y)
+        if next_position != position:
+            recent.append(next_position)
+        if backtracking:
+            if next_position != stack[-2]:
+                raise SurgeChapterError("Route 2 traversal could not backtrack.")
+            stack.pop()
+        elif next_position != position:
+            if next_position in visited:
+                rebuilt = [next_position]
+                while parents[rebuilt[-1]] is not None:
+                    rebuilt.append(parents[rebuilt[-1]])  # type: ignore[arg-type]
+                stack = list(reversed(rebuilt))
+            else:
+                visited.add(next_position)
+                parents[next_position] = position
+                stack.append(next_position)
+    raise SurgeChapterError("Route 2 traversal exceeded its bounded step budget.")
+
+
+def _traverse_route_2_to_cave_house(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SurgeTiming,
+) -> RawGameState:
+    """Explore north through Route 2's Cut lanes to Diglett's Cave."""
+
+    raw = reader.read()
+    if raw.map_id != MapId.ROUTE_2 or raw.player_x is None or raw.player_y is None:
+        raise SurgeChapterError("Northbound Route 2 traversal lacks its entry gate.")
+    position = (raw.player_x, raw.player_y)
+    attempted: dict[tuple[int, int], set[str]] = {}
+    edges: dict[tuple[int, int], dict[tuple[int, int], str]] = {}
+    deltas = {
+        "up": (0, -1),
+        "right": (1, 0),
+        "left": (-1, 0),
+        "down": (0, 1),
+    }
+    excluded = {(3, 11), (15, 19), (3, 43)}
+
+    def unexplored(current: tuple[int, int]) -> tuple[str, ...]:
+        tried = attempted.setdefault(current, set())
+        return tuple(
+            direction
+            for direction, delta in deltas.items()
+            if direction not in tried
+            and (current[0] + delta[0], current[1] + delta[1]) not in excluded
+        )
+
+    def route_to_frontier(current: tuple[int, int]) -> tuple[tuple[int, int], ...]:
+        queue = deque((current,))
+        parent: dict[tuple[int, int], tuple[int, int] | None] = {current: None}
+        target: tuple[int, int] | None = None
+        while queue:
+            node = queue.popleft()
+            if unexplored(node):
+                target = node
+                break
+            for neighbor in edges.get(node, {}):
+                if neighbor not in parent:
+                    parent[neighbor] = node
+                    queue.append(neighbor)
+        if target is None:
+            return ()
+        path = [target]
+        while parent[path[-1]] is not None:
+            path.append(parent[path[-1]])  # type: ignore[arg-type]
+        return tuple(reversed(path))
+
+    for _ in range(timing.encounter_steps):
+        raw = reader.read()
+        if raw.map_id == MapId.DIGLETTS_CAVE_ROUTE_2:
+            return raw
+        if raw.map_id == MapId.ROUTE_2_GATE:
+            if raw.player_x is None or raw.player_y is None:
+                raise SurgeChapterError("Route 2 north gate lacks entry coordinates.")
+            gate_entry = (raw.player_x, raw.player_y)
+            if raw.player_y > 1:
+                _move(
+                    executor,
+                    reader,
+                    ("up",) * (raw.player_y - 1),
+                    timing,
+                    "Route 2 north gate corridor",
+                )
+            raw = reader.read()
+            if raw.player_x is None:
+                raise SurgeChapterError("Route 2 north gate lost its exit coordinate.")
+            if raw.player_x != 5:
+                _move(
+                    executor,
+                    reader,
+                    ("right",) * (5 - raw.player_x),
+                    timing,
+                    "Route 2 north gate exit column",
+                )
+            try:
+                _move_until_map(
+                    executor,
+                    reader,
+                    "up",
+                    MapId.ROUTE_2,
+                    timing,
+                    "Route 2 northbound bypass gate",
+                )
+            except SurgeChapterError as error:
+                stuck = reader.read()
+                raise SurgeChapterError(
+                    "Route 2 northbound bypass gate did not exit: "
+                    f"entry={gate_entry!r}, current={(stuck.player_x, stuck.player_y)!r}."
+                ) from error
+            raw = reader.read()
+            if raw.player_x is None or raw.player_y is None:
+                raise SurgeChapterError("Route 2 north gate return lacks coordinates.")
+            position = (raw.player_x, raw.player_y)
+            continue
+        if raw.map_id != MapId.ROUTE_2:
+            raise SurgeChapterError(
+                f"Northbound Route 2 traversal reached map {raw.map_id!r}."
+            )
+        if raw.battle_state:
+            balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+            _flee(executor, reader, raw)
+            if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
+                raise SurgeChapterError("Northbound Route 2 flee changed Poké Balls.")
+            continue
+        if raw.player_x is None or raw.player_y is None:
+            raise SurgeChapterError("Northbound Route 2 traversal lacks coordinates.")
+        position = (raw.player_x, raw.player_y)
+        choices = unexplored(position)
+        if choices:
+            direction = choices[0]
+            attempted[position].add(direction)
+        else:
+            path = route_to_frontier(position)
+            if len(path) < 2:
+                raise SurgeChapterError(
+                    f"Northbound Route 2 traversal exhausted at {position!r}."
+                )
+            direction = edges[position][path[1]]
+        _pulse(executor, MacroActionKind.MOVE, direction, 60)
+        moved = reader.read()
+        if (
+            moved.map_id == MapId.ROUTE_2
+            and not moved.battle_state
+            and (moved.player_x, moved.player_y) == position
+            and emulator.read_u8(RamAddress.TILE_IN_FRONT_OF_PLAYER) == 0x3D
+        ):
+            _cut_tree_facing(
+                emulator,
+                executor,
+                reader,
+                direction,
+                timing,
+                "northbound Route 2 Cut",
+            )
+            moved = reader.read()
+        if moved.battle_state:
+            balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+            _flee(executor, reader, moved)
+            if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
+                raise SurgeChapterError("Northbound Route 2 flee changed Poké Balls.")
+            moved = reader.read()
+        if moved.map_id != MapId.ROUTE_2:
+            continue
+        next_position = (moved.player_x, moved.player_y)
+        if next_position != position:
+            edges.setdefault(position, {})[next_position] = direction
+            reverse = next(
+                (
+                    name
+                    for name, delta in deltas.items()
+                    if delta
+                    == (position[0] - next_position[0], position[1] - next_position[1])
+                ),
+                None,
+            )
+            if reverse is not None:
+                edges.setdefault(next_position, {})[position] = reverse
+    raw = reader.read()
+    raise SurgeChapterError(
+        "Northbound Route 2 traversal exceeded its step budget: "
+        f"map={raw.map_id!r}, coordinate={(raw.player_x, raw.player_y)!r}."
+    )
+
+
+def _traverse_cave_to_route_2(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SurgeTiming,
+) -> RawGameState:
+    """Cross Diglett's Cave while safely recovering from random encounters."""
+
+    raw = reader.read()
+    if raw.player_x is None or raw.player_y is None:
+        raise SurgeChapterError("Route 2 cave traversal lacks its entry coordinates.")
+    entry = (raw.player_x, raw.player_y)
+    stack = [entry]
+    visited = {entry}
+    attempted: dict[tuple[int, int], set[str]] = {}
+    deltas = {
+        "left": (-1, 0),
+        "up": (0, -1),
+        "right": (1, 0),
+        "down": (0, 1),
+    }
+    entrance_warp = (37, 31)
+    for _ in range(timing.encounter_steps):
+        raw = reader.read()
+        if raw.map_id == MapId.DIGLETTS_CAVE_ROUTE_2:
+            return raw
+        if raw.map_id != MapId.DIGLETTS_CAVE:
+            raise SurgeChapterError(
+                f"Route 2 cave traversal reached an unexpected map {raw.map_id!r}."
+            )
+        if raw.battle_state:
+            balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+            _flee(executor, reader, raw)
+            if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
+                raise SurgeChapterError("Cave traversal flee changed Poké Balls.")
+            continue
+        if raw.player_x is None or raw.player_y is None:
+            raise SurgeChapterError("Route 2 cave traversal lacks live coordinates.")
+        position = (raw.player_x, raw.player_y)
+        if position != stack[-1]:
+            raise SurgeChapterError(
+                f"Route 2 cave traversal lost its search stack at {position!r}."
+            )
+        tried = attempted.setdefault(position, set())
+        direction = next(
+            (
+                candidate
+                for candidate in ("left", "up", "right", "down")
+                if candidate not in tried
+                and (
+                    position[0] + deltas[candidate][0],
+                    position[1] + deltas[candidate][1],
+                )
+                not in visited
+                and (
+                    position[0] + deltas[candidate][0],
+                    position[1] + deltas[candidate][1],
+                )
+                != entrance_warp
+            ),
+            None,
+        )
+        backtracking = direction is None
+        if backtracking:
+            if len(stack) == 1:
+                raise SurgeChapterError("Route 2 cave traversal exhausted its reachable map.")
+            parent = stack[-2]
+            dx, dy = parent[0] - position[0], parent[1] - position[1]
+            direction = next(
+                name for name, delta in deltas.items() if delta == (dx, dy)
+            )
+        else:
+            tried.add(direction)
+        _pulse(executor, MacroActionKind.MOVE, direction, 60)
+        moved = reader.read()
+        if moved.battle_state:
+            balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+            _flee(executor, reader, moved)
+            if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
+                raise SurgeChapterError("Cave traversal flee changed Poké Balls.")
+            moved = reader.read()
+        if moved.map_id != MapId.DIGLETTS_CAVE:
+            continue
+        next_position = (moved.player_x, moved.player_y)
+        if backtracking:
+            if next_position != stack[-2]:
+                raise SurgeChapterError("Route 2 cave traversal could not backtrack.")
+            stack.pop()
+        elif next_position != position:
+            if next_position in visited:
+                raise SurgeChapterError("Route 2 cave traversal revisited an unplanned cell.")
+            visited.add(next_position)
+            stack.append(next_position)
+    raw = reader.read()
+    raise SurgeChapterError(
+        "Route 2 cave traversal exceeded its bounded step budget: "
+        f"map={raw.map_id!r}, coordinate={(raw.player_x, raw.player_y)!r}, "
+        f"battle={raw.battle_state}."
+    )
+
+
 def _throw_until_caught_diglett(
     emulator: EmulatorState,
     executor: _CountingExecutor,
@@ -1175,16 +1918,34 @@ def _prepare_diglett_dig(
 def _cut_tree(
     emulator: EmulatorState, executor: _CountingExecutor, reader: PokemonRedStateReader
 ) -> None:
+    _cut_tree_facing(
+        emulator,
+        executor,
+        reader,
+        "down",
+        DEFAULT_SURGE_TIMING,
+        "Gym tree",
+    )
+
+
+def _cut_tree_facing(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    direction: str,
+    timing: SurgeTiming,
+    label: str,
+) -> None:
     for _ in range(20):
         before = reader.read()
-        _pulse(executor, MacroActionKind.MOVE, "down", 120)
+        _pulse(executor, MacroActionKind.MOVE, direction, 120)
         after = reader.read()
         if (after.player_x, after.player_y) != (before.player_x, before.player_y):
-            raise SurgeChapterError("Tree orientation probe moved unexpectedly.")
+            raise SurgeChapterError(f"{label} orientation probe moved unexpectedly.")
         if emulator.read_u8(RamAddress.TILE_IN_FRONT_OF_PLAYER) == 0x3D:
             break
     else:
-        raise SurgeChapterError("No cuttable Gym tree was observed.")
+        raise SurgeChapterError(f"No cuttable {label} was observed.")
     executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
     _wait(executor, 180)
     while emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
@@ -1215,7 +1976,7 @@ def _cut_tree(
         _pulse(executor, MacroActionKind.CONFIRM, frames=180)
     else:
         raise SurgeChapterError("Cut did not clear the Gym tree and restore field input.")
-    _move(executor, reader, ("down",), DEFAULT_SURGE_TIMING, "cut tree passage")
+    _move(executor, reader, (direction,), timing, f"{label} passage")
 
 
 def _swap_party_lead(

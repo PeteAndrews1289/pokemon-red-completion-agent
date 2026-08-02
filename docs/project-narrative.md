@@ -99,12 +99,17 @@ capture per Pokédex number—and that those paths register all 124 targets alon
 calculation exposes scarce resources before execution: 3 Moon Stones, 2 Leaf Stones, 3 Water
 Stones, 1 Fire Stone, and 1 Thunder Stone.
 
-The first reusable source-survey executor is also implemented. In a ROM-free Route 1 simulation it
-fled an irrelevant Spearow, retained Pidgey into the final slot of a full PC box, switched to the
-next box without changing the census, retained Rattata there, and stopped only after both
-downstream requirements were satisfied. The generic capture policy now permits this full-party
-flow only when verified storage has room. This proves the planner/executor/storage contract; the
-live Route 1 movement and capture-menu adapter remains the next qualification boundary.
+The first reusable source-survey executor began with a ROM-free Route 1 simulation, then crossed
+its first live qualification boundary. From the ordinary story route, the teacher reversibly
+crossed Diglett's Cave and Route 2, traversed Route 1 until it caught Pidgey and then Rattata,
+verified both Pokédex ownership flags, returned to Vermilion, deposited the exact two party slots,
+verified the PC box tail, and resumed Lt. Surge without changing the three-member story roster.
+The same uninterrupted clean-power run then passed **312/312 checkpoints**, **36/36 objectives**,
+the zero-faint six-member gate at levels **77–82**, and the Hall of Fame in **758,430 actions**.
+Its terminal collection was **14/124 registered, 9/120 living, and 0/120 at level 100**. This
+qualifies one ordinary-wild source end to end; it does not qualify the remaining source methods or
+the complete collection. See the
+[sanitized Route 1 acquisition receipt](evidence/qualified-play-route1-acquisition-2026-08-02.json).
 
 The current phase makes one further correction. The qualified route completed the game by
 overleveling a single Pokémon, which is a legitimate way to finish Red but a poor thing to imitate:

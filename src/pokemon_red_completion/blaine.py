@@ -130,7 +130,12 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
     # provide measured headroom for the slower lineage.
     max_battles=7_000,
     max_steps=500_000,
-    max_healing_trips=1_000,
+    # The live acquisition lineage changes Mansion RNG and requires the escort
+    # to absorb volatile encounters before escaping. A clean replay reached a
+    # six-level spread at 1,000 heals, one trainee level short of readiness.
+    # Preserve the 90% retreat threshold and zero-faint contract while giving
+    # that measured safe strategy 25% bounded headroom.
+    max_healing_trips=1_250,
     max_faints=0,
 )
 BATTLE_PARTY_MENU_COMMAND = 2
@@ -181,11 +186,15 @@ TRAINING_ATTACK_PP_RESERVE = {
 # experience to the already-high Blastoise escort.
 MANSION_ESCORT_ENEMY_SPECIES = frozenset({0x88})
 # Koffing and Weezing can end an encounter with Selfdestruct while a trainee is
-# switching to the escort.  A terminal double knockout used to bypass the
-# normal post-battle faint assertion because the switch itself ended battle.
-# At the qualified training levels the lead has a decisive escape advantage,
-# so these encounters are fled before any switch can expose the escort.
+# switching to the escort. They are never assigned to a trainee directly. A
+# terminal Selfdestruct is counted only after the zero-faint check; otherwise
+# the healthy escort flees so it does not widen the level spread unnecessarily.
 MANSION_VOLATILE_ENEMY_SPECIES = frozenset({0x37, 0x8F})
+# A healthy training route can occasionally draw several excluded encounters,
+# but it must never spend an unbounded amount of wall time fleeing without
+# earning experience.  This is deliberately local to the Red adapter: the
+# portable policy continues to reason in battles, steps, and healing trips.
+MANSION_MAX_CONSECUTIVE_FLEES = 32
 MANSION_TRAINER_EVENTS = (
     EventFlag.BEAT_MANSION_1_TRAINER_0,
     EventFlag.BEAT_MANSION_2_TRAINER_0,
@@ -1129,7 +1138,7 @@ def _red_training_matchup_acceptable(
 ) -> bool:
     """Apply Red-specific risk margins after the portable level gate."""
 
-    if enemy_species in MANSION_ESCORT_ENEMY_SPECIES:
+    if enemy_species in MANSION_ESCORT_ENEMY_SPECIES | MANSION_VOLATILE_ENEMY_SPECIES:
         return False
     if not is_matchup_acceptable(trainee, enemy_level, policy):
         return False
@@ -1164,6 +1173,7 @@ def _run_mansion_team_balancing(
     battles = 0
     steps = 0
     healing_trips = 0
+    consecutive_flees = 0
     flee_run = _RunState([])
 
     def emit_progress() -> None:
@@ -1179,6 +1189,16 @@ def _run_mansion_team_balancing(
                 emulator.frame_count,
             )
         )
+
+    def record_flee(label: str) -> None:
+        nonlocal consecutive_flees
+        consecutive_flees += 1
+        if consecutive_flees > MANSION_MAX_CONSECUTIVE_FLEES:
+            levels = tuple(member.level for member in party_reader.read().members)
+            raise BlaineChapterError(
+                "Balanced training exceeded its consecutive-flee bound after "
+                f"{label}: flees={consecutive_flees}, battles={battles}, levels={levels}."
+            )
 
     while True:
         party = party_reader.read()
@@ -1222,8 +1242,26 @@ def _run_mansion_team_balancing(
                     "A Mansion encounter began without the selected trainee in front."
                 )
             if raw.enemy_species_id in MANSION_VOLATILE_ENEMY_SPECIES:
+                if escort_unsafe:
+                    raise BlaineChapterError(
+                        "A volatile Mansion matchup began without a safe escape escort."
+                    )
+                battle_continues = _switch_active_battler(
+                    actions,
+                    reader,
+                    emulator,
+                    target_index=escort.slot - 1,
+                    label="Blastoise volatile escape escort",
+                )
+                if not battle_continues:
+                    _require_zero_faints(party_reader, "terminal volatile escort switch")
+                    battles += 1
+                    consecutive_flees = 0
+                    emit_progress()
+                    continue
                 _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
                 _require_zero_faints(party_reader, "volatile-matchup escape")
+                record_flee("volatile matchup")
                 continue
             if raw.enemy_species_id in MANSION_ESCORT_ENEMY_SPECIES:
                 if escort_unsafe:
@@ -1242,6 +1280,7 @@ def _run_mansion_team_balancing(
                     )
                 _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
                 _require_zero_faints(party_reader, "excluded-matchup escape")
+                record_flee("excluded matchup")
                 continue
             trainee_fights = _red_training_matchup_acceptable(
                 trainee,
@@ -1259,6 +1298,7 @@ def _run_mansion_team_balancing(
             if fighter_unsafe:
                 _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
                 _require_zero_faints(party_reader, "unsafe-matchup escape")
+                record_flee("unsafe matchup")
                 continue
             if not trainee_fights:
                 battle_continues = _switch_active_battler(
@@ -1271,6 +1311,7 @@ def _run_mansion_team_balancing(
                 if not battle_continues:
                     _require_zero_faints(party_reader, "terminal escort switch")
                     battles += 1
+                    consecutive_flees = 0
                     emit_progress()
                     continue
             if reader.read().battle_state != 1:
@@ -1284,6 +1325,7 @@ def _run_mansion_team_balancing(
             )
             _require_zero_faints(party_reader, "completed training battle")
             battles += 1
+            consecutive_flees = 0
             emit_progress()
             continue
 

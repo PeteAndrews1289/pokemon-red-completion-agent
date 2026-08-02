@@ -67,6 +67,14 @@ control, and progressively trained specialists.**
 > terminal census is **12/124 registered, 7/120 living, and 0/120 at level 100**. This qualifies
 > the storage and contract foundation—not the still-unbuilt acquisition or learned-policy claims.
 > See the [sanitized perfect-save foundation receipt](docs/evidence/qualified-play-perfect-save-foundation-2026-08-01.json).
+> The first live acquisition slice is now qualified as well. The teacher crosses Diglett's Cave
+> and Route 2, catches Route 1 Pidgey and Rattata through ordinary encounters, verifies their
+> Pokédex flags, deposits both exact specimens, returns to the Lt. Surge route, and completes the
+> same **312/312 checkpoints** and Hall-of-Fame gate. The uninterrupted run used **758,430
+> actions**, passed the zero-faint six-member gate at levels **77–82**, and finished with
+> **14/124 registered, 9/120 living, and 0/120 at level 100**. This is one complete acquisition
+> slice, not a claim that the remaining collection or learned agent is finished. See the
+> [sanitized Route 1 receipt](docs/evidence/qualified-play-route1-acquisition-2026-08-02.json).
 > A first slot-equivariant battle ranker now reaches **72.5% teacher-choice agreement** versus a
 > **50.5% fold-local majority baseline** across 422 decisions; its hard legality and PP mask keeps
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned
