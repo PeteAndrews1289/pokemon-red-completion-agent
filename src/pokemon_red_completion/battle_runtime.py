@@ -1067,6 +1067,8 @@ def _await_selected_turn_effect(
             _wait(executor, timing.attack_wait_frames)
         raw = reader.read()
         _require_present_state(raw, expected_map=expected_map, label=label)
+        if _selected_turn_effect_observed(initial_raw, raw):
+            return
         current_pp = _current_pp(
             raw,
             slot=slot,
@@ -1075,7 +1077,12 @@ def _await_selected_turn_effect(
         )
         if current_pp != spent_pp:
             raise BattleRuntimeError(
-                f"{label} changed move-slot {slot} PP after its single-attack proof."
+                f"{label} changed move-slot {slot} PP after its single-attack proof: "
+                f"species={raw.active_party_species_id!r}, "
+                f"moves={initial_raw.battler_moves!r}->{raw.battler_moves!r}, "
+                f"pp={initial_raw.battler_pp!r}->{raw.battler_pp!r}, "
+                f"enemy={initial_raw.enemy_species_id!r}/{initial_raw.enemy_hp!r}"
+                f"->{raw.enemy_species_id!r}/{raw.enemy_hp!r}."
             )
     if raw.battle_state == 0:
         return
@@ -1091,6 +1098,7 @@ def _selected_turn_effect_observed(
     return (
         current.enemy_species_id != initial.enemy_species_id
         or current.enemy_hp != initial.enemy_hp
+        or current.battler_moves != initial.battler_moves
         or current.enemy_defense_stage != initial.enemy_defense_stage
         or current.battler_hp != initial.battler_hp
         or current.battler_status != initial.battler_status

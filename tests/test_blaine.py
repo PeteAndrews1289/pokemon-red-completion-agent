@@ -33,6 +33,7 @@ from pokemon_red_completion.blaine import (
     _red_training_matchup_acceptable,
     _sell_antidote_before_mansion,
     _team_training_move_slot,
+    _training_attack_pp,
     _training_attack_pp_reserve,
 )
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGameState
@@ -155,6 +156,17 @@ def test_red_training_matchup_requires_extra_margin_for_dux() -> None:
     assert not _red_training_matchup_acceptable(dux, 31, policy)
     assert not _red_training_matchup_acceptable(dux, 20, policy, 0x88)
     assert _training_attack_pp_reserve(dux, policy) == 6
+
+    dux_with_only_fly = replace(
+        dux,
+        moves=(
+            MoveObservation(0x40, 0),
+            MoveObservation(0x1C, 15),
+            MoveObservation(0x0F, 0),
+            MoveObservation(0x13, 15),
+        ),
+    )
+    assert _training_attack_pp(dux_with_only_fly) == 0
 
     dugtrio = replace(dux, species_id=0x76, moves=(MoveObservation(0x5B, 10),))
     assert _training_attack_pp_reserve(dugtrio, policy) == 2

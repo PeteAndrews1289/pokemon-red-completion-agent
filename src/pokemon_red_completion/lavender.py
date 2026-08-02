@@ -14,6 +14,7 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleResourcePolicy,
@@ -53,6 +54,7 @@ TUNNEL_RECOVERY_THRESHOLD = 55
 TRAVERSAL_RECOVERY_THRESHOLD = 30
 BATTLE_RECOVERY_THRESHOLD = 40
 FINAL_TUNNEL_RECOVERY_THRESHOLD = 90
+FINAL_TUNNEL_GRASS_SPECIES = frozenset({0xB9, 0xBA, 0xBC, 0xBD})
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -765,6 +767,7 @@ def run_lavender_chapter(
         FINAL_TUNNEL_RECOVERY_THRESHOLD,
     )
     _cure_tunnel_status_if_present(actions, reader, emulator, run, timing)
+    _prepare_dux_sleep_pivot(actions, reader, emulator, run, timing)
     _trainer(
         actions,
         reader,
@@ -864,6 +867,10 @@ class _PauseForBattleSuperPotion(Exception):
     pass
 
 
+class _PauseForDUXSleepPivot(Exception):
+    pass
+
+
 def _run_lavender_trainer_battle(
     reader: PokemonRedStateReader,
     executor: _CountingExecutor,
@@ -886,16 +893,19 @@ def _run_lavender_trainer_battle(
     starting_selected_pp = starting_pp[move_slot - 1] & 0x3F
 
     def guarded_policy(raw: RawGameState) -> int:
-        hp = raw.first_party_hp or 0
-        max_hp = raw.first_party_max_hp or 0
+        if _should_pivot_sleeping_lead(raw, _party_hp(emulator), finish_with_bubblebeam):
+            raise _PauseForDUXSleepPivot
+        hp = raw.battler_hp or 0
+        max_hp = raw.battler_max_hp or 0
         if (
-            0 < hp < max_hp
+            raw.active_party_index in {None, 0}
+            and 0 < hp < max_hp
             and hp <= BATTLE_RECOVERY_THRESHOLD
             and _bag(emulator).get(ItemId.SUPER_POTION, 0)
         ):
             raise _PauseForBattleSuperPotion
-        moves = raw.first_party_moves
-        pp = raw.first_party_pp
+        moves = raw.battler_moves
+        pp = raw.battler_pp
         if moves is None or pp is None:
             raise LavenderChapterError(f"{label} lacks live move and PP evidence.")
         selected_pp = pp[move_slot - 1] & 0x3F
@@ -904,6 +914,7 @@ def _run_lavender_trainer_battle(
             starting_selected_pp=starting_selected_pp,
             current_selected_pp=selected_pp,
             finish_with_bubblebeam=finish_with_bubblebeam,
+            enemy_species_id=raw.enemy_species_id,
         )
         for candidate in ranked_slots:
             index = candidate - 1
@@ -929,6 +940,19 @@ def _run_lavender_trainer_battle(
                 label=label,
             )
         except BattleRuntimeError as error:
+            if isinstance(error.__cause__, _PauseForDUXSleepPivot):
+                try:
+                    switch_active_battler(
+                        executor,
+                        reader,
+                        emulator,
+                        1,
+                        label=f"{label} DUX sleep pivot",
+                        wait_frames=timing.wait_frames,
+                    )
+                except ProtectedRecoveryError as pivot_error:
+                    raise LavenderChapterError(str(pivot_error)) from pivot_error
+                continue
             if not isinstance(error.__cause__, _PauseForBattleSuperPotion):
                 raise
         _use_battle_super_potion(reader, executor, emulator, run, timing, label)
@@ -943,14 +967,16 @@ def _ranked_lavender_move_slots(
     starting_selected_pp: int,
     current_selected_pp: int,
     finish_with_bubblebeam: bool,
+    enemy_species_id: int | None,
 ) -> tuple[int, ...]:
-    """Spend the evidence move once, then exploit the final Rock matchup."""
+    """Spend the evidence move once, then exploit without feeding resisted Wrap turns."""
 
-    ranked = (
-        (3, move_slot, 1, 4)
-        if finish_with_bubblebeam and current_selected_pp < starting_selected_pp
-        else (move_slot, 3, 1, 4)
-    )
+    if finish_with_bubblebeam and enemy_species_id in FINAL_TUNNEL_GRASS_SPECIES:
+        ranked = (move_slot, 1, 3, 4)
+    elif finish_with_bubblebeam and current_selected_pp < starting_selected_pp:
+        ranked = (3, move_slot, 1, 4)
+    else:
+        ranked = (move_slot, 3, 1, 4)
     return tuple(dict.fromkeys(ranked))
 
 
@@ -1013,6 +1039,46 @@ def _use_battle_super_potion(
             raise LavenderChapterError(f"{label} recovery lost the active battle.")
         _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
     raise LavenderChapterError(f"{label} recovery missed its bounded proof.")
+
+
+def _should_pivot_sleeping_lead(
+    raw: RawGameState,
+    party_hp: tuple[int, ...],
+    enabled: bool,
+) -> bool:
+    """Use DUX's Peck rather than leave a sleeping lead exposed to a Grass specialist."""
+
+    return (
+        enabled
+        and raw.active_party_index == 0
+        and bool((raw.battler_status or 0) & 0x07)
+        and raw.enemy_species_id in FINAL_TUNNEL_GRASS_SPECIES
+        and len(party_hp) > 1
+        and party_hp[1] > 0
+    )
+
+
+def _prepare_dux_sleep_pivot(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: LavenderTiming,
+) -> None:
+    """Make the declared reserve healthy before the final sleep-producing trainer."""
+
+    _swap(executor, reader, emulator, DUX, "final tunnel DUX reserve preparation")
+    _heal_if_below(
+        executor,
+        reader,
+        emulator,
+        run,
+        timing,
+        0,
+        FINAL_TUNNEL_RECOVERY_THRESHOLD,
+    )
+    _cure_tunnel_status_if_present(executor, reader, emulator, run, timing)
+    _swap(executor, reader, emulator, WARTORTLE, "final tunnel Wartortle restoration")
 
 
 def _trainer(

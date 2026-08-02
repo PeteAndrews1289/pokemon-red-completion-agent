@@ -31,10 +31,10 @@ def test_revised_route_preserves_the_unused_lavender_recovery_reserve() -> None:
     assert CERULEAN_STATUS_SUPPLY_COST == 400
     assert CERULEAN_SUPPLY_COST == 1_300
     assert TUNNEL_STATUS_SUPPLY_COST == 200
-    assert LAVENDER_TOP_UP_SUPPLY_COST == 3_700
-    assert LAVENDER_MONEY == 5_003
+    assert LAVENDER_TOP_UP_SUPPLY_COST == 5_100
+    assert LAVENDER_MONEY == 3_603
     assert (
         LAVENDER_SUPER_POTION_RESERVE,
         HIDEOUT_SUPER_POTION_RESERVE,
         TOWER_SUPER_POTION_RESERVE,
-    ) == (10, 6, 0)
+    ) == (11, 6, 0)

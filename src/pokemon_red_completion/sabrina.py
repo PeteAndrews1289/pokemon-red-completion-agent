@@ -58,7 +58,7 @@ SABRINA_PARTY = ((0x26, 38), (0x2A, 37), (0x77, 38), (0x95, 43))
 REGULAR_TRAINER_EVENTS = tuple(range(0x362, 0x369))
 PC_DEPOSIT_ITEMS = (ItemId.SILPH_SCOPE, ItemId.CARD_KEY)
 HYPER_POTION_THRESHOLD = 70
-ALAKAZAM_HYPER_POTION_THRESHOLD = 110
+ALAKAZAM_HYPER_POTION_THRESHOLD = 70
 # The next chapter restocks before its first required battle, so Sabrina may
 # consume the complete held-out reserve when her Alakazam damage requires it.
 MAX_SABRINA_HYPER_POTIONS = 7
@@ -293,10 +293,10 @@ def run_sabrina_chapter(
             break
         if (
             hyper_before - _bag(emulator).get(ItemId.HYPER_POTION, 0)
-            >= MAX_SABRINA_HYPER_POTIONS
+            >= min(MAX_SABRINA_HYPER_POTIONS, hyper_before)
         ):
             raise SabrinaChapterError(
-                f"Sabrina recovery exceeded {MAX_SABRINA_HYPER_POTIONS} Hyper Potions."
+                "Sabrina recovery exhausted its live Hyper Potion reserve."
             )
         _battle_hyper_potion(reader, actions, emulator, timing)
 

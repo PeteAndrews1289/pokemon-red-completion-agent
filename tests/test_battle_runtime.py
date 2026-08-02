@@ -1994,6 +1994,42 @@ def test_faster_opponent_trapping_move_suppresses_selected_turn_without_pp() -> 
     assert runtime.raw.enemy_using_trapping_move is True
 
 
+def test_pp_proof_accepts_an_observed_level_up_move_replacement() -> None:
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
+    initial = runtime.raw
+    confirmations = 0
+
+    def learn_move_after_attack(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.raw = replace(runtime.raw, first_party_pp=(34, 30, 30, 11))
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        else:
+            runtime.raw = replace(
+                runtime.raw,
+                first_party_moves=(0x38, TAIL_WHIP_MOVE_ID, MEGA_PUNCH_MOVE_ID, WATER_GUN_MOVE_ID),
+                first_party_pp=(5, 30, 30, 11),
+            )
+
+    runtime.on_action = learn_move_after_attack
+    _confirm_attack_with_pp_gate(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        initial_raw=initial,
+        slot=1,
+        initial_pp=35,
+        timing=BattleRuntimeTiming(),
+        label="level-up move replacement",
+    )
+
+    assert runtime.raw.first_party_moves[0] == 0x38
+    assert runtime.raw.first_party_pp[0] == 5
+
+
 def test_completion_rechecks_living_lead_before_returning() -> None:
     runtime = FakeRuntime(
         raw=_raw(battle_state=0, hp=0),

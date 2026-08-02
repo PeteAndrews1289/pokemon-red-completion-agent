@@ -6,6 +6,7 @@ from pokemon_red_completion.sabrina import (
     CENTER_TO_GYM,
     CITY_TO_CENTER,
     GYM_TO_SABRINA,
+    HYPER_POTION_THRESHOLD,
     MAX_SABRINA_HYPER_POTIONS,
     PC_DEPOSIT_ITEMS,
     SABRINA_BATTLE_TIMING,
@@ -82,8 +83,8 @@ def test_sabrina_turn_receipts_preserve_party_transitions() -> None:
     assert tuple(turn.move_slot for turn in turns) == (2, 2, 3, 3, 3, 2)
 
 
-def test_sabrina_uses_a_larger_observed_safety_margin_for_alakazam() -> None:
-    assert ALAKAZAM_HYPER_POTION_THRESHOLD == 110
+def test_sabrina_avoids_an_alakazam_recovery_loop_above_the_safe_floor() -> None:
+    assert ALAKAZAM_HYPER_POTION_THRESHOLD == HYPER_POTION_THRESHOLD == 70
     raw = RawGameState(
         game_started=True,
         map_id=MapId.SAFFRON_GYM,
@@ -96,8 +97,9 @@ def test_sabrina_uses_a_larger_observed_safety_margin_for_alakazam() -> None:
     assert not _sabrina_recovery_required(
         replace(raw, enemy_species_id=0x26)
     )
+    assert not _sabrina_recovery_required(replace(raw, enemy_species_id=0x95))
     assert _sabrina_recovery_required(
-        replace(raw, enemy_species_id=0x95)
+        replace(raw, enemy_species_id=0x95, first_party_hp=69)
     )
 
 

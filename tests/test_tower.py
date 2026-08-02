@@ -20,6 +20,7 @@ from pokemon_red_completion.tower import (
     TOWER_CHECKPOINT_COUNT,
     TOWER_FINAL_PARTY,
     TOWER_LAVENDER_TIMING,
+    TOWER_RIVAL_FIELD_RECOVERY_HP_THRESHOLD,
     TowerBattleEvidence,
     TowerChapterReport,
     TowerCheckpoint,
@@ -116,6 +117,7 @@ def test_tower_timing_is_positive_and_bounded() -> None:
     )
     assert DEFAULT_LAVENDER_TIMING.flee_pulses == 20
     assert TOWER_LAVENDER_TIMING.flee_pulses == 64
+    assert TOWER_RIVAL_FIELD_RECOVERY_HP_THRESHOLD == 55
     assert _unknown_flee_action(cancel_for_safety=True) is MacroActionKind.CANCEL
     assert _normalized_run_actions(TOWER_LAVENDER_TIMING) == (
         (MacroActionKind.CANCEL, None, TOWER_LAVENDER_TIMING.wait_frames),

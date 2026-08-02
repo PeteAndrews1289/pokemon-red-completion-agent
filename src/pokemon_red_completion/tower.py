@@ -56,6 +56,7 @@ ROCKET = (0xE6, 0x1E)
 MAROWAK = 0x91
 TOWER_FINAL_PARTY = (0x1C, PROTECTED_PARTY[1], PROTECTED_PARTY[2])
 DUGTRIO_SPECIES_ID = 0x76
+TOWER_RIVAL_FIELD_RECOVERY_HP_THRESHOLD = 55
 BALANCED_CORE_PARTIES = (
     TOWER_FINAL_PARTY,
     (TOWER_FINAL_PARTY[0], TOWER_FINAL_PARTY[1], DUGTRIO_SPECIES_ID),
@@ -467,9 +468,9 @@ def run_tower_chapter(
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "rival", "Defeated mandatory rival")
-    while _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:
+    if _party_hp(emulator)[0] <= TOWER_RIVAL_FIELD_RECOVERY_HP_THRESHOLD:
         if _bag(emulator).get(ItemId.SUPER_POTION, 0) == 0:
-            raise TowerChapterError("Rival recovery exhausted before reaching full HP.")
+            raise TowerChapterError("Rival recovery reserve is unavailable below its safe floor.")
         _use_super_potion(actions, reader, emulator, run, DEFAULT_LAVENDER_TIMING, 0)
         run.potion_inventory.append(_bag(emulator).get(ItemId.SUPER_POTION, 0))
     _move(actions, reader, emulator, run, TOWER_2_TO_3, timing, "Tower 3F")

@@ -264,9 +264,15 @@ identity, manifest, assignment, schedule, and lineage reuse is hard leakage. Rep
 policy-visible semantic states are report-only because distinct hidden timing histories can
 naturally converge on the same observation; novel-visible-state performance is reported
 separately. Preregistration and runtime enforcement are infrastructure, not held-out evidence. The
-first Forest-lineage rehearsal exposed a Route 24 moving-NPC collision at checkpoint 38/312
-without consuming a declared slot. All twelve slots remain pending, and the test partition remains
-unopened until a model and its selection rules are frozen.
+first Forest-lineage rehearsal exposed a Route 24 moving-NPC collision at checkpoint 38/312. The
+repaired crossing passed clean-power qualification and cleared that point under the same schedule;
+the second rehearsal then exposed a trapping-move recovery gap at checkpoint 109/312. Neither run
+consumed a declared slot. Clean diagnostics have since cleared the repaired tunnel, Tower, and
+Sabrina policies, isolated two-turn Fly from the one-turn Mansion grinding contract, and recognized
+level-up move replacement as a valid post-attack observation. The combined source passed a new
+312/312 clean-power Hall-of-Fame replay and is awaiting publication before rehearsal. All twelve
+slots remain pending, and the test partition remains unopened until a model and its selection
+rules are frozen.
 
 ## Milestone 4 — DAgger and selective RL
 

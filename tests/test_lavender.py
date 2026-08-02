@@ -9,6 +9,7 @@ from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.lavender import (
     BATTLE_RECOVERY_THRESHOLD,
     DEFAULT_LAVENDER_TIMING,
+    FINAL_TUNNEL_GRASS_SPECIES,
     FINAL_TUNNEL_RECOVERY_THRESHOLD,
     LAVENDER_CHECKPOINT_COUNT,
     PROTECTED_PARTY,
@@ -69,10 +70,10 @@ def _report() -> LavenderChapterReport:
         parlyz_heals_purchased=2,
         parlyz_heals_used=1,
         parlyz_heals_remaining=1,
-        super_potions_purchased=13,
+        super_potions_purchased=14,
         super_potions_used=4,
-        super_potions_remaining=10,
-        purchase_cost=10900,
+        super_potions_remaining=11,
+        purchase_cost=11600,
         money_remaining=1234,
         route_10_trainer_2_bypassed=True,
         frames_executed=100,
@@ -101,13 +102,83 @@ def test_final_tunnel_policy_spends_bite_evidence_then_exploits_with_bubblebeam(
         starting_selected_pp=25,
         current_selected_pp=25,
         finish_with_bubblebeam=True,
+        enemy_species_id=0xA9,
     ) == (1, 3, 4)
     assert lavender_module._ranked_lavender_move_slots(
         move_slot=1,
         starting_selected_pp=25,
         current_selected_pp=24,
         finish_with_bubblebeam=True,
+        enemy_species_id=0xA9,
     ) == (3, 1, 4)
+    for species in FINAL_TUNNEL_GRASS_SPECIES:
+        assert lavender_module._ranked_lavender_move_slots(
+            move_slot=1,
+            starting_selected_pp=25,
+            current_selected_pp=24,
+            finish_with_bubblebeam=True,
+            enemy_species_id=species,
+        ) == (1, 3, 4)
+
+
+def test_sleeping_lead_pivots_only_to_a_living_dux_against_final_grass() -> None:
+    sleeping = replace(
+        _raw(),
+        active_party_index=0,
+        active_party_status=1,
+        enemy_species_id=0xB9,
+    )
+
+    assert lavender_module._should_pivot_sleeping_lead(sleeping, (50, 30, 20), True)
+    assert not lavender_module._should_pivot_sleeping_lead(sleeping, (50, 0, 20), True)
+    assert not lavender_module._should_pivot_sleeping_lead(sleeping, (50, 30, 20), False)
+    assert not lavender_module._should_pivot_sleeping_lead(
+        replace(sleeping, active_party_status=0),
+        (50, 30, 20),
+        True,
+    )
+    assert not lavender_module._should_pivot_sleeping_lead(
+        replace(sleeping, enemy_species_id=0xA9),
+        (50, 30, 20),
+        True,
+    )
+
+
+def test_final_sleep_reserve_is_prepared_then_restores_the_story_lead(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[tuple[str, object]] = []
+    runtime = object()
+    monkeypatch.setattr(
+        lavender_module,
+        "_swap",
+        lambda *_args, **_kwargs: calls.append(("swap", _args[3])),
+    )
+    monkeypatch.setattr(
+        lavender_module,
+        "_heal_if_below",
+        lambda *_args, **_kwargs: calls.append(("heal", (_args[5], _args[6]))),
+    )
+    monkeypatch.setattr(
+        lavender_module,
+        "_cure_tunnel_status_if_present",
+        lambda *_args, **_kwargs: calls.append(("cure", None)),
+    )
+
+    lavender_module._prepare_dux_sleep_pivot(
+        runtime,
+        runtime,
+        runtime,
+        lavender_module._RunState([], []),
+        DEFAULT_LAVENDER_TIMING,
+    )
+
+    assert calls == [
+        ("swap", lavender_module.DUX),
+        ("heal", (0, FINAL_TUNNEL_RECOVERY_THRESHOLD)),
+        ("cure", None),
+        ("swap", lavender_module.WARTORTLE),
+    ]
 
 
 def test_field_recovery_skips_a_full_hp_target_even_above_its_maximum(
@@ -224,10 +295,10 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
         "parlyz_heals_purchased": 2,
         "parlyz_heals_used": 1,
         "parlyz_heals_remaining": 1,
-        "super_potions_purchased": 13,
+        "super_potions_purchased": 14,
         "super_potions_used": 4,
-        "super_potions_remaining": 10,
-        "purchase_cost": 10900,
+        "super_potions_remaining": 11,
+        "purchase_cost": 11600,
         "money_remaining": 1234,
     }
     assert public["route_10_trainer_2_bypassed"] is True

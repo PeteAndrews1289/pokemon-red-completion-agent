@@ -42,11 +42,15 @@ battle-plan identities remain metadata and are not move-ranker features.
 The exact source/configuration commit must be committed and pushed before any execution. A
 registry-declared, disjoint `--schedule-dry-run` must then successfully attest all 68 battles
 before slot `01`. That rehearsal is `unassigned`, has `attempt.counted=false`, and is excluded from
-every partition and performance denominator. The first Forest-lineage rehearsal applied the
-declared Cerulean-rival offset and exposed a moving-NPC collision at the Route 24 entrance at
-checkpoint 38/312. It did not qualify or consume a campaign slot; all twelve declared slots remain
-pending while the observation-driven corridor fix receives a new source identity and clean-power
-qualification.
+every partition and performance denominator. The first Forest-lineage rehearsal exposed a
+moving-NPC collision at the Route 24 entrance at checkpoint 38/312. The repaired corridor passed
+clean-power qualification and cleared that checkpoint under the same schedule, but the second
+rehearsal stopped at checkpoint 109/312 when a final Rock Tunnel trapping sequence fainted the
+lead above the old 40-HP recovery gate. Neither attempt qualified or consumed a campaign slot; all
+twelve declared slots remain pending. Clean diagnostics have since hardened the tunnel, Tower,
+Sabrina recovery, and the Mansion's one-turn grinding policy. The combined source passed a new
+312/312 clean-power Hall-of-Fame replay and must now receive a committed, pushed source identity
+before the rehearsal is retried.
 
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
 schedule, episode, manifest, and 68/68 offline audit. Every counted slot reopens and re-audits that

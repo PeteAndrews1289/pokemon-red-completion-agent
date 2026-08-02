@@ -76,7 +76,7 @@ def _report() -> CeladonChapterReport:
         party_hp=(81, 52, 37),
         party_max_hp=(81, 52, 37),
         party_status=(0, 0, 0),
-        super_potions_remaining=10,
+        super_potions_remaining=11,
         repels_remaining=0,
         money_before=5_003,
         money_remaining=5_333,
@@ -159,7 +159,7 @@ def test_celadon_public_report_exposes_exact_route_evidence() -> None:
         }
     ]
     assert public["inventory"] == {
-        "super_potions_remaining": 10,
+        "super_potions_remaining": 11,
         "repels_remaining": 0,
         "money_before": 5_003,
         "money_remaining": 5_333,

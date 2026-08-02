@@ -60,7 +60,7 @@ def _report() -> HideoutChapterReport:
         lift_key_carried=True,
         silph_scope_carried=True,
         super_potions_used=3,
-        super_potions_remaining=7,
+        super_potions_remaining=8,
         party_hp=(86, 52, 37),
         party_max_hp=(86, 52, 37),
         party_status=(0, 0, 0),
@@ -118,7 +118,7 @@ def test_hideout_report_accepts_conserved_surplus_recovery_inventory() -> None:
     report = replace(
         _report(),
         super_potions_used=2,
-        super_potions_remaining=8,
+        super_potions_remaining=9,
     )
 
     assert report.passed
@@ -134,7 +134,7 @@ def test_hideout_public_report_discloses_bug_and_assistance_scope() -> None:
         "lift_key_carried": True,
         "silph_scope_carried": True,
         "super_potions_used": 3,
-        "super_potions_remaining": 7,
+        "super_potions_remaining": 8,
         "money_before": 5_333,
         "money_remaining": 10_814,
     }

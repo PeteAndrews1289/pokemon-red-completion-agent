@@ -418,8 +418,12 @@ lineages remain hard leakage.
    infrastructure; the fitting lane has not executed because collection is pending.**
 18. Commit and push the exact source/configuration state, then complete the disjoint, unassigned,
    non-counted 68/68 schedule dry run before slot `01`. **Pending; the first Forest-lineage
-   rehearsal exposed a Route 24 moving-NPC collision at checkpoint 38/312 and consumed no declared
-   slot. All twelve slots remain pending while the bounded observation-driven fix is requalified.**
+   rehearsal exposed a Route 24 moving-NPC collision at checkpoint 38/312. The qualified repair
+   cleared that point, but the second rehearsal exposed a final Rock Tunnel trapping-recovery gap
+   at checkpoint 109/312. Neither attempt consumed a declared slot; all twelve remain pending while
+   the type-aware move, full-party sleep pivot, Tower reserve, Sabrina recovery, and one-turn
+   Mansion grinding fixes are committed and pushed after their successful 312/312 clean-power
+   Hall-of-Fame replay.**
 19. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
 20. Train a small behavior-cloning baseline per specialist.

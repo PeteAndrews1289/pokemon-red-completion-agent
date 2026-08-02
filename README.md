@@ -376,10 +376,18 @@ synchronously persisted before play, so a shutdown cannot erase a one-shot attem
 Policy-visible semantic overlap across partitions is disclosed but is not hard leakage by
 itself; copied identities, manifests, assignments, schedules, or lineages are.
 
-The first Forest-lineage rehearsal applied its declared Cerulean-rival offset, then exposed a
-moving-NPC collision at the Route 24 entrance at checkpoint 38/312. It did not qualify or consume a
-declared slot. All twelve slots remain pending and the test partition remains unopened, so there
-is still no held-out or promoted-policy result.
+The first Forest-lineage rehearsal exposed a moving-NPC collision at the Route 24 entrance at
+checkpoint 38/312. The repaired crossing then passed clean-power qualification and cleared the
+former failure under the same rehearsal schedule. That second rehearsal reached checkpoint
+109/312 before a final Rock Tunnel trapping sequence crossed the battle policy's 40-HP recovery
+gate and fainted the lead. Neither rehearsal qualified or consumed a declared slot. Subsequent
+clean diagnostics hardened the tunnel with type-aware attacks and a prepared DUX sleep pivot,
+removed a wasteful Tower top-off, broke an Alakazam healing loop, and excluded two-turn Fly from
+the one-turn Mansion grinding policy. The combined source then passed an uninterrupted clean-power
+replay at **312/312 checkpoints**, entering the Hall of Fame after **84,632,189 frames**. It must
+still be committed, pushed, and bound to a regenerated registry before the rehearsal is retried.
+All twelve slots remain pending and the test partition remains unopened, so there is still no
+held-out or promoted-policy result.
 
 ## Evidence and project status
 

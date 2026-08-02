@@ -155,7 +155,9 @@ STRENGTH_MOVE_ID = 0x46
 FIELD_MOVE_IDS = frozenset({CUT_MOVE_ID, DIG, FLY_MOVE_ID, SURF_MOVE_ID, STRENGTH_MOVE_ID})
 TRAINING_MOVE_IDS = {
     BLASTOISE_SPECIES_ID: (SURF_MOVE_ID, 0x3A, STRENGTH_MOVE_ID, 0x82),
-    DUX_SPECIES_ID: (CUT_MOVE_ID, 0x40, FLY_MOVE_ID),
+    # Fly's two-turn state can spend PP before its delayed semantic effect is
+    # observable.  Keep it for field travel, but grind with one-turn Cut/Peck.
+    DUX_SPECIES_ID: (CUT_MOVE_ID, 0x40),
     DIGLETT_SPECIES_ID: (DIG,),
     DUGTRIO_SPECIES_ID: (DIG,),
     # Snorlax replaces its early Headbutt as the long curriculum accepts

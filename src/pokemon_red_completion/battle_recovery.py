@@ -35,12 +35,67 @@ class ProtectedRecoveryError(RuntimeError):
 
 
 PROTECTED_RECOVERY_MAX_ATTACK_PULSES = 96
+PARTY_SUBMENU_SWITCH = 0
 
 
 def first_living_reserve(party_hp: tuple[int, ...]) -> int | None:
     """Return the first living non-lead party slot, if one exists."""
 
     return next((index for index, hp in enumerate(party_hp[1:], start=1) if hp > 0), None)
+
+
+def switch_active_battler(
+    actions: ActionExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    party_index: int,
+    *,
+    expected_battle_state: int = 2,
+    label: str,
+    wait_frames: int = 180,
+) -> None:
+    """Switch to one living party member through a fully observed battle-menu gate."""
+
+    party = _party_hp(emulator)
+    raw = reader.read()
+    if (
+        not 0 <= party_index < len(party)
+        or party[party_index] <= 0
+        or raw.battle_state != expected_battle_state
+    ):
+        raise ProtectedRecoveryError(f"{label} lacks a living in-battle switch target.")
+    if raw.active_party_index == party_index:
+        return
+
+    _select_battle_main_command(actions, reader, 2, wait_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+    _select_cursor(actions, emulator, party_index, wait_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+    for _ in range(12):
+        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) == PARTY_SUBMENU_SWITCH:
+            break
+        _pulse(actions, MacroActionKind.MOVE, "up", 120, wait_frames)
+    else:
+        raise ProtectedRecoveryError(f"{label} could not select the party SWITCH command.")
+    _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+
+    for pulse_index in range(48):
+        settled = reader.read()
+        if _party_hp(emulator)[party_index] <= 0:
+            raise ProtectedRecoveryError(f"{label} target fainted during the switch.")
+        if settled.battle_state != expected_battle_state:
+            raise ProtectedRecoveryError(f"{label} left its active battle during the switch.")
+        if (
+            settled.active_party_index == party_index
+            and reader.read_battle_menu_state(settled).phase is BattleMenuPhase.MAIN
+        ):
+            return
+        _pulse(
+            actions,
+            MacroActionKind.CANCEL if (pulse_index + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            wait_frames=wait_frames,
+        )
+    raise ProtectedRecoveryError(f"{label} did not return to MAIN with its selected battler.")
 
 
 def protected_lead_recovery(
