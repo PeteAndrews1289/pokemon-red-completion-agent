@@ -42,7 +42,11 @@ Potions and one Antidote for downstream routes. That replay then reached the Roc
 Drowzee sleep returned to MAIN between suppressed turns and exposed a dialogue-only recovery
 assumption. The shared battle runtime now normalizes MAIN to FIGHT and MOVE to the latched legal
 slot on every sleeping turn while preserving the exact unchanged-PP proof. The complete v4
-rehearsal is required before any v4 counted slot can begin.
+rehearsal then cleared Rocket, both Route 6 trainers, and every earlier repair before the S.S.
+Anne rival fainted Wartortle with Ivysaur at only 3/57 HP. The route now buys and carries one
+additional Potion through every bounded handoff, giving that adaptive rival controller two
+recoveries without making either use mandatory. The complete v4 rehearsal is still required
+before any v4 counted slot can begin.
 
 Historically, the v3 registry had twelve fresh counted seeds. Its
 uncounted dry seed `12001` deliberately replays the exact schedule that exposed the v2 failure;
@@ -242,13 +246,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `4504de35a901c9962cddf509f2bb31d52b459c5d9c74a134fa6e426ca07e19f1` |
-| Source bundle SHA-256 | `dd6d7ec9923810a169ad093143021ba4b03336608acac69cf4ac4db0ee85ed8e` |
+| Registry SHA-256 | `efcade175e72d50c3ecca4b752153b711c445d1211df11c96bc49785c8618d3f` |
+| Source bundle SHA-256 | `e856d236091d3f5d7982e4c1825b502b45d3566782139085a5d1a7ccf859164c` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `1c2e6500e7153c18576917fea40c68be6593b135cf73d66e4f304ea03920aadf` |
+| Teacher execution SHA-256 | `d866ec7cc3b99f86a99d453b35bab6c8730d6fd124fd99b608ffad71739d6851` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `cd8fe8a2cd7f35a10b078f22c16bce762d08485125fa89929a31fb189f647c55` |
+| Slot `01` assignment ID | `3e8f34a65478bb30c2a807b99c82f9be207f61a5fa097bab398a2a948af93502` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

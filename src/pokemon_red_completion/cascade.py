@@ -71,17 +71,17 @@ CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS = {
     RATTATA_SPECIES_ID: 25,
     BULBASAUR_SPECIES_ID: 30,
 }
-CERULEAN_RIVAL_MAX_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE + 3
+CERULEAN_RIVAL_MAX_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE + 4
 POTION_HEAL_AMOUNT = 20
 TM01_FIELD_MENU_CLOSE_PULSES = 2
-ROUTE_24_RECOVERY_POTION_RESERVE = 5
+ROUTE_24_RECOVERY_POTION_RESERVE = 6
 ROUTE_24_CENTER_RECOVERY_POSITION = 2
 ROUTE_24_ACCURACY_RECOVERY_POSITION = 3
 ROUTE_24_ACCURACY_RECOVERY_HP = 40
-ROUTE_25_RECOVERY_POTION_RESERVE = 4
-ROCKET_THIEF_POTION_RESERVE = 3
-VERMILION_ROUTE_6_POTION_RESERVE = 2
-SS_ANNE_RIVAL_POTION_RESERVE = 1
+ROUTE_25_RECOVERY_POTION_RESERVE = 5
+ROCKET_THIEF_POTION_RESERVE = 4
+VERMILION_ROUTE_6_POTION_RESERVE = 3
+SS_ANNE_RIVAL_POTION_RESERVE = 2
 FIELD_ITEM_MENU_CLOSE_PULSES = 4
 CERULEAN_GYM_TRAINER_MOVE_SLOT = 3
 ROUTE_25_NON_HIKER_MOVE_SLOT = 3
@@ -1683,7 +1683,7 @@ def _purchase_cerulean_supplies(
     emulator: EmulatorState,
     timing: CascadeTiming,
 ) -> None:
-    """Buy three extra Potions plus bounded poison and sleep contingencies."""
+    """Buy four extra Potions plus bounded poison and sleep contingencies."""
 
     before = reader.read()
     if (
@@ -1759,7 +1759,7 @@ def _purchase_cerulean_supplies(
     buy_one(
         shop_index=1,
         item=ItemId.POTION,
-        purchase_quantity=3,
+        purchase_quantity=4,
         expected_quantity=CERULEAN_RIVAL_MAX_POTION_RESERVE,
         label="Potions",
     )

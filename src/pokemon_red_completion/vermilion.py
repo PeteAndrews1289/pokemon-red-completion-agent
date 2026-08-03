@@ -1234,7 +1234,7 @@ def _run_rocket_thief_with_potion(
     """Spend at most one retained Potion when live Rocket damage requires it."""
 
     if _bag_quantity(emulator, ItemId.POTION) != ROCKET_THIEF_POTION_RESERVE:
-        raise VermilionChapterError("Rocket thief lacks its three-Potion recovery boundary.")
+        raise VermilionChapterError("Rocket thief lacks its planned Potion recovery boundary.")
 
     def guarded_policy(raw: RawGameState) -> int:
         if (

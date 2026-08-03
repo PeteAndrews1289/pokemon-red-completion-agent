@@ -462,7 +462,7 @@ def test_rocket_policy_uses_exactly_one_bite_against_drowzee() -> None:
 def test_rocket_recovery_consumes_the_extra_potion_and_reuses_intent(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    quantity = 3
+    quantity = vermilion.ROCKET_THIEF_POTION_RESERVE
     calls = 0
     intents = []
     terminal = RawGameState(
@@ -522,7 +522,7 @@ def test_rocket_recovery_consumes_the_extra_potion_and_reuses_intent(
     )
 
     assert observed is terminal
-    assert quantity == 2
+    assert quantity == vermilion.VERMILION_ROUTE_6_POTION_RESERVE
     assert calls == 2
     assert intents[0] is intents[1]
     assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
@@ -541,7 +541,11 @@ def test_rocket_victory_may_preserve_the_extra_potion_when_recovery_is_not_neede
         first_party_hp=45,
         first_party_max_hp=66,
     )
-    monkeypatch.setattr(vermilion, "_bag_quantity", lambda *_args: 3)
+    monkeypatch.setattr(
+        vermilion,
+        "_bag_quantity",
+        lambda *_args: vermilion.ROCKET_THIEF_POTION_RESERVE,
+    )
     monkeypatch.setattr(
         vermilion,
         "run_adaptive_trainer_battle",
@@ -571,7 +575,11 @@ def test_route_6_victory_may_preserve_potion_when_recovery_is_not_needed(
         first_party_hp=45,
         first_party_max_hp=66,
     )
-    monkeypatch.setattr(vermilion, "_bag_quantity", lambda *_args: 2)
+    monkeypatch.setattr(
+        vermilion,
+        "_bag_quantity",
+        lambda *_args: vermilion.VERMILION_ROUTE_6_POTION_RESERVE,
+    )
     monkeypatch.setattr(
         vermilion,
         "run_adaptive_trainer_battle",
