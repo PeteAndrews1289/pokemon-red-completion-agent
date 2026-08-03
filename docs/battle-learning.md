@@ -71,6 +71,10 @@ That correction advanced the rehearsal to Koga Gym, where Juggler 4 fainted the 
 teacher now pivots to the healthiest living reserve at the observed 50-HP safety floor and ranks
 that active reserve's own legal moves; this teaches party-role handoff without spending another
 item.
+The resulting rehearsal reached Sabrina at checkpoint 261/312. A Hyper Potion was used, but the
+shared verifier allowed only 24 single-frame acknowledgements for the opponent's reply and never
+observed MAIN. The item primitive now waits up to 720 cancel-safe frames; CANCEL advances text while
+remaining inert on MAIN, preventing a second accidental ITEM confirmation.
 
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
 schedule, episode, manifest, and 68/68 offline audit. Every counted slot reopens and re-audits that

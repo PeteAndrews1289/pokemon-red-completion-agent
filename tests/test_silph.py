@@ -6,6 +6,7 @@ import pytest
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.observation import Badge, EventFlag, ItemId, MapId, RawGameState
 from pokemon_red_completion.silph import (
+    BATTLE_ITEM_SETTLE_PULSES,
     DEFAULT_SILPH_TIMING,
     MART_2F_GIRL_X,
     MART_2F_GIRL_Y,
@@ -100,6 +101,7 @@ def _report() -> SilphChapterReport:
 
 def test_silph_timing_is_positive_and_bounded() -> None:
     assert SILPH_PC_DEPOSIT_ITEMS == (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
+    assert BATTLE_ITEM_SETTLE_PULSES == 720
     for field in fields(SilphTiming):
         assert getattr(DEFAULT_SILPH_TIMING, field.name) > 0
         with pytest.raises(ValueError, match=field.name):

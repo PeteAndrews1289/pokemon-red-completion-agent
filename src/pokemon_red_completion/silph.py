@@ -218,6 +218,7 @@ class SilphTiming:
 
 
 DEFAULT_SILPH_TIMING = SilphTiming()
+BATTLE_ITEM_SETTLE_PULSES = 720
 
 
 @dataclass(frozen=True, slots=True)
@@ -1604,7 +1605,7 @@ def _battle_x_special(
         LavenderTiming(wait_frames=timing.menu_frames),
     )
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.battle_item_frames)
-    for _ in range(24):
+    for _ in range(BATTLE_ITEM_SETTLE_PULSES):
         current = reader.read()
         if (
             current.battle_state == 2
@@ -1701,12 +1702,19 @@ def _battle_healing_item(
             and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
         ):
             break
-        # Sample after each single-frame acknowledgement. A long wait here can
-        # miss the brief return to MAIN, issue another confirmation into ITEM,
-        # and consume a second potion before the verifier observes the bag.
-        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=1)
+        # CANCEL advances Gen I battle text but is inert on MAIN. Sampling after
+        # each frame therefore tolerates long enemy replies without confirming
+        # ITEM again during the first observable MAIN frame.
+        _pulse(actions, MacroActionKind.CANCEL, timing, frames=1)
     else:
-        raise SilphChapterError(f"{label} did not return to the MAIN battle menu.")
+        current = reader.read()
+        phase = reader.read_battle_menu_state(current).phase
+        raise SilphChapterError(
+            f"{label} did not return to the MAIN battle menu: "
+            f"battle_state={current.battle_state}, phase={phase.value}, "
+            f"hp={current.battler_hp}/{current.battler_max_hp}, "
+            f"quantity={_bag(emulator).get(item, 0)}."
+        )
     after = _bag(emulator).get(item, 0)
     if before - after == 1:
         return

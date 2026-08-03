@@ -294,6 +294,9 @@ $1,000 before restoring the full downstream reserve; no counted slot was consume
 That repair moved the rehearsal to checkpoint 202/312, where Koga Gym Juggler 4 fainted the lead.
 The current teacher pivots at the 50-HP floor to the healthiest living reserve and uses that active
 party member's own legal moves. Another uncounted rehearsal is required before collection opens.
+That change advanced the route to Sabrina at checkpoint 261/312, where the Hyper Potion verifier's
+24-frame settle window expired during the opponent reply. The shared battle-item primitive now has
+a bounded 720-frame cancel-safe window and richer failure evidence. Rehearsal remains the gate.
 
 ## Milestone 4 — DAgger and selective RL
 
