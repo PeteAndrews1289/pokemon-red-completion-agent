@@ -525,6 +525,14 @@ def run_cascade_chapter(
             f"Route 24 trainer {trainer_index}",
         )
 
+    # Spend the planned Route 24 field Potion before the Rocket instead of
+    # after it.  A held-out schedule left the lead at two HP after the fifth
+    # bridge trainer; waiting until victory made the recovery unreachable.
+    _use_route_24_recovery_potion(
+        reader,
+        chapter_executor,
+        emulator,
+    )
     _move(
         chapter_executor,
         reader,
@@ -566,11 +574,6 @@ def run_cascade_chapter(
         "Defeated the Nugget Rocket",
         records,
         progress,
-        emulator,
-    )
-    _use_route_24_recovery_potion(
-        reader,
-        chapter_executor,
         emulator,
     )
     _recover_route_24(

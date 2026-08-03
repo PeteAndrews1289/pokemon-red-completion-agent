@@ -24,6 +24,11 @@ failed at the Rocket thief as documented below. V2 is therefore retired and rema
 historical evidence. This v3 registry has twelve fresh, previously unexecuted counted seeds. Its
 uncounted dry seed `12001` deliberately replays the exact schedule that exposed the v2 failure;
 none of its counted train, validation, or test seeds reuse a v1 or v2 assignment.
+The first v3 rehearsal reached checkpoint 44 with Wartortle at 2/56 HP before the Nugget Rocket's
+Ekans trapped and fainted it. The failed rehearsal remains private and uncounted. The already
+budgeted Route 24 Potion is now consumed before that battle instead of after victory, preserving
+the same four-Potion downstream handoff. The corrected source must repeat all 312 checkpoints and
+attest all 68 battle offsets before any counted v3 slot can begin.
 
 The now-retired v2 registry began as a prospective campaign with fresh counted seeds.
 Its first uncounted dry run reached checkpoint 70 before a walking Cerulean NPC blocked the Route 6
@@ -156,13 +161,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `281aed98ff750fdbe356e8d52109cff1c7e8d012de9913f807208afa1e7bc9ce` |
-| Source bundle SHA-256 | `75a0f6ba212959c0685568e19fb1a04a6936a63d31bbe0cc100216f0284a5aba` |
+| Registry SHA-256 | `66d890434c599e311239a50dc3433a9f91ade988ec8b501e08fd77d5aaaf7580` |
+| Source bundle SHA-256 | `75265a353ad6a44f4461f77e1cd25dca3b26b28156f8b193c89735e488974c58` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `5645b6f4d9e1856c46e6eb6cb3d6d24b8725abbd7f0656a336ed720acc4b5a76` |
+| Teacher execution SHA-256 | `9382095b1004c671935e73e9b34898f947655922a1a4b3ab20cc2f991176762c` |
 | Dry-run schedule SHA-256 | `20af81ca8cf4c92f45c4fd2d8ed2019dee6b51e6ebe29e384f90824525d5c484` |
-| Slot `01` assignment ID | `b328b8788260641bd9c80e46e6447814a0588f46f70385b7b0e8fce0101454b7` |
+| Slot `01` assignment ID | `0a17bccdbd295621c6f10c7d37332fbacbffc0db271ad78308674e94c05b56b2` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
