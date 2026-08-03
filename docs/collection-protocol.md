@@ -55,6 +55,11 @@ trainer's Bellsprout to 3/57 HP and then fainted inside repeated Wrap. The two f
 trainers now enable the existing status-protection role pivot: once status makes DUX unavailable,
 the healthy story lead owns the matchup for the rest of that battle instead of immediately
 switching back into the impaired specialist.
+That replay cleared all nine Tunnel trainers and reached Lavender, but the resource contract
+correctly rejected zero remaining Awakenings: DUX had been awakened immediately during an earlier
+battle despite a healthy reserve, then needed the second item at a later field boundary. Status
+recovery now prioritizes the healthy party pivot and spends an Awakening only when no safe reserve
+exists, preserving the declared Pokémon Tower contingency.
 
 Historically, the v3 registry had twelve fresh counted seeds. Its
 uncounted dry seed `12001` deliberately replays the exact schedule that exposed the v2 failure;
@@ -254,13 +259,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `2670656add45d996b826c11f45067c10e7588c606799436525691d192e164c63` |
-| Source bundle SHA-256 | `e25be7e57c0af3cf3e6d3b594c6bfe6bb7dae543a781560491f8f006532d0a6e` |
+| Registry SHA-256 | `ffa40fa35addfa549b746f47d4899a5c82ea3d4b1ddb17bd93caa15b61085c8e` |
+| Source bundle SHA-256 | `5c593db23e67e59270e94d12ae3664c1444fe0cbc52483d6042727d171093f40` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `fa81c13ff7a0931243c864aab8d53f4703d0e2d998c3ac156b85a28275ab8cc1` |
+| Teacher execution SHA-256 | `ba01be0ae945294bde21c5b7c9371179ea584979839cc0d216b38c3eb7d6cd73` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `9f4e8aa402b0c9ee068f42d1aed620a71396a4c3f1b6e6f73da82cfe3eaf5ba1` |
+| Slot `01` assignment ID | `878a412fe1e9e5986742c498524c6d7044129332d82145f8cde7de66fc4befec` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

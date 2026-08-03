@@ -994,19 +994,16 @@ def _run_lavender_trainer_battle(
     dux_status_escaped = False
 
     def guarded_policy(raw: RawGameState) -> int:
-        if (
-            protect_dux_status
-            and (raw.battler_status or 0) & 0x07
-            and _bag(emulator).get(ItemId.AWAKENING, 0) > 1
-        ):
-            raise _PauseForBattleAwakening
-        pivot_target = _dux_status_escape_target(
+        status_recovery, pivot_target = _dux_status_recovery_strategy(
             raw,
             _party_hp(emulator),
             protect_dux_status,
+            awakenings=_bag(emulator).get(ItemId.AWAKENING, 0),
         )
-        if pivot_target is not None:
+        if status_recovery == "pivot" and pivot_target is not None:
             raise _PauseForFinalTunnelPivot(pivot_target)
+        if status_recovery == "awakening":
+            raise _PauseForBattleAwakening
         pivot_target = _final_tunnel_pivot_target(
             raw,
             _party_hp(emulator),
@@ -1315,6 +1312,23 @@ def _dux_status_escape_target(
     ):
         return None
     return 1
+
+
+def _dux_status_recovery_strategy(
+    raw: RawGameState,
+    party_hp: tuple[int, ...],
+    enabled: bool,
+    *,
+    awakenings: int,
+) -> tuple[str, int | None]:
+    """Prefer a healthy role pivot before spending the protected Tower reserve."""
+
+    pivot_target = _dux_status_escape_target(raw, party_hp, enabled)
+    if pivot_target is not None:
+        return "pivot", pivot_target
+    if enabled and (raw.battler_status or 0) & 0x07 and awakenings > 1:
+        return "awakening", None
+    return "none", None
 
 
 def _prepare_dux_sleep_pivot(

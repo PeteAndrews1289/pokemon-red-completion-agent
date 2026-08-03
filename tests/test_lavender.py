@@ -174,6 +174,27 @@ def test_status_locked_dux_escapes_to_a_living_story_lead() -> None:
     assert lavender_module._dux_status_escape_target(asleep, (20, 50, 30), False) is None
 
 
+def test_status_recovery_prefers_a_healthy_pivot_before_spending_awakening() -> None:
+    asleep = replace(
+        _raw(),
+        active_party_index=0,
+        active_party_status=0x05,
+    )
+
+    assert lavender_module._dux_status_recovery_strategy(
+        asleep,
+        (20, 50, 30),
+        True,
+        awakenings=2,
+    ) == ("pivot", 1)
+    assert lavender_module._dux_status_recovery_strategy(
+        asleep,
+        (20, 0, 30),
+        True,
+        awakenings=2,
+    ) == ("awakening", None)
+
+
 def test_story_lead_uses_bite_after_a_dux_grass_status_escape() -> None:
     assert BULBASAUR_SPECIES_ID in FINAL_TUNNEL_GRASS_SPECIES
     assert lavender_module._ranked_lavender_move_slots(
