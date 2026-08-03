@@ -58,6 +58,7 @@ from pokemon_red_completion.surge import (
     _select_wild_capture_helper,
     _wild_capture_policy,
     _wild_weakening_settle_action,
+    _wild_weakening_turn_result,
 )
 
 
@@ -209,6 +210,26 @@ def test_weakening_settle_cancels_a_returned_move_menu() -> None:
     assert (
         _wild_weakening_settle_action(BattleMenuPhase.UNKNOWN, 0)
         is MacroActionKind.CONFIRM
+    )
+
+
+def test_weakening_miss_settles_without_requesting_another_attack() -> None:
+    common = {
+        "expected_species_id": KAKUNA_SPECIES_ID,
+        "before_enemy_hp": 22,
+        "current_species_id": KAKUNA_SPECIES_ID,
+        "pp_spent": True,
+        "phase": BattleMenuPhase.MAIN,
+    }
+
+    assert _wild_weakening_turn_result(current_enemy_hp=22, **common) is False
+    assert _wild_weakening_turn_result(current_enemy_hp=20, **common) is True
+    assert (
+        _wild_weakening_turn_result(
+            current_enemy_hp=22,
+            **{**common, "phase": BattleMenuPhase.MOVE},
+        )
+        is None
     )
 
 

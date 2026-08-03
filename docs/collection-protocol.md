@@ -332,13 +332,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `1371e884bef0272499648d27844b1f79cb4fa0bd854b07cf67a85647824ed932` |
-| Source bundle SHA-256 | `5c47f0ea035cf02d82ff5930c7464ac191ce3192ed5a424625a6548734ccd251` |
+| Registry SHA-256 | `e680b71fdb81fcc7e382ae73acdb76d14358bba94cc254ee8dbd6cd081812d1b` |
+| Source bundle SHA-256 | `cc86f1927f9492157a566f90b006883393b72b6ce18b785da51db9afe5ccbbdc` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `fac4d8544d7e75d29751efdbe91d3566ca1682d48052408b85f1def036caeff0` |
+| Teacher execution SHA-256 | `c662ffa46003a10b3e4cf76bbb5ffda10f86eeb044a7f03370c6af1c370485a8` |
 | Dry-run schedule SHA-256 | `44f7f521126553fbc94a7868b65bfe87237ef740dba8965ad401c9043b6c7e28` |
-| Slot `01` assignment ID | `6dfbb0909ee8aaabc51ae348b5e9abfc64f4fcf50bb5d7658dbfed655c6b7fe5` |
+| Slot `01` assignment ID | `57d8c104a2f61d573a7b17ea5f3a05f7f6bd526e84d372ba7fe9fbdfb6738e53` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -722,3 +722,11 @@ that stale move selection issued additional attacks and correctly violated the e
 contract. MOVE now receives CANCEL back to MAIN; only UNKNOWN dialogue receives bounded
 confirmation. A subsequent attack can be selected only by the outer policy after it replans from
 the newly observed HP ratio. This qualification attempt is private and uncounted.
+
+The cancel-aware replay then observed an ordinary Tackle miss against Kakuna: exactly one PP was
+spent, target HP remained 22/22, and stable MAIN returned. The verifier had no terminal miss state,
+so it waited for damage until its finite settling bound expired. PP loss plus stable MAIN now proves
+that the one selected turn completed; unchanged target HP classifies it as a miss. The adapter
+restores the protected lead, flees, and asks the area policy for a fresh encounter without claiming
+damage or capture progress. Regression cases separate hit, miss, and pending MOVE states. This
+qualification attempt is also private and uncounted.

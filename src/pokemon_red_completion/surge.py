@@ -1600,6 +1600,28 @@ def _wild_weakening_settle_action(
     return MacroActionKind.CANCEL if (pulse_index + 1) % 4 == 0 else MacroActionKind.CONFIRM
 
 
+def _wild_weakening_turn_result(
+    *,
+    expected_species_id: int,
+    before_enemy_hp: int,
+    current_species_id: int | None,
+    current_enemy_hp: int | None,
+    pp_spent: bool,
+    phase: BattleMenuPhase,
+) -> bool | None:
+    """Return hit/miss after one selected move settles, or None while pending."""
+
+    if (
+        current_species_id != expected_species_id
+        or current_enemy_hp is None
+        or current_enemy_hp <= 0
+        or not pp_spent
+        or phase is not BattleMenuPhase.MAIN
+    ):
+        return None
+    return current_enemy_hp < before_enemy_hp
+
+
 class _LiveWildCorridorSurveyExecutor:
     """Bind a reversible two-endpoint wild corridor to the shared area loop."""
 
@@ -2067,14 +2089,16 @@ def _weaken_wild_capture_once(
             if current.party_species_ids != before_party or not pp_spent:
                 raise SurgeChapterError(f"{label} weakening knockout changed protected state.")
             return False
-        if (
-            current.battle_state == 1
-            and current.enemy_species_id == before.enemy_species_id
-            and current.enemy_hp is not None
-            and 0 < current.enemy_hp < before_enemy_hp
-            and pp_spent
-            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
-        ):
+        phase = reader.read_battle_menu_state(current).phase
+        turn_result = _wild_weakening_turn_result(
+            expected_species_id=before.enemy_species_id,
+            before_enemy_hp=before_enemy_hp,
+            current_species_id=current.enemy_species_id,
+            current_enemy_hp=current.enemy_hp,
+            pp_spent=pp_spent,
+            phase=phase,
+        )
+        if current.battle_state == 1 and turn_result is not None:
             _switch_wild_capture_party_slot(
                 emulator,
                 executor,
@@ -2084,7 +2108,10 @@ def _weaken_wild_capture_once(
                 current.enemy_hp,
                 f"{label} protected lead",
             )
-            return True
+            if turn_result:
+                return True
+            _flee(executor, reader, reader.read())
+            return False
         if (current.battler_hp or 0) <= 0:
             landed = (
                 current.enemy_hp is not None and 0 < current.enemy_hp < before_enemy_hp and pp_spent
@@ -2101,7 +2128,6 @@ def _weaken_wild_capture_once(
                 return True
             _flee(executor, reader, restored)
             return False
-        phase = reader.read_battle_menu_state(current).phase
         if phase is BattleMenuPhase.MOVE:
             # A completed turn can return through the previously selected move
             # menu. Cancel back to MAIN so one weakening proof cannot issue a
