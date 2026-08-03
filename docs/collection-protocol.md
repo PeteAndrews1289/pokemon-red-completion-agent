@@ -67,6 +67,11 @@ move; once that evidence exists, the adaptive type/status pivots resume normally
 If the aggregate Lavender contract still fails after its individual gates, the retained private
 diagnostic now reports the complete public-safe trainer, inventory, party, and route ledger rather
 than a generic rejection, allowing the next repair to target the exact invariant.
+That ledger proved all eleven trainer lessons, seven wild escapes, party state, healing, Repels,
+and route gates passed; only the Tower reserve failed after two legitimate Awakening uses, with
+`$1,761` still available after every other restock. The bounded Tunnel purchase is therefore two
+Awakenings instead of one, producing a three-item total reserve and preserving one after the
+observed two-use lineage.
 
 Historically, the v3 registry had twelve fresh counted seeds. Its
 uncounted dry seed `12001` deliberately replays the exact schedule that exposed the v2 failure;
@@ -266,13 +271,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `ac4496c0d8dd8a616192d42e9f4bca3f20d32b7508d53b67ba9d83fdfc7de043` |
-| Source bundle SHA-256 | `a544a7b409c94cc81c4d4811ee520dd2e93402b8da67d1a4e3b1b0c063384547` |
+| Registry SHA-256 | `6c776b6a66aa4b7d9acf2624519c8155746d00bd5cb0cd6cd5ccc3b736f95fcf` |
+| Source bundle SHA-256 | `794c56e4d3c9b2abffa3a50828f412ba91d8c6acf27938e4aa7c3dcb4ebb50b1` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `3be06c0470364ecc5f779a0739f7055abf28b777bc2152cbef3b732d206f3623` |
+| Teacher execution SHA-256 | `d60abe4eeb36afa429f685fafbe28d5de07f65c1cedfea156ae784060030f8ad` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `9bbc71d6a212196f39624d94ed74ca1371115de775d099d0fc6d7dce67283ab0` |
+| Slot `01` assignment ID | `38adbab237e630525ffdb3c8f4efe1627ca9dfaba3ad3d438d284355ef74d639` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
