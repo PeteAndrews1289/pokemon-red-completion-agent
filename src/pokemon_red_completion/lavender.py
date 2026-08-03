@@ -839,6 +839,7 @@ def run_lavender_chapter(
         1,
         RedBattlePlanId.LAVENDER_ROCK_TUNNEL_1F_TRAINER_4,
         finish_with_bubblebeam=True,
+        protect_dux_status=True,
     )
     _heal_if_below(
         actions,
@@ -867,6 +868,7 @@ def run_lavender_chapter(
         1,
         RedBattlePlanId.LAVENDER_ROCK_TUNNEL_1F_TRAINER_5,
         finish_with_bubblebeam=True,
+        protect_dux_status=True,
     )
     _swap(actions, reader, emulator, WARTORTLE, "final tunnel Wartortle restoration")
     _heal_if_below(actions, reader, emulator, run, timing, 0, TRAVERSAL_RECOVERY_THRESHOLD)
@@ -989,6 +991,8 @@ def _run_lavender_trainer_battle(
         raise LavenderChapterError(f"{label} lacks starting PP evidence.")
     starting_selected_pp = starting_pp[move_slot - 1] & 0x3F
 
+    dux_status_escaped = False
+
     def guarded_policy(raw: RawGameState) -> int:
         if (
             protect_dux_status
@@ -1007,6 +1011,7 @@ def _run_lavender_trainer_battle(
             raw,
             _party_hp(emulator),
             finish_with_bubblebeam,
+            dux_unavailable=dux_status_escaped,
         )
         if pivot_target is not None:
             raise _PauseForFinalTunnelPivot(pivot_target)
@@ -1077,6 +1082,12 @@ def _run_lavender_trainer_battle(
                 run.awakenings_used += 1
                 continue
             if isinstance(error.__cause__, _PauseForFinalTunnelPivot):
+                before_pivot = reader.read()
+                if (
+                    before_pivot.active_party_index == 0
+                    and (before_pivot.battler_status or 0)
+                ):
+                    dux_status_escaped = True
                 try:
                     switch_active_battler(
                         executor,
@@ -1271,12 +1282,18 @@ def _final_tunnel_pivot_target(
     raw: RawGameState,
     party_hp: tuple[int, ...],
     enabled: bool,
+    *,
+    dux_unavailable: bool = False,
 ) -> int | None:
     """Assign Grass to DUX and every other final-tunnel matchup to Wartortle."""
 
     if not enabled or raw.active_party_index is None or len(party_hp) < 2:
         return None
-    target = 0 if raw.enemy_species_id in FINAL_TUNNEL_GRASS_SPECIES else 1
+    target = (
+        0
+        if raw.enemy_species_id in FINAL_TUNNEL_GRASS_SPECIES and not dux_unavailable
+        else 1
+    )
     if target == raw.active_party_index or party_hp[target] <= 0:
         return None
     return target

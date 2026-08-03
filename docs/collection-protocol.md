@@ -50,6 +50,11 @@ before any v4 counted slot can begin. That repair cleared S.S. Anne and Surge, t
 five-turn sleep value (`0x05`) at the Rock Tunnel field-recovery boundary. Gen I stores remaining
 sleep turns in the low three status bits, so the field recovery now treats every value from one
 through seven as sleep, consumes the already-budgeted Awakening, and accounts for it exactly.
+The following replay crossed that field gate, but DUX was paralyzed after reducing the final
+trainer's Bellsprout to 3/57 HP and then fainted inside repeated Wrap. The two final Grass
+trainers now enable the existing status-protection role pivot: once status makes DUX unavailable,
+the healthy story lead owns the matchup for the rest of that battle instead of immediately
+switching back into the impaired specialist.
 
 Historically, the v3 registry had twelve fresh counted seeds. Its
 uncounted dry seed `12001` deliberately replays the exact schedule that exposed the v2 failure;
@@ -249,13 +254,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `b3fd406402708b96c6144c070ce410b49b28eb5c267d074dec7cf2644b341dcd` |
-| Source bundle SHA-256 | `479c3692e7f457aca7053925dfa6514988612d768f02884a2030524d93e2892a` |
+| Registry SHA-256 | `2670656add45d996b826c11f45067c10e7588c606799436525691d192e164c63` |
+| Source bundle SHA-256 | `e25be7e57c0af3cf3e6d3b594c6bfe6bb7dae543a781560491f8f006532d0a6e` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `5879489004ab7ad6344920fd6d227c9e5b25dc371e7e9714bd75d7e25062b304` |
+| Teacher execution SHA-256 | `fa81c13ff7a0931243c864aab8d53f4703d0e2d998c3ac156b85a28275ab8cc1` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `cb509f9f83734c6f7ba2e73a6211c2aff4e2641031cd794b647de50550671f02` |
+| Slot `01` assignment ID | `9f4e8aa402b0c9ee068f42d1aed620a71396a4c3f1b6e6f73da82cfe3eaf5ba1` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
