@@ -1919,14 +1919,17 @@ def _purchase_supplies(
     # The expanded early collection needs a larger legal Ball reserve.  Liquidate
     # the Nugget at the first shop where that cash is needed instead of weakening
     # the Rock Tunnel healing and repel contract.
-    _sell_single_mart_item(
-        executor,
-        reader,
-        emulator,
-        timing,
-        ItemId.NUGGET,
-        expected_proceeds=NUGGET_SALE_PROCEEDS,
-    )
+    nugget_sale_proceeds = 0
+    if _bag(emulator).get(ItemId.NUGGET, 0):
+        _sell_single_mart_item(
+            executor,
+            reader,
+            emulator,
+            timing,
+            ItemId.NUGGET,
+            expected_proceeds=NUGGET_SALE_PROCEEDS,
+        )
+        nugget_sale_proceeds = NUGGET_SALE_PROCEEDS
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _buy_mart_item(
@@ -1973,10 +1976,10 @@ def _purchase_supplies(
         + TUNNEL_PARLYZ_HEALS_PURCHASED * PARLYZ_HEAL_PRICE
         + 4 * REPEL_PRICE
     )
-    if money_before + NUGGET_SALE_PROCEEDS - money_after != expected_cost:
+    if money_before + nugget_sale_proceeds - money_after != expected_cost:
         raise LavenderChapterError(
             "Mart money gate did not preserve the sale/purchase ledger: "
-            f"sale={NUGGET_SALE_PROCEEDS}, cost={expected_cost}, "
+            f"sale={nugget_sale_proceeds}, cost={expected_cost}, "
             f"before={money_before}, after={money_after}."
         )
     return expected_cost

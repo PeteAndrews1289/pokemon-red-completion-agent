@@ -1845,14 +1845,39 @@ def _purchase_cerulean_awakening_topup(
 
     _move(executor, reader, MART_CLERK_DIRECTIONS, "Cerulean Mart repeat clerk")
     _battle_pulse(executor, MacroActionKind.MOVE, "left", timing, frames=60)
+    if _bag_quantity(emulator, ItemId.NUGGET) != 1:
+        raise CascadeChapterError("Cerulean Awakening top-up requires the earned Nugget.")
+    money_before_sale = _money(emulator)
     _battle_pulse(executor, MacroActionKind.INTERACT, None, timing, frames=180)
-    for _ in range(4):
-        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) == 0:
-            break
-        _battle_pulse(executor, MacroActionKind.MOVE, "up", timing, frames=120)
-    else:
-        raise CascadeChapterError("Cerulean Mart could not normalize the BUY cursor.")
+    _battle_pulse(executor, MacroActionKind.MOVE, "down", timing, frames=120)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
+        raise CascadeChapterError("Cerulean Mart did not select SELL for the Nugget.")
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
+    for _ in range(24):
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        items = _bag_item_ids(emulator)
+        if absolute < len(items) and items[absolute] == ItemId.NUGGET:
+            break
+        _battle_pulse(executor, MacroActionKind.MOVE, "down", timing, frames=120)
+    else:
+        raise CascadeChapterError("Cerulean Mart could not select the earned Nugget.")
+    _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
+    for _ in range(12):
+        if _bag_quantity(emulator, ItemId.NUGGET) == 0:
+            break
+        _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=240)
+    else:
+        raise CascadeChapterError("Cerulean Mart did not sell the earned Nugget.")
+    if _money(emulator) - money_before_sale != 5_000:
+        raise CascadeChapterError("Cerulean Nugget sale missed its exact ₽5,000 ledger.")
+    for _ in range(4):
+        _battle_pulse(executor, MacroActionKind.CANCEL, None, timing, frames=180)
+    if not reader.read_input_readiness().ready:
+        raise CascadeChapterError("Cerulean Nugget sale did not restore field control.")
+
+    _battle_pulse(executor, MacroActionKind.INTERACT, None, timing, frames=180)
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
     observed_menu_states: list[tuple[int, int, int, int, int]] = []
     for _ in range(12):
@@ -2579,6 +2604,17 @@ def _bag_quantity(emulator: EmulatorState, item: ItemId) -> int:
         return 0
     index = items.index(item)
     return emulator.read_u8(int(RamAddress.BAG_ITEMS) + index * 2 + 1)
+
+
+def _money(emulator: EmulatorState) -> int:
+    value = 0
+    for offset in range(3):
+        packed = emulator.read_u8(int(RamAddress.PLAYER_MONEY) + offset)
+        high, low = packed >> 4, packed & 0x0F
+        if high > 9 or low > 9:
+            raise CascadeChapterError(f"Player money contains invalid BCD byte {packed:#04x}.")
+        value = value * 100 + high * 10 + low
+    return value
 
 
 def _battle_pulse(
