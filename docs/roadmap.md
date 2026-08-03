@@ -346,6 +346,10 @@ The resulting replay cleared S.S. Anne and Surge and reached checkpoint 109, whe
 DUX pivoted correctly but Wartortle used resisted BubbleBeam against Bulbasaur until its recovery
 limit was exhausted. Bulbasaur now shares the Grass-matchup policy, selecting neutral Bite after
 the role handoff instead of compensating for poor attacks with a larger heal cap.
+That replay survived the prior fight but reached B1F trainer 4 still paralyzed; Wartortle selected
+BubbleBeam, lost the turn, and the opponent self-destructed before PP could prove execution. The
+route now cures status before the Hiker sequence and carries a second Parlyz Heal for the later
+Grass contingency, retaining both the win contract and an executable curriculum label.
 
 ## Milestone 4 — DAgger and selective RL
 

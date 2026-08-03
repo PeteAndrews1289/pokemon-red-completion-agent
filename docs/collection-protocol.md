@@ -39,6 +39,11 @@ trainer 5 status-locked DUX. The healthy Wartortle pivot then treated Bulbasaur 
 matchup and spent resisted BubbleBeam plus its two-heal allowance before fainting. Bulbasaur now
 belongs to the reusable Grass-matchup set, so a replacement story lead ranks neutral Bite instead.
 The failed rehearsal remains private and uncounted.
+The next replay survived that matchup, then a still-paralyzed Wartortle lost its selected
+BubbleBeam turn against B1F trainer 4 before the opponent self-destructed. Victory set the trainer
+event without spending the required evidence PP. The route now cures supported status before the
+self-destructing Hiker sequence and carries a second Parlyz Heal for the later Grass contingency,
+preserving both executable teaching evidence and status robustness.
 
 The now-retired v2 registry began as a prospective campaign with fresh counted seeds.
 Its first uncounted dry run reached checkpoint 70 before a walking Cerulean NPC blocked the Route 6
@@ -171,13 +176,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `9ac238aee65ee298e7f4eda476c2c0f322f26b83d8a0c4a4564c669173a0126f` |
-| Source bundle SHA-256 | `8357995447ecc81ab6be0576604f149a4c9456259c3522c0bf6193b2182e4c88` |
+| Registry SHA-256 | `1582b2f955af6aafd3cbe53cd6409eb8e05a7c75997a03fcc3bab14c73495cd8` |
+| Source bundle SHA-256 | `afe01961113b797b4574990f51b179e4e3476ab1c36d682e51534276f748dace` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `95aa9f4e3ca2af94221034fd4454be1a77811330097f60f3b9e42a7a561eb3eb` |
+| Teacher execution SHA-256 | `fd613dd492e29405bfc6eecd47539aac4bc83984d70354c44f17ec3d07859b74` |
 | Dry-run schedule SHA-256 | `20af81ca8cf4c92f45c4fd2d8ed2019dee6b51e6ebe29e384f90824525d5c484` |
-| Slot `01` assignment ID | `af143aa2d593472ce2adec2f065e6c29ab61591b24c32b9888a73942db65e365` |
+| Slot `01` assignment ID | `e123db0e67acb655c177e89896a085f4e3ec44d37826771e38395d69fd364ea0` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

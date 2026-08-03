@@ -66,6 +66,7 @@ ROUTE_9_MIN_SUPER_POTION_RESERVE = 5
 TUNNEL_SUPER_POTIONS_PURCHASED = 10
 TUNNEL_AWAKENINGS_PURCHASED = 1
 TUNNEL_AWAKENING_RESERVE = 2
+TUNNEL_PARLYZ_HEALS_PURCHASED = 2
 TM28_SALE_PROCEEDS = 1_000
 
 
@@ -426,14 +427,14 @@ def run_lavender_chapter(
     if (
         _bag(emulator).get(ItemId.SUPER_POTION)
         != initial_sp + TUNNEL_SUPER_POTIONS_PURCHASED
-        or _bag(emulator).get(ItemId.PARLYZ_HEAL) != 1
+        or _bag(emulator).get(ItemId.PARLYZ_HEAL) != TUNNEL_PARLYZ_HEALS_PURCHASED
         or _bag(emulator).get(ItemId.AWAKENING) != TUNNEL_AWAKENING_RESERVE
         or _bag(emulator).get(ItemId.REPEL) != 4
     ):
         raise LavenderChapterError(
             "Mart purchase did not produce the ten-potion purchase plus the observed "
             "starting reserve, two Awakenings, "
-            "one Parlyz Heal, and four Repels."
+            "two Parlyz Heals, and four Repels."
         )
     _checkpoint(records, progress, emulator, supplies, "supplies", "Purchased tunnel supplies")
 
@@ -728,6 +729,10 @@ def run_lavender_chapter(
     _heal_if_below(actions, reader, emulator, run, timing, 1, TRAVERSAL_RECOVERY_THRESHOLD)
     _swap(actions, reader, emulator, WARTORTLE, "B1 Wartortle restoration")
     _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
+    # Preserve required-move evidence against the self-destructing Hiker set.
+    # A held-out lineage arrived paralyzed, lost its turn, and won without
+    # spending BubbleBeam PP when the final opponent self-KO'd.
+    _cure_tunnel_status_if_present(actions, reader, emulator, run, timing)
     _trainer(
         actions,
         reader,
@@ -925,7 +930,7 @@ def run_lavender_chapter(
         party_status=status,
         repels_purchased=4,
         repels_used=run.repels_used,
-        parlyz_heals_purchased=1 + top_up_parlyz_heals,
+        parlyz_heals_purchased=TUNNEL_PARLYZ_HEALS_PURCHASED + top_up_parlyz_heals,
         parlyz_heals_used=run.parlyz_heals_used,
         parlyz_heals_remaining=_bag(emulator).get(ItemId.PARLYZ_HEAL, 0),
         awakenings_used=run.awakenings_used,
@@ -1893,8 +1898,8 @@ def _purchase_supplies(
         timing,
         absolute_index=4,
         item=ItemId.PARLYZ_HEAL,
-        quantity=1,
-        target_bag_quantity=1,
+        quantity=TUNNEL_PARLYZ_HEALS_PURCHASED,
+        target_bag_quantity=TUNNEL_PARLYZ_HEALS_PURCHASED,
     )
     _buy_mart_item(
         executor,
@@ -1910,7 +1915,7 @@ def _purchase_supplies(
     expected_cost = (
         TUNNEL_SUPER_POTIONS_PURCHASED * SUPER_POTION_PRICE
         + TUNNEL_AWAKENINGS_PURCHASED * AWAKENING_PRICE
-        + PARLYZ_HEAL_PRICE
+        + TUNNEL_PARLYZ_HEALS_PURCHASED * PARLYZ_HEAL_PRICE
         + 4 * REPEL_PRICE
     )
     if money_before + NUGGET_SALE_PROCEEDS - money_after != expected_cost:

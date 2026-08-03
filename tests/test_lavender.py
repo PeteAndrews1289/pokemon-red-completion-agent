@@ -105,6 +105,7 @@ def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert ROUTE_9_MIN_SUPER_POTION_RESERVE == 5
     assert TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD == 40
     assert FINAL_TUNNEL_RECOVERY_THRESHOLD == 90
+    assert lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED == 2
 
 
 def test_final_tunnel_policy_spends_bite_evidence_then_exploits_with_bubblebeam() -> None:
