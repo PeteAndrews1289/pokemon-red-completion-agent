@@ -91,6 +91,7 @@ WILD_CAPTURE_PASSIVE_POLICY = CapturePolicy(
     max_throws=WILD_CAPTURE_THROWS_PER_ENCOUNTER,
 )
 WILD_CAPTURE_MAX_WEAKENING_ATTACKS = 8
+WILD_CAPTURE_ADAPTIVE_WEAKENING_CAP = 32
 SPEAROW_CAPTURE_MOVE_ID = 0x37
 SPEAROW_CAPTURE_MOVE_SLOT = 4
 SPEAROW_WEAKEN_ATTEMPT_LIMIT = 12
@@ -1591,6 +1592,26 @@ def _wild_capture_policy(species_id: int) -> CapturePolicy:
     )
 
 
+def _wild_capture_weakening_budget(
+    species_id: int,
+    current_hp: int,
+    maximum_hp: int,
+) -> int:
+    """Bound attempts by the observed damage needed at one HP per landed hit."""
+
+    if type(current_hp) is not int or type(maximum_hp) is not int:
+        raise TypeError("wild capture HP must be integers")
+    if maximum_hp <= 0 or not 0 < current_hp <= maximum_hp:
+        raise ValueError("wild capture HP must describe a living target")
+    policy = _wild_capture_policy(species_id)
+    target_hp = int(maximum_hp * policy.throw_at_or_below_hp_ratio)
+    minimum_landed_hits = max(0, current_hp - target_hp)
+    return min(
+        WILD_CAPTURE_ADAPTIVE_WEAKENING_CAP,
+        max(WILD_CAPTURE_MAX_WEAKENING_ATTACKS, minimum_landed_hits),
+    )
+
+
 def _wild_weakening_settle_action(
     phase: BattleMenuPhase,
     pulse_index: int,
@@ -1697,7 +1718,14 @@ class _LiveWildCorridorSurveyExecutor:
         if raw.enemy_species_id is None:
             raise RedAreaExecutionError(f"{self._label} capture lacks an enemy species")
         policy = _wild_capture_policy(raw.enemy_species_id)
-        for _ in range(WILD_CAPTURE_MAX_WEAKENING_ATTACKS):
+        if raw.enemy_hp is None or raw.enemy_max_hp is None:
+            raise RedAreaExecutionError(f"{self._label} capture lacks enemy HP evidence")
+        weakening_budget = _wild_capture_weakening_budget(
+            raw.enemy_species_id,
+            raw.enemy_hp,
+            raw.enemy_max_hp,
+        )
+        for _ in range(weakening_budget):
             raw = self._reader.read()
             party = self._party_reader.read()
             helper = (

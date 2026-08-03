@@ -59,6 +59,7 @@ from pokemon_red_completion.surge import (
     _run_dig_battle,
     _select_wild_capture_helper,
     _wild_capture_policy,
+    _wild_capture_weakening_budget,
     _wild_weakening_settle_action,
     _wild_weakening_turn_result,
 )
@@ -205,6 +206,12 @@ def test_passive_cocoons_receive_deeper_bounded_weakening_policy() -> None:
     assert WILD_CAPTURE_POLICY.throw_at_or_below_hp_ratio == 0.65
     assert _wild_capture_policy(CATERPIE_SPECIES_ID) is WILD_CAPTURE_POLICY
     assert _wild_capture_policy(PIKACHU_SPECIES_ID) is WILD_CAPTURE_POLICY
+
+
+def test_weakening_budget_covers_one_damage_cocoon_hits() -> None:
+    assert _wild_capture_weakening_budget(METAPOD_SPECIES_ID, 15, 18) == 10
+    assert _wild_capture_weakening_budget(KAKUNA_SPECIES_ID, 18, 18) == 13
+    assert _wild_capture_weakening_budget(CATERPIE_SPECIES_ID, 18, 18) == 8
 
 
 def test_weakening_settle_cancels_a_returned_move_menu() -> None:

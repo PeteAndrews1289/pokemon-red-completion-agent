@@ -787,3 +787,11 @@ TM11 item to remain in the bag. The invariant now accepts either the unspent TM 
 BubbleBeam in the lead's live moveset. This preserves proof of the lesson instead of confusing item
 consumption with lost progress; the failed rehearsal was uncounted and v6 requires a fresh complete
 qualification on the corrected exact source.
+
+The corrected replay cleared S.S. Anne and reached the Viridian Forest collection lesson, where a
+level-4 passive cocoon maximized Defense and remained at 7/18 HP after eight verified low-level
+Tackle hits. The former fixed attack count was insufficient for the policy's 30% capture threshold.
+The adapter now derives its finite weakening budget from observed current HP, maximum HP, and the
+policy threshold, assuming only the game's minimum one damage per landed hit and retaining a hard
+32-attack ceiling. Ordinary targets keep the eight-attack floor; passive Harden users receive only
+the additional observed work needed. The failed replay remains uncounted.
