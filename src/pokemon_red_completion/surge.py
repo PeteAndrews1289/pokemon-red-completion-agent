@@ -66,6 +66,7 @@ KAKUNA_SPECIES_ID = 0x71
 PIKACHU_SPECIES_ID = 0x54
 COLLECTION_POKE_BALL_TARGET = 30
 WILD_CAPTURE_THROWS_PER_ENCOUNTER = 5
+VIRIDIAN_FOREST_MAX_SURVEY_LEGS = 256
 SPEAROW_CAPTURE_MOVE_ID = 0x37
 SPEAROW_CAPTURE_MOVE_SLOT = 4
 SPEAROW_WEAKEN_ATTEMPT_LIMIT = 12
@@ -1323,7 +1324,7 @@ def _run_viridian_forest_collection(
         label="Viridian Forest",
         forward_directions=FOREST_ROUTE_DIRECTIONS,
         starting_endpoint="south",
-        max_legs=64,
+        max_legs=VIRIDIAN_FOREST_MAX_SURVEY_LEGS,
     )
     try:
         report = run_red_area_survey(

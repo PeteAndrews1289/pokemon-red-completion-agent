@@ -32,6 +32,7 @@ from pokemon_red_completion.surge import (
     SPEAROW_CAPTURE_MOVE_SLOT,
     SPEAROW_WEAKEN_ATTEMPT_LIMIT,
     SURGE_CHECKPOINT_COUNT,
+    VIRIDIAN_FOREST_MAX_SURVEY_LEGS,
     WILD_CAPTURE_THROWS_PER_ENCOUNTER,
     SurgeChapterReport,
     SurgeCheckpoint,
@@ -165,6 +166,7 @@ def test_surge_timing_is_positive_and_bounded() -> None:
     assert DEFAULT_SURGE_TIMING.encounter_limit == 72
     assert DEFAULT_SURGE_TIMING.spearow_encounter_limit == 96
     assert WILD_CAPTURE_THROWS_PER_ENCOUNTER == 5
+    assert VIRIDIAN_FOREST_MAX_SURVEY_LEGS == 256
     assert all(
         isinstance(getattr(DEFAULT_SURGE_TIMING, field.name), int)
         and getattr(DEFAULT_SURGE_TIMING, field.name) > 0
