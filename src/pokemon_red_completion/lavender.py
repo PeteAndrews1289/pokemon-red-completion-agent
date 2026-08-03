@@ -2026,7 +2026,7 @@ def _top_up_lavender_supplies(
 
     expected_cost = quantity * SUPER_POTION_PRICE + parlyz_quantity * PARLYZ_HEAL_PRICE
     if (
-        _money(emulator) != money_before - expected_cost
+        _money(emulator) != money_before + tm28_sale_proceeds - expected_cost
         or _bag(emulator).get(ItemId.SUPER_POTION, 0) != LAVENDER_SUPER_POTION_RESERVE
         or _bag(emulator).get(ItemId.PARLYZ_HEAL, 0) != parlyz_before + parlyz_quantity
     ):
