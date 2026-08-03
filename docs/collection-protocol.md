@@ -326,13 +326,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `87e5998beaf1ad2e06a5ceb8176cb8b98e6d9639e6f50440e43186690e5f2b6d` |
-| Source bundle SHA-256 | `8b32e75a3cef9454896f192adc5dc3e2673df98e923f96c7675ffd07d6955a31` |
+| Registry SHA-256 | `2ff2aa12fab5a73fa87fb91a5d331f22824a8c26963ee06c0a89ef9635050373` |
+| Source bundle SHA-256 | `da6520766b8a66c7cface0a463346b5627acf17a1d71d1d2df29d62104b37c1f` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `e75cff433ed2dc6f62dbde4486212f44b7ee7e663c6235bb75e583ce374e572b` |
+| Teacher execution SHA-256 | `0707d0d4a5dff6b5fd459fbc1c6a84e8213529106256155e3551e6c56069af2c` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `dbc0f6b39a8732bd45bbf39af7d2e061cc9f5e03e9d0f85c9ef1255b249242b5` |
+| Slot `01` assignment ID | `cb84f47af2c0475bccb8cf9faaf03d7973ee4eda76b32b9ff4f589ea9928fec1` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -627,10 +627,10 @@ candidate plus aggregate validation evidence. It has not executed while the camp
 The current uncounted qualification replay also validates conservation across curriculum stages.
 After the revised early capture policy passed its former Viridian Forest bottleneck, it retained
 15 unused Poké Balls but lacked the cash required by the fixed Rock Tunnel supply contract. The
-teacher now sells the exact leftover stack at the Vermilion Mart, proves the corresponding
-inventory and money deltas, and then proves the full supply-purchase ledger. The later Snorlax
-capture remains isolated behind its own Great Ball budget, so this conversion cannot silently
-spend a future capture reserve.
+teacher now sells 14 at the Vermilion Mart, retains one legal capture/capacity token, proves the
+corresponding inventory and money deltas, and then proves the full supply-purchase ledger. The later
+Snorlax capture remains isolated behind its own Great Ball budget, so this conversion cannot
+silently spend a future capture reserve.
 
 That exact replay proved the sale and purchase ledger at checkpoint 103 and reached Rock Tunnel
 trainer 5 at checkpoint 109. DUX escaped after becoming paralyzed, but the replacement Wartortle
@@ -638,3 +638,9 @@ was also paralyzed and fainted after lost turns. The live battle adapter now dis
 from paralysis, spends only the surplus second Parlyz Heal at a verified main-menu gate, proves
 the cure and item decrement, and retains one cure for the later tunnel evidence battle. This was
 an uncounted failure; the source must repeat the full dry qualification.
+
+The next replay passed that battle and every chapter through checkpoint 271 before exposing a
+15-slot Cinnabar bag against the qualified 16–19-slot capacity curriculum. Retaining exactly one
+early Poké Ball preserves the later full-bag reward lesson without introducing a new Cinnabar
+purchase: it is legal backup for Snorlax, survives the Great Ball cleanup, and is sold by the
+existing Indigo normalization. The observed 14-ball sale still funds all required Repels.

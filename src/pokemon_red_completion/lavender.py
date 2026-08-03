@@ -52,6 +52,7 @@ PARLYZ_HEAL_PRICE = 200
 AWAKENING_PRICE = 200
 REPEL_PRICE = 350
 POKE_BALL_SALE_PRICE = 100
+EARLY_POKE_BALL_CAPACITY_RESERVE = 1
 POST_MART_RNG_ALIGNMENT_FRAMES = 191
 TUNNEL_RECOVERY_THRESHOLD = 40
 TRAVERSAL_RECOVERY_THRESHOLD = 30
@@ -1959,10 +1960,12 @@ def _purchase_supplies(
         )
         nugget_sale_proceeds = NUGGET_SALE_PROCEEDS
     # Captures can succeed before the bounded Ball budget is exhausted.  The
-    # later Snorlax contract buys its own Great Ball reserve, so convert every
-    # leftover early Poké Ball into the Rock Tunnel supplies it was intended
-    # to protect rather than carrying an unusable cash shortfall forward.
-    poke_balls_sold = _bag(emulator).get(ItemId.POKE_BALL, 0)
+    # later Snorlax contract buys its own Great Ball reserve, so convert the
+    # excess into Rock Tunnel supplies.  Retain one legal Ball as Cinnabar's
+    # capacity filler; it survives the post-Snorlax cleanup and is eventually
+    # liquidated by the already-qualified Indigo inventory normalization.
+    poke_balls_before = _bag(emulator).get(ItemId.POKE_BALL, 0)
+    poke_balls_sold = max(0, poke_balls_before - EARLY_POKE_BALL_CAPACITY_RESERVE)
     poke_ball_sale_proceeds = poke_balls_sold * POKE_BALL_SALE_PRICE
     if poke_balls_sold:
         _sell_mart_item_stack(
