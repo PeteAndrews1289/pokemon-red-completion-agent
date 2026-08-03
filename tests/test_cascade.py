@@ -57,6 +57,7 @@ from pokemon_red_completion.cascade import (
     _run_route_24_accuracy_battle_with_potion,
     _should_use_cerulean_rival_potion,
     _use_cerulean_rival_potion,
+    _use_route_24_antidote_if_needed,
     _use_route_24_recovery_potion,
 )
 from pokemon_red_completion.observation import (
@@ -611,6 +612,26 @@ def test_route_24_accuracy_battle_spends_one_potion_at_low_hp(
     assert selections == 2
     assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == ROUTE_25_RECOVERY_POTION_RESERVE
     assert ROUTE_24_ACCURACY_RECOVERY_POSITION > ROUTE_24_CENTER_RECOVERY_POSITION
+
+
+def test_route_24_antidote_uses_the_immediate_field_boundary(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    observed: dict[str, object] = {}
+
+    def fake_field_cure(*args: object, **kwargs: object) -> None:
+        del args
+        observed.update(kwargs)
+
+    monkeypatch.setattr(cascade_module, "_use_field_antidote_if_needed", fake_field_cure)
+
+    _use_route_24_antidote_if_needed(
+        cast(object, object()),
+        cast(object, object()),
+        cast(object, object()),
+    )
+
+    assert observed == {"expected_map": MapId.ROUTE_24, "label": "Route 24"}
 
 
 @pytest.mark.parametrize(

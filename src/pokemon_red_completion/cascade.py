@@ -542,6 +542,11 @@ def run_cascade_chapter(
     # Spend the planned Route 24 field Potion before the Rocket instead of
     # after it.  A held-out schedule left the lead at two HP after the fifth
     # bridge trainer; waiting until victory made the recovery unreachable.
+    _use_route_24_antidote_if_needed(
+        reader,
+        chapter_executor,
+        emulator,
+    )
     route_24_potions = _bag_quantity(emulator, ItemId.POTION)
     if route_24_potions == ROUTE_24_RECOVERY_POTION_RESERVE:
         _use_route_24_recovery_potion(
@@ -1802,16 +1807,47 @@ def _purchase_cerulean_supplies(
         )
 
 
+def _use_route_24_antidote_if_needed(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+) -> None:
+    _use_field_antidote_if_needed(
+        reader,
+        executor,
+        emulator,
+        expected_map=MapId.ROUTE_24,
+        label="Route 24",
+    )
+
+
 def _use_route_25_antidote_if_needed(
     reader: PokemonRedStateReader,
     executor: _CountingChapterExecutor,
     emulator: EmulatorState,
 ) -> None:
-    """Cure the first observed Route 25 poison at its actual battle boundary."""
+    _use_field_antidote_if_needed(
+        reader,
+        executor,
+        emulator,
+        expected_map=MapId.ROUTE_25,
+        label="Route 25",
+    )
+
+
+def _use_field_antidote_if_needed(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    *,
+    expected_map: MapId,
+    label: str,
+) -> None:
+    """Cure observed field poison before any movement can apply another tick."""
 
     before = reader.read()
     if (
-        before.map_id == MapId.ROUTE_25
+        before.map_id == expected_map
         and before.battle_state == 0
         and before.party_species_ids == (WARTORTLE_SPECIES_ID,)
         and before.first_party_status == 0
@@ -1820,7 +1856,7 @@ def _use_route_25_antidote_if_needed(
     ):
         return
     if (
-        before.map_id != MapId.ROUTE_25
+        before.map_id != expected_map
         or before.battle_state != 0
         or before.party_species_ids != (WARTORTLE_SPECIES_ID,)
         or before.first_party_status != 8
@@ -1828,7 +1864,7 @@ def _use_route_25_antidote_if_needed(
         or not reader.read_input_readiness().ready
     ):
         raise CascadeChapterError(
-            "Route 25 Antidote has an invalid starting gate: "
+            f"{label} Antidote has an invalid starting gate: "
             f"map={before.map_id!r}, battle={before.battle_state}, "
             f"party={before.party_species_ids!r}, status={before.first_party_status!r}, "
             f"quantity={_bag_quantity(emulator, ItemId.ANTIDOTE)}."
@@ -1850,14 +1886,14 @@ def _use_route_25_antidote_if_needed(
         )
         _wait(executor, 120)
     else:
-        raise CascadeChapterError("Route 25 Antidote could not select ITEM.")
+        raise CascadeChapterError(f"{label} Antidote could not select ITEM.")
 
     executor.execute(MacroAction(MacroActionKind.CONFIRM))
     _wait(executor, 180)
     for _ in range(24):
         items = _bag_item_ids(emulator)
         if ItemId.ANTIDOTE not in items:
-            raise CascadeChapterError("Route 25 Antidote disappeared before use.")
+            raise CascadeChapterError(f"{label} Antidote disappeared before use.")
         absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
             RamAddress.LIST_SCROLL_OFFSET
         )
@@ -1872,7 +1908,7 @@ def _use_route_25_antidote_if_needed(
         )
         _wait(executor, 120)
     else:
-        raise CascadeChapterError("Route 25 recovery could not select Antidote.")
+        raise CascadeChapterError(f"{label} recovery could not select Antidote.")
 
     executor.execute(MacroAction(MacroActionKind.CONFIRM))
     _wait(executor, 180)
@@ -1888,20 +1924,20 @@ def _use_route_25_antidote_if_needed(
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         _wait(executor, 180)
     else:
-        raise CascadeChapterError("Route 25 Antidote missed its exact cure gate.")
+        raise CascadeChapterError(f"{label} Antidote missed its exact cure gate.")
 
     for _ in range(FIELD_ITEM_MENU_CLOSE_PULSES):
         executor.execute(MacroAction(MacroActionKind.CANCEL))
         _wait(executor, 180)
     final = reader.read()
     if (
-        final.map_id != MapId.ROUTE_25
+        final.map_id != expected_map
         or final.battle_state != 0
         or final.first_party_status != 0
         or _bag_quantity(emulator, ItemId.ANTIDOTE) != expected_quantity
         or not reader.read_input_readiness().ready
     ):
-        raise CascadeChapterError("Route 25 Antidote failed its persistent gate.")
+        raise CascadeChapterError(f"{label} Antidote failed its persistent gate.")
 
 
 def _enter_gym(
