@@ -61,6 +61,11 @@ The following exact replay proved that repair, defeated Erika, and reached check
 moving fourth-floor department-store customer occupied the evolution-stone clerk route. A bounded
 eastward yield maneuver now preserves and restores the exact approach coordinate until the customer
 vacates the single blocked tile.
+That replay proved the yield, entered Silph Co., and reached checkpoint 243 before the rival
+knocked out Blastoise with 17 enemy HP remaining. The bounded rival controller now treats the live
+active battler—not only the field lead—as its recovery subject, selects the healthiest living
+reserve from the forced-switch menu, and resumes with that reserve's actual PP. This is a reusable
+full-party lesson rather than another lead-only retry.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
@@ -114,13 +119,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `53bb3d65d6388acbb7c2b3b306b86338e8dbe423690c3dd790862da57f3a061a` |
-| Source bundle SHA-256 | `513486e92dbf6089b38f8b44a84406e69da1043513b909040bcc59c661072df0` |
+| Registry SHA-256 | `fb932aeb08ab64f6893e0d5b3181a17f9f526b6856828ac04f346965f1e8388b` |
+| Source bundle SHA-256 | `8e1b5d9aa4279141608226f29238efb2473b1e9f59e73e66a9d3ea63e48f0ec2` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `c84ece1f5d489ae460958bb56b963fd2a402d30c5048e4eb42fc155128174e9f` |
+| Teacher execution SHA-256 | `7b1244e86b1b4353ddb2a424be274f5732f3208df285c1c88dd0c94320392c50` |
 | Dry-run schedule SHA-256 | `c63ddab975851d520b6c25492e03d688cd76c88b638a01330d9d3ea659671733` |
-| Slot `01` assignment ID | `76d9b8fbeaa2e70b2c2fed62ee927fc575def9405e03dece40ccc00e566b0b43` |
+| Slot `01` assignment ID | `798989d0e9ba7bcf27534daaf5acb3667a504c5b19a65d9407ea2df536f6d70d` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

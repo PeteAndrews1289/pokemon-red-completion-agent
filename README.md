@@ -470,6 +470,10 @@ matching applied schedule entry exactly once before the next planned battle.
 That repair then passed Erika and reached checkpoint 230, where a moving department-store customer
 blocked the evolution-stone clerk aisle. The route now uses a bounded eastward yield maneuver and
 proves it returns to the exact approach coordinate before continuing.
+The repaired route then reached Silph Co. checkpoint 243, where the rival knocked out Blastoise
+with 17 HP left on its active Pokémon. The teacher now selects the healthiest living reserve from
+the forced-switch menu and continues from that battler's real move PP, adding a concrete full-team
+recovery lesson instead of relying exclusively on the lead.
 
 ## Evidence and project status
 

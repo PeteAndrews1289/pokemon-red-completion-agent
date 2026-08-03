@@ -243,6 +243,13 @@ def test_silph_rival_policy_uses_live_disable_and_pp() -> None:
     )
     assert _silph_rival_move_slot(transformed_water_flying_matchup) == 3
 
+    healthy_reserve = replace(
+        surf_disabled,
+        active_party_index=3,
+        active_party_pp=(0, 12, 8, 5),
+    )
+    assert _silph_rival_move_slot(healthy_reserve) == 2
+
 
 def test_roof_girl_interaction_retries_until_dialogue_opens() -> None:
     raw = replace(

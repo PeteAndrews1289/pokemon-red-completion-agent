@@ -1507,18 +1507,34 @@ def _run_rival_with_potions(
 ) -> None:
     potion_start = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     _battle_x_special(reader, actions, emulator, timing)
-    for recovery in range(min(2, potion_start)):
-        completed = _run_until(
-            reader,
-            actions,
-            _silph_rival_move_slot,
-            lambda raw: 0 < (raw.first_party_hp or 0) <= SILPH_RIVAL_RECOVERY_HP,
-            f"Silph rival bounded recovery {recovery + 1}",
-            RedBattlePlanId.SILPH_7F_RIVAL,
-        )
+    recovery = 0
+    forced_switches = 0
+    while recovery < min(2, potion_start):
+        try:
+            completed = _run_until(
+                reader,
+                actions,
+                _silph_rival_move_slot,
+                lambda raw: 0 < (raw.battler_hp or 0) <= SILPH_RIVAL_RECOVERY_HP,
+                f"Silph rival bounded recovery {recovery + 1}",
+                RedBattlePlanId.SILPH_7F_RIVAL,
+            )
+        except BattleRuntimeError:
+            raw = reader.read()
+            if (
+                raw.battle_state != 2
+                or raw.battler_hp != 0
+                or forced_switches >= 4
+                or not any(hp > 0 for hp in _party_hp(emulator))
+            ):
+                raise
+            _settle_silph_rival_forced_switch(reader, actions, emulator, timing)
+            forced_switches += 1
+            continue
         if completed:
             return
         _battle_hyper_potion(reader, actions, emulator, timing)
+        recovery += 1
     _run_battle(
         reader,
         actions,
@@ -1531,6 +1547,12 @@ def _run_rival_with_potions(
 
 
 def _silph_rival_move_slot(raw: RawGameState) -> int:
+    if raw.active_party_index not in {None, 0}:
+        pp = raw.battler_pp or ()
+        for slot in (1, 2, 3, 4):
+            if len(pp) >= slot and pp[slot - 1] & 0x3F:
+                return slot
+        raise SilphChapterError("Silph rival reserve battler has no usable move.")
     if raw.enemy_species_id in {151, 154}:
         priorities = (3, 4, 2, 1)
     elif raw.enemy_species_id == 22:
@@ -1549,6 +1571,42 @@ def _silph_rival_move_slot(raw: RawGameState) -> int:
         ):
             return slot
     raise SilphChapterError("Silph rival policy has no legal move with PP.")
+
+
+def _settle_silph_rival_forced_switch(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    timing: SilphTiming,
+) -> None:
+    """Select the healthiest reserve after a rival KO and prove battle MAIN."""
+
+    hp = _party_hp(emulator)
+    active = reader.read().active_party_index
+    candidates = [index for index, value in enumerate(hp) if value > 0 and index != active]
+    if not candidates:
+        raise SilphChapterError("Silph rival KO left no healthy reserve.")
+    target = max(candidates, key=lambda index: hp[index])
+    for _ in range(48):
+        raw = reader.read()
+        if (
+            raw.battle_state == 2
+            and raw.active_party_index == target
+            and (raw.battler_hp or 0) > 0
+            and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
+        ):
+            return
+        if raw.battle_state != 2:
+            raise SilphChapterError("Silph rival forced switch left the battle.")
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        _pulse(
+            actions,
+            MacroActionKind.CONFIRM if cursor == target else MacroActionKind.MOVE,
+            timing,
+            None if cursor == target else ("down" if cursor < target else "up"),
+            timing.menu_frames,
+        )
+    raise SilphChapterError("Silph rival forced switch exceeded its bounded menu pulses.")
 
 
 def _battle_hyper_potion(
