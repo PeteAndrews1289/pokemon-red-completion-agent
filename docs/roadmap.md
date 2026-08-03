@@ -281,10 +281,14 @@ removes that finisher, proves the tunnel potion floor, chooses Bite against Slow
 move evidence, escapes status-locked DUX matchups, and preserves the legal natural-evolution path.
 A surplus Tower Rare Candy now establishes the level-41 TM40 lesson boundary, moving Celadon NPCs
 receive neutral retry windows, and the Silph rival receives type-aware Ice Beam plus bounded
-whole-battle recovery. This exact source completed a clean-power **312/312-checkpoint**,
-**36/36-objective** Hall-of-Fame replay in **762,804 actions**. Its six-member Mansion curriculum
-recorded **4,236 wins**, a level-77 floor, and a five-level spread. Registry freeze and the next
-uncounted 68-battle rehearsal are the current gates.
+whole-battle recovery. The next uncounted rehearsal then proved the DUX status escape but put its
+replacement to sleep and exposed that battle healing targeted only party slot one. The current
+teacher buys one additional Awakening in Vermilion, reserves one for Tower, and applies both status
+and HP recovery to the actual active party index under a two-potion cap. This exact source completed
+a clean-power **312/312-checkpoint**, **36/36-objective** Hall-of-Fame replay in **771,022 actions**.
+Its six-member Mansion curriculum exceeded **4,000 wins**, retained a level-77 floor, and passed the
+bounded spread contract. Registry freeze and the next uncounted 68-battle rehearsal are the current
+gates.
 
 ## Milestone 4 — DAgger and selective RL
 

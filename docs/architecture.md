@@ -205,7 +205,7 @@ once, discovers safe routes for the live `D743`/`D744` electric-lock pair, and f
 the live Surge identity, Dig-only PP evidence, victory event, TM24, Thunder Badge, mirrored badge
 bit, restored Wartortle lead, and released control all agree.
 
-The Lavender chapter teaches BubbleBeam, verifies an exact $7,000 Mart purchase, and uses adaptive
+The Lavender chapter teaches BubbleBeam, verifies an exact $7,200 Mart purchase, and uses adaptive
 55-HP recovery gates backed by nine total Super Potions. Each of the 11 mandatory Route 9 and Rock
 Tunnel battles requires live opponent/class/set identity, its exact event transition, and PP spent
 from the declared move. Long Sing sleep sequences remain bounded while no-move turns preserve PP.

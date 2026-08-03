@@ -48,6 +48,7 @@ PROTECTED_PARTY = (WARTORTLE, DUX, DIGLETT)
 SUPER_POTION_PRICE = 700
 NUGGET_SALE_PROCEEDS = 5_000
 PARLYZ_HEAL_PRICE = 200
+AWAKENING_PRICE = 200
 REPEL_PRICE = 350
 POST_MART_RNG_ALIGNMENT_FRAMES = 191
 TUNNEL_RECOVERY_THRESHOLD = 40
@@ -59,6 +60,8 @@ FINAL_TUNNEL_RECOVERY_THRESHOLD = 90
 FINAL_TUNNEL_GRASS_SPECIES = frozenset({0xB9, 0xBA, 0xBC, 0xBD})
 SLOWPOKE_SPECIES_ID = 0x25
 ROUTE_9_MIN_SUPER_POTION_RESERVE = 5
+TUNNEL_AWAKENINGS_PURCHASED = 1
+TUNNEL_AWAKENING_RESERVE = 2
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -206,6 +209,8 @@ class LavenderChapterReport:
     parlyz_heals_purchased: int
     parlyz_heals_used: int
     parlyz_heals_remaining: int
+    awakenings_used: int
+    awakenings_remaining: int
     super_potions_purchased: int
     super_potions_used: int
     super_potions_remaining: int
@@ -238,6 +243,10 @@ class LavenderChapterReport:
             and self.repels_purchased == self.repels_used == 4
             and self.parlyz_heals_purchased >= 1
             and self.parlyz_heals_used + self.parlyz_heals_remaining == self.parlyz_heals_purchased
+            and 0 <= self.awakenings_used <= 2
+            and self.awakenings_remaining >= 1
+            and self.awakenings_used + self.awakenings_remaining
+            == TUNNEL_AWAKENING_RESERVE
             and self.super_potions_purchased >= 8
             and self.super_potions_used + self.super_potions_remaining
             == self.super_potions_purchased + 1
@@ -245,6 +254,7 @@ class LavenderChapterReport:
             and self.purchase_cost
             == self.super_potions_purchased * SUPER_POTION_PRICE
             + self.parlyz_heals_purchased * PARLYZ_HEAL_PRICE
+            + TUNNEL_AWAKENINGS_PURCHASED * AWAKENING_PRICE
             + 4 * REPEL_PRICE
             and self.money_remaining >= 0
             and self.route_10_trainer_2_bypassed
@@ -278,6 +288,9 @@ class LavenderChapterReport:
                 "parlyz_heals_purchased": self.parlyz_heals_purchased,
                 "parlyz_heals_used": self.parlyz_heals_used,
                 "parlyz_heals_remaining": self.parlyz_heals_remaining,
+                "awakenings_used": self.awakenings_used,
+                "awakenings_remaining": self.awakenings_remaining,
+                "awakenings_purchased": TUNNEL_AWAKENINGS_PURCHASED,
                 "super_potions_purchased": self.super_potions_purchased,
                 "super_potions_used": self.super_potions_used,
                 "super_potions_remaining": self.super_potions_remaining,
@@ -314,6 +327,7 @@ class _RunState:
     trainers: list[TrainerEvidence]
     repels_used: int = 0
     parlyz_heals_used: int = 0
+    awakenings_used: int = 0
     potions_used: int = 0
 
 
@@ -395,10 +409,12 @@ def run_lavender_chapter(
     if (
         _bag(emulator).get(ItemId.SUPER_POTION) != 13
         or _bag(emulator).get(ItemId.PARLYZ_HEAL) != 1
+        or _bag(emulator).get(ItemId.AWAKENING) != TUNNEL_AWAKENING_RESERVE
         or _bag(emulator).get(ItemId.REPEL) != 4
     ):
         raise LavenderChapterError(
-            "Mart purchase did not produce thirteen carried SP, one Parlyz Heal, and four Repels."
+            "Mart purchase did not produce thirteen carried SP, two Awakenings, "
+            "one Parlyz Heal, and four Repels."
         )
     _checkpoint(records, progress, emulator, supplies, "supplies", "Purchased tunnel supplies")
 
@@ -687,6 +703,8 @@ def run_lavender_chapter(
         1,
         RedBattlePlanId.LAVENDER_ROCK_TUNNEL_B1F_TRAINER_5,
         protect_dux_status=True,
+        battle_recovery_threshold=BATTLE_RECOVERY_THRESHOLD,
+        battle_recovery_limit=2,
     )
     _heal_if_below(actions, reader, emulator, run, timing, 1, TRAVERSAL_RECOVERY_THRESHOLD)
     _swap(actions, reader, emulator, WARTORTLE, "B1 Wartortle restoration")
@@ -889,6 +907,8 @@ def run_lavender_chapter(
         parlyz_heals_purchased=1 + top_up_parlyz_heals,
         parlyz_heals_used=run.parlyz_heals_used,
         parlyz_heals_remaining=_bag(emulator).get(ItemId.PARLYZ_HEAL, 0),
+        awakenings_used=run.awakenings_used,
+        awakenings_remaining=_bag(emulator).get(ItemId.AWAKENING, 0),
         super_potions_purchased=12 + top_up_quantity,
         super_potions_used=run.potions_used,
         super_potions_remaining=_bag(emulator).get(ItemId.SUPER_POTION, 0),
@@ -905,6 +925,10 @@ def run_lavender_chapter(
 
 
 class _PauseForBattleSuperPotion(Exception):
+    pass
+
+
+class _PauseForBattleAwakening(Exception):
     pass
 
 
@@ -938,6 +962,12 @@ def _run_lavender_trainer_battle(
     starting_selected_pp = starting_pp[move_slot - 1] & 0x3F
 
     def guarded_policy(raw: RawGameState) -> int:
+        if (
+            protect_dux_status
+            and (raw.battler_status or 0) & 0x07
+            and _bag(emulator).get(ItemId.AWAKENING, 0) > 1
+        ):
+            raise _PauseForBattleAwakening
         pivot_target = _dux_status_escape_target(
             raw,
             _party_hp(emulator),
@@ -963,8 +993,7 @@ def _run_lavender_trainer_battle(
             battle_recovery_limit is None or recoveries < battle_recovery_limit
         )
         if (
-            raw.active_party_index in {None, 0}
-            and 0 < hp < max_hp
+            0 < hp < max_hp
             and hp <= recovery_threshold
             and recovery_available
             and _bag(emulator).get(ItemId.SUPER_POTION, 0)
@@ -1007,6 +1036,18 @@ def _run_lavender_trainer_battle(
                 label=label,
             )
         except BattleRuntimeError as error:
+            if isinstance(error.__cause__, _PauseForBattleAwakening):
+                _use_battle_status_item(
+                    reader,
+                    executor,
+                    emulator,
+                    timing,
+                    label,
+                    item=ItemId.AWAKENING,
+                    expected_status=reader.read().battler_status or 0,
+                )
+                run.awakenings_used += 1
+                continue
             if isinstance(error.__cause__, _PauseForFinalTunnelPivot):
                 try:
                     switch_active_battler(
@@ -1071,13 +1112,15 @@ def _use_battle_super_potion(
 ) -> None:
     before = reader.read()
     menu = reader.read_battle_menu_state(before)
+    target_index = before.active_party_index
     before_quantity = _bag(emulator).get(ItemId.SUPER_POTION, 0)
     if (
         before.battle_state != 2
+        or target_index is None
         or menu.phase is not BattleMenuPhase.MAIN
-        or before.first_party_hp is None
-        or before.first_party_max_hp is None
-        or not 0 < before.first_party_hp < before.first_party_max_hp
+        or before.battler_hp is None
+        or before.battler_max_hp is None
+        or not 0 < before.battler_hp < before.battler_max_hp
         or before_quantity <= 0
     ):
         raise LavenderChapterError(f"{label} recovery lacks a stable damaged MAIN gate.")
@@ -1099,14 +1142,15 @@ def _use_battle_super_potion(
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _select_bag_item(executor, emulator, ItemId.SUPER_POTION, timing)
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    _select_cursor(executor, emulator, 0, timing)
+    _select_cursor(executor, emulator, target_index, timing)
     _pulse(executor, MacroActionKind.CONFIRM, frames=240)
 
-    expected_hp = min(before.first_party_max_hp, before.first_party_hp + 50)
+    expected_hp = min(before.battler_max_hp, before.battler_hp + 50)
     saw_heal = False
     for _ in range(timing.dialogue_pulses * 3):
         current = reader.read()
-        if current.first_party_hp == expected_hp:
+        party_hp = _party_hp(emulator)
+        if len(party_hp) > target_index and party_hp[target_index] == expected_hp:
             saw_heal = True
         if (
             saw_heal
@@ -1116,10 +1160,83 @@ def _use_battle_super_potion(
         ):
             run.potions_used += 1
             return
-        if current.battle_state != 2 or (current.first_party_hp or 0) <= 0:
+        if (
+            current.battle_state != 2
+            or len(party_hp) <= target_index
+            or party_hp[target_index] <= 0
+        ):
             raise LavenderChapterError(f"{label} recovery lost the active battle.")
         _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
     raise LavenderChapterError(f"{label} recovery missed its bounded proof.")
+
+
+def _use_battle_status_item(
+    reader: PokemonRedStateReader,
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+    timing: LavenderTiming,
+    label: str,
+    *,
+    item: ItemId,
+    expected_status: int,
+) -> None:
+    before = reader.read()
+    menu = reader.read_battle_menu_state(before)
+    target_index = before.active_party_index
+    before_quantity = _bag(emulator).get(item, 0)
+    if (
+        before.battle_state != 2
+        or target_index is None
+        or before.battler_status != expected_status
+        or not expected_status & 0x07
+        or before_quantity <= 1
+        or menu.phase is not BattleMenuPhase.MAIN
+    ):
+        raise LavenderChapterError(f"{label} Awakening lacks its stable sleep gate.")
+
+    command = menu.selected_main_command
+    if command == 0:
+        _pulse(executor, MacroActionKind.MOVE, "down", timing.wait_frames)
+    elif command == 2:
+        _pulse(executor, MacroActionKind.MOVE, "left", timing.wait_frames)
+        _pulse(executor, MacroActionKind.MOVE, "down", timing.wait_frames)
+    elif command == 3:
+        _pulse(executor, MacroActionKind.MOVE, "left", timing.wait_frames)
+    elif command != 1:
+        raise LavenderChapterError(f"{label} Awakening exposed an invalid command cursor.")
+
+    selected = reader.read_battle_menu_state(reader.read())
+    if selected.phase is not BattleMenuPhase.MAIN or selected.selected_main_command != 1:
+        raise LavenderChapterError(f"{label} Awakening could not select ITEM.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _select_bag_item(executor, emulator, item, timing)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _select_cursor(executor, emulator, target_index, timing)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=1)
+
+    saw_cure = False
+    saw_consumption = False
+    for _ in range(timing.dialogue_pulses * 20):
+        current = reader.read()
+        statuses = _party_status(emulator)
+        if len(statuses) > target_index and statuses[target_index] == 0:
+            saw_cure = True
+        if _bag(emulator).get(item, 0) == before_quantity - 1:
+            saw_consumption = True
+        if (
+            saw_cure
+            and saw_consumption
+            and current.battle_state == 2
+            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+        ):
+            return
+        if current.battle_state != 2 or (current.battler_hp or 0) <= 0:
+            raise LavenderChapterError(f"{label} Awakening lost the active battle.")
+        _pulse(executor, MacroActionKind.CANCEL, frames=1)
+    raise LavenderChapterError(
+        f"{label} Awakening missed its bounded cure proof: "
+        f"cure={saw_cure}, consumption={saw_consumption}."
+    )
 
 
 def _final_tunnel_pivot_target(
@@ -1738,6 +1855,15 @@ def _purchase_supplies(
         executor,
         emulator,
         timing,
+        absolute_index=3,
+        item=ItemId.AWAKENING,
+        quantity=TUNNEL_AWAKENINGS_PURCHASED,
+        target_bag_quantity=TUNNEL_AWAKENING_RESERVE,
+    )
+    _buy_mart_item(
+        executor,
+        emulator,
+        timing,
         absolute_index=4,
         item=ItemId.PARLYZ_HEAL,
         quantity=1,
@@ -1754,7 +1880,12 @@ def _purchase_supplies(
     )
     _close_menus(executor, reader, timing)
     money_after = _money(emulator)
-    expected_cost = 12 * SUPER_POTION_PRICE + PARLYZ_HEAL_PRICE + 4 * REPEL_PRICE
+    expected_cost = (
+        12 * SUPER_POTION_PRICE
+        + TUNNEL_AWAKENINGS_PURCHASED * AWAKENING_PRICE
+        + PARLYZ_HEAL_PRICE
+        + 4 * REPEL_PRICE
+    )
     if money_before + NUGGET_SALE_PROCEEDS - money_after != expected_cost:
         raise LavenderChapterError(
             "Mart money gate did not preserve the sale/purchase ledger: "

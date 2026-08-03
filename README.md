@@ -397,11 +397,15 @@ campaign slot. The current teacher removes that finisher, budgets the tunnel's h
 uses type-aware Bite after required Slowpoke evidence, escapes a status-locked DUX to the healthy
 story lead, accepts natural evolution without falsely requiring candy consumption, and uses any
 surplus Rare Candy at the level-41 lesson boundary. It also releases movement input around moving
-Celadon NPCs and uses Ice Beam plus bounded recovery against the Silph rival. This exact source
-passed a new uninterrupted **312/312-checkpoint**, **36/36-objective** clean-power replay through
-the Hall of Fame in **762,804 actions**. Its Mansion curriculum won **4,236 battles** with a
-six-member minimum level of **77** and a five-level spread. The regenerated source identity is the
-next uncounted rehearsal candidate; all twelve counted slots remain pending.
+Celadon NPCs and uses Ice Beam plus bounded recovery against the Silph rival. The next uncounted
+rehearsal proved the DUX escape but then put replacement Blastoise to sleep and fainted it because
+battle healing targeted only party slot one. The current teacher buys one additional Awakening in
+Vermilion, preserves one for Tower, cures the actual active party member, and targets Super Potions
+to that same live party index under a two-use cap. This exact source passed a new uninterrupted
+**312/312-checkpoint**, **36/36-objective** clean-power replay through the Hall of Fame in
+**771,022 actions**. Its Mansion curriculum exceeded **4,000 battles** with a six-member minimum
+level of **77** and a five-level spread. The regenerated source identity is the next uncounted
+rehearsal candidate; all twelve counted slots remain pending.
 
 ## Evidence and project status
 

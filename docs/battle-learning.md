@@ -58,9 +58,13 @@ current route removes that finisher, budgets the tunnel's potion reserve, uses t
 against Slowpoke after required evidence, and escapes a status-locked DUX to the healthy lead. It
 accepts natural evolution, uses the surplus Rare Candy for the level-41 TM40 lesson, gives moving
 Celadon NPCs neutral retry windows, and applies Ice Beam plus bounded whole-battle recovery to the
-Silph rival. That exact source completed **312/312 checkpoints**, **36/36 objectives**, and the Hall
-of Fame in **762,804 actions**; its six-member curriculum won **4,236 battles** and finished with a
-minimum level of 77 and a five-level spread. It is the next uncounted rehearsal candidate.
+Silph rival. The next uncounted rehearsal proved the DUX escape but put replacement Blastoise to
+sleep and exposed that battle recovery targeted only party slot one. The current teacher carries a
+second Awakening from Vermilion, preserves one for Tower, and applies both status and HP recovery to
+the actual active party index under a two-potion cap. That exact source completed **312/312
+checkpoints**, **36/36 objectives**, and the Hall of Fame in **771,022 actions**; its six-member
+curriculum exceeded **4,000 battles**, retained the minimum level of 77, and passed the bounded
+spread contract. It is the next uncounted rehearsal candidate.
 
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
 schedule, episode, manifest, and 68/68 offline audit. Every counted slot reopens and re-audits that
