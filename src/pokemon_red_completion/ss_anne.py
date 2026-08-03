@@ -17,6 +17,7 @@ from pokemon_red_completion.battle_runtime import (
 )
 from pokemon_red_completion.cascade import (
     DEFAULT_CASCADE_TIMING,
+    ROCKET_THIEF_POTION_RESERVE,
     SS_ANNE_RIVAL_POTION_RESERVE,
     CascadeChapterError,
     _bag_quantity,
@@ -408,21 +409,27 @@ def _run_ss_anne_rival_with_potion(
     emulator: EmulatorState,
     timing: SSAnneTiming,
 ) -> RawGameState:
-    """Spend the retained Potion once at a live, bounded HP threshold."""
+    """Spend retained Potions only at a live, bounded HP threshold."""
 
-    if _bag_quantity(emulator, ItemId.POTION) != SS_ANNE_RIVAL_POTION_RESERVE:
-        raise SSAnneChapterError("S.S. Anne rival lacks its retained Potion reserve.")
+    starting_reserve = _bag_quantity(emulator, ItemId.POTION)
+    if not SS_ANNE_RIVAL_POTION_RESERVE <= starting_reserve <= ROCKET_THIEF_POTION_RESERVE:
+        raise SSAnneChapterError("S.S. Anne rival recovery reserve is outside its bound.")
 
     def guarded_policy(raw: RawGameState) -> int:
         if (
-            _bag_quantity(emulator, ItemId.POTION) == SS_ANNE_RIVAL_POTION_RESERVE
+            _bag_quantity(emulator, ItemId.POTION) > 0
             and raw.first_party_hp is not None
             and 0 < raw.first_party_hp <= 40
         ):
             raise _PauseForSSAnneRivalPotion
         return _choose_ss_anne_rival_move(raw)
 
-    used_potion = False
+    intent = BattleIntent(
+        "obtain_cut",
+        battle_plan_id=RedBattlePlanId.SS_ANNE_RIVAL,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+    )
+    recoveries = 0
     while True:
         try:
             result = run_adaptive_trainer_battle(
@@ -430,20 +437,16 @@ def _run_ss_anne_rival_with_potion(
                 executor,
                 guarded_policy,
                 expected_map=MapId.SS_ANNE_2F,
-                intent=BattleIntent(
-                    "obtain_cut",
-                    battle_plan_id=RedBattlePlanId.SS_ANNE_RIVAL,
-                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
-                ),
+                intent=intent,
                 timing=timing.battle_runtime,
                 label="S.S. Anne rival",
             )
         except BattleRuntimeError as error:
             if not isinstance(error.__cause__, _PauseForSSAnneRivalPotion):
                 raise SSAnneChapterError(str(error)) from error
-            if used_potion:
+            if recoveries >= starting_reserve:
                 raise SSAnneChapterError(
-                    "S.S. Anne rival requested more than one Potion recovery."
+                    "S.S. Anne rival exhausted its bounded Potion reserve."
                 ) from error
             try:
                 _use_cerulean_rival_potion(
@@ -454,12 +457,12 @@ def _run_ss_anne_rival_with_potion(
                 )
             except CascadeChapterError as recovery_error:
                 raise SSAnneChapterError(str(recovery_error)) from recovery_error
-            used_potion = True
+            recoveries += 1
             continue
 
-        if not used_potion or _bag_quantity(emulator, ItemId.POTION) != 0:
+        if _bag_quantity(emulator, ItemId.POTION) != starting_reserve - recoveries:
             raise SSAnneChapterError(
-                "S.S. Anne rival did not consume exactly one planned Potion."
+                "S.S. Anne rival changed its bounded Potion reserve unexpectedly."
             )
         return result
 
