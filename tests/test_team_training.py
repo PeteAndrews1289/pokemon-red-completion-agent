@@ -11,6 +11,7 @@ from pokemon_red_completion.party import (
 )
 from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
+    DevelopedTeamPolicy,
     GrindingArea,
     RosterSlot,
     TeamRosterPlan,
@@ -20,7 +21,9 @@ from pokemon_red_completion.team_training import (
     TrainingException,
     choose_grinding_area,
     is_matchup_acceptable,
+    plan_team_development,
     plan_team_training,
+    summarize_team_development,
     summarize_team_readiness,
 )
 
@@ -352,6 +355,68 @@ def test_empty_party_receipt_fails_every_gate() -> None:
     assert not report.passed
     assert not report.meets_level_floor
     assert not report.is_balanced
+
+
+def test_developed_team_stops_with_final_forms_and_level_75_workhorse() -> None:
+    roster = TeamRosterPlan(
+        tuple(
+            RosterSlot(role, index)
+            for index, role in enumerate(PartyRole, start=1)
+        )
+    )
+    policy = DevelopedTeamPolicy(roster, workhorse_species_id=1)
+    subject = party(75, 26, 20, 30, 30, 30)
+
+    decision = plan_team_development(subject, policy)
+    report = summarize_team_development(subject, policy)
+
+    assert decision.directive is TeamTrainingDirective.STOP
+    assert report.has_final_form_roster
+    assert report.workhorse_ready
+    assert report.passed
+
+
+def test_developed_team_trains_only_the_underlevelled_workhorse() -> None:
+    roster = TeamRosterPlan(
+        tuple(RosterSlot(role, index) for index, role in enumerate(PartyRole, start=1))
+    )
+    policy = DevelopedTeamPolicy(roster, workhorse_species_id=1)
+
+    decision = plan_team_development(party(74, 60, 60, 60, 60, 60), policy)
+
+    assert decision.directive is TeamTrainingDirective.TRAIN_MEMBER
+    assert decision.target_slot == 1
+    assert "workhorse" in decision.reason
+
+
+def test_developed_team_requests_evolution_for_a_nonfinal_species() -> None:
+    roster = TeamRosterPlan(
+        tuple(RosterSlot(role, index) for index, role in enumerate(PartyRole, start=1))
+    )
+    policy = DevelopedTeamPolicy(roster, workhorse_species_id=1)
+    subject = PartyObservation(
+        members=(
+            member(1, 75),
+            member(2, 30, species_id=99),
+            *(member(index, 30) for index in range(3, 7)),
+        )
+    )
+
+    decision = plan_team_development(subject, policy)
+    report = summarize_team_development(subject, policy)
+
+    assert decision.directive is TeamTrainingDirective.EVOLVE_MEMBER
+    assert decision.target_slot == 2
+    assert not report.has_final_form_roster
+    assert not report.passed
+
+
+def test_developed_team_policy_rejects_an_unplanned_workhorse() -> None:
+    roster = TeamRosterPlan(
+        tuple(RosterSlot(role, index) for index, role in enumerate(PartyRole, start=1))
+    )
+    with pytest.raises(ValueError, match="workhorse_species_id"):
+        DevelopedTeamPolicy(roster, workhorse_species_id=99)
 
 
 # --- policy validation ------------------------------------------------------

@@ -58,17 +58,21 @@ from pokemon_red_completion.red_party import (
     DUGTRIO_SPECIES_ID,
     DUX_SPECIES_ID,
     HITMONLEE_SPECIES_ID,
+    RED_BALANCED_ROSTER,
     SNORLAX_SPECIES_ID,
     PokemonRedPartyReader,
 )
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
 from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
-    BalancedTeamReport,
+    DevelopedTeamPolicy,
+    DevelopedTeamReport,
     TeamTrainingDirective,
     TeamTrainingProgress,
     is_matchup_acceptable,
+    plan_team_development,
     plan_team_training,
+    summarize_team_development,
     summarize_team_readiness,
 )
 from pokemon_red_completion.tower import party_core_intact
@@ -104,14 +108,19 @@ HYDRO_PUMP_LEARN_LEVEL = 52
 MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL = 10_000
 JOLTEON_SPECIES_ID = 0x68
 MANSION_TRAINING_POLICY = TrainingPolicy(
-    target_level=55,
+    target_level=75,
     preferred_move_slots=(4, 2, 3, 1),
     retreat_hp_ratio=0.45,
     reserve_total_pp=2,
     max_enemy_level_delta=0,
-    max_battles=180,
-    max_steps=15_000,
-    max_healing_trips=24,
+    max_battles=800,
+    max_steps=80_000,
+    max_healing_trips=100,
+)
+MANSION_DEVELOPMENT_POLICY = DevelopedTeamPolicy(
+    roster=RED_BALANCED_ROSTER,
+    workhorse_species_id=BLASTOISE_SPECIES_ID,
+    workhorse_target_level=75,
 )
 #: Balance contract for the Mansion block.
 #:
@@ -346,7 +355,7 @@ class BlaineChapterReport:
     capacity_ultra_ball_bought: bool = False
     capacity_great_ball_bought: bool = False
     initial_bag_slot_count: int = 17
-    team_readiness: BalancedTeamReport | None = None
+    team_readiness: DevelopedTeamReport | None = None
     team_training_battles: int = 0
     team_training_healing_trips: int = 0
 
@@ -512,12 +521,24 @@ class BlaineChapterReport:
                 ],
                 "secret_key": self.secret_key_quantity,
                 "tm14_blizzard": self.tm14_quantity,
-                "team_balance": {
-                    "minimum_level": (
-                        self.team_readiness.observed_minimum_level if self.team_readiness else None
+                "team_development": {
+                    "final_forms_complete": (
+                        self.team_readiness.has_final_form_roster
+                        if self.team_readiness
+                        else None
                     ),
-                    "level_spread": (
-                        self.team_readiness.observed_level_spread if self.team_readiness else None
+                    "workhorse_species": (
+                        self.team_readiness.workhorse_species_id if self.team_readiness else None
+                    ),
+                    "workhorse_level": (
+                        self.team_readiness.observed_workhorse_level
+                        if self.team_readiness
+                        else None
+                    ),
+                    "workhorse_target_level": (
+                        self.team_readiness.workhorse_target_level
+                        if self.team_readiness
+                        else None
                     ),
                     "passed": (self.team_readiness.passed if self.team_readiness else None),
                     "battles": self.team_training_battles,
@@ -763,13 +784,9 @@ def run_blaine_chapter(
         "Trained safely in Pokémon Mansion",
     )
 
-    team_readiness, team_battles, team_healing_trips = _run_mansion_team_balancing(
-        actions,
-        reader,
-        emulator,
-        progress_sink=progress,
-        completed_checkpoint_count=len(records),
-    )
+    team_readiness = _qualify_mansion_team_development(reader, emulator)
+    team_battles = 0
+    team_healing_trips = 0
 
     _move(actions, reader, ("down",) * 5 + GYM_ENTRY_ROUTE, "Cinnabar Gym")
     _require(reader.read(), MapId.CINNABAR_GYM, (16, 17), "Cinnabar Gym entrance")
@@ -1300,6 +1317,26 @@ def _red_training_matchup_acceptable(
         policy.minimum_direct_level_advantage,
     )
     return enemy_level is not None and trainee.level - enemy_level >= required_advantage
+
+
+def _qualify_mansion_team_development(
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> DevelopedTeamReport:
+    """Require final available forms and the level-75 completion workhorse."""
+
+    party = PokemonRedPartyReader(emulator).read()
+    decision = plan_team_development(party, MANSION_DEVELOPMENT_POLICY)
+    report = summarize_team_development(party, MANSION_DEVELOPMENT_POLICY)
+    if decision.directive is not TeamTrainingDirective.STOP or not report.passed:
+        raise BlaineChapterError(
+            "Mansion team development stopped before readiness: "
+            f"{decision.reason}; species={party.species_ids()!r}, "
+            f"levels={party.levels!r}."
+        )
+    if not reader.read_input_readiness().ready:
+        raise BlaineChapterError("Mansion team development boundary is not input-ready.")
+    return report
 
 
 def _run_mansion_team_balancing(

@@ -1,13 +1,14 @@
-"""Reusable balanced-team training policy.
+"""Reusable equal-level and evolution-ready team development policies.
 
 The project's qualified route trained one overleveled carry and let the rest of
 the party idle.  That route is durable teacher evidence, but it teaches a habit
 a transferable agent should not learn: it makes progress depend on a single
 Pokémon surviving every remaining battle.
 
-This policy replaces that habit with a portable rule set—fill the party, keep
-every member above a level floor, keep the spread between members small, and
-always train whoever is furthest behind.  Like
+The module retains that strict equal-level rule set for experiments that need
+it, and adds the completion-efficient contract used by the main teacher: fill
+the declared final-form roster and train one designated workhorse to its target
+without grinding every already-evolved specimen to the same level. Like
 :mod:`pokemon_red_completion.training`, it decides *why* to fight, heal, switch,
 or stop; game adapters remain responsible for navigation, menus, and battle
 execution.
@@ -36,6 +37,7 @@ class TeamTrainingDirective(StrEnum):
     """One semantic action requested by the balanced-team policy."""
 
     RECRUIT_MEMBER = "recruit_member"
+    EVOLVE_MEMBER = "evolve_member"
     RESTORE_TEAM = "restore_team"
     SWITCH_TRAINEE = "switch_trainee"
     TRAIN_MEMBER = "train_member"
@@ -112,6 +114,146 @@ class TeamRosterPlan:
         return tuple(
             species for species in party.species_ids() if species not in planned
         )
+
+
+@dataclass(frozen=True, slots=True)
+class DevelopedTeamPolicy:
+    """Completion-efficient roster policy with one deliberately trained workhorse.
+
+    The roster species are the adapter-declared final available forms.  This
+    makes evolution completion explicit without forcing every non-workhorse to
+    copy the carry's level, and gives collection curricula the same semantic
+    gate they need when evolving one living specimen at a time.
+    """
+
+    roster: TeamRosterPlan
+    workhorse_species_id: int
+    workhorse_target_level: int = 75
+
+    def __post_init__(self) -> None:
+        if self.workhorse_species_id not in self.roster.species_ids:
+            raise ValueError("workhorse_species_id must belong to the final-form roster")
+        if not MIN_LEVEL < self.workhorse_target_level <= MAX_LEVEL:
+            raise ValueError(f"workhorse_target_level must be between 2 and {MAX_LEVEL}")
+
+
+@dataclass(frozen=True, slots=True)
+class DevelopedTeamReport:
+    """Portable receipt for final forms plus a trained completion workhorse."""
+
+    required_species_ids: tuple[int, ...]
+    observed_species_ids: tuple[int, ...]
+    workhorse_species_id: int
+    workhorse_target_level: int
+    observed_workhorse_level: int | None
+    fainted_count: int
+
+    @property
+    def has_final_form_roster(self) -> bool:
+        return (
+            len(self.observed_species_ids) == len(self.required_species_ids)
+            and set(self.observed_species_ids) == set(self.required_species_ids)
+        )
+
+    @property
+    def workhorse_ready(self) -> bool:
+        return (
+            self.observed_workhorse_level is not None
+            and self.observed_workhorse_level >= self.workhorse_target_level
+        )
+
+    @property
+    def passed(self) -> bool:
+        return self.has_final_form_roster and self.workhorse_ready and self.fainted_count == 0
+
+
+def plan_team_development(
+    party: PartyObservation,
+    policy: DevelopedTeamPolicy,
+) -> TeamTrainingDecision:
+    """Choose recruitment, evolution, workhorse training, or a completed stop."""
+
+    if not party.members:
+        return TeamTrainingDecision(
+            TeamTrainingDirective.RECRUIT_MEMBER,
+            "party is empty",
+            target_slot=LEAD_SLOT,
+        )
+    if party.fainted_count or party.is_wiped_out:
+        return TeamTrainingDecision(
+            TeamTrainingDirective.RESTORE_TEAM,
+            f"{party.fainted_count} member(s) fainted",
+        )
+    missing = policy.roster.missing_from(party)
+    unplanned = policy.roster.unplanned_in(party)
+    if party.size < len(policy.roster.slots) and not unplanned:
+        return TeamTrainingDecision(
+            TeamTrainingDirective.RECRUIT_MEMBER,
+            f"party holds {party.size} of {len(policy.roster.slots)} final-form members",
+            target_slot=party.size + 1,
+        )
+    if missing or unplanned:
+        target = next(
+            (member.slot for member in party.members if member.species_id in set(unplanned)),
+            None,
+        )
+        return TeamTrainingDecision(
+            TeamTrainingDirective.EVOLVE_MEMBER,
+            "party has not reached its declared final available forms",
+            target_slot=target,
+        )
+    workhorse = next(
+        (
+            member
+            for member in party.members
+            if member.species_id == policy.workhorse_species_id
+        ),
+        None,
+    )
+    if workhorse is None:
+        return TeamTrainingDecision(
+            TeamTrainingDirective.RECRUIT_MEMBER,
+            "declared workhorse is absent",
+        )
+    if workhorse.level < policy.workhorse_target_level:
+        directive = (
+            TeamTrainingDirective.TRAIN_MEMBER
+            if workhorse.slot == LEAD_SLOT
+            else TeamTrainingDirective.SWITCH_TRAINEE
+        )
+        return TeamTrainingDecision(
+            directive,
+            f"workhorse is below level {policy.workhorse_target_level}",
+            target_slot=workhorse.slot,
+        )
+    return TeamTrainingDecision(
+        TeamTrainingDirective.STOP,
+        "final-form roster and workhorse target are complete",
+    )
+
+
+def summarize_team_development(
+    party: PartyObservation,
+    policy: DevelopedTeamPolicy,
+) -> DevelopedTeamReport:
+    """Build the final-form and workhorse receipt used by game adapters."""
+
+    workhorse = next(
+        (
+            member
+            for member in party.members
+            if member.species_id == policy.workhorse_species_id
+        ),
+        None,
+    )
+    return DevelopedTeamReport(
+        required_species_ids=policy.roster.species_ids,
+        observed_species_ids=party.species_ids(),
+        workhorse_species_id=policy.workhorse_species_id,
+        workhorse_target_level=policy.workhorse_target_level,
+        observed_workhorse_level=workhorse.level if workhorse else None,
+        fainted_count=party.fainted_count,
+    )
 
 
 @dataclass(frozen=True, slots=True)

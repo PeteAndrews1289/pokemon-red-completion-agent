@@ -251,11 +251,12 @@ descriptive only and does not yet define a recovery learner's inputs or budget.
 Dataset quality now also depends on party composition. The historical recordings complete the game
 with one overleveled lead, which makes most battle labels trivially correct and teaches nothing
 about switching or matchup selection. The current branch adds a game-neutral six-member party
-contract, derived team metrics, and a reusable balanced-training policy. Its first live
-clean-power integration catches Snorlax, obtains and evolves Jolteon, rotates and trains the
-declared six-member party through the Hall of Fame, and enforces a level-50 floor plus five-level
-spread. The live proof qualified at levels 82–87 with zero faints. The
-single-carry lineage remains preserved as route evidence. See the
+contract, derived team metrics, a reusable equal-level policy, and a completion-efficient developed
+team policy. The active route catches Snorlax, obtains and evolves Jolteon, recruits Hitmonlee,
+verifies that all six members are in their declared final available forms, and trains Blastoise as
+the designated workhorse to level 75. The prior levels-82–87 zero-faint proof remains historical
+route evidence; matching every non-workhorse to the carry is no longer a collection prerequisite.
+See the
 [Project Narrative](project-narrative.md) for the reasoning and the outstanding route work.
 
 The protocol also requires a successful, non-counted 68/68 schedule rehearsal before slot `01`,

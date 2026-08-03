@@ -159,14 +159,17 @@ switching, matchup, and resource decisions a learner needs to acquire never appe
 A single carry also concentrates all route risk in one Pokémon, which is how the first held-out
 schedule rehearsal ended at Route 25.
 
-Teaching therefore targets a **balanced six-member party** instead:
+Teaching therefore targets a **developed six-member party** instead:
 
 - acquire and retain six members with complementary roles;
-- train every final member to at least level 50 and satisfy the five-level spread before the Elite
-  Four (the current Mansion specialist separately targets level 55 for its active trainee);
-- always train the lowest-level suitable member;
-- hold the party within a five-level spread at major training boundaries; and
+- evolve every member to its declared final form available in the title and save-lineage contract;
+- train the designated completion workhorse to level 75;
+- avoid grinding already-final non-workhorses merely to imitate the carry's level; and
 - permit temporary deviations only when progression requires them, with the reason recorded.
+
+The stricter equal-level curriculum remains available for experiments that explicitly need it. It
+is not the main completion gate: a future Pokédex teacher needs to demonstrate evolution across
+many species, not spend thousands of redundant battles equalizing every specimen.
 
 ## Collection curriculum and multi-game north star
 

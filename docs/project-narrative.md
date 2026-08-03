@@ -363,6 +363,7 @@ Several failures have already produced general improvements:
 | The next v4 rehearsal passed both repaired bridge trainers, then fainted while walking back to the Center. | The in-battle Potion preserved the planned four-Potion handoff, but Wartortle left trainer 1 poisoned. Field poison applied during the long recovery walk before the nurse could be reached. | The existing semantic field-Antidote routine is now map-parameterized and runs at the stable Route 24 boundary before any movement. It consumes one of the two already-budgeted Antidotes only when live status proves poison, leaving the downstream Potion economy unchanged and the second Antidote available for Route 25. |
 | The poison-safe v4 replay cleared both Routes 24 and 25, Misty, and reached the Rocket thief before Drowzee's sleep exhausted the bounded recovery loop at checkpoint 62. | The generic runtime correctly observed a decreasing sleep counter, but assumed every suppressed sleeping turn remained in dialogue. Gen I returned to MAIN between turns; confirming from MAIN entered FIGHT rather than attempting the selected move, so the final sleep turn never advanced. | Sleep recovery now semantically normalizes MAIN to FIGHT and MOVE to the latched legal slot before each suppressed turn, while UNKNOWN remains a dialogue confirmation. Complete PP-vector checks still prove that sleep recovery neither substitutes nor spends a move. A regression simulation returns through ITEM-selected MAIN states and verifies wake-up plus the eventual legal attack. |
 | The two-stage setup defeated Sabrina and advanced to the Mansion training block at checkpoint 275, where a wild opponent Disabled the last preferred move with PP. | The short lead-training policy ranked PP but did not remove a live disabled slot, even though the longer balanced-team policy already treated Disable as a temporary capability loss. | Lead training now ranks battle-active PP and excludes a slot only while its Disable counter is live. If no legal preferred attack remains, it records a bounded flee and resumes the field-level heal/seek policy instead of issuing an illegal action. |
+| The v5 replay passed the repaired Silph boundary and reached 1,250 equal-level Mansion wins, but the five non-workhorses were still levels 45–46 while the escort had reached 79. | The five-level-spread gate optimized visual symmetry rather than the future collection objective. Every current non-workhorse had already reached its final available species, so thousands of additional fights taught repeated grinding instead of new evolution behavior. | The replay was stopped safely and remained uncounted. The main teacher now requires the exact healthy final-form roster and trains only the declared Blastoise workhorse to level 75. A reusable developed-team planner and receipt expose recruitment, evolution, restoration, switching, and workhorse readiness; the older equal-level policy remains available for explicit experiments. |
 | The Disable-safe replay trained all six members to at least level 75, earned all eight badges, and crossed Victory Road before the League shop lacked ₽611 for its two-Revive reserve at checkpoint 296. | The expanded capture and Sabrina reliability budgets were not propagated through the final economy. Two obsolete Antidotes remained, while the shop still bought a third Full Heal despite six Full Restores providing the same status-clearing fallback. | Indigo cleanup now sells every remaining narrow status cure and buys two Full Heals plus the unchanged six Full Restores, eleven Hyper Potions, two Revives, and battle-setup reserves. This funds the exact helper-revival plan without reducing the full-team training target or static-capture reserve. |
 | The newest PP-hardened lineage defeated Agatha and Lance, then reached the Champion at checkpoint 299/300 but fell to the level-65 Venusaur after exhausting Blizzard. | Late-game tactics were compensating for a strategic level deficit. Experience had been treated as a side effect of the route rather than a planned, reusable resource. | A game-neutral training policy now chooses when to seek an encounter, fight, flee, return to heal, and stop. Its first Red adapter uses the Pokémon Mansion's level 28–39 encounters, Cinnabar healing, and Dig-based recovery to train the lead to level 55 before the final gyms. The adapter is bounded by battle, step, healing-trip, HP, status, PP, and enemy-level rules and emits a training receipt. |
 | A required attack was disabled during a held-out trainer battle even though other legal attacks remained. | The teacher confused “preferred” with “required on every turn.” | Battle policies now rank legal fallback moves from live PP and Disable state, while the post-battle contract separately proves that the strategically required move was used at least once. |
@@ -461,12 +462,14 @@ because the project has moved from proving completion to producing transferable 
 
 ### The target policy
 
-The agent should acquire and retain a full six-member party with complementary roles, train every
-final member past the level-50 floor before the Elite Four (the current Mansion specialist targets
-level 55), prefer training whoever is furthest behind, and hold the party within a five-level
-spread at major training boundaries. Temporary
-deviations are permitted when progression genuinely requires them, but each one must be recorded
-with its reason rather than silently weakening the rule.
+The agent should acquire and retain a full six-member party with complementary roles, evolve every
+member to its declared final form available in the title and save lineage, and train one designated
+completion workhorse to level 75. Already-final non-workhorses do not need thousands of redundant
+battles merely to match the carry's level. The portable equal-level policy remains available for
+explicit balancing experiments; the main route instead uses the same final-form semantics needed
+by the future Pokédex curriculum. Temporary deviations are permitted when progression genuinely
+requires them, but each one must be recorded with its reason rather than silently weakening the
+rule.
 
 ### Reusable concepts, not Red coordinates
 
@@ -477,10 +480,11 @@ The new layer is deliberately split so the policy can outlive Pokémon Red:
   experience, plus the derived team metrics a planner actually reasons over: minimum and maximum
   level, level spread, average level, fainted count, incomplete-party state, and the weakest
   *trainable* member. It contains no addresses, coordinates, or revision-specific identifiers.
-- `team_training.py` is the **reusable balanced-training policy**. It decides whether to recruit,
-  restore, switch, train, or stop; selects a safe grinding area from encounter level bands; accepts
-  or rejects a matchup; and emits a portable readiness receipt. Its rules are expressed in levels,
-  roles, and health—never in map tiles.
+- `team_training.py` contains the **reusable team-development policies**. It decides whether to
+  recruit, evolve, restore, switch, train, or stop; selects safe grinding areas; and emits portable
+  equal-level and developed-team receipts. The developed-team contract verifies the final-form
+  roster and a configurable workhorse target without requiring every specimen to share one level.
+  Its rules are expressed in species, levels, roles, and health—never in map tiles.
 - `red_party.py` is the **only Red-specific piece**. It projects the game's 44-byte party structure
   into the neutral contract and binds each role to a species.
 

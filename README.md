@@ -46,6 +46,12 @@ control, and progressively trained specialists.**
 > actions**. This qualifies the deterministic six-member teacher; collection and learned-policy
 > evaluation remain open. See the
 > [sanitized six-member receipt](docs/evidence/qualified-play-balanced-six-2026-08-01.json).
+> The active curriculum now separates **evolution readiness** from **equal-level grinding**. It
+> requires the complete declared final-form roster and a level-75 Blastoise workhorse, while the
+> older five-level-spread policy remains available as an optional experiment. This directly
+> supports the future Pokédex curriculum and removes roughly five thousand redundant Mansion wins
+> from each prospective teacher trajectory. This revised source still requires a fresh 312/312,
+> 68/68 uncounted qualification before collection slot `01` can open.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the
