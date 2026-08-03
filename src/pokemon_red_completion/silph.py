@@ -1830,14 +1830,19 @@ def _battle_healing_item(
         # ITEM again during the first observable MAIN frame.
         _pulse(actions, MacroActionKind.CANCEL, timing, frames=1)
     else:
+        # The final bounded CANCEL can itself complete the enemy reply and
+        # expose MAIN.  Observe that post-action state before declaring the
+        # wait exhausted; otherwise a legitimate transition on pulse 24 is
+        # rejected even though the semantic target has been reached.
         current = reader.read()
         phase = reader.read_battle_menu_state(current).phase
-        raise SilphChapterError(
-            f"{label} did not return to the MAIN battle menu: "
-            f"battle_state={current.battle_state}, phase={phase.value}, "
-            f"hp={current.battler_hp}/{current.battler_max_hp}, "
-            f"quantity={_bag(emulator).get(item, 0)}."
-        )
+        if current.battle_state != 2 or phase is not BattleMenuPhase.MAIN:
+            raise SilphChapterError(
+                f"{label} did not return to the MAIN battle menu: "
+                f"battle_state={current.battle_state}, phase={phase.value}, "
+                f"hp={current.battler_hp}/{current.battler_max_hp}, "
+                f"quantity={_bag(emulator).get(item, 0)}."
+            )
     after = _bag(emulator).get(item, 0)
     if before - after == 1:
         return
