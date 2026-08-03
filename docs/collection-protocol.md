@@ -64,6 +64,9 @@ The next replay preserved that item but won final Tunnel trainer 5 after pivotin
 executed its declared Peck lesson. The physical victory was rejected rather than mislabeled.
 Final-tunnel role reassignment is now gated on an observed PP decrement from the required DUX
 move; once that evidence exists, the adaptive type/status pivots resume normally.
+If the aggregate Lavender contract still fails after its individual gates, the retained private
+diagnostic now reports the complete public-safe trainer, inventory, party, and route ledger rather
+than a generic rejection, allowing the next repair to target the exact invariant.
 
 Historically, the v3 registry had twelve fresh counted seeds. Its
 uncounted dry seed `12001` deliberately replays the exact schedule that exposed the v2 failure;
@@ -263,13 +266,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `79ca499b5d7572df70d4f1a2128dbb7c9dacebcc62d3203e879531e6365129ff` |
-| Source bundle SHA-256 | `fea2622e9a9359414a8b1ca9e4f12380acfae4c916efb131201b1ae285757010` |
+| Registry SHA-256 | `ac4496c0d8dd8a616192d42e9f4bca3f20d32b7508d53b67ba9d83fdfc7de043` |
+| Source bundle SHA-256 | `a544a7b409c94cc81c4d4811ee520dd2e93402b8da67d1a4e3b1b0c063384547` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `5cd78b5d281c23534da84a69ed0e8bfbaecf9dab8785e2fcd111b081ac1efb48` |
+| Teacher execution SHA-256 | `3be06c0470364ecc5f779a0739f7055abf28b777bc2152cbef3b732d206f3623` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `b232f22af33a6791a8ba6628340e75488f1b144c078fe8507d8cb82f3692ef8d` |
+| Slot `01` assignment ID | `9bbc71d6a212196f39624d94ed74ca1371115de775d099d0fc6d7dce67283ab0` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

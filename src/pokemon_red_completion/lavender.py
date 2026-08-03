@@ -950,7 +950,10 @@ def run_lavender_chapter(
         controller_released=not emulator.pressed_buttons,
     )
     if not report.passed:
-        raise LavenderChapterError("Lavender chapter failed its evidence contract.")
+        raise LavenderChapterError(
+            "Lavender chapter failed its evidence contract: "
+            f"{report.public_dict()!r}."
+        )
     return report
 
 
