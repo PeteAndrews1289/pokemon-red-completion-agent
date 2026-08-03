@@ -841,3 +841,11 @@ bounded forced switch to the healthiest living teammate and gives reserve battle
 Disable-aware fallback move policy. At most five forced switches can occur, so this teaches normal
 team-battle continuation without adding recovery items, resets, or attempts. The exact source must
 again pass the complete uncounted rehearsal.
+
+The forced-switch replay proved the new team action: Snorlax entered and reduced Alakazam from
+4/189 to zero. The adapter then rejected the valid final-KO transition because its Champion receipt
+still read the fainted party-slot-zero HP/PP fields instead of the active reserve battler fields.
+Champion decisions and receipts now use active-battler HP, status, moves, and PP after a switch,
+and a verified zero-enemy-HP state advances through a bounded victory-text transition before the
+existing Hall-of-Fame terminal proof resumes. No outcome gate is relaxed: the Champion event and
+Hall-of-Fame map remain jointly required. The rehearsal remains uncounted.

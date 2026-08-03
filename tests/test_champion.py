@@ -84,6 +84,7 @@ def test_champion_move_ranking_distinguishes_late_matchups() -> None:
         enemy_hp: int = 100,
         pp: tuple[int, int, int, int] = (5, 15, 15, 0),
         active_party_index: int | None = 0,
+        active_party_pp: tuple[int, int, int, int] | None = None,
     ) -> RawGameState:
         return RawGameState(
             game_started=True,
@@ -97,6 +98,7 @@ def test_champion_move_ranking_distinguishes_late_matchups() -> None:
             first_party_pp=pp,
             first_party_max_hp=171,
             active_party_index=active_party_index,
+            active_party_pp=active_party_pp,
         )
 
     assert _champion_move_slot(raw(0x97, pp=(5, 10, 15, 0))) == 2
@@ -107,7 +109,17 @@ def test_champion_move_ranking_distinguishes_late_matchups() -> None:
     assert _champion_move_slot(raw(0x16, enemy_hp=31, pp=(5, 15, 15, 3))) == 3
     assert _champion_move_slot(raw(0x16, enemy_hp=196, pp=(5, 15, 15, 3))) == 3
     assert _champion_move_slot(raw(0x9A, pp=(5, 15, 15, 3))) == 3
-    assert _champion_move_slot(raw(0x9A, pp=(5, 15, 15, 3), active_party_index=3)) == 1
+    assert (
+        _champion_move_slot(
+            raw(
+                0x9A,
+                pp=(18, 11, 0, 11),
+                active_party_index=3,
+                active_party_pp=(14, 20, 10, 0),
+            )
+        )
+        == 1
+    )
     assert _champion_recovery_threshold(raw(0x01)) == CHAMPION_RHYDON_SAFE_HP
     assert _champion_recovery_threshold(raw(0x14)) == CHAMPION_SAFE_HP
     assert (

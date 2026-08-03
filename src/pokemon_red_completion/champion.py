@@ -258,13 +258,14 @@ def run_champion_chapter(
         pass
 
     def policy(raw: RawGameState) -> int:
-        hp = raw.first_party_hp or 0
-        status = raw.first_party_status or 0
+        hp = raw.battler_hp or 0
+        status = raw.battler_status or 0
         inventory = _bag(emulator)
         if accuracy_used == 0:
             raise _AccuracyBoundary
         if (
-            (hp < _champion_recovery_threshold(raw) or status)
+            raw.active_party_index in {None, 0}
+            and (hp < _champion_recovery_threshold(raw) or status)
             and _champion_recovery_available(status, inventory)
             and len(turns) != last_recovery_turn
         ):
@@ -272,7 +273,7 @@ def run_champion_chapter(
         if boosts_used < 6:
             raise _BoostBoundary
         species = raw.enemy_species_id or 0
-        pp = raw.first_party_pp or (0, 0, 0, 0)
+        pp = raw.battler_pp or (0, 0, 0, 0)
         slot = _champion_move_slot(raw)
         turns.append(
             ChampionTurn(
@@ -325,6 +326,13 @@ def run_champion_chapter(
             if _completed(reader.read()):
                 break
             current = reader.read()
+            if (
+                current.battle_state == 2
+                and current.enemy_hp == 0
+                and any(hp > 0 for hp in _party_hp(emulator))
+            ):
+                _settle_champion_battle_exit(reader, actions)
+                continue
             if (
                 current.battle_state == 2
                 and current.battler_hp == 0
@@ -526,7 +534,7 @@ def _select_recovery_item(
 
 def _champion_move_slot(raw: RawGameState) -> int:
     """Spend the five accurate Blizzard PP after Pidgeot."""
-    pp = raw.first_party_pp or (0, 0, 0, 0)
+    pp = raw.battler_pp or (0, 0, 0, 0)
     if raw.active_party_index not in {None, 0}:
         for slot, remaining in enumerate(pp, start=1):
             if remaining > 0 and raw.player_disabled_move_slot != slot:
@@ -592,6 +600,26 @@ def _settle_champion_forced_switch(
                 frames=DEFAULT_SILPH_TIMING.menu_frames,
             )
     raise ChampionChapterError("Champion forced switch exceeded its bounded menu pulses.")
+
+
+def _settle_champion_battle_exit(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+) -> None:
+    """Advance a reserve's verified final KO to the post-battle dialogue."""
+
+    for _ in range(128):
+        raw = reader.read()
+        if raw.battle_state == 0 or _completed(raw):
+            return
+        if raw.battle_state != 2 or raw.enemy_hp != 0:
+            raise ChampionChapterError("Champion final KO exposed an invalid transition.")
+        _pulse(
+            actions,
+            MacroActionKind.CONFIRM,
+            frames=DEFAULT_SILPH_TIMING.menu_frames,
+        )
+    raise ChampionChapterError("Champion final KO did not reach post-battle dialogue.")
 
 
 def _champion_recovery_threshold(raw: RawGameState) -> int:
