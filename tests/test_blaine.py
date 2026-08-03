@@ -1,5 +1,7 @@
 from dataclasses import replace
 
+import pytest
+
 from pokemon_red_completion.blaine import (
     BLAINE_ANTIDOTE_SALE_VALUE,
     BLAINE_CAPACITY_SALE_ITEM,
@@ -30,6 +32,7 @@ from pokemon_red_completion.blaine import (
     BlaineTurn,
     _battle_command_direction,
     _encounter_party,
+    _PauseForTeamTrainingRecovery,
     _red_training_matchup_acceptable,
     _sell_antidote_before_mansion,
     _team_training_move_slot,
@@ -113,6 +116,30 @@ def test_team_training_selects_damaging_moves_for_the_active_species() -> None:
         )
         == 3
     )
+
+
+def test_team_training_requests_escape_when_all_species_attacks_are_unusable() -> None:
+    base = RawGameState(True, MapId.POKEMON_MANSION_1F, 5, 20, 3, 1)
+
+    with pytest.raises(_PauseForTeamTrainingRecovery):
+        _team_training_move_slot(
+            replace(
+                base,
+                active_party_species_id=0x40,
+                active_party_moves=(0x40, 0x1C, 0x0F, 0x13),
+                active_party_pp=(0, 15, 0, 15),
+            )
+        )
+    with pytest.raises(_PauseForTeamTrainingRecovery):
+        _team_training_move_slot(
+            replace(
+                base,
+                active_party_species_id=0x40,
+                active_party_moves=(0x40, 0x1C, 0x0F, 0x13),
+                active_party_pp=(35, 15, 0, 15),
+                player_disabled_move_slot=1,
+            )
+        )
     assert (
         _team_training_move_slot(
             replace(

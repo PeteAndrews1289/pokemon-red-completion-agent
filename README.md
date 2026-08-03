@@ -413,7 +413,10 @@ low-HP lead assumption. The current policy protects the story lead by handing th
 healthiest living reserve and choosing from that reserve's own legal moves. All twelve counted
 slots remain pending. That repair reached checkpoint 261/312, where an attempted Sabrina Hyper
 Potion outlasted the shared routine's 24-frame menu-settling window. Battle-item recovery now uses
-a bounded 720-frame, cancel-safe observation window that cannot accidentally re-enter ITEM.
+a bounded 720-frame, cancel-safe observation window that cannot accidentally re-enter ITEM. That
+repair passed Sabrina and reached the balanced-team curriculum, where a member eventually lost
+every usable preferred attack to PP exhaustion or Disable. The trainer now pivots through the safe
+escort, flees, and lets the game-neutral planner schedule restoration instead of forcing a move.
 
 ## Evidence and project status
 

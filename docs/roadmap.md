@@ -297,6 +297,10 @@ party member's own legal moves. Another uncounted rehearsal is required before c
 That change advanced the route to Sabrina at checkpoint 261/312, where the Hyper Potion verifier's
 24-frame settle window expired during the opponent reply. The shared battle-item primitive now has
 a bounded 720-frame cancel-safe window and richer failure evidence. Rehearsal remains the gate.
+That repair passed Sabrina and carried the balanced curriculum beyond 1,250 battles, where live PP
+exhaustion or Disable removed every preferred attack. The current adapter hands control to the safe
+escort, flees without a faint, and lets the game-neutral planner request restoration. Another exact
+uncounted rehearsal remains required before collection opens.
 
 ## Milestone 4 — DAgger and selective RL
 

@@ -15,6 +15,7 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRuntimeError,
     RequiredMovePolicy,
     run_adaptive_trainer_battle,
     run_adaptive_wild_battle,
@@ -1139,8 +1140,15 @@ def _team_training_move_slot(state: RawGameState) -> int:
         index + 1
         for move_id in preferred_move_ids
         for index, observed in enumerate(moves)
-        if observed == move_id and index + 1 != disabled
+        if (
+            observed == move_id
+            and index + 1 != disabled
+            and index < len(pp)
+            and pp[index] > 0
+        )
     )
+    if preferred_move_ids and not preferred_slots:
+        raise _PauseForTeamTrainingRecovery
     fallback_slots = tuple(
         slot
         for slot in MANSION_TRAINING_POLICY.preferred_move_slots
@@ -1148,6 +1156,10 @@ def _team_training_move_slot(state: RawGameState) -> int:
     )
     slots = preferred_slots or fallback_slots
     return choose_training_move_slot(pp, slots)
+
+
+class _PauseForTeamTrainingRecovery(Exception):
+    """Request a safe escape when live PP or Disable removes every training attack."""
 
 
 def _training_attack_pp(member: PartyMemberObservation) -> int:
@@ -1357,13 +1369,39 @@ def _run_mansion_team_balancing(
                     continue
             if reader.read().battle_state != 1:
                 continue
-            run_adaptive_wild_battle(
-                reader,
-                actions,
-                _team_training_move_slot,
-                expected_map=MapId.POKEMON_MANSION_1F,
-                label="Pokémon Mansion team training encounter",
-            )
+            try:
+                run_adaptive_wild_battle(
+                    reader,
+                    actions,
+                    _team_training_move_slot,
+                    expected_map=MapId.POKEMON_MANSION_1F,
+                    label="Pokémon Mansion team training encounter",
+                )
+            except BattleRuntimeError as error:
+                if not isinstance(error.__cause__, _PauseForTeamTrainingRecovery):
+                    raise
+                current = reader.read()
+                if current.active_party_index != escort.slot - 1:
+                    if escort_unsafe:
+                        raise BlaineChapterError(
+                            "Training attacks were exhausted without a safe escape escort."
+                        ) from error
+                    if not _switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        target_index=escort.slot - 1,
+                        label="Blastoise PP-exhaustion escape escort",
+                    ):
+                        _require_zero_faints(party_reader, "terminal PP-exhaustion switch")
+                        battles += 1
+                        consecutive_flees = 0
+                        emit_progress()
+                        continue
+                _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
+                _require_zero_faints(party_reader, "PP-exhaustion escape")
+                record_flee("live PP exhaustion or Disable")
+                continue
             _require_zero_faints(party_reader, "completed training battle")
             battles += 1
             consecutive_flees = 0

@@ -75,6 +75,10 @@ The resulting rehearsal reached Sabrina at checkpoint 261/312. A Hyper Potion wa
 shared verifier allowed only 24 single-frame acknowledgements for the opponent's reply and never
 observed MAIN. The item primitive now waits up to 720 cancel-safe frames; CANCEL advances text while
 remaining inert on MAIN, preventing a second accidental ITEM confirmation.
+The repaired rehearsal passed Sabrina and advanced beyond 1,250 balanced-team battles before one
+fighter had no live preferred attack. The runtime now treats PP exhaustion or Disable as a semantic
+loss-of-control signal: it switches to the safe escort when required, flees with zero faints, and
+returns the decision to the portable team planner so a healing trip can be scheduled.
 
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
 schedule, episode, manifest, and 68/68 offline audit. Every counted slot reopens and re-audits that
