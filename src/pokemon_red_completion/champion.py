@@ -253,9 +253,6 @@ def run_champion_chapter(
     class _BoostBoundary(Exception):
         pass
 
-    class _PivotBoundary(Exception):
-        pass
-
     class _AccuracyBoundary(Exception):
         pass
 
@@ -271,14 +268,6 @@ def run_champion_chapter(
             and len(turns) != last_recovery_turn
         ):
             raise _HealBoundary
-        if _champion_pivot_due(
-            raw,
-            inventory=inventory,
-            party_hp=_party_hp(emulator),
-            next_sacrifice=next_sacrifice,
-            party_position=emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS),
-        ):
-            raise _PivotBoundary
         if boosts_used < 6:
             raise _BoostBoundary
         species = raw.enemy_species_id or 0
@@ -345,21 +334,6 @@ def run_champion_chapter(
             if isinstance(error.__cause__, _BoostBoundary):
                 _battle_x_special(reader, actions, emulator)
                 boosts_used += 1
-                continue
-            if isinstance(error.__cause__, _PivotBoundary):
-                try:
-                    _battle_sacrifice(
-                        actions,
-                        reader,
-                        emulator,
-                        next_sacrifice,
-                        heal_lead=False,
-                    )
-                except VictoryRoadChapterError as pivot_error:
-                    raise ChampionChapterError(
-                        "Champion exhausted-reserve pivot failed."
-                    ) from pivot_error
-                next_sacrifice += 1
                 continue
             if not isinstance(error.__cause__, _HealBoundary):
                 current = reader.read()
@@ -569,25 +543,6 @@ def _champion_recovery_available(
     return bool(
         inventory.get(ItemId.FULL_RESTORE, 0)
         or (status and inventory.get(ItemId.FULL_HEAL, 0))
-    )
-
-
-def _champion_pivot_due(
-    raw: RawGameState,
-    *,
-    inventory: Mapping[ItemId, int],
-    party_hp: tuple[int, ...],
-    next_sacrifice: int,
-    party_position: int,
-) -> bool:
-    hp = raw.first_party_hp or 0
-    status = raw.first_party_status or 0
-    return (
-        (hp < _champion_recovery_threshold(raw) or bool(status))
-        and not _champion_recovery_available(status, inventory)
-        and party_position >= 5
-        and next_sacrifice < len(party_hp)
-        and party_hp[next_sacrifice] > 0
     )
 
 

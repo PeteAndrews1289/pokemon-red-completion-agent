@@ -9,7 +9,6 @@ from pokemon_red_completion.champion import (
     CHAMPION_SAFE_HP,
     ChampionTurn,
     _champion_move_slot,
-    _champion_pivot_due,
     _champion_recovery_available,
     _champion_recovery_threshold,
     _encounter_party,
@@ -122,41 +121,6 @@ def test_champion_only_requests_available_recovery() -> None:
     assert not _champion_recovery_available(0, {ItemId.FULL_HEAL: 3})
     assert _champion_recovery_available(1, {ItemId.FULL_HEAL: 1})
     assert _champion_recovery_available(0, {ItemId.FULL_RESTORE: 1})
-
-
-def test_champion_pivots_living_helper_when_recovery_is_exhausted() -> None:
-    raw = RawGameState(
-        game_started=True,
-        map_id=MapId.CHAMPIONS_ROOM,
-        player_x=4,
-        player_y=3,
-        party_count=3,
-        battle_state=2,
-        enemy_species_id=0x16,
-        enemy_hp=161,
-        first_party_hp=46,
-    )
-    assert _champion_pivot_due(
-        raw,
-        inventory={},
-        party_hp=(46, 55, 39),
-        next_sacrifice=1,
-        party_position=5,
-    )
-    assert not _champion_pivot_due(
-        raw,
-        inventory={ItemId.FULL_RESTORE: 1},
-        party_hp=(46, 55, 39),
-        next_sacrifice=1,
-        party_position=5,
-    )
-    assert not _champion_pivot_due(
-        raw,
-        inventory={},
-        party_hp=(46, 55, 39),
-        next_sacrifice=1,
-        party_position=3,
-    )
 
 
 def test_champion_receipt_accepts_live_low_hp_decision() -> None:

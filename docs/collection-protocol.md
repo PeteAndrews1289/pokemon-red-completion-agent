@@ -825,3 +825,11 @@ twenty-four-frame settle window. Healing now uses the shared bounded battle-item
 continues to advance text with cancellation-only inputs, and still requires both a verified return
 to the trainer MAIN menu and an exact one-item decrement. This is an interaction-timing repair; it
 does not add an item, retry, party level, or battle attempt. The rehearsal remains uncounted.
+
+The long-settle replay completed that recovery, then exhausted its item reserve against the final
+Alakazam with Blastoise still at 180/262 HP and 42 legal attacks remaining. An inherited
+single-carry branch switched to the level-30 Jolteon solely to faint; during that turn Alakazam
+healed from 176/189 to full, so the switch lost a developed teammate and erased offensive progress
+without protecting a healing action. Champion play now keeps the healthy workhorse active once
+recovery is exhausted. Bounded helper pivots remain only when they purchase a verified healing
+turn. The failed rehearsal remains private and uncounted, and the exact source must requalify.
