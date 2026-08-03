@@ -90,6 +90,7 @@ def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -
     assert not _sell_antidote_before_mansion(18, 1)
     assert not _sell_antidote_before_mansion(18, 2)
     assert _sell_antidote_before_mansion(19, 1)
+    assert _sell_antidote_before_mansion(19, 2)
 
 
 def test_blaine_replaces_an_early_sold_bide_capacity_slot() -> None:

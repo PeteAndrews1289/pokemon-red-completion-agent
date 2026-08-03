@@ -802,3 +802,10 @@ the helper could act. Pikachu is now explicitly restored to the high-risk direct
 healthy workhorse remains active and the teacher spends only the existing bounded five-ball
 allowance. This is a portable risk decision—avoid a fragile switch against a dangerous target—not
 an added retry, healing item, or encounter allowance. The replay was uncounted.
+
+That replay then passed the Forest survey, every prior chapter, and Sabrina before reaching
+Cinnabar with nineteen occupied bag slots and a two-Antidote stack. The capacity planner understood
+that a slot had to be freed but only supported selling a one-item stack. It now sells the exact
+observed one- or two-item Antidote stack, verifies the quantity selector, inventory removal, and
+corresponding money delta, then follows the unchanged Mansion item-capacity proof. The failed replay
+was uncounted.

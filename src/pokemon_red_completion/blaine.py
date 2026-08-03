@@ -344,6 +344,7 @@ class BlaineChapterReport:
     x_accuracy_retained: bool
     bide_sold: bool
     antidote_sold: bool
+    antidote_sold_quantity: int
     max_repel_bought: int
     initial_money: int
     money_remaining: int
@@ -410,7 +411,7 @@ class BlaineChapterReport:
             == self.initial_money
             + BLAINE_MONEY_DELTA
             - (self.max_repel_bought - 1) * MAX_REPEL_PRICE
-            - (0 if self.antidote_sold else BLAINE_ANTIDOTE_SALE_VALUE)
+            + (self.antidote_sold_quantity - 1) * BLAINE_ANTIDOTE_SALE_VALUE
             - (ULTRA_BALL_PRICE if self.capacity_ultra_ball_bought else 0)
             - (
                 BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST
@@ -475,7 +476,7 @@ class BlaineChapterReport:
             == self.initial_money
             + BLAINE_MONEY_DELTA
             - (self.max_repel_bought - 1) * MAX_REPEL_PRICE
-            - (0 if self.antidote_sold else BLAINE_ANTIDOTE_SALE_VALUE)
+            + (self.antidote_sold_quantity - 1) * BLAINE_ANTIDOTE_SALE_VALUE
             - (ULTRA_BALL_PRICE if self.capacity_ultra_ball_bought else 0)
             - (
                 BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST
@@ -578,6 +579,7 @@ class BlaineChapterReport:
                 "x_accuracy_retained": self.x_accuracy_retained,
                 "bide_sold": self.bide_sold,
                 "antidote_sold": self.antidote_sold,
+                "antidote_sold_quantity": self.antidote_sold_quantity,
                 "max_repel_bought": self.max_repel_bought,
                 "money": [self.initial_money, self.money_remaining],
             },
@@ -667,7 +669,13 @@ def run_blaine_chapter(
         initial_bag.get(ItemId.ANTIDOTE, 0),
     )
     if sell_antidote_early:
-        _sell_current_bag_item(actions, reader, emulator, BLAINE_CAPACITY_SALE_ITEM)
+        _sell_bag_item_stack(
+            actions,
+            reader,
+            emulator,
+            BLAINE_CAPACITY_SALE_ITEM,
+            initial_bag.get(BLAINE_CAPACITY_SALE_ITEM, 0),
+        )
         if _bag(emulator).get(BLAINE_CAPACITY_SALE_ITEM, 0):
             raise BlaineChapterError("Obsolete Antidote sale did not settle.")
     else:
@@ -940,6 +948,9 @@ def run_blaine_chapter(
         x_accuracy_retained=_bag(emulator).get(ItemId.X_ACCURACY, 0) == 1,
         bide_sold=ItemId.TM34_BIDE not in _bag(emulator),
         antidote_sold=sell_antidote_early,
+        antidote_sold_quantity=(
+            initial_bag.get(ItemId.ANTIDOTE, 0) if sell_antidote_early else 0
+        ),
         max_repel_bought=repel_purchase_quantity,
         initial_money=initial_money,
         money_remaining=_money(emulator),
@@ -970,6 +981,17 @@ def _sell_current_bag_item(actions, reader, emulator, item: ItemId) -> None:
     before = _bag(emulator)
     if before.get(item, 0) != 1:
         raise BlaineChapterError(f"Expected one {item.name} to sell.")
+    _sell_bag_item_stack(actions, reader, emulator, item, 1)
+
+
+def _sell_bag_item_stack(actions, reader, emulator, item: ItemId, quantity: int) -> None:
+    """Sell an exact complete stack while preserving the live shop boundary."""
+
+    before = _bag(emulator).get(item, 0)
+    if type(quantity) is not int or quantity <= 0 or before != quantity:
+        raise BlaineChapterError(
+            f"Expected exactly {quantity} {item.name} to sell; observed {before}."
+        )
     _open_sell_menu(actions, emulator)
     for _ in range(24):
         absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
@@ -980,6 +1002,18 @@ def _sell_current_bag_item(actions, reader, emulator, item: ItemId) -> None:
         _pulse(actions, MacroActionKind.MOVE, "down", 120)
     else:
         raise BlaineChapterError(f"Sell list could not select {item.name}.")
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(quantity + 2):
+        if (
+            emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM) == item
+            and emulator.read_u8(RamAddress.SHOP_QUANTITY) == quantity
+        ):
+            break
+        _pulse(actions, MacroActionKind.MOVE, "up", 120)
+    else:
+        raise BlaineChapterError(
+            f"Cinnabar sale quantity selector missed {quantity} {item.name}."
+        )
     for _ in range(12):
         _pulse(actions, MacroActionKind.CONFIRM)
         if item not in _bag(emulator):
@@ -1003,7 +1037,7 @@ def _sell_antidote_before_mansion(
 
     if not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= input_slots <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]:
         raise BlaineChapterError(f"Unsupported Blaine input capacity: {input_slots} slots.")
-    if antidote_quantity not in (0, 1, 2) or (input_slots == 19 and antidote_quantity != 1):
+    if antidote_quantity not in (0, 1, 2) or (input_slots == 19 and antidote_quantity == 0):
         raise BlaineChapterError(
             "Unsupported Blaine Antidote capacity: "
             f"slots={input_slots}, quantity={antidote_quantity}."
