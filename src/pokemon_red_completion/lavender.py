@@ -212,6 +212,7 @@ class LavenderChapterReport:
     parlyz_heals_remaining: int
     awakenings_used: int
     awakenings_remaining: int
+    starting_super_potions: int
     super_potions_purchased: int
     super_potions_used: int
     super_potions_remaining: int
@@ -249,9 +250,10 @@ class LavenderChapterReport:
             and self.awakenings_remaining >= 1
             and self.awakenings_used + self.awakenings_remaining
             == TUNNEL_AWAKENING_RESERVE
+            and self.starting_super_potions in {0, 1}
             and self.super_potions_purchased >= 8
             and self.super_potions_used + self.super_potions_remaining
-            == self.super_potions_purchased + 1
+            == self.super_potions_purchased + self.starting_super_potions
             and self.super_potions_remaining == LAVENDER_SUPER_POTION_RESERVE
             and self.purchase_cost
             == self.super_potions_purchased * SUPER_POTION_PRICE
@@ -295,6 +297,7 @@ class LavenderChapterReport:
                 "awakenings_used": self.awakenings_used,
                 "awakenings_remaining": self.awakenings_remaining,
                 "awakenings_purchased": TUNNEL_AWAKENINGS_PURCHASED,
+                "starting_super_potions": self.starting_super_potions,
                 "super_potions_purchased": self.super_potions_purchased,
                 "super_potions_used": self.super_potions_used,
                 "super_potions_remaining": self.super_potions_remaining,
@@ -410,18 +413,21 @@ def run_lavender_chapter(
     )
     _wait(actions, timing.transition_frames)
     _require(reader.read(), MapId.VERMILION_MART, (3, 7), "Mart entrance")
-    tunnel_purchase_cost = _purchase_supplies(actions, reader, emulator, timing)
+    tunnel_purchase_cost = _purchase_supplies(
+        actions, reader, emulator, timing, starting_super_potions=initial_sp
+    )
     # Restore the qualified Route 9 battle lineage after the bounded quantity menu.
     _wait(actions, POST_MART_RNG_ALIGNMENT_FRAMES)
     supplies = reader.read()
     if (
-        _bag(emulator).get(ItemId.SUPER_POTION) != 13
+        _bag(emulator).get(ItemId.SUPER_POTION) != initial_sp + 12
         or _bag(emulator).get(ItemId.PARLYZ_HEAL) != 1
         or _bag(emulator).get(ItemId.AWAKENING) != TUNNEL_AWAKENING_RESERVE
         or _bag(emulator).get(ItemId.REPEL) != 4
     ):
         raise LavenderChapterError(
-            "Mart purchase did not produce thirteen carried SP, two Awakenings, "
+            "Mart purchase did not produce the twelve-potion purchase plus the observed "
+            "starting reserve, two Awakenings, "
             "one Parlyz Heal, and four Repels."
         )
     _checkpoint(records, progress, emulator, supplies, "supplies", "Purchased tunnel supplies")
@@ -919,6 +925,7 @@ def run_lavender_chapter(
         parlyz_heals_remaining=_bag(emulator).get(ItemId.PARLYZ_HEAL, 0),
         awakenings_used=run.awakenings_used,
         awakenings_remaining=_bag(emulator).get(ItemId.AWAKENING, 0),
+        starting_super_potions=initial_sp,
         super_potions_purchased=12 + top_up_quantity,
         super_potions_used=run.potions_used,
         super_potions_remaining=_bag(emulator).get(ItemId.SUPER_POTION, 0),
@@ -1836,7 +1843,11 @@ def _purchase_supplies(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: LavenderTiming,
+    *,
+    starting_super_potions: int,
 ) -> int:
+    if starting_super_potions not in {0, 1}:
+        raise LavenderChapterError("Invalid starting Super Potion reserve for Mart purchase.")
     money_before = _money(emulator)
     _move(executor, reader, emulator, _RunState([], []), _directions("UUL"), timing, "Mart clerk")
     _pulse(executor, MacroActionKind.MOVE, "left", 60)
@@ -1860,7 +1871,7 @@ def _purchase_supplies(
         absolute_index=1,
         item=ItemId.SUPER_POTION,
         quantity=12,
-        target_bag_quantity=13,
+        target_bag_quantity=starting_super_potions + 12,
     )
     _buy_mart_item(
         executor,

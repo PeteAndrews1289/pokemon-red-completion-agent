@@ -75,6 +75,7 @@ def _report() -> LavenderChapterReport:
         parlyz_heals_remaining=1,
         awakenings_used=1,
         awakenings_remaining=1,
+        starting_super_potions=1,
         super_potions_purchased=15,
         super_potions_used=4,
         super_potions_remaining=12,
@@ -354,6 +355,7 @@ def test_lavender_report_requires_all_route_resource_and_party_gates() -> None:
         replace(report, parlyz_heals_used=0),
         replace(report, parlyz_heals_remaining=0),
         replace(report, awakenings_remaining=0),
+        replace(report, starting_super_potions=2),
         replace(report, super_potions_remaining=3),
         replace(report, purchase_cost=10899),
         replace(report, tm28_sale_proceeds=999),
@@ -361,6 +363,12 @@ def test_lavender_report_requires_all_route_resource_and_party_gates() -> None:
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)
+
+
+def test_lavender_report_accounts_for_a_surge_consumed_starting_potion() -> None:
+    report = replace(_report(), starting_super_potions=0, super_potions_used=3)
+
+    assert report.passed
 
 
 def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
@@ -377,6 +385,7 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
         "awakenings_used": 1,
         "awakenings_remaining": 1,
         "awakenings_purchased": 1,
+        "starting_super_potions": 1,
         "super_potions_purchased": 15,
         "super_potions_used": 4,
         "super_potions_remaining": 12,
