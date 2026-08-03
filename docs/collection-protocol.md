@@ -74,6 +74,9 @@ The next replay reached the same turn with both Blastoise and the rival's final 
 That terminal mutual-KO is now distinct from a mid-battle KO: the teacher selects a living reserve,
 accepts the proven battle exit instead of requiring another MAIN menu, and closes the matching
 Silph schedule and observer lifecycle exactly once.
+That repair proved the rival victory at checkpoint 244, but post-battle text still owned input when
+the elevator route began. Terminal recovery now clears bounded dialogue and requires two consecutive
+field-readiness observations before any navigation, matching the normal adaptive runtime contract.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
@@ -127,13 +130,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `9bb313c47ae4e558b2298dd2025dcd9d9b4d1be84c8109a62401b936a032edb8` |
-| Source bundle SHA-256 | `dfd44f04e021e40a67807a28b3f385e04cc9bdc532754e0d1cab665617d54e2c` |
+| Registry SHA-256 | `59711a048540af8f896aa98e1e7ff48253962b822773b1bb2aa7fa047ed44753` |
+| Source bundle SHA-256 | `003518a8b9311b421cf551efba4c8763b10be1457a4109503bb7553318d38747` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `5259c0883c12f8a59d1acd7e24891f539d95aff29bd55e04260817989b109ad6` |
+| Teacher execution SHA-256 | `fb4666610ce9a22112a095c44bea25371cad4158d8644d784f4b25a663cedb14` |
 | Dry-run schedule SHA-256 | `c63ddab975851d520b6c25492e03d688cd76c88b638a01330d9d3ea659671733` |
-| Slot `01` assignment ID | `257e314e27978e2c2ee56e957be7232dc4a13d17cace14f446f607a6a609654b` |
+| Slot `01` assignment ID | `f5df2a5660213187e7ab25e97600eb1354377ebd8ca5ad5d98bef930fbc81c16` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

@@ -480,6 +480,9 @@ living reserve cursor and the eventual return to the battle's main menu.
 The following replay exposed the terminal variant where the rival's final Pokémon also reached zero
 HP. The teacher now accepts a proven post-selection battle exit for that mutual knockout and closes
 the exact Silph schedule entry, while ordinary knockouts still require a restored main menu.
+That repair proved checkpoint 244, then exposed lingering post-rival text before the elevator route.
+Terminal recovery now requires two consecutive field-control observations before issuing movement,
+the same completion gate used by ordinary adaptive battles.
 
 ## Evidence and project status
 

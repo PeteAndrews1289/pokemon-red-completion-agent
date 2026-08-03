@@ -1524,6 +1524,7 @@ def _run_rival_with_potions(
             raw = reader.read()
             if raw.battle_state == 0:
                 note_observed_trainer_battle_exit(_silph_rival_intent())
+                _settle_silph_rival_field_control(reader, actions, timing)
                 return
             party_hp = _party_hp(emulator)
             if (
@@ -1538,6 +1539,7 @@ def _run_rival_with_potions(
             )
             if terminal:
                 note_observed_trainer_battle_exit(_silph_rival_intent())
+                _settle_silph_rival_field_control(reader, actions, timing)
                 return
             forced_switches += 1
             continue
@@ -1589,6 +1591,36 @@ def _silph_rival_intent() -> BattleIntent:
         battle_plan_id=RedBattlePlanId.SILPH_7F_RIVAL,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
     )
+
+
+def _settle_silph_rival_field_control(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+    timing: SilphTiming,
+) -> None:
+    """Clear terminal rival text and prove stable field input before routing."""
+
+    ready_reads = 0
+    for _ in range(48):
+        raw = reader.read()
+        if raw.battle_state != 0:
+            raise SilphChapterError("Silph rival terminal recovery re-entered battle.")
+        if reader.read_input_readiness().ready:
+            ready_reads += 1
+            if ready_reads >= 2:
+                return
+            actions.execute(
+                MacroAction(MacroActionKind.WAIT, repeat=timing.menu_frames)
+            )
+        else:
+            ready_reads = 0
+            _pulse(
+                actions,
+                MacroActionKind.CONFIRM,
+                timing,
+                frames=timing.dialogue_frames,
+            )
+    raise SilphChapterError("Silph rival terminal text did not restore field control.")
 
 
 def _settle_silph_rival_forced_switch(
