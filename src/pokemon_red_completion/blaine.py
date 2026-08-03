@@ -67,6 +67,7 @@ from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
     DevelopedTeamPolicy,
     DevelopedTeamReport,
+    TeamTrainingDecision,
     TeamTrainingDirective,
     TeamTrainingProgress,
     is_matchup_acceptable,
@@ -784,9 +785,20 @@ def run_blaine_chapter(
         "Trained safely in Pokémon Mansion",
     )
 
+    development = plan_team_development(
+        PokemonRedPartyReader(emulator).read(), MANSION_DEVELOPMENT_POLICY
+    )
+    if development.directive is TeamTrainingDirective.EVOLVE_MEMBER:
+        _, team_battles, team_healing_trips = _run_mansion_team_balancing(
+            actions,
+            reader,
+            emulator,
+            evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+        )
+    else:
+        team_battles = 0
+        team_healing_trips = 0
     team_readiness = _qualify_mansion_team_development(reader, emulator)
-    team_battles = 0
-    team_healing_trips = 0
 
     _move(actions, reader, ("down",) * 5 + GYM_ENTRY_ROUTE, "Cinnabar Gym")
     _require(reader.read(), MapId.CINNABAR_GYM, (16, 17), "Cinnabar Gym entrance")
@@ -1346,7 +1358,8 @@ def _run_mansion_team_balancing(
     *,
     progress_sink: ProgressSink | None = None,
     completed_checkpoint_count: int = 0,
-) -> tuple[object, int, int]:
+    evolution_target: tuple[int, int] | None = None,
+) -> tuple[object | None, int, int]:
     """Raise the party with safe participation followed by direct training.
 
     The weakest member is moved to the front before an encounter. If the
@@ -1398,7 +1411,42 @@ def _run_mansion_team_balancing(
             healing_trips=healing_trips,
             faints=party.fainted_count,
         )
-        decision = plan_team_training(party, policy, progress)
+        if evolution_target is None:
+            decision = plan_team_training(party, policy, progress)
+            trainee = party.weakest_trainable_member
+        else:
+            precursor_species, final_species = evolution_target
+            if final_species in party.species_ids():
+                break
+            if battles >= 200:
+                raise BlaineChapterError(
+                    "Targeted Mansion evolution exceeded 200 battles: "
+                    f"target={evolution_target!r}, levels={party.levels!r}."
+                )
+            trainee = next(
+                (
+                    member
+                    for member in party.members
+                    if member.species_id == precursor_species
+                ),
+                None,
+            )
+            if trainee is None:
+                raise BlaineChapterError(
+                    "Targeted Mansion evolution lost its precursor: "
+                    f"target={evolution_target!r}, species={party.species_ids()!r}."
+                )
+            if _member_is_unsafe_for_team_training(trainee, policy):
+                directive = TeamTrainingDirective.RESTORE_TEAM
+            elif trainee.slot != 1:
+                directive = TeamTrainingDirective.SWITCH_TRAINEE
+            else:
+                directive = TeamTrainingDirective.TRAIN_MEMBER
+            decision = TeamTrainingDecision(
+                directive,
+                "train the declared precursor to its final available form",
+                target_slot=trainee.slot,
+            )
         if decision.directive in {
             TeamTrainingDirective.STOP,
             TeamTrainingDirective.RECRUIT_MEMBER,
@@ -1426,7 +1474,18 @@ def _run_mansion_team_balancing(
             or _training_attack_pp(escort) <= _training_attack_pp_reserve(escort, policy)
         )
         if raw.battle_state == 1:
-            trainee = party.weakest_trainable_member
+            trainee = (
+                party.weakest_trainable_member
+                if evolution_target is None
+                else next(
+                    (
+                        member
+                        for member in party.members
+                        if member.species_id == evolution_target[0]
+                    ),
+                    None,
+                )
+            )
             if trainee is None or trainee.slot != 1:
                 raise BlaineChapterError(
                     "A Mansion encounter began without the selected trainee in front."
@@ -1576,7 +1635,18 @@ def _run_mansion_team_balancing(
             continue
         if raw.map_id != MapId.POKEMON_MANSION_1F:
             break
-        trainee = party.weakest_trainable_member
+        trainee = (
+            party.weakest_trainable_member
+            if evolution_target is None
+            else next(
+                (
+                    member
+                    for member in party.members
+                    if member.species_id == evolution_target[0]
+                ),
+                None,
+            )
+        )
         if trainee is None:
             break
         if trainee.slot != 1:
@@ -1604,7 +1674,26 @@ def _run_mansion_team_balancing(
         _heal(actions, reader, emulator)
         healing_trips += 1
     _restore_training_core_order(actions, reader, emulator)
-    return summarize_team_readiness(party_reader.read(), policy), battles, healing_trips
+    report = (
+        summarize_team_readiness(party_reader.read(), policy)
+        if evolution_target is None
+        else None
+    )
+    return report, battles, healing_trips
+
+
+def _member_is_unsafe_for_team_training(
+    member: PartyMemberObservation,
+    policy: BalancedTeamPolicy,
+) -> bool:
+    """Apply the field-side safety gate used before a targeted trainee switch."""
+
+    return (
+        member.is_fainted
+        or member.hp_ratio <= policy.retreat_hp_ratio
+        or member.status is not StatusCondition.HEALTHY
+        or _training_attack_pp(member) <= _training_attack_pp_reserve(member, policy)
+    )
 
 
 def _require_zero_faints(party_reader: PokemonRedPartyReader, context: str) -> None:
