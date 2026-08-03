@@ -9,6 +9,7 @@ from pokemon_red_completion.koga import (
     DEFAULT_KOGA_TIMING,
     GYM_TO_JUGGLER3,
     JUGGLER3_TO_TAMER2,
+    JUGGLER_4_PIVOT_HP_THRESHOLD,
     KOGA_CHECKPOINT_COUNT,
     KOGA_OPPONENT,
     KOGA_TRAINER_CLASS,
@@ -22,6 +23,7 @@ from pokemon_red_completion.koga import (
     KogaCheckpoint,
     KogaTiming,
     _koga_move_slot,
+    _koga_reserve_pivot_target,
     _nurse_approach_directions,
 )
 from pokemon_red_completion.observation import (
@@ -221,6 +223,32 @@ def test_koga_disable_fallback_uses_a_legal_ranked_reserve_attack() -> None:
     assert _koga_move_slot(raw, allow_disable_fallback=True) == 3
     with pytest.raises(KogaChapterError, match="no legal ranked attack"):
         _koga_move_slot(raw, allow_disable_fallback=False)
+
+
+def test_koga_low_hp_lead_pivots_to_the_healthiest_reserve() -> None:
+    raw = replace(
+        _raw(),
+        battle_state=2,
+        active_party_index=0,
+        active_party_hp=40,
+        active_party_max_hp=120,
+    )
+
+    assert JUGGLER_4_PIVOT_HP_THRESHOLD == 50
+    assert _koga_reserve_pivot_target(raw, (40, 75, 130, 90), 50) == 2
+    assert _koga_reserve_pivot_target(raw, (40, 45, 0), 50) is None
+    assert _koga_reserve_pivot_target(replace(raw, active_party_index=2), (40, 75, 130), 50) is None
+
+
+def test_koga_pivoted_reserve_uses_its_own_legal_move() -> None:
+    raw = replace(
+        _raw(),
+        active_party_index=3,
+        active_party_moves=(0x1D, 0x85, 0x9C, 0),
+        active_party_pp=(15, 20, 10, 0),
+    )
+
+    assert _koga_move_slot(raw, allow_disable_fallback=True) == 1
 
 
 def test_koga_source_addresses_and_ids_are_pinned() -> None:

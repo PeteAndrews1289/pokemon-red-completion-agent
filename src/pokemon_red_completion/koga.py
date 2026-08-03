@@ -15,6 +15,7 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleRuntimeError,
@@ -46,6 +47,7 @@ KOGA_TRAINER_NUMBER = 1
 # Bound its Surf consumption by the carried 15-PP pool rather than one historical
 # eight-turn outcome; the remaining fights retain their tighter qualified limits.
 KOGA_PP_BOUNDS = ((0, 15), (1, 8), (1, 8), (1, 15))
+JUGGLER_4_PIVOT_HP_THRESHOLD = 50
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -378,6 +380,7 @@ def run_koga_chapter(
             8,
             RedBattlePlanId.KOGA_JUGGLER_4,
             allow_disable_fallback=True,
+            reserve_pivot_threshold=JUGGLER_4_PIVOT_HP_THRESHOLD,
         )
     )
     _checkpoint(
@@ -498,6 +501,7 @@ def _fight(
     *,
     clear_text: bool = True,
     allow_disable_fallback: bool = False,
+    reserve_pivot_threshold: int | None = None,
 ) -> KogaBattleEvidence:
     battle = _settle_trainer_identity(actions, reader, emulator, timing, label, identity)
     before_pp = battle.first_party_pp
@@ -508,6 +512,13 @@ def _fight(
     )
 
     def choose_move(raw: RawGameState) -> int:
+        pivot_target = _koga_reserve_pivot_target(
+            raw,
+            _party_hp(emulator),
+            reserve_pivot_threshold,
+        )
+        if pivot_target is not None:
+            raise _PauseForKogaReservePivot(pivot_target)
         try:
             return _koga_move_slot(raw, allow_disable_fallback=allow_disable_fallback)
         except KogaChapterError as error:
@@ -515,22 +526,41 @@ def _fight(
 
     terminal_mutual_ko = False
     try:
-        final = run_adaptive_trainer_battle(
-            reader,
-            actions,
-            choose_move,
-            expected_map=MapId.FUCHSIA_GYM,
-            intent=BattleIntent(
-                "defeat_koga",
-                battle_plan_id=battle_plan_id,
-                required_move_policy=required_policy,
-                required_move_ref=(None if allow_disable_fallback else pokemon_red_move_ref(SURF)),
-            ),
-            required_move_id=None if allow_disable_fallback else SURF,
-            timing=KOGA_BATTLE_TIMING,
-            label=label,
-            unknown_cancel_interval=3,
-        )
+        while True:
+            try:
+                final = run_adaptive_trainer_battle(
+                    reader,
+                    actions,
+                    choose_move,
+                    expected_map=MapId.FUCHSIA_GYM,
+                    intent=BattleIntent(
+                        "defeat_koga",
+                        battle_plan_id=battle_plan_id,
+                        required_move_policy=required_policy,
+                        required_move_ref=(
+                            None if allow_disable_fallback else pokemon_red_move_ref(SURF)
+                        ),
+                    ),
+                    required_move_id=None if allow_disable_fallback else SURF,
+                    timing=KOGA_BATTLE_TIMING,
+                    label=label,
+                    unknown_cancel_interval=3,
+                )
+                break
+            except BattleRuntimeError as error:
+                if not isinstance(error.__cause__, _PauseForKogaReservePivot):
+                    raise
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        error.__cause__.party_index,
+                        label=f"{label} healthy reserve pivot",
+                        wait_frames=timing.wait_frames,
+                    )
+                except ProtectedRecoveryError as pivot_error:
+                    raise KogaChapterError(str(pivot_error)) from pivot_error
     except BattleRuntimeError:
         mutual = reader.read()
         if (
@@ -616,11 +646,15 @@ def _settle_terminal_mutual_ko(
 def _koga_move_slot(raw: RawGameState, *, allow_disable_fallback: bool) -> int:
     """Choose Surf or the first legal reserve attack after Gen I Disable."""
 
-    moves = raw.first_party_moves
-    pp = raw.first_party_pp
+    moves = raw.battler_moves
+    pp = raw.battler_pp
     if moves is None or pp is None:
         raise KogaChapterError("battle lacks live move and PP evidence")
-    candidates = (SURF_SLOT, 3, 1, 2) if allow_disable_fallback else (SURF_SLOT,)
+    candidates = (
+        (1, 2, 3, 4)
+        if raw.active_party_index not in {None, 0}
+        else ((SURF_SLOT, 3, 1, 2) if allow_disable_fallback else (SURF_SLOT,))
+    )
     for slot in candidates:
         index = slot - 1
         if (
@@ -632,6 +666,30 @@ def _koga_move_slot(raw: RawGameState, *, allow_disable_fallback: bool) -> int:
         ):
             return slot
     raise KogaChapterError("battle has no legal ranked attack")
+
+
+class _PauseForKogaReservePivot(Exception):
+    def __init__(self, party_index: int) -> None:
+        self.party_index = party_index
+
+
+def _koga_reserve_pivot_target(
+    raw: RawGameState,
+    party_hp: tuple[int, ...],
+    threshold: int | None,
+) -> int | None:
+    """Protect the story lead by handing a dangerous finish to the healthiest reserve."""
+
+    if (
+        threshold is None
+        or raw.active_party_index not in {None, 0}
+        or not 0 < (raw.battler_hp or 0) <= threshold
+    ):
+        return None
+    living_reserves = tuple(
+        (hp, index) for index, hp in enumerate(party_hp[1:], start=1) if hp > threshold
+    )
+    return max(living_reserves, default=(0, -1))[1] if living_reserves else None
 
 
 def _settle_trainer_identity(

@@ -291,6 +291,9 @@ bounded spread contract. Registry freeze and the next uncounted 68-battle rehear
 gates. The following rehearsal cleared Rock Tunnel but exposed a $200 restock deficit from the
 additional schedule-specific recovery. The teacher now sells the unused, already-proven TM28 for
 $1,000 before restoring the full downstream reserve; no counted slot was consumed.
+That repair moved the rehearsal to checkpoint 202/312, where Koga Gym Juggler 4 fainted the lead.
+The current teacher pivots at the 50-HP floor to the healthiest living reserve and uses that active
+party member's own legal moves. Another uncounted rehearsal is required before collection opens.
 
 ## Milestone 4 — DAgger and selective RL
 

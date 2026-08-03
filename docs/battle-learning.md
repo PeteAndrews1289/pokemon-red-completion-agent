@@ -67,6 +67,10 @@ curriculum exceeded **4,000 battles**, retained the minimum level of 77, and pas
 spread contract. The next uncounted rehearsal cleared Rock Tunnel but found that its extra recovery
 left the Lavender restock $200 short. The teacher now sells the unused, already-proven TM28 for
 $1,000 before restoring the complete downstream safety reserve; no counted slot was consumed.
+That correction advanced the rehearsal to Koga Gym, where Juggler 4 fainted the low-HP lead. The
+teacher now pivots to the healthiest living reserve at the observed 50-HP safety floor and ranks
+that active reserve's own legal moves; this teaches party-role handoff without spending another
+item.
 
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
 schedule, episode, manifest, and 68/68 offline audit. Every counted slot reopens and re-audits that

@@ -408,7 +408,10 @@ level of **77** and a five-level spread. The regenerated source identity is the 
 rehearsal candidate. That rehearsal cleared all nine tunnel trainers, then exposed a $200
 schedule-specific recovery shortfall during the Lavender restock. The current teacher legally
 liquidates the already-proven, unused TM28 for $1,000 before restoring the full downstream safety
-reserve; all twelve counted slots remain pending.
+reserve. That correction carried the rehearsal to checkpoint 202/312, where Juggler 4 exposed a
+low-HP lead assumption. The current policy protects the story lead by handing the finish to the
+healthiest living reserve and choosing from that reserve's own legal moves. All twelve counted
+slots remain pending.
 
 ## Evidence and project status
 
