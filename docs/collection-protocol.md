@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v1.json`](../configs/red-battle-collection-v1.json)
+[`red-battle-collection-v2.json`](../configs/red-battle-collection-v2.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 68 stable public battle-plan identities in exact qualified-route order;
@@ -12,8 +12,15 @@ registry freezes one prospective Pokémon Red teacher-collection campaign:
   through `5/5`, in addition to global collection ordinals `1/12` through `12/12`; and
 - one unique 68-offset timing schedule and one attempt for each slot.
 
-As of the commit that introduces this protocol, the schedule dry run and all twelve declared
-slots are unexecuted. The registry is a prospective plan, not an outcome or held-out result. It
+The v1 campaign's uncounted rehearsal completed all 312 checkpoints, all 36 objectives, and Hall
+of Fame with 68/68 schedule attestations. Its first one-shot training root then failed at Route 24:
+a poisoned Wartortle entered trainer 3 at 17/54 HP and Ekans trapped it with Wrap. That failure is
+preserved in the private immutable ledger; v1 is not eligible for model fitting because its five
+training roots can no longer all complete. The teacher now visits the already-planned Center before
+that trainer, and an uncounted replay of the exact exposed schedule reached the following trainer.
+
+This v2 registry is a new prospective campaign with fresh, previously unexecuted seeds. Its dry run
+and all twelve slots are unexecuted. It is a plan, not an outcome or held-out-result claim, and it
 contains no trajectory, ROM, snapshot, private path, or completion evidence.
 
 One invocation against the superseded registry
@@ -67,14 +74,14 @@ The prospective campaign published by this version has these independent golden 
 
 | Field | Frozen value |
 | --- | --- |
-| Registry bytes | `6505` |
-| Registry SHA-256 | `f8b14cf46fa144dde60f79706b1892d627cf70be2ab0fc8b68ed1e465f88be5f` |
-| Source bundle SHA-256 | `3277a3992c327e60cc9974659dcdf090a3d0cdb99f9bb980a69ca6aa656ad2c7` |
+| Registry bytes | `6518` |
+| Registry SHA-256 | `816797bdf49d6bff7254792956970a2d3e208991cbf5d70491f158e053259a37` |
+| Source bundle SHA-256 | `6f568b5d2c99989d6bfc594f35ca4a72aa5e619493db3b8fb11334cd0b92a583` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `c99f1608eab5fbb4b9a86f56b23f79c3013266641ef1a24b46372239984cf073` |
-| Dry-run schedule SHA-256 | `8ac4a1cae0d0a5dbbf02ef16e712e63871bb4f2718e175596104ea6b8efaf9d0` |
-| Slot `01` assignment ID | `283fd5f1c8ea536d7dbf1ab1b45a203cf092eb0029d4cf43b37794ba245ec071` |
+| Teacher execution SHA-256 | `d8fe4c5a9e4a3eb7fe1204e5d9ab14aef3c5bfd59d250ec23217bfe2a419ed88` |
+| Dry-run schedule SHA-256 | `c63ddab975851d520b6c25492e03d688cd76c88b638a01330d9d3ea659671733` |
+| Slot `01` assignment ID | `cced200b2aeaf85814c35c7fd9f3a0f4e3d49d4c69fc4897f021738cad822cc8` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

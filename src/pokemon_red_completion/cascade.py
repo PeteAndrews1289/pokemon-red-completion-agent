@@ -75,6 +75,7 @@ CERULEAN_RIVAL_MAX_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE + 3
 POTION_HEAL_AMOUNT = 20
 TM01_FIELD_MENU_CLOSE_PULSES = 2
 ROUTE_24_RECOVERY_POTION_RESERVE = 4
+ROUTE_24_CENTER_RECOVERY_POSITION = 2
 ROUTE_25_RECOVERY_POTION_RESERVE = 3
 VERMILION_ROUTE_6_POTION_RESERVE = 2
 SS_ANNE_RIVAL_POTION_RESERVE = 1
@@ -476,6 +477,18 @@ def run_cascade_chapter(
             strict=True,
         )
     ):
+        # The third required trainer leads with three Bug/Poison Pokémon and
+        # finishes with an Ekans that can trap Wartortle with Wrap. Recover
+        # before this battle: a held-out schedule showed that healing
+        # immediately afterward is too late when the preceding fights poison
+        # and weaken the only party member.
+        if position == ROUTE_24_CENTER_RECOVERY_POSITION:
+            _recover_route_24(
+                chapter_executor,
+                reader,
+                timing,
+                route_24_prefix,
+            )
         route_24_prefix += segment
         _move(
             chapter_executor,
@@ -510,13 +523,6 @@ def run_cascade_chapter(
             timing,
             f"Route 24 trainer {trainer_index}",
         )
-        if position == 2:
-            _recover_route_24(
-                chapter_executor,
-                reader,
-                timing,
-                route_24_prefix,
-            )
 
     _move(
         chapter_executor,

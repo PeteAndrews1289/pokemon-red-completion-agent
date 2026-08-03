@@ -245,7 +245,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v1-01-train
+  --collection-run red-battle-v2-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
@@ -429,7 +429,14 @@ accepted 4,789 move labels and every lifecycle/progress event, reducing the rema
 lead switched out, while the semantic snapshot still described the field lead. Battle snapshots
 now describe the currently controlled battler during combat and the field lead outside combat,
 which makes switch training truthful and portable. The second failed rehearsal also consumed no
-slot.
+slot. The corrected source then passed the complete scheduled rehearsal at **312/312 checkpoints**,
+**36/36 objectives**, and Hall of Fame, promoting **4,998 decisions** and **870,460 total records**
+with all 68 scheduled-battle attestations intact. The first genuinely held-out v1 training run then
+failed honestly at checkpoint 41 when a poisoned 17/54-HP Wartortle was trapped by Ekans's Wrap;
+that one-shot outcome remains sealed and v1 cannot be used for fitting. Moving the already-planned
+Route 24 Center recovery before that trainer cleared the exact exposed schedule through the next
+checkpoint. A separately identified v2 campaign now preregisters fresh train, validation, test,
+and rehearsal seeds; it must pass its own uncounted full rehearsal before any v2 slot is consumed.
 
 ## Evidence and project status
 
