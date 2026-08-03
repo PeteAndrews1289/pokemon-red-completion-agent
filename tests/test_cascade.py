@@ -177,7 +177,7 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
         14,
     )
     assert len(CENTER_TO_RIVAL_STAGING_DIRECTIONS) == 34
-    assert MART_REPEAT_CLERK_DIRECTIONS == ("left", "left", "up", "up")
+    assert MART_REPEAT_CLERK_DIRECTIONS == ("right", "up", "up", "left", "left")
     assert _reverse_directions(
         CENTER_HEAL_TO_PC_DIRECTIONS
     ) == CENTER_PC_TO_HEAL_DIRECTIONS

@@ -101,7 +101,7 @@ CENTER_PC_TO_HEAL_DIRECTIONS = _directions("L" * 10 + "U")
 CENTER_EXIT_DIRECTIONS = _directions("DDDDD")
 CENTER_TO_MART_DIRECTIONS = _directions("D" * 5 + "L" * 2 + "D" * 3 + "R" * 8 + "U" * 3)
 MART_CLERK_DIRECTIONS = _directions("UULL")
-MART_REPEAT_CLERK_DIRECTIONS = _directions("LLUU")
+MART_REPEAT_CLERK_DIRECTIONS = _directions("RUULL")
 MART_TO_CENTER_STAGING_DIRECTIONS = _directions(
     "RR" + "D" * 3 + "L" * 10 + "U" * 3 + "R" * 2 + "U" * 5
 )
@@ -1848,7 +1848,7 @@ def _purchase_cerulean_awakening_topup(
     clerk_stance = reader.read()
     if (
         clerk_stance.map_id != MapId.CERULEAN_MART
-        or (clerk_stance.player_x, clerk_stance.player_y) != (1, 5)
+        or (clerk_stance.player_x, clerk_stance.player_y) != (2, 5)
         or not reader.read_input_readiness().ready
     ):
         raise CascadeChapterError(
