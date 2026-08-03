@@ -1854,12 +1854,19 @@ def _purchase_cerulean_awakening_topup(
         raise CascadeChapterError("Cerulean Mart could not normalize the BUY cursor.")
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
-    observed_menu_indexes: list[int] = []
+    observed_menu_states: list[tuple[int, int, int, int, int]] = []
     for _ in range(12):
-        selected_index = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
-            RamAddress.LIST_SCROLL_OFFSET
+        menu = reader.read_menu_cursor_state()
+        selected_index = menu.selected_visible_index + menu.scroll_offset
+        observed_menu_states.append(
+            (
+                menu.selected_visible_index,
+                menu.scroll_offset,
+                menu.maximum_visible_index,
+                menu.top_x,
+                menu.top_y,
+            )
         )
-        observed_menu_indexes.append(selected_index)
         if selected_index == 5:
             break
         _battle_pulse(
@@ -1872,7 +1879,7 @@ def _purchase_cerulean_awakening_topup(
     else:
         raise CascadeChapterError(
             "Cerulean Mart could not select the Awakening top-up: "
-            f"menu_indexes={observed_menu_indexes}, "
+            f"menu_states={observed_menu_states}, "
             f"shop_item={emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM):#04x}, "
             f"shop_quantity={emulator.read_u8(RamAddress.SHOP_QUANTITY)}."
         )
