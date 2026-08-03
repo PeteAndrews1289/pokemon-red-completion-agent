@@ -535,6 +535,17 @@ def note_observed_battle_exit() -> None:
     _battle_observation_finished()
 
 
+def note_observed_trainer_battle_exit(intent: BattleIntent) -> None:
+    """Close schedule and recorder state after a proven external trainer exit."""
+
+    if not isinstance(intent, BattleIntent):
+        raise TypeError("intent must be a BattleIntent")
+    schedule = bound_battle_start_schedule()
+    if schedule is not None:
+        schedule.finish_if_active(intent)
+    _battle_observation_finished()
+
+
 def _apply_battle_start_offset(
     schedule: BattleStartScheduleController | None,
     *,

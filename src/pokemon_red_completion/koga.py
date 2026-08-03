@@ -21,6 +21,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeError,
     BattleRuntimeTiming,
     RequiredMovePolicy,
+    note_observed_trainer_battle_exit,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
@@ -525,6 +526,14 @@ def _fight(
             raise KogaChapterError(f"{label}: {error}") from error
 
     terminal_mutual_ko = False
+    intent = BattleIntent(
+        "defeat_koga",
+        battle_plan_id=battle_plan_id,
+        required_move_policy=required_policy,
+        required_move_ref=(
+            None if allow_disable_fallback else pokemon_red_move_ref(SURF)
+        ),
+    )
     try:
         while True:
             try:
@@ -533,14 +542,7 @@ def _fight(
                     actions,
                     choose_move,
                     expected_map=MapId.FUCHSIA_GYM,
-                    intent=BattleIntent(
-                        "defeat_koga",
-                        battle_plan_id=battle_plan_id,
-                        required_move_policy=required_policy,
-                        required_move_ref=(
-                            None if allow_disable_fallback else pokemon_red_move_ref(SURF)
-                        ),
-                    ),
+                    intent=intent,
                     required_move_id=None if allow_disable_fallback else SURF,
                     timing=KOGA_BATTLE_TIMING,
                     label=label,
@@ -572,6 +574,7 @@ def _fight(
         ):
             raise
         final = _settle_terminal_mutual_ko(actions, reader, emulator, timing)
+        note_observed_trainer_battle_exit(intent)
         terminal_mutual_ko = True
     if before_pp is None or final.first_party_pp is None:
         raise KogaChapterError(f"{label} lacks PP evidence.")

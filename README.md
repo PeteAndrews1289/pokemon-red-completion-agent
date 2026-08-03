@@ -463,6 +463,10 @@ sale funds any required Lavender top-up, preserving the fixed downstream reserve
 The 30-ball curriculum also displaced the ₽1,400 required for four Rock Tunnel Repels. The tunnel
 allocation is now ten Super Potions—twice the proven five-potion Route 9 floor—plus all four Repels,
 with the unchanged Lavender top-up restoring twelve for downstream chapters.
+The next rehearsal proved that repair through Rock Tunnel and reached Celadon Gym at checkpoint
+220. It also revealed that Koga's terminal mutual-KO recovery completed the game battle outside the
+adaptive loop without closing its schedule entry. Externally settled trainer exits now close the
+matching applied schedule entry exactly once before the next planned battle.
 
 ## Evidence and project status
 

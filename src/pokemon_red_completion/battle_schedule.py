@@ -146,6 +146,15 @@ class BattleStartScheduleController:
         self._claimed = None
         self._applied = False
 
+    def finish_if_active(self, intent: BattlePlanIntent | None) -> bool:
+        """Close a matching battle settled by a bounded external recovery path."""
+
+        self._require_healthy()
+        if self._active_intent is None:
+            return False
+        self.finish(intent)
+        return True
+
     def require_complete(self) -> None:
         """Fail unless every declared battle finished exactly once."""
 

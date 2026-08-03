@@ -94,6 +94,19 @@ def test_controller_rejects_changed_intent_and_unapplied_finish() -> None:
         unfinished.finish(first)
 
 
+def test_controller_can_close_one_externally_settled_active_battle_once() -> None:
+    controller = BattleStartScheduleController(_offsets())
+    intent = _Intent(RED_BATTLE_PLAN_IDS[0])
+    controller.start_or_resume(intent)
+    offset = controller.claim_at_main(intent)
+    assert offset is not None
+    controller.mark_applied(intent, offset)
+
+    assert controller.finish_if_active(intent) is True
+    assert controller.finish_if_active(intent) is False
+    assert controller.finished_count == 1
+
+
 def test_controller_requires_all_declared_battles_and_exact_roster() -> None:
     with pytest.raises(BattleScheduleError, match="cover"):
         BattleStartScheduleController(_offsets()[:-1])
