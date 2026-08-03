@@ -100,6 +100,7 @@ ROUTE_22_DEFAULT_HEAL_THRESHOLD = 100
 ROUTE_22_PROACTIVE_PIVOT_SPECIES = frozenset({0x9A})
 VICTORY_ROAD_MAX_REPEL_PURCHASE = 2
 INDIGO_FULL_RESTORE_RESERVE = 6
+INDIGO_FULL_HEAL_RESERVE = 2
 INDIGO_X_SPECIAL_RESERVE = 8
 INDIGO_X_SPECIAL_PURCHASE = 8
 COLLECTION_POKE_BALL_REMAINDER_BOUNDS = (0, 30)
@@ -233,7 +234,7 @@ class VictoryRoadChapterReport:
             and self.vr3_hole_set
             and self.vr2_switch2_set
             and self.full_restores == INDIGO_FULL_RESTORE_RESERVE
-            and self.full_heals == 3
+            and self.full_heals == INDIGO_FULL_HEAL_RESERVE
             and self.revives == 2
             and self.hyper_potions == 11
             and self.x_specials == INDIGO_X_SPECIAL_RESERVE
@@ -748,7 +749,7 @@ def run_victory_road_chapter(
     # The Indigo purchase replaces these narrow status cures with Full Heals.
     # Selling both legacy stacks also preserves one bag slot for Blaine's
     # Fire Blast TM until it is taught for the Champion matchup.
-    for obsolete_cure in (ItemId.AWAKENING, ItemId.PARLYZ_HEAL):
+    for obsolete_cure in (ItemId.AWAKENING, ItemId.PARLYZ_HEAL, ItemId.ANTIDOTE):
         quantity = _bag(emulator).get(obsolete_cure, 0)
         if quantity:
             _sell_bag_stack(actions, emulator, obsolete_cure, quantity)
@@ -776,8 +777,8 @@ def run_victory_road_chapter(
         DEFAULT_LAVENDER_TIMING,
         absolute_index=4,
         item=ItemId.FULL_HEAL,
-        quantity=3,
-        target_bag_quantity=3,
+        quantity=INDIGO_FULL_HEAL_RESERVE,
+        target_bag_quantity=INDIGO_FULL_HEAL_RESERVE,
     )
     _buy_mart_item(
         actions,

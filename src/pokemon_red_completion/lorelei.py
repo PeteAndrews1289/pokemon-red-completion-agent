@@ -46,6 +46,7 @@ from pokemon_red_completion.silph import (
 )
 from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
+    INDIGO_FULL_HEAL_RESERVE,
     INDIGO_FULL_RESTORE_RESERVE,
     INDIGO_X_SPECIAL_RESERVE,
     _CountingExecutor,
@@ -224,7 +225,7 @@ def run_lorelei_chapter(
         or not party_core_intact(initial.party_species_ids)
         or initial.first_party_moves != (0x42, 0x46, 0x3A, 0x39)
         or _bag(emulator).get(ItemId.FULL_RESTORE, 0) != INDIGO_FULL_RESTORE_RESERVE
-        or _bag(emulator).get(ItemId.FULL_HEAL, 0) != 3
+        or _bag(emulator).get(ItemId.FULL_HEAL, 0) != INDIGO_FULL_HEAL_RESERVE
         or _bag(emulator).get(ItemId.HYPER_POTION, 0) != 11
         or _bag(emulator).get(ItemId.X_ACCURACY, 0) != 3
         or _bag(emulator).get(ItemId.X_SPECIAL, 0) != INDIGO_X_SPECIAL_RESERVE

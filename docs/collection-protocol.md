@@ -82,6 +82,11 @@ the lead's last preferred move with PP. Lead training now uses battle-active PP,
 currently disabled slot, and performs a bounded flee when no legal preferred attack remains. This
 aligns the lead block with the existing balanced-team recovery semantics and requires another
 uncounted exact-source qualification.
+That replay completed the level-75 six-member curriculum and reached checkpoint 296 before the
+Indigo shop lacked ₽611 for two Revives. The final economy now sells leftover Antidotes and buys
+two Full Heals instead of three while preserving six Full Restores, eleven Hyper Potions, both
+Revives, and every League setup item. This uncounted repair keeps the capture and balanced-team
+contracts intact and again requires complete exact-source qualification.
 
 The now-retired v2 registry began as a prospective campaign with fresh counted seeds.
 Its first uncounted dry run reached checkpoint 70 before a walking Cerulean NPC blocked the Route 6
@@ -214,13 +219,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `f041c7193a0abc4788b4fe2f592a09211834b44fbae5121f94948c921bb0582d` |
-| Source bundle SHA-256 | `4aa51bf87d2b90e46df83b31165fd2810cde2239350dbf99c28a473762663b16` |
+| Registry SHA-256 | `6a15a2def1789ae83336c8d314d859bfea4639fd91ed4b2d0f753993ac307fc5` |
+| Source bundle SHA-256 | `c1df5bc797d64b951cbcf020b8f223e37dddacb4872fb82f4c181fb4d6b2bd48` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `cff30d7259dabec0a06db5771c42521f16a3806ecedd282d1499435bb582b225` |
+| Teacher execution SHA-256 | `9d246f861b6add06fb39c167022d145aaac79ff713065f906e23d0c6530c9876` |
 | Dry-run schedule SHA-256 | `20af81ca8cf4c92f45c4fd2d8ed2019dee6b51e6ebe29e384f90824525d5c484` |
-| Slot `01` assignment ID | `b5c0e3dc1888a7f334d523f8525c9856e28e08e82fc2f087a287ce6b693ca22c` |
+| Slot `01` assignment ID | `a5400c86a3e48d7229fce0bd0e04165019e3b56ee4c6fef0a35605be8af9dc5b` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
