@@ -44,6 +44,11 @@ BubbleBeam turn against B1F trainer 4 before the opponent self-destructed. Victo
 event without spending the required evidence PP. The route now cures supported status before the
 self-destructing Hiker sequence and carries a second Parlyz Heal for the later Grass contingency,
 preserving both executable teaching evidence and status robustness.
+That replay then cleared Rock Tunnel, Rocket Hideout, and Pokémon Tower before consuming the
+ten-Great-Ball reserve plus all surviving Poké Balls at the one-time Route 12 Snorlax. The teacher
+now buys a completion-oriented thirty-Great-Ball reserve with a forty-throw total bound and sells
+the remainder after capture. The static encounter no longer depends on leftovers from earlier
+species searches.
 
 The now-retired v2 registry began as a prospective campaign with fresh counted seeds.
 Its first uncounted dry run reached checkpoint 70 before a walking Cerulean NPC blocked the Route 6
@@ -176,13 +181,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `1582b2f955af6aafd3cbe53cd6409eb8e05a7c75997a03fcc3bab14c73495cd8` |
-| Source bundle SHA-256 | `afe01961113b797b4574990f51b179e4e3476ab1c36d682e51534276f748dace` |
+| Registry SHA-256 | `d739b8b700a8fdf71eec31fb8dd1be0d5634e2f235fda90ddf107325bc01cec7` |
+| Source bundle SHA-256 | `e033f5153fc312431f942a8c7891df9bef4b63e8ad06e2017ff4f1f1a42a94ce` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `fd613dd492e29405bfc6eecd47539aac4bc83984d70354c44f17ec3d07859b74` |
+| Teacher execution SHA-256 | `61da8659fe39b90c116ce87ab2e945dd47243e5103c0a1fe42138121827b04ae` |
 | Dry-run schedule SHA-256 | `20af81ca8cf4c92f45c4fd2d8ed2019dee6b51e6ebe29e384f90824525d5c484` |
-| Slot `01` assignment ID | `e123db0e67acb655c177e89896a085f4e3ec44d37826771e38395d69fd364ea0` |
+| Slot `01` assignment ID | `c421fc4faf978ea80e46565e15541e3475f1c838e956085a36c6a12806ae542f` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

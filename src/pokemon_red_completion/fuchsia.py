@@ -55,7 +55,7 @@ BUBBLEBEAM = 0x3D
 SNORLAX = 0x84
 SNORLAX_BUBBLEBEAM_PP_BOUND = (1, 20)
 SNORLAX_RUNTIME_PULSE_BOUND = 720
-SNORLAX_GREAT_BALL_RESERVE = 10
+SNORLAX_GREAT_BALL_RESERVE = 30
 SNORLAX_SUPER_POTION_RESERVE = 2
 GREAT_BALL_PRICE = 600
 SUPER_POTION_PRICE = 700
@@ -65,10 +65,10 @@ SNORLAX_CAPTURE_POLICY = CapturePolicy(
     # low-health knockout, including after a critical hit changes damage.
     throw_at_or_below_hp_ratio=0.90,
     prefer_status_first=False,
-    # Ten newly purchased Great Balls are backed by the remaining Route 11
-    # Poké Balls, avoiding an oversized temporary purchase while retaining a
-    # larger total attempt budget.
-    max_throws=18,
+    # A static one-time encounter deserves a completion-oriented reserve.
+    # Thirty newly purchased Great Balls remain bounded and are sold after
+    # capture, but do not depend on leftovers from earlier species searches.
+    max_throws=40,
     retreat_hp_ratio=0.35,
 )
 BATTLE_PP_BOUNDS = ((1, 8), SNORLAX_BUBBLEBEAM_PP_BOUND, (1, 8), (1, 8), (1, 10))

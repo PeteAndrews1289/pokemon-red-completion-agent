@@ -350,6 +350,10 @@ That replay survived the prior fight but reached B1F trainer 4 still paralyzed; 
 BubbleBeam, lost the turn, and the opponent self-destructed before PP could prove execution. The
 route now cures status before the Hiker sequence and carries a second Parlyz Heal for the later
 Grass contingency, retaining both the win contract and an executable curriculum label.
+That replay cleared the complete tunnel and Pokémon Tower, then exhausted ten Great Balls and all
+remaining Poké Balls at the one-time Route 12 Snorlax. The static-capture budget is now thirty
+Great Balls with a forty-throw total bound; unused stock is sold afterward, and success no longer
+depends on lucky leftovers from earlier species searches.
 
 ## Milestone 4 — DAgger and selective RL
 
