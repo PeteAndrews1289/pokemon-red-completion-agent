@@ -24,8 +24,11 @@ Its first uncounted dry run reached checkpoint 70 before a walking Cerulean NPC 
 healing-replay corridor. The failed private artifact is retained. A bounded yield-and-retry repair
 then carried that exact rehearsal schedule through the next checkpoint. The registry below binds
 the repaired source; it still requires a new complete dry run, and all twelve counted slots remain
-unexecuted. It is a plan, not a held-out-result claim, and contains no trajectory, ROM, snapshot,
-private path, or completion evidence.
+unexecuted. The next replay cleared that collision, reached checkpoint 91, and then exhausted the
+25-ball Forest capture reserve while attempting Pikachu. The repaired source raises that legal
+reserve to 30 and expands the later bounded cleanup gate accordingly; its downstream economy is
+part of the next required full rehearsal. This remains a plan, not a held-out-result claim, and
+contains no trajectory, ROM, snapshot, private path, or completion evidence.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
@@ -79,13 +82,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `183e72a13a14204c1b0a75ddcc257c05870a3cc905a40e260bfff377bfeec979` |
-| Source bundle SHA-256 | `4531990361158dfab0e3df5827d49066f508eabc46070132dff6fc31b945fad6` |
+| Registry SHA-256 | `fefc05d579afd8d700ec42670eb9d86ac2695e4507a36b6b73cd1a0490ebb7d9` |
+| Source bundle SHA-256 | `3bfa9430024a5bdcaaa61ac0765efd7bab719715a750a3b661b038401f3a2533` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `d70a6c0c89d3b34407854aeebbc660a89d72bacb45ce8d8105961daaae3155f9` |
+| Teacher execution SHA-256 | `32db1ba02acc528842997bab859f0122f650c18281b2433aced902c16c1cc426` |
 | Dry-run schedule SHA-256 | `c63ddab975851d520b6c25492e03d688cd76c88b638a01330d9d3ea659671733` |
-| Slot `01` assignment ID | `5da1baf35dae25c8777b9e3241c81550a59a4f0c07b79fbfcead1cd98d1cf024` |
+| Slot `01` assignment ID | `39ee58d33a53019fce01f66b9e98fb9c67802c00a8cbea59470ba682673c1416` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

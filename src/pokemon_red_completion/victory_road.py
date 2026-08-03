@@ -749,9 +749,9 @@ def run_victory_road_chapter(
             _sell_bag_stack(actions, emulator, obsolete_cure, quantity)
             _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     poke_balls_sold = _bag(emulator).get(ItemId.POKE_BALL, 0)
-    if not 1 <= poke_balls_sold <= 25:
+    if not 1 <= poke_balls_sold <= 30:
         raise VictoryRoadChapterError(
-            "Indigo cleanup expected one to twenty-five remaining Poké Balls after the "
+            "Indigo cleanup expected one to thirty remaining Poké Balls after the "
             f"bounded collection route, got {poke_balls_sold}."
         )
     _sell_bag_stack(actions, emulator, ItemId.POKE_BALL, poke_balls_sold)

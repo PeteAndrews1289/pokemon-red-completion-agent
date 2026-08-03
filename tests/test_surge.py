@@ -98,7 +98,7 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert SPEAROW_WEAKEN_ATTEMPT_LIMIT == 12
     assert DUX_NICKNAME == (0x83, 0x94, 0x97, 0x50)
     assert SURGE_CHECKPOINT_COUNT == 15
-    assert COLLECTION_POKE_BALL_TARGET == 25
+    assert COLLECTION_POKE_BALL_TARGET == 30
     assert (
         CATERPIE_SPECIES_ID,
         METAPOD_SPECIES_ID,

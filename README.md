@@ -440,7 +440,11 @@ and rehearsal seeds; it must pass its own uncounted full rehearsal before any v2
 The first v2 rehearsal reached checkpoint 70 before a walking Cerulean NPC occupied the Route 6
 healing-replay corridor. That uncounted artifact is retained. A bounded yield-and-retry maneuver
 then cleared the exact exposed schedule through checkpoint 71; v2 remains unopened with all twelve
-counted roots untouched pending a new full rehearsal.
+counted roots untouched pending a new full rehearsal. That replay then reached checkpoint 91 and
+exposed a second uncounted stress case: the six-capture Viridian Forest curriculum exhausted its
+25-ball budget on Pikachu. The legal early-game reserve is now 30, with the later bounded cleanup
+gate updated to match; the larger purchase must prove both capture and downstream economy in the
+next full rehearsal.
 
 ## Evidence and project status
 
