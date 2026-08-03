@@ -399,6 +399,22 @@ def test_cerulean_rival_recovery_rejects_ambiguous_live_evidence(
         _should_use_cerulean_rival_potion(raw)
 
 
+def test_cerulean_rival_living_reserve_selects_a_legal_attack() -> None:
+    reserve = replace(
+        _raw(),
+        battle_state=2,
+        active_party_index=1,
+        active_party_moves=(0, 0x2C, 0x10, 0),
+        active_party_pp=(0, 5, 10, 0),
+    )
+
+    assert cascade_module._cerulean_rival_reserve_move_slot(reserve) == 2
+    with pytest.raises(CascadeChapterError, match="no legal attack"):
+        cascade_module._cerulean_rival_reserve_move_slot(
+            replace(reserve, active_party_pp=(0, 0, 0, 0))
+        )
+
+
 def test_cerulean_rival_recovery_reuses_one_bounded_intent(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

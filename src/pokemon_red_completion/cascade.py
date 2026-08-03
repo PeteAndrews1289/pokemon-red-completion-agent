@@ -2407,8 +2407,11 @@ def _run_cerulean_rival_with_potion(
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
     )
     accuracy_reset_complete = False
+    forced_switches = 0
 
     def guarded_policy(raw: RawGameState) -> int:
+        if raw.active_party_index not in {None, 0}:
+            return _cerulean_rival_reserve_move_slot(raw)
         if _bag_quantity(
             emulator, ItemId.POTION
         ) > ROUTE_24_RECOVERY_POTION_RESERVE and _should_use_cerulean_rival_potion(raw):
@@ -2435,11 +2438,85 @@ def _run_cerulean_rival_with_potion(
                 accuracy_reset_complete = True
                 continue
             if not isinstance(error.__cause__, _PauseForCeruleanRivalPotion):
+                raw = reader.read()
+                party_hp = _rival_party_hp(emulator)
+                if (
+                    raw.battle_state == 2
+                    and raw.battler_hp == 0
+                    and forced_switches == 0
+                    and party_hp[1] > 0
+                ):
+                    _settle_cerulean_rival_forced_switch(
+                        reader,
+                        executor,
+                        emulator,
+                        timing,
+                        target_index=1,
+                    )
+                    forced_switches += 1
+                    continue
                 raise CascadeChapterError(str(error)) from error
         _use_cerulean_rival_potion(reader, executor, emulator, timing)
         recoveries += 1
         if recoveries > starting_reserve - ROUTE_24_RECOVERY_POTION_RESERVE:
             raise CascadeChapterError("Cerulean rival exceeded its fixed recovery reserve.")
+
+
+def _cerulean_rival_reserve_move_slot(raw: RawGameState) -> int:
+    """Choose one legal reserve attack after the protected lead is knocked out."""
+
+    if raw.active_party_index in {None, 0} or raw.battler_moves is None or raw.battler_pp is None:
+        raise CascadeChapterError("Cerulean rival reserve lacks active move evidence.")
+    for slot, (move, pp) in enumerate(
+        zip(raw.battler_moves, raw.battler_pp, strict=True),
+        start=1,
+    ):
+        if move and pp & 0x3F and raw.player_disabled_move_slot != slot:
+            return slot
+    raise CascadeChapterError("Cerulean rival reserve has no legal attack.")
+
+
+def _settle_cerulean_rival_forced_switch(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    timing: CascadeTiming,
+    *,
+    target_index: int,
+) -> None:
+    """Select the sole living reserve after a KO and prove stable battle MAIN."""
+
+    party_hp = _rival_party_hp(emulator)
+    if target_index != 1 or party_hp[target_index] <= 0:
+        raise CascadeChapterError("Cerulean rival forced switch lacks a living reserve.")
+    for pulse_index in range(64):
+        raw = reader.read()
+        if (
+            raw.battle_state == 2
+            and raw.active_party_index == target_index
+            and (raw.battler_hp or 0) > 0
+            and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
+        ):
+            return
+        if raw.battle_state != 2:
+            raise CascadeChapterError("Cerulean rival forced switch left its battle.")
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        _battle_pulse(
+            executor,
+            MacroActionKind.CONFIRM if cursor == target_index else MacroActionKind.MOVE,
+            None if cursor == target_index else ("down" if cursor < target_index else "up"),
+            timing,
+            frames=timing.battle_runtime.menu_wait_frames,
+        )
+        if pulse_index % 5 == 4:
+            _battle_pulse(
+                executor,
+                MacroActionKind.CONFIRM,
+                None,
+                timing,
+                frames=timing.battle_runtime.menu_wait_frames,
+            )
+    raise CascadeChapterError("Cerulean rival forced switch exceeded its bounded menu pulses.")
 
 
 def _should_use_cerulean_rival_potion(raw: RawGameState) -> bool:

@@ -332,13 +332,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `b604a721a8646e812b537bb10ced3356844b73ae464077addf1b21e09d87ac67` |
-| Source bundle SHA-256 | `4597780cc17ceb2cb2ce98d976d660fa8fe4abb2f572eeace09ff93e18ce0696` |
+| Registry SHA-256 | `5b383b247300c7f08f4d05c27102a10223965e9d9150ea3a88a47cf9c91be03a` |
+| Source bundle SHA-256 | `7e0ebfd2cdaa9e8c9e1fa4fc42e726194904978629dde3dfb3f396e3509dd3ce` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `df5ccdccc035c1129b5d83a11b396d144ce90918c8cc6bda4ea88a51a8036a99` |
+| Teacher execution SHA-256 | `5011af34290508447454ee44a7cd5321085279ec26fa55cc70a8251f41a3c087` |
 | Dry-run schedule SHA-256 | `44f7f521126553fbc94a7868b65bfe87237ef740dba8965ad401c9043b6c7e28` |
-| Slot `01` assignment ID | `8951f7b094a8a44af4ffcda76b15e10e2bad7fd31d6c8b88252f678690da2ab2` |
+| Slot `01` assignment ID | `60bf22dd4f8b15bb7a06439df0ef0a2f4ad6e6949610529d3ea716d475dcc21a` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -684,3 +684,10 @@ entered the final bridge fight without another Center recovery. That outcome is 
 v4 ledger and is never rerun. Because v4 can no longer provide five complete training roots, the
 teacher now reuses its verified bounded Center backtrack before the final bridge trainer and must
 publish and qualify a fresh registry before collection restarts.
+
+V5 then froze disjoint seeds and its new uncounted schedule reached the Cerulean rival with
+Pidgeotto at 6 HP when Wartortle exhausted its protected Potion allowance and fainted. The living
+Zubat helper was already part of the qualified party and accuracy-reset curriculum, but had no
+post-KO continuation. The teacher now preserves the exact Route 24 Potion reserve, performs at
+most one observed forced switch to that helper, and chooses a legal move from the active battler's
+live move/PP evidence. The failed qualification is uncounted; v5 must be regenerated and replayed.
