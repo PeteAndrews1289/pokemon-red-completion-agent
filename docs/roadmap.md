@@ -357,6 +357,10 @@ depends on lucky leftovers from earlier species searches.
 The first thirty-ball proposal failed closed at the Mart: ₽16,897 could not fund the ₽19,400
 capture-plus-healing bill. Twenty-five balls plus both Super Potions cost ₽16,400, preserving
 healing and future-use TMs while exceeding the previously exhausted eighteen-throw lineage.
+The funded replay caught Snorlax in six throws and advanced through Koga to the Celadon Gym
+trainers, where a Center NPC occupied the first exit tile beyond eight bounded waits. The existing
+release-and-observe movement primitive now covers sixteen waits, preserving the route while
+allowing a full longer NPC cycle to vacate the tile.
 
 ## Milestone 4 — DAgger and selective RL
 

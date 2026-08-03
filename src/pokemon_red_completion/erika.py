@@ -142,7 +142,7 @@ class ErikaChapterError(RuntimeError):
 @dataclass(frozen=True, slots=True)
 class ErikaTiming:
     movement_frames: int = 240
-    movement_retries: int = 8
+    movement_retries: int = 16
     dialogue_pulses: int = 40
     cut_pulses: int = 8
     heal_pulses: int = 24
