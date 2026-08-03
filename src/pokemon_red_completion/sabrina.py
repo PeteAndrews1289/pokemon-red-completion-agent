@@ -62,6 +62,7 @@ ALAKAZAM_HYPER_POTION_THRESHOLD = 70
 # The next chapter restocks before its first required battle, so Sabrina may
 # consume the complete held-out reserve when her Alakazam damage requires it.
 MAX_SABRINA_HYPER_POTIONS = 7
+SABRINA_X_SPECIAL_USES = 2
 SABRINA_BATTLE_TIMING = BattleRuntimeTiming(
     max_runtime_pulses=720,
     max_move_menu_transition_pulses=24,
@@ -135,6 +136,9 @@ class SabrinaChapterReport:
     hyper_potions_before: int
     hyper_potions_used: int
     hyper_potions_remaining: int
+    x_specials_before: int
+    x_specials_used: int
+    x_specials_remaining: int
     initial_money: int
     money_remaining: int
     party_hp: tuple[int, ...]
@@ -160,6 +164,9 @@ class SabrinaChapterReport:
             and self.tm46_quantity == 1
             and 0 <= self.hyper_potions_used <= MAX_SABRINA_HYPER_POTIONS
             and self.hyper_potions_remaining == self.hyper_potions_before - self.hyper_potions_used
+            and self.x_specials_before == SABRINA_X_SPECIAL_USES
+            and self.x_specials_used == SABRINA_X_SPECIAL_USES
+            and self.x_specials_remaining == 0
             and self.money_remaining == self.initial_money + 4_257
             and all(turn.lead_hp > 0 for turn in self.turns)
             and all(_sabrina_status_is_supported(turn.lead_status) for turn in self.turns)
@@ -197,6 +204,9 @@ class SabrinaChapterReport:
                 "hyper_potions_before": self.hyper_potions_before,
                 "used": self.hyper_potions_used,
                 "remaining": self.hyper_potions_remaining,
+                "x_specials_before": self.x_specials_before,
+                "x_specials_used": self.x_specials_used,
+                "x_specials_remaining": self.x_specials_remaining,
             },
             "frames_executed": self.frames_executed,
             "actions_executed": self.actions_executed,
@@ -261,7 +271,19 @@ def run_sabrina_chapter(
     if identity != (SABRINA_OPPONENT, SABRINA_TRAINER_CLASS, SABRINA_TRAINER_SET):
         raise SabrinaChapterError(f"Unexpected Sabrina identity: {identity!r}.")
 
-    _battle_x_special(reader, actions, emulator, timing)
+    x_special_before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
+    if x_special_before != SABRINA_X_SPECIAL_USES:
+        raise SabrinaChapterError(
+            f"Sabrina requires two staged X Specials, found {x_special_before}."
+        )
+    for _ in range(SABRINA_X_SPECIAL_USES):
+        _battle_x_special(reader, actions, emulator, timing)
+    x_special_after = _bag(emulator).get(ItemId.X_SPECIAL, 0)
+    if x_special_before - x_special_after != SABRINA_X_SPECIAL_USES:
+        raise SabrinaChapterError(
+            "Sabrina X Special setup did not consume exactly two items: "
+            f"before={x_special_before}, after={x_special_after}."
+        )
 
     turns: list[SabrinaTurn] = []
 
@@ -377,6 +399,9 @@ def run_sabrina_chapter(
         hyper_before,
         hyper_before - hyper_remaining,
         hyper_remaining,
+        x_special_before,
+        x_special_before - x_special_after,
+        x_special_after,
         initial_money,
         _money(emulator),
         _party_hp(emulator),

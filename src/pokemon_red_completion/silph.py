@@ -70,10 +70,11 @@ from pokemon_red_completion.saffron import (
 from pokemon_red_completion.tower import party_core_intact
 
 SILPH_CHECKPOINT_COUNT = 12
-SILPH_NET_MONEY_DELTA = -1_951
+SILPH_NET_MONEY_DELTA = -2_301
 SILPH_PREINSTALLED_TM13_NET_MONEY_DELTA = SILPH_NET_MONEY_DELTA + FRESH_WATER_PRICE
 HYPER_POTION_PURCHASE_QUANTITY = 7
 HYPER_POTION_PRICE = 1_500
+X_SPECIAL_PURCHASE_QUANTITY = 3
 SILPH_RIVAL_RECOVERY_HP = 80
 SILPH_PC_DEPOSIT_ITEMS = (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
 STATUS_FLAGS_4 = 0xD72E
@@ -848,8 +849,8 @@ def _buy_silph_x_special(
         menu_timing,
         absolute_index=6,
         item=ItemId.X_SPECIAL,
-        quantity=2,
-        target_bag_quantity=2,
+        quantity=X_SPECIAL_PURCHASE_QUANTITY,
+        target_bag_quantity=X_SPECIAL_PURCHASE_QUANTITY,
     )
     _close_menus(actions, reader, menu_timing)  # type: ignore[arg-type]
     _move_verified(
@@ -868,7 +869,7 @@ def _acquire_silph_x_special(
     emulator: EmulatorState,
     timing: SilphTiming,
 ) -> None:
-    """Buy the Silph and Sabrina X Specials and restore the Center boundary."""
+    """Buy one Silph and two Sabrina X Specials and restore the Center boundary."""
 
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), "Silph X Special start")
     _move(actions, reader, SAFFRON_CENTER_TO_ROUTE_7_GATE, timing)
@@ -919,7 +920,7 @@ def _acquire_silph_x_special(
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "X Special Saffron return")
     _move(actions, reader, ("up",) * 4, timing)
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), "X Special restored boundary")
-    if _bag(emulator).get(ItemId.X_SPECIAL, 0) != 2:
+    if _bag(emulator).get(ItemId.X_SPECIAL, 0) != X_SPECIAL_PURCHASE_QUANTITY:
         raise SilphChapterError("Silph X Special purchase failed.")
 
 

@@ -12,6 +12,7 @@ from pokemon_red_completion.sabrina import (
     SABRINA_BATTLE_TIMING,
     SABRINA_PARTY,
     SABRINA_TO_CITY,
+    SABRINA_X_SPECIAL_USES,
     SabrinaTurn,
     _encounter_party,
     _sabrina_capacity_ready,
@@ -56,6 +57,7 @@ def test_sabrina_routes_are_source_and_live_stable() -> None:
     assert SABRINA_BATTLE_TIMING.max_attack_confirmation_pulses == 6
     assert SABRINA_BATTLE_TIMING.max_pp_confirmation_pulses == 12
     assert MAX_SABRINA_HYPER_POTIONS == 7
+    assert SABRINA_X_SPECIAL_USES == 2
     assert PC_DEPOSIT_ITEMS == (ItemId.SILPH_SCOPE, ItemId.CARD_KEY)
 
 

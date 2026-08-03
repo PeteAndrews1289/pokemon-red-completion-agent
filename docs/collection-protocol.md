@@ -72,6 +72,11 @@ Sabrina at checkpoint 261. A Hyper Potion wait exhausted its pre-action samples 
 diagnostic reread already showed the main battle phase. The bounded recovery now accepts a main
 menu reached by the final cancel pulse, while the independent exactly-once item-decrement contract
 is unchanged. This late failure was also uncounted and requires another exact dry qualification.
+The post-observation replay then showed the underlying Sabrina strategy could consume all seven
+Hyper Potions while falling below the same threshold after every enemy reply. The Celadon purchase
+now reserves three X Specials: one for the Silph rival and two independently verified setup uses
+for Sabrina. This staged Special-defense lesson changes the battle state instead of extending an
+unproductive healing loop, and the exact source again requires full dry qualification.
 
 The now-retired v2 registry began as a prospective campaign with fresh counted seeds.
 Its first uncounted dry run reached checkpoint 70 before a walking Cerulean NPC blocked the Route 6
@@ -204,13 +209,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `7e099f4aa3649e9174ef87d086fe84f0654331ce5137ef550cfb467d6e9be7da` |
-| Source bundle SHA-256 | `f74b0645f9188b4c2d3c4294144047154cd90955aaa7b2c00db9bcb9884033c3` |
+| Registry SHA-256 | `401e871071fa1df4c1a91ea225579ca5f6a6f88a7591eac73e6fca154a6eb012` |
+| Source bundle SHA-256 | `d7fb7df61fdae43d17c3da0765afd3d152aedb20ad8a0b10c2f45e6499b5c73f` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `de772442d95724dc8921fd28c788f722a6766739a89765f3a13acbc3eb6be417` |
+| Teacher execution SHA-256 | `1614e0aa798655a2c584847baa3c1ac68a8659c1b64aab7c423cd1b58d76539b` |
 | Dry-run schedule SHA-256 | `20af81ca8cf4c92f45c4fd2d8ed2019dee6b51e6ebe29e384f90824525d5c484` |
-| Slot `01` assignment ID | `fc839c548751a53eaaa9a9f0fc5442472ac2f1dfdbae5251805e25a3dc83dccc` |
+| Slot `01` assignment ID | `f4c099ba9bbee75d6d145809659972a48a9f1b7776cf1ff72ed4d1854e32a0b4` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
