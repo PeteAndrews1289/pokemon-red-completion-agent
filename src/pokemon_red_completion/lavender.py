@@ -1764,6 +1764,9 @@ def _cure_tunnel_status_if_present(
     elif before_status & 0x08:
         item = ItemId.ANTIDOTE
         label = "Antidote"
+    elif before_status & 0x07:
+        item = ItemId.AWAKENING
+        label = "Awakening"
     else:
         raise LavenderChapterError(
             f"Tunnel lead has an unsupported status condition: {before_status:#04x}."
@@ -1778,6 +1781,8 @@ def _cure_tunnel_status_if_present(
         raise LavenderChapterError(f"{label} did not cure the lead and consume exactly once.")
     if item is ItemId.PARLYZ_HEAL:
         run.parlyz_heals_used += 1
+    elif item is ItemId.AWAKENING:
+        run.awakenings_used += 1
 
 
 def _use_bag_item(

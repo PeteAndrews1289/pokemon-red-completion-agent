@@ -21,7 +21,12 @@ from pokemon_red_completion.lavender import (
     LavenderTiming,
     TrainerEvidence,
 )
-from pokemon_red_completion.observation import BULBASAUR_SPECIES_ID, MapId, RawGameState
+from pokemon_red_completion.observation import (
+    BULBASAUR_SPECIES_ID,
+    ItemId,
+    MapId,
+    RawGameState,
+)
 
 
 def _raw() -> RawGameState:
@@ -259,6 +264,43 @@ def test_final_sleep_reserve_is_prepared_then_restores_the_story_lead(
         ("cure", None),
         ("swap", lavender_module.WARTORTLE),
     ]
+
+
+@pytest.mark.parametrize("sleep_counter", range(1, 8))
+def test_tunnel_field_recovery_cures_every_sleep_counter(
+    monkeypatch: pytest.MonkeyPatch,
+    sleep_counter: int,
+) -> None:
+    status = sleep_counter
+    quantity = 2
+    used: list[ItemId] = []
+    run = lavender_module._RunState([], [])
+
+    monkeypatch.setattr(lavender_module, "_party_status", lambda _emulator: (status,))
+    monkeypatch.setattr(
+        lavender_module,
+        "_bag",
+        lambda _emulator: {ItemId.AWAKENING: quantity},
+    )
+
+    def fake_use(*_args: object, **_kwargs: object) -> None:
+        nonlocal status, quantity
+        used.append(_args[-1])
+        status = 0
+        quantity -= 1
+
+    monkeypatch.setattr(lavender_module, "_use_bag_item", fake_use)
+
+    lavender_module._cure_tunnel_status_if_present(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        run,
+        DEFAULT_LAVENDER_TIMING,
+    )
+
+    assert used == [ItemId.AWAKENING]
+    assert run.awakenings_used == 1
 
 
 def test_field_recovery_skips_a_full_hp_target_even_above_its_maximum(
