@@ -65,6 +65,7 @@ METAPOD_SPECIES_ID = 0x7C
 KAKUNA_SPECIES_ID = 0x71
 PIKACHU_SPECIES_ID = 0x54
 COLLECTION_POKE_BALL_TARGET = 30
+WILD_CAPTURE_THROWS_PER_ENCOUNTER = 5
 SPEAROW_CAPTURE_MOVE_ID = 0x37
 SPEAROW_CAPTURE_MOVE_SLOT = 4
 SPEAROW_WEAKEN_ATTEMPT_LIMIT = 12
@@ -1617,7 +1618,7 @@ class _LiveWildCorridorSurveyExecutor:
             self._start_leg()
         self._advance_one_direction()
 
-    def capture_encounter(self, species_ref: str) -> None:
+    def capture_encounter(self, species_ref: str) -> bool:
         encountered = self.encountered_species_ref()
         if encountered != species_ref:
             raise RedAreaExecutionError(
@@ -1626,12 +1627,13 @@ class _LiveWildCorridorSurveyExecutor:
         raw = self._reader.read()
         if raw.enemy_species_id is None:
             raise RedAreaExecutionError(f"{self._label} capture lacks an enemy species")
-        _throw_until_caught_wild(
+        return _try_catch_wild(
             self._emulator,
             self._executor,
             self._reader,
             raw.enemy_species_id,
             self._label,
+            max_throws=WILD_CAPTURE_THROWS_PER_ENCOUNTER,
         )
 
     def flee_encounter(self) -> None:
@@ -1725,17 +1727,21 @@ def _survey_step(
     )
 
 
-def _throw_until_caught_wild(
+def _try_catch_wild(
     emulator: EmulatorState,
     executor: _CountingExecutor,
     reader: PokemonRedStateReader,
     species_id: int | None,
     label: str,
-) -> None:
+    *,
+    max_throws: int,
+) -> bool:
     if species_id is None:
         raise SurgeChapterError(f"{label} capture received no target species.")
+    if type(max_throws) is not int or max_throws <= 0:
+        raise ValueError("max_throws must be a positive integer")
     starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
-    for _ in range(starting_balls):
+    for _ in range(min(starting_balls, max_throws)):
         _navigate_main(executor, reader, 1)
         _pulse(executor, MacroActionKind.CONFIRM)
         _select_bag_item(emulator, executor, ItemId.POKE_BALL)
@@ -1744,16 +1750,22 @@ def _throw_until_caught_wild(
             raw = reader.read()
             if raw.battle_state == 0:
                 _confirm_kind(executor, MacroActionKind.CANCEL, 6, 180)
-                return
+                return True
             if (
                 raw.battle_state == 1
                 and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
             ):
                 break
             _pulse(executor, MacroActionKind.CONFIRM)
-    raise SurgeChapterError(
-        f"{label} capture exhausted its bounded Poké Balls for {species_id:#04x}."
-    )
+    raw = reader.read()
+    if not raw.battle_state:
+        raise SurgeChapterError(f"{label} capture retry lost its live encounter.")
+    _flee(executor, reader, raw)
+    if _bag(emulator).get(ItemId.POKE_BALL, 0) != starting_balls - min(
+        starting_balls, max_throws
+    ):
+        raise SurgeChapterError(f"{label} capture retry changed its ball accounting.")
+    return False
 
 
 def _store_wild_collection_specimens(

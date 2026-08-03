@@ -289,7 +289,7 @@ class RedAreaExecutor(Protocol):
 
     def seek_encounter(self) -> None: ...
 
-    def capture_encounter(self, species_ref: str) -> None: ...
+    def capture_encounter(self, species_ref: str) -> bool | None: ...
 
     def flee_encounter(self) -> None: ...
 
@@ -581,9 +581,16 @@ def run_red_area_survey(
             if species_ref is None:
                 raise RedAreaExecutionError("capture directive omitted its species")
             before = Counter(item.species_ref for item in observation.specimens)[species_ref]
-            executor.capture_encounter(species_ref)
+            captured = executor.capture_encounter(species_ref)
             after_observation = executor.read_collection()
             after = Counter(item.species_ref for item in after_observation.specimens)[species_ref]
+            if captured is False:
+                if after != before or executor.encountered_species_ref() is not None:
+                    raise RedAreaExecutionError(
+                        f"{source_id} capture retry changed collection or kept its encounter"
+                    )
+                flees += 1
+                continue
             if after != before + 1 or executor.encountered_species_ref() is not None:
                 raise RedAreaExecutionError(
                     f"{source_id} capture did not retain exactly one {species_ref}"

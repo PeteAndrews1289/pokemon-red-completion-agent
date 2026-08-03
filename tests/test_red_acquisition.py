@@ -416,6 +416,27 @@ def test_bounded_route_one_executor_flees_catches_and_rotates_storage() -> None:
     assert executor.current_box_index == 1
 
 
+def test_area_executor_retries_a_bounded_failed_capture_on_a_fresh_encounter() -> None:
+    class _RetryingRouteOneSurvey(_RouteOneSurveySimulation):
+        failed_once = False
+
+        def capture_encounter(self, species_ref: str) -> bool | None:
+            if not self.failed_once:
+                self.failed_once = True
+                self.current_encounter = None
+                return False
+            return super().capture_encounter(species_ref)
+
+    executor = _RetryingRouteOneSurvey((16, 16, 19))
+
+    report = run_red_area_survey("wild:Route1:grass", executor)
+
+    assert report.passed
+    assert report.encounters_seen == 3
+    assert report.captures == 2
+    assert report.flees == 1
+
+
 def test_area_executor_enforces_its_encounter_bound() -> None:
     executor = _RouteOneSurveySimulation((21, 21, 16, 19))
 

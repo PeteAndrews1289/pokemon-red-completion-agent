@@ -230,6 +230,15 @@ already-owned Potion out of the Cerulean reserve, spends it at the Rocket thief'
 gate only when needed, and ranks the stronger Mega Punch after the required one-use Bite lesson.
 A v3 campaign with fresh counted seeds must qualify this repair; the v2 slot is never rerun.
 
+The latest v4 clean-power rehearsal passed the repaired Cerulean economy, Misty, the Rocket route,
+the S.S. Anne, and the Diglett curriculum through checkpoint 91 before one level-6 Kakuna consumed
+the six Poké Balls left by earlier captures. The generic source adapter had allowed a single
+full-health encounter to spend the complete campaign remainder. It now caps one encounter at five
+throws, verifies the exact decrement, and returns a failed bounded attempt to the area survey as a
+fresh-encounter retry rather than false capture progress. This applies to every live wild-source
+survey; the private failed artifact remains uncounted and the modified source must requalify the
+complete 312-checkpoint/68-battle rehearsal.
+
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
 the episode header or emulator startup because the path-free serializer rejected a canonical
@@ -282,13 +291,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `0e86bf19e312fb3e44153e2d255a9aa0d26786feed2d646febf0688e525c7da4` |
-| Source bundle SHA-256 | `ef91ec5ad541758d555affae21a72bbc040e737016fc0db7a6b678d75c54ad94` |
+| Registry SHA-256 | `883bfa931825b23b41e94c1b6a9061792cdf52bb5a57b0dbe636d3e4db32737b` |
+| Source bundle SHA-256 | `06d218ecb845ee373187ef34633da3c987ec4cbe2c621569a6519fb73161f9ab` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `0d540ec920048a3e6c6a1cdec6b96977d7f1c9951be5cb643cf5a1b4e8a36464` |
+| Teacher execution SHA-256 | `e95f9e7f8787014d0a8bea9e366dfc8f4038638ae14516a66dde1eb99d5e760c` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `a4e90c5477f9b8f50dbfc4f4273acf13182f95ae417147cfce59eab51b113c77` |
+| Slot `01` assignment ID | `8a41e89351b5fe4fe35f150407164babaccae0d9626993d4a63c6b785a0751a8` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
