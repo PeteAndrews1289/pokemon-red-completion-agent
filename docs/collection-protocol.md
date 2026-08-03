@@ -78,6 +78,11 @@ Cerulean stop then proved the early route did not yet have the extra ₽200. The
 separate Cerulean purchase after the Nugget Rocket reward: the earned Nugget is sold for its exact
 ₽5,000 value, the funded top-up carries two forward, and Vermilion performs its already-qualified
 single-Awakening, two-Parlyz-Heal, four-Repel sequence to reach the same three-item reserve.
+The same funded Cerulean top-up now adds one Potion for the mandatory Gym trainer. Route 25
+consumes its planned recovery from six to five; the Gym controller may spend the fifth item only
+at a live low-HP MAIN boundary under confusion, or use it as post-battle field recovery when the
+lineage wins without crossing that threshold. Either path restores the exact four-Potion Rocket
+handoff instead of weakening the downstream reserve.
 
 Historically, the v3 registry had twelve fresh counted seeds. Its
 uncounted dry seed `12001` deliberately replays the exact schedule that exposed the v2 failure;
@@ -277,13 +282,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `857d440bd82cdbd801e55151ae3a994613782565474379a1c6b6c8addaa944c5` |
-| Source bundle SHA-256 | `b00414f929558aa3ffacc749e6c79afa7821ef4bed7e8f75c8e6ade4a76a39ba` |
+| Registry SHA-256 | `6c3398d5da07aabaf4abca47c592d2b5b405efd3725b4823c392ea866f68055c` |
+| Source bundle SHA-256 | `40fac5aa28741d3669ef54bc4d81c2c8ecfa8e92c4a470b586efddb1dbc94959` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `f812646133044948f740eea1de5637e333989d55019b99a41e823b495e919955` |
+| Teacher execution SHA-256 | `a22ab78579da3f242b634f5c672f5d87954950c5f99562403ac60e8d4ea16c78` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `680aea9b4fef82874f7aea296a0b6a0662f31935cddeaf230a78d3b0d95fc089` |
+| Slot `01` assignment ID | `34d3477c07907b82dcf966d3481100bb1c2a1f63789bc1515b6991ab3ba48c2b` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

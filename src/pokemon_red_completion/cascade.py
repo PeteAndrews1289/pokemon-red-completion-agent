@@ -79,11 +79,13 @@ ROUTE_24_CENTER_RECOVERY_POSITION = 2
 ROUTE_24_ACCURACY_RECOVERY_POSITION = 3
 ROUTE_24_ACCURACY_RECOVERY_HP = 40
 ROUTE_25_RECOVERY_POTION_RESERVE = 5
+CERULEAN_GYM_POTION_RESERVE = 6
 ROCKET_THIEF_POTION_RESERVE = 4
 VERMILION_ROUTE_6_POTION_RESERVE = 3
 SS_ANNE_RIVAL_POTION_RESERVE = 2
 FIELD_ITEM_MENU_CLOSE_PULSES = 4
 CERULEAN_GYM_TRAINER_MOVE_SLOT = 3
+CERULEAN_GYM_TRAINER_RECOVERY_HP = 30
 ROUTE_25_NON_HIKER_MOVE_SLOT = 3
 ROUTE_24_REQUIRED_TRAINER_INDEXES = tuple(spec[0] for spec in ROUTE_24_REQUIRED_TRAINER_SPECS)
 ROUTE_25_REQUIRED_TRAINER_INDEXES = tuple(spec[0] for spec in ROUTE_25_REQUIRED_TRAINER_SPECS)
@@ -787,11 +789,10 @@ def run_cascade_chapter(
         progress,
         emulator,
     )
-    _run_fixed_slot_battle(
+    _run_cerulean_gym_trainer_with_potion(
         reader,
         chapter_executor,
-        CERULEAN_GYM_TRAINER_MOVE_SLOT,
-        MapId.CERULEAN_GYM,
+        emulator,
         timing,
         "Cerulean Gym trainer",
     )
@@ -1578,8 +1579,8 @@ def _use_route_25_recovery_potion(
         executor,
         emulator,
         expected_map=MapId.ROUTE_25,
-        starting_quantity=ROUTE_25_RECOVERY_POTION_RESERVE,
-        ending_quantity=ROCKET_THIEF_POTION_RESERVE,
+        starting_quantity=CERULEAN_GYM_POTION_RESERVE,
+        ending_quantity=ROUTE_25_RECOVERY_POTION_RESERVE,
         label="Route 25 recovery",
     )
 
@@ -1893,49 +1894,56 @@ def _purchase_cerulean_awakening_topup(
 
     _battle_pulse(executor, MacroActionKind.INTERACT, None, timing, frames=180)
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
-    observed_menu_states: list[tuple[int, int, int, int, int]] = []
-    for _ in range(12):
-        menu = reader.read_menu_cursor_state()
-        selected_index = menu.selected_visible_index + menu.scroll_offset
-        observed_menu_states.append(
-            (
-                menu.selected_visible_index,
-                menu.scroll_offset,
-                menu.maximum_visible_index,
-                menu.top_x,
-                menu.top_y,
-            )
-        )
-        if selected_index == 5:
-            break
-        _battle_pulse(
-            executor,
-            MacroActionKind.MOVE,
-            "down" if selected_index < 5 else "up",
-            timing,
-            frames=120,
-        )
-    else:
-        raise CascadeChapterError(
-            "Cerulean Mart could not select the Awakening top-up: "
-            f"menu_states={observed_menu_states}, "
-            f"shop_item={emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM):#04x}, "
-            f"shop_quantity={emulator.read_u8(RamAddress.SHOP_QUANTITY)}."
-        )
 
-    _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
-    if (
-        emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM) != ItemId.AWAKENING
-        or emulator.read_u8(RamAddress.SHOP_QUANTITY) != 1
-    ):
-        raise CascadeChapterError("Cerulean Awakening top-up quantity gate failed.")
-    for _ in range(8):
-        if _bag_quantity(emulator, ItemId.AWAKENING) == 2:
-            break
-        _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=240)
-    else:
-        raise CascadeChapterError("Cerulean Mart did not purchase the Awakening top-up.")
-    _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
+    def buy_topup(*, shop_index: int, item: ItemId, expected_quantity: int) -> None:
+        observed_menu_states: list[tuple[int, int, int, int, int]] = []
+        for _ in range(12):
+            menu = reader.read_menu_cursor_state()
+            selected_index = menu.selected_visible_index + menu.scroll_offset
+            observed_menu_states.append(
+                (
+                    menu.selected_visible_index,
+                    menu.scroll_offset,
+                    menu.maximum_visible_index,
+                    menu.top_x,
+                    menu.top_y,
+                )
+            )
+            if selected_index == shop_index:
+                break
+            _battle_pulse(
+                executor,
+                MacroActionKind.MOVE,
+                "down" if selected_index < shop_index else "up",
+                timing,
+                frames=120,
+            )
+        else:
+            raise CascadeChapterError(
+                f"Cerulean Mart could not select the {item.name} top-up: "
+                f"menu_states={observed_menu_states}."
+            )
+
+        _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
+        if (
+            emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM) != item
+            or emulator.read_u8(RamAddress.SHOP_QUANTITY) != 1
+        ):
+            raise CascadeChapterError(f"Cerulean {item.name} top-up quantity gate failed.")
+        for _ in range(8):
+            if _bag_quantity(emulator, item) == expected_quantity:
+                break
+            _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=240)
+        else:
+            raise CascadeChapterError(f"Cerulean Mart did not purchase the {item.name} top-up.")
+        _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
+
+    buy_topup(
+        shop_index=1,
+        item=ItemId.POTION,
+        expected_quantity=CERULEAN_GYM_POTION_RESERVE,
+    )
+    buy_topup(shop_index=5, item=ItemId.AWAKENING, expected_quantity=2)
 
     for _ in range(4):
         _battle_pulse(executor, MacroActionKind.CANCEL, None, timing, frames=180)
@@ -1952,6 +1960,7 @@ def _purchase_cerulean_awakening_topup(
     if (
         returned.map_id != MapId.CERULEAN_CITY
         or (returned.player_x, returned.player_y) != (19, 18)
+        or _bag_quantity(emulator, ItemId.POTION) != CERULEAN_GYM_POTION_RESERVE
         or _bag_quantity(emulator, ItemId.AWAKENING) != 2
         or not reader.read_input_readiness().ready
     ):
@@ -2241,6 +2250,114 @@ def _run_route_24_accuracy_battle_with_potion(
             executor,
             timing.dialogue_wait_frames,
         )
+
+    raise CascadeChapterError(f"{label} failed its bounded battle-completion gate.")
+
+
+def _run_cerulean_gym_trainer_with_potion(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    timing: CascadeTiming,
+    label: str,
+) -> RawGameState:
+    """Preserve the downstream reserve while surviving bounded confusion."""
+
+    starting_quantity = _bag_quantity(emulator, ItemId.POTION)
+    if starting_quantity != ROUTE_25_RECOVERY_POTION_RESERVE:
+        raise CascadeChapterError(
+            "Cerulean Gym recovery lacks its five-Potion starting reserve."
+        )
+    starting_pp = reader.read().first_party_pp
+    if starting_pp is None:
+        raise CascadeChapterError("Cerulean Gym recovery lacks move-PP evidence.")
+    try:
+        _select_battle_move(
+            executor,
+            reader,
+            DEFAULT_CERULEAN_TIMING,
+            slot=CERULEAN_GYM_TRAINER_MOVE_SLOT,
+            label=label,
+        )
+    except CeruleanChapterError as error:
+        raise CascadeChapterError(str(error)) from error
+
+    stable_reads = 0
+    recovery_used = False
+    for _ in range(DEFAULT_CERULEAN_TIMING.max_battle_pulses):
+        before = reader.read()
+        if before.map_id != MapId.CERULEAN_GYM or before.battle_state not in {0, 2}:
+            raise CascadeChapterError(f"{label} left its bounded battle state.")
+        if before.first_party_hp == 0:
+            raise CascadeChapterError(f"Squirtle's lineage fainted during {label}.")
+        if before.battle_state == 0:
+            if reader.read_input_readiness().ready:
+                stable_reads += 1
+                if stable_reads >= 2:
+                    if not recovery_used:
+                        if (
+                            before.first_party_hp is None
+                            or before.first_party_max_hp is None
+                            or not 0 < before.first_party_hp < before.first_party_max_hp
+                        ):
+                            raise CascadeChapterError(
+                                "Cerulean Gym reserve could not normalize an unused Potion."
+                            )
+                        _use_field_recovery_potion(
+                            reader,
+                            executor,
+                            emulator,
+                            expected_map=MapId.CERULEAN_GYM,
+                            starting_quantity=starting_quantity,
+                            ending_quantity=ROCKET_THIEF_POTION_RESERVE,
+                            label="Cerulean Gym reserve",
+                        )
+                        recovery_used = True
+                        before = reader.read()
+                    ending_quantity = starting_quantity - int(recovery_used)
+                    ending_pp = before.first_party_pp
+                    if (
+                        ending_quantity != ROCKET_THIEF_POTION_RESERVE
+                        or _bag_quantity(emulator, ItemId.POTION) != ending_quantity
+                        or ending_pp is None
+                        or ending_pp[CERULEAN_GYM_TRAINER_MOVE_SLOT - 1]
+                        >= starting_pp[CERULEAN_GYM_TRAINER_MOVE_SLOT - 1]
+                    ):
+                        raise CascadeChapterError(
+                            "Cerulean Gym recovery missed its Potion or move-evidence contract."
+                        )
+                    return before
+                _wait(executor, timing.dialogue_wait_frames)
+                continue
+            stable_reads = 0
+        else:
+            stable_reads = 0
+            menu = reader.read_battle_menu_state(before)
+            should_recover = (
+                not recovery_used
+                and menu.phase is BattleMenuPhase.MAIN
+                and before.first_party_hp is not None
+                and 0 < before.first_party_hp <= CERULEAN_GYM_TRAINER_RECOVERY_HP
+            )
+            if should_recover:
+                _use_cerulean_rival_potion(reader, executor, emulator, timing)
+                recovery_used = True
+                continue
+            if menu.phase is BattleMenuPhase.MAIN:
+                try:
+                    _select_battle_move(
+                        executor,
+                        reader,
+                        DEFAULT_CERULEAN_TIMING,
+                        slot=CERULEAN_GYM_TRAINER_MOVE_SLOT,
+                        label=label,
+                    )
+                except CeruleanChapterError as error:
+                    raise CascadeChapterError(str(error)) from error
+                continue
+
+        executor.execute(MacroAction(MacroActionKind.CONFIRM))
+        _wait(executor, timing.dialogue_wait_frames)
 
     raise CascadeChapterError(f"{label} failed its bounded battle-completion gate.")
 
