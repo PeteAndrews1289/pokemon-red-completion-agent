@@ -1880,6 +1880,68 @@ def _switch_wild_capture_party_slot(
     raise SurgeChapterError(f"{label} party switch did not return to MAIN.")
 
 
+def _wild_menu_cursor_active(emulator: EmulatorState) -> bool:
+    address = emulator.read_u8(RamAddress.MENU_CURSOR_LOCATION)
+    address |= emulator.read_u8(int(RamAddress.MENU_CURSOR_LOCATION) + 1) << 8
+    tile_map = int(RamAddress.TILE_MAP)
+    return tile_map <= address < tile_map + 360 and emulator.read_u8(address) == 0xED
+
+
+def _force_switch_wild_capture_to_lead(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    expected_species_id: int,
+    expected_enemy_hp: int,
+    label: str,
+) -> RawGameState:
+    """Recover a fainted helper through the mandatory party selection."""
+
+    party_size = len(reader.read().party_species_ids or ())
+    for pulse in range(32):
+        current = reader.read()
+        if current.battle_state != 1 or current.enemy_species_id != expected_species_id:
+            raise SurgeChapterError(f"{label} forced switch lost its wild encounter.")
+        if current.enemy_hp != expected_enemy_hp:
+            raise SurgeChapterError(f"{label} forced switch changed protected target HP.")
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if _wild_menu_cursor_active(emulator) and 0 <= cursor < party_size:
+            for _ in range(8):
+                cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+                if cursor == 0:
+                    break
+                _pulse(executor, MacroActionKind.MOVE, "up", 120)
+            else:
+                raise SurgeChapterError(f"{label} could not select the protected lead.")
+            _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+            break
+        _pulse(
+            executor,
+            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
+    else:
+        raise SurgeChapterError(f"{label} forced party menu did not settle.")
+
+    for pulse in range(48):
+        restored = reader.read()
+        if (
+            restored.battle_state == 1
+            and restored.enemy_species_id == expected_species_id
+            and restored.enemy_hp == expected_enemy_hp
+            and restored.active_party_index == 0
+            and (restored.battler_hp or 0) > 0
+            and reader.read_battle_menu_state(restored).phase is BattleMenuPhase.MAIN
+        ):
+            return restored
+        _pulse(
+            executor,
+            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
+    raise SurgeChapterError(f"{label} forced switch did not restore MAIN.")
+
+
 def _weaken_wild_capture_once(
     emulator: EmulatorState,
     executor: _CountingExecutor,
@@ -1974,7 +2036,21 @@ def _weaken_wild_capture_once(
             )
             return True
         if (current.battler_hp or 0) <= 0:
-            raise SurgeChapterError(f"{label} capture helper fainted while weakening.")
+            landed = (
+                current.enemy_hp is not None and 0 < current.enemy_hp < before_enemy_hp and pp_spent
+            )
+            restored = _force_switch_wild_capture_to_lead(
+                emulator,
+                executor,
+                reader,
+                before.enemy_species_id,
+                current.enemy_hp if landed else before_enemy_hp,
+                label,
+            )
+            if landed:
+                return True
+            _flee(executor, reader, restored)
+            return False
         _pulse(
             executor,
             MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
