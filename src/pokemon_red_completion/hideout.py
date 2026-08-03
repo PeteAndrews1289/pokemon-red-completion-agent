@@ -688,6 +688,7 @@ def _run_hideout_giovanni_with_recovery(
                     emulator,
                     helper_index,
                     heal_lead=True,
+                    preserve_reserve=True,
                     healing_item=ItemId.SUPER_POTION,
                     wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
                 )
@@ -697,6 +698,9 @@ def _run_hideout_giovanni_with_recovery(
                 ) from error
             run.potions_used += int(potion_spent)
             recoveries += int(potion_spent)
+            must_attack_after_recovery = potion_spent
+            if recoveries > starting_reserve:
+                raise HideoutChapterError("Giovanni exceeded the bounded recovery reserve.")
             continue
 
         _use_battle_super_potion(

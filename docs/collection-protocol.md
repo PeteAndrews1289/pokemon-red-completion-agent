@@ -326,13 +326,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `2ff2aa12fab5a73fa87fb91a5d331f22824a8c26963ee06c0a89ef9635050373` |
-| Source bundle SHA-256 | `da6520766b8a66c7cface0a463346b5627acf17a1d71d1d2df29d62104b37c1f` |
+| Registry SHA-256 | `05c5709097b9e59a871d11101cd7f2629f66ff419fe44054df0e35517e1f3281` |
+| Source bundle SHA-256 | `b72a535a865388509d0128eb8f0272f6f84483cc637e04f46bc35dbe7884da98` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `0707d0d4a5dff6b5fd459fbc1c6a84e8213529106256155e3551e6c56069af2c` |
+| Teacher execution SHA-256 | `6e0d5c0b925e935c82f34516e961df3bcca3805ba0dcd82589e93cd631ea50ce` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `cb84f47af2c0475bccb8cf9faaf03d7973ee4eda76b32b9ff4f589ea9928fec1` |
+| Slot `01` assignment ID | `3bd35ab057c6ef910297175160de41b4ef427bba21abf1e18212e33d88351e31` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -644,3 +644,10 @@ The next replay passed that battle and every chapter through checkpoint 271 befo
 early Poké Ball preserves the later full-bag reward lesson without introducing a new Cinnabar
 purchase: it is legal backup for Snorlax, survives the Great Ball cleanup, and is sold by the
 existing Indigo normalization. The observed 14-ball sale still funds all required Repels.
+
+Retaining that token shifted later battle timing and exposed Rocket Hideout Giovanni's historical
+helper-sacrifice recovery path at checkpoint 136. The teacher now invokes the same reusable
+recovery primitive in preservation mode: a living helper absorbs only the item-turn reply, the
+lead's exact Super Potion use is proved, the lead is restored immediately, and one attack must
+follow before another recovery. This aligns the rehearsal with the balanced-party objective and
+keeps the original finite item reserve; the failed replay remains uncounted.
