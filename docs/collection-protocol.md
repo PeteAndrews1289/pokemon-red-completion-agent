@@ -84,6 +84,11 @@ Balls, but Indigo cleanup still required at least one leftover before opening it
 cleanup contract now accepts the complete zero-through-thirty remainder range, skips the sale when
 the stack is empty, and retains the exact downstream supply checks. The failed rehearsal remains
 private and uncounted; this corrected exact source must repeat the full dry run before slot `01`.
+That replay again reached checkpoint 296 and accepted the empty stack, then exposed that the old
+positive-sale branch had also supplied an implicit menu transition: cancelling after a completed
+sale returns to BUY/SELL, while skipping the sale leaves field control at the clerk. The zero path
+now interacts with the clerk explicitly before selecting BUY; the positive path retains its
+cancel-to-menu transition. The second failed rehearsal also remains private and uncounted.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before

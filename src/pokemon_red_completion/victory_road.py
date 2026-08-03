@@ -758,7 +758,7 @@ def run_victory_road_chapter(
     )
     if poke_balls_sold:
         _sell_bag_stack(actions, emulator, ItemId.POKE_BALL, poke_balls_sold)
-    _pulse(actions, MacroActionKind.CANCEL)
+    _pulse(actions, _indigo_buy_entry_action(poke_balls_sold))
     _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
     _buy_mart_item(
@@ -840,6 +840,18 @@ def _validate_collection_poke_ball_remainder(quantity: int) -> int:
             f"bounded collection route, got {quantity}."
         )
     return quantity
+
+
+def _indigo_buy_entry_action(poke_balls_sold: int) -> MacroActionKind:
+    """Enter BUY from either the completed-sale state or clerk field control."""
+
+    if poke_balls_sold:
+        # A completed sale is still inside the SELL flow; CANCEL returns to the
+        # clerk's BUY/SELL menu.
+        return MacroActionKind.CANCEL
+    # With no stack to sell, cleanup is still standing at field control and
+    # must interact with the clerk before selecting BUY.
+    return MacroActionKind.INTERACT
 
 
 def _defeat_route22_rival(

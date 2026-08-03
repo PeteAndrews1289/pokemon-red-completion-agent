@@ -36,6 +36,7 @@ from pokemon_red_completion.victory_road import (
     VictoryRoadChapterError,
     _battle_sacrifice,
     _encounter_party,
+    _indigo_buy_entry_action,
     _rival_moves_valid,
     _route22_rival_move_slot,
     _validate_collection_poke_ball_remainder,
@@ -158,6 +159,15 @@ def test_indigo_cleanup_accepts_every_bounded_capture_remainder(quantity: int) -
 def test_indigo_cleanup_rejects_out_of_contract_capture_remainder(quantity: int) -> None:
     with pytest.raises(VictoryRoadChapterError, match="zero to thirty"):
         _validate_collection_poke_ball_remainder(quantity)
+
+
+def test_indigo_cleanup_opens_buy_from_the_zero_remainder_field_state() -> None:
+    assert _indigo_buy_entry_action(0) is victory_road.MacroActionKind.INTERACT
+
+
+@pytest.mark.parametrize("quantity", (1, 30))
+def test_indigo_cleanup_returns_from_a_completed_sale_before_buying(quantity: int) -> None:
+    assert _indigo_buy_entry_action(quantity) is victory_road.MacroActionKind.CANCEL
 
 
 def test_victory_road_source_ids_are_exact() -> None:

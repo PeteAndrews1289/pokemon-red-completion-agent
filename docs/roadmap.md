@@ -317,6 +317,11 @@ consume all thirty Poké Balls, while cleanup required one leftover solely to en
 Zero is now an explicit valid remainder, the zero-quantity sale is skipped, and exact Elite Four
 supplies remain the terminal proof. The run was uncounted; a fresh source-bound rehearsal remains
 the collection gate.
+The first replay of that correction accepted zero but selected the wrong shop item because the
+zero-sale branch remained at field control while the positive-sale branch had returned through
+SELL. Indigo preparation now uses an explicit two-state transition: INTERACT from the zero-remainder
+field state, or CANCEL from a completed positive sale, followed by the same verified BUY selection.
+That replay was also uncounted; the newly frozen source must qualify from clean power.
 
 ## Milestone 4 — DAgger and selective RL
 
