@@ -1843,9 +1843,15 @@ def _purchase_cerulean_awakening_topup(
     ) != (3, 7):
         raise CascadeChapterError("Cerulean Awakening top-up missed the Mart entry gate.")
 
-    _move(executor, reader, MART_CLERK_DIRECTIONS, "Cerulean Mart clerk")
+    _move(executor, reader, MART_CLERK_DIRECTIONS, "Cerulean Mart repeat clerk")
     _battle_pulse(executor, MacroActionKind.MOVE, "left", timing, frames=60)
     _battle_pulse(executor, MacroActionKind.INTERACT, None, timing, frames=180)
+    for _ in range(4):
+        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) == 0:
+            break
+        _battle_pulse(executor, MacroActionKind.MOVE, "up", timing, frames=120)
+    else:
+        raise CascadeChapterError("Cerulean Mart could not normalize the BUY cursor.")
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
     for _ in range(12):
         selected_index = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
