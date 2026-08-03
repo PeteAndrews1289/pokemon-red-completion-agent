@@ -91,6 +91,10 @@ VERMILION_ENTRY_DIRECTIONS = _directions("D" * 5)
 ROUTE_6_FIRST_TRAINER_TO_SOUTH_BUILDING_DIRECTIONS = _directions(
     "U" + "R" * 6 + "U" * 15 + "R" * 2 + "U"
 )
+CERULEAN_WALKER_BLOCK_POSITION = (16, 16)
+CERULEAN_WALKER_CLEAR_POSITION = (15, 16)
+CERULEAN_WALKER_YIELD_POSITION = (17, 16)
+CERULEAN_WALKER_CLEAR_ATTEMPTS = 12
 UNDERGROUND_TUNNEL_NORTHBOUND_DIRECTIONS = _directions("U" * 37 + "R" * 3)
 ROUTE_5_TO_CERULEAN_DIRECTIONS = _directions(
     "L" * 2 + "U" + "L" * 12 + "U" * 28
@@ -1082,6 +1086,14 @@ def _move(
                 != (before.player_x, before.player_y)
             ):
                 break
+            if (
+                label == "trashed house approach replay"
+                and before.map_id == MapId.CERULEAN_CITY
+                and (before.player_x, before.player_y) == CERULEAN_WALKER_BLOCK_POSITION
+                and direction == "left"
+            ):
+                state = _yield_to_cerulean_walker(executor, reader, timing)
+                break
             _wait(
                 executor,
                 timing.movement_retry_wait_frames * (attempt + 1),
@@ -1103,6 +1115,50 @@ def _move(
                 f"Squirtle's lineage fainted during {label}."
             )
     return state
+
+
+def _yield_to_cerulean_walker(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: VermilionTiming,
+) -> RawGameState:
+    """Let the north/south Cerulean walker vacate the replay corridor."""
+
+    for attempt in range(CERULEAN_WALKER_CLEAR_ATTEMPTS):
+        state = reader.read()
+        if (state.player_x, state.player_y) == CERULEAN_WALKER_CLEAR_POSITION:
+            return state
+        if (
+            state.map_id != MapId.CERULEAN_CITY
+            or state.battle_state != 0
+            or (state.player_x, state.player_y) != CERULEAN_WALKER_BLOCK_POSITION
+        ):
+            raise VermilionChapterError(
+                "Cerulean walker recovery left its bounded corridor gate."
+            )
+
+        executor.execute(MacroAction(MacroActionKind.MOVE, "right"))
+        yielded = reader.read()
+        if (yielded.player_x, yielded.player_y) != CERULEAN_WALKER_YIELD_POSITION:
+            raise VermilionChapterError(
+                "Cerulean walker recovery could not yield the corridor."
+            )
+        _wait(executor, timing.movement_retry_wait_frames * (attempt + 1))
+
+        executor.execute(MacroAction(MacroActionKind.MOVE, "left"))
+        returned = reader.read()
+        if (returned.player_x, returned.player_y) != CERULEAN_WALKER_BLOCK_POSITION:
+            raise VermilionChapterError(
+                "Cerulean walker recovery could not restore its approach gate."
+            )
+        executor.execute(MacroAction(MacroActionKind.MOVE, "left"))
+        state = reader.read()
+        if (state.player_x, state.player_y) == CERULEAN_WALKER_CLEAR_POSITION:
+            return state
+
+    raise VermilionChapterError(
+        "Cerulean walker did not clear the replay corridor within its bounded retries."
+    )
 
 
 def _heal(

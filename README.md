@@ -437,6 +437,10 @@ that one-shot outcome remains sealed and v1 cannot be used for fitting. Moving t
 Route 24 Center recovery before that trainer cleared the exact exposed schedule through the next
 checkpoint. A separately identified v2 campaign now preregisters fresh train, validation, test,
 and rehearsal seeds; it must pass its own uncounted full rehearsal before any v2 slot is consumed.
+The first v2 rehearsal reached checkpoint 70 before a walking Cerulean NPC occupied the Route 6
+healing-replay corridor. That uncounted artifact is retained. A bounded yield-and-retry maneuver
+then cleared the exact exposed schedule through checkpoint 71; v2 remains unopened with all twelve
+counted roots untouched pending a new full rehearsal.
 
 ## Evidence and project status
 

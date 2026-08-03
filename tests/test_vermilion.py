@@ -321,6 +321,55 @@ def test_live_route_constants_preserve_the_qualified_corridors() -> None:
     ) == vermilion.ROCKET_TO_ROUTE_5_DIRECTIONS
 
 
+def test_trashed_house_replay_yields_to_the_cerulean_walker(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(
+            _raw(_evidence()),
+            map_id=MapId.CERULEAN_CITY,
+            player_x=16,
+            player_y=16,
+            first_party_hp=66,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        left_attempts_from_block = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            position = (reader.state.player_x, reader.state.player_y)
+            if action.value == "right" and position == (16, 16):
+                reader.state = replace(reader.state, player_x=17)
+            elif action.value == "left" and position == (17, 16):
+                reader.state = replace(reader.state, player_x=16)
+            elif action.value == "left" and position == (16, 16):
+                self.left_attempts_from_block += 1
+                if self.left_attempts_from_block == 3:
+                    reader.state = replace(reader.state, player_x=15)
+            return action
+
+    executor = Executor()
+    monkeypatch.setattr(vermilion, "_wait", lambda *args: None)
+
+    final = vermilion._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        ("left",),
+        vermilion.DEFAULT_VERMILION_TIMING,
+        "trashed house approach replay",
+    )
+
+    assert (final.player_x, final.player_y) == (15, 16)
+    assert executor.left_attempts_from_block == 3
+
+
 @pytest.mark.parametrize(
     ("learn_level_up_move", "expected_interval"),
     ((False, 3), (True, 10_000)),

@@ -19,9 +19,13 @@ preserved in the private immutable ledger; v1 is not eligible for model fitting 
 training roots can no longer all complete. The teacher now visits the already-planned Center before
 that trainer, and an uncounted replay of the exact exposed schedule reached the following trainer.
 
-This v2 registry is a new prospective campaign with fresh, previously unexecuted seeds. Its dry run
-and all twelve slots are unexecuted. It is a plan, not an outcome or held-out-result claim, and it
-contains no trajectory, ROM, snapshot, private path, or completion evidence.
+This v2 registry is a new prospective campaign with fresh, previously unexecuted counted seeds.
+Its first uncounted dry run reached checkpoint 70 before a walking Cerulean NPC blocked the Route 6
+healing-replay corridor. The failed private artifact is retained. A bounded yield-and-retry repair
+then carried that exact rehearsal schedule through the next checkpoint. The registry below binds
+the repaired source; it still requires a new complete dry run, and all twelve counted slots remain
+unexecuted. It is a plan, not a held-out-result claim, and contains no trajectory, ROM, snapshot,
+private path, or completion evidence.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
@@ -75,13 +79,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `816797bdf49d6bff7254792956970a2d3e208991cbf5d70491f158e053259a37` |
-| Source bundle SHA-256 | `6f568b5d2c99989d6bfc594f35ca4a72aa5e619493db3b8fb11334cd0b92a583` |
+| Registry SHA-256 | `183e72a13a14204c1b0a75ddcc257c05870a3cc905a40e260bfff377bfeec979` |
+| Source bundle SHA-256 | `4531990361158dfab0e3df5827d49066f508eabc46070132dff6fc31b945fad6` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `d8fe4c5a9e4a3eb7fe1204e5d9ab14aef3c5bfd59d250ec23217bfe2a419ed88` |
+| Teacher execution SHA-256 | `d70a6c0c89d3b34407854aeebbc660a89d72bacb45ce8d8105961daaae3155f9` |
 | Dry-run schedule SHA-256 | `c63ddab975851d520b6c25492e03d688cd76c88b638a01330d9d3ea659671733` |
-| Slot `01` assignment ID | `cced200b2aeaf85814c35c7fd9f3a0f4e3d49d4c69fc4897f021738cad822cc8` |
+| Slot `01` assignment ID | `5da1baf35dae25c8777b9e3241c81550a59a4f0c07b79fbfcead1cd98d1cf024` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
