@@ -28,6 +28,7 @@ from pokemon_red_completion.cascade import (
     CascadeChapterError,
     _bag_quantity,
     _use_cerulean_rival_potion,
+    _use_field_recovery_potion,
 )
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
@@ -455,6 +456,11 @@ def run_vermilion_chapter(
         raise VermilionChapterError(
             "Rocket victory did not learn Bite into Wartortle's first move slot."
         )
+    _normalize_route_6_potion_reserve(
+        reader,
+        chapter_executor,
+        emulator,
+    )
 
     _move(
         chapter_executor,
@@ -1232,7 +1238,7 @@ def _run_rocket_thief_with_potion(
     emulator: EmulatorState,
     timing: VermilionTiming,
 ) -> RawGameState:
-    """Spend the extra retained Potion once before Drowzee can finish the lead."""
+    """Spend at most one retained Potion when live Rocket damage requires it."""
 
     if _bag_quantity(emulator, ItemId.POTION) != ROCKET_THIEF_POTION_RESERVE:
         raise VermilionChapterError("Rocket thief lacks its three-Potion recovery boundary.")
@@ -1285,14 +1291,43 @@ def _run_rocket_thief_with_potion(
             used_potion = True
             continue
 
-        if (
-            not used_potion
-            or _bag_quantity(emulator, ItemId.POTION) != VERMILION_ROUTE_6_POTION_RESERVE
-        ):
+        expected_quantity = (
+            VERMILION_ROUTE_6_POTION_RESERVE
+            if used_potion
+            else ROCKET_THIEF_POTION_RESERVE
+        )
+        if _bag_quantity(emulator, ItemId.POTION) != expected_quantity:
             raise VermilionChapterError(
-                "Rocket thief did not consume exactly one planned Potion."
+                "Rocket thief changed its bounded Potion reserve unexpectedly."
             )
         return result
+
+
+def _normalize_route_6_potion_reserve(
+    reader: PokemonRedStateReader,
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+) -> None:
+    """Hand exactly two Potions to Route 6 without forcing an unsafe battle heal."""
+
+    quantity = _bag_quantity(emulator, ItemId.POTION)
+    if quantity == ROCKET_THIEF_POTION_RESERVE:
+        try:
+            _use_field_recovery_potion(
+                reader,
+                executor,
+                emulator,
+                expected_map=MapId.CERULEAN_CITY,
+                starting_quantity=ROCKET_THIEF_POTION_RESERVE,
+                ending_quantity=VERMILION_ROUTE_6_POTION_RESERVE,
+                label="Rocket victory recovery",
+            )
+        except CascadeChapterError as error:
+            raise VermilionChapterError(str(error)) from error
+    elif quantity != VERMILION_ROUTE_6_POTION_RESERVE:
+        raise VermilionChapterError(
+            "Rocket victory lacks its exact Route 6 Potion handoff."
+        )
 
 
 class _PauseForRoute6Potion(Exception):

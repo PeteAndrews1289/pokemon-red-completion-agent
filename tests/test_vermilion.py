@@ -261,6 +261,11 @@ def test_runner_records_all_fifteen_ordered_semantic_boundaries(
     )
     monkeypatch.setattr(
         vermilion,
+        "_normalize_route_6_potion_reserve",
+        lambda *args, **kwargs: None,
+    )
+    monkeypatch.setattr(
+        vermilion,
         "_run_route_6_trainer_f_with_potion",
         lambda *args, **kwargs: reader.read(),
     )
@@ -526,6 +531,66 @@ def test_rocket_recovery_consumes_the_extra_potion_and_reuses_intent(
     assert calls == 2
     assert intents[0] is intents[1]
     assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
+
+
+def test_rocket_victory_may_preserve_the_extra_potion_when_recovery_is_not_needed(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    terminal = RawGameState(
+        True,
+        MapId.CERULEAN_CITY,
+        30,
+        9,
+        1,
+        0,
+        first_party_hp=45,
+        first_party_max_hp=66,
+    )
+    monkeypatch.setattr(vermilion, "_bag_quantity", lambda *_args: 3)
+    monkeypatch.setattr(
+        vermilion,
+        "run_adaptive_trainer_battle",
+        lambda *_args, **_kwargs: terminal,
+    )
+
+    observed = vermilion._run_rocket_thief_with_potion(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        vermilion.DEFAULT_VERMILION_TIMING,
+    )
+
+    assert observed is terminal
+
+
+def test_rocket_victory_spends_an_unused_recovery_before_route_6(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    quantity = 3
+    observed: dict[str, object] = {}
+
+    monkeypatch.setattr(vermilion, "_bag_quantity", lambda *_args: quantity)
+
+    def fake_field_recovery(*args: object, **kwargs: object) -> None:
+        nonlocal quantity
+        observed.update(kwargs)
+        quantity = 2
+
+    monkeypatch.setattr(vermilion, "_use_field_recovery_potion", fake_field_recovery)
+
+    vermilion._normalize_route_6_potion_reserve(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+    )
+
+    assert quantity == 2
+    assert observed == {
+        "expected_map": MapId.CERULEAN_CITY,
+        "starting_quantity": 3,
+        "ending_quantity": 2,
+        "label": "Rocket victory recovery",
+    }
 
 
 class WildFleeSimulation:

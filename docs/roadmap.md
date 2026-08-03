@@ -326,14 +326,17 @@ The corrected source subsequently passed **312/312**, **36/36**, Hall of Fame, a
 schedule audit, opening v2. Its first one-shot train root then failed at checkpoint 62 when the
 Rocket thief's Drowzee knocked out Wartortle at 0/66 HP with 24/50 enemy HP remaining. The immutable
 v2 ledger retains that failure, so v2 cannot provide five complete train roots. The next teacher
-keeps a fifth Potion through Route 24, a fourth through Route 25, spends the third at a bounded
-Rocket-thief recovery gate, and hands the original two-Potion reserve to Route 6. After the required
+keeps a fifth Potion through Route 24, a fourth through Route 25, conditionally spends the third at
+a bounded Rocket-thief recovery gate, and hands the original two-Potion reserve to Route 6. After the required
 fresh Bite, it ranks Mega Punch before weaker cleanup attacks. A fresh-seed v3 campaign is now the
 qualification target; v2 will not be retried.
 The first uncounted v3 qualification attempt then reached checkpoint 44 with Wartortle at 2/56 HP
 before the Nugget Rocket's Ekans trapped and fainted it. The route already reserved the needed
 Potion but spent it after victory; that same recovery now occurs before the battle and preserves
 the four-Potion Route 25 boundary. All counted v3 slots remain untouched pending a complete replay.
+The next replay cleared that fight and survived checkpoint 62 without needing the in-battle Rocket
+Potion, but the exact-one-use assertion rejected the safer outcome. Recovery is now conditional;
+an unused allowance becomes a proven field heal after victory so Route 6 still receives exactly two.
 
 ## Milestone 4 — DAgger and selective RL
 

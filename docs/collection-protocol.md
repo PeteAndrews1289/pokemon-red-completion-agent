@@ -105,8 +105,8 @@ and a **68/68** offline schedule audit, publishing the required dry-run qualific
 immutable training slot reached checkpoint 62 before Drowzee defeated a 0/66-HP Wartortle with
 24/50 HP remaining. That failed outcome is retained in the private v2 ledger and makes v2
 ineligible for the required five complete training roots. The teacher now carries one additional
-already-owned Potion out of the Cerulean reserve, spends it exactly once at the Rocket thief's
-live low-HP MAIN gate, and ranks the stronger Mega Punch after the required one-use Bite lesson.
+already-owned Potion out of the Cerulean reserve, spends it at the Rocket thief's live low-HP MAIN
+gate only when needed, and ranks the stronger Mega Punch after the required one-use Bite lesson.
 A v3 campaign with fresh counted seeds must qualify this repair; the v2 slot is never rerun.
 
 One invocation against the superseded registry
@@ -161,13 +161,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `66d890434c599e311239a50dc3433a9f91ade988ec8b501e08fd77d5aaaf7580` |
-| Source bundle SHA-256 | `75265a353ad6a44f4461f77e1cd25dca3b26b28156f8b193c89735e488974c58` |
+| Registry SHA-256 | `48e7e7d0cadc1bcf88bb8d0e9ff1db9995bef2ec02ffde0797fff3aa6ea69c8f` |
+| Source bundle SHA-256 | `e0295d8ea7a3e087bece9516d0b13847b4543762aba4ed1807706855c1227384` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `9382095b1004c671935e73e9b34898f947655922a1a4b3ab20cc2f991176762c` |
+| Teacher execution SHA-256 | `a3393d72d22b411719c0a6affaa82d3b188c6147af6c6f6b6a179edfddb616d6` |
 | Dry-run schedule SHA-256 | `20af81ca8cf4c92f45c4fd2d8ed2019dee6b51e6ebe29e384f90824525d5c484` |
-| Slot `01` assignment ID | `0a17bccdbd295621c6f10c7d37332fbacbffc0db271ad78308674e94c05b56b2` |
+| Slot `01` assignment ID | `d7243c6eadb8290d16714a48403c275230fbcaef6b3bb48741dc83b9d24e26cc` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
