@@ -61,6 +61,10 @@ The exact replay showed the NPC can remain parked while the player waits directl
 through that longer window. The second Center exit now uses the legal open side corridor around
 the occupied tile and rejoins the same doorway below it; no collision retry or NPC timing is
 required for that handoff.
+The first side-detour rehearsal reached checkpoint 223 but found the same NPC parked on the left
+approach. The route now uses the Center's already-proven PC-side corridor to the right, drops below
+the NPC walking row, and rejoins the doorway. This remains an uncounted source repair and requires
+a new exact dry qualification.
 
 The now-retired v2 registry began as a prospective campaign with fresh counted seeds.
 Its first uncounted dry run reached checkpoint 70 before a walking Cerulean NPC blocked the Route 6
@@ -193,13 +197,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `454fd488c0ed9e1e2683b01da86e06b27d9141e58a33322e053e3b6e38de4154` |
-| Source bundle SHA-256 | `7356570ce8f0a8cffd30ddff3044289aca5d1a3edfcf83b751ddd6eb1a7143e5` |
+| Registry SHA-256 | `98e8704add8d413fcb4c5e01ce1b178de10c3d7571c9184e4a3c947c35e582b4` |
+| Source bundle SHA-256 | `a698375b7b3ca1f018ece73ad43edbb3ee52b74681aa03b79748350ebe4e6301` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `8d972526cc203ed25d162f1127a157e62de24ab5f31357d14fef2ab8dda7a997` |
+| Teacher execution SHA-256 | `3f223d05bde02fea66e8ea570c401e9b4fb4a5d88b134b1a4589ff94d6e975d0` |
 | Dry-run schedule SHA-256 | `20af81ca8cf4c92f45c4fd2d8ed2019dee6b51e6ebe29e384f90824525d5c484` |
-| Slot `01` assignment ID | `aa00b27fae674eb8ca599f386bbcee630fb736ece72a615fd61a3010ef7d4124` |
+| Slot `01` assignment ID | `ae081a6c9b624885a1133b20c1b93c33f20ab9faf4cf84689d508dc4fbf113ce` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
