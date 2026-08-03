@@ -492,6 +492,7 @@ def run_cascade_chapter(
             _recover_route_24(
                 chapter_executor,
                 reader,
+                emulator,
                 timing,
                 route_24_prefix,
             )
@@ -558,6 +559,7 @@ def run_cascade_chapter(
         _recover_route_24(
             chapter_executor,
             reader,
+            emulator,
             timing,
             route_24_prefix,
         )
@@ -611,8 +613,10 @@ def run_cascade_chapter(
     _recover_route_24(
         chapter_executor,
         reader,
+        emulator,
         timing,
         route_24_prefix + ROUTE_24_ROCKET_SEGMENT,
+        buy_awakening_topup=True,
     )
 
     _move(
@@ -1515,8 +1519,11 @@ def _cross_route_24_npc(
 def _recover_route_24(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
+    emulator: EmulatorState,
     timing: CascadeTiming,
     route_prefix: tuple[str, ...],
+    *,
+    buy_awakening_topup: bool = False,
 ) -> None:
     _move(
         executor,
@@ -1534,6 +1541,8 @@ def _recover_route_24(
     )
     _wait(executor, timing.transition_wait_frames)
     _heal(executor, reader, timing)
+    if buy_awakening_topup:
+        _purchase_cerulean_awakening_topup(reader, executor, emulator, timing)
     _enter_route_24(executor, reader, timing)
     _move(executor, reader, route_prefix, "Route 24 recovery replay")
     _wait(executor, timing.transition_wait_frames)
@@ -1773,8 +1782,8 @@ def _purchase_cerulean_supplies(
     buy_one(
         shop_index=5,
         item=ItemId.AWAKENING,
-        purchase_quantity=2,
-        expected_quantity=2,
+        purchase_quantity=1,
+        expected_quantity=1,
         label="Awakenings",
     )
 
@@ -1795,7 +1804,7 @@ def _purchase_cerulean_supplies(
         or (returned.player_x, returned.player_y) != (19, 18)
         or _bag_quantity(emulator, ItemId.POTION) != CERULEAN_RIVAL_MAX_POTION_RESERVE
         or _bag_quantity(emulator, ItemId.ANTIDOTE) != 2
-        or _bag_quantity(emulator, ItemId.AWAKENING) != 2
+        or _bag_quantity(emulator, ItemId.AWAKENING) != 1
         or not reader.read_input_readiness().ready
     ):
         raise CascadeChapterError(
@@ -1805,6 +1814,88 @@ def _purchase_cerulean_supplies(
             f"antidotes={_bag_quantity(emulator, ItemId.ANTIDOTE)}, "
             f"awakenings={_bag_quantity(emulator, ItemId.AWAKENING)}."
         )
+
+
+def _purchase_cerulean_awakening_topup(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    timing: CascadeTiming,
+) -> None:
+    """Buy the Tower reserve copy after the Nugget reward funds it."""
+
+    before = reader.read()
+    if (
+        before.map_id != MapId.CERULEAN_CITY
+        or (before.player_x, before.player_y) != (19, 18)
+        or before.battle_state != 0
+        or _bag_quantity(emulator, ItemId.AWAKENING) != 1
+        or not reader.read_input_readiness().ready
+    ):
+        raise CascadeChapterError("Cerulean Awakening top-up has an invalid starting gate.")
+
+    _move(executor, reader, CENTER_TO_MART_DIRECTIONS, "Cerulean Mart Awakening top-up")
+    _wait(executor, timing.transition_wait_frames)
+    entered = reader.read()
+    if entered.map_id != MapId.CERULEAN_MART or (
+        entered.player_x,
+        entered.player_y,
+    ) != (3, 7):
+        raise CascadeChapterError("Cerulean Awakening top-up missed the Mart entry gate.")
+
+    _move(executor, reader, MART_CLERK_DIRECTIONS, "Cerulean Mart clerk")
+    _battle_pulse(executor, MacroActionKind.MOVE, "left", timing, frames=60)
+    _battle_pulse(executor, MacroActionKind.INTERACT, None, timing, frames=180)
+    _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
+    for _ in range(12):
+        selected_index = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        if selected_index == 5:
+            break
+        _battle_pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if selected_index < 5 else "up",
+            timing,
+            frames=120,
+        )
+    else:
+        raise CascadeChapterError("Cerulean Mart could not select the Awakening top-up.")
+
+    _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
+    if (
+        emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM) != ItemId.AWAKENING
+        or emulator.read_u8(RamAddress.SHOP_QUANTITY) != 1
+    ):
+        raise CascadeChapterError("Cerulean Awakening top-up quantity gate failed.")
+    for _ in range(8):
+        if _bag_quantity(emulator, ItemId.AWAKENING) == 2:
+            break
+        _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=240)
+    else:
+        raise CascadeChapterError("Cerulean Mart did not purchase the Awakening top-up.")
+    _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
+
+    for _ in range(4):
+        _battle_pulse(executor, MacroActionKind.CANCEL, None, timing, frames=180)
+    if not reader.read_input_readiness().ready:
+        raise CascadeChapterError("Cerulean Awakening top-up did not restore field control.")
+    _move(
+        executor,
+        reader,
+        MART_TO_CENTER_STAGING_DIRECTIONS,
+        "Cerulean Center staging return",
+    )
+    _wait(executor, timing.transition_wait_frames)
+    returned = reader.read()
+    if (
+        returned.map_id != MapId.CERULEAN_CITY
+        or (returned.player_x, returned.player_y) != (19, 18)
+        or _bag_quantity(emulator, ItemId.AWAKENING) != 2
+        or not reader.read_input_readiness().ready
+    ):
+        raise CascadeChapterError("Cerulean Awakening top-up failed its persistent gate.")
 
 
 def _use_route_24_antidote_if_needed(
