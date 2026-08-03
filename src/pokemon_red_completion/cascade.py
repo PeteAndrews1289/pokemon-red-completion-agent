@@ -806,11 +806,6 @@ def run_cascade_chapter(
         progress,
         emulator,
     )
-    _confirm_pulses(
-        chapter_executor,
-        timing.gym_trainer_cleanup_pulses,
-        timing.dialogue_wait_frames,
-    )
 
     _move(
         chapter_executor,
