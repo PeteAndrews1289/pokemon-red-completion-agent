@@ -42,6 +42,8 @@ from pokemon_red_completion.surge import (
     SURGE_CHECKPOINT_COUNT,
     VIRIDIAN_FOREST_MAX_SURVEY_LEGS,
     WILD_CAPTURE_DIRECT_THROW_SPECIES,
+    WILD_CAPTURE_HIGH_RISK_HELPER_HP_RATIO,
+    WILD_CAPTURE_HIGH_RISK_SPECIES,
     WILD_CAPTURE_MAX_WEAKENING_ATTACKS,
     WILD_CAPTURE_PASSIVE_POLICY,
     WILD_CAPTURE_PASSIVE_SPECIES,
@@ -185,7 +187,9 @@ def test_surge_timing_is_positive_and_bounded() -> None:
     assert WILD_CAPTURE_THROWS_PER_ENCOUNTER == 5
     assert WILD_CAPTURE_MAX_WEAKENING_ATTACKS == 8
     assert VIRIDIAN_FOREST_MAX_SURVEY_LEGS == 256
-    assert frozenset({PIKACHU_SPECIES_ID}) == WILD_CAPTURE_DIRECT_THROW_SPECIES
+    assert frozenset() == WILD_CAPTURE_DIRECT_THROW_SPECIES
+    assert frozenset({PIKACHU_SPECIES_ID}) == WILD_CAPTURE_HIGH_RISK_SPECIES
+    assert WILD_CAPTURE_HIGH_RISK_HELPER_HP_RATIO == 0.75
     assert frozenset({METAPOD_SPECIES_ID, KAKUNA_SPECIES_ID}) == WILD_CAPTURE_PASSIVE_SPECIES
     assert all(
         isinstance(getattr(DEFAULT_SURGE_TIMING, field.name), int)
@@ -197,7 +201,8 @@ def test_surge_timing_is_positive_and_bounded() -> None:
 def test_passive_cocoons_receive_deeper_bounded_weakening_policy() -> None:
     assert _wild_capture_policy(METAPOD_SPECIES_ID) is WILD_CAPTURE_PASSIVE_POLICY
     assert _wild_capture_policy(KAKUNA_SPECIES_ID) is WILD_CAPTURE_PASSIVE_POLICY
-    assert WILD_CAPTURE_PASSIVE_POLICY.throw_at_or_below_hp_ratio == 0.50
+    assert WILD_CAPTURE_PASSIVE_POLICY.throw_at_or_below_hp_ratio == 0.30
+    assert WILD_CAPTURE_POLICY.throw_at_or_below_hp_ratio == 0.65
     assert _wild_capture_policy(CATERPIE_SPECIES_ID) is WILD_CAPTURE_POLICY
     assert _wild_capture_policy(PIKACHU_SPECIES_ID) is WILD_CAPTURE_POLICY
 
@@ -298,6 +303,32 @@ def test_wild_capture_helper_rejects_unsafe_or_unusable_members() -> None:
     )
 
     assert _select_wild_capture_helper(party) is None
+
+
+def test_high_risk_capture_helper_requires_a_large_hp_reserve() -> None:
+    party = PartyObservation(
+        (
+            PartyMemberObservation(
+                slot=1,
+                species_id=RATTATA_SPECIES_ID,
+                level=3,
+                hp=11,
+                max_hp=15,
+                moves=(MoveObservation(0x21, 35),),
+            ),
+            PartyMemberObservation(
+                slot=2,
+                species_id=CATERPIE_SPECIES_ID,
+                level=3,
+                hp=15,
+                max_hp=15,
+                moves=(MoveObservation(0x21, 35),),
+            ),
+        )
+    )
+
+    assert _select_wild_capture_helper(party) == (0, 0)
+    assert _select_wild_capture_helper(party, minimum_hp_ratio=0.75) == (1, 0)
 
 
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))

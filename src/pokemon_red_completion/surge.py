@@ -77,14 +77,16 @@ VIRIDIAN_FOREST_MAX_SURVEY_LEGS = 256
 TACKLE_MOVE_ID = 0x21
 GUST_MOVE_ID = 0x10
 WILD_CAPTURE_POLICY = CapturePolicy(
-    throw_at_or_below_hp_ratio=0.85,
+    throw_at_or_below_hp_ratio=0.65,
     prefer_status_first=False,
     max_throws=WILD_CAPTURE_THROWS_PER_ENCOUNTER,
 )
-WILD_CAPTURE_DIRECT_THROW_SPECIES = frozenset({PIKACHU_SPECIES_ID})
+WILD_CAPTURE_DIRECT_THROW_SPECIES: frozenset[int] = frozenset()
+WILD_CAPTURE_HIGH_RISK_SPECIES = frozenset({PIKACHU_SPECIES_ID})
+WILD_CAPTURE_HIGH_RISK_HELPER_HP_RATIO = 0.75
 WILD_CAPTURE_PASSIVE_SPECIES = frozenset({METAPOD_SPECIES_ID, KAKUNA_SPECIES_ID})
 WILD_CAPTURE_PASSIVE_POLICY = CapturePolicy(
-    throw_at_or_below_hp_ratio=0.50,
+    throw_at_or_below_hp_ratio=0.30,
     prefer_status_first=False,
     max_throws=WILD_CAPTURE_THROWS_PER_ENCOUNTER,
 )
@@ -1701,7 +1703,14 @@ class _LiveWildCorridorSurveyExecutor:
             helper = (
                 None
                 if raw.enemy_species_id in WILD_CAPTURE_DIRECT_THROW_SPECIES
-                else _select_wild_capture_helper(party)
+                else _select_wild_capture_helper(
+                    party,
+                    minimum_hp_ratio=(
+                        WILD_CAPTURE_HIGH_RISK_HELPER_HP_RATIO
+                        if raw.enemy_species_id in WILD_CAPTURE_HIGH_RISK_SPECIES
+                        else WILD_CAPTURE_POLICY.retreat_hp_ratio
+                    ),
+                )
             )
             if helper is None or raw.enemy_hp is None or raw.enemy_max_hp is None:
                 break
@@ -1837,8 +1846,15 @@ def _survey_step(
     )
 
 
-def _select_wild_capture_helper(party: PartyObservation) -> tuple[int, int] | None:
+def _select_wild_capture_helper(
+    party: PartyObservation,
+    *,
+    minimum_hp_ratio: float = WILD_CAPTURE_POLICY.retreat_hp_ratio,
+) -> tuple[int, int] | None:
     """Choose a low-level adapter-specific weakening move for a wild capture."""
+
+    if not 0 < minimum_hp_ratio < 1:
+        raise ValueError("minimum_hp_ratio must be between zero and one")
 
     move_preferences = {
         RATTATA_SPECIES_ID: (TACKLE_MOVE_ID,),
@@ -1856,7 +1872,7 @@ def _select_wild_capture_helper(party: PartyObservation) -> tuple[int, int] | No
         if (
             preferred_moves is None
             or member.status is not StatusCondition.HEALTHY
-            or member.hp_ratio <= WILD_CAPTURE_POLICY.retreat_hp_ratio
+            or member.hp_ratio <= minimum_hp_ratio
         ):
             continue
         for move_index, move in enumerate(member.moves):

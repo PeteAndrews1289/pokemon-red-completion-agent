@@ -332,13 +332,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `e680b71fdb81fcc7e382ae73acdb76d14358bba94cc254ee8dbd6cd081812d1b` |
-| Source bundle SHA-256 | `cc86f1927f9492157a566f90b006883393b72b6ce18b785da51db9afe5ccbbdc` |
+| Registry SHA-256 | `5f0906c5f25cb1b7ac1192dc811143b761611f466998cc4a6e3fa3f46469d43b` |
+| Source bundle SHA-256 | `4d16777908c418fbe5a0377ecbf548be6441d60424489283694351ea26aa7f19` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `c662ffa46003a10b3e4cf76bbb5ffda10f86eeb044a7f03370c6af1c370485a8` |
+| Teacher execution SHA-256 | `0fbe257720614e73877e0e555e7f0b8d61517064e0078867c2ff64b16e273667` |
 | Dry-run schedule SHA-256 | `44f7f521126553fbc94a7868b65bfe87237ef740dba8965ad401c9043b6c7e28` |
-| Slot `01` assignment ID | `57d8c104a2f61d573a7b17ea5f3a05f7f6bd526e84d372ba7fe9fbdfb6738e53` |
+| Slot `01` assignment ID | `17fa78b6382df77c8cf7dd8d070d19f9ed2ea8943776b9ba8951ba834215ad93` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -730,3 +730,12 @@ that the one selected turn completed; unchanged target HP classifies it as a mis
 restores the protected lead, flees, and asks the area policy for a fresh encounter without claiming
 damage or capture progress. Regression cases separate hit, miss, and pending MOVE states. This
 qualification attempt is also private and uncounted.
+
+The miss-aware replay completed every Forest root, defeated Surge, and reached checkpoint 102, but
+only five of the original thirty Poké Balls survived. Selling the four-ball surplus plus the Nugget
+left ₽591 after protected healing and status supplies, so the four-Repel purchase failed closed.
+The route does not reduce those downstream reserves. Pikachu is now a high-risk weaken-and-throw
+target instead of a direct throw: only a low-level helper above 75% HP may participate, with the
+verified forced-switch/flee contingency protecting the party. Ordinary targets use a 65% threshold
+and passive Metapod/Kakuna use 30%, under the same exact PP/damage evidence and eight-attack bound.
+This qualification attempt is private and uncounted.
