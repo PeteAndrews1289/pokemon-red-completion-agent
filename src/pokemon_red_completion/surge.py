@@ -1815,6 +1815,71 @@ def _select_wild_capture_helper(party: PartyObservation) -> tuple[int, int] | No
     return party_index, move_index
 
 
+def _switch_wild_capture_party_slot(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    party_index: int,
+    expected_species_id: int,
+    expected_enemy_hp: int,
+    label: str,
+) -> RawGameState:
+    """Switch wild-battle battlers without changing the protected target."""
+
+    _navigate_main(executor, reader, 2)
+    before = reader.read()
+    party = before.party_species_ids
+    if (
+        before.battle_state != 1
+        or before.enemy_species_id != expected_species_id
+        or before.enemy_hp != expected_enemy_hp
+        or party is None
+        or not 0 <= party_index < len(party)
+        or reader.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
+    ):
+        raise SurgeChapterError(f"{label} switch lacks a stable wild MAIN gate.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=120)
+    for _ in range(12):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == party_index:
+            break
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if cursor < party_index else "up",
+            120,
+        )
+    else:
+        raise SurgeChapterError(f"{label} could not select party slot {party_index + 1}.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=120)
+    for _ in range(6):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == 0:
+            break
+        _pulse(executor, MacroActionKind.MOVE, "up", 120)
+    else:
+        raise SurgeChapterError(f"{label} party submenu did not select SWITCH.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+    for pulse in range(48):
+        switched = reader.read()
+        if (
+            switched.battle_state == 1
+            and switched.enemy_species_id == expected_species_id
+            and switched.enemy_hp == expected_enemy_hp
+            and switched.active_party_index == party_index
+            and reader.read_battle_menu_state(switched).phase is BattleMenuPhase.MAIN
+        ):
+            return switched
+        if switched.battle_state != 1 or (switched.battler_hp or 0) <= 0:
+            raise SurgeChapterError(f"{label} lost its battler during switching.")
+        _pulse(
+            executor,
+            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
+    raise SurgeChapterError(f"{label} party switch did not return to MAIN.")
+
+
 def _weaken_wild_capture_once(
     emulator: EmulatorState,
     executor: _CountingExecutor,
@@ -1830,14 +1895,23 @@ def _weaken_wild_capture_once(
     if (
         initial.battle_state != 1
         or initial.enemy_species_id is None
+        or initial.enemy_hp is None
+        or initial.enemy_hp <= 0
         or initial_party is None
         or not 0 <= party_index < len(initial_party)
         or not 0 <= move_index < 4
     ):
         raise SurgeChapterError(f"{label} weakening lacks a coherent wild encounter.")
 
-    _navigate_main(executor, reader, 2)
-    before = reader.read()
+    before = _switch_wild_capture_party_slot(
+        emulator,
+        executor,
+        reader,
+        party_index,
+        initial.enemy_species_id,
+        initial.enemy_hp,
+        f"{label} helper",
+    )
     before_party = before.party_species_ids
     before_enemy_hp = before.enemy_hp
     if (
@@ -1846,50 +1920,9 @@ def _weaken_wild_capture_once(
         or before_enemy_hp is None
         or before_enemy_hp <= 0
         or before_party != initial_party
-        or reader.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
+        or before.active_party_index != party_index
     ):
         raise SurgeChapterError(f"{label} weakening did not normalize to a stable MAIN gate.")
-    _pulse(executor, MacroActionKind.CONFIRM, frames=120)
-    for _ in range(12):
-        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-        if cursor == party_index:
-            break
-        _pulse(
-            executor,
-            MacroActionKind.MOVE,
-            "down" if cursor < party_index else "up",
-            120,
-        )
-    else:
-        raise SurgeChapterError(f"{label} could not select its capture helper.")
-    _pulse(executor, MacroActionKind.CONFIRM, frames=120)
-    for _ in range(6):
-        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-        if cursor == 0:
-            break
-        _pulse(executor, MacroActionKind.MOVE, "up", 120)
-    else:
-        raise SurgeChapterError(f"{label} helper submenu did not select SWITCH.")
-    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-    for pulse in range(48):
-        switched = reader.read()
-        if (
-            switched.battle_state == 1
-            and switched.enemy_species_id == before.enemy_species_id
-            and switched.enemy_hp == before_enemy_hp
-            and switched.active_party_index == party_index
-            and reader.read_battle_menu_state(switched).phase is BattleMenuPhase.MAIN
-        ):
-            break
-        if switched.battle_state != 1 or (switched.battler_hp or 0) <= 0:
-            raise SurgeChapterError(f"{label} lost its capture helper during switching.")
-        _pulse(
-            executor,
-            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
-            frames=120,
-        )
-    else:
-        raise SurgeChapterError(f"{label} helper switch did not return to MAIN.")
 
     party_before_attack = PokemonRedPartyReader(emulator).read()
     helper_before = party_before_attack.members[party_index]
@@ -1930,6 +1963,15 @@ def _weaken_wild_capture_once(
             and pp_spent
             and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
         ):
+            _switch_wild_capture_party_slot(
+                emulator,
+                executor,
+                reader,
+                0,
+                before.enemy_species_id,
+                current.enemy_hp,
+                f"{label} protected lead",
+            )
             return True
         if (current.battler_hp or 0) <= 0:
             raise SurgeChapterError(f"{label} capture helper fainted while weakening.")

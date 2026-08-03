@@ -255,6 +255,10 @@ normalizer, and applies its strict helper-switch gate only after PARTY-selected 
 That normalized replay exposed that the shared navigator had no PARTY destination because earlier
 callers used only FIGHT, ITEM, and RUN. PARTY now has an explicit bounded transition from each
 main-command position before the adapter opens the helper list.
+That route then proved repeated one-PP weakening hits before a failed Pikachu throw let the 1-HP
+Rattata helper faint. After target damage is proven, the adapter now uses the same verified party
+transition to restore the healthy story lead before any ball is thrown. The helper teaches the
+weakening action but does not absorb the complete retry sequence.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
@@ -308,13 +312,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `ca1fb5da84ae7f0062e7976c70eff0270890e4e420ced42f7660ba260a2a15ca` |
-| Source bundle SHA-256 | `c43b5cf59abda6e619b434bfde7f9270c4518bf7c8460c93d6eb9471d2a7517e` |
+| Registry SHA-256 | `db7bc1b9d672a43a7006ec2124ab5e9cb0bd84f30429850cb64f56c29ba28d3a` |
+| Source bundle SHA-256 | `e3c2a4c7a578f0c0345019752eb032ec1d3c81d44c2d9d43e96edacace5fbcb1` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `9ea1116b9830c0cf4bee574adca1e79829f677f519bbfcd0cd1f58c7b34f93e2` |
+| Teacher execution SHA-256 | `8e4bfd8a1b7a7363f19abf06a04c12c2f4a124254a71264410786ab702f6550f` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `62772c153f74f697d23948738a81361eba23f97f8dd3601e36ec3985de498472` |
+| Slot `01` assignment ID | `93299c86eb5f23dffba5616fd16da80806a045f89ae9c2fd24bec5a866a76de0` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
