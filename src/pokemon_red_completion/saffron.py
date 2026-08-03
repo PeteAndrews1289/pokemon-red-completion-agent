@@ -95,6 +95,10 @@ MART_1F_TO_2F = _directions("UUUULULLLU")
 MART_2F_TO_3F = _directions("LLLDDDRRRRRURUURU")
 MART_3F_TO_4F = _directions("LLLLU")
 MART_4F_TO_STONE_CLERK = _directions("LLLLLLLLLLLDDDRRRR")
+STONE_CLERK_WALKER_BLOCK_POSITION = (4, 2)
+STONE_CLERK_WALKER_CLEAR_POSITION = (3, 2)
+STONE_CLERK_WALKER_YIELD_POSITION = (5, 2)
+STONE_CLERK_WALKER_CLEAR_ATTEMPTS = 12
 STONE_CLERK_TO_MART_4F_STAIRS = _directions("LLLLUUURRRRRRRRRRR")
 MART_4F_TO_5F = _directions("RRRRU")
 MART_5F_TO_ROOF = _directions("LLLLU")
@@ -821,11 +825,64 @@ def _move(
             )
             if moved or (allow_script and not reader.read_input_readiness().ready):
                 break
+            if (
+                label == "evolution-stone clerk"
+                and before.map_id == MapId.CELADON_MART_4F
+                and (before.player_x, before.player_y)
+                == STONE_CLERK_WALKER_BLOCK_POSITION
+                and direction == "left"
+            ):
+                after = _yield_to_stone_clerk_walker(actions, reader, timing)
+                break
         else:
             raise SaffronChapterError(
                 f"{label} blocked at step {index}: {direction}; "
                 f"{(after.map_id, after.player_x, after.player_y)!r}."
             )
+
+
+def _yield_to_stone_clerk_walker(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SaffronTiming,
+) -> RawGameState:
+    """Yield east until the fourth-floor customer vacates the clerk route."""
+
+    for attempt in range(STONE_CLERK_WALKER_CLEAR_ATTEMPTS):
+        state = reader.read()
+        if (state.player_x, state.player_y) == STONE_CLERK_WALKER_CLEAR_POSITION:
+            return state
+        if (
+            state.map_id != MapId.CELADON_MART_4F
+            or state.battle_state != 0
+            or (state.player_x, state.player_y) != STONE_CLERK_WALKER_BLOCK_POSITION
+        ):
+            raise SaffronChapterError(
+                "Evolution-stone walker recovery left its bounded corridor gate."
+            )
+        actions.execute(MacroAction(MacroActionKind.MOVE, "right"))
+        _wait(actions, timing.movement_frames)
+        yielded = reader.read()
+        if (yielded.player_x, yielded.player_y) != STONE_CLERK_WALKER_YIELD_POSITION:
+            raise SaffronChapterError(
+                "Evolution-stone walker recovery could not yield the corridor."
+            )
+        _wait(actions, timing.movement_frames * (attempt + 1))
+        actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
+        _wait(actions, timing.movement_frames)
+        returned = reader.read()
+        if (returned.player_x, returned.player_y) != STONE_CLERK_WALKER_BLOCK_POSITION:
+            raise SaffronChapterError(
+                "Evolution-stone walker recovery could not restore its approach gate."
+            )
+        actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
+        _wait(actions, timing.movement_frames)
+        state = reader.read()
+        if (state.player_x, state.player_y) == STONE_CLERK_WALKER_CLEAR_POSITION:
+            return state
+    raise SaffronChapterError(
+        "Evolution-stone walker did not clear within its bounded retries."
+    )
 
 
 def _pulse(

@@ -57,6 +57,10 @@ That replay validated the complete economy repair through Rock Tunnel and contin
 turn loop, but had not closed the collection schedule lifecycle; the next Erika battle therefore
 failed closed as an apparent intent change. The externally settled trainer exit now closes the
 matching already-applied schedule entry exactly once, alongside the existing observer lifecycle.
+The following exact replay proved that repair, defeated Erika, and reached checkpoint 230 before a
+moving fourth-floor department-store customer occupied the evolution-stone clerk route. A bounded
+eastward yield maneuver now preserves and restores the exact approach coordinate until the customer
+vacates the single blocked tile.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
@@ -110,13 +114,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `401ff3bbcb02c63864ca3123c122dc4b7298b86a27feaea2c7a4b883cd4f80ee` |
-| Source bundle SHA-256 | `d8b135f9f5c7b534d101a84a0d976bdcdd8a97cfa1e52d8d937dd36e08df8673` |
+| Registry SHA-256 | `53bb3d65d6388acbb7c2b3b306b86338e8dbe423690c3dd790862da57f3a061a` |
+| Source bundle SHA-256 | `513486e92dbf6089b38f8b44a84406e69da1043513b909040bcc59c661072df0` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `feb2ec5f3479923c187ad0ab6ac35b088aeeb606689d7d7ced59f08230fa45b8` |
+| Teacher execution SHA-256 | `c84ece1f5d489ae460958bb56b963fd2a402d30c5048e4eb42fc155128174e9f` |
 | Dry-run schedule SHA-256 | `c63ddab975851d520b6c25492e03d688cd76c88b638a01330d9d3ea659671733` |
-| Slot `01` assignment ID | `e8fb7b2e11ee7e4fe8831652a87ab5f1b895aac9ff0c8878f074164ce553399c` |
+| Slot `01` assignment ID | `76d9b8fbeaa2e70b2c2fed62ee927fc575def9405e03dece40ccc00e566b0b43` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

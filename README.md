@@ -467,6 +467,9 @@ The next rehearsal proved that repair through Rock Tunnel and reached Celadon Gy
 220. It also revealed that Koga's terminal mutual-KO recovery completed the game battle outside the
 adaptive loop without closing its schedule entry. Externally settled trainer exits now close the
 matching applied schedule entry exactly once before the next planned battle.
+That repair then passed Erika and reached checkpoint 230, where a moving department-store customer
+blocked the evolution-stone clerk aisle. The route now uses a bounded eastward yield maneuver and
+proves it returns to the exact approach coordinate before continuing.
 
 ## Evidence and project status
 

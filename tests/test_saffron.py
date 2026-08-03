@@ -2,6 +2,8 @@ from dataclasses import fields, replace
 
 import pytest
 
+import pokemon_red_completion.saffron as saffron
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.observation import Badge, ItemId, MapId, RawGameState
 from pokemon_red_completion.saffron import (
     DEFAULT_SAFFRON_TIMING,
@@ -46,6 +48,50 @@ def test_saffron_timing_is_positive_and_bounded() -> None:
         assert getattr(DEFAULT_SAFFRON_TIMING, field.name) > 0
         with pytest.raises(ValueError, match=field.name):
             replace(DEFAULT_SAFFRON_TIMING, **{field.name: 0})
+
+
+def test_stone_clerk_route_yields_to_fourth_floor_walker(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(_terminal(), map_id=MapId.CELADON_MART_4F, player_x=4, player_y=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        left_attempts = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            position = (reader.state.player_x, reader.state.player_y)
+            if action.value == "right" and position == (4, 2):
+                reader.state = replace(reader.state, player_x=5)
+            elif action.value == "left" and position == (5, 2):
+                reader.state = replace(reader.state, player_x=4)
+            elif action.value == "left" and position == (4, 2):
+                self.left_attempts += 1
+                if self.left_attempts == 3:
+                    reader.state = replace(reader.state, player_x=3)
+            return action
+
+    executor = Executor()
+    monkeypatch.setattr(saffron, "_wait", lambda *args: None)
+
+    saffron._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        ("left",),
+        DEFAULT_SAFFRON_TIMING,
+        "evolution-stone clerk",
+    )
+
+    assert (reader.state.player_x, reader.state.player_y) == (3, 2)
+    assert executor.left_attempts == 3
 
 
 def test_saffron_report_proves_purchase_handoff_order_and_terminal() -> None:
