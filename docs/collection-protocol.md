@@ -332,13 +332,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `5f0906c5f25cb1b7ac1192dc811143b761611f466998cc4a6e3fa3f46469d43b` |
-| Source bundle SHA-256 | `4d16777908c418fbe5a0377ecbf548be6441d60424489283694351ea26aa7f19` |
+| Registry SHA-256 | `e90cea54f7d7d9b4bf2656df49c10cc20b0f5e5f3ea130e8d26f6b151496f44e` |
+| Source bundle SHA-256 | `362e444bf219236da54c917d8ea92ca43231a617a0301e20fa9c9688e554e8ad` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `0fbe257720614e73877e0e555e7f0b8d61517064e0078867c2ff64b16e273667` |
+| Teacher execution SHA-256 | `aa7ffde8930795c6ef71592e36a53b126c8102ba10e40329f08f88797299d789` |
 | Dry-run schedule SHA-256 | `44f7f521126553fbc94a7868b65bfe87237ef740dba8965ad401c9043b6c7e28` |
-| Slot `01` assignment ID | `17fa78b6382df77c8cf7dd8d070d19f9ed2ea8943776b9ba8951ba834215ad93` |
+| Slot `01` assignment ID | `746febed37be72651659632556eb21567e4d779aa39cc854dbe5d61fb76845b6` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -739,3 +739,13 @@ target instead of a direct throw: only a low-level helper above 75% HP may parti
 verified forced-switch/flee contingency protecting the party. Ordinary targets use a 65% threshold
 and passive Metapod/Kakuna use 30%, under the same exact PP/damage evidence and eight-attack bound.
 This qualification attempt is private and uncounted.
+
+That replay funded the complete Tunnel reserve, cleared Rock Tunnel, Rocket Hideout, and Pokémon
+Tower, then reached checkpoint 172. The Snorlax restock bought 24 Great Balls, but the chained
+product transition remained on Great Ball and bought a 25th instead of opening the two-Super-Potion
+purchase. Even without that extra ball, the live ledger was ₽779 short. The route now sells unused
+TM34 Bide for its exact ₽1,000 proceeds and reopens BUY from a verified field boundary between
+product stacks. At Cinnabar, one Great Ball replaces Bide's unique capacity slot and is sold after
+Blaine, preserving the full-bag delayed-TM38 lesson. The ledger accounts for the replacement's
+₽1,300 net difference; the 24-Great-Ball plus retained-Poké-Ball capture depth and both recovery
+items are unchanged. This qualification attempt is private and uncounted.

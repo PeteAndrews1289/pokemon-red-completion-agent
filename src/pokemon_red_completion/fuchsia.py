@@ -35,6 +35,7 @@ from pokemon_red_completion.lavender import (
     _flee,
     _open_bag,
     _select_bag_item,
+    _sell_single_mart_item,
 )
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
@@ -57,6 +58,7 @@ SNORLAX_BUBBLEBEAM_PP_BOUND = (1, 20)
 SNORLAX_RUNTIME_PULSE_BOUND = 720
 SNORLAX_GREAT_BALL_RESERVE = 24
 SNORLAX_SUPER_POTION_RESERVE = 2
+SNORLAX_TM34_SALE_PROCEEDS = 1_000
 GREAT_BALL_PRICE = 600
 SUPER_POTION_PRICE = 700
 SNORLAX_CAPTURE_POLICY = CapturePolicy(
@@ -285,16 +287,28 @@ class FuchsiaChapterReport:
             and _bag_quantity(self.final_bag, ItemId.SUPER_POTION) == 0
             and self.battles[1].balls_used <= SNORLAX_CAPTURE_POLICY.max_throws
             and self.battles[1].recovery_items_used <= SNORLAX_SUPER_POTION_RESERVE
+            and _bag_quantity(self.initial_bag, ItemId.TM34_BIDE) == 1
+            and _bag_quantity(self.final_bag, ItemId.TM34_BIDE) == 0
             and _bag_quantity(self.initial_bag, ItemId.POKE_BALL)
             - _bag_quantity(self.final_bag, ItemId.POKE_BALL)
             == max(0, self.battles[1].balls_used - SNORLAX_GREAT_BALL_RESERVE)
             and _without_bag_items(
                 self.initial_bag,
-                (ItemId.GREAT_BALL, ItemId.SUPER_POTION, ItemId.POKE_BALL),
+                (
+                    ItemId.GREAT_BALL,
+                    ItemId.SUPER_POTION,
+                    ItemId.POKE_BALL,
+                    ItemId.TM34_BIDE,
+                ),
             )
             == _without_bag_items(
                 self.final_bag,
-                (ItemId.GREAT_BALL, ItemId.SUPER_POTION, ItemId.POKE_BALL),
+                (
+                    ItemId.GREAT_BALL,
+                    ItemId.SUPER_POTION,
+                    ItemId.POKE_BALL,
+                    ItemId.TM34_BIDE,
+                ),
             )
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
@@ -753,6 +767,14 @@ def _purchase_snorlax_capture_reserve(
         "Lavender Mart clerk",
     )
     _pulse(actions, MacroActionKind.MOVE, "left", frames=60)
+    _sell_single_mart_item(
+        actions,
+        reader,
+        emulator,
+        DEFAULT_LAVENDER_TIMING,
+        ItemId.TM34_BIDE,
+        expected_proceeds=SNORLAX_TM34_SALE_PROCEEDS,
+    )
     _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
     _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
     try:
@@ -765,6 +787,11 @@ def _purchase_snorlax_capture_reserve(
             quantity=SNORLAX_GREAT_BALL_RESERVE,
             target_bag_quantity=SNORLAX_GREAT_BALL_RESERVE,
         )
+        # Reopen BUY from a verified field boundary so the completed 24-ball
+        # quantity dialogue cannot be mistaken for the next product list.
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+        _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
+        _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
         _buy_mart_item(
             actions,
             emulator,
@@ -785,7 +812,7 @@ def _purchase_snorlax_capture_reserve(
         _bag(emulator).get(ItemId.GREAT_BALL, 0) != SNORLAX_GREAT_BALL_RESERVE
         or _bag(emulator).get(ItemId.SUPER_POTION, 0)
         != before_potions + SNORLAX_SUPER_POTION_RESERVE
-        or before_money - _money(emulator) != expected_cost
+        or before_money + SNORLAX_TM34_SALE_PROCEEDS - _money(emulator) != expected_cost
     ):
         raise FuchsiaChapterError("Snorlax capture-reserve economy proof failed.")
     _move(

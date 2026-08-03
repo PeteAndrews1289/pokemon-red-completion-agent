@@ -83,11 +83,13 @@ from pokemon_red_completion.training import (
 
 BLAINE_CHECKPOINT_COUNT = 9
 BLAINE_CAPACITY_SALE_ITEM = ItemId.ANTIDOTE
-BLAINE_INPUT_BAG_SLOT_BOUNDS = (16, 19)
+BLAINE_INPUT_BAG_SLOT_BOUNDS = (15, 19)
 BLAINE_MONEY_DELTA = 5_003
 BLAINE_ANTIDOTE_SALE_VALUE = 50
+BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST = 1_300
 MAX_REPEL_PRICE = 700
 ULTRA_BALL_PRICE = 1_200
+GREAT_BALL_PRICE = 600
 BLAINE_MAX_WILD_FLEES = 3
 MANSION_TRAINING_FLEE_TIMING = CeladonTiming(flee_pulses=96)
 BLAINE_OPPONENT = 0xEF
@@ -342,6 +344,7 @@ class BlaineChapterReport:
     actions_executed: int
     controller_released: bool
     capacity_ultra_ball_bought: bool = False
+    capacity_great_ball_bought: bool = False
     initial_bag_slot_count: int = 17
     team_readiness: BalancedTeamReport | None = None
     team_training_battles: int = 0
@@ -390,13 +393,20 @@ class BlaineChapterReport:
                 BLAINE_INPUT_BAG_SLOT_BOUNDS[0],
                 BLAINE_INPUT_BAG_SLOT_BOUNDS[1] + 1,
             )
-            and self.capacity_ultra_ball_bought == (self.initial_bag_slot_count == 16)
+            and self.capacity_ultra_ball_bought
+            == (self.initial_bag_slot_count + int(self.capacity_great_ball_bought) == 16)
+            and (not self.capacity_great_ball_bought or self.initial_bag_slot_count >= 15)
             and self.money_remaining
             == self.initial_money
             + BLAINE_MONEY_DELTA
             - (self.max_repel_bought - 1) * MAX_REPEL_PRICE
             - (0 if self.antidote_sold else BLAINE_ANTIDOTE_SALE_VALUE)
             - (ULTRA_BALL_PRICE if self.capacity_ultra_ball_bought else 0)
+            - (
+                BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST
+                if self.capacity_great_ball_bought
+                else 0
+            )
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
@@ -456,7 +466,12 @@ class BlaineChapterReport:
             + BLAINE_MONEY_DELTA
             - (self.max_repel_bought - 1) * MAX_REPEL_PRICE
             - (0 if self.antidote_sold else BLAINE_ANTIDOTE_SALE_VALUE)
-            - (ULTRA_BALL_PRICE if self.capacity_ultra_ball_bought else 0),
+            - (ULTRA_BALL_PRICE if self.capacity_ultra_ball_bought else 0)
+            - (
+                BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST
+                if self.capacity_great_ball_bought
+                else 0
+            ),
             "location": self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3),
             "party_core": party_core_intact(self.final_raw.party_species_ids),
@@ -582,6 +597,13 @@ def run_blaine_chapter(
     _require(initial, MapId.CINNABAR_POKECENTER, (3, 3), "post-Cinnabar boundary")
     initial_money = _money(emulator)
     initial_bag = _bag(emulator)
+    bide_present = initial_bag.get(ItemId.TM34_BIDE, 0) == 1
+    (
+        capacity_great_ball_required,
+        capacity_ultra_ball_bought,
+        repel_purchase_quantity,
+        effective_input_slots,
+    ) = _blaine_capacity_plan(len(initial_bag), bide_present=bide_present)
     if (
         initial_bag.get(ItemId.SECRET_KEY, 0)
         or _event(emulator, EventFlag.BEAT_BLAINE)
@@ -592,7 +614,9 @@ def run_blaine_chapter(
     if (
         not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= len(initial_bag) <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]
         or initial_bag.get(ItemId.X_ACCURACY, 0) != 1
-        or initial_bag.get(ItemId.TM34_BIDE, 0) != 1
+        or initial_bag.get(ItemId.TM34_BIDE, 0) not in {0, 1}
+        or (capacity_great_ball_required and initial_bag.get(ItemId.POKE_BALL, 0) != 1)
+        or not 16 <= effective_input_slots <= 19
         or initial_bag.get(ItemId.ANTIDOTE, 0) not in (0, 1, 2)
     ):
         raise BlaineChapterError(
@@ -600,6 +624,7 @@ def run_blaine_chapter(
             f"slots={len(initial_bag)}, "
             f"x_accuracy={initial_bag.get(ItemId.X_ACCURACY, 0)}, "
             f"bide={initial_bag.get(ItemId.TM34_BIDE, 0)}, "
+            f"capacity_ball={initial_bag.get(ItemId.POKE_BALL, 0)}, "
             f"antidote={initial_bag.get(ItemId.ANTIDOTE, 0)}, "
             f"items={tuple(int(item) for item in initial_bag)}."
         )
@@ -616,7 +641,7 @@ def run_blaine_chapter(
     _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
     sell_antidote_early = _sell_antidote_before_mansion(
-        len(initial_bag),
+        effective_input_slots,
         initial_bag.get(ItemId.ANTIDOTE, 0),
     )
     if sell_antidote_early:
@@ -629,14 +654,13 @@ def run_blaine_chapter(
     # Retain TM21 here so TM14 plus the Secret Key still fill the bag and keep
     # Blaine's delayed-TM38 reward boundary meaningful. Stay in the sell menu
     # so _buy_repel can return directly to the clerk's BUY/SELL menu.
-    capacity_ultra_ball_bought = len(initial_bag) == 16
-    repel_purchase_quantity = 2 if len(initial_bag) in {16, 17} else 1
     _buy_repel(
         actions,
         reader,
         emulator,
         quantity=repel_purchase_quantity,
         buy_ultra_ball=capacity_ultra_ball_bought,
+        buy_great_ball=capacity_great_ball_required,
     )
     _use_bag_item(actions, reader, emulator, DEFAULT_LAVENDER_TIMING, ItemId.MAX_REPEL)
     if (
@@ -833,9 +857,12 @@ def run_blaine_chapter(
     _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart return")
     _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk return")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
-    _sell_current_bag_item(actions, reader, emulator, ItemId.TM34_BIDE)
-    if _bag(emulator).get(ItemId.TM34_BIDE, 0):
-        raise BlaineChapterError("TM34 Bide sale did not settle.")
+    capacity_sale_item = (
+        ItemId.GREAT_BALL if capacity_great_ball_required else ItemId.TM34_BIDE
+    )
+    _sell_current_bag_item(actions, reader, emulator, capacity_sale_item)
+    if _bag(emulator).get(capacity_sale_item, 0):
+        raise BlaineChapterError(f"{capacity_sale_item.name} capacity sale did not settle.")
     _close(actions, reader)
     _move(actions, reader, MART_TO_GYM, "Mart to Cinnabar Gym")
     _require(reader.read(), MapId.CINNABAR_GYM, (16, 16), "Gym reward return")
@@ -896,6 +923,7 @@ def run_blaine_chapter(
         capacity_ultra_ball_bought=(
             capacity_ultra_ball_bought and _bag(emulator).get(ItemId.ULTRA_BALL, 0) == 1
         ),
+        capacity_great_ball_bought=capacity_great_ball_required,
         initial_bag_slot_count=len(initial_bag),
         team_readiness=team_readiness,
         team_training_battles=team_battles,
@@ -954,6 +982,31 @@ def _sell_antidote_before_mansion(
     return input_slots == 19
 
 
+def _blaine_capacity_plan(
+    input_slots: int,
+    *,
+    bide_present: bool,
+) -> tuple[bool, bool, int, int]:
+    """Replace an early-sold Bide slot while preserving the delayed TM38 lesson."""
+
+    if type(input_slots) is not int or not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= input_slots <= 19:
+        raise BlaineChapterError(f"Unsupported Blaine input capacity: {input_slots} slots.")
+    if type(bide_present) is not bool:
+        raise TypeError("bide_present must be a bool")
+    buy_great_ball = not bide_present
+    effective_slots = input_slots + int(buy_great_ball)
+    if not 16 <= effective_slots <= 19:
+        raise BlaineChapterError(
+            f"Blaine replacement capacity is unsupported: {effective_slots} effective slots."
+        )
+    return (
+        buy_great_ball,
+        effective_slots == 16,
+        2 if effective_slots in {16, 17} else 1,
+        effective_slots,
+    )
+
+
 def _buy_repel(
     actions,
     reader,
@@ -961,7 +1014,14 @@ def _buy_repel(
     *,
     quantity: int = 1,
     buy_ultra_ball: bool = False,
+    buy_great_ball: bool = False,
 ) -> None:
+    def reopen_buy_list() -> None:
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+        _pulse(actions, MacroActionKind.INTERACT)
+        _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
+        _pulse(actions, MacroActionKind.CONFIRM)
+
     _pulse(actions, MacroActionKind.CANCEL)
     _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
@@ -975,6 +1035,18 @@ def _buy_repel(
             quantity=1,
             target_bag_quantity=1,
         )
+        reopen_buy_list()
+    if buy_great_ball:
+        _buy_mart_item(
+            actions,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            absolute_index=1,
+            item=ItemId.GREAT_BALL,
+            quantity=1,
+            target_bag_quantity=1,
+        )
+        reopen_buy_list()
     _buy_mart_item(
         actions,
         emulator,

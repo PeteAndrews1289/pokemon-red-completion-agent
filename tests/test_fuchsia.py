@@ -42,6 +42,7 @@ def _raw() -> RawGameState:
 
 def test_battle_bag_selection_can_move_backward_after_a_ball_throw(monkeypatch) -> None:
     assert fuchsia_module.SNORLAX_GREAT_BALL_RESERVE == 24
+    assert fuchsia_module.SNORLAX_TM34_SALE_PROCEEDS == 1_000
     assert fuchsia_module.SNORLAX_CAPTURE_POLICY.max_throws == 33
 
     class Emulator:
@@ -87,8 +88,8 @@ def _report() -> FuchsiaChapterReport:
     classes = (0x0E, None, 0x14, 0x17, 0x06)
     events = tuple(int(item) for item in REQUIRED_EVENTS)
     spent = (4, 3, 4, 4, 7)
-    initial_bag = ((0x04, 8), (0x28, 1), (0x49, 1))
-    final_bag = initial_bag
+    initial_bag = ((0x04, 8), (0x28, 1), (0x49, 1), (0xEA, 1))
+    final_bag = initial_bag[:-1]
     return FuchsiaChapterReport(
         records=tuple(
             FuchsiaCheckpoint(f"gate_{index}", f"Gate {index}", raw)
