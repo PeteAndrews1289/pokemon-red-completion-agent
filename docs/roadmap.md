@@ -310,6 +310,13 @@ Fame, with lifecycle and progress loss reduced to zero and 4,789 move labels acc
 remaining 209 rejections were early switch-training choices: Blastoise was active, but the snapshot
 still described the weak field lead. The adapter now projects the controlled battler during battle
 and the field lead outside battle. A newly frozen exact-source rehearsal remains the gate.
+That exact rehearsal subsequently validated every earlier repair through checkpoint **296/312**,
+including the six-member balance gate, Blaine, Giovanni, the final rival, and Victory Road. It then
+exposed a stale Indigo inventory assertion: the now-larger bounded capture curriculum may legally
+consume all thirty Poké Balls, while cleanup required one leftover solely to enter a sale helper.
+Zero is now an explicit valid remainder, the zero-quantity sale is skipped, and exact Elite Four
+supplies remain the terminal proof. The run was uncounted; a fresh source-bound rehearsal remains
+the collection gate.
 
 ## Milestone 4 — DAgger and selective RL
 

@@ -9,6 +9,7 @@ from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGame
 from pokemon_red_completion.victory_road import (
     BADGE_CHECK_EVENTS,
     CENTER_TO_ROUTE_22,
+    COLLECTION_POKE_BALL_REMAINDER_BOUNDS,
     EARTH_APPROACH,
     INDIGO_FULL_RESTORE_RESERVE,
     INDIGO_X_SPECIAL_PURCHASE,
@@ -37,6 +38,7 @@ from pokemon_red_completion.victory_road import (
     _encounter_party,
     _rival_moves_valid,
     _route22_rival_move_slot,
+    _validate_collection_poke_ball_remainder,
 )
 
 
@@ -143,7 +145,19 @@ def test_victory_road_routes_are_live_qualified() -> None:
     assert INDIGO_FULL_RESTORE_RESERVE == 6
     assert INDIGO_X_SPECIAL_RESERVE == 8
     assert INDIGO_X_SPECIAL_PURCHASE == 8
+    assert COLLECTION_POKE_BALL_REMAINDER_BOUNDS == (0, 30)
     assert PROTECTED_RECOVERY_MAX_ATTACK_PULSES == 96
+
+
+@pytest.mark.parametrize("quantity", (0, 1, 30))
+def test_indigo_cleanup_accepts_every_bounded_capture_remainder(quantity: int) -> None:
+    assert _validate_collection_poke_ball_remainder(quantity) == quantity
+
+
+@pytest.mark.parametrize("quantity", (-1, 31))
+def test_indigo_cleanup_rejects_out_of_contract_capture_remainder(quantity: int) -> None:
+    with pytest.raises(VictoryRoadChapterError, match="zero to thirty"):
+        _validate_collection_poke_ball_remainder(quantity)
 
 
 def test_victory_road_source_ids_are_exact() -> None:

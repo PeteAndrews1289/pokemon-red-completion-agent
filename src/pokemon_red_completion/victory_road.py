@@ -102,6 +102,7 @@ VICTORY_ROAD_MAX_REPEL_PURCHASE = 2
 INDIGO_FULL_RESTORE_RESERVE = 6
 INDIGO_X_SPECIAL_RESERVE = 8
 INDIGO_X_SPECIAL_PURCHASE = 8
+COLLECTION_POKE_BALL_REMAINDER_BOUNDS = (0, 30)
 VICTORY_ROAD_INPUT_HYPER_POTION_BOUNDS = (0, 7)
 BADGE_CHECK_EVENTS = (
     EventFlag.PASSED_CASCADE_BADGE_CHECK,
@@ -237,7 +238,11 @@ class VictoryRoadChapterReport:
             and self.hyper_potions == 11
             and self.x_specials == INDIGO_X_SPECIAL_RESERVE
             and self.max_repels == 0
-            and 1 <= self.poke_balls_sold <= 8
+            and (
+                COLLECTION_POKE_BALL_REMAINDER_BOUNDS[0]
+                <= self.poke_balls_sold
+                <= COLLECTION_POKE_BALL_REMAINDER_BOUNDS[1]
+            )
             and self.poke_balls_remaining == 0
             and self.tm27_sold
             and self.tm38_sold
@@ -748,13 +753,11 @@ def run_victory_road_chapter(
         if quantity:
             _sell_bag_stack(actions, emulator, obsolete_cure, quantity)
             _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
-    poke_balls_sold = _bag(emulator).get(ItemId.POKE_BALL, 0)
-    if not 1 <= poke_balls_sold <= 30:
-        raise VictoryRoadChapterError(
-            "Indigo cleanup expected one to thirty remaining Poké Balls after the "
-            f"bounded collection route, got {poke_balls_sold}."
-        )
-    _sell_bag_stack(actions, emulator, ItemId.POKE_BALL, poke_balls_sold)
+    poke_balls_sold = _validate_collection_poke_ball_remainder(
+        _bag(emulator).get(ItemId.POKE_BALL, 0)
+    )
+    if poke_balls_sold:
+        _sell_bag_stack(actions, emulator, ItemId.POKE_BALL, poke_balls_sold)
     _pulse(actions, MacroActionKind.CANCEL)
     _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
@@ -825,6 +828,18 @@ def run_victory_road_chapter(
     if not report.passed:
         raise VictoryRoadChapterError(f"Victory Road terminal evidence failed: {report!r}.")
     return report
+
+
+def _validate_collection_poke_ball_remainder(quantity: int) -> int:
+    """Accept every remainder permitted by the bounded capture curriculum."""
+
+    minimum, maximum = COLLECTION_POKE_BALL_REMAINDER_BOUNDS
+    if not minimum <= quantity <= maximum:
+        raise VictoryRoadChapterError(
+            "Indigo cleanup expected zero to thirty remaining Poké Balls after the "
+            f"bounded collection route, got {quantity}."
+        )
+    return quantity
 
 
 def _defeat_route22_rival(

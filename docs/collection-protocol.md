@@ -77,6 +77,13 @@ Silph schedule and observer lifecycle exactly once.
 That repair proved the rival victory at checkpoint 244, but post-battle text still owned input when
 the elevator route began. Terminal recovery now clears bounded dialogue and requires two consecutive
 field-readiness observations before any navigation, matching the normal adaptive runtime contract.
+The next exact rehearsal proved that repair, completed the six-member balancing block with every
+trainee in the upper seventies, defeated Blaine and Giovanni, crossed Victory Road, and reached
+checkpoint 296/312. The expanded bounded capture curriculum legally consumed all thirty Poké
+Balls, but Indigo cleanup still required at least one leftover before opening its sale path. The
+cleanup contract now accepts the complete zero-through-thirty remainder range, skips the sale when
+the stack is empty, and retains the exact downstream supply checks. The failed rehearsal remains
+private and uncounted; this corrected exact source must repeat the full dry run before slot `01`.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
