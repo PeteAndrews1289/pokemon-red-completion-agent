@@ -1587,7 +1587,7 @@ def _settle_silph_rival_forced_switch(
     if not candidates:
         raise SilphChapterError("Silph rival KO left no healthy reserve.")
     target = max(candidates, key=lambda index: hp[index])
-    for _ in range(48):
+    for pulse_index in range(64):
         raw = reader.read()
         if (
             raw.battle_state == 2
@@ -1606,6 +1606,17 @@ def _settle_silph_rival_forced_switch(
             None if cursor == target else ("down" if cursor < target else "up"),
             timing.menu_frames,
         )
+        if pulse_index % 5 == 4:
+            # Faint text precedes the forced party screen and ignores cursor
+            # movement. Periodic confirmation advances only that bounded
+            # dialogue; once the party screen appears the cursor proof above
+            # remains authoritative.
+            _pulse(
+                actions,
+                MacroActionKind.CONFIRM,
+                timing,
+                frames=timing.menu_frames,
+            )
     raise SilphChapterError("Silph rival forced switch exceeded its bounded menu pulses.")
 
 

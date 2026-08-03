@@ -66,6 +66,10 @@ knocked out Blastoise with 17 enemy HP remaining. The bounded rival controller n
 active battler—not only the field lead—as its recovery subject, selects the healthiest living
 reserve from the forced-switch menu, and resumes with that reserve's actual PP. This is a reusable
 full-party lesson rather than another lead-only retry.
+The first replay of that lesson proved the knockout branch but showed that Gen I presents bounded
+faint dialogue before the forced party cursor accepts movement. The selector now interleaves a
+periodic confirmation with cursor normalization, matching the already-qualified Koga mutual-KO
+pattern while still proving the chosen living reserve and restored MAIN state.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
@@ -119,13 +123,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `fb932aeb08ab64f6893e0d5b3181a17f9f526b6856828ac04f346965f1e8388b` |
-| Source bundle SHA-256 | `8e1b5d9aa4279141608226f29238efb2473b1e9f59e73e66a9d3ea63e48f0ec2` |
+| Registry SHA-256 | `eb221191876bf794e1fdd9f4822b00996cb3caf13ba2d04c0ce884f959da87df` |
+| Source bundle SHA-256 | `2e46b89b2c1ba1fa5afbf9f382c9219402d005112a163edda46b74b7776711c6` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `7b1244e86b1b4353ddb2a424be274f5732f3208df285c1c88dd0c94320392c50` |
+| Teacher execution SHA-256 | `791cc3c41b7e4b2336438646f9123f853b412a69a87c1aae1e359c459115b024` |
 | Dry-run schedule SHA-256 | `c63ddab975851d520b6c25492e03d688cd76c88b638a01330d9d3ea659671733` |
-| Slot `01` assignment ID | `798989d0e9ba7bcf27534daaf5acb3667a504c5b19a65d9407ea2df536f6d70d` |
+| Slot `01` assignment ID | `c954d8f39f01c60f4d727990c5f1b265a752d49cbb9aedb47b0ac86a8fcb66ae` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
