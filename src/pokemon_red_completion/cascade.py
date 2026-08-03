@@ -105,6 +105,9 @@ MART_REPEAT_CLERK_DIRECTIONS = _directions("RUULL")
 MART_TO_CENTER_STAGING_DIRECTIONS = _directions(
     "RR" + "D" * 3 + "L" * 10 + "U" * 3 + "R" * 2 + "U" * 5
 )
+MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS = _directions(
+    "DDRD" + "L" * 10 + "U" * 3 + "R" * 2 + "U" * 5
+)
 CENTER_TO_RIVAL_STAGING_DIRECTIONS = _directions("LLUU" + "L" * 9 + "U" * 4 + "R" * 12 + "U" * 5)
 RIVAL_TRIGGER_DIRECTIONS = ("up",)
 RIVAL_TO_CENTER_DIRECTIONS = _directions("D" * 6 + "L" * 12 + "D" * 4 + "R" * 9 + "DDRRU")
@@ -1941,7 +1944,7 @@ def _purchase_cerulean_awakening_topup(
     _move(
         executor,
         reader,
-        MART_TO_CENTER_STAGING_DIRECTIONS,
+        MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS,
         "Cerulean Center staging return",
     )
     _wait(executor, timing.transition_wait_frames)

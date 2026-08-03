@@ -30,6 +30,7 @@ from pokemon_red_completion.cascade import (
     GYM_TRAINER_DIRECTIONS,
     GYM_TRAINER_TO_MISTY_DIRECTIONS,
     MART_REPEAT_CLERK_DIRECTIONS,
+    MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS,
     RIVAL_CENTER_NPC_CORRECTION_DIRECTIONS,
     RIVAL_TRIGGER_DIRECTIONS,
     ROCKET_THIEF_POTION_RESERVE,
@@ -178,6 +179,12 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
     )
     assert len(CENTER_TO_RIVAL_STAGING_DIRECTIONS) == 34
     assert MART_REPEAT_CLERK_DIRECTIONS == ("right", "up", "up", "left", "left")
+    assert MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS[:4] == (
+        "down",
+        "down",
+        "right",
+        "down",
+    )
     assert _reverse_directions(
         CENTER_HEAL_TO_PC_DIRECTIONS
     ) == CENTER_PC_TO_HEAL_DIRECTIONS
