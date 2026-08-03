@@ -12,6 +12,12 @@ from pokemon_red_completion.observation import (
     MapId,
     RawGameState,
 )
+from pokemon_red_completion.party import (
+    MoveObservation,
+    PartyMemberObservation,
+    PartyObservation,
+    StatusCondition,
+)
 from pokemon_red_completion.surge import (
     CATERPIE_SPECIES_ID,
     COLLECTION_POKE_BALL_TARGET,
@@ -26,7 +32,9 @@ from pokemon_red_completion.surge import (
     LT_SURGE_TRAINER_CLASS_ID,
     LT_SURGE_TRAINER_SET,
     METAPOD_SPECIES_ID,
+    PIDGEY_SPECIES_ID,
     PIKACHU_SPECIES_ID,
+    RATTATA_SPECIES_ID,
     SPEAROW_CAPTURE_LEVELS,
     SPEAROW_CAPTURE_MOVE_ID,
     SPEAROW_CAPTURE_MOVE_SLOT,
@@ -42,6 +50,7 @@ from pokemon_red_completion.surge import (
     _party_moves_for_index,
     _plan_gym_can_path,
     _run_dig_battle,
+    _select_wild_capture_helper,
 )
 
 
@@ -174,6 +183,73 @@ def test_surge_timing_is_positive_and_bounded() -> None:
     )
 
 
+def test_wild_capture_helper_prefers_safe_rattata_tackle() -> None:
+    party = PartyObservation(
+        (
+            PartyMemberObservation(
+                slot=1,
+                species_id=0xB3,
+                level=26,
+                hp=70,
+                max_hp=70,
+                moves=(MoveObservation(0x2C, 25),),
+            ),
+            PartyMemberObservation(
+                slot=2,
+                species_id=PIDGEY_SPECIES_ID,
+                level=4,
+                hp=16,
+                max_hp=16,
+                moves=(MoveObservation(0x10, 35),),
+            ),
+            PartyMemberObservation(
+                slot=3,
+                species_id=RATTATA_SPECIES_ID,
+                level=3,
+                hp=15,
+                max_hp=15,
+                moves=(MoveObservation(0x21, 35),),
+            ),
+        )
+    )
+
+    assert _select_wild_capture_helper(party) == (2, 0)
+
+
+def test_wild_capture_helper_rejects_unsafe_or_unusable_members() -> None:
+    party = PartyObservation(
+        (
+            PartyMemberObservation(
+                slot=1,
+                species_id=RATTATA_SPECIES_ID,
+                level=3,
+                hp=4,
+                max_hp=15,
+                moves=(MoveObservation(0x21, 35),),
+            ),
+            PartyMemberObservation(
+                slot=2,
+                species_id=PIDGEY_SPECIES_ID,
+                level=4,
+                hp=16,
+                max_hp=16,
+                status=StatusCondition.PARALYSIS,
+                moves=(MoveObservation(0x10, 35),),
+            ),
+            PartyMemberObservation(
+                slot=3,
+                species_id=CATERPIE_SPECIES_ID,
+                level=3,
+                hp=15,
+                max_hp=15,
+                moves=(MoveObservation(0x21, 0),),
+            ),
+        )
+    )
+
+    assert _select_wild_capture_helper(party) is None
+
+
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
 def test_surge_timing_rejects_invalid_bounds(invalid: object) -> None:
     for field in fields(SurgeTiming):
@@ -263,9 +339,7 @@ class _PositiveHpSwitchPrompt:
 def test_post_ko_positive_enemy_hp_prompt_is_cancel_only() -> None:
     runtime = _PositiveHpSwitchPrompt()
 
-    final, dig_attacks, super_potion_used = _run_dig_battle(
-        runtime, runtime, SurgeTiming()
-    )
+    final, dig_attacks, super_potion_used = _run_dig_battle(runtime, runtime, SurgeTiming())
 
     assert final.battle_state == 0
     assert dig_attacks == 0

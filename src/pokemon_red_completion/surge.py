@@ -8,6 +8,12 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.capture import (
+    CaptureDirective,
+    CaptureObservation,
+    CapturePolicy,
+    plan_capture,
+)
 from pokemon_red_completion.collection import CollectionObservation
 from pokemon_red_completion.observation import (
     Badge,
@@ -24,6 +30,7 @@ from pokemon_red_completion.observation import (
     SurgeState,
     event_flag_is_set,
 )
+from pokemon_red_completion.party import PartyObservation, StatusCondition
 from pokemon_red_completion.pewter import (
     FOREST_GATE_TO_FOREST_DIRECTIONS,
     FOREST_ROUTE_DIRECTIONS,
@@ -67,6 +74,13 @@ PIKACHU_SPECIES_ID = 0x54
 COLLECTION_POKE_BALL_TARGET = 30
 WILD_CAPTURE_THROWS_PER_ENCOUNTER = 5
 VIRIDIAN_FOREST_MAX_SURVEY_LEGS = 256
+TACKLE_MOVE_ID = 0x21
+GUST_MOVE_ID = 0x10
+WILD_CAPTURE_POLICY = CapturePolicy(
+    throw_at_or_below_hp_ratio=0.85,
+    prefer_status_first=False,
+    max_throws=WILD_CAPTURE_THROWS_PER_ENCOUNTER,
+)
 SPEAROW_CAPTURE_MOVE_ID = 0x37
 SPEAROW_CAPTURE_MOVE_SLOT = 4
 SPEAROW_WEAKEN_ATTEMPT_LIMIT = 12
@@ -1628,6 +1642,39 @@ class _LiveWildCorridorSurveyExecutor:
         raw = self._reader.read()
         if raw.enemy_species_id is None:
             raise RedAreaExecutionError(f"{self._label} capture lacks an enemy species")
+        party = self._party_reader.read()
+        helper = _select_wild_capture_helper(party)
+        if helper is not None and raw.enemy_hp is not None and raw.enemy_max_hp is not None:
+            helper_index, _ = helper
+            catcher = party.members[helper_index]
+            collection = self.read_collection()
+            decision = plan_capture(
+                CaptureObservation(
+                    target_species_id=raw.enemy_species_id,
+                    target_level=raw.enemy_level or 1,
+                    target_hp=raw.enemy_hp,
+                    target_max_hp=raw.enemy_max_hp,
+                    catcher=catcher,
+                    balls_available=_bag(self._emulator).get(ItemId.POKE_BALL, 0),
+                    party_has_room=party.is_incomplete,
+                    storage_has_room=any(
+                        count < collection.box_capacity for count in collection.box_counts
+                    ),
+                ),
+                WILD_CAPTURE_POLICY,
+            )
+            if (
+                decision.directive is CaptureDirective.WEAKEN_TARGET
+                and not _weaken_wild_capture_once(
+                    self._emulator,
+                    self._executor,
+                    self._reader,
+                    helper_index,
+                    helper[1],
+                    self._label,
+                )
+            ):
+                return False
         return _try_catch_wild(
             self._emulator,
             self._executor,
@@ -1728,6 +1775,163 @@ def _survey_step(
     )
 
 
+def _select_wild_capture_helper(party: PartyObservation) -> tuple[int, int] | None:
+    """Choose a low-level adapter-specific weakening move for a wild capture."""
+
+    move_preferences = {
+        RATTATA_SPECIES_ID: (TACKLE_MOVE_ID,),
+        CATERPIE_SPECIES_ID: (TACKLE_MOVE_ID,),
+        PIDGEY_SPECIES_ID: (GUST_MOVE_ID,),
+    }
+    species_order = {
+        RATTATA_SPECIES_ID: 0,
+        CATERPIE_SPECIES_ID: 1,
+        PIDGEY_SPECIES_ID: 2,
+    }
+    candidates: list[tuple[int, int, int, int]] = []
+    for party_index, member in enumerate(party.members):
+        preferred_moves = move_preferences.get(member.species_id)
+        if (
+            preferred_moves is None
+            or member.status is not StatusCondition.HEALTHY
+            or member.hp_ratio <= WILD_CAPTURE_POLICY.retreat_hp_ratio
+        ):
+            continue
+        for move_index, move in enumerate(member.moves):
+            if move.move_id in preferred_moves and move.is_usable:
+                candidates.append(
+                    (
+                        species_order[member.species_id],
+                        member.level,
+                        party_index,
+                        move_index,
+                    )
+                )
+                break
+    if not candidates:
+        return None
+    _, _, party_index, move_index = min(candidates)
+    return party_index, move_index
+
+
+def _weaken_wild_capture_once(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    party_index: int,
+    move_index: int,
+    label: str,
+) -> bool:
+    """Switch to a qualified helper and attempt exactly one weakening attack."""
+
+    before = reader.read()
+    before_party = before.party_species_ids
+    before_enemy_hp = before.enemy_hp
+    if (
+        before.battle_state != 1
+        or before_enemy_hp is None
+        or before_enemy_hp <= 0
+        or before.enemy_species_id is None
+        or before_party is None
+        or not 0 <= party_index < len(before_party)
+        or not 0 <= move_index < 4
+        or reader.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
+    ):
+        raise SurgeChapterError(f"{label} weakening lacks a stable wild MAIN gate.")
+
+    _navigate_main(executor, reader, 2)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=120)
+    for _ in range(12):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == party_index:
+            break
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if cursor < party_index else "up",
+            120,
+        )
+    else:
+        raise SurgeChapterError(f"{label} could not select its capture helper.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=120)
+    for _ in range(6):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == 0:
+            break
+        _pulse(executor, MacroActionKind.MOVE, "up", 120)
+    else:
+        raise SurgeChapterError(f"{label} helper submenu did not select SWITCH.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+    for pulse in range(48):
+        switched = reader.read()
+        if (
+            switched.battle_state == 1
+            and switched.enemy_species_id == before.enemy_species_id
+            and switched.enemy_hp == before_enemy_hp
+            and switched.active_party_index == party_index
+            and reader.read_battle_menu_state(switched).phase is BattleMenuPhase.MAIN
+        ):
+            break
+        if switched.battle_state != 1 or (switched.battler_hp or 0) <= 0:
+            raise SurgeChapterError(f"{label} lost its capture helper during switching.")
+        _pulse(
+            executor,
+            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
+    else:
+        raise SurgeChapterError(f"{label} helper switch did not return to MAIN.")
+
+    party_before_attack = PokemonRedPartyReader(emulator).read()
+    helper_before = party_before_attack.members[party_index]
+    pp_before = helper_before.moves[move_index].current_pp
+    _navigate_main(executor, reader, 0)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=120)
+    target_slot = move_index + 1
+    for _ in range(8):
+        current = reader.read()
+        menu = reader.read_battle_menu_state(current)
+        if menu.phase is BattleMenuPhase.MOVE and menu.selected_move_slot == target_slot:
+            break
+        if menu.phase is not BattleMenuPhase.MOVE or menu.selected_move_slot is None:
+            raise SurgeChapterError(f"{label} lost its helper move menu.")
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if menu.selected_move_slot < target_slot else "up",
+            120,
+        )
+    else:
+        raise SurgeChapterError(f"{label} could not select its weakening move.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=180)
+
+    for pulse in range(48):
+        current = reader.read()
+        helper_after = PokemonRedPartyReader(emulator).read().members[party_index]
+        pp_spent = helper_after.moves[move_index].current_pp == pp_before - 1
+        if current.battle_state == 0:
+            if current.party_species_ids != before_party or not pp_spent:
+                raise SurgeChapterError(f"{label} weakening knockout changed protected state.")
+            return False
+        if (
+            current.battle_state == 1
+            and current.enemy_species_id == before.enemy_species_id
+            and current.enemy_hp is not None
+            and 0 < current.enemy_hp < before_enemy_hp
+            and pp_spent
+            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+        ):
+            return True
+        if (current.battler_hp or 0) <= 0:
+            raise SurgeChapterError(f"{label} capture helper fainted while weakening.")
+        _pulse(
+            executor,
+            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
+    raise SurgeChapterError(f"{label} weakening attack did not settle.")
+
+
 def _try_catch_wild(
     emulator: EmulatorState,
     executor: _CountingExecutor,
@@ -1742,6 +1946,8 @@ def _try_catch_wild(
     if type(max_throws) is not int or max_throws <= 0:
         raise ValueError("max_throws must be a positive integer")
     starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+    if starting_balls <= 0:
+        raise SurgeChapterError(f"{label} capture has no Poké Balls remaining.")
     for _ in range(min(starting_balls, max_throws)):
         _navigate_main(executor, reader, 1)
         _pulse(executor, MacroActionKind.CONFIRM)
@@ -1762,9 +1968,7 @@ def _try_catch_wild(
     if not raw.battle_state:
         raise SurgeChapterError(f"{label} capture retry lost its live encounter.")
     _flee(executor, reader, raw)
-    if _bag(emulator).get(ItemId.POKE_BALL, 0) != starting_balls - min(
-        starting_balls, max_throws
-    ):
+    if _bag(emulator).get(ItemId.POKE_BALL, 0) != starting_balls - min(starting_balls, max_throws):
         raise SurgeChapterError(f"{label} capture retry changed its ball accounting.")
     return False
 
@@ -2874,9 +3078,7 @@ def _run_dig_battle(
             and 0 < raw.battler_hp <= max(1, raw.battler_max_hp // 3)
         ):
             if emulator is None:
-                raise SurgeChapterError(
-                    "Lt. Surge low-HP recovery requires live emulator state."
-                )
+                raise SurgeChapterError("Lt. Surge low-HP recovery requires live emulator state.")
             _use_surge_super_potion(executor, reader, emulator, timing)
             super_potion_used = True
             continue
