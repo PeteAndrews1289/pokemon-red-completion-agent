@@ -31,6 +31,7 @@ from pokemon_red_completion.cascade import (
     GYM_TRAINER_TO_MISTY_DIRECTIONS,
     RIVAL_CENTER_NPC_CORRECTION_DIRECTIONS,
     RIVAL_TRIGGER_DIRECTIONS,
+    ROCKET_THIEF_POTION_RESERVE,
     ROUTE_24_AFTER_NPC_DIRECTIONS,
     ROUTE_24_CENTER_RECOVERY_POSITION,
     ROUTE_24_RECOVERY_POTION_RESERVE,
@@ -180,7 +181,8 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
     ) == ROUTE_24_AFTER_NPC_DIRECTIONS
     assert RIVAL_TRIGGER_DIRECTIONS == ("up",)
     assert TM01_FIELD_MENU_CLOSE_PULSES == 2
-    assert ROUTE_24_RECOVERY_POTION_RESERVE == 4
+    assert ROUTE_24_RECOVERY_POTION_RESERVE == 5
+    assert ROCKET_THIEF_POTION_RESERVE == 3
     assert ROUTE_24_CENTER_RECOVERY_POSITION == 2
     assert ROUTE_24_REQUIRED_TRAINER_INDEXES[ROUTE_24_CENTER_RECOVERY_POSITION] == 3
     assert CERULEAN_GYM_TRAINER_MOVE_SLOT == 3
@@ -378,7 +380,7 @@ def test_cerulean_rival_recovery_rejects_ambiguous_live_evidence(
 def test_cerulean_rival_recovery_reuses_one_bounded_intent(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    emulator = _MemoryEmulator(potion_quantity=5)
+    emulator = _MemoryEmulator(potion_quantity=6)
     final = replace(_raw(), first_party_hp=19, first_party_max_hp=51)
     intents = []
     calls = 0
@@ -414,7 +416,7 @@ def test_cerulean_rival_recovery_reuses_one_bounded_intent(
     assert calls == 2
     assert intents[0] is intents[1]
     assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
-    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 4
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 5
 
 
 def test_cerulean_rival_recovery_latches_the_transient_exact_heal(
@@ -488,7 +490,7 @@ def test_cerulean_rival_recovery_latches_the_transient_exact_heal(
 
 
 def test_route_24_recovery_consumes_the_retained_field_potion() -> None:
-    emulator = _MemoryEmulator(potion_quantity=4)
+    emulator = _MemoryEmulator(potion_quantity=5)
     emulator.memory[int(RamAddress.CURRENT_MENU_ITEM)] = 2
 
     class Reader:
@@ -521,7 +523,7 @@ def test_route_24_recovery_consumes_the_retained_field_potion() -> None:
                 emulator.memory[int(RamAddress.CURRENT_MENU_ITEM)] = 0
             elif self.confirms == 3:
                 reader.state = replace(reader.state, first_party_hp=27)
-                emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = 3
+                emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = 4
 
     executor = Executor()
     _use_route_24_recovery_potion(
@@ -531,7 +533,7 @@ def test_route_24_recovery_consumes_the_retained_field_potion() -> None:
     )
 
     assert reader.state.first_party_hp == 27
-    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 3
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 4
     assert sum(
         action.kind is MacroActionKind.CANCEL for action in executor.actions
     ) == FIELD_ITEM_MENU_CLOSE_PULSES

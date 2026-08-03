@@ -89,6 +89,14 @@ positive-sale branch had also supplied an implicit menu transition: cancelling a
 sale returns to BUY/SELL, while skipping the sale leaves field control at the clerk. The zero path
 now interacts with the clerk explicitly before selecting BUY; the positive path retains its
 cancel-to-menu transition. The second failed rehearsal also remains private and uncounted.
+The corrected v2 source then completed **312/312 checkpoints**, **36/36 objectives**, Hall of Fame,
+and a **68/68** offline schedule audit, publishing the required dry-run qualification. Its first
+immutable training slot reached checkpoint 62 before Drowzee defeated a 0/66-HP Wartortle with
+24/50 HP remaining. That failed outcome is retained in the private v2 ledger and makes v2
+ineligible for the required five complete training roots. The teacher now carries one additional
+already-owned Potion out of the Cerulean reserve, spends it exactly once at the Rocket thief's
+live low-HP MAIN gate, and ranks the stronger Mega Punch after the required one-use Bite lesson.
+A v3 campaign with fresh counted seeds must qualify this repair; the v2 slot is never rerun.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before

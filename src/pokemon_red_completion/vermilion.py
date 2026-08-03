@@ -22,6 +22,7 @@ from pokemon_red_completion.cascade import (
     DEFAULT_CASCADE_TIMING,
     GYM_TO_CENTER_DIRECTIONS,
     GYM_TRAINER_TO_EXIT_DIRECTIONS,
+    ROCKET_THIEF_POTION_RESERVE,
     SS_ANNE_RIVAL_POTION_RESERVE,
     VERMILION_ROUTE_6_POTION_RESERVE,
     CascadeChapterError,
@@ -48,6 +49,7 @@ ROUTE_6_JR_TRAINER_M_MOVE_SLOT = 3
 POST_ROCKET_WARTORTLE_MOVES = (0x2C, 0x27, 0x05, 0x37)
 BITE_MOVE_ID = 0x2C
 BITE_BASE_PP = 25
+ROCKET_THIEF_BATTLE_PLAN_ID = RedBattlePlanId.VERMILION_ROCKET_THIEF
 QUALIFIED_ROUTE_6_WILDS = (
     (15, 19, 0x24),
     (15, 22, 0x24),
@@ -428,15 +430,11 @@ def run_vermilion_chapter(
         progress,
         emulator,
     )
-    _battle(
+    _run_rocket_thief_with_potion(
         reader,
         chapter_executor,
-        _choose_rocket_move,
-        MapId.CERULEAN_CITY,
+        emulator,
         timing,
-        "Rocket thief",
-        RedBattlePlanId.VERMILION_ROCKET_THIEF,
-        learn_level_up_move=True,
     )
     _confirm_pulses(
         chapter_executor,
@@ -711,7 +709,14 @@ def _choose_rocket_move(state: RawGameState) -> int:
             and (pp[0] & 0x3F) == BITE_BASE_PP
         ):
             return 1
-        return 4
+        for slot in (3, 1, 4):
+            if (
+                len(pp) >= slot
+                and (pp[slot - 1] & 0x3F) > 0
+                and state.player_disabled_move_slot != slot
+            ):
+                return slot
+        raise VermilionChapterError("Rocket thief Drowzee left no usable ranked attack.")
     raise VermilionChapterError(
         f"Unexpected Rocket thief species {state.enemy_species_id!r}."
     )
@@ -1215,6 +1220,79 @@ def _enter_trainer_battle(
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         _wait(executor, timing.dialogue_wait_frames)
     raise VermilionChapterError(f"{label} missed its bounded battle gate.")
+
+
+class _PauseForRocketThiefPotion(Exception):
+    pass
+
+
+def _run_rocket_thief_with_potion(
+    reader: PokemonRedStateReader,
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+    timing: VermilionTiming,
+) -> RawGameState:
+    """Spend the extra retained Potion once before Drowzee can finish the lead."""
+
+    if _bag_quantity(emulator, ItemId.POTION) != ROCKET_THIEF_POTION_RESERVE:
+        raise VermilionChapterError("Rocket thief lacks its three-Potion recovery boundary.")
+
+    def guarded_policy(raw: RawGameState) -> int:
+        if (
+            _bag_quantity(emulator, ItemId.POTION) == ROCKET_THIEF_POTION_RESERVE
+            and raw.first_party_hp is not None
+            and 0 < raw.first_party_hp <= 40
+        ):
+            raise _PauseForRocketThiefPotion
+        return _choose_rocket_move(raw)
+
+    intent = BattleIntent(
+        "reach_vermilion",
+        battle_plan_id=ROCKET_THIEF_BATTLE_PLAN_ID,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+    )
+    used_potion = False
+    while True:
+        try:
+            result = run_adaptive_trainer_battle(
+                reader,
+                executor,
+                guarded_policy,
+                expected_map=MapId.CERULEAN_CITY,
+                intent=intent,
+                timing=timing.battle_runtime,
+                label="Rocket thief",
+                # The level-24 prompt occurs inside this battle and must accept
+                # Bite over Tackle when no switch prompt is possible.
+                unknown_cancel_interval=10_000,
+            )
+        except BattleRuntimeError as error:
+            if not isinstance(error.__cause__, _PauseForRocketThiefPotion):
+                raise VermilionChapterError(str(error)) from error
+            if used_potion:
+                raise VermilionChapterError(
+                    "Rocket thief requested more than one Potion recovery."
+                ) from error
+            try:
+                _use_cerulean_rival_potion(
+                    reader,
+                    executor,
+                    emulator,
+                    DEFAULT_CASCADE_TIMING,
+                )
+            except CascadeChapterError as recovery_error:
+                raise VermilionChapterError(str(recovery_error)) from recovery_error
+            used_potion = True
+            continue
+
+        if (
+            not used_potion
+            or _bag_quantity(emulator, ItemId.POTION) != VERMILION_ROUTE_6_POTION_RESERVE
+        ):
+            raise VermilionChapterError(
+                "Rocket thief did not consume exactly one planned Potion."
+            )
+        return result
 
 
 class _PauseForRoute6Potion(Exception):

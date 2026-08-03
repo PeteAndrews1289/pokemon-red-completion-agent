@@ -322,6 +322,14 @@ zero-sale branch remained at field control while the positive-sale branch had re
 SELL. Indigo preparation now uses an explicit two-state transition: INTERACT from the zero-remainder
 field state, or CANCEL from a completed positive sale, followed by the same verified BUY selection.
 That replay was also uncounted; the newly frozen source must qualify from clean power.
+The corrected source subsequently passed **312/312**, **36/36**, Hall of Fame, and **68/68**
+schedule audit, opening v2. Its first one-shot train root then failed at checkpoint 62 when the
+Rocket thief's Drowzee knocked out Wartortle at 0/66 HP with 24/50 enemy HP remaining. The immutable
+v2 ledger retains that failure, so v2 cannot provide five complete train roots. The next teacher
+keeps a fifth Potion through Route 24, a fourth through Route 25, spends the third at a bounded
+Rocket-thief recovery gate, and hands the original two-Potion reserve to Route 6. After the required
+fresh Bite, it ranks Mega Punch before weaker cleanup attacks. A fresh-seed v3 campaign is now the
+qualification target; v2 will not be retried.
 
 ## Milestone 4 — DAgger and selective RL
 

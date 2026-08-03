@@ -7,6 +7,7 @@ import pytest
 
 import pokemon_red_completion.vermilion as vermilion
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_runtime import BattleResourcePolicy, BattleRuntimeError
 from pokemon_red_completion.observation import (
     CERULEAN_ROCKET_TRAINER_NUMBER,
     ROCKET_OPPONENT_ID,
@@ -255,6 +256,11 @@ def test_runner_records_all_fifteen_ordered_semantic_boundaries(
     monkeypatch.setattr(vermilion, "_battle", lambda *args, **kwargs: reader.read())
     monkeypatch.setattr(
         vermilion,
+        "_run_rocket_thief_with_potion",
+        lambda *args, **kwargs: reader.read(),
+    )
+    monkeypatch.setattr(
+        vermilion,
         "_run_route_6_trainer_f_with_potion",
         lambda *args, **kwargs: reader.read(),
     )
@@ -437,8 +443,89 @@ def test_rocket_policy_uses_exactly_one_bite_against_drowzee() -> None:
         vermilion._choose_rocket_move(
             replace(drowzee, enemy_hp=24, first_party_pp=(24, 30, 20, 23))
         )
-        == 4
+        == 3
     )
+
+    assert (
+        vermilion._choose_rocket_move(
+            replace(
+                drowzee,
+                enemy_hp=24,
+                first_party_pp=(24, 30, 20, 23),
+                player_disabled_move_slot=3,
+            )
+        )
+        == 1
+    )
+
+
+def test_rocket_recovery_consumes_the_extra_potion_and_reuses_intent(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    quantity = 3
+    calls = 0
+    intents = []
+    terminal = RawGameState(
+        True,
+        MapId.CERULEAN_CITY,
+        30,
+        9,
+        1,
+        0,
+        first_party_hp=45,
+        first_party_max_hp=66,
+    )
+
+    def fake_bag_quantity(*_args: object) -> int:
+        return quantity
+
+    def fake_runtime(*args: object, **kwargs: object) -> RawGameState:
+        nonlocal calls
+        calls += 1
+        intents.append(kwargs["intent"])
+        if calls == 1:
+            policy = args[2]
+            try:
+                policy(
+                    RawGameState(
+                        True,
+                        MapId.CERULEAN_CITY,
+                        30,
+                        9,
+                        1,
+                        2,
+                        enemy_species_id=0x30,
+                        enemy_hp=24,
+                        first_party_hp=40,
+                        first_party_max_hp=66,
+                        first_party_moves=vermilion.POST_ROCKET_WARTORTLE_MOVES,
+                        first_party_pp=(24, 30, 20, 23),
+                    )
+                )
+            except vermilion._PauseForRocketThiefPotion as pause:
+                raise BattleRuntimeError("paused for Rocket recovery") from pause
+        return terminal
+
+    def fake_use(*_args: object) -> None:
+        nonlocal quantity
+        quantity -= 1
+
+    monkeypatch.setattr(vermilion, "_bag_quantity", fake_bag_quantity)
+    monkeypatch.setattr(vermilion, "run_adaptive_trainer_battle", fake_runtime)
+    monkeypatch.setattr(vermilion, "_use_cerulean_rival_potion", fake_use)
+
+    observed = vermilion._run_rocket_thief_with_potion(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        vermilion.DEFAULT_VERMILION_TIMING,
+    )
+
+    assert observed is terminal
+    assert quantity == 2
+    assert calls == 2
+    assert intents[0] is intents[1]
+    assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
 
 
 class WildFleeSimulation:
