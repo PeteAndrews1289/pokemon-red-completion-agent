@@ -326,13 +326,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `e5a41141731a8631c6311349f67d0faa324dd051eca75f5dbf4485fcb55a0b96` |
-| Source bundle SHA-256 | `6eebf04431639abc47d846a686fc21f6bc2943b2f644d2ee81db593a88c840e4` |
+| Registry SHA-256 | `87e5998beaf1ad2e06a5ceb8176cb8b98e6d9639e6f50440e43186690e5f2b6d` |
+| Source bundle SHA-256 | `8b32e75a3cef9454896f192adc5dc3e2673df98e923f96c7675ffd07d6955a31` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `9872cf7c78aa45affe7779c3cf4049d51fb14a36ee0190d05be13d4fcd68c581` |
+| Teacher execution SHA-256 | `e75cff433ed2dc6f62dbde4486212f44b7ee7e663c6235bb75e583ce374e572b` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `f5dcae717cdab2b4046b9ab10b37417169827b9534b1460fcddcad8ebf659417` |
+| Slot `01` assignment ID | `dbc0f6b39a8732bd45bbf39af7d2e061cc9f5e03e9d0f85c9ef1255b249242b5` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -631,3 +631,10 @@ teacher now sells the exact leftover stack at the Vermilion Mart, proves the cor
 inventory and money deltas, and then proves the full supply-purchase ledger. The later Snorlax
 capture remains isolated behind its own Great Ball budget, so this conversion cannot silently
 spend a future capture reserve.
+
+That exact replay proved the sale and purchase ledger at checkpoint 103 and reached Rock Tunnel
+trainer 5 at checkpoint 109. DUX escaped after becoming paralyzed, but the replacement Wartortle
+was also paralyzed and fainted after lost turns. The live battle adapter now distinguishes sleep
+from paralysis, spends only the surplus second Parlyz Heal at a verified main-menu gate, proves
+the cure and item decrement, and retains one cure for the later tunnel evidence battle. This was
+an uncounted failure; the source must repeat the full dry qualification.

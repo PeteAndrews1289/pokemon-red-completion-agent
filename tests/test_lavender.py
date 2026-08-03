@@ -186,13 +186,35 @@ def test_status_recovery_prefers_a_healthy_pivot_before_spending_awakening() -> 
         (20, 50, 30),
         True,
         awakenings=2,
+        parlyz_heals=2,
     ) == ("pivot", 1)
     assert lavender_module._dux_status_recovery_strategy(
         asleep,
         (20, 0, 30),
         True,
         awakenings=2,
+        parlyz_heals=2,
     ) == ("awakening", None)
+
+    paralyzed_story_lead = replace(
+        asleep,
+        active_party_index=1,
+        active_party_status=0x40,
+    )
+    assert lavender_module._dux_status_recovery_strategy(
+        paralyzed_story_lead,
+        (20, 50, 30),
+        True,
+        awakenings=2,
+        parlyz_heals=2,
+    ) == ("parlyz_heal", None)
+    assert lavender_module._dux_status_recovery_strategy(
+        paralyzed_story_lead,
+        (20, 50, 30),
+        True,
+        awakenings=2,
+        parlyz_heals=1,
+    ) == ("none", None)
 
 
 def test_story_lead_uses_bite_after_a_dux_grass_status_escape() -> None:

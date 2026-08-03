@@ -966,6 +966,10 @@ class _PauseForBattleAwakening(Exception):
     pass
 
 
+class _PauseForBattleParlyzHeal(Exception):
+    pass
+
+
 class _PauseForFinalTunnelPivot(Exception):
     def __init__(self, party_index: int) -> None:
         self.party_index = party_index
@@ -1012,11 +1016,14 @@ def _run_lavender_trainer_battle(
             _party_hp(emulator),
             protect_dux_status,
             awakenings=_bag(emulator).get(ItemId.AWAKENING, 0),
+            parlyz_heals=_bag(emulator).get(ItemId.PARLYZ_HEAL, 0),
         )
         if status_recovery == "pivot" and pivot_target is not None:
             raise _PauseForFinalTunnelPivot(pivot_target)
         if status_recovery == "awakening":
             raise _PauseForBattleAwakening
+        if status_recovery == "parlyz_heal":
+            raise _PauseForBattleParlyzHeal
         pivot_target = _final_tunnel_pivot_target(
             raw,
             _party_hp(emulator),
@@ -1091,6 +1098,18 @@ def _run_lavender_trainer_battle(
                     expected_status=reader.read().battler_status or 0,
                 )
                 run.awakenings_used += 1
+                continue
+            if isinstance(error.__cause__, _PauseForBattleParlyzHeal):
+                _use_battle_status_item(
+                    reader,
+                    executor,
+                    emulator,
+                    timing,
+                    label,
+                    item=ItemId.PARLYZ_HEAL,
+                    expected_status=reader.read().battler_status or 0,
+                )
+                run.parlyz_heals_used += 1
                 continue
             if isinstance(error.__cause__, _PauseForFinalTunnelPivot):
                 before_pivot = reader.read()
@@ -1234,15 +1253,20 @@ def _use_battle_status_item(
     menu = reader.read_battle_menu_state(before)
     target_index = before.active_party_index
     before_quantity = _bag(emulator).get(item, 0)
+    expected_status_mask = {
+        ItemId.AWAKENING: 0x07,
+        ItemId.PARLYZ_HEAL: 0x40,
+    }.get(item)
     if (
         before.battle_state != 2
         or target_index is None
         or before.battler_status != expected_status
-        or not expected_status & 0x07
+        or expected_status_mask is None
+        or not expected_status & expected_status_mask
         or before_quantity <= 1
         or menu.phase is not BattleMenuPhase.MAIN
     ):
-        raise LavenderChapterError(f"{label} Awakening lacks its stable sleep gate.")
+        raise LavenderChapterError(f"{label} status cure lacks its stable supported gate.")
 
     command = menu.selected_main_command
     if command == 0:
@@ -1253,11 +1277,11 @@ def _use_battle_status_item(
     elif command == 3:
         _pulse(executor, MacroActionKind.MOVE, "left", timing.wait_frames)
     elif command != 1:
-        raise LavenderChapterError(f"{label} Awakening exposed an invalid command cursor.")
+        raise LavenderChapterError(f"{label} status cure exposed an invalid command cursor.")
 
     selected = reader.read_battle_menu_state(reader.read())
     if selected.phase is not BattleMenuPhase.MAIN or selected.selected_main_command != 1:
-        raise LavenderChapterError(f"{label} Awakening could not select ITEM.")
+        raise LavenderChapterError(f"{label} status cure could not select ITEM.")
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _select_bag_item(executor, emulator, item, timing)
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
@@ -1281,10 +1305,10 @@ def _use_battle_status_item(
         ):
             return
         if current.battle_state != 2 or (current.battler_hp or 0) <= 0:
-            raise LavenderChapterError(f"{label} Awakening lost the active battle.")
+            raise LavenderChapterError(f"{label} status cure lost the active battle.")
         _pulse(executor, MacroActionKind.CANCEL, frames=1)
     raise LavenderChapterError(
-        f"{label} Awakening missed its bounded cure proof: "
+        f"{label} status cure missed its bounded proof: "
         f"cure={saw_cure}, consumption={saw_consumption}."
     )
 
@@ -1340,6 +1364,7 @@ def _dux_status_recovery_strategy(
     enabled: bool,
     *,
     awakenings: int,
+    parlyz_heals: int,
 ) -> tuple[str, int | None]:
     """Prefer a healthy role pivot before spending the protected Tower reserve."""
 
@@ -1348,6 +1373,8 @@ def _dux_status_recovery_strategy(
         return "pivot", pivot_target
     if enabled and (raw.battler_status or 0) & 0x07 and awakenings > 1:
         return "awakening", None
+    if enabled and (raw.battler_status or 0) & 0x40 and parlyz_heals > 1:
+        return "parlyz_heal", None
     return "none", None
 
 
