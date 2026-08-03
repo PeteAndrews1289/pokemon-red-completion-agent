@@ -452,6 +452,10 @@ finished the first opponent at 10/30 HP but was knocked out before its next Dig.
 uses its reserved Super Potion from a strictly proven low-HP battle-menu state, verifies the heal
 and inventory change, and resumes the Dig-only plan. The counted v2 campaign remains pristine while
 the repaired teacher awaits another complete rehearsal.
+The next exact replay proved the recovery and Dig-only win through the complete Surge chapter. It
+then exposed a stale Lavender entrance assumption that required the reserved potion to remain in
+the bag. The handoff now accepts the proven zero-or-one outcome and retains the later exact
+money-and-inventory proof when topping up to the fixed twelve-potion reserve.
 
 ## Evidence and project status
 

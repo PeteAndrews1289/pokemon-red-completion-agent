@@ -363,7 +363,10 @@ def run_lavender_chapter(
         raise LavenderChapterError("Lavender chapter requires the Thunder Badge.")
     initial_sp = _bag(emulator).get(ItemId.SUPER_POTION, 0)
     initial_repel = _bag(emulator).get(ItemId.REPEL, 0)
-    if initial_sp != 1 or initial_repel != 0:
+    # Surge may consume the single reserved potion to keep the Dig-only proof
+    # alive.  Both outcomes are legal and the Lavender Mart later tops the
+    # observed quantity back up to the same fixed downstream reserve.
+    if initial_sp not in {0, 1} or initial_repel != 0:
         raise LavenderChapterError(
             f"Unexpected starting recovery inventory: SP={initial_sp}, Repel={initial_repel}."
         )

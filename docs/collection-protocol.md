@@ -36,6 +36,11 @@ defeated the first opponent with 10/30 HP remaining, but the next opponent moved
 Dig and knocked it out. The teacher now performs one bounded Super Potion recovery only from a
 proven low-HP MAIN battle gate, verifies both the HP increase and inventory decrement, and resumes
 the Dig-only plan. The complete v2 rehearsal remains the next qualification gate.
+The exact replay proved that recovery and the Dig-only victory through checkpoint 97. The
+following Lavender entrance then rejected the correctly depleted potion slot because its legacy
+handoff allowed only one remaining Super Potion. That boundary now accepts either zero or one and
+still restores the observed quantity to the same fixed twelve-potion downstream reserve with an
+exact money-and-inventory proof.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
@@ -89,13 +94,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `fc8f61315d818c3e471c9987838174f1f60348c7d48269ad30003d9c5839234c` |
-| Source bundle SHA-256 | `a4df11b8b34ca99a92a23f432a803ebda252ef3e433d3612e70f44e2bdc607b8` |
+| Registry SHA-256 | `7765ae57c594e8a04a7139bf5c78668b4e31abd2247c24e95afcfca4710268bd` |
+| Source bundle SHA-256 | `36e42fbf5da017b732c4bdbd95055e6099df794d3b9fe6fbb626690c1314d578` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `604896d542d4ef84be5b3aaa15d915e8ed36466e61e32a35b4409a5c66389ca2` |
+| Teacher execution SHA-256 | `c63022167c1dac960842ccacc0bbd4091d34c4ade1d430087faa40c4e41f2d15` |
 | Dry-run schedule SHA-256 | `c63ddab975851d520b6c25492e03d688cd76c88b638a01330d9d3ea659671733` |
-| Slot `01` assignment ID | `b16eaacfb5b7b881e0ed0ec1f1d621f957157bd535e4dfae228485a5518955ad` |
+| Slot `01` assignment ID | `531cec54fd97baba4dd1be311a6e2724cd83e9c4e1d479f2fc1b6065dd30f1d2` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
