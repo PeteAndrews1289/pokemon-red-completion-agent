@@ -332,13 +332,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `e90cea54f7d7d9b4bf2656df49c10cc20b0f5e5f3ea130e8d26f6b151496f44e` |
-| Source bundle SHA-256 | `362e444bf219236da54c917d8ea92ca43231a617a0301e20fa9c9688e554e8ad` |
+| Registry SHA-256 | `b33e8f1298a9fb8f65d9d690d5812741b07333c7e68bb297bc43c76604ad99c3` |
+| Source bundle SHA-256 | `a63d5915b5418f99d9cd06ba41d6c38304eeebecf901a51a4b3d5b70459b955d` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `aa7ffde8930795c6ef71592e36a53b126c8102ba10e40329f08f88797299d789` |
+| Teacher execution SHA-256 | `bd5c65ea1a42a5e89ffbba1b01096c4cc9085710838e3ff509b9e4173521147d` |
 | Dry-run schedule SHA-256 | `44f7f521126553fbc94a7868b65bfe87237ef740dba8965ad401c9043b6c7e28` |
-| Slot `01` assignment ID | `746febed37be72651659632556eb21567e4d779aa39cc854dbe5d61fb76845b6` |
+| Slot `01` assignment ID | `6d8c8595aa3fa9ab85b659caec86ec29804d9b76a0aaa7b93b1560b5ba044693` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -749,3 +749,12 @@ product stacks. At Cinnabar, one Great Ball replaces Bide's unique capacity slot
 Blaine, preserving the full-bag delayed-TM38 lesson. The ledger accounts for the replacement's
 ₽1,300 net difference; the 24-Great-Ball plus retained-Poké-Ball capture depth and both recovery
 items are unchanged. This qualification attempt is private and uncounted.
+
+The Bide-funded replay then bought the intended reserve, caught Snorlax in five throws, completed
+Safari, Koga, and Erika, and reached Saffron at checkpoint 239. Silph cleanup rejected a full
+twenty-slot bag because depositing its three mandatory obsolete route items would leave seventeen
+slots rather than the required sixteen. The cleanup now derives its finite deposit set from live
+occupancy: SS Ticket, Lift Key, and Helix Fossil remain mandatory, while a twenty-slot lineage also
+archives the obsolete Silph Scope. Either supported input must finish at sixteen or fewer slots;
+missing route items and larger states still fail closed. This qualification remains private and
+uncounted.

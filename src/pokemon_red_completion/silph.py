@@ -77,6 +77,7 @@ HYPER_POTION_PRICE = 1_500
 X_SPECIAL_PURCHASE_QUANTITY = 3
 SILPH_RIVAL_RECOVERY_HP = 80
 SILPH_PC_DEPOSIT_ITEMS = (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
+SILPH_OVERFLOW_DEPOSIT_ITEM = ItemId.SILPH_SCOPE
 STATUS_FLAGS_4 = 0xD72E
 GOT_LAPRAS_MASK = 0x01
 ICE_BEAM_MOVE = 0x3A
@@ -1011,20 +1012,21 @@ def _store_spent_route_items(
     # the semantic requirement: depositing these three obsolete route items
     # must leave at most sixteen slots so the roof reward, supplies, Card Key,
     # and Master Ball can all be received later.
-    if not _silph_capacity_ready(before):
+    deposit_items = _silph_capacity_deposit_items(before)
+    if deposit_items is None:
         raise SilphChapterError(
             "Silph capacity cleanup lacks room or the three spent route items."
         )
-    expected_slots = len(before) - len(SILPH_PC_DEPOSIT_ITEMS)
+    expected_slots = len(before) - len(deposit_items)
     _move(actions, reader, ("down",) + ("right",) * 10, timing)
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (13, 4), "pre-Silph PC approach")
-    for item in SILPH_PC_DEPOSIT_ITEMS:
+    for item in deposit_items:
         _deposit_pc_item(actions, reader, emulator, item, timing)
     after = _bag(emulator)
     if (
         len(after) != expected_slots
         or len(after) > 16
-        or any(item in after for item in SILPH_PC_DEPOSIT_ITEMS)
+        or any(item in after for item in deposit_items)
         or not reader.read_input_readiness().ready
     ):
         raise SilphChapterError("Pre-Silph PC cleanup did not establish safe bag capacity.")
@@ -1036,7 +1038,21 @@ def _store_spent_route_items(
 def _silph_capacity_ready(bag: Mapping[object, int]) -> bool:
     """Prove that archiving three route items will leave sixteenth-slot capacity."""
 
-    return len(bag) <= 19 and all(bag.get(item, 0) == 1 for item in SILPH_PC_DEPOSIT_ITEMS)
+    return _silph_capacity_deposit_items(bag) is not None
+
+
+def _silph_capacity_deposit_items(
+    bag: Mapping[object, int],
+) -> tuple[ItemId, ...] | None:
+    """Select obsolete route items sufficient for a sixteen-slot Silph boundary."""
+
+    if not all(bag.get(item, 0) == 1 for item in SILPH_PC_DEPOSIT_ITEMS):
+        return None
+    if len(bag) <= 19:
+        return SILPH_PC_DEPOSIT_ITEMS
+    if len(bag) == 20 and bag.get(SILPH_OVERFLOW_DEPOSIT_ITEM, 0) == 1:
+        return (*SILPH_PC_DEPOSIT_ITEMS, SILPH_OVERFLOW_DEPOSIT_ITEM)
+    return None
 
 
 def _deposit_pc_item(

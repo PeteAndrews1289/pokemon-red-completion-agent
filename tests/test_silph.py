@@ -18,6 +18,7 @@ from pokemon_red_completion.silph import (
     SAFFRON_CENTER_APPROACH,
     SAFFRON_WARP_COORDINATES,
     SILPH_CHECKPOINT_COUNT,
+    SILPH_OVERFLOW_DEPOSIT_ITEM,
     SILPH_PC_DEPOSIT_ITEMS,
     THIRD_FLOOR_GUARD,
     X_SPECIAL_PURCHASE_QUANTITY,
@@ -29,6 +30,7 @@ from pokemon_red_completion.silph import (
     _move_verified,
     _plan_saffron_center_approach,
     _plan_saffron_route,
+    _silph_capacity_deposit_items,
     _silph_capacity_ready,
     _silph_rival_move_slot,
 )
@@ -102,6 +104,7 @@ def _report() -> SilphChapterReport:
 
 def test_silph_timing_is_positive_and_bounded() -> None:
     assert SILPH_PC_DEPOSIT_ITEMS == (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
+    assert SILPH_OVERFLOW_DEPOSIT_ITEM is ItemId.SILPH_SCOPE
     assert X_SPECIAL_PURCHASE_QUANTITY == 3
     assert BATTLE_ITEM_SETTLE_PULSES == 720
     for field in fields(SilphTiming):
@@ -118,6 +121,16 @@ def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:
     assert not _silph_capacity_ready(
         {**route_items, **{1000 + index: 1 for index in range(17)}}
     )
+    overflow = {
+        **route_items,
+        SILPH_OVERFLOW_DEPOSIT_ITEM: 1,
+        **{1000 + index: 1 for index in range(16)},
+    }
+    assert _silph_capacity_deposit_items(overflow) == (
+        *SILPH_PC_DEPOSIT_ITEMS,
+        SILPH_OVERFLOW_DEPOSIT_ITEM,
+    )
+    assert _silph_capacity_ready(overflow)
     assert not _silph_capacity_ready(
         {item: quantity for item, quantity in route_items.items() if item is not ItemId.SS_TICKET}
     )
