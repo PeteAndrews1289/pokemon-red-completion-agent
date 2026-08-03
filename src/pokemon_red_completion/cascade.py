@@ -1853,6 +1853,7 @@ def _purchase_cerulean_awakening_topup(
     else:
         raise CascadeChapterError("Cerulean Mart could not normalize the BUY cursor.")
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
+    _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
     observed_menu_indexes: list[int] = []
     for _ in range(12):
         selected_index = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
