@@ -1014,8 +1014,13 @@ def _store_spent_route_items(
     # and Master Ball can all be received later.
     deposit_items = _silph_capacity_deposit_items(before)
     if deposit_items is None:
+        route_quantities = {
+            item.name: before.get(item, 0)
+            for item in (*SILPH_PC_DEPOSIT_ITEMS, SILPH_OVERFLOW_DEPOSIT_ITEM)
+        }
         raise SilphChapterError(
-            "Silph capacity cleanup lacks room or the three spent route items."
+            "Silph capacity cleanup lacks room or the spent route items: "
+            f"slots={len(before)}, candidates={route_quantities}."
         )
     expected_slots = len(before) - len(deposit_items)
     _move(actions, reader, ("down",) + ("right",) * 10, timing)
