@@ -1032,9 +1032,16 @@ def _recover_sleep_transition(
     if sleep_count == 0:
         return False
 
+    initial_count = sleep_count
     previous_count = sleep_count
     saw_decrease = False
-    for _ in range(timing.max_sleep_recovery_pulses):
+    # Gen I stores the remaining sleep duration as a three-bit turn counter.
+    # Give each observed sleeping turn the configured transition allowance
+    # instead of making every turn share one allowance.  Long move animations
+    # and dialogue can otherwise consume the whole budget even while the
+    # semantic counter is decreasing normally.
+    max_recovery_pulses = timing.max_sleep_recovery_pulses * initial_count
+    for _ in range(max_recovery_pulses):
         if _ACTIVE_BATTLE_STATE.get() == _WILD_BATTLE_STATE and raw.battle_state == 0:
             _require_present_state(raw, expected_map=expected_map, label=label)
             if (raw.battler_hp or 0) <= 0:

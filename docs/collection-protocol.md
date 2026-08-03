@@ -332,13 +332,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `01f7a7bd92c9ed2565fe69adaf680cb4b2cf29a91af8e84818390336633ed261` |
-| Source bundle SHA-256 | `2764f69701dd475a94d02216b40e6840cd1de336fe265d68b08c2ae94bce9c38` |
+| Registry SHA-256 | `c21b698d79922b318982440296f9aa8ec58004f7088cbf53206177f6f595c2b6` |
+| Source bundle SHA-256 | `817d53417f18019309498e47548cceebf46fa802ccf5d74c5725e3fe00a7bacc` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `d478b0acc264d45f6459b3f77a940658e9f98e82db48b866f9f78a78c23ba77a` |
+| Teacher execution SHA-256 | `67dfcfc5f34a49122fce3c5d8d5982fc164cf9776e393e573d13cb37e7bee1ef` |
 | Dry-run schedule SHA-256 | `44f7f521126553fbc94a7868b65bfe87237ef740dba8965ad401c9043b6c7e28` |
-| Slot `01` assignment ID | `9ff298c25fe8c901d5207d3ca82f2369ba62f2b361f204e4619dd3e3755f5b5e` |
+| Slot `01` assignment ID | `3ea36bda26fffc64e1215584c5bcbd35fbf32b27faf320ecd660d6ddf14c5820` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -697,3 +697,11 @@ underlying defect was an unproductive recovery loop: every enemy reply could lea
 the same threshold and immediately trigger another Potion without an intervening attack. Rival
 recovery now latches one mandatory legal attack after every exact Potion use. No item, healing,
 switch, or retry bound is increased; the helper path remains only a final contingency.
+
+With that latch, v5 cleared the rival, all five Route 24 trainers, Misty, and reached the Rocket
+thief at checkpoint 62. Drowzee's Sing counter decreased normally but the former single 48-pulse
+allowance expired with one sleep turn remaining. The runtime now derives a finite total allowance
+from the observed Gen I three-bit sleep counter, giving each represented turn the same transition
+budget. Complete PP-vector preservation, monotonic countdown, live-HP, and menu-state checks remain
+mandatory, so the change accommodates legitimate multi-turn sleep rather than weakening progress
+evidence. This qualification attempt is also uncounted.

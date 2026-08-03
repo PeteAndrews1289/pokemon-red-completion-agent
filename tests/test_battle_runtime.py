@@ -595,6 +595,23 @@ def test_adaptive_controller_bounds_but_survives_a_long_sing_sequence() -> None:
     assert runtime.sleep_dialogue_pulses == 0
 
 
+def test_sleep_recovery_budget_scales_with_semantic_turn_counter() -> None:
+    runtime = SleepRecoverySimulation(sleep_dialogue_pulses=60)
+
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        lambda raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
+        timing=BattleRuntimeTiming(max_move_menu_transition_pulses=1),
+    )
+
+    assert final.battle_state == 0
+    assert final.first_party_status == 0
+    assert final.first_party_pp == (34, 30, 30, 11)
+    assert runtime.sleep_dialogue_pulses == 0
+
+
 def test_sleep_recovery_reenters_fight_after_each_suppressed_turn() -> None:
     runtime = MainMenuSleepRecoverySimulation()
 
