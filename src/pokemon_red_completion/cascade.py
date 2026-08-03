@@ -2408,16 +2408,21 @@ def _run_cerulean_rival_with_potion(
     )
     accuracy_reset_complete = False
     forced_switches = 0
+    must_attack_after_recovery = False
 
     def guarded_policy(raw: RawGameState) -> int:
+        nonlocal must_attack_after_recovery
         if raw.active_party_index not in {None, 0}:
             return _cerulean_rival_reserve_move_slot(raw)
-        if _bag_quantity(
-            emulator, ItemId.POTION
-        ) > ROUTE_24_RECOVERY_POTION_RESERVE and _should_use_cerulean_rival_potion(raw):
+        if (
+            not must_attack_after_recovery
+            and _bag_quantity(emulator, ItemId.POTION) > ROUTE_24_RECOVERY_POTION_RESERVE
+            and _should_use_cerulean_rival_potion(raw)
+        ):
             raise _PauseForCeruleanRivalPotion
         if raw.enemy_species_id == ABRA_SPECIES_ID and not accuracy_reset_complete:
             raise _PauseForCeruleanRivalAccuracyReset
+        must_attack_after_recovery = False
         return choose_cerulean_rival_move_slot(raw)
 
     recoveries = 0
@@ -2457,6 +2462,7 @@ def _run_cerulean_rival_with_potion(
                     continue
                 raise CascadeChapterError(str(error)) from error
         _use_cerulean_rival_potion(reader, executor, emulator, timing)
+        must_attack_after_recovery = True
         recoveries += 1
         if recoveries > starting_reserve - ROUTE_24_RECOVERY_POTION_RESERVE:
             raise CascadeChapterError("Cerulean rival exceeded its fixed recovery reserve.")
