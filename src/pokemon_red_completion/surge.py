@@ -569,7 +569,9 @@ def run_surge_chapter(
     )
     pre_battle_pp = battle.first_party_pp
     dig_slot = (battle.first_party_moves or ()).index(DIG_MOVE_ID)
-    defeated, dig_attacks = _run_dig_battle(actions, reader, timing)
+    defeated, dig_attacks, super_potion_used = _run_dig_battle(
+        actions, reader, timing, emulator=emulator
+    )
     off_slot_unchanged = (
         pre_battle_pp is not None
         and defeated.first_party_pp is not None
@@ -596,7 +598,6 @@ def run_surge_chapter(
         WARTORTLE_SPECIES_ID,
         "Wartortle lead restoration",
     )
-    super_potion_used = False
     final = reader.read()
     beat = _event(final, EventFlag.BEAT_LT_SURGE)
     got_tm = _event(final, EventFlag.GOT_TM24)
@@ -615,7 +616,7 @@ def run_surge_chapter(
         and final.first_party_max_hp is not None
         and 0 < final.first_party_hp <= final.first_party_max_hp
         and final.first_party_status == 0
-        and _bag(emulator).get(ItemId.SUPER_POTION, 0) == 1
+        and _bag(emulator).get(ItemId.SUPER_POTION, 0) == (0 if super_potion_used else 1)
         and stable
     )
     if not reward_valid:
@@ -2809,8 +2810,11 @@ def _run_dig_battle(
     executor: _CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
-) -> tuple[RawGameState, int]:
+    *,
+    emulator: EmulatorState | None = None,
+) -> tuple[RawGameState, int, bool]:
     dig_attacks = 0
+    super_potion_used = False
     declining_switch = False
     switch_pulses = 0
     protected_party: tuple[int, ...] | None = None
@@ -2818,7 +2822,7 @@ def _run_dig_battle(
     for _ in range(timing.battle_pulses):
         raw = reader.read()
         if raw.battle_state == 0:
-            return raw, dig_attacks
+            return raw, dig_attacks, super_potion_used
         if raw.battle_state != 2 or (raw.first_party_hp or 0) <= 0:
             raise SurgeChapterError("Lt. Surge battle lost its living trainer-state gate.")
         menu = reader.read_battle_menu_state(raw)
@@ -2849,6 +2853,19 @@ def _run_dig_battle(
             continue
         if menu.phase is BattleMenuPhase.MOVE:
             _pulse(executor, MacroActionKind.CANCEL, frames=120)
+            continue
+        if (
+            not super_potion_used
+            and raw.battler_hp is not None
+            and raw.battler_max_hp is not None
+            and 0 < raw.battler_hp <= max(1, raw.battler_max_hp // 3)
+        ):
+            if emulator is None:
+                raise SurgeChapterError(
+                    "Lt. Surge low-HP recovery requires live emulator state."
+                )
+            _use_surge_super_potion(executor, reader, emulator, timing)
+            super_potion_used = True
             continue
         moves = raw.first_party_moves or ()
         if DIG_MOVE_ID not in moves:
@@ -2897,7 +2914,7 @@ def _run_dig_battle(
         for _ in range(24):
             after = reader.read()
             if after.battle_state == 0:
-                return after, dig_attacks + 1
+                return after, dig_attacks + 1, super_potion_used
             if (
                 before_pp
                 and after.first_party_pp
@@ -2924,6 +2941,61 @@ def _run_dig_battle(
                 f"menu={(terminal_menu.phase, terminal_menu.selected_move_slot)!r}."
             )
     raise SurgeChapterError("Lt. Surge battle exceeded its bounded runtime.")
+
+
+def _use_surge_super_potion(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SurgeTiming,
+) -> None:
+    before = reader.read()
+    menu = reader.read_battle_menu_state(before)
+    target_index = before.active_party_index
+    before_quantity = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    if (
+        before.battle_state != 2
+        or target_index is None
+        or menu.phase is not BattleMenuPhase.MAIN
+        or before.battler_hp is None
+        or before.battler_max_hp is None
+        or not 0 < before.battler_hp < before.battler_max_hp
+        or before_quantity <= 0
+    ):
+        raise SurgeChapterError("Lt. Surge recovery lacks a stable damaged MAIN gate.")
+
+    _navigate_main(executor, reader, 1)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _select_bag_item(emulator, executor, ItemId.SUPER_POTION)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(12):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == target_index:
+            break
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if cursor < target_index else "up",
+            min(timing.wait_frames, 120),
+        )
+    else:
+        raise SurgeChapterError("Lt. Surge recovery could not select the active battler.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+
+    expected_hp = min(before.battler_max_hp, before.battler_hp + 50)
+    for _ in range(48):
+        current = reader.read()
+        if (
+            current.battle_state == 2
+            and current.battler_hp == expected_hp
+            and _bag(emulator).get(ItemId.SUPER_POTION, 0) == before_quantity - 1
+            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+        ):
+            return
+        if current.battle_state != 2 or (current.battler_hp or 0) <= 0:
+            raise SurgeChapterError("Lt. Surge recovery lost its living battle gate.")
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise SurgeChapterError("Lt. Surge recovery did not prove its HP and inventory effects.")
 
 
 def _clear_rewards(

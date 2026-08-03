@@ -259,13 +259,40 @@ class _PositiveHpSwitchPrompt:
 def test_post_ko_positive_enemy_hp_prompt_is_cancel_only() -> None:
     runtime = _PositiveHpSwitchPrompt()
 
-    final, dig_attacks = _run_dig_battle(runtime, runtime, SurgeTiming())
+    final, dig_attacks, super_potion_used = _run_dig_battle(
+        runtime, runtime, SurgeTiming()
+    )
 
     assert final.battle_state == 0
     assert dig_attacks == 0
+    assert super_potion_used is False
     assert [
         action.kind for action in runtime.actions if action.kind is not MacroActionKind.WAIT
     ] == [MacroActionKind.CANCEL, MacroActionKind.CANCEL]
+
+
+def test_low_hp_main_gate_uses_one_bounded_surge_recovery(monkeypatch: pytest.MonkeyPatch) -> None:
+    runtime = _PositiveHpSwitchPrompt()
+    runtime.raw = replace(runtime.raw, enemy_hp=43, first_party_hp=10)
+    runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    calls: list[int] = []
+
+    def recover(executor, reader, emulator, timing) -> None:
+        assert executor is runtime
+        assert reader is runtime
+        calls.append(runtime.raw.first_party_hp or 0)
+        runtime.raw = replace(runtime.raw, first_party_hp=30, battle_state=0)
+
+    monkeypatch.setattr("pokemon_red_completion.surge._use_surge_super_potion", recover)
+
+    final, dig_attacks, super_potion_used = _run_dig_battle(
+        runtime, runtime, SurgeTiming(), emulator=object()
+    )
+
+    assert final.battle_state == 0
+    assert dig_attacks == 0
+    assert super_potion_used is True
+    assert calls == [10]
 
 
 def _route_end(

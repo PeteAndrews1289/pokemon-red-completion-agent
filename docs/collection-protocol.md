@@ -31,6 +31,11 @@ part of the next required full rehearsal. The longer purchase cadence also shift
 reached the old 72-encounter Spearow cap; the repaired source gives that search a dedicated
 96-encounter bound while retaining the exact species and level requirement. This remains a plan, not a held-out-result claim, and
 contains no trajectory, ROM, snapshot, private path, or completion evidence.
+That replay then cleared both capture curricula and reached the live Lt. Surge battle. Diglett
+defeated the first opponent with 10/30 HP remaining, but the next opponent moved before its third
+Dig and knocked it out. The teacher now performs one bounded Super Potion recovery only from a
+proven low-HP MAIN battle gate, verifies both the HP increase and inventory decrement, and resumes
+the Dig-only plan. The complete v2 rehearsal remains the next qualification gate.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
@@ -84,13 +89,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `cfd0f9a679bce0b1c551a7654caa30bcef7d54e1daff97e5a31c88c9cad6dc14` |
-| Source bundle SHA-256 | `01ca22d994dd08a4ab53ac35627ab036fd3504a69321ca0bb4be7a1acf3ea856` |
+| Registry SHA-256 | `fc8f61315d818c3e471c9987838174f1f60348c7d48269ad30003d9c5839234c` |
+| Source bundle SHA-256 | `a4df11b8b34ca99a92a23f432a803ebda252ef3e433d3612e70f44e2bdc607b8` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `eb83c96bbfa04af4ee50e53ba9c5a42db4cff35578902e448a3c277e3bb25d52` |
+| Teacher execution SHA-256 | `604896d542d4ef84be5b3aaa15d915e8ed36466e61e32a35b4409a5c66389ca2` |
 | Dry-run schedule SHA-256 | `c63ddab975851d520b6c25492e03d688cd76c88b638a01330d9d3ea659671733` |
-| Slot `01` assignment ID | `ac6c0cb2137369307bb13e3d7143b1962951e2fb94826ea79e529407b4832bda` |
+| Slot `01` assignment ID | `b16eaacfb5b7b881e0ed0ec1f1d621f957157bd535e4dfae228485a5518955ad` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

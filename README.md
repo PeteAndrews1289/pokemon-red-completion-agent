@@ -447,6 +447,11 @@ gate updated to match; the larger purchase must prove both capture and downstrea
 next full rehearsal. Its added purchase timing shifted the Route 11 encounter stream and exposed
 the old 72-encounter Spearow search cap. A source-specific 96-encounter cap now retains the exact
 level-17 Spearow requirement without loosening any other encounter bound.
+That rehearsal then cleared the Forest and Route 11 curricula and reached Lt. Surge. Diglett
+finished the first opponent at 10/30 HP but was knocked out before its next Dig. The teacher now
+uses its reserved Super Potion from a strictly proven low-HP battle-menu state, verifies the heal
+and inventory change, and resumes the Dig-only plan. The counted v2 campaign remains pristine while
+the repaired teacher awaits another complete rehearsal.
 
 ## Evidence and project status
 
