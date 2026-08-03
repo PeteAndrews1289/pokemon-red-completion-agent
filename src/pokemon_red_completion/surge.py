@@ -1880,9 +1880,14 @@ def _switch_wild_capture_party_slot(
     raise SurgeChapterError(f"{label} party switch did not return to MAIN.")
 
 
-def _wild_menu_cursor_active(emulator: EmulatorState) -> bool:
+def _wild_menu_cursor_address(emulator: EmulatorState) -> int:
     address = emulator.read_u8(RamAddress.MENU_CURSOR_LOCATION)
     address |= emulator.read_u8(int(RamAddress.MENU_CURSOR_LOCATION) + 1) << 8
+    return address
+
+
+def _wild_menu_cursor_active(emulator: EmulatorState) -> bool:
+    address = _wild_menu_cursor_address(emulator)
     tile_map = int(RamAddress.TILE_MAP)
     return tile_map <= address < tile_map + 360 and emulator.read_u8(address) == 0xED
 
@@ -1898,6 +1903,7 @@ def _force_switch_wild_capture_to_lead(
     """Recover a fainted helper through the mandatory party selection."""
 
     party_size = len(reader.read().party_species_ids or ())
+    stale_cursor_address = _wild_menu_cursor_address(emulator)
     for pulse in range(32):
         current = reader.read()
         if current.battle_state != 1 or current.enemy_species_id != expected_species_id:
@@ -1905,7 +1911,12 @@ def _force_switch_wild_capture_to_lead(
         if current.enemy_hp != expected_enemy_hp:
             raise SurgeChapterError(f"{label} forced switch changed protected target HP.")
         cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-        if pulse > 0 and _wild_menu_cursor_active(emulator) and 0 <= cursor < party_size:
+        if (
+            pulse > 0
+            and _wild_menu_cursor_address(emulator) != stale_cursor_address
+            and _wild_menu_cursor_active(emulator)
+            and 0 <= cursor < party_size
+        ):
             for _ in range(8):
                 cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
                 if cursor == 0:
