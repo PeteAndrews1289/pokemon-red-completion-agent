@@ -64,7 +64,9 @@ second Awakening from Vermilion, preserves one for Tower, and applies both statu
 the actual active party index under a two-potion cap. That exact source completed **312/312
 checkpoints**, **36/36 objectives**, and the Hall of Fame in **771,022 actions**; its six-member
 curriculum exceeded **4,000 battles**, retained the minimum level of 77, and passed the bounded
-spread contract. It is the next uncounted rehearsal candidate.
+spread contract. The next uncounted rehearsal cleared Rock Tunnel but found that its extra recovery
+left the Lavender restock $200 short. The teacher now sells the unused, already-proven TM28 for
+$1,000 before restoring the complete downstream safety reserve; no counted slot was consumed.
 
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
 schedule, episode, manifest, and 68/68 offline audit. Every counted slot reopens and re-audits that

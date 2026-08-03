@@ -62,6 +62,7 @@ SLOWPOKE_SPECIES_ID = 0x25
 ROUTE_9_MIN_SUPER_POTION_RESERVE = 5
 TUNNEL_AWAKENINGS_PURCHASED = 1
 TUNNEL_AWAKENING_RESERVE = 2
+TM28_SALE_PROCEEDS = 1_000
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -215,6 +216,7 @@ class LavenderChapterReport:
     super_potions_used: int
     super_potions_remaining: int
     purchase_cost: int
+    tm28_sale_proceeds: int
     money_remaining: int
     route_10_trainer_2_bypassed: bool
     frames_executed: int
@@ -256,6 +258,8 @@ class LavenderChapterReport:
             + self.parlyz_heals_purchased * PARLYZ_HEAL_PRICE
             + TUNNEL_AWAKENINGS_PURCHASED * AWAKENING_PRICE
             + 4 * REPEL_PRICE
+            and self.tm28_sale_proceeds in {0, TM28_SALE_PROCEEDS}
+            and ItemId.TM28_DIG not in set(self.final_raw.bag_item_ids or ())
             and self.money_remaining >= 0
             and self.route_10_trainer_2_bypassed
             and self.controller_released
@@ -295,6 +299,7 @@ class LavenderChapterReport:
                 "super_potions_used": self.super_potions_used,
                 "super_potions_remaining": self.super_potions_remaining,
                 "purchase_cost": self.purchase_cost,
+                "tm28_sale_proceeds": self.tm28_sale_proceeds,
                 "money_remaining": self.money_remaining,
             },
             "route_10_trainer_2_bypassed": self.route_10_trainer_2_bypassed,
@@ -874,12 +879,14 @@ def run_lavender_chapter(
     _move(actions, reader, emulator, run, LAVENDER_TO_CENTER, timing, "Lavender Center")
     _wait(actions, timing.transition_frames)
     _heal_center(actions, reader, emulator, timing, MapId.LAVENDER_POKECENTER)
-    top_up_quantity, top_up_parlyz_heals, top_up_cost = _top_up_lavender_supplies(
-        actions,
-        reader,
-        emulator,
-        run,
-        timing,
+    top_up_quantity, top_up_parlyz_heals, top_up_cost, tm28_sale_proceeds = (
+        _top_up_lavender_supplies(
+            actions,
+            reader,
+            emulator,
+            run,
+            timing,
+        )
     )
     final = reader.read()
     hp = _party_hp(emulator)
@@ -913,6 +920,7 @@ def run_lavender_chapter(
         super_potions_used=run.potions_used,
         super_potions_remaining=_bag(emulator).get(ItemId.SUPER_POTION, 0),
         purchase_cost=tunnel_purchase_cost + top_up_cost,
+        tm28_sale_proceeds=tm28_sale_proceeds,
         money_remaining=_money(emulator),
         route_10_trainer_2_bypassed=not _event(emulator, EventFlag.BEAT_ROUTE_10_TRAINER_2),
         frames_executed=emulator.frame_count - start_frames,
@@ -1944,7 +1952,7 @@ def _top_up_lavender_supplies(
     emulator: EmulatorState,
     run: _RunState,
     timing: LavenderTiming,
-) -> tuple[int, int, int]:
+) -> tuple[int, int, int, int]:
     """Restore the downstream reserve from the observed post-Tunnel inventory."""
 
     quantity_before = _bag(emulator).get(ItemId.SUPER_POTION, 0)
@@ -1982,6 +1990,17 @@ def _top_up_lavender_supplies(
         "Lavender Mart clerk",
     )
     _pulse(executor, MacroActionKind.MOVE, "left", 60)
+    tm28_sale_proceeds = 0
+    if _bag(emulator).get(ItemId.TM28_DIG, 0):
+        _sell_single_mart_item(
+            executor,
+            reader,
+            emulator,
+            timing,
+            ItemId.TM28_DIG,
+            expected_proceeds=TM28_SALE_PROCEEDS,
+        )
+        tm28_sale_proceeds = TM28_SALE_PROCEEDS
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     if quantity:
@@ -2034,7 +2053,7 @@ def _top_up_lavender_supplies(
         "Lavender Center return",
     )
     _heal_center(executor, reader, emulator, timing, MapId.LAVENDER_POKECENTER)
-    return quantity, parlyz_quantity, expected_cost
+    return quantity, parlyz_quantity, expected_cost, tm28_sale_proceeds
 
 
 def _buy_mart_item(

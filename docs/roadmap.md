@@ -288,7 +288,9 @@ and HP recovery to the actual active party index under a two-potion cap. This ex
 a clean-power **312/312-checkpoint**, **36/36-objective** Hall-of-Fame replay in **771,022 actions**.
 Its six-member Mansion curriculum exceeded **4,000 wins**, retained a level-77 floor, and passed the
 bounded spread contract. Registry freeze and the next uncounted 68-battle rehearsal are the current
-gates.
+gates. The following rehearsal cleared Rock Tunnel but exposed a $200 restock deficit from the
+additional schedule-specific recovery. The teacher now sells the unused, already-proven TM28 for
+$1,000 before restoring the full downstream reserve; no counted slot was consumed.
 
 ## Milestone 4 — DAgger and selective RL
 

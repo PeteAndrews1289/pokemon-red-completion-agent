@@ -79,6 +79,7 @@ def _report() -> LavenderChapterReport:
         super_potions_used=4,
         super_potions_remaining=12,
         purchase_cost=12500,
+        tm28_sale_proceeds=1000,
         money_remaining=1234,
         route_10_trainer_2_bypassed=True,
         frames_executed=100,
@@ -355,6 +356,7 @@ def test_lavender_report_requires_all_route_resource_and_party_gates() -> None:
         replace(report, awakenings_remaining=0),
         replace(report, super_potions_remaining=3),
         replace(report, purchase_cost=10899),
+        replace(report, tm28_sale_proceeds=999),
         replace(report, route_10_trainer_2_bypassed=False),
         replace(report, controller_released=False),
     )
@@ -379,6 +381,7 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
         "super_potions_used": 4,
         "super_potions_remaining": 12,
         "purchase_cost": 12500,
+        "tm28_sale_proceeds": 1000,
         "money_remaining": 1234,
     }
     assert public["route_10_trainer_2_bypassed"] is True

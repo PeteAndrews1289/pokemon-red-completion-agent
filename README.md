@@ -405,7 +405,10 @@ to that same live party index under a two-use cap. This exact source passed a ne
 **312/312-checkpoint**, **36/36-objective** clean-power replay through the Hall of Fame in
 **771,022 actions**. Its Mansion curriculum exceeded **4,000 battles** with a six-member minimum
 level of **77** and a five-level spread. The regenerated source identity is the next uncounted
-rehearsal candidate; all twelve counted slots remain pending.
+rehearsal candidate. That rehearsal cleared all nine tunnel trainers, then exposed a $200
+schedule-specific recovery shortfall during the Lavender restock. The current teacher legally
+liquidates the already-proven, unused TM28 for $1,000 before restoring the full downstream safety
+reserve; all twelve counted slots remain pending.
 
 ## Evidence and project status
 
