@@ -21,7 +21,7 @@ from pokemon_red_completion.lavender import (
     LavenderTiming,
     TrainerEvidence,
 )
-from pokemon_red_completion.observation import MapId, RawGameState
+from pokemon_red_completion.observation import BULBASAUR_SPECIES_ID, MapId, RawGameState
 
 
 def _raw() -> RawGameState:
@@ -169,6 +169,7 @@ def test_status_locked_dux_escapes_to_a_living_story_lead() -> None:
 
 
 def test_story_lead_uses_bite_after_a_dux_grass_status_escape() -> None:
+    assert BULBASAUR_SPECIES_ID in FINAL_TUNNEL_GRASS_SPECIES
     assert lavender_module._ranked_lavender_move_slots(
         move_slot=1,
         starting_selected_pp=35,

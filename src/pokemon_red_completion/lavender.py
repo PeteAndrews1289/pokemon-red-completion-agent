@@ -24,6 +24,7 @@ from pokemon_red_completion.battle_runtime import (
 )
 from pokemon_red_completion.economy import LAVENDER_SUPER_POTION_RESERVE
 from pokemon_red_completion.observation import (
+    BULBASAUR_SPECIES_ID,
     Badge,
     BattleMenuPhase,
     EventFlag,
@@ -57,7 +58,9 @@ BATTLE_RECOVERY_THRESHOLD = 40
 DUX_BATTLE_RECOVERY_THRESHOLD = 20
 TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD = 40
 FINAL_TUNNEL_RECOVERY_THRESHOLD = 90
-FINAL_TUNNEL_GRASS_SPECIES = frozenset({0xB9, 0xBA, 0xBC, 0xBD})
+FINAL_TUNNEL_GRASS_SPECIES = frozenset(
+    {BULBASAUR_SPECIES_ID, 0xB9, 0xBA, 0xBC, 0xBD}
+)
 SLOWPOKE_SPECIES_ID = 0x25
 ROUTE_9_MIN_SUPER_POTION_RESERVE = 5
 TUNNEL_SUPER_POTIONS_PURCHASED = 10

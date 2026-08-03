@@ -342,6 +342,10 @@ same mandatory-use mistake after a safe victory. Route 6 now shares the conditio
 protects a one-Potion minimum while preserving any surplus for S.S. Anne. The next replay reached
 the S.S. Anne rival at checkpoint 79, where one Potion could not survive Ivysaur. That battle may
 now spend the carried bounded surplus at recurring live low-HP gates under one stable intent.
+The resulting replay cleared S.S. Anne and Surge and reached checkpoint 109, where a status-locked
+DUX pivoted correctly but Wartortle used resisted BubbleBeam against Bulbasaur until its recovery
+limit was exhausted. Bulbasaur now shares the Grass-matchup policy, selecting neutral Bite after
+the role handoff instead of compensating for poor attacks with a larger heal cap.
 
 ## Milestone 4 — DAgger and selective RL
 
