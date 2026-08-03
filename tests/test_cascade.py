@@ -32,12 +32,15 @@ from pokemon_red_completion.cascade import (
     RIVAL_CENTER_NPC_CORRECTION_DIRECTIONS,
     RIVAL_TRIGGER_DIRECTIONS,
     ROCKET_THIEF_POTION_RESERVE,
+    ROUTE_24_ACCURACY_RECOVERY_HP,
+    ROUTE_24_ACCURACY_RECOVERY_POSITION,
     ROUTE_24_AFTER_NPC_DIRECTIONS,
     ROUTE_24_CENTER_RECOVERY_POSITION,
     ROUTE_24_RECOVERY_POTION_RESERVE,
     ROUTE_24_REQUIRED_TRAINER_INDEXES,
     ROUTE_24_TRAINER_SEGMENTS,
     ROUTE_25_NON_HIKER_MOVE_SLOT,
+    ROUTE_25_RECOVERY_POTION_RESERVE,
     ROUTE_25_REQUIRED_TRAINER_INDEXES,
     ROUTE_25_TRAINER_SEGMENTS,
     TM01_FIELD_MENU_CLOSE_PULSES,
@@ -51,6 +54,7 @@ from pokemon_red_completion.cascade import (
     _cross_route_24_npc,
     _reverse_directions,
     _run_cerulean_rival_with_potion,
+    _run_route_24_accuracy_battle_with_potion,
     _should_use_cerulean_rival_potion,
     _use_cerulean_rival_potion,
     _use_route_24_recovery_potion,
@@ -537,6 +541,67 @@ def test_route_24_recovery_consumes_the_retained_field_potion() -> None:
     assert sum(
         action.kind is MacroActionKind.CANCEL for action in executor.actions
     ) == FIELD_ITEM_MENU_CLOSE_PULSES
+
+
+def test_route_24_accuracy_battle_spends_one_potion_at_low_hp(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    emulator = _MemoryEmulator(potion_quantity=ROUTE_24_RECOVERY_POTION_RESERVE)
+
+    class Reader:
+        state = replace(
+            _raw(),
+            map_id=MapId.ROUTE_24,
+            battle_state=2,
+            first_party_hp=ROUTE_24_ACCURACY_RECOVERY_HP,
+            first_party_max_hp=56,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(BattleMenuPhase.MAIN, 0, None)
+
+        def read_input_readiness(self) -> object:
+            return type("Ready", (), {"ready": self.state.battle_state == 0})()
+
+    reader = Reader()
+
+    class Executor:
+        actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+            reader.state = replace(reader.state, battle_state=0)
+
+    executor = Executor()
+    recoveries = 0
+
+    def fake_recovery(*args: object) -> None:
+        nonlocal recoveries
+        del args
+        recoveries += 1
+        reader.state = replace(reader.state, first_party_hp=56)
+        emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = ROUTE_25_RECOVERY_POTION_RESERVE
+
+    monkeypatch.setattr(cascade_module, "_select_battle_move", lambda *args, **kwargs: None)
+    monkeypatch.setattr(cascade_module, "_use_cerulean_rival_potion", fake_recovery)
+    monkeypatch.setattr(cascade_module, "_wait", lambda *args: None)
+
+    result = _run_route_24_accuracy_battle_with_potion(
+        cast(object, reader),
+        cast(object, executor),
+        emulator,
+        DEFAULT_CASCADE_TIMING,
+        "Route 24 trainer 2",
+    )
+
+    assert result.battle_state == 0
+    assert recoveries == 1
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == ROUTE_25_RECOVERY_POTION_RESERVE
+    assert ROUTE_24_ACCURACY_RECOVERY_POSITION > ROUTE_24_CENTER_RECOVERY_POSITION
 
 
 @pytest.mark.parametrize(

@@ -365,6 +365,15 @@ The replay proved that sixteen waits can still leave the NPC parked. The second 
 uses the legal side corridor around that occupied tile and rejoins the same doorway below it,
 removing NPC timing from this transition while retaining collision and destination checks.
 
+The repaired v3 lineage ultimately completed **312/312 checkpoints**, **36/36 objectives**, Hall
+of Fame, and **68/68** schedule attestations with a level-75–81 balanced party. Its first immutable
+training root then exposed a different Route 24 failure at checkpoint 42: Sand-Attack reduced
+accuracy, Nidoran poisoned Wartortle, and repeated Water Gun misses allowed the 4-HP opponent to
+outlast the lead. V3 is retired with that one-shot failure preserved. V4 uses the exposed v3 seed
+as its uncounted rehearsal, heals immediately before the accuracy battle, and permits one bounded
+Potion recovery without reducing the four-Potion downstream reserve. Twelve fresh v4 counted
+seeds remain unopened pending a complete 312/312 and 68/68 rehearsal.
+
 ## Milestone 4 — DAgger and selective RL
 
 - Collect teacher corrections on learner-induced states.

@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v3.json`](../configs/red-battle-collection-v3.json)
+[`red-battle-collection-v4.json`](../configs/red-battle-collection-v4.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 68 stable public battle-plan identities in exact qualified-route order;
@@ -21,7 +21,20 @@ that trainer, and an uncounted replay of the exact exposed schedule reached the 
 
 The v2 campaign later qualified its complete dry rehearsal, but its first immutable training root
 failed at the Rocket thief as documented below. V2 is therefore retired and remains preserved as
-historical evidence. This v3 registry has twelve fresh, previously unexecuted counted seeds. Its
+historical evidence. The v3 campaign also qualified a complete 312/312, 36/36, 68/68 Hall-of-Fame
+rehearsal. Its first immutable training root reached Route 24 trainer 2 at checkpoint 42 before
+three consecutive accuracy-reduced Water Gun misses let poison and enemy attacks faint Wartortle
+with the opponent at 4 HP. The one-shot v3 failure remains in its private ledger, so v3 is retired
+and cannot be used for fitting.
+
+The current v4 registry has twelve fresh, previously unexecuted counted seeds. Its uncounted dry
+seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
+Center immediately before the accuracy-lowering trainer, may spend one of the already-budgeted
+Route 24 Potions at a live low-HP MAIN boundary, and returns to the Center after the bridge when
+that recovery was needed. Either branch proves the same four-Potion handoff before the Nugget
+Rocket. The complete v4 rehearsal is required before any v4 counted slot can begin.
+
+Historically, the v3 registry had twelve fresh counted seeds. Its
 uncounted dry seed `12001` deliberately replays the exact schedule that exposed the v2 failure;
 none of its counted train, validation, or test seeds reuse a v1 or v2 assignment.
 The first v3 rehearsal reached checkpoint 44 with Wartortle at 2/56 HP before the Nugget Rocket's
@@ -219,13 +232,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `6a15a2def1789ae83336c8d314d859bfea4639fd91ed4b2d0f753993ac307fc5` |
-| Source bundle SHA-256 | `c1df5bc797d64b951cbcf020b8f223e37dddacb4872fb82f4c181fb4d6b2bd48` |
+| Registry SHA-256 | `ad0d43216cf495df975ac32423d2931298e3499f49db512f6248300448d9150e` |
+| Source bundle SHA-256 | `d9702677672f5a48cb64d1eed2b85eed2875ed04de0d4030c4151d4c78bdfeab` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `9d246f861b6add06fb39c167022d145aaac79ff713065f906e23d0c6530c9876` |
-| Dry-run schedule SHA-256 | `20af81ca8cf4c92f45c4fd2d8ed2019dee6b51e6ebe29e384f90824525d5c484` |
-| Slot `01` assignment ID | `a5400c86a3e48d7229fce0bd0e04165019e3b56ee4c6fef0a35605be8af9dc5b` |
+| Teacher execution SHA-256 | `f9d05e4d7441fafc0dbd10f5c2f47943e0b4271f9572e8ad2f3f533da3de8337` |
+| Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
+| Slot `01` assignment ID | `99345ade3abe6962b94471980ef2f81fca617d5d3beb8586c7e6097737ade6b8` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -402,7 +415,7 @@ pokemon-red-completion record \
 ```
 
 It is a clean-power-on, full-route rehearsal using the same frozen execution contract and the same
-68-ID instrumentation path, but the fixed seed `9101` and its distinct schedule. Its metadata is
+68-ID instrumentation path, but the fixed seed `13001` and its distinct schedule. Its metadata is
 `partition=unassigned` and `attempt.counted=false`, and explicitly binds the registry, source
 commit, source bundle, behavior, objective graph, and teacher-execution digests. It must not enter
 train, validation, or test data, and it must not enter any performance denominator. A normal

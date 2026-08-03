@@ -76,6 +76,8 @@ POTION_HEAL_AMOUNT = 20
 TM01_FIELD_MENU_CLOSE_PULSES = 2
 ROUTE_24_RECOVERY_POTION_RESERVE = 5
 ROUTE_24_CENTER_RECOVERY_POSITION = 2
+ROUTE_24_ACCURACY_RECOVERY_POSITION = 3
+ROUTE_24_ACCURACY_RECOVERY_HP = 40
 ROUTE_25_RECOVERY_POTION_RESERVE = 4
 ROCKET_THIEF_POTION_RESERVE = 3
 VERMILION_ROUTE_6_POTION_RESERVE = 2
@@ -483,7 +485,10 @@ def run_cascade_chapter(
         # before this battle: a held-out schedule showed that healing
         # immediately afterward is too late when the preceding fights poison
         # and weaken the only party member.
-        if position == ROUTE_24_CENTER_RECOVERY_POSITION:
+        if position in {
+            ROUTE_24_CENTER_RECOVERY_POSITION,
+            ROUTE_24_ACCURACY_RECOVERY_POSITION,
+        }:
             _recover_route_24(
                 chapter_executor,
                 reader,
@@ -516,23 +521,45 @@ def run_cascade_chapter(
             progress,
             emulator,
         )
-        _run_fixed_slot_battle(
-            reader,
-            chapter_executor,
-            4,
-            MapId.ROUTE_24,
-            timing,
-            f"Route 24 trainer {trainer_index}",
-        )
+        if position == ROUTE_24_ACCURACY_RECOVERY_POSITION:
+            _run_route_24_accuracy_battle_with_potion(
+                reader,
+                chapter_executor,
+                emulator,
+                timing,
+                f"Route 24 trainer {trainer_index}",
+            )
+        else:
+            _run_fixed_slot_battle(
+                reader,
+                chapter_executor,
+                4,
+                MapId.ROUTE_24,
+                timing,
+                f"Route 24 trainer {trainer_index}",
+            )
 
     # Spend the planned Route 24 field Potion before the Rocket instead of
     # after it.  A held-out schedule left the lead at two HP after the fifth
     # bridge trainer; waiting until victory made the recovery unreachable.
-    _use_route_24_recovery_potion(
-        reader,
-        chapter_executor,
-        emulator,
-    )
+    route_24_potions = _bag_quantity(emulator, ItemId.POTION)
+    if route_24_potions == ROUTE_24_RECOVERY_POTION_RESERVE:
+        _use_route_24_recovery_potion(
+            reader,
+            chapter_executor,
+            emulator,
+        )
+    elif route_24_potions == ROUTE_25_RECOVERY_POTION_RESERVE:
+        _recover_route_24(
+            chapter_executor,
+            reader,
+            timing,
+            route_24_prefix,
+        )
+    else:
+        raise CascadeChapterError(
+            "Route 24 bridge recovery changed its protected four-Potion handoff."
+        )
     _move(
         chapter_executor,
         reader,
@@ -1933,6 +1960,92 @@ def _run_fixed_slot_battle(
         )
     except CeruleanChapterError as error:
         raise CascadeChapterError(str(error)) from error
+
+
+def _run_route_24_accuracy_battle_with_potion(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    timing: CascadeTiming,
+    label: str,
+) -> RawGameState:
+    """Survive the bridge Sand-Attack/poison combination with one reserve.
+
+    This battle is intentionally outside the preregistered adaptive-battle
+    roster, so it cannot use ``run_adaptive_trainer_battle`` while a collection
+    schedule is bound.  It retains the existing fixed Water Gun controller but
+    observes each stable MAIN boundary and may spend exactly one Potion before
+    confirming the next attack.  The Potion replaces the field Potion formerly
+    spent after all five bridge trainers; four downstream Potions remain either
+    way.
+    """
+
+    starting_quantity = _bag_quantity(emulator, ItemId.POTION)
+    if starting_quantity != ROUTE_24_RECOVERY_POTION_RESERVE:
+        raise CascadeChapterError(
+            "Route 24 accuracy recovery lacks its five-Potion starting reserve."
+        )
+    try:
+        _select_battle_move(
+            executor,
+            reader,
+            DEFAULT_CERULEAN_TIMING,
+            slot=4,
+            label=label,
+        )
+    except CeruleanChapterError as error:
+        raise CascadeChapterError(str(error)) from error
+
+    saw_battle = True
+    stable_reads = 0
+    recovery_used = False
+    for _ in range(DEFAULT_CERULEAN_TIMING.max_battle_pulses):
+        before = reader.read()
+        if before.map_id != MapId.ROUTE_24 or before.battle_state not in {0, 2}:
+            raise CascadeChapterError(f"{label} left its bounded battle state.")
+        if before.first_party_hp == 0:
+            raise CascadeChapterError(f"Squirtle's lineage fainted during {label}.")
+        if before.battle_state == 0:
+            if saw_battle and reader.read_input_readiness().ready:
+                stable_reads += 1
+                if stable_reads >= 2:
+                    expected_quantity = starting_quantity - int(recovery_used)
+                    if _bag_quantity(emulator, ItemId.POTION) != expected_quantity:
+                        raise CascadeChapterError(
+                            "Route 24 accuracy recovery changed its bounded Potion reserve."
+                        )
+                    return before
+                _wait(executor, timing.dialogue_wait_frames)
+                continue
+            stable_reads = 0
+        else:
+            stable_reads = 0
+            menu = reader.read_battle_menu_state(before)
+            should_recover = (
+                not recovery_used
+                and menu.phase is BattleMenuPhase.MAIN
+                and before.first_party_hp is not None
+                and 0 < before.first_party_hp <= ROUTE_24_ACCURACY_RECOVERY_HP
+            )
+            if should_recover:
+                _use_cerulean_rival_potion(
+                    reader,
+                    executor,
+                    emulator,
+                    timing,
+                )
+                recovery_used = True
+                continue
+
+        executor.execute(MacroAction(MacroActionKind.CONFIRM))
+        _wait(
+            executor,
+            timing.battle_runtime.attack_wait_frames
+            if before.battle_state
+            else timing.dialogue_wait_frames,
+        )
+
+    raise CascadeChapterError(f"{label} failed its bounded battle-completion gate.")
 
 
 def _run_battle(

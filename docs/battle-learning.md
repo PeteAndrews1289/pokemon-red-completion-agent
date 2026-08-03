@@ -93,6 +93,14 @@ battle view now follows the controlled battler's species, level, HP, status, mov
 the non-battle view continues to describe the field lead. This second failed rehearsal also
 consumed no slot.
 
+V3 later completed the full **312/312**, **36/36**, **68/68** rehearsal and opened collection.
+Its first one-shot train root stopped at Route 24 trainer 2 after Sand-Attack, poison, and repeated
+Water Gun misses fainted Wartortle against a 4-HP opponent. That failure is retained and v3 is not
+eligible for fitting. V4 converts the exposed v3 timing schedule into its uncounted rehearsal,
+uses twelve fresh counted schedules, heals immediately before the accuracy battle, and provides
+one bounded live Potion recovery while preserving the same downstream inventory. V4 remains
+unopened until that exact exposed schedule again proves all 312 checkpoints and 68 attestations.
+
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
 schedule, episode, manifest, and 68/68 offline audit. Every counted slot reopens and re-audits that
 episode before campaign sealing, while the rehearsal remains outside the attempt ledger.

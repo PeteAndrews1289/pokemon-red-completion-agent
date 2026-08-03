@@ -97,6 +97,15 @@ control, and progressively trained specialists.**
 > every output valid by construction. This is a grouped diagnostic from one lineage, not a learned
 > gameplay rollout or held-out result. See the
 > [sanitized battle-imitation receipt](docs/evidence/private-battle-imitation-diagnostic-2026-07-30.json).
+> The formal v3 teacher rehearsal subsequently completed **312/312 checkpoints**, **36/36
+> objectives**, and **68/68 scheduled battles**, with a balanced level **75–81** party and Hall of
+> Fame verification. Its first immutable training root then failed honestly at Route 24 trainer 2:
+> accuracy loss produced repeated Water Gun misses while poison and enemy attacks fainted
+> Wartortle with 4 enemy HP remaining. V3 is retired rather than rerun. The current v4 teacher
+> heals immediately before that trainer, permits one live low-HP Potion recovery while preserving
+> the same four-Potion downstream handoff, and preregisters the exposed v3 seed as its uncounted
+> rehearsal plus twelve fresh counted seeds. V4 must repeat the entire qualification before its
+> first training root; no learned model has yet completed the game.
 
 ## The goal
 
@@ -245,7 +254,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v3-01-train
+  --collection-run red-battle-v4-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
