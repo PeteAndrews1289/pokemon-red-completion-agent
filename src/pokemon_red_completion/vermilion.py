@@ -604,6 +604,11 @@ def run_vermilion_chapter(
         progress,
         emulator,
     )
+    _normalize_ss_anne_potion_reserve(
+        reader,
+        chapter_executor,
+        emulator,
+    )
     route_6_wild_flees = (
         *initial_route_6_wild_flees,
         *_backtrack_heal_and_replay(
@@ -1341,7 +1346,7 @@ def _run_route_6_trainer_f_with_potion(
     timing: VermilionTiming,
     battle_plan_id: str,
 ) -> RawGameState:
-    """Spend one Route 6 Potion while preserving the S.S. Anne reserve."""
+    """Spend at most one Route 6 Potion while preserving the S.S. Anne reserve."""
 
     if _bag_quantity(emulator, ItemId.POTION) != VERMILION_ROUTE_6_POTION_RESERVE:
         raise VermilionChapterError("Route 6 lacks its two-Potion recovery boundary.")
@@ -1391,15 +1396,43 @@ def _run_route_6_trainer_f_with_potion(
             used_potion = True
             continue
 
-        if (
-            not used_potion
-            or _bag_quantity(emulator, ItemId.POTION)
-            != SS_ANNE_RIVAL_POTION_RESERVE
-        ):
+        expected_quantity = (
+            SS_ANNE_RIVAL_POTION_RESERVE
+            if used_potion
+            else VERMILION_ROUTE_6_POTION_RESERVE
+        )
+        if _bag_quantity(emulator, ItemId.POTION) != expected_quantity:
             raise VermilionChapterError(
-                "Route 6 did not consume exactly one planned Potion."
+                "Route 6 changed its bounded Potion reserve unexpectedly."
             )
         return result
+
+
+def _normalize_ss_anne_potion_reserve(
+    reader: PokemonRedStateReader,
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+) -> None:
+    """Hand exactly one Potion to S.S. Anne without forcing a battle heal."""
+
+    quantity = _bag_quantity(emulator, ItemId.POTION)
+    if quantity == VERMILION_ROUTE_6_POTION_RESERVE:
+        try:
+            _use_field_recovery_potion(
+                reader,
+                executor,
+                emulator,
+                expected_map=MapId.ROUTE_6,
+                starting_quantity=VERMILION_ROUTE_6_POTION_RESERVE,
+                ending_quantity=SS_ANNE_RIVAL_POTION_RESERVE,
+                label="Route 6 victory recovery",
+            )
+        except CascadeChapterError as error:
+            raise VermilionChapterError(str(error)) from error
+    elif quantity != SS_ANNE_RIVAL_POTION_RESERVE:
+        raise VermilionChapterError(
+            "Route 6 victory lacks its exact S.S. Anne Potion handoff."
+        )
 
 
 def _choose_route_6_trainer_f_move(raw: RawGameState) -> int:

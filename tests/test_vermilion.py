@@ -271,6 +271,11 @@ def test_runner_records_all_fifteen_ordered_semantic_boundaries(
     )
     monkeypatch.setattr(
         vermilion,
+        "_normalize_ss_anne_potion_reserve",
+        lambda *args, **kwargs: None,
+    )
+    monkeypatch.setattr(
+        vermilion,
         "_backtrack_heal_and_replay",
         lambda *args, **kwargs: tuple(
             vermilion.Route6WildFleeEvidence(
@@ -590,6 +595,67 @@ def test_rocket_victory_spends_an_unused_recovery_before_route_6(
         "starting_quantity": 3,
         "ending_quantity": 2,
         "label": "Rocket victory recovery",
+    }
+
+
+def test_route_6_victory_may_preserve_potion_when_recovery_is_not_needed(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    terminal = RawGameState(
+        True,
+        MapId.ROUTE_6,
+        10,
+        25,
+        1,
+        0,
+        first_party_hp=45,
+        first_party_max_hp=66,
+    )
+    monkeypatch.setattr(vermilion, "_bag_quantity", lambda *_args: 2)
+    monkeypatch.setattr(
+        vermilion,
+        "run_adaptive_trainer_battle",
+        lambda *_args, **_kwargs: terminal,
+    )
+
+    observed = vermilion._run_route_6_trainer_f_with_potion(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        vermilion.DEFAULT_VERMILION_TIMING,
+        vermilion.RedBattlePlanId.VERMILION_ROUTE_6_JR_TRAINER_F,
+    )
+
+    assert observed is terminal
+
+
+def test_route_6_victory_spends_unused_recovery_before_center_return(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    quantity = 2
+    observed: dict[str, object] = {}
+
+    monkeypatch.setattr(vermilion, "_bag_quantity", lambda *_args: quantity)
+
+    def fake_field_recovery(*args: object, **kwargs: object) -> None:
+        nonlocal quantity
+        observed.update(kwargs)
+        quantity = 1
+
+    monkeypatch.setattr(vermilion, "_use_field_recovery_potion", fake_field_recovery)
+
+    vermilion._normalize_ss_anne_potion_reserve(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+    )
+
+    assert quantity == 1
+    assert observed == {
+        "expected_map": MapId.ROUTE_6,
+        "starting_quantity": 2,
+        "ending_quantity": 1,
+        "label": "Route 6 victory recovery",
     }
 
 

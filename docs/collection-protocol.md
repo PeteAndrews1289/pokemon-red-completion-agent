@@ -29,6 +29,10 @@ Ekans trapped and fainted it. The failed rehearsal remains private and uncounted
 budgeted Route 24 Potion is now consumed before that battle instead of after victory, preserving
 the same four-Potion downstream handoff. The corrected source must repeat all 312 checkpoints and
 attest all 68 battle offsets before any counted v3 slot can begin.
+The next replay cleared both Rocket fights but reached the same exact-one-use assertion after the
+first required Route 6 trainer. Route 6 recovery is now conditional under the identical live HP
+gate; if the allowance remains unused, it becomes a proven field heal before the planned Center
+return. Both branches preserve the exact one-Potion S.S. Anne handoff.
 
 The now-retired v2 registry began as a prospective campaign with fresh counted seeds.
 Its first uncounted dry run reached checkpoint 70 before a walking Cerulean NPC blocked the Route 6
@@ -161,13 +165,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `48e7e7d0cadc1bcf88bb8d0e9ff1db9995bef2ec02ffde0797fff3aa6ea69c8f` |
-| Source bundle SHA-256 | `e0295d8ea7a3e087bece9516d0b13847b4543762aba4ed1807706855c1227384` |
+| Registry SHA-256 | `75e1269306045d7d3a8194284c9df031f8f7603b9043444e43ffe8bb0b4b8bc7` |
+| Source bundle SHA-256 | `f038192d87f28d1ea9b2fc864bc949fa8fbe5ada6ee31e31f511f512cda4aba5` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `a3393d72d22b411719c0a6affaa82d3b188c6147af6c6f6b6a179edfddb616d6` |
+| Teacher execution SHA-256 | `424f52595ddc27248e86ab90bbfaf2354d32e002681d1431a04554c0a86a7297` |
 | Dry-run schedule SHA-256 | `20af81ca8cf4c92f45c4fd2d8ed2019dee6b51e6ebe29e384f90824525d5c484` |
-| Slot `01` assignment ID | `d7243c6eadb8290d16714a48403c275230fbcaef6b3bb48741dc83b9d24e26cc` |
+| Slot `01` assignment ID | `e665300f8aa87f431ce669ba892bd28ada71218bdba2a1e2deecd9f6f3fa16d5` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

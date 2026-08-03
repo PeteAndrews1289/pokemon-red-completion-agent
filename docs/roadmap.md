@@ -337,6 +337,9 @@ the four-Potion Route 25 boundary. All counted v3 slots remain untouched pending
 The next replay cleared that fight and survived checkpoint 62 without needing the in-battle Rocket
 Potion, but the exact-one-use assertion rejected the safer outcome. Recovery is now conditional;
 an unused allowance becomes a proven field heal after victory so Route 6 still receives exactly two.
+That repair passed both Rocket boundaries and reached checkpoint 69, where Route 6 repeated the
+same mandatory-use mistake after a safe victory. Route 6 now shares the conditional rule and turns
+an unused allowance into a field heal while preserving the exact one-Potion S.S. Anne reserve.
 
 ## Milestone 4 — DAgger and selective RL
 
