@@ -77,7 +77,6 @@ HYPER_POTION_PRICE = 1_500
 X_SPECIAL_PURCHASE_QUANTITY = 3
 SILPH_RIVAL_RECOVERY_HP = 80
 SILPH_PC_DEPOSIT_ITEMS = (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
-SILPH_OVERFLOW_DEPOSIT_ITEM = ItemId.SILPH_SCOPE
 STATUS_FLAGS_4 = 0xD72E
 GOT_LAPRAS_MASK = 0x01
 ICE_BEAM_MOVE = 0x3A
@@ -1014,14 +1013,13 @@ def _store_spent_route_items(
     # and Master Ball can all be received later.
     deposit_items = _silph_capacity_deposit_items(before)
     if deposit_items is None:
-        route_quantities = {
-            item.name: before.get(item, 0)
-            for item in (*SILPH_PC_DEPOSIT_ITEMS, SILPH_OVERFLOW_DEPOSIT_ITEM)
-        }
+        route_quantities = {item.name: before.get(item, 0) for item in SILPH_PC_DEPOSIT_ITEMS}
         raise SilphChapterError(
             "Silph capacity cleanup lacks room or the spent route items: "
             f"slots={len(before)}, candidates={route_quantities}."
         )
+    if not deposit_items:
+        return True
     expected_slots = len(before) - len(deposit_items)
     _move(actions, reader, ("down",) + ("right",) * 10, timing)
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (13, 4), "pre-Silph PC approach")
@@ -1041,7 +1039,7 @@ def _store_spent_route_items(
 
 
 def _silph_capacity_ready(bag: Mapping[object, int]) -> bool:
-    """Prove that archiving three route items will leave sixteenth-slot capacity."""
+    """Prove current capacity or an available obsolete-item cleanup can reach it."""
 
     return _silph_capacity_deposit_items(bag) is not None
 
@@ -1049,15 +1047,13 @@ def _silph_capacity_ready(bag: Mapping[object, int]) -> bool:
 def _silph_capacity_deposit_items(
     bag: Mapping[object, int],
 ) -> tuple[ItemId, ...] | None:
-    """Select obsolete route items sufficient for a sixteen-slot Silph boundary."""
+    """Select only the available obsolete items needed for a sixteen-slot boundary."""
 
-    if not all(bag.get(item, 0) == 1 for item in SILPH_PC_DEPOSIT_ITEMS):
+    slots_to_free = max(0, len(bag) - 16)
+    available = tuple(item for item in SILPH_PC_DEPOSIT_ITEMS if bag.get(item, 0) == 1)
+    if len(available) < slots_to_free:
         return None
-    if len(bag) <= 19:
-        return SILPH_PC_DEPOSIT_ITEMS
-    if len(bag) == 20 and bag.get(SILPH_OVERFLOW_DEPOSIT_ITEM, 0) == 1:
-        return (*SILPH_PC_DEPOSIT_ITEMS, SILPH_OVERFLOW_DEPOSIT_ITEM)
-    return None
+    return available[:slots_to_free]
 
 
 def _deposit_pc_item(

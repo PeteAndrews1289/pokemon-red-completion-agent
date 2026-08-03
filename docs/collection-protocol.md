@@ -332,13 +332,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `5c25d3f5ea9e232c0bb16ecb7272d28f784303c8c29cca1f8e425938680aa5cb` |
-| Source bundle SHA-256 | `b31d3528f55015f7dee2d8c8a8c5dd447c090803d634a9cfd0348d54f0d30f07` |
+| Registry SHA-256 | `2190db8efa7a00b959b92fb5a0c6a5d43e3a484a5a33c7d69bac7891a8d11f16` |
+| Source bundle SHA-256 | `dfeb69294a71cb3a25b8c3a72eca654faa69d791b21de746e0d86c459f4af120` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `14f1fdae6787fac58395785176a872349aa4113c25993f780527911840dc41c1` |
+| Teacher execution SHA-256 | `4d81bbf59c168a0cdf113daf32e361dfaa03258de0ae4cc97fb4b00f19e6910c` |
 | Dry-run schedule SHA-256 | `44f7f521126553fbc94a7868b65bfe87237ef740dba8965ad401c9043b6c7e28` |
-| Slot `01` assignment ID | `142bcfe400b313f1d3cab7e7226fc0ef95cc1cc7d9aff2a13e5ae18ec4e9c38a` |
+| Slot `01` assignment ID | `9d74b96f862ea7987cb406ba5ab3b4c13ceef2ef9e3b652a74aabd77c089c069` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -751,10 +751,9 @@ Blaine, preserving the full-bag delayed-TM38 lesson. The ledger accounts for the
 items are unchanged. This qualification attempt is private and uncounted.
 
 The Bide-funded replay then bought the intended reserve, caught Snorlax in five throws, completed
-Safari, Koga, and Erika, and reached Saffron at checkpoint 239. Silph cleanup rejected a full
-twenty-slot bag because depositing its three mandatory obsolete route items would leave seventeen
-slots rather than the required sixteen. The cleanup now derives its finite deposit set from live
-occupancy: SS Ticket, Lift Key, and Helix Fossil remain mandatory, while a twenty-slot lineage also
-archives the obsolete Silph Scope. Either supported input must finish at sixteen or fewer slots;
-missing route items and larger states still fail closed. This qualification remains private and
-uncounted.
+Safari, Koga, and Erika, and reached Saffron at checkpoint 239. Exact follow-up diagnostics proved
+the bag had only fourteen occupied slots and the Helix Fossil was absent: capacity was already
+safe, but the cleanup incorrectly required a fixed three-item checklist. The cleanup now proves
+the actual sixteen-slot requirement first, performs no PC transaction when already safe, and
+otherwise deposits only enough available obsolete route items to reach the bound. Unsupported
+over-capacity states still fail closed. This qualification remains private and uncounted.

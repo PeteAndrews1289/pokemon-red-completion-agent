@@ -18,7 +18,6 @@ from pokemon_red_completion.silph import (
     SAFFRON_CENTER_APPROACH,
     SAFFRON_WARP_COORDINATES,
     SILPH_CHECKPOINT_COUNT,
-    SILPH_OVERFLOW_DEPOSIT_ITEM,
     SILPH_PC_DEPOSIT_ITEMS,
     THIRD_FLOOR_GUARD,
     X_SPECIAL_PURCHASE_QUANTITY,
@@ -104,7 +103,6 @@ def _report() -> SilphChapterReport:
 
 def test_silph_timing_is_positive_and_bounded() -> None:
     assert SILPH_PC_DEPOSIT_ITEMS == (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
-    assert SILPH_OVERFLOW_DEPOSIT_ITEM is ItemId.SILPH_SCOPE
     assert X_SPECIAL_PURCHASE_QUANTITY == 3
     assert BATTLE_ITEM_SETTLE_PULSES == 720
     for field in fields(SilphTiming):
@@ -116,24 +114,24 @@ def test_silph_timing_is_positive_and_bounded() -> None:
 def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:
     route_items = {item: 1 for item in SILPH_PC_DEPOSIT_ITEMS}
 
-    assert _silph_capacity_ready({**route_items, **{1000 + index: 1 for index in range(15)}})
-    assert _silph_capacity_ready({**route_items, **{1000 + index: 1 for index in range(16)}})
-    assert not _silph_capacity_ready(
-        {**route_items, **{1000 + index: 1 for index in range(17)}}
-    )
-    overflow = {
-        **route_items,
-        SILPH_OVERFLOW_DEPOSIT_ITEM: 1,
-        **{1000 + index: 1 for index in range(16)},
+    nineteen_slots = {**route_items, **{1000 + index: 1 for index in range(16)}}
+    assert _silph_capacity_deposit_items(nineteen_slots) == SILPH_PC_DEPOSIT_ITEMS
+    assert _silph_capacity_ready(nineteen_slots)
+    already_safe = {
+        ItemId.SS_TICKET: 1,
+        ItemId.LIFT_KEY: 1,
+        **{1000 + index: 1 for index in range(12)},
     }
-    assert _silph_capacity_deposit_items(overflow) == (
-        *SILPH_PC_DEPOSIT_ITEMS,
-        SILPH_OVERFLOW_DEPOSIT_ITEM,
-    )
-    assert _silph_capacity_ready(overflow)
-    assert not _silph_capacity_ready(
-        {item: quantity for item, quantity in route_items.items() if item is not ItemId.SS_TICKET}
-    )
+    assert len(already_safe) == 14
+    assert _silph_capacity_deposit_items(already_safe) == ()
+    assert _silph_capacity_ready(already_safe)
+    twenty_slots_without_enough_cleanup = {
+        ItemId.SS_TICKET: 1,
+        ItemId.LIFT_KEY: 1,
+        **{1000 + index: 1 for index in range(18)},
+    }
+    assert _silph_capacity_deposit_items(twenty_slots_without_enough_cleanup) is None
+    assert not _silph_capacity_ready(twenty_slots_without_enough_cleanup)
 
 
 def test_mart_2f_customer_coordinate_uses_the_pinned_fourth_object_slot() -> None:
