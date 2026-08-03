@@ -86,6 +86,12 @@ and repeated training progress reused one event identity. The retained artifact 
 portable training objectives on every wild decision, explicit lifecycle closure after an external
 flee, step-qualified progress IDs, and a bounded episode size covering the 7,000-battle envelope.
 The run remained uncounted.
+The following exact-source replay again reached **312/312** and Hall of Fame. It accepted 4,789
+move labels and all lifecycle/progress events; 209 early switch-training labels still failed because
+the snapshot described the weak field lead after Blastoise became the active battler. The portable
+battle view now follows the controlled battler's species, level, HP, status, moves, and PP, while
+the non-battle view continues to describe the field lead. This second failed rehearsal also
+consumed no slot.
 
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
 schedule, episode, manifest, and 68/68 offline audit. Every counted slot reopens and re-audits that

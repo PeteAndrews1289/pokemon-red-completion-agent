@@ -305,7 +305,11 @@ the scheduled gameplay route. Its episode remained unpromoted because wild curri
 no explicit training intent and repeated progress events reused an identity. The lossless-data
 repair labels each wild decision, closes externally fled battle instances, and keys progress to
 the execution step. No counted slot was consumed; the repaired exact source must repeat the
-uncounted rehearsal before collection opens.
+uncounted rehearsal before collection opens. That replay again completed **312/312** and Hall of
+Fame, with lifecycle and progress loss reduced to zero and 4,789 move labels accepted. The only
+remaining 209 rejections were early switch-training choices: Blastoise was active, but the snapshot
+still described the weak field lead. The adapter now projects the controlled battler during battle
+and the field lead outside battle. A newly frozen exact-source rehearsal remains the gate.
 
 ## Milestone 4 — DAgger and selective RL
 

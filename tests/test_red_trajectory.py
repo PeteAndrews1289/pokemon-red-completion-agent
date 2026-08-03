@@ -162,6 +162,67 @@ def test_red_encoder_normalizes_battle_state_without_raw_memory() -> None:
         "selected_move_index": 1,
     }
 
+
+def test_battle_snapshot_describes_switched_active_battler_not_field_lead() -> None:
+    raw = replace(
+        _raw(),
+        battle_state=1,
+        party_species_ids=(0x40, 0x1C),
+        first_party_level=32,
+        first_party_hp=51,
+        first_party_max_hp=70,
+        first_party_status=0x08,
+        first_party_moves=(0x0F, 0x40),
+        first_party_pp=(12, 20),
+        active_party_index=1,
+        active_party_species_id=0x1C,
+        active_party_level=62,
+        active_party_hp=151,
+        active_party_max_hp=180,
+        active_party_status=0,
+        active_party_moves=(0x39, 0x3A, 0x46, 0x82),
+        active_party_pp=(15, 5, 15, 10),
+        enemy_species_id=0x37,
+        enemy_level=33,
+        enemy_hp=50,
+        enemy_max_hp=70,
+    )
+    menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+
+    snapshot = PokemonRedObservationEncoder(_Reader(raw, menu)).snapshot()
+    lead = snapshot.to_dict()["features"]["party"]["lead"]
+
+    assert lead == {
+        "species_ref": "pokemon.red.gb.us.rev0:species:028",
+        "level": 62,
+        "hp": 151,
+        "max_hp": 180,
+        "hp_ratio": round(151 / 180, 6),
+        "status": None,
+        "moves": [
+            {
+                "slot_index": 0,
+                "move_ref": "pokemon.red.gb.us.rev0:move:057",
+                "pp": 15,
+            },
+            {
+                "slot_index": 1,
+                "move_ref": "pokemon.red.gb.us.rev0:move:058",
+                "pp": 5,
+            },
+            {
+                "slot_index": 2,
+                "move_ref": "pokemon.red.gb.us.rev0:move:070",
+                "pp": 15,
+            },
+            {
+                "slot_index": 3,
+                "move_ref": "pokemon.red.gb.us.rev0:move:130",
+                "pp": 10,
+            },
+        ],
+    }
+
     serialized = canonical_json(snapshot)
     for forbidden in (
         "event_flags",
@@ -429,6 +490,82 @@ def test_battle_observer_records_a_policy_safe_zero_based_move_target() -> None:
     serialized = canonical_json(decision)
     assert "event_flags" not in serialized
     assert "private-referee-state" not in serialized
+
+
+def test_battle_observer_records_move_selected_by_switched_active_battler() -> None:
+    raw = replace(
+        _raw(),
+        battle_state=1,
+        party_species_ids=(0x40, 0x1C),
+        first_party_moves=(0x0F, 0x40),
+        first_party_pp=(12, 20),
+        active_party_index=1,
+        active_party_species_id=0x1C,
+        active_party_level=62,
+        active_party_hp=151,
+        active_party_max_hp=180,
+        active_party_status=0,
+        active_party_moves=(0x39, 0x3A, 0x46, 0x82),
+        active_party_pp=(15, 5, 15, 10),
+        enemy_species_id=0x37,
+        enemy_level=33,
+        enemy_hp=50,
+        enemy_max_hp=70,
+    )
+    menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    encoder = PokemonRedObservationEncoder(_Reader(raw, menu))
+    sink = InMemoryTrajectorySink()
+    recorder = RecordingExecutor(
+        delegate=_UnusedExecutor(),
+        snapshot_provider=encoder,
+        sink=sink,
+        episode_id="switched-training-test",
+    )
+    observer = PokemonRedBattleDecisionObserver(encoder=encoder, recorder=recorder)
+    intent = BattleIntent("build_balanced_team", "red.mansion.balanced-team-training")
+    observer.battle_started(intent=intent)
+
+    with observer.decision_scope(
+        policy_state=raw,
+        policy_menu=menu,
+        selected_slot=4,
+        intent=intent,
+    ):
+        recorder.execute(MacroAction(MacroActionKind.WAIT))
+
+    assert recorder.recording_failures == 0
+    assert len(sink.decisions) == 1
+    assert sink.decisions[0].action == {"kind": "select_move", "slot_index": 3}
+    assert sink.decisions[0].snapshot.to_dict()["features"]["party"]["lead"] == {
+        "species_ref": "pokemon.red.gb.us.rev0:species:028",
+        "level": 62,
+        "hp": 151,
+        "max_hp": 180,
+        "hp_ratio": round(151 / 180, 6),
+        "status": None,
+        "moves": [
+            {
+                "slot_index": 0,
+                "move_ref": "pokemon.red.gb.us.rev0:move:057",
+                "pp": 15,
+            },
+            {
+                "slot_index": 1,
+                "move_ref": "pokemon.red.gb.us.rev0:move:058",
+                "pp": 5,
+            },
+            {
+                "slot_index": 2,
+                "move_ref": "pokemon.red.gb.us.rev0:move:070",
+                "pp": 15,
+            },
+            {
+                "slot_index": 3,
+                "move_ref": "pokemon.red.gb.us.rev0:move:130",
+                "pp": 10,
+            },
+        ],
+    }
 
 
 def test_battle_observer_rejects_changed_intent_during_reentry() -> None:

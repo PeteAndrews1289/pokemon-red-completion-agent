@@ -423,6 +423,13 @@ curriculum had no explicit training intent and repeated progress reports reused 
 The recorder retained roughly **848,000 records / 506 MB**, the failed run consumed no slot, and
 the current source gives every wild-training decision a portable objective, assigns each physical
 battle its own lifecycle, and keys repeated progress events to their execution step.
+The next exact-source rehearsal again completed **312/312 checkpoints** and Hall of Fame. It
+accepted 4,789 move labels and every lifecycle/progress event, reducing the remaining rejection to
+209 early switch-training decisions. Those decisions selected Blastoise's move after a weak field
+lead switched out, while the semantic snapshot still described the field lead. Battle snapshots
+now describe the currently controlled battler during combat and the field lead outside combat,
+which makes switch training truthful and portable. The second failed rehearsal also consumed no
+slot.
 
 ## Evidence and project status
 

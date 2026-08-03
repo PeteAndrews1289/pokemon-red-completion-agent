@@ -89,9 +89,19 @@ class PokemonRedObservationEncoder:
         mode = _observable_mode(raw, controls)
         location = _map_label(raw.map_id) if raw.game_started else None
         input_ready = raw.game_started and mode != "terminal" and controls.ready
-        max_hp = raw.first_party_max_hp
         enemy_max_hp = raw.enemy_max_hp
         in_battle = raw.game_started and raw.battle_state in {1, 2}
+        player_species_id = (
+            raw.active_party_species_id
+            if in_battle and raw.active_party_species_id is not None
+            else raw.party_species_ids[0]
+            if raw.party_species_ids
+            else None
+        )
+        player_level = raw.battler_level if in_battle else raw.first_party_level
+        player_hp = raw.battler_hp if in_battle else raw.first_party_hp
+        player_max_hp = raw.battler_max_hp if in_battle else raw.first_party_max_hp
+        player_status = raw.battler_status if in_battle else raw.first_party_status
 
         features: dict[str, object] = {
             "adapter_id": POKEMON_RED_ADAPTER_ID,
@@ -119,16 +129,16 @@ class PokemonRedObservationEncoder:
                 ),
                 "lead": {
                     "species_ref": (
-                        _local_ref("species", raw.party_species_ids[0])
-                        if raw.party_species_ids
+                        _local_ref("species", player_species_id)
+                        if player_species_id is not None
                         else None
                     ),
-                    "level": raw.first_party_level,
-                    "hp": raw.first_party_hp,
-                    "max_hp": max_hp,
-                    "hp_ratio": _ratio(raw.first_party_hp, max_hp),
-                    "status": _status_ref(raw.first_party_status),
-                    "moves": _observable_moves(raw),
+                    "level": player_level,
+                    "hp": player_hp,
+                    "max_hp": player_max_hp,
+                    "hp_ratio": _ratio(player_hp, player_max_hp),
+                    "status": _status_ref(player_status),
+                    "moves": _observable_moves(raw, use_active_battler=in_battle),
                 },
             },
             "battle": (
@@ -430,14 +440,20 @@ def _map_label(map_id: int | None) -> str | None:
     return label
 
 
-def _observable_moves(raw: RawGameState) -> tuple[dict[str, object], ...]:
+def _observable_moves(
+    raw: RawGameState,
+    *,
+    use_active_battler: bool = False,
+) -> tuple[dict[str, object], ...]:
     moves: list[dict[str, object]] = []
-    for slot_index, move_id in enumerate(raw.first_party_moves or ()):
+    observed_moves = raw.battler_moves if use_active_battler else raw.first_party_moves
+    observed_pp = raw.battler_pp if use_active_battler else raw.first_party_pp
+    for slot_index, move_id in enumerate(observed_moves or ()):
         if move_id == 0:
             continue
         pp = (
-            raw.first_party_pp[slot_index] & 0x3F
-            if raw.first_party_pp and slot_index < len(raw.first_party_pp)
+            observed_pp[slot_index] & 0x3F
+            if observed_pp and slot_index < len(observed_pp)
             else None
         )
         moves.append(
