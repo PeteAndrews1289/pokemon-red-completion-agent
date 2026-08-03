@@ -326,13 +326,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `87d9409f59dc436558486ec7e0eb4d752206919a3ed8fafe8bd496e26f616205` |
-| Source bundle SHA-256 | `fd8d24aeabca79d759bdc1d44b3d10ea844685bf5fe2121ff62c20145989d6df` |
+| Registry SHA-256 | `e5a41141731a8631c6311349f67d0faa324dd051eca75f5dbf4485fcb55a0b96` |
+| Source bundle SHA-256 | `6eebf04431639abc47d846a686fc21f6bc2943b2f644d2ee81db593a88c840e4` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `a5bdc52d4b6eec1556f41cf17475f8306a63a5a8b5b2d0f6a493506d3bfe80b1` |
+| Teacher execution SHA-256 | `9872cf7c78aa45affe7779c3cf4049d51fb14a36ee0190d05be13d4fcd68c581` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `daa097b8d09c66e25ecf5ae0e9876c642c2d74c0f46a8aff77bc229a23551965` |
+| Slot `01` assignment ID | `f5dcae717cdab2b4046b9ab10b37417169827b9534b1460fcddcad8ebf659417` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -623,3 +623,11 @@ registry-authenticated corpus audit and learned battle rollouts with teacher fal
 The implemented `learn battle fit` command enforces that boundary: it requires all seven learning
 outcomes, rejects any consumed test slot before loading a dataset, and publishes only a private
 candidate plus aggregate validation evidence. It has not executed while the campaign is pending.
+
+The current uncounted qualification replay also validates conservation across curriculum stages.
+After the revised early capture policy passed its former Viridian Forest bottleneck, it retained
+15 unused Poké Balls but lacked the cash required by the fixed Rock Tunnel supply contract. The
+teacher now sells the exact leftover stack at the Vermilion Mart, proves the corresponding
+inventory and money deltas, and then proves the full supply-purchase ledger. The later Snorlax
+capture remains isolated behind its own Great Ball budget, so this conversion cannot silently
+spend a future capture reserve.

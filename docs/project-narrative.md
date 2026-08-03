@@ -752,6 +752,14 @@ The full learned-system and transfer claims remain pending. In particular:
 These limitations are part of the public project record rather than hidden behind the completed
 teacher result.
 
+The first exact replay of the revised capture curriculum passed the former Viridian Forest
+bottleneck and reached checkpoint 102/312. It then exposed a separate resource-coupling defect:
+successful early captures left 15 Poké Balls but only ₽291, while the deterministic Rock Tunnel
+supply contract still required four Repels. The teacher now liquidates the exact unused early
+Poké Ball remainder for ₽100 each and verifies both the inventory delta and the complete Mart cash
+ledger. This does not weaken the later Snorlax capture contract, which purchases an independent
+Great Ball reserve. The replay remains an uncounted qualification rehearsal.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

@@ -51,6 +51,7 @@ NUGGET_SALE_PROCEEDS = 5_000
 PARLYZ_HEAL_PRICE = 200
 AWAKENING_PRICE = 200
 REPEL_PRICE = 350
+POKE_BALL_SALE_PRICE = 100
 POST_MART_RNG_ALIGNMENT_FRAMES = 191
 TUNNEL_RECOVERY_THRESHOLD = 40
 TRAVERSAL_RECOVERY_THRESHOLD = 30
@@ -1930,6 +1931,22 @@ def _purchase_supplies(
             expected_proceeds=NUGGET_SALE_PROCEEDS,
         )
         nugget_sale_proceeds = NUGGET_SALE_PROCEEDS
+    # Captures can succeed before the bounded Ball budget is exhausted.  The
+    # later Snorlax contract buys its own Great Ball reserve, so convert every
+    # leftover early Poké Ball into the Rock Tunnel supplies it was intended
+    # to protect rather than carrying an unusable cash shortfall forward.
+    poke_balls_sold = _bag(emulator).get(ItemId.POKE_BALL, 0)
+    poke_ball_sale_proceeds = poke_balls_sold * POKE_BALL_SALE_PRICE
+    if poke_balls_sold:
+        _sell_mart_item_stack(
+            executor,
+            reader,
+            emulator,
+            timing,
+            ItemId.POKE_BALL,
+            quantity=poke_balls_sold,
+            expected_proceeds=poke_ball_sale_proceeds,
+        )
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _buy_mart_item(
@@ -1976,10 +1993,11 @@ def _purchase_supplies(
         + TUNNEL_PARLYZ_HEALS_PURCHASED * PARLYZ_HEAL_PRICE
         + 4 * REPEL_PRICE
     )
-    if money_before + nugget_sale_proceeds - money_after != expected_cost:
+    total_sale_proceeds = nugget_sale_proceeds + poke_ball_sale_proceeds
+    if money_before + total_sale_proceeds - money_after != expected_cost:
         raise LavenderChapterError(
             "Mart money gate did not preserve the sale/purchase ledger: "
-            f"sale={nugget_sale_proceeds}, cost={expected_cost}, "
+            f"sale={total_sale_proceeds}, cost={expected_cost}, "
             f"before={money_before}, after={money_after}."
         )
     return expected_cost
@@ -1996,8 +2014,34 @@ def _sell_single_mart_item(
 ) -> None:
     """Sell one declared inventory item and prove both sides of the ledger."""
 
-    if _bag(emulator).get(item, 0) != 1:
-        raise LavenderChapterError(f"Expected one {item.name} for the declared sale.")
+    _sell_mart_item_stack(
+        executor,
+        reader,
+        emulator,
+        timing,
+        item,
+        quantity=1,
+        expected_proceeds=expected_proceeds,
+    )
+
+
+def _sell_mart_item_stack(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: LavenderTiming,
+    item: ItemId,
+    *,
+    quantity: int,
+    expected_proceeds: int,
+) -> None:
+    """Sell an exact inventory quantity and prove inventory and cash deltas."""
+
+    before = _bag(emulator).get(item, 0)
+    if not 1 <= quantity <= before:
+        raise LavenderChapterError(
+            f"Expected at least {quantity} {item.name} for the declared sale; observed {before}."
+        )
     money_before = _money(emulator)
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _pulse(executor, MacroActionKind.MOVE, "down", frames=120)
@@ -2015,8 +2059,19 @@ def _sell_single_mart_item(
     else:
         raise LavenderChapterError(f"Sell list could not select {item.name}.")
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(quantity + 2):
+        if (
+            emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM) == item
+            and emulator.read_u8(RamAddress.SHOP_QUANTITY) == quantity
+        ):
+            break
+        _pulse(executor, MacroActionKind.MOVE, "up", frames=120)
+    else:
+        raise LavenderChapterError(
+            f"Lavender sale quantity selector missed {quantity} {item.name}."
+        )
     for _ in range(timing.dialogue_pulses):
-        if _bag(emulator).get(item, 0) == 0:
+        if _bag(emulator).get(item, 0) == before - quantity:
             _close_menus(executor, reader, timing)
             proceeds = _money(emulator) - money_before
             if proceeds != expected_proceeds:
