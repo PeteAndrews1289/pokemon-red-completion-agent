@@ -578,6 +578,7 @@ def test_route_24_accuracy_battle_spends_one_potion_at_low_hp(
 
     executor = Executor()
     recoveries = 0
+    selections = 0
 
     def fake_recovery(*args: object) -> None:
         nonlocal recoveries
@@ -586,7 +587,14 @@ def test_route_24_accuracy_battle_spends_one_potion_at_low_hp(
         reader.state = replace(reader.state, first_party_hp=56)
         emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = ROUTE_25_RECOVERY_POTION_RESERVE
 
-    monkeypatch.setattr(cascade_module, "_select_battle_move", lambda *args, **kwargs: None)
+    def fake_select(*args: object, **kwargs: object) -> None:
+        nonlocal selections
+        del args, kwargs
+        selections += 1
+        if selections == 2:
+            reader.state = replace(reader.state, battle_state=0)
+
+    monkeypatch.setattr(cascade_module, "_select_battle_move", fake_select)
     monkeypatch.setattr(cascade_module, "_use_cerulean_rival_potion", fake_recovery)
     monkeypatch.setattr(cascade_module, "_wait", lambda *args: None)
 
@@ -600,6 +608,7 @@ def test_route_24_accuracy_battle_spends_one_potion_at_low_hp(
 
     assert result.battle_state == 0
     assert recoveries == 1
+    assert selections == 2
     assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == ROUTE_25_RECOVERY_POTION_RESERVE
     assert ROUTE_24_ACCURACY_RECOVERY_POSITION > ROUTE_24_CENTER_RECOVERY_POSITION
 

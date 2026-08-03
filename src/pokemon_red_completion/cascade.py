@@ -2036,13 +2036,23 @@ def _run_route_24_accuracy_battle_with_potion(
                 )
                 recovery_used = True
                 continue
+            if menu.phase is BattleMenuPhase.MAIN:
+                try:
+                    _select_battle_move(
+                        executor,
+                        reader,
+                        DEFAULT_CERULEAN_TIMING,
+                        slot=4,
+                        label=label,
+                    )
+                except CeruleanChapterError as error:
+                    raise CascadeChapterError(str(error)) from error
+                continue
 
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         _wait(
             executor,
-            timing.battle_runtime.attack_wait_frames
-            if before.battle_state
-            else timing.dialogue_wait_frames,
+            timing.dialogue_wait_frames,
         )
 
     raise CascadeChapterError(f"{label} failed its bounded battle-completion gate.")
