@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v5.json`](../configs/red-battle-collection-v5.json)
+[`red-battle-collection-v6.json`](../configs/red-battle-collection-v6.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 68 stable public battle-plan identities in exact qualified-route order;
@@ -27,11 +27,14 @@ three consecutive accuracy-reduced Water Gun misses let poison and enemy attacks
 with the opponent at 4 HP. The one-shot v3 failure remains in its private ledger, so v3 is retired
 and cannot be used for fitting.
 
-The current v5 registry has twelve fresh, previously unexecuted counted seeds and a new dry-run
-seed. It incorporates a verified Center recovery before the final Route 24 bridge trainer. V5
-must pass its complete 312-checkpoint, 36-objective, 68-battle qualification before any counted
-slot opens. The v4 qualification and its failed first training slot remain immutable historical
-evidence.
+V5 passed its complete uncounted 312-checkpoint, 36-objective, 68-battle Hall-of-Fame
+qualification, including the targeted Diglett-to-Dugtrio lesson. Its first immutable training root
+then failed at the S.S. Anne rival after accuracy loss and the earlier opponents consumed both
+retained Potions. V5 is therefore retired with that failure preserved. The current v6 registry
+promotes exposed seed `15001` to its uncounted dry run and assigns twelve fresh, disjoint counted
+seeds. The teacher now learns BubbleBeam before boarding, ranks that stronger move against the
+first three rival members, and saves Bite for Ivysaur. V6 must pass its complete qualification
+before any counted slot opens.
 
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
@@ -768,3 +771,12 @@ training, while the older equal-level policy remains available for separate expe
 replay correctly rejected level-20 Diglett after Blastoise reached 75; the Red adapter now executes
 a bounded, zero-faint, targeted Mansion lesson until Dugtrio is observed, without grinding the four
 already-final non-workhorses.
+
+That revised v5 qualification completed the entire game. The first counted v5 training root later
+failed at the S.S. Anne rival with Ivysaur at 23/57 HP after Wartortle fainted. Decision snapshots
+showed that Pidgeotto had reduced accuracy twice, Kadabra consumed the retained healing reserve,
+and Mega Punch's lower accuracy prolonged the final matchup while Leech Seed restored Ivysaur.
+Teaching the already-owned TM11 before boarding now replaces Mega Punch with BubbleBeam: the
+teacher uses BubbleBeam against Pidgeotto and Raticate, Bite against Kadabra and Ivysaur, and keeps
+Water Gun as a legal fallback. This changes no purchase budget or retry allowance. V5 remains
+immutable; the repair belongs exclusively to v6.

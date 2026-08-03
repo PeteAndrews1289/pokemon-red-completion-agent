@@ -182,9 +182,9 @@ def test_rival_victory_cannot_be_inferred_without_live_battle() -> None:
     ("species", "slot"),
     (
         (ss_anne.PIDGEOTTO_SPECIES_ID, 3),
-        (ss_anne.RATICATE_SPECIES_ID, 4),
+        (ss_anne.RATICATE_SPECIES_ID, 3),
         (ss_anne.KADABRA_SPECIES_ID, 1),
-        (ss_anne.IVYSAUR_SPECIES_ID, 3),
+        (ss_anne.IVYSAUR_SPECIES_ID, 1),
     ),
 )
 def test_ss_anne_rival_policy_uses_the_live_qualified_species_mapping(
@@ -199,7 +199,7 @@ def test_ss_anne_rival_policy_uses_the_live_qualified_species_mapping(
         party_count=1,
         battle_state=2,
         enemy_species_id=species,
-        first_party_moves=(0x2C, 0x27, 0x05, 0x37),
+        first_party_moves=(0x2C, 0x27, ss_anne.BUBBLEBEAM, 0x37),
         first_party_pp=(25, 30, 20, 25),
     )
 
@@ -227,9 +227,9 @@ def test_ss_anne_rival_policy_rejects_missing_move_evidence() -> None:
     ("species", "disabled_slot", "fallback_slot"),
     (
         (ss_anne.PIDGEOTTO_SPECIES_ID, 3, 4),
-        (ss_anne.RATICATE_SPECIES_ID, 4, 3),
+        (ss_anne.RATICATE_SPECIES_ID, 3, 4),
         (ss_anne.KADABRA_SPECIES_ID, 1, 3),
-        (ss_anne.IVYSAUR_SPECIES_ID, 3, 1),
+        (ss_anne.IVYSAUR_SPECIES_ID, 1, 4),
     ),
 )
 def test_ss_anne_rival_policy_falls_back_from_a_disabled_preferred_move(
@@ -245,7 +245,7 @@ def test_ss_anne_rival_policy_falls_back_from_a_disabled_preferred_move(
         party_count=1,
         battle_state=2,
         enemy_species_id=species,
-        first_party_moves=(0x2C, 0x27, 0x05, 0x37),
+        first_party_moves=(0x2C, 0x27, ss_anne.BUBBLEBEAM, 0x37),
         first_party_pp=(25, 30, 20, 25),
         player_disabled_move_slot=disabled_slot,
         player_disable_turns=4,

@@ -109,9 +109,12 @@ control, and progressively trained specialists.**
 > accuracy loss produced repeated Water Gun misses while poison and enemy attacks fainted
 > Wartortle with 4 enemy HP remaining. V3 is retired rather than rerun. V4 subsequently qualified
 > its full 312-checkpoint/68-battle rehearsal, but its immutable first training root fainted at the
-> final Route 24 bridge trainer. V4 is preserved and retired. The current v5 teacher adds a verified
-> Center recovery before that fight and preregisters a fresh dry run plus twelve disjoint counted
-> seeds. V5 must qualify before its first training root; no learned model has yet completed the game.
+> final Route 24 bridge trainer. V4 is preserved and retired. V5 subsequently qualified its full
+> 312-checkpoint/68-battle rehearsal, but its immutable first training root failed at the S.S. Anne
+> rival. V5 remains preserved and retired. The current v6 teacher moves the free BubbleBeam lesson
+> before that rival, promotes the exposed v5 schedule to an uncounted dry run, and preregisters
+> twelve fresh counted seeds. V6 must qualify before collection resumes; no learned model has yet
+> completed the game.
 
 ## The goal
 
@@ -260,7 +263,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v5-01-train
+  --collection-run red-battle-v6-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \

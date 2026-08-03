@@ -23,6 +23,12 @@ from pokemon_red_completion.cascade import (
     _bag_quantity,
     _use_cerulean_rival_potion,
 )
+from pokemon_red_completion.lavender import (
+    BUBBLEBEAM,
+    DEFAULT_LAVENDER_TIMING,
+    LavenderChapterError,
+    _teach_tm11,
+)
 from pokemon_red_completion.observation import (
     MEGA_PUNCH_MOVE_ID,
     PIDGEOTTO_SPECIES_ID,
@@ -256,6 +262,22 @@ def run_ss_anne_chapter(
         reader, tracker, SSAnnePhase.HEALED, "healed",
         "Restored HP, status, and move PP", records, progress, emulator,
     )
+    if _bag_quantity(emulator, ItemId.TM11_BUBBLEBEAM):
+        try:
+            _teach_tm11(
+                chapter_executor,
+                reader,
+                emulator,
+                DEFAULT_LAVENDER_TIMING,
+            )
+        except LavenderChapterError as error:
+            raise SSAnneChapterError(str(error)) from error
+    prepared = reader.read()
+    if prepared.first_party_moves != (BITE_MOVE_ID, 0x27, BUBBLEBEAM, WATER_GUN_MOVE_ID):
+        raise SSAnneChapterError(
+            "S.S. Anne preparation lacks the qualified BubbleBeam moveset: "
+            f"{prepared.first_party_moves!r}."
+        )
     _move(chapter_executor, reader, CENTER_EXIT_DIRECTIONS, timing, "Vermilion Center exit")
     _wait(chapter_executor, timing.transition_wait_frames)
     _move(chapter_executor, reader, CENTER_TO_HARBOR_DIRECTIONS, timing, "Vermilion harbor")
@@ -478,24 +500,28 @@ def _choose_ss_anne_rival_move(state: RawGameState) -> int:
         raise SSAnneChapterError("S.S. Anne rival policy lacks pinned battle evidence.")
     if state.enemy_species_id == RATICATE_SPECIES_ID:
         candidates = (
+            (3, BUBBLEBEAM),
             (4, WATER_GUN_MOVE_ID),
-            (3, MEGA_PUNCH_MOVE_ID),
             (1, BITE_MOVE_ID),
+            (3, MEGA_PUNCH_MOVE_ID),
         )
     elif state.enemy_species_id == KADABRA_SPECIES_ID:
         candidates = (
             (1, BITE_MOVE_ID),
+            (3, BUBBLEBEAM),
             (3, MEGA_PUNCH_MOVE_ID),
             (4, WATER_GUN_MOVE_ID),
         )
     elif state.enemy_species_id == IVYSAUR_SPECIES_ID:
         candidates = (
-            (3, MEGA_PUNCH_MOVE_ID),
             (1, BITE_MOVE_ID),
+            (3, MEGA_PUNCH_MOVE_ID),
             (4, WATER_GUN_MOVE_ID),
+            (3, BUBBLEBEAM),
         )
     else:
         candidates = (
+            (3, BUBBLEBEAM),
             (3, MEGA_PUNCH_MOVE_ID),
             (4, WATER_GUN_MOVE_ID),
             (1, BITE_MOVE_ID),

@@ -401,7 +401,8 @@ def run_lavender_chapter(
     healed = reader.read()
     _checkpoint(records, progress, emulator, healed, "healed", "Healed before Rock Tunnel")
 
-    _teach_tm11(actions, reader, emulator, timing)
+    if ItemId.TM11_BUBBLEBEAM in _bag(emulator):
+        _teach_tm11(actions, reader, emulator, timing)
     bubblebeam = reader.read()
     if bubblebeam.first_party_moves != (BITE, 0x27, BUBBLEBEAM, 0x37):
         raise LavenderChapterError(f"TM11 produced wrong moves: {bubblebeam.first_party_moves!r}.")
