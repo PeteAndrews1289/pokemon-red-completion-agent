@@ -109,9 +109,9 @@ self-destructing Hiker sequence and carries a second Parlyz Heal for the later G
 preserving both executable teaching evidence and status robustness.
 That replay then cleared Rock Tunnel, Rocket Hideout, and Pokémon Tower before consuming the
 ten-Great-Ball reserve plus all surviving Poké Balls at the one-time Route 12 Snorlax. The teacher
-now buys a completion-oriented twenty-five-Great-Ball reserve with a thirty-three-throw total bound and sells
-the remainder after capture. The static encounter no longer depends on leftovers from earlier
-species searches.
+now establishes a completion-oriented 25-throw combined reserve with a thirty-three-throw total
+controller bound and sells the temporary remainder after capture. The static encounter no longer
+depends on unbounded leftovers from earlier species searches.
 An attempted thirty-ball reserve failed closed at the Mart because its ₽19,400 combined capture
 and healing cost exceeded the live ₽16,897 balance. Twenty-five balls plus both Super Potions cost
 ₽16,400, retain the recovery contract, and require neither selling future-use TMs nor relying on
@@ -326,13 +326,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `5c6957f6062e016f82e00a8d9ec8bf6f4456339f5d9761088bd412f92d8efe52` |
-| Source bundle SHA-256 | `5493a3c6fd87a70d195adffd1a9b62cad14f64347b45997c96efe0fe5ceaa13b` |
+| Registry SHA-256 | `a91f87e7d7622663c4cb3023a90cc71e0fb39cff0ba6271627701a7fdde3f4af` |
+| Source bundle SHA-256 | `2569c9972137b6f6402b52c1894740cbac7f8eaaf834a6501f54aa0d8fe26cd4` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `88a8b3e59080f70963330955bc8748f7ac37df7d468f9971cd417266583c8ef8` |
+| Teacher execution SHA-256 | `c575f2549e94905d15e8823572a4135063737c45bf9b5eaabce5eaf99b75d4ac` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `1e2c9ec52ed20a2047438ea5bf6fd84d43438b1a3835eccec720d4c0737dd9d4` |
+| Slot `01` assignment ID | `cc68808664ca46e41bd6f289231a6d2ae296ba81665e51952748cb4612d32d5c` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -658,3 +658,9 @@ consumed any. It now restores a fixed two-cure reserve instead: zero consumed me
 one consumed means one repurchased, and the exact cash and inventory ledger is still mandatory.
 This saves ₽200 on the observed no-cure schedule while preserving both cures, the capacity token,
 and the full later capture/recovery budget. The replay remains uncounted.
+
+The replay still fell ₽403 short of its second Snorlax Super Potion because it bought the older
+25-Great-Ball reserve in addition to the retained capacity ball. The purchase now binds the same
+25 legal throws as before—24 Great Balls plus that one Poké Ball—saving ₽600 while remaining seven
+throws above the historical 18-throw exhaustion. Both recovery items remain mandatory and the
+controller's independent thirty-three-throw ceiling is unchanged.

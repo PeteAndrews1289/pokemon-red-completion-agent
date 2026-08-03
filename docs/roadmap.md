@@ -352,7 +352,7 @@ route now cures status before the Hiker sequence and carries a second Parlyz Hea
 Grass contingency, retaining both the win contract and an executable curriculum label.
 That replay cleared the complete tunnel and Pokémon Tower, then exhausted ten Great Balls and all
 remaining Poké Balls at the one-time Route 12 Snorlax. The funded static-capture budget is now
-twenty-five Great Balls with a thirty-three-throw total bound; unused stock is sold afterward, and success no longer
+twenty-five combined balls with a thirty-three-throw total bound; unused stock is sold afterward, and success no longer
 depends on lucky leftovers from earlier species searches.
 The first thirty-ball proposal failed closed at the Mart: ₽16,897 could not fund the ₽19,400
 capture-plus-healing bill. Twenty-five balls plus both Super Potions cost ₽16,400, preserving
