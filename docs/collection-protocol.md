@@ -833,3 +833,11 @@ healed from 176/189 to full, so the switch lost a developed teammate and erased 
 without protecting a healing action. Champion play now keeps the healthy workhorse active once
 recovery is exhausted. Bounded helper pivots remain only when they purchase a verified healing
 turn. The failed rehearsal remains private and uncounted, and the exact source must requalify.
+
+Keeping Blastoise active reduced the final Alakazam to 4/189 HP before the workhorse fainted. Three
+developed teammates remained alive, including a full-health level-30 Snorlax, but the Champion
+adapter treated any active-battler faint as terminal. The adapter now performs an observed,
+bounded forced switch to the healthiest living teammate and gives reserve battlers a live-PP,
+Disable-aware fallback move policy. At most five forced switches can occur, so this teaches normal
+team-battle continuation without adding recovery items, resets, or attempts. The exact source must
+again pass the complete uncounted rehearsal.

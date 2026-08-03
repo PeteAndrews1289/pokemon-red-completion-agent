@@ -1,6 +1,7 @@
 from pokemon_red_completion.champion import (
     CHAMPION_ARCANINE_FINISH_SAFE_HP,
     CHAMPION_CHECKPOINT_COUNT,
+    CHAMPION_FORCED_SWITCH_LIMIT,
     CHAMPION_FULL_RESTORE_INPUT_RESERVE,
     CHAMPION_GYARADOS_FINISH_SAFE_HP,
     CHAMPION_PARTY,
@@ -8,6 +9,7 @@ from pokemon_red_completion.champion import (
     CHAMPION_RNG_DELAY_FRAMES,
     CHAMPION_SAFE_HP,
     ChampionTurn,
+    _champion_forced_switch_target,
     _champion_move_slot,
     _champion_recovery_available,
     _champion_recovery_threshold,
@@ -23,6 +25,7 @@ def test_champion_source_contract_is_exact() -> None:
     assert CHAMPION_RNG_DELAY_FRAMES == 150
     assert CHAMPION_SAFE_HP == 90
     assert CHAMPION_FULL_RESTORE_INPUT_RESERVE == 1
+    assert CHAMPION_FORCED_SWITCH_LIMIT == 5
     assert CHAMPION_RHYDON_SAFE_HP == 50
     assert MapId.CHAMPIONS_ROOM == 0x78
     assert MapId.HALL_OF_FAME == 0x76
@@ -80,6 +83,7 @@ def test_champion_move_ranking_distinguishes_late_matchups() -> None:
         *,
         enemy_hp: int = 100,
         pp: tuple[int, int, int, int] = (5, 15, 15, 0),
+        active_party_index: int | None = 0,
     ) -> RawGameState:
         return RawGameState(
             game_started=True,
@@ -92,6 +96,7 @@ def test_champion_move_ranking_distinguishes_late_matchups() -> None:
             enemy_hp=enemy_hp,
             first_party_pp=pp,
             first_party_max_hp=171,
+            active_party_index=active_party_index,
         )
 
     assert _champion_move_slot(raw(0x97, pp=(5, 10, 15, 0))) == 2
@@ -102,6 +107,7 @@ def test_champion_move_ranking_distinguishes_late_matchups() -> None:
     assert _champion_move_slot(raw(0x16, enemy_hp=31, pp=(5, 15, 15, 3))) == 3
     assert _champion_move_slot(raw(0x16, enemy_hp=196, pp=(5, 15, 15, 3))) == 3
     assert _champion_move_slot(raw(0x9A, pp=(5, 15, 15, 3))) == 3
+    assert _champion_move_slot(raw(0x9A, pp=(5, 15, 15, 3), active_party_index=3)) == 1
     assert _champion_recovery_threshold(raw(0x01)) == CHAMPION_RHYDON_SAFE_HP
     assert _champion_recovery_threshold(raw(0x14)) == CHAMPION_SAFE_HP
     assert (
@@ -121,6 +127,11 @@ def test_champion_only_requests_available_recovery() -> None:
     assert not _champion_recovery_available(0, {ItemId.FULL_HEAL: 3})
     assert _champion_recovery_available(1, {ItemId.FULL_HEAL: 1})
     assert _champion_recovery_available(0, {ItemId.FULL_RESTORE: 1})
+
+
+def test_champion_forced_switch_chooses_the_healthiest_living_teammate() -> None:
+    assert _champion_forced_switch_target((0, 0, 0, 140, 73, 70), 0) == 3
+    assert _champion_forced_switch_target((0, 0, 0), 0) is None
 
 
 def test_champion_receipt_accepts_live_low_hp_decision() -> None:

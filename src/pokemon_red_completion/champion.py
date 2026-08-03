@@ -55,6 +55,7 @@ CHAMPION_RHYDON_SAFE_HP = 50
 CHAMPION_GYARADOS_FINISH_SAFE_HP = 50
 CHAMPION_ARCANINE_FINISH_SAFE_HP = 50
 CHAMPION_FULL_RESTORE_INPUT_RESERVE = 1
+CHAMPION_FORCED_SWITCH_LIMIT = 5
 CHAMPION_PARTY = (
     (0x97, 61),
     (0x95, 59),
@@ -295,6 +296,7 @@ def run_champion_chapter(
     accuracy_used = 0
     next_sacrifice = 1
     last_recovery_turn = -1
+    forced_switches = 0
     while True:
         raw = reader.read()
         if _completed(raw):
@@ -322,6 +324,21 @@ def run_champion_chapter(
         except BattleRuntimeError as error:
             if _completed(reader.read()):
                 break
+            current = reader.read()
+            if (
+                current.battle_state == 2
+                and current.battler_hp == 0
+                and forced_switches < CHAMPION_FORCED_SWITCH_LIMIT
+            ):
+                terminal = _settle_champion_forced_switch(
+                    reader,
+                    actions,
+                    emulator,
+                )
+                forced_switches += 1
+                if terminal:
+                    break
+                continue
             if isinstance(error.__cause__, _AccuracyBoundary):
                 try:
                     _battle_x_accuracy(reader, actions, emulator)
@@ -510,6 +527,11 @@ def _select_recovery_item(
 def _champion_move_slot(raw: RawGameState) -> int:
     """Spend the five accurate Blizzard PP after Pidgeot."""
     pp = raw.first_party_pp or (0, 0, 0, 0)
+    if raw.active_party_index not in {None, 0}:
+        for slot, remaining in enumerate(pp, start=1):
+            if remaining > 0 and raw.player_disabled_move_slot != slot:
+                return slot
+        raise ChampionChapterError("Champion reserve has no usable move PP.")
     species = raw.enemy_species_id or 0
     priorities = (2, 1, 3, 4) if species == 0x97 else (3, 2, 1, 4)
     for slot in priorities:
@@ -518,12 +540,66 @@ def _champion_move_slot(raw: RawGameState) -> int:
     raise ChampionChapterError("Champion has no usable move PP.")
 
 
+def _champion_forced_switch_target(
+    party_hp: tuple[int, ...],
+    active_party_index: int | None,
+) -> int | None:
+    candidates = [
+        index
+        for index, hp in enumerate(party_hp)
+        if hp > 0 and index != active_party_index
+    ]
+    return max(candidates, key=lambda index: party_hp[index], default=None)
+
+
+def _settle_champion_forced_switch(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+) -> bool:
+    """Continue the final battle with the healthiest developed teammate."""
+
+    target = _champion_forced_switch_target(
+        _party_hp(emulator),
+        reader.read().active_party_index,
+    )
+    if target is None:
+        raise ChampionChapterError("Champion KO left no living teammate.")
+    for pulse_index in range(64):
+        raw = reader.read()
+        if raw.battle_state == 0:
+            return True
+        if (
+            raw.battle_state == 2
+            and raw.active_party_index == target
+            and (raw.battler_hp or 0) > 0
+            and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
+        ):
+            return False
+        if raw.battle_state != 2:
+            raise ChampionChapterError("Champion forced switch left the battle.")
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        _pulse(
+            actions,
+            MacroActionKind.CONFIRM if cursor == target else MacroActionKind.MOVE,
+            None if cursor == target else ("down" if cursor < target else "up"),
+            DEFAULT_SILPH_TIMING.menu_frames,
+        )
+        if pulse_index % 5 == 4:
+            _pulse(
+                actions,
+                MacroActionKind.CONFIRM,
+                frames=DEFAULT_SILPH_TIMING.menu_frames,
+            )
+    raise ChampionChapterError("Champion forced switch exceeded its bounded menu pulses.")
+
+
 def _champion_recovery_threshold(raw: RawGameState) -> int:
     """Reserve recovery against Rhydon's low-pressure, Rest-heavy matchup."""
     if raw.enemy_species_id == 0x9A:
-        # The final Venusaur can erase more than the generic safety margin in
-        # one turn.  Once recovery is gone this threshold activates the two
-        # explicitly bounded helper pivots instead of accepting a lethal hit.
+        # The final Alakazam can erase more than the generic safety margin in
+        # one turn, so use recovery whenever any remains. Living developed
+        # teammates continue the battle if the active battler later faints.
         return raw.first_party_max_hp or CHAMPION_SAFE_HP
     if raw.enemy_species_id == 0x01:
         return CHAMPION_RHYDON_SAFE_HP
