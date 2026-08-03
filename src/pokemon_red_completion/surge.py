@@ -805,6 +805,7 @@ def _navigate_main(
         directions = {
             0: {1: "up", 2: "left", 3: "up"},
             1: {0: "down", 2: "left", 3: "left"},
+            2: {0: "right", 1: "up", 3: "up"},
             3: {0: "right", 1: "right", 2: "down"},
         }
         direction = directions.get(target, {}).get(current)
