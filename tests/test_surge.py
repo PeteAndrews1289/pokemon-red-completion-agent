@@ -162,6 +162,7 @@ def test_surge_timing_is_positive_and_bounded() -> None:
     assert SurgeTiming() == DEFAULT_SURGE_TIMING
     assert DEFAULT_SURGE_TIMING.encounter_steps == 1800
     assert DEFAULT_SURGE_TIMING.encounter_limit == 72
+    assert DEFAULT_SURGE_TIMING.spearow_encounter_limit == 96
     assert all(
         isinstance(getattr(DEFAULT_SURGE_TIMING, field.name), int)
         and getattr(DEFAULT_SURGE_TIMING, field.name) > 0

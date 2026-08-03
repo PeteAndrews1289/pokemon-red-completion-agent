@@ -444,7 +444,9 @@ counted roots untouched pending a new full rehearsal. That replay then reached c
 exposed a second uncounted stress case: the six-capture Viridian Forest curriculum exhausted its
 25-ball budget on Pikachu. The legal early-game reserve is now 30, with the later bounded cleanup
 gate updated to match; the larger purchase must prove both capture and downstream economy in the
-next full rehearsal.
+next full rehearsal. Its added purchase timing shifted the Route 11 encounter stream and exposed
+the old 72-encounter Spearow search cap. A source-specific 96-encounter cap now retains the exact
+level-17 Spearow requirement without loosening any other encounter bound.
 
 ## Evidence and project status
 

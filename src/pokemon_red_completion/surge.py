@@ -120,6 +120,7 @@ class SurgeTiming:
     movement_retries: int = 14
     encounter_steps: int = 1800
     encounter_limit: int = 72
+    spearow_encounter_limit: int = 96
     battle_pulses: int = 720
     reward_pulses: int = 40
 
@@ -831,7 +832,7 @@ def _find_spearow(
             raw = reader.read()
             continue
         encounters += 1
-        if encounters > timing.encounter_limit:
+        if encounters > timing.spearow_encounter_limit:
             break
         if raw.enemy_species_id == SPEAROW_SPECIES_ID and raw.enemy_level in SPEAROW_CAPTURE_LEVELS:
             return raw
@@ -843,7 +844,7 @@ def _find_spearow(
     raise SurgeChapterError(
         "Spearow search exceeded its bounded encounter budget: "
         f"steps={timing.encounter_steps}, encounters={encounters}, "
-        f"encounter_limit={timing.encounter_limit}, "
+        f"encounter_limit={timing.spearow_encounter_limit}, "
         f"last_species={raw.enemy_species_id}, last_level={raw.enemy_level}."
     )
 
