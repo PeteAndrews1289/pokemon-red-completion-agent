@@ -492,6 +492,7 @@ def run_adaptive_wild_battle(
     move_slot_policy: MoveSlotPolicy,
     *,
     expected_map: int,
+    intent: BattleIntent | None = None,
     timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
     label: str = "wild battle",
     unknown_cancel_interval: int = 3,
@@ -511,6 +512,7 @@ def run_adaptive_wild_battle(
             executor,
             move_slot_policy,
             expected_map=expected_map,
+            intent=intent,
             timing=timing,
             label=label,
             unknown_cancel_interval=unknown_cancel_interval,
@@ -518,6 +520,19 @@ def run_adaptive_wild_battle(
         )
     finally:
         _ACTIVE_BATTLE_STATE.reset(token)
+
+
+def note_observed_battle_exit() -> None:
+    """Close recorder lifecycle state after a battle exits outside this runtime.
+
+    Some bounded recovery paths leave the adaptive turn loop and then flee via
+    the field controller.  Once that controller has independently proved the
+    battle ended, it calls this observational hook so the next physical
+    encounter receives a new battle-instance identity.  The hook remains
+    fail-open and has no effect when trajectory recording is disabled.
+    """
+
+    _battle_observation_finished()
 
 
 def _apply_battle_start_offset(

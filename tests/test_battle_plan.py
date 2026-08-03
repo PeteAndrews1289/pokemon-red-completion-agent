@@ -189,7 +189,8 @@ def test_every_planned_battle_is_referenced_by_the_production_route() -> None:
             if (
                 isinstance(node, ast.Call)
                 and isinstance(node.func, ast.Name)
-                and node.func.id == "run_adaptive_trainer_battle"
+                and node.func.id
+                in {"run_adaptive_trainer_battle", "run_adaptive_wild_battle"}
                 and "intent" not in {keyword.arg for keyword in node.keywords}
             ):
                 missing_runtime_intents.append(f"{module_name}:{node.lineno}")

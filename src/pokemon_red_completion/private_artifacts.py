@@ -34,7 +34,11 @@ _PRIVATE_FILE_MODE = 0o600
 _MAX_MANIFEST_BYTES = 1024 * 1024
 _MAX_SEALED_RECORD_BYTES = 1024 * 1024
 _MAX_JSONL_LINE_BYTES = 16 * 1024 * 1024
-_MAX_EPISODE_BYTES = 512 * 1024 * 1024
+# The qualified balanced-team curriculum has measured just over 506 MB before
+# its missing battle labels are included.  One GiB retains a strict reader
+# bound while covering the declared 7,000-battle safety envelope and schedule
+# variation without making a valid full-game episode unopenable at promotion.
+_MAX_EPISODE_BYTES = 1024 * 1024 * 1024
 _READER_VALIDATION_TOKEN = object()
 _WRITER_VALIDATION_TOKEN = object()
 _SESSION_VALIDATION_TOKEN = object()

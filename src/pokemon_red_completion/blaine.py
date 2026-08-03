@@ -15,6 +15,7 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleResourcePolicy,
     BattleRuntimeError,
     RequiredMovePolicy,
     run_adaptive_trainer_battle,
@@ -199,6 +200,16 @@ MANSION_VOLATILE_ENEMY_SPECIES = frozenset({0x37, 0x8F})
 # earning experience.  This is deliberately local to the Red adapter: the
 # portable policy continues to reason in battles, steps, and healing trips.
 MANSION_MAX_CONSECUTIVE_FLEES = 32
+MANSION_LEAD_TRAINING_INTENT = BattleIntent(
+    "train_party",
+    battle_plan_id="red.mansion.lead-leveling",
+    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+)
+MANSION_BALANCED_TEAM_TRAINING_INTENT = BattleIntent(
+    "build_balanced_team",
+    battle_plan_id="red.mansion.balanced-team-training",
+    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+)
 MANSION_TRAINER_EVENTS = (
     EventFlag.BEAT_MANSION_1_TRAINER_0,
     EventFlag.BEAT_MANSION_2_TRAINER_0,
@@ -1375,6 +1386,7 @@ def _run_mansion_team_balancing(
                     actions,
                     _team_training_move_slot,
                     expected_map=MapId.POKEMON_MANSION_1F,
+                    intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
                     label="Pokémon Mansion team training encounter",
                 )
             except BattleRuntimeError as error:
@@ -1729,6 +1741,7 @@ def _run_mansion_training(
                     state.first_party_pp or (), policy.preferred_move_slots
                 ),
                 expected_map=MapId.POKEMON_MANSION_1F,
+                intent=MANSION_LEAD_TRAINING_INTENT,
                 label="Pokémon Mansion training encounter",
                 unknown_cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
                 transient_zero_pp_main_is_dialogue=True,

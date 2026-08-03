@@ -36,6 +36,7 @@ from pokemon_red_completion.play import (
     QualifiedPlayProgress,
     QualifiedPlayReport,
     QualifiedPlayTiming,
+    _trajectory_progress_bridge,
     is_parcel_verified,
     is_pokedex_verified,
     is_rival_victory_verified,
@@ -43,6 +44,7 @@ from pokemon_red_completion.play import (
 )
 from pokemon_red_completion.rom import RomFingerprint
 from pokemon_red_completion.saffron import FRESH_WATER_PRICE, THUNDER_STONE_PRICE
+from pokemon_red_completion.trajectory import InMemoryTrajectorySink
 
 
 def _raw(
@@ -1193,6 +1195,31 @@ def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
+
+
+def test_repeated_training_progress_uses_the_execution_step_in_event_identity() -> None:
+    class Recorder:
+        next_step_index = 10
+
+    recorder = Recorder()
+    sink = InMemoryTrajectorySink()
+    emit = _trajectory_progress_bridge(None, sink, "training-episode", recorder, [0])  # type: ignore[arg-type]
+    progress = QualifiedPlayProgress(
+        checkpoint_id="mansion_team_training_progress",
+        label="Balanced team training: 250 battles",
+        completed=250,
+        total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+        frames_executed=10_000,
+    )
+
+    emit(progress)
+    recorder.next_step_index = 20
+    emit(progress)
+
+    assert [event.event_id for event in sink.events] == [
+        "training-episode:checkpoint:10:250:mansion_team_training_progress",
+        "training-episode:checkpoint:20:250:mansion_team_training_progress",
+    ]
 
 
 def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:

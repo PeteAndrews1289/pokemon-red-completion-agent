@@ -10,6 +10,7 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     RequiredMovePolicy,
@@ -90,6 +91,11 @@ ROUTE15_TO_14 = _directions("RRRRRRURRRRRRRRRRRRRRRRRRRRRRRRRRDRRRRRRRRRRRRRR")
 ROUTE14_TO_13 = _directions("URRRURRRUUURRRRRUUUUUUURURRRRUUULULUUUUUUUUUUUULUUUUUURRRRRRR")
 ROUTE13_TO_12 = _directions(
     "RRRRUURRRRRRRUURURRRURRRRRRRRRDDLLLLLLLDDRRRRRRRRRDDLDDRRRRRRRRRURRRRRRRRRRRRRRRRUURUUUUUUUUUU"
+)
+ROUTE_LEVEL_TRAINING_INTENT = BattleIntent(
+    "train_party",
+    battle_plan_id="red.route-15.level-training",
+    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
 )
 ROUTE12_TO_GATE = _directions(
     "UUURUUUUUURRUUUULLLULLLLLUUURURURRUUUUUULLLLLUUUURRRRRRRRRURUUUUU"
@@ -704,6 +710,7 @@ def _move(
                                 actions,
                                 _route_training_move_slot,
                                 expected_map=int(after.map_id),
+                                intent=ROUTE_LEVEL_TRAINING_INTENT,
                                 label="bounded route level training",
                             )
                         except BattleRuntimeError as error:

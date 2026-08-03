@@ -16,6 +16,7 @@ from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     RequiredMovePolicy,
+    note_observed_battle_exit,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.economy import (
@@ -530,6 +531,7 @@ def _flee(
             ):
                 raise CeladonChapterError("Wild flee violated protected state.")
             run.wilds.append(evidence)
+            note_observed_battle_exit()
             return
         if final.battle_state != 1:
             trace.append(

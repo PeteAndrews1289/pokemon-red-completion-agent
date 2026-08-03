@@ -2259,7 +2259,8 @@ def _trajectory_progress_bridge(
             sink.record_event(
                 SparseEvent(
                     event_id=(
-                        f"{episode_id}:checkpoint:{progress.completed}:{progress.checkpoint_id}"
+                        f"{episode_id}:checkpoint:{recorder.next_step_index}:"
+                        f"{progress.completed}:{progress.checkpoint_id}"
                     ),
                     episode_id=episode_id,
                     step_index=recorder.next_step_index,

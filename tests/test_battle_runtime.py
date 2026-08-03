@@ -20,6 +20,7 @@ from pokemon_red_completion.battle_runtime import (
     _confirm_attack_with_pp_gate,
     bind_battle_decision_observer,
     bind_battle_schedule_observer,
+    note_observed_battle_exit,
     recovery_action_due,
     run_adaptive_trainer_battle,
     run_adaptive_wild_battle,
@@ -904,6 +905,45 @@ def test_battle_decision_observer_scopes_each_validated_policy_turn() -> None:
         expected_map=MapId.CERULEAN_CITY,
     )
     assert len(observer.entries) == 3
+
+
+def test_wild_battle_carries_training_intent_to_the_decision_observer() -> None:
+    runtime = AdaptiveRivalSimulation()
+    runtime.raw = replace(runtime.raw, battle_state=1)
+    observer = RecordingDecisionObserver(runtime)
+    intent = BattleIntent("help_bill", "red.mansion.balanced-team-training")
+
+    with bind_battle_decision_observer(observer):
+        final = run_adaptive_wild_battle(
+            runtime,
+            runtime,
+            lambda raw: choose_cerulean_rival_move_slot(replace(raw, battle_state=2)),
+            expected_map=MapId.CERULEAN_CITY,
+            intent=intent,
+            label="balanced-team training",
+        )
+
+    assert final.battle_state == 0
+    assert observer.starts == [intent]
+    assert observer.finishes == 1
+    assert observer.failures == 0
+    assert len(observer.entries) == 3
+
+
+def test_external_flee_hook_closes_the_observed_battle_instance() -> None:
+    runtime = FakeRuntime(raw=_raw(battle_state=1))
+    observer = RecordingDecisionObserver(runtime)
+    first = BattleIntent("help_bill", "red.mansion.training-recovery")
+    second = BattleIntent("help_bill", "red.mansion.training-resumed")
+
+    with bind_battle_decision_observer(observer):
+        observer.battle_started(intent=first)
+        note_observed_battle_exit()
+        observer.battle_started(intent=second)
+
+    assert observer.starts == [first, second]
+    assert observer.finishes == 1
+    assert observer.failures == 0
 
 
 @pytest.mark.parametrize("failure_phase", ["enter", "exit"])

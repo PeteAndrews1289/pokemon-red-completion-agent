@@ -300,7 +300,12 @@ a bounded 720-frame cancel-safe window and richer failure evidence. Rehearsal re
 That repair passed Sabrina and carried the balanced curriculum beyond 1,250 battles, where live PP
 exhaustion or Disable removed every preferred attack. The current adapter hands control to the safe
 escort, flees without a faint, and lets the game-neutral planner request restoration. Another exact
-uncounted rehearsal remains required before collection opens.
+uncounted rehearsal then completed **312/312 checkpoints** and entered the Hall of Fame, proving
+the scheduled gameplay route. Its episode remained unpromoted because wild curriculum battles had
+no explicit training intent and repeated progress events reused an identity. The lossless-data
+repair labels each wild decision, closes externally fled battle instances, and keys progress to
+the execution step. No counted slot was consumed; the repaired exact source must repeat the
+uncounted rehearsal before collection opens.
 
 ## Milestone 4 — DAgger and selective RL
 

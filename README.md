@@ -417,6 +417,12 @@ a bounded 720-frame, cancel-safe observation window that cannot accidentally re-
 repair passed Sabrina and reached the balanced-team curriculum, where a member eventually lost
 every usable preferred attack to PP exhaustion or Disable. The trainer now pivots through the safe
 escort, flees, and lets the game-neutral planner schedule restoration instead of forcing a move.
+That repair completed the entire scheduled rehearsal at **312/312 checkpoints**, defeated the
+Champion, and entered the Hall of Fame. Promotion then failed closed because the 4,000-battle wild
+curriculum had no explicit training intent and repeated progress reports reused one event identity.
+The recorder retained roughly **848,000 records / 506 MB**, the failed run consumed no slot, and
+the current source gives every wild-training decision a portable objective, assigns each physical
+battle its own lifecycle, and keys repeated progress events to their execution step.
 
 ## Evidence and project status
 

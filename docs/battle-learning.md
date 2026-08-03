@@ -79,6 +79,13 @@ The repaired rehearsal passed Sabrina and advanced beyond 1,250 balanced-team ba
 fighter had no live preferred attack. The runtime now treats PP exhaustion or Disable as a semantic
 loss-of-control signal: it switches to the safe escort when required, flees with zero faints, and
 returns the decision to the portable team planner so a healing trip can be scheduled.
+The repaired teacher then completed the scheduled **312/312-checkpoint** run and entered the Hall
+of Fame. Promotion still failed closed: the wild curriculum lacked explicit `BattleIntent` labels,
+and repeated training progress reused one event identity. The retained artifact contains roughly
+848,000 successfully written records, so the correction targets semantics rather than storage:
+portable training objectives on every wild decision, explicit lifecycle closure after an external
+flee, step-qualified progress IDs, and a bounded episode size covering the 7,000-battle envelope.
+The run remained uncounted.
 
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
 schedule, episode, manifest, and 68/68 offline audit. Every counted slot reopens and re-audits that
