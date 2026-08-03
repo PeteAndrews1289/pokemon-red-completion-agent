@@ -363,11 +363,15 @@ def run_champion_chapter(
             if not isinstance(error.__cause__, _HealBoundary):
                 current = reader.read()
                 if (
-                    current.battle_state == 2
-                    and current.enemy_hp == 0
+                    current.enemy_hp == 0
                     and any(hp > 0 for hp in _party_hp(emulator))
                 ):
-                    _settle_champion_battle_exit(reader, actions)
+                    if current.battle_state == 2:
+                        _settle_champion_battle_exit(reader, actions)
+                    elif current.battle_state != 0:
+                        raise ChampionChapterError(
+                            "Champion final KO exposed an unsupported battle state."
+                        ) from error
                     continue
                 raise ChampionChapterError(
                     "Champion battle runtime failed: "

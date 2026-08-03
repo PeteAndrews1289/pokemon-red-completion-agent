@@ -856,3 +856,10 @@ diagnostic reread already contained the valid zero-HP evidence. The same strict 
 now runs on that authoritative reread before a runtime error can be emitted. It still requires an
 active trainer battle, enemy HP exactly zero, and at least one living teammate before advancing the
 bounded victory text. The rehearsal remains uncounted and must restart from clean power.
+
+The authoritative-reread replay confirmed the missing state explicitly: the final snapshot was
+already `scripted_or_blocked` with no active battle after Snorlax's KO, while the enemy-zero bytes
+remained available as terminal evidence. The handler now accepts both legal sides of that exact
+transition: trainer battle plus zero HP is settled with bounded inputs; post-battle dialogue plus
+zero HP immediately returns to the existing outer dialogue controller. Any other battle state still
+fails closed. The rehearsal remains uncounted.
