@@ -96,9 +96,10 @@ def test_lavender_timing_is_positive_and_bounded() -> None:
 
 def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert BATTLE_RECOVERY_THRESHOLD == 40
+    assert lavender_module.TUNNEL_RECOVERY_THRESHOLD == 40
     assert DUX_BATTLE_RECOVERY_THRESHOLD == 20
-    assert ROUTE_9_MIN_SUPER_POTION_RESERVE == 4
-    assert TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD == 72
+    assert ROUTE_9_MIN_SUPER_POTION_RESERVE == 5
+    assert TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD == 40
     assert FINAL_TUNNEL_RECOVERY_THRESHOLD == 90
 
 
@@ -119,6 +120,59 @@ def test_final_tunnel_policy_spends_bite_evidence_then_exploits_with_bubblebeam(
         enemy_species_id=0xA9,
         active_party_index=1,
     ) == (3, 1, 4)
+
+
+def test_slowpoke_policy_proves_required_move_then_uses_unresisted_bite() -> None:
+    assert lavender_module._ranked_lavender_move_slots(
+        move_slot=3,
+        starting_selected_pp=20,
+        current_selected_pp=20,
+        finish_with_bubblebeam=False,
+        enemy_species_id=lavender_module.SLOWPOKE_SPECIES_ID,
+        active_party_index=0,
+    ) == (3, 1, 4)
+    assert lavender_module._ranked_lavender_move_slots(
+        move_slot=3,
+        starting_selected_pp=20,
+        current_selected_pp=19,
+        finish_with_bubblebeam=False,
+        enemy_species_id=lavender_module.SLOWPOKE_SPECIES_ID,
+        active_party_index=0,
+    ) == (1, 3, 4)
+    assert lavender_module._ranked_lavender_move_slots(
+        move_slot=1,
+        starting_selected_pp=25,
+        current_selected_pp=25,
+        finish_with_bubblebeam=False,
+        enemy_species_id=lavender_module.SLOWPOKE_SPECIES_ID,
+        active_party_index=0,
+    ) == (1, 3, 4)
+
+
+def test_status_locked_dux_escapes_to_a_living_story_lead() -> None:
+    asleep = replace(
+        _raw(),
+        active_party_index=0,
+        active_party_status=0x04,
+    )
+
+    assert lavender_module._dux_status_escape_target(asleep, (20, 50, 30), True) == 1
+    assert lavender_module._dux_status_escape_target(asleep, (20, 0, 30), True) is None
+    assert lavender_module._dux_status_escape_target(
+        replace(asleep, active_party_status=0), (20, 50, 30), True
+    ) is None
+    assert lavender_module._dux_status_escape_target(asleep, (20, 50, 30), False) is None
+
+
+def test_story_lead_uses_bite_after_a_dux_grass_status_escape() -> None:
+    assert lavender_module._ranked_lavender_move_slots(
+        move_slot=1,
+        starting_selected_pp=35,
+        current_selected_pp=24,
+        finish_with_bubblebeam=False,
+        enemy_species_id=next(iter(lavender_module.FINAL_TUNNEL_GRASS_SPECIES)),
+        active_party_index=1,
+    ) == (1, 3, 4)
     for species in FINAL_TUNNEL_GRASS_SPECIES:
         assert lavender_module._ranked_lavender_move_slots(
             move_slot=1,
@@ -160,40 +214,6 @@ def test_final_tunnel_role_pivot_tracks_enemy_type_and_live_reserves() -> None:
     assert lavender_module._final_tunnel_pivot_target(
         grass_against_wartortle,
         (50, 30, 20),
-        False,
-    ) is None
-
-
-def test_dux_finisher_pivot_requires_a_living_reserve_and_nearly_won_matchup() -> None:
-    opportunity = replace(
-        _raw(),
-        active_party_index=0,
-        enemy_hp=20,
-    )
-
-    assert lavender_module._dux_finisher_pivot_target(
-        opportunity,
-        (73, 30, 20),
-        True,
-    ) == 1
-    assert lavender_module._dux_finisher_pivot_target(
-        opportunity,
-        (73, 29, 20),
-        True,
-    ) is None
-    assert lavender_module._dux_finisher_pivot_target(
-        replace(opportunity, enemy_hp=21),
-        (73, 30, 20),
-        True,
-    ) is None
-    assert lavender_module._dux_finisher_pivot_target(
-        opportunity,
-        (73, 0, 20),
-        True,
-    ) is None
-    assert lavender_module._dux_finisher_pivot_target(
-        opportunity,
-        (73, 30, 20),
         False,
     ) is None
 

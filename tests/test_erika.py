@@ -4,10 +4,12 @@ import pytest
 
 import pokemon_red_completion.erika as erika_module
 from pokemon_red_completion.erika import (
+    BLASTOISE_SPECIES_ID,
     DEFAULT_ERIKA_TIMING,
     ERIKA_CHECKPOINT_COUNT,
     ERIKA_CLASS,
     ERIKA_OPPONENT,
+    MOVEMENT_RETRY_WAIT_FRAMES,
     STRENGTH,
     ErikaChapterReport,
     ErikaCheckpoint,
@@ -37,6 +39,7 @@ def _terminal() -> RawGameState:
 
 
 def test_erika_timing_is_positive_and_bounded() -> None:
+    assert MOVEMENT_RETRY_WAIT_FRAMES == 12
     assert all(
         isinstance(getattr(DEFAULT_ERIKA_TIMING, field.name), int)
         and getattr(DEFAULT_ERIKA_TIMING, field.name) > 0
@@ -147,3 +150,20 @@ def test_erika_policy_falls_back_when_strength_is_disabled() -> None:
     )
 
     assert erika_module._erika_move_slot(raw) == 3
+
+
+def test_route_training_handles_transformed_ditto_and_requires_safe_health() -> None:
+    raw = replace(
+        _terminal(),
+        battle_state=1,
+        enemy_species_id=BLASTOISE_SPECIES_ID,
+        active_party_index=0,
+        active_party_hp=93,
+        active_party_max_hp=123,
+        active_party_moves=(0x2C, STRENGTH, 0x3D, 0x39),
+        active_party_pp=(25, 15, 20, 4),
+    )
+
+    assert erika_module._route_training_safe(raw)
+    assert erika_module._route_training_move_slot(raw) == 2
+    assert not erika_module._route_training_safe(replace(raw, active_party_hp=92))

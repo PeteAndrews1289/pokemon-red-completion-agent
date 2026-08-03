@@ -391,12 +391,15 @@ held-out or promoted-policy result.
 
 The first rehearsal of that published source cleared the former Route 24 and Route 25 failures,
 then stopped at checkpoint 109/312 when Bellsprout began Wrap with 20/57 HP and trapped Wartortle
-until it fainted. The failed uncounted rehearsal consumed no campaign slot. The working repair now
-uses the already-qualified DUX Grass-specialist role for both final 1F trainers, preserves Peck PP
-evidence, restores Wartortle before exiting the tunnel, adds a legal Safari Zone TM40 lesson, and
-makes battle-item confirmation semantic rather than timing-only. The exact combined source has now
+until it fainted. A later published candidate cleared that matchup but its uncounted rehearsal
+stopped when an unsafe low-HP DUX finisher fainted in the tunnel; neither failure consumed a
+campaign slot. The current teacher removes that finisher, budgets the tunnel's healing reserve,
+uses type-aware Bite after required Slowpoke evidence, escapes a status-locked DUX to the healthy
+story lead, accepts natural evolution without falsely requiring candy consumption, and uses any
+surplus Rare Candy at the level-41 lesson boundary. It also releases movement input around moving
+Celadon NPCs and uses Ice Beam plus bounded recovery against the Silph rival. This exact source
 passed a new uninterrupted **312/312-checkpoint**, **36/36-objective** clean-power replay through
-the Hall of Fame in **762,318 actions**. Its Mansion curriculum won **4,236 battles** with a
+the Hall of Fame in **762,804 actions**. Its Mansion curriculum won **4,236 battles** with a
 six-member minimum level of **77** and a five-level spread. The regenerated source identity is the
 next uncounted rehearsal candidate; all twelve counted slots remain pending.
 

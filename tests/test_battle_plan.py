@@ -130,15 +130,13 @@ _EXPECTED_SOURCE_MEMBER_LEDGER = {
     "erika.py": tuple(
         item.name for item in RedBattlePlanId if item.name.startswith("ERIKA_")
     ),
-    # The rival callsite is deliberately referenced in both branches of a
-    # bounded recovery path; the lexical ledger pins that duplication too.
+    # The rival plan is shared by the bounded recovery loop and its final
+    # no-more-items continuation; the lexical ledger pins both callsites.
     "silph.py": (
         "SILPH_5F_ROCKET",
         "SILPH_3F_ROCKET",
         "SILPH_11F_ROCKET",
         "SILPH_11F_GIOVANNI",
-        "SILPH_7F_RIVAL",
-        "SILPH_7F_RIVAL",
         "SILPH_7F_RIVAL",
         "SILPH_7F_RIVAL",
     ),

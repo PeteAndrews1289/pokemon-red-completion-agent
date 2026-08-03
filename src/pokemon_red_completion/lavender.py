@@ -50,16 +50,15 @@ NUGGET_SALE_PROCEEDS = 5_000
 PARLYZ_HEAL_PRICE = 200
 REPEL_PRICE = 350
 POST_MART_RNG_ALIGNMENT_FRAMES = 191
-TUNNEL_RECOVERY_THRESHOLD = 55
+TUNNEL_RECOVERY_THRESHOLD = 40
 TRAVERSAL_RECOVERY_THRESHOLD = 30
 BATTLE_RECOVERY_THRESHOLD = 40
 DUX_BATTLE_RECOVERY_THRESHOLD = 20
-TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD = 72
+TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD = 40
 FINAL_TUNNEL_RECOVERY_THRESHOLD = 90
 FINAL_TUNNEL_GRASS_SPECIES = frozenset({0xB9, 0xBA, 0xBC, 0xBD})
-DUX_FINISHER_ENEMY_HP_THRESHOLD = 20
-DUX_FINISHER_RESERVE_HP_THRESHOLD = 30
-ROUTE_9_MIN_SUPER_POTION_RESERVE = 4
+SLOWPOKE_SPECIES_ID = 0x25
+ROUTE_9_MIN_SUPER_POTION_RESERVE = 5
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -513,15 +512,6 @@ def run_lavender_chapter(
         battle_recovery_threshold=DUX_BATTLE_RECOVERY_THRESHOLD,
         battle_recovery_limit=6,
     )
-    _heal_if_below(
-        actions,
-        reader,
-        emulator,
-        run,
-        timing,
-        0,
-        TRAVERSAL_RECOVERY_THRESHOLD,
-    )
     _swap(actions, reader, emulator, WARTORTLE, "Route 9 Wartortle restoration")
     _move(
         actions,
@@ -606,6 +596,7 @@ def run_lavender_chapter(
     _checkpoint(
         records, progress, emulator, tunnel_entered, "tunnel_entered", "Entered Rock Tunnel"
     )
+    tunnel_start_reserve = _bag(emulator).get(ItemId.SUPER_POTION, 0)
 
     _trainer(
         actions,
@@ -623,8 +614,12 @@ def run_lavender_chapter(
         BUBBLEBEAM,
         3,
         RedBattlePlanId.LAVENDER_ROCK_TUNNEL_1F_TRAINER_3,
+        battle_recovery_threshold=BATTLE_RECOVERY_THRESHOLD,
+        battle_recovery_limit=1,
     )
+    _require_potion_floor(emulator, tunnel_start_reserve - 1, "first tunnel trainer")
     _heal_if_below(actions, reader, emulator, run, timing, 0, TUNNEL_RECOVERY_THRESHOLD)
+    _require_potion_floor(emulator, tunnel_start_reserve - 2, "first tunnel field recovery")
     _move(actions, reader, emulator, run, TUNNEL_1F_TO_B1, timing, "first B1 ladder")
     _wait(actions, timing.transition_frames)
     _trainer(
@@ -643,10 +638,10 @@ def run_lavender_chapter(
         BITE,
         1,
         RedBattlePlanId.LAVENDER_ROCK_TUNNEL_B1F_TRAINER_7,
-        allow_dux_finisher=True,
         battle_recovery_threshold=TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD,
         battle_recovery_limit=1,
     )
+    _require_potion_floor(emulator, tunnel_start_reserve - 3, "trainer 7")
     _heal_if_below(
         actions,
         reader,
@@ -691,6 +686,7 @@ def run_lavender_chapter(
         PECK,
         1,
         RedBattlePlanId.LAVENDER_ROCK_TUNNEL_B1F_TRAINER_5,
+        protect_dux_status=True,
     )
     _heal_if_below(actions, reader, emulator, run, timing, 1, TRAVERSAL_RECOVERY_THRESHOLD)
     _swap(actions, reader, emulator, WARTORTLE, "B1 Wartortle restoration")
@@ -929,7 +925,7 @@ def _run_lavender_trainer_battle(
     label: str,
     intent: BattleIntent,
     finish_with_bubblebeam: bool = False,
-    allow_dux_finisher: bool = False,
+    protect_dux_status: bool = False,
     battle_recovery_threshold: int | None = None,
     battle_recovery_limit: int | None = None,
 ) -> RawGameState:
@@ -942,17 +938,17 @@ def _run_lavender_trainer_battle(
     starting_selected_pp = starting_pp[move_slot - 1] & 0x3F
 
     def guarded_policy(raw: RawGameState) -> int:
+        pivot_target = _dux_status_escape_target(
+            raw,
+            _party_hp(emulator),
+            protect_dux_status,
+        )
+        if pivot_target is not None:
+            raise _PauseForFinalTunnelPivot(pivot_target)
         pivot_target = _final_tunnel_pivot_target(
             raw,
             _party_hp(emulator),
             finish_with_bubblebeam,
-        )
-        if pivot_target is not None:
-            raise _PauseForFinalTunnelPivot(pivot_target)
-        pivot_target = _dux_finisher_pivot_target(
-            raw,
-            _party_hp(emulator),
-            allow_dux_finisher,
         )
         if pivot_target is not None:
             raise _PauseForFinalTunnelPivot(pivot_target)
@@ -1043,11 +1039,22 @@ def _ranked_lavender_move_slots(
 ) -> tuple[int, ...]:
     """Spend the evidence move once, then exploit without feeding resisted Wrap turns."""
 
-    if finish_with_bubblebeam and active_party_index == 0:
+    selected_move_spent = current_selected_pp < starting_selected_pp
+    if (
+        active_party_index in {None, 0}
+        and enemy_species_id == SLOWPOKE_SPECIES_ID
+        and (move_slot == 1 or selected_move_spent)
+    ) or (
+        active_party_index == 1
+        and enemy_species_id in FINAL_TUNNEL_GRASS_SPECIES
+        and selected_move_spent
+    ):
+        ranked = (1, move_slot, 3, 4)
+    elif finish_with_bubblebeam and active_party_index == 0:
         ranked = (move_slot, 1, 3, 4)
     elif (
         finish_with_bubblebeam and active_party_index == 1
-    ) or current_selected_pp < starting_selected_pp:
+    ) or selected_move_spent:
         ranked = (3, move_slot, 1, 4)
     else:
         ranked = (move_slot, 3, 1, 4)
@@ -1130,19 +1137,19 @@ def _final_tunnel_pivot_target(
     return target
 
 
-def _dux_finisher_pivot_target(
+def _dux_status_escape_target(
     raw: RawGameState,
     party_hp: tuple[int, ...],
     enabled: bool,
 ) -> int | None:
-    """Use a healthy DUX reserve to close a nearly won unsafe matchup."""
+    """Hand a status-locked DUX matchup to the healthy story lead before it faints."""
 
     if (
         not enabled
         or raw.active_party_index != 0
+        or not (raw.battler_status or 0)
         or len(party_hp) < 2
-        or party_hp[1] < DUX_FINISHER_RESERVE_HP_THRESHOLD
-        or not 0 < (raw.enemy_hp or 0) <= DUX_FINISHER_ENEMY_HP_THRESHOLD
+        or party_hp[1] <= 0
     ):
         return None
     return 1
@@ -1190,7 +1197,7 @@ def _trainer(
     *,
     already_triggered: bool = False,
     finish_with_bubblebeam: bool = False,
-    allow_dux_finisher: bool = False,
+    protect_dux_status: bool = False,
     battle_recovery_threshold: int | None = None,
     battle_recovery_limit: int | None = None,
 ) -> None:
@@ -1235,7 +1242,7 @@ def _trainer(
         label=label,
         intent=intent,
         finish_with_bubblebeam=finish_with_bubblebeam,
-        allow_dux_finisher=allow_dux_finisher,
+        protect_dux_status=protect_dux_status,
         battle_recovery_threshold=battle_recovery_threshold,
         battle_recovery_limit=battle_recovery_limit,
     )
@@ -1533,11 +1540,23 @@ def _heal_if_below(
     if _bag(emulator).get(ItemId.SUPER_POTION, 0) <= 0:
         if hp > BATTLE_RECOVERY_THRESHOLD:
             return False
+        raw = reader.read()
         raise LavenderChapterError(
-            f"Recovery target {party_index} is unsafe without a Super Potion: {hp}/{max_hp}."
+            f"Recovery target {party_index} is unsafe without a Super Potion: "
+            f"{hp}/{max_hp}, map={raw.map_id}, "
+            f"position={(raw.player_x, raw.player_y)}, used={run.potions_used}."
         )
     _use_super_potion(executor, reader, emulator, run, timing, party_index)
     return True
+
+
+def _require_potion_floor(emulator: EmulatorState, minimum: int, label: str) -> None:
+    observed = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    if observed < minimum:
+        raise LavenderChapterError(
+            f"{label} violated its Super Potion floor: observed {observed}, "
+            f"expected at least {minimum}."
+        )
 
 
 def _use_super_potion(

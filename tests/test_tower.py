@@ -166,7 +166,6 @@ def test_tower_report_requires_every_terminal_gate() -> None:
         replace(report, optional_events=(True,) + report.optional_events[1:]),
         replace(report, required_events=(False,) + report.required_events[1:]),
         replace(report, x_accuracy_carried=False),
-        replace(report, rare_candy_used_for_evolution=False),
         replace(report, elixir_carried=False),
         replace(report, poke_flute_carried=False),
         replace(report, evolution_after=(0xB3, 0x40, 0x3B)),
@@ -180,6 +179,12 @@ def test_tower_report_requires_every_terminal_gate() -> None:
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)
+
+
+def test_tower_report_accepts_natural_evolution_without_spending_rare_candy() -> None:
+    report = replace(_report(), rare_candy_used_for_evolution=False)
+
+    assert report.passed
 
 
 def test_tower_report_accepts_a_conserved_surplus_inventory_path() -> None:

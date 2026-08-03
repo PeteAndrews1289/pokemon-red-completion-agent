@@ -52,13 +52,15 @@ Sabrina recovery, and the Mansion's one-turn grinding policy. The combined sourc
 312/312 clean-power Hall-of-Fame replay and was then committed and pushed before the rehearsal.
 
 That published rehearsal subsequently cleared the former Route 24 and Route 25 failures but
-stopped at checkpoint 109/312 when Bellsprout trapped Wartortle with Wrap. It consumed no counted
-slot. The revised route assigns both final Grass-heavy tunnel trainers to the prepared DUX/Peck
-specialist, carries TM40 from the Safari Zone into a bounded move-teaching lesson, and samples
-battle-item confirmations closely enough to prevent duplicate consumption. That exact source then
-completed **312/312 checkpoints**, **36/36 objectives**, and the Hall of Fame in **762,318
-actions**; its six-member curriculum won **4,236 battles** and finished with a minimum level of 77
-and a five-level spread. It is the next uncounted rehearsal candidate.
+stopped at checkpoint 109/312 when Bellsprout trapped Wartortle with Wrap. A later uncounted
+candidate exposed an unsafe low-HP DUX finisher; neither attempt consumed a counted slot. The
+current route removes that finisher, budgets the tunnel's potion reserve, uses type-aware Bite
+against Slowpoke after required evidence, and escapes a status-locked DUX to the healthy lead. It
+accepts natural evolution, uses the surplus Rare Candy for the level-41 TM40 lesson, gives moving
+Celadon NPCs neutral retry windows, and applies Ice Beam plus bounded whole-battle recovery to the
+Silph rival. That exact source completed **312/312 checkpoints**, **36/36 objectives**, and the Hall
+of Fame in **762,804 actions**; its six-member curriculum won **4,236 battles** and finished with a
+minimum level of 77 and a five-level spread. It is the next uncounted rehearsal candidate.
 
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
 schedule, episode, manifest, and 68/68 offline audit. Every counted slot reopens and re-audits that

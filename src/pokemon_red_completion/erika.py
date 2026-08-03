@@ -60,6 +60,8 @@ STRENGTH = 0x46
 ERIKA_OPPONENT = 0xED
 ERIKA_CLASS = 0x25
 SKULL_BASH = 0x82
+BLASTOISE_SPECIES_ID = 0x1C
+MOVEMENT_RETRY_WAIT_FRAMES = 12
 GYM_EVENTS = tuple(
     EventFlag(int(EventFlag.BEAT_CELADON_GYM_TRAINER_0) + index) for index in range(7)
 )
@@ -363,6 +365,9 @@ def run_erika_chapter(
     optional_events_before = _optional_route_events(emulator)
     if initial.first_party_level is None:
         raise ErikaChapterError("Route training lacks a live lead level.")
+    if initial.first_party_level == 40 and _bag(emulator).get(ItemId.RARE_CANDY, 0) == 1:
+        _use_route_training_rare_candy(actions, reader, emulator, timing)
+        initial = reader.read()
     route_training = _RouteTrainingState(
         starting_level=initial.first_party_level,
         # Stop at the already-qualified level-41 training boundary. The Safari
@@ -456,6 +461,19 @@ def run_erika_chapter(
         )
     except SilphChapterError as error:
         raise ErikaChapterError("Celadon Poké Flute cleanup failed.") from error
+    if _bag(emulator).get(ItemId.RARE_CANDY, 0) == 1:
+        try:
+            _deposit_pc_item(
+                actions,  # type: ignore[arg-type]
+                reader,
+                emulator,
+                ItemId.RARE_CANDY,
+                DEFAULT_SILPH_TIMING,
+            )
+        except SilphChapterError as error:
+            raise ErikaChapterError("Celadon Rare Candy cleanup failed.") from error
+    if ItemId.RARE_CANDY in _bag(emulator):
+        raise ErikaChapterError("Celadon cleanup left the surplus Rare Candy in the bag.")
     _move(
         actions,
         reader,
@@ -721,6 +739,9 @@ def _move(
                 break
             if allow_trigger and index == len(route):
                 return
+            # Release the direction between attempts so moving overworld NPCs
+            # can vacate a temporarily occupied route tile.
+            _wait(actions, MOVEMENT_RETRY_WAIT_FRAMES * (_ + 1))
         else:
             current = reader.read()
             raise ErikaChapterError(
@@ -742,7 +763,7 @@ def _route_training_safe(raw: RawGameState) -> bool:
         hp is not None
         and maximum is not None
         and maximum > 0
-        and hp / maximum >= 0.35
+        and hp / maximum >= 0.75
         and any(
             len(moves) >= slot
             and len(pp) >= slot
@@ -758,7 +779,12 @@ def _route_training_move_slot(raw: RawGameState) -> int:
 
     moves = raw.battler_moves or ()
     pp = raw.battler_pp or ()
-    ranking = (4, 3, 1, 2) if (raw.active_party_index or 0) == 0 else (1, 4, 3, 2)
+    if raw.enemy_species_id == BLASTOISE_SPECIES_ID:
+        # Route 15 Ditto can transform into Blastoise.  Do not keep feeding
+        # resisted Water attacks into the copy; use neutral Strength instead.
+        ranking = (2, 1, 4, 3)
+    else:
+        ranking = (4, 3, 1, 2) if (raw.active_party_index or 0) == 0 else (1, 4, 3, 2)
     for slot in ranking:
         if (
             len(moves) >= slot
@@ -1022,6 +1048,56 @@ def _teach_tm40_skull_bash(
             return
         _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
     raise ErikaChapterError("TM40 did not replace Bite and consume the TM.")
+
+
+def _use_route_training_rare_candy(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: ErikaTiming,
+) -> None:
+    """Use a surplus Tower candy for the level-41 curriculum boundary."""
+
+    before = reader.read()
+    before_moves = before.first_party_moves
+    if (
+        before.first_party_level != 40
+        or before_moves != (0x2C, STRENGTH, 0x3D, 0x39)
+        or _bag(emulator).get(ItemId.RARE_CANDY, 0) != 1
+        or not reader.read_input_readiness().ready
+    ):
+        raise ErikaChapterError(
+            "Route-training Rare Candy lacks its level-40 field boundary."
+        )
+
+    menu_timing = LavenderTiming(wait_frames=timing.movement_frames)
+    _open_bag(actions, emulator, menu_timing)  # type: ignore[arg-type]
+    _select_bag_item(  # type: ignore[arg-type]
+        actions, emulator, ItemId.RARE_CANDY, menu_timing
+    )
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    for _ in range(timing.dialogue_pulses):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (0, 1):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    else:
+        raise ErikaChapterError("Route-training Rare Candy did not reach party selection.")
+    _select_cursor(actions, emulator, 0, menu_timing)  # type: ignore[arg-type]
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    for _ in range(64):
+        current = reader.read()
+        if (
+            current.first_party_level == 41
+            and current.first_party_moves == before_moves
+            and _bag(emulator).get(ItemId.RARE_CANDY, 0) == 0
+        ):
+            _close_menus(actions, reader, menu_timing)  # type: ignore[arg-type]
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    raise ErikaChapterError("Route-training Rare Candy did not establish level 41.")
 
 
 def _cut(actions, reader, emulator, timing, facing, expected_tile, label) -> None:

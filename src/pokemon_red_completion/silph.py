@@ -73,6 +73,7 @@ SILPH_NET_MONEY_DELTA = -1_951
 SILPH_PREINSTALLED_TM13_NET_MONEY_DELTA = SILPH_NET_MONEY_DELTA + FRESH_WATER_PRICE
 HYPER_POTION_PURCHASE_QUANTITY = 7
 HYPER_POTION_PRICE = 1_500
+SILPH_RIVAL_RECOVERY_HP = 80
 SILPH_PC_DEPOSIT_ITEMS = (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
 STATUS_FLAGS_4 = 0xD72E
 GOT_LAPRAS_MASK = 0x01
@@ -1505,52 +1506,17 @@ def _run_rival_with_potions(
 ) -> None:
     potion_start = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     _battle_x_special(reader, actions, emulator, timing)
-    completed = _run_until(
-        reader,
-        actions,
-        _silph_rival_move_slot,
-        lambda raw: raw.enemy_species_id == 154,
-        "Silph rival to Venusaur",
-        RedBattlePlanId.SILPH_7F_RIVAL,
-    )
-    if completed:
-        raise SilphChapterError("Rival battle ended before the Venusaur gate.")
-    venusaur = reader.read()
-    if (venusaur.first_party_hp or 0) < (venusaur.first_party_max_hp or 110):
-        _battle_hyper_potion(reader, actions, emulator, timing)
-    else:
+    for recovery in range(min(2, potion_start)):
         completed = _run_until(
             reader,
             actions,
             _silph_rival_move_slot,
-            lambda raw: (
-                raw.enemy_species_id == 154
-                and (raw.first_party_hp or 0) < (raw.first_party_max_hp or 110)
-                and _bag(emulator).get(ItemId.HYPER_POTION, 0) == potion_start
-            ),
-            "Silph rival Venusaur recovery gate",
+            lambda raw: 0 < (raw.first_party_hp or 0) <= SILPH_RIVAL_RECOVERY_HP,
+            f"Silph rival bounded recovery {recovery + 1}",
             RedBattlePlanId.SILPH_7F_RIVAL,
         )
         if completed:
             return
-        _battle_hyper_potion(reader, actions, emulator, timing)
-    already_used = potion_start - _bag(emulator).get(ItemId.HYPER_POTION, 0)
-    for recovery in range(max(0, 2 - already_used)):
-        completed = _run_until(
-            reader,
-            actions,
-            _silph_rival_move_slot,
-            lambda raw: (
-                raw.enemy_species_id == 154
-                and 0 < (raw.first_party_hp or 0) <= 60
-            ),
-            f"Silph rival Venusaur bounded recovery {recovery + 1}",
-            RedBattlePlanId.SILPH_7F_RIVAL,
-        )
-        if completed:
-            return
-        if _bag(emulator).get(ItemId.HYPER_POTION, 0) <= 0:
-            break
         _battle_hyper_potion(reader, actions, emulator, timing)
     _run_battle(
         reader,
@@ -1567,7 +1533,7 @@ def _silph_rival_move_slot(raw: RawGameState) -> int:
     if raw.enemy_species_id in {151, 154}:
         priorities = (3, 4, 2, 1)
     elif raw.enemy_species_id == 22:
-        priorities = (2, 4, 3, 1)
+        priorities = (3, 2, 4, 1)
     else:
         priorities = (4, 2, 3, 1)
     pp = raw.first_party_pp or ()

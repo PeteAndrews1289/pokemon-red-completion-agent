@@ -233,6 +233,14 @@ def test_silph_rival_policy_uses_live_disable_and_pp() -> None:
     )
     assert _silph_rival_move_slot(surf_empty) == 2
 
+    transformed_water_flying_matchup = replace(
+        surf_disabled,
+        enemy_species_id=22,
+        player_disabled_move_slot=0,
+        player_disable_turns=0,
+    )
+    assert _silph_rival_move_slot(transformed_water_flying_matchup) == 3
+
 
 def test_roof_girl_interaction_retries_until_dialogue_opens() -> None:
     raw = replace(

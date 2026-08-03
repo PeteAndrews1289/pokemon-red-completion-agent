@@ -275,13 +275,16 @@ slots remain pending, and the test partition remains unopened until a model and 
 rules are frozen.
 
 The first rehearsal of the published combined source cleared Route 24 and Route 25, then exposed a
-remaining Wrap lock at Rock Tunnel checkpoint 109/312. It consumed no slot. The working repair
-assigns both final Grass-heavy trainers to the prepared DUX/Peck specialist, restores the story
-lead afterward, acquires Safari Zone TM40 for the later Skull Bash lesson, and prevents duplicate
-battle-item confirmations. The exact revised source has now completed a clean-power
-**312/312-checkpoint**, **36/36-objective** Hall-of-Fame replay in **762,318 actions**. Its
-six-member Mansion curriculum recorded **4,236 wins**, a level-77 floor, and a five-level spread.
-Registry freeze and the next uncounted 68-battle rehearsal are the current gates.
+remaining Wrap lock at Rock Tunnel checkpoint 109/312. A later uncounted rehearsal exposed an
+unsafe low-HP DUX finisher at the same chapter; neither attempt consumed a slot. The current repair
+removes that finisher, proves the tunnel potion floor, chooses Bite against Slowpoke after required
+move evidence, escapes status-locked DUX matchups, and preserves the legal natural-evolution path.
+A surplus Tower Rare Candy now establishes the level-41 TM40 lesson boundary, moving Celadon NPCs
+receive neutral retry windows, and the Silph rival receives type-aware Ice Beam plus bounded
+whole-battle recovery. This exact source completed a clean-power **312/312-checkpoint**,
+**36/36-objective** Hall-of-Fame replay in **762,804 actions**. Its six-member Mansion curriculum
+recorded **4,236 wins**, a level-77 floor, and a five-level spread. Registry freeze and the next
+uncounted 68-battle rehearsal are the current gates.
 
 ## Milestone 4 — DAgger and selective RL
 

@@ -301,7 +301,6 @@ class TowerChapterReport:
             and self.optional_events == (False,) * len(OPTIONAL_EVENTS)
             and self.required_events == (True,) * len(REQUIRED_EVENTS)
             and self.x_accuracy_carried
-            and self.rare_candy_used_for_evolution
             and self.elixir_carried
             and self.poke_flute_carried
             and self.evolution_before == PROTECTED_PARTY

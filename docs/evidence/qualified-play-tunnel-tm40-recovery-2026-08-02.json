@@ -2,11 +2,11 @@
   "schema": "pokemon-red-qualified-play-receipt-v1",
   "recorded_on": "2026-08-02",
   "status": "passed",
-  "claim_scope": "One uninterrupted clean-power deterministic-teacher run qualified the prepared DUX Rock Tunnel assignments, the Safari Zone TM40 Skull Bash lesson, semantic single-use battle recovery, the balanced six-member curriculum, and Hall-of-Fame completion. The collection rehearsal, counted train/validation runs, learned-policy rollout, obtainable Pokédex completion, level-100 collection, and cross-game transfer remain open.",
+  "claim_scope": "One uninterrupted clean-power deterministic-teacher run qualified type-aware and reserve-bounded Rock Tunnel recovery, natural-or-item evolution handling, the level-41 Rare Candy and TM40 Skull Bash lessons, transient-NPC movement recovery, adaptive Silph rival healing, the balanced six-member curriculum, and Hall-of-Fame completion. The collection rehearsal, counted train/validation runs, learned-policy rollout, obtainable Pokédex completion, level-100 collection, and cross-game transfer remain open.",
   "source_identity": {
-    "collection_registry_sha256": "28704f41edabe43c55fbb2c9ac33af46fa5a01b03efeec0f328c22e3bfe0d786",
-    "source_bundle_sha256": "5d303b7a93c7e446e4c4844ea8049b03092d46b238c0ede6ef275fac162bc472",
-    "teacher_execution_sha256": "f62d9cfa92fd308f9ec58ef6ec7e210a60e7e2813c2d354f0b32425bfce182a2"
+    "collection_registry_sha256": "0b1cca9c0db0277539c0bac545f3e4e3d6ac41caa5bd94466cff6998c2bae72d",
+    "source_bundle_sha256": "c0a09aa27b70efd7c95c3d808755f9f5b7bd096b1422bed95cab77eddb4cb0ed",
+    "teacher_execution_sha256": "d130c25dae056103313ed7473871c6ca2d8ca5f3a887f301b1bba0cebbaf3912"
   },
   "evaluation": {
     "clean_power_on": true,
@@ -21,13 +21,19 @@
     "objectives_total": 36,
     "champion_defeated": true,
     "hall_of_fame_entered": true,
-    "actions_executed": 762318
+    "actions_executed": 762804
   },
   "qualified_lessons": {
     "prepared_dux_final_tunnel_trainers": true,
-    "tower_rare_candy_evolution": true,
+    "dux_status_escape": true,
+    "slowpoke_type_aware_bite": true,
+    "natural_or_rare_candy_evolution": true,
+    "route_level_41_rare_candy_used": true,
     "safari_tm40_collected": true,
     "tm40_skull_bash_taught": true,
+    "transient_npc_movement_retry": true,
+    "silph_water_flying_ice_beam": true,
+    "silph_bounded_rival_recovery": true,
     "sabrina_hyper_potions_used": 1,
     "duplicate_battle_item_consumption": false
   },
