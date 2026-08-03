@@ -114,6 +114,7 @@ ROUTE7_GATE = _directions("DDDD")
 ROUTE7_TO_CELADON = _directions("RRRUUUUUULLLLUUUUULLLLL")
 CELADON_CENTER_ENTRY = _directions("ULLLLLLLLU")
 CENTER_EXIT = _directions("DDDDD")
+CENTER_EXIT_TWO = _directions("LDDRDD")
 CITY_TO_OUTER_TREE = _directions("DDDLDLLLDDDDDDDDDLLLLLLLLLLLLDDDDDRRRRRRRRRRDDD")
 LOWER_CITY_TO_GYM = _directions("DDLLULLLLLLLLLLLLULLLLLLLLLLLLLLLLUUURRRRRRRU")
 GYM_EXIT = _directions("DDLDDDDDDDDD")
@@ -568,7 +569,7 @@ def run_erika_chapter(
         "Recovered after trainers",
     )
 
-    _move(actions, reader, emulator, CENTER_EXIT, timing, "Center exit two")
+    _move(actions, reader, emulator, CENTER_EXIT_TWO, timing, "Center exit two")
     _move(actions, reader, emulator, CITY_TO_OUTER_TREE, timing, "outer tree two")
     _cut(actions, reader, emulator, timing, "down", 0x2C, "outer Cut two")
     _move(actions, reader, emulator, ("down",), timing, "outer crossing two")

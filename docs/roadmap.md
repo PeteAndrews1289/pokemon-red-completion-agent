@@ -361,6 +361,9 @@ The funded replay caught Snorlax in six throws and advanced through Koga to the 
 trainers, where a Center NPC occupied the first exit tile beyond eight bounded waits. The existing
 release-and-observe movement primitive now covers sixteen waits, preserving the route while
 allowing a full longer NPC cycle to vacate the tile.
+The replay proved that sixteen waits can still leave the NPC parked. The second Center exit now
+uses the legal side corridor around that occupied tile and rejoins the same doorway below it,
+removing NPC timing from this transition while retaining collision and destination checks.
 
 ## Milestone 4 — DAgger and selective RL
 

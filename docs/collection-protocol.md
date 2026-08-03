@@ -57,6 +57,10 @@ The funded replay caught Snorlax in six throws and continued through Koga and th
 trainers before a wandering Center NPC occupied the first exit tile beyond the original eight
 bounded waits. Movement now retains the same release-and-observe semantics with sixteen bounded
 waits, covering a complete longer NPC cycle without teleporting or changing the route.
+The exact replay showed the NPC can remain parked while the player waits directly above it even
+through that longer window. The second Center exit now uses the legal open side corridor around
+the occupied tile and rejoins the same doorway below it; no collision retry or NPC timing is
+required for that handoff.
 
 The now-retired v2 registry began as a prospective campaign with fresh counted seeds.
 Its first uncounted dry run reached checkpoint 70 before a walking Cerulean NPC blocked the Route 6
@@ -189,13 +193,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `43c0469e1995237bbb64a19ab403dd6f6af2dc02fbc0f87f6a0daddb24c47e99` |
-| Source bundle SHA-256 | `d2e7d0543848766d2b11364b18bfbfd33b61c8b0d1256dc3b71ed60767bdab38` |
+| Registry SHA-256 | `454fd488c0ed9e1e2683b01da86e06b27d9141e58a33322e053e3b6e38de4154` |
+| Source bundle SHA-256 | `7356570ce8f0a8cffd30ddff3044289aca5d1a3edfcf83b751ddd6eb1a7143e5` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `00a1fe99446f7587e7a6a10a66d8320a0456c6ed5a3bb494c3e2bed79ff0ce7b` |
+| Teacher execution SHA-256 | `8d972526cc203ed25d162f1127a157e62de24ab5f31357d14fef2ab8dda7a997` |
 | Dry-run schedule SHA-256 | `20af81ca8cf4c92f45c4fd2d8ed2019dee6b51e6ebe29e384f90824525d5c484` |
-| Slot `01` assignment ID | `36ddf0e712768d2452a6a2054a35e06463469fd3c1148ccdd2bb91c17416e2ab` |
+| Slot `01` assignment ID | `aa00b27fae674eb8ca599f386bbcee630fb736ece72a615fd61a3010ef7d4124` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

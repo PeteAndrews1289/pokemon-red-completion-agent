@@ -5,6 +5,7 @@ import pytest
 import pokemon_red_completion.erika as erika_module
 from pokemon_red_completion.erika import (
     BLASTOISE_SPECIES_ID,
+    CENTER_EXIT_TWO,
     DEFAULT_ERIKA_TIMING,
     ERIKA_CHECKPOINT_COUNT,
     ERIKA_CLASS,
@@ -41,6 +42,7 @@ def _terminal() -> RawGameState:
 def test_erika_timing_is_positive_and_bounded() -> None:
     assert MOVEMENT_RETRY_WAIT_FRAMES == 12
     assert DEFAULT_ERIKA_TIMING.movement_retries == 16
+    assert CENTER_EXIT_TWO == ("left", "down", "down", "right", "down", "down")
     assert all(
         isinstance(getattr(DEFAULT_ERIKA_TIMING, field.name), int)
         and getattr(DEFAULT_ERIKA_TIMING, field.name) > 0
