@@ -269,6 +269,10 @@ accepted, while retaining the cursor-tile, party-range, species, and target-HP g
 Because the first confirm left the full snapshot and cursor pointer unchanged, elapsed attempts are
 no longer accepted as progress. The pre-faint cursor address is retained and party selection is
 permitted only after a different valid live cursor address appears.
+The exact branch remained unable to restore MAIN because Pikachu could outspeed and knock out the
+low-level helper before it acted. Pikachu is now a Red-adapter direct-throw target behind the
+durable lead. Passive Metapod and Kakuna still exercise weaken-then-throw; the threatening target
+uses its high catch rate and the same five-throw limit without deliberately sacrificing a helper.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
@@ -322,13 +326,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `8c45d14516c578aec797dc100f10735702a7122979c81d61203b1baca8b4b0e6` |
-| Source bundle SHA-256 | `7ca841059e9f2c853c98ea991e4a57c99e714f8be3c4cff39e5e1c9317a24e7f` |
+| Registry SHA-256 | `87d9409f59dc436558486ec7e0eb4d752206919a3ed8fafe8bd496e26f616205` |
+| Source bundle SHA-256 | `fd8d24aeabca79d759bdc1d44b3d10ea844685bf5fe2121ff62c20145989d6df` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `4236431cf205e311750ec37357540d117dc15a5f7b63de41971a58cf63fc89d0` |
+| Teacher execution SHA-256 | `a5bdc52d4b6eec1556f41cf17475f8306a63a5a8b5b2d0f6a493506d3bfe80b1` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `006815d01d1d98b35e7dcd23c189bd24899d3be1c30f161d0af1d6e4483d1799` |
+| Slot `01` assignment ID | `daa097b8d09c66e25ecf5ae0e9876c642c2d74c0f46a8aff77bc229a23551965` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

@@ -81,6 +81,7 @@ WILD_CAPTURE_POLICY = CapturePolicy(
     prefer_status_first=False,
     max_throws=WILD_CAPTURE_THROWS_PER_ENCOUNTER,
 )
+WILD_CAPTURE_DIRECT_THROW_SPECIES = frozenset({PIKACHU_SPECIES_ID})
 SPEAROW_CAPTURE_MOVE_ID = 0x37
 SPEAROW_CAPTURE_MOVE_SLOT = 4
 SPEAROW_WEAKEN_ATTEMPT_LIMIT = 12
@@ -1644,7 +1645,11 @@ class _LiveWildCorridorSurveyExecutor:
         if raw.enemy_species_id is None:
             raise RedAreaExecutionError(f"{self._label} capture lacks an enemy species")
         party = self._party_reader.read()
-        helper = _select_wild_capture_helper(party)
+        helper = (
+            None
+            if raw.enemy_species_id in WILD_CAPTURE_DIRECT_THROW_SPECIES
+            else _select_wild_capture_helper(party)
+        )
         if helper is not None and raw.enemy_hp is not None and raw.enemy_max_hp is not None:
             helper_index, _ = helper
             catcher = party.members[helper_index]
