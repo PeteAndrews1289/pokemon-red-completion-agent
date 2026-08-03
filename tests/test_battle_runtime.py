@@ -488,6 +488,60 @@ class OffSlotSleepPPSimulation(SleepRecoverySimulation):
             self.raw = replace(self.raw, first_party_pp=tuple(pp))
 
 
+class MainMenuSleepRecoverySimulation(FakeRuntime):
+    """Model Gen I returning to MAIN between suppressed sleeping turns."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.sleep_started = False
+
+    def execute(self, action: MacroAction) -> None:
+        self.actions.append(action)
+        if action.kind is MacroActionKind.WAIT:
+            return
+        if action.kind is MacroActionKind.CANCEL:
+            assert self.menu.phase is BattleMenuPhase.MOVE
+            self.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+            return
+        if action.kind is MacroActionKind.MOVE:
+            if self.menu.phase is BattleMenuPhase.MAIN:
+                assert action.value == "up"
+                self.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+                return
+            raise AssertionError("unexpected move-menu navigation in sleep simulation")
+        if action.kind is not MacroActionKind.CONFIRM:
+            raise AssertionError(f"unsupported sleep simulation action {action.kind}")
+        if self.raw.battle_state == 0:
+            self.controls = READY
+            return
+        if self.menu.phase is BattleMenuPhase.MAIN:
+            if not self.sleep_started:
+                self.sleep_started = True
+                self.raw = replace(self.raw, first_party_status=3)
+                self.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+            else:
+                self.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+            return
+        if self.menu.phase is BattleMenuPhase.UNKNOWN:
+            self.raw = replace(self.raw, first_party_status=2)
+            self.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=1)
+            return
+        count = (self.raw.first_party_status or 0) & 0x07
+        if count:
+            next_count = count - 1
+            self.raw = replace(self.raw, first_party_status=next_count)
+            self.menu = (
+                BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+                if next_count == 0
+                else BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=1)
+            )
+            return
+        pp = list(self.raw.first_party_pp or ())
+        pp[0] -= 1
+        self.raw = replace(self.raw, first_party_pp=tuple(pp), battle_state=0, enemy_hp=0)
+        self.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+
 class TerminalWildSleepSimulation(SleepRecoverySimulation):
     def execute(self, action: MacroAction) -> None:
         ending_sleep_turn = (
@@ -539,6 +593,23 @@ def test_adaptive_controller_bounds_but_survives_a_long_sing_sequence() -> None:
     assert final.first_party_status == 0
     assert final.first_party_pp == (34, 30, 30, 11)
     assert runtime.sleep_dialogue_pulses == 0
+
+
+def test_sleep_recovery_reenters_fight_after_each_suppressed_turn() -> None:
+    runtime = MainMenuSleepRecoverySimulation()
+
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        lambda raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
+        timing=BattleRuntimeTiming(max_move_menu_transition_pulses=1),
+    )
+
+    assert final.battle_state == 0
+    assert final.first_party_status == 0
+    assert final.first_party_pp == (34, 30, 30, 11)
+    assert MacroAction(MacroActionKind.MOVE, "up") in runtime.actions
 
 
 def test_sleep_recovery_rejects_an_off_slot_pp_decrement() -> None:

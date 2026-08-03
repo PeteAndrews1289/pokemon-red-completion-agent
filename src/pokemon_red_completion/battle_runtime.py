@@ -1054,6 +1054,73 @@ def _recover_sleep_transition(
         if raw.battler_pp != initial_pp_vector:
             raise BattleRuntimeError(f"{label} changed an off-slot PP value during sleep recovery.")
 
+        menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+        if menu.phase is BattleMenuPhase.MAIN:
+            for _ in range(timing.max_main_navigation_pulses + 1):
+                command = menu.selected_main_command
+                if command == _FIGHT_COMMAND:
+                    break
+                direction = {1: "up", 2: "left", 3: "up"}.get(command)
+                if direction is None:
+                    raise BattleRuntimeError(
+                        f"{label} exposed an invalid command during sleep recovery."
+                    )
+                _pulse(
+                    executor,
+                    MacroAction(MacroActionKind.MOVE, direction),
+                    timing.menu_wait_frames,
+                )
+                raw = reader.read()
+                _require_active_trainer_state(raw, expected_map=expected_map, label=label)
+                menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+                if menu.phase is not BattleMenuPhase.MAIN:
+                    raise BattleRuntimeError(
+                        f"{label} left MAIN while navigating sleep recovery."
+                    )
+            else:
+                raise BattleRuntimeError(
+                    f"{label} could not navigate to FIGHT during sleep recovery."
+                )
+            _pulse(
+                executor,
+                MacroAction(MacroActionKind.CONFIRM),
+                timing.menu_wait_frames,
+            )
+            raw = reader.read()
+            _require_active_trainer_state(raw, expected_map=expected_map, label=label)
+            menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+
+        if menu.phase is BattleMenuPhase.MOVE:
+            for _ in range(timing.max_move_navigation_pulses + 1):
+                selected_slot = menu.selected_move_slot
+                if selected_slot == slot:
+                    break
+                if selected_slot is None:
+                    raise BattleRuntimeError(
+                        f"{label} exposed an invalid move cursor during sleep recovery."
+                    )
+                _pulse(
+                    executor,
+                    MacroAction(
+                        MacroActionKind.MOVE,
+                        "down" if selected_slot < slot else "up",
+                    ),
+                    timing.menu_wait_frames,
+                )
+                raw = reader.read()
+                _require_active_trainer_state(raw, expected_map=expected_map, label=label)
+                menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+                if menu.phase is not BattleMenuPhase.MOVE:
+                    raise BattleRuntimeError(
+                        f"{label} left MOVE while navigating sleep recovery."
+                    )
+            else:
+                raise BattleRuntimeError(
+                    f"{label} could not restore its move cursor during sleep recovery."
+                )
+
+        if menu.phase not in {BattleMenuPhase.MOVE, BattleMenuPhase.UNKNOWN}:
+            raise BattleRuntimeError(f"{label} exposed an invalid sleep-recovery phase.")
         _pulse(
             executor,
             MacroAction(MacroActionKind.CONFIRM),

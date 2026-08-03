@@ -38,8 +38,11 @@ Stable MAIN states now pass back through the semantic move selector, which norma
 proves the chosen move's PP decrement. The next replay passed both repaired trainers, then field
 poison fainted Wartortle during the return walk to the Center. Route 24 now invokes the existing
 exact Antidote cure at the stable post-bridge boundary before any movement, preserving all four
-Potions and one Antidote for downstream routes. The complete v4 rehearsal is required before any
-v4 counted slot can begin.
+Potions and one Antidote for downstream routes. That replay then reached the Rocket thief, where
+Drowzee sleep returned to MAIN between suppressed turns and exposed a dialogue-only recovery
+assumption. The shared battle runtime now normalizes MAIN to FIGHT and MOVE to the latched legal
+slot on every sleeping turn while preserving the exact unchanged-PP proof. The complete v4
+rehearsal is required before any v4 counted slot can begin.
 
 Historically, the v3 registry had twelve fresh counted seeds. Its
 uncounted dry seed `12001` deliberately replays the exact schedule that exposed the v2 failure;
@@ -239,13 +242,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `07b137a3d94b1fb02e5d64529c5d4a5da3a680ceda84e57c7e8621320a88524d` |
-| Source bundle SHA-256 | `3150eb8a2cc3aa7b6e53bb44a1d9e74797d290966459e09d86964a77fcd55e19` |
+| Registry SHA-256 | `4504de35a901c9962cddf509f2bb31d52b459c5d9c74a134fa6e426ca07e19f1` |
+| Source bundle SHA-256 | `dd6d7ec9923810a169ad093143021ba4b03336608acac69cf4ac4db0ee85ed8e` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `152639e7b5379cc9679bba835d1edee317a0789d83cfc15f08bb7f66b73e244a` |
+| Teacher execution SHA-256 | `1c2e6500e7153c18576917fea40c68be6593b135cf73d66e4f304ea03920aadf` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `bc92d66180fce31fa92c3acac25c10cc4c4abcb797b29d103a90d95c39a8a5f8` |
+| Slot `01` assignment ID | `cd8fe8a2cd7f35a10b078f22c16bce762d08485125fa89929a31fb189f647c55` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
