@@ -60,6 +60,7 @@ FINAL_TUNNEL_RECOVERY_THRESHOLD = 90
 FINAL_TUNNEL_GRASS_SPECIES = frozenset({0xB9, 0xBA, 0xBC, 0xBD})
 SLOWPOKE_SPECIES_ID = 0x25
 ROUTE_9_MIN_SUPER_POTION_RESERVE = 5
+TUNNEL_SUPER_POTIONS_PURCHASED = 10
 TUNNEL_AWAKENINGS_PURCHASED = 1
 TUNNEL_AWAKENING_RESERVE = 2
 TM28_SALE_PROCEEDS = 1_000
@@ -420,13 +421,14 @@ def run_lavender_chapter(
     _wait(actions, POST_MART_RNG_ALIGNMENT_FRAMES)
     supplies = reader.read()
     if (
-        _bag(emulator).get(ItemId.SUPER_POTION) != initial_sp + 12
+        _bag(emulator).get(ItemId.SUPER_POTION)
+        != initial_sp + TUNNEL_SUPER_POTIONS_PURCHASED
         or _bag(emulator).get(ItemId.PARLYZ_HEAL) != 1
         or _bag(emulator).get(ItemId.AWAKENING) != TUNNEL_AWAKENING_RESERVE
         or _bag(emulator).get(ItemId.REPEL) != 4
     ):
         raise LavenderChapterError(
-            "Mart purchase did not produce the twelve-potion purchase plus the observed "
+            "Mart purchase did not produce the ten-potion purchase plus the observed "
             "starting reserve, two Awakenings, "
             "one Parlyz Heal, and four Repels."
         )
@@ -926,7 +928,7 @@ def run_lavender_chapter(
         awakenings_used=run.awakenings_used,
         awakenings_remaining=_bag(emulator).get(ItemId.AWAKENING, 0),
         starting_super_potions=initial_sp,
-        super_potions_purchased=12 + top_up_quantity,
+        super_potions_purchased=TUNNEL_SUPER_POTIONS_PURCHASED + top_up_quantity,
         super_potions_used=run.potions_used,
         super_potions_remaining=_bag(emulator).get(ItemId.SUPER_POTION, 0),
         purchase_cost=tunnel_purchase_cost + top_up_cost,
@@ -1870,8 +1872,8 @@ def _purchase_supplies(
         timing,
         absolute_index=1,
         item=ItemId.SUPER_POTION,
-        quantity=12,
-        target_bag_quantity=starting_super_potions + 12,
+        quantity=TUNNEL_SUPER_POTIONS_PURCHASED,
+        target_bag_quantity=starting_super_potions + TUNNEL_SUPER_POTIONS_PURCHASED,
     )
     _buy_mart_item(
         executor,
@@ -1903,7 +1905,7 @@ def _purchase_supplies(
     _close_menus(executor, reader, timing)
     money_after = _money(emulator)
     expected_cost = (
-        12 * SUPER_POTION_PRICE
+        TUNNEL_SUPER_POTIONS_PURCHASED * SUPER_POTION_PRICE
         + TUNNEL_AWAKENINGS_PURCHASED * AWAKENING_PRICE
         + PARLYZ_HEAL_PRICE
         + 4 * REPEL_PRICE

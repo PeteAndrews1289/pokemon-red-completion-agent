@@ -456,10 +456,13 @@ The next exact replay proved the recovery and Dig-only win through the complete 
 then exposed a stale Lavender entrance assumption that required the reserved potion to remain in
 the bag. The handoff now accepts the proven zero-or-one outcome and retains the later exact
 money-and-inventory proof when topping up to the fixed twelve-potion reserve.
-The following replay reached checkpoint 102 and exposed the associated ₽700 replacement cost. The
-Vermilion purchase now remains the same affordable twelve-potion allocation, while the evidence
+The following replay reached checkpoint 102 and exposed the associated ₽700 replacement cost. Its
+intermediate repair retained the planned allocation while the evidence
 report records the observed starting reserve and proves exact potion conservation. The later TM28
 sale funds any required Lavender top-up, preserving the fixed downstream reserve.
+The 30-ball curriculum also displaced the ₽1,400 required for four Rock Tunnel Repels. The tunnel
+allocation is now ten Super Potions—twice the proven five-potion Route 9 floor—plus all four Repels,
+with the unchanged Lavender top-up restoring twelve for downstream chapters.
 
 ## Evidence and project status
 
