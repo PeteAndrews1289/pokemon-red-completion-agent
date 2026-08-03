@@ -46,9 +46,13 @@ self-destructing Hiker sequence and carries a second Parlyz Heal for the later G
 preserving both executable teaching evidence and status robustness.
 That replay then cleared Rock Tunnel, Rocket Hideout, and Pokémon Tower before consuming the
 ten-Great-Ball reserve plus all surviving Poké Balls at the one-time Route 12 Snorlax. The teacher
-now buys a completion-oriented thirty-Great-Ball reserve with a forty-throw total bound and sells
+now buys a completion-oriented twenty-five-Great-Ball reserve with a thirty-three-throw total bound and sells
 the remainder after capture. The static encounter no longer depends on leftovers from earlier
 species searches.
+An attempted thirty-ball reserve failed closed at the Mart because its ₽19,400 combined capture
+and healing cost exceeded the live ₽16,897 balance. Twenty-five balls plus both Super Potions cost
+₽16,400, retain the recovery contract, and require neither selling future-use TMs nor relying on
+earlier Poké Ball leftovers.
 
 The now-retired v2 registry began as a prospective campaign with fresh counted seeds.
 Its first uncounted dry run reached checkpoint 70 before a walking Cerulean NPC blocked the Route 6
@@ -181,13 +185,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `d739b8b700a8fdf71eec31fb8dd1be0d5634e2f235fda90ddf107325bc01cec7` |
-| Source bundle SHA-256 | `e033f5153fc312431f942a8c7891df9bef4b63e8ad06e2017ff4f1f1a42a94ce` |
+| Registry SHA-256 | `241e77300c7dd64ea1af4c12e5aee16ea0ed2aaecd8d165097e6c89f599f6f84` |
+| Source bundle SHA-256 | `622341adcb198258e5b51d954a50c2b0a34ca2e7b912af6cbc7d35d987fb3bfe` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `61da8659fe39b90c116ce87ab2e945dd47243e5103c0a1fe42138121827b04ae` |
+| Teacher execution SHA-256 | `1c0313097261576de72b1fb53d39e20bfdde90625d9417e8d92ea00007dffeba` |
 | Dry-run schedule SHA-256 | `20af81ca8cf4c92f45c4fd2d8ed2019dee6b51e6ebe29e384f90824525d5c484` |
-| Slot `01` assignment ID | `c421fc4faf978ea80e46565e15541e3475f1c838e956085a36c6a12806ae542f` |
+| Slot `01` assignment ID | `737a41ab4ef23e2f324004a3d2869e0d6d0efe8a9d7b1b9b4ebb7f532043cb18` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

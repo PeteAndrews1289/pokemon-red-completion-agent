@@ -41,8 +41,8 @@ def _raw() -> RawGameState:
 
 
 def test_battle_bag_selection_can_move_backward_after_a_ball_throw(monkeypatch) -> None:
-    assert fuchsia_module.SNORLAX_GREAT_BALL_RESERVE == 30
-    assert fuchsia_module.SNORLAX_CAPTURE_POLICY.max_throws == 40
+    assert fuchsia_module.SNORLAX_GREAT_BALL_RESERVE == 25
+    assert fuchsia_module.SNORLAX_CAPTURE_POLICY.max_throws == 33
 
     class Emulator:
         cursor = 2
