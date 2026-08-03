@@ -795,3 +795,10 @@ The adapter now derives its finite weakening budget from observed current HP, ma
 policy threshold, assuming only the game's minimum one damage per landed hit and retaining a hard
 32-attack ceiling. Ordinary targets keep the eight-attack floor; passive Harden users receive only
 the additional observed work needed. The failed replay remains uncounted.
+
+The next replay successfully weakened and captured the passive target, then encountered a level-5
+Pikachu. Switching the level-3 Pidgey helper into Pikachu's attack caused an immediate faint before
+the helper could act. Pikachu is now explicitly restored to the high-risk direct-throw set: the
+healthy workhorse remains active and the teacher spends only the existing bounded five-ball
+allowance. This is a portable risk decision—avoid a fragile switch against a dangerous target—not
+an added retry, healing item, or encounter allowance. The replay was uncounted.
