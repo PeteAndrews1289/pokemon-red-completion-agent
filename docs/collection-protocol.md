@@ -780,3 +780,10 @@ Teaching the already-owned TM11 before boarding now replaces Mega Punch with Bub
 teacher uses BubbleBeam against Pidgeotto and Raticate, Bite against Kadabra and Ivysaur, and keeps
 Water Gun as a legal fallback. This changes no purchase budget or retry allowance. V5 remains
 immutable; the repair belongs exclusively to v6.
+
+The first v6 dry rehearsal learned BubbleBeam and reached the dock, but the dock checkpoint rejected
+the otherwise-valid state because its inherited Cascade invariant still required the consumable
+TM11 item to remain in the bag. The invariant now accepts either the unspent TM or observed
+BubbleBeam in the lead's live moveset. This preserves proof of the lesson instead of confusing item
+consumption with lost progress; the failed rehearsal was uncounted and v6 requires a fresh complete
+qualification on the corrected exact source.

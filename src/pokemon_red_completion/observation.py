@@ -674,6 +674,7 @@ TAIL_WHIP_MOVE_ID = 0x27
 MEGA_PUNCH_MOVE_ID = 0x05
 WATER_GUN_MOVE_ID = 0x37
 BUBBLE_MOVE_ID = 0x91
+BUBBLEBEAM_MOVE_ID = 0x3D
 BROCK_OPPONENT_ID = 0xEA
 BROCK_TRAINER_CLASS_ID = 0x22
 BROCK_GYM_LEADER_NUMBER = 1
@@ -4390,7 +4391,10 @@ def _vermilion_prior_chapter_complete(
             )
         )
         and ItemId.SS_TICKET in items
-        and ItemId.TM11_BUBBLEBEAM in items
+        and (
+            ItemId.TM11_BUBBLEBEAM in items
+            or BUBBLEBEAM_MOVE_ID in (raw.first_party_moves or ())
+        )
         and bool((raw.badge_bits or 0) & Badge.CASCADE)
         and bool(badge_mirror & Badge.CASCADE)
     )
