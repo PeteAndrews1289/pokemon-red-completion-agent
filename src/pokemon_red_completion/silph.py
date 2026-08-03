@@ -1865,7 +1865,7 @@ def _battle_healing_item(
     else:
         raise SilphChapterError("Could not select the party lead.")
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.battle_item_frames)
-    for _ in range(24):
+    for _ in range(BATTLE_ITEM_SETTLE_PULSES):
         current = reader.read()
         if (
             current.battle_state == 2
@@ -1879,8 +1879,8 @@ def _battle_healing_item(
     else:
         # The final bounded CANCEL can itself complete the enemy reply and
         # expose MAIN.  Observe that post-action state before declaring the
-        # wait exhausted; otherwise a legitimate transition on pulse 24 is
-        # rejected even though the semantic target has been reached.
+        # wait exhausted; otherwise a legitimate transition on the last pulse
+        # is rejected even though the semantic target has been reached.
         current = reader.read()
         phase = reader.read_battle_menu_state(current).phase
         if current.battle_state != 2 or phase is not BattleMenuPhase.MAIN:

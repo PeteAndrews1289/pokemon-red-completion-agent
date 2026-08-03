@@ -1,4 +1,5 @@
 from dataclasses import fields, replace
+from inspect import getsource
 from types import SimpleNamespace
 
 import pytest
@@ -24,6 +25,7 @@ from pokemon_red_completion.silph import (
     SilphChapterReport,
     SilphCheckpoint,
     SilphTiming,
+    _battle_healing_item,
     _interact_with_roof_girl,
     _mart_2f_girl_coordinate,
     _move_verified,
@@ -109,6 +111,11 @@ def test_silph_timing_is_positive_and_bounded() -> None:
         assert getattr(DEFAULT_SILPH_TIMING, field.name) > 0
         with pytest.raises(ValueError, match=field.name):
             replace(DEFAULT_SILPH_TIMING, **{field.name: 0})
+
+
+def test_battle_healing_uses_the_shared_long_settle_bound() -> None:
+    source = getsource(_battle_healing_item)
+    assert "for _ in range(BATTLE_ITEM_SETTLE_PULSES):" in source
 
 
 def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:

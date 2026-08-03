@@ -817,3 +817,11 @@ lineage and is neither necessary nor consistent with the developed-team contract
 level-79 Blastoise had both Surf and Ice Beam available. Lance now keeps the workhorse active,
 chooses the existing type-aware Aerodactyl move policy, and reserves helper switching only for an
 actual bounded recovery need. The uncounted rehearsal must restart on this exact source.
+
+The next exact-source rehearsal defeated Lance and reached the Champion's final level-65
+Alakazam with a level-80 Blastoise. The first recovery succeeded, but a later valid recovery was
+rejected after the opponent's Recover animation and reply outlasted the healing helper's
+twenty-four-frame settle window. Healing now uses the shared bounded battle-item settle allowance,
+continues to advance text with cancellation-only inputs, and still requires both a verified return
+to the trainer MAIN menu and an exact one-item decrement. This is an interaction-timing repair; it
+does not add an item, retry, party level, or battle attempt. The rehearsal remains uncounted.
