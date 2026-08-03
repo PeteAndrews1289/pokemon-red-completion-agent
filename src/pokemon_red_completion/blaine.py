@@ -1173,6 +1173,23 @@ class _PauseForTeamTrainingRecovery(Exception):
     """Request a safe escape when live PP or Disable removes every training attack."""
 
 
+def _mansion_training_move_slot(state: RawGameState) -> int:
+    """Rank live lead-training attacks while respecting temporary Disable."""
+
+    disabled = (
+        state.player_disabled_move_slot or 0
+        if (state.player_disable_turns or 0) > 0
+        else 0
+    )
+    slots = tuple(
+        slot for slot in MANSION_TRAINING_POLICY.preferred_move_slots if slot != disabled
+    )
+    try:
+        return choose_training_move_slot(state.battler_pp or (), slots)
+    except ValueError as error:
+        raise _PauseForTeamTrainingRecovery from error
+
+
 def _training_attack_pp(member: PartyMemberObservation) -> int:
     """Remaining PP on moves that can actually damage a training opponent."""
 
@@ -1734,18 +1751,23 @@ def _run_mansion_training(
                 continue
             if directive is not TrainingDirective.FIGHT:
                 raise BlaineChapterError(f"Invalid in-battle training directive {directive}.")
-            run_adaptive_wild_battle(
-                reader,
-                actions,
-                lambda state: choose_training_move_slot(
-                    state.first_party_pp or (), policy.preferred_move_slots
-                ),
-                expected_map=MapId.POKEMON_MANSION_1F,
-                intent=MANSION_LEAD_TRAINING_INTENT,
-                label="Pokémon Mansion training encounter",
-                unknown_cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
-                transient_zero_pp_main_is_dialogue=True,
-            )
+            try:
+                run_adaptive_wild_battle(
+                    reader,
+                    actions,
+                    _mansion_training_move_slot,
+                    expected_map=MapId.POKEMON_MANSION_1F,
+                    intent=MANSION_LEAD_TRAINING_INTENT,
+                    label="Pokémon Mansion training encounter",
+                    unknown_cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+                    transient_zero_pp_main_is_dialogue=True,
+                )
+            except BattleRuntimeError as error:
+                if not isinstance(error.__cause__, _PauseForTeamTrainingRecovery):
+                    raise
+                _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
+                battles_fled += 1
+                continue
             battles_won += 1
             continue
 

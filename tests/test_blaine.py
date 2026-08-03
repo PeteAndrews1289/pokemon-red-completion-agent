@@ -32,6 +32,7 @@ from pokemon_red_completion.blaine import (
     BlaineTurn,
     _battle_command_direction,
     _encounter_party,
+    _mansion_training_move_slot,
     _PauseForTeamTrainingRecovery,
     _red_training_matchup_acceptable,
     _sell_antidote_before_mansion,
@@ -89,6 +90,26 @@ def test_team_training_navigates_the_two_column_battle_menu() -> None:
     assert _battle_command_direction(3, 2) == "up"
     assert _battle_command_direction(2, 2) is None
     assert _battle_command_direction(None, 2) is None
+
+
+def test_lead_training_skips_a_live_disabled_move() -> None:
+    raw = RawGameState(
+        True,
+        MapId.POKEMON_MANSION_1F,
+        5,
+        20,
+        6,
+        1,
+        first_party_pp=(8, 4, 0, 3),
+        player_disabled_move_slot=4,
+        player_disable_turns=3,
+    )
+
+    assert _mansion_training_move_slot(raw) == 2
+    with pytest.raises(_PauseForTeamTrainingRecovery):
+        _mansion_training_move_slot(
+            replace(raw, first_party_pp=(8, 0, 0, 0), player_disabled_move_slot=1)
+        )
 
 
 def test_team_training_selects_damaging_moves_for_the_active_species() -> None:

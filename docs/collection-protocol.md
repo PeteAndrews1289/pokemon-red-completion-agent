@@ -77,6 +77,11 @@ Hyper Potions while falling below the same threshold after every enemy reply. Th
 now reserves three X Specials: one for the Silph rival and two independently verified setup uses
 for Sabrina. This staged Special-defense lesson changes the battle state instead of extending an
 unproductive healing loop, and the exact source again requires full dry qualification.
+The staged replay defeated Sabrina and reached checkpoint 275 before a Mansion encounter Disabled
+the lead's last preferred move with PP. Lead training now uses battle-active PP, excludes only a
+currently disabled slot, and performs a bounded flee when no legal preferred attack remains. This
+aligns the lead block with the existing balanced-team recovery semantics and requires another
+uncounted exact-source qualification.
 
 The now-retired v2 registry began as a prospective campaign with fresh counted seeds.
 Its first uncounted dry run reached checkpoint 70 before a walking Cerulean NPC blocked the Route 6
@@ -209,13 +214,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `401e871071fa1df4c1a91ea225579ca5f6a6f88a7591eac73e6fca154a6eb012` |
-| Source bundle SHA-256 | `d7fb7df61fdae43d17c3da0765afd3d152aedb20ad8a0b10c2f45e6499b5c73f` |
+| Registry SHA-256 | `f041c7193a0abc4788b4fe2f592a09211834b44fbae5121f94948c921bb0582d` |
+| Source bundle SHA-256 | `4aa51bf87d2b90e46df83b31165fd2810cde2239350dbf99c28a473762663b16` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `1614e0aa798655a2c584847baa3c1ac68a8659c1b64aab7c423cd1b58d76539b` |
+| Teacher execution SHA-256 | `cff30d7259dabec0a06db5771c42521f16a3806ecedd282d1499435bb582b225` |
 | Dry-run schedule SHA-256 | `20af81ca8cf4c92f45c4fd2d8ed2019dee6b51e6ebe29e384f90824525d5c484` |
-| Slot `01` assignment ID | `f4c099ba9bbee75d6d145809659972a48a9f1b7776cf1ff72ed4d1854e32a0b4` |
+| Slot `01` assignment ID | `b5c0e3dc1888a7f334d523f8525c9856e28e08e82fc2f087a287ce6b693ca22c` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
