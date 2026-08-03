@@ -1773,9 +1773,9 @@ def _purchase_cerulean_supplies(
     buy_one(
         shop_index=5,
         item=ItemId.AWAKENING,
-        purchase_quantity=1,
-        expected_quantity=1,
-        label="Awakening",
+        purchase_quantity=2,
+        expected_quantity=2,
+        label="Awakenings",
     )
 
     for _ in range(4):
@@ -1795,7 +1795,7 @@ def _purchase_cerulean_supplies(
         or (returned.player_x, returned.player_y) != (19, 18)
         or _bag_quantity(emulator, ItemId.POTION) != CERULEAN_RIVAL_MAX_POTION_RESERVE
         or _bag_quantity(emulator, ItemId.ANTIDOTE) != 2
-        or _bag_quantity(emulator, ItemId.AWAKENING) != 1
+        or _bag_quantity(emulator, ItemId.AWAKENING) != 2
         or not reader.read_input_readiness().ready
     ):
         raise CascadeChapterError(

@@ -69,13 +69,13 @@ diagnostic now reports the complete public-safe trainer, inventory, party, and r
 than a generic rejection, allowing the next repair to target the exact invariant.
 That ledger proved all eleven trainer lessons, seven wild escapes, party state, healing, Repels,
 and route gates passed; only the Tower reserve failed after two legitimate Awakening uses, with
-`$1,761` still available after every other restock. The bounded Tunnel purchase is therefore two
-Awakenings instead of one, producing a three-item total reserve and preserving one after the
-observed two-use lineage.
+`$1,761` still available after every other restock. The route therefore carries a three-item
+total reserve and preserves one after the observed two-use lineage.
 The first three-reserve attempt paid for four Repels but failed their inventory settlement after
-changing the original Awakening quantity selector. The Mart now preserves the qualified sequence
-of one Awakening, two Parlyz Heals, and four verified Repels, then performs the additional
-Awakening as an independently verified one-item top-up. Total cost and final reserve are unchanged.
+changing the original Awakening quantity selector. Splitting the added copy into a final same-Mart
+top-up proved the Repels but reproduced the unsettled Awakening stack. The extra copy is now bought
+in Cerulean: Cerulean carries two forward and Vermilion performs its original single-Awakening,
+two-Parlyz-Heal, four-Repel sequence to reach the same three-item reserve.
 
 Historically, the v3 registry had twelve fresh counted seeds. Its
 uncounted dry seed `12001` deliberately replays the exact schedule that exposed the v2 failure;
@@ -275,13 +275,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `4ea6c6801645ba54c2ebc8d8bc89e23ccb8703d016b77e6cf926189348245690` |
-| Source bundle SHA-256 | `6673a9869f6a6c45e6f19d8eaf0ea4e9a870680c2b111d77c951df9144f401e5` |
+| Registry SHA-256 | `ea9ae4152797e05ea61465016c9d93b0f90152f5b8de92f14abf28af7f325194` |
+| Source bundle SHA-256 | `eed98f1a3b92ecf3b43220902e04aa127186bd66d8831ee13cb8907dae010177` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `7d697767a894d118a103af4ebbd2c5a95465cd0e2c631f086f04a65692036505` |
+| Teacher execution SHA-256 | `90e5587a117925f2f60d63146df54c961b1b28934f8e6b9d4457d83bb8cf7353` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `ea3f6a4917842c4e75e1148498dfa0e8c8b63a552647787060a7314f5c6090eb` |
+| Slot `01` assignment ID | `0b6d43ab123c6a4c27240a1cba8e77b55f693b996e7dc1aba7d575c8333b55cf` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.

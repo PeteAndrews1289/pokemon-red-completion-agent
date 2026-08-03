@@ -64,7 +64,7 @@ FINAL_TUNNEL_GRASS_SPECIES = frozenset(
 SLOWPOKE_SPECIES_ID = 0x25
 ROUTE_9_MIN_SUPER_POTION_RESERVE = 5
 TUNNEL_SUPER_POTIONS_PURCHASED = 10
-TUNNEL_AWAKENINGS_PURCHASED = 2
+TUNNEL_AWAKENINGS_PURCHASED = 1
 TUNNEL_AWAKENING_RESERVE = 3
 TUNNEL_PARLYZ_HEALS_PURCHASED = 2
 TM28_SALE_PROCEEDS = 1_000
@@ -1945,7 +1945,7 @@ def _purchase_supplies(
         absolute_index=3,
         item=ItemId.AWAKENING,
         quantity=1,
-        target_bag_quantity=TUNNEL_AWAKENING_RESERVE - 1,
+        target_bag_quantity=TUNNEL_AWAKENING_RESERVE,
     )
     _buy_mart_item(
         executor,
@@ -1964,15 +1964,6 @@ def _purchase_supplies(
         item=ItemId.REPEL,
         quantity=4,
         target_bag_quantity=4,
-    )
-    _buy_mart_item(
-        executor,
-        emulator,
-        timing,
-        absolute_index=3,
-        item=ItemId.AWAKENING,
-        quantity=1,
-        target_bag_quantity=TUNNEL_AWAKENING_RESERVE,
     )
     _close_menus(executor, reader, timing)
     money_after = _money(emulator)
