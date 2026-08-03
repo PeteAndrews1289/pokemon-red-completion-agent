@@ -101,6 +101,7 @@ CENTER_PC_TO_HEAL_DIRECTIONS = _directions("L" * 10 + "U")
 CENTER_EXIT_DIRECTIONS = _directions("DDDDD")
 CENTER_TO_MART_DIRECTIONS = _directions("D" * 5 + "L" * 2 + "D" * 3 + "R" * 8 + "U" * 3)
 MART_CLERK_DIRECTIONS = _directions("UULL")
+MART_REPEAT_CLERK_DIRECTIONS = _directions("LLUU")
 MART_TO_CENTER_STAGING_DIRECTIONS = _directions(
     "RR" + "D" * 3 + "L" * 10 + "U" * 3 + "R" * 2 + "U" * 5
 )
@@ -1843,14 +1844,22 @@ def _purchase_cerulean_awakening_topup(
     ) != (3, 7):
         raise CascadeChapterError("Cerulean Awakening top-up missed the Mart entry gate.")
 
-    _move(executor, reader, MART_CLERK_DIRECTIONS, "Cerulean Mart repeat clerk")
+    _move(executor, reader, MART_REPEAT_CLERK_DIRECTIONS, "Cerulean Mart repeat clerk")
+    clerk_stance = reader.read()
+    if (
+        clerk_stance.map_id != MapId.CERULEAN_MART
+        or (clerk_stance.player_x, clerk_stance.player_y) != (1, 5)
+        or not reader.read_input_readiness().ready
+    ):
+        raise CascadeChapterError(
+            "Cerulean Mart repeat clerk approach missed its pinned gate: "
+            f"position={(clerk_stance.player_x, clerk_stance.player_y)}."
+        )
     _battle_pulse(executor, MacroActionKind.MOVE, "left", timing, frames=60)
     if _bag_quantity(emulator, ItemId.NUGGET) != 1:
         raise CascadeChapterError("Cerulean Awakening top-up requires the earned Nugget.")
     money_before_sale = _money(emulator)
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
-    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) == 0:
-        _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
     _battle_pulse(executor, MacroActionKind.MOVE, "down", timing, frames=120)
     if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
         raise CascadeChapterError("Cerulean Mart did not select SELL for the Nugget.")
