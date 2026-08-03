@@ -1589,6 +1589,17 @@ def _wild_capture_policy(species_id: int) -> CapturePolicy:
     )
 
 
+def _wild_weakening_settle_action(
+    phase: BattleMenuPhase,
+    pulse_index: int,
+) -> MacroActionKind:
+    """Advance one attack result without confirming a stale move selection."""
+
+    if phase is BattleMenuPhase.MOVE:
+        return MacroActionKind.CANCEL
+    return MacroActionKind.CANCEL if (pulse_index + 1) % 4 == 0 else MacroActionKind.CONFIRM
+
+
 class _LiveWildCorridorSurveyExecutor:
     """Bind a reversible two-endpoint wild corridor to the shared area loop."""
 
@@ -2090,9 +2101,16 @@ def _weaken_wild_capture_once(
                 return True
             _flee(executor, reader, restored)
             return False
+        phase = reader.read_battle_menu_state(current).phase
+        if phase is BattleMenuPhase.MOVE:
+            # A completed turn can return through the previously selected move
+            # menu. Cancel back to MAIN so one weakening proof cannot issue a
+            # second attack before the outer policy replans.
+            _pulse(executor, MacroActionKind.CANCEL, frames=120)
+            continue
         _pulse(
             executor,
-            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            _wild_weakening_settle_action(phase, pulse),
             frames=120,
         )
     raise SurgeChapterError(f"{label} weakening attack did not settle.")

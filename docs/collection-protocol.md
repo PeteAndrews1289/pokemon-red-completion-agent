@@ -332,13 +332,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `c0a101ac36e23380d4eba8ab4666f31549a4d066b76845dfb4d8bbb4d555c843` |
-| Source bundle SHA-256 | `b3871c1171049d90eef571ea9c92fee24150275adffeda497fe9a4faafaa36f2` |
+| Registry SHA-256 | `1371e884bef0272499648d27844b1f79cb4fa0bd854b07cf67a85647824ed932` |
+| Source bundle SHA-256 | `5c47f0ea035cf02d82ff5930c7464ac191ce3192ed5a424625a6548734ccd251` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `2fc53ca7d279c314c0320bb5328c5d69e68c88c7bec051162d4c220b0ad7ef69` |
+| Teacher execution SHA-256 | `fac4d8544d7e75d29751efdbe91d3566ca1682d48052408b85f1def036caeff0` |
 | Dry-run schedule SHA-256 | `44f7f521126553fbc94a7868b65bfe87237ef740dba8965ad401c9043b6c7e28` |
-| Slot `01` assignment ID | `0dade32dc62bfb43bc9884f570d4c09e3935e953ef106c62e52ce9c5cea63ded` |
+| Slot `01` assignment ID | `6dfbb0909ee8aaabc51ae348b5e9abfc64f4fcf50bb5d7658dbfed655c6b7fe5` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -715,3 +715,10 @@ every verified damage action. Passive cocoon targets use a 50% threshold under a
 maximum, Caterpie retains the lighter 85% lesson, and dangerous Pikachu remains a direct throw
 behind the healthy lead. Exact PP loss, target damage, encounter identity, and all finite throw
 bounds remain mandatory. This qualification attempt is uncounted as well.
+
+The first deeper-weakening replay reached a passive Kakuna but then exposed MOVE again after a
+completed hit. The one-action verifier had treated every non-MAIN phase as dialogue, so confirming
+that stale move selection issued additional attacks and correctly violated the exact-one-PP-loss
+contract. MOVE now receives CANCEL back to MAIN; only UNKNOWN dialogue receives bounded
+confirmation. A subsequent attack can be selected only by the outer policy after it replans from
+the newly observed HP ratio. This qualification attempt is private and uncounted.
