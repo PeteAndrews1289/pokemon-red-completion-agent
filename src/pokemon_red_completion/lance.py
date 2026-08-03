@@ -267,14 +267,10 @@ def run_lance_chapter(
     class _AttackBoundary(Exception):
         pass
 
-    class _AerodactylPivotBoundary(Exception):
-        pass
-
     last_recovery_turn = -1
     boosts_used = 0
     accuracy_used = 0
     attacks_used = 0
-    aerodactyl_pivoted = False
 
     def policy(raw: RawGameState) -> int:
         if accuracy_used == 0:
@@ -283,11 +279,6 @@ def run_lance_chapter(
             raise _AttackBoundary
         if boosts_used < LANCE_X_SPECIAL_USE:
             raise _BoostBoundary
-        if (
-            raw.enemy_species_id == LANCE_AERODACTYL_PIVOT_SPECIES
-            and not aerodactyl_pivoted
-        ):
-            raise _AerodactylPivotBoundary
         hp = raw.first_party_hp or 0
         status = raw.first_party_status or 0
         recovery_threshold = _lance_recovery_threshold(raw)
@@ -367,29 +358,6 @@ def run_lance_chapter(
                 except AgathaChapterError as boost_error:
                     raise LanceChapterError("Lance X Special setup failed.") from boost_error
                 boosts_used += 1
-                continue
-            if isinstance(error.__cause__, _AerodactylPivotBoundary):
-                helper_index = _next_lance_helper(
-                    _party_hp(emulator), _party_max_hp(emulator)
-                )
-                if helper_index is None:
-                    # The trained lineage can reach Aerodactyl after both
-                    # helpers have already absorbed earlier variance. Mark
-                    # the optional pivot consumed and let the normal HP/PP
-                    # policy decide whether to heal or attack with the lead.
-                    aerodactyl_pivoted = True
-                    continue
-                try:
-                    _battle_sacrifice(
-                        actions,
-                        reader,
-                        emulator,
-                        helper_index,
-                        heal_lead=False,
-                    )
-                except VictoryRoadChapterError as pivot_error:
-                    raise LanceChapterError("Lance Aerodactyl pivot failed.") from pivot_error
-                aerodactyl_pivoted = True
                 continue
             if not isinstance(error.__cause__, _HealBoundary):
                 raw = reader.read()

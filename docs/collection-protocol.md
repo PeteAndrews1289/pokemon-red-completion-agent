@@ -809,3 +809,11 @@ that a slot had to be freed but only supported selling a one-item stack. It now 
 observed one- or two-item Antidote stack, verifies the quantity selector, inventory removal, and
 corresponding money delta, then follows the unchanged Mansion item-capacity proof. The failed replay
 was uncounted.
+
+The repaired replay completed the level-75 workhorse/final-form curriculum, earned all eight
+badges, and defeated the first three Elite Four members before the historical Lance Aerodactyl
+pivot fainted a level-25 teammate. That sacrifice was designed for the obsolete single-carry
+lineage and is neither necessary nor consistent with the developed-team contract: the healthy
+level-79 Blastoise had both Surf and Ice Beam available. Lance now keeps the workhorse active,
+chooses the existing type-aware Aerodactyl move policy, and reserves helper switching only for an
+actual bounded recovery need. The uncounted rehearsal must restart on this exact source.
