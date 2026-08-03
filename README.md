@@ -477,6 +477,9 @@ recovery lesson instead of relying exclusively on the lead.
 The first replay reached that branch and exposed Gen I's faint dialogue before the party cursor.
 The selector now periodically advances only that bounded dialogue while continuing to verify the
 living reserve cursor and the eventual return to the battle's main menu.
+The following replay exposed the terminal variant where the rival's final Pokémon also reached zero
+HP. The teacher now accepts a proven post-selection battle exit for that mutual knockout and closes
+the exact Silph schedule entry, while ordinary knockouts still require a restored main menu.
 
 ## Evidence and project status
 

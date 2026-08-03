@@ -18,6 +18,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    note_observed_trainer_battle_exit,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import (
@@ -1521,14 +1522,23 @@ def _run_rival_with_potions(
             )
         except BattleRuntimeError:
             raw = reader.read()
+            if raw.battle_state == 0:
+                note_observed_trainer_battle_exit(_silph_rival_intent())
+                return
+            party_hp = _party_hp(emulator)
             if (
                 raw.battle_state != 2
                 or raw.battler_hp != 0
                 or forced_switches >= 4
-                or not any(hp > 0 for hp in _party_hp(emulator))
+                or not any(hp > 0 for hp in party_hp)
             ):
                 raise
-            _settle_silph_rival_forced_switch(reader, actions, emulator, timing)
+            terminal = _settle_silph_rival_forced_switch(
+                reader, actions, emulator, timing
+            )
+            if terminal:
+                note_observed_trainer_battle_exit(_silph_rival_intent())
+                return
             forced_switches += 1
             continue
         if completed:
@@ -1573,12 +1583,20 @@ def _silph_rival_move_slot(raw: RawGameState) -> int:
     raise SilphChapterError("Silph rival policy has no legal move with PP.")
 
 
+def _silph_rival_intent() -> BattleIntent:
+    return BattleIntent(
+        "liberate_silph",
+        battle_plan_id=RedBattlePlanId.SILPH_7F_RIVAL,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+    )
+
+
 def _settle_silph_rival_forced_switch(
     reader: PokemonRedStateReader,
     actions: _CountingExecutor,
     emulator: EmulatorState,
     timing: SilphTiming,
-) -> None:
+) -> bool:
     """Select the healthiest reserve after a rival KO and prove battle MAIN."""
 
     hp = _party_hp(emulator)
@@ -1589,13 +1607,15 @@ def _settle_silph_rival_forced_switch(
     target = max(candidates, key=lambda index: hp[index])
     for pulse_index in range(64):
         raw = reader.read()
+        if raw.battle_state == 0:
+            return True
         if (
             raw.battle_state == 2
             and raw.active_party_index == target
             and (raw.battler_hp or 0) > 0
             and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
         ):
-            return
+            return False
         if raw.battle_state != 2:
             raise SilphChapterError("Silph rival forced switch left the battle.")
         cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
