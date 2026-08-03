@@ -326,13 +326,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `05c5709097b9e59a871d11101cd7f2629f66ff419fe44054df0e35517e1f3281` |
-| Source bundle SHA-256 | `b72a535a865388509d0128eb8f0272f6f84483cc637e04f46bc35dbe7884da98` |
+| Registry SHA-256 | `5c6957f6062e016f82e00a8d9ec8bf6f4456339f5d9761088bd412f92d8efe52` |
+| Source bundle SHA-256 | `5493a3c6fd87a70d195adffd1a9b62cad14f64347b45997c96efe0fe5ceaa13b` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `6e0d5c0b925e935c82f34516e961df3bcca3805ba0dcd82589e93cd631ea50ce` |
+| Teacher execution SHA-256 | `88a8b3e59080f70963330955bc8748f7ac37df7d468f9971cd417266583c8ef8` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `3bd35ab057c6ef910297175160de41b4ef427bba21abf1e18212e33d88351e31` |
+| Slot `01` assignment ID | `1e2c9ec52ed20a2047438ea5bf6fd84d43438b1a3835eccec720d4c0737dd9d4` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -651,3 +651,10 @@ recovery primitive in preservation mode: a living helper absorbs only the item-t
 lead's exact Super Potion use is proved, the lead is restored immediately, and one attack must
 follow before another recovery. This aligns the rehearsal with the balanced-party objective and
 keeps the original finite item reserve; the failed replay remains uncounted.
+
+That repair passed Giovanni and Pokémon Tower before the Snorlax restock exposed a ₽100 shortfall.
+The earlier Lavender top-up had been adding one Parlyz Heal regardless of whether Rock Tunnel
+consumed any. It now restores a fixed two-cure reserve instead: zero consumed means zero repurchased,
+one consumed means one repurchased, and the exact cash and inventory ledger is still mandatory.
+This saves ₽200 on the observed no-cure schedule while preserving both cures, the capacity token,
+and the full later capture/recovery budget. The replay remains uncounted.

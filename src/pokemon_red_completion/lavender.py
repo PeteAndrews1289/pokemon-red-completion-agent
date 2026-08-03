@@ -2130,7 +2130,10 @@ def _top_up_lavender_supplies(
         )
     quantity = LAVENDER_SUPER_POTION_RESERVE - quantity_before
     parlyz_before = _bag(emulator).get(ItemId.PARLYZ_HEAL, 0)
-    parlyz_quantity = 1
+    # Restore a fixed two-cure reserve instead of blindly adding one.  A
+    # schedule that needed no tunnel cure already carries both; rebuy only
+    # what an earlier observed contingency actually consumed.
+    parlyz_quantity = _parlyz_top_up_quantity(parlyz_before)
 
     money_before = _money(emulator)
     _move(executor, reader, emulator, run, CENTER_EXIT, timing, "Lavender Center exit")
@@ -2180,15 +2183,16 @@ def _top_up_lavender_supplies(
             quantity=quantity,
             target_bag_quantity=LAVENDER_SUPER_POTION_RESERVE,
         )
-    _buy_mart_item(
-        executor,
-        emulator,
-        timing,
-        absolute_index=8,
-        item=ItemId.PARLYZ_HEAL,
-        quantity=parlyz_quantity,
-        target_bag_quantity=parlyz_before + parlyz_quantity,
-    )
+    if parlyz_quantity:
+        _buy_mart_item(
+            executor,
+            emulator,
+            timing,
+            absolute_index=8,
+            item=ItemId.PARLYZ_HEAL,
+            quantity=parlyz_quantity,
+            target_bag_quantity=TUNNEL_PARLYZ_HEALS_PURCHASED,
+        )
     _close_menus(executor, reader, timing)
 
     expected_cost = quantity * SUPER_POTION_PRICE + parlyz_quantity * PARLYZ_HEAL_PRICE
@@ -2221,6 +2225,16 @@ def _top_up_lavender_supplies(
     )
     _heal_center(executor, reader, emulator, timing, MapId.LAVENDER_POKECENTER)
     return quantity, parlyz_quantity, expected_cost, tm28_sale_proceeds
+
+
+def _parlyz_top_up_quantity(current_quantity: int) -> int:
+    """Return the exact purchase needed to restore the fixed cure reserve."""
+
+    if not 0 <= current_quantity <= TUNNEL_PARLYZ_HEALS_PURCHASED:
+        raise LavenderChapterError(
+            f"Unsupported Lavender Parlyz Heal reserve: {current_quantity}."
+        )
+    return TUNNEL_PARLYZ_HEALS_PURCHASED - current_quantity
 
 
 def _buy_mart_item(

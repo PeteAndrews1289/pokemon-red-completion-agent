@@ -114,6 +114,16 @@ def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert lavender_module.EARLY_POKE_BALL_CAPACITY_RESERVE == 1
 
 
+def test_lavender_paralysis_top_up_restores_a_fixed_reserve() -> None:
+    assert tuple(lavender_module._parlyz_top_up_quantity(quantity) for quantity in range(3)) == (
+        2,
+        1,
+        0,
+    )
+    with pytest.raises(lavender_module.LavenderChapterError):
+        lavender_module._parlyz_top_up_quantity(3)
+
+
 def test_final_tunnel_policy_spends_bite_evidence_then_exploits_with_bubblebeam() -> None:
     assert lavender_module._ranked_lavender_move_slots(
         move_slot=1,
