@@ -1944,8 +1944,8 @@ def _purchase_supplies(
         timing,
         absolute_index=3,
         item=ItemId.AWAKENING,
-        quantity=TUNNEL_AWAKENINGS_PURCHASED,
-        target_bag_quantity=TUNNEL_AWAKENING_RESERVE,
+        quantity=1,
+        target_bag_quantity=TUNNEL_AWAKENING_RESERVE - 1,
     )
     _buy_mart_item(
         executor,
@@ -1964,6 +1964,15 @@ def _purchase_supplies(
         item=ItemId.REPEL,
         quantity=4,
         target_bag_quantity=4,
+    )
+    _buy_mart_item(
+        executor,
+        emulator,
+        timing,
+        absolute_index=3,
+        item=ItemId.AWAKENING,
+        quantity=1,
+        target_bag_quantity=TUNNEL_AWAKENING_RESERVE,
     )
     _close_menus(executor, reader, timing)
     money_after = _money(emulator)

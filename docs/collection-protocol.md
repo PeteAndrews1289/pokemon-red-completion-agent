@@ -72,6 +72,10 @@ and route gates passed; only the Tower reserve failed after two legitimate Awake
 `$1,761` still available after every other restock. The bounded Tunnel purchase is therefore two
 Awakenings instead of one, producing a three-item total reserve and preserving one after the
 observed two-use lineage.
+The first three-reserve attempt paid for four Repels but failed their inventory settlement after
+changing the original Awakening quantity selector. The Mart now preserves the qualified sequence
+of one Awakening, two Parlyz Heals, and four verified Repels, then performs the additional
+Awakening as an independently verified one-item top-up. Total cost and final reserve are unchanged.
 
 Historically, the v3 registry had twelve fresh counted seeds. Its
 uncounted dry seed `12001` deliberately replays the exact schedule that exposed the v2 failure;
@@ -271,13 +275,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `6c776b6a66aa4b7d9acf2624519c8155746d00bd5cb0cd6cd5ccc3b736f95fcf` |
-| Source bundle SHA-256 | `794c56e4d3c9b2abffa3a50828f412ba91d8c6acf27938e4aa7c3dcb4ebb50b1` |
+| Registry SHA-256 | `4ea6c6801645ba54c2ebc8d8bc89e23ccb8703d016b77e6cf926189348245690` |
+| Source bundle SHA-256 | `6673a9869f6a6c45e6f19d8eaf0ea4e9a870680c2b111d77c951df9144f401e5` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `d60abe4eeb36afa429f685fafbe28d5de07f65c1cedfea156ae784060030f8ad` |
+| Teacher execution SHA-256 | `7d697767a894d118a103af4ebbd2c5a95465cd0e2c631f086f04a65692036505` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `38adbab237e630525ffdb3c8f4efe1627ca9dfaba3ad3d438d284355ef74d639` |
+| Slot `01` assignment ID | `ea3f6a4917842c4e75e1148498dfa0e8c8b63a552647787060a7314f5c6090eb` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
