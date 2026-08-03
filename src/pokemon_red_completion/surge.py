@@ -1905,7 +1905,7 @@ def _force_switch_wild_capture_to_lead(
         if current.enemy_hp != expected_enemy_hp:
             raise SurgeChapterError(f"{label} forced switch changed protected target HP.")
         cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-        if _wild_menu_cursor_active(emulator) and 0 <= cursor < party_size:
+        if pulse > 0 and _wild_menu_cursor_active(emulator) and 0 <= cursor < party_size:
             for _ in range(8):
                 cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
                 if cursor == 0:
