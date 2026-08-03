@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v4.json`](../configs/red-battle-collection-v4.json)
+[`red-battle-collection-v5.json`](../configs/red-battle-collection-v5.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 68 stable public battle-plan identities in exact qualified-route order;
@@ -27,7 +27,13 @@ three consecutive accuracy-reduced Water Gun misses let poison and enemy attacks
 with the opponent at 4 HP. The one-shot v3 failure remains in its private ledger, so v3 is retired
 and cannot be used for fitting.
 
-The current v4 registry has twelve fresh, previously unexecuted counted seeds. Its uncounted dry
+The current v5 registry has twelve fresh, previously unexecuted counted seeds and a new dry-run
+seed. It incorporates a verified Center recovery before the final Route 24 bridge trainer. V5
+must pass its complete 312-checkpoint, 36-objective, 68-battle qualification before any counted
+slot opens. The v4 qualification and its failed first training slot remain immutable historical
+evidence.
+
+The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
 Center immediately before the accuracy-lowering trainer, may spend one of the already-budgeted
 Route 24 Potions at a live low-HP MAIN boundary, and returns to the Center after the bridge when
@@ -326,13 +332,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `e1bee963ae081019bfd3452ebae8c2963d0b08d5bdf8f403f8ab907c46353694` |
-| Source bundle SHA-256 | `9c479ab98f42b57a04280c5522d320c75256ad1d81bfa3a034ff83fc10d2d2a7` |
+| Registry SHA-256 | `b604a721a8646e812b537bb10ced3356844b73ae464077addf1b21e09d87ac67` |
+| Source bundle SHA-256 | `4597780cc17ceb2cb2ce98d976d660fa8fe4abb2f572eeace09ff93e18ce0696` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `f0d086bbff53a16e35c05859a92dc92c37718b92beb15c569e4f54d83a6c3e25` |
-| Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `4b5c1b07d58bede33de52fc981c265d44e35a2aec1a876c39a20b3adea9b9fe0` |
+| Teacher execution SHA-256 | `df5ccdccc035c1129b5d83a11b396d144ce90918c8cc6bda4ea88a51a8036a99` |
+| Dry-run schedule SHA-256 | `44f7f521126553fbc94a7868b65bfe87237ef740dba8965ad401c9043b6c7e28` |
+| Slot `01` assignment ID | `8951f7b094a8a44af4ffcda76b15e10e2bad7fd31d6c8b88252f678690da2ab2` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -671,3 +677,10 @@ keeps the healing and party-depth bounds separate: it still spends at most two H
 uses the existing verified forced-switch path for at most four living reserves without reopening
 recovery. This is balanced-party continuity, not a larger healing or retry allowance. The failed
 replay remains uncounted.
+
+The corrected v4 source subsequently passed all 312 checkpoints, 36 objectives, and the 68-battle
+dry-run audit. Its first one-shot training slot then failed at Route 24 trainer 1 after Wartortle
+entered the final bridge fight without another Center recovery. That outcome is retained in the
+v4 ledger and is never rerun. Because v4 can no longer provide five complete training roots, the
+teacher now reuses its verified bounded Center backtrack before the final bridge trainer and must
+publish and qualify a fresh registry before collection restarts.

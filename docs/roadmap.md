@@ -371,8 +371,10 @@ training root then exposed a different Route 24 failure at checkpoint 42: Sand-A
 accuracy, Nidoran poisoned Wartortle, and repeated Water Gun misses allowed the 4-HP opponent to
 outlast the lead. V3 is retired with that one-shot failure preserved. V4 uses the exposed v3 seed
 as its uncounted rehearsal, heals immediately before the accuracy battle, and permits one bounded
-Potion recovery without reducing the four-Potion downstream reserve. Twelve fresh v4 counted
-seeds remain unopened pending a complete 312/312 and 68/68 rehearsal.
+Potion recovery without reducing the four-Potion downstream reserve. V4 later qualified but its
+first immutable training root failed at the final bridge trainer, so it is retired. V5 adds a
+Center recovery before that fight and freezes twelve fresh counted seeds pending a complete
+312/312 and 68/68 rehearsal.
 
 ## Milestone 4 — DAgger and selective RL
 
