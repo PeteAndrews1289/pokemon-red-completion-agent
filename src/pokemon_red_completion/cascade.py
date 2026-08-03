@@ -1849,6 +1849,8 @@ def _purchase_cerulean_awakening_topup(
         raise CascadeChapterError("Cerulean Awakening top-up requires the earned Nugget.")
     money_before_sale = _money(emulator)
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) == 0:
+        _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
     _battle_pulse(executor, MacroActionKind.MOVE, "down", timing, frames=120)
     if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
         raise CascadeChapterError("Cerulean Mart did not select SELL for the Nugget.")
