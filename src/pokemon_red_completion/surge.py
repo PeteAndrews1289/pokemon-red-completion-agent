@@ -1824,22 +1824,30 @@ def _weaken_wild_capture_once(
 ) -> bool:
     """Switch to a qualified helper and attempt exactly one weakening attack."""
 
+    initial = reader.read()
+    initial_party = initial.party_species_ids
+    if (
+        initial.battle_state != 1
+        or initial.enemy_species_id is None
+        or initial_party is None
+        or not 0 <= party_index < len(initial_party)
+        or not 0 <= move_index < 4
+    ):
+        raise SurgeChapterError(f"{label} weakening lacks a coherent wild encounter.")
+
+    _navigate_main(executor, reader, 2)
     before = reader.read()
     before_party = before.party_species_ids
     before_enemy_hp = before.enemy_hp
     if (
         before.battle_state != 1
+        or before.enemy_species_id != initial.enemy_species_id
         or before_enemy_hp is None
         or before_enemy_hp <= 0
-        or before.enemy_species_id is None
-        or before_party is None
-        or not 0 <= party_index < len(before_party)
-        or not 0 <= move_index < 4
+        or before_party != initial_party
         or reader.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
     ):
-        raise SurgeChapterError(f"{label} weakening lacks a stable wild MAIN gate.")
-
-    _navigate_main(executor, reader, 2)
+        raise SurgeChapterError(f"{label} weakening did not normalize to a stable MAIN gate.")
     _pulse(executor, MacroActionKind.CONFIRM, frames=120)
     for _ in range(12):
         cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)

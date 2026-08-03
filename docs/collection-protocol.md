@@ -249,6 +249,9 @@ the portable capture policy instead of extending search again: it chooses a heal
 Rattata, Caterpie, or Pidgey, performs one verified Tackle or Gust weakening action, proves the PP
 decrement and target damage, and only then enters the five-throw budget. A knockout returns as a
 fresh-source retry without collection progress, and an empty reserve fails immediately.
+The first live weakening attempt arrived during wild-introduction dialogue rather than MAIN. The
+adapter now preserves the encounter identity and party, invokes the existing bounded battle-menu
+normalizer, and applies its strict helper-switch gate only after PARTY-selected MAIN is observed.
 
 One invocation against the superseded registry
 `24520b0f5cfb027cf1339261a179650cda6e7792058af148af8722333bfdf72b` stopped before
@@ -302,13 +305,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `883a41958350e96c53df6fa70ab2a28a5cdd5ccc6ae3d7af10a30ef46f5d1460` |
-| Source bundle SHA-256 | `5b2ea78c835c0ee843818010c73650867bad9e11d74be9f3c57fec3e7634b11b` |
+| Registry SHA-256 | `e38bc648e19e6b11c4b32f0c6f7836981e615df71074a2f93baede7a3571a2d1` |
+| Source bundle SHA-256 | `3518fb18347ef91f2b321f7dd21fcb1917d24bd1fb39cbb75d4b61d4b4cd5de3` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `f77aaf647f179e0efd8cb1c3baea755eec7fdd957a14d39d5f0b5c3bd6bbef33` |
+| Teacher execution SHA-256 | `8201905db429d20bb718f4a4f05015d676514a8c6edb257f5ac233b9a18cf65c` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `72789eff6058d4c614fa385b7aa69b525ba82737311e510ad93462c3f34631d3` |
+| Slot `01` assignment ID | `820f5ceb7f3a31a41688028d05c253ba0025f9fd7f7b1408be7a33e89fb75007` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
