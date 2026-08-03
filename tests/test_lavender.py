@@ -252,6 +252,12 @@ def test_final_tunnel_role_pivot_tracks_enemy_type_and_live_reserves() -> None:
         grass_against_wartortle,
         (50, 30, 20),
         True,
+        required_move_spent=False,
+    ) is None
+    assert lavender_module._final_tunnel_pivot_target(
+        grass_against_wartortle,
+        (50, 30, 20),
+        True,
         dux_unavailable=True,
     ) is None
     assert (

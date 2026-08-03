@@ -992,8 +992,17 @@ def _run_lavender_trainer_battle(
     starting_selected_pp = starting_pp[move_slot - 1] & 0x3F
 
     dux_status_escaped = False
+    selected_move_evidence_observed = False
 
     def guarded_policy(raw: RawGameState) -> int:
+        nonlocal selected_move_evidence_observed
+        if (
+            raw.active_party_index == 0
+            and raw.battler_pp is not None
+            and len(raw.battler_pp) >= move_slot
+            and (raw.battler_pp[move_slot - 1] & 0x3F) < starting_selected_pp
+        ):
+            selected_move_evidence_observed = True
         status_recovery, pivot_target = _dux_status_recovery_strategy(
             raw,
             _party_hp(emulator),
@@ -1009,6 +1018,7 @@ def _run_lavender_trainer_battle(
             _party_hp(emulator),
             finish_with_bubblebeam,
             dux_unavailable=dux_status_escaped,
+            required_move_spent=selected_move_evidence_observed,
         )
         if pivot_target is not None:
             raise _PauseForFinalTunnelPivot(pivot_target)
@@ -1281,10 +1291,16 @@ def _final_tunnel_pivot_target(
     enabled: bool,
     *,
     dux_unavailable: bool = False,
+    required_move_spent: bool = True,
 ) -> int | None:
     """Assign Grass to DUX and every other final-tunnel matchup to Wartortle."""
 
-    if not enabled or raw.active_party_index is None or len(party_hp) < 2:
+    if (
+        not enabled
+        or not required_move_spent
+        or raw.active_party_index is None
+        or len(party_hp) < 2
+    ):
         return None
     target = (
         0
