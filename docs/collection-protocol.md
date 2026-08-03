@@ -326,13 +326,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `a91f87e7d7622663c4cb3023a90cc71e0fb39cff0ba6271627701a7fdde3f4af` |
-| Source bundle SHA-256 | `2569c9972137b6f6402b52c1894740cbac7f8eaaf834a6501f54aa0d8fe26cd4` |
+| Registry SHA-256 | `e1bee963ae081019bfd3452ebae8c2963d0b08d5bdf8f403f8ab907c46353694` |
+| Source bundle SHA-256 | `9c479ab98f42b57a04280c5522d320c75256ad1d81bfa3a034ff83fc10d2d2a7` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `c575f2549e94905d15e8823572a4135063737c45bf9b5eaabce5eaf99b75d4ac` |
+| Teacher execution SHA-256 | `f0d086bbff53a16e35c05859a92dc92c37718b92beb15c569e4f54d83a6c3e25` |
 | Dry-run schedule SHA-256 | `b8ad2a192c4b41598fd55fa4c07839960932ce298175a276642db1436c1cb95f` |
-| Slot `01` assignment ID | `cc68808664ca46e41bd6f289231a6d2ae296ba81665e51952748cb4612d32d5c` |
+| Slot `01` assignment ID | `4b5c1b07d58bede33de52fc981c265d44e35a2aec1a876c39a20b3adea9b9fe0` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -664,3 +664,10 @@ The replay still fell ₽403 short of its second Snorlax Super Potion because it
 25 legal throws as before—24 Great Balls plus that one Poké Ball—saving ₽600 while remaining seven
 throws above the historical 18-throw exhaustion. Both recovery items remain mandatory and the
 controller's independent thirty-three-throw ceiling is unchanged.
+
+The funded replay caught Snorlax in three throws and reached the Silph rival at checkpoint 243,
+where Venusaur fainted the lead after the two-item recovery budget was exhausted. The teacher now
+keeps the healing and party-depth bounds separate: it still spends at most two Hyper Potions, then
+uses the existing verified forced-switch path for at most four living reserves without reopening
+recovery. This is balanced-party continuity, not a larger healing or retry allowance. The failed
+replay remains uncounted.

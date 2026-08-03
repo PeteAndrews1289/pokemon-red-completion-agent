@@ -1550,15 +1550,44 @@ def _run_rival_with_potions(
             return
         _battle_hyper_potion(reader, actions, emulator, timing)
         recovery += 1
-    _run_battle(
-        reader,
-        actions,
-        _silph_rival_move_slot,
-        MapId.SILPH_CO_7F,
-        "Silph rival Venusaur exhausted recovery",
-        RedBattlePlanId.SILPH_7F_RIVAL,
-        BattleResourcePolicy.BOUNDED_RECOVERY,
-    )
+    # Exhausting the healing allocation does not revoke the balanced-party
+    # contract.  Continue with living reserves through the same verified
+    # forced-switch path, but never spend a third potion or reset the switch
+    # bound merely because recovery is exhausted.
+    while True:
+        try:
+            _run_battle(
+                reader,
+                actions,
+                _silph_rival_move_slot,
+                MapId.SILPH_CO_7F,
+                "Silph rival Venusaur exhausted recovery",
+                RedBattlePlanId.SILPH_7F_RIVAL,
+                BattleResourcePolicy.BOUNDED_RECOVERY,
+            )
+            return
+        except BattleRuntimeError:
+            raw = reader.read()
+            if raw.battle_state == 0:
+                note_observed_trainer_battle_exit(_silph_rival_intent())
+                _settle_silph_rival_field_control(reader, actions, timing)
+                return
+            party_hp = _party_hp(emulator)
+            if (
+                raw.battle_state != 2
+                or raw.battler_hp != 0
+                or forced_switches >= 4
+                or not any(hp > 0 for hp in party_hp)
+            ):
+                raise
+            terminal = _settle_silph_rival_forced_switch(
+                reader, actions, emulator, timing
+            )
+            if terminal:
+                note_observed_trainer_battle_exit(_silph_rival_intent())
+                _settle_silph_rival_field_control(reader, actions, timing)
+                return
+            forced_switches += 1
 
 
 def _silph_rival_move_slot(raw: RawGameState) -> int:
