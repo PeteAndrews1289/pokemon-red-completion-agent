@@ -755,9 +755,13 @@ def acquire_and_teach_ice_beam_from_celadon_center(
     *,
     timing: SilphTiming = DEFAULT_SILPH_TIMING,
 ) -> tuple[RawGameState, bool]:
-    """Install Ice Beam at the Celadon preparation boundary and return healed."""
+    """Install Ice Beam and return through the Center's entrance while still healed."""
 
     _require(reader.read(), MapId.CELADON_POKECENTER, (3, 3), "Celadon Ice Beam boundary")
+    if _party_hp(emulator) != _party_max_hp(emulator) or any(
+        status != 0 for status in _party_status(emulator)
+    ):
+        raise SilphChapterError("Celadon Ice Beam boundary requires a healed party.")
     money_before = _money(emulator)
     _move(actions, reader, CENTER_EXIT, timing)
     _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exit")
@@ -801,8 +805,6 @@ def acquire_and_teach_ice_beam_from_celadon_center(
         _require(reader.read(), map_id, coordinate, label)
     _move(actions, reader, CELADON_MART_EXIT_TO_CENTER, timing)
     _require(reader.read(), MapId.CELADON_POKECENTER, (3, 7), "Celadon Center return")
-    _move(actions, reader, ("up",) * 4, timing)
-    _heal(actions, timing)
     for _ in range(24):
         upgraded = reader.read()
         if (
@@ -814,7 +816,7 @@ def acquire_and_teach_ice_beam_from_celadon_center(
         ):
             return upgraded, transfer_before_event
         _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
-    raise SilphChapterError("Ice Beam upgrade did not reach the healed Celadon boundary.")
+    raise SilphChapterError("Ice Beam upgrade did not reach the healed Celadon entrance boundary.")
 
 
 def _buy_silph_x_special(

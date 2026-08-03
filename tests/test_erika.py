@@ -42,7 +42,7 @@ def _terminal() -> RawGameState:
 def test_erika_timing_is_positive_and_bounded() -> None:
     assert MOVEMENT_RETRY_WAIT_FRAMES == 12
     assert DEFAULT_ERIKA_TIMING.movement_retries == 16
-    assert CENTER_EXIT_TWO == ("right", "down", "down", "left", "down", "down")
+    assert CENTER_EXIT_TWO == ("down",)
     assert all(
         isinstance(getattr(DEFAULT_ERIKA_TIMING, field.name), int)
         and getattr(DEFAULT_ERIKA_TIMING, field.name) > 0
