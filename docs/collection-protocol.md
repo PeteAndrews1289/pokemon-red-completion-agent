@@ -332,13 +332,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6518` |
-| Registry SHA-256 | `c21b698d79922b318982440296f9aa8ec58004f7088cbf53206177f6f595c2b6` |
-| Source bundle SHA-256 | `817d53417f18019309498e47548cceebf46fa802ccf5d74c5725e3fe00a7bacc` |
+| Registry SHA-256 | `c0a101ac36e23380d4eba8ab4666f31549a4d066b76845dfb4d8bbb4d555c843` |
+| Source bundle SHA-256 | `b3871c1171049d90eef571ea9c92fee24150275adffeda497fe9a4faafaa36f2` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `67dfcfc5f34a49122fce3c5d8d5982fc164cf9776e393e573d13cb37e7bee1ef` |
+| Teacher execution SHA-256 | `2fc53ca7d279c314c0320bb5328c5d69e68c88c7bec051162d4c220b0ad7ef69` |
 | Dry-run schedule SHA-256 | `44f7f521126553fbc94a7868b65bfe87237ef740dba8965ad401c9043b6c7e28` |
-| Slot `01` assignment ID | `3ea36bda26fffc64e1215584c5bcbd35fbf32b27faf320ecd660d6ddf14c5820` |
+| Slot `01` assignment ID | `0dade32dc62bfb43bc9884f570d4c09e3935e953ef106c62e52ce9c5cea63ded` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -705,3 +705,13 @@ from the observed Gen I three-bit sleep counter, giving each represented turn th
 budget. Complete PP-vector preservation, monotonic countdown, live-HP, and menu-state checks remain
 mandatory, so the change accommodates legitimate multi-turn sleep rather than weakening progress
 evidence. This qualification attempt is also uncounted.
+
+The sleep-scaled replay then cleared that failure and progressed through the S.S. Anne and the
+capture/trade setup before all thirty Poké Balls were exhausted in the Forest collection lesson
+after checkpoint 91. The semantic policy requested weakening to a health threshold, but the Red
+adapter performed only one low-level attack before throwing; passive Metapod and Kakuna could
+therefore consume five-ball attempts while still near full health. The adapter now replans after
+every verified damage action. Passive cocoon targets use a 50% threshold under an eight-attack
+maximum, Caterpie retains the lighter 85% lesson, and dangerous Pikachu remains a direct throw
+behind the healthy lead. Exact PP loss, target damage, encounter identity, and all finite throw
+bounds remain mandatory. This qualification attempt is uncounted as well.

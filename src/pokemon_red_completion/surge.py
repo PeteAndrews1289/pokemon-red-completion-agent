@@ -82,6 +82,13 @@ WILD_CAPTURE_POLICY = CapturePolicy(
     max_throws=WILD_CAPTURE_THROWS_PER_ENCOUNTER,
 )
 WILD_CAPTURE_DIRECT_THROW_SPECIES = frozenset({PIKACHU_SPECIES_ID})
+WILD_CAPTURE_PASSIVE_SPECIES = frozenset({METAPOD_SPECIES_ID, KAKUNA_SPECIES_ID})
+WILD_CAPTURE_PASSIVE_POLICY = CapturePolicy(
+    throw_at_or_below_hp_ratio=0.50,
+    prefer_status_first=False,
+    max_throws=WILD_CAPTURE_THROWS_PER_ENCOUNTER,
+)
+WILD_CAPTURE_MAX_WEAKENING_ATTACKS = 8
 SPEAROW_CAPTURE_MOVE_ID = 0x37
 SPEAROW_CAPTURE_MOVE_SLOT = 4
 SPEAROW_WEAKEN_ATTEMPT_LIMIT = 12
@@ -1572,6 +1579,16 @@ def _move_until_map_fleeing_wild(
     raise SurgeChapterError(f"{label} missed map {target_map:#04x}.")
 
 
+def _wild_capture_policy(species_id: int) -> CapturePolicy:
+    """Use deeper, repeatable weakening only against passive cocoon targets."""
+
+    return (
+        WILD_CAPTURE_PASSIVE_POLICY
+        if species_id in WILD_CAPTURE_PASSIVE_SPECIES
+        else WILD_CAPTURE_POLICY
+    )
+
+
 class _LiveWildCorridorSurveyExecutor:
     """Bind a reversible two-endpoint wild corridor to the shared area loop."""
 
@@ -1644,15 +1661,18 @@ class _LiveWildCorridorSurveyExecutor:
         raw = self._reader.read()
         if raw.enemy_species_id is None:
             raise RedAreaExecutionError(f"{self._label} capture lacks an enemy species")
-        party = self._party_reader.read()
-        helper = (
-            None
-            if raw.enemy_species_id in WILD_CAPTURE_DIRECT_THROW_SPECIES
-            else _select_wild_capture_helper(party)
-        )
-        if helper is not None and raw.enemy_hp is not None and raw.enemy_max_hp is not None:
-            helper_index, _ = helper
-            catcher = party.members[helper_index]
+        policy = _wild_capture_policy(raw.enemy_species_id)
+        for _ in range(WILD_CAPTURE_MAX_WEAKENING_ATTACKS):
+            raw = self._reader.read()
+            party = self._party_reader.read()
+            helper = (
+                None
+                if raw.enemy_species_id in WILD_CAPTURE_DIRECT_THROW_SPECIES
+                else _select_wild_capture_helper(party)
+            )
+            if helper is None or raw.enemy_hp is None or raw.enemy_max_hp is None:
+                break
+            helper_index, move_index = helper
             collection = self.read_collection()
             decision = plan_capture(
                 CaptureObservation(
@@ -1660,27 +1680,30 @@ class _LiveWildCorridorSurveyExecutor:
                     target_level=raw.enemy_level or 1,
                     target_hp=raw.enemy_hp,
                     target_max_hp=raw.enemy_max_hp,
-                    catcher=catcher,
+                    catcher=party.members[helper_index],
                     balls_available=_bag(self._emulator).get(ItemId.POKE_BALL, 0),
                     party_has_room=party.is_incomplete,
                     storage_has_room=any(
                         count < collection.box_capacity for count in collection.box_counts
                     ),
                 ),
-                WILD_CAPTURE_POLICY,
+                policy,
             )
-            if (
-                decision.directive is CaptureDirective.WEAKEN_TARGET
-                and not _weaken_wild_capture_once(
-                    self._emulator,
-                    self._executor,
-                    self._reader,
-                    helper_index,
-                    helper[1],
-                    self._label,
-                )
+            if decision.directive is not CaptureDirective.WEAKEN_TARGET:
+                break
+            if not _weaken_wild_capture_once(
+                self._emulator,
+                self._executor,
+                self._reader,
+                helper_index,
+                move_index,
+                self._label,
             ):
                 return False
+        else:
+            raise RedAreaExecutionError(
+                f"{self._label} exceeded its bounded weakening attack budget"
+            )
         return _try_catch_wild(
             self._emulator,
             self._executor,

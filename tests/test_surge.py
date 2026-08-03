@@ -42,6 +42,10 @@ from pokemon_red_completion.surge import (
     SURGE_CHECKPOINT_COUNT,
     VIRIDIAN_FOREST_MAX_SURVEY_LEGS,
     WILD_CAPTURE_DIRECT_THROW_SPECIES,
+    WILD_CAPTURE_MAX_WEAKENING_ATTACKS,
+    WILD_CAPTURE_PASSIVE_POLICY,
+    WILD_CAPTURE_PASSIVE_SPECIES,
+    WILD_CAPTURE_POLICY,
     WILD_CAPTURE_THROWS_PER_ENCOUNTER,
     SurgeChapterReport,
     SurgeCheckpoint,
@@ -52,6 +56,7 @@ from pokemon_red_completion.surge import (
     _plan_gym_can_path,
     _run_dig_battle,
     _select_wild_capture_helper,
+    _wild_capture_policy,
 )
 
 
@@ -176,13 +181,23 @@ def test_surge_timing_is_positive_and_bounded() -> None:
     assert DEFAULT_SURGE_TIMING.encounter_limit == 72
     assert DEFAULT_SURGE_TIMING.spearow_encounter_limit == 96
     assert WILD_CAPTURE_THROWS_PER_ENCOUNTER == 5
+    assert WILD_CAPTURE_MAX_WEAKENING_ATTACKS == 8
     assert VIRIDIAN_FOREST_MAX_SURVEY_LEGS == 256
     assert frozenset({PIKACHU_SPECIES_ID}) == WILD_CAPTURE_DIRECT_THROW_SPECIES
+    assert frozenset({METAPOD_SPECIES_ID, KAKUNA_SPECIES_ID}) == WILD_CAPTURE_PASSIVE_SPECIES
     assert all(
         isinstance(getattr(DEFAULT_SURGE_TIMING, field.name), int)
         and getattr(DEFAULT_SURGE_TIMING, field.name) > 0
         for field in fields(SurgeTiming)
     )
+
+
+def test_passive_cocoons_receive_deeper_bounded_weakening_policy() -> None:
+    assert _wild_capture_policy(METAPOD_SPECIES_ID) is WILD_CAPTURE_PASSIVE_POLICY
+    assert _wild_capture_policy(KAKUNA_SPECIES_ID) is WILD_CAPTURE_PASSIVE_POLICY
+    assert WILD_CAPTURE_PASSIVE_POLICY.throw_at_or_below_hp_ratio == 0.50
+    assert _wild_capture_policy(CATERPIE_SPECIES_ID) is WILD_CAPTURE_POLICY
+    assert _wild_capture_policy(PIKACHU_SPECIES_ID) is WILD_CAPTURE_POLICY
 
 
 def test_wild_capture_helper_prefers_safe_rattata_tackle() -> None:
