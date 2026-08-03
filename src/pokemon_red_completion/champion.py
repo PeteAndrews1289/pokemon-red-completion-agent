@@ -362,6 +362,13 @@ def run_champion_chapter(
                 continue
             if not isinstance(error.__cause__, _HealBoundary):
                 current = reader.read()
+                if (
+                    current.battle_state == 2
+                    and current.enemy_hp == 0
+                    and any(hp > 0 for hp in _party_hp(emulator))
+                ):
+                    _settle_champion_battle_exit(reader, actions)
+                    continue
                 raise ChampionChapterError(
                     "Champion battle runtime failed: "
                     f"party_hp={_party_hp(emulator)!r}, "

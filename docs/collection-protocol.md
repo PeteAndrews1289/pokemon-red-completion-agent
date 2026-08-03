@@ -849,3 +849,10 @@ Champion decisions and receipts now use active-battler HP, status, moves, and PP
 and a verified zero-enemy-HP state advances through a bounded victory-text transition before the
 existing Hall-of-Fame terminal proof resumes. No outcome gate is relaxed: the Champion event and
 Hall-of-Fame map remain jointly required. The rehearsal remains uncounted.
+
+The active-battler replay again recorded Snorlax at 140 HP using Headbutt and Alakazam at zero, but
+the runtime's first exception sample preceded the stable KO observation; the authoritative
+diagnostic reread already contained the valid zero-HP evidence. The same strict final-KO handler
+now runs on that authoritative reread before a runtime error can be emitted. It still requires an
+active trainer battle, enemy HP exactly zero, and at least one living teammate before advancing the
+bounded victory text. The rehearsal remains uncounted and must restart from clean power.
