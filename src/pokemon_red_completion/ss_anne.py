@@ -16,8 +16,8 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.cascade import (
+    CERULEAN_GYM_START_POTION_RESERVE,
     DEFAULT_CASCADE_TIMING,
-    ROUTE_25_RECOVERY_POTION_RESERVE,
     SS_ANNE_RIVAL_POTION_RESERVE,
     CascadeChapterError,
     _bag_quantity,
@@ -437,7 +437,7 @@ def _run_ss_anne_rival_with_potion(
     if not (
         SS_ANNE_RIVAL_POTION_RESERVE
         <= starting_reserve
-        <= ROUTE_25_RECOVERY_POTION_RESERVE
+        <= CERULEAN_GYM_START_POTION_RESERVE
     ):
         raise SSAnneChapterError("S.S. Anne rival recovery reserve is outside its bound.")
 

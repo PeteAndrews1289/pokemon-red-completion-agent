@@ -528,7 +528,7 @@ def test_rocket_recovery_consumes_the_extra_potion_and_reuses_intent(
     assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
 
 
-@pytest.mark.parametrize("starting_reserve", [4, 5])
+@pytest.mark.parametrize("starting_reserve", [4, 7])
 def test_rocket_victory_may_preserve_the_extra_potion_when_recovery_is_not_needed(
     monkeypatch: pytest.MonkeyPatch,
     starting_reserve: int,
@@ -564,7 +564,7 @@ def test_rocket_victory_may_preserve_the_extra_potion_when_recovery_is_not_neede
     assert observed is terminal
 
 
-@pytest.mark.parametrize("starting_reserve", [3, 5])
+@pytest.mark.parametrize("starting_reserve", [3, 7])
 def test_route_6_victory_may_preserve_potion_when_recovery_is_not_needed(
     monkeypatch: pytest.MonkeyPatch,
     starting_reserve: int,

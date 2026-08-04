@@ -23,6 +23,7 @@ from pokemon_red_completion.cascade import (
     CENTER_TO_RIVAL_STAGING_DIRECTIONS,
     CENTER_TO_ROUTE_24_STAGING_CORRECTION_DIRECTIONS,
     CERULEAN_GYM_POTION_RESERVE,
+    CERULEAN_GYM_START_POTION_RESERVE,
     CERULEAN_GYM_TRAINER_MOVE_SLOT,
     CERULEAN_GYM_TRAINER_RECOVERY_HP,
     CERULEAN_RIVAL_MAX_POTION_RESERVE,
@@ -203,7 +204,8 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
     assert ROUTE_24_RECOVERY_POTION_RESERVE == 6
     assert cascade_module.ROUTE_24_FINAL_RECOVERY_POSITION == 4
     assert ROUTE_25_RECOVERY_POTION_RESERVE == 5
-    assert CERULEAN_GYM_POTION_RESERVE == 6
+    assert CERULEAN_GYM_POTION_RESERVE == 8
+    assert CERULEAN_GYM_START_POTION_RESERVE == 7
     assert ROCKET_THIEF_POTION_RESERVE == 4
     assert ROUTE_24_CENTER_RECOVERY_POSITION == 2
     assert ROUTE_24_REQUIRED_TRAINER_INDEXES[ROUTE_24_CENTER_RECOVERY_POSITION] == 3
@@ -589,7 +591,7 @@ def test_route_24_recovery_consumes_the_retained_field_potion() -> None:
 def test_cerulean_gym_preserves_unused_potion_after_full_hp_victory(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    emulator = _MemoryEmulator(potion_quantity=ROUTE_25_RECOVERY_POTION_RESERVE)
+    emulator = _MemoryEmulator(potion_quantity=CERULEAN_GYM_START_POTION_RESERVE)
     starting = replace(
         _raw(),
         first_party_hp=61,
@@ -620,7 +622,7 @@ def test_cerulean_gym_preserves_unused_potion_after_full_hp_victory(
     )
 
     assert observed is terminal
-    assert _bag_quantity_for_test(emulator) == ROUTE_25_RECOVERY_POTION_RESERVE
+    assert _bag_quantity_for_test(emulator) == CERULEAN_GYM_START_POTION_RESERVE
 
 
 def _bag_quantity_for_test(emulator: _MemoryEmulator) -> int:

@@ -38,8 +38,12 @@ an unnecessary field Potion, which the game correctly disallowed at full health.
 failure remains preserved, and v6 is retired rather than changed or rerun.
 
 The current v7 registry promotes exposed v6 seed `16001` to its uncounted dry rehearsal and assigns
-twelve fresh, disjoint counted seeds. The teacher now preserves the unused Potion and carries a
-bounded four-to-five reserve through the Rocket thief, Route 6, and S.S. Anne rival. This converts
+twelve fresh, disjoint counted seeds. Its first rehearsal proved the original preservation repair
+through Cerulean, Rocket, and Route 6, then accuracy loss, the rival's own Potion, and Leech Seed
+exhausted three retained Potions at the S.S. Anne rival. The failure is private and uncounted; all
+twelve official slots remain pending. The funded Cerulean top-up now buys two additional Potions
+and carries a bounded four-to-seven reserve through the Rocket thief, Route 6, and S.S. Anne rival.
+This converts
 an accidental exact-count requirement into the intended resource lesson: recovery is permitted
 when live damage requires it, never mandatory merely to reproduce one historical inventory. V7
 must pass its complete qualification before any counted slot opens.

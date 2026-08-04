@@ -80,7 +80,8 @@ ROUTE_24_ACCURACY_RECOVERY_POSITION = 3
 ROUTE_24_FINAL_RECOVERY_POSITION = 4
 ROUTE_24_ACCURACY_RECOVERY_HP = 40
 ROUTE_25_RECOVERY_POTION_RESERVE = 5
-CERULEAN_GYM_POTION_RESERVE = 6
+CERULEAN_GYM_POTION_RESERVE = 8
+CERULEAN_GYM_START_POTION_RESERVE = 7
 ROCKET_THIEF_POTION_RESERVE = 4
 VERMILION_ROUTE_6_POTION_RESERVE = 3
 SS_ANNE_RIVAL_POTION_RESERVE = 2
@@ -1577,7 +1578,7 @@ def _use_route_25_recovery_potion(
         emulator,
         expected_map=MapId.ROUTE_25,
         starting_quantity=CERULEAN_GYM_POTION_RESERVE,
-        ending_quantity=ROUTE_25_RECOVERY_POTION_RESERVE,
+        ending_quantity=CERULEAN_GYM_START_POTION_RESERVE,
         label="Route 25 recovery",
     )
 
@@ -1892,7 +1893,13 @@ def _purchase_cerulean_awakening_topup(
     _battle_pulse(executor, MacroActionKind.INTERACT, None, timing, frames=180)
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
 
-    def buy_topup(*, shop_index: int, item: ItemId, expected_quantity: int) -> None:
+    def buy_topup(
+        *,
+        shop_index: int,
+        item: ItemId,
+        purchase_quantity: int,
+        expected_quantity: int,
+    ) -> None:
         observed_menu_states: list[tuple[int, int, int, int, int]] = []
         for _ in range(12):
             menu = reader.read_menu_cursor_state()
@@ -1927,6 +1934,10 @@ def _purchase_cerulean_awakening_topup(
             or emulator.read_u8(RamAddress.SHOP_QUANTITY) != 1
         ):
             raise CascadeChapterError(f"Cerulean {item.name} top-up quantity gate failed.")
+        for _ in range(purchase_quantity - 1):
+            _battle_pulse(executor, MacroActionKind.MOVE, "up", timing, frames=120)
+        if emulator.read_u8(RamAddress.SHOP_QUANTITY) != purchase_quantity:
+            raise CascadeChapterError(f"Cerulean {item.name} top-up quantity gate failed.")
         for _ in range(8):
             if _bag_quantity(emulator, item) == expected_quantity:
                 break
@@ -1938,9 +1949,15 @@ def _purchase_cerulean_awakening_topup(
     buy_topup(
         shop_index=1,
         item=ItemId.POTION,
+        purchase_quantity=3,
         expected_quantity=CERULEAN_GYM_POTION_RESERVE,
     )
-    buy_topup(shop_index=5, item=ItemId.AWAKENING, expected_quantity=2)
+    buy_topup(
+        shop_index=5,
+        item=ItemId.AWAKENING,
+        purchase_quantity=1,
+        expected_quantity=2,
+    )
 
     for _ in range(4):
         _battle_pulse(executor, MacroActionKind.CANCEL, None, timing, frames=180)
@@ -2261,9 +2278,9 @@ def _run_cerulean_gym_trainer_with_potion(
     """Preserve the downstream reserve while surviving bounded confusion."""
 
     starting_quantity = _bag_quantity(emulator, ItemId.POTION)
-    if starting_quantity != ROUTE_25_RECOVERY_POTION_RESERVE:
+    if starting_quantity != CERULEAN_GYM_START_POTION_RESERVE:
         raise CascadeChapterError(
-            "Cerulean Gym recovery lacks its five-Potion starting reserve."
+            "Cerulean Gym recovery lacks its seven-Potion starting reserve."
         )
     starting_pp = reader.read().first_party_pp
     if starting_pp is None:
@@ -2311,9 +2328,9 @@ def _run_cerulean_gym_trainer_with_potion(
                     ending_quantity = starting_quantity - int(recovery_used)
                     ending_pp = before.first_party_pp
                     if (
-                        not ROCKET_THIEF_POTION_RESERVE
+                        not CERULEAN_GYM_START_POTION_RESERVE - 1
                         <= ending_quantity
-                        <= ROUTE_25_RECOVERY_POTION_RESERVE
+                        <= CERULEAN_GYM_START_POTION_RESERVE
                         or _bag_quantity(emulator, ItemId.POTION) != ending_quantity
                         or ending_pp is None
                         or ending_pp[CERULEAN_GYM_TRAINER_MOVE_SLOT - 1]

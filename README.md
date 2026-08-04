@@ -114,7 +114,7 @@ control, and progressively trained specialists.**
 > rival. V5 remains preserved and retired. V6 then qualified its complete 312-checkpoint,
 > 68-battle rehearsal, but immutable train slot 01 exposed a safe full-HP Cerulean outcome that
 > retained five Potions while the route required exactly four. V6 remains failed and retired. The
-> current v7 teacher carries a bounded four-to-five Potion reserve across the following chapters,
+> current v7 teacher carries a bounded four-to-seven Potion reserve across the following chapters,
 > uses the exposed v6 seed only for an uncounted rehearsal, and preregisters twelve fresh counted
 > seeds. V7 must qualify before collection resumes; no learned model has yet completed the game.
 

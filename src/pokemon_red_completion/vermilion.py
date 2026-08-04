@@ -19,11 +19,11 @@ from pokemon_red_completion.battle_runtime import (
 from pokemon_red_completion.cascade import (
     CENTER_EXIT_DIRECTIONS,
     CENTER_HEAL_APPROACH_DIRECTIONS,
+    CERULEAN_GYM_START_POTION_RESERVE,
     DEFAULT_CASCADE_TIMING,
     GYM_TO_CENTER_DIRECTIONS,
     GYM_TRAINER_TO_EXIT_DIRECTIONS,
     ROCKET_THIEF_POTION_RESERVE,
-    ROUTE_25_RECOVERY_POTION_RESERVE,
     SS_ANNE_RIVAL_POTION_RESERVE,
     VERMILION_ROUTE_6_POTION_RESERVE,
     CascadeChapterError,
@@ -1235,7 +1235,11 @@ def _run_rocket_thief_with_potion(
     """Spend at most one retained Potion when live Rocket damage requires it."""
 
     starting_reserve = _bag_quantity(emulator, ItemId.POTION)
-    if not ROCKET_THIEF_POTION_RESERVE <= starting_reserve <= ROUTE_25_RECOVERY_POTION_RESERVE:
+    if not (
+        ROCKET_THIEF_POTION_RESERVE
+        <= starting_reserve
+        <= CERULEAN_GYM_START_POTION_RESERVE
+    ):
         raise VermilionChapterError("Rocket thief lacks its planned Potion recovery boundary.")
 
     def guarded_policy(raw: RawGameState) -> int:
@@ -1311,7 +1315,7 @@ def _run_route_6_trainer_f_with_potion(
     if not (
         VERMILION_ROUTE_6_POTION_RESERVE
         <= starting_reserve
-        <= ROUTE_25_RECOVERY_POTION_RESERVE
+        <= CERULEAN_GYM_START_POTION_RESERVE
     ):
         raise VermilionChapterError("Route 6 recovery reserve is outside its bounded range.")
 

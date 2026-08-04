@@ -72,7 +72,7 @@ def test_ss_anne_rival_can_use_multiple_retained_potions_with_one_intent(
     assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
 
 
-def test_ss_anne_rival_accepts_five_potions_when_none_are_needed(
+def test_ss_anne_rival_accepts_seven_potions_when_none_are_needed(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     terminal = RawGameState(
@@ -85,7 +85,7 @@ def test_ss_anne_rival_accepts_five_potions_when_none_are_needed(
         first_party_hp=71,
         first_party_max_hp=71,
     )
-    monkeypatch.setattr(ss_anne, "_bag_quantity", lambda *_args: 5)
+    monkeypatch.setattr(ss_anne, "_bag_quantity", lambda *_args: 7)
     monkeypatch.setattr(
         ss_anne,
         "run_adaptive_trainer_battle",
