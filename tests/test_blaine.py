@@ -11,6 +11,7 @@ from pokemon_red_completion.blaine import (
     BLAINE_MAX_WILD_FLEES,
     BLAINE_MONEY_DELTA,
     BLAINE_PARTY,
+    BLAINE_TM21_SALE_VALUE,
     BLAINE_TO_GYM_EXIT,
     CENTER_TO_MANSION,
     GYM_GATE_EVENTS,
@@ -90,9 +91,11 @@ def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -
     assert not _sell_antidote_before_mansion(18, 0)
     assert not _sell_antidote_before_mansion(18, 1)
     assert not _sell_antidote_before_mansion(18, 2)
+    assert not _sell_antidote_before_mansion(19, 0)
     assert _sell_antidote_before_mansion(19, 1)
     assert _sell_antidote_before_mansion(19, 2)
     assert _sell_antidote_before_mansion(20, 1)
+    assert BLAINE_TM21_SALE_VALUE == 2_500
 
 
 def test_blaine_replaces_an_early_sold_bide_capacity_slot() -> None:

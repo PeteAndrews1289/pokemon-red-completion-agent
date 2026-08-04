@@ -92,6 +92,7 @@ BLAINE_INPUT_BAG_SLOT_BOUNDS = (15, 20)
 BLAINE_MONEY_DELTA = 5_003
 BLAINE_ANTIDOTE_SALE_VALUE = 50
 BLAINE_POTION_SALE_VALUE = 150
+BLAINE_TM21_SALE_VALUE = 2_500
 BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST = 1_300
 MAX_REPEL_PRICE = 700
 ULTRA_BALL_PRICE = 1_200
@@ -362,6 +363,7 @@ class BlaineChapterReport:
     team_readiness: DevelopedTeamReport | None = None
     team_training_battles: int = 0
     team_training_healing_trips: int = 0
+    tm21_sold_early: bool = False
 
     @property
     def passed(self) -> bool:
@@ -420,12 +422,9 @@ class BlaineChapterReport:
             - (self.max_repel_bought - 1) * MAX_REPEL_PRICE
             + (self.antidote_sold_quantity - 1) * BLAINE_ANTIDOTE_SALE_VALUE
             + self.potion_sold_quantity * BLAINE_POTION_SALE_VALUE
+            + int(self.tm21_sold_early) * BLAINE_TM21_SALE_VALUE
             - (ULTRA_BALL_PRICE if self.capacity_ultra_ball_bought else 0)
-            - (
-                BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST
-                if self.capacity_great_ball_bought
-                else 0
-            )
+            - (BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST if self.capacity_great_ball_bought else 0)
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
@@ -486,12 +485,9 @@ class BlaineChapterReport:
             - (self.max_repel_bought - 1) * MAX_REPEL_PRICE
             + (self.antidote_sold_quantity - 1) * BLAINE_ANTIDOTE_SALE_VALUE
             + self.potion_sold_quantity * BLAINE_POTION_SALE_VALUE
+            + int(self.tm21_sold_early) * BLAINE_TM21_SALE_VALUE
             - (ULTRA_BALL_PRICE if self.capacity_ultra_ball_bought else 0)
-            - (
-                BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST
-                if self.capacity_great_ball_bought
-                else 0
-            ),
+            - (BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST if self.capacity_great_ball_bought else 0),
             "location": self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3),
             "party_core": party_core_intact(self.final_raw.party_species_ids),
@@ -534,9 +530,7 @@ class BlaineChapterReport:
                 "tm14_blizzard": self.tm14_quantity,
                 "team_development": {
                     "final_forms_complete": (
-                        self.team_readiness.has_final_form_roster
-                        if self.team_readiness
-                        else None
+                        self.team_readiness.has_final_form_roster if self.team_readiness else None
                     ),
                     "workhorse_species": (
                         self.team_readiness.workhorse_species_id if self.team_readiness else None
@@ -547,9 +541,7 @@ class BlaineChapterReport:
                         else None
                     ),
                     "workhorse_target_level": (
-                        self.team_readiness.workhorse_target_level
-                        if self.team_readiness
-                        else None
+                        self.team_readiness.workhorse_target_level if self.team_readiness else None
                     ),
                     "passed": (self.team_readiness.passed if self.team_readiness else None),
                     "battles": self.team_training_battles,
@@ -590,6 +582,7 @@ class BlaineChapterReport:
                 "antidote_sold": self.antidote_sold,
                 "antidote_sold_quantity": self.antidote_sold_quantity,
                 "potion_sold_quantity": self.potion_sold_quantity,
+                "tm21_sold_early": self.tm21_sold_early,
                 "max_repel_bought": self.max_repel_bought,
                 "money": [self.initial_money, self.money_remaining],
             },
@@ -657,6 +650,11 @@ def run_blaine_chapter(
         or (capacity_great_ball_required and initial_bag.get(ItemId.POKE_BALL, 0) != 1)
         or not 16 <= effective_input_slots <= 20
         or initial_bag.get(ItemId.ANTIDOTE, 0) not in (0, 1, 2)
+        or (
+            effective_input_slots in {19, 20}
+            and initial_bag.get(ItemId.ANTIDOTE, 0) == 0
+            and initial_bag.get(ItemId.TM21_MEGA_DRAIN, 0) != 1
+        )
         or (len(initial_bag) == 20 and potion_sold_quantity == 0)
     ):
         raise BlaineChapterError(
@@ -695,6 +693,7 @@ def run_blaine_chapter(
         effective_input_slots,
         initial_bag.get(ItemId.ANTIDOTE, 0),
     )
+    sell_tm21_early = effective_input_slots in {19, 20} and initial_bag.get(ItemId.ANTIDOTE, 0) == 0
     if sell_antidote_early:
         _sell_bag_item_stack(
             actions,
@@ -705,12 +704,22 @@ def run_blaine_chapter(
         )
         if _bag(emulator).get(BLAINE_CAPACITY_SALE_ITEM, 0):
             raise BlaineChapterError("Obsolete Antidote sale did not settle.")
+    elif sell_tm21_early:
+        _sell_bag_item_stack(
+            actions,
+            reader,
+            emulator,
+            ItemId.TM21_MEGA_DRAIN,
+            1,
+        )
+        if _bag(emulator).get(ItemId.TM21_MEGA_DRAIN, 0):
+            raise BlaineChapterError("Obsolete TM21 sale did not settle.")
     else:
         _open_sell_menu(actions, emulator)
-    # The consumed Silph X Special leaves one extra free slot in this lineage.
-    # Retain TM21 here so TM14 plus the Secret Key still fill the bag and keep
-    # Blaine's delayed-TM38 reward boundary meaningful. Stay in the sell menu
-    # so _buy_repel can return directly to the clerk's BUY/SELL menu.
+    # Retain TM21 when possible so TM14 plus the Secret Key still fill the bag.
+    # A capacity-bound lineage with no Antidote sells that later-unused TM
+    # instead; the two Mansion pickups still restore the delayed-TM38 boundary.
+    # Stay in SELL so _buy_repel can return directly to BUY/SELL.
     _buy_repel(
         actions,
         reader,
@@ -921,9 +930,7 @@ def run_blaine_chapter(
     _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart return")
     _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk return")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
-    capacity_sale_item = (
-        ItemId.GREAT_BALL if capacity_great_ball_required else ItemId.TM34_BIDE
-    )
+    capacity_sale_item = ItemId.GREAT_BALL if capacity_great_ball_required else ItemId.TM34_BIDE
     _sell_current_bag_item(actions, reader, emulator, capacity_sale_item)
     if _bag(emulator).get(capacity_sale_item, 0):
         raise BlaineChapterError(f"{capacity_sale_item.name} capacity sale did not settle.")
@@ -975,9 +982,7 @@ def run_blaine_chapter(
         x_accuracy_retained=_bag(emulator).get(ItemId.X_ACCURACY, 0) == 1,
         bide_sold=ItemId.TM34_BIDE not in _bag(emulator),
         antidote_sold=sell_antidote_early,
-        antidote_sold_quantity=(
-            initial_bag.get(ItemId.ANTIDOTE, 0) if sell_antidote_early else 0
-        ),
+        antidote_sold_quantity=(initial_bag.get(ItemId.ANTIDOTE, 0) if sell_antidote_early else 0),
         max_repel_bought=repel_purchase_quantity,
         initial_money=initial_money,
         money_remaining=_money(emulator),
@@ -993,6 +998,7 @@ def run_blaine_chapter(
         capacity_great_ball_bought=capacity_great_ball_required,
         initial_bag_slot_count=len(initial_bag),
         potion_sold_quantity=potion_sold_quantity,
+        tm21_sold_early=sell_tm21_early,
         team_readiness=team_readiness,
         team_training_battles=team_battles,
         team_training_healing_trips=team_healing_trips,
@@ -1039,9 +1045,7 @@ def _sell_bag_item_stack(actions, reader, emulator, item: ItemId, quantity: int)
             break
         _pulse(actions, MacroActionKind.MOVE, "up", 120)
     else:
-        raise BlaineChapterError(
-            f"Cinnabar sale quantity selector missed {quantity} {item.name}."
-        )
+        raise BlaineChapterError(f"Cinnabar sale quantity selector missed {quantity} {item.name}.")
     for _ in range(12):
         _pulse(actions, MacroActionKind.CONFIRM)
         if item not in _bag(emulator):
@@ -1061,18 +1065,16 @@ def _sell_antidote_before_mansion(
     input_slots: int,
     antidote_quantity: int,
 ) -> bool:
-    """Sell the Antidote when a 19- or 20-slot effective plan needs one free slot."""
+    """Prefer the Antidote when a capacity-bound plan has that obsolete cure."""
 
     if not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= input_slots <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]:
         raise BlaineChapterError(f"Unsupported Blaine input capacity: {input_slots} slots.")
-    if antidote_quantity not in (0, 1, 2) or (
-        input_slots in {19, 20} and antidote_quantity == 0
-    ):
+    if antidote_quantity not in (0, 1, 2):
         raise BlaineChapterError(
             "Unsupported Blaine Antidote capacity: "
             f"slots={input_slots}, quantity={antidote_quantity}."
         )
-    return input_slots in {19, 20}
+    return input_slots in {19, 20} and antidote_quantity > 0
 
 
 def _blaine_capacity_input_slots(
@@ -1092,9 +1094,7 @@ def _blaine_capacity_input_slots(
     potion_sale_required = input_slots == 20 or (input_slots == 19 and not bide_present)
     if potion_sale_required:
         if potion_quantity == 0:
-            raise BlaineChapterError(
-                "Capacity-bound Blaine input lacks obsolete Potions to sell."
-            )
+            raise BlaineChapterError("Capacity-bound Blaine input lacks obsolete Potions to sell.")
         return input_slots - 1, potion_quantity
     return input_slots, 0
 
@@ -1340,12 +1340,7 @@ def _team_training_move_slot(state: RawGameState) -> int:
         index + 1
         for move_id in preferred_move_ids
         for index, observed in enumerate(moves)
-        if (
-            observed == move_id
-            and index + 1 != disabled
-            and index < len(pp)
-            and pp[index] > 0
-        )
+        if (observed == move_id and index + 1 != disabled and index < len(pp) and pp[index] > 0)
     )
     if preferred_move_ids and not preferred_slots:
         raise _PauseForTeamTrainingRecovery
@@ -1365,14 +1360,8 @@ class _PauseForTeamTrainingRecovery(Exception):
 def _mansion_training_move_slot(state: RawGameState) -> int:
     """Rank live lead-training attacks while respecting temporary Disable."""
 
-    disabled = (
-        state.player_disabled_move_slot or 0
-        if (state.player_disable_turns or 0) > 0
-        else 0
-    )
-    slots = tuple(
-        slot for slot in MANSION_TRAINING_POLICY.preferred_move_slots if slot != disabled
-    )
+    disabled = state.player_disabled_move_slot or 0 if (state.player_disable_turns or 0) > 0 else 0
+    slots = tuple(slot for slot in MANSION_TRAINING_POLICY.preferred_move_slots if slot != disabled)
     try:
         return choose_training_move_slot(state.battler_pp or (), slots)
     except ValueError as error:
@@ -1512,11 +1501,7 @@ def _run_mansion_team_balancing(
                     f"target={evolution_target!r}, levels={party.levels!r}."
                 )
             trainee = next(
-                (
-                    member
-                    for member in party.members
-                    if member.species_id == precursor_species
-                ),
+                (member for member in party.members if member.species_id == precursor_species),
                 None,
             )
             if trainee is None:
@@ -1727,11 +1712,7 @@ def _run_mansion_team_balancing(
             party.weakest_trainable_member
             if evolution_target is None
             else next(
-                (
-                    member
-                    for member in party.members
-                    if member.species_id == evolution_target[0]
-                ),
+                (member for member in party.members if member.species_id == evolution_target[0]),
                 None,
             )
         )
@@ -1763,9 +1744,7 @@ def _run_mansion_team_balancing(
         healing_trips += 1
     _restore_training_core_order(actions, reader, emulator)
     report = (
-        summarize_team_readiness(party_reader.read(), policy)
-        if evolution_target is None
-        else None
+        summarize_team_readiness(party_reader.read(), policy) if evolution_target is None else None
     )
     return report, battles, healing_trips
 

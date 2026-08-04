@@ -1208,3 +1208,8 @@ That replay continued to checkpoint 239 before Celadon Mart 5F's vertical gentle
 `(14, 2)` during the X Special approach. The teacher may now step from the exact blocked stance
 `(15, 2)` to `(15, 3)`, wait within a fixed 16-attempt bound, restore the approach, and prove the
 westward crossing. No other shop collision receives this exception.
+
+The next replay passed that customer and reached the Cinnabar preparation gate at checkpoint 272
+with 19 effective bag slots and no Antidote. Earlier capacity logic only knew how to free a slot by
+selling that obsolete cure. The teacher now sells the equally unused TM21 in this exact full-bag
+variant, accounts for its ₽2,500 proceeds, and preserves Bide for the delayed TM38 capacity lesson.
