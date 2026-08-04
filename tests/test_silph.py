@@ -121,9 +121,16 @@ def test_battle_healing_uses_the_shared_long_settle_bound() -> None:
 def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:
     route_items = {item: 1 for item in SILPH_PC_DEPOSIT_ITEMS}
 
-    nineteen_slots = {**route_items, **{1000 + index: 1 for index in range(16)}}
+    nineteen_slots = {
+        **route_items,
+        ItemId.X_ACCURACY: 1,
+        **{1000 + index: 1 for index in range(15)},
+    }
     assert _silph_capacity_deposit_items(nineteen_slots) == SILPH_PC_DEPOSIT_ITEMS
     assert _silph_capacity_ready(nineteen_slots)
+    replacement_pending = {**route_items, **{1000 + index: 1 for index in range(13)}}
+    assert len(replacement_pending) == 16
+    assert _silph_capacity_deposit_items(replacement_pending) == (ItemId.SS_TICKET,)
     already_safe = {
         ItemId.SS_TICKET: 1,
         ItemId.LIFT_KEY: 1,

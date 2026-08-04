@@ -1070,7 +1070,11 @@ def _silph_capacity_deposit_items(
 ) -> tuple[ItemId, ...] | None:
     """Select only the available obsolete items needed for a sixteen-slot boundary."""
 
-    slots_to_free = max(0, len(bag) - 16)
+    # Koga consumes the Tower X Accuracy against Muk.  This chapter replaces
+    # it during the 5F battle-item purchase, so a missing copy at entry needs
+    # one reserved future slot before Card Key and Master Ball are awarded.
+    replacement_slots = 0 if bag.get(ItemId.X_ACCURACY, 0) else 1
+    slots_to_free = max(0, len(bag) + replacement_slots - 16)
     available = tuple(item for item in SILPH_PC_DEPOSIT_ITEMS if bag.get(item, 0) == 1)
     if len(available) < slots_to_free:
         return None
