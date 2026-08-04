@@ -569,6 +569,6 @@ separate finite approach and return budgets and fail-closed map and battle bound
 V36 later completed five fresh **312/312** diagnostic schedules and its official **69/69**
 rehearsal. Counted training therefore began, but train slot 01 exposed a sixth Route 9 Super Potion
 use and stopped at checkpoint 106 with four remaining, below the declared five-item tunnel floor.
-That root is sealed and v36 is retired. V37 protects the five-item tunnel reserve across both
+That root is sealed and v36 is retired. V37 protects a six-item tunnel reserve across both
 Route 9 recovery controllers, must first pass the exposed v36 schedule as an uncounted diagnostic,
 and assigns wholly fresh counted seeds before collection resumes.

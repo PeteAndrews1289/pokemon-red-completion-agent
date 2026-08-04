@@ -1490,8 +1490,10 @@ entered the Hall of Fame. Its first counted training seed then reached Route 10 
 Super Potions: the held-out Route 9 timings had consumed six, one more than every qualifying run,
 and the teacher correctly stopped before opening Rock Tunnel. V36 is retired with that immutable
 failure and eleven unopened slots. The exposed seed becomes diagnostic-only. V37 exposes only the
-live surplus above five to both Route 9 recovery controllers; once that shared budget is exhausted,
-the balanced party continues with living teammates instead of spending Rock Tunnel's reserve.
+live surplus above six to both Route 9 recovery controllers; once that shared budget is exhausted,
+the balanced party continues with living teammates instead of spending Rock Tunnel's reserve. The
+eleventh purchase input is paired with a modulo-256 alignment wait that restores the previously
+qualified battle RNG phase.
 
 V37 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `280001`–`280005`, `290001`–`290002`, and `300001`–`300005`. The exposed V36 training seed

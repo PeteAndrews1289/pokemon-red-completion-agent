@@ -19,7 +19,7 @@ control, and progressively trained specialists.**
 > 69-battle rehearsal, each at **312/312 checkpoints** and Hall of Fame. Its first immutable
 > training schedule then spent a sixth Super Potion on Route 9 and stopped at checkpoint 106 with
 > four remaining, below the declared five-item Rock Tunnel floor. That honest failure is sealed.
-> V37 protects the five-item tunnel reserve across both Route 9 battles and uses living teammates
+> V37 protects a six-item tunnel reserve across both Route 9 battles and uses living teammates
 > once the healing surplus is exhausted. It uses the exposed v36 schedule only as an uncounted
 > diagnostic and assigns entirely fresh train, validation, and test seeds. Actual learned-policy
 > fitting begins only after the replacement demonstrations complete.

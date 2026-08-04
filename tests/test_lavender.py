@@ -204,24 +204,23 @@ def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert BATTLE_RECOVERY_THRESHOLD == 40
     assert lavender_module.TUNNEL_RECOVERY_THRESHOLD == 40
     assert DUX_BATTLE_RECOVERY_THRESHOLD == 20
-    assert ROUTE_9_MIN_SUPER_POTION_RESERVE == 5
-    assert lavender_module.TUNNEL_SUPER_POTION_TARGET == 10
+    assert ROUTE_9_MIN_SUPER_POTION_RESERVE == 6
+    assert lavender_module.TUNNEL_SUPER_POTION_TARGET == 11
     assert TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD == 40
     assert FINAL_TUNNEL_RECOVERY_THRESHOLD == 90
     assert lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED == 3
     assert lavender_module.TUNNEL_AWAKENINGS_PURCHASED == 3
     assert lavender_module.TUNNEL_AWAKENING_RESERVE == 5
-    assert lavender_module.POST_MART_RNG_ALIGNMENT_FRAMES == 47
+    assert lavender_module.POST_MART_RNG_ALIGNMENT_FRAMES == 159
     assert (
         lavender_module.POST_MART_RNG_ALIGNMENT_FRAMES
-        + (lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED - 1) * 144
-        == 335
-    )
+        + lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED * 144
+    ) % 256 == 335 % 256
 
 
 @pytest.mark.parametrize(
     ("carried", "allowance"),
-    ((10, 5), (7, 2), (5, 0), (4, 0)),
+    ((11, 5), (8, 2), (6, 0), (5, 0)),
 )
 def test_route_9_recovery_spends_only_the_surplus_above_tunnel_reserve(
     monkeypatch: pytest.MonkeyPatch,

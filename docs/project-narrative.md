@@ -989,9 +989,11 @@ eligible for fitting or evaluation.
 
 V37 turns that failure into a portable resource-planning lesson instead of weakening the safety
 gate or overprovisioning the inventory: both Route 9 controllers compute their healing allowance
-from the live surplus above the five-item Rock Tunnel reserve. Once that shared budget is gone,
-the balanced party continues with living teammates. The exposed v36 schedule is diagnostic-only;
-v37 uses fresh seeds for all five training, two validation, and five test lineages.
+from the live surplus above a six-item Rock Tunnel reserve. Once that shared budget is gone, the
+balanced party continues with living teammates. Buying the eleventh potion adds one 144-frame menu
+input, so a modulo-256 alignment wait restores the previously qualified battle RNG phase instead
+of silently shifting every tunnel matchup. The exposed v36 schedule is diagnostic-only; v37 uses
+fresh seeds for all five training, two validation, and five test lineages.
 
 ## Engineering and portfolio takeaways
 
