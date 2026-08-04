@@ -945,6 +945,18 @@ prove each heal and inventory decrement before replanning. This adds a transfera
 only the surplus above the next objective's reserve—without inventing a helper that does not yet
 exist or loosening the downstream economy.
 
+## V16 held-out finding and v17 response
+
+The v16 source subsequently passed its full uncounted **312/312**, **36/36**, **69/69**
+qualification. Its first immutable training schedule reached the Champion's final Venusaur and
+then exposed a long-horizon move-resource error: Blizzard had been used on neutral earlier
+matchups, Venusaur's Full Restore outlasted the remaining Ice coverage, and the final-form but
+lower-level reserves could not recover the fight. The failed root remains permanent and the other
+eleven v16 roots remain unopened. V17 turns that failure into a portable lesson by selecting moves
+from matchup and remaining-role value rather than a single global priority: physical attacks for
+Alakazam and Gyarados, Surf for Rhydon and Arcanine, and preserved Blizzard for Venusaur. The
+exposed v16 schedule is now rehearsal-only; every v17 counted seed is fresh.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v16.json`](../configs/red-battle-collection-v16.json)
+[`red-battle-collection-v17.json`](../configs/red-battle-collection-v17.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1262,3 +1262,13 @@ targeted Water Gun. The pre-ship selector respected PP but did not exclude the l
 so the battle runtime rejected the attempted action. V15 remains sealed with that failed outcome.
 V16 adds the missing semantic disabled-slot gate and uses fresh rehearsal seed `21005` plus counted
 seeds `26001`–`26005`, `36001`–`36002`, and `46001`–`46005`.
+
+V16 then completed its uncounted qualification at **312/312 checkpoints**, **36/36 objectives**,
+and **69/69** schedule attestations. Its first one-shot training root reached the Champion's final
+Venusaur but failed after the generic move ranking had spent Blizzard PP on earlier opponents.
+The permanent v16 ledger records that failure, so the campaign cannot provide five complete train
+roots and its remaining eleven roots stay unopened. V17 promotes exposed seed `26001` to the
+uncounted rehearsal and preregisters fresh train seeds `27001`–`27005`, validation seeds
+`37001`–`37002`, and sealed test seeds `47001`–`47005`. Its Champion policy reserves Blizzard for
+Venusaur, uses Surf against Rhydon and Arcanine, exploits Alakazam's physical Defense, and excludes
+the live disabled move from every ranking.

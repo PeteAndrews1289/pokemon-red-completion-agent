@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 from pokemon_red_completion.champion import (
     CHAMPION_ARCANINE_FINISH_SAFE_HP,
     CHAMPION_CHECKPOINT_COUNT,
@@ -102,13 +104,23 @@ def test_champion_move_ranking_distinguishes_late_matchups() -> None:
         )
 
     assert _champion_move_slot(raw(0x97, pp=(5, 10, 15, 0))) == 2
-    assert _champion_move_slot(raw(0x95)) == 3
-    assert _champion_move_slot(raw(0x01, pp=(5, 10, 15, 0))) == 3
-    assert _champion_move_slot(raw(0x14)) == 3
-    assert _champion_move_slot(raw(0x14, pp=(5, 0, 0, 3))) == 1
-    assert _champion_move_slot(raw(0x16, enemy_hp=31, pp=(5, 15, 15, 3))) == 3
-    assert _champion_move_slot(raw(0x16, enemy_hp=196, pp=(5, 15, 15, 3))) == 3
+    assert _champion_move_slot(raw(0x95)) == 2
+    assert _champion_move_slot(raw(0x01, pp=(5, 10, 15, 3))) == 4
+    assert _champion_move_slot(raw(0x14, pp=(5, 15, 15, 3))) == 4
+    assert _champion_move_slot(raw(0x14, pp=(5, 0, 0, 0))) == 1
+    assert _champion_move_slot(raw(0x16, enemy_hp=31, pp=(5, 15, 15, 3))) == 2
+    assert _champion_move_slot(raw(0x16, enemy_hp=196, pp=(5, 15, 15, 3))) == 2
     assert _champion_move_slot(raw(0x9A, pp=(5, 15, 15, 3))) == 3
+    assert (
+        _champion_move_slot(
+            replace(
+                raw(0x9A, pp=(5, 15, 15, 3)),
+                player_disabled_move_slot=3,
+                player_disable_turns=2,
+            )
+        )
+        == 2
+    )
     assert (
         _champion_move_slot(
             raw(

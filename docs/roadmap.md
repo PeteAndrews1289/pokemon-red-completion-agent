@@ -510,3 +510,12 @@ V15 then qualified all 312 checkpoints with the balanced party, but its first co
 a missing disabled-move exclusion during the Route 11 lesson. The failed outcome is sealed. V16
 adds that semantic action gate and receives a new rehearsal and entirely new counted schedules;
 full qualification is again required before any v16 training slot opens.
+
+V16 qualified **312/312 checkpoints**, **36/36 objectives**, and **69/69** scheduled battles. Its
+first immutable training root reached the Champion's final Venusaur before failing at checkpoint
+311. The controller had spent Blizzard against earlier neutral matchups; after the Champion used
+Full Restore, Blastoise exhausted its effective Ice coverage and the lower-level final-form
+reserves could not finish. V16 is sealed with one failed train root and eleven unopened roots. V17
+uses that exposed schedule only for its uncounted rehearsal, assigns fresh counted schedules, and
+teaches matchup-aware resource planning: physical damage for Alakazam and Gyarados, Surf for
+Rhydon and Arcanine, and Blizzard reserved for Venusaur.

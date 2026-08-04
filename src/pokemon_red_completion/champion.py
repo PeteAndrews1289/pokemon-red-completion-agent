@@ -548,19 +548,33 @@ def _select_recovery_item(
 
 
 def _champion_move_slot(raw: RawGameState) -> int:
-    """Spend the five accurate Blizzard PP after Pidgeot."""
+    """Use matchup coverage while reserving Blizzard for the final Venusaur."""
     pp = raw.battler_pp or (0, 0, 0, 0)
     if raw.active_party_index not in {None, 0}:
         for slot, remaining in enumerate(pp, start=1):
-            if remaining > 0 and raw.player_disabled_move_slot != slot:
+            if remaining > 0 and not _champion_move_disabled(raw, slot):
                 return slot
         raise ChampionChapterError("Champion reserve has no usable move PP.")
     species = raw.enemy_species_id or 0
-    priorities = (2, 1, 3, 4) if species == 0x97 else (3, 2, 1, 4)
+    priorities = {
+        0x97: (2, 1, 3, 4),  # Pidgeot: accurate physical damage.
+        0x95: (2, 1, 4, 3),  # Alakazam: exploit its lower physical Defense.
+        0x01: (4, 3, 2, 1),  # Rhydon: four-times-effective Surf.
+        0x16: (2, 1, 3, 4),  # Gyarados: preserve the irreplaceable Ice PP.
+        0x14: (4, 2, 3, 1),  # Arcanine: super-effective Surf.
+        0x9A: (3, 2, 1, 4),  # Venusaur: reserve all possible Blizzard PP.
+    }.get(species, (2, 1, 4, 3))
     for slot in priorities:
-        if pp[slot - 1] > 0:
+        if pp[slot - 1] > 0 and not _champion_move_disabled(raw, slot):
             return slot
     raise ChampionChapterError("Champion has no usable move PP.")
+
+
+def _champion_move_disabled(raw: RawGameState, slot: int) -> bool:
+    return (
+        raw.player_disabled_move_slot == slot
+        and (raw.player_disable_turns or 0) > 0
+    )
 
 
 def _champion_forced_switch_target(
@@ -638,9 +652,9 @@ def _settle_champion_battle_exit(
 def _champion_recovery_threshold(raw: RawGameState) -> int:
     """Reserve recovery against Rhydon's low-pressure, Rest-heavy matchup."""
     if raw.enemy_species_id == 0x9A:
-        # The final Alakazam can erase more than the generic safety margin in
-        # one turn, so use recovery whenever any remains. Living developed
-        # teammates continue the battle if the active battler later faints.
+        # The final Venusaur's high-critical-rate Razor Leaf can erase more
+        # than the generic safety margin in one turn, so use any remaining
+        # recovery before committing the reserved Ice coverage.
         return raw.first_party_max_hp or CHAMPION_SAFE_HP
     if raw.enemy_species_id == 0x01:
         return CHAMPION_RHYDON_SAFE_HP
