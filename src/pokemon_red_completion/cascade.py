@@ -198,7 +198,7 @@ class CascadeTiming:
     misty_reward_pulses: int = 9
     max_trainer_intro_pulses: int = 48
     max_bill_phase_pulses: int = 24
-    max_route_24_npc_attempts: int = 4
+    max_route_24_npc_attempts: int = 8
     battle_runtime: BattleRuntimeTiming = BattleRuntimeTiming(
         max_runtime_pulses=720,
         max_main_navigation_pulses=6,

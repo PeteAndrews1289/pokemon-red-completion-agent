@@ -333,6 +333,16 @@ def test_route_24_npc_crossing_retries_blocked_inputs_until_live_progress() -> N
     assert executor.left_pulses == 13
 
 
+def test_route_24_npc_crossing_tolerates_qualified_long_npc_blockage() -> None:
+    reader = _Route24CrossingReader(blocked_pulses=39)
+    executor = _Route24CrossingExecutor(reader)
+
+    _cross_route_24_npc(executor, reader, DEFAULT_CASCADE_TIMING)
+
+    assert (reader.x, reader.y) == (8, 16)
+    assert executor.left_pulses == 47
+
+
 def test_route_24_npc_crossing_fails_closed_when_progress_never_occurs() -> None:
     reader = _Route24CrossingReader(blocked_pulses=10_000)
     executor = _Route24CrossingExecutor(reader)
@@ -341,7 +351,7 @@ def test_route_24_npc_crossing_fails_closed_when_progress_never_occurs() -> None
         _cross_route_24_npc(executor, reader, DEFAULT_CASCADE_TIMING)
 
     assert (reader.x, reader.y) == (16, 16)
-    assert executor.left_pulses == 40
+    assert executor.left_pulses == 72
 
 
 def test_cascade_timing_defaults_are_positive_and_pin_qualified_delays() -> None:
@@ -352,7 +362,7 @@ def test_cascade_timing_defaults_are_positive_and_pin_qualified_delays() -> None
     assert DEFAULT_CASCADE_TIMING.gym_trainer_cleanup_pulses == 3
     assert DEFAULT_CASCADE_TIMING.bill_ticket_cleanup_pulses == 9
     assert DEFAULT_CASCADE_TIMING.misty_reward_pulses == 9
-    assert DEFAULT_CASCADE_TIMING.max_route_24_npc_attempts == 4
+    assert DEFAULT_CASCADE_TIMING.max_route_24_npc_attempts == 8
     for field in fields(CascadeTiming):
         if field.name == "battle_runtime":
             continue
