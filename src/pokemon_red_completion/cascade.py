@@ -2320,7 +2320,7 @@ def _run_cerulean_gym_trainer_with_potion(
                             emulator,
                             expected_map=MapId.CERULEAN_GYM,
                             starting_quantity=starting_quantity,
-                            ending_quantity=ROCKET_THIEF_POTION_RESERVE,
+                            ending_quantity=starting_quantity - 1,
                             label="Cerulean Gym reserve",
                         )
                         recovery_used = True

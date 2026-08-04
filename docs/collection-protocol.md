@@ -48,6 +48,12 @@ an accidental exact-count requirement into the intended resource lesson: recover
 when live damage requires it, never mandatory merely to reproduce one historical inventory. V7
 must pass its complete qualification before any counted slot opens.
 
+The first expanded-reserve replay reached the same mandatory Gym trainer and legitimately needed
+one post-battle heal, but its item helper still asserted the retired four-Potion destination rather
+than the new starting quantity minus one. That uncounted bookkeeping failure stopped at checkpoint
+55. The helper now proves exactly one decrement on the damaged branch and zero decrements on the
+full-health branch; both have direct regression coverage before the next complete rehearsal.
+
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
 Center immediately before the accuracy-lowering trainer, may spend one of the already-budgeted

@@ -625,6 +625,53 @@ def test_cerulean_gym_preserves_unused_potion_after_full_hp_victory(
     assert _bag_quantity_for_test(emulator) == CERULEAN_GYM_START_POTION_RESERVE
 
 
+def test_cerulean_gym_spends_exactly_one_potion_after_damaged_victory(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    emulator = _MemoryEmulator(potion_quantity=CERULEAN_GYM_START_POTION_RESERVE)
+    starting = replace(
+        _raw(),
+        first_party_hp=61,
+        first_party_max_hp=61,
+        first_party_pp=(25, 30, 20, 25),
+    )
+    terminal = replace(
+        starting,
+        first_party_hp=41,
+        first_party_pp=(25, 30, 19, 25),
+    )
+
+    class Reader:
+        reads = 0
+
+        def read(self) -> RawGameState:
+            self.reads += 1
+            return starting if self.reads == 1 else terminal
+
+        def read_input_readiness(self) -> object:
+            return type("Ready", (), {"ready": True})()
+
+    def fake_recovery(*_args: object, **kwargs: object) -> None:
+        assert kwargs["starting_quantity"] == CERULEAN_GYM_START_POTION_RESERVE
+        assert kwargs["ending_quantity"] == CERULEAN_GYM_START_POTION_RESERVE - 1
+        emulator.memory[int(RamAddress.BAG_ITEMS) + 1] -= 1
+
+    monkeypatch.setattr(cascade_module, "_select_battle_move", lambda *_a, **_k: None)
+    monkeypatch.setattr(cascade_module, "_use_field_recovery_potion", fake_recovery)
+    monkeypatch.setattr(cascade_module, "_wait", lambda *_a, **_k: None)
+
+    observed = _run_cerulean_gym_trainer_with_potion(
+        Reader(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        emulator,
+        DEFAULT_CASCADE_TIMING,
+        "Cerulean Gym trainer",
+    )
+
+    assert observed is terminal
+    assert _bag_quantity_for_test(emulator) == CERULEAN_GYM_START_POTION_RESERVE - 1
+
+
 def _bag_quantity_for_test(emulator: _MemoryEmulator) -> int:
     return emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1)
 
