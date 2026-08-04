@@ -164,7 +164,7 @@ Teaching therefore targets a **developed six-member party** instead:
 
 - acquire and retain six members with complementary roles;
 - evolve every member to its declared final form available in the title and save-lineage contract;
-- train the designated completion workhorse to level 75;
+- train the designated completion workhorse to level 60, then require full-route qualification;
 - avoid grinding already-final non-workhorses merely to imitate the carry's level; and
 - permit temporary deviations only when progression requires them, with the reason recorded.
 

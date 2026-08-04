@@ -1,6 +1,7 @@
 from pokemon_red_completion.cinnabar import (
     CINNABAR_CHECKPOINT_COUNT,
     CINNABAR_MAX_INPUT_BAG_SLOTS,
+    CINNABAR_MIN_LEAD_LEVEL,
     CINNABAR_TO_CENTER,
     DUX_MOVES_AFTER,
     DUX_MOVES_BEFORE,
@@ -25,6 +26,7 @@ from pokemon_red_completion.observation import (
 def test_cinnabar_routes_and_field_move_contract_are_pinned() -> None:
     assert CINNABAR_CHECKPOINT_COUNT == 6
     assert CINNABAR_MAX_INPUT_BAG_SLOTS == 19
+    assert CINNABAR_MIN_LEAD_LEVEL == 47
     assert len(TREE_TO_FLY_HOUSE) == 37
     assert len(PALLET_TO_SHORE) == 13
     assert len(ROUTE_21_TO_CINNABAR) == 93

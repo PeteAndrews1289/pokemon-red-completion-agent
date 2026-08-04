@@ -137,6 +137,19 @@ def test_tracker_accepts_all_nine_source_ordered_boundaries() -> None:
     assert tracker.saw_rival_battle
 
 
+def test_rival_identity_ignores_stale_engaged_trainer_scratch_fields() -> None:
+    rival = replace(
+        _ordered_states()[5],
+        engaged_trainer_class=0x15,
+        engaged_trainer_set=7,
+    )
+
+    assert rival.rival_battle_snapshot
+    assert not replace(rival, current_opponent=0).rival_battle_snapshot
+    assert not replace(rival, trainer_class=0).rival_battle_snapshot
+    assert not replace(rival, trainer_number=0).rival_battle_snapshot
+
+
 @pytest.mark.parametrize(
     ("changes", "missing"),
     (

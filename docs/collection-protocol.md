@@ -134,7 +134,50 @@ excluded from that readiness gate. It also proved that stepping back onto `(37, 
 it activates the return warp. A third rehearsal proved the assumed northbound neighbor of
 `(37, 30)` is blocked. The trainer now makes one verified step to that safe anchor, probes only
 non-warp neighbors until one actually changes the observed coordinate, and remembers the inverse
-step so every encounter excursion remains one tile from the anchor.
+step so every encounter excursion remains one tile from the anchor. A fourth rehearsal showed
+that a wild battle can begin before the coordinate changes; that battle now counts as a successful
+search action and preserves any already-known return direction across the battle.
+
+The first bounded-recovery rehearsal correctly retreated before another faint and returned through
+the Route 11 gate, but an unexercised shortcut then tried to walk south through the Vermilion Mart
+at `(26, 15)`. The return now reverses the already-qualified eastbound Mart-to-Route-11 path to the
+observed `(23, 14)` Mart exterior, then reuses the qualified Mart-to-Center path.
+
+That route completed the staged development and reached the ship's second-floor rival corridor.
+The first battle-state byte appeared one observation before the full RIVAL2 identity fields, so an
+immediate checkpoint classified the boundary as unknown. Rival entry now waits without issuing a
+battle choice until the complete opponent, trainer, and ship-script identity contract is
+simultaneously true.
+
+The resulting diagnostic proved the live opponent (`RIVAL2`), trainer class, trainer number, map,
+coordinate, and ship script were all correct. Only the auxiliary engaged-trainer scratch fields
+still held the preceding Route 6 trainer identity after the new wild-training block; one value
+matched the old rival gate only by coincidence. Those stale fields are no longer treated as rival
+identity. The live battle fields and ship-local script remain mandatory and are independently
+regression-tested against the wrong opponent, class, and trainer number.
+
+At level 30 the workhorse then defeated the rival without consuming the three-Super-Potion
+reserve. The previous contract rejected that stronger outcome because it required all three items
+to be deliberately wasted solely to recreate an older inventory shape. Recovery now proves the
+exact adaptive decrement from zero through three uses and preserves every unneeded item for later
+chapters.
+
+Surge preparation now treats that legal carryover as funded capacity: it buys one Super Potion
+only when the observed reserve is zero, otherwise preserves the existing one-to-three copies. The
+Gym receipt checks the exact starting target minus the optional single live recovery instead of
+assuming the route began with zero and must end with zero or one.
+
+Lavender preparation likewise accepts the resulting zero-to-three carryover and buys only the
+shortfall to its fixed ten-Super-Potion Rock Tunnel capacity. When two or more stronger items carry
+in, it liquidates one obsolete 20-HP Potion for ₽150 to close the pre-trainer Repel budget without
+weakening the high-value reserve. Its purchase receipt records the actual quantity and cost; the
+later four-item reserve remains unchanged.
+
+The stronger workhorse naturally reaches Blastoise before the historical Tower Rare Candy gate.
+Tower now accepts either Wartortle or an already-evolved Blastoise at entry, initializes its party
+guard from that observed legal lineage state, and records `(Blastoise, Blastoise)` as the evolution
+receipt when no further transformation or candy use is needed. DUX, Diglett, party order, moves,
+living HP, and the final Blastoise roster remain mandatory.
 
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the

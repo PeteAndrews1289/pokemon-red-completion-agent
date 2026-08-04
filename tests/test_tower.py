@@ -28,8 +28,10 @@ from pokemon_red_completion.tower import (
     TowerChapterReport,
     TowerCheckpoint,
     TowerTiming,
+    _observe_protected_party,
     _plan_route_8_east,
     _route_8_coordinate_is_safe,
+    _RunState,
     _scripted_trainer_identity,
     party_core_intact,
 )
@@ -185,6 +187,24 @@ def test_tower_report_accepts_natural_evolution_without_spending_rare_candy() ->
     report = replace(_report(), rare_candy_used_for_evolution=False)
 
     assert report.passed
+
+
+def test_tower_report_accepts_blastoise_that_evolved_before_tower() -> None:
+    report = replace(
+        _report(),
+        rare_candy_used_for_evolution=False,
+        evolution_before=TOWER_FINAL_PARTY,
+    )
+
+    assert report.passed
+
+
+def test_tower_guard_learns_a_natural_mid_chapter_evolution() -> None:
+    run = _RunState()
+    evolved = replace(_raw(), party_species_ids=TOWER_FINAL_PARTY, first_party_hp=78)
+
+    assert _observe_protected_party(run, evolved)
+    assert run.evolved
 
 
 def test_tower_report_accepts_a_conserved_surplus_inventory_path() -> None:

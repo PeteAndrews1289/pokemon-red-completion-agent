@@ -110,7 +110,7 @@ HYDRO_PUMP_LEARN_LEVEL = 52
 MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL = 10_000
 JOLTEON_SPECIES_ID = 0x68
 MANSION_TRAINING_POLICY = TrainingPolicy(
-    target_level=75,
+    target_level=60,
     preferred_move_slots=(4, 2, 3, 1),
     retreat_hp_ratio=0.45,
     reserve_total_pp=2,
@@ -122,7 +122,7 @@ MANSION_TRAINING_POLICY = TrainingPolicy(
 MANSION_DEVELOPMENT_POLICY = DevelopedTeamPolicy(
     roster=RED_BALANCED_ROSTER,
     workhorse_species_id=BLASTOISE_SPECIES_ID,
-    workhorse_target_level=75,
+    workhorse_target_level=60,
 )
 #: Balance contract for the Mansion block.
 #:
@@ -1423,7 +1423,7 @@ def _qualify_mansion_team_development(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> DevelopedTeamReport:
-    """Require final available forms and the level-75 completion workhorse."""
+    """Require final available forms and the level-60 completion workhorse."""
 
     party = PokemonRedPartyReader(emulator).read()
     decision = plan_team_development(party, MANSION_DEVELOPMENT_POLICY)

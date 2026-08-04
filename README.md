@@ -47,11 +47,15 @@ control, and progressively trained specialists.**
 > evaluation remain open. See the
 > [sanitized six-member receipt](docs/evidence/qualified-play-balanced-six-2026-08-01.json).
 > The active curriculum now separates **evolution readiness** from **equal-level grinding**. It
-> requires the complete declared final-form roster and a level-75 Blastoise workhorse, while the
+> requires the complete declared final-form roster and a level-60 Blastoise workhorse, while the
 > older five-level-spread policy remains available as an optional experiment. This directly
 > supports the future Pokédex curriculum and removes roughly five thousand redundant Mansion wins
-> from each prospective teacher trajectory. This revised source still requires a fresh 312/312,
-> 68/68 uncounted qualification before collection slot `01` can open.
+> from each prospective teacher trajectory. The level-60 target is supported by an earlier
+> three-member run that entered the Hall of Fame at level 61 and has now passed a clean-power
+> six-member replay: **312/312 checkpoints**, **36/36 objectives**, and Hall of Fame in **87,020
+> actions**. Mansion development required 177 workhorse wins plus 24 targeted evolution battles.
+> A fresh source-bound 68/68 scheduled qualification is still required before collection slot
+> `01` can open.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the

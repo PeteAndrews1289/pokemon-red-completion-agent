@@ -166,7 +166,8 @@ ROUTE_7_GATE_TO_WEST = ("left",) * 4
 ROUTE_7_WEST_TO_CONNECTION = _directions("LLLUULLLLUUUUUULLLLD")
 ROUTE_7_CONNECTION_TO_GATE = _reverse(ROUTE_7_WEST_TO_CONNECTION)
 ROUTE_7_CONNECTION_TO_CELADON_CITY = _reverse(CITY_TO_ROUTE_7)
-CELADON_CITY_TO_MART = ("up",)
+CELADON_CITY_TO_LEFT_MART = ("left", "left", "up")
+MART_LEFT_1F_TO_2F = ("right",) * 10 + ("up",) * 6
 CELADON_MART_EXIT_TO_CENTER = _reverse(CELADON_CENTER_EXIT_TO_MART[:-1]) + ("up",)
 ROOF_TO_SAFFRON_CENTER = (
     ROOF_TO_5F
@@ -708,10 +709,15 @@ def _acquire_and_teach_ice_beam(
     _require(reader.read(), MapId.ROUTE_7, (0, 3), "Route 7 west connection")
     _move(actions, reader, ROUTE_7_CONNECTION_TO_CELADON_CITY, timing)
     _require(reader.read(), MapId.CELADON_CITY, (10, 14), "Celadon City")
-    _move(actions, reader, CELADON_CITY_TO_MART, timing)
-    _require(reader.read(), MapId.CELADON_MART_1F, (16, 7), "Celadon Mart 1F")
+    _clear_field_text(
+        actions,
+        reader,
+        LavenderTiming(wait_frames=timing.menu_frames),
+    )
+    _move_verified(actions, reader, CELADON_CITY_TO_LEFT_MART, timing, "Celadon Mart entry")
+    _require(reader.read(), MapId.CELADON_MART_1F, (2, 7), "Celadon Mart 1F")
     for route, map_id, coordinate, label in (
-        (MART_1F_TO_2F, MapId.CELADON_MART_2F, (12, 2), "Celadon Mart 2F"),
+        (MART_LEFT_1F_TO_2F, MapId.CELADON_MART_2F, (12, 2), "Celadon Mart 2F"),
         (MART_2F_TO_3F, MapId.CELADON_MART_3F, (16, 2), "Celadon Mart 3F"),
         (MART_3F_TO_4F, MapId.CELADON_MART_4F, (12, 2), "Celadon Mart 4F"),
         (MART_4F_TO_5F, MapId.CELADON_MART_5F, (16, 2), "Celadon Mart 5F"),
@@ -880,10 +886,15 @@ def _acquire_silph_x_special(
     _require(reader.read(), MapId.ROUTE_7, (0, 3), "X Special Route 7 west connection")
     _move(actions, reader, ROUTE_7_CONNECTION_TO_CELADON_CITY, timing)
     _require(reader.read(), MapId.CELADON_CITY, (10, 14), "X Special Celadon City")
-    _move(actions, reader, CELADON_CITY_TO_MART, timing)
-    _require(reader.read(), MapId.CELADON_MART_1F, (16, 7), "X Special Mart 1F")
+    _clear_field_text(
+        actions,
+        reader,
+        LavenderTiming(wait_frames=timing.menu_frames),
+    )
+    _move_verified(actions, reader, CELADON_CITY_TO_LEFT_MART, timing, "X Special Mart entry")
+    _require(reader.read(), MapId.CELADON_MART_1F, (2, 7), "X Special Mart 1F")
     for route, map_id, coordinate, label in (
-        (MART_1F_TO_2F, MapId.CELADON_MART_2F, (12, 2), "X Special Mart 2F"),
+        (MART_LEFT_1F_TO_2F, MapId.CELADON_MART_2F, (12, 2), "X Special Mart 2F"),
         (MART_2F_TO_3F, MapId.CELADON_MART_3F, (16, 2), "X Special Mart 3F"),
         (MART_3F_TO_4F, MapId.CELADON_MART_4F, (12, 2), "X Special Mart 4F"),
         (MART_4F_TO_5F, MapId.CELADON_MART_5F, (16, 2), "X Special Mart 5F"),

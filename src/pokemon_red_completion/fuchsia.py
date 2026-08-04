@@ -743,6 +743,7 @@ def _purchase_snorlax_capture_reserve(
     before_money = _money(emulator)
     before_balls = _bag(emulator).get(ItemId.GREAT_BALL, 0)
     before_potions = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    potion_purchase_quantity = max(0, SNORLAX_SUPER_POTION_RESERVE - before_potions)
     if before_balls:
         raise FuchsiaChapterError("Fuchsia input unexpectedly already carries Great Balls.")
     _move(actions, reader, emulator, run, CENTER_EXIT, timing, "Lavender Center exit")
@@ -790,28 +791,29 @@ def _purchase_snorlax_capture_reserve(
         # Reopen BUY from a verified field boundary so the completed 24-ball
         # quantity dialogue cannot be mistaken for the next product list.
         _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
-        _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
-        _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
-        _buy_mart_item(
-            actions,
-            emulator,
-            DEFAULT_LAVENDER_TIMING,
-            absolute_index=1,
-            item=ItemId.SUPER_POTION,
-            quantity=SNORLAX_SUPER_POTION_RESERVE,
-            target_bag_quantity=before_potions + SNORLAX_SUPER_POTION_RESERVE,
-        )
-        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+        if potion_purchase_quantity:
+            _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
+            _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
+            _buy_mart_item(
+                actions,
+                emulator,
+                DEFAULT_LAVENDER_TIMING,
+                absolute_index=1,
+                item=ItemId.SUPER_POTION,
+                quantity=potion_purchase_quantity,
+                target_bag_quantity=before_potions + potion_purchase_quantity,
+            )
+            _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     except LavenderChapterError as error:
         raise FuchsiaChapterError(f"Could not buy the Snorlax capture reserve: {error}") from error
     expected_cost = (
         SNORLAX_GREAT_BALL_RESERVE * GREAT_BALL_PRICE
-        + SNORLAX_SUPER_POTION_RESERVE * SUPER_POTION_PRICE
+        + potion_purchase_quantity * SUPER_POTION_PRICE
     )
     if (
         _bag(emulator).get(ItemId.GREAT_BALL, 0) != SNORLAX_GREAT_BALL_RESERVE
         or _bag(emulator).get(ItemId.SUPER_POTION, 0)
-        != before_potions + SNORLAX_SUPER_POTION_RESERVE
+        != before_potions + potion_purchase_quantity
         or before_money + SNORLAX_TM34_SALE_PROCEEDS - _money(emulator) != expected_cost
     ):
         raise FuchsiaChapterError("Snorlax capture-reserve economy proof failed.")

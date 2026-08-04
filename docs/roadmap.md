@@ -254,8 +254,13 @@ about switching or matchup selection. The current branch adds a game-neutral six
 contract, derived team metrics, a reusable equal-level policy, and a completion-efficient developed
 team policy. The active route catches Snorlax, obtains and evolves Jolteon, recruits Hitmonlee,
 verifies that all six members are in their declared final available forms, and trains Blastoise as
-the designated workhorse to level 75. The prior levels-82–87 zero-faint proof remains historical
-route evidence; matching every non-workhorse to the carry is no longer a collection prerequisite.
+the designated workhorse to level 60. An earlier three-member teacher entered Indigo at level 58
+and the Hall of Fame at level 61, making 60 an evidence-backed speed target rather than an
+assumption that lower levels cannot work. A clean-power six-member replay has now passed all
+**312/312 checkpoints** and **36/36 objectives** in **87,020 actions**: 177 Mansion wins raised the
+workhorse from 48 to 60, and 24 targeted battles completed the remaining evolution. The prior
+levels-82–87 zero-faint proof remains historical route evidence; matching every non-workhorse to
+the carry is no longer a collection prerequisite.
 See the
 [Project Narrative](project-narrative.md) for the reasoning and the outstanding route work.
 

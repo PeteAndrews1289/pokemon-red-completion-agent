@@ -474,7 +474,7 @@ def test_lavender_report_requires_all_route_resource_and_party_gates() -> None:
         replace(report, parlyz_heals_used=0),
         replace(report, parlyz_heals_remaining=0),
         replace(report, awakenings_remaining=0),
-        replace(report, starting_super_potions=2),
+        replace(report, starting_super_potions=4),
         replace(report, super_potions_remaining=3),
         replace(report, purchase_cost=10899),
         replace(report, tm28_sale_proceeds=999),

@@ -68,12 +68,12 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert CENTER_TO_MANSION == (
         ("down",) * 5 + ("right",) * 7 + ("up",) * 7 + ("left", "up") + ("left",) * 11 + ("up",)
     )
-    assert MANSION_TRAINING_POLICY.target_level == 75
+    assert MANSION_TRAINING_POLICY.target_level == 60
     assert HYDRO_PUMP_LEARN_LEVEL == 52
     assert MANSION_TRAINING_POLICY.max_battles < MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL
     assert MANSION_TRAINING_POLICY.preferred_move_slots == (4, 2, 3, 1)
     assert MANSION_TRAINING_POLICY.max_battles == 800
-    assert MANSION_DEVELOPMENT_POLICY.workhorse_target_level == 75
+    assert MANSION_DEVELOPMENT_POLICY.workhorse_target_level == 60
     assert MANSION_DEVELOPMENT_POLICY.workhorse_species_id in (
         MANSION_DEVELOPMENT_POLICY.roster.species_ids
     )

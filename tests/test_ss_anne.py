@@ -14,7 +14,10 @@ def test_pre_ship_training_is_bounded_and_prefers_water_moves() -> None:
     policy = ss_anne.PRE_SHIP_TRAINING_POLICY
     assert policy.target_level == 30
     assert policy.preferred_move_slots == (3, 4, 1)
+    assert policy.retreat_hp_ratio == 0.65
+    assert policy.reserve_total_pp == 8
     assert policy.max_battles == 120
+    assert policy.max_healing_trips == 8
     raw = RawGameState(
         True,
         MapId.DIGLETTS_CAVE,
@@ -109,6 +112,68 @@ def test_pre_ship_training_leaves_the_arrival_warp_before_bouncing(
     assert executor.actions[0].value == "up"
 
 
+def test_pre_ship_training_preserves_return_direction_when_battle_preempts_step() -> None:
+    moved, bounce = ss_anne._pre_ship_training_step_outcome(
+        current=(36, 30),
+        next_position=(36, 30),
+        in_battle=True,
+        direction="right",
+        prior_bounce_direction="right",
+        opposite={"right": "left"},
+    )
+
+    assert moved
+    assert bounce == "right"
+
+
+def test_pre_ship_training_does_not_treat_a_blocked_step_as_movement() -> None:
+    moved, bounce = ss_anne._pre_ship_training_step_outcome(
+        current=(37, 30),
+        next_position=(37, 30),
+        in_battle=False,
+        direction="up",
+        prior_bounce_direction=None,
+        opposite={"up": "down"},
+    )
+
+    assert not moved
+    assert bounce is None
+
+
+def test_rival_entry_waits_for_the_full_rival_identity(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    states = [
+        RawGameState(True, MapId.SS_ANNE_2F, 36, 8, 1, 2),
+        RawGameState(True, MapId.SS_ANNE_2F, 36, 8, 1, 2),
+    ]
+
+    class Reader:
+        index = 0
+
+        def read(self) -> RawGameState:
+            state = states[min(self.index, len(states) - 1)]
+            self.index += 1
+            return state
+
+        def read_ss_anne_state(self, raw: RawGameState) -> object:
+            return type(
+                "RivalState",
+                (),
+                {"rival_battle_snapshot": raw is states[1]},
+            )()
+
+    monkeypatch.setattr(ss_anne, "_wait", lambda *_args: None)
+
+    observed = ss_anne._enter_rival_battle(
+        type("Executor", (), {})(),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        ss_anne.DEFAULT_SS_ANNE_TIMING,
+    )
+
+    assert observed is states[1]
+
+
 def test_ss_anne_rival_consumes_high_value_reserve_with_one_intent(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -173,7 +238,7 @@ def test_ss_anne_rival_consumes_high_value_reserve_with_one_intent(
     assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
 
 
-def test_ss_anne_rival_rejects_an_unconsumed_high_value_reserve(
+def test_ss_anne_rival_preserves_an_unneeded_high_value_reserve(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     terminal = RawGameState(
@@ -194,10 +259,12 @@ def test_ss_anne_rival_rejects_an_unconsumed_high_value_reserve(
         lambda *_args, **_kwargs: terminal,
     )
 
-    with pytest.raises(ss_anne.SSAnneChapterError, match="did not consume"):
-        ss_anne._run_ss_anne_rival_with_potion(
-            object(),  # type: ignore[arg-type]
-            object(),  # type: ignore[arg-type]
-            object(),  # type: ignore[arg-type]
-            ss_anne.DEFAULT_SS_ANNE_TIMING,
-        )
+    observed = ss_anne._run_ss_anne_rival_with_potion(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        ss_anne.DEFAULT_SS_ANNE_TIMING,
+    )
+
+    assert observed is terminal
+    assert quantities[ItemId.SUPER_POTION] == 3

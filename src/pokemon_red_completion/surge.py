@@ -316,6 +316,13 @@ def run_surge_chapter(
     _move(actions, reader, _directions("DDDDD"), timing, "Center exit")
     _move(actions, reader, CENTER_TO_MART, timing, "Vermilion Mart")
     _require(reader.read(), MapId.VERMILION_MART, (3, 7), 0, "Mart entry")
+    starting_surge_super_potions = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    if not 0 <= starting_surge_super_potions <= 3:
+        raise SurgeChapterError(
+            "Vermilion preparation has an unexpected Super Potion surplus: "
+            f"{starting_surge_super_potions}."
+        )
+    surge_super_potion_target = max(1, starting_surge_super_potions)
     _move(actions, reader, _directions("UUL"), timing, "Mart clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 60)
     _confirm(actions, 4, 180)
@@ -338,35 +345,36 @@ def run_surge_chapter(
             f"money_bytes={money_bytes!r}."
         )
     _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-    _pulse(actions, MacroActionKind.MOVE, "down", 180)
-    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
-        raise SurgeChapterError(
-            "Mart list could not select Super Potion after Poké Balls: "
-            f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
-            f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}."
-        )
-    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-    for _ in range(6):
-        if _bag(emulator).get(ItemId.SUPER_POTION, 0) == 1:
-            break
+    if starting_surge_super_potions == 0:
+        _pulse(actions, MacroActionKind.MOVE, "down", 180)
+        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
+            raise SurgeChapterError(
+                "Mart list could not select Super Potion after Poké Balls: "
+                f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
+                f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}."
+            )
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-    else:
-        raise SurgeChapterError(
-            "Super Potion purchase missed quantity one: "
-            f"bag={_bag(emulator)!r}, "
-            f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
-            f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}."
-        )
+        for _ in range(6):
+            if _bag(emulator).get(ItemId.SUPER_POTION, 0) == surge_super_potion_target:
+                break
+            _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+        else:
+            raise SurgeChapterError(
+                "Super Potion restock missed its target: "
+                f"target={surge_super_potion_target}, bag={_bag(emulator)!r}, "
+                f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
+                f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}."
+            )
     _confirm_kind(actions, MacroActionKind.CANCEL, 4, 180)
     raw = reader.read()
     _gate(
         raw,
         _bag(emulator).get(ItemId.POKE_BALL) == COLLECTION_POKE_BALL_TARGET
-        and _bag(emulator).get(ItemId.SUPER_POTION) == 1,
+        and _bag(emulator).get(ItemId.SUPER_POTION) == surge_super_potion_target,
         tracker,
         SurgePhase.BALLS_PURCHASED,
         "balls_purchased",
-        f"Purchased {COLLECTION_POKE_BALL_TARGET} Poké Balls and one recovery Super Potion",
+        f"Purchased {COLLECTION_POKE_BALL_TARGET} Poké Balls and funded recovery",
         records,
         progress,
         emulator,
@@ -643,7 +651,8 @@ def run_surge_chapter(
         and final.first_party_max_hp is not None
         and 0 < final.first_party_hp <= final.first_party_max_hp
         and final.first_party_status == 0
-        and _bag(emulator).get(ItemId.SUPER_POTION, 0) == (0 if super_potion_used else 1)
+        and _bag(emulator).get(ItemId.SUPER_POTION, 0)
+        == surge_super_potion_target - int(super_potion_used)
         and stable
     )
     if not reward_valid:

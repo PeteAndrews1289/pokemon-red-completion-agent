@@ -40,6 +40,7 @@ from pokemon_red_completion.silph import (
 from pokemon_red_completion.tower import party_core_intact
 
 CINNABAR_CHECKPOINT_COUNT = 6
+CINNABAR_MIN_LEAD_LEVEL = 47
 CINNABAR_MAX_INPUT_BAG_SLOTS = 19
 FLY_MOVE_ID = 0x13
 DUX_MOVES_BEFORE = (0x40, 0x1C, 0x0F, 0x1F)
@@ -141,7 +142,7 @@ class CinnabarChapterReport:
             )
             and len(self.lead_stats_before) == 7
             and self.lead_stats_before == self.lead_stats_after
-            and self.lead_stats_before[0] == 47
+            and self.lead_stats_before[0] >= CINNABAR_MIN_LEAD_LEVEL
             and all(value > 0 for value in self.lead_stats_before[1:])
             and self.hm02_item_before_event
             and self.got_hm02
@@ -167,7 +168,7 @@ class CinnabarChapterReport:
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
-            and self.final_raw.first_party_level == 47
+            and self.final_raw.first_party_level == self.lead_stats_before[0]
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
             and self.party_hp == self.party_max_hp

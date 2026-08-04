@@ -57,6 +57,7 @@ CHANNELER = (0xF5, 0x2D)
 ROCKET = (0xE6, 0x1E)
 MAROWAK = 0x91
 TOWER_FINAL_PARTY = (0x1C, PROTECTED_PARTY[1], PROTECTED_PARTY[2])
+TOWER_START_PARTIES = (PROTECTED_PARTY, TOWER_FINAL_PARTY)
 DUGTRIO_SPECIES_ID = 0x76
 TOWER_RIVAL_FIELD_RECOVERY_HP_THRESHOLD = 55
 TOWER_5F_MIN_SUPER_POTION_RESERVE = 1
@@ -303,7 +304,7 @@ class TowerChapterReport:
             and self.x_accuracy_carried
             and self.elixir_carried
             and self.poke_flute_carried
-            and self.evolution_before == PROTECTED_PARTY
+            and self.evolution_before in TOWER_START_PARTIES
             and self.evolution_after == TOWER_FINAL_PARTY
             and self.evolution_moves_preserved
             and self.purified_zone_event
@@ -410,6 +411,14 @@ class _RunState:
     potion_inventory: list[int] = field(default_factory=list)
 
 
+def _observe_protected_party(run: _RunState, state: RawGameState) -> bool:
+    """Accept the qualified lineage and remember a natural mid-chapter evolution."""
+
+    if state.party_species_ids == TOWER_FINAL_PARTY:
+        run.evolved = True
+    return state.party_species_ids in TOWER_START_PARTIES and (state.first_party_hp or 0) > 0
+
+
 def run_tower_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -420,10 +429,11 @@ def run_tower_chapter(
 ) -> TowerChapterReport:
     start_frames = emulator.frame_count
     actions = _CountingExecutor(executor)
-    run = _RunState()
+    start = reader.read()
+    run = _RunState(evolved=start.party_species_ids == TOWER_FINAL_PARTY)
     records: list[TowerCheckpoint] = []
     battles: list[TowerBattleEvidence] = []
-    _require(reader.read(), MapId.CELADON_POKECENTER, (3, 3), "Scope boundary")
+    _require(start, MapId.CELADON_POKECENTER, (3, 3), "Scope boundary")
     money_before = _money(emulator)
     starting_super_potions = _bag(emulator).get(ItemId.SUPER_POTION, 0)
     if (
@@ -1248,8 +1258,7 @@ def _navigate_route_8_east(
                 state = reader.read()
         else:
             discovered_blocked.add(candidate)
-        expected_party = TOWER_FINAL_PARTY if run.evolved else PROTECTED_PARTY
-        if state.party_species_ids != expected_party or (state.first_party_hp or 0) <= 0:
+        if not _observe_protected_party(run, state):
             raise TowerChapterError("Adaptive Route 8 navigation changed the protected party.")
     raise TowerChapterError("Adaptive Route 8 navigation exceeded its bounded discoveries.")
 
@@ -1294,8 +1303,7 @@ def _move(
                 f"{label} blocked at step {step}: {direction}; "
                 f"map={state.map_id!r}, coordinate={(state.player_x, state.player_y)!r}."
             )
-        expected_party = TOWER_FINAL_PARTY if run.evolved else PROTECTED_PARTY
-        if state.party_species_ids != expected_party or (state.first_party_hp or 0) <= 0:
+        if not _observe_protected_party(run, state):
             raise TowerChapterError(
                 f"{label} changed the protected party: {state.party_species_ids!r}, "
                 f"lead_hp={state.first_party_hp!r}."
@@ -1433,8 +1441,13 @@ def _qualify_evolution(
     run: _RunState,
     before: RawGameState,
 ) -> tuple[tuple[int, int, int], tuple[int, int, int], bool, bool]:
-    if before.party_species_ids != PROTECTED_PARTY or before.first_party_moves is None:
-        raise TowerChapterError("Evolution did not start from the qualified Wartortle party.")
+    if before.party_species_ids not in TOWER_START_PARTIES or before.first_party_moves is None:
+        raise TowerChapterError("Evolution did not start from the qualified starter lineage.")
+    if before.party_species_ids == TOWER_FINAL_PARTY:
+        if (before.first_party_hp or 0) <= 0:
+            raise TowerChapterError("Natural pre-Tower evolution lacks a living workhorse.")
+        run.evolved = True
+        return TOWER_FINAL_PARTY, TOWER_FINAL_PARTY, True, False
     after = reader.read()
     for _ in range(32):
         if after.party_species_ids == TOWER_FINAL_PARTY:
@@ -1552,13 +1565,18 @@ def _require(
     map_id: int,
     coordinate: tuple[int, int],
     label: str,
-    party: tuple[int, int, int] = PROTECTED_PARTY,
+    party: tuple[int, int, int] | None = None,
 ) -> None:
+    party_valid = (
+        raw.party_species_ids in TOWER_START_PARTIES
+        if party is None
+        else raw.party_species_ids == party
+    )
     if (
         raw.map_id != map_id
         or (raw.player_x, raw.player_y) != coordinate
         or raw.battle_state != 0
-        or raw.party_species_ids != party
+        or not party_valid
     ):
         raise TowerChapterError(
             f"{label} missed gate: map={raw.map_id!r}, "

@@ -52,6 +52,7 @@ PARLYZ_HEAL_PRICE = 200
 AWAKENING_PRICE = 200
 REPEL_PRICE = 350
 POKE_BALL_SALE_PRICE = 100
+POTION_SALE_PRICE = 150
 EARLY_POKE_BALL_CAPACITY_RESERVE = 1
 POST_MART_RNG_ALIGNMENT_FRAMES = 191
 TUNNEL_RECOVERY_THRESHOLD = 40
@@ -65,7 +66,7 @@ FINAL_TUNNEL_GRASS_SPECIES = frozenset(
 )
 SLOWPOKE_SPECIES_ID = 0x25
 ROUTE_9_MIN_SUPER_POTION_RESERVE = 5
-TUNNEL_SUPER_POTIONS_PURCHASED = 10
+TUNNEL_SUPER_POTION_TARGET = 10
 TUNNEL_AWAKENINGS_PURCHASED = 1
 TUNNEL_AWAKENING_RESERVE = 3
 TUNNEL_PARLYZ_HEALS_PURCHASED = 2
@@ -257,7 +258,7 @@ class LavenderChapterReport:
             and self.awakenings_remaining >= 1
             and self.awakenings_used + self.awakenings_remaining
             == TUNNEL_AWAKENING_RESERVE
-            and self.starting_super_potions in {0, 1}
+            and self.starting_super_potions in {0, 1, 2, 3}
             and self.super_potions_purchased >= 8
             and self.super_potions_used + self.super_potions_remaining
             == self.super_potions_purchased + self.starting_super_potions
@@ -373,10 +374,9 @@ def run_lavender_chapter(
         raise LavenderChapterError("Lavender chapter requires the Thunder Badge.")
     initial_sp = _bag(emulator).get(ItemId.SUPER_POTION, 0)
     initial_repel = _bag(emulator).get(ItemId.REPEL, 0)
-    # Surge may consume the single reserved potion to keep the Dig-only proof
-    # alive.  Both outcomes are legal and the Lavender Mart later tops the
-    # observed quantity back up to the same fixed downstream reserve.
-    if initial_sp not in {0, 1} or initial_repel != 0:
+    # Earlier adaptive recovery may preserve up to three legal copies. The
+    # Lavender Mart buys only the shortfall to one fixed downstream reserve.
+    if initial_sp not in {0, 1, 2, 3} or initial_repel != 0:
         raise LavenderChapterError(
             f"Unexpected starting recovery inventory: SP={initial_sp}, Repel={initial_repel}."
         )
@@ -428,8 +428,7 @@ def run_lavender_chapter(
     _wait(actions, POST_MART_RNG_ALIGNMENT_FRAMES)
     supplies = reader.read()
     if (
-        _bag(emulator).get(ItemId.SUPER_POTION)
-        != initial_sp + TUNNEL_SUPER_POTIONS_PURCHASED
+        _bag(emulator).get(ItemId.SUPER_POTION) != TUNNEL_SUPER_POTION_TARGET
         or _bag(emulator).get(ItemId.PARLYZ_HEAL) != TUNNEL_PARLYZ_HEALS_PURCHASED
         or _bag(emulator).get(ItemId.AWAKENING) != TUNNEL_AWAKENING_RESERVE
         or _bag(emulator).get(ItemId.REPEL) != 4
@@ -941,7 +940,9 @@ def run_lavender_chapter(
         awakenings_used=run.awakenings_used,
         awakenings_remaining=_bag(emulator).get(ItemId.AWAKENING, 0),
         starting_super_potions=initial_sp,
-        super_potions_purchased=TUNNEL_SUPER_POTIONS_PURCHASED + top_up_quantity,
+        super_potions_purchased=(
+            TUNNEL_SUPER_POTION_TARGET - initial_sp + top_up_quantity
+        ),
         super_potions_used=run.potions_used,
         super_potions_remaining=_bag(emulator).get(ItemId.SUPER_POTION, 0),
         purchase_cost=tunnel_purchase_cost + top_up_cost,
@@ -1941,8 +1942,9 @@ def _purchase_supplies(
     *,
     starting_super_potions: int,
 ) -> int:
-    if starting_super_potions not in {0, 1}:
+    if starting_super_potions not in {0, 1, 2, 3}:
         raise LavenderChapterError("Invalid starting Super Potion reserve for Mart purchase.")
+    super_potion_purchase_quantity = TUNNEL_SUPER_POTION_TARGET - starting_super_potions
     money_before = _money(emulator)
     _move(executor, reader, emulator, _RunState([], []), _directions("UUL"), timing, "Mart clerk")
     _pulse(executor, MacroActionKind.MOVE, "left", 60)
@@ -1978,6 +1980,17 @@ def _purchase_supplies(
             quantity=poke_balls_sold,
             expected_proceeds=poke_ball_sale_proceeds,
         )
+    potion_sale_proceeds = 0
+    if starting_super_potions >= 2 and _bag(emulator).get(ItemId.POTION, 0):
+        _sell_single_mart_item(
+            executor,
+            reader,
+            emulator,
+            timing,
+            ItemId.POTION,
+            expected_proceeds=POTION_SALE_PRICE,
+        )
+        potion_sale_proceeds = POTION_SALE_PRICE
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _buy_mart_item(
@@ -1986,8 +1999,8 @@ def _purchase_supplies(
         timing,
         absolute_index=1,
         item=ItemId.SUPER_POTION,
-        quantity=TUNNEL_SUPER_POTIONS_PURCHASED,
-        target_bag_quantity=starting_super_potions + TUNNEL_SUPER_POTIONS_PURCHASED,
+        quantity=super_potion_purchase_quantity,
+        target_bag_quantity=TUNNEL_SUPER_POTION_TARGET,
     )
     _buy_mart_item(
         executor,
@@ -2019,12 +2032,14 @@ def _purchase_supplies(
     _close_menus(executor, reader, timing)
     money_after = _money(emulator)
     expected_cost = (
-        TUNNEL_SUPER_POTIONS_PURCHASED * SUPER_POTION_PRICE
+        super_potion_purchase_quantity * SUPER_POTION_PRICE
         + TUNNEL_AWAKENINGS_PURCHASED * AWAKENING_PRICE
         + TUNNEL_PARLYZ_HEALS_PURCHASED * PARLYZ_HEAL_PRICE
         + 4 * REPEL_PRICE
     )
-    total_sale_proceeds = nugget_sale_proceeds + poke_ball_sale_proceeds
+    total_sale_proceeds = (
+        nugget_sale_proceeds + poke_ball_sale_proceeds + potion_sale_proceeds
+    )
     if money_before + total_sale_proceeds - money_after != expected_cost:
         raise LavenderChapterError(
             "Mart money gate did not preserve the sale/purchase ledger: "

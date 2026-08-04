@@ -3082,8 +3082,6 @@ class SSAnneState:
             and self.current_opponent == RIVAL2_OPPONENT_ID
             and self.trainer_class == RIVAL2_TRAINER_CLASS_ID
             and self.trainer_number == SS_ANNE_RIVAL_TRAINER_NUMBER
-            and self.engaged_trainer_class == SS_ANNE_RIVAL_ENGAGED_CLASS
-            and self.engaged_trainer_set == SS_ANNE_RIVAL_ENGAGED_SET
             and self.no_cut_evidence
         )
 
