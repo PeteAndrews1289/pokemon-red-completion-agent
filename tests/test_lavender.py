@@ -205,6 +205,7 @@ def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert lavender_module.TUNNEL_RECOVERY_THRESHOLD == 40
     assert DUX_BATTLE_RECOVERY_THRESHOLD == 20
     assert ROUTE_9_MIN_SUPER_POTION_RESERVE == 5
+    assert lavender_module.TUNNEL_SUPER_POTION_TARGET == 11
     assert TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD == 40
     assert FINAL_TUNNEL_RECOVERY_THRESHOLD == 90
     assert lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED == 3

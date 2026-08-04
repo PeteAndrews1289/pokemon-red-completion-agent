@@ -974,6 +974,25 @@ project now has an explicit arbitrary-seed, uncounted schedule-diagnostic lane. 
 timing schedules will be exercised before the next campaign is frozen, replacing the insufficient
 practice of treating one successful rehearsal as broad robustness evidence.
 
+## V36 qualification, first counted finding, and V37 response
+
+V36 completed all five arbitrary-seed diagnostics and then its fixed official rehearsal at
+**312/312 checkpoints**, **36/36 objectives**, all **69/69** battle attestations, Champion, and Hall
+of Fame. That evidence qualified the exact committed six-member teacher for collection, so the
+first training slot opened without using any validation or test schedule.
+
+The first immutable training root reached Route 10 at checkpoint 106 and stopped honestly. Its
+held-out Route 9 timings required six Super Potions, leaving four; every qualifying run had stayed
+within five, and the declared Rock Tunnel safety floor was five. The failed trajectory and outcome
+remain sealed, the other eleven v36 slots remain unopened, and the exposed seed is no longer
+eligible for fitting or evaluation.
+
+V37 turns that failure into a portable resource-planning lesson instead of weakening the safety
+gate: the teacher buys eleven pre-tunnel Super Potions rather than ten, preserving the same
+five-item minimum even when Route 9 spends six. The altered menu timing, economy, and downstream
+route must requalify from clean power-on. The exposed v36 schedule is diagnostic-only; v37 uses
+fresh seeds for all five training, two validation, and five test lineages.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

@@ -65,7 +65,7 @@ FINAL_TUNNEL_RECOVERY_THRESHOLD = 90
 FINAL_TUNNEL_GRASS_SPECIES = frozenset({BULBASAUR_SPECIES_ID, 0xB9, 0xBA, 0xBC, 0xBD})
 SLOWPOKE_SPECIES_ID = 0x25
 ROUTE_9_MIN_SUPER_POTION_RESERVE = 5
-TUNNEL_SUPER_POTION_TARGET = 10
+TUNNEL_SUPER_POTION_TARGET = 11
 TUNNEL_AWAKENINGS_PURCHASED = 3
 TUNNEL_AWAKENING_RESERVE = 5
 TUNNEL_PARLYZ_HEALS_PURCHASED = 3
@@ -449,8 +449,7 @@ def run_lavender_chapter(
         or _bag(emulator).get(ItemId.REPEL) != 4
     ):
         raise LavenderChapterError(
-            "Mart purchase did not produce the ten-potion purchase plus the observed "
-            "starting reserve, five Awakenings, "
+            "Mart purchase did not produce the eleven-potion reserve, five Awakenings, "
             "three Parlyz Heals, and four Repels."
         )
     _checkpoint(records, progress, emulator, supplies, "supplies", "Purchased tunnel supplies")

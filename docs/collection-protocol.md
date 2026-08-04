@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v36.json`](../configs/red-battle-collection-v36.json)
+[`red-battle-collection-v37.json`](../configs/red-battle-collection-v37.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1484,3 +1484,14 @@ after observing `(17,16)`.
 
 V36 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `250001`–`250005`, `260001`–`260002`, and `270001`–`270005`; all five diagnostics must be replayed.
+
+All five V36 diagnostics and its official 69-battle rehearsal completed 312/312 checkpoints and
+entered the Hall of Fame. Its first counted training seed then reached Route 10 with only four
+Super Potions: the held-out Route 9 timings had consumed six, one more than every qualifying run,
+and the teacher correctly stopped before opening Rock Tunnel. V36 is retired with that immutable
+failure and eleven unopened slots. The exposed seed becomes diagnostic-only. V37 raises the fixed
+pre-tunnel reserve from ten to eleven so the existing five-potion Rock Tunnel floor remains intact.
+
+V37 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`280001`–`280005`, `290001`–`290002`, and `300001`–`300005`. The exposed V36 training seed
+`250001` must pass as an uncounted diagnostic before the new rehearsal.
