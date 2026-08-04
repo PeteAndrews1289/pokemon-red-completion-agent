@@ -102,6 +102,13 @@ unbounded handoff loop, and the receipt records a non-mutual-KO continuation sep
 existing Selfdestruct case. This rehearsal was uncounted and must be repeated on the republished
 source before collection opens.
 
+That handoff won Koga and the Center restored the complete party, but the next chapter rejected a
+changed move set: Blastoise had reached level 42 against Muk and naturally accepted Skull Bash over
+Bite, bypassing the curriculum's later controlled TM40 lesson. The Koga policy now makes a
+matchup-aware pre-attack handoff when Muk appears, choosing the healthiest living teammate before
+Blastoise participates. This preserves the planned move-teaching label and turns post-faint
+recovery into proactive party-role planning. The uncounted run stopped at 208/312.
+
 V3 later completed the full **312/312**, **36/36**, **68/68** rehearsal and opened collection.
 Its first one-shot train root stopped at Route 24 trainer 2 after Sand-Attack, poison, and repeated
 Water Gun misses fainted Wartortle against a 4-HP opponent. That failure is retained and v3 is not

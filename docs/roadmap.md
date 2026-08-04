@@ -323,6 +323,12 @@ teammate through the observed forced-party menu, ranks that member's legal live-
 handoffs by party depth, and records the continuation separately from mutual-KO recovery. The
 post-battle Center proof still requires the complete party restored. The run was uncounted; the
 republished source must pass the full rehearsal before slot 01.
+That continuation defeated Koga and the Center restored the complete party, but the Strength input
+gate then found Skull Bash in Blastoise's first move slot. The recorded transition proved level 42
+was reached while fighting Muk and the natural move prompt replaced Bite, which is reserved for the
+later controlled TM40 lesson. Koga now assigns Muk to the healthiest living teammate before the
+workhorse selects an attack, preserving both the staged lesson and the no-faint tactical objective.
+The uncounted run stopped at 208/312; v10 remains unopened.
 That exact rehearsal subsequently validated every earlier repair through checkpoint **296/312**,
 including the six-member balance gate, Blaine, Giovanni, the final rival, and Victory Road. It then
 exposed a stale Indigo inventory assertion: the now-larger bounded capture curriculum may legally

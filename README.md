@@ -552,6 +552,11 @@ selects the healthiest living teammate through the verified forced-party menu, r
 member's own legal moves and PP under a party-depth bound, and records the handoff separately from
 mutual-KO recovery. Collection remains closed until the exact republished source passes the full
 312-checkpoint and 68-schedule rehearsal.
+That replay defeated Koga and fully healed the party, then exposed a different downstream effect:
+Blastoise reached level 42 against Muk and naturally learned Skull Bash over Bite before the
+curriculum's controlled TM40 lesson. Koga now assigns Muk to the healthiest living teammate before
+Blastoise attacks, preserving the staged move lesson while avoiding the faint proactively. The
+uncounted run stopped at 208/312; all counted v10 roots remain untouched.
 
 ## Evidence and project status
 

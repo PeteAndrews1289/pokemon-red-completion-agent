@@ -44,6 +44,7 @@ SURF_SLOT = 4
 KOGA_OPPONENT = 0xEE
 KOGA_TRAINER_CLASS = 0x26
 KOGA_TRAINER_NUMBER = 1
+MUK_SPECIES_ID = 0x88
 # Disable can legally force Juggler 3 onto reserve moves and extend the battle.
 # Bound its Surf consumption by the carried 15-PP pool rather than one historical
 # eight-turn outcome; the remaining fights retain their tighter qualified limits.
@@ -425,6 +426,7 @@ def run_koga_chapter(
             RedBattlePlanId.KOGA_LEADER,
             clear_text=False,
             allow_disable_fallback=True,
+            reserve_pivot_enemy_species=MUK_SPECIES_ID,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "koga_defeated", "Defeated Koga")
@@ -508,6 +510,7 @@ def _fight(
     clear_text: bool = True,
     allow_disable_fallback: bool = False,
     reserve_pivot_threshold: int | None = None,
+    reserve_pivot_enemy_species: int | None = None,
 ) -> KogaBattleEvidence:
     battle = _settle_trainer_identity(actions, reader, emulator, timing, label, identity)
     before_pp = battle.first_party_pp
@@ -518,10 +521,11 @@ def _fight(
     )
 
     def choose_move(raw: RawGameState) -> int:
-        pivot_target = _koga_reserve_pivot_target(
-            raw,
-            _party_hp(emulator),
-            reserve_pivot_threshold,
+        party_hp = _party_hp(emulator)
+        pivot_target = _koga_matchup_pivot_target(
+            raw, party_hp, reserve_pivot_enemy_species
+        ) or _koga_reserve_pivot_target(
+            raw, party_hp, reserve_pivot_threshold
         )
         if pivot_target is not None:
             raise _PauseForKogaReservePivot(pivot_target)
@@ -718,6 +722,26 @@ def _koga_reserve_pivot_target(
         return None
     living_reserves = tuple(
         (hp, index) for index, hp in enumerate(party_hp[1:], start=1) if hp > threshold
+    )
+    return max(living_reserves, default=(0, -1))[1] if living_reserves else None
+
+
+def _koga_matchup_pivot_target(
+    raw: RawGameState,
+    party_hp: tuple[int, ...],
+    enemy_species_id: int | None,
+) -> int | None:
+    """Hand a preregistered dangerous matchup to the healthiest living teammate."""
+
+    if (
+        enemy_species_id is None
+        or raw.enemy_species_id != enemy_species_id
+        or raw.active_party_index not in {None, 0}
+        or (raw.battler_hp or 0) <= 0
+    ):
+        return None
+    living_reserves = tuple(
+        (hp, index) for index, hp in enumerate(party_hp[1:], start=1) if hp > 0
     )
     return max(living_reserves, default=(0, -1))[1] if living_reserves else None
 

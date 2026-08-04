@@ -15,6 +15,7 @@ from pokemon_red_completion.koga import (
     KOGA_TRAINER_CLASS,
     KOGA_TRAINER_NUMBER,
     MANDATORY_TRAINER_EVENTS,
+    MUK_SPECIES_ID,
     OPTIONAL_TRAINER_EVENTS,
     REGULAR_TRAINER_EVENTS,
     KogaBattleEvidence,
@@ -23,6 +24,7 @@ from pokemon_red_completion.koga import (
     KogaCheckpoint,
     KogaTiming,
     _koga_fainted_pivot_target,
+    _koga_matchup_pivot_target,
     _koga_move_slot,
     _koga_reserve_pivot_target,
     _nurse_approach_directions,
@@ -252,6 +254,25 @@ def test_koga_low_hp_lead_pivots_to_the_healthiest_reserve() -> None:
     assert _koga_reserve_pivot_target(raw, (40, 75, 130, 90), 50) == 2
     assert _koga_reserve_pivot_target(raw, (40, 45, 0), 50) is None
     assert _koga_reserve_pivot_target(replace(raw, active_party_index=2), (40, 75, 130), 50) is None
+
+
+def test_koga_hands_muk_to_the_healthiest_living_reserve_before_attacking() -> None:
+    muk = replace(
+        _raw(),
+        battle_state=2,
+        enemy_species_id=MUK_SPECIES_ID,
+        active_party_index=0,
+        active_party_hp=126,
+    )
+
+    assert _koga_matchup_pivot_target(muk, (126, 75, 130, 143), MUK_SPECIES_ID) == 3
+    assert _koga_matchup_pivot_target(muk, (126, 75, 130, 0), MUK_SPECIES_ID) == 2
+    assert _koga_matchup_pivot_target(
+        replace(muk, active_party_index=3),
+        (126, 75, 130, 143),
+        MUK_SPECIES_ID,
+    ) is None
+    assert _koga_matchup_pivot_target(muk, (126, 75, 130, 143), None) is None
 
 
 def test_koga_fainted_member_continues_with_the_healthiest_living_teammate() -> None:

@@ -901,6 +901,15 @@ receipt distinguishes this ordinary living-party continuation from a terminal mu
 existing post-Koga Center visit must still restore the complete party before the chapter can pass.
 No healing allowance, reset, or counted attempt was added; the exact source must requalify.
 
+The first replay with that continuation defeated Koga and restored all four current party members,
+but Strength rejected the next move-set boundary. The failure was not an unhealed faint: the
+recording showed Blastoise reached level 42 while grinding through Muk and naturally accepted Skull
+Bash over Bite. That same move is deliberately reserved for the later, controlled TM40 lesson.
+Koga now hands the Muk matchup to the healthiest living teammate before Blastoise selects an attack.
+This preserves the staged move curriculum, prevents the observed KO, and demonstrates proactive
+role assignment instead of repairing the downstream contract around an accidental prompt choice.
+The run remained uncounted and stopped at 208/312.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
