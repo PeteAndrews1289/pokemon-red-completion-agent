@@ -2720,19 +2720,44 @@ def _use_cerulean_rival_potion(
     emulator: EmulatorState,
     timing: CascadeTiming,
 ) -> None:
+    _use_battle_recovery_item(
+        reader,
+        executor,
+        emulator,
+        timing,
+        item=ItemId.POTION,
+        heal_amount=POTION_HEAL_AMOUNT,
+        max_quantity=CERULEAN_RIVAL_MAX_POTION_RESERVE,
+        label="Cerulean rival Potion",
+    )
+
+
+def _use_battle_recovery_item(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    timing: CascadeTiming,
+    *,
+    item: ItemId,
+    heal_amount: int,
+    max_quantity: int,
+    label: str,
+) -> None:
+    """Use one bounded healing item and prove its HP, quantity, and MAIN return."""
+
     before = reader.read()
     menu = reader.read_battle_menu_state(before)
-    before_quantity = _bag_quantity(emulator, ItemId.POTION)
+    before_quantity = _bag_quantity(emulator, item)
     if (
         before.battle_state != 2
         or menu.phase is not BattleMenuPhase.MAIN
         or before.first_party_hp is None
         or before.first_party_max_hp is None
         or not 0 < before.first_party_hp < before.first_party_max_hp
-        or not 1 <= before_quantity <= CERULEAN_RIVAL_MAX_POTION_RESERVE
+        or not 1 <= before_quantity <= max_quantity
     ):
         raise CascadeChapterError(
-            "Cerulean rival Potion recovery requires one item and a damaged living lead "
+            f"{label} recovery requires one item and a damaged living lead "
             "at the trainer MAIN menu."
         )
 
@@ -2745,13 +2770,13 @@ def _use_cerulean_rival_potion(
     elif command == 3:
         _battle_pulse(executor, MacroActionKind.MOVE, "left", timing)
     elif command != 1:
-        raise CascadeChapterError("Cerulean rival exposed an invalid battle command cursor.")
+        raise CascadeChapterError(f"{label} exposed an invalid battle command cursor.")
 
     selected = reader.read_battle_menu_state(reader.read())
     if selected.phase is not BattleMenuPhase.MAIN or selected.selected_main_command != 1:
-        raise CascadeChapterError("Cerulean rival recovery could not select ITEM.")
+        raise CascadeChapterError(f"{label} recovery could not select ITEM.")
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing)
-    _select_bag_item(executor, emulator, ItemId.POTION, timing)
+    _select_bag_item(executor, emulator, item, timing)
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing)
 
     for _ in range(6):
@@ -2759,17 +2784,17 @@ def _use_cerulean_rival_potion(
             break
         _battle_pulse(executor, MacroActionKind.MOVE, "up", timing)
     else:
-        raise CascadeChapterError("Cerulean rival recovery could not select the party lead.")
+        raise CascadeChapterError(f"{label} recovery could not select the party lead.")
 
     executor.execute(MacroAction(MacroActionKind.CONFIRM))
     expected_healed_hp = min(
         before.first_party_max_hp,
-        before.first_party_hp + POTION_HEAL_AMOUNT,
+        before.first_party_hp + heal_amount,
     )
     current = reader.read()
     saw_exact_heal = (
         current.first_party_hp == expected_healed_hp
-        and _bag_quantity(emulator, ItemId.POTION) == before_quantity - 1
+        and _bag_quantity(emulator, item) == before_quantity - 1
     )
     for _ in range(30):
         _wait(executor, timing.battle_runtime.dialogue_wait_frames)
@@ -2778,7 +2803,7 @@ def _use_cerulean_rival_potion(
             saw_exact_heal = True
         if (
             saw_exact_heal
-            and _bag_quantity(emulator, ItemId.POTION) == before_quantity - 1
+            and _bag_quantity(emulator, item) == before_quantity - 1
             and current.battle_state == 2
             and current.first_party_hp is not None
             and current.first_party_hp > 0
@@ -2787,11 +2812,11 @@ def _use_cerulean_rival_potion(
             return
         if current.battle_state != 2 or (current.first_party_hp or 0) <= 0:
             raise CascadeChapterError(
-                "Cerulean rival recovery lost the active living battle before returning to MAIN."
+                f"{label} recovery lost the active living battle before returning to MAIN."
             )
         executor.execute(MacroAction(MacroActionKind.CANCEL))
     raise CascadeChapterError(
-        "Cerulean rival Potion missed its bounded heal, quantity, or MAIN-menu proof."
+        f"{label} missed its bounded heal, quantity, or MAIN-menu proof."
     )
 
 

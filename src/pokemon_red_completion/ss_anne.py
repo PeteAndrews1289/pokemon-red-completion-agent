@@ -21,12 +21,16 @@ from pokemon_red_completion.cascade import (
     SS_ANNE_RIVAL_POTION_RESERVE,
     CascadeChapterError,
     _bag_quantity,
+    _use_battle_recovery_item,
     _use_cerulean_rival_potion,
 )
 from pokemon_red_completion.lavender import (
     BUBBLEBEAM,
     DEFAULT_LAVENDER_TIMING,
     LavenderChapterError,
+    _buy_mart_item,
+    _close_menus,
+    _money,
     _teach_tm11,
 )
 from pokemon_red_completion.observation import (
@@ -56,6 +60,10 @@ SS_ANNE_RIVAL_SPECIES_IDS = frozenset(
         IVYSAUR_SPECIES_ID,
     }
 )
+SS_ANNE_SUPER_POTION_RESERVE = 3
+SS_ANNE_SUPER_POTION_RECOVERY_HP = 60
+SUPER_POTION_HEAL_AMOUNT = 50
+SUPER_POTION_PRICE = 700
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -68,6 +76,8 @@ def _directions(value: str) -> tuple[str, ...]:
 VERMILION_TO_CENTER_DIRECTIONS = _directions("DDDLDDLLLLLLLUU")
 CENTER_TO_NURSE_DIRECTIONS = _directions("UUUU")
 CENTER_EXIT_DIRECTIONS = _directions("DDDDD")
+CENTER_TO_MART_DIRECTIONS = CENTER_EXIT_DIRECTIONS + _directions("R" * 10 + "D" * 10 + "RRU")
+MART_TO_CENTER_EXTERIOR_DIRECTIONS = _directions("LL" + "U" * 10 + "L" * 10)
 CENTER_TO_HARBOR_DIRECTIONS = _directions(
     "DDD"
     + "R" * 5
@@ -278,8 +288,12 @@ def run_ss_anne_chapter(
             "S.S. Anne preparation lacks the qualified BubbleBeam moveset: "
             f"{prepared.first_party_moves!r}."
         )
-    _move(chapter_executor, reader, CENTER_EXIT_DIRECTIONS, timing, "Vermilion Center exit")
-    _wait(chapter_executor, timing.transition_wait_frames)
+    _purchase_ss_anne_super_potions(
+        chapter_executor,
+        reader,
+        emulator,
+        timing,
+    )
     _move(chapter_executor, reader, CENTER_TO_HARBOR_DIRECTIONS, timing, "Vermilion harbor")
     _confirm_pulses(chapter_executor, timing.ticket_dialogue_pulses, timing.dialogue_wait_frames)
     _move(chapter_executor, reader, ("down", "down"), timing, "Vermilion dock entry")
@@ -421,8 +435,77 @@ def _enter_rival_battle(
     raise SSAnneChapterError("The rival intro missed its bounded battle gate.")
 
 
+def _purchase_ss_anne_super_potions(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SSAnneTiming,
+) -> None:
+    """Buy a disclosed high-value reserve before the early attrition battle."""
+
+    if _bag_quantity(emulator, ItemId.SUPER_POTION) != 0:
+        raise SSAnneChapterError("S.S. Anne preparation began with an unexpected Super Potion.")
+    money_before = _money(emulator)
+    _move(executor, reader, CENTER_TO_MART_DIRECTIONS, timing, "Vermilion Mart reserve")
+    _wait(executor, timing.transition_wait_frames)
+    mart_entry = reader.read()
+    if (
+        mart_entry.map_id != MapId.VERMILION_MART
+        or (mart_entry.player_x, mart_entry.player_y) != (3, 7)
+    ):
+        raise SSAnneChapterError("S.S. Anne reserve missed the Vermilion Mart entry.")
+    _move(executor, reader, ("up", "up", "left"), timing, "Vermilion Mart clerk")
+    executor.execute(MacroAction(MacroActionKind.MOVE, "left"))
+    _wait(executor, 60)
+    _confirm_pulses(executor, 2, DEFAULT_LAVENDER_TIMING.wait_frames)
+    try:
+        _buy_mart_item(
+            executor,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            absolute_index=1,
+            item=ItemId.SUPER_POTION,
+            quantity=SS_ANNE_SUPER_POTION_RESERVE,
+            target_bag_quantity=SS_ANNE_SUPER_POTION_RESERVE,
+        )
+        _close_menus(executor, reader, DEFAULT_LAVENDER_TIMING)
+    except LavenderChapterError as error:
+        raise SSAnneChapterError(str(error)) from error
+    if (
+        _bag_quantity(emulator, ItemId.SUPER_POTION) != SS_ANNE_SUPER_POTION_RESERVE
+        or money_before - _money(emulator)
+        != SS_ANNE_SUPER_POTION_RESERVE * SUPER_POTION_PRICE
+    ):
+        raise SSAnneChapterError("S.S. Anne Super Potion purchase missed its inventory ledger.")
+
+    mart_position = reader.read()
+    if (
+        mart_position.map_id != MapId.VERMILION_MART
+        or mart_position.player_x != 2
+        or mart_position.player_y is None
+        or not 5 <= mart_position.player_y <= 7
+    ):
+        raise SSAnneChapterError("S.S. Anne Mart closure lost its exit column.")
+    _move(
+        executor,
+        reader,
+        ("right",) + ("down",) * (8 - mart_position.player_y),
+        timing,
+        "Vermilion Mart exit",
+    )
+    _wait(executor, timing.transition_wait_frames)
+    _move(
+        executor,
+        reader,
+        MART_TO_CENTER_EXTERIOR_DIRECTIONS,
+        timing,
+        "Vermilion Center exterior return",
+    )
+
+
 class _PauseForSSAnneRivalPotion(Exception):
-    pass
+    def __init__(self, item: ItemId = ItemId.POTION) -> None:
+        self.item = item
 
 
 def _run_ss_anne_rival_with_potion(
@@ -434,20 +517,29 @@ def _run_ss_anne_rival_with_potion(
     """Spend retained Potions only at a live, bounded HP threshold."""
 
     starting_reserve = _bag_quantity(emulator, ItemId.POTION)
+    starting_super_potions = _bag_quantity(emulator, ItemId.SUPER_POTION)
     if not (
         SS_ANNE_RIVAL_POTION_RESERVE
         <= starting_reserve
         <= CERULEAN_GYM_START_POTION_RESERVE
     ):
         raise SSAnneChapterError("S.S. Anne rival recovery reserve is outside its bound.")
+    if starting_super_potions != SS_ANNE_SUPER_POTION_RESERVE:
+        raise SSAnneChapterError("S.S. Anne rival lacks its three-Super-Potion reserve.")
 
     def guarded_policy(raw: RawGameState) -> int:
+        if (
+            _bag_quantity(emulator, ItemId.SUPER_POTION) > 0
+            and raw.first_party_hp is not None
+            and 0 < raw.first_party_hp <= SS_ANNE_SUPER_POTION_RECOVERY_HP
+        ):
+            raise _PauseForSSAnneRivalPotion(ItemId.SUPER_POTION)
         if (
             _bag_quantity(emulator, ItemId.POTION) > 0
             and raw.first_party_hp is not None
             and 0 < raw.first_party_hp <= 40
         ):
-            raise _PauseForSSAnneRivalPotion
+            raise _PauseForSSAnneRivalPotion(ItemId.POTION)
         return _choose_ss_anne_rival_move(raw)
 
     intent = BattleIntent(
@@ -456,6 +548,7 @@ def _run_ss_anne_rival_with_potion(
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
     )
     recoveries = 0
+    super_recoveries = 0
     while True:
         try:
             result = run_adaptive_trainer_battle(
@@ -470,6 +563,29 @@ def _run_ss_anne_rival_with_potion(
         except BattleRuntimeError as error:
             if not isinstance(error.__cause__, _PauseForSSAnneRivalPotion):
                 raise SSAnneChapterError(str(error)) from error
+            pause = error.__cause__
+            if not isinstance(pause, _PauseForSSAnneRivalPotion):
+                raise SSAnneChapterError(str(error)) from error
+            if pause.item is ItemId.SUPER_POTION:
+                if super_recoveries >= starting_super_potions:
+                    raise SSAnneChapterError(
+                        "S.S. Anne rival exhausted its bounded Super Potion reserve."
+                    ) from error
+                try:
+                    _use_battle_recovery_item(
+                        reader,
+                        executor,
+                        emulator,
+                        DEFAULT_CASCADE_TIMING,
+                        item=ItemId.SUPER_POTION,
+                        heal_amount=SUPER_POTION_HEAL_AMOUNT,
+                        max_quantity=SS_ANNE_SUPER_POTION_RESERVE,
+                        label="S.S. Anne Super Potion",
+                    )
+                except CascadeChapterError as recovery_error:
+                    raise SSAnneChapterError(str(recovery_error)) from recovery_error
+                super_recoveries += 1
+                continue
             if recoveries >= starting_reserve:
                 raise SSAnneChapterError(
                     "S.S. Anne rival exhausted its bounded Potion reserve."
@@ -489,6 +605,13 @@ def _run_ss_anne_rival_with_potion(
         if _bag_quantity(emulator, ItemId.POTION) != starting_reserve - recoveries:
             raise SSAnneChapterError(
                 "S.S. Anne rival changed its bounded Potion reserve unexpectedly."
+            )
+        if (
+            super_recoveries != starting_super_potions
+            or _bag_quantity(emulator, ItemId.SUPER_POTION) != 0
+        ):
+            raise SSAnneChapterError(
+                "S.S. Anne rival did not consume its disclosed Super Potion reserve."
             )
         return result
 

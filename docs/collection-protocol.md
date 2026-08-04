@@ -100,6 +100,15 @@ that maneuver now applies on the initial crossing as well. It may step aside, wa
 attempt count, restore the exact approach coordinate, and retry left, while any off-corridor or
 battle state still fails closed. This rehearsal was uncounted and v8 remains unopened.
 
+The obstruction-safe rehearsal then reached the S.S. Anne rival at checkpoint 79. Six ordinary
+Potions could not escape Ivysaur's damage cycle: a low-HP Potion restored 20 HP, but the following
+attack plus Leech Seed removed nearly the same amount while healing the opponent. Wartortle
+eventually fainted with Ivysaur at 15/57 HP. The teacher now buys three Super Potions in Vermilion
+before boarding, proves their exact ₽2,100 ledger, and prioritizes their 50-HP recovery at a bounded
+low-HP battle menu before falling back to the retained Potion stack. The reserve is deliberately
+consumed in the rival battle so the downstream capture and inventory contracts remain unchanged.
+This failure was also uncounted; another complete qualification is required.
+
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
 Center immediately before the accuracy-lowering trainer, may spend one of the already-budgeted
