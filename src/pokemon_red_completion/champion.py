@@ -14,6 +14,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    note_observed_trainer_battle_exit,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import _bag, _party_hp, _party_status
@@ -298,6 +299,11 @@ def run_champion_chapter(
     next_sacrifice = 1
     last_recovery_turn = -1
     forced_switches = 0
+    champion_intent = BattleIntent(
+        "defeat_champion",
+        battle_plan_id=RedBattlePlanId.LEAGUE_CHAMPION,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+    )
     while True:
         raw = reader.read()
         if _completed(raw):
@@ -311,11 +317,7 @@ def run_champion_chapter(
                 actions,
                 policy,
                 expected_map=MapId.CHAMPIONS_ROOM,
-                intent=BattleIntent(
-                    "defeat_champion",
-                    battle_plan_id=RedBattlePlanId.LEAGUE_CHAMPION,
-                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
-                ),
+                intent=champion_intent,
                 timing=BattleRuntimeTiming(
                     max_runtime_pulses=3000,
                     max_post_attack_transition_pulses=30,
@@ -332,6 +334,7 @@ def run_champion_chapter(
                 and any(hp > 0 for hp in _party_hp(emulator))
             ):
                 _settle_champion_battle_exit(reader, actions)
+                note_observed_trainer_battle_exit(champion_intent)
                 continue
             if (
                 current.battle_state == 2
@@ -372,6 +375,7 @@ def run_champion_chapter(
                         raise ChampionChapterError(
                             "Champion final KO exposed an unsupported battle state."
                         ) from error
+                    note_observed_trainer_battle_exit(champion_intent)
                     continue
                 raise ChampionChapterError(
                     "Champion battle runtime failed: "

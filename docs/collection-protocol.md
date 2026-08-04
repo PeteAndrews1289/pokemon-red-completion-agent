@@ -863,3 +863,11 @@ remained available as terminal evidence. The handler now accepts both legal side
 transition: trainer battle plus zero HP is settled with bounded inputs; post-battle dialogue plus
 zero HP immediately returns to the existing outer dialogue controller. Any other battle state still
 fails closed. The rehearsal remains uncounted.
+
+That replay then passed all **312/312 gameplay checkpoints**, set the Champion event, and entered
+the Hall of Fame. Its offline schedule gate rejected the artifact even though all **68/68**
+`battle_start_offset_applied` events were present: the manual reserve-battler victory path had
+proved the physical Champion exit but had not closed the schedule controller's active Champion
+intent. The same proven external-exit hook already used by other bounded team-battle continuations
+now closes both the schedule lifecycle and recorder lifecycle after the final KO. No schedule event
+is synthesized or backfilled; the exact source must replay and independently attest all 68 battles.
