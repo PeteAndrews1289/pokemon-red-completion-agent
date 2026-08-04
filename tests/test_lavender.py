@@ -105,6 +105,37 @@ def test_lavender_timing_is_positive_and_bounded() -> None:
     )
 
 
+def test_rock_center_exit_normalizes_false_ready_nurse_dialogue() -> None:
+    class Runtime:
+        def __init__(self) -> None:
+            self.actions: list[object] = []
+
+        def execute(self, action: object) -> None:
+            self.actions.append(action)
+
+        def read(self) -> RawGameState:
+            return replace(
+                _raw(),
+                map_id=MapId.ROCK_TUNNEL_POKECENTER,
+                player_x=3,
+                player_y=3,
+            )
+
+        def read_input_readiness(self) -> object:
+            return type("Readiness", (), {"ready": True})()
+
+    runtime = Runtime()
+    lavender_module._normalize_rock_center_exit_dialogue(
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        LavenderTiming(wait_frames=1),
+    )
+
+    assert [
+        getattr(action, "kind", None) for action in runtime.actions
+    ] == [MacroActionKind.CANCEL, MacroActionKind.WAIT] * 4
+
+
 @pytest.mark.parametrize(
     ("projected_money", "preserve_existing_sale", "expected"),
     (

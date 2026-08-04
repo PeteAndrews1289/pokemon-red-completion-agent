@@ -620,6 +620,7 @@ def run_lavender_chapter(
     _move(actions, reader, emulator, run, ROUTE_10_TO_CENTER, timing, "Rock Tunnel Center")
     _wait(actions, timing.transition_frames)
     _heal_center(actions, reader, emulator, timing, MapId.ROCK_TUNNEL_POKECENTER)
+    _normalize_rock_center_exit_dialogue(actions, reader, timing)
     rock_center = reader.read()
     _checkpoint(records, progress, emulator, rock_center, "rock_center", "Healed at Route 10")
 
@@ -2456,6 +2457,33 @@ def _heal_center(
             return
         _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     raise LavenderChapterError("Pokémon Center did not heal the complete party.")
+
+
+def _normalize_rock_center_exit_dialogue(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: LavenderTiming,
+) -> None:
+    """Dismiss the nurse's bounded closing text before the Route 10 exit.
+
+    Red can expose its generic input-ready flag between the final two nurse
+    text boxes.  CANCEL advances those boxes but is inert on the field, so a
+    fixed bounded sequence restores movement without risking a second nurse
+    interaction from an otherwise-idle CONFIRM press.
+    """
+
+    for _ in range(4):
+        _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
+    raw = reader.read()
+    if (
+        raw.map_id != MapId.ROCK_TUNNEL_POKECENTER
+        or (raw.player_x, raw.player_y) != (3, 3)
+        or raw.battle_state != 0
+        or not reader.read_input_readiness().ready
+    ):
+        raise LavenderChapterError(
+            "Rock Center nurse dialogue did not restore the verified exit stance."
+        )
 
 
 def _use_cut(
