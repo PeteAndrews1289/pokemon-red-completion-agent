@@ -61,5 +61,6 @@ def test_bruno_recovery_threshold_accounts_for_hitmonlee_damage() -> None:
         )
 
     assert _bruno_recovery_threshold(raw(0x2B)) == BRUNO_HITMONLEE_SAFE_HP
+    assert _bruno_recovery_threshold(raw(0x2C)) == 163
     assert _bruno_recovery_threshold(raw(0x7E)) == 163
     assert _bruno_recovery_threshold(raw(0x22)) == 90

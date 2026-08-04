@@ -318,7 +318,14 @@ def run_bruno_chapter(
                     item,
                 )
             except SilphChapterError as healing_error:
-                raise BrunoChapterError("Bruno recovery failed.") from healing_error
+                current = reader.read()
+                raise BrunoChapterError(
+                    "Bruno recovery failed: "
+                    f"item={item.name}, hp={current.first_party_hp}/"
+                    f"{current.first_party_max_hp}, enemy="
+                    f"{(current.enemy_species_id, current.enemy_hp, current.enemy_level)!r}, "
+                    f"bag={_bag(emulator)!r}, cause={healing_error}."
+                ) from healing_error
             last_recovery_turn = len(turns)
 
     for _ in range(5):
@@ -407,10 +414,10 @@ def _turns_valid(turns: Iterable[BrunoTurn]) -> bool:
 
 
 def _bruno_recovery_threshold(raw: RawGameState) -> int:
-    if raw.enemy_species_id == 0x7E:
-        # Machamp's high-roll Submission can exceed the generic margin from
-        # otherwise healthy HP.  The stocked Hyper Potions make a full-health
-        # boundary safer than accepting a one-turn knockout window.
+    if raw.enemy_species_id in {0x2C, 0x7E}:
+        # Machoke and Machamp can both produce a near-full-health critical
+        # Submission. Heal before entering that damage window; waiting until
+        # after the hit lets the opponent knock out the lead on the item turn.
         return raw.first_party_max_hp or BRUNO_HITMONLEE_SAFE_HP
     if raw.enemy_species_id == 0x2B:
         return BRUNO_HITMONLEE_SAFE_HP
