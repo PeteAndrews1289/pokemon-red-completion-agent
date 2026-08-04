@@ -575,7 +575,16 @@ def _run_pre_ship_training(
     if arrival.map_id != MapId.DIGLETTS_CAVE or arrival.player_x is None or arrival.player_y is None:
         raise SSAnneChapterError("Pre-ship training did not enter Diglett's Cave.")
     entry = _leave_pre_ship_entry_warp(executor, reader)
-    entry_position = (entry.player_x, entry.player_y)
+    anchor_position = (entry.player_x, entry.player_y)
+    warp_position = (37, 31)
+    direction_delta = {
+        "up": (0, -1),
+        "right": (1, 0),
+        "down": (0, 1),
+        "left": (-1, 0),
+    }
+    opposite = {"up": "down", "right": "left", "down": "up", "left": "right"}
+    bounce_direction: str | None = None
 
     battles_won = 0
     steps = 0
@@ -633,26 +642,65 @@ def _run_pre_ship_training(
         if raw.map_id != MapId.DIGLETTS_CAVE or raw.player_x is None or raw.player_y is None:
             raise SSAnneChapterError("Pre-ship training left Diglett's Cave.")
         current = (raw.player_x, raw.player_y)
-        if current == entry_position:
-            direction = "up"
-        elif current == (entry_position[0], entry_position[1] - 1):
-            direction = "down"
-        else:
+        if current != anchor_position and bounce_direction is None:
             raise SSAnneChapterError(
-                f"Pre-ship training left its two-tile corridor: {current!r}."
+                f"Pre-ship training lost its return direction at {current!r}."
             )
-        executor.execute(MacroAction(MacroActionKind.MOVE, direction))
-        _wait(executor, 60)
-        moved = reader.read()
-        if moved.map_id != MapId.DIGLETTS_CAVE:
-            raise SSAnneChapterError("Pre-ship training crossed an excluded cave warp.")
-        steps += 1
+        candidates = (
+            (bounce_direction,)
+            if bounce_direction is not None
+            else ("up", "right", "left", "down")
+        )
+        moved_any = False
+        for direction in candidates:
+            if direction is None:
+                continue
+            dx, dy = direction_delta[direction]
+            if (current[0] + dx, current[1] + dy) == warp_position:
+                continue
+            executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+            _wait(executor, 60)
+            steps += 1
+            moved = reader.read()
+            if moved.map_id != MapId.DIGLETTS_CAVE:
+                raise SSAnneChapterError("Pre-ship training crossed an excluded cave warp.")
+            next_position = (moved.player_x, moved.player_y)
+            if next_position != current:
+                bounce_direction = opposite[direction]
+                moved_any = True
+                break
+        if not moved_any:
+            bounce_direction = None
 
     raw = reader.read()
     if raw.battle_state:
         raise SSAnneChapterError("Pre-ship training stopped inside a battle.")
-    if (raw.player_x, raw.player_y) != entry_position:
-        _move(executor, reader, ("down",), timing, "Diglett Cave training return tile")
+    if (raw.player_x, raw.player_y) != anchor_position:
+        if bounce_direction is None:
+            raise SSAnneChapterError("Pre-ship training cannot return to its safe cave anchor.")
+        executor.execute(MacroAction(MacroActionKind.MOVE, bounce_direction))
+        _wait(executor, 60)
+        raw = reader.read()
+        if raw.battle_state == 1:
+            try:
+                run_adaptive_wild_battle(
+                    reader,
+                    executor,
+                    _pre_ship_training_move_slot,
+                    expected_map=MapId.DIGLETTS_CAVE,
+                    intent=PRE_SHIP_TRAINING_INTENT,
+                    label="pre-ship Diglett Cave training return",
+                    unknown_cancel_interval=10_000,
+                )
+            except BattleRuntimeError as error:
+                raise SSAnneChapterError(str(error)) from error
+            battles_won += 1
+            raw = reader.read()
+        if raw.map_id != MapId.DIGLETTS_CAVE or (raw.player_x, raw.player_y) != anchor_position:
+            raise SSAnneChapterError(
+                "Pre-ship training missed its safe return anchor: "
+                f"map={raw.map_id!r}, position={(raw.player_x, raw.player_y)!r}."
+            )
     _move(executor, reader, ("down",), timing, "Diglett Cave training exit")
     _wait(executor, timing.transition_wait_frames)
     gate = reader.read()
