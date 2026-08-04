@@ -2292,6 +2292,7 @@ def _run_cerulean_gym_trainer_with_potion(
             DEFAULT_CERULEAN_TIMING,
             slot=CERULEAN_GYM_TRAINER_MOVE_SLOT,
             label=label,
+            allow_resolved_turn_without_pp=True,
         )
     except CeruleanChapterError as error:
         raise CascadeChapterError(str(error)) from error
@@ -2364,6 +2365,7 @@ def _run_cerulean_gym_trainer_with_potion(
                         DEFAULT_CERULEAN_TIMING,
                         slot=CERULEAN_GYM_TRAINER_MOVE_SLOT,
                         label=label,
+                        allow_resolved_turn_without_pp=True,
                     )
                 except CeruleanChapterError as error:
                     raise CascadeChapterError(str(error)) from error

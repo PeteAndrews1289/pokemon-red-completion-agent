@@ -325,13 +325,16 @@ class _ScriptedBattleReader:
         menu_states: tuple[BattleMenuState, ...],
         *,
         pp: int = 10,
+        hp: int = 30,
     ) -> None:
         self._menu_states = list(menu_states)
         self.pp = pp
+        self.hp = hp
 
     def read(self) -> RawGameState:
         return replace(
             _raw(MapId.ROUTE_3, 11, 6, battle_state=2),
+            first_party_hp=self.hp,
             first_party_pp=(34, 30, 20, self.pp),
         )
 
@@ -348,10 +351,12 @@ class _RecordingBattleExecutor:
         reader: _ScriptedBattleReader | None = None,
         *,
         decrement_on_confirm: int | None = None,
+        damage_on_confirm: int | None = None,
     ) -> None:
         self.actions: list[MacroAction] = []
         self.reader = reader
         self.decrement_on_confirm = decrement_on_confirm
+        self.damage_on_confirm = damage_on_confirm
         self.confirm_count = 0
 
     def execute(self, action: MacroAction) -> None:
@@ -360,6 +365,8 @@ class _RecordingBattleExecutor:
             self.confirm_count += 1
             if self.reader is not None and self.confirm_count == self.decrement_on_confirm:
                 self.reader.pp -= 1
+            if self.reader is not None and self.confirm_count == self.damage_on_confirm:
+                self.reader.hp -= 7
 
 
 class _StableRouteReader:
@@ -492,6 +499,31 @@ def test_battle_selector_requires_a_persistent_pp_decrement() -> None:
 
     assert recording.confirm_count == 4
     assert reader.pp == 10
+
+
+def test_battle_selector_accepts_an_observed_confusion_turn_when_enabled() -> None:
+    reader = _ScriptedBattleReader(
+        (
+            BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0),
+            BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=4),
+            BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0),
+        )
+    )
+    recording = _RecordingBattleExecutor(reader, damage_on_confirm=2)
+
+    pp_spent = _select_battle_move(
+        _CountingChapterExecutor(recording),
+        reader,  # type: ignore[arg-type]
+        DEFAULT_CERULEAN_TIMING,
+        slot=4,
+        label="confusion turn test",
+        allow_resolved_turn_without_pp=True,
+    )
+
+    assert not pp_spent
+    assert reader.hp == 23
+    assert reader.pp == 10
+    assert recording.confirm_count == 2
 
 
 def test_deterministic_seed_wait_is_placed_before_its_exact_move() -> None:

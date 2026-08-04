@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v7.json`](../configs/red-battle-collection-v7.json)
+[`red-battle-collection-v8.json`](../configs/red-battle-collection-v8.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 68 stable public battle-plan identities in exact qualified-route order;
@@ -37,7 +37,7 @@ at full **61/61 HP** and all five Potions intact. The historical exact-four hand
 an unnecessary field Potion, which the game correctly disallowed at full health. That one-shot v6
 failure remains preserved, and v6 is retired rather than changed or rerun.
 
-The current v7 registry promotes exposed v6 seed `16001` to its uncounted dry rehearsal and assigns
+The retired v7 registry promoted exposed v6 seed `16001` to its uncounted dry rehearsal and assigned
 twelve fresh, disjoint counted seeds. Its first rehearsal proved the original preservation repair
 through Cerulean, Rocket, and Route 6, then accuracy loss, the rival's own Potion, and Leech Seed
 exhausted three retained Potions at the S.S. Anne rival. The failure is private and uncounted; all
@@ -77,7 +77,21 @@ cleanup now also sells the obsolete Potion stack before buying the disclosed Gre
 replacement. The Mansion therefore begins with eighteen occupied slots after using its Repel,
 leaving exactly two slots for TM14 and the Secret Key while preserving the later full-bag TM38
 lesson. Potion quantity and proceeds remain exact evidence. This failure was uncounted; no official
-v7 slot has opened.
+v7 slot had opened at that point.
+
+The corrected v7 source then passed the complete **312/312 checkpoint**, **36/36 objective**,
+**68/68 battle**, Hall-of-Fame qualification. Its first immutable counted training root exposed a
+different legal battle branch at checkpoint 55: Wartortle hurt itself in confusion, so its HP fell
+while Goldeen's HP and Mega Punch PP correctly remained unchanged. The move selector required a PP
+decrement from every selected turn and rejected that completed confusion turn. The failed v7 root
+is preserved in its immutable ledger, so v7 is retired and its eleven pending slots will not run.
+
+The current v8 registry uses that exposed v7 seed `17001` only for its uncounted dry rehearsal. It
+assigns fresh counted seeds `18001`–`18005`, `28001`–`28002`, and `38001`–`38005`. The Cerulean Gym
+controller may now recognize one narrowly evidenced no-PP turn only after the battle returns to its
+main menu and either combatant's HP changed; it then deliberately selects the required move again.
+Unchanged stale input still fails the original persistent PP gate. V8 must pass its full exact-source
+qualification before any counted slot opens.
 
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the

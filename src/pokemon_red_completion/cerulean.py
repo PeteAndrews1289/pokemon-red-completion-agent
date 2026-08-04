@@ -1369,8 +1369,10 @@ def _select_battle_move(
     *,
     slot: int,
     label: str,
-) -> None:
-    initial = _pp_at(reader.read(), slot)
+    allow_resolved_turn_without_pp: bool = False,
+) -> bool:
+    initial_raw = reader.read()
+    initial = _pp_at(initial_raw, slot)
     if initial <= 0:
         raise CeruleanChapterError(f"{label} move slot {slot} had no usable PP.")
 
@@ -1409,11 +1411,25 @@ def _select_battle_move(
     else:
         raise CeruleanChapterError(f"{label} never selected move slot {slot}.")
 
-    for _ in range(timing.max_attack_start_pulses):
+    for attempt in range(timing.max_attack_start_pulses):
+        raw = reader.read()
+        if _pp_at(raw, slot) < initial:
+            return True
+        if (
+            attempt > 0
+            and allow_resolved_turn_without_pp
+            and raw.battle_state == 2
+            and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
+            and (
+                raw.first_party_hp != initial_raw.first_party_hp
+                or raw.enemy_hp != initial_raw.enemy_hp
+            )
+        ):
+            return False
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         _wait(executor, timing.selected_move_wait_frames)
         if _pp_at(reader.read(), slot) < initial:
-            return
+            return True
         if reader.read().battle_state != 2:
             raise CeruleanChapterError(f"{label} ended before its persistent PP-decrement gate.")
     raise CeruleanChapterError(f"{label} failed its persistent PP-decrement gate.")
