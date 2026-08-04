@@ -2121,7 +2121,6 @@ def _earn_tunnel_supply_income(
     _move(executor, reader, emulator, run, ("up",), timing, "supply-income Center entry")
     _wait(executor, timing.transition_frames)
     _require(reader.read(), MapId.VERMILION_POKECENTER, (3, 7), "supply-income Center entry")
-    _move(executor, reader, emulator, run, ("up",) * 4, timing, "supply-income nurse return")
     _heal_center(executor, reader, emulator, timing, MapId.VERMILION_POKECENTER)
     restored = reader.read()
     if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
