@@ -69,6 +69,8 @@ control, and progressively trained specialists.**
 > post-Surf PP vector before calling the Center recovery finished. The fully restored replay then
 > reached Lance at checkpoint 308, where a forced-switch helper rejected a valid slot-4 party
 > cursor inherited from the old three-member route. Cursor validation now uses the live party size.
+> The repaired switch defeated Lance but exposed three helper sacrifices against two Revives;
+> helper pivots now stop at the declared two-Revive budget and later recovery heals Blastoise.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the

@@ -4,6 +4,7 @@ from pokemon_red_completion.lance import (
     LANCE_CHAMPION_FULL_RESTORE_RESERVE,
     LANCE_CHAMPION_SURF_RESERVE,
     LANCE_CHECKPOINT_COUNT,
+    LANCE_HELPER_PIVOT_LIMIT,
     LANCE_PARTY,
     LANCE_RNG_DELAY_FRAMES,
     LANCE_SAFE_HP,
@@ -13,6 +14,7 @@ from pokemon_red_completion.lance import (
     _lance_move_slot,
     _lance_recovery_threshold,
     _next_lance_helper,
+    _should_use_lance_helper_pivot,
     _turns_valid,
 )
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGameState
@@ -25,6 +27,7 @@ def test_lance_source_contract_is_exact() -> None:
     assert LANCE_SAFE_HP == 120
     assert LANCE_CHAMPION_FULL_RESTORE_RESERVE == 1
     assert LANCE_CHAMPION_SURF_RESERVE == 0
+    assert LANCE_HELPER_PIVOT_LIMIT == 2
     assert LANCE_APPROACH == ("up",) * 9
     assert MapId.LANCES_ROOM == 0x71
     assert MapId.CHAMPIONS_ROOM == 0x78
@@ -56,6 +59,31 @@ def test_lance_recovery_selects_any_living_helper() -> None:
     assert _next_lance_helper((80, 25, 39)) == 1
     assert _next_lance_helper((80, 0, 0)) is None
     assert _next_lance_helper((180, 120, 140), (220, 174, 158)) is None
+
+
+def test_lance_helper_pivots_cannot_exceed_the_two_revive_contract() -> None:
+    state = RawGameState(
+        game_started=True,
+        map_id=MapId.LANCES_ROOM,
+        player_x=6,
+        player_y=2,
+        party_count=6,
+        battle_state=2,
+        first_party_hp=165,
+        first_party_max_hp=205,
+        first_party_pp=(7, 0, 0, 0),
+    )
+
+    assert _should_use_lance_helper_pivot(
+        state,
+        helper_index=4,
+        helper_pivots_used=1,
+    )
+    assert not _should_use_lance_helper_pivot(
+        state,
+        helper_index=4,
+        helper_pivots_used=2,
+    )
 
 
 def test_lance_low_pp_finisher_requires_full_health() -> None:

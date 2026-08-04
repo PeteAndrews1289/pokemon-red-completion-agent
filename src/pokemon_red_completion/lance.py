@@ -74,6 +74,7 @@ LANCE_CHAMPION_FULL_RESTORE_RESERVE = 1
 LANCE_RNG_DELAY_FRAMES = 40
 LANCE_X_SPECIAL_USE = 1
 LANCE_AERODACTYL_PIVOT_SPECIES = 0xAB
+LANCE_HELPER_PIVOT_LIMIT = 2
 
 
 class EmulatorState(Protocol):
@@ -271,6 +272,7 @@ def run_lance_chapter(
     boosts_used = 0
     accuracy_used = 0
     attacks_used = 0
+    helper_pivots_used = 0
 
     def policy(raw: RawGameState) -> int:
         if accuracy_used == 0:
@@ -396,9 +398,10 @@ def run_lance_chapter(
             helper_index = _next_lance_helper(
                 _party_hp(emulator), _party_max_hp(emulator)
             )
-            if (
-                (raw.first_party_hp or 0) < _lance_recovery_threshold(raw)
-                and helper_index is not None
+            if _should_use_lance_helper_pivot(
+                raw,
+                helper_index=helper_index,
+                helper_pivots_used=helper_pivots_used,
             ):
                 try:
                     _battle_sacrifice(
@@ -411,6 +414,7 @@ def run_lance_chapter(
                     )
                 except VictoryRoadChapterError as pivot_error:
                     raise LanceChapterError("Lance recovery pivot failed.") from pivot_error
+                helper_pivots_used += 1
             else:
                 try:
                     _battle_healing_item(
@@ -640,6 +644,21 @@ def _next_lance_helper(
             and (party_max_hp is None or party_max_hp[index] <= 100)
         ),
         None,
+    )
+
+
+def _should_use_lance_helper_pivot(
+    raw: RawGameState,
+    *,
+    helper_index: int | None,
+    helper_pivots_used: int,
+) -> bool:
+    """Never sacrifice more helpers than the fixed two-Revive handoff can restore."""
+
+    return (
+        helper_index is not None
+        and helper_pivots_used < LANCE_HELPER_PIVOT_LIMIT
+        and (raw.first_party_hp or 0) < _lance_recovery_threshold(raw)
     )
 
 

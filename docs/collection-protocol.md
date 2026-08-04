@@ -1071,3 +1071,12 @@ cursor values only through 2 from the historical three-member route. It now vali
 against the observed live party size and still requires the actual party-menu cursor tile before
 selection. This generalizes ordinary forced switching to all six roster positions without adding
 items, retries, or battle attempts. The late-game failure remained uncounted.
+
+The generalized switch replay completed that slot-4 return and defeated Lance, but post-battle
+recovery then found three fainted helpers against the fixed two-Revive reserve. With Surf as the
+only remaining attack, the full-health safety rule had requested recovery after three Aerodactyl
+exchanges. The first two helper sacrifices matched the declared revival capacity; before the third,
+Blastoise still held 165/205 HP and could safely consume the selected healing item itself. Lance
+now caps helper pivots at two and performs any later recovery directly on the active workhorse.
+This carries the revival budget into the tactical decision, preserves a third teammate for the
+Champion, and adds no item, retry, or battle attempt. The rehearsal remained uncounted.
