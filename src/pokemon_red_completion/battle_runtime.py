@@ -813,11 +813,14 @@ def _execute_policy_turn(
             # FIGHT before the move menu becomes observable.  An unchanged
             # PP vector proves that no move was substituted or spent.
             return
-        if raw.enemy_using_trapping_move and raw.battler_pp == initial_raw.battler_pp:
+        if (
+            initial_raw.enemy_using_trapping_move or raw.enemy_using_trapping_move
+        ) and raw.battler_pp == initial_raw.battler_pp:
             # Gen I trapping moves such as Bind suppress the trapped player's
-            # move selection on continuation turns. The pinned enemy battle
-            # status bit proves this is a forced no-action turn; the unchanged
-            # PP vector proves that no player move was substituted or spent.
+            # move selection on continuation turns. The enemy battle-status
+            # bit can clear before the menu returns, so evidence at either the
+            # policy gate or the final transition gate proves the forced
+            # no-action turn; unchanged PP proves no player move was spent.
             return
         raise BattleRuntimeError(f"{label} never exposed a semantic move menu.")
 

@@ -2045,6 +2045,7 @@ def test_enemy_trapping_turn_can_suppress_move_selection_without_spending_pp() -
             return
         confirmations += 1
         if confirmations == 1:
+            runtime.raw = replace(runtime.raw, enemy_using_trapping_move=False)
             runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
         else:
             runtime.raw = replace(
