@@ -572,3 +572,7 @@ use and stopped at checkpoint 106 with four remaining, below the declared five-i
 That root is sealed and v36 is retired. V37 protects a six-item tunnel reserve across both
 Route 9 recovery controllers, must first pass the exposed v36 schedule as an uncounted diagnostic,
 and assigns wholly fresh counted seeds before collection resumes.
+
+The exposed-seed resource replay then cleared Rock Tunnel and reached checkpoint 244 before a
+swallowed post-rival elevator entry left the player in the hallway. Silph elevator entries now
+prove the map transition with bounded unchanged-state retries before allowing floor selection.

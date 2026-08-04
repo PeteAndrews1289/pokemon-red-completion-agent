@@ -1498,3 +1498,9 @@ qualified battle RNG phase.
 V37 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `280001`–`280005`, `290001`–`290002`, and `300001`–`300005`. The exposed V36 training seed
 `250001` must pass as an uncounted diagnostic before the new rehearsal.
+
+The first complete replay of that exposed schedule proved the Route 9 and Rock Tunnel budgets and
+continued to checkpoint 244. One post-rival elevator doorway input was then swallowed, so the floor
+selector refused to run from the hallway. All Silph elevator entries now retry only an unchanged
+doorway state and require the elevator map before opening the panel; the diagnostic remains
+uncounted and must restart from clean power-on.

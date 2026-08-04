@@ -35,6 +35,7 @@ from pokemon_red_completion.silph import (
     SilphTiming,
     _battle_healing_item,
     _battle_healing_item_verified_terminal_exit,
+    _enter_silph_elevator,
     _interact_with_roof_girl,
     _mart_2f_girl_coordinate,
     _move_verified,
@@ -281,6 +282,34 @@ def test_silph_verified_movement_yields_on_mart_2f_before_3f_stairs() -> None:
         14,
         4,
     )
+
+
+def test_silph_elevator_entry_retries_a_swallowed_doorway_input() -> None:
+    hallway = replace(_terminal(), map_id=MapId.SILPH_CO_3F, player_x=20, player_y=1)
+    elevator = replace(
+        hallway,
+        map_id=MapId.SILPH_CO_ELEVATOR,
+        player_x=1,
+        player_y=3,
+    )
+    states = iter((hallway, hallway, hallway, hallway, elevator))
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return next(states)
+
+    class Executor:
+        def execute(self, _action: object) -> None:
+            return None
+
+    final = _enter_silph_elevator(
+        Executor(),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        replace(DEFAULT_SILPH_TIMING, movement_frames=1),
+        "test elevator",
+    )
+
+    assert final.map_id == MapId.SILPH_CO_ELEVATOR
 
 
 def test_silph_clerk_approach_uses_verified_steps() -> None:

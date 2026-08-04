@@ -995,6 +995,13 @@ input, so a modulo-256 alignment wait restores the previously qualified battle R
 of silently shifting every tunnel matchup. The exposed v36 schedule is diagnostic-only; v37 uses
 fresh seeds for all five training, two validation, and five test lineages.
 
+The repaired resource replay cleared Rock Tunnel and continued through the Silph rival at
+checkpoint 244 before a swallowed elevator doorway input left the player in the hallway. The
+selector failed closed rather than choosing a floor from the wrong map. Elevator entry is now a
+bounded semantic transition: unchanged doorway observations are retryable, any unexpected movement
+fails, and the panel is unavailable until the elevator map is proven. This is a reusable navigation
+lesson, not a coordinate-specific teleport.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

@@ -492,7 +492,7 @@ def run_silph_chapter(
     _move(actions, reader, CARD_KEY_RETURN, timing)
     _move(actions, reader, ("up", "up", "down", "up"), timing)
     _move(actions, reader, FIFTH_FLOOR_TO_ELEVATOR, timing)
-    _move(actions, reader, ("up",), timing)
+    _enter_silph_elevator(actions, reader, timing, "Silph 5F elevator")
     _select_elevator_floor(actions, reader, emulator, 2, timing)
     _move(actions, reader, ELEVATOR_EXIT, timing)
     _move(actions, reader, THIRD_FLOOR_GUARD, timing)
@@ -636,7 +636,7 @@ def run_silph_chapter(
     _move(actions, reader, ("down",), timing)
     _move(actions, reader, SEVENT_TO_THIRD_WARP, timing)
     _move(actions, reader, SEVENT_TO_THIRD, timing)
-    _move(actions, reader, ("up",), timing)
+    _enter_silph_elevator(actions, reader, timing, "liberated Silph elevator")
     _select_elevator_floor(actions, reader, emulator, 0, timing)
     _move(actions, reader, ELEVATOR_EXIT, timing)
     _move(actions, reader, SILPH_1F_TO_EXIT, timing)
@@ -1487,6 +1487,20 @@ def _select_elevator_floor(
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.dialogue_frames)
 
 
+def _enter_silph_elevator(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SilphTiming,
+    label: str,
+) -> RawGameState:
+    """Retry a swallowed doorway input and prove the elevator map transition."""
+
+    state = _move_verified(actions, reader, ("up",), timing, label)
+    if state.map_id != MapId.SILPH_CO_ELEVATOR:
+        raise SilphChapterError(f"{label} did not enter the elevator.")
+    return state
+
+
 def _run_battle(
     reader: PokemonRedStateReader,
     actions: _CountingExecutor,
@@ -1999,7 +2013,7 @@ def _heal_detour_from_seventh(
 ) -> None:
     _move(actions, reader, ("up", "down"), timing)
     _move(actions, reader, SEVENT_TO_THIRD, timing)
-    _move(actions, reader, ("up",), timing)
+    _enter_silph_elevator(actions, reader, timing, "pre-rival healing elevator")
     _select_elevator_floor(actions, reader, emulator, 0, timing)
     _move(actions, reader, ELEVATOR_EXIT, timing)
     _move(actions, reader, SILPH_1F_TO_EXIT, timing)
@@ -2017,7 +2031,7 @@ def _heal_detour_after_rival(
 ) -> None:
     _move(actions, reader, _directions("RRD"), timing)
     _move(actions, reader, SEVENT_TO_THIRD, timing)
-    _move(actions, reader, ("up",), timing)
+    _enter_silph_elevator(actions, reader, timing, "post-rival healing elevator")
     _select_elevator_floor(actions, reader, emulator, 0, timing)
     _move(actions, reader, ELEVATOR_EXIT, timing)
     _move(actions, reader, SILPH_1F_TO_EXIT, timing)
