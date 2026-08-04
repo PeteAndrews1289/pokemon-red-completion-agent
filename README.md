@@ -306,7 +306,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v12-01-train
+  --collection-run red-battle-v13-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
@@ -572,8 +572,7 @@ four-Potion Rocket reserve from a verified low-HP battle state.
 Its first uncounted replay cleared the repaired Mart and reached the level-17 Spearow lesson at
 checkpoint 86, where capture settling consumed two Poké Balls inside one requested throw. The
 dialogue loop now advances with the non-selecting B button so crossing an unobserved battle-menu
-boundary cannot issue a second item command. V12 remains unopened and must requalify from clean
-power before any counted seed is used.
+boundary cannot issue a second item command.
 That repair passed the capture, Diglett, trade, Cut, and Dig gates through checkpoint 91. The
 following Route 1 survey then met the source-defined horizontal youngster on the only northbound
 tile at `(14, 14)`. The survey now uses a finite eastward yield, restores the exact approach, and

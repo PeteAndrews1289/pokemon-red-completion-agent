@@ -484,3 +484,8 @@ All full-game evaluation lanes count every declared attempt and forbid save-stat
 Snapshot-based perturbation suites remain component-training evidence, not completion evidence.
 Only the third lane supports a claim about learned generalization, and that result has not yet
 been achieved.
+
+Current collection gate: v12 completed its clean 312-checkpoint rehearsal, then its first counted
+training schedule exposed the moving S.S. Anne waiter at `(8, 6)`. The failed root is sealed and
+v12 is retired. V13 contains the bounded corridor-yield repair and entirely new rehearsal,
+training, validation, and test schedules; its rehearsal must qualify before collection restarts.

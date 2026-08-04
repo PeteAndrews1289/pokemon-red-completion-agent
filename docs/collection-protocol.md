@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v12.json`](../configs/red-battle-collection-v12.json)
+[`red-battle-collection-v13.json`](../configs/red-battle-collection-v13.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1193,3 +1193,11 @@ source-exact ₽1,260 payout from Route 11 Gambler set 1 and sells unused TM24 f
 fixed supply purchase. This adds one real adaptive battle to the frozen roster, so v12 schedules
 contain 69 identities and 69 offsets. The battle event, trainer identity, payout, reversible route,
 zero battle-item use, and restored Vermilion boundary are all required evidence.
+
+V12 subsequently qualified all **312/312 checkpoints**, **36/36 objectives**, and **69/69**
+scheduled battles. Its first immutable training root stopped after boarding the S.S. Anne when the
+source-defined first-floor waiter occupied the westbound corridor tile at `(8, 6)`. That outcome is
+sealed and v12 is retired. The teacher now yields the exact corridor from `(9, 6)` to `(9, 7)`,
+waits under a finite source-pinned bound, restores the approach, and completes the requested step.
+V13 assigns disjoint rehearsal seed `21002` and counted seeds `23001`–`23005`, `33001`–`33002`, and
+`43001`–`43005`; none of its slots may open before its clean 69-battle rehearsal qualifies.

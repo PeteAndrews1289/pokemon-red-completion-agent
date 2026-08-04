@@ -79,6 +79,10 @@ VERMILION_SAILOR_BLOCK_POSITION = (21, 27)
 VERMILION_SAILOR_YIELD_POSITION = (21, 26)
 VERMILION_SAILOR_CLEAR_POSITION = (20, 27)
 VERMILION_SAILOR_CLEAR_ATTEMPTS = 10
+SS_ANNE_WAITER_BLOCK_POSITION = (9, 6)
+SS_ANNE_WAITER_YIELD_POSITION = (9, 7)
+SS_ANNE_WAITER_CLEAR_POSITION = (8, 6)
+SS_ANNE_WAITER_CLEAR_ATTEMPTS = 10
 PRE_SHIP_TRAINING_POLICY = TrainingPolicy(
     target_level=30,
     preferred_move_slots=(3, 4, 1),
@@ -97,10 +101,7 @@ PRE_SHIP_TRAINING_INTENT = BattleIntent(
 
 
 def _directions(value: str) -> tuple[str, ...]:
-    return tuple(
-        {"U": "up", "D": "down", "L": "left", "R": "right"}[letter]
-        for letter in value
-    )
+    return tuple({"U": "up", "D": "down", "L": "left", "R": "right"}[letter] for letter in value)
 
 
 VERMILION_TO_CENTER_DIRECTIONS = _directions("DDDLDDLLLLLLLUU")
@@ -109,17 +110,7 @@ CENTER_EXIT_DIRECTIONS = _directions("DDDDD")
 CENTER_EXTERIOR_TO_MART_DIRECTIONS = _directions("R" * 10 + "D" * 10 + "RRU")
 MART_TO_CENTER_EXTERIOR_DIRECTIONS = _directions("LL" + "U" * 10 + "L" * 10)
 CENTER_TO_HARBOR_DIRECTIONS = _directions(
-    "DDD"
-    + "R" * 5
-    + "DD"
-    + "RR"
-    + "D" * 5
-    + "R" * 12
-    + "D" * 12
-    + "L" * 6
-    + "D"
-    + "L" * 5
-    + "DDLD"
+    "DDD" + "R" * 5 + "DD" + "RR" + "D" * 5 + "R" * 12 + "D" * 12 + "L" * 6 + "D" + "L" * 5 + "DDLD"
 )
 DOCK_TO_SHIP_DIRECTIONS = _directions("DDD")
 SHIP_1F_TO_2F_DIRECTIONS = _directions("DDDD" + "L" + "DDD" + "L" * 15 + "U" + "L" * 9)
@@ -234,10 +225,7 @@ class SSAnneChapterReport:
         )
 
     def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
-        return tuple(
-            (record.checkpoint_id, record.label, record.raw)
-            for record in self.records
-        )
+        return tuple((record.checkpoint_id, record.label, record.raw) for record in self.records)
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -311,8 +299,14 @@ def run_ss_anne_chapter(
     _move(chapter_executor, reader, CENTER_TO_NURSE_DIRECTIONS, timing, "Vermilion nurse")
     _confirm_pulses(chapter_executor, timing.heal_dialogue_pulses, timing.dialogue_wait_frames)
     _checkpoint(
-        reader, tracker, SSAnnePhase.HEALED, "healed",
-        "Restored HP, status, and move PP", records, progress, emulator,
+        reader,
+        tracker,
+        SSAnnePhase.HEALED,
+        "healed",
+        "Restored HP, status, and move PP",
+        records,
+        progress,
+        emulator,
     )
     if _bag_quantity(emulator, ItemId.TM11_BUBBLEBEAM):
         try:
@@ -347,27 +341,51 @@ def run_ss_anne_chapter(
     _move(chapter_executor, reader, ("down", "down"), timing, "Vermilion dock entry")
     _wait(chapter_executor, timing.transition_wait_frames)
     _checkpoint(
-        reader, tracker, SSAnnePhase.DOCK_REACHED, "dock_reached",
-        "Passed the ticket guard and reached the dock", records, progress, emulator,
+        reader,
+        tracker,
+        SSAnnePhase.DOCK_REACHED,
+        "dock_reached",
+        "Passed the ticket guard and reached the dock",
+        records,
+        progress,
+        emulator,
     )
 
     _move(chapter_executor, reader, DOCK_TO_SHIP_DIRECTIONS, timing, "S.S. Anne entry")
     _wait(chapter_executor, timing.transition_wait_frames)
     _checkpoint(
-        reader, tracker, SSAnnePhase.SHIP_1F_REACHED, "ship_1f_reached",
-        "Boarded the S.S. Anne", records, progress, emulator,
+        reader,
+        tracker,
+        SSAnnePhase.SHIP_1F_REACHED,
+        "ship_1f_reached",
+        "Boarded the S.S. Anne",
+        records,
+        progress,
+        emulator,
     )
     _move(chapter_executor, reader, SHIP_1F_TO_2F_DIRECTIONS, timing, "S.S. Anne first floor")
     _wait(chapter_executor, timing.transition_wait_frames)
     _checkpoint(
-        reader, tracker, SSAnnePhase.SHIP_2F_REACHED, "ship_2f_reached",
-        "Reached the safe second-floor corridor", records, progress, emulator,
+        reader,
+        tracker,
+        SSAnnePhase.SHIP_2F_REACHED,
+        "ship_2f_reached",
+        "Reached the safe second-floor corridor",
+        records,
+        progress,
+        emulator,
     )
     _move(chapter_executor, reader, SHIP_2F_TO_RIVAL_DIRECTIONS, timing, "S.S. Anne rival")
     _enter_rival_battle(chapter_executor, reader, timing)
     _checkpoint(
-        reader, tracker, SSAnnePhase.RIVAL_BATTLE, "rival_battle",
-        "Verified the live S.S. Anne RIVAL2 battle", records, progress, emulator,
+        reader,
+        tracker,
+        SSAnnePhase.RIVAL_BATTLE,
+        "rival_battle",
+        "Verified the live S.S. Anne RIVAL2 battle",
+        records,
+        progress,
+        emulator,
     )
     _run_ss_anne_rival_with_potion(
         reader,
@@ -376,15 +394,27 @@ def run_ss_anne_chapter(
         timing,
     )
     _checkpoint(
-        reader, tracker, SSAnnePhase.RIVAL_DEFEATED, "rival_defeated",
-        "Defeated the S.S. Anne rival", records, progress, emulator,
+        reader,
+        tracker,
+        SSAnnePhase.RIVAL_DEFEATED,
+        "rival_defeated",
+        "Defeated the S.S. Anne rival",
+        records,
+        progress,
+        emulator,
     )
 
     _move(chapter_executor, reader, RIVAL_TO_CAPTAIN_ROOM_DIRECTIONS, timing, "Captain room")
     _wait(chapter_executor, timing.transition_wait_frames)
     _checkpoint(
-        reader, tracker, SSAnnePhase.CAPTAIN_ROOM_REACHED, "captain_room_reached",
-        "Reached the Captain's room", records, progress, emulator,
+        reader,
+        tracker,
+        SSAnnePhase.CAPTAIN_ROOM_REACHED,
+        "captain_room_reached",
+        "Reached the Captain's room",
+        records,
+        progress,
+        emulator,
     )
     _move(chapter_executor, reader, CAPTAIN_APPROACH_DIRECTIONS, timing, "Captain approach")
     chapter_executor.execute(MacroAction(MacroActionKind.MOVE, "up"))
@@ -396,15 +426,8 @@ def run_ss_anne_chapter(
         timing.dialogue_wait_frames,
     )
     rubbed = reader.read_ss_anne_state(reader.read())
-    if (
-        not rubbed.rubbed_captains_back
-        or rubbed.got_hm01
-        or rubbed.hm01_in_bag
-        or rubbed.cut_fact
-    ):
-        raise SSAnneChapterError(
-            "Captain rub stage failed its exact pre-HM01 semantic gate."
-        )
+    if not rubbed.rubbed_captains_back or rubbed.got_hm01 or rubbed.hm01_in_bag or rubbed.cut_fact:
+        raise SSAnneChapterError("Captain rub stage failed its exact pre-HM01 semantic gate.")
     chapter_executor.execute(MacroAction(MacroActionKind.CANCEL))
     _wait(chapter_executor, timing.dialogue_wait_frames)
     chapter_executor.execute(MacroAction(MacroActionKind.MOVE, "up"))
@@ -416,8 +439,14 @@ def run_ss_anne_chapter(
         timing.dialogue_wait_frames,
     )
     final_raw, final_evidence = _checkpoint(
-        reader, tracker, SSAnnePhase.HM01_OBTAINED, "hm01_obtained",
-        "Rubbed the Captain's back and obtained HM01", records, progress, emulator,
+        reader,
+        tracker,
+        SSAnnePhase.HM01_OBTAINED,
+        "hm01_obtained",
+        "Rubbed the Captain's back and obtained HM01",
+        records,
+        progress,
+        emulator,
     )
     report = SSAnneChapterReport(
         records=tuple(records),
@@ -451,20 +480,26 @@ def _move(
         for attempt in range(timing.movement_retries):
             executor.execute(MacroAction(MacroActionKind.MOVE, direction))
             state = reader.read()
-            if (
-                state.map_id != before.map_id
-                or (state.player_x, state.player_y)
-                != (before.player_x, before.player_y)
+            if state.map_id != before.map_id or (state.player_x, state.player_y) != (
+                before.player_x,
+                before.player_y,
             ):
                 break
             if (
                 label == "Vermilion harbor"
                 and before.map_id == MapId.VERMILION_CITY
-                and (before.player_x, before.player_y)
-                == VERMILION_SAILOR_BLOCK_POSITION
+                and (before.player_x, before.player_y) == VERMILION_SAILOR_BLOCK_POSITION
                 and direction == "left"
             ):
                 state = _yield_to_vermilion_sailor(executor, reader, timing)
+                break
+            if (
+                label == "S.S. Anne first floor"
+                and before.map_id == MapId.SS_ANNE_1F
+                and (before.player_x, before.player_y) == SS_ANNE_WAITER_BLOCK_POSITION
+                and direction == "left"
+            ):
+                state = _yield_to_ss_anne_waiter(executor, reader, timing)
                 break
             _wait(executor, timing.movement_retry_wait_frames * (attempt + 1))
         else:
@@ -491,54 +526,89 @@ def _yield_to_vermilion_sailor(
             or state.battle_state != 0
             or (state.player_x, state.player_y) != VERMILION_SAILOR_BLOCK_POSITION
         ):
-            raise SSAnneChapterError(
-                "Vermilion sailor recovery left its bounded harbor gate."
-            )
+            raise SSAnneChapterError("Vermilion sailor recovery left its bounded harbor gate.")
 
         executor.execute(MacroAction(MacroActionKind.MOVE, "up"))
         yielded = reader.read()
         if (yielded.player_x, yielded.player_y) != VERMILION_SAILOR_YIELD_POSITION:
-            raise SSAnneChapterError(
-                "Vermilion sailor recovery could not yield the harbor lane."
-            )
+            raise SSAnneChapterError("Vermilion sailor recovery could not yield the harbor lane.")
 
         for return_attempt in range(VERMILION_SAILOR_CLEAR_ATTEMPTS):
             _wait(
                 executor,
-                timing.movement_retry_wait_frames
-                * (attempt + return_attempt + 1),
+                timing.movement_retry_wait_frames * (attempt + return_attempt + 1),
             )
             executor.execute(MacroAction(MacroActionKind.MOVE, "down"))
             returned = reader.read()
-            if (
-                returned.map_id != MapId.VERMILION_CITY
-                or returned.battle_state != 0
-            ):
-                raise SSAnneChapterError(
-                    "Vermilion sailor recovery left Vermilion City."
-                )
+            if returned.map_id != MapId.VERMILION_CITY or returned.battle_state != 0:
+                raise SSAnneChapterError("Vermilion sailor recovery left Vermilion City.")
             if (returned.player_x, returned.player_y) == VERMILION_SAILOR_BLOCK_POSITION:
                 break
             if (returned.player_x, returned.player_y) != VERMILION_SAILOR_YIELD_POSITION:
-                raise SSAnneChapterError(
-                    "Vermilion sailor recovery left its step-aside tile."
-                )
+                raise SSAnneChapterError("Vermilion sailor recovery left its step-aside tile.")
         else:
-            raise SSAnneChapterError(
-                "Vermilion sailor did not release the harbor return tile."
-            )
+            raise SSAnneChapterError("Vermilion sailor did not release the harbor return tile.")
 
         executor.execute(MacroAction(MacroActionKind.MOVE, "left"))
         state = reader.read()
         if (state.player_x, state.player_y) == VERMILION_SAILOR_CLEAR_POSITION:
             return state
         if (state.player_x, state.player_y) != VERMILION_SAILOR_BLOCK_POSITION:
-            raise SSAnneChapterError(
-                "Vermilion sailor recovery left its final approach gate."
-            )
+            raise SSAnneChapterError("Vermilion sailor recovery left its final approach gate.")
 
     raise SSAnneChapterError(
         "Vermilion sailor did not clear the harbor lane within its bounded retries."
+    )
+
+
+def _yield_to_ss_anne_waiter(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SSAnneTiming,
+) -> RawGameState:
+    """Step off the corridor so the first-floor waiter can walk past."""
+
+    for attempt in range(SS_ANNE_WAITER_CLEAR_ATTEMPTS):
+        state = reader.read()
+        if (state.player_x, state.player_y) == SS_ANNE_WAITER_CLEAR_POSITION:
+            return state
+        if (
+            state.map_id != MapId.SS_ANNE_1F
+            or state.battle_state != 0
+            or (state.player_x, state.player_y) != SS_ANNE_WAITER_BLOCK_POSITION
+        ):
+            raise SSAnneChapterError("S.S. Anne waiter recovery left its corridor gate.")
+
+        executor.execute(MacroAction(MacroActionKind.MOVE, "down"))
+        yielded = reader.read()
+        if (yielded.player_x, yielded.player_y) != SS_ANNE_WAITER_YIELD_POSITION:
+            raise SSAnneChapterError("S.S. Anne waiter recovery could not yield the corridor.")
+
+        for return_attempt in range(SS_ANNE_WAITER_CLEAR_ATTEMPTS):
+            _wait(
+                executor,
+                timing.movement_retry_wait_frames * (attempt + return_attempt + 1),
+            )
+            executor.execute(MacroAction(MacroActionKind.MOVE, "up"))
+            returned = reader.read()
+            if returned.map_id != MapId.SS_ANNE_1F or returned.battle_state != 0:
+                raise SSAnneChapterError("S.S. Anne waiter recovery left the first floor.")
+            if (returned.player_x, returned.player_y) == SS_ANNE_WAITER_BLOCK_POSITION:
+                break
+            if (returned.player_x, returned.player_y) != SS_ANNE_WAITER_YIELD_POSITION:
+                raise SSAnneChapterError("S.S. Anne waiter recovery left its step-aside tile.")
+        else:
+            raise SSAnneChapterError("S.S. Anne waiter did not release the return tile.")
+
+        executor.execute(MacroAction(MacroActionKind.MOVE, "left"))
+        state = reader.read()
+        if (state.player_x, state.player_y) == SS_ANNE_WAITER_CLEAR_POSITION:
+            return state
+        if (state.player_x, state.player_y) != SS_ANNE_WAITER_BLOCK_POSITION:
+            raise SSAnneChapterError("S.S. Anne waiter recovery left its final approach gate.")
+
+    raise SSAnneChapterError(
+        "S.S. Anne waiter did not clear the corridor within its bounded retries."
     )
 
 
@@ -562,8 +632,7 @@ def _enter_rival_battle(
         _wait(executor, timing.rival_intro_wait_frames)
     raw = reader.read()
     raise SSAnneChapterError(
-        "The rival intro missed its bounded battle gate: "
-        f"{reader.read_ss_anne_state(raw)!r}."
+        f"The rival intro missed its bounded battle gate: {reader.read_ss_anne_state(raw)!r}."
     )
 
 
@@ -589,9 +658,9 @@ def _purchase_ss_anne_super_potions(
     )
     _wait(executor, timing.transition_wait_frames)
     mart_entry = reader.read()
-    if (
-        mart_entry.map_id != MapId.VERMILION_MART
-        or (mart_entry.player_x, mart_entry.player_y) != (3, 7)
+    if mart_entry.map_id != MapId.VERMILION_MART or (mart_entry.player_x, mart_entry.player_y) != (
+        3,
+        7,
     ):
         raise SSAnneChapterError("S.S. Anne reserve missed the Vermilion Mart entry.")
     _move(executor, reader, ("up", "up", "left"), timing, "Vermilion Mart clerk")
@@ -613,8 +682,7 @@ def _purchase_ss_anne_super_potions(
         raise SSAnneChapterError(str(error)) from error
     if (
         _bag_quantity(emulator, ItemId.SUPER_POTION) != SS_ANNE_SUPER_POTION_RESERVE
-        or money_before - _money(emulator)
-        != SS_ANNE_SUPER_POTION_RESERVE * SUPER_POTION_PRICE
+        or money_before - _money(emulator) != SS_ANNE_SUPER_POTION_RESERVE * SUPER_POTION_PRICE
     ):
         raise SSAnneChapterError("S.S. Anne Super Potion purchase missed its inventory ledger.")
 
@@ -681,10 +749,7 @@ def _run_pre_ship_training(
 
     while True:
         raw = reader.read()
-        if (
-            raw.battle_state == 0
-            and (raw.player_x, raw.player_y) != anchor_position
-        ):
+        if raw.battle_state == 0 and (raw.player_x, raw.player_y) != anchor_position:
             if bounce_direction is None:
                 raise SSAnneChapterError(
                     "Pre-ship training lost its return direction at "
@@ -760,9 +825,7 @@ def _run_pre_ship_training(
             )
             entry = _enter_pre_ship_training_cave(executor, reader, timing)
             if (entry.player_x, entry.player_y) != anchor_position:
-                raise SSAnneChapterError(
-                    "Pre-ship training recovery changed its safe cave anchor."
-                )
+                raise SSAnneChapterError("Pre-ship training recovery changed its safe cave anchor.")
             bounce_direction = None
             continue
         if directive is not TrainingDirective.SEEK_ENCOUNTER:
@@ -771,9 +834,7 @@ def _run_pre_ship_training(
             raise SSAnneChapterError("Pre-ship training left Diglett's Cave.")
         current = (raw.player_x, raw.player_y)
         candidates = (
-            (bounce_direction,)
-            if bounce_direction is not None
-            else ("up", "right", "left", "down")
+            (bounce_direction,) if bounce_direction is not None else ("up", "right", "left", "down")
         )
         moved_any = False
         for direction in candidates:
@@ -935,10 +996,7 @@ def _heal_pre_ship_training_anchor(
     _move(executor, reader, ("up",) * 4, timing, "training nurse")
     _confirm_pulses(executor, timing.heal_dialogue_pulses, timing.dialogue_wait_frames)
     healed = reader.read()
-    if (
-        healed.first_party_hp != healed.first_party_max_hp
-        or healed.first_party_status != 0
-    ):
+    if healed.first_party_hp != healed.first_party_max_hp or healed.first_party_status != 0:
         raise SSAnneChapterError("Pre-ship training Center recovery did not restore the lead.")
     return healed
 
@@ -1124,11 +1182,7 @@ def _run_ss_anne_rival_with_potion(
 
     starting_reserve = _bag_quantity(emulator, ItemId.POTION)
     starting_super_potions = _bag_quantity(emulator, ItemId.SUPER_POTION)
-    if not (
-        SS_ANNE_RIVAL_POTION_RESERVE
-        <= starting_reserve
-        <= CERULEAN_GYM_START_POTION_RESERVE
-    ):
+    if not (SS_ANNE_RIVAL_POTION_RESERVE <= starting_reserve <= CERULEAN_GYM_START_POTION_RESERVE):
         raise SSAnneChapterError("S.S. Anne rival recovery reserve is outside its bound.")
     if starting_super_potions != SS_ANNE_SUPER_POTION_RESERVE:
         raise SSAnneChapterError("S.S. Anne rival lacks its three-Super-Potion reserve.")
@@ -1291,9 +1345,7 @@ def _checkpoint(
     except SSAnneProgressError as error:
         raise SSAnneChapterError(str(error)) from error
     if phase is not expected:
-        raise SSAnneChapterError(
-            f"{label} observed {phase.value!r}, expected {expected.value!r}."
-        )
+        raise SSAnneChapterError(f"{label} observed {phase.value!r}, expected {expected.value!r}.")
     records.append(SSAnneCheckpoint(checkpoint_id, label, raw, evidence))
     if progress is not None:
         progress(

@@ -32,9 +32,14 @@ def test_pre_ship_training_is_bounded_and_prefers_water_moves() -> None:
         enemy_hp=40,
     )
     assert ss_anne._pre_ship_training_move_slot(raw) == 3
-    assert ss_anne._pre_ship_training_move_slot(
-        replace(raw, first_party_pp=(20, 30, 0, 20))
-    ) == 4
+    assert ss_anne._pre_ship_training_move_slot(replace(raw, first_party_pp=(20, 30, 0, 20))) == 4
+
+
+def test_ss_anne_waiter_yield_gate_is_source_pinned() -> None:
+    assert ss_anne.SS_ANNE_WAITER_BLOCK_POSITION == (9, 6)
+    assert ss_anne.SS_ANNE_WAITER_YIELD_POSITION == (9, 7)
+    assert ss_anne.SS_ANNE_WAITER_CLEAR_POSITION == (8, 6)
+    assert ss_anne.SS_ANNE_WAITER_CLEAR_ATTEMPTS == 10
 
 
 def test_pre_ship_training_classifies_dugtrio_as_a_dangerous_flee() -> None:
@@ -206,11 +211,7 @@ def test_harbor_route_yields_to_the_vermilion_sailor(
                     reader.state = replace(reader.state, player_y=27)
                 else:
                     self.sailor_cleared = True
-            elif (
-                action.value == "left"
-                and position == (21, 27)
-                and self.sailor_cleared
-            ):
+            elif action.value == "left" and position == (21, 27) and self.sailor_cleared:
                 reader.state = replace(reader.state, player_x=20)
             return action
 
