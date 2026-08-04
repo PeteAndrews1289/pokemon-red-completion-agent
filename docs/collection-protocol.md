@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v20.json`](../configs/red-battle-collection-v20.json)
+[`red-battle-collection-v21.json`](../configs/red-battle-collection-v21.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1313,3 +1313,16 @@ proving unchanged PP, a living battler, and a finite pulse budget.
 V20 promotes diagnostic seed `60001` to its rehearsal-only assignment and reserves fresh counted
 seeds `30001`–`30005`, `40001`–`40002`, and `50001`–`50005`. Independent seeds
 `61001`–`61005` must pass through the uncounted diagnostic lane before the official v20 rehearsal.
+
+The exact v20 diagnostic replay passed the repaired sleep boundary and continued through checkpoint
+91. During the Route 1 and Viridian Forest collection detour, a paralyzed lead repeatedly failed
+to escape a low-level wild encounter while the opponent applied further Speed drops. The old flee
+bound counted every dialogue press as though it were a distinct RUN attempt, so ordinary opponent
+text exhausted the bound prematurely. V20 is retired before rehearsal with all counted roots
+unopened. Flee recovery now counts sixteen semantic RUN selections separately from 128 bounded
+transition pulses, uses non-selecting B presses through dialogue, and preserves party, PP, and a
+living lead throughout.
+
+V21 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`31001`–`31005`, `41001`–`41002`, and `51001`–`51005`. The independent diagnostic battery remains
+`61001`–`61005` and must pass before that rehearsal.

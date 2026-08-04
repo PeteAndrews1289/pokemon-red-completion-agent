@@ -848,9 +848,13 @@ def _flee(
 ) -> None:
     party = encounter.party_species_ids
     pp = encounter.first_party_pp
-    _navigate_main(executor, reader, 3)
-    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-    for _ in range(16):
+    attempts = 0
+    # Count actual RUN selections, not generic dialogue presses. A failed
+    # escape can include several opponent-action text boxes, especially when
+    # paralysis and repeated Speed drops make the lead slower than the wild
+    # opponent. B is safe while settling because it cannot select a command
+    # if MAIN becomes visible between observations.
+    for _ in range(128):
         raw = reader.read()
         if raw.battle_state == 0:
             if (
@@ -860,8 +864,30 @@ def _flee(
             ):
                 raise SurgeChapterError("Flee changed protected capture state.")
             return
-        _pulse(executor, MacroActionKind.CONFIRM)
-    raise SurgeChapterError("Flee exceeded its bounded dialogue.")
+        if (
+            raw.party_species_ids != party
+            or raw.first_party_pp != pp
+            or (raw.first_party_hp or 0) <= 0
+        ):
+            raise SurgeChapterError("Flee changed protected capture state.")
+        menu = reader.read_battle_menu_state(raw)
+        if menu.phase is BattleMenuPhase.MAIN:
+            if attempts >= 16:
+                raise SurgeChapterError("Flee exceeded its bounded RUN attempts.")
+            _navigate_main(executor, reader, 3)
+            _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+            attempts += 1
+            continue
+        if menu.phase is BattleMenuPhase.MOVE:
+            _pulse(executor, MacroActionKind.CANCEL, frames=120)
+            continue
+        if menu.phase is BattleMenuPhase.UNKNOWN:
+            _pulse(executor, MacroActionKind.CANCEL)
+            continue
+        raise SurgeChapterError("Flee exposed an invalid battle-menu phase.")
+    raise SurgeChapterError(
+        f"Flee exceeded its bounded transition pulses after {attempts} RUN attempts."
+    )
 
 
 def _find_spearow(

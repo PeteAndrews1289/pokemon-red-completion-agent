@@ -542,3 +542,9 @@ nonzero counter because wake-up and the opponent's next Hypnosis occurred betwee
 V19 is retired without an official rehearsal or any counted attempt. V20 accepts only this bounded
 wake-boundary transition, caps consecutive reapplications at two, and retains PP, HP, and finite
 recovery proofs. Five additional diagnostic schedules must pass before v20's official rehearsal.
+
+The v20 replay passed Route 11 sleep recovery, then exposed a separate wild-escape accounting bug
+after checkpoint 91: dialogue frames and opponent actions were incorrectly consuming the same bound
+as actual RUN selections. V20 is retired with no official or counted run. V21 separates those
+budgets, safely advances dialogue with B, and keeps sixteen semantic escape attempts under an
+independent 128-transition ceiling before restarting the diagnostic battery.

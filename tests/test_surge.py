@@ -62,6 +62,7 @@ from pokemon_red_completion.surge import (
     SurgeCheckpoint,
     SurgeTiming,
     _force_switch_wild_capture_to_lead,
+    _flee,
     _is_route_1_walker_gate,
     _LiveWildCorridorSurveyExecutor,
     _navigate_to_gym_can,
@@ -268,6 +269,69 @@ def _raw() -> RawGameState:
         first_party_moves=(44, DIG_MOVE_ID, 145, 55),
         first_party_pp=(25, 7, 30, 25),
     )
+
+
+class _MultiDialogueFleeSimulation:
+    def __init__(self, *, escape_attempt: int | None) -> None:
+        self.raw = replace(_raw(), battle_state=1)
+        self.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+        self.escape_attempt = escape_attempt
+        self.attempts = 0
+        self.dialogue_pulses = 0
+        self.actions: list[MacroAction] = []
+
+    def read(self) -> RawGameState:
+        return self.raw
+
+    def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+        return self.menu
+
+    def execute(self, action: MacroAction) -> None:
+        self.actions.append(action)
+        if action.kind is MacroActionKind.WAIT:
+            return
+        if action.kind is MacroActionKind.MOVE:
+            self.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=3)
+            return
+        if action.kind is MacroActionKind.CONFIRM:
+            assert self.menu.phase is BattleMenuPhase.MAIN
+            assert self.menu.selected_main_command == 3
+            self.attempts += 1
+            self.dialogue_pulses = 4
+            self.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+            return
+        if action.kind is MacroActionKind.CANCEL:
+            assert self.menu.phase is BattleMenuPhase.UNKNOWN
+            self.dialogue_pulses -= 1
+            if self.dialogue_pulses == 0:
+                if self.escape_attempt is not None and self.attempts >= self.escape_attempt:
+                    self.raw = replace(self.raw, battle_state=0)
+                else:
+                    self.menu = BattleMenuState(
+                        BattleMenuPhase.MAIN,
+                        selected_main_command=3,
+                    )
+            return
+        raise AssertionError(f"unexpected flee action {action}")
+
+
+def test_flee_counts_run_attempts_independently_of_dialogue_pulses() -> None:
+    runtime = _MultiDialogueFleeSimulation(escape_attempt=5)
+
+    _flee(runtime, runtime, runtime.raw)  # type: ignore[arg-type]
+
+    assert runtime.raw.battle_state == 0
+    assert runtime.attempts == 5
+    assert any(action.kind is MacroActionKind.CANCEL for action in runtime.actions)
+
+
+def test_flee_keeps_semantic_run_attempts_bounded() -> None:
+    runtime = _MultiDialogueFleeSimulation(escape_attempt=None)
+
+    with pytest.raises(surge_module.SurgeChapterError, match="bounded RUN attempts"):
+        _flee(runtime, runtime, runtime.raw)  # type: ignore[arg-type]
+
+    assert runtime.attempts == 16
 
 
 def _report() -> SurgeChapterReport:
