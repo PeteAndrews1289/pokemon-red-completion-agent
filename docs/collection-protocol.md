@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v32.json`](../configs/red-battle-collection-v32.json)
+[`red-battle-collection-v33.json`](../configs/red-battle-collection-v33.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1441,3 +1441,15 @@ thirty-ball Forest reserve, and returns to the same south-city boundary before c
 
 V32 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `130001`–`130005`, `140001`–`140002`, and `150001`–`150005`; all five diagnostics must be replayed.
+
+The v32 replay reached the new Viridian restock gate after checkpoint 91 and correctly rejected its
+funding premise: the Route 24 Nugget had already been sold by the earlier Cerulean status-supply
+lesson. Trace-level evidence from the original failure identified the exact budget: ten Spearow,
+two Diglett, five Pidgey, one Rattata, one Caterpie, six Metapod, two Kakuna, and three failed
+Pikachu throws consumed all thirty Balls. V32 is retired before rehearsal with every counted root
+unopened. The corrected gate spends ₽1,000 of live earned cash to restore five Balls on that
+observed lineage, establishes a seventeen-Ball Forest reserve, and preserves TM34 for its declared
+later sale.
+
+V33 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`160001`–`160005`, `170001`–`170002`, and `180001`–`180005`; all five diagnostics must be replayed.

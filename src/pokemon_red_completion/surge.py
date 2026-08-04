@@ -72,9 +72,8 @@ METAPOD_SPECIES_ID = 0x7C
 KAKUNA_SPECIES_ID = 0x71
 PIKACHU_SPECIES_ID = 0x54
 COLLECTION_POKE_BALL_TARGET = 30
-FOREST_POKE_BALL_RESERVE = 30
+FOREST_POKE_BALL_RESERVE = 17
 POKE_BALL_PRICE = 200
-NUGGET_SALE_PROCEEDS = 5_000
 SURGE_ITEM_SETTLE_PULSES = 720
 WILD_CAPTURE_THROWS_PER_ENCOUNTER = 5
 BALL_THROW_SETTLE_ACTION = MacroActionKind.CANCEL
@@ -1327,7 +1326,7 @@ def _restock_for_viridian_forest(
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> None:
-    """Liquidate the Nugget and restore a complete six-capture Forest reserve."""
+    """Use earned cash to restore the empirically qualified Forest reserve."""
 
     _require(reader.read(), MapId.VIRIDIAN_CITY, (21, 35), 0, "Route 1 reserve boundary")
     starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
@@ -1336,14 +1335,12 @@ def _restock_for_viridian_forest(
             "Forest restock received an invalid Poké Ball quantity: "
             f"{starting_balls}."
         )
-    if _bag(emulator).get(ItemId.NUGGET, 0) != 1:
-        raise SurgeChapterError("Forest restock requires the retained Route 24 Nugget.")
     purchase_quantity = FOREST_POKE_BALL_RESERVE - starting_balls
     purchase_cost = purchase_quantity * POKE_BALL_PRICE
     money_before = _money(emulator)
-    if money_before + NUGGET_SALE_PROCEEDS < purchase_cost:
+    if money_before < purchase_cost:
         raise SurgeChapterError(
-            "Forest restock is not funded by the live money and Nugget ledger: "
+            "Forest restock is not funded by the live money ledger: "
             f"money={money_before}, cost={purchase_cost}."
         )
 
@@ -1352,33 +1349,6 @@ def _restock_for_viridian_forest(
     _require(reader.read(), MapId.VIRIDIAN_MART, (3, 7), 0, "Viridian Mart entry")
     _move(executor, reader, _directions("UUL"), timing, "Viridian Mart clerk")
     _pulse(executor, MacroActionKind.MOVE, "left", 60)
-
-    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    _pulse(executor, MacroActionKind.MOVE, "down", 120)
-    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
-        raise SurgeChapterError("Viridian Mart did not select SELL for the Nugget lesson.")
-    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    for _ in range(24):
-        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
-            RamAddress.LIST_SCROLL_OFFSET
-        )
-        items = tuple(_bag(emulator))
-        if absolute < len(items) and items[absolute] == ItemId.NUGGET:
-            break
-        _pulse(executor, MacroActionKind.MOVE, "down", 120)
-    else:
-        raise SurgeChapterError("Viridian sell list could not select the Nugget.")
-    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    for _ in range(12):
-        if _bag(emulator).get(ItemId.NUGGET, 0) == 0:
-            break
-        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    else:
-        raise SurgeChapterError("Viridian Mart did not sell the Nugget.")
-    if _money(emulator) != money_before + NUGGET_SALE_PROCEEDS:
-        raise SurgeChapterError("Viridian Nugget sale missed its exact money delta.")
-
-    _confirm_kind(executor, MacroActionKind.CANCEL, 4, 180)
     _confirm(executor, 4, 180)
     _confirm(executor, 2, 240)
     for _ in range(180):
@@ -1397,7 +1367,7 @@ def _restock_for_viridian_forest(
             f"quantity={_bag(emulator).get(ItemId.POKE_BALL, 0)}, "
             f"money={_money(emulator)}."
         )
-    if _money(emulator) != money_before + NUGGET_SALE_PROCEEDS - purchase_cost:
+    if _money(emulator) != money_before - purchase_cost:
         raise SurgeChapterError("Viridian Forest restock missed its exact purchase ledger.")
 
     _confirm_kind(executor, MacroActionKind.CANCEL, 4, 180)
