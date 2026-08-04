@@ -845,6 +845,12 @@ status contract. Tunnel preparation now carries and Lavender restores a third, e
 contingency cure. It increases the existing item-stack quantity without consuming another bag slot.
 No counted v9 slot opened during this diagnosis.
 
+Buying the third cure required one additional 120-frame Mart quantity input. The following v9
+rehearsal retained the old post-Mart wait, shifted the Tunnel RNG lineage by that exact amount, and
+fainted at trainer 5. The alignment wait is reduced from 191 to 71 frames so the quantity-selection
+inputs plus explicit alignment remain the previously qualified 311 frames. This preserves the
+tested battle lineage without adding a retry, recovery, or level; the rehearsal remained uncounted.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

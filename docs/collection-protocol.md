@@ -1100,3 +1100,10 @@ paralyzed after the final role pivot and the field gate correctly rejected a cur
 Tunnel preparation now carries and Lavender restores a three-cure reserve. The dynamic
 obsolete-Potion sale funds the added ₽200 contingency, and the larger quantity stays in the same
 existing bag stack rather than consuming another capacity slot. The failed rehearsal was uncounted.
+
+The three-cure replay bought one additional unit through the Mart quantity menu, adding exactly one
+120-frame cursor pulse before the existing post-purchase alignment. Leaving the old 191-frame wait
+in place shifted the later Tunnel battle lineage and fainted the protected lead at trainer 5. The
+explicit alignment wait is now 71 frames, preserving the same 311-frame quantity-plus-alignment
+budget as the qualified two-cure route. This is a measured timing correction, not an additional
+battle attempt or recovery allowance; the second rehearsal was also uncounted.
