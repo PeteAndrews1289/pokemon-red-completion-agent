@@ -11,6 +11,7 @@ from pokemon_red_completion.observation import (
     Badge,
     BattleMenuPhase,
     BattleMenuState,
+    ItemId,
     MapId,
     RamAddress,
     RawGameState,
@@ -68,6 +69,34 @@ from pokemon_red_completion.surge import (
     _wild_weakening_settle_action,
     _wild_weakening_turn_result,
 )
+
+
+def test_ball_decrement_waits_for_persistent_stack_sync(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    reads = iter((30, 30, 29))
+    monkeypatch.setattr(
+        surge_module,
+        "_bag",
+        lambda _emulator: {ItemId.POKE_BALL: next(reads)},
+    )
+
+    class Executor:
+        def __init__(self) -> None:
+            self.actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+
+    executor = Executor()
+    surge_module._await_exact_ball_decrement(
+        object(),  # type: ignore[arg-type]
+        executor,  # type: ignore[arg-type]
+        30,
+        "Capture",
+    )
+
+    assert sum(action.kind is MacroActionKind.CANCEL for action in executor.actions) == 2
 
 
 def test_forced_wild_switch_reselects_lead_after_a_premature_confirmation() -> None:

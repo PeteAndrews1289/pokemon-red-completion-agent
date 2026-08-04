@@ -916,8 +916,12 @@ def _throw_ball(
             SPEAROW_SPECIES_ID,
         ):
             _confirm_kind(executor, MacroActionKind.CANCEL, 3, 180)
-            if _bag(emulator).get(ItemId.POKE_BALL) != before - 1:
-                raise SurgeChapterError("Capture did not consume exactly one Poké Ball.")
+            _await_exact_ball_decrement(
+                emulator,
+                executor,
+                before,
+                "Capture",
+            )
             return True
         if (
             raw.battle_state == 1
@@ -933,11 +937,35 @@ def _throw_ball(
                 raise SurgeChapterError(
                     "Failed Spearow throw did not preserve its live capture boundary."
                 )
-            if _bag(emulator).get(ItemId.POKE_BALL) != before - 1:
-                raise SurgeChapterError("Failed throw did not consume exactly one Poké Ball.")
+            _await_exact_ball_decrement(
+                emulator,
+                executor,
+                before,
+                "Failed throw",
+            )
             return False
         _pulse(executor, MacroActionKind.CONFIRM)
     raise SurgeChapterError("Poké Ball throw did not reach a capture or retry boundary.")
+
+
+def _await_exact_ball_decrement(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    before: int,
+    label: str,
+) -> None:
+    """Allow the capture script to synchronize its persistent bag stack."""
+
+    for _ in range(12):
+        after = _bag(emulator).get(ItemId.POKE_BALL, 0)
+        if after == before - 1:
+            return
+        if after != before:
+            raise SurgeChapterError(
+                f"{label} changed Poké Balls by an invalid quantity: {before} -> {after}."
+            )
+        _pulse(executor, MacroActionKind.CANCEL, frames=180)
+    raise SurgeChapterError(f"{label} did not persist exactly one Poké Ball decrement.")
 
 
 def _catch_diglett_chapter(
