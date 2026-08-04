@@ -64,6 +64,7 @@ def _report() -> KogaChapterReport:
     raw = _raw()
     initial_bag = (
         (0x04, 8),
+        (int(ItemId.X_ACCURACY), 1),
         (int(ItemId.GOLD_TEETH), 1),
         (0x49, 1),
         (int(ItemId.HM03_SURF), 1),
@@ -82,6 +83,7 @@ def _report() -> KogaChapterReport:
             107,
             124,
             0,
+            x_accuracy_used=True,
         ),
     )
     return KogaChapterReport(
@@ -92,7 +94,7 @@ def _report() -> KogaChapterReport:
         battles=battles,
         final_raw=raw,
         initial_bag=initial_bag,
-        final_bag=tuple(sorted((*initial_bag, (int(ItemId.TM06_TOXIC), 1)))),
+        final_bag=koga_module._koga_reward_bag(initial_bag),
         initial_money=20_339,
         final_money=28_191,
         trainer_events_before_koga=(False, True, False, False, True, True),
@@ -170,10 +172,11 @@ def test_koga_public_report_is_honest_about_geography_and_minimum_trainers() -> 
     assert public["recoveries"] == {
         "pokemon_center_visits_before_koga": 2,
         "mart_purchases": 0,
-        "consumables_used": 0,
+        "consumables_used": 1,
     }
     assert public["koga"]["surf_pp_spent"] == 9
     assert public["koga"]["terminal_mutual_ko"] is False
+    assert public["koga"]["x_accuracy_used"] is True
     assert public["koga"]["party_restored_at_boundary"] is True
     assert public["rewards"]["regular_trainers_deactivated"] is True
 

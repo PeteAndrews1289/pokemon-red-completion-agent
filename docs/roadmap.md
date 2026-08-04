@@ -341,6 +341,14 @@ Wartortle fainted at 0/64 before a finishing attack and Starmie retained 10/59 H
 outcome is sealed and v10 is retired. V11 rehearses on exposed seed `20001`, uses entirely fresh
 counted seeds, and lets Misty spend only the live Potion surplus above the four-Potion Rocket
 reserve under exact low-HP, heal, inventory, and same-intent gates.
+The exposed-seed v11 rehearsal cleared Misty, then found two later generalization boundaries while
+remaining uncounted. Route 10 could report field input between the nurse's final text boxes; a
+bounded CANCEL-only normalization now proves the exit stance without reopening the heal dialogue.
+At Koga, Muk's Minimize/poison stall eventually exhausted all four available party members despite
+legal forced-switch continuation. The revised lesson uses the carried Tower X Accuracy on
+Blastoise when Muk appears, directly counters the accuracy mechanic, and replaces that single
+consumable during the already-qualified Celadon battle-item purchase. The complete source must
+still pass all 312 checkpoints and 68 scheduled battles before v11 collection opens.
 That exact rehearsal subsequently validated every earlier repair through checkpoint **296/312**,
 including the six-member balance gate, Blaine, Giovanni, the final rival, and Victory Road. It then
 exposed a stale Indigo inventory assertion: the now-larger bounded capture curriculum may legally

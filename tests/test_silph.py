@@ -75,7 +75,7 @@ def _report() -> SilphChapterReport:
         ),
         final_raw=raw,
         money_before=32_047,
-        money_after=29_746,
+        money_after=28_796,
         tm13_event=True,
         tm13_preinstalled=False,
         tm13_transfer_before_event=True,
@@ -400,7 +400,7 @@ def test_silph_report_proves_required_story_and_terminal() -> None:
 def test_silph_report_accepts_the_pre_erika_ice_beam_upgrade() -> None:
     report = replace(
         _report(),
-        money_after=29_946,
+        money_after=28_996,
         tm13_preinstalled=True,
         tm13_transfer_before_event=False,
     )

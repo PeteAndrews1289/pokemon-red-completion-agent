@@ -103,7 +103,8 @@ Teeth and reusable HM03 rewards, slot-four Water Gun replacement with Surf, and 
 Time's Up cleanup before another healed Fuchsia boundary. No behavioral-cloning, DAgger,
 timing/RNG generalization, or full-game result is implied. The Koga segment adds the exact three
 mandatory-trainer minimum, two Center recoveries, six-trainer post-victory deactivation, Koga's
-live identity, Soul Badge raw and mirror bits, retained TM06, and a final healed Fuchsia boundary.
+live identity, a Tower-sourced X Accuracy counter to Muk's Minimize, Soul Badge raw and mirror bits,
+retained TM06, later replacement of the consumed battle item, and a final healed Fuchsia boundary.
 Koga must precede the return to Erika here: Route 15 is one-way eastbound, Cycling Road requires
 the Bicycle, and field Surf requires the Soul Badge.
 The Cinnabar segment uses Route 16's upper Cut lane without a Bicycle, consumes the retained Rare

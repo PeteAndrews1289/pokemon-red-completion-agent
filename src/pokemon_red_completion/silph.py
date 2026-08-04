@@ -70,7 +70,8 @@ from pokemon_red_completion.saffron import (
 from pokemon_red_completion.tower import party_core_intact
 
 SILPH_CHECKPOINT_COUNT = 12
-SILPH_NET_MONEY_DELTA = -2_301
+X_ACCURACY_REPLACEMENT_PRICE = 950
+SILPH_NET_MONEY_DELTA = -2_301 - X_ACCURACY_REPLACEMENT_PRICE
 SILPH_PREINSTALLED_TM13_NET_MONEY_DELTA = SILPH_NET_MONEY_DELTA + FRESH_WATER_PRICE
 HYPER_POTION_PURCHASE_QUANTITY = 7
 HYPER_POTION_PRICE = 1_500
@@ -857,6 +858,15 @@ def _buy_silph_x_special(
         item=ItemId.X_SPECIAL,
         quantity=X_SPECIAL_PURCHASE_QUANTITY,
         target_bag_quantity=X_SPECIAL_PURCHASE_QUANTITY,
+    )
+    _buy_mart_item(
+        actions,  # type: ignore[arg-type]
+        emulator,
+        menu_timing,
+        absolute_index=0,
+        item=ItemId.X_ACCURACY,
+        quantity=1,
+        target_bag_quantity=1,
     )
     _close_menus(actions, reader, menu_timing)  # type: ignore[arg-type]
     _move_verified(

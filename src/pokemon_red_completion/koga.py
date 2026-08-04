@@ -25,8 +25,10 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
+from pokemon_red_completion.lavender import LavenderTiming, _select_bag_item
 from pokemon_red_completion.observation import (
     Badge,
+    BattleMenuPhase,
     EventFlag,
     ItemId,
     MapId,
@@ -158,6 +160,7 @@ class KogaBattleEvidence:
     status_after: int
     terminal_mutual_ko: bool = False
     continued_after_faint: bool = False
+    x_accuracy_used: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -185,7 +188,7 @@ class KogaChapterReport:
 
     @property
     def passed(self) -> bool:
-        expected_bag = tuple(sorted((*self.initial_bag, (int(ItemId.TM06_TOXIC), 1))))
+        expected_bag = _koga_reward_bag(self.initial_bag)
         return (
             len(self.records) == KOGA_CHECKPOINT_COUNT
             and tuple(item.trainer_number for item in self.battles) == (3, 2, 4, 1)
@@ -208,6 +211,7 @@ class KogaChapterReport:
             and self.beat_koga
             and self.soul_badge
             and self.soul_badge_mirror
+            and self.battles[-1].x_accuracy_used
             and all(item != int(ItemId.TM06_TOXIC) for item, _ in self.initial_bag)
             and self.final_bag == expected_bag
             and self.initial_money >= 0
@@ -251,7 +255,7 @@ class KogaChapterReport:
             "recoveries": {
                 "pokemon_center_visits_before_koga": 2,
                 "mart_purchases": 0,
-                "consumables_used": 0,
+                "consumables_used": 1,
             },
             "koga": {
                 "opponent": self.battles[-1].opponent,
@@ -265,6 +269,7 @@ class KogaChapterReport:
                 "no_faint": all(value > 0 for value in self.party_hp),
                 "terminal_mutual_ko": self.battles[-1].terminal_mutual_ko,
                 "continued_after_faint": self.battles[-1].continued_after_faint,
+                "x_accuracy_used": self.battles[-1].x_accuracy_used,
                 "party_restored_at_boundary": all(value > 0 for value in self.party_hp),
             },
             "rewards": {
@@ -413,6 +418,8 @@ def run_koga_chapter(
     _pulse(actions, MacroActionKind.MOVE, "up", frames=120)
     actions.execute(MacroAction(MacroActionKind.INTERACT))
     bag_before_koga = _bag_tuple(emulator)
+    if _bag(emulator).get(ItemId.X_ACCURACY, 0) != 1:
+        raise KogaChapterError("Koga requires the carried Pokémon Tower X Accuracy.")
     battles.append(
         _fight(
             actions,
@@ -427,6 +434,7 @@ def run_koga_chapter(
             clear_text=False,
             allow_disable_fallback=True,
             reserve_pivot_enemy_species=MUK_SPECIES_ID,
+            x_accuracy_enemy_species=MUK_SPECIES_ID,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "koga_defeated", "Defeated Koga")
@@ -438,7 +446,7 @@ def run_koga_chapter(
     soul_badge = bool(emulator.read_u8(RamAddress.OBTAINED_BADGES) & int(Badge.SOUL))
     soul_badge_mirror = bool(emulator.read_u8(RamAddress.BEAT_GYM_FLAGS) & int(Badge.SOUL))
     if (
-        _bag_tuple(emulator) != tuple(sorted((*bag_before_koga, (int(ItemId.TM06_TOXIC), 1))))
+        _bag_tuple(emulator) != _koga_reward_bag(bag_before_koga)
         or not got_tm06
         or not beat_koga
         or not soul_badge
@@ -511,6 +519,7 @@ def _fight(
     allow_disable_fallback: bool = False,
     reserve_pivot_threshold: int | None = None,
     reserve_pivot_enemy_species: int | None = None,
+    x_accuracy_enemy_species: int | None = None,
 ) -> KogaBattleEvidence:
     battle = _settle_trainer_identity(actions, reader, emulator, timing, label, identity)
     before_pp = battle.first_party_pp
@@ -521,14 +530,24 @@ def _fight(
     )
 
     last_active_party_index = battle.active_party_index
+    x_accuracy_used = False
 
     def choose_move(raw: RawGameState) -> int:
         nonlocal last_active_party_index
         if raw.active_party_index is not None:
             last_active_party_index = raw.active_party_index
         party_hp = _party_hp(emulator)
+        if (
+            not x_accuracy_used
+            and x_accuracy_enemy_species is not None
+            and raw.enemy_species_id == x_accuracy_enemy_species
+            and raw.active_party_index in {None, 0}
+        ):
+            raise _PauseForKogaXAccuracy
         pivot_target = _koga_matchup_pivot_target(
-            raw, party_hp, reserve_pivot_enemy_species
+            raw,
+            party_hp,
+            None if x_accuracy_used else reserve_pivot_enemy_species,
         ) or _koga_reserve_pivot_target(
             raw, party_hp, reserve_pivot_threshold
         )
@@ -566,6 +585,10 @@ def _fight(
                 )
                 break
             except BattleRuntimeError as error:
+                if isinstance(error.__cause__, _PauseForKogaXAccuracy):
+                    _battle_koga_x_accuracy(actions, reader, emulator, timing)
+                    x_accuracy_used = True
+                    continue
                 if isinstance(error.__cause__, _PauseForKogaReservePivot):
                     pivot_target = error.__cause__.party_index
                     pivot_label = f"{label} healthy reserve pivot"
@@ -655,6 +678,7 @@ def _fight(
         status[0],
         terminal_mutual_ko,
         continued_after_faint,
+        x_accuracy_used,
     )
 
 
@@ -722,6 +746,70 @@ def _koga_move_slot(raw: RawGameState, *, allow_disable_fallback: bool) -> int:
 class _PauseForKogaReservePivot(Exception):
     def __init__(self, party_index: int) -> None:
         self.party_index = party_index
+
+
+class _PauseForKogaXAccuracy(Exception):
+    """Pause move selection for the preregistered Muk setup item."""
+
+
+def _battle_koga_x_accuracy(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: KogaTiming,
+) -> None:
+    raw = reader.read()
+    if (
+        raw.battle_state != 2
+        or reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN
+    ):
+        raise KogaChapterError("Koga X Accuracy requires the trainer MAIN menu.")
+    before = _bag(emulator).get(ItemId.X_ACCURACY, 0)
+    if before != 1:
+        raise KogaChapterError(f"Koga X Accuracy reserve mismatch: {before!r}.")
+    command = reader.read_battle_menu_state(raw).selected_main_command
+    if command == 0:
+        _pulse(actions, MacroActionKind.MOVE, "down", 120)
+    elif command == 2:
+        _pulse(actions, MacroActionKind.MOVE, "left", 120)
+        _pulse(actions, MacroActionKind.MOVE, "down", 120)
+    elif command == 3:
+        _pulse(actions, MacroActionKind.MOVE, "left", 120)
+    elif command != 1:
+        raise KogaChapterError("Koga X Accuracy exposed an invalid MAIN cursor.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _select_bag_item(
+        actions,
+        emulator,
+        ItemId.X_ACCURACY,
+        LavenderTiming(wait_frames=timing.wait_frames),
+    )
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for pulse_index in range(48):
+        current = reader.read()
+        if (
+            _bag(emulator).get(ItemId.X_ACCURACY, 0) == before - 1
+            and current.battle_state == 2
+            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+        ):
+            return
+        _pulse(
+            actions,
+            MacroActionKind.CANCEL if (pulse_index + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=timing.wait_frames,
+        )
+    raise KogaChapterError("Koga X Accuracy did not consume once and return to MAIN.")
+
+
+def _koga_reward_bag(
+    initial_bag: tuple[tuple[int, int], ...],
+) -> tuple[tuple[int, int], ...]:
+    inventory = Counter(dict(initial_bag))
+    if inventory[int(ItemId.X_ACCURACY)] != 1:
+        return ()
+    del inventory[int(ItemId.X_ACCURACY)]
+    inventory[int(ItemId.TM06_TOXIC)] += 1
+    return tuple(sorted(inventory.items()))
 
 
 def _koga_reserve_pivot_target(
