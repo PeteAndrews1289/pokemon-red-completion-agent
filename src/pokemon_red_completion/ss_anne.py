@@ -13,6 +13,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    note_observed_battle_exit,
     run_adaptive_trainer_battle,
     run_adaptive_wild_battle,
 )
@@ -38,6 +39,7 @@ from pokemon_red_completion.observation import (
     MEGA_PUNCH_MOVE_ID,
     PIDGEOTTO_SPECIES_ID,
     WATER_GUN_MOVE_ID,
+    BattleMenuPhase,
     ItemId,
     MapId,
     PokemonRedStateReader,
@@ -56,6 +58,7 @@ from pokemon_red_completion.training import (
 )
 
 SS_ANNE_CHECKPOINT_COUNT = 9
+DUGTRIO_SPECIES_ID = 0x76
 RATICATE_SPECIES_ID = 0xA6
 KADABRA_SPECIES_ID = 0x26
 IVYSAUR_SPECIES_ID = 0x09
@@ -658,6 +661,7 @@ def _run_pre_ship_training(
     bounce_direction: str | None = None
 
     battles_won = 0
+    battles_fled = 0
     steps = 0
     healing_trips = 0
 
@@ -700,7 +704,10 @@ def _run_pre_ship_training(
                     f"position={(returned.player_x, returned.player_y)!r}."
                 )
             continue
-        directive = choose_training_directive(observation(raw), PRE_SHIP_TRAINING_POLICY)
+        directive = _pre_ship_training_directive(
+            raw,
+            observation(raw),
+        )
         if directive is TrainingDirective.STOP:
             if (raw.first_party_level or 0) < PRE_SHIP_TRAINING_POLICY.target_level:
                 raise SSAnneChapterError(
@@ -709,6 +716,10 @@ def _run_pre_ship_training(
                 )
             break
         if raw.battle_state == 1:
+            if directive is TrainingDirective.FLEE:
+                _flee_pre_ship_dangerous_encounter(executor, reader, raw)
+                battles_fled += 1
+                continue
             if directive is not TrainingDirective.FIGHT:
                 raise SSAnneChapterError(
                     f"Pre-ship training produced unsafe battle directive {directive}."
@@ -807,7 +818,7 @@ def _run_pre_ship_training(
         target_level=PRE_SHIP_TRAINING_POLICY.target_level,
         final_level=healed.first_party_level,
         battles_won=battles_won,
-        battles_fled=0,
+        battles_fled=battles_fled,
         steps_taken=steps,
         healing_trips=healing_trips + 1,
         fainted=False,
@@ -941,6 +952,76 @@ def _pre_ship_training_move_slot(raw: RawGameState) -> int:
         if slot <= len(moves) and slot <= len(pp) and moves[slot - 1] and (pp[slot - 1] & 0x3F):
             return slot
     raise SSAnneChapterError("Pre-ship training has no legal preferred move.")
+
+
+def _pre_ship_training_directive(
+    raw: RawGameState,
+    observation: TrainingObservation,
+) -> TrainingDirective:
+    """Reject the cave's evolved ambush while training only on safe Diglett."""
+
+    if raw.battle_state == 1 and raw.enemy_species_id == DUGTRIO_SPECIES_ID:
+        return TrainingDirective.FLEE
+    return choose_training_directive(observation, PRE_SHIP_TRAINING_POLICY)
+
+
+def _flee_pre_ship_dangerous_encounter(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    before: RawGameState,
+) -> None:
+    """Reject Dugtrio as unsafe curriculum data before spending attack PP."""
+
+    if (
+        before.battle_state != 1
+        or before.map_id != MapId.DIGLETTS_CAVE
+        or before.enemy_species_id != DUGTRIO_SPECIES_ID
+    ):
+        raise SSAnneChapterError("Pre-ship danger flee lacks a live Dugtrio encounter.")
+    party = before.party_species_ids
+    pp = before.first_party_pp
+
+    def pulse(
+        kind: MacroActionKind,
+        value: str | None = None,
+        *,
+        frames: int,
+    ) -> None:
+        executor.execute(MacroAction(kind, value))
+        _wait(executor, frames)
+
+    for _ in range(48):
+        current = reader.read()
+        if current.battle_state == 0 and reader.read_input_readiness().ready:
+            if (
+                current.party_species_ids != party
+                or current.first_party_pp != pp
+                or (current.first_party_hp or 0) <= 0
+            ):
+                raise SSAnneChapterError(
+                    "Pre-ship danger flee changed party, attack PP, or lead survival."
+                )
+            note_observed_battle_exit()
+            return
+        if current.battle_state != 1:
+            pulse(MacroActionKind.CONFIRM, frames=180)
+            continue
+        menu = reader.read_battle_menu_state(current)
+        if menu.phase is BattleMenuPhase.UNKNOWN:
+            pulse(MacroActionKind.CANCEL, frames=180)
+            continue
+        if menu.phase is BattleMenuPhase.MOVE:
+            pulse(MacroActionKind.CANCEL, frames=180)
+            continue
+        command = menu.selected_main_command
+        if command == 3:
+            pulse(MacroActionKind.CONFIRM, frames=240)
+            continue
+        direction = {0: "right", 1: "right", 2: "down"}.get(command)
+        if direction is None:
+            raise SSAnneChapterError("Pre-ship danger flee exposed an invalid cursor.")
+        pulse(MacroActionKind.MOVE, direction, frames=180)
+    raise SSAnneChapterError("Pre-ship danger flee exceeded its bounded dialogue.")
 
 
 def _pre_ship_training_step_outcome(

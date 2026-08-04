@@ -37,6 +37,38 @@ def test_pre_ship_training_is_bounded_and_prefers_water_moves() -> None:
     ) == 4
 
 
+def test_pre_ship_training_classifies_dugtrio_as_a_dangerous_flee() -> None:
+    raw = RawGameState(
+        True,
+        MapId.DIGLETTS_CAVE,
+        37,
+        30,
+        1,
+        1,
+        first_party_level=26,
+        first_party_hp=73,
+        first_party_max_hp=73,
+        first_party_pp=(25, 30, 16, 25),
+        enemy_species_id=ss_anne.DUGTRIO_SPECIES_ID,
+        enemy_level=29,
+        enemy_hp=59,
+    )
+
+    directive = ss_anne._pre_ship_training_directive(
+        raw,
+        ss_anne.TrainingObservation(
+            level=raw.first_party_level or 0,
+            hp=raw.first_party_hp or 0,
+            max_hp=raw.first_party_max_hp or 0,
+            pp=raw.first_party_pp or (),
+            in_battle=True,
+            enemy_level=raw.enemy_level,
+        ),
+    )
+
+    assert directive is ss_anne.TrainingDirective.FLEE
+
+
 def test_pre_ship_training_waits_through_linked_cave_warps(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

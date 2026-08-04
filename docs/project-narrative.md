@@ -859,6 +859,14 @@ Antidote only when the observed inventory is empty, with an exact ₽100 purchas
 The status item is consumed on this branch, while later obsolete-item cleanup already covers a
 surviving stack on other schedules. No counted v9 slot opened.
 
+That source qualified v9 at **312/312 checkpoints**, **36/36 objectives**, **68/68 scheduled
+battles**, Champion, and Hall of Fame. Its fresh immutable training seed then reached checkpoint 75,
+where pre-ship development accepted a high-level Dugtrio as ordinary training material. Dugtrio
+moved first and fainted the workhorse before any attack PP or enemy HP changed. V9 is retired with
+that counted failure and eleven unopened slots. V10 turns the observation into a transferable
+opponent-selection lesson: train on safe Diglett, but use a bounded, PP-preserving escape from the
+evolved ambush. The exposed seed becomes rehearsal-only and all counted v10 seeds are fresh.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v9.json`](../configs/red-battle-collection-v9.json)
+[`red-battle-collection-v10.json`](../configs/red-battle-collection-v10.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 68 stable public battle-plan identities in exact qualified-route order;
@@ -661,7 +661,7 @@ pokemon-red-completion record \
 ```
 
 It is a clean-power-on, full-route rehearsal using the same frozen execution contract and the same
-68-ID instrumentation path, but the fixed seed `18001` and its distinct schedule. Its metadata is
+68-ID instrumentation path, but the fixed seed `19001` and its distinct schedule. Its metadata is
 `partition=unassigned` and `attempt.counted=false`, and explicitly binds the registry, source
 commit, source bundle, behavior, objective graph, and teacher-execution digests. It must not enter
 train, validation, or test data, and it must not enter any performance denominator. A normal
@@ -1118,3 +1118,17 @@ Antidote only when the live post-Tunnel inventory lacks it, proving the exact �
 one-item reserve. The same item is consumed on this observed poison branch; if it survives another
 schedule, the existing late-game obsolete-status-item cleanup already handles its stack. This
 failure remained uncounted and v9 still requires a complete replay.
+
+The restored-Antidote source then qualified v9 end to end: **312/312 checkpoints**, **36/36
+objectives**, **68/68 scheduled battles**, Champion, and Hall of Fame. Fresh counted seed `19001`
+subsequently reached checkpoint 75 before a high-level wild Dugtrio entered the pre-ship training
+loop. The controller treated every cave encounter as training material; Dugtrio moved first and
+fainted the workhorse before it spent attack PP, leaving the opponent at full HP. That immutable
+root is preserved, v9 is retired, and its eleven pending slots will never run.
+
+The current v10 registry uses exposed v9 seed `19001` only for its uncounted rehearsal and assigns
+fresh counted seeds `20001`–`20005`, `30001`–`30002`, and `40001`–`40005`. Pre-ship training now
+distinguishes the safe Diglett curriculum from the cave's evolved ambush: Dugtrio triggers a
+bounded, menu-normalized flee that must preserve the party and attack PP and leave the workhorse
+alive. Successful escapes are reported separately from training wins. V10 must pass its complete
+qualification before any counted slot opens.

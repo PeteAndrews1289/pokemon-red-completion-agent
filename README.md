@@ -79,7 +79,11 @@ control, and progressively trained specialists.**
 > for its uncounted rehearsal, and reserves fresh counted seeds beginning at `19001`.
 > Its first rehearsal proved that fix through checkpoint 91, then a third Rock Tunnel paralysis
 > exhausted the historical two-cure allowance. Tunnel preparation and Lavender replenishment now
-> carry three cures in the same bag stack; v9 remains uncounted and must replay in full.
+> carry three cures in the same bag stack; that failed rehearsal remained uncounted.
+> V9 subsequently qualified its full 312/36/68 Hall-of-Fame rehearsal, but fresh counted seed
+> `19001` encountered a high-level Dugtrio during pre-ship training and fainted before attacking.
+> That root is preserved and v9 is retired. V10 flees the evolved cave ambush while training only
+> on safe Diglett, rehearses on exposed seed `19001`, and reserves fresh counted seeds at `20001+`.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the
@@ -294,7 +298,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v9-01-train
+  --collection-run red-battle-v10-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
