@@ -1330,11 +1330,13 @@ def _restock_for_viridian_forest(
 
     _require(reader.read(), MapId.VIRIDIAN_CITY, (21, 35), 0, "Route 1 reserve boundary")
     starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
-    if not 0 <= starting_balls < FOREST_POKE_BALL_RESERVE:
+    if not 0 <= starting_balls <= COLLECTION_POKE_BALL_TARGET:
         raise SurgeChapterError(
             "Forest restock received an invalid Poké Ball quantity: "
             f"{starting_balls}."
         )
+    if starting_balls >= FOREST_POKE_BALL_RESERVE:
+        return
     purchase_quantity = FOREST_POKE_BALL_RESERVE - starting_balls
     purchase_cost = purchase_quantity * POKE_BALL_PRICE
     money_before = _money(emulator)

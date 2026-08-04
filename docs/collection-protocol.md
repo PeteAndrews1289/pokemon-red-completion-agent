@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v34.json`](../configs/red-battle-collection-v34.json)
+[`red-battle-collection-v35.json`](../configs/red-battle-collection-v35.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1463,3 +1463,13 @@ non-disabled move with PP.
 
 V34 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `190001`–`190005`, `200001`–`200002`, and `210001`–`210005`; all five diagnostics must be replayed.
+
+V34 diagnostic seed `61004` completed all 312 checkpoints and entered the Hall of Fame, proving
+both the Forest restock and Silph Disable fallback. Seeds `61001` and `61002` then reached the same
+checkpoint-91 reserve gate with 23 and 24 Balls already available. The minimum-reserve helper
+incorrectly rejected those healthy surpluses instead of skipping the purchase. V34 is retired
+before rehearsal with every counted root unopened. The gate now accepts every legal zero-to-thirty
+input, returns immediately at or above seventeen, and visits the Mart only for an actual shortfall.
+
+V35 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`220001`–`220005`, `230001`–`230002`, and `240001`–`240005`; all five diagnostics must be replayed.

@@ -399,6 +399,23 @@ def test_surge_money_decodes_exact_bcd_ledger() -> None:
     assert surge_module._money(Emulator()) == 12_345  # type: ignore[arg-type]
 
 
+def test_forest_restock_preserves_an_existing_surplus(monkeypatch: pytest.MonkeyPatch) -> None:
+    raw = replace(_raw(), map_id=MapId.VIRIDIAN_CITY, player_x=21, player_y=35)
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return raw
+
+    monkeypatch.setattr(surge_module, "_bag", lambda _emulator: {ItemId.POKE_BALL: 23})
+
+    surge_module._restock_for_viridian_forest(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        DEFAULT_SURGE_TIMING,
+    )
+
+
 def test_bag_selection_moves_up_to_tm28_after_variable_capture_spend(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
