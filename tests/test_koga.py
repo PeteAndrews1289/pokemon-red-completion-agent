@@ -22,8 +22,8 @@ from pokemon_red_completion.koga import (
     KogaChapterReport,
     KogaCheckpoint,
     KogaTiming,
-    _koga_move_slot,
     _koga_fainted_pivot_target,
+    _koga_move_slot,
     _koga_reserve_pivot_target,
     _nurse_approach_directions,
 )
