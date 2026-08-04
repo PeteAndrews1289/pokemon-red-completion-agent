@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v29.json`](../configs/red-battle-collection-v29.json)
+[`red-battle-collection-v30.json`](../configs/red-battle-collection-v30.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1402,11 +1402,20 @@ V28 retains exposed seed `60001` for rehearsal only and reserves fresh counted s
 `38001`–`38005`, `48001`–`48002`, and `58001`–`58005`; all five diagnostics must be replayed.
 
 The v28 replay of seed `61003` passed both repaired Spearow gates, completed the Diglett capture and
-trade, and preserved later inventory through checkpoint 239. A moving third-floor Celadon Mart
-customer then occupied the only scripted north step during the X Special supply trip. V28 is
+trade, and preserved later inventory through checkpoint 239. A moving second-floor Celadon Mart
+customer then occupied the only scripted north step on the approach to the third-floor stairs. V28 is
 retired before rehearsal with every counted root unopened. The verified Mart movement now detects
 that exact source-pinned gate, yields into the open side tile, waits under a finite 32-attempt bound,
 returns, and proves the originally requested north step before continuing the canonical route.
 
 V29 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `39001`–`39005`, `49001`–`49002`, and `59001`–`59005`; all five diagnostics must be replayed.
+
+The v29 replay again passed the complete capture sequence and reached checkpoint 239. The first
+customer-yield repair did not engage because it trusted the destination label ("Mart 3F") as the
+current map, while terminal evidence proved the blocked coordinate was still on map 123, Mart 2F;
+Mart 3F is map 124. V29 is retired before rehearsal with every counted root unopened. The recovery
+contract now binds to the physical Mart 2F ascent coordinate and its test simulates that exact map.
+
+V30 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`70001`–`70005`, `80001`–`80002`, and `90001`–`90005`; all five diagnostics must be replayed.

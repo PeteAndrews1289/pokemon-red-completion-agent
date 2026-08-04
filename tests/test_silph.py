@@ -9,12 +9,12 @@ from pokemon_red_completion.observation import Badge, EventFlag, ItemId, MapId, 
 from pokemon_red_completion.silph import (
     BATTLE_ITEM_SETTLE_PULSES,
     DEFAULT_SILPH_TIMING,
+    MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION,
+    MART_2F_ASCENT_CUSTOMER_CLEAR_ATTEMPTS,
+    MART_2F_ASCENT_CUSTOMER_CLEAR_POSITION,
+    MART_2F_ASCENT_CUSTOMER_YIELD_POSITION,
     MART_2F_GIRL_X,
     MART_2F_GIRL_Y,
-    MART_3F_CUSTOMER_BLOCK_POSITION,
-    MART_3F_CUSTOMER_CLEAR_ATTEMPTS,
-    MART_3F_CUSTOMER_CLEAR_POSITION,
-    MART_3F_CUSTOMER_YIELD_POSITION,
     MART_5F_GENTLEMAN_BLOCK_POSITION,
     MART_5F_GENTLEMAN_CLEAR_ATTEMPTS,
     MART_5F_GENTLEMAN_CLEAR_POSITION,
@@ -74,11 +74,11 @@ def test_mart_5f_customer_yield_is_source_pinned_and_bounded() -> None:
     assert MART_5F_GENTLEMAN_CLEAR_ATTEMPTS == 16
 
 
-def test_mart_3f_customer_yield_is_source_pinned_and_bounded() -> None:
-    assert MART_3F_CUSTOMER_BLOCK_POSITION == (14, 5)
-    assert MART_3F_CUSTOMER_YIELD_POSITION == (13, 5)
-    assert MART_3F_CUSTOMER_CLEAR_POSITION == (14, 4)
-    assert MART_3F_CUSTOMER_CLEAR_ATTEMPTS == 32
+def test_mart_2f_ascent_customer_yield_is_source_pinned_and_bounded() -> None:
+    assert MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION == (14, 5)
+    assert MART_2F_ASCENT_CUSTOMER_YIELD_POSITION == (13, 5)
+    assert MART_2F_ASCENT_CUSTOMER_CLEAR_POSITION == (14, 4)
+    assert MART_2F_ASCENT_CUSTOMER_CLEAR_ATTEMPTS == 32
 
 
 def _report() -> SilphChapterReport:
@@ -239,10 +239,10 @@ def test_silph_verified_movement_retries_a_swallowed_input() -> None:
     assert (final.map_id, final.player_x, final.player_y) == (MapId.SAFFRON_MART, 3, 7)
 
 
-def test_silph_verified_movement_yields_to_mart_3f_customer() -> None:
+def test_silph_verified_movement_yields_on_mart_2f_before_3f_stairs() -> None:
     blocked = replace(
         _terminal(),
-        map_id=MapId.CELADON_MART_3F,
+        map_id=MapId.CELADON_MART_2F,
         player_x=14,
         player_y=5,
     )
@@ -276,7 +276,7 @@ def test_silph_verified_movement_yields_to_mart_3f_customer() -> None:
     )
 
     assert (final.map_id, final.player_x, final.player_y) == (
-        MapId.CELADON_MART_3F,
+        MapId.CELADON_MART_2F,
         14,
         4,
     )
