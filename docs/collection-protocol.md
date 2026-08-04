@@ -1225,3 +1225,10 @@ the absent Full Heal solely because HP was full. That root is sealed and v13 is 
 fresh rehearsal seed `21003` and counted seeds `24001`–`24005`, `34001`–`34002`, and
 `44001`–`44005`. Its recovery selector prefers Full Heal when present and otherwise proves a legal
 Full Restore fallback for status, including full-HP poison.
+
+V14's first uncounted rehearsal stopped honestly at checkpoint 112 after clearing Rock Tunnel. Its
+held-out battle offsets required three verified Awakening uses instead of the previous maximum of
+two, exhausting the three-item reserve before Pokémon Tower. Lavender Mart cannot replace that
+item. The teacher now buys a fourth Awakening with the already-proven Vermilion income, carries it
+in the existing bag stack, and requires at least one to survive the Tunnel. The extra ₽200 is
+included in the exact purchase ledger; no counted slot was opened.

@@ -80,13 +80,13 @@ def _report() -> LavenderChapterReport:
         parlyz_heals_remaining=1,
         antidotes_purchased=1,
         antidotes_remaining=1,
-        awakenings_used=2,
+        awakenings_used=3,
         awakenings_remaining=1,
         starting_super_potions=1,
         super_potions_purchased=15,
         super_potions_used=4,
         super_potions_remaining=12,
-        purchase_cost=12800,
+        purchase_cost=13000,
         tm28_sale_proceeds=1000,
         money_remaining=1234,
         route_10_trainer_2_bypassed=True,
@@ -131,9 +131,10 @@ def test_rock_center_exit_normalizes_false_ready_nurse_dialogue() -> None:
         LavenderTiming(wait_frames=1),
     )
 
-    assert [
-        getattr(action, "kind", None) for action in runtime.actions
-    ] == [MacroActionKind.CANCEL, MacroActionKind.WAIT] * 4
+    assert [getattr(action, "kind", None) for action in runtime.actions] == [
+        MacroActionKind.CANCEL,
+        MacroActionKind.WAIT,
+    ] * 4
 
 
 @pytest.mark.parametrize(
@@ -290,9 +291,12 @@ def test_status_locked_dux_escapes_to_a_living_story_lead() -> None:
 
     assert lavender_module._dux_status_escape_target(asleep, (20, 50, 30), True) == 1
     assert lavender_module._dux_status_escape_target(asleep, (20, 0, 30), True) is None
-    assert lavender_module._dux_status_escape_target(
-        replace(asleep, active_party_status=0), (20, 50, 30), True
-    ) is None
+    assert (
+        lavender_module._dux_status_escape_target(
+            replace(asleep, active_party_status=0), (20, 50, 30), True
+        )
+        is None
+    )
     assert lavender_module._dux_status_escape_target(asleep, (20, 50, 30), False) is None
 
 
@@ -387,43 +391,64 @@ def test_final_tunnel_role_pivot_tracks_enemy_type_and_live_reserves() -> None:
         enemy_species_id=0xB9,
     )
 
-    assert lavender_module._final_tunnel_pivot_target(
-        grass_against_wartortle,
-        (50, 30, 20),
-        True,
-    ) == 0
-    assert lavender_module._final_tunnel_pivot_target(
-        replace(grass_against_wartortle, active_party_index=0),
-        (50, 30, 20),
-        True,
-    ) is None
-    assert lavender_module._final_tunnel_pivot_target(
-        replace(grass_against_wartortle, active_party_index=0, enemy_species_id=0x04),
-        (50, 30, 20),
-        True,
-    ) == 1
-    assert lavender_module._final_tunnel_pivot_target(
-        grass_against_wartortle,
-        (0, 30, 20),
-        True,
-    ) is None
-    assert lavender_module._final_tunnel_pivot_target(
-        grass_against_wartortle,
-        (50, 30, 20),
-        False,
-    ) is None
-    assert lavender_module._final_tunnel_pivot_target(
-        grass_against_wartortle,
-        (50, 30, 20),
-        True,
-        required_move_spent=False,
-    ) is None
-    assert lavender_module._final_tunnel_pivot_target(
-        grass_against_wartortle,
-        (50, 30, 20),
-        True,
-        dux_unavailable=True,
-    ) is None
+    assert (
+        lavender_module._final_tunnel_pivot_target(
+            grass_against_wartortle,
+            (50, 30, 20),
+            True,
+        )
+        == 0
+    )
+    assert (
+        lavender_module._final_tunnel_pivot_target(
+            replace(grass_against_wartortle, active_party_index=0),
+            (50, 30, 20),
+            True,
+        )
+        is None
+    )
+    assert (
+        lavender_module._final_tunnel_pivot_target(
+            replace(grass_against_wartortle, active_party_index=0, enemy_species_id=0x04),
+            (50, 30, 20),
+            True,
+        )
+        == 1
+    )
+    assert (
+        lavender_module._final_tunnel_pivot_target(
+            grass_against_wartortle,
+            (0, 30, 20),
+            True,
+        )
+        is None
+    )
+    assert (
+        lavender_module._final_tunnel_pivot_target(
+            grass_against_wartortle,
+            (50, 30, 20),
+            False,
+        )
+        is None
+    )
+    assert (
+        lavender_module._final_tunnel_pivot_target(
+            grass_against_wartortle,
+            (50, 30, 20),
+            True,
+            required_move_spent=False,
+        )
+        is None
+    )
+    assert (
+        lavender_module._final_tunnel_pivot_target(
+            grass_against_wartortle,
+            (50, 30, 20),
+            True,
+            dux_unavailable=True,
+        )
+        is None
+    )
     assert (
         lavender_module._final_tunnel_pivot_target(
             replace(grass_against_wartortle, active_party_index=0),
@@ -635,14 +660,14 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
         "parlyz_heals_remaining": 1,
         "antidotes_purchased": 1,
         "antidotes_remaining": 1,
-        "awakenings_used": 2,
+        "awakenings_used": 3,
         "awakenings_remaining": 1,
-        "awakenings_purchased": 1,
+        "awakenings_purchased": 2,
         "starting_super_potions": 1,
         "super_potions_purchased": 15,
         "super_potions_used": 4,
         "super_potions_remaining": 12,
-        "purchase_cost": 12800,
+        "purchase_cost": 13000,
         "tm28_sale_proceeds": 1000,
         "money_remaining": 1234,
     }

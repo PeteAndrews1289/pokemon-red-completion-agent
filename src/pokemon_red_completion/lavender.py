@@ -62,14 +62,12 @@ BATTLE_RECOVERY_THRESHOLD = 40
 DUX_BATTLE_RECOVERY_THRESHOLD = 20
 TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD = 40
 FINAL_TUNNEL_RECOVERY_THRESHOLD = 90
-FINAL_TUNNEL_GRASS_SPECIES = frozenset(
-    {BULBASAUR_SPECIES_ID, 0xB9, 0xBA, 0xBC, 0xBD}
-)
+FINAL_TUNNEL_GRASS_SPECIES = frozenset({BULBASAUR_SPECIES_ID, 0xB9, 0xBA, 0xBC, 0xBD})
 SLOWPOKE_SPECIES_ID = 0x25
 ROUTE_9_MIN_SUPER_POTION_RESERVE = 5
 TUNNEL_SUPER_POTION_TARGET = 10
-TUNNEL_AWAKENINGS_PURCHASED = 1
-TUNNEL_AWAKENING_RESERVE = 3
+TUNNEL_AWAKENINGS_PURCHASED = 2
+TUNNEL_AWAKENING_RESERVE = 4
 TUNNEL_PARLYZ_HEALS_PURCHASED = 3
 LAVENDER_ANTIDOTE_RESERVE = 1
 TM28_SALE_PROCEEDS = 1_000
@@ -267,10 +265,9 @@ class LavenderChapterReport:
             and self.parlyz_heals_used + self.parlyz_heals_remaining == self.parlyz_heals_purchased
             and self.antidotes_purchased in {0, 1}
             and self.antidotes_remaining >= LAVENDER_ANTIDOTE_RESERVE
-            and 0 <= self.awakenings_used <= 2
+            and 0 <= self.awakenings_used < TUNNEL_AWAKENING_RESERVE
             and self.awakenings_remaining >= 1
-            and self.awakenings_used + self.awakenings_remaining
-            == TUNNEL_AWAKENING_RESERVE
+            and self.awakenings_used + self.awakenings_remaining == TUNNEL_AWAKENING_RESERVE
             and self.starting_super_potions in {0, 1, 2, 3}
             and self.super_potions_purchased >= 8
             and self.super_potions_used + self.super_potions_remaining
@@ -453,7 +450,7 @@ def run_lavender_chapter(
     ):
         raise LavenderChapterError(
             "Mart purchase did not produce the ten-potion purchase plus the observed "
-            "starting reserve, three Awakenings, "
+            "starting reserve, four Awakenings, "
             "three Parlyz Heals, and four Repels."
         )
     _checkpoint(records, progress, emulator, supplies, "supplies", "Purchased tunnel supplies")
@@ -927,14 +924,12 @@ def run_lavender_chapter(
         top_up_antidotes,
         top_up_cost,
         tm28_sale_proceeds,
-    ) = (
-        _top_up_lavender_supplies(
-            actions,
-            reader,
-            emulator,
-            run,
-            timing,
-        )
+    ) = _top_up_lavender_supplies(
+        actions,
+        reader,
+        emulator,
+        run,
+        timing,
     )
     final = reader.read()
     hp = _party_hp(emulator)
@@ -967,9 +962,7 @@ def run_lavender_chapter(
         awakenings_used=run.awakenings_used,
         awakenings_remaining=_bag(emulator).get(ItemId.AWAKENING, 0),
         starting_super_potions=initial_sp,
-        super_potions_purchased=(
-            TUNNEL_SUPER_POTION_TARGET - initial_sp + top_up_quantity
-        ),
+        super_potions_purchased=(TUNNEL_SUPER_POTION_TARGET - initial_sp + top_up_quantity),
         super_potions_used=run.potions_used,
         super_potions_remaining=_bag(emulator).get(ItemId.SUPER_POTION, 0),
         purchase_cost=tunnel_purchase_cost + top_up_cost,
@@ -982,8 +975,7 @@ def run_lavender_chapter(
     )
     if not report.passed:
         raise LavenderChapterError(
-            "Lavender chapter failed its evidence contract: "
-            f"{report.public_dict()!r}."
+            f"Lavender chapter failed its evidence contract: {report.public_dict()!r}."
         )
     return report
 
@@ -1071,9 +1063,7 @@ def _run_lavender_trainer_battle(
             if battle_recovery_threshold is not None
             else BATTLE_RECOVERY_THRESHOLD
         )
-        recovery_available = (
-            battle_recovery_limit is None or recoveries < battle_recovery_limit
-        )
+        recovery_available = battle_recovery_limit is None or recoveries < battle_recovery_limit
         if (
             0 < hp < max_hp
             and hp <= recovery_threshold
@@ -1144,10 +1134,7 @@ def _run_lavender_trainer_battle(
                 continue
             if isinstance(error.__cause__, _PauseForFinalTunnelPivot):
                 before_pivot = reader.read()
-                if (
-                    before_pivot.active_party_index == 0
-                    and (before_pivot.battler_status or 0)
-                ):
+                if before_pivot.active_party_index == 0 and (before_pivot.battler_status or 0):
                     dux_status_escaped = True
                 try:
                     switch_active_battler(
@@ -1198,18 +1185,10 @@ def _fainted_battler_pivot_target(
 ) -> int | None:
     """Select the first living teammate only after the active member fainted."""
 
-    if (
-        raw.battle_state != 2
-        or raw.active_party_index is None
-        or (raw.battler_hp or 0) > 0
-    ):
+    if raw.battle_state != 2 or raw.active_party_index is None or (raw.battler_hp or 0) > 0:
         return None
     return next(
-        (
-            index
-            for index, hp in enumerate(party_hp)
-            if index != raw.active_party_index and hp > 0
-        ),
+        (index for index, hp in enumerate(party_hp) if index != raw.active_party_index and hp > 0),
         None,
     )
 
@@ -1238,9 +1217,7 @@ def _ranked_lavender_move_slots(
         ranked = (1, move_slot, 3, 4)
     elif finish_with_bubblebeam and active_party_index == 0:
         ranked = (move_slot, 1, 3, 4)
-    elif (
-        finish_with_bubblebeam and active_party_index == 1
-    ) or selected_move_spent:
+    elif (finish_with_bubblebeam and active_party_index == 1) or selected_move_spent:
         ranked = (3, move_slot, 1, 4)
     else:
         ranked = (move_slot, 3, 1, 4)
@@ -1406,11 +1383,7 @@ def _final_tunnel_pivot_target(
         or len(party_hp) < 2
     ):
         return None
-    target = (
-        0
-        if raw.enemy_species_id in FINAL_TUNNEL_GRASS_SPECIES and not dux_unavailable
-        else 1
-    )
+    target = 0 if raw.enemy_species_id in FINAL_TUNNEL_GRASS_SPECIES and not dux_unavailable else 1
     if target == raw.active_party_index or party_hp[target] <= 0:
         return None
     return target
@@ -2194,10 +2167,7 @@ def _purchase_supplies(
     potion_sale_quantity = _required_potion_sale_quantity(
         available=_bag(emulator).get(ItemId.POTION, 0),
         projected_money=(
-            money_before
-            + nugget_sale_proceeds
-            + tm24_sale_proceeds
-            + poke_ball_sale_proceeds
+            money_before + nugget_sale_proceeds + tm24_sale_proceeds + poke_ball_sale_proceeds
         ),
         required_cost=expected_cost,
         preserve_existing_sale=starting_super_potions >= 2,
@@ -2254,10 +2224,7 @@ def _purchase_supplies(
     _close_menus(executor, reader, timing)
     money_after = _money(emulator)
     total_sale_proceeds = (
-        nugget_sale_proceeds
-        + tm24_sale_proceeds
-        + poke_ball_sale_proceeds
-        + potion_sale_proceeds
+        nugget_sale_proceeds + tm24_sale_proceeds + poke_ball_sale_proceeds + potion_sale_proceeds
     )
     if money_before + total_sale_proceeds - money_after != expected_cost:
         raise LavenderChapterError(
@@ -2471,8 +2438,7 @@ def _top_up_lavender_supplies(
         _money(emulator) != money_before + tm28_sale_proceeds - expected_cost
         or _bag(emulator).get(ItemId.SUPER_POTION, 0) != LAVENDER_SUPER_POTION_RESERVE
         or _bag(emulator).get(ItemId.PARLYZ_HEAL, 0) != parlyz_before + parlyz_quantity
-        or _bag(emulator).get(ItemId.ANTIDOTE, 0)
-        != max(antidote_before, LAVENDER_ANTIDOTE_RESERVE)
+        or _bag(emulator).get(ItemId.ANTIDOTE, 0) != max(antidote_before, LAVENDER_ANTIDOTE_RESERVE)
     ):
         raise LavenderChapterError("Lavender Mart top-up missed its inventory/economy proof.")
 
@@ -2510,9 +2476,7 @@ def _parlyz_top_up_quantity(current_quantity: int) -> int:
     """Return the exact purchase needed to restore the fixed cure reserve."""
 
     if not 0 <= current_quantity <= TUNNEL_PARLYZ_HEALS_PURCHASED:
-        raise LavenderChapterError(
-            f"Unsupported Lavender Parlyz Heal reserve: {current_quantity}."
-        )
+        raise LavenderChapterError(f"Unsupported Lavender Parlyz Heal reserve: {current_quantity}.")
     return TUNNEL_PARLYZ_HEALS_PURCHASED - current_quantity
 
 

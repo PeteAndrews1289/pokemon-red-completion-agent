@@ -493,3 +493,7 @@ training, validation, and test schedules; its rehearsal must qualify before coll
 V13 later qualified, but its first counted root exposed an exhausted-Full-Heal assumption after
 Agatha. That root is also sealed. V14 carries the inventory-aware Full Restore fallback and fresh
 rehearsal/training/validation/test schedules; no v14 formal slot opens before qualification.
+
+V14's first rehearsal remained uncounted and stopped at checkpoint 112: three held-out sleep cures
+exhausted Rock Tunnel's old three-Awakening plan. The reserve is now four, with exact funding and a
+one-item Pokémon Tower carry-forward gate. Full qualification remains the current prerequisite.
