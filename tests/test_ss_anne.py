@@ -140,6 +140,61 @@ def test_pre_ship_training_does_not_treat_a_blocked_step_as_movement() -> None:
     assert bounce is None
 
 
+def test_harbor_route_yields_to_the_vermilion_sailor(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = RawGameState(
+            True,
+            MapId.VERMILION_CITY,
+            21,
+            27,
+            1,
+            0,
+            first_party_hp=81,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        sailor_cleared = False
+
+        def execute(self, action: object) -> object:
+            assert isinstance(action, ss_anne.MacroAction)
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            position = (reader.state.player_x, reader.state.player_y)
+            if action.value == "up" and position == (21, 27):
+                reader.state = replace(reader.state, player_y=26)
+            elif action.value == "down" and position == (21, 26):
+                if self.sailor_cleared:
+                    reader.state = replace(reader.state, player_y=27)
+                else:
+                    self.sailor_cleared = True
+            elif (
+                action.value == "left"
+                and position == (21, 27)
+                and self.sailor_cleared
+            ):
+                reader.state = replace(reader.state, player_x=20)
+            return action
+
+    monkeypatch.setattr(ss_anne, "_wait", lambda *_args: None)
+
+    final = ss_anne._move(
+        Executor(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        ("left",),
+        ss_anne.DEFAULT_SS_ANNE_TIMING,
+        "Vermilion harbor",
+    )
+
+    assert (final.player_x, final.player_y) == (20, 27)
+
+
 def test_rival_entry_waits_for_the_full_rival_identity(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

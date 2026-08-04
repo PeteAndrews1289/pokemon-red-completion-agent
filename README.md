@@ -55,7 +55,9 @@ control, and progressively trained specialists.**
 > six-member replay: **312/312 checkpoints**, **36/36 objectives**, and Hall of Fame in **87,020
 > actions**. Mansion development required 177 workhorse wins plus 24 targeted evolution battles.
 > A fresh source-bound 68/68 scheduled qualification is still required before collection slot
-> `01` can open.
+> `01` can open. Its first uncounted rehearsal reached checkpoint 75 and exposed a harbor sailor
+> deadlock. A finite, coordinate-gated step-aside maneuver now lets that left/right patrol pass;
+> all twelve counted v8 slots remain unopened while the exact source requalifies.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the

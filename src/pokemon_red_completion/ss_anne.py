@@ -72,6 +72,10 @@ SS_ANNE_SUPER_POTION_RESERVE = 3
 SS_ANNE_SUPER_POTION_RECOVERY_HP = 60
 SUPER_POTION_HEAL_AMOUNT = 50
 SUPER_POTION_PRICE = 700
+VERMILION_SAILOR_BLOCK_POSITION = (21, 27)
+VERMILION_SAILOR_YIELD_POSITION = (21, 26)
+VERMILION_SAILOR_CLEAR_POSITION = (20, 27)
+VERMILION_SAILOR_CLEAR_ATTEMPTS = 10
 PRE_SHIP_TRAINING_POLICY = TrainingPolicy(
     target_level=30,
     preferred_move_slots=(3, 4, 1),
@@ -450,6 +454,15 @@ def _move(
                 != (before.player_x, before.player_y)
             ):
                 break
+            if (
+                label == "Vermilion harbor"
+                and before.map_id == MapId.VERMILION_CITY
+                and (before.player_x, before.player_y)
+                == VERMILION_SAILOR_BLOCK_POSITION
+                and direction == "left"
+            ):
+                state = _yield_to_vermilion_sailor(executor, reader, timing)
+                break
             _wait(executor, timing.movement_retry_wait_frames * (attempt + 1))
         else:
             raise SSAnneChapterError(
@@ -457,6 +470,73 @@ def _move(
                 f"coordinate {(before.player_x, before.player_y)!r}."
             )
     return state
+
+
+def _yield_to_vermilion_sailor(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SSAnneTiming,
+) -> RawGameState:
+    """Step off the harbor lane so its left/right sailor can pass."""
+
+    for attempt in range(VERMILION_SAILOR_CLEAR_ATTEMPTS):
+        state = reader.read()
+        if (state.player_x, state.player_y) == VERMILION_SAILOR_CLEAR_POSITION:
+            return state
+        if (
+            state.map_id != MapId.VERMILION_CITY
+            or state.battle_state != 0
+            or (state.player_x, state.player_y) != VERMILION_SAILOR_BLOCK_POSITION
+        ):
+            raise SSAnneChapterError(
+                "Vermilion sailor recovery left its bounded harbor gate."
+            )
+
+        executor.execute(MacroAction(MacroActionKind.MOVE, "up"))
+        yielded = reader.read()
+        if (yielded.player_x, yielded.player_y) != VERMILION_SAILOR_YIELD_POSITION:
+            raise SSAnneChapterError(
+                "Vermilion sailor recovery could not yield the harbor lane."
+            )
+
+        for return_attempt in range(VERMILION_SAILOR_CLEAR_ATTEMPTS):
+            _wait(
+                executor,
+                timing.movement_retry_wait_frames
+                * (attempt + return_attempt + 1),
+            )
+            executor.execute(MacroAction(MacroActionKind.MOVE, "down"))
+            returned = reader.read()
+            if (
+                returned.map_id != MapId.VERMILION_CITY
+                or returned.battle_state != 0
+            ):
+                raise SSAnneChapterError(
+                    "Vermilion sailor recovery left Vermilion City."
+                )
+            if (returned.player_x, returned.player_y) == VERMILION_SAILOR_BLOCK_POSITION:
+                break
+            if (returned.player_x, returned.player_y) != VERMILION_SAILOR_YIELD_POSITION:
+                raise SSAnneChapterError(
+                    "Vermilion sailor recovery left its step-aside tile."
+                )
+        else:
+            raise SSAnneChapterError(
+                "Vermilion sailor did not release the harbor return tile."
+            )
+
+        executor.execute(MacroAction(MacroActionKind.MOVE, "left"))
+        state = reader.read()
+        if (state.player_x, state.player_y) == VERMILION_SAILOR_CLEAR_POSITION:
+            return state
+        if (state.player_x, state.player_y) != VERMILION_SAILOR_BLOCK_POSITION:
+            raise SSAnneChapterError(
+                "Vermilion sailor recovery left its final approach gate."
+            )
+
+    raise SSAnneChapterError(
+        "Vermilion sailor did not clear the harbor lane within its bounded retries."
+    )
 
 
 def _enter_rival_battle(

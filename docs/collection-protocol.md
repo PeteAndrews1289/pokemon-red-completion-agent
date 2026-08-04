@@ -1014,3 +1014,13 @@ proved the physical Champion exit but had not closed the schedule controller's a
 intent. The same proven external-exit hook already used by other bounded team-battle continuations
 now closes both the schedule lifecycle and recorder lifecycle after the final KO. No schedule event
 is synthesized or backfilled; the exact source must replay and independently attest all 68 battles.
+
+The revised level-60 curriculum subsequently passed a clean-power unscheduled diagnostic in
+**87,020 actions**, then began its required source-frozen v8 rehearsal. That uncounted run reached
+checkpoint 75 before Vermilion's left/right harbor sailor deadlocked immediately west of the
+player at `(21, 27)`: repeated left inputs and waits could not create a free patrol tile. The
+teacher now applies a strictly local, bounded maneuver only at that exact harbor gate. It steps
+north off row 27, waits for the return tile, restores the approach, and verifies the leftward move
+to `(20, 27)`. Any map change, battle, unexpected coordinate, or failure to restore still rejects
+the run. No counted v8 slot was consumed; the repaired exact source requires another complete
+312-checkpoint and 68-battle rehearsal before collection opens.
