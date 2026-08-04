@@ -13,6 +13,7 @@ from pokemon_red_completion.agatha import (
     _agatha_move_slot,
     _battle_x_special,
     _encounter_party,
+    _observed_party_valid,
     _post_agatha_recovery_item,
     _turns_valid,
 )
@@ -91,10 +92,46 @@ def test_agatha_receipt_deduplicates_switches() -> None:
         for (species, level), party_position in identities
     )
     assert _encounter_party(turns) == AGATHA_PARTY
+    assert _observed_party_valid(turns)
     assert _turns_valid(turns)
     assert _turns_valid((AgathaTurn(0x82, 56, 1, AGATHA_SAFE_HP, 0, (1, 0, 1, 1), 1),))
     assert _turns_valid((AgathaTurn(0x82, 56, 1, AGATHA_SAFE_HP, 0x40, (1, 0, 1, 1), 1),))
     assert not _turns_valid((AgathaTurn(0x82, 56, 1, 0, 0, (1, 0, 1, 1), 1),))
+
+
+def test_agatha_receipt_accepts_switch_in_ko_between_decisions() -> None:
+    turns = tuple(
+        AgathaTurn(
+            *AGATHA_PARTY[party_position],
+            enemy_hp=1,
+            lead_hp=AGATHA_SAFE_HP,
+            lead_status=0,
+            pp=(1, 1, 1, 1),
+            move_slot=3,
+            party_position=party_position,
+        )
+        for party_position in (0, 0, 2, 3, 4)
+    )
+    assert _encounter_party(turns) == (
+        AGATHA_PARTY[0],
+        AGATHA_PARTY[2],
+        AGATHA_PARTY[3],
+        AGATHA_PARTY[4],
+    )
+    assert _observed_party_valid(turns)
+
+
+def test_agatha_receipt_rejects_wrong_or_missing_terminal_opponents() -> None:
+    wrong_identity = (
+        AgathaTurn(0x82, 55, 1, AGATHA_SAFE_HP, 0, (1, 1, 1, 1), 3, 1),
+        AgathaTurn(*AGATHA_PARTY[4], 1, AGATHA_SAFE_HP, 0, (1, 1, 1, 1), 3, 4),
+    )
+    missing_final = (
+        AgathaTurn(*AGATHA_PARTY[0], 1, AGATHA_SAFE_HP, 0, (1, 1, 1, 1), 3, 0),
+        AgathaTurn(*AGATHA_PARTY[3], 1, AGATHA_SAFE_HP, 0, (1, 1, 1, 1), 3, 3),
+    )
+    assert not _observed_party_valid(wrong_identity)
+    assert not _observed_party_valid(missing_final)
 
 
 def test_agatha_policy_uses_live_legal_pp_fallbacks() -> None:

@@ -146,7 +146,8 @@ class AgathaChapterReport:
     def passed(self) -> bool:
         return (
             len(self.records) == AGATHA_CHECKPOINT_COUNT
-            and self.party == AGATHA_PARTY
+            and self.party == _encounter_party(self.turns)
+            and _observed_party_valid(self.turns)
             and _turns_valid(self.turns)
             and self.x_specials_used == AGATHA_X_SPECIAL_USE
             and _event(self.final_raw, EventFlag.BEAT_AGATHA)
@@ -164,6 +165,11 @@ class AgathaChapterReport:
         return {
             "status": "ok" if self.passed else "failed",
             "objective": "defeat_agatha",
+            "source_party": [list(item) for item in AGATHA_PARTY],
+            # Gen I trainers may switch a fresh party member into an attack that
+            # was selected against another opponent.  Such a member can faint
+            # before the teacher receives another decision boundary, so keep
+            # the policy-visible subset distinct from the declared roster.
             "party": [list(item) for item in self.party],
             "turns": [
                 {
@@ -442,6 +448,29 @@ def _encounter_party(turns: Iterable[AgathaTurn]) -> tuple[tuple[int, int], ...]
     for turn in turns:
         positions.setdefault(turn.party_position, (turn.species, turn.level))
     return tuple(positions[position] for position in sorted(positions))
+
+
+def _observed_party_valid(turns: Iterable[AgathaTurn]) -> bool:
+    """Validate every policy-visible opponent against Agatha's source roster.
+
+    The opening and final opponents must be visible.  Middle positions may be
+    absent when Agatha switches one into an already-selected attack and it
+    faints before the next policy decision.
+    """
+
+    items = tuple(turns)
+    if not items:
+        return False
+    positions = {item.party_position for item in items}
+    return (
+        0 in positions
+        and len(AGATHA_PARTY) - 1 in positions
+        and all(
+            0 <= item.party_position < len(AGATHA_PARTY)
+            and (item.species, item.level) == AGATHA_PARTY[item.party_position]
+            for item in items
+        )
+    )
 
 
 def _turns_valid(turns: Iterable[AgathaTurn]) -> bool:

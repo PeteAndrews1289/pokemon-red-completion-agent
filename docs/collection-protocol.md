@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v24.json`](../configs/red-battle-collection-v24.json)
+[`red-battle-collection-v25.json`](../configs/red-battle-collection-v25.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1358,3 +1358,15 @@ second finite bound and still rejects any map, battle, or coordinate escape.
 
 V24 uses exposed seed `60001` only for rehearsal and reserves fresh counted seeds `34001`–`34005`,
 `44001`–`44002`, and `54001`–`54005`; independent diagnostics remain required first.
+
+The v24 replay cleared the entire repaired route through checkpoint 306, defeated Agatha, healed the
+party, and entered Lance's room. Its receipt rejected that valid victory because Agatha switched her
+Golbat into an attack selected against Gengar; Golbat fainted before the teacher received another
+decision boundary, so the policy-visible roster omitted position one even though the victory event
+proved that the full trainer party was defeated. V24 is retired before rehearsal with every counted
+root unopened. Agatha evidence now publishes both the source roster and the policy-visible subset,
+validates each observed position against the source roster, and requires the opening and terminal
+opponents plus the canonical victory event.
+
+V25 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`35001`–`35005`, `45001`–`45002`, and `55001`–`55005`; diagnostics `61001`–`61005` remain unopened.
