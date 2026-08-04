@@ -386,7 +386,7 @@ def run_safari_chapter(
         _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
         if _party_hp(emulator) == _party_max_hp(emulator) and all(
             status == 0 for status in _party_status(emulator)
-        ):
+        ) and reader.read().first_party_pp == EXPECTED_PP_AFTER:
             break
     for _ in range(6):
         _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)

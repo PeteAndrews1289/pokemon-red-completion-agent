@@ -1054,3 +1054,11 @@ Surf to 15 PP. Teaching evidence now binds that observed vector, requires exact 
 slots one through three, and requires slot four to become Surf with 15 PP. The later Fuchsia nurse
 boundary independently requires the fully restored `(25, 30, 20, 15)` vector. The artifact remains
 uncounted because the stale evidence contract rejected it, and v8 still requires a complete replay.
+
+The next replay passed the immediate teaching gate at checkpoint 195 and exited the Safari Zone,
+but the final chapter report still observed `(16, 30, 16, 15)` PP. The Fuchsia nurse loop had
+stopped after one confirmation because HP and status were already clean, so it opened the dialogue
+without completing the heal. That boundary now requires HP, status, and the fully restored
+`(25, 30, 20, 15)` post-Surf PP vector before it can exit. The report therefore binds two distinct
+facts: teaching preserves unrelated current PP, and the later completed nurse interaction restores
+all four moves. This failure was also uncounted.

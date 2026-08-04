@@ -64,7 +64,9 @@ control, and progressively trained specialists.**
 > observed obsolete-Potion shortfall. All twelve counted v8 slots remain unopened while the exact
 > source requalifies. That funded replay reached Safari checkpoint 194 and taught Surf correctly;
 > its stale gate expected unrelated moves to have maximum PP immediately after teaching. The lesson
-> now proves observed PP preservation at the HM boundary and full restoration at the later Center.
+> now proves observed PP preservation at the HM boundary. The following replay exposed that the
+> later nurse loop stopped on already-full HP before restoring PP; it now requires the complete
+> post-Surf PP vector before calling the Center recovery finished.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the
