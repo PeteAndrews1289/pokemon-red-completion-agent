@@ -92,12 +92,14 @@ def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -
     assert not _sell_antidote_before_mansion(18, 2)
     assert _sell_antidote_before_mansion(19, 1)
     assert _sell_antidote_before_mansion(19, 2)
+    assert _sell_antidote_before_mansion(20, 1)
 
 
 def test_blaine_replaces_an_early_sold_bide_capacity_slot() -> None:
     assert _blaine_capacity_plan(15, bide_present=False) == (True, True, 2, 16)
     assert _blaine_capacity_plan(16, bide_present=False) == (True, False, 2, 17)
     assert _blaine_capacity_plan(17, bide_present=True) == (False, False, 2, 17)
+    assert _blaine_capacity_plan(19, bide_present=False) == (True, False, 1, 20)
 
 
 def test_blaine_sells_obsolete_potions_only_at_twenty_slots() -> None:

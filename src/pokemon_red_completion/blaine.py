@@ -654,7 +654,7 @@ def run_blaine_chapter(
         or initial_bag.get(ItemId.X_ACCURACY, 0) != 1
         or initial_bag.get(ItemId.TM34_BIDE, 0) not in {0, 1}
         or (capacity_great_ball_required and initial_bag.get(ItemId.POKE_BALL, 0) != 1)
-        or not 16 <= effective_input_slots <= 19
+        or not 16 <= effective_input_slots <= 20
         or initial_bag.get(ItemId.ANTIDOTE, 0) not in (0, 1, 2)
         or (len(initial_bag) == 20 and potion_sold_quantity == 0)
     ):
@@ -1060,16 +1060,18 @@ def _sell_antidote_before_mansion(
     input_slots: int,
     antidote_quantity: int,
 ) -> bool:
-    """Sell the Antidote only when the 19-slot lineage needs one free slot."""
+    """Sell the Antidote when a 19- or 20-slot effective plan needs one free slot."""
 
     if not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= input_slots <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]:
         raise BlaineChapterError(f"Unsupported Blaine input capacity: {input_slots} slots.")
-    if antidote_quantity not in (0, 1, 2) or (input_slots == 19 and antidote_quantity == 0):
+    if antidote_quantity not in (0, 1, 2) or (
+        input_slots in {19, 20} and antidote_quantity == 0
+    ):
         raise BlaineChapterError(
             "Unsupported Blaine Antidote capacity: "
             f"slots={input_slots}, quantity={antidote_quantity}."
         )
-    return input_slots == 19
+    return input_slots in {19, 20}
 
 
 def _blaine_capacity_input_slots(
@@ -1102,7 +1104,7 @@ def _blaine_capacity_plan(
         raise TypeError("bide_present must be a bool")
     buy_great_ball = not bide_present
     effective_slots = input_slots + int(buy_great_ball)
-    if not 16 <= effective_slots <= 19:
+    if not 16 <= effective_slots <= 20:
         raise BlaineChapterError(
             f"Blaine replacement capacity is unsupported: {effective_slots} effective slots."
         )
