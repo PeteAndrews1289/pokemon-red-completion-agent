@@ -1646,6 +1646,7 @@ def _run_mansion_team_balancing(
                     expected_map=MapId.POKEMON_MANSION_1F,
                     intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
                     label="Pokémon Mansion team training encounter",
+                    unknown_cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
                 )
             except BattleRuntimeError as error:
                 if not isinstance(error.__cause__, _PauseForTeamTrainingRecovery):

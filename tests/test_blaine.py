@@ -80,6 +80,7 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     )
     assert MANSION_TEAM_POLICY.required_size == 6
     assert MANSION_TEAM_POLICY.max_battles == 7_000
+    assert MANSION_TEAM_POLICY.max_battles < MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL
     assert MANSION_TEAM_POLICY.max_healing_trips == 1_250
     assert MANSION_MAX_CONSECUTIVE_FLEES == 32
     assert frozenset({0x37, 0x8F}) == MANSION_VOLATILE_ENEMY_SPECIES
