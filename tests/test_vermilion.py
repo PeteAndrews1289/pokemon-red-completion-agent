@@ -327,8 +327,10 @@ def test_live_route_constants_preserve_the_qualified_corridors() -> None:
     ) == vermilion.ROCKET_TO_ROUTE_5_DIRECTIONS
 
 
-def test_trashed_house_replay_yields_to_the_cerulean_walker(
+@pytest.mark.parametrize("label", ("trashed house approach", "trashed house approach replay"))
+def test_trashed_house_route_yields_to_the_cerulean_walker(
     monkeypatch: pytest.MonkeyPatch,
+    label: str,
 ) -> None:
     class Reader:
         state = replace(
@@ -369,7 +371,7 @@ def test_trashed_house_replay_yields_to_the_cerulean_walker(
         reader,  # type: ignore[arg-type]
         ("left",),
         vermilion.DEFAULT_VERMILION_TIMING,
-        "trashed house approach replay",
+        label,
     )
 
     assert (final.player_x, final.player_y) == (15, 16)

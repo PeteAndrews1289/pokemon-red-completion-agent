@@ -93,6 +93,13 @@ main menu and either combatant's HP changed; it then deliberately selects the re
 Unchanged stale input still fails the original persistent PP gate. V8 must pass its full exact-source
 qualification before any counted slot opens.
 
+The first v8 rehearsal crossed the repaired confusion turn and defeated Misty, then the altered
+timing placed Cerulean's north/south walker in the robbed-house corridor at checkpoint 59. The
+route already had a bounded yield-and-retry maneuver for the identical corridor on a later replay;
+that maneuver now applies on the initial crossing as well. It may step aside, wait with a finite
+attempt count, restore the exact approach coordinate, and retry left, while any off-corridor or
+battle state still fails closed. This rehearsal was uncounted and v8 remains unopened.
+
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
 Center immediately before the accuracy-lowering trainer, may spend one of the already-budgeted

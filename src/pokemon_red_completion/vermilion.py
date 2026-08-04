@@ -1092,7 +1092,7 @@ def _move(
             ):
                 break
             if (
-                label == "trashed house approach replay"
+                label in {"trashed house approach", "trashed house approach replay"}
                 and before.map_id == MapId.CERULEAN_CITY
                 and (before.player_x, before.player_y) == CERULEAN_WALKER_BLOCK_POSITION
                 and direction == "left"
@@ -1127,7 +1127,7 @@ def _yield_to_cerulean_walker(
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
 ) -> RawGameState:
-    """Let the north/south Cerulean walker vacate the replay corridor."""
+    """Let the north/south Cerulean walker vacate the house corridor."""
 
     for attempt in range(CERULEAN_WALKER_CLEAR_ATTEMPTS):
         state = reader.read()
