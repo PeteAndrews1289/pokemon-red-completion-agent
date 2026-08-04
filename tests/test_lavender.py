@@ -146,11 +146,11 @@ def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD == 40
     assert FINAL_TUNNEL_RECOVERY_THRESHOLD == 90
     assert lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED == 3
-    assert lavender_module.POST_MART_RNG_ALIGNMENT_FRAMES == 71
+    assert lavender_module.POST_MART_RNG_ALIGNMENT_FRAMES == 47
     assert (
         lavender_module.POST_MART_RNG_ALIGNMENT_FRAMES
-        + (lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED - 1) * 120
-        == 311
+        + (lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED - 1) * 144
+        == 335
     )
     assert lavender_module.EARLY_POKE_BALL_CAPACITY_RESERVE == 1
 
