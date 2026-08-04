@@ -758,14 +758,18 @@ def _koga_fainted_pivot_target(
 
     if (
         raw.battle_state != 2
-        or raw.active_party_index is None
         or (raw.battler_hp or 0) > 0
     ):
         return None
+    # PLAYER_MON_NUMBER briefly carries an out-of-party sentinel while the
+    # forced-switch dialogue is opening, so RawGameState intentionally exposes
+    # no active index at this exact boundary.  The fainted member is already
+    # excluded by its zero party HP; selecting the healthiest living member is
+    # therefore both sufficient and honest when the index is transiently absent.
     living = tuple(
         (hp, index)
         for index, hp in enumerate(party_hp)
-        if index != raw.active_party_index and hp > 0
+        if (raw.active_party_index is None or index != raw.active_party_index) and hp > 0
     )
     return max(living, default=(0, -1))[1] if living else None
 

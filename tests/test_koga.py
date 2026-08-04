@@ -295,6 +295,10 @@ def test_koga_fainted_member_continues_with_the_healthiest_living_teammate() -> 
     )
 
     assert _koga_fainted_pivot_target(fainted, (0, 75, 130, 90)) == 2
+    assert _koga_fainted_pivot_target(
+        replace(fainted, active_party_index=None),
+        (0, 75, 130, 90),
+    ) == 2
     assert _koga_fainted_pivot_target(fainted, (0, 75, 0, 90)) == 3
     assert _koga_fainted_pivot_target(fainted, (0, 0, 0)) is None
     assert _koga_fainted_pivot_target(
