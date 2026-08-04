@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v26.json`](../configs/red-battle-collection-v26.json)
+[`red-battle-collection-v27.json`](../configs/red-battle-collection-v27.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1380,3 +1380,13 @@ both damage and status are present, satisfying both Lance-entry invariants with 
 
 V26 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `36001`–`36005`, `46001`–`46002`, and `56001`–`56005`; all five diagnostics must be replayed.
+
+V26 diagnostic seeds `61002` and `61001` completed the Hall of Fame and verified the combined
+post-Agatha recovery. Seed `61003` then reached checkpoint 85 but searched 97 Route 11 encounters
+without finding the required level-17 Spearow, exceeding the 96-encounter/1,800-step bound. The
+route, party, and emulator remained healthy. V26 is retired before rehearsal with every counted
+root unopened. The Spearow lesson now has its own finite 3,600-step/192-encounter budget instead of
+sharing the general wild-search step budget; other capture lessons retain their existing limits.
+
+V27 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`37001`–`37005`, `47001`–`47002`, and `57001`–`57005`; all five diagnostics must be replayed.

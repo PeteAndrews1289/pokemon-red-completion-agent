@@ -473,7 +473,8 @@ def test_surge_timing_is_positive_and_bounded() -> None:
     assert SurgeTiming() == DEFAULT_SURGE_TIMING
     assert DEFAULT_SURGE_TIMING.encounter_steps == 1800
     assert DEFAULT_SURGE_TIMING.encounter_limit == 72
-    assert DEFAULT_SURGE_TIMING.spearow_encounter_limit == 96
+    assert DEFAULT_SURGE_TIMING.spearow_encounter_steps == 3600
+    assert DEFAULT_SURGE_TIMING.spearow_encounter_limit == 192
     assert WILD_CAPTURE_THROWS_PER_ENCOUNTER == 5
     assert WILD_CAPTURE_MAX_WEAKENING_ATTACKS == 8
     assert VIRIDIAN_FOREST_MAX_SURVEY_LEGS == 256
