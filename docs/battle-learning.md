@@ -117,6 +117,14 @@ redundant TM on the natural lineage before proving the same terminal moves. The 
 permits a recorded reserve faint only when another member continued and the existing Center gate
 restored everyone. No counted slot was consumed.
 
+V10 then passed its full 312/36/68 rehearsal and opened collection. Fresh train seed `20001`
+stopped at Misty, where the one-member party's Wartortle fainted before its finishing attack while
+Starmie retained 10/59 HP. The one-shot outcome is sealed and v10 is retired. V11 makes the exposed
+seed its uncounted qualification schedule and uses fresh counted seeds. Because no teammate exists
+yet, the correction is resource-aware rather than a forced switch: Misty can spend only Potions
+above the exact four-Potion Rocket reserve, from a verified low-HP MAIN state, and every retry of
+the same physical battle retains the same intent and schedule entry.
+
 V3 later completed the full **312/312**, **36/36**, **68/68** rehearsal and opened collection.
 Its first one-shot train root stopped at Route 24 trainer 2 after Sand-Attack, poison, and repeated
 Water Gun misses fainted Wartortle against a 4-HP opponent. That failure is retained and v3 is not

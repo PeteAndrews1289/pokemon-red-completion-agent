@@ -9,6 +9,7 @@ import pytest
 import pokemon_red_completion.cascade as cascade_module
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
     BattleResourcePolicy,
     BattleRuntimeError,
 )
@@ -34,6 +35,7 @@ from pokemon_red_completion.cascade import (
     GYM_TRAINER_TO_MISTY_DIRECTIONS,
     MART_REPEAT_CLERK_DIRECTIONS,
     MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS,
+    MISTY_RECOVERY_HP,
     RIVAL_CENTER_NPC_CORRECTION_DIRECTIONS,
     RIVAL_TRIGGER_DIRECTIONS,
     ROCKET_THIEF_POTION_RESERVE,
@@ -60,6 +62,7 @@ from pokemon_red_completion.cascade import (
     _reverse_directions,
     _run_cerulean_gym_trainer_with_potion,
     _run_cerulean_rival_with_potion,
+    _run_misty_with_potion,
     _run_route_24_accuracy_battle_with_potion,
     _should_use_cerulean_rival_potion,
     _use_cerulean_rival_potion,
@@ -461,6 +464,56 @@ def test_cerulean_rival_recovery_reuses_one_bounded_intent(
         emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1)
         == ROUTE_24_RECOVERY_POTION_RESERVE
     )
+
+
+def test_misty_spends_only_two_surplus_potions_and_reuses_intent(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    emulator = _MemoryEmulator(potion_quantity=ROCKET_THIEF_POTION_RESERVE + 2)
+    low = replace(
+        _raw(),
+        map_id=MapId.CERULEAN_GYM,
+        battle_state=2,
+        active_party_hp=MISTY_RECOVERY_HP,
+        active_party_max_hp=64,
+    )
+    final = replace(low, battle_state=0, active_party_hp=43)
+    intent = BattleIntent("defeat_misty", battle_plan_id="misty-test")
+    intents: list[BattleIntent] = []
+    calls = 0
+
+    def fake_runtime(*args: object, **kwargs: object) -> RawGameState:
+        nonlocal calls
+        calls += 1
+        intents.append(cast(BattleIntent, kwargs["intent"]))
+        if calls <= 2:
+            policy = cast(object, args[2])
+            try:
+                cast(object, policy)(low)  # type: ignore[operator]
+            except cascade_module._PauseForMistyPotion as pause:
+                raise BattleRuntimeError("paused for Misty recovery") from pause
+        return final
+
+    def fake_use(*args: object) -> None:
+        del args
+        emulator.memory[int(RamAddress.BAG_ITEMS) + 1] -= 1
+
+    monkeypatch.setattr(cascade_module, "run_adaptive_trainer_battle", fake_runtime)
+    monkeypatch.setattr(cascade_module, "_use_cerulean_rival_potion", fake_use)
+
+    observed = _run_misty_with_potion(
+        cast(object, object()),
+        cast(object, object()),
+        emulator,
+        lambda _raw: 3,
+        DEFAULT_CASCADE_TIMING,
+        intent,
+    )
+
+    assert observed is final
+    assert calls == 3
+    assert intents == [intent, intent, intent]
+    assert _bag_quantity_for_test(emulator) == ROCKET_THIEF_POTION_RESERVE
 
 
 def test_cerulean_rival_recovery_latches_the_transient_exact_heal(

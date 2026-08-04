@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v10.json`](../configs/red-battle-collection-v10.json)
+[`red-battle-collection-v11.json`](../configs/red-battle-collection-v11.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 68 stable public battle-plan identities in exact qualified-route order;
@@ -1160,3 +1160,11 @@ HP, so the generic presence gate rejected the state before its existing enemy-KO
 could run. Presence validation now treats enemy HP exactly zero as authoritative only while the
 battle is active or in its immediate field exit; every nonterminal zero-HP battler still fails, and
 map/readiness checks still reject blackout. This rehearsal remained uncounted.
+
+V10 subsequently qualified **312/312 checkpoints**, **36/36 objectives**, Hall of Fame, and all
+**68/68** scheduled battles on exposed rehearsal seed `19001`. Its first fresh, one-shot training
+root at seed `20001` stopped at Misty: the single-member party's Wartortle fainted with Starmie at
+10/59 HP. The outcome is sealed, v10 is retired, and its pending slots will not run. V11 uses that
+exposed seed only for the uncounted rehearsal and assigns fresh counted seeds `21001`–`21005`,
+`31001`–`31002`, and `41001`–`41005`. Misty may spend only the live Potion surplus above the
+four-Potion Rocket reserve, at a stable low-HP MAIN gate, with exact heal and quantity proof.

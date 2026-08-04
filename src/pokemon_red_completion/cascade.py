@@ -88,6 +88,7 @@ SS_ANNE_RIVAL_POTION_RESERVE = 2
 FIELD_ITEM_MENU_CLOSE_PULSES = 4
 CERULEAN_GYM_TRAINER_MOVE_SLOT = 3
 CERULEAN_GYM_TRAINER_RECOVERY_HP = 30
+MISTY_RECOVERY_HP = 25
 ROUTE_25_NON_HIKER_MOVE_SLOT = 3
 ROUTE_24_REQUIRED_TRAINER_INDEXES = tuple(spec[0] for spec in ROUTE_24_REQUIRED_TRAINER_SPECS)
 ROUTE_25_REQUIRED_TRAINER_INDEXES = tuple(spec[0] for spec in ROUTE_25_REQUIRED_TRAINER_SPECS)
@@ -853,13 +854,12 @@ def run_cascade_chapter(
         progress,
         emulator,
     )
-    _run_battle(
+    _run_misty_with_potion(
         reader,
         chapter_executor,
+        emulator,
         choose_misty_move_slot,
-        MapId.CERULEAN_GYM,
         timing,
-        "Misty",
         BattleIntent(
             "defeat_misty",
             battle_plan_id=MISTY_BATTLE_PLAN_ID,
@@ -2398,6 +2398,61 @@ def _run_battle(
         )
     except BattleRuntimeError as error:
         raise CascadeChapterError(str(error)) from error
+
+
+class _PauseForMistyPotion(Exception):
+    pass
+
+
+def _run_misty_with_potion(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    emulator: EmulatorState,
+    policy: Callable[[RawGameState], int],
+    timing: CascadeTiming,
+    intent: BattleIntent,
+) -> RawGameState:
+    """Spend only Misty's live surplus while preserving the Rocket reserve."""
+
+    starting_quantity = _bag_quantity(emulator, ItemId.POTION)
+    if not ROCKET_THIEF_POTION_RESERVE <= starting_quantity <= CERULEAN_GYM_START_POTION_RESERVE:
+        raise CascadeChapterError("Misty recovery lacks its bounded Potion reserve.")
+    recoveries = 0
+
+    def guarded_policy(raw: RawGameState) -> int:
+        if (
+            _bag_quantity(emulator, ItemId.POTION) > ROCKET_THIEF_POTION_RESERVE
+            and raw.battler_hp is not None
+            and 0 < raw.battler_hp <= MISTY_RECOVERY_HP
+        ):
+            raise _PauseForMistyPotion
+        return policy(raw)
+
+    while True:
+        try:
+            final = run_adaptive_trainer_battle(
+                reader,
+                executor,
+                guarded_policy,
+                expected_map=MapId.CERULEAN_GYM,
+                intent=intent,
+                timing=timing.battle_runtime,
+                label="Misty",
+            )
+            ending_quantity = _bag_quantity(emulator, ItemId.POTION)
+            if (
+                ending_quantity != starting_quantity - recoveries
+                or ending_quantity < ROCKET_THIEF_POTION_RESERVE
+            ):
+                raise CascadeChapterError("Misty recovery changed its protected Rocket reserve.")
+            return final
+        except BattleRuntimeError as error:
+            if not isinstance(error.__cause__, _PauseForMistyPotion):
+                raise CascadeChapterError(str(error)) from error
+        _use_cerulean_rival_potion(reader, executor, emulator, timing)
+        recoveries += 1
+        if recoveries > starting_quantity - ROCKET_THIEF_POTION_RESERVE:
+            raise CascadeChapterError("Misty exceeded her bounded Potion surplus.")
 
 
 class _PauseForCeruleanRivalPotion(Exception):

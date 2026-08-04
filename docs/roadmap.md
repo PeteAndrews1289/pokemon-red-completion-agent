@@ -335,6 +335,12 @@ two exact legal lineages: Bite followed by the controlled TM40 lesson, or natura
 followed by archival of the redundant TM40. Both must converge on the same post-Erika moves and PP,
 and Koga's Center gate must restore every member after any recorded continuation. The rehearsal was
 uncounted; v10 remains unopened.
+The combined source subsequently qualified v10 at **312/312**, **36/36**, Hall of Fame, and
+**68/68** scheduled battles. Its first fresh counted root failed at Misty with the one-member party:
+Wartortle fainted at 0/64 before a finishing attack and Starmie retained 10/59 HP. That immutable
+outcome is sealed and v10 is retired. V11 rehearses on exposed seed `20001`, uses entirely fresh
+counted seeds, and lets Misty spend only the live Potion surplus above the four-Potion Rocket
+reserve under exact low-HP, heal, inventory, and same-intent gates.
 That exact rehearsal subsequently validated every earlier repair through checkpoint **296/312**,
 including the six-member balance gate, Blaine, Giovanni, the final rival, and Victory Road. It then
 exposed a stale Indigo inventory assertion: the now-larger bounded capture curriculum may legally

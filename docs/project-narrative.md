@@ -920,6 +920,17 @@ goal than forcing one experience total: the semantic objective is acquiring and 
 capability, whether it came from level-up or a reusable teaching plan. The failed rehearsal was
 uncounted and stopped at Koga's terminal evidence gate after checkpoint 205/312.
 
+The combined source then passed the complete v10 rehearsal: **312/312 checkpoints**, **36/36
+objectives**, Hall of Fame, and **68/68** schedule attestations. Fresh counted seed `20001` exposed
+a different early-game boundary at Misty. The party still contained only Wartortle; at 3/64 HP it
+selected the finishing Mega Punch, Starmie moved first, and the run ended with the opponent at
+10/59 HP. The immutable failure is sealed and v10 is retired. V11 moves that exact seed to the
+uncounted rehearsal and reserves fresh counted lineages. Its Misty controller may spend at most the
+two Potions above the four-Potion Rocket handoff, only from a live low-HP battle MAIN menu, and must
+prove each heal and inventory decrement before replanning. This adds a transferable concept—spend
+only the surplus above the next objective's reserve—without inventing a helper that does not yet
+exist or loosening the downstream economy.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

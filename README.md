@@ -306,7 +306,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v10-01-train
+  --collection-run red-battle-v11-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
@@ -562,6 +562,12 @@ The next run made the Muk handoff, but the reserve later fainted and Blastoise r
 paths: preserve Bite and teach TM40 later, or retain naturally learned Skull Bash and archive the
 redundant TM40. Strength and Erika verify the appropriate move/PP lineage and converge on the same
 terminal move set; the unchanged Center proof restores the whole party. No counted root was opened.
+The combined v10 source then qualified at **312/312 checkpoints**, **36/36 objectives**, Hall of
+Fame, and **68/68** schedule attestations. Its first fresh counted seed (`20001`) failed honestly at
+Misty: Wartortle was still the only party member and fainted before a finishing hit with Starmie at
+10/59 HP. V10 is retired with that root sealed. V11 uses the exposed seed only for rehearsal,
+reserves fresh counted seeds at `21001+`, and may spend only Misty's Potion surplus above the exact
+four-Potion Rocket reserve from a verified low-HP battle state.
 
 ## Evidence and project status
 
