@@ -130,7 +130,9 @@ to the stable `(37, 31)` arrival tile. That input crossed straight back out, and
 guard stopped the run. Training now requires two consecutive input-ready reads on a stable cave
 coordinate before its first encounter-seeking step. The next uncounted rehearsal proved that
 `(37, 31)` itself is stable rather than transitional, so only the observed `(4, 4)` handoff is
-excluded from that readiness gate.
+excluded from that readiness gate. It also proved that stepping back onto `(37, 31)` after leaving
+it activates the return warp. The trainer now makes one verified northbound step to `(37, 30)` and
+bounces only between `(37, 30)` and `(37, 29)` until training is complete.
 
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the

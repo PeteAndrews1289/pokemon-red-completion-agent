@@ -5,6 +5,7 @@ from dataclasses import replace
 import pytest
 
 import pokemon_red_completion.ss_anne as ss_anne
+from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.battle_runtime import BattleResourcePolicy, BattleRuntimeError
 from pokemon_red_completion.observation import ItemId, MapId, RawGameState
 
@@ -70,6 +71,42 @@ def test_pre_ship_training_waits_through_linked_cave_warps(
 
     assert (settled.player_x, settled.player_y) == (37, 31)
     assert len(executor.actions) == 2
+
+
+def test_pre_ship_training_leaves_the_arrival_warp_before_bouncing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    states = [
+        RawGameState(True, MapId.DIGLETTS_CAVE, 37, 31, 1, 0),
+        RawGameState(True, MapId.DIGLETTS_CAVE, 37, 30, 1, 0),
+    ]
+
+    class Reader:
+        index = 0
+
+        def read(self) -> RawGameState:
+            state = states[min(self.index, len(states) - 1)]
+            self.index += 1
+            return state
+
+    class Executor:
+        actions = []
+
+        def execute(self, action: object) -> None:
+            self.actions.append(action)
+
+    executor = Executor()
+    monkeypatch.setattr(ss_anne, "_wait", lambda *_args: None)
+
+    anchor = ss_anne._leave_pre_ship_entry_warp(
+        executor,  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+    )
+
+    assert (anchor.player_x, anchor.player_y) == (37, 30)
+    assert len(executor.actions) == 1
+    assert executor.actions[0].kind is MacroActionKind.MOVE
+    assert executor.actions[0].value == "up"
 
 
 def test_ss_anne_rival_consumes_high_value_reserve_with_one_intent(

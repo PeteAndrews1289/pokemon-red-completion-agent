@@ -571,9 +571,10 @@ def _run_pre_ship_training(
     ) * abs(gate.player_x - 4)
     _move(executor, reader, gate_route, timing, "Diglett Cave training entrance")
     _wait(executor, timing.transition_wait_frames)
-    entry = _settle_pre_ship_cave_entry(executor, reader, timing)
-    if entry.map_id != MapId.DIGLETTS_CAVE or entry.player_x is None or entry.player_y is None:
+    arrival = _settle_pre_ship_cave_entry(executor, reader, timing)
+    if arrival.map_id != MapId.DIGLETTS_CAVE or arrival.player_x is None or arrival.player_y is None:
         raise SSAnneChapterError("Pre-ship training did not enter Diglett's Cave.")
+    entry = _leave_pre_ship_entry_warp(executor, reader)
     entry_position = (entry.player_x, entry.player_y)
 
     battles_won = 0
@@ -765,6 +766,29 @@ def _settle_pre_ship_cave_entry(
         "Pre-ship training cave entry did not settle: "
         f"map={raw.map_id!r}, position={(raw.player_x, raw.player_y)!r}."
     )
+
+
+def _leave_pre_ship_entry_warp(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+) -> RawGameState:
+    """Move once from the stable arrival warp to the safe training corridor."""
+
+    arrival = reader.read()
+    if arrival.map_id != MapId.DIGLETTS_CAVE or (arrival.player_x, arrival.player_y) != (37, 31):
+        raise SSAnneChapterError(
+            "Pre-ship training lacks the stable cave arrival tile: "
+            f"map={arrival.map_id!r}, position={(arrival.player_x, arrival.player_y)!r}."
+        )
+    executor.execute(MacroAction(MacroActionKind.MOVE, "up"))
+    _wait(executor, 60)
+    anchor = reader.read()
+    if anchor.map_id != MapId.DIGLETTS_CAVE or (anchor.player_x, anchor.player_y) != (37, 30):
+        raise SSAnneChapterError(
+            "Pre-ship training did not reach its safe cave corridor: "
+            f"map={anchor.map_id!r}, position={(anchor.player_x, anchor.player_y)!r}."
+        )
+    return anchor
 
 
 def _require_position(raw: RawGameState, map_id: MapId, position: tuple[int, int], label: str) -> None:
