@@ -1,3 +1,7 @@
+import pytest
+
+from pokemon_red_completion import bruno as bruno_module
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.bruno import (
     BRUNO_APPROACH,
     BRUNO_CHECKPOINT_COUNT,
@@ -7,6 +11,7 @@ from pokemon_red_completion.bruno import (
     BrunoTurn,
     _bruno_recovery_threshold,
     _encounter_party,
+    _settle_bruno_victory,
     _turns_valid,
 )
 from pokemon_red_completion.observation import EventFlag, MapId, RawGameState
@@ -64,3 +69,40 @@ def test_bruno_recovery_threshold_accounts_for_hitmonlee_damage() -> None:
     assert _bruno_recovery_threshold(raw(0x2C)) == 163
     assert _bruno_recovery_threshold(raw(0x7E)) == 163
     assert _bruno_recovery_threshold(raw(0x22)) == 90
+
+
+def test_bruno_victory_settle_stops_before_reinteracting(monkeypatch: pytest.MonkeyPatch) -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.BRUNOS_ROOM,
+        player_x=5,
+        player_y=3,
+        party_count=6,
+        battle_state=0,
+    )
+
+    class Executor:
+        actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+
+    class Reader:
+        def __init__(self, executor: Executor) -> None:
+            self.executor = executor
+
+        def read(self) -> RawGameState:
+            return raw
+
+        def read_input_readiness(self):
+            ready = any(
+                action.kind is MacroActionKind.CONFIRM for action in self.executor.actions
+            )
+            return type("Readiness", (), {"ready": ready})()
+
+    executor = Executor()
+    reader = Reader(executor)
+    monkeypatch.setattr(bruno_module, "_event", lambda *_args: True)
+
+    assert _settle_bruno_victory(executor, reader) == raw  # type: ignore[arg-type]
+    assert [action.kind for action in executor.actions].count(MacroActionKind.CONFIRM) == 1

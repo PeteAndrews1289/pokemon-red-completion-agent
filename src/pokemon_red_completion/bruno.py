@@ -56,7 +56,6 @@ from pokemon_red_completion.victory_road import (
     _menu_cursor_active,
     _move,
     _pulse,
-    _settle_confirm,
 )
 
 BRUNO_CHECKPOINT_COUNT = 3
@@ -328,9 +327,7 @@ def run_bruno_chapter(
                 ) from healing_error
             last_recovery_turn = len(turns)
 
-    for _ in range(5):
-        _pulse(actions, MacroActionKind.CONFIRM)
-    _settle_confirm(actions, reader, 40)
+    _settle_bruno_victory(actions, reader)
     if _party_hp(emulator) != _party_max_hp(emulator) or any(
         status != 0 for status in _party_status(emulator)
     ):
@@ -348,7 +345,7 @@ def run_bruno_chapter(
                 item,
             )
         except Exception as error:
-            raise BrunoChapterError("Post-Bruno recovery failed.") from error
+            raise BrunoChapterError(f"Post-Bruno recovery failed: {error}.") from error
     defeated = reader.read()
     if not _event(defeated, EventFlag.BEAT_BRUNO):
         raise BrunoChapterError("Bruno event did not set after battle.")
@@ -394,6 +391,26 @@ def _checkpoint(
                 emulator.frame_count,
             )
         )
+
+
+def _settle_bruno_victory(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    limit: int = 40,
+) -> RawGameState:
+    """Advance the victory script exactly until overworld control returns."""
+
+    for _ in range(limit):
+        raw = reader.read()
+        if (
+            raw.battle_state == 0
+            and _event(raw, EventFlag.BEAT_BRUNO)
+            and reader.read_input_readiness().ready
+        ):
+            return raw
+        _pulse(actions, MacroActionKind.CONFIRM)
+    raise BrunoChapterError("Bruno victory script did not settle at the overworld boundary.")
 
 
 def _encounter_party(turns: Iterable[BrunoTurn]) -> tuple[tuple[int, int], ...]:
