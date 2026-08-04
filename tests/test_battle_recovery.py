@@ -87,3 +87,12 @@ def test_switch_active_battler_observes_party_menu_and_returns_to_main(monkeypat
         action.kind is MacroActionKind.MOVE and action.value == "right"
         for action in simulation.actions
     )
+
+
+def test_forced_party_menu_accepts_a_late_balanced_team_slot(monkeypatch) -> None:
+    simulation = _SwitchSimulation()
+    simulation.cursor = 4
+    monkeypatch.setattr(battle_recovery, "_menu_cursor_active", lambda _emulator: True)
+
+    assert battle_recovery._forced_party_menu_ready(simulation, 6)
+    assert not battle_recovery._forced_party_menu_ready(simulation, 3)

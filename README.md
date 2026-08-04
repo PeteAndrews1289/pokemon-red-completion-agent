@@ -66,7 +66,9 @@ control, and progressively trained specialists.**
 > its stale gate expected unrelated moves to have maximum PP immediately after teaching. The lesson
 > now proves observed PP preservation at the HM boundary. The following replay exposed that the
 > later nurse loop stopped on already-full HP before restoring PP; it now requires the complete
-> post-Surf PP vector before calling the Center recovery finished.
+> post-Surf PP vector before calling the Center recovery finished. The fully restored replay then
+> reached Lance at checkpoint 308, where a forced-switch helper rejected a valid slot-4 party
+> cursor inherited from the old three-member route. Cursor validation now uses the live party size.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the

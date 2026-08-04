@@ -1062,3 +1062,12 @@ without completing the heal. That boundary now requires HP, status, and the full
 `(25, 30, 20, 15)` post-Surf PP vector before it can exit. The report therefore binds two distinct
 facts: teaching preserves unrelated current PP, and the later completed nurse interaction restores
 all four moves. This failure was also uncounted.
+
+The fully restored replay passed all prior repairs, completed the six-member roster and level-60
+training, and defeated Lorelei, Bruno, and Agatha before a Lance recovery pivot stalled at
+checkpoint 308. Two earlier weak helpers in party slots 1 and 2 fainted and returned to Blastoise
+correctly. The third helper occupied slot 4, while the shared forced-switch gate still accepted
+cursor values only through 2 from the historical three-member route. It now validates the cursor
+against the observed live party size and still requires the actual party-menu cursor tile before
+selection. This generalizes ordinary forced switching to all six roster positions without adding
+items, retries, or battle attempts. The late-game failure remained uncounted.

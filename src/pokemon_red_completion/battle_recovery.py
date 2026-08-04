@@ -211,7 +211,7 @@ def protected_lead_recovery(
         return potion_spent
 
     for _ in range(24):
-        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) <= 2 and _menu_cursor_active(emulator):
+        if _forced_party_menu_ready(emulator, len(_party_hp(emulator))):
             break
         _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
     else:
@@ -368,6 +368,13 @@ def _menu_cursor_active(emulator: EmulatorState) -> bool:
     address |= emulator.read_u8(int(RamAddress.MENU_CURSOR_LOCATION) + 1) << 8
     tile_map = int(RamAddress.TILE_MAP)
     return tile_map <= address < tile_map + 360 and emulator.read_u8(address) == 0xED
+
+
+def _forced_party_menu_ready(emulator: EmulatorState, party_size: int) -> bool:
+    """Recognize any valid live-party cursor, including balanced-team slots 3–5."""
+
+    cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+    return cursor < party_size and _menu_cursor_active(emulator)
 
 
 def _pulse(
