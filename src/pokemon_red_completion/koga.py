@@ -156,6 +156,7 @@ class KogaBattleEvidence:
     max_hp_after: int
     status_after: int
     terminal_mutual_ko: bool = False
+    continued_after_faint: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -194,7 +195,10 @@ class KogaChapterReport:
             )
             and all(
                 0 < item.hp_after <= item.max_hp_after
-                or (item.terminal_mutual_ko and item.hp_after == 0)
+                or (
+                    (item.terminal_mutual_ko or item.continued_after_faint)
+                    and item.hp_after == 0
+                )
                 for item in self.battles
             )
             and self.trainer_events_before_koga == (False, True, False, False, True, True)
@@ -259,6 +263,7 @@ class KogaChapterReport:
                 # caused a temporary terminal mutual KO inside the battle.
                 "no_faint": all(value > 0 for value in self.party_hp),
                 "terminal_mutual_ko": self.battles[-1].terminal_mutual_ko,
+                "continued_after_faint": self.battles[-1].continued_after_faint,
                 "party_restored_at_boundary": all(value > 0 for value in self.party_hp),
             },
             "rewards": {
@@ -526,6 +531,8 @@ def _fight(
             raise KogaChapterError(f"{label}: {error}") from error
 
     terminal_mutual_ko = False
+    continued_after_faint = False
+    faint_pivots = 0
     intent = BattleIntent(
         "defeat_koga",
         battle_plan_id=battle_plan_id,
@@ -550,19 +557,34 @@ def _fight(
                 )
                 break
             except BattleRuntimeError as error:
-                if not isinstance(error.__cause__, _PauseForKogaReservePivot):
-                    raise
+                if isinstance(error.__cause__, _PauseForKogaReservePivot):
+                    pivot_target = error.__cause__.party_index
+                    pivot_label = f"{label} healthy reserve pivot"
+                else:
+                    failed = reader.read()
+                    party_hp = _party_hp(emulator)
+                    pivot_target = _koga_fainted_pivot_target(failed, party_hp)
+                    if pivot_target is None or not allow_disable_fallback:
+                        raise
+                    if faint_pivots >= max(0, len(party_hp) - 1):
+                        raise KogaChapterError(
+                            f"{label} exhausted its living-party continuation bound."
+                        ) from error
+                    pivot_label = f"{label} fainted-member continuation"
                 try:
                     switch_active_battler(
                         actions,
                         reader,
                         emulator,
-                        error.__cause__.party_index,
-                        label=f"{label} healthy reserve pivot",
+                        pivot_target,
+                        label=pivot_label,
                         wait_frames=timing.wait_frames,
                     )
                 except ProtectedRecoveryError as pivot_error:
                     raise KogaChapterError(str(pivot_error)) from pivot_error
+                if not isinstance(error.__cause__, _PauseForKogaReservePivot):
+                    faint_pivots += 1
+                    continued_after_faint = True
     except BattleRuntimeError:
         mutual = reader.read()
         if (
@@ -590,7 +612,11 @@ def _fight(
         or not _event(emulator, event)
         or (
             any(value <= 0 for value in hp)
-            and not (terminal_mutual_ko and hp[0] == 0 and all(value > 0 for value in hp[1:]))
+            and not (
+                (terminal_mutual_ko or continued_after_faint)
+                and hp[0] == 0
+                and all(value > 0 for value in hp[1:])
+            )
         )
     ):
         raise KogaChapterError(
@@ -607,6 +633,7 @@ def _fight(
         max_hp[0],
         status[0],
         terminal_mutual_ko,
+        continued_after_faint,
     )
 
 
@@ -693,6 +720,26 @@ def _koga_reserve_pivot_target(
         (hp, index) for index, hp in enumerate(party_hp[1:], start=1) if hp > threshold
     )
     return max(living_reserves, default=(0, -1))[1] if living_reserves else None
+
+
+def _koga_fainted_pivot_target(
+    raw: RawGameState,
+    party_hp: tuple[int, ...],
+) -> int | None:
+    """Choose the healthiest living teammate after an observed active-member KO."""
+
+    if (
+        raw.battle_state != 2
+        or raw.active_party_index is None
+        or (raw.battler_hp or 0) > 0
+    ):
+        return None
+    living = tuple(
+        (hp, index)
+        for index, hp in enumerate(party_hp)
+        if index != raw.active_party_index and hp > 0
+    )
+    return max(living, default=(0, -1))[1] if living else None
 
 
 def _settle_trainer_identity(

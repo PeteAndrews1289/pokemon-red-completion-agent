@@ -545,6 +545,13 @@ the exact Silph schedule entry, while ordinary knockouts still require a restore
 That repair proved checkpoint 244, then exposed lingering post-rival text before the elevator route.
 Terminal recovery now requires two consecutive field-control observations before issuing movement,
 the same completion gate used by ordinary adaptive battles.
+The current uncounted v10 rehearsal subsequently cleared the hardened Route 9 continuation and
+reached Koga at checkpoint 205/312. When the workhorse fainted with a living opponent and trained
+teammates still available, the boss adapter stopped on its old single-carry assumption. It now
+selects the healthiest living teammate through the verified forced-party menu, resumes from that
+member's own legal moves and PP under a party-depth bound, and records the handoff separately from
+mutual-KO recovery. Collection remains closed until the exact republished source passes the full
+312-checkpoint and 68-schedule rehearsal.
 
 ## Evidence and project status
 

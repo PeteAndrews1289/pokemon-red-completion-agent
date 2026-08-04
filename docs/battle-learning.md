@@ -93,6 +93,15 @@ battle view now follows the controlled battler's species, level, HP, status, mov
 the non-battle view continues to describe the field lead. This second failed rehearsal also
 consumed no slot.
 
+A later source-bound rehearsal cleared the hardened Route 9 forced-switch transition and reached
+Koga at checkpoint 205/312, where the workhorse fainted against a still-living opponent. The boss
+adapter now applies the same game-neutral party-continuation concept: it observes the zero-HP active
+member, selects the healthiest living teammate through the forced-party menu, and resumes legal
+move ranking from that member's live battle state. A party-size-minus-one ceiling prevents an
+unbounded handoff loop, and the receipt records a non-mutual-KO continuation separately from the
+existing Selfdestruct case. This rehearsal was uncounted and must be repeated on the republished
+source before collection opens.
+
 V3 later completed the full **312/312**, **36/36**, **68/68** rehearsal and opened collection.
 Its first one-shot train root stopped at Route 24 trainer 2 after Sand-Attack, poison, and repeated
 Water Gun misses fainted Wartortle against a 4-HP opponent. That failure is retained and v3 is not

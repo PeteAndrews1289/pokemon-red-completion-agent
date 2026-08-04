@@ -23,6 +23,7 @@ from pokemon_red_completion.koga import (
     KogaCheckpoint,
     KogaTiming,
     _koga_move_slot,
+    _koga_fainted_pivot_target,
     _koga_reserve_pivot_target,
     _nurse_approach_directions,
 )
@@ -186,6 +187,19 @@ def test_koga_report_records_a_recovered_terminal_mutual_ko() -> None:
     assert recovered.public_dict()["koga"]["terminal_mutual_ko"] is True
 
 
+def test_koga_report_records_a_living_party_continuation() -> None:
+    report = _report()
+    continued_battle = replace(
+        report.battles[-1],
+        hp_after=0,
+        continued_after_faint=True,
+    )
+    continued = replace(report, battles=(*report.battles[:-1], continued_battle))
+
+    assert continued.passed
+    assert continued.public_dict()["koga"]["continued_after_faint"] is True
+
+
 def test_koga_routes_and_minimum_trainer_set_are_pinned() -> None:
     assert (
         *("down",) * 5,
@@ -238,6 +252,23 @@ def test_koga_low_hp_lead_pivots_to_the_healthiest_reserve() -> None:
     assert _koga_reserve_pivot_target(raw, (40, 75, 130, 90), 50) == 2
     assert _koga_reserve_pivot_target(raw, (40, 45, 0), 50) is None
     assert _koga_reserve_pivot_target(replace(raw, active_party_index=2), (40, 75, 130), 50) is None
+
+
+def test_koga_fainted_member_continues_with_the_healthiest_living_teammate() -> None:
+    fainted = replace(
+        _raw(),
+        battle_state=2,
+        active_party_index=0,
+        active_party_hp=0,
+    )
+
+    assert _koga_fainted_pivot_target(fainted, (0, 75, 130, 90)) == 2
+    assert _koga_fainted_pivot_target(fainted, (0, 75, 0, 90)) == 3
+    assert _koga_fainted_pivot_target(fainted, (0, 0, 0)) is None
+    assert _koga_fainted_pivot_target(
+        replace(fainted, active_party_hp=1),
+        (1, 75, 130),
+    ) is None
 
 
 def test_koga_pivoted_reserve_uses_its_own_legal_move() -> None:

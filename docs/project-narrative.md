@@ -891,6 +891,16 @@ presence gate ran before its enemy-KO handler and rejected that stale zero. Enem
 now authoritative during the active or immediate-exit terminal transition; nonterminal faints still
 fail, and map/readiness checks retain blackout protection. The rehearsal remained uncounted.
 
+That correction carried the same uncounted schedule through the former Route 9 failure and onward
+to Koga at checkpoint 205/312. There, the workhorse fainted while Koga still had 57 HP and the
+rest of the balanced party remained available. Koga's controller already knew how to make a
+proactive low-HP pivot, but it still treated an actual KO as a single-carry terminal failure. It now
+uses the verified forced-party menu to select the healthiest living teammate, continues from that
+member's own live moves and PP, and permits at most party-size-minus-one such handoffs. The battle
+receipt distinguishes this ordinary living-party continuation from a terminal mutual KO, and the
+existing post-Koga Center visit must still restore the complete party before the chapter can pass.
+No healing allowance, reset, or counted attempt was added; the exact source must requalify.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

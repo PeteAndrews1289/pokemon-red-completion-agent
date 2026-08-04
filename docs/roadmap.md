@@ -316,6 +316,13 @@ Fame, with lifecycle and progress loss reduced to zero and 4,789 move labels acc
 remaining 209 rejections were early switch-training choices: Blastoise was active, but the snapshot
 still described the weak field lead. The adapter now projects the controlled battler during battle
 and the field lead outside battle. A newly frozen exact-source rehearsal remains the gate.
+The newest rehearsal cleared the former Route 9 continuation failure and reached Koga at checkpoint
+205/312. When the workhorse fainted with a living opponent and a healthy party behind it, the boss
+adapter still stopped as though the run used a single carry. Koga now selects the healthiest living
+teammate through the observed forced-party menu, ranks that member's legal live-PP moves, caps KO
+handoffs by party depth, and records the continuation separately from mutual-KO recovery. The
+post-battle Center proof still requires the complete party restored. The run was uncounted; the
+republished source must pass the full rehearsal before slot 01.
 That exact rehearsal subsequently validated every earlier repair through checkpoint **296/312**,
 including the six-member balance gate, Blaine, Giovanni, the final rival, and Victory Road. It then
 exposed a stale Indigo inventory assertion: the now-larger bounded capture curriculum may legally
