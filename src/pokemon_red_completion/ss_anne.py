@@ -571,7 +571,7 @@ def _run_pre_ship_training(
     ) * abs(gate.player_x - 4)
     _move(executor, reader, gate_route, timing, "Diglett Cave training entrance")
     _wait(executor, timing.transition_wait_frames)
-    entry = reader.read()
+    entry = _settle_pre_ship_cave_entry(executor, reader, timing)
     if entry.map_id != MapId.DIGLETTS_CAVE or entry.player_x is None or entry.player_y is None:
         raise SSAnneChapterError("Pre-ship training did not enter Diglett's Cave.")
     entry_position = (entry.player_x, entry.player_y)
@@ -733,6 +733,38 @@ def _pre_ship_training_move_slot(raw: RawGameState) -> int:
         if slot <= len(moves) and slot <= len(pp) and moves[slot - 1] and (pp[slot - 1] & 0x3F):
             return slot
     raise SSAnneChapterError("Pre-ship training has no legal preferred move.")
+
+
+def _settle_pre_ship_cave_entry(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SSAnneTiming,
+) -> RawGameState:
+    """Wait through the cave gate's linked-warp animation before moving."""
+
+    transient_positions = {(4, 4), (37, 31)}
+    stable_reads = 0
+    for _ in range(24):
+        raw = reader.read()
+        if (
+            raw.map_id == MapId.DIGLETTS_CAVE
+            and raw.player_x is not None
+            and raw.player_y is not None
+            and (raw.player_x, raw.player_y) not in transient_positions
+            and reader.read_input_readiness().ready
+        ):
+            stable_reads += 1
+            if stable_reads >= 2:
+                return raw
+        else:
+            stable_reads = 0
+        executor.execute(MacroAction(MacroActionKind.WAIT))
+        _wait(executor, timing.transition_wait_frames)
+    raw = reader.read()
+    raise SSAnneChapterError(
+        "Pre-ship training cave entry did not settle: "
+        f"map={raw.map_id!r}, position={(raw.player_x, raw.player_y)!r}."
+    )
 
 
 def _require_position(raw: RawGameState, map_id: MapId, position: tuple[int, int], label: str) -> None:

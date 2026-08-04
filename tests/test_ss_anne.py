@@ -33,6 +33,46 @@ def test_pre_ship_training_is_bounded_and_prefers_water_moves() -> None:
     ) == 4
 
 
+def test_pre_ship_training_waits_through_linked_cave_warps(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    states = [
+        RawGameState(True, MapId.DIGLETTS_CAVE, 4, 4, 1, 0),
+        RawGameState(True, MapId.DIGLETTS_CAVE, 37, 31, 1, 0),
+        RawGameState(True, MapId.DIGLETTS_CAVE, 37, 30, 1, 0),
+        RawGameState(True, MapId.DIGLETTS_CAVE, 37, 30, 1, 0),
+    ]
+
+    class Reader:
+        index = 0
+
+        def read(self) -> RawGameState:
+            state = states[min(self.index, len(states) - 1)]
+            self.index += 1
+            return state
+
+        def read_input_readiness(self) -> object:
+            return type("Ready", (), {"ready": True})()
+
+    class Executor:
+        actions = []
+
+        def execute(self, action: object) -> None:
+            self.actions.append(action)
+
+    executor = Executor()
+    monkeypatch.setattr(ss_anne, "_wait", lambda *_args: None)
+
+    settled = ss_anne._settle_pre_ship_cave_entry(
+        executor,  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        ss_anne.DEFAULT_SS_ANNE_TIMING,
+    )
+
+    assert (settled.player_x, settled.player_y) == (37, 30)
+    assert len(executor.actions) == 3
+
+
 def test_ss_anne_rival_consumes_high_value_reserve_with_one_intent(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

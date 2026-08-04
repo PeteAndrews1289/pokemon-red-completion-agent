@@ -124,6 +124,12 @@ entrance, returns through the exact gate, heals in Vermilion, and emits a traini
 boarding. This keeps the long-term level-75 workhorse target while teaching staged development
 where it first creates reliable value. The rehearsal remains uncounted.
 
+The first staged-development rehearsal reached the cave gate at checkpoint 75, but began holding a
+movement direction while the linked Route 11 warp was still relocating the player from `(4, 4)`
+through `(37, 31)` to the stable cave tile. That input crossed straight back out, and the excluded-
+warp guard stopped the run. Training now requires two consecutive input-ready reads on a non-warp
+cave coordinate before its first encounter-seeking step. The failure was uncounted.
+
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
 Center immediately before the accuracy-lowering trainer, may spend one of the already-budgeted
