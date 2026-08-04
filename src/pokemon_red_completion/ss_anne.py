@@ -13,6 +13,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    run_adaptive_wild_battle,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.cascade import (
@@ -46,6 +47,13 @@ from pokemon_red_completion.observation import (
     SSAnneProgressTracker,
     SSAnneState,
 )
+from pokemon_red_completion.training import (
+    TrainingDirective,
+    TrainingObservation,
+    TrainingPolicy,
+    TrainingReport,
+    choose_training_directive,
+)
 
 SS_ANNE_CHECKPOINT_COUNT = 9
 RATICATE_SPECIES_ID = 0xA6
@@ -64,6 +72,21 @@ SS_ANNE_SUPER_POTION_RESERVE = 3
 SS_ANNE_SUPER_POTION_RECOVERY_HP = 60
 SUPER_POTION_HEAL_AMOUNT = 50
 SUPER_POTION_PRICE = 700
+PRE_SHIP_TRAINING_POLICY = TrainingPolicy(
+    target_level=30,
+    preferred_move_slots=(3, 4, 1),
+    retreat_hp_ratio=0.12,
+    reserve_total_pp=0,
+    max_enemy_level_delta=12,
+    max_battles=120,
+    max_steps=2_000,
+    max_healing_trips=0,
+)
+PRE_SHIP_TRAINING_INTENT = BattleIntent(
+    "develop_workhorse",
+    battle_plan_id="red.diglett-cave.pre-ship-leveling",
+    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+)
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -191,6 +214,7 @@ class SSAnneChapterReport:
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    training: TrainingReport
 
     @property
     def passed(self) -> bool:
@@ -198,6 +222,7 @@ class SSAnneChapterReport:
             len(self.records) == SS_ANNE_CHECKPOINT_COUNT
             and self.final_evidence.hm01_snapshot
             and self.saw_rival_battle
+            and self.training.passed
             and self.controller_released
         )
 
@@ -212,6 +237,16 @@ class SSAnneChapterReport:
             "status": "ok" if self.passed else "failed",
             "objective": "obtain_cut",
             "rival_battle_observed": self.saw_rival_battle,
+            "training": {
+                "area_id": self.training.area_id,
+                "starting_level": self.training.starting_level,
+                "target_level": self.training.target_level,
+                "final_level": self.training.final_level,
+                "battles_won": self.training.battles_won,
+                "battles_fled": self.training.battles_fled,
+                "steps_taken": self.training.steps_taken,
+                "healing_trips": self.training.healing_trips,
+            },
             "captain": {
                 "rubbed_back": self.final_evidence.rubbed_captains_back,
                 "got_hm01_event": self.final_evidence.got_hm01,
@@ -289,6 +324,12 @@ def run_ss_anne_chapter(
             f"{prepared.first_party_moves!r}."
         )
     _purchase_ss_anne_super_potions(
+        chapter_executor,
+        reader,
+        emulator,
+        timing,
+    )
+    training = _run_pre_ship_training(
         chapter_executor,
         reader,
         emulator,
@@ -379,6 +420,7 @@ def run_ss_anne_chapter(
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=chapter_executor.actions_executed,
         controller_released=not emulator.pressed_buttons,
+        training=training,
     )
     if not report.passed:
         raise SSAnneChapterError("The S.S. Anne chapter failed its evidence contract.")
@@ -502,6 +544,151 @@ def _purchase_ss_anne_super_potions(
         "Vermilion Mart exit",
     )
     _wait(executor, timing.transition_wait_frames)
+
+
+def _run_pre_ship_training(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SSAnneTiming,
+) -> TrainingReport:
+    """Develop the workhorse safely in Diglett's Cave before boarding."""
+
+    initial = reader.read()
+    if initial.map_id != MapId.VERMILION_CITY:
+        raise SSAnneChapterError("Pre-ship training did not begin outside the Vermilion Mart.")
+    starting_level = initial.first_party_level or 0
+    _move(executor, reader, ("right",) * 17, timing, "Route 11 training entry")
+    _wait(executor, timing.transition_wait_frames)
+    _require_position(reader.read(), MapId.ROUTE_11, (0, 6), "Route 11 training entry")
+    _move(executor, reader, ("right",) * 4 + ("up",), timing, "Diglett Cave gate")
+    _wait(executor, timing.transition_wait_frames)
+    gate = reader.read()
+    if gate.map_id != MapId.DIGLETTS_CAVE_ROUTE_11 or gate.player_x is None or gate.player_y is None:
+        raise SSAnneChapterError("Pre-ship training missed the Route 11 cave gate.")
+    gate_route = ("up",) * max(gate.player_y - 4, 0) + (
+        ("right",) if gate.player_x < 4 else ("left",)
+    ) * abs(gate.player_x - 4)
+    _move(executor, reader, gate_route, timing, "Diglett Cave training entrance")
+    _wait(executor, timing.transition_wait_frames)
+    entry = reader.read()
+    if entry.map_id != MapId.DIGLETTS_CAVE or entry.player_x is None or entry.player_y is None:
+        raise SSAnneChapterError("Pre-ship training did not enter Diglett's Cave.")
+    entry_position = (entry.player_x, entry.player_y)
+
+    battles_won = 0
+    steps = 0
+
+    def observation(raw: RawGameState) -> TrainingObservation:
+        return TrainingObservation(
+            level=raw.first_party_level or 0,
+            hp=raw.first_party_hp or 0,
+            max_hp=raw.first_party_max_hp or 0,
+            pp=raw.first_party_pp or (),
+            in_battle=raw.battle_state == 1,
+            status=raw.first_party_status or 0,
+            enemy_level=raw.enemy_level,
+            battles_completed=battles_won,
+            steps_taken=steps,
+            healing_trips=0,
+        )
+
+    while True:
+        raw = reader.read()
+        directive = choose_training_directive(observation(raw), PRE_SHIP_TRAINING_POLICY)
+        if directive is TrainingDirective.STOP:
+            if (raw.first_party_level or 0) < PRE_SHIP_TRAINING_POLICY.target_level:
+                raise SSAnneChapterError(
+                    "Pre-ship training exhausted a safety bound before level 30: "
+                    f"level={raw.first_party_level}, battles={battles_won}, steps={steps}."
+                )
+            break
+        if raw.battle_state == 1:
+            if directive is not TrainingDirective.FIGHT:
+                raise SSAnneChapterError(
+                    f"Pre-ship training produced unsafe battle directive {directive}."
+                )
+            try:
+                run_adaptive_wild_battle(
+                    reader,
+                    executor,
+                    _pre_ship_training_move_slot,
+                    expected_map=MapId.DIGLETTS_CAVE,
+                    intent=PRE_SHIP_TRAINING_INTENT,
+                    label="pre-ship Diglett Cave training",
+                    unknown_cancel_interval=10_000,
+                )
+            except BattleRuntimeError as error:
+                raise SSAnneChapterError(str(error)) from error
+            battles_won += 1
+            continue
+        if directive is TrainingDirective.RETURN_TO_HEAL:
+            raise SSAnneChapterError(
+                "Pre-ship training reached its conservative HP, status, or PP reserve before "
+                "the level target."
+            )
+        if directive is not TrainingDirective.SEEK_ENCOUNTER:
+            raise SSAnneChapterError(f"Invalid pre-ship training directive {directive}.")
+        if raw.map_id != MapId.DIGLETTS_CAVE or raw.player_x is None or raw.player_y is None:
+            raise SSAnneChapterError("Pre-ship training left Diglett's Cave.")
+        current = (raw.player_x, raw.player_y)
+        if current == entry_position:
+            direction = "up"
+        elif current == (entry_position[0], entry_position[1] - 1):
+            direction = "down"
+        else:
+            raise SSAnneChapterError(
+                f"Pre-ship training left its two-tile corridor: {current!r}."
+            )
+        executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+        _wait(executor, 60)
+        moved = reader.read()
+        if moved.map_id != MapId.DIGLETTS_CAVE:
+            raise SSAnneChapterError("Pre-ship training crossed an excluded cave warp.")
+        steps += 1
+
+    raw = reader.read()
+    if raw.battle_state:
+        raise SSAnneChapterError("Pre-ship training stopped inside a battle.")
+    if (raw.player_x, raw.player_y) != entry_position:
+        _move(executor, reader, ("down",), timing, "Diglett Cave training return tile")
+    _move(executor, reader, ("down",), timing, "Diglett Cave training exit")
+    _wait(executor, timing.transition_wait_frames)
+    gate = reader.read()
+    if gate.map_id != MapId.DIGLETTS_CAVE_ROUTE_11 or gate.player_x is None or gate.player_y is None:
+        raise SSAnneChapterError("Pre-ship training missed the cave return gate.")
+    if gate.player_x > 3:
+        _move(executor, reader, ("left",) * (gate.player_x - 3), timing, "Route 11 gate column")
+    for _ in range(16):
+        if reader.read().map_id == MapId.ROUTE_11:
+            break
+        executor.execute(MacroAction(MacroActionKind.MOVE, "down"))
+        _wait(executor, timing.movement_retry_wait_frames)
+    else:
+        raise SSAnneChapterError("Pre-ship training could not leave the Route 11 cave gate.")
+    _wait(executor, timing.transition_wait_frames)
+    for _ in range(64):
+        returned = reader.read()
+        if returned.map_id == MapId.VERMILION_CITY:
+            break
+        if returned.map_id != MapId.ROUTE_11:
+            raise SSAnneChapterError("Pre-ship training return left Route 11.")
+        executor.execute(MacroAction(MacroActionKind.MOVE, "left"))
+        _wait(executor, timing.movement_retry_wait_frames)
+    else:
+        raise SSAnneChapterError("Pre-ship training could not return to Vermilion.")
+    if returned.player_x is None or returned.player_y != 14 or returned.player_x < 26:
+        raise SSAnneChapterError(
+            "Pre-ship training missed the Vermilion east boundary: "
+            f"{(returned.player_x, returned.player_y)!r}."
+        )
+    _move(
+        executor,
+        reader,
+        ("left",) * (returned.player_x - 26) + ("down",) * 4,
+        timing,
+        "Vermilion Mart exterior return",
+    )
     _move(
         executor,
         reader,
@@ -509,6 +696,50 @@ def _purchase_ss_anne_super_potions(
         timing,
         "Vermilion Center exterior return",
     )
+    _move(executor, reader, ("up",), timing, "Vermilion training Center")
+    _wait(executor, timing.transition_wait_frames)
+    _require_position(reader.read(), MapId.VERMILION_POKECENTER, (3, 7), "training Center")
+    _move(executor, reader, ("up",) * 4, timing, "training nurse")
+    _confirm_pulses(executor, timing.heal_dialogue_pulses, timing.dialogue_wait_frames)
+    healed = reader.read()
+    if (
+        healed.first_party_level is None
+        or healed.first_party_level < PRE_SHIP_TRAINING_POLICY.target_level
+        or healed.first_party_hp != healed.first_party_max_hp
+        or healed.first_party_status != 0
+    ):
+        raise SSAnneChapterError("Pre-ship training did not finish healed at level 30.")
+    _move(executor, reader, CENTER_EXIT_DIRECTIONS, timing, "training Center exit")
+    _wait(executor, timing.transition_wait_frames)
+    return TrainingReport(
+        area_id="digletts_cave",
+        starting_level=starting_level,
+        target_level=PRE_SHIP_TRAINING_POLICY.target_level,
+        final_level=healed.first_party_level,
+        battles_won=battles_won,
+        battles_fled=0,
+        steps_taken=steps,
+        healing_trips=1,
+        fainted=False,
+    )
+
+
+def _pre_ship_training_move_slot(raw: RawGameState) -> int:
+    if raw.battle_state != 1 or raw.map_id != MapId.DIGLETTS_CAVE:
+        raise SSAnneChapterError("Pre-ship training move policy lacks a wild cave battle.")
+    moves = raw.first_party_moves or ()
+    pp = raw.first_party_pp or ()
+    for slot in PRE_SHIP_TRAINING_POLICY.preferred_move_slots:
+        if slot <= len(moves) and slot <= len(pp) and moves[slot - 1] and (pp[slot - 1] & 0x3F):
+            return slot
+    raise SSAnneChapterError("Pre-ship training has no legal preferred move.")
+
+
+def _require_position(raw: RawGameState, map_id: MapId, position: tuple[int, int], label: str) -> None:
+    if raw.map_id != map_id or (raw.player_x, raw.player_y) != position:
+        raise SSAnneChapterError(
+            f"{label} mismatch: map={raw.map_id!r}, position={(raw.player_x, raw.player_y)!r}."
+        )
 
 
 class _PauseForSSAnneRivalPotion(Exception):

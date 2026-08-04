@@ -63,7 +63,8 @@ the earlier Brock and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
 Badge and TM11 proof, plus the Rocket thief, TM28, Underground Path, exact Route 6 trainer events,
-three explicitly verified wild-flee recoveries, the live S.S. Anne rival, and concurrent raw
+three explicitly verified wild-flee recoveries, bounded pre-ship Diglett's Cave development to
+level 30, the live S.S. Anne rival, and concurrent raw
 Captain-rub event, HM01 event, inventory, and derived Cut-fact gates. The Surge segment adds
 bounded Spearow capture and the DUX trade, a source-valid Diglett Ground specialist with natural
 or exactly consumed TM28 Dig, the live variable `D743`/`D744` electric-lock puzzle, and concurrent

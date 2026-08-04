@@ -310,6 +310,17 @@ def test_report_requires_all_records_rival_latch_and_released_controller() -> No
         frames_executed=29_005,
         actions_executed=410,
         controller_released=True,
+        training=ss_anne.TrainingReport(
+            area_id="digletts_cave",
+            starting_level=25,
+            target_level=30,
+            final_level=30,
+            battles_won=40,
+            battles_fled=0,
+            steps_taken=80,
+            healing_trips=1,
+            fainted=False,
+        ),
     )
 
     assert report.passed

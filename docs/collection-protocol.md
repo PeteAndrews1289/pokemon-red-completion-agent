@@ -114,6 +114,16 @@ Mart because the new path concatenated the Center exit and overworld walk withou
 transition wait. The route now keeps those as two separately observed movement segments with the
 same bounded transition settle used elsewhere. No purchase or counted attempt occurred.
 
+After that movement repair, the reserve was purchased and consumed as planned, but the exposed
+schedule still produced enough accuracy-reduced misses for Wartortle to faint against Ivysaur at
+16/57 HP. Healing improved endurance without correcting the strategic level and damage deficit.
+Pre-ship preparation now includes a portable training-policy lesson in Diglett's Cave: seek wild
+encounters, prefer super-effective Water moves, stop at level 30, and fail closed on HP, status, PP,
+battle, step, or enemy-level bounds. It trains only on a two-tile corridor beside the Route 11
+entrance, returns through the exact gate, heals in Vermilion, and emits a training receipt before
+boarding. This keeps the long-term level-75 workhorse target while teaching staged development
+where it first creates reliable value. The rehearsal remains uncounted.
+
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
 Center immediately before the accuracy-lowering trainer, may spend one of the already-budgeted

@@ -1,10 +1,36 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 import pytest
 
 import pokemon_red_completion.ss_anne as ss_anne
 from pokemon_red_completion.battle_runtime import BattleResourcePolicy, BattleRuntimeError
 from pokemon_red_completion.observation import ItemId, MapId, RawGameState
+
+
+def test_pre_ship_training_is_bounded_and_prefers_water_moves() -> None:
+    policy = ss_anne.PRE_SHIP_TRAINING_POLICY
+    assert policy.target_level == 30
+    assert policy.preferred_move_slots == (3, 4, 1)
+    assert policy.max_battles == 120
+    raw = RawGameState(
+        True,
+        MapId.DIGLETTS_CAVE,
+        37,
+        30,
+        1,
+        1,
+        first_party_moves=(0x2C, 0x27, 0x3D, 0x37),
+        first_party_pp=(20, 30, 15, 20),
+        enemy_species_id=0x3B,
+        enemy_level=20,
+        enemy_hp=40,
+    )
+    assert ss_anne._pre_ship_training_move_slot(raw) == 3
+    assert ss_anne._pre_ship_training_move_slot(
+        replace(raw, first_party_pp=(20, 30, 0, 20))
+    ) == 4
 
 
 def test_ss_anne_rival_consumes_high_value_reserve_with_one_intent(

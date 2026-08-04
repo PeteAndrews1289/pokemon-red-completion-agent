@@ -329,7 +329,8 @@ transformation and S.S. Ticket sequence, the mandatory Cerulean Gym trainer, Mis
 identity, the Cerulean Rocket thief and TM28, and both required lower Route 6 trainers. A bounded
 heal-and-replay recovery explicitly records and flees three exact Route 6 Pidgey encounters while
 proving unchanged PP and trainer events. The S.S. Anne chapter verifies the required RIVAL2
-identity, a live win, the Captain's rub event, the separate HM01 event, HM01 inventory presence,
+identity, stages the workhorse to level 30 through a bounded Diglett's Cave training receipt,
+records a live win, the Captain's rub event, the separate HM01 event, HM01 inventory presence,
 and the derived Cut fact. The Surge chapter buys bounded capture and recovery supplies, captures
 Spearow and a source-valid Diglett, trades for DUX, teaches Cut and Dig when needed, adapts to the
 live Gym switch pair, and verifies a Dig-only Surge win plus TM24 and mirrored badge evidence.

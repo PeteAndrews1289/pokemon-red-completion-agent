@@ -195,7 +195,8 @@ and stable Vermilion coordinates. A bounded heal-and-replay recovery records thr
 Pidgey encounters, navigates to RUN from semantic menu state, and proves battle exit, restored
 control, a living status-free lead, unchanged full PP, and unchanged trainer events after each.
 The S.S. Anne chapter additionally requires the live RIVAL2 opponent/class/party identity, script
-transition from battle state 2 to defeated state 4, and a two-stage Captain protocol. The rub-only
+transition from battle state 2 to defeated state 4, a bounded level-30 Diglett's Cave training
+receipt with zero faints, and a two-stage Captain protocol. The rub-only
 state is explicitly rejected: qualification requires the rub event, HM01 event, HM01 bag item,
 and derived Cut fact concurrently.
 
