@@ -24,6 +24,7 @@ from pokemon_red_completion.party import (
 )
 from pokemon_red_completion.red_acquisition import RedAreaExecutionError
 from pokemon_red_completion.surge import (
+    BALL_THROW_SETTLE_ACTION,
     CATERPIE_SPECIES_ID,
     COLLECTION_POKE_BALL_TARGET,
     DEFAULT_SURGE_TIMING,
@@ -69,6 +70,10 @@ from pokemon_red_completion.surge import (
     _wild_weakening_settle_action,
     _wild_weakening_turn_result,
 )
+
+
+def test_ball_throw_dialogue_uses_non_selecting_settle_action() -> None:
+    assert BALL_THROW_SETTLE_ACTION is MacroActionKind.CANCEL
 
 
 def test_ball_decrement_waits_for_persistent_stack_sync(

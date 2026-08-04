@@ -354,6 +354,11 @@ Nugget Rocket when a moving Cerulean Mart customer held the repeat clerk approac
 That one-shot failure is sealed and v11 is retired. V12 uses the exposed seed only for rehearsal,
 waits for verified westward progress inside the safe Mart corridor, and assigns fresh train seeds
 `22001`–`22005`, validation seeds `32001`–`32002`, and test seeds `42001`–`42005`.
+The first v12 rehearsal passed that collision boundary and reached checkpoint 86, but the capture
+settling loop crossed the battle MAIN menu between observations and selected a second Poké Ball.
+Post-throw dialogue now uses CANCEL, which advances text while remaining inert on MAIN. The failed
+artifact is uncounted, every v12 collection slot remains pending, and the exact repaired source
+requires a new complete qualification.
 That exact rehearsal subsequently validated every earlier repair through checkpoint **296/312**,
 including the six-member balance gate, Blaine, Giovanni, the final rival, and Victory Road. It then
 exposed a stale Indigo inventory assertion: the now-larger bounded capture curriculum may legally

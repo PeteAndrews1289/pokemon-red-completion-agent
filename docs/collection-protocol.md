@@ -1168,3 +1168,15 @@ root at seed `20001` stopped at Misty: the single-member party's Wartortle faint
 exposed seed only for the uncounted rehearsal and assigns fresh counted seeds `21001`–`21005`,
 `31001`–`31002`, and `41001`–`41005`. Misty may spend only the live Potion surplus above the
 four-Potion Rocket reserve, at a stable low-HP MAIN gate, with exact heal and quantity proof.
+
+V11 passed the complete uncounted qualification, but its first immutable training root at seed
+`21001` stopped when a moving Cerulean Mart customer blocked the repeat-clerk approach. That
+one-shot outcome is sealed and v11 is retired. V12 promotes `21001` only to its uncounted rehearsal
+and assigns disjoint counted seeds `22001`–`22005`, `32001`–`32002`, and `42001`–`42005`.
+
+The first v12 rehearsal cleared that Mart boundary and reached checkpoint 86, where the Spearow
+capture loop changed the Ball stack from 30 to 28 inside one requested throw. Repeated A input had
+crossed an unobserved MAIN-menu boundary and issued a second item command. Post-throw dialogue now
+uses B, which advances text without selecting a battle command. This artifact is uncounted, every
+v12 slot remains pending, and the repaired exact source must complete the full qualification before
+collection opens.

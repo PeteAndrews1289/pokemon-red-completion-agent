@@ -569,6 +569,11 @@ Misty: Wartortle was still the only party member and fainted before a finishing 
 found a moving Cerulean Mart customer blocking the repeat clerk stance, so v11 is also retired.
 V12 rehearses that exposed `21001` seed, reserves fresh counted seeds at `22001+`, and may spend only Misty's Potion surplus above the exact
 four-Potion Rocket reserve from a verified low-HP battle state.
+Its first uncounted replay cleared the repaired Mart and reached the level-17 Spearow lesson at
+checkpoint 86, where capture settling consumed two Poké Balls inside one requested throw. The
+dialogue loop now advances with the non-selecting B button so crossing an unobserved battle-menu
+boundary cannot issue a second item command. V12 remains unopened and must requalify from clean
+power before any counted seed is used.
 
 ## Evidence and project status
 

@@ -73,6 +73,7 @@ KAKUNA_SPECIES_ID = 0x71
 PIKACHU_SPECIES_ID = 0x54
 COLLECTION_POKE_BALL_TARGET = 30
 WILD_CAPTURE_THROWS_PER_ENCOUNTER = 5
+BALL_THROW_SETTLE_ACTION = MacroActionKind.CANCEL
 VIRIDIAN_FOREST_MAX_SURVEY_LEGS = 256
 TACKLE_MOVE_ID = 0x21
 GUST_MOVE_ID = 0x10
@@ -944,7 +945,11 @@ def _throw_ball(
                 "Failed throw",
             )
             return False
-        _pulse(executor, MacroActionKind.CONFIRM)
+        # B advances battle dialogue without selecting another command if the
+        # game crosses the MAIN-menu boundary between observations.  Repeated
+        # A presses can otherwise enter ITEM and throw a second ball before the
+        # first throw's persistent bag update is observed.
+        _pulse(executor, BALL_THROW_SETTLE_ACTION)
     raise SurgeChapterError("Poké Ball throw did not reach a capture or retry boundary.")
 
 
