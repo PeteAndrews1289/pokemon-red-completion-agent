@@ -172,7 +172,17 @@ def test_obsolete_potion_sale_rejects_an_unfunded_plan() -> None:
 
 
 def test_supply_income_detour_is_source_stable_and_reversible() -> None:
-    assert lavender_module.VERMILION_TREE_TO_ROUTE_11 == ("right",) * 25
+    assert (
+        *(("right",) * 10),
+        *(("down",) * 10),
+        "right",
+        "right",
+    ) == lavender_module.CENTER_EXTERIOR_TO_MART_APPROACH
+    assert (
+        "right",
+        *(("down",) * 4),
+        *(("right",) * 17),
+    ) == lavender_module.MART_EXTERIOR_TO_ROUTE_11
     assert (
         *(("right",) * 9),
         *(("down",) * 9),
@@ -183,7 +193,12 @@ def test_supply_income_detour_is_source_stable_and_reversible() -> None:
         *(("up",) * 9),
         *(("left",) * 9),
     ) == lavender_module.SUPPLY_GAMBLER_TO_ROUTE_11_ENTRY
-    assert lavender_module.ROUTE_11_TO_VERMILION_TREE == ("left",) * 25
+    assert (
+        "left",
+        "left",
+        *(("up",) * 10),
+        *(("left",) * 10),
+    ) == lavender_module.MART_TO_CENTER_EXTERIOR
     assert lavender_module.ROUTE_11_GAMBLER_PAYOUT == 1_260
     assert lavender_module.TM24_SALE_PROCEEDS == 1_000
 

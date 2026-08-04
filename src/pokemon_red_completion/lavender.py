@@ -91,10 +91,11 @@ ROUTE_6_TO_SOUTH_GATE = _directions("U" * 7 + "R" * 5 + "U" * 14 + "R" * 3 + "U"
 SOUTH_GATE_TO_TUNNEL = _directions("UURU")
 TUNNEL_TO_NORTH_GATE = _directions("U" * 37 + "R" * 3)
 NORTH_GATE_EXIT = _directions("DDDD")
-VERMILION_TREE_TO_ROUTE_11 = _directions("R" * 25)
+CENTER_EXTERIOR_TO_MART_APPROACH = VERMILION_CENTER_TO_MART[:-1]
+MART_EXTERIOR_TO_ROUTE_11 = _directions("RDDDD" + "R" * 17)
 ROUTE_11_TO_SUPPLY_GAMBLER = _directions("R" * 9 + "D" * 9 + "R")
 SUPPLY_GAMBLER_TO_ROUTE_11_ENTRY = _directions("L" + "U" * 9 + "L" * 9)
-ROUTE_11_TO_VERMILION_TREE = _directions("L" * 25)
+MART_TO_CENTER_EXTERIOR = _directions("LL" + "U" * 10 + "L" * 10)
 ROUTE_5_TO_CERULEAN_TREE = _directions("LL" + "U" * 35 + "L" * 6)
 CERULEAN_TREE_TO_ROUTE_9 = _directions("D" + "R" * 17 + "U" * 12 + "R" * 4)
 ROUTE_9_TREE_STANCE = _directions("U" + "R" * 4)
@@ -410,13 +411,13 @@ def run_lavender_chapter(
     _require(cut, MapId.VERMILION_CITY, (15, 18), "second Cut passage")
     _checkpoint(records, progress, emulator, cut, "second_cut", "Cleared the second Gym tree")
 
-    _earn_tunnel_supply_income(actions, reader, emulator, run, timing)
-
     _move(actions, reader, emulator, run, TREE_TO_CENTER, timing, "Vermilion Center")
     _wait(actions, timing.transition_frames)
     _heal_center(actions, reader, emulator, timing, MapId.VERMILION_POKECENTER)
     healed = reader.read()
     _checkpoint(records, progress, emulator, healed, "healed", "Healed before Rock Tunnel")
+
+    _earn_tunnel_supply_income(actions, reader, emulator, run, timing)
 
     if ItemId.TM11_BUBBLEBEAM in _bag(emulator):
         _teach_tm11(actions, reader, emulator, timing)
@@ -2016,12 +2017,33 @@ def _earn_tunnel_supply_income(
     """Defeat one source-pinned Gambler instead of depending on capture resale luck."""
 
     before_money = _money(emulator)
+    _require(reader.read(), MapId.VERMILION_POKECENTER, (3, 3), "supply-income nurse")
     _move(
         executor,
         reader,
         emulator,
         run,
-        VERMILION_TREE_TO_ROUTE_11,
+        CENTER_EXIT,
+        timing,
+        "supply-income Center exit",
+    )
+    _wait(executor, timing.transition_frames)
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        CENTER_EXTERIOR_TO_MART_APPROACH,
+        timing,
+        "supply-income Mart approach",
+    )
+    _require(reader.read(), MapId.VERMILION_CITY, (23, 14), "supply-income Mart approach")
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        MART_EXTERIOR_TO_ROUTE_11,
         timing,
         "Route 11 supply-income entry",
     )
@@ -2063,11 +2085,48 @@ def _earn_tunnel_supply_income(
         reader,
         emulator,
         run,
-        ROUTE_11_TO_VERMILION_TREE,
+        ("left",),
         timing,
-        "Vermilion supply-income return",
+        "Route 11 west transition",
     )
-    _require(reader.read(), MapId.VERMILION_CITY, (15, 18), "Vermilion supply-income return")
+    returned = reader.read()
+    if (
+        returned.map_id != MapId.VERMILION_CITY
+        or returned.player_x is None
+        or returned.player_x < 23
+        or returned.player_y != 14
+    ):
+        raise LavenderChapterError(
+            "Route 11 supply-income return missed Vermilion's east boundary."
+        )
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        ("left",) * (returned.player_x - 23),
+        timing,
+        "supply-income Mart exterior return",
+    )
+    _require(reader.read(), MapId.VERMILION_CITY, (23, 14), "supply-income Mart exterior return")
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        MART_TO_CENTER_EXTERIOR,
+        timing,
+        "supply-income Center exterior return",
+    )
+    _move(executor, reader, emulator, run, ("up",), timing, "supply-income Center entry")
+    _wait(executor, timing.transition_frames)
+    _require(reader.read(), MapId.VERMILION_POKECENTER, (3, 7), "supply-income Center entry")
+    _move(executor, reader, emulator, run, ("up",) * 4, timing, "supply-income nurse return")
+    _heal_center(executor, reader, emulator, timing, MapId.VERMILION_POKECENTER)
+    restored = reader.read()
+    if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
+        raise LavenderChapterError("Supply-income recovery did not restore the complete party.")
+    _require(restored, MapId.VERMILION_POKECENTER, (3, 3), "supply-income recovery")
 
 
 def _purchase_supplies(
