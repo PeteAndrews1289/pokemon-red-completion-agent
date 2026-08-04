@@ -452,10 +452,10 @@ def test_cerulean_rival_living_reserve_selects_a_legal_attack() -> None:
         )
 
 
-def test_cerulean_rival_recovery_reuses_one_bounded_intent(
+def test_cerulean_rival_recovery_reuses_one_bounded_intent_across_consecutive_heals(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    emulator = _MemoryEmulator(potion_quantity=7)
+    emulator = _MemoryEmulator(potion_quantity=8)
     final = replace(_raw(), first_party_hp=19, first_party_max_hp=51)
     intents = []
     calls = 0
@@ -465,7 +465,7 @@ def test_cerulean_rival_recovery_reuses_one_bounded_intent(
         del args
         calls += 1
         intents.append(kwargs["intent"])
-        if calls == 1:
+        if calls <= 2:
             try:
                 raise cascade_module._PauseForCeruleanRivalPotion
             except cascade_module._PauseForCeruleanRivalPotion as pause:
@@ -488,8 +488,8 @@ def test_cerulean_rival_recovery_reuses_one_bounded_intent(
     )
 
     assert observed is final
-    assert calls == 2
-    assert intents[0] is intents[1]
+    assert calls == 3
+    assert intents[0] is intents[1] is intents[2]
     assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
     assert (
         emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1)
