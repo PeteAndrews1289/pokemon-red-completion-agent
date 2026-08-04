@@ -71,6 +71,7 @@ BRUNO_RNG_DELAY_FRAMES = 185
 BRUNO_SAFE_HP = 90
 BRUNO_HITMONLEE_SAFE_HP = 120
 BRUNO_LANCE_SURF_RESERVE = 1
+BRUNO_AFTER_BATTLE_TEXT_PULSES = 2
 
 
 class EmulatorState(Protocol):
@@ -416,7 +417,8 @@ def _settle_bruno_victory(
             # DisplayTextID outlives the end-battle map script by one text
             # layer. Confirm it only after the script is back at default;
             # earlier confirmations are consumed by the active script.
-            _pulse(actions, MacroActionKind.CONFIRM)
+            for _ in range(BRUNO_AFTER_BATTLE_TEXT_PULSES):
+                _pulse(actions, MacroActionKind.CONFIRM)
             released = reader.read()
             if (
                 released.battle_state == 0

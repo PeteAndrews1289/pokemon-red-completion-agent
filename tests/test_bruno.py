@@ -5,6 +5,7 @@ import pytest
 from pokemon_red_completion import bruno as bruno_module
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.bruno import (
+    BRUNO_AFTER_BATTLE_TEXT_PULSES,
     BRUNO_APPROACH,
     BRUNO_CHECKPOINT_COUNT,
     BRUNO_HITMONLEE_SAFE_HP,
@@ -24,6 +25,7 @@ def test_bruno_source_contract_is_exact() -> None:
     assert BRUNO_CHECKPOINT_COUNT == 3
     assert BRUNO_RNG_DELAY_FRAMES == 185
     assert BRUNO_HITMONLEE_SAFE_HP == 120
+    assert BRUNO_AFTER_BATTLE_TEXT_PULSES == 2
     assert BRUNO_APPROACH == ("right", "up", "up")
     assert MapId.BRUNOS_ROOM == 0xF6
     assert MapId.AGATHAS_ROOM == 0xF7
@@ -123,7 +125,7 @@ def test_bruno_victory_settle_stops_before_reinteracting(monkeypatch: pytest.Mon
         reader,
         emulator,
     ) == raw
-    assert [action.kind for action in executor.actions].count(MacroActionKind.CONFIRM) == 2
+    assert [action.kind for action in executor.actions].count(MacroActionKind.CONFIRM) == 3
 
 
 def test_post_bruno_field_heal_occurs_after_agatha_room_entry() -> None:
