@@ -554,3 +554,9 @@ over-strict chapter boundary: Wartortle's carried paralysis was rejected immedia
 next chapter's mandatory full-party Center heal. V21 is retired without official or counted runs.
 V22 accepts safe persistent status at the reward boundary and leaves the existing Center gate
 responsible for proving every party member is fully healed and status-free.
+
+V22 proved that handoff, then reached a fully healed Lavender Center after all mandatory Rock
+Tunnel trainers. Four legitimate sleep recoveries consumed the complete four-Awakening reserve,
+which would leave Pokémon Tower without its required cure. V22 is retired without official or
+counted runs. V23 increases the same-stack reserve to five, updates the exact purchase ledger, and
+requires at least one Awakening to survive the exposed four-use schedule.

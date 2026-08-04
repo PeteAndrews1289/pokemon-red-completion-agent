@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v22.json`](../configs/red-battle-collection-v22.json)
+[`red-battle-collection-v23.json`](../configs/red-battle-collection-v23.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1337,3 +1337,14 @@ carrying any persistent status into that explicit Center recovery.
 
 V22 again uses exposed seed `60001` only for rehearsal and reserves fresh counted seeds
 `32001`–`32005`, `42001`–`42002`, and `52001`–`52005`; diagnostics `61001`–`61005` remain unopened.
+
+V22 passed all repaired Vermilion transitions, healed the complete party, cleared every mandatory
+Rock Tunnel trainer, and reached a stable Lavender Center at checkpoint 112. Its report correctly
+rejected the run because four observed sleep cures exhausted the four-item Awakening reserve,
+leaving none for the later Pokémon Tower curriculum; Lavender Mart cannot replace it. V22 is
+retired before rehearsal with every counted root unopened. Vermilion now purchases three
+Awakenings on top of the two-item opening reserve, producing five without another bag slot and
+retaining one after the exposed four-use schedule.
+
+V23 retains seed `60001` for rehearsal only and reserves fresh counted seeds `33001`–`33005`,
+`43001`–`43002`, and `53001`–`53005`; the five independent diagnostics remain the next gate.

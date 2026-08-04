@@ -81,12 +81,12 @@ def _report() -> LavenderChapterReport:
         antidotes_purchased=1,
         antidotes_remaining=1,
         awakenings_used=3,
-        awakenings_remaining=1,
+        awakenings_remaining=2,
         starting_super_potions=1,
         super_potions_purchased=15,
         super_potions_used=4,
         super_potions_remaining=12,
-        purchase_cost=13000,
+        purchase_cost=13200,
         tm28_sale_proceeds=1000,
         money_remaining=1234,
         route_10_trainer_2_bypassed=True,
@@ -208,8 +208,8 @@ def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD == 40
     assert FINAL_TUNNEL_RECOVERY_THRESHOLD == 90
     assert lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED == 3
-    assert lavender_module.TUNNEL_AWAKENINGS_PURCHASED == 2
-    assert lavender_module.TUNNEL_AWAKENING_RESERVE == 4
+    assert lavender_module.TUNNEL_AWAKENINGS_PURCHASED == 3
+    assert lavender_module.TUNNEL_AWAKENING_RESERVE == 5
     assert lavender_module.POST_MART_RNG_ALIGNMENT_FRAMES == 47
     assert (
         lavender_module.POST_MART_RNG_ALIGNMENT_FRAMES
@@ -663,13 +663,13 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
         "antidotes_purchased": 1,
         "antidotes_remaining": 1,
         "awakenings_used": 3,
-        "awakenings_remaining": 1,
-        "awakenings_purchased": 2,
+        "awakenings_remaining": 2,
+        "awakenings_purchased": 3,
         "starting_super_potions": 1,
         "super_potions_purchased": 15,
         "super_potions_used": 4,
         "super_potions_remaining": 12,
-        "purchase_cost": 13000,
+        "purchase_cost": 13200,
         "tm28_sale_proceeds": 1000,
         "money_remaining": 1234,
     }
