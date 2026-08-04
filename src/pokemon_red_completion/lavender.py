@@ -266,7 +266,7 @@ class LavenderChapterReport:
             and self.parlyz_heals_purchased >= 1
             and self.parlyz_heals_used + self.parlyz_heals_remaining == self.parlyz_heals_purchased
             and self.antidotes_purchased in {0, 1}
-            and self.antidotes_remaining == LAVENDER_ANTIDOTE_RESERVE
+            and self.antidotes_remaining >= LAVENDER_ANTIDOTE_RESERVE
             and 0 <= self.awakenings_used <= 2
             and self.awakenings_remaining >= 1
             and self.awakenings_used + self.awakenings_remaining
@@ -2390,11 +2390,7 @@ def _top_up_lavender_supplies(
     # what an earlier observed contingency actually consumed.
     parlyz_quantity = _parlyz_top_up_quantity(parlyz_before)
     antidote_before = _bag(emulator).get(ItemId.ANTIDOTE, 0)
-    if not 0 <= antidote_before <= LAVENDER_ANTIDOTE_RESERVE:
-        raise LavenderChapterError(
-            f"Unsupported Lavender Antidote reserve: {antidote_before}."
-        )
-    antidote_quantity = LAVENDER_ANTIDOTE_RESERVE - antidote_before
+    antidote_quantity = _antidote_top_up_quantity(antidote_before)
 
     money_before = _money(emulator)
     _move(executor, reader, emulator, run, CENTER_EXIT, timing, "Lavender Center exit")
@@ -2475,7 +2471,8 @@ def _top_up_lavender_supplies(
         _money(emulator) != money_before + tm28_sale_proceeds - expected_cost
         or _bag(emulator).get(ItemId.SUPER_POTION, 0) != LAVENDER_SUPER_POTION_RESERVE
         or _bag(emulator).get(ItemId.PARLYZ_HEAL, 0) != parlyz_before + parlyz_quantity
-        or _bag(emulator).get(ItemId.ANTIDOTE, 0) != LAVENDER_ANTIDOTE_RESERVE
+        or _bag(emulator).get(ItemId.ANTIDOTE, 0)
+        != max(antidote_before, LAVENDER_ANTIDOTE_RESERVE)
     ):
         raise LavenderChapterError("Lavender Mart top-up missed its inventory/economy proof.")
 
@@ -2517,6 +2514,12 @@ def _parlyz_top_up_quantity(current_quantity: int) -> int:
             f"Unsupported Lavender Parlyz Heal reserve: {current_quantity}."
         )
     return TUNNEL_PARLYZ_HEALS_PURCHASED - current_quantity
+
+
+def _antidote_top_up_quantity(current_quantity: int) -> int:
+    """Buy a minimum reserve without discarding cures that survived the tunnel."""
+
+    return max(0, LAVENDER_ANTIDOTE_RESERVE - current_quantity)
 
 
 def _buy_mart_item(

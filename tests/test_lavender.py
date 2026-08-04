@@ -227,6 +227,14 @@ def test_lavender_paralysis_top_up_restores_a_fixed_reserve() -> None:
         lavender_module._parlyz_top_up_quantity(4)
 
 
+def test_lavender_antidote_top_up_preserves_an_existing_surplus() -> None:
+    assert tuple(lavender_module._antidote_top_up_quantity(quantity) for quantity in range(3)) == (
+        1,
+        0,
+        0,
+    )
+
+
 def test_final_tunnel_policy_spends_bite_evidence_then_exploits_with_bubblebeam() -> None:
     assert lavender_module._ranked_lavender_move_slots(
         move_slot=1,
