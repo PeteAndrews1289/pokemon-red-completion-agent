@@ -109,6 +109,11 @@ low-HP battle menu before falling back to the retained Potion stack. The reserve
 consumed in the rival battle so the downstream capture and inventory contracts remain unchanged.
 This failure was also uncounted; another complete qualification is required.
 
+The first funded-reserve rehearsal reached Vermilion preparation at checkpoint 75, then missed the
+Mart because the new path concatenated the Center exit and overworld walk without the qualified map
+transition wait. The route now keeps those as two separately observed movement segments with the
+same bounded transition settle used elsewhere. No purchase or counted attempt occurred.
+
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
 Center immediately before the accuracy-lowering trainer, may spend one of the already-budgeted

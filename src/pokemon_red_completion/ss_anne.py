@@ -76,7 +76,7 @@ def _directions(value: str) -> tuple[str, ...]:
 VERMILION_TO_CENTER_DIRECTIONS = _directions("DDDLDDLLLLLLLUU")
 CENTER_TO_NURSE_DIRECTIONS = _directions("UUUU")
 CENTER_EXIT_DIRECTIONS = _directions("DDDDD")
-CENTER_TO_MART_DIRECTIONS = CENTER_EXIT_DIRECTIONS + _directions("R" * 10 + "D" * 10 + "RRU")
+CENTER_EXTERIOR_TO_MART_DIRECTIONS = _directions("R" * 10 + "D" * 10 + "RRU")
 MART_TO_CENTER_EXTERIOR_DIRECTIONS = _directions("LL" + "U" * 10 + "L" * 10)
 CENTER_TO_HARBOR_DIRECTIONS = _directions(
     "DDD"
@@ -446,7 +446,15 @@ def _purchase_ss_anne_super_potions(
     if _bag_quantity(emulator, ItemId.SUPER_POTION) != 0:
         raise SSAnneChapterError("S.S. Anne preparation began with an unexpected Super Potion.")
     money_before = _money(emulator)
-    _move(executor, reader, CENTER_TO_MART_DIRECTIONS, timing, "Vermilion Mart reserve")
+    _move(executor, reader, CENTER_EXIT_DIRECTIONS, timing, "Vermilion Center reserve exit")
+    _wait(executor, timing.transition_wait_frames)
+    _move(
+        executor,
+        reader,
+        CENTER_EXTERIOR_TO_MART_DIRECTIONS,
+        timing,
+        "Vermilion Mart reserve",
+    )
     _wait(executor, timing.transition_wait_frames)
     mart_entry = reader.read()
     if (
