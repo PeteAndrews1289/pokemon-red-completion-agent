@@ -17,7 +17,7 @@ from pokemon_red_completion.bruno import (
     _turns_valid,
     run_bruno_chapter,
 )
-from pokemon_red_completion.observation import EventFlag, MapId, RawGameState
+from pokemon_red_completion.observation import EventFlag, MapId, RamAddress, RawGameState
 
 
 def test_bruno_source_contract_is_exact() -> None:
@@ -103,13 +103,27 @@ def test_bruno_victory_settle_stops_before_reinteracting(monkeypatch: pytest.Mon
             )
             return type("Readiness", (), {"ready": ready})()
 
+    class Emulator:
+        def __init__(self, executor: Executor) -> None:
+            self.executor = executor
+
+        def read_u8(self, address: int) -> int:
+            assert address == RamAddress.CURRENT_MAP_SCRIPT
+            return 0 if any(
+                action.kind is MacroActionKind.CONFIRM for action in self.executor.actions
+            ) else 2
+
     executor = Executor()
     reader = Reader(executor)
+    emulator = Emulator(executor)
     monkeypatch.setattr(bruno_module, "_event", lambda *_args: True)
 
-    assert _settle_bruno_victory(executor, reader) == raw  # type: ignore[arg-type]
+    assert _settle_bruno_victory(  # type: ignore[arg-type]
+        executor,
+        reader,
+        emulator,
+    ) == raw
     assert [action.kind for action in executor.actions].count(MacroActionKind.CONFIRM) == 1
-    assert [action.kind for action in executor.actions].count(MacroActionKind.CANCEL) == 1
 
 
 def test_post_bruno_field_heal_occurs_after_agatha_room_entry() -> None:

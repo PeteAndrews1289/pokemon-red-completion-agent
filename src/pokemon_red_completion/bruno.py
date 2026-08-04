@@ -327,7 +327,7 @@ def run_bruno_chapter(
                 ) from healing_error
             last_recovery_turn = len(turns)
 
-    _settle_bruno_victory(actions, reader)
+    _settle_bruno_victory(actions, reader, emulator)
     defeated = reader.read()
     if not _event(defeated, EventFlag.BEAT_BRUNO):
         raise BrunoChapterError("Bruno event did not set after battle.")
@@ -399,10 +399,11 @@ def _checkpoint(
 def _settle_bruno_victory(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
+    emulator: EmulatorState,
     *,
     limit: int = 40,
 ) -> RawGameState:
-    """Advance the victory script exactly until overworld control returns."""
+    """Advance until Bruno's source-defined map script returns to default."""
 
     for _ in range(limit):
         raw = reader.read()
@@ -410,20 +411,9 @@ def _settle_bruno_victory(
             raw.battle_state == 0
             and _event(raw, EventFlag.BEAT_BRUNO)
             and reader.read_input_readiness().ready
+            and emulator.read_u8(RamAddress.CURRENT_MAP_SCRIPT) == 0
         ):
-            # The Gen I readiness flag becomes true one text box before START
-            # is accepted here. B closes that residual box and is harmless if
-            # the overworld was already genuinely free.
-            _pulse(actions, MacroActionKind.CANCEL)
-            released = reader.read()
-            if (
-                released.battle_state == 0
-                and released.map_id == MapId.BRUNOS_ROOM
-                and _event(released, EventFlag.BEAT_BRUNO)
-                and reader.read_input_readiness().ready
-            ):
-                return released
-            raise BrunoChapterError("Bruno victory release left its qualified room boundary.")
+            return raw
         _pulse(actions, MacroActionKind.CONFIRM)
     raise BrunoChapterError("Bruno victory script did not settle at the overworld boundary.")
 
