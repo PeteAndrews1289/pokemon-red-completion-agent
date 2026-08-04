@@ -1045,3 +1045,12 @@ number of obsolete 20-HP Potions required to cover that gap. It proves both the 
 and cash proceeds, rejects a gap larger than the live obsolete reserve, and leaves the fixed ten
 Super Potions, status items, and four Repels unchanged. This rehearsal was uncounted and all twelve
 v8 roots remain pending.
+
+The funded replay then passed every earlier boundary through the Safari Zone and obtained HM03 at
+checkpoint 194. Surf correctly replaced slot-four Water Gun, but the helper rejected the lesson
+because it also required Bite and BubbleBeam to be at maximum PP immediately afterward. The live
+pre-lesson vector was `(16, 30, 16, 25)`; Gen I correctly preserved the first three slots and set
+Surf to 15 PP. Teaching evidence now binds that observed vector, requires exact preservation of
+slots one through three, and requires slot four to become Surf with 15 PP. The later Fuchsia nurse
+boundary independently requires the fully restored `(25, 30, 20, 15)` vector. The artifact remains
+uncounted because the stale evidence contract rejected it, and v8 still requires a complete replay.

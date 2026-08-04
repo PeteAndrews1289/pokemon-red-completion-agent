@@ -62,7 +62,9 @@ control, and progressively trained specialists.**
 > verified five-throw direct-capture bound. The next run caught Spearow on throw four and exposed
 > the old one-throw assumption in the Rock Tunnel budget; supply planning now sells only the
 > observed obsolete-Potion shortfall. All twelve counted v8 slots remain unopened while the exact
-> source requalifies.
+> source requalifies. That funded replay reached Safari checkpoint 194 and taught Surf correctly;
+> its stale gate expected unrelated moves to have maximum PP immediately after teaching. The lesson
+> now proves observed PP preservation at the HM boundary and full restoration at the later Center.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the

@@ -69,6 +69,8 @@ def _report() -> SafariChapterReport:
         safari_balls=0,
         moves_before=EXPECTED_MOVES_BEFORE,
         moves_after=EXPECTED_MOVES_AFTER,
+        pp_before=(16, 30, 16, 25),
+        pp_after_teach=(16, 30, 16, 15),
         pp_after=EXPECTED_PP_AFTER,
         encounters_fled=6,
         party_hp=(114, 52, 37),

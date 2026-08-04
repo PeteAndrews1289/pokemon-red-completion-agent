@@ -24,7 +24,8 @@ WATER_GUN = 0x37
 SURF = 0x39
 EXPECTED_MOVES_BEFORE = (0x2C, 0x27, 0x3D, WATER_GUN)
 EXPECTED_MOVES_AFTER = (0x2C, 0x27, 0x3D, SURF)
-EXPECTED_PP_AFTER = (25, 30, 20, 15)
+SURF_PP = 15
+EXPECTED_PP_AFTER = (25, 30, 20, SURF_PP)
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -137,6 +138,8 @@ class SafariChapterReport:
     safari_balls: int
     moves_before: tuple[int, ...]
     moves_after: tuple[int, ...]
+    pp_before: tuple[int, ...]
+    pp_after_teach: tuple[int, ...]
     pp_after: tuple[int, ...]
     encounters_fled: int
     party_hp: tuple[int, ...]
@@ -172,6 +175,8 @@ class SafariChapterReport:
             and self.safari_balls == 0
             and self.moves_before == EXPECTED_MOVES_BEFORE
             and self.moves_after == EXPECTED_MOVES_AFTER
+            and len(self.pp_before) == 4
+            and self.pp_after_teach == (*self.pp_before[:3], SURF_PP)
             and self.pp_after == EXPECTED_PP_AFTER
             and 0 <= self.encounters_fled <= 20
             and self.final_bag == expected_final_bag
@@ -214,6 +219,8 @@ class SafariChapterReport:
                 "slot": 4,
                 "moves_before": list(self.moves_before),
                 "moves_after": list(self.moves_after),
+                "pp_before": list(self.pp_before),
+                "pp_after_teach": list(self.pp_after_teach),
                 "pp_after": list(self.pp_after),
             },
             "cleanup": {
@@ -259,6 +266,9 @@ def run_safari_chapter(
     moves_before = tuple(initial.first_party_moves or ())
     if moves_before != EXPECTED_MOVES_BEFORE:
         raise SafariChapterError(f"Unexpected pre-Surf moves: {moves_before!r}.")
+    pp_before = tuple(initial.first_party_pp or ())
+    if len(pp_before) != 4 or any(pp <= 0 for pp in pp_before):
+        raise SafariChapterError(f"Unexpected pre-Surf PP: {pp_before!r}.")
     _checkpoint(records, progress, emulator, initial, "surf_ready", "Fuchsia Safari-ready")
 
     encounters += _move(actions, reader, emulator, CENTER_TO_GATE, timing, "Safari gate")
@@ -335,7 +345,7 @@ def run_safari_chapter(
     ball_milestones.append(_balls(emulator))
     _checkpoint(records, progress, emulator, reader.read(), "hm03", "Won reusable HM03")
 
-    _teach_surf(actions, reader, emulator, timing)
+    taught = _teach_surf(actions, reader, emulator, timing, pp_before=pp_before)
     _checkpoint(records, progress, emulator, reader.read(), "surf", "Taught Surf over Water Gun")
 
     encounters += _move(actions, reader, emulator, HOUSE_EXIT, timing, "Secret House exit")
@@ -402,6 +412,8 @@ def run_safari_chapter(
         _balls(emulator),
         moves_before,
         tuple(final.first_party_moves or ()),
+        pp_before,
+        tuple(taught.first_party_pp or ()),
         tuple(final.first_party_pp or ()),
         encounters,
         _party_hp(emulator),
@@ -421,7 +433,9 @@ def _teach_surf(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SafariTiming,
-) -> None:
+    *,
+    pp_before: tuple[int, ...],
+) -> RawGameState:
     actions.execute(MacroAction(MacroActionKind.OPEN_MENU))
     _wait(actions, timing.wait_frames)
     _select_cursor(actions, emulator, 2, timing)
@@ -448,7 +462,7 @@ def _teach_surf(
         raw = reader.read()
         if (
             raw.first_party_moves == EXPECTED_MOVES_AFTER
-            and raw.first_party_pp == EXPECTED_PP_AFTER
+            and raw.first_party_pp == (*pp_before[:3], SURF_PP)
             and ItemId.HM03_SURF in _bag(emulator)
         ):
             break
@@ -457,6 +471,7 @@ def _teach_surf(
         raise SafariChapterError("HM03 did not replace slot-four Water Gun.")
     for _ in range(4):
         _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
+    return raw
 
 
 def _move(
