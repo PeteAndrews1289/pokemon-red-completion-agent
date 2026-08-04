@@ -87,6 +87,10 @@ ROOF_NERD_Y = 0xC214
 ROOF_NERD_X = 0xC215
 MART_2F_GIRL_Y = 0xC244
 MART_2F_GIRL_X = 0xC245
+MART_5F_GENTLEMAN_BLOCK_POSITION = (15, 2)
+MART_5F_GENTLEMAN_YIELD_POSITION = (15, 3)
+MART_5F_GENTLEMAN_CLEAR_POSITION = (14, 2)
+MART_5F_GENTLEMAN_CLEAR_ATTEMPTS = 16
 SAFFRON_CITY_SIZE = (40, 36)
 SAFFRON_CENTER_APPROACH = (9, 30)
 SAFFRON_WARP_COORDINATES = frozenset(
@@ -1213,6 +1217,7 @@ def _interact_with_roof_girl(
     reward_started: Callable[[], bool] | None = None,
 ) -> None:
     if reward_started is None:
+
         def observed_reward_started() -> bool:
             return (
                 _bag(emulator).get(ItemId.FRESH_WATER, 0) == 0
@@ -1485,9 +1490,7 @@ def _run_battle(
     map_id: int,
     label: str,
     battle_plan_id: str,
-    resource_policy: BattleResourcePolicy = (
-        BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
-    ),
+    resource_policy: BattleResourcePolicy = (BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT),
 ) -> None:
     policy = move_slot if callable(move_slot) else lambda _: move_slot
     run_adaptive_trainer_battle(
@@ -1579,9 +1582,7 @@ def _run_rival_with_potions(
                 or not any(hp > 0 for hp in party_hp)
             ):
                 raise
-            terminal = _settle_silph_rival_forced_switch(
-                reader, actions, emulator, timing
-            )
+            terminal = _settle_silph_rival_forced_switch(reader, actions, emulator, timing)
             if terminal:
                 note_observed_trainer_battle_exit(_silph_rival_intent())
                 _settle_silph_rival_field_control(reader, actions, timing)
@@ -1622,9 +1623,7 @@ def _run_rival_with_potions(
                 or not any(hp > 0 for hp in party_hp)
             ):
                 raise
-            terminal = _settle_silph_rival_forced_switch(
-                reader, actions, emulator, timing
-            )
+            terminal = _settle_silph_rival_forced_switch(reader, actions, emulator, timing)
             if terminal:
                 note_observed_trainer_battle_exit(_silph_rival_intent())
                 _settle_silph_rival_field_control(reader, actions, timing)
@@ -1650,10 +1649,7 @@ def _silph_rival_move_slot(raw: RawGameState) -> int:
         if (
             len(pp) >= slot
             and pp[slot - 1] & 0x3F
-            and not (
-                raw.player_disabled_move_slot == slot
-                and (raw.player_disable_turns or 0) > 0
-            )
+            and not (raw.player_disabled_move_slot == slot and (raw.player_disable_turns or 0) > 0)
         ):
             return slot
     raise SilphChapterError("Silph rival policy has no legal move with PP.")
@@ -1683,9 +1679,7 @@ def _settle_silph_rival_field_control(
             ready_reads += 1
             if ready_reads >= 2:
                 return
-            actions.execute(
-                MacroAction(MacroActionKind.WAIT, repeat=timing.menu_frames)
-            )
+            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.menu_frames))
         else:
             ready_reads = 0
             _pulse(
@@ -2074,11 +2068,76 @@ def _move_verified(
             ):
                 break
         else:
+            if (
+                label == "X Special clerk approach"
+                and before.map_id == MapId.CELADON_MART_5F
+                and (before.player_x, before.player_y) == MART_5F_GENTLEMAN_BLOCK_POSITION
+                and direction == "left"
+            ):
+                state = _yield_to_mart_5f_gentleman(actions, reader, timing)
+                continue
             raise SilphChapterError(
                 f"{label} blocked at step {index}: {direction}; "
                 f"{(state.map_id, state.player_x, state.player_y)!r}."
             )
     return state
+
+
+def _yield_to_mart_5f_gentleman(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SilphTiming,
+) -> RawGameState:
+    """Yield the top aisle so the source-pinned vertical customer can pass."""
+
+    for attempt in range(MART_5F_GENTLEMAN_CLEAR_ATTEMPTS):
+        state = reader.read()
+        if (state.player_x, state.player_y) == MART_5F_GENTLEMAN_CLEAR_POSITION:
+            return state
+        _require(
+            state,
+            MapId.CELADON_MART_5F,
+            MART_5F_GENTLEMAN_BLOCK_POSITION,
+            "X Special customer gate",
+        )
+        actions.execute(MacroAction(MacroActionKind.MOVE, "down"))
+        yielded = reader.read()
+        _require(
+            yielded,
+            MapId.CELADON_MART_5F,
+            MART_5F_GENTLEMAN_YIELD_POSITION,
+            "X Special customer yield",
+        )
+        for return_attempt in range(MART_5F_GENTLEMAN_CLEAR_ATTEMPTS):
+            actions.execute(
+                MacroAction(
+                    MacroActionKind.WAIT,
+                    repeat=timing.movement_frames * (attempt + return_attempt + 1),
+                )
+            )
+            actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
+            returned = reader.read()
+            if (returned.player_x, returned.player_y) == MART_5F_GENTLEMAN_BLOCK_POSITION:
+                break
+            _require(
+                returned,
+                MapId.CELADON_MART_5F,
+                MART_5F_GENTLEMAN_YIELD_POSITION,
+                "X Special customer return wait",
+            )
+        else:
+            raise SilphChapterError("Celadon Mart 5F customer did not release the return tile.")
+        actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
+        crossed = reader.read()
+        if (crossed.player_x, crossed.player_y) == MART_5F_GENTLEMAN_CLEAR_POSITION:
+            return crossed
+        _require(
+            crossed,
+            MapId.CELADON_MART_5F,
+            MART_5F_GENTLEMAN_BLOCK_POSITION,
+            "X Special customer final gate",
+        )
+    raise SilphChapterError("Celadon Mart 5F customer did not clear the top aisle.")
 
 
 def _return_mart_2f_to_1f(
@@ -2173,8 +2232,7 @@ def _plan_saffron_route(
             visited.add(candidate)
             queue.append((candidate, (*route, direction)))
     raise SilphChapterError(
-        "Saffron Center has no route after collision discoveries "
-        f"{sorted(blocked)!r}."
+        f"Saffron Center has no route after collision discoveries {sorted(blocked)!r}."
     )
 
 
@@ -2201,11 +2259,7 @@ def _navigate_saffron_coordinate(
 ) -> RawGameState:
     """Discover static and moving Saffron obstacles while approaching a target."""
     state = reader.read()
-    if (
-        state.map_id != MapId.SAFFRON_CITY
-        or state.player_x is None
-        or state.player_y is None
-    ):
+    if state.map_id != MapId.SAFFRON_CITY or state.player_x is None or state.player_y is None:
         raise SilphChapterError("Saffron navigator lacks its city entry coordinate.")
     discovered_blocked: set[tuple[int, int]] = set()
     deltas = {"up": (0, -1), "left": (-1, 0), "right": (1, 0), "down": (0, 1)}
@@ -2229,9 +2283,7 @@ def _navigate_saffron_coordinate(
                 break
         else:
             discovered_blocked.add(candidate)
-    raise SilphChapterError(
-        f"{label} navigation exceeded its bounded collision discoveries."
-    )
+    raise SilphChapterError(f"{label} navigation exceeded its bounded collision discoveries.")
 
 
 def _require(

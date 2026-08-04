@@ -1204,3 +1204,7 @@ V13 assigns disjoint rehearsal seed `21002` and counted seeds `23001`–`23005`,
 Its first rehearsal observed the same Vermilion sailor one tile earlier at `(22, 27)`. The bounded
 yield now derives its step-aside and clear tiles from either source-observed gate, `(21, 27)` or
 `(22, 27)`, while rejecting every other coordinate.
+That replay continued to checkpoint 239 before Celadon Mart 5F's vertical gentleman occupied
+`(14, 2)` during the X Special approach. The teacher may now step from the exact blocked stance
+`(15, 2)` to `(15, 3)`, wait within a fixed 16-attempt bound, restore the approach, and prove the
+westward crossing. No other shop collision receives this exception.

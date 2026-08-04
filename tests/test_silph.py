@@ -11,6 +11,10 @@ from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
     MART_2F_GIRL_X,
     MART_2F_GIRL_Y,
+    MART_5F_GENTLEMAN_BLOCK_POSITION,
+    MART_5F_GENTLEMAN_CLEAR_ATTEMPTS,
+    MART_5F_GENTLEMAN_CLEAR_POSITION,
+    MART_5F_GENTLEMAN_YIELD_POSITION,
     ROOF_GIRL_X,
     ROOF_GIRL_Y,
     ROOF_NERD_X,
@@ -55,6 +59,13 @@ def _terminal() -> RawGameState:
         first_party_moves=(0x82, 0x46, 0x3A, 0x39),
         first_party_pp=(15, 15, 10, 15),
     )
+
+
+def test_mart_5f_customer_yield_is_source_pinned_and_bounded() -> None:
+    assert MART_5F_GENTLEMAN_BLOCK_POSITION == (15, 2)
+    assert MART_5F_GENTLEMAN_YIELD_POSITION == (15, 3)
+    assert MART_5F_GENTLEMAN_CLEAR_POSITION == (14, 2)
+    assert MART_5F_GENTLEMAN_CLEAR_ATTEMPTS == 16
 
 
 def _report() -> SilphChapterReport:
@@ -322,8 +333,7 @@ def test_roof_girl_interaction_retries_until_dialogue_opens() -> None:
     )
 
     interactions = sum(
-        getattr(action, "kind", None) is MacroActionKind.INTERACT
-        for action in executor.actions
+        getattr(action, "kind", None) is MacroActionKind.INTERACT for action in executor.actions
     )
     assert interactions == 2
 
