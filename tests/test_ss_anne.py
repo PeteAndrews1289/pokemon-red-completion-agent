@@ -42,6 +42,11 @@ def test_ss_anne_waiter_yield_gate_is_source_pinned() -> None:
     assert ss_anne.SS_ANNE_WAITER_CLEAR_ATTEMPTS == 10
 
 
+def test_vermilion_sailor_yield_supports_both_observed_corridor_gates() -> None:
+    assert frozenset({(21, 27), (22, 27)}) == ss_anne.VERMILION_SAILOR_BLOCK_POSITIONS
+    assert ss_anne.VERMILION_SAILOR_CLEAR_ATTEMPTS == 10
+
+
 def test_pre_ship_training_classifies_dugtrio_as_a_dangerous_flee() -> None:
     raw = RawGameState(
         True,

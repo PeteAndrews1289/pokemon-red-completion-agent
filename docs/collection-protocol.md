@@ -1201,3 +1201,6 @@ sealed and v12 is retired. The teacher now yields the exact corridor from `(9, 6
 waits under a finite source-pinned bound, restores the approach, and completes the requested step.
 V13 assigns disjoint rehearsal seed `21002` and counted seeds `23001`–`23005`, `33001`–`33002`, and
 `43001`–`43005`; none of its slots may open before its clean 69-battle rehearsal qualifies.
+Its first rehearsal observed the same Vermilion sailor one tile earlier at `(22, 27)`. The bounded
+yield now derives its step-aside and clear tiles from either source-observed gate, `(21, 27)` or
+`(22, 27)`, while rejecting every other coordinate.
