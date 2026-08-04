@@ -1024,3 +1024,14 @@ north off row 27, waits for the return tile, restores the approach, and verifies
 to `(20, 27)`. Any map change, battle, unexpected coordinate, or failure to restore still rejects
 the run. No counted v8 slot was consumed; the repaired exact source requires another complete
 312-checkpoint and 68-battle rehearsal before collection opens.
+
+That repaired replay crossed the harbor, boarded the ship, obtained HM01, and reached the Route 11
+capture lesson at checkpoint 86. It then knocked out twelve valid level-17 Spearow with Water Gun.
+The move had been safely qualified for a level-24 Wartortle, but staged development now reaches the
+lesson at level 30–31 and makes every available damaging move lethal from full HP. The teacher no
+longer applies a historically safe move after its damage assumptions become false. At the proven
+level-30 floor it instead allows at most five direct Poké Ball throws on the same target. Each
+failed throw must consume exactly one Ball, retain a living level-17 Spearow and workhorse, and
+return to the wild-battle main menu; success proves the exact aggregate decrement and party
+addition. This second source-frozen failure was also uncounted, and v8 remains unopened pending a
+complete replay.

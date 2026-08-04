@@ -92,9 +92,8 @@ WILD_CAPTURE_PASSIVE_POLICY = CapturePolicy(
 )
 WILD_CAPTURE_MAX_WEAKENING_ATTACKS = 8
 WILD_CAPTURE_ADAPTIVE_WEAKENING_CAP = 32
-SPEAROW_CAPTURE_MOVE_ID = 0x37
-SPEAROW_CAPTURE_MOVE_SLOT = 4
-SPEAROW_WEAKEN_ATTEMPT_LIMIT = 12
+SPEAROW_DIRECT_THROW_LEVEL_FLOOR = 30
+SPEAROW_CAPTURE_THROW_LIMIT = 5
 CUT_MOVE_ID = 0x0F
 DIG_MOVE_ID = 0x5B
 LT_SURGE_OPPONENT_ID = 0xEC
@@ -397,24 +396,28 @@ def run_surge_chapter(
         progress,
         emulator,
     )
-    for _ in range(SPEAROW_WEAKEN_ATTEMPT_LIMIT):
-        if _use_spearow_capture_move_once(actions, reader, encounter):
+    if (encounter.first_party_level or 0) < SPEAROW_DIRECT_THROW_LEVEL_FLOOR:
+        raise SurgeChapterError(
+            "Spearow direct-throw lesson requires the staged-development level floor."
+        )
+    spearow_balls_before = _bag(emulator).get(ItemId.POKE_BALL, 0)
+    for _ in range(SPEAROW_CAPTURE_THROW_LIMIT):
+        if _throw_ball(emulator, actions, reader):
             break
-        encounter = _find_spearow(emulator, actions, reader, timing)
     else:
         raise SurgeChapterError(
-            f"{SPEAROW_WEAKEN_ATTEMPT_LIMIT} bounded attempts did not weaken Spearow."
+            f"{SPEAROW_CAPTURE_THROW_LIMIT} bounded throws did not capture Spearow."
         )
-    _throw_ball(emulator, actions, reader)
     raw = reader.read()
+    spearow_balls_used = spearow_balls_before - _bag(emulator).get(ItemId.POKE_BALL, 0)
     _gate(
         raw,
         raw.party_species_ids == (WARTORTLE_SPECIES_ID, SPEAROW_SPECIES_ID)
-        and _bag(emulator).get(ItemId.POKE_BALL) == COLLECTION_POKE_BALL_TARGET - 1,
+        and 1 <= spearow_balls_used <= SPEAROW_CAPTURE_THROW_LIMIT,
         tracker,
         SurgePhase.SPEAROW_CAPTURED,
         "spearow_captured",
-        "Captured Spearow with one Poké Ball",
+        "Captured Spearow within the bounded direct-throw reserve",
         records,
         progress,
         emulator,
@@ -887,92 +890,9 @@ def _find_spearow(
     )
 
 
-def _use_spearow_capture_move_once(
-    executor: _CountingExecutor, reader: PokemonRedStateReader, encounter: RawGameState
-) -> bool:
-    slot = SPEAROW_CAPTURE_MOVE_SLOT
-    index = slot - 1
-    if (
-        encounter.first_party_moves is None
-        or encounter.first_party_moves[index] != SPEAROW_CAPTURE_MOVE_ID
-    ):
-        raise SurgeChapterError("Qualified Spearow capture move is unavailable.")
-    initial_pp = encounter.first_party_pp
-    initial_hp = encounter.enemy_hp
-    _navigate_main(executor, reader, 0)
-    _pulse(executor, MacroActionKind.CONFIRM, frames=120)
-    for _ in range(8):
-        raw = reader.read()
-        menu = reader.read_battle_menu_state(raw)
-        if menu.phase is BattleMenuPhase.MOVE:
-            break
-        _pulse(
-            executor,
-            MacroActionKind.CONFIRM if menu.phase is BattleMenuPhase.MAIN else MacroActionKind.WAIT,
-            frames=120,
-        )
-    else:
-        raise SurgeChapterError("FIGHT did not expose the move menu.")
-    for _ in range(6):
-        raw = reader.read()
-        menu = reader.read_battle_menu_state(raw)
-        slot = menu.selected_move_slot
-        if menu.phase is BattleMenuPhase.MOVE and slot == SPEAROW_CAPTURE_MOVE_SLOT:
-            break
-        if menu.phase is not BattleMenuPhase.MOVE or slot is None:
-            raise SurgeChapterError("Lost the capture move cursor.")
-        _pulse(
-            executor,
-            MacroActionKind.MOVE,
-            "down" if slot < SPEAROW_CAPTURE_MOVE_SLOT else "up",
-            120,
-        )
-    else:
-        raise SurgeChapterError("Could not select the qualified Spearow capture move.")
-    if raw.first_party_moves is None or raw.first_party_moves[index] != SPEAROW_CAPTURE_MOVE_ID:
-        raise SurgeChapterError("Selected the wrong Spearow capture move.")
-    _pulse(executor, MacroActionKind.CONFIRM)
-    for _ in range(24):
-        raw = reader.read()
-        if raw.first_party_pp and initial_pp and raw.first_party_pp[index] == initial_pp[index] - 1:
-            if tuple(raw.first_party_pp[other] for other in range(4) if other != index) != tuple(
-                initial_pp[other] for other in range(4) if other != index
-            ):
-                raise SurgeChapterError("An off-slot move spent PP during capture.")
-            break
-        _pulse(executor, MacroActionKind.CONFIRM)
-    else:
-        raise SurgeChapterError("Spearow capture move did not spend exactly one PP.")
-    for _ in range(16):
-        raw = reader.read()
-        if raw.battle_state == 0:
-            if raw.party_species_ids != encounter.party_species_ids:
-                raise SurgeChapterError("Capture-move knockout changed the protected party.")
-            return False
-        if raw.enemy_hp == 0:
-            for _ in range(16):
-                _pulse(executor, MacroActionKind.CONFIRM)
-                cleared = reader.read()
-                if cleared.battle_state == 0:
-                    if cleared.party_species_ids != encounter.party_species_ids:
-                        raise SurgeChapterError(
-                            "Capture-move knockout changed the protected party."
-                        )
-                    return False
-            raise SurgeChapterError("Capture-move knockout did not clear its battle dialogue.")
-        if reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN:
-            if raw.enemy_hp == initial_hp:
-                return False
-            if raw.enemy_hp is None or initial_hp is None or not 0 < raw.enemy_hp < initial_hp:
-                raise SurgeChapterError("Spearow capture damage gate failed.")
-            return True
-        _pulse(executor, MacroActionKind.CONFIRM)
-    raise SurgeChapterError("Capture battle did not return to MAIN.")
-
-
 def _throw_ball(
     emulator: EmulatorState, executor: _CountingExecutor, reader: PokemonRedStateReader
-) -> None:
+) -> bool:
     before = _bag(emulator).get(ItemId.POKE_BALL, 0)
     _navigate_main(executor, reader, 1)
     _pulse(executor, MacroActionKind.CONFIRM)
@@ -995,13 +915,29 @@ def _throw_ball(
             WARTORTLE_SPECIES_ID,
             SPEAROW_SPECIES_ID,
         ):
-            break
+            _confirm_kind(executor, MacroActionKind.CANCEL, 3, 180)
+            if _bag(emulator).get(ItemId.POKE_BALL) != before - 1:
+                raise SurgeChapterError("Capture did not consume exactly one Poké Ball.")
+            return True
+        if (
+            raw.battle_state == 1
+            and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
+        ):
+            if (
+                raw.enemy_species_id != SPEAROW_SPECIES_ID
+                or raw.enemy_level not in SPEAROW_CAPTURE_LEVELS
+                or raw.enemy_hp is None
+                or raw.enemy_hp <= 0
+                or (raw.first_party_hp or 0) <= 0
+            ):
+                raise SurgeChapterError(
+                    "Failed Spearow throw did not preserve its live capture boundary."
+                )
+            if _bag(emulator).get(ItemId.POKE_BALL) != before - 1:
+                raise SurgeChapterError("Failed throw did not consume exactly one Poké Ball.")
+            return False
         _pulse(executor, MacroActionKind.CONFIRM)
-    else:
-        raise SurgeChapterError("Poké Ball did not capture Spearow.")
-    _confirm_kind(executor, MacroActionKind.CANCEL, 3, 180)
-    if _bag(emulator).get(ItemId.POKE_BALL) != before - 1:
-        raise SurgeChapterError("Capture did not consume exactly one Poké Ball.")
+    raise SurgeChapterError("Poké Ball throw did not reach a capture or retry boundary.")
 
 
 def _catch_diglett_chapter(
