@@ -74,6 +74,9 @@ PIKACHU_SPECIES_ID = 0x54
 COLLECTION_POKE_BALL_TARGET = 30
 WILD_CAPTURE_THROWS_PER_ENCOUNTER = 5
 BALL_THROW_SETTLE_ACTION = MacroActionKind.CANCEL
+ROUTE_1_WALKER_APPROACH = (14, 14)
+ROUTE_1_WALKER_YIELD = (15, 14)
+ROUTE_1_WALKER_CLEAR_ATTEMPTS = 24
 VIRIDIAN_FOREST_MAX_SURVEY_LEGS = 256
 TACKLE_MOVE_ID = 0x21
 GUST_MOVE_ID = 0x10
@@ -1827,13 +1830,18 @@ class _LiveWildCorridorSurveyExecutor:
 
         before = self._reader.read()
         direction = self._directions[0]
-        raw = _survey_step(
-            self._executor,
-            self._reader,
-            direction,
-            self._timing,
-            self._label,
-        )
+        try:
+            raw = _survey_step(
+                self._executor,
+                self._reader,
+                direction,
+                self._timing,
+                self._label,
+            )
+        except SurgeChapterError:
+            if not _is_route_1_walker_gate(self._label, before, direction):
+                raise
+            raw = self._yield_to_route_1_walker()
         moved = raw.map_id != before.map_id or (raw.player_x, raw.player_y) != (
             before.player_x,
             before.player_y,
@@ -1848,6 +1856,78 @@ class _LiveWildCorridorSurveyExecutor:
                 f"{self._label} route step neither moved nor entered battle"
             )
         return raw
+
+    def _yield_to_route_1_walker(self) -> RawGameState:
+        """Create room for Route 1's horizontal youngster, then retry north."""
+
+        for attempt in range(ROUTE_1_WALKER_CLEAR_ATTEMPTS):
+            state = self._reader.read()
+            if (
+                state.map_id != MapId.ROUTE_1
+                or state.battle_state != 0
+                or (state.player_x, state.player_y) != ROUTE_1_WALKER_APPROACH
+            ):
+                raise SurgeChapterError(
+                    "Route 1 walker recovery left its bounded approach gate."
+                )
+
+            yielded = _survey_step(
+                self._executor,
+                self._reader,
+                "right",
+                self._timing,
+                "Route 1 walker yield",
+            )
+            if yielded.battle_state:
+                self.flee_encounter()
+                yielded = self._reader.read()
+            if (yielded.player_x, yielded.player_y) != ROUTE_1_WALKER_YIELD:
+                raise SurgeChapterError("Route 1 walker recovery could not yield east.")
+
+            _wait(
+                self._executor,
+                max(1, self._timing.wait_frames // 4) * (attempt + 1),
+            )
+            returned = _survey_step(
+                self._executor,
+                self._reader,
+                "left",
+                self._timing,
+                "Route 1 walker return",
+            )
+            if returned.battle_state:
+                self.flee_encounter()
+                returned = self._reader.read()
+            if (returned.player_x, returned.player_y) != ROUTE_1_WALKER_APPROACH:
+                raise SurgeChapterError("Route 1 walker recovery could not restore its approach.")
+
+            try:
+                return _survey_step(
+                    self._executor,
+                    self._reader,
+                    "up",
+                    self._timing,
+                    "Route 1 walker crossing",
+                )
+            except SurgeChapterError:
+                continue
+        raise SurgeChapterError("Route 1 youngster did not clear within its bounded retries.")
+
+
+def _is_route_1_walker_gate(
+    label: str,
+    state: RawGameState,
+    direction: str,
+) -> bool:
+    """Recognize only the source-defined Route 1 youngster crossing."""
+
+    return (
+        label == "Route 1"
+        and state.map_id == MapId.ROUTE_1
+        and state.battle_state == 0
+        and (state.player_x, state.player_y) == ROUTE_1_WALKER_APPROACH
+        and direction == "up"
+    )
 
 
 def _survey_step(

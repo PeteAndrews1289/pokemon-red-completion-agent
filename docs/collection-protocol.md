@@ -1180,3 +1180,9 @@ crossed an unobserved MAIN-menu boundary and issued a second item command. Post-
 uses B, which advances text without selecting a battle command. This artifact is uncounted, every
 v12 slot remains pending, and the repaired exact source must complete the full qualification before
 collection opens.
+
+The capture-safe replay proved checkpoints 87–91 before Route 1's horizontal youngster occupied
+the northbound tile above `(14, 14)` during the collection survey. The adapter now yields one safe
+tile east, waits under a 24-attempt bound, restores the exact approach, and retries north. It does
+not consume the pending route direction while blocked, and every incidental encounter retains the
+same flee and Ball-preservation proof. This failure was also uncounted.

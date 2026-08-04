@@ -359,6 +359,11 @@ settling loop crossed the battle MAIN menu between observations and selected a s
 Post-throw dialogue now uses CANCEL, which advances text while remaining inert on MAIN. The failed
 artifact is uncounted, every v12 collection slot remains pending, and the exact repaired source
 requires a new complete qualification.
+The capture-safe replay proved checkpoints 87–91, then the later Route 1 semantic survey was
+blocked below the source-defined horizontal youngster at `(14, 14)`. A 24-attempt maneuver now
+steps east, waits, restores the exact approach, and retries only the northward crossing. Any map,
+battle, or coordinate outside that bounded gate still fails closed. This second v12 artifact is
+also uncounted and does not open collection.
 That exact rehearsal subsequently validated every earlier repair through checkpoint **296/312**,
 including the six-member balance gate, Blaine, Giovanni, the final rival, and Victory Road. It then
 exposed a stale Indigo inventory assertion: the now-larger bounded capture curriculum may legally

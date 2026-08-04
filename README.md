@@ -574,6 +574,10 @@ checkpoint 86, where capture settling consumed two Poké Balls inside one reques
 dialogue loop now advances with the non-selecting B button so crossing an unobserved battle-menu
 boundary cannot issue a second item command. V12 remains unopened and must requalify from clean
 power before any counted seed is used.
+That repair passed the capture, Diglett, trade, Cut, and Dig gates through checkpoint 91. The
+following Route 1 survey then met the source-defined horizontal youngster on the only northbound
+tile at `(14, 14)`. The survey now uses a finite eastward yield, restores the exact approach, and
+retries north without consuming the route step or weakening any encounter/capture bound.
 
 ## Evidence and project status
 
