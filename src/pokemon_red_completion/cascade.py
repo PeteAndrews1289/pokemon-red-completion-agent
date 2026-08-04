@@ -113,6 +113,7 @@ MART_TO_CENTER_STAGING_DIRECTIONS = _directions(
 MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS = _directions(
     "DDRD" + "L" * 10 + "U" * 3 + "R" * 2 + "U" * 5
 )
+MART_REPEAT_CUSTOMER_CLEAR_ATTEMPTS = 32
 CENTER_TO_RIVAL_STAGING_DIRECTIONS = _directions("LLUU" + "L" * 9 + "U" * 4 + "R" * 12 + "U" * 5)
 RIVAL_TRIGGER_DIRECTIONS = ("up",)
 RIVAL_TO_CENTER_DIRECTIONS = _directions("D" * 6 + "L" * 12 + "D" * 4 + "R" * 9 + "DDRRU")
@@ -2004,12 +2005,7 @@ def _purchase_cerulean_awakening_topup(
         _battle_pulse(executor, MacroActionKind.CANCEL, None, timing, frames=180)
     if not reader.read_input_readiness().ready:
         raise CascadeChapterError("Cerulean Awakening top-up did not restore field control.")
-    _move(
-        executor,
-        reader,
-        MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS,
-        "Cerulean Center staging return",
-    )
+    _return_from_cerulean_repeat_clerk(executor, reader, timing)
     _wait(executor, timing.transition_wait_frames)
     returned = reader.read()
     if (
@@ -2020,6 +2016,53 @@ def _purchase_cerulean_awakening_topup(
         or not reader.read_input_readiness().ready
     ):
         raise CascadeChapterError("Cerulean Awakening top-up failed its persistent gate.")
+
+
+def _return_from_cerulean_repeat_clerk(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: CascadeTiming,
+) -> None:
+    """Prove the moving customer clears the Mart exit corridor."""
+
+    expected_positions = ((2, 6), (2, 7))
+    for direction, expected in zip(("down", "down"), expected_positions, strict=True):
+        _move(executor, reader, (direction,), "Cerulean Mart repeat-clerk return")
+        state = reader.read()
+        if state.map_id != MapId.CERULEAN_MART or (
+            state.player_x,
+            state.player_y,
+        ) != expected:
+            raise CascadeChapterError(
+                "Cerulean Mart return missed its verified south corridor: "
+                f"expected={expected}, actual={(state.map_id, state.player_x, state.player_y)!r}."
+            )
+
+    for attempt in range(MART_REPEAT_CUSTOMER_CLEAR_ATTEMPTS):
+        before = reader.read()
+        if before.map_id != MapId.CERULEAN_MART or (
+            before.player_x,
+            before.player_y,
+        ) != (2, 7):
+            raise CascadeChapterError("Cerulean Mart exit wait left its safe tile.")
+        after = _move(executor, reader, ("right",), "Cerulean Mart exit customer")
+        if (after.player_x, after.player_y) == (3, 7):
+            break
+        if after.map_id != MapId.CERULEAN_MART or (
+            after.player_x,
+            after.player_y,
+        ) != (2, 7):
+            raise CascadeChapterError("Cerulean Mart exit customer made an invalid transition.")
+        _wait(executor, max(1, timing.dialogue_wait_frames // 4) * (attempt + 1))
+    else:
+        raise CascadeChapterError("Cerulean Mart exit customer did not clear within its bound.")
+
+    _move(
+        executor,
+        reader,
+        MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS[3:],
+        "Cerulean Center staging return",
+    )
 
 
 def _use_route_24_antidote_if_needed(

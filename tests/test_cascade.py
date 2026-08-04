@@ -34,6 +34,7 @@ from pokemon_red_completion.cascade import (
     GYM_TRAINER_DIRECTIONS,
     GYM_TRAINER_TO_MISTY_DIRECTIONS,
     MART_REPEAT_CLERK_DIRECTIONS,
+    MART_REPEAT_CUSTOMER_CLEAR_ATTEMPTS,
     MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS,
     MISTY_RECOVERY_HP,
     RIVAL_CENTER_NPC_CORRECTION_DIRECTIONS,
@@ -192,6 +193,7 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
         "right",
         "down",
     )
+    assert MART_REPEAT_CUSTOMER_CLEAR_ATTEMPTS == 32
     assert _reverse_directions(
         CENTER_HEAL_TO_PC_DIRECTIONS
     ) == CENTER_PC_TO_HEAL_DIRECTIONS
@@ -282,6 +284,48 @@ def test_repeat_mart_clerk_waits_for_customer_to_vacate() -> None:
 
     assert (final.player_x, final.player_y) == (2, 5)
     assert runtime.left_pulses == 5
+
+
+def test_repeat_mart_clerk_return_retries_blocked_exit_customer() -> None:
+    class Runtime:
+        def __init__(self) -> None:
+            self.map_id = MapId.CERULEAN_MART
+            self.x = 2
+            self.y = 5
+            self.right_attempts = 0
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is not MacroActionKind.MOVE:
+                return
+            if self.map_id is not MapId.CERULEAN_MART:
+                return
+            if action.value == "down" and self.x == 2 and self.y < 7:
+                self.y += 1
+            elif action.value == "right" and (self.x, self.y) == (2, 7):
+                self.right_attempts += 1
+                if self.right_attempts >= 3:
+                    self.x = 3
+            elif action.value == "down" and (self.x, self.y) == (3, 7):
+                self.map_id = MapId.CERULEAN_CITY
+                self.x, self.y = (19, 18)
+
+        def read(self) -> RawGameState:
+            return replace(
+                _raw(),
+                map_id=self.map_id,
+                player_x=self.x,
+                player_y=self.y,
+            )
+
+    runtime = Runtime()
+    cascade_module._return_from_cerulean_repeat_clerk(
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        replace(DEFAULT_CASCADE_TIMING, dialogue_wait_frames=1),
+    )
+
+    assert (runtime.map_id, runtime.x, runtime.y) == (MapId.CERULEAN_CITY, 19, 18)
+    assert runtime.right_attempts == 3
 
 
 def test_reverse_directions_is_exact_and_involutive() -> None:

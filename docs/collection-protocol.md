@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v30.json`](../configs/red-battle-collection-v30.json)
+[`red-battle-collection-v31.json`](../configs/red-battle-collection-v31.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1419,3 +1419,14 @@ contract now binds to the physical Mart 2F ascent coordinate and its test simula
 
 V30 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `70001`–`70005`, `80001`–`80002`, and `90001`–`90005`; all five diagnostics must be replayed.
+
+V30 diagnostic seeds `61003`, `61001`, and `61002` completed the Hall of Fame and independently
+verified the capture, Mart-ascent, and Agatha repairs. Seed `61004` then purchased the required
+Potion and Awakening top-up but a moving Cerulean Mart customer swallowed the right step from
+`(2,7)` to the exit tile. The unverified route continued inside the Mart and the persistent return
+gate correctly stopped at checkpoint 45. V30 is retired before rehearsal with every counted root
+unopened. The repeat-clerk return now proves both south steps, retries the customer-blocked right
+step under a finite 32-attempt bound, and only resumes the city route after observing `(3,7)`.
+
+V31 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`100001`–`100005`, `110001`–`110002`, and `120001`–`120005`; all five diagnostics must be replayed.
