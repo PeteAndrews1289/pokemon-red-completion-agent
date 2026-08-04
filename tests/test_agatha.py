@@ -13,6 +13,7 @@ from pokemon_red_completion.agatha import (
     _agatha_move_slot,
     _battle_x_special,
     _encounter_party,
+    _post_agatha_recovery_item,
     _turns_valid,
 )
 from pokemon_red_completion.observation import (
@@ -44,6 +45,29 @@ def test_agatha_source_contract_is_exact() -> None:
     )
 
 
+def test_post_agatha_recovery_falls_back_to_full_restore_for_status() -> None:
+    assert (
+        _post_agatha_recovery_item(
+            hp=208,
+            max_hp=208,
+            status=0x08,
+            full_heals=0,
+            full_restores=5,
+        )
+        == ItemId.FULL_RESTORE
+    )
+    assert (
+        _post_agatha_recovery_item(
+            hp=180,
+            max_hp=208,
+            status=0,
+            full_heals=0,
+            full_restores=5,
+        )
+        == ItemId.FULL_RESTORE
+    )
+
+
 def test_agatha_receipt_deduplicates_switches() -> None:
     identities = (
         (AGATHA_PARTY[0], 0),
@@ -68,12 +92,8 @@ def test_agatha_receipt_deduplicates_switches() -> None:
     )
     assert _encounter_party(turns) == AGATHA_PARTY
     assert _turns_valid(turns)
-    assert _turns_valid(
-        (AgathaTurn(0x82, 56, 1, AGATHA_SAFE_HP, 0, (1, 0, 1, 1), 1),)
-    )
-    assert _turns_valid(
-        (AgathaTurn(0x82, 56, 1, AGATHA_SAFE_HP, 0x40, (1, 0, 1, 1), 1),)
-    )
+    assert _turns_valid((AgathaTurn(0x82, 56, 1, AGATHA_SAFE_HP, 0, (1, 0, 1, 1), 1),))
+    assert _turns_valid((AgathaTurn(0x82, 56, 1, AGATHA_SAFE_HP, 0x40, (1, 0, 1, 1), 1),))
     assert not _turns_valid((AgathaTurn(0x82, 56, 1, 0, 0, (1, 0, 1, 1), 1),))
 
 

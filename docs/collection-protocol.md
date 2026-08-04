@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v13.json`](../configs/red-battle-collection-v13.json)
+[`red-battle-collection-v14.json`](../configs/red-battle-collection-v14.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1217,3 +1217,11 @@ That repair completed Cinnabar and reached the Indigo shopping sequence at check
 TM21 was already gone, the old late planner did not free its expected slot before buying Submission.
 The Indigo planner now sells the remaining obsolete Potion stack when TM21 is absent; it preserves
 TM14 for Lance/Champion coverage and rejects a lineage with neither legal capacity option.
+
+V13 then qualified **312/312 checkpoints**, **36/36 objectives**, and **69/69** scheduled battles.
+Its first immutable training root reached Agatha at checkpoint 305 and defeated her final Gengar,
+but finished poisoned after consuming the Full Heal reserve. Post-battle recovery incorrectly chose
+the absent Full Heal solely because HP was full. That root is sealed and v13 is retired. V14 uses
+fresh rehearsal seed `21003` and counted seeds `24001`–`24005`, `34001`–`34002`, and
+`44001`–`44005`. Its recovery selector prefers Full Heal when present and otherwise proves a legal
+Full Restore fallback for status, including full-HP poison.

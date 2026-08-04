@@ -179,8 +179,10 @@ def test_collection_status_is_read_only_before_the_campaign_starts(
     monkeypatch.setattr(
         cli,
         "_recording_metadata",
-        lambda *args, **kwargs: observed.update(metadata_call=(args, kwargs))
-        or {"source": {}, "rom_identity": {}, "runtime_sha256": "a" * 64},
+        lambda *args, **kwargs: (
+            observed.update(metadata_call=(args, kwargs))
+            or {"source": {}, "rom_identity": {}, "runtime_sha256": "a" * 64}
+        ),
     )
     monkeypatch.setattr(
         cli,
@@ -190,19 +192,20 @@ def test_collection_status_is_read_only_before_the_campaign_starts(
     monkeypatch.setattr(
         cli,
         "find_dry_run_qualification",
-        lambda store, identity, dry_run: observed.update(
-            dry_run_store=store,
-            dry_run_identity=identity,
-            dry_run=dry_run,
-        )
-        or None,
+        lambda store, identity, dry_run: (
+            observed.update(
+                dry_run_store=store,
+                dry_run_identity=identity,
+                dry_run=dry_run,
+            )
+            or None
+        ),
     )
     monkeypatch.setattr(
         cli,
         "open_private_root",
         lambda root, *, repository_root: (
-            observed.update(private_root=root, repository_root=repository_root)
-            or FakeRoot()
+            observed.update(private_root=root, repository_root=repository_root) or FakeRoot()
         ),
     )
     monkeypatch.setattr(cli, "CollectionOutcomeLedger", FakeLedger)
@@ -375,10 +378,7 @@ def test_campaign_identity_pins_source_runtime_execution_and_rom() -> None:
     assert identity.registry_sha256 == registry.registry_sha256
     assert identity.source_commit == "a" * 40
     assert identity.source_bundle_sha256 == registry.execution.source_bundle_sha256
-    assert (
-        identity.teacher_execution_sha256
-        == registry.execution.teacher_execution_sha256
-    )
+    assert identity.teacher_execution_sha256 == registry.execution.teacher_execution_sha256
     assert identity.runtime_sha256 == "b" * 64
     assert identity.rom_sha1 == "c" * 40
     assert identity.rom_sha256 == "d" * 64
@@ -831,9 +831,9 @@ def test_battle_learning_writes_only_a_private_typed_model_artifact(
 @pytest.mark.parametrize(
     "run_id",
     [
-        "red-battle-v13-01-train",
-        "red-battle-v13-06-validation",
-        "red-battle-v13-08-test",
+        "red-battle-v14-01-train",
+        "red-battle-v14-06-validation",
+        "red-battle-v14-08-test",
     ],
 )
 def test_battle_learning_rejects_preregistered_ids_before_opening_private_data(
@@ -1413,7 +1413,7 @@ def test_planned_record_requires_dry_run_before_sealing_or_emulator_start(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v13-01-train")
+    assignment = registry.assignment("red-battle-v14-01-train")
     private_path = Path("/private/Pokemon Red.gb")
     private_root_path = Path("/private/external/trajectories")
     observed: dict[str, object] = {}
@@ -1512,7 +1512,7 @@ def test_planned_record_uses_the_frozen_identity_and_exact_offsets(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v13-01-train")
+    assignment = registry.assignment("red-battle-v14-01-train")
     private_path = Path("/private/Pokemon Red.gb")
     private_root_path = Path("/private/external/trajectories")
     observed: dict[str, object] = {}
@@ -1767,8 +1767,7 @@ def test_schedule_dry_run_uses_disjoint_offsets_without_touching_the_campaign_le
         cli,
         "open_private_root",
         lambda root, *, repository_root: (
-            observed.update(private_root=root, repository_root=repository_root)
-            or FakeRoot()
+            observed.update(private_root=root, repository_root=repository_root) or FakeRoot()
         ),
     )
     monkeypatch.setattr(
@@ -2000,7 +1999,7 @@ def test_planned_recording_metadata_binds_assignment_and_schedule(
 ) -> None:
     private_rom = Path("/private/Pokemon Red.gb")
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v13-01-train")
+    assignment = registry.assignment("red-battle-v14-01-train")
     source = SourceIdentity("a" * 40, False)
     monkeypatch.setattr(
         cli,
@@ -2098,7 +2097,7 @@ def test_scheduled_metadata_rejects_a_commit_change_after_registry_load(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v13-01-train")
+    assignment = registry.assignment("red-battle-v14-01-train")
     monkeypatch.setattr(
         cli,
         "detect_source_identity",
@@ -2179,8 +2178,5 @@ def test_dry_run_metadata_is_unassigned_non_counted_and_registry_bound(
     assert metadata["split"]["root_lineage_id"] == "red-dry-run-example"
     schedule = metadata["configuration"]["battle_start_schedule"]
     assert schedule["registry_sha256"] == registry.registry_sha256
-    assert (
-        schedule["teacher_execution_sha256"]
-        == registry.execution.teacher_execution_sha256
-    )
+    assert schedule["teacher_execution_sha256"] == registry.execution.teacher_execution_sha256
     assert schedule["offsets"] == [offset.public_dict() for offset in dry_run.offsets]

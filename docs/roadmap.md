@@ -489,3 +489,7 @@ Current collection gate: v12 completed its clean 312-checkpoint rehearsal, then 
 training schedule exposed the moving S.S. Anne waiter at `(8, 6)`. The failed root is sealed and
 v12 is retired. V13 contains the bounded corridor-yield repair and entirely new rehearsal,
 training, validation, and test schedules; its rehearsal must qualify before collection restarts.
+
+V13 later qualified, but its first counted root exposed an exhausted-Full-Heal assumption after
+Agatha. That root is also sealed. V14 carries the inventory-aware Full Restore fallback and fresh
+rehearsal/training/validation/test schedules; no v14 formal slot opens before qualification.

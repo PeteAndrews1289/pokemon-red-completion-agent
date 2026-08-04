@@ -344,10 +344,12 @@ def run_agatha_chapter(
         status != 0 for status in _party_status(emulator)
     ):
         try:
-            item = (
-                ItemId.FULL_RESTORE
-                if _party_hp(emulator)[0] < _party_max_hp(emulator)[0]
-                else ItemId.FULL_HEAL
+            item = _post_agatha_recovery_item(
+                hp=_party_hp(emulator)[0],
+                max_hp=_party_max_hp(emulator)[0],
+                status=_party_status(emulator)[0],
+                full_heals=_bag(emulator).get(ItemId.FULL_HEAL, 0),
+                full_restores=_bag(emulator).get(ItemId.FULL_RESTORE, 0),
             )
             _use_bag_item(
                 actions,
@@ -357,7 +359,11 @@ def run_agatha_chapter(
                 item,
             )
         except Exception as error:
-            raise AgathaChapterError("Post-Agatha recovery failed.") from error
+            raise AgathaChapterError(
+                "Post-Agatha recovery failed: "
+                f"hp={_party_hp(emulator)!r}, status={_party_status(emulator)!r}, "
+                f"bag={_bag(emulator)!r}, cause={error}."
+            ) from error
     defeated = reader.read()
     if not _event(defeated, EventFlag.BEAT_AGATHA):
         raise AgathaChapterError("Agatha event did not set after battle.")
@@ -384,6 +390,26 @@ def run_agatha_chapter(
     if not report.passed:
         raise AgathaChapterError(f"Agatha terminal evidence failed: {report!r}.")
     return report
+
+
+def _post_agatha_recovery_item(
+    *,
+    hp: int,
+    max_hp: int,
+    status: int,
+    full_heals: int,
+    full_restores: int,
+) -> ItemId:
+    """Choose a legal field cure without assuming a Full Heal survived."""
+
+    if status:
+        if full_heals > 0:
+            return ItemId.FULL_HEAL
+        if full_restores > 0:
+            return ItemId.FULL_RESTORE
+    elif hp < max_hp and full_restores > 0:
+        return ItemId.FULL_RESTORE
+    raise AgathaChapterError("Agatha lacks a legal post-battle recovery item.")
 
 
 def _checkpoint(
@@ -417,9 +443,7 @@ def _encounter_party(turns: Iterable[AgathaTurn]) -> tuple[tuple[int, int], ...]
 def _turns_valid(turns: Iterable[AgathaTurn]) -> bool:
     items = tuple(turns)
     return bool(items) and all(
-        item.move_slot in {1, 2, 3, 4}
-        and item.lead_hp > 0
-        for item in items
+        item.move_slot in {1, 2, 3, 4} and item.lead_hp > 0 for item in items
     )
 
 
@@ -427,10 +451,7 @@ def _agatha_move_slot(raw: RawGameState) -> int:
     species = raw.enemy_species_id or 0
     pp = raw.first_party_pp or ()
     surf_pp = (pp[3] & 0x3F) if len(pp) >= 4 else 0
-    surf_disabled = (
-        raw.player_disabled_move_slot == 4
-        and (raw.player_disable_turns or 0) > 0
-    )
+    surf_disabled = raw.player_disabled_move_slot == 4 and (raw.player_disable_turns or 0) > 0
     if species in {0x82, 0x2D}:
         priorities = (1, 4, 3, 2)
     elif surf_pp > AGATHA_SURF_RESERVE and not surf_disabled:
@@ -441,10 +462,7 @@ def _agatha_move_slot(raw: RawGameState) -> int:
         if (
             len(pp) >= slot
             and pp[slot - 1] & 0x3F
-            and not (
-                raw.player_disabled_move_slot == slot
-                and (raw.player_disable_turns or 0) > 0
-            )
+            and not (raw.player_disabled_move_slot == slot and (raw.player_disable_turns or 0) > 0)
         ):
             return slot
     raise AgathaChapterError("Agatha policy has no legal move with PP.")

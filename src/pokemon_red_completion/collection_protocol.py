@@ -24,9 +24,9 @@ from pathlib import Path
 
 from pokemon_red_completion.battle_plan import RED_BATTLE_PLAN_IDS
 
-COLLECTION_REGISTRY_RELATIVE_PATH = "configs/red-battle-collection-v13.json"
+COLLECTION_REGISTRY_RELATIVE_PATH = "configs/red-battle-collection-v14.json"
 COLLECTION_REGISTRY_DIGEST_RELATIVE_PATH = (
-    "configs/red-battle-collection-v13.digest.json"
+    "configs/red-battle-collection-v14.digest.json"
 )
 COLLECTION_REGISTRY_SCHEMA = "pokemon-red-collection-runs-v1"
 COLLECTION_REGISTRY_DIGEST_SCHEMA = "pokemon-red-collection-registry-digest-v1"
@@ -36,7 +36,7 @@ EXECUTABLE_SOURCE_BUNDLE_SCHEMA = "pokemon-red-executable-source-bundle-v2"
 TEACHER_BEHAVIOR_CONFIGURATION_SCHEMA = "pokemon-red-teacher-behavior-v1"
 OBJECTIVE_GRAPH_SCHEMA = "pokemon-red-objective-graph-v1"
 SCHEDULE_DRY_RUN_SCHEMA = "pokemon-red-schedule-dry-run-v1"
-SCHEDULE_DRY_RUN_SEED = 21002
+SCHEDULE_DRY_RUN_SEED = 21003
 BATTLE_PLAN_ROSTER_SCHEMA = "pokemon-red-battle-plan-roster-v1"
 BATTLE_START_SCHEDULE_SCHEMA = "pokemon-red-battle-start-offset-v1"
 BATTLE_START_SCHEDULE_DERIVATION = "sha256-mod-v1"
@@ -48,9 +48,9 @@ POKEMON_CORE_ONTOLOGY_ID = "pokemon.core.v1"
 POKEMON_RED_TEACHER_ACTOR = "deterministic_teacher"
 POKEMON_RED_TEACHER_POLICY_ID = "pokemon-red-qualified-teacher-v1"
 
-_EXPECTED_COLLECTION_ID = "red-battle-heldout-v13"
+_EXPECTED_COLLECTION_ID = "red-battle-heldout-v14"
 _EXPECTED_REGIME = "within_game"
-_EXPECTED_DRY_RUN_ID = "red-battle-schedule-dry-run-v13"
+_EXPECTED_DRY_RUN_ID = "red-battle-schedule-dry-run-v14"
 _EXPECTED_PARTITION_COUNTS = {"test": 5, "train": 5, "validation": 2}
 _EXPECTED_RUN_COUNT = sum(_EXPECTED_PARTITION_COUNTS.values())
 _MAX_REGISTRY_BYTES = 1024 * 1024
