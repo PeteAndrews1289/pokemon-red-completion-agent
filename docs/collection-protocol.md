@@ -70,6 +70,15 @@ obsolete Antidote first and then buying the replacement token, leaving nineteen 
 A true twenty-slot input may instead sell an obsolete Potion stack with exact proceeds. The failed
 rehearsals were uncounted and the full exact-source qualification remains mandatory.
 
+The next rehearsal replayed that branch through checkpoint 273 and proved that nineteen physical
+slots before entering the Mansion were still one too many: TM14 filled the twentieth slot, so the
+Secret Key could not enter the bag. When the live input has nineteen slots and Bide is absent, the
+cleanup now also sells the obsolete Potion stack before buying the disclosed Great Ball
+replacement. The Mansion therefore begins with eighteen occupied slots after using its Repel,
+leaving exactly two slots for TM14 and the Secret Key while preserving the later full-bag TM38
+lesson. Potion quantity and proceeds remain exact evidence. This failure was uncounted; no official
+v7 slot has opened.
+
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
 Center immediately before the accuracy-lowering trainer, may spend one of the already-budgeted

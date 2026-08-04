@@ -102,9 +102,12 @@ def test_blaine_replaces_an_early_sold_bide_capacity_slot() -> None:
     assert _blaine_capacity_plan(19, bide_present=False) == (True, False, 1, 20)
 
 
-def test_blaine_sells_obsolete_potions_only_at_twenty_slots() -> None:
-    assert _blaine_capacity_input_slots(19, 5) == (19, 0)
-    assert _blaine_capacity_input_slots(20, 5) == (19, 5)
+def test_blaine_sells_obsolete_potions_for_capacity_bound_inputs() -> None:
+    assert _blaine_capacity_input_slots(18, 5, bide_present=False) == (18, 0)
+    assert _blaine_capacity_input_slots(19, 5, bide_present=True) == (19, 0)
+    assert _blaine_capacity_input_slots(19, 5, bide_present=False) == (18, 5)
+    assert _blaine_capacity_input_slots(20, 5, bide_present=True) == (19, 5)
+    assert _blaine_capacity_input_slots(20, 5, bide_present=False) == (19, 5)
 
 
 def test_team_training_navigates_the_two_column_battle_menu() -> None:

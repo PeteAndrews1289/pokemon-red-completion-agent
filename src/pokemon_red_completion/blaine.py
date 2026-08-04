@@ -635,6 +635,7 @@ def run_blaine_chapter(
     capacity_input_slots, potion_sold_quantity = _blaine_capacity_input_slots(
         len(initial_bag),
         initial_bag.get(ItemId.POTION, 0),
+        bide_present=bide_present,
     )
     (
         capacity_great_ball_required,
@@ -1077,17 +1078,24 @@ def _sell_antidote_before_mansion(
 def _blaine_capacity_input_slots(
     input_slots: int,
     potion_quantity: int,
+    *,
+    bide_present: bool,
 ) -> tuple[int, int]:
-    """Remove an obsolete Potion stack only when the input bag reaches 20 slots."""
+    """Remove obsolete Potions when Mansion pickups otherwise exceed capacity."""
 
     if not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= input_slots <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]:
         raise BlaineChapterError(f"Unsupported Blaine input capacity: {input_slots} slots.")
     if type(potion_quantity) is not int or potion_quantity < 0:
         raise BlaineChapterError("Unsupported Blaine Potion quantity.")
-    if input_slots == 20:
+    if type(bide_present) is not bool:
+        raise TypeError("bide_present must be a bool")
+    potion_sale_required = input_slots == 20 or (input_slots == 19 and not bide_present)
+    if potion_sale_required:
         if potion_quantity == 0:
-            raise BlaineChapterError("Twenty-slot Blaine input lacks obsolete Potions to sell.")
-        return 19, potion_quantity
+            raise BlaineChapterError(
+                "Capacity-bound Blaine input lacks obsolete Potions to sell."
+            )
+        return input_slots - 1, potion_quantity
     return input_slots, 0
 
 
