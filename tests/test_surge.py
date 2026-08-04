@@ -10,6 +10,7 @@ from pokemon_red_completion.observation import (
     BattleMenuPhase,
     BattleMenuState,
     MapId,
+    RamAddress,
     RawGameState,
 )
 from pokemon_red_completion.party import (
@@ -52,6 +53,7 @@ from pokemon_red_completion.surge import (
     SurgeChapterReport,
     SurgeCheckpoint,
     SurgeTiming,
+    _force_switch_wild_capture_to_lead,
     _LiveWildCorridorSurveyExecutor,
     _navigate_to_gym_can,
     _party_moves_for_index,
@@ -63,6 +65,84 @@ from pokemon_red_completion.surge import (
     _wild_weakening_settle_action,
     _wild_weakening_turn_result,
 )
+
+
+def test_forced_wild_switch_reselects_lead_after_a_premature_confirmation() -> None:
+    cursor_address = int(RamAddress.TILE_MAP) + 20
+
+    class Emulator:
+        frame_count = 0
+        pressed_buttons = frozenset()
+        memory = {
+            int(RamAddress.MENU_CURSOR_LOCATION): 0,
+            int(RamAddress.MENU_CURSOR_LOCATION) + 1: 0,
+            int(RamAddress.CURRENT_MENU_ITEM): 4,
+            cursor_address: 0xED,
+        }
+
+        def read_u8(self, address: int) -> int:
+            return self.memory.get(int(address), 0)
+
+    emulator = Emulator()
+    fainted = RawGameState(
+        True,
+        MapId.VIRIDIAN_FOREST,
+        10,
+        20,
+        5,
+        1,
+        party_species_ids=(179, 64, 59, 36, 165),
+        enemy_species_id=123,
+        enemy_hp=5,
+        active_party_index=4,
+        active_party_hp=0,
+    )
+    restored = replace(
+        fainted,
+        active_party_index=0,
+        active_party_hp=35,
+    )
+
+    class Reader:
+        state = fainted
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(
+                BattleMenuPhase.MAIN if raw is restored else BattleMenuPhase.UNKNOWN
+            )
+
+    reader = Reader()
+
+    class Executor:
+        confirmations = 0
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.MOVE and action.value == "up":
+                emulator.memory[int(RamAddress.CURRENT_MENU_ITEM)] -= 1
+            if action.kind is not MacroActionKind.CONFIRM:
+                return
+            self.confirmations += 1
+            if self.confirmations == 1:
+                emulator.memory[int(RamAddress.MENU_CURSOR_LOCATION)] = cursor_address & 0xFF
+                emulator.memory[int(RamAddress.MENU_CURSOR_LOCATION) + 1] = cursor_address >> 8
+            elif self.confirmations == 3:
+                reader.state = restored
+
+    executor = Executor()
+    observed = _force_switch_wild_capture_to_lead(
+        emulator,  # type: ignore[arg-type]
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        123,
+        5,
+        "Viridian Forest",
+    )
+
+    assert observed is restored
+    assert executor.confirmations == 3
 
 
 def _raw() -> RawGameState:

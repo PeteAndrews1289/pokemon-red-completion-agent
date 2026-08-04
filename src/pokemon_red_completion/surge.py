@@ -2050,6 +2050,26 @@ def _force_switch_wild_capture_to_lead(
             and reader.read_battle_menu_state(restored).phase is BattleMenuPhase.MAIN
         ):
             return restored
+        if (
+            restored.battle_state != 1
+            or restored.enemy_species_id != expected_species_id
+            or restored.enemy_hp != expected_enemy_hp
+        ):
+            raise SurgeChapterError(f"{label} forced switch lost its protected encounter.")
+        if (restored.battler_hp or 0) <= 0 and _wild_menu_cursor_active(emulator):
+            cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+            if 0 <= cursor < party_size:
+                for _ in range(8):
+                    cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+                    if cursor == 0:
+                        break
+                    _pulse(executor, MacroActionKind.MOVE, "up", 120)
+                else:
+                    raise SurgeChapterError(
+                        f"{label} could not reselect the protected lead."
+                    )
+                _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+                continue
         _pulse(
             executor,
             MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,

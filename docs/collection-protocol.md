@@ -54,6 +54,14 @@ than the new starting quantity minus one. That uncounted bookkeeping failure sto
 55. The helper now proves exactly one decrement on the damaged branch and zero decrements on the
 full-health branch; both have direct regression coverage before the next complete rehearsal.
 
+The corrected reserve replay defeated the S.S. Anne rival and advanced through checkpoint 91,
+where the shifted encounter schedule fainted a weakening helper in Viridian Forest. The forced
+party menu accepted an early confirmation without switching, and the old settle loop then alternated
+generic inputs until its bound expired. The uncounted artifact remains preserved. While the active
+battler is still fainted, the recovery now recognizes a live forced-party cursor, explicitly
+reselects the protected lead, and only succeeds after proving the same wild target HP and a stable
+battle MAIN menu.
+
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
 Center immediately before the accuracy-lowering trainer, may spend one of the already-budgeted
