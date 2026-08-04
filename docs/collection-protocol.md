@@ -1035,3 +1035,13 @@ failed throw must consume exactly one Ball, retain a living level-17 Spearow and
 return to the wild-battle main menu; success proves the exact aggregate decrement and party
 addition. This second source-frozen failure was also uncounted, and v8 remains unopened pending a
 complete replay.
+
+The direct-capture replay then caught Spearow on its fourth Ball, completed the Diglett/DUX/Cut
+lesson and Lt. Surge, and reached the Rock Tunnel purchase at checkpoint 102. The first three
+failed throws were legal under the new five-throw policy but reduced the later Ball-sale proceeds
+by ₽300; the fixed supply plan consequently lacked ₽259 for its fourth Repel. The Mart contract now
+computes its funding gap after the observed Nugget and early-Ball sales and sells only the exact
+number of obsolete 20-HP Potions required to cover that gap. It proves both the Potion decrement
+and cash proceeds, rejects a gap larger than the live obsolete reserve, and leaves the fixed ten
+Super Potions, status items, and four Repels unchanged. This rehearsal was uncounted and all twelve
+v8 roots remain pending.

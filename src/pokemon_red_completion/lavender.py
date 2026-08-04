@@ -1945,6 +1945,12 @@ def _purchase_supplies(
     if starting_super_potions not in {0, 1, 2, 3}:
         raise LavenderChapterError("Invalid starting Super Potion reserve for Mart purchase.")
     super_potion_purchase_quantity = TUNNEL_SUPER_POTION_TARGET - starting_super_potions
+    expected_cost = (
+        super_potion_purchase_quantity * SUPER_POTION_PRICE
+        + TUNNEL_AWAKENINGS_PURCHASED * AWAKENING_PRICE
+        + TUNNEL_PARLYZ_HEALS_PURCHASED * PARLYZ_HEAL_PRICE
+        + 4 * REPEL_PRICE
+    )
     money_before = _money(emulator)
     _move(executor, reader, emulator, _RunState([], []), _directions("UUL"), timing, "Mart clerk")
     _pulse(executor, MacroActionKind.MOVE, "left", 60)
@@ -1980,17 +1986,23 @@ def _purchase_supplies(
             quantity=poke_balls_sold,
             expected_proceeds=poke_ball_sale_proceeds,
         )
-    potion_sale_proceeds = 0
-    if starting_super_potions >= 2 and _bag(emulator).get(ItemId.POTION, 0):
-        _sell_single_mart_item(
+    potion_sale_quantity = _required_potion_sale_quantity(
+        available=_bag(emulator).get(ItemId.POTION, 0),
+        projected_money=money_before + nugget_sale_proceeds + poke_ball_sale_proceeds,
+        required_cost=expected_cost,
+        preserve_existing_sale=starting_super_potions >= 2,
+    )
+    potion_sale_proceeds = potion_sale_quantity * POTION_SALE_PRICE
+    if potion_sale_quantity:
+        _sell_mart_item_stack(
             executor,
             reader,
             emulator,
             timing,
             ItemId.POTION,
-            expected_proceeds=POTION_SALE_PRICE,
+            quantity=potion_sale_quantity,
+            expected_proceeds=potion_sale_proceeds,
         )
-        potion_sale_proceeds = POTION_SALE_PRICE
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
     _buy_mart_item(
@@ -2031,12 +2043,6 @@ def _purchase_supplies(
     )
     _close_menus(executor, reader, timing)
     money_after = _money(emulator)
-    expected_cost = (
-        super_potion_purchase_quantity * SUPER_POTION_PRICE
-        + TUNNEL_AWAKENINGS_PURCHASED * AWAKENING_PRICE
-        + TUNNEL_PARLYZ_HEALS_PURCHASED * PARLYZ_HEAL_PRICE
-        + 4 * REPEL_PRICE
-    )
     total_sale_proceeds = (
         nugget_sale_proceeds + poke_ball_sale_proceeds + potion_sale_proceeds
     )
@@ -2047,6 +2053,27 @@ def _purchase_supplies(
             f"before={money_before}, after={money_after}."
         )
     return expected_cost
+
+
+def _required_potion_sale_quantity(
+    *,
+    available: int,
+    projected_money: int,
+    required_cost: int,
+    preserve_existing_sale: bool,
+) -> int:
+    """Fund fixed supplies from obsolete Potions after variable capture spend."""
+
+    shortfall = max(0, required_cost - projected_money)
+    quantity = (shortfall + POTION_SALE_PRICE - 1) // POTION_SALE_PRICE
+    if preserve_existing_sale and available:
+        quantity = max(1, quantity)
+    if quantity > available:
+        raise LavenderChapterError(
+            "Rock Tunnel supplies exceed the observable obsolete-Potion reserve: "
+            f"shortfall={shortfall}, required={quantity}, available={available}."
+        )
+    return quantity
 
 
 def _sell_single_mart_item(

@@ -103,6 +103,41 @@ def test_lavender_timing_is_positive_and_bounded() -> None:
     )
 
 
+@pytest.mark.parametrize(
+    ("projected_money", "preserve_existing_sale", "expected"),
+    (
+        (10_000, False, 0),
+        (10_000, True, 1),
+        (9_741, False, 2),
+        (9_701, False, 2),
+    ),
+)
+def test_obsolete_potion_sale_funds_variable_capture_spend(
+    projected_money: int,
+    preserve_existing_sale: bool,
+    expected: int,
+) -> None:
+    assert (
+        lavender_module._required_potion_sale_quantity(
+            available=6,
+            projected_money=projected_money,
+            required_cost=10_000,
+            preserve_existing_sale=preserve_existing_sale,
+        )
+        == expected
+    )
+
+
+def test_obsolete_potion_sale_rejects_an_unfunded_plan() -> None:
+    with pytest.raises(lavender_module.LavenderChapterError, match="exceed"):
+        lavender_module._required_potion_sale_quantity(
+            available=1,
+            projected_money=9_700,
+            required_cost=10_000,
+            preserve_existing_sale=False,
+        )
+
+
 def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert BATTLE_RECOVERY_THRESHOLD == 40
     assert lavender_module.TUNNEL_RECOVERY_THRESHOLD == 40

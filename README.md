@@ -59,8 +59,10 @@ control, and progressively trained specialists.**
 > deadlock. A finite, coordinate-gated step-aside maneuver now lets that left/right patrol pass;
 > the next rehearsal cleared that gate and exposed an obsolete Spearow weakening rule at checkpoint
 > 86. Because the level-30 workhorse has no nonlethal damaging move, the capture lesson now uses a
-> verified five-throw direct-capture bound. All twelve counted v8 slots remain unopened while the
-> exact source requalifies.
+> verified five-throw direct-capture bound. The next run caught Spearow on throw four and exposed
+> the old one-throw assumption in the Rock Tunnel budget; supply planning now sells only the
+> observed obsolete-Potion shortfall. All twelve counted v8 slots remain unopened while the exact
+> source requalifies.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the
