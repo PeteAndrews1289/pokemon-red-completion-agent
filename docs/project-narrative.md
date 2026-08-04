@@ -873,6 +873,12 @@ survey raised on iterator exhaustion before asking the capture policy what to do
 It now grants one terminal replan after the last attack: throw or flee is legal, but any request for
 another weakening move still fails at the unchanged cap. The rehearsal remained uncounted.
 
+That replay completed the Forest survey, but scheduled Route 9 trainer 0 trapped and fainted the
+level-17 DUX helper after it had supplied the required Peck evidence. The opponent remained at 10
+HP while two teammates were alive. The Lavender battle controller now uses the verified forced-party
+menu after an observed zero-HP active member and continues with the first living teammate under a
+party-size-minus-one bound. No item, retry, or extra training was added; the rehearsal was uncounted.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

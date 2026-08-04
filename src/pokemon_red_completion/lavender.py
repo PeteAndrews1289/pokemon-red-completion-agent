@@ -1021,6 +1021,7 @@ def _run_lavender_trainer_battle(
 
     dux_status_escaped = False
     selected_move_evidence_observed = False
+    faint_pivots = 0
 
     def guarded_policy(raw: RawGameState) -> int:
         nonlocal selected_move_evidence_observed
@@ -1150,12 +1151,57 @@ def _run_lavender_trainer_battle(
                 except ProtectedRecoveryError as pivot_error:
                     raise LavenderChapterError(str(pivot_error)) from pivot_error
                 continue
+            failed = reader.read()
+            party_hp = _party_hp(emulator)
+            pivot_target = _fainted_battler_pivot_target(failed, party_hp)
+            if pivot_target is not None:
+                if faint_pivots >= max(0, len(party_hp) - 1):
+                    raise LavenderChapterError(
+                        f"{label} exhausted its living-party continuation bound."
+                    ) from error
+                try:
+                    switch_active_battler(
+                        executor,
+                        reader,
+                        emulator,
+                        pivot_target,
+                        label=f"{label} fainted-member continuation",
+                        wait_frames=timing.wait_frames,
+                    )
+                except ProtectedRecoveryError as pivot_error:
+                    raise LavenderChapterError(
+                        f"{label} could not continue through its living party."
+                    ) from pivot_error
+                faint_pivots += 1
+                continue
             if not isinstance(error.__cause__, _PauseForBattleSuperPotion):
                 raise
         _use_battle_super_potion(reader, executor, emulator, run, timing, label)
         recoveries += 1
         if recoveries > starting_reserve:
             raise LavenderChapterError(f"{label} exceeded its bounded recovery reserve.")
+
+
+def _fainted_battler_pivot_target(
+    raw: RawGameState,
+    party_hp: tuple[int, ...],
+) -> int | None:
+    """Select the first living teammate only after the active member fainted."""
+
+    if (
+        raw.battle_state != 2
+        or raw.active_party_index is None
+        or (raw.battler_hp or 0) > 0
+    ):
+        return None
+    return next(
+        (
+            index
+            for index, hp in enumerate(party_hp)
+            if index != raw.active_party_index and hp > 0
+        ),
+        None,
+    )
 
 
 def _ranked_lavender_move_slots(

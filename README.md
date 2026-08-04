@@ -86,6 +86,8 @@ control, and progressively trained specialists.**
 > on safe Diglett, rehearses on exposed seed `19001`, and reserves fresh counted seeds at `20001+`.
 > Its first rehearsal passed the Dugtrio branch, then exposed an off-by-one policy replan after the
 > final allowed cocoon-weakening hit. V10 now replans once at the same attack cap before throwing.
+> The following replay reached Route 9, where Wrap fainted DUX after its required Peck. The shared
+> trainer controller now continues through the verified party menu with a living teammate.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the

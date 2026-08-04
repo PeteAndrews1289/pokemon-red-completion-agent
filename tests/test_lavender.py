@@ -229,6 +229,26 @@ def test_status_locked_dux_escapes_to_a_living_story_lead() -> None:
     assert lavender_module._dux_status_escape_target(asleep, (20, 50, 30), False) is None
 
 
+def test_fainted_route_helper_continues_with_the_first_living_teammate() -> None:
+    fainted = replace(
+        _raw(),
+        battle_state=2,
+        active_party_index=0,
+        active_party_hp=0,
+    )
+
+    assert lavender_module._fainted_battler_pivot_target(fainted, (0, 73, 42)) == 1
+    assert lavender_module._fainted_battler_pivot_target(fainted, (0, 0, 42)) == 2
+    assert lavender_module._fainted_battler_pivot_target(fainted, (0, 0, 0)) is None
+    assert (
+        lavender_module._fainted_battler_pivot_target(
+            replace(fainted, active_party_hp=1),
+            (1, 73, 42),
+        )
+        is None
+    )
+
+
 def test_status_recovery_prefers_a_healthy_pivot_before_spending_awakening() -> None:
     asleep = replace(
         _raw(),

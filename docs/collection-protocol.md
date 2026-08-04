@@ -1139,3 +1139,10 @@ one-damage weakening attacks. The loop treated exhaustion of the attack iterator
 replanning the now-weakened target. It now permits one terminal policy observation after the last
 budgeted attack: a throw or flee may proceed, while another weakening request still fails at the
 same cap. The attack allowance itself is unchanged, and this rehearsal was uncounted.
+
+The terminal-replan replay completed the Forest survey and reached scheduled Route 9 trainer 0.
+The level-17 DUX helper spent its required Peck evidence, then Wrap trapped and fainted it with the
+opponent at 10 HP. The shared Lavender battle controller now recognizes only an observed zero-HP
+active member, selects the first living teammate through the verified forced-party menu, and
+continues under a party-size-minus-one bound. It adds no healing item or retry and still requires
+the chapter's later Center recovery. This rehearsal was uncounted.
