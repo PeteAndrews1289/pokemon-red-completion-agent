@@ -408,7 +408,19 @@ def _settle_bruno_victory(
             and _event(raw, EventFlag.BEAT_BRUNO)
             and reader.read_input_readiness().ready
         ):
-            return raw
+            # The Gen I readiness flag becomes true one text box before START
+            # is accepted here. B closes that residual box and is harmless if
+            # the overworld was already genuinely free.
+            _pulse(actions, MacroActionKind.CANCEL)
+            released = reader.read()
+            if (
+                released.battle_state == 0
+                and released.map_id == MapId.BRUNOS_ROOM
+                and _event(released, EventFlag.BEAT_BRUNO)
+                and reader.read_input_readiness().ready
+            ):
+                return released
+            raise BrunoChapterError("Bruno victory release left its qualified room boundary.")
         _pulse(actions, MacroActionKind.CONFIRM)
     raise BrunoChapterError("Bruno victory script did not settle at the overworld boundary.")
 

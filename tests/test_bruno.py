@@ -106,3 +106,4 @@ def test_bruno_victory_settle_stops_before_reinteracting(monkeypatch: pytest.Mon
 
     assert _settle_bruno_victory(executor, reader) == raw  # type: ignore[arg-type]
     assert [action.kind for action in executor.actions].count(MacroActionKind.CONFIRM) == 1
+    assert [action.kind for action in executor.actions].count(MacroActionKind.CANCEL) == 1
