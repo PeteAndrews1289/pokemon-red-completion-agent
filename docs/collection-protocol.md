@@ -1132,3 +1132,10 @@ distinguishes the safe Diglett curriculum from the cave's evolved ambush: Dugtri
 bounded, menu-normalized flee that must preserve the party and attack PP and leave the workhorse
 alive. Successful escapes are reported separately from training wins. V10 must pass its complete
 qualification before any counted slot opens.
+
+The first v10 rehearsal crossed the Dugtrio branch and completed pre-ship training, but the later
+Viridian Forest survey stopped when a passive cocoon required exactly the declared number of
+one-damage weakening attacks. The loop treated exhaustion of the attack iterator as failure before
+replanning the now-weakened target. It now permits one terminal policy observation after the last
+budgeted attack: a throw or flee may proceed, while another weakening request still fails at the
+same cap. The attack allowance itself is unchanged, and this rehearsal was uncounted.

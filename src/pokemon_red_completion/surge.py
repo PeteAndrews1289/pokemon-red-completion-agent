@@ -1557,6 +1557,21 @@ def _wild_capture_weakening_budget(
     )
 
 
+def _weakening_attack_allowed(
+    directive: CaptureDirective,
+    *,
+    attacks_completed: int,
+    attack_budget: int,
+) -> bool:
+    """Allow a terminal replan after the final budgeted weakening attack."""
+
+    if directive is not CaptureDirective.WEAKEN_TARGET:
+        return False
+    if attacks_completed >= attack_budget:
+        raise RedAreaExecutionError("capture still requires weakening after its attack budget")
+    return True
+
+
 def _wild_weakening_settle_action(
     phase: BattleMenuPhase,
     pulse_index: int,
@@ -1670,7 +1685,7 @@ class _LiveWildCorridorSurveyExecutor:
             raw.enemy_hp,
             raw.enemy_max_hp,
         )
-        for _ in range(weakening_budget):
+        for weakening_attacks in range(weakening_budget + 1):
             raw = self._reader.read()
             party = self._party_reader.read()
             helper = (
@@ -1704,7 +1719,17 @@ class _LiveWildCorridorSurveyExecutor:
                 ),
                 policy,
             )
-            if decision.directive is not CaptureDirective.WEAKEN_TARGET:
+            try:
+                attack_allowed = _weakening_attack_allowed(
+                    decision.directive,
+                    attacks_completed=weakening_attacks,
+                    attack_budget=weakening_budget,
+                )
+            except RedAreaExecutionError as error:
+                raise RedAreaExecutionError(
+                    f"{self._label} exceeded its bounded weakening attack budget"
+                ) from error
+            if not attack_allowed:
                 break
             if not _weaken_wild_capture_once(
                 self._emulator,
@@ -1715,10 +1740,6 @@ class _LiveWildCorridorSurveyExecutor:
                 self._label,
             ):
                 return False
-        else:
-            raise RedAreaExecutionError(
-                f"{self._label} exceeded its bounded weakening attack budget"
-            )
         return _try_catch_wild(
             self._emulator,
             self._executor,

@@ -84,6 +84,8 @@ control, and progressively trained specialists.**
 > `19001` encountered a high-level Dugtrio during pre-ship training and fainted before attacking.
 > That root is preserved and v9 is retired. V10 flees the evolved cave ambush while training only
 > on safe Diglett, rehearses on exposed seed `19001`, and reserves fresh counted seeds at `20001+`.
+> Its first rehearsal passed the Dugtrio branch, then exposed an off-by-one policy replan after the
+> final allowed cocoon-weakening hit. V10 now replans once at the same attack cap before throwing.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the

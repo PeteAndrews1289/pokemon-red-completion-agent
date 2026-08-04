@@ -6,6 +6,7 @@ import pytest
 
 import pokemon_red_completion.surge as surge_module
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.capture import CaptureDirective
 from pokemon_red_completion.observation import (
     Badge,
     BattleMenuPhase,
@@ -20,6 +21,7 @@ from pokemon_red_completion.party import (
     PartyObservation,
     StatusCondition,
 )
+from pokemon_red_completion.red_acquisition import RedAreaExecutionError
 from pokemon_red_completion.surge import (
     CATERPIE_SPECIES_ID,
     COLLECTION_POKE_BALL_TARGET,
@@ -60,6 +62,7 @@ from pokemon_red_completion.surge import (
     _plan_gym_can_path,
     _run_dig_battle,
     _select_wild_capture_helper,
+    _weakening_attack_allowed,
     _wild_capture_policy,
     _wild_capture_weakening_budget,
     _wild_weakening_settle_action,
@@ -330,6 +333,20 @@ def test_weakening_budget_covers_one_damage_cocoon_hits() -> None:
     assert _wild_capture_weakening_budget(METAPOD_SPECIES_ID, 15, 18) == 10
     assert _wild_capture_weakening_budget(KAKUNA_SPECIES_ID, 18, 18) == 13
     assert _wild_capture_weakening_budget(CATERPIE_SPECIES_ID, 18, 18) == 8
+
+
+def test_weakening_budget_allows_a_terminal_replan_after_the_last_attack() -> None:
+    assert not _weakening_attack_allowed(
+        CaptureDirective.THROW_BALL,
+        attacks_completed=10,
+        attack_budget=10,
+    )
+    with pytest.raises(RedAreaExecutionError, match="still requires weakening"):
+        _weakening_attack_allowed(
+            CaptureDirective.WEAKEN_TARGET,
+            attacks_completed=10,
+            attack_budget=10,
+        )
 
 
 def test_weakening_settle_cancels_a_returned_move_menu() -> None:

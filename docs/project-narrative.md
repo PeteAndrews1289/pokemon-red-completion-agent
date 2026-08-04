@@ -867,6 +867,12 @@ that counted failure and eleven unopened slots. V10 turns the observation into a
 opponent-selection lesson: train on safe Diglett, but use a bounded, PP-preserving escape from the
 evolved ambush. The exposed seed becomes rehearsal-only and all counted v10 seeds are fresh.
 
+V10's first rehearsal proved that escape and finished the level-30 training block, then a passive
+Viridian Forest cocoon reached the capture threshold on the final allowed one-damage attack. The
+survey raised on iterator exhaustion before asking the capture policy what to do with the new HP.
+It now grants one terminal replan after the last attack: throw or flee is legal, but any request for
+another weakening move still fails at the unchanged cap. The rehearsal remained uncounted.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
