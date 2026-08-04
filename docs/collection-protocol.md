@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v25.json`](../configs/red-battle-collection-v25.json)
+[`red-battle-collection-v26.json`](../configs/red-battle-collection-v26.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1370,3 +1370,13 @@ opponents plus the canonical victory event.
 
 V25 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `35001`–`35005`, `45001`–`45002`, and `55001`–`55005`; diagnostics `61001`–`61005` remain unopened.
+
+The v25 exact replay and diagnostic seed `61001` completed the Hall of Fame. Diagnostic seed
+`61002` then defeated Agatha but ended with a damaged, cured lead: the field recovery selector used
+a Full Heal whenever one remained, even when the same lead also needed HP recovery. The receipt
+correctly stopped at checkpoint 306 rather than entering Lance underprepared. V25 is retired before
+rehearsal with every counted root unopened. Post-Agatha recovery now prefers a Full Restore whenever
+both damage and status are present, satisfying both Lance-entry invariants with one bounded item.
+
+V26 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`36001`–`36005`, `46001`–`46002`, and `56001`–`56005`; all five diagnostics must be replayed.

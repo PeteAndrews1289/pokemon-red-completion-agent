@@ -49,6 +49,16 @@ def test_agatha_source_contract_is_exact() -> None:
 def test_post_agatha_recovery_falls_back_to_full_restore_for_status() -> None:
     assert (
         _post_agatha_recovery_item(
+            hp=160,
+            max_hp=209,
+            status=0x08,
+            full_heals=2,
+            full_restores=4,
+        )
+        == ItemId.FULL_RESTORE
+    )
+    assert (
+        _post_agatha_recovery_item(
             hp=208,
             max_hp=208,
             status=0x08,

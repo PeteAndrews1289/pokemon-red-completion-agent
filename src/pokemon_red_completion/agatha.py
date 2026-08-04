@@ -410,9 +410,13 @@ def _post_agatha_recovery_item(
     full_heals: int,
     full_restores: int,
 ) -> ItemId:
-    """Choose a legal field cure without assuming a Full Heal survived."""
+    """Choose one item that leaves the lead Lance-ready when possible."""
 
     if status:
+        # A Full Heal alone is insufficient when the lead is also damaged;
+        # prefer the single Full Restore that proves both terminal invariants.
+        if hp < max_hp and full_restores > 0:
+            return ItemId.FULL_RESTORE
         if full_heals > 0:
             return ItemId.FULL_HEAL
         if full_restores > 0:
