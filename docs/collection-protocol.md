@@ -62,6 +62,13 @@ battler is still fainted, the recovery now recognizes a live forced-party cursor
 reselects the protected lead, and only succeeds after proving the same wild target HP and a stable
 battle MAIN menu.
 
+That correction carried the rehearsal through S.S. Anne, Forest, Silph, and Sabrina to checkpoint
+271. The larger early reserve left an obsolete Potion stack at Cinnabar, producing a legitimate
+twenty-slot input that the old capacity planner rejected. Cinnabar now sells that exact stack at
+the existing Mart cleanup, includes its precise half-price proceeds in the money ledger, and then
+applies the unchanged Antidote and delayed-TM38 capacity lessons. The failed rehearsal was
+uncounted and the full exact-source qualification remains mandatory.
+
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
 Center immediately before the accuracy-lowering trainer, may spend one of the already-budgeted

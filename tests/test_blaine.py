@@ -33,6 +33,7 @@ from pokemon_red_completion.blaine import (
     QUIZ_TEXT_PULSES,
     BlaineTurn,
     _battle_command_direction,
+    _blaine_capacity_input_slots,
     _blaine_capacity_plan,
     _encounter_party,
     _mansion_training_move_slot,
@@ -59,7 +60,7 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert QUIZ_TEXT_PULSES == (9, 10, 9, 11, 11, 9)
     assert len(BLAINE_TO_GYM_EXIT) == len(GYM_RETURN_TO_BLAINE) == 59
     assert BLAINE_CAPACITY_SALE_ITEM is ItemId.ANTIDOTE
-    assert BLAINE_INPUT_BAG_SLOT_BOUNDS == (15, 19)
+    assert BLAINE_INPUT_BAG_SLOT_BOUNDS == (15, 20)
     assert BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST == 1_300
     assert BLAINE_MONEY_DELTA == 5_003
     assert BLAINE_ANTIDOTE_SALE_VALUE == 50
@@ -97,6 +98,11 @@ def test_blaine_replaces_an_early_sold_bide_capacity_slot() -> None:
     assert _blaine_capacity_plan(15, bide_present=False) == (True, True, 2, 16)
     assert _blaine_capacity_plan(16, bide_present=False) == (True, False, 2, 17)
     assert _blaine_capacity_plan(17, bide_present=True) == (False, False, 2, 17)
+
+
+def test_blaine_sells_obsolete_potions_only_at_twenty_slots() -> None:
+    assert _blaine_capacity_input_slots(19, 5) == (19, 0)
+    assert _blaine_capacity_input_slots(20, 5) == (19, 5)
 
 
 def test_team_training_navigates_the_two_column_battle_menu() -> None:

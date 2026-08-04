@@ -88,9 +88,10 @@ from pokemon_red_completion.training import (
 
 BLAINE_CHECKPOINT_COUNT = 9
 BLAINE_CAPACITY_SALE_ITEM = ItemId.ANTIDOTE
-BLAINE_INPUT_BAG_SLOT_BOUNDS = (15, 19)
+BLAINE_INPUT_BAG_SLOT_BOUNDS = (15, 20)
 BLAINE_MONEY_DELTA = 5_003
 BLAINE_ANTIDOTE_SALE_VALUE = 50
+BLAINE_POTION_SALE_VALUE = 150
 BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST = 1_300
 MAX_REPEL_PRICE = 700
 ULTRA_BALL_PRICE = 1_200
@@ -357,6 +358,7 @@ class BlaineChapterReport:
     capacity_ultra_ball_bought: bool = False
     capacity_great_ball_bought: bool = False
     initial_bag_slot_count: int = 17
+    potion_sold_quantity: int = 0
     team_readiness: DevelopedTeamReport | None = None
     team_training_battles: int = 0
     team_training_healing_trips: int = 0
@@ -405,13 +407,19 @@ class BlaineChapterReport:
                 BLAINE_INPUT_BAG_SLOT_BOUNDS[1] + 1,
             )
             and self.capacity_ultra_ball_bought
-            == (self.initial_bag_slot_count + int(self.capacity_great_ball_bought) == 16)
+            == (
+                self.initial_bag_slot_count
+                - int(self.potion_sold_quantity > 0)
+                + int(self.capacity_great_ball_bought)
+                == 16
+            )
             and (not self.capacity_great_ball_bought or self.initial_bag_slot_count >= 15)
             and self.money_remaining
             == self.initial_money
             + BLAINE_MONEY_DELTA
             - (self.max_repel_bought - 1) * MAX_REPEL_PRICE
             + (self.antidote_sold_quantity - 1) * BLAINE_ANTIDOTE_SALE_VALUE
+            + self.potion_sold_quantity * BLAINE_POTION_SALE_VALUE
             - (ULTRA_BALL_PRICE if self.capacity_ultra_ball_bought else 0)
             - (
                 BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST
@@ -477,6 +485,7 @@ class BlaineChapterReport:
             + BLAINE_MONEY_DELTA
             - (self.max_repel_bought - 1) * MAX_REPEL_PRICE
             + (self.antidote_sold_quantity - 1) * BLAINE_ANTIDOTE_SALE_VALUE
+            + self.potion_sold_quantity * BLAINE_POTION_SALE_VALUE
             - (ULTRA_BALL_PRICE if self.capacity_ultra_ball_bought else 0)
             - (
                 BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST
@@ -580,6 +589,7 @@ class BlaineChapterReport:
                 "bide_sold": self.bide_sold,
                 "antidote_sold": self.antidote_sold,
                 "antidote_sold_quantity": self.antidote_sold_quantity,
+                "potion_sold_quantity": self.potion_sold_quantity,
                 "max_repel_bought": self.max_repel_bought,
                 "money": [self.initial_money, self.money_remaining],
             },
@@ -622,12 +632,16 @@ def run_blaine_chapter(
     initial_money = _money(emulator)
     initial_bag = _bag(emulator)
     bide_present = initial_bag.get(ItemId.TM34_BIDE, 0) == 1
+    capacity_input_slots, potion_sold_quantity = _blaine_capacity_input_slots(
+        len(initial_bag),
+        initial_bag.get(ItemId.POTION, 0),
+    )
     (
         capacity_great_ball_required,
         capacity_ultra_ball_bought,
         repel_purchase_quantity,
         effective_input_slots,
-    ) = _blaine_capacity_plan(len(initial_bag), bide_present=bide_present)
+    ) = _blaine_capacity_plan(capacity_input_slots, bide_present=bide_present)
     if (
         initial_bag.get(ItemId.SECRET_KEY, 0)
         or _event(emulator, EventFlag.BEAT_BLAINE)
@@ -642,6 +656,7 @@ def run_blaine_chapter(
         or (capacity_great_ball_required and initial_bag.get(ItemId.POKE_BALL, 0) != 1)
         or not 16 <= effective_input_slots <= 19
         or initial_bag.get(ItemId.ANTIDOTE, 0) not in (0, 1, 2)
+        or (len(initial_bag) == 20 and potion_sold_quantity == 0)
     ):
         raise BlaineChapterError(
             "Cinnabar input inventory lacks the qualified capacity items: "
@@ -664,6 +679,17 @@ def run_blaine_chapter(
     _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart entry")
     _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
+    if potion_sold_quantity:
+        _sell_bag_item_stack(
+            actions,
+            reader,
+            emulator,
+            ItemId.POTION,
+            potion_sold_quantity,
+        )
+        if _bag(emulator).get(ItemId.POTION, 0):
+            raise BlaineChapterError("Obsolete Potion sale did not settle.")
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     sell_antidote_early = _sell_antidote_before_mansion(
         effective_input_slots,
         initial_bag.get(ItemId.ANTIDOTE, 0),
@@ -965,6 +991,7 @@ def run_blaine_chapter(
         ),
         capacity_great_ball_bought=capacity_great_ball_required,
         initial_bag_slot_count=len(initial_bag),
+        potion_sold_quantity=potion_sold_quantity,
         team_readiness=team_readiness,
         team_training_battles=team_battles,
         team_training_healing_trips=team_healing_trips,
@@ -1043,6 +1070,23 @@ def _sell_antidote_before_mansion(
             f"slots={input_slots}, quantity={antidote_quantity}."
         )
     return input_slots == 19
+
+
+def _blaine_capacity_input_slots(
+    input_slots: int,
+    potion_quantity: int,
+) -> tuple[int, int]:
+    """Remove an obsolete Potion stack only when the input bag reaches 20 slots."""
+
+    if not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= input_slots <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]:
+        raise BlaineChapterError(f"Unsupported Blaine input capacity: {input_slots} slots.")
+    if type(potion_quantity) is not int or potion_quantity < 0:
+        raise BlaineChapterError("Unsupported Blaine Potion quantity.")
+    if input_slots == 20:
+        if potion_quantity == 0:
+            raise BlaineChapterError("Twenty-slot Blaine input lacks obsolete Potions to sell.")
+        return 19, potion_quantity
+    return input_slots, 0
 
 
 def _blaine_capacity_plan(
