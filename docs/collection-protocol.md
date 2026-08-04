@@ -1232,3 +1232,9 @@ two, exhausting the three-item reserve before Pokémon Tower. Lavender Mart cann
 item. The teacher now buys a fourth Awakening with the already-proven Vermilion income, carries it
 in the existing bag stack, and requires at least one to survive the Tunnel. The extra ₽200 is
 included in the exact purchase ledger; no counted slot was opened.
+
+The immediate replay stopped at the same Vermilion shop before entering the Tunnel: the reserve
+target and money ledger had been raised to four, but the purchase adapter still requested the old
+single-copy quantity. Its live proof rejected the observed three-item stack. The transaction now
+derives both the requested quantity and target from the same declared reserve constants, preventing
+the plan and menu operation from drifting independently.

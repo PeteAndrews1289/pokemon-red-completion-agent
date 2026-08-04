@@ -2200,7 +2200,7 @@ def _purchase_supplies(
         timing,
         absolute_index=3,
         item=ItemId.AWAKENING,
-        quantity=1,
+        quantity=TUNNEL_AWAKENINGS_PURCHASED,
         target_bag_quantity=TUNNEL_AWAKENING_RESERVE,
     )
     _buy_mart_item(
