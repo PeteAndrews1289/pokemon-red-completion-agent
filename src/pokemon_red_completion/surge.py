@@ -72,6 +72,9 @@ METAPOD_SPECIES_ID = 0x7C
 KAKUNA_SPECIES_ID = 0x71
 PIKACHU_SPECIES_ID = 0x54
 COLLECTION_POKE_BALL_TARGET = 30
+FOREST_POKE_BALL_RESERVE = 30
+POKE_BALL_PRICE = 200
+NUGGET_SALE_PROCEEDS = 5_000
 SURGE_ITEM_SETTLE_PULSES = 720
 WILD_CAPTURE_THROWS_PER_ENCOUNTER = 5
 BALL_THROW_SETTLE_ACTION = MacroActionKind.CANCEL
@@ -118,6 +121,8 @@ CITY_TO_CENTER = _directions(
     "RUURRRRRURRRRRR" + "U" * 12 + "L" * 12 + "U" * 5 + "LLUU" + "L" * 5 + "U" * 5
 )
 CENTER_TO_MART = _directions("DDDD" + "R" * 5 + "DDRR" + "D" * 5 + "R" * 5 + "UU")
+VIRIDIAN_TO_MART_DIRECTIONS = _directions("UUUUULUULUUUUUUUURRRRRRRRRRU")
+VIRIDIAN_MART_RETURN_DIRECTIONS = _directions("LLLLLLLLLLDDDDDDDDRDDRDDDDD")
 
 
 class EmulatorState(Protocol):
@@ -743,6 +748,19 @@ def _bag_ids(emulator: EmulatorState) -> set[int]:
     return set(_bag(emulator))
 
 
+def _money(emulator: EmulatorState) -> int:
+    value = 0
+    for offset in range(3):
+        packed = emulator.read_u8(int(RamAddress.PLAYER_MONEY) + offset)
+        high, low = packed >> 4, packed & 0x0F
+        if high > 9 or low > 9:
+            raise SurgeChapterError(
+                f"Player money contains invalid BCD byte {packed:#04x}."
+            )
+        value = value * 100 + high * 10 + low
+    return value
+
+
 def _event(raw: RawGameState, event: EventFlag) -> bool:
     return event_flag_is_set(raw.event_flags, event)
 
@@ -1201,6 +1219,7 @@ def _run_route_1_collection_detour(
         "Viridian southbound",
     )
     _survey_route_1(emulator, executor, reader, timing)
+    _restock_for_viridian_forest(emulator, executor, reader, timing)
     _run_viridian_forest_collection(emulator, executor, reader, timing)
     _move(
         executor,
@@ -1300,6 +1319,99 @@ def _survey_route_1(
     if not {16, 19} <= owned:
         raise SurgeChapterError(f"Route 1 captures lack Pokédex ownership: {sorted(owned)!r}.")
     return report
+
+
+def _restock_for_viridian_forest(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SurgeTiming,
+) -> None:
+    """Liquidate the Nugget and restore a complete six-capture Forest reserve."""
+
+    _require(reader.read(), MapId.VIRIDIAN_CITY, (21, 35), 0, "Route 1 reserve boundary")
+    starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+    if not 0 <= starting_balls < FOREST_POKE_BALL_RESERVE:
+        raise SurgeChapterError(
+            "Forest restock received an invalid Poké Ball quantity: "
+            f"{starting_balls}."
+        )
+    if _bag(emulator).get(ItemId.NUGGET, 0) != 1:
+        raise SurgeChapterError("Forest restock requires the retained Route 24 Nugget.")
+    purchase_quantity = FOREST_POKE_BALL_RESERVE - starting_balls
+    purchase_cost = purchase_quantity * POKE_BALL_PRICE
+    money_before = _money(emulator)
+    if money_before + NUGGET_SALE_PROCEEDS < purchase_cost:
+        raise SurgeChapterError(
+            "Forest restock is not funded by the live money and Nugget ledger: "
+            f"money={money_before}, cost={purchase_cost}."
+        )
+
+    _move(executor, reader, VIRIDIAN_TO_MART_DIRECTIONS, timing, "Viridian Mart restock")
+    _wait(executor, timing.transition_frames)
+    _require(reader.read(), MapId.VIRIDIAN_MART, (3, 7), 0, "Viridian Mart entry")
+    _move(executor, reader, _directions("UUL"), timing, "Viridian Mart clerk")
+    _pulse(executor, MacroActionKind.MOVE, "left", 60)
+
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _pulse(executor, MacroActionKind.MOVE, "down", 120)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
+        raise SurgeChapterError("Viridian Mart did not select SELL for the Nugget lesson.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(24):
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        items = tuple(_bag(emulator))
+        if absolute < len(items) and items[absolute] == ItemId.NUGGET:
+            break
+        _pulse(executor, MacroActionKind.MOVE, "down", 120)
+    else:
+        raise SurgeChapterError("Viridian sell list could not select the Nugget.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _ in range(12):
+        if _bag(emulator).get(ItemId.NUGGET, 0) == 0:
+            break
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    else:
+        raise SurgeChapterError("Viridian Mart did not sell the Nugget.")
+    if _money(emulator) != money_before + NUGGET_SALE_PROCEEDS:
+        raise SurgeChapterError("Viridian Nugget sale missed its exact money delta.")
+
+    _confirm_kind(executor, MacroActionKind.CANCEL, 4, 180)
+    _confirm(executor, 4, 180)
+    _confirm(executor, 2, 240)
+    for _ in range(180):
+        quantity = _bag(emulator).get(ItemId.POKE_BALL, 0)
+        if quantity == FOREST_POKE_BALL_RESERVE:
+            break
+        if not starting_balls <= quantity < FOREST_POKE_BALL_RESERVE:
+            raise SurgeChapterError(
+                f"Viridian restock observed invalid Poké Ball quantity {quantity}."
+            )
+        _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+    else:
+        raise SurgeChapterError(
+            "Viridian Mart missed the Forest Poké Ball reserve: "
+            f"target={FOREST_POKE_BALL_RESERVE}, "
+            f"quantity={_bag(emulator).get(ItemId.POKE_BALL, 0)}, "
+            f"money={_money(emulator)}."
+        )
+    if _money(emulator) != money_before + NUGGET_SALE_PROCEEDS - purchase_cost:
+        raise SurgeChapterError("Viridian Forest restock missed its exact purchase ledger.")
+
+    _confirm_kind(executor, MacroActionKind.CANCEL, 4, 180)
+    _move(executor, reader, _directions("RDDD"), timing, "Viridian Mart exit")
+    _wait(executor, timing.transition_frames)
+    _require(reader.read(), MapId.VIRIDIAN_CITY, (29, 20), 0, "Viridian Mart exterior")
+    _move(
+        executor,
+        reader,
+        VIRIDIAN_MART_RETURN_DIRECTIONS,
+        timing,
+        "Viridian Forest reserve return",
+    )
+    _require(reader.read(), MapId.VIRIDIAN_CITY, (21, 35), 0, "Forest reserve return")
 
 
 def _run_viridian_forest_collection(

@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v31.json`](../configs/red-battle-collection-v31.json)
+[`red-battle-collection-v32.json`](../configs/red-battle-collection-v32.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1430,3 +1430,14 @@ step under a finite 32-attempt bound, and only resumes the city route after obse
 
 V31 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `100001`–`100005`, `110001`–`110002`, and `120001`–`120005`; all five diagnostics must be replayed.
+
+V31 diagnostic seed `61004` passed the Cerulean Mart exit repair and reached the Forest collection
+lesson after checkpoint 91. It then exhausted the thirty-ball route reserve: the contract allowed
+fifteen bounded Spearow throws, eight bounded Diglett throws, and five throws for each of six
+Forest specimens, but never replenished the inventory after Route 1. V31 is retired before
+rehearsal with every counted root unopened. The teacher now sells the retained Route 24 Nugget at
+the live Viridian Mart, proves the exact ₽5,000 sale and variable Ball-purchase ledger, restores a
+thirty-ball Forest reserve, and returns to the same south-city boundary before collection.
+
+V32 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`130001`–`130005`, `140001`–`140002`, and `150001`–`150005`; all five diagnostics must be replayed.
