@@ -4,6 +4,8 @@ from dataclasses import fields, replace
 
 import pytest
 
+import pokemon_red_completion.koga as koga_module
+from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.koga import (
     CENTER_TO_GYM,
     DEFAULT_KOGA_TIMING,
@@ -310,6 +312,38 @@ def test_koga_fainted_member_continues_with_the_healthiest_living_teammate() -> 
         replace(fainted, active_party_hp=1),
         (1, 75, 130),
     ) is None
+
+
+def test_koga_fainted_continuation_waits_for_stable_party_hp(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Runtime:
+        def __init__(self) -> None:
+            self.actions: list[object] = []
+
+        def execute(self, action: object) -> None:
+            self.actions.append(action)
+
+        def read(self) -> RawGameState:
+            return replace(
+                _raw(),
+                battle_state=2,
+                active_party_index=None,
+                active_party_hp=None,
+            )
+
+    runtime = Runtime()
+    party_reads = iter(((), (126, 75, 130, 0)))
+    monkeypatch.setattr(koga_module, "_party_hp", lambda _emulator: next(party_reads))
+
+    assert koga_module._settle_koga_fainted_pivot_target(
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        KogaTiming(wait_frames=1),
+        last_active_party_index=0,
+    ) == 2
+    assert getattr(runtime.actions[0], "kind", None) is MacroActionKind.CONFIRM
 
 
 def test_koga_pivoted_reserve_uses_its_own_legal_move() -> None:

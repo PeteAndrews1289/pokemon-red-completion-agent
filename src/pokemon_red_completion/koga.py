@@ -570,15 +570,19 @@ def _fight(
                     pivot_target = error.__cause__.party_index
                     pivot_label = f"{label} healthy reserve pivot"
                 else:
-                    failed = reader.read()
-                    party_hp = _party_hp(emulator)
-                    pivot_target = _koga_fainted_pivot_target(
-                        failed,
-                        party_hp,
+                    if (
+                        not allow_disable_fallback
+                        or "active battler fainted" not in str(error)
+                    ):
+                        raise
+                    pivot_target = _settle_koga_fainted_pivot_target(
+                        actions,
+                        reader,
+                        emulator,
+                        timing,
                         last_active_party_index=last_active_party_index,
                     )
-                    if pivot_target is None or not allow_disable_fallback:
-                        raise
+                    party_hp = _party_hp(emulator)
                     if faint_pivots >= max(0, len(party_hp) - 1):
                         raise KogaChapterError(
                             f"{label} exhausted its living-party continuation bound."
@@ -785,6 +789,42 @@ def _koga_fainted_pivot_target(
         if index != active_party_index and hp > 0
     )
     return max(living, default=(0, -1))[1] if living else None
+
+
+def _settle_koga_fainted_pivot_target(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: KogaTiming,
+    *,
+    last_active_party_index: int | None,
+) -> int:
+    """Advance the transient KO boundary until the party table is stable."""
+
+    raw = reader.read()
+    party_hp = _party_hp(emulator)
+    for pulse_index in range(16):
+        target = _koga_fainted_pivot_target(
+            raw,
+            party_hp,
+            last_active_party_index=last_active_party_index,
+        )
+        if target is not None:
+            return target
+        if raw.battle_state != 2:
+            raise KogaChapterError("Koga faint continuation left its trainer battle.")
+        _pulse(
+            actions,
+            MacroActionKind.CANCEL if (pulse_index + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=timing.wait_frames,
+        )
+        raw = reader.read()
+        party_hp = _party_hp(emulator)
+    raise KogaChapterError(
+        "Koga faint continuation never exposed a living teammate: "
+        f"party_hp={party_hp!r}, active={raw.active_party_index!r}, "
+        f"battler_hp={raw.battler_hp!r}."
+    )
 
 
 def _settle_trainer_identity(
