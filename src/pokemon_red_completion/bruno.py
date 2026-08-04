@@ -18,6 +18,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    note_observed_trainer_battle_exit,
     recovery_action_due,
     run_adaptive_trainer_battle,
 )
@@ -270,6 +271,11 @@ def run_bruno_chapter(
 
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
+    battle_intent = BattleIntent(
+        "defeat_bruno",
+        battle_plan_id=RedBattlePlanId.LEAGUE_BRUNO,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+    )
     while reader.read().battle_state:
         try:
             run_adaptive_trainer_battle(
@@ -277,11 +283,7 @@ def run_bruno_chapter(
                 actions,
                 policy,
                 expected_map=MapId.BRUNOS_ROOM,
-                intent=BattleIntent(
-                    "defeat_bruno",
-                    battle_plan_id=RedBattlePlanId.LEAGUE_BRUNO,
-                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
-                ),
+                intent=battle_intent,
                 timing=BattleRuntimeTiming(max_runtime_pulses=1200),
                 label="Bruno",
             )
@@ -310,7 +312,7 @@ def run_bruno_chapter(
             if _bag(emulator).get(item, 0) == 0:
                 raise BrunoChapterError("Bruno exhausted the recovery reserve.") from error
             try:
-                _battle_healing_item(
+                terminal_exit = _battle_healing_item(
                     reader,
                     actions,
                     emulator,
@@ -326,6 +328,8 @@ def run_bruno_chapter(
                     f"{(current.enemy_species_id, current.enemy_hp, current.enemy_level)!r}, "
                     f"bag={_bag(emulator)!r}, cause={healing_error}."
                 ) from healing_error
+            if terminal_exit:
+                note_observed_trainer_battle_exit(battle_intent)
             last_recovery_turn = len(turns)
 
     _settle_bruno_victory(actions, reader, emulator)

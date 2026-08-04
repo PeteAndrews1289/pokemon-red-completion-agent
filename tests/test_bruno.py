@@ -132,3 +132,10 @@ def test_post_bruno_field_heal_occurs_after_agatha_room_entry() -> None:
     source = getsource(run_bruno_chapter)
 
     assert source.index('"Agatha room entry"') < source.index("_use_bag_item(")
+
+
+def test_bruno_closes_collection_schedule_when_recoil_ends_healing_turn() -> None:
+    source = getsource(run_bruno_chapter)
+
+    assert "terminal_exit = _battle_healing_item(" in source
+    assert "note_observed_trainer_battle_exit(battle_intent)" in source

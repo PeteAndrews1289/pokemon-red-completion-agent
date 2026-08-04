@@ -18,6 +18,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    note_observed_trainer_battle_exit,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.bruno import BrunoChapterError, _teach_mega_punch
@@ -321,6 +322,11 @@ def run_lance_chapter(
     accuracy_before = _bag(emulator).get(ItemId.X_ACCURACY, 0)
     attack_before = _bag(emulator).get(ItemId.X_ATTACK, 0)
     x_special_before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
+    battle_intent = BattleIntent(
+        "defeat_lance",
+        battle_plan_id=RedBattlePlanId.LEAGUE_LANCE,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+    )
     while reader.read().battle_state:
         try:
             run_adaptive_trainer_battle(
@@ -328,11 +334,7 @@ def run_lance_chapter(
                 actions,
                 policy,
                 expected_map=MapId.LANCES_ROOM,
-                intent=BattleIntent(
-                    "defeat_lance",
-                    battle_plan_id=RedBattlePlanId.LEAGUE_LANCE,
-                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
-                ),
+                intent=battle_intent,
                 timing=BattleRuntimeTiming(
                     max_runtime_pulses=1800,
                     max_post_attack_transition_pulses=30,
@@ -417,7 +419,7 @@ def run_lance_chapter(
                 helper_pivots_used += 1
             else:
                 try:
-                    _battle_healing_item(
+                    terminal_exit = _battle_healing_item(
                         reader,
                         actions,
                         emulator,
@@ -426,6 +428,8 @@ def run_lance_chapter(
                     )
                 except SilphChapterError as healing_error:
                     raise LanceChapterError("Lance recovery failed.") from healing_error
+                if terminal_exit:
+                    note_observed_trainer_battle_exit(battle_intent)
             last_recovery_turn = len(turns)
 
     for _ in range(20):

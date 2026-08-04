@@ -1816,7 +1816,8 @@ def _battle_healing_item(
     item: ItemId,
     *,
     _retry: bool = False,
-) -> None:
+) -> bool:
+    """Use one healing item and report whether the item turn ended the battle."""
     if item not in {ItemId.HYPER_POTION, ItemId.FULL_RESTORE, ItemId.FULL_HEAL}:
         raise ValueError("battle healing item must be Hyper Potion, Full Restore, or Full Heal")
     label = item.name.replace("_", " ").title()
@@ -1896,7 +1897,7 @@ def _battle_healing_item(
             # An opponent can faint from recoil on the item turn. In that
             # case there is no MAIN menu to return to even though the item was
             # consumed and the trainer battle ended successfully.
-            return
+            return True
         # CANCEL advances Gen I battle text but is inert on MAIN. Sampling after
         # each frame therefore tolerates long enemy replies without confirming
         # ITEM again during the first observable MAIN frame.
@@ -1917,7 +1918,7 @@ def _battle_healing_item(
             )
     after = _bag(emulator).get(item, 0)
     if before - after == 1:
-        return
+        return False
     current = reader.read()
     current_menu = reader.read_battle_menu_state(current)
     if (
@@ -1930,7 +1931,7 @@ def _battle_healing_item(
         # A long battle animation can occasionally return to MAIN without the
         # party-target confirmation registering. Retry the complete semantic
         # item action once; the unchanged quantity proves no item was spent.
-        _battle_healing_item(
+        return _battle_healing_item(
             reader,
             actions,
             emulator,
@@ -1938,7 +1939,6 @@ def _battle_healing_item(
             item,
             _retry=True,
         )
-        return
     raise SilphChapterError(
         f"{label} quantity did not decrement exactly once: "
         f"before={before}, after={after}, retry={_retry}, "

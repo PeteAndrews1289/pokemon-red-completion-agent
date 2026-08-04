@@ -425,7 +425,7 @@ def run_champion_chapter(
                     continue
             else:
                 try:
-                    _battle_healing_item(
+                    terminal_exit = _battle_healing_item(
                         reader,
                         actions,
                         emulator,
@@ -434,6 +434,8 @@ def run_champion_chapter(
                     )
                 except SilphChapterError as healing_error:
                     raise ChampionChapterError("Champion recovery failed.") from healing_error
+                if terminal_exit:
+                    note_observed_trainer_battle_exit(champion_intent)
             last_recovery_turn = len(turns)
 
     final = reader.read()

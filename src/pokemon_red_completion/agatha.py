@@ -13,6 +13,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    note_observed_trainer_battle_exit,
     recovery_action_due,
     run_adaptive_trainer_battle,
 )
@@ -275,6 +276,11 @@ def run_agatha_chapter(
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
     x_special_before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
+    battle_intent = BattleIntent(
+        "defeat_agatha",
+        battle_plan_id=RedBattlePlanId.LEAGUE_AGATHA,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+    )
     while reader.read().battle_state:
         try:
             run_adaptive_trainer_battle(
@@ -282,11 +288,7 @@ def run_agatha_chapter(
                 actions,
                 policy,
                 expected_map=MapId.AGATHAS_ROOM,
-                intent=BattleIntent(
-                    "defeat_agatha",
-                    battle_plan_id=RedBattlePlanId.LEAGUE_AGATHA,
-                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
-                ),
+                intent=battle_intent,
                 timing=BattleRuntimeTiming(
                     max_runtime_pulses=2000,
                     max_sleep_recovery_pulses=96,
@@ -319,7 +321,7 @@ def run_agatha_chapter(
             if _bag(emulator).get(item, 0) == 0:
                 raise AgathaChapterError("Agatha exhausted the recovery reserve.") from error
             try:
-                _battle_healing_item(
+                terminal_exit = _battle_healing_item(
                     reader,
                     actions,
                     emulator,
@@ -335,6 +337,8 @@ def run_agatha_chapter(
                     f"lead_status={current.first_party_status!r}, "
                     f"pp={current.first_party_pp!r}, bag={_bag(emulator)!r}."
                 ) from healing_error
+            if terminal_exit:
+                note_observed_trainer_battle_exit(battle_intent)
             last_recovery_turn = len(turns)
 
     for _ in range(20):
