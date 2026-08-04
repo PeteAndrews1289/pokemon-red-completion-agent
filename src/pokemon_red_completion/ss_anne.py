@@ -78,6 +78,7 @@ SS_ANNE_WAITER_BLOCK_POSITION = (9, 6)
 SS_ANNE_WAITER_YIELD_POSITION = (9, 7)
 SS_ANNE_WAITER_CLEAR_POSITION = (8, 6)
 SS_ANNE_WAITER_CLEAR_ATTEMPTS = 10
+PRE_SHIP_TRAINING_PATROL_DIRECTIONS = ("right", "left")
 PRE_SHIP_TRAINING_POLICY = TrainingPolicy(
     target_level=30,
     preferred_move_slots=(3, 4, 1),
@@ -90,7 +91,7 @@ PRE_SHIP_TRAINING_POLICY = TrainingPolicy(
 )
 PRE_SHIP_TRAINING_INTENT = BattleIntent(
     "develop_workhorse",
-    battle_plan_id="red.diglett-cave.pre-ship-leveling",
+    battle_plan_id="red.route-11.pre-ship-leveling",
     resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
 )
 
@@ -714,7 +715,7 @@ def _run_pre_ship_training(
     emulator: EmulatorState,
     timing: SSAnneTiming,
 ) -> TrainingReport:
-    """Develop the workhorse safely in Diglett's Cave before boarding."""
+    """Develop the workhorse safely in Route 11 grass before boarding."""
 
     initial = reader.read()
     if initial.map_id != MapId.VERMILION_CITY:
@@ -836,8 +837,13 @@ def _run_pre_ship_training(
         if raw.map_id != MapId.ROUTE_11 or raw.player_x is None or raw.player_y is None:
             raise SSAnneChapterError("Pre-ship training left Route 11.")
         current = (raw.player_x, raw.player_y)
+        # Stay on the reversible east-west grass row.  The tile immediately
+        # north of the anchor can be entered but did not permit the scheduled
+        # return step in qualification, so it is not a safe patrol edge.
         candidates = (
-            (bounce_direction,) if bounce_direction is not None else ("up", "right", "left", "down")
+            (bounce_direction,)
+            if bounce_direction is not None
+            else PRE_SHIP_TRAINING_PATROL_DIRECTIONS
         )
         moved_any = False
         for direction in candidates:
