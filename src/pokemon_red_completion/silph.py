@@ -1886,11 +1886,17 @@ def _battle_healing_item(
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.battle_item_frames)
     for _ in range(BATTLE_ITEM_SETTLE_PULSES):
         current = reader.read()
+        after = _bag(emulator).get(item, 0)
         if (
             current.battle_state == 2
             and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
         ):
             break
+        if _battle_healing_item_verified_terminal_exit(current, before, after):
+            # An opponent can faint from recoil on the item turn. In that
+            # case there is no MAIN menu to return to even though the item was
+            # consumed and the trainer battle ended successfully.
+            return
         # CANCEL advances Gen I battle text but is inert on MAIN. Sampling after
         # each frame therefore tolerates long enemy replies without confirming
         # ITEM again during the first observable MAIN frame.
@@ -1938,6 +1944,20 @@ def _battle_healing_item(
         f"before={before}, after={after}, retry={_retry}, "
         f"hp={current.first_party_hp}/{current.first_party_max_hp}, "
         f"phase={current_menu.phase.value}."
+    )
+
+
+def _battle_healing_item_verified_terminal_exit(
+    raw: RawGameState,
+    quantity_before: int,
+    quantity_after: int,
+) -> bool:
+    """Recognize an item turn whose enemy recoil legitimately ended battle."""
+
+    return (
+        raw.battle_state == 0
+        and raw.enemy_hp == 0
+        and quantity_before - quantity_after == 1
     )
 
 

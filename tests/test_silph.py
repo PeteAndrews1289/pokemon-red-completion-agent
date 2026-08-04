@@ -30,6 +30,7 @@ from pokemon_red_completion.silph import (
     SilphCheckpoint,
     SilphTiming,
     _battle_healing_item,
+    _battle_healing_item_verified_terminal_exit,
     _interact_with_roof_girl,
     _mart_2f_girl_coordinate,
     _move_verified,
@@ -127,6 +128,31 @@ def test_silph_timing_is_positive_and_bounded() -> None:
 def test_battle_healing_uses_the_shared_long_settle_bound() -> None:
     source = getsource(_battle_healing_item)
     assert "for _ in range(BATTLE_ITEM_SETTLE_PULSES):" in source
+
+
+def test_battle_healing_accepts_verified_enemy_recoil_knockout() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.BRUNOS_ROOM,
+        player_x=5,
+        player_y=3,
+        party_count=6,
+        battle_state=0,
+        enemy_hp=0,
+    )
+
+    assert _battle_healing_item_verified_terminal_exit(raw, 7, 6)
+    assert not _battle_healing_item_verified_terminal_exit(raw, 7, 7)
+    assert not _battle_healing_item_verified_terminal_exit(
+        replace(raw, battle_state=2),
+        7,
+        6,
+    )
+    assert not _battle_healing_item_verified_terminal_exit(
+        replace(raw, enemy_hp=1),
+        7,
+        6,
+    )
 
 
 def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:
