@@ -88,6 +88,8 @@ control, and progressively trained specialists.**
 > final allowed cocoon-weakening hit. V10 now replans once at the same attack cap before throwing.
 > The following replay reached Route 9, where Wrap fainted DUX after its required Peck. The shared
 > trainer controller now continues through the verified party menu with a living teammate.
+> Its first handoff exposed forced-party dialogue rather than a normal voluntary switch; the shared
+> primitive now observes and handles both menu paths separately.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the

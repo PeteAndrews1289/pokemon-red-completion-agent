@@ -1146,3 +1146,10 @@ opponent at 10 HP. The shared Lavender battle controller now recognizes only an 
 active member, selects the first living teammate through the verified forced-party menu, and
 continues under a party-size-minus-one bound. It adds no healing item or retry and still requires
 the chapter's later Center recovery. This rehearsal was uncounted.
+
+The continuation replay reached the same faint but the generic switch helper first tried to open
+PARTY from a normal battle MAIN menu. Wrap's KO had instead left faint dialogue leading directly to
+the forced-party screen, so the helper rejected the transition. The shared switch primitive now
+has an explicit zero-HP branch: it advances at least one bounded dialogue pulse, proves a live
+party cursor, selects the declared living slot, and succeeds only after the battle returns to MAIN
+with that member active. Ordinary voluntary switching is unchanged. The failure was uncounted.

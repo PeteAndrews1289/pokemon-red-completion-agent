@@ -879,6 +879,12 @@ HP while two teammates were alive. The Lavender battle controller now uses the v
 menu after an observed zero-HP active member and continues with the first living teammate under a
 party-size-minus-one bound. No item, retry, or extra training was added; the rehearsal was uncounted.
 
+The first continuation attempt identified the living slot correctly but sent the generic voluntary
+switch sequence into Wrap's forced-party screen. The shared switch primitive now distinguishes an
+observed zero-HP active member, advances the faint dialogue, proves the live party cursor, selects
+the target, and returns only after MAIN reports that member active. Normal voluntary switching is
+unchanged, and the failure remained uncounted.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 import pokemon_red_completion.battle_recovery as battle_recovery
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.observation import (
@@ -96,3 +98,56 @@ def test_forced_party_menu_accepts_a_late_balanced_team_slot(monkeypatch) -> Non
 
     assert battle_recovery._forced_party_menu_ready(simulation, 6)
     assert not battle_recovery._forced_party_menu_ready(simulation, 3)
+
+
+def test_switch_active_battler_advances_a_fainted_forced_party_menu(monkeypatch) -> None:
+    simulation = _SwitchSimulation()
+    simulation.stage = "faint_dialogue"
+
+    original_read = simulation.read
+
+    def read() -> RawGameState:
+        raw = original_read()
+        return replace(
+            raw,
+            active_party_hp=0 if simulation.active == 0 else 30,
+        )
+
+    simulation.read = read  # type: ignore[method-assign]
+
+    original_execute = simulation.execute
+
+    def execute(action: MacroAction) -> None:
+        if action.kind is MacroActionKind.CONFIRM and simulation.stage == "faint_dialogue":
+            simulation.stage = "party"
+            simulation.cursor = 0
+            simulation.actions.append(action)
+            return
+        if (
+            action.kind is MacroActionKind.CONFIRM
+            and simulation.stage == "party"
+            and simulation.cursor == 1
+        ):
+            simulation.stage = "switching"
+            simulation.actions.append(action)
+            return
+        original_execute(action)
+
+    simulation.execute = execute  # type: ignore[method-assign]
+    monkeypatch.setattr(battle_recovery, "_party_hp", lambda _emulator: (0, 30, 20))
+    monkeypatch.setattr(
+        battle_recovery,
+        "_forced_party_menu_ready",
+        lambda _emulator, _party_size: simulation.stage == "party",
+    )
+
+    battle_recovery.switch_active_battler(
+        simulation,
+        simulation,
+        simulation,
+        1,
+        label="Route 9 fainted DUX",
+    )
+
+    assert simulation.active == 1
+    assert simulation.stage == "main"
