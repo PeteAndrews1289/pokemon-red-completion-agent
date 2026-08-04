@@ -661,7 +661,7 @@ pokemon-red-completion record \
 ```
 
 It is a clean-power-on, full-route rehearsal using the same frozen execution contract and the same
-68-ID instrumentation path, but the fixed seed `16001` and its distinct schedule. Its metadata is
+68-ID instrumentation path, but the fixed seed `18001` and its distinct schedule. Its metadata is
 `partition=unassigned` and `attempt.counted=false`, and explicitly binds the registry, source
 commit, source bundle, behavior, objective graph, and teacher-execution digests. It must not enter
 train, validation, or test data, and it must not enter any performance denominator. A normal
