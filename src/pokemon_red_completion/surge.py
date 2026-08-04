@@ -2746,9 +2746,17 @@ def _select_bag_item(emulator: EmulatorState, executor: _CountingExecutor, item:
             RamAddress.LIST_SCROLL_OFFSET
         )
         items = tuple(_bag(emulator))
+        if item not in items:
+            raise SurgeChapterError(f"Bag item {item:#04x} is unavailable.")
         if absolute < len(items) and items[absolute] == item:
             return
-        _pulse(executor, MacroActionKind.MOVE, "down", 120)
+        target = items.index(item)
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if absolute < target else "up",
+            120,
+        )
     raise SurgeChapterError(f"Could not select bag item {item:#04x}.")
 
 

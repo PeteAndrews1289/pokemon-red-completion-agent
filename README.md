@@ -71,6 +71,12 @@ control, and progressively trained specialists.**
 > cursor inherited from the old three-member route. Cursor validation now uses the live party size.
 > The repaired switch defeated Lance but exposed three helper sacrifices against two Revives;
 > helper pivots now stop at the declared two-Revive budget and later recovery heals Blastoise.
+> That repaired v8 source qualified at **312/312 checkpoints**, **36/36 objectives**, **68/68
+> scheduled battles**, and Hall of Fame. Its first immutable training run then failed honestly at
+> checkpoint 90: variable capture spending left TM28 above the bag cursor, while the selector could
+> only move downward. V8 is retired with that artifact preserved and eleven slots unopened. The
+> v9 teacher navigates the absolute bag index in either direction, uses exposed seed `18001` only
+> for its uncounted rehearsal, and reserves fresh counted seeds beginning at `19001`.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the
@@ -284,7 +290,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v8-01-train
+  --collection-run red-battle-v9-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \

@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v8.json`](../configs/red-battle-collection-v8.json)
+[`red-battle-collection-v9.json`](../configs/red-battle-collection-v9.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 68 stable public battle-plan identities in exact qualified-route order;
@@ -86,7 +86,7 @@ while Goldeen's HP and Mega Punch PP correctly remained unchanged. The move sele
 decrement from every selected turn and rejected that completed confusion turn. The failed v7 root
 is preserved in its immutable ledger, so v7 is retired and its eleven pending slots will not run.
 
-The current v8 registry uses that exposed v7 seed `17001` only for its uncounted dry rehearsal. It
+The retired v8 registry used that exposed v7 seed `17001` only for its uncounted dry rehearsal. It
 assigns fresh counted seeds `18001`–`18005`, `28001`–`28002`, and `38001`–`38005`. The Cerulean Gym
 controller may now recognize one narrowly evidenced no-PP turn only after the battle returns to its
 main menu and either combatant's HP changed; it then deliberately selects the required move again.
@@ -1080,3 +1080,16 @@ Blastoise still held 165/205 HP and could safely consume the selected healing it
 now caps helper pivots at two and performs any later recovery directly on the active workhorse.
 This carries the revival budget into the tactical decision, preserves a third teammate for the
 Champion, and adds no item, retry, or battle attempt. The rehearsal remained uncounted.
+
+The resulting source then completed its full v8 qualification: **312/312 checkpoints**, **36/36
+objectives**, **68/68 scheduled battles**, Champion, and Hall of Fame. The first immutable counted
+root, seed `18001`, reached checkpoint 90 after catching Spearow, teaching Cut, and returning to the
+Dig lesson. Variable capture spending had changed the bag layout, leaving TM28 above the current
+absolute cursor; the historical helper searched only downward and rejected the present item. That
+failed root remains preserved, v8 is retired, and its eleven pending slots will never be opened.
+
+The current v9 registry uses exposed v8 seed `18001` only as its uncounted schedule rehearsal. Its
+counted seeds are fresh and disjoint: `19001`–`19005` for training, `29001`–`29002` for validation,
+and `39001`–`39005` for sealed test. Bag selection now proves that the requested item exists, finds
+its live absolute index, and moves either upward or downward to that index. V9 must reproduce the
+complete 312-checkpoint, 36-objective, 68-battle Hall-of-Fame qualification before slot 01 opens.

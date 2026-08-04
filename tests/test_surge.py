@@ -4,6 +4,7 @@ from dataclasses import fields, replace
 
 import pytest
 
+import pokemon_red_completion.surge as surge_module
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.observation import (
     Badge,
@@ -206,6 +207,44 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
         KAKUNA_SPECIES_ID,
         PIKACHU_SPECIES_ID,
     ) == (0x7B, 0x7C, 0x71, 0x54)
+
+
+def test_bag_selection_moves_up_to_tm28_after_variable_capture_spend(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Emulator:
+        cursor = 4
+
+        def read_u8(self, address: int) -> int:
+            if address == RamAddress.CURRENT_MENU_ITEM:
+                return self.cursor
+            if address == RamAddress.LIST_SCROLL_OFFSET:
+                return 0
+            raise AssertionError(f"unexpected address {address:#x}")
+
+    emulator = Emulator()
+
+    class Executor:
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.MOVE:
+                emulator.cursor += 1 if action.value == "down" else -1
+
+    items = {
+        0x0B: 1,
+        0xE4: 1,
+        0x13: 3,
+        0x04: 20,
+        0xC4: 1,
+    }
+    monkeypatch.setattr(surge_module, "_bag", lambda _emulator: items)
+
+    surge_module._select_bag_item(
+        emulator,  # type: ignore[arg-type]
+        Executor(),  # type: ignore[arg-type]
+        0xE4,
+    )
+
+    assert emulator.cursor == 1
 
 
 @pytest.mark.parametrize(

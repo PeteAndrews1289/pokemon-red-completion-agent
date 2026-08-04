@@ -828,6 +828,16 @@ for ₽100 each, retains one as a legal capture/capacity token, and verifies bot
 and the complete Mart cash ledger. This does not weaken the later Snorlax capture contract, which
 purchases an independent Great Ball reserve. The replay remains an uncounted qualification rehearsal.
 
+The final source-frozen v8 rehearsal then qualified end to end: **312/312 checkpoints**, **36/36
+objectives**, **68/68 scheduled battles**, Champion, and Hall of Fame. Its first immutable training
+root reached checkpoint 90 before the Dig lesson rejected TM28 despite the item being present.
+Variable Spearow capture spending had shifted the bag, and the old absolute-item helper could move
+its cursor only downward. The run is retained as an honest failed data point; v8 is retired with
+eleven unopened slots. The replacement v9 curriculum makes bag navigation bidirectional, rehearses
+only on exposed seed `18001`, and preregisters twelve fresh counted roots. This is the intended
+research loop: preserve a failure, generalize the teacher skill, and prevent the observed root from
+leaking into the model-fitting set.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
