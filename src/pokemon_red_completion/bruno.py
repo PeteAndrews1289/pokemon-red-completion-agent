@@ -328,6 +328,15 @@ def run_bruno_chapter(
             last_recovery_turn = len(turns)
 
     _settle_bruno_victory(actions, reader)
+    defeated = reader.read()
+    if not _event(defeated, EventFlag.BEAT_BRUNO):
+        raise BrunoChapterError("Bruno event did not set after battle.")
+    _checkpoint(records, progress, emulator, defeated, "bruno_defeated", "Defeated Bruno")
+
+    # Bruno's completed-room script can continue suppressing START after
+    # movement control returns. Cross the unlocked progression boundary first;
+    # Agatha's entry room provides a stable field-menu recovery gate.
+    _move(actions, reader, ("left", "up", "up", "up", "up"), "Agatha room entry")
     if _party_hp(emulator) != _party_max_hp(emulator) or any(
         status != 0 for status in _party_status(emulator)
     ):
@@ -346,12 +355,6 @@ def run_bruno_chapter(
             )
         except Exception as error:
             raise BrunoChapterError(f"Post-Bruno recovery failed: {error}.") from error
-    defeated = reader.read()
-    if not _event(defeated, EventFlag.BEAT_BRUNO):
-        raise BrunoChapterError("Bruno event did not set after battle.")
-    _checkpoint(records, progress, emulator, defeated, "bruno_defeated", "Defeated Bruno")
-
-    _move(actions, reader, ("left", "up", "up", "up", "up"), "Agatha room entry")
     final = reader.read()
     report = BrunoChapterReport(
         records=tuple(records),

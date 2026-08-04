@@ -1,3 +1,5 @@
+from inspect import getsource
+
 import pytest
 
 from pokemon_red_completion import bruno as bruno_module
@@ -13,6 +15,7 @@ from pokemon_red_completion.bruno import (
     _encounter_party,
     _settle_bruno_victory,
     _turns_valid,
+    run_bruno_chapter,
 )
 from pokemon_red_completion.observation import EventFlag, MapId, RawGameState
 
@@ -107,3 +110,9 @@ def test_bruno_victory_settle_stops_before_reinteracting(monkeypatch: pytest.Mon
     assert _settle_bruno_victory(executor, reader) == raw  # type: ignore[arg-type]
     assert [action.kind for action in executor.actions].count(MacroActionKind.CONFIRM) == 1
     assert [action.kind for action in executor.actions].count(MacroActionKind.CANCEL) == 1
+
+
+def test_post_bruno_field_heal_occurs_after_agatha_room_entry() -> None:
+    source = getsource(run_bruno_chapter)
+
+    assert source.index('"Agatha room entry"') < source.index("_use_bag_item(")
