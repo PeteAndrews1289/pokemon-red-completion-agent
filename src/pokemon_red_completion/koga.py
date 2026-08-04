@@ -520,7 +520,12 @@ def _fight(
         else RequiredMovePolicy.EXACT_REQUIRED
     )
 
+    last_active_party_index = battle.active_party_index
+
     def choose_move(raw: RawGameState) -> int:
+        nonlocal last_active_party_index
+        if raw.active_party_index is not None:
+            last_active_party_index = raw.active_party_index
         party_hp = _party_hp(emulator)
         pivot_target = _koga_matchup_pivot_target(
             raw, party_hp, reserve_pivot_enemy_species
@@ -567,7 +572,11 @@ def _fight(
                 else:
                     failed = reader.read()
                     party_hp = _party_hp(emulator)
-                    pivot_target = _koga_fainted_pivot_target(failed, party_hp)
+                    pivot_target = _koga_fainted_pivot_target(
+                        failed,
+                        party_hp,
+                        last_active_party_index=last_active_party_index,
+                    )
                     if pivot_target is None or not allow_disable_fallback:
                         raise
                     if faint_pivots >= max(0, len(party_hp) - 1):
@@ -753,23 +762,27 @@ def _koga_matchup_pivot_target(
 def _koga_fainted_pivot_target(
     raw: RawGameState,
     party_hp: tuple[int, ...],
+    *,
+    last_active_party_index: int | None = None,
 ) -> int | None:
     """Choose the healthiest living teammate after an observed active-member KO."""
 
-    if (
-        raw.battle_state != 2
-        or (raw.battler_hp or 0) > 0
+    active_party_index = raw.active_party_index
+    if active_party_index is None:
+        active_party_index = last_active_party_index
+    if raw.battle_state != 2 or (
+        raw.active_party_index is not None and (raw.battler_hp or 0) > 0
     ):
         return None
     # PLAYER_MON_NUMBER briefly carries an out-of-party sentinel while the
     # forced-switch dialogue is opening, so RawGameState intentionally exposes
-    # no active index at this exact boundary.  The fainted member is already
-    # excluded by its zero party HP; selecting the healthiest living member is
-    # therefore both sufficient and honest when the index is transiently absent.
+    # no active index at this exact boundary, before the fainted HP is copied
+    # back into the ordinary party table.  Carrying forward the last active
+    # index excludes that member without trusting the temporarily stale HP.
     living = tuple(
         (hp, index)
         for index, hp in enumerate(party_hp)
-        if (raw.active_party_index is None or index != raw.active_party_index) and hp > 0
+        if index != active_party_index and hp > 0
     )
     return max(living, default=(0, -1))[1] if living else None
 
