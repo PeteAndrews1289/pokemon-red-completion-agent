@@ -14,6 +14,7 @@ class RedBattlePlanId(StrEnum):
     VERMILION_ROUTE_6_JR_TRAINER_F = "battle-004-vermilion-route-6-jr-trainer-f"
     VERMILION_ROUTE_6_JR_TRAINER_M = "battle-005-vermilion-route-6-jr-trainer-m"
     SS_ANNE_RIVAL = "battle-006-ss-anne-rival"
+    LAVENDER_ROUTE_11_GAMBLER = "battle-069-lavender-route-11-gambler"
     LAVENDER_ROUTE_9_TRAINER_0 = "battle-007-lavender-route-9-trainer-0"
     LAVENDER_ROUTE_9_TRAINER_8 = "battle-008-lavender-route-9-trainer-8"
     LAVENDER_ROCK_TUNNEL_1F_TRAINER_3 = "battle-009-lavender-rock-tunnel-1f-trainer-3"
@@ -81,10 +82,17 @@ class RedBattlePlanId(StrEnum):
 # Keep existing public IDs immutable while placing later-added route battles in
 # their actual execution order. The collection schedule binds this tuple.
 RED_BATTLE_PLAN_IDS: tuple[str, ...] = (
-    *(item.value for item in RedBattlePlanId if not item.name.startswith("DOJO_")),
+    *(
+        item.value
+        for item in RedBattlePlanId
+        if not item.name.startswith("DOJO_")
+        and item is not RedBattlePlanId.LAVENDER_ROUTE_11_GAMBLER
+    ),
 )
 RED_BATTLE_PLAN_IDS = (
-    *RED_BATTLE_PLAN_IDS[:48],
+    *RED_BATTLE_PLAN_IDS[:6],
+    RedBattlePlanId.LAVENDER_ROUTE_11_GAMBLER.value,
+    *RED_BATTLE_PLAN_IDS[6:48],
     RedBattlePlanId.DOJO_BLACKBELT_SET_5.value,
     RedBattlePlanId.DOJO_BLACKBELT_SET_3.value,
     RedBattlePlanId.DOJO_BLACKBELT_SET_4.value,

@@ -516,8 +516,9 @@ def run_victory_road_chapter(
             target_bag_quantity=11,
         )
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
-    _sell_current_bag_item(actions, emulator, ItemId.TM24_THUNDERBOLT)
-    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    if ItemId.TM24_THUNDERBOLT in _bag(emulator):
+        _sell_current_bag_item(actions, emulator, ItemId.TM24_THUNDERBOLT)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     _sell_current_bag_item(actions, emulator, ItemId.TM38_FIRE_BLAST)
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     if ItemId.TM21_MEGA_DRAIN in _bag(emulator):

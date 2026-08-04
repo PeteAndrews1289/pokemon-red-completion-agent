@@ -13,6 +13,7 @@ EXPECTED_RED_BATTLE_PLAN_IDS = (
     "battle-004-vermilion-route-6-jr-trainer-f",
     "battle-005-vermilion-route-6-jr-trainer-m",
     "battle-006-ss-anne-rival",
+    "battle-069-lavender-route-11-gambler",
     "battle-007-lavender-route-9-trainer-0",
     "battle-008-lavender-route-9-trainer-8",
     "battle-009-lavender-rock-tunnel-1f-trainer-3",
@@ -109,10 +110,14 @@ _EXPECTED_SOURCE_MEMBER_LEDGER = {
         "VERMILION_ROUTE_6_JR_TRAINER_M",
     ),
     "ss_anne.py": ("SS_ANNE_RIVAL",),
-    "lavender.py": tuple(
-        item.name
-        for item in RedBattlePlanId
-        if item.name.startswith("LAVENDER_")
+    "lavender.py": (
+        *(
+            item.name
+            for item in RedBattlePlanId
+            if item.name.startswith("LAVENDER_")
+            and item is not RedBattlePlanId.LAVENDER_ROUTE_11_GAMBLER
+        ),
+        "LAVENDER_ROUTE_11_GAMBLER",
     ),
     "celadon.py": ("CELADON_ROUTE_8_LASS",),
     "hideout.py": tuple(
@@ -162,10 +167,10 @@ _EXPECTED_SOURCE_MEMBER_LEDGER = {
 }
 
 
-def test_full_adaptive_battle_route_has_68_ordered_unique_public_ids() -> None:
+def test_full_adaptive_battle_route_has_69_ordered_unique_public_ids() -> None:
     assert RED_BATTLE_PLAN_IDS == EXPECTED_RED_BATTLE_PLAN_IDS
-    assert len(RED_BATTLE_PLAN_IDS) == 68
-    assert len(set(RED_BATTLE_PLAN_IDS)) == 68
+    assert len(RED_BATTLE_PLAN_IDS) == 69
+    assert len(set(RED_BATTLE_PLAN_IDS)) == 69
     assert all(
         re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,95}", battle_plan_id)
         for battle_plan_id in RED_BATTLE_PLAN_IDS

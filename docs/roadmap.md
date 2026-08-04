@@ -137,14 +137,14 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 - [x] Add feature schema v2 with `constraint.matches_required_move` and separate free-choice,
   forced-choice, and unobserved-context metrics.
 - [x] Preregister five train, two validation, and five test root lineages with immutable,
-  single-attempt global and partition-local slots plus content-addressed 68-battle timing
+  single-attempt global and partition-local slots plus content-addressed 69-battle timing
   schedules.
 - [x] Bind the registry to exact canonical roster, schedule, assignment, sidecar, executable
   source, teacher behavior, objective graph, and teacher execution identities.
 - [x] Make planned recording verify exact battle order, apply each offset once before policy
   inference, emit per-battle and terminal schedule attestations, and fail closed on missing,
   extra, substituted, incomplete, or reordered battles.
-- [x] Add a registry-declared, disjoint, unassigned, non-counted 68-battle schedule dry run.
+- [x] Add a registry-declared, disjoint, unassigned, non-counted 69-battle schedule dry run.
 - [x] Add a private campaign seal and immutable outcome ledger that counts complete, failed,
   interrupted, and invalid slot outcomes with durable reasons.
 - [x] Pin the exact pushed source commit, live source bytes, CPython binary, and installed PyBoy
@@ -207,7 +207,7 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   one-shot outcomes, leave all five test roots unopened, disclose visible-state overlap and
   novel-visible performance, select a validation-only confidence threshold, and publish a private
   canonical candidate that remains promotion-ineligible until test and rollout evaluation.
-- [ ] Commit and push the exact source/configuration state, then successfully complete the 68/68
+- [ ] Commit and push the exact source/configuration state, then successfully complete the 69/69
   schedule dry run before slot `01`.
 - [ ] Collect every declared train and validation lineage without opening the test partition.
 - [ ] Freeze the selected battle model and thresholds, then evaluate the five test roots once.
@@ -264,7 +264,7 @@ the carry is no longer a collection prerequisite.
 See the
 [Project Narrative](project-narrative.md) for the reasoning and the outstanding route work.
 
-The protocol also requires a successful, non-counted 68/68 schedule rehearsal before slot `01`,
+The protocol also requires a successful, non-counted 69/69 schedule rehearsal before slot `01`,
 and its one-shot ledger preserves failures and power interruptions as consumed outcomes. Exact
 identity, manifest, assignment, schedule, and lineage reuse is hard leakage. Repeated
 policy-visible semantic states are report-only because distinct hidden timing histories can
@@ -364,6 +364,12 @@ blocked below the source-defined horizontal youngster at `(14, 14)`. A 24-attemp
 steps east, waits, restores the exact approach, and retries only the northward crossing. Any map,
 battle, or coordinate outside that bounded gate still fails closed. This second v12 artifact is
 also uncounted and does not open collection.
+The walker-safe replay reached checkpoint 102, where the live capture bill left a ₽2,109 Tunnel
+supply shortfall but only five obsolete Potions. The route now earns ₽1,260 from the nearest
+source-pinned Route 11 Gambler and liquidates unused TM24 for ₽1,000 before buying supplies. The
+Gambler is a new scheduled battle, raising the exact roster from 68 to 69; its payout, identity,
+event, return route, and no-item-recovery boundary are all verified. The fixed ten-Super-Potion,
+three-Awakening, three-Parlyz-Heal, and four-Repel contract is unchanged.
 That exact rehearsal subsequently validated every earlier repair through checkpoint **296/312**,
 including the six-member balance gate, Blaine, Giovanni, the final rival, and Victory Road. It then
 exposed a stale Indigo inventory assertion: the now-larger bounded capture curriculum may legally

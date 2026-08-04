@@ -54,7 +54,7 @@ control, and progressively trained specialists.**
 > three-member run that entered the Hall of Fame at level 61 and has now passed a clean-power
 > six-member replay: **312/312 checkpoints**, **36/36 objectives**, and Hall of Fame in **87,020
 > actions**. Mansion development required 177 workhorse wins plus 24 targeted evolution battles.
-> A fresh source-bound 68/68 scheduled qualification is still required before collection slot
+> A fresh source-bound 69/69 scheduled qualification is still required before collection slot
 > `01` can open. Its first uncounted rehearsal reached checkpoint 75 and exposed a harbor sailor
 > deadlock. A finite, coordinate-gated step-aside maneuver now lets that left/right patrol pass;
 > the next rehearsal cleared that gate and exposed an obsolete Spearow weakening rule at checkpoint
@@ -298,7 +298,7 @@ pokemon-red-completion private-data init --private-root /absolute/private/trajec
 pokemon-red-completion record --private-root /absolute/private/trajectory-directory
 
 # After the exact source/config commit is committed and pushed, run the required
-# unassigned, non-counted 68-battle schedule rehearsal before slot 01:
+# unassigned, non-counted 69-battle schedule rehearsal before slot 01:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
   --schedule-dry-run
@@ -417,7 +417,7 @@ reaches 72.5% teacher-choice agreement versus a 50.5% fold-local majority-slot b
 legality and PP mask makes all outputs valid by construction; that safety invariant is not a
 learned success metric. This is not battle win rate or a learned gameplay rollout.
 
-New recordings bind each adaptive decision to an explicit physical battle instance, one of 68
+New recordings bind each adaptive decision to an explicit physical battle instance, one of 69
 stable public battle-plan identities, planner objective, win goal, and required-move policy. The
 current `pokemon.core.battle.move-ranker.v2` schema adds
 `constraint.matches_required_move`; receipts report free-choice and forced-choice accuracy
@@ -427,9 +427,9 @@ typed recovery budget.
 
 The committed collection protocol preregisters twelve immutable one-attempt root-lineage
 slots—five train, two validation, and five test—with partition-local ordinals and a different
-68-battle timing schedule for each. The exact source/configuration commit must be committed and
+69-battle timing schedule for each. The exact source/configuration commit must be committed and
 pushed before collection. A registry-declared, unassigned, non-counted dry run must then attest all
-68 schedule applications before slot `01`. Counted runs emit per-battle and terminal schedule
+69 schedule applications before slot `01`. Counted runs emit per-battle and terminal schedule
 attestations; a private campaign seal and outcome ledger preserve every success, failure,
 interruption, and invalid result. An interruption consumes its slot rather than authorizing a
 rerun. The successful rehearsal produces an immutable private qualification that every counted
@@ -551,7 +551,7 @@ teammates still available, the boss adapter stopped on its old single-carry assu
 selects the healthiest living teammate through the verified forced-party menu, resumes from that
 member's own legal moves and PP under a party-depth bound, and records the handoff separately from
 mutual-KO recovery. Collection remains closed until the exact republished source passes the full
-312-checkpoint and 68-schedule rehearsal.
+312-checkpoint and 69-schedule rehearsal.
 That replay defeated Koga and fully healed the party, then exposed a different downstream effect:
 Blastoise reached level 42 against Muk and naturally learned Skull Bash over Bite before the
 curriculum's controlled TM40 lesson. Koga now assigns Muk to the healthiest living teammate before
@@ -578,6 +578,12 @@ That repair passed the capture, Diglett, trade, Cut, and Dig gates through check
 following Route 1 survey then met the source-defined horizontal youngster on the only northbound
 tile at `(14, 14)`. The survey now uses a finite eastward yield, restores the exact approach, and
 retries north without consuming the route step or weakening any encounter/capture bound.
+The next replay proved that crossing and reached the Rock Tunnel supply gate at checkpoint 102.
+Worst-case early capture spending left a ₽2,109 shortfall, beyond the five obsolete Potions still
+held. The teacher now earns a source-exact ₽1,260 from one bounded Route 11 Gambler battle and sells
+the unused TM24 for ₽1,000 at the point liquidity is needed. That battle is the 69th scheduled
+identity, turning resource acquisition into explicit training evidence instead of assuming lucky
+Ball resale or cutting the ten-Super-Potion Tunnel reserve.
 
 ## Evidence and project status
 

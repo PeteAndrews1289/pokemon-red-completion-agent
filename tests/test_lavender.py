@@ -63,7 +63,7 @@ def _report() -> LavenderChapterReport:
             44,
             1,
         )
-        for index in range(11)
+        for index in range(12)
     )
     return LavenderChapterReport(
         records=records,
@@ -169,6 +169,23 @@ def test_obsolete_potion_sale_rejects_an_unfunded_plan() -> None:
             required_cost=10_000,
             preserve_existing_sale=False,
         )
+
+
+def test_supply_income_detour_is_source_stable_and_reversible() -> None:
+    assert lavender_module.VERMILION_TREE_TO_ROUTE_11 == ("right",) * 25
+    assert (
+        *(("right",) * 9),
+        *(("down",) * 9),
+        "right",
+    ) == lavender_module.ROUTE_11_TO_SUPPLY_GAMBLER
+    assert (
+        "left",
+        *(("up",) * 9),
+        *(("left",) * 9),
+    ) == lavender_module.SUPPLY_GAMBLER_TO_ROUTE_11_ENTRY
+    assert lavender_module.ROUTE_11_TO_VERMILION_TREE == ("left",) * 25
+    assert lavender_module.ROUTE_11_GAMBLER_PAYOUT == 1_260
+    assert lavender_module.TM24_SALE_PROCEEDS == 1_000
 
 
 def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
@@ -590,7 +607,7 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
     public = _report().public_dict()
 
     assert public["status"] == "ok"
-    assert len(public["trainer_battles"]) == 11
+    assert len(public["trainer_battles"]) == 12
     assert public["inventory"] == {
         "repels_purchased": 4,
         "repels_used": 4,

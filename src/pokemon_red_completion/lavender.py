@@ -73,6 +73,8 @@ TUNNEL_AWAKENING_RESERVE = 3
 TUNNEL_PARLYZ_HEALS_PURCHASED = 3
 LAVENDER_ANTIDOTE_RESERVE = 1
 TM28_SALE_PROCEEDS = 1_000
+TM24_SALE_PROCEEDS = 1_000
+ROUTE_11_GAMBLER_PAYOUT = 1_260
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -89,6 +91,10 @@ ROUTE_6_TO_SOUTH_GATE = _directions("U" * 7 + "R" * 5 + "U" * 14 + "R" * 3 + "U"
 SOUTH_GATE_TO_TUNNEL = _directions("UURU")
 TUNNEL_TO_NORTH_GATE = _directions("U" * 37 + "R" * 3)
 NORTH_GATE_EXIT = _directions("DDDD")
+VERMILION_TREE_TO_ROUTE_11 = _directions("R" * 25)
+ROUTE_11_TO_SUPPLY_GAMBLER = _directions("R" * 9 + "D" * 9 + "R")
+SUPPLY_GAMBLER_TO_ROUTE_11_ENTRY = _directions("L" + "U" * 9 + "L" * 9)
+ROUTE_11_TO_VERMILION_TREE = _directions("L" * 25)
 ROUTE_5_TO_CERULEAN_TREE = _directions("LL" + "U" * 35 + "L" * 6)
 CERULEAN_TREE_TO_ROUTE_9 = _directions("D" + "R" * 17 + "U" * 12 + "R" * 4)
 ROUTE_9_TREE_STANCE = _directions("U" + "R" * 4)
@@ -240,8 +246,8 @@ class LavenderChapterReport:
     def passed(self) -> bool:
         return (
             len(self.records) == LAVENDER_CHECKPOINT_COUNT
-            and len(self.trainers) == 11
-            and len({item.event for item in self.trainers}) == 11
+            and len(self.trainers) == 12
+            and len({item.event for item in self.trainers}) == 12
             and all(item.selected_pp_spent > 0 for item in self.trainers)
             and all(
                 item.party_preserved
@@ -403,6 +409,8 @@ def run_lavender_chapter(
     cut = reader.read()
     _require(cut, MapId.VERMILION_CITY, (15, 18), "second Cut passage")
     _checkpoint(records, progress, emulator, cut, "second_cut", "Cleared the second Gym tree")
+
+    _earn_tunnel_supply_income(actions, reader, emulator, run, timing)
 
     _move(actions, reader, emulator, run, TREE_TO_CENTER, timing, "Vermilion Center")
     _wait(actions, timing.transition_frames)
@@ -1998,6 +2006,70 @@ def _teach_tm11(
     raise LavenderChapterError("TM11 did not replace Bubble and consume the TM.")
 
 
+def _earn_tunnel_supply_income(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: LavenderTiming,
+) -> None:
+    """Defeat one source-pinned Gambler instead of depending on capture resale luck."""
+
+    before_money = _money(emulator)
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        VERMILION_TREE_TO_ROUTE_11,
+        timing,
+        "Route 11 supply-income entry",
+    )
+    _require(reader.read(), MapId.ROUTE_11, (0, 6), "Route 11 supply-income entry")
+    _trainer(
+        executor,
+        reader,
+        emulator,
+        run,
+        ROUTE_11_TO_SUPPLY_GAMBLER,
+        timing,
+        "Route 11 supply Gambler",
+        MapId.ROUTE_11,
+        EventFlag.BEAT_ROUTE_11_TRAINER_0,
+        0xD9,
+        0x11,
+        1,
+        BITE,
+        1,
+        RedBattlePlanId.LAVENDER_ROUTE_11_GAMBLER,
+        battle_recovery_limit=0,
+    )
+    if _money(emulator) - before_money != ROUTE_11_GAMBLER_PAYOUT:
+        raise LavenderChapterError(
+            "Route 11 supply Gambler did not produce the exact source payout."
+        )
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        SUPPLY_GAMBLER_TO_ROUTE_11_ENTRY,
+        timing,
+        "Route 11 supply-income return",
+    )
+    _require(reader.read(), MapId.ROUTE_11, (0, 6), "Route 11 supply-income return")
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        ROUTE_11_TO_VERMILION_TREE,
+        timing,
+        "Vermilion supply-income return",
+    )
+    _require(reader.read(), MapId.VERMILION_CITY, (15, 18), "Vermilion supply-income return")
+
+
 def _purchase_supplies(
     executor: _CountingExecutor,
     reader: PokemonRedStateReader,
@@ -2032,6 +2104,17 @@ def _purchase_supplies(
             expected_proceeds=NUGGET_SALE_PROCEEDS,
         )
         nugget_sale_proceeds = NUGGET_SALE_PROCEEDS
+    tm24_sale_proceeds = 0
+    if _bag(emulator).get(ItemId.TM24_THUNDERBOLT, 0):
+        _sell_single_mart_item(
+            executor,
+            reader,
+            emulator,
+            timing,
+            ItemId.TM24_THUNDERBOLT,
+            expected_proceeds=TM24_SALE_PROCEEDS,
+        )
+        tm24_sale_proceeds = TM24_SALE_PROCEEDS
     # Captures can succeed before the bounded Ball budget is exhausted.  The
     # later Snorlax contract buys its own Great Ball reserve, so convert the
     # excess into Rock Tunnel supplies.  Retain one legal Ball as Cinnabar's
@@ -2052,7 +2135,12 @@ def _purchase_supplies(
         )
     potion_sale_quantity = _required_potion_sale_quantity(
         available=_bag(emulator).get(ItemId.POTION, 0),
-        projected_money=money_before + nugget_sale_proceeds + poke_ball_sale_proceeds,
+        projected_money=(
+            money_before
+            + nugget_sale_proceeds
+            + tm24_sale_proceeds
+            + poke_ball_sale_proceeds
+        ),
         required_cost=expected_cost,
         preserve_existing_sale=starting_super_potions >= 2,
     )
@@ -2108,7 +2196,10 @@ def _purchase_supplies(
     _close_menus(executor, reader, timing)
     money_after = _money(emulator)
     total_sale_proceeds = (
-        nugget_sale_proceeds + poke_ball_sale_proceeds + potion_sale_proceeds
+        nugget_sale_proceeds
+        + tm24_sale_proceeds
+        + poke_ball_sale_proceeds
+        + potion_sale_proceeds
     )
     if money_before + total_sale_proceeds - money_after != expected_cost:
         raise LavenderChapterError(
