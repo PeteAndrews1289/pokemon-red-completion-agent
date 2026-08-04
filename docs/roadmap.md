@@ -329,6 +329,12 @@ was reached while fighting Muk and the natural move prompt replaced Bite, which 
 later controlled TM40 lesson. Koga now assigns Muk to the healthiest living teammate before the
 workhorse selects an attack, preserving both the staged lesson and the no-faint tactical objective.
 The uncounted run stopped at 208/312; v10 remains unopened.
+The next replay handed Muk to Snorlax, but that reserve later fainted and Blastoise returned to win
+at 14 HP, leaving the same natural level-42 move branch possible. Strength and Erika now preserve
+two exact legal lineages: Bite followed by the controlled TM40 lesson, or natural Skull Bash
+followed by archival of the redundant TM40. Both must converge on the same post-Erika moves and PP,
+and Koga's Center gate must restore every member after any recorded continuation. The rehearsal was
+uncounted; v10 remains unopened.
 That exact rehearsal subsequently validated every earlier repair through checkpoint **296/312**,
 including the six-member balance gate, Blaine, Giovanni, the final rival, and Victory Road. It then
 exposed a stale Indigo inventory assertion: the now-larger bounded capture curriculum may legally

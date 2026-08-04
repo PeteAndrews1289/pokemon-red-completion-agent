@@ -910,6 +910,16 @@ This preserves the staged move curriculum, prevents the observed KO, and demonst
 role assignment instead of repairing the downstream contract around an accidental prompt choice.
 The run remained uncounted and stopped at 208/312.
 
+The matchup handoff occurred as designed, but the reserve later fainted and Blastoise returned to
+finish Koga with 14 HP. That ordinary party continuation could still reach level 42, so preventing
+Muk participation did not make the natural move prompt impossible. The curriculum now models both
+legal move-acquisition paths explicitly: Strength accepts either retained Bite or naturally learned
+Skull Bash with their exact PP lineages; Erika teaches TM40 only on the Bite path, while the natural
+path archives the redundant TM and proves the same final move set. This is closer to the cross-game
+goal than forcing one experience total: the semantic objective is acquiring and preserving the
+capability, whether it came from level-up or a reusable teaching plan. The failed rehearsal was
+uncounted and stopped at Koga's terminal evidence gate after checkpoint 205/312.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

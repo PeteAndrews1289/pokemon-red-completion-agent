@@ -109,6 +109,14 @@ matchup-aware pre-attack handoff when Muk appears, choosing the healthiest livin
 Blastoise participates. This preserves the planned move-teaching label and turns post-faint
 recovery into proactive party-role planning. The uncounted run stopped at 208/312.
 
+The next replay made that proactive handoff, but the reserve later fainted and Blastoise returned to
+finish Koga at 14 HP, so the natural level-42 lesson could still occur. The teacher now treats move
+source as a semantic branch rather than a timing invariant. Strength authenticates either the Bite
+or Skull Bash move/PP lineage; Erika applies TM40 only to the Bite lineage and archives the
+redundant TM on the natural lineage before proving the same terminal moves. The Koga receipt also
+permits a recorded reserve faint only when another member continued and the existing Center gate
+restored everyone. No counted slot was consumed.
+
 V3 later completed the full **312/312**, **36/36**, **68/68** rehearsal and opened collection.
 Its first one-shot train root stopped at Route 24 trainer 2 after Sand-Attack, poison, and repeated
 Water Gun misses fainted Wartortle against a 4-HP opponent. That failure is retained and v3 is not

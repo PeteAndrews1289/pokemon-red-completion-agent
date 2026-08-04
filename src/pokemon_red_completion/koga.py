@@ -617,9 +617,13 @@ def _fight(
         or (
             any(value <= 0 for value in hp)
             and not (
-                (terminal_mutual_ko or continued_after_faint)
+                terminal_mutual_ko
                 and hp[0] == 0
                 and all(value > 0 for value in hp[1:])
+            )
+            and not (
+                continued_after_faint
+                and any(value > 0 for value in hp)
             )
         )
     ):

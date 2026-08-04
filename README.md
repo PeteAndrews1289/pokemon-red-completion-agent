@@ -557,6 +557,11 @@ Blastoise reached level 42 against Muk and naturally learned Skull Bash over Bit
 curriculum's controlled TM40 lesson. Koga now assigns Muk to the healthiest living teammate before
 Blastoise attacks, preserving the staged move lesson while avoiding the faint proactively. The
 uncounted run stopped at 208/312; all counted v10 roots remain untouched.
+The next run made the Muk handoff, but the reserve later fainted and Blastoise returned to finish at
+14 HP, so level 42 could still be reached legally. The teacher now supports both exact capability
+paths: preserve Bite and teach TM40 later, or retain naturally learned Skull Bash and archive the
+redundant TM40. Strength and Erika verify the appropriate move/PP lineage and converge on the same
+terminal move set; the unchanged Center proof restores the whole party. No counted root was opened.
 
 ## Evidence and project status
 

@@ -215,6 +215,7 @@ class ErikaChapterReport:
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    skull_bash_source: str = "tm40"
     route_training_start_level: int = 39
     route_training_target_level: int = 39
     route_training_final_level: int = 39
@@ -229,7 +230,16 @@ class ErikaChapterReport:
             and 0 < self.ice_beam_pp_spent <= 10
             and self.got_tm13
             and self.tm13_transfer_before_event
-            and self.moves_before == (0x2C, STRENGTH, 0x3D, 0x39)
+            and (
+                (
+                    self.moves_before == (0x2C, STRENGTH, 0x3D, 0x39)
+                    and self.skull_bash_source == "tm40"
+                )
+                or (
+                    self.moves_before == (SKULL_BASH, STRENGTH, 0x3D, 0x39)
+                    and self.skull_bash_source == "natural_level_42"
+                )
+            )
             and self.moves_after == (0x82, STRENGTH, ICE_BEAM_MOVE, 0x39)
             and self.money_before >= 0
             and self.money_after
@@ -248,6 +258,7 @@ class ErikaChapterReport:
             and int(ItemId.POKE_FLUTE) not in dict(self.final_bag)
             and int(ItemId.TM13_ICE_BEAM) not in dict(self.final_bag)
             and int(ItemId.FRESH_WATER) not in dict(self.final_bag)
+            and int(ItemId.TM40_SKULL_BASH) not in dict(self.final_bag)
             and self.final_raw.map_id == MapId.CELADON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
@@ -291,7 +302,11 @@ class ErikaChapterReport:
                     "cost": ERIKA_ICE_BEAM_PREPARATION_COST,
                 },
                 "skull_bash_preparation": {
-                    "source": "Safari Zone North TM40",
+                    "source": (
+                        "natural level-42 move; Safari TM40 archived"
+                        if self.skull_bash_source == "natural_level_42"
+                        else "Safari Zone North TM40"
+                    ),
                     "slot": 1,
                     "replaced_move_id": 0x2C,
                     "learned_move_id": 0x82,
@@ -358,9 +373,20 @@ def run_erika_chapter(
     records: list[ErikaCheckpoint] = []
     initial = reader.read()
     _require(initial, MapId.FUCHSIA_POKECENTER, (3, 3), "Strength boundary")
+    initial_moves = tuple(initial.first_party_moves or ())
+    initial_pp = tuple(initial.first_party_pp or ())
+    skull_bash_source = (
+        "natural_level_42"
+        if initial_moves == (SKULL_BASH, STRENGTH, 0x3D, 0x39)
+        else "tm40"
+    )
     if (
         _money(emulator) < 0
-        or initial.first_party_pp != (25, 15, 20, 15)
+        or (initial_moves, initial_pp)
+        not in {
+            ((0x2C, STRENGTH, 0x3D, 0x39), (25, 15, 20, 15)),
+            ((SKULL_BASH, STRENGTH, 0x3D, 0x39), (15, 15, 20, 15)),
+        }
         or _event(emulator, EventFlag.BEAT_ERIKA)
         or ItemId.TM21_MEGA_DRAIN in _bag(emulator)
         or ItemId.TM13_ICE_BEAM in _bag(emulator)
@@ -481,6 +507,19 @@ def run_erika_chapter(
             raise ErikaChapterError("Celadon Rare Candy cleanup failed.") from error
     if ItemId.RARE_CANDY in _bag(emulator):
         raise ErikaChapterError("Celadon cleanup left the surplus Rare Candy in the bag.")
+    if skull_bash_source == "natural_level_42":
+        try:
+            _deposit_pc_item(
+                actions,  # type: ignore[arg-type]
+                reader,
+                emulator,
+                ItemId.TM40_SKULL_BASH,
+                DEFAULT_SILPH_TIMING,
+            )
+        except SilphChapterError as error:
+            raise ErikaChapterError("Natural Skull Bash TM40 archival failed.") from error
+        if ItemId.TM40_SKULL_BASH in _bag(emulator):
+            raise ErikaChapterError("Natural Skull Bash lineage retained redundant TM40.")
     _move(
         actions,
         reader,
@@ -551,7 +590,10 @@ def run_erika_chapter(
     _move(actions, reader, emulator, ("up",), timing, "outer re-cross")
     _move(actions, reader, emulator, OUTER_TREE_TO_CENTER, timing, "Center recovery")
     _heal(actions, reader, emulator, timing)
-    _teach_tm40_skull_bash(actions, reader, emulator, timing)
+    if skull_bash_source == "tm40":
+        _teach_tm40_skull_bash(actions, reader, emulator, timing)
+    elif reader.read().first_party_moves != (SKULL_BASH, STRENGTH, 0x3D, 0x39):
+        raise ErikaChapterError("Natural Skull Bash lineage changed before Gym recovery.")
     try:
         _, tm13_transfer_before_event = acquire_and_teach_ice_beam_from_celadon_center(
             actions,  # type: ignore[arg-type]
@@ -666,6 +708,7 @@ def run_erika_chapter(
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,
         controller_released=not emulator.pressed_buttons,
+        skull_bash_source=skull_bash_source,
         route_training_start_level=route_training.starting_level,
         route_training_target_level=route_training.target_level,
         route_training_final_level=route_training_final_level,

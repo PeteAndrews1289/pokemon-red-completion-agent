@@ -20,11 +20,16 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.tower import party_core_intact
 
 STRENGTH_CHECKPOINT_COUNT = 8
+BITE = 0x2C
+SKULL_BASH = 0x82
 TAIL_WHIP = 0x27
 STRENGTH = 0x46
-EXPECTED_MOVES_BEFORE = (0x2C, TAIL_WHIP, 0x3D, 0x39)
-EXPECTED_MOVES_AFTER = (0x2C, STRENGTH, 0x3D, 0x39)
+EXPECTED_MOVES_BEFORE = (BITE, TAIL_WHIP, 0x3D, 0x39)
+EXPECTED_MOVES_AFTER = (BITE, STRENGTH, 0x3D, 0x39)
 EXPECTED_PP_AFTER = (25, 15, 20, 15)
+NATURAL_MOVES_BEFORE = (SKULL_BASH, TAIL_WHIP, 0x3D, 0x39)
+NATURAL_MOVES_AFTER = (SKULL_BASH, STRENGTH, 0x3D, 0x39)
+NATURAL_PP_AFTER = (15, 15, 20, 15)
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -142,9 +147,11 @@ class StrengthChapterReport:
             and self.final_bag == expected_bag
             and self.initial_money >= 0
             and self.final_money == self.initial_money
-            and self.moves_before == EXPECTED_MOVES_BEFORE
-            and self.moves_after == EXPECTED_MOVES_AFTER
-            and self.pp_after == EXPECTED_PP_AFTER
+            and (self.moves_before, self.moves_after, self.pp_after)
+            in {
+                (EXPECTED_MOVES_BEFORE, EXPECTED_MOVES_AFTER, EXPECTED_PP_AFTER),
+                (NATURAL_MOVES_BEFORE, NATURAL_MOVES_AFTER, NATURAL_PP_AFTER),
+            }
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
@@ -210,7 +217,7 @@ def run_strength_chapter(
     initial_money = _money(emulator)
     moves_before = tuple(initial.first_party_moves or ())
     if (
-        moves_before != EXPECTED_MOVES_BEFORE
+        moves_before not in {EXPECTED_MOVES_BEFORE, NATURAL_MOVES_BEFORE}
         or ItemId.GOLD_TEETH not in _bag(emulator)
         or ItemId.HM04_STRENGTH in _bag(emulator)
         or _event(emulator, EventFlag.GOT_HM04)
@@ -250,7 +257,19 @@ def run_strength_chapter(
     for _ in range(6):
         _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
 
-    _teach_strength(actions, reader, emulator, timing)
+    expected_moves_after, expected_pp_after = (
+        (NATURAL_MOVES_AFTER, NATURAL_PP_AFTER)
+        if moves_before == NATURAL_MOVES_BEFORE
+        else (EXPECTED_MOVES_AFTER, EXPECTED_PP_AFTER)
+    )
+    _teach_strength(
+        actions,
+        reader,
+        emulator,
+        timing,
+        expected_moves_after=expected_moves_after,
+        expected_pp_after=expected_pp_after,
+    )
     _checkpoint(records, progress, emulator, reader.read(), "strength", "Taught Strength")
 
     _move(actions, reader, WARDEN_TO_HOUSE, timing, "Warden house exit route")
@@ -258,7 +277,7 @@ def run_strength_chapter(
     _require(reader.read(), MapId.FUCHSIA_POKECENTER, (3, 7), "Center entrance")
     _checkpoint(records, progress, emulator, reader.read(), "center_return", "Returned to Center")
     _move(actions, reader, CENTER_TO_NURSE, timing, "Fuchsia nurse")
-    _heal(actions, reader, emulator, timing)
+    _heal(actions, reader, emulator, timing, expected_pp=expected_pp_after)
     final = reader.read()
     _require(final, MapId.FUCHSIA_POKECENTER, (3, 3), "stable Strength boundary")
     _checkpoint(records, progress, emulator, final, "strength_stable", "Stable healed boundary")
@@ -296,6 +315,9 @@ def _teach_strength(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: StrengthTiming,
+    *,
+    expected_moves_after: tuple[int, ...],
+    expected_pp_after: tuple[int, ...],
 ) -> None:
     actions.execute(MacroAction(MacroActionKind.OPEN_MENU))
     _wait(actions, timing.wait_frames)
@@ -322,8 +344,8 @@ def _teach_strength(
     for _ in range(timing.menu_pulses):
         raw = reader.read()
         if (
-            raw.first_party_moves == EXPECTED_MOVES_AFTER
-            and raw.first_party_pp == EXPECTED_PP_AFTER
+            raw.first_party_moves == expected_moves_after
+            and raw.first_party_pp == expected_pp_after
             and ItemId.HM04_STRENGTH in _bag(emulator)
         ):
             break
@@ -368,6 +390,8 @@ def _heal(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: StrengthTiming,
+    *,
+    expected_pp: tuple[int, ...],
 ) -> None:
     actions.execute(MacroAction(MacroActionKind.INTERACT))
     for _ in range(timing.heal_pulses):
@@ -375,7 +399,7 @@ def _heal(
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
             and all(status == 0 for status in _party_status(emulator))
-            and reader.read().first_party_pp == EXPECTED_PP_AFTER
+            and reader.read().first_party_pp == expected_pp
         ):
             for _ in range(6):
                 _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)

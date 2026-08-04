@@ -12,6 +12,9 @@ from pokemon_red_completion.strength import (
     EXPECTED_MOVES_AFTER,
     EXPECTED_MOVES_BEFORE,
     EXPECTED_PP_AFTER,
+    NATURAL_MOVES_AFTER,
+    NATURAL_MOVES_BEFORE,
+    NATURAL_PP_AFTER,
     STRENGTH_CHECKPOINT_COUNT,
     StrengthChapterReport,
     StrengthCheckpoint,
@@ -99,6 +102,25 @@ def test_strength_report_requires_every_terminal_gate() -> None:
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)
+
+
+def test_strength_report_accepts_naturally_learned_skull_bash_lineage() -> None:
+    report = _report()
+    natural_raw = replace(
+        report.final_raw,
+        first_party_moves=NATURAL_MOVES_AFTER,
+        first_party_pp=NATURAL_PP_AFTER,
+    )
+    natural = replace(
+        report,
+        final_raw=natural_raw,
+        moves_before=NATURAL_MOVES_BEFORE,
+        moves_after=NATURAL_MOVES_AFTER,
+        pp_after=NATURAL_PP_AFTER,
+    )
+
+    assert natural.passed
+    assert natural.public_dict()["strength"]["moves_before"] == list(NATURAL_MOVES_BEFORE)
 
 
 def test_strength_public_report_discloses_exact_reusable_hm_teaching() -> None:

@@ -100,6 +100,16 @@ def test_erika_report_qualifies_tm40_move_learning_and_terminal() -> None:
         "learned_move_pp": 15,
     }
 
+    natural = replace(
+        report,
+        moves_before=(0x82, STRENGTH, 0x3D, 0x39),
+        skull_bash_source="natural_level_42",
+    )
+    assert natural.passed
+    assert natural.public_dict()["erika"]["skull_bash_preparation"]["source"] == (
+        "natural level-42 move; Safari TM40 archived"
+    )
+
 
 def test_erika_report_accepts_post_battle_level_and_rejects_incomplete_heal() -> None:
     raw = replace(

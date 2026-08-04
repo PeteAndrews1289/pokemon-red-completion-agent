@@ -201,6 +201,17 @@ def test_koga_report_records_a_living_party_continuation() -> None:
     assert continued.passed
     assert continued.public_dict()["koga"]["continued_after_faint"] is True
 
+    reserve_fainted = replace(
+        report.battles[-1],
+        hp_after=14,
+        continued_after_faint=True,
+    )
+    continued_from_reserve = replace(
+        report,
+        battles=(*report.battles[:-1], reserve_fainted),
+    )
+    assert continued_from_reserve.passed
+
 
 def test_koga_routes_and_minimum_trainer_set_are_pinned() -> None:
     assert (
