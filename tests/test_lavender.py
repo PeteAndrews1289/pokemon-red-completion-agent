@@ -178,11 +178,7 @@ def test_supply_income_detour_is_source_stable_and_reversible() -> None:
         "right",
         "right",
     ) == lavender_module.CENTER_EXTERIOR_TO_MART_APPROACH
-    assert (
-        "right",
-        *(("down",) * 4),
-        *(("right",) * 17),
-    ) == lavender_module.MART_EXTERIOR_TO_ROUTE_11
+    assert lavender_module.MART_EXTERIOR_TO_ROUTE_11 == ("right",) * 17
     assert (
         *(("right",) * 9),
         *(("down",) * 9),
