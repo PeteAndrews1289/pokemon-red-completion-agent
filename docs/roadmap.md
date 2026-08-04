@@ -548,3 +548,9 @@ after checkpoint 91: dialogue frames and opponent actions were incorrectly consu
 as actual RUN selections. V20 is retired with no official or counted run. V21 separates those
 budgets, safely advances dialogue with B, and keeps sixteen semantic escape attempts under an
 independent 128-transition ceiling before restarting the diagnostic battery.
+
+V21 cleared sleep recovery and the long escape sequence, defeated Lt. Surge, and then identified an
+over-strict chapter boundary: Wartortle's carried paralysis was rejected immediately before the
+next chapter's mandatory full-party Center heal. V21 is retired without official or counted runs.
+V22 accepts safe persistent status at the reward boundary and leaves the existing Center gate
+responsible for proving every party member is fully healed and status-free.

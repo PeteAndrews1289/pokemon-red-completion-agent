@@ -662,7 +662,6 @@ def test_surge_report_requires_every_terminal_reward_gate() -> None:
         replace(report, dig_attacks=2),
         replace(report, wrong_move_count=1),
         replace(report, final_raw=replace(report.final_raw, battle_state=2)),
-        replace(report, final_raw=replace(report.final_raw, first_party_status=4)),
         replace(report, final_lead_hp=0),
         replace(report, final_lead_hp=74),
         replace(report, controller_released=False),
@@ -680,6 +679,17 @@ def test_surge_report_allows_safe_damage_for_immediate_center_recovery() -> None
     )
 
     assert damaged.passed
+
+
+def test_surge_report_carries_persistent_status_to_immediate_center_recovery() -> None:
+    report = _report()
+    paralyzed = replace(
+        report,
+        final_raw=replace(report.final_raw, first_party_status=0x40),
+    )
+
+    assert paralyzed.passed
+    assert paralyzed.public_dict()["recovery"]["status"] == 0x40
 
 
 def test_surge_public_report_exposes_zero_wrong_moves() -> None:

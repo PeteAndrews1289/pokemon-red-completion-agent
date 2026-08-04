@@ -214,7 +214,6 @@ class SurgeChapterReport:
             and self.dig_attacks >= 3
             and self.wrong_move_count == 0
             and self.final_raw.battle_state == 0
-            and self.final_raw.first_party_status == 0
             and self.final_raw.first_party_hp == self.final_lead_hp
             and self.final_raw.first_party_max_hp == self.final_lead_max_hp
             and 0 < self.final_lead_hp <= self.final_lead_max_hp
@@ -658,7 +657,6 @@ def run_surge_chapter(
         and final.first_party_hp is not None
         and final.first_party_max_hp is not None
         and 0 < final.first_party_hp <= final.first_party_max_hp
-        and final.first_party_status == 0
         and _bag(emulator).get(ItemId.SUPER_POTION, 0)
         == surge_super_potion_target - int(super_potion_used)
         and stable

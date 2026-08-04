@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v21.json`](../configs/red-battle-collection-v21.json)
+[`red-battle-collection-v22.json`](../configs/red-battle-collection-v22.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1326,3 +1326,14 @@ living lead throughout.
 V21 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `31001`–`31005`, `41001`–`41002`, and `51001`–`51005`. The independent diagnostic battery remains
 `61001`–`61005` and must pass before that rehearsal.
+
+The v21 replay cleared both earlier transitions, completed the full collection detour, solved the
+Vermilion Gym locks, and defeated all three of Lt. Surge's Pokémon using only Dig. Its reward gate
+then rejected a valid victory solely because the restored Wartortle lead still carried paralysis
+from the collection detour. The next chapter already enters the Vermilion Center and proves full
+party HP and zero status for every member. V21 is retired before rehearsal with all counted roots
+unopened. The Surge boundary now proves survival, reward, inventory, party, and stable control while
+carrying any persistent status into that explicit Center recovery.
+
+V22 again uses exposed seed `60001` only for rehearsal and reserves fresh counted seeds
+`32001`–`32005`, `42001`–`42002`, and `52001`–`52005`; diagnostics `61001`–`61005` remain unopened.
