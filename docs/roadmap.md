@@ -526,3 +526,12 @@ step while approaching the Saffron Mart clerk and stopped at checkpoint 239 with
 could not distinguish a swallowed upward input from a successful approach. V17 is sealed. V18
 reuses that exact schedule only for rehearsal and requires every clerk-approach step to produce an
 observed coordinate change before advancing; all v18 counted schedules are fresh.
+
+V18 qualified the v17 Saffron schedule, but its first fresh training root reached Lt. Surge at
+checkpoint 95 and exposed an unsafe item-settlement loop. HP and inventory updates became visible
+on adjacent observations; pressing A while waiting could reopen the still-selected ITEM command
+instead of safely observing the remaining effect. V18 is sealed. Surge recovery now advances text
+with one-frame B pulses, which are inert on MAIN, and proves the joint HP, exact quantity, and menu
+state under a shared 720-pulse bound. Before v19 is frozen, the new explicit uncounted diagnostic
+schedule lane will run a multi-seed robustness battery so rare timing branches are found before,
+not inside, the next immutable campaign.

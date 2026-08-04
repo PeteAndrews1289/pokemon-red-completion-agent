@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v18.json`](../configs/red-battle-collection-v18.json)
+[`red-battle-collection-v19.json`](../configs/red-battle-collection-v19.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1281,3 +1281,23 @@ with eleven roots unopened. V18 promotes exposed seed `27001` to rehearsal-only 
 train seeds `28001`–`28005`, validation seeds `38001`–`38002`, and sealed test seeds
 `48001`–`48005`. Its clerk approach reuses the shared verified-step primitive so every intended
 movement must change the observed coordinate, with bounded retries for a swallowed input.
+
+V18 qualified that exact Saffron schedule and then failed honestly in fresh train root 01 at Lt.
+Surge. The Super Potion healed the active Diglett, but HP and inventory effects were not jointly
+visible on the first MAIN observation. The settle loop used A, which could reopen ITEM while
+waiting and destroy the exact-one-item proof. V18 is retired with one failed and eleven unopened
+roots. Recovery now samples one frame at a time with B, which advances battle text but cannot
+select ITEM from MAIN, and retains the exact HP, quantity, and living-battle contract.
+
+The next campaign is not frozen immediately. `record --diagnostic-schedule-seed SEED` binds the
+same 69-battle offset derivation to a clean-power recording while marking the episode explicitly
+uncounted, unassigned, and pre-registration-only. It never publishes a dry-run qualification and
+never opens or updates a campaign ledger. A multi-seed battery through this lane is now required
+before v19 preregistration, addressing the serial one-rehearsal/one-held-out-failure pattern without
+reusing any future counted seed.
+
+The v19 candidate registry uses the exposed v18 seed `28001` only for its mandatory rehearsal and
+reserves fresh counted seeds `29001`–`29005`, `39001`–`39002`, and `49001`–`49005`. Those counted
+seeds remain unopened while independent diagnostic seeds are exercised through the robustness
+lane; passing that battery is an additional engineering gate, not a substitute for the committed
+v19 rehearsal.

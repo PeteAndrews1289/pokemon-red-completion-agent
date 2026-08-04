@@ -9,6 +9,7 @@ from dataclasses import asdict
 from pathlib import Path
 
 from pokemon_red_completion import __version__
+from pokemon_red_completion.battle_plan import RED_BATTLE_PLAN_IDS
 from pokemon_red_completion.battle_schedule import BattleScheduleError
 from pokemon_red_completion.bootstrap import (
     DEFAULT_NEW_GAME_TIMING,
@@ -25,8 +26,12 @@ from pokemon_red_completion.collection_ledger import (
     require_dry_run_qualification,
 )
 from pokemon_red_completion.collection_protocol import (
+    BATTLE_PLAN_ROSTER_SCHEMA,
+    BATTLE_START_MAX_OFFSET_FRAMES,
+    BATTLE_START_SCHEDULE_DERIVATION,
     BATTLE_START_SCHEDULE_SCHEMA,
     BattleStartOffset,
+    BattleStartSchedule,
     CollectionAssignment,
     CollectionExecution,
     CollectionProtocolError,
@@ -312,6 +317,14 @@ def _parser() -> argparse.ArgumentParser:
             "consuming a held-out collection slot."
         ),
     )
+    recording_mode.add_argument(
+        "--diagnostic-schedule-seed",
+        type=int,
+        help=(
+            "Run one uncounted arbitrary battle-timing schedule for robustness "
+            "diagnostics without publishing a qualification or touching a campaign ledger."
+        ),
+    )
     return parser
 
 
@@ -402,6 +415,63 @@ def _collection_slots(registry: CollectionRegistry) -> tuple[CollectionSlot, ...
             )
         )
     return tuple(slots)
+
+
+def _diagnostic_schedule(seed: int) -> tuple[tuple[BattleStartOffset, ...], str]:
+    """Expand one explicitly uncounted pre-registration robustness schedule."""
+
+    if type(seed) is not int or not 0 <= seed <= (1 << 64) - 1:  # noqa: E721
+        raise ValueError("diagnostic schedule seed must be an unsigned 64-bit integer")
+    battle_roster_sha256 = collection_document_sha256(
+        {
+            "battle_plan_ids": list(RED_BATTLE_PLAN_IDS),
+            "schema": BATTLE_PLAN_ROSTER_SCHEMA,
+        }
+    )
+    schedule = BattleStartSchedule(
+        battle_plan_ids=RED_BATTLE_PLAN_IDS,
+        battle_roster_sha256=battle_roster_sha256,
+        derivation=BATTLE_START_SCHEDULE_DERIVATION,
+        max_offset_frames=BATTLE_START_MAX_OFFSET_FRAMES,
+        schema=BATTLE_START_SCHEDULE_SCHEMA,
+    )
+    offsets = schedule.offsets(seed)
+    return offsets, schedule.schedule_sha256(seed)
+
+
+def _attach_diagnostic_schedule_metadata(
+    metadata: dict[str, object],
+    *,
+    seed: int,
+    offsets: tuple[BattleStartOffset, ...],
+    schedule_sha256: str,
+) -> None:
+    """Describe a schedule-fuzzing episode without granting evaluation status."""
+
+    configuration = metadata.get("configuration")
+    collection = metadata.get("collection")
+    if not isinstance(configuration, dict) or not isinstance(collection, dict):
+        raise TypeError("diagnostic metadata lacks configuration or collection blocks")
+    configuration["battle_start_schedule"] = {
+        "offsets": [offset.public_dict() for offset in offsets],
+        "purpose": "pre_registration_robustness_diagnostic",
+        "schedule_sha256": schedule_sha256,
+        "schema": BATTLE_START_SCHEDULE_SCHEMA,
+    }
+    metadata["configuration_sha256"] = canonical_sha256(configuration)
+    collection.update(
+        {
+            "attempt": {"counted": False},
+            "harness_seed": seed,
+            "perturbation_schedule": "diagnostic_battle_start_offsets",
+            "purpose": "pre_registration_robustness_diagnostic",
+            "schedule": {
+                "schedule_sha256": schedule_sha256,
+                "schema": BATTLE_START_SCHEDULE_SCHEMA,
+            },
+            "seed_protocol": "explicit_diagnostic_harness_seed",
+        }
+    )
 
 
 def _campaign_identity(
@@ -1161,19 +1231,29 @@ def main(arguments: Sequence[str] | None = None) -> int:
             assignment = None
             schedule_dry_run = None
             registry = None
+            diagnostic_offsets = None
+            diagnostic_schedule_sha256 = None
             if args.collection_run is not None or args.schedule_dry_run:
                 registry = load_committed_collection_registry(REPOSITORY_ROOT)
             if args.collection_run is not None and registry is not None:
                 assignment = registry.assignment(args.collection_run)
             elif args.schedule_dry_run and registry is not None:
                 schedule_dry_run = registry.schedule_dry_run
+            elif args.diagnostic_schedule_seed is not None:
+                diagnostic_offsets, diagnostic_schedule_sha256 = _diagnostic_schedule(
+                    args.diagnostic_schedule_seed
+                )
             episode_id = (
                 assignment.episode_id
                 if assignment is not None
                 else (
                     f"red-dry-run-{uuid.uuid4().hex}"
                     if schedule_dry_run is not None
-                    else f"red-teacher-{uuid.uuid4().hex}"
+                    else (
+                        f"red-schedule-diagnostic-{uuid.uuid4().hex}"
+                        if diagnostic_offsets is not None
+                        else f"red-teacher-{uuid.uuid4().hex}"
+                    )
                 )
             )
             metadata = _recording_metadata(
@@ -1185,6 +1265,15 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 execution=(registry.execution if registry is not None else None),
                 schedule_dry_run=schedule_dry_run,
             )
+            if diagnostic_offsets is not None:
+                if diagnostic_schedule_sha256 is None:
+                    raise RuntimeError("diagnostic schedule digest is unavailable")
+                _attach_diagnostic_schedule_metadata(
+                    metadata,
+                    seed=args.diagnostic_schedule_seed,
+                    offsets=diagnostic_offsets,
+                    schedule_sha256=diagnostic_schedule_sha256,
+                )
             private_root = open_private_root(
                 args.private_root,
                 repository_root=REPOSITORY_ROOT,
@@ -1194,7 +1283,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 if assignment is not None
                 else schedule_dry_run.offsets
                 if schedule_dry_run is not None
-                else None
+                else diagnostic_offsets
             )
             dry_run_qualification = None
             if assignment is not None and registry is not None:

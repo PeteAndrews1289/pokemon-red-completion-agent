@@ -57,6 +57,40 @@ def _runtime_identity():
     )
 
 
+def test_diagnostic_schedule_is_uncounted_and_content_addressed() -> None:
+    offsets, schedule_sha256 = cli._diagnostic_schedule(28_001)
+    repeated, repeated_sha256 = cli._diagnostic_schedule(28_001)
+    metadata: dict[str, object] = {
+        "configuration": {"schema": "test-configuration"},
+        "configuration_sha256": "stale",
+        "collection": {"attempt": {"counted": True}},
+    }
+
+    cli._attach_diagnostic_schedule_metadata(
+        metadata,
+        seed=28_001,
+        offsets=offsets,
+        schedule_sha256=schedule_sha256,
+    )
+
+    assert offsets == repeated
+    assert schedule_sha256 == repeated_sha256
+    assert len(offsets) == 69
+    collection = metadata["collection"]
+    assert isinstance(collection, dict)
+    assert collection["attempt"] == {"counted": False}
+    assert collection["purpose"] == "pre_registration_robustness_diagnostic"
+    configuration = metadata["configuration"]
+    assert isinstance(configuration, dict)
+    assert metadata["configuration_sha256"] == canonical_sha256(configuration)
+
+
+def test_diagnostic_schedule_seed_rejects_invalid_values() -> None:
+    for invalid in (-1, 1 << 64, True):
+        with pytest.raises(ValueError, match="unsigned 64-bit"):
+            cli._diagnostic_schedule(invalid)
+
+
 def test_route_command_prints_validated_hall_of_fame_route(capsys) -> None:
     assert cli.main(["route"]) == 0
 
@@ -831,9 +865,9 @@ def test_battle_learning_writes_only_a_private_typed_model_artifact(
 @pytest.mark.parametrize(
     "run_id",
     [
-        "red-battle-v18-01-train",
-        "red-battle-v18-06-validation",
-        "red-battle-v18-08-test",
+        "red-battle-v19-01-train",
+        "red-battle-v19-06-validation",
+        "red-battle-v19-08-test",
     ],
 )
 def test_battle_learning_rejects_preregistered_ids_before_opening_private_data(
@@ -1413,7 +1447,7 @@ def test_planned_record_requires_dry_run_before_sealing_or_emulator_start(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v18-01-train")
+    assignment = registry.assignment("red-battle-v19-01-train")
     private_path = Path("/private/Pokemon Red.gb")
     private_root_path = Path("/private/external/trajectories")
     observed: dict[str, object] = {}
@@ -1512,7 +1546,7 @@ def test_planned_record_uses_the_frozen_identity_and_exact_offsets(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v18-01-train")
+    assignment = registry.assignment("red-battle-v19-01-train")
     private_path = Path("/private/Pokemon Red.gb")
     private_root_path = Path("/private/external/trajectories")
     observed: dict[str, object] = {}
@@ -1999,7 +2033,7 @@ def test_planned_recording_metadata_binds_assignment_and_schedule(
 ) -> None:
     private_rom = Path("/private/Pokemon Red.gb")
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v18-01-train")
+    assignment = registry.assignment("red-battle-v19-01-train")
     source = SourceIdentity("a" * 40, False)
     monkeypatch.setattr(
         cli,
@@ -2097,7 +2131,7 @@ def test_scheduled_metadata_rejects_a_commit_change_after_registry_load(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v18-01-train")
+    assignment = registry.assignment("red-battle-v19-01-train")
     monkeypatch.setattr(
         cli,
         "detect_source_identity",

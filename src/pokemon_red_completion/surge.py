@@ -72,6 +72,7 @@ METAPOD_SPECIES_ID = 0x7C
 KAKUNA_SPECIES_ID = 0x71
 PIKACHU_SPECIES_ID = 0x54
 COLLECTION_POKE_BALL_TARGET = 30
+SURGE_ITEM_SETTLE_PULSES = 720
 WILD_CAPTURE_THROWS_PER_ENCOUNTER = 5
 BALL_THROW_SETTLE_ACTION = MacroActionKind.CANCEL
 ROUTE_1_WALKER_APPROACH = (14, 14)
@@ -3559,7 +3560,7 @@ def _use_surge_super_potion(
     _pulse(executor, MacroActionKind.CONFIRM, frames=240)
 
     expected_hp = min(before.battler_max_hp, before.battler_hp + 50)
-    for _ in range(48):
+    for _ in range(SURGE_ITEM_SETTLE_PULSES):
         current = reader.read()
         if (
             current.battle_state == 2
@@ -3570,8 +3571,18 @@ def _use_surge_super_potion(
             return
         if current.battle_state != 2 or (current.battler_hp or 0) <= 0:
             raise SurgeChapterError("Lt. Surge recovery lost its living battle gate.")
-        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    raise SurgeChapterError("Lt. Surge recovery did not prove its HP and inventory effects.")
+        # B advances battle text but is inert when MAIN returns. A can reopen
+        # the still-selected ITEM command before the quantity update and spend
+        # another recovery item if the two effects become observable on
+        # adjacent frames.
+        _pulse(executor, MacroActionKind.CANCEL, frames=1)
+    final = reader.read()
+    raise SurgeChapterError(
+        "Lt. Surge recovery did not prove its HP and inventory effects: "
+        f"hp={final.battler_hp}/{final.battler_max_hp}, "
+        f"quantity={_bag(emulator).get(ItemId.SUPER_POTION, 0)}, "
+        f"phase={reader.read_battle_menu_state(final).phase.value}."
+    )
 
 
 def _clear_rewards(

@@ -965,6 +965,15 @@ failed and eleven unopened roots. V18 makes the approach closed-loop: each step 
 observed coordinate before the next direction is issued, and the v17 schedule is used only as the
 new uncounted qualification seed.
 
+V18 proved the Saffron correction but its first fresh schedule reached Lt. Surge and exposed a
+different item-settlement race. The Super Potion's HP and quantity effects appeared on adjacent
+observations; the controller pressed A while waiting for their joint proof and could reopen the
+ITEM command from MAIN. V18 is sealed. Surge recovery now uses frame-granular B pulses—safe battle
+text advancement that is inert on MAIN—and retains the exact-one-item proof. More importantly, the
+project now has an explicit arbitrary-seed, uncounted schedule-diagnostic lane. Multiple full-game
+timing schedules will be exercised before the next campaign is frozen, replacing the insufficient
+practice of treating one successful rehearsal as broad robustness evidence.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

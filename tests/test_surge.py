@@ -48,6 +48,7 @@ from pokemon_red_completion.surge import (
     SPEAROW_CAPTURE_THROW_LIMIT,
     SPEAROW_DIRECT_THROW_LEVEL_FLOOR,
     SURGE_CHECKPOINT_COUNT,
+    SURGE_ITEM_SETTLE_PULSES,
     VIRIDIAN_FOREST_MAX_SURVEY_LEGS,
     WILD_CAPTURE_DIRECT_THROW_SPECIES,
     WILD_CAPTURE_HIGH_RISK_HELPER_HP_RATIO,
@@ -68,6 +69,7 @@ from pokemon_red_completion.surge import (
     _plan_gym_can_path,
     _run_dig_battle,
     _select_wild_capture_helper,
+    _use_surge_super_potion,
     _weakening_attack_allowed,
     _wild_capture_policy,
     _wild_capture_weakening_budget,
@@ -696,6 +698,64 @@ def test_low_hp_main_gate_uses_one_bounded_surge_recovery(monkeypatch: pytest.Mo
     assert dig_attacks == 0
     assert super_potion_used is True
     assert calls == [10]
+
+
+def test_surge_recovery_settles_with_cancel_when_quantity_update_is_delayed(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Runtime:
+        def __init__(self) -> None:
+            self.raw = replace(
+                _raw(),
+                battle_state=2,
+                enemy_hp=5,
+                active_party_index=0,
+                first_party_hp=10,
+                first_party_max_hp=30,
+            )
+            self.quantity = 2
+            self.confirmations = 0
+            self.cancellations = 0
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=1)
+
+        def read_u8(self, address: int) -> int:
+            assert address == RamAddress.CURRENT_MENU_ITEM
+            return 0
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.CONFIRM:
+                self.confirmations += 1
+                if self.confirmations == 3:
+                    self.raw = replace(self.raw, first_party_hp=30)
+            elif action.kind is MacroActionKind.CANCEL:
+                self.cancellations += 1
+                self.quantity = 1
+
+    runtime = Runtime()
+    monkeypatch.setattr(surge_module, "_navigate_main", lambda *_args: runtime.raw)
+    monkeypatch.setattr(surge_module, "_select_bag_item", lambda *_args: None)
+    monkeypatch.setattr(
+        surge_module,
+        "_bag",
+        lambda _emulator: {ItemId.SUPER_POTION: runtime.quantity},
+    )
+
+    _use_surge_super_potion(
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        replace(DEFAULT_SURGE_TIMING, wait_frames=1),
+    )
+
+    assert SURGE_ITEM_SETTLE_PULSES == 720
+    assert runtime.confirmations == 3
+    assert runtime.cancellations == 1
+    assert runtime.quantity == 1
 
 
 def _route_end(
