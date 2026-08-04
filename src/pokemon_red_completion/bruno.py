@@ -413,7 +413,20 @@ def _settle_bruno_victory(
             and reader.read_input_readiness().ready
             and emulator.read_u8(RamAddress.CURRENT_MAP_SCRIPT) == 0
         ):
-            return raw
+            # DisplayTextID can outlive the end-battle map script by one text
+            # layer. Dismiss it only after the script is back at default;
+            # sending B earlier is consumed by the still-active script.
+            _pulse(actions, MacroActionKind.CANCEL)
+            released = reader.read()
+            if (
+                released.battle_state == 0
+                and released.map_id == MapId.BRUNOS_ROOM
+                and _event(released, EventFlag.BEAT_BRUNO)
+                and reader.read_input_readiness().ready
+                and emulator.read_u8(RamAddress.CURRENT_MAP_SCRIPT) == 0
+            ):
+                return released
+            raise BrunoChapterError("Bruno text release left its qualified room boundary.")
         _pulse(actions, MacroActionKind.CONFIRM)
     raise BrunoChapterError("Bruno victory script did not settle at the overworld boundary.")
 
