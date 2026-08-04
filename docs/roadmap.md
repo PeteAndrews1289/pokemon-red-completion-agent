@@ -503,6 +503,10 @@ Champion Full Restore reserve. Indigo now overprovisions six Full Heals so statu
 not consume the protected HP-recovery item. The v14 rehearsal must still prove the final three gates.
 
 V14 did qualify all 312 checkpoints, but its first counted seed exposed an unavoidable fast-Dugtrio
-knockout during the single-member pre-ship grind. That campaign is sealed. V15 relocates this one
-development lesson to lower-level Route 11 grass and uses wholly fresh rehearsal and counted seeds;
-full qualification is again required before any v15 training slot opens.
+knockout during the single-member pre-ship grind. That campaign is sealed. V15 relocated this one
+development lesson to lower-level Route 11 grass and used wholly fresh schedules.
+
+V15 then qualified all 312 checkpoints with the balanced party, but its first counted seed exposed
+a missing disabled-move exclusion during the Route 11 lesson. The failed outcome is sealed. V16
+adds that semantic action gate and receives a new rehearsal and entirely new counted schedules;
+full qualification is again required before any v16 training slot opens.

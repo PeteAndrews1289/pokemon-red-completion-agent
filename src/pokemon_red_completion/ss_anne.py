@@ -1007,7 +1007,13 @@ def _pre_ship_training_move_slot(raw: RawGameState) -> int:
     moves = raw.first_party_moves or ()
     pp = raw.first_party_pp or ()
     for slot in PRE_SHIP_TRAINING_POLICY.preferred_move_slots:
-        if slot <= len(moves) and slot <= len(pp) and moves[slot - 1] and (pp[slot - 1] & 0x3F):
+        if (
+            slot <= len(moves)
+            and slot <= len(pp)
+            and moves[slot - 1]
+            and (pp[slot - 1] & 0x3F)
+            and raw.player_disabled_move_slot != slot
+        ):
             return slot
     raise SSAnneChapterError("Pre-ship training has no legal preferred move.")
 

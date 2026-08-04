@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v15.json`](../configs/red-battle-collection-v15.json)
+[`red-battle-collection-v16.json`](../configs/red-battle-collection-v16.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1255,3 +1255,10 @@ attack. V14 is sealed and retired. V15 moves only this early development lesson 
 source-qualified Route 11 grass, where encounters are lower-level and can be fought safely. The
 later planned Diglett capture still teaches the cave's progression value. V15 uses fresh rehearsal
 seed `21004` and counted seeds `25001`–`25005`, `35001`–`35002`, and `45001`–`45005`.
+
+V15 qualified the complete **312-checkpoint**, **36-objective**, **69-scheduled-battle** route on
+its sealed source. Its first immutable training slot then met a Route 11 Venonat whose Disable
+targeted Water Gun. The pre-ship selector respected PP but did not exclude the live disabled slot,
+so the battle runtime rejected the attempted action. V15 remains sealed with that failed outcome.
+V16 adds the missing semantic disabled-slot gate and uses fresh rehearsal seed `21005` plus counted
+seeds `26001`–`26005`, `36001`–`36002`, and `46001`–`46005`.

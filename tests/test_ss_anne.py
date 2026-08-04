@@ -37,6 +37,16 @@ def test_pre_ship_training_is_bounded_and_prefers_water_moves() -> None:
     )
     assert ss_anne._pre_ship_training_move_slot(raw) == 3
     assert ss_anne._pre_ship_training_move_slot(replace(raw, first_party_pp=(20, 30, 0, 20))) == 4
+    assert (
+        ss_anne._pre_ship_training_move_slot(
+            replace(
+                raw,
+                first_party_pp=(20, 30, 0, 20),
+                player_disabled_move_slot=4,
+            )
+        )
+        == 1
+    )
 
 
 def test_ss_anne_waiter_yield_gate_is_source_pinned() -> None:
