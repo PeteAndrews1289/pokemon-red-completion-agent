@@ -368,7 +368,7 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert DIGLETT_SEARCH_SEED_WAIT_FRAMES == 199
     assert frozenset({17}) == SPEAROW_CAPTURE_LEVELS
     assert SPEAROW_DIRECT_THROW_LEVEL_FLOOR == 30
-    assert SPEAROW_CAPTURE_THROW_LIMIT == 5
+    assert SPEAROW_CAPTURE_THROW_LIMIT == 15
     assert DUX_NICKNAME == (0x83, 0x94, 0x97, 0x50)
     assert SURGE_CHECKPOINT_COUNT == 15
     assert COLLECTION_POKE_BALL_TARGET == 30

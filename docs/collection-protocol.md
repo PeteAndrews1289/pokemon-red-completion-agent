@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v27.json`](../configs/red-battle-collection-v27.json)
+[`red-battle-collection-v28.json`](../configs/red-battle-collection-v28.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1390,3 +1390,13 @@ sharing the general wild-search step budget; other capture lessons retain their 
 
 V27 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `37001`–`37005`, `47001`–`47002`, and `57001`–`57005`; all five diagnostics must be replayed.
+
+The v27 replay of seed `61003` proved the wider encounter search by finding the required Spearow
+beyond the former bound. Five consecutive direct throws then failed to capture it, and the teacher
+stopped with party and remaining inventory intact. V27 is retired before rehearsal with every
+counted root unopened. The staged-development direct-capture lesson now permits at most fifteen of
+the thirty purchased Poké Balls, preserving at least fifteen for the following Diglett lesson while
+substantially reducing ordinary capture-RNG rejection.
+
+V28 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`38001`–`38005`, `48001`–`48002`, and `58001`–`58005`; all five diagnostics must be replayed.
