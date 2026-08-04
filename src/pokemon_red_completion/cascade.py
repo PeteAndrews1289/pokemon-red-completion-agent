@@ -1520,6 +1520,51 @@ def _cross_route_24_npc(
     raise CascadeChapterError("Route 24 NPC crossing exhausted its bounded progress retries.")
 
 
+def _cross_route_24_recovery_npc(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: CascadeTiming,
+) -> None:
+    """Reach the Center approach despite the same moving Cerulean pedestrian."""
+
+    target_x = 17
+    expected_y = 16
+    required_steps = 9
+    retry_budget = timing.max_route_24_npc_attempts * required_steps
+    for pulse in range(1, required_steps + retry_budget + 1):
+        before = reader.read()
+        if (
+            before.map_id != MapId.CERULEAN_CITY
+            or before.player_y != expected_y
+            or not 8 <= before.player_x <= target_x
+        ):
+            raise CascadeChapterError(
+                "Route 24 recovery NPC crossing left its bounded east corridor: "
+                f"position={(before.map_id, before.player_x, before.player_y)!r}."
+            )
+        if before.player_x == target_x:
+            return
+        after = _move(
+            executor,
+            reader,
+            ("right",),
+            f"Route 24 recovery NPC crossing pulse {pulse}",
+        )
+        if (
+            after.map_id != MapId.CERULEAN_CITY
+            or after.player_y != expected_y
+            or after.player_x not in {before.player_x, before.player_x + 1}
+        ):
+            raise CascadeChapterError(
+                "Route 24 recovery NPC crossing made an invalid corridor transition: "
+                f"before={(before.player_x, before.player_y)!r}, "
+                f"after={(after.map_id, after.player_x, after.player_y)!r}."
+            )
+    raise CascadeChapterError(
+        "Route 24 recovery NPC crossing exhausted its bounded progress retries."
+    )
+
+
 def _recover_route_24(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
@@ -1540,9 +1585,11 @@ def _recover_route_24(
     _move(
         executor,
         reader,
-        _directions("D" * 12 + "L" * 12 + "D" * 4 + "R" * 9 + "DDRRU"),
-        "Route 24 recovery Center",
+        _directions("D" * 12 + "L" * 12 + "D" * 4),
+        "Route 24 recovery Center west corridor",
     )
+    _cross_route_24_recovery_npc(executor, reader, timing)
+    _move(executor, reader, _directions("DDRRU"), "Route 24 recovery Center entry")
     _wait(executor, timing.transition_wait_frames)
     _heal(executor, reader, timing)
     if buy_awakening_topup:

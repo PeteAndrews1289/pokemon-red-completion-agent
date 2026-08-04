@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v35.json`](../configs/red-battle-collection-v35.json)
+[`red-battle-collection-v36.json`](../configs/red-battle-collection-v36.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1473,3 +1473,14 @@ input, returns immediately at or above seventeen, and visits the Mart only for a
 
 V35 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `220001`–`220005`, `230001`–`230002`, and `240001`–`240005`; all five diagnostics must be replayed.
+
+V35 diagnostic seeds `61001`, `61002`, and `61003` completed all 312 checkpoints and entered the
+Hall of Fame. Seed `61005` then cleared Route 24 trainers 5 and 4, but a moving Cerulean pedestrian
+swallowed three eastbound inputs during the required Center backtrack; the fixed trace ended at
+`(16,17)` instead of entering the Center. V35 is retired before rehearsal with every counted root
+unopened. The recovery route now proves each east-corridor step, tolerates the stationary NPC under
+the same finite retry policy as the westbound bridge approach, and only resumes the Center entry
+after observing `(17,16)`.
+
+V36 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`250001`–`250005`, `260001`–`260002`, and `270001`–`270005`; all five diagnostics must be replayed.

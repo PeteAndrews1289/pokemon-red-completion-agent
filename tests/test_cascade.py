@@ -60,6 +60,7 @@ from pokemon_red_completion.cascade import (
     _cerulean_return_blocked_detour,
     _cerulean_return_direction,
     _cross_route_24_npc,
+    _cross_route_24_recovery_npc,
     _reverse_directions,
     _run_cerulean_gym_trainer_with_potion,
     _run_cerulean_rival_with_potion,
@@ -396,6 +397,42 @@ def test_route_24_npc_crossing_fails_closed_when_progress_never_occurs() -> None
 
     assert (reader.x, reader.y) == (16, 16)
     assert executor.left_pulses == 72
+
+
+def test_route_24_recovery_npc_crossing_retries_blocked_east_inputs() -> None:
+    class Reader:
+        x = 8
+
+        def read(self) -> RawGameState:
+            return replace(
+                _raw(),
+                map_id=MapId.CERULEAN_CITY,
+                player_x=self.x,
+                player_y=16,
+                first_party_hp=51,
+            )
+
+    reader = Reader()
+
+    class Executor:
+        blocked = 3
+        right_pulses = 0
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is not MacroActionKind.MOVE or action.value != "right":
+                return
+            self.right_pulses += 1
+            if self.blocked:
+                self.blocked -= 1
+            else:
+                reader.x += 1
+
+    executor = Executor()
+
+    _cross_route_24_recovery_npc(executor, reader, DEFAULT_CASCADE_TIMING)
+
+    assert reader.x == 17
+    assert executor.right_pulses == 12
 
 
 def test_cascade_timing_defaults_are_positive_and_pin_qualified_delays() -> None:
