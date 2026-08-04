@@ -988,10 +988,10 @@ remain sealed, the other eleven v36 slots remain unopened, and the exposed seed 
 eligible for fitting or evaluation.
 
 V37 turns that failure into a portable resource-planning lesson instead of weakening the safety
-gate: the teacher buys eleven pre-tunnel Super Potions rather than ten, preserving the same
-five-item minimum even when Route 9 spends six. The altered menu timing, economy, and downstream
-route must requalify from clean power-on. The exposed v36 schedule is diagnostic-only; v37 uses
-fresh seeds for all five training, two validation, and five test lineages.
+gate or overprovisioning the inventory: both Route 9 controllers compute their healing allowance
+from the live surplus above the five-item Rock Tunnel reserve. Once that shared budget is gone,
+the balanced party continues with living teammates. The exposed v36 schedule is diagnostic-only;
+v37 uses fresh seeds for all five training, two validation, and five test lineages.
 
 ## Engineering and portfolio takeaways
 

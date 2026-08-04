@@ -1489,8 +1489,9 @@ All five V36 diagnostics and its official 69-battle rehearsal completed 312/312 
 entered the Hall of Fame. Its first counted training seed then reached Route 10 with only four
 Super Potions: the held-out Route 9 timings had consumed six, one more than every qualifying run,
 and the teacher correctly stopped before opening Rock Tunnel. V36 is retired with that immutable
-failure and eleven unopened slots. The exposed seed becomes diagnostic-only. V37 raises the fixed
-pre-tunnel reserve from ten to eleven so the existing five-potion Rock Tunnel floor remains intact.
+failure and eleven unopened slots. The exposed seed becomes diagnostic-only. V37 exposes only the
+live surplus above five to both Route 9 recovery controllers; once that shared budget is exhausted,
+the balanced party continues with living teammates instead of spending Rock Tunnel's reserve.
 
 V37 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `280001`–`280005`, `290001`–`290002`, and `300001`–`300005`. The exposed V36 training seed

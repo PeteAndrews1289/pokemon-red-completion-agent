@@ -65,7 +65,7 @@ FINAL_TUNNEL_RECOVERY_THRESHOLD = 90
 FINAL_TUNNEL_GRASS_SPECIES = frozenset({BULBASAUR_SPECIES_ID, 0xB9, 0xBA, 0xBC, 0xBD})
 SLOWPOKE_SPECIES_ID = 0x25
 ROUTE_9_MIN_SUPER_POTION_RESERVE = 5
-TUNNEL_SUPER_POTION_TARGET = 11
+TUNNEL_SUPER_POTION_TARGET = 10
 TUNNEL_AWAKENINGS_PURCHASED = 3
 TUNNEL_AWAKENING_RESERVE = 5
 TUNNEL_PARLYZ_HEALS_PURCHASED = 3
@@ -449,7 +449,7 @@ def run_lavender_chapter(
         or _bag(emulator).get(ItemId.REPEL) != 4
     ):
         raise LavenderChapterError(
-            "Mart purchase did not produce the eleven-potion reserve, five Awakenings, "
+            "Mart purchase did not produce the ten-potion reserve, five Awakenings, "
             "three Parlyz Heals, and four Repels."
         )
     _checkpoint(records, progress, emulator, supplies, "supplies", "Purchased tunnel supplies")
@@ -562,7 +562,7 @@ def run_lavender_chapter(
         1,
         RedBattlePlanId.LAVENDER_ROUTE_9_TRAINER_0,
         battle_recovery_threshold=DUX_BATTLE_RECOVERY_THRESHOLD,
-        battle_recovery_limit=6,
+        battle_recovery_limit=_route_9_recovery_allowance(emulator),
     )
     _swap(actions, reader, emulator, WARTORTLE, "Route 9 Wartortle restoration")
     _move(
@@ -592,7 +592,7 @@ def run_lavender_chapter(
         3,
         RedBattlePlanId.LAVENDER_ROUTE_9_TRAINER_8,
         already_triggered=True,
-        battle_recovery_limit=2,
+        battle_recovery_limit=_route_9_recovery_allowance(emulator),
     )
     _move(
         actions,
@@ -1828,6 +1828,15 @@ def _require_potion_floor(emulator: EmulatorState, minimum: int, label: str) -> 
             f"{label} violated its Super Potion floor: observed {observed}, "
             f"expected at least {minimum}."
         )
+
+
+def _route_9_recovery_allowance(emulator: EmulatorState) -> int:
+    """Expose only the live surplus above Rock Tunnel's protected reserve."""
+
+    return max(
+        0,
+        _bag(emulator).get(ItemId.SUPER_POTION, 0) - ROUTE_9_MIN_SUPER_POTION_RESERVE,
+    )
 
 
 def _use_super_potion(

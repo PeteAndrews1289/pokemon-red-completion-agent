@@ -205,7 +205,7 @@ def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert lavender_module.TUNNEL_RECOVERY_THRESHOLD == 40
     assert DUX_BATTLE_RECOVERY_THRESHOLD == 20
     assert ROUTE_9_MIN_SUPER_POTION_RESERVE == 5
-    assert lavender_module.TUNNEL_SUPER_POTION_TARGET == 11
+    assert lavender_module.TUNNEL_SUPER_POTION_TARGET == 10
     assert TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD == 40
     assert FINAL_TUNNEL_RECOVERY_THRESHOLD == 90
     assert lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED == 3
@@ -217,6 +217,24 @@ def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
         + (lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED - 1) * 144
         == 335
     )
+
+
+@pytest.mark.parametrize(
+    ("carried", "allowance"),
+    ((10, 5), (7, 2), (5, 0), (4, 0)),
+)
+def test_route_9_recovery_spends_only_the_surplus_above_tunnel_reserve(
+    monkeypatch: pytest.MonkeyPatch,
+    carried: int,
+    allowance: int,
+) -> None:
+    monkeypatch.setattr(
+        lavender_module,
+        "_bag",
+        lambda _emulator: {ItemId.SUPER_POTION: carried},
+    )
+
+    assert lavender_module._route_9_recovery_allowance(object()) == allowance
     assert lavender_module.EARLY_POKE_BALL_CAPACITY_RESERVE == 1
 
 
