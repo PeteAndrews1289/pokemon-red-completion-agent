@@ -1213,3 +1213,7 @@ The next replay passed that customer and reached the Cinnabar preparation gate a
 with 19 effective bag slots and no Antidote. Earlier capacity logic only knew how to free a slot by
 selling that obsolete cure. The teacher now sells the equally unused TM21 in this exact full-bag
 variant, accounts for its ₽2,500 proceeds, and preserves Bide for the delayed TM38 capacity lesson.
+That repair completed Cinnabar and reached the Indigo shopping sequence at checkpoint 291. Because
+TM21 was already gone, the old late planner did not free its expected slot before buying Submission.
+The Indigo planner now sells the remaining obsolete Potion stack when TM21 is absent; it preserves
+TM14 for Lance/Champion coverage and rejects a lineage with neither legal capacity option.

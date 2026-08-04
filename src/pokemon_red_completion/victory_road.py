@@ -27,7 +27,11 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
 )
-from pokemon_red_completion.blaine import MANSION_TRAINING_POLICY, _select_cursor
+from pokemon_red_completion.blaine import (
+    MANSION_TRAINING_POLICY,
+    _select_cursor,
+    _sell_bag_item_stack,
+)
 from pokemon_red_completion.celadon import (
     DEFAULT_CELADON_TIMING,
     _bag,
@@ -521,8 +525,21 @@ def run_victory_road_chapter(
         _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     _sell_current_bag_item(actions, emulator, ItemId.TM38_FIRE_BLAST)
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
-    if ItemId.TM21_MEGA_DRAIN in _bag(emulator):
-        _sell_current_bag_item(actions, emulator, ItemId.TM21_MEGA_DRAIN)
+    late_capacity_sale = _indigo_capacity_sale_item(
+        _bag(emulator).get(ItemId.TM21_MEGA_DRAIN, 0),
+        _bag(emulator).get(ItemId.POTION, 0),
+    )
+    if late_capacity_sale == ItemId.TM21_MEGA_DRAIN:
+        _sell_current_bag_item(actions, emulator, late_capacity_sale)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    else:
+        _sell_bag_item_stack(
+            actions,
+            reader,
+            emulator,
+            late_capacity_sale,
+            _bag(emulator).get(late_capacity_sale, 0),
+        )
         _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     _move(actions, reader, ("right", "down", "down", "down"), "Saffron recovery Mart exit")
     _acquire_and_teach_submission(actions, reader, emulator)
@@ -830,6 +847,18 @@ def run_victory_road_chapter(
     if not report.passed:
         raise VictoryRoadChapterError(f"Victory Road terminal evidence failed: {report!r}.")
     return report
+
+
+def _indigo_capacity_sale_item(tm21_quantity: int, potion_quantity: int) -> ItemId:
+    """Choose one obsolete stack to free the preregistered Indigo TM slot."""
+
+    if tm21_quantity == 1:
+        return ItemId.TM21_MEGA_DRAIN
+    if tm21_quantity == 0 and potion_quantity > 0:
+        return ItemId.POTION
+    raise VictoryRoadChapterError(
+        "Indigo preparation lacks TM21 or obsolete Potions for its capacity sale."
+    )
 
 
 def _validate_collection_poke_ball_remainder(quantity: int) -> int:

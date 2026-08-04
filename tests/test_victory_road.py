@@ -44,6 +44,13 @@ from pokemon_red_completion.victory_road import (
 )
 
 
+def test_indigo_capacity_sale_uses_potions_when_tm21_was_sold_early() -> None:
+    assert victory_road._indigo_capacity_sale_item(1, 5) == ItemId.TM21_MEGA_DRAIN
+    assert victory_road._indigo_capacity_sale_item(0, 5) == ItemId.POTION
+    with pytest.raises(VictoryRoadChapterError):
+        victory_road._indigo_capacity_sale_item(0, 0)
+
+
 class _RecoveryReader:
     def __init__(self, raw: RawGameState) -> None:
         self.raw = raw
