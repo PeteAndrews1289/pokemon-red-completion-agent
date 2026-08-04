@@ -413,10 +413,10 @@ def _settle_bruno_victory(
             and reader.read_input_readiness().ready
             and emulator.read_u8(RamAddress.CURRENT_MAP_SCRIPT) == 0
         ):
-            # DisplayTextID can outlive the end-battle map script by one text
-            # layer. Dismiss it only after the script is back at default;
-            # sending B earlier is consumed by the still-active script.
-            _pulse(actions, MacroActionKind.CANCEL)
+            # DisplayTextID outlives the end-battle map script by one text
+            # layer. Confirm it only after the script is back at default;
+            # earlier confirmations are consumed by the active script.
+            _pulse(actions, MacroActionKind.CONFIRM)
             released = reader.read()
             if (
                 released.battle_state == 0

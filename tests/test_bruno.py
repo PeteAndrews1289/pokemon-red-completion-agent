@@ -123,8 +123,7 @@ def test_bruno_victory_settle_stops_before_reinteracting(monkeypatch: pytest.Mon
         reader,
         emulator,
     ) == raw
-    assert [action.kind for action in executor.actions].count(MacroActionKind.CONFIRM) == 1
-    assert [action.kind for action in executor.actions].count(MacroActionKind.CANCEL) == 1
+    assert [action.kind for action in executor.actions].count(MacroActionKind.CONFIRM) == 2
 
 
 def test_post_bruno_field_heal_occurs_after_agatha_room_entry() -> None:
