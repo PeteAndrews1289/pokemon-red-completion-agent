@@ -23,6 +23,7 @@ from pokemon_red_completion.cascade import (
     GYM_TO_CENTER_DIRECTIONS,
     GYM_TRAINER_TO_EXIT_DIRECTIONS,
     ROCKET_THIEF_POTION_RESERVE,
+    ROUTE_25_RECOVERY_POTION_RESERVE,
     SS_ANNE_RIVAL_POTION_RESERVE,
     VERMILION_ROUTE_6_POTION_RESERVE,
     CascadeChapterError,
@@ -1233,12 +1234,13 @@ def _run_rocket_thief_with_potion(
 ) -> RawGameState:
     """Spend at most one retained Potion when live Rocket damage requires it."""
 
-    if _bag_quantity(emulator, ItemId.POTION) != ROCKET_THIEF_POTION_RESERVE:
+    starting_reserve = _bag_quantity(emulator, ItemId.POTION)
+    if not ROCKET_THIEF_POTION_RESERVE <= starting_reserve <= ROUTE_25_RECOVERY_POTION_RESERVE:
         raise VermilionChapterError("Rocket thief lacks its planned Potion recovery boundary.")
 
     def guarded_policy(raw: RawGameState) -> int:
         if (
-            _bag_quantity(emulator, ItemId.POTION) == ROCKET_THIEF_POTION_RESERVE
+            _bag_quantity(emulator, ItemId.POTION) == starting_reserve
             and raw.first_party_hp is not None
             and 0 < raw.first_party_hp <= 40
         ):
@@ -1284,11 +1286,7 @@ def _run_rocket_thief_with_potion(
             used_potion = True
             continue
 
-        expected_quantity = (
-            VERMILION_ROUTE_6_POTION_RESERVE
-            if used_potion
-            else ROCKET_THIEF_POTION_RESERVE
-        )
+        expected_quantity = starting_reserve - int(used_potion)
         if _bag_quantity(emulator, ItemId.POTION) != expected_quantity:
             raise VermilionChapterError(
                 "Rocket thief changed its bounded Potion reserve unexpectedly."
@@ -1310,7 +1308,11 @@ def _run_route_6_trainer_f_with_potion(
     """Spend at most one Route 6 Potion while preserving the S.S. Anne reserve."""
 
     starting_reserve = _bag_quantity(emulator, ItemId.POTION)
-    if not VERMILION_ROUTE_6_POTION_RESERVE <= starting_reserve <= ROCKET_THIEF_POTION_RESERVE:
+    if not (
+        VERMILION_ROUTE_6_POTION_RESERVE
+        <= starting_reserve
+        <= ROUTE_25_RECOVERY_POTION_RESERVE
+    ):
         raise VermilionChapterError("Route 6 recovery reserve is outside its bounded range.")
 
     def guarded_policy(raw: RawGameState) -> int:

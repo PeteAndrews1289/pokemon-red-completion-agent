@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v6.json`](../configs/red-battle-collection-v6.json)
+[`red-battle-collection-v7.json`](../configs/red-battle-collection-v7.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 68 stable public battle-plan identities in exact qualified-route order;
@@ -30,11 +30,19 @@ and cannot be used for fitting.
 V5 passed its complete uncounted 312-checkpoint, 36-objective, 68-battle Hall-of-Fame
 qualification, including the targeted Diglett-to-Dugtrio lesson. Its first immutable training root
 then failed at the S.S. Anne rival after accuracy loss and the earlier opponents consumed both
-retained Potions. V5 is therefore retired with that failure preserved. The current v6 registry
-promotes exposed seed `15001` to its uncounted dry run and assigns twelve fresh, disjoint counted
-seeds. The teacher now learns BubbleBeam before boarding, ranks that stronger move against the
-first three rival members, and saves Bite for Ivysaur. V6 must pass its complete qualification
-before any counted slot opens.
+retained Potions. V5 is therefore retired with that failure preserved. V6 subsequently passed its
+complete **312/312 checkpoint**, **36/36 objective**, **68/68 battle**, Hall-of-Fame qualification.
+Its first immutable training root then reached the mandatory Cerulean Gym trainer with Wartortle
+at full **61/61 HP** and all five Potions intact. The historical exact-four handoff tried to consume
+an unnecessary field Potion, which the game correctly disallowed at full health. That one-shot v6
+failure remains preserved, and v6 is retired rather than changed or rerun.
+
+The current v7 registry promotes exposed v6 seed `16001` to its uncounted dry rehearsal and assigns
+twelve fresh, disjoint counted seeds. The teacher now preserves the unused Potion and carries a
+bounded four-to-five reserve through the Rocket thief, Route 6, and S.S. Anne rival. This converts
+an accidental exact-count requirement into the intended resource lesson: recovery is permitted
+when live damage requires it, never mandatory merely to reproduce one historical inventory. V7
+must pass its complete qualification before any counted slot opens.
 
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the

@@ -17,7 +17,7 @@ from pokemon_red_completion.battle_runtime import (
 )
 from pokemon_red_completion.cascade import (
     DEFAULT_CASCADE_TIMING,
-    ROCKET_THIEF_POTION_RESERVE,
+    ROUTE_25_RECOVERY_POTION_RESERVE,
     SS_ANNE_RIVAL_POTION_RESERVE,
     CascadeChapterError,
     _bag_quantity,
@@ -434,7 +434,11 @@ def _run_ss_anne_rival_with_potion(
     """Spend retained Potions only at a live, bounded HP threshold."""
 
     starting_reserve = _bag_quantity(emulator, ItemId.POTION)
-    if not SS_ANNE_RIVAL_POTION_RESERVE <= starting_reserve <= ROCKET_THIEF_POTION_RESERVE:
+    if not (
+        SS_ANNE_RIVAL_POTION_RESERVE
+        <= starting_reserve
+        <= ROUTE_25_RECOVERY_POTION_RESERVE
+    ):
         raise SSAnneChapterError("S.S. Anne rival recovery reserve is outside its bound.")
 
     def guarded_policy(raw: RawGameState) -> int:

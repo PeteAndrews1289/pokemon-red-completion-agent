@@ -111,10 +111,12 @@ control, and progressively trained specialists.**
 > its full 312-checkpoint/68-battle rehearsal, but its immutable first training root fainted at the
 > final Route 24 bridge trainer. V4 is preserved and retired. V5 subsequently qualified its full
 > 312-checkpoint/68-battle rehearsal, but its immutable first training root failed at the S.S. Anne
-> rival. V5 remains preserved and retired. The current v6 teacher moves the free BubbleBeam lesson
-> before that rival, promotes the exposed v5 schedule to an uncounted dry run, and preregisters
-> twelve fresh counted seeds. V6 must qualify before collection resumes; no learned model has yet
-> completed the game.
+> rival. V5 remains preserved and retired. V6 then qualified its complete 312-checkpoint,
+> 68-battle rehearsal, but immutable train slot 01 exposed a safe full-HP Cerulean outcome that
+> retained five Potions while the route required exactly four. V6 remains failed and retired. The
+> current v7 teacher carries a bounded four-to-five Potion reserve across the following chapters,
+> uses the exposed v6 seed only for an uncounted rehearsal, and preregisters twelve fresh counted
+> seeds. V7 must qualify before collection resumes; no learned model has yet completed the game.
 
 ## The goal
 
@@ -263,7 +265,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v6-01-train
+  --collection-run red-battle-v7-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \

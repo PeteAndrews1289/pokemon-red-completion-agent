@@ -57,6 +57,7 @@ from pokemon_red_completion.cascade import (
     _cerulean_return_direction,
     _cross_route_24_npc,
     _reverse_directions,
+    _run_cerulean_gym_trainer_with_potion,
     _run_cerulean_rival_with_potion,
     _run_route_24_accuracy_battle_with_potion,
     _should_use_cerulean_rival_potion,
@@ -583,6 +584,47 @@ def test_route_24_recovery_consumes_the_retained_field_potion() -> None:
     assert sum(
         action.kind is MacroActionKind.CANCEL for action in executor.actions
     ) == FIELD_ITEM_MENU_CLOSE_PULSES
+
+
+def test_cerulean_gym_preserves_unused_potion_after_full_hp_victory(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    emulator = _MemoryEmulator(potion_quantity=ROUTE_25_RECOVERY_POTION_RESERVE)
+    starting = replace(
+        _raw(),
+        first_party_hp=61,
+        first_party_max_hp=61,
+        first_party_pp=(25, 30, 20, 25),
+    )
+    terminal = replace(starting, first_party_pp=(25, 30, 19, 25))
+
+    class Reader:
+        reads = 0
+
+        def read(self) -> RawGameState:
+            self.reads += 1
+            return starting if self.reads == 1 else terminal
+
+        def read_input_readiness(self) -> object:
+            return type("Ready", (), {"ready": True})()
+
+    monkeypatch.setattr(cascade_module, "_select_battle_move", lambda *_a, **_k: None)
+    monkeypatch.setattr(cascade_module, "_wait", lambda *_a, **_k: None)
+
+    observed = _run_cerulean_gym_trainer_with_potion(
+        Reader(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        emulator,
+        DEFAULT_CASCADE_TIMING,
+        "Cerulean Gym trainer",
+    )
+
+    assert observed is terminal
+    assert _bag_quantity_for_test(emulator) == ROUTE_25_RECOVERY_POTION_RESERVE
+
+
+def _bag_quantity_for_test(emulator: _MemoryEmulator) -> int:
+    return emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1)
 
 
 def test_route_24_accuracy_battle_spends_one_potion_at_low_hp(

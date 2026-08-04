@@ -528,8 +528,10 @@ def test_rocket_recovery_consumes_the_extra_potion_and_reuses_intent(
     assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
 
 
+@pytest.mark.parametrize("starting_reserve", [4, 5])
 def test_rocket_victory_may_preserve_the_extra_potion_when_recovery_is_not_needed(
     monkeypatch: pytest.MonkeyPatch,
+    starting_reserve: int,
 ) -> None:
     terminal = RawGameState(
         True,
@@ -544,7 +546,7 @@ def test_rocket_victory_may_preserve_the_extra_potion_when_recovery_is_not_neede
     monkeypatch.setattr(
         vermilion,
         "_bag_quantity",
-        lambda *_args: vermilion.ROCKET_THIEF_POTION_RESERVE,
+        lambda *_args: starting_reserve,
     )
     monkeypatch.setattr(
         vermilion,
@@ -562,8 +564,10 @@ def test_rocket_victory_may_preserve_the_extra_potion_when_recovery_is_not_neede
     assert observed is terminal
 
 
+@pytest.mark.parametrize("starting_reserve", [3, 5])
 def test_route_6_victory_may_preserve_potion_when_recovery_is_not_needed(
     monkeypatch: pytest.MonkeyPatch,
+    starting_reserve: int,
 ) -> None:
     terminal = RawGameState(
         True,
@@ -578,7 +582,7 @@ def test_route_6_victory_may_preserve_potion_when_recovery_is_not_needed(
     monkeypatch.setattr(
         vermilion,
         "_bag_quantity",
-        lambda *_args: vermilion.VERMILION_ROUTE_6_POTION_RESERVE,
+        lambda *_args: starting_reserve,
     )
     monkeypatch.setattr(
         vermilion,

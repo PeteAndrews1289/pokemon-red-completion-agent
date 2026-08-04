@@ -2291,15 +2291,12 @@ def _run_cerulean_gym_trainer_with_potion(
             if reader.read_input_readiness().ready:
                 stable_reads += 1
                 if stable_reads >= 2:
-                    if not recovery_used:
-                        if (
-                            before.first_party_hp is None
-                            or before.first_party_max_hp is None
-                            or not 0 < before.first_party_hp < before.first_party_max_hp
-                        ):
-                            raise CascadeChapterError(
-                                "Cerulean Gym reserve could not normalize an unused Potion."
-                            )
+                    if (
+                        not recovery_used
+                        and before.first_party_hp is not None
+                        and before.first_party_max_hp is not None
+                        and 0 < before.first_party_hp < before.first_party_max_hp
+                    ):
                         _use_field_recovery_potion(
                             reader,
                             executor,
@@ -2314,7 +2311,9 @@ def _run_cerulean_gym_trainer_with_potion(
                     ending_quantity = starting_quantity - int(recovery_used)
                     ending_pp = before.first_party_pp
                     if (
-                        ending_quantity != ROCKET_THIEF_POTION_RESERVE
+                        not ROCKET_THIEF_POTION_RESERVE
+                        <= ending_quantity
+                        <= ROUTE_25_RECOVERY_POTION_RESERVE
                         or _bag_quantity(emulator, ItemId.POTION) != ending_quantity
                         or ending_pp is None
                         or ending_pp[CERULEAN_GYM_TRAINER_MOVE_SLOT - 1]

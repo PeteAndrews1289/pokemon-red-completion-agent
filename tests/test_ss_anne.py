@@ -70,3 +70,33 @@ def test_ss_anne_rival_can_use_multiple_retained_potions_with_one_intent(
     assert calls == 3
     assert intents[0] is intents[1] is intents[2]
     assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
+
+
+def test_ss_anne_rival_accepts_five_potions_when_none_are_needed(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    terminal = RawGameState(
+        True,
+        MapId.SS_ANNE_2F,
+        2,
+        4,
+        1,
+        0,
+        first_party_hp=71,
+        first_party_max_hp=71,
+    )
+    monkeypatch.setattr(ss_anne, "_bag_quantity", lambda *_args: 5)
+    monkeypatch.setattr(
+        ss_anne,
+        "run_adaptive_trainer_battle",
+        lambda *_args, **_kwargs: terminal,
+    )
+
+    observed = ss_anne._run_ss_anne_rival_with_potion(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        ss_anne.DEFAULT_SS_ANNE_TIMING,
+    )
+
+    assert observed is terminal
