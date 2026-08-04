@@ -69,7 +69,7 @@ ROUTE_9_MIN_SUPER_POTION_RESERVE = 5
 TUNNEL_SUPER_POTION_TARGET = 10
 TUNNEL_AWAKENINGS_PURCHASED = 1
 TUNNEL_AWAKENING_RESERVE = 3
-TUNNEL_PARLYZ_HEALS_PURCHASED = 2
+TUNNEL_PARLYZ_HEALS_PURCHASED = 3
 TM28_SALE_PROCEEDS = 1_000
 
 
@@ -436,7 +436,7 @@ def run_lavender_chapter(
         raise LavenderChapterError(
             "Mart purchase did not produce the ten-potion purchase plus the observed "
             "starting reserve, three Awakenings, "
-            "two Parlyz Heals, and four Repels."
+            "three Parlyz Heals, and four Repels."
         )
     _checkpoint(records, progress, emulator, supplies, "supplies", "Purchased tunnel supplies")
 
@@ -2173,8 +2173,7 @@ def _top_up_lavender_supplies(
         )
     quantity = LAVENDER_SUPER_POTION_RESERVE - quantity_before
     parlyz_before = _bag(emulator).get(ItemId.PARLYZ_HEAL, 0)
-    # Restore a fixed two-cure reserve instead of blindly adding one.  A
-    # schedule that needed no tunnel cure already carries both; rebuy only
+    # Restore the three-cure reserve instead of blindly adding one. Rebuy only
     # what an earlier observed contingency actually consumed.
     parlyz_quantity = _parlyz_top_up_quantity(parlyz_before)
 

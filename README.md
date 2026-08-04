@@ -77,6 +77,9 @@ control, and progressively trained specialists.**
 > only move downward. V8 is retired with that artifact preserved and eleven slots unopened. The
 > v9 teacher navigates the absolute bag index in either direction, uses exposed seed `18001` only
 > for its uncounted rehearsal, and reserves fresh counted seeds beginning at `19001`.
+> Its first rehearsal proved that fix through checkpoint 91, then a third Rock Tunnel paralysis
+> exhausted the historical two-cure allowance. Tunnel preparation and Lavender replenishment now
+> carry three cures in the same bag stack; v9 remains uncounted and must replay in full.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the

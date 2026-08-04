@@ -1093,3 +1093,10 @@ counted seeds are fresh and disjoint: `19001`–`19005` for training, `29001`–
 and `39001`–`39005` for sealed test. Bag selection now proves that the requested item exists, finds
 its live absolute index, and moves either upward or downward to that index. V9 must reproduce the
 complete 312-checkpoint, 36-objective, 68-battle Hall-of-Fame qualification before slot 01 opens.
+
+The first v9 rehearsal confirmed that repair through TM28 and checkpoint 91, then a third legal
+Rock Tunnel paralysis exhausted the two-cure travel allowance before checkpoint 110. DUX remained
+paralyzed after the final role pivot and the field gate correctly rejected a cure with no item.
+Tunnel preparation now carries and Lavender restores a three-cure reserve. The dynamic
+obsolete-Potion sale funds the added ₽200 contingency, and the larger quantity stays in the same
+existing bag stack rather than consuming another capacity slot. The failed rehearsal was uncounted.

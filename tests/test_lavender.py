@@ -75,8 +75,8 @@ def _report() -> LavenderChapterReport:
         party_status=(0, 0, 0),
         repels_purchased=4,
         repels_used=4,
-        parlyz_heals_purchased=2,
-        parlyz_heals_used=1,
+        parlyz_heals_purchased=3,
+        parlyz_heals_used=2,
         parlyz_heals_remaining=1,
         awakenings_used=2,
         awakenings_remaining=1,
@@ -84,7 +84,7 @@ def _report() -> LavenderChapterReport:
         super_potions_purchased=15,
         super_potions_used=4,
         super_potions_remaining=12,
-        purchase_cost=12500,
+        purchase_cost=12700,
         tm28_sale_proceeds=1000,
         money_remaining=1234,
         route_10_trainer_2_bypassed=True,
@@ -145,18 +145,19 @@ def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert ROUTE_9_MIN_SUPER_POTION_RESERVE == 5
     assert TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD == 40
     assert FINAL_TUNNEL_RECOVERY_THRESHOLD == 90
-    assert lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED == 2
+    assert lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED == 3
     assert lavender_module.EARLY_POKE_BALL_CAPACITY_RESERVE == 1
 
 
 def test_lavender_paralysis_top_up_restores_a_fixed_reserve() -> None:
-    assert tuple(lavender_module._parlyz_top_up_quantity(quantity) for quantity in range(3)) == (
+    assert tuple(lavender_module._parlyz_top_up_quantity(quantity) for quantity in range(4)) == (
+        3,
         2,
         1,
         0,
     )
     with pytest.raises(lavender_module.LavenderChapterError):
-        lavender_module._parlyz_top_up_quantity(3)
+        lavender_module._parlyz_top_up_quantity(4)
 
 
 def test_final_tunnel_policy_spends_bite_evidence_then_exploits_with_bubblebeam() -> None:
@@ -533,8 +534,8 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
     assert public["inventory"] == {
         "repels_purchased": 4,
         "repels_used": 4,
-        "parlyz_heals_purchased": 2,
-        "parlyz_heals_used": 1,
+        "parlyz_heals_purchased": 3,
+        "parlyz_heals_used": 2,
         "parlyz_heals_remaining": 1,
         "awakenings_used": 2,
         "awakenings_remaining": 1,
@@ -543,7 +544,7 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
         "super_potions_purchased": 15,
         "super_potions_used": 4,
         "super_potions_remaining": 12,
-        "purchase_cost": 12500,
+        "purchase_cost": 12700,
         "tm28_sale_proceeds": 1000,
         "money_remaining": 1234,
     }

@@ -838,6 +838,13 @@ only on exposed seed `18001`, and preregisters twelve fresh counted roots. This 
 research loop: preserve a failure, generalize the teacher skill, and prevent the observed root from
 leaking into the model-fitting set.
 
+V9's first uncounted rehearsal proved the bidirectional TM28 selection through checkpoint 91, then
+Rock Tunnel produced a third legal paralysis event. The two carried cures had already been consumed,
+so the teacher rejected DUX's remaining paralysis instead of inventing an item or ignoring its own
+status contract. Tunnel preparation now carries and Lavender restores a third, explicitly funded
+contingency cure. It increases the existing item-stack quantity without consuming another bag slot.
+No counted v9 slot opened during this diagnosis.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
