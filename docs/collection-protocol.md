@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v14.json`](../configs/red-battle-collection-v14.json)
+[`red-battle-collection-v15.json`](../configs/red-battle-collection-v15.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1246,3 +1246,12 @@ gone. The Indigo plan now carries six Full Heals in the same existing stack. Thi
 recovery from the scarcer all-purpose reserve, costs only an additional ₽2,400, and leaves the
 Champion's Full Restore gate intact. The diagnostic now reports every input predicate rather than
 printing HP beside an unrelated inventory failure.
+
+V14 subsequently qualified the entire game at **312/312 checkpoints**, **36/36 objectives**, and
+**69/69** scheduled battles. Its first immutable training root then encountered a level-31 Dugtrio
+during the pre-ship Diglett's Cave lesson. Wartortle selected RUN without spending attack PP, but
+the faster Dugtrio denied escape and reduced the full-health level-26 lead from 71 HP to zero in one
+attack. V14 is sealed and retired. V15 moves only this early development lesson to the already
+source-qualified Route 11 grass, where encounters are lower-level and can be fought safely. The
+later planned Diglett capture still teaches the cave's progression value. V15 uses fresh rehearsal
+seed `21004` and counted seeds `25001`–`25005`, `35001`–`35002`, and `45001`–`45005`.

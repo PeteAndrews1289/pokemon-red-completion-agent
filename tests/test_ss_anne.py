@@ -20,9 +20,9 @@ def test_pre_ship_training_is_bounded_and_prefers_water_moves() -> None:
     assert policy.max_healing_trips == 8
     raw = RawGameState(
         True,
-        MapId.DIGLETTS_CAVE,
-        37,
-        30,
+        MapId.ROUTE_11,
+        12,
+        6,
         1,
         1,
         first_party_moves=(0x2C, 0x27, 0x3D, 0x37),
@@ -47,21 +47,21 @@ def test_vermilion_sailor_yield_supports_both_observed_corridor_gates() -> None:
     assert ss_anne.VERMILION_SAILOR_CLEAR_ATTEMPTS == 10
 
 
-def test_pre_ship_training_classifies_dugtrio_as_a_dangerous_flee() -> None:
+def test_pre_ship_training_fights_lower_level_route_11_wilds() -> None:
     raw = RawGameState(
         True,
-        MapId.DIGLETTS_CAVE,
-        37,
-        30,
+        MapId.ROUTE_11,
+        12,
+        6,
         1,
         1,
         first_party_level=26,
         first_party_hp=73,
         first_party_max_hp=73,
         first_party_pp=(25, 30, 16, 25),
-        enemy_species_id=ss_anne.DUGTRIO_SPECIES_ID,
-        enemy_level=29,
-        enemy_hp=59,
+        enemy_species_id=0x05,
+        enemy_level=17,
+        enemy_hp=44,
     )
 
     directive = ss_anne._pre_ship_training_directive(
@@ -76,82 +76,7 @@ def test_pre_ship_training_classifies_dugtrio_as_a_dangerous_flee() -> None:
         ),
     )
 
-    assert directive is ss_anne.TrainingDirective.FLEE
-
-
-def test_pre_ship_training_waits_through_linked_cave_warps(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    states = [
-        RawGameState(True, MapId.DIGLETTS_CAVE, 4, 4, 1, 0),
-        RawGameState(True, MapId.DIGLETTS_CAVE, 37, 31, 1, 0),
-        RawGameState(True, MapId.DIGLETTS_CAVE, 37, 31, 1, 0),
-    ]
-
-    class Reader:
-        index = 0
-
-        def read(self) -> RawGameState:
-            state = states[min(self.index, len(states) - 1)]
-            self.index += 1
-            return state
-
-        def read_input_readiness(self) -> object:
-            return type("Ready", (), {"ready": True})()
-
-    class Executor:
-        actions = []
-
-        def execute(self, action: object) -> None:
-            self.actions.append(action)
-
-    executor = Executor()
-    monkeypatch.setattr(ss_anne, "_wait", lambda *_args: None)
-
-    settled = ss_anne._settle_pre_ship_cave_entry(
-        executor,  # type: ignore[arg-type]
-        Reader(),  # type: ignore[arg-type]
-        ss_anne.DEFAULT_SS_ANNE_TIMING,
-    )
-
-    assert (settled.player_x, settled.player_y) == (37, 31)
-    assert len(executor.actions) == 2
-
-
-def test_pre_ship_training_leaves_the_arrival_warp_before_bouncing(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    states = [
-        RawGameState(True, MapId.DIGLETTS_CAVE, 37, 31, 1, 0),
-        RawGameState(True, MapId.DIGLETTS_CAVE, 37, 30, 1, 0),
-    ]
-
-    class Reader:
-        index = 0
-
-        def read(self) -> RawGameState:
-            state = states[min(self.index, len(states) - 1)]
-            self.index += 1
-            return state
-
-    class Executor:
-        actions = []
-
-        def execute(self, action: object) -> None:
-            self.actions.append(action)
-
-    executor = Executor()
-    monkeypatch.setattr(ss_anne, "_wait", lambda *_args: None)
-
-    anchor = ss_anne._leave_pre_ship_entry_warp(
-        executor,  # type: ignore[arg-type]
-        Reader(),  # type: ignore[arg-type]
-    )
-
-    assert (anchor.player_x, anchor.player_y) == (37, 30)
-    assert len(executor.actions) == 1
-    assert executor.actions[0].kind is MacroActionKind.MOVE
-    assert executor.actions[0].value == "up"
+    assert directive is ss_anne.TrainingDirective.FIGHT
 
 
 def test_pre_ship_training_preserves_return_direction_when_battle_preempts_step() -> None:

@@ -501,3 +501,8 @@ one-item Pokémon Tower carry-forward gate. Full qualification remains the curre
 The next replay reached checkpoint 309 after defeating Lance, then correctly rejected a zero-count
 Champion Full Restore reserve. Indigo now overprovisions six Full Heals so status contingencies do
 not consume the protected HP-recovery item. The v14 rehearsal must still prove the final three gates.
+
+V14 did qualify all 312 checkpoints, but its first counted seed exposed an unavoidable fast-Dugtrio
+knockout during the single-member pre-ship grind. That campaign is sealed. V15 relocates this one
+development lesson to lower-level Route 11 grass and uses wholly fresh rehearsal and counted seeds;
+full qualification is again required before any v15 training slot opens.
