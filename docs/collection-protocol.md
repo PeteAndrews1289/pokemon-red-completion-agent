@@ -1110,3 +1110,11 @@ replay exhausted its Antidote allowance later in the same chapter. The explicit 
 now 47 frames, preserving the same 335-emulator-frame quantity-plus-alignment budget as the
 qualified two-cure route. This is a measured timing correction, not an additional battle attempt
 or recovery allowance; both rehearsals were uncounted.
+
+The exact-frame replay cleared all nine Tunnel trainers and reached Rocket Hideout checkpoint 136.
+There, the final door guard poisoned the workhorse after Rock Tunnel had consumed the carried
+Antidote, so the pre-Giovanni field gate rejected an unavailable cure. Lavender now restores one
+Antidote only when the live post-Tunnel inventory lacks it, proving the exact ₽100 purchase and
+one-item reserve. The same item is consumed on this observed poison branch; if it survives another
+schedule, the existing late-game obsolete-status-item cleanup already handles its stack. This
+failure remained uncounted and v9 still requires a complete replay.

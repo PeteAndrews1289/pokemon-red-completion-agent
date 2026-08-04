@@ -49,6 +49,7 @@ PROTECTED_PARTY = (WARTORTLE, DUX, DIGLETT)
 SUPER_POTION_PRICE = 700
 NUGGET_SALE_PROCEEDS = 5_000
 PARLYZ_HEAL_PRICE = 200
+ANTIDOTE_PRICE = 100
 AWAKENING_PRICE = 200
 REPEL_PRICE = 350
 POKE_BALL_SALE_PRICE = 100
@@ -70,6 +71,7 @@ TUNNEL_SUPER_POTION_TARGET = 10
 TUNNEL_AWAKENINGS_PURCHASED = 1
 TUNNEL_AWAKENING_RESERVE = 3
 TUNNEL_PARLYZ_HEALS_PURCHASED = 3
+LAVENDER_ANTIDOTE_RESERVE = 1
 TM28_SALE_PROCEEDS = 1_000
 
 
@@ -218,6 +220,8 @@ class LavenderChapterReport:
     parlyz_heals_purchased: int
     parlyz_heals_used: int
     parlyz_heals_remaining: int
+    antidotes_purchased: int
+    antidotes_remaining: int
     awakenings_used: int
     awakenings_remaining: int
     starting_super_potions: int
@@ -254,6 +258,8 @@ class LavenderChapterReport:
             and self.repels_purchased == self.repels_used == 4
             and self.parlyz_heals_purchased >= 1
             and self.parlyz_heals_used + self.parlyz_heals_remaining == self.parlyz_heals_purchased
+            and self.antidotes_purchased in {0, 1}
+            and self.antidotes_remaining == LAVENDER_ANTIDOTE_RESERVE
             and 0 <= self.awakenings_used <= 2
             and self.awakenings_remaining >= 1
             and self.awakenings_used + self.awakenings_remaining
@@ -266,6 +272,7 @@ class LavenderChapterReport:
             and self.purchase_cost
             == self.super_potions_purchased * SUPER_POTION_PRICE
             + self.parlyz_heals_purchased * PARLYZ_HEAL_PRICE
+            + self.antidotes_purchased * ANTIDOTE_PRICE
             + TUNNEL_AWAKENINGS_PURCHASED * AWAKENING_PRICE
             + 4 * REPEL_PRICE
             and self.tm28_sale_proceeds in {0, TM28_SALE_PROCEEDS}
@@ -302,6 +309,8 @@ class LavenderChapterReport:
                 "parlyz_heals_purchased": self.parlyz_heals_purchased,
                 "parlyz_heals_used": self.parlyz_heals_used,
                 "parlyz_heals_remaining": self.parlyz_heals_remaining,
+                "antidotes_purchased": self.antidotes_purchased,
+                "antidotes_remaining": self.antidotes_remaining,
                 "awakenings_used": self.awakenings_used,
                 "awakenings_remaining": self.awakenings_remaining,
                 "awakenings_purchased": TUNNEL_AWAKENINGS_PURCHASED,
@@ -902,7 +911,13 @@ def run_lavender_chapter(
     _move(actions, reader, emulator, run, LAVENDER_TO_CENTER, timing, "Lavender Center")
     _wait(actions, timing.transition_frames)
     _heal_center(actions, reader, emulator, timing, MapId.LAVENDER_POKECENTER)
-    top_up_quantity, top_up_parlyz_heals, top_up_cost, tm28_sale_proceeds = (
+    (
+        top_up_quantity,
+        top_up_parlyz_heals,
+        top_up_antidotes,
+        top_up_cost,
+        tm28_sale_proceeds,
+    ) = (
         _top_up_lavender_supplies(
             actions,
             reader,
@@ -937,6 +952,8 @@ def run_lavender_chapter(
         parlyz_heals_purchased=TUNNEL_PARLYZ_HEALS_PURCHASED + top_up_parlyz_heals,
         parlyz_heals_used=run.parlyz_heals_used,
         parlyz_heals_remaining=_bag(emulator).get(ItemId.PARLYZ_HEAL, 0),
+        antidotes_purchased=top_up_antidotes,
+        antidotes_remaining=_bag(emulator).get(ItemId.ANTIDOTE, 0),
         awakenings_used=run.awakenings_used,
         awakenings_remaining=_bag(emulator).get(ItemId.AWAKENING, 0),
         starting_super_potions=initial_sp,
@@ -2162,7 +2179,7 @@ def _top_up_lavender_supplies(
     emulator: EmulatorState,
     run: _RunState,
     timing: LavenderTiming,
-) -> tuple[int, int, int, int]:
+) -> tuple[int, int, int, int, int]:
     """Restore the downstream reserve from the observed post-Tunnel inventory."""
 
     quantity_before = _bag(emulator).get(ItemId.SUPER_POTION, 0)
@@ -2176,6 +2193,12 @@ def _top_up_lavender_supplies(
     # Restore the three-cure reserve instead of blindly adding one. Rebuy only
     # what an earlier observed contingency actually consumed.
     parlyz_quantity = _parlyz_top_up_quantity(parlyz_before)
+    antidote_before = _bag(emulator).get(ItemId.ANTIDOTE, 0)
+    if not 0 <= antidote_before <= LAVENDER_ANTIDOTE_RESERVE:
+        raise LavenderChapterError(
+            f"Unsupported Lavender Antidote reserve: {antidote_before}."
+        )
+    antidote_quantity = LAVENDER_ANTIDOTE_RESERVE - antidote_before
 
     money_before = _money(emulator)
     _move(executor, reader, emulator, run, CENTER_EXIT, timing, "Lavender Center exit")
@@ -2235,13 +2258,28 @@ def _top_up_lavender_supplies(
             quantity=parlyz_quantity,
             target_bag_quantity=TUNNEL_PARLYZ_HEALS_PURCHASED,
         )
+    if antidote_quantity:
+        _buy_mart_item(
+            executor,
+            emulator,
+            timing,
+            absolute_index=5,
+            item=ItemId.ANTIDOTE,
+            quantity=antidote_quantity,
+            target_bag_quantity=LAVENDER_ANTIDOTE_RESERVE,
+        )
     _close_menus(executor, reader, timing)
 
-    expected_cost = quantity * SUPER_POTION_PRICE + parlyz_quantity * PARLYZ_HEAL_PRICE
+    expected_cost = (
+        quantity * SUPER_POTION_PRICE
+        + parlyz_quantity * PARLYZ_HEAL_PRICE
+        + antidote_quantity * ANTIDOTE_PRICE
+    )
     if (
         _money(emulator) != money_before + tm28_sale_proceeds - expected_cost
         or _bag(emulator).get(ItemId.SUPER_POTION, 0) != LAVENDER_SUPER_POTION_RESERVE
         or _bag(emulator).get(ItemId.PARLYZ_HEAL, 0) != parlyz_before + parlyz_quantity
+        or _bag(emulator).get(ItemId.ANTIDOTE, 0) != LAVENDER_ANTIDOTE_RESERVE
     ):
         raise LavenderChapterError("Lavender Mart top-up missed its inventory/economy proof.")
 
@@ -2266,7 +2304,13 @@ def _top_up_lavender_supplies(
         "Lavender Center return",
     )
     _heal_center(executor, reader, emulator, timing, MapId.LAVENDER_POKECENTER)
-    return quantity, parlyz_quantity, expected_cost, tm28_sale_proceeds
+    return (
+        quantity,
+        parlyz_quantity,
+        antidote_quantity,
+        expected_cost,
+        tm28_sale_proceeds,
+    )
 
 
 def _parlyz_top_up_quantity(current_quantity: int) -> int:

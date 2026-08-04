@@ -852,6 +852,13 @@ measured 24-frame surplus and exhausted the Antidote allowance. The alignment wa
 frames, keeping quantity selection plus alignment at the previously qualified 335 emulator frames.
 No retry, recovery, or level was added, and both rehearsals remained uncounted.
 
+The exact-frame replay then cleared Rock Tunnel and reached the final Rocket Hideout guard at
+checkpoint 136. That guard poisoned the workhorse after the Tunnel had consumed its Antidote, and
+the teacher correctly refused to fabricate another before Giovanni. Lavender now restores a single
+Antidote only when the observed inventory is empty, with an exact ₽100 purchase and reserve proof.
+The status item is consumed on this branch, while later obsolete-item cleanup already covers a
+surviving stack on other schedules. No counted v9 slot opened.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
