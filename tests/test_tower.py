@@ -5,6 +5,7 @@ from dataclasses import fields, replace
 import pytest
 
 from pokemon_red_completion.actions import MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _normalized_run_actions,
@@ -23,6 +24,7 @@ from pokemon_red_completion.tower import (
     TOWER_FINAL_PARTY,
     TOWER_LAVENDER_TIMING,
     TOWER_RIVAL_FIELD_RECOVERY_HP_THRESHOLD,
+    TOWER_RIVAL_IVYSAUR,
     TOWER_ROCKET_FIELD_RECOVERY_HP_THRESHOLD,
     TowerBattleEvidence,
     TowerChapterReport,
@@ -33,6 +35,7 @@ from pokemon_red_completion.tower import (
     _route_8_coordinate_is_safe,
     _RunState,
     _scripted_trainer_identity,
+    _tower_rival_needs_accuracy_reset,
     party_core_intact,
 )
 
@@ -132,6 +135,32 @@ def test_tower_timing_is_positive_and_bounded() -> None:
         (MacroActionKind.MOVE, "down", TOWER_LAVENDER_TIMING.wait_frames),
         (MacroActionKind.MOVE, "right", TOWER_LAVENDER_TIMING.wait_frames),
         (MacroActionKind.CONFIRM, None, 240),
+    )
+
+
+def test_tower_rival_resets_inherited_accuracy_loss_against_ivysaur_once() -> None:
+    rival = replace(
+        _raw(),
+        battle_state=2,
+        active_party_index=0,
+        enemy_species_id=TOWER_RIVAL_IVYSAUR,
+        player_accuracy_stage=6,
+    )
+
+    assert _tower_rival_needs_accuracy_reset(
+        rival,
+        battle_plan_id=RedBattlePlanId.TOWER_RIVAL,
+        reset_complete=False,
+    )
+    assert not _tower_rival_needs_accuracy_reset(
+        replace(rival, player_accuracy_stage=7),
+        battle_plan_id=RedBattlePlanId.TOWER_RIVAL,
+        reset_complete=False,
+    )
+    assert not _tower_rival_needs_accuracy_reset(
+        rival,
+        battle_plan_id=RedBattlePlanId.TOWER_RIVAL,
+        reset_complete=True,
     )
 
 

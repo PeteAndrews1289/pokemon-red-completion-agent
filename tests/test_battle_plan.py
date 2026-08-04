@@ -123,8 +123,11 @@ _EXPECTED_SOURCE_MEMBER_LEDGER = {
     "hideout.py": tuple(
         item.name for item in RedBattlePlanId if item.name.startswith("HIDEOUT_")
     ),
-    "tower.py": tuple(
-        item.name for item in RedBattlePlanId if item.name.startswith("TOWER_")
+    # The rival plan is referenced once by the route and once by its
+    # party-aware accuracy-reset policy.
+    "tower.py": (
+        *(item.name for item in RedBattlePlanId if item.name.startswith("TOWER_")),
+        "TOWER_RIVAL",
     ),
     "fuchsia.py": tuple(
         item.name for item in RedBattlePlanId if item.name.startswith("FUCHSIA_")

@@ -50,6 +50,9 @@ from pokemon_red_completion.observation import (
 TOWER_CHECKPOINT_COUNT = 28
 TOWER_TRAINER_REWARD_TOTAL = 7_325
 TOWER_RIVAL_GROWLITHE = 0x21
+TOWER_RIVAL_IVYSAUR = 0x09
+NEUTRAL_BATTLE_STAT_STAGE = 7
+TOWER_RIVAL_ACCURACY_HELPER_INDEX = 1
 BITE = 0x2C
 BUBBLEBEAM = 0x3D
 RIVAL2 = (0xF2, 0x2A)
@@ -842,6 +845,150 @@ class _PauseForTowerParlyzHeal(Exception):
     pass
 
 
+class _PauseForTowerAccuracyReset(Exception):
+    pass
+
+
+def _tower_rival_needs_accuracy_reset(
+    raw: RawGameState,
+    *,
+    battle_plan_id: str,
+    reset_complete: bool,
+) -> bool:
+    return (
+        battle_plan_id == RedBattlePlanId.TOWER_RIVAL
+        and not reset_complete
+        and raw.active_party_index in {None, 0}
+        and raw.enemy_species_id == TOWER_RIVAL_IVYSAUR
+        and raw.player_accuracy_stage is not None
+        and raw.player_accuracy_stage < NEUTRAL_BATTLE_STAT_STAGE
+    )
+
+
+def _reset_tower_rival_accuracy(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    timing: BattleRuntimeTiming,
+) -> None:
+    """Clear Pidgeotto's accuracy loss by safely cycling through DUX."""
+
+    before = reader.read()
+    if (
+        before.battle_state != 2
+        or before.active_party_index not in {None, 0}
+        or before.enemy_species_id != TOWER_RIVAL_IVYSAUR
+        or before.player_accuracy_stage is None
+        or before.player_accuracy_stage >= NEUTRAL_BATTLE_STAT_STAGE
+        or reader.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
+    ):
+        raise TowerChapterError("Tower rival accuracy reset lacks a stable Ivysaur gate.")
+    hp = _party_hp(emulator)
+    if (
+        len(hp) <= TOWER_RIVAL_ACCURACY_HELPER_INDEX
+        or hp[TOWER_RIVAL_ACCURACY_HELPER_INDEX] <= 0
+    ):
+        raise TowerChapterError("Tower rival accuracy reset lacks a living DUX helper.")
+
+    _switch_tower_rival_party_slot(
+        reader,
+        actions,
+        emulator,
+        timing,
+        target_index=TOWER_RIVAL_ACCURACY_HELPER_INDEX,
+    )
+    _switch_tower_rival_party_slot(
+        reader,
+        actions,
+        emulator,
+        timing,
+        target_index=0,
+    )
+    returned = reader.read()
+    if (
+        returned.battle_state != 2
+        or returned.active_party_index not in {None, 0}
+        or returned.enemy_species_id != TOWER_RIVAL_IVYSAUR
+        or returned.player_accuracy_stage != NEUTRAL_BATTLE_STAT_STAGE
+        or (returned.battler_hp or 0) <= 0
+        or reader.read_battle_menu_state(returned).phase is not BattleMenuPhase.MAIN
+    ):
+        raise TowerChapterError("Tower rival accuracy reset did not restore the lead.")
+
+
+def _switch_tower_rival_party_slot(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+    timing: BattleRuntimeTiming,
+    *,
+    target_index: int,
+) -> None:
+    raw = reader.read()
+    menu = reader.read_battle_menu_state(raw)
+    party = raw.party_species_ids or ()
+    hp = _party_hp(emulator)
+    if (
+        raw.battle_state != 2
+        or raw.enemy_species_id != TOWER_RIVAL_IVYSAUR
+        or menu.phase is not BattleMenuPhase.MAIN
+        or not 0 <= target_index < len(party)
+        or len(hp) <= target_index
+        or hp[target_index] <= 0
+    ):
+        raise TowerChapterError("Tower rival party switch lacks a stable MAIN-menu gate.")
+
+    directions = {
+        0: ("right",),
+        1: ("up", "right"),
+        2: (),
+        3: ("up",),
+    }.get(menu.selected_main_command)
+    if directions is None:
+        raise TowerChapterError("Tower rival party switch exposed an invalid command cursor.")
+    for direction in directions:
+        _pulse(actions, MacroActionKind.MOVE, direction, frames=timing.menu_wait_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.menu_wait_frames)
+
+    for _ in range(12):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == target_index:
+            break
+        _pulse(
+            actions,
+            MacroActionKind.MOVE,
+            "down" if cursor < target_index else "up",
+            frames=timing.menu_wait_frames,
+        )
+    else:
+        raise TowerChapterError("Tower rival could not select the intended party slot.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.menu_wait_frames)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
+        raise TowerChapterError("Tower rival party submenu did not select SWITCH.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+
+    for pulse_index in range(48):
+        settled = reader.read()
+        if (
+            settled.battle_state == 2
+            and settled.enemy_species_id == TOWER_RIVAL_IVYSAUR
+            and settled.active_party_index == target_index
+            and (settled.battler_hp or 0) > 0
+            and reader.read_battle_menu_state(settled).phase is BattleMenuPhase.MAIN
+        ):
+            return
+        if settled.battle_state != 2:
+            raise TowerChapterError("Tower rival party switch left its battle.")
+        _pulse(
+            actions,
+            MacroActionKind.CANCEL
+            if (pulse_index + 1) % 4 == 0
+            else MacroActionKind.CONFIRM,
+            frames=timing.dialogue_wait_frames,
+        )
+    raise TowerChapterError("Tower rival party switch did not return to MAIN.")
+
+
 def _use_tower_battle_status_item(
     reader: PokemonRedStateReader,
     actions: _CountingExecutor,
@@ -971,6 +1118,7 @@ def _fight(
     )
 
     recoveries = 0
+    accuracy_reset_complete = False
 
     def policy(raw: RawGameState) -> int:
         selected_move_spent = (
@@ -998,6 +1146,12 @@ def _fight(
             and _bag(emulator).get(ItemId.SUPER_POTION, 0) > 0
         ):
             raise _PauseForTowerSuperPotion
+        if _tower_rival_needs_accuracy_reset(
+            raw,
+            battle_plan_id=battle_plan_id,
+            reset_complete=accuracy_reset_complete,
+        ):
+            raise _PauseForTowerAccuracyReset
         preferred = 3 if (
             (finish_with_bubblebeam and selected_move_spent)
             or (
@@ -1055,6 +1209,15 @@ def _fight(
                     item=ItemId.PARLYZ_HEAL,
                     expected_status=0x40,
                 )
+                continue
+            if isinstance(error.__cause__, _PauseForTowerAccuracyReset):
+                _reset_tower_rival_accuracy(
+                    reader,
+                    actions,
+                    emulator,
+                    battle_timing,
+                )
+                accuracy_reset_complete = True
                 continue
             if not isinstance(error.__cause__, _PauseForTowerSuperPotion):
                 raise
