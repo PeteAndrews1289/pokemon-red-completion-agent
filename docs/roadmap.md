@@ -535,3 +535,10 @@ with one-frame B pulses, which are inert on MAIN, and proves the joint HP, exact
 state under a shared 720-pulse bound. Before v19 is frozen, the new explicit uncounted diagnostic
 schedule lane will run a multi-seed robustness battery so rare timing branches are found before,
 not inside, the next immutable campaign.
+
+The first v19 diagnostic did exactly that: seed `60001` reached checkpoint 75 and exposed an
+immediate Route 11 sleep reapplication. The observer saw the final sleeping turn followed by a new
+nonzero counter because wake-up and the opponent's next Hypnosis occurred between observations.
+V19 is retired without an official rehearsal or any counted attempt. V20 accepts only this bounded
+wake-boundary transition, caps consecutive reapplications at two, and retains PP, HP, and finite
+recovery proofs. Five additional diagnostic schedules must pass before v20's official rehearsal.

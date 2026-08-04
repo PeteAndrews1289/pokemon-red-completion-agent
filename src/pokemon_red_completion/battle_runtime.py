@@ -31,6 +31,7 @@ from pokemon_red_completion.observation import (
 _WILD_BATTLE_STATE = 1
 _TRAINER_BATTLE_STATE = 2
 _FIGHT_COMMAND = 0
+_MAX_SLEEP_REAPPLICATIONS = 2
 _CURRENT_PP_MASK = 0x3F
 _MIN_MOVE_SLOT = 1
 _MAX_MOVE_SLOT = 4
@@ -1037,13 +1038,16 @@ def _recover_sleep_transition(
 
     initial_count = sleep_count
     previous_count = sleep_count
+    sleep_reapplications = 0
     saw_decrease = False
     # Gen I stores the remaining sleep duration as a three-bit turn counter.
     # Give each observed sleeping turn the configured transition allowance
     # instead of making every turn share one allowance.  Long move animations
     # and dialogue can otherwise consume the whole budget even while the
     # semantic counter is decreasing normally.
-    max_recovery_pulses = timing.max_sleep_recovery_pulses * initial_count
+    max_recovery_pulses = timing.max_sleep_recovery_pulses * (
+        initial_count + 7 * _MAX_SLEEP_REAPPLICATIONS
+    )
     for _ in range(max_recovery_pulses):
         if _ACTIVE_BATTLE_STATE.get() == _WILD_BATTLE_STATE and raw.battle_state == 0:
             _require_present_state(raw, expected_map=expected_map, label=label)
@@ -1148,7 +1152,19 @@ def _recover_sleep_transition(
                 )
             return True
         if current_count > previous_count:
-            raise BattleRuntimeError(f"{label} sleep counter increased during bounded recovery.")
+            # The observer can miss the zero between waking and an opponent
+            # immediately applying sleep again in the same turn.  Accept that
+            # as a new sleep episode only from the final observed sleeping
+            # turn, and keep the number of episodes strictly bounded.
+            if previous_count != 1:
+                raise BattleRuntimeError(
+                    f"{label} sleep counter increased before its wake-up boundary."
+                )
+            sleep_reapplications += 1
+            if sleep_reapplications > _MAX_SLEEP_REAPPLICATIONS:
+                raise BattleRuntimeError(
+                    f"{label} exceeded its bounded sleep reapplications."
+                )
         saw_decrease = saw_decrease or current_count < previous_count
         previous_count = current_count
 

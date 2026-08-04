@@ -306,12 +306,12 @@ pokemon-red-completion record \
 # Before freezing another campaign, fuzz arbitrary uncounted timing schedules:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --diagnostic-schedule-seed 29001
+  --diagnostic-schedule-seed 61001
 
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v19-01-train
+  --collection-run red-battle-v20-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \

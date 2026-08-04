@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v19.json`](../configs/red-battle-collection-v19.json)
+[`red-battle-collection-v20.json`](../configs/red-battle-collection-v20.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1301,3 +1301,15 @@ reserves fresh counted seeds `29001`–`29005`, `39001`–`39002`, and `49001`�
 seeds remain unopened while independent diagnostic seeds are exercised through the robustness
 lane; passing that battery is an additional engineering gate, not a substitute for the committed
 v19 rehearsal.
+
+The first v19 pre-registration diagnostic, seed `60001`, stopped at checkpoint 75 when Route 11
+sleep recovery observed the counter move from its final sleeping turn into a fresh sleep duration.
+That is a valid Generation I transition when the player wakes and the opponent immediately lands
+Hypnosis again before the next observation, not evidence that the route has regressed. V19 was
+retired before its mandatory rehearsal and with all twelve counted roots unopened. Recovery now
+recognizes at most two immediate sleep reapplications, only at the wake-up boundary, while still
+proving unchanged PP, a living battler, and a finite pulse budget.
+
+V20 promotes diagnostic seed `60001` to its rehearsal-only assignment and reserves fresh counted
+seeds `30001`–`30005`, `40001`–`40002`, and `50001`–`50005`. Independent seeds
+`61001`–`61005` must pass through the uncounted diagnostic lane before the official v20 rehearsal.

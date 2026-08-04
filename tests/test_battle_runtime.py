@@ -489,6 +489,42 @@ class OffSlotSleepPPSimulation(SleepRecoverySimulation):
             self.raw = replace(self.raw, first_party_pp=tuple(pp))
 
 
+class ReappliedSleepSimulation(SleepRecoverySimulation):
+    """Model waking and being put back to sleep before the next observation."""
+
+    def __init__(self, *, reapplications: int) -> None:
+        super().__init__()
+        self.reapplications = reapplications
+
+    def execute(self, action: MacroAction) -> None:
+        recovering = (
+            action.kind is MacroActionKind.CONFIRM
+            and self.menu.phase is BattleMenuPhase.UNKNOWN
+            and bool((self.raw.first_party_status or 0) & 0x07)
+        )
+        if not recovering:
+            sleep_was_started = self.sleep_started
+            super().execute(action)
+            if (
+                not sleep_was_started
+                and self.sleep_started
+                and self.menu.phase is BattleMenuPhase.UNKNOWN
+            ):
+                self.raw = replace(self.raw, first_party_status=2)
+            return
+
+        self.actions.append(action)
+        count = (self.raw.first_party_status or 0) & 0x07
+        if count == 1 and self.reapplications:
+            self.reapplications -= 1
+            self.raw = replace(self.raw, first_party_status=5)
+            return
+        next_count = max(0, count - 1)
+        self.raw = replace(self.raw, first_party_status=next_count)
+        if next_count == 0:
+            self.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+
+
 class MainMenuSleepRecoverySimulation(FakeRuntime):
     """Model Gen I returning to MAIN between suppressed sleeping turns."""
 
@@ -628,6 +664,36 @@ def test_sleep_recovery_reenters_fight_after_each_suppressed_turn() -> None:
     assert final.first_party_status == 0
     assert final.first_party_pp == (34, 30, 30, 11)
     assert MacroAction(MacroActionKind.MOVE, "up") in runtime.actions
+
+
+def test_sleep_recovery_accepts_bounded_immediate_reapplications() -> None:
+    runtime = ReappliedSleepSimulation(reapplications=2)
+
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        lambda raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
+        timing=BattleRuntimeTiming(max_move_menu_transition_pulses=1),
+    )
+
+    assert final.battle_state == 0
+    assert final.first_party_status == 0
+    assert final.first_party_pp == (34, 30, 30, 11)
+    assert runtime.reapplications == 0
+
+
+def test_sleep_recovery_rejects_excessive_immediate_reapplications() -> None:
+    runtime = ReappliedSleepSimulation(reapplications=3)
+
+    with pytest.raises(BattleRuntimeError, match="bounded sleep reapplications"):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda raw: 1,
+            expected_map=MapId.CERULEAN_CITY,
+            timing=BattleRuntimeTiming(max_move_menu_transition_pulses=1),
+        )
 
 
 def test_sleep_recovery_rejects_an_off_slot_pp_decrement() -> None:
