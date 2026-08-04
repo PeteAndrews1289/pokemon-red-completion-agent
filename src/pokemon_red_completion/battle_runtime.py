@@ -1346,7 +1346,11 @@ def _require_present_state(
         )
     if raw.party_count is None or raw.party_count <= 0 or raw.battler_hp is None:
         raise BattleRuntimeError(f"{label} lacks living active-battler evidence.")
-    if raw.battler_hp <= 0:
+    terminal_enemy_ko = (
+        raw.enemy_hp == 0
+        and raw.battle_state in {0, _ACTIVE_BATTLE_STATE.get()}
+    )
+    if raw.battler_hp <= 0 and not terminal_enemy_ko:
         raise BattleRuntimeError(
             f"{label} active battler fainted: hp={raw.battler_hp}/"
             f"{raw.battler_max_hp}, status={raw.battler_status}, "

@@ -18,6 +18,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeTiming,
     RequiredMovePolicy,
     _confirm_attack_with_pp_gate,
+    _require_present_state,
     bind_battle_decision_observer,
     bind_battle_schedule_observer,
     note_observed_battle_exit,
@@ -2201,6 +2202,14 @@ def test_completion_rechecks_living_lead_before_returning() -> None:
             lambda _raw: 1,
             expected_map=MapId.CERULEAN_CITY,
         )
+
+
+def test_terminal_enemy_ko_precedes_a_stale_fainted_party_lead_view() -> None:
+    _require_present_state(
+        _raw(battle_state=2, hp=0, enemy_hp=0),
+        expected_map=MapId.CERULEAN_CITY,
+        label="forced-party final KO",
+    )
 
 
 def test_recovery_gate_requires_an_actor_decision_between_items() -> None:

@@ -885,6 +885,12 @@ observed zero-HP active member, advances the faint dialogue, proves the live par
 the target, and returns only after MAIN reports that member active. Normal voluntary switching is
 unchanged, and the failure remained uncounted.
 
+The repaired switch then activated the living teammate and reduced the opponent from 10 HP to zero,
+but the terminal snapshot still exposed the fainted party lead's field HP. The runtime's generic
+presence gate ran before its enemy-KO handler and rejected that stale zero. Enemy HP exactly zero is
+now authoritative during the active or immediate-exit terminal transition; nonterminal faints still
+fail, and map/readiness checks retain blackout protection. The rehearsal remained uncounted.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

@@ -1153,3 +1153,10 @@ the forced-party screen, so the helper rejected the transition. The shared switc
 has an explicit zero-HP branch: it advances at least one bounded dialogue pulse, proves a live
 party cursor, selects the declared living slot, and succeeds only after the battle returns to MAIN
 with that member active. Ordinary voluntary switching is unchanged. The failure was uncounted.
+
+The forced-switch replay selected the living teammate and reduced the wrapped opponent from 10 HP
+to zero. During the terminal transition, the adapter still exposed the fainted party lead's field
+HP, so the generic presence gate rejected the state before its existing enemy-KO dialogue handler
+could run. Presence validation now treats enemy HP exactly zero as authoritative only while the
+battle is active or in its immediate field exit; every nonterminal zero-HP battler still fails, and
+map/readiness checks still reject blackout. This rehearsal remained uncounted.

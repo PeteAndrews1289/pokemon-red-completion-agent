@@ -90,6 +90,8 @@ control, and progressively trained specialists.**
 > trainer controller now continues through the verified party menu with a living teammate.
 > Its first handoff exposed forced-party dialogue rather than a normal voluntary switch; the shared
 > primitive now observes and handles both menu paths separately.
+> The repaired handoff defeated the opponent, then exposed a stale fainted-lead HP view during the
+> final-KO transition. Terminal enemy-zero evidence now settles before the nonterminal faint gate.
 > The completionist foundation now defines an auditable **124-registration** Red-only target and names
 > all **27** exclusions imposed by a one-save, no-link-cable Squirtle/Helix/Hitmonlee/Jolteon run.
 > It reads the cartridge's seen/owned Pokédex flags and performs a checksum-verified census of the
