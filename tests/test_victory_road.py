@@ -152,7 +152,7 @@ def test_victory_road_routes_are_live_qualified() -> None:
     assert VICTORY_ROAD_MAX_REPEL_PURCHASE == 2
     assert VICTORY_ROAD_INPUT_HYPER_POTION_BOUNDS == (0, 7)
     assert INDIGO_FULL_RESTORE_RESERVE == 6
-    assert INDIGO_FULL_HEAL_RESERVE == 2
+    assert INDIGO_FULL_HEAL_RESERVE == 6
     assert INDIGO_X_SPECIAL_RESERVE == 8
     assert INDIGO_X_SPECIAL_PURCHASE == 8
     assert COLLECTION_POKE_BALL_REMAINDER_BOUNDS == (0, 30)

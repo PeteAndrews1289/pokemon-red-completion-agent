@@ -1238,3 +1238,11 @@ target and money ledger had been raised to four, but the purchase adapter still 
 single-copy quantity. Its live proof rejected the observed three-item stack. The transaction now
 derives both the requested quantity and target from the same declared reserve constants, preventing
 the plan and menu operation from drifting independently.
+
+The corrected replay passed every earlier gate, defeated Lance, and stopped at checkpoint 309 when
+the Champion input correctly required a protected Full Restore. The six-item Full Restore stack had
+covered HP recovery, but Lance spent its final copy on status after the two cheaper Full Heals were
+gone. The Indigo plan now carries six Full Heals in the same existing stack. This separates status
+recovery from the scarcer all-purpose reserve, costs only an additional ₽2,400, and leaves the
+Champion's Full Restore gate intact. The diagnostic now reports every input predicate rather than
+printing HP beside an unrelated inventory failure.

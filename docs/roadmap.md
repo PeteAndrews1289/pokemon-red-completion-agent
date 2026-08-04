@@ -497,3 +497,7 @@ rehearsal/training/validation/test schedules; no v14 formal slot opens before qu
 V14's first rehearsal remained uncounted and stopped at checkpoint 112: three held-out sleep cures
 exhausted Rock Tunnel's old three-Awakening plan. The reserve is now four, with exact funding and a
 one-item Pokémon Tower carry-forward gate. Full qualification remains the current prerequisite.
+
+The next replay reached checkpoint 309 after defeating Lance, then correctly rejected a zero-count
+Champion Full Restore reserve. Indigo now overprovisions six Full Heals so status contingencies do
+not consume the protected HP-recovery item. The v14 rehearsal must still prove the final three gates.

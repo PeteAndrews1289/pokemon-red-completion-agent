@@ -215,11 +215,14 @@ def run_champion_chapter(
         or _bag(emulator).get(ItemId.X_ACCURACY, 0) != 1
         or _bag(emulator).get(ItemId.X_SPECIAL, 0)
         != INDIGO_X_SPECIAL_RESERVE - AGATHA_X_SPECIAL_USE - LANCE_X_SPECIAL_USE
-        or _bag(emulator).get(ItemId.FULL_RESTORE, 0)
-        < CHAMPION_FULL_RESTORE_INPUT_RESERVE
+        or _bag(emulator).get(ItemId.FULL_RESTORE, 0) < CHAMPION_FULL_RESTORE_INPUT_RESERVE
     ):
         raise ChampionChapterError(
             "Champion input boundary is not qualified: "
+            f"map={initial.map_id!r}, position={(initial.player_x, initial.player_y)!r}, "
+            f"party={initial.party_species_ids!r}, moves={initial.first_party_moves!r}, "
+            f"beat_lance={_event(initial, EventFlag.BEAT_LANCE)!r}, "
+            f"beat_champion={_event(initial, EventFlag.BEAT_CHAMPION_RIVAL)!r}, "
             f"party_hp={_party_hp(emulator)!r}, bag={_bag(emulator)!r}."
         )
     _checkpoint(
@@ -365,10 +368,7 @@ def run_champion_chapter(
                 continue
             if not isinstance(error.__cause__, _HealBoundary):
                 current = reader.read()
-                if (
-                    current.enemy_hp == 0
-                    and any(hp > 0 for hp in _party_hp(emulator))
-                ):
+                if current.enemy_hp == 0 and any(hp > 0 for hp in _party_hp(emulator)):
                     if current.battle_state == 2:
                         _settle_champion_battle_exit(reader, actions)
                     elif current.battle_state != 0:
@@ -499,8 +499,7 @@ def _battle_x_special(
                 consumed = True
             elif after != before:
                 raise ChampionChapterError(
-                    "X Special changed by an invalid quantity: "
-                    f"before={before}, after={after}."
+                    f"X Special changed by an invalid quantity: before={before}, after={after}."
                 )
             at_main = (
                 current.battle_state == 2
@@ -509,8 +508,7 @@ def _battle_x_special(
             if consumed and at_main:
                 if initial - after != 1:
                     raise ChampionChapterError(
-                        "X Special cumulative use was invalid: "
-                        f"initial={initial}, after={after}."
+                        f"X Special cumulative use was invalid: initial={initial}, after={after}."
                     )
                 return
             if at_main and not consumed:
@@ -568,9 +566,7 @@ def _champion_forced_switch_target(
     active_party_index: int | None,
 ) -> int | None:
     candidates = [
-        index
-        for index, hp in enumerate(party_hp)
-        if hp > 0 and index != active_party_index
+        index for index, hp in enumerate(party_hp) if hp > 0 and index != active_party_index
     ]
     return max(candidates, key=lambda index: party_hp[index], default=None)
 
@@ -660,8 +656,7 @@ def _champion_recovery_available(
     inventory: Mapping[ItemId, int],
 ) -> bool:
     return bool(
-        inventory.get(ItemId.FULL_RESTORE, 0)
-        or (status and inventory.get(ItemId.FULL_HEAL, 0))
+        inventory.get(ItemId.FULL_RESTORE, 0) or (status and inventory.get(ItemId.FULL_HEAL, 0))
     )
 
 
