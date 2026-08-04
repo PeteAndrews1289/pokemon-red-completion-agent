@@ -11,6 +11,10 @@ from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
     MART_2F_GIRL_X,
     MART_2F_GIRL_Y,
+    MART_3F_CUSTOMER_BLOCK_POSITION,
+    MART_3F_CUSTOMER_CLEAR_ATTEMPTS,
+    MART_3F_CUSTOMER_CLEAR_POSITION,
+    MART_3F_CUSTOMER_YIELD_POSITION,
     MART_5F_GENTLEMAN_BLOCK_POSITION,
     MART_5F_GENTLEMAN_CLEAR_ATTEMPTS,
     MART_5F_GENTLEMAN_CLEAR_POSITION,
@@ -68,6 +72,13 @@ def test_mart_5f_customer_yield_is_source_pinned_and_bounded() -> None:
     assert MART_5F_GENTLEMAN_YIELD_POSITION == (15, 3)
     assert MART_5F_GENTLEMAN_CLEAR_POSITION == (14, 2)
     assert MART_5F_GENTLEMAN_CLEAR_ATTEMPTS == 16
+
+
+def test_mart_3f_customer_yield_is_source_pinned_and_bounded() -> None:
+    assert MART_3F_CUSTOMER_BLOCK_POSITION == (14, 5)
+    assert MART_3F_CUSTOMER_YIELD_POSITION == (13, 5)
+    assert MART_3F_CUSTOMER_CLEAR_POSITION == (14, 4)
+    assert MART_3F_CUSTOMER_CLEAR_ATTEMPTS == 32
 
 
 def _report() -> SilphChapterReport:
@@ -226,6 +237,49 @@ def test_silph_verified_movement_retries_a_swallowed_input() -> None:
     )
 
     assert (final.map_id, final.player_x, final.player_y) == (MapId.SAFFRON_MART, 3, 7)
+
+
+def test_silph_verified_movement_yields_to_mart_3f_customer() -> None:
+    blocked = replace(
+        _terminal(),
+        map_id=MapId.CELADON_MART_3F,
+        player_x=14,
+        player_y=5,
+    )
+    yielded = replace(blocked, player_x=13)
+    crossed = replace(blocked, player_y=4)
+    states = iter(
+        (
+            blocked,
+            *(blocked for _ in range(DEFAULT_SILPH_TIMING.movement_retries * 2)),
+            blocked,
+            yielded,
+            blocked,
+            crossed,
+        )
+    )
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return next(states)
+
+    class Executor:
+        def execute(self, _action: object) -> None:
+            return None
+
+    final = _move_verified(
+        Executor(),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        ("up",),
+        replace(DEFAULT_SILPH_TIMING, movement_frames=1),
+        "X Special Mart 3F",
+    )
+
+    assert (final.map_id, final.player_x, final.player_y) == (
+        MapId.CELADON_MART_3F,
+        14,
+        4,
+    )
 
 
 def test_silph_clerk_approach_uses_verified_steps() -> None:

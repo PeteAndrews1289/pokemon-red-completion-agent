@@ -91,6 +91,10 @@ MART_5F_GENTLEMAN_BLOCK_POSITION = (15, 2)
 MART_5F_GENTLEMAN_YIELD_POSITION = (15, 3)
 MART_5F_GENTLEMAN_CLEAR_POSITION = (14, 2)
 MART_5F_GENTLEMAN_CLEAR_ATTEMPTS = 16
+MART_3F_CUSTOMER_BLOCK_POSITION = (14, 5)
+MART_3F_CUSTOMER_YIELD_POSITION = (13, 5)
+MART_3F_CUSTOMER_CLEAR_POSITION = (14, 4)
+MART_3F_CUSTOMER_CLEAR_ATTEMPTS = 32
 SAFFRON_CITY_SIZE = (40, 36)
 SAFFRON_CENTER_APPROACH = (9, 30)
 SAFFRON_WARP_COORDINATES = frozenset(
@@ -2089,6 +2093,14 @@ def _move_verified(
                 break
         else:
             if (
+                label == "X Special Mart 3F"
+                and before.map_id == MapId.CELADON_MART_3F
+                and (before.player_x, before.player_y) == MART_3F_CUSTOMER_BLOCK_POSITION
+                and direction == "up"
+            ):
+                state = _yield_to_mart_3f_customer(actions, reader, timing)
+                continue
+            if (
                 label == "X Special clerk approach"
                 and before.map_id == MapId.CELADON_MART_5F
                 and (before.player_x, before.player_y) == MART_5F_GENTLEMAN_BLOCK_POSITION
@@ -2101,6 +2113,53 @@ def _move_verified(
                 f"{(state.map_id, state.player_x, state.player_y)!r}."
             )
     return state
+
+
+def _yield_to_mart_3f_customer(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SilphTiming,
+) -> RawGameState:
+    """Yield the aisle so the source-pinned third-floor customer can pass."""
+
+    for attempt in range(MART_3F_CUSTOMER_CLEAR_ATTEMPTS):
+        _require(
+            reader.read(),
+            MapId.CELADON_MART_3F,
+            MART_3F_CUSTOMER_BLOCK_POSITION,
+            "X Special Mart 3F customer gate",
+        )
+        actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
+        _require(
+            reader.read(),
+            MapId.CELADON_MART_3F,
+            MART_3F_CUSTOMER_YIELD_POSITION,
+            "X Special Mart 3F customer yield",
+        )
+        actions.execute(
+            MacroAction(
+                MacroActionKind.WAIT,
+                repeat=timing.movement_frames * (attempt + 1),
+            )
+        )
+        actions.execute(MacroAction(MacroActionKind.MOVE, "right"))
+        _require(
+            reader.read(),
+            MapId.CELADON_MART_3F,
+            MART_3F_CUSTOMER_BLOCK_POSITION,
+            "X Special Mart 3F customer return",
+        )
+        actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
+        crossed = reader.read()
+        if (crossed.player_x, crossed.player_y) == MART_3F_CUSTOMER_CLEAR_POSITION:
+            return crossed
+        _require(
+            crossed,
+            MapId.CELADON_MART_3F,
+            MART_3F_CUSTOMER_BLOCK_POSITION,
+            "X Special Mart 3F customer final gate",
+        )
+    raise SilphChapterError("Celadon Mart 3F customer did not clear the aisle.")
 
 
 def _yield_to_mart_5f_gentleman(
