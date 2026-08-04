@@ -742,7 +742,7 @@ def _settle_pre_ship_cave_entry(
 ) -> RawGameState:
     """Wait through the cave gate's linked-warp animation before moving."""
 
-    transient_positions = {(4, 4), (37, 31)}
+    transient_positions = {(4, 4)}
     stable_reads = 0
     for _ in range(24):
         raw = reader.read()

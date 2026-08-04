@@ -39,8 +39,7 @@ def test_pre_ship_training_waits_through_linked_cave_warps(
     states = [
         RawGameState(True, MapId.DIGLETTS_CAVE, 4, 4, 1, 0),
         RawGameState(True, MapId.DIGLETTS_CAVE, 37, 31, 1, 0),
-        RawGameState(True, MapId.DIGLETTS_CAVE, 37, 30, 1, 0),
-        RawGameState(True, MapId.DIGLETTS_CAVE, 37, 30, 1, 0),
+        RawGameState(True, MapId.DIGLETTS_CAVE, 37, 31, 1, 0),
     ]
 
     class Reader:
@@ -69,8 +68,8 @@ def test_pre_ship_training_waits_through_linked_cave_warps(
         ss_anne.DEFAULT_SS_ANNE_TIMING,
     )
 
-    assert (settled.player_x, settled.player_y) == (37, 30)
-    assert len(executor.actions) == 3
+    assert (settled.player_x, settled.player_y) == (37, 31)
+    assert len(executor.actions) == 2
 
 
 def test_ss_anne_rival_consumes_high_value_reserve_with_one_intent(

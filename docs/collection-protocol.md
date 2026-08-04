@@ -126,9 +126,11 @@ where it first creates reliable value. The rehearsal remains uncounted.
 
 The first staged-development rehearsal reached the cave gate at checkpoint 75, but began holding a
 movement direction while the linked Route 11 warp was still relocating the player from `(4, 4)`
-through `(37, 31)` to the stable cave tile. That input crossed straight back out, and the excluded-
-warp guard stopped the run. Training now requires two consecutive input-ready reads on a non-warp
-cave coordinate before its first encounter-seeking step. The failure was uncounted.
+to the stable `(37, 31)` arrival tile. That input crossed straight back out, and the excluded-warp
+guard stopped the run. Training now requires two consecutive input-ready reads on a stable cave
+coordinate before its first encounter-seeking step. The next uncounted rehearsal proved that
+`(37, 31)` itself is stable rather than transitional, so only the observed `(4, 4)` handoff is
+excluded from that readiness gate.
 
 The retired v4 registry began with twelve fresh counted seeds. Its uncounted dry
 seed `13001` deliberately replays that exact exposed v3 schedule. The teacher now heals at the
