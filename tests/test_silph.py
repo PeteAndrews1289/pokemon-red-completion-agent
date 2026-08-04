@@ -42,6 +42,7 @@ from pokemon_red_completion.silph import (
     _plan_saffron_route,
     _silph_capacity_deposit_items,
     _silph_capacity_ready,
+    _silph_fixed_move_slot,
     _silph_rival_move_slot,
     run_silph_chapter,
 )
@@ -377,6 +378,30 @@ def test_silph_rival_policy_uses_live_disable_and_pp() -> None:
         active_party_pp=(0, 12, 8, 5),
     )
     assert _silph_rival_move_slot(healthy_reserve) == 2
+
+
+def test_silph_fixed_policy_falls_back_from_live_disable() -> None:
+    disabled = replace(
+        _terminal(),
+        battle_state=2,
+        first_party_moves=(44, 39, 58, 57),
+        first_party_pp=(15, 0, 10, 15),
+        player_disabled_move_slot=4,
+        player_disable_turns=3,
+    )
+
+    assert _silph_fixed_move_slot(disabled, preferred=4) == 1
+
+
+def test_silph_fixed_policy_preserves_usable_preference() -> None:
+    raw = replace(
+        _terminal(),
+        battle_state=2,
+        first_party_moves=(44, 39, 58, 57),
+        first_party_pp=(15, 0, 10, 15),
+    )
+
+    assert _silph_fixed_move_slot(raw, preferred=4) == 4
 
 
 def test_roof_girl_interaction_retries_until_dialogue_opens() -> None:

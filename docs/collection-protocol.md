@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v33.json`](../configs/red-battle-collection-v33.json)
+[`red-battle-collection-v34.json`](../configs/red-battle-collection-v34.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1453,3 +1453,13 @@ later sale.
 
 V33 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
 `160001`–`160005`, `170001`–`170002`, and `180001`–`180005`; all five diagnostics must be replayed.
+
+The v33 replay proved the earned-cash restock, completed the Forest, and preserved the later supply
+ledger through checkpoint 241. The Silph 3F Rocket then used Disable on slot four; that chapter's
+fixed-slot wrapper ignored live Disable evidence even though the shared runtime correctly rejected
+the illegal choice. V33 is retired before rehearsal with every counted root unopened. Fixed Silph
+lessons now preserve their preferred move when usable and otherwise select the first live,
+non-disabled move with PP.
+
+V34 retains exposed seed `60001` for rehearsal only and reserves fresh counted seeds
+`190001`–`190005`, `200001`–`200002`, and `210001`–`210005`; all five diagnostics must be replayed.

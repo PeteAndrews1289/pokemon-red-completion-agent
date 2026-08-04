@@ -1496,7 +1496,11 @@ def _run_battle(
     battle_plan_id: str,
     resource_policy: BattleResourcePolicy = (BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT),
 ) -> None:
-    policy = move_slot if callable(move_slot) else lambda _: move_slot
+    policy = (
+        move_slot
+        if callable(move_slot)
+        else lambda raw: _silph_fixed_move_slot(raw, preferred=move_slot)
+    )
     run_adaptive_trainer_battle(
         reader,
         actions,
@@ -1511,6 +1515,28 @@ def _run_battle(
         label=label,
         unknown_cancel_interval=3,
     )
+
+
+def _silph_fixed_move_slot(raw: RawGameState, *, preferred: int) -> int:
+    """Keep a fixed lesson preference while respecting live PP and Disable."""
+
+    moves = raw.battler_moves or ()
+    pp = raw.battler_pp or ()
+    disabled = (
+        raw.player_disabled_move_slot
+        if (raw.player_disable_turns or 0) > 0
+        else None
+    )
+    for slot in dict.fromkeys((preferred, 1, 2, 3, 4)):
+        if (
+            len(moves) >= slot
+            and moves[slot - 1]
+            and len(pp) >= slot
+            and pp[slot - 1] & 0x3F
+            and slot != disabled
+        ):
+            return slot
+    raise SilphChapterError("Silph fixed-slot policy has no legal move with PP.")
 
 
 class _PauseBattle(Exception):
