@@ -1819,6 +1819,47 @@ def _purchase_cerulean_supplies(
         )
 
 
+def _settle_mart_repeat_clerk_stance(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: CascadeTiming,
+) -> RawGameState:
+    """Wait for the moving Mart customer while proving westward progress."""
+
+    for pulse in range(24):
+        before = reader.read()
+        position = (before.player_x, before.player_y)
+        if position == (2, 5):
+            return before
+        if (
+            before.map_id != MapId.CERULEAN_MART
+            or before.battle_state != 0
+            or before.player_y != 5
+            or before.player_x not in {3, 4}
+        ):
+            raise CascadeChapterError(
+                "Cerulean Mart repeat clerk wait left its safe corridor: "
+                f"position={(before.map_id, before.player_x, before.player_y)!r}."
+            )
+        after = _move(
+            executor,
+            reader,
+            ("left",),
+            f"Cerulean Mart repeat clerk progress {pulse + 1}",
+        )
+        if (
+            after.map_id != MapId.CERULEAN_MART
+            or after.player_y != 5
+            or after.player_x not in {before.player_x, before.player_x - 1}
+        ):
+            raise CascadeChapterError("Cerulean Mart repeat clerk made an invalid transition.")
+        if after.player_x == before.player_x:
+            _wait(executor, max(1, timing.dialogue_wait_frames // 4) * (pulse + 1))
+    raise CascadeChapterError(
+        "Cerulean Mart repeat clerk customer did not vacate within its bound."
+    )
+
+
 def _purchase_cerulean_awakening_topup(
     reader: PokemonRedStateReader,
     executor: _CountingChapterExecutor,
@@ -1847,7 +1888,7 @@ def _purchase_cerulean_awakening_topup(
         raise CascadeChapterError("Cerulean Awakening top-up missed the Mart entry gate.")
 
     _move(executor, reader, MART_REPEAT_CLERK_DIRECTIONS, "Cerulean Mart repeat clerk")
-    clerk_stance = reader.read()
+    clerk_stance = _settle_mart_repeat_clerk_stance(executor, reader, timing)
     if (
         clerk_stance.map_id != MapId.CERULEAN_MART
         or (clerk_stance.player_x, clerk_stance.player_y) != (2, 5)

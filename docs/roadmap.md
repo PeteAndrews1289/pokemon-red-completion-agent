@@ -349,6 +349,11 @@ legal forced-switch continuation. The revised lesson uses the carried Tower X Ac
 Blastoise when Muk appears, directly counters the accuracy mechanic, and replaces that single
 consumable during the already-qualified Celadon battle-item purchase. The complete source must
 still pass all 312 checkpoints and 68 scheduled battles before v11 collection opens.
+V11 subsequently qualified all of those gates, but fresh counted seed `21001` stopped after the
+Nugget Rocket when a moving Cerulean Mart customer held the repeat clerk approach at `(4, 5)`.
+That one-shot failure is sealed and v11 is retired. V12 uses the exposed seed only for rehearsal,
+waits for verified westward progress inside the safe Mart corridor, and assigns fresh train seeds
+`22001`–`22005`, validation seeds `32001`–`32002`, and test seeds `42001`–`42005`.
 That exact rehearsal subsequently validated every earlier repair through checkpoint **296/312**,
 including the six-member balance gate, Blaine, Giovanni, the final rival, and Victory Road. It then
 exposed a stale Indigo inventory assertion: the now-larger bounded capture curriculum may legally

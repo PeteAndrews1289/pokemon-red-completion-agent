@@ -253,6 +253,37 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
     assert GYM_TRAINER_TO_MISTY_DIRECTIONS == ("up", "left")
 
 
+def test_repeat_mart_clerk_waits_for_customer_to_vacate() -> None:
+    class Runtime:
+        def __init__(self) -> None:
+            self.x = 4
+            self.left_pulses = 0
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.MOVE and action.value == "left":
+                self.left_pulses += 1
+                if self.left_pulses >= 4:
+                    self.x -= 1
+
+        def read(self) -> RawGameState:
+            return replace(
+                _raw(),
+                map_id=MapId.CERULEAN_MART,
+                player_x=self.x,
+                player_y=5,
+            )
+
+    runtime = Runtime()
+    final = cascade_module._settle_mart_repeat_clerk_stance(
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        replace(DEFAULT_CASCADE_TIMING, dialogue_wait_frames=1),
+    )
+
+    assert (final.player_x, final.player_y) == (2, 5)
+    assert runtime.left_pulses == 5
+
+
 def test_reverse_directions_is_exact_and_involutive() -> None:
     route = ("up", "right", "right", "down", "left")
     reversed_route = _reverse_directions(route)

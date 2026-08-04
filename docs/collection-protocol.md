@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v11.json`](../configs/red-battle-collection-v11.json)
+[`red-battle-collection-v12.json`](../configs/red-battle-collection-v12.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 68 stable public battle-plan identities in exact qualified-route order;
