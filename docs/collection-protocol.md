@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v23.json`](../configs/red-battle-collection-v23.json)
+[`red-battle-collection-v24.json`](../configs/red-battle-collection-v24.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1348,3 +1348,13 @@ retaining one after the exposed four-use schedule.
 
 V23 retains seed `60001` for rehearsal only and reserves fresh counted seeds `33001`–`33005`,
 `43001`–`43002`, and `53001`–`53005`; the five independent diagnostics remain the next gate.
+
+V23 retained the Rock Tunnel cure, completed Pokémon Tower, caught Snorlax, earned Surf, Strength,
+Soul and Rainbow Badges, and reached checkpoint 230. A fourth-floor Celadon Mart pedestrian then
+blocked the single return step from the teacher's yield tile, and the old recovery rejected that
+still-bounded position instead of continuing to wait. V23 is retired before rehearsal with every
+counted root unopened. The walker skill now retries the return from its exact yield tile under a
+second finite bound and still rejects any map, battle, or coordinate escape.
+
+V24 uses exposed seed `60001` only for rehearsal and reserves fresh counted seeds `34001`–`34005`,
+`44001`–`44002`, and `54001`–`54005`; independent diagnostics remain required first.

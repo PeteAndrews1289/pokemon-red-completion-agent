@@ -63,6 +63,7 @@ def test_stone_clerk_route_yields_to_fourth_floor_walker(
 
     class Executor:
         left_attempts = 0
+        return_attempts = 0
 
         def execute(self, action: MacroAction) -> MacroAction:
             if action.kind is not MacroActionKind.MOVE:
@@ -71,7 +72,9 @@ def test_stone_clerk_route_yields_to_fourth_floor_walker(
             if action.value == "right" and position == (4, 2):
                 reader.state = replace(reader.state, player_x=5)
             elif action.value == "left" and position == (5, 2):
-                reader.state = replace(reader.state, player_x=4)
+                self.return_attempts += 1
+                if self.return_attempts >= 3:
+                    reader.state = replace(reader.state, player_x=4)
             elif action.value == "left" and position == (4, 2):
                 self.left_attempts += 1
                 if self.left_attempts == 3:
@@ -92,6 +95,7 @@ def test_stone_clerk_route_yields_to_fourth_floor_walker(
 
     assert (reader.state.player_x, reader.state.player_y) == (3, 2)
     assert executor.left_attempts == 3
+    assert executor.return_attempts == 4
 
 
 def test_saffron_report_proves_purchase_handoff_order_and_terminal() -> None:

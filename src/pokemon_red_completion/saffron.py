@@ -868,10 +868,18 @@ def _yield_to_stone_clerk_walker(
                 "Evolution-stone walker recovery could not yield the corridor."
             )
         _wait(actions, timing.movement_frames * (attempt + 1))
-        actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
-        _wait(actions, timing.movement_frames)
-        returned = reader.read()
-        if (returned.player_x, returned.player_y) != STONE_CLERK_WALKER_BLOCK_POSITION:
+        for return_attempt in range(STONE_CLERK_WALKER_CLEAR_ATTEMPTS):
+            actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
+            _wait(actions, timing.movement_frames)
+            returned = reader.read()
+            if (returned.player_x, returned.player_y) == STONE_CLERK_WALKER_BLOCK_POSITION:
+                break
+            if (returned.player_x, returned.player_y) != STONE_CLERK_WALKER_YIELD_POSITION:
+                raise SaffronChapterError(
+                    "Evolution-stone walker recovery left its bounded yield gate."
+                )
+            _wait(actions, timing.movement_frames * (return_attempt + 1))
+        else:
             raise SaffronChapterError(
                 "Evolution-stone walker recovery could not restore its approach gate."
             )

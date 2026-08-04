@@ -560,3 +560,8 @@ Tunnel trainers. Four legitimate sleep recoveries consumed the complete four-Awa
 which would leave Pokémon Tower without its required cure. V22 is retired without official or
 counted runs. V23 increases the same-stack reserve to five, updates the exact purchase ledger, and
 requires at least one Awakening to survive the exposed four-use schedule.
+
+V23 passed that resource gate and continued to checkpoint 230 before a Celadon Mart pedestrian
+blocked the fixed return from an intentional yield step. V23 is retired without official or
+counted runs. V24 treats the unchanged yield coordinate as a retryable pedestrian wait, with
+separate finite approach and return budgets and fail-closed map and battle boundaries.
