@@ -519,3 +519,10 @@ reserves could not finish. V16 is sealed with one failed train root and eleven u
 uses that exposed schedule only for its uncounted rehearsal, assigns fresh counted schedules, and
 teaches matchup-aware resource planning: physical damage for Alakazam and Gyarados, Surf for
 Rhydon and Arcanine, and Blizzard reserved for Venusaur.
+
+V17 passed the exposed v16 schedule and defeated the Champion, but fresh train root 01 lost one
+step while approaching the Saffron Mart clerk and stopped at checkpoint 239 with the player at
+`(2,6)` instead of `(2,5)`. The old three-step shop route observed only its final stance, so it
+could not distinguish a swallowed upward input from a successful approach. V17 is sealed. V18
+reuses that exact schedule only for rehearsal and requires every clerk-approach step to produce an
+observed coordinate change before advancing; all v18 counted schedules are fresh.

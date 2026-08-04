@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v17.json`](../configs/red-battle-collection-v17.json)
+[`red-battle-collection-v18.json`](../configs/red-battle-collection-v18.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1272,3 +1272,12 @@ uncounted rehearsal and preregisters fresh train seeds `27001`–`27005`, valida
 `37001`–`37002`, and sealed test seeds `47001`–`47005`. Its Champion policy reserves Blizzard for
 Venusaur, uses Surf against Rhydon and Arcanine, exploits Alakazam's physical Defense, and excludes
 the live disabled move from every ranking.
+
+V17 qualified on the exact v16 failure schedule, proving the Champion coverage correction. Its
+first immutable training root later reached Saffron at checkpoint 239, where one upward Mart input
+was swallowed and the fixed `up, up, left` approach ended at `(2,6)` while facing left. The clerk
+gate rejected interaction from the wrong coordinate. That outcome is permanent and v17 is retired
+with eleven roots unopened. V18 promotes exposed seed `27001` to rehearsal-only use, assigns fresh
+train seeds `28001`–`28005`, validation seeds `38001`–`38002`, and sealed test seeds
+`48001`–`48005`. Its clerk approach reuses the shared verified-step primitive so every intended
+movement must change the observed coordinate, with bounded retries for a swallowed input.

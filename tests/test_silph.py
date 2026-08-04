@@ -39,6 +39,7 @@ from pokemon_red_completion.silph import (
     _silph_capacity_deposit_items,
     _silph_capacity_ready,
     _silph_rival_move_slot,
+    run_silph_chapter,
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
@@ -225,6 +226,15 @@ def test_silph_verified_movement_retries_a_swallowed_input() -> None:
     )
 
     assert (final.map_id, final.player_x, final.player_y) == (MapId.SAFFRON_MART, 3, 7)
+
+
+def test_silph_clerk_approach_uses_verified_steps() -> None:
+    source = getsource(run_silph_chapter)
+
+    assert (
+        '_move_verified(actions, reader, MART_TO_CLERK, timing, "Saffron clerk approach")'
+        in source
+    )
 
 
 def test_silph_saffron_planner_detours_around_discovered_npc() -> None:

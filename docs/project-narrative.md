@@ -957,6 +957,14 @@ from matchup and remaining-role value rather than a single global priority: phys
 Alakazam and Gyarados, Surf for Rhydon and Arcanine, and preserved Blizzard for Venusaur. The
 exposed v16 schedule is now rehearsal-only; every v17 counted seed is fresh.
 
+V17 proved that correction on the exact failed v16 schedule, then its first fresh training root
+exposed a separate Saffron Mart navigation assumption. One upward input in the three-step clerk
+approach was swallowed; the subsequent left step succeeded, leaving the player one row low. The
+interaction gate correctly refused to address the clerk from `(2,6)`. V17 remains sealed with one
+failed and eleven unopened roots. V18 makes the approach closed-loop: each step must change the
+observed coordinate before the next direction is issued, and the v17 schedule is used only as the
+new uncounted qualification seed.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

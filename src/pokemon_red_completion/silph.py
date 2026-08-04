@@ -439,7 +439,7 @@ def run_silph_chapter(
     )
     _move_verified(actions, reader, MART_DOOR, timing, "Saffron Mart entry")
     _require(reader.read(), MapId.SAFFRON_MART, (3, 7), "Saffron Mart")
-    _move(actions, reader, MART_TO_CLERK, timing)
+    _move_verified(actions, reader, MART_TO_CLERK, timing, "Saffron clerk approach")
     _buy_supplies(actions, reader, emulator, timing)
     if _bag(emulator).get(ItemId.HYPER_POTION, 0) != HYPER_POTION_PURCHASE_QUANTITY:
         raise SilphChapterError("Silph supply purchase failed.")
