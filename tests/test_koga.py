@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import fields, replace
+from inspect import getsource
 
 import pytest
 
@@ -216,6 +217,14 @@ def test_koga_report_records_a_living_party_continuation() -> None:
         battles=(*report.battles[:-1], reserve_fainted),
     )
     assert continued_from_reserve.passed
+
+
+def test_koga_x_accuracy_path_uses_keyword_bounded_move_pulses() -> None:
+    source = getsource(koga_module._battle_koga_x_accuracy)
+
+    assert source.count("frames=120") == 4
+    assert 'MacroActionKind.MOVE, "down", 120' not in source
+    assert 'MacroActionKind.MOVE, "left", 120' not in source
 
 
 def test_koga_routes_and_minimum_trainer_set_are_pinned() -> None:

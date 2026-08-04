@@ -769,12 +769,12 @@ def _battle_koga_x_accuracy(
         raise KogaChapterError(f"Koga X Accuracy reserve mismatch: {before!r}.")
     command = reader.read_battle_menu_state(raw).selected_main_command
     if command == 0:
-        _pulse(actions, MacroActionKind.MOVE, "down", 120)
+        _pulse(actions, MacroActionKind.MOVE, "down", frames=120)
     elif command == 2:
-        _pulse(actions, MacroActionKind.MOVE, "left", 120)
-        _pulse(actions, MacroActionKind.MOVE, "down", 120)
+        _pulse(actions, MacroActionKind.MOVE, "left", frames=120)
+        _pulse(actions, MacroActionKind.MOVE, "down", frames=120)
     elif command == 3:
-        _pulse(actions, MacroActionKind.MOVE, "left", 120)
+        _pulse(actions, MacroActionKind.MOVE, "left", frames=120)
     elif command != 1:
         raise KogaChapterError("Koga X Accuracy exposed an invalid MAIN cursor.")
     _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
