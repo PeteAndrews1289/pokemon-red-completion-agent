@@ -101,6 +101,11 @@ STONE_CLERK_RETURN_RETREAT_POSITION = (1, 2)
 STONE_CLERK_RETURN_YIELD_POSITION = (1, 3)
 STONE_CLERK_RETURN_MAX_X = 11
 STONE_CLERK_WALKER_CLEAR_ATTEMPTS = 12
+MART_2F_GIRL_Y = 0xC244
+MART_2F_GIRL_X = 0xC245
+MART_2F_RETURN_BLOCK_POSITION = (15, 2)
+MART_2F_RETURN_CLEAR_POSITION = (14, 2)
+MART_2F_RETURN_CLEAR_FRAMES = 2_048
 STONE_CLERK_TO_MART_4F_STAIRS = _directions("LLLLUUURRRRRRRRRRR")
 MART_4F_TO_5F = _directions("RRRRU")
 MART_5F_TO_ROOF = _directions("LLLLU")
@@ -857,6 +862,20 @@ def _move(
                     target_x=(before.player_x or 0) + 1,
                 )
                 break
+            if (
+                label == "mart_1f_return"
+                and before.map_id == MapId.CELADON_MART_2F
+                and (before.player_x, before.player_y)
+                == MART_2F_RETURN_BLOCK_POSITION
+                and direction == "left"
+            ):
+                after = _cross_mart_2f_return_customer(
+                    actions,
+                    reader,
+                    emulator,
+                    timing,
+                )
+                break
         else:
             raise SaffronChapterError(
                 f"{label} blocked at step {index}: {direction}; "
@@ -921,6 +940,44 @@ def _yield_to_stone_clerk_walker(
     raise SaffronChapterError(
         "Evolution-stone walker did not clear within its bounded retries."
     )
+
+
+def _cross_mart_2f_return_customer(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SaffronTiming,
+) -> RawGameState:
+    """Observe the moving 2F customer and cross the top aisle when it clears."""
+
+    for _ in range(MART_2F_RETURN_CLEAR_FRAMES):
+        state = reader.read()
+        if (state.player_x, state.player_y) == MART_2F_RETURN_CLEAR_POSITION:
+            return state
+        if (
+            state.map_id != MapId.CELADON_MART_2F
+            or state.battle_state != 0
+            or (state.player_x, state.player_y) != MART_2F_RETURN_BLOCK_POSITION
+        ):
+            raise SaffronChapterError(
+                "Celadon Mart 2F customer recovery left its bounded aisle gate."
+            )
+        customer = (
+            emulator.read_u8(MART_2F_GIRL_X) - 4,
+            emulator.read_u8(MART_2F_GIRL_Y) - 4,
+        )
+        if customer != MART_2F_RETURN_CLEAR_POSITION:
+            actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
+            _wait(actions, timing.movement_frames)
+            crossed = reader.read()
+            if (crossed.player_x, crossed.player_y) == MART_2F_RETURN_CLEAR_POSITION:
+                return crossed
+            if (crossed.player_x, crossed.player_y) != MART_2F_RETURN_BLOCK_POSITION:
+                raise SaffronChapterError(
+                    "Celadon Mart 2F customer recovery observed an invalid displacement."
+                )
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
+    raise SaffronChapterError("Celadon Mart 2F customer did not clear the top aisle.")
 
 
 def _yield_from_stone_clerk_return(

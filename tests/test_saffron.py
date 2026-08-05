@@ -240,6 +240,61 @@ def test_stone_clerk_return_recovers_a_later_corridor_deadlock(
     assert executor.yielded
 
 
+def test_mart_2f_return_observes_customer_before_crossing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(_terminal(), map_id=MapId.CELADON_MART_2F, player_x=15, player_y=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Emulator:
+        frame_count = 0
+        pressed_buttons = frozenset()
+        observations = 0
+
+        def read_u8(self, address: int) -> int:
+            if address == saffron.MART_2F_GIRL_X:
+                self.observations += 1
+                return 18 if self.observations < 4 else 17
+            if address == saffron.MART_2F_GIRL_Y:
+                return 6
+            raise AssertionError(address)
+
+    class Executor:
+        waits = 0
+        left_attempts = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is MacroActionKind.WAIT:
+                self.waits += 1
+            elif action.kind is MacroActionKind.MOVE and action.value == "left":
+                self.left_attempts += 1
+                if emulator.observations >= 4:
+                    reader.state = replace(reader.state, player_x=14)
+            return action
+
+    executor = Executor()
+    emulator = Emulator()
+    monkeypatch.setattr(saffron, "_wait", lambda *args: None)
+
+    saffron._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        emulator,  # type: ignore[arg-type]
+        ("left",),
+        DEFAULT_SAFFRON_TIMING,
+        "mart_1f_return",
+    )
+
+    assert (reader.state.player_x, reader.state.player_y) == (14, 2)
+    assert executor.waits == 3
+    assert executor.left_attempts == 2
+
+
 def test_saffron_report_proves_purchase_handoff_order_and_terminal() -> None:
     raw = _terminal()
     bag = (
