@@ -207,9 +207,9 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   one-shot outcomes, leave all five test roots unopened, disclose visible-state overlap and
   novel-visible performance, select a validation-only confidence threshold, and publish a private
   canonical candidate that remains promotion-ineligible until test and rollout evaluation.
-- [ ] Commit and push the exact source/configuration state, then successfully complete the 69/69
+- [x] Commit and push the exact source/configuration state, then successfully complete the 69/69
   schedule dry run before slot `01`.
-- [ ] Collect every declared train and validation lineage without opening the test partition.
+- [x] Collect every declared train and validation lineage without opening the test partition.
 - [ ] Freeze the selected battle model and thresholds, then evaluate the five test roots once.
 - [ ] Record perturbed teacher corrections and recovery trajectories.
 - Publish schemas, aggregate statistics, and dataset cards without game assets.

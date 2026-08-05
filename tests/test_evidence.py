@@ -71,6 +71,12 @@ BATTLE_IMITATION_RECEIPT = (
     / "evidence"
     / "private-battle-imitation-diagnostic-2026-07-30.json"
 )
+V44_BATTLE_VALIDATION_RECEIPT = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "private-battle-imitation-v44-validation-2026-08-05.json"
+)
 ROUTE1_ACQUISITION_RECEIPT = (
     PROJECT_ROOT
     / "docs"
@@ -1889,6 +1895,77 @@ def test_battle_imitation_receipt_is_diagnostic_aggregate_and_privacy_safe() -> 
     assert limitations["policy_goal_not_fully_observed"] is True
     assert limitations["held_out_root_lineages"] == 0
     assert limitations["learned_policy_rollouts"] == 0
+
+    serialized = json.dumps(receipt)
+    for forbidden in (
+        "/Users/",
+        "/Volumes/",
+        "Downloads",
+        ".gb",
+        ".jsonl",
+        '"weights"',
+        "candidate_vectors",
+        "decision_id",
+        "snapshot_sha256",
+    ):
+        assert forbidden not in serialized
+
+
+def test_v44_battle_validation_receipt_is_held_out_and_privacy_safe() -> None:
+    receipt = json.loads(V44_BATTLE_VALIDATION_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "battle-imitation-preassigned-validation-v1"
+    assert receipt["recorded_on"] == "2026-08-05"
+    assert receipt["status"] == "complete"
+    assert receipt["claim_scope"] == {
+        "battle_imitation_model_trained": True,
+        "held_out_validation": True,
+        "held_out_test_evaluation": False,
+        "test_partition_opened": False,
+        "learned_policy_rollout": False,
+        "learned_full_game_completion": False,
+        "promotion_eligible": False,
+        "transfer_result": False,
+    }
+    assert receipt["collection"]["train_outcomes_complete"] == 5
+    assert receipt["collection"]["validation_outcomes_complete"] == 2
+    assert receipt["collection"]["test_outcomes_opened"] == 0
+    assert receipt["scope"]["train_root_lineages"] == 5
+    assert receipt["scope"]["validation_root_lineages"] == 2
+    assert receipt["scope"]["novel_visible_decisions"] == 1059
+
+    model = receipt["model"]
+    assert model["model_id"] == "pokemon.core.battle.masked-linear-ranker.v1"
+    assert model["feature_schema_id"] == "pokemon.core.battle.move-ranker.v2"
+    assert model["feature_count"] == 102
+    assert re.fullmatch(r"[0-9a-f]{64}", model["sha256"])
+
+    validation = receipt["validation"]
+    assert validation["accuracy"] == 0.8580441640378549
+    assert validation["free_choice_accuracy"] == 0.8423817863397548
+    assert validation["novel_visible_accuracy"] == 0.874409820585458
+    assert validation["legal_choice_rate"] == 1.0
+    assert validation["accuracy"] > validation["majority_accuracy"]
+    assert validation["free_choice_accuracy"] > validation["free_choice_majority_accuracy"]
+    assert validation["cross_entropy"] < validation["uniform_legal_cross_entropy"]
+    assert validation["confidence"]["eligible"] is True
+    assert validation["confidence"]["selection_partition"] == "validation"
+
+    assert receipt["qualification"] == {
+        "freeze_eligible": True,
+        "held_out_validation": True,
+        "test_partition_opened": False,
+        "held_out_test_evaluation": False,
+        "learned_policy_rollout": False,
+        "promotion_eligible": False,
+        "reasons": [],
+    }
+    assert receipt["source"] == {
+        "git_commit": "c0dbbc675211466c83f57366db96cac3ba9a8941",
+        "worktree_dirty": False,
+    }
+    assert receipt["limitations"]["held_out_test_root_lineages_opened"] == 0
+    assert receipt["limitations"]["learned_policy_rollouts"] == 0
 
     serialized = json.dumps(receipt)
     for forbidden in (

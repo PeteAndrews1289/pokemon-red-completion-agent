@@ -149,7 +149,16 @@ validation roots, and an untouched five-root test partition. It trains only on t
 selects against validation, reports free-choice and forced-choice behavior separately, discloses
 visible-state overlap and novel-visible performance, chooses a validation-only confidence
 threshold, and writes a canonical private candidate artifact. A weak candidate remains recorded
-but cannot be frozen. No such candidate exists yet because the collection campaign has not opened.
+but cannot be frozen.
+
+V44 is the first campaign to clear that gate. Five preregistered training lineages and two
+validation lineages each completed the balanced-party route through Champion and Hall of Fame.
+The resulting 102-feature masked linear move ranker reached **85.8% validation accuracy**, **84.2%
+free-choice accuracy**, **87.4% accuracy on novel visible states**, and a **100% legal-choice
+rate**, against a **38.9% majority baseline**. The candidate and its validation-only confidence
+threshold are freeze-eligible. All five test roots remain unopened, and no learned-policy rollout
+or learned full-game completion is claimed yet. See the
+[sanitized v44 validation receipt](evidence/private-battle-imitation-v44-validation-2026-08-05.json).
 
 The current phase makes one further correction. The qualified route completed the game by
 overleveling a single Pokémon, which is a legitimate way to finish Red but a poor thing to imitate:

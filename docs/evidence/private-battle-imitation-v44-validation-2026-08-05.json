@@ -1,0 +1,121 @@
+{
+  "schema": "battle-imitation-preassigned-validation-v1",
+  "recorded_on": "2026-08-05",
+  "evidence_lane": "five_train_two_validation_root_lineages",
+  "status": "complete",
+  "claim_scope": {
+    "battle_imitation_model_trained": true,
+    "held_out_validation": true,
+    "held_out_test_evaluation": false,
+    "test_partition_opened": false,
+    "learned_policy_rollout": false,
+    "learned_full_game_completion": false,
+    "promotion_eligible": false,
+    "transfer_result": false
+  },
+  "collection": {
+    "collection_id": "red-battle-heldout-v44",
+    "registry_sha256": "235008c67f728ee8e31ca1806524a9fb679f8feccb2a6e09f0edfc68e87011d2",
+    "corpus_manifest_roster_sha256": "1cb762675628b86bc5e531c5c195938d9e5bc8ecece3d2ee543d0d6ecbaafb56",
+    "dry_run_qualified": true,
+    "train_outcomes_complete": 5,
+    "validation_outcomes_complete": 2,
+    "test_outcomes_opened": 0,
+    "failed_outcomes": 0,
+    "interrupted_outcomes": 0
+  },
+  "scope": {
+    "train_episodes": 5,
+    "train_root_lineages": 5,
+    "train_decisions": 3251,
+    "train_groups": 1758,
+    "validation_episodes": 2,
+    "validation_root_lineages": 2,
+    "validation_decisions": 1268,
+    "validation_groups": 698,
+    "free_choice_decisions": 1142,
+    "forced_choice_decisions": 126,
+    "unobserved_context_decisions": 0,
+    "visible_snapshot_overlap_count": 144,
+    "novel_visible_decisions": 1059
+  },
+  "model": {
+    "model_id": "pokemon.core.battle.masked-linear-ranker.v1",
+    "feature_schema_id": "pokemon.core.battle.move-ranker.v2",
+    "feature_count": 102,
+    "sha256": "ab164860aa591d4bf1703e52e40069cf0663a683f091785dc462ffef4dbbce16",
+    "serialization": "canonical_json"
+  },
+  "training": {
+    "seed": 1289,
+    "epochs": 300,
+    "learning_rate": 0.03,
+    "l2": 0.0001,
+    "split_unit": "preassigned_root_lineage"
+  },
+  "validation": {
+    "accuracy": 0.8580441640378549,
+    "macro_f1": 0.8371058725953328,
+    "per_slot_recall": [
+      0.6790697674418604,
+      0.8421052631578947,
+      0.8891625615763546,
+      0.9246575342465754
+    ],
+    "cross_entropy": 0.40089219248047114,
+    "uniform_legal_cross_entropy": 1.2573853713351957,
+    "majority_accuracy": 0.388801261829653,
+    "training_accuracy": 0.862811442633036,
+    "legal_choice_rate": 1.0,
+    "free_choice_accuracy": 0.8423817863397548,
+    "free_choice_majority_accuracy": 0.4098073555166375,
+    "forced_choice_accuracy": 1.0,
+    "novel_visible_accuracy": 0.874409820585458,
+    "novel_visible_cross_entropy": 0.3642010634152911,
+    "confidence": {
+      "threshold": 0.3113555390540965,
+      "target_accuracy": 0.8,
+      "accuracy": 0.8423817863397548,
+      "coverage": 1.0,
+      "minimum_coverage": 0.2,
+      "eligible": true,
+      "selection_partition": "validation",
+      "selection_population": "free_choice_decisions"
+    }
+  },
+  "qualification": {
+    "freeze_eligible": true,
+    "held_out_validation": true,
+    "test_partition_opened": false,
+    "held_out_test_evaluation": false,
+    "learned_policy_rollout": false,
+    "promotion_eligible": false,
+    "reasons": []
+  },
+  "source": {
+    "git_commit": "c0dbbc675211466c83f57366db96cac3ba9a8941",
+    "worktree_dirty": false
+  },
+  "private_artifact": {
+    "artifact_id": "red-battle-candidate-0fabd6f2224f46c58ae4dd7de15dea74",
+    "kind": "battle_model",
+    "status": "complete",
+    "schema": "private-json-artifact-summary-v1",
+    "stream_records": {
+      "metrics": 1,
+      "model": 1,
+      "training": 1
+    },
+    "total_records": 3,
+    "total_bytes": 8329,
+    "manifest_sha256": "e80fddbc28c31fc9dd572137f5e58cb7a920f792ae711771f6c2f9a402ca44c9"
+  },
+  "limitations": {
+    "held_out_test_root_lineages": 5,
+    "held_out_test_root_lineages_opened": 0,
+    "learned_policy_rollouts": 0,
+    "learned_full_game_completions": 0,
+    "cross_game_transfer_evaluations": 0,
+    "description": "This proves teacher-choice generalization across two preregistered validation root lineages and a legal learned move ranker. It is not held-out test evidence, battle win-rate evidence, an autonomous learned gameplay rollout, full-game learned completion, or cross-game transfer evidence."
+  }
+}

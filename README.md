@@ -705,6 +705,8 @@ exact `410002` schedule through 312/312 checkpoints, 36/36 objectives, and Hall 
   422 privacy-safe adaptive move labels with exact execution linkage
 - [First battle-imitation diagnostic](docs/evidence/private-battle-imitation-diagnostic-2026-07-30.json) —
   aggregate same-lineage teacher-choice agreement with explicit non-promotion limits
+- [V44 learned battle validation](docs/evidence/private-battle-imitation-v44-validation-2026-08-05.json)
+  — five training lineages, two held-out validation lineages, 85.8% accuracy, and unopened tests
 - [Optional upstream baseline](docs/upstream-baseline.md) — pinned, isolated comparison boundary
 - [Contributing](CONTRIBUTING.md) — safety and evidence requirements
 
