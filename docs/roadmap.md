@@ -591,3 +591,8 @@ the reserves stopped 28 HP short. V37 now buys seven Full Restores and protects 
 damage and status recovery branches. This preserves the faster level-60 training objective while
 teaching cross-objective inventory budgeting; the Champion boundary must prove both items before
 the next clean-power diagnostic can qualify.
+The revised inventory contract passed the exposed schedule at 312/312. The official rehearsal then
+found a fourth-floor Celadon Mart moving-customer deadlock at checkpoint 230, with the player at
+`(5,2)` blocked from advancing through `(6,2)`. The controller now retreats to the west corridor
+gate, yields for the customer, and replays only observed one-tile transitions. Qualification must
+restart from clean power under this new source identity before any training slot opens.

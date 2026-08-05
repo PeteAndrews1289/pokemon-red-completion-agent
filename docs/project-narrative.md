@@ -1033,6 +1033,14 @@ more grinding: Indigo now buys seven Full Restores, Lance protects two of them f
 status branches, and the Champion boundary requires both. One restores the established early-fight
 contingency; the second preserves a safe turn for the final high-critical-hit matchup.
 
+That resource correction passed the exact exposed schedule at **312/312**, but the fixed official
+rehearsal found a separate fourth-floor Department Store deadlock at checkpoint 230. On the return
+from the evolution-stone clerk, a moving customer occupied `(6,2)` while the player occupied
+`(5,2)`; repeatedly pressing toward each other could never resolve the collision. The return now
+retreats to the west end of the bounded corridor, yields for the customer to cross, and advances
+again only through observed one-tile transitions. This extends the earlier moving-NPC lesson from
+retrying an input to deliberately breaking a two-actor deadlock.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

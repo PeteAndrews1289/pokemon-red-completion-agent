@@ -1532,3 +1532,10 @@ V37 therefore increases the Indigo Full Restore purchase from six to seven and m
 cross-chapter protected reserve. Lance may use only inventory above that floor, including for
 status fallback, and the Champion input rejects any handoff below two. The failed diagnostic stays
 uncounted and must restart from clean power-on under the new source identity.
+
+That corrected source completed the exposed schedule at 312/312. The subsequent official fixed
+rehearsal reached checkpoint 230 before the Celadon Mart fourth-floor customer deadlocked the
+stair-return corridor: the player at `(5,2)` and customer at `(6,2)` could not pass while the
+controller continued pressing right. The failed rehearsal is retained and is not a qualification.
+The bounded recovery now retreats to `(1,2)`, yields the corridor, and proves each eastbound tile
+through `(6,2)` before the fixed route resumes. A fresh source-bound rehearsal is required.

@@ -98,6 +98,9 @@ MART_4F_TO_STONE_CLERK = _directions("LLLLLLLLLLLDDDRRRR")
 STONE_CLERK_WALKER_BLOCK_POSITION = (4, 2)
 STONE_CLERK_WALKER_CLEAR_POSITION = (3, 2)
 STONE_CLERK_WALKER_YIELD_POSITION = (5, 2)
+STONE_CLERK_RETURN_BLOCK_POSITION = (5, 2)
+STONE_CLERK_RETURN_RETREAT_POSITION = (1, 2)
+STONE_CLERK_RETURN_CLEAR_POSITION = (6, 2)
 STONE_CLERK_WALKER_CLEAR_ATTEMPTS = 12
 STONE_CLERK_TO_MART_4F_STAIRS = _directions("LLLLUUURRRRRRRRRRR")
 MART_4F_TO_5F = _directions("RRRRU")
@@ -834,6 +837,15 @@ def _move(
             ):
                 after = _yield_to_stone_clerk_walker(actions, reader, timing)
                 break
+            if (
+                label == "fourth-floor stair return"
+                and before.map_id == MapId.CELADON_MART_4F
+                and (before.player_x, before.player_y)
+                == STONE_CLERK_RETURN_BLOCK_POSITION
+                and direction == "right"
+            ):
+                after = _yield_from_stone_clerk_return(actions, reader, timing)
+                break
         else:
             raise SaffronChapterError(
                 f"{label} blocked at step {index}: {direction}; "
@@ -890,6 +902,67 @@ def _yield_to_stone_clerk_walker(
             return state
     raise SaffronChapterError(
         "Evolution-stone walker did not clear within its bounded retries."
+    )
+
+
+def _yield_from_stone_clerk_return(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SaffronTiming,
+) -> RawGameState:
+    """Retreat west so the fourth-floor customer can cross the return corridor."""
+
+    for attempt in range(STONE_CLERK_WALKER_CLEAR_ATTEMPTS):
+        state = reader.read()
+        if (
+            state.map_id != MapId.CELADON_MART_4F
+            or state.battle_state != 0
+            or state.player_y != STONE_CLERK_RETURN_BLOCK_POSITION[1]
+            or not (
+                STONE_CLERK_RETURN_RETREAT_POSITION[0]
+                <= (state.player_x or -1)
+                <= STONE_CLERK_RETURN_BLOCK_POSITION[0]
+            )
+        ):
+            raise SaffronChapterError(
+                "Evolution-stone return recovery left its bounded corridor gate."
+            )
+        while (state.player_x, state.player_y) != STONE_CLERK_RETURN_RETREAT_POSITION:
+            before_x = state.player_x
+            actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
+            _wait(actions, timing.movement_frames)
+            state = reader.read()
+            if state.map_id != MapId.CELADON_MART_4F or state.player_y != 2:
+                raise SaffronChapterError(
+                    "Evolution-stone return recovery left the fourth-floor corridor."
+                )
+            if state.player_x != (before_x or 0) - 1:
+                raise SaffronChapterError(
+                    "Evolution-stone return recovery could not reach its retreat gate."
+                )
+        _wait(actions, timing.movement_frames * (attempt + 1))
+        while (state.player_x, state.player_y) != STONE_CLERK_RETURN_CLEAR_POSITION:
+            before_x = state.player_x
+            actions.execute(MacroAction(MacroActionKind.MOVE, "right"))
+            _wait(actions, timing.movement_frames)
+            advanced = reader.read()
+            if advanced.map_id != MapId.CELADON_MART_4F or advanced.player_y != 2:
+                raise SaffronChapterError(
+                    "Evolution-stone return recovery left the fourth-floor corridor."
+                )
+            if advanced.player_x == (before_x or 0) + 1:
+                state = advanced
+                continue
+            if advanced.player_x != before_x:
+                raise SaffronChapterError(
+                    "Evolution-stone return recovery observed an invalid displacement."
+                )
+            state = advanced
+            break
+        if (state.player_x, state.player_y) == STONE_CLERK_RETURN_CLEAR_POSITION:
+            return state
+    raise SaffronChapterError(
+        "Evolution-stone walker did not clear the stair-return corridor."
     )
 
 
