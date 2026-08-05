@@ -610,6 +610,12 @@ Vermilion to Viridian. The handoff now proves that actual field-move consequence
 bounded, encounter-safe Route 2 approach and replays the exact proven Diglett's Cave path in reverse
 to regain Vermilion before storage. The shortcut is no longer allowed to assume an obsolete healing
 anchor or rediscover a static corridor from the wrong entrance orientation.
+The inverse-path replay then passed every chapter through the Champion at checkpoint 311. With all
+five Blizzard PP still reserved, the six-boost workhorse used Strength against Pidgeot, left it at
+57 HP, and was knocked out before a second attack; five Full Restores could not revive it. The
+matchup policy now spends one X-Accuracy-backed, six-boost Blizzard on that dangerous fast opener.
+Four Ice PP remain—twice the observed two-hit Venusaur requirement—so the change reallocates an
+existing combat resource instead of adding grinding, items, retries, or sacrificial teammates.
 
 ## Evidence and project status
 

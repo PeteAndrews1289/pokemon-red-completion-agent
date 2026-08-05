@@ -557,7 +557,11 @@ def _champion_move_slot(raw: RawGameState) -> int:
         raise ChampionChapterError("Champion reserve has no usable move PP.")
     species = raw.enemy_species_id or 0
     priorities = {
-        0x97: (2, 1, 3, 4),  # Pidgeot: accurate physical damage.
+        # Six X Specials plus X Accuracy make Blizzard a reliable knockout
+        # against the dangerous fast opener. Four Ice PP remain for Venusaur
+        # and contingencies; preserving all five can instead expose a second
+        # Pidgeot reply after accurate Strength leaves it alive.
+        0x97: (3, 2, 1, 4),
         0x95: (2, 1, 4, 3),  # Alakazam: exploit its lower physical Defense.
         0x01: (4, 3, 2, 1),  # Rhydon: four-times-effective Surf.
         0x16: (2, 1, 3, 4),  # Gyarados: preserve the irreplaceable Ice PP.

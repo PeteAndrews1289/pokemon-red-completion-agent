@@ -1602,3 +1602,12 @@ first inverse attempt instead launched a new DFS from the opposite entrance; its
 was not valid for that orientation and stopped safely. Recording the proven path and replaying its
 mathematical inverse removes that false rediscovery problem. Neither the field move nor a hidden
 warp assumption is removed. Both failures are uncounted.
+
+The exact inverse-path replay passed that handoff and all downstream gates through Champion
+checkpoint 311. At the first attack, the boosted workhorse held 90 HP and all five Blizzard PP;
+accurate Strength reduced Pidgeot from 182 to 57, but the reply knocked out the workhorse. The
+remaining developed party reached Alakazam but could not overcome Recover, while five Full Restores
+remained unusable on the fainted lead. The source now ranks boosted, X-Accuracy-backed Blizzard
+first against Pidgeot. Four uses remain after that attack, against an observed two-use requirement
+for Venusaur, so the repair spends existing surplus coverage rather than changing level, inventory,
+healing, retry, or party-survival contracts. The failed diagnostic remains uncounted.

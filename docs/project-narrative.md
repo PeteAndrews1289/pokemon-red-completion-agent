@@ -1102,6 +1102,15 @@ and carries the party through Route 11 to the original Vermilion storage boundar
 apparent routing regression into explicit lessons about actions changing future navigation
 affordances and about reusing verified paths instead of unnecessarily replanning a static corridor.
 
+That inverse replay proved the complete route through checkpoint 311, where a new Champion timing
+showed the cost of over-reserving a capability. The six-boost workhorse still held all five
+Blizzard PP but chose Strength against Pidgeot, dealt 125 of 182 HP, and was knocked out by the
+reply; the remaining five Full Restores could not revive it, and the developed reserves eventually
+lost to Alakazam's Recover. The policy now uses the boosted, X-Accuracy-backed super-effective Ice
+attack on the dangerous opener. It retains four Blizzard PP for a final Venusaur that historically
+requires two, converting excess reservation into immediate risk reduction without increasing
+training, healing inventory, retries, or teammate sacrifice.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

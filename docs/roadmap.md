@@ -632,3 +632,9 @@ Diglett's Cave before the existing Vermilion storage lesson. A first reverse DFS
 its stack orientation belonged to the opposite entrance. The controller now records the successful
 outbound cave path and replays its exact inverse under the same finite encounter/flee/inventory
 proofs. Another clean exposed-seed replay is required before the official rehearsal.
+The exact inverse-path replay passed every prior gate and reached Champion checkpoint 311. The
+workhorse entered its first attack at 90 HP with five Blizzard PP, used Strength, left Pidgeot at
+57 HP, and was knocked out by the reply; five Full Restores remained but could not revive it. The
+Champion policy now spends one boosted, X-Accuracy-backed Blizzard on Pidgeot and retains four for
+the historically two-hit Venusaur requirement. This reallocates existing PP without more grinding,
+inventory, retries, or sacrifice. The exposed diagnostic must restart under the new identity.

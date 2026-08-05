@@ -103,7 +103,8 @@ def test_champion_move_ranking_distinguishes_late_matchups() -> None:
             active_party_pp=active_party_pp,
         )
 
-    assert _champion_move_slot(raw(0x97, pp=(5, 10, 15, 0))) == 2
+    assert _champion_move_slot(raw(0x97, pp=(5, 10, 5, 0))) == 3
+    assert _champion_move_slot(raw(0x97, pp=(5, 10, 0, 0))) == 2
     assert _champion_move_slot(raw(0x95)) == 2
     assert _champion_move_slot(raw(0x01, pp=(5, 10, 15, 3))) == 4
     assert _champion_move_slot(raw(0x14, pp=(5, 15, 15, 3))) == 4
