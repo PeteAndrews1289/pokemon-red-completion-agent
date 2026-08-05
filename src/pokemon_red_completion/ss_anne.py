@@ -79,7 +79,7 @@ SS_ANNE_WAITER_BLOCK_POSITION = (9, 6)
 SS_ANNE_WAITER_YIELD_POSITION = (9, 7)
 SS_ANNE_WAITER_CLEAR_POSITION = (8, 6)
 SS_ANNE_WAITER_CORRIDOR_X_BOUNDS = (2, 9)
-SS_ANNE_WAITER_CLEAR_ATTEMPTS = 10
+SS_ANNE_WAITER_CLEAR_ATTEMPTS = 64
 PRE_SHIP_TRAINING_PATROL_DIRECTIONS = ("right", "left")
 PRE_SHIP_TRAINING_POLICY = TrainingPolicy(
     target_level=30,
@@ -1037,7 +1037,10 @@ def _pre_ship_training_move_slot(raw: RawGameState) -> int:
             and raw.player_disabled_move_slot != slot
         ):
             return slot
-    raise SSAnneChapterError("Pre-ship training has no legal preferred move.")
+    for slot, (move, packed_pp) in enumerate(zip(moves, pp, strict=False), start=1):
+        if move and (packed_pp & 0x3F) and raw.player_disabled_move_slot != slot:
+            return slot
+    raise SSAnneChapterError("Pre-ship training has no legal usable move.")
 
 
 def _pre_ship_training_directive(

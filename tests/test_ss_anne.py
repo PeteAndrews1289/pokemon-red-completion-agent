@@ -48,6 +48,12 @@ def test_pre_ship_training_is_bounded_and_prefers_water_moves() -> None:
         )
         == 1
     )
+    assert (
+        ss_anne._pre_ship_training_move_slot(
+            replace(raw, first_party_pp=(0, 7, 0, 0))
+        )
+        == 2
+    )
 
 
 def test_ss_anne_waiter_yield_gate_is_source_pinned() -> None:
@@ -55,7 +61,7 @@ def test_ss_anne_waiter_yield_gate_is_source_pinned() -> None:
     assert ss_anne.SS_ANNE_WAITER_YIELD_POSITION == (9, 7)
     assert ss_anne.SS_ANNE_WAITER_CLEAR_POSITION == (8, 6)
     assert ss_anne.SS_ANNE_WAITER_CORRIDOR_X_BOUNDS == (2, 9)
-    assert ss_anne.SS_ANNE_WAITER_CLEAR_ATTEMPTS == 10
+    assert ss_anne.SS_ANNE_WAITER_CLEAR_ATTEMPTS == 64
 
 
 def test_ss_anne_waiter_yield_supports_later_corridor_positions(
