@@ -975,6 +975,24 @@ def test_zero_offset_rereads_without_emitting_a_zero_repeat_wait() -> None:
     assert controller.finished_count == 1
 
 
+def test_unscheduled_adaptive_battle_does_not_consume_bound_schedule() -> None:
+    runtime = AdaptiveRivalSimulation()
+    controller = BattleStartScheduleController(_scheduled_offsets(first_frames=7))
+    with bind_battle_start_schedule(controller):
+        final = run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            choose_cerulean_rival_move_slot,
+            expected_map=MapId.CERULEAN_CITY,
+            intent=BattleIntent("help_bill", TEST_BATTLE_PLAN_ID),
+            consume_battle_start_schedule=False,
+        )
+
+    assert final.battle_state == 0
+    assert controller.finished_count == 0
+    assert MacroAction(MacroActionKind.WAIT, repeat=7) not in runtime.actions
+
+
 def test_preregistered_offset_is_not_reapplied_across_runtime_reentry() -> None:
     runtime = AdaptiveRivalSimulation()
     controller = BattleStartScheduleController(_scheduled_offsets(first_frames=7))

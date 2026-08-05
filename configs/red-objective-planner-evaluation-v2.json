@@ -1,8 +1,7 @@
 {
   "schema": "pokemon-semantic-objective-evaluation-preregistration-v1",
-  "evaluation_id": "red-objective-planner-heldout-v1",
-  "status": "retired_after_validation_failure",
-  "outcome_receipt": "../docs/evidence/objective-planner-heldout-v1-outcome-2026-08-05.json",
+  "evaluation_id": "red-objective-planner-heldout-v2",
+  "status": "preregistered",
   "game_id": "pokemon.mainline:red:gb:us:rev0",
   "ontology_id": "pokemon.core.v1",
   "model": {
@@ -20,24 +19,26 @@
     "max_offset_frames": 255,
     "scope": "battle_start_timing_and_resulting_rng"
   },
+  "exposed_repair_seeds": [910002, 910003],
   "validation_runs": [
-    {"run_id": "red-objective-v1-validation-01", "harness_seed": 910001},
-    {"run_id": "red-objective-v1-validation-02", "harness_seed": 910002},
-    {"run_id": "red-objective-v1-validation-03", "harness_seed": 910003},
-    {"run_id": "red-objective-v1-validation-04", "harness_seed": 910004},
-    {"run_id": "red-objective-v1-validation-05", "harness_seed": 910005}
+    {"run_id": "red-objective-v2-validation-01", "harness_seed": 930001},
+    {"run_id": "red-objective-v2-validation-02", "harness_seed": 930002},
+    {"run_id": "red-objective-v2-validation-03", "harness_seed": 930003},
+    {"run_id": "red-objective-v2-validation-04", "harness_seed": 930004},
+    {"run_id": "red-objective-v2-validation-05", "harness_seed": 930005}
   ],
   "sealed_test_runs": [
-    {"run_id": "red-objective-v1-test-01", "harness_seed": 920001},
-    {"run_id": "red-objective-v1-test-02", "harness_seed": 920002},
-    {"run_id": "red-objective-v1-test-03", "harness_seed": 920003},
-    {"run_id": "red-objective-v1-test-04", "harness_seed": 920004},
-    {"run_id": "red-objective-v1-test-05", "harness_seed": 920005}
+    {"run_id": "red-objective-v2-test-01", "harness_seed": 940001},
+    {"run_id": "red-objective-v2-test-02", "harness_seed": 940002},
+    {"run_id": "red-objective-v2-test-03", "harness_seed": 940003},
+    {"run_id": "red-objective-v2-test-04", "harness_seed": 940004},
+    {"run_id": "red-objective-v2-test-05", "harness_seed": 940005}
   ],
   "acceptance": {
     "validation_runs_required": 5,
     "checkpoints_per_run": 312,
     "objectives_per_run": 36,
+    "scheduled_battles_per_run": 71,
     "teacher_objective_fallbacks_per_run": 0,
     "minimum_objective_confidence": 0.5,
     "champion_defeated": true,

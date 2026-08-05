@@ -70,6 +70,7 @@ def test_mandatory_fisher_income_covers_observed_capture_reserve_floor() -> None
 
 def test_battle_bag_selection_can_move_backward_after_a_ball_throw(monkeypatch) -> None:
     assert fuchsia_module.SNORLAX_GREAT_BALL_RESERVE == 32
+    assert fuchsia_module.SNORLAX_MIN_GREAT_BALL_RESERVE == 29
     assert fuchsia_module.SNORLAX_TM34_SALE_PROCEEDS == 1_000
     assert fuchsia_module.SNORLAX_CAPTURE_POLICY.max_throws == 33
 
@@ -153,6 +154,7 @@ def _report() -> FuchsiaChapterReport:
         wild_flees=4,
         initial_bag=initial_bag,
         final_bag=final_bag,
+        great_balls_purchased=32,
         funding_potions_sold=0,
         funding_antidotes_sold=0,
         party_hp=(114, 52, 37, 135),
@@ -197,12 +199,23 @@ def test_fuchsia_report_requires_every_terminal_gate() -> None:
         replace(report, snorlax_fight_before=True),
         replace(report, snorlax_fight_after=True),
         replace(report, snorlax_object_tile_crossed=False),
+        replace(report, great_balls_purchased=28),
         replace(report, final_bag=report.final_bag[:-1]),
         replace(report, party_hp=(113, 52, 37, 135)),
         replace(report, party_status=(0, 0, 0, 0x08)),
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)
+
+
+def test_fuchsia_report_accepts_bounded_live_capture_budget_and_early_bide_sale() -> None:
+    report = _report()
+    without_bide = tuple(
+        item for item in report.initial_bag if item[0] != int(ItemId.TM34_BIDE)
+    )
+
+    assert replace(report, great_balls_purchased=29).passed
+    assert replace(report, initial_bag=without_bide).passed
 
 
 def test_fuchsia_report_requires_bounded_battle_receipts() -> None:
@@ -273,6 +286,7 @@ def test_fuchsia_public_report_discloses_assistance_and_optionals() -> None:
         "captured": True,
         "throws_used": 1,
         "recovery_items_used": 1,
+        "great_balls_purchased": 32,
         "funding_potions_sold": 0,
         "funding_antidotes_sold": 0,
         "party_before": [0x1C, 0x40, 0x3B],

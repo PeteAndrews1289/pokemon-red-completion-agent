@@ -691,13 +691,12 @@ def run_cascade_chapter(
             progress,
             emulator,
         )
-        _run_fixed_slot_battle(
+        _run_route_25_usable_move_battle(
             reader,
             chapter_executor,
-            ROUTE_25_NON_HIKER_MOVE_SLOT if trainer_index != 8 else 4,
-            MapId.ROUTE_25,
-            timing,
-            f"Route 25 trainer {trainer_index}",
+            preferred_slot=(ROUTE_25_NON_HIKER_MOVE_SLOT if trainer_index != 8 else 4),
+            trainer_index=trainer_index,
+            timing=timing,
         )
         _use_route_25_antidote_if_needed(
             reader,
@@ -2378,6 +2377,62 @@ def _run_fixed_slot_battle(
             label,
         )
     except CeruleanChapterError as error:
+        raise CascadeChapterError(str(error)) from error
+
+
+def _choose_preferred_usable_move_slot(
+    state: RawGameState,
+    *,
+    preferred_slot: int,
+) -> int:
+    """Keep a bounded route battle moving when its preferred move runs out."""
+
+    moves = state.battler_moves or state.first_party_moves
+    pp = state.battler_pp or state.first_party_pp
+    if moves is None or pp is None or len(moves) < 4 or len(pp) < 4:
+        raise CascadeChapterError("Route 25 battle lacks complete move and PP evidence.")
+    preferences = tuple(dict.fromkeys((preferred_slot, 4, 3, 1, 2)))
+    for slot in preferences:
+        index = slot - 1
+        if moves[index] and (pp[index] & 0x3F) > 0:
+            return slot
+    raise CascadeChapterError("Route 25 battle has no usable move PP.")
+
+
+def _run_route_25_usable_move_battle(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    *,
+    preferred_slot: int,
+    trainer_index: int,
+    timing: CascadeTiming,
+) -> RawGameState:
+    """Use semantic turn feedback without consuming the 71-battle timing roster."""
+
+    label = f"Route 25 trainer {trainer_index}"
+    intent = BattleIntent(
+        objective_id="help_bill",
+        battle_plan_id=f"unscheduled-route25-trainer-{trainer_index}",
+    )
+
+    def policy(state: RawGameState) -> int:
+        return _choose_preferred_usable_move_slot(
+            state,
+            preferred_slot=preferred_slot,
+        )
+
+    try:
+        return run_adaptive_trainer_battle(
+            reader,
+            executor,
+            policy,
+            expected_map=MapId.ROUTE_25,
+            intent=intent,
+            timing=timing.battle_runtime,
+            label=label,
+            consume_battle_start_schedule=False,
+        )
+    except BattleRuntimeError as error:
         raise CascadeChapterError(str(error)) from error
 
 

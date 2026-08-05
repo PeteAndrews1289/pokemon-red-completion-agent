@@ -1,0 +1,77 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-05",
+  "evaluation_id": "red-objective-planner-heldout-v1",
+  "status": "failed",
+  "source_commit": "39c4bbb48011c92d409d8ff0493ced5658eab734",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v1-validation-01",
+      "harness_seed": 910001,
+      "status": "complete",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "teacher_objective_fallbacks": 0,
+      "hall_of_fame": true,
+      "actions": 99045,
+      "frames": 9906409,
+      "schedule_sha256": "7ffc6ee026a31a435523c9ebfc0b7bf19b7fcd52903f474bf8ee7ecc1595d318",
+      "full_report_sha256": "13dd9c175dbaf69de0439761791905d06ce073dad4e96f5db9ec3977641a87b5"
+    },
+    {
+      "run_id": "red-objective-v1-validation-02",
+      "harness_seed": 910002,
+      "status": "failed",
+      "qualified_checkpoints": 49,
+      "failure": "Route 25 trainer 5 failed its bounded battle-completion gate.",
+      "diagnosis": "The preferred Mega Punch slot reached zero PP after an accuracy reduction while Water Gun retained 24 PP; the fixed controller kept reopening the exhausted slot.",
+      "failure_log_sha256": "75797475410dd1dea27475dbf402063a53c12bea53ad9a561e53abb3fdbbdb5e"
+    },
+    {
+      "run_id": "red-objective-v1-validation-03",
+      "harness_seed": 910003,
+      "status": "failed",
+      "qualified_checkpoints": 174,
+      "failure": "The route was 623 currency units short of its fixed 32-Great-Ball Snorlax reserve.",
+      "diagnosis": "Earlier timing-dependent resource use had already consumed the Bide sale token, but the capture specialist required the maximum reserve instead of the largest safe live budget.",
+      "failure_log_sha256": "23df0c5ea07542c58bafbbe3a3e1f16ee481cbeff469b4b3aab55cce71d18965"
+    }
+  ],
+  "repair_diagnostics": [
+    {
+      "harness_seed": 910002,
+      "status": "complete",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "teacher_objective_fallbacks": 0,
+      "hall_of_fame": true,
+      "actions": 120202,
+      "frames": 10702528,
+      "great_balls_purchased": 29,
+      "snorlax_throws": 6,
+      "full_report_sha256": "e97a8a8ae11c4018f75a359b11316cd6f06ab1fcbb694c29062b5d71a22acae6"
+    },
+    {
+      "harness_seed": 910003,
+      "status": "complete",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "teacher_objective_fallbacks": 0,
+      "hall_of_fame": true,
+      "actions": 99382,
+      "frames": 10267919,
+      "great_balls_purchased": 32,
+      "snorlax_throws": 2,
+      "full_report_sha256": "f743854e4aef59c3f72425b9d749bb4ce091abbfee0ee2d34379f714875e3d31"
+    }
+  ],
+  "interpretation": {
+    "planner_result": "Every objective decision observed before either specialist failure was model-authorized; the failures do not establish an objective-selection error.",
+    "evaluation_result": "The preregistered v1 series failed its five-run completion contract and is retired. Exposed-seed repair diagnostics cannot replace held-out results.",
+    "next_gate": "Run the unchanged repaired source and model on the fresh v2 validation schedules, leaving v2 test schedules sealed."
+  }
+}

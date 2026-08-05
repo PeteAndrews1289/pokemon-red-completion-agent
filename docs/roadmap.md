@@ -248,6 +248,10 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   choices with zero objective fallbacks through Hall of Fame.
 - [x] Preregister five disjoint objective-planner validation schedules and five sealed test
   schedules with a frozen model identity and fail-closed completion criteria.
+- [x] Retire held-out planner evaluation v1 honestly after one complete run and two fixed-specialist
+  failures; reproduce and repair both exposed schedules without counting them as held-out evidence.
+- [x] Preregister fresh v2 validation and sealed-test schedules after the exposed Route 25 PP,
+  Snorlax live-budget, and Celadon collision-feedback repairs.
 - [ ] Collect disjoint planner train/validation roots and evaluate objective selection under
   perturbed timing, encounter, damage, status, and position states.
 - [x] Catch Route 12 Snorlax with bounded recovery and capture decisions, raise the live balance

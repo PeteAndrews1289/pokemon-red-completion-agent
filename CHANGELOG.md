@@ -16,6 +16,9 @@
 - Added auditable seeded objective-policy evaluation: a complete 71-battle perturbation schedule
   may run without a private trajectory only when a live objective model is present, and its public
   result records the consumed schedule digest and battle counts.
+- Replaced Route 25's fixed move latch with a semantic PP-aware turn loop, made the Snorlax capture
+  reserve choose the largest affordable 29–32 Great Ball budget, and changed the Celadon fourth-floor
+  walker recovery to test the actual collision boundary instead of guessing from an NPC coordinate.
 - Added a versioned, game-neutral trajectory schema for semantic observations, decisions,
   executions, and sparse events.
 - Added a thin Pokémon Red observation adapter that keeps revision-specific RAM details below the

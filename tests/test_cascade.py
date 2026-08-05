@@ -60,6 +60,7 @@ from pokemon_red_completion.cascade import (
     CascadeTiming,
     _cerulean_return_blocked_detour,
     _cerulean_return_direction,
+    _choose_preferred_usable_move_slot,
     _cross_route_24_npc,
     _cross_route_24_recovery_npc,
     _move_verified,
@@ -263,6 +264,24 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
     )
     assert _cerulean_return_direction((11, 3)) == "left"
     assert _cerulean_return_direction((3, 4)) == "up"
+
+
+def test_route_25_policy_falls_back_when_preferred_pp_is_exhausted() -> None:
+    raw = replace(
+        _raw(),
+        battle_state=2,
+        first_party_moves=(0x21, 0x27, 0x05, 0x37),
+        first_party_pp=(35, 30, 0, 24),
+    )
+
+    assert _choose_preferred_usable_move_slot(raw, preferred_slot=3) == 4
+    assert (
+        _choose_preferred_usable_move_slot(
+            replace(raw, first_party_pp=(35, 30, 1, 24)),
+            preferred_slot=3,
+        )
+        == 3
+    )
     assert _cerulean_return_blocked_detour((5, 3), "left") == "down"
     assert BILL_PC_TO_HUMAN_DIRECTIONS == (
         "right",

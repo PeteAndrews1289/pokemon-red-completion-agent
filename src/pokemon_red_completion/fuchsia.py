@@ -58,6 +58,7 @@ SNORLAX = 0x84
 SNORLAX_BUBBLEBEAM_PP_BOUND = (1, 20)
 SNORLAX_RUNTIME_PULSE_BOUND = 720
 SNORLAX_GREAT_BALL_RESERVE = 32
+SNORLAX_MIN_GREAT_BALL_RESERVE = 29
 SNORLAX_SUPER_POTION_RESERVE = 2
 SNORLAX_TM34_SALE_PROCEEDS = 1_000
 SNORLAX_POTION_SALE_PROCEEDS = 150
@@ -267,6 +268,7 @@ class FuchsiaChapterReport:
     wild_flees: int
     initial_bag: tuple[tuple[int, int], ...]
     final_bag: tuple[tuple[int, int], ...]
+    great_balls_purchased: int
     funding_potions_sold: int
     funding_antidotes_sold: int
     party_hp: tuple[int, ...]
@@ -305,8 +307,11 @@ class FuchsiaChapterReport:
                 SNORLAX_SUPER_POTION_RESERVE,
                 _bag_quantity(self.initial_bag, ItemId.SUPER_POTION),
             )
-            and _bag_quantity(self.initial_bag, ItemId.TM34_BIDE) == 1
+            and _bag_quantity(self.initial_bag, ItemId.TM34_BIDE) in {0, 1}
             and _bag_quantity(self.final_bag, ItemId.TM34_BIDE) == 0
+            and SNORLAX_MIN_GREAT_BALL_RESERVE
+            <= self.great_balls_purchased
+            <= SNORLAX_GREAT_BALL_RESERVE
             and _bag_quantity(self.initial_bag, ItemId.POTION)
             - _bag_quantity(self.final_bag, ItemId.POTION)
             == self.funding_potions_sold
@@ -315,7 +320,7 @@ class FuchsiaChapterReport:
             == self.funding_antidotes_sold
             and _bag_quantity(self.initial_bag, ItemId.POKE_BALL)
             - _bag_quantity(self.final_bag, ItemId.POKE_BALL)
-            == max(0, self.battles[1].balls_used - SNORLAX_GREAT_BALL_RESERVE)
+            == max(0, self.battles[1].balls_used - self.great_balls_purchased)
             and _without_bag_items(
                 self.initial_bag,
                 (
@@ -378,6 +383,7 @@ class FuchsiaChapterReport:
                 "captured": self.battles[1].captured,
                 "throws_used": self.battles[1].balls_used,
                 "recovery_items_used": self.battles[1].recovery_items_used,
+                "great_balls_purchased": self.great_balls_purchased,
                 "funding_potions_sold": self.funding_potions_sold,
                 "funding_antidotes_sold": self.funding_antidotes_sold,
                 "party_before": list(self.battles[1].party_before),
@@ -464,7 +470,11 @@ def run_fuchsia_chapter(
     # route-required income.
     _move(actions, reader, emulator, run, FISHER_TO_LAVENDER, timing, "Fisher income return")
     _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 3), "Fisher income return")
-    funding_potions_sold, funding_antidotes_sold = _purchase_snorlax_capture_reserve(
+    (
+        great_balls_purchased,
+        funding_potions_sold,
+        funding_antidotes_sold,
+    ) = _purchase_snorlax_capture_reserve(
         actions,
         reader,
         emulator,
@@ -605,6 +615,7 @@ def run_fuchsia_chapter(
         len(run.wilds),
         initial_bag,
         _bag_tuple(emulator),
+        great_balls_purchased,
         funding_potions_sold,
         funding_antidotes_sold,
         _party_hp(emulator),
@@ -781,7 +792,7 @@ def _purchase_snorlax_capture_reserve(
     emulator: EmulatorState,
     run: _RunState,
     timing: FuchsiaTiming,
-) -> tuple[int, int]:
+) -> tuple[int, int, int]:
     """Buy a bounded reliable-ball reserve before the static encounter."""
 
     before_money = _money(emulator)
@@ -823,9 +834,25 @@ def _purchase_snorlax_capture_reserve(
             expected_proceeds=SNORLAX_TM34_SALE_PROCEEDS,
         )
         tm34_sale_proceeds = SNORLAX_TM34_SALE_PROCEEDS
+    available_funding = (
+        before_money
+        + tm34_sale_proceeds
+        + _bag(emulator).get(ItemId.POTION, 0) * SNORLAX_POTION_SALE_PROCEEDS
+        + _bag(emulator).get(ItemId.ANTIDOTE, 0) * SNORLAX_ANTIDOTE_SALE_PROCEEDS
+    )
+    fixed_recovery_cost = potion_purchase_quantity * SUPER_POTION_PRICE
+    great_ball_purchase_quantity = min(
+        SNORLAX_GREAT_BALL_RESERVE,
+        max(0, (available_funding - fixed_recovery_cost) // GREAT_BALL_PRICE),
+    )
+    if great_ball_purchase_quantity < SNORLAX_MIN_GREAT_BALL_RESERVE:
+        raise FuchsiaChapterError(
+            "Available resources cannot fund the minimum Snorlax capture reserve: "
+            f"affordable={great_ball_purchase_quantity}, "
+            f"minimum={SNORLAX_MIN_GREAT_BALL_RESERVE}."
+        )
     expected_cost = (
-        SNORLAX_GREAT_BALL_RESERVE * GREAT_BALL_PRICE
-        + potion_purchase_quantity * SUPER_POTION_PRICE
+        great_ball_purchase_quantity * GREAT_BALL_PRICE + fixed_recovery_cost
     )
     potion_sale_quantity, antidote_sale_quantity = _snorlax_funding_sale_quantities(
         money=before_money + tm34_sale_proceeds,
@@ -867,8 +894,8 @@ def _purchase_snorlax_capture_reserve(
             DEFAULT_LAVENDER_TIMING,
             absolute_index=0,
             item=ItemId.GREAT_BALL,
-            quantity=SNORLAX_GREAT_BALL_RESERVE,
-            target_bag_quantity=SNORLAX_GREAT_BALL_RESERVE,
+            quantity=great_ball_purchase_quantity,
+            target_bag_quantity=great_ball_purchase_quantity,
         )
         # Reopen BUY from a verified field boundary so the completed 24-ball
         # quantity dialogue cannot be mistaken for the next product list.
@@ -889,7 +916,7 @@ def _purchase_snorlax_capture_reserve(
     except LavenderChapterError as error:
         raise FuchsiaChapterError(f"Could not buy the Snorlax capture reserve: {error}") from error
     if (
-        _bag(emulator).get(ItemId.GREAT_BALL, 0) != SNORLAX_GREAT_BALL_RESERVE
+        _bag(emulator).get(ItemId.GREAT_BALL, 0) != great_ball_purchase_quantity
         or _bag(emulator).get(ItemId.SUPER_POTION, 0) != before_potions + potion_purchase_quantity
         or before_money + tm34_sale_proceeds + funding_sale_proceeds - _money(emulator)
         != expected_cost
@@ -918,7 +945,7 @@ def _purchase_snorlax_capture_reserve(
     _move(actions, reader, emulator, run, ("up",) * 4, timing, "Lavender nurse return")
     _heal_at_nurse(actions, reader, emulator, timing)
     _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 3), "capture-ready boundary")
-    return potion_sale_quantity, antidote_sale_quantity
+    return great_ball_purchase_quantity, potion_sale_quantity, antidote_sale_quantity
 
 
 def _snorlax_funding_sale_quantities(

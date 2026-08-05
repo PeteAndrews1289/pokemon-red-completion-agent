@@ -361,6 +361,7 @@ def run_adaptive_trainer_battle(
     label: str = "trainer battle",
     unknown_cancel_interval: int = 3,
     transient_zero_pp_main_is_dialogue: bool = False,
+    consume_battle_start_schedule: bool = True,
 ) -> RawGameState:
     """Finish one already-active trainer battle with semantic feedback.
 
@@ -388,6 +389,8 @@ def run_adaptive_trainer_battle(
         raise ValueError("unknown_cancel_interval must be a positive integer")
     if not isinstance(transient_zero_pp_main_is_dialogue, bool):
         raise TypeError("transient_zero_pp_main_is_dialogue must be a bool")
+    if not isinstance(consume_battle_start_schedule, bool):
+        raise TypeError("consume_battle_start_schedule must be a bool")
     if required_move_id is not None and (
         not isinstance(required_move_id, int)
         or isinstance(required_move_id, bool)
@@ -408,7 +411,9 @@ def run_adaptive_trainer_battle(
         kind = "trainer" if expected_battle_state == _TRAINER_BATTLE_STATE else "wild"
         raise BattleRuntimeError(f"{label} must start in an active {kind} battle.")
     battle_start_schedule = (
-        bound_battle_start_schedule() if expected_battle_state == _TRAINER_BATTLE_STATE else None
+        bound_battle_start_schedule()
+        if expected_battle_state == _TRAINER_BATTLE_STATE and consume_battle_start_schedule
+        else None
     )
     if battle_start_schedule is not None:
         battle_start_schedule.start_or_resume(intent)

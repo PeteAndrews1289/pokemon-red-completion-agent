@@ -1032,32 +1032,11 @@ def _yield_from_stone_clerk_return(
             raise SaffronChapterError(
                 "Evolution-stone return recovery could not enter its yield alcove."
             )
+        # Test the actual collision boundary instead of inferring availability
+        # from one NPC coordinate.  A held-out timing lineage left the walker
+        # on another row, where the old row-specific predicate waited forever
+        # even though the entrance itself could be retried safely.
         for _ in range(STONE_CLERK_RETURN_CLEAR_FRAMES):
-            walker = (
-                emulator.read_u8(STONE_CLERK_WALKER_X) - 4,
-                emulator.read_u8(STONE_CLERK_WALKER_Y) - 4,
-            )
-            if (
-                walker[1] == STONE_CLERK_RETURN_BLOCK_POSITION[1]
-                and walker[0] > STONE_CLERK_RETURN_RETREAT_POSITION[0]
-            ):
-                actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
-                _wait(actions, timing.movement_frames)
-                state = reader.read()
-                if (state.player_x, state.player_y) == STONE_CLERK_RETURN_RETREAT_POSITION:
-                    break
-                if (state.player_x, state.player_y) != STONE_CLERK_RETURN_YIELD_POSITION:
-                    raise SaffronChapterError(
-                        "Evolution-stone return recovery left its yield alcove."
-                    )
-            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
-        else:
-            raise SaffronChapterError(
-                "Evolution-stone return recovery could not observe a clear alcove entrance."
-            )
-        for _ in range(STONE_CLERK_WALKER_CLEAR_ATTEMPTS):
-            if (state.player_x, state.player_y) == STONE_CLERK_RETURN_RETREAT_POSITION:
-                break
             actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
             _wait(actions, timing.movement_frames)
             state = reader.read()
@@ -1067,6 +1046,7 @@ def _yield_from_stone_clerk_return(
                 raise SaffronChapterError(
                     "Evolution-stone return recovery left its yield alcove."
                 )
+            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
         else:
             raise SaffronChapterError(
                 "Evolution-stone return recovery could not reenter the corridor."
