@@ -317,7 +317,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v42-01-train
+  --collection-run red-battle-v43-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
@@ -675,10 +675,12 @@ door transitions. Each exact failing schedule subsequently completed **312/312 c
 **36/36 objectives**, all **69** scheduled battles, and Hall of Fame. V41 then passed its official
 rehearsal and completed three counted training episodes; its immutable fourth slot exposed a
 33-throw Snorlax schedule that exhausted the 24-Great-Ball plus one-Poké-Ball reserve. V41 is
-preserved and retired. The v42 teacher funds all 32 Great Balls needed to cover the already-declared
+preserved and retired. The v42 teacher funded all 32 Great Balls needed to cover the already-declared
 33-throw ceiling by selling only the exact obsolete Potion/Antidote shortfall, records those sales
-as evidence, and has completed the exact formerly failing seed through Hall of Fame. V42 now awaits
-its source-bound official rehearsal before opening fresh counted slots.
+as evidence, and completed two counted training episodes before train seed `400003` exposed a
+fixed-cadence collision with the Celadon Mart 2F shopper. V42 is preserved and retired. The v43
+teacher observes that shopper frame-by-frame and permits four bounded Hyper Potions against the
+Silph rival; the exact `400003` schedule has completed 312/312 checkpoints and Hall of Fame.
 
 ## Evidence and project status
 

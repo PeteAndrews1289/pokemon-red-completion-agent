@@ -700,7 +700,11 @@ fresh train seed `400001`.
 
 V41 passed the official rehearsal and its first three train slots, but train slot four exhausted
 the bounded Snorlax ball inventory. The failed one-attempt outcome is retained in the private
-ledger; v41 is retired rather than retried. The v42 source aligns purchased inventory with the
-existing 33-throw policy, proves the exact obsolete Potion/Antidote funding sales, and has completed
-the exposed `400004` schedule through Hall of Fame. The immediate gate is v42's committed official
-rehearsal, followed by five fresh train and two fresh validation episodes before the first fit.
+ledger; v41 is retired rather than retried. The v42 source aligned purchased inventory with the
+existing 33-throw policy and completed two train slots before seed `400003` exposed a fixed-cadence
+Celadon Mart 2F shopper collision. That immutable outcome is retained and v42 is retired. V43
+observes the shopper's live coordinates before crossing and expands the Silph rival's bounded
+recovery budget from two to four Hyper Potions. The exact `400003` schedule subsequently completed
+312/312 checkpoints, 36/36 objectives, and Hall of Fame. The immediate gate is v43's committed
+official rehearsal, followed by five fresh train and two fresh validation episodes before the
+first fit.
