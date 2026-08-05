@@ -721,11 +721,7 @@ def run_qualified_play(
     """Run every currently qualified objective in one clean, no-save session."""
     if (trajectory_sink is None) != (trajectory_episode_id is None):
         raise ValueError("trajectory_sink and trajectory_episode_id must be provided together")
-    if (
-        battle_start_offsets is not None
-        and trajectory_sink is None
-        and battle_control_sink is None
-    ):
+    if battle_start_offsets is not None and trajectory_sink is None and battle_control_sink is None:
         raise ValueError(
             "battle_start_offsets require private trajectory or battle-control recording"
         )
@@ -742,9 +738,7 @@ def run_qualified_play(
     if execute_battle_control_model and battle_control_model is None:
         raise ValueError("battle control execution requires a control model")
     if not 0.0 <= battle_control_confidence_threshold <= 1.0:
-        raise ValueError(
-            "battle_control_confidence_threshold must be between zero and one"
-        )
+        raise ValueError("battle_control_confidence_threshold must be between zero and one")
     battle_start_schedule = (
         BattleStartScheduleController(battle_start_offsets)
         if battle_start_offsets is not None
@@ -1206,6 +1200,7 @@ def run_qualified_play(
                 reader,
                 executor,
                 progress=_champion_progress_bridge(progress),
+                require_teacher_strategy_evidence=(not execute_battle_control_model),
             )
         except ChampionChapterError as error:
             raise QualifiedPlayError(str(error)) from error

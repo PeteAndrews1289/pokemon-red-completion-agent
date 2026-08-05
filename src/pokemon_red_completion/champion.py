@@ -135,19 +135,33 @@ class ChampionChapterReport:
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    require_teacher_strategy_evidence: bool
 
     @property
-    def passed(self) -> bool:
+    def completion_evidence_passed(self) -> bool:
+        """Verify the game objective independently of one prescribed strategy."""
         return (
             len(self.records) == CHAMPION_CHECKPOINT_COUNT
-            and self.party == CHAMPION_PARTY
-            and _turns_valid(self.turns)
-            and self.x_accuracy_used == 1
-            and self.x_specials_used == 6
             and _event(self.final_raw, EventFlag.BEAT_CHAMPION_RIVAL)
             and self.final_raw.map_id == MapId.HALL_OF_FAME
             and party_core_intact(self.final_raw.party_species_ids)
             and self.controller_released
+        )
+
+    @property
+    def teacher_strategy_evidence_passed(self) -> bool:
+        """Verify the deterministic teacher's exact Champion demonstration."""
+        return (
+            self.party == CHAMPION_PARTY
+            and _turns_valid(self.turns)
+            and self.x_accuracy_used == 1
+            and self.x_specials_used == 6
+        )
+
+    @property
+    def passed(self) -> bool:
+        return self.completion_evidence_passed and (
+            not self.require_teacher_strategy_evidence or self.teacher_strategy_evidence_passed
         )
 
     def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
@@ -157,6 +171,11 @@ class ChampionChapterReport:
         return {
             "status": "ok" if self.passed else "failed",
             "objective": "enter_hall_of_fame",
+            "verification": {
+                "completion_evidence_passed": self.completion_evidence_passed,
+                "teacher_strategy_required": self.require_teacher_strategy_evidence,
+                "teacher_strategy_evidence_passed": (self.teacher_strategy_evidence_passed),
+            },
             "party": [list(item) for item in self.party],
             "turns": [
                 {
@@ -203,6 +222,7 @@ def run_champion_chapter(
     executor: ChapterExecutor,
     *,
     progress: ProgressSink | None = None,
+    require_teacher_strategy_evidence: bool = True,
 ) -> ChampionChapterReport:
     start_frames = emulator.frame_count
     actions = _CountingExecutor(executor)
@@ -443,6 +463,7 @@ def run_champion_chapter(
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,
         controller_released=not emulator.pressed_buttons,
+        require_teacher_strategy_evidence=require_teacher_strategy_evidence,
     )
     if not report.passed:
         raise ChampionChapterError(f"Champion terminal evidence failed: {report!r}.")
@@ -556,10 +577,7 @@ def _champion_move_slot(raw: RawGameState) -> int:
 
 
 def _champion_move_disabled(raw: RawGameState, slot: int) -> bool:
-    return (
-        raw.player_disabled_move_slot == slot
-        and (raw.player_disable_turns or 0) > 0
-    )
+    return raw.player_disabled_move_slot == slot and (raw.player_disable_turns or 0) > 0
 
 
 def _champion_forced_switch_target(

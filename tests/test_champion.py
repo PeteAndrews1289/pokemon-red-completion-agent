@@ -10,6 +10,8 @@ from pokemon_red_completion.champion import (
     CHAMPION_RHYDON_SAFE_HP,
     CHAMPION_RNG_DELAY_FRAMES,
     CHAMPION_SAFE_HP,
+    ChampionChapterReport,
+    ChampionCheckpoint,
     ChampionTurn,
     _champion_forced_switch_target,
     _champion_move_slot,
@@ -20,6 +22,13 @@ from pokemon_red_completion.champion import (
     _turns_valid,
 )
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGameState
+
+
+def _events(*flags: EventFlag) -> bytes:
+    result = bytearray((max(int(flag) for flag in flags) // 8) + 1)
+    for flag in flags:
+        result[int(flag) // 8] |= 1 << (int(flag) % 8)
+    return bytes(result)
 
 
 def test_champion_source_contract_is_exact() -> None:
@@ -135,16 +144,10 @@ def test_champion_move_ranking_distinguishes_late_matchups() -> None:
     )
     assert _champion_recovery_threshold(raw(0x01)) == CHAMPION_RHYDON_SAFE_HP
     assert _champion_recovery_threshold(raw(0x14)) == CHAMPION_SAFE_HP
-    assert (
-        _champion_recovery_threshold(raw(0x16, enemy_hp=31))
-        == CHAMPION_GYARADOS_FINISH_SAFE_HP
-    )
+    assert _champion_recovery_threshold(raw(0x16, enemy_hp=31)) == CHAMPION_GYARADOS_FINISH_SAFE_HP
     assert _champion_recovery_threshold(raw(0x16, enemy_hp=196)) == 171
     assert _champion_recovery_threshold(raw(0x9A)) == 171
-    assert (
-        _champion_recovery_threshold(raw(0x14, enemy_hp=24))
-        == CHAMPION_ARCANINE_FINISH_SAFE_HP
-    )
+    assert _champion_recovery_threshold(raw(0x14, enemy_hp=24)) == CHAMPION_ARCANINE_FINISH_SAFE_HP
 
 
 def test_champion_only_requests_available_recovery() -> None:
@@ -165,6 +168,42 @@ def test_champion_receipt_accepts_live_low_hp_decision() -> None:
         for position, (species, level) in enumerate(CHAMPION_PARTY)
     )
     assert _turns_valid(turns)
-    assert not _turns_valid(
-        (ChampionTurn(0x97, 61, 1, 0, 0, (1, 1, 1, 1), 1, 0),)
+    assert not _turns_valid((ChampionTurn(0x97, 61, 1, 0, 0, (1, 1, 1, 1), 1, 0),))
+
+
+def test_champion_completion_is_distinct_from_teacher_strategy_evidence() -> None:
+    final = RawGameState(
+        game_started=True,
+        map_id=MapId.HALL_OF_FAME,
+        player_x=4,
+        player_y=3,
+        party_count=6,
+        battle_state=0,
+        party_species_ids=(0x1C, 0x40, 0x76, 0x84, 0x68, 0x2B),
+        event_flags=_events(EventFlag.BEAT_CHAMPION_RIVAL),
     )
+    report = ChampionChapterReport(
+        records=tuple(
+            ChampionCheckpoint(str(index), str(index), final)
+            for index in range(CHAMPION_CHECKPOINT_COUNT)
+        ),
+        final_raw=final,
+        turns=(),
+        party=(),
+        hyper_potions_used=0,
+        full_restores_used=1,
+        full_heals_used=0,
+        x_accuracy_used=1,
+        x_specials_used=4,
+        party_hp=(178, 120, 100, 90, 80, 70),
+        party_status=(0, 0, 0, 0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+        require_teacher_strategy_evidence=False,
+    )
+
+    assert report.completion_evidence_passed
+    assert not report.teacher_strategy_evidence_passed
+    assert report.passed
+    assert not replace(report, require_teacher_strategy_evidence=True).passed
