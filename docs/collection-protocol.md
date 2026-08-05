@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v58.json`](../configs/red-battle-collection-v58.json)
+[`red-battle-collection-v59.json`](../configs/red-battle-collection-v59.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 71 stable public battle-plan identities in exact qualified-route order;
@@ -1809,3 +1809,10 @@ now emit typed control requests without changing their existing execution behavi
 actions to become training examples instead of opaque exceptions. V58 reserves train seeds
 `760001`–`760005`, validation seeds `770001`–`770002`, test seeds `780001`–`780005`, and dry-run
 seed `62001`.
+
+V59 expands each semantic observation with every party member's level, HP, maximum HP, and status,
+plus transferable counts for healing, status recovery, revival, and battle-boost resources. Its
+full-battle label stream records ordinary move selections as well as typed recovery, boost, and
+switch decisions, so a high-level controller can be trained without a control-only class imbalance.
+V59 reserves train seeds `790001`–`790005`, validation seeds `800001`–`800002`, test seeds
+`810001`–`810005`, and dry-run seed `62001`.

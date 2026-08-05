@@ -105,6 +105,25 @@ def test_red_encoder_exposes_normalized_and_namespaced_semantics() -> None:
         "move_ref": "pokemon.red.gb.us.rev0:move:033",
         "pp": 35,
     }
+    assert features["party"]["members"] == [
+        {
+            "party_index": 0,
+            "species_ref": "pokemon.red.gb.us.rev0:species:177",
+            "level": None,
+            "hp": None,
+            "max_hp": None,
+            "hp_ratio": None,
+            "status": None,
+        }
+    ]
+    assert features["resources"] == {
+        "healing_item_count": 0,
+        "status_recovery_item_count": 0,
+        "revive_item_count": 0,
+        "accuracy_boost_count": 0,
+        "attack_boost_count": 0,
+        "special_boost_count": 0,
+    }
     assert features["control"] == {"input_ready": True}
     assert snapshot.facts == ("pokemon.core:party:available",)
     assert features["menu"] is None

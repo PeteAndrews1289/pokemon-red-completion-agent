@@ -972,8 +972,13 @@ class RawGameState:
     battle_state: int | None
     badge_bits: int | None = None
     bag_item_ids: tuple[int, ...] | None = None
+    bag_items: tuple[tuple[int, int], ...] | None = None
     event_flags: bytes | None = None
     party_species_ids: tuple[int, ...] | None = None
+    party_levels: tuple[int, ...] | None = None
+    party_hp: tuple[int, ...] | None = None
+    party_max_hp: tuple[int, ...] | None = None
+    party_status: tuple[int, ...] | None = None
     first_party_level: int | None = None
     first_party_hp: int | None = None
     first_party_max_hp: int | None = None
@@ -3282,14 +3287,32 @@ class PokemonRedStateReader:
             return RawGameState(False, None, None, None, None, None)
 
         bag_count = min(self._memory.read_u8(RamAddress.NUM_BAG_ITEMS), MAX_BAG_ITEMS)
-        bag_items = tuple(
-            self._memory.read_u8(int(RamAddress.BAG_ITEMS) + index * 2)
+        bag_entries = tuple(
+            (
+                self._memory.read_u8(int(RamAddress.BAG_ITEMS) + index * 2),
+                self._memory.read_u8(int(RamAddress.BAG_ITEMS) + index * 2 + 1),
+            )
             for index in range(bag_count)
         )
+        bag_items = tuple(item_id for item_id, _quantity in bag_entries)
         party_count = min(self._memory.read_u8(RamAddress.PARTY_COUNT), PARTY_LIMIT)
         party_species = tuple(
             self._memory.read_u8(int(RamAddress.PARTY_SPECIES) + index)
             for index in range(party_count)
+        )
+        party_bases = tuple(
+            int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE
+            for index in range(party_count)
+        )
+        party_levels = tuple(
+            self._memory.read_u8(base + PARTY_LEVEL_OFFSET) for base in party_bases
+        )
+        party_hp = tuple(self._read_u16_be(base + PARTY_HP_OFFSET) for base in party_bases)
+        party_max_hp = tuple(
+            self._read_u16_be(base + PARTY_MAX_HP_OFFSET) for base in party_bases
+        )
+        party_status = tuple(
+            self._memory.read_u8(base + PARTY_STATUS_OFFSET) for base in party_bases
         )
         first_party_level = (
             self._memory.read_u8(RamAddress.PARTY_MON_1_LEVEL) if party_count else None
@@ -3357,8 +3380,13 @@ class PokemonRedStateReader:
             battle_state=battle_state,
             badge_bits=self._memory.read_u8(RamAddress.OBTAINED_BADGES),
             bag_item_ids=bag_items,
+            bag_items=bag_entries,
             event_flags=events,
             party_species_ids=party_species,
+            party_levels=party_levels,
+            party_hp=party_hp,
+            party_max_hp=party_max_hp,
+            party_status=party_status,
             first_party_level=first_party_level,
             first_party_hp=first_party_hp,
             first_party_max_hp=first_party_max_hp,

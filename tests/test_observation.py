@@ -348,7 +348,9 @@ def test_reader_extracts_bounded_bag_and_event_state() -> None:
             RamAddress.OBTAINED_BADGES: int(Badge.BOULDER | Badge.CASCADE),
             RamAddress.NUM_BAG_ITEMS: 2,
             RamAddress.BAG_ITEMS: 0x3F,
+            int(RamAddress.BAG_ITEMS) + 1: 3,
             int(RamAddress.BAG_ITEMS) + 2: 0x48,
+            int(RamAddress.BAG_ITEMS) + 3: 1,
             int(RamAddress.EVENT_FLAGS) + champion_byte: 1 << champion_bit,
         }
     )
@@ -365,6 +367,11 @@ def test_reader_extracts_bounded_bag_and_event_state() -> None:
         0x01,
     )
     assert raw.bag_item_ids == (0x3F, 0x48)
+    assert raw.bag_items == ((0x3F, 3), (0x48, 1))
+    assert len(raw.party_levels or ()) == 6
+    assert len(raw.party_hp or ()) == 6
+    assert len(raw.party_max_hp or ()) == 6
+    assert len(raw.party_status or ()) == 6
     assert event_flag_is_set(raw.event_flags, EventFlag.BEAT_CHAMPION_RIVAL)
 
 
@@ -435,6 +442,10 @@ def test_reader_exposes_the_active_battler_without_overwriting_the_field_lead() 
 
     assert raw.first_party_level == 30
     assert raw.first_party_hp == 80
+    assert raw.party_levels == (30, 20)
+    assert raw.party_hp == (80, 42)
+    assert raw.party_max_hp == (90, 52)
+    assert raw.party_status == (0, 0x40)
     assert raw.active_party_index == 1
     assert raw.active_party_species_id == 0x40
     assert raw.battler_level == 20

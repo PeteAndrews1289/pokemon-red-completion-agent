@@ -70,6 +70,7 @@ class ModelAssistedBattlePolicy:
     shadow_teacher_disagreements: int = 0
     shadow_teacher_unavailable: int = 0
     control_records: int = 0
+    typed_non_move_control_records: int = 0
     control_signals: Counter[str] = field(default_factory=Counter)
 
     def __post_init__(self) -> None:
@@ -151,9 +152,12 @@ class ModelAssistedBattlePolicy:
             )
             self.teacher_fallbacks += 1
             self.fallback_reasons[fallback_reason] += 1
+            self._record_control_action(observation, BattleAction.move(teacher_slot))
             return teacher_slot
         if fallback_reason is not None:
-            return self._fallback(fallback, fallback_reason)
+            teacher_slot = self._fallback(fallback, fallback_reason)
+            self._record_control_action(observation, BattleAction.move(teacher_slot))
+            return teacher_slot
         assert predicted_slot is not None
         if self.require_teacher_agreement:
             teacher_slot = fallback()
@@ -173,14 +177,14 @@ class ModelAssistedBattlePolicy:
                 )
                 self.teacher_fallbacks += 1
                 self.fallback_reasons["teacher_disagreement"] += 1
+                self._record_control_action(observation, BattleAction.move(teacher_slot))
                 return teacher_slot
         elif self.observe_teacher_when_not_required:
             try:
                 teacher_slot = fallback()
             except BattleControlRequest as request:
                 self.shadow_teacher_unavailable += 1
-                self.control_signals[request.action.semantic_ref] += 1
-                self._record_control_signal(observation, request.action)
+                self._record_control_action(observation, request.action)
                 raise
             except Exception:
                 self.shadow_teacher_unavailable += 1
@@ -202,6 +206,7 @@ class ModelAssistedBattlePolicy:
                     )
                     self.shadow_teacher_disagreements += 1
         self.model_decisions += 1
+        self._record_control_action(observation, BattleAction.move(predicted_slot))
         return predicted_slot
 
     def _fallback(self, fallback: Callable[[], int], reason: str) -> int:
@@ -289,10 +294,11 @@ class ModelAssistedBattlePolicy:
             "shadow_teacher_disagreements": self.shadow_teacher_disagreements,
             "shadow_teacher_unavailable": self.shadow_teacher_unavailable,
             "control_records": self.control_records,
+            "typed_non_move_control_records": self.typed_non_move_control_records,
             "control_signals": dict(sorted(self.control_signals.items())),
         }
 
-    def _record_control_signal(
+    def _record_control_action(
         self,
         observation: BattlePolicyObservation,
         action: BattleAction,
@@ -304,6 +310,9 @@ class ModelAssistedBattlePolicy:
             raise LearnedBattlePolicyError("battle control label lacks planner intent")
         snapshot = self.encoder.snapshot_from_raw(observation.state)
         self.control_records += 1
+        if action.kind.value != "select_move":
+            self.typed_non_move_control_records += 1
+        self.control_signals[action.semantic_ref] += 1
         self.control_sink(
             {
                 "record_type": "battle_control_label",

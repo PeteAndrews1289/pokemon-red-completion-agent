@@ -18,6 +18,7 @@ from pokemon_red_completion.observation import (
     BattleMenuPhase,
     BattleMenuState,
     InputReadiness,
+    ItemId,
     MapId,
     PokemonRedStateReader,
     RawGameState,
@@ -127,6 +128,7 @@ class PokemonRedObservationEncoder:
                 "species_refs": tuple(
                     _local_ref("species", species) for species in (raw.party_species_ids or ())
                 ),
+                "members": _party_members(raw),
                 "lead": {
                     "species_ref": (
                         _local_ref("species", player_species_id)
@@ -141,6 +143,7 @@ class PokemonRedObservationEncoder:
                     "moves": _observable_moves(raw, use_active_battler=in_battle),
                 },
             },
+            "resources": _battle_resources(raw),
             "battle": (
                 {
                     "active": True,
@@ -173,6 +176,56 @@ class PokemonRedObservationEncoder:
             facts=_observable_concepts(raw),
             features=features,
         )
+
+
+def _party_members(raw: RawGameState) -> tuple[dict[str, object], ...]:
+    species = raw.party_species_ids or ()
+    levels = raw.party_levels or ()
+    hp = raw.party_hp or ()
+    max_hp = raw.party_max_hp or ()
+    statuses = raw.party_status or ()
+    return tuple(
+        {
+            "party_index": index,
+            "species_ref": _local_ref("species", species_id),
+            "level": levels[index] if index < len(levels) else None,
+            "hp": hp[index] if index < len(hp) else None,
+            "max_hp": max_hp[index] if index < len(max_hp) else None,
+            "hp_ratio": _ratio(
+                hp[index] if index < len(hp) else None,
+                max_hp[index] if index < len(max_hp) else None,
+            ),
+            "status": _status_ref(statuses[index] if index < len(statuses) else None),
+        }
+        for index, species_id in enumerate(species)
+    )
+
+
+def _battle_resources(raw: RawGameState) -> dict[str, object]:
+    inventory = dict(raw.bag_items or ())
+
+    def quantity(*item_ids: ItemId) -> int:
+        return sum(inventory.get(int(item_id), 0) for item_id in item_ids)
+
+    return {
+        "healing_item_count": quantity(
+            ItemId.POTION,
+            ItemId.SUPER_POTION,
+            ItemId.HYPER_POTION,
+            ItemId.FULL_RESTORE,
+        ),
+        "status_recovery_item_count": quantity(
+            ItemId.ANTIDOTE,
+            ItemId.AWAKENING,
+            ItemId.PARLYZ_HEAL,
+            ItemId.FULL_HEAL,
+            ItemId.FULL_RESTORE,
+        ),
+        "revive_item_count": quantity(ItemId.REVIVE),
+        "accuracy_boost_count": quantity(ItemId.X_ACCURACY),
+        "attack_boost_count": quantity(ItemId.X_ATTACK),
+        "special_boost_count": quantity(ItemId.X_SPECIAL),
+    }
 
 
 @dataclass(slots=True)

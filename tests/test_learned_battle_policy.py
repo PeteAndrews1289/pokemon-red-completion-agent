@@ -217,8 +217,30 @@ def test_shadow_teacher_records_typed_control_signal() -> None:
         policy.choose_move(_observation(), request_recovery)
 
     assert policy.control_records == 1
+    assert policy.typed_non_move_control_records == 1
     assert policy.control_signals == {"pokemon.core:battle:recovery": 1}
     assert records[0]["teacher_action"] == BattleAction.recovery().public_dict()
+
+
+def test_control_sink_records_normal_model_move() -> None:
+    records: list[dict[str, object]] = []
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_ControlEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+        observe_teacher_when_not_required=True,
+        control_sink=lambda record: records.append(dict(record)),
+    )
+
+    chosen = policy.choose_move(_observation(), lambda: 1)
+
+    assert 1 <= chosen <= 4
+    assert policy.control_records == 1
+    assert policy.typed_non_move_control_records == 0
+    assert policy.control_signals == {f"pokemon.core:battle:move:{chosen}": 1}
+    assert records[0]["teacher_action"] == BattleAction.move(chosen).public_dict()
 
 
 @pytest.mark.parametrize(
