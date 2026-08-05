@@ -234,6 +234,10 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   ranker with an explicitly non-promotable single-lineage diagnostic lane.
 - [x] Capture the first objective-labeled 312-checkpoint episode and publish its diagnostic model:
   36 decisions, 94.4% training accuracy, and an explicit non-promotion receipt.
+- [x] Add portable target-region and downstream-unlock graph features, bind dataset loading to the
+  exact objective-graph digest, and publish the v74 diagnostic at 36/36 training choices.
+- [ ] Run the v74 model at every live objective boundary and require 36/36 model-selected choices
+  through Hall of Fame before collecting disjoint perturbation lineages.
 - [ ] Collect disjoint planner train/validation roots and evaluate objective selection under
   perturbed timing, encounter, damage, status, and position states.
 - [x] Catch Route 12 Snorlax with bounded recovery and capture decisions, raise the live balance

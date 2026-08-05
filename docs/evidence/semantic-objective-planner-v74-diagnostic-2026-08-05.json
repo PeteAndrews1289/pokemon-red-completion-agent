@@ -1,0 +1,63 @@
+{
+  "schema": "pokemon-semantic-objective-planner-diagnostic-v1",
+  "recorded_on": "2026-08-05",
+  "status": "complete",
+  "claim_scope": {
+    "objective_labels_recorded": true,
+    "complete_game_teacher_episode": true,
+    "episode_graph_identity_matched": true,
+    "planner_model_trained": true,
+    "planner_model_published": true,
+    "held_out_evaluation": false,
+    "teacher_free_planner_rollout": false,
+    "cross_game_transfer_evaluated": false
+  },
+  "source": {
+    "git_commit": "a3799bf730d15afa5856d084978ee289b35bd134",
+    "worktree_dirty": false,
+    "collection_registry": "red-battle-heldout-v74",
+    "objective_graph_sha256": "d86fd746901dae2806de025b6ccc721794750c7bffa1c761b0e2a79dabdca3de"
+  },
+  "teacher_episode": {
+    "episode_id": "red-teacher-11e3045eaf5347f4b867db6b09495096",
+    "manifest_sha256": "870d6d306acc87965a60691e84716a333fcd4f9ffbaefd7908b5df835d27b3df",
+    "checkpoints_completed": 312,
+    "objectives_verified": 36,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "save_state_used": false,
+    "human_input": false,
+    "stream_records": {
+      "decisions": 699,
+      "events": 313,
+      "executions": 92721,
+      "snapshots": 24239
+    }
+  },
+  "planner_dataset": {
+    "objective_decisions": 36,
+    "graph_identity_required": true,
+    "input_view": "live semantic observation plus verifier-confirmed completion facts",
+    "supervision_view": "selected objective plus re-derived legal candidate set",
+    "portable_branch_features": [
+      "candidate_target_region_matches_current",
+      "candidate_direct_dependant_count"
+    ],
+    "objective_id_feature": false,
+    "game_id_feature": false,
+    "teacher_label_feature_leakage": false
+  },
+  "model": {
+    "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+    "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "artifact_id": "red-objective-planner-2e1fa41e88ee494ca7e252603a9fbbad",
+    "artifact_manifest_sha256": "27474ec5390351045f594782a2aa0235080105dc1c61a246c66627e041f30f53",
+    "training_accuracy": 1.0,
+    "correct_decisions": 36,
+    "total_decisions": 36
+  },
+  "interpretation": {
+    "result": "A graph-authenticated, complete teacher lineage trained a portable semantic objective ranker that reproduced all 36 demonstrated choices without objective-ID features.",
+    "remaining_gap": "This remains a single-lineage training result. The next evidence must come from a live model-selected rollout and then disjoint perturbed lineages."
+  }
+}

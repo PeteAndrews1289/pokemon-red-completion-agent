@@ -1371,6 +1371,14 @@ which identifies the next modeling gap: the planner needs a portable representat
 location and travel cost, not a hidden route index or an objective-ID shortcut. The model is sealed
 as a private diagnostic artifact and is not labeled promotion-ready.
 
+The follow-up represents each candidate by whether its semantic target region matches the current
+area and by the number of immediate objectives it unlocks. These are relations that another game
+adapter and quest graph can provide; neither exposes a route index. Dataset loading now also binds
+the episode's objective-graph digest to the exact graph used for feature projection, preventing a
+later graph from silently reinterpreting older labels. A fresh v74 clean-power episode again
+completed 312/312 checkpoints and Hall of Fame, and the new ranker reproduced all 36 demonstrated
+objective choices. That is a successful training result, not yet a held-out or live-control claim.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
