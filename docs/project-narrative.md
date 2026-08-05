@@ -1128,9 +1128,10 @@ Earlier diagnostics had taught the controller to yield from the east at `(15,2)`
 train schedule exposed the symmetric west approach at `(13,2)`. That failed root is retained rather
 than retried or relabeled. V39 adds a bounded west-side yield-and-recross skill and assigns fresh
 train, validation, and test roots, preserving the prospective evaluation contract.
-Its first exact-schedule reproduction proved the branch selection but swallowed the initial downward
-yield. The repaired helper now observes every down/up coordinate change with bounded retries before
-recrossing, applying the same closed-loop movement principle to the recovery itself.
+Its first exact-schedule reproductions proved the branch selection and then showed `(13,3)` was not
+traversable rather than merely timing-sensitive. The corrected helper retreats west along the open
+top aisle to `(12,2)`, observes the west/east coordinate changes with bounded retries, and then
+recrosses. This applies the same closed-loop movement principle without inventing a walkable tile.
 
 ## Engineering and portfolio takeaways
 

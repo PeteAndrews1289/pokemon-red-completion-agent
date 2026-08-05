@@ -628,8 +628,9 @@ opposite direction: after buying X Specials, the player at `(13,2)` could not cr
 `(14,2)` tile on the return route. V38 is sealed with that failed root. V39 adds the symmetric,
 bounded west-side yield, retains the same fail-closed map and coordinate proofs, and reserves wholly
 fresh `340001`/`350001`/`360001` train, validation, and test seed ranges.
-The first v39 reproduction engaged that branch but exposed a swallowed initial step-aside input;
-the west-side yield now verifies and retries its down/up transitions before attempting the crossing.
+The first v39 reproduction engaged that branch but showed the proposed downward yield tile was not
+traversable. The west-side recovery now retreats along the open aisle to `(12,2)`, verifies its
+west/east transitions, and only then attempts the crossing.
 
 ## Evidence and project status
 

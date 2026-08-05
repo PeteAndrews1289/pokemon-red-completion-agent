@@ -91,7 +91,7 @@ MART_5F_GENTLEMAN_BLOCK_POSITION = (15, 2)
 MART_5F_GENTLEMAN_YIELD_POSITION = (15, 3)
 MART_5F_GENTLEMAN_CLEAR_POSITION = (14, 2)
 MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION = (13, 2)
-MART_5F_GENTLEMAN_RETURN_YIELD_POSITION = (13, 3)
+MART_5F_GENTLEMAN_RETURN_YIELD_POSITION = (12, 2)
 MART_5F_GENTLEMAN_CLEAR_ATTEMPTS = 16
 MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION = (14, 5)
 MART_2F_ASCENT_CUSTOMER_YIELD_POSITION = (13, 5)
@@ -2319,7 +2319,7 @@ def _yield_to_mart_5f_gentleman_from_left(
         yielded = _move_verified(
             actions,
             reader,
-            ("down",),
+            ("left",),
             timing,
             "X Special return customer yield step",
         )
@@ -2339,7 +2339,7 @@ def _yield_to_mart_5f_gentleman_from_left(
             returned = _move_verified(
                 actions,
                 reader,
-                ("up",),
+                ("right",),
                 timing,
                 "X Special return customer reentry step",
             )

@@ -80,7 +80,7 @@ def test_mart_5f_customer_yield_is_source_pinned_and_bounded() -> None:
     assert MART_5F_GENTLEMAN_YIELD_POSITION == (15, 3)
     assert MART_5F_GENTLEMAN_CLEAR_POSITION == (14, 2)
     assert MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION == (13, 2)
-    assert MART_5F_GENTLEMAN_RETURN_YIELD_POSITION == (13, 3)
+    assert MART_5F_GENTLEMAN_RETURN_YIELD_POSITION == (12, 2)
     assert MART_5F_GENTLEMAN_CLEAR_ATTEMPTS == 16
 
 
@@ -307,7 +307,7 @@ def test_silph_verified_movement_yields_to_mart_5f_customer_on_return() -> None:
             return self.state
 
     class Executor:
-        down_attempts = 0
+        yield_attempts = 0
         yielded_once = False
 
         def __init__(self, reader: Reader) -> None:
@@ -318,13 +318,13 @@ def test_silph_verified_movement_yields_to_mart_5f_customer_on_return() -> None:
             if action.kind is not MacroActionKind.MOVE:
                 return
             coordinate = (self.reader.state.player_x, self.reader.state.player_y)
-            if action.value == "down" and coordinate == (13, 2):
-                self.down_attempts += 1
-                if self.down_attempts >= 2:
-                    self.reader.state = replace(self.reader.state, player_y=3)
+            if action.value == "left" and coordinate == (13, 2):
+                self.yield_attempts += 1
+                if self.yield_attempts >= 2:
+                    self.reader.state = replace(self.reader.state, player_x=12)
                     self.yielded_once = True
-            elif action.value == "up" and coordinate == (13, 3):
-                self.reader.state = replace(self.reader.state, player_y=2)
+            elif action.value == "right" and coordinate == (12, 2):
+                self.reader.state = replace(self.reader.state, player_x=13)
             elif action.value == "right" and coordinate == (13, 2) and self.yielded_once:
                 self.reader.state = replace(self.reader.state, player_x=14)
 
@@ -344,7 +344,7 @@ def test_silph_verified_movement_yields_to_mart_5f_customer_on_return() -> None:
         14,
         2,
     )
-    assert executor.down_attempts == 2
+    assert executor.yield_attempts == 2
 
 
 def test_silph_elevator_entry_retries_a_swallowed_doorway_input() -> None:

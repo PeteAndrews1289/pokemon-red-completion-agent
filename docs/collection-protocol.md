@@ -478,13 +478,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6583` |
-| Registry SHA-256 | `00bcdf2ac2f813a6e68de96df2d38f294d6dfe2f6396e5c0794a683ee2bd74e1` |
-| Source bundle SHA-256 | `75659676746404b7a1a88efc2ab2fb7d23408fdfadb2d61cd3d6060c4db203ef` |
+| Registry SHA-256 | `16c28efb5549b0f57bfd44b2d5e707b08e339fe230b2d5f43a3624a6eeb20787` |
+| Source bundle SHA-256 | `66daa34a16c438301b6fc37bca2ef0af3327f7f20a31bf9345e91d80155cf66c` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `e0a505da96a2e67d782583bd44d6b8c5a2ba7a69745a07e2b93c8dac1c2cd1ce` |
+| Teacher execution SHA-256 | `52f42c11f3fb0db5dc5ced0bceffba4f7b2ea97e63945e52cec6e1a7eb457c20` |
 | Dry-run schedule SHA-256 | `db1076f691c753055fb333523b4864b7f5a89cfc172da97737db8ff8372b142d` |
-| Slot `01` assignment ID | `3ed7ebcf742633167f6a06b8090338dcce588da5177c463757ce79cbf78123d7` |
+| Slot `01` assignment ID | `60d2de8c76eb74d1cf2c3a043540497846061ab8ec0f73e8ac90daf99e49b3c9` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -1628,7 +1628,8 @@ aisle only from the east. The failed root remains sealed and v38 is retired. V39
 symmetric west-side bounded yield, map/coordinate proof, and recross; it assigns fresh counted
 seeds `340001`–`340005`, `350001`–`350002`, and `360001`–`360005`. Exposed seed `310001` is now
 diagnostic-only and must pass before the fixed rehearsal can qualify v39.
-The first v39 reproduction reached the same obstruction and selected the new west-side branch, but
-the initial downward yield input was swallowed. The controller now requires observed coordinate
-changes with bounded retries for both yield and reentry before attempting the recross. That failed
-diagnostic remains uncounted and source-bound qualification restarts.
+The first v39 reproductions reached the same obstruction and selected the new west-side branch, but
+proved the proposed downward yield tile `(13,3)` was not traversable. The controller now retreats
+west along the known-open top aisle to `(12,2)`, requires observed west/east coordinate changes with
+bounded retries, and then attempts the recross. Those diagnostics remain uncounted and source-bound
+qualification restarts.
