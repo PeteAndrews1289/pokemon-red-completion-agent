@@ -8,7 +8,7 @@ inside Lavender's Pokémon Center.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -2172,11 +2172,36 @@ def _purchase_supplies(
             quantity=poke_balls_sold,
             expected_proceeds=poke_ball_sale_proceeds,
         )
+    projected_money = (
+        money_before + nugget_sale_proceeds + tm24_sale_proceeds + poke_ball_sale_proceeds
+    )
+    tm28_sale_proceeds = 0
+    available_potions = _bag(emulator).get(ItemId.POTION, 0)
+    if (
+        ItemId.TM28_DIG in _bag(emulator)
+        and _needs_early_tm28_sale(
+            available_potions=available_potions,
+            projected_money=projected_money,
+            required_cost=expected_cost,
+        )
+    ):
+        # Natural Dig lineages retain TM28, while lower-level lineages consume
+        # it before Surge.  Move the already-supported sale forward only when
+        # the live obsolete-Potion reserve cannot bridge the immediate supply
+        # gap.  Dig capability was proved before this chapter began.
+        _sell_single_mart_item(
+            executor,
+            reader,
+            emulator,
+            timing,
+            ItemId.TM28_DIG,
+            expected_proceeds=TM28_SALE_PROCEEDS,
+        )
+        tm28_sale_proceeds = TM28_SALE_PROCEEDS
+        projected_money += tm28_sale_proceeds
     potion_sale_quantity = _required_potion_sale_quantity(
-        available=_bag(emulator).get(ItemId.POTION, 0),
-        projected_money=(
-            money_before + nugget_sale_proceeds + tm24_sale_proceeds + poke_ball_sale_proceeds
-        ),
+        available=available_potions,
+        projected_money=projected_money,
         required_cost=expected_cost,
         preserve_existing_sale=starting_super_potions >= 2,
         observed_bag=_bag(emulator),
@@ -2233,7 +2258,11 @@ def _purchase_supplies(
     _close_menus(executor, reader, timing)
     money_after = _money(emulator)
     total_sale_proceeds = (
-        nugget_sale_proceeds + tm24_sale_proceeds + poke_ball_sale_proceeds + potion_sale_proceeds
+        nugget_sale_proceeds
+        + tm24_sale_proceeds
+        + poke_ball_sale_proceeds
+        + tm28_sale_proceeds
+        + potion_sale_proceeds
     )
     if money_before + total_sale_proceeds - money_after != expected_cost:
         raise LavenderChapterError(
@@ -2250,7 +2279,7 @@ def _required_potion_sale_quantity(
     projected_money: int,
     required_cost: int,
     preserve_existing_sale: bool,
-    observed_bag: dict[ItemId, int] | None = None,
+    observed_bag: Mapping[int, int] | None = None,
 ) -> int:
     """Fund fixed supplies from obsolete Potions after variable capture spend."""
 
@@ -2266,6 +2295,14 @@ def _required_potion_sale_quantity(
             f"bag={observed_bag!r}."
         )
     return quantity
+
+
+def _needs_early_tm28_sale(
+    *, available_potions: int, projected_money: int, required_cost: int
+) -> bool:
+    """Use the existing TM28 income only when obsolete items cannot fund the reserve."""
+
+    return projected_money + available_potions * POTION_SALE_PRICE < required_cost
 
 
 def _sell_single_mart_item(

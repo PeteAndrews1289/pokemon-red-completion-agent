@@ -172,6 +172,30 @@ def test_obsolete_potion_sale_rejects_an_unfunded_plan() -> None:
         )
 
 
+@pytest.mark.parametrize(
+    ("available_potions", "projected_money", "required_cost", "expected"),
+    (
+        (0, 8_851, 9_600, True),
+        (5, 8_851, 9_600, False),
+        (0, 9_600, 9_600, False),
+    ),
+)
+def test_tm28_sale_moves_forward_only_when_obsolete_potions_cannot_fund_supplies(
+    available_potions: int,
+    projected_money: int,
+    required_cost: int,
+    expected: bool,
+) -> None:
+    assert (
+        lavender_module._needs_early_tm28_sale(
+            available_potions=available_potions,
+            projected_money=projected_money,
+            required_cost=required_cost,
+        )
+        is expected
+    )
+
+
 def test_supply_income_detour_is_source_stable_and_reversible() -> None:
     assert (
         *(("right",) * 10),
