@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 5: the learned planner authorizes the full objective sequence
+
+The project has crossed the boundary that the deterministic teacher work was meant to enable. A
+graph-authenticated objective ranker now reads live semantic state, considers only currently legal
+quest objectives, and must authorize the next specialist before execution can continue. It cannot
+silently defer to the teacher: a disagreement, schema mismatch, graph mismatch, low-confidence
+decision, or altered model artifact fails the run closed.
+
+In a clean-power evaluation, the frozen model authorized **36/36 objective boundaries** with zero
+teacher objective fallbacks, **98.14% mean confidence**, and **79.83% minimum confidence.** The
+fixed route specialists completed **312/312 checkpoints**, defeated the Champion, and entered the
+Hall of Fame in 9,826,693 frames and 92,721 actions. This is the first full-game completion in which
+the learned planner controls high-level objective dispatch.
+
+The result is deliberately narrower than autonomous play. The model decides what verified objective
+comes next; deterministic specialists still perform exact navigation, menus, resource handling, and
+most bounded game skills. The planner also learned from one lineage, so this completion does not yet
+demonstrate resilience to perturbed states or transfer to another Pokémon title. Those are the next
+evaluation gates, not claims attached to this run. See the
+[model-authorized objective receipt](evidence/model-authorized-objective-hall-of-fame-2026-08-05.json).
+
 ## August 5: every typed battle action becomes teacher-free
 
 Party switching exposed why a single generic target heuristic was not enough. A normal tactical

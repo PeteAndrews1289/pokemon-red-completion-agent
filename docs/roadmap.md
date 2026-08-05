@@ -80,6 +80,14 @@ requirements, and navigation, objectives, items, switching, and recovery are sti
 The exact hashes and claim boundary are preserved in the
 [nonlinear completion receipt](evidence/nonlinear-battle-policy-hall-of-fame-2026-08-05.json).
 
+The semantic objective model has now entered the live completion loop as well. An authenticated
+linear ranker authorized **36/36 objective choices** from semantic observations, with **98.14% mean
+confidence**, **79.83% minimum confidence**, and zero teacher objective fallbacks. The unchanged
+fixed specialists then executed all **312/312 checkpoints**, defeated the Champion, and entered the
+Hall of Fame. This is learned high-level objective selection, not learned navigation or unseen-state
+generalization; the exact boundary is preserved in the
+[model-authorized objective receipt](evidence/model-authorized-objective-hall-of-fame-2026-08-05.json).
+
 ## Milestone 0 — completion foundation
 
 **Status: complete — July 2026**
@@ -236,8 +244,8 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   36 decisions, 94.4% training accuracy, and an explicit non-promotion receipt.
 - [x] Add portable target-region and downstream-unlock graph features, bind dataset loading to the
   exact objective-graph digest, and publish the v74 diagnostic at 36/36 training choices.
-- [ ] Run the v74 model at every live objective boundary and require 36/36 model-selected choices
-  through Hall of Fame before collecting disjoint perturbation lineages.
+- [x] Authenticate the v75 model at every live objective boundary and require 36/36 model-selected
+  choices with zero objective fallbacks through Hall of Fame.
 - [ ] Collect disjoint planner train/validation roots and evaluate objective selection under
   perturbed timing, encounter, damage, status, and position states.
 - [x] Catch Route 12 Snorlax with bounded recovery and capture decisions, raise the live balance

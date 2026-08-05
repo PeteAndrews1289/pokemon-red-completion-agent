@@ -32,6 +32,13 @@ control, and progressively trained specialists.**
 > objective selection, items, switching, recovery, and required-move constraints remain scripted;
 > this is learned battle-move completion, not fully autonomous game completion. See the
 > [nonlinear completion receipt](docs/evidence/nonlinear-battle-policy-hall-of-fame-2026-08-05.json).
+> **August 5 planner update:** the authenticated semantic objective ranker now authorizes all
+> **36/36 live objectives** with zero objective fallbacks before the fixed specialists execute
+> them. The resulting clean-power run completed **312/312 checkpoints**, defeated the Champion,
+> and entered the Hall of Fame. Mean objective confidence was **98.14%** and the minimum was
+> **79.83%**. Navigation, menus, resource handling, and other bounded skills remain deterministic;
+> this is learned objective dispatch, not autonomous unseen-game completion. See the
+> [model-authorized objective receipt](docs/evidence/model-authorized-objective-hall-of-fame-2026-08-05.json).
 > V48 remains historical; the repaired
 > v49 rehearsal exposed one remaining late-corridor condition and was retired without opening a
 > counted slot. The exact schedule then completed under the corrected rule. V50's first counted
