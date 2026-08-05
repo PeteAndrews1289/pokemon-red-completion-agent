@@ -58,7 +58,9 @@ SABRINA_PARTY = ((0x26, 38), (0x2A, 37), (0x77, 38), (0x95, 43))
 REGULAR_TRAINER_EVENTS = tuple(range(0x362, 0x369))
 PC_DEPOSIT_ITEMS = (ItemId.SILPH_SCOPE, ItemId.CARD_KEY)
 HYPER_POTION_THRESHOLD = 70
-ALAKAZAM_HYPER_POTION_THRESHOLD = 70
+# The exposed v38 schedule produced a 94-HP critical hit from Alakazam after
+# Recover. Preserve at least that observed damage plus one HP before attacking.
+ALAKAZAM_HYPER_POTION_THRESHOLD = 95
 # The next chapter restocks before its first required battle, so Sabrina may
 # consume the complete held-out reserve when her Alakazam damage requires it.
 MAX_SABRINA_HYPER_POTIONS = 7

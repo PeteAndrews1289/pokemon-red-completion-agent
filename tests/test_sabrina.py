@@ -85,8 +85,9 @@ def test_sabrina_turn_receipts_preserve_party_transitions() -> None:
     assert tuple(turn.move_slot for turn in turns) == (2, 2, 3, 3, 3, 2)
 
 
-def test_sabrina_avoids_an_alakazam_recovery_loop_above_the_safe_floor() -> None:
-    assert ALAKAZAM_HYPER_POTION_THRESHOLD == HYPER_POTION_THRESHOLD == 70
+def test_sabrina_protects_the_observed_alakazam_critical_damage_floor() -> None:
+    assert HYPER_POTION_THRESHOLD == 70
+    assert ALAKAZAM_HYPER_POTION_THRESHOLD == 95
     raw = RawGameState(
         game_started=True,
         map_id=MapId.SAFFRON_GYM,
@@ -99,9 +100,12 @@ def test_sabrina_avoids_an_alakazam_recovery_loop_above_the_safe_floor() -> None
     assert not _sabrina_recovery_required(
         replace(raw, enemy_species_id=0x26)
     )
-    assert not _sabrina_recovery_required(replace(raw, enemy_species_id=0x95))
+    assert _sabrina_recovery_required(replace(raw, enemy_species_id=0x95))
+    assert not _sabrina_recovery_required(
+        replace(raw, enemy_species_id=0x95, first_party_hp=95)
+    )
     assert _sabrina_recovery_required(
-        replace(raw, enemy_species_id=0x95, first_party_hp=69)
+        replace(raw, enemy_species_id=0x95, first_party_hp=94)
     )
 
 

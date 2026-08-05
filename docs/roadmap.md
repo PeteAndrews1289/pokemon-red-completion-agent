@@ -659,3 +659,7 @@ now requires an observed coordinate or map transition before qualification resta
 The next replay localized the obstruction to a moving pedestrian at the initial `(13,14)` staging
 tile. A bounded westward yield to `(12,14)`, observed reentry, and proven crossing to `(14,14)` now
 precede the verified Route 7 segment. The exposed schedule must restart again.
+That route passed, and the replay reached Sabrina before Alakazam recovered and landed a measured
+94-HP critical hit against the 94-HP lead. The Alakazam-specific Hyper Potion floor is now 95 HP;
+the generic 70-HP floor and seven-item chapter cap remain unchanged. The same exposed schedule must
+restart to prove the bounded recovery does not loop.

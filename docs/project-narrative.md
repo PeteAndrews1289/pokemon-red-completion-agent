@@ -1140,6 +1140,10 @@ The following run localized that lost alignment to the first city staging leg: a
 the eastbound tile while the player waited at `(13,14)`. The controller now yields west to
 `(12,14)`, waits until reentry is observed, proves the crossing to `(14,14)`, and only then resumes
 the north/east Route 7 path.
+The repaired route then reached Sabrina, where Alakazam recovered at low HP and landed a measured
+94-HP critical hit against a 94-HP lead. The prior 70-HP generic recovery floor could not cover
+that demonstrated damage. Sabrina now uses a 95-HP Alakazam-specific floor while preserving the
+ordinary threshold for the other opponents and the existing seven-Hyper-Potion chapter cap.
 
 ## Engineering and portfolio takeaways
 

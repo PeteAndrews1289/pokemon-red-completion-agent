@@ -637,6 +637,10 @@ on that city return instead of accepting an unobserved 38-input trace.
 The next replay localized the loss to a pedestrian blocking the initial eastbound staging step at
 `(13,14)`. The route now retreats to `(12,14)`, waits with a finite observed reentry loop, proves
 the crossing to `(14,14)`, and resumes the verified north/east route.
+That replay cleared both navigation defects and reached Sabrina. Her Alakazam used Recover at low
+HP and then landed an observed 94-HP critical hit, fainting the lead from 94 HP. The Sabrina
+recovery floor now protects 95 HP against Alakazam while retaining the ordinary 70-HP threshold
+for the other opponents and the existing seven-item total bound.
 
 ## Evidence and project status
 

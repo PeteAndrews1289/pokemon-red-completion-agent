@@ -478,13 +478,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6583` |
-| Registry SHA-256 | `6118ec288a4a46ac3334646bbe4ce2dee7be74a83f9a71fda3b652a4de6356d9` |
-| Source bundle SHA-256 | `de601ce7bd242c8473c8d33fa675648cb4e740b9983f49f66cb9e08b5eb5b10a` |
+| Registry SHA-256 | `85d0f860d0f46b348c68179c9bc202f768e1eaa5680ece0082ef419f1c3cfcd1` |
+| Source bundle SHA-256 | `2a98c5791c216c2f12408e4dff31c3e51289f9d9c9ebd0f907481f923e7df482` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `07ec4feb6c4e22f640e73889c2fd4f5218d7ae6e73d9e1e889fb5775db80b749` |
+| Teacher execution SHA-256 | `eff18056efa0faf1baf3b83e66f66ec532c6d072f507063b62f2ae36a69fbe80` |
 | Dry-run schedule SHA-256 | `db1076f691c753055fb333523b4864b7f5a89cfc172da97737db8ff8372b142d` |
-| Slot `01` assignment ID | `ad45af776f6bfbaf9a1ffc66212230721e98a7e7c8a719b5b3cf61b6206687a9` |
+| Slot `01` assignment ID | `0b5fb83b1e381b69487969fb789cf87cab72a5091a571e1142451c0e8bf29c37` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -1641,3 +1641,7 @@ The next replay localized the obstruction to the initial eastbound staging leg, 
 held the player at `(13,14)`. A bounded westward yield to `(12,14)`, observed reentry, and proven
 crossing to `(14,14)` now precede the verified north/east Route 7 segment. The failure remains an
 uncounted diagnostic and qualification restarts.
+That route passed and the replay reached Sabrina, where Alakazam used Recover and then landed a
+measured 94-HP critical hit against the 94-HP lead. The Alakazam-specific recovery floor is now 95
+HP, while the generic 70-HP floor and seven-Hyper-Potion chapter cap remain unchanged. The failure
+is uncounted; the exposed schedule must prove this stronger floor terminates before qualification.
