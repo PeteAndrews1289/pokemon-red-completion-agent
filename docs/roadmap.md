@@ -29,6 +29,13 @@ coverage of **81.90%**, up from 75.95%. A second correction round completed the 
 to 92 interventions and 80.76% coverage, so it was rejected. The exact comparison is preserved in
 the [correction-trained policy receipt](evidence/correction-trained-battle-policy-2026-08-05.json).
 
+The selected model's zero-fallback battle rollout reproducibly reaches checkpoint 37, then loses
+its active Pokémon during the Cerulean rival battle. A new shadow-teacher lane labels disagreements
+without changing learner actions and retained the three counterfactual labels that precede this
+failure. Failed rollout artifacts remain visibly failed but can now be authenticated as training
+data; the [failure-correction receipt](evidence/autonomous-battle-failure-corrections-2026-08-05.json)
+does not misstate the run as completion.
+
 ## Milestone 0 — completion foundation
 
 **Status: complete — July 2026**

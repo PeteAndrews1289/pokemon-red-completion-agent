@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v53.json`](../configs/red-battle-collection-v53.json)
+[`red-battle-collection-v54.json`](../configs/red-battle-collection-v54.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 71 stable public battle-plan identities in exact qualified-route order;
@@ -1776,3 +1776,9 @@ refit lane. It reserves train seeds `610001`–`610005`, validation seeds `62000
 seeds `630001`–`630005`, and dry-run seed `62001`. Corrections are training-only additions; the
 historical validation roots remain unchanged, and every corrected model still requires a fresh
 live rollout before any deployment claim.
+
+V54 adds counterfactual teacher labeling during learner-controlled battles. The shadow teacher may
+observe and label a disagreement but cannot replace the model's action. Failed learner rollouts are
+retained as explicitly failed, integrity-checked correction corpora so the first causal failure
+states can enter training. V54 reserves train seeds `640001`–`640005`, validation seeds
+`650001`–`650002`, test seeds `660001`–`660005`, and dry-run seed `62001`.

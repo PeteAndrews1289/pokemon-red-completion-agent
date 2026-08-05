@@ -1,0 +1,34 @@
+{
+  "schema": "pokemon-red-autonomous-battle-failure-v1",
+  "recorded_on": "2026-08-05",
+  "status": "learner_failure_captured",
+  "model": {
+    "artifact_id": "red-battle-corrected-101b6e00095a4cd99d7c5053e4143de0",
+    "sha256": "98e506f89565f86de95132a78523b7b467737e182485e0fe7f04a5634bbfb271"
+  },
+  "evaluation": {
+    "teacher_action_replacement": false,
+    "confidence_fallback_threshold": 0.0,
+    "scripted_navigation": true,
+    "last_completed_checkpoint": 37,
+    "failure_boundary": "cerulean_rival_active_battler_fainted",
+    "game_complete": false
+  },
+  "corrections": {
+    "artifact_id": "red-battle-corrections-be8c1b620bd941bc9096d0a5a58953e0",
+    "manifest_sha256": "b8f498459d72b3b30e41717418ed5eaec38f1d3efe24160d4a5c5b0cf33ee3fe",
+    "rollout_status": "learner_failure",
+    "records": 3,
+    "battle_groups": 1,
+    "reason_counts": {
+      "teacher_disagreement": 3
+    }
+  },
+  "claim_scope": {
+    "autonomous_battle_completion": false,
+    "reproducible_first_failure": true,
+    "learner_induced_state_labels_captured": true,
+    "teacher_changed_model_actions": false,
+    "eligible_for_correction_training": true
+  }
+}

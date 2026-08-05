@@ -35,6 +35,7 @@ class BattleCorrectionDataset:
     examples: tuple[BattleDecisionExample, ...]
     reason_counts: tuple[tuple[str, int], ...]
     game_complete: bool
+    rollout_status: str
 
     def public_summary(self) -> dict[str, object]:
         return {
@@ -46,6 +47,7 @@ class BattleCorrectionDataset:
             "groups": len({example.group_id for example in self.examples}),
             "reason_counts": dict(self.reason_counts),
             "game_complete": self.game_complete,
+            "rollout_status": self.rollout_status,
         }
 
 
@@ -71,16 +73,24 @@ def load_battle_correction_artifact(
         manifest.get("format") != "pokemon-red-completion-private-artifact-jsonl"
         or manifest.get("kind") != "battle_corrections"
         or manifest.get("schema_version") != 1
-        or manifest.get("status") != "complete"
+        or manifest.get("status") not in {"complete", "failed"}
     ):
         raise BattleCorrectionError("battle correction artifact is not complete and typed")
     artifact_id = manifest.get("artifact_id")
-    if not isinstance(artifact_id, str) or root.name != artifact_id:
+    status = str(manifest.get("status"))
+    expected_directory_name = (
+        artifact_id if status == "complete" else f"{artifact_id}.failed.partial"
+    )
+    if not isinstance(artifact_id, str) or root.name != expected_directory_name:
         raise BattleCorrectionError("battle correction artifact identity does not match")
     files = manifest.get("files")
     if not isinstance(files, list):
         raise BattleCorrectionError("battle correction file inventory is absent")
-    expected_streams = {"metadata.jsonl", "corrections.jsonl", "summary.jsonl"}
+    expected_streams = {"metadata.jsonl", "corrections.jsonl"}
+    if status == "complete":
+        expected_streams.add("summary.jsonl")
+    elif manifest.get("reason_code") != "unhandled_exception":
+        raise BattleCorrectionError("failed correction artifact has an invalid terminal reason")
     entries: dict[str, Mapping[str, object]] = {}
     payloads: dict[str, bytes] = {}
     for value in files:
@@ -120,8 +130,16 @@ def load_battle_correction_artifact(
 
     metadata_rows = _records(payloads["metadata.jsonl"])
     correction_rows = _records(payloads["corrections.jsonl"])
-    summary_rows = _records(payloads["summary.jsonl"])
-    if len(metadata_rows) != 1 or len(summary_rows) != 1 or not correction_rows:
+    summary_rows = (
+        _records(payloads["summary.jsonl"])
+        if "summary.jsonl" in payloads
+        else []
+    )
+    if (
+        len(metadata_rows) != 1
+        or (status == "complete" and len(summary_rows) != 1)
+        or not correction_rows
+    ):
         raise BattleCorrectionError("battle correction record counts are invalid")
     header = metadata_rows[0]
     if (
@@ -208,23 +226,26 @@ def load_battle_correction_artifact(
             )
         )
 
-    summary = summary_rows[0]
-    policy = _mapping(summary.get("battle_policy"), "battle policy summary")
-    game_complete = summary.get("game_complete")
-    if (
-        summary.get("record_type") != "battle_correction_summary"
-        or summary.get("schema_version") != 1
-        or game_complete is not True
-        or policy.get("correction_records") != len(examples)
-    ):
-        raise BattleCorrectionError("battle correction terminal summary does not match")
+    game_complete = False
+    if status == "complete":
+        summary = summary_rows[0]
+        policy = _mapping(summary.get("battle_policy"), "battle policy summary")
+        game_complete = summary.get("game_complete") is True
+        if (
+            summary.get("record_type") != "battle_correction_summary"
+            or summary.get("schema_version") != 1
+            or not game_complete
+            or policy.get("correction_records") != len(examples)
+        ):
+            raise BattleCorrectionError("battle correction terminal summary does not match")
     return BattleCorrectionDataset(
         artifact_id=artifact_id,
         manifest_sha256=hashlib.sha256(manifest_payload).hexdigest(),
         source_model_sha256=source_model_sha256,
         examples=tuple(examples),
         reason_counts=tuple(sorted(reasons.items())),
-        game_complete=True,
+        game_complete=game_complete,
+        rollout_status=("game_complete" if game_complete else "learner_failure"),
     )
 
 

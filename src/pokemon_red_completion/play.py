@@ -747,6 +747,10 @@ def run_qualified_play(
                 confidence_threshold=battle_model_confidence_threshold,
                 require_teacher_agreement=require_battle_model_teacher_agreement,
                 correction_sink=battle_correction_sink,
+                observe_teacher_when_not_required=(
+                    battle_correction_sink is not None
+                    and not require_battle_model_teacher_agreement
+                ),
             )
             stack.enter_context(bind_battle_policy_override(model_policy))
         base_executor: QualifiedExecutor = FrameSafeExecutor(

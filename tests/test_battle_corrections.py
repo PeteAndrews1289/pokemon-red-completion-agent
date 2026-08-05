@@ -124,6 +124,7 @@ def test_loader_authenticates_and_decodes_correction_examples(tmp_path: Path) ->
     assert dataset.source_model_sha256 == "a" * 64
     assert dataset.reason_counts == (("teacher_disagreement", 1),)
     assert dataset.game_complete is True
+    assert dataset.rollout_status == "game_complete"
     assert len(dataset.examples) == 1
     example = dataset.examples[0]
     assert example.features.slot_indices == (0, 2)
@@ -139,3 +140,27 @@ def test_loader_rejects_tampered_correction_stream(tmp_path: Path) -> None:
 
     with pytest.raises(BattleCorrectionError, match="authentication"):
         load_battle_correction_artifact(root)
+
+
+def test_loader_admits_authenticated_failed_learner_rollout(tmp_path: Path) -> None:
+    complete = _artifact(tmp_path)
+    manifest_path = complete / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="ascii"))
+    (complete / "summary.jsonl").unlink()
+    manifest["files"] = [
+        entry for entry in manifest["files"] if entry["filename"] != "summary.jsonl"
+    ]
+    manifest["status"] = "failed"
+    manifest["reason_code"] = "unhandled_exception"
+    manifest["totals"]["files"] = 2
+    manifest["totals"]["records"] = 2
+    manifest["totals"]["bytes"] = sum(entry["bytes"] for entry in manifest["files"])
+    manifest_path.write_bytes(_line(manifest))
+    failed = complete.with_name(f"{complete.name}.failed.partial")
+    complete.rename(failed)
+
+    dataset = load_battle_correction_artifact(failed)
+
+    assert dataset.game_complete is False
+    assert dataset.rollout_status == "learner_failure"
+    assert len(dataset.examples) == 1

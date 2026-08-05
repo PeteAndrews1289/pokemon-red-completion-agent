@@ -31,6 +31,13 @@ validation accuracy and required 92 live interventions, so the earlier model rem
 That rejection is important evidence that the loop measures general behavior instead of declaring
 success whenever a newer artifact exists.
 
+Removing the correction gate entirely exposed the next real boundary: the selected model again
+reached the Cerulean rival, then allowed its active Pokémon to faint while the opposing Pokémon
+still had 23/53 HP. Instead of returning to scripted-route repair, the rollout was repeated with a
+shadow teacher. The learner still chose and executed every move, while the teacher supplied three
+counterfactual labels immediately preceding the same failure. Those learner-induced states are now
+an authenticated failed-rollout corpus and the next targeted DAgger input.
+
 > **Living engineering record — updated August 4, 2026.** This document separates verified
 > historical results from work on the current robustness branch. It will be updated at each
 > collection, training, evaluation, and transfer gate.

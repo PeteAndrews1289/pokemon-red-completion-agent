@@ -149,6 +149,25 @@ def test_model_assisted_policy_records_low_confidence_teacher_label() -> None:
     assert records[0]["teacher"] == {"chosen_candidate_index": 0}
 
 
+def test_shadow_teacher_records_disagreement_but_model_still_acts() -> None:
+    records: list[dict[str, object]] = []
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_Encoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+        observe_teacher_when_not_required=True,
+        correction_sink=lambda record: records.append(dict(record)),
+    )
+
+    assert policy.choose_move(_observation(), lambda: 1) == 3
+    assert policy.model_decisions == 1
+    assert policy.teacher_fallbacks == 0
+    assert policy.shadow_teacher_disagreements == 1
+    assert records[0]["teacher"] == {"chosen_candidate_index": 0}
+
+
 def test_model_loader_authenticates_typed_artifact_stream(tmp_path: Path) -> None:
     artifact = tmp_path / "candidate"
     artifact.mkdir()

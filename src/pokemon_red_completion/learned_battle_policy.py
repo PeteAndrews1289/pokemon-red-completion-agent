@@ -51,18 +51,25 @@ class ModelAssistedBattlePolicy:
         default_factory=lambda: BattleFeatureProjector(PokemonRedBattleCatalog())
     )
     correction_sink: BattleCorrectionSink | None = None
+    observe_teacher_when_not_required: bool = False
     decisions: int = 0
     model_decisions: int = 0
     teacher_fallbacks: int = 0
     forced_decisions: int = 0
     fallback_reasons: Counter[str] = field(default_factory=Counter)
     correction_records: int = 0
+    shadow_teacher_disagreements: int = 0
+    shadow_teacher_unavailable: int = 0
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.confidence_threshold <= 1.0:
             raise ValueError("confidence_threshold must be between zero and one")
         if not isinstance(self.require_teacher_agreement, bool):
             raise TypeError("require_teacher_agreement must be a bool")
+        if not isinstance(self.observe_teacher_when_not_required, bool):
+            raise TypeError("observe_teacher_when_not_required must be a bool")
+        if self.observe_teacher_when_not_required and self.require_teacher_agreement:
+            raise ValueError("shadow teacher observation requires model-disagreement execution")
         if tuple(self.model.feature_names) != FEATURE_NAMES:
             raise LearnedBattlePolicyError(
                 "battle model feature names do not match the live transferable schema"
@@ -156,6 +163,27 @@ class ModelAssistedBattlePolicy:
                 self.teacher_fallbacks += 1
                 self.fallback_reasons["teacher_disagreement"] += 1
                 return teacher_slot
+        elif self.observe_teacher_when_not_required:
+            try:
+                teacher_slot = fallback()
+            except Exception:
+                self.shadow_teacher_unavailable += 1
+            else:
+                if teacher_slot != predicted_slot:
+                    assert batch is not None
+                    assert predicted_candidate is not None
+                    assert confidence is not None
+                    self._record_correction(
+                        observation=observation,
+                        context=context,
+                        batch=batch,
+                        legal_mask=legal_mask,
+                        predicted_candidate=predicted_candidate,
+                        confidence=confidence,
+                        teacher_slot=teacher_slot,
+                        reason="teacher_disagreement",
+                    )
+                    self.shadow_teacher_disagreements += 1
         self.model_decisions += 1
         return predicted_slot
 
@@ -241,6 +269,8 @@ class ModelAssistedBattlePolicy:
             "teacher_agreement_required": self.require_teacher_agreement,
             "fallback_reasons": dict(sorted(self.fallback_reasons.items())),
             "correction_records": self.correction_records,
+            "shadow_teacher_disagreements": self.shadow_teacher_disagreements,
+            "shadow_teacher_unavailable": self.shadow_teacher_unavailable,
         }
 
 
