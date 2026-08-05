@@ -13,6 +13,9 @@
 - Added authenticated planner-model loading bound to the exact objective graph and live
   model authorization at every objective boundary. The fixed specialist dispatcher cannot proceed
   when the model selects a different legal objective or falls below its confidence threshold.
+- Added auditable seeded objective-policy evaluation: a complete 71-battle perturbation schedule
+  may run without a private trajectory only when a live objective model is present, and its public
+  result records the consumed schedule digest and battle counts.
 - Added a versioned, game-neutral trajectory schema for semantic observations, decisions,
   executions, and sparse events.
 - Added a thin Pokémon Red observation adapter that keeps revision-specific RAM details below the

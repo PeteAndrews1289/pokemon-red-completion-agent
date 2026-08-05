@@ -2024,8 +2024,11 @@ def test_pokedex_gate_accepts_stable_delivery_after_escape_result_overwrite() ->
     assert is_pokedex_verified(_pokedex_obtained())
 
 
-def test_battle_start_offsets_require_private_recording() -> None:
-    with pytest.raises(ValueError, match="require private trajectory or battle-control recording"):
+def test_battle_start_offsets_require_auditable_policy_evidence() -> None:
+    with pytest.raises(
+        ValueError,
+        match="require trajectory, battle-control, or objective-policy evidence",
+    ):
         run_qualified_play(
             Path("/private/Pokemon Red.gb"),
             battle_start_offsets=(),

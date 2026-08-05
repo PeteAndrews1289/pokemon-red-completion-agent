@@ -521,6 +521,7 @@ class QualifiedPlayReport:
     collection_progress: RedCollectionProgress | None = None
     battle_policy_report: dict[str, object] | None = None
     objective_policy_report: dict[str, object] | None = None
+    battle_start_schedule_report: dict[str, object] | None = None
 
     @property
     def passed(self) -> bool:
@@ -729,6 +730,7 @@ class QualifiedPlayReport:
             "controller_released": self.controller_released,
             "battle_policy": self.battle_policy_report,
             "objective_policy": self.objective_policy_report,
+            "battle_start_schedule": self.battle_start_schedule_report,
         }
 
 
@@ -791,9 +793,14 @@ def run_qualified_play(
     """Run every currently qualified objective in one clean, no-save session."""
     if (trajectory_sink is None) != (trajectory_episode_id is None):
         raise ValueError("trajectory_sink and trajectory_episode_id must be provided together")
-    if battle_start_offsets is not None and trajectory_sink is None and battle_control_sink is None:
+    if (
+        battle_start_offsets is not None
+        and trajectory_sink is None
+        and battle_control_sink is None
+        and objective_model is None
+    ):
         raise ValueError(
-            "battle_start_offsets require private trajectory or battle-control recording"
+            "battle_start_offsets require trajectory, battle-control, or objective-policy evidence"
         )
     if not 0.0 <= battle_model_confidence_threshold <= 1.0:
         raise ValueError("battle_model_confidence_threshold must be between zero and one")
@@ -1356,6 +1363,8 @@ def run_qualified_play(
         final_pokedex = reader.read_pokedex_state()
         final_boxes = reader.read_all_box_states()
         final_party = PokemonRedPartyReader(emulator).read()
+        if battle_start_schedule is not None:
+            battle_start_schedule.require_complete()
         report = QualifiedPlayReport(
             rom=emulator.fingerprint,
             pyboy_version=emulator.pyboy_version,
@@ -1415,11 +1424,20 @@ def run_qualified_play(
             objective_policy_report=(
                 objective_policy.public_dict() if objective_policy is not None else None
             ),
+            battle_start_schedule_report=(
+                {
+                    "complete": True,
+                    "expected_battles": battle_start_schedule.expected_count,
+                    "finished_battles": battle_start_schedule.finished_count,
+                    "schedule_sha256": battle_start_schedule.schedule_sha256,
+                    "schema": "pokemon-red-battle-start-schedule-result-v1",
+                }
+                if battle_start_schedule is not None
+                else None
+            ),
         )
         if not report.passed:
             raise QualifiedPlayError("Qualified play evidence failed its public contract.")
-        if battle_start_schedule is not None:
-            battle_start_schedule.require_complete()
         if (
             trajectory_sink is not None
             and trajectory_episode_id is not None
