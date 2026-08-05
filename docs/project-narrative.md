@@ -23,6 +23,14 @@ game-neutral feature candidates, legality and PP masks, model prediction and con
 teacher's selected candidate. A strict reader authenticates every declared stream and rejects
 failed, incomplete, altered, noncanonical, or schema-incompatible artifacts before training.
 
+The first correction-trained model improved the untouched validation roots from 85.80% to 87.62%
+and free-choice accuracy from 84.24% to 86.25%. At the threshold selected from validation, its next
+clean Hall-of-Fame run reduced teacher interventions from 126 to 84 and raised reported model
+coverage from 75.95% to 81.90%. A second retrain was not automatically accepted: it fell to 86.51%
+validation accuracy and required 92 live interventions, so the earlier model remained selected.
+That rejection is important evidence that the loop measures general behavior instead of declaring
+success whenever a newer artifact exists.
+
 > **Living engineering record — updated August 4, 2026.** This document separates verified
 > historical results from work on the current robustness branch. It will be updated at each
 > collection, training, evaluation, and transfer gate.

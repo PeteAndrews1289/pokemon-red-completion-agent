@@ -22,6 +22,13 @@ semantic candidates and teacher labels needed for retraining, while the
 contains only aggregate identities and counts. The failed first publication attempt is retained
 privately and excluded; only the complete manifest is admitted by the correction loader.
 
+Correction training now has a verified closed loop. The selected v3 model improved unchanged
+validation accuracy from **85.80% to 87.62%**, then completed a fresh 312/312 run at its
+validation-selected threshold with **84 teacher interventions**, down from 126, and reported model
+coverage of **81.90%**, up from 75.95%. A second correction round completed the game but regressed
+to 92 interventions and 80.76% coverage, so it was rejected. The exact comparison is preserved in
+the [correction-trained policy receipt](evidence/correction-trained-battle-policy-2026-08-05.json).
+
 ## Milestone 0 — completion foundation
 
 **Status: complete — July 2026**
