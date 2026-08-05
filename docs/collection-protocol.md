@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v39.json`](../configs/red-battle-collection-v39.json)
+[`red-battle-collection-v40.json`](../configs/red-battle-collection-v40.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -478,13 +478,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6583` |
-| Registry SHA-256 | `ab76a1c18bfd42effebb81fead9d3cbd0e21f1129937e7b50e0a5895339666cf` |
-| Source bundle SHA-256 | `b2f7a7f18009c76e66f1c88a91527befa11a259cb82096dd66d8d0f39a9ec3b4` |
+| Registry SHA-256 | `17bcd20cde224125ef7f4bc4d512a956f3d968fd906b9b8ae0024719b396de32` |
+| Source bundle SHA-256 | `8044ffb09b805038ce2f4bb03d18b8f9fd65abe84c387e871619a417c0a02b2e` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `52daa14223ae2a68d19cd04f6ec2948f95f71ff56f01feda8a5f2e074053afee` |
+| Teacher execution SHA-256 | `2fe23731b52e79006d444c4e1cc6968896a6373df4cb8fc7959c668095f3e9d3` |
 | Dry-run schedule SHA-256 | `db1076f691c753055fb333523b4864b7f5a89cfc172da97737db8ff8372b142d` |
-| Slot `01` assignment ID | `987483f20d407627676d0088d4cfa73e8025345ecb26e904a051343f1cfbfd85` |
+| Slot `01` assignment ID | `0bdd33b2e139d5a7fb81896fb62d6512aa69b190cbae98b3c3ddab5ef66025b5` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -1645,3 +1645,12 @@ That route passed and the replay reached Sabrina, where Alakazam used Recover an
 measured 94-HP critical hit against the 94-HP lead. The Alakazam-specific recovery floor is now 95
 HP, while the generic 70-HP floor and seven-Hyper-Potion chapter cap remain unchanged. The failure
 is uncounted; the exposed schedule must prove this stronger floor terminates before qualification.
+
+That source then passed both the exposed diagnostic and the v39 clean-power rehearsal at 312/312
+checkpoints, 36/36 objectives, and 69/69 battle attestations. V39 train slot 01 reached checkpoint
+230 before the fourth-floor Celadon customer occupied `(1,2)` and blocked the westbound approach
+from `(2,2)`. The immutable failed root remains sealed and v39 is retired. V40 generalizes the
+existing bounded eastward yield to both observed corridor gates, preserves the map and coordinate
+proofs, and reserves fresh counted seeds `370001`–`370005`, `380001`–`380002`, and
+`390001`–`390005`. Exposed v39 seed `340001` is diagnostic-only and must complete before v40's
+fixed rehearsal can qualify collection.

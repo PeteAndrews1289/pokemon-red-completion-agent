@@ -663,3 +663,9 @@ That route passed, and the replay reached Sabrina before Alakazam recovered and 
 94-HP critical hit against the 94-HP lead. The Alakazam-specific Hyper Potion floor is now 95 HP;
 the generic 70-HP floor and seven-item chapter cap remain unchanged. The same exposed schedule must
 restart to prove the bounded recovery does not loop.
+That source completed the exposed replay and v39 official rehearsal. Its first counted training
+slot then exposed a second legal fourth-floor Celadon customer gate: the player reached `(2,2)` but
+could not cross occupied `(1,2)` on the evolution-stone approach. The v39 failure is sealed. V40
+generalizes the same bounded yield-and-recross proof across both observed gates and assigns fresh
+`370001`–`370005`, `380001`–`380002`, and `390001`–`390005` partition seeds. Seed `340001` must
+first complete as an uncounted diagnostic, followed by the exact-source rehearsal.

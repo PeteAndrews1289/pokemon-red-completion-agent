@@ -95,9 +95,7 @@ MART_1F_TO_2F = _directions("UUUULULLLU")
 MART_2F_TO_3F = _directions("LLLDDDRRRRRURUURU")
 MART_3F_TO_4F = _directions("LLLLU")
 MART_4F_TO_STONE_CLERK = _directions("LLLLLLLLLLLDDDRRRR")
-STONE_CLERK_WALKER_BLOCK_POSITION = (4, 2)
-STONE_CLERK_WALKER_CLEAR_POSITION = (3, 2)
-STONE_CLERK_WALKER_YIELD_POSITION = (5, 2)
+STONE_CLERK_WALKER_BLOCK_POSITIONS = ((2, 2), (4, 2))
 STONE_CLERK_RETURN_BLOCK_POSITION = (5, 2)
 STONE_CLERK_RETURN_RETREAT_POSITION = (1, 2)
 STONE_CLERK_RETURN_MAX_X = 11
@@ -832,10 +830,15 @@ def _move(
                 label == "evolution-stone clerk"
                 and before.map_id == MapId.CELADON_MART_4F
                 and (before.player_x, before.player_y)
-                == STONE_CLERK_WALKER_BLOCK_POSITION
+                in STONE_CLERK_WALKER_BLOCK_POSITIONS
                 and direction == "left"
             ):
-                after = _yield_to_stone_clerk_walker(actions, reader, timing)
+                after = _yield_to_stone_clerk_walker(
+                    actions,
+                    reader,
+                    timing,
+                    block_position=(before.player_x or 0, before.player_y or 0),
+                )
                 break
             if (
                 label == "fourth-floor stair return"
@@ -864,17 +867,24 @@ def _yield_to_stone_clerk_walker(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SaffronTiming,
+    *,
+    block_position: tuple[int, int],
 ) -> RawGameState:
     """Yield east until the fourth-floor customer vacates the clerk route."""
 
+    if block_position not in STONE_CLERK_WALKER_BLOCK_POSITIONS:
+        raise ValueError("stone-clerk walker block position must be a declared corridor gate")
+    clear_position = (block_position[0] - 1, block_position[1])
+    yield_position = (block_position[0] + 1, block_position[1])
+
     for attempt in range(STONE_CLERK_WALKER_CLEAR_ATTEMPTS):
         state = reader.read()
-        if (state.player_x, state.player_y) == STONE_CLERK_WALKER_CLEAR_POSITION:
+        if (state.player_x, state.player_y) == clear_position:
             return state
         if (
             state.map_id != MapId.CELADON_MART_4F
             or state.battle_state != 0
-            or (state.player_x, state.player_y) != STONE_CLERK_WALKER_BLOCK_POSITION
+            or (state.player_x, state.player_y) != block_position
         ):
             raise SaffronChapterError(
                 "Evolution-stone walker recovery left its bounded corridor gate."
@@ -882,7 +892,7 @@ def _yield_to_stone_clerk_walker(
         actions.execute(MacroAction(MacroActionKind.MOVE, "right"))
         _wait(actions, timing.movement_frames)
         yielded = reader.read()
-        if (yielded.player_x, yielded.player_y) != STONE_CLERK_WALKER_YIELD_POSITION:
+        if (yielded.player_x, yielded.player_y) != yield_position:
             raise SaffronChapterError(
                 "Evolution-stone walker recovery could not yield the corridor."
             )
@@ -891,9 +901,9 @@ def _yield_to_stone_clerk_walker(
             actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
             _wait(actions, timing.movement_frames)
             returned = reader.read()
-            if (returned.player_x, returned.player_y) == STONE_CLERK_WALKER_BLOCK_POSITION:
+            if (returned.player_x, returned.player_y) == block_position:
                 break
-            if (returned.player_x, returned.player_y) != STONE_CLERK_WALKER_YIELD_POSITION:
+            if (returned.player_x, returned.player_y) != yield_position:
                 raise SaffronChapterError(
                     "Evolution-stone walker recovery left its bounded yield gate."
                 )
@@ -905,7 +915,7 @@ def _yield_to_stone_clerk_walker(
         actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
         _wait(actions, timing.movement_frames)
         state = reader.read()
-        if (state.player_x, state.player_y) == STONE_CLERK_WALKER_CLEAR_POSITION:
+        if (state.player_x, state.player_y) == clear_position:
             return state
     raise SaffronChapterError(
         "Evolution-stone walker did not clear within its bounded retries."

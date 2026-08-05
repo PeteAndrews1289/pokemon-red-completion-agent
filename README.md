@@ -317,7 +317,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v39-01-train
+  --collection-run red-battle-v40-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
@@ -641,6 +641,11 @@ That replay cleared both navigation defects and reached Sabrina. Her Alakazam us
 HP and then landed an observed 94-HP critical hit, fainting the lead from 94 HP. The Sabrina
 recovery floor now protects 95 HP against Alakazam while retaining the ordinary 70-HP threshold
 for the other opponents and the existing seven-item total bound.
+That source completed both qualification replays. The first v39 counted run then exposed the same
+fourth-floor customer at a second corridor gate, blocking the evolution-stone approach from
+`(2,2)` toward `(1,2)`. V39 is sealed with that failed outcome. V40 extends the bounded eastward
+yield to both observed gates and reserves fresh `370001`/`380001`/`390001` train, validation, and
+test seed ranges; exposed seed `340001` must pass diagnostically before the official rehearsal.
 
 ## Evidence and project status
 
