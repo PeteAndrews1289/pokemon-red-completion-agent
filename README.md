@@ -317,7 +317,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v40-01-train
+  --collection-run red-battle-v41-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
@@ -648,6 +648,12 @@ yield to both observed gates and reserves fresh `370001`/`380001`/`390001` train
 test seed ranges; exposed seed `340001` must pass diagnostically before the official rehearsal.
 That exact diagnostic has now passed 312/312 checkpoints and entered the Hall of Fame; the v40
 clean-power rehearsal is the remaining gate before fresh counted collection begins.
+V40 subsequently passed that rehearsal, but train slot 01 used 19 Poké Balls on Snorlax and arrived
+at Cinnabar with three Antidotes. The capacity controller already sells the whole obsolete stack,
+yet its input proof only admitted quantities zero through two. The failed root is sealed and v40 is
+retired. V41 admits the legal 0–99 item-stack range, preserves the exact sale and money proofs, and
+reserves fresh `400001`/`410001`/`420001` train, validation, and test seeds. Retired v40 schedules
+are stress-only and cannot enter the new dataset.
 
 ## Evidence and project status
 

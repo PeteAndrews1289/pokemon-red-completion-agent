@@ -672,3 +672,8 @@ first complete as an uncounted diagnostic, followed by the exact-source rehearsa
 The exact `340001` replay has now completed 312/312 checkpoints and all 36 objectives. V40 remains
 closed until the committed source passes its independent clean-power rehearsal and all 69 battle
 offset attestations.
+V40 passed that rehearsal, but its first counted schedule required 19 throws for Snorlax and
+carried three Antidotes into Cinnabar. The bag controller could already sell and account for the
+whole obsolete stack; only its legacy 0–2 input bound rejected the legal quantity. V40 is sealed and
+retired. V41 expands the proof to the legal 0–99 range, reserves fresh `400001`/`410001`/`420001`
+partition seeds, and uses retired v40 schedules only for uncounted stress before qualification.

@@ -649,7 +649,7 @@ def run_blaine_chapter(
         or initial_bag.get(ItemId.TM34_BIDE, 0) not in {0, 1}
         or (capacity_great_ball_required and initial_bag.get(ItemId.POKE_BALL, 0) != 1)
         or not 16 <= effective_input_slots <= 20
-        or initial_bag.get(ItemId.ANTIDOTE, 0) not in (0, 1, 2)
+        or not 0 <= initial_bag.get(ItemId.ANTIDOTE, 0) <= 99
         or (
             effective_input_slots in {19, 20}
             and initial_bag.get(ItemId.ANTIDOTE, 0) == 0
@@ -1069,7 +1069,7 @@ def _sell_antidote_before_mansion(
 
     if not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= input_slots <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]:
         raise BlaineChapterError(f"Unsupported Blaine input capacity: {input_slots} slots.")
-    if antidote_quantity not in (0, 1, 2):
+    if type(antidote_quantity) is not int or not 0 <= antidote_quantity <= 99:
         raise BlaineChapterError(
             "Unsupported Blaine Antidote capacity: "
             f"slots={input_slots}, quantity={antidote_quantity}."

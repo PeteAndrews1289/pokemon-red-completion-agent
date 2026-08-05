@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v40.json`](../configs/red-battle-collection-v40.json)
+[`red-battle-collection-v41.json`](../configs/red-battle-collection-v41.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -478,13 +478,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6583` |
-| Registry SHA-256 | `17bcd20cde224125ef7f4bc4d512a956f3d968fd906b9b8ae0024719b396de32` |
-| Source bundle SHA-256 | `8044ffb09b805038ce2f4bb03d18b8f9fd65abe84c387e871619a417c0a02b2e` |
+| Registry SHA-256 | `24c153824d5a37cf6f6eeb5b44315f6c7eb2dcdeac544c10f04fee6f7f7ad4b1` |
+| Source bundle SHA-256 | `38a7db20c9a143fe6b0a234e3b7deda35b129a0896edf400fb882ef1b7b20a1c` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `2fe23731b52e79006d444c4e1cc6968896a6373df4cb8fc7959c668095f3e9d3` |
+| Teacher execution SHA-256 | `6e1b902d998ea88f5d36c3bd1917f52da2902ee0b48471a431ada54e126faed8` |
 | Dry-run schedule SHA-256 | `db1076f691c753055fb333523b4864b7f5a89cfc172da97737db8ff8372b142d` |
-| Slot `01` assignment ID | `0bdd33b2e139d5a7fb81896fb62d6512aa69b190cbae98b3c3ddab5ef66025b5` |
+| Slot `01` assignment ID | `9707a48bed5502a1ed80d5f7a9958a438a7b4948afef3c9c862df17ccc4313ae` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -1657,3 +1657,11 @@ fixed rehearsal can qualify collection.
 The exact `340001` diagnostic subsequently completed 312/312 checkpoints, all 36 objectives, and
 the Hall of Fame. It remains uncounted; v40 still requires its separately scheduled clean-power
 rehearsal and 69/69 attestation before slot 01 may open.
+
+V40 passed that rehearsal and opened train slot 01. Its Snorlax capture consumed 19 Poké Balls,
+leaving a 19-slot Cinnabar bag with three Antidotes. The capacity plan was already able to sell the
+entire obsolete stack and prove the resulting money, but an outdated input predicate admitted only
+quantities zero through two. The immutable failure remains sealed and v40 is retired. V41 validates
+the legal 0–99 stack range while retaining the full-stack sale, slot, pickup, and economy proofs;
+it reserves fresh counted seeds `400001`–`400005`, `410001`–`410002`, and `420001`–`420005`.
+Retired v40 schedules may be used only as uncounted stress diagnostics before v41 qualification.

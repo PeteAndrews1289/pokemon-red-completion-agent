@@ -32,6 +32,7 @@ from pokemon_red_completion.blaine import (
     MANSION_VOLATILE_ENEMY_SPECIES,
     QUIZ_ANSWERS,
     QUIZ_TEXT_PULSES,
+    BlaineChapterError,
     BlaineTurn,
     _battle_command_direction,
     _blaine_capacity_input_slots,
@@ -95,7 +96,10 @@ def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -
     assert not _sell_antidote_before_mansion(19, 0)
     assert _sell_antidote_before_mansion(19, 1)
     assert _sell_antidote_before_mansion(19, 2)
+    assert _sell_antidote_before_mansion(19, 3)
     assert _sell_antidote_before_mansion(20, 1)
+    with pytest.raises(BlaineChapterError, match="Unsupported Blaine Antidote capacity"):
+        _sell_antidote_before_mansion(19, 100)
     assert BLAINE_TM21_SALE_VALUE == 2_500
 
 
