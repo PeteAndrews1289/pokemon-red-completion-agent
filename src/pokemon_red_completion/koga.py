@@ -638,10 +638,21 @@ def _fight(
         final = _settle_terminal_mutual_ko(actions, reader, emulator, timing)
         note_observed_trainer_battle_exit(intent)
         terminal_mutual_ko = True
+    hp = _party_hp(emulator)
+    if not terminal_mutual_ko and _observed_terminal_mutual_ko_after_exit(
+        label=label,
+        final=final,
+        event_set=_event(emulator, event),
+        party_hp=hp,
+        last_active_party_index=last_active_party_index,
+    ):
+        # Selfdestruct can set the trainer event and leave battle mode between
+        # two observer reads.  Classify the same proven terminal exchange even
+        # when no forced-switch menu was sampled.
+        terminal_mutual_ko = True
     if before_pp is None or final.first_party_pp is None:
         raise KogaChapterError(f"{label} lacks PP evidence.")
     spent = (before_pp[SURF_SLOT - 1] & 0x3F) - (final.first_party_pp[SURF_SLOT - 1] & 0x3F)
-    hp = _party_hp(emulator)
     max_hp = _party_max_hp(emulator)
     status = _party_status(emulator)
     if clear_text:
@@ -679,6 +690,27 @@ def _fight(
         terminal_mutual_ko,
         continued_after_faint,
         x_accuracy_used,
+    )
+
+
+def _observed_terminal_mutual_ko_after_exit(
+    *,
+    label: str,
+    final: RawGameState,
+    event_set: bool,
+    party_hp: tuple[int, ...],
+    last_active_party_index: int | None,
+) -> bool:
+    """Recognize Koga's terminal Selfdestruct when battle exit wins the sampling race."""
+
+    return bool(
+        label == "Koga"
+        and final.battle_state == 0
+        and event_set
+        and last_active_party_index in {None, 0}
+        and len(party_hp) > 1
+        and party_hp[0] == 0
+        and all(hp > 0 for hp in party_hp[1:])
     )
 
 

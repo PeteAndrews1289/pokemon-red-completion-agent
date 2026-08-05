@@ -31,6 +31,7 @@ from pokemon_red_completion.koga import (
     _koga_move_slot,
     _koga_reserve_pivot_target,
     _nurse_approach_directions,
+    _observed_terminal_mutual_ko_after_exit,
 )
 from pokemon_red_completion.observation import (
     Badge,
@@ -324,6 +325,32 @@ def test_koga_fainted_member_continues_with_the_healthiest_living_teammate() -> 
         replace(fainted, active_party_hp=1),
         (1, 75, 130),
     ) is None
+
+
+def test_koga_terminal_mutual_ko_is_recognized_after_direct_battle_exit() -> None:
+    exited = replace(_raw(), battle_state=0)
+
+    assert _observed_terminal_mutual_ko_after_exit(
+        label="Koga",
+        final=exited,
+        event_set=True,
+        party_hp=(0, 54, 41, 143),
+        last_active_party_index=0,
+    )
+    assert not _observed_terminal_mutual_ko_after_exit(
+        label="Koga",
+        final=exited,
+        event_set=False,
+        party_hp=(0, 54, 41, 143),
+        last_active_party_index=0,
+    )
+    assert not _observed_terminal_mutual_ko_after_exit(
+        label="Koga",
+        final=exited,
+        event_set=True,
+        party_hp=(0, 54, 0, 143),
+        last_active_party_index=0,
+    )
 
 
 def test_koga_fainted_continuation_waits_for_stable_party_hp(
