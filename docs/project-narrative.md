@@ -47,6 +47,19 @@ its less efficient tactics left the route ₽1,549 short of Rock Tunnel supplies
 disagreements across seven battles now connect tactical choices to a downstream resource failure,
 while the claim boundary remains clear: this is autonomous move selection, not full battle control.
 
+The linear scorer could not absorb those corrections without breaking earlier decisions, so the
+next iteration changed the hypothesis class instead of adding route exceptions. A deterministic
+one-hidden-layer candidate scorer raised unchanged validation accuracy to **98.66%**, free-choice
+accuracy to **98.51%**, and novel-visible-state accuracy to **98.68%**. Its first rollout exposed
+one teacher-specific verifier that demanded Bite PP even though the model legally won with Water
+Gun. Separating teacher-route evidence from learned-move evidence removed that false failure. The
+unchanged model then completed **312/312 checkpoints**, **36/36 objectives**, Champion, and Hall of
+Fame. It made 669 of 709 reported battle decisions (**94.36% coverage**) with zero teacher move
+fallbacks and only nine shadow-teacher disagreements. This is the first learned battle-move policy
+to complete Red in the project. The route, objectives, navigation, items, switching, recovery, and
+67 planner-required move constraints remain scripted; full battle and game autonomy are still open.
+See the [nonlinear completion receipt](evidence/nonlinear-battle-policy-hall-of-fame-2026-08-05.json).
+
 > **Living engineering record — updated August 4, 2026.** This document separates verified
 > historical results from work on the current robustness branch. It will be updated at each
 > collection, training, evaluation, and transfer gate.

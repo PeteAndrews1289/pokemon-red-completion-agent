@@ -1,0 +1,64 @@
+{
+  "schema": "pokemon-red-nonlinear-battle-policy-completion-v1",
+  "recorded_on": "2026-08-05",
+  "status": "complete",
+  "source_commit": "4bf17e2",
+  "model": {
+    "artifact_id": "red-battle-corrected-97c6fcffe46f47efb53e1762a771d2dc",
+    "artifact_manifest_sha256": "40ee847d0f3877b82c887df4b27bdda7d429bd8bbb0f4a062d2fe68fc688840e",
+    "model_id": "pokemon.core.battle.masked-mlp-ranker.v1",
+    "model_sha256": "535b8a07a590afac6c0d8c24d882cd4adb80d8ac73fd002f1b991be816b434dc",
+    "feature_schema_id": "pokemon.core.battle.move-ranker.v3",
+    "hidden_units": 16,
+    "historical_train_episodes": 5,
+    "historical_validation_episodes": 2,
+    "failure_correction_examples": 69,
+    "correction_repetitions": 1
+  },
+  "validation": {
+    "accuracy": 0.9865930599369085,
+    "free_choice_accuracy": 0.9851138353765324,
+    "novel_visible_accuracy": 0.9867799811142587,
+    "legal_choice_rate": 1.0,
+    "selected_confidence_threshold": 0.3999480833153264,
+    "selected_coverage": 1.0
+  },
+  "rollout": {
+    "checkpoints": "312/312",
+    "objectives": "36/36",
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 97967,
+    "battle_decisions": 709,
+    "model_decisions": 669,
+    "reported_model_coverage": 0.9435825105782792,
+    "teacher_move_fallbacks": 0,
+    "planner_constrained_move_decisions": 67,
+    "non_move_teacher_signals": 40,
+    "shadow_teacher_disagreements": 9
+  },
+  "rollout_corrections": {
+    "artifact_id": "red-battle-corrections-48c76ba343564ab5a809feb7adb67cdb",
+    "artifact_manifest_sha256": "664a6f62bad9dbaf18501efe579b308d5c6463313d18e64de0d7d0f47fd9a349",
+    "records": 9,
+    "status": "complete"
+  },
+  "action_authority": {
+    "learned_move_ranking": true,
+    "teacher_replaced_model_moves": false,
+    "planner_constrained_required_moves": true,
+    "learned_item_use": false,
+    "learned_switching": false,
+    "learned_navigation": false,
+    "scripted_objective_route": true
+  },
+  "claim_scope": {
+    "learned_battle_move_policy_completed_red": true,
+    "fully_autonomous_battle_policy": false,
+    "fully_autonomous_game_completion": false,
+    "cross_seed_evaluation_complete": false,
+    "cross_game_transfer": false,
+    "pokedex_target_complete": false
+  },
+  "interpretation": "A shared nonlinear candidate scorer resolved the context conflicts that caused the selected linear policy to regress. It completed the full scripted Red route with no teacher move fallback. Navigation, objectives, items, switching, recovery, and 67 required-move constraints remain outside autonomous learned control."
+}

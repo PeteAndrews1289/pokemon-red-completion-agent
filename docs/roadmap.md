@@ -45,6 +45,16 @@ supply budget after inefficient battles consumed recovery resources. The failed 
 Full battle autonomy still requires learned item and switch commands rather than hidden teacher
 ownership of those action classes.
 
+The next model family resolved the linear ranker's incompatible correction boundary. A shared
+nonlinear scorer reached **98.66% validation accuracy**, **98.51% free-choice accuracy**, and
+**98.68% novel-visible accuracy**, then completed **312/312 checkpoints**, **36/36 objectives**,
+Champion, and Hall of Fame. It made 669 of 709 reported battle decisions (**94.36% coverage**) with
+zero teacher move fallbacks and nine shadow-teacher disagreements. This completes the learned
+battle-move milestone, not the end state: 67 decisions remained constrained by explicit planner
+requirements, and navigation, objectives, items, switching, and recovery are still teacher-owned.
+The exact hashes and claim boundary are preserved in the
+[nonlinear completion receipt](evidence/nonlinear-battle-policy-hall-of-fame-2026-08-05.json).
+
 ## Milestone 0 — completion foundation
 
 **Status: complete — July 2026**

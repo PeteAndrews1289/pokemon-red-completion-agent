@@ -24,7 +24,15 @@ control, and progressively trained specialists.**
 > checkpoints**, **36/36 objectives**, all **71/71 scheduled battles**, the Champion, and Hall of
 > Fame. Subsequent stress schedules exposed an unconditional Route 24 recovery and a fixed-delay
 > Celadon walker loop. Both now use live game state, and the exact Celadon failure subsequently
-> completed **312/312**, **36/36**, **71/71**, and Hall of Fame. V48 remains historical; the repaired
+> completed **312/312**, **36/36**, **71/71**, and Hall of Fame.
+> **August 5 learned-policy update:** a shared nonlinear battle ranker now completes the same
+> **312/312 checkpoints**, **36/36 objectives**, Champion, and Hall of Fame with **669 of 709**
+> reported battle decisions (**94.36% coverage**), zero teacher move fallbacks, and nine shadow
+> disagreements. It reaches **98.66%** unchanged validation accuracy. The route, navigation,
+> objective selection, items, switching, recovery, and required-move constraints remain scripted;
+> this is learned battle-move completion, not fully autonomous game completion. See the
+> [nonlinear completion receipt](docs/evidence/nonlinear-battle-policy-hall-of-fame-2026-08-05.json).
+> V48 remains historical; the repaired
 > v49 rehearsal exposed one remaining late-corridor condition and was retired without opening a
 > counted slot. The exact schedule then completed under the corrected rule. V50's first counted
 > lineage exposed a lower-level-Diglett economy branch and is preserved as a failed immutable
@@ -172,7 +180,8 @@ control, and progressively trained specialists.**
 > v8 teacher carried a bounded four-to-seven Potion reserve across the following chapters and
 > qualified its rehearsal before the bidirectional-bag defect retired its first counted root. V9
 > uses that exposed v8 seed only for an uncounted rehearsal and preregisters twelve fresh counted
-> seeds. V9 must qualify before collection resumes; no learned model has yet completed the game.
+> seeds. At that historical stage, V9 still required qualification and no learned model had yet
+> completed the game.
 
 ## The goal
 
