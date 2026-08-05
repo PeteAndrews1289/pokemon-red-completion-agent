@@ -1687,6 +1687,11 @@ def _run_rival_with_potions(
                 _settle_silph_rival_field_control(reader, actions, timing)
                 return
             forced_switches += 1
+            # Healing-item targeting is intentionally fixed to party slot one.
+            # Once that lead has fainted, re-entering this recovery loop would
+            # repeatedly select the same invalid target. Move immediately to
+            # the bounded living-reserve policy below instead.
+            recovery = min(2, potion_start)
             continue
         if completed:
             return

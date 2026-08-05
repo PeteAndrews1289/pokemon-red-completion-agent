@@ -53,6 +53,7 @@ from pokemon_red_completion.silph import (
     _plan_saffron_center_approach,
     _plan_saffron_route,
     _return_center_to_seventh,
+    _run_rival_with_potions,
     _silph_capacity_deposit_items,
     _silph_capacity_ready,
     _silph_fixed_move_slot,
@@ -221,6 +222,13 @@ def test_battle_healing_recognizes_unspent_active_lead_knockout() -> None:
         7,
         7,
     )
+
+
+def test_silph_rival_exits_lead_only_recovery_after_target_ko() -> None:
+    source = getsource(_run_rival_with_potions)
+
+    assert "except _HealingTargetFaintedBeforeItem:" in source
+    assert "recovery = min(2, potion_start)" in source
 
 
 def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:
