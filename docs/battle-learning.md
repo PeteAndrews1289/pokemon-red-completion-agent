@@ -22,7 +22,7 @@ one-based slot sequence (`1/5`–`5/5`, `1/2`–`2/2`, and `1/5`–`5/5`) as wel
 lineage from the authenticated registry, execution identity, partition, harness seed, and complete
 schedule digest.
 
-Each full run expects the same 69 stable public adaptive-battle identities in route order. A
+Each full run expects the same 71 stable public adaptive-battle identities in route order. A
 versioned SHA-256 derivation gives every identity a preregistered 0–255-frame timing offset. At the
 first stable main battle menu, before the policy is called, the collection harness claims that
 offset; the battle runtime emits the WAIT through the normal executor, rereads and revalidates the
@@ -32,7 +32,7 @@ unfinished battles fail the planned run.
 
 Every applied offset is privately attested with its roster ordinal, plan ID, frame count, schedule
 digest, before/after policy-snapshot hashes, and the linked `WAIT` execution index when the offset
-is positive. The terminal event must attest a complete 69/69 schedule. These records prove that a
+is positive. The terminal event must attest a complete 71/71 schedule. These records prove that a
 scheduled run used its committed offsets rather than merely carrying the expected metadata.
 
 The harness seed is not presented as a user-selectable cartridge seed. It is a reproducible
@@ -40,7 +40,7 @@ collection timing input that changes hidden battle RNG timing. Run, seed, partit
 battle-plan identities remain metadata and are not move-ranker features.
 
 The exact source/configuration commit must be committed and pushed before any execution. A
-registry-declared, disjoint `--schedule-dry-run` must then successfully attest all 69 battles
+registry-declared, disjoint `--schedule-dry-run` must then successfully attest all 71 battles
 before slot `01`. That rehearsal is `unassigned`, has `attempt.counted=false`, and is excluded from
 every partition and performance denominator. The first Forest-lineage rehearsal exposed a
 moving-NPC collision at the Route 24 entrance at checkpoint 38/312. The repaired corridor passed
@@ -134,7 +134,7 @@ one bounded live Potion recovery while preserving the same downstream inventory.
 unopened until that exact exposed schedule again proves all 312 checkpoints and 69 attestations.
 
 Success publishes an immutable private qualification bound to the exact source, runtime, ROM,
-schedule, episode, manifest, and 69/69 offline audit. Every counted slot reopens and re-audits that
+schedule, episode, manifest, and 71/71 offline audit. Every counted slot reopens and re-audits that
 episode before campaign sealing, while the rehearsal remains outside the attempt ledger.
 
 A private campaign seal fixes the registry, exact pushed source commit, executable source,

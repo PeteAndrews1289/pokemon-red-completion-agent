@@ -3,14 +3,14 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v47.json`](../configs/red-battle-collection-v47.json)
+[`red-battle-collection-v48.json`](../configs/red-battle-collection-v48.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
-- 69 stable public battle-plan identities in exact qualified-route order;
+- 71 stable public battle-plan identities in exact qualified-route order;
 - five `train`, two `validation`, and five `test` root-lineage slots;
 - partition-local ordinals `1/5` through `5/5`, `1/2` through `2/2`, and `1/5`
   through `5/5`, in addition to global collection ordinals `1/12` through `12/12`; and
-- one unique 69-offset timing schedule and one attempt for each slot.
+- one unique 71-offset timing schedule and one attempt for each slot.
 
 The v1 campaign's uncounted rehearsal completed all 312 checkpoints, all 36 objectives, and Hall
 of Fame with 68/68 schedule attestations. Its first one-shot training root then failed at Route 24:
@@ -477,14 +477,14 @@ The prospective campaign published by this version has these independent golden 
 
 | Field | Frozen value |
 | --- | --- |
-| Registry bytes | `6583` |
-| Registry SHA-256 | `5c38b660a02f55ca2611cf329ee48f5e9e861cd16cff73a644c255594313679b` |
-| Source bundle SHA-256 | `26eb3b776762b45f5f3ac728c122c625a3168b16e05931e5b759280550e32d17` |
+| Registry bytes | `6659` |
+| Registry SHA-256 | `9d35da5744953dc172da54731d6a44cab88bcc24b5ac315e6cb9ba6751cffe98` |
+| Source bundle SHA-256 | `87fd4e04b21ea639a8798f1c58923aaab2877daca239dae05bf52bf15a7bd886` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `8a9fb92c3db0dfbdae0d0e751d837b48602bb07e65769e25c97d8c122266dac8` |
-| Dry-run schedule SHA-256 | `db1076f691c753055fb333523b4864b7f5a89cfc172da97737db8ff8372b142d` |
-| Slot `01` assignment ID | `283abd86ff77dec4d5b48ba71c47e3b57169fc98f458b514437c3dd67d139524` |
+| Teacher execution SHA-256 | `406e2bed217f20e17d330d93ba0a9d7c4dc444bf62357dd2cf27127c8680cf51` |
+| Dry-run schedule SHA-256 | `7fdf8905f235b1e25e1f58595a986b7d16a2da91dbaa741d587870a304ed47d4` |
+| Slot `01` assignment ID | `fb33b30d44ca47f0e078d1d99afd92675b9847dbdd26789e7e3c64ca7a60fc99` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -497,13 +497,13 @@ The roster digest is:
 
 ```text
 D({
-  "battle_plan_ids": [the exact 69 IDs in qualified route order],
+  "battle_plan_ids": [the exact 71 IDs in qualified route order],
   "schema": "pokemon-red-battle-plan-roster-v1"
 })
 ```
 
-The array must equal the 69-entry `RED_BATTLE_PLAN_IDS` tuple exactly. A missing, duplicated,
-substituted, or reordered ID is invalid even if the array length remains 69.
+The array must equal the 71-entry `RED_BATTLE_PLAN_IDS` tuple exactly. A missing, duplicated,
+substituted, or reordered ID is invalid even if the array length remains 71.
 
 For each roster ID, `sha256-mod-v1` derives a frame offset from 0 through 255. The SHA-256 input is
 the following exact byte concatenation:
@@ -661,21 +661,21 @@ pokemon-red-completion record \
 ```
 
 It is a clean-power-on, full-route rehearsal using the same frozen execution contract and the same
-69-ID instrumentation path, but the fixed seed `21001` and its distinct schedule. Its metadata is
+71-ID instrumentation path, but the fixed seed `62001` and its distinct schedule. Its metadata is
 `partition=unassigned` and `attempt.counted=false`, and explicitly binds the registry, source
 commit, source bundle, behavior, objective graph, and teacher-execution digests. It must not enter
 train, validation, or test data, and it must not enter any performance denominator. A normal
 unplanned recording is not a substitute.
 
-The dry run must finish successfully and attest all 69 offsets before slot `01` starts. A failed
+The dry run must finish successfully and attest all 71 offsets before slot `01` starts. A failed
 dry run does not consume a declared slot, but collection must pause until the defect is corrected.
 Any correction to a frozen input must be committed, pushed, and reflected in a regenerated
 registry and sidecar before repeating the dry run.
 
-After the complete episode and all 69 attestations pass their offline audit, the recorder publishes
+After the complete episode and all 71 attestations pass their offline audit, the recorder publishes
 a separate immutable dry-run qualification in private storage. It binds the registry, exact source
 commit and execution digests, CPython/PyBoy runtime, ROM hashes, dry seed and schedule, episode ID,
-manifest digest, and 69/69 audit receipt. Before any counted slot can create the campaign seal or
+manifest digest, and 71/71 audit receipt. Before any counted slot can create the campaign seal or
 episode namespace, the command reopens that referenced episode and reruns the audit under the same
 exclusive collection session. Absence, identity drift, replacement, or malformed evidence fails
 closed. This qualification is not a campaign outcome and never enters an evaluation denominator.
@@ -695,7 +695,7 @@ Each application produces exactly one private `battle_start_offset_applied` even
   `WAIT` execution.
 
 The terminal event must contain a `battle_start_schedule` attestation with `complete=true`,
-`expected_battles=69`, `finished_battles=69`, and the same schedule digest. Duplicate or unknown
+`expected_battles=71`, `finished_battles=71`, and the same schedule digest. Duplicate or unknown
 IDs, intent changes, schedule mismatch, reordering, substitution, partial application, an extra
 battle, or an unfinished schedule fails the attempt.
 
@@ -1716,3 +1716,25 @@ complete and one failed counted outcomes and is ineligible for fitting. V42 keep
 The exact exposed seed completed the shop proof, capture proof, all downstream inventory gates,
 Champion, and Hall of Fame as an uncounted diagnostic. V42 uses fresh assignment identities and
 must pass its own committed clean-power rehearsal before any counted slot opens.
+
+V44 later completed all five training lineages and both validation lineages and produced the first
+frozen battle candidate, with 85.8% held-out validation accuracy and its five test slots still
+sealed. Test schedule `420002` then exposed two teacher-route defects before model evaluation: an
+unconditional full-HP recovery and insufficient Snorlax-route liquidity. Those defects were
+repaired without opening another test slot. Before a replacement campaign, the teacher moved to a
+multi-schedule uncounted stress gate. Seed `61001` required a 25-Ball Forest capture reserve and
+then completed the game. Seed `61002` caught Snorlax on throw 24, legitimately carried seven Super
+Potions, and proved the final Indigo purchase was roughly ₽3,200 underfunded.
+
+V48 addresses that systemic economy weakness by intentionally answering Cinnabar quizzes 1 and 3
+incorrectly and defeating the adjacent source-pinned Burglar sets 4 and 5. Their exact ₽3,240 and
+₽3,690 rewards create a ₽6,930 income buffer while adding four appropriate Fire-type opponents to
+the battle curriculum. The two battles have stable public IDs, exact trainer identity, party,
+Surf-policy, event, and payout receipts, expanding the schedule from 69 to 71 battles. The exact
+formerly failing diagnostic, private episode
+`red-schedule-diagnostic-a2bedeaf2d9041839955e2ab9a89904a`, subsequently completed 312/312
+checkpoints, 36/36 objectives, 71/71 schedule attestations, Champion, and Hall of Fame. This is
+uncounted stress evidence, not collection qualification. V48 reserves fresh train seeds
+`460001`–`460005`, validation seeds `470001`–`470002`, test seeds `480001`–`480005`, and dry-run
+seed `62001`; no counted slot may open until the remaining stress schedules and the independent
+committed-source dry run pass.

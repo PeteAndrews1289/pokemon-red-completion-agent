@@ -137,14 +137,14 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 - [x] Add feature schema v2 with `constraint.matches_required_move` and separate free-choice,
   forced-choice, and unobserved-context metrics.
 - [x] Preregister five train, two validation, and five test root lineages with immutable,
-  single-attempt global and partition-local slots plus content-addressed 69-battle timing
+  single-attempt global and partition-local slots plus content-addressed 71-battle timing
   schedules.
 - [x] Bind the registry to exact canonical roster, schedule, assignment, sidecar, executable
   source, teacher behavior, objective graph, and teacher execution identities.
 - [x] Make planned recording verify exact battle order, apply each offset once before policy
   inference, emit per-battle and terminal schedule attestations, and fail closed on missing,
   extra, substituted, incomplete, or reordered battles.
-- [x] Add a registry-declared, disjoint, unassigned, non-counted 69-battle schedule dry run.
+- [x] Add a registry-declared, disjoint, unassigned, non-counted 71-battle schedule dry run.
 - [x] Add a private campaign seal and immutable outcome ledger that counts complete, failed,
   interrupted, and invalid slot outcomes with durable reasons.
 - [x] Pin the exact pushed source commit, live source bytes, CPython binary, and installed PyBoy
@@ -207,7 +207,7 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   one-shot outcomes, leave all five test roots unopened, disclose visible-state overlap and
   novel-visible performance, select a validation-only confidence threshold, and publish a private
   canonical candidate that remains promotion-ineligible until test and rollout evaluation.
-- [x] Commit and push the exact source/configuration state, then successfully complete the 69/69
+- [ ] Commit and push the v48 source/configuration state, then successfully complete the 71/71
   schedule dry run before slot `01`.
 - [x] Collect every declared train and validation lineage without opening the test partition.
 - [ ] Freeze the selected battle model and thresholds, then evaluate the five test roots once.
@@ -264,7 +264,7 @@ the carry is no longer a collection prerequisite.
 See the
 [Project Narrative](project-narrative.md) for the reasoning and the outstanding route work.
 
-The protocol also requires a successful, non-counted 69/69 schedule rehearsal before slot `01`,
+The protocol also requires a successful, non-counted 71/71 schedule rehearsal before slot `01`,
 and its one-shot ledger preserves failures and power interruptions as consumed outcomes. Exact
 identity, manifest, assignment, schedule, and lineage reuse is hard leakage. Repeated
 policy-visible semantic states are report-only because distinct hidden timing histories can
@@ -712,3 +712,15 @@ v43 is retired. V44 recognizes the changed battle identity without consuming the
 the exact `410002` schedule subsequently completed 312/312 checkpoints, 36/36 objectives, and Hall
 of Fame. The immediate gate is v44's committed official rehearsal, followed by five fresh train and
 two fresh validation episodes before the first fit.
+
+V44 subsequently completed all five train and two validation episodes and produced the first
+frozen battle candidate at 85.8% held-out validation accuracy. Its sealed test schedule then
+exposed teacher-route defects before model evaluation, so no test metric was claimed. The current
+v48 candidate replaces the late-game minimum-budget assumption with a transferable earn-and-train
+lesson: it deliberately fights Cinnabar Gym Burglar sets 4 and 5, proves their exact parties and
+₽6,930 combined payout, and expands the scheduled roster to 71 battles. The exact 24-throw Snorlax
+lineage that previously reached Indigo with only ₽389 now completes 312/312 checkpoints, 36/36
+objectives, 71/71 schedule attestations, Champion, and Hall of Fame. Remaining gates are to finish
+the other uncounted stress seeds, publish the source-bound v48 registry, pass its independent
+seed-62001 rehearsal, then collect five train and two validation demonstrations before fitting the
+replacement candidate. Test remains sealed until after freeze.

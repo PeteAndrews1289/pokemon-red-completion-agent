@@ -15,12 +15,15 @@ control, and progressively trained specialists.**
 > verified deterministic-teacher completion—not a learned-policy or unseen-seed generalization
 > claim. See the
 > [sanitized three-run completion receipt](docs/evidence/qualified-play-hall-of-fame-2026-07-29.json).
-> **August 4 collection update:** v37 completed its exposed-seed diagnostic and official 69-battle
-> rehearsal at **312/312 checkpoints**, then its first immutable training slot exposed an incidental
-> wild encounter during the Route 11 capture approach. That honest failure is sealed. V38 makes
-> grass navigation encounter-aware, uses seed `280001` only for uncounted diagnosis, and assigns
-> entirely fresh train, validation, and test seeds. Actual learned-policy fitting begins only after
-> the replacement demonstrations complete.
+> **August 5 collection update:** the first battle model is trained from five complete teacher
+> lineages and reaches **85.8% held-out validation accuracy** across two validation lineages. Its
+> sealed test partition remains unopened. Broader teacher stress then exposed a legitimate
+> high-capture-cost economy lineage. The v48 route deliberately fights two source-pinned Cinnabar
+> Gym Burglars for **₽6,930** and four additional Fire-type opponents instead of depending on lucky
+> captures or selling useful supplies. The exact formerly failing schedule now completes **312/312
+> checkpoints**, **36/36 objectives**, all **71/71 scheduled battles**, the Champion, and Hall of
+> Fame. This is uncounted diagnostic evidence; v48 collection remains sealed until the remaining
+> stress schedules and its independent committed-source rehearsal pass.
 > The first private, integrity-audited trajectory reproduced the same terminal in 4,796,436 frames
 > while recording **41,330 executor actions**, **300 events**, and **14,760 deduplicated semantic
 > snapshots**. The 14-action difference closes a previously uncounted menu-control path; it is not
@@ -304,7 +307,7 @@ pokemon-red-completion private-data init --private-root /absolute/private/trajec
 pokemon-red-completion record --private-root /absolute/private/trajectory-directory
 
 # After the exact source/config commit is committed and pushed, run the required
-# unassigned, non-counted 69-battle schedule rehearsal before slot 01:
+# unassigned, non-counted 71-battle schedule rehearsal before slot 01:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
   --schedule-dry-run
@@ -317,7 +320,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v47-01-train
+  --collection-run red-battle-v48-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
@@ -431,7 +434,7 @@ reaches 72.5% teacher-choice agreement versus a 50.5% fold-local majority-slot b
 legality and PP mask makes all outputs valid by construction; that safety invariant is not a
 learned success metric. This is not battle win rate or a learned gameplay rollout.
 
-New recordings bind each adaptive decision to an explicit physical battle instance, one of 69
+New recordings bind each adaptive decision to an explicit physical battle instance, one of 71
 stable public battle-plan identities, planner objective, win goal, and required-move policy. The
 current `pokemon.core.battle.move-ranker.v2` schema adds
 `constraint.matches_required_move`; receipts report free-choice and forced-choice accuracy
@@ -441,9 +444,9 @@ typed recovery budget.
 
 The committed collection protocol preregisters twelve immutable one-attempt root-lineage
 slots—five train, two validation, and five test—with partition-local ordinals and a different
-69-battle timing schedule for each. The exact source/configuration commit must be committed and
+71-battle timing schedule for each. The exact source/configuration commit must be committed and
 pushed before collection. A registry-declared, unassigned, non-counted dry run must then attest all
-69 schedule applications before slot `01`. Counted runs emit per-battle and terminal schedule
+71 schedule applications before slot `01`. Counted runs emit per-battle and terminal schedule
 attestations; a private campaign seal and outcome ledger preserve every success, failure,
 interruption, and invalid result. An interruption consumes its slot rather than authorizing a
 rerun. The successful rehearsal produces an immutable private qualification that every counted
@@ -707,6 +710,9 @@ exact `410002` schedule through 312/312 checkpoints, 36/36 objectives, and Hall 
   aggregate same-lineage teacher-choice agreement with explicit non-promotion limits
 - [V44 learned battle validation](docs/evidence/private-battle-imitation-v44-validation-2026-08-05.json)
   — five training lineages, two held-out validation lineages, 85.8% accuracy, and unopened tests
+- [V48 expensive-lineage stress receipt](docs/evidence/private-stress-v48-seed-61002-2026-08-05.json)
+  — 312/312 checkpoints, 36/36 objectives, 71/71 scheduled battles, and Hall of Fame after the
+  source-pinned Cinnabar income curriculum
 - [Optional upstream baseline](docs/upstream-baseline.md) — pinned, isolated comparison boundary
 - [Contributing](CONTRIBUTING.md) — safety and evidence requirements
 

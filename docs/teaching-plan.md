@@ -310,8 +310,8 @@ Three versioned artifact types remain outside Git:
   context; and a descriptive recovery marker.
 - **Sparse event log:** map, objective, badge, party, item, battle, checkpoint, recovery, and
   terminal transitions. Scheduled runs additionally record one
-  `battle_start_offset_applied` attestation for each of the 69 stable battle IDs and a terminal
-  69/69 schedule attestation.
+  `battle_start_offset_applied` attestation for each of the 71 stable battle IDs and a terminal
+  71/71 schedule attestation.
 
 Recorder v1 uses canonical JSONL for inspectable, append-only episode streams. Columnar Parquet
 training views are derived from validated episodes later; they are not the source of record.
@@ -330,7 +330,7 @@ The campaign status command can reconcile the same artifacts after a power loss 
 a new slot.
 
 The successful non-counted rehearsal publishes a separate immutable qualification bound to its
-source, runtime, ROM, schedule, episode, manifest, and 69/69 audit. A counted slot cannot create its
+source, runtime, ROM, schedule, episode, manifest, and 71/71 audit. A counted slot cannot create its
 campaign seal or episode namespace until that qualification is reopened and re-audited. The slot's
 partial episode directory is then synchronously persisted before emulator execution begins, making
 the one-attempt claim durable across power loss.
@@ -367,7 +367,7 @@ disjoint.
 
 Before collection, the exact source/configuration/registry commit must be committed and pushed.
 The registry's disjoint, unassigned, non-counted schedule dry run must then complete and attest all
-69 battles before slot `01`. It is excluded from train, validation, test, and every performance
+71 battles before slot `01`. It is excluded from train, validation, test, and every performance
 denominator.
 
 - **Exact teacher:** repeat the frozen clean-power-on route and report its own attempts,
@@ -422,7 +422,10 @@ lineages remain hard leakage.
    only complete train/validation outcomes while leaving test sealed. **Done as protocol
    infrastructure; the fitting lane has not executed because collection is pending.**
 18. Commit and push the exact source/configuration state, then complete the disjoint, unassigned,
-   non-counted 69/69 schedule dry run before slot `01`. **Pending; the first Forest-lineage
+   non-counted 71/71 schedule dry run before slot `01`. **Pending; the current v48 source completed
+   the exact formerly failing seed `61002` at 312/312 checkpoints, 36/36 objectives, 71/71 battles,
+   and Hall of Fame. The remaining uncounted stress schedules and the independent committed-source
+   rehearsal must still pass before slot `01`; no v48 counted slot is open. The first Forest-lineage
    rehearsal exposed a Route 24 moving-NPC collision at checkpoint 38/312. The qualified repair
    cleared that point, but the second rehearsal exposed a final Rock Tunnel trapping-recovery gap
    at checkpoint 109/312. Neither attempt consumed a declared slot; all twelve remain pending while

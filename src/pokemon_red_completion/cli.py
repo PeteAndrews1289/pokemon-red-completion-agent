@@ -313,7 +313,7 @@ def _parser() -> argparse.ArgumentParser:
         "--schedule-dry-run",
         action="store_true",
         help=(
-            "Run the fixed unassigned 69-battle schedule rehearsal without "
+            "Run the fixed unassigned 71-battle schedule rehearsal without "
             "consuming a held-out collection slot."
         ),
     )
@@ -984,7 +984,7 @@ def _run_preassigned_battle_learning(
                 is None
             ):
                 raise BattleTrainingError(
-                    "The exact 69-battle schedule rehearsal is not qualified."
+                    "The exact 71-battle schedule rehearsal is not qualified."
                 )
             ledger = CollectionOutcomeLedger.open_existing(
                 store=private_root,
