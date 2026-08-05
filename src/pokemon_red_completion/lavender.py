@@ -20,6 +20,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     RequiredMovePolicy,
+    battle_policy_override_active,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.economy import LAVENDER_SUPER_POTION_RESERVE
@@ -1498,6 +1499,7 @@ def _trainer(
     if battle.map_id != map_id or identity != expected_identity:
         raise LavenderChapterError(f"{label} identity mismatch: observed {identity!r}.")
     before_pp = battle.first_party_pp
+    before_moves = battle.first_party_moves
     intent = BattleIntent(
         "reach_lavender",
         battle_plan_id=battle_plan_id,
@@ -1521,9 +1523,18 @@ def _trainer(
     )
     if not _event(emulator, event):
         raise LavenderChapterError(f"{label} did not set event {int(event):#05x}.")
-    if before_pp is None or final.first_party_pp is None:
+    if before_pp is None or before_moves is None or final.first_party_pp is None:
         raise LavenderChapterError(f"{label} lacks PP evidence.")
-    spent = (before_pp[move_slot - 1] & 0x3F) - (final.first_party_pp[move_slot - 1] & 0x3F)
+    pp_spent = tuple(
+        (before & 0x3F) - (after & 0x3F)
+        for before, after in zip(before_pp, final.first_party_pp, strict=True)
+    )
+    evidence_slot = move_slot - 1
+    if battle_policy_override_active():
+        spent_slots = tuple(index for index, spent in enumerate(pp_spent) if spent > 0)
+        if spent_slots:
+            evidence_slot = max(spent_slots, key=lambda index: (pp_spent[index], -index))
+    spent = pp_spent[evidence_slot]
     if spent <= 0:
         raise LavenderChapterError(f"{label} did not spend selected-move PP.")
     run.trainers.append(
@@ -1534,7 +1545,7 @@ def _trainer(
             opponent,
             trainer_class,
             trainer_set,
-            move_id,
+            before_moves[evidence_slot] if battle_policy_override_active() else move_id,
             spent,
         )
     )

@@ -203,6 +203,12 @@ _BATTLE_POLICY_OVERRIDE: ContextVar[BattlePolicyOverride | None] = ContextVar(
 )
 
 
+def battle_policy_override_active() -> bool:
+    """Report whether a learned deployment policy currently owns move selection."""
+
+    return _BATTLE_POLICY_OVERRIDE.get() is not None
+
+
 class BattleRuntimeError(RuntimeError):
     """Raised when a trainer battle loses required semantic evidence."""
 

@@ -19,7 +19,9 @@ from pokemon_red_completion.battle_runtime import (
     RequiredMovePolicy,
     _confirm_attack_with_pp_gate,
     _require_present_state,
+    battle_policy_override_active,
     bind_battle_decision_observer,
+    bind_battle_policy_override,
     bind_battle_schedule_observer,
     note_observed_battle_exit,
     recovery_action_due,
@@ -63,6 +65,21 @@ MEGA_PUNCH_MOVE_ID = 0x05
 DIG_MOVE_ID = 0x5B
 TEST_BATTLE_PLAN_ID = "battle-001-test"
 SCHEDULED_BATTLE_PLAN_ID = RED_BATTLE_PLAN_IDS[0]
+
+
+def test_battle_policy_override_scope_is_observable_and_resets() -> None:
+    class Policy:
+        def choose_move(
+            self,
+            observation: BattlePolicyObservation,
+            fallback: Callable[[], int],
+        ) -> int:
+            return fallback()
+
+    assert not battle_policy_override_active()
+    with bind_battle_policy_override(Policy()):
+        assert battle_policy_override_active()
+    assert not battle_policy_override_active()
 
 
 def _raw(

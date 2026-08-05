@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v56.json`](../configs/red-battle-collection-v56.json)
+[`red-battle-collection-v57.json`](../configs/red-battle-collection-v57.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 71 stable public battle-plan identities in exact qualified-route order;
@@ -1795,3 +1795,10 @@ choices that the earlier linear ranker could not reconcile. The model keeps the 
 candidate features, legality mask, deterministic fitting, authenticated serialization, and live
 deployment boundary. V56 reserves train seeds `700001`–`700005`, validation seeds
 `710001`–`710002`, test seeds `720001`–`720005`, and dry-run seed `62001`.
+
+V57 separates teacher-specific PP evidence from learned-policy battle evidence. Deterministic
+teacher runs still require the routed move to spend PP; when a deployed model owns move selection,
+the chapter accepts and records the actual legal move whose PP was spent. This prevents a valid
+learned victory from failing merely because it did not copy the teacher's exact move. V57 reserves
+train seeds `730001`–`730005`, validation seeds `740001`–`740002`, test seeds `750001`–`750005`,
+and dry-run seed `62001`.
