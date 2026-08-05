@@ -55,6 +55,19 @@ def test_snorlax_funding_sells_only_the_obsolete_cure_shortfall() -> None:
     ) == (0, 0)
 
 
+def test_mandatory_fisher_income_covers_observed_capture_reserve_floor() -> None:
+    assert (
+        fuchsia_module._reverse(fuchsia_module.ROUTE12_FISHER)
+        + fuchsia_module._reverse(fuchsia_module.LAVENDER_TO_ROUTE12)
+    ) == fuchsia_module.FISHER_TO_LAVENDER
+    assert fuchsia_module._snorlax_funding_sale_quantities(
+        money=18_447 + 770,
+        potions=0,
+        antidotes=0,
+        required_cost=19_200,
+    ) == (0, 0)
+
+
 def test_battle_bag_selection_can_move_backward_after_a_ball_throw(monkeypatch) -> None:
     assert fuchsia_module.SNORLAX_GREAT_BALL_RESERVE == 32
     assert fuchsia_module.SNORLAX_TM34_SALE_PROCEEDS == 1_000

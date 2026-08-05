@@ -98,6 +98,7 @@ def _reverse(directions: tuple[str, ...]) -> tuple[str, ...]:
 
 LAVENDER_TO_ROUTE12 = _directions("DDDDDRRRRRRDRDDDDDDDDLDDD")
 ROUTE12_FISHER = _directions("DDDDDDDDDDRDDDDDDDDDDDDDDRDDDDRRRDDDDLLLLD")
+FISHER_TO_LAVENDER = _reverse(ROUTE12_FISHER) + _reverse(LAVENDER_TO_ROUTE12)
 FISHER_TO_SNORLAX = _directions(
     "DDDLLLLLLDDDDDDRRRDRRDDDRRRRDDDDDDRDDDLLLLLLUUUULLLDDDDDDDRRRRRDDDDD"
 )
@@ -431,14 +432,6 @@ def run_fuchsia_chapter(
         raise FuchsiaChapterError("Fuchsia input lacks the qualified Poké Flute.")
     _checkpoint(records, progress, emulator, start, "fuji_ready", "Poké Flute ready")
 
-    funding_potions_sold, funding_antidotes_sold = _purchase_snorlax_capture_reserve(
-        actions,
-        reader,
-        emulator,
-        run,
-        timing,
-    )
-
     _move(actions, reader, emulator, run, LAVENDER_TO_ROUTE12, timing, "Route 12 entry")
     _require(reader.read(), MapId.ROUTE_12, (9, 0), "Route 12 entry")
     _checkpoint(records, progress, emulator, reader.read(), "route12", "Reached Route 12")
@@ -461,7 +454,21 @@ def run_fuchsia_chapter(
     )
     _checkpoint(records, progress, emulator, reader.read(), "fisher", "Defeated mandatory Fisher")
 
-    _move(actions, reader, emulator, run, FISHER_TO_SNORLAX, timing, "Route 12 Snorlax")
+    # Collect the mandatory Fisher's deterministic payout before committing to
+    # the full 33-throw Snorlax reserve.  Held-out battle timing can change how
+    # many early Poké Balls survive for resale, but it cannot remove this
+    # route-required income.
+    _move(actions, reader, emulator, run, FISHER_TO_LAVENDER, timing, "Fisher income return")
+    _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 3), "Fisher income return")
+    funding_potions_sold, funding_antidotes_sold = _purchase_snorlax_capture_reserve(
+        actions,
+        reader,
+        emulator,
+        run,
+        timing,
+    )
+
+    _move(actions, reader, emulator, run, LAVENDER_TO_SNORLAX, timing, "Route 12 Snorlax")
     snorlax_fight_before = _event(emulator, EventFlag.FIGHT_ROUTE12_SNORLAX)
     battles.append(_fight_snorlax(actions, reader, emulator, timing))
     snorlax_fight_after = _event(emulator, EventFlag.FIGHT_ROUTE12_SNORLAX)
