@@ -5,7 +5,7 @@ from dataclasses import replace
 import pytest
 
 import pokemon_red_completion.ss_anne as ss_anne
-from pokemon_red_completion.actions import MacroActionKind
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_runtime import BattleResourcePolicy, BattleRuntimeError
 from pokemon_red_completion.observation import ItemId, MapId, RawGameState
 
@@ -53,7 +53,50 @@ def test_ss_anne_waiter_yield_gate_is_source_pinned() -> None:
     assert ss_anne.SS_ANNE_WAITER_BLOCK_POSITION == (9, 6)
     assert ss_anne.SS_ANNE_WAITER_YIELD_POSITION == (9, 7)
     assert ss_anne.SS_ANNE_WAITER_CLEAR_POSITION == (8, 6)
+    assert ss_anne.SS_ANNE_WAITER_CORRIDOR_X_BOUNDS == (2, 9)
     assert ss_anne.SS_ANNE_WAITER_CLEAR_ATTEMPTS == 10
+
+
+def test_ss_anne_waiter_yield_supports_later_corridor_positions(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = RawGameState(True, MapId.SS_ANNE_1F, 5, 6, 1, 0, first_party_hp=10)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        left_attempts = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            if action.value == "down":
+                reader.state = replace(reader.state, player_y=7)
+            elif action.value == "up":
+                reader.state = replace(reader.state, player_y=6)
+            elif action.value == "left":
+                self.left_attempts += 1
+                if self.left_attempts >= 2:
+                    reader.state = replace(reader.state, player_x=4)
+            return action
+
+    executor = Executor()
+    monkeypatch.setattr(ss_anne, "_wait", lambda *_args: None)
+
+    final = ss_anne._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        ("left",),
+        ss_anne.DEFAULT_SS_ANNE_TIMING,
+        "S.S. Anne first floor",
+    )
+
+    assert (final.player_x, final.player_y) == (4, 6)
+    assert executor.left_attempts == 2
 
 
 def test_vermilion_sailor_yield_supports_both_observed_corridor_gates() -> None:

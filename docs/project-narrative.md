@@ -1075,6 +1075,12 @@ stages at the known east gate, reuses the collision-aware eight-tile crossing, a
 verified north approach from `(8,16)`. Reusing the semantic skill avoids inventing another
 coordinate-specific workaround for the same world interaction.
 
+The following replay passed Cerulean and then met the S.S. Anne first-floor waiter at `(5,6)`
+instead of the previously observed `(9,6)`. The existing step-aside recovery was conceptually
+correct but pinned to one meeting point. It now derives its yield and clear tiles from any supported
+`y=6`, `x=2..9` corridor position, so the same passenger-passing skill applies wherever the moving
+actor and route meet.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

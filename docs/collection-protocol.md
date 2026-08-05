@@ -1575,3 +1575,9 @@ The replay showed unchanged-input retries alone cannot break the head-on pedestr
 `(16,16)`. The route now proves its approach to that existing east gate, delegates the crossing to
 the already bounded Route 24 NPC controller until `(8,16)`, and verifies the remaining northbound
 segment separately. The failed diagnostic stays uncounted; another clean restart is required.
+
+That restart cleared Cerulean but reached the S.S. Anne first-floor waiter at `(5,6)`, outside the
+old recovery's single `(9,6)` source gate. The waiter recovery now supports the complete bounded
+`y=6`, `x=2..9` corridor and derives its downward yield and westward clear tiles from the live
+meeting coordinate. Regression evidence covers the new position. The uncounted diagnostic must
+restart under the updated source.

@@ -617,3 +617,6 @@ with bounded unchanged-input retries. The diagnostic must restart again under th
 Because the pedestrian could remain head-on at `(16,16)`, retries alone were insufficient. Rival
 staging now reuses the existing bounded Route 24 NPC crossing from `(16,16)` to `(8,16)` between
 two verified route segments. The exposed diagnostic must restart once more.
+The next replay cleared Cerulean and exposed the S.S. Anne waiter at `(5,6)` rather than the former
+`(9,6)` gate. The step-aside recovery now covers the complete bounded first-floor corridor and
+derives its yield/clear coordinates from live position. Another clean diagnostic remains required.

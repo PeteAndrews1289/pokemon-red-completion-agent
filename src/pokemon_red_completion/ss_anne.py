@@ -77,6 +77,7 @@ VERMILION_SAILOR_CLEAR_ATTEMPTS = 10
 SS_ANNE_WAITER_BLOCK_POSITION = (9, 6)
 SS_ANNE_WAITER_YIELD_POSITION = (9, 7)
 SS_ANNE_WAITER_CLEAR_POSITION = (8, 6)
+SS_ANNE_WAITER_CORRIDOR_X_BOUNDS = (2, 9)
 SS_ANNE_WAITER_CLEAR_ATTEMPTS = 10
 PRE_SHIP_TRAINING_PATROL_DIRECTIONS = ("right", "left")
 PRE_SHIP_TRAINING_POLICY = TrainingPolicy(
@@ -492,7 +493,10 @@ def _move(
             if (
                 label == "S.S. Anne first floor"
                 and before.map_id == MapId.SS_ANNE_1F
-                and (before.player_x, before.player_y) == SS_ANNE_WAITER_BLOCK_POSITION
+                and before.player_y == SS_ANNE_WAITER_BLOCK_POSITION[1]
+                and SS_ANNE_WAITER_CORRIDOR_X_BOUNDS[0]
+                <= (before.player_x or -1)
+                <= SS_ANNE_WAITER_CORRIDOR_X_BOUNDS[1]
                 and direction == "left"
             ):
                 state = _yield_to_ss_anne_waiter(executor, reader, timing)
@@ -573,20 +577,34 @@ def _yield_to_ss_anne_waiter(
 ) -> RawGameState:
     """Step off the corridor so the first-floor waiter can walk past."""
 
+    initial = reader.read()
+    block_position = (initial.player_x, initial.player_y)
+    if (
+        initial.map_id != MapId.SS_ANNE_1F
+        or initial.battle_state != 0
+        or initial.player_y != SS_ANNE_WAITER_BLOCK_POSITION[1]
+        or not SS_ANNE_WAITER_CORRIDOR_X_BOUNDS[0]
+        <= (initial.player_x or -1)
+        <= SS_ANNE_WAITER_CORRIDOR_X_BOUNDS[1]
+    ):
+        raise SSAnneChapterError("S.S. Anne waiter recovery lacks a supported corridor gate.")
+    yield_position = ((initial.player_x or 0), (initial.player_y or 0) + 1)
+    clear_position = ((initial.player_x or 0) - 1, (initial.player_y or 0))
+
     for attempt in range(SS_ANNE_WAITER_CLEAR_ATTEMPTS):
         state = reader.read()
-        if (state.player_x, state.player_y) == SS_ANNE_WAITER_CLEAR_POSITION:
+        if (state.player_x, state.player_y) == clear_position:
             return state
         if (
             state.map_id != MapId.SS_ANNE_1F
             or state.battle_state != 0
-            or (state.player_x, state.player_y) != SS_ANNE_WAITER_BLOCK_POSITION
+            or (state.player_x, state.player_y) != block_position
         ):
             raise SSAnneChapterError("S.S. Anne waiter recovery left its corridor gate.")
 
         executor.execute(MacroAction(MacroActionKind.MOVE, "down"))
         yielded = reader.read()
-        if (yielded.player_x, yielded.player_y) != SS_ANNE_WAITER_YIELD_POSITION:
+        if (yielded.player_x, yielded.player_y) != yield_position:
             raise SSAnneChapterError("S.S. Anne waiter recovery could not yield the corridor.")
 
         for return_attempt in range(SS_ANNE_WAITER_CLEAR_ATTEMPTS):
@@ -598,18 +616,18 @@ def _yield_to_ss_anne_waiter(
             returned = reader.read()
             if returned.map_id != MapId.SS_ANNE_1F or returned.battle_state != 0:
                 raise SSAnneChapterError("S.S. Anne waiter recovery left the first floor.")
-            if (returned.player_x, returned.player_y) == SS_ANNE_WAITER_BLOCK_POSITION:
+            if (returned.player_x, returned.player_y) == block_position:
                 break
-            if (returned.player_x, returned.player_y) != SS_ANNE_WAITER_YIELD_POSITION:
+            if (returned.player_x, returned.player_y) != yield_position:
                 raise SSAnneChapterError("S.S. Anne waiter recovery left its step-aside tile.")
         else:
             raise SSAnneChapterError("S.S. Anne waiter did not release the return tile.")
 
         executor.execute(MacroAction(MacroActionKind.MOVE, "left"))
         state = reader.read()
-        if (state.player_x, state.player_y) == SS_ANNE_WAITER_CLEAR_POSITION:
+        if (state.player_x, state.player_y) == clear_position:
             return state
-        if (state.player_x, state.player_y) != SS_ANNE_WAITER_BLOCK_POSITION:
+        if (state.player_x, state.player_y) != block_position:
             raise SSAnneChapterError("S.S. Anne waiter recovery left its final approach gate.")
 
     raise SSAnneChapterError(
