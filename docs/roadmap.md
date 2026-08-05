@@ -22,6 +22,15 @@ safe-degrades to a legal move when no matching typed target is available. The ne
 that owns those targets directly, followed by learned objective/skill selection, navigation, and a
 sealed transfer evaluation in a second Pokémon title.
 
+Target ownership is now partially promoted. A portable resolver covered **77/77** non-move actions
+across three complete held-out lineages (34 recovery, 36 boost, and 7 switch targets), with no
+explicit party-target disagreements. Boosts now execute from the learned controller without calling
+the teacher, and that source completed a clean **312/312**, **36/36**, Hall-of-Fame rollout. Recovery
+items and switch menu handlers remain the next target-free execution slice. A fresh perturbed
+diagnostic stopped earlier at the teacher's fixed Snorlax economy boundary; its immutable failed
+artifact is retained for the learned resource-planning curriculum rather than triggering another
+route-specific patch.
+
 The first authenticated model-assisted clean run is now complete: **312/312 checkpoints**, **36/36
 objectives**, Champion, and Hall of Fame. Across 707 live battle decisions, the learned ranker
 handled 537 (75.95%) while the teacher supplied 81 low-confidence fallbacks and corrected 52

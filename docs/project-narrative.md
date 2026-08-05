@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 5: target resolution begins removing the teacher from execution
+
+The controller's first typed execution still called the teacher after predicting a non-move action,
+using that callback only to discover a party or recovery target and the matching menu handler. A new
+game-neutral resolver now derives the active recovery target, distinguishes HP, status, and combined
+recovery needs, and chooses a legal living switch target from portable semantic party state. Across
+three complete held-out rollout lineages it resolved **77/77 non-move targets**—34 recoveries, 36
+boosts, and 7 switches—with zero disagreements on every explicitly labeled party slot.
+
+High-confidence Accuracy, Attack, and Special boosts now bypass the teacher callback entirely and
+emit a semantic typed request directly to the existing verified menu executor. A clean power-on
+rollout with this path completed **312/312 checkpoints**, **36/36 objectives**, Champion, and Hall
+of Fame. All **1,704** ROM-free tests pass, and the target/action source is frozen in collection
+registry v69.
+
+An additional uncounted timing/RNG diagnostic reached checkpoint 174 before exposing a separate
+teacher-economy boundary: that capture lineage was ₽1,573 short of the fixed Snorlax throw reserve.
+The failed artifact is retained. It is not being converted into another exact-route patch; it is a
+curriculum example for learned resource planning. Recovery-item and switch menu execution still
+use teacher-specific handlers, so teacher-free target execution remains in progress.
+
 ## August 5: the full battle controller completes Red through typed execution
 
 The frozen high-level controller has now moved beyond shadow scoring into the live game loop. In a
