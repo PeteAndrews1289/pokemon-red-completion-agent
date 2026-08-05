@@ -10,6 +10,7 @@ from pokemon_red_completion.battle_control_features import (
     CONTROL_FEATURE_NAMES,
     BattleControlFeatureError,
     BattleControlHistoryTracker,
+    action_from_control_class_ref,
     control_class_ref,
     project_control_features,
 )
@@ -105,6 +106,15 @@ def test_control_action_classes_drop_game_specific_targets() -> None:
         control_class_ref(BattleAction.boost(BattleBoostStat.SPECIAL))
         == "pokemon.core:battle:boost:special"
     )
+
+
+def test_control_classes_expand_to_typed_actions() -> None:
+    assert action_from_control_class_ref(CONTROL_CLASS_REFS[1]) == BattleAction.recovery()
+    assert action_from_control_class_ref(CONTROL_CLASS_REFS[5]) == BattleAction.switch()
+    assert action_from_control_class_ref(CONTROL_CLASS_REFS[6]) == BattleAction.capture()
+    assert action_from_control_class_ref(CONTROL_CLASS_REFS[7]) == BattleAction.flee()
+    with pytest.raises(BattleControlFeatureError):
+        action_from_control_class_ref(CONTROL_CLASS_REFS[0])
 
 
 def test_control_projector_rejects_missing_or_impossible_state() -> None:

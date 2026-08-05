@@ -6,7 +6,12 @@ from pathlib import Path
 
 import pytest
 
-from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleBoostStat,
+    BattleControlRequest,
+    LearnedBattleControlRequest,
+)
 from pokemon_red_completion.battle_control_features import (
     CONTROL_CLASS_REFS,
     CONTROL_FEATURE_NAMES,
@@ -113,6 +118,8 @@ class _ShadowEncoder:
                         "lead": {
                             "species_ref": "pokemon:test",
                             "level": 10,
+                            "hp": 50,
+                            "max_hp": 100,
                             "hp_ratio": 1.0,
                             "status": None,
                         },
@@ -120,6 +127,8 @@ class _ShadowEncoder:
                             {
                                 "species_ref": "pokemon:test",
                                 "level": 10,
+                                "hp": 50,
+                                "max_hp": 100,
                                 "hp_ratio": 1.0,
                                 "status": None,
                             }
@@ -151,6 +160,19 @@ def _control_model(class_index: int = 1) -> BattleControlMLP:
         input_weights=[[0.0] * len(CONTROL_FEATURE_NAMES)] * 2,
         hidden_bias=[0.0, 0.0],
         output_weights=[[0.0, 0.0], [0.0, 0.0]],
+        output_bias=output_bias,
+    )
+
+
+def _full_control_model(class_index: int) -> BattleControlMLP:
+    output_bias = [0.0] * len(CONTROL_CLASS_REFS)
+    output_bias[class_index] = 5.0
+    return BattleControlMLP(
+        feature_names=CONTROL_FEATURE_NAMES,
+        class_refs=CONTROL_CLASS_REFS,
+        input_weights=[[0.0] * len(CONTROL_FEATURE_NAMES)] * 2,
+        hidden_bias=[0.0, 0.0],
+        output_weights=[[0.0] * len(CONTROL_CLASS_REFS)] * 2,
         output_bias=output_bias,
     )
 
@@ -413,6 +435,30 @@ def test_control_execution_guards_an_unparameterized_special_action() -> None:
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
     assert execution["safety_fallbacks"] == 1
+
+
+def test_control_execution_emits_boost_without_calling_teacher() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_full_control_model(4),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+
+    def teacher_must_not_run() -> int:
+        raise AssertionError("high-confidence boost queried the teacher")
+
+    with pytest.raises(LearnedBattleControlRequest) as raised:
+        policy.choose_move(_observation(), teacher_must_not_run)
+
+    assert raised.value.action == BattleAction.boost(BattleBoostStat.SPECIAL)
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["teacher_free_requests"] == 1
+    assert execution["typed_requests_executed"] == 1
 
 
 @pytest.mark.parametrize(

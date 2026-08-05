@@ -16,6 +16,7 @@ from pokemon_red_completion.battle_actions import (
     BattleAction,
     BattleBoostStat,
     BattleControlRequest,
+    control_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
@@ -322,7 +323,7 @@ def run_lorelei_chapter(
                 label="Lorelei",
             )
         except BattleRuntimeError as error:
-            if isinstance(error.__cause__, _AccuracyBoundary):
+            if control_request_matches(error.__cause__, _AccuracyBoundary.default_action):
                 _battle_x_accuracy(reader, actions, emulator)
                 accuracy_used += 1
                 continue

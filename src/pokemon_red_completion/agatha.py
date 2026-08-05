@@ -11,6 +11,7 @@ from pokemon_red_completion.battle_actions import (
     BattleAction,
     BattleBoostStat,
     BattleControlRequest,
+    control_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
@@ -308,7 +309,7 @@ def run_agatha_chapter(
                 label="Agatha",
             )
         except BattleRuntimeError as error:
-            if isinstance(error.__cause__, _BoostBoundary):
+            if control_request_matches(error.__cause__, _BoostBoundary.default_action):
                 _battle_x_special(reader, actions, emulator)
                 boosts_used += 1
                 continue

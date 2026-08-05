@@ -16,6 +16,7 @@ from pokemon_red_completion.battle_actions import (
     BattleAction,
     BattleBoostStat,
     BattleControlRequest,
+    control_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
@@ -348,21 +349,21 @@ def run_lance_chapter(
                 label="Lance",
             )
         except BattleRuntimeError as error:
-            if isinstance(error.__cause__, _AccuracyBoundary):
+            if control_request_matches(error.__cause__, _AccuracyBoundary.default_action):
                 try:
                     _battle_x_accuracy(reader, actions, emulator)
                 except LoreleiChapterError as accuracy_error:
                     raise LanceChapterError("Lance X Accuracy setup failed.") from accuracy_error
                 accuracy_used += 1
                 continue
-            if isinstance(error.__cause__, _AttackBoundary):
+            if control_request_matches(error.__cause__, _AttackBoundary.default_action):
                 try:
                     _battle_x_special(reader, actions, emulator, item=ItemId.X_ATTACK)
                 except AgathaChapterError as attack_error:
                     raise LanceChapterError("Lance X Attack setup failed.") from attack_error
                 attacks_used += 1
                 continue
-            if isinstance(error.__cause__, _BoostBoundary):
+            if control_request_matches(error.__cause__, _BoostBoundary.default_action):
                 try:
                     _battle_x_special(reader, actions, emulator)
                 except AgathaChapterError as boost_error:

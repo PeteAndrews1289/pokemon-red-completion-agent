@@ -7,6 +7,8 @@ from pokemon_red_completion.battle_actions import (
     BattleActionKind,
     BattleBoostStat,
     BattleControlRequest,
+    LearnedBattleControlRequest,
+    control_request_matches,
 )
 
 
@@ -27,10 +29,7 @@ def test_battle_actions_have_stable_game_neutral_references() -> None:
         "party_slot": 4,
         "boost_stat": None,
     }
-    assert (
-        BattleAction.from_dict(BattleAction.switch(4).public_dict())
-        == BattleAction.switch(4)
-    )
+    assert BattleAction.from_dict(BattleAction.switch(4).public_dict()) == BattleAction.switch(4)
 
 
 @pytest.mark.parametrize(
@@ -65,3 +64,10 @@ def test_battle_actions_reject_incompatible_parameters(arguments: dict[str, obje
 def test_control_request_rejects_move_actions() -> None:
     with pytest.raises(ValueError, match="return normally"):
         BattleControlRequest(BattleAction.move(1))
+
+
+def test_learned_requests_match_teacher_handlers_by_semantic_action() -> None:
+    request = LearnedBattleControlRequest(BattleAction.boost(BattleBoostStat.SPECIAL))
+    assert control_request_matches(request, BattleAction.boost(BattleBoostStat.SPECIAL))
+    assert not control_request_matches(request, BattleAction.boost(BattleBoostStat.ACCURACY))
+    assert not control_request_matches(request, BattleAction.recovery())

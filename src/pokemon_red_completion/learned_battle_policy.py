@@ -11,11 +11,21 @@ from pathlib import Path
 
 import numpy as np
 
-from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
+from pokemon_red_completion.battle_action_targets import (
+    BattleActionTargetError,
+    resolve_battle_action_target,
+)
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleActionKind,
+    BattleControlRequest,
+    LearnedBattleControlRequest,
+)
 from pokemon_red_completion.battle_control_features import (
     CONTROL_CLASS_REFS,
     BattleControlHistory,
     BattleControlHistoryTracker,
+    action_from_control_class_ref,
     control_class_ref,
     project_control_features,
 )
@@ -97,6 +107,9 @@ class ModelAssistedBattlePolicy:
     control_suppressed_teacher_requests: int = 0
     control_safety_fallbacks: int = 0
     control_low_confidence_fallbacks: int = 0
+    control_resolved_targets: Counter[str] = field(default_factory=Counter)
+    control_target_resolution_failures: Counter[str] = field(default_factory=Counter)
+    control_teacher_free_requests: int = 0
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.confidence_threshold <= 1.0:
@@ -266,9 +279,7 @@ class ModelAssistedBattlePolicy:
         candidate_vectors = tuple(tuple(row) for row in batch.candidate_vectors)
         slot_indices = tuple(batch.slot_indices)
         teacher_matches = [
-            index
-            for index, slot_index in enumerate(slot_indices)
-            if slot_index + 1 == teacher_slot
+            index for index, slot_index in enumerate(slot_indices) if slot_index + 1 == teacher_slot
         ]
         if len(teacher_matches) != 1:
             raise LearnedBattlePolicyError(
@@ -366,6 +377,11 @@ class ModelAssistedBattlePolicy:
                 "safety_fallbacks": self.control_safety_fallbacks,
                 "low_confidence_fallbacks": self.control_low_confidence_fallbacks,
                 "confidence_threshold": self.control_confidence_threshold,
+                "resolved_targets": dict(sorted(self.control_resolved_targets.items())),
+                "target_resolution_failures": dict(
+                    sorted(self.control_target_resolution_failures.items())
+                ),
+                "teacher_free_requests": self.control_teacher_free_requests,
             }
         return result
 
@@ -408,6 +424,31 @@ class ModelAssistedBattlePolicy:
                 raise
             self._record_control_action(observation, BattleAction.move(teacher_slot))
             return teacher_slot
+
+        resolved_action = None
+        if predicted_ref != CONTROL_CLASS_REFS[0]:
+            try:
+                predicted_action = action_from_control_class_ref(predicted_ref)
+                resolved_action = resolve_battle_action_target(predicted_action, encoded)
+            except BattleActionTargetError as error:
+                self.control_target_resolution_failures[type(error).__name__] += 1
+                self.control_execution_decisions += 1
+                self.control_safety_fallbacks += 1
+                self.model_decisions += 1
+                self._record_control_action(observation, BattleAction.move(predicted_slot))
+                return predicted_slot
+            target_key = predicted_ref
+            if resolved_action.recovery_need is not None:
+                target_key = f"{target_key}:{resolved_action.recovery_need.value}"
+            if resolved_action.party_slot is not None:
+                target_key = f"{target_key}:party_slot"
+            self.control_resolved_targets[target_key] += 1
+            if resolved_action.action.kind is BattleActionKind.USE_BOOST:
+                self.control_execution_decisions += 1
+                self.control_execution_requests += 1
+                self.control_teacher_free_requests += 1
+                self._record_control_action(observation, resolved_action.action)
+                raise LearnedBattleControlRequest(resolved_action.action)
 
         teacher_request: BattleControlRequest | None = None
         teacher_slot: int | None = None

@@ -12,6 +12,7 @@ from pokemon_red_completion.battle_actions import (
     BattleAction,
     BattleBoostStat,
     BattleControlRequest,
+    control_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
@@ -375,7 +376,7 @@ def run_champion_chapter(
                 if terminal:
                     break
                 continue
-            if isinstance(error.__cause__, _AccuracyBoundary):
+            if control_request_matches(error.__cause__, _AccuracyBoundary.default_action):
                 try:
                     _battle_x_accuracy(reader, actions, emulator)
                 except LoreleiChapterError as accuracy_error:
@@ -384,7 +385,7 @@ def run_champion_chapter(
                     ) from accuracy_error
                 accuracy_used += 1
                 continue
-            if isinstance(error.__cause__, _BoostBoundary):
+            if control_request_matches(error.__cause__, _BoostBoundary.default_action):
                 _battle_x_special(reader, actions, emulator)
                 boosts_used += 1
                 continue

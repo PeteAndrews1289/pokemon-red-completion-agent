@@ -18,6 +18,7 @@ from pokemon_red_completion.battle_actions import (
     BattleAction,
     BattleBoostStat,
     BattleControlRequest,
+    control_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
@@ -590,7 +591,9 @@ def _fight(
                 )
                 break
             except BattleRuntimeError as error:
-                if isinstance(error.__cause__, _PauseForKogaXAccuracy):
+                if control_request_matches(
+                    error.__cause__, _PauseForKogaXAccuracy.default_action
+                ):
                     _battle_koga_x_accuracy(actions, reader, emulator, timing)
                     x_accuracy_used = True
                     continue

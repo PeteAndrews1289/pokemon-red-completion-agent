@@ -55,10 +55,7 @@ class BattleAction:
                 raise ValueError("boost actions require a transferable stat role")
             if self.move_slot is not None or self.party_slot is not None:
                 raise ValueError("boost actions cannot name move or switch parameters")
-        elif any(
-            value is not None
-            for value in (self.move_slot, self.party_slot, self.boost_stat)
-        ):
+        elif any(value is not None for value in (self.move_slot, self.party_slot, self.boost_stat)):
             raise ValueError("recovery actions cannot name move, switch, or boost parameters")
 
     @classmethod
@@ -153,3 +150,25 @@ class BattleControlRequest(Exception):
             raise ValueError("move selection must return normally, not use a control request")
         self.action = resolved
         super().__init__(resolved.semantic_ref)
+
+
+class LearnedBattleControlRequest(BattleControlRequest):
+    """A complete semantic request emitted without consulting the teacher policy."""
+
+
+def control_request_matches(
+    cause: BaseException | None,
+    expected: BattleAction,
+) -> bool:
+    """Match teacher-specific and learned requests by transferable action meaning."""
+
+    if not isinstance(expected, BattleAction):
+        raise TypeError("expected must be a BattleAction")
+    if not isinstance(cause, BattleControlRequest):
+        return False
+    actual = cause.action
+    if actual.kind is not expected.kind:
+        return False
+    if actual.kind is BattleActionKind.USE_BOOST:
+        return actual.boost_stat is expected.boost_stat
+    return actual.kind is not BattleActionKind.SELECT_MOVE

@@ -9,7 +9,7 @@ from dataclasses import dataclass
 import numpy as np
 from numpy.typing import NDArray
 
-from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind, BattleBoostStat
 from pokemon_red_completion.battle_semantics import (
     FEATURE_NAMES as MOVE_FEATURE_NAMES,
 )
@@ -234,6 +234,27 @@ def control_class_ref(action: BattleAction) -> str:
     if action.kind is BattleActionKind.ATTEMPT_CAPTURE:
         return CONTROL_CLASS_REFS[6]
     return CONTROL_CLASS_REFS[7]
+
+
+def action_from_control_class_ref(class_ref: str) -> BattleAction:
+    """Expand a transferable controller class into an untargeted typed action."""
+    if class_ref == CONTROL_CLASS_REFS[0]:
+        raise BattleControlFeatureError("move class requires the move ranker's slot")
+    if class_ref == CONTROL_CLASS_REFS[1]:
+        return BattleAction.recovery()
+    if class_ref == CONTROL_CLASS_REFS[2]:
+        return BattleAction.boost(BattleBoostStat.ACCURACY)
+    if class_ref == CONTROL_CLASS_REFS[3]:
+        return BattleAction.boost(BattleBoostStat.ATTACK)
+    if class_ref == CONTROL_CLASS_REFS[4]:
+        return BattleAction.boost(BattleBoostStat.SPECIAL)
+    if class_ref == CONTROL_CLASS_REFS[5]:
+        return BattleAction.switch()
+    if class_ref == CONTROL_CLASS_REFS[6]:
+        return BattleAction.capture()
+    if class_ref == CONTROL_CLASS_REFS[7]:
+        return BattleAction.flee()
+    raise BattleControlFeatureError("control class reference is unsupported")
 
 
 def project_control_features(
