@@ -812,20 +812,23 @@ def _purchase_snorlax_capture_reserve(
         "Lavender Mart clerk",
     )
     _pulse(actions, MacroActionKind.MOVE, "left", frames=60)
-    _sell_single_mart_item(
-        actions,
-        reader,
-        emulator,
-        DEFAULT_LAVENDER_TIMING,
-        ItemId.TM34_BIDE,
-        expected_proceeds=SNORLAX_TM34_SALE_PROCEEDS,
-    )
+    tm34_sale_proceeds = 0
+    if _bag(emulator).get(ItemId.TM34_BIDE, 0):
+        _sell_single_mart_item(
+            actions,
+            reader,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            ItemId.TM34_BIDE,
+            expected_proceeds=SNORLAX_TM34_SALE_PROCEEDS,
+        )
+        tm34_sale_proceeds = SNORLAX_TM34_SALE_PROCEEDS
     expected_cost = (
         SNORLAX_GREAT_BALL_RESERVE * GREAT_BALL_PRICE
         + potion_purchase_quantity * SUPER_POTION_PRICE
     )
     potion_sale_quantity, antidote_sale_quantity = _snorlax_funding_sale_quantities(
-        money=before_money + SNORLAX_TM34_SALE_PROCEEDS,
+        money=before_money + tm34_sale_proceeds,
         potions=_bag(emulator).get(ItemId.POTION, 0),
         antidotes=_bag(emulator).get(ItemId.ANTIDOTE, 0),
         required_cost=expected_cost,
@@ -887,12 +890,8 @@ def _purchase_snorlax_capture_reserve(
         raise FuchsiaChapterError(f"Could not buy the Snorlax capture reserve: {error}") from error
     if (
         _bag(emulator).get(ItemId.GREAT_BALL, 0) != SNORLAX_GREAT_BALL_RESERVE
-        or _bag(emulator).get(ItemId.SUPER_POTION, 0)
-        != before_potions + potion_purchase_quantity
-        or before_money
-        + SNORLAX_TM34_SALE_PROCEEDS
-        + funding_sale_proceeds
-        - _money(emulator)
+        or _bag(emulator).get(ItemId.SUPER_POTION, 0) != before_potions + potion_purchase_quantity
+        or before_money + tm34_sale_proceeds + funding_sale_proceeds - _money(emulator)
         != expected_cost
     ):
         raise FuchsiaChapterError("Snorlax capture-reserve economy proof failed.")
@@ -934,14 +933,12 @@ def _snorlax_funding_sale_quantities(
     shortfall = max(0, required_cost - money)
     potion_quantity = min(
         potions,
-        (shortfall + SNORLAX_POTION_SALE_PROCEEDS - 1)
-        // SNORLAX_POTION_SALE_PROCEEDS,
+        (shortfall + SNORLAX_POTION_SALE_PROCEEDS - 1) // SNORLAX_POTION_SALE_PROCEEDS,
     )
     shortfall = max(0, shortfall - potion_quantity * SNORLAX_POTION_SALE_PROCEEDS)
     antidote_quantity = min(
         antidotes,
-        (shortfall + SNORLAX_ANTIDOTE_SALE_PROCEEDS - 1)
-        // SNORLAX_ANTIDOTE_SALE_PROCEEDS,
+        (shortfall + SNORLAX_ANTIDOTE_SALE_PROCEEDS - 1) // SNORLAX_ANTIDOTE_SALE_PROCEEDS,
     )
     shortfall = max(0, shortfall - antidote_quantity * SNORLAX_ANTIDOTE_SALE_PROCEEDS)
     if shortfall:

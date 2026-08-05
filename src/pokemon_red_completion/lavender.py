@@ -73,6 +73,7 @@ LAVENDER_PARLYZ_HEAL_RESERVE = 3
 LAVENDER_ANTIDOTE_RESERVE = 1
 TM28_SALE_PROCEEDS = 1_000
 TM24_SALE_PROCEEDS = 1_000
+TM34_SALE_PROCEEDS = 1_000
 ROUTE_11_GAMBLER_PAYOUT = 1_260
 
 
@@ -1665,10 +1666,7 @@ def _flee(
                     allow_purified_zone_heal=allow_purified_zone_heal,
                 )
                 return
-            if (
-                escaped_state is not None
-                and _wild_battle_identity_changed(before, final)
-            ):
+            if escaped_state is not None and _wild_battle_identity_changed(before, final):
                 # A scripted wild boss can start immediately after a random
                 # encounter is fled, without exposing an input-ready field
                 # frame. Preserve the observed field transition as the flee
@@ -2217,13 +2215,10 @@ def _purchase_supplies(
     )
     tm28_sale_proceeds = 0
     available_potions = _bag(emulator).get(ItemId.POTION, 0)
-    if (
-        ItemId.TM28_DIG in _bag(emulator)
-        and _needs_early_tm28_sale(
-            available_potions=available_potions,
-            projected_money=projected_money,
-            required_cost=expected_cost,
-        )
+    if ItemId.TM28_DIG in _bag(emulator) and _needs_early_tm28_sale(
+        available_potions=available_potions,
+        projected_money=projected_money,
+        required_cost=expected_cost,
     ):
         # Natural Dig lineages retain TM28, while lower-level lineages consume
         # it before Surge.  Move the already-supported sale forward only when
@@ -2239,6 +2234,27 @@ def _purchase_supplies(
         )
         tm28_sale_proceeds = TM28_SALE_PROCEEDS
         projected_money += tm28_sale_proceeds
+    tm34_sale_proceeds = 0
+    if ItemId.TM34_BIDE in _bag(emulator) and _needs_early_obsolete_tm_sale(
+        available_potions=available_potions,
+        projected_money=projected_money,
+        required_cost=expected_cost,
+    ):
+        # A lower-level Diglett can consume TM28 before Surge.  When that
+        # lineage also spends enough of the bounded capture budget, liquidate
+        # the already-supported Bide capacity token instead of weakening the
+        # fixed healing/status/repel reserve.  Cinnabar already replaces the
+        # missing unique slot before its delayed-TM38 capacity lesson.
+        _sell_single_mart_item(
+            executor,
+            reader,
+            emulator,
+            timing,
+            ItemId.TM34_BIDE,
+            expected_proceeds=TM34_SALE_PROCEEDS,
+        )
+        tm34_sale_proceeds = TM34_SALE_PROCEEDS
+        projected_money += tm34_sale_proceeds
     potion_sale_quantity = _required_potion_sale_quantity(
         available=available_potions,
         projected_money=projected_money,
@@ -2302,6 +2318,7 @@ def _purchase_supplies(
         + tm24_sale_proceeds
         + poke_ball_sale_proceeds
         + tm28_sale_proceeds
+        + tm34_sale_proceeds
         + potion_sale_proceeds
     )
     if money_before + total_sale_proceeds - money_after != expected_cost:
@@ -2341,6 +2358,14 @@ def _needs_early_tm28_sale(
     *, available_potions: int, projected_money: int, required_cost: int
 ) -> bool:
     """Use the existing TM28 income only when obsolete items cannot fund the reserve."""
+
+    return projected_money + available_potions * POTION_SALE_PRICE < required_cost
+
+
+def _needs_early_obsolete_tm_sale(
+    *, available_potions: int, projected_money: int, required_cost: int
+) -> bool:
+    """Use a qualified obsolete-TM fallback before reducing the safety reserve."""
 
     return projected_money + available_potions * POTION_SALE_PRICE < required_cost
 

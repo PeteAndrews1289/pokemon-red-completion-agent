@@ -725,6 +725,8 @@ the other uncounted stress seeds. Seeds `61003` and `61004` completed after cond
 seed `61005` then exposed and verified the live Celadon-walker repair before completing Hall of
 Fame. V48 remains historical. V49's rehearsal exposed an overly strict late-corridor condition and
 was retired without opening a counted slot; the corrected exact seed-62001 replay then completed
-Hall of Fame. The source-bound v50 registry now provides fresh unopened slots. Its independent
-rehearsal is next, followed by five train and two validation
+Hall of Fame. V50's rehearsal completed, but counted slot 01 exposed a lower-level-Diglett economy
+branch and is preserved as a failed immutable attempt. V51 conditionally liquidates the qualified
+Bide capacity token when live cash plus obsolete Potions cannot fund the fixed Tunnel reserve.
+Its independent rehearsal is next, followed by five train and two validation
 demonstrations before fitting the replacement candidate. Test remains sealed until after freeze.

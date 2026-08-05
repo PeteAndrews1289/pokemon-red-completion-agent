@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v50.json`](../configs/red-battle-collection-v50.json)
+[`red-battle-collection-v51.json`](../configs/red-battle-collection-v51.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 71 stable public battle-plan identities in exact qualified-route order;
@@ -1754,4 +1754,12 @@ retreats again only after observed blockage. An uncounted replay of the exact se
 subsequently completed 312/312 checkpoints, 36/36 objectives, 71/71 schedule attestations,
 Champion, and Hall of Fame. V50 reserves train seeds `520001`–`520005`, validation seeds
 `530001`–`530002`, test seeds `540001`–`540005`, and dry-run seed `62001`. All twelve v50 counted
-slots remain unopened until its committed-source rehearsal.
+slots were initially unopened. Its committed-source rehearsal completed the full terminal, but
+counted train slot 01 then exposed a lower-level-Diglett lineage that had consumed TM28 before
+Surge. With that ₽1,000 sale unavailable, live cash plus all three obsolete Potions was ₽299 short
+of the fixed Rock Tunnel safety reserve. The failed slot is immutable and v50 is retired. The
+teacher now conditionally sells the already-supported TM34 Bide capacity token only when observable
+cash plus the complete obsolete-Potion stack cannot fund the reserve; Cinnabar's qualified
+replacement preserves the later delayed-TM38 capacity lesson. V51 reserves train seeds
+`550001`–`550005`, validation seeds `560001`–`560002`, test seeds `570001`–`570005`, and dry-run
+seed `62001`. Its twelve counted slots remain unopened pending the committed-source rehearsal.

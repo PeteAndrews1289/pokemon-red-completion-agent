@@ -428,7 +428,10 @@ lineages remain hard leakage.
    71/71 battles, and Hall of Fame under state-observed repairs. V48 remains historical and the
    v49 rehearsal then exposed a late-corridor condition and was retired with every counted slot
    unopened. The exact seed-62001 diagnostic now completes the full terminal under the corrected
-   observed-progress rule. Fresh v50 slots remain unopened until its committed-source rehearsal. The first Forest-lineage
+   observed-progress rule. V50's rehearsal completed, but its first counted lineage exposed a
+   lower-level-Diglett economy branch and is preserved as a failed immutable attempt. V51 uses the
+   qualified Bide sale only when live cash plus obsolete Potions cannot fund Tunnel supplies; its
+   fresh slots remain unopened until the committed-source rehearsal. The first Forest-lineage
    rehearsal exposed a Route 24 moving-NPC collision at checkpoint 38/312. The qualified repair
    cleared that point, but the second rehearsal exposed a final Rock Tunnel trapping-recovery gap
    at checkpoint 109/312. Neither attempt consumed a declared slot; all twelve remain pending while

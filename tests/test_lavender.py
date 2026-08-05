@@ -197,6 +197,23 @@ def test_tm28_sale_moves_forward_only_when_obsolete_potions_cannot_fund_supplies
     )
 
 
+def test_bide_sale_covers_the_consumed_tm28_capture_branch() -> None:
+    assert lavender_module._needs_early_obsolete_tm_sale(
+        available_potions=3,
+        projected_money=9_751,
+        required_cost=10_500,
+    )
+    assert (
+        lavender_module._required_potion_sale_quantity(
+            available=3,
+            projected_money=9_751 + lavender_module.TM34_SALE_PROCEEDS,
+            required_cost=10_500,
+            preserve_existing_sale=False,
+        )
+        == 0
+    )
+
+
 def test_supply_income_detour_is_source_stable_and_reversible() -> None:
     assert (
         *(("right",) * 10),
