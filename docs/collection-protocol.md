@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v41.json`](../configs/red-battle-collection-v41.json)
+[`red-battle-collection-v42.json`](../configs/red-battle-collection-v42.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1707,3 +1707,12 @@ transition. The per-battle PP contract now records that measured budget and the 
 verifies each city step and both doorway transitions. Both validation seeds then completed 312/312,
 36/36, all 69 scheduled battles, Champion, and Hall of Fame. These artifacts remain stress-only;
 v41's fresh counted roots stay sealed pending the exact-source official rehearsal.
+
+V41 subsequently passed its official 312/312, 36/36, 69/69 rehearsal and completed train slots
+`400001` through `400003`. Immutable slot `400004` exhausted its 24 Great Balls plus retained Poké
+Ball while attempting the one-time Route 12 Snorlax capture, so v41 is preserved with three
+complete and one failed counted outcomes and is ineligible for fitting. V42 keeps the same frozen
+33-throw capture ceiling but funds 32 Great Balls by selling only the live obsolete-cure shortfall.
+The exact exposed seed completed the shop proof, capture proof, all downstream inventory gates,
+Champion, and Hall of Fame as an uncounted diagnostic. V42 uses fresh assignment identities and
+must pass its own committed clean-power rehearsal before any counted slot opens.

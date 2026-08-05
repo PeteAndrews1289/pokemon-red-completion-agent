@@ -1157,6 +1157,14 @@ last north input entered. All four remaining retired train/validation schedules 
 completed the 312-checkpoint, 36-objective, 69-battle Hall-of-Fame contract. The official v41
 source-bound rehearsal remains the final gate before fresh demonstration collection.
 
+That rehearsal passed, followed by three complete counted v41 training episodes. The fourth
+one-shot schedule then did exactly what the preregistration was designed to reveal: a valid
+Snorlax capture lineage consumed the entire 25-ball reserve. The system preserved the failure
+instead of rerunning it. V42 now makes the policy and economy agree—32 Great Balls plus the retained
+Poké Ball cover the full 33-throw ceiling, while exact sales of obsolete Potions and Antidotes fund
+the difference and appear in the public evidence report. Replaying the failed seed under that
+source completed all 312 checkpoints and Hall of Fame without weakening downstream inventory.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

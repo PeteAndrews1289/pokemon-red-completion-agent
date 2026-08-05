@@ -697,3 +697,10 @@ door transitions. Each exact failing seed subsequently reached 312/312 checkpoin
 objectives, 69/69 battle attestations, Champion, and Hall of Fame. The next gate is to regenerate
 the committed v41 source identity, pass the official clean-power rehearsal, and only then open
 fresh train seed `400001`.
+
+V41 passed the official rehearsal and its first three train slots, but train slot four exhausted
+the bounded Snorlax ball inventory. The failed one-attempt outcome is retained in the private
+ledger; v41 is retired rather than retried. The v42 source aligns purchased inventory with the
+existing 33-throw policy, proves the exact obsolete Potion/Antidote funding sales, and has completed
+the exposed `400004` schedule through Hall of Fame. The immediate gate is v42's committed official
+rehearsal, followed by five fresh train and two fresh validation episodes before the first fit.

@@ -317,7 +317,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v41-01-train
+  --collection-run red-battle-v42-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
@@ -672,8 +672,13 @@ liquidity-aware TM28 sale timing, a fourth tunnel-only paralysis contingency wit
 downstream reserve, bounded repeated-sleep recovery during Route 11 training, direct-exit Koga
 mutual-KO recognition, a reserve-safe 15-PP Route 13 accuracy budget, and observed Celadon Mart
 door transitions. Each exact failing schedule subsequently completed **312/312 checkpoints**,
-**36/36 objectives**, all **69** scheduled battles, and Hall of Fame. Counted v41 slots remain
-unopened until the regenerated source-bound official rehearsal passes.
+**36/36 objectives**, all **69** scheduled battles, and Hall of Fame. V41 then passed its official
+rehearsal and completed three counted training episodes; its immutable fourth slot exposed a
+33-throw Snorlax schedule that exhausted the 24-Great-Ball plus one-Poké-Ball reserve. V41 is
+preserved and retired. The v42 teacher funds all 32 Great Balls needed to cover the already-declared
+33-throw ceiling by selling only the exact obsolete Potion/Antidote shortfall, records those sales
+as evidence, and has completed the exact formerly failing seed through Hall of Fame. V42 now awaits
+its source-bound official rehearsal before opening fresh counted slots.
 
 ## Evidence and project status
 
