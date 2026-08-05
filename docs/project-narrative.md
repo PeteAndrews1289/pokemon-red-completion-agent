@@ -1047,6 +1047,15 @@ aisle invariant. Recovery is now corridor-wide: a blocked eastbound transition a
 `x=1` through `x=11` retreats to `(1,2)` and semantically replays only as far as that step's
 original target. Regression coverage includes both the original and later deadlock positions.
 
+That generalized source passed the official rehearsal at **312/312**, **36/36**, and **69/69**.
+The first v37 training root then exposed a wild encounter during the Route 11 grass approach after
+checkpoint 85. The controller had an encounter-aware movement primitive elsewhere, but this
+twelve-step capture approach still used the battle-intolerant corridor helper. The immutable
+failure is sealed and v37 is retired with eleven unopened roots. V38 applies the reusable rule:
+grass traversal must preserve a pending step across incidental encounters, flee within semantic
+bounds without changing party, PP, HP, or capture inventory, and only then begin the target-species
+search. Seed `280001` becomes diagnostic-only; all v38 counted partitions receive fresh seeds.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

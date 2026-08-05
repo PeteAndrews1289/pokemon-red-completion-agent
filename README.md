@@ -15,14 +15,12 @@ control, and progressively trained specialists.**
 > verified deterministic-teacher completion—not a learned-policy or unseen-seed generalization
 > claim. See the
 > [sanitized three-run completion receipt](docs/evidence/qualified-play-hall-of-fame-2026-07-29.json).
-> **August 4 collection update:** v36 completed five fresh full-game diagnostics and its official
-> 69-battle rehearsal, each at **312/312 checkpoints** and Hall of Fame. Its first immutable
-> training schedule then spent a sixth Super Potion on Route 9 and stopped at checkpoint 106 with
-> four remaining, below the declared five-item Rock Tunnel floor. That honest failure is sealed.
-> V37 protects a six-item tunnel reserve across both Route 9 battles and uses living teammates
-> once the healing surplus is exhausted. It uses the exposed v36 schedule only as an uncounted
-> diagnostic and assigns entirely fresh train, validation, and test seeds. Actual learned-policy
-> fitting begins only after the replacement demonstrations complete.
+> **August 4 collection update:** v37 completed its exposed-seed diagnostic and official 69-battle
+> rehearsal at **312/312 checkpoints**, then its first immutable training slot exposed an incidental
+> wild encounter during the Route 11 capture approach. That honest failure is sealed. V38 makes
+> grass navigation encounter-aware, uses seed `280001` only for uncounted diagnosis, and assigns
+> entirely fresh train, validation, and test seeds. Actual learned-policy fitting begins only after
+> the replacement demonstrations complete.
 > The first private, integrity-audited trajectory reproduced the same terminal in 4,796,436 frames
 > while recording **41,330 executor actions**, **300 events**, and **14,760 deduplicated semantic
 > snapshots**. The 14-action difference closes a previously uncounted menu-control path; it is not
@@ -319,7 +317,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v37-01-train
+  --collection-run red-battle-v38-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \

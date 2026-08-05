@@ -147,6 +147,50 @@ def test_route_1_walker_recovery_yields_restores_and_crosses(
     assert (crossed.player_x, crossed.player_y) == (14, 13)
 
 
+def test_encounter_aware_corridor_preserves_the_interrupted_grass_step(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(_raw(), map_id=MapId.ROUTE_11, player_x=10, player_y=6)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+    steps: list[str] = []
+
+    def survey_step(_executor, _reader, direction, _timing, _label):
+        steps.append(direction)
+        if len(steps) == 1:
+            reader.state = replace(reader.state, battle_state=1)
+        else:
+            reader.state = replace(reader.state, player_x=(reader.state.player_x or 0) + 1)
+        return reader.state
+
+    def flee(_executor, _reader, _raw):
+        reader.state = replace(reader.state, battle_state=0)
+
+    monkeypatch.setattr(surge_module, "_survey_step", survey_step)
+    monkeypatch.setattr(surge_module, "_flee", flee)
+    monkeypatch.setattr(
+        surge_module,
+        "_bag",
+        lambda _emulator: {ItemId.POKE_BALL: 30},
+    )
+
+    final = surge_module._move_fleeing_wild(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        ("right", "right"),
+        DEFAULT_SURGE_TIMING,
+        "Route 11 grass",
+    )
+
+    assert steps == ["right", "right", "right"]
+    assert (final.player_x, final.player_y, final.battle_state) == (12, 6, 0)
+
+
 def test_ball_decrement_waits_for_persistent_stack_sync(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

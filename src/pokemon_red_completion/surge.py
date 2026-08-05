@@ -390,7 +390,14 @@ def run_surge_chapter(
 
     _move(actions, reader, _directions("RDDDD" + "R" * 17), timing, "Route 11")
     _require(reader.read(), MapId.ROUTE_11, (0, 6), 0, "Route 11 entry")
-    _move(actions, reader, _directions("R" * 12), timing, "Route 11 grass")
+    _move_fleeing_wild(
+        emulator,
+        actions,
+        reader,
+        _directions("R" * 12),
+        timing,
+        "Route 11 grass",
+    )
     encounter = _find_spearow(emulator, actions, reader, timing)
     _gate(
         encounter,

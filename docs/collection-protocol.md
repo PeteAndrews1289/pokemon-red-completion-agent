@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v37.json`](../configs/red-battle-collection-v37.json)
+[`red-battle-collection-v38.json`](../configs/red-battle-collection-v38.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1545,3 +1545,15 @@ at `(9,2)`. That failed rehearsal is also retained and does not qualify the sour
 now defined over the complete bounded `y=2` aisle rather than one coordinate: any blocked eastbound
 step from `x=1` through `x=11` retreats to `(1,2)`, yields, and proves movement only through the
 original step target. Qualification restarts again with the generalized source.
+
+The generalized source then completed its official rehearsal at **312/312 checkpoints**,
+**36/36 objectives**, and all **69/69** scheduled battle attestations. V37's first immutable train
+slot nevertheless stopped after checkpoint 85 when a wild encounter began during the twelve-step
+Route 11 grass approach. The approach used the ordinary deterministic corridor primitive, which
+correctly rejected battle state but could not dismiss an incidental encounter before the explicit
+Spearow search began. That root is sealed, the other eleven v37 slots remain unopened, and v37 is
+retired. V38 uses the existing encounter-aware corridor primitive for those twelve grass steps: it
+retries the unconsumed movement after a bounded RUN, proves that party, PP, HP, and Poké Ball state
+remain protected, and then begins the same species-filtered search. Exposed seed `280001` is now
+diagnostic-only. V38 reserves fresh counted seeds `310001`–`310005`, `320001`–`320002`, and
+`330001`–`330005`; its fixed rehearsal seed remains `60001`.

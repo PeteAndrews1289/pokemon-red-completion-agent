@@ -600,3 +600,10 @@ That rehearsal passed the original `(5,2)` obstruction but encountered the same 
 `(9,2)`, proving the first repair was too coordinate-specific. The retreat-and-replay policy now
 covers every eastbound tile in the bounded fourth-floor aisle and has regressions for both exposed
 positions. A new source-bound rehearsal remains required.
+The generalized source subsequently qualified at 312/312 checkpoints, 36/36 objectives, and 69/69
+battle attestations. Its first v37 training root then encountered a wild Pokémon during the Route
+11 grass approach after checkpoint 85; that corridor still rejected battle state instead of using
+the existing encounter-aware movement policy. V37 is sealed with one failed and eleven unopened
+slots. V38 preserves pending grass steps across bounded wild flees, uses exposed seed `280001` only
+for diagnosis, and assigns fresh `310001`/`320001`/`330001` partition ranges before collection can
+resume.
