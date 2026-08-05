@@ -234,7 +234,9 @@ def test_stone_clerk_return_recovers_a_later_corridor_deadlock(
 
     class Emulator:
         def read_u8(self, address: int) -> int:
-            return 15 if address == saffron.STONE_CLERK_WALKER_X else 6
+            # The walker only needs to clear the x=1 alcove entrance. It does
+            # not need to move beyond this late x=10 corridor destination.
+            return 9 if address == saffron.STONE_CLERK_WALKER_X else 6
 
     monkeypatch.setattr(saffron, "_wait", lambda *args: None)
 

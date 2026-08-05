@@ -1037,7 +1037,10 @@ def _yield_from_stone_clerk_return(
                 emulator.read_u8(STONE_CLERK_WALKER_X) - 4,
                 emulator.read_u8(STONE_CLERK_WALKER_Y) - 4,
             )
-            if walker[1] == STONE_CLERK_RETURN_BLOCK_POSITION[1] and walker[0] > target_x:
+            if (
+                walker[1] == STONE_CLERK_RETURN_BLOCK_POSITION[1]
+                and walker[0] > STONE_CLERK_RETURN_RETREAT_POSITION[0]
+            ):
                 actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
                 _wait(actions, timing.movement_frames)
                 state = reader.read()
@@ -1050,7 +1053,7 @@ def _yield_from_stone_clerk_return(
             actions.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
         else:
             raise SaffronChapterError(
-                "Evolution-stone return recovery could not observe a clear corridor."
+                "Evolution-stone return recovery could not observe a clear alcove entrance."
             )
         for _ in range(STONE_CLERK_WALKER_CLEAR_ATTEMPTS):
             if (state.player_x, state.player_y) == STONE_CLERK_RETURN_RETREAT_POSITION:
