@@ -372,14 +372,11 @@ def _canonical_records(payload: bytes) -> list[Mapping[str, object]]:
 
 
 def _canonical_sha256(value: object) -> str:
-    payload = (
-        json.dumps(
-            value,
-            allow_nan=False,
-            ensure_ascii=True,
-            separators=(",", ":"),
-            sort_keys=True,
-        )
-        + "\n"
+    payload = json.dumps(
+        value,
+        allow_nan=False,
+        ensure_ascii=True,
+        separators=(",", ":"),
+        sort_keys=True,
     ).encode("ascii")
     return hashlib.sha256(payload).hexdigest()

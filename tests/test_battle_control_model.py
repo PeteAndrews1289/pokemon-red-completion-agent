@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import hashlib
+import json
+
 import numpy as np
 import pytest
 
@@ -10,6 +13,7 @@ from pokemon_red_completion.battle_control_features import (
 from pokemon_red_completion.battle_control_model import (
     BattleControlMLP,
     BattleControlModelError,
+    _canonical_sha256,
     evaluate_control_model,
 )
 
@@ -47,3 +51,16 @@ def test_control_mlp_learns_balanced_action_boundary_and_round_trips() -> None:
 def test_control_mlp_rejects_one_class_training() -> None:
     with pytest.raises(BattleControlModelError, match="at least two"):
         BattleControlMLP.fit(_examples()[::2])
+
+
+def test_control_model_digest_matches_canonical_artifact_writer_contract() -> None:
+    model = BattleControlMLP.fit(_examples(), seed=7, epochs=2)
+    payload = json.dumps(
+        model.to_dict(),
+        allow_nan=False,
+        ensure_ascii=True,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("ascii")
+
+    assert _canonical_sha256(model.to_dict()) == hashlib.sha256(payload).hexdigest()
