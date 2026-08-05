@@ -1,5 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 5: the full battle controller completes Red through typed execution
+
+The frozen high-level controller has now moved beyond shadow scoring into the live game loop. In a
+clean power-on run it completed **312/312 checkpoints** and **36/36 objectives**, defeated the
+Champion, and entered the Hall of Fame. Across 704 high-level decisions it agreed with the teacher
+on **701 (99.57%)**, executed 35 typed recovery/boost/switch requests, suppressed four teacher
+requests that its learned decision judged unnecessary, used three guarded safety fallbacks for
+special-action predictions that lacked a qualified target, and used zero ordinary teacher action
+fallbacks. Mean confidence was 99.01%.
+
+This run also corrected an evaluation mistake rather than disguising it as a gameplay failure. The
+controller won the Champion battle with four X Specials instead of the teacher's exact six, but the
+old receipt required the teacher's boost count and teacher-populated turn log even after the game
+had independently set the Champion event and entered the Hall of Fame. Completion evidence and
+teacher-strategy conformance are now separate: deterministic demonstrations retain the strict
+route receipt, while learned-controller evaluation accepts only real terminal game evidence and
+reports strategy disagreement independently.
+
+This is learned high-level battle control with typed execution, not autonomous Pokémon completion.
+Navigation and objective selection remain scripted, and the three guarded special-action cases
+still used a legal move because the class model does not yet predict item or party targets. The next
+controller must emit complete typed actions—including target selection—without consulting the
+teacher for parameterization, followed by learned objective/skill selection and cross-game transfer.
+
 ## August 5: the full battle controller reaches live shadow qualification
 
 The project now learns the high-level decision that the move ranker could not represent: whether
@@ -21,10 +45,10 @@ all 12 boosts and all 6 switches correctly, missed 3 of 15 recoveries, and propo
 of 645 move turns. The authenticated model SHA-256 is
 `9542220ad090c4014fd089f654d88dd523055832561952d4d44a99ad3f1be28a`.
 
-This is a live shadow qualification, not an autonomous full-battle claim: the teacher still
-executed the action after the controller was scored. The next gate promotes the controller behind
-typed menu executors, measures intervention-free completion, and retains fail-closed legality and
-resource checks. During this evaluation the perturbed teacher also exposed and fixed independent
+This was a live shadow qualification, not an autonomous full-battle claim: the teacher still
+executed the action after the controller was scored. The subsequent typed-execution rollout above
+passed the full completion gate while retaining fail-closed legality and resource checks. During
+shadow evaluation the perturbed teacher also exposed and fixed independent
 S.S. Anne waiter and disabled-preferred-move recovery defects; those failures were not attributed
 to the model.
 
