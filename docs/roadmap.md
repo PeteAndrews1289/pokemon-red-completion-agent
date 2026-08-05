@@ -705,6 +705,10 @@ existing 33-throw policy and completed two train slots before seed `400003` expo
 Celadon Mart 2F shopper collision. That immutable outcome is retained and v42 is retired. V43
 observes the shopper's live coordinates before crossing and expands the Silph rival's bounded
 recovery budget from two to four Hyper Potions. The exact `400003` schedule subsequently completed
-312/312 checkpoints, 36/36 objectives, and Hall of Fame. The immediate gate is v43's committed
-official rehearsal, followed by five fresh train and two fresh validation episodes before the
-first fit.
+312/312 checkpoints, 36/36 objectives, and Hall of Fame. V43 passed its official rehearsal, all
+five train slots, and validation slot one before seed `410002` exposed an adjacent random wild
+encounter followed by the scripted Marowak encounter. The immutable failed outcome is retained and
+v43 is retired. V44 recognizes the changed battle identity without consuming the scripted battle;
+the exact `410002` schedule subsequently completed 312/312 checkpoints, 36/36 objectives, and Hall
+of Fame. The immediate gate is v44's committed official rehearsal, followed by five fresh train and
+two fresh validation episodes before the first fit.

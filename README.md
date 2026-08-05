@@ -317,7 +317,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v43-01-train
+  --collection-run red-battle-v44-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
@@ -680,7 +680,12 @@ preserved and retired. The v42 teacher funded all 32 Great Balls needed to cover
 as evidence, and completed two counted training episodes before train seed `400003` exposed a
 fixed-cadence collision with the Celadon Mart 2F shopper. V42 is preserved and retired. The v43
 teacher observes that shopper frame-by-frame and permits four bounded Hyper Potions against the
-Silph rival; the exact `400003` schedule has completed 312/312 checkpoints and Hall of Fame.
+Silph rival; the exact `400003` schedule completed 312/312 checkpoints and Hall of Fame. V43 then
+completed all five train slots and its first validation slot before validation seed `410002`
+exposed a consecutive random-wild-to-scripted-Marowak transition that the flee normalizer treated
+as one battle. V43 is preserved and retired. The v44 teacher distinguishes a changed wild-battle
+identity, preserves the scripted Marowak encounter for its dedicated policy, and has replayed the
+exact `410002` schedule through 312/312 checkpoints, 36/36 objectives, and Hall of Fame.
 
 ## Evidence and project status
 
