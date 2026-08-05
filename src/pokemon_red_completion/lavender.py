@@ -55,7 +55,7 @@ REPEL_PRICE = 350
 POKE_BALL_SALE_PRICE = 100
 POTION_SALE_PRICE = 150
 EARLY_POKE_BALL_CAPACITY_RESERVE = 1
-POST_MART_RNG_ALIGNMENT_FRAMES = 159
+POST_MART_RNG_ALIGNMENT_FRAMES = 15
 TUNNEL_RECOVERY_THRESHOLD = 40
 TRAVERSAL_RECOVERY_THRESHOLD = 30
 BATTLE_RECOVERY_THRESHOLD = 40
@@ -68,7 +68,8 @@ ROUTE_9_MIN_SUPER_POTION_RESERVE = 6
 TUNNEL_SUPER_POTION_TARGET = 11
 TUNNEL_AWAKENINGS_PURCHASED = 3
 TUNNEL_AWAKENING_RESERVE = 5
-TUNNEL_PARLYZ_HEALS_PURCHASED = 3
+TUNNEL_PARLYZ_HEALS_PURCHASED = 4
+LAVENDER_PARLYZ_HEAL_RESERVE = 3
 LAVENDER_ANTIDOTE_RESERVE = 1
 TM28_SALE_PROCEEDS = 1_000
 TM24_SALE_PROCEEDS = 1_000
@@ -450,7 +451,7 @@ def run_lavender_chapter(
     ):
         raise LavenderChapterError(
             "Mart purchase did not produce the eleven-potion reserve, five Awakenings, "
-            "three Parlyz Heals, and four Repels."
+            "four Parlyz Heals, and four Repels."
         )
     _checkpoint(records, progress, emulator, supplies, "supplies", "Purchased tunnel supplies")
 
@@ -2402,8 +2403,9 @@ def _top_up_lavender_supplies(
         )
     quantity = LAVENDER_SUPER_POTION_RESERVE - quantity_before
     parlyz_before = _bag(emulator).get(ItemId.PARLYZ_HEAL, 0)
-    # Restore the three-cure reserve instead of blindly adding one. Rebuy only
-    # what an earlier observed contingency actually consumed.
+    # The tunnel may spend a fourth schedule-specific contingency cure, but
+    # downstream chapters need only the established three-cure reserve. Rebuy
+    # the exact shortfall without discarding a larger surviving stack.
     parlyz_quantity = _parlyz_top_up_quantity(parlyz_before)
     antidote_before = _bag(emulator).get(ItemId.ANTIDOTE, 0)
     antidote_quantity = _antidote_top_up_quantity(antidote_before)
@@ -2522,11 +2524,11 @@ def _top_up_lavender_supplies(
 
 
 def _parlyz_top_up_quantity(current_quantity: int) -> int:
-    """Return the exact purchase needed to restore the fixed cure reserve."""
+    """Return the exact purchase needed to restore the downstream cure reserve."""
 
     if not 0 <= current_quantity <= TUNNEL_PARLYZ_HEALS_PURCHASED:
         raise LavenderChapterError(f"Unsupported Lavender Parlyz Heal reserve: {current_quantity}.")
-    return TUNNEL_PARLYZ_HEALS_PURCHASED - current_quantity
+    return max(0, LAVENDER_PARLYZ_HEAL_RESERVE - current_quantity)
 
 
 def _antidote_top_up_quantity(current_quantity: int) -> int:
