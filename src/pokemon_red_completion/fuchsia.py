@@ -59,6 +59,7 @@ SNORLAX_BUBBLEBEAM_PP_BOUND = (1, 20)
 SNORLAX_RUNTIME_PULSE_BOUND = 720
 SNORLAX_GREAT_BALL_RESERVE = 32
 SNORLAX_SUPER_POTION_RESERVE = 2
+SNORLAX_SUPER_POTION_CARRY_MAX = 3
 SNORLAX_TM34_SALE_PROCEEDS = 1_000
 SNORLAX_POTION_SALE_PROCEEDS = 150
 SNORLAX_ANTIDOTE_SALE_PROCEEDS = 50
@@ -300,7 +301,11 @@ class FuchsiaChapterReport:
             and _bag_quantity(self.final_bag, ItemId.GREAT_BALL) == 0
             and _bag_quantity(self.final_bag, ItemId.SUPER_POTION) == 0
             and self.battles[1].balls_used <= SNORLAX_CAPTURE_POLICY.max_throws
-            and self.battles[1].recovery_items_used <= SNORLAX_SUPER_POTION_RESERVE
+            and self.battles[1].recovery_items_used
+            <= max(
+                SNORLAX_SUPER_POTION_RESERVE,
+                _bag_quantity(self.initial_bag, ItemId.SUPER_POTION),
+            )
             and _bag_quantity(self.initial_bag, ItemId.TM34_BIDE) == 1
             and _bag_quantity(self.final_bag, ItemId.TM34_BIDE) == 0
             and _bag_quantity(self.initial_bag, ItemId.POTION)
@@ -783,6 +788,11 @@ def _purchase_snorlax_capture_reserve(
     before_money = _money(emulator)
     before_balls = _bag(emulator).get(ItemId.GREAT_BALL, 0)
     before_potions = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    if before_potions > SNORLAX_SUPER_POTION_CARRY_MAX:
+        raise FuchsiaChapterError(
+            "Fuchsia input exceeds the bounded Super Potion carry ceiling: "
+            f"{before_potions}."
+        )
     potion_purchase_quantity = max(0, SNORLAX_SUPER_POTION_RESERVE - before_potions)
     if before_balls:
         raise FuchsiaChapterError("Fuchsia input unexpectedly already carries Great Balls.")

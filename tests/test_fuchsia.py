@@ -231,6 +231,15 @@ def test_snorlax_receipt_accepts_held_out_damage_roll_spend() -> None:
     assert replace(report, battles=tuple(battles)).passed
 
 
+def test_snorlax_receipt_accepts_proven_three_potion_upstream_surplus() -> None:
+    report = _report()
+    battles = list(report.battles)
+    battles[1] = replace(battles[1], recovery_items_used=3)
+    initial_bag = (*report.initial_bag, (int(ItemId.SUPER_POTION), 3))
+
+    assert replace(report, battles=tuple(battles), initial_bag=initial_bag).passed
+
+
 def test_snorlax_policy_falls_back_after_bubblebeam_is_exhausted() -> None:
     raw = RawGameState(
         game_started=True,
