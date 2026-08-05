@@ -1539,3 +1539,9 @@ stair-return corridor: the player at `(5,2)` and customer at `(6,2)` could not p
 controller continued pressing right. The failed rehearsal is retained and is not a qualification.
 The bounded recovery now retreats to `(1,2)`, yields the corridor, and proves each eastbound tile
 through `(6,2)` before the fixed route resumes. A fresh source-bound rehearsal is required.
+
+The next fixed rehearsal cleared `(6,2)` but the same moving customer caused another head-on block
+at `(9,2)`. That failed rehearsal is also retained and does not qualify the source. The recovery is
+now defined over the complete bounded `y=2` aisle rather than one coordinate: any blocked eastbound
+step from `x=1` through `x=11` retreats to `(1,2)`, yields, and proves movement only through the
+original step target. Qualification restarts again with the generalized source.

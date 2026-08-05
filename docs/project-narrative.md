@@ -1041,6 +1041,12 @@ retreats to the west end of the bounded corridor, yields for the customer to cro
 again only through observed one-tile transitions. This extends the earlier moving-NPC lesson from
 retrying an input to deliberately breaking a two-actor deadlock.
 
+The next rehearsal proved the `(5,2)` recovery and then met the same customer farther east at
+`(9,2)`. The initial repair had encoded the first observed coordinate rather than the underlying
+aisle invariant. Recovery is now corridor-wide: a blocked eastbound transition anywhere from
+`x=1` through `x=11` retreats to `(1,2)` and semantically replays only as far as that step's
+original target. Regression coverage includes both the original and later deadlock positions.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

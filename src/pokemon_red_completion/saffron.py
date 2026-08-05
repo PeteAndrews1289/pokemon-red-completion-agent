@@ -100,7 +100,7 @@ STONE_CLERK_WALKER_CLEAR_POSITION = (3, 2)
 STONE_CLERK_WALKER_YIELD_POSITION = (5, 2)
 STONE_CLERK_RETURN_BLOCK_POSITION = (5, 2)
 STONE_CLERK_RETURN_RETREAT_POSITION = (1, 2)
-STONE_CLERK_RETURN_CLEAR_POSITION = (6, 2)
+STONE_CLERK_RETURN_MAX_X = 11
 STONE_CLERK_WALKER_CLEAR_ATTEMPTS = 12
 STONE_CLERK_TO_MART_4F_STAIRS = _directions("LLLLUUURRRRRRRRRRR")
 MART_4F_TO_5F = _directions("RRRRU")
@@ -840,11 +840,18 @@ def _move(
             if (
                 label == "fourth-floor stair return"
                 and before.map_id == MapId.CELADON_MART_4F
-                and (before.player_x, before.player_y)
-                == STONE_CLERK_RETURN_BLOCK_POSITION
+                and before.player_y == STONE_CLERK_RETURN_BLOCK_POSITION[1]
+                and STONE_CLERK_RETURN_RETREAT_POSITION[0]
+                <= (before.player_x or -1)
+                <= STONE_CLERK_RETURN_MAX_X
                 and direction == "right"
             ):
-                after = _yield_from_stone_clerk_return(actions, reader, timing)
+                after = _yield_from_stone_clerk_return(
+                    actions,
+                    reader,
+                    timing,
+                    target_x=(before.player_x or 0) + 1,
+                )
                 break
         else:
             raise SaffronChapterError(
@@ -909,8 +916,13 @@ def _yield_from_stone_clerk_return(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SaffronTiming,
+    *,
+    target_x: int,
 ) -> RawGameState:
     """Retreat west so the fourth-floor customer can cross the return corridor."""
+
+    if not 2 <= target_x <= STONE_CLERK_RETURN_MAX_X + 1:
+        raise ValueError("stone-clerk return target must stay inside the fourth-floor corridor")
 
     for attempt in range(STONE_CLERK_WALKER_CLEAR_ATTEMPTS):
         state = reader.read()
@@ -921,7 +933,7 @@ def _yield_from_stone_clerk_return(
             or not (
                 STONE_CLERK_RETURN_RETREAT_POSITION[0]
                 <= (state.player_x or -1)
-                <= STONE_CLERK_RETURN_BLOCK_POSITION[0]
+                < target_x
             )
         ):
             raise SaffronChapterError(
@@ -941,7 +953,7 @@ def _yield_from_stone_clerk_return(
                     "Evolution-stone return recovery could not reach its retreat gate."
                 )
         _wait(actions, timing.movement_frames * (attempt + 1))
-        while (state.player_x, state.player_y) != STONE_CLERK_RETURN_CLEAR_POSITION:
+        while state.player_x != target_x:
             before_x = state.player_x
             actions.execute(MacroAction(MacroActionKind.MOVE, "right"))
             _wait(actions, timing.movement_frames)
@@ -959,7 +971,7 @@ def _yield_from_stone_clerk_return(
                 )
             state = advanced
             break
-        if (state.player_x, state.player_y) == STONE_CLERK_RETURN_CLEAR_POSITION:
+        if state.player_x == target_x and state.player_y == 2:
             return state
     raise SaffronChapterError(
         "Evolution-stone walker did not clear the stair-return corridor."

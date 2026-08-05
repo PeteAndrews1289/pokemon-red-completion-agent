@@ -140,6 +140,48 @@ def test_stone_clerk_return_retreats_until_fourth_floor_walker_clears(
     assert executor.retreated
 
 
+def test_stone_clerk_return_recovers_a_later_corridor_deadlock(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(_terminal(), map_id=MapId.CELADON_MART_4F, player_x=9, player_y=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        retreated = False
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            x = reader.state.player_x or 0
+            if action.value == "left":
+                reader.state = replace(reader.state, player_x=x - 1)
+                if x - 1 == 1:
+                    self.retreated = True
+            elif action.value == "right" and (self.retreated or x != 9):
+                reader.state = replace(reader.state, player_x=x + 1)
+            return action
+
+    executor = Executor()
+    monkeypatch.setattr(saffron, "_wait", lambda *args: None)
+
+    saffron._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        ("right",),
+        DEFAULT_SAFFRON_TIMING,
+        "fourth-floor stair return",
+    )
+
+    assert (reader.state.player_x, reader.state.player_y) == (10, 2)
+    assert executor.retreated
+
+
 def test_saffron_report_proves_purchase_handoff_order_and_terminal() -> None:
     raw = _terminal()
     bag = (

@@ -596,3 +596,7 @@ found a fourth-floor Celadon Mart moving-customer deadlock at checkpoint 230, wi
 `(5,2)` blocked from advancing through `(6,2)`. The controller now retreats to the west corridor
 gate, yields for the customer, and replays only observed one-tile transitions. Qualification must
 restart from clean power under this new source identity before any training slot opens.
+That rehearsal passed the original `(5,2)` obstruction but encountered the same customer at
+`(9,2)`, proving the first repair was too coordinate-specific. The retreat-and-replay policy now
+covers every eastbound tile in the bounded fourth-floor aisle and has regressions for both exposed
+positions. A new source-bound rehearsal remains required.
