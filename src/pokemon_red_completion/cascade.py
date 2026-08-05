@@ -72,6 +72,7 @@ CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS = {
     BULBASAUR_SPECIES_ID: 30,
 }
 CERULEAN_RIVAL_MAX_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE + 4
+CERULEAN_ANTIDOTE_RESERVE = 3
 POTION_HEAL_AMOUNT = 20
 TM01_FIELD_MENU_CLOSE_PULSES = 2
 ROUTE_24_RECOVERY_POTION_RESERVE = 6
@@ -1826,8 +1827,8 @@ def _purchase_cerulean_supplies(
     buy_one(
         shop_index=3,
         item=ItemId.ANTIDOTE,
-        purchase_quantity=2,
-        expected_quantity=2,
+        purchase_quantity=CERULEAN_ANTIDOTE_RESERVE,
+        expected_quantity=CERULEAN_ANTIDOTE_RESERVE,
         label="Antidotes",
     )
     buy_one(
@@ -1854,7 +1855,7 @@ def _purchase_cerulean_supplies(
         returned.map_id != MapId.CERULEAN_CITY
         or (returned.player_x, returned.player_y) != (19, 18)
         or _bag_quantity(emulator, ItemId.POTION) != CERULEAN_RIVAL_MAX_POTION_RESERVE
-        or _bag_quantity(emulator, ItemId.ANTIDOTE) != 2
+        or _bag_quantity(emulator, ItemId.ANTIDOTE) != CERULEAN_ANTIDOTE_RESERVE
         or _bag_quantity(emulator, ItemId.AWAKENING) != 1
         or not reader.read_input_readiness().ready
     ):
@@ -2156,7 +2157,7 @@ def _use_field_antidote_if_needed(
         and before.battle_state == 0
         and before.party_species_ids == (WARTORTLE_SPECIES_ID,)
         and before.first_party_status == 0
-        and 0 <= _bag_quantity(emulator, ItemId.ANTIDOTE) <= 2
+        and 0 <= _bag_quantity(emulator, ItemId.ANTIDOTE) <= CERULEAN_ANTIDOTE_RESERVE
         and reader.read_input_readiness().ready
     ):
         return
@@ -2165,7 +2166,7 @@ def _use_field_antidote_if_needed(
         or before.battle_state != 0
         or before.party_species_ids != (WARTORTLE_SPECIES_ID,)
         or before.first_party_status != 8
-        or not 1 <= _bag_quantity(emulator, ItemId.ANTIDOTE) <= 2
+        or not 1 <= _bag_quantity(emulator, ItemId.ANTIDOTE) <= CERULEAN_ANTIDOTE_RESERVE
         or not reader.read_input_readiness().ready
     ):
         raise CascadeChapterError(

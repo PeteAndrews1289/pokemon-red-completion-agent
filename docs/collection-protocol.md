@@ -1557,3 +1557,10 @@ retries the unconsumed movement after a bounded RUN, proves that party, PP, HP, 
 remain protected, and then begins the same species-filtered search. Exposed seed `280001` is now
 diagnostic-only. V38 reserves fresh counted seeds `310001`–`310005`, `320001`–`320002`, and
 `330001`–`330005`; its fixed rehearsal seed remains `60001`.
+
+The first v38 exposed-seed replay passed Route 11 and entered Rock Tunnel, then stopped before the
+eighth tunnel battle when a second poison cure was required and no Antidote remained. One of the
+two Cerulean purchases may be consumed before the dungeon, leaving only one for multiple protected
+lead/helper roles. The Cerulean purchase contract now carries three Antidotes and accepts every
+observed zero-to-three remainder at immediate field-cure gates. The replay remains uncounted and
+must restart from clean power under the resulting source identity.

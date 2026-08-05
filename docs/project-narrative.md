@@ -1056,6 +1056,13 @@ grass traversal must preserve a pending step across incidental encounters, flee 
 bounds without changing party, PP, HP, or capture inventory, and only then begin the target-species
 search. Seed `280001` becomes diagnostic-only; all v38 counted partitions receive fresh seeds.
 
+The first v38 replay proved the encounter-aware Route 11 repair, then reached Rock Tunnel and
+exposed a second poison contingency. One of the two Cerulean Antidotes had been used earlier, the
+first tunnel poison consumed the other, and a later protected-role handoff correctly refused to
+continue poisoned with no cure. Cerulean now buys three Antidotes: one may cover the early route
+while two remain available for independent tunnel roles. This is an explicit future-objective
+reserve, not an assumption that one status event represents the whole dungeon.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

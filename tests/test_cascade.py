@@ -23,6 +23,7 @@ from pokemon_red_completion.cascade import (
     CENTER_PC_TO_HEAL_DIRECTIONS,
     CENTER_TO_RIVAL_STAGING_DIRECTIONS,
     CENTER_TO_ROUTE_24_STAGING_CORRECTION_DIRECTIONS,
+    CERULEAN_ANTIDOTE_RESERVE,
     CERULEAN_GYM_POTION_RESERVE,
     CERULEAN_GYM_START_POTION_RESERVE,
     CERULEAN_GYM_TRAINER_MOVE_SLOT,
@@ -99,6 +100,10 @@ class _FinalEvidence:
     tm11_in_bag = True
     got_ss_ticket = True
     ss_ticket_in_bag = True
+
+
+def test_cerulean_poison_reserve_covers_route_and_tunnel_contingencies() -> None:
+    assert CERULEAN_ANTIDOTE_RESERVE == 3
 
 
 class _MemoryEmulator:

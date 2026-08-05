@@ -607,3 +607,7 @@ the existing encounter-aware movement policy. V37 is sealed with one failed and 
 slots. V38 preserves pending grass steps across bounded wild flees, uses exposed seed `280001` only
 for diagnosis, and assigns fresh `310001`/`320001`/`330001` partition ranges before collection can
 resume.
+The first v38 diagnostic cleared Route 11, then exposed a second poison contingency inside Rock
+Tunnel after the two-item Cerulean stock had been split between earlier travel and the dungeon.
+The teacher now buys three Antidotes and treats the extra cure as a protected downstream-role
+reserve. The same exposed seed must restart uncounted before v38 rehearsal.
