@@ -620,3 +620,9 @@ two verified route segments. The exposed diagnostic must restart once more.
 The next replay cleared Cerulean and exposed the S.S. Anne waiter at `(5,6)` rather than the former
 `(9,6)` gate. The step-aside recovery now covers the complete bounded first-floor corridor and
 derives its yield/clear coordinates from live position. Another clean diagnostic remains required.
+That diagnostic passed the repaired waiter, Route 11, and checkpoint 91, but the Forest curriculum
+spent its 22 surviving Balls before the final Pikachu capture. Route 1's newly caught low-level
+helpers had not been healed before the six-capture survey, reducing safe weakening capacity and
+making later cocoon attempts inventory-expensive. V38 now performs and verifies a free Viridian
+Center recovery, restores Pidgey and Rattata's 35-PP helper moves, and returns to the exact source
+boundary before the Forest. The exposed diagnostic must restart; all counted slots remain sealed.

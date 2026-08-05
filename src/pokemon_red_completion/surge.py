@@ -122,6 +122,8 @@ CITY_TO_CENTER = _directions(
 CENTER_TO_MART = _directions("DDDD" + "R" * 5 + "DDRR" + "D" * 5 + "R" * 5 + "UU")
 VIRIDIAN_TO_MART_DIRECTIONS = _directions("UUUUULUULUUUUUUUURRRRRRRRRRU")
 VIRIDIAN_MART_RETURN_DIRECTIONS = _directions("LLLLLLLLLLDDDDDDDDRDDRDDDDD")
+VIRIDIAN_TO_CENTER_DIRECTIONS = _directions("UUUUULUULUURRRRU")
+VIRIDIAN_CENTER_RETURN_DIRECTIONS = _directions("LLLLDDRDDRDDDDD")
 
 
 class EmulatorState(Protocol):
@@ -1225,6 +1227,7 @@ def _run_route_1_collection_detour(
         "Viridian southbound",
     )
     _survey_route_1(emulator, executor, reader, timing)
+    _recover_for_viridian_forest(emulator, executor, reader, timing)
     _restock_for_viridian_forest(emulator, executor, reader, timing)
     _run_viridian_forest_collection(emulator, executor, reader, timing)
     _move(
@@ -1325,6 +1328,76 @@ def _survey_route_1(
     if not {16, 19} <= owned:
         raise SurgeChapterError(f"Route 1 captures lack Pokédex ownership: {sorted(owned)!r}.")
     return report
+
+
+def _recover_for_viridian_forest(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SurgeTiming,
+) -> None:
+    """Restore the newly caught low-power helpers before the long survey."""
+
+    _require(reader.read(), MapId.VIRIDIAN_CITY, (21, 35), 0, "Route 1 recovery boundary")
+    _move(
+        executor,
+        reader,
+        VIRIDIAN_TO_CENTER_DIRECTIONS,
+        timing,
+        "Viridian Forest helper recovery",
+    )
+    _wait(executor, timing.transition_frames)
+    _require(
+        reader.read(),
+        MapId.VIRIDIAN_POKECENTER,
+        (3, 7),
+        0,
+        "Viridian Center entry",
+    )
+    _move(executor, reader, _directions("UUUU"), timing, "Viridian Center nurse")
+    _confirm(executor, 9, 240)
+
+    party = PokemonRedPartyReader(emulator).read()
+    if any(
+        member.hp != member.max_hp or member.status is not StatusCondition.HEALTHY
+        for member in party.members
+    ):
+        raise SurgeChapterError("Viridian Center did not restore the complete capture party.")
+    helper_pp: dict[int, int] = {}
+    helper_moves = {
+        RATTATA_SPECIES_ID: TACKLE_MOVE_ID,
+        PIDGEY_SPECIES_ID: GUST_MOVE_ID,
+    }
+    for member in party.members:
+        helper_move = helper_moves.get(member.species_id)
+        if helper_move is None:
+            continue
+        helper_pp[member.species_id] = next(
+            (move.current_pp for move in member.moves if move.move_id == helper_move),
+            -1,
+        )
+    if helper_pp != {RATTATA_SPECIES_ID: 35, PIDGEY_SPECIES_ID: 35}:
+        raise SurgeChapterError(
+            f"Viridian Center missed the capture-helper PP contract: {helper_pp!r}."
+        )
+
+    _move(executor, reader, _directions("DDDDD"), timing, "Viridian Center exit")
+    _wait(executor, timing.transition_frames)
+    _require(
+        reader.read(),
+        MapId.VIRIDIAN_CITY,
+        (23, 26),
+        0,
+        "Viridian Center exterior",
+    )
+    _move(
+        executor,
+        reader,
+        VIRIDIAN_CENTER_RETURN_DIRECTIONS,
+        timing,
+        "Viridian Forest recovery return",
+    )
+    _require(reader.read(), MapId.VIRIDIAN_CITY, (21, 35), 0, "Forest recovery return")
 
 
 def _restock_for_viridian_forest(

@@ -598,6 +598,14 @@ the unused TM24 for ₽1,000 at the point liquidity is needed. That battle is th
 identity, turning resource acquisition into explicit training evidence instead of assuming lucky
 Ball resale or cutting the ten-Super-Potion Tunnel reserve.
 
+The latest uncounted v38 stress replay cleared the repaired Cerulean, S.S. Anne, and Route 11
+branches and passed checkpoint 91, then reached the final required Viridian Forest species with no
+Poké Balls remaining. Its trace showed the deeper cause: Route 1's newly caught Pidgey and Rattata
+entered the six-capture survey without a source-boundary recovery, leaving too little safe low-power
+HP and PP for the cocoon weakening curriculum. The teacher now visits Viridian Center, proves the
+whole party healthy and both 35-PP helper moves restored, returns to the exact boundary, and only
+then begins the Forest survey. The attempt remains diagnostic-only; no v38 counted root is open.
+
 ## Evidence and project status
 
 - [Roadmap](docs/roadmap.md) — milestone gates and current implementation status

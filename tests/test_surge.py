@@ -421,6 +421,12 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert surge_module._inverse_directions(
         surge_module.VIRIDIAN_TO_MART_DIRECTIONS[:-1]
     ) == surge_module.VIRIDIAN_MART_RETURN_DIRECTIONS
+    assert surge_module._directions(
+        "UUUUULUULUURRRRU"
+    ) == surge_module.VIRIDIAN_TO_CENTER_DIRECTIONS
+    assert surge_module._directions(
+        "LLLLDDRDDRDDDDD"
+    ) == surge_module.VIRIDIAN_CENTER_RETURN_DIRECTIONS
     assert (
         CATERPIE_SPECIES_ID,
         METAPOD_SPECIES_ID,

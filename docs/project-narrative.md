@@ -1081,6 +1081,16 @@ correct but pinned to one meeting point. It now derives its yield and clear tile
 `y=6`, `x=2..9` corridor position, so the same passenger-passing skill applies wherever the moving
 actor and route meet.
 
+That generalized waiter replay continued through Route 11 and checkpoint 91, then exhausted its
+22 surviving Poké Balls when the Viridian Forest curriculum reached Pikachu. The capture logic had
+treated inventory as the only finite resource, but its low-damage helpers were finite too: newly
+caught Pidgey and Rattata carried their Route 1 health and move-PP state directly into six more
+captures. The repaired source introduces an explicit source-boundary preparation skill. It visits
+Viridian Center at no monetary cost, proves the complete party healthy, proves both low-power helper
+moves restored to 35 PP, and returns to the same observed boundary before the Forest controller
+runs. This preserves the existing capture, encounter, and economy limits while teaching that a
+completion planner must budget the agents that make a resource-efficient capture possible.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

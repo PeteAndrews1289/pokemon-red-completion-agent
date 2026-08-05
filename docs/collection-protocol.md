@@ -1581,3 +1581,13 @@ old recovery's single `(9,6)` source gate. The waiter recovery now supports the 
 `y=6`, `x=2..9` corridor and derives its downward yield and westward clear tiles from the live
 meeting coordinate. Regression evidence covers the new position. The uncounted diagnostic must
 restart under the updated source.
+
+The next restart passed those repaired branches, Route 11, and checkpoint 91 before the expanded
+Viridian Forest survey exhausted its remaining Poké Balls on the final required Pikachu. The trace
+entered the Forest with 22 Balls, but Pidgey and Rattata still carried their post-capture Route 1
+HP/PP state; repeated cocoon lessons therefore depleted the safe low-power weakening capacity and
+forced expensive full-health throws. The source now performs a free, bounded Viridian Center
+recovery between the two surveys, verifies every party member at full HP and healthy status, proves
+both Tackle/Gust helpers at 35 PP, and returns to the exact `(21,35)` source boundary before any
+restock or Forest action. This changes neither the money ledger nor any throw/encounter bound. The
+failed run remains uncounted and the fresh v38 partitions remain untouched.
