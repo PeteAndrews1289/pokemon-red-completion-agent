@@ -2179,6 +2179,7 @@ def _purchase_supplies(
         ),
         required_cost=expected_cost,
         preserve_existing_sale=starting_super_potions >= 2,
+        observed_bag=_bag(emulator),
     )
     potion_sale_proceeds = potion_sale_quantity * POTION_SALE_PRICE
     if potion_sale_quantity:
@@ -2249,6 +2250,7 @@ def _required_potion_sale_quantity(
     projected_money: int,
     required_cost: int,
     preserve_existing_sale: bool,
+    observed_bag: dict[ItemId, int] | None = None,
 ) -> int:
     """Fund fixed supplies from obsolete Potions after variable capture spend."""
 
@@ -2259,7 +2261,9 @@ def _required_potion_sale_quantity(
     if quantity > available:
         raise LavenderChapterError(
             "Rock Tunnel supplies exceed the observable obsolete-Potion reserve: "
-            f"shortfall={shortfall}, required={quantity}, available={available}."
+            f"shortfall={shortfall}, required={quantity}, available={available}, "
+            f"projected_money={projected_money}, required_cost={required_cost}, "
+            f"bag={observed_bag!r}."
         )
     return quantity
 
