@@ -614,3 +614,6 @@ reserve. The same exposed seed must restart uncounted before v38 rehearsal.
 The extra Cerulean purchase input shifted pedestrian timing and exposed a blind rival-staging
 trace, which ended at `(16,16)` instead of `(20,7)`. That route now proves each tile transition
 with bounded unchanged-input retries. The diagnostic must restart again under the new source.
+Because the pedestrian could remain head-on at `(16,16)`, retries alone were insufficient. Rival
+staging now reuses the existing bounded Route 24 NPC crossing from `(16,16)` to `(8,16)` between
+two verified route segments. The exposed diagnostic must restart once more.

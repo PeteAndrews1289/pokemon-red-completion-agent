@@ -397,8 +397,15 @@ def run_cascade_chapter(
     _move_verified(
         chapter_executor,
         reader,
-        CENTER_TO_RIVAL_STAGING_DIRECTIONS,
-        "Cerulean rival staging",
+        CENTER_TO_RIVAL_STAGING_DIRECTIONS[:5],
+        "Cerulean rival staging east approach",
+    )
+    _cross_route_24_npc(chapter_executor, reader, timing)
+    _move_verified(
+        chapter_executor,
+        reader,
+        CENTER_TO_RIVAL_STAGING_DIRECTIONS[13:],
+        "Cerulean rival staging north approach",
     )
     rival_staging = reader.read()
     if (

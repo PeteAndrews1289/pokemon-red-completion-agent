@@ -1570,3 +1570,8 @@ Center-to-rival staging trace: several swallowed inputs left the player at `(16,
 the required `(20,7)`. The run stopped at checkpoint 36 and remains uncounted. That staging route
 now requires every direction to change map or coordinate within eight bounded retries and rejects
 battle or a fainted lead before continuing. The exposed seed must restart under this source.
+
+The replay showed unchanged-input retries alone cannot break the head-on pedestrian deadlock at
+`(16,16)`. The route now proves its approach to that existing east gate, delegates the crossing to
+the already bounded Route 24 NPC controller until `(8,16)`, and verifies the remaining northbound
+segment separately. The failed diagnostic stays uncounted; another clean restart is required.

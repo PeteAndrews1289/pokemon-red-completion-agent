@@ -1069,6 +1069,12 @@ swallowed steps and stopped at `(16,16)` instead of `(20,7)`. That route now ret
 field inputs and proves every requested map/coordinate transition before advancing. The lesson is
 that even a correct resource change must revalidate downstream navigation timing.
 
+Simple retries then deadlocked against the pedestrian at `(16,16)`. That tile is the same bounded
+west-corridor crossing already solved for the later Route 24 approach, so the rival route now
+stages at the known east gate, reuses the collision-aware eight-tile crossing, and resumes its
+verified north approach from `(8,16)`. Reusing the semantic skill avoids inventing another
+coordinate-specific workaround for the same world interaction.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
