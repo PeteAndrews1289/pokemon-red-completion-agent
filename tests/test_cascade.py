@@ -799,10 +799,15 @@ def test_route_24_recovery_consumes_the_retained_field_potion() -> None:
     ) == FIELD_ITEM_MENU_CLOSE_PULSES
 
 
+@pytest.mark.parametrize(
+    "potion_quantity",
+    (CERULEAN_GYM_START_POTION_RESERVE, CERULEAN_GYM_POTION_RESERVE),
+)
 def test_cerulean_gym_preserves_unused_potion_after_full_hp_victory(
     monkeypatch: pytest.MonkeyPatch,
+    potion_quantity: int,
 ) -> None:
-    emulator = _MemoryEmulator(potion_quantity=CERULEAN_GYM_START_POTION_RESERVE)
+    emulator = _MemoryEmulator(potion_quantity=potion_quantity)
     starting = replace(
         _raw(),
         first_party_hp=61,
@@ -833,13 +838,18 @@ def test_cerulean_gym_preserves_unused_potion_after_full_hp_victory(
     )
 
     assert observed is terminal
-    assert _bag_quantity_for_test(emulator) == CERULEAN_GYM_START_POTION_RESERVE
+    assert _bag_quantity_for_test(emulator) == potion_quantity
 
 
+@pytest.mark.parametrize(
+    "potion_quantity",
+    (CERULEAN_GYM_START_POTION_RESERVE, CERULEAN_GYM_POTION_RESERVE),
+)
 def test_cerulean_gym_spends_exactly_one_potion_after_damaged_victory(
     monkeypatch: pytest.MonkeyPatch,
+    potion_quantity: int,
 ) -> None:
-    emulator = _MemoryEmulator(potion_quantity=CERULEAN_GYM_START_POTION_RESERVE)
+    emulator = _MemoryEmulator(potion_quantity=potion_quantity)
     starting = replace(
         _raw(),
         first_party_hp=61,
@@ -863,8 +873,8 @@ def test_cerulean_gym_spends_exactly_one_potion_after_damaged_victory(
             return type("Ready", (), {"ready": True})()
 
     def fake_recovery(*_args: object, **kwargs: object) -> None:
-        assert kwargs["starting_quantity"] == CERULEAN_GYM_START_POTION_RESERVE
-        assert kwargs["ending_quantity"] == CERULEAN_GYM_START_POTION_RESERVE - 1
+        assert kwargs["starting_quantity"] == potion_quantity
+        assert kwargs["ending_quantity"] == potion_quantity - 1
         emulator.memory[int(RamAddress.BAG_ITEMS) + 1] -= 1
 
     monkeypatch.setattr(cascade_module, "_select_battle_move", lambda *_a, **_k: None)
@@ -880,7 +890,7 @@ def test_cerulean_gym_spends_exactly_one_potion_after_damaged_victory(
     )
 
     assert observed is terminal
-    assert _bag_quantity_for_test(emulator) == CERULEAN_GYM_START_POTION_RESERVE - 1
+    assert _bag_quantity_for_test(emulator) == potion_quantity - 1
 
 
 def _bag_quantity_for_test(emulator: _MemoryEmulator) -> int:

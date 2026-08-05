@@ -569,11 +569,19 @@ def run_cascade_chapter(
     )
     route_24_potions = _bag_quantity(emulator, ItemId.POTION)
     if route_24_potions == ROUTE_24_RECOVERY_POTION_RESERVE:
-        _use_route_24_recovery_potion(
-            reader,
-            chapter_executor,
-            emulator,
-        )
+        route_24_state = reader.read()
+        if (
+            route_24_state.first_party_hp is None
+            or route_24_state.first_party_max_hp is None
+            or not 0 < route_24_state.first_party_hp <= route_24_state.first_party_max_hp
+        ):
+            raise CascadeChapterError("Route 24 bridge recovery lacks live HP evidence.")
+        if route_24_state.first_party_hp < route_24_state.first_party_max_hp:
+            _use_route_24_recovery_potion(
+                reader,
+                chapter_executor,
+                emulator,
+            )
     elif route_24_potions == ROUTE_25_RECOVERY_POTION_RESERVE:
         _recover_route_24(
             chapter_executor,
@@ -584,7 +592,7 @@ def run_cascade_chapter(
         )
     else:
         raise CascadeChapterError(
-            "Route 24 bridge recovery changed its protected four-Potion handoff."
+            "Route 24 bridge recovery changed its protected Potion handoff."
         )
     _move(
         chapter_executor,
@@ -688,7 +696,7 @@ def run_cascade_chapter(
             chapter_executor,
             emulator,
         )
-        if trainer_index == 2:
+        if trainer_index == 2 and _lead_is_injured(reader.read()):
             _use_route_25_recovery_potion(
                 reader,
                 chapter_executor,
@@ -1677,6 +1685,16 @@ def _use_route_25_recovery_potion(
     )
 
 
+def _lead_is_injured(state: RawGameState) -> bool:
+    """Return whether the living lead can benefit from field recovery."""
+
+    return (
+        state.first_party_hp is not None
+        and state.first_party_max_hp is not None
+        and 0 < state.first_party_hp < state.first_party_max_hp
+    )
+
+
 def _use_field_recovery_potion(
     reader: PokemonRedStateReader,
     executor: _CountingChapterExecutor,
@@ -2081,10 +2099,16 @@ def _purchase_cerulean_awakening_topup(
             raise CascadeChapterError(f"Cerulean Mart did not purchase the {item.name} top-up.")
         _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
 
+    potion_quantity = _bag_quantity(emulator, ItemId.POTION)
+    potion_topup = CERULEAN_GYM_POTION_RESERVE - potion_quantity
+    if potion_topup not in {2, 3}:
+        raise CascadeChapterError(
+            "Cerulean Potion top-up is outside its protected two-or-three-item bound."
+        )
     buy_topup(
         shop_index=1,
         item=ItemId.POTION,
-        purchase_quantity=3,
+        purchase_quantity=potion_topup,
         expected_quantity=CERULEAN_GYM_POTION_RESERVE,
     )
     buy_topup(
@@ -2455,9 +2479,9 @@ def _run_cerulean_gym_trainer_with_potion(
     """Preserve the downstream reserve while surviving bounded confusion."""
 
     starting_quantity = _bag_quantity(emulator, ItemId.POTION)
-    if starting_quantity != CERULEAN_GYM_START_POTION_RESERVE:
+    if not CERULEAN_GYM_START_POTION_RESERVE <= starting_quantity <= CERULEAN_GYM_POTION_RESERVE:
         raise CascadeChapterError(
-            "Cerulean Gym recovery lacks its seven-Potion starting reserve."
+            "Cerulean Gym recovery lacks its bounded seven-or-eight-Potion starting reserve."
         )
     starting_pp = reader.read().first_party_pp
     if starting_pp is None:
@@ -2506,9 +2530,7 @@ def _run_cerulean_gym_trainer_with_potion(
                     ending_quantity = starting_quantity - int(recovery_used)
                     ending_pp = before.first_party_pp
                     if (
-                        not CERULEAN_GYM_START_POTION_RESERVE - 1
-                        <= ending_quantity
-                        <= CERULEAN_GYM_START_POTION_RESERVE
+                        not starting_quantity - 1 <= ending_quantity <= starting_quantity
                         or _bag_quantity(emulator, ItemId.POTION) != ending_quantity
                         or ending_pp is None
                         or ending_pp[CERULEAN_GYM_TRAINER_MOVE_SLOT - 1]
@@ -2592,7 +2614,7 @@ def _run_misty_with_potion(
     """Spend only Misty's live surplus while preserving the Rocket reserve."""
 
     starting_quantity = _bag_quantity(emulator, ItemId.POTION)
-    if not ROCKET_THIEF_POTION_RESERVE <= starting_quantity <= CERULEAN_GYM_START_POTION_RESERVE:
+    if not ROCKET_THIEF_POTION_RESERVE <= starting_quantity <= CERULEAN_GYM_POTION_RESERVE:
         raise CascadeChapterError("Misty recovery lacks its bounded Potion reserve.")
     recoveries = 0
 
