@@ -1591,3 +1591,11 @@ recovery between the two surveys, verifies every party member at full HP and hea
 both Tackle/Gust helpers at 35 PP, and returns to the exact `(21,35)` source boundary before any
 restock or Forest action. This changes neither the money ledger nor any throw/encounter bound. The
 failed run remains uncounted and the fresh v38 partitions remain untouched.
+
+The repaired replay did complete all six Forest captures. Its subsequent field Dig returned to the
+newly visited Viridian Center rather than the obsolete Vermilion anchor, and the exact destination
+gate stopped the run. The source now treats the changed anchor as real world state: it proves the
+Viridian return, walks the bounded Route 2 approach again, traverses Diglett's Cave toward Route 11
+with the same encounter/inventory protections, normalizes the Vermilion east boundary, and reaches
+the existing Center-storage coordinate. Both cave directions share one finite search controller;
+neither the field move nor a hidden warp assumption is removed. This failure is uncounted.

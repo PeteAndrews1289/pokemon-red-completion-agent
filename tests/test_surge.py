@@ -427,6 +427,9 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert surge_module._directions(
         "LLLLDDRDDRDDDDD"
     ) == surge_module.VIRIDIAN_CENTER_RETURN_DIRECTIONS
+    assert surge_module._directions(
+        "LLUUUUUUUUUULLLLLLLLLL"
+    ) == surge_module.VERMILION_ROUTE_11_TO_CENTER_EXTERIOR
     assert (
         CATERPIE_SPECIES_ID,
         METAPOD_SPECIES_ID,
@@ -447,6 +450,31 @@ def test_surge_money_decodes_exact_bcd_ledger() -> None:
             return self.values[address]
 
     assert surge_module._money(Emulator()) == 12_345  # type: ignore[arg-type]
+
+
+def test_cave_crossing_wrappers_bind_opposite_targets(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[dict[str, object]] = []
+
+    def traverse(*_args: object, **kwargs: object) -> str:
+        calls.append(kwargs)
+        return "crossed"
+
+    monkeypatch.setattr(surge_module, "_traverse_cave", traverse)
+
+    assert surge_module._traverse_cave_to_route_2(None, None, None, None) == "crossed"
+    assert surge_module._traverse_cave_to_route_11(None, None, None, None) == "crossed"
+    assert calls == [
+        {
+            "target_map": MapId.DIGLETTS_CAVE_ROUTE_2,
+            "entrance_warp": (37, 31),
+            "label": "Route 2 cave traversal",
+        },
+        {
+            "target_map": MapId.DIGLETTS_CAVE_ROUTE_11,
+            "entrance_warp": (5, 5),
+            "label": "Route 11 cave traversal",
+        },
+    ]
 
 
 def test_forest_restock_preserves_an_existing_surplus(monkeypatch: pytest.MonkeyPatch) -> None:

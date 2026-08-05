@@ -626,3 +626,8 @@ helpers had not been healed before the six-capture survey, reducing safe weakeni
 making later cocoon attempts inventory-expensive. V38 now performs and verifies a free Viridian
 Center recovery, restores Pidgey and Rattata's 35-PP helper moves, and returns to the exact source
 boundary before the Forest. The exposed diagnostic must restart; all counted slots remain sealed.
+That source completed the Forest but then proved the Center visit had changed Dig's destination to
+Viridian. V38 now verifies that new field-move anchor and legally returns through Route 2 and
+Diglett's Cave in the opposite direction before the existing Vermilion storage lesson. The shared
+cave controller is target-parameterized and keeps the same finite encounter/flee/inventory proofs.
+Another clean exposed-seed replay is required before the official rehearsal.

@@ -1091,6 +1091,15 @@ moves restored to 35 PP, and returns to the same observed boundary before the Fo
 runs. This preserves the existing capture, encounter, and economy limits while teaching that a
 completion planner must budget the agents that make a resource-efficient capture possible.
 
+The next trace proved the preparation worked by completing the Forest collection, then exposed its
+world-state consequence: the last healed Center determines Dig's destination, so the field move
+returned to Viridian instead of Vermilion. Rather than hard-coding the old destination or discarding
+the field-move lesson, the teacher now verifies the new anchor and plans a legal physical return.
+The collision-discovering Diglett's Cave controller is parameterized for either exit, retains its
+wild-flee and inventory invariants, and carries the party back through Route 11 to the original
+Vermilion storage boundary. This turns an apparent routing regression into an explicit lesson about
+actions changing future navigation affordances.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
