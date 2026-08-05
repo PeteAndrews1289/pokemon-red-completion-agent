@@ -721,6 +721,8 @@ lesson: it deliberately fights Cinnabar Gym Burglar sets 4 and 5, proves their e
 ₽6,930 combined payout, and expands the scheduled roster to 71 battles. The exact 24-throw Snorlax
 lineage that previously reached Indigo with only ₽389 now completes 312/312 checkpoints, 36/36
 objectives, 71/71 schedule attestations, Champion, and Hall of Fame. Remaining gates are to finish
-the other uncounted stress seeds, publish the source-bound v48 registry, pass its independent
-seed-62001 rehearsal, then collect five train and two validation demonstrations before fitting the
-replacement candidate. Test remains sealed until after freeze.
+the other uncounted stress seeds. Seeds `61003` and `61004` completed after conditional recovery;
+seed `61005` then exposed and verified the live Celadon-walker repair before completing Hall of
+Fame. V48 remains historical. The source-bound v49 registry now provides fresh unopened slots;
+its independent seed-62001 rehearsal is next, followed by five train and two validation
+demonstrations before fitting the replacement candidate. Test remains sealed until after freeze.

@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v48.json`](../configs/red-battle-collection-v48.json)
+[`red-battle-collection-v49.json`](../configs/red-battle-collection-v49.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 71 stable public battle-plan identities in exact qualified-route order;
@@ -1736,5 +1736,15 @@ formerly failing diagnostic, private episode
 checkpoints, 36/36 objectives, 71/71 schedule attestations, Champion, and Hall of Fame. This is
 uncounted stress evidence, not collection qualification. V48 reserves fresh train seeds
 `460001`–`460005`, validation seeds `470001`–`470002`, test seeds `480001`–`480005`, and dry-run
-seed `62001`; no counted slot may open until the remaining stress schedules and the independent
-committed-source dry run pass.
+seed `62001`; no counted slot opened.
+
+Diagnostic seed `61003` then exposed an invalid exact-outcome assumption: Wartortle legally left
+Route 24 at full HP, so the teacher had no reason to consume the reserved Potion. Recovery and
+the subsequent Mart top-up now depend on live HP and carried quantity. Seeds `61003` and `61004`
+then completed 312/312 checkpoints, 36/36 objectives, 71/71 schedule attestations, Champion, and
+Hall of Fame. Seed `61005` exposed a second schedule alias at the Celadon Mart fourth-floor moving
+Youngster. The return controller now reads that source-pinned object's live coordinates before
+leaving its yield alcove; the exact seed subsequently completed the same full terminal. Because
+v48 was already published, it remains historical. V49 reserves fresh train seeds
+`490001`–`490005`, validation seeds `500001`–`500002`, test seeds `510001`–`510005`, and dry-run
+seed `62001`. All twelve v49 counted slots remain unopened until its committed-source rehearsal.

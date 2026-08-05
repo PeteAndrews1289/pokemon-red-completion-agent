@@ -422,10 +422,11 @@ lineages remain hard leakage.
    only complete train/validation outcomes while leaving test sealed. **Done as protocol
    infrastructure; the fitting lane has not executed because collection is pending.**
 18. Commit and push the exact source/configuration state, then complete the disjoint, unassigned,
-   non-counted 71/71 schedule dry run before slot `01`. **Pending; the current v48 source completed
-   the exact formerly failing seed `61002` at 312/312 checkpoints, 36/36 objectives, 71/71 battles,
-   and Hall of Fame. The remaining uncounted stress schedules and the independent committed-source
-   rehearsal must still pass before slot `01`; no v48 counted slot is open. The first Forest-lineage
+   non-counted 71/71 schedule dry run before slot `01`. **Pending; v48 completed the exact formerly
+   failing economy seed but stress seeds `61003` and `61005` exposed conditional-recovery and
+   moving-NPC assumptions. Both exact schedules now complete 312/312 checkpoints, 36/36 objectives,
+   71/71 battles, and Hall of Fame under state-observed repairs. V48 remains historical and the
+   fresh v49 slots are unopened until its independent committed-source rehearsal. The first Forest-lineage
    rehearsal exposed a Route 24 moving-NPC collision at checkpoint 38/312. The qualified repair
    cleared that point, but the second rehearsal exposed a final Rock Tunnel trapping-recovery gap
    at checkpoint 109/312. Neither attempt consumed a declared slot; all twelve remain pending while

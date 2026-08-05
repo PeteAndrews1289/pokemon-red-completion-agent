@@ -18,12 +18,14 @@ control, and progressively trained specialists.**
 > **August 5 collection update:** the first battle model is trained from five complete teacher
 > lineages and reaches **85.8% held-out validation accuracy** across two validation lineages. Its
 > sealed test partition remains unopened. Broader teacher stress then exposed a legitimate
-> high-capture-cost economy lineage. The v48 route deliberately fights two source-pinned Cinnabar
+> high-capture-cost economy lineage. The route deliberately fights two source-pinned Cinnabar
 > Gym Burglars for **₽6,930** and four additional Fire-type opponents instead of depending on lucky
 > captures or selling useful supplies. The exact formerly failing schedule now completes **312/312
 > checkpoints**, **36/36 objectives**, all **71/71 scheduled battles**, the Champion, and Hall of
-> Fame. This is uncounted diagnostic evidence; v48 collection remains sealed until the remaining
-> stress schedules and its independent committed-source rehearsal pass.
+> Fame. Subsequent stress schedules exposed an unconditional Route 24 recovery and a fixed-delay
+> Celadon walker loop. Both now use live game state, and the exact Celadon failure subsequently
+> completed **312/312**, **36/36**, **71/71**, and Hall of Fame. V48 remains historical; the repaired
+> v49 campaign has fresh unopened slots and still requires its committed-source rehearsal.
 > The first private, integrity-audited trajectory reproduced the same terminal in 4,796,436 frames
 > while recording **41,330 executor actions**, **300 events**, and **14,760 deduplicated semantic
 > snapshots**. The 14-action difference closes a previously uncounted menu-control path; it is not
@@ -320,7 +322,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v48-01-train
+  --collection-run red-battle-v49-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
@@ -713,6 +715,9 @@ exact `410002` schedule through 312/312 checkpoints, 36/36 objectives, and Hall 
 - [V48 expensive-lineage stress receipt](docs/evidence/private-stress-v48-seed-61002-2026-08-05.json)
   — 312/312 checkpoints, 36/36 objectives, 71/71 scheduled battles, and Hall of Fame after the
   source-pinned Cinnabar income curriculum
+- [Post-v48 state-observation stress receipt](docs/evidence/private-stress-post-v48-seed-61005-2026-08-05.json)
+  — the exact Route 24/Celadon timing lineage completes 312/312 checkpoints, 36/36 objectives,
+  71/71 scheduled battles, and Hall of Fame after state-based recovery and walker handling
 - [Optional upstream baseline](docs/upstream-baseline.md) — pinned, isolated comparison boundary
 - [Contributing](CONTRIBUTING.md) — safety and evidence requirements
 

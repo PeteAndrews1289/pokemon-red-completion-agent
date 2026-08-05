@@ -1,0 +1,40 @@
+{
+  "claim_boundary": "Uncounted robustness diagnostic for the deterministic teacher; not collection qualification or learned-policy evaluation.",
+  "episode_id": "red-schedule-diagnostic-59fdd39747c64d20a49bef2367d18544",
+  "game_complete": true,
+  "harness_seed": 61005,
+  "manifest_sha256": "2b5ea412d142a36ca758a0680bec3ba97d7c5eab94654e8bfd53bcc72a8e3b82",
+  "objectives": {
+    "total": 36,
+    "verified": 36
+  },
+  "route": {
+    "checkpoints_total": 312,
+    "checkpoints_verified": 312,
+    "controller_released": true,
+    "frames": 9426266,
+    "qualified_through": "enter_hall_of_fame"
+  },
+  "schedule": {
+    "complete": true,
+    "expected_battles": 71,
+    "finished_battles": 71,
+    "sha256": "1dcbdffaa122682271b437f40f07374c456c05388b5be829ce2e6cba9795a961"
+  },
+  "schema": "pokemon-red-private-stress-receipt-v1",
+  "source_commit": "2ccf249",
+  "status": "complete",
+  "stream": {
+    "bytes": 77181415,
+    "decisions": 637,
+    "events": 384,
+    "executions": 89162,
+    "records": 112242,
+    "snapshots": 22058
+  },
+  "teacher_change": {
+    "celadon_walker_policy": "Observe the pinned fourth-floor Youngster's live coordinates before leaving the yield alcove.",
+    "cerulean_recovery_policy": "Consume recovery only when live HP is below maximum and carry unused surplus forward.",
+    "purpose": "Replace exact-outcome and fixed-delay assumptions with state-observed reusable policies."
+  }
+}
