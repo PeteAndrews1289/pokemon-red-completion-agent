@@ -466,6 +466,21 @@ def _parser() -> argparse.ArgumentParser:
         ),
     )
     play.add_argument(
+        "--execute-battle-control",
+        action="store_true",
+        help=(
+            "Promotion mode: let the full-battle controller gate typed recovery, "
+            "boost, and switch requests; requires --battle-control-model and "
+            "--allow-model-disagreement."
+        ),
+    )
+    play.add_argument(
+        "--battle-control-confidence-threshold",
+        type=float,
+        default=0.0,
+        help="Teacher-gate the control decision below this confidence (default: 0).",
+    )
+    play.add_argument(
         "--diagnostic-schedule-seed",
         type=int,
         help="Apply an uncounted reproducible battle-timing perturbation schedule.",
@@ -1736,6 +1751,12 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 )
             if args.battle_control_model is not None and args.battle_model is None:
                 parser.error("--battle-control-model requires --battle-model")
+            if args.execute_battle_control and args.battle_control_model is None:
+                parser.error("--execute-battle-control requires --battle-control-model")
+            if args.execute_battle_control and not args.allow_model_disagreement:
+                parser.error(
+                    "--execute-battle-control requires --allow-model-disagreement"
+                )
             battle_model = (
                 load_battle_model_artifact(args.battle_model)
                 if args.battle_model is not None
@@ -1823,6 +1844,10 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     progress=_print_qualified_progress,
                     battle_model=battle_model,
                     battle_control_model=battle_control_model,
+                    execute_battle_control_model=args.execute_battle_control,
+                    battle_control_confidence_threshold=(
+                        args.battle_control_confidence_threshold
+                    ),
                     battle_model_confidence_threshold=args.battle_confidence_threshold,
                     require_battle_model_teacher_agreement=not args.allow_model_disagreement,
                     battle_correction_sink=(

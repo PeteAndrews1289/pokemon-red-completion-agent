@@ -13,6 +13,7 @@ import numpy as np
 
 from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_control_features import (
+    CONTROL_CLASS_REFS,
     BattleControlHistory,
     BattleControlHistoryTracker,
     control_class_ref,
@@ -63,6 +64,8 @@ class ModelAssistedBattlePolicy:
     encoder: PokemonRedObservationEncoder
     confidence_threshold: float
     control_model: BattleControlMLP | None = None
+    execute_control_model: bool = False
+    control_confidence_threshold: float = 0.0
     require_teacher_agreement: bool = True
     projector: BattleFeatureProjector = field(
         default_factory=lambda: BattleFeatureProjector(PokemonRedBattleCatalog())
@@ -89,6 +92,11 @@ class ModelAssistedBattlePolicy:
     control_history: BattleControlHistoryTracker = field(
         default_factory=BattleControlHistoryTracker
     )
+    control_execution_decisions: int = 0
+    control_execution_requests: int = 0
+    control_suppressed_teacher_requests: int = 0
+    control_safety_fallbacks: int = 0
+    control_low_confidence_fallbacks: int = 0
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.confidence_threshold <= 1.0:
@@ -103,6 +111,10 @@ class ModelAssistedBattlePolicy:
             raise LearnedBattlePolicyError(
                 "battle model feature names do not match the live transferable schema"
             )
+        if self.execute_control_model and self.control_model is None:
+            raise ValueError("control execution requires a control model")
+        if not 0.0 <= self.control_confidence_threshold <= 1.0:
+            raise ValueError("control_confidence_threshold must be between zero and one")
 
     def choose_move(
         self,
@@ -176,6 +188,12 @@ class ModelAssistedBattlePolicy:
             self._record_control_action(observation, BattleAction.move(teacher_slot))
             return teacher_slot
         assert predicted_slot is not None
+        if self.execute_control_model:
+            return self._execute_control_decision(
+                observation,
+                fallback,
+                predicted_slot=predicted_slot,
+            )
         if self.require_teacher_agreement:
             teacher_slot = fallback()
             if teacher_slot != predicted_slot:
@@ -340,7 +358,88 @@ class ModelAssistedBattlePolicy:
                 "unavailable": dict(sorted(self.control_shadow_unavailable.items())),
                 "confusion": dict(sorted(self.control_shadow_confusion.items())),
             }
+        if self.execute_control_model:
+            result["control_model_execution"] = {
+                "decisions": self.control_execution_decisions,
+                "typed_requests_executed": self.control_execution_requests,
+                "teacher_requests_suppressed": self.control_suppressed_teacher_requests,
+                "safety_fallbacks": self.control_safety_fallbacks,
+                "low_confidence_fallbacks": self.control_low_confidence_fallbacks,
+                "confidence_threshold": self.control_confidence_threshold,
+            }
         return result
+
+    def _execute_control_decision(
+        self,
+        observation: BattlePolicyObservation,
+        fallback: Callable[[], int],
+        *,
+        predicted_slot: int,
+    ) -> int:
+        """Let the controller gate typed teacher parameterization during promotion."""
+
+        assert self.control_model is not None
+        intent = observation.intent
+        if intent is None:
+            raise LearnedBattlePolicyError("control execution lacks planner intent")
+        snapshot = self.encoder.snapshot_from_raw(observation.state)
+        encoded = snapshot.to_dict()
+        history = self.control_history.before(intent.battle_plan_id, encoded)
+        try:
+            probabilities = self.control_model.predict_proba(
+                project_control_features(
+                    encoded,
+                    move_batch=self.projector.project(snapshot),
+                    history=history,
+                )
+            )
+            predicted_ref = self.control_model.class_refs[int(np.argmax(probabilities))]
+            confidence = float(np.max(probabilities))
+        except Exception as error:
+            raise LearnedBattlePolicyError(
+                "control execution could not project the live decision"
+            ) from error
+        if confidence < self.control_confidence_threshold:
+            self.control_low_confidence_fallbacks += 1
+            try:
+                teacher_slot = fallback()
+            except BattleControlRequest as request:
+                self._record_control_action(observation, request.action)
+                raise
+            self._record_control_action(observation, BattleAction.move(teacher_slot))
+            return teacher_slot
+
+        teacher_request: BattleControlRequest | None = None
+        teacher_slot: int | None = None
+        try:
+            teacher_slot = fallback()
+        except BattleControlRequest as request:
+            teacher_request = request
+
+        self.control_execution_decisions += 1
+        if predicted_ref == CONTROL_CLASS_REFS[0]:
+            if teacher_request is not None:
+                self.control_suppressed_teacher_requests += 1
+            self.model_decisions += 1
+            self._record_control_action(observation, BattleAction.move(predicted_slot))
+            return predicted_slot
+
+        if (
+            teacher_request is not None
+            and control_class_ref(teacher_request.action) == predicted_ref
+        ):
+            self.control_execution_requests += 1
+            self._record_control_action(observation, teacher_request.action)
+            raise teacher_request
+
+        # The class model intentionally does not yet own cartridge-specific item or
+        # party targets. A false-positive special action therefore degrades to the
+        # learned legal move rather than spending an unverified resource.
+        del teacher_slot
+        self.control_safety_fallbacks += 1
+        self.model_decisions += 1
+        self._record_control_action(observation, BattleAction.move(predicted_slot))
+        return predicted_slot
 
     def _record_control_action(
         self,

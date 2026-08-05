@@ -142,14 +142,16 @@ class _ShadowEncoder:
         return self.Snapshot()
 
 
-def _recovery_control_model() -> BattleControlMLP:
+def _control_model(class_index: int = 1) -> BattleControlMLP:
+    output_bias = [0.0, 0.0]
+    output_bias[class_index] = 5.0
     return BattleControlMLP(
         feature_names=CONTROL_FEATURE_NAMES,
         class_refs=CONTROL_CLASS_REFS[:2],
         input_weights=[[0.0] * len(CONTROL_FEATURE_NAMES)] * 2,
         hidden_bias=[0.0, 0.0],
         output_weights=[[0.0, 0.0], [0.0, 0.0]],
-        output_bias=[0.0, 5.0],
+        output_bias=output_bias,
     )
 
 
@@ -323,7 +325,7 @@ def test_control_sink_records_normal_model_move() -> None:
 def test_control_model_scores_live_actions_without_executing_them() -> None:
     policy = ModelAssistedBattlePolicy(
         model=_model(),
-        control_model=_recovery_control_model(),
+        control_model=_control_model(),
         encoder=_ShadowEncoder(),  # type: ignore[arg-type]
         projector=_Projector(),  # type: ignore[arg-type]
         confidence_threshold=0.0,
@@ -348,6 +350,69 @@ def test_control_model_scores_live_actions_without_executing_them() -> None:
         "pokemon.core:battle:recovery -> pokemon.core:battle:recovery": 1,
         "pokemon.core:battle:select_move -> pokemon.core:battle:recovery": 1,
     }
+
+
+def test_control_execution_reuses_typed_teacher_parameterization() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_control_model(),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+
+    with pytest.raises(BattleControlRequest):
+        policy.choose_move(
+            _observation(),
+            lambda: (_ for _ in ()).throw(BattleControlRequest(BattleAction.recovery())),
+        )
+
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["decisions"] == 1
+    assert execution["typed_requests_executed"] == 1
+    assert execution["safety_fallbacks"] == 0
+
+
+def test_control_execution_can_suppress_a_teacher_recovery() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_control_model(0),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+
+    chosen = policy.choose_move(
+        _observation(),
+        lambda: (_ for _ in ()).throw(BattleControlRequest(BattleAction.recovery())),
+    )
+
+    assert chosen == 3
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["teacher_requests_suppressed"] == 1
+
+
+def test_control_execution_guards_an_unparameterized_special_action() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_control_model(),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+
+    assert policy.choose_move(_observation(), lambda: 1) == 3
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["safety_fallbacks"] == 1
 
 
 @pytest.mark.parametrize(

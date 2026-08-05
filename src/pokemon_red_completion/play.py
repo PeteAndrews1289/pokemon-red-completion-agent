@@ -710,6 +710,8 @@ def run_qualified_play(
     battle_start_offsets: tuple[BattleStartOffset, ...] | None = None,
     battle_model: BattleMoveRanker | None = None,
     battle_control_model: BattleControlMLP | None = None,
+    execute_battle_control_model: bool = False,
+    battle_control_confidence_threshold: float = 0.0,
     battle_model_confidence_threshold: float = 0.0,
     require_battle_model_teacher_agreement: bool = True,
     battle_correction_sink: Callable[[Mapping[str, object]], None] | None = None,
@@ -737,6 +739,12 @@ def run_qualified_play(
         raise ValueError("battle_control_sink requires a battle model")
     if battle_control_model is not None and battle_model is None:
         raise ValueError("battle_control_model requires a battle move model")
+    if execute_battle_control_model and battle_control_model is None:
+        raise ValueError("battle control execution requires a control model")
+    if not 0.0 <= battle_control_confidence_threshold <= 1.0:
+        raise ValueError(
+            "battle_control_confidence_threshold must be between zero and one"
+        )
     battle_start_schedule = (
         BattleStartScheduleController(battle_start_offsets)
         if battle_start_offsets is not None
@@ -759,6 +767,8 @@ def run_qualified_play(
                 encoder=PokemonRedObservationEncoder.from_state_reader(reader),
                 confidence_threshold=battle_model_confidence_threshold,
                 control_model=battle_control_model,
+                execute_control_model=execute_battle_control_model,
+                control_confidence_threshold=battle_control_confidence_threshold,
                 require_teacher_agreement=require_battle_model_teacher_agreement,
                 correction_sink=battle_correction_sink,
                 control_sink=battle_control_sink,
