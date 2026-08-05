@@ -10,6 +10,10 @@ import numpy as np
 from numpy.typing import NDArray
 
 from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
+from pokemon_red_completion.battle_semantics import (
+    FEATURE_NAMES as MOVE_FEATURE_NAMES,
+)
+from pokemon_red_completion.battle_semantics import BattleFeatureBatch
 
 CONTROL_FEATURE_SCHEMA_ID = "pokemon.core.battle.control.features.v1"
 CONTROL_CLASS_REFS = (
@@ -55,6 +59,23 @@ CONTROL_FEATURE_NAMES = (
     "resources.attack_boosts",
     "resources.special_boosts",
     "progress.badge_count",
+    *(f"matchup.player_type.{name}" for name in (
+        "normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost",
+        "fire", "water", "grass", "electric", "psychic", "ice", "dragon",
+    )),
+    *(f"matchup.opponent_type.{name}" for name in (
+        "normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost",
+        "fire", "water", "grass", "electric", "psychic", "ice", "dragon",
+    )),
+    "moves.best.category.physical",
+    "moves.best.category.special",
+    "moves.best.category.status",
+    "moves.best.accuracy",
+    "moves.best.type_effectiveness",
+    "moves.best.effective_power",
+    "moves.best.accuracy_weighted_effective_power",
+    "moves.usable_count",
+    "moves.mean_pp_fraction",
 )
 
 
@@ -101,7 +122,11 @@ def control_class_ref(action: BattleAction) -> str:
     return CONTROL_CLASS_REFS[7]
 
 
-def project_control_features(observation: Mapping[str, object]) -> NDArray[np.float64]:
+def project_control_features(
+    observation: Mapping[str, object],
+    *,
+    move_batch: BattleFeatureBatch | None = None,
+) -> NDArray[np.float64]:
     """Project one privacy-safe semantic snapshot into normalized transferable state."""
 
     features = _mapping(observation.get("features"), "features")
@@ -158,6 +183,7 @@ def project_control_features(observation: Mapping[str, object]) -> NDArray[np.fl
         _resource(resources, "attack_boost_count", 20),
         _resource(resources, "special_boost_count", 20),
         _bounded(progress.get("badge_count"), 0, 8, "badge count") / 8.0,
+        *_move_control_features(move_batch),
     )
     result = np.asarray(values, dtype=np.float64)
     if result.shape != (len(CONTROL_FEATURE_NAMES),) or not np.all(np.isfinite(result)):
@@ -228,3 +254,50 @@ def _active_index(
     if len(matches) != 1:
         raise BattleControlFeatureError("active party index cannot be inferred uniquely")
     return matches[0]
+
+
+def _move_control_features(batch: BattleFeatureBatch | None) -> tuple[float, ...]:
+    width = 30 + 3 + 6
+    if batch is None:
+        return (0.0,) * width
+    vectors = np.asarray(batch.candidate_vectors, dtype=np.float64)
+    usable = np.asarray(batch.legal_mask, dtype=np.bool_) & (
+        np.asarray(batch.current_pp, dtype=np.float64) > 0
+    )
+    if not np.any(usable):
+        raise BattleControlFeatureError("battle control has no usable move")
+
+    def column(name: str) -> NDArray[np.float64]:
+        return vectors[:, MOVE_FEATURE_NAMES.index(name)]
+
+    first = vectors[np.flatnonzero(usable)[0]]
+    player_types = tuple(
+        float(first[MOVE_FEATURE_NAMES.index(f"state.player_type.{name}")])
+        for name in (
+            "normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost",
+            "fire", "water", "grass", "electric", "psychic", "ice", "dragon",
+        )
+    )
+    opponent_types = tuple(
+        float(first[MOVE_FEATURE_NAMES.index(f"state.opponent_type.{name}")])
+        for name in (
+            "normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost",
+            "fire", "water", "grass", "electric", "psychic", "ice", "dragon",
+        )
+    )
+    weighted = column("move.accuracy_weighted_effective_power_fraction").copy()
+    weighted[~usable] = -1.0
+    best = int(np.argmax(weighted))
+    return (
+        *player_types,
+        *opponent_types,
+        float(vectors[best, MOVE_FEATURE_NAMES.index("move.category.physical")]),
+        float(vectors[best, MOVE_FEATURE_NAMES.index("move.category.special")]),
+        float(vectors[best, MOVE_FEATURE_NAMES.index("move.category.status")]),
+        float(vectors[best, MOVE_FEATURE_NAMES.index("move.accuracy")]),
+        float(vectors[best, MOVE_FEATURE_NAMES.index("move.type_effectiveness_fraction")]),
+        float(vectors[best, MOVE_FEATURE_NAMES.index("move.effective_power_fraction")]),
+        float(weighted[best]),
+        float(np.sum(usable)) / 4.0,
+        float(np.mean(column("move.pp_fraction")[usable])),
+    )

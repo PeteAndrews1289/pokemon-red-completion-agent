@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v60.json`](../configs/red-battle-collection-v60.json)
+[`red-battle-collection-v62.json`](../configs/red-battle-collection-v62.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 71 stable public battle-plan identities in exact qualified-route order;
@@ -1823,3 +1823,14 @@ game-neutral capture/flee action vocabulary. It also preregisters a class-balanc
 controller and battle-group-held-out evaluation path; no candidate may be deployed on training fit
 alone. V60 reserves train seeds `820001`–`820005`, validation seeds `830001`–`830002`, test seeds
 `840001`–`840005`, and dry-run seed `62001`.
+
+V61 publishes the authenticated command-line fitting path for full-battle control candidates and
+keeps the resulting model explicitly ineligible for promotion until it completes a fresh learned
+rollout. V61 reserves train seeds `850001`–`850005`, validation seeds `860001`–`860002`, test seeds
+`870001`–`870005`, and dry-run seed `62001`.
+
+V62 adds reproducible uncounted timing perturbations to full-action collection, enriches the
+controller with game-neutral type and move-mechanics aggregates, authenticates saved control-model
+artifacts, and supports disjoint rollout-lineage evaluation. V62 reserves train seeds
+`880001`–`880005`, validation seeds `890001`–`890002`, test seeds `900001`–`900005`, and dry-run
+seed `62001`.

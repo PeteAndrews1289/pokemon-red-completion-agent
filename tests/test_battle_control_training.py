@@ -14,7 +14,68 @@ from pokemon_red_completion.battle_control_training import (
     control_examples,
     fit_group_heldout_control_candidate,
 )
-from tests.test_battle_control_features import _observation
+
+
+def _observation() -> dict[str, object]:
+    members = [
+        {
+            "species_ref": "pokemon.red.gb.us.rev0:species:177",
+            "level": 40,
+            "hp": 100,
+            "max_hp": 100,
+            "hp_ratio": 1.0,
+            "status": None,
+        }
+        for index in range(1, 4)
+    ]
+    return {
+        "schema_version": 1,
+        "game_id": "pokemon.mainline:red:gb:us:rev0",
+        "mode": "battle",
+        "location": "pokemon.red.gb.us.rev0:area:route_20",
+        "facts": ["pokemon.core:battle:active"],
+        "features": {
+            "progress": {"badge_count": 4},
+            "party": {
+                "count": 3,
+                "active_index": 0,
+                "lead": {
+                    **members[0],
+                    "moves": [
+                        {
+                            "slot_index": 0,
+                            "move_ref": "pokemon.red.gb.us.rev0:move:033",
+                            "pp": 20,
+                        }
+                    ],
+                },
+                "members": members,
+            },
+            "resources": {
+                "capture_item_count": 10,
+                "healing_item_count": 4,
+                "status_recovery_item_count": 2,
+                "revive_item_count": 1,
+                "accuracy_boost_count": 3,
+                "attack_boost_count": 2,
+                "special_boost_count": 1,
+            },
+            "battle": {
+                "active": True,
+                "kind": "trainer",
+                "opponent_species_ref": "pokemon.red.gb.us.rev0:species:022",
+                "opponent_level": 41,
+                "opponent_hp_ratio": 0.5,
+                "player_attack_stage": 0,
+                "player_special_stage": 0,
+                "player_accuracy_stage": 0,
+                "opponent_defense_stage": 0,
+                "player_disabled_move_slot": None,
+                "opponent_using_trapping_move": False,
+            },
+            "menu": {"kind": "battle_main", "selected_command_index": 0},
+        }
+    }
 
 
 def _dataset() -> BattleControlDataset:

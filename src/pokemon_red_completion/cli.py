@@ -307,6 +307,39 @@ def _parser() -> argparse.ArgumentParser:
         default=16,
         help="Hidden units for --model-family mlp (default: 16).",
     )
+    learn_control = learn_commands.add_parser(
+        "control",
+        help="Build the transferable high-level battle-action controller.",
+    )
+    learn_control_commands = learn_control.add_subparsers(
+        dest="learn_control_command",
+        required=True,
+    )
+    learn_control_fit = learn_control_commands.add_parser(
+        "fit",
+        help="Fit and battle-group-validate a full-battle control model.",
+    )
+    learn_control_fit.add_argument(
+        "--private-root",
+        type=Path,
+        required=True,
+        help="Explicit absolute path to the initialized private artifact root.",
+    )
+    learn_control_fit.add_argument(
+        "--labels",
+        type=Path,
+        required=True,
+        help="Completed authenticated battle-control label artifact directory.",
+    )
+    learn_control_fit.add_argument(
+        "--validation-battle-plan",
+        action="append",
+        required=True,
+        help="Battle plan held out as a whole; repeat for additional groups.",
+    )
+    learn_control_fit.add_argument("--epochs", type=int, default=500)
+    learn_control_fit.add_argument("--seed", type=int, default=1289)
+    learn_control_fit.add_argument("--hidden-units", type=int, default=24)
     doctor = subcommands.add_parser("doctor", help="Verify the private ROM identity.")
     doctor.add_argument("--rom", type=Path, help="Private ROM path; otherwise use POKEMON_RED_ROM.")
     bootstrap = subcommands.add_parser(
@@ -390,6 +423,11 @@ def _parser() -> argparse.ArgumentParser:
             "external artifact root; requires --battle-model and "
             "--allow-model-disagreement."
         ),
+    )
+    play.add_argument(
+        "--diagnostic-schedule-seed",
+        type=int,
+        help="Apply an uncounted reproducible battle-timing perturbation schedule.",
     )
     record = subcommands.add_parser(
         "record",
@@ -1001,6 +1039,102 @@ def _run_battle_learning(
     raise AssertionError("argparse error unexpectedly returned")
 
 
+def _run_control_learning(
+    parser: argparse.ArgumentParser,
+    args: argparse.Namespace,
+) -> dict[str, object]:
+    """Train one authenticated, battle-group-held-out high-level controller."""
+
+    try:
+        from pokemon_red_completion.battle_control_features import CONTROL_FEATURE_SCHEMA_ID
+        from pokemon_red_completion.battle_control_labels import (
+            BattleControlLabelError,
+            load_battle_control_artifact,
+        )
+        from pokemon_red_completion.battle_control_model import BattleControlModelError
+        from pokemon_red_completion.battle_control_training import (
+            fit_group_heldout_control_candidate,
+        )
+
+        source = detect_source_identity(REPOSITORY_ROOT, include_untracked=True)
+        require_clean_source(source)
+        private_root = open_private_root(
+            args.private_root,
+            repository_root=REPOSITORY_ROOT,
+        )
+        dataset = load_battle_control_artifact(args.labels)
+        candidate = fit_group_heldout_control_candidate(
+            dataset,
+            validation_battle_plan_ids=args.validation_battle_plan,
+            seed=args.seed,
+            hidden_units=args.hidden_units,
+            epochs=args.epochs,
+        )
+        model_payload = candidate.model.to_dict()
+        model_sha256 = canonical_sha256(model_payload)
+        artifact_id = f"red-battle-control-model-{uuid.uuid4().hex}"
+        writer = private_root.begin_artifact(artifact_id, kind="battle_control_model")
+        with writer:
+            writer.append(
+                "model",
+                {
+                    "record_type": "battle_control_model_candidate",
+                    "model": model_payload,
+                    "model_sha256": model_sha256,
+                    "source": source.public_dict(),
+                },
+            )
+            writer.append(
+                "training",
+                {
+                    "record_type": "battle_control_training",
+                    "feature_schema_id": CONTROL_FEATURE_SCHEMA_ID,
+                    "source_artifact_id": dataset.artifact_id,
+                    "source_manifest_sha256": dataset.manifest_sha256,
+                    "validation_battle_plan_ids": list(args.validation_battle_plan),
+                    "configuration": {
+                        "epochs": args.epochs,
+                        "hidden_units": args.hidden_units,
+                        "seed": args.seed,
+                    },
+                },
+            )
+            writer.append(
+                "metrics",
+                {
+                    "record_type": "battle_control_validation_metrics",
+                    "candidate": candidate.public_summary(),
+                    "promotion_eligible": False,
+                    "reason": "fresh_full_control_rollout_required",
+                },
+            )
+        payload = candidate.public_summary()
+        payload["model_sha256"] = model_sha256
+        payload["qualification"] = {
+            "promotion_eligible": False,
+            "held_out_battle_groups": True,
+            "learned_policy_rollout": False,
+            "reasons": ["fresh_full_control_rollout_required"],
+        }
+        payload["private_artifact"] = writer.summary.public_dict()
+        return payload
+    except (
+        BattleControlLabelError,
+        BattleControlModelError,
+        EvaluationIdentityError,
+        PrivateArtifactError,
+    ) as error:
+        parser.error(
+            _public_error_message(
+                error,
+                private_paths=(args.private_root, args.labels),
+            )
+        )
+    except OSError:
+        parser.error("Private battle-control training failed; no model was published.")
+    raise AssertionError("argparse error unexpectedly returned")
+
+
 def _run_preassigned_battle_learning(
     parser: argparse.ArgumentParser,
     args: argparse.Namespace,
@@ -1422,7 +1556,11 @@ def main(arguments: Sequence[str] | None = None) -> int:
         return 0
 
     if args.command == "learn":
-        payload = _run_battle_learning(parser, args)
+        payload = (
+            _run_control_learning(parser, args)
+            if args.learn_command == "control"
+            else _run_battle_learning(parser, args)
+        )
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
 
@@ -1518,6 +1656,12 @@ def main(arguments: Sequence[str] | None = None) -> int:
             correction_summary = None
             control_writer = None
             control_summary = None
+            diagnostic_offsets = None
+            diagnostic_schedule_sha256 = None
+            if args.diagnostic_schedule_seed is not None:
+                diagnostic_offsets, diagnostic_schedule_sha256 = _diagnostic_schedule(
+                    args.diagnostic_schedule_seed
+                )
             if args.battle_corrections_root is not None:
                 correction_root = open_private_root(
                     args.battle_corrections_root,
@@ -1568,6 +1712,14 @@ def main(arguments: Sequence[str] | None = None) -> int:
                                 battle_model.to_json().encode("ascii")
                             ).hexdigest(),
                             "action_schema": "pokemon.core.battle.action.v1",
+                            "diagnostic_schedule": (
+                                {
+                                    "harness_seed": args.diagnostic_schedule_seed,
+                                    "schedule_sha256": diagnostic_schedule_sha256,
+                                }
+                                if diagnostic_offsets is not None
+                                else None
+                            ),
                         },
                     )
                 qualified_report = run_qualified_play(
@@ -1588,6 +1740,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
                         if control_writer is not None
                         else None
                     ),
+                    battle_start_offsets=diagnostic_offsets,
                 )
                 if correction_writer is not None:
                     qualified_public = qualified_report.public_dict()

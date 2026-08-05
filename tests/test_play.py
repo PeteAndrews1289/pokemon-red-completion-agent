@@ -1925,7 +1925,7 @@ def test_pokedex_gate_accepts_stable_delivery_after_escape_result_overwrite() ->
 
 
 def test_battle_start_offsets_require_private_recording() -> None:
-    with pytest.raises(ValueError, match="require private trajectory recording"):
+    with pytest.raises(ValueError, match="require private trajectory or battle-control recording"):
         run_qualified_play(
             Path("/private/Pokemon Red.gb"),
             battle_start_offsets=(),

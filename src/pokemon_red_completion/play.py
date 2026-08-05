@@ -717,8 +717,14 @@ def run_qualified_play(
     """Run every currently qualified objective in one clean, no-save session."""
     if (trajectory_sink is None) != (trajectory_episode_id is None):
         raise ValueError("trajectory_sink and trajectory_episode_id must be provided together")
-    if battle_start_offsets is not None and trajectory_sink is None:
-        raise ValueError("battle_start_offsets require private trajectory recording")
+    if (
+        battle_start_offsets is not None
+        and trajectory_sink is None
+        and battle_control_sink is None
+    ):
+        raise ValueError(
+            "battle_start_offsets require private trajectory or battle-control recording"
+        )
     if not 0.0 <= battle_model_confidence_threshold <= 1.0:
         raise ValueError("battle_model_confidence_threshold must be between zero and one")
     if not isinstance(require_battle_model_teacher_agreement, bool):

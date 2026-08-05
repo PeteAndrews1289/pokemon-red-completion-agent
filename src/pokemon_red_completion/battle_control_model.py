@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 import math
+import stat
 from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -275,3 +279,107 @@ def evaluate_control_model(
         cross_entropy=loss,
         class_counts=dict(counts),
     )
+
+
+def load_battle_control_model_artifact(
+    artifact_directory: str | Path,
+) -> BattleControlMLP:
+    """Authenticate and load one finalized private full-battle model artifact."""
+
+    root = Path(artifact_directory)
+    manifest_path = root / "manifest.json"
+    if root.is_symlink() or not root.is_dir() or manifest_path.is_symlink():
+        raise BattleControlModelError("control model artifact is not a regular directory")
+    try:
+        manifest_payload = manifest_path.read_bytes()
+        manifest = json.loads(manifest_payload.decode("ascii"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise BattleControlModelError("control model manifest cannot be read") from error
+    if (
+        not isinstance(manifest, Mapping)
+        or manifest.get("format") != "pokemon-red-completion-private-artifact-jsonl"
+        or manifest.get("kind") != "battle_control_model"
+        or manifest.get("schema_version") != 1
+        or manifest.get("status") != "complete"
+    ):
+        raise BattleControlModelError("control model artifact is not complete and typed")
+    files = manifest.get("files")
+    if not isinstance(files, list):
+        raise BattleControlModelError("control model file inventory is absent")
+    entries = {
+        str(entry.get("filename")): entry
+        for entry in files
+        if isinstance(entry, Mapping) and isinstance(entry.get("filename"), str)
+    }
+    expected = {"model.jsonl", "training.jsonl", "metrics.jsonl"}
+    if set(entries) != expected or len(entries) != len(files):
+        raise BattleControlModelError("control model file inventory is invalid")
+    rows: dict[str, list[Mapping[str, object]]] = {}
+    for filename, entry in entries.items():
+        path = root / filename
+        try:
+            metadata = path.lstat()
+            payload = path.read_bytes()
+        except OSError as error:
+            raise BattleControlModelError("control model stream cannot be read") from error
+        if (
+            path.is_symlink()
+            or not stat.S_ISREG(metadata.st_mode)
+            or entry.get("bytes") != len(payload)
+            or entry.get("sha256") != hashlib.sha256(payload).hexdigest()
+        ):
+            raise BattleControlModelError("control model stream failed authentication")
+        parsed = _canonical_records(payload)
+        if entry.get("records") != len(parsed):
+            raise BattleControlModelError("control model record count is invalid")
+        rows[filename] = parsed
+    if any(len(value) != 1 for value in rows.values()):
+        raise BattleControlModelError("control model streams must contain one record each")
+    record = rows["model.jsonl"][0]
+    model_payload = record.get("model")
+    if (
+        record.get("record_type") != "battle_control_model_candidate"
+        or not isinstance(model_payload, Mapping)
+        or record.get("model_sha256") != _canonical_sha256(model_payload)
+    ):
+        raise BattleControlModelError("control model record is invalid")
+    return BattleControlMLP.from_dict(model_payload)
+
+
+def _canonical_records(payload: bytes) -> list[Mapping[str, object]]:
+    try:
+        text = payload.decode("ascii")
+    except UnicodeError as error:
+        raise BattleControlModelError("control model stream is not ASCII") from error
+    if not text or not text.endswith("\n"):
+        raise BattleControlModelError("control model stream is not canonical JSONL")
+    result: list[Mapping[str, object]] = []
+    for line in text.splitlines():
+        try:
+            value = json.loads(line)
+        except json.JSONDecodeError as error:
+            raise BattleControlModelError("control model stream contains invalid JSON") from error
+        if not isinstance(value, Mapping) or line != json.dumps(
+            value,
+            allow_nan=False,
+            ensure_ascii=True,
+            separators=(",", ":"),
+            sort_keys=True,
+        ):
+            raise BattleControlModelError("control model stream is not canonical JSONL")
+        result.append(value)
+    return result
+
+
+def _canonical_sha256(value: object) -> str:
+    payload = (
+        json.dumps(
+            value,
+            allow_nan=False,
+            ensure_ascii=True,
+            separators=(",", ":"),
+            sort_keys=True,
+        )
+        + "\n"
+    ).encode("ascii")
+    return hashlib.sha256(payload).hexdigest()
