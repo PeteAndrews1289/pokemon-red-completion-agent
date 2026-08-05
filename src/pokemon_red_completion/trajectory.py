@@ -678,6 +678,37 @@ class RecordingExecutor(Generic[ActionT, ResultT]):
 
         self._note_failure("observer_callback")
 
+    def record_standalone_decision(
+        self,
+        decision: DecisionRecord | DecisionFactory,
+    ) -> bool:
+        """Record a semantic decision that does not own an execution span.
+
+        Objective selection is an instantaneous planner decision.  Its step index
+        divides the surrounding execution stream into objective-sized segments,
+        but it must not remain active while nested battle decisions are recorded.
+        As with the executor's other instrumentation, recording is fail-open and
+        a failure makes the episode ineligible for promotion.
+        """
+
+        try:
+            record = decision() if callable(decision) else decision
+            if not isinstance(record, DecisionRecord):
+                raise TypeError("decision must produce a DecisionRecord")
+            if record.episode_id != self.episode_id:
+                raise TrajectoryValidationError(
+                    "decision episode_id must match the recording executor"
+                )
+            if record.step_index != self._next_step_index:
+                raise TrajectoryValidationError(
+                    "decision step_index must match the next execution step"
+                )
+            self.sink.record_decision(record)
+        except Exception:
+            self._note_failure("decision_record")
+            return False
+        return True
+
     @contextmanager
     def decision_scope(
         self,

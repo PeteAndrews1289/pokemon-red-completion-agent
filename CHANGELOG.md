@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Added game-neutral objective-selection records for all 36 completion objectives. Policy inputs
+  contain only the live semantic observation and verifier-confirmed cumulative completion facts;
+  teacher labels and legal candidate sets remain separate supervision fields.
+- Added an authenticated planner-dataset loader that rejects incomplete games, illegal objective
+  choices, mismatched graph candidates, snapshot tampering, provenance mismatches, and teacher-label
+  leakage into model features.
+- Added a portable semantic objective projector, masked listwise objective ranker, diagnostic
+  trainer, private model-artifact publication, and `learn planner train` CLI entry point.
 - Added a versioned, game-neutral trajectory schema for semantic observations, decisions,
   executions, and sparse events.
 - Added a thin Pokémon Red observation adapter that keeps revision-specific RAM details below the

@@ -1346,6 +1346,23 @@ Poké Ball cover the full 33-throw ceiling, while exact sales of obsolete Potion
 the difference and appear in the public evidence report. Replaying the failed seed under that
 source completed all 312 checkpoints and Hall of Fame without weakening downstream inventory.
 
+## From scripted completion to planner training
+
+The completed route initially recorded battle choices and button executions but not the semantic
+decision that connected them: which whole-game objective the teacher was pursuing. That omission
+made the data unsuitable for training the high-level planner even though the teacher could finish
+the game. The trajectory boundary now emits one objective-selection record for every one of the 36
+completion objectives at its real verified boundary. Each record joins the live, game-neutral
+observation with cumulative completion facts supplied by the verifier. The selected objective and
+the full legal candidate set remain supervision metadata and are explicitly rejected if they leak
+into policy features.
+
+The first planner-training lane authenticates the complete private episode, re-derives the legal
+candidate set from the frozen quest graph, projects state/objective pairs without objective-ID or
+game-ID features, and fits a shared listwise objective ranker. Its first single-lineage result is
+deliberately diagnostic: it can prove the data and optimizer work end to end, but only disjoint
+full-game lineages and teacher-free rollouts can support a generalization or autonomy claim.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

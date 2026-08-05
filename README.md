@@ -340,7 +340,14 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v71-01-train
+  --collection-run red-battle-v72-01-train
+
+# Fit the first whole-game objective ranker from one completed labeled episode.
+# This lane is explicitly diagnostic until separate train/validation lineages exist:
+pokemon-red-completion learn planner train \
+  --private-root /absolute/private/trajectory-directory \
+  --episode-id COMPLETE_EPISODE_ID \
+  --diagnostic
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \

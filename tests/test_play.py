@@ -25,11 +25,14 @@ from pokemon_red_completion.observation import (
     RedPokedexState,
 )
 from pokemon_red_completion.opening import OpeningChapterReport
+from pokemon_red_completion.planner_trajectory import SemanticObjectiveDecisionObserver
 from pokemon_red_completion.play import (
     DEFAULT_QUALIFIED_PLAY_TIMING,
     LAB_EXIT_DIRECTIONS,
     LAB_RIVAL_TRIGGER_DIRECTIONS,
     PALLET_TO_ROUTE_1_DIRECTIONS,
+    QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS,
+    QUALIFIED_OBJECTIVE_SEQUENCE,
     QUALIFIED_PLAY_CHECKPOINT_COUNT,
     ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
     VIRIDIAN_TO_MART_DIRECTIONS,
@@ -43,8 +46,13 @@ from pokemon_red_completion.play import (
     run_qualified_play,
 )
 from pokemon_red_completion.rom import RomFingerprint
+from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.saffron import FRESH_WATER_PRICE, THUNDER_STONE_PRICE
-from pokemon_red_completion.trajectory import InMemoryTrajectorySink
+from pokemon_red_completion.trajectory import (
+    InMemoryTrajectorySink,
+    RecordingExecutor,
+    SemanticSnapshot,
+)
 
 
 def _raw(
@@ -1220,6 +1228,62 @@ def test_repeated_training_progress_uses_the_execution_step_in_event_identity() 
         "training-episode:checkpoint:10:250:mansion_team_training_progress",
         "training-episode:checkpoint:20:250:mansion_team_training_progress",
     ]
+
+
+def test_qualified_progress_emits_one_legal_label_for_every_completion_objective() -> None:
+    class SnapshotProvider:
+        def snapshot(self) -> SemanticSnapshot:
+            return SemanticSnapshot(game_id="pokemon.test", mode="interactive")
+
+    class Executor:
+        def execute(self, action: object) -> object:
+            return action
+
+    sink = InMemoryTrajectorySink()
+    provider = SnapshotProvider()
+    recorder: RecordingExecutor[object, object] = RecordingExecutor(
+        delegate=Executor(),
+        snapshot_provider=provider,
+        sink=sink,
+        episode_id="planner-episode",
+    )
+    observer = SemanticObjectiveDecisionObserver(
+        graph=COMPLETION_QUEST,
+        snapshot_provider=provider,
+        recorder=recorder,
+        policy_id="teacher-v1",
+    )
+    observer.select(QUALIFIED_OBJECTIVE_SEQUENCE[0])
+    emit = _trajectory_progress_bridge(
+        None,
+        sink,
+        "planner-episode",
+        recorder,  # type: ignore[arg-type]
+        [0],
+        observer,
+    )
+
+    for completed, _ in dict(QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS).items():
+        emit(
+            QualifiedPlayProgress(
+                checkpoint_id=f"checkpoint_{completed}",
+                label=f"Checkpoint {completed}",
+                completed=completed,
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=completed,
+            )
+        )
+
+    planner_decisions = [
+        decision for decision in sink.decisions if decision.decision_type == "objective_selection"
+    ]
+    assert tuple(
+        decision.action["objective_id"]  # type: ignore[index]
+        for decision in planner_decisions
+    ) == QUALIFIED_OBJECTIVE_SEQUENCE
+    assert observer.completed_ids == frozenset(QUALIFIED_OBJECTIVE_SEQUENCE)
+    assert observer.active_objective_id is None
+    assert recorder.recording_failures == 0
 
 
 def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:

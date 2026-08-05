@@ -373,6 +373,36 @@ def _parser() -> argparse.ArgumentParser:
     learn_control_lineages.add_argument("--seed", type=int, default=1289)
     learn_control_lineages.add_argument("--hidden-units", type=int, default=48)
     learn_control_lineages.add_argument("--class-balance-power", type=float, default=1.0)
+    learn_planner = learn_commands.add_parser(
+        "planner",
+        help="Build the transferable semantic whole-game objective planner.",
+    )
+    learn_planner_commands = learn_planner.add_subparsers(
+        dest="learn_planner_command",
+        required=True,
+    )
+    learn_planner_train = learn_planner_commands.add_parser(
+        "train",
+        help="Fit the first diagnostic objective ranker from a complete teacher episode.",
+    )
+    learn_planner_train.add_argument(
+        "--private-root",
+        type=Path,
+        required=True,
+        help="Explicit absolute path to the initialized private artifact root.",
+    )
+    learn_planner_train.add_argument(
+        "--episode-id",
+        required=True,
+        help="Safe identifier of a completed objective-labeled teacher episode.",
+    )
+    learn_planner_train.add_argument(
+        "--diagnostic",
+        action="store_true",
+        help="Acknowledge that one lineage cannot establish held-out autonomy.",
+    )
+    learn_planner_train.add_argument("--epochs", type=int, default=2500)
+    learn_planner_train.add_argument("--seed", type=int, default=1289)
     doctor = subcommands.add_parser("doctor", help="Verify the private ROM identity.")
     doctor.add_argument("--rom", type=Path, help="Private ROM path; otherwise use POKEMON_RED_ROM.")
     bootstrap = subcommands.add_parser(
@@ -1095,6 +1125,113 @@ def _run_battle_learning(
     raise AssertionError("argparse error unexpectedly returned")
 
 
+def _run_planner_learning(
+    parser: argparse.ArgumentParser,
+    args: argparse.Namespace,
+) -> dict[str, object]:
+    """Train the first objective ranker from an authenticated complete run."""
+
+    if not args.diagnostic:
+        parser.error(
+            "The current single-lineage planner trainer requires --diagnostic; "
+            "it cannot produce held-out evidence."
+        )
+    try:
+        from pokemon_red_completion.planner_dataset import (
+            PlannerDatasetError,
+            PlannerDecisionProvenance,
+            load_planner_episode,
+        )
+        from pokemon_red_completion.planner_model import PlannerModelError
+        from pokemon_red_completion.planner_semantics import (
+            ObjectiveFeatureProjector,
+            PlannerFeatureError,
+        )
+        from pokemon_red_completion.planner_training import (
+            PlannerTrainingError,
+            train_diagnostic_objective_ranker,
+        )
+        from pokemon_red_completion.planner_trajectory import (
+            POKEMON_OBJECTIVE_SELECTION_SKILL_ID,
+        )
+    except ModuleNotFoundError as error:
+        if error.name == "numpy":
+            parser.error('Planner learning requires the optional "learning" dependencies.')
+        raise
+
+    try:
+        source = detect_source_identity(REPOSITORY_ROOT, include_untracked=True)
+        require_clean_source(source)
+        private_root = open_private_root(
+            args.private_root,
+            repository_root=REPOSITORY_ROOT,
+        )
+        dataset = load_planner_episode(
+            private_root.open_episode(args.episode_id),
+            COMPLETION_QUEST,
+            ObjectiveFeatureProjector(),
+            required_provenance=PlannerDecisionProvenance(
+                actor="deterministic_teacher",
+                policy_id=POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
+                skill_id=POKEMON_OBJECTIVE_SELECTION_SKILL_ID,
+            ),
+        )
+        result = train_diagnostic_objective_ranker(
+            dataset,
+            seed=args.seed,
+            epochs=args.epochs,
+        )
+        artifact_id = f"red-objective-planner-{uuid.uuid4().hex}"
+        writer = private_root.begin_artifact(artifact_id, kind="planner_model")
+        with writer:
+            writer.append(
+                "model",
+                {
+                    "record_type": "planner_model",
+                    "model": result.model.to_dict(),
+                    "model_sha256": result.model_sha256,
+                    "source": source.public_dict(),
+                    "source_episode_manifest_sha256": dataset.manifest_sha256,
+                },
+            )
+            writer.append(
+                "training",
+                {
+                    "record_type": "planner_training",
+                    "dataset": dataset.public_summary(),
+                    "epochs": args.epochs,
+                    "seed": args.seed,
+                },
+            )
+            writer.append(
+                "metrics",
+                {
+                    "record_type": "planner_diagnostic_metrics",
+                    "receipt": result.public_receipt(),
+                },
+            )
+        payload = result.public_receipt()
+        payload["source"] = source.public_dict()
+        payload["private_artifact"] = writer.summary.public_dict()
+        return payload
+    except (
+        PlannerDatasetError,
+        PlannerFeatureError,
+        PlannerModelError,
+        PlannerTrainingError,
+        EvaluationIdentityError,
+        PrivateArtifactError,
+        OSError,
+    ) as error:
+        parser.error(
+            _public_error_message(
+                error,
+                private_paths=(args.private_root,),
+            )
+        )
+    raise AssertionError("argparse error unexpectedly returned")
+
+
 def _run_control_learning(
     parser: argparse.ArgumentParser,
     args: argparse.Namespace,
@@ -1658,11 +1795,12 @@ def main(arguments: Sequence[str] | None = None) -> int:
         return 0
 
     if args.command == "learn":
-        payload = (
-            _run_control_learning(parser, args)
-            if args.learn_command == "control"
-            else _run_battle_learning(parser, args)
-        )
+        if args.learn_command == "control":
+            payload = _run_control_learning(parser, args)
+        elif args.learn_command == "planner":
+            payload = _run_planner_learning(parser, args)
+        else:
+            payload = _run_battle_learning(parser, args)
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
 

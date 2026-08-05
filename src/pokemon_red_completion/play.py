@@ -177,6 +177,7 @@ from pokemon_red_completion.pewter import (
     PewterProgress,
     run_pewter_chapter,
 )
+from pokemon_red_completion.planner_trajectory import SemanticObjectiveDecisionObserver
 from pokemon_red_completion.red_collection import (
     RedCollectionProgress,
     summarize_red_collection,
@@ -184,6 +185,7 @@ from pokemon_red_completion.red_collection import (
 )
 from pokemon_red_completion.red_party import PokemonRedPartyReader
 from pokemon_red_completion.red_trajectory import (
+    POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
     PokemonRedBattleDecisionObserver,
     PokemonRedBattleScheduleObserver,
     PokemonRedObservationEncoder,
@@ -267,6 +269,58 @@ from pokemon_red_completion.victory_road import (
 )
 
 POKEDEX_CHECKPOINT_COUNT = 11
+
+# The actual qualified teacher order.  Branches deliberately preserve the
+# teacher's demonstrated choice (for example Koga before Strength) instead of
+# pretending the quest graph has only one legal route.
+QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS: tuple[tuple[int, str], ...] = (
+    (1, "power_on"),
+    (5, "begin_adventure"),
+    (6, "choose_starter"),
+    (11, "receive_pokedex"),
+    (18, "reach_pewter"),
+    (21, "defeat_brock"),
+    (36, "reach_cerulean"),
+    (54, "help_bill"),
+    (59, "defeat_misty"),
+    (74, "reach_vermilion"),
+    (83, "obtain_cut"),
+    (98, "defeat_surge"),
+    (113, "reach_lavender"),
+    (125, "reach_celadon"),
+    (141, "clear_rocket_hideout"),
+    (144, "obtain_silph_scope"),
+    (172, "rescue_fuji"),
+    (186, "reach_fuchsia"),
+    (198, "obtain_surf"),
+    (208, "defeat_koga"),
+    (217, "obtain_strength"),
+    (229, "defeat_erika"),
+    (238, "reach_saffron"),
+    (250, "liberate_silph"),
+    (265, "defeat_sabrina"),
+    (271, "reach_cinnabar"),
+    (275, "obtain_secret_key"),
+    (280, "defeat_blaine"),
+    (288, "defeat_giovanni"),
+    (297, "cross_victory_road"),
+    (300, "defeat_lorelei"),
+    (303, "defeat_bruno"),
+    (306, "defeat_agatha"),
+    (309, "defeat_lance"),
+    (312, "defeat_champion"),
+    (312, "enter_hall_of_fame"),
+)
+QUALIFIED_OBJECTIVE_SEQUENCE = tuple(
+    objective_id for _, objective_id in QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS
+)
+_QUALIFIED_OBJECTIVES_BY_CHECKPOINT: dict[int, tuple[str, ...]] = {}
+for _checkpoint_count, _objective_id in QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS:
+    _QUALIFIED_OBJECTIVES_BY_CHECKPOINT[_checkpoint_count] = (
+        *_QUALIFIED_OBJECTIVES_BY_CHECKPOINT.get(_checkpoint_count, ()),
+        _objective_id,
+    )
+
 QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     POKEDEX_CHECKPOINT_COUNT
     + PEWTER_CHECKPOINT_COUNT
@@ -777,6 +831,7 @@ def run_qualified_play(
             new_game_timing.controller_timing(),
         )
         recording_executor: RecordingExecutor[MacroAction, ExecutedAction] | None = None
+        objective_observer: SemanticObjectiveDecisionObserver | None = None
         recording_failures = [0]
         effective_progress = progress
         if trajectory_sink is not None and trajectory_episode_id is not None:
@@ -788,6 +843,16 @@ def run_qualified_play(
                 episode_id=trajectory_episode_id,
             )
             base_executor = recording_executor
+            objective_observer = SemanticObjectiveDecisionObserver(
+                graph=COMPLETION_QUEST,
+                snapshot_provider=snapshot_encoder,
+                recorder=recording_executor,
+                policy_id=POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
+            )
+            try:
+                objective_observer.select(QUALIFIED_OBJECTIVE_SEQUENCE[0])
+            except Exception:
+                recording_executor.note_instrumentation_failure()
             stack.enter_context(
                 bind_battle_decision_observer(
                     PokemonRedBattleDecisionObserver(
@@ -813,6 +878,7 @@ def run_qualified_play(
                 trajectory_episode_id,
                 recording_executor,
                 recording_failures,
+                objective_observer,
             )
         progress = effective_progress
 
@@ -2302,6 +2368,7 @@ def _trajectory_progress_bridge(
     episode_id: str,
     recorder: RecordingExecutor[MacroAction, ExecutedAction],
     recording_failures: list[int],
+    objective_observer: SemanticObjectiveDecisionObserver | None = None,
 ) -> ProgressSink:
     def emit(progress: QualifiedPlayProgress) -> None:
         if downstream is not None:
@@ -2327,6 +2394,21 @@ def _trajectory_progress_bridge(
             )
         except Exception:
             recording_failures[0] += 1
+        if objective_observer is not None:
+            try:
+                completed_at_boundary = _QUALIFIED_OBJECTIVES_BY_CHECKPOINT.get(
+                    progress.completed,
+                    (),
+                )
+                for objective_id in completed_at_boundary:
+                    objective_observer.complete(objective_id)
+                    completed_count = len(objective_observer.completed_ids)
+                    if completed_count < len(QUALIFIED_OBJECTIVE_SEQUENCE):
+                        objective_observer.select(
+                            QUALIFIED_OBJECTIVE_SEQUENCE[completed_count]
+                        )
+            except Exception:
+                recorder.note_instrumentation_failure()
 
     return emit
 

@@ -228,6 +228,13 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   reusable balanced-training policy, with a Red adapter binding the declared roster.
 - [x] Integrate bounded switch-participation training for the route's existing party and replay it
   from clean power through the Hall of Fame.
+- [x] Record all 36 whole-game objective choices at their verified execution boundaries while
+  keeping teacher labels and legal candidate annotations outside policy input features.
+- [x] Add an authenticated complete-episode planner loader and a game-neutral semantic objective
+  ranker with an explicitly non-promotable single-lineage diagnostic lane.
+- [ ] Capture the first objective-labeled 312-checkpoint episode and publish its diagnostic model.
+- [ ] Collect disjoint planner train/validation roots and evaluate objective selection under
+  perturbed timing, encounter, damage, status, and position states.
 - [x] Catch Route 12 Snorlax with bounded recovery and capture decisions, raise the live balance
   contract to four members, and qualify all 301 checkpoints through the Hall of Fame.
 - [x] Add the Eevee/Thunder Stone/Jolteon acquisition and raise the live training contract to five.
