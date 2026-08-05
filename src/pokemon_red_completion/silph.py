@@ -2380,7 +2380,9 @@ def _yield_to_mart_5f_gentleman_from_left(
                 "X Special return customer wait",
             )
         else:
-            raise SilphChapterError("Celadon Mart 5F customer did not release the west return tile.")
+            raise SilphChapterError(
+                "Celadon Mart 5F customer did not release the west return tile."
+            )
         crossed = _move(actions, reader, ("right",), timing)
         if (crossed.player_x, crossed.player_y) == MART_5F_GENTLEMAN_CLEAR_POSITION:
             return crossed
