@@ -206,13 +206,18 @@ def test_battle_healing_recognizes_unspent_active_lead_knockout() -> None:
 
     assert _battle_healing_item_target_fainted_before_consumption(raw, 7, 7)
     assert not _battle_healing_item_target_fainted_before_consumption(raw, 7, 6)
-    assert not _battle_healing_item_target_fainted_before_consumption(
+    assert _battle_healing_item_target_fainted_before_consumption(
         replace(raw, active_party_hp=1),
         7,
         7,
     )
-    assert not _battle_healing_item_target_fainted_before_consumption(
+    assert _battle_healing_item_target_fainted_before_consumption(
         replace(raw, active_party_index=1),
+        7,
+        7,
+    )
+    assert not _battle_healing_item_target_fainted_before_consumption(
+        replace(raw, first_party_hp=1),
         7,
         7,
     )

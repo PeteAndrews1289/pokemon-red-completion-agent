@@ -1693,12 +1693,22 @@ def _run_rival_with_potions(
         try:
             _battle_hyper_potion(reader, actions, emulator, timing)
         except _HealingTargetFaintedBeforeItem:
-            terminal = _settle_silph_rival_forced_switch(
-                reader,
-                actions,
-                emulator,
-                timing,
+            current = reader.read()
+            current_menu = reader.read_battle_menu_state(current)
+            switched_to_healthy_reserve = (
+                current.battle_state == 2
+                and current.active_party_index not in {None, 0}
+                and (current.battler_hp or 0) > 0
+                and current_menu.phase is BattleMenuPhase.MAIN
             )
+            terminal = False
+            if not switched_to_healthy_reserve:
+                terminal = _settle_silph_rival_forced_switch(
+                    reader,
+                    actions,
+                    emulator,
+                    timing,
+                )
             if terminal:
                 note_observed_trainer_battle_exit(_silph_rival_intent())
                 _settle_silph_rival_field_control(reader, actions, timing)
@@ -2079,9 +2089,7 @@ def _battle_healing_item_target_fainted_before_consumption(
 
     return (
         raw.battle_state == 2
-        and raw.active_party_index in {None, 0}
         and (raw.first_party_hp or 0) == 0
-        and (raw.battler_hp or 0) == 0
         and quantity_before == quantity_after
     )
 
