@@ -7,10 +7,15 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
@@ -1122,6 +1127,7 @@ def _run_ss_anne_rival_with_potion(
         "obtain_cut",
         battle_plan_id=RedBattlePlanId.SS_ANNE_RIVAL,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
     )
     recoveries = 0
     super_recoveries = 0
@@ -1137,7 +1143,9 @@ def _run_ss_anne_rival_with_potion(
                 label="S.S. Anne rival",
             )
         except BattleRuntimeError as error:
-            if not isinstance(error.__cause__, _PauseForSSAnneRivalPotion):
+            if not recovery_request_matches(
+                error.__cause__, _PauseForSSAnneRivalPotion
+            ):
                 raise SSAnneChapterError(str(error)) from error
             pause = error.__cause__
             if not isinstance(pause, _PauseForSSAnneRivalPotion):

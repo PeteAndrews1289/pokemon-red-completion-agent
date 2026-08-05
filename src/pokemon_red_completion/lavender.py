@@ -13,11 +13,16 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     RequiredMovePolicy,
@@ -1112,7 +1117,12 @@ def _run_lavender_trainer_battle(
                 label=label,
             )
         except BattleRuntimeError as error:
-            if isinstance(error.__cause__, _PauseForBattleAwakening):
+            if recovery_request_matches(
+                error.__cause__,
+                _PauseForBattleAwakening,
+                accepted_needs=frozenset({"status"}),
+                accepted_statuses=frozenset({"sleep"}),
+            ):
                 _use_battle_status_item(
                     reader,
                     executor,
@@ -1124,7 +1134,12 @@ def _run_lavender_trainer_battle(
                 )
                 run.awakenings_used += 1
                 continue
-            if isinstance(error.__cause__, _PauseForBattleParlyzHeal):
+            if recovery_request_matches(
+                error.__cause__,
+                _PauseForBattleParlyzHeal,
+                accepted_needs=frozenset({"status"}),
+                accepted_statuses=frozenset({"paralysis"}),
+            ):
                 _use_battle_status_item(
                     reader,
                     executor,
@@ -1175,7 +1190,11 @@ def _run_lavender_trainer_battle(
                     ) from pivot_error
                 faint_pivots += 1
                 continue
-            if not isinstance(error.__cause__, _PauseForBattleSuperPotion):
+            if not recovery_request_matches(
+                error.__cause__,
+                _PauseForBattleSuperPotion,
+                accepted_needs=frozenset({"hp"}),
+            ):
                 raise
         _use_battle_super_potion(reader, executor, emulator, run, timing, label)
         recoveries += 1
@@ -1506,6 +1525,13 @@ def _trainer(
         "reach_lavender",
         battle_plan_id=battle_plan_id,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset(
+            {
+                BattleRecoveryCapability.RESTORE_HP,
+                BattleRecoveryCapability.CURE_SLEEP,
+                BattleRecoveryCapability.CURE_PARALYSIS,
+            }
+        ),
         required_move_policy=RequiredMovePolicy.ANY_USABLE,
     )
     final = _run_lavender_trainer_battle(

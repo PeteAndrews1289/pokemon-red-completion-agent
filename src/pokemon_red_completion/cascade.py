@@ -14,11 +14,16 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_policy import choose_cerulean_rival_move_slot
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
@@ -2647,7 +2652,7 @@ def _run_misty_with_potion(
                 raise CascadeChapterError("Misty recovery changed its protected Rocket reserve.")
             return final
         except BattleRuntimeError as error:
-            if not isinstance(error.__cause__, _PauseForMistyPotion):
+            if not recovery_request_matches(error.__cause__, _PauseForMistyPotion):
                 raise CascadeChapterError(str(error)) from error
         _use_cerulean_rival_potion(reader, executor, emulator, timing)
         recoveries += 1
@@ -2678,6 +2683,7 @@ def _run_cerulean_rival_with_potion(
         "help_bill",
         battle_plan_id=CERULEAN_RIVAL_BATTLE_PLAN_ID,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
     )
     accuracy_reset_complete = False
     forced_switches = 0
@@ -2710,7 +2716,9 @@ def _run_cerulean_rival_with_potion(
                 _reset_cerulean_rival_accuracy(reader, executor, emulator, timing)
                 accuracy_reset_complete = True
                 continue
-            if not isinstance(error.__cause__, _PauseForCeruleanRivalPotion):
+            if not recovery_request_matches(
+                error.__cause__, _PauseForCeruleanRivalPotion
+            ):
                 raw = reader.read()
                 party_hp = _rival_party_hp(emulator)
                 if (

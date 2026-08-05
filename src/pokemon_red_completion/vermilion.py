@@ -7,11 +7,16 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleActionExecutor,
     BattleIntent,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
@@ -1256,6 +1261,7 @@ def _run_rocket_thief_with_potion(
         "reach_vermilion",
         battle_plan_id=ROCKET_THIEF_BATTLE_PLAN_ID,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
     )
     used_potion = False
     while True:
@@ -1273,7 +1279,7 @@ def _run_rocket_thief_with_potion(
                 unknown_cancel_interval=10_000,
             )
         except BattleRuntimeError as error:
-            if not isinstance(error.__cause__, _PauseForRocketThiefPotion):
+            if not recovery_request_matches(error.__cause__, _PauseForRocketThiefPotion):
                 raise VermilionChapterError(str(error)) from error
             if used_potion:
                 raise VermilionChapterError(
@@ -1341,13 +1347,16 @@ def _run_route_6_trainer_f_with_potion(
                     "reach_vermilion",
                     battle_plan_id=battle_plan_id,
                     resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                    recovery_capabilities=frozenset(
+                        {BattleRecoveryCapability.RESTORE_HP}
+                    ),
                 ),
                 timing=timing.battle_runtime,
                 label="Route 6 Jr Trainer F",
                 unknown_cancel_interval=3,
             )
         except BattleRuntimeError as error:
-            if not isinstance(error.__cause__, _PauseForRoute6Potion):
+            if not recovery_request_matches(error.__cause__, _PauseForRoute6Potion):
                 raise VermilionChapterError(str(error)) from error
             if recoveries >= starting_reserve - SS_ANNE_RIVAL_POTION_RESERVE:
                 raise VermilionChapterError(

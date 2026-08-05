@@ -9,6 +9,7 @@ from pokemon_red_completion.battle_actions import (
     BattleControlRequest,
     LearnedBattleControlRequest,
     control_request_matches,
+    recovery_request_matches,
 )
 
 
@@ -71,3 +72,26 @@ def test_learned_requests_match_teacher_handlers_by_semantic_action() -> None:
     assert control_request_matches(request, BattleAction.boost(BattleBoostStat.SPECIAL))
     assert not control_request_matches(request, BattleAction.boost(BattleBoostStat.ACCURACY))
     assert not control_request_matches(request, BattleAction.recovery())
+
+
+def test_learned_recovery_matches_only_its_authorized_effect_handler() -> None:
+    class TeacherRecovery(BattleControlRequest):
+        default_action = BattleAction.recovery()
+
+    request = LearnedBattleControlRequest(
+        BattleAction.recovery(),
+        party_slot=2,
+        recovery_need="status",
+        status="paralysis",
+    )
+    assert recovery_request_matches(
+        request,
+        TeacherRecovery,
+        accepted_needs=frozenset({"status"}),
+        accepted_statuses=frozenset({"paralysis"}),
+    )
+    assert not recovery_request_matches(
+        request,
+        TeacherRecovery,
+        accepted_needs=frozenset({"hp"}),
+    )

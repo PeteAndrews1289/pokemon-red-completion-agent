@@ -17,10 +17,12 @@ from pokemon_red_completion.battle_actions import (
     BattleBoostStat,
     BattleControlRequest,
     control_request_matches,
+    recovery_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
@@ -306,6 +308,12 @@ def run_lorelei_chapter(
         "defeat_lorelei",
         battle_plan_id=RedBattlePlanId.LEAGUE_LORELEI,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset(
+            {
+                BattleRecoveryCapability.RESTORE_HP,
+                BattleRecoveryCapability.CURE_ANY_STATUS,
+            }
+        ),
     )
     while reader.read().battle_state:
         try:
@@ -327,7 +335,7 @@ def run_lorelei_chapter(
                 _battle_x_accuracy(reader, actions, emulator)
                 accuracy_used += 1
                 continue
-            if not isinstance(error.__cause__, _HealBoundary):
+            if not recovery_request_matches(error.__cause__, _HealBoundary):
                 raise LoreleiChapterError("Lorelei battle runtime failed.") from error
             raw = reader.read()
             if (raw.first_party_status or 0) and (raw.first_party_hp or 0) >= 70:

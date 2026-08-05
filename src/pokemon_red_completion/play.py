@@ -1110,6 +1110,7 @@ def run_qualified_play(
                 reader,
                 executor,
                 progress=_sabrina_progress_bridge(progress),
+                require_teacher_strategy_evidence=(not execute_battle_control_model),
             )
         except SabrinaChapterError as error:
             raise QualifiedPlayError(str(error)) from error

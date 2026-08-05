@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 5: recovery decisions become teacher-free
+
+The typed controller can now execute recovery without asking the Red-specific teacher to identify
+an item effect or party target. Each battle executor declares a portable capability mask—restore
+HP, cure one named status, or cure any status—and the target resolver authorizes only effects that
+both the live semantic observation requires and that executor can actually perform. Unsupported
+predictions fail closed to a legal move instead of guessing at an item. This distinction fixed two
+important false starts: a generic recovery permission attempted healing in a battle that did not
+own recovery, while a single `bounded_recovery` flag could not distinguish poison from sleep.
+
+The clean power-on execution run completed **312/312 checkpoints**, defeated the Champion, and
+entered the Hall of Fame. The frozen controller made 673 high-level decisions and agreed with the
+teacher on **669 (99.41%)**. It resolved 31 typed non-move requests, executed **27 without a teacher
+callback**, and suppressed 21 teacher requests. Those teacher-free requests include all qualified
+boosts plus 18 HP/status recovery decisions. Four unsupported predictions safely degraded to legal
+moves; the four resolved party switches still used the existing teacher-bound menu handler and are
+the next autonomy boundary. The public claim is preserved in the
+[capability-gated recovery receipt](evidence/teacher-free-recovery-hall-of-fame-2026-08-05.json).
+
 ## August 5: target resolution begins removing the teacher from execution
 
 The controller's first typed execution still called the teacher after predicting a non-move action,

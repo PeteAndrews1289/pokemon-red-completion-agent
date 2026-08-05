@@ -16,17 +16,18 @@ again reached Champion and Hall of Fame. The controller made 704 high-level deci
 **701 (99.57%)**, executed 35 typed non-move requests, suppressed four unnecessary teacher requests,
 used three guarded target-unavailable safety fallbacks, and used zero ordinary teacher fallbacks.
 
-This completes the high-level typed-execution gate, not autonomous full-game play. The current
-special-action adapter still consults the teacher to parameterize an item or party target, and it
-safe-degrades to a legal move when no matching typed target is available. The next gate is a model
-that owns those targets directly, followed by learned objective/skill selection, navigation, and a
-sealed transfer evaluation in a second Pokémon title.
+This completes the high-level typed-execution gate, not autonomous full-game play. Portable target
+resolution and executor capability masks now allow boosts and qualified HP/status recovery to run
+without a teacher callback. Party switching remains teacher-bound, followed by learned
+objective/skill selection, navigation, and a sealed transfer evaluation in a second Pokémon title.
 
 Target ownership is now partially promoted. A portable resolver covered **77/77** non-move actions
 across three complete held-out lineages (34 recovery, 36 boost, and 7 switch targets), with no
-explicit party-target disagreements. Boosts now execute from the learned controller without calling
-the teacher, and that source completed a clean **312/312**, **36/36**, Hall-of-Fame rollout. Recovery
-items and switch menu handlers remain the next target-free execution slice. A fresh perturbed
+explicit party-target disagreements. Boosts and qualified recovery actions now execute from the
+learned controller without calling the teacher. The capability-gated source completed another clean
+**312/312** Hall-of-Fame rollout: 27 typed requests were teacher-free, including 18 recovery
+decisions, while four party switches remained teacher-bound. Teacher-free switching is the next
+execution slice. A fresh perturbed
 diagnostic stopped earlier at the teacher's fixed Snorlax economy boundary; its immutable failed
 artifact is retained for the learned resource-planning curriculum rather than triggering another
 route-specific patch.

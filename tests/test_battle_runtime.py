@@ -12,6 +12,7 @@ from pokemon_red_completion.battle_policy import choose_cerulean_rival_move_slot
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattlePolicyObservation,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTimeoutError,
@@ -337,6 +338,46 @@ def test_explicit_move_policy_must_agree_with_required_move_id(
 def test_battle_intent_requires_a_safe_public_plan_id(battle_plan_id: str) -> None:
     with pytest.raises(ValueError, match="safe public battle identity"):
         BattleIntent("defeat_rival", battle_plan_id)
+
+
+def test_battle_intent_accepts_declared_bounded_recovery_capabilities() -> None:
+    intent = BattleIntent(
+        "defeat_rival",
+        TEST_BATTLE_PLAN_ID,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset(
+            {
+                BattleRecoveryCapability.RESTORE_HP,
+                BattleRecoveryCapability.CURE_PARALYSIS,
+            }
+        ),
+    )
+
+    assert intent.recovery_capabilities == frozenset(
+        {
+            BattleRecoveryCapability.RESTORE_HP,
+            BattleRecoveryCapability.CURE_PARALYSIS,
+        }
+    )
+
+
+def test_battle_intent_rejects_recovery_capabilities_without_bounded_policy() -> None:
+    with pytest.raises(ValueError, match="bounded recovery"):
+        BattleIntent(
+            "defeat_rival",
+            TEST_BATTLE_PLAN_ID,
+            recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
+        )
+
+
+def test_battle_intent_rejects_untyped_recovery_capabilities() -> None:
+    with pytest.raises(TypeError, match="must contain recovery capabilities"):
+        BattleIntent(
+            "defeat_rival",
+            TEST_BATTLE_PLAN_ID,
+            resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+            recovery_capabilities=frozenset({"restore_hp"}),  # type: ignore[arg-type]
+        )
 
 
 class AdaptiveRivalSimulation(FakeRuntime):

@@ -155,6 +155,35 @@ class BattleControlRequest(Exception):
 class LearnedBattleControlRequest(BattleControlRequest):
     """A complete semantic request emitted without consulting the teacher policy."""
 
+    def __init__(
+        self,
+        action: BattleAction,
+        *,
+        party_slot: int | None = None,
+        recovery_need: str | None = None,
+        status: str | None = None,
+    ) -> None:
+        if party_slot is not None and not 1 <= party_slot <= 6:
+            raise ValueError("learned request party slot must be one-based")
+        if recovery_need not in {None, "hp", "status", "hp_and_status"}:
+            raise ValueError("learned request recovery need is invalid")
+        if action.kind is BattleActionKind.USE_RECOVERY:
+            if party_slot is None or recovery_need is None:
+                raise ValueError("learned recovery request requires a complete target")
+            if recovery_need in {"status", "hp_and_status"} and not status:
+                raise ValueError("learned status recovery requires the observed status")
+            if recovery_need == "hp" and status is not None:
+                raise ValueError("learned HP recovery cannot name a status")
+        elif action.kind is BattleActionKind.SWITCH:
+            if party_slot is None or recovery_need is not None or status is not None:
+                raise ValueError("learned switch request requires only a party target")
+        elif party_slot is not None or recovery_need is not None or status is not None:
+            raise ValueError("learned target is incompatible with the action")
+        self.party_slot = party_slot
+        self.recovery_need = recovery_need
+        self.status = status
+        super().__init__(action)
+
 
 def control_request_matches(
     cause: BaseException | None,
@@ -172,3 +201,23 @@ def control_request_matches(
     if actual.kind is BattleActionKind.USE_BOOST:
         return actual.boost_stat is expected.boost_stat
     return actual.kind is not BattleActionKind.SELECT_MOVE
+
+
+def recovery_request_matches(
+    cause: BaseException | None,
+    teacher_request_type: type[BattleControlRequest],
+    *,
+    accepted_needs: frozenset[str] = frozenset({"hp", "status", "hp_and_status"}),
+    accepted_statuses: frozenset[str] | None = None,
+) -> bool:
+    """Match an exact teacher recovery or a compatible complete learned request."""
+    if not issubclass(teacher_request_type, BattleControlRequest):
+        raise TypeError("teacher_request_type must be a BattleControlRequest type")
+    if isinstance(cause, teacher_request_type):
+        return True
+    return (
+        isinstance(cause, LearnedBattleControlRequest)
+        and cause.action.kind is BattleActionKind.USE_RECOVERY
+        and cause.recovery_need in accepted_needs
+        and (accepted_statuses is None or cause.status in accepted_statuses)
+    )

@@ -84,6 +84,18 @@ class BattleResourcePolicy(StrEnum):
     BOUNDED_RECOVERY = "bounded_recovery"
 
 
+class BattleRecoveryCapability(StrEnum):
+    """Game-neutral recovery effects one bound executor can legally perform."""
+
+    RESTORE_HP = "restore_hp"
+    CURE_SLEEP = "cure_sleep"
+    CURE_PARALYSIS = "cure_paralysis"
+    CURE_POISON = "cure_poison"
+    CURE_BURN = "cure_burn"
+    CURE_FREEZE = "cure_freeze"
+    CURE_ANY_STATUS = "cure_any_status"
+
+
 @dataclass(frozen=True, slots=True)
 class BattleIntent:
     """Inference-available objective and constraints for a battle policy."""
@@ -94,6 +106,7 @@ class BattleIntent:
     required_move_policy: RequiredMovePolicy = RequiredMovePolicy.ANY_USABLE
     required_move_ref: str | None = None
     resource_policy: BattleResourcePolicy = BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
+    recovery_capabilities: frozenset[BattleRecoveryCapability] = frozenset()
 
     def __post_init__(self) -> None:
         if (
@@ -120,6 +133,16 @@ class BattleIntent:
             raise ValueError("an exact battle intent requires a safe semantic move reference")
         if not isinstance(self.resource_policy, BattleResourcePolicy):
             raise TypeError("resource_policy must be a BattleResourcePolicy")
+        if not isinstance(self.recovery_capabilities, frozenset) or any(
+            not isinstance(value, BattleRecoveryCapability)
+            for value in self.recovery_capabilities
+        ):
+            raise TypeError("recovery_capabilities must contain recovery capabilities")
+        if (
+            self.recovery_capabilities
+            and self.resource_policy is not BattleResourcePolicy.BOUNDED_RECOVERY
+        ):
+            raise ValueError("recovery capabilities require bounded recovery policy")
 
 
 @dataclass(frozen=True, slots=True)

@@ -8,10 +8,15 @@ from dataclasses import dataclass, field, replace
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
@@ -1114,6 +1119,17 @@ def _fight(
             if bounded_recovery
             else BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
         ),
+        recovery_capabilities=(
+            frozenset(
+                {
+                    BattleRecoveryCapability.RESTORE_HP,
+                    BattleRecoveryCapability.CURE_SLEEP,
+                    BattleRecoveryCapability.CURE_PARALYSIS,
+                }
+            )
+            if bounded_recovery
+            else frozenset()
+        ),
         required_move_policy=RequiredMovePolicy.ANY_USABLE,
         required_move_ref=None,
     )
@@ -1191,7 +1207,12 @@ def _fight(
             )
             break
         except BattleRuntimeError as error:
-            if isinstance(error.__cause__, _PauseForTowerAwakening):
+            if recovery_request_matches(
+                error.__cause__,
+                _PauseForTowerAwakening,
+                accepted_needs=frozenset({"status"}),
+                accepted_statuses=frozenset({"sleep"}),
+            ):
                 _use_tower_battle_status_item(
                     reader,
                     actions,
@@ -1201,7 +1222,12 @@ def _fight(
                     expected_status=reader.read().first_party_status or 0,
                 )
                 continue
-            if isinstance(error.__cause__, _PauseForTowerParlyzHeal):
+            if recovery_request_matches(
+                error.__cause__,
+                _PauseForTowerParlyzHeal,
+                accepted_needs=frozenset({"status"}),
+                accepted_statuses=frozenset({"paralysis"}),
+            ):
                 _use_tower_battle_status_item(
                     reader,
                     actions,
@@ -1220,7 +1246,11 @@ def _fight(
                 )
                 accuracy_reset_complete = True
                 continue
-            if not isinstance(error.__cause__, _PauseForTowerSuperPotion):
+            if not recovery_request_matches(
+                error.__cause__,
+                _PauseForTowerSuperPotion,
+                accepted_needs=frozenset({"hp"}),
+            ):
                 raise
         if run is None:
             raise TowerChapterError(f"{label} recovery lacks its chapter resource ledger.")

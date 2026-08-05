@@ -12,9 +12,15 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
@@ -1605,8 +1611,8 @@ def _silph_fixed_move_slot(raw: RawGameState, *, preferred: int) -> int:
     raise SilphChapterError("Silph fixed-slot policy has no legal move with PP.")
 
 
-class _PauseBattle(Exception):
-    pass
+class _PauseBattle(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
 class _HealingTargetFaintedBeforeItem(SilphChapterError):
@@ -1636,13 +1642,18 @@ def _run_until(
                 "liberate_silph",
                 battle_plan_id=battle_plan_id,
                 resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                recovery_capabilities=frozenset(
+                    {BattleRecoveryCapability.RESTORE_HP}
+                ),
             ),
             timing=BattleRuntimeTiming(max_runtime_pulses=720),
             label=label,
             unknown_cancel_interval=3,
         )
     except BattleRuntimeError as error:
-        if not isinstance(error.__cause__, _PauseBattle):
+        if not recovery_request_matches(
+            error.__cause__, _PauseBattle, accepted_needs=frozenset({"hp"})
+        ):
             raise
         return False
     return True
@@ -1790,6 +1801,7 @@ def _silph_rival_intent() -> BattleIntent:
         "liberate_silph",
         battle_plan_id=RedBattlePlanId.SILPH_7F_RIVAL,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
     )
 
 

@@ -10,9 +10,15 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 
 from pokemon_red_completion.actions import MacroActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
@@ -149,14 +155,23 @@ class SabrinaChapterReport:
     controller_released: bool
     frames_executed: int
     actions_executed: int
+    require_teacher_strategy_evidence: bool
 
     @property
-    def passed(self) -> bool:
+    def teacher_strategy_evidence_passed(self) -> bool:
+        return (
+            _encounter_party(self.turns) == SABRINA_PARTY
+            and all(_sabrina_turn_is_allowed(turn) for turn in self.turns)
+            and all(turn.lead_hp > 0 for turn in self.turns)
+            and all(_sabrina_status_is_supported(turn.lead_status) for turn in self.turns)
+        )
+
+    @property
+    def completion_evidence_passed(self) -> bool:
         return (
             len(self.records) == SABRINA_CHECKPOINT_COUNT
-            and self.identity == (SABRINA_OPPONENT, SABRINA_TRAINER_CLASS, SABRINA_TRAINER_SET)
-            and _encounter_party(self.turns) == SABRINA_PARTY
-            and all(_sabrina_turn_is_allowed(turn) for turn in self.turns)
+            and self.identity
+            == (SABRINA_OPPONENT, SABRINA_TRAINER_CLASS, SABRINA_TRAINER_SET)
             and self.trainer_events_before == (False,) * 7
             and self.trainer_events_after == (True,) * 7
             and self.got_tm46
@@ -165,13 +180,12 @@ class SabrinaChapterReport:
             and self.marsh_badge_mirror
             and self.tm46_quantity == 1
             and 0 <= self.hyper_potions_used <= MAX_SABRINA_HYPER_POTIONS
-            and self.hyper_potions_remaining == self.hyper_potions_before - self.hyper_potions_used
+            and self.hyper_potions_remaining
+            == self.hyper_potions_before - self.hyper_potions_used
             and self.x_specials_before == SABRINA_X_SPECIAL_USES
             and self.x_specials_used == SABRINA_X_SPECIAL_USES
             and self.x_specials_remaining == 0
             and self.money_remaining == self.initial_money + 4_257
-            and all(turn.lead_hp > 0 for turn in self.turns)
-            and all(_sabrina_status_is_supported(turn.lead_status) for turn in self.turns)
             and self.final_raw.map_id == MapId.SAFFRON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.battle_state == 0
@@ -183,6 +197,13 @@ class SabrinaChapterReport:
             and self.controller_released
         )
 
+    @property
+    def passed(self) -> bool:
+        return self.completion_evidence_passed and (
+            not self.require_teacher_strategy_evidence
+            or self.teacher_strategy_evidence_passed
+        )
+
     def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
         return tuple((item.checkpoint_id, item.label, item.raw) for item in self.records)
 
@@ -190,6 +211,11 @@ class SabrinaChapterReport:
         return {
             "status": "ok" if self.passed else "failed",
             "objective": "defeat_sabrina",
+            "verification": {
+                "completion_evidence_passed": self.completion_evidence_passed,
+                "teacher_strategy_required": self.require_teacher_strategy_evidence,
+                "teacher_strategy_evidence_passed": self.teacher_strategy_evidence_passed,
+            },
             "trainer_free_warp_route": self.trainer_events_before == (False,) * 7,
             "identity": list(self.identity),
             "party": [list(member) for member in SABRINA_PARTY],
@@ -223,6 +249,7 @@ def run_sabrina_chapter(
     *,
     timing: SilphTiming = DEFAULT_SILPH_TIMING,
     progress: ProgressSink | None = None,
+    require_teacher_strategy_evidence: bool = True,
 ) -> SabrinaChapterReport:
     start_frames = emulator.frame_count
     actions = _CountingExecutor(executor)
@@ -324,9 +351,11 @@ def run_sabrina_chapter(
             )
         _battle_hyper_potion(reader, actions, emulator, timing)
 
-    if _encounter_party(turns) != SABRINA_PARTY:
+    if require_teacher_strategy_evidence and _encounter_party(turns) != SABRINA_PARTY:
         raise SabrinaChapterError(f"Sabrina party or turn policy changed: {turns!r}.")
-    if any(not _sabrina_status_is_supported(turn.lead_status) for turn in turns):
+    if require_teacher_strategy_evidence and any(
+        not _sabrina_status_is_supported(turn.lead_status) for turn in turns
+    ):
         raise SabrinaChapterError("Sabrina policy encountered an unsupported persistent status.")
     _checkpoint(records, progress, emulator, reader.read(), "sabrina_defeated", "Defeated Sabrina")
 
@@ -412,14 +441,15 @@ def run_sabrina_chapter(
         not emulator.pressed_buttons,
         emulator.frame_count - start_frames,
         actions.actions_executed,
+        require_teacher_strategy_evidence,
     )
     if not report.passed:
         raise SabrinaChapterError(f"Sabrina chapter failed its evidence contract: {report!r}.")
     return report
 
 
-class _PauseBattle(Exception):
-    pass
+class _PauseBattle(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
 def _run_until_sabrina(
@@ -444,13 +474,18 @@ def _run_until_sabrina(
                 "defeat_sabrina",
                 battle_plan_id=RedBattlePlanId.SABRINA_LEADER,
                 resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                recovery_capabilities=frozenset(
+                    {BattleRecoveryCapability.RESTORE_HP}
+                ),
             ),
             timing=SABRINA_BATTLE_TIMING,
             label=label,
             unknown_cancel_interval=3,
         )
     except BattleRuntimeError as error:
-        if not isinstance(error.__cause__, _PauseBattle):
+        if not recovery_request_matches(
+            error.__cause__, _PauseBattle, accepted_needs=frozenset({"hp"})
+        ):
             raise
         return False
     return True

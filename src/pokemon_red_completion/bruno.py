@@ -12,10 +12,15 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
@@ -265,6 +270,12 @@ def run_bruno_chapter(
         "defeat_bruno",
         battle_plan_id=RedBattlePlanId.LEAGUE_BRUNO,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset(
+            {
+                BattleRecoveryCapability.RESTORE_HP,
+                BattleRecoveryCapability.CURE_ANY_STATUS,
+            }
+        ),
     )
     while reader.read().battle_state:
         try:
@@ -278,7 +289,7 @@ def run_bruno_chapter(
                 label="Bruno",
             )
         except BattleRuntimeError as error:
-            if not isinstance(error.__cause__, _HealBoundary):
+            if not recovery_request_matches(error.__cause__, _HealBoundary):
                 current = reader.read()
                 raise BrunoChapterError(
                     "Bruno battle runtime failed: "

@@ -13,10 +13,12 @@ from pokemon_red_completion.battle_actions import (
     BattleBoostStat,
     BattleControlRequest,
     control_request_matches,
+    recovery_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
@@ -329,6 +331,12 @@ def run_champion_chapter(
         "defeat_champion",
         battle_plan_id=RedBattlePlanId.LEAGUE_CHAMPION,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset(
+            {
+                BattleRecoveryCapability.RESTORE_HP,
+                BattleRecoveryCapability.CURE_ANY_STATUS,
+            }
+        ),
     )
     while True:
         raw = reader.read()
@@ -389,7 +397,7 @@ def run_champion_chapter(
                 _battle_x_special(reader, actions, emulator)
                 boosts_used += 1
                 continue
-            if not isinstance(error.__cause__, _HealBoundary):
+            if not recovery_request_matches(error.__cause__, _HealBoundary):
                 current = reader.read()
                 if current.enemy_hp == 0 and any(hp > 0 for hp in _party_hp(emulator)):
                     if current.battle_state == 2:

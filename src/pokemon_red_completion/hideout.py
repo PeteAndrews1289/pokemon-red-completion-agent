@@ -7,7 +7,11 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_recovery import (
     ProtectedRecoveryError,
@@ -16,6 +20,7 @@ from pokemon_red_completion.battle_recovery import (
 )
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
@@ -664,6 +669,7 @@ def _run_hideout_giovanni_with_recovery(
         battle_plan_id=battle_plan_id,
         required_move_policy=RequiredMovePolicy.ANY_USABLE,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
     )
     recoveries = 0
     while True:
@@ -679,7 +685,9 @@ def _run_hideout_giovanni_with_recovery(
                 unknown_cancel_interval=2,
             )
         except BattleRuntimeError as error:
-            if not isinstance(error.__cause__, _PauseForGiovanniSuperPotion):
+            if not recovery_request_matches(
+                error.__cause__, _PauseForGiovanniSuperPotion
+            ):
                 failed = reader.read()
                 raise HideoutChapterError(
                     f"{error} Recovery evidence: starting_reserve={starting_reserve}, "

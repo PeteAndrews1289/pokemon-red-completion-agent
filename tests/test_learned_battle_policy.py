@@ -19,7 +19,12 @@ from pokemon_red_completion.battle_control_features import (
 from pokemon_red_completion.battle_control_model import BattleControlMLP
 from pokemon_red_completion.battle_model import MaskedLinearMoveRanker
 from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker
-from pokemon_red_completion.battle_runtime import BattleIntent, BattlePolicyObservation
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattlePolicyObservation,
+    BattleRecoveryCapability,
+    BattleResourcePolicy,
+)
 from pokemon_red_completion.battle_semantics import (
     FEATURE_NAMES,
     BattleFeatureBatch,
@@ -51,7 +56,10 @@ def _batch() -> BattleFeatureBatch:
     )
 
 
-def _observation() -> BattlePolicyObservation:
+def _observation(
+    *,
+    recovery_capabilities: frozenset[BattleRecoveryCapability] = frozenset(),
+) -> BattlePolicyObservation:
     return BattlePolicyObservation(
         RawGameState(
             game_started=True,
@@ -63,7 +71,16 @@ def _observation() -> BattlePolicyObservation:
             first_party_moves=(33, 0, 55),
             first_party_pp=(10, 0, 10),
         ),
-        BattleIntent("test_battle", "battle-test"),
+        BattleIntent(
+            "test_battle",
+            "battle-test",
+            resource_policy=(
+                BattleResourcePolicy.BOUNDED_RECOVERY
+                if recovery_capabilities
+                else BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
+            ),
+            recovery_capabilities=recovery_capabilities,
+        ),
     )
 
 
@@ -374,7 +391,7 @@ def test_control_model_scores_live_actions_without_executing_them() -> None:
     }
 
 
-def test_control_execution_reuses_typed_teacher_parameterization() -> None:
+def test_control_execution_emits_recovery_without_calling_teacher() -> None:
     policy = ModelAssistedBattlePolicy(
         model=_model(),
         control_model=_control_model(),
@@ -385,11 +402,21 @@ def test_control_execution_reuses_typed_teacher_parameterization() -> None:
         require_teacher_agreement=False,
     )
 
-    with pytest.raises(BattleControlRequest):
+    def teacher_must_not_run() -> int:
+        raise AssertionError("authorized recovery queried the teacher")
+
+    with pytest.raises(LearnedBattleControlRequest) as raised:
         policy.choose_move(
-            _observation(),
-            lambda: (_ for _ in ()).throw(BattleControlRequest(BattleAction.recovery())),
+            _observation(
+                recovery_capabilities=frozenset(
+                    {BattleRecoveryCapability.RESTORE_HP}
+                )
+            ),
+            teacher_must_not_run,
         )
+
+    assert raised.value.party_slot == 1
+    assert raised.value.recovery_need == "hp"
 
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
@@ -435,6 +462,7 @@ def test_control_execution_guards_an_unparameterized_special_action() -> None:
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
     assert execution["safety_fallbacks"] == 1
+    assert execution["target_resolution_failures"] == {"capability_mask": 1}
 
 
 def test_control_execution_emits_boost_without_calling_teacher() -> None:

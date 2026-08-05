@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum
 
 from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
+from pokemon_red_completion.battle_runtime import BattleRecoveryCapability
 
 
 class BattleActionTargetError(ValueError):
@@ -28,6 +29,7 @@ class ResolvedBattleAction:
     action: BattleAction
     party_slot: int | None = None
     recovery_need: RecoveryNeed | None = None
+    status: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.action, BattleAction):
@@ -35,10 +37,19 @@ class ResolvedBattleAction:
         if self.action.kind is BattleActionKind.USE_RECOVERY:
             if self.party_slot is None or self.recovery_need is None:
                 raise ValueError("recovery actions require a party slot and recovery need")
+            if self.recovery_need in {RecoveryNeed.STATUS, RecoveryNeed.HP_AND_STATUS}:
+                if not self.status:
+                    raise ValueError("status recovery requires the observed status")
+            elif self.status is not None:
+                raise ValueError("HP-only recovery cannot name a status")
         elif self.action.kind is BattleActionKind.SWITCH:
-            if self.party_slot is None or self.recovery_need is not None:
+            if self.party_slot is None or self.recovery_need is not None or self.status is not None:
                 raise ValueError("switch actions require only a party slot")
-        elif self.party_slot is not None or self.recovery_need is not None:
+        elif (
+            self.party_slot is not None
+            or self.recovery_need is not None
+            or self.status is not None
+        ):
             raise ValueError("this action kind does not accept a target")
         if self.party_slot is not None and not 1 <= self.party_slot <= 6:
             raise ValueError("party_slot must be one-based and between one and six")
@@ -48,6 +59,7 @@ class ResolvedBattleAction:
             "action": self.action.public_dict(),
             "party_slot": self.party_slot,
             "recovery_need": (self.recovery_need.value if self.recovery_need is not None else None),
+            "status": self.status,
         }
 
 
@@ -80,7 +92,10 @@ def resolve_battle_action_target(
         max_hp = _positive_int(active.get("max_hp"), "active max hp")
         if hp > max_hp:
             raise BattleActionTargetError("active hp exceeds maximum hp")
-        has_status = active.get("status") is not None
+        status = active.get("status")
+        if status is not None and (not isinstance(status, str) or not status):
+            raise BattleActionTargetError("active status must be a semantic string")
+        has_status = status is not None
         needs_hp = hp < max_hp
         if not needs_hp and not has_status:
             raise BattleActionTargetError("recovery has no observable effect target")
@@ -95,6 +110,7 @@ def resolve_battle_action_target(
             action,
             party_slot=active_index + 1,
             recovery_need=need,
+            status=status,
         )
 
     if not members:
@@ -124,6 +140,46 @@ def resolve_battle_action_target(
         raise BattleActionTargetError("no living switch target is available")
     chosen_index = -max(candidates)[3]
     return ResolvedBattleAction(action, party_slot=chosen_index + 1)
+
+
+def authorize_recovery_target(
+    resolved: ResolvedBattleAction,
+    capabilities: frozenset[BattleRecoveryCapability],
+) -> ResolvedBattleAction:
+    """Select one declared recovery effect without consulting a teacher policy."""
+    if resolved.action.kind is not BattleActionKind.USE_RECOVERY:
+        raise BattleActionTargetError("only recovery actions use recovery capabilities")
+    if not isinstance(capabilities, frozenset) or any(
+        not isinstance(value, BattleRecoveryCapability) for value in capabilities
+    ):
+        raise TypeError("capabilities must contain recovery capabilities")
+    need = resolved.recovery_need
+    assert need is not None
+    status_capability = {
+        "sleep": BattleRecoveryCapability.CURE_SLEEP,
+        "paralysis": BattleRecoveryCapability.CURE_PARALYSIS,
+        "poison": BattleRecoveryCapability.CURE_POISON,
+        "burn": BattleRecoveryCapability.CURE_BURN,
+        "freeze": BattleRecoveryCapability.CURE_FREEZE,
+    }.get(resolved.status)
+    status_allowed = resolved.status is not None and (
+        BattleRecoveryCapability.CURE_ANY_STATUS in capabilities
+        or status_capability in capabilities
+    )
+    hp_allowed = (
+        need in {RecoveryNeed.HP, RecoveryNeed.HP_AND_STATUS}
+        and BattleRecoveryCapability.RESTORE_HP in capabilities
+    )
+    if status_allowed and BattleRecoveryCapability.CURE_ANY_STATUS in capabilities:
+        return replace(
+            resolved,
+            recovery_need=(RecoveryNeed.HP_AND_STATUS if hp_allowed else RecoveryNeed.STATUS),
+        )
+    if status_allowed:
+        return replace(resolved, recovery_need=RecoveryNeed.STATUS)
+    if hp_allowed:
+        return replace(resolved, recovery_need=RecoveryNeed.HP, status=None)
+    raise BattleActionTargetError("recovery effect is not declared by the executor")
 
 
 def _mapping(value: object, label: str) -> Mapping[str, object]:

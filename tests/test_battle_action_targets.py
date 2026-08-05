@@ -3,9 +3,11 @@ import pytest
 from pokemon_red_completion.battle_action_targets import (
     BattleActionTargetError,
     RecoveryNeed,
+    authorize_recovery_target,
     resolve_battle_action_target,
 )
 from pokemon_red_completion.battle_actions import BattleAction, BattleBoostStat
+from pokemon_red_completion.battle_runtime import BattleRecoveryCapability
 
 
 def _observation(
@@ -44,6 +46,8 @@ def test_recovery_resolves_active_party_target_and_effect_role() -> None:
     assert (hp.party_slot, hp.recovery_need) == (1, RecoveryNeed.HP)
     assert (status.party_slot, status.recovery_need) == (1, RecoveryNeed.STATUS)
     assert (both.party_slot, both.recovery_need) == (1, RecoveryNeed.HP_AND_STATUS)
+    assert status.status == "sleep"
+    assert both.status == "paralysis"
 
 
 def test_recovery_can_infer_active_slot_from_legacy_lead_observation() -> None:
@@ -104,3 +108,39 @@ def test_targetless_action_stays_targetless() -> None:
     )
     assert resolved.party_slot is None
     assert resolved.recovery_need is None
+
+
+def test_recovery_authorization_selects_only_declared_effect() -> None:
+    combined = resolve_battle_action_target(
+        BattleAction.recovery(),
+        _observation(members=((30, 100, 20, "poison"),)),
+    )
+    hp_only = authorize_recovery_target(
+        combined,
+        frozenset({BattleRecoveryCapability.RESTORE_HP}),
+    )
+    assert hp_only.recovery_need is RecoveryNeed.HP
+    assert hp_only.status is None
+    with pytest.raises(BattleActionTargetError, match="not declared"):
+        authorize_recovery_target(
+            combined,
+            frozenset({BattleRecoveryCapability.CURE_SLEEP}),
+        )
+
+
+def test_recovery_authorization_prefers_specific_status_before_hp() -> None:
+    combined = resolve_battle_action_target(
+        BattleAction.recovery(),
+        _observation(members=((30, 100, 20, "paralysis"),)),
+    )
+    status = authorize_recovery_target(
+        combined,
+        frozenset(
+            {
+                BattleRecoveryCapability.RESTORE_HP,
+                BattleRecoveryCapability.CURE_PARALYSIS,
+            }
+        ),
+    )
+    assert status.recovery_need is RecoveryNeed.STATUS
+    assert status.status == "paralysis"
