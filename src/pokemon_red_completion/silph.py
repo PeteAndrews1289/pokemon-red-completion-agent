@@ -1608,6 +1608,10 @@ class _PauseBattle(Exception):
     pass
 
 
+class _HealingTargetFaintedBeforeItem(SilphChapterError):
+    """The selected lead fainted before a recovery item was consumed."""
+
+
 def _run_until(
     reader: PokemonRedStateReader,
     actions: _CountingExecutor,
@@ -1686,7 +1690,21 @@ def _run_rival_with_potions(
             continue
         if completed:
             return
-        _battle_hyper_potion(reader, actions, emulator, timing)
+        try:
+            _battle_hyper_potion(reader, actions, emulator, timing)
+        except _HealingTargetFaintedBeforeItem:
+            terminal = _settle_silph_rival_forced_switch(
+                reader,
+                actions,
+                emulator,
+                timing,
+            )
+            if terminal:
+                note_observed_trainer_battle_exit(_silph_rival_intent())
+                _settle_silph_rival_field_control(reader, actions, timing)
+                return
+            forced_switches += 1
+            continue
         recovery += 1
     # Exhausting the healing allocation does not revoke the balanced-party
     # contract.  Continue with living reserves through the same verified
@@ -2016,6 +2034,16 @@ def _battle_healing_item(
         return False
     current = reader.read()
     current_menu = reader.read_battle_menu_state(current)
+    if _battle_healing_item_target_fainted_before_consumption(current, before, after):
+        # The schedule can put the enemy reply on the same narrow boundary as
+        # the party-target confirmation.  No inventory was spent, so let the
+        # caller perform the already-bounded forced-switch recovery instead of
+        # misreporting this as an inventory mutation failure.
+        raise _HealingTargetFaintedBeforeItem(
+            f"{label} target fainted before consumption: "
+            f"quantity={before}, active={current.active_party_index}, "
+            f"battler_hp={current.battler_hp}."
+        )
     if (
         before == after
         and not _retry
@@ -2039,6 +2067,22 @@ def _battle_healing_item(
         f"before={before}, after={after}, retry={_retry}, "
         f"hp={current.first_party_hp}/{current.first_party_max_hp}, "
         f"phase={current_menu.phase.value}."
+    )
+
+
+def _battle_healing_item_target_fainted_before_consumption(
+    raw: RawGameState,
+    quantity_before: int,
+    quantity_after: int,
+) -> bool:
+    """Recognize an unspent recovery turn that ended in an active-lead KO."""
+
+    return (
+        raw.battle_state == 2
+        and raw.active_party_index in {None, 0}
+        and (raw.first_party_hp or 0) == 0
+        and (raw.battler_hp or 0) == 0
+        and quantity_before == quantity_after
     )
 
 

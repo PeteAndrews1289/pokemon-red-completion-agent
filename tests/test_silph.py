@@ -43,6 +43,7 @@ from pokemon_red_completion.silph import (
     SilphTiming,
     _acquire_silph_x_special,
     _battle_healing_item,
+    _battle_healing_item_target_fainted_before_consumption,
     _battle_healing_item_verified_terminal_exit,
     _enter_silph_elevator,
     _enter_silph_from_city,
@@ -187,6 +188,33 @@ def test_battle_healing_accepts_verified_enemy_recoil_knockout() -> None:
         replace(raw, enemy_hp=1),
         7,
         6,
+    )
+
+
+def test_battle_healing_recognizes_unspent_active_lead_knockout() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.SILPH_CO_7F,
+        player_x=3,
+        player_y=2,
+        party_count=5,
+        battle_state=2,
+        active_party_index=0,
+        active_party_hp=0,
+        first_party_hp=0,
+    )
+
+    assert _battle_healing_item_target_fainted_before_consumption(raw, 7, 7)
+    assert not _battle_healing_item_target_fainted_before_consumption(raw, 7, 6)
+    assert not _battle_healing_item_target_fainted_before_consumption(
+        replace(raw, active_party_hp=1),
+        7,
+        7,
+    )
+    assert not _battle_healing_item_target_fainted_before_consumption(
+        replace(raw, active_party_index=1),
+        7,
+        7,
     )
 
 
