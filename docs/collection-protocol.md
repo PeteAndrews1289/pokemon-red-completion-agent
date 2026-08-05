@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v38.json`](../configs/red-battle-collection-v38.json)
+[`red-battle-collection-v39.json`](../configs/red-battle-collection-v39.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -477,14 +477,14 @@ The prospective campaign published by this version has these independent golden 
 
 | Field | Frozen value |
 | --- | --- |
-| Registry bytes | `6518` |
-| Registry SHA-256 | `b6644123def08aec1637f7bf2edf44c3dc3d4a862d56df4402f2a235594eda78` |
-| Source bundle SHA-256 | `62c92d15e7ced29653b4a50fb4352cffd2e6ca7473f7ffae521bd7074f542a4a` |
+| Registry bytes | `6583` |
+| Registry SHA-256 | `e3ec9da9210cc2e43155c11018f8bbeded4eabe402d22da8ae139994b8f265b5` |
+| Source bundle SHA-256 | `dc58f574ec7ab8eb56c8d3c44d4081a2bf274fef94f2dfcce62de356110f4ee2` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `31cbc829256c4f6a258750996c00778b8796c4be4b9131d16ae97535620d5111` |
-| Dry-run schedule SHA-256 | `44f7f521126553fbc94a7868b65bfe87237ef740dba8965ad401c9043b6c7e28` |
-| Slot `01` assignment ID | `70c361a4d2ad62f723fd97874f975560ac5cd3d869ed6681509e03596fc1622d` |
+| Teacher execution SHA-256 | `461cd51d5dc74f419b7fc31da2248f847431f73c289b7f80527257136ee79e97` |
+| Dry-run schedule SHA-256 | `db1076f691c753055fb333523b4864b7f5a89cfc172da97737db8ff8372b142d` |
+| Slot `01` assignment ID | `212a20a8d9260f3fca98babf13d47a9d9cb78f17986a5990add44e6c82620548` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -1619,3 +1619,12 @@ then dealt only 64–65 damage, Venusaur repeatedly used Recover, and both helpe
 recovery now uses the existing bounded direct Full Restore action. It preserves the boosted active
 battler and every developed teammate, consumes no new item, and retains the one-attack progress
 latch between heals. The failure remains an uncounted diagnostic.
+
+That source completed the next exposed replay and the official clean-power rehearsal at 312/312
+checkpoints, 36/36 objectives, and all 69 battle attestations. V38 train slot 01 then reached
+checkpoint 239 before the moving fifth-floor Celadon customer occupied `(14,2)` while the player
+returned from the X Special clerk at `(13,2)`. The existing customer controller covered the same
+aisle only from the east. The failed root remains sealed and v38 is retired. V39 introduces the
+symmetric west-side bounded yield, map/coordinate proof, and recross; it assigns fresh counted
+seeds `340001`–`340005`, `350001`–`350002`, and `360001`–`360005`. Exposed seed `310001` is now
+diagnostic-only and must pass before the fixed rehearsal can qualify v39.

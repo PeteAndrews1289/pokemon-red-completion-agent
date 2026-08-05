@@ -317,7 +317,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v38-01-train
+  --collection-run red-battle-v39-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
@@ -621,6 +621,13 @@ remaining obsolete sacrifice tactic at Venusaur. Two helper pivots erased all si
 under Gen I switch rules; Blizzard damage fell to 64–65 while Venusaur recovered, and the helpers
 fainted. Champion healing is now direct: Full Restore preserves the boosted workhorse's stat stages
 and the developed teammates, aligning the final battle with the balanced-party curriculum.
+That source subsequently completed both the exposed diagnostic and the official clean-power
+qualification at 312/312 checkpoints, 36/36 objectives, and 69/69 scheduled battle attestations.
+The first immutable v38 training root then exposed the fifth-floor Celadon customer from the
+opposite direction: after buying X Specials, the player at `(13,2)` could not cross the occupied
+`(14,2)` tile on the return route. V38 is sealed with that failed root. V39 adds the symmetric,
+bounded west-side yield, retains the same fail-closed map and coordinate proofs, and reserves wholly
+fresh `340001`/`350001`/`360001` train, validation, and test seed ranges.
 
 ## Evidence and project status
 

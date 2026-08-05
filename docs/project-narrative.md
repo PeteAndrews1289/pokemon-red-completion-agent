@@ -1120,6 +1120,15 @@ policy now heals the active workhorse directly with the already-budgeted Full Re
 preserves the setup investment and the balanced team, while the existing progress latch still
 requires an attack between heals and prevents an unproductive item loop.
 
+The repaired teacher then completed a clean exposed replay and the official source-bound rehearsal:
+312/312 checkpoints, 36/36 objectives, all 69 schedule attestations, Champion victory, and Hall of
+Fame entry. Collection finally opened, and the first v38 train root reached checkpoint 239 before
+the Celadon fifth-floor gentleman occupied `(14,2)` during the return from the X Special clerk.
+Earlier diagnostics had taught the controller to yield from the east at `(15,2)`; the immutable
+train schedule exposed the symmetric west approach at `(13,2)`. That failed root is retained rather
+than retried or relabeled. V39 adds a bounded west-side yield-and-recross skill and assigns fresh
+train, validation, and test roots, preserving the prospective evaluation contract.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

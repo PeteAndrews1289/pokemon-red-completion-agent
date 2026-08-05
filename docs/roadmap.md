@@ -643,3 +643,9 @@ recovery erased all six X Special stages at Venusaur and sacrificed two develope
 Blizzard fell to 64–65 damage while Recover reset progress. Champion healing is now direct through
 the existing bounded Full Restore action, preserving both stat stages and party members while the
 one-attack-between-heals latch remains enforced. Another clean diagnostic is required.
+That source passed the clean diagnostic and official qualification at 312/312, 36/36 objectives,
+and 69/69 battle attestations. V38 train slot 01 then stopped at checkpoint 239 when the moving
+Celadon fifth-floor customer blocked the X Special return from `(13,2)`. The immutable failed root
+is sealed and v38 is retired. V39 adds the symmetric west-side bounded yield and uses fresh
+`340001`–`340005`, `350001`–`350002`, and `360001`–`360005` partition seeds. It must reproduce the
+exposed v38 schedule diagnostically, pass the official rehearsal, and only then reopen collection.

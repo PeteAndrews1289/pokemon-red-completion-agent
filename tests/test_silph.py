@@ -18,6 +18,8 @@ from pokemon_red_completion.silph import (
     MART_5F_GENTLEMAN_BLOCK_POSITION,
     MART_5F_GENTLEMAN_CLEAR_ATTEMPTS,
     MART_5F_GENTLEMAN_CLEAR_POSITION,
+    MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION,
+    MART_5F_GENTLEMAN_RETURN_YIELD_POSITION,
     MART_5F_GENTLEMAN_YIELD_POSITION,
     ROOF_GIRL_X,
     ROOF_GIRL_Y,
@@ -77,6 +79,8 @@ def test_mart_5f_customer_yield_is_source_pinned_and_bounded() -> None:
     assert MART_5F_GENTLEMAN_BLOCK_POSITION == (15, 2)
     assert MART_5F_GENTLEMAN_YIELD_POSITION == (15, 3)
     assert MART_5F_GENTLEMAN_CLEAR_POSITION == (14, 2)
+    assert MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION == (13, 2)
+    assert MART_5F_GENTLEMAN_RETURN_YIELD_POSITION == (13, 3)
     assert MART_5F_GENTLEMAN_CLEAR_ATTEMPTS == 16
 
 
@@ -285,6 +289,49 @@ def test_silph_verified_movement_yields_on_mart_2f_before_3f_stairs() -> None:
         MapId.CELADON_MART_2F,
         14,
         4,
+    )
+
+
+def test_silph_verified_movement_yields_to_mart_5f_customer_on_return() -> None:
+    blocked = replace(
+        _terminal(),
+        map_id=MapId.CELADON_MART_5F,
+        player_x=13,
+        player_y=2,
+    )
+    yielded = replace(blocked, player_y=3)
+    crossed = replace(blocked, player_x=14)
+    states = iter(
+        (
+            blocked,
+            *(blocked for _ in range(DEFAULT_SILPH_TIMING.movement_retries * 2)),
+            blocked,
+            yielded,
+            blocked,
+            crossed,
+        )
+    )
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return next(states)
+
+    class Executor:
+        def execute(self, _action: object) -> None:
+            return None
+
+    final = _move_verified(
+        Executor(),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        ("right",),
+        replace(DEFAULT_SILPH_TIMING, movement_frames=1),
+        "X Special clerk return",
+    )
+
+    assert (final.map_id, final.player_x, final.player_y) == (
+        MapId.CELADON_MART_5F,
+        14,
+        2,
     )
 
 

@@ -90,6 +90,8 @@ MART_2F_GIRL_X = 0xC245
 MART_5F_GENTLEMAN_BLOCK_POSITION = (15, 2)
 MART_5F_GENTLEMAN_YIELD_POSITION = (15, 3)
 MART_5F_GENTLEMAN_CLEAR_POSITION = (14, 2)
+MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION = (13, 2)
+MART_5F_GENTLEMAN_RETURN_YIELD_POSITION = (13, 3)
 MART_5F_GENTLEMAN_CLEAR_ATTEMPTS = 16
 MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION = (14, 5)
 MART_2F_ASCENT_CUSTOMER_YIELD_POSITION = (13, 5)
@@ -2177,6 +2179,15 @@ def _move_verified(
             ):
                 state = _yield_to_mart_5f_gentleman(actions, reader, timing)
                 continue
+            if (
+                label == "X Special clerk return"
+                and before.map_id == MapId.CELADON_MART_5F
+                and (before.player_x, before.player_y)
+                == MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION
+                and direction == "right"
+            ):
+                state = _yield_to_mart_5f_gentleman_from_left(actions, reader, timing)
+                continue
             raise SilphChapterError(
                 f"{label} blocked at step {index}: {direction}; "
                 f"{(state.map_id, state.player_x, state.player_y)!r}."
@@ -2286,6 +2297,66 @@ def _yield_to_mart_5f_gentleman(
             "X Special customer final gate",
         )
     raise SilphChapterError("Celadon Mart 5F customer did not clear the top aisle.")
+
+
+def _yield_to_mart_5f_gentleman_from_left(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SilphTiming,
+) -> RawGameState:
+    """Yield below the aisle, then cross the moving customer from the west."""
+
+    for attempt in range(MART_5F_GENTLEMAN_CLEAR_ATTEMPTS):
+        state = reader.read()
+        if (state.player_x, state.player_y) == MART_5F_GENTLEMAN_CLEAR_POSITION:
+            return state
+        _require(
+            state,
+            MapId.CELADON_MART_5F,
+            MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION,
+            "X Special return customer gate",
+        )
+        actions.execute(MacroAction(MacroActionKind.MOVE, "down"))
+        yielded = reader.read()
+        _require(
+            yielded,
+            MapId.CELADON_MART_5F,
+            MART_5F_GENTLEMAN_RETURN_YIELD_POSITION,
+            "X Special return customer yield",
+        )
+        for return_attempt in range(MART_5F_GENTLEMAN_CLEAR_ATTEMPTS):
+            actions.execute(
+                MacroAction(
+                    MacroActionKind.WAIT,
+                    repeat=timing.movement_frames * (attempt + return_attempt + 1),
+                )
+            )
+            actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
+            returned = reader.read()
+            if (
+                returned.player_x,
+                returned.player_y,
+            ) == MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION:
+                break
+            _require(
+                returned,
+                MapId.CELADON_MART_5F,
+                MART_5F_GENTLEMAN_RETURN_YIELD_POSITION,
+                "X Special return customer wait",
+            )
+        else:
+            raise SilphChapterError("Celadon Mart 5F customer did not release the west return tile.")
+        actions.execute(MacroAction(MacroActionKind.MOVE, "right"))
+        crossed = reader.read()
+        if (crossed.player_x, crossed.player_y) == MART_5F_GENTLEMAN_CLEAR_POSITION:
+            return crossed
+        _require(
+            crossed,
+            MapId.CELADON_MART_5F,
+            MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION,
+            "X Special return customer final gate",
+        )
+    raise SilphChapterError("Celadon Mart 5F customer did not clear the west return aisle.")
 
 
 def _return_mart_2f_to_1f(
