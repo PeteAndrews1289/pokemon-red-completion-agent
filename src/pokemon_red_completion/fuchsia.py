@@ -59,6 +59,7 @@ SNORLAX_RUNTIME_PULSE_BOUND = 720
 SNORLAX_GREAT_BALL_RESERVE = 24
 SNORLAX_SUPER_POTION_RESERVE = 2
 SNORLAX_TM34_SALE_PROCEEDS = 1_000
+ROUTE13_BIRD_KEEPER_BITE_PP_BOUND = 15
 GREAT_BALL_PRICE = 600
 SUPER_POTION_PRICE = 700
 SNORLAX_CAPTURE_POLICY = CapturePolicy(
@@ -73,7 +74,13 @@ SNORLAX_CAPTURE_POLICY = CapturePolicy(
     max_throws=33,
     retreat_hp_ratio=0.35,
 )
-BATTLE_PP_BOUNDS = ((1, 8), SNORLAX_BUBBLEBEAM_PP_BOUND, (1, 8), (1, 8), (1, 10))
+BATTLE_PP_BOUNDS = (
+    (1, 8),
+    SNORLAX_BUBBLEBEAM_PP_BOUND,
+    (1, 8),
+    (1, ROUTE13_BIRD_KEEPER_BITE_PP_BOUND),
+    (1, 10),
+)
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -503,7 +510,7 @@ def run_fuchsia_chapter(
             EventFlag.BEAT_ROUTE_13_TRAINER_0,
             BITE,
             1,
-            8,
+            ROUTE13_BIRD_KEEPER_BITE_PP_BOUND,
             RedBattlePlanId.FUCHSIA_ROUTE_13_BIRD_KEEPER_1,
             trigger_direction="up",
         )

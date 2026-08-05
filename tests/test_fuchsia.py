@@ -142,6 +142,9 @@ def test_fuchsia_timing_is_positive_and_bounded() -> None:
         and getattr(DEFAULT_FUCHSIA_TIMING, field.name) > 0
         for field in fields(FuchsiaTiming)
     )
+    assert fuchsia_module.ROUTE13_BIRD_KEEPER_BITE_PP_BOUND == 15
+    assert fuchsia_module.BATTLE_PP_BOUNDS[3] == (1, 15)
+    assert fuchsia_module.BATTLE_PP_BOUNDS[4] == (1, 10)
 
 
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
