@@ -1596,6 +1596,9 @@ The repaired replay did complete all six Forest captures. Its subsequent field D
 newly visited Viridian Center rather than the obsolete Vermilion anchor, and the exact destination
 gate stopped the run. The source now treats the changed anchor as real world state: it proves the
 Viridian return, walks the bounded Route 2 approach again, traverses Diglett's Cave toward Route 11
-with the same encounter/inventory protections, normalizes the Vermilion east boundary, and reaches
-the existing Center-storage coordinate. Both cave directions share one finite search controller;
-neither the field move nor a hidden warp assumption is removed. This failure is uncounted.
+by reversing the exact successful outbound path with the same encounter/inventory protections,
+normalizes the Vermilion east boundary, and reaches the existing Center-storage coordinate. The
+first inverse attempt instead launched a new DFS from the opposite entrance; its backtracking stack
+was not valid for that orientation and stopped safely. Recording the proven path and replaying its
+mathematical inverse removes that false rediscovery problem. Neither the field move nor a hidden
+warp assumption is removed. Both failures are uncounted.

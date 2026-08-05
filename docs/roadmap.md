@@ -628,6 +628,7 @@ Center recovery, restores Pidgey and Rattata's 35-PP helper moves, and returns t
 boundary before the Forest. The exposed diagnostic must restart; all counted slots remain sealed.
 That source completed the Forest but then proved the Center visit had changed Dig's destination to
 Viridian. V38 now verifies that new field-move anchor and legally returns through Route 2 and
-Diglett's Cave in the opposite direction before the existing Vermilion storage lesson. The shared
-cave controller is target-parameterized and keeps the same finite encounter/flee/inventory proofs.
-Another clean exposed-seed replay is required before the official rehearsal.
+Diglett's Cave before the existing Vermilion storage lesson. A first reverse DFS stopped because
+its stack orientation belonged to the opposite entrance. The controller now records the successful
+outbound cave path and replays its exact inverse under the same finite encounter/flee/inventory
+proofs. Another clean exposed-seed replay is required before the official rehearsal.

@@ -1095,10 +1095,12 @@ The next trace proved the preparation worked by completing the Forest collection
 world-state consequence: the last healed Center determines Dig's destination, so the field move
 returned to Viridian instead of Vermilion. Rather than hard-coding the old destination or discarding
 the field-move lesson, the teacher now verifies the new anchor and plans a legal physical return.
-The collision-discovering Diglett's Cave controller is parameterized for either exit, retains its
-wild-flee and inventory invariants, and carries the party back through Route 11 to the original
-Vermilion storage boundary. This turns an apparent routing regression into an explicit lesson about
-actions changing future navigation affordances.
+The first reverse attempt incorrectly restarted the cave's DFS from the opposite entrance, where
+its search-stack orientation no longer held. The corrected controller records the exact successful
+outbound path, replays its mathematical inverse while retaining wild-flee and inventory invariants,
+and carries the party through Route 11 to the original Vermilion storage boundary. This turns an
+apparent routing regression into explicit lessons about actions changing future navigation
+affordances and about reusing verified paths instead of unnecessarily replanning a static corridor.
 
 ## Engineering and portfolio takeaways
 

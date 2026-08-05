@@ -1201,7 +1201,14 @@ def _run_route_1_collection_detour(
     raw = reader.read()
     if raw.map_id != MapId.DIGLETTS_CAVE or raw.player_x is None or raw.player_y is None:
         raise SurgeChapterError(f"Route 2 probe missed Diglett's Cave: {raw!r}")
-    _traverse_cave_to_route_2(emulator, executor, reader, timing)
+    cave_route_to_route_2: list[str] = []
+    _traverse_cave_to_route_2(
+        emulator,
+        executor,
+        reader,
+        timing,
+        route_sink=cave_route_to_route_2,
+    )
     _wait(executor, timing.transition_frames)
     raw = reader.read()
     if raw.map_id != MapId.DIGLETTS_CAVE_ROUTE_2:
@@ -1253,7 +1260,13 @@ def _run_route_1_collection_detour(
     if reader.read().map_id != MapId.DIGLETTS_CAVE:
         raise SurgeChapterError("Route 2 return did not enter Diglett's Cave.")
     _field_dig_to_viridian(emulator, executor, reader, timing)
-    _return_from_viridian_to_vermilion(emulator, executor, reader, timing)
+    _return_from_viridian_to_vermilion(
+        emulator,
+        executor,
+        reader,
+        timing,
+        cave_route_to_route_2=tuple(cave_route_to_route_2),
+    )
     _store_wild_collection_specimens(emulator, executor, reader, timing)
     _move(
         executor,
@@ -2653,6 +2666,8 @@ def _return_from_viridian_to_vermilion(
     executor: _CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
+    *,
+    cave_route_to_route_2: tuple[str, ...],
 ) -> None:
     """Walk back through Diglett's Cave after the verified Viridian Dig."""
 
@@ -2687,7 +2702,25 @@ def _return_from_viridian_to_vermilion(
     _wait(executor, timing.transition_frames)
     if reader.read().map_id != MapId.DIGLETTS_CAVE:
         raise SurgeChapterError("Viridian Dig return did not enter Diglett's Cave.")
-    _traverse_cave_to_route_11(emulator, executor, reader, timing)
+    if not cave_route_to_route_2:
+        raise SurgeChapterError("Viridian Dig return lacks its proven cave route.")
+    _move_fleeing_wild(
+        emulator,
+        executor,
+        reader,
+        _inverse_directions(cave_route_to_route_2),
+        timing,
+        "Route 11 inverse cave traversal",
+    )
+    _move_until_map_fleeing_wild(
+        emulator,
+        executor,
+        reader,
+        "down",
+        MapId.DIGLETTS_CAVE_ROUTE_11,
+        timing,
+        "Route 11 cave-house return",
+    )
     _wait(executor, timing.transition_frames)
     raw = reader.read()
     if raw.map_id != MapId.DIGLETTS_CAVE_ROUTE_11 or raw.player_x is None or raw.player_y is None:
@@ -3032,6 +3065,8 @@ def _traverse_cave_to_route_2(
     executor: _CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
+    *,
+    route_sink: list[str] | None = None,
 ) -> RawGameState:
     """Cross Diglett's Cave toward Route 2."""
 
@@ -3043,25 +3078,7 @@ def _traverse_cave_to_route_2(
         target_map=MapId.DIGLETTS_CAVE_ROUTE_2,
         entrance_warp=(37, 31),
         label="Route 2 cave traversal",
-    )
-
-
-def _traverse_cave_to_route_11(
-    emulator: EmulatorState,
-    executor: _CountingExecutor,
-    reader: PokemonRedStateReader,
-    timing: SurgeTiming,
-) -> RawGameState:
-    """Cross Diglett's Cave toward Route 11."""
-
-    return _traverse_cave(
-        emulator,
-        executor,
-        reader,
-        timing,
-        target_map=MapId.DIGLETTS_CAVE_ROUTE_11,
-        entrance_warp=(5, 5),
-        label="Route 11 cave traversal",
+        route_sink=route_sink,
     )
 
 
@@ -3074,6 +3091,7 @@ def _traverse_cave(
     target_map: MapId,
     entrance_warp: tuple[int, int],
     label: str,
+    route_sink: list[str] | None = None,
 ) -> RawGameState:
     """Cross Diglett's Cave while safely recovering from random encounters."""
 
@@ -3082,6 +3100,7 @@ def _traverse_cave(
         raise SurgeChapterError(f"{label} lacks its entry coordinates.")
     entry = (raw.player_x, raw.player_y)
     stack = [entry]
+    path_directions: list[str] = []
     visited = {entry}
     attempted: dict[tuple[int, int], set[str]] = {}
     deltas = {
@@ -3147,18 +3166,24 @@ def _traverse_cave(
             if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
                 raise SurgeChapterError(f"{label} flee changed Poké Balls.")
             moved = reader.read()
+        if moved.map_id == target_map:
+            if route_sink is not None:
+                route_sink[:] = (*path_directions, direction)
+            return moved
         if moved.map_id != MapId.DIGLETTS_CAVE:
-            continue
+            raise SurgeChapterError(f"{label} reached an unexpected map {moved.map_id!r}.")
         next_position = (moved.player_x, moved.player_y)
         if backtracking:
             if next_position != stack[-2]:
                 raise SurgeChapterError(f"{label} could not backtrack.")
             stack.pop()
+            path_directions.pop()
         elif next_position != position:
             if next_position in visited:
                 raise SurgeChapterError(f"{label} revisited an unplanned cell.")
             visited.add(next_position)
             stack.append(next_position)
+            path_directions.append(direction)
     raw = reader.read()
     raise SurgeChapterError(
         f"{label} exceeded its bounded step budget: "

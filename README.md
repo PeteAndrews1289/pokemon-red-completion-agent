@@ -607,8 +607,9 @@ whole party healthy and both 35-PP helper moves restored, returns to the exact b
 then begins the Forest survey. The attempt remains diagnostic-only; no v38 counted root is open.
 That repair completed the Forest, but the Center visit correctly changed Dig's return anchor from
 Vermilion to Viridian. The handoff now proves that actual field-move consequence, then uses the same
-bounded, encounter-safe Route 2 and Diglett's Cave traversal in the opposite direction to regain
-Vermilion before storage. The shortcut is no longer allowed to assume an obsolete healing anchor.
+bounded, encounter-safe Route 2 approach and replays the exact proven Diglett's Cave path in reverse
+to regain Vermilion before storage. The shortcut is no longer allowed to assume an obsolete healing
+anchor or rediscover a static corridor from the wrong entrance orientation.
 
 ## Evidence and project status
 

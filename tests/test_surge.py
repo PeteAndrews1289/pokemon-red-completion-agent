@@ -452,7 +452,9 @@ def test_surge_money_decodes_exact_bcd_ledger() -> None:
     assert surge_module._money(Emulator()) == 12_345  # type: ignore[arg-type]
 
 
-def test_cave_crossing_wrappers_bind_opposite_targets(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_route_two_cave_crossing_exports_its_proven_path(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     calls: list[dict[str, object]] = []
 
     def traverse(*_args: object, **kwargs: object) -> str:
@@ -461,20 +463,56 @@ def test_cave_crossing_wrappers_bind_opposite_targets(monkeypatch: pytest.Monkey
 
     monkeypatch.setattr(surge_module, "_traverse_cave", traverse)
 
-    assert surge_module._traverse_cave_to_route_2(None, None, None, None) == "crossed"
-    assert surge_module._traverse_cave_to_route_11(None, None, None, None) == "crossed"
+    route: list[str] = []
+    assert (
+        surge_module._traverse_cave_to_route_2(
+            None,
+            None,
+            None,
+            None,
+            route_sink=route,
+        )
+        == "crossed"
+    )
     assert calls == [
         {
             "target_map": MapId.DIGLETTS_CAVE_ROUTE_2,
             "entrance_warp": (37, 31),
             "label": "Route 2 cave traversal",
-        },
-        {
-            "target_map": MapId.DIGLETTS_CAVE_ROUTE_11,
-            "entrance_warp": (5, 5),
-            "label": "Route 11 cave traversal",
+            "route_sink": route,
         },
     ]
+
+
+def test_cave_crossing_records_only_the_successful_target_path(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    start = replace(_raw(), map_id=MapId.DIGLETTS_CAVE, player_x=2, player_y=2)
+    moved = replace(start, player_x=1)
+    target = replace(moved, map_id=MapId.DIGLETTS_CAVE_ROUTE_2)
+
+    class Reader:
+        states = iter((start, start, moved, moved, target))
+
+        def read(self) -> RawGameState:
+            return next(self.states)
+
+    monkeypatch.setattr(surge_module, "_pulse", lambda *_args, **_kwargs: None)
+    route: list[str] = []
+
+    result = surge_module._traverse_cave(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        DEFAULT_SURGE_TIMING,
+        target_map=MapId.DIGLETTS_CAVE_ROUTE_2,
+        entrance_warp=(99, 99),
+        label="test crossing",
+        route_sink=route,
+    )
+
+    assert result is target
+    assert route == ["left", "left"]
 
 
 def test_forest_restock_preserves_an_existing_surplus(monkeypatch: pytest.MonkeyPatch) -> None:
