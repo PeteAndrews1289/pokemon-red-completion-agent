@@ -18,6 +18,7 @@ def test_pre_ship_training_is_bounded_and_prefers_water_moves() -> None:
     assert policy.reserve_total_pp == 8
     assert policy.max_battles == 120
     assert policy.max_healing_trips == 8
+    assert ss_anne.SSAnneTiming().battle_runtime.max_sleep_reapplications == 4
     assert ss_anne.PRE_SHIP_TRAINING_PATROL_DIRECTIONS == ("right", "left")
     assert ss_anne.PRE_SHIP_TRAINING_INTENT.battle_plan_id == (
         "red.route-11.pre-ship-leveling"

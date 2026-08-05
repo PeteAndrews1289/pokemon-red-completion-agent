@@ -31,7 +31,6 @@ from pokemon_red_completion.observation import (
 _WILD_BATTLE_STATE = 1
 _TRAINER_BATTLE_STATE = 2
 _FIGHT_COMMAND = 0
-_MAX_SLEEP_REAPPLICATIONS = 2
 _CURRENT_PP_MASK = 0x3F
 _MIN_MOVE_SLOT = 1
 _MAX_MOVE_SLOT = 4
@@ -213,6 +212,7 @@ class BattleRuntimeTiming:
     max_attack_confirmation_pulses: int = 3
     max_post_attack_transition_pulses: int = 12
     max_sleep_recovery_pulses: int = 48
+    max_sleep_reapplications: int = 2
     required_ready_reads: int = 2
 
     def __post_init__(self) -> None:
@@ -1046,7 +1046,7 @@ def _recover_sleep_transition(
     # and dialogue can otherwise consume the whole budget even while the
     # semantic counter is decreasing normally.
     max_recovery_pulses = timing.max_sleep_recovery_pulses * (
-        initial_count + 7 * _MAX_SLEEP_REAPPLICATIONS
+        initial_count + 7 * timing.max_sleep_reapplications
     )
     for _ in range(max_recovery_pulses):
         if _ACTIVE_BATTLE_STATE.get() == _WILD_BATTLE_STATE and raw.battle_state == 0:
@@ -1161,7 +1161,7 @@ def _recover_sleep_transition(
                     f"{label} sleep counter increased before its wake-up boundary."
                 )
             sleep_reapplications += 1
-            if sleep_reapplications > _MAX_SLEEP_REAPPLICATIONS:
+            if sleep_reapplications > timing.max_sleep_reapplications:
                 raise BattleRuntimeError(
                     f"{label} exceeded its bounded sleep reapplications."
                 )

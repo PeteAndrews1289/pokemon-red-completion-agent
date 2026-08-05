@@ -157,6 +157,7 @@ class SSAnneTiming:
         max_attack_confirmation_pulses=4,
         max_post_attack_transition_pulses=12,
         max_sleep_recovery_pulses=16,
+        max_sleep_reapplications=4,
     )
 
     def __post_init__(self) -> None:
@@ -813,6 +814,7 @@ def _run_pre_ship_training(
                     expected_map=MapId.ROUTE_11,
                     intent=PRE_SHIP_TRAINING_INTENT,
                     label="pre-ship Route 11 training",
+                    timing=timing.battle_runtime,
                     unknown_cancel_interval=10_000,
                 )
             except BattleRuntimeError as error:
@@ -972,6 +974,7 @@ def _heal_pre_ship_training_anchor(
                     expected_map=MapId.ROUTE_11,
                     intent=PRE_SHIP_TRAINING_INTENT,
                     label="Route 11 training return",
+                    timing=timing.battle_runtime,
                     unknown_cancel_interval=10_000,
                 )
             except BattleRuntimeError as error:

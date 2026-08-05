@@ -696,6 +696,25 @@ def test_sleep_recovery_rejects_excessive_immediate_reapplications() -> None:
         )
 
 
+def test_sleep_recovery_supports_a_larger_explicit_curriculum_bound() -> None:
+    runtime = ReappliedSleepSimulation(reapplications=3)
+
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        lambda raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
+        timing=BattleRuntimeTiming(
+            max_move_menu_transition_pulses=1,
+            max_sleep_reapplications=3,
+        ),
+    )
+
+    assert final.battle_state == 0
+    assert final.first_party_status == 0
+    assert runtime.reapplications == 0
+
+
 def test_sleep_recovery_rejects_an_off_slot_pp_decrement() -> None:
     runtime = OffSlotSleepPPSimulation()
 
