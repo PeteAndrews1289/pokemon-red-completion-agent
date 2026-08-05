@@ -115,7 +115,7 @@ def test_tracked_registry_is_canonical_frozen_and_preassigned() -> None:
     assert sidecar["bytes"] == len(payload)
     assert sidecar["sha256"] == hashlib.sha256(payload).hexdigest()
     assert registry.schedule.battle_plan_ids == RED_BATTLE_PLAN_IDS
-    assert len(registry.schedule.battle_plan_ids) == 69
+    assert len(registry.schedule.battle_plan_ids) == 71
     assert len({run.harness_seed for run in registry.runs}) == 12
     assert len({run.schedule_sha256 for run in registry.runs}) == 12
     assert registry.schedule_dry_run.harness_seed not in {run.harness_seed for run in registry.runs}
@@ -176,7 +176,7 @@ def test_schedule_expansion_is_deterministic_bounded_and_content_addressed() -> 
     second = registry.schedule.offsets(run.harness_seed)
 
     assert first == second
-    assert len(first) == 69
+    assert len(first) == 71
     assert first[0].battle_plan_id == RED_BATTLE_PLAN_IDS[0]
     assert first[0].frames == 28
     assert first[-1].battle_plan_id == RED_BATTLE_PLAN_IDS[-1]

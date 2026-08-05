@@ -58,6 +58,8 @@ class RedBattlePlanId(StrEnum):
     SILPH_11F_ROCKET = "battle-047-silph-11f-rocket"
     SILPH_11F_GIOVANNI = "battle-048-silph-11f-giovanni"
     SABRINA_LEADER = "battle-049-sabrina-leader"
+    BLAINE_GYM_BURGLAR_SET_4 = "battle-070-blaine-gym-burglar-set-4"
+    BLAINE_GYM_BURGLAR_SET_5 = "battle-071-blaine-gym-burglar-set-5"
     BLAINE_LEADER = "battle-050-blaine-leader"
     GIOVANNI_HIKER_SET_8 = "battle-051-giovanni-hiker-set-8"
     GIOVANNI_BLACKBELT_SET_6 = "battle-052-giovanni-blackbelt-set-6"

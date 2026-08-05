@@ -62,6 +62,8 @@ EXPECTED_RED_BATTLE_PLAN_IDS = (
     "battle-067-dojo-blackbelt-set-2",
     "battle-068-dojo-karate-master",
     "battle-049-sabrina-leader",
+    "battle-070-blaine-gym-burglar-set-4",
+    "battle-071-blaine-gym-burglar-set-5",
     "battle-050-blaine-leader",
     "battle-051-giovanni-hiker-set-8",
     "battle-052-giovanni-blackbelt-set-6",
@@ -120,24 +122,16 @@ _EXPECTED_SOURCE_MEMBER_LEDGER = {
         "LAVENDER_ROUTE_11_GAMBLER",
     ),
     "celadon.py": ("CELADON_ROUTE_8_LASS",),
-    "hideout.py": tuple(
-        item.name for item in RedBattlePlanId if item.name.startswith("HIDEOUT_")
-    ),
+    "hideout.py": tuple(item.name for item in RedBattlePlanId if item.name.startswith("HIDEOUT_")),
     # The rival plan is referenced once by the route and once by its
     # party-aware accuracy-reset policy.
     "tower.py": (
         *(item.name for item in RedBattlePlanId if item.name.startswith("TOWER_")),
         "TOWER_RIVAL",
     ),
-    "fuchsia.py": tuple(
-        item.name for item in RedBattlePlanId if item.name.startswith("FUCHSIA_")
-    ),
-    "koga.py": tuple(
-        item.name for item in RedBattlePlanId if item.name.startswith("KOGA_")
-    ),
-    "erika.py": tuple(
-        item.name for item in RedBattlePlanId if item.name.startswith("ERIKA_")
-    ),
+    "fuchsia.py": tuple(item.name for item in RedBattlePlanId if item.name.startswith("FUCHSIA_")),
+    "koga.py": tuple(item.name for item in RedBattlePlanId if item.name.startswith("KOGA_")),
+    "erika.py": tuple(item.name for item in RedBattlePlanId if item.name.startswith("ERIKA_")),
     # The rival plan is shared by the bounded recovery loop and its final
     # no-more-items continuation; the lexical ledger pins both callsites.
     "silph.py": (
@@ -157,7 +151,11 @@ _EXPECTED_SOURCE_MEMBER_LEDGER = {
         "DOJO_KARATE_MASTER",
     ),
     "sabrina.py": ("SABRINA_LEADER",),
-    "blaine.py": ("BLAINE_LEADER",),
+    "blaine.py": (
+        "BLAINE_GYM_BURGLAR_SET_4",
+        "BLAINE_GYM_BURGLAR_SET_5",
+        "BLAINE_LEADER",
+    ),
     "giovanni.py": tuple(
         item.name for item in RedBattlePlanId if item.name.startswith("GIOVANNI_")
     ),
@@ -170,10 +168,10 @@ _EXPECTED_SOURCE_MEMBER_LEDGER = {
 }
 
 
-def test_full_adaptive_battle_route_has_69_ordered_unique_public_ids() -> None:
+def test_full_adaptive_battle_route_has_71_ordered_unique_public_ids() -> None:
     assert RED_BATTLE_PLAN_IDS == EXPECTED_RED_BATTLE_PLAN_IDS
-    assert len(RED_BATTLE_PLAN_IDS) == 69
-    assert len(set(RED_BATTLE_PLAN_IDS)) == 69
+    assert len(RED_BATTLE_PLAN_IDS) == 71
+    assert len(set(RED_BATTLE_PLAN_IDS)) == 71
     assert all(
         re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,95}", battle_plan_id)
         for battle_plan_id in RED_BATTLE_PLAN_IDS
@@ -189,17 +187,14 @@ def test_every_planned_battle_is_referenced_by_the_production_route() -> None:
     for module_name in _ROUTE_MODULES:
         path = source_root / module_name
         source = path.read_text(encoding="utf-8")
-        observed_members = tuple(
-            re.findall(r"RedBattlePlanId\.([A-Z][A-Z0-9_]*)", source)
-        )
+        observed_members = tuple(re.findall(r"RedBattlePlanId\.([A-Z][A-Z0-9_]*)", source))
         assert observed_members == _EXPECTED_SOURCE_MEMBER_LEDGER[module_name]
         referenced_members.update(observed_members)
         for node in ast.walk(ast.parse(source)):
             if (
                 isinstance(node, ast.Call)
                 and isinstance(node.func, ast.Name)
-                and node.func.id
-                in {"run_adaptive_trainer_battle", "run_adaptive_wild_battle"}
+                and node.func.id in {"run_adaptive_trainer_battle", "run_adaptive_wild_battle"}
                 and "intent" not in {keyword.arg for keyword in node.keywords}
             ):
                 missing_runtime_intents.append(f"{module_name}:{node.lineno}")

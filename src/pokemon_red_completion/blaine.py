@@ -89,7 +89,8 @@ from pokemon_red_completion.training import (
 BLAINE_CHECKPOINT_COUNT = 9
 BLAINE_CAPACITY_SALE_ITEM = ItemId.ANTIDOTE
 BLAINE_INPUT_BAG_SLOT_BOUNDS = (15, 20)
-BLAINE_MONEY_DELTA = 5_003
+BLAINE_GYM_TRAINER_INCOME = 6_930
+BLAINE_MONEY_DELTA = 5_003 + BLAINE_GYM_TRAINER_INCOME
 BLAINE_ANTIDOTE_SALE_VALUE = 50
 BLAINE_POTION_SALE_VALUE = 150
 BLAINE_TM21_SALE_VALUE = 2_500
@@ -103,6 +104,10 @@ BLAINE_OPPONENT = 0xEF
 BLAINE_TRAINER_CLASS = 0xEF
 BLAINE_TRAINER_SET = 1
 BLAINE_PARTY = ((0x21, 42), (0xA3, 40), (0xA4, 42), (0x14, 47))
+BLAINE_GYM_BURGLAR_OPPONENT = 0xD3
+BLAINE_GYM_BURGLAR_CLASS = 0xD3
+BLAINE_GYM_BURGLAR_SET_4_PARTY = ((0x21, 36), (0x52, 36), (0x53, 36))
+BLAINE_GYM_BURGLAR_SET_5_PARTY = ((0xA3, 41),)
 HYDRO_PUMP_MOVE_ID = 0x38
 HYDRO_PUMP_LEARN_LEVEL = 52
 # No trainer switch prompt can occur in this wild-only block.  Keeping CANCEL
@@ -238,8 +243,32 @@ GYM_TRAINER_EVENTS = tuple(
 GYM_GATE_EVENTS = tuple(
     EventFlag(int(EventFlag.CINNABAR_GYM_GATE_0_UNLOCKED) + offset) for offset in range(7)
 )
-QUIZ_ANSWERS = (True, False, False, False, True, False)
+QUIZ_CORRECT_ANSWERS = (True, False, False, False, True, False)
+# Intentionally miss the first and third quizzes.  Their adjacent Burglars
+# provide a deterministic late-game income and experience buffer instead of
+# relying on low capture costs or selling useful supplies.
+QUIZ_TRAINER_BATTLE_INDEXES = (1, 3)
+QUIZ_ANSWERS = tuple(
+    not answer if index in QUIZ_TRAINER_BATTLE_INDEXES else answer
+    for index, answer in enumerate(QUIZ_CORRECT_ANSWERS, 1)
+)
 QUIZ_TEXT_PULSES = (9, 10, 9, 11, 11, 9)
+CINNABAR_GYM_TRAINER_PLANS = {
+    1: (
+        "Cinnabar Gym Burglar set 4",
+        (BLAINE_GYM_BURGLAR_OPPONENT, BLAINE_GYM_BURGLAR_CLASS, 4),
+        BLAINE_GYM_BURGLAR_SET_4_PARTY,
+        3_240,
+        RedBattlePlanId.BLAINE_GYM_BURGLAR_SET_4,
+    ),
+    3: (
+        "Cinnabar Gym Burglar set 5",
+        (BLAINE_GYM_BURGLAR_OPPONENT, BLAINE_GYM_BURGLAR_CLASS, 5),
+        BLAINE_GYM_BURGLAR_SET_5_PARTY,
+        3_690,
+        RedBattlePlanId.BLAINE_GYM_BURGLAR_SET_5,
+    ),
+}
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -322,6 +351,32 @@ class BlaineTurn:
 
 
 @dataclass(frozen=True, slots=True)
+class CinnabarGymTrainerReceipt:
+    quiz_index: int
+    identity: tuple[int, int, int]
+    expected_party: tuple[tuple[int, int], ...]
+    turns: tuple[BlaineTurn, ...]
+    money_before: int
+    money_after: int
+    expected_reward: int
+
+    @property
+    def passed(self) -> bool:
+        plan = CINNABAR_GYM_TRAINER_PLANS.get(self.quiz_index)
+        return (
+            plan is not None
+            and self.identity == plan[1]
+            and self.expected_party == plan[2]
+            and self.expected_reward == plan[3]
+            and _encounter_party(self.turns) == self.expected_party
+            and bool(self.turns)
+            and all(turn.move_slot == 4 for turn in self.turns)
+            and all(turn.lead_hp > 0 and turn.lead_status == 0 for turn in self.turns)
+            and self.money_after - self.money_before == self.expected_reward
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class BlaineChapterReport:
     records: tuple[BlaineCheckpoint, ...]
     final_raw: RawGameState
@@ -335,6 +390,8 @@ class BlaineChapterReport:
     quiz_answers: tuple[bool, ...]
     gym_gate_events_after_quizzes: tuple[bool, ...]
     gym_trainer_events_before: tuple[bool, ...]
+    gym_trainer_events_after_quizzes: tuple[bool, ...]
+    quiz_trainer_battles: tuple[CinnabarGymTrainerReceipt, ...]
     gym_trainer_events_after: tuple[bool, ...]
     identity: tuple[int, int, int]
     turns: tuple[BlaineTurn, ...]
@@ -389,6 +446,11 @@ class BlaineChapterReport:
             and self.quiz_answers == QUIZ_ANSWERS
             and self.gym_gate_events_after_quizzes == (False,) + (True,) * 6
             and self.gym_trainer_events_before == (False,) * 7
+            and self.gym_trainer_events_after_quizzes
+            == (False, True, False, True, False, False, False)
+            and tuple(item.quiz_index for item in self.quiz_trainer_battles)
+            == QUIZ_TRAINER_BATTLE_INDEXES
+            and all(item.passed for item in self.quiz_trainer_battles)
             and self.gym_trainer_events_after == (True,) * 7
             and self.identity == (BLAINE_OPPONENT, BLAINE_TRAINER_CLASS, BLAINE_TRAINER_SET)
             and _encounter_party(self.turns) == BLAINE_PARTY
@@ -464,6 +526,11 @@ class BlaineChapterReport:
             "quiz_answers": self.quiz_answers == QUIZ_ANSWERS,
             "quiz_gates": self.gym_gate_events_after_quizzes == (False,) + (True,) * 6,
             "gym_trainers_before": self.gym_trainer_events_before == (False,) * 7,
+            "gym_trainers_after_quizzes": self.gym_trainer_events_after_quizzes
+            == (False, True, False, True, False, False, False),
+            "quiz_trainer_battles": tuple(item.quiz_index for item in self.quiz_trainer_battles)
+            == QUIZ_TRAINER_BATTLE_INDEXES
+            and all(item.passed for item in self.quiz_trainer_battles),
             "gym_trainers_after": self.gym_trainer_events_after == (True,) * 7,
             "blaine_identity": self.identity
             == (BLAINE_OPPONENT, BLAINE_TRAINER_CLASS, BLAINE_TRAINER_SET),
@@ -560,8 +627,21 @@ class BlaineChapterReport:
             },
             "quiz": {
                 "answers": ["yes" if answer else "no" for answer in self.quiz_answers],
+                "correct_answers": ["yes" if answer else "no" for answer in QUIZ_CORRECT_ANSWERS],
                 "gates_after": list(self.gym_gate_events_after_quizzes),
                 "trainers_before": list(self.gym_trainer_events_before),
+                "trainers_after": list(self.gym_trainer_events_after_quizzes),
+                "trainer_battles": [
+                    {
+                        "quiz_index": item.quiz_index,
+                        "identity": list(item.identity),
+                        "party": [list(member) for member in item.expected_party],
+                        "reward": item.money_after - item.money_before,
+                        "move_slots": [turn.move_slot for turn in item.turns],
+                    }
+                    for item in self.quiz_trainer_battles
+                ],
+                "income_buffer": BLAINE_GYM_TRAINER_INCOME,
             },
             "blaine": {
                 "identity": list(self.identity),
@@ -849,15 +929,27 @@ def run_blaine_chapter(
     gym_before = _events(emulator, GYM_TRAINER_EVENTS)
     if gym_before != (False,) * 7:
         raise BlaineChapterError("A Cinnabar Gym trainer was already defeated.")
+    quiz_trainer_battles: list[CinnabarGymTrainerReceipt] = []
     for index, (route, answer, text_pulses) in enumerate(
         zip(GYM_QUIZ_ROUTES, QUIZ_ANSWERS, QUIZ_TEXT_PULSES, strict=True),
         1,
     ):
         _move(actions, reader, route, f"Cinnabar quiz {index}")
-        _answer_quiz(actions, reader, emulator, index, answer, text_pulses)
-        if _events(emulator, GYM_TRAINER_EVENTS) != gym_before:
-            raise BlaineChapterError(f"Quiz {index} changed a regular trainer event.")
+        receipt = _answer_quiz(actions, reader, emulator, index, answer, text_pulses)
+        if receipt is not None:
+            quiz_trainer_battles.append(receipt)
+        expected_trainers = tuple(
+            trainer_index in {item.quiz_index for item in quiz_trainer_battles}
+            for trainer_index in range(7)
+        )
+        observed_trainers = _events(emulator, GYM_TRAINER_EVENTS)
+        if observed_trainers != expected_trainers:
+            raise BlaineChapterError(
+                f"Quiz {index} trainer state changed: expected {expected_trainers!r}, "
+                f"got {observed_trainers!r}."
+            )
     gates_after = _events(emulator, GYM_GATE_EVENTS)
+    gym_after_quizzes = _events(emulator, GYM_TRAINER_EVENTS)
     if gates_after != (False,) + (True,) * 6:
         raise BlaineChapterError(f"Unexpected Cinnabar gate state: {gates_after!r}.")
     _checkpoint(
@@ -971,6 +1063,8 @@ def run_blaine_chapter(
         quiz_answers=QUIZ_ANSWERS,
         gym_gate_events_after_quizzes=gates_after,
         gym_trainer_events_before=gym_before,
+        gym_trainer_events_after_quizzes=gym_after_quizzes,
+        quiz_trainer_battles=tuple(quiz_trainer_battles),
         gym_trainer_events_after=_events(emulator, GYM_TRAINER_EVENTS),
         identity=identity,
         turns=tuple(turns),
@@ -2123,7 +2217,14 @@ def _field_fly_to_cinnabar(actions, reader, emulator) -> None:
         raise BlaineChapterError("Fly changed protected party or inventory state.")
 
 
-def _answer_quiz(actions, reader, emulator, index: int, answer: bool, text_pulses: int) -> None:
+def _answer_quiz(
+    actions,
+    reader,
+    emulator,
+    index: int,
+    answer: bool,
+    text_pulses: int,
+) -> CinnabarGymTrainerReceipt | None:
     target_event = GYM_GATE_EVENTS[index]
     if _event(emulator, target_event):
         raise BlaineChapterError(f"Quiz gate {index} was already open.")
@@ -2133,10 +2234,78 @@ def _answer_quiz(actions, reader, emulator, index: int, answer: bool, text_pulse
     if not answer:
         _pulse(actions, MacroActionKind.MOVE, "down", 120)
     _pulse(actions, MacroActionKind.CONFIRM)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    if not _event(emulator, target_event) or not reader.read_input_readiness().ready:
-        raise BlaineChapterError(f"Quiz gate {index} did not open on the qualified answer.")
+    plan = CINNABAR_GYM_TRAINER_PLANS.get(index)
+    if plan is None:
+        if answer != QUIZ_CORRECT_ANSWERS[index - 1]:
+            raise BlaineChapterError(f"Quiz {index} has an unplanned incorrect answer.")
+        _pulse(actions, MacroActionKind.CONFIRM)
+        _pulse(actions, MacroActionKind.CONFIRM)
+        if not _event(emulator, target_event) or not reader.read_input_readiness().ready:
+            raise BlaineChapterError(f"Quiz gate {index} did not open on the qualified answer.")
+        return None
+
+    if answer == QUIZ_CORRECT_ANSWERS[index - 1]:
+        raise BlaineChapterError(f"Quiz {index} did not select its planned trainer battle.")
+    label, expected_identity, expected_party, expected_reward, battle_plan_id = plan
+    money_before = _money(emulator)
+    _await_trainer_battle(actions, reader, DEFAULT_SILPH_TIMING)
+    identity = (
+        emulator.read_u8(RamAddress.CURRENT_OPPONENT),
+        emulator.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
+        emulator.read_u8(RamAddress.ENGAGED_TRAINER_SET),
+    )
+    if identity != expected_identity:
+        raise BlaineChapterError(
+            f"Unexpected {label} identity: expected {expected_identity!r}, got {identity!r}."
+        )
+    turns: list[BlaineTurn] = []
+
+    def policy(raw: RawGameState) -> int:
+        turns.append(
+            BlaineTurn(
+                raw.enemy_species_id or 0,
+                raw.enemy_level or 0,
+                raw.enemy_hp or 0,
+                raw.first_party_hp or 0,
+                raw.first_party_status or 0,
+                raw.first_party_pp or (0, 0, 0, 0),
+                4,
+            )
+        )
+        return 4
+
+    run_adaptive_trainer_battle(
+        reader,
+        actions,
+        policy,
+        expected_map=MapId.CINNABAR_GYM,
+        intent=BattleIntent(
+            "build_income_and_experience_buffer",
+            battle_plan_id=battle_plan_id,
+            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+            required_move_ref=pokemon_red_move_ref(SURF_MOVE_ID),
+        ),
+        required_move_id=SURF_MOVE_ID,
+        label=label,
+    )
+    for _ in range(DEFAULT_SILPH_TIMING.max_script_pulses):
+        if _event(emulator, target_event) and reader.read_input_readiness().ready:
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_SILPH_TIMING.dialogue_frames)
+    else:
+        raise BlaineChapterError(f"Quiz gate {index} did not open after {label}.")
+    receipt = CinnabarGymTrainerReceipt(
+        quiz_index=index,
+        identity=identity,
+        expected_party=expected_party,
+        turns=tuple(turns),
+        money_before=money_before,
+        money_after=_money(emulator),
+        expected_reward=expected_reward,
+    )
+    if not receipt.passed:
+        raise BlaineChapterError(f"{label} evidence failed: {receipt!r}.")
+    return receipt
 
 
 def _heal(actions, reader, emulator) -> None:

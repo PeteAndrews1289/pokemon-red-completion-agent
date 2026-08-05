@@ -7,6 +7,9 @@ from pokemon_red_completion.blaine import (
     BLAINE_CAPACITY_SALE_ITEM,
     BLAINE_CHECKPOINT_COUNT,
     BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST,
+    BLAINE_GYM_BURGLAR_SET_4_PARTY,
+    BLAINE_GYM_BURGLAR_SET_5_PARTY,
+    BLAINE_GYM_TRAINER_INCOME,
     BLAINE_INPUT_BAG_SLOT_BOUNDS,
     BLAINE_MAX_WILD_FLEES,
     BLAINE_MONEY_DELTA,
@@ -31,9 +34,12 @@ from pokemon_red_completion.blaine import (
     MANSION_TRAINING_POLICY,
     MANSION_VOLATILE_ENEMY_SPECIES,
     QUIZ_ANSWERS,
+    QUIZ_CORRECT_ANSWERS,
     QUIZ_TEXT_PULSES,
+    QUIZ_TRAINER_BATTLE_INDEXES,
     BlaineChapterError,
     BlaineTurn,
+    CinnabarGymTrainerReceipt,
     _battle_command_direction,
     _blaine_capacity_input_slots,
     _blaine_capacity_plan,
@@ -58,13 +64,16 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert len(MANSION_B1F_TO_NORTH_STATUE) == 54
     assert len(MANSION_B1F_TO_SECRET_KEY) == 35
     assert tuple(len(route) for route in GYM_QUIZ_ROUTES) == (14, 19, 11, 12, 12, 12)
-    assert QUIZ_ANSWERS == (True, False, False, False, True, False)
+    assert QUIZ_CORRECT_ANSWERS == (True, False, False, False, True, False)
+    assert QUIZ_ANSWERS == (False, False, True, False, True, False)
+    assert QUIZ_TRAINER_BATTLE_INDEXES == (1, 3)
     assert QUIZ_TEXT_PULSES == (9, 10, 9, 11, 11, 9)
     assert len(BLAINE_TO_GYM_EXIT) == len(GYM_RETURN_TO_BLAINE) == 59
     assert BLAINE_CAPACITY_SALE_ITEM is ItemId.ANTIDOTE
     assert BLAINE_INPUT_BAG_SLOT_BOUNDS == (15, 20)
     assert BLAINE_EARLY_BIDE_REPLACEMENT_NET_COST == 1_300
-    assert BLAINE_MONEY_DELTA == 5_003
+    assert BLAINE_GYM_TRAINER_INCOME == 6_930
+    assert BLAINE_MONEY_DELTA == 11_933
     assert BLAINE_ANTIDOTE_SALE_VALUE == 50
     assert BLAINE_MAX_WILD_FLEES == 3
     assert CENTER_TO_MANSION == (
@@ -309,3 +318,36 @@ def test_blaine_turn_receipt_collapses_repeated_arcanine_turns() -> None:
     )
 
     assert _encounter_party(turns) == BLAINE_PARTY
+
+
+def test_cinnabar_burglar_receipts_pin_party_identity_move_and_income() -> None:
+    set_4_turns = tuple(
+        BlaineTurn(species, level, 50, 180, 0, (5, 15, 10, 15), 4)
+        for species, level in BLAINE_GYM_BURGLAR_SET_4_PARTY
+    )
+    receipt = CinnabarGymTrainerReceipt(
+        quiz_index=1,
+        identity=(0xD3, 0xD3, 4),
+        expected_party=BLAINE_GYM_BURGLAR_SET_4_PARTY,
+        turns=set_4_turns,
+        money_before=389,
+        money_after=3_629,
+        expected_reward=3_240,
+    )
+    assert receipt.passed
+    assert not replace(receipt, money_after=3_628).passed
+    assert not replace(receipt, identity=(0xD3, 0xD3, 5)).passed
+
+    set_5_turns = tuple(
+        BlaineTurn(species, level, 50, 180, 0, (5, 15, 10, 11), 4)
+        for species, level in BLAINE_GYM_BURGLAR_SET_5_PARTY
+    )
+    assert CinnabarGymTrainerReceipt(
+        quiz_index=3,
+        identity=(0xD3, 0xD3, 5),
+        expected_party=BLAINE_GYM_BURGLAR_SET_5_PARTY,
+        turns=set_5_turns,
+        money_before=3_629,
+        money_after=7_319,
+        expected_reward=3_690,
+    ).passed
