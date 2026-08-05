@@ -28,6 +28,7 @@ from pokemon_red_completion.silph import (
     SAFFRON_WARP_COORDINATES,
     SILPH_1F_TO_ELEVATOR,
     SILPH_CHECKPOINT_COUNT,
+    SILPH_ENTRANCE_APPROACH,
     SILPH_PC_DEPOSIT_ITEMS,
     THIRD_FLOOR_GUARD,
     X_SPECIAL_PURCHASE_QUANTITY,
@@ -37,6 +38,7 @@ from pokemon_red_completion.silph import (
     _battle_healing_item,
     _battle_healing_item_verified_terminal_exit,
     _enter_silph_elevator,
+    _enter_silph_from_city,
     _interact_with_roof_girl,
     _mart_2f_girl_coordinate,
     _move_verified,
@@ -328,6 +330,13 @@ def test_silph_first_floor_routes_delegate_the_doorway_step() -> None:
     assert getsource(run_silph_chapter).count("_enter_silph_elevator(") >= 3
     assert "Silph 1F elevator corridor" in getsource(run_silph_chapter)
     assert "return Silph 1F elevator corridor" in getsource(_return_center_to_seventh)
+
+
+def test_silph_city_entry_uses_collision_aware_navigation() -> None:
+    assert SILPH_ENTRANCE_APPROACH == (18, 22)
+    source = getsource(_enter_silph_from_city)
+    assert "_navigate_saffron_coordinate" in source
+    assert "MapId.SILPH_CO_1F" in source
 
 
 def test_silph_saffron_planner_detours_around_discovered_npc() -> None:

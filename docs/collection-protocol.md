@@ -1513,3 +1513,8 @@ That doorway proof then localized the lost progress to the preceding first-floor
 return arrived at `(6,6)` rather than the elevator stance. Both outbound and return corridor traces
 now prove every requested coordinate change before advancing, then delegate the doorway transition
 to the shared elevator helper.
+
+The verified corridor then proved its starting state was wrong: the fixed Center-to-Silph city
+trace had re-entered the building from a displaced approach. Center returns now use the existing
+collision-discovering Saffron planner to reach the Silph exterior at `(18,22)`, prove the entrance
+warp to 1F `(10,17)`, and only then begin the verified elevator corridor.

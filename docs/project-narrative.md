@@ -1012,6 +1012,11 @@ corridor and arrived at `(6,6)`; the new doorway gate made that upstream fault o
 directions through the corridor now require each requested step to change world state before the
 verified doorway transition begins.
 
+That stronger corridor exposed the actual upstream cause: the fixed city trace from the Pokémon
+Center had returned to Silph from a displaced approach, so the corridor's initial coordinate was
+false. The return now reuses the collision-aware Saffron planner, proves exterior `(18,22)` and the
+warp to 1F `(10,17)`, then starts the corridor. Each layer now owns and proves its own boundary.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

@@ -580,3 +580,5 @@ The following replay localized a second swallowed input to the first-floor retur
 embedded final step now delegates to the same verified elevator transition.
 The next diagnostic localized the remaining loss to the preceding first-floor corridor at `(6,6)`;
 both corridor traversals now use bounded step-by-step movement proofs.
+That proof exposed a displaced Center-to-Silph city approach; returns now use collision-aware
+Saffron navigation and prove both the exterior stance and 1F entrance warp before the corridor.

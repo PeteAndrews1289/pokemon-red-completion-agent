@@ -97,6 +97,7 @@ MART_2F_ASCENT_CUSTOMER_CLEAR_POSITION = (14, 4)
 MART_2F_ASCENT_CUSTOMER_CLEAR_ATTEMPTS = 32
 SAFFRON_CITY_SIZE = (40, 36)
 SAFFRON_CENTER_APPROACH = (9, 30)
+SILPH_ENTRANCE_APPROACH = (18, 22)
 SAFFRON_WARP_COORDINATES = frozenset(
     {
         (7, 5),
@@ -464,8 +465,7 @@ def run_silph_chapter(
     )
 
     _move(actions, reader, CENTER_EXIT, timing)
-    _move(actions, reader, CENTER_TO_SILPH, timing)
-    _require(reader.read(), MapId.SILPH_CO_1F, (10, 17), "Silph 1F")
+    _enter_silph_from_city(actions, reader, timing)
     _move_verified(actions, reader, SILPH_1F_TO_ELEVATOR, timing, "Silph 1F elevator corridor")
     _enter_silph_elevator(actions, reader, timing, "Silph 1F elevator")
     _select_elevator_floor(actions, reader, emulator, 4, timing)
@@ -1502,6 +1502,26 @@ def _enter_silph_elevator(
     return state
 
 
+def _enter_silph_from_city(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SilphTiming,
+) -> RawGameState:
+    """Navigate around live Saffron obstacles and prove the Silph entrance warp."""
+
+    state = _navigate_saffron_coordinate(
+        actions,
+        reader,
+        timing,
+        SILPH_ENTRANCE_APPROACH,
+        "Silph entrance",
+    )
+    _require(state, MapId.SAFFRON_CITY, SILPH_ENTRANCE_APPROACH, "Silph entrance approach")
+    state = _move_verified(actions, reader, ("up",), timing, "Silph entrance warp")
+    _require(state, MapId.SILPH_CO_1F, (10, 17), "Silph 1F")
+    return state
+
+
 def _run_battle(
     reader: PokemonRedStateReader,
     actions: _CountingExecutor,
@@ -2049,7 +2069,7 @@ def _return_center_to_seventh(
     timing: SilphTiming,
 ) -> None:
     _move(actions, reader, CENTER_EXIT, timing)
-    _move(actions, reader, _directions("LLLLLLUUUUUUUURRRRRRRRRRRRRRRU"), timing)
+    _enter_silph_from_city(actions, reader, timing)
     _move_verified(
         actions,
         reader,
