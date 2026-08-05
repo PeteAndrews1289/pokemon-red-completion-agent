@@ -1002,6 +1002,11 @@ bounded semantic transition: unchanged doorway observations are retryable, any u
 fails, and the panel is unavailable until the elevator map is proven. This is a reusable navigation
 lesson, not a coordinate-specific teleport.
 
+The first repair narrowed the same symptom to the later first-floor re-entry after healing: its
+doorway input was still the final character of a long route string. That character is now removed
+from the route, and the shared verified entry helper owns the transition. This illustrates why
+semantic boundaries must replace fixed inputs at every call site, not only the first observed one.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

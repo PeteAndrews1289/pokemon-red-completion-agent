@@ -26,6 +26,7 @@ from pokemon_red_completion.silph import (
     ROUTE_7_CONNECTION_TO_GATE,
     SAFFRON_CENTER_APPROACH,
     SAFFRON_WARP_COORDINATES,
+    SILPH_1F_TO_ELEVATOR,
     SILPH_CHECKPOINT_COUNT,
     SILPH_PC_DEPOSIT_ITEMS,
     THIRD_FLOOR_GUARD,
@@ -319,6 +320,11 @@ def test_silph_clerk_approach_uses_verified_steps() -> None:
         '_move_verified(actions, reader, MART_TO_CLERK, timing, "Saffron clerk approach")'
         in source
     )
+
+
+def test_silph_first_floor_routes_delegate_the_doorway_step() -> None:
+    assert SILPH_1F_TO_ELEVATOR[-1] == "right"
+    assert getsource(run_silph_chapter).count("_enter_silph_elevator(") >= 3
 
 
 def test_silph_saffron_planner_detours_around_discovered_npc() -> None:

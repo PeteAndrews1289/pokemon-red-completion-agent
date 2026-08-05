@@ -576,3 +576,5 @@ and assigns wholly fresh counted seeds before collection resumes.
 The exposed-seed resource replay then cleared Rock Tunnel and reached checkpoint 244 before a
 swallowed post-rival elevator entry left the player in the hallway. Silph elevator entries now
 prove the map transition with bounded unchanged-state retries before allowing floor selection.
+The following replay localized a second swallowed input to the first-floor return route; that
+embedded final step now delegates to the same verified elevator transition.

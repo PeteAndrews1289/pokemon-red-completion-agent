@@ -1504,3 +1504,7 @@ continued to checkpoint 244. One post-rival elevator doorway input was then swal
 selector refused to run from the hallway. All Silph elevator entries now retry only an unchanged
 doorway state and require the elevator map before opening the panel; the diagnostic remains
 uncounted and must restart from clean power-on.
+
+The next replay proved the post-rival exit but showed the later first-floor return still embedded
+its final doorway input inside a long trace. That final step is now split out as well, so every
+Silph elevator entry shares the same verified transition.
