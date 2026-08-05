@@ -22,6 +22,10 @@ from pokemon_red_completion.battle_model import (
     choice_accuracy,
     mean_listwise_cross_entropy,
 )
+from pokemon_red_completion.battle_neural_model import (
+    BattleMoveRanker,
+    MaskedMLPMoveRanker,
+)
 
 
 class BattleTrainingError(RuntimeError):
@@ -203,7 +207,7 @@ class BattleConfidenceSelection:
 class BattlePreassignedValidationResult:
     """A train-only model evaluated on preregistered validation lineages."""
 
-    model: MaskedLinearMoveRanker
+    model: BattleMoveRanker
     config: BattleTrainingConfig
     corpus_manifest_roster_sha256: str
     train_episodes: int
@@ -437,6 +441,8 @@ def train_preassigned_battle_ranker(
     validation_datasets: Sequence[BattleEpisodeDataset],
     *,
     config: BattleTrainingConfig | None = None,
+    model_family: str = "linear",
+    hidden_units: int = 16,
 ) -> BattlePreassignedValidationResult:
     """Fit on declared train roots and evaluate only on declared validation roots.
 
@@ -451,6 +457,10 @@ def train_preassigned_battle_ranker(
         config = BattleTrainingConfig()
     if not isinstance(config, BattleTrainingConfig):
         raise TypeError("config must be a BattleTrainingConfig")
+    if model_family not in {"linear", "mlp"}:
+        raise BattleTrainingError("model_family must be linear or mlp")
+    if type(hidden_units) is not int or not 2 <= hidden_units <= 128:  # noqa: E721
+        raise BattleTrainingError("hidden_units must be between two and 128")
     _require_preassigned_corpus(train, validation)
 
     train_examples = tuple(example for dataset in train for example in dataset.examples)
@@ -464,6 +474,8 @@ def train_preassigned_battle_ranker(
         train_choices,
         config=config,
         seed=config.seed,
+        model_family=model_family,
+        hidden_units=hidden_units,
     )
     majority_slot = _majority_slot(train_examples)
 
@@ -704,7 +716,19 @@ def _fit(
     *,
     config: BattleTrainingConfig,
     seed: int,
-) -> MaskedLinearMoveRanker:
+    model_family: str = "linear",
+    hidden_units: int = 16,
+) -> BattleMoveRanker:
+    if model_family == "mlp":
+        return MaskedMLPMoveRanker.fit(
+            feature_names=feature_names,
+            examples=choices,
+            seed=seed,
+            hidden_units=hidden_units,
+            epochs=config.epochs,
+            learning_rate=config.learning_rate,
+            l2=config.l2,
+        )
     return MaskedLinearMoveRanker.fit(
         feature_names=feature_names,
         examples=choices,

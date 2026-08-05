@@ -12,8 +12,14 @@ from pathlib import Path
 import numpy as np
 
 from pokemon_red_completion.battle_model import (
+    BATTLE_MODEL_ID,
     CURRENT_BATTLE_FEATURE_SCHEMA_ID,
     MaskedLinearMoveRanker,
+)
+from pokemon_red_completion.battle_neural_model import (
+    BATTLE_MLP_MODEL_ID,
+    BattleMoveRanker,
+    MaskedMLPMoveRanker,
 )
 from pokemon_red_completion.battle_runtime import (
     BattlePolicyObservation,
@@ -43,7 +49,7 @@ BattleCorrectionSink = Callable[[Mapping[str, object]], None]
 class ModelAssistedBattlePolicy:
     """Use the ranker above a teacher fallback and expose correction coverage."""
 
-    model: MaskedLinearMoveRanker
+    model: BattleMoveRanker
     encoder: PokemonRedObservationEncoder
     confidence_threshold: float
     require_teacher_agreement: bool = True
@@ -279,7 +285,7 @@ class ModelAssistedBattlePolicy:
         }
 
 
-def load_battle_model_artifact(model_stream: str | Path) -> MaskedLinearMoveRanker:
+def load_battle_model_artifact(model_stream: str | Path) -> BattleMoveRanker:
     """Authenticate one finalized model stream against its typed manifest."""
 
     path = Path(model_stream)
@@ -321,7 +327,13 @@ def load_battle_model_artifact(model_stream: str | Path) -> MaskedLinearMoveRank
     model_payload = record.get("model")
     if not isinstance(model_payload, Mapping):
         raise LearnedBattlePolicyError("battle model payload is absent")
-    model = MaskedLinearMoveRanker.from_dict(model_payload)
+    model_id = model_payload.get("model_id")
+    if model_id == BATTLE_MODEL_ID:
+        model = MaskedLinearMoveRanker.from_dict(model_payload)
+    elif model_id == BATTLE_MLP_MODEL_ID:
+        model = MaskedMLPMoveRanker.from_dict(model_payload)
+    else:
+        raise LearnedBattlePolicyError("battle model payload has an unsupported model ID")
     expected_sha256 = record.get("model_sha256")
     if expected_sha256 != hashlib.sha256(model.to_json().encode("utf-8")).hexdigest():
         raise LearnedBattlePolicyError("battle model payload digest does not match")

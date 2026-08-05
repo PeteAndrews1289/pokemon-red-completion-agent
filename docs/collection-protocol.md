@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v55.json`](../configs/red-battle-collection-v55.json)
+[`red-battle-collection-v56.json`](../configs/red-battle-collection-v56.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 71 stable public battle-plan identities in exact qualified-route order;
@@ -1789,3 +1789,9 @@ every move selection. The resulting rollout passed the former Cerulean boundary 
 disagreement labels across seven battle groups before a Rock Tunnel supply shortfall. V55 reserves
 train seeds `670001`–`670005`, validation seeds `680001`–`680002`, test seeds
 `690001`–`690005`, and dry-run seed `62001`.
+
+V56 adds a shared nonlinear move scorer so the learned policy can represent context-dependent
+choices that the earlier linear ranker could not reconcile. The model keeps the same transferable
+candidate features, legality mask, deterministic fitting, authenticated serialization, and live
+deployment boundary. V56 reserves train seeds `700001`–`700005`, validation seeds
+`710001`–`710002`, test seeds `720001`–`720005`, and dry-run seed `62001`.

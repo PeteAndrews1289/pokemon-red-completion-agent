@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from pokemon_red_completion.battle_model import MaskedLinearMoveRanker
+from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker
 from pokemon_red_completion.battle_runtime import BattleIntent, BattlePolicyObservation
 from pokemon_red_completion.battle_semantics import (
     FEATURE_NAMES,
@@ -187,10 +188,25 @@ def test_shadow_teacher_preserves_non_move_control_signal() -> None:
     assert policy.model_decisions == 0
 
 
-def test_model_loader_authenticates_typed_artifact_stream(tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    "model",
+    (
+        _model(),
+        MaskedMLPMoveRanker(
+            feature_names=FEATURE_NAMES,
+            input_weights=[[0.0] * len(FEATURE_NAMES)] * 2,
+            hidden_bias=[0.0, 0.0],
+            output_weights=[0.0, 0.0],
+            output_bias=0.0,
+        ),
+    ),
+)
+def test_model_loader_authenticates_typed_artifact_stream(
+    tmp_path: Path,
+    model: MaskedLinearMoveRanker | MaskedMLPMoveRanker,
+) -> None:
     artifact = tmp_path / "candidate"
     artifact.mkdir()
-    model = _model()
     record = {
         "record_type": "battle_model_candidate",
         "model": model.to_dict(),

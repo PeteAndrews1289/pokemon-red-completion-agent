@@ -231,6 +231,18 @@ def _parser() -> argparse.ArgumentParser:
         default=1289,
         help="Frozen deterministic training seed (default: 1289).",
     )
+    learn_battle_fit.add_argument(
+        "--model-family",
+        choices=("linear", "mlp"),
+        default="linear",
+        help="Candidate scorer architecture (default: linear).",
+    )
+    learn_battle_fit.add_argument(
+        "--hidden-units",
+        type=int,
+        default=16,
+        help="Hidden units for --model-family mlp (default: 16).",
+    )
     learn_battle_correct = learn_battle_commands.add_parser(
         "correct",
         help="Refit a battle model with authenticated live teacher corrections.",
@@ -282,6 +294,18 @@ def _parser() -> argparse.ArgumentParser:
         type=int,
         default=1289,
         help="Deterministic training seed (default: 1289).",
+    )
+    learn_battle_correct.add_argument(
+        "--model-family",
+        choices=("linear", "mlp"),
+        default="linear",
+        help="Candidate scorer architecture (default: linear).",
+    )
+    learn_battle_correct.add_argument(
+        "--hidden-units",
+        type=int,
+        default=16,
+        help="Hidden units for --model-family mlp (default: 16).",
     )
     doctor = subcommands.add_parser("doctor", help="Verify the private ROM identity.")
     doctor.add_argument("--rom", type=Path, help="Private ROM path; otherwise use POKEMON_RED_ROM.")
@@ -1095,6 +1119,8 @@ def _run_preassigned_battle_learning(
             tuple(datasets[slot.assignment_id] for slot in train_slots),
             tuple(datasets[slot.assignment_id] for slot in validation_slots),
             config=config,
+            model_family=args.model_family,
+            hidden_units=args.hidden_units,
         )
         artifact_id = f"red-battle-candidate-{uuid.uuid4().hex}"
         writer = private_root.begin_artifact(artifact_id, kind="battle_model")
@@ -1268,6 +1294,8 @@ def _run_corrected_battle_learning(
             (augmented_first, *train_datasets[1:]),
             validation_datasets,
             config=config,
+            model_family=args.model_family,
+            hidden_units=args.hidden_units,
         )
         artifact_id = f"red-battle-corrected-{uuid.uuid4().hex}"
         writer = private_root.begin_artifact(artifact_id, kind="battle_model")
@@ -1294,6 +1322,8 @@ def _run_corrected_battle_learning(
                     "configuration": {
                         **config.public_dict(split_unit="preassigned_root_lineage"),
                         "correction_repetitions": args.correction_repetitions,
+                        "model_family": args.model_family,
+                        "hidden_units": args.hidden_units,
                     },
                     "historical_train_decisions": sum(
                         len(dataset.examples) for dataset in train_datasets

@@ -12,7 +12,7 @@ import json
 import math
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any, NoReturn
+from typing import Any, NoReturn, Protocol, runtime_checkable
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
@@ -28,6 +28,24 @@ SUPPORTED_BATTLE_FEATURE_SCHEMA_IDS = frozenset(
     }
 )
 BATTLE_MODEL_ID = "pokemon.core.battle.masked-linear-ranker.v1"
+
+
+@runtime_checkable
+class BattleMoveScorer(Protocol):
+    """Structural contract shared by linear and nonlinear candidate scorers."""
+
+    @property
+    def feature_names(self) -> tuple[str, ...]: ...
+
+    def scores(self, candidate_features: ArrayLike) -> NDArray[np.float64]: ...
+
+    def predict(
+        self,
+        candidate_features: ArrayLike,
+        *,
+        legal_mask: ArrayLike,
+        current_pp: ArrayLike,
+    ) -> int: ...
 BATTLE_MODEL_FORMAT_VERSION = 1
 
 _MODEL_FIELDS = frozenset(
@@ -357,7 +375,7 @@ class MaskedLinearMoveRanker:
 
 
 def choice_accuracy(
-    model: MaskedLinearMoveRanker,
+    model: BattleMoveScorer,
     examples: Iterable[BattleChoiceExample],
 ) -> float:
     """Return exact selected-move accuracy over one or more choices."""
@@ -376,7 +394,7 @@ def choice_accuracy(
 
 
 def mean_listwise_cross_entropy(
-    model: MaskedLinearMoveRanker,
+    model: BattleMoveScorer,
     examples: Iterable[BattleChoiceExample],
 ) -> float:
     """Return mean negative log likelihood of demonstrated legal choices."""
@@ -397,11 +415,11 @@ def mean_listwise_cross_entropy(
 
 
 def _metric_examples(
-    model: MaskedLinearMoveRanker,
+    model: BattleMoveScorer,
     examples: Iterable[BattleChoiceExample],
 ) -> tuple[BattleChoiceExample, ...]:
-    if not isinstance(model, MaskedLinearMoveRanker):
-        raise BattleModelValidationError("Metrics require a MaskedLinearMoveRanker.")
+    if not isinstance(model, BattleMoveScorer):
+        raise BattleModelValidationError("Metrics require a battle move scorer.")
     choices = tuple(examples)
     if not choices:
         raise BattleModelValidationError("At least one battle choice is required.")

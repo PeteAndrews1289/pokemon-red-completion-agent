@@ -22,7 +22,7 @@ from pokemon_red_completion.agatha import (
     AgathaProgress,
     run_agatha_chapter,
 )
-from pokemon_red_completion.battle_model import MaskedLinearMoveRanker
+from pokemon_red_completion.battle_neural_model import BattleMoveRanker
 from pokemon_red_completion.battle_runtime import (
     bind_battle_decision_observer,
     bind_battle_policy_override,
@@ -707,7 +707,7 @@ def run_qualified_play(
     trajectory_sink: TrajectorySink | None = None,
     trajectory_episode_id: str | None = None,
     battle_start_offsets: tuple[BattleStartOffset, ...] | None = None,
-    battle_model: MaskedLinearMoveRanker | None = None,
+    battle_model: BattleMoveRanker | None = None,
     battle_model_confidence_threshold: float = 0.0,
     require_battle_model_teacher_agreement: bool = True,
     battle_correction_sink: Callable[[Mapping[str, object]], None] | None = None,

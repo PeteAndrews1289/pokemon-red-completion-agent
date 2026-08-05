@@ -207,6 +207,19 @@ def test_preassigned_training_does_not_freeze_a_model_that_misses_validation() -
     assert "validation_confidence_threshold_not_qualified" in result.reasons
 
 
+def test_preassigned_training_supports_nonlinear_ranker() -> None:
+    result = train_preassigned_battle_ranker(
+        tuple(_preassigned_dataset("train", index) for index in range(5)),
+        tuple(_preassigned_dataset("validation", index) for index in range(2)),
+        config=BattleTrainingConfig(epochs=40),
+        model_family="mlp",
+        hidden_units=4,
+    )
+
+    assert result.model.model_id == "pokemon.core.battle.masked-mlp-ranker.v1"
+    assert result.legal_choice_rate == 1.0
+
+
 @pytest.mark.parametrize(
     ("train", "validation", "message"),
     [
