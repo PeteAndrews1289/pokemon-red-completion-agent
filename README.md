@@ -646,6 +646,8 @@ fourth-floor customer at a second corridor gate, blocking the evolution-stone ap
 `(2,2)` toward `(1,2)`. V39 is sealed with that failed outcome. V40 extends the bounded eastward
 yield to both observed gates and reserves fresh `370001`/`380001`/`390001` train, validation, and
 test seed ranges; exposed seed `340001` must pass diagnostically before the official rehearsal.
+That exact diagnostic has now passed 312/312 checkpoints and entered the Hall of Fame; the v40
+clean-power rehearsal is the remaining gate before fresh counted collection begins.
 
 ## Evidence and project status
 

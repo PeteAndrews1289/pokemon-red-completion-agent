@@ -1654,3 +1654,6 @@ existing bounded eastward yield to both observed corridor gates, preserves the m
 proofs, and reserves fresh counted seeds `370001`–`370005`, `380001`–`380002`, and
 `390001`–`390005`. Exposed v39 seed `340001` is diagnostic-only and must complete before v40's
 fixed rehearsal can qualify collection.
+The exact `340001` diagnostic subsequently completed 312/312 checkpoints, all 36 objectives, and
+the Hall of Fame. It remains uncounted; v40 still requires its separately scheduled clean-power
+rehearsal and 69/69 attestation before slot 01 may open.

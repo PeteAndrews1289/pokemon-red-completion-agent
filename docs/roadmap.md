@@ -669,3 +669,6 @@ could not cross occupied `(1,2)` on the evolution-stone approach. The v39 failur
 generalizes the same bounded yield-and-recross proof across both observed gates and assigns fresh
 `370001`–`370005`, `380001`–`380002`, and `390001`–`390005` partition seeds. Seed `340001` must
 first complete as an uncounted diagnostic, followed by the exact-source rehearsal.
+The exact `340001` replay has now completed 312/312 checkpoints and all 36 objectives. V40 remains
+closed until the committed source passes its independent clean-power rehearsal and all 69 battle
+offset attestations.
