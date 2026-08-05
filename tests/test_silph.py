@@ -36,6 +36,7 @@ from pokemon_red_completion.silph import (
     SILPH_CHECKPOINT_COUNT,
     SILPH_ENTRANCE_APPROACH,
     SILPH_PC_DEPOSIT_ITEMS,
+    SILPH_RIVAL_MAX_POTIONS,
     THIRD_FLOOR_GUARD,
     X_SPECIAL_PURCHASE_QUANTITY,
     SilphChapterReport,
@@ -228,7 +229,17 @@ def test_silph_rival_exits_lead_only_recovery_after_target_ko() -> None:
     source = getsource(_run_rival_with_potions)
 
     assert "except _HealingTargetFaintedBeforeItem:" in source
-    assert "recovery = min(2, potion_start)" in source
+    assert "recovery = rival_recovery_limit" in source
+
+
+def test_silph_report_accepts_full_rival_recovery_budget() -> None:
+    report = replace(
+        _report(),
+        rival_potions_used=SILPH_RIVAL_MAX_POTIONS,
+        hyper_potions_remaining=7 - SILPH_RIVAL_MAX_POTIONS,
+    )
+
+    assert report.passed
 
 
 def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:

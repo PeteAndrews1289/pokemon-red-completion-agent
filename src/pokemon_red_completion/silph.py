@@ -77,6 +77,7 @@ HYPER_POTION_PURCHASE_QUANTITY = 7
 HYPER_POTION_PRICE = 1_500
 X_SPECIAL_PURCHASE_QUANTITY = 3
 SILPH_RIVAL_RECOVERY_HP = 80
+SILPH_RIVAL_MAX_POTIONS = 4
 SILPH_PC_DEPOSIT_ITEMS = (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
 STATUS_FLAGS_4 = 0xD72E
 GOT_LAPRAS_MASK = 0x01
@@ -312,7 +313,7 @@ class SilphChapterReport:
                 if self.tm13_preinstalled
                 else SILPH_NET_MONEY_DELTA
             )
-            and 0 <= self.rival_potions_used <= 2
+            and 0 <= self.rival_potions_used <= SILPH_RIVAL_MAX_POTIONS
             and self.rival_x_special_used == 1
             and self.hyper_potions_remaining
             == HYPER_POTION_PURCHASE_QUANTITY - self.rival_potions_used
@@ -541,7 +542,7 @@ def run_silph_chapter(
     potion_after = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     _require_event(emulator, EventFlag.BEAT_SILPH_CO_RIVAL)
     rival_potions_used = potion_before - potion_after
-    if not 0 <= rival_potions_used <= 2:
+    if not 0 <= rival_potions_used <= SILPH_RIVAL_MAX_POTIONS:
         raise SilphChapterError(
             f"Rival policy consumed an invalid number of Hyper Potions: {rival_potions_used}."
         )
@@ -1657,7 +1658,8 @@ def _run_rival_with_potions(
     _battle_x_special(reader, actions, emulator, timing)
     recovery = 0
     forced_switches = 0
-    while recovery < min(2, potion_start):
+    rival_recovery_limit = min(SILPH_RIVAL_MAX_POTIONS, potion_start)
+    while recovery < rival_recovery_limit:
         try:
             completed = _run_until(
                 reader,
@@ -1691,7 +1693,7 @@ def _run_rival_with_potions(
             # Once that lead has fainted, re-entering this recovery loop would
             # repeatedly select the same invalid target. Move immediately to
             # the bounded living-reserve policy below instead.
-            recovery = min(2, potion_start)
+            recovery = rival_recovery_limit
             continue
         if completed:
             return
