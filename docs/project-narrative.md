@@ -1111,6 +1111,15 @@ attack on the dangerous opener. It retains four Blizzard PP for a final Venusaur
 requires two, converting excess reservation into immediate risk reduction without increasing
 training, healing inventory, retries, or teammate sacrifice.
 
+Blizzard then did exactly what the trace predicted: it removed Pidgeot in one attack and the
+workhorse swept the next four opponents. The remaining failure was a strategy inherited from the
+old single-carry route. At Venusaur, two “recovery helpers” were switched in to buy healing turns.
+Switching resets stat stages in Gen I, so the workhorse lost all six X Special boosts and Blizzard
+damage fell to roughly half while Venusaur recovered; the helpers were also sacrificed. The final
+policy now heals the active workhorse directly with the already-budgeted Full Restores. This
+preserves the setup investment and the balanced team, while the existing progress latch still
+requires an attack between heals and prevents an unproductive item loop.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

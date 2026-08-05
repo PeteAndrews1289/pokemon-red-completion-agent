@@ -1611,3 +1611,11 @@ remained unusable on the fainted lead. The source now ranks boosted, X-Accuracy-
 first against Pidgeot. Four uses remain after that attack, against an observed two-use requirement
 for Venusaur, so the repair spends existing surplus coverage rather than changing level, inventory,
 healing, retry, or party-survival contracts. The failed diagnostic remains uncounted.
+
+The Blizzard-first replay proved the opener and swept Pidgeot, Alakazam, Rhydon, Gyarados, and
+Arcanine. At Venusaur, however, the inherited late helper-recovery tactic switched the workhorse
+out twice. Gen I clears stat stages on switching, so six X Special stages disappeared; Blizzard
+then dealt only 64–65 damage, Venusaur repeatedly used Recover, and both helpers fainted. Champion
+recovery now uses the existing bounded direct Full Restore action. It preserves the boosted active
+battler and every developed teammate, consumes no new item, and retains the one-attack progress
+latch between heals. The failure remains an uncounted diagnostic.

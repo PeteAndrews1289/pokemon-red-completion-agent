@@ -638,3 +638,8 @@ workhorse entered its first attack at 90 HP with five Blizzard PP, used Strength
 Champion policy now spends one boosted, X-Accuracy-backed Blizzard on Pidgeot and retains four for
 the historically two-hit Venusaur requirement. This reallocates existing PP without more grinding,
 inventory, retries, or sacrifice. The exposed diagnostic must restart under the new identity.
+The Blizzard-first replay swept the first five Champion opponents, then the old helper-pivot
+recovery erased all six X Special stages at Venusaur and sacrificed two developed teammates.
+Blizzard fell to 64–65 damage while Recover reset progress. Champion healing is now direct through
+the existing bounded Full Restore action, preserving both stat stages and party members while the
+one-attack-between-heals latch remains enforced. Another clean diagnostic is required.

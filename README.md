@@ -616,6 +616,11 @@ five Blizzard PP still reserved, the six-boost workhorse used Strength against P
 matchup policy now spends one X-Accuracy-backed, six-boost Blizzard on that dangerous fast opener.
 Four Ice PP remain—twice the observed two-hit Venusaur requirement—so the change reallocates an
 existing combat resource instead of adding grinding, items, retries, or sacrificial teammates.
+That replay confirmed the new opener swept Pidgeot and the next four opponents, but exposed the
+remaining obsolete sacrifice tactic at Venusaur. Two helper pivots erased all six X Special stages
+under Gen I switch rules; Blizzard damage fell to 64–65 while Venusaur recovered, and the helpers
+fainted. Champion healing is now direct: Full Restore preserves the boosted workhorse's stat stages
+and the developed teammates, aligning the final battle with the balanced-party curriculum.
 
 ## Evidence and project status
 

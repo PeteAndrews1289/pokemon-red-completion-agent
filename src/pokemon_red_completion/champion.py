@@ -41,8 +41,6 @@ from pokemon_red_completion.silph import (
 from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
     INDIGO_X_SPECIAL_RESERVE,
-    VictoryRoadChapterError,
-    _battle_sacrifice,
     _CountingExecutor,
     _event,
     _pulse,
@@ -299,7 +297,6 @@ def run_champion_chapter(
     accuracy_before = _bag(emulator).get(ItemId.X_ACCURACY, 0)
     x_special_before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
     accuracy_used = 0
-    next_sacrifice = 1
     last_recovery_turn = -1
     forced_switches = 0
     champion_intent = BattleIntent(
@@ -403,39 +400,18 @@ def run_champion_chapter(
                     f"bag={inventory!r}, "
                     f"turns={turns!r}."
                 ) from error
-            if (
-                (current.first_party_hp or 0) < _champion_recovery_threshold(current)
-                and emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS) >= 5
-                and next_sacrifice < 3
-                and _party_hp(emulator)[next_sacrifice] > 0
-            ):
-                try:
-                    recovery_spent = _battle_sacrifice(
-                        actions,
-                        reader,
-                        emulator,
-                        next_sacrifice,
-                        heal_lead=True,
-                        healing_item=item,
-                    )
-                except VictoryRoadChapterError as pivot_error:
-                    raise ChampionChapterError("Champion recovery pivot failed.") from pivot_error
-                next_sacrifice += 1
-                if not recovery_spent:
-                    continue
-            else:
-                try:
-                    terminal_exit = _battle_healing_item(
-                        reader,
-                        actions,
-                        emulator,
-                        DEFAULT_SILPH_TIMING,
-                        item,
-                    )
-                except SilphChapterError as healing_error:
-                    raise ChampionChapterError("Champion recovery failed.") from healing_error
-                if terminal_exit:
-                    note_observed_trainer_battle_exit(champion_intent)
+            try:
+                terminal_exit = _battle_healing_item(
+                    reader,
+                    actions,
+                    emulator,
+                    DEFAULT_SILPH_TIMING,
+                    item,
+                )
+            except SilphChapterError as healing_error:
+                raise ChampionChapterError("Champion recovery failed.") from healing_error
+            if terminal_exit:
+                note_observed_trainer_battle_exit(champion_intent)
             last_recovery_turn = len(turns)
 
     final = reader.read()
