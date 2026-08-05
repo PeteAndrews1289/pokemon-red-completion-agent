@@ -168,6 +168,11 @@ class ModelAssistedBattlePolicy:
                 teacher_slot = fallback()
             except Exception:
                 self.shadow_teacher_unavailable += 1
+                # Routed teachers use typed exceptions as non-move control signals
+                # (heal, reset a volatile condition, or settle a forced switch).
+                # The move ranker cannot represent those commands yet, so preserve
+                # the signal instead of silently converting it into a model attack.
+                raise
             else:
                 if teacher_slot != predicted_slot:
                     assert batch is not None

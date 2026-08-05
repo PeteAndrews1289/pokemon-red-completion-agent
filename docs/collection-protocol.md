@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v54.json`](../configs/red-battle-collection-v54.json)
+[`red-battle-collection-v55.json`](../configs/red-battle-collection-v55.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 71 stable public battle-plan identities in exact qualified-route order;
@@ -1782,3 +1782,10 @@ observe and label a disagreement but cannot replace the model's action. Failed l
 retained as explicitly failed, integrity-checked correction corpora so the first causal failure
 states can enter training. V54 reserves train seeds `640001`–`640005`, validation seeds
 `650001`–`650002`, test seeds `660001`–`660005`, and dry-run seed `62001`.
+
+V55 preserves routed non-move teacher control signals during learner move evaluation. This keeps
+healing, volatile-condition recovery, and forced-switch control synchronized while the model owns
+every move selection. The resulting rollout passed the former Cerulean boundary and produced 69
+disagreement labels across seven battle groups before a Rock Tunnel supply shortfall. V55 reserves
+train seeds `670001`–`670005`, validation seeds `680001`–`680002`, test seeds
+`690001`–`690005`, and dry-run seed `62001`.

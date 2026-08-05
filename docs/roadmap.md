@@ -36,6 +36,15 @@ failure. Failed rollout artifacts remain visibly failed but can now be authentic
 data; the [failure-correction receipt](evidence/autonomous-battle-failure-corrections-2026-08-05.json)
 does not misstate the run as completion.
 
+Preserving the teacher's non-move recovery and forced-switch signals established a fairer boundary
+for the move specialist. With the selected model choosing every attack, the rollout cleared the
+former Cerulean failure and reached checkpoint 102. It then arrived ₽1,549 short of the Rock Tunnel
+supply budget after inefficient battles consumed recovery resources. The failed rollout retained
+**69 disagreements across seven battle groups**; see the
+[autonomous-move Rock Tunnel receipt](evidence/autonomous-move-rollout-rock-tunnel-2026-08-05.json).
+Full battle autonomy still requires learned item and switch commands rather than hidden teacher
+ownership of those action classes.
+
 ## Milestone 0 — completion foundation
 
 **Status: complete — July 2026**

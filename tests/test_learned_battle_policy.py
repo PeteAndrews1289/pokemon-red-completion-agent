@@ -168,6 +168,25 @@ def test_shadow_teacher_records_disagreement_but_model_still_acts() -> None:
     assert records[0]["teacher"] == {"chosen_candidate_index": 0}
 
 
+def test_shadow_teacher_preserves_non_move_control_signal() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_Encoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+        observe_teacher_when_not_required=True,
+    )
+
+    def request_recovery() -> int:
+        raise RuntimeError("use recovery command")
+
+    with pytest.raises(RuntimeError, match="recovery"):
+        policy.choose_move(_observation(), request_recovery)
+    assert policy.shadow_teacher_unavailable == 1
+    assert policy.model_decisions == 0
+
+
 def test_model_loader_authenticates_typed_artifact_stream(tmp_path: Path) -> None:
     artifact = tmp_path / "candidate"
     artifact.mkdir()

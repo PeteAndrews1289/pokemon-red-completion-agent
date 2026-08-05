@@ -38,6 +38,15 @@ shadow teacher. The learner still chose and executed every move, while the teach
 counterfactual labels immediately preceding the same failure. Those learner-induced states are now
 an authenticated failed-rollout corpus and the next targeted DAgger input.
 
+That first failure also exposed an action-space bug in the experiment. The move model could never
+request a Potion, reset a volatile accuracy condition, or settle a forced switch; bypassing the
+teacher therefore removed capabilities that no amount of move-label training could recover. After
+preserving those explicit non-move control signals, the same selected model cleared Cerulean and
+every battle through Lt. Surge while owning every move choice. It reached checkpoint 102 before
+its less efficient tactics left the route ₽1,549 short of Rock Tunnel supplies. The resulting 69
+disagreements across seven battles now connect tactical choices to a downstream resource failure,
+while the claim boundary remains clear: this is autonomous move selection, not full battle control.
+
 > **Living engineering record — updated August 4, 2026.** This document separates verified
 > historical results from work on the current robustness branch. It will be updated at each
 > collection, training, evaluation, and transfer gate.
