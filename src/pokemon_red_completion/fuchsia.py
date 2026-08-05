@@ -56,7 +56,7 @@ BUBBLEBEAM = 0x3D
 SNORLAX = 0x84
 SNORLAX_BUBBLEBEAM_PP_BOUND = (1, 20)
 SNORLAX_RUNTIME_PULSE_BOUND = 720
-SNORLAX_GREAT_BALL_RESERVE = 24
+SNORLAX_GREAT_BALL_RESERVE = 32
 SNORLAX_SUPER_POTION_RESERVE = 2
 SNORLAX_TM34_SALE_PROCEEDS = 1_000
 ROUTE13_BIRD_KEEPER_BITE_PP_BOUND = 15
@@ -69,8 +69,9 @@ SNORLAX_CAPTURE_POLICY = CapturePolicy(
     throw_at_or_below_hp_ratio=0.90,
     prefer_status_first=False,
     # A static one-time encounter deserves a completion-oriented reserve.
-    # Twenty-five newly purchased Great Balls remain bounded and are sold after
-    # capture, but do not depend on leftovers from earlier species searches.
+    # Thirty-two newly purchased Great Balls plus the retained legal Poké Ball
+    # cover the complete bounded throw policy and are sold after capture, but
+    # do not depend on variable leftovers from earlier species searches.
     max_throws=33,
     retreat_hp_ratio=0.35,
 )
