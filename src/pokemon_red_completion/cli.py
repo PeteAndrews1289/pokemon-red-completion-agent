@@ -57,6 +57,7 @@ from pokemon_red_completion.learned_battle_policy import (
     LearnedBattlePolicyError,
     load_battle_model_artifact,
 )
+from pokemon_red_completion.learned_planner_policy import LearnedPlannerPolicyError
 from pokemon_red_completion.opening import (
     DEFAULT_OPENING_TIMING,
     PRET_POKERED_COMMIT,
@@ -65,6 +66,11 @@ from pokemon_red_completion.opening import (
     OpeningProgress,
     run_opening_chapter,
 )
+from pokemon_red_completion.planner_model import (
+    PlannerModelError,
+    load_objective_model_artifact,
+)
+from pokemon_red_completion.planner_semantics import ObjectiveFeatureProjector
 from pokemon_red_completion.play import (
     DEFAULT_QUALIFIED_PLAY_TIMING,
     QualifiedPlayError,
@@ -514,6 +520,17 @@ def _parser() -> argparse.ArgumentParser:
         "--diagnostic-schedule-seed",
         type=int,
         help="Apply an uncounted reproducible battle-timing perturbation schedule.",
+    )
+    play.add_argument(
+        "--objective-model",
+        type=Path,
+        help="Authenticated planner-model artifact directory for live objective authorization.",
+    )
+    play.add_argument(
+        "--objective-confidence-threshold",
+        type=float,
+        default=0.0,
+        help="Reject objective predictions below this confidence (default: 0).",
     )
     record = subcommands.add_parser(
         "record",
@@ -1192,6 +1209,7 @@ def _run_planner_learning(
                     "model_sha256": result.model_sha256,
                     "source": source.public_dict(),
                     "source_episode_manifest_sha256": dataset.manifest_sha256,
+                    "objective_graph_sha256": dataset.objective_graph_sha256,
                 },
             )
             writer.append(
@@ -1905,6 +1923,19 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 if args.battle_control_model is not None
                 else None
             )
+            objective_model = (
+                load_objective_model_artifact(
+                    args.objective_model,
+                    expected_feature_names=ObjectiveFeatureProjector(
+                        COMPLETION_QUEST
+                    ).feature_names,
+                    expected_objective_graph_sha256=collection_document_sha256(
+                        objective_graph_document(completion_route_payload())
+                    ),
+                )
+                if args.objective_model is not None
+                else None
+            )
             correction_writer = None
             correction_summary = None
             control_writer = None
@@ -1999,6 +2030,10 @@ def main(arguments: Sequence[str] | None = None) -> int:
                         else None
                     ),
                     battle_start_offsets=diagnostic_offsets,
+                    objective_model=objective_model,
+                    objective_model_confidence_threshold=(
+                        args.objective_confidence_threshold
+                    ),
                 )
                 if correction_writer is not None:
                     qualified_public = qualified_report.public_dict()
@@ -2180,7 +2215,9 @@ def main(arguments: Sequence[str] | None = None) -> int:
         EmulatorError,
         EvaluationIdentityError,
         LearnedBattlePolicyError,
+        LearnedPlannerPolicyError,
         OpeningChapterError,
+        PlannerModelError,
         PrivateArtifactError,
         QualifiedPlayError,
         RomValidationError,

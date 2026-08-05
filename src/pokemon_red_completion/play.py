@@ -144,6 +144,7 @@ from pokemon_red_completion.lavender import (
     run_lavender_chapter,
 )
 from pokemon_red_completion.learned_battle_policy import ModelAssistedBattlePolicy
+from pokemon_red_completion.learned_planner_policy import ModelObjectivePolicy
 from pokemon_red_completion.lorelei import (
     LORELEI_CHECKPOINT_COUNT,
     LoreleiChapterError,
@@ -177,6 +178,7 @@ from pokemon_red_completion.pewter import (
     PewterProgress,
     run_pewter_chapter,
 )
+from pokemon_red_completion.planner_model import ObjectiveRanker
 from pokemon_red_completion.planner_trajectory import SemanticObjectiveDecisionObserver
 from pokemon_red_completion.red_collection import (
     RedCollectionProgress,
@@ -518,6 +520,7 @@ class QualifiedPlayReport:
     pokedex_state: RedPokedexState | None = None
     collection_progress: RedCollectionProgress | None = None
     battle_policy_report: dict[str, object] | None = None
+    objective_policy_report: dict[str, object] | None = None
 
     @property
     def passed(self) -> bool:
@@ -559,6 +562,16 @@ class QualifiedPlayReport:
             and self.champion.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
+            and (
+                self.objective_policy_report is None
+                or (
+                    self.objective_policy_report.get("authorized_decisions")
+                    == len(COMPLETION_QUEST)
+                    and self.objective_policy_report.get("completed_objectives")
+                    == len(COMPLETION_QUEST)
+                    and self.objective_policy_report.get("teacher_fallbacks") == 0
+                )
+            )
         )
 
     def public_dict(self) -> dict[str, object]:
@@ -715,6 +728,7 @@ class QualifiedPlayReport:
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
             "battle_policy": self.battle_policy_report,
+            "objective_policy": self.objective_policy_report,
         }
 
 
@@ -766,6 +780,8 @@ def run_qualified_play(
     battle_control_model: BattleControlMLP | None = None,
     execute_battle_control_model: bool = False,
     battle_control_confidence_threshold: float = 0.0,
+    objective_model: ObjectiveRanker | None = None,
+    objective_model_confidence_threshold: float = 0.0,
     battle_model_confidence_threshold: float = 0.0,
     require_battle_model_teacher_agreement: bool = True,
     battle_correction_sink: Callable[[Mapping[str, object]], None] | None = None,
@@ -793,6 +809,8 @@ def run_qualified_play(
         raise ValueError("battle control execution requires a control model")
     if not 0.0 <= battle_control_confidence_threshold <= 1.0:
         raise ValueError("battle_control_confidence_threshold must be between zero and one")
+    if not 0.0 <= objective_model_confidence_threshold <= 1.0:
+        raise ValueError("objective_model_confidence_threshold must be between zero and one")
     battle_start_schedule = (
         BattleStartScheduleController(battle_start_offsets)
         if battle_start_offsets is not None
@@ -832,10 +850,29 @@ def run_qualified_play(
         )
         recording_executor: RecordingExecutor[MacroAction, ExecutedAction] | None = None
         objective_observer: SemanticObjectiveDecisionObserver | None = None
+        objective_policy: ModelObjectivePolicy | None = None
         recording_failures = [0]
         effective_progress = progress
+        snapshot_encoder = (
+            PokemonRedObservationEncoder.from_state_reader(reader)
+            if trajectory_sink is not None or objective_model is not None
+            else None
+        )
+        if objective_model is not None:
+            assert snapshot_encoder is not None
+            objective_policy = ModelObjectivePolicy(
+                model=objective_model,
+                graph=COMPLETION_QUEST,
+                snapshot_provider=snapshot_encoder,
+                confidence_threshold=objective_model_confidence_threshold,
+            )
+            objective_policy.authorize(QUALIFIED_OBJECTIVE_SEQUENCE[0])
+            effective_progress = _objective_model_progress_bridge(
+                effective_progress,
+                objective_policy,
+            )
         if trajectory_sink is not None and trajectory_episode_id is not None:
-            snapshot_encoder = PokemonRedObservationEncoder.from_state_reader(reader)
+            assert snapshot_encoder is not None
             recording_executor = RecordingExecutor(
                 delegate=base_executor,
                 snapshot_provider=snapshot_encoder,
@@ -1375,6 +1412,9 @@ def run_qualified_play(
                 final_boxes,
             ),
             battle_policy_report=(model_policy.public_dict() if model_policy is not None else None),
+            objective_policy_report=(
+                objective_policy.public_dict() if objective_policy is not None else None
+            ),
         )
         if not report.passed:
             raise QualifiedPlayError("Qualified play evidence failed its public contract.")
@@ -2409,6 +2449,27 @@ def _trajectory_progress_bridge(
                         )
             except Exception:
                 recorder.note_instrumentation_failure()
+
+    return emit
+
+
+def _objective_model_progress_bridge(
+    downstream: ProgressSink | None,
+    policy: ModelObjectivePolicy,
+) -> ProgressSink:
+    """Advance verifier facts and require the model to authorize every next objective."""
+
+    def emit(progress: QualifiedPlayProgress) -> None:
+        if downstream is not None:
+            downstream(progress)
+        for objective_id in _QUALIFIED_OBJECTIVES_BY_CHECKPOINT.get(
+            progress.completed,
+            (),
+        ):
+            policy.complete(objective_id)
+            completed_count = policy.completed_objective_count
+            if completed_count < len(QUALIFIED_OBJECTIVE_SEQUENCE):
+                policy.authorize(QUALIFIED_OBJECTIVE_SEQUENCE[completed_count])
 
     return emit
 

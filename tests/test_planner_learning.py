@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from collections.abc import Iterator
 from copy import deepcopy
+from pathlib import Path
 
 import pytest
 
@@ -9,12 +12,21 @@ from pokemon_red_completion.collection_protocol import (
     collection_document_sha256,
     objective_graph_document,
 )
+from pokemon_red_completion.learned_planner_policy import (
+    LearnedPlannerPolicyError,
+    ModelObjectivePolicy,
+)
 from pokemon_red_completion.planner_dataset import (
     PlannerDatasetError,
     PlannerDecisionProvenance,
     load_planner_episode,
 )
-from pokemon_red_completion.planner_model import ObjectiveRanker, planner_accuracy
+from pokemon_red_completion.planner_model import (
+    ObjectiveRanker,
+    PlannerModelError,
+    load_objective_model_artifact,
+    planner_accuracy,
+)
 from pokemon_red_completion.planner_semantics import ObjectiveFeatureProjector
 from pokemon_red_completion.planner_trajectory import SemanticObjectiveDecisionObserver
 from pokemon_red_completion.play import QUALIFIED_OBJECTIVE_SEQUENCE
@@ -207,3 +219,105 @@ def test_projector_matches_current_region_without_exposing_region_identity() -> 
 
     assert batch.candidate_vectors[:, match_index].tolist() == [1.0, 0.0]
     assert all("fuchsia" not in feature for feature in batch.feature_names)
+
+
+def _canonical_line(value: object) -> bytes:
+    return (
+        json.dumps(
+            value,
+            ensure_ascii=True,
+            allow_nan=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("ascii")
+        + b"\n"
+    )
+
+
+def _model_artifact(tmp_path: Path) -> tuple[Path, ObjectiveRanker, str]:
+    projector = ObjectiveFeatureProjector(COMPLETION_QUEST)
+    model = ObjectiveRanker(
+        feature_names=projector.feature_names,
+        weights=[0.0] * len(projector.feature_names),
+    )
+    graph_sha256 = collection_document_sha256(
+        objective_graph_document(quest_graph_payload(COMPLETION_QUEST))
+    )
+    streams = {
+        "model.jsonl": _canonical_line(
+            {
+                "record_type": "planner_model",
+                "model": model.to_dict(),
+                "model_sha256": canonical_sha256(model.to_dict()),
+                "objective_graph_sha256": graph_sha256,
+            }
+        ),
+        "training.jsonl": _canonical_line({"record_type": "planner_training"}),
+        "metrics.jsonl": _canonical_line({"record_type": "planner_metrics"}),
+    }
+    artifact = tmp_path / "planner-model"
+    artifact.mkdir()
+    files = []
+    for filename, payload in streams.items():
+        (artifact / filename).write_bytes(payload)
+        files.append(
+            {
+                "filename": filename,
+                "bytes": len(payload),
+                "records": 1,
+                "sha256": hashlib.sha256(payload).hexdigest(),
+            }
+        )
+    (artifact / "manifest.json").write_text(
+        json.dumps(
+            {
+                "format": "pokemon-red-completion-private-artifact-jsonl",
+                "kind": "planner_model",
+                "schema_version": 1,
+                "status": "complete",
+                "files": files,
+            }
+        ),
+        encoding="ascii",
+    )
+    return artifact, model, graph_sha256
+
+
+def test_objective_model_artifact_authenticates_model_and_graph(tmp_path: Path) -> None:
+    artifact, expected, graph_sha256 = _model_artifact(tmp_path)
+
+    loaded = load_objective_model_artifact(
+        artifact,
+        expected_feature_names=expected.feature_names,
+        expected_objective_graph_sha256=graph_sha256,
+    )
+
+    assert loaded.to_dict() == expected.to_dict()
+    with pytest.raises(PlannerModelError, match="graph-incompatible"):
+        load_objective_model_artifact(
+            artifact,
+            expected_feature_names=expected.feature_names,
+            expected_objective_graph_sha256="f" * 64,
+        )
+
+
+def test_live_policy_authorizes_model_choice_and_rejects_route_disagreement() -> None:
+    provider = _Provider()
+    projector = ObjectiveFeatureProjector(COMPLETION_QUEST)
+    model = ObjectiveRanker(
+        feature_names=projector.feature_names,
+        weights=[0.0] * len(projector.feature_names),
+    )
+    policy = ModelObjectivePolicy(
+        model=model,
+        graph=COMPLETION_QUEST,
+        snapshot_provider=provider,
+    )
+    prefix = QUALIFIED_OBJECTIVE_SEQUENCE[:8]
+    for objective_id in prefix:
+        assert policy.authorize(objective_id) == objective_id
+        policy.complete(objective_id)
+
+    with pytest.raises(LearnedPlannerPolicyError, match="different legal objective"):
+        policy.authorize("defeat_misty")
+    assert policy.public_dict()["teacher_fallbacks"] == 0

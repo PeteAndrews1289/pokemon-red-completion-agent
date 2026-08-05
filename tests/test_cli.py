@@ -865,9 +865,9 @@ def test_battle_learning_writes_only_a_private_typed_model_artifact(
 @pytest.mark.parametrize(
     "run_id",
     [
-        "red-battle-v74-01-train",
-        "red-battle-v74-06-validation",
-        "red-battle-v74-08-test",
+        "red-battle-v75-01-train",
+        "red-battle-v75-06-validation",
+        "red-battle-v75-08-test",
     ],
 )
 def test_battle_learning_rejects_preregistered_ids_before_opening_private_data(
@@ -1199,6 +1199,8 @@ def test_play_command_runs_the_continuous_watched_boundary(
         battle_correction_sink,
         battle_control_sink,
         battle_start_offsets,
+        objective_model,
+        objective_model_confidence_threshold: float,
     ) -> FakeReport:
         assert path == private_path
         assert watch is True
@@ -1212,6 +1214,8 @@ def test_play_command_runs_the_continuous_watched_boundary(
         assert battle_correction_sink is None
         assert battle_control_sink is None
         assert battle_start_offsets is None
+        assert objective_model is None
+        assert objective_model_confidence_threshold == 0.0
         progress(
             QualifiedPlayProgress(
                 checkpoint_id="bedroom_ready",
@@ -1620,7 +1624,7 @@ def test_planned_record_requires_dry_run_before_sealing_or_emulator_start(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v74-01-train")
+    assignment = registry.assignment("red-battle-v75-01-train")
     private_path = Path("/private/Pokemon Red.gb")
     private_root_path = Path("/private/external/trajectories")
     observed: dict[str, object] = {}
@@ -1719,7 +1723,7 @@ def test_planned_record_uses_the_frozen_identity_and_exact_offsets(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v74-01-train")
+    assignment = registry.assignment("red-battle-v75-01-train")
     private_path = Path("/private/Pokemon Red.gb")
     private_root_path = Path("/private/external/trajectories")
     observed: dict[str, object] = {}
@@ -2206,7 +2210,7 @@ def test_planned_recording_metadata_binds_assignment_and_schedule(
 ) -> None:
     private_rom = Path("/private/Pokemon Red.gb")
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v74-01-train")
+    assignment = registry.assignment("red-battle-v75-01-train")
     source = SourceIdentity("a" * 40, False)
     monkeypatch.setattr(
         cli,
@@ -2304,7 +2308,7 @@ def test_scheduled_metadata_rejects_a_commit_change_after_registry_load(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v74-01-train")
+    assignment = registry.assignment("red-battle-v75-01-train")
     monkeypatch.setattr(
         cli,
         "detect_source_identity",

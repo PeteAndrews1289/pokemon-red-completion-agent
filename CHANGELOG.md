@@ -10,6 +10,9 @@
   leakage into model features.
 - Added a portable semantic objective projector, masked listwise objective ranker, diagnostic
   trainer, private model-artifact publication, and `learn planner train` CLI entry point.
+- Added authenticated planner-model loading bound to the exact objective graph and live
+  model authorization at every objective boundary. The fixed specialist dispatcher cannot proceed
+  when the model selects a different legal objective or falls below its confidence threshold.
 - Added a versioned, game-neutral trajectory schema for semantic observations, decisions,
   executions, and sparse events.
 - Added a thin Pokémon Red observation adapter that keeps revision-specific RAM details below the

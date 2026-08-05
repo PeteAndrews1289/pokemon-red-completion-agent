@@ -39,6 +39,7 @@ from pokemon_red_completion.play import (
     QualifiedPlayProgress,
     QualifiedPlayReport,
     QualifiedPlayTiming,
+    _objective_model_progress_bridge,
     _trajectory_progress_bridge,
     is_parcel_verified,
     is_pokedex_verified,
@@ -1284,6 +1285,41 @@ def test_qualified_progress_emits_one_legal_label_for_every_completion_objective
     assert observer.completed_ids == frozenset(QUALIFIED_OBJECTIVE_SEQUENCE)
     assert observer.active_objective_id is None
     assert recorder.recording_failures == 0
+
+
+def test_objective_model_progress_requires_every_live_objective_boundary() -> None:
+    class Policy:
+        def __init__(self) -> None:
+            self.completed: list[str] = []
+            self.authorized: list[str] = []
+
+        @property
+        def completed_objective_count(self) -> int:
+            return len(self.completed)
+
+        def complete(self, objective_id: str) -> None:
+            self.completed.append(objective_id)
+
+        def authorize(self, objective_id: str) -> str:
+            self.authorized.append(objective_id)
+            return objective_id
+
+    policy = Policy()
+    policy.authorize(QUALIFIED_OBJECTIVE_SEQUENCE[0])
+    emit = _objective_model_progress_bridge(None, policy)  # type: ignore[arg-type]
+    for completed, _ in dict(QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS).items():
+        emit(
+            QualifiedPlayProgress(
+                checkpoint_id=f"checkpoint_{completed}",
+                label=f"Checkpoint {completed}",
+                completed=completed,
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=completed,
+            )
+        )
+
+    assert tuple(policy.authorized) == QUALIFIED_OBJECTIVE_SEQUENCE
+    assert tuple(policy.completed) == QUALIFIED_OBJECTIVE_SEQUENCE
 
 
 def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:

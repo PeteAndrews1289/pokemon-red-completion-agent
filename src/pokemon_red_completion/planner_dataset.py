@@ -65,6 +65,7 @@ class PlannerEpisodeDataset:
     manifest_sha256: str
     root_lineage_id: str
     partition: str
+    objective_graph_sha256: str
     examples: tuple[PlannerDecisionExample, ...]
     feature_names: tuple[str, ...]
 
@@ -75,6 +76,7 @@ class PlannerEpisodeDataset:
             "game_id": self.game_id,
             "manifest_sha256": self.manifest_sha256,
             "partition": self.partition,
+            "objective_graph_sha256": self.objective_graph_sha256,
         }
 
 
@@ -207,6 +209,7 @@ def load_planner_episode(
         manifest_sha256=_digest(reader.manifest_sha256, subject="episode manifest digest"),
         root_lineage_id=root_lineage_id,
         partition=partition,
+        objective_graph_sha256=expected_graph_sha256,
         examples=tuple(examples),
         feature_names=feature_names or (),
     )
