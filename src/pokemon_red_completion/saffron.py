@@ -101,6 +101,9 @@ STONE_CLERK_RETURN_RETREAT_POSITION = (1, 2)
 STONE_CLERK_RETURN_YIELD_POSITION = (1, 3)
 STONE_CLERK_RETURN_MAX_X = 11
 STONE_CLERK_WALKER_CLEAR_ATTEMPTS = 12
+STONE_CLERK_WALKER_Y = 0xC234
+STONE_CLERK_WALKER_X = 0xC235
+STONE_CLERK_RETURN_CLEAR_FRAMES = 2_048
 MART_2F_GIRL_Y = 0xC244
 MART_2F_GIRL_X = 0xC245
 MART_2F_RETURN_BLOCK_POSITION = (15, 2)
@@ -858,6 +861,7 @@ def _move(
                 after = _yield_from_stone_clerk_return(
                     actions,
                     reader,
+                    emulator,
                     timing,
                     target_x=(before.player_x or 0) + 1,
                 )
@@ -983,6 +987,7 @@ def _cross_mart_2f_return_customer(
 def _yield_from_stone_clerk_return(
     actions: _CountingExecutor,
     reader: PokemonRedStateReader,
+    emulator: EmulatorState,
     timing: SaffronTiming,
     *,
     target_x: int,
@@ -992,7 +997,7 @@ def _yield_from_stone_clerk_return(
     if not 2 <= target_x <= STONE_CLERK_RETURN_MAX_X + 1:
         raise ValueError("stone-clerk return target must stay inside the fourth-floor corridor")
 
-    for attempt in range(STONE_CLERK_WALKER_CLEAR_ATTEMPTS):
+    for _ in range(STONE_CLERK_WALKER_CLEAR_ATTEMPTS):
         state = reader.read()
         if (
             state.map_id != MapId.CELADON_MART_4F
@@ -1027,8 +1032,29 @@ def _yield_from_stone_clerk_return(
             raise SaffronChapterError(
                 "Evolution-stone return recovery could not enter its yield alcove."
             )
-        _wait(actions, timing.movement_frames * (attempt + 1))
-        for return_attempt in range(STONE_CLERK_WALKER_CLEAR_ATTEMPTS):
+        for _ in range(STONE_CLERK_RETURN_CLEAR_FRAMES):
+            walker = (
+                emulator.read_u8(STONE_CLERK_WALKER_X) - 4,
+                emulator.read_u8(STONE_CLERK_WALKER_Y) - 4,
+            )
+            if walker[1] == STONE_CLERK_RETURN_BLOCK_POSITION[1] and walker[0] > target_x:
+                actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
+                _wait(actions, timing.movement_frames)
+                state = reader.read()
+                if (state.player_x, state.player_y) == STONE_CLERK_RETURN_RETREAT_POSITION:
+                    break
+                if (state.player_x, state.player_y) != STONE_CLERK_RETURN_YIELD_POSITION:
+                    raise SaffronChapterError(
+                        "Evolution-stone return recovery left its yield alcove."
+                    )
+            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
+        else:
+            raise SaffronChapterError(
+                "Evolution-stone return recovery could not observe a clear corridor."
+            )
+        for _ in range(STONE_CLERK_WALKER_CLEAR_ATTEMPTS):
+            if (state.player_x, state.player_y) == STONE_CLERK_RETURN_RETREAT_POSITION:
+                break
             actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
             _wait(actions, timing.movement_frames)
             state = reader.read()
@@ -1038,7 +1064,6 @@ def _yield_from_stone_clerk_return(
                 raise SaffronChapterError(
                     "Evolution-stone return recovery left its yield alcove."
                 )
-            _wait(actions, timing.movement_frames * (return_attempt + 1))
         else:
             raise SaffronChapterError(
                 "Evolution-stone return recovery could not reenter the corridor."

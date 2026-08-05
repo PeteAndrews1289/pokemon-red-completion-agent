@@ -82,6 +82,7 @@ def test_stone_clerk_route_yields_to_fourth_floor_walker(
             return action
 
     executor = Executor()
+
     monkeypatch.setattr(saffron, "_wait", lambda *args: None)
 
     saffron._move(
@@ -127,6 +128,7 @@ def test_stone_clerk_route_yields_at_west_fourth_floor_gate(
             return action
 
     executor = Executor()
+
     monkeypatch.setattr(saffron, "_wait", lambda *args: None)
 
     saffron._move(
@@ -175,12 +177,17 @@ def test_stone_clerk_return_retreats_until_fourth_floor_walker_clears(
             return action
 
     executor = Executor()
+
+    class Emulator:
+        def read_u8(self, address: int) -> int:
+            return 11 if address == saffron.STONE_CLERK_WALKER_X else 6
+
     monkeypatch.setattr(saffron, "_wait", lambda *args: None)
 
     saffron._move(
         executor,  # type: ignore[arg-type]
         reader,  # type: ignore[arg-type]
-        object(),  # type: ignore[arg-type]
+        Emulator(),  # type: ignore[arg-type]
         ("right",),
         DEFAULT_SAFFRON_TIMING,
         "fourth-floor stair return",
@@ -224,12 +231,17 @@ def test_stone_clerk_return_recovers_a_later_corridor_deadlock(
             return action
 
     executor = Executor()
+
+    class Emulator:
+        def read_u8(self, address: int) -> int:
+            return 15 if address == saffron.STONE_CLERK_WALKER_X else 6
+
     monkeypatch.setattr(saffron, "_wait", lambda *args: None)
 
     saffron._move(
         executor,  # type: ignore[arg-type]
         reader,  # type: ignore[arg-type]
-        object(),  # type: ignore[arg-type]
+        Emulator(),  # type: ignore[arg-type]
         ("right",),
         DEFAULT_SAFFRON_TIMING,
         "fourth-floor stair return",
