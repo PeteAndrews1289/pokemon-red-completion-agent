@@ -11,6 +11,10 @@ from dataclasses import asdict, replace
 from pathlib import Path
 
 from pokemon_red_completion import __version__
+from pokemon_red_completion.battle_control_model import (
+    BattleControlModelError,
+    load_battle_control_model_artifact,
+)
 from pokemon_red_completion.battle_model import CURRENT_BATTLE_FEATURE_SCHEMA_ID
 from pokemon_red_completion.battle_plan import RED_BATTLE_PLAN_IDS
 from pokemon_red_completion.battle_schedule import BattleScheduleError
@@ -340,6 +344,33 @@ def _parser() -> argparse.ArgumentParser:
     learn_control_fit.add_argument("--epochs", type=int, default=500)
     learn_control_fit.add_argument("--seed", type=int, default=1289)
     learn_control_fit.add_argument("--hidden-units", type=int, default=24)
+    learn_control_lineages = learn_control_commands.add_parser(
+        "fit-lineages",
+        help="Fit on complete rollout lineages and validate on disjoint lineages.",
+    )
+    learn_control_lineages.add_argument(
+        "--private-root",
+        type=Path,
+        required=True,
+        help="Explicit absolute path to the initialized private artifact root.",
+    )
+    learn_control_lineages.add_argument(
+        "--training-labels",
+        type=Path,
+        action="append",
+        required=True,
+        help="Completed training-lineage artifact; repeat for additional lineages.",
+    )
+    learn_control_lineages.add_argument(
+        "--validation-labels",
+        type=Path,
+        action="append",
+        required=True,
+        help="Disjoint completed validation-lineage artifact; repeat as needed.",
+    )
+    learn_control_lineages.add_argument("--epochs", type=int, default=750)
+    learn_control_lineages.add_argument("--seed", type=int, default=1289)
+    learn_control_lineages.add_argument("--hidden-units", type=int, default=48)
     doctor = subcommands.add_parser("doctor", help="Verify the private ROM identity.")
     doctor.add_argument("--rom", type=Path, help="Private ROM path; otherwise use POKEMON_RED_ROM.")
     bootstrap = subcommands.add_parser(
@@ -422,6 +453,14 @@ def _parser() -> argparse.ArgumentParser:
             "Write typed recovery and boost teacher labels to an initialized private "
             "external artifact root; requires --battle-model and "
             "--allow-model-disagreement."
+        ),
+    )
+    play.add_argument(
+        "--battle-control-model",
+        type=Path,
+        help=(
+            "Authenticated full-battle controller artifact directory to evaluate "
+            "in shadow mode; requires --battle-model."
         ),
     )
     play.add_argument(
@@ -1043,8 +1082,13 @@ def _run_control_learning(
     parser: argparse.ArgumentParser,
     args: argparse.Namespace,
 ) -> dict[str, object]:
-    """Train one authenticated, battle-group-held-out high-level controller."""
+    """Train one authenticated high-level controller with an explicit holdout."""
 
+    private_inputs = (
+        (args.private_root, *args.training_labels, *args.validation_labels)
+        if args.learn_control_command == "fit-lineages"
+        else (args.private_root, args.labels)
+    )
     try:
         from pokemon_red_completion.battle_control_features import CONTROL_FEATURE_SCHEMA_ID
         from pokemon_red_completion.battle_control_labels import (
@@ -1054,6 +1098,7 @@ def _run_control_learning(
         from pokemon_red_completion.battle_control_model import BattleControlModelError
         from pokemon_red_completion.battle_control_training import (
             fit_group_heldout_control_candidate,
+            fit_preassigned_control_candidate,
         )
 
         source = detect_source_identity(REPOSITORY_ROOT, include_untracked=True)
@@ -1062,14 +1107,61 @@ def _run_control_learning(
             args.private_root,
             repository_root=REPOSITORY_ROOT,
         )
-        dataset = load_battle_control_artifact(args.labels)
-        candidate = fit_group_heldout_control_candidate(
-            dataset,
-            validation_battle_plan_ids=args.validation_battle_plan,
-            seed=args.seed,
-            hidden_units=args.hidden_units,
-            epochs=args.epochs,
-        )
+        if args.learn_control_command == "fit-lineages":
+            training_datasets = tuple(
+                load_battle_control_artifact(path) for path in args.training_labels
+            )
+            validation_datasets = tuple(
+                load_battle_control_artifact(path) for path in args.validation_labels
+            )
+            candidate = fit_preassigned_control_candidate(
+                training_datasets,
+                validation_datasets,
+                seed=args.seed,
+                hidden_units=args.hidden_units,
+                epochs=args.epochs,
+            )
+            training_record: dict[str, object] = {
+                "record_type": "battle_control_training",
+                "feature_schema_id": CONTROL_FEATURE_SCHEMA_ID,
+                "split": "complete_rollout_lineages",
+                "training_artifacts": [
+                    {
+                        "artifact_id": dataset.artifact_id,
+                        "manifest_sha256": dataset.manifest_sha256,
+                    }
+                    for dataset in training_datasets
+                ],
+                "validation_artifacts": [
+                    {
+                        "artifact_id": dataset.artifact_id,
+                        "manifest_sha256": dataset.manifest_sha256,
+                    }
+                    for dataset in validation_datasets
+                ],
+            }
+        else:
+            dataset = load_battle_control_artifact(args.labels)
+            candidate = fit_group_heldout_control_candidate(
+                dataset,
+                validation_battle_plan_ids=args.validation_battle_plan,
+                seed=args.seed,
+                hidden_units=args.hidden_units,
+                epochs=args.epochs,
+            )
+            training_record = {
+                "record_type": "battle_control_training",
+                "feature_schema_id": CONTROL_FEATURE_SCHEMA_ID,
+                "split": "battle_plan_groups",
+                "source_artifact_id": dataset.artifact_id,
+                "source_manifest_sha256": dataset.manifest_sha256,
+                "validation_battle_plan_ids": list(args.validation_battle_plan),
+            }
+        training_record["configuration"] = {
+            "epochs": args.epochs,
+            "hidden_units": args.hidden_units,
+            "seed": args.seed,
+        }
         model_payload = candidate.model.to_dict()
         model_sha256 = canonical_sha256(model_payload)
         artifact_id = f"red-battle-control-model-{uuid.uuid4().hex}"
@@ -1086,18 +1178,7 @@ def _run_control_learning(
             )
             writer.append(
                 "training",
-                {
-                    "record_type": "battle_control_training",
-                    "feature_schema_id": CONTROL_FEATURE_SCHEMA_ID,
-                    "source_artifact_id": dataset.artifact_id,
-                    "source_manifest_sha256": dataset.manifest_sha256,
-                    "validation_battle_plan_ids": list(args.validation_battle_plan),
-                    "configuration": {
-                        "epochs": args.epochs,
-                        "hidden_units": args.hidden_units,
-                        "seed": args.seed,
-                    },
-                },
+                training_record,
             )
             writer.append(
                 "metrics",
@@ -1112,7 +1193,8 @@ def _run_control_learning(
         payload["model_sha256"] = model_sha256
         payload["qualification"] = {
             "promotion_eligible": False,
-            "held_out_battle_groups": True,
+            "held_out_battle_groups": args.learn_control_command == "fit",
+            "held_out_rollout_lineages": args.learn_control_command == "fit-lineages",
             "learned_policy_rollout": False,
             "reasons": ["fresh_full_control_rollout_required"],
         }
@@ -1127,7 +1209,7 @@ def _run_control_learning(
         parser.error(
             _public_error_message(
                 error,
-                private_paths=(args.private_root, args.labels),
+                private_paths=private_inputs,
             )
         )
     except OSError:
@@ -1647,9 +1729,16 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 parser.error(
                     "--battle-control-root requires --allow-model-disagreement"
                 )
+            if args.battle_control_model is not None and args.battle_model is None:
+                parser.error("--battle-control-model requires --battle-model")
             battle_model = (
                 load_battle_model_artifact(args.battle_model)
                 if args.battle_model is not None
+                else None
+            )
+            battle_control_model = (
+                load_battle_control_model_artifact(args.battle_control_model)
+                if args.battle_control_model is not None
                 else None
             )
             correction_writer = None
@@ -1728,6 +1817,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     speed=args.speed,
                     progress=_print_qualified_progress,
                     battle_model=battle_model,
+                    battle_control_model=battle_control_model,
                     battle_model_confidence_threshold=args.battle_confidence_threshold,
                     require_battle_model_teacher_agreement=not args.allow_model_disagreement,
                     battle_correction_sink=(
@@ -1915,6 +2005,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 payload["dry_run_qualification"] = dry_run_qualification.public_dict()
     except (
         BootstrapError,
+        BattleControlModelError,
         BattleScheduleError,
         CollectionLedgerError,
         CollectionProtocolError,

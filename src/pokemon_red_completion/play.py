@@ -22,6 +22,7 @@ from pokemon_red_completion.agatha import (
     AgathaProgress,
     run_agatha_chapter,
 )
+from pokemon_red_completion.battle_control_model import BattleControlMLP
 from pokemon_red_completion.battle_neural_model import BattleMoveRanker
 from pokemon_red_completion.battle_runtime import (
     bind_battle_decision_observer,
@@ -708,6 +709,7 @@ def run_qualified_play(
     trajectory_episode_id: str | None = None,
     battle_start_offsets: tuple[BattleStartOffset, ...] | None = None,
     battle_model: BattleMoveRanker | None = None,
+    battle_control_model: BattleControlMLP | None = None,
     battle_model_confidence_threshold: float = 0.0,
     require_battle_model_teacher_agreement: bool = True,
     battle_correction_sink: Callable[[Mapping[str, object]], None] | None = None,
@@ -733,6 +735,8 @@ def run_qualified_play(
         raise ValueError("battle_correction_sink requires a battle model")
     if battle_control_sink is not None and battle_model is None:
         raise ValueError("battle_control_sink requires a battle model")
+    if battle_control_model is not None and battle_model is None:
+        raise ValueError("battle_control_model requires a battle move model")
     battle_start_schedule = (
         BattleStartScheduleController(battle_start_offsets)
         if battle_start_offsets is not None
@@ -754,6 +758,7 @@ def run_qualified_play(
                 model=battle_model,
                 encoder=PokemonRedObservationEncoder.from_state_reader(reader),
                 confidence_threshold=battle_model_confidence_threshold,
+                control_model=battle_control_model,
                 require_teacher_agreement=require_battle_model_teacher_agreement,
                 correction_sink=battle_correction_sink,
                 control_sink=battle_control_sink,

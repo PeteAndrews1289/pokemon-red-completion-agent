@@ -12,6 +12,11 @@ from pathlib import Path
 import numpy as np
 
 from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
+from pokemon_red_completion.battle_control_features import (
+    control_class_ref,
+    project_control_features,
+)
+from pokemon_red_completion.battle_control_model import BattleControlMLP
 from pokemon_red_completion.battle_model import (
     BATTLE_MODEL_ID,
     CURRENT_BATTLE_FEATURE_SCHEMA_ID,
@@ -37,6 +42,7 @@ from pokemon_red_completion.red_battle_catalog import (
     pokemon_red_move_ref,
 )
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
+from pokemon_red_completion.trajectory import SemanticSnapshot
 
 
 class LearnedBattlePolicyError(RuntimeError):
@@ -54,6 +60,7 @@ class ModelAssistedBattlePolicy:
     model: BattleMoveRanker
     encoder: PokemonRedObservationEncoder
     confidence_threshold: float
+    control_model: BattleControlMLP | None = None
     require_teacher_agreement: bool = True
     projector: BattleFeatureProjector = field(
         default_factory=lambda: BattleFeatureProjector(PokemonRedBattleCatalog())
@@ -72,6 +79,11 @@ class ModelAssistedBattlePolicy:
     control_records: int = 0
     typed_non_move_control_records: int = 0
     control_signals: Counter[str] = field(default_factory=Counter)
+    control_shadow_decisions: int = 0
+    control_shadow_agreements: int = 0
+    control_shadow_confidence_total: float = 0.0
+    control_shadow_unavailable: Counter[str] = field(default_factory=Counter)
+    control_shadow_confusion: Counter[str] = field(default_factory=Counter)
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.confidence_threshold <= 1.0:
@@ -279,7 +291,7 @@ class ModelAssistedBattlePolicy:
         )
 
     def public_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "schema": "pokemon-model-assisted-battle-policy-v1",
             "actor": "learned_policy_with_teacher_fallback",
             "decisions": self.decisions,
@@ -297,18 +309,49 @@ class ModelAssistedBattlePolicy:
             "typed_non_move_control_records": self.typed_non_move_control_records,
             "control_signals": dict(sorted(self.control_signals.items())),
         }
+        if self.control_model is not None:
+            control_model_payload = json.dumps(
+                self.control_model.to_dict(),
+                allow_nan=False,
+                ensure_ascii=True,
+                separators=(",", ":"),
+                sort_keys=True,
+            ).encode("ascii")
+            result["control_model_shadow"] = {
+                "model_id": self.control_model.model_id,
+                "model_sha256": hashlib.sha256(control_model_payload).hexdigest(),
+                "decisions": self.control_shadow_decisions,
+                "agreements": self.control_shadow_agreements,
+                "accuracy": (
+                    self.control_shadow_agreements / self.control_shadow_decisions
+                    if self.control_shadow_decisions
+                    else 0.0
+                ),
+                "mean_confidence": (
+                    self.control_shadow_confidence_total / self.control_shadow_decisions
+                    if self.control_shadow_decisions
+                    else 0.0
+                ),
+                "unavailable": dict(sorted(self.control_shadow_unavailable.items())),
+                "confusion": dict(sorted(self.control_shadow_confusion.items())),
+            }
+        return result
 
     def _record_control_action(
         self,
         observation: BattlePolicyObservation,
         action: BattleAction,
     ) -> None:
-        if self.control_sink is None:
+        if self.control_sink is None and self.control_model is None:
             return
         intent = observation.intent
         if intent is None:
             raise LearnedBattlePolicyError("battle control label lacks planner intent")
         snapshot = self.encoder.snapshot_from_raw(observation.state)
+        if self.control_model is not None:
+            self._observe_control_model(snapshot, action)
+        if self.control_sink is None:
+            return
         self.control_records += 1
         if action.kind.value != "select_move":
             self.typed_non_move_control_records += 1
@@ -325,6 +368,31 @@ class ModelAssistedBattlePolicy:
                 "teacher_action": action.public_dict(),
             }
         )
+
+    def _observe_control_model(
+        self,
+        snapshot: SemanticSnapshot,
+        action: BattleAction,
+    ) -> None:
+        """Score one live teacher action without allowing the controller to act."""
+
+        assert self.control_model is not None
+        try:
+            observation = snapshot.to_dict()
+            move_batch = self.projector.project(snapshot)
+            features = project_control_features(observation, move_batch=move_batch)
+            probabilities = self.control_model.predict_proba(features)
+            predicted = self.control_model.class_refs[int(np.argmax(probabilities))]
+            confidence = float(np.max(probabilities))
+            actual = control_class_ref(action)
+        except Exception as error:
+            self.control_shadow_unavailable[type(error).__name__] += 1
+            return
+        self.control_shadow_decisions += 1
+        self.control_shadow_confidence_total += confidence
+        self.control_shadow_confusion[f"{actual} -> {predicted}"] += 1
+        if predicted == actual:
+            self.control_shadow_agreements += 1
 
 
 def load_battle_model_artifact(model_stream: str | Path) -> BattleMoveRanker:

@@ -7,6 +7,11 @@ from pathlib import Path
 import pytest
 
 from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
+from pokemon_red_completion.battle_control_features import (
+    CONTROL_CLASS_REFS,
+    CONTROL_FEATURE_NAMES,
+)
+from pokemon_red_completion.battle_control_model import BattleControlMLP
 from pokemon_red_completion.battle_model import MaskedLinearMoveRanker
 from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker
 from pokemon_red_completion.battle_runtime import BattleIntent, BattlePolicyObservation
@@ -72,8 +77,80 @@ class _ControlEncoder:
 
 
 class _Projector:
-    def project(self, snapshot: object, *, policy_context: object) -> BattleFeatureBatch:
+    def project(
+        self,
+        snapshot: object,
+        *,
+        policy_context: object | None = None,
+    ) -> BattleFeatureBatch:
         return _batch()
+
+
+class _ShadowEncoder:
+    class Snapshot:
+        def to_dict(self) -> dict[str, object]:
+            return {
+                "schema_version": 1,
+                "game_id": "pokemon-red",
+                "mode": "battle",
+                "location": "test",
+                "facts": [],
+                "features": {
+                    "battle": {
+                        "kind": "trainer",
+                        "player_attack_stage": 0,
+                        "player_special_stage": 0,
+                        "player_accuracy_stage": 0,
+                        "player_disabled_move_slot": None,
+                        "opponent_level": 10,
+                        "opponent_hp_ratio": 1.0,
+                        "opponent_defense_stage": 0,
+                        "opponent_using_trapping_move": False,
+                    },
+                    "party": {
+                        "count": 1,
+                        "active_index": 0,
+                        "lead": {
+                            "species_ref": "pokemon:test",
+                            "level": 10,
+                            "hp_ratio": 1.0,
+                            "status": None,
+                        },
+                        "members": [
+                            {
+                                "species_ref": "pokemon:test",
+                                "level": 10,
+                                "hp_ratio": 1.0,
+                                "status": None,
+                            }
+                        ],
+                    },
+                    "resources": {
+                        "capture_item_count": 0,
+                        "healing_item_count": 1,
+                        "status_recovery_item_count": 0,
+                        "revive_item_count": 0,
+                        "accuracy_boost_count": 0,
+                        "attack_boost_count": 0,
+                        "special_boost_count": 0,
+                    },
+                    "progress": {"badge_count": 0},
+                },
+            }
+
+    def snapshot_from_raw(self, raw: RawGameState) -> Snapshot:
+        return self.Snapshot()
+
+
+def _recovery_control_model() -> BattleControlMLP:
+    return BattleControlMLP(
+        feature_names=CONTROL_FEATURE_NAMES,
+        class_refs=CONTROL_CLASS_REFS[:2],
+        input_weights=[[0.0] * len(CONTROL_FEATURE_NAMES)] * 2,
+        hidden_bias=[0.0, 0.0],
+        output_weights=[[0.0, 0.0], [0.0, 0.0]],
+        output_bias=[0.0, 5.0],
+    )
 
 
 def test_model_assisted_policy_uses_confident_prediction_and_counts_coverage() -> None:
@@ -241,6 +318,36 @@ def test_control_sink_records_normal_model_move() -> None:
     assert policy.typed_non_move_control_records == 0
     assert policy.control_signals == {f"pokemon.core:battle:move:{chosen}": 1}
     assert records[0]["teacher_action"] == BattleAction.move(chosen).public_dict()
+
+
+def test_control_model_scores_live_actions_without_executing_them() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_recovery_control_model(),
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+        observe_teacher_when_not_required=True,
+    )
+
+    assert policy.choose_move(_observation(), lambda: 1) == 3
+    with pytest.raises(BattleControlRequest):
+        policy.choose_move(
+            _observation(),
+            lambda: (_ for _ in ()).throw(BattleControlRequest(BattleAction.recovery())),
+        )
+
+    shadow = policy.public_dict()["control_model_shadow"]
+    assert isinstance(shadow, dict)
+    assert shadow["decisions"] == 2
+    assert shadow["agreements"] == 1
+    assert shadow["accuracy"] == 0.5
+    assert shadow["unavailable"] == {}
+    assert shadow["confusion"] == {
+        "pokemon.core:battle:recovery -> pokemon.core:battle:recovery": 1,
+        "pokemon.core:battle:select_move -> pokemon.core:battle:recovery": 1,
+    }
 
 
 @pytest.mark.parametrize(
