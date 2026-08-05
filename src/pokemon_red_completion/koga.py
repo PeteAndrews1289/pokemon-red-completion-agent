@@ -19,6 +19,7 @@ from pokemon_red_completion.battle_actions import (
     BattleBoostStat,
     BattleControlRequest,
     control_request_matches,
+    learned_switch_party_index,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
@@ -26,6 +27,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    BattleSwitchCapability,
     RequiredMovePolicy,
     note_observed_trainer_battle_exit,
     run_adaptive_trainer_battle,
@@ -574,6 +576,7 @@ def _fight(
         required_move_ref=(
             None if allow_disable_fallback else pokemon_red_move_ref(SURF)
         ),
+        switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
     )
     try:
         while True:
@@ -597,9 +600,16 @@ def _fight(
                     _battle_koga_x_accuracy(actions, reader, emulator, timing)
                     x_accuracy_used = True
                     continue
+                learned_pivot = learned_switch_party_index(error.__cause__)
+                proactive_pivot = isinstance(
+                    error.__cause__, _PauseForKogaReservePivot
+                ) or learned_pivot is not None
                 if isinstance(error.__cause__, _PauseForKogaReservePivot):
                     pivot_target = error.__cause__.party_index
                     pivot_label = f"{label} healthy reserve pivot"
+                elif learned_pivot is not None:
+                    pivot_target = learned_pivot
+                    pivot_label = f"{label} learned healthy reserve pivot"
                 else:
                     if (
                         not allow_disable_fallback
@@ -630,7 +640,7 @@ def _fight(
                     )
                 except ProtectedRecoveryError as pivot_error:
                     raise KogaChapterError(str(pivot_error)) from pivot_error
-                if not isinstance(error.__cause__, _PauseForKogaReservePivot):
+                if not proactive_pivot:
                     faint_pivots += 1
                     continued_after_faint = True
     except BattleRuntimeError:

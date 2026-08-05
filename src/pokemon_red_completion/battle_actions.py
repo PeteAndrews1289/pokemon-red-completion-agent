@@ -221,3 +221,14 @@ def recovery_request_matches(
         and cause.recovery_need in accepted_needs
         and (accepted_statuses is None or cause.status in accepted_statuses)
     )
+
+
+def learned_switch_party_index(cause: BaseException | None) -> int | None:
+    """Return a complete learned switch target as a zero-based executor index."""
+    if (
+        not isinstance(cause, LearnedBattleControlRequest)
+        or cause.action.kind is not BattleActionKind.SWITCH
+        or cause.party_slot is None
+    ):
+        return None
+    return cause.party_slot - 1

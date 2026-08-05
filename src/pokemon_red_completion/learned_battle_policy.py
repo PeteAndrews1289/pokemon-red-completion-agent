@@ -14,6 +14,7 @@ import numpy as np
 from pokemon_red_completion.battle_action_targets import (
     BattleActionTargetError,
     authorize_recovery_target,
+    authorize_switch_target,
     resolve_battle_action_target,
 )
 from pokemon_red_completion.battle_actions import (
@@ -457,6 +458,20 @@ class ModelAssistedBattlePolicy:
                     self.model_decisions += 1
                     self._record_control_action(observation, BattleAction.move(predicted_slot))
                     return predicted_slot
+            if resolved_action.action.kind is BattleActionKind.SWITCH:
+                try:
+                    resolved_action = authorize_switch_target(
+                        resolved_action,
+                        intent.switch_capabilities,
+                        observation=encoded,
+                    )
+                except BattleActionTargetError:
+                    self.control_target_resolution_failures["capability_mask"] += 1
+                    self.control_execution_decisions += 1
+                    self.control_safety_fallbacks += 1
+                    self.model_decisions += 1
+                    self._record_control_action(observation, BattleAction.move(predicted_slot))
+                    return predicted_slot
             if resolved_action.action.kind is BattleActionKind.USE_BOOST:
                 self.control_execution_decisions += 1
                 self.control_execution_requests += 1
@@ -473,6 +488,15 @@ class ModelAssistedBattlePolicy:
                     party_slot=resolved_action.party_slot,
                     recovery_need=resolved_action.recovery_need.value,
                     status=resolved_action.status,
+                )
+            if resolved_action.action.kind is BattleActionKind.SWITCH:
+                self.control_execution_decisions += 1
+                self.control_execution_requests += 1
+                self.control_teacher_free_requests += 1
+                self._record_control_action(observation, resolved_action.action)
+                raise LearnedBattleControlRequest(
+                    resolved_action.action,
+                    party_slot=resolved_action.party_slot,
                 )
 
         teacher_request: BattleControlRequest | None = None

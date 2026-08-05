@@ -1,0 +1,59 @@
+{
+  "schema": "pokemon-red-teacher-free-battle-control-completion-v1",
+  "recorded_on": "2026-08-05",
+  "status": "complete",
+  "claim_scope": {
+    "clean_power_on": true,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "learned_battle_controller_deployed": true,
+    "teacher_free_boost_execution": true,
+    "teacher_free_recovery_execution": true,
+    "teacher_free_switch_execution": true,
+    "navigation_learned": false,
+    "resource_planning_learned": false,
+    "cross_game_transfer_evaluated": false
+  },
+  "completion": {
+    "checkpoints_completed": 312,
+    "checkpoints_declared": 312,
+    "actions_executed": 95790
+  },
+  "battle_controller": {
+    "decisions": 673,
+    "teacher_agreements": 669,
+    "teacher_agreement": 0.9940564635958395,
+    "mean_confidence": 0.9846117492997294,
+    "typed_requests_executed": 31,
+    "teacher_free_requests": 31,
+    "teacher_requests_suppressed": 18,
+    "safety_fallbacks": 4,
+    "target_resolution_failures": {
+      "capability_mask": 4
+    },
+    "resolved_targets": {
+      "boost_accuracy": 4,
+      "boost_attack": 1,
+      "boost_special": 8,
+      "recovery_hp": 12,
+      "recovery_hp_and_status": 5,
+      "recovery_status": 1,
+      "switch": 4
+    }
+  },
+  "model": {
+    "model_id": "pokemon.core.battle.control.mlp.v1",
+    "model_sha256": "9542220ad090c4014fd089f654d88dd523055832561952d4d44a99ad3f1be28a"
+  },
+  "execution": {
+    "collection_registry": "red-battle-heldout-v71",
+    "source_bundle_sha256": "df8c01bc9e3e68801d93d8c4689d62a30fb18e3502409ca57674028fb1cc022a",
+    "rom_identity_private": true,
+    "save_state_used": false,
+    "human_input": false
+  },
+  "interpretation": {
+    "result": "The learned game-neutral battle controller completed Pokemon Red while every typed boost, recovery, and switch request executed without consulting the teacher.",
+    "remaining_gap": "Four unsupported recovery predictions safely became legal moves. Navigation, objective selection, resource planning, and transfer remain outside this completion claim."
+  }
+}

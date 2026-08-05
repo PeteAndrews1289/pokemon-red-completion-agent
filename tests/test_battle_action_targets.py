@@ -4,10 +4,14 @@ from pokemon_red_completion.battle_action_targets import (
     BattleActionTargetError,
     RecoveryNeed,
     authorize_recovery_target,
+    authorize_switch_target,
     resolve_battle_action_target,
 )
 from pokemon_red_completion.battle_actions import BattleAction, BattleBoostStat
-from pokemon_red_completion.battle_runtime import BattleRecoveryCapability
+from pokemon_red_completion.battle_runtime import (
+    BattleRecoveryCapability,
+    BattleSwitchCapability,
+)
 
 
 def _observation(
@@ -80,6 +84,74 @@ def test_switch_selects_healthiest_living_reserve_without_game_identity() -> Non
 def test_switch_honors_an_explicit_legal_target() -> None:
     resolved = resolve_battle_action_target(BattleAction.switch(2), _observation())
     assert resolved.party_slot == 2
+
+
+def test_switch_target_requires_a_declared_executor_capability() -> None:
+    resolved = resolve_battle_action_target(BattleAction.switch(), _observation())
+
+    with pytest.raises(BattleActionTargetError, match="not declared"):
+        authorize_switch_target(resolved, frozenset())
+
+    assert authorize_switch_target(
+        resolved,
+        frozenset({BattleSwitchCapability.DIRECT}),
+    ) == resolved
+
+
+def test_switch_roles_choose_portable_executor_targets() -> None:
+    observation = _observation(
+        members=(
+            (30, 100, 20, None),
+            (50, 100, 25, None),
+            (80, 100, 12, None),
+        )
+    )
+    resolved = resolve_battle_action_target(BattleAction.switch(), observation)
+
+    reset = authorize_switch_target(
+        resolved,
+        frozenset({BattleSwitchCapability.RESET_STAT_STAGES}),
+        observation=observation,
+    )
+    protected = authorize_switch_target(
+        resolved,
+        frozenset({BattleSwitchCapability.PROTECTED_RECOVERY}),
+        observation=observation,
+    )
+
+    assert reset.party_slot == 2
+    assert protected.party_slot == 2
+
+
+def test_temporary_role_pivot_selects_workhorse_then_returns_to_route_lead() -> None:
+    observation = _observation(
+        members=(
+            (38, 56, 20, None),
+            (72, 90, 33, None),
+            (33, 33, 18, None),
+        )
+    )
+    outward = authorize_switch_target(
+        resolve_battle_action_target(BattleAction.switch(), observation),
+        frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
+        observation=observation,
+    )
+    return_observation = _observation(
+        active=1,
+        members=(
+            (38, 56, 20, None),
+            (72, 90, 33, None),
+            (33, 33, 18, None),
+        ),
+    )
+    returned = authorize_switch_target(
+        resolve_battle_action_target(BattleAction.switch(), return_observation),
+        frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
+        observation=return_observation,
+    )
+
+    assert outward.party_slot == 2
+    assert returned.party_slot == 1
 
 
 @pytest.mark.parametrize(

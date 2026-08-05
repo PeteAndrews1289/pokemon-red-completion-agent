@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 5: every typed battle action becomes teacher-free
+
+Party switching exposed why a single generic target heuristic was not enough. A normal tactical
+switch wants the healthiest legal teammate; a stat reset wants a stable reserve and then the lead;
+a protected heal wants the first living reserve; and the Rock Tunnel sequence is a temporary role
+pivot from the route specialist to the strongest battler and back. Treating all four as “choose the
+healthiest teammate” changed the downstream lineage and repeatedly reached the known Snorlax
+economy failure. The final controller declares these portable switch roles explicitly and binds
+each role to a fail-closed executor.
+
+The corrected clean run completed **312/312 checkpoints**, Champion, and Hall of Fame. Across 673
+high-level decisions, all **31 typed non-move requests** executed without a teacher callback: 13
+boosts, 18 HP/status recoveries, and 4 switches. The controller agreed with the teacher on
+**669/673 (99.41%)**. Its four remaining safety fallbacks were false recovery predictions in
+battles whose capability masks correctly rejected recovery and selected a legal move; none invoked
+the teacher. This closes teacher dependency for the learned battle controller. Navigation,
+objective selection, resource planning, and cross-game transfer remain separate unfinished gates.
+The exact claim boundary is recorded in the
+[teacher-free battle-control receipt](evidence/teacher-free-battle-control-hall-of-fame-2026-08-05.json).
+
 ## August 5: recovery decisions become teacher-free
 
 The typed controller can now execute recovery without asking the Red-specific teacher to identify

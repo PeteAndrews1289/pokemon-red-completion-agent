@@ -9,6 +9,7 @@ from pokemon_red_completion.battle_actions import (
     BattleControlRequest,
     LearnedBattleControlRequest,
     control_request_matches,
+    learned_switch_party_index,
     recovery_request_matches,
 )
 
@@ -95,3 +96,10 @@ def test_learned_recovery_matches_only_its_authorized_effect_handler() -> None:
         TeacherRecovery,
         accepted_needs=frozenset({"hp"}),
     )
+
+
+def test_learned_switch_request_exposes_zero_based_executor_target() -> None:
+    request = LearnedBattleControlRequest(BattleAction.switch(), party_slot=4)
+
+    assert learned_switch_party_index(request) == 3
+    assert learned_switch_party_index(BattleControlRequest(BattleAction.switch())) is None

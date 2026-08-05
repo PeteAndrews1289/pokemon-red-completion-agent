@@ -7,7 +7,10 @@ from dataclasses import dataclass, replace
 from enum import StrEnum
 
 from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
-from pokemon_red_completion.battle_runtime import BattleRecoveryCapability
+from pokemon_red_completion.battle_runtime import (
+    BattleRecoveryCapability,
+    BattleSwitchCapability,
+)
 
 
 class BattleActionTargetError(ValueError):
@@ -180,6 +183,73 @@ def authorize_recovery_target(
     if hp_allowed:
         return replace(resolved, recovery_need=RecoveryNeed.HP, status=None)
     raise BattleActionTargetError("recovery effect is not declared by the executor")
+
+
+def authorize_switch_target(
+    resolved: ResolvedBattleAction,
+    capabilities: frozenset[BattleSwitchCapability],
+    *,
+    observation: Mapping[str, object] | None = None,
+) -> ResolvedBattleAction:
+    """Authorize a complete living-party target for a declared switch executor."""
+    if resolved.action.kind is not BattleActionKind.SWITCH:
+        raise BattleActionTargetError("only switch actions use switch capabilities")
+    if not isinstance(capabilities, frozenset) or any(
+        not isinstance(value, BattleSwitchCapability) for value in capabilities
+    ):
+        raise TypeError("capabilities must contain switch capabilities")
+    if not capabilities:
+        raise BattleActionTargetError("switch effect is not declared by the executor")
+    if resolved.party_slot is None:
+        raise BattleActionTargetError("switch action lacks a complete party target")
+    if observation is not None and capabilities & {
+        BattleSwitchCapability.RESET_STAT_STAGES,
+        BattleSwitchCapability.TEMPORARY_ROLE_PIVOT,
+        BattleSwitchCapability.PROTECTED_RECOVERY,
+    }:
+        features = _mapping(observation.get("features"), "features")
+        party = _mapping(features.get("party"), "party")
+        members_value = party.get("members")
+        if not isinstance(members_value, Sequence) or isinstance(
+            members_value, (str, bytes)
+        ):
+            raise BattleActionTargetError("party members are unavailable for switching")
+        members = tuple(_mapping(value, "party member") for value in members_value)
+        active_index = _active_index(party, members)
+        candidates = [
+            (index, member)
+            for index, member in enumerate(members)
+            if index != active_index
+            and _nonnegative_int(member.get("hp"), "party hp") > 0
+        ]
+        if not candidates:
+            raise BattleActionTargetError("no living switch target is available")
+        if BattleSwitchCapability.TEMPORARY_ROLE_PIVOT in capabilities:
+            active_level = _positive_int(
+                members[active_index].get("level"), "active party level"
+            )
+            strongest_level = max(
+                _positive_int(member.get("level"), "party level")
+                for _index, member in candidates
+            )
+            if active_level < strongest_level:
+                chosen_index = max(
+                    candidates,
+                    key=lambda candidate: (
+                        _positive_int(candidate[1].get("level"), "party level"),
+                        _nonnegative_int(candidate[1].get("hp"), "party hp")
+                        / _positive_int(
+                            candidate[1].get("max_hp"), "party max hp"
+                        ),
+                        -candidate[0],
+                    ),
+                )[0]
+            else:
+                chosen_index = min(index for index, _member in candidates)
+        else:
+            chosen_index = min(index for index, _member in candidates)
+        return replace(resolved, party_slot=chosen_index + 1)
+    return resolved
 
 
 def _mapping(value: object, label: str) -> Mapping[str, object]:

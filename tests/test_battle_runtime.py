@@ -17,6 +17,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeError,
     BattleRuntimeTimeoutError,
     BattleRuntimeTiming,
+    BattleSwitchCapability,
     RequiredMovePolicy,
     _confirm_attack_with_pp_gate,
     _require_present_state,
@@ -377,6 +378,27 @@ def test_battle_intent_rejects_untyped_recovery_capabilities() -> None:
             TEST_BATTLE_PLAN_ID,
             resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
             recovery_capabilities=frozenset({"restore_hp"}),  # type: ignore[arg-type]
+        )
+
+
+def test_battle_intent_accepts_typed_switch_capabilities() -> None:
+    intent = BattleIntent(
+        "defeat_rival",
+        TEST_BATTLE_PLAN_ID,
+        switch_capabilities=frozenset({BattleSwitchCapability.RESET_STAT_STAGES}),
+    )
+
+    assert intent.switch_capabilities == frozenset(
+        {BattleSwitchCapability.RESET_STAT_STAGES}
+    )
+
+
+def test_battle_intent_rejects_untyped_switch_capabilities() -> None:
+    with pytest.raises(TypeError, match="must contain switch capabilities"):
+        BattleIntent(
+            "defeat_rival",
+            TEST_BATTLE_PLAN_ID,
+            switch_capabilities=frozenset({"direct"}),  # type: ignore[arg-type]
         )
 
 

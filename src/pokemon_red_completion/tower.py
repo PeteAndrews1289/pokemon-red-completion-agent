@@ -11,6 +11,7 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
     BattleControlRequest,
+    learned_switch_party_index,
     recovery_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
@@ -20,6 +21,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    BattleSwitchCapability,
     RequiredMovePolicy,
     run_adaptive_trainer_battle,
 )
@@ -855,6 +857,9 @@ class _PauseForTowerAccuracyReset(BattleControlRequest):
     default_action = BattleAction.switch()
 
 
+_TOWER_RIVAL_PLAN_ID = str(RedBattlePlanId.TOWER_RIVAL)
+
+
 def _tower_rival_needs_accuracy_reset(
     raw: RawGameState,
     *,
@@ -862,7 +867,7 @@ def _tower_rival_needs_accuracy_reset(
     reset_complete: bool,
 ) -> bool:
     return (
-        battle_plan_id == RedBattlePlanId.TOWER_RIVAL
+        battle_plan_id == _TOWER_RIVAL_PLAN_ID
         and not reset_complete
         and raw.active_party_index in {None, 0}
         and raw.enemy_species_id == TOWER_RIVAL_IVYSAUR
@@ -876,6 +881,8 @@ def _reset_tower_rival_accuracy(
     actions: _CountingExecutor,
     emulator: EmulatorState,
     timing: BattleRuntimeTiming,
+    *,
+    helper_index: int = TOWER_RIVAL_ACCURACY_HELPER_INDEX,
 ) -> None:
     """Clear Pidgeotto's accuracy loss by safely cycling through DUX."""
 
@@ -891,8 +898,8 @@ def _reset_tower_rival_accuracy(
         raise TowerChapterError("Tower rival accuracy reset lacks a stable Ivysaur gate.")
     hp = _party_hp(emulator)
     if (
-        len(hp) <= TOWER_RIVAL_ACCURACY_HELPER_INDEX
-        or hp[TOWER_RIVAL_ACCURACY_HELPER_INDEX] <= 0
+        not 0 < helper_index < len(hp)
+        or hp[helper_index] <= 0
     ):
         raise TowerChapterError("Tower rival accuracy reset lacks a living DUX helper.")
 
@@ -901,7 +908,7 @@ def _reset_tower_rival_accuracy(
         actions,
         emulator,
         timing,
-        target_index=TOWER_RIVAL_ACCURACY_HELPER_INDEX,
+        target_index=helper_index,
     )
     _switch_tower_rival_party_slot(
         reader,
@@ -1130,6 +1137,11 @@ def _fight(
             if bounded_recovery
             else frozenset()
         ),
+        switch_capabilities=(
+            frozenset({BattleSwitchCapability.RESET_STAT_STAGES})
+            if battle_plan_id == _TOWER_RIVAL_PLAN_ID
+            else frozenset()
+        ),
         required_move_policy=RequiredMovePolicy.ANY_USABLE,
         required_move_ref=None,
     )
@@ -1237,12 +1249,20 @@ def _fight(
                     expected_status=0x40,
                 )
                 continue
-            if isinstance(error.__cause__, _PauseForTowerAccuracyReset):
+            learned_switch = learned_switch_party_index(error.__cause__)
+            if isinstance(
+                error.__cause__, _PauseForTowerAccuracyReset
+            ) or learned_switch is not None:
                 _reset_tower_rival_accuracy(
                     reader,
                     actions,
                     emulator,
                     battle_timing,
+                    helper_index=(
+                        TOWER_RIVAL_ACCURACY_HELPER_INDEX
+                        if learned_switch is None
+                        else learned_switch
+                    ),
                 )
                 accuracy_reset_complete = True
                 continue

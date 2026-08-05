@@ -16,6 +16,7 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
     BattleControlRequest,
+    learned_switch_party_index,
     recovery_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
@@ -25,6 +26,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
+    BattleSwitchCapability,
     RequiredMovePolicy,
     battle_policy_override_active,
     run_adaptive_trainer_battle,
@@ -1151,16 +1153,25 @@ def _run_lavender_trainer_battle(
                 )
                 run.parlyz_heals_used += 1
                 continue
-            if isinstance(error.__cause__, _PauseForFinalTunnelPivot):
+            learned_pivot = learned_switch_party_index(error.__cause__)
+            if isinstance(
+                error.__cause__, _PauseForFinalTunnelPivot
+            ) or learned_pivot is not None:
                 before_pivot = reader.read()
                 if before_pivot.active_party_index == 0 and (before_pivot.battler_status or 0):
                     dux_status_escaped = True
+                pivot_target = (
+                    error.__cause__.party_index
+                    if isinstance(error.__cause__, _PauseForFinalTunnelPivot)
+                    else learned_pivot
+                )
+                assert pivot_target is not None
                 try:
                     switch_active_battler(
                         executor,
                         reader,
                         emulator,
-                        error.__cause__.party_index,
+                        pivot_target,
                         label=f"{label} observed role pivot",
                         wait_frames=timing.wait_frames,
                     )
@@ -1531,6 +1542,9 @@ def _trainer(
                 BattleRecoveryCapability.CURE_SLEEP,
                 BattleRecoveryCapability.CURE_PARALYSIS,
             }
+        ),
+        switch_capabilities=frozenset(
+            {BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}
         ),
         required_move_policy=RequiredMovePolicy.ANY_USABLE,
     )

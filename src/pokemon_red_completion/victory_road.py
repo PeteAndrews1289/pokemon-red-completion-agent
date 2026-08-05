@@ -15,6 +15,7 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
     BattleControlRequest,
+    learned_switch_party_index,
     recovery_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
@@ -31,6 +32,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    BattleSwitchCapability,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.blaine import (
@@ -972,14 +974,20 @@ def _defeat_route22_rival(
                     recovery_capabilities=frozenset(
                         {BattleRecoveryCapability.RESTORE_HP}
                     ),
+                    switch_capabilities=frozenset(
+                        {BattleSwitchCapability.PROTECTED_RECOVERY}
+                    ),
                 ),
                 timing=BattleRuntimeTiming(max_runtime_pulses=720),
                 label="Route 22 rival",
             )
         except BattleRuntimeError as error:
             cause = error.__cause__
-            if not recovery_request_matches(cause, _HealBoundary) and not isinstance(
-                cause, _PivotBoundary
+            learned_pivot = learned_switch_party_index(cause)
+            if (
+                not recovery_request_matches(cause, _HealBoundary)
+                and not isinstance(cause, _PivotBoundary)
+                and learned_pivot is None
             ):
                 failed = reader.read()
                 raise VictoryRoadChapterError(
@@ -989,17 +997,18 @@ def _defeat_route22_rival(
                     f"enemy={(failed.enemy_species_id, failed.enemy_hp)!r}, "
                     f"turns={turns[-8:]!r}."
                 ) from error
-            if isinstance(cause, _PivotBoundary):
+            if isinstance(cause, _PivotBoundary) or learned_pivot is not None:
                 species = reader.read().enemy_species_id or 0
+                pivot_target = next_sacrifice if learned_pivot is None else learned_pivot
                 potion_spent = _battle_sacrifice(
                     actions,
                     reader,
                     emulator,
-                    next_sacrifice,
+                    pivot_target,
                     heal_lead=_party_hp(emulator)[0] < _party_max_hp(emulator)[0],
                 )
                 pivoted_species.add(species)
-                next_sacrifice += 1
+                next_sacrifice = max(next_sacrifice + 1, pivot_target + 1)
                 pivot_heals += int(potion_spent)
                 potions_used += int(potion_spent)
                 last_recovery_turn = len(turns)

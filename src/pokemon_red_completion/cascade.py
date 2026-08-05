@@ -17,6 +17,7 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
     BattleControlRequest,
+    learned_switch_party_index,
     recovery_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
@@ -27,6 +28,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    BattleSwitchCapability,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.cerulean import (
@@ -2684,6 +2686,9 @@ def _run_cerulean_rival_with_potion(
         battle_plan_id=CERULEAN_RIVAL_BATTLE_PLAN_ID,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
         recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
+        switch_capabilities=frozenset(
+            {BattleSwitchCapability.RESET_STAT_STAGES}
+        ),
     )
     accuracy_reset_complete = False
     forced_switches = 0
@@ -2712,10 +2717,17 @@ def _run_cerulean_rival_with_potion(
                 label="Cerulean rival",
             )
         except BattleRuntimeError as error:
-            if isinstance(error.__cause__, _PauseForCeruleanRivalAccuracyReset):
+            learned_switch = learned_switch_party_index(error.__cause__)
+            if isinstance(
+                error.__cause__, _PauseForCeruleanRivalAccuracyReset
+            ) or learned_switch == 1:
                 _reset_cerulean_rival_accuracy(reader, executor, emulator, timing)
                 accuracy_reset_complete = True
                 continue
+            if learned_switch is not None:
+                raise CascadeChapterError(
+                    "Cerulean rival learned accuracy reset selected an invalid helper."
+                ) from error
             if not recovery_request_matches(
                 error.__cause__, _PauseForCeruleanRivalPotion
             ):

@@ -96,6 +96,15 @@ class BattleRecoveryCapability(StrEnum):
     CURE_ANY_STATUS = "cure_any_status"
 
 
+class BattleSwitchCapability(StrEnum):
+    """Game-neutral switch effects one bound executor can safely perform."""
+
+    DIRECT = "direct"
+    RESET_STAT_STAGES = "reset_stat_stages"
+    TEMPORARY_ROLE_PIVOT = "temporary_role_pivot"
+    PROTECTED_RECOVERY = "protected_recovery"
+
+
 @dataclass(frozen=True, slots=True)
 class BattleIntent:
     """Inference-available objective and constraints for a battle policy."""
@@ -107,6 +116,7 @@ class BattleIntent:
     required_move_ref: str | None = None
     resource_policy: BattleResourcePolicy = BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
     recovery_capabilities: frozenset[BattleRecoveryCapability] = frozenset()
+    switch_capabilities: frozenset[BattleSwitchCapability] = frozenset()
 
     def __post_init__(self) -> None:
         if (
@@ -143,6 +153,11 @@ class BattleIntent:
             and self.resource_policy is not BattleResourcePolicy.BOUNDED_RECOVERY
         ):
             raise ValueError("recovery capabilities require bounded recovery policy")
+        if not isinstance(self.switch_capabilities, frozenset) or any(
+            not isinstance(value, BattleSwitchCapability)
+            for value in self.switch_capabilities
+        ):
+            raise TypeError("switch_capabilities must contain switch capabilities")
 
 
 @dataclass(frozen=True, slots=True)

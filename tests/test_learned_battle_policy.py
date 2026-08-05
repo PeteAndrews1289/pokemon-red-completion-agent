@@ -24,6 +24,7 @@ from pokemon_red_completion.battle_runtime import (
     BattlePolicyObservation,
     BattleRecoveryCapability,
     BattleResourcePolicy,
+    BattleSwitchCapability,
 )
 from pokemon_red_completion.battle_semantics import (
     FEATURE_NAMES,
@@ -59,6 +60,7 @@ def _batch() -> BattleFeatureBatch:
 def _observation(
     *,
     recovery_capabilities: frozenset[BattleRecoveryCapability] = frozenset(),
+    switch_capabilities: frozenset[BattleSwitchCapability] = frozenset(),
 ) -> BattlePolicyObservation:
     return BattlePolicyObservation(
         RawGameState(
@@ -80,6 +82,7 @@ def _observation(
                 else BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
             ),
             recovery_capabilities=recovery_capabilities,
+            switch_capabilities=switch_capabilities,
         ),
     )
 
@@ -130,7 +133,7 @@ class _ShadowEncoder:
                         "opponent_using_trapping_move": False,
                     },
                     "party": {
-                        "count": 1,
+                        "count": 2,
                         "active_index": 0,
                         "lead": {
                             "species_ref": "pokemon:test",
@@ -148,7 +151,15 @@ class _ShadowEncoder:
                                 "max_hp": 100,
                                 "hp_ratio": 1.0,
                                 "status": None,
-                            }
+                            },
+                            {
+                                "species_ref": "pokemon:reserve",
+                                "level": 12,
+                                "hp": 80,
+                                "max_hp": 100,
+                                "hp_ratio": 0.8,
+                                "status": None,
+                            },
                         ],
                     },
                     "resources": {
@@ -483,6 +494,36 @@ def test_control_execution_emits_boost_without_calling_teacher() -> None:
         policy.choose_move(_observation(), teacher_must_not_run)
 
     assert raised.value.action == BattleAction.boost(BattleBoostStat.SPECIAL)
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["teacher_free_requests"] == 1
+    assert execution["typed_requests_executed"] == 1
+
+
+def test_control_execution_emits_switch_without_calling_teacher() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_full_control_model(5),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+
+    def teacher_must_not_run() -> int:
+        raise AssertionError("authorized switch queried the teacher")
+
+    with pytest.raises(LearnedBattleControlRequest) as raised:
+        policy.choose_move(
+            _observation(
+                switch_capabilities=frozenset({BattleSwitchCapability.DIRECT})
+            ),
+            teacher_must_not_run,
+        )
+
+    assert raised.value.action.kind.value == "switch"
+    assert raised.value.party_slot == 2
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
     assert execution["teacher_free_requests"] == 1
