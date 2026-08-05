@@ -22,8 +22,10 @@ from pokemon_red_completion.agatha import (
     AgathaProgress,
     run_agatha_chapter,
 )
+from pokemon_red_completion.battle_model import MaskedLinearMoveRanker
 from pokemon_red_completion.battle_runtime import (
     bind_battle_decision_observer,
+    bind_battle_policy_override,
     bind_battle_schedule_observer,
 )
 from pokemon_red_completion.battle_schedule import (
@@ -140,6 +142,7 @@ from pokemon_red_completion.lavender import (
     LavenderProgress,
     run_lavender_chapter,
 )
+from pokemon_red_completion.learned_battle_policy import ModelAssistedBattlePolicy
 from pokemon_red_completion.lorelei import (
     LORELEI_CHECKPOINT_COUNT,
     LoreleiChapterError,
@@ -459,6 +462,7 @@ class QualifiedPlayReport:
     controller_released: bool
     pokedex_state: RedPokedexState | None = None
     collection_progress: RedCollectionProgress | None = None
+    battle_policy_report: dict[str, object] | None = None
 
     @property
     def passed(self) -> bool:
@@ -655,6 +659,7 @@ class QualifiedPlayReport:
             "frames_executed": self.frames_executed,
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
+            "battle_policy": self.battle_policy_report,
         }
 
 
@@ -702,6 +707,9 @@ def run_qualified_play(
     trajectory_sink: TrajectorySink | None = None,
     trajectory_episode_id: str | None = None,
     battle_start_offsets: tuple[BattleStartOffset, ...] | None = None,
+    battle_model: MaskedLinearMoveRanker | None = None,
+    battle_model_confidence_threshold: float = 0.0,
+    require_battle_model_teacher_agreement: bool = True,
     _emulator: PyBoyAdapter | None = None,
 ) -> QualifiedPlayReport:
     """Run every currently qualified objective in one clean, no-save session."""
@@ -709,6 +717,10 @@ def run_qualified_play(
         raise ValueError("trajectory_sink and trajectory_episode_id must be provided together")
     if battle_start_offsets is not None and trajectory_sink is None:
         raise ValueError("battle_start_offsets require private trajectory recording")
+    if not 0.0 <= battle_model_confidence_threshold <= 1.0:
+        raise ValueError("battle_model_confidence_threshold must be between zero and one")
+    if not isinstance(require_battle_model_teacher_agreement, bool):
+        raise TypeError("require_battle_model_teacher_agreement must be a bool")
     battle_start_schedule = (
         BattleStartScheduleController(battle_start_offsets)
         if battle_start_offsets is not None
@@ -724,6 +736,15 @@ def run_qualified_play(
             stack.enter_context(bind_battle_start_schedule(battle_start_schedule))
         emulator = stack.enter_context(emulator_context)
         reader = PokemonRedStateReader(emulator)
+        model_policy = None
+        if battle_model is not None:
+            model_policy = ModelAssistedBattlePolicy(
+                model=battle_model,
+                encoder=PokemonRedObservationEncoder.from_state_reader(reader),
+                confidence_threshold=battle_model_confidence_threshold,
+                require_teacher_agreement=require_battle_model_teacher_agreement,
+            )
+            stack.enter_context(bind_battle_policy_override(model_policy))
         base_executor: QualifiedExecutor = FrameSafeExecutor(
             emulator,
             new_game_timing.controller_timing(),
@@ -1258,6 +1279,7 @@ def run_qualified_play(
                 final_party,
                 final_boxes,
             ),
+            battle_policy_report=(model_policy.public_dict() if model_policy is not None else None),
         )
         if not report.passed:
             raise QualifiedPlayError("Qualified play evidence failed its public contract.")

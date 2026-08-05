@@ -8,6 +8,13 @@ differs from its demonstrations. The qualified deterministic player is a disclos
 safety baseline for producing evidence and corrections. It is not the final model, and its results
 must not be reported as learned-policy results.
 
+The first authenticated model-assisted clean run is now complete: **312/312 checkpoints**, **36/36
+objectives**, Champion, and Hall of Fame. Across 707 live battle decisions, the learned ranker
+handled 537 (75.95%) while the teacher supplied 81 low-confidence fallbacks and corrected 52
+confident disagreements. This is a learner deployment milestone, not an autonomous completion
+claim; the exact scope is frozen in the
+[model-assisted Hall-of-Fame receipt](evidence/model-assisted-hall-of-fame-2026-08-05.json).
+
 ## Milestone 0 — completion foundation
 
 **Status: complete — July 2026**

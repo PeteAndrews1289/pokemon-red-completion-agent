@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v51.json`](../configs/red-battle-collection-v51.json)
+[`red-battle-collection-v52.json`](../configs/red-battle-collection-v52.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 71 stable public battle-plan identities in exact qualified-route order;
@@ -1762,4 +1762,11 @@ teacher now conditionally sells the already-supported TM34 Bide capacity token o
 cash plus the complete obsolete-Potion stack cannot fund the reserve; Cinnabar's qualified
 replacement preserves the later delayed-TM38 capacity lesson. V51 reserves train seeds
 `550001`–`550005`, validation seeds `560001`–`560002`, test seeds `570001`–`570005`, and dry-run
-seed `62001`. Its twelve counted slots remain unopened pending the committed-source rehearsal.
+seed `62001`. Its diagnostic moved the early ₽1,000 shortfall downstream to the Snorlax Great Ball
+purchase, so v51 is retained as failed evidence rather than being retried indefinitely.
+
+V52 freezes the model-assisted deployment bridge and the repaired S.S. Anne return route. It
+reserves train seeds `580001`–`580005`, validation seeds `590001`–`590002`, test seeds
+`600001`–`600005`, and dry-run seed `62001`. The registry remains a deterministic-teacher
+collection contract; the separate model-assisted Hall-of-Fame receipt measures learner coverage
+and teacher intervention without relabeling that run as autonomous model completion.

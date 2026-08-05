@@ -120,7 +120,11 @@ def _directions(value: str) -> tuple[str, ...]:
 
 CAPTAIN_EXIT = _directions("LDLLLDDD")
 SHIP_2F_RETURN = _directions("D" * 6 + "L" * 2 + "D" * 2 + "L" * 31 + "UL" + "U" * 7)
-SHIP_1F_RETURN = _directions("R" * 9 + "DR" + "R" * 14 + "U" * 3 + "R" + "U" * 4)
+# Leave the 2F stair tile into the open y=7 lane immediately. The y=6
+# corridor contains a source-pinned left/right waiter whose timing varies with
+# the preceding rival battle; the parallel lane reaches the same x=26 turn
+# without racing that moving object.
+SHIP_1F_RETURN = _directions("D" + "R" * 24 + "U" * 3 + "R" + "U" * 4)
 CITY_TO_CENTER = _directions(
     "RUURRRRRURRRRRR" + "U" * 12 + "L" * 12 + "U" * 5 + "LLUU" + "L" * 5 + "U" * 5
 )
@@ -768,9 +772,7 @@ def _money(emulator: EmulatorState) -> int:
         packed = emulator.read_u8(int(RamAddress.PLAYER_MONEY) + offset)
         high, low = packed >> 4, packed & 0x0F
         if high > 9 or low > 9:
-            raise SurgeChapterError(
-                f"Player money contains invalid BCD byte {packed:#04x}."
-            )
+            raise SurgeChapterError(f"Player money contains invalid BCD byte {packed:#04x}.")
         value = value * 100 + high * 10 + low
     return value
 
@@ -1432,8 +1434,7 @@ def _restock_for_viridian_forest(
     starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
     if not 0 <= starting_balls <= COLLECTION_POKE_BALL_TARGET:
         raise SurgeChapterError(
-            "Forest restock received an invalid Poké Ball quantity: "
-            f"{starting_balls}."
+            f"Forest restock received an invalid Poké Ball quantity: {starting_balls}."
         )
     if starting_balls >= FOREST_POKE_BALL_RESERVE:
         return
@@ -2077,9 +2078,7 @@ class _LiveWildCorridorSurveyExecutor:
                 or state.battle_state != 0
                 or (state.player_x, state.player_y) != ROUTE_1_WALKER_APPROACH
             ):
-                raise SurgeChapterError(
-                    "Route 1 walker recovery left its bounded approach gate."
-                )
+                raise SurgeChapterError("Route 1 walker recovery left its bounded approach gate.")
 
             yielded = _survey_step(
                 self._executor,
@@ -2354,9 +2353,7 @@ def _force_switch_wild_capture_to_lead(
                         break
                     _pulse(executor, MacroActionKind.MOVE, "up", 120)
                 else:
-                    raise SurgeChapterError(
-                        f"{label} could not reselect the protected lead."
-                    )
+                    raise SurgeChapterError(f"{label} could not reselect the protected lead.")
                 _pulse(executor, MacroActionKind.CONFIRM, frames=240)
                 continue
         _pulse(
@@ -2753,8 +2750,7 @@ def _return_from_viridian_to_vermilion(
     raw = reader.read() if raw.map_id == MapId.VERMILION_CITY else raw
     if raw.player_x is None or raw.player_y != 14 or raw.player_x < 23:
         raise SurgeChapterError(
-            "Route 11 return missed the Vermilion east boundary: "
-            f"{(raw.player_x, raw.player_y)!r}."
+            f"Route 11 return missed the Vermilion east boundary: {(raw.player_x, raw.player_y)!r}."
         )
     _move(
         executor,
@@ -3119,9 +3115,7 @@ def _traverse_cave(
         if raw.map_id == target_map:
             return raw
         if raw.map_id != MapId.DIGLETTS_CAVE:
-            raise SurgeChapterError(
-                f"{label} reached an unexpected map {raw.map_id!r}."
-            )
+            raise SurgeChapterError(f"{label} reached an unexpected map {raw.map_id!r}.")
         if raw.battle_state:
             balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
             _flee(executor, reader, raw)
@@ -3132,9 +3126,7 @@ def _traverse_cave(
             raise SurgeChapterError(f"{label} lacks live coordinates.")
         position = (raw.player_x, raw.player_y)
         if position != stack[-1]:
-            raise SurgeChapterError(
-                f"{label} lost its search stack at {position!r}."
-            )
+            raise SurgeChapterError(f"{label} lost its search stack at {position!r}.")
         tried = attempted.setdefault(position, set())
         direction = next(
             (

@@ -8,7 +8,7 @@ the revision-pinned observation adapter.
 from __future__ import annotations
 
 import re
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from contextlib import AbstractContextManager, contextmanager, nullcontext
 from contextvars import ContextVar
 from dataclasses import dataclass
@@ -142,6 +142,17 @@ class IntentAwareMoveSlotPolicy(Protocol):
     def choose_move(self, observation: BattlePolicyObservation, /) -> int: ...
 
 
+class BattlePolicyOverride(Protocol):
+    """Deployment policy that may defer one decision to the routed teacher."""
+
+    def choose_move(
+        self,
+        observation: BattlePolicyObservation,
+        fallback: Callable[[], int],
+        /,
+    ) -> int: ...
+
+
 class BattleDecisionObserver(Protocol):
     """Encode a validated policy choice without persisting privileged raw state."""
 
@@ -184,6 +195,10 @@ _BATTLE_DECISION_OBSERVER: ContextVar[BattleDecisionObserver | None] = ContextVa
 )
 _BATTLE_SCHEDULE_OBSERVER: ContextVar[BattleScheduleObserver | None] = ContextVar(
     "pokemon_red_battle_schedule_observer",
+    default=None,
+)
+_BATTLE_POLICY_OVERRIDE: ContextVar[BattlePolicyOverride | None] = ContextVar(
+    "pokemon_red_battle_policy_override",
     default=None,
 )
 
@@ -273,6 +288,21 @@ def bind_battle_schedule_observer(
         yield
     finally:
         _BATTLE_SCHEDULE_OBSERVER.reset(token)
+
+
+@contextmanager
+def bind_battle_policy_override(policy: BattlePolicyOverride) -> Iterator[None]:
+    """Install one model-assisted policy above every adaptive battle runtime."""
+
+    if not callable(getattr(policy, "choose_move", None)):
+        raise TypeError("battle policy override must provide choose_move")
+    if _BATTLE_POLICY_OVERRIDE.get() is not None:
+        raise BattleRuntimeError("a battle policy override is already bound")
+    token = _BATTLE_POLICY_OVERRIDE.set(policy)
+    try:
+        yield
+    finally:
+        _BATTLE_POLICY_OVERRIDE.reset(token)
 
 
 def run_adaptive_trainer_battle(
@@ -1088,9 +1118,7 @@ def _recover_sleep_transition(
                 _require_active_trainer_state(raw, expected_map=expected_map, label=label)
                 menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
                 if menu.phase is not BattleMenuPhase.MAIN:
-                    raise BattleRuntimeError(
-                        f"{label} left MAIN while navigating sleep recovery."
-                    )
+                    raise BattleRuntimeError(f"{label} left MAIN while navigating sleep recovery.")
             else:
                 raise BattleRuntimeError(
                     f"{label} could not navigate to FIGHT during sleep recovery."
@@ -1125,9 +1153,7 @@ def _recover_sleep_transition(
                 _require_active_trainer_state(raw, expected_map=expected_map, label=label)
                 menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
                 if menu.phase is not BattleMenuPhase.MOVE:
-                    raise BattleRuntimeError(
-                        f"{label} left MOVE while navigating sleep recovery."
-                    )
+                    raise BattleRuntimeError(f"{label} left MOVE while navigating sleep recovery.")
             else:
                 raise BattleRuntimeError(
                     f"{label} could not restore its move cursor during sleep recovery."
@@ -1162,9 +1188,7 @@ def _recover_sleep_transition(
                 )
             sleep_reapplications += 1
             if sleep_reapplications > timing.max_sleep_reapplications:
-                raise BattleRuntimeError(
-                    f"{label} exceeded its bounded sleep reapplications."
-                )
+                raise BattleRuntimeError(f"{label} exceeded its bounded sleep reapplications.")
         saw_decrease = saw_decrease or current_count < previous_count
         previous_count = current_count
 
@@ -1267,11 +1291,20 @@ def _choose_usable_slot(
     label: str,
 ) -> int:
     try:
-        choose_with_intent = getattr(policy, "choose_move", None)
-        if callable(choose_with_intent):
-            slot = choose_with_intent(BattlePolicyObservation(raw, intent))
-        else:
-            slot = policy(raw)  # type: ignore[operator]
+        observation = BattlePolicyObservation(raw, intent)
+
+        def routed_teacher() -> int:
+            choose_with_intent = getattr(policy, "choose_move", None)
+            if callable(choose_with_intent):
+                return choose_with_intent(observation)
+            return policy(raw)  # type: ignore[operator]
+
+        override = _BATTLE_POLICY_OVERRIDE.get()
+        slot = (
+            override.choose_move(observation, routed_teacher)
+            if override is not None
+            else routed_teacher()
+        )
     except Exception as error:
         raise BattleRuntimeError(
             f"{label} move-slot policy rejected the current MAIN-menu turn."
@@ -1365,10 +1398,7 @@ def _require_present_state(
         )
     if raw.party_count is None or raw.party_count <= 0 or raw.battler_hp is None:
         raise BattleRuntimeError(f"{label} lacks living active-battler evidence.")
-    terminal_enemy_ko = (
-        raw.enemy_hp == 0
-        and raw.battle_state in {0, _ACTIVE_BATTLE_STATE.get()}
-    )
+    terminal_enemy_ko = raw.enemy_hp == 0 and raw.battle_state in {0, _ACTIVE_BATTLE_STATE.get()}
     if raw.battler_hp <= 0 and not terminal_enemy_ko:
         raise BattleRuntimeError(
             f"{label} active battler fainted: hp={raw.battler_hp}/"

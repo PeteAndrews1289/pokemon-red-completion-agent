@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 5: the learner enters the game loop
+
+The project stopped treating a universally perfect deterministic teacher as a prerequisite for
+learning. An integrity-checked deployment bridge now projects live battle state into the same
+102-feature schema used during training, masks illegal and route-required choices, and lets the
+model act above a declared confidence threshold. In safety mode, the existing teacher supplies a
+label and takes control whenever the model is uncertain or disagrees.
+
+The first clean model-assisted run completed all **312/312 checkpoints** and **36/36 objectives**,
+including the Champion and Hall of Fame. The model handled **537 of 707** live battle decisions
+(**75.95%** coverage). The teacher handled 81 low-confidence cases and corrected 52 confident
+disagreements. Those interventions are now the bounded learning backlog, replacing the former
+open-ended cycle of requiring the scripted teacher to tolerate every possible lineage before model
+deployment. This is deliberately reported as model-assisted completion, not autonomous play; the
+navigation route remains scripted and teacher disagreement is still fail-safe.
+
 > **Living engineering record — updated August 4, 2026.** This document separates verified
 > historical results from work on the current robustness branch. It will be updated at each
 > collection, training, evaluation, and transfer gate.

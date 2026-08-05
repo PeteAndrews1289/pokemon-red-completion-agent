@@ -1,0 +1,57 @@
+{
+  "schema": "pokemon-red-model-assisted-completion-v1",
+  "recorded_on": "2026-08-05",
+  "status": "complete",
+  "claim_scope": {
+    "clean_power_on": true,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "learned_battle_policy_deployed": true,
+    "teacher_correction_enabled": true,
+    "autonomous_model_completion": false,
+    "navigation_learned": false,
+    "cross_game_transfer_evaluated": false
+  },
+  "completion": {
+    "checkpoints_completed": 312,
+    "checkpoints_declared": 312,
+    "objectives_verified": 36,
+    "objectives_declared": 36,
+    "actions_executed": 92721
+  },
+  "battle_policy": {
+    "actor": "learned_policy_with_teacher_fallback",
+    "confidence_threshold": 0.5,
+    "teacher_agreement_required": true,
+    "decisions": 707,
+    "model_decisions": 537,
+    "model_coverage": 0.7595473833097596,
+    "teacher_fallbacks": 133,
+    "forced_decisions": 68,
+    "fallback_reasons": {
+      "low_confidence": 81,
+      "teacher_disagreement": 52
+    }
+  },
+  "model": {
+    "artifact_id": "red-battle-candidate-0fabd6f2224f46c58ae4dd7de15dea74",
+    "artifact_stream_sha256": "0659bc67cf01ed6f1e3ab008bdaee6ebada98436c17d9ad527310debc91e12ee",
+    "artifact_manifest_sha256": "e80fddbc28c31fc9dd572137f5e58cb7a920f792ae711771f6c2f9a402ca44c9",
+    "model_sha256": "ab164860aa591d4bf1703e52e40069cf0663a683f091785dc462ffef4dbbce16",
+    "feature_count": 102,
+    "training_episodes": 5,
+    "held_out_validation_episodes": 2,
+    "held_out_validation_accuracy": 0.8580441640378549
+  },
+  "execution": {
+    "collection_registry": "red-battle-heldout-v52",
+    "source_bundle_sha256": "c2a61e8b4e758dfade36de7038a824b2dc63bda0ac37d27535a0e4487210f9ef",
+    "rom_identity_private": true,
+    "save_state_used": false,
+    "human_input": false
+  },
+  "interpretation": {
+    "result": "The authenticated learned battle ranker participated throughout a complete Pokemon Red run while the deterministic teacher corrected unsafe or uncertain choices.",
+    "remaining_gap": "The 81 low-confidence decisions and 52 confident disagreements define the next correction curriculum. This receipt does not claim autonomous full-game play or learned navigation."
+  }
+}

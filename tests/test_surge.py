@@ -420,18 +420,24 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert COLLECTION_POKE_BALL_TARGET == 30
     assert surge_module.FOREST_POKE_BALL_RESERVE == 25
     assert surge_module.POKE_BALL_PRICE == 200
-    assert surge_module._inverse_directions(
-        surge_module.VIRIDIAN_TO_MART_DIRECTIONS[:-1]
-    ) == surge_module.VIRIDIAN_MART_RETURN_DIRECTIONS
     assert surge_module._directions(
-        "UUUUULUULUURRRRU"
-    ) == surge_module.VIRIDIAN_TO_CENTER_DIRECTIONS
-    assert surge_module._directions(
-        "LLLLDDRDDRDDDDD"
-    ) == surge_module.VIRIDIAN_CENTER_RETURN_DIRECTIONS
-    assert surge_module._directions(
-        "LLUUUUUUUUUULLLLLLLLLL"
-    ) == surge_module.VERMILION_ROUTE_11_TO_CENTER_EXTERIOR
+        "D" + "R" * 24 + "U" * 3 + "R" + "U" * 4
+    ) == surge_module.SHIP_1F_RETURN
+    assert (
+        surge_module._inverse_directions(surge_module.VIRIDIAN_TO_MART_DIRECTIONS[:-1])
+        == surge_module.VIRIDIAN_MART_RETURN_DIRECTIONS
+    )
+    assert (
+        surge_module._directions("UUUUULUULUURRRRU") == surge_module.VIRIDIAN_TO_CENTER_DIRECTIONS
+    )
+    assert (
+        surge_module._directions("LLLLDDRDDRDDDDD")
+        == surge_module.VIRIDIAN_CENTER_RETURN_DIRECTIONS
+    )
+    assert (
+        surge_module._directions("LLUUUUUUUUUULLLLLLLLLL")
+        == surge_module.VERMILION_ROUTE_11_TO_CENTER_EXTERIOR
+    )
     assert (
         CATERPIE_SPECIES_ID,
         METAPOD_SPECIES_ID,
@@ -673,14 +679,8 @@ def test_weakening_budget_allows_a_terminal_replan_after_the_last_attack() -> No
 
 
 def test_weakening_settle_cancels_a_returned_move_menu() -> None:
-    assert (
-        _wild_weakening_settle_action(BattleMenuPhase.MOVE, 0)
-        is MacroActionKind.CANCEL
-    )
-    assert (
-        _wild_weakening_settle_action(BattleMenuPhase.UNKNOWN, 0)
-        is MacroActionKind.CONFIRM
-    )
+    assert _wild_weakening_settle_action(BattleMenuPhase.MOVE, 0) is MacroActionKind.CANCEL
+    assert _wild_weakening_settle_action(BattleMenuPhase.UNKNOWN, 0) is MacroActionKind.CONFIRM
 
 
 def test_weakening_miss_settles_without_requesting_another_attack() -> None:

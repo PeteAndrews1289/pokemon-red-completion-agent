@@ -18,9 +18,14 @@ import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
 BATTLE_FEATURE_SCHEMA_ID = "pokemon.core.battle.move-ranker.v2"
+CURRENT_BATTLE_FEATURE_SCHEMA_ID = "pokemon.core.battle.move-ranker.v3"
 LEGACY_BATTLE_FEATURE_SCHEMA_ID = "pokemon.core.battle.move-ranker.v1"
 SUPPORTED_BATTLE_FEATURE_SCHEMA_IDS = frozenset(
-    {BATTLE_FEATURE_SCHEMA_ID, LEGACY_BATTLE_FEATURE_SCHEMA_ID}
+    {
+        CURRENT_BATTLE_FEATURE_SCHEMA_ID,
+        BATTLE_FEATURE_SCHEMA_ID,
+        LEGACY_BATTLE_FEATURE_SCHEMA_ID,
+    }
 )
 BATTLE_MODEL_ID = "pokemon.core.battle.masked-linear-ranker.v1"
 BATTLE_MODEL_FORMAT_VERSION = 1

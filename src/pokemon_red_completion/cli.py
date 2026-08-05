@@ -46,6 +46,10 @@ from pokemon_red_completion.collection_protocol import (
     working_source_bundle_sha256,
 )
 from pokemon_red_completion.emulator import EmulatorError
+from pokemon_red_completion.learned_battle_policy import (
+    LearnedBattlePolicyError,
+    load_battle_model_artifact,
+)
 from pokemon_red_completion.opening import (
     DEFAULT_OPENING_TIMING,
     PRET_POKERED_COMMIT,
@@ -275,6 +279,22 @@ def _parser() -> argparse.ArgumentParser:
         choices=(1, 2, 4),
         help="Watched playback speed; requires --watch and defaults to 2.",
     )
+    play.add_argument(
+        "--battle-model",
+        type=Path,
+        help="Deploy an authenticated model.jsonl artifact for live battle choices.",
+    )
+    play.add_argument(
+        "--battle-confidence-threshold",
+        type=float,
+        default=0.5,
+        help="Use the routed teacher below this learned-policy confidence (default: 0.5).",
+    )
+    play.add_argument(
+        "--allow-model-disagreement",
+        action="store_true",
+        help="Evaluation mode: execute confident model choices even when the teacher disagrees.",
+    )
     record = subcommands.add_parser(
         "record",
         help="Record a qualified Hall of Fame teacher run to private external storage.",
@@ -494,9 +514,7 @@ def _campaign_identity(
         registry_sha256=registry.registry_sha256,
         source_commit=str(source.get("git_commit")),
         source_bundle_sha256=registry.execution.source_bundle_sha256,
-        behavior_configuration_sha256=(
-            registry.execution.behavior_configuration_sha256
-        ),
+        behavior_configuration_sha256=(registry.execution.behavior_configuration_sha256),
         objective_graph_sha256=registry.execution.objective_graph_sha256,
         teacher_execution_sha256=registry.execution.teacher_execution_sha256,
         runtime_sha256=runtime_sha256,
@@ -588,27 +606,18 @@ def _recording_metadata(
         play_timing=asdict(DEFAULT_QUALIFIED_PLAY_TIMING),
         pret_pokered_commit=PRET_POKERED_COMMIT,
     )
-    behavior_configuration_sha256 = collection_document_sha256(
-        behavior_configuration
-    )
+    behavior_configuration_sha256 = collection_document_sha256(behavior_configuration)
     route = completion_route_payload()
-    objective_graph_sha256 = collection_document_sha256(
-        objective_graph_document(route)
-    )
+    objective_graph_sha256 = collection_document_sha256(objective_graph_document(route))
     source_bundle_sha256: str | None = None
     if execution is not None:
         source_bundle_sha256 = committed_source_bundle_sha256(
             REPOSITORY_ROOT,
-            revision=(
-                execution.source_commit
-                if execution.source_commit is not None
-                else "HEAD"
-            ),
+            revision=(execution.source_commit if execution.source_commit is not None else "HEAD"),
         )
         working_bundle_sha256 = working_source_bundle_sha256(REPOSITORY_ROOT)
         if (
-            behavior_configuration_sha256
-            != execution.behavior_configuration_sha256
+            behavior_configuration_sha256 != execution.behavior_configuration_sha256
             or behavior_configuration != execution.behavior_configuration_dict()
             or objective_graph_sha256 != execution.objective_graph_sha256
             or source_bundle_sha256 != execution.source_bundle_sha256
@@ -669,9 +678,7 @@ def _recording_metadata(
                     "dry_run_id": schedule_dry_run.dry_run_id,
                     "purpose": "schedule_integration_dry_run",
                     "registry_sha256": schedule_dry_run.registry_sha256,
-                    "teacher_execution_sha256": (
-                        execution.teacher_execution_sha256
-                    ),
+                    "teacher_execution_sha256": (execution.teacher_execution_sha256),
                 }
             )
     if assignment is None:
@@ -694,14 +701,10 @@ def _recording_metadata(
                 "attempt": {"counted": False},
                 "dry_run_id": schedule_dry_run.dry_run_id,
                 "execution": {
-                    "behavior_configuration_sha256": (
-                        execution.behavior_configuration_sha256
-                    ),
+                    "behavior_configuration_sha256": (execution.behavior_configuration_sha256),
                     "objective_graph_sha256": execution.objective_graph_sha256,
                     "source_bundle_sha256": execution.source_bundle_sha256,
-                    "teacher_execution_sha256": (
-                        execution.teacher_execution_sha256
-                    ),
+                    "teacher_execution_sha256": (execution.teacher_execution_sha256),
                 },
                 "harness_seed": schedule_dry_run.harness_seed,
                 "human_input": False,
@@ -736,17 +739,13 @@ def _recording_metadata(
             "seed_protocol": "committed_harness_seed",
             **assignment_metadata,
         }
-        configuration["assignment_configuration_sha256"] = (
-            collection_document_sha256(
-                {
-                    "assignment_id": assignment.assignment_id,
-                    "behavior_configuration_sha256": (
-                        assignment.behavior_configuration_sha256
-                    ),
-                    "schedule_sha256": assignment.schedule_sha256,
-                    "schema": "pokemon-red-assignment-configuration-v1",
-                }
-            )
+        configuration["assignment_configuration_sha256"] = collection_document_sha256(
+            {
+                "assignment_id": assignment.assignment_id,
+                "behavior_configuration_sha256": (assignment.behavior_configuration_sha256),
+                "schedule_sha256": assignment.schedule_sha256,
+                "schema": "pokemon-red-assignment-configuration-v1",
+            }
         )
     return {
         "adapter_id": POKEMON_RED_ADAPTER_ID,
@@ -812,8 +811,7 @@ def _run_battle_learning(
         require_clean_source(source)
         registry = load_committed_collection_registry(REPOSITORY_ROOT)
         if any(
-            registry.assignment(run.run_id).episode_id == args.episode_id
-            for run in registry.runs
+            registry.assignment(run.run_id).episode_id == args.episode_id for run in registry.runs
         ):
             raise BattleTrainingError(
                 "This diagnostic command cannot open a preregistered collection episode."
@@ -945,9 +943,7 @@ def _run_preassigned_battle_learning(
         registry = load_committed_collection_registry(REPOSITORY_ROOT)
         slots = _collection_slots(registry)
         train_slots = tuple(slot for slot in slots if slot.partition == "train")
-        validation_slots = tuple(
-            slot for slot in slots if slot.partition == "validation"
-        )
+        validation_slots = tuple(slot for slot in slots if slot.partition == "validation")
         test_slots = tuple(slot for slot in slots if slot.partition == "test")
         if (len(train_slots), len(validation_slots), len(test_slots)) != (5, 2, 5):
             raise BattleTrainingError(
@@ -994,9 +990,7 @@ def _run_preassigned_battle_learning(
             )
             if ledger is None:
                 raise BattleTrainingError("The frozen collection campaign has not started.")
-            outcomes = {
-                outcome.slot.assignment_id: outcome for outcome in ledger.reconcile()
-            }
+            outcomes = {outcome.slot.assignment_id: outcome for outcome in ledger.reconcile()}
             if any(slot.assignment_id in outcomes for slot in test_slots):
                 raise BattleTrainingError(
                     "The test partition must remain unopened until the model is frozen."
@@ -1049,9 +1043,7 @@ def _run_preassigned_battle_learning(
                     "source": source.public_dict(),
                     "collection_id": registry.collection_id,
                     "registry_sha256": registry.registry_sha256,
-                    "corpus_manifest_roster_sha256": (
-                        result.corpus_manifest_roster_sha256
-                    ),
+                    "corpus_manifest_roster_sha256": (result.corpus_manifest_roster_sha256),
                 },
             )
             writer.append(
@@ -1062,9 +1054,7 @@ def _run_preassigned_battle_learning(
                         "game": "pokemon_red_us_rev0",
                         "pret_pokered_commit": BATTLE_CATALOG_SOURCE_COMMIT,
                     },
-                    "configuration": config.public_dict(
-                        split_unit="preassigned_root_lineage"
-                    ),
+                    "configuration": config.public_dict(split_unit="preassigned_root_lineage"),
                     "collection_id": registry.collection_id,
                     "registry_sha256": registry.registry_sha256,
                     "scope": result.public_receipt()["scope"],
@@ -1219,11 +1209,19 @@ def main(arguments: Sequence[str] | None = None) -> int:
             _print_opening_summary(report)
             payload = report.public_dict()
         elif args.command == "play":
+            battle_model = (
+                load_battle_model_artifact(args.battle_model)
+                if args.battle_model is not None
+                else None
+            )
             qualified_report = run_qualified_play(
                 rom_path,
                 watch=args.watch,
                 speed=args.speed,
                 progress=_print_qualified_progress,
+                battle_model=battle_model,
+                battle_model_confidence_threshold=args.battle_confidence_threshold,
+                require_battle_model_teacher_agreement=not args.allow_model_disagreement,
             )
             _print_qualified_summary(qualified_report)
             payload = qualified_report.public_dict()
@@ -1322,13 +1320,8 @@ def main(arguments: Sequence[str] | None = None) -> int:
                         report_completed = True
                     finally:
                         outcome = ledger.reconcile_slot(slot)
-                    if (
-                        report_completed
-                        and (
-                            outcome is None
-                            or outcome.status != "complete"
-                            or not outcome.game_complete
-                        )
+                    if report_completed and (
+                        outcome is None or outcome.status != "complete" or not outcome.game_complete
                     ):
                         raise CollectionLedgerError(
                             "completed collection run failed outcome verification"
@@ -1370,9 +1363,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 "episode": episode_summary,
             }
             if dry_run_qualification is not None:
-                payload["dry_run_qualification"] = (
-                    dry_run_qualification.public_dict()
-                )
+                payload["dry_run_qualification"] = dry_run_qualification.public_dict()
     except (
         BootstrapError,
         BattleScheduleError,
@@ -1380,6 +1371,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
         CollectionProtocolError,
         EmulatorError,
         EvaluationIdentityError,
+        LearnedBattlePolicyError,
         OpeningChapterError,
         PrivateArtifactError,
         QualifiedPlayError,
