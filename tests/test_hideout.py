@@ -14,6 +14,7 @@ from pokemon_red_completion.hideout import (
     HideoutCheckpoint,
     HideoutTiming,
     HideoutTrainerEvidence,
+    _lead_needs_recovery,
 )
 from pokemon_red_completion.observation import MapId, RawGameState
 
@@ -86,6 +87,26 @@ def test_protected_recovery_selects_only_a_living_non_lead_party_member() -> Non
     assert first_living_reserve((40, 0, 37)) == 2
     assert first_living_reserve((40, 0, 0)) is None
     assert first_living_reserve((40,)) is None
+
+
+@pytest.mark.parametrize(
+    ("current_hp", "maximum_hp", "expected"),
+    ((93, 93, False), (92, 93, True)),
+)
+def test_hideout_only_recovers_a_damaged_lead(
+    monkeypatch: pytest.MonkeyPatch,
+    current_hp: int,
+    maximum_hp: int,
+    expected: bool,
+) -> None:
+    monkeypatch.setattr(
+        "pokemon_red_completion.hideout._party_hp", lambda _emulator: (current_hp,)
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.hideout._party_max_hp", lambda _emulator: (maximum_hp,)
+    )
+
+    assert _lead_needs_recovery(object()) is expected  # type: ignore[arg-type]
 
 
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))

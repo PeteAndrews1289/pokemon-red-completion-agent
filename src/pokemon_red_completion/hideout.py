@@ -375,7 +375,8 @@ def run_hideout_chapter(
     _checkpoint(records, progress, emulator, reader.read(), "lift_key", "Obtained Lift Key")
 
     _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    _use_super_potion(actions, reader, emulator, run, timing, 0)  # type: ignore[arg-type]
+    if _lead_needs_recovery(emulator):
+        _use_super_potion(actions, reader, emulator, run, timing, 0)  # type: ignore[arg-type]
     _checkpoint(
         records, progress, emulator, reader.read(), "recovered", "Recovered before boss wing"
     )
@@ -445,7 +446,7 @@ def run_hideout_chapter(
     _checkpoint(records, progress, emulator, reader.read(), "boss_door", "Unlocked Giovanni door")
 
     _cure_giovanni_poison_if_present(actions, reader, emulator, timing)
-    if _party_hp(emulator)[0] < _party_max_hp(emulator)[0]:
+    if _lead_needs_recovery(emulator):
         _use_super_potion(actions, reader, emulator, run, timing, 0)  # type: ignore[arg-type]
     _move(actions, reader, emulator, run, DOOR_TO_GIOVANNI, timing, "Giovanni")
     _face(actions, "right", timing)
@@ -608,6 +609,12 @@ def _fight(
 
 class _PauseForGiovanniSuperPotion(Exception):
     pass
+
+
+def _lead_needs_recovery(emulator: EmulatorState) -> bool:
+    """Return whether the lead can validly receive an HP recovery item."""
+
+    return _party_hp(emulator)[0] < _party_max_hp(emulator)[0]
 
 
 def _run_hideout_giovanni_with_recovery(

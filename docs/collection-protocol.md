@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v44.json`](../configs/red-battle-collection-v44.json)
+[`red-battle-collection-v45.json`](../configs/red-battle-collection-v45.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 69 stable public battle-plan identities in exact qualified-route order;
@@ -1663,7 +1663,7 @@ leaving a 19-slot Cinnabar bag with three Antidotes. The capacity plan was alrea
 entire obsolete stack and prove the resulting money, but an outdated input predicate admitted only
 quantities zero through two. The immutable failure remains sealed and v40 is retired. V41 validates
 the legal 0–99 stack range while retaining the full-stack sale, slot, pickup, and economy proofs;
-it reserves fresh counted seeds `400001`–`400005`, `410001`–`410002`, and `420001`–`420005`.
+it reserves fresh counted seeds `430001`–`430005`, `440001`–`440002`, and `450001`–`450005`.
 Retired v40 schedules may be used only as uncounted stress diagnostics before v41 qualification.
 The first retired schedule completed the game. The second reached Lt. Surge with Diglett at 12/32
 HP after the preceding knockout; the former one-third recovery floor did not heal, and the next
