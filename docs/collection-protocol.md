@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v49.json`](../configs/red-battle-collection-v49.json)
+[`red-battle-collection-v50.json`](../configs/red-battle-collection-v50.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 71 stable public battle-plan identities in exact qualified-route order;
@@ -1747,4 +1747,11 @@ Youngster. The return controller now reads that source-pinned object's live coor
 leaving its yield alcove; the exact seed subsequently completed the same full terminal. Because
 v48 was already published, it remains historical. V49 reserves fresh train seeds
 `490001`–`490005`, validation seeds `500001`–`500002`, test seeds `510001`–`510005`, and dry-run
-seed `62001`. All twelve v49 counted slots remain unopened until its committed-source rehearsal.
+seed `62001`. V49's rehearsal reached checkpoint 230 before proving that “walker east of the next
+tile” becomes impossible near the staircase. V49 is retired with all counted slots unopened. The
+controller now waits only for the x=1 alcove entrance to clear, follows behind the walker, and
+retreats again only after observed blockage. An uncounted replay of the exact seed `62001`
+subsequently completed 312/312 checkpoints, 36/36 objectives, 71/71 schedule attestations,
+Champion, and Hall of Fame. V50 reserves train seeds `520001`–`520005`, validation seeds
+`530001`–`530002`, test seeds `540001`–`540005`, and dry-run seed `62001`. All twelve v50 counted
+slots remain unopened until its committed-source rehearsal.

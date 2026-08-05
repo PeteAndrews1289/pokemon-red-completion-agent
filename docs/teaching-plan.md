@@ -426,7 +426,9 @@ lineages remain hard leakage.
    failing economy seed but stress seeds `61003` and `61005` exposed conditional-recovery and
    moving-NPC assumptions. Both exact schedules now complete 312/312 checkpoints, 36/36 objectives,
    71/71 battles, and Hall of Fame under state-observed repairs. V48 remains historical and the
-   fresh v49 slots are unopened until its independent committed-source rehearsal. The first Forest-lineage
+   v49 rehearsal then exposed a late-corridor condition and was retired with every counted slot
+   unopened. The exact seed-62001 diagnostic now completes the full terminal under the corrected
+   observed-progress rule. Fresh v50 slots remain unopened until its committed-source rehearsal. The first Forest-lineage
    rehearsal exposed a Route 24 moving-NPC collision at checkpoint 38/312. The qualified repair
    cleared that point, but the second rehearsal exposed a final Rock Tunnel trapping-recovery gap
    at checkpoint 109/312. Neither attempt consumed a declared slot; all twelve remain pending while

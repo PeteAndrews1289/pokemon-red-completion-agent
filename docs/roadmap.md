@@ -723,6 +723,8 @@ lineage that previously reached Indigo with only ₽389 now completes 312/312 ch
 objectives, 71/71 schedule attestations, Champion, and Hall of Fame. Remaining gates are to finish
 the other uncounted stress seeds. Seeds `61003` and `61004` completed after conditional recovery;
 seed `61005` then exposed and verified the live Celadon-walker repair before completing Hall of
-Fame. V48 remains historical. The source-bound v49 registry now provides fresh unopened slots;
-its independent seed-62001 rehearsal is next, followed by five train and two validation
+Fame. V48 remains historical. V49's rehearsal exposed an overly strict late-corridor condition and
+was retired without opening a counted slot; the corrected exact seed-62001 replay then completed
+Hall of Fame. The source-bound v50 registry now provides fresh unopened slots. Its independent
+rehearsal is next, followed by five train and two validation
 demonstrations before fitting the replacement candidate. Test remains sealed until after freeze.

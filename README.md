@@ -25,7 +25,9 @@ control, and progressively trained specialists.**
 > Fame. Subsequent stress schedules exposed an unconditional Route 24 recovery and a fixed-delay
 > Celadon walker loop. Both now use live game state, and the exact Celadon failure subsequently
 > completed **312/312**, **36/36**, **71/71**, and Hall of Fame. V48 remains historical; the repaired
-> v49 campaign has fresh unopened slots and still requires its committed-source rehearsal.
+> v49 rehearsal exposed one remaining late-corridor condition and was retired without opening a
+> counted slot. The exact schedule then completed under the corrected rule. V50 has fresh unopened
+> slots and still requires its committed-source rehearsal.
 > The first private, integrity-audited trajectory reproduced the same terminal in 4,796,436 frames
 > while recording **41,330 executor actions**, **300 events**, and **14,760 deduplicated semantic
 > snapshots**. The 14-action difference closes a previously uncounted menu-control path; it is not
@@ -322,7 +324,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v49-01-train
+  --collection-run red-battle-v50-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
