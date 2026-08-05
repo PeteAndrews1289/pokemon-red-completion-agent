@@ -266,6 +266,8 @@ class FuchsiaChapterReport:
     wild_flees: int
     initial_bag: tuple[tuple[int, int], ...]
     final_bag: tuple[tuple[int, int], ...]
+    funding_potions_sold: int
+    funding_antidotes_sold: int
     party_hp: tuple[int, ...]
     party_max_hp: tuple[int, ...]
     party_status: tuple[int, ...]
@@ -300,6 +302,12 @@ class FuchsiaChapterReport:
             and self.battles[1].recovery_items_used <= SNORLAX_SUPER_POTION_RESERVE
             and _bag_quantity(self.initial_bag, ItemId.TM34_BIDE) == 1
             and _bag_quantity(self.final_bag, ItemId.TM34_BIDE) == 0
+            and _bag_quantity(self.initial_bag, ItemId.POTION)
+            - _bag_quantity(self.final_bag, ItemId.POTION)
+            == self.funding_potions_sold
+            and _bag_quantity(self.initial_bag, ItemId.ANTIDOTE)
+            - _bag_quantity(self.final_bag, ItemId.ANTIDOTE)
+            == self.funding_antidotes_sold
             and _bag_quantity(self.initial_bag, ItemId.POKE_BALL)
             - _bag_quantity(self.final_bag, ItemId.POKE_BALL)
             == max(0, self.battles[1].balls_used - SNORLAX_GREAT_BALL_RESERVE)
@@ -310,6 +318,8 @@ class FuchsiaChapterReport:
                     ItemId.SUPER_POTION,
                     ItemId.POKE_BALL,
                     ItemId.TM34_BIDE,
+                    ItemId.POTION,
+                    ItemId.ANTIDOTE,
                 ),
             )
             == _without_bag_items(
@@ -319,6 +329,8 @@ class FuchsiaChapterReport:
                     ItemId.SUPER_POTION,
                     ItemId.POKE_BALL,
                     ItemId.TM34_BIDE,
+                    ItemId.POTION,
+                    ItemId.ANTIDOTE,
                 ),
             )
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
@@ -361,6 +373,8 @@ class FuchsiaChapterReport:
                 "captured": self.battles[1].captured,
                 "throws_used": self.battles[1].balls_used,
                 "recovery_items_used": self.battles[1].recovery_items_used,
+                "funding_potions_sold": self.funding_potions_sold,
+                "funding_antidotes_sold": self.funding_antidotes_sold,
                 "party_before": list(self.battles[1].party_before),
                 "party_after": list(self.battles[1].party_after),
             },
@@ -417,7 +431,13 @@ def run_fuchsia_chapter(
         raise FuchsiaChapterError("Fuchsia input lacks the qualified Poké Flute.")
     _checkpoint(records, progress, emulator, start, "fuji_ready", "Poké Flute ready")
 
-    _purchase_snorlax_capture_reserve(actions, reader, emulator, run, timing)
+    funding_potions_sold, funding_antidotes_sold = _purchase_snorlax_capture_reserve(
+        actions,
+        reader,
+        emulator,
+        run,
+        timing,
+    )
 
     _move(actions, reader, emulator, run, LAVENDER_TO_ROUTE12, timing, "Route 12 entry")
     _require(reader.read(), MapId.ROUTE_12, (9, 0), "Route 12 entry")
@@ -574,6 +594,8 @@ def run_fuchsia_chapter(
         len(run.wilds),
         initial_bag,
         _bag_tuple(emulator),
+        funding_potions_sold,
+        funding_antidotes_sold,
         _party_hp(emulator),
         _party_max_hp(emulator),
         _party_status(emulator),
@@ -748,7 +770,7 @@ def _purchase_snorlax_capture_reserve(
     emulator: EmulatorState,
     run: _RunState,
     timing: FuchsiaTiming,
-) -> None:
+) -> tuple[int, int]:
     """Buy a bounded reliable-ball reserve before the static encounter."""
 
     before_money = _money(emulator)
@@ -886,6 +908,7 @@ def _purchase_snorlax_capture_reserve(
     _move(actions, reader, emulator, run, ("up",) * 4, timing, "Lavender nurse return")
     _heal_at_nurse(actions, reader, emulator, timing)
     _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 3), "capture-ready boundary")
+    return potion_sale_quantity, antidote_sale_quantity
 
 
 def _snorlax_funding_sale_quantities(

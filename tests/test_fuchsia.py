@@ -140,6 +140,8 @@ def _report() -> FuchsiaChapterReport:
         wild_flees=4,
         initial_bag=initial_bag,
         final_bag=final_bag,
+        funding_potions_sold=0,
+        funding_antidotes_sold=0,
         party_hp=(114, 52, 37, 135),
         party_max_hp=(114, 52, 37, 135),
         party_status=(0, 0, 0, 0),
@@ -247,6 +249,8 @@ def test_fuchsia_public_report_discloses_assistance_and_optionals() -> None:
         "captured": True,
         "throws_used": 1,
         "recovery_items_used": 1,
+        "funding_potions_sold": 0,
+        "funding_antidotes_sold": 0,
         "party_before": [0x1C, 0x40, 0x3B],
         "party_after": [0x1C, 0x40, 0x3B, 0x84],
     }
