@@ -1444,6 +1444,12 @@ def _move(
             _pulse(actions, MacroActionKind.MOVE, direction, frames=12 * (attempt + 1))
             state = reader.read()
             if state.battle_state == 1:
+                if label == "Marowak" and _is_restless_marowak_battle(state):
+                    # The floor script represents Marowak as a wild battle.
+                    # Hand it directly to the source-validating boss routine;
+                    # treating it as a random encounter attempts an invalid
+                    # flee and consumes the one-time trigger.
+                    return state
                 _flee(
                     actions,
                     reader,
@@ -1473,6 +1479,18 @@ def _move(
             )
     _wait(actions, timing.transition_frames)
     return reader.read()
+
+
+def _is_restless_marowak_battle(state: RawGameState) -> bool:
+    """Recognize the unique Tower 6F scripted ghost gate, including its intro."""
+
+    return (
+        state.map_id == MapId.POKEMON_TOWER_6F
+        and state.battle_state == 1
+        and (state.player_x, state.player_y) == (10, 16)
+        and state.enemy_species_id in {None, MAROWAK}
+        and state.enemy_level in {None, 30}
+    )
 
 
 def _enter_battle(

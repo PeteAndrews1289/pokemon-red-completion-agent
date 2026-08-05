@@ -20,6 +20,7 @@ from pokemon_red_completion.lavender import (
     LavenderCheckpoint,
     LavenderTiming,
     TrainerEvidence,
+    _wild_battle_identity_changed,
 )
 from pokemon_red_completion.observation import (
     BULBASAUR_SPECIES_ID,
@@ -653,6 +654,24 @@ def test_wild_flee_accepts_only_declared_purified_zone_restoration(
     assert len(accepted.wilds) == 1
     assert accepted.wilds[0].pp_preserved
     assert accepted.wilds[0].hp_safe
+
+
+def test_wild_flee_detects_an_immediate_scripted_opponent_handoff() -> None:
+    random_wild = replace(
+        _raw(),
+        battle_state=1,
+        enemy_species_id=25,
+        enemy_level=20,
+    )
+    marowak = replace(
+        random_wild,
+        enemy_species_id=145,
+        enemy_level=30,
+    )
+
+    assert _wild_battle_identity_changed(random_wild, marowak)
+    assert not _wild_battle_identity_changed(random_wild, replace(random_wild))
+    assert not _wild_battle_identity_changed(random_wild, replace(marowak, battle_state=0))
 
 
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))

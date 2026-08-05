@@ -30,6 +30,7 @@ from pokemon_red_completion.tower import (
     TowerChapterReport,
     TowerCheckpoint,
     TowerTiming,
+    _is_restless_marowak_battle,
     _observe_protected_party,
     _plan_route_8_east,
     _route_8_coordinate_is_safe,
@@ -266,6 +267,25 @@ def test_tower_report_requires_selected_move_evidence_and_marowak_level() -> Non
     )
     assert not wrong_count.passed
     assert not wrong_marowak.passed
+
+
+def test_restless_marowak_is_not_classified_as_a_random_wild() -> None:
+    battle = replace(
+        _raw(),
+        map_id=MapId.POKEMON_TOWER_6F,
+        player_x=10,
+        player_y=16,
+        battle_state=1,
+        enemy_species_id=0x91,
+        enemy_level=30,
+    )
+    intro = replace(battle, enemy_species_id=None, enemy_level=None)
+
+    assert _is_restless_marowak_battle(battle)
+    assert _is_restless_marowak_battle(intro)
+    assert not _is_restless_marowak_battle(replace(battle, enemy_level=29))
+    assert not _is_restless_marowak_battle(replace(battle, player_x=9))
+    assert not _is_restless_marowak_battle(replace(battle, map_id=MapId.POKEMON_TOWER_5F))
 
 
 def test_tower_public_report_discloses_route_assistance() -> None:

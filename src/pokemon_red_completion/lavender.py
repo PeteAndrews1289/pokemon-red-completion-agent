@@ -1638,8 +1638,11 @@ def _flee(
     if before.battle_state != 1:
         raise LavenderChapterError("Wild flee requires an active wild battle.")
     if unknown_with_cancel:
+        escaped_state: RawGameState | None = None
         for _ in range(timing.flee_pulses):
-            if reader.read().battle_state == 0:
+            state = reader.read()
+            if state.battle_state == 0:
+                escaped_state = state
                 break
             for kind, value, frames in _normalized_run_actions(timing):
                 _pulse(executor, kind, value, frames=frames)
@@ -1653,6 +1656,26 @@ def _flee(
                 _record_wild_flee_evidence(
                     before,
                     final,
+                    emulator,
+                    run,
+                    species,
+                    pp,
+                    hp,
+                    inventory,
+                    allow_purified_zone_heal=allow_purified_zone_heal,
+                )
+                return
+            if (
+                escaped_state is not None
+                and _wild_battle_identity_changed(before, final)
+            ):
+                # A scripted wild boss can start immediately after a random
+                # encounter is fled, without exposing an input-ready field
+                # frame. Preserve the observed field transition as the flee
+                # boundary and return the new battle to the route owner.
+                _record_wild_flee_evidence(
+                    before,
+                    escaped_state,
                     emulator,
                     run,
                     species,
@@ -1708,6 +1731,22 @@ def _flee(
 
 def _unknown_flee_action(cancel_for_safety: bool) -> MacroActionKind:
     return MacroActionKind.CANCEL if cancel_for_safety else MacroActionKind.CONFIRM
+
+
+def _wild_battle_identity_changed(
+    before: RawGameState,
+    after: RawGameState,
+) -> bool:
+    """Whether a newly active wild opponent replaced the fled encounter."""
+
+    before_identity = (before.enemy_species_id, before.enemy_level)
+    after_identity = (after.enemy_species_id, after.enemy_level)
+    return (
+        after.battle_state == 1
+        and None not in before_identity
+        and None not in after_identity
+        and after_identity != before_identity
+    )
 
 
 def _normalized_run_actions(
