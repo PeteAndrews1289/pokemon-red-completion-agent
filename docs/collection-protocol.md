@@ -478,13 +478,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6583` |
-| Registry SHA-256 | `e3ec9da9210cc2e43155c11018f8bbeded4eabe402d22da8ae139994b8f265b5` |
-| Source bundle SHA-256 | `dc58f574ec7ab8eb56c8d3c44d4081a2bf274fef94f2dfcce62de356110f4ee2` |
+| Registry SHA-256 | `00bcdf2ac2f813a6e68de96df2d38f294d6dfe2f6396e5c0794a683ee2bd74e1` |
+| Source bundle SHA-256 | `75659676746404b7a1a88efc2ab2fb7d23408fdfadb2d61cd3d6060c4db203ef` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `461cd51d5dc74f419b7fc31da2248f847431f73c289b7f80527257136ee79e97` |
+| Teacher execution SHA-256 | `e0a505da96a2e67d782583bd44d6b8c5a2ba7a69745a07e2b93c8dac1c2cd1ce` |
 | Dry-run schedule SHA-256 | `db1076f691c753055fb333523b4864b7f5a89cfc172da97737db8ff8372b142d` |
-| Slot `01` assignment ID | `212a20a8d9260f3fca98babf13d47a9d9cb78f17986a5990add44e6c82620548` |
+| Slot `01` assignment ID | `3ed7ebcf742633167f6a06b8090338dcce588da5177c463757ce79cbf78123d7` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -1628,3 +1628,7 @@ aisle only from the east. The failed root remains sealed and v38 is retired. V39
 symmetric west-side bounded yield, map/coordinate proof, and recross; it assigns fresh counted
 seeds `340001`–`340005`, `350001`–`350002`, and `360001`–`360005`. Exposed seed `310001` is now
 diagnostic-only and must pass before the fixed rehearsal can qualify v39.
+The first v39 reproduction reached the same obstruction and selected the new west-side branch, but
+the initial downward yield input was swallowed. The controller now requires observed coordinate
+changes with bounded retries for both yield and reentry before attempting the recross. That failed
+diagnostic remains uncounted and source-bound qualification restarts.

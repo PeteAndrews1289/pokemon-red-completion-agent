@@ -2316,8 +2316,13 @@ def _yield_to_mart_5f_gentleman_from_left(
             MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION,
             "X Special return customer gate",
         )
-        actions.execute(MacroAction(MacroActionKind.MOVE, "down"))
-        yielded = reader.read()
+        yielded = _move_verified(
+            actions,
+            reader,
+            ("down",),
+            timing,
+            "X Special return customer yield step",
+        )
         _require(
             yielded,
             MapId.CELADON_MART_5F,
@@ -2331,8 +2336,13 @@ def _yield_to_mart_5f_gentleman_from_left(
                     repeat=timing.movement_frames * (attempt + return_attempt + 1),
                 )
             )
-            actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
-            returned = reader.read()
+            returned = _move_verified(
+                actions,
+                reader,
+                ("up",),
+                timing,
+                "X Special return customer reentry step",
+            )
             if (
                 returned.player_x,
                 returned.player_y,
@@ -2346,8 +2356,7 @@ def _yield_to_mart_5f_gentleman_from_left(
             )
         else:
             raise SilphChapterError("Celadon Mart 5F customer did not release the west return tile.")
-        actions.execute(MacroAction(MacroActionKind.MOVE, "right"))
-        crossed = reader.read()
+        crossed = _move(actions, reader, ("right",), timing)
         if (crossed.player_x, crossed.player_y) == MART_5F_GENTLEMAN_CLEAR_POSITION:
             return crossed
         _require(

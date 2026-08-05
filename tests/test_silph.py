@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from pokemon_red_completion.actions import MacroActionKind
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.observation import Badge, EventFlag, ItemId, MapId, RawGameState
 from pokemon_red_completion.silph import (
     BATTLE_ITEM_SETTLE_PULSES,
@@ -299,30 +299,41 @@ def test_silph_verified_movement_yields_to_mart_5f_customer_on_return() -> None:
         player_x=13,
         player_y=2,
     )
-    yielded = replace(blocked, player_y=3)
-    crossed = replace(blocked, player_x=14)
-    states = iter(
-        (
-            blocked,
-            *(blocked for _ in range(DEFAULT_SILPH_TIMING.movement_retries * 2)),
-            blocked,
-            yielded,
-            blocked,
-            crossed,
-        )
-    )
 
     class Reader:
+        state = blocked
+
         def read(self) -> RawGameState:
-            return next(states)
+            return self.state
 
     class Executor:
-        def execute(self, _action: object) -> None:
-            return None
+        down_attempts = 0
+        yielded_once = False
+
+        def __init__(self, reader: Reader) -> None:
+            self.reader = reader
+
+        def execute(self, action: object) -> None:
+            assert isinstance(action, MacroAction)
+            if action.kind is not MacroActionKind.MOVE:
+                return
+            coordinate = (self.reader.state.player_x, self.reader.state.player_y)
+            if action.value == "down" and coordinate == (13, 2):
+                self.down_attempts += 1
+                if self.down_attempts >= 2:
+                    self.reader.state = replace(self.reader.state, player_y=3)
+                    self.yielded_once = True
+            elif action.value == "up" and coordinate == (13, 3):
+                self.reader.state = replace(self.reader.state, player_y=2)
+            elif action.value == "right" and coordinate == (13, 2) and self.yielded_once:
+                self.reader.state = replace(self.reader.state, player_x=14)
+
+    reader = Reader()
+    executor = Executor(reader)
 
     final = _move_verified(
-        Executor(),  # type: ignore[arg-type]
-        Reader(),  # type: ignore[arg-type]
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
         ("right",),
         replace(DEFAULT_SILPH_TIMING, movement_frames=1),
         "X Special clerk return",
@@ -333,6 +344,7 @@ def test_silph_verified_movement_yields_to_mart_5f_customer_on_return() -> None:
         14,
         2,
     )
+    assert executor.down_attempts == 2
 
 
 def test_silph_elevator_entry_retries_a_swallowed_doorway_input() -> None:

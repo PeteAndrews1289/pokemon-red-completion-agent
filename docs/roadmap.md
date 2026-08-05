@@ -649,3 +649,6 @@ Celadon fifth-floor customer blocked the X Special return from `(13,2)`. The imm
 is sealed and v38 is retired. V39 adds the symmetric west-side bounded yield and uses fresh
 `340001`–`340005`, `350001`–`350002`, and `360001`–`360005` partition seeds. It must reproduce the
 exposed v38 schedule diagnostically, pass the official rehearsal, and only then reopen collection.
+The first reproduction reached the same obstruction and entered the new branch, but its initial
+downward yield input was swallowed. The yield and reentry steps now use bounded observed-state
+retries; the exposed schedule must restart from clean power under the updated source identity.
