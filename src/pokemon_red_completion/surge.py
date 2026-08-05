@@ -75,6 +75,8 @@ COLLECTION_POKE_BALL_TARGET = 30
 FOREST_POKE_BALL_RESERVE = 17
 POKE_BALL_PRICE = 200
 SURGE_ITEM_SETTLE_PULSES = 720
+SURGE_RECOVERY_HP_NUMERATOR = 2
+SURGE_RECOVERY_HP_DENOMINATOR = 3
 WILD_CAPTURE_THROWS_PER_ENCOUNTER = 5
 BALL_THROW_SETTLE_ACTION = MacroActionKind.CANCEL
 ROUTE_1_WALKER_APPROACH = (14, 14)
@@ -3786,7 +3788,9 @@ def _run_dig_battle(
             not super_potion_used
             and raw.battler_hp is not None
             and raw.battler_max_hp is not None
-            and 0 < raw.battler_hp <= max(1, raw.battler_max_hp // 3)
+            and raw.battler_hp > 0
+            and raw.battler_hp * SURGE_RECOVERY_HP_DENOMINATOR
+            <= raw.battler_max_hp * SURGE_RECOVERY_HP_NUMERATOR
         ):
             if emulator is None:
                 raise SurgeChapterError("Lt. Surge low-HP recovery requires live emulator state.")

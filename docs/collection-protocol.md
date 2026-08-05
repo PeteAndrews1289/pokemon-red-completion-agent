@@ -478,13 +478,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6583` |
-| Registry SHA-256 | `24c153824d5a37cf6f6eeb5b44315f6c7eb2dcdeac544c10f04fee6f7f7ad4b1` |
-| Source bundle SHA-256 | `38a7db20c9a143fe6b0a234e3b7deda35b129a0896edf400fb882ef1b7b20a1c` |
+| Registry SHA-256 | `3d83e16d7262f825797d76339665c765cd78f6d1bb03738eb49c097d70224cd5` |
+| Source bundle SHA-256 | `3ca6c3a63e3d38ff8087f14c5eb948210bf212750d717b967fdac752dd95dfea` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `6e1b902d998ea88f5d36c3bd1917f52da2902ee0b48471a431ada54e126faed8` |
+| Teacher execution SHA-256 | `67e162a3a7cd99f72eb3f77b5bb2925c9ef8aeafd84ceacc3458f56172a493e1` |
 | Dry-run schedule SHA-256 | `db1076f691c753055fb333523b4864b7f5a89cfc172da97737db8ff8372b142d` |
-| Slot `01` assignment ID | `9707a48bed5502a1ed80d5f7a9958a438a7b4948afef3c9c862df17ccc4313ae` |
+| Slot `01` assignment ID | `4e42b97dfe1050af5eee15245c1bcf32968fc25100d21bb87cc860e5d02e26ec` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -1665,3 +1665,8 @@ quantities zero through two. The immutable failure remains sealed and v40 is ret
 the legal 0–99 stack range while retaining the full-stack sale, slot, pickup, and economy proofs;
 it reserves fresh counted seeds `400001`–`400005`, `410001`–`410002`, and `420001`–`420005`.
 Retired v40 schedules may be used only as uncounted stress diagnostics before v41 qualification.
+The first retired schedule completed the game. The second reached Lt. Surge with Diglett at 12/32
+HP after the preceding knockout; the former one-third recovery floor did not heal, and the next
+faster opponent dealt an observed 20 damage. V41 now spends the same single bounded Super Potion at
+or below two-thirds HP. No extra item, retry, alternate move, or teammate sacrifice is introduced;
+the exact stress schedule must restart under the updated source identity.

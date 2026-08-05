@@ -49,6 +49,8 @@ from pokemon_red_completion.surge import (
     SPEAROW_DIRECT_THROW_LEVEL_FLOOR,
     SURGE_CHECKPOINT_COUNT,
     SURGE_ITEM_SETTLE_PULSES,
+    SURGE_RECOVERY_HP_DENOMINATOR,
+    SURGE_RECOVERY_HP_NUMERATOR,
     VIRIDIAN_FOREST_MAX_SURVEY_LEGS,
     WILD_CAPTURE_DIRECT_THROW_SPECIES,
     WILD_CAPTURE_HIGH_RISK_HELPER_HP_RATIO,
@@ -925,6 +927,35 @@ def test_low_hp_main_gate_uses_one_bounded_surge_recovery(monkeypatch: pytest.Mo
     assert dig_attacks == 0
     assert super_potion_used is True
     assert calls == [10]
+
+
+def test_surge_recovery_protects_the_observed_twelve_hp_switch_gate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    runtime = _PositiveHpSwitchPrompt()
+    runtime.raw = replace(
+        runtime.raw,
+        enemy_hp=43,
+        first_party_hp=12,
+        first_party_max_hp=32,
+    )
+    runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    calls: list[int] = []
+
+    def recover(executor, reader, emulator, timing) -> None:
+        calls.append(runtime.raw.first_party_hp or 0)
+        runtime.raw = replace(runtime.raw, first_party_hp=32, battle_state=0)
+
+    monkeypatch.setattr("pokemon_red_completion.surge._use_surge_super_potion", recover)
+
+    final, _, super_potion_used = _run_dig_battle(
+        runtime, runtime, SurgeTiming(), emulator=object()
+    )
+
+    assert final.battle_state == 0
+    assert super_potion_used is True
+    assert calls == [12]
+    assert (SURGE_RECOVERY_HP_NUMERATOR, SURGE_RECOVERY_HP_DENOMINATOR) == (2, 3)
 
 
 def test_surge_recovery_settles_with_cancel_when_quantity_update_is_delayed(

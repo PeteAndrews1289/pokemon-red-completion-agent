@@ -677,3 +677,6 @@ carried three Antidotes into Cinnabar. The bag controller could already sell and
 whole obsolete stack; only its legacy 0–2 input bound rejected the legal quantity. V40 is sealed and
 retired. V41 expands the proof to the legal 0–99 range, reserves fresh `400001`/`410001`/`420001`
 partition seeds, and uses retired v40 schedules only for uncounted stress before qualification.
+The first stress schedule completed. The second left Diglett at 12/32 HP between Surge opponents;
+the old one-third heal floor did not cover the next observed 20 damage. The same one-item recovery
+now triggers at or below two-thirds HP, and that exact schedule must restart before qualification.

@@ -654,6 +654,9 @@ yet its input proof only admitted quantities zero through two. The failed root i
 retired. V41 admits the legal 0–99 item-stack range, preserves the exact sale and money proofs, and
 reserves fresh `400001`/`410001`/`420001` train, validation, and test seeds. Retired v40 schedules
 are stress-only and cannot enter the new dataset.
+The first retired schedule completed; the second exposed Diglett at 12/32 HP between Surge
+opponents, below an observed 20-damage reply but above the old one-third healing floor. V41 now uses
+its same single bounded Super Potion at or below two-thirds HP and must replay that exact schedule.
 
 ## Evidence and project status
 
