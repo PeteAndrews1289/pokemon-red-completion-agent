@@ -155,6 +155,7 @@ def test_stone_clerk_return_retreats_until_fourth_floor_walker_clears(
 
     class Executor:
         retreated = False
+        yielded = False
 
         def execute(self, action: MacroAction) -> MacroAction:
             if action.kind is not MacroActionKind.MOVE:
@@ -164,7 +165,12 @@ def test_stone_clerk_return_retreats_until_fourth_floor_walker_clears(
                 reader.state = replace(reader.state, player_x=x - 1)
                 if x - 1 == 1:
                     self.retreated = True
-            elif action.value == "right" and (self.retreated or x != 5):
+            elif action.value == "down" and x == 1:
+                reader.state = replace(reader.state, player_y=3)
+                self.yielded = True
+            elif action.value == "up" and reader.state.player_y == 3:
+                reader.state = replace(reader.state, player_y=2)
+            elif action.value == "right" and (self.yielded or x != 5):
                 reader.state = replace(reader.state, player_x=x + 1)
             return action
 
@@ -182,6 +188,7 @@ def test_stone_clerk_return_retreats_until_fourth_floor_walker_clears(
 
     assert (reader.state.player_x, reader.state.player_y) == (6, 2)
     assert executor.retreated
+    assert executor.yielded
 
 
 def test_stone_clerk_return_recovers_a_later_corridor_deadlock(
@@ -197,6 +204,7 @@ def test_stone_clerk_return_recovers_a_later_corridor_deadlock(
 
     class Executor:
         retreated = False
+        yielded = False
 
         def execute(self, action: MacroAction) -> MacroAction:
             if action.kind is not MacroActionKind.MOVE:
@@ -206,7 +214,12 @@ def test_stone_clerk_return_recovers_a_later_corridor_deadlock(
                 reader.state = replace(reader.state, player_x=x - 1)
                 if x - 1 == 1:
                     self.retreated = True
-            elif action.value == "right" and (self.retreated or x != 9):
+            elif action.value == "down" and x == 1:
+                reader.state = replace(reader.state, player_y=3)
+                self.yielded = True
+            elif action.value == "up" and reader.state.player_y == 3:
+                reader.state = replace(reader.state, player_y=2)
+            elif action.value == "right" and (self.yielded or x != 9):
                 reader.state = replace(reader.state, player_x=x + 1)
             return action
 
@@ -224,6 +237,7 @@ def test_stone_clerk_return_recovers_a_later_corridor_deadlock(
 
     assert (reader.state.player_x, reader.state.player_y) == (10, 2)
     assert executor.retreated
+    assert executor.yielded
 
 
 def test_saffron_report_proves_purchase_handoff_order_and_terminal() -> None:

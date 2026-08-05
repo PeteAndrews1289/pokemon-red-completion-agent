@@ -683,3 +683,6 @@ now triggers at or below two-thirds HP, and that exact schedule must restart bef
 The first retry healed correctly, but the opponent replied before the delayed bag decrement became
 visible. The proof now latches heal and exactly-one-item consumption independently and still
 requires a living MAIN-menu return; the exact stress schedule must replay again.
+That Surge replay completed. Retired schedule `370003` then exposed the fourth-floor customer on
+the evolution-stone return: waiting at `(1,2)` blocked the customer's own crossing. V41 now steps
+into the proven `(1,3)` alcove, verifies reentry, and retries east within the existing finite gate.

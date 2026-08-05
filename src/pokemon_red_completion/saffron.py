@@ -98,6 +98,7 @@ MART_4F_TO_STONE_CLERK = _directions("LLLLLLLLLLLDDDRRRR")
 STONE_CLERK_WALKER_BLOCK_POSITIONS = ((2, 2), (4, 2))
 STONE_CLERK_RETURN_BLOCK_POSITION = (5, 2)
 STONE_CLERK_RETURN_RETREAT_POSITION = (1, 2)
+STONE_CLERK_RETURN_YIELD_POSITION = (1, 3)
 STONE_CLERK_RETURN_MAX_X = 11
 STONE_CLERK_WALKER_CLEAR_ATTEMPTS = 12
 STONE_CLERK_TO_MART_4F_STAIRS = _directions("LLLLUUURRRRRRRRRRR")
@@ -962,7 +963,29 @@ def _yield_from_stone_clerk_return(
                 raise SaffronChapterError(
                     "Evolution-stone return recovery could not reach its retreat gate."
                 )
+        actions.execute(MacroAction(MacroActionKind.MOVE, "down"))
+        _wait(actions, timing.movement_frames)
+        state = reader.read()
+        if (state.player_x, state.player_y) != STONE_CLERK_RETURN_YIELD_POSITION:
+            raise SaffronChapterError(
+                "Evolution-stone return recovery could not enter its yield alcove."
+            )
         _wait(actions, timing.movement_frames * (attempt + 1))
+        for return_attempt in range(STONE_CLERK_WALKER_CLEAR_ATTEMPTS):
+            actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
+            _wait(actions, timing.movement_frames)
+            state = reader.read()
+            if (state.player_x, state.player_y) == STONE_CLERK_RETURN_RETREAT_POSITION:
+                break
+            if (state.player_x, state.player_y) != STONE_CLERK_RETURN_YIELD_POSITION:
+                raise SaffronChapterError(
+                    "Evolution-stone return recovery left its yield alcove."
+                )
+            _wait(actions, timing.movement_frames * (return_attempt + 1))
+        else:
+            raise SaffronChapterError(
+                "Evolution-stone return recovery could not reenter the corridor."
+            )
         while state.player_x != target_x:
             before_x = state.player_x
             actions.execute(MacroAction(MacroActionKind.MOVE, "right"))

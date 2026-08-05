@@ -660,6 +660,9 @@ its same single bounded Super Potion at or below two-thirds HP and must replay t
 The replay then proved the heal and delayed inventory decrement can appear on adjacent frames after
 the opponent replies. V41 latches those two effects independently while still rejecting an extra
 item spend or a nonliving battle state.
+That Surge schedule now completes. The next retired schedule showed the evolution-stone return
+waiting at `(1,2)` could itself block the fourth-floor customer. The recovery now yields into the
+proven `(1,3)` alcove, verifies corridor reentry, and retries east under finite coordinate bounds.
 
 ## Evidence and project status
 
