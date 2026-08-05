@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_recovery import (
     ProtectedRecoveryError,
@@ -607,8 +608,8 @@ def _fight(
     )
 
 
-class _PauseForGiovanniSuperPotion(Exception):
-    pass
+class _PauseForGiovanniSuperPotion(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
 def _lead_needs_recovery(emulator: EmulatorState) -> bool:

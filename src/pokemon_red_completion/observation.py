@@ -42,6 +42,7 @@ class RamAddress(IntEnum):
     MENU_CURSOR_LOCATION = 0xCC30
     NPC_MOVEMENT_SCRIPT_TABLE = 0xCC57
     PLAYER_ATTACK_STAGE = 0xCD1A
+    PLAYER_SPECIAL_STAGE = 0xCD1D
     PLAYER_ACCURACY_STAGE = 0xCD1E
     ENEMY_DEFENSE_STAGE = 0xCD2F
     ENGAGED_TRAINER_CLASS = 0xCD2D
@@ -991,6 +992,7 @@ class RawGameState:
     enemy_level: int | None = None
     enemy_max_hp: int | None = None
     player_attack_stage: int | None = None
+    player_special_stage: int | None = None
     player_accuracy_stage: int | None = None
     enemy_defense_stage: int | None = None
     player_disabled_move_slot: int | None = None
@@ -3400,6 +3402,9 @@ class PokemonRedStateReader:
             enemy_max_hp=self._read_u16_be(RamAddress.ENEMY_MAX_HP),
             player_attack_stage=(
                 self._memory.read_u8(RamAddress.PLAYER_ATTACK_STAGE) if battle_state else None
+            ),
+            player_special_stage=(
+                self._memory.read_u8(RamAddress.PLAYER_SPECIAL_STAGE) if battle_state else None
             ),
             player_accuracy_stage=(
                 self._memory.read_u8(RamAddress.PLAYER_ACCURACY_STAGE) if battle_state else None

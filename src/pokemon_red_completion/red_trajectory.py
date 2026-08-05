@@ -125,6 +125,7 @@ class PokemonRedObservationEncoder:
             },
             "party": {
                 "count": raw.party_count,
+                "active_index": raw.active_party_index if in_battle else 0,
                 "species_refs": tuple(
                     _local_ref("species", species) for species in (raw.party_species_ids or ())
                 ),
@@ -158,6 +159,7 @@ class PokemonRedObservationEncoder:
                     "opponent_max_hp": enemy_max_hp,
                     "opponent_hp_ratio": _ratio(raw.enemy_hp, enemy_max_hp),
                     "player_attack_stage": _normalize_stage(raw.player_attack_stage),
+                    "player_special_stage": _normalize_stage(raw.player_special_stage),
                     "player_accuracy_stage": _normalize_stage(raw.player_accuracy_stage),
                     "opponent_defense_stage": _normalize_stage(raw.enemy_defense_stage),
                     "player_disabled_move_slot": raw.player_disabled_move_slot,
@@ -208,6 +210,12 @@ def _battle_resources(raw: RawGameState) -> dict[str, object]:
         return sum(inventory.get(int(item_id), 0) for item_id in item_ids)
 
     return {
+        "capture_item_count": quantity(
+            ItemId.POKE_BALL,
+            ItemId.GREAT_BALL,
+            ItemId.ULTRA_BALL,
+            ItemId.MASTER_BALL,
+        ),
         "healing_item_count": quantity(
             ItemId.POTION,
             ItemId.SUPER_POTION,

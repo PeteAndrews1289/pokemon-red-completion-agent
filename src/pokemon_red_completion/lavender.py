@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
 from pokemon_red_completion.battle_runtime import (
@@ -982,21 +983,22 @@ def run_lavender_chapter(
     return report
 
 
-class _PauseForBattleSuperPotion(Exception):
-    pass
+class _PauseForBattleSuperPotion(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
-class _PauseForBattleAwakening(Exception):
-    pass
+class _PauseForBattleAwakening(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
-class _PauseForBattleParlyzHeal(Exception):
-    pass
+class _PauseForBattleParlyzHeal(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
-class _PauseForFinalTunnelPivot(Exception):
+class _PauseForFinalTunnelPivot(BattleControlRequest):
     def __init__(self, party_index: int) -> None:
         self.party_index = party_index
+        super().__init__(BattleAction.switch(party_index + 1))
 
 
 def _run_lavender_trainer_battle(

@@ -392,6 +392,22 @@ def test_reader_exposes_pinned_player_disable_slot_and_turns() -> None:
     assert raw.player_disable_turns == 6
 
 
+def test_reader_exposes_pinned_player_special_stage() -> None:
+    memory = RecordingMemory(
+        {
+            RamAddress.STATUS_FLAGS_6: 1,
+            RamAddress.IS_IN_BATTLE: 2,
+            RamAddress.PARTY_COUNT: 1,
+            RamAddress.PLAYER_SPECIAL_STAGE: 10,
+        }
+    )
+
+    raw = PokemonRedStateReader(memory).read()
+
+    assert RamAddress.PLAYER_SPECIAL_STAGE == 0xCD1D
+    assert raw.player_special_stage == 10
+
+
 def test_reader_exposes_pinned_enemy_trapping_status() -> None:
     memory = RecordingMemory(
         {

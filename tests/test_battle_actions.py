@@ -18,6 +18,8 @@ def test_battle_actions_have_stable_game_neutral_references() -> None:
         == "pokemon.core:battle:boost:accuracy"
     )
     assert BattleAction.switch().semantic_ref == "pokemon.core:battle:switch:select"
+    assert BattleAction.capture().semantic_ref == "pokemon.core:battle:capture"
+    assert BattleAction.flee().semantic_ref == "pokemon.core:battle:flee"
     assert BattleAction.switch(4).public_dict() == {
         "kind": "switch",
         "semantic_ref": "pokemon.core:battle:switch:4",
@@ -37,6 +39,8 @@ def test_battle_actions_have_stable_game_neutral_references() -> None:
         BattleAction(BattleActionKind.USE_RECOVERY),
         BattleAction(BattleActionKind.USE_BOOST, boost_stat=BattleBoostStat.SPECIAL),
         BattleAction(BattleActionKind.SWITCH),
+        BattleAction(BattleActionKind.ATTEMPT_CAPTURE),
+        BattleAction(BattleActionKind.FLEE),
     ),
 )
 def test_control_request_preserves_non_move_action(action: BattleAction) -> None:

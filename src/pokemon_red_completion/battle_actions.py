@@ -14,6 +14,8 @@ class BattleActionKind(StrEnum):
     USE_RECOVERY = "use_recovery"
     USE_BOOST = "use_boost"
     SWITCH = "switch"
+    ATTEMPT_CAPTURE = "attempt_capture"
+    FLEE = "flee"
 
 
 class BattleBoostStat(StrEnum):
@@ -75,6 +77,14 @@ class BattleAction:
     def switch(cls, slot: int | None = None) -> BattleAction:
         return cls(BattleActionKind.SWITCH, party_slot=slot)
 
+    @classmethod
+    def capture(cls) -> BattleAction:
+        return cls(BattleActionKind.ATTEMPT_CAPTURE)
+
+    @classmethod
+    def flee(cls) -> BattleAction:
+        return cls(BattleActionKind.FLEE)
+
     @property
     def semantic_ref(self) -> str:
         if self.kind is BattleActionKind.SELECT_MOVE:
@@ -85,6 +95,10 @@ class BattleAction:
         if self.kind is BattleActionKind.USE_BOOST:
             assert self.boost_stat is not None
             return f"pokemon.core:battle:boost:{self.boost_stat.value}"
+        if self.kind is BattleActionKind.ATTEMPT_CAPTURE:
+            return "pokemon.core:battle:capture"
+        if self.kind is BattleActionKind.FLEE:
+            return "pokemon.core:battle:flee"
         return "pokemon.core:battle:recovery"
 
     def public_dict(self) -> dict[str, object]:

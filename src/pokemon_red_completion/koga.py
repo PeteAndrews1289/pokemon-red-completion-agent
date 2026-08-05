@@ -14,6 +14,11 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleBoostStat,
+    BattleControlRequest,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
 from pokemon_red_completion.battle_runtime import (
@@ -775,13 +780,16 @@ def _koga_move_slot(raw: RawGameState, *, allow_disable_fallback: bool) -> int:
     raise KogaChapterError("battle has no legal ranked attack")
 
 
-class _PauseForKogaReservePivot(Exception):
+class _PauseForKogaReservePivot(BattleControlRequest):
     def __init__(self, party_index: int) -> None:
         self.party_index = party_index
+        super().__init__(BattleAction.switch(party_index + 1))
 
 
-class _PauseForKogaXAccuracy(Exception):
+class _PauseForKogaXAccuracy(BattleControlRequest):
     """Pause move selection for the preregistered Muk setup item."""
+
+    default_action = BattleAction.boost(BattleBoostStat.ACCURACY)
 
 
 def _battle_koga_x_accuracy(

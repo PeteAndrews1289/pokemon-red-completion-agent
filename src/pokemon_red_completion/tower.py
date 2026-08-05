@@ -8,6 +8,7 @@ from dataclasses import dataclass, field, replace
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
@@ -833,20 +834,20 @@ def run_tower_chapter(
     return report
 
 
-class _PauseForTowerSuperPotion(Exception):
-    pass
+class _PauseForTowerSuperPotion(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
-class _PauseForTowerAwakening(Exception):
-    pass
+class _PauseForTowerAwakening(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
-class _PauseForTowerParlyzHeal(Exception):
-    pass
+class _PauseForTowerParlyzHeal(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
-class _PauseForTowerAccuracyReset(Exception):
-    pass
+class _PauseForTowerAccuracyReset(BattleControlRequest):
+    default_action = BattleAction.switch()
 
 
 def _tower_rival_needs_accuracy_reset(

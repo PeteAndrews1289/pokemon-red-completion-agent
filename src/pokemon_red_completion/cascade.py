@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_policy import choose_cerulean_rival_move_slot
 from pokemon_red_completion.battle_runtime import (
@@ -2599,8 +2600,8 @@ def _run_battle(
         raise CascadeChapterError(str(error)) from error
 
 
-class _PauseForMistyPotion(Exception):
-    pass
+class _PauseForMistyPotion(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
 def _run_misty_with_potion(
@@ -2654,12 +2655,12 @@ def _run_misty_with_potion(
             raise CascadeChapterError("Misty exceeded her bounded Potion surplus.")
 
 
-class _PauseForCeruleanRivalPotion(Exception):
-    pass
+class _PauseForCeruleanRivalPotion(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
-class _PauseForCeruleanRivalAccuracyReset(Exception):
-    pass
+class _PauseForCeruleanRivalAccuracyReset(BattleControlRequest):
+    default_action = BattleAction.switch()
 
 
 def _run_cerulean_rival_with_potion(

@@ -117,6 +117,7 @@ def test_red_encoder_exposes_normalized_and_namespaced_semantics() -> None:
         }
     ]
     assert features["resources"] == {
+        "capture_item_count": 0,
         "healing_item_count": 0,
         "status_recovery_item_count": 0,
         "revive_item_count": 0,
@@ -170,6 +171,7 @@ def test_red_encoder_normalizes_battle_state_without_raw_memory() -> None:
         "opponent_max_hp": 22,
         "opponent_hp_ratio": 0.5,
         "player_attack_stage": 1,
+        "player_special_stage": None,
         "player_accuracy_stage": -1,
         "opponent_defense_stage": 0,
         "player_disabled_move_slot": 3,

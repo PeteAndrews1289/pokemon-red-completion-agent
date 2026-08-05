@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_recovery import (
     ProtectedRecoveryError,
@@ -914,11 +915,11 @@ def _defeat_route22_rival(
         )
         return slot
 
-    class _HealBoundary(Exception):
-        pass
+    class _HealBoundary(BattleControlRequest):
+        default_action = BattleAction.recovery()
 
-    class _PivotBoundary(Exception):
-        pass
+    class _PivotBoundary(BattleControlRequest):
+        default_action = BattleAction.switch()
 
     potions_used = 0
     recovery_reserve = _bag(emulator).get(ItemId.HYPER_POTION, 0)

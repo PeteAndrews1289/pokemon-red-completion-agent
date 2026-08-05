@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
@@ -1078,9 +1079,10 @@ def _require_position(
         )
 
 
-class _PauseForSSAnneRivalPotion(Exception):
+class _PauseForSSAnneRivalPotion(BattleControlRequest):
     def __init__(self, item: ItemId = ItemId.POTION) -> None:
         self.item = item
+        super().__init__(BattleAction.recovery())
 
 
 def _run_ss_anne_rival_with_potion(

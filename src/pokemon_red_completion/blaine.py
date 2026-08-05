@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
@@ -1451,8 +1452,10 @@ def _team_training_move_slot(state: RawGameState) -> int:
     return choose_training_move_slot(pp, slots)
 
 
-class _PauseForTeamTrainingRecovery(Exception):
+class _PauseForTeamTrainingRecovery(BattleControlRequest):
     """Request a safe escape when live PP or Disable removes every training attack."""
+
+    default_action = BattleAction.flee()
 
 
 def _mansion_training_move_slot(state: RawGameState) -> int:

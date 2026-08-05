@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleActionExecutor,
@@ -1222,8 +1223,8 @@ def _enter_trainer_battle(
     raise VermilionChapterError(f"{label} missed its bounded battle gate.")
 
 
-class _PauseForRocketThiefPotion(Exception):
-    pass
+class _PauseForRocketThiefPotion(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
 def _run_rocket_thief_with_potion(
@@ -1298,8 +1299,8 @@ def _run_rocket_thief_with_potion(
         return result
 
 
-class _PauseForRoute6Potion(Exception):
-    pass
+class _PauseForRoute6Potion(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
 def _run_route_6_trainer_f_with_potion(
