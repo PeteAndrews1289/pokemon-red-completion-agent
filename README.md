@@ -657,6 +657,9 @@ are stress-only and cannot enter the new dataset.
 The first retired schedule completed; the second exposed Diglett at 12/32 HP between Surge
 opponents, below an observed 20-damage reply but above the old one-third healing floor. V41 now uses
 its same single bounded Super Potion at or below two-thirds HP and must replay that exact schedule.
+The replay then proved the heal and delayed inventory decrement can appear on adjacent frames after
+the opponent replies. V41 latches those two effects independently while still rejecting an extra
+item spend or a nonliving battle state.
 
 ## Evidence and project status
 

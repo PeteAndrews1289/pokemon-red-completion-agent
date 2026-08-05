@@ -1016,6 +1016,61 @@ def test_surge_recovery_settles_with_cancel_when_quantity_update_is_delayed(
     assert runtime.quantity == 1
 
 
+def test_surge_recovery_latches_heal_before_the_opponent_reply(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Runtime:
+        def __init__(self) -> None:
+            self.raw = replace(
+                _raw(),
+                battle_state=2,
+                enemy_hp=43,
+                active_party_index=0,
+                first_party_hp=12,
+                first_party_max_hp=32,
+            )
+            self.quantity = 3
+            self.confirmations = 0
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=1)
+
+        def read_u8(self, address: int) -> int:
+            assert address == RamAddress.CURRENT_MENU_ITEM
+            return 0
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.CONFIRM:
+                self.confirmations += 1
+                if self.confirmations == 3:
+                    self.raw = replace(self.raw, first_party_hp=32)
+            elif action.kind is MacroActionKind.CANCEL:
+                self.quantity = 2
+                self.raw = replace(self.raw, first_party_hp=18)
+
+    runtime = Runtime()
+    monkeypatch.setattr(surge_module, "_navigate_main", lambda *_args: runtime.raw)
+    monkeypatch.setattr(surge_module, "_select_bag_item", lambda *_args: None)
+    monkeypatch.setattr(
+        surge_module,
+        "_bag",
+        lambda _emulator: {ItemId.SUPER_POTION: runtime.quantity},
+    )
+
+    _use_surge_super_potion(
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        replace(DEFAULT_SURGE_TIMING, wait_frames=1),
+    )
+
+    assert runtime.quantity == 2
+    assert runtime.raw.first_party_hp == 18
+
+
 def _route_end(
     start: tuple[int, int],
     route: tuple[str, ...],

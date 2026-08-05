@@ -3913,12 +3913,21 @@ def _use_surge_super_potion(
     _pulse(executor, MacroActionKind.CONFIRM, frames=240)
 
     expected_hp = min(before.battler_max_hp, before.battler_hp + 50)
+    hp_effect_observed = False
+    quantity_effect_observed = False
     for _ in range(SURGE_ITEM_SETTLE_PULSES):
         current = reader.read()
+        current_quantity = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+        hp_effect_observed = hp_effect_observed or current.battler_hp == expected_hp
+        quantity_effect_observed = (
+            quantity_effect_observed or current_quantity == before_quantity - 1
+        )
+        if current_quantity < before_quantity - 1:
+            raise SurgeChapterError("Lt. Surge recovery spent more than one Super Potion.")
         if (
             current.battle_state == 2
-            and current.battler_hp == expected_hp
-            and _bag(emulator).get(ItemId.SUPER_POTION, 0) == before_quantity - 1
+            and hp_effect_observed
+            and quantity_effect_observed
             and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
         ):
             return

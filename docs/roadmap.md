@@ -680,3 +680,6 @@ partition seeds, and uses retired v40 schedules only for uncounted stress before
 The first stress schedule completed. The second left Diglett at 12/32 HP between Surge opponents;
 the old one-third heal floor did not cover the next observed 20 damage. The same one-item recovery
 now triggers at or below two-thirds HP, and that exact schedule must restart before qualification.
+The first retry healed correctly, but the opponent replied before the delayed bag decrement became
+visible. The proof now latches heal and exactly-one-item consumption independently and still
+requires a living MAIN-menu return; the exact stress schedule must replay again.

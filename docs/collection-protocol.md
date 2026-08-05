@@ -478,13 +478,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6583` |
-| Registry SHA-256 | `3d83e16d7262f825797d76339665c765cd78f6d1bb03738eb49c097d70224cd5` |
-| Source bundle SHA-256 | `3ca6c3a63e3d38ff8087f14c5eb948210bf212750d717b967fdac752dd95dfea` |
+| Registry SHA-256 | `0cbf2ddf9ed6e72a52bd6fe27d4c36a7929dcc7c24e6724e812e3a0427c9eecf` |
+| Source bundle SHA-256 | `809a7a0f86ae5ecedc865ab47eac977493148ee0633ea4aa09b90d65726b6ecf` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `67e162a3a7cd99f72eb3f77b5bb2925c9ef8aeafd84ceacc3458f56172a493e1` |
+| Teacher execution SHA-256 | `2e0308b2cb1834942625b580fb98caae078e3097b9b91f59db1a8544cd9edf8a` |
 | Dry-run schedule SHA-256 | `db1076f691c753055fb333523b4864b7f5a89cfc172da97737db8ff8372b142d` |
-| Slot `01` assignment ID | `4e42b97dfe1050af5eee15245c1bcf32968fc25100d21bb87cc860e5d02e26ec` |
+| Slot `01` assignment ID | `9a11e56db7300ff52948cf9dbdab27f70691577ea677d4dde30eaa1a17e20db3` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -1670,3 +1670,7 @@ HP after the preceding knockout; the former one-third recovery floor did not hea
 faster opponent dealt an observed 20 damage. V41 now spends the same single bounded Super Potion at
 or below two-thirds HP. No extra item, retry, alternate move, or teammate sacrifice is introduced;
 the exact stress schedule must restart under the updated source identity.
+That replay selected the recovery at the intended gate and restored HP, but the opponent's reply
+arrived before the delayed bag count became visible. The old verifier required full HP and the
+decrement on the same sampled frame. V41 now latches the observed heal and the exactly-one-item
+decrement independently, still requires a living MAIN-menu return, and fails on any second item.
