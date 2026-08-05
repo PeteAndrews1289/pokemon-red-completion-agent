@@ -2466,7 +2466,7 @@ def _top_up_lavender_supplies(
             absolute_index=8,
             item=ItemId.PARLYZ_HEAL,
             quantity=parlyz_quantity,
-            target_bag_quantity=TUNNEL_PARLYZ_HEALS_PURCHASED,
+            target_bag_quantity=LAVENDER_PARLYZ_HEAL_RESERVE,
         )
     if antidote_quantity:
         _buy_mart_item(
