@@ -478,13 +478,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6583` |
-| Registry SHA-256 | `521eb9e00abf981a8568cdd348a19d24e1e7a023151f716fc5b30a072a3ebf9c` |
-| Source bundle SHA-256 | `21c761c4cd3bf8835bbddfe9102a1061e61c139e19d7e880c1664151aa61e734` |
+| Registry SHA-256 | `6118ec288a4a46ac3334646bbe4ce2dee7be74a83f9a71fda3b652a4de6356d9` |
+| Source bundle SHA-256 | `de601ce7bd242c8473c8d33fa675648cb4e740b9983f49f66cb9e08b5eb5b10a` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `15f489d0bb0045c2468263967efb8f0a79b5d3c16b2172745e72d7fd114e5cb9` |
+| Teacher execution SHA-256 | `07ec4feb6c4e22f640e73889c2fd4f5218d7ae6e73d9e1e889fb5775db80b749` |
 | Dry-run schedule SHA-256 | `db1076f691c753055fb333523b4864b7f5a89cfc172da97737db8ff8372b142d` |
-| Slot `01` assignment ID | `0a0a8df1c6dc08cfb0930b5f2008c226f8f88a12631b7cf8bb55ade0993396a1` |
+| Slot `01` assignment ID | `ad45af776f6bfbaf9a1ffc66212230721e98a7e7c8a719b5b3cf61b6206687a9` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -1637,3 +1637,7 @@ The next reproduction crossed the repaired customer and exited the Mart, then th
 return lost its vertical alignment and ended at `(19,14)` instead of Route 7. That failed diagnostic
 remains uncounted. The complete city crossing now uses bounded observed-state movement rather than
 accepting an unverified 38-input trace before the Route 7 terminal gate.
+The next replay localized the obstruction to the initial eastbound staging leg, where a pedestrian
+held the player at `(13,14)`. A bounded westward yield to `(12,14)`, observed reentry, and proven
+crossing to `(14,14)` now precede the verified north/east Route 7 segment. The failure remains an
+uncounted diagnostic and qualification restarts.

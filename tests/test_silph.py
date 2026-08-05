@@ -8,6 +8,10 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.observation import Badge, EventFlag, ItemId, MapId, RawGameState
 from pokemon_red_completion.silph import (
     BATTLE_ITEM_SETTLE_PULSES,
+    CELADON_RETURN_PEDESTRIAN_BLOCK_POSITION,
+    CELADON_RETURN_PEDESTRIAN_CLEAR_ATTEMPTS,
+    CELADON_RETURN_PEDESTRIAN_CLEAR_POSITION,
+    CELADON_RETURN_PEDESTRIAN_YIELD_POSITION,
     DEFAULT_SILPH_TIMING,
     MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION,
     MART_2F_ASCENT_CUSTOMER_CLEAR_ATTEMPTS,
@@ -83,6 +87,13 @@ def test_mart_5f_customer_yield_is_source_pinned_and_bounded() -> None:
     assert MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION == (13, 2)
     assert MART_5F_GENTLEMAN_RETURN_YIELD_POSITION == (12, 2)
     assert MART_5F_GENTLEMAN_CLEAR_ATTEMPTS == 16
+
+
+def test_celadon_return_pedestrian_yield_is_bounded() -> None:
+    assert CELADON_RETURN_PEDESTRIAN_BLOCK_POSITION == (13, 14)
+    assert CELADON_RETURN_PEDESTRIAN_YIELD_POSITION == (12, 14)
+    assert CELADON_RETURN_PEDESTRIAN_CLEAR_POSITION == (14, 14)
+    assert CELADON_RETURN_PEDESTRIAN_CLEAR_ATTEMPTS == 16
 
 
 def test_mart_2f_ascent_customer_yield_is_source_pinned_and_bounded() -> None:
@@ -346,6 +357,55 @@ def test_silph_verified_movement_yields_to_mart_5f_customer_on_return() -> None:
         2,
     )
     assert executor.yield_attempts == 2
+
+
+def test_silph_verified_movement_yields_to_celadon_return_pedestrian() -> None:
+    blocked = replace(
+        _terminal(),
+        map_id=MapId.CELADON_CITY,
+        player_x=13,
+        player_y=14,
+    )
+
+    class Reader:
+        state = blocked
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    class Executor:
+        yielded_once = False
+
+        def __init__(self, reader: Reader) -> None:
+            self.reader = reader
+
+        def execute(self, action: object) -> None:
+            assert isinstance(action, MacroAction)
+            if action.kind is not MacroActionKind.MOVE:
+                return
+            coordinate = (self.reader.state.player_x, self.reader.state.player_y)
+            if action.value == "left" and coordinate == (13, 14):
+                self.reader.state = replace(self.reader.state, player_x=12)
+                self.yielded_once = True
+            elif action.value == "right" and coordinate == (12, 14):
+                self.reader.state = replace(self.reader.state, player_x=13)
+            elif action.value == "right" and coordinate == (13, 14) and self.yielded_once:
+                self.reader.state = replace(self.reader.state, player_x=14)
+
+    reader = Reader()
+    final = _move_verified(
+        Executor(reader),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        ("right",),
+        replace(DEFAULT_SILPH_TIMING, movement_frames=1),
+        "X Special city return staging",
+    )
+
+    assert (final.map_id, final.player_x, final.player_y) == (
+        MapId.CELADON_CITY,
+        14,
+        14,
+    )
 
 
 def test_silph_elevator_entry_retries_a_swallowed_doorway_input() -> None:

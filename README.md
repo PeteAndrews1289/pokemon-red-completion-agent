@@ -634,6 +634,9 @@ west/east transitions, and only then attempts the crossing.
 That repair crossed the customer and exited the Mart. The following fixed Celadon-to-Route-7 trace
 then lost its vertical alignment and stopped at `(19,14)`. V39 now verifies every coordinate change
 on that city return instead of accepting an unobserved 38-input trace.
+The next replay localized the loss to a pedestrian blocking the initial eastbound staging step at
+`(13,14)`. The route now retreats to `(12,14)`, waits with a finite observed reentry loop, proves
+the crossing to `(14,14)`, and resumes the verified north/east route.
 
 ## Evidence and project status
 

@@ -93,6 +93,10 @@ MART_5F_GENTLEMAN_CLEAR_POSITION = (14, 2)
 MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION = (13, 2)
 MART_5F_GENTLEMAN_RETURN_YIELD_POSITION = (12, 2)
 MART_5F_GENTLEMAN_CLEAR_ATTEMPTS = 16
+CELADON_RETURN_PEDESTRIAN_BLOCK_POSITION = (13, 14)
+CELADON_RETURN_PEDESTRIAN_YIELD_POSITION = (12, 14)
+CELADON_RETURN_PEDESTRIAN_CLEAR_POSITION = (14, 14)
+CELADON_RETURN_PEDESTRIAN_CLEAR_ATTEMPTS = 16
 MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION = (14, 5)
 MART_2F_ASCENT_CUSTOMER_YIELD_POSITION = (13, 5)
 MART_2F_ASCENT_CUSTOMER_CLEAR_POSITION = (14, 4)
@@ -933,7 +937,13 @@ def _acquire_silph_x_special(
             _return_mart_2f_to_1f(actions, reader, emulator, timing)
         _move_verified(actions, reader, route, timing, label)
         _require(reader.read(), map_id, coordinate, label)
-    _move(actions, reader, _directions("RRRRU"), timing)
+    _move_verified(
+        actions,
+        reader,
+        _directions("RRRRU"),
+        timing,
+        "X Special city return staging",
+    )
     _confirm_many(actions, 3, timing.menu_frames)
     _clear_field_text(  # type: ignore[arg-type]
         actions,
@@ -2194,6 +2204,15 @@ def _move_verified(
             ):
                 state = _yield_to_mart_5f_gentleman_from_left(actions, reader, timing)
                 continue
+            if (
+                label == "X Special city return staging"
+                and before.map_id == MapId.CELADON_CITY
+                and (before.player_x, before.player_y)
+                == CELADON_RETURN_PEDESTRIAN_BLOCK_POSITION
+                and direction == "right"
+            ):
+                state = _yield_to_celadon_return_pedestrian(actions, reader, timing)
+                continue
             raise SilphChapterError(
                 f"{label} blocked at step {index}: {direction}; "
                 f"{(state.map_id, state.player_x, state.player_y)!r}."
@@ -2372,6 +2391,66 @@ def _yield_to_mart_5f_gentleman_from_left(
             "X Special return customer final gate",
         )
     raise SilphChapterError("Celadon Mart 5F customer did not clear the west return aisle.")
+
+
+def _yield_to_celadon_return_pedestrian(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SilphTiming,
+) -> RawGameState:
+    """Vacate the west tile so the source-route pedestrian can clear the crossing."""
+
+    for attempt in range(CELADON_RETURN_PEDESTRIAN_CLEAR_ATTEMPTS):
+        _require(
+            reader.read(),
+            MapId.CELADON_CITY,
+            CELADON_RETURN_PEDESTRIAN_BLOCK_POSITION,
+            "X Special city pedestrian gate",
+        )
+        _move_verified(
+            actions,
+            reader,
+            ("left",),
+            timing,
+            "X Special city pedestrian yield",
+        )
+        _require(
+            reader.read(),
+            MapId.CELADON_CITY,
+            CELADON_RETURN_PEDESTRIAN_YIELD_POSITION,
+            "X Special city pedestrian yield",
+        )
+        for return_attempt in range(CELADON_RETURN_PEDESTRIAN_CLEAR_ATTEMPTS):
+            actions.execute(
+                MacroAction(
+                    MacroActionKind.WAIT,
+                    repeat=timing.movement_frames * (attempt + return_attempt + 1),
+                )
+            )
+            returned = _move(actions, reader, ("right",), timing)
+            if (
+                returned.player_x,
+                returned.player_y,
+            ) == CELADON_RETURN_PEDESTRIAN_BLOCK_POSITION:
+                break
+            _require(
+                returned,
+                MapId.CELADON_CITY,
+                CELADON_RETURN_PEDESTRIAN_YIELD_POSITION,
+                "X Special city pedestrian reentry wait",
+            )
+        else:
+            raise SilphChapterError("Celadon return pedestrian did not release the reentry tile.")
+        crossed = _move(actions, reader, ("right",), timing)
+        if (crossed.player_x, crossed.player_y) == CELADON_RETURN_PEDESTRIAN_CLEAR_POSITION:
+            return crossed
+        _require(
+            crossed,
+            MapId.CELADON_CITY,
+            CELADON_RETURN_PEDESTRIAN_BLOCK_POSITION,
+            "X Special city pedestrian final gate",
+        )
+    raise SilphChapterError("Celadon return pedestrian did not clear the eastbound route.")
 
 
 def _return_mart_2f_to_1f(

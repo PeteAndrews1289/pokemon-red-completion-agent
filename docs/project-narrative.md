@@ -1136,6 +1136,10 @@ The westward recovery then crossed successfully and returned outside. The next f
 lost its vertical alignment and ended at `(19,14)` rather than Route 7, showing that the same lesson
 had to extend beyond the newly repaired aisle. The Celadon return now proves every one-tile world
 state change before accepting the Route 7 connection.
+The following run localized that lost alignment to the first city staging leg: a pedestrian held
+the eastbound tile while the player waited at `(13,14)`. The controller now yields west to
+`(12,14)`, waits until reentry is observed, proves the crossing to `(14,14)`, and only then resumes
+the north/east Route 7 path.
 
 ## Engineering and portfolio takeaways
 

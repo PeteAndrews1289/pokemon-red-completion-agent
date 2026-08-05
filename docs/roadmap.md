@@ -656,3 +656,6 @@ schedule must restart from clean power under the updated source identity.
 The next reproduction crossed the customer and exited the Mart, then the blind Celadon return lost
 its vertical alignment and ended at `(19,14)` instead of Route 7. Every step of that city crossing
 now requires an observed coordinate or map transition before qualification restarts.
+The next replay localized the obstruction to a moving pedestrian at the initial `(13,14)` staging
+tile. A bounded westward yield to `(12,14)`, observed reentry, and proven crossing to `(14,14)` now
+precede the verified Route 7 segment. The exposed schedule must restart again.
