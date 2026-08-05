@@ -940,7 +940,13 @@ def _acquire_silph_x_special(
         reader,
         LavenderTiming(wait_frames=timing.menu_frames),
     )
-    _move(actions, reader, ("up",) * 2 + ("right",) * 36, timing)
+    _move_verified(
+        actions,
+        reader,
+        ("up",) * 2 + ("right",) * 36,
+        timing,
+        "X Special Route 7 city return",
+    )
     _require(reader.read(), MapId.ROUTE_7, (0, 3), "X Special Route 7 return")
     _move(actions, reader, ROUTE_7_CONNECTION_TO_GATE, timing)
     _require(reader.read(), MapId.ROUTE_7, (11, 10), "X Special Route 7 gate exterior")

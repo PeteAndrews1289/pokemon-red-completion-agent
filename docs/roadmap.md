@@ -653,3 +653,6 @@ The first reproductions reached the same obstruction and entered the new branch,
 proposed downward yield tile `(13,3)` was not traversable. The recovery now retreats west to the
 known-open `(12,2)` aisle tile, verifies its west/east transitions, and then recrosses. The exposed
 schedule must restart from clean power under the updated source identity.
+The next reproduction crossed the customer and exited the Mart, then the blind Celadon return lost
+its vertical alignment and ended at `(19,14)` instead of Route 7. Every step of that city crossing
+now requires an observed coordinate or map transition before qualification restarts.

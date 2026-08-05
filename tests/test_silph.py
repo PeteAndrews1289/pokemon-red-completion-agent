@@ -37,6 +37,7 @@ from pokemon_red_completion.silph import (
     SilphChapterReport,
     SilphCheckpoint,
     SilphTiming,
+    _acquire_silph_x_special,
     _battle_healing_item,
     _battle_healing_item_verified_terminal_exit,
     _enter_silph_elevator,
@@ -382,6 +383,13 @@ def test_silph_clerk_approach_uses_verified_steps() -> None:
         '_move_verified(actions, reader, MART_TO_CLERK, timing, "Saffron clerk approach")'
         in source
     )
+
+
+def test_x_special_city_return_uses_verified_steps() -> None:
+    source = getsource(_acquire_silph_x_special)
+
+    assert '"X Special Route 7 city return"' in source
+    assert '("up",) * 2 + ("right",) * 36' in source
 
 
 def test_silph_first_floor_routes_delegate_the_doorway_step() -> None:

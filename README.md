@@ -631,6 +631,9 @@ fresh `340001`/`350001`/`360001` train, validation, and test seed ranges.
 The first v39 reproduction engaged that branch but showed the proposed downward yield tile was not
 traversable. The west-side recovery now retreats along the open aisle to `(12,2)`, verifies its
 west/east transitions, and only then attempts the crossing.
+That repair crossed the customer and exited the Mart. The following fixed Celadon-to-Route-7 trace
+then lost its vertical alignment and stopped at `(19,14)`. V39 now verifies every coordinate change
+on that city return instead of accepting an unobserved 38-input trace.
 
 ## Evidence and project status
 

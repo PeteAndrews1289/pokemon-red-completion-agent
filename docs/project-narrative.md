@@ -1132,6 +1132,10 @@ Its first exact-schedule reproductions proved the branch selection and then show
 traversable rather than merely timing-sensitive. The corrected helper retreats west along the open
 top aisle to `(12,2)`, observes the west/east coordinate changes with bounded retries, and then
 recrosses. This applies the same closed-loop movement principle without inventing a walkable tile.
+The westward recovery then crossed successfully and returned outside. The next fixed city trace
+lost its vertical alignment and ended at `(19,14)` rather than Route 7, showing that the same lesson
+had to extend beyond the newly repaired aisle. The Celadon return now proves every one-tile world
+state change before accepting the Route 7 connection.
 
 ## Engineering and portfolio takeaways
 
