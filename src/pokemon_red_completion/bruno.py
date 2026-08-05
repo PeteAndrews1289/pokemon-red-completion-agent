@@ -244,18 +244,7 @@ def run_bruno_chapter(
             raise _HealBoundary
         species = raw.enemy_species_id or 0
         pp = raw.first_party_pp or (0, 0, 0, 0)
-        if species == 0x22 and pp[3] > BRUNO_LANCE_SURF_RESERVE:
-            slot = 4
-        elif species == 0x22 and pp[2] > 0:
-            slot = 3
-        elif pp[0] > 0:
-            slot = 1
-        elif pp[1] > 0:
-            slot = 2
-        elif pp[2] > 0:
-            slot = 3
-        else:
-            slot = 4
+        slot = _bruno_move_slot(pp)
         turns.append(
             BrunoTurn(
                 species,
@@ -454,6 +443,20 @@ def _turns_valid(turns: Iterable[BrunoTurn]) -> bool:
         and 0 <= item.lead_status <= 0x7F
         for item in items
     )
+
+
+def _bruno_move_slot(pp: tuple[int, int, int, int]) -> int:
+    """Prefer STAB Surf while preserving the explicit downstream reserve."""
+
+    if pp[3] > BRUNO_LANCE_SURF_RESERVE:
+        return 4
+    if pp[2] > 0:
+        return 3
+    if pp[0] > 0:
+        return 1
+    if pp[1] > 0:
+        return 2
+    return 4
 
 
 def _bruno_recovery_threshold(raw: RawGameState) -> int:

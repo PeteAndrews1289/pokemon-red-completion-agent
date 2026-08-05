@@ -663,6 +663,9 @@ item spend or a nonliving battle state.
 That Surge schedule now completes. The next retired schedule showed the evolution-stone return
 waiting at `(1,2)` could itself block the fourth-floor customer. The recovery now yields into the
 proven `(1,3)` alcove, verifies corridor reentry, and retries east under finite coordinate bounds.
+That fix passed, but the same stress schedule later left Bruno's level-55 Machoke at 8 HP with
+unboosted Mega Punch before a critical Submission knocked out the workhorse. Bruno now prefers
+STAB Surf above the already-declared one-use Lance reserve, with no extra grinding or item spend.
 
 ## Evidence and project status
 

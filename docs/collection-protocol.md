@@ -478,13 +478,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `6583` |
-| Registry SHA-256 | `1e9f1875bab4cbdf197f2ea70bb21ffe7ed2fd8c1966739b3f68051b5a1755bf` |
-| Source bundle SHA-256 | `e535ff13834a214954d0332b6f25afb5e2a9b30ac50d7c85ad5eccfef8f73193` |
+| Registry SHA-256 | `5c38b660a02f55ca2611cf329ee48f5e9e861cd16cff73a644c255594313679b` |
+| Source bundle SHA-256 | `26eb3b776762b45f5f3ac728c122c625a3168b16e05931e5b759280550e32d17` |
 | Behavior configuration SHA-256 | `6b1ead4078541ca953ed432e90c175710d4c4f7a2b096f14ed9ed5cb6c71b39d` |
 | Objective graph SHA-256 | `453ba1dcecbb33df9e10a911ac93090ff9a5080b07e02a5594e34a015e5bd3b6` |
-| Teacher execution SHA-256 | `7119241f8b49ffb2983a61d7aca09690304aa9dee2237c1a094605f9642e795a` |
+| Teacher execution SHA-256 | `8a9fb92c3db0dfbdae0d0e751d837b48602bb07e65769e25c97d8c122266dac8` |
 | Dry-run schedule SHA-256 | `db1076f691c753055fb333523b4864b7f5a89cfc172da97737db8ff8372b142d` |
-| Slot `01` assignment ID | `27620c99314a0ee6edd8420dd8ff77f123af3b71e48cee434658b54f9a134881` |
+| Slot `01` assignment ID | `283abd86ff77dec4d5b48ba71c47e3b57169fc98f458b514437c3dd67d139524` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
@@ -1679,3 +1679,7 @@ fourth-floor evolution-stone return with the customer occupying the eastbound co
 recovery waited at `(1,2)`, which itself prevented the customer from crossing. V41 now steps into
 the proven `(1,3)` alcove, observes the reentry to `(1,2)`, and only then retries east with the same
 finite coordinate and map bounds.
+That return recovery passed, and the same schedule reached Bruno. Unboosted Mega Punch left his
+level-55 Machoke at 8 HP before an observed critical Submission knocked out the workhorse. V41 now
+prefers STAB Surf throughout Bruno while PP exceeds the existing one-use Lance reserve, then falls
+back through the prior move order. It adds no grinding, item, retry, or party sacrifice.

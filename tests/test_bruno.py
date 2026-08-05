@@ -12,6 +12,7 @@ from pokemon_red_completion.bruno import (
     BRUNO_PARTY,
     BRUNO_RNG_DELAY_FRAMES,
     BrunoTurn,
+    _bruno_move_slot,
     _bruno_recovery_threshold,
     _encounter_party,
     _settle_bruno_victory,
@@ -76,6 +77,13 @@ def test_bruno_recovery_threshold_accounts_for_hitmonlee_damage() -> None:
     assert _bruno_recovery_threshold(raw(0x2C)) == 163
     assert _bruno_recovery_threshold(raw(0x7E)) == 163
     assert _bruno_recovery_threshold(raw(0x22)) == 90
+
+
+def test_bruno_prefers_stab_surf_above_the_lance_reserve() -> None:
+    assert _bruno_move_slot((20, 10, 10, 15)) == 4
+    assert _bruno_move_slot((20, 10, 10, 2)) == 4
+    assert _bruno_move_slot((20, 10, 10, 1)) == 3
+    assert _bruno_move_slot((20, 10, 0, 1)) == 1
 
 
 def test_bruno_victory_settle_stops_before_reinteracting(monkeypatch: pytest.MonkeyPatch) -> None:
