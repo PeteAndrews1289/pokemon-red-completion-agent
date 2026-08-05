@@ -788,7 +788,13 @@ def acquire_and_teach_ice_beam_from_celadon_center(
     money_before = _money(emulator)
     _move(actions, reader, CENTER_EXIT, timing)
     _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exit")
-    _move(actions, reader, CELADON_CENTER_EXIT_TO_MART, timing)
+    _move_verified(
+        actions,
+        reader,
+        CELADON_CENTER_EXIT_TO_MART,
+        timing,
+        "Celadon Ice Beam Mart approach",
+    )
     _require(reader.read(), MapId.CELADON_MART_1F, (16, 7), "Celadon Mart 1F")
     for route, map_id, coordinate, label in (
         (MART_1F_TO_2F, MapId.CELADON_MART_2F, (12, 2), "Celadon Mart 2F"),
@@ -826,7 +832,13 @@ def acquire_and_teach_ice_beam_from_celadon_center(
                 break
             _move(actions, reader, route[-2:], timing)
         _require(reader.read(), map_id, coordinate, label)
-    _move(actions, reader, CELADON_MART_EXIT_TO_CENTER, timing)
+    _move_verified(
+        actions,
+        reader,
+        CELADON_MART_EXIT_TO_CENTER,
+        timing,
+        "Celadon Ice Beam Center return",
+    )
     _require(reader.read(), MapId.CELADON_POKECENTER, (3, 7), "Celadon Center return")
     for _ in range(24):
         upgraded = reader.read()

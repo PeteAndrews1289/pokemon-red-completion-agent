@@ -56,6 +56,7 @@ from pokemon_red_completion.silph import (
     _silph_capacity_ready,
     _silph_fixed_move_slot,
     _silph_rival_move_slot,
+    acquire_and_teach_ice_beam_from_celadon_center,
     run_silph_chapter,
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
@@ -738,3 +739,11 @@ def test_silph_report_rejects_missing_evidence(
     value: object,
 ) -> None:
     assert not replace(_report(), **{field_name: value}).passed
+
+
+def test_ice_beam_errand_verifies_each_city_step_and_door_transition() -> None:
+    source = getsource(acquire_and_teach_ice_beam_from_celadon_center)
+
+    assert '"Celadon Ice Beam Mart approach"' in source
+    assert '"Celadon Ice Beam Center return"' in source
+    assert source.count("_move_verified(") >= 2
