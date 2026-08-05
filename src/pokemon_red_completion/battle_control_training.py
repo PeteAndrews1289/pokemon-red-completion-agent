@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from pokemon_red_completion.battle_control_features import (
     CONTROL_CLASS_REFS,
     BattleControlExample,
+    BattleControlHistoryTracker,
     control_class_ref,
     project_control_features,
 )
@@ -51,6 +52,7 @@ def control_examples(dataset: BattleControlDataset) -> tuple[BattleControlExampl
     """Project every authenticated label without using objective or game IDs as features."""
 
     projector = BattleFeatureProjector(PokemonRedBattleCatalog())
+    history = BattleControlHistoryTracker()
     examples: list[BattleControlExample] = []
     for label in dataset.labels:
         observation = label.observation
@@ -66,11 +68,13 @@ def control_examples(dataset: BattleControlDataset) -> tuple[BattleControlExampl
             features=project_control_features(
                 observation,
                 move_batch=projector.project(snapshot),
+                history=history.before(label.battle_plan_id, observation),
             ),
             class_index=CONTROL_CLASS_REFS.index(control_class_ref(label.teacher_action)),
             battle_plan_id=label.battle_plan_id,
             decision_index=label.decision_index,
         ))
+        history.advance(label.teacher_action, observation)
     return tuple(examples)
 
 
@@ -83,6 +87,7 @@ def fit_group_heldout_control_candidate(
     epochs: int = 500,
     learning_rate: float = 0.01,
     l2: float = 1e-4,
+    class_balance_power: float = 1.0,
 ) -> BattleControlCandidate:
     """Fit without allowing any battle identity to cross the validation boundary."""
 
@@ -112,6 +117,7 @@ def fit_group_heldout_control_candidate(
         epochs=epochs,
         learning_rate=learning_rate,
         l2=l2,
+        class_balance_power=class_balance_power,
     )
     return BattleControlCandidate(
         model=model,
@@ -133,6 +139,7 @@ def fit_preassigned_control_candidate(
     epochs: int = 500,
     learning_rate: float = 0.01,
     l2: float = 1e-4,
+    class_balance_power: float = 1.0,
 ) -> BattleControlCandidate:
     """Fit on complete rollout lineages and validate on disjoint rollout lineages."""
 
@@ -165,6 +172,7 @@ def fit_preassigned_control_candidate(
         epochs=epochs,
         learning_rate=learning_rate,
         l2=l2,
+        class_balance_power=class_balance_power,
     )
     return BattleControlCandidate(
         model=model,

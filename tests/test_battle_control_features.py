@@ -9,6 +9,7 @@ from pokemon_red_completion.battle_control_features import (
     CONTROL_CLASS_REFS,
     CONTROL_FEATURE_NAMES,
     BattleControlFeatureError,
+    BattleControlHistoryTracker,
     control_class_ref,
     project_control_features,
 )
@@ -67,6 +68,7 @@ def _observation() -> dict[str, object]:
             },
             "battle": {
                 "kind": "trainer",
+                "opponent_species_ref": "pokemon:test:opponent-one",
                 "opponent_level": 41,
                 "opponent_hp_ratio": 0.5,
                 "player_attack_stage": 2,
@@ -115,3 +117,23 @@ def test_control_projector_rejects_missing_or_impossible_state() -> None:
     impossible["features"]["party"]["members"][0]["hp_ratio"] = 2.0  # type: ignore[index]
     with pytest.raises(BattleControlFeatureError):
         project_control_features(impossible)
+
+
+def test_control_history_tracks_causal_actions_and_opponent_changes() -> None:
+    tracker = BattleControlHistoryTracker()
+    observation = _observation()
+
+    initial = tracker.before("battle-one", observation)
+    tracker.advance(BattleAction.recovery(), observation)
+    second = tracker.before("battle-one", observation)
+    observation["features"]["battle"]["opponent_species_ref"] = (  # type: ignore[index]
+        "pokemon:test:opponent-two"
+    )
+    next_opponent = tracker.before("battle-one", observation)
+
+    assert initial.battle_turn == 0
+    assert second.battle_turn == 1
+    assert second.previous_class_index == 1
+    assert second.action_counts[1] == 1
+    assert next_opponent.opponent_index == 1
+    assert next_opponent.opponent_turn == 0

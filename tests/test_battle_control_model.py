@@ -52,6 +52,9 @@ def test_control_mlp_rejects_one_class_training() -> None:
     with pytest.raises(BattleControlModelError, match="at least two"):
         BattleControlMLP.fit(_examples()[::2])
 
+    with pytest.raises(BattleControlModelError, match="class-balance"):
+        BattleControlMLP.fit(_examples(), class_balance_power=1.1)
+
 
 def test_control_model_digest_matches_canonical_artifact_writer_contract() -> None:
     model = BattleControlMLP.fit(_examples(), seed=7, epochs=2)

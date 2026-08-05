@@ -13,6 +13,8 @@ import numpy as np
 
 from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_control_features import (
+    BattleControlHistory,
+    BattleControlHistoryTracker,
     control_class_ref,
     project_control_features,
 )
@@ -84,6 +86,9 @@ class ModelAssistedBattlePolicy:
     control_shadow_confidence_total: float = 0.0
     control_shadow_unavailable: Counter[str] = field(default_factory=Counter)
     control_shadow_confusion: Counter[str] = field(default_factory=Counter)
+    control_history: BattleControlHistoryTracker = field(
+        default_factory=BattleControlHistoryTracker
+    )
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.confidence_threshold <= 1.0:
@@ -349,7 +354,9 @@ class ModelAssistedBattlePolicy:
             raise LearnedBattlePolicyError("battle control label lacks planner intent")
         snapshot = self.encoder.snapshot_from_raw(observation.state)
         if self.control_model is not None:
-            self._observe_control_model(snapshot, action)
+            history = self.control_history.before(intent.battle_plan_id, snapshot.to_dict())
+            self._observe_control_model(snapshot, action, history)
+            self.control_history.advance(action, snapshot.to_dict())
         if self.control_sink is None:
             return
         self.control_records += 1
@@ -373,6 +380,7 @@ class ModelAssistedBattlePolicy:
         self,
         snapshot: SemanticSnapshot,
         action: BattleAction,
+        history: BattleControlHistory,
     ) -> None:
         """Score one live teacher action without allowing the controller to act."""
 
@@ -380,7 +388,11 @@ class ModelAssistedBattlePolicy:
         try:
             observation = snapshot.to_dict()
             move_batch = self.projector.project(snapshot)
-            features = project_control_features(observation, move_batch=move_batch)
+            features = project_control_features(
+                observation,
+                move_batch=move_batch,
+                history=history,
+            )
             probabilities = self.control_model.predict_proba(features)
             predicted = self.control_model.class_refs[int(np.argmax(probabilities))]
             confidence = float(np.max(probabilities))

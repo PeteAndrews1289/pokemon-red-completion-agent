@@ -344,6 +344,7 @@ def _parser() -> argparse.ArgumentParser:
     learn_control_fit.add_argument("--epochs", type=int, default=500)
     learn_control_fit.add_argument("--seed", type=int, default=1289)
     learn_control_fit.add_argument("--hidden-units", type=int, default=24)
+    learn_control_fit.add_argument("--class-balance-power", type=float, default=1.0)
     learn_control_lineages = learn_control_commands.add_parser(
         "fit-lineages",
         help="Fit on complete rollout lineages and validate on disjoint lineages.",
@@ -371,6 +372,7 @@ def _parser() -> argparse.ArgumentParser:
     learn_control_lineages.add_argument("--epochs", type=int, default=750)
     learn_control_lineages.add_argument("--seed", type=int, default=1289)
     learn_control_lineages.add_argument("--hidden-units", type=int, default=48)
+    learn_control_lineages.add_argument("--class-balance-power", type=float, default=1.0)
     doctor = subcommands.add_parser("doctor", help="Verify the private ROM identity.")
     doctor.add_argument("--rom", type=Path, help="Private ROM path; otherwise use POKEMON_RED_ROM.")
     bootstrap = subcommands.add_parser(
@@ -1120,6 +1122,7 @@ def _run_control_learning(
                 seed=args.seed,
                 hidden_units=args.hidden_units,
                 epochs=args.epochs,
+                class_balance_power=args.class_balance_power,
             )
             training_record: dict[str, object] = {
                 "record_type": "battle_control_training",
@@ -1148,6 +1151,7 @@ def _run_control_learning(
                 seed=args.seed,
                 hidden_units=args.hidden_units,
                 epochs=args.epochs,
+                class_balance_power=args.class_balance_power,
             )
             training_record = {
                 "record_type": "battle_control_training",
@@ -1161,6 +1165,7 @@ def _run_control_learning(
             "epochs": args.epochs,
             "hidden_units": args.hidden_units,
             "seed": args.seed,
+            "class_balance_power": args.class_balance_power,
         }
         model_payload = candidate.model.to_dict()
         model_sha256 = canonical_sha256(model_payload)

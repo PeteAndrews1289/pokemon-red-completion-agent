@@ -136,6 +136,7 @@ class BattleControlMLP:
         epochs: int = 500,
         learning_rate: float = 0.01,
         l2: float = 1e-4,
+        class_balance_power: float = 1.0,
     ) -> BattleControlMLP:
         rows = tuple(examples)
         if not rows:
@@ -157,6 +158,11 @@ class BattleControlMLP:
             raise BattleControlModelError("control learning rate is invalid")
         if not math.isfinite(l2) or l2 < 0.0:
             raise BattleControlModelError("control regularization is invalid")
+        if (
+            not math.isfinite(class_balance_power)
+            or not 0.0 <= class_balance_power <= 1.0
+        ):
+            raise BattleControlModelError("control class-balance power is invalid")
         class_lookup = {value: index for index, value in enumerate(observed)}
         x = np.vstack([row.features for row in rows])
         y = np.asarray(
@@ -164,7 +170,7 @@ class BattleControlMLP:
             dtype=np.int64,
         )
         counts = np.bincount(y, minlength=len(observed)).astype(np.float64)
-        sample_weights = len(rows) / (len(observed) * counts[y])
+        sample_weights = counts[y] ** (-class_balance_power)
         sample_weights /= np.mean(sample_weights)
         rng = np.random.default_rng(seed)
         w1 = rng.normal(0.0, 0.04, size=(hidden_units, x.shape[1]))

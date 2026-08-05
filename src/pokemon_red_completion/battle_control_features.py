@@ -15,7 +15,7 @@ from pokemon_red_completion.battle_semantics import (
 )
 from pokemon_red_completion.battle_semantics import BattleFeatureBatch
 
-CONTROL_FEATURE_SCHEMA_ID = "pokemon.core.battle.control.features.v1"
+CONTROL_FEATURE_SCHEMA_ID = "pokemon.core.battle.control.features.v2"
 CONTROL_CLASS_REFS = (
     "pokemon.core:battle:select_move",
     "pokemon.core:battle:recovery",
@@ -59,6 +59,11 @@ CONTROL_FEATURE_NAMES = (
     "resources.attack_boosts",
     "resources.special_boosts",
     "progress.badge_count",
+    "history.battle_turn",
+    "history.opponent_index",
+    "history.opponent_turn",
+    *(f"history.previous.{value.rsplit(':', 1)[-1]}" for value in CONTROL_CLASS_REFS),
+    *(f"history.count.{value.rsplit(':', 1)[-1]}" for value in CONTROL_CLASS_REFS),
     *(f"matchup.player_type.{name}" for name in (
         "normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost",
         "fire", "water", "grass", "electric", "psychic", "ice", "dragon",
@@ -77,6 +82,115 @@ CONTROL_FEATURE_NAMES = (
     "moves.usable_count",
     "moves.mean_pp_fraction",
 )
+
+
+@dataclass(frozen=True, slots=True)
+class BattleControlHistory:
+    """Game-neutral action history available before one battle decision."""
+
+    battle_turn: int = 0
+    opponent_index: int = 0
+    opponent_turn: int = 0
+    previous_class_index: int | None = None
+    action_counts: tuple[int, ...] = (0,) * len(CONTROL_CLASS_REFS)
+
+    def __post_init__(self) -> None:
+        if any(
+            type(value) is not int or value < 0  # noqa: E721
+            for value in (self.battle_turn, self.opponent_index, self.opponent_turn)
+        ):
+            raise BattleControlFeatureError("control history indices must be non-negative")
+        if self.previous_class_index is not None and (
+            type(self.previous_class_index) is not int  # noqa: E721
+            or not 0 <= self.previous_class_index < len(CONTROL_CLASS_REFS)
+        ):
+            raise BattleControlFeatureError("previous control action is invalid")
+        if len(self.action_counts) != len(CONTROL_CLASS_REFS) or any(
+            type(value) is not int or value < 0 for value in self.action_counts  # noqa: E721
+        ):
+            raise BattleControlFeatureError("control action counts are invalid")
+
+    def feature_values(self) -> tuple[float, ...]:
+        previous = tuple(
+            float(self.previous_class_index == index)
+            for index in range(len(CONTROL_CLASS_REFS))
+        )
+        ceilings = (64, 16, 6, 6, 6, 6, 16, 16)
+        counts = tuple(
+            min(value, ceiling) / ceiling
+            for value, ceiling in zip(self.action_counts, ceilings, strict=True)
+        )
+        return (
+            min(self.battle_turn, 64) / 64.0,
+            min(self.opponent_index, 5) / 5.0,
+            min(self.opponent_turn, 32) / 32.0,
+            *previous,
+            *counts,
+        )
+
+
+@dataclass(slots=True)
+class BattleControlHistoryTracker:
+    """Derive causal temporal features without exposing game or objective identity."""
+
+    battle_plan_id: str | None = None
+    opponent_key: tuple[object, object] | None = None
+    last_opponent_hp_ratio: float | None = None
+    history: BattleControlHistory = BattleControlHistory()
+
+    def before(
+        self,
+        battle_plan_id: str,
+        observation: Mapping[str, object],
+    ) -> BattleControlHistory:
+        battle = _mapping(
+            _mapping(observation.get("features"), "features").get("battle"),
+            "battle",
+        )
+        opponent_key = (battle.get("opponent_species_ref"), battle.get("opponent_level"))
+        hp_ratio = _ratio(battle.get("opponent_hp_ratio"), "opponent hp ratio")
+        if battle_plan_id != self.battle_plan_id:
+            self.battle_plan_id = battle_plan_id
+            self.opponent_key = opponent_key
+            self.last_opponent_hp_ratio = None
+            self.history = BattleControlHistory()
+        elif opponent_key != self.opponent_key or (
+            self.last_opponent_hp_ratio is not None
+            and self.last_opponent_hp_ratio <= 0.25
+            and hp_ratio >= 0.9
+        ):
+            self.opponent_key = opponent_key
+            self.history = BattleControlHistory(
+                battle_turn=self.history.battle_turn,
+                opponent_index=self.history.opponent_index + 1,
+                action_counts=self.history.action_counts,
+                previous_class_index=self.history.previous_class_index,
+            )
+        return self.history
+
+    def advance(
+        self,
+        action: BattleAction,
+        observation: Mapping[str, object],
+    ) -> None:
+        class_index = CONTROL_CLASS_REFS.index(control_class_ref(action))
+        counts = list(self.history.action_counts)
+        counts[class_index] += 1
+        battle = _mapping(
+            _mapping(observation.get("features"), "features").get("battle"),
+            "battle",
+        )
+        self.last_opponent_hp_ratio = _ratio(
+            battle.get("opponent_hp_ratio"),
+            "opponent hp ratio",
+        )
+        self.history = BattleControlHistory(
+            battle_turn=self.history.battle_turn + 1,
+            opponent_index=self.history.opponent_index,
+            opponent_turn=self.history.opponent_turn + 1,
+            previous_class_index=class_index,
+            action_counts=tuple(counts),
+        )
 
 
 class BattleControlFeatureError(ValueError):
@@ -126,6 +240,7 @@ def project_control_features(
     observation: Mapping[str, object],
     *,
     move_batch: BattleFeatureBatch | None = None,
+    history: BattleControlHistory | None = None,
 ) -> NDArray[np.float64]:
     """Project one privacy-safe semantic snapshot into normalized transferable state."""
 
@@ -150,6 +265,7 @@ def project_control_features(
     kind = battle.get("kind")
     if kind not in {"trainer", "wild"}:
         raise BattleControlFeatureError("battle kind must be trainer or wild")
+    temporal = history if history is not None else BattleControlHistory()
     values = (
         float(kind == "trainer"),
         float(kind == "wild"),
@@ -183,6 +299,7 @@ def project_control_features(
         _resource(resources, "attack_boost_count", 20),
         _resource(resources, "special_boost_count", 20),
         _bounded(progress.get("badge_count"), 0, 8, "badge count") / 8.0,
+        *temporal.feature_values(),
         *_move_control_features(move_batch),
     )
     result = np.asarray(values, dtype=np.float64)
