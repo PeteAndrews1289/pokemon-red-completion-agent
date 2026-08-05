@@ -5,6 +5,10 @@ from copy import deepcopy
 
 import pytest
 
+from pokemon_red_completion.collection_protocol import (
+    collection_document_sha256,
+    objective_graph_document,
+)
 from pokemon_red_completion.planner_dataset import (
     PlannerDatasetError,
     PlannerDecisionProvenance,
@@ -14,6 +18,7 @@ from pokemon_red_completion.planner_model import ObjectiveRanker, planner_accura
 from pokemon_red_completion.planner_semantics import ObjectiveFeatureProjector
 from pokemon_red_completion.planner_trajectory import SemanticObjectiveDecisionObserver
 from pokemon_red_completion.play import QUALIFIED_OBJECTIVE_SEQUENCE
+from pokemon_red_completion.quest import quest_graph_payload
 from pokemon_red_completion.red_trajectory import (
     POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
 )
@@ -57,6 +62,9 @@ class _Reader:
             "episode_id": "episode-1",
             "game_id": "pokemon.test",
             "metadata": {
+                "objective_graph_sha256": collection_document_sha256(
+                    objective_graph_document(quest_graph_payload(COMPLETION_QUEST))
+                ),
                 "policy": {
                     "actor": "deterministic_teacher",
                     "policy_id": POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,

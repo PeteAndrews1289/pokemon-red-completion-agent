@@ -7,7 +7,12 @@ adapters below this planning layer.
 
 from __future__ import annotations
 
-from pokemon_red_completion.quest import Objective, QuestGraph, Specialist
+from pokemon_red_completion.quest import (
+    Objective,
+    QuestGraph,
+    Specialist,
+    quest_graph_payload,
+)
 
 HALL_OF_FAME_FACT = "game:hall_of_fame"
 
@@ -366,14 +371,4 @@ COMPLETION_QUEST = build_completion_quest_graph()
 def completion_route_payload() -> list[dict[str, object]]:
     """Return the canonical public projection of the completion objective graph."""
 
-    return [
-        {
-            "id": objective.id,
-            "title": objective.title,
-            "specialist": objective.specialist.value,
-            "prerequisites": sorted(objective.prerequisites),
-            "completion_facts": sorted(objective.completion_facts),
-            "target_region": objective.target_region,
-        }
-        for objective in COMPLETION_QUEST.topological_order()
-    ]
+    return quest_graph_payload(COMPLETION_QUEST)

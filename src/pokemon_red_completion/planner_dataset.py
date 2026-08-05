@@ -7,6 +7,10 @@ from collections.abc import Iterator, Mapping
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.collection_protocol import (
+    collection_document_sha256,
+    objective_graph_document,
+)
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.planner_semantics import (
     ObjectiveFeatureBatch,
@@ -15,7 +19,7 @@ from pokemon_red_completion.planner_semantics import (
 from pokemon_red_completion.planner_trajectory import (
     POKEMON_OBJECTIVE_SELECTION_SKILL_ID,
 )
-from pokemon_red_completion.quest import QuestGraph
+from pokemon_red_completion.quest import QuestGraph, quest_graph_payload
 from pokemon_red_completion.trajectory import canonical_sha256
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -91,6 +95,11 @@ def load_planner_episode(
     episode_id = _string(header.get("episode_id"), subject="episode identity")
     game_id = _string(header.get("game_id"), subject="game identity")
     metadata = _mapping(header.get("metadata"), subject="episode metadata")
+    expected_graph_sha256 = collection_document_sha256(
+        objective_graph_document(quest_graph_payload(graph))
+    )
+    if metadata.get("objective_graph_sha256") != expected_graph_sha256:
+        raise PlannerDatasetError("episode objective graph does not match the training graph")
     policy = _mapping(metadata.get("policy"), subject="episode policy metadata")
     if policy.get("actor") != required_provenance.actor or policy.get("policy_id") != (
         required_provenance.policy_id

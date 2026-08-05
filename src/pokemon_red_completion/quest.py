@@ -246,3 +246,21 @@ class QuestGraph:
                     heapq.heappush(ready, (dependant.priority, dependant.id))
 
         return tuple(ordered)
+
+
+def quest_graph_payload(graph: QuestGraph) -> list[dict[str, object]]:
+    """Return the canonical game-neutral public projection of a quest graph."""
+
+    if not isinstance(graph, QuestGraph):
+        raise TypeError("graph must be a QuestGraph")
+    return [
+        {
+            "id": objective.id,
+            "title": objective.title,
+            "specialist": objective.specialist.value,
+            "prerequisites": sorted(objective.prerequisites),
+            "completion_facts": sorted(objective.completion_facts),
+            "target_region": objective.target_region,
+        }
+        for objective in graph.topological_order()
+    ]
