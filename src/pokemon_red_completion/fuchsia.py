@@ -35,6 +35,7 @@ from pokemon_red_completion.lavender import (
     _flee,
     _open_bag,
     _select_bag_item,
+    _sell_mart_item_stack,
     _sell_single_mart_item,
 )
 from pokemon_red_completion.observation import (
@@ -59,6 +60,8 @@ SNORLAX_RUNTIME_PULSE_BOUND = 720
 SNORLAX_GREAT_BALL_RESERVE = 32
 SNORLAX_SUPER_POTION_RESERVE = 2
 SNORLAX_TM34_SALE_PROCEEDS = 1_000
+SNORLAX_POTION_SALE_PROCEEDS = 150
+SNORLAX_ANTIDOTE_SALE_PROCEEDS = 50
 ROUTE13_BIRD_KEEPER_BITE_PP_BOUND = 15
 GREAT_BALL_PRICE = 600
 SUPER_POTION_PRICE = 700
@@ -784,6 +787,41 @@ def _purchase_snorlax_capture_reserve(
         ItemId.TM34_BIDE,
         expected_proceeds=SNORLAX_TM34_SALE_PROCEEDS,
     )
+    expected_cost = (
+        SNORLAX_GREAT_BALL_RESERVE * GREAT_BALL_PRICE
+        + potion_purchase_quantity * SUPER_POTION_PRICE
+    )
+    potion_sale_quantity, antidote_sale_quantity = _snorlax_funding_sale_quantities(
+        money=before_money + SNORLAX_TM34_SALE_PROCEEDS,
+        potions=_bag(emulator).get(ItemId.POTION, 0),
+        antidotes=_bag(emulator).get(ItemId.ANTIDOTE, 0),
+        required_cost=expected_cost,
+    )
+    funding_sale_proceeds = 0
+    if potion_sale_quantity:
+        proceeds = potion_sale_quantity * SNORLAX_POTION_SALE_PROCEEDS
+        _sell_mart_item_stack(
+            actions,
+            reader,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            ItemId.POTION,
+            quantity=potion_sale_quantity,
+            expected_proceeds=proceeds,
+        )
+        funding_sale_proceeds += proceeds
+    if antidote_sale_quantity:
+        proceeds = antidote_sale_quantity * SNORLAX_ANTIDOTE_SALE_PROCEEDS
+        _sell_mart_item_stack(
+            actions,
+            reader,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            ItemId.ANTIDOTE,
+            quantity=antidote_sale_quantity,
+            expected_proceeds=proceeds,
+        )
+        funding_sale_proceeds += proceeds
     _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
     _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_LAVENDER_TIMING.wait_frames)
     try:
@@ -814,15 +852,15 @@ def _purchase_snorlax_capture_reserve(
             _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     except LavenderChapterError as error:
         raise FuchsiaChapterError(f"Could not buy the Snorlax capture reserve: {error}") from error
-    expected_cost = (
-        SNORLAX_GREAT_BALL_RESERVE * GREAT_BALL_PRICE
-        + potion_purchase_quantity * SUPER_POTION_PRICE
-    )
     if (
         _bag(emulator).get(ItemId.GREAT_BALL, 0) != SNORLAX_GREAT_BALL_RESERVE
         or _bag(emulator).get(ItemId.SUPER_POTION, 0)
         != before_potions + potion_purchase_quantity
-        or before_money + SNORLAX_TM34_SALE_PROCEEDS - _money(emulator) != expected_cost
+        or before_money
+        + SNORLAX_TM34_SALE_PROCEEDS
+        + funding_sale_proceeds
+        - _money(emulator)
+        != expected_cost
     ):
         raise FuchsiaChapterError("Snorlax capture-reserve economy proof failed.")
     _move(
@@ -848,6 +886,37 @@ def _purchase_snorlax_capture_reserve(
     _move(actions, reader, emulator, run, ("up",) * 4, timing, "Lavender nurse return")
     _heal_at_nurse(actions, reader, emulator, timing)
     _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 3), "capture-ready boundary")
+
+
+def _snorlax_funding_sale_quantities(
+    *,
+    money: int,
+    potions: int,
+    antidotes: int,
+    required_cost: int,
+) -> tuple[int, int]:
+    """Fund the throw ceiling from obsolete cures without overselling."""
+
+    shortfall = max(0, required_cost - money)
+    potion_quantity = min(
+        potions,
+        (shortfall + SNORLAX_POTION_SALE_PROCEEDS - 1)
+        // SNORLAX_POTION_SALE_PROCEEDS,
+    )
+    shortfall = max(0, shortfall - potion_quantity * SNORLAX_POTION_SALE_PROCEEDS)
+    antidote_quantity = min(
+        antidotes,
+        (shortfall + SNORLAX_ANTIDOTE_SALE_PROCEEDS - 1)
+        // SNORLAX_ANTIDOTE_SALE_PROCEEDS,
+    )
+    shortfall = max(0, shortfall - antidote_quantity * SNORLAX_ANTIDOTE_SALE_PROCEEDS)
+    if shortfall:
+        raise FuchsiaChapterError(
+            "Obsolete cure inventory cannot fund the declared Snorlax throw ceiling: "
+            f"shortfall={shortfall}, money={money}, potions={potions}, "
+            f"antidotes={antidotes}, required={required_cost}."
+        )
+    return potion_quantity, antidote_quantity
 
 
 def _sell_capture_surplus(
