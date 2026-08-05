@@ -1518,3 +1518,9 @@ The verified corridor then proved its starting state was wrong: the fixed Center
 trace had re-entered the building from a displaced approach. Center returns now use the existing
 collision-discovering Saffron planner to reach the Silph exterior at `(18,22)`, prove the entrance
 warp to 1F `(10,17)`, and only then begin the verified elevator corridor.
+
+That replay crossed Silph, all eight badges, Victory Road, Lorelei, and Bruno. Bruno immediately
+reapplied a valid status after recovery; the teacher continued legally, won, and entered Agatha's
+room with all six members fully healed and status-free, but the receipt rejected the intermediate
+status byte. Bruno's decision evidence now accepts any valid low-seven-bit Gen-I status value while
+retaining positive-HP, legal-move, terminal event, full-heal, and clean-status requirements.

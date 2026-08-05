@@ -582,3 +582,6 @@ The next diagnostic localized the remaining loss to the preceding first-floor co
 both corridor traversals now use bounded step-by-step movement proofs.
 That proof exposed a displaced Center-to-Silph city approach; returns now use collision-aware
 Saffron navigation and prove both the exterior stance and 1F entrance warp before the corridor.
+That replay defeated Bruno at checkpoint 303 but exposed an over-strict receipt rule after an
+immediate status reapplication. Intermediate decisions may now carry valid Gen-I status bytes;
+the terminal party must still be fully healed, status-free, and safely inside Agatha's room.

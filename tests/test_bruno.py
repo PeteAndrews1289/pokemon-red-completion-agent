@@ -54,7 +54,9 @@ def test_bruno_receipt_reconstructs_party_and_policy() -> None:
     )
     assert _encounter_party(turns) == BRUNO_PARTY
     assert _turns_valid(turns)
+    assert _turns_valid((BrunoTurn(0x2C, 55, 63, 193, 0x20, (19, 10, 10, 14), 1),))
     assert not _turns_valid((BrunoTurn(0x22, 53, 1, 0, 0, (1, 1, 1, 1), 4),))
+    assert not _turns_valid((BrunoTurn(0x22, 53, 1, 70, 0x80, (1, 1, 1, 1), 4),))
 
 
 def test_bruno_recovery_threshold_accounts_for_hitmonlee_damage() -> None:

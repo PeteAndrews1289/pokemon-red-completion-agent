@@ -1017,6 +1017,13 @@ Center had returned to Silph from a displaced approach, so the corridor's initia
 false. The return now reuses the collision-aware Saffron planner, proves exterior `(18,22)` and the
 warp to 1F `(10,17)`, then starts the corridor. Each layer now owns and proves its own boundary.
 
+The resulting replay reached checkpoint 303 after defeating Bruno. A status condition had been
+reapplied immediately after recovery; continuing the legal battle was correct, and the terminal
+party was fully healed and status-free, but the receipt required every intermediate decision to
+show zero status. The evidence contract now accepts valid Gen-I status bytes during combat while
+still requiring positive HP, a legal move slot, the Bruno event, Agatha's room, and a clean fully
+healed six-member terminal state.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

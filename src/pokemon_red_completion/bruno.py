@@ -449,7 +449,9 @@ def _encounter_party(turns: Iterable[BrunoTurn]) -> tuple[tuple[int, int], ...]:
 def _turns_valid(turns: Iterable[BrunoTurn]) -> bool:
     items = tuple(turns)
     return bool(items) and all(
-        item.move_slot in {1, 2, 3, 4} and item.lead_hp > 0 and item.lead_status == 0
+        item.move_slot in {1, 2, 3, 4}
+        and item.lead_hp > 0
+        and 0 <= item.lead_status <= 0x7F
         for item in items
     )
 
