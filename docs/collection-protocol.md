@@ -1564,3 +1564,9 @@ two Cerulean purchases may be consumed before the dungeon, leaving only one for 
 lead/helper roles. The Cerulean purchase contract now carries three Antidotes and accepts every
 observed zero-to-three remainder at immediate field-cure gates. The replay remains uncounted and
 must restart from clean power under the resulting source identity.
+
+The additional Cerulean quantity input then shifted a moving pedestrian and exposed the blind
+Center-to-rival staging trace: several swallowed inputs left the player at `(16,16)` rather than
+the required `(20,7)`. The run stopped at checkpoint 36 and remains uncounted. That staging route
+now requires every direction to change map or coordinate within eight bounded retries and rejects
+battle or a fainted lead before continuing. The exposed seed must restart under this source.

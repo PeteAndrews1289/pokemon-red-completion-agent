@@ -1063,6 +1063,12 @@ continue poisoned with no cure. Cerulean now buys three Antidotes: one may cover
 while two remain available for independent tunnel roles. This is an explicit future-objective
 reserve, not an assumption that one status event represents the whole dungeon.
 
+Adding the third shop quantity input shifted the Cerulean pedestrian timing. The next replay left
+the Mart correctly but a blind Center-to-rival trace advanced its instruction pointer across
+swallowed steps and stopped at `(16,16)` instead of `(20,7)`. That route now retries unchanged
+field inputs and proves every requested map/coordinate transition before advancing. The lesson is
+that even a correct resource change must revalidate downstream navigation timing.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

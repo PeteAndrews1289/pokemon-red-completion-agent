@@ -611,3 +611,6 @@ The first v38 diagnostic cleared Route 11, then exposed a second poison continge
 Tunnel after the two-item Cerulean stock had been split between earlier travel and the dungeon.
 The teacher now buys three Antidotes and treats the extra cure as a protected downstream-role
 reserve. The same exposed seed must restart uncounted before v38 rehearsal.
+The extra Cerulean purchase input shifted pedestrian timing and exposed a blind rival-staging
+trace, which ended at `(16,16)` instead of `(20,7)`. That route now proves each tile transition
+with bounded unchanged-input retries. The diagnostic must restart again under the new source.

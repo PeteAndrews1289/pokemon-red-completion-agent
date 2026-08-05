@@ -394,7 +394,7 @@ def run_cascade_chapter(
         emulator,
         timing,
     )
-    _move(
+    _move_verified(
         chapter_executor,
         reader,
         CENTER_TO_RIVAL_STAGING_DIRECTIONS,
@@ -930,6 +930,44 @@ def _move(
             raise CascadeChapterError(f"Unexpected battle interrupted {label} at step {step}.")
         if state.first_party_hp == 0:
             raise CascadeChapterError(f"Squirtle's lineage fainted during {label}.")
+    return state
+
+
+def _move_verified(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    label: str,
+) -> RawGameState:
+    """Retry unchanged field inputs while proving every requested tile transition."""
+
+    state = reader.read()
+    for step, direction in enumerate(directions, start=1):
+        before = state
+        for _ in range(8):
+            if state.battle_state:
+                raise CascadeChapterError(
+                    f"Unexpected battle interrupted {label} before step {step}."
+                )
+            executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+            state = reader.read()
+            if state.battle_state:
+                raise CascadeChapterError(
+                    f"Unexpected battle interrupted {label} at step {step}."
+                )
+            if state.first_party_hp == 0:
+                raise CascadeChapterError(f"Squirtle's lineage fainted during {label}.")
+            if (
+                state.map_id != before.map_id
+                or state.player_x != before.player_x
+                or state.player_y != before.player_y
+            ):
+                break
+        else:
+            raise CascadeChapterError(
+                f"{label} blocked at step {step}: {direction}; "
+                f"{(state.map_id, state.player_x, state.player_y)!r}."
+            )
     return state
 
 

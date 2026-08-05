@@ -62,6 +62,7 @@ from pokemon_red_completion.cascade import (
     _cerulean_return_direction,
     _cross_route_24_npc,
     _cross_route_24_recovery_npc,
+    _move_verified,
     _reverse_directions,
     _run_cerulean_gym_trainer_with_potion,
     _run_cerulean_rival_with_potion,
@@ -104,6 +105,36 @@ class _FinalEvidence:
 
 def test_cerulean_poison_reserve_covers_route_and_tunnel_contingencies() -> None:
     assert CERULEAN_ANTIDOTE_RESERVE == 3
+
+
+def test_verified_cerulean_route_retries_a_swallowed_pedestrian_step() -> None:
+    class Reader:
+        state = RawGameState(True, MapId.CERULEAN_CITY, 0, 0, 1, 0, first_party_hp=10)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        actions = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            self.actions += 1
+            if self.actions > 1:
+                reader.state = replace(reader.state, player_x=(reader.state.player_x or 0) + 1)
+            return action
+
+    executor = Executor()
+    final = _move_verified(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        ("right", "right"),
+        "Cerulean rival staging",
+    )
+
+    assert (final.player_x, final.player_y) == (2, 0)
+    assert executor.actions == 3
 
 
 class _MemoryEmulator:
