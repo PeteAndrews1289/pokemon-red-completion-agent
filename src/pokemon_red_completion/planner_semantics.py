@@ -8,7 +8,7 @@ from dataclasses import dataclass
 import numpy as np
 from numpy.typing import NDArray
 
-from pokemon_red_completion.quest import Objective
+from pokemon_red_completion.quest import Objective, QuestGraph
 
 PLANNER_FEATURE_SCHEMA_ID = "pokemon.core.planning.objective-ranker.v1"
 _SPECIALISTS = (
@@ -55,16 +55,26 @@ class ObjectiveFeatureBatch:
 class ObjectiveFeatureProjector:
     """Project state/objective pairs without game IDs or objective-ID features."""
 
+    def __init__(self, graph: QuestGraph) -> None:
+        if not isinstance(graph, QuestGraph):
+            raise TypeError("graph must be a QuestGraph")
+        self._graph = graph
+
     @property
     def feature_names(self) -> tuple[str, ...]:
-        names = ["bias", "candidate_priority", "candidate_prerequisite_count"]
+        names = [
+            "bias",
+            "candidate_priority",
+            "candidate_prerequisite_count",
+            "candidate_direct_dependant_count",
+        ]
         names.extend(f"specialist:{name}" for name in _SPECIALISTS)
         names.extend(f"completion_kind:{name}" for name in _FACT_KINDS)
         names.extend(f"progress_x_specialist:{name}" for name in _SPECIALISTS)
         names.extend(f"badges_x_completion_kind:{name}" for name in _FACT_KINDS)
         names.extend(
             (
-                "candidate_location_matches_current_area_kind",
+                "candidate_target_region_matches_current",
                 "candidate_is_next_league_stage",
             )
         )
@@ -108,6 +118,7 @@ class ObjectiveFeatureProjector:
                 1.0,
                 min(candidate.priority, 1000) / 1000.0,
                 min(len(candidate.prerequisites), 8) / 8.0,
+                min(self._graph.direct_dependant_count(candidate.id), 8) / 8.0,
             ]
             row.extend(float(specialist == name) for name in _SPECIALISTS)
             row.extend(float(name in completion_kinds) for name in _FACT_KINDS)
@@ -119,9 +130,8 @@ class ObjectiveFeatureProjector:
             )
             row.append(
                 float(
-                    area_kind is not None
-                    and "location" in completion_kinds
-                    and _location_kind_hint(candidate) == area_kind
+                    candidate.target_region is not None
+                    and _region_matches(snapshot.get("location"), candidate.target_region)
                 )
             )
             row.append(float("league" in completion_kinds))
@@ -139,13 +149,11 @@ def _fact_kind(fact: str) -> str:
     return prefix if prefix in _FACT_KINDS[:-1] else "other"
 
 
-def _location_kind_hint(objective: Objective) -> str | None:
-    title = objective.title.casefold()
-    if any(token in title for token in ("city", "town", "island")):
-        return "settlement"
-    if "victory road" in title:
-        return "dungeon"
-    return None
+def _region_matches(location: object, target_region: str) -> bool:
+    if not isinstance(location, str):
+        return False
+    area = location.rpartition(":")[2]
+    return target_region in area.split("_")
 
 
 def _mapping(value: object, *, subject: str) -> Mapping[str, object]:

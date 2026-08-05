@@ -232,7 +232,8 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
   keeping teacher labels and legal candidate annotations outside policy input features.
 - [x] Add an authenticated complete-episode planner loader and a game-neutral semantic objective
   ranker with an explicitly non-promotable single-lineage diagnostic lane.
-- [ ] Capture the first objective-labeled 312-checkpoint episode and publish its diagnostic model.
+- [x] Capture the first objective-labeled 312-checkpoint episode and publish its diagnostic model:
+  36 decisions, 94.4% training accuracy, and an explicit non-promotion receipt.
 - [ ] Collect disjoint planner train/validation roots and evaluate objective selection under
   perturbed timing, encounter, damage, status, and position states.
 - [x] Catch Route 12 Snorlax with bounded recovery and capture decisions, raise the live balance

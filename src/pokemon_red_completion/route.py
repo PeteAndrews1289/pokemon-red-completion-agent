@@ -11,6 +11,44 @@ from pokemon_red_completion.quest import Objective, QuestGraph, Specialist
 
 HALL_OF_FAME_FACT = "game:hall_of_fame"
 
+_OBJECTIVE_TARGET_REGIONS: dict[str, str] = {
+    "begin_adventure": "pallet",
+    "choose_starter": "pallet",
+    "receive_pokedex": "pallet",
+    "reach_pewter": "pewter",
+    "defeat_brock": "pewter",
+    "reach_cerulean": "cerulean",
+    "help_bill": "cerulean",
+    "defeat_misty": "cerulean",
+    "reach_vermilion": "vermilion",
+    "obtain_cut": "vermilion",
+    "defeat_surge": "vermilion",
+    "reach_lavender": "lavender",
+    "reach_celadon": "celadon",
+    "clear_rocket_hideout": "celadon",
+    "obtain_silph_scope": "celadon",
+    "rescue_fuji": "lavender",
+    "reach_fuchsia": "fuchsia",
+    "obtain_surf": "fuchsia",
+    "obtain_strength": "fuchsia",
+    "defeat_koga": "fuchsia",
+    "defeat_erika": "celadon",
+    "reach_saffron": "saffron",
+    "liberate_silph": "saffron",
+    "defeat_sabrina": "saffron",
+    "reach_cinnabar": "cinnabar",
+    "obtain_secret_key": "cinnabar",
+    "defeat_blaine": "cinnabar",
+    "defeat_giovanni": "viridian",
+    "cross_victory_road": "indigo",
+    "defeat_lorelei": "league",
+    "defeat_bruno": "league",
+    "defeat_agatha": "league",
+    "defeat_lance": "league",
+    "defeat_champion": "league",
+    "enter_hall_of_fame": "league",
+}
+
 
 def _objective(
     objective_id: str,
@@ -27,6 +65,7 @@ def _objective(
         specialist=specialist,
         prerequisites=frozenset(prerequisites),
         priority=priority,
+        target_region=_OBJECTIVE_TARGET_REGIONS.get(objective_id),
     )
 
 
@@ -334,6 +373,7 @@ def completion_route_payload() -> list[dict[str, object]]:
             "specialist": objective.specialist.value,
             "prerequisites": sorted(objective.prerequisites),
             "completion_facts": sorted(objective.completion_facts),
+            "target_region": objective.target_region,
         }
         for objective in COMPLETION_QUEST.topological_order()
     ]

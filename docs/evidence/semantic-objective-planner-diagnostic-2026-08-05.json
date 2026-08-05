@@ -1,0 +1,66 @@
+{
+  "schema": "pokemon-semantic-objective-planner-diagnostic-v1",
+  "recorded_on": "2026-08-05",
+  "status": "complete",
+  "claim_scope": {
+    "objective_labels_recorded": true,
+    "complete_game_teacher_episode": true,
+    "planner_model_trained": true,
+    "planner_model_published": true,
+    "held_out_evaluation": false,
+    "teacher_free_planner_rollout": false,
+    "cross_game_transfer_evaluated": false
+  },
+  "source": {
+    "git_commit": "705725a606fba3aa5747a5fa8d2caa36ac54dc4e",
+    "worktree_dirty": false,
+    "collection_registry": "red-battle-heldout-v72"
+  },
+  "teacher_episode": {
+    "episode_id": "red-teacher-c4956aa9f3bf4f56b24b6220eaf63a32",
+    "manifest_sha256": "44bc6de9a473a4f3240ee46019fde2a1b1be87145060ae811b9f7ba3dc5dba74",
+    "checkpoints_completed": 312,
+    "objectives_verified": 36,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "save_state_used": false,
+    "human_input": false,
+    "stream_records": {
+      "decisions": 699,
+      "events": 313,
+      "executions": 92721,
+      "snapshots": 24239
+    }
+  },
+  "planner_dataset": {
+    "objective_decisions": 36,
+    "input_view": "live semantic observation plus verifier-confirmed completion facts",
+    "supervision_view": "selected objective plus re-derived legal candidate set",
+    "objective_id_feature": false,
+    "game_id_feature": false,
+    "teacher_label_feature_leakage": false
+  },
+  "model": {
+    "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+    "model_sha256": "9dd3e66145788c34510a9e730fe3881f08238dedb23cf6af638617fe80de4f88",
+    "artifact_id": "red-objective-planner-4a5afe84ea3d404ab9fa3217842f8ec0",
+    "artifact_manifest_sha256": "aa6b3ce2b4eee1025fffce8c4c52a8f0e5fd551dc9bfb6b8d896c3a6be9b1f3c",
+    "training_accuracy": 0.9444444444444444,
+    "correct_decisions": 34,
+    "total_decisions": 36,
+    "training_mismatches": [
+      {
+        "selected": "reach_fuchsia",
+        "predicted": "defeat_erika"
+      },
+      {
+        "selected": "defeat_koga",
+        "predicted": "defeat_erika"
+      }
+    ]
+  },
+  "interpretation": {
+    "result": "The whole-game planner data and training path now works end to end on one complete teacher lineage.",
+    "remaining_gap": "This single-lineage fit is diagnostic and cannot establish generalization. The model still confuses two legal midgame branch choices and has not controlled a live rollout."
+  }
+}

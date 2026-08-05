@@ -1363,6 +1363,14 @@ game-ID features, and fits a shared listwise objective ranker. Its first single-
 deliberately diagnostic: it can prove the data and optimizer work end to end, but only disjoint
 full-game lineages and teacher-free rollouts can support a generalization or autonomy claim.
 
+That end-to-end diagnostic is now concrete. A fresh clean-power run completed 312/312 checkpoints,
+all 36 objectives, the Champion, and Hall of Fame while recording 36 planner choices alongside
+663 battle decisions. The authenticated ranker fit 34 of 36 demonstrated objective choices
+(94.4%). It confused the legal `reach_fuchsia` and `defeat_koga` branches with `defeat_erika`,
+which identifies the next modeling gap: the planner needs a portable representation of objective
+location and travel cost, not a hidden route index or an objective-ID shortcut. The model is sealed
+as a private diagnostic artifact and is not labeled promotion-ready.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

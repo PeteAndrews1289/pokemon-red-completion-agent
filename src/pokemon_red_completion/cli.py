@@ -1169,7 +1169,7 @@ def _run_planner_learning(
         dataset = load_planner_episode(
             private_root.open_episode(args.episode_id),
             COMPLETION_QUEST,
-            ObjectiveFeatureProjector(),
+            ObjectiveFeatureProjector(COMPLETION_QUEST),
             required_provenance=PlannerDecisionProvenance(
                 actor="deterministic_teacher",
                 policy_id=POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,

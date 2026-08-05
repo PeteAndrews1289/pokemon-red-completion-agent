@@ -121,7 +121,7 @@ def _load(reader: _Reader):  # type: ignore[no-untyped-def]
     return load_planner_episode(
         reader,
         COMPLETION_QUEST,
-        ObjectiveFeatureProjector(),
+        ObjectiveFeatureProjector(COMPLETION_QUEST),
         required_provenance=PlannerDecisionProvenance(
             actor="deterministic_teacher",
             policy_id=POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
@@ -174,3 +174,28 @@ def test_first_semantic_objective_ranker_fits_the_demonstrated_route() -> None:
     assert model.to_dict()["model_id"] == (
         "pokemon.core.planning.masked-linear-ranker.v1"
     )
+
+
+def test_projector_matches_current_region_without_exposing_region_identity() -> None:
+    snapshot = SemanticSnapshot(
+        game_id="pokemon.test",
+        mode="interactive",
+        location="pokemon.test:area:fuchsia_pokecenter",
+        features={
+            "progress": {"badge_count": 4},
+            "world": {"area_kind": "healing"},
+        },
+    ).to_dict()
+    projector = ObjectiveFeatureProjector(COMPLETION_QUEST)
+    batch = projector.project(
+        snapshot,
+        (
+            COMPLETION_QUEST.objective("defeat_koga"),
+            COMPLETION_QUEST.objective("defeat_erika"),
+        ),
+        objective_count=len(COMPLETION_QUEST),
+    )
+    match_index = batch.feature_names.index("candidate_target_region_matches_current")
+
+    assert batch.candidate_vectors[:, match_index].tolist() == [1.0, 0.0]
+    assert all("fuchsia" not in feature for feature in batch.feature_names)

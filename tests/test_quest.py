@@ -66,6 +66,21 @@ def test_missing_prerequisite_is_rejected() -> None:
         QuestGraph((_objective("finish", prerequisites=frozenset({"absent"})),))
 
 
+def test_objective_target_region_is_semantic_and_graph_exposes_unlock_count() -> None:
+    with pytest.raises(ValueError, match="target_region"):
+        Objective(
+            id="start",
+            title="Start",
+            completion_facts=frozenset({"done:start"}),
+            specialist=Specialist.INTERACTION,
+            target_region="Fuchsia City",
+        )
+
+    assert COMPLETION_QUEST.objective("defeat_koga").target_region == "fuchsia"
+    assert COMPLETION_QUEST.direct_dependant_count("reach_fuchsia") == 3
+    assert COMPLETION_QUEST.direct_dependant_count("defeat_erika") == 1
+
+
 def test_cycles_are_rejected_with_the_cycle_path() -> None:
     with pytest.raises(
         QuestGraphValidationError,
