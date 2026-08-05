@@ -1683,3 +1683,27 @@ That return recovery passed, and the same schedule reached Bruno. Unboosted Mega
 level-55 Machoke at 8 HP before an observed critical Submission knocked out the workhorse. V41 now
 prefers STAB Surf throughout Bruno while PP exceeds the existing one-use Lance reserve, then falls
 back through the prior move order. It adds no grinding, item, retry, or party sacrifice.
+Retired seed `370004` next exposed a legal one-Super-Potion lineage whose capture spending left the
+Rock Tunnel Mart ₽749 short with no obsolete Potions. Natural Dig had left TM28 unused, and the
+post-Tunnel plan already treated its ₽1,000 sale as optional. V41 now moves that same sale earlier
+only when live cash plus the complete obsolete-Potion stack cannot fund the fixed supplies. The
+same trace legitimately consumed three Parlyz Heals before the final DUX role preparation, so the
+tunnel carries a fourth contingency while Lavender restores only the established three-cure
+downstream reserve. The adjusted quantity input retains the measured modulo-256 timing budget.
+The exact seed then completed 312/312 checkpoints and Hall of Fame.
+
+Retired seed `370005` repeatedly reapplied sleep during safe Route 11 training. The generic runtime
+keeps its two-episode default, while this sleep-producing curriculum explicitly allows four finite
+reapplications and retains HP, PP, menu, and fifth-episode rejection gates. Its Lavender replay
+also proved the top-up must verify the three-cure downstream target rather than the four-cure
+tunnel purchase. The exact seed subsequently completed the game.
+
+Retired validation seed `380001` produced Koga's genuine terminal Selfdestruct exchange after the
+battle-exit observation had already won the sampling race. V41 recognizes that result only when
+Koga's event is complete, the lead alone is at zero, and every reserve remains alive; ordinary
+faints still fail. Seed `380002` spent 15 Bite PP under Route 13 accuracy pressure while preserving
+the declared ten-PP budget for the following trainer, then missed a Celadon Department Store door
+transition. The per-battle PP contract now records that measured budget and the Ice Beam errand
+verifies each city step and both doorway transitions. Both validation seeds then completed 312/312,
+36/36, all 69 scheduled battles, Champion, and Hall of Fame. These artifacts remain stress-only;
+v41's fresh counted roots stay sealed pending the exact-source official rehearsal.

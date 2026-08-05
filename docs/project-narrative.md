@@ -1145,6 +1145,18 @@ The repaired route then reached Sabrina, where Alakazam recovered at low HP and 
 that demonstrated damage. Sabrina now uses a 95-HP Alakazam-specific floor while preserving the
 ordinary threshold for the other opponents and the existing seven-Hyper-Potion chapter cap.
 
+The final v41 retired-schedule stress set added six broadly reusable lessons before collection.
+When variable capture spending exhausted obsolete Potions, the teacher moved an already-planned
+TM28 sale forward instead of reducing safety supplies. A schedule that consumed three paralysis
+cures before final tunnel role preparation justified one extra tunnel-only cure while keeping the
+downstream reserve at three. Safe Route 11 training received an explicit repeated-sleep budget;
+Koga's terminal Selfdestruct is now recognized across either side of the battle-exit sampling race;
+Route 13 accuracy pressure carries a PP budget that preserves the next required battle; and the
+Celadon Ice Beam errand verifies the physical Department Store transition instead of assuming the
+last north input entered. All four remaining retired train/validation schedules subsequently
+completed the 312-checkpoint, 36-objective, 69-battle Hall-of-Fame contract. The official v41
+source-bound rehearsal remains the final gate before fresh demonstration collection.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

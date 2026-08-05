@@ -746,6 +746,11 @@ def test_vermilion_receipt_is_source_bound_repeatable_and_privacy_safe() -> None
     assert GIT_COMMIT.fullmatch(receipt["source"]["git_commit"])
 
     controller = DEFAULT_NEW_GAME_TIMING
+    historical_vermilion_timing = asdict(DEFAULT_VERMILION_TIMING)
+    # This immutable receipt predates the explicit per-curriculum sleep
+    # reapplication field. Its historical default was the same value (two),
+    # but the absent key remains part of the artifact's authenticated schema.
+    historical_vermilion_timing["battle_runtime"].pop("max_sleep_reapplications")
     expected_configuration = {
         "battle_policy": ("adaptive_rocket_and_fixed_route6_trainers_with_bounded_sleep_recovery"),
         "controller_timing": {
@@ -767,7 +772,7 @@ def test_vermilion_receipt_is_source_bound_repeatable_and_privacy_safe() -> None
             "three_exact_route6_pidgey_encounters_with_semantic_run_and_pp_event_gates"
         ),
         "starter": "squirtle",
-        "vermilion_timing": asdict(DEFAULT_VERMILION_TIMING),
+        "vermilion_timing": historical_vermilion_timing,
     }
     assert receipt["configuration"] == expected_configuration
     assert canonical_sha256(expected_configuration) == VERMILION_CONFIGURATION_SHA256

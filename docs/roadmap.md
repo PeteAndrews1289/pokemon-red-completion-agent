@@ -689,3 +689,11 @@ into the proven `(1,3)` alcove, verifies reentry, and retries east within the ex
 That repair passed. The same schedule then reached Bruno, where Mega Punch left level-55 Machoke at
 8 HP and a critical Submission knocked out the workhorse. Bruno now prioritizes STAB Surf while PP
 exceeds the existing one-use Lance reserve, without more grinding, recovery items, or sacrifice.
+Retired schedules `370004`–`370005` and `380001`–`380002` have now passed the complete game after
+hardening six additional transferable boundaries: liquidity-aware timing of an already-legal TM28
+sale, a tunnel-only fourth paralysis cure, curriculum-specific bounded sleep persistence, Koga
+terminal mutual-KO observation, reserve-safe Route 13 accuracy pressure, and verified Celadon Mart
+door transitions. Each exact failing seed subsequently reached 312/312 checkpoints, 36/36
+objectives, 69/69 battle attestations, Champion, and Hall of Fame. The next gate is to regenerate
+the committed v41 source identity, pass the official clean-power rehearsal, and only then open
+fresh train seed `400001`.

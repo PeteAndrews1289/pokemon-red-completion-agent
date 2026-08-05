@@ -666,6 +666,14 @@ proven `(1,3)` alcove, verifies corridor reentry, and retries east under finite 
 That fix passed, but the same stress schedule later left Bruno's level-55 Machoke at 8 HP with
 unboosted Mega Punch before a critical Submission knocked out the workhorse. Bruno now prefers
 STAB Surf above the already-declared one-use Lance reserve, with no extra grinding or item spend.
+Retired schedules `370004`, `370005`, `380001`, and `380002` then exercised the final source across
+variable capture, status, inventory, and battle lineages. They produced reusable repairs for
+liquidity-aware TM28 sale timing, a fourth tunnel-only paralysis contingency with a three-cure
+downstream reserve, bounded repeated-sleep recovery during Route 11 training, direct-exit Koga
+mutual-KO recognition, a reserve-safe 15-PP Route 13 accuracy budget, and observed Celadon Mart
+door transitions. Each exact failing schedule subsequently completed **312/312 checkpoints**,
+**36/36 objectives**, all **69** scheduled battles, and Hall of Fame. Counted v41 slots remain
+unopened until the regenerated source-bound official rehearsal passes.
 
 ## Evidence and project status
 
