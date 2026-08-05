@@ -8,6 +8,15 @@ differs from its demonstrations. The qualified deterministic player is a disclos
 safety baseline for producing evidence and corrections. It is not the final model, and its results
 must not be reported as learned-policy results.
 
+The transferable full-battle controller has now passed its live shadow gate. It was selected from
+complete rollout lineages, reached **98.27%** on an untouched 693-decision test lineage, and then
+completed a fresh unseen timing/RNG run through all **312/312 checkpoints**, **36/36 objectives**,
+Champion, and Hall of Fame. Live agreement was **673/678 (99.26%)** with no unscorable states: all
+12 boosts and all 6 switches were correct, while the five errors were confined to move-versus-heal
+decisions. This does not yet claim autonomous full battle control because the teacher executed the
+shadow-scored actions. Promotion now requires typed live execution and a full completion rollout
+with the teacher action fallback disabled.
+
 The first authenticated model-assisted clean run is now complete: **312/312 checkpoints**, **36/36
 objectives**, Champion, and Hall of Fame. Across 707 live battle decisions, the learned ranker
 handled 537 (75.95%) while the teacher supplied 81 low-confidence fallbacks and corrected 52

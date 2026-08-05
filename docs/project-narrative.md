@@ -1,5 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 5: the full battle controller reaches live shadow qualification
+
+The project now learns the high-level decision that the move ranker could not represent: whether
+to attack, recover, boost Accuracy, boost Attack, boost Special, or switch. The control observation
+contains only transferable battle, party, inventory-role, matchup, and causal battle-history
+features; it excludes map, objective, battle-plan, and Pokémon Red identity. Complete rollout
+lineages, rather than individual turns from one run, form the training and evaluation boundary.
+
+The first lineage-held-out controller reached **96.40% accuracy** on 666 decisions from an altered
+timing/RNG run. Its first fresh full-game shadow rollout completed **312/312 checkpoints** and
+**36/36 objectives**, but 29 false non-move predictions showed that fully balancing six very rare
+action classes against hundreds of moves was unsafe. That model was not promoted.
+
+Adding causal battle history and selecting a weaker class-balance exponent on the validation
+lineage improved the untouched 693-decision test lineage to **98.27% accuracy**. The frozen
+candidate then completed another previously unseen timing/RNG schedule through the Champion and
+Hall of Fame. It agreed on **673 of 678 decisions (99.26%)**, scored every observation, selected
+all 12 boosts and all 6 switches correctly, missed 3 of 15 recoveries, and proposed recovery on 2
+of 645 move turns. The authenticated model SHA-256 is
+`9542220ad090c4014fd089f654d88dd523055832561952d4d44a99ad3f1be28a`.
+
+This is a live shadow qualification, not an autonomous full-battle claim: the teacher still
+executed the action after the controller was scored. The next gate promotes the controller behind
+typed menu executors, measures intervention-free completion, and retains fail-closed legality and
+resource checks. During this evaluation the perturbed teacher also exposed and fixed independent
+S.S. Anne waiter and disabled-preferred-move recovery defects; those failures were not attributed
+to the model.
+
 ## August 5: the learner enters the game loop
 
 The project stopped treating a universally perfect deterministic teacher as a prerequisite for
