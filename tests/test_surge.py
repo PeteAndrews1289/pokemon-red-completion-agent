@@ -418,7 +418,7 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert DUX_NICKNAME == (0x83, 0x94, 0x97, 0x50)
     assert SURGE_CHECKPOINT_COUNT == 15
     assert COLLECTION_POKE_BALL_TARGET == 30
-    assert surge_module.FOREST_POKE_BALL_RESERVE == 17
+    assert surge_module.FOREST_POKE_BALL_RESERVE == 25
     assert surge_module.POKE_BALL_PRICE == 200
     assert surge_module._inverse_directions(
         surge_module.VIRIDIAN_TO_MART_DIRECTIONS[:-1]
@@ -524,7 +524,7 @@ def test_forest_restock_preserves_an_existing_surplus(monkeypatch: pytest.Monkey
         def read(self) -> RawGameState:
             return raw
 
-    monkeypatch.setattr(surge_module, "_bag", lambda _emulator: {ItemId.POKE_BALL: 23})
+    monkeypatch.setattr(surge_module, "_bag", lambda _emulator: {ItemId.POKE_BALL: 27})
 
     surge_module._restock_for_viridian_forest(
         object(),  # type: ignore[arg-type]

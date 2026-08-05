@@ -72,7 +72,10 @@ METAPOD_SPECIES_ID = 0x7C
 KAKUNA_SPECIES_ID = 0x71
 PIKACHU_SPECIES_ID = 0x54
 COLLECTION_POKE_BALL_TARGET = 30
-FOREST_POKE_BALL_RESERVE = 17
+# Preserve a completion-oriented margin across repeated full-route timing
+# schedules.  Seventeen covered one observed lineage but allowed a valid
+# sequence of failed throws to starve the final required Forest capture.
+FOREST_POKE_BALL_RESERVE = 25
 POKE_BALL_PRICE = 200
 SURGE_ITEM_SETTLE_PULSES = 720
 SURGE_RECOVERY_HP_NUMERATOR = 2
