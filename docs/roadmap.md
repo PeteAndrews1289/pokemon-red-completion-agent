@@ -585,3 +585,9 @@ Saffron navigation and prove both the exterior stance and 1F entrance warp befor
 That replay defeated Bruno at checkpoint 303 but exposed an over-strict receipt rule after an
 immediate status reapplication. Intermediate decisions may now carry valid Gen-I status bytes;
 the terminal party must still be fully healed, status-free, and safely inside Agatha's room.
+The subsequent replay reached the Champion's final Venusaur at checkpoint 311 with the level-67
+workhorse and all five Blizzard PP, but the single protected Full Restore had already been spent;
+the reserves stopped 28 HP short. V37 now buys seven Full Restores and protects two across Lance's
+damage and status recovery branches. This preserves the faster level-60 training objective while
+teaching cross-objective inventory budgeting; the Champion boundary must prove both items before
+the next clean-power diagnostic can qualify.

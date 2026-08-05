@@ -1024,6 +1024,15 @@ show zero status. The evidence contract now accepts valid Gen-I status bytes dur
 still requiring positive HP, a legal move slot, the Bruno event, Agatha's room, and a clean fully
 healed six-member terminal state.
 
+The corrected replay then defeated Agatha and Lance and reached the Champion at checkpoint 311.
+Blastoise entered at level 67, preserved all five Blizzard PP, and reduced the final Venusaur from
+189 HP to 59 with the first Ice attack. The single protected Full Restore had already been spent,
+however, so Venusaur knocked out the workhorse and the five balanced but intentionally lower-level
+teammates stopped 28 HP short. This is a long-horizon inventory lesson rather than evidence for
+more grinding: Indigo now buys seven Full Restores, Lance protects two of them from both damage and
+status branches, and the Champion boundary requires both. One restores the established early-fight
+contingency; the second preserves a safe turn for the final high-critical-hit matchup.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

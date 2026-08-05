@@ -25,7 +25,7 @@ def test_lance_source_contract_is_exact() -> None:
     assert LANCE_RNG_DELAY_FRAMES == 40
     assert LANCE_AERODACTYL_PIVOT_SPECIES == 0xAB
     assert LANCE_SAFE_HP == 120
-    assert LANCE_CHAMPION_FULL_RESTORE_RESERVE == 1
+    assert LANCE_CHAMPION_FULL_RESTORE_RESERVE == 2
     assert LANCE_CHAMPION_SURF_RESERVE == 0
     assert LANCE_HELPER_PIVOT_LIMIT == 2
     assert LANCE_APPROACH == ("up",) * 9

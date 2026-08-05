@@ -376,6 +376,9 @@ solves every Strength boulder and switch in Victory Road, reaches Indigo Plateau
 the declared Full Restore, Full Heal, Hyper Potion, X Special, and Max Repel reserve.
 It then defeats Lorelei, Bruno, Agatha, Lance, and the Champion, enters the Hall of Fame, and
 reports completion only when the Champion event and Hall-of-Fame map are simultaneously true.
+The League contract protects two Full Restores across Lance for the Champion, including the final
+Venusaur contingency, rather than compensating for resource variance with additional workhorse
+grinding.
 The forest
 segment deliberately trains against three verified Kakuna encounters and one mandatory Bug
 Catcher. Later gates require the declared trainer identities and event order, Bill's complete

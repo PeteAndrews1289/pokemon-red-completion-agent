@@ -71,7 +71,7 @@ LANCE_PARTY = (
 LANCE_APPROACH = ("up",) * 9
 LANCE_SAFE_HP = 120
 LANCE_CHAMPION_SURF_RESERVE = 0
-LANCE_CHAMPION_FULL_RESTORE_RESERVE = 1
+LANCE_CHAMPION_FULL_RESTORE_RESERVE = 2
 LANCE_RNG_DELAY_FRAMES = 40
 LANCE_X_SPECIAL_USE = 1
 LANCE_AERODACTYL_PIVOT_SPECIES = 0xAB
@@ -293,6 +293,7 @@ def run_lance_chapter(
         status_recovery = bool(
             _bag(emulator).get(ItemId.FULL_HEAL, 0)
             or _bag(emulator).get(ItemId.FULL_RESTORE, 0)
+            > LANCE_CHAMPION_FULL_RESTORE_RESERVE
         )
         if (
             ((hp < recovery_threshold and hp_recovery) or (status and status_recovery))
@@ -383,11 +384,14 @@ def run_lance_chapter(
                 item = ItemId.FULL_HEAL
             elif (raw.first_party_status or 0) and _bag(emulator).get(
                 ItemId.FULL_RESTORE, 0
-            ):
+            ) > LANCE_CHAMPION_FULL_RESTORE_RESERVE:
                 item = ItemId.FULL_RESTORE
             elif _bag(emulator).get(ItemId.HYPER_POTION, 0):
                 item = ItemId.HYPER_POTION
-            elif _bag(emulator).get(ItemId.FULL_RESTORE, 0) > 1:
+            elif (
+                _bag(emulator).get(ItemId.FULL_RESTORE, 0)
+                > LANCE_CHAMPION_FULL_RESTORE_RESERVE
+            ):
                 item = ItemId.FULL_RESTORE
             else:
                 item = ItemId.FULL_HEAL

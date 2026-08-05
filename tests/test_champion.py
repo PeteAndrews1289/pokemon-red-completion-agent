@@ -26,7 +26,7 @@ def test_champion_source_contract_is_exact() -> None:
     assert CHAMPION_CHECKPOINT_COUNT == 3
     assert CHAMPION_RNG_DELAY_FRAMES == 150
     assert CHAMPION_SAFE_HP == 90
-    assert CHAMPION_FULL_RESTORE_INPUT_RESERVE == 1
+    assert CHAMPION_FULL_RESTORE_INPUT_RESERVE == 2
     assert CHAMPION_FORCED_SWITCH_LIMIT == 5
     assert CHAMPION_RHYDON_SAFE_HP == 50
     assert MapId.CHAMPIONS_ROOM == 0x78

@@ -1524,3 +1524,11 @@ reapplied a valid status after recovery; the teacher continued legally, won, and
 room with all six members fully healed and status-free, but the receipt rejected the intermediate
 status byte. Bruno's decision evidence now accepts any valid low-seven-bit Gen-I status value while
 retaining positive-HP, legal-move, terminal event, full-heal, and clean-status requirements.
+
+The next clean diagnostic reached the final Champion Venusaur at checkpoint 311. The level-67
+workhorse had preserved five Blizzard PP and dealt 130 of 189 HP, but the one-item Champion
+Full Restore reserve had already been consumed; the remaining developed team stopped 28 HP short.
+V37 therefore increases the Indigo Full Restore purchase from six to seven and makes two items a
+cross-chapter protected reserve. Lance may use only inventory above that floor, including for
+status fallback, and the Champion input rejects any handoff below two. The failed diagnostic stays
+uncounted and must restart from clean power-on under the new source identity.
