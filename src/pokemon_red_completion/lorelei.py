@@ -12,6 +12,11 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleBoostStat,
+    BattleControlRequest,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
@@ -255,11 +260,11 @@ def run_lorelei_chapter(
 
     turns: list[LoreleiTurn] = []
 
-    class _HealBoundary(Exception):
-        pass
+    class _HealBoundary(BattleControlRequest):
+        default_action = BattleAction.recovery()
 
-    class _AccuracyBoundary(Exception):
-        pass
+    class _AccuracyBoundary(BattleControlRequest):
+        default_action = BattleAction.boost(BattleBoostStat.ACCURACY)
 
     accuracy_used = 0
 

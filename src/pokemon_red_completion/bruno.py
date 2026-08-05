@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
@@ -226,8 +227,8 @@ def run_bruno_chapter(
 
     turns: list[BrunoTurn] = []
 
-    class _HealBoundary(Exception):
-        pass
+    class _HealBoundary(BattleControlRequest):
+        default_action = BattleAction.recovery()
 
     last_recovery_turn = -1
 

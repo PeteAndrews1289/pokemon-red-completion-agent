@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_model import MaskedLinearMoveRanker
 from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker
 from pokemon_red_completion.battle_runtime import BattleIntent, BattlePolicyObservation
@@ -59,6 +60,15 @@ def _observation() -> BattlePolicyObservation:
 class _Encoder:
     def snapshot_from_raw(self, raw: RawGameState) -> dict[str, object]:
         return {"battle_state": raw.battle_state}
+
+
+class _ControlEncoder:
+    class Snapshot:
+        def to_dict(self) -> dict[str, object]:
+            return {"schema": "semantic-snapshot-v1"}
+
+    def snapshot_from_raw(self, raw: RawGameState) -> Snapshot:
+        return self.Snapshot()
 
 
 class _Projector:
@@ -186,6 +196,29 @@ def test_shadow_teacher_preserves_non_move_control_signal() -> None:
         policy.choose_move(_observation(), request_recovery)
     assert policy.shadow_teacher_unavailable == 1
     assert policy.model_decisions == 0
+
+
+def test_shadow_teacher_records_typed_control_signal() -> None:
+    records: list[dict[str, object]] = []
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_ControlEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+        observe_teacher_when_not_required=True,
+        control_sink=lambda record: records.append(dict(record)),
+    )
+
+    def request_recovery() -> int:
+        raise BattleControlRequest(BattleAction.recovery())
+
+    with pytest.raises(BattleControlRequest):
+        policy.choose_move(_observation(), request_recovery)
+
+    assert policy.control_records == 1
+    assert policy.control_signals == {"pokemon.core:battle:recovery": 1}
+    assert records[0]["teacher_action"] == BattleAction.recovery().public_dict()
 
 
 @pytest.mark.parametrize(

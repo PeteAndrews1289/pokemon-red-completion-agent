@@ -11,6 +11,7 @@ from pathlib import Path
 
 import numpy as np
 
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_model import (
     BATTLE_MODEL_ID,
     CURRENT_BATTLE_FEATURE_SCHEMA_ID,
@@ -43,6 +44,7 @@ class LearnedBattlePolicyError(RuntimeError):
 
 
 BattleCorrectionSink = Callable[[Mapping[str, object]], None]
+BattleControlSink = Callable[[Mapping[str, object]], None]
 
 
 @dataclass(slots=True)
@@ -57,6 +59,7 @@ class ModelAssistedBattlePolicy:
         default_factory=lambda: BattleFeatureProjector(PokemonRedBattleCatalog())
     )
     correction_sink: BattleCorrectionSink | None = None
+    control_sink: BattleControlSink | None = None
     observe_teacher_when_not_required: bool = False
     decisions: int = 0
     model_decisions: int = 0
@@ -66,6 +69,8 @@ class ModelAssistedBattlePolicy:
     correction_records: int = 0
     shadow_teacher_disagreements: int = 0
     shadow_teacher_unavailable: int = 0
+    control_records: int = 0
+    control_signals: Counter[str] = field(default_factory=Counter)
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.confidence_threshold <= 1.0:
@@ -172,12 +177,13 @@ class ModelAssistedBattlePolicy:
         elif self.observe_teacher_when_not_required:
             try:
                 teacher_slot = fallback()
+            except BattleControlRequest as request:
+                self.shadow_teacher_unavailable += 1
+                self.control_signals[request.action.semantic_ref] += 1
+                self._record_control_signal(observation, request.action)
+                raise
             except Exception:
                 self.shadow_teacher_unavailable += 1
-                # Routed teachers use typed exceptions as non-move control signals
-                # (heal, reset a volatile condition, or settle a forced switch).
-                # The move ranker cannot represent those commands yet, so preserve
-                # the signal instead of silently converting it into a model attack.
                 raise
             else:
                 if teacher_slot != predicted_slot:
@@ -282,7 +288,34 @@ class ModelAssistedBattlePolicy:
             "correction_records": self.correction_records,
             "shadow_teacher_disagreements": self.shadow_teacher_disagreements,
             "shadow_teacher_unavailable": self.shadow_teacher_unavailable,
+            "control_records": self.control_records,
+            "control_signals": dict(sorted(self.control_signals.items())),
         }
+
+    def _record_control_signal(
+        self,
+        observation: BattlePolicyObservation,
+        action: BattleAction,
+    ) -> None:
+        if self.control_sink is None:
+            return
+        intent = observation.intent
+        if intent is None:
+            raise LearnedBattlePolicyError("battle control label lacks planner intent")
+        snapshot = self.encoder.snapshot_from_raw(observation.state)
+        self.control_records += 1
+        self.control_sink(
+            {
+                "record_type": "battle_control_label",
+                "schema_version": 1,
+                "label_index": self.control_records,
+                "decision_index": self.decisions,
+                "battle_plan_id": intent.battle_plan_id,
+                "objective_id": intent.objective_id,
+                "observation": snapshot.to_dict(),
+                "teacher_action": action.public_dict(),
+            }
+        )
 
 
 def load_battle_model_artifact(model_stream: str | Path) -> BattleMoveRanker:

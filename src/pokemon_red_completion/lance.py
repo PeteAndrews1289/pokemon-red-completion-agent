@@ -12,6 +12,11 @@ from pokemon_red_completion.agatha import (
     _battle_x_special,
     _teach_take_down,
 )
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleBoostStat,
+    BattleControlRequest,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
@@ -257,17 +262,17 @@ def run_lance_chapter(
 
     turns: list[LanceTurn] = []
 
-    class _HealBoundary(Exception):
-        pass
+    class _HealBoundary(BattleControlRequest):
+        default_action = BattleAction.recovery()
 
-    class _BoostBoundary(Exception):
-        pass
+    class _BoostBoundary(BattleControlRequest):
+        default_action = BattleAction.boost(BattleBoostStat.SPECIAL)
 
-    class _AccuracyBoundary(Exception):
-        pass
+    class _AccuracyBoundary(BattleControlRequest):
+        default_action = BattleAction.boost(BattleBoostStat.ACCURACY)
 
-    class _AttackBoundary(Exception):
-        pass
+    class _AttackBoundary(BattleControlRequest):
+        default_action = BattleAction.boost(BattleBoostStat.ATTACK)
 
     last_recovery_turn = -1
     boosts_used = 0

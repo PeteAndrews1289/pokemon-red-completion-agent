@@ -711,6 +711,7 @@ def run_qualified_play(
     battle_model_confidence_threshold: float = 0.0,
     require_battle_model_teacher_agreement: bool = True,
     battle_correction_sink: Callable[[Mapping[str, object]], None] | None = None,
+    battle_control_sink: Callable[[Mapping[str, object]], None] | None = None,
     _emulator: PyBoyAdapter | None = None,
 ) -> QualifiedPlayReport:
     """Run every currently qualified objective in one clean, no-save session."""
@@ -724,6 +725,8 @@ def run_qualified_play(
         raise TypeError("require_battle_model_teacher_agreement must be a bool")
     if battle_correction_sink is not None and battle_model is None:
         raise ValueError("battle_correction_sink requires a battle model")
+    if battle_control_sink is not None and battle_model is None:
+        raise ValueError("battle_control_sink requires a battle model")
     battle_start_schedule = (
         BattleStartScheduleController(battle_start_offsets)
         if battle_start_offsets is not None
@@ -747,8 +750,9 @@ def run_qualified_play(
                 confidence_threshold=battle_model_confidence_threshold,
                 require_teacher_agreement=require_battle_model_teacher_agreement,
                 correction_sink=battle_correction_sink,
+                control_sink=battle_control_sink,
                 observe_teacher_when_not_required=(
-                    battle_correction_sink is not None
+                    (battle_correction_sink is not None or battle_control_sink is not None)
                     and not require_battle_model_teacher_agreement
                 ),
             )

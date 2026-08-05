@@ -8,6 +8,11 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.agatha import AGATHA_X_SPECIAL_USE
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleBoostStat,
+    BattleControlRequest,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
@@ -250,14 +255,14 @@ def run_champion_chapter(
     turns: list[ChampionTurn] = []
     boosts_used = 0
 
-    class _HealBoundary(Exception):
-        pass
+    class _HealBoundary(BattleControlRequest):
+        default_action = BattleAction.recovery()
 
-    class _BoostBoundary(Exception):
-        pass
+    class _BoostBoundary(BattleControlRequest):
+        default_action = BattleAction.boost(BattleBoostStat.SPECIAL)
 
-    class _AccuracyBoundary(Exception):
-        pass
+    class _AccuracyBoundary(BattleControlRequest):
+        default_action = BattleAction.boost(BattleBoostStat.ACCURACY)
 
     def policy(raw: RawGameState) -> int:
         hp = raw.battler_hp or 0

@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v57.json`](../configs/red-battle-collection-v57.json)
+[`red-battle-collection-v58.json`](../configs/red-battle-collection-v58.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 71 stable public battle-plan identities in exact qualified-route order;
@@ -1802,3 +1802,10 @@ the chapter accepts and records the actual legal move whose PP was spent. This p
 learned victory from failing merely because it did not copy the teacher's exact move. V57 reserves
 train seeds `730001`–`730005`, validation seeds `740001`–`740002`, test seeds `750001`–`750005`,
 and dry-run seed `62001`.
+
+V58 introduces the game-neutral full-battle action vocabulary and a separate authenticated label
+artifact for recovery, stat-boost, and switch decisions. Elite Four and Champion policy boundaries
+now emit typed control requests without changing their existing execution behavior, allowing those
+actions to become training examples instead of opaque exceptions. V58 reserves train seeds
+`760001`–`760005`, validation seeds `770001`–`770002`, test seeds `780001`–`780005`, and dry-run
+seed `62001`.

@@ -382,6 +382,15 @@ def _parser() -> argparse.ArgumentParser:
             "private external artifact root; requires --battle-model."
         ),
     )
+    play.add_argument(
+        "--battle-control-root",
+        type=Path,
+        help=(
+            "Write typed recovery and boost teacher labels to an initialized private "
+            "external artifact root; requires --battle-model and "
+            "--allow-model-disagreement."
+        ),
+    )
     record = subcommands.add_parser(
         "record",
         help="Record a qualified Hall of Fame teacher run to private external storage.",
@@ -1494,6 +1503,12 @@ def main(arguments: Sequence[str] | None = None) -> int:
         elif args.command == "play":
             if args.battle_corrections_root is not None and args.battle_model is None:
                 parser.error("--battle-corrections-root requires --battle-model")
+            if args.battle_control_root is not None and args.battle_model is None:
+                parser.error("--battle-control-root requires --battle-model")
+            if args.battle_control_root is not None and not args.allow_model_disagreement:
+                parser.error(
+                    "--battle-control-root requires --allow-model-disagreement"
+                )
             battle_model = (
                 load_battle_model_artifact(args.battle_model)
                 if args.battle_model is not None
@@ -1501,6 +1516,8 @@ def main(arguments: Sequence[str] | None = None) -> int:
             )
             correction_writer = None
             correction_summary = None
+            control_writer = None
+            control_summary = None
             if args.battle_corrections_root is not None:
                 correction_root = open_private_root(
                     args.battle_corrections_root,
@@ -1510,7 +1527,18 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     f"red-battle-corrections-{uuid.uuid4().hex}",
                     kind="battle_corrections",
                 )
-            with correction_writer if correction_writer is not None else nullcontext():
+            if args.battle_control_root is not None:
+                control_root = open_private_root(
+                    args.battle_control_root,
+                    repository_root=REPOSITORY_ROOT,
+                )
+                control_writer = control_root.begin_artifact(
+                    f"red-battle-control-{uuid.uuid4().hex}",
+                    kind="battle_control_labels",
+                )
+            with correction_writer if correction_writer is not None else nullcontext(), (
+                control_writer if control_writer is not None else nullcontext()
+            ):
                 if correction_writer is not None:
                     assert battle_model is not None
                     correction_writer.append(
@@ -1528,6 +1556,20 @@ def main(arguments: Sequence[str] | None = None) -> int:
                             "teacher_agreement_required": not args.allow_model_disagreement,
                         },
                     )
+                if control_writer is not None:
+                    assert battle_model is not None
+                    control_writer.append(
+                        "metadata",
+                        {
+                            "record_type": "battle_control_run",
+                            "schema_version": 1,
+                            "model_id": battle_model.model_id,
+                            "model_sha256": hashlib.sha256(
+                                battle_model.to_json().encode("ascii")
+                            ).hexdigest(),
+                            "action_schema": "pokemon.core.battle.action.v1",
+                        },
+                    )
                 qualified_report = run_qualified_play(
                     rom_path,
                     watch=args.watch,
@@ -1539,6 +1581,11 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     battle_correction_sink=(
                         (lambda record: correction_writer.append("corrections", record))
                         if correction_writer is not None
+                        else None
+                    ),
+                    battle_control_sink=(
+                        (lambda record: control_writer.append("labels", record))
+                        if control_writer is not None
                         else None
                     ),
                 )
@@ -1553,12 +1600,27 @@ def main(arguments: Sequence[str] | None = None) -> int:
                             "game_complete": bool(qualified_public.get("game_complete")),
                         },
                     )
+                if control_writer is not None:
+                    qualified_public = qualified_report.public_dict()
+                    control_writer.append(
+                        "summary",
+                        {
+                            "record_type": "battle_control_summary",
+                            "schema_version": 1,
+                            "battle_policy": qualified_report.battle_policy_report,
+                            "game_complete": bool(qualified_public.get("game_complete")),
+                        },
+                    )
             if correction_writer is not None:
                 correction_summary = correction_writer.summary.public_dict()
+            if control_writer is not None:
+                control_summary = control_writer.summary.public_dict()
             _print_qualified_summary(qualified_report)
             payload = qualified_report.public_dict()
             if correction_summary is not None:
                 payload["battle_corrections"] = correction_summary
+            if control_summary is not None:
+                payload["battle_control_labels"] = control_summary
         else:
             assignment = None
             schedule_dry_run = None

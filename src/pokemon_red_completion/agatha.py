@@ -7,6 +7,11 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleBoostStat,
+    BattleControlRequest,
+)
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
@@ -240,11 +245,11 @@ def run_agatha_chapter(
 
     turns: list[AgathaTurn] = []
 
-    class _HealBoundary(Exception):
-        pass
+    class _HealBoundary(BattleControlRequest):
+        default_action = BattleAction.recovery()
 
-    class _BoostBoundary(Exception):
-        pass
+    class _BoostBoundary(BattleControlRequest):
+        default_action = BattleAction.boost(BattleBoostStat.SPECIAL)
 
     last_recovery_turn = -1
     boosts_used = 0
