@@ -273,6 +273,7 @@ class MaskedLinearMoveRanker:
         return cls(
             feature_names=names,
             weights=weights,
+            feature_schema_id=CURRENT_BATTLE_FEATURE_SCHEMA_ID,
             training_seed=validated_seed,
         )
 

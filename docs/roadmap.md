@@ -15,6 +15,13 @@ confident disagreements. This is a learner deployment milestone, not an autonomo
 claim; the exact scope is frozen in the
 [model-assisted Hall-of-Fame receipt](evidence/model-assisted-hall-of-fame-2026-08-05.json).
 
+The next clean run published **126 authenticated live corrections across 36 battle groups**: 74
+low-confidence choices and 52 confident disagreements. The private artifact contains the projected
+semantic candidates and teacher labels needed for retraining, while the
+[public correction-corpus receipt](evidence/model-assisted-correction-corpus-2026-08-05.json)
+contains only aggregate identities and counts. The failed first publication attempt is retained
+privately and excluded; only the complete manifest is admitted by the correction loader.
+
 ## Milestone 0 — completion foundation
 
 **Status: complete — July 2026**

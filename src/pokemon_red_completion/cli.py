@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import uuid
 from collections.abc import Sequence
-from dataclasses import asdict
+from contextlib import nullcontext
+from dataclasses import asdict, replace
 from pathlib import Path
 
 from pokemon_red_completion import __version__
+from pokemon_red_completion.battle_model import CURRENT_BATTLE_FEATURE_SCHEMA_ID
 from pokemon_red_completion.battle_plan import RED_BATTLE_PLAN_IDS
 from pokemon_red_completion.battle_schedule import BattleScheduleError
 from pokemon_red_completion.bootstrap import (
@@ -228,6 +231,58 @@ def _parser() -> argparse.ArgumentParser:
         default=1289,
         help="Frozen deterministic training seed (default: 1289).",
     )
+    learn_battle_correct = learn_battle_commands.add_parser(
+        "correct",
+        help="Refit a battle model with authenticated live teacher corrections.",
+    )
+    learn_battle_correct.add_argument(
+        "--private-root",
+        type=Path,
+        required=True,
+        help="Explicit absolute path to the initialized private artifact root.",
+    )
+    learn_battle_correct.add_argument(
+        "--base-model",
+        type=Path,
+        required=True,
+        help="Authenticated model.jsonl used to collect the corrections.",
+    )
+    learn_battle_correct.add_argument(
+        "--corrections",
+        type=Path,
+        required=True,
+        help="Completed private battle-correction artifact directory.",
+    )
+    learn_battle_correct.add_argument(
+        "--train-episode",
+        action="append",
+        required=True,
+        help="Authenticated historical train episode ID; repeat exactly five times.",
+    )
+    learn_battle_correct.add_argument(
+        "--validation-episode",
+        action="append",
+        required=True,
+        help="Authenticated historical validation episode ID; repeat exactly twice.",
+    )
+    learn_battle_correct.add_argument(
+        "--correction-repetitions",
+        type=int,
+        default=8,
+        help="Training weight for each live correction (default: 8).",
+    )
+    learn_battle_correct.add_argument(
+        "--epochs",
+        type=int,
+        default=300,
+        help="Deterministic optimizer epochs (default: 300).",
+    )
+    learn_battle_correct.add_argument(
+        "--seed",
+        type=int,
+        default=1289,
+        help="Deterministic training seed (default: 1289).",
+    )
     doctor = subcommands.add_parser("doctor", help="Verify the private ROM identity.")
     doctor.add_argument("--rom", type=Path, help="Private ROM path; otherwise use POKEMON_RED_ROM.")
     bootstrap = subcommands.add_parser(
@@ -294,6 +349,14 @@ def _parser() -> argparse.ArgumentParser:
         "--allow-model-disagreement",
         action="store_true",
         help="Evaluation mode: execute confident model choices even when the teacher disagrees.",
+    )
+    play.add_argument(
+        "--battle-corrections-root",
+        type=Path,
+        help=(
+            "Write live low-confidence and disagreement labels to an initialized "
+            "private external artifact root; requires --battle-model."
+        ),
     )
     record = subcommands.add_parser(
         "record",
@@ -776,6 +839,8 @@ def _run_battle_learning(
 
     if args.learn_battle_command == "fit":
         return _run_preassigned_battle_learning(parser, args)
+    if args.learn_battle_command == "correct":
+        return _run_corrected_battle_learning(parser, args)
     if not args.diagnostic:
         parser.error(
             "The current single-lineage trainer requires --diagnostic; "
@@ -1096,6 +1161,194 @@ def _run_preassigned_battle_learning(
     raise AssertionError("argparse error unexpectedly returned")
 
 
+def _run_corrected_battle_learning(
+    parser: argparse.ArgumentParser,
+    args: argparse.Namespace,
+) -> dict[str, object]:
+    """Refit on the historical train roots plus authenticated live corrections."""
+
+    try:
+        from pokemon_red_completion.battle_corrections import (
+            BattleCorrectionError,
+            load_battle_correction_artifact,
+        )
+        from pokemon_red_completion.battle_dataset import (
+            BattleDatasetError,
+            BattleDecisionProvenance,
+            BattleEpisodeDataset,
+            load_battle_episode,
+        )
+        from pokemon_red_completion.battle_model import BattleModelValidationError
+        from pokemon_red_completion.battle_semantics import (
+            BattleFeatureError,
+            BattleFeatureProjector,
+        )
+        from pokemon_red_completion.battle_training import (
+            BattleTrainingConfig,
+            BattleTrainingError,
+            train_preassigned_battle_ranker,
+        )
+        from pokemon_red_completion.red_battle_catalog import (
+            PRET_POKERED_COMMIT as BATTLE_CATALOG_SOURCE_COMMIT,
+        )
+        from pokemon_red_completion.red_battle_catalog import PokemonRedBattleCatalog
+    except ModuleNotFoundError as error:
+        if error.name == "numpy":
+            parser.error('Battle learning requires the optional "learning" dependencies.')
+        raise
+
+    try:
+        if (
+            len(args.train_episode) != 5
+            or len(set(args.train_episode)) != 5
+            or len(args.validation_episode) != 2
+            or len(set(args.validation_episode)) != 2
+            or set(args.train_episode) & set(args.validation_episode)
+        ):
+            raise BattleTrainingError(
+                "Correction training requires five unique train and two unique validation roots."
+            )
+        if (
+            type(args.correction_repetitions) is not int  # noqa: E721
+            or not 1 <= args.correction_repetitions <= 64
+        ):
+            raise BattleTrainingError("correction repetitions must be between one and 64")
+        source = detect_source_identity(REPOSITORY_ROOT, include_untracked=True)
+        require_clean_source(source)
+        private_root = open_private_root(
+            args.private_root,
+            repository_root=REPOSITORY_ROOT,
+        )
+        base_model = load_battle_model_artifact(args.base_model)
+        base_model_sha256 = hashlib.sha256(
+            base_model.to_json().encode("ascii")
+        ).hexdigest()
+        corrections = load_battle_correction_artifact(args.corrections)
+        if corrections.source_model_sha256 != base_model_sha256:
+            raise BattleTrainingError(
+                "The correction corpus was collected from a different base model."
+            )
+        projector = BattleFeatureProjector(PokemonRedBattleCatalog())
+        provenance = BattleDecisionProvenance(
+            actor="deterministic_teacher",
+            policy_id=POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
+            skill_id=POKEMON_BATTLE_MOVE_SKILL_ID,
+        )
+
+        def load_partition(
+            episode_ids: Sequence[str],
+            partition: str,
+        ) -> tuple[BattleEpisodeDataset, ...]:
+            datasets = tuple(
+                load_battle_episode(
+                    private_root.open_episode(episode_id),
+                    projector,
+                    required_provenance=provenance,
+                )
+                for episode_id in episode_ids
+            )
+            if any(
+                dataset.partition != partition or not dataset.episode_qualified
+                for dataset in datasets
+            ):
+                raise BattleTrainingError(
+                    f"Every correction-training {partition} episode must be qualified."
+                )
+            return datasets
+
+        train_datasets = load_partition(args.train_episode, "train")
+        validation_datasets = load_partition(args.validation_episode, "validation")
+        weighted_corrections = corrections.examples * args.correction_repetitions
+        augmented_first = replace(
+            train_datasets[0],
+            examples=train_datasets[0].examples + weighted_corrections,
+        )
+        config = BattleTrainingConfig(seed=args.seed, epochs=args.epochs)
+        result = train_preassigned_battle_ranker(
+            (augmented_first, *train_datasets[1:]),
+            validation_datasets,
+            config=config,
+        )
+        artifact_id = f"red-battle-corrected-{uuid.uuid4().hex}"
+        writer = private_root.begin_artifact(artifact_id, kind="battle_model")
+        with writer:
+            writer.append(
+                "model",
+                {
+                    "record_type": "battle_model_candidate",
+                    "model": result.model.to_dict(),
+                    "model_sha256": result.model_sha256,
+                    "source": source.public_dict(),
+                    "base_model_sha256": base_model_sha256,
+                    "correction_manifest_sha256": corrections.manifest_sha256,
+                },
+            )
+            writer.append(
+                "training",
+                {
+                    "record_type": "battle_correction_training",
+                    "catalog": {
+                        "game": "pokemon_red_us_rev0",
+                        "pret_pokered_commit": BATTLE_CATALOG_SOURCE_COMMIT,
+                    },
+                    "configuration": {
+                        **config.public_dict(split_unit="preassigned_root_lineage"),
+                        "correction_repetitions": args.correction_repetitions,
+                    },
+                    "historical_train_decisions": sum(
+                        len(dataset.examples) for dataset in train_datasets
+                    ),
+                    "correction_decisions": len(corrections.examples),
+                    "weighted_correction_decisions": len(weighted_corrections),
+                    "historical_validation_decisions": sum(
+                        len(dataset.examples) for dataset in validation_datasets
+                    ),
+                },
+            )
+            writer.append(
+                "metrics",
+                {
+                    "record_type": "battle_correction_validation_metrics",
+                    "receipt": result.public_receipt(),
+                    "corrections": corrections.public_summary(),
+                    "promotion_eligible": False,
+                    "reason": "iterative_corrections_require_fresh_rollout_evaluation",
+                },
+            )
+        payload = result.public_receipt()
+        payload["schema"] = "battle-imitation-correction-training-v1"
+        payload["corrections"] = corrections.public_summary()
+        payload["base_model_sha256"] = base_model_sha256
+        payload["qualification"] = {
+            "promotion_eligible": False,
+            "held_out_validation": True,
+            "learned_policy_rollout": False,
+            "reasons": ["fresh_model_assisted_rollout_required"],
+        }
+        payload["source"] = source.public_dict()
+        payload["private_artifact"] = writer.summary.public_dict()
+        return payload
+    except (
+        BattleCorrectionError,
+        BattleDatasetError,
+        BattleFeatureError,
+        BattleModelValidationError,
+        BattleTrainingError,
+        EvaluationIdentityError,
+        LearnedBattlePolicyError,
+        PrivateArtifactError,
+    ) as error:
+        parser.error(
+            _public_error_message(
+                error,
+                private_paths=(args.private_root, args.base_model, args.corrections),
+            )
+        )
+    except OSError:
+        parser.error("Private correction training failed; no model was published.")
+    raise AssertionError("argparse error unexpectedly returned")
+
+
 def main(arguments: Sequence[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(arguments)
@@ -1209,22 +1462,73 @@ def main(arguments: Sequence[str] | None = None) -> int:
             _print_opening_summary(report)
             payload = report.public_dict()
         elif args.command == "play":
+            if args.battle_corrections_root is not None and args.battle_model is None:
+                parser.error("--battle-corrections-root requires --battle-model")
             battle_model = (
                 load_battle_model_artifact(args.battle_model)
                 if args.battle_model is not None
                 else None
             )
-            qualified_report = run_qualified_play(
-                rom_path,
-                watch=args.watch,
-                speed=args.speed,
-                progress=_print_qualified_progress,
-                battle_model=battle_model,
-                battle_model_confidence_threshold=args.battle_confidence_threshold,
-                require_battle_model_teacher_agreement=not args.allow_model_disagreement,
-            )
+            correction_writer = None
+            correction_summary = None
+            if args.battle_corrections_root is not None:
+                correction_root = open_private_root(
+                    args.battle_corrections_root,
+                    repository_root=REPOSITORY_ROOT,
+                )
+                correction_writer = correction_root.begin_artifact(
+                    f"red-battle-corrections-{uuid.uuid4().hex}",
+                    kind="battle_corrections",
+                )
+            with correction_writer if correction_writer is not None else nullcontext():
+                if correction_writer is not None:
+                    assert battle_model is not None
+                    correction_writer.append(
+                        "metadata",
+                        {
+                            "record_type": "battle_correction_run",
+                            "schema_version": 1,
+                            "model_id": battle_model.model_id,
+                            "model_sha256": hashlib.sha256(
+                                battle_model.to_json().encode("ascii")
+                            ).hexdigest(),
+                            "feature_schema_id": CURRENT_BATTLE_FEATURE_SCHEMA_ID,
+                            "feature_count": len(battle_model.feature_names),
+                            "confidence_threshold": args.battle_confidence_threshold,
+                            "teacher_agreement_required": not args.allow_model_disagreement,
+                        },
+                    )
+                qualified_report = run_qualified_play(
+                    rom_path,
+                    watch=args.watch,
+                    speed=args.speed,
+                    progress=_print_qualified_progress,
+                    battle_model=battle_model,
+                    battle_model_confidence_threshold=args.battle_confidence_threshold,
+                    require_battle_model_teacher_agreement=not args.allow_model_disagreement,
+                    battle_correction_sink=(
+                        (lambda record: correction_writer.append("corrections", record))
+                        if correction_writer is not None
+                        else None
+                    ),
+                )
+                if correction_writer is not None:
+                    qualified_public = qualified_report.public_dict()
+                    correction_writer.append(
+                        "summary",
+                        {
+                            "record_type": "battle_correction_summary",
+                            "schema_version": 1,
+                            "battle_policy": qualified_report.battle_policy_report,
+                            "game_complete": bool(qualified_public.get("game_complete")),
+                        },
+                    )
+            if correction_writer is not None:
+                correction_summary = correction_writer.summary.public_dict()
             _print_qualified_summary(qualified_report)
             payload = qualified_report.public_dict()
+            if correction_summary is not None:
+                payload["battle_corrections"] = correction_summary
         else:
             assignment = None
             schedule_dry_run = None
@@ -1386,6 +1690,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     rom_path,
                     getattr(args, "rom", None),
                     getattr(args, "private_root", None),
+                    getattr(args, "battle_corrections_root", None),
                 ),
             )
         )

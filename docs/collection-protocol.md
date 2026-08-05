@@ -3,7 +3,7 @@
 ## Scope and current status
 
 The public
-[`red-battle-collection-v52.json`](../configs/red-battle-collection-v52.json)
+[`red-battle-collection-v53.json`](../configs/red-battle-collection-v53.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
 - 71 stable public battle-plan identities in exact qualified-route order;
@@ -1770,3 +1770,9 @@ reserves train seeds `580001`–`580005`, validation seeds `590001`–`590002`, 
 `600001`–`600005`, and dry-run seed `62001`. The registry remains a deterministic-teacher
 collection contract; the separate model-assisted Hall-of-Fame receipt measures learner coverage
 and teacher intervention without relabeling that run as autonomous model completion.
+
+V53 freezes the private correction writer, its independent authenticated reader, and the iterative
+refit lane. It reserves train seeds `610001`–`610005`, validation seeds `620001`–`620002`, test
+seeds `630001`–`630005`, and dry-run seed `62001`. Corrections are training-only additions; the
+historical validation roots remain unchanged, and every corrected model still requires a fresh
+live rollout before any deployment claim.

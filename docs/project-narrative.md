@@ -16,6 +16,13 @@ open-ended cycle of requiring the scripted teacher to tolerate every possible li
 deployment. This is deliberately reported as model-assisted completion, not autonomous play; the
 navigation route remains scripted and teacher disagreement is still fail-safe.
 
+The follow-up deployment turned those interventions into training data rather than another prose
+bug list. A clean 312/312 replay published 126 integrity-checked correction examples spanning 36
+battle plans: 74 uncertainty labels and 52 disagreement labels. Each private row contains the live
+game-neutral feature candidates, legality and PP masks, model prediction and confidence, and the
+teacher's selected candidate. A strict reader authenticates every declared stream and rejects
+failed, incomplete, altered, noncanonical, or schema-incompatible artifacts before training.
+
 > **Living engineering record — updated August 4, 2026.** This document separates verified
 > historical results from work on the current robustness branch. It will be updated at each
 > collection, training, evaluation, and transfer gate.

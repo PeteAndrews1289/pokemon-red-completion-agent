@@ -306,6 +306,11 @@ pokemon-red-completion opening --watch --speed 4
 pokemon-red-completion play
 pokemon-red-completion play --watch --speed 4
 
+# Deploy an authenticated battle model and retain live teacher interventions:
+pokemon-red-completion play \
+  --battle-model /absolute/private/model-artifact/model.jsonl \
+  --battle-corrections-root /absolute/private/trajectory-directory
+
 # One-time setup for an existing directory on a separate private volume:
 pokemon-red-completion private-data init --private-root /absolute/private/trajectory-directory
 
@@ -326,11 +331,23 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v52-01-train
+  --collection-run red-battle-v53-01-train
 
 # After all five train and two validation roots complete, fit without opening test:
 pokemon-red-completion learn battle fit \
   --private-root /absolute/private/trajectory-directory
+
+# Refit with one completed correction artifact. Supply the original five train
+# episode IDs and two validation episode IDs with repeated arguments:
+pokemon-red-completion learn battle correct \
+  --private-root /absolute/private/trajectory-directory \
+  --base-model /absolute/private/model-artifact/model.jsonl \
+  --corrections /absolute/private/correction-artifact \
+  --train-episode TRAIN_EPISODE_1 --train-episode TRAIN_EPISODE_2 \
+  --train-episode TRAIN_EPISODE_3 --train-episode TRAIN_EPISODE_4 \
+  --train-episode TRAIN_EPISODE_5 \
+  --validation-episode VALIDATION_EPISODE_1 \
+  --validation-episode VALIDATION_EPISODE_2
 
 # Inspect all twelve slots and reconcile a power-loss partial without starting a run:
 pokemon-red-completion collection status \

@@ -865,9 +865,9 @@ def test_battle_learning_writes_only_a_private_typed_model_artifact(
 @pytest.mark.parametrize(
     "run_id",
     [
-        "red-battle-v52-01-train",
-        "red-battle-v52-06-validation",
-        "red-battle-v52-08-test",
+        "red-battle-v53-01-train",
+        "red-battle-v53-06-validation",
+        "red-battle-v53-08-test",
     ],
 )
 def test_battle_learning_rejects_preregistered_ids_before_opening_private_data(
@@ -1193,6 +1193,7 @@ def test_play_command_runs_the_continuous_watched_boundary(
         battle_model,
         battle_model_confidence_threshold: float,
         require_battle_model_teacher_agreement: bool,
+        battle_correction_sink,
     ) -> FakeReport:
         assert path == private_path
         assert watch is True
@@ -1200,6 +1201,7 @@ def test_play_command_runs_the_continuous_watched_boundary(
         assert battle_model is None
         assert battle_model_confidence_threshold == 0.5
         assert require_battle_model_teacher_agreement is True
+        assert battle_correction_sink is None
         progress(
             QualifiedPlayProgress(
                 checkpoint_id="bedroom_ready",
@@ -1250,6 +1252,85 @@ def test_play_command_runs_the_continuous_watched_boundary(
     ]
     assert str(private_path) not in captured.out
     assert str(private_path) not in captured.err
+
+
+def test_play_command_finalizes_private_battle_corrections(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    appended: list[tuple[str, dict[str, object]]] = []
+
+    class FakeModel:
+        model_id = "pokemon.core.battle.masked-linear-ranker.v1"
+        feature_names = ("feature",)
+
+        def to_json(self) -> str:
+            return "{}"
+
+    class FakeSummary:
+        def public_dict(self) -> dict[str, object]:
+            return {"artifact_id": "red-battle-corrections-test", "status": "complete"}
+
+    class FakeWriter:
+        summary = FakeSummary()
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exception_type, exception, traceback) -> bool:
+            assert exception_type is None
+            return False
+
+        def append(self, stream: str, record) -> None:
+            appended.append((stream, dict(record)))
+
+    class FakeRoot:
+        def begin_artifact(self, artifact_id: str, *, kind: str) -> FakeWriter:
+            assert artifact_id.startswith("red-battle-corrections-")
+            assert kind == "battle_corrections"
+            return FakeWriter()
+
+    class FakeReport:
+        verified_objectives = tuple(objective.id for objective in cli.COMPLETION_QUEST)
+        next_objective = None
+        battle_policy_report = {"correction_records": 1}
+
+        def public_dict(self) -> dict[str, object]:
+            return {"status": "ok", "game_complete": True}
+
+    private_rom = Path("/private/Pokemon Red.gb")
+    corrections_root = Path("/private/corrections")
+    model_path = Path("/private/model/model.jsonl")
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda argument: private_rom)
+    monkeypatch.setattr(cli, "load_battle_model_artifact", lambda path: FakeModel())
+    monkeypatch.setattr(cli, "open_private_root", lambda *args, **kwargs: FakeRoot())
+
+    def fake_play(*args, battle_correction_sink, **kwargs) -> FakeReport:
+        assert battle_correction_sink is not None
+        battle_correction_sink({"record_type": "battle_policy_correction"})
+        return FakeReport()
+
+    monkeypatch.setattr(cli, "run_qualified_play", fake_play)
+
+    assert (
+        cli.main(
+            [
+                "play",
+                "--rom",
+                str(private_rom),
+                "--battle-model",
+                str(model_path),
+                "--battle-corrections-root",
+                str(corrections_root),
+            ]
+        )
+        == 0
+    )
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["game_complete"] is True
+    assert payload["battle_corrections"]["status"] == "complete"
+    assert [stream for stream, _ in appended] == ["metadata", "corrections", "summary"]
+    assert appended[-1][1]["game_complete"] is True
 
 
 def test_play_command_stops_cleanly_on_keyboard_interrupt(
@@ -1453,7 +1534,7 @@ def test_planned_record_requires_dry_run_before_sealing_or_emulator_start(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v52-01-train")
+    assignment = registry.assignment("red-battle-v53-01-train")
     private_path = Path("/private/Pokemon Red.gb")
     private_root_path = Path("/private/external/trajectories")
     observed: dict[str, object] = {}
@@ -1552,7 +1633,7 @@ def test_planned_record_uses_the_frozen_identity_and_exact_offsets(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v52-01-train")
+    assignment = registry.assignment("red-battle-v53-01-train")
     private_path = Path("/private/Pokemon Red.gb")
     private_root_path = Path("/private/external/trajectories")
     observed: dict[str, object] = {}
@@ -2039,7 +2120,7 @@ def test_planned_recording_metadata_binds_assignment_and_schedule(
 ) -> None:
     private_rom = Path("/private/Pokemon Red.gb")
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v52-01-train")
+    assignment = registry.assignment("red-battle-v53-01-train")
     source = SourceIdentity("a" * 40, False)
     monkeypatch.setattr(
         cli,
@@ -2137,7 +2218,7 @@ def test_scheduled_metadata_rejects_a_commit_change_after_registry_load(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     registry = _collection_registry()
-    assignment = registry.assignment("red-battle-v52-01-train")
+    assignment = registry.assignment("red-battle-v53-01-train")
     monkeypatch.setattr(
         cli,
         "detect_source_identity",

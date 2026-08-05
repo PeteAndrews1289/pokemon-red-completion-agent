@@ -11,13 +11,17 @@ from pathlib import Path
 
 import numpy as np
 
-from pokemon_red_completion.battle_model import MaskedLinearMoveRanker
+from pokemon_red_completion.battle_model import (
+    CURRENT_BATTLE_FEATURE_SCHEMA_ID,
+    MaskedLinearMoveRanker,
+)
 from pokemon_red_completion.battle_runtime import (
     BattlePolicyObservation,
     RequiredMovePolicy,
 )
 from pokemon_red_completion.battle_semantics import (
     FEATURE_NAMES,
+    BattleFeatureBatch,
     BattleFeatureProjector,
     BattleMovePolicyContext,
 )
@@ -32,6 +36,9 @@ class LearnedBattlePolicyError(RuntimeError):
     """Raised when a private model artifact cannot be authenticated or deployed."""
 
 
+BattleCorrectionSink = Callable[[Mapping[str, object]], None]
+
+
 @dataclass(slots=True)
 class ModelAssistedBattlePolicy:
     """Use the ranker above a teacher fallback and expose correction coverage."""
@@ -43,11 +50,13 @@ class ModelAssistedBattlePolicy:
     projector: BattleFeatureProjector = field(
         default_factory=lambda: BattleFeatureProjector(PokemonRedBattleCatalog())
     )
+    correction_sink: BattleCorrectionSink | None = None
     decisions: int = 0
     model_decisions: int = 0
     teacher_fallbacks: int = 0
     forced_decisions: int = 0
     fallback_reasons: Counter[str] = field(default_factory=Counter)
+    correction_records: int = 0
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.confidence_threshold <= 1.0:
@@ -68,6 +77,11 @@ class ModelAssistedBattlePolicy:
         self.decisions += 1
         fallback_reason: str | None = None
         predicted_slot: int | None = None
+        predicted_candidate: int | None = None
+        confidence: float | None = None
+        batch: BattleFeatureBatch | None = None
+        context: BattleMovePolicyContext | None = None
+        legal_mask: list[bool] = []
         try:
             context = _policy_context(observation)
             snapshot = self.encoder.snapshot_from_raw(observation.state)
@@ -94,6 +108,7 @@ class ModelAssistedBattlePolicy:
                     current_pp=batch.current_pp,
                 )
                 candidate = int(np.argmax(probabilities))
+                predicted_candidate = candidate
                 confidence = float(probabilities[candidate])
                 if confidence < self.confidence_threshold:
                     fallback_reason = "low_confidence"
@@ -101,12 +116,43 @@ class ModelAssistedBattlePolicy:
                     predicted_slot = batch.slot_indices[candidate] + 1
         except Exception:
             fallback_reason = "unsupported_observation"
+        if fallback_reason == "low_confidence":
+            teacher_slot = fallback()
+            assert batch is not None
+            assert predicted_candidate is not None
+            assert confidence is not None
+            self._record_correction(
+                observation=observation,
+                context=context,
+                batch=batch,
+                legal_mask=legal_mask,
+                predicted_candidate=predicted_candidate,
+                confidence=confidence,
+                teacher_slot=teacher_slot,
+                reason=fallback_reason,
+            )
+            self.teacher_fallbacks += 1
+            self.fallback_reasons[fallback_reason] += 1
+            return teacher_slot
         if fallback_reason is not None:
             return self._fallback(fallback, fallback_reason)
         assert predicted_slot is not None
         if self.require_teacher_agreement:
             teacher_slot = fallback()
             if teacher_slot != predicted_slot:
+                assert batch is not None
+                assert predicted_candidate is not None
+                assert confidence is not None
+                self._record_correction(
+                    observation=observation,
+                    context=context,
+                    batch=batch,
+                    legal_mask=legal_mask,
+                    predicted_candidate=predicted_candidate,
+                    confidence=confidence,
+                    teacher_slot=teacher_slot,
+                    reason="teacher_disagreement",
+                )
                 self.teacher_fallbacks += 1
                 self.fallback_reasons["teacher_disagreement"] += 1
                 return teacher_slot
@@ -117,6 +163,70 @@ class ModelAssistedBattlePolicy:
         self.teacher_fallbacks += 1
         self.fallback_reasons[reason] += 1
         return fallback()
+
+    def _record_correction(
+        self,
+        *,
+        observation: BattlePolicyObservation,
+        context: BattleMovePolicyContext | None,
+        batch: BattleFeatureBatch,
+        legal_mask: list[bool],
+        predicted_candidate: int,
+        confidence: float,
+        teacher_slot: int,
+        reason: str,
+    ) -> None:
+        if self.correction_sink is None:
+            return
+        candidate_vectors = tuple(tuple(row) for row in batch.candidate_vectors)
+        slot_indices = tuple(batch.slot_indices)
+        teacher_matches = [
+            index
+            for index, slot_index in enumerate(slot_indices)
+            if slot_index + 1 == teacher_slot
+        ]
+        if len(teacher_matches) != 1:
+            raise LearnedBattlePolicyError(
+                "teacher correction is absent from the projected candidates"
+            )
+        teacher_candidate = teacher_matches[0]
+        if not legal_mask[teacher_candidate]:
+            raise LearnedBattlePolicyError("teacher correction selected a masked candidate")
+        intent = observation.intent
+        self.correction_records += 1
+        self.correction_sink(
+            {
+                "record_type": "battle_policy_correction",
+                "schema_version": 1,
+                "decision_index": self.decisions,
+                "correction_index": self.correction_records,
+                "reason": reason,
+                "objective_id": intent.objective_id if intent is not None else None,
+                "battle_plan_id": intent.battle_plan_id if intent is not None else None,
+                "policy_context": (
+                    {
+                        "goal": context.goal,
+                        "move_policy": context.move_policy,
+                        "required_move_ref": context.required_move_ref,
+                    }
+                    if context is not None
+                    else None
+                ),
+                "features": {
+                    "feature_schema_id": CURRENT_BATTLE_FEATURE_SCHEMA_ID,
+                    "feature_names": list(self.model.feature_names),
+                    "candidate_vectors": [list(row) for row in candidate_vectors],
+                    "legal_mask": list(legal_mask),
+                    "current_pp": list(batch.current_pp),
+                    "slot_indices": list(slot_indices),
+                },
+                "model": {
+                    "predicted_candidate_index": predicted_candidate,
+                    "confidence": confidence,
+                },
+                "teacher": {"chosen_candidate_index": teacher_candidate},
+            }
+        )
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -130,6 +240,7 @@ class ModelAssistedBattlePolicy:
             "confidence_threshold": self.confidence_threshold,
             "teacher_agreement_required": self.require_teacher_agreement,
             "fallback_reasons": dict(sorted(self.fallback_reasons.items())),
+            "correction_records": self.correction_records,
         }
 
 

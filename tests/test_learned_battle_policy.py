@@ -106,6 +106,49 @@ def test_model_assisted_policy_defers_low_confidence_state_to_teacher() -> None:
     assert policy.fallback_reasons == {"low_confidence": 1}
 
 
+def test_model_assisted_policy_emits_private_training_record_for_disagreement() -> None:
+    records: list[dict[str, object]] = []
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_Encoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.9,
+        correction_sink=lambda record: records.append(dict(record)),
+    )
+
+    assert policy.choose_move(_observation(), lambda: 1) == 1
+    assert policy.correction_records == 1
+    assert len(records) == 1
+    record = records[0]
+    assert record["reason"] == "teacher_disagreement"
+    assert record["battle_plan_id"] == "battle-test"
+    assert record["model"] == {
+        "predicted_candidate_index": 1,
+        "confidence": pytest.approx(0.9999546021312976),
+    }
+    assert record["teacher"] == {"chosen_candidate_index": 0}
+    features = record["features"]
+    assert isinstance(features, dict)
+    assert features["slot_indices"] == [0, 2]
+    assert len(features["candidate_vectors"]) == 2
+    assert policy.public_dict()["correction_records"] == 1
+
+
+def test_model_assisted_policy_records_low_confidence_teacher_label() -> None:
+    records: list[dict[str, object]] = []
+    policy = ModelAssistedBattlePolicy(
+        model=_model(power_weight=0.0),
+        encoder=_Encoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.75,
+        correction_sink=lambda record: records.append(dict(record)),
+    )
+
+    assert policy.choose_move(_observation(), lambda: 1) == 1
+    assert records[0]["reason"] == "low_confidence"
+    assert records[0]["teacher"] == {"chosen_candidate_index": 0}
+
+
 def test_model_loader_authenticates_typed_artifact_stream(tmp_path: Path) -> None:
     artifact = tmp_path / "candidate"
     artifact.mkdir()
