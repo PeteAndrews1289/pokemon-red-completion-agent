@@ -466,7 +466,7 @@ def run_silph_chapter(
     _move(actions, reader, CENTER_EXIT, timing)
     _move(actions, reader, CENTER_TO_SILPH, timing)
     _require(reader.read(), MapId.SILPH_CO_1F, (10, 17), "Silph 1F")
-    _move(actions, reader, SILPH_1F_TO_ELEVATOR, timing)
+    _move_verified(actions, reader, SILPH_1F_TO_ELEVATOR, timing, "Silph 1F elevator corridor")
     _enter_silph_elevator(actions, reader, timing, "Silph 1F elevator")
     _select_elevator_floor(actions, reader, emulator, 4, timing)
     _move(actions, reader, ELEVATOR_EXIT, timing)
@@ -2050,7 +2050,13 @@ def _return_center_to_seventh(
 ) -> None:
     _move(actions, reader, CENTER_EXIT, timing)
     _move(actions, reader, _directions("LLLLLLUUUUUUUURRRRRRRRRRRRRRRU"), timing)
-    _move(actions, reader, SILPH_1F_TO_ELEVATOR, timing)
+    _move_verified(
+        actions,
+        reader,
+        SILPH_1F_TO_ELEVATOR,
+        timing,
+        "return Silph 1F elevator corridor",
+    )
     _enter_silph_elevator(actions, reader, timing, "return Silph 1F elevator")
     _select_elevator_floor(actions, reader, emulator, 2, timing)
     _move(actions, reader, ELEVATOR_EXIT, timing)

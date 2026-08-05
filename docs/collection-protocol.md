@@ -1508,3 +1508,8 @@ uncounted and must restart from clean power-on.
 The next replay proved the post-rival exit but showed the later first-floor return still embedded
 its final doorway input inside a long trace. That final step is now split out as well, so every
 Silph elevator entry shares the same verified transition.
+
+That doorway proof then localized the lost progress to the preceding first-floor corridor: the
+return arrived at `(6,6)` rather than the elevator stance. Both outbound and return corridor traces
+now prove every requested coordinate change before advancing, then delegate the doorway transition
+to the shared elevator helper.

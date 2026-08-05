@@ -578,3 +578,5 @@ swallowed post-rival elevator entry left the player in the hallway. Silph elevat
 prove the map transition with bounded unchanged-state retries before allowing floor selection.
 The following replay localized a second swallowed input to the first-floor return route; that
 embedded final step now delegates to the same verified elevator transition.
+The next diagnostic localized the remaining loss to the preceding first-floor corridor at `(6,6)`;
+both corridor traversals now use bounded step-by-step movement proofs.

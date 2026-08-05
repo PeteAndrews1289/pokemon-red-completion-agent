@@ -1007,6 +1007,11 @@ doorway input was still the final character of a long route string. That charact
 from the route, and the shared verified entry helper owns the transition. This illustrates why
 semantic boundaries must replace fixed inputs at every call site, not only the first observed one.
 
+The next replay showed the return route had actually lost progress earlier in the first-floor
+corridor and arrived at `(6,6)`; the new doorway gate made that upstream fault observable. Both
+directions through the corridor now require each requested step to change world state before the
+verified doorway transition begins.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
