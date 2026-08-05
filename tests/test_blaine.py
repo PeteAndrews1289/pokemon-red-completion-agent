@@ -63,7 +63,7 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert len(MANSION_3F_TO_B1F) == 34
     assert len(MANSION_B1F_TO_NORTH_STATUE) == 54
     assert len(MANSION_B1F_TO_SECRET_KEY) == 35
-    assert tuple(len(route) for route in GYM_QUIZ_ROUTES) == (14, 19, 11, 12, 12, 12)
+    assert tuple(len(route) for route in GYM_QUIZ_ROUTES) == (14, 23, 11, 12, 12, 12)
     assert QUIZ_CORRECT_ANSWERS == (True, False, False, False, True, False)
     assert QUIZ_ANSWERS == (False, False, True, False, True, False)
     assert QUIZ_TRAINER_BATTLE_INDEXES == (1, 3)

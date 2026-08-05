@@ -289,9 +289,13 @@ MANSION_B1F_TO_SECRET_KEY = _directions("RRRRDDLLLLLLLLLLLLLLLLLLLLDDDDDDDDR")
 GYM_ENTRY_ROUTE = _directions("RRRRRRRUUUUUUUUU")
 GYM_QUIZ_ROUTES = (
     _directions("UUURRUUUUULLUL"),
-    _directions("RURRUUUUUULLLLLLDLL"),
+    # Quiz-one's Burglar remains at (16, 8) after stepping toward the player.
+    # Walk around him through the open row below before resuming the original
+    # approach at (16, 7).
+    _directions("DRRUULRRUUUUUULLLLLLDLL"),
     _directions("RRDDDDDLLDL"),
-    _directions("RDRRDDDDLLDL"),
+    # Quiz-three's Burglar likewise occupies the old first step at (10, 8).
+    _directions("DRRRDDDDLLDL"),
     _directions("DDLLLLULLLUL"),
     _directions("RURRUUUULLUL"),
 )
