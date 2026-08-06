@@ -24,6 +24,8 @@ from pokemon_red_completion.lavender import (
 )
 from pokemon_red_completion.observation import (
     BULBASAUR_SPECIES_ID,
+    BattleMenuPhase,
+    BattleMenuState,
     ItemId,
     MapId,
     RawGameState,
@@ -76,11 +78,14 @@ def _report() -> LavenderChapterReport:
         party_status=(0, 0, 0),
         repels_purchased=4,
         repels_used=4,
+        starting_parlyz_heals=0,
         parlyz_heals_purchased=3,
         parlyz_heals_used=2,
         parlyz_heals_remaining=1,
         antidotes_purchased=1,
         antidotes_remaining=1,
+        starting_awakenings=2,
+        awakenings_purchased=5,
         awakenings_used=3,
         awakenings_remaining=4,
         starting_super_potions=1,
@@ -258,6 +263,22 @@ def test_supply_income_detour_is_source_stable_and_reversible() -> None:
     assert lavender_module.ROUTE_11_GAMBLER_PAYOUT == 1_260
     assert lavender_module.ROUTE_11_SUPPLY_INCOME == 3_780
     assert lavender_module.TM24_SALE_PROCEEDS == 1_000
+
+
+def test_tunnel_status_supplies_top_up_from_live_survivors() -> None:
+    assert lavender_module._status_supply_purchase_quantities(
+        parlyz_heals=1,
+        awakenings=2,
+    ) == (6, 5)
+    assert lavender_module._status_supply_purchase_quantities(
+        parlyz_heals=7,
+        awakenings=7,
+    ) == (0, 0)
+    with pytest.raises(lavender_module.LavenderChapterError):
+        lavender_module._status_supply_purchase_quantities(
+            parlyz_heals=8,
+            awakenings=0,
+        )
 
 
 def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
@@ -637,6 +658,40 @@ def test_tunnel_field_recovery_cures_every_sleep_counter(
     assert run.awakenings_used == 1
 
 
+def test_income_return_cures_paralysis_before_crossing_grass(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    status = 0x40
+    quantity = 2
+    used: list[ItemId] = []
+    run = lavender_module._RunState([], [])
+
+    monkeypatch.setattr(lavender_module, "_party_status", lambda _emulator: (status,))
+    monkeypatch.setattr(
+        lavender_module,
+        "_bag",
+        lambda _emulator: {ItemId.PARLYZ_HEAL: quantity},
+    )
+
+    def fake_use(*_args: object, **_kwargs: object) -> None:
+        nonlocal status, quantity
+        used.append(_args[-1])
+        status = 0
+        quantity -= 1
+
+    monkeypatch.setattr(lavender_module, "_use_bag_item", fake_use)
+    lavender_module._cure_tunnel_status_if_present(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        run,
+        DEFAULT_LAVENDER_TIMING,
+    )
+
+    assert used == [ItemId.PARLYZ_HEAL]
+    assert run.parlyz_heals_used == 1
+
+
 def test_field_recovery_skips_a_full_hp_target_even_above_its_maximum(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -730,6 +785,73 @@ def test_wild_flee_detects_an_immediate_scripted_opponent_handoff() -> None:
     assert not _wild_battle_identity_changed(random_wild, replace(marowak, battle_state=0))
 
 
+def test_wild_flee_reselects_run_after_a_failed_escape(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Runtime:
+        def __init__(self) -> None:
+            self.phase = BattleMenuPhase.MAIN
+            self.run_attempts = 0
+            self.hp = 61
+            self.raw = replace(
+                _raw(),
+                map_id=MapId.ROUTE_11,
+                player_x=25,
+                player_y=2,
+                battle_state=1,
+                enemy_species_id=5,
+                enemy_level=17,
+                enemy_hp=40,
+                first_party_hp=self.hp,
+            )
+
+        def execute(self, action: object) -> None:
+            kind = getattr(action, "kind", None)
+            if kind is MacroActionKind.CONFIRM and self.phase is BattleMenuPhase.MAIN:
+                self.run_attempts += 1
+                if self.run_attempts == 1:
+                    self.hp = 40
+                    self.raw = replace(self.raw, first_party_hp=self.hp)
+                    self.phase = BattleMenuPhase.UNKNOWN
+                else:
+                    self.raw = replace(self.raw, battle_state=0, first_party_hp=self.hp)
+            elif kind is MacroActionKind.CANCEL and self.phase is BattleMenuPhase.UNKNOWN:
+                self.phase = BattleMenuPhase.MAIN
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(
+                self.phase,
+                selected_main_command=3 if self.phase is BattleMenuPhase.MAIN else None,
+            )
+
+        def read_input_readiness(self) -> object:
+            return type("Readiness", (), {"ready": True})()
+
+    runtime = Runtime()
+    run = lavender_module._RunState([], [])
+    monkeypatch.setattr(
+        lavender_module,
+        "_party_hp",
+        lambda _emulator: (runtime.hp, 46, 36),
+    )
+    monkeypatch.setattr(lavender_module, "_bag", lambda _emulator: {})
+
+    lavender_module._flee(
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        run,
+        LavenderTiming(wait_frames=1),
+    )
+
+    assert runtime.run_attempts == 2
+    assert len(run.wilds) == 1
+    assert run.wilds[0].hp_safe
+
+
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
 def test_lavender_timing_rejects_invalid_bounds(invalid: object) -> None:
     for field in fields(LavenderTiming):
@@ -776,14 +898,16 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
     assert public["inventory"] == {
         "repels_purchased": 4,
         "repels_used": 4,
+        "starting_parlyz_heals": 0,
         "parlyz_heals_purchased": 3,
         "parlyz_heals_used": 2,
         "parlyz_heals_remaining": 1,
         "antidotes_purchased": 1,
         "antidotes_remaining": 1,
+        "starting_awakenings": 2,
+        "awakenings_purchased": 5,
         "awakenings_used": 3,
         "awakenings_remaining": 4,
-        "awakenings_purchased": 5,
         "starting_super_potions": 1,
         "super_potions_purchased": 15,
         "super_potions_used": 4,

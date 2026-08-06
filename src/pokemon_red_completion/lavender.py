@@ -237,11 +237,14 @@ class LavenderChapterReport:
     party_status: tuple[int, ...]
     repels_purchased: int
     repels_used: int
+    starting_parlyz_heals: int
     parlyz_heals_purchased: int
     parlyz_heals_used: int
     parlyz_heals_remaining: int
     antidotes_purchased: int
     antidotes_remaining: int
+    starting_awakenings: int
+    awakenings_purchased: int
     awakenings_used: int
     awakenings_remaining: int
     starting_super_potions: int
@@ -276,13 +279,18 @@ class LavenderChapterReport:
             and self.party_hp == self.party_max_hp
             and all(status == 0 for status in self.party_status)
             and self.repels_purchased == self.repels_used == 4
-            and self.parlyz_heals_purchased >= 1
-            and self.parlyz_heals_used + self.parlyz_heals_remaining == self.parlyz_heals_purchased
+            and self.starting_parlyz_heals >= 0
+            and self.parlyz_heals_purchased >= 0
+            and self.parlyz_heals_used + self.parlyz_heals_remaining
+            == self.starting_parlyz_heals + self.parlyz_heals_purchased
             and self.antidotes_purchased in {0, 1}
             and self.antidotes_remaining >= LAVENDER_ANTIDOTE_RESERVE
+            and self.starting_awakenings >= 0
+            and self.awakenings_purchased >= 0
             and 0 <= self.awakenings_used < TUNNEL_AWAKENING_RESERVE
             and self.awakenings_remaining >= 1
-            and self.awakenings_used + self.awakenings_remaining == TUNNEL_AWAKENING_RESERVE
+            and self.awakenings_used + self.awakenings_remaining
+            == self.starting_awakenings + self.awakenings_purchased
             and self.starting_super_potions in {0, 1, 2, 3}
             and self.super_potions_purchased >= 8
             and self.super_potions_used + self.super_potions_remaining
@@ -292,7 +300,7 @@ class LavenderChapterReport:
             == self.super_potions_purchased * SUPER_POTION_PRICE
             + self.parlyz_heals_purchased * PARLYZ_HEAL_PRICE
             + self.antidotes_purchased * ANTIDOTE_PRICE
-            + TUNNEL_AWAKENINGS_PURCHASED * AWAKENING_PRICE
+            + self.awakenings_purchased * AWAKENING_PRICE
             + 4 * REPEL_PRICE
             and self.tm28_sale_proceeds in {0, TM28_SALE_PROCEEDS}
             and ItemId.TM28_DIG not in set(self.final_raw.bag_item_ids or ())
@@ -325,14 +333,16 @@ class LavenderChapterReport:
             "inventory": {
                 "repels_purchased": self.repels_purchased,
                 "repels_used": self.repels_used,
+                "starting_parlyz_heals": self.starting_parlyz_heals,
                 "parlyz_heals_purchased": self.parlyz_heals_purchased,
                 "parlyz_heals_used": self.parlyz_heals_used,
                 "parlyz_heals_remaining": self.parlyz_heals_remaining,
                 "antidotes_purchased": self.antidotes_purchased,
                 "antidotes_remaining": self.antidotes_remaining,
+                "starting_awakenings": self.starting_awakenings,
+                "awakenings_purchased": self.awakenings_purchased,
                 "awakenings_used": self.awakenings_used,
                 "awakenings_remaining": self.awakenings_remaining,
-                "awakenings_purchased": TUNNEL_AWAKENINGS_PURCHASED,
                 "starting_super_potions": self.starting_super_potions,
                 "super_potions_purchased": self.super_potions_purchased,
                 "super_potions_used": self.super_potions_used,
@@ -402,6 +412,8 @@ def run_lavender_chapter(
         raise LavenderChapterError("Lavender chapter requires the Thunder Badge.")
     initial_sp = _bag(emulator).get(ItemId.SUPER_POTION, 0)
     initial_repel = _bag(emulator).get(ItemId.REPEL, 0)
+    initial_parlyz_heals = _bag(emulator).get(ItemId.PARLYZ_HEAL, 0)
+    initial_awakenings = _bag(emulator).get(ItemId.AWAKENING, 0)
     # Earlier adaptive recovery may preserve up to three legal copies. The
     # Lavender Mart buys only the shortfall to one fixed downstream reserve.
     if initial_sp not in {0, 1, 2, 3} or initial_repel != 0:
@@ -451,7 +463,11 @@ def run_lavender_chapter(
     )
     _wait(actions, timing.transition_frames)
     _require(reader.read(), MapId.VERMILION_MART, (3, 7), "Mart entrance")
-    tunnel_purchase_cost = _purchase_supplies(
+    (
+        tunnel_purchase_cost,
+        tunnel_parlyz_heals_purchased,
+        tunnel_awakenings_purchased,
+    ) = _purchase_supplies(
         actions, reader, emulator, timing, starting_super_potions=initial_sp
     )
     # Restore the qualified Route 9 battle lineage after the bounded quantity menu.
@@ -968,11 +984,14 @@ def run_lavender_chapter(
         party_status=status,
         repels_purchased=4,
         repels_used=run.repels_used,
-        parlyz_heals_purchased=TUNNEL_PARLYZ_HEALS_PURCHASED + top_up_parlyz_heals,
+        starting_parlyz_heals=initial_parlyz_heals,
+        parlyz_heals_purchased=tunnel_parlyz_heals_purchased + top_up_parlyz_heals,
         parlyz_heals_used=run.parlyz_heals_used,
         parlyz_heals_remaining=_bag(emulator).get(ItemId.PARLYZ_HEAL, 0),
         antidotes_purchased=top_up_antidotes,
         antidotes_remaining=_bag(emulator).get(ItemId.ANTIDOTE, 0),
+        starting_awakenings=initial_awakenings,
+        awakenings_purchased=tunnel_awakenings_purchased,
         awakenings_used=run.awakenings_used,
         awakenings_remaining=_bag(emulator).get(ItemId.AWAKENING, 0),
         starting_super_potions=initial_sp,
@@ -1740,30 +1759,8 @@ def _flee(
                 return
             _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
         raise LavenderChapterError("Wild flee exceeded its bounded normalized dialogue.")
-    for _ in range(timing.flee_pulses):
-        raw = reader.read()
-        menu = reader.read_battle_menu_state(raw)
-        if menu.phase is BattleMenuPhase.UNKNOWN:
-            _pulse(
-                executor,
-                _unknown_flee_action(unknown_with_cancel),
-                frames=timing.wait_frames,
-            )
-            continue
-        if menu.phase is BattleMenuPhase.MOVE:
-            _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
-            continue
-        command = menu.selected_main_command
-        if command == 3:
-            break
-        direction = {0: "right", 1: "right", 2: "down"}.get(command)
-        if direction is None:
-            raise LavenderChapterError("Wild flee exposed an invalid main-menu cursor.")
-        _pulse(executor, MacroActionKind.MOVE, direction, timing.wait_frames)
-    else:
-        raise LavenderChapterError("Wild flee could not select RUN.")
-    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-    for _ in range(timing.flee_pulses):
+    run_attempts = 0
+    for _ in range(max(128, timing.flee_pulses)):
         final = reader.read()
         if final.battle_state == 0 and reader.read_input_readiness().ready:
             _record_wild_flee_evidence(
@@ -1778,8 +1775,38 @@ def _flee(
                 allow_purified_zone_heal=allow_purified_zone_heal,
             )
             return
-        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    raise LavenderChapterError("Wild flee exceeded its bounded dialogue.")
+        if final.battle_state != 1:
+            _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
+            continue
+        if final.party_species_ids != species or final.first_party_pp != pp:
+            raise LavenderChapterError("Wild flee changed protected party or move PP.")
+        if (final.battler_hp or 0) <= 0:
+            raise LavenderChapterError(
+                "Wild flee exhausted the active battler before a safe escape."
+            )
+        menu = reader.read_battle_menu_state(final)
+        if menu.phase is BattleMenuPhase.UNKNOWN:
+            # B advances failed-RUN and opponent-action dialogue but cannot
+            # accidentally choose FIGHT when MAIN becomes visible.
+            _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
+            continue
+        if menu.phase is BattleMenuPhase.MOVE:
+            _pulse(executor, MacroActionKind.CANCEL, frames=timing.wait_frames)
+            continue
+        command = menu.selected_main_command
+        if command == 3:
+            if run_attempts >= 16:
+                raise LavenderChapterError("Wild flee exceeded its bounded RUN attempts.")
+            _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+            run_attempts += 1
+            continue
+        direction = {0: "right", 1: "right", 2: "down"}.get(command)
+        if direction is None:
+            raise LavenderChapterError("Wild flee exposed an invalid main-menu cursor.")
+        _pulse(executor, MacroActionKind.MOVE, direction, timing.wait_frames)
+    raise LavenderChapterError(
+        f"Wild flee exceeded its bounded dialogue after {run_attempts} RUN attempts."
+    )
 
 
 def _unknown_flee_action(cancel_for_safety: bool) -> MacroActionKind:
@@ -2266,6 +2293,10 @@ def _earn_tunnel_supply_income(
         battle_recovery_threshold=BATTLE_RECOVERY_THRESHOLD,
         battle_recovery_limit=1,
     )
+    # A terminal status from the final income battle can make an otherwise
+    # low-risk Route 11 escape fail repeatedly. Cure the observed lead before
+    # crossing grass, then let the Mart restore the declared tunnel reserve.
+    _cure_tunnel_status_if_present(executor, reader, emulator, run, timing)
     _move(
         executor,
         reader,
@@ -2323,14 +2354,20 @@ def _purchase_supplies(
     timing: LavenderTiming,
     *,
     starting_super_potions: int,
-) -> int:
+) -> tuple[int, int, int]:
     if starting_super_potions not in {0, 1, 2, 3}:
         raise LavenderChapterError("Invalid starting Super Potion reserve for Mart purchase.")
     super_potion_purchase_quantity = TUNNEL_SUPER_POTION_TARGET - starting_super_potions
+    parlyz_heal_purchase_quantity, awakening_purchase_quantity = (
+        _status_supply_purchase_quantities(
+            parlyz_heals=_bag(emulator).get(ItemId.PARLYZ_HEAL, 0),
+            awakenings=_bag(emulator).get(ItemId.AWAKENING, 0),
+        )
+    )
     expected_cost = (
         super_potion_purchase_quantity * SUPER_POTION_PRICE
-        + TUNNEL_AWAKENINGS_PURCHASED * AWAKENING_PRICE
-        + TUNNEL_PARLYZ_HEALS_PURCHASED * PARLYZ_HEAL_PRICE
+        + awakening_purchase_quantity * AWAKENING_PRICE
+        + parlyz_heal_purchase_quantity * PARLYZ_HEAL_PRICE
         + 4 * REPEL_PRICE
     )
     money_before = _money(emulator)
@@ -2453,24 +2490,26 @@ def _purchase_supplies(
         quantity=super_potion_purchase_quantity,
         target_bag_quantity=TUNNEL_SUPER_POTION_TARGET,
     )
-    _buy_mart_item(
-        executor,
-        emulator,
-        timing,
-        absolute_index=3,
-        item=ItemId.AWAKENING,
-        quantity=TUNNEL_AWAKENINGS_PURCHASED,
-        target_bag_quantity=TUNNEL_AWAKENING_RESERVE,
-    )
-    _buy_mart_item(
-        executor,
-        emulator,
-        timing,
-        absolute_index=4,
-        item=ItemId.PARLYZ_HEAL,
-        quantity=TUNNEL_PARLYZ_HEALS_PURCHASED,
-        target_bag_quantity=TUNNEL_PARLYZ_HEALS_PURCHASED,
-    )
+    if awakening_purchase_quantity:
+        _buy_mart_item(
+            executor,
+            emulator,
+            timing,
+            absolute_index=3,
+            item=ItemId.AWAKENING,
+            quantity=awakening_purchase_quantity,
+            target_bag_quantity=TUNNEL_AWAKENING_RESERVE,
+        )
+    if parlyz_heal_purchase_quantity:
+        _buy_mart_item(
+            executor,
+            emulator,
+            timing,
+            absolute_index=4,
+            item=ItemId.PARLYZ_HEAL,
+            quantity=parlyz_heal_purchase_quantity,
+            target_bag_quantity=TUNNEL_PARLYZ_HEALS_PURCHASED,
+        )
     _buy_mart_item(
         executor,
         emulator,
@@ -2496,7 +2535,28 @@ def _purchase_supplies(
             f"sale={total_sale_proceeds}, cost={expected_cost}, "
             f"before={money_before}, after={money_after}."
         )
-    return expected_cost
+    return expected_cost, parlyz_heal_purchase_quantity, awakening_purchase_quantity
+
+
+def _status_supply_purchase_quantities(
+    *, parlyz_heals: int, awakenings: int
+) -> tuple[int, int]:
+    """Top up from observed inventory instead of assuming earlier cures were exhausted."""
+
+    if (
+        type(parlyz_heals) is not int
+        or not 0 <= parlyz_heals <= TUNNEL_PARLYZ_HEALS_PURCHASED
+        or type(awakenings) is not int
+        or not 0 <= awakenings <= TUNNEL_AWAKENING_RESERVE
+    ):
+        raise LavenderChapterError(
+            "Tunnel status inventory is outside its declared reserve: "
+            f"parlyz_heals={parlyz_heals}, awakenings={awakenings}."
+        )
+    return (
+        TUNNEL_PARLYZ_HEALS_PURCHASED - parlyz_heals,
+        TUNNEL_AWAKENING_RESERVE - awakenings,
+    )
 
 
 def _required_potion_sale_quantity(
