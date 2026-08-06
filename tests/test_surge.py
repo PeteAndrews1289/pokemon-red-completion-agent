@@ -1399,136 +1399,94 @@ class _PositiveHpSwitchPrompt:
             self.raw = replace(self.raw, battle_state=0)
 
 
-def test_post_ko_positive_enemy_hp_prompt_is_cancel_only() -> None:
+def test_surge_uses_shared_runtime_with_an_exact_dig_contract(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     runtime = _PositiveHpSwitchPrompt()
+    runtime.raw = replace(
+        runtime.raw,
+        battle_state=2,
+        enemy_hp=43,
+        active_party_index=0,
+        active_party_hp=30,
+        active_party_max_hp=30,
+        active_party_moves=(10, 45, DIG_MOVE_ID, 0),
+        active_party_pp=(35, 40, 8, 0),
+        first_party_moves=(10, 45, DIG_MOVE_ID, 0),
+        first_party_pp=(35, 40, 8, 0),
+    )
+    observed: dict[str, object] = {}
 
-    final, dig_attacks, super_potions_used = _run_dig_battle(runtime, runtime, SurgeTiming())
-
-    assert final.battle_state == 0
-    assert dig_attacks == 0
-    assert super_potions_used == 0
-    assert [
-        action.kind for action in runtime.actions if action.kind is not MacroActionKind.WAIT
-    ] == [MacroActionKind.CANCEL, MacroActionKind.CANCEL]
-
-
-def test_low_hp_main_gate_uses_one_bounded_surge_recovery(monkeypatch: pytest.MonkeyPatch) -> None:
-    runtime = _PositiveHpSwitchPrompt()
-    runtime.raw = replace(runtime.raw, enemy_hp=43, first_party_hp=10)
-    runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
-    calls: list[int] = []
-
-    def recover(executor, reader, emulator, timing) -> bool:
-        assert executor is runtime
+    def run(reader, executor, policy, **kwargs):
+        observed.update(kwargs)
         assert reader is runtime
-        calls.append(runtime.raw.first_party_hp or 0)
-        runtime.raw = replace(runtime.raw, first_party_hp=30, battle_state=0)
+        assert executor is runtime
+        assert policy(runtime.raw) == 3
+        return replace(runtime.raw, battle_state=0, first_party_pp=(35, 40, 5, 0))
+
+    monkeypatch.setattr(surge_module, "run_adaptive_trainer_battle", run)
+
+    final, dig_attacks, super_potions_used = _run_dig_battle(
+        runtime, runtime, SurgeTiming(), emulator=object()
+    )
+
+    assert final.battle_state == 0
+    assert dig_attacks == 3
+    assert super_potions_used == 0
+    assert observed["required_move_id"] == DIG_MOVE_ID
+    assert observed["intent"] == surge_module.SURGE_BATTLE_INTENT
+    assert observed["consume_battle_start_schedule"] is False
+
+
+def test_surge_shared_runtime_allows_two_bounded_recoveries(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    runtime = _PositiveHpSwitchPrompt()
+    runtime.raw = replace(
+        runtime.raw,
+        battle_state=2,
+        enemy_hp=43,
+        active_party_index=0,
+        active_party_hp=10,
+        active_party_max_hp=30,
+        active_party_moves=(10, 45, DIG_MOVE_ID, 0),
+        active_party_pp=(35, 40, 8, 0),
+        first_party_moves=(10, 45, DIG_MOVE_ID, 0),
+        first_party_pp=(35, 40, 8, 0),
+    )
+    runtime_calls = 0
+    recovery_calls = 0
+
+    def run(reader, executor, policy, **kwargs):
+        nonlocal runtime_calls
+        del reader, executor, kwargs
+        runtime_calls += 1
+        if runtime_calls <= 2:
+            try:
+                policy(runtime.raw)
+            except surge_module._PauseForSurgeSuperPotion as request:
+                raise surge_module.BattleRuntimeError("recovery requested") from request
+        return replace(runtime.raw, battle_state=0, first_party_pp=(35, 40, 5, 0))
+
+    def recover(executor, reader, emulator, timing) -> bool:
+        nonlocal recovery_calls
+        del executor, reader, emulator, timing
+        recovery_calls += 1
         return True
 
-    monkeypatch.setattr("pokemon_red_completion.surge._use_surge_super_potion", recover)
+    monkeypatch.setattr(surge_module, "run_adaptive_trainer_battle", run)
+    monkeypatch.setattr(surge_module, "_use_surge_super_potion", recover)
 
     final, dig_attacks, super_potions_used = _run_dig_battle(
         runtime, runtime, SurgeTiming(), emulator=object()
     )
 
     assert final.battle_state == 0
-    assert dig_attacks == 0
-    assert super_potions_used == 1
-    assert calls == [10]
-
-
-def test_surge_recovery_protects_the_observed_twelve_hp_switch_gate(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    runtime = _PositiveHpSwitchPrompt()
-    runtime.raw = replace(
-        runtime.raw,
-        enemy_hp=43,
-        first_party_hp=12,
-        first_party_max_hp=32,
-    )
-    runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
-    calls: list[int] = []
-
-    def recover(executor, reader, emulator, timing) -> bool:
-        calls.append(runtime.raw.first_party_hp or 0)
-        runtime.raw = replace(runtime.raw, first_party_hp=32, battle_state=0)
-        return True
-
-    monkeypatch.setattr("pokemon_red_completion.surge._use_surge_super_potion", recover)
-
-    final, _, super_potions_used = _run_dig_battle(
-        runtime, runtime, SurgeTiming(), emulator=object()
-    )
-
-    assert final.battle_state == 0
-    assert super_potions_used == 1
-    assert calls == [12]
-    assert (SURGE_RECOVERY_HP_NUMERATOR, SURGE_RECOVERY_HP_DENOMINATOR) == (1, 1)
-
-
-def test_surge_recovery_heals_damage_carried_into_the_next_opponent(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    runtime = _PositiveHpSwitchPrompt()
-    runtime.raw = replace(
-        runtime.raw,
-        enemy_hp=43,
-        first_party_hp=29,
-        first_party_max_hp=30,
-    )
-    runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
-    calls: list[int] = []
-
-    def recover(executor, reader, emulator, timing) -> bool:
-        del executor, reader, emulator, timing
-        calls.append(runtime.raw.first_party_hp or 0)
-        runtime.raw = replace(runtime.raw, first_party_hp=30, battle_state=0)
-        return True
-
-    monkeypatch.setattr("pokemon_red_completion.surge._use_surge_super_potion", recover)
-
-    final, _, super_potions_used = _run_dig_battle(
-        runtime, runtime, SurgeTiming(), emulator=object()
-    )
-
-    assert final.battle_state == 0
-    assert super_potions_used == 1
-    assert calls == [29]
-
-
-def test_surge_controller_allows_two_bounded_recoveries(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    runtime = _PositiveHpSwitchPrompt()
-    runtime.raw = replace(runtime.raw, enemy_hp=43, first_party_hp=10)
-    runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
-    calls = 0
-
-    def recover(executor, reader, emulator, timing) -> bool:
-        nonlocal calls
-        del executor, reader, emulator, timing
-        calls += 1
-        runtime.raw = replace(
-            runtime.raw,
-            first_party_hp=10,
-            battle_state=0 if calls == 2 else 2,
-        )
-        return True
-
-    monkeypatch.setattr("pokemon_red_completion.surge._use_surge_super_potion", recover)
-
-    final, dig_attacks, super_potions_used = _run_dig_battle(
-        runtime,
-        runtime,
-        SurgeTiming(),
-        emulator=object(),
-    )
-
-    assert final.battle_state == 0
-    assert dig_attacks == 0
+    assert dig_attacks == 3
     assert super_potions_used == 2
-    assert calls == 2
+    assert recovery_calls == 2
+    assert runtime_calls == 3
+    assert (SURGE_RECOVERY_HP_NUMERATOR, SURGE_RECOVERY_HP_DENOMINATOR) == (1, 1)
 
 
 def test_surge_recovery_revalidates_an_already_full_transition(
@@ -1553,39 +1511,6 @@ def test_surge_recovery_revalidates_an_already_full_transition(
 
     assert used is False
     assert runtime.actions == []
-
-
-def test_surge_battle_resumes_after_stale_recovery_request(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    runtime = _PositiveHpSwitchPrompt()
-    runtime.raw = replace(
-        runtime.raw,
-        enemy_hp=43,
-        active_party_index=0,
-        first_party_hp=29,
-        first_party_max_hp=30,
-    )
-    runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
-    calls = 0
-
-    def revalidate(executor, reader, emulator, timing) -> bool:
-        nonlocal calls
-        del executor, reader, emulator, timing
-        calls += 1
-        runtime.raw = replace(runtime.raw, first_party_hp=30, battle_state=0)
-        return False
-
-    monkeypatch.setattr(surge_module, "_use_surge_super_potion", revalidate)
-
-    final, dig_attacks, super_potions_used = _run_dig_battle(
-        runtime, runtime, SurgeTiming(), emulator=object()
-    )
-
-    assert final.battle_state == 0
-    assert dig_attacks == 0
-    assert super_potions_used == 0
-    assert calls == 1
 
 
 def test_surge_recovery_settles_with_cancel_when_quantity_update_is_delayed(

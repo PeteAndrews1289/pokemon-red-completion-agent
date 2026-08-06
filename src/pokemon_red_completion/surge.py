@@ -8,6 +8,19 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRecoveryCapability,
+    BattleResourcePolicy,
+    BattleRuntimeError,
+    RequiredMovePolicy,
+    run_adaptive_trainer_battle,
+)
 from pokemon_red_completion.capture import (
     CaptureDirective,
     CaptureObservation,
@@ -126,6 +139,14 @@ LT_SURGE_OPPONENT_ID = 0xEC
 LT_SURGE_TRAINER_CLASS_ID = 0x24
 LT_SURGE_TRAINER_SET = 1
 DUX_NICKNAME = (0x83, 0x94, 0x97, 0x50)
+SURGE_BATTLE_INTENT = BattleIntent(
+    "defeat_surge",
+    battle_plan_id="red.vermilion.lt-surge",
+    required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+    required_move_ref="move:dig",
+    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+    recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
+)
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -4173,145 +4194,67 @@ def _run_dig_battle(
     *,
     emulator: EmulatorState | None = None,
 ) -> tuple[RawGameState, int, int]:
-    dig_attacks = 0
+    initial = reader.read()
+    moves = initial.battler_moves or initial.first_party_moves or ()
+    pp = initial.battler_pp or initial.first_party_pp or ()
+    if DIG_MOVE_ID not in moves:
+        raise SurgeChapterError("Diglett lead lacks observed Dig move evidence.")
+    dig_index = moves.index(DIG_MOVE_ID)
+    if dig_index >= len(pp):
+        raise SurgeChapterError("Diglett lead lacks observed Dig PP evidence.")
+    initial_dig_pp = pp[dig_index] & 0x3F
     super_potions_used = 0
-    declining_switch = False
-    switch_pulses = 0
-    protected_party: tuple[int, ...] | None = None
-    protected_pp: tuple[int, ...] | None = None
-    for _ in range(timing.battle_pulses):
-        raw = reader.read()
-        if raw.battle_state == 0:
-            return raw, dig_attacks, super_potions_used
-        if raw.battle_state != 2 or (raw.first_party_hp or 0) <= 0:
-            raise SurgeChapterError("Lt. Surge battle lost its living trainer-state gate.")
-        menu = reader.read_battle_menu_state(raw)
-        if raw.enemy_hp == 0:
-            if not declining_switch:
-                declining_switch = True
-                switch_pulses = 0
-                protected_party = raw.party_species_ids
-                protected_pp = raw.first_party_pp
-            _pulse(executor, MacroActionKind.CANCEL)
-            continue
-        if declining_switch:
-            if raw.party_species_ids != protected_party or raw.first_party_pp != protected_pp:
-                raise SurgeChapterError(
-                    "Post-KO switch decline changed protected party or PP state."
-                )
-            if menu.phase is BattleMenuPhase.MAIN:
-                declining_switch = False
-                switch_pulses = 0
-            else:
-                switch_pulses += 1
-                if switch_pulses > 24:
-                    raise SurgeChapterError("Post-KO switch decline exceeded its bounded pulses.")
-                _pulse(executor, MacroActionKind.CANCEL)
-                continue
-        if menu.phase is BattleMenuPhase.UNKNOWN:
-            _pulse(executor, MacroActionKind.CONFIRM)
-            continue
-        if menu.phase is BattleMenuPhase.MOVE:
-            _pulse(executor, MacroActionKind.CANCEL, frames=120)
-            continue
+
+    def dig_policy(raw: RawGameState) -> int:
         if (
             super_potions_used < 2
             and raw.battler_hp is not None
             and raw.battler_max_hp is not None
-            and raw.battler_hp > 0
-            and raw.battler_hp * SURGE_RECOVERY_HP_DENOMINATOR
-            <= raw.battler_max_hp * SURGE_RECOVERY_HP_NUMERATOR
+            and 0 < raw.battler_hp < raw.battler_max_hp
         ):
-            if emulator is None:
-                raise SurgeChapterError("Lt. Surge low-HP recovery requires live emulator state.")
-            recovery_used = _use_surge_super_potion(executor, reader, emulator, timing)
-            if recovery_used:
-                super_potions_used += 1
-                continue
-            # A transition can make the requesting observation stale.  If the
-            # action-boundary read is already full, resume from that current
-            # state instead of reconsidering the stale recovery forever.
-            raw = reader.read()
-            if raw.battle_state == 0:
-                return raw, dig_attacks, super_potions_used
-        moves = raw.first_party_moves or ()
-        if DIG_MOVE_ID not in moves:
-            raise SurgeChapterError("Diglett lead lacks observed Dig move evidence.")
-        dig_index = moves.index(DIG_MOVE_ID)
-        dig_slot = dig_index + 1
-        _navigate_main(executor, reader, 0)
-        _pulse(executor, MacroActionKind.CONFIRM, frames=120)
-        for _ in range(8):
-            selected = reader.read()
-            selected_menu = reader.read_battle_menu_state(selected)
-            if selected_menu.phase is BattleMenuPhase.MOVE:
-                break
-            _pulse(
+            raise _PauseForSurgeSuperPotion
+        live_moves = raw.battler_moves or ()
+        try:
+            return live_moves.index(DIG_MOVE_ID) + 1
+        except ValueError as error:
+            raise SurgeChapterError("Diglett lead lacks live Dig move evidence.") from error
+
+    while True:
+        try:
+            final = run_adaptive_trainer_battle(
+                reader,
                 executor,
-                MacroActionKind.CONFIRM
-                if selected_menu.phase is BattleMenuPhase.MAIN
-                else MacroActionKind.WAIT,
-                frames=120,
+                dig_policy,
+                expected_map=MapId.VERMILION_GYM,
+                intent=SURGE_BATTLE_INTENT,
+                required_move_id=DIG_MOVE_ID,
+                label="Lt. Surge",
+                unknown_cancel_interval=3,
+                consume_battle_start_schedule=False,
             )
-        else:
-            raise SurgeChapterError("Lt. Surge FIGHT menu did not expose moves.")
-        for _ in range(6):
-            slot = selected_menu.selected_move_slot
-            if slot == dig_slot:
-                break
-            if slot is None:
-                raise SurgeChapterError("Lt. Surge move menu lacks a cursor.")
-            _pulse(
-                executor,
-                MacroActionKind.MOVE,
-                "down" if slot < dig_slot else "up",
-                120,
-            )
-            selected = reader.read()
-            selected_menu = reader.read_battle_menu_state(selected)
-        else:
-            raise SurgeChapterError("Could not normalize the persisted cursor to Dig.")
-        if (
-            selected.first_party_moves is None
-            or selected.first_party_moves[dig_index] != DIG_MOVE_ID
-        ):
-            raise SurgeChapterError("Selected Surge move is not Dig (0x5B).")
-        before_pp = selected.first_party_pp
-        _pulse(executor, MacroActionKind.CONFIRM)
-        for _ in range(24):
-            after = reader.read()
-            if after.battle_state == 0:
-                return after, dig_attacks + 1, super_potions_used
-            if (
-                before_pp
-                and after.first_party_pp
-                and after.first_party_pp[dig_index] == before_pp[dig_index] - 1
-            ):
-                if tuple(
-                    after.first_party_pp[index] for index in range(4) if index != dig_index
-                ) != tuple(before_pp[index] for index in range(4) if index != dig_index):
-                    raise SurgeChapterError("An off-slot move spent PP against Lt. Surge.")
-                dig_attacks += 1
-                break
-            phase = reader.read_battle_menu_state(after).phase
-            if phase in {BattleMenuPhase.MAIN, BattleMenuPhase.MOVE}:
-                raise SurgeChapterError("Dig failed closed before its PP proof.")
-            _pulse(executor, MacroActionKind.CONFIRM)
-        else:
-            terminal_menu = reader.read_battle_menu_state(after)
-            raise SurgeChapterError(
-                "Dig did not reach its bounded PP gate: "
-                f"enemy={(after.enemy_species_id, after.enemy_hp)}, "
-                f"hp={(after.first_party_hp, after.first_party_max_hp)}, "
-                f"status={after.first_party_status!r}, "
-                "active="
-                f"{(after.active_party_index, after.active_party_hp, after.active_party_max_hp)}, "
-                f"moves={after.first_party_moves!r}, "
-                f"before_pp={before_pp!r}, "
-                f"pp={after.first_party_pp!r}, "
-                f"menu={(terminal_menu.phase, terminal_menu.selected_move_slot)!r}."
-            )
-    raise SurgeChapterError("Lt. Surge battle exceeded its bounded runtime.")
+            break
+        except BattleRuntimeError as error:
+            if not recovery_request_matches(error.__cause__, _PauseForSurgeSuperPotion):
+                raise SurgeChapterError(str(error)) from error
+        if emulator is None:
+            raise SurgeChapterError("Lt. Surge recovery requires live emulator state.")
+        if not _use_surge_super_potion(executor, reader, emulator, timing):
+            continue
+        super_potions_used += 1
+        if super_potions_used > 2:
+            raise SurgeChapterError("Lt. Surge exceeded its two-item recovery bound.")
+
+    final_pp = final.first_party_pp or final.battler_pp or ()
+    if dig_index >= len(final_pp):
+        raise SurgeChapterError("Lt. Surge terminal state lacks Dig PP evidence.")
+    dig_attacks = initial_dig_pp - (final_pp[dig_index] & 0x3F)
+    if dig_attacks < 0:
+        raise SurgeChapterError("Lt. Surge Dig PP increased during the battle.")
+    return final, dig_attacks, super_potions_used
+
+
+class _PauseForSurgeSuperPotion(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
 def _use_surge_super_potion(
