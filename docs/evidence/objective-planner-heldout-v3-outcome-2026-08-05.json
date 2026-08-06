@@ -1,0 +1,53 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-05",
+  "evaluation_id": "red-objective-planner-heldout-v3",
+  "status": "failed",
+  "source_commit": "89020277a0ec90a595a6c5fb416535b6659552c7",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v3-validation-01",
+      "harness_seed": 950001,
+      "status": "complete",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "teacher_objective_fallbacks": 0,
+      "hall_of_fame": true,
+      "actions": 86635,
+      "frames": 9439037,
+      "schedule_sha256": "e5024e3d3f223e4b3ecffdee3b7c33c42dd810586aba301af806f3c1d6498681",
+      "full_report_sha256": "16829a26546f51f8c6aa3a545d34197ccf55ab6e6d17a592d7f2c300f94a645c"
+    },
+    {
+      "run_id": "red-objective-v3-validation-02",
+      "harness_seed": 950002,
+      "status": "failed",
+      "qualified_checkpoints": 91,
+      "failure": "Flee changed protected capture state.",
+      "diagnosis": "A failed escape during the Route 1 acquisition survey fainted the fixed protected lead. The capture specialist could preserve the encounter only while party slot one remained living.",
+      "failure_log_sha256": "12a1199902516ab14cfdb936d1a8dd48570ff721e01a66f8a7ca2f5d3bf8f7f5"
+    }
+  ],
+  "repair_diagnostics": [
+    {
+      "harness_seed": 950002,
+      "status": "complete",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "teacher_objective_fallbacks": 0,
+      "hall_of_fame": true,
+      "actions": 89256,
+      "frames": 9474346,
+      "full_report_sha256": "26d1f4ab13ab3674c53242bcd7eb814a8e69aa4f3aa1e8de2b0806a8022953f6"
+    }
+  ],
+  "interpretation": {
+    "planner_result": "Every objective decision in both v3 runs was model-authorized; the failure occurred in party survival and capture control rather than objective selection.",
+    "evaluation_result": "The preregistered v3 series failed its five-run completion contract and is retired. The exposed-seed repair completion cannot replace a held-out result.",
+    "repair_result": "The capture controller now recovers a failed escape through the forced party menu, selects a living protected catcher rather than a fixed slot, and later restores the team at the planned Center.",
+    "next_gate": "Run the unchanged repaired source and model on the fresh v4 validation schedules, leaving v4 test schedules sealed."
+  }
+}

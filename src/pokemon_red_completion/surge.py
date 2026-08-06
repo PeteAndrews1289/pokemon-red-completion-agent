@@ -886,7 +886,10 @@ def _navigate_main(
 
 
 def _flee(
-    executor: _CountingExecutor, reader: PokemonRedStateReader, encounter: RawGameState
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    encounter: RawGameState,
 ) -> None:
     party = encounter.party_species_ids
     pp = encounter.first_party_pp
@@ -899,19 +902,20 @@ def _flee(
     for _ in range(128):
         raw = reader.read()
         if raw.battle_state == 0:
+            living_hp = raw.party_hp or ((raw.first_party_hp or 0),)
             if (
                 raw.party_species_ids != party
                 or raw.first_party_pp != pp
-                or (raw.first_party_hp or 0) <= 0
+                or not any(hp > 0 for hp in living_hp)
             ):
                 raise SurgeChapterError("Flee changed protected capture state.")
             return
-        if (
-            raw.party_species_ids != party
-            or raw.first_party_pp != pp
-            or (raw.first_party_hp or 0) <= 0
-        ):
+        if raw.party_species_ids != party or raw.first_party_pp != pp:
             raise SurgeChapterError("Flee changed protected capture state.")
+        if (raw.battler_hp or 0) <= 0:
+            raw = _force_switch_failed_flee_to_living(emulator, executor, reader, raw)
+            if raw.battle_state == 0:
+                continue
         menu = reader.read_battle_menu_state(raw)
         if menu.phase is BattleMenuPhase.MAIN:
             if attempts >= 16:
@@ -930,6 +934,98 @@ def _flee(
     raise SurgeChapterError(
         f"Flee exceeded its bounded transition pulses after {attempts} RUN attempts."
     )
+
+
+def _force_switch_failed_flee_to_living(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    fainted: RawGameState,
+) -> RawGameState:
+    """Select a living party member after a failed escape faints the battler."""
+
+    party_hp = fainted.party_hp or ()
+    living_index = next((index for index, hp in enumerate(party_hp) if hp > 0), None)
+    if living_index is None:
+        raise SurgeChapterError("Flee left no living party member.")
+    expected_species = fainted.enemy_species_id
+    expected_enemy_hp = fainted.enemy_hp
+    party_size = len(fainted.party_species_ids or ())
+    stale_cursor_address = _wild_menu_cursor_address(emulator)
+    for pulse in range(32):
+        current = reader.read()
+        if (
+            current.battle_state != 1
+            or current.enemy_species_id != expected_species
+            or current.enemy_hp != expected_enemy_hp
+        ):
+            raise SurgeChapterError(
+                "Failed-flee switch lost its protected encounter before selection: "
+                f"battle={current.battle_state}, species={current.enemy_species_id}, "
+                f"enemy_hp={current.enemy_hp}, expected_species={expected_species}, "
+                f"expected_enemy_hp={expected_enemy_hp}, party_hp={current.party_hp}, "
+                f"active={current.active_party_index}."
+            )
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if (
+            pulse > 0
+            and _wild_menu_cursor_address(emulator) != stale_cursor_address
+            and _wild_menu_cursor_active(emulator)
+            and 0 <= cursor < party_size
+        ):
+            for _ in range(party_size + 2):
+                cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+                if cursor == living_index:
+                    break
+                _pulse(
+                    executor,
+                    MacroActionKind.MOVE,
+                    "down" if cursor < living_index else "up",
+                    120,
+                )
+            else:
+                raise SurgeChapterError("Failed-flee switch could not select a living member.")
+            _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+            break
+        _pulse(
+            executor,
+            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
+    else:
+        raise SurgeChapterError("Failed-flee forced party menu did not settle.")
+
+    for pulse in range(48):
+        restored = reader.read()
+        if restored.battle_state == 0 and any(hp > 0 for hp in (restored.party_hp or ())):
+            return restored
+        if (
+            restored.battle_state == 1
+            and restored.enemy_species_id == expected_species
+            and restored.enemy_hp == expected_enemy_hp
+            and restored.active_party_index == living_index
+            and (restored.battler_hp or 0) > 0
+            and reader.read_battle_menu_state(restored).phase is BattleMenuPhase.MAIN
+        ):
+            return restored
+        if (
+            restored.battle_state != 1
+            or restored.enemy_species_id != expected_species
+            or restored.enemy_hp != expected_enemy_hp
+        ):
+            raise SurgeChapterError(
+                "Failed-flee switch lost its protected encounter while settling: "
+                f"battle={restored.battle_state}, species={restored.enemy_species_id}, "
+                f"enemy_hp={restored.enemy_hp}, expected_species={expected_species}, "
+                f"expected_enemy_hp={expected_enemy_hp}, party_hp={restored.party_hp}, "
+                f"active={restored.active_party_index}."
+            )
+        _pulse(
+            executor,
+            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
+    raise SurgeChapterError("Failed-flee switch did not restore MAIN.")
 
 
 def _find_spearow(
@@ -951,7 +1047,7 @@ def _find_spearow(
         if raw.enemy_species_id == SPEAROW_SPECIES_ID and raw.enemy_level in SPEAROW_CAPTURE_LEVELS:
             return raw
         balls = _bag(emulator).get(ItemId.POKE_BALL)
-        _flee(executor, reader, raw)
+        _flee(emulator, executor, reader, raw)
         if _bag(emulator).get(ItemId.POKE_BALL) != balls:
             raise SurgeChapterError("Non-target flee changed Poké Balls.")
         raw = reader.read()
@@ -1128,7 +1224,7 @@ def _catch_diglett_chapter(
         ):
             break
         rejected_encounters.append((encounter.enemy_species_id, encounter.enemy_level))
-        _flee(executor, reader, encounter)
+        _flee(emulator, executor, reader, encounter)
         encounter = reader.read()
     else:
         raise SurgeChapterError(
@@ -1748,7 +1844,7 @@ def _move_fleeing_wild(
             pending.popleft()
         if raw.battle_state:
             balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
-            _flee(executor, reader, raw)
+            _flee(emulator, executor, reader, raw)
             if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
                 raise SurgeChapterError(f"{label} flee changed Poké Balls.")
             raw = reader.read()
@@ -1777,7 +1873,7 @@ def _move_until_map_fleeing_wild(
         raw = _survey_step(executor, reader, direction, timing, label)
         if raw.battle_state:
             balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
-            _flee(executor, reader, raw)
+            _flee(emulator, executor, reader, raw)
             if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
                 raise SurgeChapterError(f"{label} flee changed Poké Balls.")
     raise SurgeChapterError(f"{label} missed map {target_map:#04x}.")
@@ -2010,7 +2106,7 @@ class _LiveWildCorridorSurveyExecutor:
         if not raw.battle_state:
             raise RedAreaExecutionError(f"{self._label} cannot flee without an encounter")
         balls = _bag(self._emulator).get(ItemId.POKE_BALL, 0)
-        _flee(self._executor, self._reader, raw)
+        _flee(self._emulator, self._executor, self._reader, raw)
         if _bag(self._emulator).get(ItemId.POKE_BALL, 0) != balls:
             raise RedAreaExecutionError(f"{self._label} flee changed Poké Balls")
 
@@ -2312,10 +2408,14 @@ def _force_switch_wild_capture_to_lead(
     expected_species_id: int,
     expected_enemy_hp: int,
     label: str,
+    *,
+    party_index: int = 0,
 ) -> RawGameState:
     """Recover a fainted helper through the mandatory party selection."""
 
     party_size = len(reader.read().party_species_ids or ())
+    if not 0 <= party_index < party_size:
+        raise SurgeChapterError(f"{label} protected party index is invalid.")
     stale_cursor_address = _wild_menu_cursor_address(emulator)
     for pulse in range(32):
         current = reader.read()
@@ -2332,9 +2432,14 @@ def _force_switch_wild_capture_to_lead(
         ):
             for _ in range(8):
                 cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-                if cursor == 0:
+                if cursor == party_index:
                     break
-                _pulse(executor, MacroActionKind.MOVE, "up", 120)
+                _pulse(
+                    executor,
+                    MacroActionKind.MOVE,
+                    "down" if cursor < party_index else "up",
+                    120,
+                )
             else:
                 raise SurgeChapterError(f"{label} could not select the protected lead.")
             _pulse(executor, MacroActionKind.CONFIRM, frames=240)
@@ -2353,7 +2458,7 @@ def _force_switch_wild_capture_to_lead(
             restored.battle_state == 1
             and restored.enemy_species_id == expected_species_id
             and restored.enemy_hp == expected_enemy_hp
-            and restored.active_party_index == 0
+            and restored.active_party_index == party_index
             and (restored.battler_hp or 0) > 0
             and reader.read_battle_menu_state(restored).phase is BattleMenuPhase.MAIN
         ):
@@ -2369,9 +2474,14 @@ def _force_switch_wild_capture_to_lead(
             if 0 <= cursor < party_size:
                 for _ in range(8):
                     cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-                    if cursor == 0:
+                    if cursor == party_index:
                         break
-                    _pulse(executor, MacroActionKind.MOVE, "up", 120)
+                    _pulse(
+                        executor,
+                        MacroActionKind.MOVE,
+                        "down" if cursor < party_index else "up",
+                        120,
+                    )
                 else:
                     raise SurgeChapterError(f"{label} could not reselect the protected lead.")
                 _pulse(executor, MacroActionKind.CONFIRM, frames=240)
@@ -2469,23 +2579,36 @@ def _weaken_wild_capture_once(
             phase=phase,
         )
         if current.battle_state == 1 and turn_result is not None:
-            _switch_wild_capture_party_slot(
-                emulator,
-                executor,
-                reader,
-                0,
-                before.enemy_species_id,
-                current.enemy_hp,
-                f"{label} protected lead",
+            protected_index = next(
+                (index for index, hp in enumerate(current.party_hp or ()) if hp > 0),
+                None,
             )
+            if protected_index is None:
+                raise SurgeChapterError(f"{label} weakening left no living catcher.")
+            if current.active_party_index != protected_index:
+                _switch_wild_capture_party_slot(
+                    emulator,
+                    executor,
+                    reader,
+                    protected_index,
+                    before.enemy_species_id,
+                    current.enemy_hp,
+                    f"{label} protected catcher",
+                )
             if turn_result:
                 return True
-            _flee(executor, reader, reader.read())
+            _flee(emulator, executor, reader, reader.read())
             return False
         if (current.battler_hp or 0) <= 0:
             landed = (
                 current.enemy_hp is not None and 0 < current.enemy_hp < before_enemy_hp and pp_spent
             )
+            protected_index = next(
+                (index for index, hp in enumerate(current.party_hp or ()) if hp > 0),
+                None,
+            )
+            if protected_index is None:
+                raise SurgeChapterError(f"{label} weakening left no living catcher.")
             restored = _force_switch_wild_capture_to_lead(
                 emulator,
                 executor,
@@ -2493,10 +2616,11 @@ def _weaken_wild_capture_once(
                 before.enemy_species_id,
                 current.enemy_hp if landed else before_enemy_hp,
                 label,
+                party_index=protected_index,
             )
             if landed:
                 return True
-            _flee(executor, reader, restored)
+            _flee(emulator, executor, reader, restored)
             return False
         if phase is BattleMenuPhase.MOVE:
             # A completed turn can return through the previously selected move
@@ -2547,7 +2671,7 @@ def _try_catch_wild(
     raw = reader.read()
     if not raw.battle_state:
         raise SurgeChapterError(f"{label} capture retry lost its live encounter.")
-    _flee(executor, reader, raw)
+    _flee(emulator, executor, reader, raw)
     if _bag(emulator).get(ItemId.POKE_BALL, 0) != starting_balls - min(starting_balls, max_throws):
         raise SurgeChapterError(f"{label} capture retry changed its ball accounting.")
     return False
@@ -2844,7 +2968,7 @@ def _traverse_route_2_to_viridian(
             raise SurgeChapterError(f"Route 2 traversal reached an unexpected map {raw.map_id!r}.")
         if raw.battle_state:
             balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
-            _flee(executor, reader, raw)
+            _flee(emulator, executor, reader, raw)
             if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
                 raise SurgeChapterError("Route 2 flee changed Poké Balls.")
             continue
@@ -2892,7 +3016,7 @@ def _traverse_route_2_to_viridian(
             moved = reader.read()
         if moved.battle_state:
             balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
-            _flee(executor, reader, moved)
+            _flee(emulator, executor, reader, moved)
             if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
                 raise SurgeChapterError("Route 2 flee changed Poké Balls.")
             moved = reader.read()
@@ -3020,7 +3144,7 @@ def _traverse_route_2_to_cave_house(
             raise SurgeChapterError(f"Northbound Route 2 traversal reached map {raw.map_id!r}.")
         if raw.battle_state:
             balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
-            _flee(executor, reader, raw)
+            _flee(emulator, executor, reader, raw)
             if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
                 raise SurgeChapterError("Northbound Route 2 flee changed Poké Balls.")
             continue
@@ -3055,7 +3179,7 @@ def _traverse_route_2_to_cave_house(
             moved = reader.read()
         if moved.battle_state:
             balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
-            _flee(executor, reader, moved)
+            _flee(emulator, executor, reader, moved)
             if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
                 raise SurgeChapterError("Northbound Route 2 flee changed Poké Balls.")
             moved = reader.read()
@@ -3138,7 +3262,7 @@ def _traverse_cave(
             raise SurgeChapterError(f"{label} reached an unexpected map {raw.map_id!r}.")
         if raw.battle_state:
             balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
-            _flee(executor, reader, raw)
+            _flee(emulator, executor, reader, raw)
             if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
                 raise SurgeChapterError(f"{label} flee changed Poké Balls.")
             continue
@@ -3179,7 +3303,7 @@ def _traverse_cave(
         moved = reader.read()
         if moved.battle_state:
             balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
-            _flee(executor, reader, moved)
+            _flee(emulator, executor, reader, moved)
             if _bag(emulator).get(ItemId.POKE_BALL, 0) != balls:
                 raise SurgeChapterError(f"{label} flee changed Poké Balls.")
             moved = reader.read()

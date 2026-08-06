@@ -66,6 +66,7 @@ from pokemon_red_completion.surge import (
     SurgeCheckpoint,
     SurgeTiming,
     _flee,
+    _force_switch_failed_flee_to_living,
     _force_switch_wild_capture_to_lead,
     _is_route_1_walker_gate,
     _LiveWildCorridorSurveyExecutor,
@@ -227,7 +228,7 @@ def test_encounter_aware_corridor_preserves_the_interrupted_grass_step(
             reader.state = replace(reader.state, player_x=(reader.state.player_x or 0) + 1)
         return reader.state
 
-    def flee(_executor, _reader, _raw):
+    def flee(_emulator, _executor, _reader, _raw):
         reader.state = replace(reader.state, battle_state=0)
 
     monkeypatch.setattr(surge_module, "_survey_step", survey_step)
@@ -279,7 +280,7 @@ def test_ball_decrement_waits_for_persistent_stack_sync(
     assert sum(action.kind is MacroActionKind.CANCEL for action in executor.actions) == 2
 
 
-def test_forced_wild_switch_reselects_lead_after_a_premature_confirmation() -> None:
+def test_forced_wild_switch_selects_requested_living_slot_after_premature_confirmation() -> None:
     cursor_address = int(RamAddress.TILE_MAP) + 20
 
     class Emulator:
@@ -311,7 +312,7 @@ def test_forced_wild_switch_reselects_lead_after_a_premature_confirmation() -> N
     )
     restored = replace(
         fainted,
-        active_party_index=0,
+        active_party_index=1,
         active_party_hp=35,
     )
 
@@ -351,10 +352,89 @@ def test_forced_wild_switch_reselects_lead_after_a_premature_confirmation() -> N
         123,
         5,
         "Viridian Forest",
+        party_index=1,
     )
 
     assert observed is restored
     assert executor.confirmations == 3
+
+
+def test_failed_flee_accepts_escape_during_forced_living_switch() -> None:
+    cursor_address = int(RamAddress.TILE_MAP) + 24
+
+    class Emulator:
+        frame_count = 0
+        pressed_buttons = frozenset()
+        memory = {
+            int(RamAddress.MENU_CURSOR_LOCATION): 0,
+            int(RamAddress.MENU_CURSOR_LOCATION) + 1: 0,
+            int(RamAddress.CURRENT_MENU_ITEM): 0,
+            cursor_address: 0xED,
+        }
+
+        def read_u8(self, address: int) -> int:
+            return self.memory.get(int(address), 0)
+
+    emulator = Emulator()
+    fainted = RawGameState(
+        True,
+        MapId.ROUTE_1,
+        12,
+        14,
+        3,
+        1,
+        party_species_ids=(179, 64, 59),
+        party_hp=(0, 24, 18),
+        first_party_hp=0,
+        first_party_pp=(20, 20, 20, 20),
+        enemy_species_id=165,
+        enemy_hp=12,
+        active_party_index=0,
+        active_party_hp=0,
+    )
+    restored = replace(
+        fainted,
+        battle_state=0,
+        active_party_index=None,
+        active_party_hp=None,
+    )
+
+    class Reader:
+        state = fainted
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(
+                BattleMenuPhase.MAIN if raw is restored else BattleMenuPhase.UNKNOWN
+            )
+
+    reader = Reader()
+
+    class Executor:
+        confirmations = 0
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.MOVE and action.value == "down":
+                emulator.memory[int(RamAddress.CURRENT_MENU_ITEM)] += 1
+            if action.kind is not MacroActionKind.CONFIRM:
+                return
+            self.confirmations += 1
+            if self.confirmations == 1:
+                emulator.memory[int(RamAddress.MENU_CURSOR_LOCATION)] = cursor_address & 0xFF
+                emulator.memory[int(RamAddress.MENU_CURSOR_LOCATION) + 1] = cursor_address >> 8
+            elif self.confirmations == 2:
+                reader.state = restored
+
+    observed = _force_switch_failed_flee_to_living(
+        emulator,  # type: ignore[arg-type]
+        Executor(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        fainted,
+    )
+
+    assert observed is restored
 
 
 def _raw() -> RawGameState:
@@ -422,7 +502,7 @@ class _MultiDialogueFleeSimulation:
 def test_flee_counts_run_attempts_independently_of_dialogue_pulses() -> None:
     runtime = _MultiDialogueFleeSimulation(escape_attempt=5)
 
-    _flee(runtime, runtime, runtime.raw)  # type: ignore[arg-type]
+    _flee(runtime, runtime, runtime, runtime.raw)  # type: ignore[arg-type]
 
     assert runtime.raw.battle_state == 0
     assert runtime.attempts == 5
@@ -433,7 +513,7 @@ def test_flee_keeps_semantic_run_attempts_bounded() -> None:
     runtime = _MultiDialogueFleeSimulation(escape_attempt=None)
 
     with pytest.raises(surge_module.SurgeChapterError, match="bounded RUN attempts"):
-        _flee(runtime, runtime, runtime.raw)  # type: ignore[arg-type]
+        _flee(runtime, runtime, runtime, runtime.raw)  # type: ignore[arg-type]
 
     assert runtime.attempts == 16
 
