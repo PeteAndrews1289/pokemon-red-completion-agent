@@ -8,6 +8,8 @@ from pokemon_red_completion.red_battle_catalog import (
     PRET_POKERED_COMMIT,
     RED_BATTLE_CATALOG,
     RedBattleCatalogError,
+    pokemon_red_move_ref,
+    pokemon_red_species_ref,
 )
 
 
@@ -23,6 +25,14 @@ def test_catalog_covers_every_canonical_red_species_and_move() -> None:
     assert PRET_POKERED_COMMIT == "1e96034092686d006e863cace09e87273051a3d8"
     assert RED_BATTLE_CATALOG.move_count == 165
     assert RED_BATTLE_CATALOG.species_count == 151
+
+
+def test_catalog_builds_stable_game_local_references() -> None:
+    assert pokemon_red_move_ref(85) == _move(85)
+    assert pokemon_red_species_ref(104) == _species(104)
+    for builder in (pokemon_red_move_ref, pokemon_red_species_ref):
+        with pytest.raises(RedBattleCatalogError):
+            builder(0)
 
 
 def test_known_move_mechanics_match_pinned_red_source() -> None:

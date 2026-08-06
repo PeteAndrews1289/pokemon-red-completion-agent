@@ -4,12 +4,14 @@ from pokemon_red_completion.agatha import (
     AGATHA_APPROACH,
     AGATHA_CHECKPOINT_COUNT,
     AGATHA_ELIXIR_USE,
+    AGATHA_FORCED_SWITCH_LIMIT,
     AGATHA_PARTY,
     AGATHA_RNG_DELAY_FRAMES,
     AGATHA_SAFE_HP,
     AGATHA_SURF_RESERVE,
     AGATHA_X_SPECIAL_USE,
     AgathaTurn,
+    _agatha_forced_switch_target,
     _agatha_move_slot,
     _battle_x_special,
     _encounter_party,
@@ -33,6 +35,7 @@ def test_agatha_source_contract_is_exact() -> None:
     assert AGATHA_RNG_DELAY_FRAMES == 85
     assert AGATHA_ELIXIR_USE == 1
     assert AGATHA_X_SPECIAL_USE == 1
+    assert AGATHA_FORCED_SWITCH_LIMIT == 5
     assert AGATHA_SURF_RESERVE == 1
     assert MapId.AGATHAS_ROOM == 0xF7
     assert MapId.LANCES_ROOM == 0x71
@@ -191,6 +194,35 @@ def test_agatha_policy_uses_live_legal_pp_fallbacks() -> None:
         first_party_pp=(3, 5, 12, AGATHA_SURF_RESERVE),
     )
     assert _agatha_move_slot(reserve) == 3
+
+
+def test_agatha_reserve_uses_live_active_moves_and_pp() -> None:
+    reserve = RawGameState(
+        game_started=True,
+        map_id=MapId.AGATHAS_ROOM,
+        player_x=4,
+        player_y=3,
+        party_count=6,
+        battle_state=2,
+        active_party_index=3,
+        enemy_species_id=0x0E,
+        first_party_pp=(15, 15, 10, 10),
+        active_party_moves=(0, 84, 85, 0),
+        active_party_pp=(0, 12, 8, 0),
+        player_disabled_move_slot=2,
+        player_disable_turns=2,
+    )
+
+    assert _agatha_move_slot(reserve) == 3
+
+
+def test_agatha_forced_switch_prefers_live_matchup_coverage() -> None:
+    party = (0x1C, 0x40, 0x76, 0x84, 0x68, 0x2B)
+    hp = (0, 31, 92, 150, 74, 55)
+
+    assert _agatha_forced_switch_target(hp, party, 0, 0x0E) == 2
+    assert _agatha_forced_switch_target(hp, party, 0, 0x82) == 4
+    assert _agatha_forced_switch_target((0, 0, 0, 0, 0, 0), party, 0, 0x0E) is None
 
 
 def test_battle_x_item_reselects_after_unconsumed_turn(monkeypatch) -> None:

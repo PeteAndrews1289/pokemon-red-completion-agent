@@ -100,6 +100,14 @@ def pokemon_red_move_ref(identifier: int) -> str:
     return f"{POKEMON_RED_REF_NAMESPACE}:move:{identifier:03d}"
 
 
+def pokemon_red_species_ref(identifier: int) -> str:
+    """Return the stable semantic reference for one nonzero Red species ID."""
+
+    if type(identifier) is not int or not 1 <= identifier <= 0xFF:  # noqa: E721
+        raise RedBattleCatalogError("Pokémon Red species identifier must be a nonzero byte")
+    return f"{POKEMON_RED_REF_NAMESPACE}:species:{identifier:03d}"
+
+
 def _parse_ref(value: object, *, expected_kind: str) -> int:
     if not isinstance(value, str):
         raise RedBattleCatalogError("Pokémon Red reference must be a string")

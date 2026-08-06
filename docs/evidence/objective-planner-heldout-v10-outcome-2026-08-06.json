@@ -1,0 +1,25 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "evaluation_id": "red-objective-planner-heldout-v10",
+  "status": "superseded_before_validation",
+  "source_commit": "cf2c975",
+  "source_bundle_sha256": "1c871933e300c39cdb9900b8f74b7b528b24fadb55333e0595a942b14d4fe816",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "exposed_repair_runs": [
+    {
+      "run_id": "red-objective-v10-exposed-repair-1230002",
+      "harness_seed": 1230002,
+      "battle_start_schedule_sha256": "555739486884dff917da51622738f239a1e16206a4d2d32d6de0176a75bafd0e",
+      "private_log_sha256": "f2f8111c589a2c3214e6fb3456883bbcb1ae3b6ef97aa81bb232e0d2558f2306",
+      "status": "failed",
+      "checkpoints_verified": 305,
+      "repaired_boundary_verified": "silph_7f_rival",
+      "failure_boundary": "league_agatha",
+      "failure_reason": "the lead fainted during Agatha and the lead-only policy had no balanced-party forced-switch continuation",
+      "observed_capture_variation": "Route 12 Snorlax required 18 throws"
+    }
+  ],
+  "validation_runs_opened": 0,
+  "sealed_test_runs_opened": 0,
+  "interpretation": "The exposed Silph repair seed proved that boundary and then uncovered a later missing balanced-party continuation at Agatha. V10 is superseded before validation; no fresh validation or sealed test schedule was opened."
+}

@@ -49,6 +49,16 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import (
+    RED_BATTLE_CATALOG,
+    pokemon_red_move_ref,
+    pokemon_red_species_ref,
+)
+from pokemon_red_completion.red_party import (
+    DUGTRIO_SPECIES_ID,
+    DUX_SPECIES_ID,
+    JOLTEON_SPECIES_ID,
+)
 from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
     SilphChapterError,
@@ -83,6 +93,7 @@ AGATHA_APPROACH = ("right", "up", "up")
 AGATHA_SURF_RESERVE = 1
 AGATHA_X_SPECIAL_USE = 1
 AGATHA_ELIXIR_USE = 1
+AGATHA_FORCED_SWITCH_LIMIT = 5
 
 
 class EmulatorState(Protocol):
@@ -256,22 +267,26 @@ def run_agatha_chapter(
 
     last_recovery_turn = -1
     boosts_used = 0
+    forced_switches = 0
 
     def policy(raw: RawGameState) -> int:
         if boosts_used < AGATHA_X_SPECIAL_USE:
             raise _BoostBoundary
-        hp = raw.first_party_hp or 0
-        status = raw.first_party_status or 0
-        if recovery_action_due(
-            hp=hp,
-            status=status,
-            safe_hp=AGATHA_SAFE_HP,
-            decisions_made=len(turns),
-            last_recovery_decision=last_recovery_turn,
+        hp = raw.battler_hp or 0
+        status = raw.battler_status or 0
+        if (
+            raw.active_party_index in {None, 0}
+            and recovery_action_due(
+                hp=hp,
+                status=status,
+                safe_hp=AGATHA_SAFE_HP,
+                decisions_made=len(turns),
+                last_recovery_decision=last_recovery_turn,
+            )
         ):
             raise _HealBoundary
         species = raw.enemy_species_id or 0
-        pp = raw.first_party_pp or (0, 0, 0, 0)
+        pp = raw.battler_pp or (0, 0, 0, 0)
         slot = _agatha_move_slot(raw)
         turns.append(
             AgathaTurn(
@@ -317,12 +332,42 @@ def run_agatha_chapter(
                 label="Agatha",
             )
         except BattleRuntimeError as error:
+            current = reader.read()
+            if (
+                current.battle_state == 2
+                and current.battler_hp == 0
+                and forced_switches < AGATHA_FORCED_SWITCH_LIMIT
+                and any(hp > 0 for hp in _party_hp(emulator))
+            ):
+                terminal = _settle_agatha_forced_switch(
+                    reader,
+                    actions,
+                    emulator,
+                )
+                forced_switches += 1
+                if terminal:
+                    note_observed_trainer_battle_exit(battle_intent)
+                    break
+                continue
             if control_request_matches(error.__cause__, _BoostBoundary.default_action):
                 _battle_x_special(reader, actions, emulator)
                 boosts_used += 1
                 continue
             if not recovery_request_matches(error.__cause__, _HealBoundary):
-                raise AgathaChapterError("Agatha battle runtime failed.") from error
+                cause = error.__cause__
+                active = (
+                    current.active_party_index,
+                    current.battler_hp,
+                    current.battler_status,
+                )
+                raise AgathaChapterError(
+                    "Agatha battle runtime failed: "
+                    f"runtime={error}, cause={cause!r}, "
+                    f"party_hp={_party_hp(emulator)!r}, "
+                    f"active={active!r}, "
+                    f"enemy={(current.enemy_species_id, current.enemy_hp, current.enemy_level)!r}, "
+                    f"pp={current.battler_pp!r}, bag={_bag(emulator)!r}."
+                ) from error
             raw = reader.read()
             if (
                 (raw.first_party_status or 0)
@@ -500,7 +545,39 @@ def _turns_valid(turns: Iterable[AgathaTurn]) -> bool:
 
 def _agatha_move_slot(raw: RawGameState) -> int:
     species = raw.enemy_species_id or 0
-    pp = raw.first_party_pp or ()
+    pp = raw.battler_pp or ()
+    if raw.active_party_index not in {None, 0}:
+        moves = raw.battler_moves or ()
+        enemy_species = raw.enemy_species_id or 0
+        enemy_types = RED_BATTLE_CATALOG.resolve_species(
+            pokemon_red_species_ref(enemy_species)
+        ).types
+        ranked: list[tuple[float, int]] = []
+        fallback: list[int] = []
+        for slot, (move, remaining) in enumerate(zip(moves, pp, strict=True), start=1):
+            if (
+                move
+                and remaining & 0x3F
+                and not (
+                    raw.player_disabled_move_slot == slot
+                    and (raw.player_disable_turns or 0) > 0
+                )
+            ):
+                fallback.append(slot)
+                mechanics = RED_BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(move))
+                effectiveness = RED_BATTLE_CATALOG.type_effectiveness(
+                    mechanics.type_name,
+                    enemy_types,
+                )
+                if mechanics.power > 0 and effectiveness > 0:
+                    ranked.append(
+                        (mechanics.power * mechanics.accuracy * effectiveness, slot)
+                    )
+        if ranked:
+            return max(ranked)[1]
+        if fallback:
+            return fallback[0]
+        raise AgathaChapterError("Agatha reserve has no legal move with PP.")
     surf_pp = (pp[3] & 0x3F) if len(pp) >= 4 else 0
     surf_disabled = raw.player_disabled_move_slot == 4 and (raw.player_disable_turns or 0) > 0
     if species in {0x82, 0x2D}:
@@ -517,6 +594,75 @@ def _agatha_move_slot(raw: RawGameState) -> int:
         ):
             return slot
     raise AgathaChapterError("Agatha policy has no legal move with PP.")
+
+
+def _agatha_forced_switch_target(
+    party_hp: tuple[int, ...],
+    party_species: tuple[int, ...],
+    active_party_index: int | None,
+    enemy_species: int | None,
+) -> int | None:
+    """Choose a living teammate with useful coverage for Agatha's opponent."""
+
+    candidates = [
+        index for index, hp in enumerate(party_hp) if hp > 0 and index != active_party_index
+    ]
+    if not candidates:
+        return None
+    if enemy_species == 0x82:  # Golbat: Electric first, then Flying utility.
+        priorities = (JOLTEON_SPECIES_ID, DUX_SPECIES_ID, DUGTRIO_SPECIES_ID)
+    else:  # Ghost/Poison and Arbok: Dugtrio's Ground coverage first.
+        priorities = (DUGTRIO_SPECIES_ID, JOLTEON_SPECIES_ID, DUX_SPECIES_ID)
+    for species in priorities:
+        for index in candidates:
+            if index < len(party_species) and party_species[index] == species:
+                return index
+    return max(candidates, key=lambda index: party_hp[index])
+
+
+def _settle_agatha_forced_switch(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+) -> bool:
+    """Continue Agatha with a living party member and prove the MAIN menu."""
+
+    initial = reader.read()
+    target = _agatha_forced_switch_target(
+        _party_hp(emulator),
+        initial.party_species_ids or (),
+        initial.active_party_index,
+        initial.enemy_species_id,
+    )
+    if target is None:
+        raise AgathaChapterError("Agatha KO left no living teammate.")
+    for pulse_index in range(64):
+        raw = reader.read()
+        if raw.battle_state == 0:
+            return True
+        if (
+            raw.battle_state == 2
+            and raw.active_party_index == target
+            and (raw.battler_hp or 0) > 0
+            and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
+        ):
+            return False
+        if raw.battle_state != 2:
+            raise AgathaChapterError("Agatha forced switch left the battle.")
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        _pulse(
+            actions,
+            MacroActionKind.CONFIRM if cursor == target else MacroActionKind.MOVE,
+            None if cursor == target else ("down" if cursor < target else "up"),
+            DEFAULT_SILPH_TIMING.menu_frames,
+        )
+        if pulse_index % 5 == 4:
+            _pulse(
+                actions,
+                MacroActionKind.CONFIRM,
+                frames=DEFAULT_SILPH_TIMING.menu_frames,
+            )
+    raise AgathaChapterError("Agatha forced switch exceeded its bounded menu pulses.")
 
 
 def _battle_x_special(
