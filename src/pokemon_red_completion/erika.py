@@ -263,7 +263,9 @@ class ErikaChapterReport:
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
             and self.final_raw.first_party_level is not None
-            and 42 <= self.final_raw.first_party_level <= 43
+            # A level-42 lead can legitimately gain two levels from the
+            # required Gym trainers and Erika under a fresh battle schedule.
+            and 42 <= self.final_raw.first_party_level <= 44
             and self.final_raw.first_party_moves == (0x82, STRENGTH, ICE_BEAM_MOVE, 0x39)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
             and self.party_hp == self.party_max_hp

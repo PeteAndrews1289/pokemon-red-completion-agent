@@ -111,10 +111,10 @@ def test_erika_report_qualifies_tm40_move_learning_and_terminal() -> None:
     )
 
 
-def test_erika_report_accepts_post_battle_level_and_rejects_incomplete_heal() -> None:
+def test_erika_report_accepts_two_post_battle_levels_and_rejects_incomplete_heal() -> None:
     raw = replace(
         _terminal(),
-        first_party_level=43,
+        first_party_level=44,
         first_party_hp=133,
         first_party_max_hp=133,
     )
@@ -153,6 +153,7 @@ def test_erika_report_accepts_post_battle_level_and_rejects_incomplete_heal() ->
 
     assert report.passed
     assert not replace(report, party_hp=(132, 47, 40)).passed
+    assert not replace(report, final_raw=replace(raw, first_party_level=45)).passed
 
 
 def test_erika_policy_falls_back_when_strength_is_disabled() -> None:
