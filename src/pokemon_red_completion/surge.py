@@ -2443,11 +2443,28 @@ def _switch_wild_capture_party_slot(
             and switched.enemy_species_id == expected_species_id
             and switched.enemy_hp == expected_enemy_hp
             and switched.active_party_index == party_index
+            and (switched.battler_hp or 0) > 0
             and reader.read_battle_menu_state(switched).phase is BattleMenuPhase.MAIN
         ):
             return switched
-        if switched.battle_state != 1 or (switched.battler_hp or 0) <= 0:
-            raise SurgeChapterError(f"{label} lost its battler during switching.")
+        if switched.battle_state != 1:
+            raise SurgeChapterError(f"{label} lost its encounter during switching.")
+        if (switched.battler_hp or 0) <= 0:
+            protected_index = next(
+                (index for index, hp in enumerate(switched.party_hp or ()) if hp > 0),
+                None,
+            )
+            if protected_index is None:
+                raise SurgeChapterError(f"{label} switching left no living catcher.")
+            return _force_switch_wild_capture_to_lead(
+                emulator,
+                executor,
+                reader,
+                expected_species_id,
+                expected_enemy_hp,
+                label,
+                party_index=protected_index,
+            )
         _pulse(
             executor,
             MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
@@ -2601,9 +2618,11 @@ def _weaken_wild_capture_once(
         or before_enemy_hp is None
         or before_enemy_hp <= 0
         or before_party != initial_party
-        or before.active_party_index != party_index
     ):
         raise SurgeChapterError(f"{label} weakening did not normalize to a stable MAIN gate.")
+    if before.active_party_index != party_index:
+        _flee(emulator, executor, reader, before)
+        return False
 
     party_before_attack = PokemonRedPartyReader(emulator).read()
     helper_before = party_before_attack.members[party_index]

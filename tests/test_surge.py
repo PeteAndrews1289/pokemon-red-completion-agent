@@ -447,6 +447,97 @@ def test_forced_wild_switch_selects_requested_living_slot_after_premature_confir
     assert executor.confirmations == 3
 
 
+def test_wild_helper_switch_recovers_when_incoming_helper_faints(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    initial = RawGameState(
+        True,
+        MapId.ROUTE_1,
+        12,
+        14,
+        3,
+        1,
+        party_species_ids=(179, RATTATA_SPECIES_ID, 59),
+        party_hp=(25, 0, 18),
+        enemy_species_id=PIDGEY_SPECIES_ID,
+        enemy_hp=12,
+        active_party_index=0,
+        active_party_hp=25,
+    )
+    fainted = replace(initial, active_party_index=1, active_party_hp=0)
+    restored = replace(initial, active_party_index=0, active_party_hp=25)
+
+    class Emulator:
+        phase = "main"
+
+        def read_u8(self, address: int) -> int:
+            if address == RamAddress.CURRENT_MENU_ITEM:
+                return 1 if self.phase == "party" else 0
+            raise AssertionError(f"unexpected address {address:#x}")
+
+    emulator = Emulator()
+
+    class Reader:
+        state = initial
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(BattleMenuPhase.MAIN)
+
+    reader = Reader()
+
+    def pulse(
+        _executor: object,
+        kind: MacroActionKind,
+        _value: object = None,
+        _frames: object = None,
+        **_kwargs: object,
+    ) -> None:
+        if kind is not MacroActionKind.CONFIRM:
+            return
+        if emulator.phase == "main":
+            emulator.phase = "party"
+        elif emulator.phase == "party":
+            emulator.phase = "submenu"
+        elif emulator.phase == "submenu":
+            emulator.phase = "resolving"
+            reader.state = fainted
+
+    recovered_slots: list[int] = []
+
+    def force_switch(
+        _emulator: object,
+        _executor: object,
+        _reader: object,
+        _species: int,
+        _enemy_hp: int,
+        _label: str,
+        *,
+        party_index: int,
+    ) -> RawGameState:
+        recovered_slots.append(party_index)
+        return restored
+
+    monkeypatch.setattr(surge_module, "_navigate_main", lambda *_args: None)
+    monkeypatch.setattr(surge_module, "_pulse", pulse)
+    monkeypatch.setattr(surge_module, "_force_switch_wild_capture_to_lead", force_switch)
+
+    observed = surge_module._switch_wild_capture_party_slot(
+        emulator,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        1,
+        PIDGEY_SPECIES_ID,
+        12,
+        "Route 1 helper",
+    )
+
+    assert observed is restored
+    assert recovered_slots == [0]
+
+
 def test_failed_flee_accepts_escape_during_forced_living_switch() -> None:
     cursor_address = int(RamAddress.TILE_MAP) + 24
 
