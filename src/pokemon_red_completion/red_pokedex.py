@@ -26,6 +26,7 @@ from .observation import RamAddress, ReadOnlyMemory
 from .pokedex import (
     ExclusionReason,
     PokedexObservation,
+    PokedexTarget,
     declare_target,
     registration_from_flags,
 )
@@ -39,13 +40,12 @@ POKEDEX_FLAG_BYTES = (RED_TOTAL_SPECIES + 7) // 8
 POKEDEX_OWNED = PARTY_NICKNAMES_BASE + PARTY_NICKNAME_COUNT * NICKNAME_LENGTH
 POKEDEX_SEEN = POKEDEX_OWNED + POKEDEX_FLAG_BYTES
 
-#: Species a single Red cartridge cannot register, and why.
+#: Species no Red cartridge can register, whatever choices a run makes.
 #:
 #: Stating the unreachable set rather than the reachable one keeps the
-#: declaration short enough to review.  "100% of the Pokédex" is not a coherent
-#: target for one cartridge, and pinning that here stops the number drifting
-#: into something that merely sounds complete.
-RED_EXCLUSIONS: dict[int, ExclusionReason] = {
+#: declaration short enough to review.  These are properties of the cartridge:
+#: no route recovers them, and only a paired Blue run or a trade will.
+RED_CARTRIDGE_EXCLUSIONS: dict[int, ExclusionReason] = {
     # Blue-exclusive lines.
     27: ExclusionReason.VERSION_EXCLUSIVE,  # Sandshrew
     28: ExclusionReason.VERSION_EXCLUSIVE,  # Sandslash
@@ -62,29 +62,92 @@ RED_EXCLUSIONS: dict[int, ExclusionReason] = {
     68: ExclusionReason.REQUIRES_TRADE,  # Machamp
     76: ExclusionReason.REQUIRES_TRADE,  # Golem
     94: ExclusionReason.REQUIRES_TRADE,  # Gengar
-    # Never distributed in normal play.
+    # Never distributed in normal play. Left open for a later title that
+    # actually features it rather than pretended away here.
     151: ExclusionReason.EVENT_DISTRIBUTION,  # Mew
-    # Forfeited by a choice this route makes.  These are not properties of the
-    # cartridge: a different starter, fossil, Dojo prize, or evolution stone
-    # moves them into the obtainable set and moves others out.  They belong in
-    # the declaration because the denominator is route-specific, and a target
-    # that ignores that reports completion against a set the run could never
-    # have reached.
-    1: ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE,  # Bulbasaur, taken by the rival
-    2: ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE,  # Ivysaur
-    3: ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE,  # Venusaur
-    4: ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE,  # Charmander, chosen by neither
-    5: ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE,  # Charmeleon
-    6: ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE,  # Charizard
-    107: ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE,  # Hitmonchan, Hitmonlee taken
-    134: ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE,  # Vaporeon, Jolteon taken
-    136: ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE,  # Flareon, Jolteon taken
-    140: ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE,  # Kabuto, Helix Fossil taken
-    141: ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE,  # Kabutops
 }
 
-#: The auditable completion target for one Red cartridge.
-RED_POKEDEX_TARGET = declare_target(RED_TOTAL_SPECIES, RED_EXCLUSIONS)
+#: The four branches a Red run must pick, and the lines each one forecloses.
+#:
+#: These are not cartridge properties. They are coverage decisions: a second
+#: run exists precisely to take the other branch, so the target has to be a
+#: function of the choices rather than a constant.
+STARTER_LINES: dict[str, tuple[int, ...]] = {
+    "squirtle": (7, 8, 9),
+    "bulbasaur": (1, 2, 3),
+    "charmander": (4, 5, 6),
+}
+FOSSIL_LINES: dict[str, tuple[int, ...]] = {
+    "helix": (138, 139),
+    "dome": (140, 141),
+}
+DOJO_PRIZES: dict[str, tuple[int, ...]] = {
+    "hitmonlee": (106,),
+    "hitmonchan": (107,),
+}
+EEVEE_EVOLUTIONS: dict[str, tuple[int, ...]] = {
+    "vaporeon": (134,),
+    "jolteon": (135,),
+    "flareon": (136,),
+}
+
+
+@dataclass(frozen=True, slots=True)
+class RedRunChoices:
+    """The mutually exclusive branches one Red run commits to.
+
+    The rival always takes the starter strong against the player's, so a single
+    run reaches exactly one of the three starter lines.
+    """
+
+    starter: str = "squirtle"
+    fossil: str = "helix"
+    dojo_prize: str = "hitmonlee"
+    eevee_evolution: str = "jolteon"
+
+    def __post_init__(self) -> None:
+        for field_name, options in (
+            ("starter", STARTER_LINES),
+            ("fossil", FOSSIL_LINES),
+            ("dojo_prize", DOJO_PRIZES),
+            ("eevee_evolution", EEVEE_EVOLUTIONS),
+        ):
+            value = getattr(self, field_name)
+            if value not in options:
+                raise ValueError(
+                    f"{field_name} must be one of {sorted(options)}; got {value!r}"
+                )
+
+    def forfeited(self) -> dict[int, ExclusionReason]:
+        """Every species this run's choices put out of reach."""
+
+        forfeited: dict[int, ExclusionReason] = {}
+        for chosen, options in (
+            (self.starter, STARTER_LINES),
+            (self.fossil, FOSSIL_LINES),
+            (self.dojo_prize, DOJO_PRIZES),
+            (self.eevee_evolution, EEVEE_EVOLUTIONS),
+        ):
+            for name, line in options.items():
+                if name == chosen:
+                    continue
+                for species in line:
+                    forfeited[species] = ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE
+        return forfeited
+
+
+def red_target(choices: RedRunChoices | None = None) -> PokedexTarget:
+    """The auditable completion target for one Red run with given choices."""
+
+    selected = choices or RedRunChoices()
+    return declare_target(
+        RED_TOTAL_SPECIES,
+        {**RED_CARTRIDGE_EXCLUSIONS, **selected.forfeited()},
+    )
+
+
+#: The target for the route this repository currently runs.
+RED_POKEDEX_TARGET = red_target()
 
 
 @dataclass(frozen=True, slots=True)

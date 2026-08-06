@@ -205,3 +205,85 @@ def test_reader_tolerates_an_owned_species_missing_from_seen() -> None:
 def test_reader_covers_the_whole_species_range() -> None:
     observed = PokemonRedPokedexReader(memory_with(owned={1, 151})).read()
     assert observed.owned == frozenset({1, 151})
+
+
+# --- multi-run living dex ----------------------------------------------------
+
+
+def test_run_choices_change_which_species_are_reachable() -> None:
+    """A second run exists to take the branch the first one forfeited."""
+
+    from pokemon_red_completion.red_pokedex import RedRunChoices, red_target
+
+    a = red_target()
+    b = red_target(RedRunChoices("charmander", "dome", "hitmonchan", "flareon"))
+
+    assert a.obtainable_count == b.obtainable_count == 125
+    # Squirtle's line and the Helix fossil belong to A, not B.
+    assert {7, 8, 9, 138, 139, 106, 135} <= a.obtainable
+    assert not {7, 8, 9} & b.obtainable
+    # Charmander's line, the Dome fossil, Hitmonchan and Flareon belong to B.
+    assert {4, 5, 6, 140, 141, 107, 136} <= b.obtainable
+
+
+def test_two_opposed_red_runs_still_cannot_finish_the_dex() -> None:
+    from pokemon_red_completion.red_pokedex import RedRunChoices, red_target
+
+    a = red_target()
+    b = red_target(RedRunChoices("charmander", "dome", "hitmonchan", "flareon"))
+    union = a.obtainable | b.obtainable
+
+    assert len(union) == 132
+    # What two Red runs leave open: Blue exclusives, trade evolutions, Mew, plus
+    # the third starter line and the third Eevee stone no pair of runs reaches.
+    remaining = frozenset(range(1, 152)) - union
+    assert {27, 37, 52, 69, 126} <= remaining  # Blue-exclusive
+    assert {65, 68, 76, 94} <= remaining  # trade evolutions
+    assert 151 in remaining  # Mew, deferred to a later title
+    assert {1, 2, 3} <= remaining  # the untaken starter line
+    assert 134 in remaining  # the untaken Eevee stone
+
+
+def test_run_choices_reject_a_branch_that_does_not_exist() -> None:
+    from pokemon_red_completion.red_pokedex import RedRunChoices
+
+    with pytest.raises(ValueError, match="starter must be one of"):
+        RedRunChoices(starter="pikachu")
+    with pytest.raises(ValueError, match="fossil must be one of"):
+        RedRunChoices(fossil="amber")
+
+
+def test_living_dex_accumulates_across_runs() -> None:
+    from pokemon_red_completion.pokedex import LivingDex
+    from pokemon_red_completion.red_pokedex import RedRunChoices, red_target
+
+    a = red_target()
+    b = red_target(RedRunChoices("charmander", "dome", "hitmonchan", "flareon"))
+
+    living = LivingDex()
+    assert living.coverage(a) == pytest.approx(0.0)
+
+    living = living.with_run(PokedexObservation(seen=a.obtainable, owned=a.obtainable))
+    assert living.coverage(a) == pytest.approx(1.0)
+    assert living.remaining(a) == frozenset()
+    # A run of the same game with opposite choices still adds seven species.
+    assert len(living.remaining(b)) == 7
+
+
+def test_coverage_planner_picks_the_run_that_adds_the_most() -> None:
+    from pokemon_red_completion.pokedex import LivingDex, plan_next_run
+    from pokemon_red_completion.red_pokedex import RedRunChoices, red_target
+
+    a = red_target()
+    b = red_target(RedRunChoices("charmander", "dome", "hitmonchan", "flareon"))
+    living = LivingDex().with_run(PokedexObservation(seen=a.obtainable, owned=a.obtainable))
+
+    chosen = plan_next_run(living, {"red-a": a, "red-b": b})
+    assert chosen is not None
+    name, gain = chosen
+    assert name == "red-b"
+    assert len(gain) == 7
+
+    # Once nothing is left to add, the planner says so rather than picking one.
+    complete = living.with_run(PokedexObservation(seen=b.obtainable, owned=b.obtainable))
+    assert plan_next_run(complete, {"red-a": a, "red-b": b}) is None

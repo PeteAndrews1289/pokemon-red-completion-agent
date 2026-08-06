@@ -164,6 +164,74 @@ class PokedexProgress:
         return not self.missing
 
 
+@dataclass(frozen=True, slots=True)
+class LivingDex:
+    """Registrations accumulated across many runs and many titles.
+
+    A single cartridge cannot hold a complete Pokédex, so completion is a
+    property of a *collection*: several runs of one game taking different
+    mutually-exclusive choices, a run of the paired version for its exclusives,
+    and trades to resolve the evolutions that only occur on trade.  Species
+    unavailable in an entire generation stay open until a later title carries
+    them.
+
+    This is the accumulator.  It is deliberately ignorant of which run
+    contributed what, because the living dex only cares whether a species has
+    been registered somewhere.
+    """
+
+    registered: frozenset[int] = frozenset()
+
+    def __post_init__(self) -> None:
+        registered = frozenset(self.registered)
+        if any(type(entry) is not int or entry <= 0 for entry in registered):
+            raise ValueError("registered must contain positive species identifiers")
+        object.__setattr__(self, "registered", registered)
+
+    def with_run(self, observation: PokedexObservation) -> LivingDex:
+        """Return a new living dex including one run's owned species."""
+
+        return LivingDex(self.registered | observation.owned)
+
+    def remaining(self, target: PokedexTarget) -> frozenset[int]:
+        """Species in a target that the living dex has not registered anywhere."""
+
+        return target.obtainable - self.registered
+
+    def coverage(self, target: PokedexTarget) -> float:
+        """Fraction of one target's obtainable set already registered."""
+
+        if not target.obtainable_count:
+            return 0.0
+        return len(target.obtainable & self.registered) / target.obtainable_count
+
+
+def plan_next_run(
+    living: LivingDex,
+    candidates: Mapping[str, PokedexTarget],
+) -> tuple[str, frozenset[int]] | None:
+    """Choose the candidate run that registers the most currently-missing species.
+
+    Which starter, fossil, Dojo prize, or evolution stone a run takes is a
+    coverage decision, not a preference: each choice forecloses the
+    alternatives, so a second run exists precisely to take the other branch.
+    Greedy set cover is the right shape here because runs are expensive and the
+    candidate set is small.
+
+    Returns the candidate name and what it would newly contribute, or ``None``
+    when no candidate adds anything.
+    """
+
+    best: tuple[str, frozenset[int]] | None = None
+    for name in sorted(candidates):
+        gain = living.remaining(candidates[name])
+        if not gain:
+            continue
+        if best is None or len(gain) > len(best[1]):
+            best = (name, gain)
+    return best
+
+
 def declare_target(
     total_species: int,
     exclusions: Mapping[int, ExclusionReason],
