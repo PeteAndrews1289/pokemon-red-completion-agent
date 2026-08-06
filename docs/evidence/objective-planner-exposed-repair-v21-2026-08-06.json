@@ -1,0 +1,34 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v21",
+  "source_commit": "b66129ab7d8096e7b4a1a10de77e66469363bf2d",
+  "source_bundle_sha256": "5e144d011ff33d4bd95592940f01ee5f563e0e140f0dc2f551d69b6a63bf972b",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1450001,
+    "battle_start_schedule_sha256": "d10ae05ce9e695b2dd84cffb375c0f3a5b62993488f9ea13a6f933b6f4ccc40a",
+    "private_log_sha256": "5154a0cb6426b251833eba85c6cdc10c47179fa6ce3616e2ad160a38da038d52",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 73,
+    "teacher_objective_fallbacks": 0,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "observed_capture_variation": "Route 12 Snorlax caught in 11 throws"
+  },
+  "repair_iterations": [
+    {
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "private_log_sha256": "5154a0cb6426b251833eba85c6cdc10c47179fa6ce3616e2ad160a38da038d52"
+    }
+  ],
+  "repairs_verified": [
+    "The observed blocked Celadon Department Store doorway triggers a bounded side-step and wait policy",
+    "The player re-enters only after live map and coordinate evidence proves the store transition",
+    "The same exposed lineage completes Silph Co., balanced-team development, the level-60 workhorse goal, Champion, and Hall of Fame without another source change"
+  ]
+}
