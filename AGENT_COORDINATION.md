@@ -2,9 +2,34 @@
 
 Read [MISSION.md](MISSION.md) first. This document is about *who does what* and *how not to collide*.
 
-Three agents work this repository: **Claude**, **Codex**, and **Antigravity**. They share one branch
-and one emulator, which means most collisions are mechanical rather than intellectual. The rules
-below exist because those mechanical collisions are the expensive ones.
+Three agents work this repository: **Claude**, **Codex**, and **Antigravity**. Most collisions
+between them are mechanical rather than intellectual, and the rules below exist because the
+mechanical ones are what actually cost time.
+
+## Repository topology
+
+There is more than one checkout. Know which you are in before you touch anything.
+
+| Worktree | Branch | Role |
+| --- | --- | --- |
+| `pokemon-red-completion-agent` | `agent/battle-evaluation-protocol` | Original checkout. Stale, ~90 commits behind. Do not work here. |
+| `pokemon-red-completion-agent-claude` | `agent/balanced-team-curriculum` | **Trunk.** All integration lands here. |
+| `pokemon-red-completion-agent-v44-eval` | detached at `c0dbbc6` | Frozen source for the v44 evaluation campaign. Never edit or check out. |
+| `pokemon-red-learning-next` | `agent/learned-navigation` | Learning lane. Its work through `7dffe30` is now integrated into trunk. |
+
+**Git forbids two worktrees sharing one branch**, so "everyone in one worktree" and "agents working
+in parallel" cannot both be true. The workable arrangement is one *trunk branch* plus short-lived
+side branches that integrate often:
+
+- `agent/balanced-team-curriculum` is trunk. Everything lands here.
+- Work directly on trunk when you are the only agent active. It is the simplest thing that works.
+- When two agents are active at once, the second takes a short-lived branch in its own worktree and
+  integrates **before it exceeds roughly five commits or one working day**.
+
+That threshold is not arbitrary. `agent/learned-navigation` branched off trunk and was left alone
+while trunk moved 90 commits ahead. Integrating four commits then required skipping two of them and
+resolving conflicts across six files. Four commits, integrated the same day, would have been a
+fast-forward.
 
 ## Lanes
 
@@ -47,8 +72,19 @@ as writing up someone else's.
 ```
 
 Verify only the two source-digest fields moved and all twelve slot records stayed byte-identical.
-`tests/test_collection_protocol.py` is therefore the highest-collision file in the repo — expect to
-rebase, and never merge two branches that both touched it without re-regenerating afterward.
+
+`tests/test_collection_protocol.py` is therefore the highest-collision file in the repo, and any two
+branches that both touched `src/` **will** conflict there by construction.
+
+**Never resolve a golden-hash conflict by hand.** Take either side, then re-run
+`regenerate_collection_registry.py` and update the four values from its output. The hashes are
+derived, not authored, so hand-merging them produces a plausible file that fails the check. This
+turns a frightening conflict into a mechanical step.
+
+The same applies to the registry-version bump commits (`Freeze … collection source`, which rename
+`configs/red-battle-collection-vNN.json` and update the matching identifiers). Those are bookkeeping
+local to whichever branch made them. When integrating, **skip them and regenerate once at trunk's
+current version** rather than replaying a version the trunk has already passed.
 
 **Never open a counted evaluation seed.** Preregistered validation and sealed test seeds are
 one-attempt-only. Exposed diagnostic seeds are unlimited. V35 is retired: do not touch validation
@@ -107,7 +143,7 @@ decisions, and more Red reliability does not change that.
 .venv/bin/pytest -m "not integration"
 ```
 
-Current state: **1819 passed, 3 deselected**, all checks green, branch
+Current state: **1830 passed, 3 deselected**, all checks green, on trunk
 `agent/balanced-team-curriculum`.
 
 ## Open work, in priority order
