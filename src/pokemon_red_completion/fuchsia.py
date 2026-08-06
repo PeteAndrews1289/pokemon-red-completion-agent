@@ -50,6 +50,22 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.red_party import PokemonRedPartyReader
 from pokemon_red_completion.tower import party_core_intact
+from pokemon_red_completion.team_training import BalancedTeamPolicy
+from pokemon_red_completion.red_team_training import run_red_team_balancing
+
+FUCHSIA_DEVELOPMENT_POLICY = BalancedTeamPolicy(
+    minimum_level=30,
+    maximum_level_spread=40,
+    required_size=3,
+    retreat_hp_ratio=0.90,
+    reserve_total_pp=16,
+    max_enemy_level_delta=0,
+    minimum_direct_level_advantage=10,
+    max_battles=1000,
+    max_steps=50000,
+    max_healing_trips=25,
+    max_faints=3,
+)
 
 FUCHSIA_CHECKPOINT_COUNT = 14
 BITE = 0x2C
@@ -129,6 +145,12 @@ ROUTE13_TO_FUCHSIA = _directions(
 )
 FUCHSIA_TO_CENTER = _directions(
     "DLLDLLLLLLLLLLLLDLDDLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDRRRRRRRUUUURRRRRRRRRRRU"
+)
+CENTER_TO_ROUTE15 = _directions(
+    "LLLLLLLLLLLDDDDLLLLLLLUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRUURURRRRRRRRRRRRURRURRRRRRR"
+)
+ROUTE15_TO_CENTER = _directions(
+    "LLLLLLLDLLDLLLLLLLLLLLLDLDDLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDRRRRRRRUUUURRRRRRRRRRRU"
 )
 
 REQUIRED_EVENTS = (
@@ -610,6 +632,30 @@ def run_fuchsia_chapter(
     _move(actions, reader, emulator, run, FUCHSIA_TO_CENTER, timing, "Fuchsia Center")
     _require(reader.read(), MapId.FUCHSIA_POKECENTER, (3, 7), "Fuchsia Center entrance")
     _heal_center(actions, reader, emulator, run, timing)
+
+    _require(reader.read(), MapId.FUCHSIA_POKECENTER, (3, 3), "pre-training center")
+    if not party_core_intact(reader):
+        raise FuchsiaChapterError("Core trainees are not intact for Fuchsia development.")
+        
+    _move(actions, reader, emulator, run, CENTER_TO_ROUTE15, timing, "Center to Route 15")
+    _require(reader.read(), MapId.ROUTE_15, None, "Route 15 training zone")
+    
+    # We may need to move into the grass if CENTER_TO_ROUTE15 doesn't place us in grass.
+    # For now, let's just assume we are on Route 15 and can encounter wilds.
+    
+    run_red_team_balancing(
+        actions,
+        reader,
+        emulator,
+        policy=FUCHSIA_DEVELOPMENT_POLICY,
+        expected_map=MapId.ROUTE_15,
+        volatile_enemy_species=frozenset(),
+        escort_enemy_species=frozenset(),
+        progress_sink=progress,
+    )
+    _move(actions, reader, emulator, run, ROUTE15_TO_CENTER, timing, "Route 15 to Center")
+    _heal_center(actions, reader, emulator, run, timing)
+
     final = reader.read()
     _require(final, MapId.FUCHSIA_POKECENTER, (3, 3), "stable Fuchsia boundary")
     for checkpoint_id, label in (

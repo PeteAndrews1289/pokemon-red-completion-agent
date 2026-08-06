@@ -222,6 +222,7 @@ class DevelopedTeamReport:
     workhorse_target_level: int
     observed_workhorse_level: int | None
     fainted_count: int
+    required_minimum_level: int | None = None
     observed_levels: tuple[int, ...] = ()
 
     @property
@@ -261,15 +262,17 @@ class DevelopedTeamReport:
     @property
     def passed(self) -> bool:
         """Whether the roster is complete, the workhorse is trained, and none fainted.
-
-        This deliberately does *not* assert a level floor or a spread ceiling
-        across the whole party.  It reports them instead, because the route
-        currently trains one workhorse and carries the rest: gating on balance
-        today would fail every run rather than describe it.  Use
-        :attr:`level_spread` and :attr:`minimum_level` to see the real gap.
+        
+        If a level parity contract was requested, this also asserts that every party 
+        member has reached the required minimum level.
         """
 
-        return self.has_final_form_roster and self.workhorse_ready and self.fainted_count == 0
+        if not (self.has_final_form_roster and self.workhorse_ready and self.fainted_count == 0):
+            return False
+        if self.required_minimum_level is not None:
+            if self.minimum_level is None or self.minimum_level < self.required_minimum_level:
+                return False
+        return True
 
 
 def plan_team_development(
@@ -383,6 +386,11 @@ def summarize_team_development(
         workhorse_target_level=policy.workhorse_target_level,
         observed_workhorse_level=workhorse.level if workhorse else None,
         fainted_count=party.fainted_count,
+        required_minimum_level=(
+            policy.level_parity.required_level(policy.parity_opposition_level)
+            if policy.trains_whole_party and policy.level_parity and policy.parity_opposition_level
+            else None
+        ),
         observed_levels=party.levels,
     )
 

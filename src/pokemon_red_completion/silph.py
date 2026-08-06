@@ -197,6 +197,8 @@ ROUTE_7_CONNECTION_TO_CELADON_CITY = _reverse(CITY_TO_ROUTE_7)
 CELADON_CITY_TO_LEFT_MART = ("left", "left", "up")
 MART_LEFT_1F_TO_2F = ("right",) * 10 + ("up",) * 6
 CELADON_MART_EXIT_TO_CENTER = _reverse(CELADON_CENTER_EXIT_TO_MART[:-1]) + ("up",)
+SAFFRON_CENTER_TO_ROUTE_8_GATE = _directions("LLLLLLUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
+ROUTE_8_GATE_TO_SAFFRON_CENTER = _directions("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDRRRRRRU")
 ROOF_TO_SAFFRON_CENTER = (
     ROOF_TO_5F
     + MART_5F_TO_4F
@@ -432,6 +434,31 @@ def run_silph_chapter(
     ):
         raise SilphChapterError("Silph input boundary is not pristine.")
     _checkpoint(records, progress, emulator, initial, "silph_ready", "Silph plan ready")
+    
+    # Saffron/Silph training block on Route 8
+    if not party_core_intact(initial.party_species_ids):
+        raise SilphChapterError("Core trainees are not intact for Saffron development.")
+    _move(actions, reader, CENTER_EXIT, timing, "Saffron Center exit")
+    _move(actions, reader, SAFFRON_CENTER_TO_ROUTE_8_GATE, timing, "Center to Route 8 Gate")
+    _move(actions, reader, ("right",) * 5, timing, "Through Route 8 Gate")
+    _move(actions, reader, ("right",) * 10, timing, "To Route 8 Grass")
+    _require(reader.read(), MapId.ROUTE_8, None, "Route 8 training zone")
+    run_red_team_balancing(
+        actions,
+        reader,
+        emulator,
+        policy=SAFFRON_DEVELOPMENT_POLICY,
+        expected_map=MapId.ROUTE_8,
+        volatile_enemy_species=frozenset(),
+        escort_enemy_species=frozenset(),
+        progress_sink=progress,
+    )
+    _move(actions, reader, ("left",) * 12, timing, "Return to Route 8 Gate")
+    _move(actions, reader, ("left",) * 5, timing, "Through Route 8 Gate to Saffron")
+    _move(actions, reader, ROUTE_8_GATE_TO_SAFFRON_CENTER, timing, "Gate to Saffron Center")
+    _move(actions, reader, ("up", "up", "up"), timing, "nurse approach")
+    _heal(actions, timing)
+    
     route_items_archived = _store_spent_route_items(actions, reader, emulator, timing)
 
     # The roof exchange temporarily needs one free bag slot. Complete and

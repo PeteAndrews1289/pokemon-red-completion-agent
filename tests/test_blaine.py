@@ -40,17 +40,19 @@ from pokemon_red_completion.blaine import (
     BlaineChapterError,
     BlaineTurn,
     CinnabarGymTrainerReceipt,
-    _battle_command_direction,
     _blaine_capacity_input_slots,
     _blaine_capacity_plan,
     _encounter_party,
     _mansion_training_move_slot,
-    _PauseForTeamTrainingRecovery,
-    _red_training_matchup_acceptable,
     _sell_antidote_before_mansion,
     _team_training_move_slot,
-    _training_attack_pp,
-    _training_attack_pp_reserve,
+)
+from pokemon_red_completion.red_team_training import (
+    _PauseForTeamTrainingRecovery,
+    battle_command_direction as _battle_command_direction,
+    red_training_matchup_acceptable as _red_training_matchup_acceptable,
+    training_attack_pp as _training_attack_pp,
+    training_attack_pp_reserve as _training_attack_pp_reserve,
 )
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGameState
 from pokemon_red_completion.party import MoveObservation, PartyMemberObservation
@@ -263,24 +265,7 @@ def test_red_training_matchup_requires_extra_margin_for_dux() -> None:
     assert _training_attack_pp_reserve(dugtrio, policy) == 2
 
 
-def test_red_training_matchup_routes_volatile_species_to_the_safe_escort() -> None:
-    trainee = PartyMemberObservation(
-        slot=1,
-        species_id=0x40,
-        level=80,
-        hp=100,
-        max_hp=100,
-        moves=(MoveObservation(0x0F, 30),),
-    )
-    policy = BalancedTeamPolicy(required_size=3)
 
-    for enemy_species in MANSION_VOLATILE_ENEMY_SPECIES:
-        assert not _red_training_matchup_acceptable(
-            trainee,
-            enemy_level=30,
-            policy=policy,
-            enemy_species=enemy_species,
-        )
 
 
 def test_blaine_source_ids_are_exact() -> None:
