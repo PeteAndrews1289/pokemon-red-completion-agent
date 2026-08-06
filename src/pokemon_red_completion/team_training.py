@@ -117,6 +117,58 @@ class TeamRosterPlan:
 
 
 @dataclass(frozen=True, slots=True)
+class LevelParityContract:
+    """How far behind the local opposition a party member may fall.
+
+    An absolute level floor is a Red-specific magic number: ``50`` means nothing
+    in a game whose Elite Four sits at 70, and it over-trains in one whose gyms
+    top out at 30.  Competent play is relative—stay near what you are actually
+    facing—so this contract is expressed against the opposition's level and
+    transfers to any mainline title unchanged.
+
+    It also makes training self-pacing.  A party measured against the local
+    difficulty curve trains continuously as that curve rises, instead of
+    grinding to a fixed number in one late block.
+    """
+
+    max_levels_behind: int = 5
+
+    def __post_init__(self) -> None:
+        if type(self.max_levels_behind) is not int or self.max_levels_behind < 0:
+            raise ValueError("max_levels_behind must be a non-negative integer")
+
+    def required_level(self, opposition_level: int) -> int:
+        """The lowest level a member may hold and still be considered ready."""
+
+        if type(opposition_level) is not int or not MIN_LEVEL <= opposition_level <= MAX_LEVEL:
+            raise ValueError(f"opposition_level must be between {MIN_LEVEL} and {MAX_LEVEL}")
+        return max(MIN_LEVEL, opposition_level - self.max_levels_behind)
+
+    def members_behind(
+        self,
+        party: PartyObservation,
+        opposition_level: int,
+    ) -> tuple[PartyMemberObservation, ...]:
+        """Every member that trails the opposition by more than the tolerance."""
+
+        floor = self.required_level(opposition_level)
+        return tuple(member for member in party.members if member.level < floor)
+
+    def is_met_by(self, party: PartyObservation, opposition_level: int) -> bool:
+        """Whether a non-empty party is ready for this opposition."""
+
+        return bool(party.members) and not self.members_behind(party, opposition_level)
+
+    def deficit(self, party: PartyObservation, opposition_level: int) -> int | None:
+        """How many levels the weakest member is short, or ``None`` if ready."""
+
+        if not party.members:
+            return None
+        shortfall = self.required_level(opposition_level) - min(party.levels)
+        return shortfall if shortfall > 0 else None
+
+
+@dataclass(frozen=True, slots=True)
 class DevelopedTeamPolicy:
     """Completion-efficient roster policy with one deliberately trained workhorse.
 

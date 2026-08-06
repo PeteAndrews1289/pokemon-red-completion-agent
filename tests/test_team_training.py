@@ -472,3 +472,59 @@ def test_developed_team_report_without_levels_reports_none() -> None:
     )
     assert report.minimum_level is None
     assert report.level_spread is None
+
+
+# --- relative level parity ---------------------------------------------------
+
+
+def test_level_parity_is_relative_to_the_opposition_not_a_fixed_number() -> None:
+    """A level-50 floor is a Red constant; "near what you face" transfers."""
+
+    from pokemon_red_completion.team_training import LevelParityContract
+
+    contract = LevelParityContract(max_levels_behind=5)
+    assert contract.required_level(65) == 60
+    assert contract.required_level(30) == 25
+    # The same contract self-paces against an easier game's curve.
+    assert contract.required_level(20) == 15
+
+
+def test_level_parity_floors_at_the_minimum_level() -> None:
+    from pokemon_red_completion.team_training import LevelParityContract
+
+    contract = LevelParityContract(max_levels_behind=20)
+    assert contract.required_level(5) == 1
+
+
+def test_level_parity_identifies_every_member_that_trails() -> None:
+    from pokemon_red_completion.team_training import LevelParityContract
+
+    contract = LevelParityContract(max_levels_behind=5)
+    measured = party(68, 20, 26, 30, 25, 30)
+
+    behind = contract.members_behind(measured, 65)
+    assert tuple(entry.level for entry in behind) == (20, 26, 30, 25, 30)
+    assert not contract.is_met_by(measured, 65)
+    assert contract.deficit(measured, 65) == 40
+
+
+def test_level_parity_is_met_by_a_team_that_actually_participates() -> None:
+    from pokemon_red_completion.team_training import LevelParityContract
+
+    contract = LevelParityContract(max_levels_behind=5)
+    ready = party(62, 60, 61, 63, 60, 64)
+    assert contract.is_met_by(ready, 65)
+    assert contract.members_behind(ready, 65) == ()
+    assert contract.deficit(ready, 65) is None
+
+
+def test_level_parity_rejects_an_empty_party_and_invalid_opposition() -> None:
+    from pokemon_red_completion.team_training import LevelParityContract
+
+    contract = LevelParityContract()
+    assert not contract.is_met_by(PartyObservation(), 65)
+    assert contract.deficit(PartyObservation(), 65) is None
+    with pytest.raises(ValueError, match="opposition_level"):
+        contract.required_level(0)
+    with pytest.raises(ValueError, match="max_levels_behind"):
+        LevelParityContract(max_levels_behind=-1)
