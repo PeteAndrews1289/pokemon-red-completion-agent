@@ -4224,10 +4224,16 @@ def _run_dig_battle(
         ):
             if emulator is None:
                 raise SurgeChapterError("Lt. Surge low-HP recovery requires live emulator state.")
-            super_potions_used += int(
-                _use_surge_super_potion(executor, reader, emulator, timing)
-            )
-            continue
+            recovery_used = _use_surge_super_potion(executor, reader, emulator, timing)
+            if recovery_used:
+                super_potions_used += 1
+                continue
+            # A transition can make the requesting observation stale.  If the
+            # action-boundary read is already full, resume from that current
+            # state instead of reconsidering the stale recovery forever.
+            raw = reader.read()
+            if raw.battle_state == 0:
+                return raw, dig_attacks, super_potions_used
         moves = raw.first_party_moves or ()
         if DIG_MOVE_ID not in moves:
             raise SurgeChapterError("Diglett lead lacks observed Dig move evidence.")

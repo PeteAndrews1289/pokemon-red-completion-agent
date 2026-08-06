@@ -1555,6 +1555,39 @@ def test_surge_recovery_revalidates_an_already_full_transition(
     assert runtime.actions == []
 
 
+def test_surge_battle_resumes_after_stale_recovery_request(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    runtime = _PositiveHpSwitchPrompt()
+    runtime.raw = replace(
+        runtime.raw,
+        enemy_hp=43,
+        active_party_index=0,
+        first_party_hp=29,
+        first_party_max_hp=30,
+    )
+    runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    calls = 0
+
+    def revalidate(executor, reader, emulator, timing) -> bool:
+        nonlocal calls
+        del executor, reader, emulator, timing
+        calls += 1
+        runtime.raw = replace(runtime.raw, first_party_hp=30, battle_state=0)
+        return False
+
+    monkeypatch.setattr(surge_module, "_use_surge_super_potion", revalidate)
+
+    final, dig_attacks, super_potions_used = _run_dig_battle(
+        runtime, runtime, SurgeTiming(), emulator=object()
+    )
+
+    assert final.battle_state == 0
+    assert dig_attacks == 0
+    assert super_potions_used == 0
+    assert calls == 1
+
+
 def test_surge_recovery_settles_with_cancel_when_quantity_update_is_delayed(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
