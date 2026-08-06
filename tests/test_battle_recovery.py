@@ -151,3 +151,53 @@ def test_switch_active_battler_advances_a_fainted_forced_party_menu(monkeypatch)
 
     assert simulation.active == 1
     assert simulation.stage == "main"
+
+
+def test_forced_switch_ignores_stale_cursor_until_delayed_party_menu(monkeypatch) -> None:
+    simulation = _SwitchSimulation()
+    simulation.stage = "faint_dialogue"
+    simulation.cursor = 1
+    confirmations = 0
+
+    original_read = simulation.read
+
+    def read() -> RawGameState:
+        raw = original_read()
+        return replace(raw, active_party_hp=0 if simulation.active == 0 else 30)
+
+    simulation.read = read  # type: ignore[method-assign]
+    original_execute = simulation.execute
+
+    def execute(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is MacroActionKind.CONFIRM and simulation.stage == "faint_dialogue":
+            confirmations += 1
+            simulation.actions.append(action)
+            if confirmations == 3:
+                simulation.stage = "party"
+                simulation.cursor = 0
+            return
+        if (
+            action.kind is MacroActionKind.CONFIRM
+            and simulation.stage == "party"
+            and simulation.cursor == 1
+        ):
+            simulation.stage = "switching"
+            simulation.actions.append(action)
+            return
+        original_execute(action)
+
+    simulation.execute = execute  # type: ignore[method-assign]
+    monkeypatch.setattr(battle_recovery, "_party_hp", lambda _emulator: (0, 30, 20))
+
+    battle_recovery.switch_active_battler(
+        simulation,
+        simulation,
+        simulation,
+        1,
+        label="delayed Route 22 forced switch",
+    )
+
+    assert confirmations == 3
+    assert simulation.active == 1
+    assert simulation.stage == "main"

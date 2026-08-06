@@ -121,38 +121,46 @@ def _switch_forced_fainted_battler(
 ) -> None:
     """Advance faint dialogue, select the live forced-party cursor, and prove MAIN."""
 
-    for pulse_index in range(32):
-        if pulse_index > 0 and _forced_party_menu_ready(
-            emulator,
-            len(_party_hp(emulator)),
-        ):
-            break
-        _pulse(
-            actions,
-            MacroActionKind.CANCEL if (pulse_index + 1) % 4 == 0 else MacroActionKind.CONFIRM,
-            wait_frames=wait_frames,
-        )
-    else:
-        raise ProtectedRecoveryError(f"{label} forced-party menu did not settle.")
-    _select_cursor(actions, emulator, party_index, wait_frames)
-    _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
-    for pulse_index in range(48):
+    # Gen I leaves the party cursor bytes stale while the faint text is still
+    # visible. Do not require a particular cursor-tile address before acting:
+    # movement is harmless during text, while periodic confirmation advances
+    # that text. Once the forced party screen is live, the same observed cursor
+    # movement selects the requested member. This is the proven pattern used by
+    # the Silph rival recovery and it also covers six-member parties.
+    for pulse_index in range(64):
         settled = reader.read()
-        if _party_hp(emulator)[party_index] <= 0:
+        party = _party_hp(emulator)
+        if party[party_index] <= 0:
             raise ProtectedRecoveryError(f"{label} forced-switch target fainted.")
         if settled.battle_state != expected_battle_state:
             raise ProtectedRecoveryError(f"{label} left battle during its forced switch.")
         if (
             settled.active_party_index == party_index
+            and (settled.battler_hp or 0) > 0
             and reader.read_battle_menu_state(settled).phase is BattleMenuPhase.MAIN
         ):
             return
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if (settled.battler_hp or 0) <= 0:
+            _pulse(
+                actions,
+                MacroActionKind.CONFIRM if cursor == party_index else MacroActionKind.MOVE,
+                None if cursor == party_index else ("down" if cursor < party_index else "up"),
+                wait_frames=wait_frames,
+            )
+            if pulse_index % 5 == 4:
+                _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+            continue
         _pulse(
             actions,
             MacroActionKind.CANCEL if (pulse_index + 1) % 4 == 0 else MacroActionKind.CONFIRM,
             wait_frames=wait_frames,
         )
-    raise ProtectedRecoveryError(f"{label} did not restore MAIN after its forced switch.")
+    raise ProtectedRecoveryError(
+        f"{label} did not restore MAIN after its forced switch: "
+        f"active={reader.read().active_party_index}, party_hp={_party_hp(emulator)!r}, "
+        f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}."
+    )
 
 
 def protected_lead_recovery(
