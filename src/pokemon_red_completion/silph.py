@@ -104,6 +104,9 @@ CELADON_RETURN_PEDESTRIAN_BLOCK_POSITION = (13, 14)
 CELADON_RETURN_PEDESTRIAN_YIELD_POSITION = (12, 14)
 CELADON_RETURN_PEDESTRIAN_CLEAR_POSITION = (14, 14)
 CELADON_RETURN_PEDESTRIAN_CLEAR_ATTEMPTS = 16
+CELADON_MART_ENTRY_CUSTOMER_BLOCK_POSITION = (8, 14)
+CELADON_MART_ENTRY_CUSTOMER_YIELD_POSITION = (9, 14)
+CELADON_MART_ENTRY_CUSTOMER_CLEAR_ATTEMPTS = 16
 MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION = (14, 5)
 MART_2F_ASCENT_CUSTOMER_YIELD_POSITION = (13, 5)
 MART_2F_ASCENT_CUSTOMER_CLEAR_POSITION = (14, 4)
@@ -2260,6 +2263,15 @@ def _move_verified(
                 break
         else:
             if (
+                label == "X Special Mart entry"
+                and before.map_id == MapId.CELADON_CITY
+                and (before.player_x, before.player_y)
+                == CELADON_MART_ENTRY_CUSTOMER_BLOCK_POSITION
+                and direction == "up"
+            ):
+                state = _yield_to_celadon_mart_entry_customer(actions, reader, timing)
+                continue
+            if (
                 label == "X Special Mart 3F"
                 and before.map_id == MapId.CELADON_MART_2F
                 and (before.player_x, before.player_y)
@@ -2299,6 +2311,65 @@ def _move_verified(
                 f"{(state.map_id, state.player_x, state.player_y)!r}."
             )
     return state
+
+
+def _yield_to_celadon_mart_entry_customer(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SilphTiming,
+) -> RawGameState:
+    """Leave the doorway approach briefly so its wandering customer can clear."""
+
+    for attempt in range(CELADON_MART_ENTRY_CUSTOMER_CLEAR_ATTEMPTS):
+        state = reader.read()
+        coordinate = (state.player_x, state.player_y)
+        if coordinate == CELADON_MART_ENTRY_CUSTOMER_BLOCK_POSITION:
+            _require(
+                state,
+                MapId.CELADON_CITY,
+                CELADON_MART_ENTRY_CUSTOMER_BLOCK_POSITION,
+                "X Special Mart entry customer gate",
+            )
+            state = _move(actions, reader, ("right",), timing)
+            _require(
+                state,
+                MapId.CELADON_CITY,
+                CELADON_MART_ENTRY_CUSTOMER_YIELD_POSITION,
+                "X Special Mart entry customer yield",
+            )
+        else:
+            _require(
+                state,
+                MapId.CELADON_CITY,
+                CELADON_MART_ENTRY_CUSTOMER_YIELD_POSITION,
+                "X Special Mart entry customer wait",
+            )
+        actions.execute(
+            MacroAction(
+                MacroActionKind.WAIT,
+                repeat=timing.movement_frames * (attempt + 1),
+            )
+        )
+        returned = _move(actions, reader, ("left",), timing)
+        if (returned.player_x, returned.player_y) == CELADON_MART_ENTRY_CUSTOMER_YIELD_POSITION:
+            continue
+        _require(
+            returned,
+            MapId.CELADON_CITY,
+            CELADON_MART_ENTRY_CUSTOMER_BLOCK_POSITION,
+            "X Special Mart entry customer return",
+        )
+        crossed = _move(actions, reader, ("up",), timing)
+        if crossed.map_id == MapId.CELADON_MART_1F:
+            _require(crossed, MapId.CELADON_MART_1F, (2, 7), "X Special Mart customer entry")
+            return crossed
+        _require(
+            crossed,
+            MapId.CELADON_CITY,
+            CELADON_MART_ENTRY_CUSTOMER_BLOCK_POSITION,
+            "X Special Mart entry customer final gate",
+        )
+    raise SilphChapterError("Celadon Mart entrance customer did not clear the doorway.")
 
 
 def _yield_to_mart_2f_ascent_customer(

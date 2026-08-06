@@ -1,0 +1,23 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v20",
+  "status": "failed",
+  "source_commit": "0916561b968fa033d58733abec6dbc6e8f353841",
+  "source_bundle_sha256": "9d284c9fa4165ea5b7aeccef2fe2a1b600f213b7e812565a4eaab5ab2caa2630",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v20-validation-01",
+      "harness_seed": 1450001,
+      "battle_start_schedule_sha256": "d10ae05ce9e695b2dd84cffb375c0f3a5b62993488f9ea13a6f933b6f4ccc40a",
+      "status": "failed",
+      "qualified_checkpoints": 239,
+      "failure": "A moving Celadon pedestrian occupied the left Department Store doorway and the verified Saffron X Special supply route exhausted fixed retries from the observed exterior approach.",
+      "private_log_sha256": "7affde0fe843b346fe677491409c5edbc6c7029da6f5271356ae73ef7effa073"
+    }
+  ],
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The route already handled moving customers inside the Department Store and on its return path, but the outward left-door entry still assumed the exterior doorway would clear during repeated upward inputs. The player could pin the pedestrian in place and prevent that assumption from becoming true.",
+  "repair_direction": "Yield one tile away from the observed blocked doorway, wait under a bounded schedule, re-enter the approach, and accept success only after the live map and coordinate confirm the Department Store transition."
+}
