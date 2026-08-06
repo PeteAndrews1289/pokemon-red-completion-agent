@@ -1400,6 +1400,17 @@ later graph from silently reinterpreting older labels. A fresh v74 clean-power e
 completed 312/312 checkpoints and Hall of Fame, and the new ranker reproduced all 36 demonstrated
 objective choices. That is a successful training result, not yet a held-out or live-control claim.
 
+The objective-planner stress campaign later exposed a useful resource lesson at Snorlax. One legal
+capture lineage spent 29 of the 30 early Poke Balls, so a first repair that planned to resell ball
+surplus had no meaningful inventory to use. A live inventory diagnostic instead showed six Super
+Potions remaining after Pokemon Tower even though the static-capture contract required only two.
+The planner now liquidates exactly that observed surplus, retains the complete healing reserve, and
+includes the proceeds in its affordability proof. Replaying the exact failed battle-timing schedule
+then completed all 312 checkpoints, all 36 model-authorized objectives, all 73 scheduled battles,
+Champion, and Hall of Fame with zero objective-teacher fallbacks. This is the intended transferable
+behavior: preserve declared safety needs, identify resources whose purpose has expired, and convert
+only the excess when a later objective is underfunded.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

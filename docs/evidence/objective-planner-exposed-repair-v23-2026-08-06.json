@@ -1,0 +1,44 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v23",
+  "source_commit": "6a5ceb9f8b1aaed97d3250fc281a904eeedba69e",
+  "source_bundle_sha256": "6017ec8b3be2b84b6b7ed47ceeb6cb35c6bd831bc24172212eb76e353bc91753",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1490001,
+    "battle_start_schedule_sha256": "f25ceb35dc73c7a2c87b7a90348fa78c2d77375cc3e07572a059327d36bbeed5",
+    "private_log_sha256": "6505fb5ad08a8c4491369027ec6a5b005bed2e7f32c1e915ad9e149f6b7137f9",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 73,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "observed_capture_variation": "Route 12 Snorlax caught in 7 throws"
+  },
+  "repair_iterations": [
+    {
+      "attempt": 1,
+      "status": "failed",
+      "qualified_checkpoints": 174,
+      "failure": "Selling early Poke Ball surplus was insufficient because the two required early captures legally consumed 29 of 30 Balls, leaving only the retained fallback.",
+      "private_log_sha256": "82d5bbc73e75755336c2d8738c9e753f7df380423c70151ff26f7d2d7585f442"
+    },
+    {
+      "attempt": 2,
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "private_log_sha256": "6505fb5ad08a8c4491369027ec6a5b005bed2e7f32c1e915ad9e149f6b7137f9"
+    }
+  ],
+  "repairs_verified": [
+    "The economy planner derives sale quantity from live Super Potion inventory rather than a seed-specific constant",
+    "The complete two-item Snorlax healing reserve is retained while only post-Tower surplus is liquidated",
+    "Four observed surplus Super Potions produced the exact 1400-Pokedollar proceeds needed to remove the artificial funding failure",
+    "The repaired schedule caught Snorlax and passed every downstream balanced-team, level-60 workhorse, Champion, and Hall of Fame contract"
+  ]
+}
