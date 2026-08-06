@@ -40,6 +40,7 @@ from pokemon_red_completion.victory_road import (
     _indigo_buy_entry_action,
     _rival_moves_valid,
     _route22_fainted_pivot_target,
+    _route22_recovery_pivot_target,
     _route22_rival_move_slot,
     _validate_collection_poke_ball_remainder,
 )
@@ -257,6 +258,24 @@ def test_route22_rival_continues_with_a_living_balanced_team_member() -> None:
 
     assert _route22_fainted_pivot_target(fainted, (0, 57, 57, 139, 69, 70)) == 1
     assert _route22_fainted_pivot_target(fainted, (0, 0, 0, 0, 0, 0)) is None
+
+
+def test_route22_recovery_skips_fainted_fixed_slot_and_wraps_to_living_reserve() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.ROUTE_22,
+        player_x=30,
+        player_y=5,
+        party_count=6,
+        party_hp=(150, 0, 57, 139, 0, 70),
+        battle_state=2,
+        active_party_index=0,
+        active_party_hp=150,
+    )
+
+    assert _route22_recovery_pivot_target(raw, 1) == 2
+    assert _route22_recovery_pivot_target(raw, 4) == 5
+    assert _route22_recovery_pivot_target(raw, 6) == 2
 
 
 def test_route22_rival_reserve_uses_observed_active_moves() -> None:

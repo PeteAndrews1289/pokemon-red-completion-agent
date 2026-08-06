@@ -347,7 +347,7 @@ pokemon-red-completion record \
 # Only after that rehearsal succeeds, consume one declared training slot:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
-  --collection-run red-battle-v88-01-train
+  --collection-run red-battle-v89-01-train
 
 # Fit the first whole-game objective ranker from one completed labeled episode.
 # This lane is explicitly diagnostic until separate train/validation lineages exist:

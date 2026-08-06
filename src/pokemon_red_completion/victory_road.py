@@ -939,7 +939,7 @@ def _defeat_route22_rival(
         if (
             species in ROUTE_22_PROACTIVE_PIVOT_SPECIES
             and species not in pivoted_species
-            and next_sacrifice < 3
+            and _route22_recovery_pivot_target(raw, next_sacrifice) is not None
         ):
             # Preserve the observed opponent and intended move in the receipt
             # before yielding to recovery. With a stronger reserve the pivot
@@ -1027,7 +1027,15 @@ def _defeat_route22_rival(
                 ) from error
             if isinstance(cause, _PivotBoundary) or learned_pivot is not None:
                 species = reader.read().enemy_species_id or 0
-                pivot_target = next_sacrifice if learned_pivot is None else learned_pivot
+                requested_target = next_sacrifice if learned_pivot is None else learned_pivot
+                pivot_target = _route22_recovery_pivot_target(
+                    reader.read(),
+                    requested_target,
+                )
+                if pivot_target is None:
+                    raise VictoryRoadChapterError(
+                        "Route 22 rival requested protected recovery without a living reserve."
+                    ) from error
                 potion_spent = _battle_sacrifice(
                     actions,
                     reader,
@@ -1045,15 +1053,19 @@ def _defeat_route22_rival(
                 raise VictoryRoadChapterError(
                     "Route 22 rival exceeded the bounded recovery reserve."
                 ) from error
-            if reader.read().enemy_species_id == 0x9A and next_sacrifice < 3:
+            pivot_target = _route22_recovery_pivot_target(
+                reader.read(),
+                next_sacrifice,
+            )
+            if reader.read().enemy_species_id == 0x9A and pivot_target is not None:
                 potion_spent = _battle_sacrifice(
                     actions,
                     reader,
                     emulator,
-                    next_sacrifice,
+                    pivot_target,
                     heal_lead=True,
                 )
-                next_sacrifice += 1
+                next_sacrifice = pivot_target + 1
                 pivot_heals += int(potion_spent)
             else:
                 _battle_hyper_potion(reader, actions, emulator, DEFAULT_SILPH_TIMING)
@@ -1655,6 +1667,25 @@ def _route22_fainted_pivot_target(
             if hp > 0 and index != active_index
         ),
         None,
+    )
+
+
+def _route22_recovery_pivot_target(
+    raw: RawGameState,
+    preferred_index: int,
+) -> int | None:
+    """Choose a currently living reserve, starting at the preferred party slot."""
+
+    party_hp = raw.party_hp or ()
+    active_index = raw.active_party_index
+    candidates = [
+        index
+        for index, hp in enumerate(party_hp)
+        if index > 0 and hp > 0 and index != active_index
+    ]
+    return next(
+        (index for index in candidates if index >= preferred_index),
+        candidates[0] if candidates else None,
     )
 
 
