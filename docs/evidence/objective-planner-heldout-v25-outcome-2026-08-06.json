@@ -1,0 +1,41 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v25",
+  "status": "failed",
+  "source_commit": "6f0d65145295d3f97d2ea90d9c11d6346131ad30",
+  "source_bundle_sha256": "863bdac2a14eac82c7f8a6655959105a9efe0427d83f38ba708af15c42e39bb4",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v25-validation-01",
+      "harness_seed": 1550001,
+      "battle_start_schedule_sha256": "b5255e42d861d7a2321adcae4b17b30950d6ee61cbf07901646412f836207741",
+      "status": "passed",
+      "checkpoints_verified": 312,
+      "objectives_verified": 36,
+      "scheduled_battles_verified": 73,
+      "teacher_objective_fallbacks": 0,
+      "minimum_objective_confidence": 0.7983486180511433,
+      "champion_defeated": true,
+      "hall_of_fame_entered": true,
+      "human_input": false,
+      "save_restore_used": false,
+      "actions_executed": 92012,
+      "private_log_sha256": "5076b9a12258cea0180fc5e697e2f368db55e7df7de8928d30ca1f0b36152679"
+    },
+    {
+      "run_id": "red-objective-v25-validation-02",
+      "harness_seed": 1550002,
+      "battle_start_schedule_sha256": "bbe1b648f71f6f1fc336668ceb83e9c6221779fbf6aae25b5ec2d3ecb6c664c9",
+      "status": "failed",
+      "qualified_checkpoints": 102,
+      "failure": "The maximum legal capture-spend lineage reached the Rock Tunnel shop with only four obsolete Potions and remained 1,029 currency short of the complete safety kit after every previously declared sale.",
+      "private_log_sha256": "d3aae7551d9c4ecd675e7fec52e54d150254e6fa1fe315a61ffc3624e5380149"
+    }
+  ],
+  "remaining_validation_runs_opened": false,
+  "sealed_test_runs_opened": false,
+  "diagnosis": "Three optional Route 11 income battles covered ordinary capture variance but not the bounded worst case in which TM28 was consumed, only one capture Ball survived, and both status reserves required a full top-up.",
+  "repair_direction": "Add the fourth source-pinned Route 11 Gambler through a reversible collision-derived route. Its 1,260 payout funds the observed 1,029 shortfall while preserving all eleven Super Potions, seven Parlyz Heals, seven Awakenings, four Repels, and the complete capture curriculum. Retire the unopened v25 remainder and preregister fresh validation and sealed cohorts with the new 74-battle roster."
+}

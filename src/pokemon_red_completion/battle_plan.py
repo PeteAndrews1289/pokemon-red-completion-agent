@@ -17,6 +17,7 @@ class RedBattlePlanId(StrEnum):
     LAVENDER_ROUTE_11_GAMBLER = "battle-069-lavender-route-11-gambler"
     LAVENDER_ROUTE_11_GAMBLER_2 = "battle-072-lavender-route-11-gambler-2"
     LAVENDER_ROUTE_11_GAMBLER_4 = "battle-073-lavender-route-11-gambler-4"
+    LAVENDER_ROUTE_11_GAMBLER_3 = "battle-074-lavender-route-11-gambler-3"
     LAVENDER_ROUTE_9_TRAINER_0 = "battle-007-lavender-route-9-trainer-0"
     LAVENDER_ROUTE_9_TRAINER_8 = "battle-008-lavender-route-9-trainer-8"
     LAVENDER_ROCK_TUNNEL_1F_TRAINER_3 = "battle-009-lavender-rock-tunnel-1f-trainer-3"
@@ -89,6 +90,7 @@ _ROUTE_11_INCOME_PLAN_IDS = (
     RedBattlePlanId.LAVENDER_ROUTE_11_GAMBLER,
     RedBattlePlanId.LAVENDER_ROUTE_11_GAMBLER_2,
     RedBattlePlanId.LAVENDER_ROUTE_11_GAMBLER_4,
+    RedBattlePlanId.LAVENDER_ROUTE_11_GAMBLER_3,
 )
 
 RED_BATTLE_PLAN_IDS: tuple[str, ...] = (

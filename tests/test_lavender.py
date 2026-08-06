@@ -248,6 +248,24 @@ def test_supply_income_detour_is_source_stable_and_reversible() -> None:
         "right",
     ) == lavender_module.SECOND_TO_FOURTH_SUPPLY_GAMBLER
     assert (
+        *(("right",) * 9),
+        *(("down",) * 4),
+        "right",
+        "right",
+        "down",
+        "down",
+        "right",
+    ) == lavender_module.FOURTH_TO_THIRD_SUPPLY_GAMBLER
+    assert (
+        "left",
+        "up",
+        "up",
+        "left",
+        "left",
+        *(("up",) * 4),
+        *(("left",) * 9),
+    ) == lavender_module.THIRD_TO_FOURTH_SUPPLY_GAMBLER
+    assert (
         *(("left",) * 10),
         *(("down",) * 3),
         *(("left",) * 7),
@@ -261,7 +279,7 @@ def test_supply_income_detour_is_source_stable_and_reversible() -> None:
         *(("left",) * 10),
     ) == lavender_module.MART_TO_CENTER_EXTERIOR
     assert lavender_module.ROUTE_11_GAMBLER_PAYOUT == 1_260
-    assert lavender_module.ROUTE_11_SUPPLY_INCOME == 3_780
+    assert lavender_module.ROUTE_11_SUPPLY_INCOME == 5_040
     assert lavender_module.TM24_SALE_PROCEEDS == 1_000
 
 

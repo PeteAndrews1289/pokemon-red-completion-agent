@@ -84,7 +84,7 @@ TM28_SALE_PROCEEDS = 1_000
 TM24_SALE_PROCEEDS = 1_000
 TM34_SALE_PROCEEDS = 1_000
 ROUTE_11_GAMBLER_PAYOUT = 1_260
-ROUTE_11_SUPPLY_INCOME = 3 * ROUTE_11_GAMBLER_PAYOUT
+ROUTE_11_SUPPLY_INCOME = 4 * ROUTE_11_GAMBLER_PAYOUT
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -107,6 +107,8 @@ ROUTE_11_TO_SUPPLY_GAMBLER = _directions("R" * 9 + "D" * 9 + "R")
 SUPPLY_GAMBLER_TO_ROUTE_11_ENTRY = _directions("L" + "U" * 9 + "L" * 9)
 ROUTE_11_TO_SECOND_SUPPLY_GAMBLER = _directions("R" * 25 + "D" * 4 + "R")
 SECOND_TO_FOURTH_SUPPLY_GAMBLER = _directions("R" * 6 + "U" * 8 + "R")
+FOURTH_TO_THIRD_SUPPLY_GAMBLER = _directions("R" * 9 + "D" * 4 + "RR" + "DD" + "R")
+THIRD_TO_FOURTH_SUPPLY_GAMBLER = _directions("L" + "UU" + "LL" + "U" * 4 + "L" * 9)
 FOURTH_SUPPLY_GAMBLER_TO_ROUTE_11_ENTRY = _directions("L" * 10 + "D" * 3 + "L" * 7 + "D" + "L" * 16)
 MART_TO_CENTER_EXTERIOR = _directions("LL" + "U" * 10 + "L" * 10)
 ROUTE_5_TO_CERULEAN_TREE = _directions("LL" + "U" * 35 + "L" * 6)
@@ -2293,10 +2295,28 @@ def _earn_tunnel_supply_income(
         battle_recovery_threshold=BATTLE_RECOVERY_THRESHOLD,
         battle_recovery_limit=1,
     )
-    # A terminal status from the final income battle can make an otherwise
-    # low-risk Route 11 escape fail repeatedly. Cure it when a supported item
-    # survived; otherwise lead with a healthy status-free reserve for the
-    # grass crossing and restore the workhorse after the Center heal.
+    _trainer(
+        executor,
+        reader,
+        emulator,
+        run,
+        FOURTH_TO_THIRD_SUPPLY_GAMBLER,
+        timing,
+        "Route 11 supply Gambler 3",
+        MapId.ROUTE_11,
+        EventFlag.BEAT_ROUTE_11_TRAINER_5,
+        0xD9,
+        0x11,
+        3,
+        BUBBLEBEAM,
+        3,
+        RedBattlePlanId.LAVENDER_ROUTE_11_GAMBLER_3,
+        battle_recovery_threshold=BATTLE_RECOVERY_THRESHOLD,
+        battle_recovery_limit=1,
+    )
+    # The final income battle can inflict a terminal status before either
+    # grass return. Cure it immediately when a supported item survives;
+    # otherwise use an observed healthy reserve until the Center heal.
     income_return_pivoted = _prepare_income_return(
         executor,
         reader,
@@ -2304,6 +2324,16 @@ def _earn_tunnel_supply_income(
         run,
         timing,
     )
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        THIRD_TO_FOURTH_SUPPLY_GAMBLER,
+        timing,
+        "Route 11 supply Gambler 3 return",
+    )
+    _require(reader.read(), MapId.ROUTE_11, (33, 2), "Route 11 supply Gambler 4 return")
     _move(
         executor,
         reader,

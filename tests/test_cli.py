@@ -75,7 +75,7 @@ def test_diagnostic_schedule_is_uncounted_and_content_addressed() -> None:
 
     assert offsets == repeated
     assert schedule_sha256 == repeated_sha256
-    assert len(offsets) == 73
+    assert len(offsets) == 74
     collection = metadata["collection"]
     assert isinstance(collection, dict)
     assert collection["attempt"] == {"counted": False}

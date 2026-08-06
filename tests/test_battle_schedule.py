@@ -41,8 +41,8 @@ def test_controller_consumes_the_exact_frozen_route_once() -> None:
         controller.finish(intent)
 
     controller.require_complete()
-    assert controller.finished_count == 73
-    assert controller.expected_count == 73
+    assert controller.finished_count == 74
+    assert controller.expected_count == 74
     assert controller.failed is False
 
 

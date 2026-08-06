@@ -675,7 +675,7 @@ registry and sidecar before repeating the dry run.
 After the complete episode and all 73 attestations pass their offline audit, the recorder publishes
 a separate immutable dry-run qualification in private storage. It binds the registry, exact source
 commit and execution digests, CPython/PyBoy runtime, ROM hashes, dry seed and schedule, episode ID,
-manifest digest, and 73/73 audit receipt. Before any counted slot can create the campaign seal or
+manifest digest, and 74/74 audit receipt. Before any counted slot can create the campaign seal or
 episode namespace, the command reopens that referenced episode and reruns the audit under the same
 exclusive collection session. Absence, identity drift, replacement, or malformed evidence fails
 closed. This qualification is not a campaign outcome and never enters an evaluation denominator.
@@ -695,7 +695,7 @@ Each application produces exactly one private `battle_start_offset_applied` even
   `WAIT` execution.
 
 The terminal event must contain a `battle_start_schedule` attestation with `complete=true`,
-`expected_battles=73`, `finished_battles=73`, and the same schedule digest. Duplicate or unknown
+`expected_battles=74`, `finished_battles=74`, and the same schedule digest. Duplicate or unknown
 IDs, intent changes, schedule mismatch, reordering, substitution, partial application, an extra
 battle, or an unfinished schedule fails the attempt.
 
