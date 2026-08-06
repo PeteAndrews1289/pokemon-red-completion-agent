@@ -6,52 +6,64 @@ Three agents work this repository: **Claude**, **Codex**, and **Antigravity**. M
 between them are mechanical rather than intellectual, and the rules below exist because the
 mechanical ones are what actually cost time.
 
-## Repository topology
+## Where to work
 
-There is more than one checkout. Know which you are in before you touch anything.
+**Every agent works in `pokemon-red-completion-agent-claude`, on `agent/balanced-team-curriculum`.**
+That is trunk and it is the only working checkout. No side branches, no second worktree, no
+duplicated effort.
 
-| Worktree | Branch | Role |
+The other checkouts on this machine exist but are not workspaces:
+
+| Worktree | Branch | Status |
 | --- | --- | --- |
-| `pokemon-red-completion-agent` | `agent/battle-evaluation-protocol` | Original checkout. Stale, ~90 commits behind. Do not work here. |
-| `pokemon-red-completion-agent-claude` | `agent/balanced-team-curriculum` | **Trunk.** All integration lands here. |
+| `pokemon-red-completion-agent` | `agent/battle-evaluation-protocol` | Stale, ~90 commits behind. Do not work here. |
 | `pokemon-red-completion-agent-v44-eval` | detached at `c0dbbc6` | Frozen source for the v44 evaluation campaign. Never edit or check out. |
-| `pokemon-red-learning-next` | `agent/learned-navigation` | Learning lane. Its work through `7dffe30` is now integrated into trunk. |
+| `pokemon-red-learning-next` | `agent/learned-navigation` | Superseded. Its work is integrated into trunk as of `e7205ee`. Do not continue it. |
 
-**Git forbids two worktrees sharing one branch**, so "everyone in one worktree" and "agents working
-in parallel" cannot both be true. The workable arrangement is one *trunk branch* plus short-lived
-side branches that integrate often:
+### One worktree means taking turns
 
-- `agent/balanced-team-curriculum` is trunk. Everything lands here.
-- Work directly on trunk when you are the only agent active. It is the simplest thing that works.
-- When two agents are active at once, the second takes a short-lived branch in its own worktree and
-  integrates **before it exceeds roughly five commits or one working day**.
+Git forbids two worktrees from sharing a branch, so a single shared checkout is the simplest thing
+that removes divergence entirely — at the cost of parallelism. **Only one agent edits at a time.**
+Say which lane you are in when you start, and finish or commit before another agent begins.
 
-That threshold is not arbitrary. `agent/learned-navigation` branched off trunk and was left alone
-while trunk moved 90 commits ahead. Integrating four commits then required skipping two of them and
-resolving conflicts across six files. Four commits, integrated the same day, would have been a
-fast-forward.
+This is deliberate. `agent/learned-navigation` branched off trunk and was left while trunk moved 90
+commits ahead; integrating its four commits meant skipping two and resolving conflicts across six
+files. The same four commits landed the same day would have been a fast-forward. The cost is not the
+number of commits, it is how long they sit.
+
+### The one rule that survives serialisation
+
+**Do not edit `src/` while an emulator run is in flight.** A run loads its source at launch, so
+edits mid-run do not change its behaviour — they change what the tree says the run *was*. The
+receipt then describes a source commit that never produced it. Wait for the run, or work in `docs/`
+and `tests/`.
+
+If a genuine need for parallel work appears, take a short-lived branch in a fresh worktree and
+integrate **within about five commits or one working day** — never longer.
 
 ## Lanes
 
-Pick a lane per session and say which one you are in. Lanes are about *ownership of files*, not
-about who is smart enough to do what.
+Say which lane you are in when you start a session. Since only one agent edits at a time, lanes are
+no longer about avoiding concurrent edits — they are about *who owns which concern*, so the same
+question does not get re-answered three different ways in three sessions.
 
 ### Lane A — Route and emulator
 
 Owns `src/pokemon_red_completion/` chapter modules (`blaine.py`, `victory_road.py`, `champion.py`,
 `fuchsia.py`, and every other chapter), and owns emulator runs.
 
-Only Lane A launches the emulator. A clean-power replay currently takes 6–7 minutes for the baseline
-route and roughly 25 minutes with the balancing pass enabled. Two concurrent runs contend for CPU and
-make every timing measurement meaningless.
+Only Lane A launches the emulator. A clean-power replay takes 6–7 minutes for the baseline route and
+roughly 25 minutes with the balancing pass enabled. Two concurrent runs contend for CPU and make
+every timing measurement meaningless — and while a run is in flight, nobody edits `src/`.
 
 ### Lane B — Contracts and policy
 
 Owns the game-neutral modules: `party.py`, `team_training.py`, `capture.py`, `pokedex.py`,
 `training.py`, and their adapters `red_party.py`, `red_pokedex.py`.
 
-This lane never needs the ROM. Everything here is ROM-free and unit-testable, so it can run in
-parallel with a long Lane A replay.
+This lane never needs the ROM. Everything here is ROM-free and unit-testable, which makes it the
+safest work to pick up while a Lane A replay is finishing — as long as you stay out of `src/` until
+the run reports.
 
 ### Lane C — Evidence, measurement and documentation
 
