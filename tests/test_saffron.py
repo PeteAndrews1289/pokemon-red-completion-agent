@@ -355,12 +355,12 @@ def test_saffron_report_proves_purchase_handoff_order_and_terminal() -> None:
     }
 
 
-def test_saffron_report_accepts_level_43_healed_lineage() -> None:
+def test_saffron_report_accepts_level_44_healed_lineage() -> None:
     raw = replace(
         _terminal(),
-        first_party_level=43,
-        first_party_hp=133,
-        first_party_max_hp=133,
+        first_party_level=44,
+        first_party_hp=137,
+        first_party_max_hp=137,
     )
     bag = ((int(ItemId.TM21_MEGA_DRAIN), 1),)
     report = SaffronChapterReport(
@@ -384,8 +384,8 @@ def test_saffron_report_accepts_level_43_healed_lineage() -> None:
         bag_after=bag,
         party_before=PARTY_BEFORE,
         party_after=PARTY_AFTER,
-        party_hp=(133, 47, 40, 120, 65),
-        party_max_hp=(133, 47, 40, 120, 65),
+        party_hp=(137, 47, 40, 120, 65),
+        party_max_hp=(137, 47, 40, 120, 65),
         party_status=(0, 0, 0, 0, 0),
         battle_free=True,
         frames_executed=1,
@@ -394,6 +394,7 @@ def test_saffron_report_accepts_level_43_healed_lineage() -> None:
     )
 
     assert report.passed
+    assert not replace(report, final_raw=replace(raw, first_party_level=45)).passed
 
 
 @pytest.mark.parametrize(

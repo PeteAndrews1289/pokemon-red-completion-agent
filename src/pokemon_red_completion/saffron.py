@@ -238,7 +238,9 @@ class SaffronChapterReport:
             and self.party_after[-1] == JOLTEON
             and EEVEE not in self.party_after
             and self.final_raw.first_party_level is not None
-            and 42 <= self.final_raw.first_party_level <= 43
+            # Preserve the qualified post-Erika lineage, including schedules
+            # where the required Gym battles advance the lead to level 44.
+            and 42 <= self.final_raw.first_party_level <= 44
             and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)
             and self.final_raw.first_party_pp == (15, 15, 10, 15)
             and self.party_hp == self.party_max_hp
