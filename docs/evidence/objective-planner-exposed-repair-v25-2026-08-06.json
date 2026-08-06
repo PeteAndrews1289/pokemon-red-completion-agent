@@ -1,0 +1,45 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v25",
+  "source_commit": "7b96a477aaea639e7f8be37aaf4cfadcbacc7444",
+  "source_bundle_sha256": "863bdac2a14eac82c7f8a6655959105a9efe0427d83f38ba708af15c42e39bb4",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1530001,
+    "battle_start_schedule_sha256": "5d92803b73e7e18882f464b70590c0b0160de1b2644a1aff979308800b19cf77",
+    "private_log_sha256": "377ca22b6211475f7f44ebf4f16f5ed9652e4326ea269aedcb2e7d46f93a019e",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 73,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "actions_executed": 90577,
+    "party_size": 6,
+    "workhorse_level": 60,
+    "final_forms_complete": true
+  },
+  "repair_iterations": [
+    {
+      "attempt": 1,
+      "status": "failed",
+      "qualified_checkpoints": 222,
+      "failure": "A wandering Celadon pedestrian occupied the right-side department-store doorway during the Ice Beam errand, so repeated upward movement could not enter the store.",
+      "private_log_sha256": "f47f1cbfabad1052f328834570c50cc3976f154fe9795e8e1c977bad06899f4c"
+    },
+    {
+      "attempt": 2,
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "private_log_sha256": "377ca22b6211475f7f44ebf4f16f5ed9652e4326ea269aedcb2e7d46f93a019e"
+    }
+  ],
+  "repairs_verified": [
+    "The teacher recognizes an observed blocked right-side Celadon Mart doorway during the Ice Beam objective",
+    "It yields into an adjacent safe tile, waits a bounded interval, returns only after observing movement, and retries the doorway",
+    "The existing left-side X Special entrance recovery remains covered by its independent regression test",
+    "The repaired run passes the full balanced-party, level-60 workhorse, Champion, and Hall of Fame contracts together"
+  ]
+}
