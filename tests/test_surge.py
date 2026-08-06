@@ -89,6 +89,93 @@ def test_ball_throw_dialogue_uses_non_selecting_settle_action() -> None:
     assert BALL_THROW_SETTLE_ACTION is MacroActionKind.CANCEL
 
 
+def test_mart_buy_list_waits_for_variable_purchase_dialogue(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Emulator:
+        confirmations = 0
+
+        def read_u8(self, address: int) -> int:
+            if address == RamAddress.TOP_MENU_ITEM_X:
+                return 5 if self.confirmations == 3 else 0
+            if address == RamAddress.TOP_MENU_ITEM_Y:
+                return 4 if self.confirmations == 3 else 0
+            raise AssertionError(f"unexpected address {address:#x}")
+
+    emulator = Emulator()
+
+    def pulse(_executor: object, kind: MacroActionKind, *_args: object, **_kwargs: object) -> None:
+        assert kind is MacroActionKind.CONFIRM
+        emulator.confirmations += 1
+
+    monkeypatch.setattr(surge_module, "_pulse", pulse)
+    surge_module._open_mart_buy_list(object(), emulator, 240)  # type: ignore[arg-type]
+
+    assert emulator.confirmations == 3
+
+
+def test_exact_mart_purchase_selects_super_potion_and_existing_top_up(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Emulator:
+        cursor = 0
+        selected = 0
+        shop_quantity = 0
+        state = "list"
+        bag = {ItemId.SUPER_POTION: 1}
+
+        def read_u8(self, address: int) -> int:
+            if address == RamAddress.CURRENT_MENU_ITEM:
+                return self.cursor
+            if address == RamAddress.LIST_SCROLL_OFFSET:
+                return 0
+            if address == RamAddress.SHOP_SELECTED_ITEM:
+                return self.selected
+            if address == RamAddress.SHOP_QUANTITY:
+                return self.shop_quantity
+            raise AssertionError(f"unexpected address {address:#x}")
+
+    emulator = Emulator()
+
+    def pulse(
+        _executor: object,
+        kind: MacroActionKind,
+        value: object = None,
+        _frames: object = None,
+        **_kwargs: object,
+    ) -> None:
+        if emulator.state == "list" and kind is MacroActionKind.MOVE:
+            assert value == "down"
+            emulator.cursor += 1
+        elif emulator.state == "list" and kind is MacroActionKind.CONFIRM:
+            emulator.state = "quantity"
+            emulator.selected = int(ItemId.SUPER_POTION)
+            emulator.shop_quantity = 1
+        elif emulator.state == "quantity" and kind is MacroActionKind.CONFIRM:
+            emulator.state = "receipt"
+            emulator.bag[ItemId.SUPER_POTION] = 2
+        elif emulator.state == "receipt" and kind is MacroActionKind.CONFIRM:
+            emulator.state = "list"
+        else:
+            raise AssertionError((emulator.state, kind, value))
+
+    monkeypatch.setattr(surge_module, "_pulse", pulse)
+    monkeypatch.setattr(surge_module, "_bag", lambda _emulator: emulator.bag)
+
+    surge_module._buy_mart_item(
+        object(),  # type: ignore[arg-type]
+        emulator,  # type: ignore[arg-type]
+        absolute_index=1,
+        item=ItemId.SUPER_POTION,
+        quantity=1,
+        target_bag_quantity=2,
+        wait_frames=240,
+    )
+
+    assert emulator.bag[ItemId.SUPER_POTION] == 2
+    assert emulator.state == "list"
+
+
 def test_route_1_walker_recovery_is_bound_to_exact_source_gate() -> None:
     state = RawGameState(
         True,

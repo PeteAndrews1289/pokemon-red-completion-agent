@@ -374,27 +374,17 @@ def run_surge_chapter(
             f"quantity={_bag(emulator).get(ItemId.POKE_BALL, 0)}, "
             f"money_bytes={money_bytes!r}."
         )
-    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    _open_mart_buy_list(actions, emulator, 240)
     if starting_surge_super_potions < surge_super_potion_target:
-        _pulse(actions, MacroActionKind.MOVE, "down", 180)
-        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
-            raise SurgeChapterError(
-                "Mart list could not select Super Potion after Poké Balls: "
-                f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
-                f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}."
-            )
-        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-        for _ in range(6):
-            if _bag(emulator).get(ItemId.SUPER_POTION, 0) == surge_super_potion_target:
-                break
-            _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-        else:
-            raise SurgeChapterError(
-                "Super Potion restock missed its target: "
-                f"target={surge_super_potion_target}, bag={_bag(emulator)!r}, "
-                f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
-                f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}."
-            )
+        _buy_mart_item(
+            actions,
+            emulator,
+            absolute_index=1,
+            item=ItemId.SUPER_POTION,
+            quantity=surge_super_potion_target - starting_surge_super_potions,
+            target_bag_quantity=surge_super_potion_target,
+            wait_frames=240,
+        )
     _confirm_kind(actions, MacroActionKind.CANCEL, 4, 180)
     raw = reader.read()
     _gate(
@@ -771,6 +761,81 @@ def _bag(emulator: EmulatorState) -> dict[int, int]:
         )
         for index in range(count)
     }
+
+
+def _open_mart_buy_list(
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+    wait_frames: int,
+) -> None:
+    """Settle variable purchase dialogue at the priced item list."""
+
+    for _ in range(8):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (5, 4):
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=wait_frames)
+    raise SurgeChapterError("Vermilion Mart dialogue did not return to the priced item list.")
+
+
+def _buy_mart_item(
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+    *,
+    absolute_index: int,
+    item: int,
+    quantity: int,
+    target_bag_quantity: int,
+    wait_frames: int,
+) -> None:
+    """Select and buy an exact item quantity from an already-open Mart list."""
+
+    for _ in range(12):
+        current = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        if current == absolute_index:
+            break
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if current < absolute_index else "up",
+            120,
+        )
+    else:
+        raise SurgeChapterError(
+            f"Mart could not select inventory index {absolute_index}; "
+            f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
+            f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}."
+        )
+
+    _pulse(executor, MacroActionKind.CONFIRM, frames=wait_frames)
+    for _ in range(max(12, quantity + 1)):
+        selected = emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM)
+        current_quantity = emulator.read_u8(RamAddress.SHOP_QUANTITY)
+        if selected == item and current_quantity == quantity:
+            break
+        if selected != item:
+            raise SurgeChapterError(
+                f"Mart selected {selected:#04x}, expected {int(item):#04x}."
+            )
+        _pulse(executor, MacroActionKind.MOVE, "up", 120)
+    else:
+        raise SurgeChapterError(f"Mart quantity selector missed {quantity}.")
+
+    for _ in range(12):
+        if _bag(emulator).get(item, 0) == target_bag_quantity:
+            _pulse(executor, MacroActionKind.CONFIRM, frames=wait_frames)
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=wait_frames)
+    raise SurgeChapterError(
+        f"Mart did not purchase {quantity} of {int(item):#04x}: "
+        f"bag={_bag(emulator)!r}, "
+        f"selected={emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM):#04x}, "
+        f"shop_quantity={emulator.read_u8(RamAddress.SHOP_QUANTITY)}."
+    )
 
 
 def _bag_ids(emulator: EmulatorState) -> set[int]:
