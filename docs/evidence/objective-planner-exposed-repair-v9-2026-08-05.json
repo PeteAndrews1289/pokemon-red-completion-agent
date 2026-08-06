@@ -1,0 +1,31 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_role": "exposed_repair_nonheldout",
+  "counted": false,
+  "harness_seed": 1210001,
+  "source_commit": "ca88b8756fa61bd35da9c871d8608ddc91c1b887",
+  "source_bundle_sha256": "64eec1d5aa6f383c67efa8d87ebe0c66f56b82ba6b18cada6c73dc36cd78b364",
+  "collection_registry_sha256": "b940f96d350a9edc215fc1f5231e5975aa98ba57858ee2b1643c7b8d2745bfd7",
+  "objective_model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "battle_start_schedule_sha256": "c88b327987560c939f70f3ad60e0635b7657eb57e77ad2acff0e3fb91a2bc3ad",
+  "private_log_sha256": "87282c9921887a81466b2b554ef326a443b42f7ffda0982bf2aad6b78c8e22e3",
+  "outcome": {
+    "status": "ok",
+    "checkpoints_verified": 312,
+    "checkpoints_declared": 312,
+    "objectives_verified": 36,
+    "objectives_declared": 36,
+    "scheduled_battles_finished": 71,
+    "scheduled_battles_expected": 71,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "safe_stop_reason": "completion_verified"
+  },
+  "repair_evidence": {
+    "boundary": "victory_road_route_22_rival",
+    "switch_in_knockout_continuation_observed": true,
+    "remaining_living_party_used": true,
+    "hyper_potions_used_in_route22": 0
+  },
+  "interpretation": "The exact v8 validation failure schedule completes on the repaired v9 source. This is exposed regression evidence only and does not count toward v9 validation."
+}
