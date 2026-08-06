@@ -79,8 +79,12 @@ COLLECTION_POKE_BALL_TARGET = 30
 FOREST_POKE_BALL_RESERVE = COLLECTION_POKE_BALL_TARGET
 POKE_BALL_PRICE = 200
 SURGE_ITEM_SETTLE_PULSES = 720
-SURGE_RECOVERY_HP_NUMERATOR = 2
-SURGE_RECOVERY_HP_DENOMINATOR = 3
+# Diglett is deliberately the lesson lead here, but it is still a fragile new
+# capture.  Restore any missing HP at a stable MAIN boundary so damage carried
+# from Voltorb cannot turn Pikachu's priority Quick Attack into a schedule-
+# dependent knockout.  The chapter already funds and caps two recoveries.
+SURGE_RECOVERY_HP_NUMERATOR = 1
+SURGE_RECOVERY_HP_DENOMINATOR = 1
 WILD_CAPTURE_THROWS_PER_ENCOUNTER = 5
 BALL_THROW_SETTLE_ACTION = MacroActionKind.CANCEL
 ROUTE_1_WALKER_APPROACH = (14, 14)

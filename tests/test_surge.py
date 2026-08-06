@@ -1462,7 +1462,36 @@ def test_surge_recovery_protects_the_observed_twelve_hp_switch_gate(
     assert final.battle_state == 0
     assert super_potions_used == 1
     assert calls == [12]
-    assert (SURGE_RECOVERY_HP_NUMERATOR, SURGE_RECOVERY_HP_DENOMINATOR) == (2, 3)
+    assert (SURGE_RECOVERY_HP_NUMERATOR, SURGE_RECOVERY_HP_DENOMINATOR) == (1, 1)
+
+
+def test_surge_recovery_heals_damage_carried_into_the_next_opponent(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    runtime = _PositiveHpSwitchPrompt()
+    runtime.raw = replace(
+        runtime.raw,
+        enemy_hp=43,
+        first_party_hp=29,
+        first_party_max_hp=30,
+    )
+    runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    calls: list[int] = []
+
+    def recover(executor, reader, emulator, timing) -> None:
+        del executor, reader, emulator, timing
+        calls.append(runtime.raw.first_party_hp or 0)
+        runtime.raw = replace(runtime.raw, first_party_hp=30, battle_state=0)
+
+    monkeypatch.setattr("pokemon_red_completion.surge._use_surge_super_potion", recover)
+
+    final, _, super_potions_used = _run_dig_battle(
+        runtime, runtime, SurgeTiming(), emulator=object()
+    )
+
+    assert final.battle_state == 0
+    assert super_potions_used == 1
+    assert calls == [29]
 
 
 def test_surge_controller_allows_two_bounded_recoveries(
