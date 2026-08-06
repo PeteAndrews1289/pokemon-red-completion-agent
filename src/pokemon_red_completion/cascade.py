@@ -1635,6 +1635,9 @@ def _recover_route_24(
     *,
     buy_awakening_topup: bool = False,
 ) -> None:
+    # Poison damage is applied by field steps in Generation I. Cure it at the
+    # battle boundary before attempting the long walk back to the Center.
+    _use_route_24_antidote_if_needed(reader, executor, emulator)
     _move(
         executor,
         reader,

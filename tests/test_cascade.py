@@ -64,6 +64,7 @@ from pokemon_red_completion.cascade import (
     _cross_route_24_npc,
     _cross_route_24_recovery_npc,
     _move_verified,
+    _recover_route_24,
     _reverse_directions,
     _run_cerulean_gym_trainer_with_potion,
     _run_cerulean_rival_with_potion,
@@ -1004,6 +1005,47 @@ def test_route_24_antidote_uses_the_immediate_field_boundary(
     )
 
     assert observed == {"expected_map": MapId.ROUTE_24, "label": "Route 24"}
+
+
+def test_route_24_recovery_cures_poison_before_any_field_step(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    events: list[str] = []
+
+    monkeypatch.setattr(
+        cascade_module,
+        "_use_route_24_antidote_if_needed",
+        lambda *_args: events.append("cure"),
+    )
+    monkeypatch.setattr(
+        cascade_module,
+        "_move",
+        lambda *_args, **_kwargs: events.append("move"),
+    )
+    monkeypatch.setattr(cascade_module, "_wait", lambda *_args: events.append("wait"))
+    monkeypatch.setattr(
+        cascade_module,
+        "_cross_route_24_recovery_npc",
+        lambda *_args: events.append("cross"),
+    )
+    monkeypatch.setattr(cascade_module, "_heal", lambda *_args: events.append("heal"))
+    monkeypatch.setattr(
+        cascade_module,
+        "_enter_route_24",
+        lambda *_args: events.append("enter"),
+    )
+
+    _recover_route_24(
+        cast(object, object()),
+        cast(object, object()),
+        cast(object, object()),
+        DEFAULT_CASCADE_TIMING,
+        ("up",),
+    )
+
+    assert events[0] == "cure"
+    assert events.count("cure") == 1
+    assert "move" in events[1:]
 
 
 @pytest.mark.parametrize(
