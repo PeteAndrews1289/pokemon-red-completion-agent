@@ -230,14 +230,18 @@ def test_agatha_recovery_tracks_live_state_without_forcing_an_attack_between_ite
         battle_state=2,
         active_party_index=0,
         active_party_hp=AGATHA_SAFE_HP - 1,
+        active_party_max_hp=210,
         active_party_status=0,
     )
 
     assert _agatha_recovery_due(lead)
     assert _agatha_recovery_due(
-        replace(lead, active_party_hp=AGATHA_SAFE_HP, active_party_status=0x04)
+        replace(lead, active_party_hp=210, active_party_status=0x04)
     )
     assert not _agatha_recovery_due(
+        replace(lead, active_party_hp=210, active_party_status=0)
+    )
+    assert _agatha_recovery_due(
         replace(lead, active_party_hp=AGATHA_SAFE_HP, active_party_status=0)
     )
     assert not _agatha_recovery_due(replace(lead, active_party_index=2))

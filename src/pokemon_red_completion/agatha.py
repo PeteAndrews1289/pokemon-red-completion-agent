@@ -532,10 +532,11 @@ def _turns_valid(turns: Iterable[AgathaTurn]) -> bool:
 
 
 def _agatha_recovery_due(raw: RawGameState) -> bool:
-    """Protect the workhorse when Agatha immediately undoes a recovery turn."""
+    """Protect the workhorse from Agatha's lethal status/critical sequences."""
 
     return raw.active_party_index in {None, 0} and (
-        (raw.battler_hp or 0) < AGATHA_SAFE_HP or bool(raw.battler_status or 0)
+        (raw.battler_hp or 0) < max(AGATHA_SAFE_HP, raw.battler_max_hp or 0)
+        or bool(raw.battler_status or 0)
     )
 
 
