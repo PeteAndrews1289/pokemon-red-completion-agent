@@ -549,7 +549,14 @@ def run_cascade_chapter(
             progress,
             emulator,
         )
-        if position == ROUTE_24_ACCURACY_RECOVERY_POSITION:
+        if position == ROUTE_24_CENTER_RECOVERY_POSITION:
+            _run_route_24_usable_move_battle(
+                reader,
+                chapter_executor,
+                trainer_index=trainer_index,
+                timing=timing,
+            )
+        elif position == ROUTE_24_ACCURACY_RECOVERY_POSITION:
             _run_route_24_accuracy_battle_with_potion(
                 reader,
                 chapter_executor,
@@ -1988,7 +1995,7 @@ def _purchase_cerulean_awakening_topup(
     emulator: EmulatorState,
     timing: CascadeTiming,
 ) -> None:
-    """Buy the Tower reserve copy after the Nugget reward funds it."""
+    """Restore consumable reserves after the Nugget reward funds them."""
 
     before = reader.read()
     if (
@@ -2121,6 +2128,16 @@ def _purchase_cerulean_awakening_topup(
         purchase_quantity=potion_topup,
         expected_quantity=CERULEAN_GYM_POTION_RESERVE,
     )
+    antidote_topup = _cerulean_antidote_topup_quantity(
+        _bag_quantity(emulator, ItemId.ANTIDOTE)
+    )
+    if antidote_topup:
+        buy_topup(
+            shop_index=3,
+            item=ItemId.ANTIDOTE,
+            purchase_quantity=antidote_topup,
+            expected_quantity=CERULEAN_ANTIDOTE_RESERVE,
+        )
     buy_topup(
         shop_index=5,
         item=ItemId.AWAKENING,
@@ -2139,10 +2156,23 @@ def _purchase_cerulean_awakening_topup(
         returned.map_id != MapId.CERULEAN_CITY
         or (returned.player_x, returned.player_y) != (19, 18)
         or _bag_quantity(emulator, ItemId.POTION) != CERULEAN_GYM_POTION_RESERVE
+        or _bag_quantity(emulator, ItemId.ANTIDOTE) != CERULEAN_ANTIDOTE_RESERVE
         or _bag_quantity(emulator, ItemId.AWAKENING) != 2
         or not reader.read_input_readiness().ready
     ):
         raise CascadeChapterError("Cerulean Awakening top-up failed its persistent gate.")
+
+
+def _cerulean_antidote_topup_quantity(current_quantity: int) -> int:
+    """Restore the original Route 25/Rock Tunnel poison contingency."""
+
+    if (
+        not isinstance(current_quantity, int)
+        or isinstance(current_quantity, bool)
+        or not 0 <= current_quantity <= CERULEAN_ANTIDOTE_RESERVE
+    ):
+        raise CascadeChapterError("Cerulean Antidote top-up has an invalid live quantity.")
+    return CERULEAN_ANTIDOTE_RESERVE - current_quantity
 
 
 def _return_from_cerulean_repeat_clerk(
@@ -2430,6 +2460,42 @@ def _run_route_25_usable_move_battle(
             executor,
             policy,
             expected_map=MapId.ROUTE_25,
+            intent=intent,
+            timing=timing.battle_runtime,
+            label=label,
+            consume_battle_start_schedule=False,
+        )
+    except BattleRuntimeError as error:
+        raise CascadeChapterError(str(error)) from error
+
+
+def _run_route_24_usable_move_battle(
+    reader: PokemonRedStateReader,
+    executor: _CountingChapterExecutor,
+    *,
+    trainer_index: int,
+    timing: CascadeTiming,
+) -> RawGameState:
+    """Clear the long Bug/Poison team with a live PP-aware move policy."""
+
+    label = f"Route 24 trainer {trainer_index}"
+    intent = BattleIntent(
+        objective_id="help_bill",
+        battle_plan_id=f"unscheduled-route24-trainer-{trainer_index}",
+    )
+
+    def policy(state: RawGameState) -> int:
+        # Mega Punch usually shortens the four-opponent battle enough to avoid
+        # compounding poison and Wrap damage; fall back to any live move when
+        # accuracy or PP variation exhausts the preferred slot.
+        return _choose_preferred_usable_move_slot(state, preferred_slot=3)
+
+    try:
+        return run_adaptive_trainer_battle(
+            reader,
+            executor,
+            policy,
+            expected_map=MapId.ROUTE_24,
             intent=intent,
             timing=timing.battle_runtime,
             label=label,

@@ -58,6 +58,7 @@ from pokemon_red_completion.cascade import (
     CascadeCheckpoint,
     CascadeProgress,
     CascadeTiming,
+    _cerulean_antidote_topup_quantity,
     _cerulean_return_blocked_detour,
     _cerulean_return_direction,
     _choose_preferred_usable_move_slot,
@@ -70,6 +71,7 @@ from pokemon_red_completion.cascade import (
     _run_cerulean_rival_with_potion,
     _run_misty_with_potion,
     _run_route_24_accuracy_battle_with_potion,
+    _run_route_24_usable_move_battle,
     _should_use_cerulean_rival_potion,
     _use_cerulean_rival_potion,
     _use_route_24_antidote_if_needed,
@@ -107,6 +109,15 @@ class _FinalEvidence:
 
 def test_cerulean_poison_reserve_covers_route_and_tunnel_contingencies() -> None:
     assert CERULEAN_ANTIDOTE_RESERVE == 3
+
+
+def test_cerulean_nugget_topup_restores_spent_antidotes() -> None:
+    assert tuple(
+        _cerulean_antidote_topup_quantity(quantity)
+        for quantity in range(CERULEAN_ANTIDOTE_RESERVE + 1)
+    ) == (3, 2, 1, 0)
+    with pytest.raises(CascadeChapterError, match="invalid live quantity"):
+        _cerulean_antidote_topup_quantity(4)
 
 
 def test_verified_cerulean_route_retries_a_swallowed_pedestrian_step() -> None:
@@ -1046,6 +1057,45 @@ def test_route_24_recovery_cures_poison_before_any_field_step(
     assert events[0] == "cure"
     assert events.count("cure") == 1
     assert "move" in events[1:]
+
+
+def test_route_24_long_team_uses_unscheduled_pp_aware_runtime(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    observed: dict[str, object] = {}
+    state = RawGameState(
+        True,
+        MapId.ROUTE_24,
+        10,
+        8,
+        1,
+        2,
+        first_party_moves=(1, 2, 3, 4),
+        first_party_pp=(0, 0, 5, 10),
+        active_party_moves=(1, 2, 3, 4),
+        active_party_pp=(0, 0, 5, 10),
+    )
+
+    def fake_runtime(*args: object, **kwargs: object) -> RawGameState:
+        policy = args[2]
+        assert callable(policy)
+        observed["slot"] = policy(state)
+        observed.update(kwargs)
+        return replace(state, battle_state=0)
+
+    monkeypatch.setattr(cascade_module, "run_adaptive_trainer_battle", fake_runtime)
+
+    result = _run_route_24_usable_move_battle(
+        cast(object, object()),
+        cast(object, object()),
+        trainer_index=3,
+        timing=DEFAULT_CASCADE_TIMING,
+    )
+
+    assert result.battle_state == 0
+    assert observed["slot"] == 3
+    assert observed["expected_map"] == MapId.ROUTE_24
+    assert observed["consume_battle_start_schedule"] is False
 
 
 @pytest.mark.parametrize(
