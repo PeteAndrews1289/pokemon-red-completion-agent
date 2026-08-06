@@ -79,7 +79,13 @@ SPEAROW_SPECIES_ID = 0x05
 SPEAROW_CAPTURE_LEVELS = frozenset({17})
 DUX_SPECIES_ID = 0x40
 DIGLETT_SPECIES_ID = 0x3B
-DIGLETT_CAPTURE_LEVELS = frozenset(range(17, 23))
+# A Ground specialist is a development lesson, not a disposable key.  Lower
+# level Diglett lineages can legally arrive at Surge with too little bulk to
+# survive schedule-dependent Quick Attack sequences even after consuming the
+# chapter's complete recovery reserve.  Select from the cave's naturally
+# available upper level band so the same capture teaches matchup preparation
+# without adding a brittle sacrifice or a trainer-specific menu exception.
+DIGLETT_CAPTURE_LEVELS = frozenset({21, 22})
 DIGLETT_CAPTURE_THROW_LIMIT = 30
 DIGLETT_SEARCH_SEED_WAIT_FRAMES = 199
 WARTORTLE_SPECIES_ID = 0xB3

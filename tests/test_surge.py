@@ -913,7 +913,7 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert LT_SURGE_TRAINER_CLASS_ID == 0x24
     assert LT_SURGE_TRAINER_SET == 1
     assert DIG_MOVE_ID == 0x5B
-    assert frozenset({17, 18, 19, 20, 21, 22}) == DIGLETT_CAPTURE_LEVELS
+    assert frozenset({21, 22}) == DIGLETT_CAPTURE_LEVELS
     assert DIGLETT_CAPTURE_THROW_LIMIT == COLLECTION_POKE_BALL_TARGET
     assert DIGLETT_SEARCH_SEED_WAIT_FRAMES == 199
     assert frozenset({17}) == SPEAROW_CAPTURE_LEVELS
