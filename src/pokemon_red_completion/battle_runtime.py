@@ -1016,6 +1016,25 @@ def _confirm_attack_with_pp_gate(
             # player selected a move. The selected turn is forcibly suppressed;
             # unchanged full PP proves no player move executed or was replaced.
             return
+        if (
+            (raw.battler_status or 0) & 0x07
+            and raw.battler_pp == initial_raw.battler_pp
+            and _recover_sleep_transition(
+                reader,
+                executor,
+                expected_map=expected_map,
+                slot=slot,
+                initial_pp=initial_pp,
+                initial_pp_vector=initial_raw.battler_pp,
+                timing=timing,
+                label=label,
+            )
+        ):
+            # A faster opponent can apply sleep after the player has already
+            # selected a move. The move menu was real, but the chosen attack
+            # is suppressed before spending PP. Recover the bounded sleep
+            # counter and return to a fresh policy boundary.
+            return
         expected_battle_state = _ACTIVE_BATTLE_STATE.get()
         if (
             expected_battle_state == _WILD_BATTLE_STATE

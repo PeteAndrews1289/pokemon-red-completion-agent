@@ -569,6 +569,47 @@ class OffSlotSleepPPSimulation(SleepRecoverySimulation):
             self.raw = replace(self.raw, first_party_pp=tuple(pp))
 
 
+class PostSelectionSleepSimulation(FakeRuntime):
+    """Model a faster opponent applying sleep after a move was selected."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.sleep_started = False
+
+    def execute(self, action: MacroAction) -> None:
+        self.actions.append(action)
+        if action.kind is MacroActionKind.WAIT:
+            return
+        if action.kind is MacroActionKind.CANCEL:
+            assert self.menu.phase is BattleMenuPhase.MOVE
+            self.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+            return
+        if action.kind is not MacroActionKind.CONFIRM:
+            raise AssertionError(f"unsupported sleep simulation action {action.kind}")
+        if self.raw.battle_state == 0:
+            self.controls = READY
+            return
+        if self.menu.phase is BattleMenuPhase.MAIN:
+            self.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+            return
+        if self.menu.phase is BattleMenuPhase.MOVE and not self.sleep_started:
+            self.sleep_started = True
+            self.raw = replace(self.raw, first_party_status=4)
+            self.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+            return
+        if self.menu.phase is BattleMenuPhase.UNKNOWN:
+            count = (self.raw.first_party_status or 0) & 0x07
+            next_count = 1 if count == 4 else 0
+            self.raw = replace(self.raw, first_party_status=next_count)
+            if next_count == 0:
+                self.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+            return
+        pp = list(self.raw.first_party_pp or ())
+        pp[0] -= 1
+        self.raw = replace(self.raw, first_party_pp=tuple(pp), battle_state=0, enemy_hp=0)
+        self.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+
 class ReappliedSleepSimulation(SleepRecoverySimulation):
     """Model waking and being put back to sleep before the next observation."""
 
@@ -687,6 +728,22 @@ def test_adaptive_controller_recovers_a_decreasing_sleep_counter() -> None:
         lambda raw: 1,
         expected_map=MapId.CERULEAN_CITY,
         timing=BattleRuntimeTiming(max_move_menu_transition_pulses=1),
+    )
+
+    assert final.battle_state == 0
+    assert final.first_party_status == 0
+    assert final.first_party_pp == (34, 30, 30, 11)
+    assert MacroAction(MacroActionKind.CANCEL) in runtime.actions
+
+
+def test_adaptive_controller_recovers_sleep_applied_after_move_selection() -> None:
+    runtime = PostSelectionSleepSimulation()
+
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        lambda _raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
     )
 
     assert final.battle_state == 0
