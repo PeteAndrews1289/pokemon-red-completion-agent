@@ -1,5 +1,9 @@
 # Repository instructions
 
+Read [MISSION.md](MISSION.md) first — it states the goal every change is judged against. Then
+[AGENT_COORDINATION.md](AGENT_COORDINATION.md) for lanes, collision rules, and current open work.
+This file holds the standing engineering constraints; those two hold the direction and the plan.
+
 This is the completion-first successor to the concluded `pokemon-red-ai` research project.
 
 - Do not copy experimental claims or results from the predecessor into this repository.

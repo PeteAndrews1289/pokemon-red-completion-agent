@@ -65,6 +65,38 @@ tree with `rglob` and ignores `.gitignore`, so an *untracked* note containing a 
 fails the gate with exit 1. Supply the ROM path, private artifact root, and objective-model path via
 environment, never in a file.
 
+## Do not
+
+- **Do not restore the multi-target Route 22 continuation loop.** It was implemented, replayed
+  against the exposed seed, and reverted after it cycled every reserve into Venusaur until the party
+  reached `(0, 0, 0, 0, 0, 0)`. "Continue until the living roster is exhausted" is the failure, not
+  the fix. The V35 receipt preserves it as `rejected_repair_direction`.
+- **Do not treat a green `passed` as evidence the thing it is named after happened.** Two examples
+  are already in the record: `team_development.passed` never looked at five of six party members,
+  and twelve receipts reported the opponent's party levels as ours.
+- **Do not use the party as disposable HP.** Switching to a healthy teammate is strategy; feeding
+  a weak one in to absorb a hit is the behaviour V35 exposed. `ROUTE_22_PIVOT_MIN_HP_RATIO` and
+  `ROUTE_22_MAX_TEAM_PIVOTS` make the wipe structurally unreachable — keep it that way.
+- **Do not describe the objective ranker as an autonomous player.** It runs as
+  `model_authorized_fixed_specialists`: it selects among 36 objectives while fixed code executes
+  them. Zero teacher fallbacks is a real result and is not the same claim.
+
+## Private inputs
+
+The ROM, the private artifact root, and the objective-model path are supplied per session by the
+repository owner and must never appear in a tracked or untracked file. Ask if you do not have them.
+
+## Honest status
+
+The deterministic teacher completes Pokémon Red repeatedly with genuine Champion and Hall-of-Fame
+evidence in the same run. The objective ranker authorizes all 36 objectives with zero fallbacks. The
+team can now be trained to League parity at a measured cost of roughly 1,878 battles.
+
+The team still does not participate in battles — the escort does everything. No learned policy has
+completed the game, no cross-game transfer has been measured, and the living Pokédex has not been
+started. The blocker is not game completion; it is that the demonstrations contain very few real
+decisions, and more Red reliability does not change that.
+
 ## The full gate, before every commit
 
 ```bash
