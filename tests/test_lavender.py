@@ -268,11 +268,12 @@ def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert lavender_module.TUNNEL_SUPER_POTION_TARGET == 11
     assert TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD == 40
     assert FINAL_TUNNEL_RECOVERY_THRESHOLD == 90
-    assert lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED == 4
+    assert lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED == 7
+    assert lavender_module.BATTLE_PARLYZ_HEAL_LIMIT == 1
     assert lavender_module.LAVENDER_PARLYZ_HEAL_RESERVE == 3
     assert lavender_module.TUNNEL_AWAKENINGS_PURCHASED == 3
     assert lavender_module.TUNNEL_AWAKENING_RESERVE == 5
-    assert lavender_module.POST_MART_RNG_ALIGNMENT_FRAMES == 15
+    assert lavender_module.POST_MART_RNG_ALIGNMENT_FRAMES == 95
     assert (
         lavender_module.POST_MART_RNG_ALIGNMENT_FRAMES
         + lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED * 144
@@ -299,15 +300,18 @@ def test_route_9_recovery_spends_only_the_surplus_above_tunnel_reserve(
 
 
 def test_lavender_paralysis_top_up_restores_a_fixed_reserve() -> None:
-    assert tuple(lavender_module._parlyz_top_up_quantity(quantity) for quantity in range(5)) == (
+    assert tuple(lavender_module._parlyz_top_up_quantity(quantity) for quantity in range(8)) == (
         3,
         2,
         1,
         0,
         0,
+        0,
+        0,
+        0,
     )
     with pytest.raises(lavender_module.LavenderChapterError):
-        lavender_module._parlyz_top_up_quantity(5)
+        lavender_module._parlyz_top_up_quantity(8)
 
 
 def test_lavender_antidote_top_up_preserves_an_existing_surplus() -> None:

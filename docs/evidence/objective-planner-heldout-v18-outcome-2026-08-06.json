@@ -1,0 +1,23 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v18",
+  "status": "failed",
+  "source_commit": "f44822718c2b9354af9f1a5918c76279f6b969a5",
+  "source_bundle_sha256": "54f753931462e03e08dd17d6dec4f69d07b08679555678cfedf87a5d1e413bb7",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v18-validation-01",
+      "harness_seed": 1410001,
+      "battle_start_schedule_sha256": "ae4288544ac4740ce299e22f63c8f987596b706ad55e01894176287ea2df2ec1",
+      "status": "failed",
+      "qualified_checkpoints": 109,
+      "failure": "Rock Tunnel produced a fifth persistent paralysis after the four-item reserve had been consumed.",
+      "private_log_sha256": "e576a81c21ad1f673171104eb4e11e07c8df586e45b959aea1a10a541fc152a7"
+    }
+  ],
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The route had a deterministic four-cure inventory but no per-battle spending limit. A fresh status lineage could repeatedly re-paralyze the active battler and exhaust cures before a later move-evidence gate.",
+  "repair_direction": "Use the remaining guaranteed-income margin to carry seven Parlyz Heals, preserve the qualified post-purchase RNG residue, and cap in-battle Parlyz Heal use at one per trainer while continuing to replan attacks under repeated paralysis."
+}
