@@ -30,6 +30,7 @@ from pokemon_red_completion.surge import (
     DEFAULT_SURGE_TIMING,
     DIG_MOVE_ID,
     DIGLETT_CAPTURE_LEVELS,
+    DIGLETT_CAPTURE_THROW_LIMIT,
     DIGLETT_SEARCH_SEED_WAIT_FRAMES,
     DUX_NICKNAME,
     GYM_CAN_COORDINATES,
@@ -549,6 +550,7 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert LT_SURGE_TRAINER_SET == 1
     assert DIG_MOVE_ID == 0x5B
     assert frozenset({17, 18, 19, 20, 21, 22}) == DIGLETT_CAPTURE_LEVELS
+    assert DIGLETT_CAPTURE_THROW_LIMIT == COLLECTION_POKE_BALL_TARGET
     assert DIGLETT_SEARCH_SEED_WAIT_FRAMES == 199
     assert frozenset({17}) == SPEAROW_CAPTURE_LEVELS
     assert SPEAROW_DIRECT_THROW_LEVEL_FLOOR == 30
@@ -556,7 +558,7 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert DUX_NICKNAME == (0x83, 0x94, 0x97, 0x50)
     assert SURGE_CHECKPOINT_COUNT == 15
     assert COLLECTION_POKE_BALL_TARGET == 30
-    assert surge_module.FOREST_POKE_BALL_RESERVE == 25
+    assert surge_module.FOREST_POKE_BALL_RESERVE == COLLECTION_POKE_BALL_TARGET
     assert surge_module.POKE_BALL_PRICE == 200
     assert surge_module._directions(
         "D" + "R" * 24 + "U" * 3 + "R" + "U" * 4
@@ -668,7 +670,11 @@ def test_forest_restock_preserves_an_existing_surplus(monkeypatch: pytest.Monkey
         def read(self) -> RawGameState:
             return raw
 
-    monkeypatch.setattr(surge_module, "_bag", lambda _emulator: {ItemId.POKE_BALL: 27})
+    monkeypatch.setattr(
+        surge_module,
+        "_bag",
+        lambda _emulator: {ItemId.POKE_BALL: COLLECTION_POKE_BALL_TARGET},
+    )
 
     surge_module._restock_for_viridian_forest(
         object(),  # type: ignore[arg-type]

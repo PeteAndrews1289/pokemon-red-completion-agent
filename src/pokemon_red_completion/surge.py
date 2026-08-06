@@ -63,6 +63,7 @@ SPEAROW_CAPTURE_LEVELS = frozenset({17})
 DUX_SPECIES_ID = 0x40
 DIGLETT_SPECIES_ID = 0x3B
 DIGLETT_CAPTURE_LEVELS = frozenset(range(17, 23))
+DIGLETT_CAPTURE_THROW_LIMIT = 30
 DIGLETT_SEARCH_SEED_WAIT_FRAMES = 199
 WARTORTLE_SPECIES_ID = 0xB3
 PIDGEY_SPECIES_ID = 0x24
@@ -72,10 +73,10 @@ METAPOD_SPECIES_ID = 0x7C
 KAKUNA_SPECIES_ID = 0x71
 PIKACHU_SPECIES_ID = 0x54
 COLLECTION_POKE_BALL_TARGET = 30
-# Preserve a completion-oriented margin across repeated full-route timing
-# schedules.  Seventeen covered one observed lineage but allowed a valid
-# sequence of failed throws to starve the final required Forest capture.
-FOREST_POKE_BALL_RESERVE = 25
+# The Forest lesson retains six specimens and permits five throws per live
+# encounter.  Keep the full predeclared Poké Ball budget instead of treating
+# an empirically successful smaller reserve as a resource invariant.
+FOREST_POKE_BALL_RESERVE = COLLECTION_POKE_BALL_TARGET
 POKE_BALL_PRICE = 200
 SURGE_ITEM_SETTLE_PULSES = 720
 SURGE_RECOVERY_HP_NUMERATOR = 2
@@ -3340,7 +3341,8 @@ def _throw_until_caught_diglett(
     reader: PokemonRedStateReader,
 ) -> None:
     starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
-    for _ in range(min(starting_balls, 8)):
+    throw_limit = min(starting_balls, DIGLETT_CAPTURE_THROW_LIMIT)
+    for _ in range(throw_limit):
         _navigate_main(executor, reader, 1)
         _pulse(executor, MacroActionKind.CONFIRM)
         _select_bag_item(emulator, executor, ItemId.POKE_BALL)
@@ -3354,7 +3356,7 @@ def _throw_until_caught_diglett(
             ):
                 _confirm_kind(executor, MacroActionKind.CANCEL, 3, 180)
                 used = starting_balls - _bag(emulator).get(ItemId.POKE_BALL, 0)
-                if not 1 <= used <= 8:
+                if not 1 <= used <= throw_limit:
                     raise SurgeChapterError("Diglett capture used an invalid ball count.")
                 return
             if (

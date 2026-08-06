@@ -1,0 +1,85 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-05",
+  "evaluation_id": "red-objective-planner-heldout-v7",
+  "status": "failed",
+  "source_commit": "7d0a4833e41429c2815a4987a12123f848e85620",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v7-validation-01",
+      "harness_seed": 1160001,
+      "status": "complete",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "teacher_objective_fallbacks": 0,
+      "hall_of_fame": true,
+      "actions": 89740,
+      "frames": 9590111,
+      "schedule_sha256": "705be6f0d7836e5a6d1b3c727a33ac374121d96af698eb075df1daddbedefab1",
+      "full_report_sha256": "bd3d3bb4a052d42014987fab1e3e9f2a8ca471c4b137ea90fd8237706e29f2a8"
+    },
+    {
+      "run_id": "red-objective-v7-validation-02",
+      "harness_seed": 1160002,
+      "status": "complete",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "teacher_objective_fallbacks": 0,
+      "hall_of_fame": true,
+      "actions": 106598,
+      "frames": 10166715,
+      "schedule_sha256": "5afbd6eb3955e27b1c16344dd0a749f91863e3eab4d9467481ad1260475547b2",
+      "full_report_sha256": "76947f3c6e6829daceed849b1d747c01046077654a6071b6665f19089bd7947a"
+    },
+    {
+      "run_id": "red-objective-v7-validation-03",
+      "harness_seed": 1160003,
+      "status": "complete",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "teacher_objective_fallbacks": 0,
+      "hall_of_fame": true,
+      "actions": 85680,
+      "frames": 9472866,
+      "schedule_sha256": "d5ab28236d41aadd84dcded5334330cc23d2cde720b225aac6bef0b850eb62ba",
+      "full_report_sha256": "c3ce06218280dac716a886492fbc0eebd51e46d4dd82c1ad4b7a1c323542e0b3"
+    },
+    {
+      "run_id": "red-objective-v7-validation-04",
+      "harness_seed": 1160004,
+      "status": "failed",
+      "qualified_checkpoints": 87,
+      "failure": "Diglett capture exhausted its bounded Poké Balls.",
+      "diagnosis": "The direct-capture loop capped Diglett at eight throws even though the route carried a declared thirty-ball capture budget.",
+      "failure_log_sha256": "85914821998bbacbb68ca73be1a1080180d255e5cbdf050fffeeaa619ba55eb0"
+    }
+  ],
+  "repair_diagnostics": [
+    {
+      "harness_seed": 1160004,
+      "status": "failed",
+      "qualified_checkpoints": 91,
+      "repair": "Permit Diglett to use the full declared capture budget.",
+      "failure": "An incorrectly placed early restock expected Viridian while the player was still on Route 1.",
+      "failure_log_sha256": "0e31a0f856c2ffe715d1d2ffb4767048d62c42e150d37aa8500c2e6ae0712fd4"
+    },
+    {
+      "harness_seed": 1160004,
+      "status": "failed",
+      "qualified_checkpoints": 91,
+      "repair": "Remove the misplaced restock and use the existing verified Viridian Mart boundary.",
+      "failure": "The Forest survey exhausted its empirically selected twenty-five-ball reserve before retaining all six required specimens.",
+      "failure_log_sha256": "6e9c5ee9645d9f443786e20f33bc2df41ac2b7624ee61e07d8849a60eb285bd8"
+    }
+  ],
+  "interpretation": {
+    "planner_result": "All objective decisions in the three complete runs and before the fourth-run failure were model-authorized with zero objective fallback.",
+    "evaluation_result": "The preregistered v7 series failed its five-run completion contract and is retired. Validation seed 1160005 and every sealed test seed remain unopened.",
+    "repair_result": "Diglett may use the declared thirty-ball budget, and the Forest restock now preserves that complete budget rather than an empirical twenty-five-ball reserve.",
+    "next_gate": "Freeze the repaired source and run fresh v8 validation schedules while keeping v8 test schedules sealed."
+  }
+}
