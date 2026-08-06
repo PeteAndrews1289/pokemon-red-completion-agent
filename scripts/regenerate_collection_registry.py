@@ -54,18 +54,18 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
     document = json.loads(V3_TEMPLATE_PATH.read_text(encoding="ascii"))
     if not isinstance(document, dict):
         raise RuntimeError("collection registry must be an object")
-    document["collection_id"] = "red-battle-heldout-v84"
+    document["collection_id"] = "red-battle-heldout-v85"
     document["runs"] = [
         {
             "harness_seed": seed,
             "partition": partition,
-            "run_id": f"red-battle-v84-{ordinal:02d}-{partition}",
+            "run_id": f"red-battle-v85-{ordinal:02d}-{partition}",
         }
         for ordinal, (partition, seed) in enumerate(
             (
-                *(("train", seed) for seed in range(1_260_001, 1_260_006)),
-                *(("validation", seed) for seed in range(1_270_001, 1_270_003)),
-                *(("test", seed) for seed in range(1_280_001, 1_280_006)),
+                *(("train", seed) for seed in range(1_290_001, 1_290_006)),
+                *(("validation", seed) for seed in range(1_300_001, 1_300_003)),
+                *(("test", seed) for seed in range(1_310_001, 1_310_006)),
             ),
             start=1,
         )
@@ -134,7 +134,7 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
             raise RuntimeError("collection run must be an object")
         run["schedule_sha256"] = schedule.schedule_sha256(int(run["harness_seed"]))
     document["schedule_dry_run"] = {
-        "dry_run_id": "red-battle-schedule-dry-run-v84",
+        "dry_run_id": "red-battle-schedule-dry-run-v85",
         "harness_seed": SCHEDULE_DRY_RUN_SEED,
         "schedule_sha256": schedule.schedule_sha256(SCHEDULE_DRY_RUN_SEED),
         "schema": SCHEDULE_DRY_RUN_SCHEMA,
