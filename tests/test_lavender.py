@@ -426,6 +426,24 @@ def test_status_recovery_prefers_a_healthy_pivot_before_spending_awakening() -> 
         awakenings=2,
         parlyz_heals=2,
     ) == ("awakening", None)
+    assert lavender_module._dux_status_recovery_strategy(
+        asleep,
+        (20, 50, 30),
+        True,
+        awakenings=2,
+        parlyz_heals=2,
+        required_move_spent=False,
+    ) == ("awakening", None)
+
+    paralyzed_dux = replace(asleep, active_party_status=0x40)
+    assert lavender_module._dux_status_recovery_strategy(
+        paralyzed_dux,
+        (20, 50, 30),
+        True,
+        awakenings=2,
+        parlyz_heals=2,
+        required_move_spent=False,
+    ) == ("parlyz_heal", None)
 
     paralyzed_story_lead = replace(
         asleep,

@@ -1055,6 +1055,7 @@ def _run_lavender_trainer_battle(
             protect_dux_status,
             awakenings=_bag(emulator).get(ItemId.AWAKENING, 0),
             parlyz_heals=_bag(emulator).get(ItemId.PARLYZ_HEAL, 0),
+            required_move_spent=selected_move_evidence_observed,
         )
         if status_recovery == "pivot" and pivot_target is not None:
             raise _PauseForFinalTunnelPivot(pivot_target)
@@ -1450,10 +1451,11 @@ def _dux_status_recovery_strategy(
     *,
     awakenings: int,
     parlyz_heals: int,
+    required_move_spent: bool = True,
 ) -> tuple[str, int | None]:
-    """Prefer a healthy role pivot before spending the protected Tower reserve."""
+    """Preserve move evidence, then prefer a healthy role pivot over an item."""
 
-    pivot_target = _dux_status_escape_target(raw, party_hp, enabled)
+    pivot_target = _dux_status_escape_target(raw, party_hp, enabled and required_move_spent)
     if pivot_target is not None:
         return "pivot", pivot_target
     if enabled and (raw.battler_status or 0) & 0x07 and awakenings > 1:
