@@ -828,3 +828,12 @@ branch and is preserved as a failed immutable attempt. V51 conditionally liquida
 Bide capacity token when live cash plus obsolete Potions cannot fund the fixed Tunnel reserve.
 Its independent rehearsal is next, followed by five train and two validation
 demonstrations before fitting the replacement candidate. Test remains sealed until after freeze.
+
+The objective planner's V34 validation opened one seed and failed at Lt. Surge after a low-level
+Diglett exhausted the complete two-item recovery reserve. The remaining four validation seeds and
+all five test seeds stayed sealed. V35 replaces the minimum-level assumption with a reusable
+readiness decision: acquire a natural level-21 or level-22 Diglett before the Gym. The exact V34
+failure replay subsequently completed 312/312 checkpoints, 36/36 objectives, 74/74 scheduled
+battles, Champion, and Hall of Fame with three Dig attacks and no Surge recovery item. V35 is
+preregistered on fresh validation seeds `1810001`–`1810005`; sealed test seeds
+`1820001`–`1820005` remain unopened until all five validations pass unchanged.

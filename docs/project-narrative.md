@@ -1411,6 +1411,15 @@ Champion, and Hall of Fame with zero objective-teacher fallbacks. This is the in
 behavior: preserve declared safety needs, identify resources whose purpose has expired, and convert
 only the excess when a later objective is underfunded.
 
+The V34 evaluation exposed the cost of overfitting the early specialist lesson. The route accepted
+any level-17-to-22 Diglett and tried to make the weakest legal capture survive every Lt. Surge
+schedule through exact item timing. A held-out level lineage still exhausted both recoveries before
+Pikachu. V35 instead teaches preparation: select a naturally available level-21 or level-22
+specialist before committing to the Gym. The exact failed schedule then won with three Dig attacks,
+spent no Super Potion, and continued through all 312 checkpoints and the Hall of Fame. This is a
+better transfer story than another scripted rescue—matchup knowledge includes deciding whether a
+team member is ready before entering the fight.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
