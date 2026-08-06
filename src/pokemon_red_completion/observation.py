@@ -376,6 +376,8 @@ class EventFlag(IntEnum):
     BEAT_ROUTE_9_TRAINER_8 = 0x449
     BEAT_ROUTE_10_TRAINER_2 = 0x453
     BEAT_ROUTE_11_TRAINER_0 = 0x471
+    BEAT_ROUTE_11_TRAINER_1 = 0x472
+    BEAT_ROUTE_11_TRAINER_6 = 0x477
     BEAT_ROCK_TUNNEL_1_TRAINER_3 = 0x45C
     BEAT_ROCK_TUNNEL_1_TRAINER_4 = 0x45D
     BEAT_ROCK_TUNNEL_1_TRAINER_5 = 0x45E
@@ -3310,9 +3312,7 @@ class PokemonRedStateReader:
             self._memory.read_u8(base + PARTY_LEVEL_OFFSET) for base in party_bases
         )
         party_hp = tuple(self._read_u16_be(base + PARTY_HP_OFFSET) for base in party_bases)
-        party_max_hp = tuple(
-            self._read_u16_be(base + PARTY_MAX_HP_OFFSET) for base in party_bases
-        )
+        party_max_hp = tuple(self._read_u16_be(base + PARTY_MAX_HP_OFFSET) for base in party_bases)
         party_status = tuple(
             self._memory.read_u8(base + PARTY_STATUS_OFFSET) for base in party_bases
         )
@@ -4423,10 +4423,7 @@ def _vermilion_prior_chapter_complete(
             )
         )
         and ItemId.SS_TICKET in items
-        and (
-            ItemId.TM11_BUBBLEBEAM in items
-            or BUBBLEBEAM_MOVE_ID in (raw.first_party_moves or ())
-        )
+        and (ItemId.TM11_BUBBLEBEAM in items or BUBBLEBEAM_MOVE_ID in (raw.first_party_moves or ()))
         and bool((raw.badge_bits or 0) & Badge.CASCADE)
         and bool(badge_mirror & Badge.CASCADE)
     )

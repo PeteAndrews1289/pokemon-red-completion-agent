@@ -6,11 +6,11 @@ The public
 [`red-battle-collection-v95.json`](../configs/red-battle-collection-v95.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
-- 71 stable public battle-plan identities in exact qualified-route order;
+- 73 stable public battle-plan identities in exact qualified-route order;
 - five `train`, two `validation`, and five `test` root-lineage slots;
 - partition-local ordinals `1/5` through `5/5`, `1/2` through `2/2`, and `1/5`
   through `5/5`, in addition to global collection ordinals `1/12` through `12/12`; and
-- one unique 71-offset timing schedule and one attempt for each slot.
+- one unique 73-offset timing schedule and one attempt for each slot.
 
 The v1 campaign's uncounted rehearsal completed all 312 checkpoints, all 36 objectives, and Hall
 of Fame with 68/68 schedule attestations. Its first one-shot training root then failed at Route 24:
@@ -497,13 +497,13 @@ The roster digest is:
 
 ```text
 D({
-  "battle_plan_ids": [the exact 71 IDs in qualified route order],
+  "battle_plan_ids": [the exact 73 IDs in qualified route order],
   "schema": "pokemon-red-battle-plan-roster-v1"
 })
 ```
 
-The array must equal the 71-entry `RED_BATTLE_PLAN_IDS` tuple exactly. A missing, duplicated,
-substituted, or reordered ID is invalid even if the array length remains 71.
+The array must equal the 73-entry `RED_BATTLE_PLAN_IDS` tuple exactly. A missing, duplicated,
+substituted, or reordered ID is invalid even if the array length remains 73.
 
 For each roster ID, `sha256-mod-v1` derives a frame offset from 0 through 255. The SHA-256 input is
 the following exact byte concatenation:
@@ -667,15 +667,15 @@ commit, source bundle, behavior, objective graph, and teacher-execution digests.
 train, validation, or test data, and it must not enter any performance denominator. A normal
 unplanned recording is not a substitute.
 
-The dry run must finish successfully and attest all 71 offsets before slot `01` starts. A failed
+The dry run must finish successfully and attest all 73 offsets before slot `01` starts. A failed
 dry run does not consume a declared slot, but collection must pause until the defect is corrected.
 Any correction to a frozen input must be committed, pushed, and reflected in a regenerated
 registry and sidecar before repeating the dry run.
 
-After the complete episode and all 71 attestations pass their offline audit, the recorder publishes
+After the complete episode and all 73 attestations pass their offline audit, the recorder publishes
 a separate immutable dry-run qualification in private storage. It binds the registry, exact source
 commit and execution digests, CPython/PyBoy runtime, ROM hashes, dry seed and schedule, episode ID,
-manifest digest, and 71/71 audit receipt. Before any counted slot can create the campaign seal or
+manifest digest, and 73/73 audit receipt. Before any counted slot can create the campaign seal or
 episode namespace, the command reopens that referenced episode and reruns the audit under the same
 exclusive collection session. Absence, identity drift, replacement, or malformed evidence fails
 closed. This qualification is not a campaign outcome and never enters an evaluation denominator.
@@ -695,7 +695,7 @@ Each application produces exactly one private `battle_start_offset_applied` even
   `WAIT` execution.
 
 The terminal event must contain a `battle_start_schedule` attestation with `complete=true`,
-`expected_battles=71`, `finished_battles=71`, and the same schedule digest. Duplicate or unknown
+`expected_battles=73`, `finished_battles=73`, and the same schedule digest. Duplicate or unknown
 IDs, intent changes, schedule mismatch, reordering, substitution, partial application, an extra
 battle, or an unfinished schedule fails the attempt.
 

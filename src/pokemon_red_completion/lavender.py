@@ -84,6 +84,7 @@ TM28_SALE_PROCEEDS = 1_000
 TM24_SALE_PROCEEDS = 1_000
 TM34_SALE_PROCEEDS = 1_000
 ROUTE_11_GAMBLER_PAYOUT = 1_260
+ROUTE_11_SUPPLY_INCOME = 3 * ROUTE_11_GAMBLER_PAYOUT
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -104,6 +105,9 @@ CENTER_EXTERIOR_TO_MART_APPROACH = VERMILION_CENTER_TO_MART[:-1]
 MART_EXTERIOR_TO_ROUTE_11 = _directions("R" * 17)
 ROUTE_11_TO_SUPPLY_GAMBLER = _directions("R" * 9 + "D" * 9 + "R")
 SUPPLY_GAMBLER_TO_ROUTE_11_ENTRY = _directions("L" + "U" * 9 + "L" * 9)
+ROUTE_11_TO_SECOND_SUPPLY_GAMBLER = _directions("R" * 25 + "D" * 4 + "R")
+SECOND_TO_FOURTH_SUPPLY_GAMBLER = _directions("R" * 6 + "U" * 8 + "R")
+FOURTH_SUPPLY_GAMBLER_TO_ROUTE_11_ENTRY = _directions("L" * 10 + "D" * 3 + "L" * 7 + "D" + "L" * 16)
 MART_TO_CENTER_EXTERIOR = _directions("LL" + "U" * 10 + "L" * 10)
 ROUTE_5_TO_CERULEAN_TREE = _directions("LL" + "U" * 35 + "L" * 6)
 CERULEAN_TREE_TO_ROUTE_9 = _directions("D" + "R" * 17 + "U" * 12 + "R" * 4)
@@ -1154,9 +1158,7 @@ def _run_lavender_trainer_battle(
                 run.parlyz_heals_used += 1
                 continue
             learned_pivot = learned_switch_party_index(error.__cause__)
-            if isinstance(
-                error.__cause__, _PauseForFinalTunnelPivot
-            ) or learned_pivot is not None:
+            if isinstance(error.__cause__, _PauseForFinalTunnelPivot) or learned_pivot is not None:
                 before_pivot = reader.read()
                 if before_pivot.active_party_index == 0 and (before_pivot.battler_status or 0):
                     dux_status_escaped = True
@@ -1543,9 +1545,7 @@ def _trainer(
                 BattleRecoveryCapability.CURE_PARALYSIS,
             }
         ),
-        switch_capabilities=frozenset(
-            {BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}
-        ),
+        switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
         required_move_policy=RequiredMovePolicy.ANY_USABLE,
     )
     final = _run_lavender_trainer_battle(
@@ -2086,7 +2086,7 @@ def _earn_tunnel_supply_income(
     run: _RunState,
     timing: LavenderTiming,
 ) -> None:
-    """Defeat one source-pinned Gambler instead of depending on capture resale luck."""
+    """Earn a source-pinned worst-case supply budget independent of capture luck."""
 
     before_money = _money(emulator)
     _require(reader.read(), MapId.VERMILION_POKECENTER, (3, 3), "supply-income nurse")
@@ -2138,10 +2138,6 @@ def _earn_tunnel_supply_income(
         RedBattlePlanId.LAVENDER_ROUTE_11_GAMBLER,
         battle_recovery_limit=0,
     )
-    if _money(emulator) - before_money != ROUTE_11_GAMBLER_PAYOUT:
-        raise LavenderChapterError(
-            "Route 11 supply Gambler did not produce the exact source payout."
-        )
     _move(
         executor,
         reader,
@@ -2198,6 +2194,124 @@ def _earn_tunnel_supply_income(
     if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
         raise LavenderChapterError("Supply-income recovery did not restore the complete party.")
     _require(restored, MapId.VERMILION_POKECENTER, (3, 3), "supply-income recovery")
+
+    # A one-Gambler budget still depended on selling unused capture Balls.
+    # Take a second, source-derived excursion for two untouched Gamblers so
+    # even the one-Ball-remaining capture branch can buy the full safety kit.
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        CENTER_EXIT,
+        timing,
+        "extended supply-income Center exit",
+    )
+    _wait(executor, timing.transition_frames)
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        CENTER_EXTERIOR_TO_MART_APPROACH,
+        timing,
+        "extended supply-income Mart approach",
+    )
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        MART_EXTERIOR_TO_ROUTE_11,
+        timing,
+        "extended Route 11 supply-income entry",
+    )
+    _require(reader.read(), MapId.ROUTE_11, (0, 6), "extended Route 11 entry")
+    _trainer(
+        executor,
+        reader,
+        emulator,
+        run,
+        ROUTE_11_TO_SECOND_SUPPLY_GAMBLER,
+        timing,
+        "Route 11 supply Gambler 2",
+        MapId.ROUTE_11,
+        EventFlag.BEAT_ROUTE_11_TRAINER_1,
+        0xD9,
+        0x11,
+        2,
+        BITE,
+        1,
+        RedBattlePlanId.LAVENDER_ROUTE_11_GAMBLER_2,
+        battle_recovery_limit=0,
+    )
+    _trainer(
+        executor,
+        reader,
+        emulator,
+        run,
+        SECOND_TO_FOURTH_SUPPLY_GAMBLER,
+        timing,
+        "Route 11 supply Gambler 4",
+        MapId.ROUTE_11,
+        EventFlag.BEAT_ROUTE_11_TRAINER_6,
+        0xD9,
+        0x11,
+        4,
+        BUBBLEBEAM,
+        3,
+        RedBattlePlanId.LAVENDER_ROUTE_11_GAMBLER_4,
+        battle_recovery_threshold=BATTLE_RECOVERY_THRESHOLD,
+        battle_recovery_limit=1,
+    )
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        FOURTH_SUPPLY_GAMBLER_TO_ROUTE_11_ENTRY,
+        timing,
+        "extended Route 11 supply-income return",
+    )
+    _require(reader.read(), MapId.ROUTE_11, (0, 6), "extended Route 11 return")
+    _move(executor, reader, emulator, run, ("left",), timing, "extended Route 11 transition")
+    returned = reader.read()
+    if (
+        returned.map_id != MapId.VERMILION_CITY
+        or returned.player_x is None
+        or returned.player_x < 23
+        or returned.player_y != 14
+    ):
+        raise LavenderChapterError("Extended supply-income return missed Vermilion.")
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        ("left",) * (returned.player_x - 23),
+        timing,
+        "extended supply-income Mart exterior return",
+    )
+    _move(
+        executor,
+        reader,
+        emulator,
+        run,
+        MART_TO_CENTER_EXTERIOR,
+        timing,
+        "extended supply-income Center exterior return",
+    )
+    _move(executor, reader, emulator, run, ("up",), timing, "extended supply-income Center entry")
+    _wait(executor, timing.transition_frames)
+    _heal_center(executor, reader, emulator, timing, MapId.VERMILION_POKECENTER)
+    restored = reader.read()
+    if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
+        raise LavenderChapterError("Extended supply-income recovery did not heal the party.")
+    _require(restored, MapId.VERMILION_POKECENTER, (3, 3), "extended supply-income recovery")
+    if _money(emulator) - before_money != ROUTE_11_SUPPLY_INCOME:
+        raise LavenderChapterError(
+            "Route 11 supply curriculum did not produce its three exact payouts."
+        )
 
 
 def _purchase_supplies(

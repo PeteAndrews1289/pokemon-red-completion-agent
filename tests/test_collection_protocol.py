@@ -115,7 +115,7 @@ def test_tracked_registry_is_canonical_frozen_and_preassigned() -> None:
     assert sidecar["bytes"] == len(payload)
     assert sidecar["sha256"] == hashlib.sha256(payload).hexdigest()
     assert registry.schedule.battle_plan_ids == RED_BATTLE_PLAN_IDS
-    assert len(registry.schedule.battle_plan_ids) == 71
+    assert len(registry.schedule.battle_plan_ids) == 73
     assert len({run.harness_seed for run in registry.runs}) == 12
     assert len({run.schedule_sha256 for run in registry.runs}) == 12
     assert registry.schedule_dry_run.harness_seed not in {run.harness_seed for run in registry.runs}
@@ -124,11 +124,11 @@ def test_tracked_registry_is_canonical_frozen_and_preassigned() -> None:
     }
     assert (
         registry.schedule.battle_roster_sha256
-        == "0d49c34610163938e7b34c7d848b257c7a91116c8c0bd54599c799297d4fb89a"
+        == "47d88b4154f9dd6f5addc4a4b05c500b1e9f9069c0de53b5122799c9a7860b8a"
     )
     assert (
         registry.schedule_dry_run.schedule_sha256
-        == "7fdf8905f235b1e25e1f58595a986b7d16a2da91dbaa741d587870a304ed47d4"
+        == "ebd344d580865adedafc02d6a729493370c8273e265a1e78966c94a482906d17"
     )
 
 
@@ -137,14 +137,14 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     registry = parse_collection_registry(payload)
     first = registry.assignment("red-battle-v95-01-train")
 
-    assert len(payload) == 6671
+    assert len(payload) == 6753
     assert (
         registry.registry_sha256
-        == "da9083fc1d4e846f1490fa9e2f24a189c115281d9d851ad84eb544586358f3a7"
+        == "a817a10d22ed4dcaf67ebbe991a1fcc49bb9b303f67d6cf097eb8bcbe12d5e3c"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "60837fb7b54575c5bc519a85209bd208f70435c9d1bac7c60b6f44fb961abcca"
+        == "670ccdbe7682d9aa3ce1afcbe00b093195688ccfe36635da9823b45377f8ee66"
     )
     assert (
         registry.execution.behavior_configuration_sha256
@@ -156,9 +156,9 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "ffcfef4f5f7e19b4cadb963c0929ff210b028bc3155ea6fed6ff5604cf4eed6d"
+        == "615d6518eda953ef600fe5c27aab4f3dfe504cfae11c50af674a9da518533f41"
     )
-    assert first.assignment_id == "2a4429c2102186be40d4e5322e6f415cb4947c47f3541504fc2230f17f623809"
+    assert first.assignment_id == "91ab1bbdfd7b994175d49eb64889d79c5a8a8e891bc82d7764cc03675d824430"
 
 
 def test_canonical_newline_hash_has_an_independent_golden_vector() -> None:
@@ -176,13 +176,13 @@ def test_schedule_expansion_is_deterministic_bounded_and_content_addressed() -> 
     second = registry.schedule.offsets(run.harness_seed)
 
     assert first == second
-    assert len(first) == 71
+    assert len(first) == 73
     assert first[0].battle_plan_id == RED_BATTLE_PLAN_IDS[0]
     assert first[0].frames == 40
     assert first[-1].battle_plan_id == RED_BATTLE_PLAN_IDS[-1]
     assert first[-1].frames == 190
     assert all(0 <= offset.frames <= 255 for offset in first)
-    assert run.schedule_sha256 == "8704de539733d9db38d50de5016594644710d87a5c1cae7f0a5a4d87df8c6fd5"
+    assert run.schedule_sha256 == "c3847033e3a0a59cddb67741838b0952c3f444216c3271a8175efae0734bdfe8"
     assert registry.schedule.schedule_sha256(run.harness_seed) == run.schedule_sha256
     assert registry.schedule.schedule_sha256(registry.runs[1].harness_seed) != run.schedule_sha256
 
