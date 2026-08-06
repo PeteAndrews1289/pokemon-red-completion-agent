@@ -1,0 +1,33 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v33",
+  "source_commit": "24f5b34e10e315e02866bf69d8e78a3446ebd3d5",
+  "source_bundle_sha256": "d2da90e0b20a0d3cb5e7e778fe4d6690e6477ed63b244b82b7209b0638585f02",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1730002,
+    "battle_start_schedule_sha256": "416d4f51a19d8899197b7e10402815d2c6ee73f4a64d955e7734aba013a37141",
+    "private_log_sha256": "76e56e36281792ecf34cfe181ca38627315b2e9cf17eb014daceb7a09c0ad596",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 74,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "actions_executed": 90832,
+    "party_size": 6,
+    "final_party_levels": [61, 59, 61, 61, 63, 65],
+    "agatha_hyper_potions_used": 6,
+    "agatha_full_restores_used": 0
+  },
+  "repairs_verified": [
+    "The Indigo supply boundary carries one emergency Revive in addition to the two reserved for Lance",
+    "Agatha restores the workhorse at a full-health decision boundary while ordinary Hyper Potions remain",
+    "A fainted workhorse has a bounded revive-and-return path instead of allowing the remaining party to cascade to zero",
+    "The exact failed seed now preserves the balanced party and completes Agatha, Lance, Champion, and Hall of Fame"
+  ]
+}
