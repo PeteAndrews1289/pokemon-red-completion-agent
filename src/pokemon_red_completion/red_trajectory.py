@@ -210,6 +210,7 @@ def _battle_resources(raw: RawGameState) -> dict[str, object]:
         return sum(inventory.get(int(item_id), 0) for item_id in item_ids)
 
     return {
+        "money": raw.player_money,
         "capture_item_count": quantity(
             ItemId.POKE_BALL,
             ItemId.GREAT_BALL,

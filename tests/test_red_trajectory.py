@@ -117,6 +117,7 @@ def test_red_encoder_exposes_normalized_and_namespaced_semantics() -> None:
         }
     ]
     assert features["resources"] == {
+        "money": None,
         "capture_item_count": 0,
         "healing_item_count": 0,
         "status_recovery_item_count": 0,

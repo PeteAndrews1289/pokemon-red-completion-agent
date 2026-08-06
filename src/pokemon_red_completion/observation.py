@@ -1009,6 +1009,7 @@ class RawGameState:
     active_party_status: int | None = None
     active_party_moves: tuple[int, ...] | None = None
     active_party_pp: tuple[int, ...] | None = None
+    player_money: int | None = None
 
     @property
     def battler_level(self) -> int | None:
@@ -3430,6 +3431,7 @@ class PokemonRedStateReader:
             active_party_status=active_party_status,
             active_party_moves=active_party_moves,
             active_party_pp=active_party_pp,
+            player_money=self._read_bcd(RamAddress.PLAYER_MONEY, 3),
         )
 
     def read_pokedex_state(self) -> RedPokedexState:
@@ -4301,6 +4303,16 @@ class PokemonRedStateReader:
 
     def _read_u16_be(self, address: int) -> int:
         return (self._memory.read_u8(address) << 8) | self._memory.read_u8(address + 1)
+
+    def _read_bcd(self, address: int, length: int) -> int:
+        value = 0
+        for offset in range(length):
+            packed = self._memory.read_u8(address + offset)
+            high, low = packed >> 4, packed & 0x0F
+            if high > 9 or low > 9:
+                raise SemanticStateError("packed decimal observation contains an invalid digit")
+            value = value * 100 + high * 10 + low
+        return value
 
 
 def _travel_boundary(raw: RawGameState) -> TravelBoundary:
