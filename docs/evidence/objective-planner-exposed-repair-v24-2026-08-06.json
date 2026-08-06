@@ -1,0 +1,44 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v24",
+  "source_commit": "7d9125ae54271f16bd9f75b573633bb1d6bd0fe9",
+  "source_bundle_sha256": "03b70dc448ad2a6e9d03bf82c82a0c81ddc02ac3b7322749b909dc6b5fc1f8db",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1510002,
+    "battle_start_schedule_sha256": "e1ace486d434f844ba505ecfded3cd1f4ec6e750ce08188c3d965f80f9b23925",
+    "private_log_sha256": "1e5a11179dc9bcf52fd09d1b80143cec0ff694bf056b34cd4dd9bf7c885aabb2",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 73,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false
+  },
+  "repair_iterations": [
+    {
+      "attempt": 1,
+      "status": "failed",
+      "qualified_checkpoints": 101,
+      "failure": "Both carried paralysis cures were legitimately consumed during the income battles, so the first field-cure-only repair had no item available.",
+      "private_log_sha256": "85d39e72675e225c5a3f2f418ddea96071a6a991a12a7059ccf344a285e4454a"
+    },
+    {
+      "attempt": 2,
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "private_log_sha256": "1e5a11179dc9bcf52fd09d1b80143cec0ff694bf056b34cd4dd9bf7c885aabb2"
+    }
+  ],
+  "repairs_verified": [
+    "A supported terminal status is cured before the Route 11 grass return whenever its matching item survives",
+    "When no cure survives, the teacher pivots to an observed healthy status-free reserve, heals at the Center, and restores the workhorse lead",
+    "Tunnel status supplies are topped up from live inventory rather than assuming every earlier cure was exhausted",
+    "Failed wild escapes count actual RUN attempts and use a command-safe dialogue action before reselection",
+    "All downstream balanced-team, level-60 workhorse, Champion, and Hall of Fame contracts pass together"
+  ]
+}
