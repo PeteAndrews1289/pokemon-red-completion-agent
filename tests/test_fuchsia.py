@@ -89,6 +89,7 @@ def test_battle_bag_selection_can_move_backward_after_a_ball_throw(monkeypatch) 
     assert fuchsia_module.SNORLAX_TM34_SALE_PROCEEDS == 1_000
     assert fuchsia_module.SNORLAX_POKE_BALL_RESERVE == 1
     assert fuchsia_module.SNORLAX_CAPTURE_POLICY.max_throws == 33
+    assert fuchsia_module.SNORLAX_CAPTURE_POLICY.retreat_hp_ratio == 0.65
 
     class Emulator:
         cursor = 2

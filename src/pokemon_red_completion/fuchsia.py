@@ -80,7 +80,10 @@ SNORLAX_CAPTURE_POLICY = CapturePolicy(
     # cover the complete bounded throw policy and are sold after capture, but
     # do not depend on variable leftovers from earlier species searches.
     max_throws=33,
-    retreat_hp_ratio=0.35,
+    # A failed throw gives Snorlax a free turn.  Heal before the lead enters
+    # Headbutt's held-out critical/damage-roll range instead of waiting for a
+    # generic low-health threshold that is only safe between attacks.
+    retreat_hp_ratio=0.65,
 )
 BATTLE_PP_BOUNDS = (
     (1, 8),
@@ -1216,7 +1219,12 @@ def _run_wild_capture(
             _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
             continue
         if raw.battle_state != 1 or (raw.battler_hp or 0) <= 0:
-            raise FuchsiaChapterError("Snorlax battle lost the qualified lead.")
+            raise FuchsiaChapterError(
+                "Snorlax battle lost the qualified lead: "
+                f"battle_state={raw.battle_state}, hp={raw.battler_hp!r}, "
+                f"max_hp={raw.battler_max_hp!r}, throws={throws_used}, "
+                f"recovery_items={recovery_items_used}."
+            )
         menu = reader.read_battle_menu_state(raw)
         if menu.phase is BattleMenuPhase.UNKNOWN:
             _pulse(
