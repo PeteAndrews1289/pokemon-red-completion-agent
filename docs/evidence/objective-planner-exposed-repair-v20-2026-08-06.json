@@ -1,0 +1,34 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v20",
+  "source_commit": "1aa886e40a94fe93cf5c86498b6868da21724245",
+  "source_bundle_sha256": "9d284c9fa4165ea5b7aeccef2fe2a1b600f213b7e812565a4eaab5ab2caa2630",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1430002,
+    "battle_start_schedule_sha256": "9ec068bb278f0ffdb58a66d6de30a5d0e07ff9b052272a7676b4891bf2f6fb8e",
+    "private_log_sha256": "fab82f6105ec7629b170fdf03b5ad800d309fa4c102a5ef65df624fadbbd5563",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 73,
+    "teacher_objective_fallbacks": 0,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "observed_capture_variation": "Route 12 Snorlax caught in 7 throws"
+  },
+  "repair_iterations": [
+    {
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "private_log_sha256": "fab82f6105ec7629b170fdf03b5ad800d309fa4c102a5ef65df624fadbbd5563"
+    }
+  ],
+  "repairs_verified": [
+    "Seven funded Awakenings cover the exposed five-cure Rock Tunnel lineage while retaining the downstream reserve",
+    "The same exposed battle schedule clears all nine Tunnel trainers and the Lavender resource contract",
+    "Pokemon Tower, balanced six-member team development, level-60 workhorse, Champion, and Hall of Fame contracts pass downstream without another source change"
+  ]
+}
