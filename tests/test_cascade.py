@@ -1098,6 +1098,43 @@ def test_route_24_long_team_uses_unscheduled_pp_aware_runtime(
     assert observed["consume_battle_start_schedule"] is False
 
 
+def test_route_24_long_team_uses_accurate_move_to_finish_low_hp_enemy(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    observed: dict[str, object] = {}
+    state = RawGameState(
+        True,
+        MapId.ROUTE_24,
+        10,
+        8,
+        1,
+        2,
+        first_party_moves=(1, 2, 3, 4),
+        first_party_pp=(35, 30, 15, 25),
+        active_party_moves=(1, 2, 3, 4),
+        active_party_pp=(35, 30, 15, 25),
+        enemy_hp=8,
+        enemy_max_hp=37,
+    )
+
+    def fake_runtime(*args: object, **kwargs: object) -> RawGameState:
+        policy = args[2]
+        assert callable(policy)
+        observed["slot"] = policy(state)
+        return replace(state, battle_state=0)
+
+    monkeypatch.setattr(cascade_module, "run_adaptive_trainer_battle", fake_runtime)
+
+    _run_route_24_usable_move_battle(
+        cast(object, object()),
+        cast(object, object()),
+        trainer_index=3,
+        timing=DEFAULT_CASCADE_TIMING,
+    )
+
+    assert observed["slot"] == 4
+
+
 @pytest.mark.parametrize(
     "quantity",
     (0, CERULEAN_RIVAL_MAX_POTION_RESERVE + 1),

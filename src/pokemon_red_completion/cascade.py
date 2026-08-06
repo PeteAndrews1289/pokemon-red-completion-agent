@@ -88,6 +88,7 @@ ROUTE_24_CENTER_RECOVERY_POSITION = 2
 ROUTE_24_ACCURACY_RECOVERY_POSITION = 3
 ROUTE_24_FINAL_RECOVERY_POSITION = 4
 ROUTE_24_ACCURACY_RECOVERY_HP = 40
+ROUTE_24_ACCURATE_FINISH_HP = 12
 ROUTE_25_RECOVERY_POTION_RESERVE = 5
 CERULEAN_GYM_POTION_RESERVE = 8
 CERULEAN_GYM_START_POTION_RESERVE = 7
@@ -2427,9 +2428,28 @@ def _choose_preferred_usable_move_slot(
     preferences = tuple(dict.fromkeys((preferred_slot, 4, 3, 1, 2)))
     for slot in preferences:
         index = slot - 1
-        if moves[index] and (pp[index] & 0x3F) > 0:
+        if (
+            moves[index]
+            and (pp[index] & 0x3F) > 0
+            and not (
+                state.player_disabled_move_slot == slot
+                and (state.player_disable_turns or 0) > 0
+            )
+        ):
             return slot
     raise CascadeChapterError("Route 25 battle has no usable move PP.")
+
+
+def _choose_route_24_long_team_move_slot(state: RawGameState) -> int:
+    """Prefer the accurate finisher once the last opponent is nearly down."""
+
+    preferred_slot = (
+        4
+        if state.enemy_hp is not None
+        and 0 < state.enemy_hp <= ROUTE_24_ACCURATE_FINISH_HP
+        else 3
+    )
+    return _choose_preferred_usable_move_slot(state, preferred_slot=preferred_slot)
 
 
 def _run_route_25_usable_move_battle(
@@ -2486,9 +2506,10 @@ def _run_route_24_usable_move_battle(
 
     def policy(state: RawGameState) -> int:
         # Mega Punch usually shortens the four-opponent battle enough to avoid
-        # compounding poison and Wrap damage; fall back to any live move when
-        # accuracy or PP variation exhausts the preferred slot.
-        return _choose_preferred_usable_move_slot(state, preferred_slot=3)
+        # compounding poison and Wrap damage. Once the final opponent is in
+        # guaranteed Water Gun range, prefer its perfect accuracy rather than
+        # risking another damaging reply on a Mega Punch miss.
+        return _choose_route_24_long_team_move_slot(state)
 
     try:
         return run_adaptive_trainer_battle(
