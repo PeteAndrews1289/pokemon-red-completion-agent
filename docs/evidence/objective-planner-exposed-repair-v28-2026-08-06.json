@@ -1,0 +1,48 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v28",
+  "source_commit": "7daec60eb82d1a4f5af0944f4544d5c6ce76ea9a",
+  "source_bundle_sha256": "729d36d41fb212aded9bc901a5e6d0b220e9c466151a09aa66d2b59b75ce68a1",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1620001,
+    "battle_start_schedule_sha256": "1bd9aff259e2e58106af8fb4051eaeae7ab145a4f0da146b15642628fb553308",
+    "private_log_sha256": "912a375a3300fe034b4a2139867d2587230fa4dc935c290d54b594cc0ab5a01b",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 74,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "actions_executed": 95531,
+    "party_size": 6,
+    "workhorse_level": 60,
+    "snorlax_throws": 21,
+    "snorlax_recovery_items_used": 4
+  },
+  "repair_iterations": [
+    {
+      "attempt": 1,
+      "status": "failed",
+      "qualified_checkpoints": 174,
+      "failure": "The raised survival threshold correctly healed the catcher twice, then stopped safely because the inherited two-item recovery reserve was exhausted during the 21-throw capture sequence.",
+      "private_log_sha256": "6d601e40939bb209b6a03d5ec69bb7191ac39fd6ac2118cbc34163a1085a52f9"
+    },
+    {
+      "attempt": 2,
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "private_log_sha256": "912a375a3300fe034b4a2139867d2587230fa4dc935c290d54b594cc0ab5a01b"
+    }
+  ],
+  "repairs_verified": [
+    "The capture policy heals before a failed throw can expose the qualified lead to a legal knockout roll",
+    "The resource planner retains seven Super Potions for the complete bounded Headbutt damage budget instead of selling the tunnel surplus",
+    "The exposed 21-throw capture consumed four planned restores, caught Snorlax, and preserved every party member",
+    "The balanced six-member party, level-60 workhorse, Champion, and Hall of Fame contracts pass together"
+  ]
+}
