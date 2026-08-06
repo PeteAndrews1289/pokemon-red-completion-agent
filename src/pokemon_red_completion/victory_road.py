@@ -1005,7 +1005,7 @@ def _defeat_route22_rival(
                         emulator,
                         continuation_target,
                         label="Route 22 rival fainted-member continuation",
-                        wait_frames=DEFAULT_SILPH_TIMING.wait_frames,
+                        wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
                     )
                 except ProtectedRecoveryError as pivot_error:
                     raise VictoryRoadChapterError(
