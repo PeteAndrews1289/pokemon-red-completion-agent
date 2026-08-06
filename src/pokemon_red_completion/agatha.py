@@ -15,6 +15,10 @@ from pokemon_red_completion.battle_actions import (
     recovery_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import (
+    ProtectedRecoveryError,
+    switch_active_battler,
+)
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleRecoveryCapability,
@@ -93,6 +97,7 @@ AGATHA_SURF_RESERVE = 1
 AGATHA_X_SPECIAL_USE = 1
 AGATHA_ELIXIR_USE = 1
 AGATHA_FORCED_SWITCH_LIMIT = 5
+AGATHA_EMERGENCY_REVIVE_RESERVE = 1
 
 
 class EmulatorState(Protocol):
@@ -264,12 +269,22 @@ def run_agatha_chapter(
     class _BoostBoundary(BattleControlRequest):
         default_action = BattleAction.boost(BattleBoostStat.SPECIAL)
 
+    class _ReviveLeadBoundary(BattleControlRequest):
+        default_action = BattleAction.recovery()
+
+    class _ReturnLeadBoundary(BattleControlRequest):
+        default_action = BattleAction.switch(1)
+
     boosts_used = 0
     forced_switches = 0
 
     def policy(raw: RawGameState) -> int:
         if boosts_used < AGATHA_X_SPECIAL_USE:
             raise _BoostBoundary
+        if raw.active_party_index not in {None, 0}:
+            if _party_hp(emulator)[0] == 0:
+                raise _ReviveLeadBoundary
+            raise _ReturnLeadBoundary
         hp = raw.battler_hp or 0
         status = raw.battler_status or 0
         if _agatha_recovery_due(raw):
@@ -337,6 +352,26 @@ def run_agatha_chapter(
                 if terminal:
                     note_observed_trainer_battle_exit(battle_intent)
                     break
+                continue
+            if isinstance(error.__cause__, _ReviveLeadBoundary):
+                _battle_revive_lead(reader, actions, emulator)
+                continue
+            if control_request_matches(
+                error.__cause__, _ReturnLeadBoundary.default_action
+            ):
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        0,
+                        label="Agatha revived lead return",
+                        wait_frames=DEFAULT_SILPH_TIMING.menu_frames,
+                    )
+                except ProtectedRecoveryError as switch_error:
+                    raise AgathaChapterError(
+                        "Agatha could not return the revived workhorse."
+                    ) from switch_error
                 continue
             if control_request_matches(error.__cause__, _BoostBoundary.default_action):
                 _battle_x_special(reader, actions, emulator)
@@ -720,6 +755,51 @@ def _battle_x_special(
     raise AgathaChapterError(
         f"{item.name} was not consumed after two bounded selections: "
         f"initial={initial}, after={_bag(emulator).get(item, 0)}."
+    )
+
+
+def _battle_revive_lead(
+    reader: PokemonRedStateReader,
+    actions: _CountingExecutor,
+    emulator: EmulatorState,
+) -> None:
+    """Spend the dedicated Agatha Revive while a living teammate absorbs the turn."""
+
+    raw = reader.read()
+    before = _bag(emulator).get(ItemId.REVIVE, 0)
+    if (
+        raw.battle_state != 2
+        or raw.active_party_index in {None, 0}
+        or _party_hp(emulator)[0] != 0
+        or before < 2 + AGATHA_EMERGENCY_REVIVE_RESERVE
+        or reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN
+    ):
+        raise AgathaChapterError(
+            "Agatha emergency revive boundary is not qualified: "
+            f"active={raw.active_party_index}, party_hp={_party_hp(emulator)!r}, "
+            f"revives={before}."
+        )
+    _select_battle_main_command(actions, reader, 1)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _select_bag_item(actions, emulator, ItemId.REVIVE, DEFAULT_LAVENDER_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _select_cursor(actions, emulator, 0, DEFAULT_LAVENDER_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(40):
+        current = reader.read()
+        if (
+            _bag(emulator).get(ItemId.REVIVE, 0) == before - 1
+            and _party_hp(emulator)[0] > 0
+            and (
+                (current.battler_hp or 0) == 0
+                or reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+            )
+        ):
+            return
+        _pulse(actions, MacroActionKind.CONFIRM)
+    raise AgathaChapterError(
+        "Agatha emergency revive did not restore the workhorse: "
+        f"party_hp={_party_hp(emulator)!r}, revives={_bag(emulator).get(ItemId.REVIVE, 0)}."
     )
 
 

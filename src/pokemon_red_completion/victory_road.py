@@ -116,6 +116,7 @@ INDIGO_FULL_RESTORE_RESERVE = 7
 INDIGO_FULL_HEAL_RESERVE = 6
 INDIGO_X_SPECIAL_RESERVE = 8
 INDIGO_X_SPECIAL_PURCHASE = 8
+INDIGO_REVIVE_RESERVE = 3
 COLLECTION_POKE_BALL_REMAINDER_BOUNDS = (0, 30)
 VICTORY_ROAD_INPUT_HYPER_POTION_BOUNDS = (0, 7)
 BADGE_CHECK_EVENTS = (
@@ -248,7 +249,7 @@ class VictoryRoadChapterReport:
             and self.vr2_switch2_set
             and self.full_restores == INDIGO_FULL_RESTORE_RESERVE
             and self.full_heals == INDIGO_FULL_HEAL_RESERVE
-            and self.revives == 2
+            and self.revives == INDIGO_REVIVE_RESERVE
             and self.hyper_potions == 11
             and self.x_specials == INDIGO_X_SPECIAL_RESERVE
             and self.max_repels == 0
@@ -813,8 +814,8 @@ def run_victory_road_chapter(
         DEFAULT_LAVENDER_TIMING,
         absolute_index=5,
         item=ItemId.REVIVE,
-        quantity=2,
-        target_bag_quantity=2,
+        quantity=INDIGO_REVIVE_RESERVE,
+        target_bag_quantity=INDIGO_REVIVE_RESERVE,
     )
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     final = reader.read()

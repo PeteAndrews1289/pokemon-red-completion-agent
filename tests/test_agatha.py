@@ -6,6 +6,7 @@ from pokemon_red_completion.agatha import (
     AGATHA_APPROACH,
     AGATHA_CHECKPOINT_COUNT,
     AGATHA_ELIXIR_USE,
+    AGATHA_EMERGENCY_REVIVE_RESERVE,
     AGATHA_FORCED_SWITCH_LIMIT,
     AGATHA_PARTY,
     AGATHA_RNG_DELAY_FRAMES,
@@ -37,6 +38,7 @@ def test_agatha_source_contract_is_exact() -> None:
     assert AGATHA_APPROACH == ("right", "up", "up")
     assert AGATHA_RNG_DELAY_FRAMES == 85
     assert AGATHA_ELIXIR_USE == 1
+    assert AGATHA_EMERGENCY_REVIVE_RESERVE == 1
     assert AGATHA_X_SPECIAL_USE == 1
     assert AGATHA_FORCED_SWITCH_LIMIT == 5
     assert AGATHA_SAFE_HP == 140
