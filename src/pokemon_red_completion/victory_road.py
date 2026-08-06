@@ -22,6 +22,7 @@ from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_recovery import (
     ProtectedRecoveryError,
     protected_lead_recovery,
+    switch_active_battler,
 )
 from pokemon_red_completion.battle_recovery import (
     _select_battle_main_command as _select_shared_battle_main_command,
@@ -915,8 +916,8 @@ def _defeat_route22_rival(
                 species,
                 raw.enemy_level or 0,
                 raw.enemy_hp or 0,
-                raw.first_party_hp or 0,
-                raw.first_party_pp or (0, 0, 0, 0),
+                raw.battler_hp or 0,
+                raw.battler_pp or (0, 0, 0, 0),
                 slot,
             )
         )
@@ -951,7 +952,8 @@ def _defeat_route22_rival(
             0x9A: ROUTE_22_VENUSAUR_HEAL_THRESHOLD,
         }.get(species, ROUTE_22_DEFAULT_HEAL_THRESHOLD)
         if (
-            (raw.first_party_hp or 0) < heal_threshold
+            raw.active_party_index in {None, 0}
+            and (raw.battler_hp or 0) < heal_threshold
             and len(turns) != last_recovery_turn
             and potions_used < recovery_reserve
         ):
@@ -960,6 +962,7 @@ def _defeat_route22_rival(
 
     next_sacrifice = 1
     pivot_heals = 0
+    faint_pivots = 0
     while reader.read().battle_state:
         try:
             run_adaptive_trainer_battle(
@@ -984,12 +987,37 @@ def _defeat_route22_rival(
         except BattleRuntimeError as error:
             cause = error.__cause__
             learned_pivot = learned_switch_party_index(cause)
+            failed = reader.read()
+            continuation_target = _route22_fainted_pivot_target(
+                failed,
+                _party_hp(emulator),
+            )
+            if continuation_target is not None:
+                party_hp = _party_hp(emulator)
+                if faint_pivots >= max(0, len(party_hp) - 1):
+                    raise VictoryRoadChapterError(
+                        "Route 22 rival exhausted its living-party continuation bound."
+                    ) from error
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        continuation_target,
+                        label="Route 22 rival fainted-member continuation",
+                        wait_frames=DEFAULT_SILPH_TIMING.wait_frames,
+                    )
+                except ProtectedRecoveryError as pivot_error:
+                    raise VictoryRoadChapterError(
+                        "Route 22 rival could not continue through its living party."
+                    ) from pivot_error
+                faint_pivots += 1
+                continue
             if (
                 not recovery_request_matches(cause, _HealBoundary)
                 and not isinstance(cause, _PivotBoundary)
                 and learned_pivot is None
             ):
-                failed = reader.read()
                 raise VictoryRoadChapterError(
                     "Route 22 rival battle runtime failed after recovery: "
                     f"party_hp={_party_hp(emulator)!r}, potions={potions_used}, "
@@ -1578,6 +1606,23 @@ def _rival_moves_valid(turns: Iterable[RivalTurn]) -> bool:
 
 
 def _route22_rival_move_slot(raw: RawGameState) -> int:
+    if raw.active_party_index not in {None, 0}:
+        if raw.battler_moves is None or raw.battler_pp is None:
+            raise VictoryRoadChapterError("Route 22 reserve lacks active move evidence.")
+        for slot, (move, pp) in enumerate(
+            zip(raw.battler_moves, raw.battler_pp, strict=True),
+            start=1,
+        ):
+            if (
+                move
+                and pp & 0x3F
+                and not (
+                    raw.player_disabled_move_slot == slot
+                    and (raw.player_disable_turns or 0) > 0
+                )
+            ):
+                return slot
+        raise VictoryRoadChapterError("Route 22 reserve has no legal move with PP.")
     species = raw.enemy_species_id or 0
     try:
         priorities = RIVAL_PRIORITIES[species]
@@ -1592,6 +1637,25 @@ def _route22_rival_move_slot(raw: RawGameState) -> int:
         ):
             return slot
     raise VictoryRoadChapterError("Route 22 rival policy has no legal move with PP.")
+
+
+def _route22_fainted_pivot_target(
+    raw: RawGameState,
+    party_hp: tuple[int, ...],
+) -> int | None:
+    """Choose a living teammate after a nonterminal Route 22 faint."""
+
+    if raw.battle_state != 2 or (raw.battler_hp or 0) > 0:
+        return None
+    active_index = raw.active_party_index
+    return next(
+        (
+            index
+            for index, hp in enumerate(party_hp)
+            if hp > 0 and index != active_index
+        ),
+        None,
+    )
 
 
 def _checkpoint(
