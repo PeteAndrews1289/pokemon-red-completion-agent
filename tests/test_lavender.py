@@ -64,7 +64,7 @@ def _report() -> LavenderChapterReport:
             44,
             1,
         )
-        for index in range(12)
+        for index in range(14)
     )
     return LavenderChapterReport(
         records=records,
@@ -751,7 +751,7 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
     public = _report().public_dict()
 
     assert public["status"] == "ok"
-    assert len(public["trainer_battles"]) == 12
+    assert len(public["trainer_battles"]) == 14
     assert public["inventory"] == {
         "repels_purchased": 4,
         "repels_used": 4,

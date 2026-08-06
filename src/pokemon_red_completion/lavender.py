@@ -260,8 +260,8 @@ class LavenderChapterReport:
     def passed(self) -> bool:
         return (
             len(self.records) == LAVENDER_CHECKPOINT_COUNT
-            and len(self.trainers) == 12
-            and len({item.event for item in self.trainers}) == 12
+            and len(self.trainers) == 14
+            and len({item.event for item in self.trainers}) == 14
             and all(item.selected_pp_spent > 0 for item in self.trainers)
             and all(
                 item.party_preserved
