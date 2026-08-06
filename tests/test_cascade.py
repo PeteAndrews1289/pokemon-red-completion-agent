@@ -257,6 +257,13 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
     assert TM01_FIELD_MENU_CLOSE_PULSES == 2
     assert CERULEAN_RIVAL_MAX_POTION_RESERVE == CERULEAN_RIVAL_POTION_RESERVE + 4
     assert ROUTE_24_RECOVERY_POTION_RESERVE == 6
+    assert cascade_module.ROUTE_24_SECOND_RECOVERY_POSITION == 1
+    assert (
+        ROUTE_24_REQUIRED_TRAINER_INDEXES[
+            cascade_module.ROUTE_24_SECOND_RECOVERY_POSITION
+        ]
+        == 4
+    )
     assert cascade_module.ROUTE_24_FINAL_RECOVERY_POSITION == 4
     assert ROUTE_25_RECOVERY_POTION_RESERVE == 5
     assert CERULEAN_GYM_POTION_RESERVE == 8
