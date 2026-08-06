@@ -342,6 +342,13 @@ def test_encounter_aware_corridor_preserves_the_interrupted_grass_step(
     assert (final.player_x, final.player_y, final.battle_state) == (12, 6, 0)
 
 
+def test_post_collection_pc_route_visits_nurse_before_exiting() -> None:
+    assert surge_module.VERMILION_PC_TO_NURSE == surge_module._directions(
+        "LLLLDLLLLDLUULU"
+    )
+    assert surge_module.VERMILION_NURSE_TO_EXIT == surge_module._directions("DDDDD")
+
+
 def test_ball_decrement_waits_for_persistent_stack_sync(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

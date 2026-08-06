@@ -145,6 +145,8 @@ VIRIDIAN_TO_CENTER_DIRECTIONS = _directions("UUUUULUULUURRRRU")
 VIRIDIAN_CENTER_RETURN_DIRECTIONS = _directions("LLLLDDRDDRDDDDD")
 VERMILION_ROUTE_11_TO_CENTER_EXTERIOR = _directions("LL" + "U" * 10 + "L" * 10)
 VERMILION_CENTER_TO_ROUTE_11 = _directions("R" * 10 + "D" * 10 + "RR")
+VERMILION_PC_TO_NURSE = _directions("LLLLDLLLLDLUULU")
+VERMILION_NURSE_TO_EXIT = _directions("DDDDD")
 
 
 class EmulatorState(Protocol):
@@ -2909,13 +2911,37 @@ def _store_wild_collection_specimens(
     _move(
         executor,
         reader,
-        _directions("L" * 4 + "D" + "L" * 4 + "DLUU" + "L" + "D" * 4),
+        VERMILION_PC_TO_NURSE,
+        timing,
+        "Vermilion collection nurse",
+    )
+    _require(reader.read(), MapId.VERMILION_POKECENTER, (3, 3), 0, "collection nurse")
+    _confirm(executor, 9, 240)
+    healed = reader.read()
+    if (
+        healed.party_species_ids
+        != (WARTORTLE_SPECIES_ID, DUX_SPECIES_ID, DIGLETT_SPECIES_ID)
+        or healed.party_hp != healed.party_max_hp
+        or any(healed.party_status or ())
+    ):
+        raise SurgeChapterError(
+            "Vermilion Center did not restore the complete post-collection party."
+        )
+    _move(
+        executor,
+        reader,
+        VERMILION_NURSE_TO_EXIT,
         timing,
         "Vermilion Center collection exit",
     )
     _wait(executor, timing.transition_frames)
-    if reader.read().map_id != MapId.VERMILION_CITY:
-        raise SurgeChapterError("Wild collection storage did not restore Vermilion field control.")
+    _require(
+        reader.read(),
+        MapId.VERMILION_CITY,
+        (11, 4),
+        0,
+        "post-collection healed boundary",
+    )
 
 
 def _approach_vermilion_pc(
