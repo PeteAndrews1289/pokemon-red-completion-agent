@@ -451,6 +451,61 @@ def test_silph_verified_movement_yields_to_celadon_mart_entry_customer() -> None
     )
 
 
+def test_silph_verified_movement_yields_at_ice_beam_mart_entry() -> None:
+    blocked = replace(
+        _terminal(),
+        map_id=MapId.CELADON_CITY,
+        player_x=10,
+        player_y=14,
+    )
+
+    class Reader:
+        state = blocked
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    class Executor:
+        return_attempts = 0
+
+        def __init__(self, reader: Reader) -> None:
+            self.reader = reader
+
+        def execute(self, action: object) -> None:
+            assert isinstance(action, MacroAction)
+            if action.kind is not MacroActionKind.MOVE:
+                return
+            coordinate = (self.reader.state.player_x, self.reader.state.player_y)
+            if action.value == "right" and coordinate == (10, 14):
+                self.reader.state = replace(self.reader.state, player_x=11)
+            elif action.value == "left" and coordinate == (11, 14):
+                self.return_attempts += 1
+                if self.return_attempts >= 2:
+                    self.reader.state = replace(self.reader.state, player_x=10)
+            elif action.value == "up" and coordinate == (10, 14):
+                self.reader.state = replace(
+                    self.reader.state,
+                    map_id=MapId.CELADON_MART_1F,
+                    player_x=16,
+                    player_y=7,
+                )
+
+    reader = Reader()
+    final = _move_verified(
+        Executor(reader),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        ("up",),
+        replace(DEFAULT_SILPH_TIMING, movement_frames=1),
+        "Celadon Ice Beam Mart approach",
+    )
+
+    assert (final.map_id, final.player_x, final.player_y) == (
+        MapId.CELADON_MART_1F,
+        16,
+        7,
+    )
+
+
 def test_mart_2f_ascent_yield_retries_when_customer_blocks_return() -> None:
     blocked = replace(
         _terminal(),
