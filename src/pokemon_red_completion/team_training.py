@@ -181,12 +181,32 @@ class DevelopedTeamPolicy:
     roster: TeamRosterPlan
     workhorse_species_id: int
     workhorse_target_level: int = 75
+    level_parity: LevelParityContract | None = None
+    parity_opposition_level: int | None = None
 
     def __post_init__(self) -> None:
         if self.workhorse_species_id not in self.roster.species_ids:
             raise ValueError("workhorse_species_id must belong to the final-form roster")
         if not MIN_LEVEL < self.workhorse_target_level <= MAX_LEVEL:
             raise ValueError(f"workhorse_target_level must be between 2 and {MAX_LEVEL}")
+        if (self.level_parity is None) != (self.parity_opposition_level is None):
+            raise ValueError(
+                "level_parity and parity_opposition_level must be provided together"
+            )
+        if self.parity_opposition_level is not None and not (
+            MIN_LEVEL <= self.parity_opposition_level <= MAX_LEVEL
+        ):
+            raise ValueError(f"parity_opposition_level must be between {MIN_LEVEL} and {MAX_LEVEL}")
+
+    @property
+    def trains_whole_party(self) -> bool:
+        """Whether this policy trains every member or only the workhorse.
+
+        Left ``False`` by default so the completion-efficient behaviour is
+        unchanged until a caller opts in deliberately.
+        """
+
+        return self.level_parity is not None and self.parity_opposition_level is not None
 
 
 @dataclass(frozen=True, slots=True)
@@ -308,6 +328,31 @@ def plan_team_development(
             f"workhorse is below level {policy.workhorse_target_level}",
             target_slot=workhorse.slot,
         )
+    if policy.trains_whole_party:
+        assert policy.level_parity is not None
+        assert policy.parity_opposition_level is not None
+        behind = policy.level_parity.members_behind(party, policy.parity_opposition_level)
+        if behind:
+            trainable = [member for member in behind if member.is_trainable]
+            if not trainable:
+                return TeamTrainingDecision(
+                    TeamTrainingDirective.RESTORE_TEAM,
+                    "no member trailing the opposition can currently gain experience",
+                )
+            weakest = min(trainable, key=lambda member: (member.level, member.slot))
+            required = policy.level_parity.required_level(policy.parity_opposition_level)
+            directive = (
+                TeamTrainingDirective.TRAIN_MEMBER
+                if weakest.slot == LEAD_SLOT
+                else TeamTrainingDirective.SWITCH_TRAINEE
+            )
+            return TeamTrainingDecision(
+                directive,
+                f"slot {weakest.slot} is level {weakest.level}, below the level {required} "
+                f"needed against opposition at {policy.parity_opposition_level}",
+                target_slot=weakest.slot,
+            )
+
     return TeamTrainingDecision(
         TeamTrainingDirective.STOP,
         "final-form roster and workhorse target are complete",

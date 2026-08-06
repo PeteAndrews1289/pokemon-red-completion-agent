@@ -528,3 +528,84 @@ def test_level_parity_rejects_an_empty_party_and_invalid_opposition() -> None:
         contract.required_level(0)
     with pytest.raises(ValueError, match="max_levels_behind"):
         LevelParityContract(max_levels_behind=-1)
+
+
+# --- parity continuation past the workhorse ----------------------------------
+
+
+def _roster6() -> TeamRosterPlan:
+    roles = list(PartyRole)
+    return TeamRosterPlan(
+        tuple(RosterSlot(roles[i], species) for i, species in enumerate((1, 2, 3, 4, 5, 6)))
+    )
+
+
+def test_workhorse_policy_stops_without_looking_at_the_rest_of_the_party() -> None:
+    """The measured behaviour: 27 battles, workhorse at target, five members ignored."""
+
+    policy = DevelopedTeamPolicy(_roster6(), workhorse_species_id=1, workhorse_target_level=60)
+    assert not policy.trains_whole_party
+    decision = plan_team_development(party(68, 20, 26, 30, 25, 30), policy)
+    assert decision.directive is TeamTrainingDirective.STOP
+
+
+def test_parity_continuation_trains_the_members_the_workhorse_gate_skipped() -> None:
+    from pokemon_red_completion.team_training import LevelParityContract
+
+    policy = DevelopedTeamPolicy(
+        _roster6(),
+        workhorse_species_id=1,
+        workhorse_target_level=60,
+        level_parity=LevelParityContract(max_levels_behind=5),
+        parity_opposition_level=65,
+    )
+    assert policy.trains_whole_party
+    decision = plan_team_development(party(68, 20, 26, 30, 25, 30), policy)
+    assert decision.directive is TeamTrainingDirective.SWITCH_TRAINEE
+    assert decision.target_slot == 2
+    assert "below the level 60" in decision.reason
+    assert "opposition at 65" in decision.reason
+
+
+def test_parity_continuation_stops_once_every_member_reaches_parity() -> None:
+    from pokemon_red_completion.team_training import LevelParityContract
+
+    policy = DevelopedTeamPolicy(
+        _roster6(),
+        workhorse_species_id=1,
+        workhorse_target_level=60,
+        level_parity=LevelParityContract(max_levels_behind=5),
+        parity_opposition_level=65,
+    )
+    decision = plan_team_development(party(68, 60, 61, 62, 60, 63), policy)
+    assert decision.directive is TeamTrainingDirective.STOP
+
+
+def test_parity_continuation_restores_when_the_trailing_members_cannot_act() -> None:
+    from pokemon_red_completion.team_training import LevelParityContract
+
+    policy = DevelopedTeamPolicy(
+        _roster6(),
+        workhorse_species_id=1,
+        workhorse_target_level=60,
+        level_parity=LevelParityContract(max_levels_behind=5),
+        parity_opposition_level=65,
+    )
+    members = (
+        member(1, 68),
+        *(member(index, 20, moves=(move(55, 0),)) for index in range(2, 7)),
+    )
+    decision = plan_team_development(PartyObservation(members=members), policy)
+    assert decision.directive is TeamTrainingDirective.RESTORE_TEAM
+    assert "trailing the opposition" in decision.reason
+
+
+def test_parity_configuration_must_be_complete() -> None:
+    from pokemon_red_completion.team_training import LevelParityContract
+
+    with pytest.raises(ValueError, match="provided together"):
+        DevelopedTeamPolicy(
+            _roster6(), workhorse_species_id=1, level_parity=LevelParityContract()
+        )
+    with pytest.raises(ValueError, match="provided together"):
+        DevelopedTeamPolicy(_roster6(), workhorse_species_id=1, parity_opposition_level=65)
