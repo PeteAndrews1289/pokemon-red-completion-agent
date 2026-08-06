@@ -1,0 +1,47 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v27",
+  "source_commit": "2add22d809db0f44be2e4c2a6565181dcc7406d4",
+  "source_bundle_sha256": "c1c23218589aa6fd650c228ffd138ce6165a39e7ca9930b6765570a14d3bd8aa",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1570002,
+    "battle_start_schedule_sha256": "f9f21b64a460c225f24170c1be3d900f4306fd3bcfe08760620576f7ea25aae3",
+    "private_log_sha256": "c08dbfc88e90b5e20bf0aaad11a45d5c22ea68a3f949b1e1a49eb202387ef0b1",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 74,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "actions_executed": 91046,
+    "party_size": 6,
+    "workhorse_level": 60
+  },
+  "repair_iterations": [
+    {
+      "attempt": 1,
+      "status": "failed",
+      "qualified_checkpoints": 102,
+      "failure": "The stricter partial-purchase helper observed that an income battle had consumed one Super Potion, but the caller still supplied a quantity derived from the stale chapter-entry inventory.",
+      "private_log_sha256": "4491926cd7f3f9c66683593bcfc15b357f3595b75f5b0cd00adb32e76ac23e5c"
+    },
+    {
+      "attempt": 2,
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "private_log_sha256": "c08dbfc88e90b5e20bf0aaad11a45d5c22ea68a3f949b1e1a49eb202387ef0b1"
+    }
+  ],
+  "repairs_verified": [
+    "The tunnel purchase quantity is derived from the live observed Super Potion inventory after all income battles",
+    "Every observed pre-Mart recovery use is replaced before Route 9 without weakening the eleven-item tunnel reserve",
+    "A partial positive Mart purchase is settled, re-observed, and topped up within a fixed bound",
+    "The purchase ledger accounts for all live top-ups and all downstream chapter contracts",
+    "The balanced six-member party, level-60 workhorse, Champion, and Hall of Fame contracts pass together"
+  ]
+}
