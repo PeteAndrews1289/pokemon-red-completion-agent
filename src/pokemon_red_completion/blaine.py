@@ -929,16 +929,32 @@ def run_blaine_chapter(
     development = plan_team_development(
         PokemonRedPartyReader(emulator).read(), MANSION_DEVELOPMENT_POLICY
     )
+    team_battles = 0
+    team_healing_trips = 0
     if development.directive is TeamTrainingDirective.EVOLVE_MEMBER:
-        _, team_battles, team_healing_trips = _run_mansion_team_balancing(
+        _, evolution_battles, evolution_heals = _run_mansion_team_balancing(
             actions,
             reader,
             emulator,
             evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
         )
-    else:
-        team_battles = 0
-        team_healing_trips = 0
+        team_battles += evolution_battles
+        team_healing_trips += evolution_heals
+
+    # The evolution pass breaks as soon as the final species appears, without
+    # checking readiness.  Until now it was the only call, so the balancing pass
+    # below -- the one that enforces MANSION_TEAM_POLICY's level floor and
+    # spread -- was never reached, and the party finished the game at
+    # [68, 20, 26, 30, 25, 30].  Run it.
+    _, balance_battles, balance_heals = _run_mansion_team_balancing(
+        actions,
+        reader,
+        emulator,
+        progress_sink=progress,
+        completed_checkpoint_count=len(records),
+    )
+    team_battles += balance_battles
+    team_healing_trips += balance_heals
     team_readiness = _qualify_mansion_team_development(reader, emulator)
 
     _move(actions, reader, ("down",) * 5 + GYM_ENTRY_ROUTE, "Cinnabar Gym")
