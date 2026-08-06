@@ -1418,11 +1418,12 @@ def test_low_hp_main_gate_uses_one_bounded_surge_recovery(monkeypatch: pytest.Mo
     runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
     calls: list[int] = []
 
-    def recover(executor, reader, emulator, timing) -> None:
+    def recover(executor, reader, emulator, timing) -> bool:
         assert executor is runtime
         assert reader is runtime
         calls.append(runtime.raw.first_party_hp or 0)
         runtime.raw = replace(runtime.raw, first_party_hp=30, battle_state=0)
+        return True
 
     monkeypatch.setattr("pokemon_red_completion.surge._use_surge_super_potion", recover)
 
@@ -1449,9 +1450,10 @@ def test_surge_recovery_protects_the_observed_twelve_hp_switch_gate(
     runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
     calls: list[int] = []
 
-    def recover(executor, reader, emulator, timing) -> None:
+    def recover(executor, reader, emulator, timing) -> bool:
         calls.append(runtime.raw.first_party_hp or 0)
         runtime.raw = replace(runtime.raw, first_party_hp=32, battle_state=0)
+        return True
 
     monkeypatch.setattr("pokemon_red_completion.surge._use_surge_super_potion", recover)
 
@@ -1478,10 +1480,11 @@ def test_surge_recovery_heals_damage_carried_into_the_next_opponent(
     runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
     calls: list[int] = []
 
-    def recover(executor, reader, emulator, timing) -> None:
+    def recover(executor, reader, emulator, timing) -> bool:
         del executor, reader, emulator, timing
         calls.append(runtime.raw.first_party_hp or 0)
         runtime.raw = replace(runtime.raw, first_party_hp=30, battle_state=0)
+        return True
 
     monkeypatch.setattr("pokemon_red_completion.surge._use_surge_super_potion", recover)
 
@@ -1502,7 +1505,7 @@ def test_surge_controller_allows_two_bounded_recoveries(
     runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
     calls = 0
 
-    def recover(executor, reader, emulator, timing) -> None:
+    def recover(executor, reader, emulator, timing) -> bool:
         nonlocal calls
         del executor, reader, emulator, timing
         calls += 1
@@ -1511,6 +1514,7 @@ def test_surge_controller_allows_two_bounded_recoveries(
             first_party_hp=10,
             battle_state=0 if calls == 2 else 2,
         )
+        return True
 
     monkeypatch.setattr("pokemon_red_completion.surge._use_surge_super_potion", recover)
 
@@ -1525,6 +1529,30 @@ def test_surge_controller_allows_two_bounded_recoveries(
     assert dig_attacks == 0
     assert super_potions_used == 2
     assert calls == 2
+
+
+def test_surge_recovery_revalidates_an_already_full_transition(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    runtime = _PositiveHpSwitchPrompt()
+    runtime.raw = replace(
+        runtime.raw,
+        enemy_hp=43,
+        active_party_index=0,
+        first_party_hp=30,
+        first_party_max_hp=30,
+    )
+    runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    monkeypatch.setattr(
+        surge_module,
+        "_bag",
+        lambda _emulator: {ItemId.SUPER_POTION: 3},
+    )
+
+    used = _use_surge_super_potion(runtime, runtime, object(), SurgeTiming())
+
+    assert used is False
+    assert runtime.actions == []
 
 
 def test_surge_recovery_settles_with_cancel_when_quantity_update_is_delayed(

@@ -4224,8 +4224,9 @@ def _run_dig_battle(
         ):
             if emulator is None:
                 raise SurgeChapterError("Lt. Surge low-HP recovery requires live emulator state.")
-            _use_surge_super_potion(executor, reader, emulator, timing)
-            super_potions_used += 1
+            super_potions_used += int(
+                _use_surge_super_potion(executor, reader, emulator, timing)
+            )
             continue
         moves = raw.first_party_moves or ()
         if DIG_MOVE_ID not in moves:
@@ -4312,11 +4313,23 @@ def _use_surge_super_potion(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SurgeTiming,
-) -> None:
+) -> bool:
     before = reader.read()
     menu = reader.read_battle_menu_state(before)
     target_index = before.active_party_index
     before_quantity = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    # The observation that requested recovery can straddle an opponent or
+    # level-up transition.  Revalidate at the action boundary and accept an
+    # already-full battler without spending or falsely accounting for an item.
+    if (
+        before.battle_state == 2
+        and target_index is not None
+        and menu.phase is BattleMenuPhase.MAIN
+        and before.battler_hp is not None
+        and before.battler_max_hp is not None
+        and before.battler_hp == before.battler_max_hp
+    ):
+        return False
     if (
         before.battle_state != 2
         or target_index is None
@@ -4326,7 +4339,12 @@ def _use_surge_super_potion(
         or not 0 < before.battler_hp < before.battler_max_hp
         or before_quantity <= 0
     ):
-        raise SurgeChapterError("Lt. Surge recovery lacks a stable damaged MAIN gate.")
+        raise SurgeChapterError(
+            "Lt. Surge recovery lacks a stable damaged MAIN gate: "
+            f"battle={before.battle_state}, active={target_index!r}, "
+            f"hp={(before.battler_hp, before.battler_max_hp)!r}, "
+            f"phase={menu.phase.value}, quantity={before_quantity}."
+        )
 
     _navigate_main(executor, reader, 1)
     _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
@@ -4364,7 +4382,7 @@ def _use_surge_super_potion(
             and quantity_effect_observed
             and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
         ):
-            return
+            return True
         if current.battle_state != 2 or (current.battler_hp or 0) <= 0:
             raise SurgeChapterError("Lt. Surge recovery lost its living battle gate.")
         # B advances battle text but is inert when MAIN returns. A can reopen
