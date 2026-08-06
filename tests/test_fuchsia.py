@@ -55,6 +55,13 @@ def test_snorlax_funding_sells_only_the_obsolete_cure_shortfall() -> None:
     ) == (0, 0)
 
 
+def test_snorlax_funding_sells_early_ball_surplus_but_retains_one() -> None:
+    assert fuchsia_module._snorlax_poke_ball_sale_quantity(1) == 0
+    assert fuchsia_module._snorlax_poke_ball_sale_quantity(27) == 26
+    with pytest.raises(fuchsia_module.FuchsiaChapterError):
+        fuchsia_module._snorlax_poke_ball_sale_quantity(0)
+
+
 def test_mandatory_fisher_income_covers_observed_capture_reserve_floor() -> None:
     assert (
         fuchsia_module._reverse(fuchsia_module.ROUTE12_FISHER)
@@ -72,6 +79,7 @@ def test_battle_bag_selection_can_move_backward_after_a_ball_throw(monkeypatch) 
     assert fuchsia_module.SNORLAX_GREAT_BALL_RESERVE == 32
     assert fuchsia_module.SNORLAX_MIN_GREAT_BALL_RESERVE == 29
     assert fuchsia_module.SNORLAX_TM34_SALE_PROCEEDS == 1_000
+    assert fuchsia_module.SNORLAX_POKE_BALL_RESERVE == 1
     assert fuchsia_module.SNORLAX_CAPTURE_POLICY.max_throws == 33
 
     class Emulator:

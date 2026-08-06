@@ -63,6 +63,8 @@ SNORLAX_SUPER_POTION_RESERVE = 2
 SNORLAX_TM34_SALE_PROCEEDS = 1_000
 SNORLAX_POTION_SALE_PROCEEDS = 150
 SNORLAX_ANTIDOTE_SALE_PROCEEDS = 50
+SNORLAX_POKE_BALL_SALE_PROCEEDS = 100
+SNORLAX_POKE_BALL_RESERVE = 1
 ROUTE13_BIRD_KEEPER_BITE_PP_BOUND = 15
 GREAT_BALL_PRICE = 600
 SUPER_POTION_PRICE = 700
@@ -798,6 +800,10 @@ def _purchase_snorlax_capture_reserve(
     before_money = _money(emulator)
     before_balls = _bag(emulator).get(ItemId.GREAT_BALL, 0)
     before_potions = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    poke_ball_sale_quantity = _snorlax_poke_ball_sale_quantity(
+        _bag(emulator).get(ItemId.POKE_BALL, 0)
+    )
+    poke_ball_sale_proceeds = poke_ball_sale_quantity * SNORLAX_POKE_BALL_SALE_PROCEEDS
     potion_purchase_quantity = max(0, SNORLAX_SUPER_POTION_RESERVE - before_potions)
     if before_balls:
         raise FuchsiaChapterError("Fuchsia input unexpectedly already carries Great Balls.")
@@ -837,6 +843,7 @@ def _purchase_snorlax_capture_reserve(
     available_funding = (
         before_money
         + tm34_sale_proceeds
+        + poke_ball_sale_proceeds
         + _bag(emulator).get(ItemId.POTION, 0) * SNORLAX_POTION_SALE_PROCEEDS
         + _bag(emulator).get(ItemId.ANTIDOTE, 0) * SNORLAX_ANTIDOTE_SALE_PROCEEDS
     )
@@ -855,12 +862,23 @@ def _purchase_snorlax_capture_reserve(
         great_ball_purchase_quantity * GREAT_BALL_PRICE + fixed_recovery_cost
     )
     potion_sale_quantity, antidote_sale_quantity = _snorlax_funding_sale_quantities(
-        money=before_money + tm34_sale_proceeds,
+        money=before_money + tm34_sale_proceeds + poke_ball_sale_proceeds,
         potions=_bag(emulator).get(ItemId.POTION, 0),
         antidotes=_bag(emulator).get(ItemId.ANTIDOTE, 0),
         required_cost=expected_cost,
     )
     funding_sale_proceeds = 0
+    if poke_ball_sale_quantity:
+        _sell_mart_item_stack(
+            actions,
+            reader,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            ItemId.POKE_BALL,
+            quantity=poke_ball_sale_quantity,
+            expected_proceeds=poke_ball_sale_proceeds,
+        )
+        funding_sale_proceeds += poke_ball_sale_proceeds
     if potion_sale_quantity:
         proceeds = potion_sale_quantity * SNORLAX_POTION_SALE_PROCEEDS
         _sell_mart_item_stack(
@@ -917,6 +935,7 @@ def _purchase_snorlax_capture_reserve(
         raise FuchsiaChapterError(f"Could not buy the Snorlax capture reserve: {error}") from error
     if (
         _bag(emulator).get(ItemId.GREAT_BALL, 0) != great_ball_purchase_quantity
+        or _bag(emulator).get(ItemId.POKE_BALL, 0) != SNORLAX_POKE_BALL_RESERVE
         or _bag(emulator).get(ItemId.SUPER_POTION, 0) != before_potions + potion_purchase_quantity
         or before_money + tm34_sale_proceeds + funding_sale_proceeds - _money(emulator)
         != expected_cost
@@ -975,6 +994,16 @@ def _snorlax_funding_sale_quantities(
             f"antidotes={antidotes}, required={required_cost}."
         )
     return potion_quantity, antidote_quantity
+
+
+def _snorlax_poke_ball_sale_quantity(current_quantity: int) -> int:
+    """Sell variable early-capture surplus while retaining one legal fallback ball."""
+
+    if type(current_quantity) is not int or current_quantity < SNORLAX_POKE_BALL_RESERVE:
+        raise FuchsiaChapterError(
+            f"Snorlax preparation lacks its retained Poke Ball: {current_quantity}."
+        )
+    return current_quantity - SNORLAX_POKE_BALL_RESERVE
 
 
 def _sell_capture_surplus(

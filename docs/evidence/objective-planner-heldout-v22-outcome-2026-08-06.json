@@ -1,0 +1,23 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v22",
+  "status": "failed",
+  "source_commit": "511cbc437798165ae5b5dec9aedbf7a12d0eac94",
+  "source_bundle_sha256": "931c74ce9efbf8df6d9844295b9ac05d23c6f45cad914ff036114f722276b3e8",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v22-validation-01",
+      "harness_seed": 1490001,
+      "battle_start_schedule_sha256": "f25ceb35dc73c7a2c87b7a90348fa78c2d77375cc3e07572a059327d36bbeed5",
+      "status": "failed",
+      "qualified_checkpoints": 174,
+      "failure": "The route reached the Snorlax supply gate with enough retained early Poke Balls to fund the reserve, but the economy planner counted only cash and obsolete cures and therefore reported an artificial two-Great-Ball shortfall.",
+      "private_log_sha256": "82d5bbc73e75755336c2d8738c9e753f7df380423c70151ff26f7d2d7585f442"
+    }
+  ],
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The Snorlax policy intentionally retained one legal Poke Ball as the thirty-third throw, but its funding calculation never sold the variable surplus from the original thirty-ball acquisition reserve. The nearby Mart can legally convert that surplus into more than the missing funds.",
+  "repair_direction": "Sell every observed early Poke Ball above the single retained fallback, include the exact proceeds in affordability and economy proofs, preserve the 29-to-32 Great Ball floor, and preregister fresh validation and sealed cohorts."
+}
