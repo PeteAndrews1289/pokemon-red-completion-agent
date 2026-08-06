@@ -59,7 +59,10 @@ SNORLAX_BUBBLEBEAM_PP_BOUND = (1, 20)
 SNORLAX_RUNTIME_PULSE_BOUND = 720
 SNORLAX_GREAT_BALL_RESERVE = 32
 SNORLAX_MIN_GREAT_BALL_RESERVE = 29
-SNORLAX_SUPER_POTION_RESERVE = 2
+# A level-30 Snorlax has 15 Headbutt PP.  Seven 50-HP restores plus the
+# qualified lead's full-health entry cover the complete physical-damage budget
+# even when held-out timing produces a much longer capture than rehearsals.
+SNORLAX_SUPER_POTION_RESERVE = 7
 SNORLAX_TM34_SALE_PROCEEDS = 1_000
 SNORLAX_POTION_SALE_PROCEEDS = 150
 SNORLAX_ANTIDOTE_SALE_PROCEEDS = 50
@@ -1364,7 +1367,10 @@ def _restore_capture_catcher(
         raise FuchsiaChapterError("Snorlax recovery lost the active catcher slot.")
     before_items = _bag(emulator).get(ItemId.SUPER_POTION, 0)
     if before_items <= 0:
-        raise FuchsiaChapterError("Snorlax recovery exhausted its Super Potion reserve.")
+        raise FuchsiaChapterError(
+            "Snorlax recovery exhausted its Super Potion reserve: "
+            f"hp={raw.battler_hp!r}, max_hp={raw.battler_max_hp!r}."
+        )
     for pulse_index in range(24):
         menu = reader.read_battle_menu_state(reader.read())
         if menu.phase is BattleMenuPhase.MAIN and menu.selected_main_command == 1:

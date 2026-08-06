@@ -65,7 +65,8 @@ def test_snorlax_funding_sells_early_ball_surplus_but_retains_one() -> None:
 def test_snorlax_funding_liquidates_only_tunnel_super_potion_surplus() -> None:
     assert fuchsia_module._snorlax_super_potion_sale_quantity(0) == 0
     assert fuchsia_module._snorlax_super_potion_sale_quantity(2) == 0
-    assert fuchsia_module._snorlax_super_potion_sale_quantity(6) == 4
+    assert fuchsia_module._snorlax_super_potion_sale_quantity(7) == 0
+    assert fuchsia_module._snorlax_super_potion_sale_quantity(9) == 2
     with pytest.raises(fuchsia_module.FuchsiaChapterError):
         fuchsia_module._snorlax_super_potion_sale_quantity(-1)
 
@@ -88,6 +89,7 @@ def test_battle_bag_selection_can_move_backward_after_a_ball_throw(monkeypatch) 
     assert fuchsia_module.SNORLAX_MIN_GREAT_BALL_RESERVE == 29
     assert fuchsia_module.SNORLAX_TM34_SALE_PROCEEDS == 1_000
     assert fuchsia_module.SNORLAX_POKE_BALL_RESERVE == 1
+    assert fuchsia_module.SNORLAX_SUPER_POTION_RESERVE == 7
     assert fuchsia_module.SNORLAX_CAPTURE_POLICY.max_throws == 33
     assert fuchsia_module.SNORLAX_CAPTURE_POLICY.retreat_hp_ratio == 0.65
 
@@ -272,7 +274,7 @@ def test_snorlax_receipt_accepts_recovery_within_proven_upstream_surplus() -> No
         report,
         battles=tuple(battles),
         initial_bag=initial_bag,
-        funding_super_potions_sold=5,
+        funding_super_potions_sold=0,
     ).passed
     battles[1] = replace(battles[1], recovery_items_used=8)
     assert not replace(report, battles=tuple(battles), initial_bag=initial_bag).passed
