@@ -1,0 +1,36 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v15",
+  "source_commit": "1791662c5564f93fff79c7627507aa912ed3ec8a",
+  "source_bundle_sha256": "533e22e3fe658ef02fe19d60a18daeed87c29f9fc879e0a155888d926f8959c9",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1330001,
+    "battle_start_schedule_sha256": "9e4451806d3a54ab905cc5b7f0c234ad7359c45004b854be86fc8170eb46371a",
+    "private_log_sha256": "a73485e0f1d13850a8033e89b94e4c884b667adb9bbcdbf04a334d0c3b7c6252",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 73,
+    "teacher_objective_fallbacks": 0,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "observed_capture_variation": "Route 12 Snorlax caught in 7 throws"
+  },
+  "repairs_verified": [
+    "Three source-pinned Route 11 Gamblers produce exactly P3780 before the Tunnel purchase",
+    "The one-Ball-remaining capture branch buys the complete Rock Tunnel safety inventory",
+    "The expanded 14-battle Lavender receipt and 73-battle campaign schedule authenticate end-to-end"
+  ],
+  "agatha": {
+    "status": "passed",
+    "hyper_potions_used": 1,
+    "full_restores_used": 1,
+    "x_specials_used": 1,
+    "party_hp": [210, 54, 62, 142, 75, 70],
+    "party_max_hp": [210, 54, 62, 142, 75, 70],
+    "party_status": [0, 0, 0, 0, 0, 0]
+  }
+}
