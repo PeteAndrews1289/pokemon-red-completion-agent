@@ -110,7 +110,15 @@ RIVAL_PRIORITIES = {
 }
 ROUTE_22_VENUSAUR_HEAL_THRESHOLD = 120
 ROUTE_22_DEFAULT_HEAL_THRESHOLD = 100
-ROUTE_22_PROACTIVE_PIVOT_SPECIES = frozenset({0x9A})
+#: Deliberately empty: this is a kill switch, not an oversight.  Proactively
+#: replacing a healthy workhorse because a particular species appeared is the
+#: sacrifice behaviour V35 exposed.  The guarded block below is therefore
+#: unreachable by design; re-populating this set re-enables it.
+ROUTE_22_PROACTIVE_PIVOT_SPECIES: frozenset[int] = frozenset()
+#: A pivot target must arrive able to fight rather than as damage padding.
+ROUTE_22_PIVOT_MIN_HP_RATIO = 0.5
+#: One strategic switch is a decision; walking the party is a sacrifice loop.
+ROUTE_22_MAX_TEAM_PIVOTS = 1
 VICTORY_ROAD_MAX_REPEL_PURCHASE = 2
 INDIGO_FULL_RESTORE_RESERVE = 7
 INDIGO_FULL_HEAL_RESERVE = 6
@@ -964,6 +972,7 @@ def _defeat_route22_rival(
     next_sacrifice = 1
     pivot_heals = 0
     faint_pivots = 0
+    team_pivots = 0
     while reader.read().battle_state:
         try:
             run_adaptive_trainer_battle(
@@ -1023,14 +1032,25 @@ def _defeat_route22_rival(
             if isinstance(cause, _PivotBoundary) or learned_pivot is not None:
                 species = reader.read().enemy_species_id or 0
                 requested_target = next_sacrifice if learned_pivot is None else learned_pivot
-                pivot_target = _route22_recovery_pivot_target(
-                    reader.read(),
-                    requested_target,
+                pivot_target = (
+                    _route22_battle_ready_pivot_target(reader.read(), requested_target)
+                    if team_pivots < ROUTE_22_MAX_TEAM_PIVOTS
+                    else None
                 )
                 if pivot_target is None:
-                    raise VictoryRoadChapterError(
-                        "Route 22 rival requested protected recovery without a living reserve."
-                    ) from error
+                    # No battle-ready reserve, or the pivot budget is spent.
+                    # Recover in place with the already-funded reserve rather
+                    # than feeding another teammate to the opponent.
+                    if potions_used >= recovery_reserve:
+                        raise VictoryRoadChapterError(
+                            "Route 22 rival needed recovery with no battle-ready reserve "
+                            f"and no Hyper Potion left: party_hp={_party_hp(emulator)!r}, "
+                            f"potions={potions_used}, team_pivots={team_pivots}."
+                        ) from error
+                    _battle_hyper_potion(reader, actions, emulator, DEFAULT_SILPH_TIMING)
+                    potions_used += 1
+                    last_recovery_turn = len(turns)
+                    continue
                 pivot_target = _route22_switch_with_faint_continuation(
                     actions,
                     reader,
@@ -1039,6 +1059,7 @@ def _defeat_route22_rival(
                     label="Route 22 rival balanced-team pivot",
                 )
                 pivoted_species.add(species)
+                team_pivots += 1
                 next_sacrifice = max(next_sacrifice + 1, pivot_target + 1)
                 last_recovery_turn = len(turns)
                 continue
@@ -1046,24 +1067,8 @@ def _defeat_route22_rival(
                 raise VictoryRoadChapterError(
                     "Route 22 rival exceeded the bounded recovery reserve."
                 ) from error
-            pivot_target = _route22_recovery_pivot_target(
-                reader.read(),
-                next_sacrifice,
-            )
-            if reader.read().enemy_species_id == 0x9A and pivot_target is not None:
-                pivot_target = _route22_switch_with_faint_continuation(
-                    actions,
-                    reader,
-                    emulator,
-                    pivot_target,
-                    label="Route 22 rival low-health team pivot",
-                )
-                next_sacrifice = pivot_target + 1
-                potion_spent = False
-            else:
-                _battle_hyper_potion(reader, actions, emulator, DEFAULT_SILPH_TIMING)
-                potion_spent = True
-            potions_used += int(potion_spent)
+            _battle_hyper_potion(reader, actions, emulator, DEFAULT_SILPH_TIMING)
+            potions_used += 1
             last_recovery_turn = len(turns)
     _settle_confirm(actions, reader, 30)
     return tuple(turns), potions_used
@@ -1679,6 +1684,39 @@ def _route22_recovery_pivot_target(
     return next(
         (index for index in candidates if index >= preferred_index),
         candidates[0] if candidates else None,
+    )
+
+
+def _route22_battle_ready_pivot_target(
+    raw: RawGameState,
+    preferred_index: int,
+) -> int | None:
+    """Choose a reserve healthy enough to fight, not one spent as damage padding.
+
+    :func:`_route22_recovery_pivot_target` accepts any *living* member, which is
+    what let a held-out schedule walk the whole party into Venusaur one faint at
+    a time.  Requiring a real health fraction makes a pivot a strategic choice
+    and makes the wipe structurally unreachable.
+    """
+
+    party_hp = raw.party_hp or ()
+    party_max_hp = raw.party_max_hp or ()
+    active_index = raw.active_party_index
+    candidates = [
+        index
+        for index, hp in enumerate(party_hp)
+        if index > 0
+        and index != active_index
+        and hp > 0
+        and index < len(party_max_hp)
+        and party_max_hp[index] > 0
+        and hp / party_max_hp[index] >= ROUTE_22_PIVOT_MIN_HP_RATIO
+    ]
+    if not candidates:
+        return None
+    return next(
+        (index for index in candidates if index >= preferred_index),
+        candidates[0],
     )
 
 

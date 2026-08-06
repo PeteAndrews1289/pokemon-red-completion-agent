@@ -1,0 +1,25 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v35",
+  "status": "failed",
+  "source_commit": "9e13af0a31d4b5b22623debed291256bd3ac6b74",
+  "source_bundle_sha256": "84c3f6d51bcbfcdf4d7d53507658e1442ec6ea7fbec33d736a2b26720a4ef57e",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v35-validation-01",
+      "harness_seed": 1810001,
+      "battle_start_schedule_sha256": "2b0fe917d572c3a690e353de321d9465d493e1fd742dab4b4073f57a0a135a88",
+      "private_log_sha256": "e4dd70e261f4f407d5b19efe4a0fe0d1eb50c757ffba87a7b62eb434e7fb0f12",
+      "status": "failed",
+      "qualified_checkpoints": 290,
+      "failure": "The final Route 22 rival knocked out an incoming reserve; the one-step continuation then observed another delayed faint and stopped instead of selecting the next living teammate."
+    }
+  ],
+  "rejected_repair_direction": "Generalize the continuation into a six-member bounded loop that stops only on a successful switch or an exhausted living roster. Implemented, replayed against this exposed seed, and reverted after it wiped the party.",
+  "remaining_validation_runs_opened": false,
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The balanced-team Route 22 controller could recover from exactly one switch-in knockout. A held-out battle schedule exposed two consecutive observed target deaths while the forced-party state settled, but the party still contained living members.",
+  "repair_direction": "Preserve the trained workhorse instead of spending teammates. A generalized six-member continuation loop was implemented first and rejected: an exact replay of this exposed seed cycled every reserve into Venusaur until party_hp reached (0, 0, 0, 0, 0, 0), so stopping only on an exhausted living roster is the failure rather than the fix. The adopted repair removes the proactive species pivot, spends the already-funded Hyper Potion at the low-health boundary, and permits at most one pivot and only to a reserve above a real health fraction, so a switch is a strategic decision rather than damage padding."
+}

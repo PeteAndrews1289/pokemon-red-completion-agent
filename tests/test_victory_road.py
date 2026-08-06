@@ -18,6 +18,8 @@ from pokemon_red_completion.victory_road import (
     RIVAL_PARTY,
     RIVAL_POLICY,
     ROUTE_22_DEFAULT_HEAL_THRESHOLD,
+    ROUTE_22_MAX_TEAM_PIVOTS,
+    ROUTE_22_PIVOT_MIN_HP_RATIO,
     ROUTE_22_PROACTIVE_PIVOT_SPECIES,
     ROUTE_22_TO_GATE,
     ROUTE_22_TO_RIVAL,
@@ -39,6 +41,7 @@ from pokemon_red_completion.victory_road import (
     _encounter_party,
     _indigo_buy_entry_action,
     _rival_moves_valid,
+    _route22_battle_ready_pivot_target,
     _route22_fainted_pivot_target,
     _route22_recovery_pivot_target,
     _route22_rival_move_slot,
@@ -212,7 +215,7 @@ def test_route22_rival_receipt_matches_source_party_and_policy() -> None:
     assert tuple(turn.move_slot for turn in turns) == (3, 4, 3, 4, 2, 3)
     assert _rival_moves_valid(turns)
     assert ROUTE_22_DEFAULT_HEAL_THRESHOLD == 100
-    assert frozenset({0x9A}) == ROUTE_22_PROACTIVE_PIVOT_SPECIES
+    assert frozenset() == ROUTE_22_PROACTIVE_PIVOT_SPECIES
     assert ROUTE_22_VENUSAUR_HEAL_THRESHOLD == 120
 
 
@@ -450,7 +453,7 @@ def test_route22_rival_fainted_continuation_uses_shared_switch_timing(
     assert switches == [(1, victory_road.DEFAULT_HIDEOUT_TIMING.wait_frames)]
 
 
-def test_route22_proactive_pivot_switches_to_live_teammate_without_sacrifice(
+def test_route22_venusaur_keeps_trained_workhorse_instead_of_sacrificing_team(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     class Reader:
@@ -463,7 +466,7 @@ def test_route22_proactive_pivot_switches_to_live_teammate_without_sacrifice(
             party_hp=(150, 0, 57, 139, 69, 70),
             battle_state=2,
             active_party_index=0,
-            active_party_hp=150,
+            active_party_hp=100,
             first_party_pp=(10, 10, 10, 10),
             enemy_species_id=0x9A,
             enemy_hp=40,
@@ -475,6 +478,7 @@ def test_route22_proactive_pivot_switches_to_live_teammate_without_sacrifice(
     reader = Reader()
     calls = 0
     switches: list[int] = []
+    heals = 0
 
     def run_battle(_reader, _actions, policy, **_kwargs) -> None:
         nonlocal calls
@@ -516,10 +520,29 @@ def test_route22_proactive_pivot_switches_to_live_teammate_without_sacrifice(
             enemy_hp=40,
         )
 
+    def heal(*_args: object, **_kwargs: object) -> None:
+        nonlocal heals
+        heals += 1
+        reader.raw = RawGameState(
+            game_started=True,
+            map_id=MapId.ROUTE_22,
+            player_x=30,
+            player_y=5,
+            party_count=6,
+            party_hp=(150, 0, 57, 139, 69, 70),
+            battle_state=2,
+            active_party_index=0,
+            active_party_hp=150,
+            first_party_pp=(10, 10, 10, 10),
+            enemy_species_id=0x9A,
+            enemy_hp=40,
+        )
+
     monkeypatch.setattr(victory_road, "_pulse", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(victory_road, "_settle_confirm", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(victory_road, "run_adaptive_trainer_battle", run_battle)
     monkeypatch.setattr(victory_road, "switch_active_battler", switch)
+    monkeypatch.setattr(victory_road, "_battle_hyper_potion", heal)
     monkeypatch.setattr(victory_road, "_party_hp", lambda _emulator: (150, 0, 57, 139, 69, 70))
     monkeypatch.setattr(victory_road, "_bag", lambda _emulator: {ItemId.HYPER_POTION: 1})
     monkeypatch.setattr(
@@ -528,10 +551,81 @@ def test_route22_proactive_pivot_switches_to_live_teammate_without_sacrifice(
         lambda *_args, **_kwargs: pytest.fail("balanced-team pivot used sacrifice recovery"),
     )
 
-    victory_road._defeat_route22_rival(
+    _, potions = victory_road._defeat_route22_rival(
         object(),  # type: ignore[arg-type]
         reader,  # type: ignore[arg-type]
         object(),  # type: ignore[arg-type]
     )
 
-    assert switches == [2]
+    assert frozenset() == victory_road.ROUTE_22_PROACTIVE_PIVOT_SPECIES
+    assert switches == []
+    assert heals == 1
+    assert potions == 1
+
+
+def _route22_party(
+    party_hp: tuple[int, ...],
+    party_max_hp: tuple[int, ...],
+    active_party_index: int = 0,
+) -> RawGameState:
+    return RawGameState(
+        game_started=True,
+        map_id=MapId.ROUTE_22,
+        player_x=30,
+        player_y=5,
+        party_count=len(party_hp),
+        party_hp=party_hp,
+        party_max_hp=party_max_hp,
+        battle_state=2,
+        active_party_index=active_party_index,
+        active_party_hp=party_hp[active_party_index],
+    )
+
+
+def test_battle_ready_pivot_rejects_reserves_that_would_only_absorb_damage() -> None:
+    """A living-but-fragile reserve is damage padding, not a strategic switch."""
+
+    raw = _route22_party(
+        party_hp=(150, 5, 12, 4, 3, 2),
+        party_max_hp=(150, 100, 100, 100, 100, 100),
+    )
+    assert _route22_battle_ready_pivot_target(raw, 1) is None
+
+
+def test_battle_ready_pivot_selects_a_healthy_reserve_at_or_after_the_request() -> None:
+    raw = _route22_party(
+        party_hp=(150, 10, 90, 95, 5, 80),
+        party_max_hp=(150, 100, 100, 100, 100, 100),
+    )
+    assert _route22_battle_ready_pivot_target(raw, 1) == 2
+    assert _route22_battle_ready_pivot_target(raw, 3) == 3
+    # A request past every candidate wraps to the first healthy reserve rather
+    # than falling through to a fragile one.
+    assert _route22_battle_ready_pivot_target(raw, 6) == 2
+
+
+def test_battle_ready_pivot_never_returns_the_lead_or_the_active_member() -> None:
+    raw = _route22_party(
+        party_hp=(150, 100, 100, 0, 0, 0),
+        party_max_hp=(150, 100, 100, 100, 100, 100),
+        active_party_index=1,
+    )
+    chosen = _route22_battle_ready_pivot_target(raw, 1)
+    assert chosen == 2
+    assert chosen != 0
+
+
+def test_battle_ready_pivot_ignores_members_without_a_known_maximum() -> None:
+    raw = _route22_party(
+        party_hp=(150, 90, 90),
+        party_max_hp=(150, 0, 100),
+    )
+    assert _route22_battle_ready_pivot_target(raw, 1) == 2
+
+
+def test_route22_pivot_budget_permits_a_decision_not_a_sacrifice_loop() -> None:
+    """One switch is a strategic choice; walking six members is the V35 wipe."""
+
+    assert ROUTE_22_MAX_TEAM_PIVOTS == 1
+    assert 0 < ROUTE_22_PIVOT_MIN_HP_RATIO < 1
+    assert frozenset() == ROUTE_22_PROACTIVE_PIVOT_SPECIES
