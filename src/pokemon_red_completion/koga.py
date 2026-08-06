@@ -70,6 +70,8 @@ CENTER_TO_GYM = _directions("DDDDDLLLLLLLLLLLLLLU")
 GYM_TO_JUGGLER3 = _directions("URRRRRUUUUUUULU")
 JUGGLER3_TO_TAMER2 = _directions("UUUU")
 TAMER2_TO_CENTER = _directions("DDDDDDDDRDDDDDLLLLDRRRRRRRRRRRRRRUUUU")
+JUGGLER3_TO_CENTER = _directions("DDDDRDDDDDLLLLDRRRRRRRRRRRRRRUUUU")
+CENTER_TO_TAMER2 = CENTER_TO_GYM + GYM_TO_JUGGLER3 + JUGGLER3_TO_TAMER2
 CENTER_TO_JUGGLER4 = CENTER_TO_GYM + _directions("URRRRRUUUUUUUUUUUUUUULLLLLLLLDDRDDLDD")
 JUGGLER4_TO_CENTER = _directions("UURUULUURRRRRRRRDDDDDDDDDDDDDDDDLLLLLDRRRRRRRRRRRRRRUUUU")
 CENTER_TO_KOGA = CENTER_TO_GYM + _directions("URRRRRUUUUUUUUUUUUUUULLLLLLLLDDRDDLDDDDRRDDR")
@@ -261,7 +263,7 @@ class KogaChapterReport:
                 for item in self.battles[:-1]
             ],
             "recoveries": {
-                "pokemon_center_visits_before_koga": 2,
+                "pokemon_center_visits_before_koga": 3,
                 "mart_purchases": 0,
                 "consumables_used": 1,
             },
@@ -360,7 +362,12 @@ def run_koga_chapter(
         "Defeated mandatory Juggler 3",
     )
 
-    _move(actions, reader, JUGGLER3_TO_TAMER2, timing, "Tamer 2 sight line")
+    # A long Disable branch can make Juggler 3 end with the story lead
+    # fainted even though a reserve legally finishes the trainer. Restore the
+    # complete party before initiating another sight-line battle.
+    _move(actions, reader, JUGGLER3_TO_CENTER, timing, "post-Juggler 3 recovery")
+    _heal_center(actions, reader, emulator, timing)
+    _move(actions, reader, CENTER_TO_TAMER2, timing, "Tamer 2 sight line")
     battles.append(
         _fight(
             actions,

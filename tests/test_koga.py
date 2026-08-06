@@ -9,8 +9,10 @@ import pokemon_red_completion.koga as koga_module
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.koga import (
     CENTER_TO_GYM,
+    CENTER_TO_TAMER2,
     DEFAULT_KOGA_TIMING,
     GYM_TO_JUGGLER3,
+    JUGGLER3_TO_CENTER,
     JUGGLER3_TO_TAMER2,
     JUGGLER_4_PIVOT_HP_THRESHOLD,
     KOGA_CHECKPOINT_COUNT,
@@ -172,7 +174,7 @@ def test_koga_public_report_is_honest_about_geography_and_minimum_trainers() -> 
     }
     assert [item["trainer_number"] for item in public["mandatory_trainers"]] == [3, 2, 4]
     assert public["recoveries"] == {
-        "pokemon_center_visits_before_koga": 2,
+        "pokemon_center_visits_before_koga": 3,
         "mart_purchases": 0,
         "consumables_used": 1,
     }
@@ -181,6 +183,11 @@ def test_koga_public_report_is_honest_about_geography_and_minimum_trainers() -> 
     assert public["koga"]["x_accuracy_used"] is True
     assert public["koga"]["party_restored_at_boundary"] is True
     assert public["rewards"]["regular_trainers_deactivated"] is True
+
+
+def test_juggler_three_recovery_returns_before_tamer_two() -> None:
+    assert koga_module.TAMER2_TO_CENTER == ("down",) * 4 + JUGGLER3_TO_CENTER
+    assert CENTER_TO_TAMER2 == CENTER_TO_GYM + GYM_TO_JUGGLER3 + JUGGLER3_TO_TAMER2
 
 
 def test_koga_report_records_a_recovered_terminal_mutual_ko() -> None:

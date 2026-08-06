@@ -1,0 +1,24 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v29",
+  "status": "failed",
+  "source_commit": "fab80e7971df02e536896c7da71ae31c39924532",
+  "source_bundle_sha256": "d028ff483df58c0b22c8e3f2b09bde71cf184e8d2993c86777dfb3a13825123a",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v29-validation-01",
+      "harness_seed": 1660001,
+      "battle_start_schedule_sha256": "3775a79036495787d36dca1d61750660d1adbfb16b1d3cf470c9474fbd54a725",
+      "status": "failed",
+      "qualified_checkpoints": 200,
+      "failure": "A long Disable branch let a reserve finish Juggler 3 after the workhorse fainted. The route then initiated Tamer 2 before its existing pair-level Center recovery, so the next live trainer battle began with a fainted lead.",
+      "private_log_sha256": "58d7edce50c3a5ca4f10c820b1e4dc9ddf7160c80e3bafaa492c5d6bc33abfd3"
+    }
+  ],
+  "remaining_validation_runs_opened": false,
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The battle controller could legally continue Juggler 3 with a healthy reserve, but the chapter scheduled its first Center visit only after Tamer 2. That optimized two trainers into one recovery trip at the cost of violating the balanced-party invariant on held-out damage and Disable timing.",
+  "repair_direction": "Return to the Fuchsia Center immediately after Juggler 3, prove full-party HP, status, and Surf PP recovery, then re-enter the Gym for Tamer 2 while retaining the later recovery boundaries."
+}
