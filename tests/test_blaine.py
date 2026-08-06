@@ -351,3 +351,68 @@ def test_cinnabar_burglar_receipts_pin_party_identity_move_and_income() -> None:
         money_after=7_319,
         expected_reward=3_690,
     ).passed
+
+
+def test_mansion_training_targets_the_league_not_an_internal_spread() -> None:
+    """A measured run overshot parity by 19 levels chasing the escort's level."""
+
+    from pokemon_red_completion.blaine import (
+        INDIGO_MAX_OPPOSITION_LEVEL,
+        MANSION_LEVEL_PARITY,
+        MANSION_TEAM_POLICY,
+    )
+
+    # The floor states why it is what it is, rather than being a hand-tuned constant.
+    assert MANSION_TEAM_POLICY.minimum_level == MANSION_LEVEL_PARITY.required_level(
+        INDIGO_MAX_OPPOSITION_LEVEL
+    )
+    assert MANSION_TEAM_POLICY.minimum_level == 55
+    # A natural playthrough arrives below the League, not above it.
+    assert MANSION_TEAM_POLICY.minimum_level < INDIGO_MAX_OPPOSITION_LEVEL
+
+    # The spread must not be able to drag trainees toward an overlevelled escort.
+    escort_level = 84
+    assert MANSION_TEAM_POLICY.maximum_level_spread >= (
+        escort_level - MANSION_TEAM_POLICY.minimum_level
+    )
+
+
+def test_mansion_policy_stops_once_the_party_reaches_league_parity() -> None:
+    from pokemon_red_completion.blaine import MANSION_TEAM_POLICY
+    from pokemon_red_completion.party import (
+        MoveObservation,
+        PartyMemberObservation,
+        PartyObservation,
+    )
+    from pokemon_red_completion.team_training import (
+        TeamTrainingDirective,
+        plan_team_training,
+    )
+
+    def member(slot: int, level: int) -> PartyMemberObservation:
+        return PartyMemberObservation(
+            slot=slot,
+            species_id=slot,
+            level=level,
+            hp=200,
+            max_hp=200,
+            moves=(MoveObservation(55, 15, 15),),
+        )
+
+    # An escort far above parity no longer keeps the block running.
+    at_parity = PartyObservation(
+        members=(member(1, 84), *(member(slot, 55) for slot in range(2, 7)))
+    )
+    assert (
+        plan_team_training(at_parity, MANSION_TEAM_POLICY).directive
+        is TeamTrainingDirective.STOP
+    )
+
+    # A member genuinely short of the League still trains.
+    below = PartyObservation(
+        members=(member(1, 84), member(2, 30), *(member(slot, 55) for slot in range(3, 7)))
+    )
+    assert (
+        plan_team_training(below, MANSION_TEAM_POLICY).directive
+        is not TeamTrainingDirective.STOP
+    )

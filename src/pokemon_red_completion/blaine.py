@@ -68,6 +68,7 @@ from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
     DevelopedTeamPolicy,
     DevelopedTeamReport,
+    LevelParityContract,
     TeamTrainingDecision,
     TeamTrainingDirective,
     TeamTrainingProgress,
@@ -131,13 +132,32 @@ MANSION_DEVELOPMENT_POLICY = DevelopedTeamPolicy(
     workhorse_species_id=BLASTOISE_SPECIES_ID,
     workhorse_target_level=60,
 )
+#: The strongest Pokémon the Indigo League fields.
+INDIGO_MAX_OPPOSITION_LEVEL = 65
+#: How far below the League a natural playthrough arrives.  A player who used a
+#: team throughout the game reaches Indigo in the mid-fifties; that is the band
+#: where switching and type choices still decide battles.  Above it the team
+#: wins on stats alone and the demonstrations stop containing decisions.
+MANSION_LEVEL_PARITY = LevelParityContract(max_levels_behind=10)
+
 #: Balance contract for the Mansion block.
 #:
 #: ``required_size`` tracks the complete declared roster assembled before this
 #: long-form balancing block.
+#:
+#: ``minimum_level`` is derived from the League rather than written as a
+#: constant, so it states *why* the number is what it is and moves with the
+#: opposition instead of being tuned by hand.
+#:
+#: ``maximum_level_spread`` is deliberately non-binding.  Measured inside the
+#: party it anchored to the strongest member -- an escort at 84 -- and dragged
+#: every trainee up to 79 against opposition of 65.  A measured run paid 4,570
+#: battles and 1,063 healing trips for that overshoot, arriving nineteen levels
+#: past parity.  Readiness is a question about the opposition, not about the
+#: escort, so the spread is now reported rather than chased.
 MANSION_TEAM_POLICY = BalancedTeamPolicy(
-    minimum_level=50,
-    maximum_level_spread=5,
+    minimum_level=MANSION_LEVEL_PARITY.required_level(INDIGO_MAX_OPPOSITION_LEVEL),
+    maximum_level_spread=40,
     required_size=6,
     retreat_hp_ratio=0.90,
     # The lead-only block reserved 2 PP because it ran barely a hundred battles
@@ -147,10 +167,10 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
     reserve_total_pp=16,
     max_enemy_level_delta=0,
     minimum_direct_level_advantage=15,
-    # Clean-power measurements have needed between 5,445 wins (levels 82--87)
-    # and more than 5,500 wins (levels 82--91) because escort participation is
-    # encounter-dependent. Retain the strict spread and zero-faint contract and
-    # provide measured headroom for the slower lineage.
+    # A measured clean-power run reached parity (level 60+) near battle 1,500
+    # and then spent roughly 3,000 more closing an internal spread against the
+    # escort. With the spread no longer driving training, the budget retains
+    # generous headroom over the parity requirement rather than the overshoot.
     max_battles=7_000,
     max_steps=500_000,
     # The live acquisition lineage changes Mansion RNG and requires the escort
