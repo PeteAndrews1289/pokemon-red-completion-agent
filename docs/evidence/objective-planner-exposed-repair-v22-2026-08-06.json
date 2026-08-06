@@ -1,0 +1,65 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v22",
+  "source_commit": "5510177df20b37a2b7abebfacb8b7b2652599106",
+  "source_bundle_sha256": "931c74ce9efbf8df6d9844295b9ac05d23c6f45cad914ff036114f722276b3e8",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1470001,
+    "battle_start_schedule_sha256": "ba40bab6a18078630bea9b76dd2a2d620ef1754886ce2c877aaf9a0b3da4a8df",
+    "private_log_sha256": "ab6d0e6e98f7f10681797e80fac786008a5d0cf053a750184983911af20eb0af",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 73,
+    "teacher_objective_fallbacks": 0,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "observed_capture_variation": "Route 12 Snorlax caught in 5 throws"
+  },
+  "repair_iterations": [
+    {
+      "attempts": [1, 2, 3, 4, 5],
+      "status": "failed",
+      "qualified_checkpoints": 87,
+      "failure": "The first catcher recovery revisions conflated battle-intro, forced-party, and capture-completion transitions.",
+      "private_log_sha256": "fe2cf6aab45cce5bee22e6a487ab3bd439b469f11131915a4691751f7b43f902"
+    },
+    {
+      "attempt": 6,
+      "status": "failed",
+      "qualified_checkpoints": 87,
+      "failure": "Both capture candidates could still be exhausted before Diglett acquisition.",
+      "private_log_sha256": "ac8b1b1148feee051465471658386668a333f78afdde8b56f104eddb154ef1d0"
+    },
+    {
+      "attempts": [7, 8],
+      "status": "failed",
+      "qualified_checkpoints": 137,
+      "failure": "The successful pre-Diglett Center recovery changed downstream evolution timing and exposed a Wartortle-only Hideout invariant.",
+      "private_log_sha256": "5f4d873027cec33f2d19b8bd7335cc6be1d191454630dc9f848cbf41a6262a9b"
+    },
+    {
+      "attempt": 9,
+      "status": "failed",
+      "qualified_checkpoints": 137,
+      "failure": "Live evidence proved a healthy early Blastoise, DUX, and Diglett party; the remaining party-species gate still rejected the valid evolution.",
+      "private_log_sha256": "6cbd5ac48846780f91ea4debe4be2c2f01c68992a95b386f23f7f1fad61bf831"
+    },
+    {
+      "attempt": 10,
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "private_log_sha256": "ab6d0e6e98f7f10681797e80fac786008a5d0cf053a750184983911af20eb0af"
+    }
+  ],
+  "repairs_verified": [
+    "The teacher makes an observed, reversible Pokemon Center recovery trip between the Spearow and Diglett acquisitions",
+    "Diglett acquisition evidence takes precedence over transient faint and forced-switch screens",
+    "Mandatory forced-switch recovery waits for stable enemy identity and HP evidence before resuming capture",
+    "Rocket Hideout accepts either Wartortle or its legitimate early Blastoise evolution and requires at least one observed living party member",
+    "All downstream balanced-team, level-60 workhorse, Champion, and Hall of Fame contracts pass together"
+  ]
+}
