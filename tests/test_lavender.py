@@ -692,6 +692,32 @@ def test_income_return_cures_paralysis_before_crossing_grass(
     assert run.parlyz_heals_used == 1
 
 
+def test_income_return_pivots_to_healthy_diglett_when_no_cure_survives(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    swaps: list[int] = []
+    raw = replace(_raw(), party_species_ids=PROTECTED_PARTY)
+    monkeypatch.setattr(lavender_module, "_party_status", lambda _emulator: (0x40, 0, 0))
+    monkeypatch.setattr(lavender_module, "_party_hp", lambda _emulator: (40, 46, 36))
+    monkeypatch.setattr(lavender_module, "_bag", lambda _emulator: {})
+    monkeypatch.setattr(
+        lavender_module,
+        "_swap",
+        lambda *_args: swaps.append(_args[3]),
+    )
+
+    pivoted = lavender_module._prepare_income_return(
+        object(),  # type: ignore[arg-type]
+        type("Reader", (), {"read": lambda self: raw})(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        lavender_module._RunState([], []),
+        DEFAULT_LAVENDER_TIMING,
+    )
+
+    assert pivoted
+    assert swaps == [lavender_module.DIGLETT]
+
+
 def test_field_recovery_skips_a_full_hp_target_even_above_its_maximum(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

@@ -2294,9 +2294,16 @@ def _earn_tunnel_supply_income(
         battle_recovery_limit=1,
     )
     # A terminal status from the final income battle can make an otherwise
-    # low-risk Route 11 escape fail repeatedly. Cure the observed lead before
-    # crossing grass, then let the Mart restore the declared tunnel reserve.
-    _cure_tunnel_status_if_present(executor, reader, emulator, run, timing)
+    # low-risk Route 11 escape fail repeatedly. Cure it when a supported item
+    # survived; otherwise lead with a healthy status-free reserve for the
+    # grass crossing and restore the workhorse after the Center heal.
+    income_return_pivoted = _prepare_income_return(
+        executor,
+        reader,
+        emulator,
+        run,
+        timing,
+    )
     _move(
         executor,
         reader,
@@ -2337,6 +2344,8 @@ def _earn_tunnel_supply_income(
     _move(executor, reader, emulator, run, ("up",), timing, "extended supply-income Center entry")
     _wait(executor, timing.transition_frames)
     _heal_center(executor, reader, emulator, timing, MapId.VERMILION_POKECENTER)
+    if income_return_pivoted:
+        _swap(executor, reader, emulator, WARTORTLE, "income-return workhorse restoration")
     restored = reader.read()
     if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
         raise LavenderChapterError("Extended supply-income recovery did not heal the party.")
@@ -2345,6 +2354,50 @@ def _earn_tunnel_supply_income(
         raise LavenderChapterError(
             "Route 11 supply curriculum did not produce its three exact payouts."
         )
+
+
+def _prepare_income_return(
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    run: _RunState,
+    timing: LavenderTiming,
+) -> bool:
+    """Make the post-income grass return safe without assuming a cure survives."""
+
+    statuses = _party_status(emulator)
+    if not statuses or statuses[0] == 0:
+        return False
+    status = statuses[0]
+    cure = (
+        ItemId.PARLYZ_HEAL
+        if status & 0x40
+        else ItemId.ANTIDOTE
+        if status & 0x08
+        else ItemId.AWAKENING
+        if status & 0x07
+        else None
+    )
+    if cure is None:
+        raise LavenderChapterError(
+            f"Income-return lead has an unsupported status condition: {status:#04x}."
+        )
+    if _bag(emulator).get(cure, 0):
+        _cure_tunnel_status_if_present(executor, reader, emulator, run, timing)
+        return False
+
+    hp = _party_hp(emulator)
+    species = reader.read().party_species_ids or ()
+    for target in (DIGLETT, DUX):
+        if target not in species:
+            continue
+        index = species.index(target)
+        if index < len(hp) and index < len(statuses) and hp[index] > 0 and statuses[index] == 0:
+            _swap(executor, reader, emulator, target, "income-return status pivot")
+            return True
+    raise LavenderChapterError(
+        "Income-return status has neither a matching cure nor a healthy status-free reserve."
+    )
 
 
 def _purchase_supplies(
