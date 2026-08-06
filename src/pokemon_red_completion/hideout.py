@@ -46,6 +46,7 @@ from pokemon_red_completion.lavender import (
     _use_super_potion,
 )
 from pokemon_red_completion.observation import (
+    BLASTOISE_SPECIES_ID,
     EventFlag,
     ItemId,
     MapId,
@@ -62,6 +63,12 @@ BUBBLEBEAM = 0x3D
 DIG = 0x5B
 ROCKET = (0xE6, 0x1E)
 GIOVANNI = (0xE5, 0x1D)
+PROTECTED_PARTIES = frozenset(
+    {
+        PROTECTED_PARTY,
+        (BLASTOISE_SPECIES_ID, *PROTECTED_PARTY[1:]),
+    }
+)
 OPTIONAL_EVENTS = (
     EventFlag.BEAT_ROCKET_HIDEOUT_1_TRAINER_0,
     EventFlag.BEAT_ROCKET_HIDEOUT_1_TRAINER_1,
@@ -210,7 +217,7 @@ class HideoutChapterReport:
             and self.super_potions_remaining >= HIDEOUT_SUPER_POTION_RESERVE
             and self.final_raw.map_id == MapId.CELADON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == PROTECTED_PARTY
+            and self.final_raw.party_species_ids in PROTECTED_PARTIES
             and self.party_hp == self.party_max_hp
             and all(status == 0 for status in self.party_status)
             and self.money_before >= 0
@@ -754,9 +761,23 @@ def _move(
                 break
         else:
             raise HideoutChapterError(f"{label} blocked at step {step}: {direction}.")
-        if state.party_species_ids != PROTECTED_PARTY or (state.first_party_hp or 0) <= 0:
-            raise HideoutChapterError(f"{label} changed the protected party.")
+        observed_party_hp = _party_hp(emulator)
+        if not _protected_party_can_continue(state, observed_party_hp):
+            raise HideoutChapterError(
+                f"{label} changed the protected party: "
+                f"species={state.party_species_ids!r}, hp={observed_party_hp!r}."
+            )
     return state
+
+
+def _protected_party_can_continue(
+    raw: RawGameState,
+    observed_party_hp: tuple[int, ...] | None = None,
+) -> bool:
+    """Keep navigating when a reserve is alive even if the field lead fainted."""
+
+    living_hp = observed_party_hp or raw.party_hp or ((raw.first_party_hp or 0),)
+    return raw.party_species_ids in PROTECTED_PARTIES and any(hp > 0 for hp in living_hp)
 
 
 def _spinner(
@@ -938,7 +959,7 @@ def _require(
         raw.map_id != map_id
         or (raw.player_x, raw.player_y) != coordinate
         or raw.battle_state != 0
-        or raw.party_species_ids != PROTECTED_PARTY
+        or raw.party_species_ids not in PROTECTED_PARTIES
     ):
         raise HideoutChapterError(
             f"{label} missed gate: map={raw.map_id!r}, "

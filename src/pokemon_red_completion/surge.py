@@ -144,6 +144,7 @@ VIRIDIAN_MART_RETURN_DIRECTIONS = _directions("LLLLLLLLLLDDDDDDDDRDDRDDDDD")
 VIRIDIAN_TO_CENTER_DIRECTIONS = _directions("UUUUULUULUURRRRU")
 VIRIDIAN_CENTER_RETURN_DIRECTIONS = _directions("LLLLDDRDDRDDDDD")
 VERMILION_ROUTE_11_TO_CENTER_EXTERIOR = _directions("LL" + "U" * 10 + "L" * 10)
+VERMILION_CENTER_TO_ROUTE_11 = _directions("R" * 10 + "D" * 10 + "RR")
 
 
 class EmulatorState(Protocol):
@@ -450,6 +451,7 @@ def run_surge_chapter(
         progress,
         emulator,
     )
+    _heal_after_spearow_capture(emulator, actions, reader, timing)
 
     raw = _catch_diglett_chapter(emulator, actions, reader, timing)
     _gate(
@@ -1206,6 +1208,85 @@ def _await_exact_ball_decrement(
             )
         _pulse(executor, MacroActionKind.CANCEL, frames=180)
     raise SurgeChapterError(f"{label} did not persist exactly one Poké Ball decrement.")
+
+
+def _heal_after_spearow_capture(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SurgeTiming,
+) -> None:
+    """Restore both capture candidates before the damaging Diglett encounter."""
+
+    raw = reader.read()
+    if raw.map_id != MapId.ROUTE_11 or raw.player_x is None or raw.player_y != 6:
+        raise SurgeChapterError("Post-Spearow recovery lacks its Route 11 boundary.")
+    raw = _move_until_map_fleeing_wild(
+        emulator,
+        executor,
+        reader,
+        "left",
+        MapId.VERMILION_CITY,
+        timing,
+        "Post-Spearow Vermilion return",
+    )
+    _wait(executor, timing.transition_frames)
+    raw = reader.read() if raw.map_id == MapId.VERMILION_CITY else raw
+    if raw.player_x is None or raw.player_y != 14 or raw.player_x < 23:
+        raise SurgeChapterError("Post-Spearow return missed the Vermilion east boundary.")
+    _move(
+        executor,
+        reader,
+        ("left",) * (raw.player_x - 23),
+        timing,
+        "Post-Spearow east-boundary normalization",
+    )
+    _move(
+        executor,
+        reader,
+        VERMILION_ROUTE_11_TO_CENTER_EXTERIOR,
+        timing,
+        "Post-Spearow Center return",
+    )
+    _require(reader.read(), MapId.VERMILION_CITY, (11, 4), 0, "Post-Spearow Center exterior")
+    _move(executor, reader, ("up",), timing, "Post-Spearow Center entry")
+    _wait(executor, timing.transition_frames)
+    _require(reader.read(), MapId.VERMILION_POKECENTER, (3, 7), 0, "Post-Spearow Center")
+    _move(executor, reader, _directions("UUUU"), timing, "Post-Spearow nurse")
+    _confirm(executor, 9, 240)
+    healed = reader.read()
+    if (
+        healed.party_species_ids != (WARTORTLE_SPECIES_ID, SPEAROW_SPECIES_ID)
+        or healed.party_hp != healed.party_max_hp
+        or any(healed.party_status or ())
+    ):
+        raise SurgeChapterError("Post-Spearow Center did not restore the capture party.")
+    _move(executor, reader, _directions("DDDDD"), timing, "Post-Spearow Center exit")
+    _move(
+        executor,
+        reader,
+        VERMILION_CENTER_TO_ROUTE_11,
+        timing,
+        "Post-Spearow Route 11 return",
+    )
+    _move_until_map(
+        executor,
+        reader,
+        "right",
+        MapId.ROUTE_11,
+        timing,
+        "Post-Spearow Route 11 entry",
+    )
+    _wait(executor, timing.transition_frames)
+    _move_fleeing_wild(
+        emulator,
+        executor,
+        reader,
+        ("right",) * 4,
+        timing,
+        "Post-Spearow Diglett Cave approach",
+    )
+    _require(reader.read(), MapId.ROUTE_11, (4, 6), 0, "Post-Spearow recovery boundary")
 
 
 def _catch_diglett_chapter(
@@ -2503,10 +2584,8 @@ def _force_switch_wild_capture_to_lead(
     stale_cursor_address = _wild_menu_cursor_address(emulator)
     for pulse in range(32):
         current = reader.read()
-        if current.battle_state != 1 or current.enemy_species_id != expected_species_id:
+        if current.battle_state != 1:
             raise SurgeChapterError(f"{label} forced switch lost its wild encounter.")
-        if current.enemy_hp != expected_enemy_hp:
-            raise SurgeChapterError(f"{label} forced switch changed protected target HP.")
         cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
         if (
             pulse > 0
@@ -2538,21 +2617,23 @@ def _force_switch_wild_capture_to_lead(
 
     for pulse in range(48):
         restored = reader.read()
+        restored_menu = reader.read_battle_menu_state(restored)
         if (
             restored.battle_state == 1
             and restored.enemy_species_id == expected_species_id
             and restored.enemy_hp == expected_enemy_hp
             and restored.active_party_index == party_index
             and (restored.battler_hp or 0) > 0
-            and reader.read_battle_menu_state(restored).phase is BattleMenuPhase.MAIN
+            and restored_menu.phase is BattleMenuPhase.MAIN
         ):
             return restored
-        if (
-            restored.battle_state != 1
-            or restored.enemy_species_id != expected_species_id
+        if restored.battle_state != 1:
+            raise SurgeChapterError(f"{label} forced switch lost its protected encounter.")
+        if restored_menu.phase is BattleMenuPhase.MAIN and (
+            restored.enemy_species_id != expected_species_id
             or restored.enemy_hp != expected_enemy_hp
         ):
-            raise SurgeChapterError(f"{label} forced switch lost its protected encounter.")
+            raise SurgeChapterError(f"{label} forced switch changed its protected target.")
         if (restored.battler_hp or 0) <= 0 and _wild_menu_cursor_active(emulator):
             cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
             if 0 <= cursor < party_size:
@@ -3427,26 +3508,38 @@ def _throw_until_caught_diglett(
     starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
     throw_limit = min(starting_balls, DIGLETT_CAPTURE_THROW_LIMIT)
     for _ in range(throw_limit):
-        _restore_diglett_capture_catcher_if_fainted(emulator, executor, reader)
+        if _settle_caught_diglett(emulator, executor, reader, starting_balls, throw_limit):
+            return
+        restored = _restore_diglett_capture_catcher_if_fainted(emulator, executor, reader)
+        if restored.battle_state == 0:
+            if _settle_caught_diglett(emulator, executor, reader, starting_balls, throw_limit):
+                return
+            raise SurgeChapterError("Diglett capture ended before acquisition.")
         _navigate_main(executor, reader, 1)
         _pulse(executor, MacroActionKind.CONFIRM)
         _select_bag_item(emulator, executor, ItemId.POKE_BALL)
         _pulse(executor, MacroActionKind.CONFIRM, frames=360)
         for _ in range(32):
             raw = reader.read()
-            if raw.battle_state == 0 and raw.party_species_ids == (
-                WARTORTLE_SPECIES_ID,
-                SPEAROW_SPECIES_ID,
-                DIGLETT_SPECIES_ID,
-            ):
-                _confirm_kind(executor, MacroActionKind.CANCEL, 3, 180)
-                used = starting_balls - _bag(emulator).get(ItemId.POKE_BALL, 0)
-                if not 1 <= used <= throw_limit:
-                    raise SurgeChapterError("Diglett capture used an invalid ball count.")
+            if _settle_caught_diglett(emulator, executor, reader, starting_balls, throw_limit):
                 return
             active_hp = raw.battler_hp if raw.battler_hp is not None else raw.active_party_hp
             if raw.battle_state == 1 and active_hp == 0:
-                _restore_diglett_capture_catcher_if_fainted(emulator, executor, reader)
+                restored = _restore_diglett_capture_catcher_if_fainted(
+                    emulator,
+                    executor,
+                    reader,
+                )
+                if restored.battle_state == 0:
+                    if _settle_caught_diglett(
+                        emulator,
+                        executor,
+                        reader,
+                        starting_balls,
+                        throw_limit,
+                    ):
+                        return
+                    raise SurgeChapterError("Diglett capture ended before acquisition.")
                 break
             if (
                 raw.battle_state == 1
@@ -3455,6 +3548,37 @@ def _throw_until_caught_diglett(
                 break
             _pulse(executor, MacroActionKind.CONFIRM)
     raise SurgeChapterError("Diglett capture exhausted its bounded Poké Balls.")
+
+
+def _settle_caught_diglett(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    starting_balls: int,
+    throw_limit: int,
+) -> bool:
+    """Finish capture dialogue once the observed party already contains Diglett."""
+
+    target_party = (
+        WARTORTLE_SPECIES_ID,
+        SPEAROW_SPECIES_ID,
+        DIGLETT_SPECIES_ID,
+    )
+    raw = reader.read()
+    if raw.party_species_ids != target_party:
+        return False
+    for _ in range(32):
+        if raw.battle_state == 0:
+            _confirm_kind(executor, MacroActionKind.CANCEL, 3, 180)
+            used = starting_balls - _bag(emulator).get(ItemId.POKE_BALL, 0)
+            if not 1 <= used <= throw_limit:
+                raise SurgeChapterError("Diglett capture used an invalid ball count.")
+            return True
+        _pulse(executor, MacroActionKind.CANCEL, frames=120)
+        raw = reader.read()
+        if raw.party_species_ids != target_party:
+            raise SurgeChapterError("Diglett capture dialogue changed the acquired party.")
+    raise SurgeChapterError("Diglett capture dialogue did not settle.")
 
 
 def _restore_diglett_capture_catcher_if_fainted(
@@ -3468,25 +3592,38 @@ def _restore_diglett_capture_catcher_if_fainted(
     active_hp = raw.battler_hp if raw.battler_hp is not None else raw.active_party_hp
     if raw.battle_state != 1 or (active_hp is not None and active_hp > 0):
         return raw
+    if raw.enemy_species_id is None or raw.enemy_hp is None:
+        return raw
     if active_hp is None:
         raise SurgeChapterError("Diglett capture lacks active-catcher HP evidence.")
-    if raw.enemy_species_id != DIGLETT_SPECIES_ID or raw.enemy_hp is None:
-        raise SurgeChapterError("Diglett forced switch lost its protected encounter.")
+    if raw.enemy_species_id != DIGLETT_SPECIES_ID:
+        raise SurgeChapterError(
+            "Diglett forced switch lost its protected encounter: "
+            f"enemy={(raw.enemy_species_id, raw.enemy_hp)}, "
+            f"active={(raw.active_party_index, active_hp)}, "
+            f"party_hp={raw.party_hp!r}."
+        )
     living_index = next(
         (index for index, hp in enumerate(raw.party_hp or ()) if hp > 0),
         None,
     )
     if living_index is None:
         raise SurgeChapterError("Diglett capture left no living catcher.")
-    return _force_switch_wild_capture_to_lead(
-        emulator,
-        executor,
-        reader,
-        DIGLETT_SPECIES_ID,
-        raw.enemy_hp,
-        "Diglett capture",
-        party_index=living_index,
-    )
+    try:
+        return _force_switch_wild_capture_to_lead(
+            emulator,
+            executor,
+            reader,
+            DIGLETT_SPECIES_ID,
+            raw.enemy_hp,
+            "Diglett capture",
+            party_index=living_index,
+        )
+    except SurgeChapterError:
+        settled = reader.read()
+        if settled.battle_state == 0:
+            return settled
+        raise
 
 
 def _select_bag_item(emulator: EmulatorState, executor: _CountingExecutor, item: int) -> None:

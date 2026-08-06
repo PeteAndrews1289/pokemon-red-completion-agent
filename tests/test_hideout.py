@@ -15,8 +15,9 @@ from pokemon_red_completion.hideout import (
     HideoutTiming,
     HideoutTrainerEvidence,
     _lead_needs_recovery,
+    _protected_party_can_continue,
 )
-from pokemon_red_completion.observation import MapId, RawGameState
+from pokemon_red_completion.observation import BLASTOISE_SPECIES_ID, MapId, RawGameState
 
 
 def _raw() -> RawGameState:
@@ -87,6 +88,21 @@ def test_protected_recovery_selects_only_a_living_non_lead_party_member() -> Non
     assert first_living_reserve((40, 0, 37)) == 2
     assert first_living_reserve((40, 0, 0)) is None
     assert first_living_reserve((40,)) is None
+
+
+def test_hideout_navigation_accepts_a_living_reserve_after_the_lead_faints() -> None:
+    raw = replace(
+        _raw(),
+        first_party_hp=0,
+        party_hp=(0, 52, 37),
+    )
+
+    assert _protected_party_can_continue(raw)
+    assert not _protected_party_can_continue(replace(raw, party_hp=(0, 0, 0)))
+    assert _protected_party_can_continue(replace(raw, party_hp=None), (0, 52, 37))
+    assert _protected_party_can_continue(
+        replace(raw, party_species_ids=(BLASTOISE_SPECIES_ID, 0x40, 0x3B))
+    )
 
 
 @pytest.mark.parametrize(

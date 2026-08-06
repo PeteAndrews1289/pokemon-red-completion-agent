@@ -418,6 +418,7 @@ def test_forced_wild_switch_selects_requested_living_slot_after_premature_confir
             )
 
     reader = Reader()
+    reader.state = replace(fainted, enemy_species_id=0, enemy_hp=0)
 
     class Executor:
         confirmations = 0
@@ -585,6 +586,134 @@ def test_diglett_capture_recovers_a_fainted_catcher_with_living_party(
 
     assert observed is restored
     assert calls == [(DIGLETT_SPECIES_ID, 9, 1)]
+
+
+def test_diglett_capture_does_not_force_switch_during_battle_intro(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    transitional = replace(
+        _raw(),
+        battle_state=1,
+        enemy_species_id=None,
+        enemy_hp=None,
+        active_party_index=None,
+        active_party_hp=None,
+        first_party_hp=0,
+        party_hp=(0, 21),
+        party_species_ids=(179, SPEAROW_SPECIES_ID),
+    )
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return transitional
+
+    def unexpected_switch(*_args: object, **_kwargs: object) -> RawGameState:
+        raise AssertionError("battle-intro state must settle before forced-switch recovery")
+
+    monkeypatch.setattr(
+        surge_module,
+        "_force_switch_wild_capture_to_lead",
+        unexpected_switch,
+    )
+
+    assert (
+        surge_module._restore_diglett_capture_catcher_if_fainted(
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            Reader(),  # type: ignore[arg-type]
+        )
+        is transitional
+    )
+
+
+def test_diglett_fainted_recovery_accepts_capture_settling_between_reads(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fainted = replace(
+        _raw(),
+        battle_state=1,
+        enemy_species_id=DIGLETT_SPECIES_ID,
+        enemy_hp=9,
+        active_party_index=0,
+        active_party_hp=0,
+        first_party_hp=0,
+        party_hp=(0, 21),
+        party_species_ids=(179, SPEAROW_SPECIES_ID),
+    )
+    settled = replace(
+        fainted,
+        battle_state=0,
+        party_hp=(0, 21, 12),
+        party_species_ids=(179, SPEAROW_SPECIES_ID, DIGLETT_SPECIES_ID),
+    )
+
+    class Reader:
+        state = fainted
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    def finish_capture(*_args: object, **_kwargs: object) -> RawGameState:
+        reader.state = settled
+        raise surge_module.SurgeChapterError("transitional battle flag cleared")
+
+    monkeypatch.setattr(
+        surge_module,
+        "_force_switch_wild_capture_to_lead",
+        finish_capture,
+    )
+
+    assert (
+        surge_module._restore_diglett_capture_catcher_if_fainted(
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            reader,  # type: ignore[arg-type]
+        )
+        is settled
+    )
+
+
+def test_diglett_capture_settles_acquisition_before_fainted_switch_recovery(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    acquired = replace(
+        _raw(),
+        battle_state=1,
+        active_party_hp=0,
+        first_party_hp=0,
+        party_hp=(0, 21, 12),
+        party_species_ids=(179, SPEAROW_SPECIES_ID, DIGLETT_SPECIES_ID),
+    )
+    settled = replace(acquired, battle_state=0)
+
+    class Reader:
+        state = acquired
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.CANCEL:
+                reader.state = settled
+
+    monkeypatch.setattr(
+        surge_module,
+        "_bag",
+        lambda _emulator: {ItemId.POKE_BALL: 29},
+    )
+
+    assert surge_module._settle_caught_diglett(
+        object(),  # type: ignore[arg-type]
+        Executor(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        30,
+        30,
+    )
 
 
 def test_failed_flee_accepts_escape_during_forced_living_switch() -> None:
