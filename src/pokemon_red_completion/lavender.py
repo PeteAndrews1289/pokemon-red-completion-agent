@@ -2923,50 +2923,91 @@ def _buy_mart_item(
     quantity: int,
     target_bag_quantity: int,
 ) -> None:
-    for _ in range(12):
-        current = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
-            RamAddress.LIST_SCROLL_OFFSET
-        )
-        if current == absolute_index:
-            break
-        _pulse(
-            executor,
-            MacroActionKind.MOVE,
-            "down" if current < absolute_index else "up",
-            120,
-        )
-    else:
+    before = _bag(emulator).get(item, 0)
+    if target_bag_quantity - before != quantity or quantity <= 0:
         raise LavenderChapterError(
-            f"Mart could not select inventory index {absolute_index}; "
-            f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
-            f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}, "
-            f"max={emulator.read_u8(RamAddress.MAX_MENU_ITEM)}, "
-            f"top=({emulator.read_u8(RamAddress.TOP_MENU_ITEM_X)}, "
-            f"{emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y)}), "
-            f"selected={emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM):#04x}."
+            f"Mart purchase target is inconsistent: before={before}, "
+            f"quantity={quantity}, target={target_bag_quantity}."
         )
-    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    for _ in range(max(12, quantity + 1)):
-        selected = emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM)
-        current_quantity = emulator.read_u8(RamAddress.SHOP_QUANTITY)
-        if selected == item and current_quantity == quantity:
-            break
-        if selected != item:
-            raise LavenderChapterError(f"Mart selected {selected:#04x}, expected {int(item):#04x}.")
-        _pulse(executor, MacroActionKind.MOVE, "up", 120)
-    else:
-        raise LavenderChapterError(f"Mart quantity selector missed {quantity}.")
-    for _ in range(timing.dialogue_pulses):
-        if _bag(emulator).get(item, 0) == target_bag_quantity:
-            _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for _attempt in range(4):
+        remaining = target_bag_quantity - _bag(emulator).get(item, 0)
+        if remaining <= 0:
             return
+        for _ in range(12):
+            current = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+                RamAddress.LIST_SCROLL_OFFSET
+            )
+            if current == absolute_index:
+                break
+            _pulse(
+                executor,
+                MacroActionKind.MOVE,
+                "down" if current < absolute_index else "up",
+                120,
+            )
+        else:
+            raise LavenderChapterError(
+                f"Mart could not select inventory index {absolute_index}; "
+                f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
+                f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}, "
+                f"max={emulator.read_u8(RamAddress.MAX_MENU_ITEM)}, "
+                f"top=({emulator.read_u8(RamAddress.TOP_MENU_ITEM_X)}, "
+                f"{emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y)}), "
+                f"selected={emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM):#04x}."
+            )
         _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+        for _ in range(max(12, remaining + 1)):
+            selected = emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM)
+            current_quantity = emulator.read_u8(RamAddress.SHOP_QUANTITY)
+            if selected == item and current_quantity == remaining:
+                break
+            if selected != item:
+                raise LavenderChapterError(
+                    f"Mart selected {selected:#04x}, expected {int(item):#04x}."
+                )
+            _pulse(executor, MacroActionKind.MOVE, "up", 120)
+        else:
+            raise LavenderChapterError(f"Mart quantity selector missed {remaining}.")
+
+        purchase_before = _bag(emulator).get(item, 0)
+        for _ in range(timing.dialogue_pulses):
+            observed = _bag(emulator).get(item, 0)
+            if observed > purchase_before:
+                if observed > target_bag_quantity:
+                    raise LavenderChapterError(
+                        f"Mart purchase exceeded {int(item):#04x} target: "
+                        f"observed={observed}, target={target_bag_quantity}."
+                    )
+                _open_mart_buy_list(executor, emulator, timing.wait_frames)
+                break
+            _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+        else:
+            break
+        if _bag(emulator).get(item, 0) == target_bag_quantity:
+            return
     raise LavenderChapterError(
         f"Mart did not purchase {quantity} of {int(item):#04x}: "
         f"money={_money(emulator)}, bag={_bag(emulator)!r}, "
         f"selected={emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM):#04x}, "
         f"shop_quantity={emulator.read_u8(RamAddress.SHOP_QUANTITY)}."
     )
+
+
+def _open_mart_buy_list(
+    executor: _CountingExecutor,
+    emulator: EmulatorState,
+    wait_frames: int,
+) -> None:
+    """Settle a completed or partial purchase back to the priced item list."""
+
+    for _ in range(8):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (5, 4):
+            return
+        _pulse(executor, MacroActionKind.CONFIRM, frames=wait_frames)
+    raise LavenderChapterError("Mart dialogue did not return to the priced item list.")
 
 
 def _heal_center(

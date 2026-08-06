@@ -28,6 +28,7 @@ from pokemon_red_completion.observation import (
     BattleMenuState,
     ItemId,
     MapId,
+    RamAddress,
     RawGameState,
 )
 
@@ -109,6 +110,76 @@ def test_lavender_timing_is_positive_and_bounded() -> None:
         and getattr(DEFAULT_LAVENDER_TIMING, field.name) > 0
         for field in fields(LavenderTiming)
     )
+
+
+def test_mart_purchase_tops_up_after_a_partial_quantity_registration(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Emulator:
+        cursor = 1
+        selected = 0
+        shop_quantity = 0
+        state = "list"
+        purchases = 0
+        bag = {ItemId.SUPER_POTION: 3}
+
+        def read_u8(self, address: int) -> int:
+            if address == RamAddress.CURRENT_MENU_ITEM:
+                return self.cursor
+            if address == RamAddress.LIST_SCROLL_OFFSET:
+                return 0
+            if address == RamAddress.SHOP_SELECTED_ITEM:
+                return self.selected
+            if address == RamAddress.SHOP_QUANTITY:
+                return self.shop_quantity
+            if address == RamAddress.TOP_MENU_ITEM_X:
+                return 5 if self.state == "list" else 0
+            if address == RamAddress.TOP_MENU_ITEM_Y:
+                return 4 if self.state == "list" else 0
+            raise AssertionError(f"unexpected address {address:#x}")
+
+    emulator = Emulator()
+
+    def pulse(
+        _executor: object,
+        kind: MacroActionKind,
+        value: object = None,
+        _frames: object = None,
+        **_kwargs: object,
+    ) -> None:
+        if emulator.state == "list" and kind is MacroActionKind.CONFIRM:
+            emulator.state = "quantity"
+            emulator.selected = int(ItemId.SUPER_POTION)
+            emulator.shop_quantity = 1
+        elif emulator.state == "quantity" and kind is MacroActionKind.MOVE:
+            assert value == "up"
+            emulator.shop_quantity += 1
+        elif emulator.state == "quantity" and kind is MacroActionKind.CONFIRM:
+            emulator.purchases += 1
+            purchased = emulator.shop_quantity - 1 if emulator.purchases == 1 else 1
+            emulator.bag[ItemId.SUPER_POTION] += purchased
+            emulator.state = "receipt"
+        elif emulator.state == "receipt" and kind is MacroActionKind.CONFIRM:
+            emulator.state = "list"
+        else:
+            raise AssertionError((emulator.state, kind, value))
+
+    monkeypatch.setattr(lavender_module, "_pulse", pulse)
+    monkeypatch.setattr(lavender_module, "_bag", lambda _emulator: emulator.bag)
+
+    lavender_module._buy_mart_item(
+        object(),  # type: ignore[arg-type]
+        emulator,  # type: ignore[arg-type]
+        DEFAULT_LAVENDER_TIMING,
+        absolute_index=1,
+        item=ItemId.SUPER_POTION,
+        quantity=8,
+        target_bag_quantity=11,
+    )
+
+    assert emulator.bag[ItemId.SUPER_POTION] == 11
+    assert emulator.purchases == 2
+    assert emulator.state == "list"
 
 
 def test_rock_center_exit_normalizes_false_ready_nurse_dialogue() -> None:
