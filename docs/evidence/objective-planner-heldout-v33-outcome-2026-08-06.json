@@ -1,0 +1,39 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v33",
+  "status": "failed",
+  "source_commit": "24f5b34e10e315e02866bf69d8e78a3446ebd3d5",
+  "source_bundle_sha256": "d2da90e0b20a0d3cb5e7e778fe4d6690e6477ed63b244b82b7209b0638585f02",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v33-validation-01",
+      "harness_seed": 1750001,
+      "battle_start_schedule_sha256": "ce2edd67d29897ca5134f749a742ecd7e4418a7a9b46650b54fa8793407a5917",
+      "private_log_sha256": "c66fa65c07fb7912ab892aeed6ff1795cac33031089e7d11cdbb755a7de34cfb",
+      "status": "passed",
+      "checkpoints_verified": 312,
+      "objectives_verified": 36,
+      "scheduled_battles_verified": 74,
+      "teacher_objective_fallbacks": 0,
+      "minimum_objective_confidence": 0.7983486180511433,
+      "actions_executed": 94795,
+      "champion_defeated": true,
+      "hall_of_fame_entered": true,
+      "final_party_levels": [61, 59, 61, 61, 63, 65]
+    },
+    {
+      "run_id": "red-objective-v33-validation-02",
+      "harness_seed": 1750002,
+      "private_log_sha256": "c60ebc6d8f1c38d988f6d7b6a2d3a0df3cdd2195ab36c852b8561616892f941d",
+      "status": "failed",
+      "qualified_checkpoints": 91,
+      "failure": "A failed wild-battle flee fainted the active member, and the duplicated forced-party-menu cursor loop could not select the observed living party member."
+    }
+  ],
+  "remaining_validation_runs_opened": false,
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The failed-flee and wild-capture paths retained separate cursor-address heuristics instead of using the shared observed forced-switch primitive. The local cursor could be active without responding to the assumed numeric up/down progression, exhausting the inner selection bound.",
+  "repair_direction": "Route both wild-battle forced-switch paths through the shared semantic switch controller, source party health from the observation adapter, and preserve the exact encounter identity before resuming flee or capture."
+}
