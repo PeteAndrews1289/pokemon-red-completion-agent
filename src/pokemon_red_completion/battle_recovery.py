@@ -56,8 +56,8 @@ def switch_active_battler(
 ) -> None:
     """Switch to one living party member through a fully observed battle-menu gate."""
 
-    party = _party_hp(emulator)
     raw = reader.read()
+    party = raw.party_hp or _party_hp(emulator)
     if (
         not 0 <= party_index < len(party)
         or party[party_index] <= 0
@@ -129,7 +129,7 @@ def _switch_forced_fainted_battler(
     # the Silph rival recovery and it also covers six-member parties.
     for pulse_index in range(64):
         settled = reader.read()
-        party = _party_hp(emulator)
+        party = settled.party_hp or _party_hp(emulator)
         if party[party_index] <= 0:
             raise ProtectedRecoveryError(f"{label} forced-switch target fainted.")
         if settled.battle_state != expected_battle_state:

@@ -13,6 +13,10 @@ from pokemon_red_completion.battle_actions import (
     BattleControlRequest,
     recovery_request_matches,
 )
+from pokemon_red_completion.battle_recovery import (
+    ProtectedRecoveryError,
+    switch_active_battler,
+)
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleRecoveryCapability,
@@ -1046,82 +1050,45 @@ def _force_switch_failed_flee_to_living(
         raise SurgeChapterError("Flee left no living party member.")
     expected_species = fainted.enemy_species_id
     expected_enemy_hp = fainted.enemy_hp
-    party_size = len(fainted.party_species_ids or ())
-    stale_cursor_address = _wild_menu_cursor_address(emulator)
-    for pulse in range(32):
-        current = reader.read()
-        if (
-            current.battle_state != 1
-            or current.enemy_species_id != expected_species
-            or current.enemy_hp != expected_enemy_hp
-        ):
-            raise SurgeChapterError(
-                "Failed-flee switch lost its protected encounter before selection: "
-                f"battle={current.battle_state}, species={current.enemy_species_id}, "
-                f"enemy_hp={current.enemy_hp}, expected_species={expected_species}, "
-                f"expected_enemy_hp={expected_enemy_hp}, party_hp={current.party_hp}, "
-                f"active={current.active_party_index}."
-            )
-        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-        if (
-            pulse > 0
-            and _wild_menu_cursor_address(emulator) != stale_cursor_address
-            and _wild_menu_cursor_active(emulator)
-            and 0 <= cursor < party_size
-        ):
-            for _ in range(party_size + 2):
-                cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-                if cursor == living_index:
-                    break
-                _pulse(
-                    executor,
-                    MacroActionKind.MOVE,
-                    "down" if cursor < living_index else "up",
-                    120,
-                )
-            else:
-                raise SurgeChapterError("Failed-flee switch could not select a living member.")
-            _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-            break
-        _pulse(
+    try:
+        switch_active_battler(
             executor,
-            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
-            frames=120,
+            reader,
+            emulator,
+            living_index,
+            expected_battle_state=1,
+            label="Failed-flee living-member continuation",
+            wait_frames=120,
         )
-    else:
-        raise SurgeChapterError("Failed-flee forced party menu did not settle.")
-
-    for pulse in range(48):
+    except ProtectedRecoveryError as error:
         restored = reader.read()
-        if restored.battle_state == 0 and any(hp > 0 for hp in (restored.party_hp or ())):
-            return restored
-        if (
-            restored.battle_state == 1
-            and restored.enemy_species_id == expected_species
-            and restored.enemy_hp == expected_enemy_hp
-            and restored.active_party_index == living_index
-            and (restored.battler_hp or 0) > 0
-            and reader.read_battle_menu_state(restored).phase is BattleMenuPhase.MAIN
+        if restored.battle_state == 0 and any(
+            hp > 0 for hp in (restored.party_hp or ())
         ):
             return restored
-        if (
-            restored.battle_state != 1
-            or restored.enemy_species_id != expected_species
-            or restored.enemy_hp != expected_enemy_hp
-        ):
-            raise SurgeChapterError(
-                "Failed-flee switch lost its protected encounter while settling: "
-                f"battle={restored.battle_state}, species={restored.enemy_species_id}, "
-                f"enemy_hp={restored.enemy_hp}, expected_species={expected_species}, "
-                f"expected_enemy_hp={expected_enemy_hp}, party_hp={restored.party_hp}, "
-                f"active={restored.active_party_index}."
-            )
-        _pulse(
-            executor,
-            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
-            frames=120,
+        raise SurgeChapterError(
+            "Failed-flee shared switch failed: "
+            f"cause={error}, battle={restored.battle_state}, "
+            f"species={restored.enemy_species_id}, enemy_hp={restored.enemy_hp}, "
+            f"party_hp={restored.party_hp}, active={restored.active_party_index}."
+        ) from error
+    restored = reader.read()
+    if (
+        restored.battle_state != 1
+        or restored.enemy_species_id != expected_species
+        or restored.enemy_hp != expected_enemy_hp
+        or restored.active_party_index != living_index
+        or (restored.battler_hp or 0) <= 0
+        or reader.read_battle_menu_state(restored).phase is not BattleMenuPhase.MAIN
+    ):
+        raise SurgeChapterError(
+            "Failed-flee shared switch changed its protected encounter: "
+            f"battle={restored.battle_state}, species={restored.enemy_species_id}, "
+            f"enemy_hp={restored.enemy_hp}, expected_species={expected_species}, "
+            f"expected_enemy_hp={expected_enemy_hp}, party_hp={restored.party_hp}, "
+            f"active={restored.active_party_index}."
         )
-    raise SurgeChapterError("Failed-flee switch did not restore MAIN.")
+    return restored
 
 
 def _find_spearow(
@@ -2608,82 +2575,31 @@ def _force_switch_wild_capture_to_lead(
     party_size = len(reader.read().party_species_ids or ())
     if not 0 <= party_index < party_size:
         raise SurgeChapterError(f"{label} protected party index is invalid.")
-    stale_cursor_address = _wild_menu_cursor_address(emulator)
-    for pulse in range(32):
-        current = reader.read()
-        if current.battle_state != 1:
-            raise SurgeChapterError(f"{label} forced switch lost its wild encounter.")
-        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-        if (
-            pulse > 0
-            and _wild_menu_cursor_address(emulator) != stale_cursor_address
-            and _wild_menu_cursor_active(emulator)
-            and 0 <= cursor < party_size
-        ):
-            for _ in range(8):
-                cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-                if cursor == party_index:
-                    break
-                _pulse(
-                    executor,
-                    MacroActionKind.MOVE,
-                    "down" if cursor < party_index else "up",
-                    120,
-                )
-            else:
-                raise SurgeChapterError(f"{label} could not select the protected lead.")
-            _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-            break
-        _pulse(
+    try:
+        switch_active_battler(
             executor,
-            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
-            frames=120,
+            reader,
+            emulator,
+            party_index,
+            expected_battle_state=1,
+            label=f"{label} forced living-member continuation",
+            wait_frames=120,
         )
-    else:
-        raise SurgeChapterError(f"{label} forced party menu did not settle.")
-
-    for pulse in range(48):
-        restored = reader.read()
-        restored_menu = reader.read_battle_menu_state(restored)
-        if (
-            restored.battle_state == 1
-            and restored.enemy_species_id == expected_species_id
-            and restored.enemy_hp == expected_enemy_hp
-            and restored.active_party_index == party_index
-            and (restored.battler_hp or 0) > 0
-            and restored_menu.phase is BattleMenuPhase.MAIN
-        ):
-            return restored
-        if restored.battle_state != 1:
-            raise SurgeChapterError(f"{label} forced switch lost its protected encounter.")
-        if restored_menu.phase is BattleMenuPhase.MAIN and (
-            restored.enemy_species_id != expected_species_id
-            or restored.enemy_hp != expected_enemy_hp
-        ):
-            raise SurgeChapterError(f"{label} forced switch changed its protected target.")
-        if (restored.battler_hp or 0) <= 0 and _wild_menu_cursor_active(emulator):
-            cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-            if 0 <= cursor < party_size:
-                for _ in range(8):
-                    cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-                    if cursor == party_index:
-                        break
-                    _pulse(
-                        executor,
-                        MacroActionKind.MOVE,
-                        "down" if cursor < party_index else "up",
-                        120,
-                    )
-                else:
-                    raise SurgeChapterError(f"{label} could not reselect the protected lead.")
-                _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-                continue
-        _pulse(
-            executor,
-            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
-            frames=120,
+    except ProtectedRecoveryError as error:
+        raise SurgeChapterError(f"{label} shared forced switch failed: {error}") from error
+    restored = reader.read()
+    if (
+        restored.battle_state != 1
+        or restored.enemy_species_id != expected_species_id
+        or restored.enemy_hp != expected_enemy_hp
+        or restored.active_party_index != party_index
+        or (restored.battler_hp or 0) <= 0
+        or reader.read_battle_menu_state(restored).phase is not BattleMenuPhase.MAIN
+    ):
+        raise SurgeChapterError(
+            f"{label} shared forced switch changed its protected target."
         )
-    raise SurgeChapterError(f"{label} forced switch did not restore MAIN.")
+    return restored
 
 
 def _weaken_wild_capture_once(

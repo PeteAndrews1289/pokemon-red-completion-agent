@@ -402,6 +402,7 @@ def test_forced_wild_switch_selects_requested_living_slot_after_premature_confir
         5,
         1,
         party_species_ids=(179, 64, 59, 36, 165),
+        party_hp=(0, 35, 0, 0, 0),
         enemy_species_id=123,
         enemy_hp=5,
         active_party_index=4,
