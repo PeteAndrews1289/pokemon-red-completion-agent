@@ -1,0 +1,31 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v32",
+  "source_commit": "c6346c07eb35f70d15c315cfc969c0bacc0f4ec6",
+  "source_bundle_sha256": "a26b3f1e18626c9879e6b5655e05242b2a10983b8c67a57f9c92f7975f9a92b0",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1700002,
+    "battle_start_schedule_sha256": "fcb1276b29cfe465f54f544c5547da4c575e7b1b32c9e7556ee93662af459164",
+    "private_log_sha256": "fb212841810b22e8f64460676647e665a10f82347a9df6726a1f8f356c681489",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 74,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "actions_executed": 93158,
+    "party_size": 6,
+    "final_party_levels": [61, 59, 61, 61, 63, 65]
+  },
+  "repairs_verified": [
+    "The player yields south from the exact fifth-floor collision gate instead of repeating a blocked west input",
+    "Return to the top aisle and the westward crossing are independently observed within finite bounds",
+    "The repaired route reaches the vending roof and completes the Saffron access handoff",
+    "The same run preserves all downstream balanced-party, Champion, and Hall of Fame contracts"
+  ]
+}

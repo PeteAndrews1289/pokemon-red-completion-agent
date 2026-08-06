@@ -1,0 +1,37 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v31",
+  "status": "failed",
+  "source_commit": "cee817efa11276abd131be4ac1eecb3edf853f78",
+  "source_bundle_sha256": "de5c54268a14f8adac52dd03b741bff7e22ddfaaf25efe1f0304e11ec1671ba3",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v31-validation-01",
+      "harness_seed": 1700001,
+      "battle_start_schedule_sha256": "a1a1ff065e50b30073008fef3dc0788bd33320d9fc399411eb58115b927f8dde",
+      "status": "passed",
+      "checkpoints_verified": 312,
+      "objectives_verified": 36,
+      "scheduled_battles_verified": 74,
+      "actions_executed": 103652,
+      "champion_defeated": true,
+      "hall_of_fame_entered": true,
+      "private_log_sha256": "95a19236a939693e4bf37a16ca0139be3a010465fc01888cf2f769fc304ae2ff"
+    },
+    {
+      "run_id": "red-objective-v31-validation-02",
+      "harness_seed": 1700002,
+      "battle_start_schedule_sha256": "fcb1276b29cfe465f54f544c5547da4c575e7b1b32c9e7556ee93662af459164",
+      "status": "failed",
+      "qualified_checkpoints": 231,
+      "failure": "The vertical customer on Celadon Mart 5F occupied (14,2), repeatedly blocking the second westward step toward the rooftop stairs while the player remained at (15,2).",
+      "private_log_sha256": "629598fb94866529ee3e5c4cf95d831066430c410ccd1ea053f7c185f2c8526d"
+    }
+  ],
+  "remaining_validation_runs_opened": false,
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The Saffron access chapter still treated the fifth-floor top aisle as static, even though the later Silph supply chapter already modeled the same customer's vertical patrol. Repeating the same long movement cadence could keep both sprites in lockstep and exhaust ordinary movement retries.",
+  "repair_direction": "At the exact (15,2) westbound gate, step south to yield the aisle, vary a bounded wait, prove the return to (15,2), and cross to (14,2) only after the customer has moved. All other blocked movements remain fail-closed."
+}
