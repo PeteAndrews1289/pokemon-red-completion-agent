@@ -351,7 +351,7 @@ def run_surge_chapter(
             "Vermilion preparation has an unexpected Super Potion surplus: "
             f"{starting_surge_super_potions}."
         )
-    surge_super_potion_target = max(1, starting_surge_super_potions)
+    surge_super_potion_target = max(2, starting_surge_super_potions)
     _move(actions, reader, _directions("UUL"), timing, "Mart clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 60)
     _confirm(actions, 4, 180)
@@ -374,7 +374,7 @@ def run_surge_chapter(
             f"money_bytes={money_bytes!r}."
         )
     _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-    if starting_surge_super_potions == 0:
+    if starting_surge_super_potions < surge_super_potion_target:
         _pulse(actions, MacroActionKind.MOVE, "down", 180)
         if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
             raise SurgeChapterError(
@@ -644,9 +644,10 @@ def run_surge_chapter(
     )
     pre_battle_pp = battle.first_party_pp
     dig_slot = (battle.first_party_moves or ()).index(DIG_MOVE_ID)
-    defeated, dig_attacks, super_potion_used = _run_dig_battle(
+    defeated, dig_attacks, super_potions_used = _run_dig_battle(
         actions, reader, timing, emulator=emulator
     )
+    super_potion_used = super_potions_used > 0
     off_slot_unchanged = (
         pre_battle_pp is not None
         and defeated.first_party_pp is not None
@@ -691,7 +692,7 @@ def run_surge_chapter(
         and final.first_party_max_hp is not None
         and 0 < final.first_party_hp <= final.first_party_max_hp
         and _bag(emulator).get(ItemId.SUPER_POTION, 0)
-        == surge_super_potion_target - int(super_potion_used)
+        == surge_super_potion_target - super_potions_used
         and stable
     )
     if not reward_valid:
@@ -3881,9 +3882,9 @@ def _run_dig_battle(
     timing: SurgeTiming,
     *,
     emulator: EmulatorState | None = None,
-) -> tuple[RawGameState, int, bool]:
+) -> tuple[RawGameState, int, int]:
     dig_attacks = 0
-    super_potion_used = False
+    super_potions_used = 0
     declining_switch = False
     switch_pulses = 0
     protected_party: tuple[int, ...] | None = None
@@ -3891,7 +3892,7 @@ def _run_dig_battle(
     for _ in range(timing.battle_pulses):
         raw = reader.read()
         if raw.battle_state == 0:
-            return raw, dig_attacks, super_potion_used
+            return raw, dig_attacks, super_potions_used
         if raw.battle_state != 2 or (raw.first_party_hp or 0) <= 0:
             raise SurgeChapterError("Lt. Surge battle lost its living trainer-state gate.")
         menu = reader.read_battle_menu_state(raw)
@@ -3924,7 +3925,7 @@ def _run_dig_battle(
             _pulse(executor, MacroActionKind.CANCEL, frames=120)
             continue
         if (
-            not super_potion_used
+            super_potions_used < 2
             and raw.battler_hp is not None
             and raw.battler_max_hp is not None
             and raw.battler_hp > 0
@@ -3934,7 +3935,7 @@ def _run_dig_battle(
             if emulator is None:
                 raise SurgeChapterError("Lt. Surge low-HP recovery requires live emulator state.")
             _use_surge_super_potion(executor, reader, emulator, timing)
-            super_potion_used = True
+            super_potions_used += 1
             continue
         moves = raw.first_party_moves or ()
         if DIG_MOVE_ID not in moves:
@@ -3983,7 +3984,7 @@ def _run_dig_battle(
         for _ in range(24):
             after = reader.read()
             if after.battle_state == 0:
-                return after, dig_attacks + 1, super_potion_used
+                return after, dig_attacks + 1, super_potions_used
             if (
                 before_pp
                 and after.first_party_pp
@@ -4006,6 +4007,10 @@ def _run_dig_battle(
                 f"enemy={(after.enemy_species_id, after.enemy_hp)}, "
                 f"hp={(after.first_party_hp, after.first_party_max_hp)}, "
                 f"status={after.first_party_status!r}, "
+                "active="
+                f"{(after.active_party_index, after.active_party_hp, after.active_party_max_hp)}, "
+                f"moves={after.first_party_moves!r}, "
+                f"before_pp={before_pp!r}, "
                 f"pp={after.first_party_pp!r}, "
                 f"menu={(terminal_menu.phase, terminal_menu.selected_move_slot)!r}."
             )

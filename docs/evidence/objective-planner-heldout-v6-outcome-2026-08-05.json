@@ -1,0 +1,39 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-05",
+  "evaluation_id": "red-objective-planner-heldout-v6",
+  "status": "failed",
+  "source_commit": "c144b8c13dc0b0dbb57c906e025162752d755418",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v6-validation-01",
+      "harness_seed": 1110001,
+      "status": "failed",
+      "qualified_checkpoints": 95,
+      "failure": "Dig did not reach its bounded PP gate after Diglett fainted before attacking Raichu.",
+      "diagnosis": "The Dig-only controller carried one Super Potion. This legal high-damage branch consumed it before Raichu, then entered another turn below a survivable HP threshold and fainted before the selected Dig could execute.",
+      "failure_log_sha256": "184f1e92e854c2e7bd21db7c566486ab7e5dbc77ce82112f6de5fc9d81437d23"
+    }
+  ],
+  "repair_diagnostics": [
+    {
+      "harness_seed": 1110001,
+      "status": "complete",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "teacher_objective_fallbacks": 0,
+      "hall_of_fame": true,
+      "actions": 97765,
+      "frames": 10030288,
+      "full_report_sha256": "58e1eb506f12c138134a56e688842a4b69c137bda04907689c0afc5158b1d452"
+    }
+  ],
+  "interpretation": {
+    "planner_result": "All objective decisions before the failure were model-authorized; the failure occurred in bounded battle recovery rather than objective selection.",
+    "evaluation_result": "The preregistered v6 series failed its five-run completion contract and is retired. The exposed-seed repair completion cannot replace a held-out result.",
+    "repair_result": "Vermilion preparation now carries a two-use Super Potion budget, and the Dig-only controller may spend both at semantic low-HP MAIN gates while preserving the off-slot PP invariant.",
+    "next_gate": "Run the unchanged repaired source and model on the fresh v7 validation schedules, leaving v7 test schedules sealed."
+  }
+}
