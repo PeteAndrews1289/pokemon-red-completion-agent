@@ -1,0 +1,64 @@
+{
+  "schema": "pokemon-semantic-team-balance-measurement-v1",
+  "recorded_on": "2026-08-06",
+  "measurement_id": "red-team-balance-1810001",
+  "source_commit": "ec70c10",
+  "harness_seed": 1810001,
+  "private_log_sha256": "629a8f4d3bc4c8d5bd6d6b2de2987de194ad1728b9cc3300ce5493efc958d1f9",
+  "finding": "The route assembles the full six-member roster and trains exactly one workhorse. The remaining five members finish the game between level 20 and level 30 while the workhorse reaches level 68.",
+  "observed": {
+    "our_final_party_levels": [
+      68,
+      20,
+      26,
+      30,
+      25,
+      30
+    ],
+    "minimum_level": 20,
+    "maximum_level": 68,
+    "level_spread": 48,
+    "party_size": 6,
+    "our_terminal_party_hp": [
+      216,
+      55,
+      59,
+      142,
+      69,
+      76
+    ],
+    "team_development_battles": 27,
+    "team_development_passed": true,
+    "workhorse_level": 60
+  },
+  "declared_contract": {
+    "minimum_level": 50,
+    "maximum_level_spread": 5,
+    "required_size": 6,
+    "source": "MANSION_TEAM_POLICY in blaine.py"
+  },
+  "contract_gap": {
+    "minimum_level_shortfall": 30,
+    "level_spread_excess": 43,
+    "note": "DevelopedTeamReport.passed asserts a complete roster, one trained workhorse, and zero faints. It does not assert the declared level floor or spread, so this run reports team_development.passed=true while missing the floor by 30 levels and the spread by 43."
+  },
+  "prior_receipt_error": {
+    "claimed_final_party_levels": [
+      61,
+      59,
+      61,
+      61,
+      63,
+      65
+    ],
+    "actual_source": "the Champion's fixed party, identical in every run",
+    "receipts_affected": 12,
+    "note": "Relabelled as champion_party_levels; see commit ec70c10."
+  },
+  "completion_unaffected": {
+    "game_complete": true,
+    "champion_event": true,
+    "hall_of_fame": true,
+    "note": "The run still finishes the game. The carry wins; the team does not participate."
+  }
+}
