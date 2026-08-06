@@ -22,7 +22,6 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeError,
     BattleRuntimeTiming,
     note_observed_trainer_battle_exit,
-    recovery_action_due,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.blaine import _select_cursor
@@ -78,7 +77,7 @@ from pokemon_red_completion.victory_road import (
 
 AGATHA_CHECKPOINT_COUNT = 3
 AGATHA_RNG_DELAY_FRAMES = 85
-AGATHA_SAFE_HP = 100
+AGATHA_SAFE_HP = 140
 AGATHA_PARTY = (
     (0x0E, 56),
     (0x82, 56),
@@ -265,7 +264,6 @@ def run_agatha_chapter(
     class _BoostBoundary(BattleControlRequest):
         default_action = BattleAction.boost(BattleBoostStat.SPECIAL)
 
-    last_recovery_turn = -1
     boosts_used = 0
     forced_switches = 0
 
@@ -274,16 +272,7 @@ def run_agatha_chapter(
             raise _BoostBoundary
         hp = raw.battler_hp or 0
         status = raw.battler_status or 0
-        if (
-            raw.active_party_index in {None, 0}
-            and recovery_action_due(
-                hp=hp,
-                status=status,
-                safe_hp=AGATHA_SAFE_HP,
-                decisions_made=len(turns),
-                last_recovery_decision=last_recovery_turn,
-            )
-        ):
+        if _agatha_recovery_due(raw):
             raise _HealBoundary
         species = raw.enemy_species_id or 0
         pp = raw.battler_pp or (0, 0, 0, 0)
@@ -404,7 +393,6 @@ def run_agatha_chapter(
                 ) from healing_error
             if terminal_exit:
                 note_observed_trainer_battle_exit(battle_intent)
-            last_recovery_turn = len(turns)
 
     for _ in range(20):
         _pulse(actions, MacroActionKind.CANCEL)
@@ -540,6 +528,14 @@ def _turns_valid(turns: Iterable[AgathaTurn]) -> bool:
     items = tuple(turns)
     return bool(items) and all(
         item.move_slot in {1, 2, 3, 4} and item.lead_hp > 0 for item in items
+    )
+
+
+def _agatha_recovery_due(raw: RawGameState) -> bool:
+    """Protect the workhorse when Agatha immediately undoes a recovery turn."""
+
+    return raw.active_party_index in {None, 0} and (
+        (raw.battler_hp or 0) < AGATHA_SAFE_HP or bool(raw.battler_status or 0)
     )
 
 

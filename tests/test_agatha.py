@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 import pokemon_red_completion.agatha as agatha_module
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.agatha import (
@@ -13,6 +15,7 @@ from pokemon_red_completion.agatha import (
     AgathaTurn,
     _agatha_forced_switch_target,
     _agatha_move_slot,
+    _agatha_recovery_due,
     _battle_x_special,
     _encounter_party,
     _observed_party_valid,
@@ -36,6 +39,7 @@ def test_agatha_source_contract_is_exact() -> None:
     assert AGATHA_ELIXIR_USE == 1
     assert AGATHA_X_SPECIAL_USE == 1
     assert AGATHA_FORCED_SWITCH_LIMIT == 5
+    assert AGATHA_SAFE_HP == 140
     assert AGATHA_SURF_RESERVE == 1
     assert MapId.AGATHAS_ROOM == 0xF7
     assert MapId.LANCES_ROOM == 0x71
@@ -214,6 +218,29 @@ def test_agatha_reserve_uses_live_active_moves_and_pp() -> None:
     )
 
     assert _agatha_move_slot(reserve) == 3
+
+
+def test_agatha_recovery_tracks_live_state_without_forcing_an_attack_between_items() -> None:
+    lead = RawGameState(
+        game_started=True,
+        map_id=MapId.AGATHAS_ROOM,
+        player_x=4,
+        player_y=3,
+        party_count=6,
+        battle_state=2,
+        active_party_index=0,
+        active_party_hp=AGATHA_SAFE_HP - 1,
+        active_party_status=0,
+    )
+
+    assert _agatha_recovery_due(lead)
+    assert _agatha_recovery_due(
+        replace(lead, active_party_hp=AGATHA_SAFE_HP, active_party_status=0x04)
+    )
+    assert not _agatha_recovery_due(
+        replace(lead, active_party_hp=AGATHA_SAFE_HP, active_party_status=0)
+    )
+    assert not _agatha_recovery_due(replace(lead, active_party_index=2))
 
 
 def test_agatha_forced_switch_prefers_live_matchup_coverage() -> None:
