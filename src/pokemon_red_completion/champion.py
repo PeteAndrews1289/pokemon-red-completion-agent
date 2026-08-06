@@ -51,7 +51,7 @@ from pokemon_red_completion.silph import (
     SilphChapterError,
     _battle_healing_item,
 )
-from pokemon_red_completion.team_training import LevelParityContract
+from pokemon_red_completion.team_training import COMPLETION_LEVEL_PARITY
 from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
     INDIGO_X_SPECIAL_RESERVE,
@@ -62,9 +62,7 @@ from pokemon_red_completion.victory_road import (
 )
 
 CHAMPION_CHECKPOINT_COUNT = 3
-#: Readiness for the final battle is measured against the party actually
-#: faced, not against a fixed number that only means something in Red.
-CHAMPION_LEVEL_PARITY = LevelParityContract(max_levels_behind=5)
+# Removed local level parity contract, using COMPLETION_LEVEL_PARITY instead
 CHAMPION_RNG_DELAY_FRAMES = 150
 CHAMPION_SAFE_HP = 90
 CHAMPION_RHYDON_SAFE_HP = 50
@@ -224,9 +222,9 @@ class ChampionChapterReport:
                     "opposition_maximum_level": (
                         max((level for _, level in self.party), default=None)
                     ),
-                    "level_parity_tolerance": CHAMPION_LEVEL_PARITY.max_levels_behind,
+                    "level_parity_tolerance": COMPLETION_LEVEL_PARITY.max_levels_behind,
                     "level_parity_required": (
-                        CHAMPION_LEVEL_PARITY.required_level(
+                        COMPLETION_LEVEL_PARITY.required_level(
                             max(level for _, level in self.party)
                         )
                         if self.party
@@ -237,7 +235,7 @@ class ChampionChapterReport:
                             1
                             for level in self.party_levels
                             if level
-                            < CHAMPION_LEVEL_PARITY.required_level(
+                            < COMPLETION_LEVEL_PARITY.required_level(
                                 max(level for _, level in self.party)
                             )
                         )

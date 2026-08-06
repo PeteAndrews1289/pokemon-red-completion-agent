@@ -357,13 +357,13 @@ def test_mansion_training_targets_the_league_not_an_internal_spread() -> None:
     """A measured run overshot parity by 19 levels chasing the escort's level."""
 
     from pokemon_red_completion.blaine import (
+        COMPLETION_LEVEL_PARITY,
         INDIGO_MAX_OPPOSITION_LEVEL,
-        MANSION_LEVEL_PARITY,
         MANSION_TEAM_POLICY,
     )
 
     # The floor states why it is what it is, rather than being a hand-tuned constant.
-    assert MANSION_TEAM_POLICY.minimum_level == MANSION_LEVEL_PARITY.required_level(
+    assert MANSION_TEAM_POLICY.minimum_level == COMPLETION_LEVEL_PARITY.required_level(
         INDIGO_MAX_OPPOSITION_LEVEL
     )
     assert MANSION_TEAM_POLICY.minimum_level == 55

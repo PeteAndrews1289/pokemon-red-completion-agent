@@ -65,10 +65,10 @@ from pokemon_red_completion.red_party import (
 )
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
 from pokemon_red_completion.team_training import (
+    COMPLETION_LEVEL_PARITY,
     BalancedTeamPolicy,
     DevelopedTeamPolicy,
     DevelopedTeamReport,
-    LevelParityContract,
     TeamTrainingDecision,
     TeamTrainingDirective,
     TeamTrainingProgress,
@@ -138,7 +138,7 @@ INDIGO_MAX_OPPOSITION_LEVEL = 65
 #: team throughout the game reaches Indigo in the mid-fifties; that is the band
 #: where switching and type choices still decide battles.  Above it the team
 #: wins on stats alone and the demonstrations stop containing decisions.
-MANSION_LEVEL_PARITY = LevelParityContract(max_levels_behind=10)
+# Removed local level parity contract, using COMPLETION_LEVEL_PARITY instead
 
 #: Balance contract for the Mansion block.
 #:
@@ -156,7 +156,7 @@ MANSION_LEVEL_PARITY = LevelParityContract(max_levels_behind=10)
 #: past parity.  Readiness is a question about the opposition, not about the
 #: escort, so the spread is now reported rather than chased.
 MANSION_TEAM_POLICY = BalancedTeamPolicy(
-    minimum_level=MANSION_LEVEL_PARITY.required_level(INDIGO_MAX_OPPOSITION_LEVEL),
+    minimum_level=COMPLETION_LEVEL_PARITY.required_level(INDIGO_MAX_OPPOSITION_LEVEL),
     maximum_level_spread=40,
     required_size=6,
     retreat_hp_ratio=0.90,

@@ -168,6 +168,9 @@ class LevelParityContract:
         return shortfall if shortfall > 0 else None
 
 
+COMPLETION_LEVEL_PARITY = LevelParityContract(max_levels_behind=10)
+
+
 @dataclass(frozen=True, slots=True)
 class DevelopedTeamPolicy:
     """Completion-efficient roster policy with one deliberately trained workhorse.
