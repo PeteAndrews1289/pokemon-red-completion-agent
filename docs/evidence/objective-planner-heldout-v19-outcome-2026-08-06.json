@@ -1,0 +1,37 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v19",
+  "status": "failed",
+  "source_commit": "400a4ff7de0b2fc0eb530a36969e077696424829",
+  "source_bundle_sha256": "a8898bdb660e045327e542bc2f66f56893b4470af1f5b01732843cb0c7f5d870",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v19-validation-01",
+      "harness_seed": 1430001,
+      "battle_start_schedule_sha256": "9b4865b0409767856ff8e3249cc90dd87204da8ae3111153e27260db4df79d9d",
+      "status": "passed",
+      "checkpoints_verified": 312,
+      "objectives_verified": 36,
+      "scheduled_battles_verified": 73,
+      "teacher_objective_fallbacks": 0,
+      "champion_defeated": true,
+      "hall_of_fame_entered": true,
+      "observed_capture_variation": "Route 12 Snorlax caught in 11 throws",
+      "private_log_sha256": "112f381308f05b8781619b5e24a16ac28659b3ab451504a0714f61580e522751"
+    },
+    {
+      "run_id": "red-objective-v19-validation-02",
+      "harness_seed": 1430002,
+      "battle_start_schedule_sha256": "9ec068bb278f0ffdb58a66d6de30a5d0e07ff9b052272a7676b4891bf2f6fb8e",
+      "status": "failed",
+      "qualified_checkpoints": 112,
+      "failure": "The teacher reached and healed in Lavender after all mandatory Rock Tunnel battles, but five sleep cures exhausted the declared Awakening reserve and failed the chapter resource contract.",
+      "private_log_sha256": "d1d88c0d7ee2208c6dddc83b8953aabe3e26ecb577082ff76025e4cdb964172b"
+    }
+  ],
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The route carried five Awakenings and required one to survive for the later Pokemon Tower recovery policy. A fresh sleep lineage legitimately consumed all five while preserving required move evidence and completing Rock Tunnel, exposing an under-sized bounded reserve rather than a navigation or battle loss.",
+  "repair_direction": "Use the remaining guaranteed-income margin to carry seven Awakenings, retain the one-item downstream reserve contract, replay seed 1430002 as exposed repair evidence, and preregister a fresh validation and sealed-test cohort before qualification resumes."
+}
