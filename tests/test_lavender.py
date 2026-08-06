@@ -182,6 +182,13 @@ def test_mart_purchase_tops_up_after_a_partial_quantity_registration(
     assert emulator.state == "list"
 
 
+def test_tunnel_purchase_replaces_income_battle_recovery_from_live_inventory() -> None:
+    assert lavender_module._tunnel_super_potion_purchase_quantity(starting=3, current=2) == 9
+    assert lavender_module._tunnel_super_potion_purchase_quantity(starting=3, current=3) == 8
+    with pytest.raises(lavender_module.LavenderChapterError):
+        lavender_module._tunnel_super_potion_purchase_quantity(starting=2, current=3)
+
+
 def test_rock_center_exit_normalizes_false_ready_nurse_dialogue() -> None:
     class Runtime:
         def __init__(self) -> None:

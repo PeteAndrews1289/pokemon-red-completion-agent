@@ -467,6 +467,7 @@ def run_lavender_chapter(
     _require(reader.read(), MapId.VERMILION_MART, (3, 7), "Mart entrance")
     (
         tunnel_purchase_cost,
+        tunnel_super_potions_purchased,
         tunnel_parlyz_heals_purchased,
         tunnel_awakenings_purchased,
     ) = _purchase_supplies(
@@ -997,7 +998,7 @@ def run_lavender_chapter(
         awakenings_used=run.awakenings_used,
         awakenings_remaining=_bag(emulator).get(ItemId.AWAKENING, 0),
         starting_super_potions=initial_sp,
-        super_potions_purchased=(TUNNEL_SUPER_POTION_TARGET - initial_sp + top_up_quantity),
+        super_potions_purchased=tunnel_super_potions_purchased + top_up_quantity,
         super_potions_used=run.potions_used,
         super_potions_remaining=_bag(emulator).get(ItemId.SUPER_POTION, 0),
         purchase_cost=tunnel_purchase_cost + top_up_cost,
@@ -2437,10 +2438,11 @@ def _purchase_supplies(
     timing: LavenderTiming,
     *,
     starting_super_potions: int,
-) -> tuple[int, int, int]:
-    if starting_super_potions not in {0, 1, 2, 3}:
-        raise LavenderChapterError("Invalid starting Super Potion reserve for Mart purchase.")
-    super_potion_purchase_quantity = TUNNEL_SUPER_POTION_TARGET - starting_super_potions
+) -> tuple[int, int, int, int]:
+    super_potion_purchase_quantity = _tunnel_super_potion_purchase_quantity(
+        starting=starting_super_potions,
+        current=_bag(emulator).get(ItemId.SUPER_POTION, 0),
+    )
     parlyz_heal_purchase_quantity, awakening_purchase_quantity = (
         _status_supply_purchase_quantities(
             parlyz_heals=_bag(emulator).get(ItemId.PARLYZ_HEAL, 0),
@@ -2618,7 +2620,23 @@ def _purchase_supplies(
             f"sale={total_sale_proceeds}, cost={expected_cost}, "
             f"before={money_before}, after={money_after}."
         )
-    return expected_cost, parlyz_heal_purchase_quantity, awakening_purchase_quantity
+    return (
+        expected_cost,
+        super_potion_purchase_quantity,
+        parlyz_heal_purchase_quantity,
+        awakening_purchase_quantity,
+    )
+
+
+def _tunnel_super_potion_purchase_quantity(*, starting: int, current: int) -> int:
+    """Replace every observed pre-Mart use and restore the fixed tunnel reserve."""
+
+    if starting not in {0, 1, 2, 3} or not 0 <= current <= starting:
+        raise LavenderChapterError(
+            "Invalid Super Potion lineage before the tunnel Mart: "
+            f"starting={starting}, current={current}."
+        )
+    return TUNNEL_SUPER_POTION_TARGET - current
 
 
 def _status_supply_purchase_quantities(
