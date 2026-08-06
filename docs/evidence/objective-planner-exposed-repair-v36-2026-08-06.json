@@ -1,0 +1,73 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v36",
+  "source_commit": "f67f690ed1a782a6c367f059eda5eda978b2cf62",
+  "source_bundle_sha256": "4cd8634f9a0c6d887483a71fa5be5130dcd691389ea3ae7c7a9f7b20b3942f22",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1810001,
+    "battle_start_schedule_sha256": "2b0fe917d572c3a690e353de321d9465d493e1fd742dab4b4073f57a0a135a88",
+    "private_log_sha256": "d8085b47310f4bff4abaafb0e14908c1b8fcb0b08ecc95654fc5af1f92615201",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 74,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "actions_executed": 89000,
+    "party_size": 6,
+    "terminal_party_hp": [
+      216,
+      55,
+      59,
+      142,
+      69,
+      76
+    ],
+    "terminal_party_status": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "route22_rival_hyper_potions_used": 0,
+    "route22_rival_party_pivots": 0,
+    "route22_rival_lead_hp_trace": [
+      200,
+      200,
+      200,
+      183,
+      183,
+      183,
+      149,
+      149,
+      149
+    ],
+    "roster_species_after_acquisition": [
+      28,
+      64,
+      59,
+      132,
+      104,
+      43
+    ]
+  },
+  "repairs_verified": [
+    "The proactive species pivot stays disabled, so a healthy workhorse is not replaced merely because Venusaur appeared",
+    "The Route 22 rival was defeated by a single active member across all nine recorded turns, whose health never fell below 149 of 200 and never reached zero",
+    "No teammate was switched in as damage padding and no Hyper Potion was required, so the V35 sacrifice cascade did not occur",
+    "The learned-switch pivot path is now gated on a battle-ready reserve and a one-pivot budget, and falls back to in-place recovery rather than spending a teammate",
+    "The same run assembled the six-member roster and finished with every member alive and status-free, Champion, and Hall of Fame"
+  ],
+  "limitations": [
+    "This is an exposed diagnostic on the already-failed V35 seed 1810001, not a held-out qualification",
+    "The new battle-ready pivot guard was never exercised: the workhorse never dropped to the recovery threshold, so the guard is proven unreached rather than proven correct under pressure",
+    "Our own final party levels are not present in the run report; only terminal party HP and status are recorded"
+  ]
+}
