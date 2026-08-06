@@ -1,0 +1,44 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v32",
+  "status": "failed",
+  "source_commit": "c6346c07eb35f70d15c315cfc969c0bacc0f4ec6",
+  "source_bundle_sha256": "a26b3f1e18626c9879e6b5655e05242b2a10983b8c67a57f9c92f7975f9a92b0",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_gate": {
+    "status": "passed",
+    "runs_passed": 5,
+    "runs_required": 5,
+    "evidence": "docs/evidence/objective-planner-heldout-v32-validation-2026-08-06.json"
+  },
+  "sealed_test_results": [
+    {
+      "run_id": "red-objective-v32-test-01",
+      "harness_seed": 1730001,
+      "battle_start_schedule_sha256": "73f9c8f9c2c0a77369c2e5e6003e29558294b771d199e4384a53822b32a327a8",
+      "private_log_sha256": "ab8923ae5804037b5e44fcf102aadb0b9026bc302c65036f1ce70061264dfc05",
+      "status": "passed",
+      "checkpoints_verified": 312,
+      "objectives_verified": 36,
+      "scheduled_battles_verified": 74,
+      "teacher_objective_fallbacks": 0,
+      "minimum_objective_confidence": 0.7983486180511433,
+      "actions_executed": 96303,
+      "champion_defeated": true,
+      "hall_of_fame_entered": true,
+      "final_party_levels": [61, 59, 61, 61, 63, 65]
+    },
+    {
+      "run_id": "red-objective-v32-test-02",
+      "harness_seed": 1730002,
+      "private_log_sha256": "91aff71b6d82064163639f3c7f1568f021c1fcb67fe71c2c92631b72cd33bf90",
+      "status": "failed",
+      "qualified_checkpoints": 305,
+      "failure": "The lead fainted during Agatha and the forced-switch policy spent every remaining teammate without recovering the lead; the final active teammate then fainted against Agatha's level-55 Haunter while six Full Restores and two Revives remained in the bag."
+    }
+  ],
+  "remaining_sealed_test_runs_opened": false,
+  "diagnosis": "Agatha's recovery policy protects only party slot zero while it is active. Once that workhorse faints, reserve battlers attack until they faint and the controller never uses the available Revives to restore the workhorse. The 140-HP recovery boundary also permits a lethal high-damage sequence before the lead can request another item.",
+  "repair_direction": "Keep the workhorse at a full-health decision boundary against Agatha's volatile status and critical-hit sequence, and add a bounded revive-and-return path if the workhorse still faints. Preserve the two-Revive downstream contract and prove the exact failed seed before preregistering a new evaluation."
+}
