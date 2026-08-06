@@ -129,6 +129,7 @@ class ChampionTurn:
     pp: tuple[int, int, int, int]
     move_slot: int
     party_position: int
+    active_party_index: int | None
 
 
 @dataclass(frozen=True, slots=True)
@@ -200,6 +201,7 @@ class ChampionChapterReport:
                     "pp": list(item.pp),
                     "move_slot": item.move_slot,
                     "party_position": item.party_position,
+                    "active_party_index": item.active_party_index,
                 }
                 for item in self.turns
             ],
@@ -250,6 +252,10 @@ class ChampionChapterReport:
                         else None
                     ),
                 },
+                "turns_per_party_member": [
+                    sum(1 for t in self.turns if t.active_party_index == i)
+                    for i in range(len(self.party_levels))
+                ],
                 "moves": list(self.final_raw.first_party_moves or ()),
                 "pp": list(self.final_raw.first_party_pp or ()),
                 "champion_event": _event(
@@ -360,6 +366,7 @@ def run_champion_chapter(
                 pp=pp,
                 move_slot=slot,
                 party_position=emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS),
+                active_party_index=raw.active_party_index,
             )
         )
         return slot

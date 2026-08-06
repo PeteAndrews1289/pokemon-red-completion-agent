@@ -62,6 +62,7 @@ def test_champion_receipt_reconstructs_party_and_policy() -> None:
             (1, 1, 0, 1),
             4 if species in {0x01, 0x14} else 1,
             position,
+            0,
         )
         for position, (species, level) in enumerate(CHAMPION_PARTY)
     )
@@ -164,11 +165,11 @@ def test_champion_forced_switch_chooses_the_healthiest_living_teammate() -> None
 
 def test_champion_receipt_accepts_live_low_hp_decision() -> None:
     turns = tuple(
-        ChampionTurn(species, level, 1, 1, 0, (1, 1, 1, 1), 1, position)
+        ChampionTurn(species, level, 1, 1, 0, (1, 1, 1, 1), 1, position, 0)
         for position, (species, level) in enumerate(CHAMPION_PARTY)
     )
     assert _turns_valid(turns)
-    assert not _turns_valid((ChampionTurn(0x97, 61, 1, 0, 0, (1, 1, 1, 1), 1, 0),))
+    assert not _turns_valid((ChampionTurn(0x97, 61, 1, 0, 0, (1, 1, 1, 1), 1, 0, 0),))
 
 
 def test_champion_completion_is_distinct_from_teacher_strategy_evidence() -> None:
