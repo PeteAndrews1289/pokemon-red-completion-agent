@@ -144,6 +144,56 @@ def test_stone_clerk_route_yields_at_west_fourth_floor_gate(
     assert executor.left_attempts == 2
 
 
+def test_mart_roof_route_yields_to_fifth_floor_customer(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(_terminal(), map_id=MapId.CELADON_MART_5F, player_x=15, player_y=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        left_attempts = 0
+        return_attempts = 0
+        yielded = False
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            position = (reader.state.player_x, reader.state.player_y)
+            if action.value == "down" and position == (15, 2):
+                reader.state = replace(reader.state, player_y=3)
+                self.yielded = True
+            elif action.value == "up" and position == (15, 3):
+                self.return_attempts += 1
+                if self.return_attempts >= 2:
+                    reader.state = replace(reader.state, player_y=2)
+            elif action.value == "left" and position == (15, 2) and self.yielded:
+                self.left_attempts += 1
+                if self.left_attempts >= 2:
+                    reader.state = replace(reader.state, player_x=14)
+            return action
+
+    executor = Executor()
+    monkeypatch.setattr(saffron, "_wait", lambda *args: None)
+
+    saffron._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        ("left",),
+        DEFAULT_SAFFRON_TIMING,
+        "mart_roof",
+    )
+
+    assert (reader.state.player_x, reader.state.player_y) == (14, 2)
+    assert executor.return_attempts == 3
+    assert executor.left_attempts == 2
+
+
 def test_stone_clerk_return_retreats_until_fourth_floor_walker_clears(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

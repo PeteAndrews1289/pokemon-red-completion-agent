@@ -111,6 +111,10 @@ MART_2F_RETURN_CLEAR_POSITION = (14, 2)
 MART_2F_RETURN_CLEAR_FRAMES = 2_048
 STONE_CLERK_TO_MART_4F_STAIRS = _directions("LLLLUUURRRRRRRRRRR")
 MART_4F_TO_5F = _directions("RRRRU")
+MART_5F_GENTLEMAN_BLOCK_POSITION = (15, 2)
+MART_5F_GENTLEMAN_YIELD_POSITION = (15, 3)
+MART_5F_GENTLEMAN_CLEAR_POSITION = (14, 2)
+MART_5F_GENTLEMAN_CLEAR_ATTEMPTS = 16
 MART_5F_TO_ROOF = _directions("LLLLU")
 ROOF_TO_VENDING = _directions("LLL")
 ROOF_TO_5F = _directions("RRRU")
@@ -869,6 +873,15 @@ def _move(
                 )
                 break
             if (
+                label == "mart_roof"
+                and before.map_id == MapId.CELADON_MART_5F
+                and (before.player_x, before.player_y)
+                == MART_5F_GENTLEMAN_BLOCK_POSITION
+                and direction == "left"
+            ):
+                after = _yield_to_mart_5f_gentleman(actions, reader, timing)
+                break
+            if (
                 label == "mart_1f_return"
                 and before.map_id == MapId.CELADON_MART_2F
                 and (before.player_x, before.player_y)
@@ -887,6 +900,55 @@ def _move(
                 f"{label} blocked at step {index}: {direction}; "
                 f"{(after.map_id, after.player_x, after.player_y)!r}."
             )
+
+
+def _yield_to_mart_5f_gentleman(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: SaffronTiming,
+) -> RawGameState:
+    """Yield the top aisle until the fifth-floor customer can pass."""
+
+    for attempt in range(MART_5F_GENTLEMAN_CLEAR_ATTEMPTS):
+        state = reader.read()
+        if (state.player_x, state.player_y) == MART_5F_GENTLEMAN_CLEAR_POSITION:
+            return state
+        if (
+            state.map_id != MapId.CELADON_MART_5F
+            or state.battle_state != 0
+            or (state.player_x, state.player_y) != MART_5F_GENTLEMAN_BLOCK_POSITION
+        ):
+            raise SaffronChapterError(
+                "Celadon Mart 5F recovery left its bounded top-aisle gate."
+            )
+        actions.execute(MacroAction(MacroActionKind.MOVE, "down"))
+        _wait(actions, timing.movement_frames)
+        yielded = reader.read()
+        if (yielded.player_x, yielded.player_y) != MART_5F_GENTLEMAN_YIELD_POSITION:
+            raise SaffronChapterError("Celadon Mart 5F could not yield the top aisle.")
+        for return_attempt in range(MART_5F_GENTLEMAN_CLEAR_ATTEMPTS):
+            _wait(actions, timing.movement_frames * (attempt + return_attempt + 1))
+            actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
+            _wait(actions, timing.movement_frames)
+            returned = reader.read()
+            if (returned.player_x, returned.player_y) == MART_5F_GENTLEMAN_BLOCK_POSITION:
+                break
+            if (returned.player_x, returned.player_y) != MART_5F_GENTLEMAN_YIELD_POSITION:
+                raise SaffronChapterError(
+                    "Celadon Mart 5F recovery left its bounded yield tile."
+                )
+        else:
+            raise SaffronChapterError("Celadon Mart 5F did not release the return tile.")
+        actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
+        _wait(actions, timing.movement_frames)
+        crossed = reader.read()
+        if (crossed.player_x, crossed.player_y) == MART_5F_GENTLEMAN_CLEAR_POSITION:
+            return crossed
+        if (crossed.player_x, crossed.player_y) != MART_5F_GENTLEMAN_BLOCK_POSITION:
+            raise SaffronChapterError(
+                "Celadon Mart 5F recovery left its bounded crossing gate."
+            )
+    raise SaffronChapterError("Celadon Mart 5F customer did not clear the top aisle.")
 
 
 def _yield_to_stone_clerk_walker(
