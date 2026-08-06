@@ -998,19 +998,13 @@ def _defeat_route22_rival(
                     raise VictoryRoadChapterError(
                         "Route 22 rival exhausted its living-party continuation bound."
                     ) from error
-                try:
-                    switch_active_battler(
-                        actions,
-                        reader,
-                        emulator,
-                        continuation_target,
-                        label="Route 22 rival fainted-member continuation",
-                        wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
-                    )
-                except ProtectedRecoveryError as pivot_error:
-                    raise VictoryRoadChapterError(
-                        "Route 22 rival could not continue through its living party."
-                    ) from pivot_error
+                _route22_switch_with_faint_continuation(
+                    actions,
+                    reader,
+                    emulator,
+                    continuation_target,
+                    label="Route 22 rival fainted-member continuation",
+                )
                 faint_pivots += 1
                 continue
             if (
@@ -1036,19 +1030,13 @@ def _defeat_route22_rival(
                     raise VictoryRoadChapterError(
                         "Route 22 rival requested protected recovery without a living reserve."
                     ) from error
-                try:
-                    switch_active_battler(
-                        actions,
-                        reader,
-                        emulator,
-                        pivot_target,
-                        label="Route 22 rival balanced-team pivot",
-                        wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
-                    )
-                except ProtectedRecoveryError as pivot_error:
-                    raise VictoryRoadChapterError(
-                        "Route 22 rival could not pivot to its living reserve."
-                    ) from pivot_error
+                pivot_target = _route22_switch_with_faint_continuation(
+                    actions,
+                    reader,
+                    emulator,
+                    pivot_target,
+                    label="Route 22 rival balanced-team pivot",
+                )
                 pivoted_species.add(species)
                 next_sacrifice = max(next_sacrifice + 1, pivot_target + 1)
                 last_recovery_turn = len(turns)
@@ -1062,19 +1050,13 @@ def _defeat_route22_rival(
                 next_sacrifice,
             )
             if reader.read().enemy_species_id == 0x9A and pivot_target is not None:
-                try:
-                    switch_active_battler(
-                        actions,
-                        reader,
-                        emulator,
-                        pivot_target,
-                        label="Route 22 rival low-health team pivot",
-                        wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
-                    )
-                except ProtectedRecoveryError as pivot_error:
-                    raise VictoryRoadChapterError(
-                        "Route 22 rival could not protect its low-health lead."
-                    ) from pivot_error
+                pivot_target = _route22_switch_with_faint_continuation(
+                    actions,
+                    reader,
+                    emulator,
+                    pivot_target,
+                    label="Route 22 rival low-health team pivot",
+                )
                 next_sacrifice = pivot_target + 1
                 potion_spent = False
             else:
@@ -1697,6 +1679,47 @@ def _route22_recovery_pivot_target(
         (index for index in candidates if index >= preferred_index),
         candidates[0] if candidates else None,
     )
+
+
+def _route22_switch_with_faint_continuation(
+    actions: _CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    party_index: int,
+    *,
+    label: str,
+) -> int:
+    """Switch once, then recover if the incoming reserve is knocked out."""
+
+    try:
+        switch_active_battler(
+            actions,
+            reader,
+            emulator,
+            party_index,
+            label=label,
+            wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
+        )
+        return party_index
+    except ProtectedRecoveryError as first_error:
+        failed = reader.read()
+        continuation = _route22_fainted_pivot_target(failed, _party_hp(emulator))
+        if continuation is None:
+            raise VictoryRoadChapterError(f"{label} failed: {first_error}") from first_error
+        try:
+            switch_active_battler(
+                actions,
+                reader,
+                emulator,
+                continuation,
+                label=f"{label} after switch-in faint",
+                wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
+            )
+        except ProtectedRecoveryError as continuation_error:
+            raise VictoryRoadChapterError(
+                f"{label} continuation failed: {continuation_error}"
+            ) from continuation_error
+        return continuation
 
 
 def _checkpoint(

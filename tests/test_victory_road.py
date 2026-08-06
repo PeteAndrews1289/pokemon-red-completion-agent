@@ -42,6 +42,7 @@ from pokemon_red_completion.victory_road import (
     _route22_fainted_pivot_target,
     _route22_recovery_pivot_target,
     _route22_rival_move_slot,
+    _route22_switch_with_faint_continuation,
     _validate_collection_poke_ball_remainder,
 )
 
@@ -276,6 +277,75 @@ def test_route22_recovery_skips_fainted_fixed_slot_and_wraps_to_living_reserve()
     assert _route22_recovery_pivot_target(raw, 1) == 2
     assert _route22_recovery_pivot_target(raw, 4) == 5
     assert _route22_recovery_pivot_target(raw, 6) == 2
+
+
+def test_route22_switch_continues_when_incoming_reserve_faints(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        raw = RawGameState(
+            game_started=True,
+            map_id=MapId.ROUTE_22,
+            player_x=30,
+            player_y=5,
+            party_count=6,
+            battle_state=2,
+            active_party_index=0,
+            active_party_hp=80,
+        )
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+    party_hp = [80, 0, 57, 139, 69, 70]
+    calls: list[int] = []
+
+    def switch(
+        _actions: object,
+        _reader: object,
+        _emulator: object,
+        party_index: int,
+        **_kwargs: object,
+    ) -> None:
+        calls.append(party_index)
+        if len(calls) == 1:
+            party_hp[party_index] = 0
+            reader.raw = RawGameState(
+                game_started=True,
+                map_id=MapId.ROUTE_22,
+                player_x=30,
+                player_y=5,
+                party_count=6,
+                battle_state=2,
+                active_party_index=party_index,
+                active_party_hp=0,
+            )
+            raise ProtectedRecoveryError("target fainted during the switch")
+        reader.raw = RawGameState(
+            game_started=True,
+            map_id=MapId.ROUTE_22,
+            player_x=30,
+            player_y=5,
+            party_count=6,
+            battle_state=2,
+            active_party_index=party_index,
+            active_party_hp=party_hp[party_index],
+        )
+
+    monkeypatch.setattr(victory_road, "switch_active_battler", switch)
+    monkeypatch.setattr(victory_road, "_party_hp", lambda _emulator: tuple(party_hp))
+
+    selected = _route22_switch_with_faint_continuation(
+        object(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        2,
+        label="Route 22 test pivot",
+    )
+
+    assert selected == 0
+    assert calls == [2, 0]
 
 
 def test_route22_rival_reserve_uses_observed_active_moves() -> None:

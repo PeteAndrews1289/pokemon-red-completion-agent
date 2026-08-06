@@ -135,16 +135,16 @@ def test_tracked_registry_is_canonical_frozen_and_preassigned() -> None:
 def test_final_campaign_identity_has_public_golden_values() -> None:
     payload = REGISTRY_PATH.read_bytes()
     registry = parse_collection_registry(payload)
-    first = registry.assignment("red-battle-v90-01-train")
+    first = registry.assignment("red-battle-v91-01-train")
 
     assert len(payload) == 6671
     assert (
         registry.registry_sha256
-        == "e8d8d1cff31707d214865821d55252ce2c23dd46b0ae28c6bee032e946926c79"
+        == "b940f96d350a9edc215fc1f5231e5975aa98ba57858ee2b1643c7b8d2745bfd7"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "3e55b0bf6aee7800b77a0ff09bffb568a099444833d3f883b83a667c76190f77"
+        == "64eec1d5aa6f383c67efa8d87ebe0c66f56b82ba6b18cada6c73dc36cd78b364"
     )
     assert (
         registry.execution.behavior_configuration_sha256
@@ -156,9 +156,9 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "8c71a85fe55c9efbfe460016b78b98023dd5ee85d148159f7f4a6d39f9e1a197"
+        == "c6ed4b801e0edce4309d37648e9d0c1590c7c037b7cee5057b1eb2d53fc168f3"
     )
-    assert first.assignment_id == "a0269da8349490a56848fc9a3665407db6aed28acd6a4d5a5da78bee63761e65"
+    assert first.assignment_id == "b0c40e882f6aa0ae879cf97fca9dc9b27a41d364ec922edd6ca520862beb7723"
 
 
 def test_canonical_newline_hash_has_an_independent_golden_vector() -> None:
@@ -170,7 +170,7 @@ def test_canonical_newline_hash_has_an_independent_golden_vector() -> None:
 
 def test_schedule_expansion_is_deterministic_bounded_and_content_addressed() -> None:
     registry = parse_collection_registry(REGISTRY_PATH.read_bytes())
-    run = registry.run("red-battle-v90-01-train")
+    run = registry.run("red-battle-v91-01-train")
 
     first = registry.schedule.offsets(run.harness_seed)
     second = registry.schedule.offsets(run.harness_seed)
@@ -178,19 +178,19 @@ def test_schedule_expansion_is_deterministic_bounded_and_content_addressed() -> 
     assert first == second
     assert len(first) == 71
     assert first[0].battle_plan_id == RED_BATTLE_PLAN_IDS[0]
-    assert first[0].frames == 155
+    assert first[0].frames == 164
     assert first[-1].battle_plan_id == RED_BATTLE_PLAN_IDS[-1]
-    assert first[-1].frames == 26
+    assert first[-1].frames == 85
     assert all(0 <= offset.frames <= 255 for offset in first)
-    assert run.schedule_sha256 == "f9c8ddf4d1cd7974dbaa311d5430643129732c5cd30c0fd9843561a51b8b5fca"
+    assert run.schedule_sha256 == "6ceb23b2c0f2f6876bbd2eb5538293cc8558a855750a1a7261645e2331305a75"
     assert registry.schedule.schedule_sha256(run.harness_seed) == run.schedule_sha256
     assert registry.schedule.schedule_sha256(registry.runs[1].harness_seed) != run.schedule_sha256
 
 
 def test_assignment_ids_are_stable_collision_safe_and_path_free() -> None:
     registry = parse_collection_registry(REGISTRY_PATH.read_bytes())
-    first = registry.assignment("red-battle-v90-01-train")
-    repeated = registry.assignment("red-battle-v90-01-train")
+    first = registry.assignment("red-battle-v91-01-train")
+    repeated = registry.assignment("red-battle-v91-01-train")
 
     assert first == repeated
     assert first.assignment_id == collection_document_sha256(
@@ -216,8 +216,8 @@ def test_assignment_ids_are_stable_collision_safe_and_path_free() -> None:
     assert len({registry.assignment(run.run_id).episode_id for run in registry.runs}) == 12
 
     metadata = first.metadata_dict()
-    assert metadata["harness_seed"] == 1440001
-    assert metadata["run_id"] == "red-battle-v90-01-train"
+    assert metadata["harness_seed"] == 1470001
+    assert metadata["run_id"] == "red-battle-v91-01-train"
     assert metadata["attempt"] == {"attempts_per_slot": 1, "counted": True}
     assert metadata["collection_slot"] == {
         "collection_ordinal": 1,
@@ -233,7 +233,7 @@ def test_assignment_ids_are_stable_collision_safe_and_path_free() -> None:
     assert "offsets" not in metadata
     assert "/" not in json.dumps(metadata, sort_keys=True)
 
-    first_test = registry.assignment("red-battle-v90-08-test")
+    first_test = registry.assignment("red-battle-v91-08-test")
     assert first_test.collection_slot_ordinal == 8
     assert first_test.partition_slot_ordinal == 1
     assert first_test.declared_partition_slots == 5
@@ -453,7 +453,7 @@ def test_committed_loader_rejects_a_valid_but_different_registry_digest(
 ) -> None:
     repository = _committed_repository(tmp_path)
     changed = _document()
-    _runs(changed)[0]["run_id"] = "red-battle-v90-00-train"
+    _runs(changed)[0]["run_id"] = "red-battle-v91-00-train"
     payload = _canonical(changed)
     assert (
         parse_collection_registry(payload).registry_sha256
@@ -600,12 +600,12 @@ def test_registry_generator_check_mode_rebuilds_the_exact_tracked_bytes() -> Non
 
 def test_metadata_names_seed_as_harness_seed_not_a_cartridge_seed() -> None:
     assignment = parse_collection_registry(REGISTRY_PATH.read_bytes()).assignment(
-        "red-battle-v90-08-test"
+        "red-battle-v91-08-test"
     )
     metadata = deepcopy(assignment.metadata_dict())
     serialized = json.dumps(metadata, sort_keys=True)
 
-    assert metadata["harness_seed"] == 1460001
+    assert metadata["harness_seed"] == 1490001
     assert '"seed"' not in serialized
     assert BATTLE_START_SCHEDULE_SCHEMA in serialized
     assert "outcome" not in serialized

@@ -1,0 +1,22 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "evaluation_id": "red-objective-planner-heldout-v8",
+  "status": "retired_after_validation_failure",
+  "source_commit": "b4c063005076b8f52b1001406ef8bf9fd48c8039",
+  "source_bundle_sha256": "3e55b0bf6aee7800b77a0ff09bffb568a099444833d3f883b83a667c76190f77",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_runs": [
+    {
+      "run_id": "red-objective-v8-validation-01",
+      "harness_seed": 1210001,
+      "battle_start_schedule_sha256": "c88b327987560c939f70f3ad60e0635b7657eb57e77ad2acff0e3fb91a2bc3ad",
+      "private_log_sha256": "1810b1e4461c12222d1dc7c7417eb3fdf76cee1b02ffc2aa49b7ec0222174fc2",
+      "status": "failed",
+      "checkpoints_verified": 290,
+      "failure_boundary": "victory_road_route_22_rival",
+      "failure_reason": "incoming low-health pivot fainted before the remaining living party could continue"
+    }
+  ],
+  "sealed_test_runs_opened": 0,
+  "interpretation": "The first fresh validation schedule exposed a missing continuation after a switch-in knockout. V8 is retired without opening any sealed test schedule."
+}
