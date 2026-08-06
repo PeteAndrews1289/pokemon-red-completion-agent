@@ -1759,6 +1759,21 @@ def _run_mansion_team_balancing(
                 policy,
                 raw.enemy_species_id,
             ) and _training_attack_pp(trainee) > _training_attack_pp_reserve(trainee, policy)
+            if not trainee_fights and escort.level >= policy.minimum_level:
+                if not _switch_active_battler(
+                    actions,
+                    reader,
+                    emulator,
+                    target_index=escort.slot - 1,
+                    label="Blastoise capped escort flee",
+                ):
+                    raise BlaineChapterError(
+                        "Encounter ended during capped-escort switch."
+                    )
+                _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
+                _require_zero_faints(party_reader, "capped-escort escape")
+                record_flee("escort at parity")
+                continue
             fighter = trainee if trainee_fights else escort
             fighter_unsafe = (
                 fighter.is_fainted
