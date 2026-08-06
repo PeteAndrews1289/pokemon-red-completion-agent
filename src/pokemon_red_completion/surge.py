@@ -84,7 +84,16 @@ WILD_CAPTURE_THROWS_PER_ENCOUNTER = 5
 BALL_THROW_SETTLE_ACTION = MacroActionKind.CANCEL
 ROUTE_1_WALKER_APPROACH = (14, 14)
 ROUTE_1_WALKER_YIELD = (15, 14)
+ROUTE_1_WALKER_SOUTH_APPROACH = (14, 12)
+ROUTE_1_WALKER_SOUTH_YIELD = (15, 12)
 ROUTE_1_WALKER_CLEAR_ATTEMPTS = 24
+ROUTE_1_WALKER_GATES = {
+    (ROUTE_1_WALKER_APPROACH, "up"): (ROUTE_1_WALKER_YIELD, (14, 13)),
+    (ROUTE_1_WALKER_SOUTH_APPROACH, "down"): (
+        ROUTE_1_WALKER_SOUTH_YIELD,
+        (14, 13),
+    ),
+}
 VIRIDIAN_FOREST_MAX_SURVEY_LEGS = 256
 TACKLE_MOVE_ID = 0x21
 GUST_MOVE_ID = 0x10
@@ -2052,7 +2061,7 @@ class _LiveWildCorridorSurveyExecutor:
         except SurgeChapterError:
             if not _is_route_1_walker_gate(self._label, before, direction):
                 raise
-            raw = self._yield_to_route_1_walker()
+            raw = self._yield_to_route_1_walker(direction)
         moved = raw.map_id != before.map_id or (raw.player_x, raw.player_y) != (
             before.player_x,
             before.player_y,
@@ -2068,17 +2077,21 @@ class _LiveWildCorridorSurveyExecutor:
             )
         return raw
 
-    def _yield_to_route_1_walker(self) -> RawGameState:
-        """Create room for Route 1's horizontal youngster, then retry north."""
+    def _yield_to_route_1_walker(self, crossing_direction: str) -> RawGameState:
+        """Create room for Route 1's horizontal youngster, then retry crossing."""
 
         for attempt in range(ROUTE_1_WALKER_CLEAR_ATTEMPTS):
             state = self._reader.read()
+            gate = ROUTE_1_WALKER_GATES.get(
+                ((state.player_x, state.player_y), crossing_direction)
+            )
             if (
                 state.map_id != MapId.ROUTE_1
                 or state.battle_state != 0
-                or (state.player_x, state.player_y) != ROUTE_1_WALKER_APPROACH
+                or gate is None
             ):
                 raise SurgeChapterError("Route 1 walker recovery left its bounded approach gate.")
+            yield_position, crossed_position = gate
 
             yielded = _survey_step(
                 self._executor,
@@ -2090,7 +2103,7 @@ class _LiveWildCorridorSurveyExecutor:
             if yielded.battle_state:
                 self.flee_encounter()
                 yielded = self._reader.read()
-            if (yielded.player_x, yielded.player_y) != ROUTE_1_WALKER_YIELD:
+            if (yielded.player_x, yielded.player_y) != yield_position:
                 raise SurgeChapterError("Route 1 walker recovery could not yield east.")
 
             _wait(
@@ -2107,17 +2120,25 @@ class _LiveWildCorridorSurveyExecutor:
             if returned.battle_state:
                 self.flee_encounter()
                 returned = self._reader.read()
-            if (returned.player_x, returned.player_y) != ROUTE_1_WALKER_APPROACH:
+            if (returned.player_x, returned.player_y) != (
+                state.player_x,
+                state.player_y,
+            ):
                 raise SurgeChapterError("Route 1 walker recovery could not restore its approach.")
 
             try:
-                return _survey_step(
+                crossed = _survey_step(
                     self._executor,
                     self._reader,
-                    "up",
+                    crossing_direction,
                     self._timing,
                     "Route 1 walker crossing",
                 )
+                if (crossed.player_x, crossed.player_y) != crossed_position:
+                    raise SurgeChapterError(
+                        "Route 1 walker recovery crossed to an unexpected tile."
+                    )
+                return crossed
             except SurgeChapterError:
                 continue
         raise SurgeChapterError("Route 1 youngster did not clear within its bounded retries.")
@@ -2134,8 +2155,7 @@ def _is_route_1_walker_gate(
         label == "Route 1"
         and state.map_id == MapId.ROUTE_1
         and state.battle_state == 0
-        and (state.player_x, state.player_y) == ROUTE_1_WALKER_APPROACH
-        and direction == "up"
+        and ((state.player_x, state.player_y), direction) in ROUTE_1_WALKER_GATES
     )
 
 

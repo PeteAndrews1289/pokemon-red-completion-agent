@@ -1,7 +1,7 @@
 {
   "schema": "pokemon-semantic-objective-evaluation-preregistration-v1",
-  "evaluation_id": "red-objective-planner-heldout-v2",
-  "status": "retired_after_validation_failure",
+  "evaluation_id": "red-objective-planner-heldout-v3",
+  "status": "preregistered",
   "game_id": "pokemon.mainline:red:gb:us:rev0",
   "ontology_id": "pokemon.core.v1",
   "model": {
@@ -19,20 +19,20 @@
     "max_offset_frames": 255,
     "scope": "battle_start_timing_and_resulting_rng"
   },
-  "exposed_repair_seeds": [910002, 910003],
+  "exposed_repair_seeds": [910002, 910003, 930002],
   "validation_runs": [
-    {"run_id": "red-objective-v2-validation-01", "harness_seed": 930001},
-    {"run_id": "red-objective-v2-validation-02", "harness_seed": 930002},
-    {"run_id": "red-objective-v2-validation-03", "harness_seed": 930003},
-    {"run_id": "red-objective-v2-validation-04", "harness_seed": 930004},
-    {"run_id": "red-objective-v2-validation-05", "harness_seed": 930005}
+    {"run_id": "red-objective-v3-validation-01", "harness_seed": 950001},
+    {"run_id": "red-objective-v3-validation-02", "harness_seed": 950002},
+    {"run_id": "red-objective-v3-validation-03", "harness_seed": 950003},
+    {"run_id": "red-objective-v3-validation-04", "harness_seed": 950004},
+    {"run_id": "red-objective-v3-validation-05", "harness_seed": 950005}
   ],
   "sealed_test_runs": [
-    {"run_id": "red-objective-v2-test-01", "harness_seed": 940001},
-    {"run_id": "red-objective-v2-test-02", "harness_seed": 940002},
-    {"run_id": "red-objective-v2-test-03", "harness_seed": 940003},
-    {"run_id": "red-objective-v2-test-04", "harness_seed": 940004},
-    {"run_id": "red-objective-v2-test-05", "harness_seed": 940005}
+    {"run_id": "red-objective-v3-test-01", "harness_seed": 960001},
+    {"run_id": "red-objective-v3-test-02", "harness_seed": 960002},
+    {"run_id": "red-objective-v3-test-03", "harness_seed": 960003},
+    {"run_id": "red-objective-v3-test-04", "harness_seed": 960004},
+    {"run_id": "red-objective-v3-test-05", "harness_seed": 960005}
   ],
   "acceptance": {
     "validation_runs_required": 5,

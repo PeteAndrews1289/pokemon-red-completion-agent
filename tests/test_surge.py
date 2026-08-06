@@ -43,6 +43,8 @@ from pokemon_red_completion.surge import (
     RATTATA_SPECIES_ID,
     ROUTE_1_WALKER_APPROACH,
     ROUTE_1_WALKER_CLEAR_ATTEMPTS,
+    ROUTE_1_WALKER_SOUTH_APPROACH,
+    ROUTE_1_WALKER_SOUTH_YIELD,
     ROUTE_1_WALKER_YIELD,
     SPEAROW_CAPTURE_LEVELS,
     SPEAROW_CAPTURE_THROW_LIMIT,
@@ -97,6 +99,15 @@ def test_route_1_walker_recovery_is_bound_to_exact_source_gate() -> None:
     assert ROUTE_1_WALKER_YIELD == (15, 14)
     assert ROUTE_1_WALKER_CLEAR_ATTEMPTS == 24
     assert _is_route_1_walker_gate("Route 1", state, "up")
+    assert _is_route_1_walker_gate(
+        "Route 1",
+        replace(
+            state,
+            player_x=ROUTE_1_WALKER_SOUTH_APPROACH[0],
+            player_y=ROUTE_1_WALKER_SOUTH_APPROACH[1],
+        ),
+        "down",
+    )
     assert not _is_route_1_walker_gate("Route 1", replace(state, player_x=13), "up")
     assert not _is_route_1_walker_gate("Route 1", state, "left")
     assert not _is_route_1_walker_gate("Viridian Forest", state, "up")
@@ -143,9 +154,56 @@ def test_route_1_walker_recovery_yields_restores_and_crosses(
     live._executor = object()
     live._timing = DEFAULT_SURGE_TIMING
 
-    crossed = live._yield_to_route_1_walker()
+    crossed = live._yield_to_route_1_walker("up")
 
     assert directions == ["right", "left", "up"]
+    assert (crossed.player_x, crossed.player_y) == (14, 13)
+
+
+def test_route_1_walker_recovery_also_crosses_southbound(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    approach = RawGameState(
+        True,
+        MapId.ROUTE_1,
+        *ROUTE_1_WALKER_SOUTH_APPROACH,
+        1,
+        0,
+    )
+
+    class Reader:
+        state = approach
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+    directions: list[str] = []
+
+    def step(_executor, _reader, direction, _timing, _label):
+        directions.append(direction)
+        coordinates = {
+            "right": ROUTE_1_WALKER_SOUTH_YIELD,
+            "left": ROUTE_1_WALKER_SOUTH_APPROACH,
+            "down": (14, 13),
+        }
+        reader.state = replace(
+            reader.state,
+            player_x=coordinates[direction][0],
+            player_y=coordinates[direction][1],
+        )
+        return reader.state
+
+    monkeypatch.setattr(surge_module, "_survey_step", step)
+    monkeypatch.setattr(surge_module, "_wait", lambda *_args: None)
+    live = object.__new__(_LiveWildCorridorSurveyExecutor)
+    live._reader = reader
+    live._executor = object()
+    live._timing = DEFAULT_SURGE_TIMING
+
+    crossed = live._yield_to_route_1_walker("down")
+
+    assert directions == ["right", "left", "down"]
     assert (crossed.player_x, crossed.player_y) == (14, 13)
 
 
