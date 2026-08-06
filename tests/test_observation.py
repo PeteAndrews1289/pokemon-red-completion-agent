@@ -167,6 +167,31 @@ def test_reader_hides_pregame_scratch_state() -> None:
     assert memory.reads == [RamAddress.STATUS_FLAGS_6]
 
 
+def test_reader_decodes_money_as_a_semantic_decimal_resource() -> None:
+    memory = RecordingMemory(
+        {
+            RamAddress.STATUS_FLAGS_6: 1,
+            int(RamAddress.PLAYER_MONEY): 0x01,
+            int(RamAddress.PLAYER_MONEY) + 1: 0x23,
+            int(RamAddress.PLAYER_MONEY) + 2: 0x45,
+        }
+    )
+
+    assert PokemonRedStateReader(memory).read().player_money == 12_345
+
+
+def test_reader_rejects_invalid_money_digits() -> None:
+    memory = RecordingMemory(
+        {
+            RamAddress.STATUS_FLAGS_6: 1,
+            int(RamAddress.PLAYER_MONEY): 0x0A,
+        }
+    )
+
+    with pytest.raises(SemanticStateError, match="packed decimal"):
+        PokemonRedStateReader(memory).read()
+
+
 def test_reader_decodes_owned_and_seen_national_pokedex_flags() -> None:
     values: dict[int, int] = {}
 
