@@ -1567,6 +1567,7 @@ def _run_battle(
     label: str,
     battle_plan_id: str,
     resource_policy: BattleResourcePolicy = (BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT),
+    intent: BattleIntent | None = None,
 ) -> None:
     policy = (
         move_slot
@@ -1578,7 +1579,8 @@ def _run_battle(
         actions,
         policy,
         expected_map=int(map_id),
-        intent=BattleIntent(
+        intent=intent
+        or BattleIntent(
             "liberate_silph",
             battle_plan_id=battle_plan_id,
             resource_policy=resource_policy,
@@ -1638,14 +1640,7 @@ def _run_until(
             actions,
             guarded,
             expected_map=int(MapId.SILPH_CO_7F),
-            intent=BattleIntent(
-                "liberate_silph",
-                battle_plan_id=battle_plan_id,
-                resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
-                recovery_capabilities=frozenset(
-                    {BattleRecoveryCapability.RESTORE_HP}
-                ),
-            ),
+            intent=_silph_rival_intent(battle_plan_id),
             timing=BattleRuntimeTiming(max_runtime_pulses=720),
             label=label,
             unknown_cancel_interval=3,
@@ -1748,6 +1743,7 @@ def _run_rival_with_potions(
                 "Silph rival Venusaur exhausted recovery",
                 RedBattlePlanId.SILPH_7F_RIVAL,
                 BattleResourcePolicy.BOUNDED_RECOVERY,
+                intent=_silph_rival_intent(),
             )
             return
         except BattleRuntimeError:
@@ -1796,10 +1792,12 @@ def _silph_rival_move_slot(raw: RawGameState) -> int:
     raise SilphChapterError("Silph rival policy has no legal move with PP.")
 
 
-def _silph_rival_intent() -> BattleIntent:
+def _silph_rival_intent(
+    battle_plan_id: str = RedBattlePlanId.SILPH_7F_RIVAL,
+) -> BattleIntent:
     return BattleIntent(
         "liberate_silph",
-        battle_plan_id=RedBattlePlanId.SILPH_7F_RIVAL,
+        battle_plan_id=battle_plan_id,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
         recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
     )

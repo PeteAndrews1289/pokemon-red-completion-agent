@@ -4,7 +4,10 @@ from types import SimpleNamespace
 
 import pytest
 
+import pokemon_red_completion.silph as silph_module
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_runtime import BattleResourcePolicy
 from pokemon_red_completion.observation import Badge, EventFlag, ItemId, MapId, RawGameState
 from pokemon_red_completion.silph import (
     BATTLE_ITEM_SETTLE_PULSES,
@@ -54,7 +57,9 @@ from pokemon_red_completion.silph import (
     _plan_saffron_center_approach,
     _plan_saffron_route,
     _return_center_to_seventh,
+    _run_battle,
     _run_rival_with_potions,
+    _run_until,
     _silph_capacity_deposit_items,
     _silph_capacity_ready,
     _silph_fixed_move_slot,
@@ -230,6 +235,40 @@ def test_silph_rival_exits_lead_only_recovery_after_target_ko() -> None:
 
     assert "except _HealingTargetFaintedBeforeItem:" in source
     assert "recovery = rival_recovery_limit" in source
+
+
+def test_silph_rival_reentry_preserves_the_exact_bounded_recovery_intent(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    intents = []
+
+    def fake_runtime(*_args: object, **kwargs: object) -> None:
+        intents.append(kwargs["intent"])
+
+    monkeypatch.setattr(silph_module, "run_adaptive_trainer_battle", fake_runtime)
+    reader = SimpleNamespace()
+    actions = SimpleNamespace()
+
+    assert _run_until(
+        reader,  # type: ignore[arg-type]
+        actions,  # type: ignore[arg-type]
+        lambda _raw: 1,
+        lambda _raw: False,
+        "bounded recovery",
+        RedBattlePlanId.SILPH_7F_RIVAL,
+    )
+    _run_battle(
+        reader,  # type: ignore[arg-type]
+        actions,  # type: ignore[arg-type]
+        1,
+        MapId.SILPH_CO_7F,
+        "exhausted recovery",
+        RedBattlePlanId.SILPH_7F_RIVAL,
+        BattleResourcePolicy.BOUNDED_RECOVERY,
+        intent=silph_module._silph_rival_intent(),
+    )
+
+    assert intents[0] == intents[1]
 
 
 def test_silph_report_accepts_full_rival_recovery_budget() -> None:
