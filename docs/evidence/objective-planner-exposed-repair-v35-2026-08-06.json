@@ -20,9 +20,17 @@
     "save_restore_used": false,
     "actions_executed": 114402,
     "party_size": 6,
-    "final_party_levels": [61, 59, 61, 61, 63, 65],
     "surge_dig_attacks": 3,
-    "surge_super_potions_used": 0
+    "surge_super_potions_used": 0,
+    "champion_party_levels": [
+      61,
+      59,
+      61,
+      61,
+      63,
+      65
+    ],
+    "champion_party_levels_note": "Recorded as final_party_levels in the original receipt. These are the Champion's fixed party levels, identical in every run, not this run's own party. Our party levels were not captured by the run report at the time and cannot be recovered."
   },
   "repairs_verified": [
     "The Diglett acquisition policy selects the cave's naturally available level-21 or level-22 band instead of treating every level as equally battle-ready",

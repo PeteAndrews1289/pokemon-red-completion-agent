@@ -260,3 +260,40 @@ def test_wild_flee_reselects_run_after_a_failed_escape(
     assert runtime.run_attempts == 2
     assert len(run.wilds) == 1
     assert run.wilds[0].hp_safe
+
+
+def test_party_levels_reads_our_own_party_not_the_opponent() -> None:
+    """Twelve receipts recorded the Champion's fixed levels as ours; source ours."""
+
+    from pokemon_red_completion.celadon import PARTY_STRUCT_STRIDE, _party_levels
+    from pokemon_red_completion.observation import RamAddress
+
+    levels = (61, 24, 22, 47, 39, 41)
+    values = {int(RamAddress.PARTY_COUNT): len(levels)}
+    for index, level in enumerate(levels):
+        values[int(RamAddress.PARTY_MON_1_LEVEL) + index * PARTY_STRUCT_STRIDE] = level
+
+    class Memory:
+        def read_u8(self, address: int) -> int:
+            return values.get(int(address), 0)
+
+    observed = _party_levels(Memory())
+    assert observed == levels
+    # An uneven party must be visible as uneven rather than averaged away.
+    assert min(observed) == 22
+    assert max(observed) - min(observed) == 39
+
+
+def test_party_levels_respects_the_live_party_size() -> None:
+    from pokemon_red_completion.celadon import PARTY_STRUCT_STRIDE, _party_levels
+    from pokemon_red_completion.observation import RamAddress
+
+    values = {int(RamAddress.PARTY_COUNT): 2}
+    for index, level in enumerate((50, 45, 99)):
+        values[int(RamAddress.PARTY_MON_1_LEVEL) + index * PARTY_STRUCT_STRIDE] = level
+
+    class Memory:
+        def read_u8(self, address: int) -> int:
+            return values.get(int(address), 0)
+
+    assert _party_levels(Memory()) == (50, 45)

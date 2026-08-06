@@ -20,9 +20,17 @@
     "save_restore_used": false,
     "actions_executed": 90832,
     "party_size": 6,
-    "final_party_levels": [61, 59, 61, 61, 63, 65],
     "agatha_hyper_potions_used": 6,
-    "agatha_full_restores_used": 0
+    "agatha_full_restores_used": 0,
+    "champion_party_levels": [
+      61,
+      59,
+      61,
+      61,
+      63,
+      65
+    ],
+    "champion_party_levels_note": "Recorded as final_party_levels in the original receipt. These are the Champion's fixed party levels, identical in every run, not this run's own party. Our party levels were not captured by the run report at the time and cannot be recovered."
   },
   "repairs_verified": [
     "The Indigo supply boundary carries one emergency Revive in addition to the two reserved for Lance",

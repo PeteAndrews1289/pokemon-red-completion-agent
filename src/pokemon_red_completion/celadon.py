@@ -689,6 +689,20 @@ def _party_hp(emulator: EmulatorState) -> tuple[int, ...]:
     )
 
 
+def _party_levels(emulator: EmulatorState) -> tuple[int, ...]:
+    """Read every party member's level.
+
+    Receipts previously reported the Champion's fixed party levels as though
+    they were ours, which is why twelve independent runs all recorded the same
+    six numbers.  Sourcing our own levels makes that class of claim checkable.
+    """
+
+    return tuple(
+        emulator.read_u8(int(RamAddress.PARTY_MON_1_LEVEL) + index * PARTY_STRUCT_STRIDE)
+        for index in range(_party_size(emulator))
+    )
+
+
 def _party_max_hp(emulator: EmulatorState) -> tuple[int, ...]:
     return tuple(
         _u16(emulator, int(RamAddress.PARTY_MON_1_MAX_HP) + index * PARTY_STRUCT_STRIDE)

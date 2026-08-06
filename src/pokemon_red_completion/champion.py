@@ -25,7 +25,12 @@ from pokemon_red_completion.battle_runtime import (
     note_observed_trainer_battle_exit,
     run_adaptive_trainer_battle,
 )
-from pokemon_red_completion.celadon import _bag, _party_hp, _party_status
+from pokemon_red_completion.celadon import (
+    _bag,
+    _party_hp,
+    _party_levels,
+    _party_status,
+)
 from pokemon_red_completion.lance import LANCE_X_SPECIAL_USE
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
@@ -139,6 +144,7 @@ class ChampionChapterReport:
     actions_executed: int
     controller_released: bool
     require_teacher_strategy_evidence: bool
+    party_levels: tuple[int, ...] = ()
 
     @property
     def completion_evidence_passed(self) -> bool:
@@ -205,6 +211,17 @@ class ChampionChapterReport:
                 "position": [self.final_raw.player_x, self.final_raw.player_y],
                 "party_hp": list(self.party_hp),
                 "party_status": list(self.party_status),
+                "party_levels": list(self.party_levels),
+                "team_balance": {
+                    "size": len(self.party_levels),
+                    "minimum_level": min(self.party_levels) if self.party_levels else None,
+                    "maximum_level": max(self.party_levels) if self.party_levels else None,
+                    "level_spread": (
+                        max(self.party_levels) - min(self.party_levels)
+                        if self.party_levels
+                        else None
+                    ),
+                },
                 "moves": list(self.final_raw.first_party_moves or ()),
                 "pp": list(self.final_raw.first_party_pp or ()),
                 "champion_event": _event(
@@ -468,6 +485,7 @@ def run_champion_chapter(
         x_accuracy_used=accuracy_before - _bag(emulator).get(ItemId.X_ACCURACY, 0),
         x_specials_used=x_special_before - _bag(emulator).get(ItemId.X_SPECIAL, 0),
         party_hp=_party_hp(emulator),
+        party_levels=_party_levels(emulator),
         party_status=_party_status(emulator),
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,

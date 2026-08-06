@@ -21,7 +21,15 @@
       "actions_executed": 94795,
       "champion_defeated": true,
       "hall_of_fame_entered": true,
-      "final_party_levels": [61, 59, 61, 61, 63, 65]
+      "champion_party_levels": [
+        61,
+        59,
+        61,
+        61,
+        63,
+        65
+      ],
+      "champion_party_levels_note": "Recorded as final_party_levels in the original receipt. These are the Champion's fixed party levels, identical in every run, not this run's own party. Our party levels were not captured by the run report at the time and cannot be recovered."
     },
     {
       "run_id": "red-objective-v33-validation-02",
