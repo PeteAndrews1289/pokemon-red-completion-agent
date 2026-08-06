@@ -378,3 +378,90 @@ def test_route22_rival_fainted_continuation_uses_shared_switch_timing(
     assert turns == ()
     assert potions == 0
     assert switches == [(1, victory_road.DEFAULT_HIDEOUT_TIMING.wait_frames)]
+
+
+def test_route22_proactive_pivot_switches_to_live_teammate_without_sacrifice(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        raw = RawGameState(
+            game_started=True,
+            map_id=MapId.ROUTE_22,
+            player_x=30,
+            player_y=5,
+            party_count=6,
+            party_hp=(150, 0, 57, 139, 69, 70),
+            battle_state=2,
+            active_party_index=0,
+            active_party_hp=150,
+            first_party_pp=(10, 10, 10, 10),
+            enemy_species_id=0x9A,
+            enemy_hp=40,
+        )
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+    calls = 0
+    switches: list[int] = []
+
+    def run_battle(_reader, _actions, policy, **_kwargs) -> None:
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            try:
+                policy(reader.raw)
+            except Exception as cause:
+                raise victory_road.BattleRuntimeError("runtime boundary") from cause
+        reader.raw = RawGameState(
+            game_started=True,
+            map_id=MapId.ROUTE_22,
+            player_x=30,
+            player_y=5,
+            party_count=6,
+            party_hp=(150, 0, 57, 139, 69, 70),
+            battle_state=0,
+        )
+
+    def switch(
+        _actions: object,
+        _reader: object,
+        _emulator: object,
+        party_index: int,
+        **_kwargs: object,
+    ) -> None:
+        switches.append(party_index)
+        reader.raw = RawGameState(
+            game_started=True,
+            map_id=MapId.ROUTE_22,
+            player_x=30,
+            player_y=5,
+            party_count=6,
+            party_hp=(150, 0, 57, 139, 69, 70),
+            battle_state=2,
+            active_party_index=party_index,
+            active_party_hp=57,
+            enemy_species_id=0x9A,
+            enemy_hp=40,
+        )
+
+    monkeypatch.setattr(victory_road, "_pulse", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(victory_road, "_settle_confirm", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(victory_road, "run_adaptive_trainer_battle", run_battle)
+    monkeypatch.setattr(victory_road, "switch_active_battler", switch)
+    monkeypatch.setattr(victory_road, "_party_hp", lambda _emulator: (150, 0, 57, 139, 69, 70))
+    monkeypatch.setattr(victory_road, "_bag", lambda _emulator: {ItemId.HYPER_POTION: 1})
+    monkeypatch.setattr(
+        victory_road,
+        "_battle_sacrifice",
+        lambda *_args, **_kwargs: pytest.fail("balanced-team pivot used sacrifice recovery"),
+    )
+
+    victory_road._defeat_route22_rival(
+        object(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+    )
+
+    assert switches == [2]

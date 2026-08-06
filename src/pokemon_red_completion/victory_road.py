@@ -1036,17 +1036,21 @@ def _defeat_route22_rival(
                     raise VictoryRoadChapterError(
                         "Route 22 rival requested protected recovery without a living reserve."
                     ) from error
-                potion_spent = _battle_sacrifice(
-                    actions,
-                    reader,
-                    emulator,
-                    pivot_target,
-                    heal_lead=_party_hp(emulator)[0] < _party_max_hp(emulator)[0],
-                )
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        pivot_target,
+                        label="Route 22 rival balanced-team pivot",
+                        wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
+                    )
+                except ProtectedRecoveryError as pivot_error:
+                    raise VictoryRoadChapterError(
+                        "Route 22 rival could not pivot to its living reserve."
+                    ) from pivot_error
                 pivoted_species.add(species)
                 next_sacrifice = max(next_sacrifice + 1, pivot_target + 1)
-                pivot_heals += int(potion_spent)
-                potions_used += int(potion_spent)
                 last_recovery_turn = len(turns)
                 continue
             if potions_used >= recovery_reserve:
@@ -1058,15 +1062,21 @@ def _defeat_route22_rival(
                 next_sacrifice,
             )
             if reader.read().enemy_species_id == 0x9A and pivot_target is not None:
-                potion_spent = _battle_sacrifice(
-                    actions,
-                    reader,
-                    emulator,
-                    pivot_target,
-                    heal_lead=True,
-                )
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        pivot_target,
+                        label="Route 22 rival low-health team pivot",
+                        wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
+                    )
+                except ProtectedRecoveryError as pivot_error:
+                    raise VictoryRoadChapterError(
+                        "Route 22 rival could not protect its low-health lead."
+                    ) from pivot_error
                 next_sacrifice = pivot_target + 1
-                pivot_heals += int(potion_spent)
+                potion_spent = False
             else:
                 _battle_hyper_potion(reader, actions, emulator, DEFAULT_SILPH_TIMING)
                 potion_spent = True
