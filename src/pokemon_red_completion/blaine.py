@@ -601,6 +601,18 @@ class BlaineChapterReport:
                 "secret_key": self.secret_key_quantity,
                 "tm14_blizzard": self.tm14_quantity,
                 "team_development": {
+                    "observed_levels": (
+                        list(self.team_readiness.observed_levels) if self.team_readiness else []
+                    ),
+                    "minimum_level": (
+                        self.team_readiness.minimum_level if self.team_readiness else None
+                    ),
+                    "maximum_level": (
+                        self.team_readiness.maximum_level if self.team_readiness else None
+                    ),
+                    "level_spread": (
+                        self.team_readiness.level_spread if self.team_readiness else None
+                    ),
                     "final_forms_complete": (
                         self.team_readiness.has_final_form_roster if self.team_readiness else None
                     ),

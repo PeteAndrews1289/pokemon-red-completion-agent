@@ -147,6 +147,7 @@ class DevelopedTeamReport:
     workhorse_target_level: int
     observed_workhorse_level: int | None
     fainted_count: int
+    observed_levels: tuple[int, ...] = ()
 
     @property
     def has_final_form_roster(self) -> bool:
@@ -163,7 +164,36 @@ class DevelopedTeamReport:
         )
 
     @property
+    def minimum_level(self) -> int | None:
+        """The weakest member's level, or ``None`` when no levels were observed."""
+
+        return min(self.observed_levels) if self.observed_levels else None
+
+    @property
+    def maximum_level(self) -> int | None:
+        """The strongest member's level."""
+
+        return max(self.observed_levels) if self.observed_levels else None
+
+    @property
+    def level_spread(self) -> int | None:
+        """The distance between the strongest and weakest member."""
+
+        if not self.observed_levels:
+            return None
+        return max(self.observed_levels) - min(self.observed_levels)
+
+    @property
     def passed(self) -> bool:
+        """Whether the roster is complete, the workhorse is trained, and none fainted.
+
+        This deliberately does *not* assert a level floor or a spread ceiling
+        across the whole party.  It reports them instead, because the route
+        currently trains one workhorse and carries the rest: gating on balance
+        today would fail every run rather than describe it.  Use
+        :attr:`level_spread` and :attr:`minimum_level` to see the real gap.
+        """
+
         return self.has_final_form_roster and self.workhorse_ready and self.fainted_count == 0
 
 
@@ -253,6 +283,7 @@ def summarize_team_development(
         workhorse_target_level=policy.workhorse_target_level,
         observed_workhorse_level=workhorse.level if workhorse else None,
         fainted_count=party.fainted_count,
+        observed_levels=party.levels,
     )
 
 

@@ -436,3 +436,39 @@ def test_developed_team_policy_rejects_an_unplanned_workhorse() -> None:
 def test_policy_rejects_invalid_configuration(field: str, value: object, match: str) -> None:
     with pytest.raises(ValueError, match=match):
         BalancedTeamPolicy(**{field: value})  # type: ignore[arg-type]
+
+
+def test_developed_team_report_exposes_the_real_level_spread() -> None:
+    """The gate trains one workhorse; the receipt must still show the others."""
+
+    from pokemon_red_completion.team_training import DevelopedTeamReport
+
+    report = DevelopedTeamReport(
+        required_species_ids=(28, 64, 59, 132, 104, 43),
+        observed_species_ids=(28, 64, 59, 132, 104, 43),
+        workhorse_species_id=28,
+        workhorse_target_level=60,
+        observed_workhorse_level=60,
+        fainted_count=0,
+        observed_levels=(60, 20, 22, 47, 39, 41),
+    )
+    assert report.passed
+    # Passing says nothing about balance, and the receipt must make that visible.
+    assert report.minimum_level == 20
+    assert report.maximum_level == 60
+    assert report.level_spread == 40
+
+
+def test_developed_team_report_without_levels_reports_none() -> None:
+    from pokemon_red_completion.team_training import DevelopedTeamReport
+
+    report = DevelopedTeamReport(
+        required_species_ids=(28,),
+        observed_species_ids=(28,),
+        workhorse_species_id=28,
+        workhorse_target_level=60,
+        observed_workhorse_level=60,
+        fainted_count=0,
+    )
+    assert report.minimum_level is None
+    assert report.level_spread is None
