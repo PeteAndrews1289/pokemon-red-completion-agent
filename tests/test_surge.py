@@ -32,6 +32,7 @@ from pokemon_red_completion.surge import (
     DIGLETT_CAPTURE_LEVELS,
     DIGLETT_CAPTURE_THROW_LIMIT,
     DIGLETT_SEARCH_SEED_WAIT_FRAMES,
+    DIGLETT_SPECIES_ID,
     DUX_NICKNAME,
     GYM_CAN_COORDINATES,
     KAKUNA_SPECIES_ID,
@@ -50,6 +51,7 @@ from pokemon_red_completion.surge import (
     SPEAROW_CAPTURE_LEVELS,
     SPEAROW_CAPTURE_THROW_LIMIT,
     SPEAROW_DIRECT_THROW_LEVEL_FLOOR,
+    SPEAROW_SPECIES_ID,
     SURGE_CHECKPOINT_COUNT,
     SURGE_ITEM_SETTLE_PULSES,
     SURGE_RECOVERY_HP_DENOMINATOR,
@@ -536,6 +538,53 @@ def test_wild_helper_switch_recovers_when_incoming_helper_faints(
 
     assert observed is restored
     assert recovered_slots == [0]
+
+
+def test_diglett_capture_recovers_a_fainted_catcher_with_living_party(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fainted = replace(
+        _raw(),
+        battle_state=1,
+        enemy_species_id=DIGLETT_SPECIES_ID,
+        enemy_hp=9,
+        active_party_index=0,
+        active_party_hp=0,
+        first_party_hp=0,
+        party_hp=(0, 21),
+        party_species_ids=(179, SPEAROW_SPECIES_ID),
+    )
+    restored = replace(fainted, active_party_hp=21, active_party_index=1)
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return fainted
+
+    calls: list[tuple[int, int, int]] = []
+
+    def force_switch(
+        _emulator: object,
+        _executor: object,
+        _reader: object,
+        species_id: int,
+        enemy_hp: int,
+        _label: str,
+        *,
+        party_index: int,
+    ) -> RawGameState:
+        calls.append((species_id, enemy_hp, party_index))
+        return restored
+
+    monkeypatch.setattr(surge_module, "_force_switch_wild_capture_to_lead", force_switch)
+
+    observed = surge_module._restore_diglett_capture_catcher_if_fainted(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+    )
+
+    assert observed is restored
+    assert calls == [(DIGLETT_SPECIES_ID, 9, 1)]
 
 
 def test_failed_flee_accepts_escape_during_forced_living_switch() -> None:

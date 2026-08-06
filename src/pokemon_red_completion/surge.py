@@ -3427,6 +3427,7 @@ def _throw_until_caught_diglett(
     starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
     throw_limit = min(starting_balls, DIGLETT_CAPTURE_THROW_LIMIT)
     for _ in range(throw_limit):
+        _restore_diglett_capture_catcher_if_fainted(emulator, executor, reader)
         _navigate_main(executor, reader, 1)
         _pulse(executor, MacroActionKind.CONFIRM)
         _select_bag_item(emulator, executor, ItemId.POKE_BALL)
@@ -3443,6 +3444,10 @@ def _throw_until_caught_diglett(
                 if not 1 <= used <= throw_limit:
                     raise SurgeChapterError("Diglett capture used an invalid ball count.")
                 return
+            active_hp = raw.battler_hp if raw.battler_hp is not None else raw.active_party_hp
+            if raw.battle_state == 1 and active_hp == 0:
+                _restore_diglett_capture_catcher_if_fainted(emulator, executor, reader)
+                break
             if (
                 raw.battle_state == 1
                 and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
@@ -3450,6 +3455,38 @@ def _throw_until_caught_diglett(
                 break
             _pulse(executor, MacroActionKind.CONFIRM)
     raise SurgeChapterError("Diglett capture exhausted its bounded Poké Balls.")
+
+
+def _restore_diglett_capture_catcher_if_fainted(
+    emulator: EmulatorState,
+    executor: _CountingExecutor,
+    reader: PokemonRedStateReader,
+) -> RawGameState:
+    """Select a living party member when Diglett KOs the current catcher."""
+
+    raw = reader.read()
+    active_hp = raw.battler_hp if raw.battler_hp is not None else raw.active_party_hp
+    if raw.battle_state != 1 or (active_hp is not None and active_hp > 0):
+        return raw
+    if active_hp is None:
+        raise SurgeChapterError("Diglett capture lacks active-catcher HP evidence.")
+    if raw.enemy_species_id != DIGLETT_SPECIES_ID or raw.enemy_hp is None:
+        raise SurgeChapterError("Diglett forced switch lost its protected encounter.")
+    living_index = next(
+        (index for index, hp in enumerate(raw.party_hp or ()) if hp > 0),
+        None,
+    )
+    if living_index is None:
+        raise SurgeChapterError("Diglett capture left no living catcher.")
+    return _force_switch_wild_capture_to_lead(
+        emulator,
+        executor,
+        reader,
+        DIGLETT_SPECIES_ID,
+        raw.enemy_hp,
+        "Diglett capture",
+        party_index=living_index,
+    )
 
 
 def _select_bag_item(emulator: EmulatorState, executor: _CountingExecutor, item: int) -> None:
