@@ -396,6 +396,52 @@ def test_silph_verified_movement_yields_on_mart_2f_before_3f_stairs() -> None:
     )
 
 
+def test_mart_2f_ascent_yield_retries_when_customer_blocks_return() -> None:
+    blocked = replace(
+        _terminal(),
+        map_id=MapId.CELADON_MART_2F,
+        player_x=14,
+        player_y=5,
+    )
+
+    class Reader:
+        state = blocked
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    class Executor:
+        return_attempts = 0
+
+        def __init__(self, reader: Reader) -> None:
+            self.reader = reader
+
+        def execute(self, action: object) -> None:
+            assert isinstance(action, MacroAction)
+            coordinate = (self.reader.state.player_x, self.reader.state.player_y)
+            if action.kind is not MacroActionKind.MOVE:
+                return
+            if action.value == "left" and coordinate == (14, 5):
+                self.reader.state = replace(self.reader.state, player_x=13)
+            elif action.value == "right" and coordinate == (13, 5):
+                self.return_attempts += 1
+                if self.return_attempts >= 2:
+                    self.reader.state = replace(self.reader.state, player_x=14)
+            elif action.value == "up" and coordinate == (14, 5):
+                self.reader.state = replace(self.reader.state, player_y=4)
+
+    reader = Reader()
+    executor = Executor(reader)
+    final = silph_module._yield_to_mart_2f_ascent_customer(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        replace(DEFAULT_SILPH_TIMING, movement_frames=1),
+    )
+
+    assert (final.player_x, final.player_y) == MART_2F_ASCENT_CUSTOMER_CLEAR_POSITION
+    assert executor.return_attempts == 2
+
+
 def test_silph_verified_movement_yields_to_mart_5f_customer_on_return() -> None:
     blocked = replace(
         _terminal(),

@@ -2309,19 +2309,29 @@ def _yield_to_mart_2f_ascent_customer(
     """Yield the 2F aisle so its customer clears the 3F stair approach."""
 
     for attempt in range(MART_2F_ASCENT_CUSTOMER_CLEAR_ATTEMPTS):
-        _require(
-            reader.read(),
-            MapId.CELADON_MART_2F,
-            MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION,
-            "X Special Mart 2F ascent customer gate",
-        )
-        actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
-        _require(
-            reader.read(),
-            MapId.CELADON_MART_2F,
-            MART_2F_ASCENT_CUSTOMER_YIELD_POSITION,
-            "X Special Mart 2F ascent customer yield",
-        )
+        state = reader.read()
+        coordinate = (state.player_x, state.player_y)
+        if coordinate == MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION:
+            _require(
+                state,
+                MapId.CELADON_MART_2F,
+                MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION,
+                "X Special Mart 2F ascent customer gate",
+            )
+            actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
+            _require(
+                reader.read(),
+                MapId.CELADON_MART_2F,
+                MART_2F_ASCENT_CUSTOMER_YIELD_POSITION,
+                "X Special Mart 2F ascent customer yield",
+            )
+        else:
+            _require(
+                state,
+                MapId.CELADON_MART_2F,
+                MART_2F_ASCENT_CUSTOMER_YIELD_POSITION,
+                "X Special Mart 2F ascent customer wait",
+            )
         actions.execute(
             MacroAction(
                 MacroActionKind.WAIT,
@@ -2329,8 +2339,11 @@ def _yield_to_mart_2f_ascent_customer(
             )
         )
         actions.execute(MacroAction(MacroActionKind.MOVE, "right"))
+        returned = reader.read()
+        if (returned.player_x, returned.player_y) == MART_2F_ASCENT_CUSTOMER_YIELD_POSITION:
+            continue
         _require(
-            reader.read(),
+            returned,
             MapId.CELADON_MART_2F,
             MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION,
             "X Special Mart 2F ascent customer return",
