@@ -78,7 +78,6 @@ TUNNEL_SUPER_POTION_TARGET = 11
 TUNNEL_AWAKENINGS_PURCHASED = 3
 TUNNEL_AWAKENING_RESERVE = 5
 TUNNEL_PARLYZ_HEALS_PURCHASED = 7
-BATTLE_PARLYZ_HEAL_LIMIT = 1
 LAVENDER_PARLYZ_HEAL_RESERVE = 3
 LAVENDER_ANTIDOTE_RESERVE = 1
 TM28_SALE_PROCEEDS = 1_000
@@ -1040,7 +1039,6 @@ def _run_lavender_trainer_battle(
     dux_status_escaped = False
     selected_move_evidence_observed = False
     faint_pivots = 0
-    battle_parlyz_heals = 0
 
     def guarded_policy(raw: RawGameState) -> int:
         nonlocal selected_move_evidence_observed
@@ -1062,10 +1060,7 @@ def _run_lavender_trainer_battle(
             raise _PauseForFinalTunnelPivot(pivot_target)
         if status_recovery == "awakening":
             raise _PauseForBattleAwakening
-        if (
-            status_recovery == "parlyz_heal"
-            and battle_parlyz_heals < BATTLE_PARLYZ_HEAL_LIMIT
-        ):
+        if status_recovery == "parlyz_heal":
             raise _PauseForBattleParlyzHeal
         pivot_target = _final_tunnel_pivot_target(
             raw,
@@ -1161,7 +1156,6 @@ def _run_lavender_trainer_battle(
                     expected_status=reader.read().battler_status or 0,
                 )
                 run.parlyz_heals_used += 1
-                battle_parlyz_heals += 1
                 continue
             learned_pivot = learned_switch_party_index(error.__cause__)
             if isinstance(error.__cause__, _PauseForFinalTunnelPivot) or learned_pivot is not None:

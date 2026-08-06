@@ -269,7 +269,6 @@ def test_final_tunnel_battles_use_seed_safe_recovery_thresholds() -> None:
     assert TUNNEL_TRAINER_7_BATTLE_RECOVERY_THRESHOLD == 40
     assert FINAL_TUNNEL_RECOVERY_THRESHOLD == 90
     assert lavender_module.TUNNEL_PARLYZ_HEALS_PURCHASED == 7
-    assert lavender_module.BATTLE_PARLYZ_HEAL_LIMIT == 1
     assert lavender_module.LAVENDER_PARLYZ_HEAL_RESERVE == 3
     assert lavender_module.TUNNEL_AWAKENINGS_PURCHASED == 3
     assert lavender_module.TUNNEL_AWAKENING_RESERVE == 5
