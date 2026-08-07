@@ -1817,13 +1817,27 @@ def _digletts_cave_heal_and_return(
     # stage, because "Failed to enter Route 11" on its own cannot distinguish
     # leaving the Center at the wrong tile from walking the right path from the
     # wrong start -- and those want different fixes.
+    # Twenty-four steps, matching surge._move_until_map, which is proven on this
+    # exact stretch. A copy here used twelve, and a measured run showed why that
+    # is not a detail: the return path lands at x=23, twelve steps east reached
+    # x=35, and Vermilion had not ended. The walk was working and simply gave up
+    # partway.
+    #
+    # The battle guard is the proven version's too. The east end of this walk
+    # crosses into Route 11's grass, and an encounter mid-walk would leave the
+    # step count meaning nothing.
     trail: list[tuple[str, int | None]] = []
-    for _ in range(12):
+    for _ in range(24):
         raw = reader.read()
         trail.append((_map_name(raw.map_id), raw.player_x))
         if raw.map_id == MapId.ROUTE_11:
             break
         _pulse(actions, MacroActionKind.MOVE, "right", 120)
+        if reader.read().battle_state:
+            raise BlaineChapterError(
+                "Walking east to Route 11 was interrupted by a battle at "
+                f"{_map_name(reader.read().map_id)}."
+            )
     else:
         raw = reader.read()
         raise BlaineChapterError(
