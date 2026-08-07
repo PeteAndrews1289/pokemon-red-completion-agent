@@ -452,10 +452,6 @@ def run_silph_chapter(
     # behaviours that need deriving against the collision map rather than
     # copying from the Mansion. The walk constants above remain correct.
 
-    _move(actions, reader, ROUTE_8_GATE_TO_SAFFRON_CENTER, timing, "Gate to Saffron Center")
-    _move(actions, reader, ("up", "up", "up"), timing, "nurse approach")
-    _heal(actions, timing)
-
     route_items_archived = _store_spent_route_items(actions, reader, emulator, timing)
 
     # The roof exchange temporarily needs one free bag slot. Complete and
