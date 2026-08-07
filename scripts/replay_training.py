@@ -38,6 +38,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--state", type=Path, required=True, help="a captured state file")
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument(
+        "--max-steps",
+        type=int,
+        default=None,
+        help="shrink the policy's step budget so a spinning loop fails in seconds",
+    )
+    parser.add_argument(
         "--swap-only",
         action="store_true",
         help="exercise just the party swap rather than the whole training block",
@@ -65,7 +71,7 @@ def main(argv: list[str] | None = None) -> int:
 
         if args.swap_only:
             return _replay_swap(actions, reader, emulator, party_reader)
-        return _replay_training(actions, reader, emulator)
+        return _replay_training(actions, reader, emulator, args.max_steps)
     finally:
         emulator.close()
 
@@ -121,18 +127,30 @@ def _replay_swap(actions, reader, emulator, party_reader) -> int:
     return 0 if swapped else 1
 
 
-def _replay_training(actions, reader, emulator) -> int:
+def _replay_training(actions, reader, emulator, max_steps: int | None) -> int:
     """Run the Mansion balancing block exactly as ``blaine`` calls it."""
+
+    from dataclasses import replace
 
     from pokemon_red_completion import blaine
 
-    print("\nrunning the Mansion balancing block")
+    policy = blaine.MANSION_TEAM_POLICY
+    if max_steps is not None:
+        policy = replace(policy, max_steps=max_steps)
+
+    party_reader = PokemonRedPartyReader(emulator)
+
+    def note(message: str) -> None:
+        levels = party_reader.read().levels
+        print(f"  {message} | levels={levels}", flush=True)
+
+    print("\nrunning the Mansion balancing block", flush=True)
     try:
         report, battles, heals = blaine.run_red_team_balancing(
             actions,
             reader,
             emulator,
-            policy=blaine.MANSION_TEAM_POLICY,
+            policy=policy,
             venues=(blaine.DIGLETTS_CAVE_TRAINING_VENUE, blaine.MANSION_TRAINING_VENUE),
             intent=blaine.MANSION_BALANCED_TEAM_TRAINING_INTENT,
             flee_timing=blaine.MANSION_TRAINING_FLEE_TIMING,
@@ -142,6 +160,7 @@ def _replay_training(actions, reader, emulator) -> int:
             escort_enemy_species=blaine.MANSION_ESCORT_ENEMY_SPECIES,
             max_consecutive_flees=blaine.MANSION_MAX_CONSECUTIVE_FLEES,
             cancel_interval=blaine.MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+            progress_sink=note,
             report_label="replay training",
             checkpoint_count=blaine.BLAINE_CHECKPOINT_COUNT,
         )

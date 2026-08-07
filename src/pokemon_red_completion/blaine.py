@@ -1782,17 +1782,40 @@ def _training_dig_to_vermilion(
     _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Dig return vermilion")
 
 
+#: Which way the cave pacing is currently headed, reversed on every wall.
+_CAVE_PACING = {"direction": "left"}
+
+
 def _digletts_cave_walk_to_grass(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> int:
-    # Just step left/right since the whole cave is an encounter zone
-    raw = reader.read()
-    if raw.player_x is None:
+    """Pace the tunnel, turning round at each wall.
+
+    The whole cave is an encounter zone, so any real step will do -- but only a
+    real step counts. Walking one fixed direction chosen by x walks into a wall
+    and stays there, and a blocked press is not a step, so the encounter check
+    never runs. Measured from a captured state: 250 walks produced one
+    encounter and no level gain, because after about eight tiles west the
+    remaining two hundred presses were all against rock.
+
+    Bouncing is what surge's own Diglett search does for the same cave. The
+    direction is kept between calls and reversed whenever the player did not
+    actually move.
+    """
+
+    before = reader.read()
+    if before.player_x is None:
         return 0
-    direction = "right" if raw.player_x < 10 else "left"
+    direction = _CAVE_PACING["direction"]
     _pulse(actions, MacroActionKind.MOVE, direction, 120)
+    after = reader.read()
+    if after.battle_state:
+        return 1
+    if (after.player_x, after.player_y) == (before.player_x, before.player_y):
+        _CAVE_PACING["direction"] = "right" if direction == "left" else "left"
+        return 0
     return 1
 
 def _digletts_cave_heal_and_return(
