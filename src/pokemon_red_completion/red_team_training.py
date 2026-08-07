@@ -392,12 +392,23 @@ def switch_active_battler(
             raise RuntimeError(
                 f"Battle ended safely while switching to {label}, but field input did not settle."
             )
+        if menu.phase is BattleMenuPhase.MAIN:
+            # Already back at the command menu but the switch has not
+            # registered. Pressing CONFIRM here selects FIGHT and opens the move
+            # menu, so the loop would mash its way into attacking instead of
+            # settling. Wait for the write to land rather than pressing.
+            actions.execute(MacroAction(MacroActionKind.WAIT, 120))
+            continue
         pulse(
             actions,
             MacroActionKind.CANCEL if (p + 1) % 4 == 0 else MacroActionKind.CONFIRM,
             frames=120,
         )
-    raise RuntimeError(f"Switch to {label} did not return to the battle menu.")
+    active = emulator.read_u8(RamAddress.PLAYER_MON_NUMBER)
+    raise RuntimeError(
+        f"Switch to {label} did not return to the battle menu: "
+        f"active slot {active + 1}, wanted {target_index + 1}."
+    )
 
 
 def run_red_team_balancing(
