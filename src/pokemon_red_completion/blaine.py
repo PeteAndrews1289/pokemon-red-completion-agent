@@ -1494,130 +1494,117 @@ def _field_fly_to_vermilion_from_saffron(actions, reader, emulator) -> None:
         raise BlaineChapterError("Fly did not return to Vermilion from Saffron.")
     _pulse(actions, MacroActionKind.CONFIRM, frames=12)
 
-#: Addresses that might carry the town-map cursor. Which one does is not
-#: documented anywhere in this repository, and guessing the cursor's behaviour
-#: has already cost one run: six hand-derived hops from Cinnabar were supposed
-#: to reach Vermilion and arrived at Viridian instead. Rather than guess a
-#: fourth time, every candidate is sampled after every move and the failure
-#: reports the table.
-_TOWN_MAP_CURSOR_CANDIDATES = (
-    RamAddress.CURRENT_MENU_ITEM,
-    RamAddress.MENU_CURSOR_LOCATION,
-    RamAddress.MAX_MENU_ITEM,
-    RamAddress.TOP_MENU_ITEM_X,
-    RamAddress.TOP_MENU_ITEM_Y,
-)
+#: How many town-map cursor positions to try before giving up.
+#:
+#: The town map is not a list menu -- it writes to none of the standard menu
+#: RAM, so there is no cursor to read and step toward. That was measured, not
+#: assumed: five candidate addresses were sampled after every move and all five
+#: were frozen at values left behind by the previous submenu. See
+#: ``docs/evidence/town-map-cursor-not-observable-2026-08-07.json``.
+#:
+#: What can be observed is where we land. A wrong fly puts us in another
+#: flyable town and costs only in-game time, so trying and checking is cheap,
+#: repeatable, and answers with the game's own state instead of our beliefs
+#: about the map's layout.
+FLY_ATTEMPT_LIMIT = 10
 
 
-def _town_map_readings(emulator) -> tuple[int, ...]:
-    return tuple(emulator.read_u8(address) for address in _TOWN_MAP_CURSOR_CANDIDATES)
+def _fly_menu_indices(emulator: EmulatorState) -> tuple[int, int]:
+    """Which party slot knows Fly, and which submenu row Fly occupies.
 
+    Both are read from the party rather than fixed, because training reorders
+    it: a trainee is swapped into slot one whenever the venue changes, so the
+    Fly holder does not stay put. A hard-coded slot index would fly with
+    whichever Pokemon happened to be second.
 
-def _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator) -> None:
-    """Fly Cinnabar to Vermilion, recording what the town-map cursor does.
-
-    The hop sequence below is not trusted. It is the sequence that produced
-    Viridian, kept only so this run reproduces the same conditions while the
-    readings are collected. Once a candidate address is shown to track the
-    cursor, this becomes a read-and-verify loop like the party-switch fix, and
-    the hop list goes away.
+    The submenu lists a Pokemon's usable field moves first, in move order, then
+    SWITCH, STATS and CANCEL. That layout is measured -- it is what the party
+    switch investigation established, and the town-map run corroborated it: the
+    submenu reported five entries for a Pokemon knowing Cut and Fly.
     """
 
+    party = PokemonRedPartyReader(emulator).read()
+    for index, member in enumerate(party.members):
+        move_ids = [move.move_id for move in member.known_moves]
+        if FLY_MOVE_ID not in move_ids:
+            continue
+        field_moves = [move_id for move_id in move_ids if move_id in FIELD_MOVE_IDS]
+        return index, field_moves.index(FLY_MOVE_ID)
+    raise BlaineChapterError("No party member knows Fly, so no town can be reached by air.")
+
+
+def _open_fly_map(actions, reader, emulator) -> None:
+    """Open the town map with Fly selected, from the field."""
+
+    party_index, fly_row = _fly_menu_indices(emulator)
     _pulse(actions, MacroActionKind.OPEN_MENU)
     _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
-    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
+    _select_cursor(actions, emulator, party_index, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
-    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
+    _select_cursor(actions, emulator, fly_row, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
     _pulse(actions, MacroActionKind.WAIT, frames=90)
 
-    trace: list[tuple[str, tuple[int, ...]]] = [("opened", _town_map_readings(emulator))]
-    for direction in ("up", "up", "up", "right", "down", "down"):
-        _pulse(actions, MacroActionKind.MOVE, direction, 10)
-        _pulse(actions, MacroActionKind.WAIT, frames=60)
-        trace.append((direction, _town_map_readings(emulator)))
 
-    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-    for _ in range(12):
-        raw = reader.read()
-        if raw.map_id == MapId.VERMILION_CITY:
+def _fly_to_town(actions, reader, emulator, destination: MapId, label: str) -> None:
+    """Fly to ``destination``, judged by where we land rather than by a cursor.
+
+    Each attempt moves the cursor a different number of steps and confirms; the
+    map we end up standing on says whether it worked. Wrong landings are not
+    wasted -- every one is recorded, and on exhaustion the table of
+    origin, direction, steps and landing is reported, which is the measurement
+    somebody needs to make this deterministic later.
+    """
+
+    landings: list[tuple[str, str, int, str]] = []
+    attempts = [("up", steps) for steps in range(FLY_ATTEMPT_LIMIT // 2)]
+    attempts += [("down", steps) for steps in range(1, FLY_ATTEMPT_LIMIT // 2 + 1)]
+
+    for direction, steps in attempts:
+        origin = reader.read().map_id
+        if origin == destination:
             return
+        _open_fly_map(actions, reader, emulator)
+        for _ in range(steps):
+            _pulse(actions, MacroActionKind.MOVE, direction, 120)
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-    raw = reader.read()
-    names = ", ".join(a.name for a in _TOWN_MAP_CURSOR_CANDIDATES)
+
+        landed = origin
+        for _ in range(8):
+            landed = reader.read().map_id
+            if landed != origin:
+                break
+            _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+        landings.append((_map_name(origin), direction, steps, _map_name(landed)))
+        if landed == destination:
+            return
+
     raise BlaineChapterError(
-        f"Fly to Vermilion failed: arrived at map {raw.map_id} "
-        f"at {(raw.player_x, raw.player_y)!r}. "
-        f"Town-map readings ({names}) after each move: {trace!r}. "
-        "An address whose value changes with the moves is the cursor; "
-        "one that never changes is not."
+        f"{label}: could not reach {_map_name(int(destination))} by air in "
+        f"{len(attempts)} attempts. (origin, direction, steps, landing) = {landings!r}."
     )
-    _pulse(actions, MacroActionKind.CONFIRM, frames=12)
+
+
+def _map_name(map_id: int | None) -> str:
+    if map_id is None:
+        return "unknown"
+    try:
+        return MapId(map_id).name.lower()
+    except ValueError:
+        return f"map_{map_id:#04x}"
+
+
+def _field_fly_to_vermilion_from_saffron(actions, reader, emulator) -> None:
+    _fly_to_town(actions, reader, emulator, MapId.VERMILION_CITY, "Saffron to Vermilion")
+
+
+def _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator) -> None:
+    _fly_to_town(actions, reader, emulator, MapId.VERMILION_CITY, "Cinnabar to Vermilion")
+
 
 def _field_fly_to_cinnabar_from_vermilion(actions, reader, emulator) -> None:
-    _pulse(actions, MacroActionKind.OPEN_MENU)
-    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    _pulse(actions, MacroActionKind.MOVE, "down", 120)
-    _pulse(actions, MacroActionKind.MOVE, "left", 120)
-    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-    for _ in range(12):
-        if reader.read().map_id == MapId.CINNABAR_ISLAND:
-            break
-        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-    else:
-        raise BlaineChapterError("Fly did not return to Cinnabar from Vermilion.")
-    _pulse(actions, MacroActionKind.CONFIRM, frames=12)
-
-def _training_dig_to_cinnabar(
-    actions: CountingExecutor,
-    reader: PokemonRedStateReader,
-    emulator: EmulatorState,
-) -> None:
-    destination = _field_dig(
-        actions,
-        reader,
-        emulator,
-        expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY),
-    )
-    if destination.map_id == MapId.SAFFRON_CITY:
-        _field_fly_to_cinnabar(actions, reader, emulator)
-    elif destination.map_id == MapId.VERMILION_CITY:
-        _field_fly_to_cinnabar_from_vermilion(actions, reader, emulator)
-    _require(reader.read(), MapId.CINNABAR_ISLAND, (11, 12), "training Dig return")
-
-def _training_dig_to_vermilion(
-    actions: CountingExecutor,
-    reader: PokemonRedStateReader,
-    emulator: EmulatorState,
-) -> None:
-    raw = reader.read()
-    if raw.map_id == MapId.CINNABAR_POKECENTER:
-        _move(actions, reader, ("down",) * 5, "exit Cinnabar Center")
-        raw = reader.read()
-    elif raw.map_id == MapId.SAFFRON_POKECENTER:
-        _move(actions, reader, ("down",) * 5, "exit Saffron Center")
-        raw = reader.read()
-
-    if raw.map_id not in (MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY):
-        raw = _field_dig(
-            actions,
-            reader,
-            emulator,
-            expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY),
-        )
-        
-    if raw.map_id == MapId.SAFFRON_CITY:
-        _field_fly_to_vermilion_from_saffron(actions, reader, emulator)
-    elif raw.map_id == MapId.CINNABAR_ISLAND:
-        _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator)
-        
-    _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Dig return vermilion")
+    _fly_to_town(actions, reader, emulator, MapId.CINNABAR_ISLAND, "Vermilion to Cinnabar")
 
 
 
@@ -1730,6 +1717,53 @@ def _mansion_walk_to_grass(actions, reader, emulator) -> int:
     direction = "down" if (raw.player_y or 0) <= 20 else "up"
     _pulse(actions, MacroActionKind.MOVE, direction, 240)
     return 1
+
+
+def _training_dig_to_cinnabar(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    destination = _field_dig(
+        actions,
+        reader,
+        emulator,
+        expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY),
+    )
+    if destination.map_id == MapId.SAFFRON_CITY:
+        _field_fly_to_cinnabar(actions, reader, emulator)
+    elif destination.map_id == MapId.VERMILION_CITY:
+        _field_fly_to_cinnabar_from_vermilion(actions, reader, emulator)
+    _require(reader.read(), MapId.CINNABAR_ISLAND, (11, 12), "training Dig return")
+
+
+def _training_dig_to_vermilion(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    raw = reader.read()
+    if raw.map_id == MapId.CINNABAR_POKECENTER:
+        _move(actions, reader, ("down",) * 5, "exit Cinnabar Center")
+        raw = reader.read()
+    elif raw.map_id == MapId.SAFFRON_POKECENTER:
+        _move(actions, reader, ("down",) * 5, "exit Saffron Center")
+        raw = reader.read()
+
+    if raw.map_id not in (MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY):
+        raw = _field_dig(
+            actions,
+            reader,
+            emulator,
+            expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY),
+        )
+        
+    if raw.map_id == MapId.SAFFRON_CITY:
+        _field_fly_to_vermilion_from_saffron(actions, reader, emulator)
+    elif raw.map_id == MapId.CINNABAR_ISLAND:
+        _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator)
+        
+    _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Dig return vermilion")
 
 
 def _digletts_cave_walk_to_grass(
