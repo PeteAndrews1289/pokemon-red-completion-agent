@@ -305,6 +305,25 @@ def _party_hp(emulator: EmulatorState) -> tuple[int, ...]:
     )
 
 
+def advance_toward_main(
+    actions: CountingExecutor,
+    phase: BattleMenuPhase,
+) -> None:
+    """Press whatever moves the battle UI toward the command menu.
+
+    Never CONFIRM at MOVE: that selects an attack. The settle loops previously
+    alternated CONFIRM and CANCEL regardless of phase, so once anything left
+    them in the move menu they pressed their way into fighting instead of
+    returning, and reported that the switch had not settled while the switch
+    had in fact already registered.
+    """
+
+    if phase is BattleMenuPhase.MOVE:
+        pulse(actions, MacroActionKind.CANCEL, frames=120)
+        return
+    pulse(actions, MacroActionKind.CONFIRM, frames=120)
+
+
 def switch_active_battler(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
@@ -323,11 +342,7 @@ def switch_active_battler(
             break
         if raw.battle_state == 0:
             raise RuntimeError(f"Battle ended before switching to {label}.")
-        pulse(
-            actions,
-            MacroActionKind.CANCEL if (p + 1) % 4 == 0 else MacroActionKind.CONFIRM,
-            frames=120,
-        )
+        advance_toward_main(actions, menu.phase)
     else:
         raise RuntimeError(f"Battle menu did not settle before switching to {label}.")
     if emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) == target_index:
@@ -393,17 +408,11 @@ def switch_active_battler(
                 f"Battle ended safely while switching to {label}, but field input did not settle."
             )
         if menu.phase is BattleMenuPhase.MAIN:
-            # Already back at the command menu but the switch has not
-            # registered. Pressing CONFIRM here selects FIGHT and opens the move
-            # menu, so the loop would mash its way into attacking instead of
-            # settling. Wait for the write to land rather than pressing.
+            # Back at the command menu but the switch has not registered yet.
+            # CONFIRM here would select FIGHT, so wait for the write to land.
             actions.execute(MacroAction(MacroActionKind.WAIT, 120))
             continue
-        pulse(
-            actions,
-            MacroActionKind.CANCEL if (p + 1) % 4 == 0 else MacroActionKind.CONFIRM,
-            frames=120,
-        )
+        advance_toward_main(actions, menu.phase)
     active = emulator.read_u8(RamAddress.PLAYER_MON_NUMBER)
     raise RuntimeError(
         f"Switch to {label} did not return to the battle menu: "
