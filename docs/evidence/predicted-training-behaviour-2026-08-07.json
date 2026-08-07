@@ -1,0 +1,40 @@
+{
+  "schema": "pokemon-run-prediction-v1",
+  "recorded_on": "2026-08-07",
+  "prediction_id": "mansion-block-after-venue-aware-selection",
+  "purpose": "Three changes made today alter how a run behaves and none has been checked against the emulator. Writing down what they should do, before running, is what makes the run able to refute them. A run compared against no prediction can only ever be interpreted after the fact.",
+  "changes_under_test": [
+    "max_enemy_level_delta=2 replacing minimum_direct_level_advantage=15 (docs/evidence/training-margin-decision-2026-08-07.json)",
+    "RED_DIRECT_LEVEL_ADVANTAGE retired",
+    "the trainee is now the weakest member the venue can train, not the weakest member outright"
+  ],
+  "assumed_party": {
+    "source": "the party levels recorded by the previous receipt on arrival at the Mansion block",
+    "levels": [68, 20, 26, 30, 25, 30],
+    "note": "if the run arrives with different levels the prediction below does not apply, and that is itself worth recording"
+  },
+  "predicted": {
+    "mansion_block_outcome": "stops immediately, before executing a single input",
+    "expected_message_contains": [
+      "No party member can train here",
+      "pokemon_mansion_1f fields levels 28-34",
+      "digletts_cave"
+    ],
+    "flees": 0,
+    "battles": 0,
+    "reason": "The Mansion's typical ceiling is 34. With a +2 margin the level-30 members may engage up to 32, so none of the five members below the level floor can fight there. The escort at 68 could, but it is excluded because it is already past the floor.",
+    "contrast_with_last_run": "The previous receipt recorded flees=33, battles=0 before stopping. The same conclusion is now reached with zero flees and names the venue to use instead."
+  },
+  "what_would_refute_this": [
+    "The block executes inputs at the Mansion at all — that would mean the venue-aware selection is not reached, or venue_band is not arriving at the call site",
+    "It flees rather than stopping — that would mean the immediate stop is unreachable and the eight-flee path is still doing the work",
+    "It trains the escort — that would mean the level-floor exclusion is not binding, which is the failure mode this design most has to avoid",
+    "It reports a different band for the Mansion than 28-34 — that would mean the harvested measurement does not describe what the run actually meets"
+  ],
+  "known_limitation": "This is a faster and more informative failure, not a success. No member can be trained until Diglett's Cave has an implemented heal-and-return and a way to be reached; that is the remaining routing work. The run tests the diagnosis, not the cure.",
+  "next": [
+    "Take the run with POKEMON_RED_ENCOUNTER_LOG set, so it harvests more bands even though the block stops early",
+    "Compare the stop against the predicted message, field by field",
+    "Then build the Diglett's Cave venue from the surge navigation and re-run"
+  ]
+}
