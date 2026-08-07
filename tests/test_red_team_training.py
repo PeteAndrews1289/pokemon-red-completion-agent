@@ -256,6 +256,19 @@ def state(**changes: object) -> RawGameState:
     return RawGameState(**values)  # type: ignore[arg-type]
 
 
+def _venue(band: GrindingArea, map_id: int = TRAINING_MAP) -> TrainingVenue:
+    """A venue over a measured band, with navigation the fake can satisfy."""
+
+    return TrainingVenue(
+        band=band,
+        map_id=map_id,
+        walk_to_grass=lambda *_args: 1,
+        heal_and_return=lambda *_args: None,
+        is_in_center=lambda raw: raw.map_id == CENTER_MAP,
+        move_slot=lambda _raw: 1,
+    )
+
+
 def balancing_kwargs(**overrides: object) -> dict[str, object]:
     """Every keyword argument the loop requires.
 
@@ -264,15 +277,17 @@ def balancing_kwargs(**overrides: object) -> dict[str, object]:
     ever invoked the function.
     """
 
-    venue_band = overrides.pop("venue_band", GrindingArea(area_id="test_area", minimum_encounter_level=1, maximum_encounter_level=10, rare_maximum_encounter_level=10, measured_samples=100))
-    default_venues = [TrainingVenue(
-        band=venue_band,
-        map_id=overrides.pop("expected_map", TRAINING_MAP),
-        walk_to_grass=overrides.pop("walk_to_grass", lambda *_args: 1),
-        heal_and_return=overrides.pop("heal_and_return", lambda *_args: None),
-        is_in_center=overrides.pop("is_in_center", lambda raw: raw.map_id == CENTER_MAP),
-        move_slot=overrides.pop("move_slot", lambda _raw: 1),
-    )]
+    venue_band = overrides.pop(
+        "venue_band",
+        GrindingArea(
+            area_id="test_area",
+            minimum_encounter_level=1,
+            maximum_encounter_level=10,
+            rare_maximum_encounter_level=10,
+            measured_samples=100,
+        ),
+    )
+    default_venues = [_venue(venue_band, map_id=overrides.pop("expected_map", TRAINING_MAP))]
 
     kwargs: dict[str, object] = {
         "policy": BalancedTeamPolicy(minimum_level=55, maximum_level_spread=40, required_size=6),
@@ -418,118 +433,72 @@ def test_the_venue_mismatch_stop_names_where_the_trainee_belongs() -> None:
     )
 
     with pytest.raises(RuntimeError) as failure:
-        run(memory, reader, venues=[TrainingVenue(band=venues[0], map_id=TRAINING_MAP, walk_to_grass=lambda *_args: 1, heal_and_return=lambda *_args: None, is_in_center=lambda raw: raw.map_id == CENTER_MAP, move_slot=lambda _raw: 1)])
+        run(
+            memory,
+            reader,
+            venues=[
+                TrainingVenue(
+                    band=venues[0],
+                    map_id=TRAINING_MAP,
+                    walk_to_grass=lambda *_args: 1,
+                    heal_and_return=lambda *_args: None,
+                    is_in_center=lambda raw: raw.map_id == CENTER_MAP,
+                    move_slot=lambda _raw: 1,
+                )
+            ],
+        )
 
     message = str(failure.value)
     assert "digletts_cave" in message, f"the stop should name the venue: {message}"
     assert "29 encounters" in message, "and say how well that venue was measured"
 
 
-def test_without_measured_bands_the_stop_does_not_invent_a_venue() -> None:
-    """Silence is correct when nothing has been measured."""
+def test_a_stop_with_nowhere_to_send_anyone_says_so_plainly() -> None:
+    """Silence beats invention when no measured area suits the trainee.
 
-    memory = FakeMemory()
-    memory.set_party(
-        [(DIGLETT_SPECIES_ID, 20), (BLASTOISE_SPECIES_ID, ESCORT_LEVEL_CAP - 5)]
-        + [(DUGTRIO_SPECIES_ID, 25) for _ in range(4)],
-        hp=30,
-    )
-    reader = FakeReader([state(battle_state=1, enemy_level=32, enemy_species_id=0x21)])
-
-    with pytest.raises(RuntimeError, match="where their own level lives"):
-        run(memory, reader, venues=[])
-
-
-MANSION_BAND = GrindingArea(
-    area_id="pokemon_mansion_1f",
-    minimum_encounter_level=28,
-    maximum_encounter_level=34,
-    rare_maximum_encounter_level=39,
-    measured_samples=155,
-)
-
-
-def test_a_venue_trains_whoever_it_can_rather_than_the_weakest_outright() -> None:
-    """The deadlock, stated as a choice rather than as a stop.
-
-    The Mansion fields 28-34. A party holding members at 20 and 38 used to put
-    the level-20 member in front, which can engage nothing there, and flee
-    until it gave up — while the level-38 member, which could have trained all
-    along, never got a turn.
+    The venue set is no longer optional -- a run with no venue has nowhere to
+    walk and nothing to judge a matchup against, and is refused up front. What
+    is still possible is a party too weak for every venue on offer, and the
+    stop has to admit that rather than name one anyway.
     """
 
     memory = FakeMemory()
+    # The escort sits at the level floor, so it is not itself a trainee, and
+    # nobody else can reach a band starting at 28.
     memory.set_party(
-        [
-            (DIGLETT_SPECIES_ID, 20),
-            (BLASTOISE_SPECIES_ID, ESCORT_LEVEL_CAP + 5),
-            (DUX_SPECIES_ID, 38),
-            (DUGTRIO_SPECIES_ID, 41),
-            (SNORLAX_SPECIES_ID, 41),
-            (HITMONLEE_SPECIES_ID, 41),
-        ]
+        [(DIGLETT_SPECIES_ID, 20), (BLASTOISE_SPECIES_ID, ESCORT_LEVEL_CAP)]
+        + [(DUGTRIO_SPECIES_ID, 25) for _ in range(4)]
     )
     reader = FakeReader([state()])
-    policy = BalancedTeamPolicy(
-        minimum_level=55,
-        maximum_level_spread=40,
-        required_size=6,
-        max_enemy_level_delta=2,
-        max_steps=64,
+    too_strong = GrindingArea(
+        area_id="pokemon_mansion_1f",
+        minimum_encounter_level=28,
+        maximum_encounter_level=34,
+        rare_maximum_encounter_level=39,
+        measured_samples=164,
     )
 
     with pytest.raises(RuntimeError) as failure:
-        run(memory, reader, policy=policy, venue_band=MANSION_BAND)
-
-    # It ran out of steps looking for battles, which means it was training the
-    # level-38 member — not refusing to train at all.
-    assert "stopped before readiness" in str(failure.value)
-
-
-def test_a_venue_that_can_train_nobody_says_so_at_once() -> None:
-    """Eight flees to learn what the band already says is eight too many."""
-
-    memory = FakeMemory()
-    memory.set_party(
-        [
-            (DIGLETT_SPECIES_ID, 20),
-            (BLASTOISE_SPECIES_ID, ESCORT_LEVEL_CAP + 5),
-            (DUX_SPECIES_ID, 22),
-            (DUGTRIO_SPECIES_ID, 22),
-            (SNORLAX_SPECIES_ID, 22),
-            (HITMONLEE_SPECIES_ID, 22),
-        ]
-    )
-    reader = FakeReader([state()])
-    policy = BalancedTeamPolicy(
-        minimum_level=55, maximum_level_spread=40, required_size=6, max_enemy_level_delta=2
-    )
-    executor = FakeExecutor(memory)
-
-    with pytest.raises(RuntimeError) as failure:
-        run_red_team_balancing(
-            executor,  # type: ignore[arg-type]
-            reader,  # type: ignore[arg-type]
-            memory,  # type: ignore[arg-type]
-            **balancing_kwargs(  # type: ignore[arg-type]
-                policy=policy,
-                venues=[
-                    TrainingVenue(
-                        band=MANSION_BAND,
-                        map_id=TRAINING_MAP,
-                        walk_to_grass=lambda *_args: 1,
-                        heal_and_return=lambda *_args: None,
-                        is_in_center=lambda raw: raw.map_id == CENTER_MAP,
-                        move_slot=lambda _raw: 1,
-                    ),
-                ],
-            ),
-        )
+        run(memory, reader, venues=[_venue(too_strong)])
 
     message = str(failure.value)
-    assert "No party member can train here" in message
-    assert "28-34" in message, "the stop should state what this venue fields"
-    assert executor.actions_executed == 0, "and should not walk a single step first"
+    assert "No measured area suits" in message, f"it should admit it has nowhere: {message}"
+    assert "digletts_cave" not in message, "and must not invent a venue it was not given"
+
+
+def test_a_run_given_no_venue_at_all_is_refused_up_front() -> None:
+    """An empty venue list used to be the default, and guaranteed a crash.
+
+    ``current_venue`` stayed None until a trainee was matched to a band, but
+    RESTORE_TEAM -- or an unsafe escort -- reaches the healing branch on the
+    first iteration and dereferences it. Six call sites did that.
+    """
+
+    memory = FakeMemory()
+    memory.set_party([(species, 60) for species in FINAL_FORM_ROSTER])
+
+    with pytest.raises(RuntimeError, match="given no venue"):
+        run(memory, FakeReader([state()]), venues=[])
 
 
 def test_the_venue_bound_is_far_below_the_flee_bound() -> None:

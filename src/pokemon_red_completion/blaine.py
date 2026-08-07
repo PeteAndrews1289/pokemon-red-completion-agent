@@ -921,7 +921,7 @@ def run_blaine_chapter(
             reader,
             emulator,
             policy=MANSION_TEAM_POLICY,
-            expected_map=MapId.POKEMON_MANSION_1F,
+            venues=(DIGLETTS_CAVE_TRAINING_VENUE, MANSION_TRAINING_VENUE),
             intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
             flee_timing=MANSION_TRAINING_FLEE_TIMING,
             hideout_timing=DEFAULT_HIDEOUT_TIMING,
@@ -931,15 +931,8 @@ def run_blaine_chapter(
             max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
             cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
             evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
-            heal_and_return=MANSION_TRAINING_VENUE.heal_and_return,
-            is_in_center=MANSION_TRAINING_VENUE.is_in_center,
-            is_in_map=MANSION_TRAINING_VENUE.is_in_map,
-            walk_to_grass=MANSION_TRAINING_VENUE.walk_to_grass,
-            move_slot=MANSION_TRAINING_VENUE.move_slot,
             report_label="Mansion team training",
             checkpoint_count=BLAINE_CHECKPOINT_COUNT,
-            measured_venues=MEASURED_TRAINING_VENUES,
-            venue_band=MANSION_TRAINING_VENUE.band,
         )
         team_battles += evolution_battles
         team_healing_trips += evolution_heals
@@ -954,7 +947,7 @@ def run_blaine_chapter(
         reader,
         emulator,
         policy=MANSION_TEAM_POLICY,
-        expected_map=MapId.POKEMON_MANSION_1F,
+        venues=(DIGLETTS_CAVE_TRAINING_VENUE, MANSION_TRAINING_VENUE),
         intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
         flee_timing=MANSION_TRAINING_FLEE_TIMING,
         hideout_timing=DEFAULT_HIDEOUT_TIMING,
@@ -1509,15 +1502,37 @@ def _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator) -> None:
     _pulse(actions, MacroActionKind.CONFIRM)
     _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
-    _pulse(actions, MacroActionKind.MOVE, "right", 120)
-    _pulse(actions, MacroActionKind.MOVE, "up", 120)
+    _pulse(actions, MacroActionKind.WAIT, frames=90)
+    # Cinnabar -> Pallet
+    _pulse(actions, MacroActionKind.MOVE, "up", 10)
+    _pulse(actions, MacroActionKind.WAIT, frames=60)
+    # Pallet -> Viridian
+    _pulse(actions, MacroActionKind.MOVE, "up", 10)
+    _pulse(actions, MacroActionKind.WAIT, frames=60)
+    # Viridian -> Pewter
+    _pulse(actions, MacroActionKind.MOVE, "up", 10)
+    _pulse(actions, MacroActionKind.WAIT, frames=60)
+    # Pewter -> Cerulean
+    _pulse(actions, MacroActionKind.MOVE, "right", 10)
+    _pulse(actions, MacroActionKind.WAIT, frames=60)
+    # Cerulean -> Saffron
+    _pulse(actions, MacroActionKind.MOVE, "down", 10)
+    _pulse(actions, MacroActionKind.WAIT, frames=60)
+    # Saffron -> Vermilion
+    _pulse(actions, MacroActionKind.MOVE, "down", 10)
+    _pulse(actions, MacroActionKind.WAIT, frames=60)
     _pulse(actions, MacroActionKind.CONFIRM, frames=240)
     for _ in range(12):
-        if reader.read().map_id == MapId.VERMILION_CITY:
+        raw = reader.read()
+        if raw.map_id == MapId.VERMILION_CITY:
             break
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
     else:
-        raise BlaineChapterError("Fly did not return to Vermilion from Cinnabar.")
+        raw = reader.read()
+        raise BlaineChapterError(
+            f"Fly to Vermilion failed. Map: {raw.map_id}, "
+            f"position: {(raw.player_x, raw.player_y)!r}."
+        )
     _pulse(actions, MacroActionKind.CONFIRM, frames=12)
 
 def _field_fly_to_cinnabar_from_vermilion(actions, reader, emulator) -> None:
@@ -1561,16 +1576,27 @@ def _training_dig_to_vermilion(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
-    destination = _field_dig(
-        actions,
-        reader,
-        emulator,
-        expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY),
-    )
-    if destination.map_id == MapId.SAFFRON_CITY:
+    raw = reader.read()
+    if raw.map_id == MapId.CINNABAR_POKECENTER:
+        _move(actions, reader, ("down",) * 5, "exit Cinnabar Center")
+        raw = reader.read()
+    elif raw.map_id == MapId.SAFFRON_POKECENTER:
+        _move(actions, reader, ("down",) * 5, "exit Saffron Center")
+        raw = reader.read()
+
+    if raw.map_id not in (MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY):
+        raw = _field_dig(
+            actions,
+            reader,
+            emulator,
+            expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY),
+        )
+        
+    if raw.map_id == MapId.SAFFRON_CITY:
         _field_fly_to_vermilion_from_saffron(actions, reader, emulator)
-    elif destination.map_id == MapId.CINNABAR_ISLAND:
+    elif raw.map_id == MapId.CINNABAR_ISLAND:
         _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator)
+        
     _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Dig return vermilion")
 
 

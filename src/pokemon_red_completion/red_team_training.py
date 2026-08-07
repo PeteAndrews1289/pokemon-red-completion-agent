@@ -19,7 +19,6 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.party import (
     PARTY_SLOT_LIMIT,
     PartyMemberObservation,
-    PartyObservation,
     StatusCondition,
 )
 from pokemon_red_completion.red_party import (
@@ -40,11 +39,11 @@ from pokemon_red_completion.team_training import (
     TeamTrainingProgress,
     choose_grinding_area,
     is_matchup_acceptable,
+    member_needs_training,
     plan_team_training,
     summarize_team_readiness,
-    weakest_member_trainable_at,
 )
-from pokemon_red_completion.training_venue import TrainingVenue
+from pokemon_red_completion.training_venue import TrainingVenue, venue_for_map
 
 
 class EmulatorState(Protocol):
@@ -78,16 +77,16 @@ FIELD_MOVE_IDS = frozenset({0x0F, DIG, 0x13, 0x39, 0x46})
 #:
 #: Every band here is transcribed from
 #: ``docs/evidence/encounter-bands-2026-08-07.json`` and only areas with at
-#: least twenty samples appear; ``test_[v.band for v in venues]_match_the_evidence``
+#: least twenty samples appear; ``test_measured_venues_match_the_evidence``
 #: fails if the two drift apart.  The typical maximum is what ninety percent of
 #: encounters stay under, with the rare ceiling recorded separately, because
 #: Diglett's Cave summarised as "15-31" would be rejected for the level-twenty
 #: trainee its twenty-nine other encounters suit exactly.
 #:
 #: ``has_nearby_healer`` describes the game's geography -- each of these sits a
-#: short walk from a Pokemon Center -- not our navigation.  Only the Mansion
-#: currently has an implemented heal-and-return path, so these serve venue
-#: *recommendation* today; routing to them is the remaining Tier 1 work.
+#: short walk from a Pokemon Center -- not our navigation.  The Mansion and
+#: Diglett's Cave now have implemented heal-and-return paths; the Cave's has
+#: not yet been validated against the emulator.
 MEASURED_TRAINING_VENUES: tuple[GrindingArea, ...] = (
     GrindingArea(
         area_id="viridian_forest",
@@ -576,23 +575,6 @@ def switch_active_battler(
     )
 
 
-def _trainee_for_venue(
-    party: PartyObservation,
-    policy: BalancedTeamPolicy,
-    venue_band: GrindingArea | None,
-) -> PartyMemberObservation | None:
-    """Who should be in front here.
-
-    Without a measured band for where we are standing there is nothing to judge
-    against, so this falls back to the weakest member overall -- the behaviour
-    that deadlocked the Mansion, kept only for venues nobody has measured yet.
-    """
-
-    if venue_band is None:
-        return party.weakest_trainable_member
-    return weakest_member_trainable_at(party, policy, venue_band)
-
-
 def _recommended_venue(
     party_reader: PokemonRedPartyReader,
     policy: BalancedTeamPolicy,
@@ -640,11 +622,16 @@ def run_red_team_balancing(
     progress_sink: Callable[[str], None] | None = None,
     completed_checkpoint_count: int = 0,
     evolution_target: tuple[int, int] | None = None,
-    venues: Sequence[TrainingVenue] = (),
+    venues: Sequence[TrainingVenue],
     report_label: str,
     checkpoint_count: int,
 ) -> tuple[object | None, int, int]:
     party_reader = PokemonRedPartyReader(emulator)
+    if not venues:
+        raise RuntimeError(
+            "Team training was given no venue. There is nowhere to walk, nowhere to heal, "
+            "and no band to judge a matchup against."
+        )
     if BLASTOISE_SPECIES_ID not in party_reader.read().species_ids():
         raise RuntimeError("Team training lacks its qualified Blastoise escort.")
     battles = 0
@@ -698,7 +685,12 @@ def run_red_team_balancing(
                 f"encounter band {band}."
             )
 
-    current_venue: TrainingVenue | None = None
+    # Never None. A venue is needed before any trainee is matched to one --
+    # ``plan_team_training`` can ask to RESTORE_TEAM on the first iteration, and
+    # an unsafe escort triggers the same branch -- and both paths heal through
+    # the venue. Starting from wherever we are standing keeps that honest;
+    # falling back to the first venue keeps it total.
+    current_venue: TrainingVenue = venue_for_map(venues, reader.read().map_id or -1) or venues[0]
 
     while True:
         party = party_reader.read()
@@ -714,7 +706,7 @@ def run_red_team_balancing(
             trainee = None
             target_band = None
             bands = [v.band for v in venues]
-            trainable_members = [m for m in party.members if m.level < policy.minimum_level]
+            trainable_members = [m for m in party.members if member_needs_training(m, policy)]
             for member in sorted(trainable_members, key=lambda m: (m.level, m.slot)):
                 band = choose_grinding_area(bands, member, policy)
                 if band is not None:
@@ -723,9 +715,15 @@ def run_red_team_balancing(
                     break
             
             if not trainable_members:
-                pass # decision will be STOP
+                # Nobody is below the floor, so the decision is already STOP and
+                # the readiness check below is what should speak.
+                pass
             elif trainee is None:
-                here = ", ".join(f"{v.band.area_id} fields levels {v.band.minimum_encounter_level}-{v.band.maximum_encounter_level}" for v in venues if v.band) if venues else "this venue"
+                here = ", ".join(
+                    f"{venue.band.area_id} fields levels "
+                    f"{venue.band.minimum_encounter_level}-{venue.band.maximum_encounter_level}"
+                    for venue in venues
+                )
                 raise RuntimeError(
                     f"No party member can train here: {here}, and the party "
                     f"levels are {tuple(m.level for m in party.members)}. "
@@ -943,7 +941,7 @@ def run_red_team_balancing(
             continue
         steps += current_venue.walk_to_grass(actions, reader, emulator)
 
-    if current_venue is not None and current_venue.is_in_map(reader.read()):
+    if current_venue.is_in_map(reader.read()):
         restore_training_core_order(actions, reader, emulator, hideout_timing)
         current_venue.heal_and_return(actions, reader, emulator)
         healing_trips += 1

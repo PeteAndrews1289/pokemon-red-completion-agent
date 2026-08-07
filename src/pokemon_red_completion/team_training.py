@@ -797,6 +797,23 @@ def training_safety_ceiling(trainee: PartyMemberObservation, policy: BalancedTea
     return trainee.level + policy.max_enemy_level_delta
 
 
+def member_needs_training(
+    member: PartyMemberObservation, policy: BalancedTeamPolicy
+) -> bool:
+    """Whether this member is still short of the level floor.
+
+    Kept separate from *can* it train here, and load-bearing rather than
+    cosmetic. The escort is the one member high enough to fight anywhere, so
+    "the weakest member that can train here" selects the escort at a venue too
+    strong for everyone else, and it would train happily and forever while the
+    members that need it never get a turn. Excluding members already at the
+    floor is what prevents that, and it is stated once so the venue loop and
+    the single-area helper cannot drift apart on it.
+    """
+
+    return member.level < policy.minimum_level
+
+
 def member_can_train_at(
     member: PartyMemberObservation,
     policy: BalancedTeamPolicy,
@@ -851,7 +868,7 @@ def weakest_member_trainable_at(
     trainable = [
         member
         for member in party.members
-        if member.level < policy.minimum_level and member_can_train_at(member, policy, area)
+        if member_needs_training(member, policy) and member_can_train_at(member, policy, area)
     ]
     if not trainable:
         return None
