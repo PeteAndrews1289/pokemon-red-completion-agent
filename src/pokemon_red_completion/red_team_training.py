@@ -877,8 +877,8 @@ def run_red_team_balancing(
                     unknown_cancel_interval=cancel_interval,
                 )
             except BattleRuntimeError as error:
-                # Assuming _PauseForTeamTrainingRecovery is imported or handled differently.
-                # Actually, in blaine.py it was handled. I'll just check if it's PP exhaustion.
+                if not isinstance(error.__cause__, _PauseForTeamTrainingRecovery):
+                    raise
                 current = reader.read()
                 if current.active_party_index != escort.slot - 1:
                     if escort_unsafe:

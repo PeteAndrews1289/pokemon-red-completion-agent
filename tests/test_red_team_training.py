@@ -18,8 +18,9 @@ from __future__ import annotations
 
 import pytest
 
+from pokemon_red_completion import red_team_training
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import BattleIntent
+from pokemon_red_completion.battle_runtime import BattleIntent, BattleRuntimeError
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     BattleMenuState,
@@ -412,6 +413,36 @@ def test_a_wrong_venue_stops_early_and_names_the_band() -> None:
     assert flees <= 10, f"gave up after {flees} flees, which is a run half wasted"
     assert "32" in message, f"the encounter band must survive into the report: {message}"
     assert "20" in message, f"our own levels must survive into the report: {message}"
+
+
+def test_an_unrelated_battle_runtime_failure_is_not_misreported_as_pp_exhaustion(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Only the move policy's explicit recovery request may enter the escape path.
+
+    ``BattleRuntimeError`` also reports broken observations, invalid menus, and
+    unexpected battle transitions. Treating all of those as exhausted PP hides
+    their actual cause and starts an unrelated party-switch sequence.
+    """
+
+    memory = FakeMemory()
+    memory.set_party(
+        [(DIGLETT_SPECIES_ID, 20), (BLASTOISE_SPECIES_ID, ESCORT_LEVEL_CAP - 5)]
+        + [(DUGTRIO_SPECIES_ID, 25) for _ in range(4)]
+    )
+    reader = FakeReader(
+        [state(battle_state=1, enemy_level=10, enemy_species_id=0x21)]
+    )
+
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+
+    def fail_battle(*_args: object, **_kwargs: object) -> None:
+        raise BattleRuntimeError("semantic battle observation failed")
+
+    monkeypatch.setattr(red_team_training, "run_adaptive_wild_battle", fail_battle)
+
+    with pytest.raises(BattleRuntimeError, match="semantic battle observation failed"):
+        run(memory, reader)
 
 
 def test_a_run_that_never_finds_a_battle_is_reported_as_unfinished() -> None:
