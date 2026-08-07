@@ -1,0 +1,24 @@
+{
+  "schema": "pokemon-run-outcome-v1",
+  "recorded_on": "2026-08-07",
+  "run_id": "fly-verified-by-landing",
+  "counted": false,
+  "duration_seconds": 313,
+  "checkpoints_reached": "275 of 312",
+  "result": "the town-map Fly problem is solved",
+  "what_changed": "Flying stopped being driven by a hand-derived cursor sequence and started being judged by the map underfoot. _fly_to_town tries an offset, confirms, asks the game where it landed, and moves on if that is not the destination.",
+  "evidence_it_worked": {
+    "before": "two runs ended at 'Fly to Vermilion failed', arriving at Viridian",
+    "after": "no fly failure at all; the run flew to Vermilion, entered the Center, healed at the nurse, and failed two steps later on the walk east to Route 11",
+    "reading": "The failure moving forward is the result. Nothing about the town map's layout was ever learned, and nothing needed to be."
+  },
+  "the_defect_this_run_also_fixed": {
+    "symptom": "cursor stuck at 0 with watched=0x03",
+    "cause": "The first version of the search kept pressing A until the map changed. An attempt that flew nowhere therefore left eight unanswered presses in the field, and the next attempt opened onto a prompt where only A and B were watched -- so the d-pad did nothing and the cursor could not move. The search was poisoning its own next attempt.",
+    "fix": "Confirm once, allow one further press for a waiting prompt, then wait and look. An attempt that changes nothing closes back to the field first.",
+    "lesson": "A retry loop that presses buttons to make progress has to consider what those presses mean when there is no progress to make."
+  },
+  "why_this_generalises": "Recognising success by the game's own state rather than by a belief about a screen is now the second time this has resolved something that resisted careful guessing -- the party-switch row was the first. Where an observable exists, read it; where none does, act and check what happened. Neither requires being right in advance.",
+  "next_failure": "Failed to enter Route 11, inside the cave's heal-and-return, after the Vermilion nurse. Instrumented to report where we left the Center, where the return path put us, and the map and x at each step of the walk east.",
+  "still_true": "Nothing has trained at Diglett's Cave yet. The 29 cave encounters in this run's log are the route's own Diglett capture, as in every previous run."
+}

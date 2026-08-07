@@ -1810,16 +1810,29 @@ def _digletts_cave_heal_and_return(
         _move(actions, reader, ("up",) * 4, "team training Vermilion nurse")
     _heal(actions, reader, emulator)
     _move(actions, reader, VERMILION_NURSE_TO_EXIT, "team training Vermilion Center exit")
+    after_exit = reader.read()
     _move(actions, reader, VERMILION_CENTER_TO_ROUTE_11, "team training Route 11 return")
-    
-    # move until route 11
+
+    # Walk east until Route 11 loads. The failure carries where we were at each
+    # stage, because "Failed to enter Route 11" on its own cannot distinguish
+    # leaving the Center at the wrong tile from walking the right path from the
+    # wrong start -- and those want different fixes.
+    trail: list[tuple[str, int | None]] = []
     for _ in range(12):
         raw = reader.read()
+        trail.append((_map_name(raw.map_id), raw.player_x))
         if raw.map_id == MapId.ROUTE_11:
             break
         _pulse(actions, MacroActionKind.MOVE, "right", 120)
     else:
-        raise BlaineChapterError("Failed to enter Route 11")
+        raw = reader.read()
+        raise BlaineChapterError(
+            f"Failed to enter Route 11. Left the Center at "
+            f"{_map_name(after_exit.map_id)} {(after_exit.player_x, after_exit.player_y)!r}; "
+            f"after the return path at {_map_name(raw.map_id)} "
+            f"{(raw.player_x, raw.player_y)!r}; "
+            f"(map, x) while walking east: {trail!r}."
+        )
     _pulse(actions, MacroActionKind.CONFIRM, frames=12) # wait out transition
     
     _move(actions, reader, ("right",) * 4, "Post-Spearow Diglett Cave approach")
