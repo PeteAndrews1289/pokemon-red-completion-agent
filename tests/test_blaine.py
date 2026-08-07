@@ -37,6 +37,7 @@ from pokemon_red_completion.blaine import (
     QUIZ_CORRECT_ANSWERS,
     QUIZ_TEXT_PULSES,
     QUIZ_TRAINER_BATTLE_INDEXES,
+    ROUTE_11_TRAINING_VENUE,
     BlaineChapterError,
     BlaineTurn,
     CinnabarGymTrainerReceipt,
@@ -51,6 +52,7 @@ from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGame
 from pokemon_red_completion.party import MoveObservation, PartyMemberObservation
 from pokemon_red_completion.red_team_training import (
     _PauseForTeamTrainingRecovery,
+    trainee_should_fight_directly,
 )
 from pokemon_red_completion.red_team_training import (
     battle_command_direction as _battle_command_direction,
@@ -102,6 +104,10 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert MANSION_TEAM_POLICY.max_battles == 7_000
     assert MANSION_TEAM_POLICY.max_battles < MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL
     assert MANSION_TEAM_POLICY.max_healing_trips == 1_250
+    assert MANSION_TEAM_POLICY.minimum_direct_level_advantage == 5
+    assert MANSION_TEAM_POLICY.max_enemy_level_delta == 0
+    assert ROUTE_11_TRAINING_VENUE.band.area_id == "route_11"
+    assert ROUTE_11_TRAINING_VENUE.map_id == int(MapId.ROUTE_11)
     assert MANSION_MAX_CONSECUTIVE_FLEES == 32
     assert frozenset({0x37, 0x8F}) == MANSION_VOLATILE_ENEMY_SPECIES
 
@@ -234,7 +240,18 @@ def test_team_training_requests_escape_when_all_species_attacks_are_unusable() -
                 active_party_pp=(35, 40, 10, 15),
             )
         )
-        == 3
+        == 1
+    )
+    assert (
+        _team_training_move_slot(
+            replace(
+                base,
+                active_party_species_id=0x76,
+                active_party_moves=(0x0A, 0x2D, 0x5B, 0xA3),
+                active_party_pp=(35, 40, 10, 20),
+            )
+        )
+        == 4
     )
 
 
@@ -244,7 +261,7 @@ def test_the_policy_margin_governs_and_no_species_silently_overrides_it() -> Non
     It demanded fifteen levels for Farfetch\'d and eight for Diglett and
     Dugtrio, none of it measured, and those three species are the trainees, so
     it bound hardest on the members being trained. The margin is the policy's
-    to state; the gate now adds only the Red-specific exclusion it exists for.
+    to state; the gate no longer adds a hidden species-level requirement.
     """
 
     dux = PartyMemberObservation(
@@ -283,6 +300,59 @@ def test_the_policy_margin_governs_and_no_species_silently_overrides_it() -> Non
 
     dugtrio = replace(dux, species_id=0x76, moves=(MoveObservation(0x5B, 10),))
     assert _training_attack_pp_reserve(dugtrio, policy) == 2
+
+
+def test_team_training_refuses_an_opponents_super_effective_stab_type() -> None:
+    """A level lead alone cannot protect Jolteon from a Ground attacker."""
+
+    policy = BalancedTeamPolicy(
+        minimum_level=55,
+        max_enemy_level_delta=0,
+        minimum_direct_level_advantage=5,
+    )
+    jolteon = PartyMemberObservation(
+        slot=1,
+        species_id=0x68,
+        level=25,
+        hp=75,
+        max_hp=75,
+        moves=(MoveObservation(0x54, 15), MoveObservation(0x18, 30)),
+    )
+    dux = replace(jolteon, species_id=0x40, level=20)
+    diglett = replace(jolteon, species_id=0x3B, level=23)
+
+    assert not _red_training_matchup_acceptable(jolteon, 19, policy, 0x3B)
+    assert _red_training_matchup_acceptable(dux, 15, policy, 0x3B)
+    assert _red_training_matchup_acceptable(diglett, 17, policy, 0x3B)
+
+
+def test_targeted_evolution_earns_participation_without_directly_fighting() -> None:
+    trainee = PartyMemberObservation(
+        slot=1,
+        species_id=0x3B,
+        level=23,
+        hp=38,
+        max_hp=38,
+        moves=(MoveObservation(0x5B, 10),),
+    )
+    policy = BalancedTeamPolicy(
+        minimum_level=55,
+        minimum_direct_level_advantage=5,
+    )
+
+    assert trainee_should_fight_directly(
+        trainee,
+        enemy_level=17,
+        enemy_species=0x3B,
+        policy=policy,
+    )
+    assert not trainee_should_fight_directly(
+        trainee,
+        enemy_level=17,
+        enemy_species=0x3B,
+        policy=policy,
+        participation_only=True,
+    )
 
 
 

@@ -1420,6 +1420,29 @@ spent no Super Potion, and continued through all 312 checkpoints and the Hall of
 better transfer story than another scripted rescue—matchup knowledge includes deciding whether a
 team member is ready before entering the fight.
 
+## Turning a carry route into a team curriculum
+
+The first successful Red teacher produced poor demonstrations: an overlevelled Blastoise erased the
+Champion's six-Pokémon party in six attacks while five teammates contributed nothing. A first attempt
+to correct that failure chased the escort's internal level, spent 4,570 battles and 1,063 healing
+trips, and overshot League parity by nineteen levels. It made the roster look balanced by removing
+the decisions training data needed.
+
+The replacement curriculum measures the opposition instead. It routes a trainee through Route 11,
+Diglett's Cave, and Pokémon Mansion using harvested encounter bands; caps the escort at the League
+floor; refuses direct fights when the opponent's type presents a super-effective same-type threat;
+and evolves a fragile precursor through switch participation rather than disposable-HP combat. A
+captured-state replay also exposed a subtle move-policy failure: forcing Dig in a mirror matchup
+created a two-turn window in which the opponent could knock the trainee out before its attack landed.
+The ground line now prefers immediate Scratch or Slash attacks and retains Dig only as fallback.
+
+That captured post-Mansion replay completed the curriculum for the first time. Diglett evolved in
+64 participation battles and 37 healing trips. The balancing pass then took 1,652 battles and 848
+healing trips to finish with six level-55 Pokémon, zero level spread, and zero faints. The combined
+1,716-battle cost is below the roughly 1,878-battle historical baseline and far below the overshoot.
+This is captured-state evidence, not yet a full-route or learned-policy claim; the next run must
+arrive at the checkpoint naturally and carry the balanced party through the entire League.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
@@ -1436,13 +1459,13 @@ This project demonstrates:
 
 A concise interview description is:
 
-> I built a completion-first Pokémon Red system that reaches the Hall of Fame through 312 verified
-> semantic checkpoints with a balanced six-member party, then turned replay failures into reusable
-> navigation, capture, storage, recovery, and experience-training skills. It now measures a
-> 124-registration/120-living completion contract, records integrity-checked private
-> demonstrations, and keeps train, validation, and test roots sealed before fitting
-> legality-constrained specialists. The next experiment measures whether those game-neutral skills
-> reduce how much teaching a second Pokémon title needs.
+> I built a Pokémon Red teacher that reaches the Hall of Fame through 312 verified semantic
+> checkpoints, then measured why its overlevelled single-carry demonstrations were poor model
+> training data. I redesigned the curriculum around real team participation: a captured-state run
+> now evolves the fragile precursor safely and trains all six Pokémon to level 55 in 1,716 battles
+> with zero faints. The system records integrity-checked private demonstrations and keeps train,
+> validation, and test roots sealed; the next experiment reproduces the curriculum end to end and
+> measures how much of it transfers to a second Pokémon title.
 
 ## Related documentation
 

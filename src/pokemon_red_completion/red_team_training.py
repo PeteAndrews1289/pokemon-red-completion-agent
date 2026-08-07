@@ -21,6 +21,10 @@ from pokemon_red_completion.party import (
     PartyMemberObservation,
     StatusCondition,
 )
+from pokemon_red_completion.red_battle_catalog import (
+    RED_BATTLE_CATALOG,
+    pokemon_red_species_ref,
+)
 from pokemon_red_completion.red_party import (
     BLASTOISE_SPECIES_ID,
     DUGTRIO_SPECIES_ID,
@@ -58,6 +62,8 @@ class EmulatorState(Protocol):
 #: and thirty-three is a wasted run.
 VENUE_MISMATCH_FLEES = 8
 DIG = 0x5B
+SCRATCH = 0x0A
+SLASH = 0xA3
 INDIGO_MAX_OPPOSITION_LEVEL = 65
 ESCORT_LEVEL_CAP = COMPLETION_LEVEL_PARITY.required_level(INDIGO_MAX_OPPOSITION_LEVEL)
 
@@ -65,8 +71,11 @@ ESCORT_LEVEL_CAP = COMPLETION_LEVEL_PARITY.required_level(INDIGO_MAX_OPPOSITION_
 TRAINING_MOVE_IDS = {
     BLASTOISE_SPECIES_ID: (0x39, 0x3A, 0x46, 0x82),  # Surf, etc.
     DUX_SPECIES_ID: (0x0F, 0x40),  # Cut, Peck
-    0x3B: (DIG,),  # Diglett
-    DUGTRIO_SPECIES_ID: (DIG,),
+    # Dig is a two-turn charge attack. In a mirror matchup the opponent can
+    # surface first and knock out the trainee before its own hit lands, so use
+    # immediate attacks whenever the ground line knows one.
+    0x3B: (SLASH, SCRATCH, DIG),  # Diglett
+    DUGTRIO_SPECIES_ID: (SLASH, SCRATCH, DIG),
     SNORLAX_SPECIES_ID: (0x1D, 0x22, 0x26, 0x3F),
     0x87: (0x57, 0x54, 0x18, 0x2A, 0x62),  # Jolteon
     HITMONLEE_SPECIES_ID: (0x18, 0x1B, 0x1A, 0x88, 0x19),
@@ -145,6 +154,7 @@ BATTLE_COMMAND_COORDINATES = {
 
 BATTLE_PARTY_MENU_COMMAND = 2
 PARTY_SUBMENU_SWITCH = 0
+PARTY_LIST_MENU_TOP = (0, 1)
 
 
 class _PauseForTeamTrainingRecovery(BattleControlRequest):
@@ -220,6 +230,18 @@ def red_training_matchup_acceptable(
 
     if enemy_species == 0x88:  # Muk
         return False
+    if enemy_species is not None:
+        trainee_types = RED_BATTLE_CATALOG.resolve_species(
+            pokemon_red_species_ref(member.species_id)
+        ).types
+        enemy_types = RED_BATTLE_CATALOG.resolve_species(
+            pokemon_red_species_ref(enemy_species)
+        ).types
+        if any(
+            RED_BATTLE_CATALOG.type_effectiveness(enemy_type, trainee_types) > 1.0
+            for enemy_type in enemy_types
+        ):
+            return False
     return is_matchup_acceptable(member, enemy_level, policy)
 
 
@@ -232,6 +254,23 @@ def member_is_unsafe_for_team_training(
         or member.hp_ratio <= policy.retreat_hp_ratio
         or member.status is not StatusCondition.HEALTHY
         or training_attack_pp(member) <= training_attack_pp_reserve(member, policy)
+    )
+
+
+def trainee_should_fight_directly(
+    trainee: PartyMemberObservation,
+    *,
+    enemy_level: int | None,
+    enemy_species: int | None,
+    policy: BalancedTeamPolicy,
+    participation_only: bool = False,
+) -> bool:
+    """Whether this trainee should attack rather than earn shared experience."""
+
+    return (
+        not participation_only
+        and red_training_matchup_acceptable(trainee, enemy_level, policy, enemy_species)
+        and training_attack_pp(trainee) > training_attack_pp_reserve(trainee, policy)
     )
 
 
@@ -321,6 +360,30 @@ def _walk_cursor_to(actions: CountingExecutor, emulator: EmulatorState, target: 
         pulse(actions, MacroActionKind.MOVE, "down" if cursor < target else "up", 120)
 
 
+def open_party_member_submenu(
+    actions: CountingExecutor,
+    emulator: EmulatorState,
+    *,
+    label: str,
+) -> None:
+    """Confirm the selected party member until its command submenu appears."""
+
+    seen: list[tuple[int, int]] = []
+    for _ in range(8):
+        top = (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        )
+        seen.append(top)
+        if top != PARTY_LIST_MENU_TOP:
+            return
+        pulse(actions, MacroActionKind.CONFIRM)
+    raise RuntimeError(
+        f"Could not open the party-member submenu for {label}; "
+        f"menu top remained {seen!r}."
+    )
+
+
 def swap_field_party_slots(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
@@ -370,11 +433,15 @@ def swap_field_party_slots(
     switch_row = field_move_count + 1
     attempts: list[tuple[int, tuple[int, ...]]] = []
     for row in [switch_row] + [r for r in range(PARTY_SLOT_LIMIT) if r != switch_row]:
+        # A heal, field move, or prior candidate can leave a submenu visible
+        # even though generic input readiness is true. START does not replace
+        # that submenu, so establish the field boundary before every attempt.
+        close_menu(actions, reader)
         pulse(actions, MacroActionKind.OPEN_MENU)
         select_cursor(actions, emulator, 1, hideout_timing, "start-menu POKEMON")
         pulse(actions, MacroActionKind.CONFIRM)
         select_cursor(actions, emulator, first_index, hideout_timing, "party source slot")
-        pulse(actions, MacroActionKind.CONFIRM)
+        open_party_member_submenu(actions, emulator, label=label)
         if row > emulator.read_u8(RamAddress.MAX_MENU_ITEM):
             close_menu(actions, reader)
             continue
@@ -819,9 +886,13 @@ def run_red_team_balancing(
             if raw.enemy_level is not None:
                 observed_encounter_levels.append(raw.enemy_level)
 
-            trainee_fights = red_training_matchup_acceptable(
-                trainee, raw.enemy_level, policy, raw.enemy_species_id
-            ) and training_attack_pp(trainee) > training_attack_pp_reserve(trainee, policy)
+            trainee_fights = trainee_should_fight_directly(
+                trainee,
+                enemy_level=raw.enemy_level,
+                enemy_species=raw.enemy_species_id,
+                policy=policy,
+                participation_only=evolution_target is not None,
+            )
 
             if not trainee_fights and escort.level >= ESCORT_LEVEL_CAP:
                 if not switch_active_battler(
@@ -916,6 +987,7 @@ def run_red_team_balancing(
             continue
 
         if not current_venue.is_in_map(raw):
+            restore_training_core_order(actions, reader, emulator, hideout_timing)
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             continue

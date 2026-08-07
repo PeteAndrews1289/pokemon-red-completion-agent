@@ -128,7 +128,7 @@ def _replay_swap(actions, reader, emulator, party_reader) -> int:
 
 
 def _replay_training(actions, reader, emulator, max_steps: int | None) -> int:
-    """Run the Mansion balancing block exactly as ``blaine`` calls it."""
+    """Run the Mansion evolution and balancing blocks exactly as Blaine does."""
 
     from dataclasses import replace
 
@@ -144,14 +144,48 @@ def _replay_training(actions, reader, emulator, max_steps: int | None) -> int:
         levels = party_reader.read().levels
         print(f"  {message} | levels={levels}", flush=True)
 
-    print("\nrunning the Mansion balancing block", flush=True)
+    print("\nrunning the Mansion development blocks", flush=True)
     try:
+        development = blaine.plan_team_development(
+            party_reader.read(), blaine.MANSION_DEVELOPMENT_POLICY
+        )
+        evolution_battles = 0
+        evolution_heals = 0
+        if development.directive is blaine.TeamTrainingDirective.EVOLVE_MEMBER:
+            print("\nrunning participation-based Diglett evolution", flush=True)
+            _, evolution_battles, evolution_heals = blaine.run_red_team_balancing(
+                actions,
+                reader,
+                emulator,
+                policy=policy,
+                venues=(
+                    blaine.ROUTE_11_TRAINING_VENUE,
+                    blaine.DIGLETTS_CAVE_TRAINING_VENUE,
+                    blaine.MANSION_TRAINING_VENUE,
+                ),
+                intent=blaine.MANSION_BALANCED_TEAM_TRAINING_INTENT,
+                flee_timing=blaine.MANSION_TRAINING_FLEE_TIMING,
+                hideout_timing=blaine.DEFAULT_HIDEOUT_TIMING,
+                flee_func=blaine._flee,
+                volatile_enemy_species=blaine.MANSION_VOLATILE_ENEMY_SPECIES,
+                escort_enemy_species=blaine.MANSION_ESCORT_ENEMY_SPECIES,
+                max_consecutive_flees=blaine.MANSION_MAX_CONSECUTIVE_FLEES,
+                cancel_interval=blaine.MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+                evolution_target=(blaine.DIGLETT_SPECIES_ID, blaine.DUGTRIO_SPECIES_ID),
+                report_label="replay evolution",
+                checkpoint_count=blaine.BLAINE_CHECKPOINT_COUNT,
+            )
+        print("\nrunning the Mansion balancing block", flush=True)
         report, battles, heals = blaine.run_red_team_balancing(
             actions,
             reader,
             emulator,
             policy=policy,
-            venues=(blaine.DIGLETTS_CAVE_TRAINING_VENUE, blaine.MANSION_TRAINING_VENUE),
+            venues=(
+                blaine.ROUTE_11_TRAINING_VENUE,
+                blaine.DIGLETTS_CAVE_TRAINING_VENUE,
+                blaine.MANSION_TRAINING_VENUE,
+            ),
             intent=blaine.MANSION_BALANCED_TEAM_TRAINING_INTENT,
             flee_timing=blaine.MANSION_TRAINING_FLEE_TIMING,
             hideout_timing=blaine.DEFAULT_HIDEOUT_TIMING,
@@ -168,7 +202,11 @@ def _replay_training(actions, reader, emulator, max_steps: int | None) -> int:
         print(f"\nFAILED: {type(error).__name__}: {error}")
         traceback.print_exc(limit=3)
         return 1
-    print(f"\nfinished: battles={battles}, healing_trips={heals}, report={report}")
+    print(
+        f"\nfinished: evolution_battles={evolution_battles}, "
+        f"evolution_healing_trips={evolution_heals}, "
+        f"balance_battles={battles}, balance_healing_trips={heals}, report={report}"
+    )
     return 0
 
 

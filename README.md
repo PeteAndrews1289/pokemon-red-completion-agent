@@ -17,6 +17,15 @@ control, and progressively trained specialists.**
 > verified deterministic-teacher completion—not a learned-policy or unseen-seed generalization
 > claim. See the
 > [sanitized three-run completion receipt](docs/evidence/qualified-play-hall-of-fame-2026-07-29.json).
+> **August 7 balanced-team update:** a captured post-Mansion replay now completes the full team
+> curriculum instead of feeding every battle to an overlevelled carry. Diglett evolves through 64
+> participation battles, then the balancing pass trains all six members to exactly level 55 in
+> 1,652 battles. The combined cost is **1,716 battles**, **885 healing trips**, **zero faints**, and
+> **zero final level spread**. The policy uses measured Route 11, Diglett's Cave, and Mansion bands,
+> type-aware matchup refusal, and immediate attacks instead of unsafe two-turn Dig mirrors. This is
+> captured-state teacher evidence; a full uninterrupted route and learned-policy reproduction remain
+> open. See the
+> [captured-state balanced-team receipt](docs/evidence/measured-balanced-team-captured-state-success-2026-08-07.json).
 > **August 5 collection update:** the first battle model is trained from five complete teacher
 > lineages and reaches **85.8% held-out validation accuracy** across two validation lineages. Its
 > sealed test partition remains unopened. Broader teacher stress then exposed a legitimate

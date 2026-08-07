@@ -69,7 +69,11 @@ from pokemon_red_completion.red_team_training import (
     run_red_team_balancing,
 )
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
-from pokemon_red_completion.surge import VERMILION_CENTER_TO_ROUTE_11, VERMILION_NURSE_TO_EXIT
+from pokemon_red_completion.surge import (
+    VERMILION_CENTER_TO_ROUTE_11,
+    VERMILION_NURSE_TO_EXIT,
+    VERMILION_ROUTE_11_TO_CENTER_EXTERIOR,
+)
 from pokemon_red_completion.team_training import (
     COMPLETION_LEVEL_PARITY,
     BalancedTeamPolicy,
@@ -182,12 +186,14 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
     # a rule permitting only opponents far below guarantees the slowest possible
     # progress.
     #
-    # Fighting slightly above your own level is what a competent player does, so
-    # the margin is now the relative delta the contract already had.  Two is
-    # deliberately small: a starting value to be checked by a measured run
-    # rather than a tuned one.
-    max_enemy_level_delta=2,
-    minimum_direct_level_advantage=0,
+    # The +2 experiment is now rejected by live evidence. A level-23 Diglett
+    # was knocked out from full HP by a level-19 Diglett before acting, so even
+    # a four-level lead cannot support the zero-faint contract. Five levels is
+    # the first boundary the measurement has not contradicted. Route 11 is an
+    # implemented venue below the Cave so this margin does not send the early
+    # trainees back to level-three encounters.
+    max_enemy_level_delta=0,
+    minimum_direct_level_advantage=5,
     safe_lead_level=42,
     # A measured clean-power run reached parity (level 60+) near battle 1,500
     # and then spent roughly 3,000 more closing an internal spread against the
@@ -923,7 +929,11 @@ def run_blaine_chapter(
             reader,
             emulator,
             policy=MANSION_TEAM_POLICY,
-            venues=(DIGLETTS_CAVE_TRAINING_VENUE, MANSION_TRAINING_VENUE),
+            venues=(
+                ROUTE_11_TRAINING_VENUE,
+                DIGLETTS_CAVE_TRAINING_VENUE,
+                MANSION_TRAINING_VENUE,
+            ),
             intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
             flee_timing=MANSION_TRAINING_FLEE_TIMING,
             hideout_timing=DEFAULT_HIDEOUT_TIMING,
@@ -949,7 +959,11 @@ def run_blaine_chapter(
         reader,
         emulator,
         policy=MANSION_TEAM_POLICY,
-        venues=(DIGLETTS_CAVE_TRAINING_VENUE, MANSION_TRAINING_VENUE),
+        venues=(
+            ROUTE_11_TRAINING_VENUE,
+            DIGLETTS_CAVE_TRAINING_VENUE,
+            MANSION_TRAINING_VENUE,
+        ),
         intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
         flee_timing=MANSION_TRAINING_FLEE_TIMING,
         hideout_timing=DEFAULT_HIDEOUT_TIMING,
@@ -1840,14 +1854,46 @@ def _digletts_cave_walk_to_grass(
         return 0
     return 1
 
-def _digletts_cave_heal_and_return(
+def _route_11_heal_and_return(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
     raw = reader.read()
     if raw.map_id != MapId.VERMILION_POKECENTER:
-        _training_dig_to_vermilion(actions, reader, emulator)
+        if raw.map_id == MapId.ROUTE_11:
+            flee_run = _RunState([])
+            for _ in range(64):
+                raw = reader.read()
+                if raw.map_id == MapId.VERMILION_CITY:
+                    break
+                if raw.battle_state:
+                    _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
+                    continue
+                _pulse(actions, MacroActionKind.MOVE, "left", 120)
+            else:
+                raise BlaineChapterError("Route 11 training could not return to Vermilion.")
+            raw = reader.read()
+            if raw.player_x is None or raw.player_y != 14 or raw.player_x < 23:
+                raise BlaineChapterError(
+                    "Route 11 training reached an invalid Vermilion boundary: "
+                    f"{(raw.player_x, raw.player_y)!r}."
+                )
+            _move(
+                actions,
+                reader,
+                ("left",) * (raw.player_x - 23),
+                "team training Vermilion east-boundary normalization",
+            )
+            _move(
+                actions,
+                reader,
+                VERMILION_ROUTE_11_TO_CENTER_EXTERIOR,
+                "team training Vermilion Center return",
+            )
+            _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Center exterior")
+        else:
+            _training_dig_to_vermilion(actions, reader, emulator)
         _move(actions, reader, ("up",), "team training Vermilion Center entry")
         _require(reader.read(), MapId.VERMILION_POKECENTER, (3, 7), "team training Center")
         raw = reader.read()
@@ -1893,6 +1939,14 @@ def _digletts_cave_heal_and_return(
             f"(map, x) while walking east: {trail!r}."
         )
     _pulse(actions, MacroActionKind.CONFIRM, frames=12) # wait out transition
+
+
+def _digletts_cave_heal_and_return(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    _route_11_heal_and_return(actions, reader, emulator)
     
     _move(actions, reader, ("right",) * 4, "Post-Spearow Diglett Cave approach")
     raw = reader.read()
@@ -1922,6 +1976,42 @@ def _digletts_cave_heal_and_return(
     if entry.map_id != MapId.DIGLETTS_CAVE or entry.player_x is None or entry.player_y is None:
         raise BlaineChapterError("Diglett Cave interior did not load")
 
+
+def _route_11_walk_to_grass(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> int:
+    """Reach Route 11's measured grass, then alternate across two real tiles."""
+
+    del emulator
+    before = reader.read()
+    if before.map_id != MapId.ROUTE_11 or before.player_x is None:
+        return 0
+    direction = "right" if before.player_x <= 12 else "left"
+    _pulse(actions, MacroActionKind.MOVE, direction, 120)
+    after = reader.read()
+    if after.battle_state:
+        return 1
+    return int((after.player_x, after.player_y) != (before.player_x, before.player_y))
+
+
+def _route_11_training_venue() -> TrainingVenue:
+    """Route 11's measured band, used before a trainee is Cave-safe."""
+
+    band = next(area for area in MEASURED_TRAINING_VENUES if area.area_id == "route_11")
+    return TrainingVenue(
+        band=band,
+        map_id=int(MapId.ROUTE_11),
+        walk_to_grass=_route_11_walk_to_grass,
+        heal_and_return=_route_11_heal_and_return,
+        is_in_center=lambda raw: raw.map_id == MapId.VERMILION_POKECENTER,
+        move_slot=_team_training_move_slot,
+    )
+
+
+ROUTE_11_TRAINING_VENUE = _route_11_training_venue()
+
 def _digletts_cave_training_venue() -> TrainingVenue:
     """Diglett's Cave, bound to the band it was measured to field.
 
@@ -1949,11 +2039,8 @@ DIGLETTS_CAVE_TRAINING_VENUE = _digletts_cave_training_venue()
 def _mansion_training_venue() -> TrainingVenue:
     """The Mansion, bound to the band it was actually measured to field.
 
-    This is the only venue with an implemented heal-and-return, which is why it
-    is the only one constructed. Diglett's Cave is measured and would suit the
-    level-20 trainees far better; the navigation for it exists in ``surge`` --
-    ``VERMILION_CENTER_TO_ROUTE_11`` and the Route 11 gate walk -- and lifting
-    it into a second venue here is the remaining routing work.
+    Route 11 and Diglett's Cave now cover the lower measured bands; the Mansion
+    remains the late-game venue once a trainee can safely engage it.
     """
 
     band = next(

@@ -121,6 +121,10 @@ class FakeMemory:
             return self.cursor
         if addr == int(RamAddress.MAX_MENU_ITEM):
             return self._max_menu_item()
+        if addr == int(RamAddress.TOP_MENU_ITEM_X):
+            return self._menu_top()[0]
+        if addr == int(RamAddress.TOP_MENU_ITEM_Y):
+            return self._menu_top()[1]
         species_base = int(RamAddress.PARTY_SPECIES)
         if species_base <= addr < species_base + 6:
             index = addr - species_base
@@ -155,7 +159,7 @@ class FakeMemory:
         """Advance the menu the way the game would for this input."""
 
         kind = action.kind
-        if kind is MacroActionKind.OPEN_MENU:
+        if kind is MacroActionKind.OPEN_MENU and self.stage == "field":
             self.stage, self.cursor = "root", 0
         elif kind is MacroActionKind.CANCEL:
             self._cancel()
@@ -198,6 +202,15 @@ class FakeMemory:
         if self.stage == "member":
             return self._field_move_count() + 2  # moves, then STATS, SWITCH, CANCEL
         return 5
+
+    def _menu_top(self) -> tuple[int, int]:
+        if self.stage == "root":
+            return (11, 2)
+        if self.stage in {"party", "party_target"}:
+            return (0, 1)
+        if self.stage == "member":
+            return (10, 8)
+        return (0, 0)
 
     def _field_move_count(self) -> int:
         """How many field moves the selected member contributes to its submenu."""
@@ -612,6 +625,20 @@ class MisplacedSwitchMemory(FakeMemory):
         return self.EXTRA_FIELD_MOVES
 
 
+class DelayedPartyConfirmMemory(FakeMemory):
+    """Ignore the first attempt to open a selected member's submenu."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.ignored_party_confirms = 0
+
+    def _confirm(self) -> None:
+        if self.stage == "party" and self.ignored_party_confirms == 0:
+            self.ignored_party_confirms += 1
+            return
+        super()._confirm()
+
+
 def test_the_switch_row_is_found_even_when_it_is_not_where_expected() -> None:
     """Three guesses at this row have each cost an emulator run.
 
@@ -630,3 +657,46 @@ def test_the_switch_row_is_found_even_when_it_is_not_where_expected() -> None:
     assert memory.swaps, "the core restore should still have reordered the party"
     assert memory.party[0].species == BLASTOISE_SPECIES_ID
     assert memory.party[1].species == DUX_SPECIES_ID
+
+
+def test_a_party_swap_closes_a_residual_member_submenu_before_opening_start() -> None:
+    """Input readiness can remain true while a party submenu is still visible."""
+
+    memory = FakeMemory()
+    memory.set_party([(species, 60) for species in FINAL_FORM_ROSTER])
+    memory.stage = "member"
+    memory.cursor = 2
+
+    red_team_training.swap_field_party_slots(
+        FakeExecutor(memory),  # type: ignore[arg-type]
+        FakeReader([state()]),  # type: ignore[arg-type]
+        memory,  # type: ignore[arg-type]
+        first_index=0,
+        second_index=1,
+        label="residual-menu swap",
+        hideout_timing=None,
+    )
+
+    assert memory.party[0].species == DUGTRIO_SPECIES_ID
+    assert memory.party[1].species == BLASTOISE_SPECIES_ID
+
+
+def test_a_party_swap_observes_a_delayed_member_submenu_transition() -> None:
+    """A dropped confirm must not turn a party slot into a supposed SWITCH row."""
+
+    memory = DelayedPartyConfirmMemory()
+    memory.set_party([(species, 60) for species in FINAL_FORM_ROSTER])
+
+    red_team_training.swap_field_party_slots(
+        FakeExecutor(memory),  # type: ignore[arg-type]
+        FakeReader([state()]),  # type: ignore[arg-type]
+        memory,  # type: ignore[arg-type]
+        first_index=0,
+        second_index=2,
+        label="delayed-submenu swap",
+        hideout_timing=None,
+    )
+
+    assert memory.ignored_party_confirms == 1
+    assert memory.party[0].species == DUX_SPECIES_ID
+    assert memory.party[2].species == BLASTOISE_SPECIES_ID

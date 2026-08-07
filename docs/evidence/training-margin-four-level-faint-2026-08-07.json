@@ -1,0 +1,51 @@
+{
+  "schema": "pokemon-red-training-margin-evidence-v1",
+  "recorded_at": "2026-08-07",
+  "regime": "captured-state diagnostic; no validation or sealed evaluation seed opened",
+  "starting_checkpoint": "Returned safely from Mansion (275/312)",
+  "starting_party": [
+    "Blastoise level 48",
+    "DUX level 20",
+    "Diglett level 22",
+    "Snorlax level 30",
+    "Jolteon level 25",
+    "Hitmonlee level 30"
+  ],
+  "policy_under_test": {
+    "max_enemy_level_delta": 2,
+    "minimum_direct_level_advantage": 0,
+    "max_faints": 0
+  },
+  "observations": {
+    "completed_battle_starts_before_failure": 20,
+    "dux_progress": "DUX fought twelve observed Cave encounters and rose from level 20 to 22 without a faint.",
+    "fatal_battle": {
+      "trainee": "Diglett",
+      "trainee_level": 23,
+      "trainee_hp_before": "38/38",
+      "opponent": "Diglett",
+      "opponent_level": 19,
+      "opponent_hp_before": "33/33",
+      "trainee_hp_after": "0/38",
+      "opponent_hp_after": "33/33",
+      "trainee_pp_before": [35, 40, 9, 0],
+      "trainee_pp_after": [35, 40, 8, 0]
+    }
+  },
+  "conclusion": "The +2 direct-training margin is rejected. A four-level lead still allowed a full-health trainee to faint before damaging the opponent, contradicting the zero-faint contract.",
+  "next_policy": {
+    "max_enemy_level_delta": 0,
+    "minimum_direct_level_advantage": 5,
+    "new_lower_venue": "Route 11, measured level band 9-15",
+    "additional_controls": [
+      "Refuse direct fights when an opponent's same-type attack would be super effective.",
+      "Evolve the fragile Diglett precursor through switch participation rather than direct combat.",
+      "Prefer immediate Scratch or Slash over the two-turn Dig attack in ground-line training."
+    ],
+    "reason": "The next replay showed that level alone was insufficient: Jolteon was vulnerable to Ground and Dig's two-turn exchange left the ground-line trainee exposed. The final policy combines the measured level boundary with matchup and move-duration evidence."
+  },
+  "still_unproven": [
+    "Whether the combined five-level, type-aware, immediate-attack policy survives a full uninterrupted route.",
+    "Whether the full route reaches the level-55 team floor within its battle and healing budgets."
+  ]
+}

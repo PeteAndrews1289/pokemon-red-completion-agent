@@ -51,8 +51,8 @@ question does not get re-answered three different ways in three sessions.
 
 ### Lane A — Route and emulator
 
-**Status:** ✅ Complete: Distributed training across Route 15 and 8, and resolved escort over-leveling using `safe_lead_level`. 1829 tests passing.
-**Owner:** @antigravity
+**Status:** Captured-state curriculum complete at six level-55 members and zero faints; full-route confirmation pending.
+**Owner:** @Codex
 
 Owns `src/pokemon_red_completion/` chapter modules (`blaine.py`, `victory_road.py`, `champion.py`,
 `fuchsia.py`, and every other chapter), and owns emulator runs.
@@ -142,13 +142,14 @@ repository owner and must never appear in a tracked or untracked file. Ask if yo
 ## Honest status
 
 The deterministic teacher completes Pokémon Red repeatedly with genuine Champion and Hall-of-Fame
-evidence in the same run. The objective ranker authorizes all 36 objectives with zero fallbacks. The
-team can now be trained to League parity at a measured cost of roughly 1,878 battles.
+evidence in the same run. The objective ranker authorizes all 36 objectives with zero fallbacks.
+From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
+of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
+uninterrupted route has not reproduced that result yet.
 
-The team still does not participate in battles — the escort does everything. No learned policy has
-completed the game, no cross-game transfer has been measured, and the living Pokédex has not been
-started. The blocker is not game completion; it is that the demonstrations contain very few real
-decisions, and more Red reliability does not change that.
+The trainees now perform the balancing work rather than leaving every battle to the escort, but the
+decisions remain teacher-authored. No learned policy has completed the game, no cross-game transfer
+has been measured, and the living Pokédex has not been started.
 
 ### Training venues (2026-08-07)
 
@@ -168,10 +169,13 @@ its other twenty-nine encounters suit exactly.
 
 Two things changed that anyone touching training should know:
 
-- **The team-training margin is now `max_enemy_level_delta=2`**, replacing a fifteen-level required
-  advantage that made a level-20 trainee unable to engage anything above level 5. It is
-  **unvalidated** — a starting value awaiting a measured run. See
-  `docs/evidence/training-margin-decision-2026-08-07.json`.
+- **The `max_enemy_level_delta=2` experiment is rejected.** A full-health level-23 Diglett fainted
+  to a level-19 Diglett before dealing damage. The replacement uses a five-level direct advantage,
+  refuses opponent STAB types that are super effective, evolves fragile precursors through shared
+  participation, and prefers immediate Scratch or Slash over two-turn Dig. One captured-state replay
+  completed; full-route validation remains. See
+  `docs/evidence/training-margin-four-level-faint-2026-08-07.json` and
+  `docs/evidence/measured-balanced-team-captured-state-success-2026-08-07.json`.
 - **`RED_DIRECT_LEVEL_ADVANTAGE` is retired.** It silently outranked the policy margin for the three
   species that are the trainees. Values preserved in the same evidence file.
 
@@ -245,17 +249,17 @@ arguments where it takes four, and a typed progress sink called with `None`.
 Each cost a 25-minute emulator run to discover. A type checker reports them in
 seconds, and the neutral layer is now covered.
 
-Current state: **1829 passed, 3 deselected**, all checks green, on trunk
+Current state: **1891 passed, 3 deselected**, all checks green, on trunk
 `agent/balanced-team-curriculum`.
 
 ## Open work, in priority order
 
 These are ordered by how much they serve the mission, not by difficulty.
 
-**1. Prove the training block finishes inside a real budget. (Lane A)** Routing and training both
-work from a captured state, which is one starting point. Nobody has shown the block reaches the
-level floor of 55 during a full run, or what it costs in battles and healing trips. Take the run,
-record the numbers, and compare against the 1,878-battle baseline from the escort-only era.
+**1. Reproduce the captured success in one full uninterrupted run. (Lane A)** The captured state
+reaches six level-55 members with zero faints in 1,716 combined battles and 885 healing trips. Take
+the full run, record the same numbers, continue through the League, and compare the result against
+both the captured receipt and the roughly 1,878-battle escort-era baseline.
 
 **2. Measure participation across the whole League, and derive the judgement. (Lane C)**
 `turns_per_member` exists — in `champion.py` only, so participation is measured for one of the five
@@ -267,14 +271,13 @@ not embarrass anyone. Two derived numbers would: how many members took a turn at
 the busiest one took. "One member, six turns, 100%" is a sentence that ends an argument; `[6, 0, 0,
 0, 0, 0]` is a row someone has to read carefully to be bothered by.
 
-**3. Resolve the tolerance conflict. (Lane B)** `MANSION_LEVEL_PARITY` uses `max_levels_behind=10`
-(target 55) while `CHAMPION_LEVEL_PARITY` uses `5` (required 60), so the receipt reports a team that
-*won the game* as five levels short. One contract, one number.
+**3. Tolerance conflict resolved.** Mansion development and Champion readiness now share
+`COMPLETION_LEVEL_PARITY`, which requires level 55 against the League's level-65 ceiling. Do not
+restore separate local tolerance contracts.
 
-**4. Validate the +2 training margin. (Lane A/C)** `max_enemy_level_delta=2` replaced a fifteen-level
-required advantage and is explicitly recorded as unvalidated in
-`docs/evidence/training-margin-decision-2026-08-07.json`. It survived 64 live Mansion encounters
-without a faint, which is evidence and not proof. Revisit it against a full run.
+**4. Validate the combined training-safety policy. (Lane A/C)** The +2 margin is rejected. The
+five-level, type-aware, immediate-attack replacement completed one captured-state run. Validate the
+combined policy against the full route rather than attributing success to the level margin alone.
 
 **5. Turn the balance assertion on. (Lane B, after 1)** `DevelopedTeamReport.passed` asserts a
 complete roster, one trained workhorse, and zero faints — nothing about the other five members. It
