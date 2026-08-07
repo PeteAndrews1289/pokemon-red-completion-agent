@@ -147,7 +147,12 @@ ROUTE13_TO_FUCHSIA = _directions(
 FUCHSIA_TO_CENTER = _directions(
     "DLLDLLLLLLLLLLLLDLDDLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDRRRRRRRUUUURRRRRRRRRRRU"
 )
+#: Healing leaves the player at the nurse counter, four tiles inside the Center,
+#: so the crossing starts with the walk back out through the door.  The rest is
+#: ``ROUTE15_TO_CENTER`` reversed; the previous value omitted those five steps
+#: and blocked on its first move against the counter wall.
 CENTER_TO_ROUTE15 = _directions(
+    "DDDDD"
     "LLLLLLLLLLLDDDDLLLLLLLUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRUURURRRRRRRRRRRRURRURRRRRRR"
 )
 ROUTE15_TO_CENTER = _directions(
