@@ -46,6 +46,10 @@ class EmulatorState(Protocol):
     def read_u8(self, address: int) -> int: ...
 
 
+#: Consecutive flees with no win that identify a venue mismatch rather than an
+#: unlucky streak. Small on purpose: eight encounters is enough to see the band,
+#: and thirty-three is a wasted run.
+VENUE_MISMATCH_FLEES = 8
 DIG = 0x5B
 INDIGO_MAX_OPPOSITION_LEVEL = 65
 ESCORT_LEVEL_CAP = COMPLETION_LEVEL_PARITY.required_level(INDIGO_MAX_OPPOSITION_LEVEL)
@@ -335,7 +339,7 @@ def switch_active_battler(
     raw = reader.read()
     if not 0 <= target_index < len(raw.party_species_ids or ()) or raw.battle_state != 1:
         raise RuntimeError(f"Cannot switch to {label} outside a live wild battle.")
-    for p in range(48):
+    for _p in range(48):
         raw = reader.read()
         menu = reader.read_battle_menu_state(raw)
         if raw.battle_state == 1 and menu.phase is BattleMenuPhase.MAIN:
@@ -387,7 +391,7 @@ def switch_active_battler(
         raise RuntimeError(f"Could not select SWITCH for {label}.")
     pulse(actions, MacroActionKind.CONFIRM, frames=240)
 
-    for p in range(48):
+    for _p in range(48):
         settled = reader.read()
         menu = reader.read_battle_menu_state(settled)
         if (
@@ -459,6 +463,11 @@ def run_red_team_balancing(
     # run state. It was left as None, which raised on the first flee -- and the
     # escort cap flees by design, so the cap could never have run.
     flee_run = _RunState([])
+    # The repository declares no wild encounter tables, so the band an area
+    # actually fields is observed rather than assumed. It is what separates a
+    # venue mismatch from bad luck, and it is the evidence a training-area
+    # catalogue should eventually be built from.
+    observed_encounter_levels: list[int] = []
 
     def emit_progress() -> None:
         """Report progress as a message the caller renders in its own record type.
@@ -478,11 +487,23 @@ def run_red_team_balancing(
     def record_flee(label: str) -> None:
         nonlocal consecutive_flees
         consecutive_flees += 1
+        levels = tuple(member.level for member in party_reader.read().members)
+        band = (
+            f"{min(observed_encounter_levels)}-{max(observed_encounter_levels)}"
+            if observed_encounter_levels
+            else "unobserved"
+        )
+        if battles == 0 and consecutive_flees >= VENUE_MISMATCH_FLEES:
+            raise RuntimeError(
+                f"Training venue does not match the party: {consecutive_flees} flees and no "
+                f"win after {label}. Encounters here are level {band}; party levels are "
+                f"{levels}. Train the weaker members where their own level lives."
+            )
         if consecutive_flees > max_consecutive_flees:
-            levels = tuple(member.level for member in party_reader.read().members)
             raise RuntimeError(
                 f"Balanced training exceeded its consecutive-flee bound after "
-                f"{label}: flees={consecutive_flees}, battles={battles}, levels={levels}."
+                f"{label}: flees={consecutive_flees}, battles={battles}, levels={levels}, "
+                f"encounter band {band}."
             )
 
     while True:
@@ -576,6 +597,9 @@ def run_red_team_balancing(
                 require_zero_faints(party_reader, "excluded-matchup escape")
                 record_flee("excluded matchup")
                 continue
+
+            if raw.enemy_level is not None:
+                observed_encounter_levels.append(raw.enemy_level)
 
             trainee_fights = red_training_matchup_acceptable(
                 trainee, raw.enemy_level, policy, raw.enemy_species_id
