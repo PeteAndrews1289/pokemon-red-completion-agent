@@ -16,12 +16,13 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
-from pokemon_red_completion.party import PartyMemberObservation, StatusCondition
+from pokemon_red_completion.party import PARTY_SLOT_LIMIT, PartyMemberObservation, StatusCondition
 from pokemon_red_completion.red_party import (
     BLASTOISE_SPECIES_ID,
     DUGTRIO_SPECIES_ID,
     DUX_SPECIES_ID,
     HITMONLEE_SPECIES_ID,
+    PARTY_STRUCT_STRIDE,
     SNORLAX_SPECIES_ID,
     PokemonRedPartyReader,
 )
@@ -38,8 +39,10 @@ from pokemon_red_completion.team_training import (
 
 
 class EmulatorState(Protocol):
+    # read_u8 is the whole surface PyBoyAdapter offers. A read_u16_be was
+    # declared here and nothing implements it, so every party-health read
+    # raised as soon as training ran.
     def read_u8(self, address: int) -> int: ...
-    def read_u16_be(self, address: int) -> int: ...
 
 
 DIG = 0x5B
@@ -279,10 +282,26 @@ def battle_command_direction(current: int | None, target: int) -> str | None:
     return None
 
 
+def u16(emulator: EmulatorState, address: int) -> int:
+    """Read a big-endian 16-bit value from two byte reads."""
+
+    return emulator.read_u8(address) * 0x100 + emulator.read_u8(address + 1)
+
+
 def _party_hp(emulator: EmulatorState) -> tuple[int, ...]:
-    party_count = emulator.read_u8(RamAddress.PARTY_COUNT)
-    hp = [emulator.read_u16_be(RamAddress.PARTY_1_HP + 0x2C * i) for i in range(party_count)]
-    return tuple(hp)
+    """Read every live party member's current health.
+
+    ``RamAddress.PARTY_1_HP`` does not exist; the symbol is
+    ``PARTY_MON_1_HP``.  The stride is the shared party-struct constant rather
+    than a repeated ``0x2C``, and the count is clamped the way every other
+    whole-party receipt clamps it.
+    """
+
+    party_count = min(emulator.read_u8(RamAddress.PARTY_COUNT), PARTY_SLOT_LIMIT)
+    return tuple(
+        u16(emulator, int(RamAddress.PARTY_MON_1_HP) + PARTY_STRUCT_STRIDE * index)
+        for index in range(party_count)
+    )
 
 
 def switch_active_battler(
