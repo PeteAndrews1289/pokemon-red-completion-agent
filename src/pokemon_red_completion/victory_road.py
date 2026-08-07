@@ -11,6 +11,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -170,10 +171,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class VictoryRoadChapterError(RuntimeError):
@@ -341,17 +338,6 @@ class VictoryRoadChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_victory_road_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -360,7 +346,7 @@ def run_victory_road_chapter(
     progress: ProgressSink | None = None,
 ) -> VictoryRoadChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[VictoryRoadCheckpoint] = []
     wild_run = _RunState([])
     initial = reader.read()
@@ -904,7 +890,7 @@ def _indigo_buy_entry_action(poke_balls_sold: int) -> MacroActionKind:
 
 
 def _defeat_route22_rival(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> tuple[tuple[RivalTurn, ...], int]:
@@ -1075,7 +1061,7 @@ def _defeat_route22_rival(
 
 
 def _teach_toxic(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -1119,7 +1105,7 @@ def _teach_toxic(
 
 
 def _acquire_and_teach_submission(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -1227,7 +1213,7 @@ def _acquire_and_teach_submission(
 
 
 def _teach_submission(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -1272,7 +1258,7 @@ def _teach_submission(
 
 
 def _archive_master_ball(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -1307,7 +1293,7 @@ def _archive_master_ball(
 
 
 def _battle_sacrifice(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     party_index: int,
@@ -1346,7 +1332,7 @@ def _battle_sacrifice(
 
 
 def _sell_bag_stack(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     item: ItemId,
     quantity: int,
@@ -1399,7 +1385,7 @@ def _menu_cursor_active(emulator: EmulatorState) -> bool:
 
 
 def _select_battle_main_command(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     target: int,
 ) -> None:
@@ -1417,7 +1403,7 @@ def _select_battle_main_command(
 
 
 def _field_fly(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     town_direction: str | Iterable[str],
@@ -1444,7 +1430,7 @@ def _field_fly(
 
 
 def _field_surf(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -1465,7 +1451,7 @@ def _field_surf(
 
 
 def _activate_strength(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -1483,7 +1469,7 @@ def _activate_strength(
 
 
 def _pass_badge_gate(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1500,7 +1486,7 @@ def _pass_badge_gate(
 
 
 def _heal(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -1521,7 +1507,7 @@ def _heal(
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     route: Iterable[str],
     label: str,
@@ -1531,7 +1517,7 @@ def _move(
 
 
 def _move_with_wilds(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1558,7 +1544,7 @@ def _move_with_wilds(
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     value: str | None = None,
     frames: int = DEFAULT_HIDEOUT_TIMING.wait_frames,
@@ -1568,7 +1554,7 @@ def _pulse(
 
 
 def _step(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     direction: str,
     label: str,
@@ -1586,7 +1572,7 @@ def _step(
 
 
 def _settle_confirm(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     limit: int,
 ) -> None:
@@ -1721,7 +1707,7 @@ def _route22_battle_ready_pivot_target(
 
 
 def _route22_switch_with_faint_continuation(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     party_index: int,

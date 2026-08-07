@@ -6,6 +6,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -130,10 +131,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(BattleActionExecutor, Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class VermilionChapterError(RuntimeError):
@@ -320,17 +317,6 @@ class VermilionChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_vermilion_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -342,7 +328,7 @@ def run_vermilion_chapter(
     """Continue a verified Misty victory to stable Vermilion City."""
 
     start_frames = emulator.frame_count
-    chapter_executor = _CountingExecutor(executor)
+    chapter_executor = CountingExecutor(executor)
     starting_raw = reader.read()
     try:
         tracker = VermilionProgressTracker(
@@ -729,7 +715,7 @@ def _choose_rocket_move(state: RawGameState) -> int:
 
 
 def _backtrack_heal_and_replay(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
 ) -> tuple[Route6WildFleeEvidence, ...]:
@@ -885,7 +871,7 @@ def _backtrack_heal_and_replay(
 
 
 def _replay_route_6_lower_gap(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
 ) -> tuple[Route6WildFleeEvidence, ...]:
@@ -919,7 +905,7 @@ def _replay_route_6_lower_gap(
 
 
 def _move_route_6_with_wild_flees(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: VermilionTiming,
@@ -977,7 +963,7 @@ def _move_route_6_with_wild_flees(
 
 
 def _flee_qualified_route_6_wild(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
     encounter: RawGameState,
@@ -1075,7 +1061,7 @@ def _flee_qualified_route_6_wild(
 
 
 def _move(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: VermilionTiming,
@@ -1129,7 +1115,7 @@ def _move(
 
 
 def _yield_to_cerulean_walker(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
 ) -> RawGameState:
@@ -1173,7 +1159,7 @@ def _yield_to_cerulean_walker(
 
 
 def _heal(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
 ) -> None:
@@ -1209,7 +1195,7 @@ def _heal(
 
 
 def _enter_trainer_battle(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
     expected_map: MapId,
@@ -1234,7 +1220,7 @@ class _PauseForRocketThiefPotion(BattleControlRequest):
 
 def _run_rocket_thief_with_potion(
     reader: PokemonRedStateReader,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     timing: VermilionTiming,
 ) -> RawGameState:
@@ -1311,7 +1297,7 @@ class _PauseForRoute6Potion(BattleControlRequest):
 
 def _run_route_6_trainer_f_with_potion(
     reader: PokemonRedStateReader,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     timing: VermilionTiming,
     battle_plan_id: str,
@@ -1418,7 +1404,7 @@ def _choose_route_6_trainer_f_move(raw: RawGameState) -> int:
 
 def _battle(
     reader: PokemonRedStateReader,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     policy: Callable[[RawGameState], int],
     expected_map: MapId,
     timing: VermilionTiming,
@@ -1499,7 +1485,7 @@ def _checkpoint(
 
 
 def _confirm_pulses(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     pulses: int,
     wait_frames: int,
 ) -> None:
@@ -1508,5 +1494,5 @@ def _confirm_pulses(
         _wait(executor, wait_frames)
 
 
-def _wait(executor: _CountingExecutor, frames: int) -> None:
+def _wait(executor: CountingExecutor, frames: int) -> None:
     executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

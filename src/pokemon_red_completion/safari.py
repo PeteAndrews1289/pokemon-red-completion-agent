@@ -7,6 +7,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
 from pokemon_red_completion.observation import (
@@ -70,10 +71,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class SafariChapterError(RuntimeError):
@@ -236,17 +233,6 @@ class SafariChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_safari_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -256,7 +242,7 @@ def run_safari_chapter(
     progress: ProgressSink | None = None,
 ) -> SafariChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[SafariCheckpoint] = []
     encounters = 0
     initial = reader.read()
@@ -429,7 +415,7 @@ def run_safari_chapter(
 
 
 def _teach_surf(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SafariTiming,
@@ -475,7 +461,7 @@ def _teach_surf(
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     directions: Iterable[str],
@@ -517,7 +503,7 @@ def _move(
 
 
 def _pickup_tm40_skull_bash(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SafariTiming,
@@ -544,7 +530,7 @@ def _pickup_tm40_skull_bash(
 
 
 def _flee_safari(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SafariTiming,
@@ -571,7 +557,7 @@ def _flee_safari(
 
 
 def _select_cursor(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     target: int,
     timing: SafariTiming,
@@ -590,7 +576,7 @@ def _select_cursor(
 
 
 def _select_bag_item(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     item: int,
     timing: SafariTiming,
@@ -667,7 +653,7 @@ def _checkpoint(
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     value: str | int | None = None,
     *,
@@ -677,5 +663,5 @@ def _pulse(
     _wait(actions, frames)
 
 
-def _wait(actions: _CountingExecutor, frames: int) -> None:
+def _wait(actions: CountingExecutor, frames: int) -> None:
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

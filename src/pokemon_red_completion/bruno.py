@@ -11,6 +11,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -58,7 +59,7 @@ from pokemon_red_completion.silph import (
 )
 from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
-    _CountingExecutor,
+    CountingExecutor,
     _event,
     _menu_cursor_active,
     _move,
@@ -89,10 +90,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class BrunoChapterError(RuntimeError):
@@ -205,7 +202,7 @@ def run_bruno_chapter(
     progress: ProgressSink | None = None,
 ) -> BrunoChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[BrunoCheckpoint] = []
     initial = reader.read()
     if (
@@ -403,7 +400,7 @@ def _checkpoint(
 
 
 def _settle_bruno_victory(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     *,
@@ -483,7 +480,7 @@ def _bruno_recovery_threshold(raw: RawGameState) -> int:
 
 
 def _teach_mega_punch(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     *,

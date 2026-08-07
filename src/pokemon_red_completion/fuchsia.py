@@ -7,6 +7,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
@@ -219,10 +220,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class FuchsiaChapterError(RuntimeError):
@@ -449,17 +446,6 @@ class FuchsiaChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 @dataclass(slots=True)
 class _RunState:
     wilds: list[object] = field(default_factory=list)
@@ -475,7 +461,7 @@ def run_fuchsia_chapter(
     progress: ProgressSink | None = None,
 ) -> FuchsiaChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     run = _RunState()
     records: list[FuchsiaCheckpoint] = []
     battles: list[FuchsiaBattleEvidence] = []
@@ -687,7 +673,7 @@ def run_fuchsia_chapter(
 
 
 def _fight_trainer(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: FuchsiaTiming,
@@ -753,7 +739,7 @@ def _fight_trainer(
 
 
 def _settle_trainer_identity(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: FuchsiaTiming,
@@ -774,7 +760,7 @@ def _settle_trainer_identity(
 
 
 def _fight_snorlax(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: FuchsiaTiming,
@@ -842,7 +828,7 @@ def _fight_snorlax(
 
 
 def _purchase_snorlax_capture_reserve(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1097,7 +1083,7 @@ def _snorlax_super_potion_sale_quantity(current_quantity: int) -> int:
 
 
 def _sell_capture_surplus(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1170,7 +1156,7 @@ def _sell_capture_surplus(
 
 
 def _sell_capture_stack(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     item: ItemId,
     quantity: int,
@@ -1209,7 +1195,7 @@ def _sell_capture_stack(
 
 
 def _run_wild_capture(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     expected_map: int,
@@ -1343,7 +1329,7 @@ def _snorlax_capture_observation(
 
 
 def _navigate_battle_main(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     selected_command: int | None,
     target_command: int,
 ) -> None:
@@ -1364,7 +1350,7 @@ def _navigate_battle_main(
 
 
 def _select_battle_bag_item(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     item: int,
 ) -> None:
@@ -1390,7 +1376,7 @@ def _select_battle_bag_item(
 
 
 def _restore_capture_catcher(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     raw: RawGameState,
@@ -1471,7 +1457,7 @@ def _snorlax_move_slot(raw: RawGameState) -> int:
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1520,7 +1506,7 @@ def _move(
 
 
 def _heal_center(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1538,7 +1524,7 @@ def _heal_center(
 
 
 def _heal_at_nurse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: FuchsiaTiming,
@@ -1554,7 +1540,7 @@ def _heal_at_nurse(
 
 
 def _clear_text(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: FuchsiaTiming,
 ) -> None:
@@ -1635,7 +1621,7 @@ def _checkpoint(
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     value: str | int | None = None,
     *,
@@ -1645,5 +1631,5 @@ def _pulse(
     _wait(actions, frames)
 
 
-def _wait(actions: _CountingExecutor, frames: int) -> None:
+def _wait(actions: CountingExecutor, frames: int) -> None:
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

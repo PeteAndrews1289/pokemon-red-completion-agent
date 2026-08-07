@@ -7,6 +7,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
 from pokemon_red_completion.observation import (
@@ -58,10 +59,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class StrengthChapterError(RuntimeError):
@@ -189,17 +186,6 @@ class StrengthChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_strength_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -209,7 +195,7 @@ def run_strength_chapter(
     progress: ProgressSink | None = None,
 ) -> StrengthChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[StrengthCheckpoint] = []
     initial = reader.read()
     _require(initial, MapId.FUCHSIA_POKECENTER, (3, 3), "Koga boundary")
@@ -311,7 +297,7 @@ def run_strength_chapter(
 
 
 def _teach_strength(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: StrengthTiming,
@@ -357,7 +343,7 @@ def _teach_strength(
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: StrengthTiming,
@@ -386,7 +372,7 @@ def _move(
 
 
 def _heal(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: StrengthTiming,
@@ -408,7 +394,7 @@ def _heal(
 
 
 def _select_cursor(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     target: int,
     timing: StrengthTiming,
@@ -423,7 +409,7 @@ def _select_cursor(
 
 
 def _select_bag_item(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     item: ItemId,
     timing: StrengthTiming,
@@ -504,12 +490,12 @@ def _checkpoint(
         )
 
 
-def _wait(actions: _CountingExecutor, frames: int) -> None:
+def _wait(actions: CountingExecutor, frames: int) -> None:
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     value: str | int | None = None,
     *,

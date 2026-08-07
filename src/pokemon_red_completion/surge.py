@@ -7,6 +7,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -200,10 +201,6 @@ class EmulatorState(Protocol):
     def tick(self, frames: int) -> None: ...
 
 
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
-
-
 class SurgeChapterError(RuntimeError):
     """Raised when the bounded Thunder Badge route misses a semantic gate."""
 
@@ -315,17 +312,6 @@ class SurgeChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_surge_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -337,7 +323,7 @@ def run_surge_chapter(
     """Continue the verified Captain boundary through Lt. Surge's reward."""
 
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     tracker = SurgeProgressTracker()
     records: list[SurgeCheckpoint] = []
 
@@ -803,7 +789,7 @@ def _bag(emulator: EmulatorState) -> dict[int, int]:
 
 
 def _open_mart_buy_list(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     wait_frames: int,
 ) -> None:
@@ -820,7 +806,7 @@ def _open_mart_buy_list(
 
 
 def _buy_mart_item(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     *,
     absolute_index: int,
@@ -916,7 +902,7 @@ def _require(
 
 
 def _move(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: SurgeTiming,
@@ -946,7 +932,7 @@ def _move(
 
 
 def _move_until_map(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     direction: str,
     target_map: int,
@@ -964,7 +950,7 @@ def _move_until_map(
 
 
 def _navigate_main(
-    executor: _CountingExecutor, reader: PokemonRedStateReader, target: int
+    executor: CountingExecutor, reader: PokemonRedStateReader, target: int
 ) -> RawGameState:
     for _ in range(32):
         raw = reader.read()
@@ -993,7 +979,7 @@ def _navigate_main(
 
 def _flee(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     encounter: RawGameState,
 ) -> None:
@@ -1044,7 +1030,7 @@ def _flee(
 
 def _force_switch_failed_flee_to_living(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     fainted: RawGameState,
 ) -> RawGameState:
@@ -1099,7 +1085,7 @@ def _force_switch_failed_flee_to_living(
 
 def _find_spearow(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> RawGameState:
@@ -1129,7 +1115,7 @@ def _find_spearow(
 
 
 def _throw_ball(
-    emulator: EmulatorState, executor: _CountingExecutor, reader: PokemonRedStateReader
+    emulator: EmulatorState, executor: CountingExecutor, reader: PokemonRedStateReader
 ) -> bool:
     before = _bag(emulator).get(ItemId.POKE_BALL, 0)
     _navigate_main(executor, reader, 1)
@@ -1192,7 +1178,7 @@ def _throw_ball(
 
 def _await_exact_ball_decrement(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     before: int,
     label: str,
 ) -> None:
@@ -1212,7 +1198,7 @@ def _await_exact_ball_decrement(
 
 def _heal_after_spearow_capture(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> None:
@@ -1291,7 +1277,7 @@ def _heal_after_spearow_capture(
 
 def _catch_diglett_chapter(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> RawGameState:
@@ -1426,7 +1412,7 @@ def _catch_diglett_chapter(
 
 def _run_route_1_collection_detour(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> None:
@@ -1545,7 +1531,7 @@ def _inverse_directions(directions: Iterable[str]) -> tuple[str, ...]:
 
 def _survey_route_1(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> RedAreaExecutionReport:
@@ -1607,7 +1593,7 @@ def _survey_route_1(
 
 def _recover_for_viridian_forest(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> None:
@@ -1677,7 +1663,7 @@ def _recover_for_viridian_forest(
 
 def _restock_for_viridian_forest(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> None:
@@ -1742,7 +1728,7 @@ def _restock_for_viridian_forest(
 
 def _run_viridian_forest_collection(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> RedAreaExecutionReport:
@@ -1958,7 +1944,7 @@ def _run_viridian_forest_collection(
 
 def _move_fleeing_wild(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: SurgeTiming,
@@ -2005,7 +1991,7 @@ def _move_fleeing_wild(
 
 def _move_until_map_fleeing_wild(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     direction: str,
     target_map: int,
@@ -2111,7 +2097,7 @@ class _LiveWildCorridorSurveyExecutor:
     def __init__(
         self,
         emulator: EmulatorState,
-        executor: _CountingExecutor,
+        executor: CountingExecutor,
         reader: PokemonRedStateReader,
         timing: SurgeTiming,
         *,
@@ -2404,7 +2390,7 @@ def _is_route_1_walker_gate(
 
 
 def _survey_step(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     direction: str,
     timing: SurgeTiming,
@@ -2474,7 +2460,7 @@ def _select_wild_capture_helper(
 
 def _switch_wild_capture_party_slot(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     party_index: int,
     expected_species_id: int,
@@ -2568,7 +2554,7 @@ def _wild_menu_cursor_active(emulator: EmulatorState) -> bool:
 
 def _force_switch_wild_capture_to_lead(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     expected_species_id: int,
     expected_enemy_hp: int,
@@ -2610,7 +2596,7 @@ def _force_switch_wild_capture_to_lead(
 
 def _weaken_wild_capture_once(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     party_index: int,
     move_index: int,
@@ -2754,7 +2740,7 @@ def _weaken_wild_capture_once(
 
 def _try_catch_wild(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     species_id: int | None,
     label: str,
@@ -2795,7 +2781,7 @@ def _try_catch_wild(
 
 def _store_wild_collection_specimens(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> None:
@@ -2892,7 +2878,7 @@ def _store_wild_collection_specimens(
 
 
 def _approach_vermilion_pc(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> None:
@@ -2909,7 +2895,7 @@ def _approach_vermilion_pc(
 
 def _field_dig_to_viridian(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> None:
@@ -2949,7 +2935,7 @@ def _field_dig_to_viridian(
 
 def _return_from_viridian_to_vermilion(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
     *,
@@ -3055,7 +3041,7 @@ def _return_from_viridian_to_vermilion(
 
 def _traverse_route_2_to_viridian(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> tuple[tuple[int, int], ...]:
@@ -3184,7 +3170,7 @@ def _traverse_route_2_to_viridian(
 
 def _traverse_route_2_to_cave_house(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
 ) -> RawGameState:
@@ -3347,7 +3333,7 @@ def _traverse_route_2_to_cave_house(
 
 def _traverse_cave_to_route_2(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
     *,
@@ -3369,7 +3355,7 @@ def _traverse_cave_to_route_2(
 
 def _traverse_cave(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
     *,
@@ -3475,7 +3461,7 @@ def _traverse_cave(
 
 def _throw_until_caught_diglett(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
 ) -> None:
     starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
@@ -3525,7 +3511,7 @@ def _throw_until_caught_diglett(
 
 def _settle_caught_diglett(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     starting_balls: int,
     throw_limit: int,
@@ -3556,7 +3542,7 @@ def _settle_caught_diglett(
 
 def _restore_diglett_capture_catcher_if_fainted(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
 ) -> RawGameState:
     """Select a living party member when Diglett KOs the current catcher."""
@@ -3599,7 +3585,7 @@ def _restore_diglett_capture_catcher_if_fainted(
         raise
 
 
-def _select_bag_item(emulator: EmulatorState, executor: _CountingExecutor, item: int) -> None:
+def _select_bag_item(emulator: EmulatorState, executor: CountingExecutor, item: int) -> None:
     for _ in range(20):
         absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
             RamAddress.LIST_SCROLL_OFFSET
@@ -3620,7 +3606,7 @@ def _select_bag_item(emulator: EmulatorState, executor: _CountingExecutor, item:
 
 
 def _teach_cut(
-    emulator: EmulatorState, executor: _CountingExecutor, reader: PokemonRedStateReader
+    emulator: EmulatorState, executor: CountingExecutor, reader: PokemonRedStateReader
 ) -> None:
     executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
     _wait(executor, 180)
@@ -3653,7 +3639,7 @@ def _teach_cut(
 
 def _prepare_diglett_dig(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
 ) -> None:
     if DIG_MOVE_ID in _read_four(emulator, RamAddress.PARTY_MON_3_MOVES):
         return
@@ -3678,7 +3664,7 @@ def _prepare_diglett_dig(
 
 
 def _cut_tree(
-    emulator: EmulatorState, executor: _CountingExecutor, reader: PokemonRedStateReader
+    emulator: EmulatorState, executor: CountingExecutor, reader: PokemonRedStateReader
 ) -> None:
     _cut_tree_facing(
         emulator,
@@ -3692,7 +3678,7 @@ def _cut_tree(
 
 def _cut_tree_facing(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     direction: str,
     timing: SurgeTiming,
@@ -3743,7 +3729,7 @@ def _cut_tree_facing(
 
 def _swap_party_lead(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     species_id: int,
     label: str,
@@ -3829,7 +3815,7 @@ def _party_moves_for_index(
 
 def _swap_party_slots(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     *,
     source_index: int,
@@ -3933,7 +3919,7 @@ def _plan_gym_path(
 
 
 def _navigate_gym_adaptive(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     goals: frozenset[tuple[int, int]],
     timing: SurgeTiming,
@@ -3995,7 +3981,7 @@ def _plan_gym_can_path(
 
 
 def _navigate_to_gym_can(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     can_index: int,
     timing: SurgeTiming,
@@ -4038,7 +4024,7 @@ def _navigate_to_gym_can(
 
 def _solve_switches(
     emulator: EmulatorState,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
     tracker: SurgeProgressTracker,
@@ -4095,7 +4081,7 @@ def _event_byte(raw: RawGameState, event: EventFlag) -> int:
 
 
 def _enter_surge(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SurgeTiming,
@@ -4110,7 +4096,7 @@ def _enter_surge(
 
 
 def _run_dig_battle(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SurgeTiming,
     *,
@@ -4180,7 +4166,7 @@ class _PauseForSurgeSuperPotion(BattleControlRequest):
 
 
 def _use_surge_super_potion(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SurgeTiming,
@@ -4271,7 +4257,7 @@ def _use_surge_super_potion(
 
 
 def _clear_rewards(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SurgeTiming,
@@ -4292,19 +4278,19 @@ def _clear_rewards(
     raise SurgeChapterError("Lt. Surge reward did not reach its stable semantic gate.")
 
 
-def _confirm(executor: _CountingExecutor, count: int, frames: int = 180) -> None:
+def _confirm(executor: CountingExecutor, count: int, frames: int = 180) -> None:
     _confirm_kind(executor, MacroActionKind.CONFIRM, count, frames)
 
 
 def _confirm_kind(
-    executor: _CountingExecutor, kind: MacroActionKind, count: int, frames: int
+    executor: CountingExecutor, kind: MacroActionKind, count: int, frames: int
 ) -> None:
     for _ in range(count):
         _pulse(executor, kind, frames=frames)
 
 
 def _pulse(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     kind: MacroActionKind,
     value: str | int | None = None,
     frames: int = 180,
@@ -4313,5 +4299,5 @@ def _pulse(
     _wait(executor, frames)
 
 
-def _wait(executor: _CountingExecutor, frames: int) -> None:
+def _wait(executor: CountingExecutor, frames: int) -> None:
     executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

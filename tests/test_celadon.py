@@ -15,13 +15,13 @@ from pokemon_red_completion.celadon import (
     CeladonCheckpoint,
     CeladonTiming,
     Route8TrainerEvidence,
-    _CountingExecutor,
     _flee,
     _party_hp,
     _party_max_hp,
     _party_status,
     _RunState,
 )
+from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     BattleMenuState,
@@ -250,7 +250,7 @@ def test_wild_flee_reselects_run_after_a_failed_escape(
     run = _RunState([])
 
     _flee(
-        _CountingExecutor(runtime),
+        CountingExecutor(runtime),
         runtime,  # type: ignore[arg-type]
         runtime,  # type: ignore[arg-type]
         run,

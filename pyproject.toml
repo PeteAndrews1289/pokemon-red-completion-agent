@@ -54,7 +54,6 @@ markers = [
 ]
 
 [tool.mypy]
-python_version = "3.11"
 ignore_missing_imports = true
 # Scoped to the game-neutral layer and its adapters, which are fully annotated
 # and pass cleanly today. The chapter modules are excluded for one specific
@@ -63,14 +62,7 @@ ignore_missing_imports = true
 # and reports the cross-module calls as errors. Hoisting that into one shared
 # Protocol is the prerequisite for widening this scope, not a reason to skip
 # type checking entirely.
-files = [
-  "src/pokemon_red_completion/capture.py",
-  "src/pokemon_red_completion/party.py",
-  "src/pokemon_red_completion/pokedex.py",
-  "src/pokemon_red_completion/red_party.py",
-  "src/pokemon_red_completion/red_pokedex.py",
-  "src/pokemon_red_completion/team_training.py",
-]
+files = ["src/"]
 
 [tool.ruff]
 line-length = 100

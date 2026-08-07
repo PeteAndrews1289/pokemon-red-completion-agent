@@ -11,6 +11,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
@@ -101,10 +102,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class GiovanniChapterError(RuntimeError):
@@ -301,17 +298,6 @@ class GiovanniChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, delegate: ChapterExecutor) -> None:
-        self.delegate = delegate
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self.delegate.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_giovanni_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -320,7 +306,7 @@ def run_giovanni_chapter(
     progress: ProgressSink | None = None,
 ) -> GiovanniChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[GiovanniCheckpoint] = []
     initial = reader.read()
     _require(initial, MapId.CINNABAR_POKECENTER, (3, 3), "post-Blaine boundary")

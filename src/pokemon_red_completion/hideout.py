@@ -6,6 +6,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -118,10 +119,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class HideoutChapterError(RuntimeError):
@@ -266,17 +263,6 @@ class HideoutChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 @dataclass(slots=True)
 class _RunState:
     wilds: list[object]
@@ -292,7 +278,7 @@ def run_hideout_chapter(
     progress: ProgressSink | None = None,
 ) -> HideoutChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     run = _RunState([])
     records: list[HideoutCheckpoint] = []
     trainers: list[HideoutTrainerEvidence] = []
@@ -530,7 +516,7 @@ def run_hideout_chapter(
 
 
 def _fight(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -632,7 +618,7 @@ def _lead_needs_recovery(emulator: EmulatorState) -> bool:
 
 def _run_hideout_giovanni_with_recovery(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     run: _RunState,
     *,
@@ -741,7 +727,7 @@ def _run_hideout_giovanni_with_recovery(
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -781,7 +767,7 @@ def _protected_party_can_continue(
 
 
 def _spinner(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     directions: Iterable[str],
     timing: HideoutTiming,
 ) -> None:
@@ -791,7 +777,7 @@ def _spinner(
 
 
 def _field_dig(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: HideoutTiming,
@@ -822,7 +808,7 @@ def _field_dig(
 
 
 def _heal_center(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -845,7 +831,7 @@ def _heal_center(
 
 
 def _cure_giovanni_poison_if_present(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: HideoutTiming,
@@ -869,7 +855,7 @@ def _cure_giovanni_poison_if_present(
 
 
 def _interact_until(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: HideoutTiming,
@@ -885,7 +871,7 @@ def _interact_until(
 
 
 def _interact_until_item(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: HideoutTiming,
@@ -901,7 +887,7 @@ def _interact_until_item(
 
 
 def _select_cursor(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     target: int,
     timing: HideoutTiming,
@@ -919,7 +905,7 @@ def _select_cursor(
     raise HideoutChapterError(f"Menu cursor could not select {target}.")
 
 
-def _face(actions: _CountingExecutor, direction: str, timing: HideoutTiming) -> None:
+def _face(actions: CountingExecutor, direction: str, timing: HideoutTiming) -> None:
     _pulse(actions, MacroActionKind.MOVE, direction, 120)
 
 
@@ -968,7 +954,7 @@ def _require(
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     value: str | int | None = None,
     frames: int = 180,
@@ -977,5 +963,5 @@ def _pulse(
     _wait(actions, frames)
 
 
-def _wait(actions: _CountingExecutor, frames: int) -> None:
+def _wait(actions: CountingExecutor, frames: int) -> None:
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

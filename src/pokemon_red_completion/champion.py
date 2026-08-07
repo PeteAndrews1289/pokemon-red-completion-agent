@@ -6,6 +6,7 @@ from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.agatha import AGATHA_X_SPECIAL_USE
 from pokemon_red_completion.battle_actions import (
@@ -55,7 +56,7 @@ from pokemon_red_completion.team_training import COMPLETION_LEVEL_PARITY
 from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
     INDIGO_X_SPECIAL_RESERVE,
-    _CountingExecutor,
+    CountingExecutor,
     _event,
     _pulse,
     _select_battle_main_command,
@@ -88,10 +89,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class ChampionChapterError(RuntimeError):
@@ -285,7 +282,7 @@ def run_champion_chapter(
     require_teacher_strategy_evidence: bool = True,
 ) -> ChampionChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[ChampionCheckpoint] = []
     initial = reader.read()
     if (
@@ -540,7 +537,7 @@ def run_champion_chapter(
 
 def _battle_x_special(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
 ) -> None:
     raw = reader.read()
@@ -660,7 +657,7 @@ def _champion_forced_switch_target(
 
 def _settle_champion_forced_switch(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
 ) -> bool:
     """Continue the final battle with the healthiest developed teammate."""
@@ -702,7 +699,7 @@ def _settle_champion_forced_switch(
 
 def _settle_champion_battle_exit(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
 ) -> None:
     """Advance a reserve's verified final KO to the post-battle dialogue."""
 

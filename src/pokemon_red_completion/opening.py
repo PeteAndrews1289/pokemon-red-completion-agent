@@ -23,7 +23,7 @@ from pokemon_red_completion.bootstrap import (
     play_new_game_intro,
 )
 from pokemon_red_completion.emulator import PyBoyAdapter
-from pokemon_red_completion.executor import ExecutedAction, FrameSafeExecutor
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor, ExecutedAction, FrameSafeExecutor
 from pokemon_red_completion.navigation import Coordinate, path_to_directions
 from pokemon_red_completion.observation import (
     SQUIRTLE_SPECIES_ID,
@@ -223,17 +223,6 @@ class OpeningExecutor(Protocol):
     def execute(self, action: MacroAction) -> ExecutedAction: ...
 
 
-class _CountingExecutor:
-    def __init__(self, executor: OpeningExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> ExecutedAction:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_opening_chapter(
     rom_path: str | Path,
     *,
@@ -254,7 +243,7 @@ def run_opening_chapter(
         reader = PokemonRedStateReader(emulator)
         initial = reader.read()
         tracker = SemanticStateTracker(initial)
-        executor = _CountingExecutor(
+        executor = CountingExecutor(
             _executor or FrameSafeExecutor(emulator, new_game_timing.controller_timing())
         )
 
@@ -405,7 +394,7 @@ def run_opening_chapter(
 
 
 def _follow_corridor(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     map_id: MapId,
     path: tuple[Coordinate, ...],
@@ -436,7 +425,7 @@ def _follow_corridor(
 
 
 def _advance_until_phase(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     target: OpeningPhase,
     max_pulses: int,
@@ -462,7 +451,7 @@ def _advance_until_phase(
 
 
 def _advance_until_party(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     max_pulses: int,
     wait_frames: int,
@@ -484,7 +473,7 @@ def _advance_until_party(
     raise OpeningChapterError("Starter selection failed to populate the party.")
 
 
-def _wait(executor: _CountingExecutor, frames: int) -> None:
+def _wait(executor: CountingExecutor, frames: int) -> None:
     executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 

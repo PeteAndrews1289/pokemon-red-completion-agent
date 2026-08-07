@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
@@ -33,7 +34,7 @@ from pokemon_red_completion.silph import (
     SilphChapterError,
     SilphTiming,
     _await_trainer_battle,
-    _CountingExecutor,
+    CountingExecutor,
     _event,
     _heal,
     _move,
@@ -214,7 +215,7 @@ def run_dojo_chapter(
     progress: ProgressSink | None = None,
 ) -> DojoChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[DojoCheckpoint] = []
     battles: list[DojoBattleEvidence] = []
     initial = reader.read()
@@ -343,7 +344,7 @@ def run_dojo_chapter(
 
 
 def _fight_next(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -447,7 +448,7 @@ def _party_levels(emulator: EmulatorState) -> tuple[int, ...]:
 
 
 def _clear_dialogue(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
     label: str,
@@ -462,7 +463,7 @@ def _clear_dialogue(
 
 
 def _settle_battle_event(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -485,7 +486,7 @@ def _settle_battle_event(
 
 
 def _prove_center_field_control(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
 ) -> None:
@@ -519,7 +520,7 @@ def _prove_center_field_control(
 
 
 def _await_trainer_battle_safe(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
     label: str,
@@ -531,7 +532,7 @@ def _await_trainer_battle_safe(
 
 
 def _navigate_safe(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
     target: tuple[int, int],
@@ -544,7 +545,7 @@ def _navigate_safe(
 
 
 def _move_verified_safe(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: tuple[str, ...],
     timing: SilphTiming,

@@ -7,6 +7,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field, replace
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -203,10 +204,6 @@ class EmulatorState(Protocol):
     def read_u8(self, address: int) -> int: ...
 
 
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
-
-
 class TowerChapterError(RuntimeError):
     """Raised when the qualified Fuji route loses semantic evidence."""
 
@@ -400,17 +397,6 @@ class TowerChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 @dataclass(slots=True)
 class _RunState:
     wilds: list[object] = field(default_factory=list)
@@ -439,7 +425,7 @@ def run_tower_chapter(
     progress: ProgressSink | None = None,
 ) -> TowerChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     start = reader.read()
     run = _RunState(evolved=start.party_species_ids == TOWER_FINAL_PARTY)
     records: list[TowerCheckpoint] = []
@@ -878,7 +864,7 @@ def _tower_rival_needs_accuracy_reset(
 
 def _reset_tower_rival_accuracy(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     timing: BattleRuntimeTiming,
     *,
@@ -931,7 +917,7 @@ def _reset_tower_rival_accuracy(
 
 def _switch_tower_rival_party_slot(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     timing: BattleRuntimeTiming,
     *,
@@ -1004,7 +990,7 @@ def _switch_tower_rival_party_slot(
 
 def _use_tower_battle_status_item(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     label: str,
     *,
@@ -1072,7 +1058,7 @@ def _use_tower_battle_status_item(
 
 
 def _fight(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: TowerTiming,
@@ -1306,7 +1292,7 @@ def _scripted_trainer_identity(emulator: EmulatorState) -> tuple[int, int, int]:
 
 
 def _fight_marowak(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: TowerTiming,
@@ -1416,7 +1402,7 @@ def _plan_route_8_east(
 
 
 def _navigate_route_8_east(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1478,7 +1464,7 @@ def _navigate_route_8_east(
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1545,7 +1531,7 @@ def _is_restless_marowak_battle(state: RawGameState) -> bool:
 
 
 def _enter_battle(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: TowerTiming,
     label: str,
@@ -1560,7 +1546,7 @@ def _enter_battle(
 
 
 def _pickup(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1597,7 +1583,7 @@ def _pickup(
 
 
 def _interact_until_map(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: TowerTiming,
     direction: str,
@@ -1614,7 +1600,7 @@ def _interact_until_map(
 
 
 def _interact_until_item(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: TowerTiming,
@@ -1631,7 +1617,7 @@ def _interact_until_item(
 
 
 def _heal_center(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1656,7 +1642,7 @@ def _heal_center(
 
 
 def _clear_text(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: TowerTiming,
 ) -> None:
@@ -1667,7 +1653,7 @@ def _clear_text(
 
 
 def _qualify_evolution(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1709,7 +1695,7 @@ def _qualify_evolution(
 
 
 def _use_rare_candy_for_evolution(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -1817,7 +1803,7 @@ def _require(
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     value: str | int | None = None,
     *,
@@ -1827,5 +1813,5 @@ def _pulse(
     _wait(actions, frames)
 
 
-def _wait(actions: _CountingExecutor, frames: int) -> None:
+def _wait(actions: CountingExecutor, frames: int) -> None:
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

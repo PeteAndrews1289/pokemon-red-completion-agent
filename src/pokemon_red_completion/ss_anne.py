@@ -6,6 +6,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -134,10 +135,6 @@ class EmulatorState(Protocol):
     def read_u8(self, address: int) -> int: ...
 
 
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
-
-
 class SSAnneChapterError(RuntimeError):
     """Raised when the bounded S.S. Anne route misses a semantic gate."""
 
@@ -258,17 +255,6 @@ class SSAnneChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_ss_anne_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -280,7 +266,7 @@ def run_ss_anne_chapter(
     """Continue verified Vermilion state through the Captain's HM01 reward."""
 
     start_frames = emulator.frame_count
-    chapter_executor = _CountingExecutor(executor)
+    chapter_executor = CountingExecutor(executor)
     starting_raw = reader.read()
     try:
         tracker = SSAnneProgressTracker(reader.read_vermilion_state(starting_raw))
@@ -468,7 +454,7 @@ def run_ss_anne_chapter(
 
 
 def _move(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: SSAnneTiming,
@@ -518,7 +504,7 @@ def _move(
 
 
 def _yield_to_vermilion_sailor(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SSAnneTiming,
 ) -> RawGameState:
@@ -578,7 +564,7 @@ def _yield_to_vermilion_sailor(
 
 
 def _yield_to_ss_anne_waiter(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SSAnneTiming,
 ) -> RawGameState:
@@ -643,7 +629,7 @@ def _yield_to_ss_anne_waiter(
 
 
 def _enter_rival_battle(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SSAnneTiming,
 ) -> RawGameState:
@@ -667,7 +653,7 @@ def _enter_rival_battle(
 
 
 def _purchase_ss_anne_super_potions(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SSAnneTiming,
@@ -735,7 +721,7 @@ def _purchase_ss_anne_super_potions(
 
 
 def _run_pre_ship_training(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SSAnneTiming,
@@ -923,7 +909,7 @@ def _run_pre_ship_training(
 
 
 def _enter_pre_ship_training_route11(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SSAnneTiming,
 ) -> RawGameState:
@@ -948,7 +934,7 @@ def _enter_pre_ship_training_route11(
 
 
 def _heal_pre_ship_training_anchor(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SSAnneTiming,
     anchor_position: tuple[int | None, int | None],
@@ -1095,7 +1081,7 @@ class _PauseForSSAnneRivalPotion(BattleControlRequest):
 
 def _run_ss_anne_rival_with_potion(
     reader: PokemonRedStateReader,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     timing: SSAnneTiming,
 ) -> RawGameState:
@@ -1284,11 +1270,11 @@ def _checkpoint(
     return raw, evidence
 
 
-def _confirm_pulses(executor: _CountingExecutor, count: int, frames: int) -> None:
+def _confirm_pulses(executor: CountingExecutor, count: int, frames: int) -> None:
     for _ in range(count):
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         _wait(executor, frames)
 
 
-def _wait(executor: _CountingExecutor, frames: int) -> None:
+def _wait(executor: CountingExecutor, frames: int) -> None:
     executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

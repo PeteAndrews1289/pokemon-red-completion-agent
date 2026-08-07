@@ -13,6 +13,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -103,10 +104,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class KogaChapterError(RuntimeError):
@@ -297,17 +294,6 @@ class KogaChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_koga_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -317,7 +303,7 @@ def run_koga_chapter(
     progress: ProgressSink | None = None,
 ) -> KogaChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[KogaCheckpoint] = []
     battles: list[KogaBattleEvidence] = []
     initial = reader.read()
@@ -520,7 +506,7 @@ def run_koga_chapter(
 
 
 def _fight(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: KogaTiming,
@@ -740,7 +726,7 @@ def _observed_terminal_mutual_ko_after_exit(
 
 
 def _settle_terminal_mutual_ko(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: KogaTiming,
@@ -813,7 +799,7 @@ class _PauseForKogaXAccuracy(BattleControlRequest):
 
 
 def _battle_koga_x_accuracy(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: KogaTiming,
@@ -940,7 +926,7 @@ def _koga_fainted_pivot_target(
 
 
 def _settle_koga_fainted_pivot_target(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: KogaTiming,
@@ -976,7 +962,7 @@ def _settle_koga_fainted_pivot_target(
 
 
 def _settle_trainer_identity(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: KogaTiming,
@@ -997,7 +983,7 @@ def _settle_trainer_identity(
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: KogaTiming,
@@ -1026,7 +1012,7 @@ def _move(
 
 
 def _heal_center(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: KogaTiming,
@@ -1062,7 +1048,7 @@ def _nurse_approach_directions(raw: RawGameState) -> tuple[str, ...]:
 
 
 def _clear_text(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: KogaTiming,
 ) -> None:
@@ -1121,7 +1107,7 @@ def _checkpoint(
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     value: str | int | None = None,
     *,

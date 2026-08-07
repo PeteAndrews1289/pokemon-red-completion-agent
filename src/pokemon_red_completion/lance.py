@@ -6,6 +6,7 @@ from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.agatha import (
     AgathaChapterError,
@@ -61,7 +62,7 @@ from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
     VictoryRoadChapterError,
     _battle_sacrifice,
-    _CountingExecutor,
+    CountingExecutor,
     _event,
     _move,
     _pulse,
@@ -94,10 +95,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class LanceChapterError(RuntimeError):
@@ -224,7 +221,7 @@ def run_lance_chapter(
     progress: ProgressSink | None = None,
 ) -> LanceChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[LanceCheckpoint] = []
     initial = reader.read()
     if (
@@ -499,7 +496,7 @@ def run_lance_chapter(
 
 
 def _field_recover(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -547,7 +544,7 @@ def _lance_field_recovery_item(
 
 
 def _recover_fainted_helpers(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -565,7 +562,7 @@ def _recover_fainted_helpers(
 
 
 def _field_recover_helpers(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -589,7 +586,7 @@ def _field_recover_helpers(
 
 
 def _use_field_item_on_party(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     item: ItemId,

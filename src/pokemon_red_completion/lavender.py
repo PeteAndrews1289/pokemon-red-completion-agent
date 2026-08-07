@@ -12,6 +12,7 @@ from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -156,10 +157,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class LavenderChapterError(RuntimeError):
@@ -366,17 +363,6 @@ class LavenderChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 @dataclass(slots=True)
 class _RunState:
     wilds: list[WildFleeEvidence]
@@ -398,7 +384,7 @@ def run_lavender_chapter(
     """Continue the verified Surge boundary to a stable Lavender Center."""
 
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     run = _RunState([], [])
     records: list[LavenderCheckpoint] = []
 
@@ -1036,7 +1022,7 @@ class _PauseForFinalTunnelPivot(BattleControlRequest):
 
 def _run_lavender_trainer_battle(
     reader: PokemonRedStateReader,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     run: _RunState,
     timing: LavenderTiming,
@@ -1285,7 +1271,7 @@ def _ranked_lavender_move_slots(
 
 def _use_battle_super_potion(
     reader: PokemonRedStateReader,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     run: _RunState,
     timing: LavenderTiming,
@@ -1353,7 +1339,7 @@ def _use_battle_super_potion(
 
 def _use_battle_status_item(
     reader: PokemonRedStateReader,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     timing: LavenderTiming,
     label: str,
@@ -1488,7 +1474,7 @@ def _dux_status_recovery_strategy(
 
 
 def _prepare_dux_sleep_pivot(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1511,7 +1497,7 @@ def _prepare_dux_sleep_pivot(
 
 
 def _trainer(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1618,7 +1604,7 @@ def _trainer(
 
 
 def _move(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1683,7 +1669,7 @@ def _move(
 
 
 def _enter_trainer_battle(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: LavenderTiming,
     label: str,
@@ -1699,7 +1685,7 @@ def _enter_trainer_battle(
 
 
 def _flee(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1898,7 +1884,7 @@ def _record_wild_flee_evidence(
 
 
 def _use_repel(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1917,7 +1903,7 @@ def _use_repel(
 
 
 def _heal_if_below(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1963,7 +1949,7 @@ def _route_9_recovery_allowance(emulator: EmulatorState) -> int:
 
 
 def _use_super_potion(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -2007,7 +1993,7 @@ def _use_super_potion(
 
 
 def _cure_tunnel_status_if_present(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -2044,7 +2030,7 @@ def _cure_tunnel_status_if_present(
 
 
 def _use_bag_item(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: LavenderTiming,
@@ -2064,7 +2050,7 @@ def _use_bag_item(
 
 
 def _teach_tm11(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: LavenderTiming,
@@ -2112,7 +2098,7 @@ def _teach_tm11(
 
 
 def _earn_tunnel_supply_income(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -2388,7 +2374,7 @@ def _earn_tunnel_supply_income(
 
 
 def _prepare_income_return(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -2432,7 +2418,7 @@ def _prepare_income_return(
 
 
 def _purchase_supplies(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: LavenderTiming,
@@ -2701,7 +2687,7 @@ def _needs_early_obsolete_tm_sale(
 
 
 def _sell_single_mart_item(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: LavenderTiming,
@@ -2723,7 +2709,7 @@ def _sell_single_mart_item(
 
 
 def _sell_mart_item_stack(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: LavenderTiming,
@@ -2781,7 +2767,7 @@ def _sell_mart_item_stack(
 
 
 def _top_up_lavender_supplies(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -2932,7 +2918,7 @@ def _antidote_top_up_quantity(current_quantity: int) -> int:
 
 
 def _buy_mart_item(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     timing: LavenderTiming,
     *,
@@ -3012,7 +2998,7 @@ def _buy_mart_item(
 
 
 def _open_mart_buy_list(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     wait_frames: int,
 ) -> None:
@@ -3029,7 +3015,7 @@ def _open_mart_buy_list(
 
 
 def _heal_center(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: LavenderTiming,
@@ -3062,7 +3048,7 @@ def _heal_center(
 
 
 def _normalize_rock_center_exit_dialogue(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: LavenderTiming,
 ) -> None:
@@ -3089,7 +3075,7 @@ def _normalize_rock_center_exit_dialogue(
 
 
 def _use_cut(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     direction: str,
@@ -3127,7 +3113,7 @@ def _use_cut(
 
 
 def _face_blocked(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     direction: str,
@@ -3145,7 +3131,7 @@ def _face_blocked(
 
 
 def _swap(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     species: int,
@@ -3158,7 +3144,7 @@ def _swap(
 
 
 def _open_bag(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     timing: LavenderTiming,
 ) -> None:
@@ -3169,7 +3155,7 @@ def _open_bag(
 
 
 def _select_bag_item(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     item: int,
     timing: LavenderTiming,
@@ -3194,7 +3180,7 @@ def _select_bag_item(
 
 
 def _select_cursor(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     emulator: EmulatorState,
     target: int,
     timing: LavenderTiming,
@@ -3213,7 +3199,7 @@ def _select_cursor(
 
 
 def _close_menus(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: LavenderTiming,
 ) -> None:
@@ -3229,7 +3215,7 @@ def _close_menus(
 
 
 def _clear_field_text(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: LavenderTiming,
 ) -> None:
@@ -3338,7 +3324,7 @@ def _party_status(emulator: EmulatorState) -> tuple[int, ...]:
 
 
 def _pulse(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     kind: MacroActionKind,
     value: str | int | None = None,
     frames: int = 180,
@@ -3347,5 +3333,5 @@ def _pulse(
     _wait(executor, frames)
 
 
-def _wait(executor: _CountingExecutor, frames: int) -> None:
+def _wait(executor: CountingExecutor, frames: int) -> None:
     executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

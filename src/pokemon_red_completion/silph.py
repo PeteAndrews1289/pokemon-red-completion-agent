@@ -11,6 +11,7 @@ from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -234,10 +235,6 @@ class EmulatorState(Protocol):
     def read_u8(self, address: int) -> int: ...
 
 
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
-
-
 class SilphChapterError(RuntimeError):
     """Raised when the Silph evidence contract fails."""
 
@@ -400,17 +397,6 @@ class SilphChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_silph_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -420,7 +406,7 @@ def run_silph_chapter(
     progress: ProgressSink | None = None,
 ) -> SilphChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[SilphCheckpoint] = []
     initial = reader.read()
     _require(initial, MapId.SAFFRON_POKECENTER, (3, 3), "Saffron boundary")
@@ -743,7 +729,7 @@ def run_silph_chapter(
 
 
 def _acquire_and_teach_ice_beam(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -804,7 +790,7 @@ def _acquire_and_teach_ice_beam(
 
 
 def acquire_and_teach_ice_beam_from_celadon_center(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     *,
@@ -887,7 +873,7 @@ def acquire_and_teach_ice_beam_from_celadon_center(
 
 
 def _buy_silph_x_special(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -939,7 +925,7 @@ def _buy_silph_x_special(
 
 
 def _acquire_silph_x_special(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -1017,7 +1003,7 @@ def _acquire_silph_x_special(
 
 
 def _acquire_and_teach_ice_beam_on_roof(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -1092,7 +1078,7 @@ def _acquire_and_teach_ice_beam_on_roof(
 
 
 def _store_spent_route_items(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -1153,7 +1139,7 @@ def _silph_capacity_deposit_items(
 
 
 def _deposit_pc_item(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     item: ItemId,
@@ -1181,7 +1167,7 @@ def _deposit_pc_item(
 
 
 def _select_pc_menu_cursor(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     target: int,
     timing: SilphTiming,
@@ -1201,7 +1187,7 @@ def _select_pc_menu_cursor(
 
 
 def _select_pc_bag_item(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     item: ItemId,
     timing: SilphTiming,
@@ -1227,7 +1213,7 @@ def _select_pc_bag_item(
 
 
 def _return_roof_to_saffron(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
 ) -> None:
@@ -1276,7 +1262,7 @@ def _roof_nerd_coordinate(emulator: EmulatorState) -> tuple[int, int]:
 
 
 def _interact_with_roof_girl(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -1350,7 +1336,7 @@ def _interact_with_roof_girl(
 
 
 def _navigate_roof_to(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     target: tuple[int, int],
@@ -1420,7 +1406,7 @@ def _direction_between(start: tuple[int, int], end: tuple[int, int]) -> str:
 
 
 def _teach_ice_beam(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -1470,7 +1456,7 @@ def _teach_ice_beam(
 
 
 def _buy_supplies(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -1521,7 +1507,7 @@ def _buy_supplies(
 
 
 def _select_elevator_floor(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     target: int,
@@ -1551,7 +1537,7 @@ def _select_elevator_floor(
 
 
 def _enter_silph_elevator(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
     label: str,
@@ -1565,7 +1551,7 @@ def _enter_silph_elevator(
 
 
 def _enter_silph_from_city(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
 ) -> RawGameState:
@@ -1586,7 +1572,7 @@ def _enter_silph_from_city(
 
 def _run_battle(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     move_slot: int | Callable[[RawGameState], int],
     map_id: int,
     label: str,
@@ -1644,7 +1630,7 @@ class _HealingTargetFaintedBeforeItem(SilphChapterError):
 
 def _run_until(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     policy: Callable[[RawGameState], int],
     pause: Callable[[RawGameState], bool],
     label: str,
@@ -1677,7 +1663,7 @@ def _run_until(
 
 def _run_rival_with_potions(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     timing: SilphTiming,
 ) -> None:
@@ -1826,7 +1812,7 @@ def _silph_rival_intent(
 
 def _settle_silph_rival_field_control(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     timing: SilphTiming,
 ) -> None:
     """Clear terminal rival text and prove stable field input before routing."""
@@ -1854,7 +1840,7 @@ def _settle_silph_rival_field_control(
 
 def _settle_silph_rival_forced_switch(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     timing: SilphTiming,
 ) -> bool:
@@ -1903,7 +1889,7 @@ def _settle_silph_rival_forced_switch(
 
 def _battle_hyper_potion(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     timing: SilphTiming,
 ) -> None:
@@ -1918,7 +1904,7 @@ def _battle_hyper_potion(
 
 def _battle_x_special(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     timing: SilphTiming,
 ) -> None:
@@ -1971,7 +1957,7 @@ def _battle_x_special(
 
 def _battle_healing_item(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     timing: SilphTiming,
     item: ItemId,
@@ -2143,7 +2129,7 @@ def _battle_healing_item_verified_terminal_exit(
 
 
 def _heal_detour_from_seventh(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -2161,7 +2147,7 @@ def _heal_detour_from_seventh(
 
 
 def _heal_detour_after_rival(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -2179,7 +2165,7 @@ def _heal_detour_after_rival(
 
 
 def _return_center_to_seventh(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -2200,7 +2186,7 @@ def _return_center_to_seventh(
 
 
 def _await_trainer_battle(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
 ) -> None:
@@ -2211,23 +2197,23 @@ def _await_trainer_battle(
     raise SilphChapterError("Scripted trainer battle did not start inside its bound.")
 
 
-def _heal(actions: _CountingExecutor, timing: SilphTiming) -> None:
+def _heal(actions: CountingExecutor, timing: SilphTiming) -> None:
     _confirm_many(actions, timing.heal_pulses, timing.menu_frames)
 
 
-def _confirm_many(actions: _CountingExecutor, count: int, frames: int) -> None:
+def _confirm_many(actions: CountingExecutor, count: int, frames: int) -> None:
     for _ in range(count):
         actions.execute(MacroAction(MacroActionKind.CONFIRM))
         actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 
-def _interact(actions: _CountingExecutor, frames: int) -> None:
+def _interact(actions: CountingExecutor, frames: int) -> None:
     actions.execute(MacroAction(MacroActionKind.INTERACT))
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     timing: SilphTiming,
     direction: str | None = None,
@@ -2239,7 +2225,7 @@ def _pulse(
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: SilphTiming,
@@ -2255,7 +2241,7 @@ def _move(
 
 
 def _move_verified(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: SilphTiming,
@@ -2343,7 +2329,7 @@ def _move_verified(
 
 
 def _yield_to_celadon_mart_entry_customer(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
     *,
@@ -2407,7 +2393,7 @@ def _yield_to_celadon_mart_entry_customer(
 
 
 def _yield_to_mart_2f_ascent_customer(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
 ) -> RawGameState:
@@ -2467,7 +2453,7 @@ def _yield_to_mart_2f_ascent_customer(
 
 
 def _yield_to_mart_5f_gentleman(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
 ) -> RawGameState:
@@ -2524,7 +2510,7 @@ def _yield_to_mart_5f_gentleman(
 
 
 def _yield_to_mart_5f_gentleman_from_left(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
 ) -> RawGameState:
@@ -2595,7 +2581,7 @@ def _yield_to_mart_5f_gentleman_from_left(
 
 
 def _yield_to_celadon_return_pedestrian(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
 ) -> RawGameState:
@@ -2655,7 +2641,7 @@ def _yield_to_celadon_return_pedestrian(
 
 
 def _return_mart_2f_to_1f(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -2688,7 +2674,7 @@ def _return_mart_2f_to_1f(
 
 
 def _wait_for_mart_2f_customer(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
 ) -> None:
     """Observe the pinned vertical NPC rather than sampling it at a fixed cadence."""
@@ -2751,7 +2737,7 @@ def _plan_saffron_route(
 
 
 def _navigate_saffron_center_approach(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
 ) -> RawGameState:
@@ -2765,7 +2751,7 @@ def _navigate_saffron_center_approach(
 
 
 def _navigate_saffron_coordinate(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SilphTiming,
     target: tuple[int, int],

@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -45,7 +46,7 @@ from pokemon_red_completion.silph import (
     _await_trainer_battle,
     _battle_hyper_potion,
     _battle_x_special,
-    _CountingExecutor,
+    CountingExecutor,
     _event,
     _heal,
     _interact,
@@ -252,7 +253,7 @@ def run_sabrina_chapter(
     require_teacher_strategy_evidence: bool = True,
 ) -> SabrinaChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[SabrinaCheckpoint] = []
     initial = reader.read()
     _require(initial, MapId.SAFFRON_POKECENTER, (3, 3), "post-Silph boundary")
@@ -454,7 +455,7 @@ class _PauseBattle(BattleControlRequest):
 
 def _run_until_sabrina(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     policy: Callable[[RawGameState], int],
     pause: Callable[[RawGameState], bool],
     label: str,
@@ -537,7 +538,7 @@ def _sabrina_recovery_required(raw: RawGameState) -> bool:
 
 
 def _store_obsolete_key_items(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
@@ -575,7 +576,7 @@ def _sabrina_capacity_ready(bag: Mapping[object, int]) -> bool:
 
 
 def _deposit_pc_item(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     item: ItemId,
@@ -603,7 +604,7 @@ def _deposit_pc_item(
 
 
 def _select_menu_cursor(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     target: int,
     timing: SilphTiming,
@@ -623,7 +624,7 @@ def _select_menu_cursor(
 
 
 def _select_bag_list_item(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     item: ItemId,
     timing: SilphTiming,

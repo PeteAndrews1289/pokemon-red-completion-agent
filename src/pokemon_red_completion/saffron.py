@@ -6,6 +6,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.celadon import (
     DEFAULT_CELADON_TIMING,
@@ -137,10 +138,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class SaffronChapterError(RuntimeError):
@@ -311,17 +308,6 @@ class SaffronChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_saffron_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -331,7 +317,7 @@ def run_saffron_chapter(
     progress: ProgressSink | None = None,
 ) -> SaffronChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[SaffronCheckpoint] = []
     initial = reader.read()
     _require(initial, MapId.CELADON_POKECENTER, (3, 3), "Erika boundary")
@@ -649,7 +635,7 @@ def run_saffron_chapter(
 
 
 def _receive_eevee(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     party_before: tuple[int, ...],
@@ -699,7 +685,7 @@ def _receive_eevee(
 
 
 def _purchase_thunder_stone(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SaffronTiming,
@@ -753,7 +739,7 @@ def _purchase_thunder_stone(
 
 
 def _open_mart_buy_list(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     wait_frames: int,
 ) -> None:
@@ -770,7 +756,7 @@ def _open_mart_buy_list(
 
 
 def _evolve_eevee(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SaffronTiming,
@@ -803,7 +789,7 @@ def _evolve_eevee(
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     route: Iterable[str],
@@ -903,7 +889,7 @@ def _move(
 
 
 def _yield_to_mart_5f_gentleman(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SaffronTiming,
 ) -> RawGameState:
@@ -952,7 +938,7 @@ def _yield_to_mart_5f_gentleman(
 
 
 def _yield_to_stone_clerk_walker(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: SaffronTiming,
     *,
@@ -1011,7 +997,7 @@ def _yield_to_stone_clerk_walker(
 
 
 def _cross_mart_2f_return_customer(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SaffronTiming,
@@ -1049,7 +1035,7 @@ def _cross_mart_2f_return_customer(
 
 
 def _yield_from_stone_clerk_return(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SaffronTiming,
@@ -1141,7 +1127,7 @@ def _yield_from_stone_clerk_return(
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     *,
     frames: int,
@@ -1150,7 +1136,7 @@ def _pulse(
     _wait(actions, frames)
 
 
-def _wait(actions: _CountingExecutor, frames: int) -> None:
+def _wait(actions: CountingExecutor, frames: int) -> None:
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 

@@ -5,7 +5,8 @@ from types import SimpleNamespace
 
 import pytest
 
-import pokemon_red_completion.vermilion as vermilion
+from pokemon_red_completion import vermilion
+from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_runtime import BattleResourcePolicy, BattleRuntimeError
 from pokemon_red_completion.observation import (
@@ -689,7 +690,7 @@ def test_wild_flee_navigates_observed_run_menu_and_proves_resources() -> None:
     encounter = simulation.read()
 
     evidence = vermilion._flee_qualified_route_6_wild(
-        vermilion._CountingExecutor(simulation),
+        CountingExecutor(simulation),
         simulation,  # type: ignore[arg-type]
         vermilion.DEFAULT_VERMILION_TIMING,
         encounter,
@@ -710,7 +711,7 @@ def test_wild_flee_accepts_pretrainer_route_6_event_state() -> None:
     simulation = WildFleeSimulation(trainer_events=(False,) * 6)
 
     evidence = vermilion._flee_qualified_route_6_wild(
-        vermilion._CountingExecutor(simulation),
+        CountingExecutor(simulation),
         simulation,  # type: ignore[arg-type]
         vermilion.DEFAULT_VERMILION_TIMING,
         simulation.read(),
@@ -729,7 +730,7 @@ def test_wild_flee_rejects_any_pp_change() -> None:
         match="post-RUN semantic evidence",
     ):
         vermilion._flee_qualified_route_6_wild(
-            vermilion._CountingExecutor(simulation),
+            CountingExecutor(simulation),
             simulation,  # type: ignore[arg-type]
             vermilion.DEFAULT_VERMILION_TIMING,
             simulation.read(),

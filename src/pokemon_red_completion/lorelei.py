@@ -11,6 +11,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -58,7 +59,7 @@ from pokemon_red_completion.victory_road import (
     INDIGO_FULL_HEAL_RESERVE,
     INDIGO_FULL_RESTORE_RESERVE,
     INDIGO_X_SPECIAL_RESERVE,
-    _CountingExecutor,
+    CountingExecutor,
     _event,
     _move,
     _pulse,
@@ -104,10 +105,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class LoreleiChapterError(RuntimeError):
@@ -225,7 +222,7 @@ def run_lorelei_chapter(
     progress: ProgressSink | None = None,
 ) -> LoreleiChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[LoreleiCheckpoint] = []
     initial = reader.read()
     if (
@@ -418,7 +415,7 @@ def run_lorelei_chapter(
 
 def _battle_x_accuracy(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
 ) -> None:
     raw = reader.read()

@@ -11,6 +11,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.celadon import (
     DEFAULT_CELADON_TIMING,
@@ -70,10 +71,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class CinnabarChapterError(RuntimeError):
@@ -251,17 +248,6 @@ def _cinnabar_bag_capacity_preserved(before: int, after_optional_candy: int) -> 
     return 0 < before <= CINNABAR_MAX_INPUT_BAG_SLOTS and after_optional_candy == before
 
 
-class _CountingExecutor:
-    def __init__(self, delegate: ChapterExecutor) -> None:
-        self.delegate = delegate
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self.delegate.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_cinnabar_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -270,7 +256,7 @@ def run_cinnabar_chapter(
     progress: ProgressSink | None = None,
 ) -> CinnabarChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[CinnabarCheckpoint] = []
     initial = reader.read()
     _require(initial, MapId.SAFFRON_POKECENTER, (3, 3), "post-Sabrina boundary")

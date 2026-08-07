@@ -100,7 +100,7 @@ from pokemon_red_completion.erika import (
     ErikaProgress,
     run_erika_chapter,
 )
-from pokemon_red_completion.executor import ExecutedAction, FrameSafeExecutor
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor, ExecutedAction, FrameSafeExecutor
 from pokemon_red_completion.fuchsia import (
     FUCHSIA_CHECKPOINT_COUNT,
     FuchsiaChapterError,
@@ -738,17 +738,6 @@ class QualifiedExecutor(Protocol):
     def execute(self, action: MacroAction) -> ExecutedAction: ...
 
 
-class _CountingExecutor:
-    def __init__(self, executor: QualifiedExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> ExecutedAction:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def is_rival_victory_verified(
     state: OaksErrandState,
     *,
@@ -934,7 +923,7 @@ def run_qualified_play(
             _emulator=emulator,
             _executor=base_executor,
         )
-        executor = _CountingExecutor(base_executor)
+        executor = CountingExecutor(base_executor)
 
         _move(executor, reader, LAB_RIVAL_TRIGGER_DIRECTIONS, "lab rival trigger")
         _expect_position(reader.read(), MapId.OAKS_LAB, 4, 6, "lab rival trigger")
@@ -1493,7 +1482,7 @@ def run_qualified_play(
 
 
 def _defeat_lab_rival(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: QualifiedPlayTiming,
 ) -> tuple[RawGameState, OaksErrandState, bool]:
@@ -1517,7 +1506,7 @@ def _defeat_lab_rival(
 
 
 def _receive_parcel(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: QualifiedPlayTiming,
 ) -> tuple[RawGameState, OaksErrandState]:
@@ -1534,7 +1523,7 @@ def _receive_parcel(
 
 
 def _receive_pokedex(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: QualifiedPlayTiming,
 ) -> tuple[RawGameState, OaksErrandState]:
@@ -1551,7 +1540,7 @@ def _receive_pokedex(
 
 
 def _move(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     label: str,
@@ -1583,7 +1572,7 @@ def _expect_position(
         raise QualifiedPlayError(f"The clean run missed the stable {label} gate.")
 
 
-def _wait(executor: _CountingExecutor, frames: int) -> None:
+def _wait(executor: CountingExecutor, frames: int) -> None:
     executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 

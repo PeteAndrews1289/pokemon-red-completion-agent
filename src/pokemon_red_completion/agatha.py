@@ -6,6 +6,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -70,7 +71,7 @@ from pokemon_red_completion.silph import (
 from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
     INDIGO_X_SPECIAL_RESERVE,
-    _CountingExecutor,
+    CountingExecutor,
     _event,
     _menu_cursor_active,
     _move,
@@ -108,10 +109,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class AgathaChapterError(RuntimeError):
@@ -235,7 +232,7 @@ def run_agatha_chapter(
     progress: ProgressSink | None = None,
 ) -> AgathaChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[AgathaCheckpoint] = []
     initial = reader.read()
     if (
@@ -654,7 +651,7 @@ def _agatha_forced_switch_target(
 
 def _settle_agatha_forced_switch(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
 ) -> bool:
     """Continue Agatha with a living party member and prove the MAIN menu."""
@@ -699,7 +696,7 @@ def _settle_agatha_forced_switch(
 
 def _battle_x_special(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     *,
     item: ItemId = ItemId.X_SPECIAL,
@@ -760,7 +757,7 @@ def _battle_x_special(
 
 def _battle_revive_lead(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
 ) -> None:
     """Spend the dedicated Agatha Revive while a living teammate absorbs the turn."""
@@ -830,7 +827,7 @@ def _use_field_elixir(actions, reader, emulator) -> None:
 
 
 def _teach_take_down(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     *,

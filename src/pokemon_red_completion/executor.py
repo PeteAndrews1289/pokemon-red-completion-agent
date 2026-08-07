@@ -97,3 +97,18 @@ class FrameSafeExecutor:
         raise UnsupportedMacroActionError(
             f"{action.kind.value} requires a qualified specialist compiler"
         )
+
+
+class ChapterExecutor(Protocol):
+    def execute(self, action: MacroAction) -> object: ...
+
+
+class CountingExecutor:
+    def __init__(self, delegate: ChapterExecutor) -> None:
+        self.delegate = delegate
+        self.actions_executed = 0
+
+    def execute(self, action: MacroAction) -> object:
+        result = self.delegate.execute(action)
+        self.actions_executed += 1
+        return result

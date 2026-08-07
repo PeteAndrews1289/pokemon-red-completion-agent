@@ -6,6 +6,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
@@ -130,10 +131,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class ErikaChapterError(RuntimeError):
@@ -351,17 +348,6 @@ class ErikaChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_erika_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -371,7 +357,7 @@ def run_erika_chapter(
     progress: ProgressSink | None = None,
 ) -> ErikaChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[ErikaCheckpoint] = []
     initial = reader.read()
     _require(initial, MapId.FUCHSIA_POKECENTER, (3, 3), "Strength boundary")
@@ -722,7 +708,7 @@ def run_erika_chapter(
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     route: Iterable[str],
@@ -851,7 +837,7 @@ def _route_training_move_slot(raw: RawGameState) -> int:
 
 
 def _switch_route_training_escort(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> bool:
@@ -979,7 +965,7 @@ def _battle_command_direction(current: int | None, target: int) -> str | None:
 
 
 def _run_route15_training(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: ErikaTiming,
@@ -1042,7 +1028,7 @@ def _run_route15_training(
 
 
 def _teach_tm40_skull_bash(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: ErikaTiming,
@@ -1104,7 +1090,7 @@ def _teach_tm40_skull_bash(
 
 
 def _use_route_training_rare_candy(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: ErikaTiming,
