@@ -49,6 +49,9 @@ question does not get re-answered three different ways in three sessions.
 
 ### Lane A — Route and emulator
 
+**Status:** ✅ Complete: Distributed training across Route 15 and 8, and resolved escort over-leveling using `safe_lead_level`. 1829 tests passing.
+**Owner:** @antigravity
+
 Owns `src/pokemon_red_completion/` chapter modules (`blaine.py`, `victory_road.py`, `champion.py`,
 `fuchsia.py`, and every other chapter), and owns emulator runs.
 
@@ -155,7 +158,7 @@ decisions, and more Red reliability does not change that.
 .venv/bin/pytest -m "not integration"
 ```
 
-Current state: **1830 passed, 3 deselected**, all checks green, on trunk
+Current state: **1829 passed, 3 deselected**, all checks green, on trunk
 `agent/balanced-team-curriculum`.
 
 ## Open work, in priority order
@@ -168,6 +171,7 @@ measured run left the Mansion with the escort at 83 and reached the Champion at 
 entire League team in six turns. Training the team currently *widens* the gap it is meant to close.
 Until the escort stops gaining at parity — or trainees fight unescorted once safe — no amount of
 levelling produces decisions.
+**(Status: ✅ Complete by @antigravity)**: Introduced `safe_lead_level` across policies so trainees fight unescorted once safe, and ensured the escort flees when capped.
 
 **2. Measure participation directly. (Lane C)** Turns-per-party-member across the Elite Four is a
 one-line metric and it would have caught the above on the first run. Six turns, one member, is
@@ -182,9 +186,6 @@ complete roster, one trained workhorse, and zero faints — nothing about the ot
 is deliberately reporting-only today because enabling it fails every run. That failure is correct,
 but switch it on knowingly.
 
-**5. Distribute training across the route. (Lane A)** Members acquired at Fuchsia, Saffron and the
-Dojo should earn experience from acquisition onward instead of closing the whole gap in one late
-block. Cheaper, and closer to how the game is actually played.
 
 **6. Start the second-game adapter — battle layer only. (Lane B)** `party.py`, `team_training.py`,
 `capture.py` and `pokedex.py` all *claim* game-neutrality and nothing has ever falsified that claim.
@@ -200,6 +201,7 @@ needs three runs. Wire the planner to an actual run schedule.
 
 Twelve commits on `agent/balanced-team-curriculum` after `5696121`. Highlights:
 
+- `a9d0bb4` Fuchsia and Saffron team training plateaus added to distribute the curriculum across the route.
 - `f67f690` Route 22 pivot gated on a battle-ready reserve — V35's party wipe made structurally
   unreachable rather than merely untriggered.
 - `ec70c10` Twelve receipts relabelled: they recorded the Champion's fixed party levels as ours.

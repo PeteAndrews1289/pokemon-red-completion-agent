@@ -87,8 +87,8 @@ def _committed_repository(tmp_path: Path) -> Path:
     repository.mkdir()
     shutil.copy2(PROJECT_ROOT / "pyproject.toml", repository / "pyproject.toml")
     shutil.copytree(
-        PROJECT_ROOT / "src" / "pokemon_red_completion",
-        repository / "src" / "pokemon_red_completion",
+        PROJECT_ROOT / "src",
+        repository / "src",
         ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"),
     )
     for relative_path in (
@@ -140,11 +140,11 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     assert len(payload) == 6794
     assert (
         registry.registry_sha256
-        == "9fdc716f85644191a7840ee896b26e06781d937272e8fd52d4d261e7953c3d2b"
+        == "c8494f7bc27594fb36a538b166b9c5cdb98d53ff32abededa5a833b2873078a1"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "9addd681b08f3d5f91b90807669ea75b8c0d82d67dbf9c0496fffe67c60d4ba3"
+        == "5bb3b3560965364dadc4270e733389e219f9f1eaba80bd74e943e64eefffb183"
     )
     assert (
         registry.execution.behavior_configuration_sha256
@@ -156,9 +156,9 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "9abdeddedd71f0bc74a75b359531031cea22c3d901393ae50d5447081b5061a0"
+        == "aeff6a7d2e1222ad2442ba1293b09e7a0b1d33116db91ab2880b517d7203c58c"
     )
-    assert first.assignment_id == "6e9ec59e442f2b6c9ddac5321af197fb88f1db392ba4a7d57bdff0323134e94b"
+    assert first.assignment_id == "cf88c540b171e4c8c80412303e5bcfd7f4204a5b61103c4a47960f88b094fcd5"
 
 
 def test_canonical_newline_hash_has_an_independent_golden_vector() -> None:

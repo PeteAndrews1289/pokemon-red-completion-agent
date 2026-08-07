@@ -12,7 +12,6 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
@@ -44,7 +43,6 @@ from pokemon_red_completion.lavender import (
 )
 from pokemon_red_completion.observation import (
     Badge,
-    BattleMenuPhase,
     EventFlag,
     ItemId,
     MapId,
@@ -52,39 +50,31 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
-from pokemon_red_completion.party import PartyMemberObservation, StatusCondition
+from pokemon_red_completion.party import PartyMemberObservation
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.red_party import (
     BLASTOISE_SPECIES_ID,
     DUGTRIO_SPECIES_ID,
-    DUX_SPECIES_ID,
-    HITMONLEE_SPECIES_ID,
     RED_BALANCED_ROSTER,
-    SNORLAX_SPECIES_ID,
     PokemonRedPartyReader,
 )
-from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
-
 from pokemon_red_completion.red_team_training import (
-    run_red_team_balancing,
-    TRAINING_MOVE_IDS,
-    TRAINING_ATTACK_PP_RESERVE,
     RED_DIRECT_LEVEL_ADVANTAGE,
+    TRAINING_ATTACK_PP_RESERVE,
+    TRAINING_MOVE_IDS,
     _PauseForTeamTrainingRecovery,
+    run_red_team_balancing,
 )
+from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
 from pokemon_red_completion.team_training import (
     COMPLETION_LEVEL_PARITY,
     BalancedTeamPolicy,
     DevelopedTeamPolicy,
     DevelopedTeamReport,
-    TeamTrainingDecision,
     TeamTrainingDirective,
-    TeamTrainingProgress,
     is_matchup_acceptable,
     plan_team_development,
-    plan_team_training,
     summarize_team_development,
-    summarize_team_readiness,
 )
 from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.training import (
@@ -135,13 +125,16 @@ MANSION_TRAINING_POLICY = TrainingPolicy(
     max_steps=80_000,
     max_healing_trips=100,
 )
+#: The strongest Pokémon the Indigo League fields.
+INDIGO_MAX_OPPOSITION_LEVEL = 65
+
 MANSION_DEVELOPMENT_POLICY = DevelopedTeamPolicy(
     roster=RED_BALANCED_ROSTER,
     workhorse_species_id=BLASTOISE_SPECIES_ID,
     workhorse_target_level=60,
+    level_parity=COMPLETION_LEVEL_PARITY,
+    parity_opposition_level=INDIGO_MAX_OPPOSITION_LEVEL,
 )
-#: The strongest Pokémon the Indigo League fields.
-INDIGO_MAX_OPPOSITION_LEVEL = 65
 #: How far below the League a natural playthrough arrives.  A player who used a
 #: team throughout the game reaches Indigo in the mid-fifties; that is the band
 #: where switching and type choices still decide battles.  Above it the team
@@ -175,6 +168,7 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
     reserve_total_pp=16,
     max_enemy_level_delta=0,
     minimum_direct_level_advantage=15,
+    safe_lead_level=42,
     # A measured clean-power run reached parity (level 60+) near battle 1,500
     # and then spent roughly 3,000 more closing an internal spread against the
     # escort. With the spread no longer driving training, the budget retains
@@ -930,18 +924,27 @@ def run_blaine_chapter(
     team_healing_trips = 0
     if development.directive is TeamTrainingDirective.EVOLVE_MEMBER:
         _, evolution_battles, evolution_heals = run_red_team_balancing(
-            actions, reader, emulator,
-            policy=MANSION_TEAM_POLICY, expected_map=MapId.POKEMON_MANSION_1F,
-            intent=MANSION_BALANCED_TEAM_TRAINING_INTENT, flee_timing=MANSION_TRAINING_FLEE_TIMING, hideout_timing=DEFAULT_HIDEOUT_TIMING,
-            flee_func=_flee, volatile_enemy_species=MANSION_VOLATILE_ENEMY_SPECIES, escort_enemy_species=MANSION_ESCORT_ENEMY_SPECIES,
-            max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES, cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+            actions,
+            reader,
+            emulator,
+            policy=MANSION_TEAM_POLICY,
+            expected_map=MapId.POKEMON_MANSION_1F,
+            intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
+            flee_timing=MANSION_TRAINING_FLEE_TIMING,
+            hideout_timing=DEFAULT_HIDEOUT_TIMING,
+            flee_func=_flee,
+            volatile_enemy_species=MANSION_VOLATILE_ENEMY_SPECIES,
+            escort_enemy_species=MANSION_ESCORT_ENEMY_SPECIES,
+            max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
+            cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
             evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
             heal_and_return=_mansion_heal_and_return,
             is_in_center=lambda raw: raw.map_id == MapId.CINNABAR_POKECENTER,
             is_in_map=lambda raw: raw.map_id == MapId.POKEMON_MANSION_1F,
             walk_to_grass=_mansion_walk_to_grass,
             move_slot=_team_training_move_slot,
-            report_label="Mansion team training", checkpoint_count=BLAINE_CHECKPOINT_COUNT
+            report_label="Mansion team training",
+            checkpoint_count=BLAINE_CHECKPOINT_COUNT,
         )
         team_battles += evolution_battles
         team_healing_trips += evolution_heals
@@ -952,18 +955,42 @@ def run_blaine_chapter(
     # spread -- was never reached, and the party finished the game at
     # [68, 20, 26, 30, 25, 30].  Run it.
     _, balance_battles, balance_heals = run_red_team_balancing(
-        actions, reader, emulator,
-        policy=MANSION_TEAM_POLICY, expected_map=MapId.POKEMON_MANSION_1F,
-        intent=MANSION_BALANCED_TEAM_TRAINING_INTENT, flee_timing=MANSION_TRAINING_FLEE_TIMING, hideout_timing=DEFAULT_HIDEOUT_TIMING,
-        flee_func=_flee, volatile_enemy_species=MANSION_VOLATILE_ENEMY_SPECIES, escort_enemy_species=MANSION_ESCORT_ENEMY_SPECIES,
-        max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES, cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
-        progress_sink=progress, completed_checkpoint_count=len(records),
+        actions,
+        reader,
+        emulator,
+        policy=MANSION_TEAM_POLICY,
+        expected_map=MapId.POKEMON_MANSION_1F,
+        intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
+        flee_timing=MANSION_TRAINING_FLEE_TIMING,
+        hideout_timing=DEFAULT_HIDEOUT_TIMING,
+        flee_func=_flee,
+        volatile_enemy_species=MANSION_VOLATILE_ENEMY_SPECIES,
+        escort_enemy_species=MANSION_ESCORT_ENEMY_SPECIES,
+        max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
+        cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+        progress_sink=(
+            (
+                lambda message: progress(
+                    BlaineProgress(
+                        "mansion_team_training_progress",
+                        message,
+                        len(records),
+                        BLAINE_CHECKPOINT_COUNT,
+                        emulator.frame_count,
+                    )
+                )
+            )
+            if progress is not None
+            else None
+        ),
+        completed_checkpoint_count=len(records),
         heal_and_return=_mansion_heal_and_return,
         is_in_center=lambda raw: raw.map_id == MapId.CINNABAR_POKECENTER,
         is_in_map=lambda raw: raw.map_id == MapId.POKEMON_MANSION_1F,
         walk_to_grass=_mansion_walk_to_grass,
         move_slot=_team_training_move_slot,
-        report_label="Mansion team training", checkpoint_count=BLAINE_CHECKPOINT_COUNT
+        report_label="Mansion team training",
+        checkpoint_count=BLAINE_CHECKPOINT_COUNT,
     )
     team_battles += balance_battles
     team_healing_trips += balance_heals
@@ -1573,6 +1600,7 @@ def _mansion_heal_and_return(actions, reader, emulator) -> None:
     _heal(actions, reader, emulator)
     _move(actions, reader, CENTER_TO_MANSION, "team training return")
     _require(reader.read(), MapId.POKEMON_MANSION_1F, (5, 27), "team training Mansion entrance")
+
 
 def _mansion_walk_to_grass(actions, reader, emulator) -> int:
     raw = reader.read()

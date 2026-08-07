@@ -279,11 +279,11 @@ def test_coverage_planner_picks_the_run_that_adds_the_most() -> None:
     living = LivingDex().with_run(PokedexObservation(seen=a.obtainable, owned=a.obtainable))
 
     chosen = plan_next_run(living, {"red-a": a, "red-b": b})
-    assert chosen is not None
-    name, gain = chosen
+    assert len(chosen) > 0
+    name, gain = chosen[0]
     assert name == "red-b"
     assert len(gain) == 7
 
     # Once nothing is left to add, the planner says so rather than picking one.
     complete = living.with_run(PokedexObservation(seen=b.obtainable, owned=b.obtainable))
-    assert plan_next_run(complete, {"red-a": a, "red-b": b}) is None
+    assert plan_next_run(complete, {"red-a": a, "red-b": b}) == []

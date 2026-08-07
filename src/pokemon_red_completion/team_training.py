@@ -269,10 +269,13 @@ class DevelopedTeamReport:
 
         if not (self.has_final_form_roster and self.workhorse_ready and self.fainted_count == 0):
             return False
-        if self.required_minimum_level is not None:
-            if self.minimum_level is None or self.minimum_level < self.required_minimum_level:
-                return False
-        return True
+        return not (
+            self.required_minimum_level is not None
+            and (
+                self.minimum_level is None
+                or self.minimum_level < self.required_minimum_level
+            )
+        )
 
 
 def plan_team_development(
@@ -432,6 +435,7 @@ class BalancedTeamPolicy:
     required_size: int = PARTY_SLOT_LIMIT
     retreat_hp_ratio: float = 0.45
     reserve_total_pp: int = 2
+    safe_lead_level: int | None = None
     max_enemy_level_delta: int = 4
     minimum_direct_level_advantage: int = 0
     max_battles: int = 400
@@ -718,6 +722,8 @@ def is_matchup_acceptable(
         return False
     if _member_is_unsafe(trainee, policy):
         return False
+    if policy.safe_lead_level is not None and trainee.level >= policy.safe_lead_level:
+        return True
     safety_ceiling = (
         trainee.level - policy.minimum_direct_level_advantage
         if policy.minimum_direct_level_advantage

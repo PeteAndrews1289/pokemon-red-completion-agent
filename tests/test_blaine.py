@@ -47,15 +47,23 @@ from pokemon_red_completion.blaine import (
     _sell_antidote_before_mansion,
     _team_training_move_slot,
 )
-from pokemon_red_completion.red_team_training import (
-    _PauseForTeamTrainingRecovery,
-    battle_command_direction as _battle_command_direction,
-    red_training_matchup_acceptable as _red_training_matchup_acceptable,
-    training_attack_pp as _training_attack_pp,
-    training_attack_pp_reserve as _training_attack_pp_reserve,
-)
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGameState
 from pokemon_red_completion.party import MoveObservation, PartyMemberObservation
+from pokemon_red_completion.red_team_training import (
+    _PauseForTeamTrainingRecovery,
+)
+from pokemon_red_completion.red_team_training import (
+    battle_command_direction as _battle_command_direction,
+)
+from pokemon_red_completion.red_team_training import (
+    red_training_matchup_acceptable as _red_training_matchup_acceptable,
+)
+from pokemon_red_completion.red_team_training import (
+    training_attack_pp as _training_attack_pp,
+)
+from pokemon_red_completion.red_team_training import (
+    training_attack_pp_reserve as _training_attack_pp_reserve,
+)
 from pokemon_red_completion.team_training import BalancedTeamPolicy
 
 

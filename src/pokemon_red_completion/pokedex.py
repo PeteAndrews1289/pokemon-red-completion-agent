@@ -209,8 +209,8 @@ class LivingDex:
 def plan_next_run(
     living: LivingDex,
     candidates: Mapping[str, PokedexTarget],
-) -> tuple[str, frozenset[int]] | None:
-    """Choose the candidate run that registers the most currently-missing species.
+) -> list[tuple[str, frozenset[int]]]:
+    """Choose the sequence of candidate runs to maximize registered species.
 
     Which starter, fossil, Dojo prize, or evolution stone a run takes is a
     coverage decision, not a preference: each choice forecloses the
@@ -218,18 +218,24 @@ def plan_next_run(
     Greedy set cover is the right shape here because runs are expensive and the
     candidate set is small.
 
-    Returns the candidate name and what it would newly contribute, or ``None``
-    when no candidate adds anything.
+    Returns a list of candidate names and what each would newly contribute.
     """
 
-    best: tuple[str, frozenset[int]] | None = None
-    for name in sorted(candidates):
-        gain = living.remaining(candidates[name])
-        if not gain:
-            continue
-        if best is None or len(gain) > len(best[1]):
-            best = (name, gain)
-    return best
+    schedule: list[tuple[str, frozenset[int]]] = []
+    current_living = living
+    while True:
+        best: tuple[str, frozenset[int]] | None = None
+        for name in sorted(candidates):
+            gain = current_living.remaining(candidates[name])
+            if not gain:
+                continue
+            if best is None or len(gain) > len(best[1]):
+                best = (name, gain)
+        if not best:
+            break
+        schedule.append(best)
+        current_living = LivingDex(current_living.registered | best[1])
+    return schedule
 
 
 def declare_target(

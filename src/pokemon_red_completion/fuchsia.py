@@ -49,9 +49,9 @@ from pokemon_red_completion.observation import (
 )
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.red_party import PokemonRedPartyReader
-from pokemon_red_completion.tower import party_core_intact
-from pokemon_red_completion.team_training import BalancedTeamPolicy
 from pokemon_red_completion.red_team_training import run_red_team_balancing
+from pokemon_red_completion.team_training import BalancedTeamPolicy
+from pokemon_red_completion.tower import party_core_intact
 
 FUCHSIA_DEVELOPMENT_POLICY = BalancedTeamPolicy(
     minimum_level=30,
@@ -61,6 +61,7 @@ FUCHSIA_DEVELOPMENT_POLICY = BalancedTeamPolicy(
     reserve_total_pp=16,
     max_enemy_level_delta=0,
     minimum_direct_level_advantage=10,
+    safe_lead_level=30,
     max_battles=1000,
     max_steps=50000,
     max_healing_trips=25,
@@ -651,7 +652,21 @@ def run_fuchsia_chapter(
         expected_map=MapId.ROUTE_15,
         volatile_enemy_species=frozenset(),
         escort_enemy_species=frozenset(),
-        progress_sink=progress,
+        progress_sink=(
+            (
+                lambda message: progress(
+                    FuchsiaProgress(
+                        "route15_team_training_progress",
+                        message,
+                        len(records),
+                        FUCHSIA_CHECKPOINT_COUNT,
+                        emulator.frame_count,
+                    )
+                )
+            )
+            if progress is not None
+            else None
+        ),
     )
     _move(actions, reader, emulator, run, ROUTE15_TO_CENTER, timing, "Route 15 to Center")
     _heal_center(actions, reader, emulator, run, timing)

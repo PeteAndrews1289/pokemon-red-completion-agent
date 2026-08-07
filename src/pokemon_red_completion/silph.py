@@ -52,6 +52,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_team_training import run_red_team_balancing
 from pokemon_red_completion.saffron import (
     CITY_TO_MART as CELADON_CENTER_EXIT_TO_MART,
 )
@@ -73,7 +74,14 @@ from pokemon_red_completion.saffron import (
     ROOF_TO_VENDING,
     SAFFRON_TO_CENTER,
 )
+from pokemon_red_completion.team_training import BalancedTeamPolicy
 from pokemon_red_completion.tower import party_core_intact
+
+SAFFRON_DEVELOPMENT_POLICY = BalancedTeamPolicy(
+    minimum_level=38,
+    maximum_level_spread=2,
+    safe_lead_level=40,
+)
 
 SILPH_CHECKPOINT_COUNT = 12
 X_ACCURACY_REPLACEMENT_PRICE = 950
@@ -197,8 +205,12 @@ ROUTE_7_CONNECTION_TO_CELADON_CITY = _reverse(CITY_TO_ROUTE_7)
 CELADON_CITY_TO_LEFT_MART = ("left", "left", "up")
 MART_LEFT_1F_TO_2F = ("right",) * 10 + ("up",) * 6
 CELADON_MART_EXIT_TO_CENTER = _reverse(CELADON_CENTER_EXIT_TO_MART[:-1]) + ("up",)
-SAFFRON_CENTER_TO_ROUTE_8_GATE = _directions("LLLLLLUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
-ROUTE_8_GATE_TO_SAFFRON_CENTER = _directions("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDRRRRRRU")
+SAFFRON_CENTER_TO_ROUTE_8_GATE = _directions(
+    "LLLLLLUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"
+)
+ROUTE_8_GATE_TO_SAFFRON_CENTER = _directions(
+    "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDRRRRRRU"
+)
 ROOF_TO_SAFFRON_CENTER = (
     ROOF_TO_5F
     + MART_5F_TO_4F
@@ -434,7 +446,7 @@ def run_silph_chapter(
     ):
         raise SilphChapterError("Silph input boundary is not pristine.")
     _checkpoint(records, progress, emulator, initial, "silph_ready", "Silph plan ready")
-    
+
     # Saffron/Silph training block on Route 8
     if not party_core_intact(initial.party_species_ids):
         raise SilphChapterError("Core trainees are not intact for Saffron development.")
@@ -451,14 +463,28 @@ def run_silph_chapter(
         expected_map=MapId.ROUTE_8,
         volatile_enemy_species=frozenset(),
         escort_enemy_species=frozenset(),
-        progress_sink=progress,
+        progress_sink=(
+            (
+                lambda message: progress(
+                    SilphProgress(
+                        "route8_team_training_progress",
+                        message,
+                        len(records),
+                        SILPH_CHECKPOINT_COUNT,
+                        emulator.frame_count,
+                    )
+                )
+            )
+            if progress is not None
+            else None
+        ),
     )
     _move(actions, reader, ("left",) * 12, timing, "Return to Route 8 Gate")
     _move(actions, reader, ("left",) * 5, timing, "Through Route 8 Gate to Saffron")
     _move(actions, reader, ROUTE_8_GATE_TO_SAFFRON_CENTER, timing, "Gate to Saffron Center")
     _move(actions, reader, ("up", "up", "up"), timing, "nurse approach")
     _heal(actions, timing)
-    
+
     route_items_archived = _store_spent_route_items(actions, reader, emulator, timing)
 
     # The roof exchange temporarily needs one free bag slot. Complete and
@@ -1628,11 +1654,7 @@ def _silph_fixed_move_slot(raw: RawGameState, *, preferred: int) -> int:
 
     moves = raw.battler_moves or ()
     pp = raw.battler_pp or ()
-    disabled = (
-        raw.player_disabled_move_slot
-        if (raw.player_disable_turns or 0) > 0
-        else None
-    )
+    disabled = raw.player_disabled_move_slot if (raw.player_disable_turns or 0) > 0 else None
     for slot in dict.fromkeys((preferred, 1, 2, 3, 4)):
         if (
             len(moves) >= slot
@@ -2150,11 +2172,7 @@ def _battle_healing_item_verified_terminal_exit(
 ) -> bool:
     """Recognize an item turn whose enemy recoil legitimately ended battle."""
 
-    return (
-        raw.battle_state == 0
-        and raw.enemy_hp == 0
-        and quantity_before - quantity_after == 1
-    )
+    return raw.battle_state == 0 and raw.enemy_hp == 0 and quantity_before - quantity_after == 1
 
 
 def _heal_detour_from_seventh(
@@ -2321,8 +2339,7 @@ def _move_verified(
             if (
                 label == "X Special Mart 3F"
                 and before.map_id == MapId.CELADON_MART_2F
-                and (before.player_x, before.player_y)
-                == MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION
+                and (before.player_x, before.player_y) == MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION
                 and direction == "up"
             ):
                 state = _yield_to_mart_2f_ascent_customer(actions, reader, timing)
@@ -2338,8 +2355,7 @@ def _move_verified(
             if (
                 label == "X Special clerk return"
                 and before.map_id == MapId.CELADON_MART_5F
-                and (before.player_x, before.player_y)
-                == MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION
+                and (before.player_x, before.player_y) == MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION
                 and direction == "right"
             ):
                 state = _yield_to_mart_5f_gentleman_from_left(actions, reader, timing)
@@ -2347,8 +2363,7 @@ def _move_verified(
             if (
                 label == "X Special city return staging"
                 and before.map_id == MapId.CELADON_CITY
-                and (before.player_x, before.player_y)
-                == CELADON_RETURN_PEDESTRIAN_BLOCK_POSITION
+                and (before.player_x, before.player_y) == CELADON_RETURN_PEDESTRIAN_BLOCK_POSITION
                 and direction == "right"
             ):
                 state = _yield_to_celadon_return_pedestrian(actions, reader, timing)

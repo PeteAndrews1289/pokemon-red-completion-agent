@@ -180,6 +180,13 @@ class ChampionChapterReport:
         return tuple((item.checkpoint_id, item.label, item.raw) for item in self.records)
 
     def public_dict(self) -> dict[str, object]:
+        turns_per_member = [0] * len(self.party_levels)
+        for turn in self.turns:
+            if turn.active_party_index is not None and 0 <= turn.active_party_index < len(
+                self.party_levels
+            ):
+                turns_per_member[turn.active_party_index] += 1
+
         return {
             "status": "ok" if self.passed else "failed",
             "objective": "enter_hall_of_fame",
@@ -218,6 +225,7 @@ class ChampionChapterReport:
                 "party_levels": list(self.party_levels),
                 "team_balance": {
                     "size": len(self.party_levels),
+                    "turns_per_member": turns_per_member,
                     "opposition_levels": [level for _, level in self.party],
                     "opposition_maximum_level": (
                         max((level for _, level in self.party), default=None)

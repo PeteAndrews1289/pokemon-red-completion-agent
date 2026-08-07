@@ -1,17 +1,15 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable
-from typing import Protocol, Any
+from collections.abc import Callable
+from typing import Any, Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleRuntimeError,
     run_adaptive_wild_battle,
 )
-
-BATTLE_PARTY_MENU_COMMAND = 2
-PARTY_SUBMENU_SWITCH = 0
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     PokemonRedStateReader,
@@ -33,15 +31,16 @@ from pokemon_red_completion.team_training import (
     TeamTrainingDecision,
     TeamTrainingDirective,
     TeamTrainingProgress,
+    is_matchup_acceptable,
     plan_team_training,
     summarize_team_readiness,
-    DevelopedTeamReport,
-    is_matchup_acceptable,
 )
+
 
 class EmulatorState(Protocol):
     def read_u8(self, address: int) -> int: ...
     def read_u16_be(self, address: int) -> int: ...
+
 
 DIG = 0x5B
 INDIGO_MAX_OPPOSITION_LEVEL = 65
@@ -82,17 +81,25 @@ BATTLE_COMMAND_COORDINATES = {
     3: (1, 1),
 }
 
-from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
+
+BATTLE_PARTY_MENU_COMMAND = 2
+PARTY_SUBMENU_SWITCH = 0
+
 
 class _PauseForTeamTrainingRecovery(BattleControlRequest):
     default_action = BattleAction.flee()
 
+
 class CountingExecutor(Protocol):
     def execute(self, action: MacroAction) -> object: ...
 
-def pulse(actions: CountingExecutor, kind: MacroActionKind, value: str | None = None, frames: int = 180) -> None:
+
+def pulse(
+    actions: CountingExecutor, kind: MacroActionKind, value: str | None = None, frames: int = 180
+) -> None:
     actions.execute(MacroAction(kind, value))
     actions.execute(MacroAction(MacroActionKind.WAIT, frames))
+
 
 def close_menu(actions: CountingExecutor, reader: PokemonRedStateReader) -> None:
     for _ in range(8):
@@ -101,11 +108,13 @@ def close_menu(actions: CountingExecutor, reader: PokemonRedStateReader) -> None
         pulse(actions, MacroActionKind.CANCEL)
     raise RuntimeError("Could not close menu.")
 
+
 def training_attack_pp(member: PartyMemberObservation) -> int:
     damaging = set(TRAINING_MOVE_IDS.get(member.species_id, ()))
     if not damaging:
         return member.total_pp
     return sum(move.current_pp for move in member.known_moves if move.move_id in damaging)
+
 
 def training_attack_pp_reserve(
     member: PartyMemberObservation,
@@ -115,6 +124,7 @@ def training_attack_pp_reserve(
         member.species_id,
         policy.reserve_total_pp,
     )
+
 
 def red_training_matchup_acceptable(
     member: PartyMemberObservation,
@@ -126,8 +136,13 @@ def red_training_matchup_acceptable(
         return False
     if not is_matchup_acceptable(member, enemy_level, policy):
         return False
-    advantage = RED_DIRECT_LEVEL_ADVANTAGE.get(member.species_id, policy.minimum_direct_level_advantage)
+    if policy.safe_lead_level is not None and member.level >= policy.safe_lead_level:
+        return True
+    advantage = RED_DIRECT_LEVEL_ADVANTAGE.get(
+        member.species_id, policy.minimum_direct_level_advantage
+    )
     return enemy_level is not None and member.level >= enemy_level + advantage
+
 
 def member_is_unsafe_for_team_training(
     member: PartyMemberObservation,
@@ -140,6 +155,7 @@ def member_is_unsafe_for_team_training(
         or training_attack_pp(member) <= training_attack_pp_reserve(member, policy)
     )
 
+
 def require_zero_faints(party_reader: PokemonRedPartyReader, context: str) -> None:
     party = party_reader.read()
     if party.fainted_count:
@@ -148,6 +164,7 @@ def require_zero_faints(party_reader: PokemonRedPartyReader, context: str) -> No
             for member in party.members
         )
         raise RuntimeError(f"Team training recorded a faint after {context}: party={state!r}.")
+
 
 def restore_training_core_order(
     actions: CountingExecutor,
@@ -176,7 +193,10 @@ def restore_training_core_order(
             hideout_timing=hideout_timing,
         )
 
-def select_cursor(actions: CountingExecutor, emulator: EmulatorState, target: int, timing: object) -> None:
+
+def select_cursor(
+    actions: CountingExecutor, emulator: EmulatorState, target: int, timing: object
+) -> None:
     for _ in range(8):
         cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
         if cursor == target:
@@ -184,6 +204,7 @@ def select_cursor(actions: CountingExecutor, emulator: EmulatorState, target: in
         pulse(actions, MacroActionKind.MOVE, "down" if cursor < target else "up", 120)
     else:
         raise RuntimeError("Could not select menu item.")
+
 
 def swap_field_party_slots(
     actions: CountingExecutor,
@@ -226,6 +247,7 @@ def swap_field_party_slots(
             f"{label} produced party order {observed!r}, expected {tuple(expected)!r}."
         )
 
+
 def battle_command_direction(current: int | None, target: int) -> str | None:
     if current not in BATTLE_COMMAND_COORDINATES:
         return None
@@ -243,14 +265,12 @@ def battle_command_direction(current: int | None, target: int) -> str | None:
         return "up"
     return None
 
+
 def _party_hp(emulator: EmulatorState) -> tuple[int, ...]:
     party_count = emulator.read_u8(RamAddress.PARTY_COUNT)
-    addresses = (RamAddress.PARTY_1_HP,)
-    hp = [
-        emulator.read_u16_be(RamAddress.PARTY_1_HP + 0x2C * i)
-        for i in range(party_count)
-    ]
+    hp = [emulator.read_u16_be(RamAddress.PARTY_1_HP + 0x2C * i) for i in range(party_count)]
     return tuple(hp)
+
 
 def switch_active_battler(
     actions: CountingExecutor,
@@ -270,7 +290,11 @@ def switch_active_battler(
             break
         if raw.battle_state == 0:
             raise RuntimeError(f"Battle ended before switching to {label}.")
-        pulse(actions, MacroActionKind.CANCEL if (p + 1) % 4 == 0 else MacroActionKind.CONFIRM, frames=120)
+        pulse(
+            actions,
+            MacroActionKind.CANCEL if (p + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
     else:
         raise RuntimeError(f"Battle menu did not settle before switching to {label}.")
     if emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) == target_index:
@@ -284,7 +308,11 @@ def switch_active_battler(
         ):
             break
         if menu.phase is not BattleMenuPhase.MAIN:
-            pulse(actions, MacroActionKind.CANCEL if (p + 1) % 4 == 0 else MacroActionKind.CONFIRM, frames=120)
+            pulse(
+                actions,
+                MacroActionKind.CANCEL if (p + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+                frames=120,
+            )
             continue
         direction = battle_command_direction(menu.selected_main_command, BATTLE_PARTY_MENU_COMMAND)
         if direction is None:
@@ -331,7 +359,11 @@ def switch_active_battler(
             raise RuntimeError(
                 f"Battle ended safely while switching to {label}, but field input did not settle."
             )
-        pulse(actions, MacroActionKind.CANCEL if (p + 1) % 4 == 0 else MacroActionKind.CONFIRM, frames=120)
+        pulse(
+            actions,
+            MacroActionKind.CANCEL if (p + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=120,
+        )
     raise RuntimeError(f"Switch to {label} did not return to the battle menu.")
 
 
@@ -345,12 +377,14 @@ def run_red_team_balancing(
     intent: BattleIntent,
     flee_timing: object,
     hideout_timing: object,
-    flee_func: Callable[[CountingExecutor, PokemonRedStateReader, EmulatorState, Any, object], None],
+    flee_func: Callable[
+        [CountingExecutor, PokemonRedStateReader, EmulatorState, Any, object], None
+    ],
     volatile_enemy_species: frozenset[int] = frozenset(),
     escort_enemy_species: frozenset[int] = frozenset(),
     max_consecutive_flees: int = 32,
     cancel_interval: int = 40,
-    progress_sink: object = None,
+    progress_sink: Callable[[str], None] | None = None,
     completed_checkpoint_count: int = 0,
     evolution_target: tuple[int, int] | None = None,
     heal_and_return: Callable[[CountingExecutor, PokemonRedStateReader, EmulatorState], None],
@@ -371,12 +405,19 @@ def run_red_team_balancing(
     flee_run: Any = None
 
     def emit_progress() -> None:
+        """Report progress as a message the caller renders in its own record type.
+
+        This previously called the sink with ``None`` because the progress type
+        varies per chapter.  Callers pass a typed ``ProgressSink``, so that was
+        a latent crash on the first report — battle 250 of a run that takes
+        roughly 25 minutes to reach it.  Emitting a message keeps this module
+        chapter-agnostic without inventing a record it cannot construct.
+        """
+
         if progress_sink is None or battles == 0 or battles % 250:
             return
         levels = tuple(member.level for member in party_reader.read().members)
-        progress_sink(
-            None # Just a placeholder since progress type varies
-        )
+        progress_sink(f"Balanced team training: {battles} battles, levels {levels}")
 
     def record_flee(label: str) -> None:
         nonlocal consecutive_flees
@@ -414,8 +455,10 @@ def run_red_team_balancing(
                 directive = TeamTrainingDirective.SWITCH_TRAINEE
             else:
                 directive = TeamTrainingDirective.TRAIN_MEMBER
-            decision = TeamTrainingDecision(directive, "targeted evolution", target_slot=trainee.slot)
-            
+            decision = TeamTrainingDecision(
+                directive, "targeted evolution", target_slot=trainee.slot
+            )
+
         if decision.directive in {TeamTrainingDirective.STOP, TeamTrainingDirective.RECRUIT_MEMBER}:
             readiness = summarize_team_readiness(party, policy)
             if not readiness.passed:
@@ -443,7 +486,13 @@ def run_red_team_balancing(
             if raw.enemy_species_id in volatile_enemy_species:
                 if escort_unsafe:
                     raise RuntimeError("A volatile matchup began without a safe escape escort.")
-                if not switch_active_battler(actions, reader, emulator, target_index=escort.slot - 1, label="Blastoise volatile escape escort"):
+                if not switch_active_battler(
+                    actions,
+                    reader,
+                    emulator,
+                    target_index=escort.slot - 1,
+                    label="Blastoise volatile escape escort",
+                ):
                     require_zero_faints(party_reader, "terminal volatile escort switch")
                     battles += 1
                     consecutive_flees = 0
@@ -456,7 +505,13 @@ def run_red_team_balancing(
             if raw.enemy_species_id in escort_enemy_species:
                 if escort_unsafe:
                     raise RuntimeError("An excluded matchup began without a safe escape escort.")
-                if not switch_active_battler(actions, reader, emulator, target_index=escort.slot - 1, label="Blastoise escape escort"):
+                if not switch_active_battler(
+                    actions,
+                    reader,
+                    emulator,
+                    target_index=escort.slot - 1,
+                    label="Blastoise escape escort",
+                ):
                     require_zero_faints(party_reader, "terminal escape switch")
                     battles += 1
                     consecutive_flees = 0
@@ -465,13 +520,19 @@ def run_red_team_balancing(
                 require_zero_faints(party_reader, "excluded-matchup escape")
                 record_flee("excluded matchup")
                 continue
-                
+
             trainee_fights = red_training_matchup_acceptable(
                 trainee, raw.enemy_level, policy, raw.enemy_species_id
             ) and training_attack_pp(trainee) > training_attack_pp_reserve(trainee, policy)
-            
+
             if not trainee_fights and escort.level >= ESCORT_LEVEL_CAP:
-                if not switch_active_battler(actions, reader, emulator, target_index=escort.slot - 1, label="Blastoise capped escort flee"):
+                if not switch_active_battler(
+                    actions,
+                    reader,
+                    emulator,
+                    target_index=escort.slot - 1,
+                    label="Blastoise capped escort flee",
+                ):
                     require_zero_faints(party_reader, "terminal capped-escort switch")
                     battles += 1
                     consecutive_flees = 0
@@ -480,7 +541,7 @@ def run_red_team_balancing(
                 require_zero_faints(party_reader, "capped-escort escape")
                 record_flee("escort at parity")
                 continue
-                
+
             fighter = trainee if trainee_fights else escort
             fighter_unsafe = (
                 fighter.is_fainted
@@ -493,13 +554,18 @@ def run_red_team_balancing(
                 require_zero_faints(party_reader, "unsafe-matchup escape")
                 record_flee("unsafe matchup")
                 continue
-            if not trainee_fights:
-                if not switch_active_battler(actions, reader, emulator, target_index=escort.slot - 1, label="Blastoise escort"):
-                    require_zero_faints(party_reader, "terminal escort switch")
-                    battles += 1
-                    consecutive_flees = 0
-                    emit_progress()
-                    continue
+            if not trainee_fights and not switch_active_battler(
+                actions,
+                reader,
+                emulator,
+                target_index=escort.slot - 1,
+                label="Blastoise escort",
+            ):
+                require_zero_faints(party_reader, "terminal escort switch")
+                battles += 1
+                consecutive_flees = 0
+                emit_progress()
+                continue
             if reader.read().battle_state != 1:
                 continue
             try:
@@ -518,8 +584,16 @@ def run_red_team_balancing(
                 current = reader.read()
                 if current.active_party_index != escort.slot - 1:
                     if escort_unsafe:
-                        raise RuntimeError("Training attacks were exhausted without a safe escape escort.") from error
-                    if not switch_active_battler(actions, reader, emulator, target_index=escort.slot - 1, label="Blastoise PP-exhaustion escape escort"):
+                        raise RuntimeError(
+                            "Training attacks were exhausted without a safe escape escort."
+                        ) from error
+                    if not switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        target_index=escort.slot - 1,
+                        label="Blastoise PP-exhaustion escape escort",
+                    ):
                         require_zero_faints(party_reader, "terminal PP-exhaustion switch")
                         battles += 1
                         consecutive_flees = 0
@@ -558,8 +632,11 @@ def run_red_team_balancing(
             break
         if trainee.slot != 1:
             swap_field_party_slots(
-                actions, reader, emulator,
-                first_index=0, second_index=trainee.slot - 1,
+                actions,
+                reader,
+                emulator,
+                first_index=0,
+                second_index=trainee.slot - 1,
                 label=f"place trainee slot {trainee.slot} in front",
                 hideout_timing=hideout_timing,
             )
@@ -571,6 +648,7 @@ def run_red_team_balancing(
         heal_and_return(actions, reader, emulator)
         healing_trips += 1
     restore_training_core_order(actions, reader, emulator, hideout_timing)
-    report = summarize_team_readiness(party_reader.read(), policy) if evolution_target is None else None
+    report = (
+        summarize_team_readiness(party_reader.read(), policy) if evolution_target is None else None
+    )
     return report, battles, healing_trips
-
