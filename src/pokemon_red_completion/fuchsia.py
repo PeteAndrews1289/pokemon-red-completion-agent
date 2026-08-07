@@ -635,9 +635,9 @@ def run_fuchsia_chapter(
     _heal_center(actions, reader, emulator, run, timing)
 
     _require(reader.read(), MapId.FUCHSIA_POKECENTER, (3, 3), "pre-training center")
-    if not party_core_intact(reader):
+    if not party_core_intact(reader.read().party_species_ids):
         raise FuchsiaChapterError("Core trainees are not intact for Fuchsia development.")
-        
+
     _move(actions, reader, emulator, run, CENTER_TO_ROUTE15, timing, "Center to Route 15")
     _require(reader.read(), MapId.ROUTE_15, None, "Route 15 training zone")
     
