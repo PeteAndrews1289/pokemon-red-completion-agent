@@ -49,7 +49,7 @@ from pokemon_red_completion.red_team_training import (
     VENUE_MISMATCH_FLEES,
     run_red_team_balancing,
 )
-from pokemon_red_completion.team_training import BalancedTeamPolicy
+from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingArea
 
 DIGLETT_SPECIES_ID = 0x3B
 TACKLE_MOVE_ID = 0x21
@@ -353,6 +353,53 @@ def test_a_run_that_never_finds_a_battle_is_reported_as_unfinished() -> None:
 
     with pytest.raises(RuntimeError, match="stopped before readiness"):
         run(memory, FakeReader([state()]), policy=policy)
+
+
+def test_the_venue_mismatch_stop_names_where_the_trainee_belongs() -> None:
+    """A diagnosis that stops short of the answer costs another run to finish.
+
+    "Train them where their own level lives" is true and useless. With measured
+    bands in hand the area is computable at the moment of the stop.
+    """
+
+    memory = FakeMemory()
+    memory.set_party(
+        [(DIGLETT_SPECIES_ID, 20), (BLASTOISE_SPECIES_ID, ESCORT_LEVEL_CAP - 5)]
+        + [(DUGTRIO_SPECIES_ID, 25) for _ in range(4)],
+        hp=30,
+    )
+    reader = FakeReader([state(battle_state=1, enemy_level=32, enemy_species_id=0x21)])
+    venues = (
+        GrindingArea(
+            area_id="digletts_cave",
+            minimum_encounter_level=15,
+            maximum_encounter_level=21,
+            rare_maximum_encounter_level=31,
+            measured_samples=29,
+        ),
+    )
+
+    with pytest.raises(RuntimeError) as failure:
+        run(memory, reader, measured_venues=venues)
+
+    message = str(failure.value)
+    assert "digletts_cave" in message, f"the stop should name the venue: {message}"
+    assert "29 encounters" in message, "and say how well that venue was measured"
+
+
+def test_without_measured_bands_the_stop_does_not_invent_a_venue() -> None:
+    """Silence is correct when nothing has been measured."""
+
+    memory = FakeMemory()
+    memory.set_party(
+        [(DIGLETT_SPECIES_ID, 20), (BLASTOISE_SPECIES_ID, ESCORT_LEVEL_CAP - 5)]
+        + [(DUGTRIO_SPECIES_ID, 25) for _ in range(4)],
+        hp=30,
+    )
+    reader = FakeReader([state(battle_state=1, enemy_level=32, enemy_species_id=0x21)])
+
+    with pytest.raises(RuntimeError, match="where their own level lives"):
+        run(memory, reader)
 
 
 def test_the_venue_bound_is_far_below_the_flee_bound() -> None:

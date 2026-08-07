@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from typing import Any, Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
@@ -30,9 +30,11 @@ from pokemon_red_completion.red_party import (
 from pokemon_red_completion.team_training import (
     COMPLETION_LEVEL_PARITY,
     BalancedTeamPolicy,
+    GrindingArea,
     TeamTrainingDecision,
     TeamTrainingDirective,
     TeamTrainingProgress,
+    choose_grinding_area,
     is_matchup_acceptable,
     plan_team_training,
     summarize_team_readiness,
@@ -65,6 +67,58 @@ TRAINING_MOVE_IDS = {
     HITMONLEE_SPECIES_ID: (0x18, 0x1B, 0x1A, 0x88, 0x19),
 }
 FIELD_MOVE_IDS = frozenset({0x0F, DIG, 0x13, 0x39, 0x46})
+
+#: Training venues measured from real encounters, not recalled from a guide.
+#:
+#: Every band here is transcribed from
+#: ``docs/evidence/encounter-bands-2026-08-07.json`` and only areas with at
+#: least twenty samples appear; ``test_measured_venues_match_the_evidence``
+#: fails if the two drift apart.  The typical maximum is what ninety percent of
+#: encounters stay under, with the rare ceiling recorded separately, because
+#: Diglett's Cave summarised as "15-31" would be rejected for the level-twenty
+#: trainee its twenty-nine other encounters suit exactly.
+#:
+#: ``has_nearby_healer`` describes the game's geography -- each of these sits a
+#: short walk from a Pokemon Center -- not our navigation.  Only the Mansion
+#: currently has an implemented heal-and-return path, so these serve venue
+#: *recommendation* today; routing to them is the remaining Tier 1 work.
+MEASURED_TRAINING_VENUES: tuple[GrindingArea, ...] = (
+    GrindingArea(
+        area_id="viridian_forest",
+        minimum_encounter_level=3,
+        maximum_encounter_level=5,
+        rare_maximum_encounter_level=6,
+        measured_samples=55,
+    ),
+    GrindingArea(
+        area_id="route_2",
+        minimum_encounter_level=2,
+        maximum_encounter_level=5,
+        rare_maximum_encounter_level=5,
+        measured_samples=21,
+    ),
+    GrindingArea(
+        area_id="route_11",
+        minimum_encounter_level=9,
+        maximum_encounter_level=15,
+        rare_maximum_encounter_level=17,
+        measured_samples=81,
+    ),
+    GrindingArea(
+        area_id="digletts_cave",
+        minimum_encounter_level=15,
+        maximum_encounter_level=21,
+        rare_maximum_encounter_level=31,
+        measured_samples=29,
+    ),
+    GrindingArea(
+        area_id="pokemon_mansion_1f",
+        minimum_encounter_level=28,
+        maximum_encounter_level=34,
+        rare_maximum_encounter_level=39,
+        measured_samples=155,
+    ),
+)
 
 TRAINING_ATTACK_PP_RESERVE = {
     BLASTOISE_SPECIES_ID: 16,
@@ -423,6 +477,34 @@ def switch_active_battler(
     )
 
 
+def _recommended_venue(
+    party_reader: PokemonRedPartyReader,
+    policy: BalancedTeamPolicy,
+    measured_venues: Sequence[GrindingArea],
+) -> str:
+    """Name where the weakest member should be training instead.
+
+    A diagnosis that says only "train them where their own level lives" leaves
+    the next run to rediscover where that is.  When measured bands are supplied
+    the answer is already computable, so the stop states it.
+    """
+
+    trainee = party_reader.read().weakest_trainable_member
+    if trainee is None or not measured_venues:
+        return "Train the weaker members where their own level lives."
+    venue = choose_grinding_area(measured_venues, trainee, policy)
+    if venue is None:
+        return (
+            f"No measured area suits the level-{trainee.level} member in slot "
+            f"{trainee.slot}; harvest more areas before training it."
+        )
+    return (
+        f"The level-{trainee.level} member in slot {trainee.slot} belongs at "
+        f"{venue.area_id} ({venue.minimum_encounter_level}-"
+        f"{venue.maximum_encounter_level}), measured over {venue.measured_samples} encounters."
+    )
+
+
 def run_red_team_balancing(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
@@ -450,6 +532,7 @@ def run_red_team_balancing(
     move_slot: Callable[[RawGameState], int],
     report_label: str,
     checkpoint_count: int,
+    measured_venues: Sequence[GrindingArea] = (),
 ) -> tuple[object | None, int, int]:
     party_reader = PokemonRedPartyReader(emulator)
     if BLASTOISE_SPECIES_ID not in party_reader.read().species_ids():
@@ -496,7 +579,7 @@ def run_red_team_balancing(
             raise RuntimeError(
                 f"Training venue does not match the party: {consecutive_flees} flees and no "
                 f"win after {label}. Encounters here are level {band}; party levels are "
-                f"{levels}. Train the weaker members where their own level lives."
+                f"{levels}. {_recommended_venue(party_reader, policy, measured_venues)}"
             )
         if consecutive_flees > max_consecutive_flees:
             raise RuntimeError(

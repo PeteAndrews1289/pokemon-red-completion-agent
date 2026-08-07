@@ -20,12 +20,13 @@ from pokemon_red_completion.encounters import (
     read_encounter_log,
     summarize_encounters,
 )
-from pokemon_red_completion.observation import RawGameState
+from pokemon_red_completion.observation import MapId, RawGameState
 from pokemon_red_completion.party import (
     MoveObservation,
     PartyMemberObservation,
     StatusCondition,
 )
+from pokemon_red_completion.red_team_training import MEASURED_TRAINING_VENUES
 from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
     choose_grinding_area,
@@ -273,6 +274,31 @@ def test_a_chosen_venue_is_one_the_battle_loop_will_actually_fight_in() -> None:
             f"level {level} was sent to {chosen.area_id}, "
             f"which tops out at {chosen.maximum_encounter_level} and it may not engage"
         )
+
+
+def test_measured_venues_match_the_evidence() -> None:
+    """The constant claims to be transcribed from a file. Check that it is.
+
+    A hand-copied band drifting from its measurement is exactly how "30-32"
+    outlived the 155 samples that said 28-39.
+    """
+
+    evidence = Path("docs/evidence/encounter-bands-2026-08-07.json")
+    trusted = {
+        band.map_id: band for band in load_measured_bands(evidence) if band.is_trusted
+    }
+    by_area = {area.area_id: area for area in MEASURED_TRAINING_VENUES}
+
+    assert len(by_area) == len(trusted), (
+        f"{len(by_area)} venues declared against {len(trusted)} trusted bands in {evidence}"
+    )
+    for band in trusted.values():
+        name = MapId(band.map_id).name.lower()
+        area = by_area[name]
+        assert area.minimum_encounter_level == band.minimum_level
+        assert area.maximum_encounter_level == band.typical_maximum_level
+        assert area.rare_maximum_encounter_level == band.observed_maximum_level
+        assert area.measured_samples == band.samples
 
 
 def test_a_venue_above_the_trainee_is_still_refused() -> None:

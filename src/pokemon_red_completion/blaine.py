@@ -60,6 +60,7 @@ from pokemon_red_completion.red_party import (
     PokemonRedPartyReader,
 )
 from pokemon_red_completion.red_team_training import (
+    MEASURED_TRAINING_VENUES,
     TRAINING_ATTACK_PP_RESERVE,
     TRAINING_MOVE_IDS,
     _PauseForTeamTrainingRecovery,
@@ -935,6 +936,7 @@ def run_blaine_chapter(
             move_slot=_team_training_move_slot,
             report_label="Mansion team training",
             checkpoint_count=BLAINE_CHECKPOINT_COUNT,
+            measured_venues=MEASURED_TRAINING_VENUES,
         )
         team_battles += evolution_battles
         team_healing_trips += evolution_heals
@@ -981,6 +983,7 @@ def run_blaine_chapter(
         move_slot=_team_training_move_slot,
         report_label="Mansion team training",
         checkpoint_count=BLAINE_CHECKPOINT_COUNT,
+        measured_venues=MEASURED_TRAINING_VENUES,
     )
     team_battles += balance_battles
     team_healing_trips += balance_heals
