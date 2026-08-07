@@ -471,16 +471,33 @@ def switch_active_battler(
     raw = reader.read()
     if not 0 <= target_index < len(raw.party_species_ids or ()) or raw.battle_state != 1:
         raise RuntimeError(f"Cannot switch to {label} outside a live wild battle.")
+    # The phases seen on the way are the whole diagnosis. A menu stuck in one
+    # phase wants a different fix from one cycling between two, and "did not
+    # settle" cannot tell them apart -- which is how every other menu in this
+    # module cost a run before it started reporting what it saw.
+    phases_seen: list[str] = []
     for _p in range(48):
         raw = reader.read()
         menu = reader.read_battle_menu_state(raw)
+        phases_seen.append(menu.phase.name)
         if raw.battle_state == 1 and menu.phase is BattleMenuPhase.MAIN:
             break
         if raw.battle_state == 0:
-            raise RuntimeError(f"Battle ended before switching to {label}.")
+            raise RuntimeError(
+                f"Battle ended before switching to {label}. Phases seen: {phases_seen!r}."
+            )
         advance_toward_main(actions, menu.phase)
     else:
-        raise RuntimeError(f"Battle menu did not settle before switching to {label}.")
+        distinct = sorted(set(phases_seen))
+        raise RuntimeError(
+            f"Battle menu did not settle before switching to {label} in 48 attempts. "
+            f"Phases seen: {distinct!r}; last eight: {phases_seen[-8:]!r}. "
+            + (
+                "It never left that phase, so advance_toward_main does not know how to."
+                if len(distinct) == 1
+                else "It kept moving without arriving."
+            )
+        )
     if emulator.read_u8(RamAddress.PLAYER_MON_NUMBER) == target_index:
         return True
 
