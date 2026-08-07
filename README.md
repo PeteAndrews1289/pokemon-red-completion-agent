@@ -10,22 +10,16 @@
 control, and progressively trained specialists.**
 
 > **Current status:** the deterministic teacher completes Pokémon Red from clean power-on through
-> the Hall of Fame in one uninterrupted, no-save-restore emulator session. Three independent runs
-> produced the same **299/299 checkpoints**, **36/36 objectives**, **4,796,436 frames**, and
-> **41,316 actions**, with human input disabled and the controller released at termination. The
-> terminal gate requires the Champion-defeated event and Hall-of-Fame map concurrently. This is a
-> verified deterministic-teacher completion—not a learned-policy or unseen-seed generalization
-> claim. See the
-> [sanitized three-run completion receipt](docs/evidence/qualified-play-hall-of-fame-2026-07-29.json).
-> **August 7 balanced-team update:** a captured post-Mansion replay now completes the full team
-> curriculum instead of feeding every battle to an overlevelled carry. Diglett evolves through 64
-> participation battles, then the balancing pass trains all six members to exactly level 55 in
-> 1,652 battles. The combined cost is **1,716 battles**, **885 healing trips**, **zero faints**, and
-> **zero final level spread**. The policy uses measured Route 11, Diglett's Cave, and Mansion bands,
-> type-aware matchup refusal, and immediate attacks instead of unsafe two-turn Dig mirrors. This is
-> captured-state teacher evidence; a full uninterrupted route and learned-policy reproduction remain
-> open. See the
-> [captured-state balanced-team receipt](docs/evidence/measured-balanced-team-captured-state-success-2026-08-07.json).
+> the Hall of Fame in one uninterrupted, no-save-restore emulator session while developing a real
+> six-member party. The August 7 run verified **312/312 checkpoints** and **36/36 objectives** in
+> **540,247 actions**. Its team curriculum used **1,716 battles** and **885 healing trips**, evolved
+> Diglett, and passed the readiness gate at levels **60/55/55/55/55/55** with every member in its
+> final form. It then defeated Blaine, Giovanni, Lorelei, Bruno, Agatha, Lance, and the Champion and
+> entered the Hall of Fame in the same process. This is verified deterministic-teacher completion—not
+> a learned-policy or unseen-seed generalization claim. See the
+> [full-route balanced-team receipt](docs/evidence/measured-balanced-team-full-route-success-2026-08-07.json)
+> and the earlier
+> [captured-state diagnostic](docs/evidence/measured-balanced-team-captured-state-success-2026-08-07.json).
 > **August 5 collection update:** the first battle model is trained from five complete teacher
 > lineages and reaches **85.8% held-out validation accuracy** across two validation lineages. Its
 > sealed test partition remains unopened. Broader teacher stress then exposed a legitimate

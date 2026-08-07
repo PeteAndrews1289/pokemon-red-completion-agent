@@ -40,39 +40,40 @@ of whether it serves this.
 - A party member too weak for where the run happens to be is now routed to a venue that suits it,
   travels there, and gains levels. This is new as of 2026-08-07 and is the mechanism everything
   downstream depends on.
-- A captured post-Mansion state now completes the entire development curriculum: Diglett evolves
-  through 64 participation battles, then all six members reach exactly level 55 in 1,652 balancing
-  battles, with zero faints and zero final spread. The combined cost is 1,716 battles and 885 heals.
+- A clean-power, uninterrupted run now completes the entire development curriculum and the game in
+  the same process: 312/312 checkpoints, 36/36 objectives, Champion defeated, and Hall of Fame
+  entered. The curriculum used 1,716 battles and 885 heals and passed with a final-form party at
+  levels 60/55/55/55/55/55.
 
 **Not true, however it may look:**
 
-- The training block has **not reached the level floor of 55 in a full uninterrupted run.** The
-  captured-state success is real and is not a substitute for the route arriving there itself.
 - The team still does not choose its own battles. The trainees now perform the majority of the
   balancing work, but the decisions remain teacher-authored.
-- No learned policy has completed the game. No cross-game transfer has been measured. The living
-  Pokédex has not been started.
+- No learned policy has reproduced this balanced-team run. No cross-game transfer has been
+  measured. The terminal Pokédex census is 18 owned and 89 seen against the 124-species Red target;
+  living-Pokédex completion remains open.
 - `max_enemy_level_delta=2` is **rejected**. A full-health level-23 Diglett fainted to a level-19
   Diglett before dealing damage. The replacement combines a five-level direct advantage, type-risk
-  refusal, participation-based evolution, and immediate attacks; it has one captured-state success,
-  not full-route proof.
+  refusal, participation-based evolution, and immediate attacks; that replacement now has both
+  captured-state and full-route proof.
 
-**Gate state:** 1891 tests, 3 skipped; ruff, mypy (103 files), artifacts, docs and registry all
-clean. Thirty-three commits on 2026-08-07.
+**Gate state:** 1892 tests, 3 deselected; ruff, mypy (103 files), artifacts, docs and registry all
+clean before the full-route documentation update.
 
 ---
 
 ## 3. Start here
 
-**Take one full uninterrupted run.** The captured-state replay now finishes at six level-55 members,
-zero faints, and a 1,716-battle combined cost. The old PP-exhaustion diagnosis was false: a broad
-`BattleRuntimeError` catch had hidden an actual trainee faint. That catch is now cause-specific, the
-party-menu transitions are observed, Route 11 is a real venue, and fragile evolution uses shared
-participation experience.
+**Move from teacher qualification to learning.** The clean-power run now reproduces the balanced
+curriculum, continues through all five League battles, and preserves concurrent Champion and
+Hall-of-Fame evidence. Keep the captured-state harness for bounded trainer regressions, but do not
+spend more time re-proving the deterministic route without a concrete source change.
 
-The full run must reproduce the same result, continue through all five League battles, and preserve
-concurrent Champion and Hall-of-Fame evidence. If it fails, record the first new boundary rather than
-retuning from the captured success.
+The next useful experiment is to record the newly qualified balanced-team decisions under the
+existing lineage and partition contracts, then measure which training, switching, recovery, and
+venue-selection decisions a learned policy can reproduce without teacher fallback. Keep living-
+Pokédex expansion and second-title transfer as explicit later stages rather than inflating the Red
+completion claim.
 
 Then continue down [AGENT_COORDINATION.md](AGENT_COORDINATION.md) § *Open work, in priority order*.
 
@@ -147,6 +148,7 @@ Each cost at least one emulator run to establish. Each has an evidence file.
 | A **blocked press is not a step**, so a walk into a wall never rolls for an encounter | `cave-pacing-and-training-2026-08-07.json` |
 | The +2 margin is unsafe: level-23 Diglett fainted from full HP to level-19 Diglett before dealing damage | `training-margin-four-level-faint-2026-08-07.json` |
 | Captured-state development reached six level-55 members in 1,716 battles with zero faints | `measured-balanced-team-captured-state-success-2026-08-07.json` |
+| A clean-power run passed the final-form 60/55/55/55/55/55 team gate and completed 312/312 checkpoints through Hall of Fame | `measured-balanced-team-full-route-success-2026-08-07.json` |
 
 ---
 

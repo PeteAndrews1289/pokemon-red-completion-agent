@@ -1,0 +1,61 @@
+{
+  "schema": "pokemon-red-balanced-team-full-route-evidence-v1",
+  "recorded_at": "2026-08-07",
+  "source_commit": "d37ff6f",
+  "regime": "clean-power deterministic-teacher run; one uninterrupted process; no save-state restore; no validation or sealed evaluation seed opened",
+  "completion": {
+    "status": "ok",
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "qualified_through": "enter_hall_of_fame",
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 540247,
+    "safe_stop_reason": "completion_verified"
+  },
+  "team_development": {
+    "battles": 1716,
+    "healing_trips": 885,
+    "final_forms_complete": true,
+    "observed_levels": [60, 55, 55, 55, 55, 55],
+    "minimum_level": 55,
+    "maximum_level": 60,
+    "level_spread": 5,
+    "workhorse_level": 60,
+    "workhorse_target_level": 60,
+    "passed": true
+  },
+  "balancing_progress_levels": {
+    "250": [30, 31, 31, 51, 31, 30],
+    "500": [33, 34, 34, 53, 34, 33],
+    "750": [38, 55, 38, 38, 38, 38],
+    "1000": [44, 55, 45, 44, 44, 44],
+    "1250": [48, 49, 49, 55, 49, 49],
+    "1500": [52, 53, 53, 55, 53, 52]
+  },
+  "downstream_verified": [
+    "defeat_blaine",
+    "defeat_giovanni",
+    "cross_victory_road",
+    "defeat_lorelei",
+    "defeat_bruno",
+    "defeat_agatha",
+    "defeat_lance",
+    "defeat_champion",
+    "enter_hall_of_fame"
+  ],
+  "terminal_collection_census": {
+    "target": 124,
+    "owned": 18,
+    "seen": 89,
+    "pokedex_target_complete": false
+  },
+  "claim": "The exact pushed deterministic teacher reached the balanced-team checkpoint naturally, passed the six-member final-form readiness contract, and completed Pokemon Red through the Hall of Fame in the same uninterrupted run.",
+  "not_claimed": [
+    "No learned policy produced the training, routing, switching, recovery, or completion decisions in this run.",
+    "No unseen-seed or cross-game generalization was measured.",
+    "The 124-species Red collection target and level-100 living-Pokedex stretch goal remain incomplete."
+  ]
+}

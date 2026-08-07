@@ -1436,12 +1436,18 @@ captured-state replay also exposed a subtle move-policy failure: forcing Dig in 
 created a two-turn window in which the opponent could knock the trainee out before its attack landed.
 The ground line now prefers immediate Scratch or Slash attacks and retains Dig only as fallback.
 
-That captured post-Mansion replay completed the curriculum for the first time. Diglett evolved in
-64 participation battles and 37 healing trips. The balancing pass then took 1,652 battles and 848
+The captured post-Mansion replay completed the curriculum for the first time. Diglett evolved in 64
+participation battles and 37 healing trips. The balancing pass then took 1,652 battles and 848
 healing trips to finish with six level-55 Pokémon, zero level spread, and zero faints. The combined
 1,716-battle cost is below the roughly 1,878-battle historical baseline and far below the overshoot.
-This is captured-state evidence, not yet a full-route or learned-policy claim; the next run must
-arrive at the checkpoint naturally and carry the balanced party through the entire League.
+
+The next clean-power run reproduced the combined 1,716-battle and 885-heal cost after arriving at
+checkpoint 275 naturally. Its readiness gate passed with a final-form party at levels
+60/55/55/55/55/55. The same uninterrupted process then cleared Blaine, Giovanni, Victory Road, all
+four Elite Four members, the Champion, and the Hall-of-Fame gate: 312/312 checkpoints, 36/36
+objectives, and 540,247 actions. That closes the full-route teacher claim. Learned-policy
+reproduction, unseen-seed generalization, living-Pokédex completion, and cross-game transfer remain
+open and are deliberately separate claims.
 
 ## Engineering and portfolio takeaways
 
@@ -1461,11 +1467,12 @@ A concise interview description is:
 
 > I built a Pokémon Red teacher that reaches the Hall of Fame through 312 verified semantic
 > checkpoints, then measured why its overlevelled single-carry demonstrations were poor model
-> training data. I redesigned the curriculum around real team participation: a captured-state run
-> now evolves the fragile precursor safely and trains all six Pokémon to level 55 in 1,716 battles
-> with zero faints. The system records integrity-checked private demonstrations and keeps train,
-> validation, and test roots sealed; the next experiment reproduces the curriculum end to end and
-> measures how much of it transfers to a second Pokémon title.
+> training data. I redesigned the curriculum around measured encounter difficulty, type-aware
+> safety, participation-based evolution, and balanced experience allocation. A clean-power run now
+> builds a six-member final-form party at levels 60/55/55/55/55/55, clears the League, and enters the
+> Hall of Fame in the same uninterrupted process. The system records integrity-checked private
+> demonstrations and keeps train, validation, and test roots sealed; the next research question is
+> how much of this team-building behavior a learned policy can reproduce and transfer.
 
 ## Related documentation
 

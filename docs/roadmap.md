@@ -310,7 +310,8 @@ Exit gate met: the teacher completed three identical clean runs without save-sta
 - [x] Add the Eevee/Thunder Stone/Jolteon acquisition and raise the live training contract to five.
 - [x] Add the Hitmonlee acquisition and raise the live training contract from five members to six.
 - [x] Replay the six-member balanced-team route from clean power-on and qualify it against the
-  completion contract.
+  completion contract: 312/312 checkpoints, 36/36 objectives, a final-form party at
+  60/55/55/55/55/55, Champion defeated, and Hall of Fame entered in one uninterrupted run.
 - [x] Define the Red one-save/no-link collection contract: 124 obtainable Pokédex registrations,
   120 coexisting living targets, and 27 explicit version, trade, mutually exclusive gift, fossil,
   starter, evolution, or event exclusions.
