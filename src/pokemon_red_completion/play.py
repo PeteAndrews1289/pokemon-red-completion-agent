@@ -175,6 +175,7 @@ from pokemon_red_completion.opening import (
     OpeningTiming,
     run_opening_chapter,
 )
+from pokemon_red_completion.participation import summarize_party_participation
 from pokemon_red_completion.pewter import (
     PEWTER_CHECKPOINT_COUNT,
     PewterChapterError,
@@ -650,6 +651,20 @@ class QualifiedPlayReport:
             pokedex["collection_progress"] = self.collection_progress.public_dict()
         elif self.pokedex_state is not None:
             pokedex["collection_progress"] = summarize_red_pokedex(self.pokedex_state).public_dict()
+        league_participation = summarize_party_participation(
+            (
+                turn.active_party_index
+                for chapter in (
+                    self.lorelei,
+                    self.bruno,
+                    self.agatha,
+                    self.lance,
+                    self.champion,
+                )
+                for turn in getattr(chapter, "turns", ())
+            ),
+            party_size=len(getattr(self.champion, "party_hp", (0,) * 6)),
+        )
         return {
             "schema": "qualified-play-v26",
             "status": "ok" if self.passed else "failed",
@@ -722,6 +737,7 @@ class QualifiedPlayReport:
             "agatha_chapter": self.agatha.public_dict(),
             "lance_chapter": self.lance.public_dict(),
             "champion_chapter": self.champion.public_dict(),
+            "league_participation": league_participation.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),

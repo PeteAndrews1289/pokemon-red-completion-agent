@@ -49,6 +49,7 @@ from pokemon_red_completion.observation import (
     PokemonRedStateReader,
     RawGameState,
 )
+from pokemon_red_completion.participation import summarize_party_participation
 from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
     SilphChapterError,
@@ -138,6 +139,7 @@ class LoreleiTurn:
     lead_status: int
     pp: tuple[int, int, int, int]
     move_slot: int
+    active_party_index: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -178,6 +180,10 @@ class LoreleiChapterReport:
         return tuple((item.checkpoint_id, item.label, item.raw) for item in self.records)
 
     def public_dict(self) -> dict[str, object]:
+        participation = summarize_party_participation(
+            (turn.active_party_index for turn in self.turns),
+            party_size=len(self.party_hp),
+        )
         return {
             "status": "ok" if self.passed else "failed",
             "objective": "defeat_lorelei",
@@ -191,9 +197,11 @@ class LoreleiChapterReport:
                     "lead_status": item.lead_status,
                     "pp": list(item.pp),
                     "move_slot": item.move_slot,
+                    "active_party_index": item.active_party_index,
                 }
                 for item in self.turns
             ],
+            "participation": participation.public_dict(),
             "recovery": {
                 "x_accuracy_used": self.x_accuracy_used,
                 "hyper_potions_used": self.hyper_potions_used,
@@ -293,6 +301,7 @@ def run_lorelei_chapter(
                 status,
                 pp,
                 slot,
+                raw.active_party_index,
             )
         )
         return slot

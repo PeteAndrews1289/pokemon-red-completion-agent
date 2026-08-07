@@ -47,6 +47,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.participation import summarize_party_participation
 from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
     SilphChapterError,
@@ -176,12 +177,10 @@ class ChampionChapterReport:
         return tuple((item.checkpoint_id, item.label, item.raw) for item in self.records)
 
     def public_dict(self) -> dict[str, object]:
-        turns_per_member = [0] * len(self.party_levels)
-        for turn in self.turns:
-            if turn.active_party_index is not None and 0 <= turn.active_party_index < len(
-                self.party_levels
-            ):
-                turns_per_member[turn.active_party_index] += 1
+        participation = summarize_party_participation(
+            (turn.active_party_index for turn in self.turns),
+            party_size=len(self.party_levels),
+        )
 
         return {
             "status": "ok" if self.passed else "failed",
@@ -206,6 +205,7 @@ class ChampionChapterReport:
                 }
                 for item in self.turns
             ],
+            "participation": participation.public_dict(),
             "resources": {
                 "hyper_potions_used": self.hyper_potions_used,
                 "full_restores_used": self.full_restores_used,
@@ -221,7 +221,7 @@ class ChampionChapterReport:
                 "party_levels": list(self.party_levels),
                 "team_balance": {
                     "size": len(self.party_levels),
-                    "turns_per_member": turns_per_member,
+                    "turns_per_member": list(participation.turns_per_member),
                     "opposition_levels": [level for _, level in self.party],
                     "opposition_maximum_level": (
                         max((level for _, level in self.party), default=None)

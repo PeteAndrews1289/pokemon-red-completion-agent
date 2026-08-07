@@ -53,6 +53,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.participation import summarize_party_participation
 from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
     SilphChapterError,
@@ -129,6 +130,7 @@ class LanceTurn:
     pp: tuple[int, int, int, int]
     move_slot: int
     party_position: int = 0
+    active_party_index: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -172,6 +174,10 @@ class LanceChapterReport:
         return tuple((item.checkpoint_id, item.label, item.raw) for item in self.records)
 
     def public_dict(self) -> dict[str, object]:
+        participation = summarize_party_participation(
+            (turn.active_party_index for turn in self.turns),
+            party_size=len(self.party_hp),
+        )
         return {
             "status": "ok" if self.passed else "failed",
             "objective": "defeat_lance",
@@ -186,9 +192,11 @@ class LanceChapterReport:
                     "pp": list(item.pp),
                     "move_slot": item.move_slot,
                     "party_position": item.party_position,
+                    "active_party_index": item.active_party_index,
                 }
                 for item in self.turns
             ],
+            "participation": participation.public_dict(),
             "recovery": {
                 "hyper_potions_used": self.hyper_potions_used,
                 "full_restores_used": self.full_restores_used,
@@ -317,6 +325,7 @@ def run_lance_chapter(
                 pp,
                 slot,
                 emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS),
+                raw.active_party_index,
             )
         )
         return slot
