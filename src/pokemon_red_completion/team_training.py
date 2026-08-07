@@ -741,12 +741,24 @@ def is_matchup_acceptable(
         return False
     if policy.safe_lead_level is not None and trainee.level >= policy.safe_lead_level:
         return True
-    safety_ceiling = (
-        trainee.level - policy.minimum_direct_level_advantage
-        if policy.minimum_direct_level_advantage
-        else trainee.level + policy.max_enemy_level_delta
-    )
-    return enemy_level <= safety_ceiling
+    return enemy_level <= training_safety_ceiling(trainee, policy)
+
+
+def training_safety_ceiling(trainee: PartyMemberObservation, policy: BalancedTeamPolicy) -> int:
+    """The highest opponent level this trainee is permitted to engage.
+
+    Two settings can define this and only one of them applies at a time.  When
+    a policy demands a direct level advantage that requirement binds and
+    ``max_enemy_level_delta`` is dead; otherwise the delta binds.  Venue
+    selection and matchup acceptance both have to ask the same question,
+    because a venue chosen under one rule and fought under the other is a venue
+    the run walks to and then flees every encounter in — the training deadlock
+    again, one level further up.
+    """
+
+    if policy.minimum_direct_level_advantage:
+        return trainee.level - policy.minimum_direct_level_advantage
+    return trainee.level + policy.max_enemy_level_delta
 
 
 def choose_grinding_area(
@@ -757,13 +769,17 @@ def choose_grinding_area(
 ) -> GrindingArea | None:
     """Pick the fastest training area whose encounters stay inside the safety band.
 
-    Areas whose strongest encounter could exceed the trainee's tolerance are
-    rejected outright.  Among the safe remainder the highest minimum encounter
+    An area qualifies when the level its encounters typically stay under is one
+    this trainee is permitted to engage, judged by exactly the rule the battle
+    loop will apply.  Among the safe remainder the highest minimum encounter
     level wins, because it yields the most experience per battle; ties resolve
     on the area label so the choice is reproducible.
+
+    The rare ceiling deliberately does not disqualify an area.  One Dugtrio in
+    thirty encounters is a flee, not a reason to reject the other twenty-nine.
     """
 
-    ceiling = trainee.level + policy.max_enemy_level_delta
+    ceiling = training_safety_ceiling(trainee, policy)
     safe = [
         area
         for area in areas

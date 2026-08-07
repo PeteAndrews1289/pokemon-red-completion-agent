@@ -21,8 +21,16 @@ from pokemon_red_completion.encounters import (
     summarize_encounters,
 )
 from pokemon_red_completion.observation import RawGameState
-from pokemon_red_completion.party import PartyMemberObservation, StatusCondition
-from pokemon_red_completion.team_training import BalancedTeamPolicy, choose_grinding_area
+from pokemon_red_completion.party import (
+    MoveObservation,
+    PartyMemberObservation,
+    StatusCondition,
+)
+from pokemon_red_completion.team_training import (
+    BalancedTeamPolicy,
+    choose_grinding_area,
+    is_matchup_acceptable,
+)
 
 MANSION = 0xA5
 DIGLETTS_CAVE = 0xAE
@@ -55,6 +63,13 @@ def raw(**changes: object) -> RawGameState:
 
 
 def trainee(level: int) -> PartyMemberObservation:
+    """A healthy trainee with a usable move.
+
+    The move matters: a member with no power points reads as unsafe, and an
+    unsafe member is refused every matchup regardless of level. A fixture
+    without one makes venue tests pass by never reaching the comparison.
+    """
+
     return PartyMemberObservation(
         slot=1,
         species_id=0x3B,
@@ -62,7 +77,7 @@ def trainee(level: int) -> PartyMemberObservation:
         hp=80,
         max_hp=80,
         status=StatusCondition.HEALTHY,
-        moves=(),
+        moves=(MoveObservation(move_id=0x21, current_pp=30),),
         experience=0,
     )
 
@@ -228,6 +243,36 @@ def test_the_rare_ceiling_no_longer_disqualifies_a_good_venue() -> None:
 
     assert chosen is not None, "a level-20 trainee should be able to train at 15-21"
     assert chosen.worst_case_encounter_level == 31, "and should still be told about the Dugtrio"
+
+
+def test_a_chosen_venue_is_one_the_battle_loop_will_actually_fight_in() -> None:
+    """Venue selection and matchup acceptance must apply the same rule.
+
+    They did not.  Acceptance uses ``level - minimum_direct_level_advantage``
+    whenever that is set, and selection used ``level + max_enemy_level_delta``,
+    which under the Mansion policy is dead code.  Selection would therefore
+    approve an area the loop refuses every encounter in — the training deadlock
+    again, one level further up, and reached only after walking there.
+    """
+
+    entries = [row(map_id=DIGLETTS_CAVE, enemy_level=18) for _ in range(MINIMUM_TRUSTED_SAMPLES)]
+    areas = grinding_areas(
+        summarize_encounters(entries),
+        {DIGLETTS_CAVE: "digletts_cave"},
+        healer_map_ids=[DIGLETTS_CAVE],
+    )
+    binding = BalancedTeamPolicy(
+        minimum_level=55, max_enemy_level_delta=0, minimum_direct_level_advantage=15
+    )
+
+    for level in range(16, 60):
+        chosen = choose_grinding_area(areas, trainee(level), binding)
+        if chosen is None:
+            continue
+        assert is_matchup_acceptable(trainee(level), chosen.maximum_encounter_level, binding), (
+            f"level {level} was sent to {chosen.area_id}, "
+            f"which tops out at {chosen.maximum_encounter_level} and it may not engage"
+        )
 
 
 def test_a_venue_above_the_trainee_is_still_refused() -> None:

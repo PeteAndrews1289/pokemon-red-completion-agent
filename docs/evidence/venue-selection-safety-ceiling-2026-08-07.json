@@ -1,0 +1,29 @@
+{
+  "schema": "pokemon-training-policy-analysis-v1",
+  "recorded_on": "2026-08-07",
+  "analysis_id": "red-venue-selection-safety-ceiling",
+  "inputs": {
+    "bands": "docs/evidence/encounter-bands-2026-08-07.json",
+    "policy": "blaine.MANSION_TEAM_POLICY",
+    "policy_settings": {
+      "safe_lead_level": 42,
+      "minimum_direct_level_advantage": 15,
+      "max_enemy_level_delta": 0
+    }
+  },
+  "defect": "Venue selection and matchup acceptance applied different rules. is_matchup_acceptable uses trainee.level - minimum_direct_level_advantage whenever that setting is non-zero, which makes max_enemy_level_delta dead code under this policy; choose_grinding_area used trainee.level + max_enemy_level_delta. Selection could therefore approve an area the battle loop refuses every encounter in. Both now call training_safety_ceiling, and a test walks levels 16 through 59 asserting that any area selection returns is an area acceptance agrees to.",
+  "consequence_of_the_fix": "The two agree, so the venue a trainee is sent to is one it can fight in. This makes the second finding visible rather than creating it.",
+  "second_finding": "With minimum_direct_level_advantage=15 binding, a trainee may only engage opponents fifteen levels below itself. Applied to the measured bands this sends low-level trainees to areas that cannot train them.",
+  "computed": [
+    {"trainee_level": 20, "may_engage_up_to": 5, "chosen_venue": "viridian_forest", "venue_band": "3-5"},
+    {"trainee_level": 25, "may_engage_up_to": 10, "chosen_venue": "viridian_forest", "venue_band": "3-5"},
+    {"trainee_level": 30, "may_engage_up_to": 15, "chosen_venue": "route_11", "venue_band": "9-15"},
+    {"trainee_level": 35, "may_engage_up_to": 20, "chosen_venue": "route_11", "venue_band": "9-15"},
+    {"trainee_level": 42, "may_engage_up_to": "anything (safe_lead_level reached)", "chosen_venue": "digletts_cave", "venue_band": "15-21"},
+    {"trainee_level": 50, "may_engage_up_to": "anything (safe_lead_level reached)", "chosen_venue": "pokemon_mansion_1f", "venue_band": "28-34"}
+  ],
+  "interpretation": "A fifteen-level advantage is a survival margin for a lead escorting a party through hostile terrain, not a training rule. Experience in Gen 1 scales with the defeated Pokemon's level, so a rule that only ever permits opponents fifteen levels down guarantees the slowest possible training. A level-20 trainee sent to fight level-3 Caterpie is safe and is not being trained.",
+  "why_this_was_invisible": "The setting was inherited from the lead-only block, where a single overleveled carry really did outclass everything by that margin, so the requirement never bound. It binds now because the party contains members near level 20, and it binds hardest on exactly the members that need training most.",
+  "open_decision": "What the team-training safety margin should be. The relative form already exists as max_enemy_level_delta, which expresses 'fight things near your level and flee what is well above'. Setting minimum_direct_level_advantage to zero for team training would make the delta live again. The value of the delta should be chosen against a measured run rather than asserted here, which is the whole point of the surrounding infrastructure.",
+  "not_changed": "No policy constant was altered. Changing a training margin without a measured run to validate it would be the exact substitution of assertion for measurement this evidence is arguing against."
+}
