@@ -311,53 +311,6 @@ def select_cursor(
     )
 
 
-def _select_party_switch_row(
-    actions: CountingExecutor,
-    emulator: EmulatorState,
-    *,
-    expected_near: int,
-    party_size: int,
-    label: str,
-) -> int:
-    """Confirm the submenu row that opens the party list, and say which it was.
-
-    The member submenu holds the Pokémon's usable field moves plus SWITCH,
-    STATS and CANCEL, and the order has resisted two confident guesses. Rather
-    than assume it, each candidate row is confirmed and the result inspected:
-    SWITCH is the row after which the menu reports the party's own length,
-    because only the party list is that long. STATS opens a screen that reports
-    something else, and CANCEL closes back to a menu that is shorter.
-
-    The recognised signal is the game's, not ours, so this stays correct if the
-    submenu is ordered differently from whatever we currently believe.
-    """
-
-    submenu_max = emulator.read_u8(RamAddress.MAX_MENU_ITEM)
-    attempts: list[tuple[int, int]] = []
-    # Try the expected row first, then every other row in the submenu.
-    candidates = [expected_near] + [row for row in range(submenu_max + 1) if row != expected_near]
-    for row in candidates:
-        if not 0 <= row <= submenu_max:
-            continue
-        _walk_cursor_to(actions, emulator, row)
-        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != row:
-            continue
-        pulse(actions, MacroActionKind.CONFIRM)
-        opened = emulator.read_u8(RamAddress.MAX_MENU_ITEM)
-        attempts.append((row, opened))
-        if opened == party_size - 1:
-            return row
-        # Not SWITCH. Back out to the submenu and try the next row.
-        pulse(actions, MacroActionKind.CANCEL)
-        if emulator.read_u8(RamAddress.MAX_MENU_ITEM) != submenu_max:
-            break
-    raise RuntimeError(
-        f"{label} could not find the SWITCH row: submenu max_menu_item={submenu_max}, "
-        f"party_size={party_size}, tried (row, resulting max_menu_item)={attempts!r}. "
-        "No row opened a menu as long as the party."
-    )
-
-
 def _walk_cursor_to(actions: CountingExecutor, emulator: EmulatorState, target: int) -> None:
     """Nudge the cursor toward ``target`` without insisting that it arrive."""
 
@@ -389,35 +342,50 @@ def swap_field_party_slots(
     selected = before.members[first_index]
     field_move_count = sum(move.move_id in FIELD_MOVE_IDS for move in selected.known_moves)
 
-    pulse(actions, MacroActionKind.OPEN_MENU)
-    select_cursor(actions, emulator, 1, hideout_timing, "start-menu POKEMON")
-    pulse(actions, MacroActionKind.CONFIRM)
-    select_cursor(actions, emulator, first_index, hideout_timing, "party source slot")
-    pulse(actions, MacroActionKind.CONFIRM)
-    # Which submenu row is SWITCH has now been guessed wrong twice — once at
-    # ``field_move_count + 1``, which confirmed on the wrong row and left the
-    # following selection driving a five-entry menu it thought was the party,
-    # and once at ``field_move_count``, which changed nothing at all. Both
-    # guesses came from a belief about the menu's layout rather than from the
-    # menu.
+    # Which submenu row means SWITCH has been guessed wrong three times: at
+    # ``field_move_count + 1``, at ``field_move_count``, and by expecting the
+    # resulting menu to be as long as the party. Each guess was a claim about
+    # the menu's shape, and the shape refused to cooperate -- the switch-target
+    # list reports the same length as the submenu it came from, so no reading
+    # tells them apart.
     #
-    # So this asks it. The submenu is entered, then walked one row at a time,
-    # and the row that opens the party list is SWITCH — recognised by the menu
-    # growing to the party's own length, which is a fact about the game rather
-    # than a fact about our assumptions. ``field_move_count`` is used only to
-    # start the search near where SWITCH should be.
-    _select_party_switch_row(
-        actions, emulator, expected_near=field_move_count, party_size=before.size, label=label
-    )
-    select_cursor(actions, emulator, second_index, hideout_timing, "party target slot")
-    pulse(actions, MacroActionKind.CONFIRM)
-    close_menu(actions, reader)
+    # The party order does. A row either produced the swap we asked for or it
+    # did not, and that is visible in memory afterwards without knowing
+    # anything about the menu. So each candidate row is tried as a complete
+    # open-swap-close, checked against the party, and abandoned if it did
+    # nothing. ``field_move_count`` is tried first because it is still the best
+    # guess; it is simply no longer required to be right.
+    attempts: list[tuple[int, tuple[int, ...]]] = []
+    for row in [field_move_count] + [r for r in range(PARTY_SLOT_LIMIT) if r != field_move_count]:
+        pulse(actions, MacroActionKind.OPEN_MENU)
+        select_cursor(actions, emulator, 1, hideout_timing, "start-menu POKEMON")
+        pulse(actions, MacroActionKind.CONFIRM)
+        select_cursor(actions, emulator, first_index, hideout_timing, "party source slot")
+        pulse(actions, MacroActionKind.CONFIRM)
+        if row > emulator.read_u8(RamAddress.MAX_MENU_ITEM):
+            close_menu(actions, reader)
+            continue
+        _walk_cursor_to(actions, emulator, row)
+        pulse(actions, MacroActionKind.CONFIRM)
+        _walk_cursor_to(actions, emulator, second_index)
+        pulse(actions, MacroActionKind.CONFIRM)
+        close_menu(actions, reader)
 
-    observed = party_reader.read().species_ids()
-    if observed != tuple(expected):
-        raise RuntimeError(
-            f"{label} produced party order {observed!r}, expected {tuple(expected)!r}."
-        )
+        observed = party_reader.read().species_ids()
+        attempts.append((row, observed))
+        if observed == tuple(expected):
+            return
+        if observed != before.species_ids():
+            raise RuntimeError(
+                f"{label} left the party as {observed!r} rather than "
+                f"{tuple(expected)!r} after submenu row {row}."
+            )
+
+    raise RuntimeError(
+        f"{label} could not swap slots {first_index + 1} and {second_index + 1}: "
+        f"no submenu row changed the party. Tried (row, resulting order)={attempts!r}."
+    )
+
 
 
 def battle_command_direction(current: int | None, target: int) -> str | None:

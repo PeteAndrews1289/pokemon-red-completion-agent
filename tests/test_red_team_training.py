@@ -153,11 +153,29 @@ class FakeMemory:
         if kind is MacroActionKind.OPEN_MENU:
             self.stage, self.cursor = "root", 0
         elif kind is MacroActionKind.CANCEL:
-            self.stage, self.cursor, self.pending_slot = "field", 0, None
+            self._cancel()
         elif kind is MacroActionKind.MOVE:
             self._move(str(action.value))
         elif kind is MacroActionKind.CONFIRM:
             self._confirm()
+
+    def _cancel(self) -> None:
+        """Back out one level, the way the game does.
+
+        Cancelling a member submenu returns to the party list, not to the
+        field. The search for the SWITCH row relies on that: a wrong row is
+        undone by cancelling and re-entering the source slot. A fake that
+        dropped straight to the field made the search look like it gave up
+        after one attempt, which is exactly what the run reported.
+        """
+
+        if self.stage in {"member", "party_target"}:
+            self.stage, self.cursor = "party", 0
+        elif self.stage == "party":
+            self.stage, self.cursor = "root", 0
+        else:
+            self.stage, self.cursor = "field", 0
+        self.pending_slot = None
 
     def _max_menu_item(self) -> int:
         """The highest index the menu currently on screen will accept.
@@ -536,3 +554,43 @@ def test_internal_indices_are_not_pokedex_ordinals() -> None:
 
     assert observed.species_ids() == (9,)
     assert observed.species_ids() != (BLASTOISE_SPECIES_ID,)
+
+
+class MisplacedSwitchMemory(FakeMemory):
+    """A fake whose SWITCH row is not where the move list predicts.
+
+    The real game put SWITCH somewhere three separate guesses did not expect.
+    This makes the harness able to say so: the row is deliberately moved away
+    from ``field_move_count``, so a search that only tries its first guess
+    cannot pass.
+    """
+
+    SWITCH_ROW = 2
+
+    def _max_menu_item(self) -> int:
+        if self.stage == "member":
+            return 4
+        return super()._max_menu_item()
+
+    def _field_move_count(self) -> int:
+        return self.SWITCH_ROW
+
+
+def test_the_switch_row_is_found_even_when_it_is_not_where_expected() -> None:
+    """Three guesses at this row have each cost an emulator run.
+
+    The search tries rows until the cursor can be placed on the slot it needs
+    to swap with — a question about the job rather than a claim about the
+    menu's shape — so it survives the layout being different from any guess.
+    """
+
+    memory = MisplacedSwitchMemory()
+    memory.set_party([(species, 60) for species in FINAL_FORM_ROSTER])
+    reader = FakeReader([state()])
+
+    result = run(memory, reader)
+
+    assert isinstance(result, tuple)
+    assert memory.swaps, "the core restore should still have reordered the party"
+    assert memory.party[0].species == BLASTOISE_SPECIES_ID
+    assert memory.party[1].species == DUX_SPECIES_ID
