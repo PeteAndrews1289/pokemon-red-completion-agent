@@ -148,6 +148,35 @@ completed the game, no cross-game transfer has been measured, and the living Pok
 started. The blocker is not game completion; it is that the demonstrations contain very few real
 decisions, and more Red reliability does not change that.
 
+### Training venues (2026-08-07)
+
+Encounter bands are now measured rather than recalled. `MEASURED_TRAINING_VENUES` in
+`red_team_training.py` is transcribed from `docs/evidence/encounter-bands-2026-08-07.json`, and a
+test fails if the two drift. Harvest more with:
+
+```bash
+POKEMON_RED_ENCOUNTER_LOG=<path> ...take a run...
+.venv/bin/python scripts/harvest_encounters.py <path>
+```
+
+Areas below twenty samples are dropped, not downgraded — nine of the first twenty-one areas had
+four samples or fewer. A band records the level 90% of encounters stay under *separately* from the
+rare ceiling, because Diglett's Cave summarised as "15-31" gets rejected for the level-20 trainee
+its other twenty-nine encounters suit exactly.
+
+Two things changed that anyone touching training should know:
+
+- **The team-training margin is now `max_enemy_level_delta=2`**, replacing a fifteen-level required
+  advantage that made a level-20 trainee unable to engage anything above level 5. It is
+  **unvalidated** — a starting value awaiting a measured run. See
+  `docs/evidence/training-margin-decision-2026-08-07.json`.
+- **`RED_DIRECT_LEVEL_ADVANTAGE` is retired.** It silently outranked the policy margin for the three
+  species that are the trainees. Values preserved in the same evidence file.
+
+Venue selection is wired for *recommendation* only: the venue-mismatch stop names where the trainee
+belongs. Routing a trainee to a chosen venue needs navigation paths that do not exist yet, and only
+the Mansion has an implemented heal-and-return. That is the open Tier 1 item.
+
 ## The full gate, before every commit
 
 ```bash
@@ -159,12 +188,13 @@ decisions, and more Red reliability does not change that.
 .venv/bin/pytest -m "not integration"
 ```
 
-`mypy` is scoped to the game-neutral layer and its adapters, which pass cleanly.
-It is deliberately not run over the chapter modules yet: each of the twenty
-defines its own structurally identical `_CountingExecutor`, so mypy reads them as
-twenty incompatible nominal types and buries real errors under cross-module
-noise. Hoisting that into one shared Protocol is the prerequisite for widening
-the scope.
+`mypy` now runs over all of `src/`, clean. It got there via a debt register in
+`pyproject.toml`: forty-four legacy modules carry per-module `ignore_errors`
+overrides, and that list may only ever shrink. Do not add to it — fix the module
+instead. Two patterns dominate what remains: twenty-eight modules each declaring
+their own structurally identical `EmulatorState` (and five their own `_RunState`),
+and `int | None` passed where `int` is required. Hoisting the duplicated Protocols
+into one shared definition removes roughly forty-five of the entries at a stroke.
 
 This matters more than it looks. Of nine defects found in the balanced-team work
 in a single session, five were type or arity errors — a reader passed where a
