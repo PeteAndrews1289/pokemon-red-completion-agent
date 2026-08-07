@@ -49,7 +49,6 @@ from pokemon_red_completion.observation import (
 )
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.red_party import PokemonRedPartyReader
-from pokemon_red_completion.red_team_training import run_red_team_balancing
 from pokemon_red_completion.team_training import BalancedTeamPolicy
 from pokemon_red_completion.tower import party_core_intact
 
@@ -639,42 +638,13 @@ def run_fuchsia_chapter(
     _require(reader.read(), MapId.FUCHSIA_POKECENTER, (3, 7), "Fuchsia Center entrance")
     _heal_center(actions, reader, emulator, run, timing)
 
-    _require(reader.read(), MapId.FUCHSIA_POKECENTER, (3, 3), "pre-training center")
-    if not party_core_intact(reader.read().party_species_ids):
-        raise FuchsiaChapterError("Core trainees are not intact for Fuchsia development.")
-
-    _move(actions, reader, emulator, run, CENTER_TO_ROUTE15, timing, "Center to Route 15")
-    _require(reader.read(), MapId.ROUTE_15, None, "Route 15 training zone")
-    
-    # We may need to move into the grass if CENTER_TO_ROUTE15 doesn't place us in grass.
-    # For now, let's just assume we are on Route 15 and can encounter wilds.
-    
-    run_red_team_balancing(
-        actions,
-        reader,
-        emulator,
-        policy=FUCHSIA_DEVELOPMENT_POLICY,
-        expected_map=MapId.ROUTE_15,
-        volatile_enemy_species=frozenset(),
-        escort_enemy_species=frozenset(),
-        progress_sink=(
-            (
-                lambda message: progress(
-                    FuchsiaProgress(
-                        "route15_team_training_progress",
-                        message,
-                        len(records),
-                        FUCHSIA_CHECKPOINT_COUNT,
-                        emulator.frame_count,
-                    )
-                )
-            )
-            if progress is not None
-            else None
-        ),
-    )
-    _move(actions, reader, emulator, run, ROUTE15_TO_CENTER, timing, "Route 15 to Center")
-    _heal_center(actions, reader, emulator, run, timing)
+    # A Route 15 training excursion was drafted here and is not wired: its
+    # run_red_team_balancing call supplied 7 of 18 arguments, and the eleven
+    # missing ones are chapter behaviours -- how to flee here, how to reach a
+    # healer and return, and which tiles are safe grass. Route 15's trainers are
+    # deliberately bypassed by this chapter, so walking blindly for encounters
+    # risks a trainer battle. CENTER_TO_ROUTE15 and ROUTE15_TO_CENTER are correct
+    # and remain available for whoever completes it against the collision map.
 
     final = reader.read()
     _require(final, MapId.FUCHSIA_POKECENTER, (3, 3), "stable Fuchsia boundary")

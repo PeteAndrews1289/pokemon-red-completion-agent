@@ -52,7 +52,6 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
-from pokemon_red_completion.red_team_training import run_red_team_balancing
 from pokemon_red_completion.saffron import (
     CITY_TO_MART as CELADON_CENTER_EXIT_TO_MART,
 )
@@ -447,40 +446,12 @@ def run_silph_chapter(
         raise SilphChapterError("Silph input boundary is not pristine.")
     _checkpoint(records, progress, emulator, initial, "silph_ready", "Silph plan ready")
 
-    # Saffron/Silph training block on Route 8
-    if not party_core_intact(initial.party_species_ids):
-        raise SilphChapterError("Core trainees are not intact for Saffron development.")
-    _move(actions, reader, CENTER_EXIT, timing, "Saffron Center exit")
-    _move(actions, reader, SAFFRON_CENTER_TO_ROUTE_8_GATE, timing, "Center to Route 8 Gate")
-    _move(actions, reader, ("right",) * 5, timing, "Through Route 8 Gate")
-    _move(actions, reader, ("right",) * 10, timing, "To Route 8 Grass")
-    _require(reader.read(), MapId.ROUTE_8, None, "Route 8 training zone")
-    run_red_team_balancing(
-        actions,
-        reader,
-        emulator,
-        policy=SAFFRON_DEVELOPMENT_POLICY,
-        expected_map=MapId.ROUTE_8,
-        volatile_enemy_species=frozenset(),
-        escort_enemy_species=frozenset(),
-        progress_sink=(
-            (
-                lambda message: progress(
-                    SilphProgress(
-                        "route8_team_training_progress",
-                        message,
-                        len(records),
-                        SILPH_CHECKPOINT_COUNT,
-                        emulator.frame_count,
-                    )
-                )
-            )
-            if progress is not None
-            else None
-        ),
-    )
-    _move(actions, reader, ("left",) * 12, timing, "Return to Route 8 Gate")
-    _move(actions, reader, ("left",) * 5, timing, "Through Route 8 Gate to Saffron")
+    # A Route 8 training excursion was drafted here and is not wired, for the
+    # same reason as the Route 15 one in fuchsia.py: its run_red_team_balancing
+    # call supplied 7 of 18 arguments, and the eleven missing ones are chapter
+    # behaviours that need deriving against the collision map rather than
+    # copying from the Mansion. The walk constants above remain correct.
+
     _move(actions, reader, ROUTE_8_GATE_TO_SAFFRON_CENTER, timing, "Gate to Saffron Center")
     _move(actions, reader, ("up", "up", "up"), timing, "nurse approach")
     _heal(actions, timing)
