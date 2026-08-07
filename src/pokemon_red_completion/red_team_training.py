@@ -10,6 +10,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeError,
     run_adaptive_wild_battle,
 )
+from pokemon_red_completion.celadon import _RunState
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     PokemonRedStateReader,
@@ -434,7 +435,10 @@ def run_red_team_balancing(
     steps = 0
     healing_trips = 0
     consecutive_flees = 0
-    flee_run: Any = None
+    # celadon._flee appends its evidence to run.wilds, so this has to be a real
+    # run state. It was left as None, which raised on the first flee -- and the
+    # escort cap flees by design, so the cap could never have run.
+    flee_run = _RunState([])
 
     def emit_progress() -> None:
         """Report progress as a message the caller renders in its own record type.
