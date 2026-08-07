@@ -122,7 +122,7 @@ MEASURED_TRAINING_VENUES: tuple[GrindingArea, ...] = (
         minimum_encounter_level=28,
         maximum_encounter_level=34,
         rare_maximum_encounter_level=39,
-        measured_samples=155,
+        measured_samples=164,
     ),
 )
 

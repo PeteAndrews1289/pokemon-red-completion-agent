@@ -206,7 +206,7 @@
     {
       "area": "pokemon_mansion_1f",
       "map_id": 165,
-      "samples": 155,
+      "samples": 164,
       "trusted": true,
       "minimum_level": 28,
       "typical_maximum_level": 34,
@@ -272,5 +272,7 @@
         107
       ]
     }
-  ]
+  ],
+  "replicated_by": "docs/evidence/measured-run-2026-08-07.json",
+  "replication": "Every trusted band reproduced exactly in an independent run on 2026-08-07. The route is deterministic, so these are durable measurements rather than one sample of a noisy process."
 }
