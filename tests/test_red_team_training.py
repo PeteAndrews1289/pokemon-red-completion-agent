@@ -402,6 +402,99 @@ def test_without_measured_bands_the_stop_does_not_invent_a_venue() -> None:
         run(memory, reader)
 
 
+MANSION_BAND = GrindingArea(
+    area_id="pokemon_mansion_1f",
+    minimum_encounter_level=28,
+    maximum_encounter_level=34,
+    rare_maximum_encounter_level=39,
+    measured_samples=155,
+)
+
+
+def test_a_venue_trains_whoever_it_can_rather_than_the_weakest_outright() -> None:
+    """The deadlock, stated as a choice rather than as a stop.
+
+    The Mansion fields 28-34. A party holding members at 20 and 38 used to put
+    the level-20 member in front, which can engage nothing there, and flee
+    until it gave up — while the level-38 member, which could have trained all
+    along, never got a turn.
+    """
+
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (DIGLETT_SPECIES_ID, 20),
+            (BLASTOISE_SPECIES_ID, ESCORT_LEVEL_CAP + 5),
+            (DUX_SPECIES_ID, 38),
+            (DUGTRIO_SPECIES_ID, 41),
+            (SNORLAX_SPECIES_ID, 41),
+            (HITMONLEE_SPECIES_ID, 41),
+        ]
+    )
+    reader = FakeReader([state()])
+    policy = BalancedTeamPolicy(
+        minimum_level=55,
+        maximum_level_spread=40,
+        required_size=6,
+        max_enemy_level_delta=2,
+        max_steps=64,
+    )
+
+    with pytest.raises(RuntimeError) as failure:
+        run(memory, reader, policy=policy, venue_band=MANSION_BAND)
+
+    # It ran out of steps looking for battles, which means it was training the
+    # level-38 member — not refusing to train at all.
+    assert "stopped before readiness" in str(failure.value)
+
+
+def test_a_venue_that_can_train_nobody_says_so_at_once() -> None:
+    """Eight flees to learn what the band already says is eight too many."""
+
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (DIGLETT_SPECIES_ID, 20),
+            (BLASTOISE_SPECIES_ID, ESCORT_LEVEL_CAP + 5),
+            (DUX_SPECIES_ID, 22),
+            (DUGTRIO_SPECIES_ID, 22),
+            (SNORLAX_SPECIES_ID, 22),
+            (HITMONLEE_SPECIES_ID, 22),
+        ]
+    )
+    reader = FakeReader([state()])
+    policy = BalancedTeamPolicy(
+        minimum_level=55, maximum_level_spread=40, required_size=6, max_enemy_level_delta=2
+    )
+    executor = FakeExecutor(memory)
+
+    with pytest.raises(RuntimeError) as failure:
+        run_red_team_balancing(
+            executor,  # type: ignore[arg-type]
+            reader,  # type: ignore[arg-type]
+            memory,  # type: ignore[arg-type]
+            **balancing_kwargs(  # type: ignore[arg-type]
+                policy=policy,
+                venue_band=MANSION_BAND,
+                measured_venues=(
+                    GrindingArea(
+                        area_id="digletts_cave",
+                        minimum_encounter_level=15,
+                        maximum_encounter_level=21,
+                        rare_maximum_encounter_level=31,
+                        measured_samples=29,
+                    ),
+                ),
+            ),
+        )
+
+    message = str(failure.value)
+    assert "No party member can train here" in message
+    assert "28-34" in message, "the stop should state what this venue fields"
+    assert "digletts_cave" in message, "and where the party should go instead"
+    assert executor.actions_executed == 0, "and should not walk a single step first"
+
+
 def test_the_venue_bound_is_far_below_the_flee_bound() -> None:
     """Eight encounters is enough to see a mismatch; thirty-three is a lost run."""
 

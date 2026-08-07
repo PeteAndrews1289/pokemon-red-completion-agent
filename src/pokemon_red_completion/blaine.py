@@ -938,6 +938,7 @@ def run_blaine_chapter(
             report_label="Mansion team training",
             checkpoint_count=BLAINE_CHECKPOINT_COUNT,
             measured_venues=MEASURED_TRAINING_VENUES,
+            venue_band=MANSION_TRAINING_VENUE.band,
         )
         team_battles += evolution_battles
         team_healing_trips += evolution_heals
@@ -985,6 +986,7 @@ def run_blaine_chapter(
         report_label="Mansion team training",
         checkpoint_count=BLAINE_CHECKPOINT_COUNT,
         measured_venues=MEASURED_TRAINING_VENUES,
+        venue_band=MANSION_TRAINING_VENUE.band,
     )
     team_battles += balance_battles
     team_healing_trips += balance_heals

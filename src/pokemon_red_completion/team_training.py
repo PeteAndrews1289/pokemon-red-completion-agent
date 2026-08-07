@@ -767,6 +767,61 @@ def training_safety_ceiling(trainee: PartyMemberObservation, policy: BalancedTea
     return trainee.level + policy.max_enemy_level_delta
 
 
+def member_can_train_at(
+    member: PartyMemberObservation,
+    policy: BalancedTeamPolicy,
+    area: GrindingArea,
+) -> bool:
+    """Whether this member can gain experience in this area rather than flee it.
+
+    Judged against the level the area's encounters typically stay under, not
+    its rare ceiling: an occasional encounter that has to be fled does not make
+    an area untrainable, it makes it an area with a rare encounter.
+    """
+
+    if not member.is_trainable:
+        return False
+    if policy.safe_lead_level is not None and member.level >= policy.safe_lead_level:
+        return True
+    return area.maximum_encounter_level <= training_safety_ceiling(member, policy)
+
+
+def weakest_member_trainable_at(
+    party: PartyObservation,
+    policy: BalancedTeamPolicy,
+    area: GrindingArea,
+) -> PartyMemberObservation | None:
+    """The weakest member this area can actually train, or ``None``.
+
+    Picking the weakest member outright is what deadlocks a training block.
+    The Mansion fields levels 28-34; a party arriving with members at 20, 25
+    and 30 puts the level-20 member in front, which can engage nothing there,
+    so the block flees until it gives up — while the level-30 members, which
+    could have trained productively, never get a turn.
+
+    Choosing the weakest member the *venue* can train trains whoever can be
+    trained here and leaves the rest to be routed somewhere that suits them.
+    Ties break on party position so the choice is stable across observations.
+
+    Members already at the level floor are excluded, and that exclusion is
+    load-bearing rather than an optimisation.  The escort is the one member
+    high enough to fight anywhere, so "the weakest member that can train here"
+    selects *the escort* at a venue too strong for everyone else — and it would
+    train happily, forever, while the members that need it never get a turn.
+    That is precisely the escort-does-everything failure this whole line of
+    work exists to undo, and it would have re-entered through the fix for it.
+    """
+
+    trainable = [
+        member
+        for member in party.members
+        if member.level < policy.minimum_level and member_can_train_at(member, policy, area)
+    ]
+    if not trainable:
+        return None
+    return min(trainable, key=lambda member: (member.level, member.slot))
+
+
 def choose_grinding_area(
     areas: Iterable[GrindingArea],
     trainee: PartyMemberObservation,

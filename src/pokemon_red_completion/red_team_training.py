@@ -17,7 +17,12 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
-from pokemon_red_completion.party import PARTY_SLOT_LIMIT, PartyMemberObservation, StatusCondition
+from pokemon_red_completion.party import (
+    PARTY_SLOT_LIMIT,
+    PartyMemberObservation,
+    PartyObservation,
+    StatusCondition,
+)
 from pokemon_red_completion.red_party import (
     BLASTOISE_SPECIES_ID,
     DUGTRIO_SPECIES_ID,
@@ -38,6 +43,7 @@ from pokemon_red_completion.team_training import (
     is_matchup_acceptable,
     plan_team_training,
     summarize_team_readiness,
+    weakest_member_trainable_at,
 )
 
 
@@ -477,6 +483,23 @@ def switch_active_battler(
     )
 
 
+def _trainee_for_venue(
+    party: PartyObservation,
+    policy: BalancedTeamPolicy,
+    venue_band: GrindingArea | None,
+) -> PartyMemberObservation | None:
+    """Who should be in front here.
+
+    Without a measured band for where we are standing there is nothing to judge
+    against, so this falls back to the weakest member overall -- the behaviour
+    that deadlocked the Mansion, kept only for venues nobody has measured yet.
+    """
+
+    if venue_band is None:
+        return party.weakest_trainable_member
+    return weakest_member_trainable_at(party, policy, venue_band)
+
+
 def _recommended_venue(
     party_reader: PokemonRedPartyReader,
     policy: BalancedTeamPolicy,
@@ -533,6 +556,7 @@ def run_red_team_balancing(
     report_label: str,
     checkpoint_count: int,
     measured_venues: Sequence[GrindingArea] = (),
+    venue_band: GrindingArea | None = None,
 ) -> tuple[object | None, int, int]:
     party_reader = PokemonRedPartyReader(emulator)
     if BLASTOISE_SPECIES_ID not in party_reader.read().species_ids():
@@ -598,7 +622,22 @@ def run_red_team_balancing(
         )
         if evolution_target is None:
             decision = plan_team_training(party, policy, progress)
-            trainee = party.weakest_trainable_member
+            trainee = _trainee_for_venue(party, policy, venue_band)
+            if trainee is None and party.weakest_trainable_member is not None:
+                # Somebody could be trained, just not here. Say so now rather
+                # than after eight flees prove it the expensive way.
+                here = (
+                    f"{venue_band.area_id} fields levels "
+                    f"{venue_band.minimum_encounter_level}-"
+                    f"{venue_band.maximum_encounter_level}"
+                    if venue_band is not None
+                    else "this venue"
+                )
+                raise RuntimeError(
+                    f"No party member can train here: {here}, and the party "
+                    f"levels are {tuple(m.level for m in party.members)}. "
+                    + _recommended_venue(party_reader, policy, measured_venues)
+                )
         else:
             precursor_species, final_species = evolution_target
             if final_species in party.species_ids():
@@ -636,7 +675,7 @@ def run_red_team_balancing(
         )
         if raw.battle_state == 1:
             trainee = (
-                party.weakest_trainable_member
+                _trainee_for_venue(party, policy, venue_band)
                 if evolution_target is None
                 else next((m for m in party.members if m.species_id == evolution_target[0]), None)
             )
@@ -786,7 +825,7 @@ def run_red_team_balancing(
         if not is_in_map(raw):
             break
         trainee = (
-            party.weakest_trainable_member
+            _trainee_for_venue(party, policy, venue_band)
             if evolution_target is None
             else next((m for m in party.members if m.species_id == evolution_target[0]), None)
         )

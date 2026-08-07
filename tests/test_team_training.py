@@ -21,10 +21,12 @@ from pokemon_red_completion.team_training import (
     TrainingException,
     choose_grinding_area,
     is_matchup_acceptable,
+    member_can_train_at,
     plan_team_development,
     plan_team_training,
     summarize_team_development,
     summarize_team_readiness,
+    weakest_member_trainable_at,
 )
 
 POLICY = BalancedTeamPolicy()
@@ -609,3 +611,67 @@ def test_parity_configuration_must_be_complete() -> None:
         )
     with pytest.raises(ValueError, match="provided together"):
         DevelopedTeamPolicy(_roster6(), workhorse_species_id=1, parity_opposition_level=65)
+
+
+MANSION_BAND = GrindingArea(
+    area_id="pokemon_mansion_1f",
+    minimum_encounter_level=28,
+    maximum_encounter_level=34,
+    rare_maximum_encounter_level=39,
+    measured_samples=155,
+)
+CAVE_BAND = GrindingArea(
+    area_id="digletts_cave",
+    minimum_encounter_level=15,
+    maximum_encounter_level=21,
+    rare_maximum_encounter_level=31,
+    measured_samples=29,
+)
+VENUE_POLICY = BalancedTeamPolicy(
+    minimum_level=55, maximum_level_spread=40, max_enemy_level_delta=2
+)
+
+
+def test_the_escort_is_never_chosen_as_the_trainee() -> None:
+    """The load-bearing exclusion.
+
+    The escort is the one member high enough to fight anywhere, so "the weakest
+    member that can train here" selects the escort at a venue too strong for
+    everyone else. It would then train happily and forever while the members
+    that need it never get a turn — the escort-does-everything failure, walking
+    straight back in through its own fix.
+    """
+
+    # The party from the real receipt: an escort at 68 and nobody else past 30.
+    observed = party(68, 20, 26, 30, 25, 30)
+
+    assert weakest_member_trainable_at(observed, VENUE_POLICY, MANSION_BAND) is None
+
+
+def test_a_venue_trains_the_weakest_member_it_can_reach() -> None:
+    observed = party(68, 20, 26, 30, 25, 30)
+
+    chosen = weakest_member_trainable_at(observed, VENUE_POLICY, CAVE_BAND)
+
+    assert chosen is not None and chosen.level == 20
+
+
+def test_members_at_the_floor_are_not_trained_again() -> None:
+    """Readiness is the point at which a member stops needing battles."""
+
+    observed = party(68, 38, 60, 61, 62, 63)
+
+    chosen = weakest_member_trainable_at(observed, VENUE_POLICY, MANSION_BAND)
+
+    assert chosen is not None
+    assert chosen.level == 38, "the only member still short of the floor"
+
+
+def test_capability_and_need_are_separate_questions() -> None:
+    """A level-60 member *can* fight in the Mansion; it just has no reason to."""
+
+    veteran = member(1, 60)
+
+    assert member_can_train_at(veteran, VENUE_POLICY, MANSION_BAND)
+    veterans = party(60, 60, 60, 60, 60, 60)
+    assert weakest_member_trainable_at(veterans, VENUE_POLICY, MANSION_BAND) is None
