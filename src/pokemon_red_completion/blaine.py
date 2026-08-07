@@ -1558,7 +1558,9 @@ def _fly_to_town(actions, reader, emulator, destination: MapId, label: str) -> N
     """
 
     landings: list[tuple[str, str, int, str]] = []
-    attempts = [("up", steps) for steps in range(FLY_ATTEMPT_LIMIT // 2)]
+    # No zero-step attempt: the cursor opens on the town we are standing in, so
+    # confirming immediately flies us nowhere and costs an attempt.
+    attempts = [("up", steps) for steps in range(1, FLY_ATTEMPT_LIMIT // 2 + 1)]
     attempts += [("down", steps) for steps in range(1, FLY_ATTEMPT_LIMIT // 2 + 1)]
 
     for direction, steps in attempts:
@@ -1568,17 +1570,31 @@ def _fly_to_town(actions, reader, emulator, destination: MapId, label: str) -> N
         _open_fly_map(actions, reader, emulator)
         for _ in range(steps):
             _pulse(actions, MacroActionKind.MOVE, direction, 120)
-        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
 
+        # Confirm, then *wait* rather than press again. An earlier version kept
+        # confirming until the map changed, which is fine while it works and
+        # ruinous when it does not: an attempt that flies nowhere leaves eight
+        # unanswered A presses in the field, and the next attempt then found a
+        # prompt open with only A and B watched, so the d-pad did nothing and
+        # the cursor would not move at all.
+        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
         landed = origin
-        for _ in range(8):
+        for index in range(6):
+            _pulse(actions, MacroActionKind.WAIT, frames=90)
             landed = reader.read().map_id
             if landed != origin:
                 break
-            _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+            if index == 0:
+                # One further press, in case a prompt is waiting on it.
+                _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+
         landings.append((_map_name(origin), direction, steps, _map_name(landed)))
         if landed == destination:
             return
+        if landed == origin:
+            # Nothing happened. Put the field back in a known state before the
+            # next attempt rather than opening a menu on top of whatever is up.
+            _close(actions, reader)
 
     raise BlaineChapterError(
         f"{label}: could not reach {_map_name(int(destination))} by air in "
