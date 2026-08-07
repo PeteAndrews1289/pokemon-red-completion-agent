@@ -255,9 +255,15 @@ work from a captured state, which is one starting point. Nobody has shown the bl
 level floor of 55 during a full run, or what it costs in battles and healing trips. Take the run,
 record the numbers, and compare against the 1,878-battle baseline from the escort-only era.
 
-**2. Measure participation directly. (Lane C)** Turns-per-party-member across the Elite Four is a
-one-line metric and it would have caught the escort problem on the first run. Six turns, one member,
-is visible immediately. Add it beside the existing `team_balance` block.
+**2. Measure participation across the whole League, and derive the judgement. (Lane C)**
+`turns_per_member` exists — in `champion.py` only, so participation is measured for one of the five
+League battles. `agatha.py` records `active_party_index` per turn but never aggregates it;
+`lorelei.py`, `bruno.py` and `lance.py` record neither.
+
+Coverage is half the gap. The other half is that `turns_per_member` is a raw list, and a list does
+not embarrass anyone. Two derived numbers would: how many members took a turn at all, and what share
+the busiest one took. "One member, six turns, 100%" is a sentence that ends an argument; `[6, 0, 0,
+0, 0, 0]` is a row someone has to read carefully to be bothered by.
 
 **3. Resolve the tolerance conflict. (Lane B)** `MANSION_LEVEL_PARITY` uses `max_levels_behind=10`
 (target 55) while `CHAMPION_LEVEL_PARITY` uses `5` (required 60), so the receipt reports a team that
