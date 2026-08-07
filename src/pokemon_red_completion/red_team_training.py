@@ -355,8 +355,21 @@ def swap_field_party_slots(
     # open-swap-close, checked against the party, and abandoned if it did
     # nothing. ``field_move_count`` is tried first because it is still the best
     # guess; it is simply no longer required to be right.
+    # SWITCH sits one past the field moves, because the submenu is ordered
+    # moves, STATS, SWITCH, CANCEL -- measured directly from a captured state:
+    # Blastoise, knowing Surf and Strength, gave a five-entry submenu whose row
+    # three opened the party list and completed the swap, while rows zero to
+    # two left the submenu untouched.
+    #
+    # That vindicates the formula this file started with. An earlier change in
+    # this session moved it to ``field_move_count`` on the theory that the order
+    # was moves-then-SWITCH; the theory was wrong and the measurement says so.
+    # The search below remains because the count itself can be wrong -- a move
+    # this table does not recognise as a field move shifts every row -- but the
+    # first candidate is now the one the game was observed to use.
+    switch_row = field_move_count + 1
     attempts: list[tuple[int, tuple[int, ...]]] = []
-    for row in [field_move_count] + [r for r in range(PARTY_SLOT_LIMIT) if r != field_move_count]:
+    for row in [switch_row] + [r for r in range(PARTY_SLOT_LIMIT) if r != switch_row]:
         pulse(actions, MacroActionKind.OPEN_MENU)
         select_cursor(actions, emulator, 1, hideout_timing, "start-menu POKEMON")
         pulse(actions, MacroActionKind.CONFIRM)

@@ -1,0 +1,32 @@
+{
+  "schema": "pokemon-measured-menu-layout-v1",
+  "recorded_on": "2026-08-07",
+  "finding_id": "field-party-submenu-row-order",
+  "method": "Measured from a captured mid-route state, one fresh load per candidate row, about a second each. Five full runs had been spent on this menu beforehand, at roughly six minutes apiece.",
+  "party_at_capture": {
+    "slot_1": "Blastoise (0x1c) at level 48",
+    "known_moves": ["0x82", "0x46", "0x3a", "0x39"],
+    "recognised_field_moves": ["0x46 Strength", "0x39 Surf"],
+    "field_move_count": 2
+  },
+  "menu_signatures": {
+    "start_menu": "max_menu_item=7, top=(11, 2)",
+    "party_list": "max_menu_item=5, top=(0, 1)",
+    "member_submenu": "max_menu_item=4, top=(10, 8)"
+  },
+  "row_probe": [
+    {"row": 0, "result": "stayed in the submenu", "party_order_changed": false},
+    {"row": 1, "result": "stayed in the submenu", "party_order_changed": false},
+    {"row": 2, "result": "stayed in the submenu", "party_order_changed": false},
+    {"row": 3, "result": "opened the party list (max=5, top=(0,1))", "party_order_changed": true},
+    {"row": 4, "result": "stayed in the submenu, then exited to the party list", "party_order_changed": false}
+  ],
+  "conclusion": "SWITCH is at field_move_count + 1. With two field moves the five-entry submenu reads moves, moves, STATS, SWITCH, CANCEL — so the order is field moves, then STATS, then SWITCH, then CANCEL, not field moves then SWITCH.",
+  "correction_to_earlier_work": {
+    "what_was_believed": "That the submenu ran field moves, then SWITCH, STATS, CANCEL, so SWITCH sat at field_move_count.",
+    "what_that_caused": "The formula was changed from field_move_count + 1 to field_move_count earlier in this session, on the strength of that belief and a five-entry menu that seemed to confirm it. The original formula had been right. The change cost runs and produced a swap that silently did nothing.",
+    "why_the_belief_survived": "Every check available at the time was derived from the same assumption, so nothing could contradict it. The measurement contradicts it in one line."
+  },
+  "also_corrected": "watched=0x03 was read earlier as meaning the d-pad is ignored. It does not: the party list reports watched=0x03 and its cursor moves normally. That inference was wrong and no conclusion should rest on it.",
+  "verification": "With the formula restored, swapping slots 1 and 2 from the captured state produces ('0x40', '0x1c', ...) from ('0x1c', '0x40', ...) — the swap that was asked for. Restricting the search to the wrong row turns two harness tests red."
+}

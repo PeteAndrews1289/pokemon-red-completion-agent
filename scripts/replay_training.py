@@ -24,6 +24,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind  # noqa: E402
 from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor  # noqa: E402
 from pokemon_red_completion.observation import PokemonRedStateReader  # noqa: E402
@@ -69,6 +70,25 @@ def main(argv: list[str] | None = None) -> int:
         emulator.close()
 
 
+def _step_into_the_field(actions, reader) -> None:
+    """Leave the tile the capture happens to have stopped on.
+
+    "Returned safely from Mansion" leaves the player at the Cinnabar nurse,
+    facing her, where opening the menu feeds her dialogue instead. The real
+    run never swaps from there -- heal_and_return walks away first -- so the
+    harness does the same rather than pretending the position is neutral.
+    """
+
+    for _ in range(4):
+        actions.execute(MacroAction(MacroActionKind.CANCEL, None))
+        actions.execute(MacroAction(MacroActionKind.WAIT, 30))
+    for _ in range(2):
+        actions.execute(MacroAction(MacroActionKind.MOVE, "down"))
+        actions.execute(MacroAction(MacroActionKind.WAIT, 60))
+    raw = reader.read()
+    print(f"stepped clear of the nurse to {(raw.player_x, raw.player_y)!r}")
+
+
 def _replay_swap(actions, reader, emulator, party_reader) -> int:
     """Swap the party's first two slots and report what happened.
 
@@ -76,6 +96,8 @@ def _replay_swap(actions, reader, emulator, party_reader) -> int:
     """
 
     from pokemon_red_completion.red_team_training import swap_field_party_slots
+
+    _step_into_the_field(actions, reader)
 
     before = party_reader.read().species_ids()
     print(f"\nswapping slots 1 and 2 of {tuple(hex(s) for s in before)}")

@@ -54,8 +54,12 @@ from pokemon_red_completion.training_venue import TrainingVenue
 
 DIGLETT_SPECIES_ID = 0x3B
 TACKLE_MOVE_ID = 0x21
-#: The fake gives every member one damaging move and no field moves, so a
-#: member submenu is SWITCH, STATS, CANCEL with SWITCH at index zero.
+#: The fake gives every member one damaging move and no field moves.
+#:
+#: The member submenu is ordered moves, STATS, SWITCH, CANCEL -- measured from a
+#: captured state, where Blastoise knowing two field moves gave a five-entry
+#: submenu whose row three performed the swap. So SWITCH sits at
+#: ``field moves + 1``, which is row one here.
 FIELD_MOVES_PER_MEMBER = 0
 TRAINING_MAP = int(MapId.POKEMON_MANSION_1F)
 CENTER_MAP = int(MapId.CINNABAR_POKECENTER)
@@ -191,7 +195,7 @@ class FakeMemory:
         if self.stage in {"party", "party_target"}:
             return len(self.party) - 1
         if self.stage == "member":
-            return self._field_move_count() + 2  # moves, then SWITCH, STATS, CANCEL
+            return self._field_move_count() + 2  # moves, then STATS, SWITCH, CANCEL
         return 5
 
     def _field_move_count(self) -> int:
@@ -217,7 +221,7 @@ class FakeMemory:
             # mistake leaves the submenu open, which is what really happened:
             # the run then drove this five-entry menu believing it was choosing
             # a party slot.
-            if self.cursor == self._field_move_count():
+            if self.cursor == self._field_move_count() + 1:  # moves, STATS, SWITCH
                 self.stage, self.cursor = "party_target", 0
         elif self.stage == "party_target" and self.pending_slot is not None:
             first, second = self.pending_slot, self.cursor
@@ -565,7 +569,8 @@ class MisplacedSwitchMemory(FakeMemory):
     cannot pass.
     """
 
-    SWITCH_ROW = 2
+    #: Two rows further out than the move list predicts.
+    EXTRA_FIELD_MOVES = 2
 
     def _max_menu_item(self) -> int:
         if self.stage == "member":
@@ -573,7 +578,7 @@ class MisplacedSwitchMemory(FakeMemory):
         return super()._max_menu_item()
 
     def _field_move_count(self) -> int:
-        return self.SWITCH_ROW
+        return self.EXTRA_FIELD_MOVES
 
 
 def test_the_switch_row_is_found_even_when_it_is_not_where_expected() -> None:
