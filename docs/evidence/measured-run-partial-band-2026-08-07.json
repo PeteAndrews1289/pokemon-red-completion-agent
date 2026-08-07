@@ -1,0 +1,40 @@
+{
+  "schema": "pokemon-run-outcome-v1",
+  "recorded_on": "2026-08-07",
+  "run_id": "diagnostic-partial-band-training",
+  "tests": "docs/evidence/predicted-partial-band-training-2026-08-07.json",
+  "counted": false,
+  "duration_seconds": 319,
+  "checkpoints_reached": "275 of 312",
+  "outcome": "the training block ran, then failed on a new defect further in",
+  "prediction_outcome": "the central claim held; the run then reached code the prediction did not anticipate",
+  "confirmed": {
+    "predicted": "the Mansion block trains, where it previously stopped at once",
+    "observed": "64 wild encounters in the Mansion, against zero in the previous run",
+    "levels_met": {"28": 3, "30": 23, "32": 20, "34": 13, "37": 2, "39": 3},
+    "reading": "The distribution is what the band said it would be, and the member fought the part of it that the fightable-share rule predicted it could. The rule is doing what it was built to do.",
+    "refutation_not_observed": "no faint, so the +2 margin survived 64 live encounters"
+  },
+  "new_defect": {
+    "where": "swap_field_party_slots, at the second cursor selection — choosing the target slot after the SWITCH command",
+    "message": "Could not select menu item.",
+    "why_it_is_newly_reachable": "Placing a trainee into slot one only happens once training actually starts. The previous run stopped before any of this, and every run before that stopped earlier still, so this path had never executed against the game.",
+    "status": "not yet diagnosed. select_cursor now reports the cursor readings it saw and which of the three menu stages failed, so the next run distinguishes a cursor that never moved — meaning this menu does not report itself at CURRENT_MENU_ITEM — from one that moved and did not arrive."
+  },
+  "what_the_harness_did_not_catch": {
+    "finding": "The fake-emulator harness exercises this exact swap and passes. It models the party menu the way the code assumes the menu behaves, so it confirms the code runs and cannot confirm the model is right.",
+    "consequence": "A fake that answers back catches missing symbols, wrong arity, unreachable branches and never-executed code. It cannot catch a wrong belief about the game, because the fake is built out of that same belief.",
+    "not_a_reason_to_drop_it": "The harness has already turned four reintroduced defects red in milliseconds. This is a statement of its boundary, not an argument against it: memory layout and menu behaviour have to be measured against the game, and that is what the run is for."
+  },
+  "progress_against_the_original_problem": {
+    "first_receipt": "flees 33, battles 0, party [68, 20, 26, 30, 25, 30]",
+    "previous_run": "flees 0, battles 0, stopped before any input with a named alternative venue",
+    "this_run": "64 encounters fought at the venue, stopped on an unrelated menu defect",
+    "still_true": "three members sit below the Mansion's reach and have nowhere to go until Diglett's Cave has an implemented heal-and-return"
+  },
+  "next": [
+    "Re-run to read the cursor sequence the instrumented failure now reports",
+    "Fix the swap against what it says rather than against what the menu is assumed to do",
+    "Then Diglett's Cave, for the three members the Mansion cannot reach"
+  ]
+}

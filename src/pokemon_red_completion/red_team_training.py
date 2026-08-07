@@ -275,15 +275,37 @@ def restore_training_core_order(
 
 
 def select_cursor(
-    actions: CountingExecutor, emulator: EmulatorState, target: int, timing: object
+    actions: CountingExecutor,
+    emulator: EmulatorState,
+    target: int,
+    timing: object,
+    label: str = "menu",
 ) -> None:
+    """Move the menu cursor onto ``target``.
+
+    The failure carries the readings.  "Could not select menu item" says
+    nothing about whether the cursor was moving and overshot, moving and too
+    slow, or not moving at all -- and those want three different fixes.  A
+    twenty-five minute run that ends in an unfalsifiable sentence has to be
+    repeated to learn anything, so the sequence is reported instead.
+    """
+
+    seen: list[int] = []
     for _ in range(8):
         cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        seen.append(cursor)
         if cursor == target:
-            break
+            return
         pulse(actions, MacroActionKind.MOVE, "down" if cursor < target else "up", 120)
-    else:
-        raise RuntimeError("Could not select menu item.")
+    raise RuntimeError(
+        f"Could not select {label} item {target}: cursor read {seen!r} across eight moves. "
+        + (
+            "It never moved, so this menu does not report its cursor at "
+            "CURRENT_MENU_ITEM."
+            if len(set(seen)) == 1
+            else "It moved but did not arrive."
+        )
+    )
 
 
 def swap_field_party_slots(
@@ -308,16 +330,16 @@ def swap_field_party_slots(
     field_move_count = sum(move.move_id in FIELD_MOVE_IDS for move in selected.known_moves)
 
     pulse(actions, MacroActionKind.OPEN_MENU)
-    select_cursor(actions, emulator, 1, hideout_timing)
+    select_cursor(actions, emulator, 1, hideout_timing, "start-menu POKEMON")
     pulse(actions, MacroActionKind.CONFIRM)
-    select_cursor(actions, emulator, first_index, hideout_timing)
+    select_cursor(actions, emulator, first_index, hideout_timing, "party source slot")
     pulse(actions, MacroActionKind.CONFIRM)
     for _ in range(field_move_count + 1):
         pulse(actions, MacroActionKind.MOVE, "down", 120)
     if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != field_move_count + 1:
         raise RuntimeError(f"{label} could not select the field SWITCH command.")
     pulse(actions, MacroActionKind.CONFIRM)
-    select_cursor(actions, emulator, second_index, hideout_timing)
+    select_cursor(actions, emulator, second_index, hideout_timing, "party target slot")
     pulse(actions, MacroActionKind.CONFIRM)
     close_menu(actions, reader)
 
