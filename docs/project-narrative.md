@@ -1449,6 +1449,14 @@ objectives, and 540,247 actions. That closes the full-route teacher claim. Learn
 reproduction, unseen-seed generalization, living-Pokédex completion, and cross-game transfer remain
 open and are deliberately separate claims.
 
+The full-party level gate did not, by itself, create full-party League behavior. Whole-League
+instrumentation on the next exact-source clean-power run recorded 49 attack decisions: Lorelei 19,
+Bruno 6, Agatha 9, Lance 7, and the Champion 8. Every one came from party slot 1. Participation was
+therefore one of six members and the busiest-member share was 100% in every chapter. This is a
+useful negative result: balanced preparation prevents disposable teammates and creates strategic
+capacity, but the battle teacher must still learn when to use that capacity. The next curriculum
+target is matchup-aware switching with an explicit participation judgement, not additional levels.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

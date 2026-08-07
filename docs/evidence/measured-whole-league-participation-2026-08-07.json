@@ -1,0 +1,62 @@
+{
+  "schema": "pokemon-red-whole-league-participation-evidence-v1",
+  "recorded_at": "2026-08-07",
+  "source_commit": "d56eee7",
+  "regime": "clean-power deterministic-teacher run; one uninterrupted process; no save-state restore; no validation or sealed evaluation seed opened",
+  "completion": {
+    "status": "ok",
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "qualified_through": "enter_hall_of_fame",
+    "actions_executed": 540247
+  },
+  "whole_league": {
+    "turns_per_member": [49, 0, 0, 0, 0, 0],
+    "observed_turns": 49,
+    "unobserved_turns": 0,
+    "participating_members": 1,
+    "busiest_member_turns": 49,
+    "busiest_member_share": 1.0
+  },
+  "chapters": {
+    "lorelei": {
+      "turns_per_member": [19, 0, 0, 0, 0, 0],
+      "observed_turns": 19,
+      "participating_members": 1,
+      "busiest_member_share": 1.0
+    },
+    "bruno": {
+      "turns_per_member": [6, 0, 0, 0, 0, 0],
+      "observed_turns": 6,
+      "participating_members": 1,
+      "busiest_member_share": 1.0
+    },
+    "agatha": {
+      "turns_per_member": [9, 0, 0, 0, 0, 0],
+      "observed_turns": 9,
+      "participating_members": 1,
+      "busiest_member_share": 1.0
+    },
+    "lance": {
+      "turns_per_member": [7, 0, 0, 0, 0, 0],
+      "observed_turns": 7,
+      "participating_members": 1,
+      "busiest_member_share": 1.0
+    },
+    "champion": {
+      "turns_per_member": [8, 0, 0, 0, 0, 0],
+      "observed_turns": 8,
+      "participating_members": 1,
+      "busiest_member_share": 1.0
+    }
+  },
+  "judgement": "Balanced development fixed roster readiness but did not fix League behavior. The teacher still assigned every recorded attack decision to one member, so these League demonstrations remain single-carry data despite the six-member level floor.",
+  "next_requirement": "Add matchup-aware League switching and require more than one participating member with a busiest-member share below 1.0 before describing the League curriculum as team play.",
+  "not_claimed": [
+    "The other five party members made no recorded attack decisions in this run.",
+    "Balanced levels do not by themselves demonstrate balanced battle participation.",
+    "No learned policy or cross-game transfer was evaluated."
+  ]
+}

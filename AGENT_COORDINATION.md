@@ -256,28 +256,21 @@ Current state: **1891 passed, 3 deselected**, all checks green, on trunk
 
 These are ordered by how much they serve the mission, not by difficulty.
 
-**1. Reproduce the captured success in one full uninterrupted run. (Lane A)** The captured state
-reaches six level-55 members with zero faints in 1,716 combined battles and 885 healing trips. Take
-the full run, record the same numbers, continue through the League, and compare the result against
-both the captured receipt and the roughly 1,878-battle escort-era baseline.
+**1. Full uninterrupted reproduction complete.** The clean-power route reproduced 1,716 combined
+battles and 885 healing trips, passed the final-form team gate at 60/55/55/55/55/55, completed
+312/312 checkpoints and 36/36 objectives, and entered the Hall of Fame.
 
-**2. Measure participation across the whole League, and derive the judgement. (Lane C)**
-`turns_per_member` exists — in `champion.py` only, so participation is measured for one of the five
-League battles. `agatha.py` records `active_party_index` per turn but never aggregates it;
-`lorelei.py`, `bruno.py` and `lance.py` record neither.
-
-Coverage is half the gap. The other half is that `turns_per_member` is a raw list, and a list does
-not embarrass anyone. Two derived numbers would: how many members took a turn at all, and what share
-the busiest one took. "One member, six turns, 100%" is a sentence that ends an argument; `[6, 0, 0,
-0, 0, 0]` is a row someone has to read carefully to be bothered by.
+**2. Whole-League participation measurement complete.** All five chapters now record active-party
+indexes and derive participating-member count and busiest-member share. The exact clean-power run
+measured `[49, 0, 0, 0, 0, 0]`: 1/6 participation and 100% busiest-member share. The next task is
+matchup-aware League switching that reduces that share without weakening completion safety.
 
 **3. Tolerance conflict resolved.** Mansion development and Champion readiness now share
 `COMPLETION_LEVEL_PARITY`, which requires level 55 against the League's level-65 ceiling. Do not
 restore separate local tolerance contracts.
 
-**4. Validate the combined training-safety policy. (Lane A/C)** The +2 margin is rejected. The
-five-level, type-aware, immediate-attack replacement completed one captured-state run. Validate the
-combined policy against the full route rather than attributing success to the level margin alone.
+**4. Combined training-safety policy validated.** The five-level, type-aware, immediate-attack
+replacement now has both captured-state and repeated clean-power full-route completion evidence.
 
 **5. Turn the balance assertion on. (Lane B, after 1)** `DevelopedTeamReport.passed` asserts a
 complete roster, one trained workhorse, and zero faints — nothing about the other five members. It

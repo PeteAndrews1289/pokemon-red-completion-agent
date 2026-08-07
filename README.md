@@ -20,6 +20,12 @@ control, and progressively trained specialists.**
 > [full-route balanced-team receipt](docs/evidence/measured-balanced-team-full-route-success-2026-08-07.json)
 > and the earlier
 > [captured-state diagnostic](docs/evidence/measured-balanced-team-captured-state-success-2026-08-07.json).
+> **Important limitation:** whole-League instrumentation then measured all **49/49 attack
+> decisions** on party slot 1: only **one of six members participated**, and the busiest-member share
+> was **100%** in every League chapter. The roster is now developed, but League combat is still a
+> single-carry teacher demonstration. The next curriculum change is matchup-aware team switching,
+> not more grinding. See the
+> [whole-League participation receipt](docs/evidence/measured-whole-league-participation-2026-08-07.json).
 > **August 5 collection update:** the first battle model is trained from five complete teacher
 > lineages and reaches **85.8% held-out validation accuracy** across two validation lineages. Its
 > sealed test partition remains unopened. Broader teacher stress then exposed a legitimate

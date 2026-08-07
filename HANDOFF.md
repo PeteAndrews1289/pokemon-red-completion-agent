@@ -44,6 +44,9 @@ of whether it serves this.
   the same process: 312/312 checkpoints, 36/36 objectives, Champion defeated, and Hall of Fame
   entered. The curriculum used 1,716 battles and 885 heals and passed with a final-form party at
   levels 60/55/55/55/55/55.
+- Whole-League instrumentation on the next exact-source completion recorded 49/49 attack decisions
+  from party slot 1. The roster is balanced; League behavior is not. Participation is 1/6 and the
+  busiest-member share is 100% in Lorelei, Bruno, Agatha, Lance, and Champion alike.
 
 **Not true, however it may look:**
 
@@ -64,16 +67,16 @@ clean before the full-route documentation update.
 
 ## 3. Start here
 
-**Move from teacher qualification to learning.** The clean-power run now reproduces the balanced
+**Fix League participation before collecting this curriculum.** The clean-power run now reproduces the balanced
 curriculum, continues through all five League battles, and preserves concurrent Champion and
 Hall-of-Fame evidence. Keep the captured-state harness for bounded trainer regressions, but do not
 spend more time re-proving the deterministic route without a concrete source change.
 
-The next useful experiment is to record the newly qualified balanced-team decisions under the
-existing lineage and partition contracts, then measure which training, switching, recovery, and
-venue-selection decisions a learned policy can reproduce without teacher fallback. Keep living-
-Pokédex expansion and second-title transfer as explicit later stages rather than inflating the Red
-completion claim.
+The next useful experiment is matchup-aware switching across the five League battles, with the
+whole-League participation report as its judgement. Require more than one participating member and
+a busiest-member share below 100% before collecting the newly qualified curriculum under the
+existing lineage and partition contracts. Keep living-Pokédex expansion and second-title transfer
+as explicit later stages rather than inflating the Red completion claim.
 
 Then continue down [AGENT_COORDINATION.md](AGENT_COORDINATION.md) § *Open work, in priority order*.
 
@@ -149,6 +152,7 @@ Each cost at least one emulator run to establish. Each has an evidence file.
 | The +2 margin is unsafe: level-23 Diglett fainted from full HP to level-19 Diglett before dealing damage | `training-margin-four-level-faint-2026-08-07.json` |
 | Captured-state development reached six level-55 members in 1,716 battles with zero faints | `measured-balanced-team-captured-state-success-2026-08-07.json` |
 | A clean-power run passed the final-form 60/55/55/55/55/55 team gate and completed 312/312 checkpoints through Hall of Fame | `measured-balanced-team-full-route-success-2026-08-07.json` |
+| The next full run measured all 49 League attack decisions on party slot 1: 1/6 participation and 100% busiest-member share | `measured-whole-league-participation-2026-08-07.json` |
 
 ---
 
