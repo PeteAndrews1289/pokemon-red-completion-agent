@@ -85,6 +85,7 @@ from pokemon_red_completion.training import (
     choose_training_directive,
     choose_training_move_slot,
 )
+from pokemon_red_completion.training_venue import TrainingVenue
 
 BLAINE_CHECKPOINT_COUNT = 9
 BLAINE_CAPACITY_SALE_ITEM = ItemId.ANTIDOTE
@@ -929,11 +930,11 @@ def run_blaine_chapter(
             max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
             cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
             evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
-            heal_and_return=_mansion_heal_and_return,
-            is_in_center=lambda raw: raw.map_id == MapId.CINNABAR_POKECENTER,
-            is_in_map=lambda raw: raw.map_id == MapId.POKEMON_MANSION_1F,
-            walk_to_grass=_mansion_walk_to_grass,
-            move_slot=_team_training_move_slot,
+            heal_and_return=MANSION_TRAINING_VENUE.heal_and_return,
+            is_in_center=MANSION_TRAINING_VENUE.is_in_center,
+            is_in_map=MANSION_TRAINING_VENUE.is_in_map,
+            walk_to_grass=MANSION_TRAINING_VENUE.walk_to_grass,
+            move_slot=MANSION_TRAINING_VENUE.move_slot,
             report_label="Mansion team training",
             checkpoint_count=BLAINE_CHECKPOINT_COUNT,
             measured_venues=MEASURED_TRAINING_VENUES,
@@ -976,11 +977,11 @@ def run_blaine_chapter(
             else None
         ),
         completed_checkpoint_count=len(records),
-        heal_and_return=_mansion_heal_and_return,
-        is_in_center=lambda raw: raw.map_id == MapId.CINNABAR_POKECENTER,
-        is_in_map=lambda raw: raw.map_id == MapId.POKEMON_MANSION_1F,
-        walk_to_grass=_mansion_walk_to_grass,
-        move_slot=_team_training_move_slot,
+        heal_and_return=MANSION_TRAINING_VENUE.heal_and_return,
+        is_in_center=MANSION_TRAINING_VENUE.is_in_center,
+        is_in_map=MANSION_TRAINING_VENUE.is_in_map,
+        walk_to_grass=MANSION_TRAINING_VENUE.walk_to_grass,
+        move_slot=MANSION_TRAINING_VENUE.move_slot,
         report_label="Mansion team training",
         checkpoint_count=BLAINE_CHECKPOINT_COUNT,
         measured_venues=MEASURED_TRAINING_VENUES,
@@ -1605,6 +1606,32 @@ def _mansion_walk_to_grass(actions, reader, emulator) -> int:
     direction = "down" if (raw.player_y or 0) <= 20 else "up"
     _pulse(actions, MacroActionKind.MOVE, direction, 240)
     return 1
+
+
+def _mansion_training_venue() -> TrainingVenue:
+    """The Mansion, bound to the band it was actually measured to field.
+
+    This is the only venue with an implemented heal-and-return, which is why it
+    is the only one constructed. Diglett's Cave is measured and would suit the
+    level-20 trainees far better; the navigation for it exists in ``surge`` --
+    ``VERMILION_CENTER_TO_ROUTE_11`` and the Route 11 gate walk -- and lifting
+    it into a second venue here is the remaining routing work.
+    """
+
+    band = next(
+        area for area in MEASURED_TRAINING_VENUES if area.area_id == "pokemon_mansion_1f"
+    )
+    return TrainingVenue(
+        band=band,
+        map_id=int(MapId.POKEMON_MANSION_1F),
+        walk_to_grass=_mansion_walk_to_grass,
+        heal_and_return=_mansion_heal_and_return,
+        is_in_center=lambda raw: raw.map_id == MapId.CINNABAR_POKECENTER,
+        move_slot=_team_training_move_slot,
+    )
+
+
+MANSION_TRAINING_VENUE = _mansion_training_venue()
 
 
 def _run_mansion_training(

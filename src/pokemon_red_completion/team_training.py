@@ -534,6 +534,12 @@ class GrindingArea:
 
         return self.rare_maximum_encounter_level or self.maximum_encounter_level
 
+    @property
+    def has_rare_ceiling(self) -> bool:
+        """Whether a few of this area's encounters run above the rest."""
+
+        return self.worst_case_encounter_level > self.maximum_encounter_level
+
 
 @dataclass(frozen=True, slots=True)
 class BalancedTeamReport:
