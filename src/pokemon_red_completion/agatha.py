@@ -6,7 +6,6 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -36,6 +35,7 @@ from pokemon_red_completion.celadon import (
     _party_max_hp,
     _party_status,
 )
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
@@ -71,7 +71,6 @@ from pokemon_red_completion.silph import (
 from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
     INDIGO_X_SPECIAL_RESERVE,
-    CountingExecutor,
     _event,
     _menu_cursor_active,
     _move,

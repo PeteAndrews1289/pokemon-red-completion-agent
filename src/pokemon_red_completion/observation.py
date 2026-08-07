@@ -3285,6 +3285,7 @@ class SurgeProgressTracker:
 class PokemonRedStateReader:
     def __init__(self, memory: ReadOnlyMemory) -> None:
         self._memory = memory
+        self._last_encounter = None
 
     def read(self) -> RawGameState:
         status = self._memory.read_u8(RamAddress.STATUS_FLAGS_6)
@@ -3375,7 +3376,7 @@ class PokemonRedStateReader:
         )
         disabled_move = self._memory.read_u8(RamAddress.PLAYER_DISABLED_MOVE) if battle_state else 0
         disabled_slot = (disabled_move >> 4) & 0x0F
-        return RawGameState(
+        raw = RawGameState(
             game_started=True,
             map_id=self._memory.read_u8(RamAddress.CURRENT_MAP),
             player_x=self._memory.read_u8(RamAddress.PLAYER_X),
@@ -3433,6 +3434,23 @@ class PokemonRedStateReader:
             active_party_pp=active_party_pp,
             player_money=self._read_bcd(RamAddress.PLAYER_MONEY, 3),
         )
+
+        if raw.battle_state:
+            enc = (raw.map_id, raw.enemy_species_id, raw.enemy_level, raw.battle_state)
+            if enc != self._last_encounter:
+                self._last_encounter = enc
+                import json
+                from pathlib import Path
+                log_path = Path("/tmp/pokemon_encounters.jsonl")
+                entry = {
+                    "map_id": raw.map_id,
+                    "enemy_species": raw.enemy_species_id,
+                    "enemy_level": raw.enemy_level,
+                    "battle_state": raw.battle_state,
+                }
+                with log_path.open("a") as f:
+                    f.write(json.dumps(entry) + "\n")
+        return raw
 
     def read_pokedex_state(self) -> RedPokedexState:
         """Decode Red's two 151-bit National Pokédex flag arrays."""

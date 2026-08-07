@@ -6,7 +6,6 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -32,6 +31,7 @@ from pokemon_red_completion.cascade import (
     _use_battle_recovery_item,
     _use_cerulean_rival_potion,
 )
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.lavender import (
     BUBBLEBEAM,
     DEFAULT_LAVENDER_TIMING,

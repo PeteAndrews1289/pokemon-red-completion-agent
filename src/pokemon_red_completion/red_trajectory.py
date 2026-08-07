@@ -267,6 +267,7 @@ class PokemonRedBattleDecisionObserver:
         self._active_battle_instance_id = f"{self.recorder.episode_id}:battle:{battle_index}"
         self._active_battle_intent = intent
 
+
     def battle_finished(self) -> None:
         """Close the active encounter only after the runtime observes battle exit."""
 
@@ -283,8 +284,6 @@ class PokemonRedBattleDecisionObserver:
     ) -> AbstractContextManager[None]:
         """Return a fail-open span linking one move choice to its executions."""
 
-        # Observable world features remain part of the general policy view and
-        # may be ablated explicitly by a battle-specialist training export.
         return self.recorder.decision_scope(
             lambda: self._build_decision(
                 policy_state=policy_state,

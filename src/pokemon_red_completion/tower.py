@@ -7,7 +7,6 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field, replace
 from typing import Protocol
 
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -35,6 +34,7 @@ from pokemon_red_completion.celadon import (
     _party_status,
 )
 from pokemon_red_completion.economy import HIDEOUT_SUPER_POTION_RESERVE
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _close_menus,

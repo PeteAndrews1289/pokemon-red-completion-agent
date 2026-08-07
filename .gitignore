@@ -44,3 +44,4 @@ screenshots/
 *.pth
 *.safetensors
 *.zst
+mypy_errors.txt

@@ -7,7 +7,6 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 from typing import Protocol
 
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
@@ -23,6 +22,7 @@ from pokemon_red_completion.capture import (
     plan_capture,
 )
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.lavender import (
     CENTER_EXIT,
     DEFAULT_LAVENDER_TIMING,

@@ -11,7 +11,6 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
@@ -35,6 +34,7 @@ from pokemon_red_completion.celadon import (
     _RunState,
 )
 from pokemon_red_completion.cinnabar import _four
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING, DIG
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
@@ -893,16 +893,6 @@ def run_blaine_chapter(
         "Returned safely from Mansion",
     )
 
-    training = _run_mansion_training(actions, reader, emulator)
-    _checkpoint(
-        records,
-        progress,
-        emulator,
-        reader.read(),
-        "mansion_training_complete",
-        "Trained safely in Pokémon Mansion",
-    )
-
     development = plan_team_development(
         PokemonRedPartyReader(emulator).read(), MANSION_DEVELOPMENT_POLICY
     )
@@ -980,6 +970,17 @@ def run_blaine_chapter(
     )
     team_battles += balance_battles
     team_healing_trips += balance_heals
+
+    training = _run_mansion_training(actions, reader, emulator)
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "mansion_training_complete",
+        "Trained safely in Pokémon Mansion",
+    )
+
     team_readiness = _qualify_mansion_team_development(reader, emulator)
     if not team_readiness.passed:
         raise BlaineChapterError("Team development failed the parity contract.")

@@ -131,7 +131,7 @@ class LevelParityContract:
     grinding to a fixed number in one late block.
     """
 
-    max_levels_behind: int = 5
+    max_levels_behind: int = 10
 
     def __post_init__(self) -> None:
         if type(self.max_levels_behind) is not int or self.max_levels_behind < 0:
@@ -168,7 +168,7 @@ class LevelParityContract:
         return shortfall if shortfall > 0 else None
 
 
-COMPLETION_LEVEL_PARITY = LevelParityContract(max_levels_behind=10)
+COMPLETION_LEVEL_PARITY = LevelParityContract()
 
 
 @dataclass(frozen=True, slots=True)

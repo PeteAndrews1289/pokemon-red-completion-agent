@@ -9,7 +9,6 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
@@ -19,6 +18,7 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import _party_hp, _party_max_hp, _party_status
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.observation import (
     EventFlag,
     MapId,
@@ -29,12 +29,10 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.silph import (
     CENTER_EXIT,
     DEFAULT_SILPH_TIMING,
-    ChapterExecutor,
     EmulatorState,
     SilphChapterError,
     SilphTiming,
     _await_trainer_battle,
-    CountingExecutor,
     _event,
     _heal,
     _move,

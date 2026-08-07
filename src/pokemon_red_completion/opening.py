@@ -23,7 +23,11 @@ from pokemon_red_completion.bootstrap import (
     play_new_game_intro,
 )
 from pokemon_red_completion.emulator import PyBoyAdapter
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor, ExecutedAction, FrameSafeExecutor
+from pokemon_red_completion.executor import (
+    CountingExecutor,
+    ExecutedAction,
+    FrameSafeExecutor,
+)
 from pokemon_red_completion.navigation import Coordinate, path_to_directions
 from pokemon_red_completion.observation import (
     SQUIRTLE_SPECIES_ID,

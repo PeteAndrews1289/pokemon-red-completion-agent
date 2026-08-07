@@ -6,9 +6,9 @@ from types import SimpleNamespace
 import pytest
 
 from pokemon_red_completion import vermilion
-from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_runtime import BattleResourcePolicy, BattleRuntimeError
+from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.observation import (
     CERULEAN_ROCKET_TRAINER_NUMBER,
     ROCKET_OPPONENT_ID,

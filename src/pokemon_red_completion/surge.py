@@ -7,7 +7,6 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -33,6 +32,7 @@ from pokemon_red_completion.capture import (
     plan_capture,
 )
 from pokemon_red_completion.collection import CollectionObservation
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.observation import (
     Badge,
     BattleMenuPhase,

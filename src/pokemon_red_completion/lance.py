@@ -6,7 +6,6 @@ from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Protocol
 
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.agatha import (
     AgathaChapterError,
@@ -37,6 +36,7 @@ from pokemon_red_completion.celadon import (
     _party_max_hp,
     _party_status,
 )
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _close_menus,
@@ -62,7 +62,6 @@ from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
     VictoryRoadChapterError,
     _battle_sacrifice,
-    CountingExecutor,
     _event,
     _move,
     _pulse,

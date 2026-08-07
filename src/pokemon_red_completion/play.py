@@ -100,7 +100,11 @@ from pokemon_red_completion.erika import (
     ErikaProgress,
     run_erika_chapter,
 )
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor, ExecutedAction, FrameSafeExecutor
+from pokemon_red_completion.executor import (
+    CountingExecutor,
+    ExecutedAction,
+    FrameSafeExecutor,
+)
 from pokemon_red_completion.fuchsia import (
     FUCHSIA_CHECKPOINT_COUNT,
     FuchsiaChapterError,

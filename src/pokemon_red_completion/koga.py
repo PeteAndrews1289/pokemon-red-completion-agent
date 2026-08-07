@@ -13,7 +13,6 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -34,6 +33,7 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.lavender import LavenderTiming, _select_bag_item
 from pokemon_red_completion.observation import (
     Badge,

@@ -12,7 +12,6 @@ from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Protocol
 
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -33,6 +32,7 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.economy import LAVENDER_SUPER_POTION_RESERVE
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.observation import (
     BULBASAUR_SPECIES_ID,
     Badge,

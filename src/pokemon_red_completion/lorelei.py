@@ -11,7 +11,6 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
-from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -36,6 +35,7 @@ from pokemon_red_completion.celadon import (
     _party_max_hp,
     _party_status,
 )
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _select_bag_item,
@@ -59,7 +59,6 @@ from pokemon_red_completion.victory_road import (
     INDIGO_FULL_HEAL_RESERVE,
     INDIGO_FULL_RESTORE_RESERVE,
     INDIGO_X_SPECIAL_RESERVE,
-    CountingExecutor,
     _event,
     _move,
     _pulse,

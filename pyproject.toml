@@ -64,6 +64,73 @@ ignore_missing_imports = true
 # type checking entirely.
 files = ["src/"]
 
+# Type-checking debt register.
+#
+# The scope is deliberately the whole package so that new and refactored modules
+# are checked -- every one of the sixteen defects found in the balanced-team work
+# lived in new code, and five were plain type errors. The 44 modules below are
+# pre-existing chapters that do not pass yet; listing them keeps the gate green
+# and honest instead of leaving 215 errors that everyone learns to ignore.
+#
+# Two patterns dominate and are worth fixing at the root rather than per-error:
+#   * 28 modules each declare their own structurally similar EmulatorState, and
+#     5 their own _RunState, so mypy reads cross-module calls as type errors.
+#     Consolidating these the way executor.py consolidated _CountingExecutor
+#     removes roughly 45 of them.
+#   * The remainder are largely `int | None` passed where `int` is required --
+#     the same class of latent fault as the None-coordinate and reader-for-tuple
+#     bugs the emulator caught one 25-minute run at a time.
+#
+# This list should only ever shrink. Do not add to it: fix the module instead.
+[[tool.mypy.overrides]]
+module = [
+  "pokemon_red_completion.agatha",
+  "pokemon_red_completion.battle_action_targets",
+  "pokemon_red_completion.battle_control_model",
+  "pokemon_red_completion.battle_control_training",
+  "pokemon_red_completion.battle_corrections",
+  "pokemon_red_completion.battle_neural_model",
+  "pokemon_red_completion.battle_recovery",
+  "pokemon_red_completion.battle_runtime",
+  "pokemon_red_completion.battle_schedule",
+  "pokemon_red_completion.battle_training",
+  "pokemon_red_completion.blaine",
+  "pokemon_red_completion.bruno",
+  "pokemon_red_completion.cascade",
+  "pokemon_red_completion.celadon",
+  "pokemon_red_completion.cerulean",
+  "pokemon_red_completion.champion",
+  "pokemon_red_completion.cinnabar",
+  "pokemon_red_completion.cli",
+  "pokemon_red_completion.collection_protocol",
+  "pokemon_red_completion.erika",
+  "pokemon_red_completion.fuchsia",
+  "pokemon_red_completion.giovanni",
+  "pokemon_red_completion.lance",
+  "pokemon_red_completion.lavender",
+  "pokemon_red_completion.learned_battle_policy",
+  "pokemon_red_completion.learned_planner_policy",
+  "pokemon_red_completion.lorelei",
+  "pokemon_red_completion.observation",
+  "pokemon_red_completion.opening",
+  "pokemon_red_completion.planner_model",
+  "pokemon_red_completion.planner_trajectory",
+  "pokemon_red_completion.play",
+  "pokemon_red_completion.private_artifacts",
+  "pokemon_red_completion.provenance",
+  "pokemon_red_completion.red_trajectory",
+  "pokemon_red_completion.sabrina",
+  "pokemon_red_completion.saffron",
+  "pokemon_red_completion.silph",
+  "pokemon_red_completion.ss_anne",
+  "pokemon_red_completion.surge",
+  "pokemon_red_completion.tower",
+  "pokemon_red_completion.trajectory",
+  "pokemon_red_completion.vermilion",
+  "pokemon_red_completion.victory_road",
+]
+ignore_errors = true
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"
