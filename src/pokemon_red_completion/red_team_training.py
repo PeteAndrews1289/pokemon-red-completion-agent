@@ -102,8 +102,21 @@ def pulse(
 
 
 def close_menu(actions: CountingExecutor, reader: PokemonRedStateReader) -> None:
-    for _ in range(8):
-        if reader.read().map_menu_state == 0:
+    """Close any open field menu.
+
+    This previously read ``RawGameState.map_menu_state``, which does not exist,
+    so it raised the first time a menu had to be closed during training.
+
+    The shape here follows ``lavender._close_menus``, which is proven on the
+    qualified route: the generic input-ready flags are *also* true inside
+    several field menus, so readiness alone cannot show that an ITEM or party
+    screen actually closed.  Cancel unconditionally first, then confirm.
+    """
+
+    for _ in range(4):
+        pulse(actions, MacroActionKind.CANCEL)
+    for _ in range(6):
+        if reader.read_input_readiness().ready:
             return
         pulse(actions, MacroActionKind.CANCEL)
     raise RuntimeError("Could not close menu.")
