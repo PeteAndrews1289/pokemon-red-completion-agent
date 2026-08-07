@@ -988,15 +988,8 @@ def run_blaine_chapter(
             else None
         ),
         completed_checkpoint_count=len(records),
-        heal_and_return=MANSION_TRAINING_VENUE.heal_and_return,
-        is_in_center=MANSION_TRAINING_VENUE.is_in_center,
-        is_in_map=MANSION_TRAINING_VENUE.is_in_map,
-        walk_to_grass=MANSION_TRAINING_VENUE.walk_to_grass,
-        move_slot=MANSION_TRAINING_VENUE.move_slot,
         report_label="Mansion team training",
         checkpoint_count=BLAINE_CHECKPOINT_COUNT,
-        measured_venues=MEASURED_TRAINING_VENUES,
-        venue_band=MANSION_TRAINING_VENUE.band,
     )
     team_battles += balance_battles
     team_healing_trips += balance_heals

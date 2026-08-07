@@ -1,7 +1,11 @@
+import ast
+import inspect
+import textwrap
 from dataclasses import replace
 
 import pytest
 
+from pokemon_red_completion import blaine as blaine_module
 from pokemon_red_completion.blaine import (
     BLAINE_ANTIDOTE_SALE_VALUE,
     BLAINE_CAPACITY_SALE_ITEM,
@@ -52,6 +56,7 @@ from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGame
 from pokemon_red_completion.party import MoveObservation, PartyMemberObservation
 from pokemon_red_completion.red_team_training import (
     _PauseForTeamTrainingRecovery,
+    run_red_team_balancing,
     trainee_should_fight_directly,
 )
 from pokemon_red_completion.red_team_training import (
@@ -67,6 +72,26 @@ from pokemon_red_completion.red_team_training import (
     training_attack_pp_reserve as _training_attack_pp_reserve,
 )
 from pokemon_red_completion.team_training import BalancedTeamPolicy
+
+
+def test_blaine_training_calls_only_use_the_shared_balancer_signature() -> None:
+    tree = ast.parse(textwrap.dedent(inspect.getsource(blaine_module.run_blaine_chapter)))
+    allowed_keywords = set(inspect.signature(run_red_team_balancing).parameters)
+    calls = [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == "run_red_team_balancing"
+    ]
+
+    assert len(calls) == 2
+    assert [
+        keyword.arg
+        for call in calls
+        for keyword in call.keywords
+        if keyword.arg not in allowed_keywords
+    ] == []
 
 
 def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
