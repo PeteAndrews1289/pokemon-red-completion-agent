@@ -154,6 +154,99 @@ reporting somebody else's Pokémon.
 
 ---
 
+## Act VI: Four guesses, one measurement
+
+The team could now reach the right *level*. It still could not reach the right *place*.
+
+Training happened in one late block at the Pokémon Mansion, and the Mansion is where a run goes to
+get strong, not to grow up. Our own note in the repository said its wild Pokémon were level 30–32.
+That note came from eight encounters. When 155 encounters were counted properly, the real band was
+**28–39** — we had understated the ceiling by seven levels and could not tell, because the note
+recorded no sample count.
+
+A level-20 trainee cannot fight anything there. So it fled, thirty-three times, and gave up.
+
+The fix is obvious once stated: send each member somewhere its own level lives. Diglett's Cave
+measures 15–21 over 29 encounters, which suits a level-20 Diglett exactly. But "send it there"
+means walking there, and walking there meant Fly, and Fly meant the town map.
+
+### The map that will not answer
+
+Every menu in this project is driven the same way: press a direction, read where the cursor went,
+press again until it is where you want it. That technique had solved a dozen menus.
+
+The town map does not participate. Five candidate memory addresses were sampled after every cursor
+move, and all five were **frozen** — still holding values the previous menu had left behind. There is
+no cursor to read. The screen is not a list.
+
+So we stopped trying to steer it and started checking it instead: fly, then ask the game which town
+we are standing in, and try again if it is the wrong one. A wrong fly costs a few seconds of game
+time and nothing else. Two runs had ended at *"Fly to Vermilion failed"*, arriving at Viridian; the
+next one flew to Vermilion, healed at the nurse, and failed two steps further along.
+
+Nothing was ever learned about the town map's layout. Nothing needed to be.
+
+### The menu that cost five runs
+
+Then a party menu. To put a trainee in front you open POKéMON, pick a slot, and choose SWITCH from
+its submenu. The only question is which row SWITCH is on.
+
+We guessed four times. Each guess was checked by logic derived from the same assumption as the
+guess, so nothing could contradict it, and each one cost a six-minute run to disprove:
+
+| guess | outcome |
+|---|---|
+| one row past the field moves | confirmed on the wrong row |
+| exactly at the field moves | changed nothing at all |
+| "the menu will be as long as the party" | it is not |
+| "the cursor can reach the target slot" | it can in both menus |
+
+Five runs. Thirty minutes of emulator time, spent asking a menu the same question in four different
+wrong ways.
+
+### The suggestion that ended it
+
+The project's owner asked why we were replaying the whole game to reach the same thirty seconds.
+Why not save the emulator's state at that point and resume from there?
+
+The answer took one afternoon to build and reduced the loop from **six minutes to one second**.
+
+With that, the menu stopped being an argument and became an experiment. Load the state, put the
+cursor on a row, press A, look at the party. Five rows, five seconds:
+
+```
+row 0   stayed in the submenu
+row 1   stayed in the submenu
+row 2   stayed in the submenu
+row 3   opened the party list — and the party order changed
+row 4   exited
+```
+
+SWITCH is row 3. Which is `field_move_count + 1` — **the formula the code had before we changed it.**
+
+We had broken working code with a plausible theory, then spent five runs failing to disprove the
+theory, because the theory and the tests came from the same place.
+
+### And then it looked like it was working
+
+With the swap fixed, the block ran for ten minutes without failing. Previous attempts had died in
+seconds. That looks exactly like training.
+
+It was pressing left against a rock.
+
+The cave walk picked one direction from the player's position and kept it. Diglett's Cave winds, so
+after eight tiles the player met a wall, and a blocked press is not a step — the game never rolls for
+an encounter. The loop counted a step anyway. Five hundred thousand of them.
+
+The number that separates training from spinning is the ratio of steps to battles, and nothing was
+reporting it. Measured: **250 walks, one encounter, no level gained.** After pacing the tunnel and
+turning at each wall: **120 walks, level 20 to 21.**
+
+That is the whole lesson of this act, twice over. A wrong belief that nothing can contradict, and a
+process that looks like work. Both survive any amount of care. Neither survives one measurement.
+
+---
+
 ## Why a living Pokédex
 
 Every failure in this story has the same shape: a fixed sequence standing in where a decision should
@@ -197,8 +290,13 @@ Being precise about this matters more than the story sounding finished.
   Hall-of-Fame evidence in the same run.
 - A trained model authorizes all 36 objectives with zero fallbacks — but fixed code executes them.
   It selects objectives; it does not yet play.
-- The team can now be trained to League parity at a measured cost.
-- The team still does not participate in battles. The escort does everything.
+- Encounter bands for five areas are measured rather than recalled, with sample counts, and they
+  reproduce exactly across runs because the route is deterministic.
+- A member that is too weak for where the run happens to be is now routed somewhere that suits it,
+  travels there, and gains levels. That is new, and it is the mechanism the rest depends on.
+- Whether it reaches the League floor within a real budget has **not** been shown. A captured state
+  proves the machinery works from one starting point; it does not prove the route arrives there.
+- The team still does not choose its own battles. The escort still does most of the fighting.
 - No learned policy has completed the game. No cross-game transfer has been measured. The living
   Pokédex has not been started.
 

@@ -173,9 +173,48 @@ Two things changed that anyone touching training should know:
 - **`RED_DIRECT_LEVEL_ADVANTAGE` is retired.** It silently outranked the policy margin for the three
   species that are the trainees. Values preserved in the same evidence file.
 
-Venue selection is wired for *recommendation* only: the venue-mismatch stop names where the trainee
-belongs. Routing a trainee to a chosen venue needs navigation paths that do not exist yet, and only
-the Mansion has an implemented heal-and-return. That is the open Tier 1 item.
+Routing now works end to end. A trainee too weak for where the run is gets sent somewhere that
+suits it, travels there, and gains levels: Cinnabar nurse → Fly to Vermilion → east to Route 11 →
+the gate → Diglett's Cave. Both venues have implemented heal-and-return paths.
+
+Three things about that chain are worth knowing before touching it.
+
+**The town map has no readable cursor.** Five candidate addresses were sampled after every move and
+all five stayed frozen on values the previous menu left behind
+(`docs/evidence/town-map-cursor-not-observable-2026-08-07.json`). Fly is therefore judged by the map
+underfoot: try an offset, confirm, ask the game where you landed, try again if wrong. Do not
+reintroduce a hand-derived hop sequence; two runs died to one.
+
+**The party submenu is ordered field moves, STATS, SWITCH, CANCEL.** SWITCH is at
+`field_move_count + 1`, measured one row at a time from a captured state
+(`docs/evidence/party-submenu-layout-2026-08-07.json`). This was guessed wrong four times, at five
+runs' cost, because every check was derived from the same assumption as the guess.
+
+**A step is not a step unless the player moved.** A blocked press never rolls for an encounter, so a
+walk into a wall burns the step budget while looking exactly like training. The ratio that
+distinguishes them is steps-to-battles; report it when adding any new walk.
+
+### Iterating without replaying the route (2026-08-07)
+
+Runs reach the training block in about six minutes. A captured state reaches it in about one.
+
+```bash
+POKEMON_RED_ROM=<path> python scripts/capture_checkpoint.py \
+    --at "Returned safely from Mansion" --out <scratch>/mansion.state
+POKEMON_RED_ROM=<path> python scripts/replay_training.py --state <scratch>/mansion.state
+POKEMON_RED_ROM=<path> python scripts/replay_training.py --state <scratch>/mansion.state --swap-only
+```
+
+`--max-steps N` shrinks the policy's step budget so a spinning loop fails in seconds rather than
+burning 500,000 steps.
+
+State files are ROM-derived and private in exactly the way the ROM is. Keep them outside the
+repository and never commit them; `trajectory` already refuses `savestate` keys in public artifacts.
+This does not weaken the adapter's no-save property, which is about PyBoy never creating files
+beside the user's ROM — see `PyBoyAdapter.save_state`.
+
+A capture is one starting point, not a substitute for a run. Iterate against it; confirm with
+`cli play`.
 
 ## The full gate, before every commit
 
@@ -211,43 +250,79 @@ Current state: **1829 passed, 3 deselected**, all checks green, on trunk
 
 These are ordered by how much they serve the mission, not by difficulty.
 
-**1. Cap the escort. (Lane A)** The switch-participation mechanism trains a weak member by sending
-it in beside a strong escort, but the escort gains experience from every one of those battles. A
-measured run left the Mansion with the escort at 83 and reached the Champion at 87, one-shotting the
-entire League team in six turns. Training the team currently *widens* the gap it is meant to close.
-Until the escort stops gaining at parity — or trainees fight unescorted once safe — no amount of
-levelling produces decisions.
-**(Status: ✅ Complete by @antigravity)**: Introduced `safe_lead_level` across policies so trainees fight unescorted once safe, and ensured the escort flees when capped.
+**1. Prove the training block finishes inside a real budget. (Lane A)** Routing and training both
+work from a captured state, which is one starting point. Nobody has shown the block reaches the
+level floor of 55 during a full run, or what it costs in battles and healing trips. Take the run,
+record the numbers, and compare against the 1,878-battle baseline from the escort-only era.
 
 **2. Measure participation directly. (Lane C)** Turns-per-party-member across the Elite Four is a
-one-line metric and it would have caught the above on the first run. Six turns, one member, is
-visible immediately. Add it beside the existing `team_balance` block.
+one-line metric and it would have caught the escort problem on the first run. Six turns, one member,
+is visible immediately. Add it beside the existing `team_balance` block.
 
 **3. Resolve the tolerance conflict. (Lane B)** `MANSION_LEVEL_PARITY` uses `max_levels_behind=10`
 (target 55) while `CHAMPION_LEVEL_PARITY` uses `5` (required 60), so the receipt reports a team that
 *won the game* as five levels short. One contract, one number.
 
-**4. Turn the balance assertion on. (Lane B, after 1)** `DevelopedTeamReport.passed` asserts a
+**4. Validate the +2 training margin. (Lane A/C)** `max_enemy_level_delta=2` replaced a fifteen-level
+required advantage and is explicitly recorded as unvalidated in
+`docs/evidence/training-margin-decision-2026-08-07.json`. It survived 64 live Mansion encounters
+without a faint, which is evidence and not proof. Revisit it against a full run.
+
+**5. Turn the balance assertion on. (Lane B, after 1)** `DevelopedTeamReport.passed` asserts a
 complete roster, one trained workhorse, and zero faints — nothing about the other five members. It
 is deliberately reporting-only today because enabling it fails every run. That failure is correct,
 but switch it on knowingly.
 
+**6. Decide what `global_router.py` and `collection_chapter.py` are for. (Lane B)** Both landed as
+scaffolding. The router has a correct Dijkstra, three tests, no call site, a hand-written five-node
+graph, and edges carrying no warp coordinates — so it cannot drive navigation as it stands.
+`run_collection` reads the collection correctly and then raises `NotImplementedError` at routing.
+Either give them a job or park them; they currently cost gate time and imply more than exists.
 
-**6. Start the second-game adapter — battle layer only. (Lane B)** `party.py`, `team_training.py`,
+**7. Start the second-game adapter — battle layer only. (Lane B)** `party.py`, `team_training.py`,
 `capture.py` and `pokedex.py` all *claim* game-neutrality and nothing has ever falsified that claim.
 Moving the battle observation contract to one other title will teach more about transfer readiness
 than another ten Red runs.
 
-**7. Plan multi-run dex coverage. (Lane B/C)** `red_target(RedRunChoices(...))` and
-`plan_next_run()` exist. Two opposed Red runs reach 132 of 151; the remaining nineteen are ten Blue
-exclusives, four trade evolutions, Mew, the third starter line and the third Eevee stone. Red alone
-needs three runs. Wire the planner to an actual run schedule.
+**8. Plan multi-run dex coverage. (Lane B/C)** `red_target(RedRunChoices(...))` and `plan_next_run()`
+exist. Two opposed Red runs reach 132 of 151; the remaining nineteen are ten Blue exclusives, four
+trade evolutions, Mew, the third starter line and the third Eevee stone. Red alone needs three runs.
+Wire the planner to an actual run schedule.
+
+**9. Scrub the ROM path from git history. (Owner's call)** `a9d0bb4` added an absolute ROM path in
+source and `371be10` removed it. It is not in the current tree and `a9d0bb4` is on no remote, so the
+exposure is local only. Rewriting history is destructive and belongs to the repository owner, not to
+an agent.
 
 ## Recent history
 
-Twelve commits on `agent/balanced-team-curriculum` after `5696121`. Highlights:
+Roughly thirty commits on `agent/balanced-team-curriculum` after `5696121`. The 2026-08-07 session,
+newest first:
 
-- `a9d0bb4` Fuchsia and Saffron team training plateaus added to distribute the curriculum across the route.
+- `528e661` The cave walk paced instead of pressing into a wall. A blocked press is not a step, so
+  500,000 "steps" produced no encounters while looking exactly like training.
+- `37dcec6` The party submenu measured a row at a time: SWITCH is at `field_move_count + 1`, which
+  restores the formula an earlier commit in the same session had wrongly replaced.
+- `5f64311`, `fd651f6` Mid-route state capture and replay. Six minutes to one second.
+- `f8a4b7b` Fly judged by the map underfoot after five addresses proved the town-map cursor is not
+  observable.
+- `cf5b8bc` Gate repaired after the venue refactor: 124 ruff errors, 7 mypy errors and 3 failing
+  tests to zero; 21 scratch scripts untracked; a module containing only `# Just a scratchpad`
+  deleted from `src/`.
+- `a87574c` A member may train in a band it can only partly fight — measured at 71% of the Mansion
+  for a level-30 member, where the all-or-nothing rule had locked it out.
+- `20c49f9` The venue trains whoever it can, not the weakest member outright — with the escort
+  excluded, because "weakest that can train here" selects the escort and reinstates the very failure
+  it was meant to fix.
+- `17c3873` Relative training margin (+2) replacing a fifteen-level required advantage that let a
+  level-20 trainee engage nothing above level 5.
+- `3f7019e` Encounter bands measured rather than asserted. Our own Mansion note said 30-32 from
+  eight samples; 155 samples said 28-39.
+- `91ca43c` The training loop made runnable without an emulator, replacing two tests that asserted
+  nothing.
+
+Earlier highlights:
+
 - `f67f690` Route 22 pivot gated on a battle-ready reserve — V35's party wipe made structurally
   unreachable rather than merely untriggered.
 - `ec70c10` Twelve receipts relabelled: they recorded the Champion's fixed party levels as ours.
