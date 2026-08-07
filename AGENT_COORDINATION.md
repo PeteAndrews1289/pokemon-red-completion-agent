@@ -155,8 +155,24 @@ decisions, and more Red reliability does not change that.
 .venv/bin/python scripts/check_docs.py
 .venv/bin/python scripts/regenerate_collection_registry.py --check
 .venv/bin/ruff check .
+.venv/bin/python -m mypy
 .venv/bin/pytest -m "not integration"
 ```
+
+`mypy` is scoped to the game-neutral layer and its adapters, which pass cleanly.
+It is deliberately not run over the chapter modules yet: each of the twenty
+defines its own structurally identical `_CountingExecutor`, so mypy reads them as
+twenty incompatible nominal types and buries real errors under cross-module
+noise. Hoisting that into one shared Protocol is the prerequisite for widening
+the scope.
+
+This matters more than it looks. Of nine defects found in the balanced-team work
+in a single session, five were type or arity errors — a reader passed where a
+species tuple was expected, `None` passed where a coordinate tuple was declared,
+a call supplying 7 of 18 required arguments, `_move` given five positional
+arguments where it takes four, and a typed progress sink called with `None`.
+Each cost a 25-minute emulator run to discover. A type checker reports them in
+seconds, and the neutral layer is now covered.
 
 Current state: **1829 passed, 3 deselected**, all checks green, on trunk
 `agent/balanced-team-curriculum`.
