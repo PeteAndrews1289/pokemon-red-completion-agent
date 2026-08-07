@@ -1593,10 +1593,23 @@ def _qualify_mansion_team_development(
 
 
 def _mansion_heal_and_return(actions, reader, emulator) -> None:
-    _training_dig_to_cinnabar(actions, reader, emulator)
-    _move(actions, reader, ("up",), "team training Center entry")
-    _require(reader.read(), MapId.CINNABAR_POKECENTER, (3, 7), "team training Center")
-    _move(actions, reader, ("up",) * 4, "team training nurse")
+    """Restore the party and return to the Mansion, from wherever this starts.
+
+    The balancing block runs straight after the lead-only block, which ends by
+    healing — so this can be entered already standing at the Cinnabar nurse.
+    Field Dig cannot be used indoors, so digging unconditionally failed there
+    with the player at (3, 3) inside the Center.  Each leg is now guarded by
+    where the player actually is rather than by where the Mansion path assumed.
+    """
+
+    raw = reader.read()
+    if raw.map_id != MapId.CINNABAR_POKECENTER:
+        _training_dig_to_cinnabar(actions, reader, emulator)
+        _move(actions, reader, ("up",), "team training Center entry")
+        _require(reader.read(), MapId.CINNABAR_POKECENTER, (3, 7), "team training Center")
+        raw = reader.read()
+    if (raw.player_x, raw.player_y) != (3, 3):
+        _move(actions, reader, ("up",) * 4, "team training nurse")
     _heal(actions, reader, emulator)
     _move(actions, reader, CENTER_TO_MANSION, "team training return")
     _require(reader.read(), MapId.POKEMON_MANSION_1F, (5, 27), "team training Mansion entrance")
