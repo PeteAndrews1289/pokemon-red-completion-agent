@@ -636,16 +636,47 @@ def test_the_escort_is_never_chosen_as_the_trainee() -> None:
     """The load-bearing exclusion.
 
     The escort is the one member high enough to fight anywhere, so "the weakest
-    member that can train here" selects the escort at a venue too strong for
-    everyone else. It would then train happily and forever while the members
-    that need it never get a turn — the escort-does-everything failure, walking
-    straight back in through its own fix.
+    member that can train here" selects the escort whenever the venue is out of
+    everyone else's reach. It would then train happily and forever while the
+    members that need it never get a turn — the escort-does-everything failure,
+    walking straight back in through its own fix.
     """
 
-    # The party from the real receipt: an escort at 68 and nobody else past 30.
-    observed = party(68, 20, 26, 30, 25, 30)
+    # The party a measured run really produced at the Mansion.
+    observed = party(55, 20, 26, 30, 25, 30)
 
-    assert weakest_member_trainable_at(observed, VENUE_POLICY, MANSION_BAND) is None
+    chosen = weakest_member_trainable_at(observed, VENUE_POLICY, MANSION_BAND)
+
+    assert chosen is not None
+    assert chosen.level == 30, "the weakest member that can meaningfully fight here"
+    assert chosen.slot != 1, "and never the escort"
+
+
+def test_a_member_that_can_fight_part_of_a_band_can_train_in_it() -> None:
+    """Requiring the whole band was too strict by a wide margin.
+
+    Measured over 164 Mansion encounters, a level-30 member can fight 71% of
+    what it meets there and a level-28 member 40%. The all-or-nothing rule
+    locked both out of an area that suits them; fleeing the rest is what
+    fleeing is for.
+    """
+
+    assert member_can_train_at(member(1, 30), VENUE_POLICY, MANSION_BAND)
+    assert member_can_train_at(member(1, 28), VENUE_POLICY, MANSION_BAND)
+    # A level-27 member can really fight 4% of the Mansion. That is not training.
+    assert not member_can_train_at(member(1, 27), VENUE_POLICY, MANSION_BAND)
+    assert not member_can_train_at(member(1, 20), VENUE_POLICY, MANSION_BAND)
+
+
+def test_the_fightable_share_tracks_the_measured_distribution() -> None:
+    """The estimate is an estimate, and this is how far off it is allowed to be."""
+
+    # True shares over the 164 measured Mansion encounters, by member ceiling.
+    for ceiling, truth in ((22, 0.00), (27, 0.00), (30, 0.40), (32, 0.71), (36, 0.97)):
+        estimate = MANSION_BAND.fightable_share(ceiling)
+        assert abs(estimate - truth) <= 0.1, (
+            f"ceiling {ceiling}: estimated {estimate:.0%} against a measured {truth:.0%}"
+        )
 
 
 def test_a_venue_trains_the_weakest_member_it_can_reach() -> None:

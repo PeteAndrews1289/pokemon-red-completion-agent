@@ -32,6 +32,16 @@ from .party import (
 
 LEAD_SLOT = 1
 
+#: How much of an area's encounters a member must be able to engage before the
+#: area counts as somewhere it can train.
+#:
+#: Not a tuned number. Below roughly a quarter the member spends most of its
+#: time fleeing, which is the deadlock this whole line of work exists to avoid;
+#: much above it and areas that train perfectly well get refused. Against the
+#: measured Mansion band it admits a level-28 member, which can really fight
+#: 40% of what it meets there, and refuses a level-27 member, which can fight 4%.
+MINIMUM_FIGHTABLE_SHARE = 0.25
+
 
 class TeamTrainingDirective(StrEnum):
     """One semantic action requested by the balanced-team policy."""
@@ -540,6 +550,26 @@ class GrindingArea:
 
         return self.worst_case_encounter_level > self.maximum_encounter_level
 
+    def fightable_share(self, ceiling: int) -> float:
+        """Roughly what fraction of this area's encounters a ceiling can engage.
+
+        Interpolated across the band, because the band is what a measurement
+        records; the full distribution is not carried around.  Checked against
+        the Mansion's real distribution over 164 encounters, the estimate
+        tracks closely enough to decide with — 33% against a true 40% at a
+        ceiling of 30, and 67% against a true 71% at 32.
+
+        It is an estimate and is treated as one.  It answers "is this area
+        worth walking to", not "how many battles will this take".
+        """
+
+        if ceiling < self.minimum_encounter_level:
+            return 0.0
+        span = self.maximum_encounter_level - self.minimum_encounter_level
+        if span <= 0:
+            return 1.0
+        return min(1.0, (ceiling - self.minimum_encounter_level) / span)
+
 
 @dataclass(frozen=True, slots=True)
 class BalancedTeamReport:
@@ -774,16 +804,22 @@ def member_can_train_at(
 ) -> bool:
     """Whether this member can gain experience in this area rather than flee it.
 
-    Judged against the level the area's encounters typically stay under, not
-    its rare ceiling: an occasional encounter that has to be fled does not make
-    an area untrainable, it makes it an area with a rare encounter.
+    Judged on how much of the area the member can engage, not on whether it can
+    engage all of it.  Requiring the whole band was too strict by a wide margin:
+    a measured run showed a level-30 member can fight 71% of the Mansion's
+    encounters and a level-28 member 40%, and the all-or-nothing rule locked
+    both out of an area that suits them. Fleeing the rest is what fleeing is for.
+
+    The rare ceiling is excluded from the judgement for the same reason. One
+    Dugtrio in thirty encounters is a flee, not a disqualification.
     """
 
     if not member.is_trainable:
         return False
     if policy.safe_lead_level is not None and member.level >= policy.safe_lead_level:
         return True
-    return area.maximum_encounter_level <= training_safety_ceiling(member, policy)
+    ceiling = training_safety_ceiling(member, policy)
+    return area.fightable_share(ceiling) >= MINIMUM_FIGHTABLE_SHARE
 
 
 def weakest_member_trainable_at(
@@ -840,11 +876,10 @@ def choose_grinding_area(
     thirty encounters is a flee, not a reason to reject the other twenty-nine.
     """
 
-    ceiling = training_safety_ceiling(trainee, policy)
     safe = [
         area
         for area in areas
-        if area.maximum_encounter_level <= ceiling
+        if member_can_train_at(trainee, policy, area)
         and (area.has_nearby_healer or not require_healer)
     ]
     if not safe:

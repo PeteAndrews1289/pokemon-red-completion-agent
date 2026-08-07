@@ -254,6 +254,11 @@ def test_a_chosen_venue_is_one_the_battle_loop_will_actually_fight_in() -> None:
     which under the Mansion policy is dead code.  Selection would therefore
     approve an area the loop refuses every encounter in — the training deadlock
     again, one level further up, and reached only after walking there.
+
+    The invariant is about the *weakest* encounter an area fields, not its
+    strongest: a venue worth training in is one where some meaningful share can
+    be fought, and the rest fled. An area whose easiest encounter is already out
+    of reach is one where nothing can be fought at all.
     """
 
     entries = [row(map_id=DIGLETTS_CAVE, enemy_level=18) for _ in range(MINIMUM_TRUSTED_SAMPLES)]
@@ -270,9 +275,10 @@ def test_a_chosen_venue_is_one_the_battle_loop_will_actually_fight_in() -> None:
         chosen = choose_grinding_area(areas, trainee(level), binding)
         if chosen is None:
             continue
-        assert is_matchup_acceptable(trainee(level), chosen.maximum_encounter_level, binding), (
+        assert is_matchup_acceptable(trainee(level), chosen.minimum_encounter_level, binding), (
             f"level {level} was sent to {chosen.area_id}, "
-            f"which tops out at {chosen.maximum_encounter_level} and it may not engage"
+            f"whose weakest encounter is {chosen.minimum_encounter_level} "
+            "and it may not engage even that"
         )
 
 
