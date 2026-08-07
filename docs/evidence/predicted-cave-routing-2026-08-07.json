@@ -1,0 +1,29 @@
+{
+  "schema": "pokemon-run-prediction-v1",
+  "recorded_on": "2026-08-07",
+  "prediction_id": "digletts-cave-routing-first-contact",
+  "change_under_test": "A second training venue, Diglett's Cave, with navigation from Cinnabar: Dig or Fly to Vermilion, the Vermilion nurse, VERMILION_CENTER_TO_ROUTE_11, the Route 11 gate walk, and into the cave. None of it has met the emulator.",
+  "assumed_party": {
+    "source": "what the previous run produced at the Mansion block",
+    "levels": [55, 20, 26, 30, 25, 30]
+  },
+  "computed_selection": {
+    "first_trainee": "slot 2, level 20",
+    "chosen_venue": "digletts_cave",
+    "why": "The escort at 55 is at the floor and excluded. The level-20 member can engage the whole of a 15-21 band and none of a 28-34 one, so the cave is the only venue that suits it, and it is the weakest member with anywhere to go."
+  },
+  "predicted": {
+    "outcome": "the run reaches the venue-travel path and fails inside it",
+    "reasoning": "Standing in Cinnabar with the cave selected, `is_in_map` is false, so heal_and_return runs as the travel mechanism. That immediately enters the unvalidated Fly. The town-map cursor is driven by six hand-derived hops with ten-frame waits, and neither the hop count nor the wait length has been checked against the game.",
+    "most_likely_failure": "'Fly to Vermilion failed. Map: <id>, position: <x, y>' — the cursor lands on the wrong town, or the ten-frame waits are too short for the moves to register",
+    "confidence": "low on the specific failure, high that it fails somewhere in travel rather than reaching the cave"
+  },
+  "what_would_refute_this": [
+    "It reaches Diglett's Cave and fights there — the Fly chain is right and the remaining work is smaller than assumed",
+    "It fails before the Fly, in Dig — the problem is the departure, not the town map",
+    "It flies somewhere other than Vermilion and continues anyway — the arrival check is not binding, which would be worse than failing",
+    "It selects the Mansion rather than the cave — the venue-selection computation above is wrong about what the loop does"
+  ],
+  "also_changed": "The cave venue now takes its band from MEASURED_TRAINING_VENUES instead of restating it. The numbers were identical, so this changes no behaviour; it puts the band under the drift guard, which a hand-copied duplicate had escaped.",
+  "cost_note": "Previous runs reached this point in roughly five to six minutes."
+}

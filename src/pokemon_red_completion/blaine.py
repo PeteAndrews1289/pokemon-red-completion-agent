@@ -1781,13 +1781,17 @@ def _digletts_cave_heal_and_return(
         raise BlaineChapterError("Diglett Cave interior did not load")
 
 def _digletts_cave_training_venue() -> TrainingVenue:
-    from pokemon_red_completion.team_training import GrindingArea
-    band = GrindingArea(
-        area_id="Diglett's Cave",
-        minimum_encounter_level=15,
-        maximum_encounter_level=21,
-        rare_maximum_encounter_level=31,
-        measured_samples=29,
+    """Diglett's Cave, bound to the band it was measured to field.
+
+    The band is taken from ``MEASURED_TRAINING_VENUES`` rather than restated
+    here. A hand-copied copy held the right numbers but sat outside
+    ``test_measured_venues_match_the_evidence``, so a re-harvest would have
+    updated the guarded list and left this one silently behind -- which is
+    exactly how a Mansion band of "30-32" outlived the 155 samples saying 28-39.
+    """
+
+    band = next(
+        area for area in MEASURED_TRAINING_VENUES if area.area_id == "digletts_cave"
     )
     return TrainingVenue(
         band=band,
