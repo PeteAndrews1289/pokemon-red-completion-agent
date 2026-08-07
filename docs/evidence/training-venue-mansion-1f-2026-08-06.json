@@ -4,11 +4,14 @@
   "measurement_id": "red-mansion-1f-encounter-band",
   "harness_seed": 1810001,
   "source_commit": "HEAD at measurement",
-  "method": "Observed live during the Mansion balancing block. The repository declares no wild encounter tables, so the band is measured from actual encounters rather than asserted.",
+  "superseded_by": "docs/evidence/encounter-bands-2026-08-07.json",
+  "correction": "The band recorded here is too narrow. It was taken from the eight encounters that preceded the venue-mismatch stop; a later harvest of 155 wild encounters in the same area measured 28-39, median 32, with 90% at or below 34. The ceiling was understated by seven levels. The finding below is unaffected and in fact strengthened: the trainees were further out of their depth than this file claimed.",
+  "method": "Observed live during the Mansion balancing block. The repository declares no wild encounter tables, so the band is measured from actual encounters rather than asserted. Sample count was not recorded, which is why the band could be this wrong without looking wrong; measurements now carry their sample count.",
   "observed": {
     "area": "pokemon_mansion_1f",
     "encounter_level_min": 30,
     "encounter_level_max": 32,
+    "samples": 8,
     "party_levels": [
       22,
       20,

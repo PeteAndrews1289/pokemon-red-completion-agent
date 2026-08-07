@@ -1,0 +1,276 @@
+{
+  "schema": "pokemon-encounter-band-measurement-v1",
+  "recorded_on": "2026-08-07",
+  "method": "Measured from wild encounters the agent really had. Trainer battles are excluded because they share the battle flag but not the level distribution, and reads taken before battle memory settles are excluded because they report species zero at level zero.",
+  "typical_encounter_share": 0.9,
+  "minimum_trusted_samples": 20,
+  "areas_measured": 20,
+  "areas_trusted": 5,
+  "bands": [
+    {
+      "area": "route_1",
+      "map_id": 12,
+      "samples": 6,
+      "trusted": false,
+      "minimum_level": 2,
+      "typical_maximum_level": 4,
+      "observed_maximum_level": 4,
+      "species_ids": [
+        36,
+        165
+      ]
+    },
+    {
+      "area": "route_2",
+      "map_id": 13,
+      "samples": 21,
+      "trusted": true,
+      "minimum_level": 2,
+      "typical_maximum_level": 5,
+      "observed_maximum_level": 5,
+      "species_ids": [
+        36,
+        112,
+        165
+      ]
+    },
+    {
+      "area": "route_6",
+      "map_id": 17,
+      "samples": 3,
+      "trusted": false,
+      "minimum_level": 13,
+      "typical_maximum_level": 15,
+      "observed_maximum_level": 15,
+      "species_ids": [
+        36,
+        57
+      ]
+    },
+    {
+      "area": "route_7",
+      "map_id": 18,
+      "samples": 1,
+      "trusted": false,
+      "minimum_level": 19,
+      "typical_maximum_level": 19,
+      "observed_maximum_level": 19,
+      "species_ids": [
+        36
+      ]
+    },
+    {
+      "area": "route_11",
+      "map_id": 22,
+      "samples": 81,
+      "trusted": true,
+      "minimum_level": 9,
+      "typical_maximum_level": 15,
+      "observed_maximum_level": 17,
+      "species_ids": [
+        5,
+        48,
+        108
+      ]
+    },
+    {
+      "area": "route_12",
+      "map_id": 23,
+      "samples": 1,
+      "trusted": false,
+      "minimum_level": 30,
+      "typical_maximum_level": 30,
+      "observed_maximum_level": 30,
+      "species_ids": [
+        132
+      ]
+    },
+    {
+      "area": "route_15",
+      "map_id": 26,
+      "samples": 4,
+      "trusted": false,
+      "minimum_level": 23,
+      "typical_maximum_level": 28,
+      "observed_maximum_level": 28,
+      "species_ids": [
+        36,
+        65,
+        76
+      ]
+    },
+    {
+      "area": "route_16",
+      "map_id": 27,
+      "samples": 1,
+      "trusted": false,
+      "minimum_level": 18,
+      "typical_maximum_level": 18,
+      "observed_maximum_level": 18,
+      "species_ids": [
+        70
+      ]
+    },
+    {
+      "area": "route_21",
+      "map_id": 32,
+      "samples": 2,
+      "trusted": false,
+      "minimum_level": 15,
+      "typical_maximum_level": 20,
+      "observed_maximum_level": 20,
+      "species_ids": [
+        24
+      ]
+    },
+    {
+      "area": "viridian_forest",
+      "map_id": 51,
+      "samples": 55,
+      "trusted": true,
+      "minimum_level": 3,
+      "typical_maximum_level": 5,
+      "observed_maximum_level": 6,
+      "species_ids": [
+        84,
+        112,
+        113,
+        123,
+        124
+      ]
+    },
+    {
+      "area": "mt_moon_1f",
+      "map_id": 59,
+      "samples": 1,
+      "trusted": false,
+      "minimum_level": 7,
+      "typical_maximum_level": 7,
+      "observed_maximum_level": 7,
+      "species_ids": [
+        107
+      ]
+    },
+    {
+      "area": "rock_tunnel_1f",
+      "map_id": 82,
+      "samples": 4,
+      "trusted": false,
+      "minimum_level": 16,
+      "typical_maximum_level": 18,
+      "observed_maximum_level": 18,
+      "species_ids": [
+        107,
+        169
+      ]
+    },
+    {
+      "area": "pokemon_tower_3f",
+      "map_id": 144,
+      "samples": 2,
+      "trusted": false,
+      "minimum_level": 21,
+      "typical_maximum_level": 22,
+      "observed_maximum_level": 22,
+      "species_ids": [
+        17,
+        25
+      ]
+    },
+    {
+      "area": "pokemon_tower_5f",
+      "map_id": 146,
+      "samples": 3,
+      "trusted": false,
+      "minimum_level": 18,
+      "typical_maximum_level": 21,
+      "observed_maximum_level": 21,
+      "species_ids": [
+        25
+      ]
+    },
+    {
+      "area": "pokemon_tower_6f",
+      "map_id": 147,
+      "samples": 9,
+      "trusted": false,
+      "minimum_level": 20,
+      "typical_maximum_level": 23,
+      "observed_maximum_level": 30,
+      "species_ids": [
+        17,
+        25,
+        145
+      ]
+    },
+    {
+      "area": "pokemon_mansion_1f",
+      "map_id": 165,
+      "samples": 155,
+      "trusted": true,
+      "minimum_level": 28,
+      "typical_maximum_level": 34,
+      "observed_maximum_level": 39,
+      "species_ids": [
+        13,
+        33,
+        55,
+        136,
+        143,
+        163
+      ]
+    },
+    {
+      "area": "digletts_cave",
+      "map_id": 197,
+      "samples": 29,
+      "trusted": true,
+      "minimum_level": 15,
+      "typical_maximum_level": 21,
+      "observed_maximum_level": 31,
+      "species_ids": [
+        59,
+        118
+      ]
+    },
+    {
+      "area": "safari_zone_east",
+      "map_id": 217,
+      "samples": 2,
+      "trusted": false,
+      "minimum_level": 22,
+      "typical_maximum_level": 24,
+      "observed_maximum_level": 24,
+      "species_ids": [
+        3,
+        109
+      ]
+    },
+    {
+      "area": "safari_zone_north",
+      "map_id": 218,
+      "samples": 2,
+      "trusted": false,
+      "minimum_level": 27,
+      "typical_maximum_level": 30,
+      "observed_maximum_level": 30,
+      "species_ids": [
+        12,
+        167
+      ]
+    },
+    {
+      "area": "rock_tunnel_b1f",
+      "map_id": 232,
+      "samples": 3,
+      "trusted": false,
+      "minimum_level": 17,
+      "typical_maximum_level": 17,
+      "observed_maximum_level": 17,
+      "species_ids": [
+        106,
+        107
+      ]
+    }
+  ]
+}

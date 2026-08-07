@@ -111,9 +111,7 @@ class TeamRosterPlan:
         """Species present in the party that the roster plan does not name."""
 
         planned = set(self.species_ids)
-        return tuple(
-            species for species in party.species_ids() if species not in planned
-        )
+        return tuple(species for species in party.species_ids() if species not in planned)
 
 
 @dataclass(frozen=True, slots=True)
@@ -193,9 +191,7 @@ class DevelopedTeamPolicy:
         if not MIN_LEVEL < self.workhorse_target_level <= MAX_LEVEL:
             raise ValueError(f"workhorse_target_level must be between 2 and {MAX_LEVEL}")
         if (self.level_parity is None) != (self.parity_opposition_level is None):
-            raise ValueError(
-                "level_parity and parity_opposition_level must be provided together"
-            )
+            raise ValueError("level_parity and parity_opposition_level must be provided together")
         if self.parity_opposition_level is not None and not (
             MIN_LEVEL <= self.parity_opposition_level <= MAX_LEVEL
         ):
@@ -227,10 +223,9 @@ class DevelopedTeamReport:
 
     @property
     def has_final_form_roster(self) -> bool:
-        return (
-            len(self.observed_species_ids) == len(self.required_species_ids)
-            and set(self.observed_species_ids) == set(self.required_species_ids)
-        )
+        return len(self.observed_species_ids) == len(self.required_species_ids) and set(
+            self.observed_species_ids
+        ) == set(self.required_species_ids)
 
     @property
     def workhorse_ready(self) -> bool:
@@ -262,8 +257,8 @@ class DevelopedTeamReport:
     @property
     def passed(self) -> bool:
         """Whether the roster is complete, the workhorse is trained, and none fainted.
-        
-        If a level parity contract was requested, this also asserts that every party 
+
+        If a level parity contract was requested, this also asserts that every party
         member has reached the required minimum level.
         """
 
@@ -271,10 +266,7 @@ class DevelopedTeamReport:
             return False
         return not (
             self.required_minimum_level is not None
-            and (
-                self.minimum_level is None
-                or self.minimum_level < self.required_minimum_level
-            )
+            and (self.minimum_level is None or self.minimum_level < self.required_minimum_level)
         )
 
 
@@ -314,11 +306,7 @@ def plan_team_development(
             target_slot=target,
         )
     workhorse = next(
-        (
-            member
-            for member in party.members
-            if member.species_id == policy.workhorse_species_id
-        ),
+        (member for member in party.members if member.species_id == policy.workhorse_species_id),
         None,
     )
     if workhorse is None:
@@ -375,11 +363,7 @@ def summarize_team_development(
     """Build the final-form and workhorse receipt used by game adapters."""
 
     workhorse = next(
-        (
-            member
-            for member in party.members
-            if member.species_id == policy.workhorse_species_id
-        ),
+        (member for member in party.members if member.species_id == policy.workhorse_species_id),
         None,
     )
     return DevelopedTeamReport(
@@ -500,12 +484,24 @@ class TeamTrainingDecision:
 
 @dataclass(frozen=True, slots=True)
 class GrindingArea:
-    """A candidate training area described by its encounter level band."""
+    """A candidate training area described by its encounter level band.
+
+    ``maximum_encounter_level`` is what nearly every encounter stays under, not
+    the highest level the area can produce.  Those differ, and treating them as
+    one rules out good venues: Diglett's Cave was measured at fifteen to
+    twenty-one across twenty-nine encounters, with a rare Dugtrio at thirty-one.
+    Summarised as "fifteen to thirty-one" it is unusable for the level-twenty
+    trainee it in fact suits almost perfectly.  The rare ceiling is recorded
+    separately so a caller can see what it is accepting; handling it is the
+    escape path's job, which is the job the escape path exists for.
+    """
 
     area_id: str
     minimum_encounter_level: int
     maximum_encounter_level: int
     has_nearby_healer: bool = True
+    rare_maximum_encounter_level: int | None = None
+    measured_samples: int | None = None
 
     def __post_init__(self) -> None:
         if not self.area_id.strip():
@@ -516,6 +512,27 @@ class GrindingArea:
                 raise ValueError(f"{name} must be a valid level")
         if self.maximum_encounter_level < self.minimum_encounter_level:
             raise ValueError("maximum_encounter_level cannot be below the minimum")
+        rare = self.rare_maximum_encounter_level
+        if rare is not None:
+            if type(rare) is not int or not MIN_LEVEL <= rare <= MAX_LEVEL:
+                raise ValueError("rare_maximum_encounter_level must be a valid level")
+            if rare < self.maximum_encounter_level:
+                raise ValueError("rare_maximum_encounter_level cannot be below the typical maximum")
+        samples = self.measured_samples
+        if samples is not None and (type(samples) is not int or samples <= 0):
+            raise ValueError("measured_samples must be a positive count when given")
+
+    @property
+    def is_measured(self) -> bool:
+        """Whether this band came from counted encounters rather than memory."""
+
+        return self.measured_samples is not None
+
+    @property
+    def worst_case_encounter_level(self) -> int:
+        """The highest level this area is known to be able to field."""
+
+        return self.rare_maximum_encounter_level or self.maximum_encounter_level
 
 
 @dataclass(frozen=True, slots=True)

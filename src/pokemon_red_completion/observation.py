@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, replace
 from enum import IntEnum, IntFlag, StrEnum
 from typing import Protocol, runtime_checkable
 
 from pokemon_red_completion.domain import GameMode, GameState
+from pokemon_red_completion.encounters import encounter_log_path, is_wild_encounter
 from pokemon_red_completion.referee import CHAMPION_DEFEATED_FACT
 from pokemon_red_completion.route import HALL_OF_FAME_FACT
 
@@ -3285,7 +3287,8 @@ class SurgeProgressTracker:
 class PokemonRedStateReader:
     def __init__(self, memory: ReadOnlyMemory) -> None:
         self._memory = memory
-        self._last_encounter = None
+        self._last_encounter: tuple[int | None, ...] | None = None
+        self._encounter_log = encounter_log_path()
 
     def read(self) -> RawGameState:
         status = self._memory.read_u8(RamAddress.STATUS_FLAGS_6)
@@ -3435,22 +3438,35 @@ class PokemonRedStateReader:
             player_money=self._read_bcd(RamAddress.PLAYER_MONEY, 3),
         )
 
-        if raw.battle_state:
-            enc = (raw.map_id, raw.enemy_species_id, raw.enemy_level, raw.battle_state)
-            if enc != self._last_encounter:
-                self._last_encounter = enc
-                import json
-                from pathlib import Path
-                log_path = Path("/tmp/pokemon_encounters.jsonl")
-                entry = {
-                    "map_id": raw.map_id,
-                    "enemy_species": raw.enemy_species_id,
-                    "enemy_level": raw.enemy_level,
-                    "battle_state": raw.battle_state,
-                }
-                with log_path.open("a") as f:
-                    f.write(json.dumps(entry) + "\n")
+        if self._encounter_log is not None:
+            self._record_encounter(raw)
         return raw
+
+    def _record_encounter(self, raw: RawGameState) -> None:
+        """Append one newly seen encounter to the harvest log.
+
+        Only distinct encounters are written, so the cost is per battle rather
+        than per read.  Battle memory is not populated the instant the battle
+        flag flips: reads taken during that transition report species zero at
+        level zero, which is how five nonexistent "wild encounters in Pallet
+        Town" reached an earlier log.  Those are dropped here rather than left
+        for the harvester, because a band is only as honest as its samples.
+        """
+
+        if not is_wild_encounter(raw):
+            return
+        encounter = (raw.map_id, raw.enemy_species_id, raw.enemy_level)
+        if encounter == self._last_encounter:
+            return
+        self._last_encounter = encounter
+        entry = {
+            "map_id": raw.map_id,
+            "enemy_species": raw.enemy_species_id,
+            "enemy_level": raw.enemy_level,
+            "battle_state": raw.battle_state,
+        }
+        with self._encounter_log.open("a", encoding="utf-8") as log:
+            log.write(json.dumps(entry) + "\n")
 
     def read_pokedex_state(self) -> RedPokedexState:
         """Decode Red's two 151-bit National Pokédex flag arrays."""
