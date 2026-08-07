@@ -1619,12 +1619,21 @@ def _without_bag_items(
 def _require(
     raw: RawGameState,
     map_id: int,
-    coordinate: tuple[int, int],
+    coordinate: tuple[int, int] | None,
     label: str,
 ) -> None:
+    """Assert a semantic boundary.
+
+    ``coordinate`` may be ``None`` to mean "anywhere on this map", which is what
+    a training zone wants: the block only needs to be on Route 15, not standing
+    on one exact tile.  Pinning a tile there is the brittleness this work exists
+    to remove, and the previous signature made ``None`` compare unequal to every
+    position, so such a gate could never pass.
+    """
+
     if (
         raw.map_id != map_id
-        or (raw.player_x, raw.player_y) != coordinate
+        or (coordinate is not None and (raw.player_x, raw.player_y) != coordinate)
         or raw.battle_state != 0
         or not party_core_intact(raw.party_species_ids)
     ):
