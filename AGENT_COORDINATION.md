@@ -1,6 +1,8 @@
 # Three-agent coordination
 
-Read [MISSION.md](MISSION.md) first. This document is about *who does what* and *how not to collide*.
+**New here? Read [HANDOFF.md](HANDOFF.md) first** — it is the complete orientation, including what
+is unproven and how this codebase repeatedly fools people. Then [MISSION.md](MISSION.md) for why the
+project exists. This document is about *who does what* and *how not to collide*.
 
 Three agents work this repository: **Claude**, **Codex**, and **Antigravity**. Most collisions
 between them are mechanical rather than intellectual, and the rules below exist because the

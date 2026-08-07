@@ -1,5 +1,56 @@
 # Roadmap
 
+> **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
+> results accumulated over the project. The handoff is what a new agent needs to be oriented today.
+
+## Current focus (2026-08-07)
+
+The milestones below are largely written in terms of *the teacher completing Red* and *learned
+components reaching agreement rates*. Both are real and both are recorded honestly. Neither is the
+bottleneck any more.
+
+**The bottleneck is that the demonstrations contain almost no decisions.**
+
+A run that finishes with one overleveled Pokémon sweeping the League in six turns produces a
+trajectory in which nothing was ever chosen. Agreement rates measured on such a trajectory are
+measuring the wrong thing well. The learning milestones cannot mean what they say until the
+demonstrations do.
+
+So the near-term work is not another point of agreement. It is:
+
+**A. Make the team participate.** Six members that fight, not one escort that sweeps. This is
+currently blocked on the training block reaching the level floor within a real budget, which has
+never been shown. Everything in Milestone 3 and beyond inherits whatever this produces.
+
+**B. Make participation measurable, and embarrassing when absent.** Turns-per-party-member exists in
+`champion.py` alone, as a raw list. Two derived numbers — how many members acted, and the busiest
+one's share — would have caught the escort problem on its first run instead of after four thousand
+battles. Until absence of participation is loud, it will keep being tolerated.
+
+**C. Start the living Pokédex.** `red_target(RedRunChoices(...))` and `plan_next_run()` exist and
+have no schedule behind them. Two opposed Red runs reach 132 of 151. This is the constraint that
+makes route tricks useless and transfer necessary, and it has not been started.
+
+**D. Falsify the game-neutrality claim.** `party.py`, `team_training.py`, `capture.py` and
+`pokedex.py` all claim to be game-neutral and nothing has ever tested that claim. Moving the battle
+observation contract to one other title will teach more about transfer readiness than another ten
+Red runs.
+
+Milestone 6 remains the end state. A, B and C are what make it reachable rather than aspirational,
+and D is the cheapest early evidence that it is possible at all.
+
+### What changed on 2026-08-07
+
+Routing works: a member too weak for where the run is gets sent to a venue that suits it, travels
+there, and gains levels. That mechanism did not exist before and A depends entirely on it.
+
+The session also produced a working practice worth keeping, described in the handoff: measure rather
+than infer, predict before running, capture a mid-route state so iteration costs a second instead of
+six minutes, and make every failure carry the readings that explain it. Fifteen evidence files from
+that day are in `docs/evidence/`.
+
+---
+
 ## End state
 
 The final deliverable is a learned/hybrid policy that chooses objectives and bounded skills from
