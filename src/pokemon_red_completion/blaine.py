@@ -1494,7 +1494,35 @@ def _field_fly_to_vermilion_from_saffron(actions, reader, emulator) -> None:
         raise BlaineChapterError("Fly did not return to Vermilion from Saffron.")
     _pulse(actions, MacroActionKind.CONFIRM, frames=12)
 
+#: Addresses that might carry the town-map cursor. Which one does is not
+#: documented anywhere in this repository, and guessing the cursor's behaviour
+#: has already cost one run: six hand-derived hops from Cinnabar were supposed
+#: to reach Vermilion and arrived at Viridian instead. Rather than guess a
+#: fourth time, every candidate is sampled after every move and the failure
+#: reports the table.
+_TOWN_MAP_CURSOR_CANDIDATES = (
+    RamAddress.CURRENT_MENU_ITEM,
+    RamAddress.MENU_CURSOR_LOCATION,
+    RamAddress.MAX_MENU_ITEM,
+    RamAddress.TOP_MENU_ITEM_X,
+    RamAddress.TOP_MENU_ITEM_Y,
+)
+
+
+def _town_map_readings(emulator) -> tuple[int, ...]:
+    return tuple(emulator.read_u8(address) for address in _TOWN_MAP_CURSOR_CANDIDATES)
+
+
 def _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator) -> None:
+    """Fly Cinnabar to Vermilion, recording what the town-map cursor does.
+
+    The hop sequence below is not trusted. It is the sequence that produced
+    Viridian, kept only so this run reproduces the same conditions while the
+    readings are collected. Once a candidate address is shown to track the
+    cursor, this becomes a read-and-verify loop like the party-switch fix, and
+    the hop list goes away.
+    """
+
     _pulse(actions, MacroActionKind.OPEN_MENU)
     _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
@@ -1503,36 +1531,28 @@ def _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator) -> None:
     _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
     _pulse(actions, MacroActionKind.WAIT, frames=90)
-    # Cinnabar -> Pallet
-    _pulse(actions, MacroActionKind.MOVE, "up", 10)
-    _pulse(actions, MacroActionKind.WAIT, frames=60)
-    # Pallet -> Viridian
-    _pulse(actions, MacroActionKind.MOVE, "up", 10)
-    _pulse(actions, MacroActionKind.WAIT, frames=60)
-    # Viridian -> Pewter
-    _pulse(actions, MacroActionKind.MOVE, "up", 10)
-    _pulse(actions, MacroActionKind.WAIT, frames=60)
-    # Pewter -> Cerulean
-    _pulse(actions, MacroActionKind.MOVE, "right", 10)
-    _pulse(actions, MacroActionKind.WAIT, frames=60)
-    # Cerulean -> Saffron
-    _pulse(actions, MacroActionKind.MOVE, "down", 10)
-    _pulse(actions, MacroActionKind.WAIT, frames=60)
-    # Saffron -> Vermilion
-    _pulse(actions, MacroActionKind.MOVE, "down", 10)
-    _pulse(actions, MacroActionKind.WAIT, frames=60)
+
+    trace: list[tuple[str, tuple[int, ...]]] = [("opened", _town_map_readings(emulator))]
+    for direction in ("up", "up", "up", "right", "down", "down"):
+        _pulse(actions, MacroActionKind.MOVE, direction, 10)
+        _pulse(actions, MacroActionKind.WAIT, frames=60)
+        trace.append((direction, _town_map_readings(emulator)))
+
     _pulse(actions, MacroActionKind.CONFIRM, frames=240)
     for _ in range(12):
         raw = reader.read()
         if raw.map_id == MapId.VERMILION_CITY:
-            break
+            return
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
-    else:
-        raw = reader.read()
-        raise BlaineChapterError(
-            f"Fly to Vermilion failed. Map: {raw.map_id}, "
-            f"position: {(raw.player_x, raw.player_y)!r}."
-        )
+    raw = reader.read()
+    names = ", ".join(a.name for a in _TOWN_MAP_CURSOR_CANDIDATES)
+    raise BlaineChapterError(
+        f"Fly to Vermilion failed: arrived at map {raw.map_id} "
+        f"at {(raw.player_x, raw.player_y)!r}. "
+        f"Town-map readings ({names}) after each move: {trace!r}. "
+        "An address whose value changes with the moves is the cursor; "
+        "one that never changes is not."
+    )
     _pulse(actions, MacroActionKind.CONFIRM, frames=12)
 
 def _field_fly_to_cinnabar_from_vermilion(actions, reader, emulator) -> None:
