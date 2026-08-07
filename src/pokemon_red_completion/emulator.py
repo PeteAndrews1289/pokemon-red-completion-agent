@@ -48,6 +48,10 @@ class PyBoyBackend(Protocol):
 
     def stop(self, save: bool = True, **kwargs: Any) -> None: ...
 
+    def save_state(self, file_like_object: Any) -> None: ...
+
+    def load_state(self, file_like_object: Any) -> None: ...
+
 
 PyBoyFactory = Callable[..., PyBoyBackend]
 WindowEventPump = Callable[[], bool]
@@ -229,6 +233,42 @@ class PyBoyAdapter:
         self._fingerprint = fingerprint
         self._logical_frame = 0
         return self
+
+    def save_state(self, destination: str | Path) -> None:
+        """Write the emulator's exact state to a file we name.
+
+        This does not weaken the no-save property above. That property is about
+        never letting PyBoy discover or create RAM and RTC files beside the
+        user's private ROM, which is why the ROM arrives as an in-memory
+        stream. Here the destination is explicit and chosen by the caller, so
+        nothing is written near the ROM.
+
+        The written file is derived from the ROM and is private data in exactly
+        the way the ROM is. It belongs outside the repository and must never be
+        committed; ``trajectory`` already refuses ``savestate`` keys in public
+        artifacts for the same reason.
+        """
+
+        path = Path(destination)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("wb") as handle:
+            self._require_backend().save_state(handle)
+
+    def load_state(self, source: str | Path) -> None:
+        """Restore a state written by :meth:`save_state`.
+
+        A state captured mid-route is a faithful starting point rather than an
+        approximation: it restores real memory, so code under test meets the
+        same bytes it would have met at that moment in a full run. That is the
+        difference between this and a fake -- the fake can only answer what we
+        thought to teach it.
+        """
+
+        path = Path(source)
+        if not path.exists():
+            raise EmulatorError(f"no saved state at {path}")
+        with path.open("rb") as handle:
+            self._require_backend().load_state(handle)
 
     def close(self) -> None:
         backend = self._backend
