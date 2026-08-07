@@ -56,8 +56,10 @@ from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.red_party import (
     BLASTOISE_SPECIES_ID,
     DUGTRIO_SPECIES_ID,
+    PP_OFFSET,
     RED_BALANCED_ROSTER,
     PokemonRedPartyReader,
+    member_field_address,
 )
 from pokemon_red_completion.red_team_training import (
     MEASURED_TRAINING_VENUES,
@@ -1443,15 +1445,18 @@ def _field_dig(
     before_bag = _bag(emulator)
     before_hp = _party_hp(emulator)
     before_status = _party_status(emulator)
-    before_pp = emulator.read_u8(int(RamAddress.PARTY_MON_3_PP) + 2)
+    # Which slot digs, and which submenu row Dig is on, are read from the party.
+    # They used to be the constants two and zero, which held only while the
+    # party never moved. The first working party swap moved Diglett and this
+    # raised "Diglett no longer exposes Dig in field slot zero" on a live run.
+    dig_index, dig_row = _field_move_menu_indices(emulator, DIG, "Dig")
+    before_pp = emulator.read_u8(member_field_address(dig_index, PP_OFFSET + dig_row))
     _pulse(actions, MacroActionKind.OPEN_MENU, frames=DEFAULT_HIDEOUT_TIMING.wait_frames)
     _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_HIDEOUT_TIMING.wait_frames)
-    _select_cursor(actions, emulator, 2, DEFAULT_HIDEOUT_TIMING)
+    _select_cursor(actions, emulator, dig_index, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_HIDEOUT_TIMING.wait_frames)
-    if emulator.read_u8(int(RamAddress.PARTY_MON_3_MOVES) + 2) != DIG:
-        raise BlaineChapterError("Diglett no longer exposes Dig in field slot zero.")
-    _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
+    _select_cursor(actions, emulator, dig_row, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM, frames=DEFAULT_HIDEOUT_TIMING.wait_frames)
     expected_maps = (expected_map,) if isinstance(expected_map, MapId) else tuple(expected_map)
     for _ in range(DEFAULT_HIDEOUT_TIMING.dialogue_pulses):
@@ -1470,7 +1475,7 @@ def _field_dig(
         _bag(emulator) != before_bag
         or _party_hp(emulator) != before_hp
         or _party_status(emulator) != before_status
-        or emulator.read_u8(int(RamAddress.PARTY_MON_3_PP) + 2) != before_pp
+        or emulator.read_u8(member_field_address(dig_index, PP_OFFSET + dig_row)) != before_pp
     ):
         raise BlaineChapterError("Field Dig changed protected party or inventory state.")
     return reader.read()
@@ -1509,6 +1514,30 @@ def _field_fly_to_vermilion_from_saffron(actions, reader, emulator) -> None:
 FLY_ATTEMPT_LIMIT = 10
 
 
+def _field_move_menu_indices(emulator: EmulatorState, move_id: int, name: str) -> tuple[int, int]:
+    """Which party slot knows ``move_id``, and which submenu row it occupies.
+
+    Both are read from the party rather than fixed, because training reorders
+    it. A hard-coded slot was how field Dig broke the moment the party swap
+    started working: it addressed Diglett as the third member with Dig in move
+    slot two, and the first successful swap moved both.
+
+    The submenu lists a Pokemon's usable field moves first, in move order, then
+    STATS, SWITCH and CANCEL -- measured one row at a time in
+    ``docs/evidence/party-submenu-layout-2026-08-07.json``. A field move
+    therefore sits at its own index among that member's field moves.
+    """
+
+    party = PokemonRedPartyReader(emulator).read()
+    for index, member in enumerate(party.members):
+        move_ids = [move.move_id for move in member.known_moves]
+        if move_id not in move_ids:
+            continue
+        field_moves = [candidate for candidate in move_ids if candidate in FIELD_MOVE_IDS]
+        return index, field_moves.index(move_id)
+    raise BlaineChapterError(f"No party member knows {name}.")
+
+
 def _fly_menu_indices(emulator: EmulatorState) -> tuple[int, int]:
     """Which party slot knows Fly, and which submenu row Fly occupies.
 
@@ -1523,14 +1552,7 @@ def _fly_menu_indices(emulator: EmulatorState) -> tuple[int, int]:
     submenu reported five entries for a Pokemon knowing Cut and Fly.
     """
 
-    party = PokemonRedPartyReader(emulator).read()
-    for index, member in enumerate(party.members):
-        move_ids = [move.move_id for move in member.known_moves]
-        if FLY_MOVE_ID not in move_ids:
-            continue
-        field_moves = [move_id for move_id in move_ids if move_id in FIELD_MOVE_IDS]
-        return index, field_moves.index(FLY_MOVE_ID)
-    raise BlaineChapterError("No party member knows Fly, so no town can be reached by air.")
+    return _field_move_menu_indices(emulator, FLY_MOVE_ID, "Fly, so no town can be reached by air")
 
 
 def _open_fly_map(actions, reader, emulator) -> None:

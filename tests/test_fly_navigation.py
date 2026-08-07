@@ -1,4 +1,4 @@
-"""Finding FLY in the party menu, without an emulator.
+"""Finding a field move in the party menu, without an emulator.
 
 The town map itself cannot be tested here -- it writes to none of the standard
 menu RAM, which is a measured fact rather than an assumption, so a fake has
@@ -14,7 +14,11 @@ from __future__ import annotations
 
 import pytest
 
-from pokemon_red_completion.blaine import BlaineChapterError, _fly_menu_indices
+from pokemon_red_completion.blaine import (
+    BlaineChapterError,
+    _field_move_menu_indices,
+    _fly_menu_indices,
+)
 from pokemon_red_completion.observation import RamAddress
 from pokemon_red_completion.red_party import (
     LEVEL_OFFSET,
@@ -109,3 +113,44 @@ def test_a_party_that_cannot_fly_says_so() -> None:
 
     with pytest.raises(BlaineChapterError, match="knows Fly"):
         _fly_menu_indices(memory)  # type: ignore[arg-type]
+
+
+DIG = 0x5B
+
+
+def test_dig_follows_its_pokemon_through_a_reorder() -> None:
+    """The bug a live run found the moment the party swap started working.
+
+    Field Dig addressed Diglett as the third party member with Dig in move slot
+    two. Both were true only while nothing ever moved the party. The first
+    successful swap moved it, and the run stopped with "Diglett no longer
+    exposes Dig in field slot zero".
+    """
+
+    memory = FakeMemory(
+        [
+            (0x3B, [TACKLE, DIG]),  # Diglett, swapped to the front as a trainee
+            (0x1C, [SURF, STRENGTH]),
+            (0x40, [PECK, CUT, FLY]),
+        ]
+    )
+
+    assert _field_move_menu_indices(memory, DIG, "Dig") == (0, 0)  # type: ignore[arg-type]
+    # And the same party still finds Fly on the third member, second field row.
+    assert _fly_menu_indices(memory) == (2, 1)  # type: ignore[arg-type]
+
+
+def test_a_field_move_row_counts_only_field_moves_before_it() -> None:
+    """Damaging moves do not appear in the submenu, so they do not shift rows."""
+
+    memory = FakeMemory([(0x1C, [TACKLE, SURF, PECK, STRENGTH])])
+
+    assert _field_move_menu_indices(memory, SURF, "Surf") == (0, 0)  # type: ignore[arg-type]
+    assert _field_move_menu_indices(memory, STRENGTH, "Strength") == (0, 1)  # type: ignore[arg-type]
+
+
+def test_a_party_without_the_move_names_it() -> None:
+    memory = FakeMemory([(0x3B, [TACKLE]), (0x1C, [SURF])])
+
+    with pytest.raises(BlaineChapterError, match="knows Dig"):
+        _field_move_menu_indices(memory, DIG, "Dig")  # type: ignore[arg-type]
