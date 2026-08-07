@@ -298,12 +298,16 @@ def select_cursor(
             return
         pulse(actions, MacroActionKind.MOVE, "down" if cursor < target else "up", 120)
     raise RuntimeError(
-        f"Could not select {label} item {target}: cursor read {seen!r} across eight moves. "
+        f"Could not select {label} item {target}: cursor read {seen!r} across eight moves, "
+        f"with max_menu_item={emulator.read_u8(RamAddress.MAX_MENU_ITEM)}, "
+        f"party_count={emulator.read_u8(RamAddress.PARTY_COUNT)}, "
+        f"top=({emulator.read_u8(RamAddress.TOP_MENU_ITEM_X)}, "
+        f"{emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y)}). "
         + (
-            "It never moved, so this menu does not report its cursor at "
-            "CURRENT_MENU_ITEM."
+            "It never moved, so this menu does not report its cursor at CURRENT_MENU_ITEM."
             if len(set(seen)) == 1
-            else "It moved but did not arrive."
+            else "It moved and then stopped, so the menu it is driving is shorter than "
+            "the party — which means it is not the menu this code believes it is in."
         )
     )
 
@@ -334,10 +338,24 @@ def swap_field_party_slots(
     pulse(actions, MacroActionKind.CONFIRM)
     select_cursor(actions, emulator, first_index, hideout_timing, "party source slot")
     pulse(actions, MacroActionKind.CONFIRM)
-    for _ in range(field_move_count + 1):
+    # The selected Pokémon's submenu lists its usable field moves first, then
+    # SWITCH, STATS and CANCEL. SWITCH therefore sits at ``field_move_count``,
+    # the first index past the moves — not one beyond it.
+    #
+    # Measured, not reasoned: with Blastoise in front the failure reported
+    # max_menu_item=4 against party_count=6, which is a five-entry menu (Surf,
+    # Strength, SWITCH, STATS, CANCEL) and not the party list at all. The extra
+    # step landed on STATS, so the following selection was driving the submenu
+    # while believing it was choosing a party slot, and ran off the end of it.
+    for _ in range(field_move_count):
         pulse(actions, MacroActionKind.MOVE, "down", 120)
-    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != field_move_count + 1:
-        raise RuntimeError(f"{label} could not select the field SWITCH command.")
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != field_move_count:
+        raise RuntimeError(
+            f"{label} could not select the field SWITCH command: cursor at "
+            f"{emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, expected {field_move_count} "
+            f"after {field_move_count} field moves, "
+            f"max_menu_item={emulator.read_u8(RamAddress.MAX_MENU_ITEM)}."
+        )
     pulse(actions, MacroActionKind.CONFIRM)
     select_cursor(actions, emulator, second_index, hideout_timing, "party target slot")
     pulse(actions, MacroActionKind.CONFIRM)

@@ -53,6 +53,9 @@ from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingAre
 
 DIGLETT_SPECIES_ID = 0x3B
 TACKLE_MOVE_ID = 0x21
+#: The fake gives every member one damaging move and no field moves, so a
+#: member submenu is SWITCH, STATS, CANCEL with SWITCH at index zero.
+FIELD_MOVES_PER_MEMBER = 0
 TRAINING_MAP = int(MapId.POKEMON_MANSION_1F)
 CENTER_MAP = int(MapId.CINNABAR_POKECENTER)
 
@@ -153,12 +156,33 @@ class FakeMemory:
         elif kind is MacroActionKind.CONFIRM:
             self._confirm()
 
+    def _max_menu_item(self) -> int:
+        """The highest index the menu currently on screen will accept.
+
+        This is the detail an earlier version of this fake got wrong, and the
+        omission cost two emulator runs. The member submenu is not the party
+        list: it lists the Pokémon's usable field moves, then SWITCH, STATS and
+        CANCEL. With Blastoise in front that is five entries against a party of
+        six, so a cursor driven past the end of it stops at four — which is
+        exactly what the game reported.
+        """
+
+        if self.stage in {"party", "party_target"}:
+            return len(self.party) - 1
+        if self.stage == "member":
+            return self._field_move_count() + 2  # moves, then SWITCH, STATS, CANCEL
+        return 5
+
+    def _field_move_count(self) -> int:
+        """How many field moves the selected member contributes to its submenu."""
+
+        return FIELD_MOVES_PER_MEMBER
+
     def _move(self, direction: str) -> None:
         if self.stage == "field":
             return
-        limit = len(self.party) - 1 if self.stage.startswith("party") else 5
         if direction == "down":
-            self.cursor = min(self.cursor + 1, limit)
+            self.cursor = min(self.cursor + 1, self._max_menu_item())
         elif direction == "up":
             self.cursor = max(self.cursor - 1, 0)
 
@@ -168,7 +192,12 @@ class FakeMemory:
         elif self.stage == "party":
             self.pending_slot, self.stage, self.cursor = self.cursor, "member", 0
         elif self.stage == "member":
-            self.stage, self.cursor = "party_target", 0
+            # Only SWITCH leads anywhere. Selecting STATS or a field move by
+            # mistake leaves the submenu open, which is what really happened:
+            # the run then drove this five-entry menu believing it was choosing
+            # a party slot.
+            if self.cursor == self._field_move_count():
+                self.stage, self.cursor = "party_target", 0
         elif self.stage == "party_target" and self.pending_slot is not None:
             first, second = self.pending_slot, self.cursor
             self.party[first], self.party[second] = self.party[second], self.party[first]
