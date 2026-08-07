@@ -66,12 +66,6 @@ TRAINING_MOVE_IDS = {
 }
 FIELD_MOVE_IDS = frozenset({0x0F, DIG, 0x13, 0x39, 0x46})
 
-RED_DIRECT_LEVEL_ADVANTAGE = {
-    DUX_SPECIES_ID: 15,
-    0x3B: 8,  # Diglett
-    DUGTRIO_SPECIES_ID: 8,
-}
-
 TRAINING_ATTACK_PP_RESERVE = {
     BLASTOISE_SPECIES_ID: 16,
     DUX_SPECIES_ID: 6,
@@ -153,16 +147,21 @@ def red_training_matchup_acceptable(
     policy: BalancedTeamPolicy,
     enemy_species: int | None = None,
 ) -> bool:
+    """Apply the Red-specific exclusion on top of the portable level gate.
+
+    The level margin belongs to the policy.  A per-species table used to
+    override it here with undocumented constants -- Farfetch'd fifteen levels,
+    Diglett and Dugtrio eight -- which silently outranked whatever margin the
+    policy set.  Those three species are the trainees, so the table bound
+    hardest on exactly the members being trained, and no measurement was ever
+    recorded for the numbers.  They are preserved in
+    ``docs/evidence/training-margin-decision-2026-08-07.json`` rather than
+    simply deleted.
+    """
+
     if enemy_species == 0x88:  # Muk
         return False
-    if not is_matchup_acceptable(member, enemy_level, policy):
-        return False
-    if policy.safe_lead_level is not None and member.level >= policy.safe_lead_level:
-        return True
-    advantage = RED_DIRECT_LEVEL_ADVANTAGE.get(
-        member.species_id, policy.minimum_direct_level_advantage
-    )
-    return enemy_level is not None and member.level >= enemy_level + advantage
+    return is_matchup_acceptable(member, enemy_level, policy)
 
 
 def member_is_unsafe_for_team_training(

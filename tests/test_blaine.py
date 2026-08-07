@@ -238,7 +238,15 @@ def test_team_training_requests_escape_when_all_species_attacks_are_unusable() -
     )
 
 
-def test_red_training_matchup_requires_extra_margin_for_dux() -> None:
+def test_the_policy_margin_governs_and_no_species_silently_overrides_it() -> None:
+    """A per-species table used to outrank the policy inside this gate.
+
+    It demanded fifteen levels for Farfetch\'d and eight for Diglett and
+    Dugtrio, none of it measured, and those three species are the trainees, so
+    it bound hardest on the members being trained. The margin is the policy's
+    to state; the gate now adds only the Red-specific exclusion it exists for.
+    """
+
     dux = PartyMemberObservation(
         slot=1,
         species_id=0x40,
@@ -253,8 +261,12 @@ def test_red_training_matchup_requires_extra_margin_for_dux() -> None:
         minimum_direct_level_advantage=8,
     )
 
-    assert _red_training_matchup_acceptable(dux, 30, policy)
-    assert not _red_training_matchup_acceptable(dux, 31, policy)
+    # The policy permits up to level 37 (45 - 8), and that is what applies.
+    assert _red_training_matchup_acceptable(dux, 37, policy)
+    assert not _red_training_matchup_acceptable(dux, 38, policy)
+    # The retired table would have refused this one at 31; it no longer speaks.
+    assert _red_training_matchup_acceptable(dux, 31, policy)
+    # Muk stays excluded outright, which is what this gate is actually for.
     assert not _red_training_matchup_acceptable(dux, 20, policy, 0x88)
     assert _training_attack_pp_reserve(dux, policy) == 6
 

@@ -60,7 +60,6 @@ from pokemon_red_completion.red_party import (
     PokemonRedPartyReader,
 )
 from pokemon_red_completion.red_team_training import (
-    RED_DIRECT_LEVEL_ADVANTAGE,
     TRAINING_ATTACK_PP_RESERVE,
     TRAINING_MOVE_IDS,
     _PauseForTeamTrainingRecovery,
@@ -73,7 +72,6 @@ from pokemon_red_completion.team_training import (
     DevelopedTeamPolicy,
     DevelopedTeamReport,
     TeamTrainingDirective,
-    is_matchup_acceptable,
     plan_team_development,
     summarize_team_development,
 )
@@ -167,8 +165,24 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
     # returns to heal with a real margin instead of fighting to exhaustion and
     # discovering mid-battle that its last slot is Disabled.
     reserve_total_pp=16,
-    max_enemy_level_delta=0,
-    minimum_direct_level_advantage=15,
+    # Training margin, expressed relatively so it transfers to any title.
+    #
+    # This block previously demanded a fifteen-level advantage, inherited from
+    # the lead-only route where one overleveled carry outclassed everything and
+    # the requirement never bound.  It binds on a real team, and it binds
+    # hardest on the weakest members: measured against the harvested bands, a
+    # level-20 trainee could engage nothing above level 5, so venue selection
+    # sent it to Viridian Forest to fight level-3 Caterpie.  That is safe and it
+    # is not training.  Experience scales with the defeated Pokemon's level, so
+    # a rule permitting only opponents far below guarantees the slowest possible
+    # progress.
+    #
+    # Fighting slightly above your own level is what a competent player does, so
+    # the margin is now the relative delta the contract already had.  Two is
+    # deliberately small: a starting value to be checked by a measured run
+    # rather than a tuned one.
+    max_enemy_level_delta=2,
+    minimum_direct_level_advantage=0,
     safe_lead_level=42,
     # A measured clean-power run reached parity (level 60+) near battle 1,500
     # and then spent roughly 3,000 more closing an internal spread against the
@@ -1538,25 +1552,6 @@ def _training_attack_pp_reserve(
         member.species_id,
         policy.reserve_total_pp,
     )
-
-
-def _red_training_matchup_acceptable(
-    trainee: PartyMemberObservation,
-    enemy_level: int | None,
-    policy: BalancedTeamPolicy,
-    enemy_species: int | None = None,
-) -> bool:
-    """Apply Red-specific risk margins after the portable level gate."""
-
-    if enemy_species in MANSION_ESCORT_ENEMY_SPECIES | MANSION_VOLATILE_ENEMY_SPECIES:
-        return False
-    if not is_matchup_acceptable(trainee, enemy_level, policy):
-        return False
-    required_advantage = RED_DIRECT_LEVEL_ADVANTAGE.get(
-        trainee.species_id,
-        policy.minimum_direct_level_advantage,
-    )
-    return enemy_level is not None and trainee.level - enemy_level >= required_advantage
 
 
 def _qualify_mansion_team_development(

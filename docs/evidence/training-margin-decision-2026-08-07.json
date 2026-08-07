@@ -1,0 +1,35 @@
+{
+  "schema": "pokemon-training-policy-decision-v1",
+  "recorded_on": "2026-08-07",
+  "decision_id": "red-team-training-relative-margin",
+  "decided_by": "repository owner, 2026-08-07",
+  "decision": "Team training uses a relative margin of +2: a trainee may engage opponents up to two levels above itself. minimum_direct_level_advantage drops to 0 so max_enemy_level_delta becomes the live setting, and the undocumented per-species advantage table is retired.",
+  "status": "unvalidated. +2 is a starting value chosen to be checked by a measured run, not a tuned one.",
+  "why": "Experience in Gen 1 scales with the defeated Pokemon's level. A rule permitting only opponents far below the trainee guarantees the slowest possible training, and fighting slightly above your own level is what a competent player does. The relative form also transfers to other titles unchanged, which an absolute floor does not.",
+  "what_it_replaces": {
+    "policy_setting": {
+      "minimum_direct_level_advantage": 15,
+      "max_enemy_level_delta": 0,
+      "note": "the delta was dead code while the advantage was non-zero"
+    },
+    "retired_species_table": {
+      "name": "RED_DIRECT_LEVEL_ADVANTAGE",
+      "values": {"0x40 Farfetch'd": 15, "0x3B Diglett": 8, "0x76 Dugtrio": 8},
+      "introduced_by": "a9d0bb4 'Distribute team training plateaus to Fuchsia and Saffron'",
+      "recorded_rationale": "none. The commit message is a single line and no measurement accompanies the numbers.",
+      "why_retired": "It silently outranked whatever margin the policy set, and the three species it named are the trainees, so it bound hardest on exactly the members being trained. Preserved here so the values are recoverable if a measured run argues for them."
+    },
+    "dead_duplicate_removed": "blaine._red_training_matchup_acceptable, a second copy of the same gate that had drifted from the live one (it checked the escort and volatile species sets; the live one checks Muk and honours safe_lead_level) and was never called by anything but its own test."
+  },
+  "measured_consequence": {
+    "source_bands": "docs/evidence/encounter-bands-2026-08-07.json",
+    "before": "a level-20 trainee could engage nothing above level 5, so venue selection sent it to viridian_forest (band 3-5) to fight level-3 Caterpie",
+    "after": "a level-20 trainee may engage up to level 22, which places digletts_cave (15-21, rare to 31) and route_11 (9-15) in range"
+  },
+  "risk": "A trainee that faints aborts the run, so being wrong here is not free. The Mansion policy retreats at 90% health, which disengages early, and +2 is a small step above parity rather than a gamble.",
+  "next": [
+    "Take a measured run with the encounter log enabled and record battles, faints, and levels reached",
+    "Compare against the prior receipt's flees=33 battles=0 to confirm the deadlock is gone",
+    "Revisit +2 against what that run measures, in either direction"
+  ]
+}
