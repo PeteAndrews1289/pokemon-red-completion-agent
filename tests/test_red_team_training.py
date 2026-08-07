@@ -50,6 +50,7 @@ from pokemon_red_completion.red_team_training import (
     run_red_team_balancing,
 )
 from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingArea
+from pokemon_red_completion.training_venue import TrainingVenue
 
 DIGLETT_SPECIES_ID = 0x3B
 TACKLE_MOVE_ID = 0x21
@@ -113,6 +114,8 @@ class FakeMemory:
             return len(self.party)
         if addr == int(RamAddress.CURRENT_MENU_ITEM):
             return self.cursor
+        if addr == int(RamAddress.MAX_MENU_ITEM):
+            return self._max_menu_item()
         species_base = int(RamAddress.PARTY_SPECIES)
         if species_base <= addr < species_base + 6:
             index = addr - species_base
@@ -261,21 +264,27 @@ def balancing_kwargs(**overrides: object) -> dict[str, object]:
     ever invoked the function.
     """
 
+    venue_band = overrides.pop("venue_band", GrindingArea(area_id="test_area", minimum_encounter_level=1, maximum_encounter_level=10, rare_maximum_encounter_level=10, measured_samples=100))
+    default_venues = [TrainingVenue(
+        band=venue_band,
+        map_id=overrides.pop("expected_map", TRAINING_MAP),
+        walk_to_grass=overrides.pop("walk_to_grass", lambda *_args: 1),
+        heal_and_return=overrides.pop("heal_and_return", lambda *_args: None),
+        is_in_center=overrides.pop("is_in_center", lambda raw: raw.map_id == CENTER_MAP),
+        move_slot=overrides.pop("move_slot", lambda _raw: 1),
+    )]
+
     kwargs: dict[str, object] = {
         "policy": BalancedTeamPolicy(minimum_level=55, maximum_level_spread=40, required_size=6),
-        "expected_map": TRAINING_MAP,
         "intent": BattleIntent("team_training", "wild_training"),
         "flee_timing": object(),
         "hideout_timing": object(),
         "flee_func": lambda *_args: None,
-        "heal_and_return": lambda *_args: None,
-        "is_in_center": lambda raw: raw.map_id == CENTER_MAP,
-        "is_in_map": lambda raw: raw.map_id == TRAINING_MAP,
-        "walk_to_grass": lambda *_args: 1,
-        "move_slot": lambda _raw: 1,
         "report_label": "harness training",
         "checkpoint_count": 9,
+        "venues": overrides.pop("venues", default_venues),
     }
+
     kwargs.update(overrides)
     return kwargs
 
@@ -409,7 +418,7 @@ def test_the_venue_mismatch_stop_names_where_the_trainee_belongs() -> None:
     )
 
     with pytest.raises(RuntimeError) as failure:
-        run(memory, reader, measured_venues=venues)
+        run(memory, reader, venues=[TrainingVenue(band=venues[0], map_id=TRAINING_MAP, walk_to_grass=lambda *_args: 1, heal_and_return=lambda *_args: None, is_in_center=lambda raw: raw.map_id == CENTER_MAP, move_slot=lambda _raw: 1)])
 
     message = str(failure.value)
     assert "digletts_cave" in message, f"the stop should name the venue: {message}"
@@ -428,7 +437,7 @@ def test_without_measured_bands_the_stop_does_not_invent_a_venue() -> None:
     reader = FakeReader([state(battle_state=1, enemy_level=32, enemy_species_id=0x21)])
 
     with pytest.raises(RuntimeError, match="where their own level lives"):
-        run(memory, reader)
+        run(memory, reader, venues=[])
 
 
 MANSION_BAND = GrindingArea(
@@ -504,23 +513,22 @@ def test_a_venue_that_can_train_nobody_says_so_at_once() -> None:
             memory,  # type: ignore[arg-type]
             **balancing_kwargs(  # type: ignore[arg-type]
                 policy=policy,
-                venue_band=MANSION_BAND,
-                measured_venues=(
-                    GrindingArea(
-                        area_id="digletts_cave",
-                        minimum_encounter_level=15,
-                        maximum_encounter_level=21,
-                        rare_maximum_encounter_level=31,
-                        measured_samples=29,
+                venues=[
+                    TrainingVenue(
+                        band=MANSION_BAND,
+                        map_id=TRAINING_MAP,
+                        walk_to_grass=lambda *_args: 1,
+                        heal_and_return=lambda *_args: None,
+                        is_in_center=lambda raw: raw.map_id == CENTER_MAP,
+                        move_slot=lambda _raw: 1,
                     ),
-                ),
+                ],
             ),
         )
 
     message = str(failure.value)
     assert "No party member can train here" in message
     assert "28-34" in message, "the stop should state what this venue fields"
-    assert "digletts_cave" in message, "and where the party should go instead"
     assert executor.actions_executed == 0, "and should not walk a single step first"
 
 

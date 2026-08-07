@@ -67,6 +67,7 @@ from pokemon_red_completion.red_team_training import (
     run_red_team_balancing,
 )
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
+from pokemon_red_completion.surge import VERMILION_CENTER_TO_ROUTE_11, VERMILION_NURSE_TO_EXIT
 from pokemon_red_completion.team_training import (
     COMPLETION_LEVEL_PARITY,
     BalancedTeamPolicy,
@@ -1482,6 +1483,62 @@ def _field_dig(
     return reader.read()
 
 
+def _field_fly_to_vermilion_from_saffron(actions, reader, emulator) -> None:
+    _pulse(actions, MacroActionKind.OPEN_MENU)
+    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _pulse(actions, MacroActionKind.MOVE, "down", 120)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    for _ in range(12):
+        if reader.read().map_id == MapId.VERMILION_CITY:
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    else:
+        raise BlaineChapterError("Fly did not return to Vermilion from Saffron.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=12)
+
+def _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator) -> None:
+    _pulse(actions, MacroActionKind.OPEN_MENU)
+    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _pulse(actions, MacroActionKind.MOVE, "right", 120)
+    _pulse(actions, MacroActionKind.MOVE, "up", 120)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    for _ in range(12):
+        if reader.read().map_id == MapId.VERMILION_CITY:
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    else:
+        raise BlaineChapterError("Fly did not return to Vermilion from Cinnabar.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=12)
+
+def _field_fly_to_cinnabar_from_vermilion(actions, reader, emulator) -> None:
+    _pulse(actions, MacroActionKind.OPEN_MENU)
+    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    _pulse(actions, MacroActionKind.MOVE, "down", 120)
+    _pulse(actions, MacroActionKind.MOVE, "left", 120)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    for _ in range(12):
+        if reader.read().map_id == MapId.CINNABAR_ISLAND:
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=240)
+    else:
+        raise BlaineChapterError("Fly did not return to Cinnabar from Vermilion.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=12)
+
 def _training_dig_to_cinnabar(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
@@ -1491,12 +1548,31 @@ def _training_dig_to_cinnabar(
         actions,
         reader,
         emulator,
-        expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY),
+        expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY),
     )
     if destination.map_id == MapId.SAFFRON_CITY:
-        _require(destination, MapId.SAFFRON_CITY, (9, 30), "training Dig fallback")
         _field_fly_to_cinnabar(actions, reader, emulator)
+    elif destination.map_id == MapId.VERMILION_CITY:
+        _field_fly_to_cinnabar_from_vermilion(actions, reader, emulator)
     _require(reader.read(), MapId.CINNABAR_ISLAND, (11, 12), "training Dig return")
+
+def _training_dig_to_vermilion(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    destination = _field_dig(
+        actions,
+        reader,
+        emulator,
+        expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY),
+    )
+    if destination.map_id == MapId.SAFFRON_CITY:
+        _field_fly_to_vermilion_from_saffron(actions, reader, emulator)
+    elif destination.map_id == MapId.CINNABAR_ISLAND:
+        _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator)
+    _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Dig return vermilion")
+
 
 
 def _team_training_move_slot(state: RawGameState) -> int:
@@ -1609,6 +1685,94 @@ def _mansion_walk_to_grass(actions, reader, emulator) -> int:
     _pulse(actions, MacroActionKind.MOVE, direction, 240)
     return 1
 
+
+def _digletts_cave_walk_to_grass(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> int:
+    # Just step left/right since the whole cave is an encounter zone
+    raw = reader.read()
+    if raw.player_x is None:
+        return 0
+    direction = "right" if raw.player_x < 10 else "left"
+    _pulse(actions, MacroActionKind.MOVE, direction, 120)
+    return 1
+
+def _digletts_cave_heal_and_return(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    raw = reader.read()
+    if raw.map_id != MapId.VERMILION_POKECENTER:
+        _training_dig_to_vermilion(actions, reader, emulator)
+        _move(actions, reader, ("up",), "team training Vermilion Center entry")
+        _require(reader.read(), MapId.VERMILION_POKECENTER, (3, 7), "team training Center")
+        raw = reader.read()
+    if (raw.player_x, raw.player_y) != (3, 3):
+        _move(actions, reader, ("up",) * 4, "team training Vermilion nurse")
+    _heal(actions, reader, emulator)
+    _move(actions, reader, VERMILION_NURSE_TO_EXIT, "team training Vermilion Center exit")
+    _move(actions, reader, VERMILION_CENTER_TO_ROUTE_11, "team training Route 11 return")
+    
+    # move until route 11
+    for _ in range(12):
+        raw = reader.read()
+        if raw.map_id == MapId.ROUTE_11:
+            break
+        _pulse(actions, MacroActionKind.MOVE, "right", 120)
+    else:
+        raise BlaineChapterError("Failed to enter Route 11")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=12) # wait out transition
+    
+    _move(actions, reader, ("right",) * 4, "Post-Spearow Diglett Cave approach")
+    raw = reader.read()
+    if raw.player_x is None or raw.player_x < 4:
+        raise BlaineChapterError("Route 11 Diglett Cave approach failed")
+        
+    def _directions(s: str) -> tuple[str, ...]:
+        return tuple({"U": "up", "D": "down", "L": "left", "R": "right"}[c] for c in s)
+        
+    _move(
+        actions,
+        reader,
+        _directions("L" * (raw.player_x - 4) + "U"),
+        "Diglett Cave Route 11 gate",
+    )
+    _pulse(actions, MacroActionKind.CONFIRM, frames=60) # Wait transition
+    
+    raw = reader.read()
+    if raw.map_id != MapId.DIGLETTS_CAVE_ROUTE_11 or raw.player_x is None or raw.player_y is None:
+        raise BlaineChapterError("Route 11 Diglett Cave gate did not load.")
+    to_cave = "U" * max(raw.player_y - 4, 0)
+    to_cave += ("R" if raw.player_x < 4 else "L") * abs(raw.player_x - 4)
+    _move(actions, reader, _directions(to_cave), "Diglett Cave entry")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=120)
+    
+    entry = reader.read()
+    if entry.map_id != MapId.DIGLETTS_CAVE or entry.player_x is None or entry.player_y is None:
+        raise BlaineChapterError("Diglett Cave interior did not load")
+
+def _digletts_cave_training_venue() -> TrainingVenue:
+    from pokemon_red_completion.team_training import GrindingArea
+    band = GrindingArea(
+        area_id="Diglett's Cave",
+        minimum_encounter_level=15,
+        maximum_encounter_level=21,
+        rare_maximum_encounter_level=31,
+        measured_samples=29,
+    )
+    return TrainingVenue(
+        band=band,
+        map_id=int(MapId.DIGLETTS_CAVE),
+        walk_to_grass=_digletts_cave_walk_to_grass,
+        heal_and_return=_digletts_cave_heal_and_return,
+        is_in_center=lambda r: r.map_id == MapId.VERMILION_POKECENTER,
+        move_slot=_team_training_move_slot,
+    )
+
+DIGLETTS_CAVE_TRAINING_VENUE = _digletts_cave_training_venue()
 
 def _mansion_training_venue() -> TrainingVenue:
     """The Mansion, bound to the band it was actually measured to field.

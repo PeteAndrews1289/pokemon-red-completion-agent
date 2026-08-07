@@ -15,7 +15,6 @@ from pokemon_red_completion.observation import (
     BattleMenuPhase,
     PokemonRedStateReader,
     RamAddress,
-    RawGameState,
 )
 from pokemon_red_completion.party import (
     PARTY_SLOT_LIMIT,
@@ -45,6 +44,7 @@ from pokemon_red_completion.team_training import (
     summarize_team_readiness,
     weakest_member_trainable_at,
 )
+from pokemon_red_completion.training_venue import TrainingVenue
 
 
 class EmulatorState(Protocol):
@@ -78,7 +78,7 @@ FIELD_MOVE_IDS = frozenset({0x0F, DIG, 0x13, 0x39, 0x46})
 #:
 #: Every band here is transcribed from
 #: ``docs/evidence/encounter-bands-2026-08-07.json`` and only areas with at
-#: least twenty samples appear; ``test_measured_venues_match_the_evidence``
+#: least twenty samples appear; ``test_[v.band for v in venues]_match_the_evidence``
 #: fails if the two drift apart.  The typical maximum is what ninety percent of
 #: encounters stay under, with the rare ceiling recorded separately, because
 #: Diglett's Cave summarised as "15-31" would be rejected for the level-twenty
@@ -312,6 +312,63 @@ def select_cursor(
     )
 
 
+def _select_party_switch_row(
+    actions: CountingExecutor,
+    emulator: EmulatorState,
+    *,
+    expected_near: int,
+    party_size: int,
+    label: str,
+) -> int:
+    """Confirm the submenu row that opens the party list, and say which it was.
+
+    The member submenu holds the Pokémon's usable field moves plus SWITCH,
+    STATS and CANCEL, and the order has resisted two confident guesses. Rather
+    than assume it, each candidate row is confirmed and the result inspected:
+    SWITCH is the row after which the menu reports the party's own length,
+    because only the party list is that long. STATS opens a screen that reports
+    something else, and CANCEL closes back to a menu that is shorter.
+
+    The recognised signal is the game's, not ours, so this stays correct if the
+    submenu is ordered differently from whatever we currently believe.
+    """
+
+    submenu_max = emulator.read_u8(RamAddress.MAX_MENU_ITEM)
+    attempts: list[tuple[int, int]] = []
+    # Try the expected row first, then every other row in the submenu.
+    candidates = [expected_near] + [row for row in range(submenu_max + 1) if row != expected_near]
+    for row in candidates:
+        if not 0 <= row <= submenu_max:
+            continue
+        _walk_cursor_to(actions, emulator, row)
+        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != row:
+            continue
+        pulse(actions, MacroActionKind.CONFIRM)
+        opened = emulator.read_u8(RamAddress.MAX_MENU_ITEM)
+        attempts.append((row, opened))
+        if opened == party_size - 1:
+            return row
+        # Not SWITCH. Back out to the submenu and try the next row.
+        pulse(actions, MacroActionKind.CANCEL)
+        if emulator.read_u8(RamAddress.MAX_MENU_ITEM) != submenu_max:
+            break
+    raise RuntimeError(
+        f"{label} could not find the SWITCH row: submenu max_menu_item={submenu_max}, "
+        f"party_size={party_size}, tried (row, resulting max_menu_item)={attempts!r}. "
+        "No row opened a menu as long as the party."
+    )
+
+
+def _walk_cursor_to(actions: CountingExecutor, emulator: EmulatorState, target: int) -> None:
+    """Nudge the cursor toward ``target`` without insisting that it arrive."""
+
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == target:
+            return
+        pulse(actions, MacroActionKind.MOVE, "down" if cursor < target else "up", 120)
+
+
 def swap_field_party_slots(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
@@ -338,25 +395,21 @@ def swap_field_party_slots(
     pulse(actions, MacroActionKind.CONFIRM)
     select_cursor(actions, emulator, first_index, hideout_timing, "party source slot")
     pulse(actions, MacroActionKind.CONFIRM)
-    # The selected Pokémon's submenu lists its usable field moves first, then
-    # SWITCH, STATS and CANCEL. SWITCH therefore sits at ``field_move_count``,
-    # the first index past the moves — not one beyond it.
+    # Which submenu row is SWITCH has now been guessed wrong twice — once at
+    # ``field_move_count + 1``, which confirmed on the wrong row and left the
+    # following selection driving a five-entry menu it thought was the party,
+    # and once at ``field_move_count``, which changed nothing at all. Both
+    # guesses came from a belief about the menu's layout rather than from the
+    # menu.
     #
-    # Measured, not reasoned: with Blastoise in front the failure reported
-    # max_menu_item=4 against party_count=6, which is a five-entry menu (Surf,
-    # Strength, SWITCH, STATS, CANCEL) and not the party list at all. The extra
-    # step landed on STATS, so the following selection was driving the submenu
-    # while believing it was choosing a party slot, and ran off the end of it.
-    for _ in range(field_move_count):
-        pulse(actions, MacroActionKind.MOVE, "down", 120)
-    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != field_move_count:
-        raise RuntimeError(
-            f"{label} could not select the field SWITCH command: cursor at "
-            f"{emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, expected {field_move_count} "
-            f"after {field_move_count} field moves, "
-            f"max_menu_item={emulator.read_u8(RamAddress.MAX_MENU_ITEM)}."
-        )
-    pulse(actions, MacroActionKind.CONFIRM)
+    # So this asks it. The submenu is entered, then walked one row at a time,
+    # and the row that opens the party list is SWITCH — recognised by the menu
+    # growing to the party's own length, which is a fact about the game rather
+    # than a fact about our assumptions. ``field_move_count`` is used only to
+    # start the search near where SWITCH should be.
+    _select_party_switch_row(
+        actions, emulator, expected_near=field_move_count, party_size=before.size, label=label
+    )
     select_cursor(actions, emulator, second_index, hideout_timing, "party target slot")
     pulse(actions, MacroActionKind.CONFIRM)
     close_menu(actions, reader)
@@ -574,7 +627,6 @@ def run_red_team_balancing(
     emulator: EmulatorState,
     *,
     policy: BalancedTeamPolicy,
-    expected_map: int,
     intent: BattleIntent,
     flee_timing: object,
     hideout_timing: object,
@@ -588,15 +640,9 @@ def run_red_team_balancing(
     progress_sink: Callable[[str], None] | None = None,
     completed_checkpoint_count: int = 0,
     evolution_target: tuple[int, int] | None = None,
-    heal_and_return: Callable[[CountingExecutor, PokemonRedStateReader, EmulatorState], None],
-    is_in_center: Callable[[RawGameState], bool],
-    is_in_map: Callable[[RawGameState], bool],
-    walk_to_grass: Callable[[CountingExecutor, PokemonRedStateReader, EmulatorState], int],
-    move_slot: Callable[[RawGameState], int],
+    venues: Sequence[TrainingVenue] = (),
     report_label: str,
     checkpoint_count: int,
-    measured_venues: Sequence[GrindingArea] = (),
-    venue_band: GrindingArea | None = None,
 ) -> tuple[object | None, int, int]:
     party_reader = PokemonRedPartyReader(emulator)
     if BLASTOISE_SPECIES_ID not in party_reader.read().species_ids():
@@ -643,7 +689,7 @@ def run_red_team_balancing(
             raise RuntimeError(
                 f"Training venue does not match the party: {consecutive_flees} flees and no "
                 f"win after {label}. Encounters here are level {band}; party levels are "
-                f"{levels}. {_recommended_venue(party_reader, policy, measured_venues)}"
+                f"{levels}. {_recommended_venue(party_reader, policy, [v.band for v in venues])}"
             )
         if consecutive_flees > max_consecutive_flees:
             raise RuntimeError(
@@ -651,6 +697,8 @@ def run_red_team_balancing(
                 f"{label}: flees={consecutive_flees}, battles={battles}, levels={levels}, "
                 f"encounter band {band}."
             )
+
+    current_venue: TrainingVenue | None = None
 
     while True:
         party = party_reader.read()
@@ -660,24 +708,32 @@ def run_red_team_balancing(
             healing_trips=healing_trips,
             faints=party.fainted_count,
         )
+
         if evolution_target is None:
             decision = plan_team_training(party, policy, progress)
-            trainee = _trainee_for_venue(party, policy, venue_band)
-            if trainee is None and party.weakest_trainable_member is not None:
-                # Somebody could be trained, just not here. Say so now rather
-                # than after eight flees prove it the expensive way.
-                here = (
-                    f"{venue_band.area_id} fields levels "
-                    f"{venue_band.minimum_encounter_level}-"
-                    f"{venue_band.maximum_encounter_level}"
-                    if venue_band is not None
-                    else "this venue"
-                )
+            trainee = None
+            target_band = None
+            bands = [v.band for v in venues]
+            trainable_members = [m for m in party.members if m.level < policy.minimum_level]
+            for member in sorted(trainable_members, key=lambda m: (m.level, m.slot)):
+                band = choose_grinding_area(bands, member, policy)
+                if band is not None:
+                    trainee = member
+                    target_band = band
+                    break
+            
+            if not trainable_members:
+                pass # decision will be STOP
+            elif trainee is None:
+                here = ", ".join(f"{v.band.area_id} fields levels {v.band.minimum_encounter_level}-{v.band.maximum_encounter_level}" for v in venues if v.band) if venues else "this venue"
                 raise RuntimeError(
                     f"No party member can train here: {here}, and the party "
                     f"levels are {tuple(m.level for m in party.members)}. "
-                    + _recommended_venue(party_reader, policy, measured_venues)
+                    + _recommended_venue(party_reader, policy, [v.band for v in venues])
                 )
+            else:
+                current_venue = next(v for v in venues if v.band == target_band)
+
         else:
             precursor_species, final_species = evolution_target
             if final_species in party.species_ids():
@@ -687,6 +743,11 @@ def run_red_team_balancing(
             trainee = next((m for m in party.members if m.species_id == precursor_species), None)
             if trainee is None:
                 raise RuntimeError("Targeted evolution lost its precursor.")
+            target_band = choose_grinding_area([v.band for v in venues], trainee, policy)
+            if target_band is None:
+                raise RuntimeError(f"No provided venue suits precursor at level {trainee.level}.")
+            current_venue = next(v for v in venues if v.band == target_band)
+            
             if member_is_unsafe_for_team_training(trainee, policy):
                 directive = TeamTrainingDirective.RESTORE_TEAM
             elif trainee.slot != 1:
@@ -715,7 +776,7 @@ def run_red_team_balancing(
         )
         if raw.battle_state == 1:
             trainee = (
-                _trainee_for_venue(party, policy, venue_band)
+                trainee
                 if evolution_target is None
                 else next((m for m in party.members if m.species_id == evolution_target[0]), None)
             )
@@ -813,8 +874,8 @@ def run_red_team_balancing(
                 run_adaptive_wild_battle(
                     reader,
                     actions,
-                    move_slot,
-                    expected_map=expected_map,
+                    current_venue.move_slot,
+                    expected_map=current_venue.map_id,
                     intent=intent,
                     label="team training encounter",
                     unknown_cancel_interval=cancel_interval,
@@ -854,18 +915,16 @@ def run_red_team_balancing(
             if healing_trips >= policy.max_healing_trips:
                 break
             restore_training_core_order(actions, reader, emulator, hideout_timing)
-            heal_and_return(actions, reader, emulator)
+            current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             continue
 
-        if is_in_center(raw):
-            heal_and_return(actions, reader, emulator)
+        if not current_venue.is_in_map(raw):
+            current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             continue
-        if not is_in_map(raw):
-            break
         trainee = (
-            _trainee_for_venue(party, policy, venue_band)
+            trainee
             if evolution_target is None
             else next((m for m in party.members if m.species_id == evolution_target[0]), None)
         )
@@ -882,11 +941,11 @@ def run_red_team_balancing(
                 hideout_timing=hideout_timing,
             )
             continue
-        steps += walk_to_grass(actions, reader, emulator)
+        steps += current_venue.walk_to_grass(actions, reader, emulator)
 
-    if is_in_map(reader.read()):
+    if current_venue is not None and current_venue.is_in_map(reader.read()):
         restore_training_core_order(actions, reader, emulator, hideout_timing)
-        heal_and_return(actions, reader, emulator)
+        current_venue.heal_and_return(actions, reader, emulator)
         healing_trips += 1
     restore_training_core_order(actions, reader, emulator, hideout_timing)
     report = (
