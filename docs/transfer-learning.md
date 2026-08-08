@@ -51,6 +51,13 @@ adapters must project the exact same 25-feature training observation. This does 
 Crystal transfer; it prevents those title identities from becoming shortcuts before that benchmark
 exists.
 
+Identity-free inputs are necessary and not sufficient. The first affordance-masked Red training
+candidate reached 100% held-out accuracy, but a baseline that saw only the candidate-action set
+also reached 100%: every two-action set had the same label in every observed state. A later
+transfer claim therefore requires at least one unchanged candidate set with multiple well-supported
+labels, plus a held-out improvement over that candidate-only baseline. Otherwise the model may be
+portable in format while learning no state-dependent Pokémon knowledge.
+
 Every episode therefore has two authority lanes:
 
 - the **policy observation** contains only semantic state the player could obtain from the game
