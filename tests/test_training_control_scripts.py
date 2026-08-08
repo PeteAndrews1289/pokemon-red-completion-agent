@@ -234,3 +234,31 @@ def test_selection_and_fit_scripts_keep_validation_in_its_own_stage(tmp_path: Pa
     )
     assert rejected.returncode == 2
     assert "candidate lineage source does not match" in rejected.stderr
+
+    diversity = tmp_path / "diversity.json"
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/audit_training_control_choice_diversity.py",
+            "--train",
+            str(train_one),
+            train_one_sha,
+            "--train",
+            str(train_two),
+            train_two_sha,
+            "--validation",
+            str(validation),
+            validation_sha,
+            "--out",
+            str(diversity),
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    diversity_payload = json.loads(diversity.read_text())
+    assert diversity_payload["validation_candidate_coverage"] == 1.0
+    assert diversity_payload["validation_candidate_only_accuracy"] == 0.4
+    assert diversity_payload["candidate_only_baseline_saturates_validation"] is False
+    assert diversity_payload["state_dependent_choice_demonstrated"] is True

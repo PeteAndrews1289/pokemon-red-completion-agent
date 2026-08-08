@@ -228,6 +228,11 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   four offline gates despite perfect battle accuracy.
 - [ ] Collect fresh v6 lineages under safety-affordance masking, select without validation, and
   attempt shadow/full causal promotion only if every unchanged operational gate passes.
+- [x] Audit v6 against a candidate-set-only held-out baseline. That baseline also reaches 100%:
+  every `fight/flee` row is labeled `fight`, every `seek/heal` row is labeled `seek`, and every
+  other set is a singleton. Treat causal qualification as a safe authority/integration result, not
+  evidence that the 25 state features add predictive value. The next curriculum must contain
+  state-dependent choices within at least one unchanged candidate set.
 - [x] Make offline promotion mechanical: emit path-free lineage/root identities from fitting,
   authenticate the preregistration and candidate summary, evaluate all eight gates, and return a
   nonzero status that forbids shadow whenever one fails.
