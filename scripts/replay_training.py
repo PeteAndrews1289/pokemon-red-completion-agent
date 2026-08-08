@@ -57,6 +57,12 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="write portable seek/fight/flee/heal/stop teacher decisions as JSON",
     )
+    parser.add_argument(
+        "--out-candidate-decisions",
+        type=Path,
+        default=None,
+        help="write identity-free trainee/venue candidate-ranking decisions as JSON",
+    )
     parser.add_argument("--shadow-model", type=Path, default=None)
     parser.add_argument("--shadow-model-sha256", default=None)
     parser.add_argument("--out-shadow", type=Path, default=None)
@@ -105,8 +111,10 @@ def main(argv: list[str] | None = None) -> int:
         help="derive and verify --out-root-state without running the training lesson",
     )
     args = parser.parse_args(argv)
-    if args.out_decisions is not None and not args.lineage_id:
-        parser.error("--lineage-id is required with --out-decisions")
+    if (args.out_decisions is not None or args.out_candidate_decisions is not None) and not (
+        args.lineage_id
+    ):
+        parser.error("--lineage-id is required with decision output")
     if args.seed_wait_frames < 0:
         parser.error("--seed-wait-frames must be non-negative")
     if not 0 <= args.seed_walk_cycles <= 16:
@@ -199,7 +207,7 @@ def main(argv: list[str] | None = None) -> int:
             )
         provenance = (
             _collection_provenance(collection_state, args.lineage_id, args.partition)
-            if args.out_decisions is not None
+            if args.out_decisions is not None or args.out_candidate_decisions is not None
             else None
         )
         raw = reader.read()
@@ -221,6 +229,7 @@ def main(argv: list[str] | None = None) -> int:
             emulator,
             args.max_steps,
             args.out_decisions,
+            args.out_candidate_decisions,
             provenance,
             shadow,
             args.out_shadow,
@@ -290,6 +299,7 @@ def _replay_training(
     emulator,
     max_steps: int | None,
     out_decisions: Path | None,
+    out_candidate_decisions: Path | None,
     provenance: dict[str, object] | None,
     shadow,
     out_shadow: Path | None,
@@ -311,6 +321,8 @@ def _replay_training(
     party_reader = PokemonRedPartyReader(emulator)
     evolution_decisions = []
     balance_decisions = []
+    evolution_candidate_decisions = []
+    balance_candidate_decisions = []
 
     def record_evolution(decision) -> None:
         evolution_decisions.append(decision)
@@ -321,6 +333,12 @@ def _replay_training(
         balance_decisions.append(decision)
         if shadow is not None and decision_authority is None:
             shadow.observe(decision)
+
+    def record_evolution_candidate(decision) -> None:
+        evolution_candidate_decisions.append(decision)
+
+    def record_balance_candidate(decision) -> None:
+        balance_candidate_decisions.append(decision)
 
     def note(message: str) -> None:
         levels = party_reader.read().levels
@@ -355,6 +373,7 @@ def _replay_training(
                 cancel_interval=blaine.MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
                 evolution_target=(blaine.DIGLETT_SPECIES_ID, blaine.DUGTRIO_SPECIES_ID),
                 decision_sink=record_evolution,
+                candidate_decision_sink=record_evolution_candidate,
                 decision_authority=decision_authority,
                 report_label="replay evolution",
                 checkpoint_count=blaine.BLAINE_CHECKPOINT_COUNT,
@@ -380,6 +399,7 @@ def _replay_training(
             cancel_interval=blaine.MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
             progress_sink=note,
             decision_sink=record_balance,
+            candidate_decision_sink=record_balance_candidate,
             decision_authority=decision_authority,
             report_label="replay training",
             checkpoint_count=blaine.BLAINE_CHECKPOINT_COUNT,
@@ -390,6 +410,14 @@ def _replay_training(
             status="failed",
             evolution=evolution_decisions,
             balance=balance_decisions,
+            error=f"{type(error).__name__}: {error}",
+            provenance=provenance,
+        )
+        _write_candidate_decisions(
+            out_candidate_decisions,
+            status="failed",
+            evolution=evolution_candidate_decisions,
+            balance=balance_candidate_decisions,
             error=f"{type(error).__name__}: {error}",
             provenance=provenance,
         )
@@ -416,6 +444,13 @@ def _replay_training(
         status="ok",
         evolution=evolution_decisions,
         balance=balance_decisions,
+        provenance=provenance,
+    )
+    _write_candidate_decisions(
+        out_candidate_decisions,
+        status="ok",
+        evolution=evolution_candidate_decisions,
+        balance=balance_candidate_decisions,
         provenance=provenance,
     )
     _write_shadow(
@@ -520,6 +555,48 @@ def _write_decisions(
     temporary.replace(path)
     print(
         f"wrote {len(evolution) + len(balance)} portable training decisions to {path}",
+        flush=True,
+    )
+
+
+def _write_candidate_decisions(
+    path: Path | None,
+    *,
+    status: str,
+    evolution: list,
+    balance: list,
+    provenance: dict[str, object] | None,
+    error: str | None = None,
+) -> None:
+    """Atomically retain strategic ranking choices, including failed lessons."""
+
+    if path is None:
+        return
+    if provenance is None:
+        raise RuntimeError("candidate-decision output lacks lineage provenance")
+    from pokemon_red_completion.training_candidate_rank import (
+        TRAINING_CANDIDATE_FEATURE_NAMES,
+        TRAINING_CANDIDATE_FEATURE_SCHEMA_ID,
+    )
+
+    payload = {
+        "schema": "pokemon-training-candidate-replay-v1",
+        "status": status,
+        "feature_schema_id": TRAINING_CANDIDATE_FEATURE_SCHEMA_ID,
+        "feature_names": list(TRAINING_CANDIDATE_FEATURE_NAMES),
+        "error": error,
+        "provenance": provenance,
+        "segments": {
+            "evolution": [decision.public_dict() for decision in evolution],
+            "balance": [decision.public_dict() for decision in balance],
+        },
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.tmp")
+    temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    temporary.replace(path)
+    print(
+        f"wrote {len(evolution) + len(balance)} portable candidate decisions to {path}",
         flush=True,
     )
 

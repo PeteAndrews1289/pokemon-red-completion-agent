@@ -16,6 +16,8 @@ is where nearly all the cost has been.
 
 from __future__ import annotations
 
+import json
+
 import pytest
 
 from pokemon_red_completion import red_team_training
@@ -52,6 +54,7 @@ from pokemon_red_completion.red_team_training import (
     switch_active_battler,
 )
 from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingArea
+from pokemon_red_completion.training_candidate_rank import TrainingCandidateDecision
 from pokemon_red_completion.training_control import TrainingControlAction, TrainingControlDecision
 from pokemon_red_completion.training_venue import TrainingVenue
 
@@ -550,6 +553,51 @@ def test_model_selected_optional_heal_executes_and_pays_its_budget(
 
     assert chose_optional_heal
     assert calls == {"heal": 1, "walk": 1}
+
+
+def test_balancing_emits_identity_free_trainee_and_venue_choices() -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (
+                species,
+                20
+                if species == DUX_SPECIES_ID
+                else 40
+                if species == BLASTOISE_SPECIES_ID
+                else 30,
+            )
+            for species in FINAL_FORM_ROSTER
+        ]
+    )
+    candidate_decisions: list[TrainingCandidateDecision] = []
+
+    with pytest.raises(RuntimeError, match="stopped before readiness"):
+        run(
+            memory,
+            FakeReader([state()]),
+            policy=BalancedTeamPolicy(
+                minimum_level=55,
+                maximum_level_spread=40,
+                required_size=6,
+                max_steps=1,
+            ),
+            candidate_decision_sink=candidate_decisions.append,
+        )
+
+    assert [decision.decision_index for decision in candidate_decisions] == list(
+        range(len(candidate_decisions))
+    )
+    assert [decision.observation.kind.value for decision in candidate_decisions[:2]] == [
+        "trainee",
+        "venue",
+    ]
+    serialized = json.dumps(
+        [decision.public_dict() for decision in candidate_decisions], sort_keys=True
+    )
+    assert "species" not in serialized
+    assert "area_id" not in serialized
+    assert "map" not in serialized
 
 
 def test_training_without_the_escort_fails_before_the_first_step() -> None:
