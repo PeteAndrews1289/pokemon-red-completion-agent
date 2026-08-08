@@ -162,6 +162,13 @@ obvious—Blaine's team-development lesson alone consumed **93.44%** of the acti
 battles and 885 healing trips. End the Red act by replacing “Can the pieces connect?” with the more
 important question: “Can the model learn the largest piece?”
 
+For the next-episode bridge, show the same teacher loop with five labels appearing before the
+inputs: `seek`, `fight`, `flee`, `heal`, and `stop`. Fade out the Red-specific map, species, move,
+and memory fields, leaving the 21 portable signals—relative levels, health, attack reserve, team
+readiness, venue suitability, and bounded progress. Be precise: this is the collection interface,
+not a trained result. The cliffhanger is the first lineage-held-out candidate and whether it can
+replace the teacher without changing the safety referee.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

@@ -19,6 +19,7 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.party import (
     PARTY_SLOT_LIMIT,
     PartyMemberObservation,
+    PartyObservation,
     StatusCondition,
 )
 from pokemon_red_completion.red_battle_catalog import (
@@ -46,6 +47,12 @@ from pokemon_red_completion.team_training import (
     member_needs_training,
     plan_team_training,
     summarize_team_readiness,
+)
+from pokemon_red_completion.training_control import (
+    TrainingControlAction,
+    TrainingControlDecision,
+    TrainingControlPhase,
+    project_training_control_observation,
 )
 from pokemon_red_completion.training_venue import TrainingVenue, venue_for_map
 
@@ -685,6 +692,7 @@ def run_red_team_balancing(
     max_consecutive_flees: int = 32,
     cancel_interval: int = 40,
     progress_sink: Callable[[str], None] | None = None,
+    decision_sink: Callable[[TrainingControlDecision], None] | None = None,
     completed_checkpoint_count: int = 0,
     evolution_target: tuple[int, int] | None = None,
     venues: Sequence[TrainingVenue],
@@ -712,6 +720,7 @@ def run_red_team_balancing(
     # venue mismatch from bad luck, and it is the evidence a training-area
     # catalogue should eventually be built from.
     observed_encounter_levels: list[int] = []
+    decision_index = 0
 
     def emit_progress() -> None:
         """Report progress as a message the caller renders in its own record type.
@@ -750,6 +759,39 @@ def run_red_team_balancing(
                 f"encounter band {band}."
             )
 
+    def emit_decision(
+        action: TrainingControlAction,
+        reason: str,
+        *,
+        phase: TrainingControlPhase,
+        party: PartyObservation,
+        progress: TeamTrainingProgress,
+        trainee: PartyMemberObservation | None,
+        enemy_level: int | None = None,
+    ) -> None:
+        """Publish supervision before the teacher executes the mechanic."""
+
+        nonlocal decision_index
+        if decision_sink is None:
+            return
+        pp = training_attack_pp(trainee) if trainee is not None else None
+        reserve = training_attack_pp_reserve(trainee, policy) if trainee is not None else None
+        observation = project_training_control_observation(
+            party,
+            policy,
+            progress,
+            phase=phase,
+            trainee=trainee,
+            attack_pp=pp,
+            attack_pp_reserve=reserve,
+            enemy_level=enemy_level,
+            venue=current_venue.band,
+            consecutive_flees=consecutive_flees,
+            max_consecutive_flees=max_consecutive_flees,
+        )
+        decision_sink(TrainingControlDecision(decision_index, action, observation, reason))
+        decision_index += 1
+
     # Never None. A venue is needed before any trainee is matched to one --
     # ``plan_team_training`` can ask to RESTORE_TEAM on the first iteration, and
     # an unsafe escort triggers the same branch -- and both paths heal through
@@ -778,7 +820,7 @@ def run_red_team_balancing(
                     trainee = member
                     target_band = band
                     break
-            
+
             if not trainable_members:
                 # Nobody is below the floor, so the decision is already STOP and
                 # the readiness check below is what should speak.
@@ -810,7 +852,7 @@ def run_red_team_balancing(
             if target_band is None:
                 raise RuntimeError(f"No provided venue suits precursor at level {trainee.level}.")
             current_venue = next(v for v in venues if v.band == target_band)
-            
+
             if member_is_unsafe_for_team_training(trainee, policy):
                 directive = TeamTrainingDirective.RESTORE_TEAM
             elif trainee.slot != 1:
@@ -825,6 +867,14 @@ def run_red_team_balancing(
             readiness = summarize_team_readiness(party, policy)
             if not readiness.passed:
                 raise RuntimeError(f"Team training stopped before readiness: {decision.reason}")
+            emit_decision(
+                TrainingControlAction.STOP,
+                decision.reason,
+                phase=TrainingControlPhase.OVERWORLD,
+                party=party,
+                progress=progress,
+                trainee=trainee,
+            )
             break
 
         raw = reader.read()
@@ -860,6 +910,15 @@ def run_red_team_balancing(
                     consecutive_flees = 0
                     emit_progress()
                     continue
+                emit_decision(
+                    TrainingControlAction.FLEE,
+                    "volatile matchup",
+                    phase=TrainingControlPhase.BATTLE,
+                    party=party_reader.read(),
+                    progress=progress,
+                    trainee=party_reader.read().lead,
+                    enemy_level=raw.enemy_level,
+                )
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
                 require_zero_faints(party_reader, "volatile-matchup escape")
                 record_flee("volatile matchup")
@@ -878,6 +937,15 @@ def run_red_team_balancing(
                     battles += 1
                     consecutive_flees = 0
                     continue
+                emit_decision(
+                    TrainingControlAction.FLEE,
+                    "excluded matchup",
+                    phase=TrainingControlPhase.BATTLE,
+                    party=party_reader.read(),
+                    progress=progress,
+                    trainee=party_reader.read().lead,
+                    enemy_level=raw.enemy_level,
+                )
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
                 require_zero_faints(party_reader, "excluded-matchup escape")
                 record_flee("excluded matchup")
@@ -906,6 +974,15 @@ def run_red_team_balancing(
                     battles += 1
                     consecutive_flees = 0
                     continue
+                emit_decision(
+                    TrainingControlAction.FLEE,
+                    "escort has reached the parity cap",
+                    phase=TrainingControlPhase.BATTLE,
+                    party=party_reader.read(),
+                    progress=progress,
+                    trainee=party_reader.read().lead,
+                    enemy_level=raw.enemy_level,
+                )
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
                 require_zero_faints(party_reader, "capped-escort escape")
                 record_flee("escort at parity")
@@ -919,6 +996,15 @@ def run_red_team_balancing(
                 or training_attack_pp(fighter) <= training_attack_pp_reserve(fighter, policy)
             )
             if fighter_unsafe:
+                emit_decision(
+                    TrainingControlAction.FLEE,
+                    "selected fighter is unsafe",
+                    phase=TrainingControlPhase.BATTLE,
+                    party=party,
+                    progress=progress,
+                    trainee=trainee,
+                    enemy_level=raw.enemy_level,
+                )
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
                 require_zero_faints(party_reader, "unsafe-matchup escape")
                 record_flee("unsafe matchup")
@@ -937,6 +1023,15 @@ def run_red_team_balancing(
                 continue
             if reader.read().battle_state != 1:
                 continue
+            emit_decision(
+                TrainingControlAction.FIGHT,
+                "matchup and resource gates permit a training battle",
+                phase=TrainingControlPhase.BATTLE,
+                party=party,
+                progress=progress,
+                trainee=trainee,
+                enemy_level=raw.enemy_level,
+            )
             try:
                 run_adaptive_wild_battle(
                     reader,
@@ -968,6 +1063,15 @@ def run_red_team_balancing(
                         consecutive_flees = 0
                         emit_progress()
                         continue
+                emit_decision(
+                    TrainingControlAction.FLEE,
+                    "live attack PP was exhausted or disabled",
+                    phase=TrainingControlPhase.BATTLE,
+                    party=party_reader.read(),
+                    progress=progress,
+                    trainee=party_reader.read().lead,
+                    enemy_level=current.enemy_level,
+                )
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
                 require_zero_faints(party_reader, "PP-exhaustion escape")
                 record_flee("live PP exhaustion or Disable")
@@ -981,12 +1085,29 @@ def run_red_team_balancing(
         if decision.directive is TeamTrainingDirective.RESTORE_TEAM or escort_unsafe:
             if healing_trips >= policy.max_healing_trips:
                 break
+            emit_decision(
+                TrainingControlAction.HEAL,
+                decision.reason if decision.directive is TeamTrainingDirective.RESTORE_TEAM
+                else "escort is unsafe",
+                phase=TrainingControlPhase.OVERWORLD,
+                party=party,
+                progress=progress,
+                trainee=trainee,
+            )
             restore_training_core_order(actions, reader, emulator, hideout_timing)
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             continue
 
         if not current_venue.is_in_map(raw):
+            emit_decision(
+                TrainingControlAction.SEEK,
+                "travel to the selected training venue",
+                phase=TrainingControlPhase.OVERWORLD,
+                party=party,
+                progress=progress,
+                trainee=trainee,
+            )
             restore_training_core_order(actions, reader, emulator, hideout_timing)
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
@@ -999,6 +1120,14 @@ def run_red_team_balancing(
         if trainee is None:
             break
         if trainee.slot != 1:
+            emit_decision(
+                TrainingControlAction.SEEK,
+                "prepare the selected trainee before seeking an encounter",
+                phase=TrainingControlPhase.OVERWORLD,
+                party=party,
+                progress=progress,
+                trainee=trainee,
+            )
             swap_field_party_slots(
                 actions,
                 reader,
@@ -1009,6 +1138,14 @@ def run_red_team_balancing(
                 hideout_timing=hideout_timing,
             )
             continue
+        emit_decision(
+            TrainingControlAction.SEEK,
+            "seek a bounded encounter in the selected venue",
+            phase=TrainingControlPhase.OVERWORLD,
+            party=party,
+            progress=progress,
+            trainee=trainee,
+        )
         steps += current_venue.walk_to_grass(actions, reader, emulator)
 
     if current_venue.is_in_map(reader.read()):

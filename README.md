@@ -40,6 +40,14 @@ TM38, and return healed. That one skill consumed **93.44% of all actions** in th
 run, making learned training control the next concrete replacement target. See
 the [post-Mansion Blaine receipt](docs/evidence/affordance-masked-post-mansion-blaine-2026-08-08.json).
 
+That replacement now has a data boundary. The live teacher can emit every strategic training
+choice as one of `seek`, `fight`, `flee`, `heal`, or `stop` before executing it. Its 21 normalized
+features describe party readiness, relative matchup safety, resources, venue suitability, and
+bounded progress without retaining Red map IDs, species IDs, move IDs, or memory addresses. The
+captured-state replay tool can preserve successful or failed decision streams for later lineage
+splits. This is instrumentation, not a trained training policy; the next gate is to collect complete
+disjoint lineages and fit a candidate without mixing one run across train and validation.
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

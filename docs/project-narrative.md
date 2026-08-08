@@ -184,6 +184,15 @@ fight, flee, heal, and stop? See the
 The capture begins at Celadon and every mechanic skill is still teacher-authored; neither fact is
 hidden behind the successful terminal.
 
+The first learned-mechanics seam follows directly from that measurement. The teacher now emits a
+decision before each strategic training action using five portable labels: seek, fight, flee, heal,
+and stop. A 21-feature observation describes phase, party readiness, level deficit and spread,
+trainee health and attack reserve, relative enemy level, venue suitability, and bounded progress.
+It deliberately omits Red's map numbers, species and move identities, and memory layout. The replay
+harness atomically retains even failed streams so useful experience is not erased, but failed runs
+cannot be promoted as successful lineages. No learned training candidate has qualified yet; this is
+the collection interface that makes one possible.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

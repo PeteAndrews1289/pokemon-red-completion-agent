@@ -51,6 +51,7 @@ from pokemon_red_completion.red_team_training import (
     run_red_team_balancing,
 )
 from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingArea
+from pokemon_red_completion.training_control import TrainingControlAction
 from pokemon_red_completion.training_venue import TrainingVenue
 
 DIGLETT_SPECIES_ID = 0x3B
@@ -367,6 +368,22 @@ def test_a_finished_team_runs_the_loop_to_its_exit() -> None:
     assert memory.party[0].species == BLASTOISE_SPECIES_ID
     assert memory.party[1].species == DUX_SPECIES_ID
     assert memory.party[2].species == DUGTRIO_SPECIES_ID
+
+
+def test_a_finished_team_emits_stop_supervision_before_cleanup() -> None:
+    memory = FakeMemory()
+    memory.set_party([(species, 60) for species in FINAL_FORM_ROSTER])
+    decisions = []
+
+    run(
+        memory,
+        FakeReader([state()]),
+        decision_sink=decisions.append,
+    )
+
+    assert [decision.action for decision in decisions] == [TrainingControlAction.STOP]
+    assert decisions[0].decision_index == 0
+    assert decisions[0].observation.phase.value == "overworld"
 
 
 def test_training_without_the_escort_fails_before_the_first_step() -> None:

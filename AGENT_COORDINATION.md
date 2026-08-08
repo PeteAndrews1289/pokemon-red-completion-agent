@@ -167,6 +167,10 @@ effect; do not count a second model decision. The uninterrupted integration repl
 the authenticated Celadon capture, with no labels, fallbacks, or replans. Nineteen dispatches were
 singletons. The next authority replacement is the teacher-authored training controller, not another
 fixed route extension.
+That replacement seam is now instrumented: `training_control.py` projects 21 identity-free features
+and five phase-masked actions, `run_red_team_balancing` emits decisions before mechanics, and
+`replay_training.py --out-decisions` preserves the stream. No training-control model or qualified
+dataset exists yet. Collect and split complete root lineages before fitting anything.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

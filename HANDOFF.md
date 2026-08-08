@@ -285,9 +285,17 @@ Hall of Fame with no expected labels, fallbacks, or replans. Fresh observations 
 objectives. Nineteen dispatches were singletons; only Koga versus Strength measured ranking. See the
 [twenty-decision receipt](docs/evidence/affordance-masked-twenty-objective-hall-of-fame-2026-08-08.json).
 
-**Next:** replace the 469,232-action training skill's teacher authority with a learned bounded
-seek/fight/flee/heal/stop controller. Preserve the fixed skill as demonstrator and referee. Do not
-describe this integration result as clean-start or end-to-end learned completion.
+The first replacement seam is implemented. `training_control.py` defines a 21-feature portable
+observation and the five phase-masked actions `seek`, `fight`, `flee`, `heal`, and `stop`.
+`run_red_team_balancing` emits each teacher decision before execution through an optional sink, and
+`scripts/replay_training.py --out-decisions` atomically preserves complete or failed streams. The
+features deliberately exclude game, map, species, move, and memory identity.
+
+**Next:** collect at least three complete decision lineages, split by root lineage rather than by
+row, train and shadow-evaluate the first candidate, then replace the 469,232-action skill's teacher
+authority under the same safety envelope. Preserve the fixed skill as demonstrator and referee. Do
+not describe instrumentation as a trained policy or this integration result as clean-start or
+end-to-end learned completion.
 
 ---
 

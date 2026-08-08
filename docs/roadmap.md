@@ -145,6 +145,16 @@ seek/fight/flee/heal/stop dataset and replace that authority with a learned cont
 same safety envelope. The 469,232-action development block accounts for 93.44% of the integrated
 run, so it is both the largest scripted surface and the highest-leverage learning target.
 
+- [x] Define phase-masked `seek` / `fight` / `flee` / `heal` / `stop` labels and a normalized
+  cross-game feature schema with no Red map, species, move, or memory identifiers.
+- [x] Instrument the live balanced-team teacher to emit those decisions before execution and let
+  the captured-state replay atomically retain successful or failed streams.
+- [ ] Collect complete disjoint root lineages and publish class balance plus feature coverage.
+- [ ] Train a candidate with lineage-held-out validation; require every validation class to exist
+  in training and keep the sealed test partition closed.
+- [ ] Run the candidate in shadow mode, then model-controlled mode under the unchanged teacher
+  referee and action/frame/faint bounds.
+
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
 on a small Crystal battle-and-navigation benchmark under zero-shot, few-shot, and from-scratch

@@ -18,6 +18,7 @@ Usage::
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 import traceback
 from pathlib import Path
@@ -48,6 +49,12 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="exercise just the party swap rather than the whole training block",
     )
+    parser.add_argument(
+        "--out-decisions",
+        type=Path,
+        default=None,
+        help="write portable seek/fight/flee/heal/stop teacher decisions as JSON",
+    )
     args = parser.parse_args(argv)
 
     emulator = PyBoyAdapter(resolve_rom_path(args.rom))
@@ -71,7 +78,13 @@ def main(argv: list[str] | None = None) -> int:
 
         if args.swap_only:
             return _replay_swap(actions, reader, emulator, party_reader)
-        return _replay_training(actions, reader, emulator, args.max_steps)
+        return _replay_training(
+            actions,
+            reader,
+            emulator,
+            args.max_steps,
+            args.out_decisions,
+        )
     finally:
         emulator.close()
 
@@ -127,7 +140,13 @@ def _replay_swap(actions, reader, emulator, party_reader) -> int:
     return 0 if swapped else 1
 
 
-def _replay_training(actions, reader, emulator, max_steps: int | None) -> int:
+def _replay_training(
+    actions,
+    reader,
+    emulator,
+    max_steps: int | None,
+    out_decisions: Path | None,
+) -> int:
     """Run the Mansion evolution and balancing blocks exactly as Blaine does."""
 
     from dataclasses import replace
@@ -139,6 +158,8 @@ def _replay_training(actions, reader, emulator, max_steps: int | None) -> int:
         policy = replace(policy, max_steps=max_steps)
 
     party_reader = PokemonRedPartyReader(emulator)
+    evolution_decisions = []
+    balance_decisions = []
 
     def note(message: str) -> None:
         levels = party_reader.read().levels
@@ -172,6 +193,7 @@ def _replay_training(actions, reader, emulator, max_steps: int | None) -> int:
                 max_consecutive_flees=blaine.MANSION_MAX_CONSECUTIVE_FLEES,
                 cancel_interval=blaine.MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
                 evolution_target=(blaine.DIGLETT_SPECIES_ID, blaine.DUGTRIO_SPECIES_ID),
+                decision_sink=evolution_decisions.append,
                 report_label="replay evolution",
                 checkpoint_count=blaine.BLAINE_CHECKPOINT_COUNT,
             )
@@ -195,10 +217,18 @@ def _replay_training(actions, reader, emulator, max_steps: int | None) -> int:
             max_consecutive_flees=blaine.MANSION_MAX_CONSECUTIVE_FLEES,
             cancel_interval=blaine.MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
             progress_sink=note,
+            decision_sink=balance_decisions.append,
             report_label="replay training",
             checkpoint_count=blaine.BLAINE_CHECKPOINT_COUNT,
         )
     except Exception as error:  # noqa: BLE001 - the failure is the output
+        _write_decisions(
+            out_decisions,
+            status="failed",
+            evolution=evolution_decisions,
+            balance=balance_decisions,
+            error=f"{type(error).__name__}: {error}",
+        )
         print(f"\nFAILED: {type(error).__name__}: {error}")
         traceback.print_exc(limit=3)
         return 1
@@ -207,7 +237,51 @@ def _replay_training(actions, reader, emulator, max_steps: int | None) -> int:
         f"evolution_healing_trips={evolution_heals}, "
         f"balance_battles={battles}, balance_healing_trips={heals}, report={report}"
     )
+    _write_decisions(
+        out_decisions,
+        status="ok",
+        evolution=evolution_decisions,
+        balance=balance_decisions,
+    )
     return 0
+
+
+def _write_decisions(
+    path: Path | None,
+    *,
+    status: str,
+    evolution: list,
+    balance: list,
+    error: str | None = None,
+) -> None:
+    """Persist even a failed rehearsal so useful supervision is not discarded."""
+
+    if path is None:
+        return
+    from pokemon_red_completion.training_control import (
+        TRAINING_CONTROL_FEATURE_NAMES,
+        TRAINING_CONTROL_FEATURE_SCHEMA_ID,
+    )
+
+    payload = {
+        "schema": "pokemon-training-control-replay-v1",
+        "status": status,
+        "feature_schema_id": TRAINING_CONTROL_FEATURE_SCHEMA_ID,
+        "feature_names": list(TRAINING_CONTROL_FEATURE_NAMES),
+        "error": error,
+        "segments": {
+            "evolution": [decision.public_dict() for decision in evolution],
+            "balance": [decision.public_dict() for decision in balance],
+        },
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.tmp")
+    temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    temporary.replace(path)
+    print(
+        f"wrote {len(evolution) + len(balance)} portable training decisions to {path}",
+        flush=True,
+    )
 
 
 if __name__ == "__main__":
