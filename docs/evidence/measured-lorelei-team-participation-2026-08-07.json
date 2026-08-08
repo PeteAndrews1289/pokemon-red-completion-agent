@@ -1,0 +1,103 @@
+{
+  "schema": "pokemon-red-lorelei-team-participation-evidence-v1",
+  "recorded_at": "2026-08-07",
+  "source_commit": "e721f00",
+  "regime": "clean-power deterministic-teacher run; one uninterrupted process; no save-state restore; no validation or sealed evaluation seed opened",
+  "completion": {
+    "status": "ok",
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "qualified_through": "enter_hall_of_fame",
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 540279
+  },
+  "whole_league": {
+    "turns_per_member": [39, 0, 0, 0, 3, 1],
+    "observed_turns": 43,
+    "unobserved_turns": 0,
+    "participating_members": 3,
+    "busiest_member_turns": 39,
+    "busiest_member_share": 0.9069767441860465
+  },
+  "lorelei": {
+    "turns_per_member": [5, 0, 0, 0, 3, 0],
+    "observed_turns": 8,
+    "unobserved_turns": 0,
+    "participating_members": 2,
+    "busiest_member_turns": 5,
+    "busiest_member_share": 0.625,
+    "team_switches": 2,
+    "lesson": {
+      "reserve": {
+        "participant": "Jolteon",
+        "participant_species_id": 104,
+        "active_party_index": 4,
+        "target_resolution": "living party member selected by species rather than fixed slot",
+        "move": "Thunder",
+        "move_id": 87,
+        "move_slot": 1,
+        "opponents": [
+          {"name": "Dewgong", "species_id": 120, "level": 54},
+          {"name": "Cloyster", "species_id": 139, "level": 53},
+          {"name": "Slowbro", "species_id": 8, "level": 54}
+        ],
+        "recorded_attack_decisions": 3
+      },
+      "anchor": {
+        "participant": "Blastoise",
+        "participant_species_id": 28,
+        "active_party_index": 0,
+        "opponents": [
+          {"name": "Jynx", "species_id": 72, "level": 56},
+          {"name": "Lapras", "species_id": 19, "level": 56}
+        ],
+        "recorded_attack_decisions": 5
+      },
+      "x_accuracy_applied_after_reserve_switch": true,
+      "reserve_and_anchor_target_sets_completed": true
+    },
+    "post_battle_recovery": {
+      "hyper_potions_used": 3,
+      "full_restores_used": 0,
+      "party_aware_target_selection": true,
+      "entire_party_fully_healed_and_status_free": true
+    }
+  },
+  "bruno_regression": {
+    "status": "ok",
+    "turns_per_member": [6, 0, 0, 0, 0, 1],
+    "observed_turns": 7,
+    "unobserved_turns": 0,
+    "participating_members": 2,
+    "busiest_member_turns": 6,
+    "busiest_member_share": 0.8571428571428571,
+    "team_switches": 2,
+    "hyper_potions_used": 0,
+    "full_restores_used": 0
+  },
+  "comparison": {
+    "single_carry_baseline": {
+      "source_commit": "d56eee7",
+      "turns_per_member": [49, 0, 0, 0, 0, 0],
+      "participating_members": 1,
+      "busiest_member_share": 1.0
+    },
+    "first_bruno_lesson": {
+      "source_commit": "14a7c0b",
+      "turns_per_member": [51, 0, 0, 0, 0, 1],
+      "participating_members": 2,
+      "busiest_member_share": 0.9807692307692307
+    },
+    "result": "The second non-cosmetic League lesson added Jolteon as a third participant, reduced the whole-League busiest-member share from 98.08% to 90.70%, and cut Lorelei from 19 single-carry attack decisions to an eight-decision two-member split while preserving clean-power completion."
+  },
+  "claim": "The exact pushed deterministic teacher selected Jolteon by observed species and health, used Thunder against Lorelei's three Water targets, returned Blastoise for Jynx and Lapras, recovered the party members that actually needed healing, retained the qualified Hitmonlee lesson at Bruno, and entered the Hall of Fame in the same uninterrupted run.",
+  "remaining_limitations": [
+    "Three of six party members supplied recorded League attack decisions; DUX, Dugtrio, and Snorlax supplied none.",
+    "The whole-League busiest-member share remains 90.70%, so this is an expanding team curriculum rather than balanced six-member League play.",
+    "No learned policy produced these switches, attacks, recoveries, or completion behavior.",
+    "No unseen-seed or cross-game generalization was measured."
+  ]
+}

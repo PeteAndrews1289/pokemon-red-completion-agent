@@ -1473,6 +1473,22 @@ lesson, not balanced League play. It establishes the reusable pattern—observe 
 role by species and health, act, return the anchor when appropriate, and recover whoever actually
 needs it—while leaving four party roles and cross-game transfer open.
 
+The second lesson applies that pattern across an entire matchup phase rather than one attack.
+Lorelei resolves a living Jolteon by species, switches before applying X Accuracy so the boost
+belongs to the intended battler, and uses Thunder against Dewgong, Cloyster, and Slowbro. It then
+resolves Blastoise for Jynx and Lapras. Battle recovery can now address a non-lead party member, and
+the shared field-recovery planner verifies the selected member's HP or status change and the exact
+item decrement. The chapter contract requires both target sets, exactly two voluntary switches,
+and a fully healed, status-free party at the Bruno boundary.
+
+A private pre-Lorelei replay first proved the eight-decision `[5, 0, 0, 0, 3, 0]` split and 62.5%
+busiest-member share; a clean-power run of the exact pushed source then completed 312/312
+checkpoints, 36/36 objectives, Champion, and Hall of Fame in 540,279 actions. Across the League,
+Blastoise, Jolteon, and Hitmonlee supplied `[39, 0, 0, 0, 3, 1]` decisions: three of six members,
+43 observed decisions, and a 90.70% busiest-member share. Lorelei also fell from 19 single-carry
+decisions to eight purposeful decisions. This is measurable progress toward useful demonstrations,
+not a claim that the remaining three members have roles or that a learned model chose any of them.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
@@ -1495,11 +1511,13 @@ A concise interview description is:
 > safety, participation-based evolution, and balanced experience allocation. A clean-power run now
 > builds a six-member final-form party at levels 60/55/55/55/55/55, clears the League, and enters the
 > Hall of Fame in the same uninterrupted process. Instrumentation exposed that the first version
-> still used one carry for every League decision, so I added a species- and state-resolved Bruno
-> lesson in which Hitmonlee attacks Onix and receives targeted recovery. The exact clean-power run
-> preserved all 312 checkpoints while proving the first two-member League behavior. The system keeps
-> private demonstrations integrity-checked and evaluation roots sealed; the next research question
-> is how much of this team-building and matchup behavior a learned policy can reproduce and transfer.
+> still used one carry for every League decision, so I added species- and state-resolved roles:
+> Jolteon uses Thunder against Lorelei's Water core, while Hitmonlee attacks Bruno's opening Onix.
+> The exact clean-power run preserved all 312 checkpoints and Hall of Fame while raising League
+> participation from one member to three and reducing the busiest-member share from 100% to 90.70%.
+> The system keeps private demonstrations integrity-checked and evaluation roots sealed; the next
+> research question is how much of this team-building and matchup behavior a learned policy can
+> reproduce under changed conditions and transfer to another title.
 
 ## Related documentation
 

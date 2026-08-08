@@ -44,11 +44,12 @@ of whether it serves this.
   the same process: 312/312 checkpoints, 36/36 objectives, Champion defeated, and Hall of Fame
   entered. The curriculum used 1,716 battles and 885 heals and passed with a final-form party at
   levels 60/55/55/55/55/55.
-- Whole-League instrumentation first recorded 49/49 attack decisions from party slot 1. The first
-  matchup-aware lesson now selects Hitmonlee by species and health, uses Jump Kick against Bruno's
-  opening Onix, restores Blastoise, and targets post-battle recovery at the member actually damaged.
-  A clean-power completion records `[51, 0, 0, 0, 0, 1]`: 2/6 League participants, 98.08% busiest
-  share overall, and 83.33% inside Bruno. All 312 checkpoints and Hall of Fame still pass.
+- Whole-League instrumentation first recorded 49/49 attack decisions from party slot 1. Two
+  matchup-aware lessons now create real roles: Jolteon uses Thunder against Lorelei's three Water
+  targets before Blastoise handles Jynx and Lapras, and Hitmonlee uses Jump Kick against Bruno's
+  opening Onix. A clean-power completion records `[39, 0, 0, 0, 3, 1]`: 3/6 League participants
+  and 90.70% busiest share overall. Lorelei alone is `[5, 0, 0, 0, 3, 0]`, 62.5% busiest share,
+  with both switches and full-party recovery verified. All 312 checkpoints and Hall of Fame pass.
 
 **Not true, however it may look:**
 
@@ -62,23 +63,23 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1899 tests, 3 deselected; ruff, mypy (104 files), artifacts, docs and registry all
-clean before the team-participation documentation update.
+**Gate state:** 1904 tests, 3 deselected; ruff, mypy (105 files), artifacts, docs and registry all
+clean before the Lorelei qualification documentation update.
 
 ---
 
 ## 3. Start here
 
-**Extend the first qualified League team lesson.** Bruno now proves one safe, non-cosmetic reserve
-attack and the whole-League gate is above one participant and below 100% busiest share. That closes
-the first participation increment, not the curriculum: only Hitmonlee joins Blastoise and the
-overall share is still 98.08%.
+**Extend the qualified League roles beyond three members.** Lorelei and Bruno now prove two
+non-cosmetic reserve roles, but DUX, Dugtrio, and Snorlax still supply no recorded League attacks and
+Blastoise still owns 90.70% of the whole-League decisions.
 
-The next useful experiment is another species- and matchup-resolved lesson in a different League
-battle, judged by the same clean-power whole-League report. Prefer a role that creates genuine type
-or resource value; never switch merely to satisfy a counter. Keep the private Bruno checkpoint for
-bounded regressions, preserve the existing lineage and partition contracts, and keep living-Pokédex
-expansion and second-title transfer as explicit later stages.
+The next useful experiment is a fourth species- and matchup-resolved role, judged by the same
+clean-power whole-League report. Dugtrio against a safe Poison, Fire, or Rock target is a plausible
+candidate, but measure the exact matchup before turning it into a contract. Prefer a role that
+creates genuine type or resource value; never switch merely to satisfy a counter. Keep the private
+Lorelei and Bruno checkpoints for bounded regressions, preserve the existing lineage and partition
+contracts, and keep living-Pokédex expansion and second-title transfer as explicit later stages.
 
 Then continue down [AGENT_COORDINATION.md](AGENT_COORDINATION.md) § *Open work, in priority order*.
 
@@ -162,6 +163,7 @@ Each cost at least one emulator run to establish. Each has an evidence file.
 | A clean-power run passed the final-form 60/55/55/55/55/55 team gate and completed 312/312 checkpoints through Hall of Fame | `measured-balanced-team-full-route-success-2026-08-07.json` |
 | The next full run measured all 49 League attack decisions on party slot 1: 1/6 participation and 100% busiest-member share | `measured-whole-league-participation-2026-08-07.json` |
 | A clean-power run qualified the first matchup-aware League lesson: Hitmonlee attacked Bruno's Onix, recovery followed the damaged member, League participation reached 2/6, and Hall of Fame still passed | `measured-bruno-team-participation-2026-08-07.json` |
+| The next clean-power run qualified Jolteon's Lorelei role: Thunder handled three Water targets, Blastoise handled Jynx and Lapras, League participation reached 3/6 with 90.70% busiest share, and Hall of Fame still passed | `measured-lorelei-team-participation-2026-08-07.json` |
 
 ---
 
@@ -260,8 +262,9 @@ how a wrong band survived 155 samples that contradicted it.
   correctly then raises `NotImplementedError` at routing. Give them a job or park them.
 - **Participation is measured across all five League battles, but still concentrated.** Every
   chapter records active-party indexes and publishes participating-member count plus busiest-member
-  share. Bruno is the first chapter with an explicit two-member pass condition. The remaining work
-  is behavioral: extend real matchup participation beyond Hitmonlee's one attack.
+  share. Lorelei and Bruno each have explicit two-member role contracts; together they raise the
+  League to 3/6 participants, but Blastoise still owns 90.70% of decisions. The remaining work is
+  behavioral: add real matchup value for DUX, Dugtrio, and Snorlax.
 - **The ROM path is in git history.** `a9d0bb4` added it in source, `371be10` removed it. Not in the
   current tree; `a9d0bb4` is on no remote, so exposure is local only. Rewriting history is
   destructive and belongs to the repository owner.
