@@ -161,7 +161,9 @@ verified objectives and exposed three genuinely legal choices: `clear_rocket_hid
 `clear_rocket_hideout` at **99.70% confidence**. No skill or action was executed, so this is the
 first real-state selection diagnostic—not live objective completion. The capture also proves that
 resumed evaluation needs an authenticated progress envelope because transient historical location
-facts are not recoverable from current cartridge memory alone. See the
+facts are not recoverable from current cartridge memory alone. That envelope is now implemented:
+the capture tool binds the exact private state digest to its checkpoint and verified-objective
+prefix, and refuses a modified state. The resumed Red observer/dispatcher remains next. See the
 [selection receipt](docs/evidence/model-selected-celadon-objective-2026-08-08.json).
 
 ---

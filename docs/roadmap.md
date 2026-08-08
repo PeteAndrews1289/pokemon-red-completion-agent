@@ -89,8 +89,8 @@ branching states and picks the candidate-local target in 237/317 opportunities; 
 misses form a concrete correction curriculum rather than a vague request for more planner data.
 The first real captured-state diagnostic now exposes three legal Celadon objectives; the model
 selects `clear_rocket_hideout` at 99.70% confidence without an expected label. Dispatch and
-completion are still pending. Before replay can be a trustworthy evaluation lane, captured states
-must carry a source-bound progress envelope for transient verified facts.
+completion are still pending. Captures now carry a digest-bound progress envelope for transient
+verified facts; connecting that envelope to the resumed Red observer and dispatcher is next.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

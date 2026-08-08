@@ -23,6 +23,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
+from pokemon_red_completion.captured_progress import write_captured_progress  # noqa: E402
 from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
 from pokemon_red_completion.rom import resolve_rom_path  # noqa: E402
 
@@ -47,7 +48,7 @@ def main(argv: list[str] | None = None) -> int:
     # is never entered there and has to be started here.
     emulator = PyBoyAdapter(rom)
     emulator.start()
-    captured: list[str] = []
+    captured: list[tuple[str, str, int, int]] = []
 
     def progress(update: object) -> None:
         # The sink receives a QualifiedPlayProgress, not a string. Match on its
@@ -61,7 +62,7 @@ def main(argv: list[str] | None = None) -> int:
         if captured or (wanted not in label.lower() and wanted not in checkpoint_id.lower()):
             return
         emulator.save_state(args.out)
-        captured.append(label)
+        captured.append((checkpoint_id, label, int(completed), int(total)))
         raise _CaptureReached(label)
 
     from pokemon_red_completion.play import run_qualified_play
@@ -83,8 +84,27 @@ def main(argv: list[str] | None = None) -> int:
         print(f"never reached a checkpoint matching {args.at!r}", file=sys.stderr)
         return 1
 
+    checkpoint_id, label, completed, total = captured[0]
+    from pokemon_red_completion.play import QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS
+
+    verified = tuple(
+        objective_id
+        for completion_checkpoint, objective_id in QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS
+        if completion_checkpoint <= completed
+    )
+    envelope_path = args.out.with_name(args.out.name + ".json")
+    write_captured_progress(
+        envelope_path,
+        state_path=args.out,
+        checkpoint_id=checkpoint_id,
+        checkpoint_label=label,
+        checkpoints_completed=completed,
+        checkpoints_total=total,
+        verified_objective_ids=verified,
+    )
     size = args.out.stat().st_size
-    print(f"\ncaptured at {captured[0]!r}\nwrote {args.out} ({size} bytes)")
+    print(f"\ncaptured at {label!r}\nwrote {args.out} ({size} bytes)")
+    print(f"wrote authenticated progress envelope {envelope_path}")
     print("This file is ROM-derived private data. Do not commit it.")
     return 0
 
