@@ -316,6 +316,12 @@ with **119,668 controlled choices, 191 executed trainee disagreements, 1,803 bat
 all six level 55, and zero faints**. This failure–diagnosis–repair–causal-proof sequence is the
 cleanest example yet of why live operational gates matter more than a 99.9% offline score.
 
+Give the repaired ranker one final systems payoff. From the post-Secret-Key capture, show the
+objective model dispatching `defeat_blaine`, then the same strategic scorer controlling **114,831
+trainee/venue choices** and executing **400 disagreements** inside the bounded skill. End on the
+fresh Volcano Badge observation, fully healed 60/55/55/55/55/55 party, and Giovanni becoming
+available. Keep “singleton objective” and “authored mechanics” on screen throughout.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local
@@ -358,6 +364,9 @@ version has to prove the model learned something worth carrying into a game it h
   success: 119,353 shadow choices; then 15,449 controlled choices with zero disagreements and an
   incomplete 51/32/32/31/31/31 terminal; then 119,668 controlled choices with 191 executed
   disagreements and an all-55 terminal.
+- The portable strategic proof: 114,831 controlled choices, 400 disagreements, 1,803 development
+  battles, 1,048 heals, fresh Volcano Badge observation, and Giovanni available—alongside the
+  singleton-objective and fixed-mechanics limitations.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video

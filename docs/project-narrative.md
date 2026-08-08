@@ -65,8 +65,16 @@ no teacher fallback. The lesson finished after 1,803 battles and 1,114 healing t
 55/55/55/55/55/55 party and zero faints. All eight shadow gates and eleven causal gates passed.
 This is a stronger story than silently rerunning the failure: the repository preserves the bad
 experiment, identifies a causal instrumentation defect, proves the repair against the same root,
-and only then opens the portable integration boundary. The objective-loop seam is now implemented,
-but its combined live runtime remains deliberately unclaimed until a fresh emulator receipt exists.
+and only then opens the portable integration boundary.
+
+That combined runtime now exists. From the authenticated post-Secret-Key capture, the objective
+ranker dispatched the only executable objective, `defeat_blaine`. Inside the skill, the strategic
+ranker controlled all **114,831** trainee and venue choices and executed **400** teacher
+disagreements without fallback. The lesson used 1,803 development battles and 1,048 healing trips;
+the fixed Gym mechanics then defeated Blaine and returned a fully healed 60/55/55/55/55/55 party.
+Fresh semantic observation added the Volcano Badge and opened Giovanni. The proof closes captured-
+state portable composition, while its singleton objective dispatch and authored mechanics remain
+visible rather than being inflated into clean-start autonomy.
 
 Before moving on, v6 passed one final integration test. The portable objective loop loaded the
 authenticated post-Secret-Key state, selected its sole executable objective (`defeat_blaine`), and

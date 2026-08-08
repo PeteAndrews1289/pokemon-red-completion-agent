@@ -28,7 +28,7 @@ demonstrations and a referee; it is not the final autonomous player.
 | Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
 | Learned battle control | Model-controlled Red battle qualifications with fail-closed safety and no disagreement fallback | Scripted curriculum; cross-title battle evaluation is still pending |
 | Learned objective dispatch | One uninterrupted captured-state loop reached Hall of Fame through 20 model dispatches | Nineteen dispatches were singletons; mechanics were fixed skills |
-| Learned training control | Safe-action authority passed; the trainee/venue ranker beat its shape baseline, passed shadow, and completed a no-fallback causal run with 191 executed disagreements | Portable objective-loop wiring exists, but that exact combined path still needs a live recertification run |
+| Learned training control | The trainee/venue ranker beat its shape baseline, passed causal control, then controlled 114,831 choices inside the portable Blaine objective | One captured Red training slice; navigation, menus, recovery, and battle mechanics remain authored |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |
 
@@ -260,10 +260,17 @@ makes teacher agreement a behavioral no-op and pins that invariant in a ROM-free
 On a newly preregistered byte-distinct root, the unchanged authenticated model then controlled
 **119,668 choices**, executed **191 real trainee disagreements** with no fallback, completed
 **1,803 battles / 1,114 heals**, and ended at **55/55/55/55/55/55 with zero faints**. All 19 runtime
-gates passed. The portable objective script now exposes authenticated shadow and live-authority
-modes for this ranker, but `portable_runtime_recertified` remains false until that combined emulator
-path runs. See the
+gates passed. See the
 [runtime qualification](docs/evidence/training-candidate-ranker-v1-runtime-qualification-2026-08-08.json).
+
+The same ranker is now qualified inside the portable objective loop. From the authenticated
+post-Secret-Key capture, the objective model dispatched `defeat_blaine`; the strategic model then
+controlled **114,831 trainee/venue choices**, executed **400 teacher disagreements** with no
+fallback, and completed **1,803 development battles / 1,048 heals**. The fixed skill defeated
+Blaine and returned a fully healed **60/55/55/55/55/55** party; fresh observation added the Volcano
+Badge and opened Giovanni. The objective dispatch was a singleton and mechanics remain authored.
+See the
+[portable strategic qualification](docs/evidence/training-candidate-ranker-v1-portable-qualification-2026-08-08.json).
 
 That controller has now passed the final captured-state integration check inside the portable
 objective loop. Starting from the authenticated Secret Key terminal, the model controlled all

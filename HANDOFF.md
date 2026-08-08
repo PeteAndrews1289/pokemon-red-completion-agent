@@ -55,14 +55,17 @@ This section supersedes the older starting-point and test-count notes below.
   8/8 shadow and 11/11 causal checks. See the
   [runtime qualification](docs/evidence/training-candidate-ranker-v1-runtime-qualification-2026-08-08.json).
 - `replay_selected_objective.py` now accepts an authenticated candidate model in shadow or live
-  authority mode and threads it through `DefeatBlaineObjectiveSkill`. This is source integration,
-  not a live portable qualification: its report explicitly emits
-  `portable_runtime_recertified=false` and `promotion_eligible=false`.
+  authority mode and threads it through `DefeatBlaineObjectiveSkill`.
+- The live portable qualification passed. The objective model dispatched the singleton
+  `defeat_blaine`; the strategic model controlled **114,831** candidate choices with **400 executed
+  disagreements** and no fallback; the fixed skill completed 1,803 development battles / 1,048
+  heals and returned a fully healed 60/55/55/55/55/55 party. Fresh observation added the Volcano
+  Badge and opened Giovanni. See the
+  [portable receipt](docs/evidence/training-candidate-ranker-v1-portable-qualification-2026-08-08.json).
 
-The immediate dependency order is now: publish the repaired causal receipt → run the authenticated
-strategic ranker through the portable post-Secret-Key objective path → require the existing
-Blaine terminal evidence plus nonzero controlled choices and no fallback → begin multi-root
-clean-start Red evaluation → run the bounded Crystal transfer benchmark.
+The immediate dependency order is now: begin multi-root clean-start Red evaluation → run the
+bounded Crystal transfer benchmark → replace one small navigation/recovery mechanic seam → expand
+collection only through the portable loop.
 
 ---
 

@@ -10,8 +10,10 @@
 > diagnostic proved that an agreeing callback was incorrectly recomputing downstream mechanics.
 > Commit `a089988` makes agreement a behavioral no-op. The repaired preregistered root then passed:
 > 119,668 controlled choices, 191 executed trainee disagreements, 1,803 battles, 1,114 heals, all
-> six at level 55, zero faints, and no fallback. The portable objective seam is now wired, but its
-> report must keep `portable_runtime_recertified=false` until a live combined run passes.
+> six at level 55, zero faints, and no fallback. Portable integration also passed: 114,831
+> controlled candidate choices, 400 executed disagreements, 1,803 development battles, 1,048
+> heals, a fully healed 60/55/55/55/55/55 terminal, fresh Volcano Badge observation, and Giovanni
+> available. Clean-start multi-root Red and the Crystal falsification benchmark are next.
 
 **New here? Read [HANDOFF.md](HANDOFF.md) first** — it is the complete orientation, including what
 is unproven and how this codebase repeatedly fools people. Then [MISSION.md](MISSION.md) for why the

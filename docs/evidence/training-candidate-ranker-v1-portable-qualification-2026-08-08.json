@@ -1,0 +1,86 @@
+{
+  "schema": "pokemon-training-candidate-portable-qualification-v1",
+  "status": "portable_strategic_authority_qualified",
+  "source_commit": "60dd24e393d80eb53ae6e1e266c397847a978af5",
+  "portable_plan_sha256": "d877d346194904354b91a22e7b76a7b2334cea072ee9bb2402d8c6f67c60281f",
+  "portable_plan_amendment_sha256": "96fd6078c706851006b9ce69792aa4cdc7c740e1caf89f46865a1ac9fcf40cb4",
+  "runtime_qualification_sha256": "5252bf0a072635cdfa536c031c8e95bb1b3774cf97ecdff0ec03f41c005d7665",
+  "portable_report_sha256": "882e671e40a57a7a98be4cb159bece15f7c5cf645ab2716d2ca8c76c32c32438",
+  "portable_gate_evaluation_sha256": "30ba7bcfe6dd391aa488bd008ceb02851548b8b303d750b00730db69f2da4d0d",
+  "root_state_sha256": "0f3bca16995984dbe3d21bf1c1d8beb926c8fc1536af391f0b8b8890df042047",
+  "root_envelope_sha256": "5ffcd5130e781e6f46716b794b2c0d013933522f73275e37cef00fb50ffd64ce",
+  "terminal_state_sha256": "5c35b60bac83d90f585353d128702b1ab98451067517f49f3aa188a9de36a8fe",
+  "terminal_envelope_sha256": "f051b65314104359d48cb4f4ce18eff32d83d8b238e619e292a092b8b4000e00",
+  "models": {
+    "objective": {
+      "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+      "artifact_manifest_sha256": "27a106ffdfb167cd34ed2173953844a596bdb6ee66014e1d082c277c069cdc2f"
+    },
+    "training_candidate": {
+      "model_file_sha256": "53104c999f0289f8a1dcef9816c34e6963963a047bf710a05544e383c328fdd3",
+      "canonical_model_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026"
+    }
+  },
+  "objective": {
+    "available_before": ["defeat_blaine"],
+    "selected": "defeat_blaine",
+    "branching_model_decisions": 0,
+    "singleton_dispatches": 1,
+    "expected_route_label_provided": false,
+    "teacher_fallbacks": 0,
+    "facts_added": ["badge:volcano"],
+    "available_after": ["defeat_giovanni"]
+  },
+  "training_candidate_control": {
+    "model_had_execution_authority": true,
+    "authority_choice_kinds": ["trainee", "venue"],
+    "teacher_fallback_on_model_disagreement": false,
+    "decisions": 114831,
+    "controlled_decisions": 114831,
+    "genuine_multi_candidate_decisions": 113985,
+    "model_teacher_disagreements": 400,
+    "genuine_accuracy": 0.9964907663289029,
+    "genuine_kind_accuracy": {
+      "trainee": 0.9928193160398529,
+      "venue": 1.0
+    }
+  },
+  "skill": {
+    "actions_executed": 567601,
+    "frames_executed": 38150776,
+    "team_development_battles": 1803,
+    "team_development_healing_trips": 1048,
+    "final_forms_complete": true,
+    "final_party_levels": [60, 55, 55, 55, 55, 55],
+    "terminal_party_fully_healed": true,
+    "terminal_party_status_free": true,
+    "blaine_defeated": true,
+    "volcano_badge_observed": true
+  },
+  "gate": {
+    "checks_passed": 10,
+    "checks_failed": 0,
+    "portable_strategic_authority_eligible": true,
+    "raw_runtime_marker_before_independent_gate": false
+  },
+  "claim_boundary": {
+    "verified": [
+      "the already-qualified identity-free trainee and venue ranker composes with learned objective dispatch and a bounded Red skill",
+      "the model controlled every exposed strategic candidate choice and executed 400 teacher disagreements without fallback",
+      "fresh emulator observation verified the Volcano Badge and returned control with Giovanni available",
+      "the terminal save state and progress envelope authenticate a healthy developed party"
+    ],
+    "not_verified": [
+      "a genuine branching objective choice in this singleton dispatch",
+      "clean-start learned completion",
+      "learned navigation, menus, recovery, or battle tactics",
+      "cross-title transfer",
+      "autonomous living Pokedex completion"
+    ]
+  },
+  "portable_strategic_authority_eligible": true,
+  "clean_start_evaluation_eligible": false,
+  "cross_title_transfer_eligible": false,
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}

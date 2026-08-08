@@ -19,16 +19,15 @@ measuring the wrong thing well. The learning milestones cannot mean what they sa
 demonstrations do.
 
 The balanced-team and participation work below remains the foundation. The first two strategic
-dependencies are now closed: a same-root diagnostic isolated the agreement-wrapper defect, and a
-newly preregistered causal root completed with 191 executed model/teacher disagreements. The
-dependency-ordered near-term work is now:
+dependencies are now closed: a same-root diagnostic isolated the agreement-wrapper defect, a newly
+preregistered causal root completed with 191 executed model/teacher disagreements, and the portable
+Blaine objective completed with 400 disagreements. The dependency-ordered near-term work is now:
 
-1. live-recertify the newly wired strategic ranker inside the portable Red objective loop;
-2. establish an 8/10 multi-root clean-start Red evaluation lane;
-3. run the small Crystal zero-shot/few-shot/from-scratch falsification benchmark;
-4. replace another teacher-authored mechanic boundary—navigation is the highest-leverage target;
+1. establish an 8/10 multi-root clean-start Red evaluation lane;
+2. run the small Crystal zero-shot/few-shot/from-scratch falsification benchmark;
+3. replace another teacher-authored mechanic boundary—navigation is the highest-leverage target;
    and
-5. expand the living-Pokédex curriculum only through the portable loop.
+4. expand the living-Pokédex curriculum only through the portable loop.
 
 Historical curriculum priorities were:
 
