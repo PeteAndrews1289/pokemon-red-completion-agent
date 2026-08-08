@@ -311,6 +311,12 @@ Only the trainee existed in the model input. The roots were stopped and excluded
 adds portable reserve HP, status, attack PP, and PP margin so the replacement is asked to learn only
 from causes it can observe.
 
+Fresh collection then exposed two teacher failures before any model was fitted. One complete-health
+trainee lost a permitted rare Diglett's Cave matchup; another run wrote the Blastoise switch into
+party memory but never recovered an observable battle command menu inside the bounded settle loop.
+Neither partial stream enters a split. Their atomic failure artifacts and root hashes remain in the
+public audit, and each replacement was fixed before its run while validation metrics stayed sealed.
+
 The first causal root ended after 480 decisions, exactly as the fail-closed contract required. The
 model agreed with 479 teacher decisions, then chose `fight` after every admissible training attack
 had been exhausted or disabled. The immediately preceding safe fight and the rejected decision had

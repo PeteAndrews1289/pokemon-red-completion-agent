@@ -1,0 +1,61 @@
+{
+  "schema": "pokemon-training-control-teacher-failure-audit-v1",
+  "status": "diagnostic_only",
+  "source_commit": "ec368b409582beb1f9b79709e16694e321ac9a53",
+  "feature_schema_id": "pokemon.core.training.control.features.v2",
+  "failures": [
+    {
+      "lineage_id": "training-control-v5-train-02",
+      "partition": "train",
+      "root_state_sha256": "d3ca7fecee4f92bfdb22749a7f3ef3323eaaf0cf85a9444be962566219aa6afb",
+      "failed_artifact_sha256": "dc324977a819f4cc503cded7cf59f3b6a4dc6da4fe6798124ab46d12bfff1529",
+      "failure_class": "teacher_battle_safety",
+      "failure": "A full-health level-34 trainee fainted in an allowed matchup against a level-29 rare Diglett's Cave encounter.",
+      "decisions_preserved": 11708,
+      "segment_counts": {
+        "evolution": 1211,
+        "balance": 10497
+      },
+      "action_counts": {
+        "seek": 11017,
+        "fight": 651,
+        "flee": 14,
+        "heal": 26,
+        "stop": 0
+      }
+    },
+    {
+      "lineage_id": "training-control-v5-train-03",
+      "partition": "train",
+      "root_state_sha256": "e39d1f52e58a373033a103fb55b9544785d4e589549fa8494fff6b7114968336",
+      "failed_artifact_sha256": "85e478881ecba7ce2c4110d14dee7bbfcdd316dcefd574f5db1bc88f477302ee",
+      "failure_class": "teacher_menu_synchronization",
+      "failure": "The switch to the safety escort registered in party memory but the battle command menu did not become observable inside the bounded settle loop.",
+      "decisions_preserved": 1393,
+      "segment_counts": {
+        "evolution": 1245,
+        "balance": 148
+      },
+      "action_counts": {
+        "seek": 1307,
+        "fight": 76,
+        "flee": 5,
+        "heal": 5,
+        "stop": 0
+      }
+    }
+  ],
+  "qualification": {
+    "included_in_model_selection": false,
+    "included_in_training": false,
+    "included_in_validation": false,
+    "validation_metrics_opened_before_replacement_preregistration": false,
+    "model_had_execution_authority": false
+  },
+  "interpretation": [
+    "Both runs failed under teacher authority, so neither failure measures learned-controller quality.",
+    "Atomic failed artifacts preserve the evidence without turning partial lineages into training data.",
+    "The battle failure motivates excluding the measured rare encounter from direct trainee fights; the synchronization failure motivates accepting a verified switch after the bounded UI settle attempt."
+  ],
+  "private_artifacts_tracked": false
+}

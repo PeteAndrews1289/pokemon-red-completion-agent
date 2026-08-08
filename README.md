@@ -172,6 +172,11 @@ authenticated controller can now be injected into the portable Red loop's `defea
 battle and overworld authority are enabled separately, every decision is audited, and disagreement
 never falls back to the teacher. See the
 [promotion plan](docs/evidence/training-control-overworld-promotion-plan-2026-08-08.json).
+Two replacement roots failed before qualification under teacher authority—not model authority. One
+exposed a rare direct-fight knockout; the other confirmed the escort switch in memory but never
+re-exposed the battle menu inside the bounded settle loop. Both partial streams are excluded, their
+fresh replacements were preregistered before collection, and the failures remain visible in the
+[teacher-failure audit](docs/evidence/training-control-v5-teacher-failures-2026-08-08.json).
 
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
