@@ -95,7 +95,7 @@ class TrainingControlObservation:
         values = np.asarray(self.features, dtype=np.float64)
         if not np.all(np.isfinite(values)) or np.any(values < -1.0) or np.any(values > 1.0):
             raise TrainingControlError("training features must be finite and normalized")
-        expected = (
+        phase_actions = (
             (TrainingControlAction.FIGHT, TrainingControlAction.FLEE)
             if self.phase is TrainingControlPhase.BATTLE
             else (
@@ -104,7 +104,12 @@ class TrainingControlObservation:
                 TrainingControlAction.STOP,
             )
         )
-        if self.candidate_actions != expected:
+        if (
+            not self.candidate_actions
+            or any(action not in phase_actions for action in self.candidate_actions)
+            or tuple(action for action in phase_actions if action in self.candidate_actions)
+            != self.candidate_actions
+        ):
             raise TrainingControlError("candidate actions do not match the training phase")
 
     def vector(self) -> NDArray[np.float64]:
@@ -165,6 +170,7 @@ def project_training_control_observation(
     venue: GrindingArea | None = None,
     consecutive_flees: int = 0,
     max_consecutive_flees: int = 1,
+    fight_allowed: bool = True,
 ) -> TrainingControlObservation:
     """Project a teacher boundary without retaining game-specific identity."""
 
@@ -172,6 +178,8 @@ def project_training_control_observation(
         raise TrainingControlError("consecutive flee count is invalid")
     if type(max_consecutive_flees) is not int or max_consecutive_flees < 1:  # noqa: E721
         raise TrainingControlError("maximum consecutive flee count is invalid")
+    if type(fight_allowed) is not bool:  # noqa: E721
+        raise TrainingControlError("fight-allowed flag is invalid")
     for name, value in (("attack_pp", attack_pp), ("attack_pp_reserve", attack_pp_reserve)):
         if value is not None and (type(value) is not int or value < 0):
             raise TrainingControlError(f"{name} is invalid")
@@ -216,7 +224,11 @@ def project_training_control_observation(
         _ratio(consecutive_flees, max_consecutive_flees),
     )
     candidates = (
-        (TrainingControlAction.FIGHT, TrainingControlAction.FLEE)
+        (
+            (TrainingControlAction.FIGHT, TrainingControlAction.FLEE)
+            if fight_allowed
+            else (TrainingControlAction.FLEE,)
+        )
         if phase is TrainingControlPhase.BATTLE
         else (
             TrainingControlAction.SEEK,

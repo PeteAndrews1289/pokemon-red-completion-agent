@@ -231,6 +231,16 @@ progress. An unsafe model fight hits a red referee wall and ends the run—there
 around it. Label the experiment **“battle authority: true; overworld authority: false; fallback:
 none.”** This makes the first controlled failure as scientifically useful as a completion.
 
+Then show the failure rather than skipping to a cleaner rerun. At decision 480, every usable attack
+is exhausted or disabled, the model requests `fight`, and the red referee wall ends the run. Put
+**“479/480 agreement; terminated; zero fallback”** on screen. Rewind one decision and display the
+two model inputs side by side: the last safe fight and the now-impossible fight are identical. The
+lesson is not “train longer.” The model was offered an action the emulator could no longer execute.
+Animate `fight` disappearing from the candidate card, leaving only `flee`, and name the principle:
+**the model chooses among safe affordances; the adapter defines what is currently possible.** This
+is the kind of game-neutral boundary that can transfer even when Crystal uses different memory
+addresses, species, and moves.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

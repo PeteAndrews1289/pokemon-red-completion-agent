@@ -210,6 +210,10 @@ must address those measured risks without silently substituting teacher actions.
 Battle-only authority is now implemented. Safe model flee choices execute; unsafe model fights
 abort. Overworld remains teacher-controlled. Do not call this full training control, and do not
 permit teacher fallback on disagreement in the fresh controlled run.
+Controlled root 01 failed closed after 480 decisions when exhausted/disabled attacks made `fight`
+unavailable without changing the model's features or candidates. It is excluded from training. The
+repair masks `fight` from the runtime candidate set at all unsafe boundaries; qualify that contract
+on a fresh root before considering retraining or overworld authority.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

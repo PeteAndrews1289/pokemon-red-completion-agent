@@ -111,6 +111,25 @@ def test_battle_projection_exposes_relative_matchup_without_species_identity() -
     assert features["trainee.attack_pp_margin"] == 0.0
 
 
+def test_battle_projection_removes_fight_when_runtime_affordance_is_unavailable() -> None:
+    trainee = _member(1, level=30)
+    party = PartyObservation((trainee,))
+
+    observation = project_training_control_observation(
+        party,
+        BalancedTeamPolicy(minimum_level=55, required_size=1),
+        TeamTrainingProgress(),
+        phase=TrainingControlPhase.BATTLE,
+        trainee=trainee,
+        attack_pp=0,
+        attack_pp_reserve=0,
+        enemy_level=30,
+        fight_allowed=False,
+    )
+
+    assert observation.candidate_actions == (TrainingControlAction.FLEE,)
+
+
 def test_training_decision_rejects_an_action_illegal_for_its_phase() -> None:
     party = PartyObservation((_member(1, level=30),))
     observation = project_training_control_observation(

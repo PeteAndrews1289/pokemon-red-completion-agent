@@ -129,6 +129,15 @@ instead of substituting the teacher action. The control audit states its authori
 no teacher fallback occurred. This is intentionally narrower than full training control, but it is
 real model authority over the measured weakest phase.
 
+The first battle-controlled root failed closed after 480 decisions. The model agreed on 479, then
+requested `fight` when the live move policy had exhausted or disabled every admissible training
+attack; the referee terminated with no fallback. The preceding safe fight and failing flee had the
+same feature vector, proving the legal candidate set had not been updated when runtime authority
+changed. The repair removes `fight` from candidates at volatile, excluded, unsafe, capped-escort,
+and unavailable-attack boundaries. This is an affordance-mask correction, not a hidden teacher
+override. See the
+[controlled failure receipt](docs/evidence/training-control-battle-control-01-failure-2026-08-08.json).
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

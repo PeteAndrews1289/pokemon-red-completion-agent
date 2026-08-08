@@ -188,12 +188,16 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   model-controlled action is permitted.
 - [x] Complete fresh-root live shadow: 55,904 decisions, 75.57% raw / 76.73% balanced agreement,
   zero faints, all level 55, with teacher-only execution authority.
-- [ ] Build a bounded control referee around the measured errors: conservative fight-to-flee and
+- [x] Build a bounded control referee around the measured errors: conservative fight-to-flee and
   unnecessary seek-to-heal. Attempt a fresh model-controlled lineage without teacher fallback.
 - [x] Implement battle-only model authority: execute safe model fight/flee choices, fail closed on
   unsafe fights, retain teacher overworld authority, and prohibit disagreement fallback.
-- [ ] Run a fresh battle-controlled lineage; preserve its first failure or complete terminal, then
-  use that evidence to decide whether retraining is required before overworld authority.
+- [x] Run the first fresh battle-controlled lineage and preserve its failure: after 479/480 matching
+  decisions, an unsafe `fight` request failed closed with no fallback because the legal candidates
+  did not reflect exhausted/disabled attacks.
+- [ ] Qualify the corrected battle affordance contract on a fresh root. Runtime safety removes
+  impossible fights before ranking; safe model-selected flees remain causal. If the model then
+  stalls through under-fighting, use that evidence to decide whether retraining is required.
   The class-balanced MLP, phase-masked inference, metrics, and fail-closed candidate fitter are
   implemented and tested synthetically; this item remains open until real v2 lineages exist.
 - [ ] Run the candidate in shadow mode, then model-controlled mode under the unchanged teacher

@@ -107,6 +107,9 @@ def test_prediction_masks_actions_illegal_in_the_current_phase() -> None:
     assert probabilities["heal"] == 0.0
     assert model.predict(battle) is TrainingControlAction.FIGHT
 
+    referee_masked = replace(battle, candidate_actions=(TrainingControlAction.FLEE,))
+    assert model.predict(referee_masked) is TrainingControlAction.FLEE
+
 
 def test_candidate_rejects_same_root_state_across_train_and_validation() -> None:
     train = _dataset("train-root", "train", "1")

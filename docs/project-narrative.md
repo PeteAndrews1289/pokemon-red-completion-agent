@@ -283,6 +283,16 @@ than substituting a teacher flee. Overworld decisions remain teacher-controlled 
 such. This is partial authority, but it is causal authority—model errors can now change or end the
 trajectory, and no disagreement is hidden.
 
+The first causal root ended after 480 decisions, exactly as the fail-closed contract required. The
+model agreed with 479 teacher decisions, then chose `fight` after every admissible training attack
+had been exhausted or disabled. The immediately preceding safe fight and the rejected decision had
+identical 21-feature vectors and identical candidates. No classifier could separate them: the
+runtime had changed what was possible without changing the action interface. The correction is
+architectural rather than statistical. The Red adapter now removes `fight` from the candidate set
+at volatile, excluded, unsafe-health, capped-escort, and unavailable-attack boundaries, leaving the
+model to rank only actions the runtime can execute safely. The failed lineage remains excluded from
+training and preserved as evidence; a fresh root must test the corrected contract.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

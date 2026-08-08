@@ -770,6 +770,7 @@ def run_red_team_balancing(
         progress: TeamTrainingProgress,
         trainee: PartyMemberObservation | None,
         enemy_level: int | None = None,
+        fight_allowed: bool = True,
     ) -> TrainingControlAction:
         """Publish supervision before the teacher executes the mechanic."""
 
@@ -788,6 +789,7 @@ def run_red_team_balancing(
             venue=current_venue.band,
             consecutive_flees=consecutive_flees,
             max_consecutive_flees=max_consecutive_flees,
+            fight_allowed=fight_allowed,
         )
         decision = TrainingControlDecision(decision_index, action, observation, reason)
         if decision_sink is not None:
@@ -932,6 +934,7 @@ def run_red_team_balancing(
                     progress=progress,
                     trainee=party_reader.read().lead,
                     enemy_level=raw.enemy_level,
+                    fight_allowed=False,
                 )
                 require_safe_exit(selected, "volatile matchup")
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
@@ -960,6 +963,7 @@ def run_red_team_balancing(
                     progress=progress,
                     trainee=party_reader.read().lead,
                     enemy_level=raw.enemy_level,
+                    fight_allowed=False,
                 )
                 require_safe_exit(selected, "excluded matchup")
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
@@ -998,6 +1002,7 @@ def run_red_team_balancing(
                     progress=progress,
                     trainee=party_reader.read().lead,
                     enemy_level=raw.enemy_level,
+                    fight_allowed=False,
                 )
                 require_safe_exit(selected, "escort at parity")
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
@@ -1021,6 +1026,7 @@ def run_red_team_balancing(
                     progress=progress,
                     trainee=trainee,
                     enemy_level=raw.enemy_level,
+                    fight_allowed=False,
                 )
                 require_safe_exit(selected, "unsafe selected fighter")
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
@@ -1096,6 +1102,7 @@ def run_red_team_balancing(
                     progress=progress,
                     trainee=party_reader.read().lead,
                     enemy_level=current.enemy_level,
+                    fight_allowed=False,
                 )
                 require_safe_exit(selected, "live PP exhaustion or Disable")
                 flee_func(actions, reader, emulator, flee_run, flee_timing)

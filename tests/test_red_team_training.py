@@ -51,7 +51,7 @@ from pokemon_red_completion.red_team_training import (
     run_red_team_balancing,
 )
 from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingArea
-from pokemon_red_completion.training_control import TrainingControlAction
+from pokemon_red_completion.training_control import TrainingControlAction, TrainingControlDecision
 from pokemon_red_completion.training_venue import TrainingVenue
 
 DIGLETT_SPECIES_ID = 0x3B
@@ -445,7 +445,7 @@ def test_a_wrong_venue_stops_early_and_names_the_band() -> None:
     assert "20" in message, f"our own levels must survive into the report: {message}"
 
 
-def test_battle_authority_fails_closed_instead_of_fighting_unsafe() -> None:
+def test_battle_authority_masks_fight_and_rejects_an_illegal_override() -> None:
     memory = FakeMemory()
     memory.set_party(
         [(DIGLETT_SPECIES_ID, 20), (BLASTOISE_SPECIES_ID, ESCORT_LEVEL_CAP - 5)]
@@ -454,12 +454,20 @@ def test_battle_authority_fails_closed_instead_of_fighting_unsafe() -> None:
     )
     reader = FakeReader([state(battle_state=1, enemy_level=10, enemy_species_id=0x21)])
 
-    with pytest.raises(RuntimeError, match="referee rejected fight at unsafe boundary"):
+    observed_candidates: list[tuple[TrainingControlAction, ...]] = []
+
+    def illegal_override(decision: TrainingControlDecision) -> TrainingControlAction:
+        observed_candidates.append(decision.observation.candidate_actions)
+        return TrainingControlAction.FIGHT
+
+    with pytest.raises(RuntimeError, match="selected an illegal phase action"):
         run(
             memory,
             reader,
-            decision_authority=lambda _decision: TrainingControlAction.FIGHT,
+            decision_authority=illegal_override,
         )
+
+    assert observed_candidates == [(TrainingControlAction.FLEE,)]
 
 
 def test_an_unrelated_battle_runtime_failure_is_not_misreported_as_pp_exhaustion(
