@@ -192,6 +192,15 @@ Candidate summaries now expose authenticated lineage/root identities, and the of
 authenticates both the plan and summary before scoring all eight thresholds. It exits nonzero and
 forbids shadow automatically when any operational gate fails.
 
+The fresh v6 offline campaign now clears those eight gates. Two training lineages contributed
+120,214 decisions; one untouched validation lineage contributed 60,164, with zero root overlap and
+an all-level-55, zero-faint terminal in every run. The selected model made zero validation errors.
+The equally important negative result is that a candidate-set-only baseline also scored 100%:
+`fight/flee` was always labeled `fight`, `seek/heal` was always labeled `seek`, and every other
+candidate set was a singleton. This qualifies the candidate to enter live shadow, but it does not
+show that the other 25 features add predictive value or that training strategy is learned. See the
+[offline qualification](docs/evidence/training-control-affordance-v6-offline-2026-08-08.json).
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,
