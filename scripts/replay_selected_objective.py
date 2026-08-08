@@ -34,6 +34,8 @@ from pokemon_red_completion.provenance import (
 )
 from pokemon_red_completion.quest import quest_graph_payload
 from pokemon_red_completion.red_objective_skills import (
+    DefeatKogaObjectiveSkill,
+    ObtainStrengthObjectiveSkill,
     ObtainSurfObjectiveSkill,
     PokemonTowerObjectiveSkill,
     ReachFuchsiaObjectiveSkill,
@@ -64,9 +66,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--max-decisions",
         type=int,
-        choices=(1, 2, 3, 4),
+        choices=(1, 2, 3, 4, 5, 6),
         default=1,
-        help="execute one to four decisions through the registered Red skills",
+        help="execute one to six decisions through the registered Red skills",
     )
     args = parser.parse_args(argv)
 
@@ -108,6 +110,8 @@ def main(argv: list[str] | None = None) -> int:
             PokemonTowerObjectiveSkill(emulator, reader, executor),
             ReachFuchsiaObjectiveSkill(emulator, reader, executor),
             ObtainSurfObjectiveSkill(emulator, reader, executor),
+            DefeatKogaObjectiveSkill(emulator, reader, executor),
+            ObtainStrengthObjectiveSkill(emulator, reader, executor),
         )
         loop = PortablePlayerLoop(
             graph=COMPLETION_QUEST,
@@ -124,12 +128,12 @@ def main(argv: list[str] | None = None) -> int:
         after = observer.observe()
 
         report = {
-            "schema": "pokemon-model-selected-objective-execution-v2",
+            "schema": "pokemon-model-selected-objective-execution-v3",
             "status": "ok",
             "claim": (
-                "A learned ranker repeatedly selected legal objectives without expected labels; "
-                "registered fixed skills executed them; fresh emulator observations verified "
-                "every declared objective and side effect."
+                "An affordance-masked learned ranker selected executable objectives without "
+                "expected labels; registered fixed skills executed them; fresh emulator "
+                "observations verified every declared objective and side effect."
             ),
             "source": source.public_dict(),
             "capture": {
@@ -157,6 +161,13 @@ def main(argv: list[str] | None = None) -> int:
             "loop": dict(loop.public_dict()),
             "assistance": {
                 "model_decisions_executed": len(steps),
+                "branching_model_decisions": sum(
+                    len(step.executable_objectives) > 1 for step in steps
+                ),
+                "singleton_dispatches": sum(
+                    len(step.executable_objectives) == 1 for step in steps
+                ),
+                "candidate_set_mode": "dependency_legal_and_skill_affordance_masked",
                 "objective_selection": "learned_ranker",
                 "expected_route_label_provided": False,
                 "mechanic_execution": "teacher_authored_bounded_skill",
@@ -165,6 +176,7 @@ def main(argv: list[str] | None = None) -> int:
             "limitations": [
                 "captured_state_diagnostic",
                 "bounded_model_decision_sequence",
+                "singleton_dispatches_do_not_measure_ranking_quality",
                 "fixed_teacher_authored_mechanic_skills",
                 "not_a_clean_start_evaluation",
                 "not_end_to_end_learned_gameplay",

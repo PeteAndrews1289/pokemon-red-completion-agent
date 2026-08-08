@@ -358,6 +358,9 @@ def test_live_policy_selects_among_legal_objectives_without_expected_route_label
     assert report["selected_decisions"] == 1
     assert report["authorized_decisions"] == 0
     assert report["route_dispatch_mode"] == "model_selected_specialists"
+    assert report["branching_decisions"] == 1
+    assert report["singleton_decisions"] == 0
+    assert report["mean_candidate_count"] == 2.0
 
 
 def test_live_policy_ranks_only_the_supplied_executable_candidates() -> None:
@@ -394,3 +397,7 @@ def test_live_policy_ranks_only_the_supplied_executable_candidates() -> None:
     )
 
     assert selected == "executable"
+    report = policy.public_dict()
+    assert report["singleton_decisions"] == 1
+    assert report["branching_decisions"] == 0
+    assert report["mean_branching_confidence"] == 0.0

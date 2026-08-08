@@ -8,6 +8,7 @@ from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.executor import ChapterExecutor
 from pokemon_red_completion.fuchsia import FuchsiaTiming, run_fuchsia_chapter
 from pokemon_red_completion.hideout import EmulatorState, HideoutTiming, run_hideout_chapter
+from pokemon_red_completion.koga import KogaTiming, run_koga_chapter
 from pokemon_red_completion.objective_skills import (
     ObjectiveSkillAvailability,
     ObjectiveSkillExecution,
@@ -15,6 +16,7 @@ from pokemon_red_completion.objective_skills import (
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.quest import Specialist
 from pokemon_red_completion.safari import SafariTiming, run_safari_chapter
+from pokemon_red_completion.strength import StrengthTiming, run_strength_chapter
 from pokemon_red_completion.tower import TowerTiming, run_tower_chapter
 
 
@@ -186,6 +188,96 @@ class ObtainSurfObjectiveSkill:
 
     def execute(self) -> ObjectiveSkillExecution:
         report = run_safari_chapter(
+            self.emulator,
+            self.reader,
+            self.executor,
+            timing=self.timing,
+        )
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class DefeatKogaObjectiveSkill:
+    """Execute the qualified Fuchsia Gym chapter from the Surf boundary."""
+
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    timing: KogaTiming = KogaTiming()
+    objective_id: str = "defeat_koga"
+    specialist: Specialist = Specialist.BATTLE
+    expected_facts: frozenset[str] = frozenset({"badge:soul"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 5_000
+    max_frames: int = 3_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "fuchsia_pokecenter"
+            and "move:surf_available" in state.facts
+            and "badge:soul" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the Surf-ready Fuchsia Center boundary."
+                if executable
+                else "Requires Fuchsia Center with Surf before Koga is defeated."
+            ),
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_koga_chapter(
+            self.emulator,
+            self.reader,
+            self.executor,
+            timing=self.timing,
+        )
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class ObtainStrengthObjectiveSkill:
+    """Execute the qualified Warden and Strength lesson from Fuchsia."""
+
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    timing: StrengthTiming = StrengthTiming()
+    objective_id: str = "obtain_strength"
+    specialist: Specialist = Specialist.INTERACTION
+    expected_facts: frozenset[str] = frozenset({"move:strength_available"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 5_000
+    max_frames: int = 3_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "fuchsia_pokecenter"
+            and "item:gold_teeth" in state.facts
+            and "move:strength_available" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed Fuchsia Center with the Gold Teeth."
+                if executable
+                else "Requires Fuchsia Center with Gold Teeth before Strength is obtained."
+            ),
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_strength_chapter(
             self.emulator,
             self.reader,
             self.executor,

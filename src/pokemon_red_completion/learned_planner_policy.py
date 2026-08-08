@@ -38,6 +38,11 @@ class ModelObjectivePolicy:
     selected_decisions: int = field(default=0, init=False)
     confidence_total: float = field(default=0.0, init=False)
     minimum_confidence: float = field(default=1.0, init=False)
+    candidate_total: int = field(default=0, init=False)
+    singleton_decisions: int = field(default=0, init=False)
+    branching_decisions: int = field(default=0, init=False)
+    branching_confidence_total: float = field(default=0.0, init=False)
+    minimum_branching_confidence: float = field(default=1.0, init=False)
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.confidence_threshold <= 1.0:
@@ -115,6 +120,16 @@ class ModelObjectivePolicy:
         self.decisions += 1
         self.confidence_total += confidence
         self.minimum_confidence = min(self.minimum_confidence, confidence)
+        self.candidate_total += len(legal)
+        if len(legal) == 1:
+            self.singleton_decisions += 1
+        else:
+            self.branching_decisions += 1
+            self.branching_confidence_total += confidence
+            self.minimum_branching_confidence = min(
+                self.minimum_branching_confidence,
+                confidence,
+            )
         if confidence < self.confidence_threshold:
             raise LearnedPlannerPolicyError(
                 f"planner confidence below threshold for {predicted_id}"
@@ -152,6 +167,11 @@ class ModelObjectivePolicy:
 
     def public_dict(self) -> dict[str, object]:
         mean_confidence = self.confidence_total / self.decisions if self.decisions else 0.0
+        mean_branching_confidence = (
+            self.branching_confidence_total / self.branching_decisions
+            if self.branching_decisions
+            else 0.0
+        )
         return {
             "schema": "pokemon-semantic-objective-live-policy-v1",
             "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
@@ -162,6 +182,15 @@ class ModelObjectivePolicy:
             "completed_objectives": self.completed_objective_count,
             "mean_confidence": mean_confidence,
             "minimum_confidence": self.minimum_confidence if self.decisions else 0.0,
+            "mean_candidate_count": (
+                self.candidate_total / self.decisions if self.decisions else 0.0
+            ),
+            "singleton_decisions": self.singleton_decisions,
+            "branching_decisions": self.branching_decisions,
+            "mean_branching_confidence": mean_branching_confidence,
+            "minimum_branching_confidence": (
+                self.minimum_branching_confidence if self.branching_decisions else 0.0
+            ),
             "teacher_fallbacks": 0,
             "route_dispatch_mode": (
                 "model_selected_specialists"

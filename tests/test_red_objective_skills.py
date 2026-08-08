@@ -2,8 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+import pytest
+
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.red_objective_skills import (
+    DefeatKogaObjectiveSkill,
+    ObtainStrengthObjectiveSkill,
     ObtainSurfObjectiveSkill,
     PokemonTowerObjectiveSkill,
     ReachFuchsiaObjectiveSkill,
@@ -113,6 +117,8 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     tower = PokemonTowerObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     fuchsia = ReachFuchsiaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     safari = ObtainSurfObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    koga = DefeatKogaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    strength = ObtainStrengthObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     celadon = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"item:silph_scope"}),
@@ -134,6 +140,9 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     assert fuchsia.availability(lavender).executable
     assert not tower.availability(lavender).executable
     assert safari.availability(fuchsia_center).executable
+    surf_ready = fuchsia_center.with_facts("move:surf_available", "item:gold_teeth")
+    assert koga.availability(surf_ready).executable
+    assert strength.availability(surf_ready).executable
 
 
 def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
@@ -161,3 +170,42 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
     assert result.actions_executed == 1_111
     assert result.frames_executed == 222_222
     assert calls == [(emulator, reader, executor)]
+
+
+@pytest.mark.parametrize(
+    ("skill_type", "runner_name", "objective_id", "actions", "frames"),
+    (
+        (DefeatKogaObjectiveSkill, "run_koga_chapter", "defeat_koga", 800, 90_000),
+        (
+            ObtainStrengthObjectiveSkill,
+            "run_strength_chapter",
+            "obtain_strength",
+            300,
+            40_000,
+        ),
+    ),
+)
+def test_red_fuchsia_followup_skills_match_graph_and_preserve_evidence(
+    monkeypatch,
+    skill_type,
+    runner_name: str,
+    objective_id: str,
+    actions: int,
+    frames: int,
+) -> None:
+    def fake_run(emulator, reader, executor, *, timing):
+        return _Report(actions_executed=actions, frames_executed=frames)
+
+    monkeypatch.setattr(
+        f"pokemon_red_completion.red_objective_skills.{runner_name}",
+        fake_run,
+    )
+    skill = skill_type(object(), object(), object())
+
+    result = skill.execute()
+
+    objective = COMPLETION_QUEST.objective(objective_id)
+    assert skill.specialist is objective.specialist
+    assert skill.expected_facts == objective.completion_facts
+    assert result.actions_executed == actions
+    assert result.frames_executed == frames
