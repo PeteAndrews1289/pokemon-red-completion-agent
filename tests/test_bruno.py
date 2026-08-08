@@ -12,17 +12,25 @@ from pokemon_red_completion.bruno import (
     BRUNO_HITMONLEE_SAFE_HP,
     BRUNO_PARTY,
     BRUNO_RNG_DELAY_FRAMES,
+    BrunoChapterError,
     BrunoTurn,
     _bruno_matchup_switch_target,
     _bruno_move_slot,
     _bruno_recovery_threshold,
     _bruno_team_participation_satisfied,
     _encounter_party,
+    _post_bruno_recovery_plan,
     _settle_bruno_victory,
     _turns_valid,
     run_bruno_chapter,
 )
-from pokemon_red_completion.observation import EventFlag, MapId, RamAddress, RawGameState
+from pokemon_red_completion.observation import (
+    EventFlag,
+    ItemId,
+    MapId,
+    RamAddress,
+    RawGameState,
+)
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING
 
 
@@ -120,6 +128,29 @@ def test_bruno_recovery_threshold_accounts_for_hitmonlee_damage() -> None:
     assert _bruno_recovery_threshold(raw(0x22)) == 90
 
 
+def test_post_bruno_recovery_targets_each_affected_member() -> None:
+    assert _post_bruno_recovery_plan(
+        (200, 130, 120, 250, 125, 91),
+        (200, 130, 120, 250, 125, 140),
+        (0, 0, 0, 0, 0, 0),
+    ) == ((5, ItemId.HYPER_POTION),)
+    assert _post_bruno_recovery_plan(
+        (190, 130),
+        (200, 130),
+        (0x08, 0x40),
+    ) == (
+        (0, ItemId.FULL_RESTORE),
+        (1, ItemId.FULL_HEAL),
+    )
+
+
+def test_post_bruno_recovery_rejects_incomplete_or_fainted_party_state() -> None:
+    with pytest.raises(BrunoChapterError, match="incomplete"):
+        _post_bruno_recovery_plan((200,), (200,), ())
+    with pytest.raises(BrunoChapterError, match="invalid HP"):
+        _post_bruno_recovery_plan((0,), (200,), (0,))
+
+
 def test_bruno_prefers_stab_surf_above_the_lance_reserve() -> None:
     assert _bruno_move_slot((20, 10, 10, 15)) == 4
     assert _bruno_move_slot((20, 10, 10, 2)) == 4
@@ -182,7 +213,7 @@ def test_bruno_victory_settle_stops_before_reinteracting(monkeypatch: pytest.Mon
 def test_post_bruno_field_heal_occurs_after_agatha_room_entry() -> None:
     source = getsource(run_bruno_chapter)
 
-    assert source.index('"Agatha room entry"') < source.index("_use_bag_item(")
+    assert source.index('"Agatha room entry"') < source.index("_use_post_bruno_item(")
 
 
 def test_bruno_closes_collection_schedule_when_recoil_ends_healing_turn() -> None:
