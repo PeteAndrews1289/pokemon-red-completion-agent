@@ -12,6 +12,7 @@ from pokemon_red_completion.actions import (
 )
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.objective_skills import (
+    ObjectiveSkillAvailability,
     ObjectiveSkillExecution,
     ObjectiveSkillRegistry,
 )
@@ -103,7 +104,7 @@ def test_portable_loop_observes_selects_dispatches_and_replans_to_completion() -
     assert [step.objective_id for step in report.steps[:2]] == ["first", "second"]
     assert len(world.actions) == 2
     assert loop.public_dict() == {
-        "schema": "pokemon-portable-player-loop-v1",
+        "schema": "pokemon-portable-player-loop-v2",
         "decisions": 2,
         "actions_executed": 2,
         "objectives_completed": 2,
@@ -113,7 +114,11 @@ def test_portable_loop_observes_selects_dispatches_and_replans_to_completion() -
 
 @dataclass
 class _IllegalPolicy:
-    def select(self, state: GameState) -> str:
+    def select(
+        self,
+        state: GameState,
+        candidates: tuple[Objective, ...] | None = None,
+    ) -> str:
         return "second"
 
     def complete(self, objective_id: str) -> None:
@@ -134,7 +139,7 @@ def test_portable_loop_rejects_unavailable_objective_authority() -> None:
         executor=world,
     )
 
-    with pytest.raises(PlayerLoopError, match="unavailable objective"):
+    with pytest.raises(PlayerLoopError, match="non-executable objective"):
         loop.step()
     assert world.actions == []
 
@@ -218,6 +223,10 @@ class _CompositeSkill:
     max_actions: int = 4
     max_frames: int = 40
     expose_effects: bool = True
+    executable: bool = True
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        return ObjectiveSkillAvailability(self.executable, "Test skill availability.")
 
     def execute(self) -> ObjectiveSkillExecution:
         if self.expose_effects:
@@ -291,3 +300,90 @@ def test_portable_loop_enforces_composite_skill_execution_bounds() -> None:
 
     with pytest.raises(PlayerLoopError, match="action bound"):
         loop.step()
+
+
+@dataclass
+class _CandidateRecordingPolicy:
+    candidates_seen: tuple[str, ...] = ()
+    active: str | None = None
+
+    def select(
+        self,
+        state: GameState,
+        candidates: tuple[Objective, ...] | None = None,
+    ) -> str:
+        assert candidates is not None
+        self.candidates_seen = tuple(objective.id for objective in candidates)
+        self.active = candidates[0].id
+        return candidates[0].id
+
+    def complete(self, objective_id: str) -> None:
+        assert objective_id == self.active
+        self.active = None
+
+    def abandon(self, objective_id: str) -> None:
+        assert objective_id == self.active
+        self.active = None
+
+
+def test_portable_loop_masks_dependency_legal_but_unexecutable_objectives() -> None:
+    graph = QuestGraph(
+        (
+            Objective(
+                id="first",
+                title="First",
+                completion_facts=frozenset({"done:first"}),
+                specialist=Specialist.INTERACTION,
+            ),
+            Objective(
+                id="parallel",
+                title="Parallel",
+                completion_facts=frozenset({"done:parallel"}),
+                specialist=Specialist.BATTLE,
+            ),
+        )
+    )
+    world = _World(GameState(GameMode.OVERWORLD), [])
+    policy = _CandidateRecordingPolicy()
+    skill = _CompositeSkill(world)
+    loop = PortablePlayerLoop(
+        graph=graph,
+        observer=world,
+        objective_policy=policy,
+        specialists=SpecialistRegistry(()),
+        executor=world,
+        objective_skills=ObjectiveSkillRegistry((skill,)),
+    )
+
+    result = loop.step()
+
+    assert policy.candidates_seen == ("first",)
+    assert result.dependency_legal_objectives == ("first", "parallel")
+    assert result.executable_objectives == ("first",)
+    assert result.excluded_objectives == (
+        ("parallel", "No objective skill or specialist planner is registered."),
+    )
+    assert result.public_dict()["excluded_objectives"] == [
+        {
+            "objective_id": "parallel",
+            "reason": "No objective skill or specialist planner is registered.",
+        }
+    ]
+
+
+def test_portable_loop_fails_before_policy_when_no_objective_is_executable() -> None:
+    graph = _graph()
+    world = _World(GameState(GameMode.OVERWORLD), [])
+    policy = _CandidateRecordingPolicy()
+    loop = PortablePlayerLoop(
+        graph=graph,
+        observer=world,
+        objective_policy=policy,
+        specialists=SpecialistRegistry(()),
+        executor=world,
+    )
+
+    with pytest.raises(PlayerLoopError, match="no dependency-legal objective is executable"):
+        loop.step()
+
+    assert policy.candidates_seen == ()

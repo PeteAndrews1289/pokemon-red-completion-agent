@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.red_objective_skills import (
     PokemonTowerObjectiveSkill,
     ReachFuchsiaObjectiveSkill,
@@ -101,3 +102,27 @@ def test_red_fuchsia_skill_matches_graph_and_preserves_mechanics_evidence(monkey
     assert result.frames_executed == 444_555
     assert result.evidence == {"status": "ok", "trainers": 5}
     assert calls == [(emulator, reader, executor)]
+
+
+def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
+    emulator = object()
+    reader = object()
+    executor = object()
+    hideout = RocketHideoutObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    tower = PokemonTowerObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    fuchsia = ReachFuchsiaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    celadon = GameState(
+        GameMode.OVERWORLD,
+        facts=frozenset({"item:silph_scope"}),
+        location="celadon_pokecenter",
+    )
+    lavender = GameState(
+        GameMode.OVERWORLD,
+        facts=frozenset({"item:poke_flute"}),
+        location="lavender_pokecenter",
+    )
+
+    assert tower.availability(celadon).executable
+    assert not hideout.availability(celadon).executable
+    assert fuchsia.availability(lavender).executable
+    assert not tower.availability(lavender).executable

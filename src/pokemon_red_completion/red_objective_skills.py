@@ -4,10 +4,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.executor import ChapterExecutor
 from pokemon_red_completion.fuchsia import FuchsiaTiming, run_fuchsia_chapter
 from pokemon_red_completion.hideout import EmulatorState, HideoutTiming, run_hideout_chapter
-from pokemon_red_completion.objective_skills import ObjectiveSkillExecution
+from pokemon_red_completion.objective_skills import (
+    ObjectiveSkillAvailability,
+    ObjectiveSkillExecution,
+)
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.quest import Specialist
 from pokemon_red_completion.tower import TowerTiming, run_tower_chapter
@@ -27,6 +31,22 @@ class RocketHideoutObjectiveSkill:
     additional_effect_facts: frozenset[str] = frozenset({"item:silph_scope"})
     max_actions: int = 2_000
     max_frames: int = 2_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "celadon_pokecenter"
+            and "story:rocket_hideout_cleared" not in state.facts
+            and "item:silph_scope" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the pristine Celadon Center entrance boundary."
+                if executable
+                else "Requires the pre-Hideout Celadon Center boundary."
+            ),
+        )
 
     def execute(self) -> ObjectiveSkillExecution:
         report = run_hideout_chapter(
@@ -57,6 +77,22 @@ class PokemonTowerObjectiveSkill:
     max_actions: int = 3_000
     max_frames: int = 3_000_000
 
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "celadon_pokecenter"
+            and "item:silph_scope" in state.facts
+            and "item:poke_flute" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the Celadon Center boundary with the Silph Scope."
+                if executable
+                else "Requires Celadon Center with the Silph Scope before Mr. Fuji is rescued."
+            ),
+        )
+
     def execute(self) -> ObjectiveSkillExecution:
         report = run_tower_chapter(
             self.emulator,
@@ -85,6 +121,22 @@ class ReachFuchsiaObjectiveSkill:
     additional_effect_facts: frozenset[str] = frozenset()
     max_actions: int = 10_000
     max_frames: int = 5_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "lavender_pokecenter"
+            and "item:poke_flute" in state.facts
+            and "location:fuchsia_city" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the Lavender Center boundary with the Poké Flute."
+                if executable
+                else "Requires Lavender Center with the Poké Flute before Fuchsia is reached."
+            ),
+        )
 
     def execute(self) -> ObjectiveSkillExecution:
         report = run_fuchsia_chapter(

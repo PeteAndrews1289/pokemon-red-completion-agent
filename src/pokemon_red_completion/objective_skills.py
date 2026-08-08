@@ -6,6 +6,7 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from typing import Protocol
 
+from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.quest import Objective, Specialist
 
 
@@ -30,6 +31,20 @@ class ObjectiveSkillExecution:
                 raise ValueError(f"{name} must be a non-negative integer")
 
 
+@dataclass(frozen=True, slots=True)
+class ObjectiveSkillAvailability:
+    """Explain whether a skill can start from the observed semantic boundary."""
+
+    executable: bool
+    reason: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.executable, bool):
+            raise TypeError("objective skill executable flag must be boolean")
+        if not self.reason:
+            raise ValueError("objective skill availability reason must be non-empty")
+
+
 class ObjectiveSkill(Protocol):
     """A fixed, bounded mechanic executor selected by objective ID."""
 
@@ -39,6 +54,8 @@ class ObjectiveSkill(Protocol):
     additional_effect_facts: frozenset[str]
     max_actions: int
     max_frames: int
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability: ...
 
     def execute(self) -> ObjectiveSkillExecution: ...
 

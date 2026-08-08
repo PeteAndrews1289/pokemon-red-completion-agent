@@ -10,6 +10,7 @@ from typing import Protocol
 from pokemon_red_completion.actions import MacroAction, SkillOutcome
 from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.objective_skills import (
+    ObjectiveSkillAvailability,
     ObjectiveSkillError,
     ObjectiveSkillRegistry,
 )
@@ -26,7 +27,7 @@ class StateObserver(Protocol):
 
 
 class ObjectivePolicy(Protocol):
-    def select(self, state: GameState) -> str: ...
+    def select(self, state: GameState, candidates: tuple[Objective, ...] | None = None) -> str: ...
 
     def complete(self, objective_id: str) -> None: ...
 
@@ -54,6 +55,9 @@ class PlayerStepResult:
     skill_actions_executed: int = 0
     skill_frames_executed: int = 0
     skill_evidence: Mapping[str, object] | None = None
+    dependency_legal_objectives: tuple[str, ...] = ()
+    executable_objectives: tuple[str, ...] = ()
+    excluded_objectives: tuple[tuple[str, str], ...] = ()
     facts_added: frozenset[str] = field(default_factory=frozenset)
     reason: str = ""
 
@@ -75,6 +79,12 @@ class PlayerStepResult:
             "skill_actions_executed": self.skill_actions_executed,
             "skill_frames_executed": self.skill_frames_executed,
             "skill_evidence": self.skill_evidence,
+            "dependency_legal_objectives": list(self.dependency_legal_objectives),
+            "executable_objectives": list(self.executable_objectives),
+            "excluded_objectives": [
+                {"objective_id": objective_id, "reason": reason}
+                for objective_id, reason in self.excluded_objectives
+            ],
             "facts_added": sorted(self.facts_added),
             "reason": self.reason,
         }
@@ -93,7 +103,7 @@ class PlayerRunReport:
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "pokemon-portable-player-run-v1",
+            "schema": "pokemon-portable-player-run-v2",
             "status": "complete" if self.passed else "step_budget_exhausted",
             "graph_complete": self.graph_complete,
             "exhausted_step_budget": self.exhausted_step_budget,
@@ -107,6 +117,15 @@ class PlayerRunReport:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class ObjectiveSelectionScope:
+    """Dependency-legal objectives narrowed by live executor affordances."""
+
+    dependency_legal_ids: tuple[str, ...]
+    executable_ids: tuple[str, ...]
+    excluded: tuple[tuple[str, str], ...]
+
+
 @dataclass(slots=True)
 class DeterministicObjectivePolicy:
     """Explicit teacher baseline for the same player-loop interface."""
@@ -116,12 +135,22 @@ class DeterministicObjectivePolicy:
     decisions: int = field(default=0, init=False)
     completions: int = field(default=0, init=False)
 
-    def select(self, state: GameState) -> str:
+    def select(
+        self,
+        state: GameState,
+        candidates: tuple[Objective, ...] | None = None,
+    ) -> str:
         if self._active_objective_id is not None:
             raise PlayerLoopError("an objective is already active")
-        objective = self.graph.next_objective(state)
-        if objective is None:
+        available = self.graph.available_objectives(state) if candidates is None else candidates
+        if not available:
             raise PlayerLoopError("no dependency-satisfied objective is available")
+        graph_legal = {
+            objective.id: objective for objective in self.graph.available_objectives(state)
+        }
+        if any(graph_legal.get(objective.id) != objective for objective in available):
+            raise PlayerLoopError("deterministic policy candidates are not graph-legal")
+        objective = available[0]
         self.decisions += 1
         self._active_objective_id = objective.id
         return objective.id
@@ -162,10 +191,10 @@ class PortablePlayerLoop:
                 reason="Every objective has verified semantic completion evidence.",
             )
 
-        objective = self._select_legal_objective(before)
+        objective, scope = self._select_executable_objective(before)
         composite = self.objective_skills.get(objective.id)
         if composite is not None:
-            return self._execute_objective_skill(before, objective)
+            return self._execute_objective_skill(before, objective, scope)
         try:
             specialist = self.specialists.require(objective.specialist)
         except SpecialistRegistryError as error:
@@ -186,6 +215,9 @@ class PortablePlayerLoop:
                 kind=PlayerStepKind.REPLAN,
                 objective_id=objective.id,
                 specialist=objective.specialist,
+                dependency_legal_objectives=scope.dependency_legal_ids,
+                executable_objectives=scope.executable_ids,
+                excluded_objectives=scope.excluded,
                 reason=plan.rationale,
             )
         if plan.outcome is SkillOutcome.SUCCESS:
@@ -217,6 +249,9 @@ class PortablePlayerLoop:
             objective_id=objective.id,
             specialist=objective.specialist,
             action=action,
+            dependency_legal_objectives=scope.dependency_legal_ids,
+            executable_objectives=scope.executable_ids,
+            excluded_objectives=scope.excluded,
             facts_added=frozenset(facts_added),
             reason=plan.rationale,
         )
@@ -225,6 +260,7 @@ class PortablePlayerLoop:
         self,
         before: GameState,
         objective: Objective,
+        scope: ObjectiveSelectionScope,
     ) -> PlayerStepResult:
         try:
             skill = self.objective_skills.require_for(objective)
@@ -255,6 +291,9 @@ class PortablePlayerLoop:
             skill_actions_executed=execution.actions_executed,
             skill_frames_executed=execution.frames_executed,
             skill_evidence=execution.evidence,
+            dependency_legal_objectives=scope.dependency_legal_ids,
+            executable_objectives=scope.executable_ids,
+            excluded_objectives=scope.excluded,
             facts_added=frozenset(after.facts.difference(before.facts)),
             reason="Executed a registered bounded objective skill and independently verified it.",
         )
@@ -284,21 +323,53 @@ class PortablePlayerLoop:
 
     def public_dict(self) -> Mapping[str, object]:
         return {
-            "schema": "pokemon-portable-player-loop-v1",
+            "schema": "pokemon-portable-player-loop-v2",
             "decisions": self.decisions,
             "actions_executed": self.actions_executed,
             "objectives_completed": self.objectives_completed,
             "replans": self.replans,
         }
 
-    def _select_legal_objective(self, state: GameState) -> Objective:
-        available = self.graph.available_objectives(state)
-        available_by_id = {objective.id: objective for objective in available}
-        selected_id = self.objective_policy.select(state)
+    def _select_executable_objective(
+        self,
+        state: GameState,
+    ) -> tuple[Objective, ObjectiveSelectionScope]:
+        dependency_legal = self.graph.available_objectives(state)
+        executable: list[Objective] = []
+        excluded: list[tuple[str, str]] = []
+        for objective in dependency_legal:
+            skill = self.objective_skills.get(objective.id)
+            if skill is not None:
+                availability = skill.availability(state)
+            elif self.specialists.supports(objective.specialist):
+                availability = ObjectiveSkillAvailability(
+                    True,
+                    "A bounded specialist planner is registered.",
+                )
+            else:
+                availability = ObjectiveSkillAvailability(
+                    False,
+                    "No objective skill or specialist planner is registered.",
+                )
+            if availability.executable:
+                executable.append(objective)
+            else:
+                excluded.append((objective.id, availability.reason))
+        if not executable:
+            details = "; ".join(f"{objective_id}: {reason}" for objective_id, reason in excluded)
+            raise PlayerLoopError("no dependency-legal objective is executable: " + details)
+        candidates = tuple(executable)
+        available_by_id = {objective.id: objective for objective in candidates}
+        selected_id = self.objective_policy.select(state, candidates)
         self.decisions += 1
         if not isinstance(selected_id, str) or selected_id not in available_by_id:
-            raise PlayerLoopError("objective policy selected an unavailable objective")
-        return available_by_id[selected_id]
+            raise PlayerLoopError("objective policy selected a non-executable objective")
+        scope = ObjectiveSelectionScope(
+            dependency_legal_ids=tuple(objective.id for objective in dependency_legal),
+            executable_ids=tuple(objective.id for objective in candidates),
+            excluded=tuple(excluded),
+        )
+        return available_by_id[selected_id], scope
 
     def _abandon_unfinished_objective(self, objective_id: str) -> None:
         self.objective_policy.abandon(objective_id)

@@ -9,7 +9,7 @@ import numpy as np
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.planner_model import ObjectiveRanker
 from pokemon_red_completion.planner_semantics import ObjectiveFeatureProjector
-from pokemon_red_completion.quest import QuestGraph
+from pokemon_red_completion.quest import Objective, QuestGraph
 from pokemon_red_completion.trajectory import (
     SemanticSnapshot,
     SnapshotProvider,
@@ -52,12 +52,20 @@ class ModelObjectivePolicy:
         state = GameState(mode=GameMode.OVERWORLD, facts=frozenset(self._completion_facts))
         return self._choose(state, expected_objective_id=expected_objective_id)
 
-    def select(self, state: GameState) -> str:
+    def select(
+        self,
+        state: GameState,
+        candidates: tuple[Objective, ...] | None = None,
+    ) -> str:
         """Choose a legal objective without receiving the fixed route's expected answer."""
 
         if not isinstance(state, GameState):
             raise TypeError("state must be a GameState")
-        selected = self._choose(state, expected_objective_id=None)
+        selected = self._choose(
+            state,
+            expected_objective_id=None,
+            candidates=candidates,
+        )
         self.selected_decisions += 1
         return selected
 
@@ -66,6 +74,7 @@ class ModelObjectivePolicy:
         state: GameState,
         *,
         expected_objective_id: str | None,
+        candidates: tuple[Objective, ...] | None = None,
     ) -> str:
         """Rank the objectives available in authoritative semantic state."""
 
@@ -79,7 +88,19 @@ class ModelObjectivePolicy:
             facts=tuple(sorted(set(source.facts).union(state.facts, self._completion_facts))),
             features=source.features,
         )
-        legal = self.graph.available_objectives(state)
+        graph_legal = self.graph.available_objectives(state)
+        if candidates is None:
+            legal = graph_legal
+        else:
+            legal_by_id = {objective.id: objective for objective in graph_legal}
+            if not candidates or len({objective.id for objective in candidates}) != len(candidates):
+                raise LearnedPlannerPolicyError("planner candidates must be non-empty and unique")
+            if any(
+                objective.id not in legal_by_id or legal_by_id[objective.id] != objective
+                for objective in candidates
+            ):
+                raise LearnedPlannerPolicyError("planner candidates are not graph-legal objectives")
+            legal = candidates
         if not legal:
             raise LearnedPlannerPolicyError("no legal incomplete objective is available")
         batch = self.projector.project(

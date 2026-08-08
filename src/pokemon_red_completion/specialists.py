@@ -53,6 +53,9 @@ class SpecialistRegistry:
                 f"no planner registered for specialist: {specialist.value}"
             ) from None
 
+    def supports(self, specialist: Specialist) -> bool:
+        return specialist in self._by_kind
+
 
 @dataclass(frozen=True, slots=True)
 class NavigationContext:

@@ -358,3 +358,39 @@ def test_live_policy_selects_among_legal_objectives_without_expected_route_label
     assert report["selected_decisions"] == 1
     assert report["authorized_decisions"] == 0
     assert report["route_dispatch_mode"] == "model_selected_specialists"
+
+
+def test_live_policy_ranks_only_the_supplied_executable_candidates() -> None:
+    graph = QuestGraph(
+        (
+            Objective(
+                id="masked",
+                title="Masked",
+                completion_facts=frozenset({"done:masked"}),
+                specialist=Specialist.INTERACTION,
+                priority=900,
+            ),
+            Objective(
+                id="executable",
+                title="Executable",
+                completion_facts=frozenset({"done:executable"}),
+                specialist=Specialist.INTERACTION,
+                priority=0,
+            ),
+        )
+    )
+    projector = ObjectiveFeatureProjector(graph)
+    weights = [0.0] * len(projector.feature_names)
+    weights[projector.feature_names.index("candidate_priority")] = 100.0
+    policy = ModelObjectivePolicy(
+        model=ObjectiveRanker(feature_names=projector.feature_names, weights=weights),
+        graph=graph,
+        snapshot_provider=_Provider(),
+    )
+
+    selected = policy.select(
+        GameState(GameMode.OVERWORLD),
+        (graph.objective("executable"),),
+    )
+
+    assert selected == "executable"
