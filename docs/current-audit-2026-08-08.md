@@ -145,7 +145,8 @@ real regressions and weakens the otherwise strong evidence story.
 
 **Resolved during this audit:** the stale registry was regenerated from source, all four public
 golden identities were updated from generator output, and the full 2,026-test local gate passed.
-The final **19 consecutive GitHub Actions runs** were green after the registry fix. This is why the
+At least **19 consecutive GitHub Actions runs** were green after the registry fix, with later audit
+and interface commits also passing. This is why the
 prior email storm was not intended behavior—it was one repeatedly retriggered derived-artifact
 mismatch, not useful Dependabot noise. GitHub's repository APIs also report that Dependabot alerts
 are disabled, no CodeQL/code-scanning analysis exists, and secret scanning has zero alerts. The
