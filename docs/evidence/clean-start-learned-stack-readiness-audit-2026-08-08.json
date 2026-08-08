@@ -29,7 +29,9 @@
     },
     "strategic_training_runtime": {
       "captured_state_portable_authority_qualified": true,
-      "clean_start_runner_accepts_authenticated_candidate_model": false
+      "clean_start_runner_accepts_authenticated_candidate_model": true,
+      "clean_start_runner_records_candidate_ownership": true,
+      "clean_start_candidate_authority_runtime_rehearsed": false
     }
   },
   "blocking_interfaces": [
@@ -44,19 +46,22 @@
       "why_it_matters": "ten successful runs would still not measure open objective dispatch"
     },
     {
-      "id": "strategic_model_injection",
-      "finding": "the qualified clean-start runner has no authenticated trainee/venue model input or authority report",
-      "why_it_matters": "the newly qualified strategic ranker would disappear from the proposed learned-stack denominator"
-    },
-    {
       "id": "series_provenance",
       "finding": "plain completion reports do not bind the source commit, all model-file hashes, root assignment, and immutable ten-run series in one authenticated record",
       "why_it_matters": "an 8/10 claim needs failures and successes from one frozen prospective campaign"
     }
   ],
+  "resolved_interfaces": [
+    {
+      "id": "strategic_model_injection",
+      "finding": "the clean-start runner now authenticates an exact candidate-model file digest, supports shadow or trainee/venue authority, threads the model through both Blaine development passes, and records controlled decisions and fallback status",
+      "verification": "ROM-free CLI, report-contract, callback-threading, Ruff, and mypy gates pass",
+      "remaining_runtime_gate": "one uncounted clean-power rehearsal must still prove nonzero authority under the source-bound campaign envelope"
+    }
+  ],
   "required_before_counted_roots": [
     "extend one observation-driven orchestrator from clean power-on through Hall of Fame, or explicitly publish every fixed dispatch outside its learned denominator",
-    "thread authenticated battle, training-action, and trainee/venue artifacts through that same process",
+    "thread authenticated battle, training-action, objective, and trainee/venue artifacts through one source-bound process; the trainee/venue CLI seam is implemented but not yet rehearsed from clean power",
     "fail on any teacher query, fallback, expected-route label, undeclared safety substitution, save-state load, or human input",
     "bind source commit, ROM identity, runtime identity, model files, objective graph, and ten distinct perturbation assignments before opening root 01",
     "write the independent 8-of-10 checker and its failure-path tests before the campaign",
@@ -64,7 +69,7 @@
   ],
   "recommended_implementation_order": [
     "add early-game typed objective skills or a documented composite boundary to the portable registry",
-    "add clean-start strategic-ranker injection and ownership accounting",
+    "exercise the implemented clean-start strategic-ranker injection in the uncounted rehearsal",
     "add one source-bound learned-stack run envelope",
     "add the ten-root campaign registry and independent series gate",
     "run the uncounted rehearsal",

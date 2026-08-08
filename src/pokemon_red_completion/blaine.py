@@ -1120,6 +1120,8 @@ def run_blaine_chapter(
     executor: ChapterExecutor,
     *,
     progress: ProgressSink | None = None,
+    training_candidate_decision_sink: Callable[[TrainingCandidateDecision], None] | None = None,
+    training_candidate_decision_authority: Callable[[TrainingCandidateDecision], int] | None = None,
 ) -> BlaineChapterReport:
     start_frames = emulator.frame_count
     actions = CountingExecutor(executor)
@@ -1347,6 +1349,8 @@ def run_blaine_chapter(
             escort_enemy_species=MANSION_ESCORT_ENEMY_SPECIES,
             max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
             cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+            candidate_decision_sink=training_candidate_decision_sink,
+            candidate_decision_authority=training_candidate_decision_authority,
             evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
             report_label="Mansion team training",
             checkpoint_count=BLAINE_CHECKPOINT_COUNT,
@@ -1377,6 +1381,8 @@ def run_blaine_chapter(
         escort_enemy_species=MANSION_ESCORT_ENEMY_SPECIES,
         max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
         cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+        candidate_decision_sink=training_candidate_decision_sink,
+        candidate_decision_authority=training_candidate_decision_authority,
         progress_sink=(
             (
                 lambda message: progress(

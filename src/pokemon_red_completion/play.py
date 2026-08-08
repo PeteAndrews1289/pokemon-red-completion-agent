@@ -255,6 +255,11 @@ from pokemon_red_completion.tower import (
     TowerProgress,
     run_tower_chapter,
 )
+from pokemon_red_completion.training_candidate_model import (
+    TrainingCandidateMLP,
+    TrainingCandidateShadowAudit,
+)
+from pokemon_red_completion.training_candidate_rank import TrainingCandidateDecision
 from pokemon_red_completion.trajectory import (
     RecordingExecutor,
     SparseEvent,
@@ -528,6 +533,8 @@ class QualifiedPlayReport:
     battle_policy_teacher_free_required: bool = False
     objective_policy_report: dict[str, object] | None = None
     battle_start_schedule_report: dict[str, object] | None = None
+    training_candidate_policy_report: dict[str, object] | None = None
+    training_candidate_authority_required: bool = False
 
     @property
     def passed(self) -> bool:
@@ -583,6 +590,10 @@ class QualifiedPlayReport:
                     and self.objective_policy_report.get("teacher_fallbacks") == 0
                 )
             )
+            and (
+                not self.training_candidate_authority_required
+                or self._training_candidate_authority_passed
+            )
         )
 
     @property
@@ -602,6 +613,19 @@ class QualifiedPlayReport:
         return (
             execution.get("safety_fallbacks") == 0
             and execution.get("low_confidence_fallbacks") == 0
+        )
+
+    @property
+    def _training_candidate_authority_passed(self) -> bool:
+        report = self.training_candidate_policy_report
+        if report is None:
+            return False
+        controlled_decisions = report.get("controlled_decisions")
+        return (
+            report.get("model_had_execution_authority") is True
+            and isinstance(controlled_decisions, int)
+            and controlled_decisions > 0
+            and report.get("teacher_fallback_on_model_disagreement") is False
         )
 
     def public_dict(self) -> dict[str, object]:
@@ -776,6 +800,8 @@ class QualifiedPlayReport:
             "battle_policy_teacher_free_required": (self.battle_policy_teacher_free_required),
             "objective_policy": self.objective_policy_report,
             "battle_start_schedule": self.battle_start_schedule_report,
+            "training_candidate_policy": self.training_candidate_policy_report,
+            "training_candidate_authority_required": (self.training_candidate_authority_required),
         }
 
 
@@ -800,6 +826,30 @@ def is_pokedex_verified(state: OaksErrandState) -> bool:
     return state.pokedex_snapshot
 
 
+def _training_candidate_runtime_report(
+    audit: TrainingCandidateShadowAudit | None,
+    *,
+    model_file_sha256: str | None,
+    authority: bool,
+    controlled_decisions: int,
+) -> dict[str, object] | None:
+    if audit is None:
+        return None
+    summary = audit.public_dict()
+    summary.update(
+        {
+            "model_file_sha256": model_file_sha256,
+            "authority_choice_kinds": ["trainee", "venue"] if authority else [],
+            "controlled_decisions": controlled_decisions,
+            "model_had_execution_authority": authority and controlled_decisions > 0,
+            "teacher_fallback_on_model_disagreement": False if authority else None,
+            "runtime_scope": "clean_power_fixed_objective_sequence",
+            "promotion_eligible": False,
+        }
+    )
+    return summary
+
+
 def run_qualified_play(
     rom_path: str | Path,
     *,
@@ -818,6 +868,9 @@ def run_qualified_play(
     battle_control_confidence_threshold: float = 0.0,
     objective_model: ObjectiveRanker | None = None,
     objective_model_confidence_threshold: float = 0.0,
+    training_candidate_model: TrainingCandidateMLP | None = None,
+    training_candidate_model_file_sha256: str | None = None,
+    execute_training_candidate_model: bool = False,
     battle_model_confidence_threshold: float = 0.0,
     require_battle_model_teacher_agreement: bool = True,
     require_teacher_free_battle_policy: bool = False,
@@ -863,6 +916,10 @@ def run_qualified_play(
         raise ValueError("battle_control_confidence_threshold must be between zero and one")
     if not 0.0 <= objective_model_confidence_threshold <= 1.0:
         raise ValueError("objective_model_confidence_threshold must be between zero and one")
+    if (training_candidate_model is None) != (training_candidate_model_file_sha256 is None):
+        raise ValueError("training candidate model and file digest must be provided together")
+    if execute_training_candidate_model and training_candidate_model is None:
+        raise ValueError("training candidate execution requires an authenticated model")
     battle_start_schedule = (
         BattleStartScheduleController(battle_start_offsets)
         if battle_start_offsets is not None
@@ -904,6 +961,23 @@ def run_qualified_play(
         recording_executor: RecordingExecutor[MacroAction, ExecutedAction] | None = None
         objective_observer: SemanticObjectiveDecisionObserver | None = None
         objective_policy: ModelObjectivePolicy | None = None
+        training_candidate_audit = (
+            TrainingCandidateShadowAudit(training_candidate_model)
+            if training_candidate_model is not None
+            else None
+        )
+        training_candidate_controlled_decisions = 0
+
+        def training_candidate_decision_authority(
+            decision: TrainingCandidateDecision,
+        ) -> int:
+            nonlocal training_candidate_controlled_decisions
+            assert training_candidate_audit is not None
+            assert training_candidate_model is not None
+            training_candidate_audit.observe(decision)
+            training_candidate_controlled_decisions += 1
+            return training_candidate_model.predict(decision.observation)
+
         recording_failures = [0]
         effective_progress = progress
         snapshot_encoder = (
@@ -1287,6 +1361,16 @@ def run_qualified_play(
                 reader,
                 executor,
                 progress=_blaine_progress_bridge(progress),
+                training_candidate_decision_sink=(
+                    training_candidate_audit.observe
+                    if training_candidate_audit is not None and not execute_training_candidate_model
+                    else None
+                ),
+                training_candidate_decision_authority=(
+                    training_candidate_decision_authority
+                    if execute_training_candidate_model
+                    else None
+                ),
             )
         except BlaineChapterError as error:
             raise QualifiedPlayError(str(error)) from error
@@ -1482,6 +1566,13 @@ def run_qualified_play(
                 if battle_start_schedule is not None
                 else None
             ),
+            training_candidate_policy_report=_training_candidate_runtime_report(
+                training_candidate_audit,
+                model_file_sha256=training_candidate_model_file_sha256,
+                authority=execute_training_candidate_model,
+                controlled_decisions=training_candidate_controlled_decisions,
+            ),
+            training_candidate_authority_required=execute_training_candidate_model,
         )
         if not report.passed:
             raise QualifiedPlayError("Qualified play evidence failed its public contract.")

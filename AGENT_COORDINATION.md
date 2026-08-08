@@ -13,7 +13,9 @@
 > six at level 55, zero faints, and no fallback. Portable integration also passed: 114,831
 > controlled candidate choices, 400 executed disagreements, 1,803 development battles, 1,048
 > heals, a fully healed 60/55/55/55/55/55 terminal, fresh Volcano Badge observation, and Giovanni
-> available. Clean-start multi-root Red and the Crystal falsification benchmark are next.
+> available. The clean-power runner can now inject that same exact-hash ranker and account for its
+> authority, but this new seam has only ROM-free verification. Clean-start multi-root Red and the
+> Crystal falsification benchmark are next.
 
 **New here? Read [HANDOFF.md](HANDOFF.md) first** — it is the complete orientation, including what
 is unproven and how this codebase repeatedly fools people. Then [MISSION.md](MISSION.md) for why the

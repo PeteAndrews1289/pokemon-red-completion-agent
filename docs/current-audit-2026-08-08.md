@@ -28,7 +28,7 @@ Scores measure the repository against its stated end goal, not against a typical
 | Deterministic completion and referee | 9/10 | Clean power-on; 312/312 semantic checkpoints; 36/36 objectives; Champion and Hall of Fame. The remaining point is for more cartridge revisions/titles. |
 | Experimental honesty | 9/10 | Failed and rejected lineages remain visible, authority modes are separated, and operational gates can overrule headline accuracy. A few historical claims remain scattered through very long documents. |
 | Safety and artifact integrity | 9/10 | Exact hashes, clean-source binding, root-overlap rejection, atomic failed-stream retention, affordance masks, and fail-closed control. Private ROM-derived assets remain external. |
-| Tests and static checks | 8/10 | 2,024 non-integration test cases currently pass locally, with Ruff, documentation, public-artifact, registry, and mypy gates. Forty-four legacy modules still use mypy `ignore_errors` overrides. |
+| Tests and static checks | 8/10 | 2,026 non-integration test cases currently pass locally, with Ruff, documentation, public-artifact, registry, and mypy gates. Forty-four legacy modules still use mypy `ignore_errors` overrides. |
 | Architecture and modularity | 7/10 | Typed observations, objectives, skills, results, model loaders, and promotion gates are strong seams. The 136,980-line Python surface and Red-specific chapter modules remain costly to reason about. |
 | Learned battle control | 7/10 | Real model-controlled qualifications exist with no disagreement fallback. Evaluation is still dominated by the authored Red curriculum and lacks a second-title test. |
 | Learned objective planning | 5/10 | A single process reached Hall of Fame through 20 model dispatches, but 19 dispatches offered only one executable candidate and fixed skills pressed the buttons. |
@@ -144,7 +144,7 @@ match the intended source diff. Repeated red mail from a known derived-artifact 
 real regressions and weakens the otherwise strong evidence story.
 
 **Resolved during this audit:** the stale registry was regenerated from source, all four public
-golden identities were updated from generator output, and the full 2,024-test local gate passed.
+golden identities were updated from generator output, and the full 2,026-test local gate passed.
 The final **19 consecutive GitHub Actions runs** were green after the registry fix. This is why the
 prior email storm was not intended behavior—it was one repeatedly retriggered derived-artifact
 mismatch, not useful Dependabot noise. GitHub's repository APIs also report that Dependabot alerts
@@ -170,9 +170,11 @@ after merge. Do not rewrite the shared branch or force-push its history.
 1. **Establish a clean-start evaluation lane.** No captured starting state, teacher query, answer
    label, undeclared safety substitution, or restore. Score success rate across multiple declared
    roots instead of presenting one favorable completion.
-   The readiness audit found this lane is not yet safe to open: the clean-start path still uses
-   expected-objective authorization, lacks candidate-ranker injection, and has no source-bound
-   ten-root envelope. Build those interfaces and one uncounted rehearsal before freezing roots.
+   The readiness audit found this lane is not yet safe to open. The exact-hash candidate-ranker
+   injection and ownership receipt are now implemented in the clean-power runner, but they have not
+   been exercised in a clean-power rehearsal. The path still uses expected-objective authorization
+   and has no source-bound ten-root envelope. Build those remaining interfaces and run one
+   uncounted rehearsal before freezing roots.
 2. **Run the Crystal microbenchmark.** Port one local navigation task, one battle task, and one
    training choice. Compare zero-shot, few-shot, and from-scratch performance. Treat breakage as an
    abstraction audit, not a demo failure to hide.

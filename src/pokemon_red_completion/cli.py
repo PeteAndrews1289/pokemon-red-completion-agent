@@ -108,6 +108,10 @@ from pokemon_red_completion.schedule_audit import (
     ScheduleAttestationError,
     audit_schedule_attestations,
 )
+from pokemon_red_completion.training_candidate_model import (
+    TrainingCandidateModelError,
+    load_training_candidate_model,
+)
 from pokemon_red_completion.trajectory_io import EpisodeTrajectorySink
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
@@ -539,6 +543,20 @@ def _parser() -> argparse.ArgumentParser:
         type=float,
         default=0.0,
         help="Reject objective predictions below this confidence (default: 0).",
+    )
+    play.add_argument(
+        "--training-candidate-model",
+        type=Path,
+        help="Authenticated trainee/venue ranker used during clean-start party development.",
+    )
+    play.add_argument(
+        "--training-candidate-model-sha256",
+        help="Exact SHA-256 digest of --training-candidate-model.",
+    )
+    play.add_argument(
+        "--training-candidate-authority",
+        action="store_true",
+        help="Let the authenticated ranker execute trainee and venue choices.",
     )
     record = subcommands.add_parser(
         "record",
@@ -1903,6 +1921,19 @@ def main(arguments: Sequence[str] | None = None) -> int:
             _print_opening_summary(report)
             payload = report.public_dict()
         elif args.command == "play":
+            candidate_model_values = (
+                args.training_candidate_model,
+                args.training_candidate_model_sha256,
+            )
+            if any(value is not None for value in candidate_model_values) and not all(
+                value is not None for value in candidate_model_values
+            ):
+                parser.error(
+                    "training candidate control requires both --training-candidate-model and "
+                    "--training-candidate-model-sha256"
+                )
+            if args.training_candidate_authority and args.training_candidate_model is None:
+                parser.error("training-candidate authority requires an authenticated model")
             if args.require_teacher_free_battle and args.battle_model is None:
                 parser.error("--require-teacher-free-battle requires --battle-model")
             if args.require_teacher_free_battle and not args.allow_model_disagreement:
@@ -1944,6 +1975,14 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     ),
                 )
                 if args.objective_model is not None
+                else None
+            )
+            training_candidate_model = (
+                load_training_candidate_model(
+                    args.training_candidate_model,
+                    expected_sha256=args.training_candidate_model_sha256,
+                )
+                if args.training_candidate_model is not None
                 else None
             )
             correction_writer = None
@@ -2042,6 +2081,9 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     battle_start_offsets=diagnostic_offsets,
                     objective_model=objective_model,
                     objective_model_confidence_threshold=(args.objective_confidence_threshold),
+                    training_candidate_model=training_candidate_model,
+                    training_candidate_model_file_sha256=(args.training_candidate_model_sha256),
+                    execute_training_candidate_model=args.training_candidate_authority,
                 )
                 if correction_writer is not None:
                     qualified_public = qualified_report.public_dict()
@@ -2231,6 +2273,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
         RomValidationError,
         RuntimeIdentityError,
         ScheduleAttestationError,
+        TrainingCandidateModelError,
     ) as error:
         parser.error(
             _public_error_message(
@@ -2240,6 +2283,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     getattr(args, "rom", None),
                     getattr(args, "private_root", None),
                     getattr(args, "battle_corrections_root", None),
+                    getattr(args, "training_candidate_model", None),
                 ),
             )
         )

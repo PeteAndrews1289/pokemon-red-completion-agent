@@ -296,11 +296,21 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   [offline receipt](evidence/training-candidate-ranker-v1-offline-2026-08-08.json).
 - [x] Pass the separately preregistered shadow gate: 119,353 genuine choices at 99.9941% agreement,
   both choice kinds, 1,802 battles, 1,098 heals, all six at level 55, and zero faints.
-- [ ] Pass causal authority. V1 is preserved as rejected: its reserved root exhausted the training
+- [x] Pass causal authority. V1 is preserved as rejected: its reserved root exhausted the training
   healing budget after 15,449 controlled candidate decisions and ended at 51/32/32/31/31/31. The
   model had zero disagreements with the teacher before failure, so the required causal difference
-  was absent and portable integration remains closed. See the
-  [runtime rejection](evidence/training-candidate-ranker-v1-runtime-rejection-2026-08-08.json).
+  was absent. A same-root teacher control exposed the agreement-wrapper defect; the repaired,
+  unchanged model passed a fresh preregistered root with 119,668 controlled choices, 191 executed
+  disagreements, all six level 55, zero faints, and no fallback. See the
+  preserved [runtime rejection](evidence/training-candidate-ranker-v1-runtime-rejection-2026-08-08.json)
+  and the fresh [runtime qualification](evidence/training-candidate-ranker-v1-runtime-qualification-2026-08-08.json).
+- [x] Pass portable strategic authority. The model controlled 114,831 choices, executed 400 teacher
+  disagreements with no fallback, completed 1,803 development battles, defeated Blaine, and opened
+  Giovanni from fresh observation. This remains a captured-state, singleton-objective proof.
+- [x] Add exact-hash strategic-ranker injection and ownership accounting to the clean-power runner.
+  Both Blaine development passes receive the model; the report fails closed when requested
+  authority owns zero choices. ROM-free gates pass, but an uncounted clean-power rehearsal remains
+  required before the ten-root campaign can be frozen.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

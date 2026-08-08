@@ -28,7 +28,7 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | State-dependent training strategy | 99.9004% sealed validation versus 95.6615% for the shape-only baseline | One Red training curriculum; no cross-title result |
 | Isolated strategic authority | 119,668 controlled trainee/venue choices, 191 executed teacher disagreements, all six level 55, zero faints | Captured-state training lesson |
 | Portable strategic authority | 114,831 controlled choices, 400 executed disagreements, 1,803 development battles, no fallback; fresh observation opened Giovanni | Singleton objective dispatch and authored mechanics remain |
-| Repository gate | 2,024 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
+| Repository gate | 2,026 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
 
 ## Architecture in one minute
 
@@ -77,7 +77,7 @@ invariant testing, and the discipline to preserve a negative result rather than 
 - Why shadow agreement cannot substitute for causal authority, and why causal authority can still
   prove integration without proving feature value.
 - How the candidate scorer remains permutation-equivariant and excludes title-specific identity.
-- How an emulator-scale system is tested without redistributing the ROM: 2,024 ROM-free tests plus
+- How an emulator-scale system is tested without redistributing the ROM: 2,026 ROM-free tests plus
   private authenticated runtime receipts.
 
 ## Honest limitations
@@ -101,7 +101,7 @@ until one source-bound portable orchestrator can carry the full learned stack fr
 - Qualified a strategic trainee/venue controller inside a portable objective loop across 114,831
   live choices and 400 executed teacher disagreements, completing 1,803 development battles with no
   fallback before fresh emulator observation verified the Volcano Badge.
-- Hardened a 136k-line Python research system with 2,024 tests, Ruff, mypy, documentation/privacy
+- Hardened a 136k-line Python research system with 2,026 tests, Ruff, mypy, documentation/privacy
   gates, deterministic source registries, and 19 consecutive green GitHub Actions runs after
   diagnosing one derived-artifact CI regression.
 

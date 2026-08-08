@@ -1549,11 +1549,23 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "fallback_reasons": {},
         },
     ).passed
+    assert not replace(report, training_candidate_authority_required=True).passed
+    assert replace(
+        report,
+        training_candidate_authority_required=True,
+        training_candidate_policy_report={
+            "model_had_execution_authority": True,
+            "controlled_decisions": 1,
+            "teacher_fallback_on_model_disagreement": False,
+        },
+    ).passed
     assert public["schema"] == "qualified-play-v26"
     assert public["status"] == "ok"
     assert public["qualified_through"] == "enter_hall_of_fame"
     assert public["game_complete"] is True
     assert public["safe_stop_reason"] == "completion_verified"
+    assert public["training_candidate_policy"] is None
+    assert public["training_candidate_authority_required"] is False
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
         "bedroom_ready",
         "downstairs",

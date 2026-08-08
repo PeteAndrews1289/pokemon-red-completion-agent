@@ -62,6 +62,10 @@ This section supersedes the older starting-point and test-count notes below.
   heals and returned a fully healed 60/55/55/55/55/55 party. Fresh observation added the Volcano
   Badge and opened Giovanni. See the
   [portable receipt](docs/evidence/training-candidate-ranker-v1-portable-qualification-2026-08-08.json).
+- The clean-power `play` path now accepts the same exact-hash trainee/venue model in shadow or live
+  authority mode, threads it through both party-development passes, records controlled decisions
+  and fallback status, and fails completion when requested authority never executes. This interface
+  is ROM-free tested but has **not** yet passed an uncounted clean-power runtime rehearsal.
 
 The immediate dependency order is now: build the multi-root clean-start Red evaluation
 infrastructure → run the
@@ -69,11 +73,12 @@ bounded Crystal transfer benchmark → replace one small navigation/recovery mec
 collection only through the portable loop.
 
 Do **not** open the ten counted clean-start roots yet. The
-[readiness audit](docs/evidence/clean-start-learned-stack-readiness-audit-2026-08-08.json) found four
-blocking interfaces: early-game portable skills are incomplete, the clean-start runner still uses
-expected-objective authorization over a fixed sequence, it cannot inject the qualified strategic
-ranker, and its ordinary report is not one source/model/root-bound series envelope. Build those
-contracts and run one uncounted rehearsal before freezing the 8/10 campaign.
+[readiness audit](docs/evidence/clean-start-learned-stack-readiness-audit-2026-08-08.json) now has
+three blocking interfaces: early-game portable skills are incomplete, the clean-start runner still
+uses expected-objective authorization over a fixed sequence, and its ordinary report is not one
+source/model/root-bound series envelope. The strategic-ranker injection is implemented but still
+needs the same uncounted rehearsal. Build those contracts and run that rehearsal before freezing
+the 8/10 campaign.
 
 PR #8 is still intentionally draft and cleanly mergeable, but it now represents the whole
 accumulated project: 655 commits / 622 changed files versus `main`. Do not force-push or attempt a

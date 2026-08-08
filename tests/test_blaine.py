@@ -97,6 +97,14 @@ def test_blaine_training_calls_only_use_the_shared_balancer_signature() -> None:
         for keyword in call.keywords
         if keyword.arg not in allowed_keywords
     ] == []
+    for call in calls:
+        keywords = {keyword.arg: keyword.value for keyword in call.keywords}
+        assert ast.dump(keywords["candidate_decision_sink"]) == ast.dump(
+            ast.Name(id="training_candidate_decision_sink", ctx=ast.Load())
+        )
+        assert ast.dump(keywords["candidate_decision_authority"]) == ast.dump(
+            ast.Name(id="training_candidate_decision_authority", ctx=ast.Load())
+        )
 
 
 def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:

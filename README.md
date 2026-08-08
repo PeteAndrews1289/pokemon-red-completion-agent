@@ -276,6 +276,13 @@ Badge and opened Giovanni. The objective dispatch was a singleton and mechanics 
 See the
 [portable strategic qualification](docs/evidence/training-candidate-ranker-v1-portable-qualification-2026-08-08.json).
 
+The clean-power `play` command can now authenticate the same candidate-model file by exact SHA-256,
+observe it in shadow or grant it trainee/venue authority, thread it through both Cinnabar party-
+development passes, and publish controlled-decision and fallback accounting in the completion
+report. Completion fails if requested authority never executes. This closes the code-level
+injection gap; it is not yet runtime qualification from clean power, and the fixed objective
+sequence remains outside the learned denominator.
+
 That controller has now passed the final captured-state integration check inside the portable
 objective loop. Starting from the authenticated Secret Key terminal, the model controlled all
 **57,548** exposed training decisions across battle and overworld phases. The registered skill

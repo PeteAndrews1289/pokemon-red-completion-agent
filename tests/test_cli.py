@@ -1202,6 +1202,9 @@ def test_play_command_runs_the_continuous_watched_boundary(
         battle_start_offsets,
         objective_model,
         objective_model_confidence_threshold: float,
+        training_candidate_model,
+        training_candidate_model_file_sha256,
+        execute_training_candidate_model: bool,
     ) -> FakeReport:
         assert path == private_path
         assert watch is True
@@ -1218,6 +1221,9 @@ def test_play_command_runs_the_continuous_watched_boundary(
         assert battle_start_offsets is None
         assert objective_model is None
         assert objective_model_confidence_threshold == 0.0
+        assert training_candidate_model is None
+        assert training_candidate_model_file_sha256 is None
+        assert execute_training_candidate_model is False
         progress(
             QualifiedPlayProgress(
                 checkpoint_id="bedroom_ready",
@@ -1284,6 +1290,75 @@ def test_play_rejects_teacher_free_battle_without_a_model(
     assert error.value.code == 2
     assert "requires --battle-model" in captured.err
     assert str(private_path) not in captured.err
+
+
+def test_play_rejects_training_candidate_authority_without_a_model(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    private_path = Path("/private/Pokemon Red.gb")
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda argument: private_path)
+
+    with pytest.raises(SystemExit) as error:
+        cli.main(["play", "--training-candidate-authority"])
+
+    captured = capsys.readouterr()
+    assert error.value.code == 2
+    assert "requires an authenticated model" in captured.err
+    assert str(private_path) not in captured.err
+
+
+def test_play_wires_authenticated_training_candidate_authority(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    class FakeModel:
+        pass
+
+    class FakeReport:
+        verified_objectives = tuple(objective.id for objective in cli.COMPLETION_QUEST)
+        next_objective = None
+
+        def public_dict(self) -> dict[str, object]:
+            return {"status": "ok", "game_complete": True}
+
+    private_path = Path("/private/Pokemon Red.gb")
+    model_path = Path("/private/training-candidate.json")
+    model_digest = "a" * 64
+    model = FakeModel()
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda argument: private_path)
+
+    def fake_load(path: Path, *, expected_sha256: str) -> FakeModel:
+        assert path == model_path
+        assert expected_sha256 == model_digest
+        return model
+
+    monkeypatch.setattr(cli, "load_training_candidate_model", fake_load)
+
+    def fake_play(*args, **kwargs) -> FakeReport:
+        assert kwargs["training_candidate_model"] is model
+        assert kwargs["training_candidate_model_file_sha256"] == model_digest
+        assert kwargs["execute_training_candidate_model"] is True
+        return FakeReport()
+
+    monkeypatch.setattr(cli, "run_qualified_play", fake_play)
+
+    assert (
+        cli.main(
+            [
+                "play",
+                "--rom",
+                str(private_path),
+                "--training-candidate-model",
+                str(model_path),
+                "--training-candidate-model-sha256",
+                model_digest,
+                "--training-candidate-authority",
+            ]
+        )
+        == 0
+    )
+    assert json.loads(capsys.readouterr().out)["game_complete"] is True
 
 
 def test_play_command_finalizes_private_battle_corrections(
