@@ -113,6 +113,12 @@ the Volcano Badge, and independently opened Giovanni. The first rehearsal exceed
 is a one-objective captured-state receipt, not a contiguous thirteen-step receipt. See the
 [post-Mansion receipt](evidence/affordance-masked-post-mansion-blaine-2026-08-08.json).
 
+The next captured-state slice now qualifies `defeat_giovanni`: 1,409 actions / 156,305 frames,
+six exact Viridian Gym trainer lessons, two declared bypasses, TM27, both Earth Badge mirrors, and a
+fully healed six-member terminal. Fresh observation opens Victory Road. The adapter is a bounded
+one-objective receipt, not yet an uninterrupted fourteen-step sequence. See the
+[Giovanni receipt](evidence/affordance-masked-post-blaine-giovanni-2026-08-08.json).
+
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
 on a small Crystal battle-and-navigation benchmark under zero-shot, few-shot, and from-scratch

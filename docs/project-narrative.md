@@ -134,6 +134,15 @@ report—added `badge:volcano` and made Giovanni available. See the
 run began from an authenticated Secret Key capture, this is one-objective qualification rather than
 a thirteen-decision uninterrupted claim.
 
+Giovanni then became the next independently selectable lesson. From the authenticated post-Blaine
+terminal, the fixed skill used 1,409 actions / 156,305 frames: sell the obsolete TM46 capacity
+token, fly to Viridian, clear six source-pinned trainer lessons, deliberately bypass two trainers,
+recover, defeat Giovanni's exact party, receive TM27 and the Earth Badge, and return the six-member
+party fully healed. Fresh memory added `badge:earth` and exposed `cross_victory_road`; no expected
+route label, fallback, or replan was used. See the
+[Giovanni receipt](evidence/affordance-masked-post-blaine-giovanni-2026-08-08.json). This remains a
+captured-state one-objective qualification rather than an uninterrupted fourteen-dispatch claim.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

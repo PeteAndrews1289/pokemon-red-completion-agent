@@ -247,6 +247,15 @@ healed, and independently exposed `defeat_giovanni`. See the
 failed rehearsal remains uncounted; the successful receipt is a bounded one-objective qualification,
 not yet a contiguous thirteen-step run.
 
+The post-Blaine Giovanni adapter is now live-qualified from its authenticated capture. It used
+1,409 actions / 156,305 frames, cleared the six declared Viridian Gym trainer lessons, preserved
+the two intended bypasses until Giovanni settled the remaining events, defeated his exact party,
+collected TM27 plus both Earth Badge mirrors, returned all six members healed, and independently
+opened `cross_victory_road`. See the
+[Giovanni receipt](docs/evidence/affordance-masked-post-blaine-giovanni-2026-08-08.json). This is a
+bounded one-objective qualification; the next adapter starts from the authenticated Viridian Center
+terminal.
+
 ---
 
 ## 4. How to work here without burning hours

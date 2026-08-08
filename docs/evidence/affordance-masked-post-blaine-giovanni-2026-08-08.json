@@ -1,0 +1,412 @@
+{
+  "after": {
+    "available_objectives": [
+      "cross_victory_road"
+    ],
+    "completed_objectives": [
+      "begin_adventure",
+      "choose_starter",
+      "clear_rocket_hideout",
+      "defeat_blaine",
+      "defeat_brock",
+      "defeat_erika",
+      "defeat_giovanni",
+      "defeat_koga",
+      "defeat_misty",
+      "defeat_sabrina",
+      "defeat_surge",
+      "help_bill",
+      "liberate_silph",
+      "obtain_cut",
+      "obtain_secret_key",
+      "obtain_silph_scope",
+      "obtain_strength",
+      "obtain_surf",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_cinnabar",
+      "reach_fuchsia",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_saffron",
+      "reach_vermilion",
+      "receive_pokedex",
+      "rescue_fuji"
+    ],
+    "facts_added": [
+      "badge:earth"
+    ],
+    "location": "viridian_pokecenter",
+    "mode": "overworld"
+  },
+  "assistance": {
+    "branching_model_decisions": 0,
+    "candidate_set_mode": "dependency_legal_and_skill_affordance_masked",
+    "expected_route_label_provided": false,
+    "mechanic_execution": "teacher_authored_bounded_skill",
+    "model_decisions_executed": 1,
+    "objective_selection": "learned_ranker",
+    "singleton_dispatches": 1,
+    "teacher_fallbacks": 0
+  },
+  "before": {
+    "available_objectives": [
+      "defeat_giovanni"
+    ],
+    "completed_objectives": [
+      "begin_adventure",
+      "choose_starter",
+      "clear_rocket_hideout",
+      "defeat_blaine",
+      "defeat_brock",
+      "defeat_erika",
+      "defeat_koga",
+      "defeat_misty",
+      "defeat_sabrina",
+      "defeat_surge",
+      "help_bill",
+      "liberate_silph",
+      "obtain_cut",
+      "obtain_secret_key",
+      "obtain_silph_scope",
+      "obtain_strength",
+      "obtain_surf",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_cinnabar",
+      "reach_fuchsia",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_saffron",
+      "reach_vermilion",
+      "receive_pokedex",
+      "rescue_fuji"
+    ],
+    "location": "cinnabar_pokecenter",
+    "mode": "overworld"
+  },
+  "capture": {
+    "checkpoint_id": "portable_loop_defeat_blaine_terminal",
+    "checkpoints_completed": 280,
+    "state_sha256": "e6229aafebf0bd18a3be30275cc740ffa6a430edf30755481a3d98b71c0e0ab4"
+  },
+  "claim": "An affordance-masked learned ranker selected executable objectives without expected labels; registered fixed skills executed them; fresh emulator observations verified every declared objective and side effect.",
+  "decisions_and_executions": [
+    {
+      "action": null,
+      "dependency_legal_objectives": [
+        "defeat_giovanni"
+      ],
+      "excluded_objectives": [],
+      "executable_objectives": [
+        "defeat_giovanni"
+      ],
+      "facts_added": [
+        "badge:earth"
+      ],
+      "kind": "skill_completed",
+      "objective_id": "defeat_giovanni",
+      "reason": "Executed a registered bounded objective skill and independently verified it.",
+      "skill_actions_executed": 1409,
+      "skill_evidence": {
+        "actions_executed": 1409,
+        "controller_released": true,
+        "frames_executed": 156305,
+        "giovanni": {
+          "identity": [
+            229,
+            229,
+            3
+          ],
+          "move_slots": [
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "party": [
+            [
+              18,
+              45
+            ],
+            [
+              118,
+              42
+            ],
+            [
+              16,
+              44
+            ],
+            [
+              7,
+              45
+            ],
+            [
+              1,
+              50
+            ]
+          ]
+        },
+        "gym": {
+          "required_battles": [
+            {
+              "identity": [
+                224,
+                224,
+                8
+              ],
+              "label": "hiker_set_8",
+              "move_slots": [
+                2,
+                2,
+                2,
+                2
+              ],
+              "party": [
+                [
+                  41,
+                  38
+                ],
+                [
+                  106,
+                  38
+                ],
+                [
+                  41,
+                  38
+                ]
+              ]
+            },
+            {
+              "identity": [
+                224,
+                224,
+                6
+              ],
+              "label": "blackbelt_set_6",
+              "move_slots": [
+                2,
+                2,
+                2
+              ],
+              "party": [
+                [
+                  106,
+                  40
+                ],
+                [
+                  41,
+                  40
+                ]
+              ]
+            },
+            {
+              "identity": [
+                231,
+                231,
+                9
+              ],
+              "label": "cooltrainer_set_9",
+              "move_slots": [
+                3,
+                3
+              ],
+              "party": [
+                [
+                  97,
+                  39
+                ],
+                [
+                  118,
+                  39
+                ]
+              ]
+            },
+            {
+              "identity": [
+                222,
+                222,
+                3
+              ],
+              "label": "tamer_set_3",
+              "move_slots": [
+                3
+              ],
+              "party": [
+                [
+                  18,
+                  43
+                ]
+              ]
+            },
+            {
+              "identity": [
+                231,
+                231,
+                10
+              ],
+              "label": "cooltrainer_set_10",
+              "move_slots": [
+                3
+              ],
+              "party": [
+                [
+                  18,
+                  43
+                ]
+              ]
+            },
+            {
+              "identity": [
+                231,
+                231,
+                1
+              ],
+              "label": "cooltrainer_set_1",
+              "move_slots": [
+                3,
+                3
+              ],
+              "party": [
+                [
+                  167,
+                  39
+                ],
+                [
+                  7,
+                  39
+                ]
+              ]
+            }
+          ],
+          "trainers_after": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "trainers_before": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "trainers_before_giovanni": [
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            false,
+            true
+          ]
+        },
+        "inventory": {
+          "money": [
+            42849,
+            57704
+          ],
+          "tm27": 1,
+          "tm46_sold": true
+        },
+        "objectives": [
+          "defeat_giovanni"
+        ],
+        "rewards": {
+          "earth_badge": true,
+          "earth_badge_mirror": true,
+          "giovanni_event": true,
+          "route22_rival_visible": true,
+          "route22_rival_wants_battle": true,
+          "tm27": 1,
+          "tm27_event": true
+        },
+        "status": "ok",
+        "terminal": {
+          "map": 41,
+          "party_hp": [
+            196,
+            139,
+            118,
+            272,
+            167,
+            151
+          ],
+          "party_max_hp": [
+            196,
+            139,
+            118,
+            272,
+            167,
+            151
+          ],
+          "party_status": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "position": [
+            3,
+            3
+          ]
+        }
+      },
+      "skill_frames_executed": 156305,
+      "specialist": "battle"
+    }
+  ],
+  "limitations": [
+    "captured_state_diagnostic",
+    "bounded_model_decision_sequence",
+    "singleton_dispatches_do_not_measure_ranking_quality",
+    "fixed_teacher_authored_mechanic_skills",
+    "not_a_clean_start_evaluation",
+    "not_end_to_end_learned_gameplay"
+  ],
+  "loop": {
+    "actions_executed": 1409,
+    "decisions": 1,
+    "objectives_completed": 1,
+    "replans": 0,
+    "schema": "pokemon-portable-player-loop-v2"
+  },
+  "policy": {
+    "authorized_decisions": 0,
+    "branching_decisions": 0,
+    "completed_objectives": 1,
+    "decisions": 1,
+    "mean_branching_confidence": 0.0,
+    "mean_candidate_count": 1.0,
+    "mean_confidence": 1.0,
+    "minimum_branching_confidence": 0.0,
+    "minimum_confidence": 1.0,
+    "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+    "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "route_dispatch_mode": "model_selected_specialists",
+    "schema": "pokemon-semantic-objective-live-policy-v1",
+    "selected_decisions": 1,
+    "singleton_decisions": 1,
+    "teacher_fallbacks": 0
+  },
+  "schema": "pokemon-model-selected-objective-execution-v3",
+  "source": {
+    "git_commit": "a6e1cff5f1de72724dcf0f5ff3b618900b42fb63",
+    "worktree_dirty": false
+  },
+  "status": "ok"
+}

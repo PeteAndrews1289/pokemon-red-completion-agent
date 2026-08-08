@@ -44,6 +44,13 @@ TM38, and return healed. Fresh observation independently exposed Giovanni as the
 This is a bounded one-objective qualification, not yet a contiguous thirteen-decision claim. See
 the [post-Mansion Blaine receipt](docs/evidence/affordance-masked-post-mansion-blaine-2026-08-08.json).
 
+The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
+selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
+declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,
+defeat Giovanni's exact party, collect TM27 and the Earth Badge, and return the full team healed.
+Fresh observation opened Victory Road. See the
+[post-Blaine Giovanni receipt](docs/evidence/affordance-masked-post-blaine-giovanni-2026-08-08.json).
+
 - [Current technical handoff](HANDOFF.md)
 - [Dependency-ordered roadmap](docs/roadmap.md)
 - [Evidence-first project narrative](docs/project-narrative.md)

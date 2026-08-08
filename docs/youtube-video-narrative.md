@@ -136,6 +136,10 @@ battles; 885 healing trips; final-form levels 60/55/55/55/55/55.** Finish on TM3
 Badge, a fully healed party, and Giovanni appearing as the next independently observed objective.
 Label this footage clearly as a post-Mansion captured-state qualification, not a continuous
 thirteen-dispatch run.
+Follow it with the short contrast: Giovanni takes only **1,409 actions / 156,305 frames** after the
+31.9-million-frame training lesson. Show six required Gym trainers, two bypasses, the exact leader
+party, TM27, Earth Badge, full-team healing, and Victory Road appearing from fresh observation. The
+contrast makes the real bottleneck visible: broad team development, not high-level dispatch.
 
 ### Act VII: the Crystal test — 10:10–11:15
 
