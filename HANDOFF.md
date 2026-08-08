@@ -301,6 +301,10 @@ the audit rejects state overlap and validation-only classes.
 `training_control_model.py` now supplies the class-balanced MLP, phase-masked inference, aggregate
 metrics, and whole-lineage candidate fit. Its public summary is always non-promotable until later
 runtime gates; only synthetic separability and integrity behavior are currently tested.
+For distinct deterministic roots, `replay_training.py` accepts a positive `--seed-wait-frames` only
+when paired with `--out-root-state`; it advances the emulator, saves the exact resulting private
+state, and hashes that state into v2 provenance. Never call two copies of the same input state
+independent lineages without creating and retaining distinct roots this way.
 
 **Next:** collect at least three v2 complete decision lineages, split by root lineage rather than by
 row, train and shadow-evaluate the first candidate, then replace the 469,232-action skill's teacher

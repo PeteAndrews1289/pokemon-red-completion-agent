@@ -178,6 +178,9 @@ dataset audit rejects leakage. Future counted lineages must use v2.
 The class-balanced, phase-masked candidate fitter is implemented in `training_control_model.py`.
 It has only synthetic tests; do not report a real model, accuracy, or promotion until v2 lineages,
 shadow execution, and model-controlled execution pass.
+Create distinct v2 roots with `--seed-wait-frames N --out-root-state <private>.state`; the saved
+post-wait state digest, not the shared parent filename, is the lineage identity used by leakage
+checks. Retain every root state beside its raw private stream.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

@@ -158,6 +158,9 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
 - [x] Add a v2 integrity loader and partition audit that bind source commit, dirty flag, root-state
   digest, and lineage partition; reject altered files, dirty successful sources, terminal drift,
   state overlap across train/validation, and validation classes absent from training.
+- [x] Add bounded pre-collection frame perturbation that saves the exact resulting private state,
+  making deterministic encounter lineages genuinely distinct and reproducible rather than merely
+  renaming duplicate runs.
 - [ ] Train a candidate with lineage-held-out validation; require every validation class to exist
   in training and keep the sealed test partition closed.
   The class-balanced MLP, phase-masked inference, metrics, and fail-closed candidate fitter are

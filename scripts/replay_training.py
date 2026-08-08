@@ -68,14 +68,29 @@ def main(argv: list[str] | None = None) -> int:
         default="unassigned",
         help="whole-lineage data partition",
     )
+    parser.add_argument(
+        "--seed-wait-frames",
+        type=int,
+        default=0,
+        help="advance a bounded number of frames before saving a distinct collection root",
+    )
+    parser.add_argument(
+        "--out-root-state",
+        type=Path,
+        default=None,
+        help="private state created after --seed-wait-frames for exact lineage replay",
+    )
     args = parser.parse_args(argv)
     if args.out_decisions is not None and not args.lineage_id:
         parser.error("--lineage-id is required with --out-decisions")
-    provenance = (
-        _collection_provenance(args.state, args.lineage_id, args.partition)
-        if args.out_decisions is not None
-        else None
-    )
+    if args.seed_wait_frames < 0:
+        parser.error("--seed-wait-frames must be non-negative")
+    if args.seed_wait_frames and args.out_root_state is None:
+        parser.error("--out-root-state is required with --seed-wait-frames")
+    if args.out_root_state is not None and not args.seed_wait_frames:
+        parser.error("--out-root-state requires a positive --seed-wait-frames")
+    if args.out_root_state is not None and args.out_root_state.resolve() == args.state.resolve():
+        parser.error("--out-root-state must not overwrite the input state")
 
     emulator = PyBoyAdapter(resolve_rom_path(args.rom))
     emulator.start()
@@ -84,6 +99,21 @@ def main(argv: list[str] | None = None) -> int:
         reader = PokemonRedStateReader(emulator)
         actions = CountingExecutor(
             FrameSafeExecutor(emulator, DEFAULT_NEW_GAME_TIMING.controller_timing())
+        )
+        collection_state = args.state
+        if args.seed_wait_frames:
+            actions.execute(MacroAction(MacroActionKind.WAIT, args.seed_wait_frames))
+            assert args.out_root_state is not None
+            emulator.save_state(args.out_root_state)
+            collection_state = args.out_root_state
+            print(
+                f"saved distinct collection root after {args.seed_wait_frames} frames",
+                flush=True,
+            )
+        provenance = (
+            _collection_provenance(collection_state, args.lineage_id, args.partition)
+            if args.out_decisions is not None
+            else None
         )
         party_reader = PokemonRedPartyReader(emulator)
 
