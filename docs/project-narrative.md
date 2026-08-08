@@ -161,6 +161,17 @@ the next objective. See the [Lorelei](evidence/affordance-masked-post-victory-ro
 [Agatha](evidence/affordance-masked-post-bruno-agatha-2026-08-08.json), and
 [Lance](evidence/affordance-masked-post-agatha-lance-2026-08-08.json) receipts.
 
+The Champion boundary required one final ownership experiment. An attempted split stopped when the
+Champion event appeared, but the first observable terminal was already the Hall-of-Fame map. Red
+does not expose a stable state where the model can select a separate ceremony objective. The
+correct contract therefore makes `defeat_champion` the model dispatch and declares
+`game:hall_of_fame` as an automatic cartridge side effect. The source-bound rerun passed in 567
+actions / 45,216 frames against the exact six-member Champion party, consumed one X Accuracy, six
+X Specials, and three Full Restores, and ended with the 66/55/55/55/55/55 team in the Hall of Fame.
+See the [Champion receipt](evidence/affordance-masked-post-lance-champion-2026-08-08.json). The failed
+split remains uncounted. Every post-Celadon adapter is now individually qualified; uninterrupted
+twenty-dispatch integration remains the next proof.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

@@ -270,6 +270,18 @@ single-member chapter. The current private boundary is `portable-loop-post-lance
 Champion/Hall-of-Fame transition into honest graph authority if the live game exposes a stable
 post-victory boundary.
 
+That experiment is complete. The first rehearsal proved there is no stable post-victory
+Champion-room boundary: the Champion event and Hall-of-Fame map appeared together. The final skill
+therefore declares Hall of Fame as an automatic side effect of `defeat_champion`; it does not claim
+a second model decision. The source-bound rerun passed in 567 actions / 45,216 frames with the exact
+Champion party, one X Accuracy, six X Specials, three Full Restores, and the 66/55/55/55/55/55 team
+in the Hall of Fame. See the
+[Champion receipt](docs/evidence/affordance-masked-post-lance-champion-2026-08-08.json).
+
+All post-Celadon adapters are now individually live-qualified on successive authenticated captures.
+**Next:** run `--max-decisions 20` from the original Celadon capture to prove the complete chain in
+one emulator process. Do not yet describe the captured-state chain as uninterrupted completion.
+
 ---
 
 ## 4. How to work here without burning hours

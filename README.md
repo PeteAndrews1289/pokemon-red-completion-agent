@@ -65,6 +65,14 @@ honestly labeled single-member lesson. Each fresh observation opened the next ro
 [Agatha](docs/evidence/affordance-masked-post-bruno-agatha-2026-08-08.json), and
 [Lance](docs/evidence/affordance-masked-post-agatha-lance-2026-08-08.json) receipts.
 
+The final captured-state dispatch now defeats the Champion in **567 actions / 45,216 frames** and
+reaches the Hall of Fame. Red exposes no stable state between the victory event and Hall-of-Fame
+map, so the skill declares `game:hall_of_fame` as a coupled cartridge side effect rather than
+inventing a second model decision. All post-Celadon objective adapters are now individually
+live-qualified along one authenticated lineage; a single uninterrupted twenty-dispatch replay is
+the next integration proof. See the
+[Champion receipt](docs/evidence/affordance-masked-post-lance-champion-2026-08-08.json).
+
 - [Current technical handoff](HANDOFF.md)
 - [Dependency-ordered roadmap](docs/roadmap.md)
 - [Evidence-first project narrative](docs/project-narrative.md)

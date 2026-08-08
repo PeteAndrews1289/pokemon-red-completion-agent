@@ -148,6 +148,10 @@ For the League montage, keep the role vectors on screen: Lorelei `[5,0,0,0,3,0]`
 the loop completed the room, but it did not invent team diversity that the teacher had not taught.
 Pause before the Champion to explain the final authority split—defeating the Champion and verifying
 the Hall of Fame are two graph objectives even though the game may chain them automatically.
+Show the failed split as the answer: the first post-victory observation is already the Hall of Fame.
+Then show the corrected ownership label—**one model dispatch, one declared automatic cartridge side
+effect**—beside **567 actions / 45,216 frames** and the final 66/55/55/55/55/55 party. Do not animate
+a fictional second model choice.
 
 ### Act VII: the Crystal test — 10:10–11:15
 

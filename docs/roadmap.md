@@ -130,6 +130,13 @@ two-member role evidence; Lance remains single-member. The current frontier is t
 authority split because the historical chapter also enters the Hall of Fame while the graph treats
 those as two objectives.
 
+The live split experiment found no stable boundary: the Champion event and Hall-of-Fame map become
+observable together. The final contract declares Hall of Fame as a coupled side effect of the
+single `defeat_champion` dispatch. Its rerun passed in 567 actions / 45,216 frames with the exact
+Champion party and a 66/55/55/55/55/55 terminal. All post-Celadon adapters are individually
+qualified. The immediate gate is now one uninterrupted twenty-dispatch replay from the original
+authenticated Celadon capture.
+
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
 on a small Crystal battle-and-navigation benchmark under zero-shot, few-shot, and from-scratch
