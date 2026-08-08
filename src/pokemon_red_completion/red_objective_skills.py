@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from pokemon_red_completion.cinnabar import run_cinnabar_chapter
 from pokemon_red_completion.dojo import run_dojo_chapter
 from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.erika import ErikaTiming, run_erika_chapter
@@ -484,4 +485,48 @@ class DefeatSabrinaObjectiveSkill:
                 "dojo": dojo.public_dict(),
                 "sabrina": sabrina.public_dict(),
             },
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class ReachCinnabarObjectiveSkill:
+    """Execute the qualified Fly acquisition and Route 21 chapter."""
+
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    objective_id: str = "reach_cinnabar"
+    specialist: Specialist = Specialist.NAVIGATION
+    expected_facts: frozenset[str] = frozenset({"location:cinnabar_island"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 10_000
+    max_frames: int = 5_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "saffron_pokecenter"
+            and "badge:marsh" in state.facts
+            and "move:surf_available" in state.facts
+            and "location:cinnabar_island" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the post-Sabrina Saffron Center boundary with Surf."
+                if executable
+                else "Requires Saffron Center after Sabrina with Surf available."
+            ),
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_cinnabar_chapter(
+            self.emulator,
+            self.reader,
+            self.executor,
+        )
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
         )

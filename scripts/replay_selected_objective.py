@@ -41,6 +41,7 @@ from pokemon_red_completion.red_objective_skills import (
     ObtainStrengthObjectiveSkill,
     ObtainSurfObjectiveSkill,
     PokemonTowerObjectiveSkill,
+    ReachCinnabarObjectiveSkill,
     ReachFuchsiaObjectiveSkill,
     ReachSaffronObjectiveSkill,
     RocketHideoutObjectiveSkill,
@@ -70,9 +71,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--max-decisions",
         type=int,
-        choices=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+        choices=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11),
         default=1,
-        help="execute one to ten decisions through the registered Red skills",
+        help="execute one to eleven decisions through the registered Red skills",
     )
     args = parser.parse_args(argv)
 
@@ -120,6 +121,7 @@ def main(argv: list[str] | None = None) -> int:
             ReachSaffronObjectiveSkill(emulator, reader, executor),
             LiberateSilphObjectiveSkill(emulator, reader, executor),
             DefeatSabrinaObjectiveSkill(emulator, reader, executor),
+            ReachCinnabarObjectiveSkill(emulator, reader, executor),
         ]
         loop = PortablePlayerLoop(
             graph=COMPLETION_QUEST,

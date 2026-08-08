@@ -13,6 +13,7 @@ from pokemon_red_completion.red_objective_skills import (
     ObtainStrengthObjectiveSkill,
     ObtainSurfObjectiveSkill,
     PokemonTowerObjectiveSkill,
+    ReachCinnabarObjectiveSkill,
     ReachFuchsiaObjectiveSkill,
     ReachSaffronObjectiveSkill,
     RocketHideoutObjectiveSkill,
@@ -127,6 +128,7 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     saffron = ReachSaffronObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     silph = LiberateSilphObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     sabrina = DefeatSabrinaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    cinnabar = ReachCinnabarObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     celadon = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"item:silph_scope"}),
@@ -167,6 +169,8 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     assert silph.availability(saffron_center).executable
     post_silph = saffron_center.with_facts("story:silph_co_liberated")
     assert sabrina.availability(post_silph).executable
+    post_sabrina = post_silph.with_facts("badge:marsh", "move:surf_available")
+    assert cinnabar.availability(post_sabrina).executable
 
 
 def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
@@ -222,6 +226,13 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
             4_000,
             700_000,
         ),
+        (
+            ReachCinnabarObjectiveSkill,
+            "run_cinnabar_chapter",
+            "reach_cinnabar",
+            2_500,
+            350_000,
+        ),
     ),
 )
 def test_red_fuchsia_followup_skills_match_graph_and_preserve_evidence(
@@ -232,7 +243,7 @@ def test_red_fuchsia_followup_skills_match_graph_and_preserve_evidence(
     actions: int,
     frames: int,
 ) -> None:
-    def fake_run(emulator, reader, executor, *, timing):
+    def fake_run(emulator, reader, executor, **kwargs):
         return _Report(actions_executed=actions, frames_executed=frames)
 
     monkeypatch.setattr(
