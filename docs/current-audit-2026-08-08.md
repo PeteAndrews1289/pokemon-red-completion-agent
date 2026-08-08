@@ -162,8 +162,9 @@ be done with a quiet, reviewed notification policy rather than during an experim
 
 ### The branch now needs integration, not more accumulated history
 
-Draft PR #8 is mergeable and its current checks are green, but it spans **655 commits, 622 changed
-files, 123,184 additions, and 3,828 deletions** relative to `main`. That is the accumulated project,
+Draft PR #8 is mergeable and its current checks are green, but it spans **more than 650 commits,
+more than 620 changed files, roughly 124,000 additions, and 4,000 deletions** relative to `main`.
+That is the accumulated project,
 not a focused review unit. Continuing indefinitely on the same branch raises recovery and review
 risk even when every commit is sound.
 

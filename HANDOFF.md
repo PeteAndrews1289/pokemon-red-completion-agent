@@ -84,7 +84,7 @@ needed runtime proof; that uncounted rehearsal now passes, but it did not launch
 prospective envelope. Build the remaining contracts before freezing the 8/10 campaign.
 
 PR #8 is still intentionally draft and cleanly mergeable, but it now represents the whole
-accumulated project: 655 commits / 622 changed files versus `main`. Do not force-push or attempt a
+accumulated project: more than 650 commits / 620 changed files versus `main`. Do not force-push or attempt a
 history rewrite. After Peter reviews the final audit, the safe integration path is a GitHub squash
 merge, followed immediately by a new short-lived branch and a full post-merge gate. No merge was
 performed during this handoff.
