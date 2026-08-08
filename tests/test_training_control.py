@@ -130,6 +130,35 @@ def test_battle_projection_removes_fight_when_runtime_affordance_is_unavailable(
     assert observation.candidate_actions == (TrainingControlAction.FLEE,)
 
 
+def test_projection_accepts_a_canonical_runtime_candidate_subset() -> None:
+    trainee = _member(1, level=30)
+    observation = project_training_control_observation(
+        PartyObservation((trainee,)),
+        BalancedTeamPolicy(minimum_level=55, required_size=1),
+        TeamTrainingProgress(),
+        phase=TrainingControlPhase.OVERWORLD,
+        trainee=trainee,
+        candidate_actions=(TrainingControlAction.SEEK,),
+    )
+
+    assert observation.candidate_actions == (TrainingControlAction.SEEK,)
+
+
+def test_projection_rejects_fight_at_an_unsafe_runtime_boundary() -> None:
+    trainee = _member(1, level=30)
+    with pytest.raises(TrainingControlError, match="fight cannot be a candidate"):
+        project_training_control_observation(
+            PartyObservation((trainee,)),
+            BalancedTeamPolicy(minimum_level=55, required_size=1),
+            TeamTrainingProgress(),
+            phase=TrainingControlPhase.BATTLE,
+            trainee=trainee,
+            enemy_level=30,
+            fight_allowed=False,
+            candidate_actions=(TrainingControlAction.FIGHT, TrainingControlAction.FLEE),
+        )
+
+
 def test_training_decision_rejects_an_action_illegal_for_its_phase() -> None:
     party = PartyObservation((_member(1, level=30),))
     observation = project_training_control_observation(

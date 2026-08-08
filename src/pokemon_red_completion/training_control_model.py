@@ -358,6 +358,12 @@ class TrainingControlShadowAudit:
     phase_counts: Counter[str] = field(default_factory=Counter)
     phase_agreements: Counter[str] = field(default_factory=Counter)
     confusion: Counter[str] = field(default_factory=Counter)
+    phase_confusion: Counter[str] = field(default_factory=Counter)
+    candidate_counts: Counter[str] = field(default_factory=Counter)
+    forced_decisions: int = 0
+    forced_agreements: int = 0
+    genuine_decisions: int = 0
+    genuine_agreements: int = 0
 
     def observe(self, decision: object) -> None:
         from pokemon_red_completion.training_control import TrainingControlDecision
@@ -378,6 +384,15 @@ class TrainingControlShadowAudit:
         self.phase_counts[phase] += 1
         self.phase_agreements[phase] += int(agreed)
         self.confusion[f"{actual} -> {predicted}"] += 1
+        self.phase_confusion[f"{phase}: {actual} -> {predicted}"] += 1
+        candidates = "/".join(action.value for action in decision.observation.candidate_actions)
+        self.candidate_counts[candidates] += 1
+        if len(decision.observation.candidate_actions) == 1:
+            self.forced_decisions += 1
+            self.forced_agreements += int(agreed)
+        else:
+            self.genuine_decisions += 1
+            self.genuine_agreements += int(agreed)
 
     def public_dict(self) -> dict[str, object]:
         balanced = (
@@ -402,6 +417,33 @@ class TrainingControlShadowAudit:
                 for phase, count in sorted(self.phase_counts.items())
             },
             "confusion": dict(sorted(self.confusion.items())),
+            "phase_confusion": dict(sorted(self.phase_confusion.items())),
+            "candidate_counts": dict(sorted(self.candidate_counts.items())),
+            "forced_decisions": self.forced_decisions,
+            "forced_accuracy": (
+                self.forced_agreements / self.forced_decisions if self.forced_decisions else 0.0
+            ),
+            "genuine_decisions": self.genuine_decisions,
+            "genuine_accuracy": (
+                self.genuine_agreements / self.genuine_decisions
+                if self.genuine_decisions
+                else 0.0
+            ),
+            "operational_errors": {
+                "unnecessary_heal": self.confusion["seek -> heal"],
+                "missed_required_heal": self.confusion["heal -> seek"]
+                + self.confusion["heal -> stop"],
+                "premature_stop": sum(
+                    count
+                    for key, count in self.confusion.items()
+                    if not key.startswith("stop ->") and key.endswith(" -> stop")
+                ),
+                "missed_stop": sum(
+                    count
+                    for key, count in self.confusion.items()
+                    if key.startswith("stop ->") and key != "stop -> stop"
+                ),
+            },
             "model_had_execution_authority": False,
             "promotion_eligible": False,
         }

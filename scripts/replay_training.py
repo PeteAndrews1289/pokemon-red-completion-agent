@@ -66,6 +66,11 @@ def main(argv: list[str] | None = None) -> int:
         help="grant the authenticated model fight/flee authority; fail closed on unsafe fights",
     )
     parser.add_argument(
+        "--overworld-control",
+        action="store_true",
+        help="grant the model causal seek/heal/stop authority; fail closed at referee boundaries",
+    )
+    parser.add_argument(
         "--lineage-id",
         default=None,
         help="stable root-lineage identity required when writing decisions",
@@ -124,8 +129,8 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("shadow mode requires --shadow-model, --shadow-model-sha256, and --out-shadow")
     if args.out_shadow is not None and args.out_decisions is None:
         parser.error("shadow mode requires --out-decisions and its lineage provenance")
-    if args.battle_control and args.shadow_model is None:
-        parser.error("--battle-control requires the authenticated model/output bundle")
+    if (args.battle_control or args.overworld_control) and args.shadow_model is None:
+        parser.error("control flags require the authenticated model/output bundle")
 
     shadow = None
     decision_authority = None
@@ -140,13 +145,18 @@ def main(argv: list[str] | None = None) -> int:
                 expected_sha256=args.shadow_model_sha256,
             )
         shadow = TrainingControlShadowAudit(model)
-        if args.battle_control:
+        if args.battle_control or args.overworld_control:
             from pokemon_red_completion.training_control import TrainingControlPhase
 
             def decision_authority(decision):
                 assert shadow is not None
                 shadow.observe(decision)
-                if decision.observation.phase is TrainingControlPhase.BATTLE:
+                controlled = (
+                    args.battle_control
+                    if decision.observation.phase is TrainingControlPhase.BATTLE
+                    else args.overworld_control
+                )
+                if controlled:
                     return model.predict(decision.observation)
                 return decision.action
 
@@ -217,6 +227,7 @@ def main(argv: list[str] | None = None) -> int:
             args.shadow_model_sha256,
             decision_authority,
             args.battle_control,
+            args.overworld_control,
         )
     finally:
         emulator.close()
@@ -285,6 +296,7 @@ def _replay_training(
     model_artifact_sha256: str | None,
     decision_authority,
     battle_control: bool,
+    overworld_control: bool,
 ) -> int:
     """Run the Mansion evolution and balancing blocks exactly as Blaine does."""
 
@@ -389,6 +401,7 @@ def _replay_training(
             provenance=provenance,
             model_artifact_sha256=model_artifact_sha256,
             battle_control=battle_control,
+            overworld_control=overworld_control,
         )
         print(f"\nFAILED: {type(error).__name__}: {error}")
         traceback.print_exc(limit=3)
@@ -412,6 +425,7 @@ def _replay_training(
         provenance=provenance,
         model_artifact_sha256=model_artifact_sha256,
         battle_control=battle_control,
+        overworld_control=overworld_control,
     )
     return 0
 
@@ -424,6 +438,7 @@ def _write_shadow(
     provenance: dict[str, object] | None,
     model_artifact_sha256: str | None,
     battle_control: bool,
+    overworld_control: bool,
     error: str | None = None,
 ) -> None:
     if path is None:
@@ -431,15 +446,35 @@ def _write_shadow(
     if shadow is None or provenance is None or model_artifact_sha256 is None:
         raise RuntimeError("shadow output lacks authenticated model or lineage provenance")
     payload = shadow.public_dict()
+    authority_phases = [
+        phase
+        for phase, enabled in (
+            ("battle", battle_control),
+            ("overworld", overworld_control),
+        )
+        if enabled
+    ]
+    controlled_decisions = sum(shadow.phase_counts[phase] for phase in authority_phases)
+    controlled_agreements = sum(shadow.phase_agreements[phase] for phase in authority_phases)
+    controlled_confusion = {
+        key: count
+        for key, count in sorted(shadow.phase_confusion.items())
+        if key.split(":", 1)[0] in authority_phases
+    }
     payload.update(
         {
             "status": status,
             "error": error,
             "provenance": provenance,
             "model_artifact_sha256": model_artifact_sha256,
-            "model_had_execution_authority": battle_control,
-            "authority_phases": ["battle"] if battle_control else [],
-            "teacher_fallback_on_model_disagreement": False if battle_control else None,
+            "model_had_execution_authority": bool(authority_phases),
+            "authority_phases": authority_phases,
+            "controlled_decisions": controlled_decisions,
+            "controlled_accuracy": (
+                controlled_agreements / controlled_decisions if controlled_decisions else None
+            ),
+            "controlled_confusion": controlled_confusion,
+            "teacher_fallback_on_model_disagreement": False if authority_phases else None,
         }
     )
     path.parent.mkdir(parents=True, exist_ok=True)

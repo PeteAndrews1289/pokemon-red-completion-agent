@@ -771,6 +771,7 @@ def run_red_team_balancing(
         trainee: PartyMemberObservation | None,
         enemy_level: int | None = None,
         fight_allowed: bool = True,
+        candidate_actions: tuple[TrainingControlAction, ...] | None = None,
     ) -> TrainingControlAction:
         """Publish supervision before the teacher executes the mechanic."""
 
@@ -790,6 +791,7 @@ def run_red_team_balancing(
             consecutive_flees=consecutive_flees,
             max_consecutive_flees=max_consecutive_flees,
             fight_allowed=fight_allowed,
+            candidate_actions=candidate_actions,
         )
         decision = TrainingControlDecision(decision_index, action, observation, reason)
         if decision_sink is not None:
@@ -807,6 +809,23 @@ def run_red_team_balancing(
             raise RuntimeError(
                 f"training-control referee rejected {selected.value} at unsafe boundary: {reason}"
             )
+
+    def require_overworld_action(
+        selected: TrainingControlAction,
+        required: TrainingControlAction,
+        reason: str,
+    ) -> None:
+        if selected is not required:
+            raise RuntimeError(
+                f"training-control referee rejected {selected.value} at {reason}; "
+                f"{required.value} was required"
+            )
+
+    overworld_choices = (
+        TrainingControlAction.SEEK,
+        TrainingControlAction.HEAL,
+        TrainingControlAction.STOP,
+    )
 
     # Never None. A venue is needed before any trainee is matched to one --
     # ``plan_team_training`` can ask to RESTORE_TEAM on the first iteration, and
@@ -883,13 +902,19 @@ def run_red_team_balancing(
             readiness = summarize_team_readiness(party, policy)
             if not readiness.passed:
                 raise RuntimeError(f"Team training stopped before readiness: {decision.reason}")
-            emit_decision(
+            selected = emit_decision(
                 TrainingControlAction.STOP,
                 decision.reason,
                 phase=TrainingControlPhase.OVERWORLD,
                 party=party,
                 progress=progress,
                 trainee=trainee,
+                candidate_actions=overworld_choices,
+            )
+            require_overworld_action(
+                selected,
+                TrainingControlAction.STOP,
+                "verified training readiness",
             )
             break
 
@@ -1118,7 +1143,7 @@ def run_red_team_balancing(
         if decision.directive is TeamTrainingDirective.RESTORE_TEAM or escort_unsafe:
             if healing_trips >= policy.max_healing_trips:
                 break
-            emit_decision(
+            selected = emit_decision(
                 TrainingControlAction.HEAL,
                 decision.reason if decision.directive is TeamTrainingDirective.RESTORE_TEAM
                 else "escort is unsafe",
@@ -1126,6 +1151,12 @@ def run_red_team_balancing(
                 party=party,
                 progress=progress,
                 trainee=trainee,
+                candidate_actions=overworld_choices,
+            )
+            require_overworld_action(
+                selected,
+                TrainingControlAction.HEAL,
+                "required recovery boundary",
             )
             restore_training_core_order(actions, reader, emulator, hideout_timing)
             current_venue.heal_and_return(actions, reader, emulator)
@@ -1133,13 +1164,19 @@ def run_red_team_balancing(
             continue
 
         if not current_venue.is_in_map(raw):
-            emit_decision(
+            selected = emit_decision(
                 TrainingControlAction.SEEK,
                 "travel to the selected training venue",
                 phase=TrainingControlPhase.OVERWORLD,
                 party=party,
                 progress=progress,
                 trainee=trainee,
+                candidate_actions=(TrainingControlAction.SEEK,),
+            )
+            require_overworld_action(
+                selected,
+                TrainingControlAction.SEEK,
+                "venue-travel boundary",
             )
             restore_training_core_order(actions, reader, emulator, hideout_timing)
             current_venue.heal_and_return(actions, reader, emulator)
@@ -1153,13 +1190,19 @@ def run_red_team_balancing(
         if trainee is None:
             break
         if trainee.slot != 1:
-            emit_decision(
+            selected = emit_decision(
                 TrainingControlAction.SEEK,
                 "prepare the selected trainee before seeking an encounter",
                 phase=TrainingControlPhase.OVERWORLD,
                 party=party,
                 progress=progress,
                 trainee=trainee,
+                candidate_actions=(TrainingControlAction.SEEK,),
+            )
+            require_overworld_action(
+                selected,
+                TrainingControlAction.SEEK,
+                "trainee-preparation boundary",
             )
             swap_field_party_slots(
                 actions,
@@ -1171,13 +1214,26 @@ def run_red_team_balancing(
                 hideout_timing=hideout_timing,
             )
             continue
-        emit_decision(
+        selected = emit_decision(
             TrainingControlAction.SEEK,
             "seek a bounded encounter in the selected venue",
             phase=TrainingControlPhase.OVERWORLD,
             party=party,
             progress=progress,
             trainee=trainee,
+            candidate_actions=overworld_choices,
+        )
+        if selected is TrainingControlAction.HEAL:
+            if healing_trips >= policy.max_healing_trips:
+                raise RuntimeError("training-control authority exhausted the healing budget")
+            restore_training_core_order(actions, reader, emulator, hideout_timing)
+            current_venue.heal_and_return(actions, reader, emulator)
+            healing_trips += 1
+            continue
+        require_overworld_action(
+            selected,
+            TrainingControlAction.SEEK,
+            "safe encounter-seeking boundary",
         )
         steps += current_venue.walk_to_grass(actions, reader, emulator)
 

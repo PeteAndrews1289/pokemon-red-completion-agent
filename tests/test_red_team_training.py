@@ -386,6 +386,93 @@ def test_a_finished_team_emits_stop_supervision_before_cleanup() -> None:
     assert decisions[0].observation.phase.value == "overworld"
 
 
+def test_overworld_authority_must_stop_at_verified_readiness() -> None:
+    memory = FakeMemory()
+    memory.set_party([(species, 60) for species in FINAL_FORM_ROSTER])
+
+    with pytest.raises(RuntimeError, match="verified training readiness"):
+        run(
+            memory,
+            FakeReader([state()]),
+            decision_authority=lambda _decision: TrainingControlAction.SEEK,
+        )
+
+
+def test_overworld_authority_cannot_skip_required_recovery() -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [(species, 54 if index == 1 else 55) for index, species in enumerate(FINAL_FORM_ROSTER)],
+        hp=1,
+        max_hp=80,
+    )
+
+    with pytest.raises(RuntimeError, match="required recovery boundary"):
+        run(
+            memory,
+            FakeReader([state()]),
+            decision_authority=lambda _decision: TrainingControlAction.SEEK,
+        )
+
+
+def test_model_selected_optional_heal_executes_and_pays_its_budget(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [(species, 54 if index == 1 else 55) for index, species in enumerate(FINAL_FORM_ROSTER)]
+    )
+    calls = {"heal": 0, "walk": 0}
+
+    def heal(*_args: object) -> None:
+        calls["heal"] += 1
+
+    def walk(*_args: object) -> int:
+        calls["walk"] += 1
+        return 1
+
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+    band = GrindingArea(
+        "test_area", 45, 55, rare_maximum_encounter_level=55, measured_samples=100
+    )
+    venue = TrainingVenue(
+        band=band,
+        map_id=TRAINING_MAP,
+        walk_to_grass=walk,
+        heal_and_return=heal,
+        is_in_center=lambda raw: raw.map_id == CENTER_MAP,
+        move_slot=lambda _raw: 1,
+    )
+    chose_optional_heal = False
+
+    def authority(decision: TrainingControlDecision) -> TrainingControlAction:
+        nonlocal chose_optional_heal
+        if (
+            not chose_optional_heal
+            and decision.reason == "seek a bounded encounter in the selected venue"
+        ):
+            chose_optional_heal = True
+            return TrainingControlAction.HEAL
+        return decision.action
+
+    with pytest.raises(RuntimeError, match="step budget exhausted"):
+        run(
+            memory,
+            FakeReader([state()]),
+            policy=BalancedTeamPolicy(
+                minimum_level=55,
+                maximum_level_spread=40,
+                required_size=6,
+                max_steps=1,
+                max_healing_trips=10,
+            ),
+            venues=[venue],
+            decision_authority=authority,
+        )
+
+    assert chose_optional_heal
+    assert calls == {"heal": 1, "walk": 1}
+
+
 def test_training_without_the_escort_fails_before_the_first_step() -> None:
     """Checked up front, not after twenty-five minutes of walking.
 

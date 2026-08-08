@@ -187,4 +187,14 @@ def test_shadow_audit_observes_without_model_authority() -> None:
     assert summary["agreements"] == 1
     assert summary["accuracy"] == 0.5
     assert summary["balanced_accuracy"] == 0.5
+    assert summary["forced_decisions"] == 0
+    assert summary["genuine_decisions"] == 2
+    assert summary["genuine_accuracy"] == 0.5
+    assert summary["candidate_counts"] == {"fight/flee": 1, "seek/heal/stop": 1}
+    assert summary["operational_errors"] == {
+        "unnecessary_heal": 0,
+        "missed_required_heal": 0,
+        "premature_stop": 0,
+        "missed_stop": 0,
+    }
     assert summary["model_had_execution_authority"] is False

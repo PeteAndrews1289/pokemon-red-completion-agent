@@ -171,6 +171,7 @@ def project_training_control_observation(
     consecutive_flees: int = 0,
     max_consecutive_flees: int = 1,
     fight_allowed: bool = True,
+    candidate_actions: tuple[TrainingControlAction, ...] | None = None,
 ) -> TrainingControlObservation:
     """Project a teacher boundary without retaining game-specific identity."""
 
@@ -223,19 +224,27 @@ def project_training_control_observation(
         _ratio(progress.healing_trips, max(1, policy.max_healing_trips)),
         _ratio(consecutive_flees, max_consecutive_flees),
     )
-    candidates = (
-        (
-            (TrainingControlAction.FIGHT, TrainingControlAction.FLEE)
-            if fight_allowed
-            else (TrainingControlAction.FLEE,)
+    candidates = candidate_actions
+    if candidates is None:
+        candidates = (
+            (
+                (TrainingControlAction.FIGHT, TrainingControlAction.FLEE)
+                if fight_allowed
+                else (TrainingControlAction.FLEE,)
+            )
+            if phase is TrainingControlPhase.BATTLE
+            else (
+                TrainingControlAction.SEEK,
+                TrainingControlAction.HEAL,
+                TrainingControlAction.STOP,
+            )
         )
-        if phase is TrainingControlPhase.BATTLE
-        else (
-            TrainingControlAction.SEEK,
-            TrainingControlAction.HEAL,
-            TrainingControlAction.STOP,
-        )
-    )
+    if (
+        phase is TrainingControlPhase.BATTLE
+        and not fight_allowed
+        and TrainingControlAction.FIGHT in candidates
+    ):
+        raise TrainingControlError("fight cannot be a candidate at an unsafe battle boundary")
     return TrainingControlObservation(phase, values, candidates)
 
 
