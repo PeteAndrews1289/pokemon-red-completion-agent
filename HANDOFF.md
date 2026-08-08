@@ -163,7 +163,9 @@ first real-state selection diagnostic—not live objective completion. The captu
 resumed evaluation needs an authenticated progress envelope because transient historical location
 facts are not recoverable from current cartridge memory alone. That envelope is now implemented:
 the capture tool binds the exact private state digest to its checkpoint and verified-objective
-prefix, and refuses a modified state. The resumed Red observer/dispatcher remains next. See the
+prefix, and refuses a modified state. The resumed Red observer now reconstructs the real Celadon
+state and its three legal objectives from that envelope plus live memory. The dispatcher remains
+next. See the
 [selection receipt](docs/evidence/model-selected-celadon-objective-2026-08-08.json).
 
 ---
