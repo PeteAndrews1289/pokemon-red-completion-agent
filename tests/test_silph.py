@@ -48,6 +48,7 @@ from pokemon_red_completion.silph import (
     _acquire_silph_x_special,
     _battle_healing_item,
     _battle_healing_item_target_fainted_before_consumption,
+    _battle_healing_item_target_hp,
     _battle_healing_item_verified_terminal_exit,
     _enter_silph_elevator,
     _enter_silph_from_city,
@@ -171,6 +172,7 @@ def test_silph_timing_is_positive_and_bounded() -> None:
 def test_battle_healing_uses_the_shared_long_settle_bound() -> None:
     source = getsource(_battle_healing_item)
     assert "for _ in range(BATTLE_ITEM_SETTLE_PULSES):" in source
+    assert "cursor == party_index" in source
 
 
 def test_battle_healing_accepts_verified_enemy_recoil_knockout() -> None:
@@ -227,6 +229,30 @@ def test_battle_healing_recognizes_unspent_active_lead_knockout() -> None:
         replace(raw, first_party_hp=1),
         7,
         7,
+    )
+
+
+def test_battle_healing_can_target_a_nonlead_party_member() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.LORELEIS_ROOM,
+        player_x=5,
+        player_y=3,
+        party_count=6,
+        battle_state=2,
+        active_party_index=4,
+        active_party_hp=0,
+        first_party_hp=202,
+        party_hp=(202, 130, 120, 250, 0, 140),
+    )
+
+    assert _battle_healing_item_target_hp(raw, 4) == 0
+    assert not _battle_healing_item_target_fainted_before_consumption(raw, 7, 7)
+    assert _battle_healing_item_target_fainted_before_consumption(
+        raw,
+        7,
+        7,
+        party_index=4,
     )
 
 

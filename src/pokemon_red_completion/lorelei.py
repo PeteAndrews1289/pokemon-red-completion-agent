@@ -20,12 +20,14 @@ from pokemon_red_completion.battle_actions import (
     recovery_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    BattleSwitchCapability,
     note_observed_trainer_battle_exit,
     run_adaptive_trainer_battle,
 )
@@ -36,10 +38,10 @@ from pokemon_red_completion.celadon import (
     _party_status,
 )
 from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
+from pokemon_red_completion.field_recovery import plan_party_recovery, use_field_recovery_item
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _select_bag_item,
-    _use_bag_item,
 )
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
@@ -50,6 +52,7 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.participation import summarize_party_participation
+from pokemon_red_completion.red_party import BLASTOISE_SPECIES_ID, JOLTEON_SPECIES_ID
 from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
     SilphChapterError,
@@ -95,6 +98,10 @@ INDIGO_TO_LORELEI = (
     "up",
 )
 LORELEI_APPROACH = ("right", "up", "up")
+LORELEI_JOLTEON_TARGETS = frozenset({0x78, 0x8B, 0x08})
+LORELEI_BLASTOISE_TARGETS = frozenset({0x48, 0x13})
+THUNDER_MOVE_ID = 0x57
+THUNDER_SHOCK_MOVE_ID = 0x54
 
 
 class EmulatorState(Protocol):
@@ -157,6 +164,7 @@ class LoreleiChapterReport:
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    team_switches: int
 
     @property
     def passed(self) -> bool:
@@ -170,9 +178,10 @@ class LoreleiChapterReport:
             and _event(self.final_raw, EventFlag.BEAT_LORELEI)
             and self.final_raw.map_id == MapId.BRUNOS_ROOM
             and party_core_intact(self.final_raw.party_species_ids)
-            and self.party_hp[0] >= LORELEI_SAFE_HP
-            and self.party_hp[1:] == self.party_max_hp[1:]
+            and self.party_hp == self.party_max_hp
             and all(status == 0 for status in self.party_status)
+            and _lorelei_team_lesson_satisfied(self.turns)
+            and self.team_switches == 2
             and self.controller_released
         )
 
@@ -202,6 +211,7 @@ class LoreleiChapterReport:
                 for item in self.turns
             ],
             "participation": participation.public_dict(),
+            "team_switches": self.team_switches,
             "recovery": {
                 "x_accuracy_used": self.x_accuracy_used,
                 "hyper_potions_used": self.hyper_potions_used,
@@ -273,25 +283,37 @@ def run_lorelei_chapter(
     class _AccuracyBoundary(BattleControlRequest):
         default_action = BattleAction.boost(BattleBoostStat.ACCURACY)
 
+    class _TeamSwitchBoundary(BattleControlRequest):
+        pass
+
     accuracy_used = 0
+    team_switches = 0
 
     def policy(raw: RawGameState) -> int:
-        hp = raw.first_party_hp or 0
-        status = raw.first_party_status or 0
+        species = raw.enemy_species_id or 0
+        anchor_phase_started = any(
+            turn.species in LORELEI_BLASTOISE_TARGETS for turn in turns
+        )
+        if species in LORELEI_JOLTEON_TARGETS and not anchor_phase_started:
+            target = _lorelei_matchup_switch_target(raw, JOLTEON_SPECIES_ID)
+            if target is not None:
+                raise _TeamSwitchBoundary(BattleAction.switch(target + 1))
+            if raw.active_party_species_id != JOLTEON_SPECIES_ID:
+                raise LoreleiChapterError("Lorelei lacks its planned Jolteon specialist.")
+        if species in LORELEI_BLASTOISE_TARGETS:
+            target = _lorelei_matchup_switch_target(raw, BLASTOISE_SPECIES_ID)
+            if target is not None:
+                raise _TeamSwitchBoundary(BattleAction.switch(target + 1))
+            if raw.active_party_species_id != BLASTOISE_SPECIES_ID:
+                raise LoreleiChapterError("Lorelei could not restore its protected anchor.")
         if accuracy_used == 0:
             raise _AccuracyBoundary
+        hp = raw.battler_hp or 0
+        status = raw.battler_status or 0
         if hp < LORELEI_SAFE_HP or status:
             raise _HealBoundary
-        species = raw.enemy_species_id or 0
-        pp = raw.first_party_pp or (0, 0, 0, 0)
-        if species != 0x08 and pp[0] > 0:
-            slot = 1
-        elif pp[1] > 0:
-            slot = 2
-        elif pp[3] > 0:
-            slot = 4
-        else:
-            slot = 3
+        pp = raw.battler_pp or (0, 0, 0, 0)
+        slot = _lorelei_move_slot(raw)
         turns.append(
             LoreleiTurn(
                 species,
@@ -319,6 +341,7 @@ def run_lorelei_chapter(
                 BattleRecoveryCapability.CURE_ANY_STATUS,
             }
         ),
+        switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
     )
     while reader.read().battle_state:
         try:
@@ -336,6 +359,28 @@ def run_lorelei_chapter(
                 label="Lorelei",
             )
         except BattleRuntimeError as error:
+            cause = error.__cause__
+            if isinstance(cause, _TeamSwitchBoundary):
+                party_slot = cause.action.party_slot
+                if party_slot is None:
+                    raise LoreleiChapterError(
+                        "Lorelei team switch lacked a party target."
+                    ) from error
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        party_slot - 1,
+                        label="Lorelei matchup-aware participation",
+                        wait_frames=DEFAULT_SILPH_TIMING.menu_frames,
+                    )
+                except ProtectedRecoveryError as switch_error:
+                    raise LoreleiChapterError(
+                        f"Lorelei matchup-aware switch failed: {switch_error}"
+                    ) from switch_error
+                team_switches += 1
+                continue
             if control_request_matches(error.__cause__, _AccuracyBoundary.default_action):
                 _battle_x_accuracy(reader, actions, emulator)
                 accuracy_used += 1
@@ -343,9 +388,9 @@ def run_lorelei_chapter(
             if not recovery_request_matches(error.__cause__, _HealBoundary):
                 raise LoreleiChapterError("Lorelei battle runtime failed.") from error
             raw = reader.read()
-            if (raw.first_party_status or 0) and (raw.first_party_hp or 0) >= 70:
+            if (raw.battler_status or 0) and (raw.battler_hp or 0) >= 70:
                 item = ItemId.FULL_HEAL
-            elif raw.first_party_status or 0:
+            elif raw.battler_status or 0:
                 item = ItemId.FULL_RESTORE
             else:
                 item = (
@@ -357,10 +402,11 @@ def run_lorelei_chapter(
                 inventory = _bag(emulator)
                 raise LoreleiChapterError(
                     "Lorelei exhausted the bounded recovery reserve: "
-                    f"hp={raw.first_party_hp}/{raw.first_party_max_hp}, "
-                    f"status={raw.first_party_status}, enemy="
+                    f"active={raw.active_party_index}, "
+                    f"hp={raw.battler_hp}/{raw.battler_max_hp}, "
+                    f"status={raw.battler_status}, enemy="
                     f"{(raw.enemy_species_id, raw.enemy_hp, raw.enemy_max_hp)!r}, "
-                    f"pp={raw.first_party_pp!r}, bag={inventory!r}."
+                    f"pp={raw.battler_pp!r}, bag={inventory!r}."
                 ) from error
             try:
                 terminal_exit = _battle_healing_item(
@@ -369,6 +415,7 @@ def run_lorelei_chapter(
                     emulator,
                     DEFAULT_SILPH_TIMING,
                     item,
+                    party_index=raw.active_party_index or 0,
                 )
             except SilphChapterError as healing_error:
                 raise LoreleiChapterError("Lorelei recovery failed.") from healing_error
@@ -378,22 +425,15 @@ def run_lorelei_chapter(
     for _ in range(4):
         _pulse(actions, MacroActionKind.CONFIRM)
     _settle_confirm(actions, reader, 40)
-    if _party_hp(emulator)[0] < _party_max_hp(emulator)[0] or _party_status(emulator)[0]:
-        try:
-            item = (
-                ItemId.FULL_RESTORE
-                if _party_hp(emulator)[0] < _party_max_hp(emulator)[0]
-                else ItemId.FULL_HEAL
-            )
-            _use_bag_item(
-                actions,
-                reader,
-                emulator,
-                DEFAULT_LAVENDER_TIMING,
-                item,
-            )
-        except Exception as error:
-            raise LoreleiChapterError("Post-Lorelei recovery failed.") from error
+    try:
+        for party_index, item in plan_party_recovery(
+            _party_hp(emulator),
+            _party_max_hp(emulator),
+            _party_status(emulator),
+        ):
+            use_field_recovery_item(actions, reader, emulator, party_index, item)
+    except Exception as error:
+        raise LoreleiChapterError("Post-Lorelei recovery failed.") from error
     defeated = reader.read()
     if not _event(defeated, EventFlag.BEAT_LORELEI):
         raise LoreleiChapterError("Lorelei event did not set after battle.")
@@ -415,6 +455,7 @@ def run_lorelei_chapter(
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,
         controller_released=not emulator.pressed_buttons,
+        team_switches=team_switches,
     )
     if not report.passed:
         raise LoreleiChapterError(f"Lorelei terminal evidence failed: {report!r}.")
@@ -525,3 +566,52 @@ def _turns_valid(turns: Iterable[LoreleiTurn]) -> bool:
         and item.lead_status == 0
         for item in items
     )
+
+
+def _lorelei_matchup_switch_target(raw: RawGameState, species_id: int) -> int | None:
+    """Resolve one living matchup role by observed species rather than slot."""
+    party_hp = raw.party_hp or ()
+    for index, species in enumerate(raw.party_species_ids or ()):
+        if (
+            species == species_id
+            and index < len(party_hp)
+            and party_hp[index] > 0
+            and index != raw.active_party_index
+        ):
+            return index
+    return None
+
+
+def _lorelei_team_lesson_satisfied(turns: Iterable[LoreleiTurn]) -> bool:
+    """Require the specialist and anchor to complete their declared matchups."""
+    items = tuple(turns)
+    reserve_targets = {
+        turn.species
+        for turn in items
+        if turn.active_party_index is not None and turn.active_party_index > 0
+    }
+    anchor_targets = {turn.species for turn in items if turn.active_party_index == 0}
+    return (
+        reserve_targets >= LORELEI_JOLTEON_TARGETS
+        and anchor_targets >= LORELEI_BLASTOISE_TARGETS
+    )
+
+
+def _lorelei_move_slot(raw: RawGameState) -> int:
+    """Use Jolteon's boosted Thunder, otherwise preserve the anchor policy."""
+    pp = raw.battler_pp or (0, 0, 0, 0)
+    moves = raw.battler_moves or (0, 0, 0, 0)
+    if raw.active_party_species_id == JOLTEON_SPECIES_ID:
+        for move_id in (THUNDER_MOVE_ID, THUNDER_SHOCK_MOVE_ID):
+            for index, (move, current_pp) in enumerate(zip(moves, pp, strict=True)):
+                if move == move_id and current_pp > 0:
+                    return index + 1
+        raise LoreleiChapterError("Lorelei's Jolteon specialist lacks an Electric attack.")
+    species = raw.enemy_species_id or 0
+    if species != 0x08 and pp[0] > 0:
+        return 1
+    if pp[1] > 0:
+        return 2
+    if pp[3] > 0:
+        return 4
+    return 3

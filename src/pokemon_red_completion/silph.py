@@ -1962,6 +1962,7 @@ def _battle_healing_item(
     timing: SilphTiming,
     item: ItemId,
     *,
+    party_index: int = 0,
     _retry: bool = False,
 ) -> bool:
     """Use one healing item and report whether the item turn ended the battle."""
@@ -1972,6 +1973,11 @@ def _battle_healing_item(
     menu = reader.read_battle_menu_state(raw)
     if raw.battle_state != 2 or menu.phase is not BattleMenuPhase.MAIN:
         raise SilphChapterError(f"{label} gate requires the trainer MAIN menu.")
+    party = raw.party_hp or _party_hp(emulator)
+    if not 0 <= party_index < len(party) or party[party_index] <= 0:
+        raise SilphChapterError(
+            f"{label} target {party_index + 1} is not a living party member."
+        )
     command = menu.selected_main_command
     if command == 0:
         _pulse(
@@ -2020,17 +2026,17 @@ def _battle_healing_item(
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.battle_item_frames)
     for _ in range(6):
         cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-        if cursor == 0:
+        if cursor == party_index:
             break
         _pulse(
             actions,
             MacroActionKind.MOVE,
             timing,
-            "up",
+            "down" if cursor < party_index else "up",
             timing.battle_item_menu_frames,
         )
     else:
-        raise SilphChapterError("Could not select the party lead.")
+        raise SilphChapterError(f"Could not select party member {party_index + 1}.")
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.battle_item_frames)
     for _ in range(BATTLE_ITEM_SETTLE_PULSES):
         current = reader.read()
@@ -2068,7 +2074,12 @@ def _battle_healing_item(
         return False
     current = reader.read()
     current_menu = reader.read_battle_menu_state(current)
-    if _battle_healing_item_target_fainted_before_consumption(current, before, after):
+    if _battle_healing_item_target_fainted_before_consumption(
+        current,
+        before,
+        after,
+        party_index=party_index,
+    ):
         # The schedule can put the enemy reply on the same narrow boundary as
         # the party-target confirmation.  No inventory was spent, so let the
         # caller perform the already-bounded forced-switch recovery instead of
@@ -2083,7 +2094,15 @@ def _battle_healing_item(
         and not _retry
         and current.battle_state == 2
         and current_menu.phase is BattleMenuPhase.MAIN
-        and 0 < (current.first_party_hp or 0) < (current.first_party_max_hp or 0)
+        and (
+            target_hp := _battle_healing_item_target_hp(current, party_index)
+        )
+        is not None
+        and (
+            target_max_hp := _battle_healing_item_target_max_hp(current, party_index)
+        )
+        is not None
+        and 0 < target_hp < target_max_hp
     ):
         # A long battle animation can occasionally return to MAIN without the
         # party-target confirmation registering. Retry the complete semantic
@@ -2094,12 +2113,14 @@ def _battle_healing_item(
             emulator,
             timing,
             item,
+            party_index=party_index,
             _retry=True,
         )
     raise SilphChapterError(
         f"{label} quantity did not decrement exactly once: "
         f"before={before}, after={after}, retry={_retry}, "
-        f"hp={current.first_party_hp}/{current.first_party_max_hp}, "
+        f"target={party_index + 1}, hp={_battle_healing_item_target_hp(current, party_index)}/"
+        f"{_battle_healing_item_target_max_hp(current, party_index)}, "
         f"phase={current_menu.phase.value}."
     )
 
@@ -2108,14 +2129,36 @@ def _battle_healing_item_target_fainted_before_consumption(
     raw: RawGameState,
     quantity_before: int,
     quantity_after: int,
+    *,
+    party_index: int = 0,
 ) -> bool:
-    """Recognize an unspent recovery turn that ended in an active-lead KO."""
+    """Recognize an unspent recovery turn that ended in the target's KO."""
 
     return (
         raw.battle_state == 2
-        and (raw.first_party_hp or 0) == 0
+        and _battle_healing_item_target_hp(raw, party_index) == 0
         and quantity_before == quantity_after
     )
+
+
+def _battle_healing_item_target_hp(raw: RawGameState, party_index: int) -> int | None:
+    if raw.party_hp is not None and party_index < len(raw.party_hp):
+        return raw.party_hp[party_index]
+    if party_index == 0:
+        return raw.first_party_hp
+    if raw.active_party_index == party_index:
+        return raw.battler_hp
+    return None
+
+
+def _battle_healing_item_target_max_hp(raw: RawGameState, party_index: int) -> int | None:
+    if raw.party_max_hp is not None and party_index < len(raw.party_max_hp):
+        return raw.party_max_hp[party_index]
+    if party_index == 0:
+        return raw.first_party_max_hp
+    if raw.active_party_index == party_index:
+        return raw.battler_max_hp
+    return None
 
 
 def _battle_healing_item_verified_terminal_exit(

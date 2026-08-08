@@ -100,6 +100,9 @@ POKEMON_RED_ROM=<path> python scripts/replay_training.py --state <scratch>/mansi
 POKEMON_RED_ROM=<path> python scripts/capture_checkpoint.py \
     --at "Bruno room ready" --out <scratch>/bruno.state
 POKEMON_RED_ROM=<path> python scripts/replay_bruno.py --state <scratch>/bruno.state
+POKEMON_RED_ROM=<path> python scripts/capture_checkpoint.py \
+    --at "Lorelei supplies ready" --out <scratch>/lorelei.state
+POKEMON_RED_ROM=<path> python scripts/replay_lorelei.py --state <scratch>/lorelei.state
 ```
 
 `--max-steps` shrinks the policy's step budget so a spinning loop fails in seconds instead of
