@@ -8,6 +8,7 @@ from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.red_objective_skills import (
     DefeatErikaObjectiveSkill,
     DefeatKogaObjectiveSkill,
+    DefeatSabrinaObjectiveSkill,
     LiberateSilphObjectiveSkill,
     ObtainStrengthObjectiveSkill,
     ObtainSurfObjectiveSkill,
@@ -125,6 +126,7 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     erika = DefeatErikaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     saffron = ReachSaffronObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     silph = LiberateSilphObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    sabrina = DefeatSabrinaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     celadon = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"item:silph_scope"}),
@@ -163,6 +165,8 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
         location="saffron_pokecenter",
     )
     assert silph.availability(saffron_center).executable
+    post_silph = saffron_center.with_facts("story:silph_co_liberated")
+    assert sabrina.availability(post_silph).executable
 
 
 def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
@@ -244,3 +248,39 @@ def test_red_fuchsia_followup_skills_match_graph_and_preserve_evidence(
     assert skill.expected_facts == objective.completion_facts
     assert result.actions_executed == actions
     assert result.frames_executed == frames
+
+
+def test_red_sabrina_skill_composes_dojo_curriculum_and_gym(monkeypatch) -> None:
+    calls: list[str] = []
+
+    @dataclass
+    class _PassedReport(_Report):
+        passed: bool = True
+
+    def fake_dojo(emulator, reader, executor, *, timing):
+        calls.append("dojo")
+        return _PassedReport(actions_executed=700, frames_executed=80_000)
+
+    def fake_sabrina(emulator, reader, executor, *, timing):
+        calls.append("sabrina")
+        return _PassedReport(actions_executed=900, frames_executed=120_000)
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_objective_skills.run_dojo_chapter",
+        fake_dojo,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_objective_skills.run_sabrina_chapter",
+        fake_sabrina,
+    )
+    skill = DefeatSabrinaObjectiveSkill(object(), object(), object())
+
+    result = skill.execute()
+
+    objective = COMPLETION_QUEST.objective("defeat_sabrina")
+    assert skill.specialist is objective.specialist
+    assert skill.expected_facts == objective.completion_facts
+    assert result.actions_executed == 1_600
+    assert result.frames_executed == 200_000
+    assert result.evidence["status"] == "ok"
+    assert calls == ["dojo", "sabrina"]

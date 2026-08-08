@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from pokemon_red_completion.dojo import run_dojo_chapter
 from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.erika import ErikaTiming, run_erika_chapter
 from pokemon_red_completion.executor import ChapterExecutor
@@ -16,6 +17,7 @@ from pokemon_red_completion.objective_skills import (
 )
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.quest import Specialist
+from pokemon_red_completion.sabrina import run_sabrina_chapter
 from pokemon_red_completion.safari import SafariTiming, run_safari_chapter
 from pokemon_red_completion.saffron import SaffronTiming, run_saffron_chapter
 from pokemon_red_completion.silph import SilphTiming, run_silph_chapter
@@ -426,4 +428,60 @@ class LiberateSilphObjectiveSkill:
             actions_executed=report.actions_executed,
             frames_executed=report.frames_executed,
             evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class DefeatSabrinaObjectiveSkill:
+    """Recruit the sixth team member, then execute the qualified Sabrina chapter."""
+
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    timing: SilphTiming = SilphTiming()
+    objective_id: str = "defeat_sabrina"
+    specialist: Specialist = Specialist.BATTLE
+    expected_facts: frozenset[str] = frozenset({"badge:marsh"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 15_000
+    max_frames: int = 8_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "saffron_pokecenter"
+            and "story:silph_co_liberated" in state.facts
+            and "badge:marsh" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the post-Silph Saffron Center boundary."
+                if executable
+                else "Requires Saffron Center after Silph Co. is liberated."
+            ),
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        dojo = run_dojo_chapter(
+            self.emulator,
+            self.reader,
+            self.executor,
+            timing=self.timing,
+        )
+        sabrina = run_sabrina_chapter(
+            self.emulator,
+            self.reader,
+            self.executor,
+            timing=self.timing,
+        )
+        return ObjectiveSkillExecution(
+            actions_executed=dojo.actions_executed + sabrina.actions_executed,
+            frames_executed=dojo.frames_executed + sabrina.frames_executed,
+            evidence={
+                "status": "ok" if dojo.passed and sabrina.passed else "failed",
+                "curriculum": "recruit_hitmonlee_then_defeat_sabrina",
+                "dojo": dojo.public_dict(),
+                "sabrina": sabrina.public_dict(),
+            },
         )

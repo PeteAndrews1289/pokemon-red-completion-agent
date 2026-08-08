@@ -48,12 +48,23 @@ class ObjectiveSkillAvailability:
 class ObjectiveSkill(Protocol):
     """A fixed, bounded mechanic executor selected by objective ID."""
 
-    objective_id: str
-    specialist: Specialist
-    expected_facts: frozenset[str]
-    additional_effect_facts: frozenset[str]
-    max_actions: int
-    max_frames: int
+    @property
+    def objective_id(self) -> str: ...
+
+    @property
+    def specialist(self) -> Specialist: ...
+
+    @property
+    def expected_facts(self) -> frozenset[str]: ...
+
+    @property
+    def additional_effect_facts(self) -> frozenset[str]: ...
+
+    @property
+    def max_actions(self) -> int: ...
+
+    @property
+    def max_frames(self) -> int: ...
 
     def availability(self, state: GameState) -> ObjectiveSkillAvailability: ...
 
