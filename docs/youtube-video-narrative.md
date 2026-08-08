@@ -299,8 +299,10 @@ Move the camera one decision earlier. Show six party members competing to become
 then three measured encounter bands competing to become the venue. Strip species, slot, move, area,
 map, and memory identities from the cards; retain only candidate-relative readiness, health,
 levels, attack reserve, and encounter safety. Shuffle the cards and require the same candidate to
-win. End the beat on the preregistered challenge: **beat the shape-only baseline on a sealed lineage,
-then make the selected trainee and venue change the emulator for real.**
+win. Then reveal the sealed result: **99.9004% on 7,030 genuine choices versus 95.6615% for the
+shape-only baseline**, with 99.7727% trainee and 100% venue accuracy. End the beat on the remaining
+causal challenge: make at least one non-teacher trainee or venue selection change the emulator for
+real, complete the lesson, and show that no fallback hid the disagreement.
 
 ### Act VII: the Crystal test — 10:10–11:15
 

@@ -14,11 +14,13 @@ def _write_json(path: Path, payload: object) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _provenance(lineage_id: str, state_sha256: str) -> dict[str, object]:
+def _provenance(
+    lineage_id: str, state_sha256: str, *, source_commit: str = "a" * 40
+) -> dict[str, object]:
     return {
         "lineage_id": lineage_id,
         "partition": "unassigned",
-        "source_commit": "a" * 40,
+        "source_commit": source_commit,
         "source_dirty": False,
         "state_sha256": state_sha256,
     }
@@ -88,7 +90,11 @@ def _run_gate(
 
     def write_runtime(stem: str, lineage_id: str, root: str, *, authority: bool) -> tuple[str, str]:
         replay = tmp_path / f"{stem}-replay.json"
-        provenance = _provenance(lineage_id, root)
+        provenance = _provenance(
+            lineage_id,
+            root,
+            source_commit=("b" * 40 if authority else "a" * 40),
+        )
         replay_sha = _write_json(
             replay,
             {

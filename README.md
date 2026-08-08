@@ -28,7 +28,7 @@ demonstrations and a referee; it is not the final autonomous player.
 | Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
 | Learned battle control | Model-controlled Red battle qualifications with fail-closed safety and no disagreement fallback | Scripted curriculum; cross-title battle evaluation is still pending |
 | Learned objective dispatch | One uninterrupted captured-state loop reached Hall of Fame through 20 model dispatches | Nineteen dispatches were singletons; mechanics were fixed skills |
-| Learned training control | 57,644 full-authority decisions, 1,801 battles, 1,046 heals, zero faints and all six members at level 55 | The candidate-set-only baseline also scores 100%; authority is proven, state-dependent strategy is not |
+| Learned training control | Safe-action authority passed; a separate trainee/venue ranker scored 99.9004% on 7,030 genuine held-out choices versus a 95.6615% shape baseline | Strategic ranker is offline-qualified; live shadow and causal authority remain gated |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |
 
@@ -235,6 +235,17 @@ state features drive the policy. The next dataset records candidate-relative tra
 choices—the first interface designed to make state-dependent strategy identifiable. See the
 [causal qualification](docs/evidence/training-control-affordance-v6-causal-2026-08-08.json) and its
 [frozen candidate-ranker plan](docs/evidence/training-candidate-ranker-v1-promotion-plan-2026-08-08.json).
+
+The strategic replacement has now passed its offline gate. Two complete training roots fixed the
+model configuration before the sealed validation root opened. On that untouched lineage, the
+shared identity-free scorer reached **99.9004% on 7,030 genuine multi-candidate decisions**, versus
+**95.6615%** for a baseline that sees only choice kind and candidate count. Trainee accuracy was
+**99.7727%** and venue accuracy was **100%**; all three lineages ended at level 55 across all six
+members with zero faints. This is the first current training result where state-relative features
+demonstrably beat choice shape. It remains offline evidence until the separately preregistered
+shadow and causal roots pass. See the
+[offline strategic-ranker receipt](docs/evidence/training-candidate-ranker-v1-offline-2026-08-08.json)
+and [runtime gates](docs/evidence/training-candidate-ranker-v1-runtime-promotion-plan-2026-08-08.json).
 
 That controller has now passed the final captured-state integration check inside the portable
 objective loop. Starting from the authenticated Secret Key terminal, the model controlled all

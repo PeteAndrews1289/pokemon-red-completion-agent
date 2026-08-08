@@ -34,6 +34,16 @@ may open only after selection, and a candidate must beat the choice-shape baseli
 points while reaching 90% overall and 85% per choice kind. This is the first current training
 interface where a perfect shape-only baseline causes rejection rather than promotion.
 
+That gate has now produced a materially different result. The two training roots were collected to
+all-55, zero-faint terminals, the bidirectional training-only selection froze a 16-unit shared
+scorer, and only then did the sealed validation root open. It retained 7,080 strategic transitions,
+7,030 of them genuine choices. The model scored **99.9004%** on those genuine choices while the
+shape-only baseline scored **95.6615%**, a **4.239-point state-dependent margin**. Trainee selection
+reached 99.7727% and venue selection 100%. The result authenticates the model, roots, streams,
+terminal outcomes, and split; it does not yet authenticate live authority. Shadow and causal roots
+remain separate, with causal promotion requiring at least one executed disagreement and no teacher
+fallback.
+
 Before moving on, v6 passed one final integration test. The portable objective loop loaded the
 authenticated post-Secret-Key state, selected its sole executable objective (`defeat_blaine`), and
 injected the same training controller into the bounded skill. The model controlled all 57,548

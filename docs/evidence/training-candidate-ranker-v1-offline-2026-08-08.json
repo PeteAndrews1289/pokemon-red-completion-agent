@@ -1,0 +1,103 @@
+{
+  "schema": "pokemon-training-candidate-offline-receipt-v1",
+  "status": "offline_candidate_eligible",
+  "collection_source_commit": "83c633a4610fd9ceeaf5f606232b99d30e2c8e26",
+  "promotion_plan_sha256": "7176a2e8685439f2e3936613709eb93e34331ecd229624fbb5a31c2a9db4b40a",
+  "runtime_promotion_plan_sha256": "82e1a4b94092ad60dd33b3f907206d7d6ba397299561d2367ea74a93daa925fd",
+  "training_only_selection_sha256": "47ee2a6226e893ecc30ca1a333ccf8d4d5a2559153b9c8221500723766277e45",
+  "candidate_model_summary_sha256": "4ac584d755394da7e4feda2924fd4c33d824ca3fad14a00835f00e90eab39385",
+  "candidate_model_file_sha256": "53104c999f0289f8a1dcef9816c34e6963963a047bf710a05544e383c328fdd3",
+  "candidate_model_canonical_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026",
+  "offline_gate_evaluation_sha256": "44fd149703bb7c6031e176e3c2329ea1e99f6f91d4f90f83e00cb2cde89a6115",
+  "lineages": [
+    {
+      "lineage_id": "training-candidate-v1-train-01",
+      "partition": "train",
+      "root_sha256": "7b6f6bb4dbbf8478b9bb6addfd0b86863b6dfd5ca198d7859cd32e1c03147af5",
+      "replay_sha256": "b30ee3af123b7fcb77b3453fdc0b2c89cf9c7fc1cc7f11987aa168f5d36ee796",
+      "audit_sha256": "8334b3a4161aaaadae8bddf04d010326ea317028ec1be2bb83df54433c417a4d",
+      "observed_decisions": 112211,
+      "retained_decisions": 6890,
+      "genuine_multi_candidate_decisions": 6854,
+      "battles": 1787,
+      "healing_trips": 1040,
+      "final_party_levels": [55, 55, 55, 55, 55, 55],
+      "final_fainted_count": 0
+    },
+    {
+      "lineage_id": "training-candidate-v1-train-02",
+      "partition": "train",
+      "root_sha256": "ab7bb41c3e220a8d094cf39cb8b2b75694195c2e272cfd62fb127b053fcd0965",
+      "replay_sha256": "cb9923c51cc47aae583e7daa46e52319150eafb67e3a474dbccefe41e50f62f5",
+      "audit_sha256": "7d3eda2ad604a5a01ac5c1ec5b97a9f0a93334a942628b75f5c360f0f5490e85",
+      "observed_decisions": 115849,
+      "retained_decisions": 6819,
+      "genuine_multi_candidate_decisions": 6779,
+      "battles": 1796,
+      "healing_trips": 1046,
+      "final_party_levels": [55, 55, 55, 55, 55, 55],
+      "final_fainted_count": 0
+    },
+    {
+      "lineage_id": "training-candidate-v1-validation-01",
+      "partition": "validation",
+      "root_sha256": "20de5cee4a644c4d339f3277bc78fc8cf9058fb87198f4e464d34f37c3d8d3cb",
+      "replay_sha256": "d5b5907f27b27eab276e2dbb3c5ae6055e1aae3a49b658b4c85121f27c261c36",
+      "audit_sha256": "7ec6fc788d1d9249cc047c34bd1f3d2216d5b603b358ee1865474956dd36eac9",
+      "observed_decisions": 119963,
+      "retained_decisions": 7080,
+      "genuine_multi_candidate_decisions": 7030,
+      "battles": 1795,
+      "healing_trips": 1113,
+      "final_party_levels": [55, 55, 55, 55, 55, 55],
+      "final_fainted_count": 0
+    }
+  ],
+  "model_selection": {
+    "validation_opened_during_selection": false,
+    "method": "bidirectional_whole_lineage_train_to_train_cross_validation",
+    "hidden_units": 16,
+    "epochs": 300,
+    "learning_rate": 0.01,
+    "l2": 0.0001,
+    "kind_balance_power": 1.0,
+    "seed": 20260808
+  },
+  "heldout_validation": {
+    "examples": 7080,
+    "genuine_multi_candidate_examples": 7030,
+    "accuracy": 0.9990112994350282,
+    "genuine_accuracy": 0.99900426742532,
+    "genuine_shape_only_baseline_accuracy": 0.9566145092460882,
+    "genuine_model_margin_over_shape_baseline": 0.04238975817923185,
+    "genuine_kind_accuracy": {
+      "trainee": 0.9977265345891523,
+      "venue": 1.0
+    },
+    "state_dependent_choice_demonstrated": true,
+    "identity_fields_present": false,
+    "state_overlap_count": 0
+  },
+  "offline_gate_checks_passed": {
+    "collection": 3,
+    "identity": 4,
+    "selection": 4,
+    "heldout_validation": 6
+  },
+  "claim_boundary": {
+    "supported": "one identity-free model learned state-dependent trainee and venue ranking on disjoint Pokemon Red captured-state lineages",
+    "not_yet_supported": [
+      "live trainee or venue authority",
+      "portable objective-loop integration",
+      "clean-start autonomy",
+      "cross-title transfer",
+      "living Pokedex completion"
+    ]
+  },
+  "offline_candidate_eligible": true,
+  "shadow_may_start": true,
+  "causal_control_eligible": false,
+  "cross_title_transfer_eligible": false,
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}

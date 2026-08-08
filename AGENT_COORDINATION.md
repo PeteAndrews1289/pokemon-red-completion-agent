@@ -3,10 +3,11 @@
 > **2026-08-08 active lane:** the teacher route is frozen except for genuine regressions. The
 > current work is the strategic trainee/venue ranker described in
 > [the preregistered promotion plan](docs/evidence/training-candidate-ranker-v1-promotion-plan-2026-08-08.json).
-> Training-control v6 has already passed causal and portable authority integration; its perfect
-> candidate-only baseline means further seek/fight/flee/heal/stop imitation is off the critical
-> path. Do not open the sealed candidate validation root before a training-only selection artifact
-> exists. The current local gate is 2,006 passed / 3 deselected.
+> Its training-only selection and sealed validation are complete: 99.9004% genuine held-out accuracy
+> versus a 95.6615% shape baseline. Training-control v6 has already passed causal and portable
+> authority integration; its perfect candidate-only baseline means further seek/fight/flee/heal/stop
+> imitation is off the critical path. The reserved shadow and causal roots must follow the separate
+> runtime plan and cannot be interchanged. The current local gate is 2,018 passed / 3 deselected.
 
 **New here? Read [HANDOFF.md](HANDOFF.md) first** — it is the complete orientation, including what
 is unproven and how this codebase repeatedly fools people. Then [MISSION.md](MISSION.md) for why the

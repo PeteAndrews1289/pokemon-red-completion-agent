@@ -97,14 +97,17 @@ def main() -> int:
         model_sha256=model_sha256,
         subject="causal control",
     )
-    shadow_source = _provenance(shadow, subject="shadow audit").get("source_commit")
-    control_source = _provenance(control, subject="control audit").get("source_commit")
-    if (
-        not isinstance(shadow_source, str)
-        or _GIT_COMMIT.fullmatch(shadow_source) is None
-        or shadow_source != control_source
+    runtime_sources = {
+        "shadow": _provenance(shadow, subject="shadow audit").get("source_commit"),
+        "causal_control": _provenance(control, subject="control audit").get(
+            "source_commit"
+        ),
+    }
+    if any(
+        not isinstance(source, str) or _GIT_COMMIT.fullmatch(source) is None
+        for source in runtime_sources.values()
     ):
-        parser.error("runtime lineages must use one exact committed source")
+        parser.error("runtime lineages must name exact committed sources")
 
     shadow_gates = _mapping(plan.get("shadow_gates"), subject="shadow gates")
     causal_gates = _mapping(plan.get("causal_gates"), subject="causal gates")
@@ -123,7 +126,7 @@ def main() -> int:
         "shadow_replay_sha256": args.shadow_replay[1],
         "control_audit_sha256": args.control[1],
         "control_replay_sha256": args.control_replay[1],
-        "runtime_source_commit": shadow_source,
+        "runtime_source_commits": runtime_sources,
         "shadow_checks": shadow_checks,
         "causal_checks": causal_checks,
         "shadow_eligible": shadow_eligible,

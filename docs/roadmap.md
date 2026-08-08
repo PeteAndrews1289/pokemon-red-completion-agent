@@ -267,9 +267,15 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   choice-shape baseline audit, a shared candidate-scoring MLP, training-only bidirectional selection,
   and sealed-validation fitting. The v1 curriculum and five historically disjoint roots are
   [preregistered](evidence/training-candidate-ranker-v1-promotion-plan-2026-08-08.json).
-- [ ] Collect both v1 training lineages, select without validation, open and score the sealed
-  validation lineage, then require a real held-out margin over the choice-shape baseline before any
-  shadow or causal authority.
+- [x] Collect both v1 training lineages, freeze selection without validation, and open the sealed
+  validation lineage once. The shared scorer reached 99.9004% on 7,030 genuine held-out choices,
+  versus 95.6615% for the choice-shape baseline, with 99.7727% trainee and 100% venue accuracy.
+  All collection, identity, selection, and offline gates passed; see the
+  [offline receipt](evidence/training-candidate-ranker-v1-offline-2026-08-08.json).
+- [ ] Pass the separately preregistered shadow and causal gates. The causal run must execute at
+  least one real model/teacher disagreement with no fallback while still finishing all six at level
+  55, zero faints, at most 1,900 battles, and at most 1,150 healing trips. See the
+  [runtime promotion plan](evidence/training-candidate-ranker-v1-runtime-promotion-plan-2026-08-08.json).
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

@@ -28,13 +28,23 @@ This section supersedes the older starting-point and test-count notes below.
   It records identity-free, variable-sized choice sets, collapses repeated identical polls into
   explicit state-transition records, authenticates terminal party/faint evidence, and selects
   hyperparameters only on genuine multi-candidate train-to-train accuracy.
-- The full local gate currently reports **2,006 passed, 3 deselected**, with registry, artifact,
-  documentation, Ruff, and mypy checks green. The collection registry was regenerated after the
-  strategic-ranker source change; do not manually edit its hashes.
+- That offline campaign is complete. The sealed validation lineage retained 7,030 genuine choices;
+  the frozen model scored 99.9004% versus the 95.6615% shape-only baseline, with 99.7727% trainee
+  and 100% venue accuracy. All roots, streams, terminal outcomes, split boundaries, and model bytes
+  authenticated. The public result is in
+  [the offline receipt](docs/evidence/training-candidate-ranker-v1-offline-2026-08-08.json).
+- Commit `d05dbb7` adds authenticated shadow/control loading, exact ephemeral candidate binding,
+  alternate trainee/venue execution, no-fallback auditing, and an offline runtime gate checker. Its
+  full local gate reports **2,018 passed, 3 deselected**, with registry, artifact, documentation,
+  Ruff, and mypy checks green. GitHub CI is also green. The collection registry was regenerated in
+  the same source commit; do not manually edit its hashes.
 
-The immediate dependency order is: collect both training roots → select using training only → open
-sealed validation once → require a real genuine-choice margin over the shape baseline → shadow on
-a fresh root → grant candidate selection authority on a separate causal root.
+The immediate dependency order is now: complete the reserved shadow root → require both choice
+kinds, at least 100 genuine decisions, 90% genuine accuracy, and 85% per kind → open the separate
+causal root → require at least one executed disagreement, no fallback, all six at level 55, zero
+faints, at most 1,900 battles, and at most 1,150 heals. The exact runtime gates were
+[preregistered](docs/evidence/training-candidate-ranker-v1-runtime-promotion-plan-2026-08-08.json)
+before either runtime root opened.
 
 ---
 
