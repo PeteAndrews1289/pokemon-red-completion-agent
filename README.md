@@ -90,6 +90,14 @@ versus train lineage 01. Two training roots now exist; a disjoint validation roo
 gate before fitting the first real candidate. See the
 [repaired motion-lineage receipt](docs/evidence/training-control-v2-train-02-motion-repair-2026-08-08.json).
 
+The first preregistered validation root remained honestly held out and failed after 17,751
+decisions. It had already completed 725 battles and was still gaining levels, but 33 consecutive
+safe exits tripped a 32-flee anti-loop bound. The failed root will not be rerun as validation. The
+repair keeps consecutive flees as a saturated model feature, preserves the early no-win venue
+check, and relies on the global step budget for later non-progress; a fresh validation root is now
+required. See the
+[failed-validation receipt](docs/evidence/training-control-v2-validation-01-failure-2026-08-08.json).
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

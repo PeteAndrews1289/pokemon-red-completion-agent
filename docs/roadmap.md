@@ -173,6 +173,9 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   novel diagnostic pairs are excluded. The repaired replay of that exact root then qualified with
   60,192 decisions, zero faints, an all-55 terminal, and 99.89% novel pairs versus train lineage 01.
   Two training roots are now ready; one disjoint validation root remains before fitting.
+  Validation root 01 was genuinely disjoint but failed after 725 progressing wins when 33 safe
+  exits crossed a 32-flee anti-loop threshold. It remains immutable and excluded. The repair
+  separates feature saturation from termination; validation root 02 must be fresh.
 - [ ] Train a candidate with lineage-held-out validation; require every validation class to exist
   in training and keep the sealed test partition closed.
   The class-balanced MLP, phase-masked inference, metrics, and fail-closed candidate fitter are

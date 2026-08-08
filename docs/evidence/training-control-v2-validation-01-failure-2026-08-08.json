@@ -1,0 +1,49 @@
+{
+  "schema": "pokemon-training-control-lineage-summary-v2",
+  "status": "failed",
+  "lineage_id": "training-control-v2-validation-01",
+  "partition": "validation",
+  "lineage_qualified": false,
+  "source": {
+    "git_commit": "234beea343a8ea5697ede896be337d8c7e770ef2",
+    "worktree_dirty": false
+  },
+  "private_artifacts": {
+    "decision_stream_sha256": "a900d463b2d1e7336efc0684547d5b734e3c3b3a5575ad55a60bf2c65a8556a2",
+    "root_state_sha256": "68bda2dd7bdcdf4a01fd259160a05393bf760ff0f3960e905d26054b0bb8131b",
+    "tracked": false
+  },
+  "root_derivation": {
+    "method": "two_reversible_down_and_back_cycles",
+    "same_map_position_battle_and_party_afterward": true,
+    "digest_distinct_from_parent_and_both_training_roots": true
+  },
+  "dataset": {
+    "decisions": 17751,
+    "unique_action_feature_pairs": 16932,
+    "duplicate_action_feature_pairs": 819,
+    "action_counts": {
+      "fight": 822,
+      "flee": 205,
+      "heal": 97,
+      "seek": 16627
+    },
+    "phase_counts": {
+      "battle": 1027,
+      "overworld": 16724
+    }
+  },
+  "failure": {
+    "completed_battles": 725,
+    "party_levels": [36, 37, 37, 55, 37, 36],
+    "consecutive_safe_exits": 33,
+    "observed_encounter_band": [12, 34],
+    "category": "progressing_safe_exit_streak_misclassified_as_deadlock",
+    "accepted_as_validation_data": false,
+    "root_will_not_be_rerun_as_validation": true
+  },
+  "repair": {
+    "description": "Retain the flee count as a saturated feature, use the early no-win venue check for true mismatches, and let the global step budget bound later non-progress.",
+    "requires_fresh_validation_root": true
+  }
+}

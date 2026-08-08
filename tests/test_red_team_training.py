@@ -584,8 +584,8 @@ def test_a_run_given_no_venue_at_all_is_refused_up_front() -> None:
         run(memory, FakeReader([state()]), venues=[])
 
 
-def test_the_venue_bound_is_far_below_the_flee_bound() -> None:
-    """Eight encounters is enough to see a mismatch; thirty-three is a lost run."""
+def test_the_venue_bound_is_far_below_the_feature_saturation_horizon() -> None:
+    """A true no-win venue mismatch must fail before the flee feature saturates."""
 
     assert VENUE_MISMATCH_FLEES < 32
 

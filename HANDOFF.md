@@ -318,6 +318,11 @@ The same root then passed at source `71205a8`: 60,192 decisions, 1,740 battles, 
 zero faints, and all level 55. It adds 59,303 novel unique pairs versus train lineage 01 (99.89%)
 and is the second qualified training root. See the
 [repaired receipt](docs/evidence/training-control-v2-train-02-motion-repair-2026-08-08.json).
+Validation root 01 failed immutably after 17,751 decisions and 725 completed battles: a legitimate
+33-safe-exit streak exceeded the 32-flee feature horizon even though levels were progressing. Do not
+rerun or count that root. The later anti-loop raise is removed; the early no-win venue mismatch and
+global step budget remain. See the
+[validation failure receipt](docs/evidence/training-control-v2-validation-01-failure-2026-08-08.json).
 
 Counted v2 train lineage 01 is qualified from a retained 17-frame root at source `4c885d8`:
 46,687 decisions, all five actions, 1,726 battles, 815 healing trips, zero faints, and all level 55.
@@ -326,7 +331,7 @@ its root-state SHA is `62f7862e6f7e15c6f7c14a4cbb7488d6ff946502809dde5e131517192
 It adds 45,831 novel unique action-feature pairs versus diagnostic lineage 01 (99.85% of its unique
 pairs). See the [sanitized receipt](docs/evidence/training-control-v2-train-01-2026-08-08.json).
 
-**Next:** collect a distinct validation root, split by root
+**Next:** freeze the repaired source and collect a fresh distinct validation root, split by root
 lineage rather than by row, train and shadow-evaluate the first candidate, then replace the
 469,232-action skill's teacher
 authority under the same safety envelope. Preserve the fixed skill as demonstrator and referee. Do

@@ -201,6 +201,12 @@ heals; zero faints; all 55.** Put **99.89% novel pairs versus training lineage 1
 honest distinction matters: this earns a second training lineage, not a validation score. The next
 card remains “validation lineage: empty” until a root that never influenced the repair completes.
 
+Do not cut around the first validation failure. After 725 real wins, the held-out route encounters
+33 consecutive matchups it safely refuses; an old 32-flee anti-loop threshold stops the run even
+though levels were progressing. Mark all 17,751 decisions **“failed validation—never rerun.”** The
+lesson is subtle: a useful saturated feature is not automatically a valid termination condition.
+Freeze that repair, then require an entirely fresh validation root before showing a model score.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

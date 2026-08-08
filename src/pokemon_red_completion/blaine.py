@@ -234,10 +234,9 @@ MANSION_ESCORT_ENEMY_SPECIES = frozenset({0x88})
 # terminal Selfdestruct is counted only after the zero-faint check; otherwise
 # the healthy escort flees so it does not widen the level spread unnecessarily.
 MANSION_VOLATILE_ENEMY_SPECIES = frozenset({0x37, 0x8F})
-# A healthy training route can occasionally draw several excluded encounters,
-# but it must never spend an unbounded amount of wall time fleeing without
-# earning experience.  This is deliberately local to the Red adapter: the
-# portable policy continues to reason in battles, steps, and healing trips.
+# A healthy training route can draw long streaks of excluded encounters. This
+# value is the horizon at which the portable consecutive-flee feature saturates;
+# the global step budget, not the saturated feature, bounds a non-progressing run.
 MANSION_MAX_CONSECUTIVE_FLEES = 32
 MANSION_LEAD_TRAINING_INTENT = BattleIntent(
     "train_party",

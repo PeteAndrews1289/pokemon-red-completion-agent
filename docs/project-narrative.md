@@ -242,6 +242,14 @@ action-feature pairs overlapped train lineage 01; 59,303 were new. That makes it
 training root, not validation evidence. One disjoint validation lineage still stands between these
 demonstrations and the first honest model score.
 
+The first held-out root did not cooperate with the story. It progressed through 725 battles and
+levels 36–55, then drew 33 consecutive matchups the safety policy correctly refused. A 32-flee
+anti-loop threshold called that streak a deadlock despite the hundreds of prior wins. The immutable
+17,751-decision stream remains a failed validation lineage and its root will not be rerun. The
+repair separates observation from termination: consecutive flees still saturate a portable model
+feature, the early no-win check still rejects a genuinely unsuitable venue, and the global step
+budget bounds later non-progress. A fresh root must supply validation after this repair is frozen.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal
