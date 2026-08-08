@@ -22,7 +22,7 @@ from pokemon_red_completion.collection_protocol import (
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import FrameSafeExecutor
 from pokemon_red_completion.learned_planner_policy import ModelObjectivePolicy
-from pokemon_red_completion.objective_skills import ObjectiveSkillRegistry
+from pokemon_red_completion.objective_skills import ObjectiveSkill, ObjectiveSkillRegistry
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.planner_model import load_objective_model_artifact
 from pokemon_red_completion.planner_semantics import ObjectiveFeatureProjector
@@ -36,6 +36,7 @@ from pokemon_red_completion.quest import quest_graph_payload
 from pokemon_red_completion.red_objective_skills import (
     DefeatErikaObjectiveSkill,
     DefeatKogaObjectiveSkill,
+    LiberateSilphObjectiveSkill,
     ObtainStrengthObjectiveSkill,
     ObtainSurfObjectiveSkill,
     PokemonTowerObjectiveSkill,
@@ -68,9 +69,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--max-decisions",
         type=int,
-        choices=(1, 2, 3, 4, 5, 6, 7, 8),
+        choices=(1, 2, 3, 4, 5, 6, 7, 8, 9),
         default=1,
-        help="execute one to eight decisions through the registered Red skills",
+        help="execute one to nine decisions through the registered Red skills",
     )
     args = parser.parse_args(argv)
 
@@ -107,7 +108,7 @@ def main(argv: list[str] | None = None) -> int:
             snapshot_provider=PokemonRedObservationEncoder.from_state_reader(reader),
         )
         executor = FrameSafeExecutor(emulator, DEFAULT_NEW_GAME_TIMING.controller_timing())
-        skills = (
+        skills: list[ObjectiveSkill] = [
             RocketHideoutObjectiveSkill(emulator, reader, executor),
             PokemonTowerObjectiveSkill(emulator, reader, executor),
             ReachFuchsiaObjectiveSkill(emulator, reader, executor),
@@ -116,7 +117,8 @@ def main(argv: list[str] | None = None) -> int:
             ObtainStrengthObjectiveSkill(emulator, reader, executor),
             DefeatErikaObjectiveSkill(emulator, reader, executor),
             ReachSaffronObjectiveSkill(emulator, reader, executor),
-        )
+            LiberateSilphObjectiveSkill(emulator, reader, executor),
+        ]
         loop = PortablePlayerLoop(
             graph=COMPLETION_QUEST,
             observer=observer,

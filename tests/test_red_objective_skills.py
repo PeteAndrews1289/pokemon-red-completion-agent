@@ -8,6 +8,7 @@ from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.red_objective_skills import (
     DefeatErikaObjectiveSkill,
     DefeatKogaObjectiveSkill,
+    LiberateSilphObjectiveSkill,
     ObtainStrengthObjectiveSkill,
     ObtainSurfObjectiveSkill,
     PokemonTowerObjectiveSkill,
@@ -123,6 +124,7 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     strength = ObtainStrengthObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     erika = DefeatErikaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     saffron = ReachSaffronObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    silph = LiberateSilphObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     celadon = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"item:silph_scope"}),
@@ -155,6 +157,12 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
         location="celadon_pokecenter",
     )
     assert saffron.availability(post_erika).executable
+    saffron_center = GameState(
+        GameMode.OVERWORLD,
+        facts=frozenset({"location:saffron_city"}),
+        location="saffron_pokecenter",
+    )
+    assert silph.availability(saffron_center).executable
 
 
 def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
@@ -202,6 +210,13 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
             "reach_saffron",
             1_000,
             150_000,
+        ),
+        (
+            LiberateSilphObjectiveSkill,
+            "run_silph_chapter",
+            "liberate_silph",
+            4_000,
+            700_000,
         ),
     ),
 )
