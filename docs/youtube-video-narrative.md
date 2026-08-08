@@ -140,6 +140,9 @@ Follow it with the short contrast: Giovanni takes only **1,409 actions / 156,305
 31.9-million-frame training lesson. Show six required Gym trainers, two bypasses, the exact leader
 party, TM27, Earth Badge, full-team healing, and Victory Road appearing from fresh observation. The
 contrast makes the real bottleneck visible: broad team development, not high-level dispatch.
+Then compress Victory Road into a navigation montage: Route 22 rival, seven badge gates, five
+boulder-switch proofs, the League shopping ledger, and the healed Indigo terminal. Overlay
+**3,857 actions / 453,733 frames** and end with Lorelei appearing from fresh observation.
 
 ### Act VII: the Crystal test — 10:10–11:15
 

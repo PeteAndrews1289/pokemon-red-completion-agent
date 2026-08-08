@@ -119,6 +119,11 @@ fully healed six-member terminal. Fresh observation opens Victory Road. The adap
 one-objective receipt, not yet an uninterrupted fourteen-step sequence. See the
 [Giovanni receipt](evidence/affordance-masked-post-blaine-giovanni-2026-08-08.json).
 
+Victory Road now passes from the authenticated Viridian terminal in 3,857 actions / 453,733
+frames, including the Route 22 rival, seven badge gates, all five boulder switches, exact League
+supplies, and a healed Indigo terminal. Fresh observation exposes Lorelei. See the
+[Victory Road receipt](evidence/affordance-masked-post-giovanni-victory-road-2026-08-08.json).
+
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
 on a small Crystal battle-and-navigation benchmark under zero-shot, few-shot, and from-scratch

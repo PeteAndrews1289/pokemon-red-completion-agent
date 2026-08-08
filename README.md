@@ -51,6 +51,11 @@ defeat Giovanni's exact party, collect TM27 and the Earth Badge, and return the 
 Fresh observation opened Victory Road. See the
 [post-Blaine Giovanni receipt](docs/evidence/affordance-masked-post-blaine-giovanni-2026-08-08.json).
 
+Victory Road is now qualified from the next authenticated terminal: **3,857 actions / 453,733
+frames**, the exact Route 22 rival party, seven badge gates, five Strength-switch invariants, exact
+League supply reserves, and a fully healed Indigo terminal. Fresh observation opened Lorelei. See
+the [Victory Road receipt](docs/evidence/affordance-masked-post-giovanni-victory-road-2026-08-08.json).
+
 - [Current technical handoff](HANDOFF.md)
 - [Dependency-ordered roadmap](docs/roadmap.md)
 - [Evidence-first project narrative](docs/project-narrative.md)

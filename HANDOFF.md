@@ -256,6 +256,12 @@ opened `cross_victory_road`. See the
 bounded one-objective qualification; the next adapter starts from the authenticated Viridian Center
 terminal.
 
+Victory Road is also live-qualified from that Viridian capture. It used 3,857 actions / 453,733
+frames, defeated the exact Route 22 rival party without a Hyper Potion, passed all seven badge
+gates, satisfied all five boulder-switch events, normalized the exact League reserves, and ended
+with the full party healed at Indigo. Fresh observation opened `defeat_lorelei`. See the
+[Victory Road receipt](docs/evidence/affordance-masked-post-giovanni-victory-road-2026-08-08.json).
+
 ---
 
 ## 4. How to work here without burning hours

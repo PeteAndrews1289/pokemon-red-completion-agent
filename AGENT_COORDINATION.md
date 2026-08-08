@@ -154,6 +154,9 @@ captured-state one-objective qualification, not a contiguous thirteen-step claim
 The next captured-state dispatch also qualifies Giovanni: 1,409 actions / 156,305 frames, six
 declared Gym lessons, two bypasses, TM27, Earth Badge, healed six-member terminal, and a fresh
 Victory Road frontier. It is not yet a contiguous fourteen-step claim.
+Victory Road is separately qualified in 3,857 actions / 453,733 frames with the Route 22 rival,
+seven badge gates, five boulder switches, exact League supplies, a healed Indigo terminal, and a
+fresh Lorelei frontier.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

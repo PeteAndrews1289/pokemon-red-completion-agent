@@ -143,6 +143,13 @@ route label, fallback, or replan was used. See the
 [Giovanni receipt](evidence/affordance-masked-post-blaine-giovanni-2026-08-08.json). This remains a
 captured-state one-objective qualification rather than an uninterrupted fourteen-dispatch claim.
 
+The next captured-state dispatch crossed Victory Road in 3,857 actions / 453,733 frames. It
+defeated the source-pinned Route 22 rival party without a Hyper Potion, passed all seven remaining
+badge checks, completed all five Strength-switch invariants, sold only declared obsolete inventory,
+assembled the exact League supply reserve, and returned the full party healed at Indigo. Fresh
+memory added `story:victory_road_cleared` and exposed Lorelei. See the
+[Victory Road receipt](evidence/affordance-masked-post-giovanni-victory-road-2026-08-08.json).
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal
