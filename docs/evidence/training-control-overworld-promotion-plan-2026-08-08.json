@@ -5,7 +5,19 @@
   "feature_schema_id": "pokemon.core.training.control.features.v2",
   "training_lineages": [
     "training-control-v5-train-01",
-    "training-control-v5-train-02"
+    "training-control-v5-train-03"
+  ],
+  "preregistration_amendments": [
+    {
+      "recorded_at": "2026-08-08T15:12:14Z",
+      "reason": "The train-02 teacher run failed closed after an active trainee fainted; its failed artifact is excluded before model selection.",
+      "validation_metrics_opened": false,
+      "excluded_lineage": "training-control-v5-train-02",
+      "excluded_root_sha256": "d3ca7fecee4f92bfdb22749a7f3ef3323eaaf0cf85a9444be962566219aa6afb",
+      "excluded_failed_artifact_sha256": "dc324977a819f4cc503cded7cf59f3b6a4dc6da4fe6798124ab46d12bfff1529",
+      "replacement_lineage": "training-control-v5-train-03",
+      "replacement_root_sha256": "e39d1f52e58a373033a103fb55b9544785d4e589549fa8494fff6b7114968336"
+    }
   ],
   "sealed_validation_lineage": "training-control-v5-validation-01",
   "sealed_validation_root_sha256": "ae564c793aa8c9f193dadea5440b75b85102ba74fdb9b2db397a335b4ac9b20d",
