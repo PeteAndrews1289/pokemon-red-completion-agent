@@ -155,6 +155,9 @@ Dependabot noise.
 1. **Establish a clean-start evaluation lane.** No captured starting state, teacher query, answer
    label, undeclared safety substitution, or restore. Score success rate across multiple declared
    roots instead of presenting one favorable completion.
+   The readiness audit found this lane is not yet safe to open: the clean-start path still uses
+   expected-objective authorization, lacks candidate-ranker injection, and has no source-bound
+   ten-root envelope. Build those interfaces and one uncounted rehearsal before freezing roots.
 2. **Run the Crystal microbenchmark.** Port one local navigation task, one battle task, and one
    training choice. Compare zero-shot, few-shot, and from-scratch performance. Treat breakage as an
    abstraction audit, not a demo failure to hide.

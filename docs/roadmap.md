@@ -29,6 +29,15 @@ Blaine objective completed with 400 disagreements. The dependency-ordered near-t
    and
 4. expand the living-Pokédex curriculum only through the portable loop.
 
+The clean-start readiness audit is now explicit: counted roots must **not** begin yet. The current
+clean-start runner still supplies expected objectives to a fixed sequence, does not inject the
+qualified trainee/venue model, and cannot bind the whole learned stack into one prospective series
+record. The historical teacher-free battle completion also used four safety fallbacks and does not
+meet today's strict zero-fallback contract. See the
+[readiness audit](evidence/clean-start-learned-stack-readiness-audit-2026-08-08.json). The correct
+next implementation is the clean-start portable orchestrator and source-bound run envelope—not ten
+expensive fixed-dispatch reruns.
+
 Historical curriculum priorities were:
 
 **A. Make the team participate.** The level floor is proven in a real clean-power budget. Lorelei,

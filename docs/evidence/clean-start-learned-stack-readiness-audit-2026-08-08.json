@@ -1,0 +1,76 @@
+{
+  "schema": "pokemon-clean-start-learned-stack-readiness-audit-v1",
+  "status": "not_ready_to_preregister_ten_counted_roots",
+  "recorded_on": "2026-08-08",
+  "current_evidence": {
+    "clean_power_teacher_completion": {
+      "checkpoints": 312,
+      "objectives": 36,
+      "champion_defeated": true,
+      "hall_of_fame_entered": true
+    },
+    "historical_teacher_free_battle_completion": {
+      "receipt": "teacher-free-battle-control-hall-of-fame-2026-08-05.json",
+      "teacher_free_typed_requests": 31,
+      "safety_fallbacks": 4,
+      "meets_current_zero_fallback_contract": false
+    },
+    "strict_battle_runtime": {
+      "teacher_queries_forbidden": true,
+      "teacher_fallbacks_forbidden": true,
+      "teacher_label_collection_forbidden": true,
+      "safety_fallbacks_forbidden": true,
+      "low_confidence_fallbacks_forbidden": true
+    },
+    "objective_runtime": {
+      "clean_start_runner_mode": "model_authorized_fixed_sequence",
+      "expected_objective_is_supplied_to_authorize": true,
+      "portable_observe_select_dispatch_loop_used_from_power_on": false
+    },
+    "strategic_training_runtime": {
+      "captured_state_portable_authority_qualified": true,
+      "clean_start_runner_accepts_authenticated_candidate_model": false
+    }
+  },
+  "blocking_interfaces": [
+    {
+      "id": "portable_early_game_skills",
+      "finding": "the portable objective registry begins at the midgame bounded skills and does not yet own power-on through the Celadon boundary",
+      "why_it_matters": "a clean-start portable loop cannot currently dispatch the whole quest graph"
+    },
+    {
+      "id": "expected_objective_authorization",
+      "finding": "the clean-start completion runner asks the objective model to authorize the fixed sequence rather than letting it select the next objective",
+      "why_it_matters": "ten successful runs would still not measure open objective dispatch"
+    },
+    {
+      "id": "strategic_model_injection",
+      "finding": "the qualified clean-start runner has no authenticated trainee/venue model input or authority report",
+      "why_it_matters": "the newly qualified strategic ranker would disappear from the proposed learned-stack denominator"
+    },
+    {
+      "id": "series_provenance",
+      "finding": "plain completion reports do not bind the source commit, all model-file hashes, root assignment, and immutable ten-run series in one authenticated record",
+      "why_it_matters": "an 8/10 claim needs failures and successes from one frozen prospective campaign"
+    }
+  ],
+  "required_before_counted_roots": [
+    "extend one observation-driven orchestrator from clean power-on through Hall of Fame, or explicitly publish every fixed dispatch outside its learned denominator",
+    "thread authenticated battle, training-action, and trainee/venue artifacts through that same process",
+    "fail on any teacher query, fallback, expected-route label, undeclared safety substitution, save-state load, or human input",
+    "bind source commit, ROM identity, runtime identity, model files, objective graph, and ten distinct perturbation assignments before opening root 01",
+    "write the independent 8-of-10 checker and its failure-path tests before the campaign",
+    "run one uncounted end-to-end rehearsal before freezing the counted roots"
+  ],
+  "recommended_implementation_order": [
+    "add early-game typed objective skills or a documented composite boundary to the portable registry",
+    "add clean-start strategic-ranker injection and ownership accounting",
+    "add one source-bound learned-stack run envelope",
+    "add the ten-root campaign registry and independent series gate",
+    "run the uncounted rehearsal",
+    "freeze and open the ten counted roots sequentially"
+  ],
+  "decision": "do not spend roughly ten full-game runtimes collecting a misleading fixed-dispatch series",
+  "clean_start_series_may_start": false,
+  "promotion_eligible": false
+}

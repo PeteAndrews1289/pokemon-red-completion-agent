@@ -63,9 +63,17 @@ This section supersedes the older starting-point and test-count notes below.
   Badge and opened Giovanni. See the
   [portable receipt](docs/evidence/training-candidate-ranker-v1-portable-qualification-2026-08-08.json).
 
-The immediate dependency order is now: begin multi-root clean-start Red evaluation → run the
+The immediate dependency order is now: build the multi-root clean-start Red evaluation
+infrastructure → run the
 bounded Crystal transfer benchmark → replace one small navigation/recovery mechanic seam → expand
 collection only through the portable loop.
+
+Do **not** open the ten counted clean-start roots yet. The
+[readiness audit](docs/evidence/clean-start-learned-stack-readiness-audit-2026-08-08.json) found four
+blocking interfaces: early-game portable skills are incomplete, the clean-start runner still uses
+expected-objective authorization over a fixed sequence, it cannot inject the qualified strategic
+ranker, and its ordinary report is not one source/model/root-bound series envelope. Build those
+contracts and run one uncounted rehearsal before freezing the 8/10 campaign.
 
 ---
 
