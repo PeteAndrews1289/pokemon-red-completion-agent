@@ -124,6 +124,16 @@ budget. No gameplay rule was relaxed: the replacement safety envelope is 100,000
 post-Mansion boundary matters—future attempts repeat the expensive lesson, not the preceding twelve
 objectives.
 
+The published-source rerun then passed without changing the curriculum. The bounded skill executed
+469,232 actions / 31,883,961 frames, including 1,716 team-development battles and 885 healing trips.
+All six members reached their final forms at 60/55/55/55/55/55. It cleared the six quizzes, fought
+only the two declared trainer lessons, defeated Blaine's exact party with Surf, recovered delayed
+TM38, verified both Volcano Badge mirrors, and returned fully healed. Fresh memory—not the skill
+report—added `badge:volcano` and made Giovanni available. See the
+[post-Mansion receipt](evidence/affordance-masked-post-mansion-blaine-2026-08-08.json). Because the
+run began from an authenticated Secret Key capture, this is one-objective qualification rather than
+a thirteen-decision uninterrupted claim.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

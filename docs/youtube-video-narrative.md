@@ -131,6 +131,11 @@ Keep the first Blaine rehearsal in the edit: the team-development skill returns,
 rejects it for exceeding its declared frame budget. It is a clean demonstration that the safety
 envelope is enforced after real work, and that failed rehearsals are measured rather than relabeled
 as successes.
+Then show the successful source-bound rerun: **469,232 actions; 31,883,961 frames; 1,716 balancing
+battles; 885 healing trips; final-form levels 60/55/55/55/55/55.** Finish on TM38, the Volcano
+Badge, a fully healed party, and Giovanni appearing as the next independently observed objective.
+Label this footage clearly as a post-Mansion captured-state qualification, not a continuous
+thirteen-dispatch run.
 
 ### Act VII: the Crystal test — 10:10–11:15
 

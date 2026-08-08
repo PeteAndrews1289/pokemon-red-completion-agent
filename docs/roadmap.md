@@ -105,6 +105,14 @@ before Blaine, proving that one fixed skill cannot silently claim two graph obje
 adapter is the separate post-Mansion training-and-Blaine chapter. See the
 [twelve-decision receipt](evidence/affordance-masked-twelve-objective-sequence-2026-08-08.json).
 
+The separate post-Mansion Blaine adapter is now source-bound and live-qualified. From the
+authenticated Secret Key terminal it used 469,232 actions / 31,883,961 frames, trained the complete
+final-form party to 60/55/55/55/55/55 through 1,716 battles and 885 healing trips, obtained TM38 and
+the Volcano Badge, and independently opened Giovanni. The first rehearsal exceeded its declared
+20,000,000-frame envelope and remains uncounted; the successful rerun changed only that bound. This
+is a one-objective captured-state receipt, not a contiguous thirteen-step receipt. See the
+[post-Mansion receipt](evidence/affordance-masked-post-mansion-blaine-2026-08-08.json).
+
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
 on a small Crystal battle-and-navigation benchmark under zero-shot, few-shot, and from-scratch

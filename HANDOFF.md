@@ -237,12 +237,15 @@ branch, and zero labels, fallbacks, or replans. See the
 reintroduce the old combined Mansion-plus-Gym authority: the model owns the objective transition;
 current skills still own navigation, battle, menu, training, and recovery actions.
 
-That skill is now implemented and unit-qualified at the authenticated post-Mansion boundary. Its
-first private live rehearsal completed enough internal work to return an execution report, then the
-portable loop correctly rejected it for exceeding the initial 20,000,000-frame declaration. This
-is a safety-envelope measurement, not a gameplay qualification. The bound is now 100,000,000
-frames / 750,000 actions; rerun from `portable-loop-post-secret-key.state` and do not count the
-failed rehearsal as completion.
+That skill is now live-qualified at the authenticated post-Mansion boundary. Its first private
+rehearsal returned a report but was correctly rejected for exceeding the initial 20,000,000-frame
+declaration. With only the safety envelope widened, the published-source rerun passed in 469,232
+actions / 31,883,961 frames. It trained 1,716 balanced-team battles with 885 healing trips, reached
+60/55/55/55/55/55 in final forms, defeated Blaine, collected TM38 and the Volcano Badge, returned
+healed, and independently exposed `defeat_giovanni`. See the
+[post-Mansion receipt](docs/evidence/affordance-masked-post-mansion-blaine-2026-08-08.json). The
+failed rehearsal remains uncounted; the successful receipt is a bounded one-objective qualification,
+not yet a contiguous thirteen-step run.
 
 ---
 

@@ -37,6 +37,13 @@ ranking quality. Mechanics remain teacher-authored; this is a truthful model-sel
 loop, not yet end-to-end learned play. See the
 [twelve-decision receipt](docs/evidence/affordance-masked-twelve-objective-sequence-2026-08-08.json).
 
+The separately dispatched post-Mansion Blaine skill is also live-qualified from its authenticated
+boundary. It used **469,232 actions / 31,883,961 frames** to develop the six final-form members to
+**60/55/55/55/55/55**, clear the quizzes and two intentional trainer lessons, defeat Blaine, collect
+TM38, and return healed. Fresh observation independently exposed Giovanni as the next objective.
+This is a bounded one-objective qualification, not yet a contiguous thirteen-decision claim. See
+the [post-Mansion Blaine receipt](docs/evidence/affordance-masked-post-mansion-blaine-2026-08-08.json).
+
 - [Current technical handoff](HANDOFF.md)
 - [Dependency-ordered roadmap](docs/roadmap.md)
 - [Evidence-first project narrative](docs/project-narrative.md)
