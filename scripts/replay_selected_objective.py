@@ -34,11 +34,13 @@ from pokemon_red_completion.provenance import (
 )
 from pokemon_red_completion.quest import quest_graph_payload
 from pokemon_red_completion.red_objective_skills import (
+    DefeatErikaObjectiveSkill,
     DefeatKogaObjectiveSkill,
     ObtainStrengthObjectiveSkill,
     ObtainSurfObjectiveSkill,
     PokemonTowerObjectiveSkill,
     ReachFuchsiaObjectiveSkill,
+    ReachSaffronObjectiveSkill,
     RocketHideoutObjectiveSkill,
 )
 from pokemon_red_completion.red_player_observer import CapturedPokemonRedObserver
@@ -66,9 +68,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--max-decisions",
         type=int,
-        choices=(1, 2, 3, 4, 5, 6),
+        choices=(1, 2, 3, 4, 5, 6, 7, 8),
         default=1,
-        help="execute one to six decisions through the registered Red skills",
+        help="execute one to eight decisions through the registered Red skills",
     )
     args = parser.parse_args(argv)
 
@@ -112,14 +114,16 @@ def main(argv: list[str] | None = None) -> int:
             ObtainSurfObjectiveSkill(emulator, reader, executor),
             DefeatKogaObjectiveSkill(emulator, reader, executor),
             ObtainStrengthObjectiveSkill(emulator, reader, executor),
+            DefeatErikaObjectiveSkill(emulator, reader, executor),
+            ReachSaffronObjectiveSkill(emulator, reader, executor),
         )
         loop = PortablePlayerLoop(
             graph=COMPLETION_QUEST,
             observer=observer,
             objective_policy=policy,
-            # This diagnostic has exactly one executable skill. A different
-            # model choice must stop visibly instead of falling back to a
-            # generic or fixed-route planner.
+            # Composite skills are the only execution authority here. Any
+            # unregistered choice is masked with a public reason rather than
+            # falling back to a generic or fixed-route planner.
             specialists=SpecialistRegistry(()),
             executor=executor,
             objective_skills=ObjectiveSkillRegistry(skills),

@@ -6,11 +6,13 @@ import pytest
 
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.red_objective_skills import (
+    DefeatErikaObjectiveSkill,
     DefeatKogaObjectiveSkill,
     ObtainStrengthObjectiveSkill,
     ObtainSurfObjectiveSkill,
     PokemonTowerObjectiveSkill,
     ReachFuchsiaObjectiveSkill,
+    ReachSaffronObjectiveSkill,
     RocketHideoutObjectiveSkill,
 )
 from pokemon_red_completion.route import COMPLETION_QUEST
@@ -119,6 +121,8 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     safari = ObtainSurfObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     koga = DefeatKogaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     strength = ObtainStrengthObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    erika = DefeatErikaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    saffron = ReachSaffronObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     celadon = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"item:silph_scope"}),
@@ -143,6 +147,14 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     surf_ready = fuchsia_center.with_facts("move:surf_available", "item:gold_teeth")
     assert koga.availability(surf_ready).executable
     assert strength.availability(surf_ready).executable
+    post_strength = surf_ready.with_facts("badge:soul", "move:strength_available")
+    assert erika.availability(post_strength).executable
+    post_erika = GameState(
+        GameMode.OVERWORLD,
+        facts=frozenset({"badge:rainbow"}),
+        location="celadon_pokecenter",
+    )
+    assert saffron.availability(post_erika).executable
 
 
 def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
@@ -182,6 +194,14 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
             "obtain_strength",
             300,
             40_000,
+        ),
+        (DefeatErikaObjectiveSkill, "run_erika_chapter", "defeat_erika", 2_000, 300_000),
+        (
+            ReachSaffronObjectiveSkill,
+            "run_saffron_chapter",
+            "reach_saffron",
+            1_000,
+            150_000,
         ),
     ),
 )

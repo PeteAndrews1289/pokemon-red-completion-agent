@@ -58,10 +58,10 @@ class CapturedPokemonRedObserver:
 
     def observe(self) -> GameState:
         raw = self.reader.read()
-        self._latched_facts.update(semantic_facts(raw))
+        live_facts = semantic_facts(raw)
         state = GameState(
             mode=game_mode(raw),
-            facts=frozenset(self._latched_facts),
+            facts=frozenset(self._latched_facts.union(live_facts)),
             location=location_label(raw.map_id),
         )
         completed = self.graph.completed_ids(state)
@@ -75,7 +75,16 @@ class CapturedPokemonRedObserver:
                 "live captured state exposes out-of-order objective evidence: "
                 + ", ".join(inconsistent)
             )
-        return state
+        self._latched_facts.update(
+            fact
+            for objective_id in completed
+            for fact in self.graph.objective(objective_id).completion_facts
+        )
+        return GameState(
+            mode=state.mode,
+            facts=frozenset(self._latched_facts.union(live_facts)),
+            location=state.location,
+        )
 
     def public_dict(self) -> dict[str, object]:
         return {

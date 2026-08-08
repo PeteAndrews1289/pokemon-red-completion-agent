@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import pytest
 
 from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
-from pokemon_red_completion.observation import MapId, RawGameState
+from pokemon_red_completion.observation import ItemId, MapId, RawGameState
 from pokemon_red_completion.red_player_observer import (
     CapturedPokemonRedObserver,
     ResumedStateError,
@@ -80,3 +80,33 @@ def test_resumed_observer_rejects_unknown_or_out_of_order_progress() -> None:
         CapturedPokemonRedObserver(reader, COMPLETION_QUEST, _envelope("not_real"))
     with pytest.raises(ResumedStateError, match="prerequisites"):
         CapturedPokemonRedObserver(reader, COMPLETION_QUEST, _envelope("defeat_brock"))
+
+
+def test_resumed_observer_does_not_latch_transient_inventory_affordances() -> None:
+    prefix = (
+        "power_on",
+        "begin_adventure",
+        "choose_starter",
+        "receive_pokedex",
+        "reach_pewter",
+        "defeat_brock",
+        "reach_cerulean",
+        "help_bill",
+        "defeat_misty",
+        "reach_vermilion",
+        "obtain_cut",
+        "defeat_surge",
+        "reach_lavender",
+    )
+    reader = _Reader(
+        replace(_celadon_raw(), bag_item_ids=(ItemId.GOLD_TEETH,))
+    )
+    observer = CapturedPokemonRedObserver(reader, COMPLETION_QUEST, _envelope(*prefix))
+
+    assert "item:gold_teeth" in observer.observe().facts
+
+    reader.raw = _celadon_raw()
+    state = observer.observe()
+
+    assert "item:gold_teeth" not in state.facts
+    assert "location:celadon_city" in state.facts
