@@ -82,6 +82,8 @@ def main() -> int:
                     "partition": dataset.partition,
                     "state_sha256": dataset.state_sha256,
                     "artifact_sha256": dataset.artifact_sha256,
+                    "source_commit": dataset.source_commit,
+                    "source_dirty": dataset.source_dirty,
                 }
                 for dataset in (*training, *validation)
             ],

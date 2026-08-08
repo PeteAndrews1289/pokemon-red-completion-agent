@@ -13,6 +13,7 @@ from collections.abc import Mapping
 from pathlib import Path
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+_GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 
 
 def main() -> int:
@@ -123,6 +124,9 @@ def _require_preregistered_lineages(
     candidate: Mapping[str, object],
     parser: argparse.ArgumentParser,
 ) -> None:
+    source_commit = plan.get("source_commit")
+    if not isinstance(source_commit, str) or _GIT_COMMIT.fullmatch(source_commit) is None:
+        parser.error("promotion plan source commit is invalid")
     lineages = _mapping(plan.get("lineages"), subject="lineages")
     training = lineages.get("training")
     validation = _mapping(lineages.get("sealed_validation"), subject="sealed validation")
@@ -142,6 +146,11 @@ def _require_preregistered_lineages(
     roots = candidate.get("lineage_roots")
     if not isinstance(roots, list) or not all(isinstance(row, Mapping) for row in roots):
         parser.error("candidate summary lacks authenticated lineage roots")
+    if any(
+        row.get("source_commit") != source_commit or row.get("source_dirty") is not False
+        for row in roots
+    ):
+        parser.error("candidate lineage source does not match the clean preregistered source")
     actual = {
         (str(row.get("lineage_id")), str(row.get("partition")), str(row.get("state_sha256")))
         for row in roots

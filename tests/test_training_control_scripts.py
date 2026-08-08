@@ -134,18 +134,24 @@ def test_selection_and_fit_scripts_keep_validation_in_its_own_stage(tmp_path: Pa
             "partition": "train",
             "state_sha256": "1" * 64,
             "artifact_sha256": train_one_sha,
+            "source_commit": "a" * 40,
+            "source_dirty": False,
         },
         {
             "lineage_id": "train-two",
             "partition": "train",
             "state_sha256": "2" * 64,
             "artifact_sha256": train_two_sha,
+            "source_commit": "a" * 40,
+            "source_dirty": False,
         },
         {
             "lineage_id": "validation-one",
             "partition": "validation",
             "state_sha256": "3" * 64,
             "artifact_sha256": validation_sha,
+            "source_commit": "a" * 40,
+            "source_dirty": False,
         },
     ]
     assert hashlib.sha256(model.read_bytes()).hexdigest() == summary_payload[
@@ -156,6 +162,7 @@ def test_selection_and_fit_scripts_keep_validation_in_its_own_stage(tmp_path: Pa
     plan_payload = {
         "schema": "pokemon-training-control-promotion-plan-v2",
         "feature_schema_id": "pokemon.core.training.control.features.v2",
+        "source_commit": "a" * 40,
         "lineages": {
             "training": [
                 {"lineage_id": "train-one", "root_sha256": "1" * 64},
@@ -203,3 +210,27 @@ def test_selection_and_fit_scripts_keep_validation_in_its_own_stage(tmp_path: Pa
     assert gate_payload["offline_validation_eligible"] is True
     assert gate_payload["shadow_may_start"] is True
     assert gate_payload["promotion_eligible"] is False
+
+    plan_payload["source_commit"] = "b" * 40
+    plan.write_text(json.dumps(plan_payload, indent=2, sort_keys=True) + "\n")
+    mismatched_plan_sha = hashlib.sha256(plan.read_bytes()).hexdigest()
+    rejected = subprocess.run(
+        [
+            sys.executable,
+            "scripts/check_training_control_offline_gates.py",
+            "--plan",
+            str(plan),
+            mismatched_plan_sha,
+            "--candidate",
+            str(summary),
+            summary_sha,
+            "--out",
+            str(gate_report),
+        ],
+        cwd=PROJECT_ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert rejected.returncode == 2
+    assert "candidate lineage source does not match" in rejected.stderr
