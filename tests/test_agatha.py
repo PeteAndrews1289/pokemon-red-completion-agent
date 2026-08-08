@@ -5,22 +5,29 @@ from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.agatha import (
     AGATHA_APPROACH,
     AGATHA_CHECKPOINT_COUNT,
+    AGATHA_DUGTRIO_TARGET_POSITIONS,
     AGATHA_ELIXIR_USE,
-    AGATHA_EMERGENCY_REVIVE_RESERVE,
     AGATHA_FORCED_SWITCH_LIMIT,
+    AGATHA_JOLTEON_TARGET_POSITIONS,
     AGATHA_PARTY,
+    AGATHA_RESERVE_SAFE_HP,
     AGATHA_RNG_DELAY_FRAMES,
-    AGATHA_SAFE_HP,
     AGATHA_SURF_RESERVE,
     AGATHA_X_SPECIAL_USE,
+    DUGTRIO_SPECIES_ID,
+    EARTHQUAKE_MOVE_ID,
+    JOLTEON_SPECIES_ID,
+    THUNDER_MOVE_ID,
     AgathaTurn,
     _agatha_forced_switch_target,
+    _agatha_matchup_species,
+    _agatha_matchup_switch_target,
     _agatha_move_slot,
     _agatha_recovery_due,
+    _agatha_team_lesson_satisfied,
     _battle_x_special,
     _encounter_party,
     _observed_party_valid,
-    _post_agatha_recovery_item,
     _turns_valid,
 )
 from pokemon_red_completion.observation import (
@@ -38,10 +45,11 @@ def test_agatha_source_contract_is_exact() -> None:
     assert AGATHA_APPROACH == ("right", "up", "up")
     assert AGATHA_RNG_DELAY_FRAMES == 85
     assert AGATHA_ELIXIR_USE == 1
-    assert AGATHA_EMERGENCY_REVIVE_RESERVE == 1
     assert AGATHA_X_SPECIAL_USE == 1
     assert AGATHA_FORCED_SWITCH_LIMIT == 5
-    assert AGATHA_SAFE_HP == 140
+    assert AGATHA_RESERVE_SAFE_HP == 60
+    assert frozenset({0, 2, 3, 4}) == AGATHA_DUGTRIO_TARGET_POSITIONS
+    assert frozenset({1}) == AGATHA_JOLTEON_TARGET_POSITIONS
     assert AGATHA_SURF_RESERVE == 1
     assert MapId.AGATHAS_ROOM == 0xF7
     assert MapId.LANCES_ROOM == 0x71
@@ -52,39 +60,6 @@ def test_agatha_source_contract_is_exact() -> None:
         (0x93, 55),
         (0x2D, 58),
         (0x0E, 60),
-    )
-
-
-def test_post_agatha_recovery_falls_back_to_full_restore_for_status() -> None:
-    assert (
-        _post_agatha_recovery_item(
-            hp=160,
-            max_hp=209,
-            status=0x08,
-            full_heals=2,
-            full_restores=4,
-        )
-        == ItemId.FULL_RESTORE
-    )
-    assert (
-        _post_agatha_recovery_item(
-            hp=208,
-            max_hp=208,
-            status=0x08,
-            full_heals=0,
-            full_restores=5,
-        )
-        == ItemId.FULL_RESTORE
-    )
-    assert (
-        _post_agatha_recovery_item(
-            hp=180,
-            max_hp=208,
-            status=0,
-            full_heals=0,
-            full_restores=5,
-        )
-        == ItemId.FULL_RESTORE
     )
 
 
@@ -102,7 +77,7 @@ def test_agatha_receipt_deduplicates_switches() -> None:
             species,
             level,
             1,
-            AGATHA_SAFE_HP,
+            AGATHA_RESERVE_SAFE_HP,
             0,
             (1, 1, 1, 1),
             3,
@@ -113,8 +88,12 @@ def test_agatha_receipt_deduplicates_switches() -> None:
     assert _encounter_party(turns) == AGATHA_PARTY
     assert _observed_party_valid(turns)
     assert _turns_valid(turns)
-    assert _turns_valid((AgathaTurn(0x82, 56, 1, AGATHA_SAFE_HP, 0, (1, 0, 1, 1), 1),))
-    assert _turns_valid((AgathaTurn(0x82, 56, 1, AGATHA_SAFE_HP, 0x40, (1, 0, 1, 1), 1),))
+    assert _turns_valid(
+        (AgathaTurn(0x82, 56, 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 0, 1, 1), 1),)
+    )
+    assert _turns_valid(
+        (AgathaTurn(0x82, 56, 1, AGATHA_RESERVE_SAFE_HP, 0x40, (1, 0, 1, 1), 1),)
+    )
     assert not _turns_valid((AgathaTurn(0x82, 56, 1, 0, 0, (1, 0, 1, 1), 1),))
 
 
@@ -123,7 +102,7 @@ def test_agatha_receipt_accepts_switch_in_ko_between_decisions() -> None:
         AgathaTurn(
             *AGATHA_PARTY[party_position],
             enemy_hp=1,
-            lead_hp=AGATHA_SAFE_HP,
+            lead_hp=AGATHA_RESERVE_SAFE_HP,
             lead_status=0,
             pp=(1, 1, 1, 1),
             move_slot=3,
@@ -142,12 +121,18 @@ def test_agatha_receipt_accepts_switch_in_ko_between_decisions() -> None:
 
 def test_agatha_receipt_rejects_wrong_or_missing_terminal_opponents() -> None:
     wrong_identity = (
-        AgathaTurn(0x82, 55, 1, AGATHA_SAFE_HP, 0, (1, 1, 1, 1), 3, 1),
-        AgathaTurn(*AGATHA_PARTY[4], 1, AGATHA_SAFE_HP, 0, (1, 1, 1, 1), 3, 4),
+        AgathaTurn(0x82, 55, 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 1, 1, 1), 3, 1),
+        AgathaTurn(
+            *AGATHA_PARTY[4], 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 1, 1, 1), 3, 4
+        ),
     )
     missing_final = (
-        AgathaTurn(*AGATHA_PARTY[0], 1, AGATHA_SAFE_HP, 0, (1, 1, 1, 1), 3, 0),
-        AgathaTurn(*AGATHA_PARTY[3], 1, AGATHA_SAFE_HP, 0, (1, 1, 1, 1), 3, 3),
+        AgathaTurn(
+            *AGATHA_PARTY[0], 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 1, 1, 1), 3, 0
+        ),
+        AgathaTurn(
+            *AGATHA_PARTY[3], 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 1, 1, 1), 3, 3
+        ),
     )
     assert not _observed_party_valid(wrong_identity)
     assert not _observed_party_valid(missing_final)
@@ -222,8 +207,37 @@ def test_agatha_reserve_uses_live_active_moves_and_pp() -> None:
     assert _agatha_move_slot(reserve) == 3
 
 
-def test_agatha_recovery_tracks_live_state_without_forcing_an_attack_between_items() -> None:
-    lead = RawGameState(
+def test_agatha_specialists_use_immediate_matchup_attacks() -> None:
+    dugtrio = RawGameState(
+        game_started=True,
+        map_id=MapId.AGATHAS_ROOM,
+        player_x=4,
+        player_y=3,
+        party_count=6,
+        battle_state=2,
+        active_party_index=2,
+        active_party_species_id=DUGTRIO_SPECIES_ID,
+        active_party_moves=(EARTHQUAKE_MOVE_ID, 45, 91, 28),
+        active_party_pp=(10, 40, 10, 15),
+        enemy_species_id=0x0E,
+    )
+    jolteon = replace(
+        dugtrio,
+        active_party_index=4,
+        active_party_species_id=JOLTEON_SPECIES_ID,
+        active_party_moves=(THUNDER_MOVE_ID, 28, 98, 84),
+        active_party_pp=(7, 15, 30, 30),
+        enemy_species_id=0x82,
+    )
+
+    assert _agatha_move_slot(dugtrio) == 1
+    assert _agatha_move_slot(jolteon) == 1
+
+
+def test_agatha_matchups_resolve_living_specialists_by_species() -> None:
+    party = (0x1C, 0x40, DUGTRIO_SPECIES_ID, 0x84, JOLTEON_SPECIES_ID, 0x2B)
+    hp = (202, 139, 118, 272, 167, 151)
+    raw = RawGameState(
         game_started=True,
         map_id=MapId.AGATHAS_ROOM,
         player_x=4,
@@ -231,22 +245,67 @@ def test_agatha_recovery_tracks_live_state_without_forcing_an_attack_between_ite
         party_count=6,
         battle_state=2,
         active_party_index=0,
-        active_party_hp=AGATHA_SAFE_HP - 1,
-        active_party_max_hp=210,
+        party_species_ids=party,
+        party_hp=hp,
+        enemy_species_id=0x0E,
+    )
+
+    assert _agatha_matchup_species(raw) == DUGTRIO_SPECIES_ID
+    assert _agatha_matchup_switch_target(raw, DUGTRIO_SPECIES_ID) == 2
+    golbat = replace(raw, enemy_species_id=0x82)
+    assert _agatha_matchup_species(golbat) == JOLTEON_SPECIES_ID
+    assert _agatha_matchup_switch_target(golbat, JOLTEON_SPECIES_ID) == 4
+    active = replace(raw, active_party_index=2)
+    assert _agatha_matchup_switch_target(active, DUGTRIO_SPECIES_ID) is None
+
+
+def test_agatha_team_lesson_requires_every_declared_role_position() -> None:
+    turns = tuple(
+        AgathaTurn(
+            *AGATHA_PARTY[position],
+            enemy_hp=1,
+            lead_hp=AGATHA_RESERVE_SAFE_HP,
+            lead_status=0,
+            pp=(1, 1, 1, 1),
+            move_slot=1,
+            party_position=position,
+            active_party_index=4 if position == 1 else 2,
+            active_party_species_id=(
+                JOLTEON_SPECIES_ID if position == 1 else DUGTRIO_SPECIES_ID
+            ),
+        )
+        for position in range(len(AGATHA_PARTY))
+    )
+
+    assert _agatha_team_lesson_satisfied(turns)
+    assert not _agatha_team_lesson_satisfied(turns[:-1])
+
+
+def test_agatha_recovery_tracks_live_state_without_forcing_an_attack_between_items() -> None:
+    reserve = RawGameState(
+        game_started=True,
+        map_id=MapId.AGATHAS_ROOM,
+        player_x=4,
+        player_y=3,
+        party_count=6,
+        battle_state=2,
+        active_party_index=2,
+        active_party_species_id=DUGTRIO_SPECIES_ID,
+        active_party_hp=AGATHA_RESERVE_SAFE_HP - 1,
+        active_party_max_hp=118,
         active_party_status=0,
     )
 
-    assert _agatha_recovery_due(lead)
+    assert _agatha_recovery_due(reserve)
     assert _agatha_recovery_due(
-        replace(lead, active_party_hp=210, active_party_status=0x04)
+        replace(reserve, active_party_hp=118, active_party_status=0x04)
     )
     assert not _agatha_recovery_due(
-        replace(lead, active_party_hp=210, active_party_status=0)
+        replace(reserve, active_party_hp=118, active_party_status=0)
     )
-    assert _agatha_recovery_due(
-        replace(lead, active_party_hp=AGATHA_SAFE_HP, active_party_status=0)
+    assert not _agatha_recovery_due(
+        replace(reserve, active_party_hp=AGATHA_RESERVE_SAFE_HP, active_party_status=0)
     )
-    assert not _agatha_recovery_due(replace(lead, active_party_index=2))
 
 
 def test_agatha_forced_switch_prefers_live_matchup_coverage() -> None:

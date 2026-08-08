@@ -25,6 +25,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    BattleSwitchCapability,
     note_observed_trainer_battle_exit,
     run_adaptive_trainer_battle,
 )
@@ -36,13 +37,13 @@ from pokemon_red_completion.celadon import (
     _party_status,
 )
 from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
+from pokemon_red_completion.field_recovery import plan_party_recovery, use_field_recovery_item
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _close_menus,
     _open_bag,
     _select_bag_item,
-    _use_bag_item,
 )
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
@@ -82,7 +83,6 @@ from pokemon_red_completion.victory_road import (
 
 AGATHA_CHECKPOINT_COUNT = 3
 AGATHA_RNG_DELAY_FRAMES = 85
-AGATHA_SAFE_HP = 140
 AGATHA_PARTY = (
     (0x0E, 56),
     (0x82, 56),
@@ -98,7 +98,12 @@ AGATHA_SURF_RESERVE = 1
 AGATHA_X_SPECIAL_USE = 1
 AGATHA_ELIXIR_USE = 1
 AGATHA_FORCED_SWITCH_LIMIT = 5
-AGATHA_EMERGENCY_REVIVE_RESERVE = 1
+AGATHA_RESERVE_SAFE_HP = 60
+AGATHA_DUGTRIO_TARGET_POSITIONS = frozenset({0, 2, 3, 4})
+AGATHA_JOLTEON_TARGET_POSITIONS = frozenset({1})
+EARTHQUAKE_MOVE_ID = 0x59
+THUNDER_MOVE_ID = 0x57
+THUNDER_SHOCK_MOVE_ID = 0x54
 
 
 class EmulatorState(Protocol):
@@ -145,6 +150,7 @@ class AgathaTurn:
     move_slot: int
     party_position: int = 0
     active_party_index: int | None = None
+    active_party_species_id: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -162,6 +168,7 @@ class AgathaChapterReport:
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    team_switches: int
 
     @property
     def passed(self) -> bool:
@@ -176,6 +183,8 @@ class AgathaChapterReport:
             and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
             and all(status == 0 for status in self.party_status)
+            and _agatha_team_lesson_satisfied(self.turns)
+            and self.team_switches == 3
             and self.controller_released
         )
 
@@ -207,10 +216,12 @@ class AgathaChapterReport:
                     "move_slot": item.move_slot,
                     "party_position": item.party_position,
                     "active_party_index": item.active_party_index,
+                    "active_party_species_id": item.active_party_species_id,
                 }
                 for item in self.turns
             ],
             "participation": participation.public_dict(),
+            "team_switches": self.team_switches,
             "recovery": {
                 "hyper_potions_used": self.hyper_potions_used,
                 "full_restores_used": self.full_restores_used,
@@ -273,22 +284,30 @@ def run_agatha_chapter(
     class _BoostBoundary(BattleControlRequest):
         default_action = BattleAction.boost(BattleBoostStat.SPECIAL)
 
-    class _ReviveLeadBoundary(BattleControlRequest):
-        default_action = BattleAction.recovery()
-
-    class _ReturnLeadBoundary(BattleControlRequest):
-        default_action = BattleAction.switch(1)
+    class _TeamSwitchBoundary(BattleControlRequest):
+        pass
 
     boosts_used = 0
     forced_switches = 0
+    team_switches = 0
 
     def policy(raw: RawGameState) -> int:
-        if boosts_used < AGATHA_X_SPECIAL_USE:
+        target_species = _agatha_matchup_species(raw)
+        target = _agatha_matchup_switch_target(raw, target_species)
+        if target is not None:
+            raise _TeamSwitchBoundary(BattleAction.switch(target + 1))
+        if raw.active_party_species_id != target_species:
+            opponent = (
+                raw.enemy_species_id,
+                emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS),
+            )
+            raise AgathaChapterError(
+                "Agatha lacks its planned matchup specialist: "
+                f"enemy={opponent!r}, "
+                f"wanted={target_species}, active={raw.active_party_species_id}."
+            )
+        if boosts_used < AGATHA_X_SPECIAL_USE and target_species == JOLTEON_SPECIES_ID:
             raise _BoostBoundary
-        if raw.active_party_index not in {None, 0}:
-            if _party_hp(emulator)[0] == 0:
-                raise _ReviveLeadBoundary
-            raise _ReturnLeadBoundary
         hp = raw.battler_hp or 0
         status = raw.battler_status or 0
         if _agatha_recovery_due(raw):
@@ -307,6 +326,7 @@ def run_agatha_chapter(
                 slot,
                 emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS),
                 raw.active_party_index,
+                raw.active_party_species_id,
             )
         )
         return slot
@@ -324,6 +344,7 @@ def run_agatha_chapter(
                 BattleRecoveryCapability.CURE_ANY_STATUS,
             }
         ),
+        switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
     )
     while reader.read().battle_state:
         try:
@@ -341,6 +362,26 @@ def run_agatha_chapter(
                 label="Agatha",
             )
         except BattleRuntimeError as error:
+            cause = error.__cause__
+            if isinstance(cause, _TeamSwitchBoundary):
+                party_slot = cause.action.party_slot
+                if party_slot is None:
+                    raise AgathaChapterError("Agatha team switch lacked a party target.") from error
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        party_slot - 1,
+                        label="Agatha matchup-aware participation",
+                        wait_frames=DEFAULT_SILPH_TIMING.menu_frames,
+                    )
+                except ProtectedRecoveryError as switch_error:
+                    raise AgathaChapterError(
+                        f"Agatha matchup-aware switch failed: {switch_error}"
+                    ) from switch_error
+                team_switches += 1
+                continue
             current = reader.read()
             if (
                 current.battle_state == 2
@@ -357,26 +398,6 @@ def run_agatha_chapter(
                 if terminal:
                     note_observed_trainer_battle_exit(battle_intent)
                     break
-                continue
-            if isinstance(error.__cause__, _ReviveLeadBoundary):
-                _battle_revive_lead(reader, actions, emulator)
-                continue
-            if control_request_matches(
-                error.__cause__, _ReturnLeadBoundary.default_action
-            ):
-                try:
-                    switch_active_battler(
-                        actions,
-                        reader,
-                        emulator,
-                        0,
-                        label="Agatha revived lead return",
-                        wait_frames=DEFAULT_SILPH_TIMING.menu_frames,
-                    )
-                except ProtectedRecoveryError as switch_error:
-                    raise AgathaChapterError(
-                        "Agatha could not return the revived workhorse."
-                    ) from switch_error
                 continue
             if control_request_matches(error.__cause__, _BoostBoundary.default_action):
                 _battle_x_special(reader, actions, emulator)
@@ -399,12 +420,12 @@ def run_agatha_chapter(
                 ) from error
             raw = reader.read()
             if (
-                (raw.first_party_status or 0)
-                and (raw.first_party_hp or 0) >= 120
+                (raw.battler_status or 0)
+                and (raw.battler_hp or 0) >= AGATHA_RESERVE_SAFE_HP
                 and _bag(emulator).get(ItemId.FULL_HEAL, 0)
             ):
                 item = ItemId.FULL_HEAL
-            elif raw.first_party_status or 0:
+            elif raw.battler_status or 0:
                 item = ItemId.FULL_RESTORE
             else:
                 item = (
@@ -421,6 +442,7 @@ def run_agatha_chapter(
                     emulator,
                     DEFAULT_SILPH_TIMING,
                     item,
+                    party_index=raw.active_party_index or 0,
                 )
             except SilphChapterError as healing_error:
                 current = reader.read()
@@ -428,8 +450,8 @@ def run_agatha_chapter(
                     "Agatha recovery failed: "
                     f"party_hp={_party_hp(emulator)!r}, "
                     f"enemy={(current.enemy_species_id, current.enemy_hp, current.enemy_level)!r}, "
-                    f"lead_status={current.first_party_status!r}, "
-                    f"pp={current.first_party_pp!r}, bag={_bag(emulator)!r}."
+                    f"active_status={current.battler_status!r}, "
+                    f"pp={current.battler_pp!r}, bag={_bag(emulator)!r}."
                 ) from healing_error
             if terminal_exit:
                 note_observed_trainer_battle_exit(battle_intent)
@@ -437,30 +459,19 @@ def run_agatha_chapter(
     for _ in range(20):
         _pulse(actions, MacroActionKind.CANCEL)
     _settle_confirm(actions, reader, 40)
-    if _party_hp(emulator) != _party_max_hp(emulator) or any(
-        status != 0 for status in _party_status(emulator)
-    ):
-        try:
-            item = _post_agatha_recovery_item(
-                hp=_party_hp(emulator)[0],
-                max_hp=_party_max_hp(emulator)[0],
-                status=_party_status(emulator)[0],
-                full_heals=_bag(emulator).get(ItemId.FULL_HEAL, 0),
-                full_restores=_bag(emulator).get(ItemId.FULL_RESTORE, 0),
-            )
-            _use_bag_item(
-                actions,
-                reader,
-                emulator,
-                DEFAULT_LAVENDER_TIMING,
-                item,
-            )
-        except Exception as error:
-            raise AgathaChapterError(
-                "Post-Agatha recovery failed: "
-                f"hp={_party_hp(emulator)!r}, status={_party_status(emulator)!r}, "
-                f"bag={_bag(emulator)!r}, cause={error}."
-            ) from error
+    try:
+        for party_index, item in plan_party_recovery(
+            _party_hp(emulator),
+            _party_max_hp(emulator),
+            _party_status(emulator),
+        ):
+            use_field_recovery_item(actions, reader, emulator, party_index, item)
+    except Exception as error:
+        raise AgathaChapterError(
+            "Post-Agatha recovery failed: "
+            f"hp={_party_hp(emulator)!r}, status={_party_status(emulator)!r}, "
+            f"bag={_bag(emulator)!r}, cause={error}."
+        ) from error
     defeated = reader.read()
     if not _event(defeated, EventFlag.BEAT_AGATHA):
         raise AgathaChapterError("Agatha event did not set after battle.")
@@ -483,34 +494,11 @@ def run_agatha_chapter(
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,
         controller_released=not emulator.pressed_buttons,
+        team_switches=team_switches,
     )
     if not report.passed:
         raise AgathaChapterError(f"Agatha terminal evidence failed: {report!r}.")
     return report
-
-
-def _post_agatha_recovery_item(
-    *,
-    hp: int,
-    max_hp: int,
-    status: int,
-    full_heals: int,
-    full_restores: int,
-) -> ItemId:
-    """Choose one item that leaves the lead Lance-ready when possible."""
-
-    if status:
-        # A Full Heal alone is insufficient when the lead is also damaged;
-        # prefer the single Full Restore that proves both terminal invariants.
-        if hp < max_hp and full_restores > 0:
-            return ItemId.FULL_RESTORE
-        if full_heals > 0:
-            return ItemId.FULL_HEAL
-        if full_restores > 0:
-            return ItemId.FULL_RESTORE
-    elif hp < max_hp and full_restores > 0:
-        return ItemId.FULL_RESTORE
-    raise AgathaChapterError("Agatha lacks a legal post-battle recovery item.")
 
 
 def _checkpoint(
@@ -571,20 +559,66 @@ def _turns_valid(turns: Iterable[AgathaTurn]) -> bool:
     )
 
 
-def _agatha_recovery_due(raw: RawGameState) -> bool:
-    """Protect the workhorse from Agatha's lethal status/critical sequences."""
+def _agatha_matchup_species(raw: RawGameState) -> int:
+    """Assign the airborne target to Jolteon and grounded Poison targets to Dugtrio."""
+    return JOLTEON_SPECIES_ID if raw.enemy_species_id == 0x82 else DUGTRIO_SPECIES_ID
 
-    return raw.active_party_index in {None, 0} and (
-        (raw.battler_hp or 0) < max(AGATHA_SAFE_HP, raw.battler_max_hp or 0)
-        or bool(raw.battler_status or 0)
+
+def _agatha_matchup_switch_target(raw: RawGameState, species_id: int) -> int | None:
+    """Resolve one living Agatha specialist by observed species rather than slot."""
+    party_hp = raw.party_hp or ()
+    for index, species in enumerate(raw.party_species_ids or ()):
+        if (
+            species == species_id
+            and index < len(party_hp)
+            and party_hp[index] > 0
+            and index != raw.active_party_index
+        ):
+            return index
+    return None
+
+
+def _agatha_team_lesson_satisfied(turns: Iterable[AgathaTurn]) -> bool:
+    """Require both specialists to complete every declared opponent role."""
+    items = tuple(turns)
+    dugtrio_positions = {
+        turn.party_position
+        for turn in items
+        if turn.active_party_species_id == DUGTRIO_SPECIES_ID
+    }
+    jolteon_positions = {
+        turn.party_position
+        for turn in items
+        if turn.active_party_species_id == JOLTEON_SPECIES_ID
+    }
+    return (
+        dugtrio_positions >= AGATHA_DUGTRIO_TARGET_POSITIONS
+        and jolteon_positions >= AGATHA_JOLTEON_TARGET_POSITIONS
     )
+
+
+def _agatha_recovery_due(raw: RawGameState) -> bool:
+    """Protect the active specialist from Agatha's damage and status sequences."""
+
+    return (raw.battler_hp or 0) < AGATHA_RESERVE_SAFE_HP or bool(raw.battler_status or 0)
 
 
 def _agatha_move_slot(raw: RawGameState) -> int:
     species = raw.enemy_species_id or 0
     pp = raw.battler_pp or ()
+    moves = raw.battler_moves or ()
+    if raw.active_party_species_id == DUGTRIO_SPECIES_ID:
+        for index, (move, current_pp) in enumerate(zip(moves, pp, strict=True)):
+            if move == EARTHQUAKE_MOVE_ID and current_pp & 0x3F:
+                return index + 1
+        raise AgathaChapterError("Agatha's Dugtrio specialist lacks Earthquake.")
+    if raw.active_party_species_id == JOLTEON_SPECIES_ID:
+        for move_id in (THUNDER_MOVE_ID, THUNDER_SHOCK_MOVE_ID):
+            for index, (move, current_pp) in enumerate(zip(moves, pp, strict=True)):
+                if move == move_id and current_pp & 0x3F:
+                    return index + 1
+        raise AgathaChapterError("Agatha's Jolteon specialist lacks an Electric attack.")
     if raw.active_party_index not in {None, 0}:
-        moves = raw.battler_moves or ()
         enemy_species = raw.enemy_species_id or 0
         enemy_types = RED_BATTLE_CATALOG.resolve_species(
             pokemon_red_species_ref(enemy_species)
@@ -760,51 +794,6 @@ def _battle_x_special(
     raise AgathaChapterError(
         f"{item.name} was not consumed after two bounded selections: "
         f"initial={initial}, after={_bag(emulator).get(item, 0)}."
-    )
-
-
-def _battle_revive_lead(
-    reader: PokemonRedStateReader,
-    actions: CountingExecutor,
-    emulator: EmulatorState,
-) -> None:
-    """Spend the dedicated Agatha Revive while a living teammate absorbs the turn."""
-
-    raw = reader.read()
-    before = _bag(emulator).get(ItemId.REVIVE, 0)
-    if (
-        raw.battle_state != 2
-        or raw.active_party_index in {None, 0}
-        or _party_hp(emulator)[0] != 0
-        or before < 2 + AGATHA_EMERGENCY_REVIVE_RESERVE
-        or reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN
-    ):
-        raise AgathaChapterError(
-            "Agatha emergency revive boundary is not qualified: "
-            f"active={raw.active_party_index}, party_hp={_party_hp(emulator)!r}, "
-            f"revives={before}."
-        )
-    _select_battle_main_command(actions, reader, 1)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    _select_bag_item(actions, emulator, ItemId.REVIVE, DEFAULT_LAVENDER_TIMING)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    _select_cursor(actions, emulator, 0, DEFAULT_LAVENDER_TIMING)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    for _ in range(40):
-        current = reader.read()
-        if (
-            _bag(emulator).get(ItemId.REVIVE, 0) == before - 1
-            and _party_hp(emulator)[0] > 0
-            and (
-                (current.battler_hp or 0) == 0
-                or reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
-            )
-        ):
-            return
-        _pulse(actions, MacroActionKind.CONFIRM)
-    raise AgathaChapterError(
-        "Agatha emergency revive did not restore the workhorse: "
-        f"party_hp={_party_hp(emulator)!r}, revives={_bag(emulator).get(ItemId.REVIVE, 0)}."
     )
 
 

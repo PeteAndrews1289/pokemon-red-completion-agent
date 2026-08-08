@@ -6,7 +6,8 @@ boundary, then qualify the exact source with ``pokemon-red-completion play``.
 
 Usage::
 
-    POKEMON_RED_ROM=<path> python scripts/replay_bruno.py --state <path>.state
+    POKEMON_RED_ROM=<path> python scripts/replay_bruno.py --state <path>.state \\
+        [--out-state <next-path>.state]
 """
 
 from __future__ import annotations
@@ -30,6 +31,12 @@ from pokemon_red_completion.rom import resolve_rom_path  # noqa: E402
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--state", type=Path, required=True, help="private pre-Bruno state")
+    parser.add_argument(
+        "--out-state",
+        type=Path,
+        default=None,
+        help="optional private post-Bruno state for the next chapter",
+    )
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     args = parser.parse_args(argv)
 
@@ -48,6 +55,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"FAILED: {type(error).__name__}: {error}", file=sys.stderr)
             traceback.print_exc(limit=5)
             return 1
+        if args.out_state is not None:
+            emulator.save_state(args.out_state)
         public = report.public_dict()
         print(
             json.dumps(
@@ -56,6 +65,7 @@ def main(argv: list[str] | None = None) -> int:
                     "team_switches": public["team_switches"],
                     "participation": public["participation"],
                     "turns": public["turns"],
+                    "state_written": args.out_state is not None,
                 },
                 indent=2,
                 sort_keys=True,
