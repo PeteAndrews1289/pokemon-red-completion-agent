@@ -44,6 +44,13 @@ Maps, coordinates, story flags, NPCs, trainer parties, puzzles, and raw numeric 
 namespaced to one game and revision. Raw RAM addresses, event bytes, screenshots, ROM data, and
 teacher-only diagnostics are never policy inputs.
 
+The first training-control transfer invariant is executable rather than aspirational. A contract
+test builds Red-like and Crystal-like parties with different species identifiers, move identifiers,
+and venue names but identical semantic levels, health, PP, progress, and safety affordances. Both
+adapters must project the exact same 25-feature training observation. This does not demonstrate
+Crystal transfer; it prevents those title identities from becoming shortcuts before that benchmark
+exists.
+
 Every episode therefore has two authority lanes:
 
 - the **policy observation** contains only semantic state the player could obtain from the game

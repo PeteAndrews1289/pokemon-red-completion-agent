@@ -231,6 +231,8 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
 - [x] Make offline promotion mechanical: emit path-free lineage/root identities from fitting,
   authenticate the preregistration and candidate summary, evaluate all eight gates, and return a
   nonzero status that forbids shadow whenever one fails.
+- [x] Add a cross-title falsification contract proving that different species, move, and venue
+  identities project the same training-control observation when their semantic state is equal.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
