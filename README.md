@@ -61,6 +61,14 @@ root-state overlap across training and validation, and reports balanced accuracy
 accuracy. Candidate summaries remain `promotion_eligible: false` until a frozen model passes real
 lineage-held-out, shadow, and model-controlled emulator gates.
 
+The first counted v2 training lineage is now qualified. A retained 17-frame-perturbed root produced
+**46,687 decisions**, all five action classes, **1,726 battles**, **815 healing trips**, zero faints,
+and an all-level-55 terminal. The production loader verified its clean source commit, distinct root
+digest, phase legality, and exact terminal stop. Of 45,902 unique action-feature pairs, **45,831
+(99.85%)** were absent from diagnostic lineage 01. This is accepted training data, not yet a model
+result; independent v2 train and validation roots remain required. See the
+[counted lineage receipt](docs/evidence/training-control-v2-train-01-2026-08-08.json).
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

@@ -155,6 +155,11 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   93.2% seek majority, 47,370 unique feature vectors, zero phase violations, 1,716 battles, 885
   healing trips, zero faints, and a 55/55/55/55/55/55 terminal. See the
   [sanitized receipt](evidence/training-control-lineage-01-2026-08-08.json).
+  Counted v2 train lineage 01 is now qualified: 46,687 decisions, all five classes, zero
+  faints, all level 55, and 45,831 novel unique action-feature pairs versus the diagnostic
+  lineage. Its retained distinct root and clean source passed the production loader. See the
+  [v2 train receipt](evidence/training-control-v2-train-01-2026-08-08.json). At least one more
+  training root and one validation root remain before fitting a real candidate.
 - [x] Add a v2 integrity loader and partition audit that bind source commit, dirty flag, root-state
   digest, and lineage partition; reject altered files, dirty successful sources, terminal drift,
   state overlap across train/validation, and validation classes absent from training.

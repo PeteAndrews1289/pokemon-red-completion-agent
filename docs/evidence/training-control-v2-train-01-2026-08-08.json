@@ -1,0 +1,63 @@
+{
+  "schema": "pokemon-training-control-lineage-summary-v2",
+  "status": "ok",
+  "lineage_id": "training-control-v2-train-01",
+  "partition": "train",
+  "lineage_qualified": true,
+  "source": {
+    "git_commit": "4c885d8f90d506529d720e1581b7ed0c8ff83107",
+    "worktree_dirty": false
+  },
+  "private_artifacts": {
+    "decision_stream_sha256": "f13f9f1031632a8f1158c280c241d6f6a24ab5eeed4c30bdf76d802917e1aca1",
+    "root_state_sha256": "62f7862e6f7e15c6f7c14a4cbb7488d6ff946502809dde5e1315171925e80c9c",
+    "tracked": false
+  },
+  "root_derivation": {
+    "parent_checkpoint_id": "portable_loop_post_secret_key",
+    "bounded_wait_frames": 17,
+    "exact_resulting_state_retained": true
+  },
+  "execution": {
+    "evolution_battles": 56,
+    "evolution_healing_trips": 34,
+    "balance_battles": 1670,
+    "balance_healing_trips": 781,
+    "total_battles": 1726,
+    "total_healing_trips": 815,
+    "faints": 0,
+    "final_party_levels": [55, 55, 55, 55, 55, 55],
+    "final_level_spread": 0
+  },
+  "dataset": {
+    "feature_schema_id": "pokemon.core.training.control.features.v1",
+    "feature_count": 21,
+    "decisions": 46687,
+    "unique_action_feature_pairs": 45902,
+    "duplicate_action_feature_pairs": 785,
+    "action_counts": {
+      "fight": 1719,
+      "flee": 1022,
+      "heal": 434,
+      "seek": 43511,
+      "stop": 1
+    },
+    "phase_counts": {
+      "battle": 2741,
+      "overworld": 43946
+    },
+    "phase_legality_violations": 0,
+    "terminal_action": "stop"
+  },
+  "diversity_against_diagnostic_lineage_01": {
+    "shared_unique_action_feature_pairs": 71,
+    "novel_unique_action_feature_pairs": 45831,
+    "novel_pair_ratio": 0.9984532264389351
+  },
+  "limitations": [
+    "single_counted_training_lineage",
+    "no_validation_lineage_yet",
+    "no_real_model_trained",
+    "not_promotion_eligible"
+  ]
+}

@@ -306,6 +306,13 @@ when paired with `--out-root-state`; it advances the emulator, saves the exact r
 state, and hashes that state into v2 provenance. Never call two copies of the same input state
 independent lineages without creating and retaining distinct roots this way.
 
+Counted v2 train lineage 01 is qualified from a retained 17-frame root at source `4c885d8`:
+46,687 decisions, all five actions, 1,726 battles, 815 healing trips, zero faints, and all level 55.
+Its private stream SHA is `f13f9f1031632a8f1158c280c241d6f6a24ab5eeed4c30bdf76d802917e1aca1`;
+its root-state SHA is `62f7862e6f7e15c6f7c14a4cbb7488d6ff946502809dde5e1315171925e80c9c`.
+It adds 45,831 novel unique action-feature pairs versus diagnostic lineage 01 (99.85% of its unique
+pairs). See the [sanitized receipt](docs/evidence/training-control-v2-train-01-2026-08-08.json).
+
 **Next:** collect at least three v2 complete decision lineages, split by root lineage rather than by
 row, train and shadow-evaluate the first candidate, then replace the 469,232-action skill's teacher
 authority under the same safety envelope. Preserve the fixed skill as demonstrator and referee. Do

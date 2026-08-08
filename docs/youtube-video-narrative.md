@@ -179,6 +179,11 @@ Show the learner architecture briefly after the warning: inverse-frequency weigh
 minority classes, the current phase blacks out illegal outputs, and both raw and balanced accuracy
 appear together. Keep the result card blank—the implementation exists, but no real lineage-held-out
 candidate has earned a score yet.
+Then show the first counted v2 root: a 17-frame perturbation saved as an exact private state, two
+mid-run party-level checkpoints diverging, and both paths reconverging at all 55. Put **99.85% new
+unique action-feature pairs** beside the hashes. The point is not random noise; it is a reproducible
+different lesson under the same rules. End the card with “training lineage 1 accepted; validation
+still empty.”
 
 ### Act VII: the Crystal test — 10:10–11:15
 

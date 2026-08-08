@@ -210,6 +210,14 @@ when train and validation share a root-state digest or validation contains an ac
 training. These are implemented safeguards, not evidence that a real candidate works: only
 synthetic lineages have exercised the fitter so far.
 
+The first counted v2 root then proved the perturbation was real rather than ceremonial. Seventeen
+bounded frames produced and retained a distinct authenticated state. Its teacher needed 1,726
+battles and 815 healing trips to reach the same all-55 terminal with zero faints, but its middle
+checkpoints diverged visibly from diagnostic lineage 01. The final stream held 46,687 decisions;
+45,831 of its 45,902 unique action-feature pairs were new, a 99.85% novel-pair ratio. The production
+loader accepted its clean source, root digest, five-class coverage, phase legality, and exact stop.
+It is now real training data, but one training root still cannot supply held-out evidence.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal
