@@ -258,6 +258,7 @@ uninterrupted twenty-dispatch run. See the
 
 - [Current technical handoff](HANDOFF.md)
 - [Dependency-ordered roadmap](docs/roadmap.md)
+- [Current capability and portfolio audit](docs/current-audit-2026-08-08.md)
 - [Evidence-first project narrative](docs/project-narrative.md)
 - [Potential YouTube video narrative](docs/youtube-video-narrative.md)
 
