@@ -283,6 +283,26 @@ than substituting a teacher flee. Overworld decisions remain teacher-controlled 
 such. This is partial authority, but it is causal authority—model errors can now change or end the
 trajectory, and no disagreement is hidden.
 
+The first two causal attempts did exactly what this gate was designed to do: fail visibly. Attempt
+one stopped after 480 decisions when the interface still advertised `fight` after usable attacks
+were exhausted. Attempt two corrected that affordance, then paid for the model's under-fighting:
+1,963 safe fights became real flees and the healing budget exhausted after 77,538 decisions. The
+second failure exposed a mismatch between inference and fitting—the inference softmax respected
+candidate masks, while the loss still trained on forced singleton actions.
+
+Two entirely fresh training roots and one untouched validation root followed the corrected loss.
+Their 119,328 training decisions and 58,117 validation decisions had no root overlap, and the
+unchanged 24-unit MLP reached 78.06% raw / 89.25% balanced validation accuracy. A fresh
+57,342-decision shadow reached 100% battle agreement. The causal rerun then completed 59,137
+decisions, 1,743 battles, and 1,051 healing trips with zero faints, all six at level 55, and no
+fallback. This is the first successful learned execution of the lesson's battle control boundary.
+
+It is also an intentionally narrow success. Unsafe states offered only `flee`; all 1,984 safe
+two-candidate states were labeled `fight`, while 1,602 flees were forced singletons. Overworld still
+belongs to the teacher, and the model predicted 12,405 unnecessary heals in place of safe seeks.
+The next chapter is therefore not another accuracy card. It is an executable overworld contract and
+metrics that count wasted trips, unsafe continuation, and premature stopping directly.
+
 The first causal root ended after 480 decisions, exactly as the fail-closed contract required. The
 model agreed with 479 teacher decisions, then chose `fight` after every admissible training attack
 had been exhausted or disabled. The immediately preceding safe fight and the rejected decision had

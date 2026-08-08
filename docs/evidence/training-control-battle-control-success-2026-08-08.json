@@ -1,0 +1,24 @@
+{
+  "schema": "pokemon-training-control-controlled-summary-v1",
+  "status": "ok",
+  "lineage_id": "training-control-v3-battle-control-01",
+  "source_commit": "378ad2653486c5822cd751ea89b3deccab3a65fc",
+  "root_state_sha256": "c6e9ca7cac655a4a5b8bb04995d56e587907e700e33863d34b949553f514bae7",
+  "decision_stream_sha256": "1943d717ca1274866b55a571daa2071123540375de724876810b3f16de8095ff",
+  "control_summary_sha256": "fa4ef4c4f7807f7e0a2d817ba06853d9677a94ac6fc62f540598e3d111ce2968",
+  "model_sha256": "e5a8a862ce3b9edb5153890f1d4c0af2a18b912b45770d77d99ce223177361f2",
+  "authority_phases": ["battle"],
+  "teacher_fallback_on_model_disagreement": false,
+  "execution": {"decisions": 59137, "total_battles": 1743, "total_healing_trips": 1051, "faints": 0, "final_party_levels": [55, 55, 55, 55, 55, 55]},
+  "audit": {
+    "accuracy": 0.7869016013663189,
+    "balanced_accuracy": 0.8950137766475479,
+    "battle_accuracy": 1.0,
+    "overworld_accuracy": 0.7731453979226297,
+    "teacher_battle_actions": {"fight": 1984, "flee": 1602},
+    "model_battle_actions": {"fight": 1984, "flee": 1602}
+  },
+  "promotion_eligible": false,
+  "limitations": ["overworld_authority_remains_teacher_controlled"],
+  "private_artifacts_tracked": false
+}

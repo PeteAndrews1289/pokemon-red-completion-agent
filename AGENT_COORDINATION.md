@@ -218,6 +218,14 @@ Controlled root 02 passed that boundary but exhausted the healing budget after t
 1,963 of 2,690 safe fights with real flees. It is excluded from training. The fitting loss now uses
 the same candidate mask as inference; collect entirely fresh teacher-authority train/train/validation
 lineages before fitting a replacement.
+The replacement campaign passed: 119,328 fresh training decisions, 58,117 untouched validation
+decisions, 78.06% raw / 89.25% balanced validation accuracy, a 57,342-decision shadow with 100%
+battle agreement, and a 59,137-decision causal lesson with all six at level 55, zero faints, and no
+fallback. This qualifies only battle `fight`/`flee` authority. The causal stream exposes 1,602
+singleton forced flees and 1,984 safe two-candidate fights; do not describe that as tactical battle
+learning. Overworld remains teacher-controlled and produced 12,405 seek-to-heal disagreements.
+Before another collection campaign, make overworld selections execute causally and make its
+candidate masks express only legality and hard safety, not the teacher's preferred action.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

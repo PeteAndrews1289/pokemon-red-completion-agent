@@ -358,6 +358,21 @@ failed controlled lineage for fitting. Collect two fresh train roots and one fre
 under the corrected contract, then fit and requalify. See the
 [under-fighting receipt](docs/evidence/training-control-battle-control-02-failure-2026-08-08.json).
 
+That replacement campaign is now qualified for **battle-only** authority. Two new training roots
+contributed 119,328 decisions, and a fresh untouched validation root contributed 58,117 with zero
+root overlap. The unchanged 24-unit MLP reached 78.06% raw / 89.25% balanced validation accuracy.
+A fresh 57,342-decision shadow reached 100% battle agreement. Under causal battle authority, the
+model then completed a 59,137-decision lesson, 1,743 battles, 1,051 healing trips, zero faints, and
+an all-55 terminal without fallback. See the [candidate](docs/evidence/training-control-candidate-v2-2026-08-08.json),
+[shadow](docs/evidence/training-control-shadow-02-2026-08-08.json), and
+[controlled success](docs/evidence/training-control-battle-control-success-2026-08-08.json).
+
+Do not overstate that result. Every unsafe battle state offered singleton `flee`; every safe
+two-candidate state was labeled `fight`. The causal run therefore contained 1,602 forced flees and
+1,984 safe fight choices. The next substantive boundary is overworld control, where the model still
+turned 12,405 teacher seeks into heals and the runtime does not yet execute every returned
+overworld choice. Redesign that contract before collecting another generation of lineages.
+
 Counted v2 train lineage 01 is qualified from a retained 17-frame root at source `4c885d8`:
 46,687 decisions, all five actions, 1,726 battles, 815 healing trips, zero faints, and all level 55.
 Its private stream SHA is `f13f9f1031632a8f1158c280c241d6f6a24ab5eeed4c30bdf76d802917e1aca1`;
@@ -365,8 +380,9 @@ its root-state SHA is `62f7862e6f7e15c6f7c14a4cbb7488d6ff946502809dde5e131517192
 It adds 45,831 novel unique action-feature pairs versus diagnostic lineage 01 (99.85% of its unique
 pairs). See the [sanitized receipt](docs/evidence/training-control-v2-train-01-2026-08-08.json).
 
-**Next:** add authenticated model loading and run shadow inference on a fresh root, then attempt
-bounded model control under the teacher referee. Keep test roots sealed.
+**Next:** make `seek`, `heal`, and `stop` executable model authorities, distinguish hard safety
+affordances from teacher strategy, and preregister consequence-based gates before collecting fresh
+lineages. Keep test roots sealed.
 lineage rather than by row, train and shadow-evaluate the first candidate, then replace the
 469,232-action skill's teacher
 authority under the same safety envelope. Preserve the fixed skill as demonstrator and referee. Do

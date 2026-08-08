@@ -202,12 +202,19 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   flees, and the healing budget exhausted before readiness with zero fallback.
 - [x] Apply candidate masks inside the fitting softmax so forced singleton decisions contribute no
   policy gradient; inference and training now optimize the same decision surface.
-- [ ] Collect two fresh teacher-authority training roots and one untouched validation root under
+- [x] Collect two fresh teacher-authority training roots and one untouched validation root under
   the corrected candidate contract, fit a replacement, then repeat shadow and causal control.
-  The class-balanced MLP, phase-masked inference, metrics, and fail-closed candidate fitter are
-  implemented and tested synthetically; this item remains open until real v2 lineages exist.
-- [ ] Run the candidate in shadow mode, then model-controlled mode under the unchanged teacher
-  referee and action/frame/faint bounds.
+  The 119,328-example training set and 58,117-example untouched validation lineage had zero root
+  overlap; the unchanged 24-unit MLP reached 78.06% raw / 89.25% balanced validation accuracy.
+- [x] Run the replacement candidate in shadow mode, then battle-controlled mode under the unchanged
+  teacher referee and action/frame/faint bounds. The 57,342-decision shadow reached 100% battle
+  agreement. A fresh 59,137-decision causal lesson then completed 1,743 battles with zero faints,
+  all six at level 55, and no teacher fallback.
+- [ ] Redesign the overworld authority boundary before granting it control. All current overworld
+  observations advertise `seek`, `heal`, and `stop`, the selected return is not yet the mechanic's
+  sole source of control, and the replacement predicted 12,405 unnecessary heals in its causal
+  audit. Report forced versus genuine choices and operational false-heal cost rather than relying
+  on balanced accuracy.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

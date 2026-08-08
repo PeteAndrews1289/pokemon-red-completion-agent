@@ -147,6 +147,17 @@ sets. The loss now normalizes only over each observation's actual candidates; fr
 required before fitting the replacement. See the
 [under-fighting receipt](docs/evidence/training-control-battle-control-02-failure-2026-08-08.json).
 
+The replacement campaign now closes that failure. Two fresh training roots and one untouched
+validation root all reached level 55 with zero faints and 99.86% of validation's unique tuples
+absent from training. With the candidate mask applied inside the loss, the unchanged 24-unit MLP
+reached **78.06% raw / 89.25% balanced validation accuracy** and 100% fight/flee recall. A fresh
+57,342-decision shadow again achieved 100% battle agreement. Under real battle authority, the model
+then completed a fresh 59,137-decision lesson with 1,743 battles, zero faints, all six at level 55,
+and no fallback. Overworld remains teacher-controlled because 12,405 safe seeks were still
+predicted as unnecessary heals. See the [candidate](docs/evidence/training-control-candidate-v2-2026-08-08.json),
+[shadow](docs/evidence/training-control-shadow-02-2026-08-08.json), and
+[controlled success](docs/evidence/training-control-battle-control-success-2026-08-08.json) receipts.
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

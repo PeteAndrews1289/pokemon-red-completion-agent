@@ -219,6 +219,19 @@ controller. Accumulate confidence, phase accuracy, balanced agreement, and the f
 confusion matrix live. Keep **“model authority: false”** on screen throughout; shadow success is
 evidence that the model understands decisions, not permission to press buttons.
 
+Then show why causal evaluation matters. The first controlled run stops at decision 480 because an
+unsafe fight was still advertised. The second makes 1,963 conservative flee choices for real and
+eventually exhausts its healing budget. Neither failure is edited away. The fix aligns the fitting
+and inference masks, throws away both failed lineages for training, and starts again with two fresh
+training roots plus untouched validation.
+
+Reveal the replacement card: **78.06% raw / 89.25% balanced validation**, then the fresh shadow's
+**100% battle agreement**. Finally connect the model card to the emulator: **59,137 decisions,
+1,743 battles, zero faints, all six level 55, zero fallback.** Immediately split that success into
+1,984 real safe fight choices and 1,602 forced singleton flees. The honest ending is the overworld
+confusion: 12,405 safe seeks predicted as heals. The next problem is no longer “train a model”; it
+is “give the model a real overworld control surface and score the cost of its mistakes.”
+
 Reveal the completed shadow card: **55,904 decisions; 75.57% raw; 76.73% balanced; zero faints;
 all 55; authority false.** Then zoom into the confusion matrix. The model catches 96.53% of flees
 but only 42.05% of fights, replacing 1,134 safe fights with conservative exits; it also replaces
