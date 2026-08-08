@@ -5,7 +5,7 @@
   "feature_schema_id": "pokemon.core.training.control.features.v2",
   "training_lineages": [
     "training-control-v5-train-01",
-    "training-control-v5-train-03"
+    "training-control-v5-train-04"
   ],
   "preregistration_amendments": [
     {
@@ -17,6 +17,16 @@
       "excluded_failed_artifact_sha256": "dc324977a819f4cc503cded7cf59f3b6a4dc6da4fe6798124ab46d12bfff1529",
       "replacement_lineage": "training-control-v5-train-03",
       "replacement_root_sha256": "e39d1f52e58a373033a103fb55b9544785d4e589549fa8494fff6b7114968336"
+    },
+    {
+      "recorded_at": "2026-08-08T15:14:39Z",
+      "reason": "The train-03 teacher run failed closed when a confirmed party switch did not return to the battle command menu; its failed artifact is excluded before model selection.",
+      "validation_metrics_opened": false,
+      "excluded_lineage": "training-control-v5-train-03",
+      "excluded_root_sha256": "e39d1f52e58a373033a103fb55b9544785d4e589549fa8494fff6b7114968336",
+      "excluded_failed_artifact_sha256": "85e478881ecba7ce2c4110d14dee7bbfcdd316dcefd574f5db1bc88f477302ee",
+      "replacement_lineage": "training-control-v5-train-04",
+      "replacement_root_sha256": "e136d58d3d10305e0f4be6d49f0594008c83c7f22bedb90f0508fbf86edabfe1"
     }
   ],
   "sealed_validation_lineage": "training-control-v5-validation-01",
