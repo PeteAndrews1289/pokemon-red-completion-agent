@@ -79,9 +79,17 @@ selected Koga at 96.41% confidence. Fresh observations verified all declared eff
 Gold Teeth as a temporary Safari affordance and their removal after the Strength lesson. See the
 [eight-decision receipt](evidence/affordance-masked-eight-objective-sequence-2026-08-08.json).
 
-The next frontier is Saffron: `liberate_silph` and `reach_cinnabar` are dependency-legal, but neither
-has yet been connected to this replay harness. Silph is the next bounded adapter because it starts
-at the verified terminal boundary and adds a substantial multi-floor battle-and-navigation skill.
+Silph then became the ninth dispatch in the same uninterrupted replay. Its fixed skill executed
+5,041 actions across 1,675,457 frames, cleared all required Silph events, retained the Card Key and
+Master Ball, left optional Lapras untouched, and returned the healed party to Saffron Center. The
+complete slice now totals 20,634 mechanic actions, nine model dispatches, eight singletons, one real
+ranking branch, and zero labels, fallbacks, or replans. Fresh memory independently supplied
+`story:silph_co_liberated`. See the
+[nine-decision receipt](evidence/affordance-masked-nine-objective-sequence-2026-08-08.json).
+
+The next frontier is `defeat_sabrina` versus `reach_cinnabar`. Connecting both would create the
+second genuine executable branch and therefore a more informative planner test than merely adding
+another singleton chapter.
 
 ## August 5: the learned planner authorizes the fixed objective sequence
 

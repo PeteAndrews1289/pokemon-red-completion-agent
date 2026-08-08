@@ -1,0 +1,1220 @@
+{
+  "after": {
+    "available_objectives": [
+      "defeat_sabrina",
+      "reach_cinnabar"
+    ],
+    "completed_objectives": [
+      "begin_adventure",
+      "choose_starter",
+      "clear_rocket_hideout",
+      "defeat_brock",
+      "defeat_erika",
+      "defeat_koga",
+      "defeat_misty",
+      "defeat_surge",
+      "help_bill",
+      "liberate_silph",
+      "obtain_cut",
+      "obtain_silph_scope",
+      "obtain_strength",
+      "obtain_surf",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_fuchsia",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_saffron",
+      "reach_vermilion",
+      "receive_pokedex",
+      "rescue_fuji"
+    ],
+    "facts_added": [
+      "badge:rainbow",
+      "badge:soul",
+      "item:poke_flute",
+      "item:silph_scope",
+      "location:fuchsia_city",
+      "location:saffron_city",
+      "move:strength_available",
+      "move:surf_available",
+      "story:rocket_hideout_cleared",
+      "story:silph_co_liberated"
+    ],
+    "location": "saffron_pokecenter",
+    "mode": "overworld"
+  },
+  "assistance": {
+    "branching_model_decisions": 1,
+    "candidate_set_mode": "dependency_legal_and_skill_affordance_masked",
+    "expected_route_label_provided": false,
+    "mechanic_execution": "teacher_authored_bounded_skill",
+    "model_decisions_executed": 9,
+    "objective_selection": "learned_ranker",
+    "singleton_dispatches": 8,
+    "teacher_fallbacks": 0
+  },
+  "before": {
+    "available_objectives": [
+      "clear_rocket_hideout",
+      "defeat_erika",
+      "reach_saffron"
+    ],
+    "completed_objectives": [
+      "begin_adventure",
+      "choose_starter",
+      "defeat_brock",
+      "defeat_misty",
+      "defeat_surge",
+      "help_bill",
+      "obtain_cut",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_vermilion",
+      "receive_pokedex"
+    ],
+    "location": "celadon_pokecenter",
+    "mode": "overworld"
+  },
+  "capture": {
+    "checkpoint_id": "celadon_stable",
+    "checkpoints_completed": 124,
+    "state_sha256": "2f5adf158fced5dfddf9695c178abd75a272bc74befe6ae8f712db73d49f4d22"
+  },
+  "claim": "An affordance-masked learned ranker selected executable objectives without expected labels; registered fixed skills executed them; fresh emulator observations verified every declared objective and side effect.",
+  "decisions_and_executions": [
+    {
+      "action": null,
+      "dependency_legal_objectives": [
+        "clear_rocket_hideout",
+        "defeat_erika",
+        "reach_saffron"
+      ],
+      "excluded_objectives": [
+        {
+          "objective_id": "defeat_erika",
+          "reason": "Requires Fuchsia Center after Koga and the Strength lesson."
+        },
+        {
+          "objective_id": "reach_saffron",
+          "reason": "Requires Celadon Center after Erika before Saffron access."
+        }
+      ],
+      "executable_objectives": [
+        "clear_rocket_hideout"
+      ],
+      "facts_added": [
+        "item:silph_scope",
+        "story:rocket_hideout_cleared"
+      ],
+      "kind": "skill_completed",
+      "objective_id": "clear_rocket_hideout",
+      "reason": "Executed a registered bounded objective skill and independently verified it.",
+      "skill_actions_executed": 1143,
+      "skill_evidence": {
+        "actions_executed": 1143,
+        "controller_released": true,
+        "entered_hideout_bug_event": false,
+        "frames_executed": 98237,
+        "inventory": {
+          "lift_key_carried": true,
+          "money_before": 6371,
+          "money_remaining": 11852,
+          "silph_scope_carried": true,
+          "super_potions_remaining": 10,
+          "super_potions_used": 2
+        },
+        "objectives": [
+          "clear_rocket_hideout",
+          "obtain_silph_scope"
+        ],
+        "optional_trainers_bypassed": 8,
+        "party": {
+          "hp": [
+            98,
+            53,
+            37
+          ],
+          "max_hp": [
+            98,
+            53,
+            37
+          ],
+          "species": [
+            179,
+            64,
+            59
+          ],
+          "status": [
+            0,
+            0,
+            0
+          ]
+        },
+        "status": "ok",
+        "trainer_battles": [
+          {
+            "class": 30,
+            "event": null,
+            "label": "Game Corner guard",
+            "move_id": 44,
+            "opponent": 230,
+            "selected_pp_spent": 3,
+            "set": 7
+          },
+          {
+            "class": 30,
+            "event": 1700,
+            "label": "Lift Key Rocket",
+            "move_id": 44,
+            "opponent": 230,
+            "selected_pp_spent": 5,
+            "set": 18
+          },
+          {
+            "class": 30,
+            "event": 1699,
+            "label": "B4 door guard 2",
+            "move_id": 61,
+            "opponent": 230,
+            "selected_pp_spent": 4,
+            "set": 17
+          },
+          {
+            "class": 30,
+            "event": 1698,
+            "label": "B4 door guard 1",
+            "move_id": 61,
+            "opponent": 230,
+            "selected_pp_spent": 3,
+            "set": 16
+          },
+          {
+            "class": 29,
+            "event": 1703,
+            "label": "Rocket Hideout Giovanni",
+            "move_id": 61,
+            "opponent": 229,
+            "selected_pp_spent": 4,
+            "set": 1
+          }
+        ]
+      },
+      "skill_frames_executed": 98237,
+      "specialist": "battle"
+    },
+    {
+      "action": null,
+      "dependency_legal_objectives": [
+        "rescue_fuji",
+        "defeat_erika",
+        "reach_saffron"
+      ],
+      "excluded_objectives": [
+        {
+          "objective_id": "defeat_erika",
+          "reason": "Requires Fuchsia Center after Koga and the Strength lesson."
+        },
+        {
+          "objective_id": "reach_saffron",
+          "reason": "Requires Celadon Center after Erika before Saffron access."
+        }
+      ],
+      "executable_objectives": [
+        "rescue_fuji"
+      ],
+      "facts_added": [
+        "item:poke_flute"
+      ],
+      "kind": "skill_completed",
+      "objective_id": "rescue_fuji",
+      "reason": "Executed a registered bounded objective skill and independently verified it.",
+      "skill_actions_executed": 2508,
+      "skill_evidence": {
+        "actions_executed": 2508,
+        "battles": [
+          {
+            "class": 42,
+            "enemy_level": null,
+            "event": 239,
+            "label": "Tower rival",
+            "move_id": 44,
+            "opponent": 242,
+            "selected_pp_spent": 7,
+            "set": 5
+          },
+          {
+            "class": 45,
+            "enemy_level": null,
+            "event": 250,
+            "label": "4F Channeler",
+            "move_id": 61,
+            "opponent": 245,
+            "selected_pp_spent": 3,
+            "set": 10
+          },
+          {
+            "class": 45,
+            "enemy_level": null,
+            "event": 258,
+            "label": "5F Channeler",
+            "move_id": 61,
+            "opponent": 245,
+            "selected_pp_spent": 2,
+            "set": 14
+          },
+          {
+            "class": 45,
+            "enemy_level": null,
+            "event": 265,
+            "label": "6F Channeler 19",
+            "move_id": 61,
+            "opponent": 245,
+            "selected_pp_spent": 3,
+            "set": 19
+          },
+          {
+            "class": 45,
+            "enemy_level": null,
+            "event": 267,
+            "label": "6F Channeler 21",
+            "move_id": 61,
+            "opponent": 245,
+            "selected_pp_spent": 2,
+            "set": 21
+          },
+          {
+            "class": 45,
+            "enemy_level": null,
+            "event": 266,
+            "label": "6F Channeler 20",
+            "move_id": 61,
+            "opponent": 245,
+            "selected_pp_spent": 2,
+            "set": 20
+          },
+          {
+            "class": null,
+            "enemy_level": 30,
+            "event": 271,
+            "label": "restless Marowak",
+            "move_id": 61,
+            "opponent": 145,
+            "selected_pp_spent": 1,
+            "set": null
+          },
+          {
+            "class": 30,
+            "enemy_level": null,
+            "event": 273,
+            "label": "7F Rocket 19",
+            "move_id": 44,
+            "opponent": 230,
+            "selected_pp_spent": 4,
+            "set": 19
+          },
+          {
+            "class": 30,
+            "enemy_level": null,
+            "event": 274,
+            "label": "7F Rocket 20",
+            "move_id": 44,
+            "opponent": 230,
+            "selected_pp_spent": 1,
+            "set": 20
+          },
+          {
+            "class": 30,
+            "enemy_level": null,
+            "event": 275,
+            "label": "7F Rocket 21",
+            "move_id": 61,
+            "opponent": 230,
+            "selected_pp_spent": 4,
+            "set": 21
+          }
+        ],
+        "controller_released": true,
+        "evolution": {
+          "after": [
+            28,
+            64,
+            59
+          ],
+          "before": [
+            28,
+            64,
+            59
+          ],
+          "moves_preserved": true,
+          "rare_candy_used": false
+        },
+        "frames_executed": 167351,
+        "inventory": {
+          "money_before": 11852,
+          "money_remaining": 19177,
+          "super_potion_inventory_path": [
+            10,
+            9
+          ],
+          "super_potions_remaining": 9,
+          "super_potions_used": 1
+        },
+        "objective": "rescue_fuji",
+        "optional_trainers_bypassed": 8,
+        "party": {
+          "hp": [
+            121,
+            53,
+            37
+          ],
+          "max_hp": [
+            121,
+            53,
+            37
+          ],
+          "species": [
+            28,
+            64,
+            59
+          ],
+          "status": [
+            0,
+            0,
+            0
+          ]
+        },
+        "purified_zone": {
+          "event_set": true,
+          "full_party_heals": 3
+        },
+        "required_pickups": {
+          "elixir": true,
+          "poke_flute": true,
+          "rare_candy": true,
+          "x_accuracy": true
+        },
+        "status": "ok"
+      },
+      "skill_frames_executed": 167351,
+      "specialist": "battle"
+    },
+    {
+      "action": null,
+      "dependency_legal_objectives": [
+        "reach_fuchsia",
+        "defeat_erika",
+        "reach_saffron"
+      ],
+      "excluded_objectives": [
+        {
+          "objective_id": "defeat_erika",
+          "reason": "Requires Fuchsia Center after Koga and the Strength lesson."
+        },
+        {
+          "objective_id": "reach_saffron",
+          "reason": "Requires Celadon Center after Erika before Saffron access."
+        }
+      ],
+      "executable_objectives": [
+        "reach_fuchsia"
+      ],
+      "facts_added": [
+        "location:fuchsia_city"
+      ],
+      "kind": "skill_completed",
+      "objective_id": "reach_fuchsia",
+      "reason": "Executed a registered bounded objective skill and independently verified it.",
+      "skill_actions_executed": 3132,
+      "skill_evidence": {
+        "actions_executed": 3132,
+        "battles": [
+          {
+            "class": 14,
+            "enemy_level": null,
+            "enemy_species": [],
+            "event": 1154,
+            "label": "Route 12 Fisher",
+            "move_id": 61,
+            "opponent": 214,
+            "selected_pp_spent": 5,
+            "set": 3
+          },
+          {
+            "class": null,
+            "enemy_level": 30,
+            "enemy_species": [
+              132
+            ],
+            "event": 1167,
+            "label": "Route 12 Snorlax",
+            "move_id": 61,
+            "opponent": 132,
+            "selected_pp_spent": 1,
+            "set": null
+          },
+          {
+            "class": 20,
+            "enemy_level": null,
+            "enemy_species": [],
+            "event": 1157,
+            "label": "Route 12 Rocker",
+            "move_id": 61,
+            "opponent": 220,
+            "selected_pp_spent": 1,
+            "set": 2
+          },
+          {
+            "class": 23,
+            "enemy_level": null,
+            "enemy_species": [],
+            "event": 1169,
+            "label": "Route 13 Bird Keeper1",
+            "move_id": 44,
+            "opponent": 223,
+            "selected_pp_spent": 4,
+            "set": 1
+          },
+          {
+            "class": 6,
+            "enemy_level": null,
+            "enemy_species": [],
+            "event": 1170,
+            "label": "Route 13 Jr. Trainer F1",
+            "move_id": 44,
+            "opponent": 206,
+            "selected_pp_spent": 5,
+            "set": 12
+          }
+        ],
+        "controller_released": true,
+        "frames_executed": 373072,
+        "money_remaining": 15477,
+        "objective": "reach_fuchsia",
+        "optional_events_false": 35,
+        "optional_items_untouched": 5,
+        "party": {
+          "hp": [
+            125,
+            53,
+            37,
+            144
+          ],
+          "max_hp": [
+            125,
+            53,
+            37,
+            144
+          ],
+          "species": [
+            28,
+            64,
+            59,
+            132
+          ],
+          "status": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "snorlax": {
+          "beat_event": true,
+          "captured": true,
+          "fight_event_after": false,
+          "fight_event_before": false,
+          "flute_retained": true,
+          "funding_antidotes_sold": 0,
+          "funding_potions_sold": 0,
+          "funding_super_potions_sold": 2,
+          "great_balls_purchased": 32,
+          "level": 30,
+          "object_tile_crossed": true,
+          "party_after": [
+            28,
+            64,
+            59,
+            132
+          ],
+          "party_before": [
+            28,
+            64,
+            59
+          ],
+          "recovery_items_used": 1,
+          "species": 132,
+          "throws_used": 2
+        },
+        "status": "ok",
+        "wild_flees": 3
+      },
+      "skill_frames_executed": 373072,
+      "specialist": "navigation"
+    },
+    {
+      "action": null,
+      "dependency_legal_objectives": [
+        "obtain_surf",
+        "defeat_erika",
+        "obtain_strength",
+        "reach_saffron",
+        "defeat_koga"
+      ],
+      "excluded_objectives": [
+        {
+          "objective_id": "defeat_erika",
+          "reason": "Requires Fuchsia Center after Koga and the Strength lesson."
+        },
+        {
+          "objective_id": "obtain_strength",
+          "reason": "Requires Fuchsia Center with Gold Teeth before Strength is obtained."
+        },
+        {
+          "objective_id": "reach_saffron",
+          "reason": "Requires Celadon Center after Erika before Saffron access."
+        },
+        {
+          "objective_id": "defeat_koga",
+          "reason": "Requires Fuchsia Center with Surf before Koga is defeated."
+        }
+      ],
+      "executable_objectives": [
+        "obtain_surf"
+      ],
+      "facts_added": [
+        "item:gold_teeth",
+        "move:surf_available"
+      ],
+      "kind": "skill_completed",
+      "objective_id": "obtain_surf",
+      "reason": "Executed a registered bounded objective skill and independently verified it.",
+      "skill_actions_executed": 1648,
+      "skill_evidence": {
+        "actions_executed": 1648,
+        "admission": {
+          "fee": 500,
+          "initial_balls": 30,
+          "initial_steps": 500,
+          "single_admission": true
+        },
+        "cleanup": {
+          "balls": 0,
+          "in_safari_zone": false,
+          "mechanism": "times_up",
+          "steps": 0
+        },
+        "controller_released": true,
+        "frames_executed": 209136,
+        "money_remaining": 14977,
+        "objective": "obtain_surf",
+        "rewards": {
+          "gold_teeth": true,
+          "got_hm03_event": true,
+          "hm03_reusable_and_retained": true,
+          "tm40_skull_bash": true
+        },
+        "route": {
+          "balls_milestones": [
+            30,
+            30,
+            30,
+            30,
+            30,
+            30,
+            30
+          ],
+          "encounters_fled": 4,
+          "step_milestones": [
+            500,
+            472,
+            376,
+            238,
+            228,
+            201,
+            0
+          ],
+          "west_elevation_trap_avoided": true
+        },
+        "status": "ok",
+        "surf": {
+          "move_id": 57,
+          "moves_after": [
+            44,
+            39,
+            61,
+            57
+          ],
+          "moves_before": [
+            44,
+            39,
+            61,
+            55
+          ],
+          "pp_after": [
+            25,
+            30,
+            20,
+            15
+          ],
+          "pp_after_teach": [
+            25,
+            30,
+            20,
+            15
+          ],
+          "pp_before": [
+            25,
+            30,
+            20,
+            25
+          ],
+          "replaced_move_id": 55,
+          "slot": 4
+        }
+      },
+      "skill_frames_executed": 209136,
+      "specialist": "navigation"
+    },
+    {
+      "action": null,
+      "dependency_legal_objectives": [
+        "defeat_erika",
+        "obtain_strength",
+        "reach_saffron",
+        "defeat_koga"
+      ],
+      "excluded_objectives": [
+        {
+          "objective_id": "defeat_erika",
+          "reason": "Requires Fuchsia Center after Koga and the Strength lesson."
+        },
+        {
+          "objective_id": "reach_saffron",
+          "reason": "Requires Celadon Center after Erika before Saffron access."
+        }
+      ],
+      "executable_objectives": [
+        "obtain_strength",
+        "defeat_koga"
+      ],
+      "facts_added": [
+        "badge:soul"
+      ],
+      "kind": "skill_completed",
+      "objective_id": "defeat_koga",
+      "reason": "Executed a registered bounded objective skill and independently verified it.",
+      "skill_actions_executed": 1555,
+      "skill_evidence": {
+        "actions_executed": 1555,
+        "controller_released": true,
+        "frames_executed": 179476,
+        "geographic_dependency": {
+          "cycling_road": "bicycle_required",
+          "reason": "post-Surf Fuchsia cannot legally return to Celadon before Soul Badge",
+          "route15_return": "one_way_blocked",
+          "surf": "soul_badge_required",
+          "unblocks": "Surf route toward the western Kanto network"
+        },
+        "koga": {
+          "continued_after_faint": false,
+          "no_faint": true,
+          "opponent": 238,
+          "party": [
+            "Koffing L37",
+            "Muk L39",
+            "Koffing L37",
+            "Weezing L43"
+          ],
+          "party_restored_at_boundary": true,
+          "surf_pp_spent": 7,
+          "terminal_mutual_ko": false,
+          "trainer_class": 38,
+          "trainer_number": 1,
+          "x_accuracy_used": true
+        },
+        "mandatory_trainers": [
+          {
+            "event": 603,
+            "label": "Juggler 3",
+            "move_id": 57,
+            "opponent": 221,
+            "selected_pp_spent": 8,
+            "trainer_class": 21,
+            "trainer_number": 3
+          },
+          {
+            "event": 606,
+            "label": "Tamer 2",
+            "move_id": 57,
+            "opponent": 222,
+            "selected_pp_spent": 5,
+            "trainer_class": 22,
+            "trainer_number": 2
+          },
+          {
+            "event": 607,
+            "label": "Juggler 4",
+            "move_id": 57,
+            "opponent": 221,
+            "selected_pp_spent": 3,
+            "trainer_class": 21,
+            "trainer_number": 4
+          }
+        ],
+        "money_remaining": 22829,
+        "objective": "defeat_koga",
+        "recoveries": {
+          "consumables_used": 1,
+          "mart_purchases": 0,
+          "pokemon_center_visits_before_koga": 3
+        },
+        "rewards": {
+          "beat_koga_event": true,
+          "got_tm06_event": true,
+          "regular_trainers_deactivated": true,
+          "soul_badge": true,
+          "soul_badge_mirror": true,
+          "tm06_toxic_retained": true
+        },
+        "status": "ok"
+      },
+      "skill_frames_executed": 179476,
+      "specialist": "battle"
+    },
+    {
+      "action": null,
+      "dependency_legal_objectives": [
+        "defeat_erika",
+        "obtain_strength",
+        "reach_saffron",
+        "reach_cinnabar"
+      ],
+      "excluded_objectives": [
+        {
+          "objective_id": "defeat_erika",
+          "reason": "Requires Fuchsia Center after Koga and the Strength lesson."
+        },
+        {
+          "objective_id": "reach_saffron",
+          "reason": "Requires Celadon Center after Erika before Saffron access."
+        },
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "No objective skill or specialist planner is registered."
+        }
+      ],
+      "executable_objectives": [
+        "obtain_strength"
+      ],
+      "facts_added": [
+        "move:strength_available"
+      ],
+      "kind": "skill_completed",
+      "objective_id": "obtain_strength",
+      "reason": "Executed a registered bounded objective skill and independently verified it.",
+      "skill_actions_executed": 726,
+      "skill_evidence": {
+        "actions_executed": 726,
+        "controller_released": true,
+        "frames_executed": 93816,
+        "money_remaining": 22829,
+        "objective": "obtain_strength",
+        "status": "ok",
+        "strength": {
+          "move_id": 70,
+          "moves_after": [
+            44,
+            70,
+            61,
+            57
+          ],
+          "moves_before": [
+            44,
+            39,
+            61,
+            57
+          ],
+          "pp_after": [
+            25,
+            15,
+            20,
+            15
+          ],
+          "replaced_move_id": 39,
+          "slot": 2
+        },
+        "warden": {
+          "gave_gold_teeth_event": true,
+          "gold_teeth_removed": true,
+          "got_hm04_event": true,
+          "hm04_reusable_and_retained": true
+        }
+      },
+      "skill_frames_executed": 93816,
+      "specialist": "interaction"
+    },
+    {
+      "action": null,
+      "dependency_legal_objectives": [
+        "defeat_erika",
+        "reach_saffron",
+        "reach_cinnabar"
+      ],
+      "excluded_objectives": [
+        {
+          "objective_id": "reach_saffron",
+          "reason": "Requires Celadon Center after Erika before Saffron access."
+        },
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "No objective skill or specialist planner is registered."
+        }
+      ],
+      "executable_objectives": [
+        "defeat_erika"
+      ],
+      "facts_added": [
+        "badge:rainbow"
+      ],
+      "kind": "skill_completed",
+      "objective_id": "defeat_erika",
+      "reason": "Executed a registered bounded objective skill and independently verified it.",
+      "skill_actions_executed": 3551,
+      "skill_evidence": {
+        "actions_executed": 3551,
+        "controller_released": true,
+        "erika": {
+          "class": 37,
+          "ice_beam_move_id": 58,
+          "ice_beam_pp_spent": 3,
+          "ice_beam_preparation": {
+            "cost": 200,
+            "tm13_event": true,
+            "transfer_before_event": true
+          },
+          "opponent": 237,
+          "set": 1,
+          "skull_bash_preparation": {
+            "learned_move_id": 130,
+            "learned_move_pp": 15,
+            "moves_after": [
+              130,
+              70,
+              58,
+              57
+            ],
+            "moves_before": [
+              44,
+              70,
+              61,
+              57
+            ],
+            "replaced_move_id": 44,
+            "slot": 1,
+            "source": "Safari Zone North TM40"
+          },
+          "strength_move_id": 70,
+          "strength_pp_spent": 0
+        },
+        "frames_executed": 506453,
+        "money_remaining": 26685,
+        "objective": "defeat_erika",
+        "optional_route_trainers_bypassed": 20,
+        "party": {
+          "hp": [
+            137,
+            53,
+            37,
+            144
+          ],
+          "lead_level": 44,
+          "max_hp": [
+            137,
+            53,
+            37,
+            144
+          ],
+          "moves": [
+            130,
+            70,
+            58,
+            57
+          ],
+          "pp": [
+            15,
+            15,
+            10,
+            15
+          ],
+          "status": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "poke_flute_archived": true,
+        "rainbow_badge": {
+          "beat_erika": true,
+          "beat_gym_flags": 31,
+          "got_tm21": true,
+          "obtained_badges": 31
+        },
+        "route_training": {
+          "battles_won": 2,
+          "final_level": 42,
+          "requirement_met": true,
+          "starting_level": 42,
+          "target_level": 42
+        },
+        "status": "ok"
+      },
+      "skill_frames_executed": 506453,
+      "specialist": "battle"
+    },
+    {
+      "action": null,
+      "dependency_legal_objectives": [
+        "reach_saffron",
+        "reach_cinnabar"
+      ],
+      "excluded_objectives": [
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "No objective skill or specialist planner is registered."
+        }
+      ],
+      "executable_objectives": [
+        "reach_saffron"
+      ],
+      "facts_added": [
+        "location:saffron_city"
+      ],
+      "kind": "skill_completed",
+      "objective_id": "reach_saffron",
+      "reason": "Executed a registered bounded objective skill and independently verified it.",
+      "skill_actions_executed": 1330,
+      "skill_evidence": {
+        "actions_executed": 1330,
+        "battle_free": true,
+        "controller_released": true,
+        "frames_executed": 168448,
+        "guard_handoff": {
+          "consumed_before_global_access": true,
+          "flag_after_consumption": 0,
+          "flag_after_dialogue": 64,
+          "flag_before": 0,
+          "fresh_water": [
+            0,
+            1,
+            0
+          ]
+        },
+        "jolteon_recruitment": {
+          "evolved_species": 104,
+          "gift_level": 25,
+          "gift_species": 102,
+          "money_after_stone": 24585,
+          "party_after": [
+            28,
+            64,
+            59,
+            132,
+            104
+          ],
+          "party_before": [
+            28,
+            64,
+            59,
+            132
+          ],
+          "stone_item_id": 33,
+          "stone_price": 2100
+        },
+        "objective": "reach_saffron",
+        "other_guard_drinks_absent": {
+          "lemonade": true,
+          "soda_pop": true
+        },
+        "party": {
+          "hp": [
+            137,
+            53,
+            37,
+            144,
+            75
+          ],
+          "lead_level": 44,
+          "max_hp": [
+            137,
+            53,
+            37,
+            144,
+            75
+          ],
+          "moves": [
+            130,
+            70,
+            58,
+            57
+          ],
+          "pp": [
+            15,
+            15,
+            10,
+            15
+          ],
+          "status": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "status": "ok",
+        "vending_machine": {
+          "cursor": 0,
+          "floor": "celadon_mart_roof",
+          "item_id": 60,
+          "money_after": 24385,
+          "money_before": 26685,
+          "price": 200
+        }
+      },
+      "skill_frames_executed": 168448,
+      "specialist": "navigation"
+    },
+    {
+      "action": null,
+      "dependency_legal_objectives": [
+        "liberate_silph",
+        "reach_cinnabar"
+      ],
+      "excluded_objectives": [
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "No objective skill or specialist planner is registered."
+        }
+      ],
+      "executable_objectives": [
+        "liberate_silph"
+      ],
+      "facts_added": [
+        "story:silph_co_liberated"
+      ],
+      "kind": "skill_completed",
+      "objective_id": "liberate_silph",
+      "reason": "Executed a registered bounded objective skill and independently verified it.",
+      "skill_actions_executed": 5041,
+      "skill_evidence": {
+        "actions_executed": 5041,
+        "controller_released": true,
+        "frames_executed": 1675457,
+        "ice_beam_upgrade": {
+          "fresh_water_remaining": 0,
+          "item_transfer_before_event": false,
+          "moves": [
+            130,
+            70,
+            58,
+            57
+          ],
+          "other_roof_rewards_untouched": true,
+          "pp": [
+            15,
+            15,
+            10,
+            15
+          ],
+          "preinstalled_before_silph": true,
+          "tm13_event": true,
+          "tm13_remaining": 0
+        },
+        "inventory_capacity": {
+          "archived_before_silph": [
+            "SS_TICKET",
+            "LIFT_KEY",
+            "HELIX_FOSSIL"
+          ],
+          "transition_verified": true
+        },
+        "key_items": {
+          "card_key": 1,
+          "master_ball": 1
+        },
+        "money": [
+          24385,
+          21334
+        ],
+        "objective": "liberate_silph",
+        "optional_lapras_untouched": true,
+        "required_events": {
+          "0x702": true,
+          "0x709": true,
+          "0x722": true,
+          "0x740": true,
+          "0x784": true,
+          "0x788": true,
+          "0x78d": true,
+          "0x78f": true
+        },
+        "status": "ok",
+        "supply": {
+          "hyper_potions_bought": 7,
+          "max_repel_bought": 0,
+          "max_repel_remaining": 0,
+          "remaining": 7,
+          "used_by_rival_policy": 0,
+          "x_special_used_by_rival_policy": 1
+        }
+      },
+      "skill_frames_executed": 1675457,
+      "specialist": "battle"
+    }
+  ],
+  "limitations": [
+    "captured_state_diagnostic",
+    "bounded_model_decision_sequence",
+    "singleton_dispatches_do_not_measure_ranking_quality",
+    "fixed_teacher_authored_mechanic_skills",
+    "not_a_clean_start_evaluation",
+    "not_end_to_end_learned_gameplay"
+  ],
+  "loop": {
+    "actions_executed": 20634,
+    "decisions": 9,
+    "objectives_completed": 9,
+    "replans": 0,
+    "schema": "pokemon-portable-player-loop-v2"
+  },
+  "policy": {
+    "authorized_decisions": 0,
+    "branching_decisions": 1,
+    "completed_objectives": 9,
+    "decisions": 9,
+    "mean_branching_confidence": 0.9640747386427077,
+    "mean_candidate_count": 1.1111111111111112,
+    "mean_confidence": 0.9960083042936342,
+    "minimum_branching_confidence": 0.9640747386427077,
+    "minimum_confidence": 0.9640747386427077,
+    "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+    "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "route_dispatch_mode": "model_selected_specialists",
+    "schema": "pokemon-semantic-objective-live-policy-v1",
+    "selected_decisions": 9,
+    "singleton_decisions": 8,
+    "teacher_fallbacks": 0
+  },
+  "schema": "pokemon-model-selected-objective-execution-v3",
+  "source": {
+    "git_commit": "568d58c80ce7d2212c6ef90487f9add8aa1d8964",
+    "worktree_dirty": false
+  },
+  "status": "ok"
+}

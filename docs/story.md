@@ -258,13 +258,13 @@ So the runtime changed. It now observes the game, asks the model for an objectiv
 skill that can physically run from the live state, executes that bounded skill, observes the result
 again, and replans. An impossible choice cannot quietly fall back to the teacher.
 
-From one authenticated Celadon capture, that loop completed eight objectives in the same emulator
-process: Rocket Hideout, Pokémon Tower, Fuchsia, Surf, Koga, Strength, Erika, and Saffron. The fixed
-skills performed 15,593 mechanic actions. The model received no route labels, used no teacher
+From one authenticated Celadon capture, that loop completed nine objectives in the same emulator
+process: Rocket Hideout, Pokémon Tower, Fuchsia, Surf, Koga, Strength, Erika, Saffron, and Silph Co.
+The fixed skills performed 20,634 mechanic actions. The model received no route labels, used no teacher
 fallbacks, and required no replans. Fresh memory observations—not the skills' own success reports—
 verified each result.
 
-That sounds like eight planning victories. It is not. Seven times only one registered skill was
+That sounds like nine planning victories. It is not. Eight times only one registered skill was
 physically executable. Those are useful dispatch and integration tests, but they do not measure
 ranking quality. Once, both Koga and Strength were executable. The model chose Koga at 96.41%
 confidence, and the run continued.
@@ -315,9 +315,9 @@ Being precise about this matters more than the story sounding finished.
 
 - The deterministic teacher completes Pokémon Red repeatedly, with genuine Champion and
   Hall-of-Fame evidence in the same run.
-- A trained model has selected and completed eight consecutive objectives in a portable closed
+- A trained model has selected and completed nine consecutive objectives in a portable closed
   loop with no expected labels or fallbacks. Fixed skills still execute navigation, battles,
-  menus, and recovery; only one of the eight decisions had multiple executable candidates.
+  menus, and recovery; only one of the nine decisions had multiple executable candidates.
 - Encounter bands for five areas are measured rather than recalled, with sample counts, and they
   reproduce exactly across runs because the route is deterministic.
 - A member that is too weak for where the run happens to be is now routed somewhere that suits it,

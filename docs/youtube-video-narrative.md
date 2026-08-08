@@ -116,8 +116,11 @@ counter reads **“eight model dispatches; 15,593 fixed-skill actions; zero labe
 replans.”** Do not present all eight decisions as equal evidence. Seven had only one executable
 candidate. At the first true branch, Koga and Strength were both runnable and the model chose Koga
 at **96.41% confidence**. Make that distinction part of the visual: seven grey singleton dispatches,
-one highlighted ranking decision. End the act on the healed five-member party in Saffron and the
-next open frontier—Silph or Cinnabar.
+one highlighted ranking decision. Then let the model dispatch Silph Co. in the same emulator
+process. The fixed skill performs 5,041 more actions, verifies the Master Ball and required events,
+leaves optional Lapras untouched, and returns healed. End the act on **“nine dispatches; 20,634
+fixed-skill actions; zero labels, fallbacks, or replans”** and the next open frontier—Sabrina or
+Cinnabar.
 
 ### Act VII: the Crystal test — 10:10–11:15
 
@@ -146,7 +149,7 @@ version has to prove the model learned something worth carrying into a game it h
 - A strict-evaluation counter showing teacher queries at zero.
 - The Celadon three-way choice, the post-Hideout replan to Tower, and the independently verified
   Hideout/Silph Scope/Poké Flute receipt, with model-versus-fixed-skill ownership labeled.
-- The eight-step Saffron receipt, with seven singleton dispatches visually separated from the real
+- The nine-step Silph receipt, with eight singleton dispatches visually separated from the real
   Koga-versus-Strength branch and the transient Gold Teeth fact disappearing after use.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 

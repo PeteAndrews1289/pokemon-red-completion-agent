@@ -64,9 +64,9 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1939 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
-clean after the affordance-masked eight-objective dispatcher. The source-bound eight-step run uses
-published commit `bb2c3a2` (the documentation receipt lands in the following commit).
+**Gate state:** 1940 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
+clean after the affordance-masked Silph adapter. The source-bound nine-step run uses published
+commit `568d58c` (the documentation receipt lands in the following commit).
 
 ---
 
@@ -206,11 +206,17 @@ inventory facts, so Gold Teeth disappear after the Warden consumes them while du
 progress remains. See the
 [eight-decision receipt](docs/evidence/affordance-masked-eight-objective-sequence-2026-08-08.json).
 
-**Next:** extend the portable sequence from Saffron through Silph while preserving the same typed
-availability, bounded execution, independent observation, and honest branch metrics. The current
-frontier is `liberate_silph` versus `reach_cinnabar`; neither is yet registered in this replay
-harness. Preserve the ownership distinction: the model selects objectives; current skills still
-choose navigation, battle, menu, and recovery actions.
+Silph is now part of the same uninterrupted sequence. Its bounded skill executed 5,041 actions and
+1,675,457 frames, cleared the required events, retained the Card Key and Master Ball, left optional
+Lapras untouched, and returned healed to Saffron Center. The complete slice is now nine dispatches
+and 20,634 actions; eight are singletons and the Koga-versus-Strength choice remains the one measured
+ranking branch. See the
+[nine-decision receipt](docs/evidence/affordance-masked-nine-objective-sequence-2026-08-08.json).
+
+**Next:** connect the post-Silph Dojo/Sabrina curriculum as the bounded `defeat_sabrina` mechanic,
+or Cinnabar as a genuinely competing executable branch. Preserve the same typed availability,
+independent observation, and ownership distinction: the model selects objectives; current skills
+still choose navigation, battle, menu, and recovery actions.
 
 ---
 

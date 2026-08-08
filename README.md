@@ -21,17 +21,17 @@ Pokémon game without quietly handing control back to the teacher.
 That distinction is the heart of the project and its public story. The teacher supplies verified
 demonstrations and a referee; it is not the final autonomous player.
 
-The first uninterrupted Red vertical slice now runs through eight portable-loop decisions. From an
+The first uninterrupted Red vertical slice now runs through nine portable-loop decisions. From an
 authenticated Celadon capture, the learned objective ranker selected and completed Rocket Hideout,
-Pokémon Tower, Fuchsia, Surf, Koga, Strength, Erika, and Saffron. Registered fixed skills executed
-**15,593 bounded actions** with zero expected-route labels, teacher fallbacks, or replans. Fresh
+Pokémon Tower, Fuchsia, Surf, Koga, Strength, Erika, Saffron, and Silph Co. Registered fixed skills
+executed **20,634 bounded actions** with zero expected-route labels, teacher fallbacks, or replans. Fresh
 observations independently verified every declared result; the run also captured Snorlax, built a
 five-member party, and ended healed in Saffron. The first genuinely competing *executable* choice
-was Koga versus Strength, where the model selected Koga at **96.41% confidence**. The other seven
+was Koga versus Strength, where the model selected Koga at **96.41% confidence**. The other eight
 dispatches had only one executable candidate, so their confidence scores are not evidence of
 ranking quality. Mechanics remain teacher-authored; this is a truthful model-selected objective
 loop, not yet end-to-end learned play. See the
-[eight-decision receipt](docs/evidence/affordance-masked-eight-objective-sequence-2026-08-08.json).
+[nine-decision receipt](docs/evidence/affordance-masked-nine-objective-sequence-2026-08-08.json).
 
 - [Current technical handoff](HANDOFF.md)
 - [Dependency-ordered roadmap](docs/roadmap.md)
