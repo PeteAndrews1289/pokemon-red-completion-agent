@@ -34,7 +34,14 @@ def _decision(
     return TrainingCandidateDecision(index, selected, observation, "synthetic").public_dict()
 
 
-def _write_replay(path: Path, *, add_identity: bool = False) -> str:
+def _write_replay(
+    path: Path,
+    *,
+    add_identity: bool = False,
+    lineage: str = "diagnostic-one",
+    partition: str = "unassigned",
+    state: str = "b",
+) -> str:
     evolution = [_decision(0, TrainingChoiceKind.VENUE, 2, 1)]
     balance = [
         _decision(0, TrainingChoiceKind.TRAINEE, 3, 0),
@@ -50,11 +57,11 @@ def _write_replay(path: Path, *, add_identity: bool = False) -> str:
         "feature_names": list(TRAINING_CANDIDATE_FEATURE_NAMES),
         "error": None,
         "provenance": {
-            "lineage_id": "diagnostic-one",
-            "partition": "unassigned",
+            "lineage_id": lineage,
+            "partition": partition,
             "source_commit": "a" * 40,
             "source_dirty": False,
-            "state_sha256": "b" * 64,
+            "state_sha256": state * 64,
         },
         "segments": {"evolution": evolution, "balance": balance},
     }
@@ -101,3 +108,83 @@ def test_choice_audit_rejects_candidate_identity_fields(tmp_path: Path) -> None:
 
     assert rejected.returncode == 2
     assert "unexpected identity" in rejected.stderr
+
+
+def test_selection_stays_training_only_then_fit_opens_validation(tmp_path: Path) -> None:
+    train_one = tmp_path / "train-one.json"
+    train_two = tmp_path / "train-two.json"
+    validation = tmp_path / "validation.json"
+    train_one_sha = _write_replay(
+        train_one, lineage="train-one", partition="train", state="1"
+    )
+    train_two_sha = _write_replay(
+        train_two, lineage="train-two", partition="train", state="2"
+    )
+    validation_sha = _write_replay(
+        validation, lineage="validation-one", partition="validation", state="3"
+    )
+    selection = tmp_path / "selection.json"
+    selected = subprocess.run(
+        [
+            sys.executable,
+            "scripts/select_training_candidate_model.py",
+            "--train",
+            str(train_one),
+            train_one_sha,
+            "--train",
+            str(train_two),
+            train_two_sha,
+            "--out",
+            str(selection),
+            "--epochs",
+            "2",
+            "--kind-balance-power",
+            "0",
+            "--kind-balance-power",
+            "1",
+        ],
+        cwd=PROJECT_ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert selected.returncode == 0, selected.stderr
+    selection_payload = json.loads(selection.read_text())
+    assert selection_payload["validation_opened"] is False
+    assert len(selection_payload["trials"]) == 2
+
+    model = tmp_path / "model.json"
+    summary = tmp_path / "summary.json"
+    fitted = subprocess.run(
+        [
+            sys.executable,
+            "scripts/fit_training_candidate.py",
+            "--train",
+            str(train_one),
+            train_one_sha,
+            "--train",
+            str(train_two),
+            train_two_sha,
+            "--validation",
+            str(validation),
+            validation_sha,
+            "--out-model",
+            str(model),
+            "--out-summary",
+            str(summary),
+            "--epochs",
+            "2",
+        ],
+        cwd=PROJECT_ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert fitted.returncode == 0, fitted.stderr
+    summary_payload = json.loads(summary.read_text())
+    assert summary_payload["validation_opened"] is True
+    assert summary_payload["partition_audit"]["promotion_eligible"] is True
+    assert summary_payload["validation_lineages"] == ["validation-one"]
+    assert hashlib.sha256(model.read_bytes()).hexdigest() == summary_payload[
+        "private_model_file_sha256"
+    ]
