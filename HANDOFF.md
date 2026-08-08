@@ -327,6 +327,10 @@ Fresh validation root 02 qualified at source `6c65dcd`: 60,459 decisions, 1,767 
 heals, zero faints, and all level 55. The default 500-epoch candidate scored 75.62% raw and 76.91%
 balanced accuracy on it, with zero state overlap and all five classes covered. Model SHA is
 `d04546c2...df91d7d`. It is offline-only; shadow and controlled emulator gates remain.
+Authenticated loading and live shadow instrumentation are now implemented. The private model file
+digest is `8088efbf...52307f`; loading rejects links, altered bytes, schema drift, shape drift, and
+non-finite parameters. Shadow output reports confidence, raw/balanced agreement, phases, class
+counts, and confusion while explicitly recording that the model had no authority.
 
 Counted v2 train lineage 01 is qualified from a retained 17-frame root at source `4c885d8`:
 46,687 decisions, all five actions, 1,726 battles, 815 healing trips, zero faints, and all level 55.

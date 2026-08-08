@@ -180,8 +180,12 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   in training and keep the sealed test partition closed.
 - [x] The first real offline candidate used two training roots and one fresh validation root:
   75.62% raw / 76.91% balanced validation accuracy, zero root overlap, all five classes covered.
-- [ ] Authenticate the private model, shadow it on a fresh root, then grant bounded emulator control
-  only under the unchanged teacher/referee safety envelope.
+- [ ] Complete the promotion path: shadow on a fresh root, then grant bounded emulator control only
+  under the unchanged teacher/referee safety envelope.
+- [x] Implement exact-file authenticated model loading and live teacher-authority shadow auditing;
+  failed and successful runs both retain their disagreement evidence atomically.
+- [ ] Collect the first fresh live shadow lineage and analyze per-class/phase failures before any
+  model-controlled action is permitted.
   The class-balanced MLP, phase-masked inference, metrics, and fail-closed candidate fitter are
   implemented and tested synthetically; this item remains open until real v2 lineages exist.
 - [ ] Run the candidate in shadow mode, then model-controlled mode under the unchanged teacher

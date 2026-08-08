@@ -258,6 +258,14 @@ predeclared default class-balanced MLP reached 75.62% ordinary accuracy and 76.9
 accuracy. This is the first real learned training-control result. It is still an offline candidate:
 shadow inference and a bounded model-controlled emulator run must pass before it receives authority.
 
+The candidate can now enter that next stage without weakening artifact integrity. Its private file
+is authenticated byte-for-byte before reconstruction, and the decoder rejects links, missing or
+extra fields, schema drift, invalid classes, bad parameter shapes, and non-finite values. During a
+live shadow replay, the teacher still performs every mechanic while the model's prediction,
+confidence, action distribution, phase accuracy, balanced agreement, and confusion matrix are
+recorded. The mechanism deliberately writes evidence on failure as well as success; a shadow run
+cannot disappear merely because the underlying teacher lineage breaks.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

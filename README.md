@@ -106,6 +106,13 @@ offline training-control model, but it remains non-promotable until shadow and m
 emulator runs pass. See the [validation receipt](docs/evidence/training-control-v2-validation-02-2026-08-08.json)
 and [candidate receipt](docs/evidence/training-control-candidate-v1-2026-08-08.json).
 
+The next gate is implemented. Private model loading now requires an exact SHA-256, a regular
+non-symlink file, the complete feature/class schema, finite correctly shaped parameters, and the
+declared model format. `replay_training.py` can run that authenticated model in shadow mode: it
+records confidence, raw and balanced agreement, per-phase accuracy, action distributions, and the
+full teacher-to-model confusion matrix while the teacher alone retains execution authority. The
+next fresh root will produce the first live shadow receipt.
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

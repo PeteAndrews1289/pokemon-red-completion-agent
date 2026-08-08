@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import replace
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -9,6 +12,7 @@ from pokemon_red_completion.training_control import (
     TRAINING_CONTROL_CLASS_REFS,
     TRAINING_CONTROL_FEATURE_NAMES,
     TrainingControlAction,
+    TrainingControlDecision,
     TrainingControlObservation,
     TrainingControlPhase,
 )
@@ -19,7 +23,9 @@ from pokemon_red_completion.training_control_dataset import (
 from pokemon_red_completion.training_control_model import (
     TrainingControlMLP,
     TrainingControlModelError,
+    TrainingControlShadowAudit,
     fit_training_control_candidate,
+    load_training_control_model,
 )
 
 
@@ -109,3 +115,45 @@ def test_candidate_rejects_same_root_state_across_train_and_validation() -> None
 
     with pytest.raises(TrainingControlModelError, match="state_overlap"):
         fit_training_control_candidate((train,), (validation,), epochs=2)
+
+
+def test_private_model_loading_authenticates_and_round_trips(tmp_path: Path) -> None:
+    candidate = fit_training_control_candidate(
+        (_dataset("train-root", "train", "1"),),
+        (_dataset("validation-root", "validation", "2"),),
+        epochs=2,
+    )
+    path = tmp_path / "model.json"
+    payload = json.dumps(candidate.model.to_dict(), sort_keys=True).encode()
+    path.write_bytes(payload)
+    digest = hashlib.sha256(payload).hexdigest()
+
+    loaded = load_training_control_model(path, expected_sha256=digest)
+
+    assert loaded.to_dict() == candidate.model.to_dict()
+    path.write_bytes(payload + b"\n")
+    with pytest.raises(TrainingControlModelError, match="authentication"):
+        load_training_control_model(path, expected_sha256=digest)
+
+
+def test_shadow_audit_observes_without_model_authority() -> None:
+    hidden = 2
+    model = TrainingControlMLP(
+        class_refs=TRAINING_CONTROL_CLASS_REFS,
+        input_weights=np.zeros((hidden, len(TRAINING_CONTROL_FEATURE_NAMES))),
+        hidden_bias=np.zeros(hidden),
+        output_weights=np.zeros((hidden, len(TRAINING_CONTROL_CLASS_REFS))),
+        output_bias=np.asarray([5.0, 5.0, 1.0, 1.0, 0.0]),
+    )
+    audit = TrainingControlShadowAudit(model)
+    for index, action in enumerate((TrainingControlAction.SEEK, TrainingControlAction.FLEE)):
+        audit.observe(
+            TrainingControlDecision(index, action, _observation(action, index), "teacher")
+        )
+
+    summary = audit.public_dict()
+    assert summary["decisions"] == 2
+    assert summary["agreements"] == 1
+    assert summary["accuracy"] == 0.5
+    assert summary["balanced_accuracy"] == 0.5
+    assert summary["model_had_execution_authority"] is False

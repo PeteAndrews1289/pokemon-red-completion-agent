@@ -201,6 +201,9 @@ while retaining the early no-win mismatch and global step budget. Use a fresh va
 Validation root 02 qualified with 60,459 decisions and an all-55 zero-faint terminal. The default
 candidate scored 75.62% raw / 76.91% balanced held-out accuracy with no state overlap. It is still
 offline-only. Next add authenticated loading and shadow inference; do not open test roots.
+Authenticated model loading and teacher-authority shadow auditing are implemented on the current
+source. The real private model file digest is `8088efbf...52307f`. Collect a new unassigned shadow
+root next; never treat the shadow model's predictions as execution commands.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

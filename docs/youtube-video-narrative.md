@@ -213,6 +213,12 @@ five actions. Contrast it with the 20% balanced majority baseline. End with the 
 large type: **offline candidate—no emulator authority yet.** The next episode is shadow inference,
 then bounded control under the teacher referee.
 
+For the shadow episode, show the model file hash being authenticated before the emulator starts.
+Run teacher and model decision cards side by side, but visually disconnect the model card from the
+controller. Accumulate confidence, phase accuracy, balanced agreement, and the five-by-five
+confusion matrix live. Keep **“model authority: false”** on screen throughout; shadow success is
+evidence that the model understands decisions, not permission to press buttons.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

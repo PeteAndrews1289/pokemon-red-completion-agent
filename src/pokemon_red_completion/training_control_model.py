@@ -2,10 +2,15 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 import math
+import re
+import stat
 from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from pathlib import Path
 
 import numpy as np
 from numpy.typing import ArrayLike
@@ -25,6 +30,7 @@ from pokemon_red_completion.training_control_dataset import (
 from pokemon_red_completion.trajectory import canonical_sha256
 
 TRAINING_CONTROL_MODEL_ID = "pokemon.core.training.control.mlp.v1"
+_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
 
 class TrainingControlModelError(ValueError):
@@ -172,6 +178,45 @@ class TrainingControlMLP:
         }
 
     @classmethod
+    def from_dict(cls, raw: object) -> TrainingControlMLP:
+        """Decode only the exact portable model format emitted by ``to_dict``."""
+
+        if not isinstance(raw, Mapping):
+            raise TrainingControlModelError("training-control model must be an object")
+        expected = {
+            "format_version", "model_id", "feature_schema_id", "feature_names",
+            "class_refs", "training_seed", "input_weights", "hidden_bias",
+            "output_weights", "output_bias",
+        }
+        if set(raw) != expected:
+            raise TrainingControlModelError("training-control model fields are incompatible")
+        if raw.get("format_version") != 1 or raw.get("model_id") != TRAINING_CONTROL_MODEL_ID:
+            raise TrainingControlModelError("training-control model format is unsupported")
+        names = raw.get("feature_names")
+        classes = raw.get("class_refs")
+        if not isinstance(names, list) or tuple(names) != TRAINING_CONTROL_FEATURE_NAMES:
+            raise TrainingControlModelError("training-control feature names are incompatible")
+        if not isinstance(classes, list) or not all(isinstance(value, str) for value in classes):
+            raise TrainingControlModelError("training-control model classes are invalid")
+        arrays = tuple(
+            raw.get(name)
+            for name in ("input_weights", "hidden_bias", "output_weights", "output_bias")
+        )
+        if any(not isinstance(value, list) for value in arrays):
+            raise TrainingControlModelError("training-control model parameters are invalid")
+        seed = raw.get("training_seed")
+        schema = raw.get("feature_schema_id")
+        return cls(
+            class_refs=classes,
+            input_weights=arrays[0],  # type: ignore[arg-type]
+            hidden_bias=arrays[1],  # type: ignore[arg-type]
+            output_weights=arrays[2],  # type: ignore[arg-type]
+            output_bias=arrays[3],  # type: ignore[arg-type]
+            training_seed=seed,  # type: ignore[arg-type]
+            feature_schema_id=schema,  # type: ignore[arg-type]
+        )
+
+    @classmethod
     def fit(
         cls,
         examples: Iterable[TrainingControlExample],
@@ -258,6 +303,95 @@ class TrainingControlMLP:
             output_bias=b2,
             training_seed=seed,
         )
+
+
+def load_training_control_model(
+    path: str | Path,
+    *,
+    expected_sha256: str,
+) -> TrainingControlMLP:
+    """Authenticate and decode one private model artifact without following links."""
+
+    if _SHA256.fullmatch(expected_sha256) is None:
+        raise TrainingControlModelError("expected model digest is invalid")
+    source = Path(path)
+    try:
+        metadata = source.lstat()
+        payload = source.read_bytes()
+    except OSError as error:
+        raise TrainingControlModelError("training-control model cannot be read") from error
+    if source.is_symlink() or not stat.S_ISREG(metadata.st_mode):
+        raise TrainingControlModelError("training-control model must be a regular file")
+    if hashlib.sha256(payload).hexdigest() != expected_sha256:
+        raise TrainingControlModelError("training-control model failed authentication")
+    try:
+        raw = json.loads(payload)
+    except (UnicodeError, json.JSONDecodeError) as error:
+        raise TrainingControlModelError("training-control model is invalid JSON") from error
+    return TrainingControlMLP.from_dict(raw)
+
+
+@dataclass(slots=True)
+class TrainingControlShadowAudit:
+    """Observe teacher decisions without granting the model execution authority."""
+
+    model: TrainingControlMLP
+    decisions: int = 0
+    agreements: int = 0
+    confidence_total: float = 0.0
+    teacher_counts: Counter[str] = field(default_factory=Counter)
+    correct_counts: Counter[str] = field(default_factory=Counter)
+    predicted_counts: Counter[str] = field(default_factory=Counter)
+    phase_counts: Counter[str] = field(default_factory=Counter)
+    phase_agreements: Counter[str] = field(default_factory=Counter)
+    confusion: Counter[str] = field(default_factory=Counter)
+
+    def observe(self, decision: object) -> None:
+        from pokemon_red_completion.training_control import TrainingControlDecision
+
+        if not isinstance(decision, TrainingControlDecision):
+            raise TypeError("shadow input must be a TrainingControlDecision")
+        probabilities = self.model.probabilities(decision.observation)
+        predicted = max(probabilities, key=probabilities.__getitem__)
+        actual = decision.action.value
+        phase = decision.observation.phase.value
+        agreed = predicted == actual
+        self.decisions += 1
+        self.agreements += int(agreed)
+        self.confidence_total += probabilities[predicted]
+        self.teacher_counts[actual] += 1
+        self.correct_counts[actual] += int(agreed)
+        self.predicted_counts[predicted] += 1
+        self.phase_counts[phase] += 1
+        self.phase_agreements[phase] += int(agreed)
+        self.confusion[f"{actual} -> {predicted}"] += 1
+
+    def public_dict(self) -> dict[str, object]:
+        balanced = (
+            sum(self.correct_counts[name] / count for name, count in self.teacher_counts.items())
+            / len(self.teacher_counts)
+            if self.teacher_counts
+            else 0.0
+        )
+        return {
+            "schema": "pokemon-training-control-shadow-summary-v1",
+            "model_id": self.model.model_id,
+            "model_sha256": canonical_sha256(self.model.to_dict()),
+            "decisions": self.decisions,
+            "agreements": self.agreements,
+            "accuracy": self.agreements / self.decisions if self.decisions else 0.0,
+            "balanced_accuracy": balanced,
+            "mean_confidence": self.confidence_total / self.decisions if self.decisions else 0.0,
+            "teacher_counts": dict(sorted(self.teacher_counts.items())),
+            "predicted_counts": dict(sorted(self.predicted_counts.items())),
+            "phase_accuracy": {
+                phase: self.phase_agreements[phase] / count
+                for phase, count in sorted(self.phase_counts.items())
+            },
+            "confusion": dict(sorted(self.confusion.items())),
+            "model_had_execution_authority": False,
+            "promotion_eligible": False,
+        }
 
 
 def fit_training_control_candidate(

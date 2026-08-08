@@ -57,6 +57,9 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="write portable seek/fight/flee/heal/stop teacher decisions as JSON",
     )
+    parser.add_argument("--shadow-model", type=Path, default=None)
+    parser.add_argument("--shadow-model-sha256", default=None)
+    parser.add_argument("--out-shadow", type=Path, default=None)
     parser.add_argument(
         "--lineage-id",
         default=None,
@@ -109,6 +112,27 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--out-root-state must not overwrite the input state")
     if args.root_only and not seed_perturbation:
         parser.error("--root-only requires a seed perturbation and --out-root-state")
+    shadow_values = (args.shadow_model, args.shadow_model_sha256, args.out_shadow)
+    if any(value is not None for value in shadow_values) and not all(
+        value is not None for value in shadow_values
+    ):
+        parser.error("shadow mode requires --shadow-model, --shadow-model-sha256, and --out-shadow")
+    if args.out_shadow is not None and args.out_decisions is None:
+        parser.error("shadow mode requires --out-decisions and its lineage provenance")
+
+    shadow = None
+    if args.shadow_model is not None:
+        from pokemon_red_completion.training_control_model import (
+            TrainingControlShadowAudit,
+            load_training_control_model,
+        )
+
+        shadow = TrainingControlShadowAudit(
+            load_training_control_model(
+                args.shadow_model,
+                expected_sha256=args.shadow_model_sha256,
+            )
+        )
 
     emulator = PyBoyAdapter(resolve_rom_path(args.rom))
     emulator.start()
@@ -172,6 +196,9 @@ def main(argv: list[str] | None = None) -> int:
             args.max_steps,
             args.out_decisions,
             provenance,
+            shadow,
+            args.out_shadow,
+            args.shadow_model_sha256,
         )
     finally:
         emulator.close()
@@ -235,6 +262,9 @@ def _replay_training(
     max_steps: int | None,
     out_decisions: Path | None,
     provenance: dict[str, object] | None,
+    shadow,
+    out_shadow: Path | None,
+    model_artifact_sha256: str | None,
 ) -> int:
     """Run the Mansion evolution and balancing blocks exactly as Blaine does."""
 
@@ -249,6 +279,16 @@ def _replay_training(
     party_reader = PokemonRedPartyReader(emulator)
     evolution_decisions = []
     balance_decisions = []
+
+    def record_evolution(decision) -> None:
+        evolution_decisions.append(decision)
+        if shadow is not None:
+            shadow.observe(decision)
+
+    def record_balance(decision) -> None:
+        balance_decisions.append(decision)
+        if shadow is not None:
+            shadow.observe(decision)
 
     def note(message: str) -> None:
         levels = party_reader.read().levels
@@ -282,7 +322,7 @@ def _replay_training(
                 max_consecutive_flees=blaine.MANSION_MAX_CONSECUTIVE_FLEES,
                 cancel_interval=blaine.MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
                 evolution_target=(blaine.DIGLETT_SPECIES_ID, blaine.DUGTRIO_SPECIES_ID),
-                decision_sink=evolution_decisions.append,
+                decision_sink=record_evolution,
                 report_label="replay evolution",
                 checkpoint_count=blaine.BLAINE_CHECKPOINT_COUNT,
             )
@@ -306,7 +346,7 @@ def _replay_training(
             max_consecutive_flees=blaine.MANSION_MAX_CONSECUTIVE_FLEES,
             cancel_interval=blaine.MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
             progress_sink=note,
-            decision_sink=balance_decisions.append,
+            decision_sink=record_balance,
             report_label="replay training",
             checkpoint_count=blaine.BLAINE_CHECKPOINT_COUNT,
         )
@@ -318,6 +358,14 @@ def _replay_training(
             balance=balance_decisions,
             error=f"{type(error).__name__}: {error}",
             provenance=provenance,
+        )
+        _write_shadow(
+            out_shadow,
+            shadow,
+            status="failed",
+            error=f"{type(error).__name__}: {error}",
+            provenance=provenance,
+            model_artifact_sha256=model_artifact_sha256,
         )
         print(f"\nFAILED: {type(error).__name__}: {error}")
         traceback.print_exc(limit=3)
@@ -334,7 +382,43 @@ def _replay_training(
         balance=balance_decisions,
         provenance=provenance,
     )
+    _write_shadow(
+        out_shadow,
+        shadow,
+        status="ok",
+        provenance=provenance,
+        model_artifact_sha256=model_artifact_sha256,
+    )
     return 0
+
+
+def _write_shadow(
+    path: Path | None,
+    shadow,
+    *,
+    status: str,
+    provenance: dict[str, object] | None,
+    model_artifact_sha256: str | None,
+    error: str | None = None,
+) -> None:
+    if path is None:
+        return
+    if shadow is None or provenance is None or model_artifact_sha256 is None:
+        raise RuntimeError("shadow output lacks authenticated model or lineage provenance")
+    payload = shadow.public_dict()
+    payload.update(
+        {
+            "status": status,
+            "error": error,
+            "provenance": provenance,
+            "model_artifact_sha256": model_artifact_sha256,
+        }
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.tmp")
+    temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    temporary.replace(path)
+    print(f"wrote shadow audit for {shadow.decisions} decisions to {path}", flush=True)
 
 
 def _write_decisions(
