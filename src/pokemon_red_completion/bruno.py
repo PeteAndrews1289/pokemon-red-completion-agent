@@ -335,7 +335,7 @@ def run_bruno_chapter(
                         emulator,
                         party_slot - 1,
                         label="Bruno matchup-aware participation",
-                        wait_frames=DEFAULT_SILPH_TIMING.wait_frames,
+                        wait_frames=DEFAULT_SILPH_TIMING.menu_frames,
                     )
                 except ProtectedRecoveryError as switch_error:
                     raise BrunoChapterError(

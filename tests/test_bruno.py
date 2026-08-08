@@ -23,6 +23,7 @@ from pokemon_red_completion.bruno import (
     run_bruno_chapter,
 )
 from pokemon_red_completion.observation import EventFlag, MapId, RamAddress, RawGameState
+from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING
 
 
 def test_bruno_source_contract_is_exact() -> None:
@@ -30,6 +31,10 @@ def test_bruno_source_contract_is_exact() -> None:
     assert BRUNO_RNG_DELAY_FRAMES == 185
     assert BRUNO_HITMONLEE_SAFE_HP == 120
     assert BRUNO_AFTER_BATTLE_TEXT_PULSES == 2
+    assert DEFAULT_SILPH_TIMING.menu_frames > 0
+    source = getsource(run_bruno_chapter)
+    assert "DEFAULT_SILPH_TIMING.menu_frames" in source
+    assert "DEFAULT_SILPH_TIMING.wait_frames" not in source
     assert BRUNO_APPROACH == ("right", "up", "up")
     assert MapId.BRUNOS_ROOM == 0xF6
     assert MapId.AGATHAS_ROOM == 0xF7
