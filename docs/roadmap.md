@@ -18,16 +18,17 @@ demonstrations do.
 
 So the near-term work is not another point of agreement. It is:
 
-**A. Make the team participate.** The level floor is proven in a real clean-power budget. Bruno and
-Lorelei now have qualified species- and matchup-aware reserve roles: Hitmonlee attacks opening Onix,
-while Jolteon handles Lorelei's three Water targets before Blastoise returns for Jynx and Lapras.
-Whole-League participation is 3/6 with a 90.70% busiest-member share. Extend genuine roles rather
+**A. Make the team participate.** The level floor is proven in a real clean-power budget. Lorelei,
+Bruno, and Agatha now have qualified species- and matchup-aware roles. Agatha no longer uses
+Blastoise at all: Jolteon handles Golbat and Dugtrio handles both Gengar opponents, Haunter, and
+Arbok.
+Whole-League participation is 4/6 with a 70.59% busiest-member share. Extend genuine roles rather
 than adding switches for the metric.
 
 **B. Make participation measurable, and embarrassing when absent.** Done across all five League
-chapters. The first measurement exposed `[49, 0, 0, 0, 0, 0]`; the two qualified lessons now reach
-`[39, 0, 0, 0, 3, 1]`. Lorelei and Bruno each require their two real switches and role target sets
-as part of the chapter pass contract.
+chapters. The first measurement exposed `[49, 0, 0, 0, 0, 0]`; the three qualified lessons now reach
+`[24, 0, 4, 0, 5, 1]`. Lorelei, Bruno, and Agatha require their real switches and complete role
+target sets as part of the chapter pass contracts.
 
 **C. Start the living Pokédex.** `red_target(RedRunChoices(...))` and `plan_next_run()` exist and
 have no schedule behind them. Two opposed Red runs reach 132 of 151. This is the constraint that
@@ -46,11 +47,12 @@ and D is the cheapest early evidence that it is possible at all.
 Routing works: a member too weak for where the run is gets sent to a venue that suits it, travels
 there, and gains levels. That mechanism did not exist before and A depends entirely on it.
 
-The complete curriculum now reaches its 60/55/55/55/55/55 readiness gate, and two League
+The complete curriculum now reaches its 60/55/55/55/55/55 readiness gate, and three League
 participation increments are qualified from clean power through Hall of Fame. Hitmonlee attacks
-Bruno's opening Onix with Jump Kick. Jolteon attacks Dewgong, Cloyster, and Slowbro with Thunder,
-then Blastoise resumes the anchor role for Jynx and Lapras. Shared field recovery selects the
-actually damaged member rather than assuming party slot one.
+Bruno's opening Onix. Jolteon attacks Lorelei's Water core. At Agatha, Jolteon attacks Golbat and
+Dugtrio uses Earthquake against all four grounded targets. Shared field recovery selects the
+actually damaged member rather than assuming party slot one. The latest run uses 539,957 actions,
+322 fewer than the preceding qualification.
 
 The session also produced a working practice worth keeping, described in the handoff: measure rather
 than infer, predict before running, capture a mid-route state so iteration costs a second instead of

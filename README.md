@@ -14,22 +14,24 @@ control, and progressively trained specialists.**
 > six-member party. Its team curriculum uses **1,716 battles** and **885 healing trips**, evolves
 > Diglett, and passes the readiness gate at levels **60/55/55/55/55/55** with every member in its
 > final form. The latest exact-source run verified **312/312 checkpoints**, **36/36 objectives**,
-> Champion, and Hall of Fame in **540,279 actions**. This is verified deterministic-teacher
+> Champion, and Hall of Fame in **539,957 actions**. This is verified deterministic-teacher
 > completion—not a learned-policy or unseen-seed generalization claim. See the
 > [full-route balanced-team receipt](docs/evidence/measured-balanced-team-full-route-success-2026-08-07.json)
 > and the earlier
 > [captured-state diagnostic](docs/evidence/measured-balanced-team-captured-state-success-2026-08-07.json).
-> Whole-League instrumentation first exposed a **49/49 single-carry baseline**. Two genuine role
-> lessons now replace part of that sweep. Jolteon resolves by observed species and health, uses
-> Thunder against Lorelei's Dewgong, Cloyster, and Slowbro, then returns Blastoise for Jynx and
-> Lapras; Hitmonlee still attacks Bruno's opening Onix with Jump Kick. The latest clean-power proof
-> records **3/6 participating members**, `[39, 0, 0, 0, 3, 1]` decisions, and a **90.70%**
-> whole-League busiest-member share. Lorelei alone improves from 19 single-carry decisions to an
-> eight-decision `[5, 0, 0, 0, 3, 0]` split with **62.5%** busiest share and two verified switches.
-> This is expanding non-cosmetic team play, not yet a complete six-member League curriculum. See the
+> Whole-League instrumentation first exposed a **49/49 single-carry baseline**. Three genuine role
+> lessons now replace much of that sweep. Jolteon handles Lorelei's Water core, Hitmonlee attacks
+> Bruno's opening Onix, and Agatha is assigned entirely to type-advantaged specialists: Jolteon uses
+> Thunder against Golbat while Dugtrio uses immediate Earthquake against both Gengar opponents,
+> Haunter, and Arbok. The latest clean-power proof records **4/6 participating members**,
+> `[24, 0, 4, 0, 5, 1]` decisions, and a **70.59%** whole-League busiest-member share. Agatha alone
+> improves from 15 Blastoise decisions and ten healing items to a six-decision
+> `[0, 0, 4, 0, 2, 0]` split with one healing item and three verified switches. This is expanding
+> non-cosmetic team play, not yet a complete six-member League curriculum. See the
 > [single-carry baseline](docs/evidence/measured-whole-league-participation-2026-08-07.json), the
 > [qualified Bruno receipt](docs/evidence/measured-bruno-team-participation-2026-08-07.json), and the
-> [qualified Lorelei receipt](docs/evidence/measured-lorelei-team-participation-2026-08-07.json).
+> [qualified Lorelei receipt](docs/evidence/measured-lorelei-team-participation-2026-08-07.json), and
+> the [qualified Agatha receipt](docs/evidence/measured-agatha-team-participation-2026-08-07.json).
 > **August 5 collection update:** the first battle model is trained from five complete teacher
 > lineages and reaches **85.8% held-out validation accuracy** across two validation lineages. Its
 > sealed test partition remains unopened. Broader teacher stress then exposed a legitimate

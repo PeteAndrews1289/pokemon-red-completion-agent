@@ -1,0 +1,113 @@
+{
+  "schema": "pokemon-red-agatha-team-participation-evidence-v1",
+  "recorded_at": "2026-08-07",
+  "source_commit": "6918f89",
+  "regime": "clean-power deterministic-teacher run; one uninterrupted process; no save-state restore; no validation or sealed evaluation seed opened",
+  "completion": {
+    "status": "ok",
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "qualified_through": "enter_hall_of_fame",
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 539957,
+    "party_levels": [66, 55, 55, 55, 55, 55]
+  },
+  "whole_league": {
+    "turns_per_member": [24, 0, 4, 0, 5, 1],
+    "observed_turns": 34,
+    "unobserved_turns": 0,
+    "participating_members": 4,
+    "busiest_member_turns": 24,
+    "busiest_member_share": 0.7058823529411765
+  },
+  "agatha": {
+    "turns_per_member": [0, 0, 4, 0, 2, 0],
+    "observed_turns": 6,
+    "unobserved_turns": 0,
+    "participating_members": 2,
+    "busiest_member_turns": 4,
+    "busiest_member_share": 0.6666666666666666,
+    "team_switches": 3,
+    "lesson": {
+      "ground_specialist": {
+        "participant": "Dugtrio",
+        "participant_species_id": 118,
+        "active_party_index": 2,
+        "target_resolution": "living party member selected by species rather than fixed slot",
+        "move": "Earthquake",
+        "move_id": 89,
+        "move_slot": 1,
+        "opponents": [
+          {"name": "Gengar", "species_id": 14, "level": 56, "party_position": 0},
+          {"name": "Haunter", "species_id": 147, "level": 55, "party_position": 2},
+          {"name": "Arbok", "species_id": 45, "level": 58, "party_position": 3},
+          {"name": "Gengar", "species_id": 14, "level": 60, "party_position": 4}
+        ],
+        "recorded_attack_decisions": 4
+      },
+      "airborne_specialist": {
+        "participant": "Jolteon",
+        "participant_species_id": 104,
+        "active_party_index": 4,
+        "target_resolution": "living party member selected by species rather than fixed slot",
+        "move": "Thunder",
+        "move_id": 87,
+        "move_slot": 1,
+        "opponent": {"name": "Golbat", "species_id": 130, "level": 56, "party_position": 1},
+        "recorded_attack_decisions": 2,
+        "x_special_applied_after_switch": true
+      },
+      "all_five_opponent_positions_completed_by_declared_specialists": true
+    },
+    "recovery": {
+      "hyper_potions_used": 1,
+      "full_restores_used": 0,
+      "x_specials_used": 1,
+      "party_aware_target_selection": true,
+      "entire_party_fully_healed_and_status_free": true
+    }
+  },
+  "downstream_regression": {
+    "lance": {
+      "status": "ok",
+      "observed_turns": 6,
+      "hyper_potions_used": 2,
+      "full_restores_used": 0
+    },
+    "champion": {
+      "status": "ok",
+      "observed_turns": 7,
+      "full_restores_used": 3,
+      "champion_event": true,
+      "hall_of_fame_entered": true
+    }
+  },
+  "comparison": {
+    "previous_clean_power_receipt": {
+      "source_commit": "e721f00",
+      "actions_executed": 540279,
+      "turns_per_member": [39, 0, 0, 0, 3, 1],
+      "observed_turns": 43,
+      "participating_members": 3,
+      "busiest_member_share": 0.9069767441860465
+    },
+    "pre_agatha_private_replay": {
+      "turns_per_member": [15, 0, 0, 0, 0, 0],
+      "observed_turns": 15,
+      "hyper_potions_used": 8,
+      "full_restores_used": 2,
+      "x_specials_used": 1
+    },
+    "result": "The third non-cosmetic League lesson added Dugtrio as a fourth participant, reduced the whole-League busiest-member share from 90.70% to 70.59%, cut Agatha from 15 single-carry decisions to six specialist decisions, reduced Agatha healing-item use from ten to one, and saved 322 controller actions while preserving clean-power completion."
+  },
+  "claim": "The exact pushed deterministic teacher selected Dugtrio and Jolteon by observed species and health, assigned every Agatha opponent to a type-advantaged specialist, used immediate Earthquake rather than two-turn Dig, recovered the damaged participant, retained the qualified Lorelei and Bruno lessons, and entered the Hall of Fame in the same uninterrupted run.",
+  "remaining_limitations": [
+    "Four of six party members supplied recorded League attack decisions; DUX and Snorlax supplied none.",
+    "Lance and the Champion remain single-participant battles.",
+    "No learned policy produced these switches, attacks, recoveries, or completion behavior.",
+    "No unseen-seed or cross-game generalization was measured."
+  ]
+}

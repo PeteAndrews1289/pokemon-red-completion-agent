@@ -1489,6 +1489,26 @@ Blastoise, Jolteon, and Hitmonlee supplied `[39, 0, 0, 0, 3, 1]` decisions: thre
 decisions to eight purposeful decisions. This is measurable progress toward useful demonstrations,
 not a claim that the remaining three members have roles or that a learned model chose any of them.
 
+Agatha supplied the next useful counterexample because the single-carry teacher was not merely
+concentrated there; it was inefficient. The measured pre-change chapter needed 15 Blastoise attack
+decisions, eight Hyper Potions, and two Full Restores. The roster already contained two natural
+answers that the teacher ignored: Dugtrio had immediate Earthquake for grounded Poison opponents,
+and Jolteon had Thunder for Golbat. The revised chapter resolves both specialists by observed
+species and living HP. It uses Jolteon for Golbat, Dugtrio for both Gengar opponents, Haunter, and
+Arbok, and requires all five source-party positions plus exactly three voluntary switches in the
+pass contract.
+X Special is applied only after Jolteon enters, and shared party-aware recovery restores the member
+that actually took damage.
+
+The private chapter replay reduced Agatha to six decisions—four Earthquakes and two Thunder
+choices—with one Hyper Potion and no Full Restores. Chained replays then proved that the larger
+healing reserve preserved Lance and the strict Champion strategy. Finally, the exact pushed source
+completed a new uninterrupted clean-power run through 312/312 checkpoints, 36/36 objectives, and
+Hall of Fame in 539,957 actions. Whole-League participation became `[24, 0, 4, 0, 5, 1]`: four of
+six members across 34 decisions, with a 70.59% busiest-member share. Compared with the preceding
+qualification, that adds a fourth participant, removes nine low-value attack decisions and nine
+Agatha healing items, and saves 322 controller actions without weakening the completion gate.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
@@ -1512,12 +1532,13 @@ A concise interview description is:
 > builds a six-member final-form party at levels 60/55/55/55/55/55, clears the League, and enters the
 > Hall of Fame in the same uninterrupted process. Instrumentation exposed that the first version
 > still used one carry for every League decision, so I added species- and state-resolved roles:
-> Jolteon uses Thunder against Lorelei's Water core, while Hitmonlee attacks Bruno's opening Onix.
-> The exact clean-power run preserved all 312 checkpoints and Hall of Fame while raising League
-> participation from one member to three and reducing the busiest-member share from 100% to 90.70%.
-> The system keeps private demonstrations integrity-checked and evaluation roots sealed; the next
-> research question is how much of this team-building and matchup behavior a learned policy can
-> reproduce under changed conditions and transfer to another title.
+> Jolteon handles Lorelei's Water core, Hitmonlee attacks Bruno's opening Onix, and Dugtrio joins
+> Jolteon to replace Agatha's 15-decision, ten-heal Blastoise sequence with six specialist decisions
+> and one heal. The exact clean-power run preserved all 312 checkpoints and Hall of Fame while
+> raising League participation from one member to four and reducing the busiest-member share from
+> 100% to 70.59%. The system keeps private demonstrations integrity-checked and evaluation roots
+> sealed; the next research question is how much of this team-building and matchup behavior a
+> learned policy can reproduce under changed conditions and transfer to another title.
 
 ## Related documentation
 

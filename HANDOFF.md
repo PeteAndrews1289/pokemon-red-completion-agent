@@ -44,12 +44,13 @@ of whether it serves this.
   the same process: 312/312 checkpoints, 36/36 objectives, Champion defeated, and Hall of Fame
   entered. The curriculum used 1,716 battles and 885 heals and passed with a final-form party at
   levels 60/55/55/55/55/55.
-- Whole-League instrumentation first recorded 49/49 attack decisions from party slot 1. Two
-  matchup-aware lessons now create real roles: Jolteon uses Thunder against Lorelei's three Water
-  targets before Blastoise handles Jynx and Lapras, and Hitmonlee uses Jump Kick against Bruno's
-  opening Onix. A clean-power completion records `[39, 0, 0, 0, 3, 1]`: 3/6 League participants
-  and 90.70% busiest share overall. Lorelei alone is `[5, 0, 0, 0, 3, 0]`, 62.5% busiest share,
-  with both switches and full-party recovery verified. All 312 checkpoints and Hall of Fame pass.
+- Whole-League instrumentation first recorded 49/49 attack decisions from party slot 1. Three
+  matchup-aware lessons now create real roles: Jolteon handles Lorelei's Water core, Hitmonlee
+  attacks Bruno's opening Onix, and Agatha is split between Jolteon's Thunder against Golbat and
+  Dugtrio's Earthquake against her four grounded Poison targets. A clean-power completion records
+  `[24, 0, 4, 0, 5, 1]`: 4/6 League participants and 70.59% busiest share overall. Agatha alone is
+  `[0, 0, 4, 0, 2, 0]`, 66.67% busiest share, with all five opponent positions, three switches,
+  and full-party recovery verified. All 312 checkpoints and Hall of Fame pass.
 
 **Not true, however it may look:**
 
@@ -63,23 +64,23 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1904 tests, 3 deselected; ruff, mypy (105 files), artifacts, docs and registry all
-clean before the Lorelei qualification documentation update.
+**Gate state:** 1906 tests, 3 deselected; ruff, mypy (105 files), artifacts, docs and registry all
+clean before the Agatha qualification documentation update.
 
 ---
 
 ## 3. Start here
 
-**Extend the qualified League roles beyond three members.** Lorelei and Bruno now prove two
-non-cosmetic reserve roles, but DUX, Dugtrio, and Snorlax still supply no recorded League attacks and
-Blastoise still owns 90.70% of the whole-League decisions.
+**Extend the qualified League roles beyond four members.** Lorelei, Bruno, and Agatha now prove
+non-cosmetic specialist roles, but DUX and Snorlax still supply no recorded League attacks and
+Blastoise still owns 70.59% of the whole-League decisions.
 
-The next useful experiment is a fourth species- and matchup-resolved role, judged by the same
-clean-power whole-League report. Dugtrio against a safe Poison, Fire, or Rock target is a plausible
-candidate, but measure the exact matchup before turning it into a contract. Prefer a role that
-creates genuine type or resource value; never switch merely to satisfy a counter. Keep the private
-Lorelei and Bruno checkpoints for bounded regressions, preserve the existing lineage and partition
-contracts, and keep living-Pokédex expansion and second-title transfer as explicit later stages.
+The next useful experiment is a fifth species- and matchup-resolved role, judged by the same
+clean-power whole-League report. DUX or Snorlax needs a matchup that creates genuine offensive,
+defensive, or resource value; never switch merely to satisfy a counter. Lance and the Champion are
+still single-participant chapters, so they are the clearest candidates. Keep the private chained
+League checkpoints for bounded regressions, preserve the existing lineage and partition contracts,
+and keep living-Pokédex expansion and second-title transfer as explicit later stages.
 
 Then continue down [AGENT_COORDINATION.md](AGENT_COORDINATION.md) § *Open work, in priority order*.
 
@@ -173,6 +174,7 @@ Each cost at least one emulator run to establish. Each has an evidence file.
 | The next full run measured all 49 League attack decisions on party slot 1: 1/6 participation and 100% busiest-member share | `measured-whole-league-participation-2026-08-07.json` |
 | A clean-power run qualified the first matchup-aware League lesson: Hitmonlee attacked Bruno's Onix, recovery followed the damaged member, League participation reached 2/6, and Hall of Fame still passed | `measured-bruno-team-participation-2026-08-07.json` |
 | The next clean-power run qualified Jolteon's Lorelei role: Thunder handled three Water targets, Blastoise handled Jynx and Lapras, League participation reached 3/6 with 90.70% busiest share, and Hall of Fame still passed | `measured-lorelei-team-participation-2026-08-07.json` |
+| The next clean-power run assigned all of Agatha to Jolteon and Dugtrio, cut that battle from 15 decisions and ten healing items to six decisions and one item, raised League participation to 4/6 with 70.59% busiest share, and still entered Hall of Fame | `measured-agatha-team-participation-2026-08-07.json` |
 
 ---
 
@@ -271,9 +273,9 @@ how a wrong band survived 155 samples that contradicted it.
   correctly then raises `NotImplementedError` at routing. Give them a job or park them.
 - **Participation is measured across all five League battles, but still concentrated.** Every
   chapter records active-party indexes and publishes participating-member count plus busiest-member
-  share. Lorelei and Bruno each have explicit two-member role contracts; together they raise the
-  League to 3/6 participants, but Blastoise still owns 90.70% of decisions. The remaining work is
-  behavioral: add real matchup value for DUX, Dugtrio, and Snorlax.
+  share. Lorelei, Bruno, and Agatha have explicit specialist-role contracts; together they raise the
+  League to 4/6 participants, but Blastoise still owns 70.59% of decisions. The remaining work is
+  behavioral: add real matchup value for DUX and Snorlax, especially in Lance or Champion.
 - **The ROM path is in git history.** `a9d0bb4` added it in source, `371be10` removed it. Not in the
   current tree; `a9d0bb4` is on no remote, so exposure is local only. Rewriting history is
   destructive and belongs to the repository owner.

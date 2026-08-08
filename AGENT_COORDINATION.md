@@ -249,7 +249,7 @@ arguments where it takes four, and a typed progress sink called with `None`.
 Each cost a 25-minute emulator run to discover. A type checker reports them in
 seconds, and the neutral layer is now covered.
 
-Current state: **1904 passed, 3 deselected**, all checks green, on trunk
+Current state: **1906 passed, 3 deselected**, all checks green, on trunk
 `agent/balanced-team-curriculum`.
 
 ## Open work, in priority order
@@ -260,12 +260,13 @@ These are ordered by how much they serve the mission, not by difficulty.
 battles and 885 healing trips, passed the final-form team gate at 60/55/55/55/55/55, completed
 312/312 checkpoints and 36/36 objectives, and entered the Hall of Fame.
 
-**2. Two matchup-aware League lessons complete.** All five chapters record active-party indexes
-and derive participating-member count and busiest-member share. Bruno resolves Hitmonlee for a real
-Jump Kick against opening Onix. Lorelei resolves Jolteon for Thunder against Dewgong, Cloyster, and
-Slowbro, then returns Blastoise for Jynx and Lapras. The exact clean-power run measured
-`[39, 0, 0, 0, 3, 1]`: 3/6 participation and 90.70% busiest-member share while retaining Hall of
-Fame. Extend this to a fourth genuine role; do not add cosmetic switches.
+**2. Three matchup-aware League lessons complete.** All five chapters record active-party indexes
+and derive participating-member count and busiest-member share. Bruno resolves Hitmonlee for Onix;
+Lorelei resolves Jolteon for its Water core; Agatha resolves Jolteon for Golbat and Dugtrio for all
+four grounded Poison targets. The exact clean-power run measured `[24, 0, 4, 0, 5, 1]`: 4/6
+participation and 70.59% busiest-member share while retaining Hall of Fame. Agatha fell from 15
+single-carry decisions and ten healing items to six decisions and one item. Extend this to a fifth
+genuine role; do not add cosmetic switches.
 
 **3. Tolerance conflict resolved.** Mansion development and Champion readiness now share
 `COMPLETION_LEVEL_PARITY`, which requires level 55 against the League's level-65 ceiling. Do not
