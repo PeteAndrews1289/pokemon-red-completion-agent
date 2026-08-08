@@ -51,6 +51,7 @@ class SkillPlan:
     outcome: SkillOutcome
     actions: tuple[MacroAction, ...] = ()
     expected_facts: frozenset[str] = field(default_factory=frozenset)
+    additional_effect_facts: frozenset[str] = field(default_factory=frozenset)
     max_executor_steps: int = 1
     rationale: str = ""
 
@@ -71,3 +72,5 @@ class SkillPlan:
             raise ValueError("an in-progress plan must contain at least one action")
         if len(self.actions) > self.max_executor_steps:
             raise ValueError("plan actions exceed the declared executor-step bound")
+        if self.expected_facts.intersection(self.additional_effect_facts):
+            raise ValueError("additional skill effects must not duplicate expected facts")

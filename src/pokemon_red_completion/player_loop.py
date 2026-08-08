@@ -184,6 +184,12 @@ class PortablePlayerLoop:
         after = self.observer.observe()
         self._require_no_progress_regression(before, after)
         facts_added = after.facts.difference(before.facts)
+        missing_effects = plan.additional_effect_facts.difference(after.facts)
+        if missing_effects:
+            raise PlayerLoopError(
+                "specialist did not produce declared additional effects: "
+                + ", ".join(sorted(missing_effects))
+            )
         if objective.is_complete(after):
             self.objective_policy.complete(objective.id)
             self.objectives_completed += 1
