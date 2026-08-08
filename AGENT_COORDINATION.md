@@ -143,9 +143,9 @@ repository owner and must never appear in a tracked or untracked file. Ask if yo
 
 The deterministic teacher completes Pokémon Red repeatedly with genuine Champion and Hall-of-Fame
 evidence in the same run. The objective ranker authorizes all 36 objectives with zero fallbacks.
-In the portable loop it has also selected and completed ten sequential objectives—from Rocket
-Hideout through Sabrina—through registered fixed skills with independently observed effects and no
-expected labels, fallbacks, or replans. Nine were singleton dispatches; the one true executable
+In the portable loop it has also selected and completed eleven sequential objectives—from Rocket
+Hideout through Cinnabar—through registered fixed skills with independently observed effects and no
+expected labels, fallbacks, or replans. Ten were singleton dispatches; the one true executable
 branch was Koga versus Strength, and the model selected Koga at 96.41% confidence.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full

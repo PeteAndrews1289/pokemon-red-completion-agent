@@ -95,9 +95,17 @@ now totals 23,692 fixed-skill actions, ten dispatches, nine singletons, one real
 zero labels, fallbacks, or replans. See the
 [ten-decision receipt](evidence/affordance-masked-ten-objective-sequence-2026-08-08.json).
 
-The next frontier is Cinnabar, currently the only dependency-legal objective at the verified
-post-Sabrina boundary. It extends coverage, but another strong planner-ranking test will require a
-state where at least two skills are simultaneously executable.
+The eleventh dispatch reached Cinnabar. Its fixed skill acquired HM02, taught Fly to DUX, preserved
+the full six-member party and lead stats, fled one Route 16 and three Route 21 wild battles, defeated
+no Route 21 trainers, and healed in Cinnabar Center. The segment used 830 actions / 148,680 frames;
+the full slice now totals 24,522 actions, eleven dispatches, ten singletons, one real ranking branch,
+and zero labels, fallbacks, or replans. Fresh memory independently added
+`location:cinnabar_island`. See the
+[eleven-decision receipt](evidence/affordance-masked-eleven-objective-sequence-2026-08-08.json).
+
+The next frontier is `obtain_secret_key`, currently the only dependency-legal objective at the
+verified Cinnabar boundary. It extends mechanic coverage into Pokémon Mansion, but another strong
+planner-ranking test will require a state where at least two skills are simultaneously executable.
 
 ## August 5: the learned planner authorizes the fixed objective sequence
 

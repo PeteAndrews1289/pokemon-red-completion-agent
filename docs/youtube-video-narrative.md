@@ -121,8 +121,9 @@ process. The fixed skill performs 5,041 more actions, verifies the Master Ball a
 leaves optional Lapras untouched, and returns healed. Continue into the Fighting Dojo: five fights,
 Hitmonlee recruited, and the six-member party finally complete. The same bounded objective skill
 then takes the trainer-free warp route to Sabrina and independently verifies the Marsh Badge. End
-the act on **“ten dispatches; 23,692 fixed-skill actions; zero labels, fallbacks, or replans”** and
-the next frontier—Cinnabar.
+then acquire Fly, teach it to DUX, cross Route 21 without defeating a trainer, and heal at Cinnabar.
+End the act on **“eleven dispatches; 24,522 fixed-skill actions; zero labels, fallbacks, or replans”**
+and the next frontier—Pokémon Mansion.
 
 ### Act VII: the Crystal test — 10:10–11:15
 
@@ -151,9 +152,9 @@ version has to prove the model learned something worth carrying into a game it h
 - A strict-evaluation counter showing teacher queries at zero.
 - The Celadon three-way choice, the post-Hideout replan to Tower, and the independently verified
   Hideout/Silph Scope/Poké Flute receipt, with model-versus-fixed-skill ownership labeled.
-- The ten-step Sabrina receipt, with nine singleton dispatches visually separated from the real
+- The eleven-step Cinnabar receipt, with ten singleton dispatches visually separated from the real
   Koga-versus-Strength branch, the transient Gold Teeth fact disappearing after use, and Hitmonlee
-  filling the sixth party slot before Sabrina.
+  filling the sixth party slot before Sabrina. Add the Fly lesson and trainer-free Route 21 crossing.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video

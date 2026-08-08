@@ -96,12 +96,12 @@ Lavender boundary. A third replan selects `reach_fuchsia`; 3,132 more actions ca
 reach a healed Fuchsia Center boundary. The three-decision sequence totals 6,783 actions and 638,660
 frames with no route labels, fallbacks, or replans. The added live skill-affordance mask then
 extended that same run through Surf, Koga, Strength, Erika, Saffron, Silph Co., the Fighting Dojo,
-and Sabrina. The final ten-decision sequence executed 23,692 bounded mechanic actions with no
-labels, fallbacks, or replans. It records nine singleton dispatches separately from the one true executable branch: Koga versus Strength,
+Sabrina, Fly acquisition, and Cinnabar. The final eleven-decision sequence executed 24,522 bounded
+mechanic actions with no labels, fallbacks, or replans. It records ten singleton dispatches separately from the one true executable branch: Koga versus Strength,
 where the model selected Koga at 96.41% confidence. This is model-owned objective selection over
-teacher-owned mechanics, not learned full-game play. The next adapter is Cinnabar from the verified
-post-Sabrina Saffron Center boundary. See the
-[ten-decision receipt](evidence/affordance-masked-ten-objective-sequence-2026-08-08.json).
+teacher-owned mechanics, not learned full-game play. The next adapter is the Mansion Secret Key
+chapter from the verified Cinnabar Center boundary. See the
+[eleven-decision receipt](evidence/affordance-masked-eleven-objective-sequence-2026-08-08.json).
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

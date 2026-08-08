@@ -64,9 +64,9 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1941 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
-clean after the composite Dojo/Sabrina adapter. The source-bound ten-step run uses published commit
-`19a8fcd` (the documentation receipt lands in the following commit).
+**Gate state:** 1942 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
+clean after the Cinnabar adapter. The source-bound eleven-step run uses published commit `8daad48`
+(the documentation receipt lands in the following commit).
 
 ---
 
@@ -220,9 +220,16 @@ warp route, defeated Sabrina, and returned healed to Saffron Center. The skill u
 See the
 [ten-decision receipt](docs/evidence/affordance-masked-ten-objective-sequence-2026-08-08.json).
 
-**Next:** connect Cinnabar, the only legal objective at the verified terminal boundary. Preserve
-the same typed availability, independent observation, and ownership distinction: the model selects
-objectives; current skills still choose navigation, battle, menu, and recovery actions.
+The Cinnabar adapter is now live-qualified. It used 830 actions / 148,680 frames, acquired HM02,
+taught Fly to DUX, preserved all six party members and lead stats, fled four bounded wild battles,
+defeated zero Route 21 trainers, and ended fully healed in Cinnabar Center. The eleven-step slice
+totals 24,522 actions and independently verifies `location:cinnabar_island`. See the
+[eleven-decision receipt](docs/evidence/affordance-masked-eleven-objective-sequence-2026-08-08.json).
+
+**Next:** connect the Mansion Secret Key chapter, the only legal objective at the verified terminal
+boundary. Preserve the same typed availability, independent observation, and ownership distinction:
+the model selects objectives; current skills still choose navigation, battle, menu, and recovery
+actions.
 
 ---
 
