@@ -21,6 +21,22 @@ Pokémon game without quietly handing control back to the teacher.
 That distinction is the heart of the project and its public story. The teacher supplies verified
 demonstrations and a referee; it is not the final autonomous player.
 
+### Capability snapshot
+
+| Layer | Best verified evidence | Honest boundary |
+| --- | --- | --- |
+| Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
+| Learned battle control | Model-controlled Red battle qualifications with fail-closed safety and no disagreement fallback | Scripted curriculum; cross-title battle evaluation is still pending |
+| Learned objective dispatch | One uninterrupted captured-state loop reached Hall of Fame through 20 model dispatches | Nineteen dispatches were singletons; mechanics were fixed skills |
+| Learned training control | 57,644 full-authority decisions, 1,801 battles, 1,046 heals, zero faints and all six members at level 55 | The candidate-set-only baseline also scores 100%; authority is proven, state-dependent strategy is not |
+| Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
+| Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |
+
+The project is therefore past “can automation finish Red?” and at the more useful question:
+**which decisions can a learned, portable controller own without an answer key?** Every promotion
+receipt separates teacher, shadow, constrained, and model-controlled authority so a green result
+cannot blur that boundary.
+
 The portable loop now has one uninterrupted Hall-of-Fame integration proof. Starting from an
 authenticated Celadon capture, the learned objective ranker dispatched **20 objectives** in the
 same emulator process: Rocket Hideout through the Mansion, the six-member development block, the
@@ -200,6 +216,17 @@ The equally important negative result is that a candidate-set-only baseline also
 candidate set was a singleton. This qualifies the candidate to enter live shadow, but it does not
 show that the other 25 features add predictive value or that training strategy is learned. See the
 [offline qualification](docs/evidence/training-control-affordance-v6-offline-2026-08-08.json).
+
+The preregistered v6 live campaign now clears its shadow and full-authority causal gates. The
+causal controller owned all **57,644** strategic decisions across both battle and overworld phases:
+**1,365 evolution battles, 56,279 balancing decisions, 1,801 total battles, 1,046 heals, zero
+faints, and a 55/55/55/55/55/55 terminal**, with no teacher fallback. All seven operational gates
+passed. This is strong evidence that the authenticated authority path and safety affordances work;
+because the choice-only baseline is still perfect, it is deliberately **not** evidence that the 25
+state features drive the policy. The next dataset records candidate-relative trainee and venue
+choices—the first interface designed to make state-dependent strategy identifiable. See the
+[causal qualification](docs/evidence/training-control-affordance-v6-causal-2026-08-08.json) and its
+[frozen candidate-ranker plan](docs/evidence/training-candidate-ranker-v1-promotion-plan-2026-08-08.json).
 
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
