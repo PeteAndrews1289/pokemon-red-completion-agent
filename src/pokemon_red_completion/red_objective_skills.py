@@ -29,6 +29,7 @@ from pokemon_red_completion.saffron import SaffronTiming, run_saffron_chapter
 from pokemon_red_completion.silph import SilphTiming, run_silph_chapter
 from pokemon_red_completion.strength import StrengthTiming, run_strength_chapter
 from pokemon_red_completion.tower import TowerTiming, run_tower_chapter
+from pokemon_red_completion.victory_road import run_victory_road_chapter
 
 
 @dataclass(frozen=True, slots=True)
@@ -655,6 +656,50 @@ class DefeatGiovanniObjectiveSkill:
 
     def execute(self) -> ObjectiveSkillExecution:
         report = run_giovanni_chapter(
+            self.emulator,
+            self.reader,
+            self.executor,
+        )
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class CrossVictoryRoadObjectiveSkill:
+    """Execute the qualified Route 22, badge-gate, and Victory Road chapter."""
+
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    objective_id: str = "cross_victory_road"
+    specialist: Specialist = Specialist.NAVIGATION
+    expected_facts: frozenset[str] = frozenset({"story:victory_road_cleared"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 10_000
+    max_frames: int = 3_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "viridian_pokecenter"
+            and "badge:earth" in state.facts
+            and "move:strength_available" in state.facts
+            and "story:victory_road_cleared" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the healed eight-badge Viridian Center boundary with Strength."
+                if executable
+                else "Requires eight badges, Strength, and the Viridian Center boundary."
+            ),
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_victory_road_chapter(
             self.emulator,
             self.reader,
             self.executor,

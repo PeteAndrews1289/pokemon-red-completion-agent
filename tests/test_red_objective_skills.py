@@ -6,6 +6,7 @@ import pytest
 
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.red_objective_skills import (
+    CrossVictoryRoadObjectiveSkill,
     DefeatBlaineObjectiveSkill,
     DefeatErikaObjectiveSkill,
     DefeatGiovanniObjectiveSkill,
@@ -135,6 +136,9 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     mansion = ObtainSecretKeyObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     blaine = DefeatBlaineObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     giovanni = DefeatGiovanniObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    victory_road = CrossVictoryRoadObjectiveSkill(  # type: ignore[arg-type]
+        emulator, reader, executor
+    )
     celadon = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"item:silph_scope"}),
@@ -190,6 +194,13 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     post_blaine = post_mansion.with_facts("badge:volcano")
     assert giovanni.availability(post_blaine).executable
     assert not blaine.availability(post_blaine).executable
+    post_giovanni = GameState(
+        GameMode.OVERWORLD,
+        facts=post_blaine.with_facts("badge:earth", "move:strength_available").facts,
+        location="viridian_pokecenter",
+    )
+    assert victory_road.availability(post_giovanni).executable
+    assert not giovanni.availability(post_giovanni).executable
 
 
 def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
@@ -272,6 +283,13 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
             "defeat_giovanni",
             2_000,
             300_000,
+        ),
+        (
+            CrossVictoryRoadObjectiveSkill,
+            "run_victory_road_chapter",
+            "cross_victory_road",
+            4_000,
+            500_000,
         ),
     ),
 )
