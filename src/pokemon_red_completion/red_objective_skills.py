@@ -14,6 +14,7 @@ from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.erika import ErikaTiming, run_erika_chapter
 from pokemon_red_completion.executor import ChapterExecutor
 from pokemon_red_completion.fuchsia import FuchsiaTiming, run_fuchsia_chapter
+from pokemon_red_completion.giovanni import run_giovanni_chapter
 from pokemon_red_completion.hideout import EmulatorState, HideoutTiming, run_hideout_chapter
 from pokemon_red_completion.koga import KogaTiming, run_koga_chapter
 from pokemon_red_completion.objective_skills import (
@@ -611,6 +612,49 @@ class DefeatBlaineObjectiveSkill:
 
     def execute(self) -> ObjectiveSkillExecution:
         report = run_blaine_after_mansion_chapter(
+            self.emulator,
+            self.reader,
+            self.executor,
+        )
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class DefeatGiovanniObjectiveSkill:
+    """Execute the qualified Viridian Gym chapter after Blaine releases control."""
+
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    objective_id: str = "defeat_giovanni"
+    specialist: Specialist = Specialist.BATTLE
+    expected_facts: frozenset[str] = frozenset({"badge:earth"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 5_000
+    max_frames: int = 2_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "cinnabar_pokecenter"
+            and "badge:volcano" in state.facts
+            and "badge:earth" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the healed post-Blaine Cinnabar Center boundary."
+                if executable
+                else "Requires Cinnabar Center after Blaine and before Giovanni."
+            ),
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_giovanni_chapter(
             self.emulator,
             self.reader,
             self.executor,
