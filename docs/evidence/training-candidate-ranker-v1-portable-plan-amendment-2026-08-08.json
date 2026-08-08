@@ -1,0 +1,28 @@
+{
+  "schema": "pokemon-training-candidate-portable-plan-amendment-v1",
+  "status": "preregistered_after_fail_closed_artifact_preflight_before_emulator_start",
+  "original_plan_sha256": "d877d346194904354b91a22e7b76a7b2334cea072ee9bb2402d8c6f67c60281f",
+  "source_commit": "e6e7c7dec63d715369af65284b2a5183e0f59728",
+  "failed_preflight": {
+    "emulator_opened": false,
+    "root_state_loaded": false,
+    "model_decisions_executed": 0,
+    "reason": "the first historical objective artifact predates the loader's required objective_graph_sha256 record field and failed closed as graph-incompatible",
+    "rejected_artifact_manifest_sha256": "27474ec5390351045f594782a2aa0235080105dc1c61a246c66627e041f30f53"
+  },
+  "substitution": {
+    "scope": "artifact envelope only",
+    "replacement_artifact_manifest_sha256": "27a106ffdfb167cd34ed2173953844a596bdb6ee66014e1d082c277c069cdc2f",
+    "replacement_model_record_sha256": "1889e6137b8f48755eaf91e90c732e7d1539f973c461013e5edd0b196a8880d2",
+    "objective_graph_sha256": "d86fd746901dae2806de025b6ccc721794750c7bffa1c761b0e2a79dabdca3de",
+    "model_sha256_before": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "model_sha256_after": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "model_parameters_changed": false,
+    "candidate_model_changed": false,
+    "root_changed": false,
+    "gates_changed": false
+  },
+  "portable_run_may_start": true,
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}
