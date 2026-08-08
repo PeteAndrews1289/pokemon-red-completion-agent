@@ -159,13 +159,18 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   faints, all level 55, and 45,831 novel unique action-feature pairs versus the diagnostic
   lineage. Its retained distinct root and clean source passed the production loader. See the
   [v2 train receipt](evidence/training-control-v2-train-01-2026-08-08.json). At least one more
-  training root and one validation root remain before fitting a real candidate.
+  training root and one validation root remain before fitting a real candidate. A proposed
+  43-frame second root was correctly rejected: it matched the 17-frame root digest and reproduced
+  all 46,687 decisions with zero novel pairs. See the
+  [idle-equivalence receipt](evidence/training-control-idle-wait-equivalence-2026-08-08.json).
 - [x] Add a v2 integrity loader and partition audit that bind source commit, dirty flag, root-state
   digest, and lineage partition; reject altered files, dirty successful sources, terminal drift,
   state overlap across train/validation, and validation classes absent from training.
-- [x] Add bounded pre-collection frame perturbation that saves the exact resulting private state,
-  making deterministic encounter lineages genuinely distinct and reproducible rather than merely
-  renaming duplicate runs.
+- [ ] Replace idle-only root perturbation with reversible movement that proves the same semantic
+  checkpoint, requires a different serialized digest, and fails closed before collection when
+  either condition is false. The tool now enforces both checks. The first motion-derived root
+  passed them, then exposed an in-battle health-gate failure after 11,122 decisions. Its 99.46%
+  novel diagnostic pairs are excluded; the repaired source must now replay that root.
 - [ ] Train a candidate with lineage-held-out validation; require every validation class to exist
   in training and keep the sealed test partition closed.
   The class-balanced MLP, phase-masked inference, metrics, and fail-closed candidate fitter are

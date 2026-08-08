@@ -178,13 +178,20 @@ dataset audit rejects leakage. Future counted lineages must use v2.
 The class-balanced, phase-masked candidate fitter is implemented in `training_control_model.py`.
 It has only synthetic tests; do not report a real model, accuracy, or promotion until v2 lineages,
 shadow execution, and model-controlled execution pass.
-Create distinct v2 roots with `--seed-wait-frames N --out-root-state <private>.state`; the saved
-post-wait state digest, not the shared parent filename, is the lineage identity used by leakage
-checks. Retain every root state beside its raw private stream.
+Do not create nominally distinct roots by changing `--seed-wait-frames`. The 43-frame attempt
+matched the 17-frame root digest and exact 46,687-decision sequence, so it is retained only as a
+private reproducibility control. Use a reversible movement perturbation, prove unchanged semantic
+checkpoint state, and require a new serialized digest before collection. Retain every accepted
+root state beside its raw private stream.
 v2 train lineage 01 is qualified at source `4c885d8`: stream SHA `f13f9f10...17e1aca1`, root SHA
 `62f7862e...25e80c9c`, 46,687 decisions, all five actions, zero faints, all level 55, and 99.85%
 novel unique action-feature pairs versus diagnostic lineage 01. Do not fit a real candidate yet;
 collect at least one more train root and one validation root first.
+The sanitized rejection record is
+`docs/evidence/training-control-idle-wait-equivalence-2026-08-08.json`; do not count that duplicate.
+The first motion-root attempt is also unqualified: it failed after 11,122 decisions when the active
+trainee fainted. Its stream is diagnostic only. The teacher now checks the same retreat floor before
+every move, and `replay_training.py` rejects byte-identical or semantically changed derived roots.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

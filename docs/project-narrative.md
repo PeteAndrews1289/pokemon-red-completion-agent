@@ -218,6 +218,23 @@ checkpoints diverged visibly from diagnostic lineage 01. The final stream held 4
 loader accepted its clean source, root digest, five-class coverage, phase legality, and exact stop.
 It is now real training data, but one training root still cannot supply held-out evidence.
 
+The next attempted root revealed why provenance hashes must be checked rather than merely recorded.
+Changing the idle wait from 17 to 43 frames produced the same saved-state digest and then the exact
+same 46,687 decisions: all 45,902 unique action-feature pairs were shared and none were new. The run
+is preserved as a reproducibility control but excluded from the learning split. A reversible
+down-and-back movement perturbation then returned to the same map, coordinate, non-battle state,
+and party while producing a genuinely different serialized state. This turns a failed collection
+assumption into an enforceable rule: semantic equivalence and byte-level distinction must both pass
+before a lineage can count.
+
+That honest second root immediately found something the duplicate could not. After 11,122 teacher
+decisions, a durable opponent reduced the active trainee to zero HP. The route checked its 90%
+health floor between battles, but the adaptive move policy did not recheck it between turns. The
+failed stream remains outside every model split even though 10,375 of its 10,431 unique pairs were
+new. The repair applies the same portable health rule before each move and transfers control to the
+existing escort-and-flee mechanism. This is exactly the teacher's role: varied experience should
+break hidden assumptions now, before a learner imitates them.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

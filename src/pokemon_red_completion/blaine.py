@@ -2346,13 +2346,24 @@ def _field_fly_to_cinnabar_from_vermilion(actions, reader, emulator) -> None:
 
 
 def _team_training_move_slot(state: RawGameState) -> int:
-    """Pick a training move, skipping any slot the opponent has Disabled.
+    """Pick a safe training move, or request an in-battle escape.
 
     The lead-only block was short enough never to meet Disable.  Team training
     runs many more encounters, so the fallback slot can be locked out; treating
     a disabled slot as available made the battle runtime reject the choice.
+    The overworld retreat gate is not enough by itself: a durable opponent can
+    push a trainee below the same safety floor after the battle has begun.  The
+    move policy is re-evaluated before every turn, so it also enforces that
+    portable health rule and hands control back to the bounded escort-and-flee
+    path before selecting another attack.
     """
 
+    hp = state.battler_hp
+    max_hp = state.battler_max_hp
+    if hp is None or max_hp is None or max_hp <= 0:
+        raise _PauseForTeamTrainingRecovery
+    if hp / max_hp <= MANSION_TEAM_POLICY.retreat_hp_ratio:
+        raise _PauseForTeamTrainingRecovery
     disabled = state.player_disabled_move_slot or 0
     moves = state.battler_moves or ()
     pp = state.battler_pp or ()

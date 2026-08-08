@@ -181,9 +181,20 @@ appear together. Keep the result card blank—the implementation exists, but no 
 candidate has earned a score yet.
 Then show the first counted v2 root: a 17-frame perturbation saved as an exact private state, two
 mid-run party-level checkpoints diverging, and both paths reconverging at all 55. Put **99.85% new
-unique action-feature pairs** beside the hashes. The point is not random noise; it is a reproducible
-different lesson under the same rules. End the card with “training lineage 1 accepted; validation
-still empty.”
+unique action-feature pairs** beside the hashes—but do not end on an easy victory.
+
+Try 43 idle frames for lineage two and freeze the screen when both root hashes match. The entire
+46,687-decision sequence matches too: 45,902 shared unique pairs, zero new ones. Label it
+**“reproducibility control—rejected as independent data.”** This is the next measurement trap:
+different settings and different output files are not necessarily different experience. Show the
+repair as a reversible down-and-back movement that returns to the same map, tile, battle state, and
+party while changing the serialized root.
+
+Then let the honest root fail. At decision 11,122, a durable matchup faints the trainee because the
+teacher enforced its health floor between battles but not between turns. Put **99.46% novel pairs**
+next to **“failed—excluded from training.”** Show the repair: the same health signal is checked
+before every move, and the safe escort takes over to flee. End the card with “training lineage 1
+accepted; lineage 2 taught the teacher; validation still empty.”
 
 ### Act VII: the Crystal test — 10:10–11:15
 

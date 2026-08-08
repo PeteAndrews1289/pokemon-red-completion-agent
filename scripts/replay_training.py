@@ -72,23 +72,34 @@ def main(argv: list[str] | None = None) -> int:
         "--seed-wait-frames",
         type=int,
         default=0,
-        help="advance a bounded number of frames before saving a distinct collection root",
+        help="advance frames before saving a root; rejected if the serialized state is unchanged",
+    )
+    parser.add_argument(
+        "--seed-walk-cycles",
+        type=int,
+        default=0,
+        help="derive a root with bounded down-and-back movement and semantic equality checks",
     )
     parser.add_argument(
         "--out-root-state",
         type=Path,
         default=None,
-        help="private state created after --seed-wait-frames for exact lineage replay",
+        help="private state created by one seed perturbation for exact lineage replay",
     )
     args = parser.parse_args(argv)
     if args.out_decisions is not None and not args.lineage_id:
         parser.error("--lineage-id is required with --out-decisions")
     if args.seed_wait_frames < 0:
         parser.error("--seed-wait-frames must be non-negative")
-    if args.seed_wait_frames and args.out_root_state is None:
-        parser.error("--out-root-state is required with --seed-wait-frames")
-    if args.out_root_state is not None and not args.seed_wait_frames:
-        parser.error("--out-root-state requires a positive --seed-wait-frames")
+    if not 0 <= args.seed_walk_cycles <= 16:
+        parser.error("--seed-walk-cycles must be between zero and sixteen")
+    if args.seed_wait_frames and args.seed_walk_cycles:
+        parser.error("choose only one seed perturbation")
+    seed_perturbation = bool(args.seed_wait_frames or args.seed_walk_cycles)
+    if seed_perturbation and args.out_root_state is None:
+        parser.error("--out-root-state is required with a seed perturbation")
+    if args.out_root_state is not None and not seed_perturbation:
+        parser.error("--out-root-state requires a positive seed perturbation")
     if args.out_root_state is not None and args.out_root_state.resolve() == args.state.resolve():
         parser.error("--out-root-state must not overwrite the input state")
 
@@ -100,14 +111,33 @@ def main(argv: list[str] | None = None) -> int:
         actions = CountingExecutor(
             FrameSafeExecutor(emulator, DEFAULT_NEW_GAME_TIMING.controller_timing())
         )
+        party_reader = PokemonRedPartyReader(emulator)
         collection_state = args.state
-        if args.seed_wait_frames:
-            actions.execute(MacroAction(MacroActionKind.WAIT, args.seed_wait_frames))
+        if seed_perturbation:
+            before_semantics = _collection_semantics(reader, party_reader)
+            if args.seed_wait_frames:
+                actions.execute(MacroAction(MacroActionKind.WAIT, args.seed_wait_frames))
+            else:
+                for _ in range(args.seed_walk_cycles):
+                    actions.execute(MacroAction(MacroActionKind.MOVE, "down"))
+                    actions.execute(MacroAction(MacroActionKind.WAIT, 60))
+                    actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
+                    actions.execute(MacroAction(MacroActionKind.WAIT, 60))
+            after_semantics = _collection_semantics(reader, party_reader)
+            if after_semantics != before_semantics:
+                raise RuntimeError(
+                    "seed perturbation did not return to the same semantic checkpoint"
+                )
             assert args.out_root_state is not None
             emulator.save_state(args.out_root_state)
+            if _sha256(args.out_root_state) == _sha256(args.state):
+                raise RuntimeError(
+                    "seed perturbation left the serialized root unchanged; "
+                    "this cannot count as an independent lineage"
+                )
             collection_state = args.out_root_state
             print(
-                f"saved distinct collection root after {args.seed_wait_frames} frames",
+                "saved a semantically equivalent, serialized-distinct collection root",
                 flush=True,
             )
         provenance = (
@@ -115,8 +145,6 @@ def main(argv: list[str] | None = None) -> int:
             if args.out_decisions is not None
             else None
         )
-        party_reader = PokemonRedPartyReader(emulator)
-
         raw = reader.read()
         party = party_reader.read()
         print(f"resumed on map {raw.map_id} at {(raw.player_x, raw.player_y)!r}")
@@ -375,6 +403,20 @@ def _collection_provenance(
         "source_dirty": dirty,
         "state_sha256": state_sha256,
     }
+
+
+def _collection_semantics(
+    reader: PokemonRedStateReader,
+    party_reader: PokemonRedPartyReader,
+) -> tuple[object, ...]:
+    """Capture facts that a root perturbation is not allowed to change."""
+
+    raw = reader.read()
+    return (raw.map_id, raw.player_x, raw.player_y, raw.battle_state, party_reader.read())
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 if __name__ == "__main__":

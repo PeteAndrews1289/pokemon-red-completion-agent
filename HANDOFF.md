@@ -301,10 +301,19 @@ the audit rejects state overlap and validation-only classes.
 `training_control_model.py` now supplies the class-balanced MLP, phase-masked inference, aggregate
 metrics, and whole-lineage candidate fit. Its public summary is always non-promotable until later
 runtime gates; only synthetic separability and integrity behavior are currently tested.
-For distinct deterministic roots, `replay_training.py` accepts a positive `--seed-wait-frames` only
-when paired with `--out-root-state`; it advances the emulator, saves the exact resulting private
-state, and hashes that state into v2 provenance. Never call two copies of the same input state
-independent lineages without creating and retaining distinct roots this way.
+Do not assume that different idle-wait counts create distinct deterministic roots. The 17-frame
+root used by train lineage 01 differed from its parent, but a later 43-frame attempt produced the
+same root digest and the exact same 46,687-decision sequence. That attempt is retained privately as
+a reproducibility control and rejected as independent data. A replacement root uses reversible
+movement, proves the same map, position, battle state, and party afterward, and must have a distinct
+serialized digest before collection. See the
+[idle-equivalence receipt](docs/evidence/training-control-idle-wait-equivalence-2026-08-08.json).
+The first motion-root replay then failed after 11,122 decisions when a trainee fainted inside a
+durable matchup. It contributed 10,375 novel diagnostic pairs (99.46%) but is excluded from fitting.
+The teacher now reapplies its health floor before every battle turn and escapes through the bounded
+escort path when crossed. Root creation also fails closed on unchanged bytes or changed checkpoint
+semantics. See the
+[failed-lineage receipt](docs/evidence/training-control-v2-train-02-motion-failure-2026-08-08.json).
 
 Counted v2 train lineage 01 is qualified from a retained 17-frame root at source `4c885d8`:
 46,687 decisions, all five actions, 1,726 battles, 815 healing trips, zero faints, and all level 55.
@@ -313,8 +322,9 @@ its root-state SHA is `62f7862e6f7e15c6f7c14a4cbb7488d6ff946502809dde5e131517192
 It adds 45,831 novel unique action-feature pairs versus diagnostic lineage 01 (99.85% of its unique
 pairs). See the [sanitized receipt](docs/evidence/training-control-v2-train-01-2026-08-08.json).
 
-**Next:** collect at least three v2 complete decision lineages, split by root lineage rather than by
-row, train and shadow-evaluate the first candidate, then replace the 469,232-action skill's teacher
+**Next:** replay the repaired teacher on the motion root, collect a distinct validation root, split by root
+lineage rather than by row, train and shadow-evaluate the first candidate, then replace the
+469,232-action skill's teacher
 authority under the same safety envelope. Preserve the fixed skill as demonstrator and referee. Do
 not describe instrumentation as a trained policy or this integration result as clean-start or
 end-to-end learned completion.

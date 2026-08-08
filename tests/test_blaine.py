@@ -278,7 +278,16 @@ def test_lead_training_skips_a_live_disabled_move() -> None:
 
 
 def test_team_training_selects_damaging_moves_for_the_active_species() -> None:
-    base = RawGameState(True, MapId.POKEMON_MANSION_1F, 5, 20, 3, 1)
+    base = RawGameState(
+        True,
+        MapId.POKEMON_MANSION_1F,
+        5,
+        20,
+        3,
+        1,
+        first_party_hp=100,
+        first_party_max_hp=100,
+    )
 
     assert (
         _team_training_move_slot(
@@ -305,7 +314,16 @@ def test_team_training_selects_damaging_moves_for_the_active_species() -> None:
 
 
 def test_team_training_requests_escape_when_all_species_attacks_are_unusable() -> None:
-    base = RawGameState(True, MapId.POKEMON_MANSION_1F, 5, 20, 3, 1)
+    base = RawGameState(
+        True,
+        MapId.POKEMON_MANSION_1F,
+        5,
+        20,
+        3,
+        1,
+        first_party_hp=100,
+        first_party_max_hp=100,
+    )
 
     with pytest.raises(_PauseForTeamTrainingRecovery):
         _team_training_move_slot(
@@ -359,6 +377,27 @@ def test_team_training_requests_escape_when_all_species_attacks_are_unusable() -
         )
         == 4
     )
+
+
+def test_team_training_requests_escape_after_live_hp_crosses_retreat_floor() -> None:
+    base = RawGameState(
+        True,
+        MapId.POKEMON_MANSION_1F,
+        5,
+        20,
+        3,
+        1,
+        first_party_hp=90,
+        first_party_max_hp=100,
+        active_party_species_id=0x3B,
+        active_party_moves=(0x0A, 0x2D, 0x5B, 0x1C),
+        active_party_pp=(35, 40, 10, 15),
+    )
+
+    with pytest.raises(_PauseForTeamTrainingRecovery):
+        _team_training_move_slot(base)
+
+    assert _team_training_move_slot(replace(base, first_party_hp=91)) == 1
 
 
 def test_the_policy_margin_governs_and_no_species_silently_overrides_it() -> None:

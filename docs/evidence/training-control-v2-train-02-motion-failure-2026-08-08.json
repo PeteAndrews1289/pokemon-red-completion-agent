@@ -1,0 +1,56 @@
+{
+  "schema": "pokemon-training-control-lineage-summary-v2",
+  "status": "failed",
+  "lineage_id": "training-control-v2-train-02-motion",
+  "partition": "train",
+  "lineage_qualified": false,
+  "source": {
+    "git_commit": "4c885d8f90d506529d720e1581b7ed0c8ff83107",
+    "worktree_dirty": false
+  },
+  "private_artifacts": {
+    "decision_stream_sha256": "fd11e1325ad891c637ea7b5357f20e96d9490d372e0f7c412e85cd7d547bfe54",
+    "root_state_sha256": "b900d039a0c4df47b712867ddcb448bcff7fa79b88616bdf1e2e5fdf9e96b9b7",
+    "tracked": false
+  },
+  "root_derivation": {
+    "method": "reversible_down_and_back_movement",
+    "parent_checkpoint_id": "portable_loop_post_secret_key",
+    "same_map_position_battle_and_party_afterward": true,
+    "serialized_digest_distinct_from_parent": true,
+    "exact_resulting_state_retained": true
+  },
+  "dataset": {
+    "feature_schema_id": "pokemon.core.training.control.features.v1",
+    "feature_count": 21,
+    "decisions": 11122,
+    "unique_action_feature_pairs": 10431,
+    "duplicate_action_feature_pairs": 691,
+    "action_counts": {
+      "fight": 627,
+      "heal": 22,
+      "seek": 10473
+    },
+    "phase_counts": {
+      "battle": 627,
+      "overworld": 10495
+    }
+  },
+  "diversity_against_v2_train_lineage_01": {
+    "shared_unique_action_feature_pairs": 56,
+    "novel_unique_action_feature_pairs": 10375,
+    "novel_pair_ratio": 0.9946313872111974
+  },
+  "failure": {
+    "category": "active_trainee_fainted_during_training_battle",
+    "completed_decisions_retained_for_diagnosis": true,
+    "accepted_as_training_data": false,
+    "root_cause": "The retreat policy was enforced between encounters but not before each in-battle turn.",
+    "repair": "Re-evaluate the same health floor before every move and hand control to the bounded escort-and-flee path when crossed."
+  },
+  "limitations": [
+    "failed_lineage",
+    "diagnostic_only",
+    "not_promotion_eligible"
+  ]
+}

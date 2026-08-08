@@ -69,6 +69,20 @@ digest, phase legality, and exact terminal stop. Of 45,902 unique action-feature
 result; independent v2 train and validation roots remain required. See the
 [counted lineage receipt](docs/evidence/training-control-v2-train-01-2026-08-08.json).
 
+A second idle-wait attempt exposed an important collection trap. Waiting 43 frames produced the
+same saved root as the 17-frame attempt and replayed the exact same 46,687 teacher decisions, with
+zero novel action-feature pairs. It is a useful reproducibility control, not another lineage, and
+has been rejected from the learning split. New roots must now prove semantic equivalence after a
+reversible perturbation and byte-level distinction before collection. See the
+[idle-equivalence receipt](docs/evidence/training-control-idle-wait-equivalence-2026-08-08.json).
+
+The first honest motion-root replay demonstrated that the difference mattered. It produced 11,122
+decisions before a trainee fainted during a durable matchup; 10,375 of its 10,431 unique pairs were
+new versus train lineage 01. The failed stream remains diagnostic and cannot enter a model split.
+The repair applies the declared health retreat floor before every in-battle move, then uses the
+existing bounded escort-and-flee path. See the
+[failed-lineage receipt](docs/evidence/training-control-v2-train-02-motion-failure-2026-08-08.json).
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,
