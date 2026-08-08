@@ -101,6 +101,10 @@ confirming the Poké Flute at Lavender Center. Keep the screen labeled **“mode
 fixed skills executed 3,651 mechanic actions”**. The useful headline is two uninterrupted decisions
 over 265,588 frames, not an autonomous run.
 
+Then let the third replan breathe: the model chooses Fuchsia, the fixed skill captures Snorlax in
+two throws, and the observer confirms Fuchsia Center. Update the label to **“three model goals;
+6,783 fixed-skill actions; zero route labels or fallbacks.”**
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

@@ -23,12 +23,13 @@ demonstrations and a referee; it is not the final autonomous player.
 
 The first uninterrupted Red vertical slice now runs through the portable closed loop. From an
 authenticated Celadon capture, the learned objective ranker chose the Rocket Hideout over two other
-legal branches at **99.70% confidence**, then chose Pokémon Tower at **99.08%** from the next three.
-No expected-route label or fallback was available. Registered fixed skills executed **3,651 bounded
-actions / 265,588 frames**, while fresh emulator observations independently verified the Hideout,
-Silph Scope, and Poké Flute facts. This transfers two real sequential decisions to the model;
-mechanics remain teacher-authored, and it is not yet end-to-end learned play. See the
-[two-decision receipt](docs/evidence/model-selected-two-objective-sequence-2026-08-08.json).
+legal branches at **99.70% confidence**, chose Pokémon Tower at **99.08%**, and then chose Fuchsia.
+No expected-route label or fallback was available. Registered fixed skills executed **6,783 bounded
+actions / 638,660 frames**, while fresh observations independently verified the Hideout, Silph
+Scope, Poké Flute, and Fuchsia facts. The third skill also captured Snorlax in two throws. This
+transfers three real sequential decisions to the model; mechanics remain teacher-authored, and it
+is not yet end-to-end learned play. See the
+[three-decision receipt](docs/evidence/model-selected-three-objective-sequence-2026-08-08.json).
 
 - [Current technical handoff](HANDOFF.md)
 - [Dependency-ordered roadmap](docs/roadmap.md)

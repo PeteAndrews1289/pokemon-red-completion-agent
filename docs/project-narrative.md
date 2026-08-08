@@ -55,6 +55,14 @@ the model owned two sequential objective decisions while fixed skills supplied 3
 actions over 265,588 frames. No expected objective label or fallback entered either decision. See
 the [two-decision receipt](evidence/model-selected-two-objective-sequence-2026-08-08.json).
 
+The third replan selected `reach_fuchsia` from the live Lavender state. The fixed mechanic skill
+crossed Routes 12–15, cleared the required trainers, bought a bounded capture reserve, captured the
+level-30 Snorlax in two throws, and returned a healed four-member party to Fuchsia Center. A fresh
+observation—not the chapter report—supplied `location:fuchsia_city`. The uninterrupted vertical
+slice therefore covers three model-owned objectives, 6,783 teacher-owned mechanic actions, and
+638,660 frames with zero route labels, fallbacks, or replans. See the
+[three-decision receipt](evidence/model-selected-three-objective-sequence-2026-08-08.json).
+
 That success also exposed the next architectural defect. The dependency graph presents Erika and
 Saffron as legal at Celadon, but their existing fixed skills are not executable there: Erika starts
 from the later Fuchsia/Strength boundary, and Saffron assumes post-Erika party, move, and economy

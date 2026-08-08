@@ -143,9 +143,9 @@ repository owner and must never appear in a tracked or untracked file. Ask if yo
 
 The deterministic teacher completes Pokémon Red repeatedly with genuine Champion and Hall-of-Fame
 evidence in the same run. The objective ranker authorizes all 36 objectives with zero fallbacks.
-In the portable loop it has also selected and completed two sequential objectives—Rocket Hideout
-and Pokémon Tower—through registered fixed skills with independently observed effects and no
-expected labels or fallbacks.
+In the portable loop it has also selected and completed three sequential objectives—Rocket Hideout,
+Pokémon Tower, and Fuchsia—through registered fixed skills with independently observed effects and
+no expected labels or fallbacks.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

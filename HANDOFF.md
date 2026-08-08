@@ -64,9 +64,9 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1927 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
-clean after the two-objective model-selected dispatcher. CI is green through the implementation
-lineage ending at `911e18c` (final documentation may be one later commit).
+**Gate state:** 1928 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
+clean after the three-objective model-selected dispatcher. The source-bound three-step run uses
+published commit `0e92d12` (final documentation may be one later commit).
 
 ---
 
@@ -186,6 +186,14 @@ battles, obtained the Poké Flute, and returned the healed party to Lavender Cen
 steps the model made two decisions with no expected labels or fallbacks; the loop executed **3,651
 actions / 265,588 frames** and independently verified all three new semantic facts. See the
 [two-decision receipt](docs/evidence/model-selected-two-objective-sequence-2026-08-08.json).
+
+The third uninterrupted decision selected `reach_fuchsia` from the post-Tower Lavender state. Its
+registered skill executed **3,132 actions / 373,072 frames**, cleared the required Route 12–13
+battles, captured the level-30 Snorlax in two throws, preserved the Poké Flute, and returned a
+fully healed four-member party to Fuchsia Center. The complete three-decision slice totals **6,783
+actions / 638,660 frames**, three model selections, four independently observed progress facts,
+zero expected labels, zero fallbacks, and zero replans. See the
+[three-decision receipt](docs/evidence/model-selected-three-objective-sequence-2026-08-08.json).
 
 **Next:** add an explicit skill-affordance mask before extending the sequence. The quest graph calls
 Erika and Saffron dependency-legal early, but their current fixed skills require later physical

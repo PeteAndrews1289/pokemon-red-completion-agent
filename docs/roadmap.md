@@ -92,11 +92,12 @@ selects `clear_rocket_hideout` at 99.70% confidence without an expected label. T
 dispatcher executes its registered 1,143-action Hideout skill and independently observes both the
 Hideout-clear and Silph Scope facts. It then replans from fresh state, selects `rescue_fuji` at
 99.08%, executes the 2,508-action Tower skill, and independently observes the Poké Flute at a healed
-Lavender boundary. The two-decision sequence totals 3,651 actions and 265,588 frames with no route
-labels or fallbacks. This is model-owned objective selection over teacher-owned mechanics, not
-learned full-game play. The next dependency is an explicit live skill-affordance mask: the graph
+Lavender boundary. A third replan selects `reach_fuchsia`; 3,132 more actions capture Snorlax and
+reach a healed Fuchsia Center boundary. The three-decision sequence totals 6,783 actions and 638,660
+frames with no route labels, fallbacks, or replans. This is model-owned objective selection over
+teacher-owned mechanics, not learned full-game play. The next dependency is an explicit live skill-affordance mask: the graph
 currently exposes Erika and Saffron before their fixed skills' physical preconditions hold. See the
-[two-decision receipt](evidence/model-selected-two-objective-sequence-2026-08-08.json).
+[three-decision receipt](evidence/model-selected-three-objective-sequence-2026-08-08.json).
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
