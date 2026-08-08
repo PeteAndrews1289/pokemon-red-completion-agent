@@ -162,8 +162,11 @@ Lance (582). Their participation vectors are `[5,0,0,0,3,0]`, `[6,0,0,0,0,1]`,
 `[0,0,4,0,2,0]`, and `[6,0,0,0,0,0]`; do not describe Lance as a team lesson.
 Champion is separately qualified in 567 actions / 45,216 frames. Red couples the Champion event and
 Hall-of-Fame map, so `DefeatChampionObjectiveSkill` declares `game:hall_of_fame` as an automatic
-effect; do not count a second model decision. All post-Celadon adapters are individually qualified,
-but the uninterrupted twenty-dispatch replay remains pending.
+effect; do not count a second model decision. The uninterrupted integration replay now also passes:
+20 dispatches, 502,175 actions, 37,369,283 frames, all 36 objectives closed, and Hall of Fame from
+the authenticated Celadon capture, with no labels, fallbacks, or replans. Nineteen dispatches were
+singletons. The next authority replacement is the teacher-authored training controller, not another
+fixed route extension.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

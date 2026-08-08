@@ -153,6 +153,15 @@ Then show the corrected ownership label—**one model dispatch, one declared aut
 effect**—beside **567 actions / 45,216 frames** and the final 66/55/55/55/55/55 party. Do not animate
 a fictional second model choice.
 
+Return to the original Celadon checkpoint for the payoff: show the full uninterrupted counter
+advancing through all 20 dispatches without a restore between objectives. The terminal card should
+read **“502,175 actions; 37,369,283 frames; 20 model dispatches; 36/36 graph objectives; Hall of
+Fame; zero labels, fallbacks, or replans.”** Immediately reveal the denominator: 19 dispatches were
+singletons, and fixed teacher skills still pressed every button. A stacked bar makes the next target
+obvious—Blaine's team-development lesson alone consumed **93.44%** of the actions through 1,716
+battles and 885 healing trips. End the Red act by replacing “Can the pieces connect?” with the more
+important question: “Can the model learn the largest piece?”
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local
@@ -184,6 +193,9 @@ version has to prove the model learned something worth carrying into a game it h
   Koga-versus-Strength branch, the transient Gold Teeth fact disappearing after use, and Hitmonlee
   filling the sixth party slot before Sabrina. Add the Fly lesson, trainer-free Route 21 crossing,
   and the positive Secret Key/TM14 evidence beside the negative Blaine/Badge/trainer evidence.
+- The uninterrupted twenty-dispatch Hall-of-Fame receipt and a proportional action bar showing
+  469,232 of 502,175 actions inside the team-development/Blaine skill. Label the captured Celadon
+  start and teacher-authored mechanics on screen for the entire sequence.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video

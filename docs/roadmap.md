@@ -134,8 +134,16 @@ The live split experiment found no stable boundary: the Champion event and Hall-
 observable together. The final contract declares Hall of Fame as a coupled side effect of the
 single `defeat_champion` dispatch. Its rerun passed in 567 actions / 45,216 frames with the exact
 Champion party and a 66/55/55/55/55/55 terminal. All post-Celadon adapters are individually
-qualified. The immediate gate is now one uninterrupted twenty-dispatch replay from the original
-authenticated Celadon capture.
+qualified. That integration gate has now passed: one process ran 20 model dispatches from the
+authenticated Celadon capture through the Hall of Fame in 502,175 actions / 37,369,283 frames,
+with zero labels, fallbacks, or replans. Nineteen dispatches were singletons and one was a genuine
+ranking branch. The captured-state result is not a clean-start evaluation. See the
+[twenty-decision receipt](evidence/affordance-masked-twenty-objective-hall-of-fame-2026-08-08.json).
+
+**Immediate implementation gate:** extract the teacher's training decisions into a portable
+seek/fight/flee/heal/stop dataset and replace that authority with a learned controller under the
+same safety envelope. The 469,232-action development block accounts for 93.44% of the integrated
+run, so it is both the largest scripted surface and the highest-leverage learning target.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

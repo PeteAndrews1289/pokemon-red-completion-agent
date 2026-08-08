@@ -169,8 +169,20 @@ correct contract therefore makes `defeat_champion` the model dispatch and declar
 actions / 45,216 frames against the exact six-member Champion party, consumed one X Accuracy, six
 X Specials, and three Full Restores, and ended with the 66/55/55/55/55/55 team in the Hall of Fame.
 See the [Champion receipt](evidence/affordance-masked-post-lance-champion-2026-08-08.json). The failed
-split remains uncounted. Every post-Celadon adapter is now individually qualified; uninterrupted
-twenty-dispatch integration remains the next proof.
+split remains uncounted.
+
+The isolated lessons then passed their real integration test. From the original authenticated
+Celadon capture, one uninterrupted emulator process accepted 20 model dispatches and reached the
+Hall of Fame after 502,175 actions / 37,369,283 frames. It used no expected route label, teacher
+fallback, replan, or save-state restore between objectives. Fresh observations closed all 36 graph
+objectives. The model had one genuine ranking decision—Koga versus Strength—and 19 singleton
+dispatches, so the result proves control-loop continuity far more strongly than planner
+generalization. The 1,716-battle, 885-healing-trip development block consumed 93.44% of all actions,
+turning the next research question into a measured one: can a learned skill decide when to seek,
+fight, flee, heal, and stop? See the
+[twenty-decision receipt](evidence/affordance-masked-twenty-objective-hall-of-fame-2026-08-08.json).
+The capture begins at Celadon and every mechanic skill is still teacher-authored; neither fact is
+hidden behind the successful terminal.
 
 ## August 5: the learned planner authorizes the fixed objective sequence
 

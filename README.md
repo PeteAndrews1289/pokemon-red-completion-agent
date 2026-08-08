@@ -21,27 +21,23 @@ Pokémon game without quietly handing control back to the teacher.
 That distinction is the heart of the project and its public story. The teacher supplies verified
 demonstrations and a referee; it is not the final autonomous player.
 
-The first uninterrupted Red vertical slice now runs through twelve portable-loop decisions. From an
-authenticated Celadon capture, the learned objective ranker selected and completed Rocket Hideout,
-Pokémon Tower, Fuchsia, Surf, Koga, Strength, Erika, Saffron, Silph Co., and Sabrina. The final
-three skills recruited Hitmonlee in the Fighting Dojo, completed the six-member party, obtained
-and taught Fly, reached Cinnabar without defeating a Route 21 trainer, and recovered the Mansion's
-Secret Key plus TM14 while explicitly leaving Blaine untouched. Registered fixed skills executed
-**25,254 bounded actions** with zero expected-route labels, teacher fallbacks, or replans. Fresh
-observations independently verified every declared result; the run also captured Snorlax, completed
-the six-member party, and ended fully healed in Cinnabar. The first genuinely competing
-*executable* choice
-was Koga versus Strength, where the model selected Koga at **96.41% confidence**. The other eleven
-dispatches had only one executable candidate, so their confidence scores are not evidence of
-ranking quality. Mechanics remain teacher-authored; this is a truthful model-selected objective
-loop, not yet end-to-end learned play. See the
-[twelve-decision receipt](docs/evidence/affordance-masked-twelve-objective-sequence-2026-08-08.json).
+The portable loop now has one uninterrupted Hall-of-Fame integration proof. Starting from an
+authenticated Celadon capture, the learned objective ranker dispatched **20 objectives** in the
+same emulator process: Rocket Hideout through the Mansion, the six-member development block, the
+final two Gyms, Victory Road, the Elite Four, and the Champion. Registered fixed skills executed
+**502,175 actions / 37,369,283 frames** with zero expected-route labels, teacher fallbacks, or
+replans. Fresh observations verified all **36 completed graph objectives** and the Hall-of-Fame
+terminal. The model made one genuine ranking choice—Koga versus Strength, selecting Koga at
+**96.41% confidence**—while the other 19 dispatches had one executable candidate. The run begins
+from a captured state, and mechanics remain teacher-authored, so this proves continuous objective
+dispatch and integration rather than clean-start or end-to-end learned play. See the
+[twenty-decision receipt](docs/evidence/affordance-masked-twenty-objective-hall-of-fame-2026-08-08.json).
 
-The separately dispatched post-Mansion Blaine skill is also live-qualified from its authenticated
-boundary. It used **469,232 actions / 31,883,961 frames** to develop the six final-form members to
+The training bottleneck is now measured inside that same uninterrupted run. The post-Mansion
+Blaine skill used **469,232 actions / 31,883,961 frames** to develop the six final-form members to
 **60/55/55/55/55/55**, clear the quizzes and two intentional trainer lessons, defeat Blaine, collect
-TM38, and return healed. Fresh observation independently exposed Giovanni as the next objective.
-This is a bounded one-objective qualification, not yet a contiguous thirteen-decision claim. See
+TM38, and return healed. That one skill consumed **93.44% of all actions** in the twenty-dispatch
+run, making learned training control the next concrete replacement target. See
 the [post-Mansion Blaine receipt](docs/evidence/affordance-masked-post-mansion-blaine-2026-08-08.json).
 
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
@@ -65,12 +61,11 @@ honestly labeled single-member lesson. Each fresh observation opened the next ro
 [Agatha](docs/evidence/affordance-masked-post-bruno-agatha-2026-08-08.json), and
 [Lance](docs/evidence/affordance-masked-post-agatha-lance-2026-08-08.json) receipts.
 
-The final captured-state dispatch now defeats the Champion in **567 actions / 45,216 frames** and
+The final dispatch defeats the Champion in **567 actions / 45,216 frames** and
 reaches the Hall of Fame. Red exposes no stable state between the victory event and Hall-of-Fame
 map, so the skill declares `game:hall_of_fame` as a coupled cartridge side effect rather than
-inventing a second model decision. All post-Celadon objective adapters are now individually
-live-qualified along one authenticated lineage; a single uninterrupted twenty-dispatch replay is
-the next integration proof. See the
+inventing a second model decision. It is now qualified both independently and inside the
+uninterrupted twenty-dispatch run. See the
 [Champion receipt](docs/evidence/affordance-masked-post-lance-champion-2026-08-08.json).
 
 - [Current technical handoff](HANDOFF.md)

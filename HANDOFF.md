@@ -278,9 +278,16 @@ Champion party, one X Accuracy, six X Specials, three Full Restores, and the 66/
 in the Hall of Fame. See the
 [Champion receipt](docs/evidence/affordance-masked-post-lance-champion-2026-08-08.json).
 
-All post-Celadon adapters are now individually live-qualified on successive authenticated captures.
-**Next:** run `--max-decisions 20` from the original Celadon capture to prove the complete chain in
-one emulator process. Do not yet describe the captured-state chain as uninterrupted completion.
+All post-Celadon adapters are now individually live-qualified on successive authenticated captures,
+and the complete integration run has passed. From the original authenticated Celadon capture, one
+emulator process executed 20 model dispatches, 502,175 actions, and 37,369,283 frames through the
+Hall of Fame with no expected labels, fallbacks, or replans. Fresh observations closed all 36 graph
+objectives. Nineteen dispatches were singletons; only Koga versus Strength measured ranking. See the
+[twenty-decision receipt](docs/evidence/affordance-masked-twenty-objective-hall-of-fame-2026-08-08.json).
+
+**Next:** replace the 469,232-action training skill's teacher authority with a learned bounded
+seek/fight/flee/heal/stop controller. Preserve the fixed skill as demonstrator and referee. Do not
+describe this integration result as clean-start or end-to-end learned completion.
 
 ---
 

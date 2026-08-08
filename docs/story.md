@@ -258,22 +258,26 @@ So the runtime changed. It now observes the game, asks the model for an objectiv
 skill that can physically run from the live state, executes that bounded skill, observes the result
 again, and replans. An impossible choice cannot quietly fall back to the teacher.
 
-From one authenticated Celadon capture, that loop completed twelve objectives in the same emulator
-process: Rocket Hideout, Pokémon Tower, Fuchsia, Surf, Koga, Strength, Erika, Saffron, Silph Co.,
-Sabrina, Cinnabar, and the Mansion Secret Key. The final skills also cleared the Fighting Dojo,
-recruited Hitmonlee to complete the six-member party, taught Fly to DUX, crossed Route 21, and
-returned from the Mansion while leaving Blaine untouched. The fixed skills performed 25,254
-mechanic actions. The model received no route labels, used no teacher
-fallbacks, and required no replans. Fresh memory observations—not the skills' own success reports—
-verified each result.
+From one authenticated Celadon capture, that loop first completed twelve objectives in the same
+emulator process through the Mansion Secret Key. After each remaining adapter was qualified in
+isolation, the full integration run started again at that same capture and continued through all 20
+dispatches: the six-member development block, Blaine, Giovanni, Victory Road, the Elite Four, the
+Champion, and the Hall of Fame. The fixed skills performed 502,175 mechanic actions across
+37,369,283 frames. The model received no route labels, used no teacher fallbacks, required no
+replans, and fresh memory observations—not the skills' own reports—closed all 36 graph objectives.
 
-That sounds like twelve planning victories. It is not. Eleven times only one registered skill was
+That sounds like twenty planning victories. It is not. Nineteen times only one registered skill was
 physically executable. Those are useful dispatch and integration tests, but they do not measure
 ranking quality. Once, both Koga and Strength were executable. The model chose Koga at 96.41%
 confidence, and the run continued.
 
 That distinction is the project in miniature: the number matters only after asking what it actually
 measured.
+
+One more number changed the direction of the work. The team-development and Blaine skill used
+469,232 actions—93.44% of the entire integrated run—through 1,716 battles and 885 trips to heal.
+The high-level loop is connected. The largest remaining piece of teacher authority is now visible,
+bounded, and large enough to become the next learned skill.
 
 ---
 
@@ -318,15 +322,16 @@ Being precise about this matters more than the story sounding finished.
 
 - The deterministic teacher completes Pokémon Red repeatedly, with genuine Champion and
   Hall-of-Fame evidence in the same run.
-- A trained model has selected and completed twelve consecutive objectives in a portable closed
-  loop with no expected labels or fallbacks. Fixed skills still execute navigation, battles,
-  menus, and recovery; only one of the twelve decisions had multiple executable candidates.
+- A trained model has selected and completed twenty consecutive objectives from an authenticated
+  Celadon capture through the Hall of Fame in one portable closed loop with no expected labels,
+  fallbacks, or replans. Fixed skills still execute navigation, battles, menus, and recovery; only
+  one of the twenty decisions had multiple executable candidates.
 - Encounter bands for five areas are measured rather than recalled, with sample counts, and they
   reproduce exactly across runs because the route is deterministic.
 - A member that is too weak for where the run happens to be is now routed somewhere that suits it,
   travels there, and gains levels. That is new, and it is the mechanism the rest depends on.
-- A clean-power teacher run reaches its 60/55/55/55/55/55 readiness gate and completes the game,
-  but the learned portable loop has not yet reproduced that full route.
+- A clean-power teacher run reaches its 60/55/55/55/55/55 readiness gate and completes the game;
+  the learned objective loop now reproduces the post-Celadon portion, not a clean-power route.
 - The team still does not choose its own battles. The escort still does most of the fighting.
 - No learned policy has completed the game. No cross-game transfer has been measured. The living
   Pokédex has not been started.
