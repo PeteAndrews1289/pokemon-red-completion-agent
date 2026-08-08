@@ -64,9 +64,9 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1942 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
-clean after the Cinnabar adapter. The source-bound eleven-step run uses published commit `8daad48`
-(the documentation receipt lands in the following commit).
+**Gate state:** 1945 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
+clean after the Secret Key adapter. The source-bound twelve-step run uses published commit
+`e2875c4` (the documentation receipt lands in the following commit).
 
 ---
 
@@ -226,10 +226,16 @@ defeated zero Route 21 trainers, and ended fully healed in Cinnabar Center. The 
 totals 24,522 actions and independently verifies `location:cinnabar_island`. See the
 [eleven-decision receipt](docs/evidence/affordance-masked-eleven-objective-sequence-2026-08-08.json).
 
-**Next:** connect the Mansion Secret Key chapter, the only legal objective at the verified terminal
-boundary. Preserve the same typed availability, independent observation, and ownership distinction:
-the model selects objectives; current skills still choose navigation, battle, menu, and recovery
-actions.
+The twelfth dispatch now isolates the Mansion lesson from Blaine. It used 732 actions / 87,564
+frames, recovered the Secret Key and TM14, preserved all six optional trainers, explicitly verified
+that Blaine and the Volcano Badge remained untouched, and returned the healed party to Cinnabar
+Center. The twelve-step slice totals 25,254 actions, eleven singleton dispatches, one real ranking
+branch, and zero labels, fallbacks, or replans. See the
+[twelve-decision receipt](docs/evidence/affordance-masked-twelve-objective-sequence-2026-08-08.json).
+
+**Next:** connect a separate post-Mansion `defeat_blaine` skill from this verified boundary. Do not
+reintroduce the old combined Mansion-plus-Gym authority: the model owns the objective transition;
+current skills still own navigation, battle, menu, training, and recovery actions.
 
 ---
 

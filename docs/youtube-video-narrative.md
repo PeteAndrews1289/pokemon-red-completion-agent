@@ -122,8 +122,11 @@ leaves optional Lapras untouched, and returns healed. Continue into the Fighting
 Hitmonlee recruited, and the six-member party finally complete. The same bounded objective skill
 then takes the trainer-free warp route to Sabrina and independently verifies the Marsh Badge. End
 then acquire Fly, teach it to DUX, cross Route 21 without defeating a trainer, and heal at Cinnabar.
-End the act on **“eleven dispatches; 24,522 fixed-skill actions; zero labels, fallbacks, or replans”**
-and the next frontier—Pokémon Mansion.
+Inside Pokémon Mansion, recover the Secret Key and TM14 while a split-screen evidence panel proves
+that all optional trainers, Blaine, and the Volcano Badge remain untouched. Explain why this matters:
+the old deterministic chapter quietly combined two graph objectives, while the portable loop now
+returns control to the model between them. End the act on **“twelve dispatches; 25,254 fixed-skill
+actions; zero labels, fallbacks, or replans”** and the separately selectable Blaine frontier.
 
 ### Act VII: the Crystal test — 10:10–11:15
 
@@ -152,9 +155,10 @@ version has to prove the model learned something worth carrying into a game it h
 - A strict-evaluation counter showing teacher queries at zero.
 - The Celadon three-way choice, the post-Hideout replan to Tower, and the independently verified
   Hideout/Silph Scope/Poké Flute receipt, with model-versus-fixed-skill ownership labeled.
-- The eleven-step Cinnabar receipt, with ten singleton dispatches visually separated from the real
+- The twelve-step Mansion receipt, with eleven singleton dispatches visually separated from the real
   Koga-versus-Strength branch, the transient Gold Teeth fact disappearing after use, and Hitmonlee
-  filling the sixth party slot before Sabrina. Add the Fly lesson and trainer-free Route 21 crossing.
+  filling the sixth party slot before Sabrina. Add the Fly lesson, trainer-free Route 21 crossing,
+  and the positive Secret Key/TM14 evidence beside the negative Blaine/Badge/trainer evidence.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video

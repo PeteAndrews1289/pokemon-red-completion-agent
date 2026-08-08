@@ -103,9 +103,18 @@ and zero labels, fallbacks, or replans. Fresh memory independently added
 `location:cinnabar_island`. See the
 [eleven-decision receipt](evidence/affordance-masked-eleven-objective-sequence-2026-08-08.json).
 
-The next frontier is `obtain_secret_key`, currently the only dependency-legal objective at the
-verified Cinnabar boundary. It extends mechanic coverage into Pokémon Mansion, but another strong
-planner-ranking test will require a state where at least two skills are simultaneously executable.
+The twelfth dispatch exposed and repaired an authority leak in the old chapter design. Pokémon
+Mansion and Blaine were two graph objectives hidden inside one deterministic function. The new
+`obtain_secret_key` skill stops after the Mansion lesson: 732 actions / 87,564 frames recover the
+Secret Key and TM14, preserve all six optional trainers, verify that Blaine and the Volcano Badge
+remain untouched, and return the healed party to Cinnabar Center. The complete slice now totals
+25,254 actions, twelve dispatches, eleven singletons, one real ranking branch, and zero labels,
+fallbacks, or replans. See the
+[twelve-decision receipt](evidence/affordance-masked-twelve-objective-sequence-2026-08-08.json).
+
+The next frontier is the separately selectable `defeat_blaine` objective. This improves control
+ownership and demonstration quality, but another strong planner-ranking test still requires a
+state where at least two skills are simultaneously executable.
 
 ## August 5: the learned planner authorizes the fixed objective sequence
 

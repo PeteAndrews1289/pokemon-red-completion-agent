@@ -258,15 +258,16 @@ So the runtime changed. It now observes the game, asks the model for an objectiv
 skill that can physically run from the live state, executes that bounded skill, observes the result
 again, and replans. An impossible choice cannot quietly fall back to the teacher.
 
-From one authenticated Celadon capture, that loop completed eleven objectives in the same emulator
+From one authenticated Celadon capture, that loop completed twelve objectives in the same emulator
 process: Rocket Hideout, Pokémon Tower, Fuchsia, Surf, Koga, Strength, Erika, Saffron, Silph Co.,
-Sabrina, and Cinnabar. The final skills also cleared the Fighting Dojo, recruited Hitmonlee to
-complete the six-member party, taught Fly to DUX, and crossed Route 21. The fixed skills performed
-24,522 mechanic actions. The model received no route labels, used no teacher
+Sabrina, Cinnabar, and the Mansion Secret Key. The final skills also cleared the Fighting Dojo,
+recruited Hitmonlee to complete the six-member party, taught Fly to DUX, crossed Route 21, and
+returned from the Mansion while leaving Blaine untouched. The fixed skills performed 25,254
+mechanic actions. The model received no route labels, used no teacher
 fallbacks, and required no replans. Fresh memory observations—not the skills' own success reports—
 verified each result.
 
-That sounds like eleven planning victories. It is not. Ten times only one registered skill was
+That sounds like twelve planning victories. It is not. Eleven times only one registered skill was
 physically executable. Those are useful dispatch and integration tests, but they do not measure
 ranking quality. Once, both Koga and Strength were executable. The model chose Koga at 96.41%
 confidence, and the run continued.
@@ -317,9 +318,9 @@ Being precise about this matters more than the story sounding finished.
 
 - The deterministic teacher completes Pokémon Red repeatedly, with genuine Champion and
   Hall-of-Fame evidence in the same run.
-- A trained model has selected and completed eleven consecutive objectives in a portable closed
+- A trained model has selected and completed twelve consecutive objectives in a portable closed
   loop with no expected labels or fallbacks. Fixed skills still execute navigation, battles,
-  menus, and recovery; only one of the eleven decisions had multiple executable candidates.
+  menus, and recovery; only one of the twelve decisions had multiple executable candidates.
 - Encounter bands for five areas are measured rather than recalled, with sample counts, and they
   reproduce exactly across runs because the route is deterministic.
 - A member that is too weak for where the run happens to be is now routed somewhere that suits it,
