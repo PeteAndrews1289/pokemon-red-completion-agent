@@ -37,6 +37,14 @@ The project is therefore past “can automation finish Red?” and at the more u
 receipt separates teacher, shadow, constrained, and model-controlled authority so a green result
 cannot blur that boundary.
 
+For a compact technical review, read the
+[current capability and portfolio audit](docs/current-audit-2026-08-08.md). The complete evidence
+log is preserved below for reproducibility, but collapsed so the repository's first screen states
+the result and boundary before the experiment history.
+
+<details>
+<summary>Current research evidence log (full metrics and claim boundaries)</summary>
+
 The portable loop now has one uninterrupted Hall-of-Fame integration proof. Starting from an
 authenticated Celadon capture, the learned objective ranker dispatched **20 objectives** in the
 same emulator process: Rocket Hideout through the Mansion, the six-member development block, the
@@ -265,6 +273,8 @@ map, so the skill declares `game:hall_of_fame` as a coupled cartridge side effec
 inventing a second model decision. It is now qualified both independently and inside the
 uninterrupted twenty-dispatch run. See the
 [Champion receipt](docs/evidence/affordance-masked-post-lance-champion-2026-08-08.json).
+
+</details>
 
 - [Current technical handoff](HANDOFF.md)
 - [Dependency-ordered roadmap](docs/roadmap.md)

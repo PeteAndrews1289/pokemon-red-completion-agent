@@ -126,6 +126,10 @@ Regeneration should be one isolated generated-file commit after verifying that i
 match the intended source diff. Repeated red mail from a known derived-artifact mismatch obscures
 real regressions and weakens the otherwise strong evidence story.
 
+**Resolved during this audit:** the registry was regenerated in an isolated commit, all four public
+golden identities were updated from the generator output, the full 2,006-test local gate passed,
+and the next four GitHub Actions runs completed successfully.
+
 ## Dependency-ordered next work
 
 1. **Qualify the trainee/venue ranker.** Collect two fresh training lineages, select
