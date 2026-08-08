@@ -1,7 +1,7 @@
 {
   "schema": "pokemon-training-candidate-promotion-plan-v1",
   "status": "preregistered_before_collection",
-  "source_commit": "d9e6b0e00f81dd8da45f6b9b4a610b7b9daf0d91",
+  "source_commit": "83c633a4610fd9ceeaf5f606232b99d30e2c8e26",
   "feature_schema_id": "pokemon.core.training.candidate-ranker.v1",
   "claim_boundary": {
     "learned_target": [
@@ -70,20 +70,23 @@
       "venue"
     ],
     "minimum_multi_candidate_decisions": 100,
+    "sampling_method": "retain_first_and_per_kind_state_transitions",
+    "terminal_outcome_authenticated": true,
     "identity_fields_present": false
   },
   "offline_validation_gates": {
     "state_dependent_choice_demonstrated": true,
-    "maximum_shape_only_majority_accuracy": 0.99,
-    "minimum_heldout_model_margin_over_shape_baseline": 0.02,
-    "minimum_heldout_accuracy": 0.9,
-    "minimum_per_kind_accuracy": 0.85,
+    "maximum_genuine_shape_only_majority_accuracy": 0.99,
+    "minimum_genuine_heldout_model_margin_over_shape_baseline": 0.02,
+    "minimum_genuine_heldout_accuracy": 0.9,
+    "minimum_genuine_per_kind_accuracy": 0.85,
     "whole_lineage_partitioning": true,
     "validation_opened_during_selection": false
   },
   "model_selection": {
     "method": "bidirectional whole-lineage train-to-train cross-validation",
     "candidate_scoring": "shared permutation-equivariant scorer",
+    "selection_metric": "genuine multi-candidate accuracy and margin over the shape baseline",
     "validation_access": false,
     "fixed_seed": 20260808
   },
