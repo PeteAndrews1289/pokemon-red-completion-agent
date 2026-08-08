@@ -138,6 +138,15 @@ and unavailable-attack boundaries. This is an affordance-mask correction, not a 
 override. See the
 [controlled failure receipt](docs/evidence/training-control-battle-control-01-failure-2026-08-08.json).
 
+The corrected second controlled root passed that unsafe-action boundary, then exposed the model's
+other measured weakness causally. Across 77,538 decisions it replaced 1,963 of 2,690 safe teacher
+fights with real flees, stretched the lesson to the healing limit, and stopped before readiness.
+No teacher fallback concealed the failure. The learner had masked unavailable actions at inference
+but not inside its training loss, so it spent capacity predicting decisions for singleton candidate
+sets. The loss now normalizes only over each observation's actual candidates; fresh lineages are
+required before fitting the replacement. See the
+[under-fighting receipt](docs/evidence/training-control-battle-control-02-failure-2026-08-08.json).
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

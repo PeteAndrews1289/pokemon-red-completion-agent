@@ -349,6 +349,15 @@ collection registry and its four goldens with every source edit, then use a fres
 controlled attempt 02. Never count or retrain on attempt 01. See the
 [controlled failure receipt](docs/evidence/training-control-battle-control-01-failure-2026-08-08.json).
 
+Controlled attempt 02 used fresh root `e6f95dfe...e2f37e` at source `742607a`. It passed the unsafe
+boundary but failed after 77,538 decisions when 1,963 of 2,690 safe teacher fights became causal
+flees and the healing budget ran out before readiness. There was no fallback. The fitting loss had
+not applied observation candidate masks, so forced singleton flee decisions still trained the
+classifier. The current repair masks the fitting softmax as well as inference. Do not reuse either
+failed controlled lineage for fitting. Collect two fresh train roots and one fresh validation root
+under the corrected contract, then fit and requalify. See the
+[under-fighting receipt](docs/evidence/training-control-battle-control-02-failure-2026-08-08.json).
+
 Counted v2 train lineage 01 is qualified from a retained 17-frame root at source `4c885d8`:
 46,687 decisions, all five actions, 1,726 battles, 815 healing trips, zero faints, and all level 55.
 Its private stream SHA is `f13f9f1031632a8f1158c280c241d6f6a24ab5eeed4c30bdf76d802917e1aca1`;

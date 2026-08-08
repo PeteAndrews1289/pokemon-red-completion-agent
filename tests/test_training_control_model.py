@@ -111,6 +111,34 @@ def test_prediction_masks_actions_illegal_in_the_current_phase() -> None:
     assert model.predict(referee_masked) is TrainingControlAction.FLEE
 
 
+def test_fit_does_not_train_on_singleton_referee_decisions() -> None:
+    shared = _observation(TrainingControlAction.FIGHT, 0)
+    safe_fight = TrainingControlExample(
+        lineage_id="train-root",
+        segment="balance",
+        decision_index=0,
+        action=TrainingControlAction.FIGHT,
+        observation=shared,
+        reason="genuine choice",
+    )
+    forced_flees = tuple(
+        TrainingControlExample(
+            lineage_id="train-root",
+            segment="balance",
+            decision_index=index + 1,
+            action=TrainingControlAction.FLEE,
+            observation=replace(shared, candidate_actions=(TrainingControlAction.FLEE,)),
+            reason="referee-only action",
+        )
+        for index in range(100)
+    )
+
+    model = TrainingControlMLP.fit((safe_fight, *forced_flees), epochs=100)
+
+    assert model.predict(shared) is TrainingControlAction.FIGHT
+    assert model.predict(forced_flees[0].observation) is TrainingControlAction.FLEE
+
+
 def test_candidate_rejects_same_root_state_across_train_and_validation() -> None:
     train = _dataset("train-root", "train", "1")
     validation = _dataset("validation-root", "validation", "1")

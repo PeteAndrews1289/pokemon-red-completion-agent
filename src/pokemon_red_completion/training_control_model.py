@@ -251,6 +251,18 @@ class TrainingControlMLP:
         lookup = {class_ref: index for index, class_ref in enumerate(observed)}
         x = np.vstack([example.observation.vector() for example in rows])
         y = np.asarray([lookup[example.action.value] for example in rows], dtype=np.int64)
+        legal = np.asarray(
+            [
+                [
+                    TrainingControlAction(class_ref) in example.observation.candidate_actions
+                    for class_ref in observed
+                ]
+                for example in rows
+            ],
+            dtype=bool,
+        )
+        if not np.all(legal[np.arange(len(rows)), y]):
+            raise TrainingControlModelError("teacher action is absent from its candidate set")
         counts = np.bincount(y, minlength=len(observed)).astype(np.float64)
         sample_weights = counts[y] ** (-class_balance_power)
         sample_weights /= np.mean(sample_weights)
@@ -266,6 +278,7 @@ class TrainingControlMLP:
         for step in range(1, epochs + 1):
             hidden = np.tanh(x @ w1.T + b1)
             scores = hidden @ w2 + b2
+            scores = np.where(legal, scores, -np.inf)
             scores -= np.max(scores, axis=1, keepdims=True)
             probabilities = np.exp(scores)
             probabilities /= np.sum(probabilities, axis=1, keepdims=True)

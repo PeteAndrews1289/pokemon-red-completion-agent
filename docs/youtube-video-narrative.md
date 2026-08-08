@@ -241,6 +241,14 @@ Animate `fight` disappearing from the candidate card, leaving only `flee`, and n
 is the kind of game-neutral boundary that can transfer even when Crystal uses different memory
 addresses, species, and moves.
 
+Do not make the corrected rerun an instant redemption. It survives the unsafe boundary, but the
+model turns **1,963 of 2,690 safe fights into real flees**. After 77,538 decisions, the healing
+budget is gone and the party is still not ready. Put the two outcomes side by side: attempt one
+proved the action interface was incomplete; attempt two proved a safe policy can still be useless.
+Then reveal the second mismatch: inference masked impossible actions, while the training softmax
+still learned from them. Show singleton rows fading out of the loss—not out of the evidence—and end
+the beat on the new rule: **learn only where there was a choice; audit every boundary.**
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

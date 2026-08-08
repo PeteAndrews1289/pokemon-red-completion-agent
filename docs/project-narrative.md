@@ -293,6 +293,21 @@ at volatile, excluded, unsafe-health, capped-escort, and unavailable-attack boun
 model to rank only actions the runtime can execute safely. The failed lineage remains excluded from
 training and preserved as evidence; a fresh root must test the corrected contract.
 
+That fresh root passed the first failure boundary but did not complete. Over 77,538 decisions the
+model executed only 727 of 2,690 safe teacher fights, replacing 1,963 with real escapes. It reached
+the healing budget at 99.92% while the normalized minimum-level deficit was still 20%, then stopped
+before readiness. The 1,752 unsafe flee boundaries were correctly forced by singleton candidates,
+and no fallback hid the progress cost. This separated safety from competence: the action shield
+worked, but the policy was too conservative to finish.
+
+The postmortem found that action masking existed only during inference. The fitting softmax still
+compared every row against every learned class, including singleton referee decisions where no
+choice existed. It therefore trained on thousands of forced flees and then reproduced that bias at
+genuine fight-or-flee boundaries. Training now uses the same per-observation candidate mask as
+inference; singleton rows have probability one and zero policy gradient. Existing lineages remain
+immutable. A replacement model requires fresh teacher-authority train and validation roots emitted
+under the corrected affordance contract.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

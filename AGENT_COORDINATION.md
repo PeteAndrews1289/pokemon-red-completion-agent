@@ -214,6 +214,10 @@ Controlled root 01 failed closed after 480 decisions when exhausted/disabled att
 unavailable without changing the model's features or candidates. It is excluded from training. The
 repair masks `fight` from the runtime candidate set at all unsafe boundaries; qualify that contract
 on a fresh root before considering retraining or overworld authority.
+Controlled root 02 passed that boundary but exhausted the healing budget after the model replaced
+1,963 of 2,690 safe fights with real flees. It is excluded from training. The fitting loss now uses
+the same candidate mask as inference; collect entirely fresh teacher-authority train/train/validation
+lineages before fitting a replacement.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

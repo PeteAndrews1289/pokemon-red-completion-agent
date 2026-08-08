@@ -195,9 +195,15 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
 - [x] Run the first fresh battle-controlled lineage and preserve its failure: after 479/480 matching
   decisions, an unsafe `fight` request failed closed with no fallback because the legal candidates
   did not reflect exhausted/disabled attacks.
-- [ ] Qualify the corrected battle affordance contract on a fresh root. Runtime safety removes
-  impossible fights before ranking; safe model-selected flees remain causal. If the model then
-  stalls through under-fighting, use that evidence to decide whether retraining is required.
+- [x] Test the corrected battle affordance contract on a fresh root. Runtime safety removed
+  impossible fights before ranking, while safe model-selected flees remained causal and exposed
+  under-fighting rather than another safety-interface failure.
+- [x] Preserve the corrected causal failure: 77,538 decisions, 1,963 safe fights changed to real
+  flees, and the healing budget exhausted before readiness with zero fallback.
+- [x] Apply candidate masks inside the fitting softmax so forced singleton decisions contribute no
+  policy gradient; inference and training now optimize the same decision surface.
+- [ ] Collect two fresh teacher-authority training roots and one untouched validation root under
+  the corrected candidate contract, fit a replacement, then repeat shadow and causal control.
   The class-balanced MLP, phase-masked inference, metrics, and fail-closed candidate fitter are
   implemented and tested synthetically; this item remains open until real v2 lineages exist.
 - [ ] Run the candidate in shadow mode, then model-controlled mode under the unchanged teacher

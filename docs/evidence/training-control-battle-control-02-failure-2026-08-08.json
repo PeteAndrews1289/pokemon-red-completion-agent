@@ -1,0 +1,35 @@
+{
+  "schema": "pokemon-training-control-controlled-summary-v1",
+  "status": "failed",
+  "lineage_id": "training-control-v2-battle-control-02",
+  "source_commit": "742607a2e0b8799cca2bf11b9f5368fe372b42de",
+  "root_state_sha256": "e6f95dfe2fd9158cc8f7fecafebd21c37c1e5e0ff2067cf4fa97457759e2f37e",
+  "decision_stream_sha256": "d36591b4f15b82b650d5f8cc4949cead980e76832d9212377e1c33a1e54394dc",
+  "control_summary_sha256": "e9198be4af510eb21b0a053b495d9e0a5ed989e08685c5e031f8439ddc106648",
+  "model_sha256": "d04546c2a999aa4b5f85da983b4cf3e24aab7b2d29b691dbe27e5157ddf91d7d",
+  "authority_phases": ["battle"],
+  "teacher_fallback_on_model_disagreement": false,
+  "decisions": 77538,
+  "agreements": 58069,
+  "accuracy": 0.7489102117671336,
+  "balanced_accuracy": 0.5915804325027594,
+  "battle_accuracy": 0.5580819450697884,
+  "teacher_battle_actions": {"fight": 2690, "flee": 1752},
+  "model_battle_actions": {"fight": 727, "flee": 3715},
+  "fight_recall": 0.27026022304832714,
+  "failure": {
+    "reason": "Team training stopped before readiness: healing budget exhausted",
+    "last_balance_observation": {
+      "minimum_level_normalized": 0.35,
+      "level_floor_deficit_normalized": 0.2,
+      "healing_budget_ratio": 0.9992
+    }
+  },
+  "root_cause": {
+    "category": "candidate_mask_missing_from_training_loss",
+    "evidence": "Inference correctly forced 1,752 unsafe teacher flees through singleton candidate sets, but the fitted model had been trained to separate those forced decisions from safe fights. It then replaced 1,963 of 2,690 safe teacher fights with causal flees.",
+    "repair": "Apply each observation's candidate mask inside the softmax training loss so singleton referee decisions contribute zero gradient; collect fresh train and validation lineages under the corrected affordance contract before fitting a replacement."
+  },
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}
