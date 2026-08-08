@@ -42,6 +42,10 @@ For a compact technical review, read the
 log is preserved below for reproducibility, but collapsed so the repository's first screen states
 the result and boundary before the experiment history.
 
+For a hiring-manager-friendly version, use the
+[one-page portfolio brief](docs/portfolio-brief.md): verified results, architecture, strongest
+debugging story, interview topics, resume bullets, and a two-minute demo outline.
+
 <details>
 <summary>Current research evidence log (full metrics and claim boundaries)</summary>
 
