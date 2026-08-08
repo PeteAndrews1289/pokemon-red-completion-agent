@@ -9,6 +9,7 @@ from pokemon_red_completion.hideout import EmulatorState, HideoutTiming, run_hid
 from pokemon_red_completion.objective_skills import ObjectiveSkillExecution
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.quest import Specialist
+from pokemon_red_completion.tower import TowerTiming, run_tower_chapter
 
 
 @dataclass(frozen=True, slots=True)
@@ -28,6 +29,35 @@ class RocketHideoutObjectiveSkill:
 
     def execute(self) -> ObjectiveSkillExecution:
         report = run_hideout_chapter(
+            self.emulator,
+            self.reader,
+            self.executor,
+            timing=self.timing,
+        )
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class PokemonTowerObjectiveSkill:
+    """Execute the qualified Pokémon Tower chapter after model dispatch."""
+
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    timing: TowerTiming = TowerTiming()
+    objective_id: str = "rescue_fuji"
+    specialist: Specialist = Specialist.BATTLE
+    expected_facts: frozenset[str] = frozenset({"item:poke_flute"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 3_000
+    max_frames: int = 3_000_000
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_tower_chapter(
             self.emulator,
             self.reader,
             self.executor,

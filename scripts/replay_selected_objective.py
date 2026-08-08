@@ -33,7 +33,10 @@ from pokemon_red_completion.provenance import (
     require_published_source,
 )
 from pokemon_red_completion.quest import quest_graph_payload
-from pokemon_red_completion.red_objective_skills import RocketHideoutObjectiveSkill
+from pokemon_red_completion.red_objective_skills import (
+    PokemonTowerObjectiveSkill,
+    RocketHideoutObjectiveSkill,
+)
 from pokemon_red_completion.red_player_observer import CapturedPokemonRedObserver
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 from pokemon_red_completion.rom import resolve_rom_path
@@ -56,6 +59,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", type=Path, help="also write the sanitized JSON report here")
     parser.add_argument("--watch", action="store_true")
     parser.add_argument("--speed", type=int, choices=(1, 2, 4), default=2)
+    parser.add_argument(
+        "--max-decisions",
+        type=int,
+        choices=(1, 2),
+        default=1,
+        help="execute one decision, or continue through the registered Tower skill",
+    )
     args = parser.parse_args(argv)
 
     source = detect_source_identity(REPOSITORY_ROOT, include_untracked=True)
@@ -91,7 +101,10 @@ def main(argv: list[str] | None = None) -> int:
             snapshot_provider=PokemonRedObservationEncoder.from_state_reader(reader),
         )
         executor = FrameSafeExecutor(emulator, DEFAULT_NEW_GAME_TIMING.controller_timing())
-        skill = RocketHideoutObjectiveSkill(emulator, reader, executor)
+        skills = (
+            RocketHideoutObjectiveSkill(emulator, reader, executor),
+            PokemonTowerObjectiveSkill(emulator, reader, executor),
+        )
         loop = PortablePlayerLoop(
             graph=COMPLETION_QUEST,
             observer=observer,
@@ -101,13 +114,13 @@ def main(argv: list[str] | None = None) -> int:
             # generic or fixed-route planner.
             specialists=SpecialistRegistry(()),
             executor=executor,
-            objective_skills=ObjectiveSkillRegistry((skill,)),
+            objective_skills=ObjectiveSkillRegistry(skills),
         )
-        step = loop.step()
+        steps = tuple(loop.step() for _ in range(args.max_decisions))
         after = observer.observe()
 
         report = {
-            "schema": "pokemon-model-selected-objective-execution-v1",
+            "schema": "pokemon-model-selected-objective-execution-v2",
             "status": "ok",
             "claim": (
                 "A learned ranker selected one legal objective without an expected label; "
@@ -126,7 +139,7 @@ def main(argv: list[str] | None = None) -> int:
                 "completed_objectives": sorted(COMPLETION_QUEST.completed_ids(before)),
                 "available_objectives": list(available_before),
             },
-            "decision_and_execution": step.public_dict(),
+            "decisions_and_executions": [step.public_dict() for step in steps],
             "after": {
                 "mode": after.mode.value,
                 "location": after.location,
