@@ -1,10 +1,38 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 5: the learned planner authorizes the full objective sequence
+## August 8: separating an answer checker from a player
 
-The project has crossed the boundary that the deterministic teacher work was meant to enable. A
-graph-authenticated objective ranker now reads live semantic state, considers only currently legal
-quest objectives, and must authorize the next specialist before execution can continue. It cannot
+The architecture audit found a critical mismatch between the project's language and its runtime.
+The objective model did rank legal candidates, but fixed Python code supplied the objective it was
+about to execute and asked the model to authorize that expected answer. A disagreement stopped the
+run, which was useful verification, but the model never owned open-loop objective dispatch.
+
+The first portable player loop now makes that ownership explicit. It observes game-neutral semantic
+state, asks a policy to select among the legal objectives, resolves the selected specialist,
+executes exactly one bounded typed action, observes the result, verifies that completed objectives
+did not regress, and replans. The same loop accepts either a deterministic teacher policy or
+`ModelObjectivePolicy.select(state)`, which does not receive an expected route label. An unavailable
+choice, mismatched specialist plan, fabricated success, or regressed completion fact fails before
+the loop can continue.
+
+This is an architecture and falsifiability milestone, not a new Red completion. The qualified Red
+runner still calls its chapter functions in a fixed sequence. The next evidence must come from a
+captured-state Red vertical slice with genuinely competing legal objectives, followed by gradual
+replacement of chapter-owned dispatch. In parallel, strict battle evaluation now counts every
+teacher query and forbids both query and fallback in its official mode.
+
+An exhaustive synthetic audit then enumerated all 166 reachable dependency-valid quest states.
+Among 129 states with competing objectives, the historical model changed its selection when the
+simulated location changed in 73 cases and chose the candidate-local target in 237 of 317 location
+opportunities. This is better than a fixed priority sorter and weaker than a competent planner: the
+snapshots are synthetic, there are no correctness labels, and 80 local-context opportunities still
+choose a different target. Those misses are now a bounded correction curriculum. See the
+[counterfactual receipt](evidence/semantic-objective-counterfactual-audit-2026-08-08.json).
+
+## August 5: the learned planner authorizes the fixed objective sequence
+
+A graph-authenticated objective ranker reads live semantic state, considers only currently legal
+quest objectives, and authorizes the next fixed specialist before execution can continue. It cannot
 silently defer to the teacher: a disagreement, schema mismatch, graph mismatch, low-confidence
 decision, or altered model artifact fails the run closed.
 
@@ -14,11 +42,11 @@ fixed route specialists completed **312/312 checkpoints**, defeated the Champion
 Hall of Fame in 9,826,693 frames and 92,721 actions. This is the first full-game completion in which
 the learned planner controls high-level objective dispatch.
 
-The result is deliberately narrower than autonomous play. The model decides what verified objective
-comes next; deterministic specialists still perform exact navigation, menus, resource handling, and
-most bounded game skills. The planner also learned from one lineage, so this completion does not yet
-demonstrate resilience to perturbed states or transfer to another Pokémon title. Those are the next
-evaluation gates, not claims attached to this run. See the
+The result is deliberately narrower than autonomous play. Fixed code decides which objective comes
+next and the model confirms or rejects that answer; deterministic specialists still perform exact
+navigation, menus, resource handling, and most bounded game skills. The planner also learned from
+one lineage, so this completion does not yet demonstrate resilience to perturbed states or transfer
+to another Pokémon title. Those are the next evaluation gates, not claims attached to this run. See the
 [model-authorized objective receipt](evidence/model-authorized-objective-hall-of-fame-2026-08-05.json).
 
 ## August 5: every typed battle action becomes teacher-free

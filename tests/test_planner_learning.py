@@ -12,6 +12,7 @@ from pokemon_red_completion.collection_protocol import (
     collection_document_sha256,
     objective_graph_document,
 )
+from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.learned_planner_policy import (
     LearnedPlannerPolicyError,
     ModelObjectivePolicy,
@@ -30,7 +31,7 @@ from pokemon_red_completion.planner_model import (
 from pokemon_red_completion.planner_semantics import ObjectiveFeatureProjector
 from pokemon_red_completion.planner_trajectory import SemanticObjectiveDecisionObserver
 from pokemon_red_completion.play import QUALIFIED_OBJECTIVE_SEQUENCE
-from pokemon_red_completion.quest import quest_graph_payload
+from pokemon_red_completion.quest import Objective, QuestGraph, Specialist, quest_graph_payload
 from pokemon_red_completion.red_trajectory import (
     POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
 )
@@ -191,9 +192,7 @@ def test_first_semantic_objective_ranker_fits_the_demonstrated_route() -> None:
     )
 
     assert planner_accuracy(model, examples) >= 0.9
-    assert model.to_dict()["model_id"] == (
-        "pokemon.core.planning.masked-linear-ranker.v1"
-    )
+    assert model.to_dict()["model_id"] == ("pokemon.core.planning.masked-linear-ranker.v1")
 
 
 def test_projector_matches_current_region_without_exposing_region_identity() -> None:
@@ -321,3 +320,41 @@ def test_live_policy_authorizes_model_choice_and_rejects_route_disagreement() ->
     with pytest.raises(LearnedPlannerPolicyError, match="different legal objective"):
         policy.authorize("defeat_misty")
     assert policy.public_dict()["teacher_fallbacks"] == 0
+
+
+def test_live_policy_selects_among_legal_objectives_without_expected_route_label() -> None:
+    graph = QuestGraph(
+        (
+            Objective(
+                id="nearby",
+                title="Nearby",
+                completion_facts=frozenset({"done:nearby"}),
+                specialist=Specialist.INTERACTION,
+                priority=0,
+            ),
+            Objective(
+                id="preferred",
+                title="Preferred",
+                completion_facts=frozenset({"done:preferred"}),
+                specialist=Specialist.INTERACTION,
+                priority=900,
+            ),
+        )
+    )
+    projector = ObjectiveFeatureProjector(graph)
+    weights = [0.0] * len(projector.feature_names)
+    weights[projector.feature_names.index("candidate_priority")] = 100.0
+    policy = ModelObjectivePolicy(
+        model=ObjectiveRanker(feature_names=projector.feature_names, weights=weights),
+        graph=graph,
+        snapshot_provider=_Provider(),
+    )
+
+    selected = policy.select(GameState(GameMode.OVERWORLD))
+
+    assert selected == "preferred"
+    policy.complete(selected)
+    report = policy.public_dict()
+    assert report["selected_decisions"] == 1
+    assert report["authorized_decisions"] == 0
+    assert report["route_dispatch_mode"] == "model_selected_specialists"

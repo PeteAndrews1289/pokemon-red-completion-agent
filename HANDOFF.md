@@ -32,8 +32,8 @@ of whether it serves this.
 
 - The deterministic teacher completes Red repeatedly, with genuine Champion and Hall-of-Fame
   evidence in the same run.
-- A trained model authorizes all 36 objectives with zero fallbacks. It *selects* objectives; fixed
-  code executes them. Do not describe it as an autonomous player — it runs as
+- A trained model authorizes all 36 expected objectives with zero fallbacks. Fixed code selects and
+  executes them. Do not describe it as an autonomous player — it runs as
   `model_authorized_fixed_specialists`.
 - Encounter bands for five areas are measured with sample counts and reproduce exactly across runs
   (the route is deterministic).
@@ -64,8 +64,8 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1906 tests, 3 deselected; ruff, mypy (105 files), artifacts, docs and registry all
-clean before the Agatha qualification documentation update.
+**Gate state:** 1919 tests, 3 deselected; ruff, mypy (107 files), artifacts, docs and registry all
+clean after the portable-loop and counterfactual-planner audit.
 
 ---
 
@@ -126,6 +126,34 @@ The dependency order is now:
 Near-term code work starts with item 4 because it creates an enforceable boundary immediately, then
 items 2 and 3 proceed together. See [the roadmap](docs/roadmap.md) for the full gate sequence and
 [the video narrative](docs/youtube-video-narrative.md) for the public explanation of this pivot.
+
+### Portable-loop implementation checkpoint — 2026-08-08
+
+The first two architecture boundaries now exist and are ROM-independent:
+
+- strict battle evaluation records teacher queries separately from fallbacks and cannot pass after
+  either one;
+- `ModelObjectivePolicy.select(state)` ranks legal objectives without receiving the route's expected
+  objective ID;
+- `PortablePlayerLoop` implements observe → select → specialist plan → one bounded typed action →
+  observe result → verify/replan;
+- verified objective facts may not regress across an action, unavailable objective choices fail
+  before execution, and a specialist cannot return authority for a different objective; and
+- the deterministic objective policy uses the identical loop interface, so teacher and learner
+  ownership can be compared without two runtimes.
+
+This is **not live Red autonomy yet**. `run_qualified_play` still invokes chapter functions in a
+fixed Python sequence. The next slice is an adapter that exposes bounded Red objective skills to
+this loop, starting with a captured-state vertical slice where at least two objectives are genuinely
+legal. Do not claim the new `select` method completed Red until that dispatch path has a receipt.
+
+The bounded exhaustive counterfactual audit of the historical planner enumerates **166 reachable
+dependency-valid states**, including **129 branching states** and **446 neutral/candidate-local
+evaluations**. Selection changes with location in **73/129 (56.59%)** branching states and chooses
+the candidate whose target region matches simulated location in **237/317 (74.76%)** opportunities.
+This proves some context sensitivity, not correct gameplay. The 80 local-context misses are the
+first explicit planner-curriculum queue. See the
+[sanitized receipt](docs/evidence/semantic-objective-counterfactual-audit-2026-08-08.json).
 
 ---
 

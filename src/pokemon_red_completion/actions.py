@@ -69,3 +69,5 @@ class SkillPlan:
             raise ValueError("max_executor_steps must be a positive integer")
         if self.outcome is SkillOutcome.IN_PROGRESS and not self.actions:
             raise ValueError("an in-progress plan must contain at least one action")
+        if len(self.actions) > self.max_executor_steps:
+            raise ValueError("plan actions exceed the declared executor-step bound")

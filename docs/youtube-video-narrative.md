@@ -84,6 +84,14 @@ The deterministic code remains valuable as expert demonstrations, bounded tools,
 referee. It stops being the hidden decision-maker. A strict evaluation lane fails on any teacher
 query, fallback, unsupported action, or undeclared safety substitution.
 
+Implementation checkpoint: the game-neutral loop and no-answer-label objective-selection interface
+now exist and pass ROM-independent tests. Until Red's fixed chapter runner is adapted to them, show
+this as the new architecture—not as footage of an autonomous completion.
+
+Useful visual: show the exhaustive planner audit as 166 reachable quest states, highlight the 129
+branch points, then split the 317 candidate-local evaluations into 237 matching selections and 80
+misses. Explain that sensitivity is encouraging but is not the same as knowing the correct goal.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

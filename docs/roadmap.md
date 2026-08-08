@@ -75,12 +75,18 @@ flowchart LR
 teacher queries, not only teacher fallbacks. Low-confidence predictions, unsupported action
 classes, and execution failures must fail the evaluation instead of silently invoking the teacher.
 Teacher-assisted collection, shadow comparison, and strict evaluation remain separate modes. A
-strict run cannot pass if the battle policy queried the teacher.
+strict run cannot pass if the battle policy queried the teacher. **Implemented in source and CLI;
+full strict-ROM qualification remains pending.**
 
 **Gate 2 — build the portable loop and current curriculum.** The learner must repeatedly observe,
 choose an objective, dispatch a bounded skill, receive a structured result, and replan. Collect
 decision spans and corrections from the current balanced teacher while moving revision-specific
-memory reads and menu compilation behind the game adapter.
+memory reads and menu compilation behind the game adapter. **The game-neutral loop and real
+model-selected objective interface are implemented and ROM-independent tests pass. The Red chapter
+adapter and current balanced decision corpus remain pending.** A bounded exhaustive diagnostic now
+enumerates 166 reachable graph states. The historical model is location-sensitive in 73/129
+branching states and picks the candidate-local target in 237/317 opportunities; the remaining 80
+misses form a concrete correction curriculum rather than a vague request for more planner data.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

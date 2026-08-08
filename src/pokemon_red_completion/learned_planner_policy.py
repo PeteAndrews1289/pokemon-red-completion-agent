@@ -35,6 +35,7 @@ class ModelObjectivePolicy:
     _active_objective_id: str | None = field(default=None, init=False)
     decisions: int = field(default=0, init=False)
     authorized_decisions: int = field(default=0, init=False)
+    selected_decisions: int = field(default=0, init=False)
     confidence_total: float = field(default=0.0, init=False)
     minimum_confidence: float = field(default=1.0, init=False)
 
@@ -48,6 +49,26 @@ class ModelObjectivePolicy:
     def authorize(self, expected_objective_id: str) -> str:
         """Predict from policy-visible state and authorize only the chosen specialist."""
 
+        state = GameState(mode=GameMode.OVERWORLD, facts=frozenset(self._completion_facts))
+        return self._choose(state, expected_objective_id=expected_objective_id)
+
+    def select(self, state: GameState) -> str:
+        """Choose a legal objective without receiving the fixed route's expected answer."""
+
+        if not isinstance(state, GameState):
+            raise TypeError("state must be a GameState")
+        selected = self._choose(state, expected_objective_id=None)
+        self.selected_decisions += 1
+        return selected
+
+    def _choose(
+        self,
+        state: GameState,
+        *,
+        expected_objective_id: str | None,
+    ) -> str:
+        """Rank the objectives available in authoritative semantic state."""
+
         if self._active_objective_id is not None:
             raise LearnedPlannerPolicyError("a planner objective is already active")
         source = self.snapshot_provider.snapshot()
@@ -55,11 +76,12 @@ class ModelObjectivePolicy:
             game_id=source.game_id,
             mode=source.mode,
             location=source.location,
-            facts=tuple((*source.facts, *self._completion_facts)),
+            facts=tuple(sorted(set(source.facts).union(state.facts, self._completion_facts))),
             features=source.features,
         )
-        state = GameState(mode=GameMode.OVERWORLD, facts=self._completion_facts)
         legal = self.graph.available_objectives(state)
+        if not legal:
+            raise LearnedPlannerPolicyError("no legal incomplete objective is available")
         batch = self.projector.project(
             snapshot.to_dict(),
             legal,
@@ -76,12 +98,13 @@ class ModelObjectivePolicy:
             raise LearnedPlannerPolicyError(
                 f"planner confidence below threshold for {predicted_id}"
             )
-        if predicted_id != expected_objective_id:
+        if expected_objective_id is not None and predicted_id != expected_objective_id:
             raise LearnedPlannerPolicyError(
                 "learned planner selected a different legal objective: "
                 f"predicted={predicted_id}, specialist={legal[predicted_index].specialist.value}"
             )
-        self.authorized_decisions += 1
+        if expected_objective_id is not None:
+            self.authorized_decisions += 1
         self._active_objective_id = predicted_id
         return predicted_id
 
@@ -93,6 +116,13 @@ class ModelObjectivePolicy:
         objective = self.graph.objective(objective_id)
         self._completed_ids.add(objective_id)
         self._completion_facts.update(objective.completion_facts)
+        self._active_objective_id = None
+
+    def abandon(self, objective_id: str) -> None:
+        """Return unfinished authority to the loop without fabricating completion."""
+
+        if objective_id != self._active_objective_id:
+            raise LearnedPlannerPolicyError("abandoned objective was not model-authorized")
         self._active_objective_id = None
 
     @property
@@ -107,9 +137,14 @@ class ModelObjectivePolicy:
             "model_sha256": canonical_sha256(self.model.to_dict()),
             "decisions": self.decisions,
             "authorized_decisions": self.authorized_decisions,
+            "selected_decisions": self.selected_decisions,
             "completed_objectives": self.completed_objective_count,
             "mean_confidence": mean_confidence,
             "minimum_confidence": self.minimum_confidence if self.decisions else 0.0,
             "teacher_fallbacks": 0,
-            "route_dispatch_mode": "model_authorized_fixed_specialists",
+            "route_dispatch_mode": (
+                "model_selected_specialists"
+                if self.selected_decisions
+                else "model_authorized_fixed_specialists"
+            ),
         }

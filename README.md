@@ -21,6 +21,12 @@ Pokémon game without quietly handing control back to the teacher.
 That distinction is the heart of the project and its public story. The teacher supplies verified
 demonstrations and a referee; it is not the final autonomous player.
 
+The first portable closed-loop runtime now exists in ROM-independent form. It can observe semantic
+state, let a policy choose among legal objectives without an expected-route label, dispatch one
+bounded typed action, verify the resulting facts, reject progress regression, and replan. It is not
+yet connected to the monolithic Red chapter runner, so this is an architecture milestone rather
+than a new gameplay-completion claim.
+
 - [Current technical handoff](HANDOFF.md)
 - [Dependency-ordered roadmap](docs/roadmap.md)
 - [Evidence-first project narrative](docs/project-narrative.md)
