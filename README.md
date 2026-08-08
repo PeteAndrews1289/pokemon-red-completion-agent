@@ -48,6 +48,19 @@ captured-state replay tool can preserve successful or failed decision streams fo
 splits. This is instrumentation, not a trained training policy; the next gate is to collect complete
 disjoint lineages and fit a candidate without mixing one run across train and validation.
 
+The first diagnostic collection has now completed from the authenticated Secret Key boundary:
+**48,156 decisions** across **1,716 battles**, **885 healing trips**, zero faints, and a final
+`55/55/55/55/55/55` party. It contains 44,882 seek, 1,710 fight, 1,064 flee, 499 heal, and one stop
+label, with zero phase-legality violations and 47,370 unique feature vectors. Because `seek` is
+93.2% of the stream and this is only one unassigned lineage, no model or held-out score is claimed.
+See the [sanitized lineage receipt](docs/evidence/training-control-lineage-01-2026-08-08.json).
+
+The offline candidate implementation is ready for those future v2 lineages. It trains a small
+class-balanced nonlinear classifier, masks actions that are illegal in the current phase, refuses
+root-state overlap across training and validation, and reports balanced accuracy alongside ordinary
+accuracy. Candidate summaries remain `promotion_eligible: false` until a frozen model passes real
+lineage-held-out, shadow, and model-controlled emulator gates.
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

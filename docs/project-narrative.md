@@ -193,6 +193,23 @@ harness atomically retains even failed streams so useful experience is not erase
 cannot be promoted as successful lineages. No learned training candidate has qualified yet; this is
 the collection interface that makes one possible.
 
+The first diagnostic lineage then ran the complete lesson. From the authenticated Secret Key
+capture it evolved Diglett and balanced the team through 1,716 battles and 885 healing trips with
+zero faints, stopping at 55/55/55/55/55/55. It emitted 48,156 decisions: 44,882 seek, 1,710 fight,
+1,064 flee, 499 heal, and one terminal stop. There were no phase-legality violations, and 47,370
+feature vectors were unique. The uncomfortable number is the useful one: seek is 93.2% of the
+stream, so an unweighted classifier could look accurate while learning almost nothing. The raw v1
+artifact remains immutable and diagnostic because it predates embedded lineage provenance. The v2
+collector and loader now authenticate source, state, partition, terminal status, and class coverage
+before any later lineage can enter held-out training.
+
+The candidate code responds directly to the measured imbalance. It assigns inverse-frequency
+weight to the five actions, reports balanced accuracy as well as raw accuracy, and masks outputs by
+phase so an otherwise high-scoring illegal action receives zero probability. It also refuses to fit
+when train and validation share a root-state digest or validation contains an action absent from
+training. These are implemented safeguards, not evidence that a real candidate works: only
+synthetic lineages have exercised the fitter so far.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

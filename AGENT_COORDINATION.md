@@ -171,6 +171,13 @@ That replacement seam is now instrumented: `training_control.py` projects 21 ide
 and five phase-masked actions, `run_red_team_balancing` emits decisions before mechanics, and
 `replay_training.py --out-decisions` preserves the stream. No training-control model or qualified
 dataset exists yet. Collect and split complete root lineages before fitting anything.
+Diagnostic lineage 01 is complete but unassigned: 48,156 decisions and a zero-faint 55-all terminal.
+Its v1 private artifact SHA is `6685c889c4e5ea55c56b0194074f0c4b6b82376d40dfb8f475f7d903856f5a64`.
+Do not promote it: v2 now embeds source, dirty state, root-state digest, and partition, and the new
+dataset audit rejects leakage. Future counted lineages must use v2.
+The class-balanced, phase-masked candidate fitter is implemented in `training_control_model.py`.
+It has only synthetic tests; do not report a real model, accuracy, or promotion until v2 lineages,
+shadow execution, and model-controlled execution pass.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

@@ -18,7 +18,9 @@ Usage::
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import subprocess
 import sys
 import traceback
 from pathlib import Path
@@ -55,7 +57,25 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="write portable seek/fight/flee/heal/stop teacher decisions as JSON",
     )
+    parser.add_argument(
+        "--lineage-id",
+        default=None,
+        help="stable root-lineage identity required when writing decisions",
+    )
+    parser.add_argument(
+        "--partition",
+        choices=("train", "validation", "test", "unassigned"),
+        default="unassigned",
+        help="whole-lineage data partition",
+    )
     args = parser.parse_args(argv)
+    if args.out_decisions is not None and not args.lineage_id:
+        parser.error("--lineage-id is required with --out-decisions")
+    provenance = (
+        _collection_provenance(args.state, args.lineage_id, args.partition)
+        if args.out_decisions is not None
+        else None
+    )
 
     emulator = PyBoyAdapter(resolve_rom_path(args.rom))
     emulator.start()
@@ -84,6 +104,7 @@ def main(argv: list[str] | None = None) -> int:
             emulator,
             args.max_steps,
             args.out_decisions,
+            provenance,
         )
     finally:
         emulator.close()
@@ -146,6 +167,7 @@ def _replay_training(
     emulator,
     max_steps: int | None,
     out_decisions: Path | None,
+    provenance: dict[str, object] | None,
 ) -> int:
     """Run the Mansion evolution and balancing blocks exactly as Blaine does."""
 
@@ -228,6 +250,7 @@ def _replay_training(
             evolution=evolution_decisions,
             balance=balance_decisions,
             error=f"{type(error).__name__}: {error}",
+            provenance=provenance,
         )
         print(f"\nFAILED: {type(error).__name__}: {error}")
         traceback.print_exc(limit=3)
@@ -242,6 +265,7 @@ def _replay_training(
         status="ok",
         evolution=evolution_decisions,
         balance=balance_decisions,
+        provenance=provenance,
     )
     return 0
 
@@ -253,6 +277,7 @@ def _write_decisions(
     evolution: list,
     balance: list,
     error: str | None = None,
+    provenance: dict[str, object] | None,
 ) -> None:
     """Persist even a failed rehearsal so useful supervision is not discarded."""
 
@@ -264,11 +289,12 @@ def _write_decisions(
     )
 
     payload = {
-        "schema": "pokemon-training-control-replay-v1",
+        "schema": "pokemon-training-control-replay-v2",
         "status": status,
         "feature_schema_id": TRAINING_CONTROL_FEATURE_SCHEMA_ID,
         "feature_names": list(TRAINING_CONTROL_FEATURE_NAMES),
         "error": error,
+        "provenance": provenance,
         "segments": {
             "evolution": [decision.public_dict() for decision in evolution],
             "balance": [decision.public_dict() for decision in balance],
@@ -282,6 +308,43 @@ def _write_decisions(
         f"wrote {len(evolution) + len(balance)} portable training decisions to {path}",
         flush=True,
     )
+
+
+def _collection_provenance(
+    state: Path,
+    lineage_id: str,
+    partition: str,
+) -> dict[str, object]:
+    """Bind a stream to its root state and exact committed source."""
+
+    repository = Path(__file__).resolve().parent.parent
+    try:
+        commit = subprocess.run(
+            ("git", "rev-parse", "HEAD"),
+            cwd=repository,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        dirty = bool(
+            subprocess.run(
+                ("git", "status", "--porcelain", "--untracked-files=no"),
+                cwd=repository,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+        )
+    except (OSError, subprocess.CalledProcessError) as error:
+        raise RuntimeError("could not bind training collection to Git source") from error
+    state_sha256 = hashlib.sha256(state.read_bytes()).hexdigest()
+    return {
+        "lineage_id": lineage_id,
+        "partition": partition,
+        "source_commit": commit,
+        "source_dirty": dirty,
+        "state_sha256": state_sha256,
+    }
 
 
 if __name__ == "__main__":

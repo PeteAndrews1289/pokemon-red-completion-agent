@@ -149,9 +149,19 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   cross-game feature schema with no Red map, species, move, or memory identifiers.
 - [x] Instrument the live balanced-team teacher to emit those decisions before execution and let
   the captured-state replay atomically retain successful or failed streams.
-- [ ] Collect complete disjoint root lineages and publish class balance plus feature coverage.
+- [ ] Collect complete disjoint v2 root lineages and publish class balance plus feature coverage.
+  Diagnostic lineage 01 completed with 48,156 decisions and all five actions, but is deliberately
+  unassigned because its v1 stream predates embedded source/partition provenance. It measured a
+  93.2% seek majority, 47,370 unique feature vectors, zero phase violations, 1,716 battles, 885
+  healing trips, zero faints, and a 55/55/55/55/55/55 terminal. See the
+  [sanitized receipt](evidence/training-control-lineage-01-2026-08-08.json).
+- [x] Add a v2 integrity loader and partition audit that bind source commit, dirty flag, root-state
+  digest, and lineage partition; reject altered files, dirty successful sources, terminal drift,
+  state overlap across train/validation, and validation classes absent from training.
 - [ ] Train a candidate with lineage-held-out validation; require every validation class to exist
   in training and keep the sealed test partition closed.
+  The class-balanced MLP, phase-masked inference, metrics, and fail-closed candidate fitter are
+  implemented and tested synthetically; this item remains open until real v2 lineages exist.
 - [ ] Run the candidate in shadow mode, then model-controlled mode under the unchanged teacher
   referee and action/frame/faint bounds.
 

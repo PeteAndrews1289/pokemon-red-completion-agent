@@ -169,6 +169,17 @@ readiness, venue suitability, and bounded progress. Be precise: this is the coll
 not a trained result. The cliffhanger is the first lineage-held-out candidate and whether it can
 replace the teacher without changing the safety referee.
 
+The first collection gives that bridge a measured ending: **48,156 decisions, 1,716 battles, 885
+heals, zero faints, 55/55/55/55/55/55**. Animate the class distribution rather than only the total:
+44,882 seek, 1,710 fight, 1,064 flee, 499 heal, one stop. Then let the 93.2% seek bar fill the screen.
+That is the next trap—an apparently accurate model could simply predict the majority action. Close
+on the safeguards: class weighting, whole-lineage validation, root-state overlap rejection, and no
+held-out score until independent v2 lineages exist.
+Show the learner architecture briefly after the warning: inverse-frequency weighting lifts the
+minority classes, the current phase blacks out illegal outputs, and both raw and balanced accuracy
+appear together. Keep the result card blank—the implementation exists, but no real lineage-held-out
+candidate has earned a score yet.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

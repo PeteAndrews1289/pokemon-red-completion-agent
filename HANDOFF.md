@@ -291,7 +291,18 @@ observation and the five phase-masked actions `seek`, `fight`, `flee`, `heal`, a
 `scripts/replay_training.py --out-decisions` atomically preserves complete or failed streams. The
 features deliberately exclude game, map, species, move, and memory identity.
 
-**Next:** collect at least three complete decision lineages, split by root lineage rather than by
+Diagnostic lineage 01 completed at source `778e6cb`: 48,156 decisions, 1,716 battles, 885 healing
+trips, zero faints, and a 55/55/55/55/55/55 terminal. Counts are seek 44,882, fight 1,710, flee
+1,064, heal 499, stop 1. The raw v1 artifact remains private and immutable at SHA-256
+`6685c889c4e5ea55c56b0194074f0c4b6b82376d40dfb8f475f7d903856f5a64`; it predates embedded
+lineage/source provenance and is diagnostic only. The v2 writer and `training_control_dataset.py`
+now bind later streams to source commit, dirty flag, root-state digest, and whole-lineage partition;
+the audit rejects state overlap and validation-only classes.
+`training_control_model.py` now supplies the class-balanced MLP, phase-masked inference, aggregate
+metrics, and whole-lineage candidate fit. Its public summary is always non-promotable until later
+runtime gates; only synthetic separability and integrity behavior are currently tested.
+
+**Next:** collect at least three v2 complete decision lineages, split by root lineage rather than by
 row, train and shadow-evaluate the first candidate, then replace the 469,232-action skill's teacher
 authority under the same safety envelope. Preserve the fixed skill as demonstrator and referee. Do
 not describe instrumentation as a trained policy or this integration result as clean-start or
