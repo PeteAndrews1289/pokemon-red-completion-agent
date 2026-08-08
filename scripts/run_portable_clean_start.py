@@ -20,6 +20,7 @@ from pokemon_red_completion.learned_battle_policy import load_battle_model_artif
 from pokemon_red_completion.planner_model import load_objective_model_artifact
 from pokemon_red_completion.planner_semantics import ObjectiveFeatureProjector
 from pokemon_red_completion.provenance import (
+    canonical_sha256,
     detect_source_identity,
     require_clean_source,
     require_published_source,
@@ -123,70 +124,118 @@ def main(argv: list[str] | None = None) -> int:
     offsets = schedule.offsets(args.diagnostic_seed)
     schedule_sha256 = schedule.schedule_sha256(args.diagnostic_seed)
     initial_wait_frames = derive_initial_wait_frames(args.diagnostic_seed)
-    report = run_portable_clean_start(
-        resolve_rom_path(args.rom),
-        objective_model=objective_model,
-        battle_model=battle_model,
-        battle_control_model=battle_control_model,
-        execute_battle_control_model=args.execute_battle_control,
-        battle_confidence_threshold=args.battle_confidence_threshold,
-        battle_control_confidence_threshold=args.battle_control_confidence_threshold,
-        require_teacher_free_battle=args.require_teacher_free_battle,
-        training_control_model=training_control_model,
-        execute_training_control_model=args.execute_training_control,
-        training_candidate_model=training_candidate_model,
-        execute_training_candidate_model=args.execute_training_candidate,
-        initial_wait_frames=initial_wait_frames,
-        battle_start_offsets=offsets,
-        watch=args.watch,
-        speed=args.speed if args.watch else None,
-    )
+    diagnostic_root = {
+        "battle_schedule_sha256": schedule_sha256,
+        "counted": False,
+        "harness_seed": args.diagnostic_seed,
+        "initial_wait_frames": initial_wait_frames,
+    }
+    model_identities = {
+        "battle_control": (
+            _model_identity(args.battle_control_model, battle_control_model)
+            if battle_control_model is not None
+            else None
+        ),
+        "battle_move": (
+            _model_identity(args.battle_model, battle_model)
+            if battle_model is not None
+            else None
+        ),
+        "objective": _model_identity(args.objective_model, objective_model),
+        "training_candidate": (
+            _model_identity(args.training_candidate_model, training_candidate_model)
+            if training_candidate_model is not None
+            else None
+        ),
+        "training_control": (
+            _model_identity(args.training_control_model, training_control_model)
+            if training_control_model is not None
+            else None
+        ),
+    }
+    try:
+        report = run_portable_clean_start(
+            resolve_rom_path(args.rom),
+            objective_model=objective_model,
+            battle_model=battle_model,
+            battle_control_model=battle_control_model,
+            execute_battle_control_model=args.execute_battle_control,
+            battle_confidence_threshold=args.battle_confidence_threshold,
+            battle_control_confidence_threshold=args.battle_control_confidence_threshold,
+            require_teacher_free_battle=args.require_teacher_free_battle,
+            training_control_model=training_control_model,
+            execute_training_control_model=args.execute_training_control,
+            training_candidate_model=training_candidate_model,
+            execute_training_candidate_model=args.execute_training_candidate,
+            initial_wait_frames=initial_wait_frames,
+            battle_start_offsets=offsets,
+            watch=args.watch,
+            speed=args.speed if args.watch else None,
+        )
+    except Exception as error:
+        _emit(
+            {
+                "claim": (
+                    "One uncounted diagnostic root failed closed. It cannot enter or replace "
+                    "the future ten-root campaign."
+                ),
+                "diagnostic_root": diagnostic_root,
+                "failure": {
+                    "exception_type": type(error).__name__,
+                    "message": str(error),
+                    "stage": "portable_clean_start_execution",
+                },
+                "model_identities": model_identities,
+                "promotion_eligible": False,
+                "schema": "pokemon-red-portable-clean-start-rehearsal-v1",
+                "source": source.public_dict(),
+                "status": "failed_uncounted_rehearsal",
+            },
+            args.out,
+        )
+        return 2
     payload = {
         "claim": (
             "One uncounted diagnostic root exercised the portable clean-start loop. "
             "It cannot enter or replace the future ten-root campaign."
         ),
-        "diagnostic_root": {
-            "battle_schedule_sha256": schedule_sha256,
-            "counted": False,
-            "harness_seed": args.diagnostic_seed,
-            "initial_wait_frames": initial_wait_frames,
-        },
-        "model_identities": {
-            "battle_control": (
-                collection_document_sha256(battle_control_model.to_dict())
-                if battle_control_model is not None
-                else None
-            ),
-            "battle_move": (
-                hashlib.sha256(battle_model.to_json().encode("ascii")).hexdigest()
-                if battle_model is not None
-                else None
-            ),
-            "objective": report.objective_policy.get("model_sha256"),
-            "training_candidate": (
-                args.training_candidate_model_sha256
-                if training_candidate_model is not None
-                else None
-            ),
-            "training_control": (
-                args.training_control_model_sha256
-                if training_control_model is not None
-                else None
-            ),
-        },
+        "diagnostic_root": diagnostic_root,
+        "model_identities": model_identities,
         "promotion_eligible": False,
         "run": report.public_dict(),
         "schema": "pokemon-red-portable-clean-start-rehearsal-v1",
         "source": source.public_dict(),
         "status": "passed_uncounted_rehearsal",
     }
-    encoded = json.dumps(payload, indent=2, sort_keys=True) + "\n"
-    if args.out is not None:
-        args.out.parent.mkdir(parents=True, exist_ok=True)
-        args.out.write_text(encoded, encoding="ascii")
-    print(encoded, end="")
+    _emit(payload, args.out)
     return 0
+
+
+def _model_identity(path: Path | None, model: object) -> dict[str, str]:
+    if path is None:
+        raise ValueError("model identity requires an artifact path")
+    payload_path = path / "model.jsonl" if path.is_dir() else path
+    artifact_sha256 = hashlib.sha256(payload_path.read_bytes()).hexdigest()
+    to_dict = getattr(model, "to_dict", None)
+    to_json = getattr(model, "to_json", None)
+    if callable(to_dict):
+        model_sha256 = canonical_sha256(to_dict())
+    elif callable(to_json):
+        model_sha256 = hashlib.sha256(to_json().encode("ascii")).hexdigest()
+    else:
+        raise TypeError("authenticated model does not expose a canonical representation")
+    return {
+        "artifact_sha256": artifact_sha256,
+        "model_sha256": model_sha256,
+    }
+
+
+def _emit(payload: dict[str, object], destination: Path | None) -> None:
+    encoded = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    if destination is not None:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(encoded, encoding="ascii")
+    print(encoded, end="")
 
 
 def _require_pair(
