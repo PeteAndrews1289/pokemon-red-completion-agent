@@ -123,9 +123,9 @@ def main(argv: list[str] | None = None) -> int:
             "schema": "pokemon-model-selected-objective-execution-v2",
             "status": "ok",
             "claim": (
-                "A learned ranker selected one legal objective without an expected label; "
-                "a registered fixed skill executed it; fresh emulator observations verified "
-                "the declared objective and side effects."
+                "A learned ranker repeatedly selected legal objectives without expected labels; "
+                "registered fixed skills executed them; fresh emulator observations verified "
+                "every declared objective and side effect."
             ),
             "source": source.public_dict(),
             "capture": {
@@ -152,6 +152,7 @@ def main(argv: list[str] | None = None) -> int:
             "policy": policy.public_dict(),
             "loop": dict(loop.public_dict()),
             "assistance": {
+                "model_decisions_executed": len(steps),
                 "objective_selection": "learned_ranker",
                 "expected_route_label_provided": False,
                 "mechanic_execution": "teacher_authored_bounded_skill",
@@ -159,8 +160,8 @@ def main(argv: list[str] | None = None) -> int:
             },
             "limitations": [
                 "captured_state_diagnostic",
-                "single_model_decision",
-                "fixed_teacher_authored_mechanic_skill",
+                "bounded_model_decision_sequence",
+                "fixed_teacher_authored_mechanic_skills",
                 "not_a_clean_start_evaluation",
                 "not_end_to_end_learned_gameplay",
             ],
