@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
-from pokemon_red_completion.captured_progress import load_captured_progress
+from pokemon_red_completion.captured_progress import load_captured_progress, write_captured_progress
 from pokemon_red_completion.collection_protocol import (
     collection_document_sha256,
     objective_graph_document,
@@ -26,6 +26,10 @@ from pokemon_red_completion.objective_skills import ObjectiveSkill, ObjectiveSki
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.planner_model import load_objective_model_artifact
 from pokemon_red_completion.planner_semantics import ObjectiveFeatureProjector
+from pokemon_red_completion.play import (
+    QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS,
+    QUALIFIED_PLAY_CHECKPOINT_COUNT,
+)
 from pokemon_red_completion.player_loop import PortablePlayerLoop
 from pokemon_red_completion.provenance import (
     detect_source_identity,
@@ -67,6 +71,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--model", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument("--out", type=Path, help="also write the sanitized JSON report here")
+    parser.add_argument(
+        "--out-state",
+        type=Path,
+        help="also save the private terminal emulator state and authenticated progress envelope",
+    )
     parser.add_argument("--watch", action="store_true")
     parser.add_argument("--speed", type=int, choices=(1, 2, 4), default=2)
     parser.add_argument(
@@ -138,6 +147,9 @@ def main(argv: list[str] | None = None) -> int:
         )
         steps = tuple(loop.step() for _ in range(args.max_decisions))
         after = observer.observe()
+        if args.out_state is not None:
+            args.out_state.parent.mkdir(parents=True, exist_ok=True)
+            emulator.save_state(args.out_state)
 
         report = {
             "schema": "pokemon-model-selected-objective-execution-v3",
@@ -194,6 +206,29 @@ def main(argv: list[str] | None = None) -> int:
                 "not_end_to_end_learned_gameplay",
             ],
         }
+
+    if args.out_state is not None:
+        completed_ids = COMPLETION_QUEST.completed_ids(after)
+        verified = tuple(
+            objective_id
+            for _, objective_id in QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS
+            if objective_id in completed_ids
+        )
+        completed_checkpoints = max(
+            checkpoint_count
+            for checkpoint_count, objective_id in QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS
+            if objective_id in completed_ids
+        )
+        final_objective = steps[-1].objective_id
+        write_captured_progress(
+            args.out_state.with_name(args.out_state.name + ".json"),
+            state_path=args.out_state,
+            checkpoint_id=f"portable_loop_{final_objective}_terminal",
+            checkpoint_label=f"Portable loop completed {final_objective}",
+            checkpoints_completed=completed_checkpoints,
+            checkpoints_total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+            verified_objective_ids=verified,
+        )
 
     payload = json.dumps(report, indent=2, sort_keys=True) + "\n"
     if args.out is not None:
