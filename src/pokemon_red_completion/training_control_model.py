@@ -44,6 +44,15 @@ class TrainingControlMetrics:
     balanced_accuracy: float
     cross_entropy: float
     class_counts: Mapping[str, int]
+    class_recall: Mapping[str, float]
+    class_precision: Mapping[str, float]
+    confusion: Mapping[str, int]
+    candidate_counts: Mapping[str, int]
+    forced_examples: int
+    forced_accuracy: float
+    genuine_examples: int
+    genuine_accuracy: float
+    operational_errors: Mapping[str, int]
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -52,6 +61,15 @@ class TrainingControlMetrics:
             "balanced_accuracy": self.balanced_accuracy,
             "cross_entropy": self.cross_entropy,
             "class_counts": dict(sorted(self.class_counts.items())),
+            "class_recall": dict(sorted(self.class_recall.items())),
+            "class_precision": dict(sorted(self.class_precision.items())),
+            "confusion": dict(sorted(self.confusion.items())),
+            "candidate_counts": dict(sorted(self.candidate_counts.items())),
+            "forced_examples": self.forced_examples,
+            "forced_accuracy": self.forced_accuracy,
+            "genuine_examples": self.genuine_examples,
+            "genuine_accuracy": self.genuine_accuracy,
+            "operational_errors": dict(sorted(self.operational_errors.items())),
         }
 
 
@@ -492,11 +510,31 @@ def evaluate_training_control_model(
         raise TrainingControlModelError("training-control evaluation examples are empty")
     counts = Counter(example.action.value for example in rows)
     correct = Counter[str]()
+    predicted_counts = Counter[str]()
+    confusion = Counter[str]()
+    candidate_counts = Counter[str]()
+    forced_examples = 0
+    forced_correct = 0
+    genuine_examples = 0
+    genuine_correct = 0
     losses: list[float] = []
     for example in rows:
         probabilities = model.probabilities(example.observation)
         predicted = max(probabilities, key=probabilities.__getitem__)
-        correct[example.action.value] += int(predicted == example.action.value)
+        agreed = predicted == example.action.value
+        correct[example.action.value] += int(agreed)
+        predicted_counts[predicted] += 1
+        confusion[f"{example.action.value} -> {predicted}"] += 1
+        candidate_key = "/".join(
+            action.value for action in example.observation.candidate_actions
+        )
+        candidate_counts[candidate_key] += 1
+        if len(example.observation.candidate_actions) == 1:
+            forced_examples += 1
+            forced_correct += int(agreed)
+        else:
+            genuine_examples += 1
+            genuine_correct += int(agreed)
         losses.append(-math.log(max(probabilities.get(example.action.value, 0.0), 1e-12)))
     return TrainingControlMetrics(
         examples=len(rows),
@@ -505,4 +543,29 @@ def evaluate_training_control_model(
         / len(counts),
         cross_entropy=sum(losses) / len(losses),
         class_counts=dict(counts),
+        class_recall={name: correct[name] / count for name, count in counts.items()},
+        class_precision={
+            name: correct[name] / predicted_counts[name] if predicted_counts[name] else 0.0
+            for name in counts
+        },
+        confusion=dict(confusion),
+        candidate_counts=dict(candidate_counts),
+        forced_examples=forced_examples,
+        forced_accuracy=forced_correct / forced_examples if forced_examples else 0.0,
+        genuine_examples=genuine_examples,
+        genuine_accuracy=genuine_correct / genuine_examples if genuine_examples else 0.0,
+        operational_errors={
+            "unnecessary_heal": confusion["seek -> heal"],
+            "missed_required_heal": confusion["heal -> seek"] + confusion["heal -> stop"],
+            "premature_stop": sum(
+                count
+                for key, count in confusion.items()
+                if not key.startswith("stop ->") and key.endswith(" -> stop")
+            ),
+            "missed_stop": sum(
+                count
+                for key, count in confusion.items()
+                if key.startswith("stop ->") and key != "stop -> stop"
+            ),
+        },
     )

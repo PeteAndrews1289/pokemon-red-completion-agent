@@ -64,6 +64,10 @@ TRAINING_CONTROL_FEATURE_NAMES = (
     "trainee.status_healthy",
     "trainee.attack_pp",
     "trainee.attack_pp_margin",
+    "reserve.hp_ratio",
+    "reserve.status_healthy",
+    "reserve.attack_pp",
+    "reserve.attack_pp_margin",
     "enemy.observed",
     "enemy.level",
     "enemy.level_delta",
@@ -73,7 +77,7 @@ TRAINING_CONTROL_FEATURE_NAMES = (
     "progress.healing_ratio",
     "progress.consecutive_flee_ratio",
 )
-TRAINING_CONTROL_FEATURE_SCHEMA_ID = "pokemon.core.training.control.features.v1"
+TRAINING_CONTROL_FEATURE_SCHEMA_ID = "pokemon.core.training.control.features.v2"
 
 
 @dataclass(frozen=True, slots=True)
@@ -166,6 +170,9 @@ def project_training_control_observation(
     trainee: PartyMemberObservation | None,
     attack_pp: int | None = None,
     attack_pp_reserve: int | None = None,
+    safety_reserve: PartyMemberObservation | None = None,
+    safety_reserve_attack_pp: int | None = None,
+    safety_reserve_attack_pp_reserve: int | None = None,
     enemy_level: int | None = None,
     venue: GrindingArea | None = None,
     consecutive_flees: int = 0,
@@ -181,7 +188,12 @@ def project_training_control_observation(
         raise TrainingControlError("maximum consecutive flee count is invalid")
     if type(fight_allowed) is not bool:  # noqa: E721
         raise TrainingControlError("fight-allowed flag is invalid")
-    for name, value in (("attack_pp", attack_pp), ("attack_pp_reserve", attack_pp_reserve)):
+    for name, value in (
+        ("attack_pp", attack_pp),
+        ("attack_pp_reserve", attack_pp_reserve),
+        ("safety_reserve_attack_pp", safety_reserve_attack_pp),
+        ("safety_reserve_attack_pp_reserve", safety_reserve_attack_pp_reserve),
+    ):
         if value is not None and (type(value) is not int or value < 0):
             raise TrainingControlError(f"{name} is invalid")
     if enemy_level is not None and (
@@ -194,6 +206,8 @@ def project_training_control_observation(
     trainee_level = trainee.level if trainee else 0
     pp = attack_pp or 0
     reserve = attack_pp_reserve or 0
+    safety_pp = safety_reserve_attack_pp or 0
+    safety_pp_reserve = safety_reserve_attack_pp_reserve or 0
     enemy = enemy_level or 0
     values = (
         float(phase is TrainingControlPhase.BATTLE),
@@ -213,6 +227,14 @@ def project_training_control_observation(
         ),
         _ratio(pp, 64),
         _signed_ratio(pp - reserve, 64),
+        safety_reserve.hp_ratio if safety_reserve else 0.0,
+        float(
+            safety_reserve is not None
+            and not safety_reserve.is_fainted
+            and safety_reserve.status is StatusCondition.HEALTHY
+        ),
+        _ratio(safety_pp, 64),
+        _signed_ratio(safety_pp - safety_pp_reserve, 64),
         float(enemy_level is not None),
         _ratio(enemy, MAX_LEVEL),
         _signed_ratio(trainee_level - enemy, MAX_LEVEL),

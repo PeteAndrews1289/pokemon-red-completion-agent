@@ -373,6 +373,14 @@ two-candidate state was labeled `fight`. The causal run therefore contained 1,60
 turned 12,405 teacher seeks into heals and the runtime does not yet execute every returned
 overworld choice. Redesign that contract before collecting another generation of lineages.
 
+That execution boundary is now implemented: optional heals pay their real trip budget, while a
+missed required heal or missed terminal stop aborts without fallback. The first three v4 roots were
+then stopped before producing artifacts because the observation audit found an unlearnable label
+source. In v3 train 01, 356 of 639 heals were caused by the Blastoise safety reserve, but feature
+schema v1 exposed only the trainee. Schema v2 adds game-neutral reserve HP/status/attack-PP signals.
+Never reuse the three exposed roots listed in the
+[observation audit](docs/evidence/training-control-overworld-observation-audit-2026-08-08.json).
+
 Counted v2 train lineage 01 is qualified from a retained 17-frame root at source `4c885d8`:
 46,687 decisions, all five actions, 1,726 battles, 815 healing trips, zero faints, and all level 55.
 Its private stream SHA is `f13f9f1031632a8f1158c280c241d6f6a24ab5eeed4c30bdf76d802917e1aca1`;

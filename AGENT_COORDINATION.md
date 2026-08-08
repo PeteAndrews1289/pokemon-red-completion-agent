@@ -226,6 +226,10 @@ singleton forced flees and 1,984 safe two-candidate fights; do not describe that
 learning. Overworld remains teacher-controlled and produced 12,405 seek-to-heal disagreements.
 Before another collection campaign, make overworld selections execute causally and make its
 candidate masks express only legality and hard safety, not the teacher's preferred action.
+Overworld execution is now causal, but the first v4 campaign was stopped before artifact creation:
+356 required heals in v3 train 01 came from an escort whose health/status/PP were absent from the
+model observation. Feature schema v2 adds those game-neutral safety-reserve signals. The three
+exposed roots in the observation-audit receipt are excluded from every later partition.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

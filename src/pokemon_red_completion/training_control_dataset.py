@@ -63,8 +63,18 @@ class TrainingControlDataset:
     def public_summary(self) -> dict[str, object]:
         counts = Counter(example.action.value for example in self.examples)
         phases = Counter(example.observation.phase.value for example in self.examples)
+        candidates = Counter(
+            "/".join(action.value for action in example.observation.candidate_actions)
+            for example in self.examples
+        )
+        forced = sum(len(example.observation.candidate_actions) == 1 for example in self.examples)
         unique = {
-            (example.action.value, example.observation.features) for example in self.examples
+            (
+                example.action.value,
+                example.observation.features,
+                example.observation.candidate_actions,
+            )
+            for example in self.examples
         }
         return {
             "schema": "pokemon-training-control-dataset-summary-v1",
@@ -77,10 +87,13 @@ class TrainingControlDataset:
             "status": self.status,
             "lineage_qualified": self.lineage_qualified,
             "examples": len(self.examples),
-            "unique_action_feature_pairs": len(unique),
-            "duplicate_action_feature_pairs": len(self.examples) - len(unique),
+            "unique_action_feature_candidate_tuples": len(unique),
+            "duplicate_action_feature_candidate_tuples": len(self.examples) - len(unique),
             "action_counts": dict(sorted(counts.items())),
             "phase_counts": dict(sorted(phases.items())),
+            "candidate_counts": dict(sorted(candidates.items())),
+            "forced_decisions": forced,
+            "genuine_decisions": len(self.examples) - forced,
             "promotion_eligible": False,
         }
 

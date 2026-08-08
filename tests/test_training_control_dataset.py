@@ -98,14 +98,18 @@ def test_loader_authenticates_a_complete_whole_lineage(tmp_path: Path) -> None:
         "heal",
         "stop",
     ]
-    assert dataset.public_summary()["action_counts"] == {
+    summary = dataset.public_summary()
+    assert summary["action_counts"] == {
         "fight": 1,
         "flee": 1,
         "heal": 1,
         "seek": 1,
         "stop": 1,
     }
-    assert dataset.public_summary()["promotion_eligible"] is False
+    assert summary["candidate_counts"] == {"fight/flee": 2, "seek/heal/stop": 3}
+    assert summary["forced_decisions"] == 0
+    assert summary["genuine_decisions"] == 5
+    assert summary["promotion_eligible"] is False
 
 
 def test_loader_rejects_digest_or_terminal_tampering(tmp_path: Path) -> None:

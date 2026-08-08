@@ -303,6 +303,14 @@ belongs to the teacher, and the model predicted 12,405 unnecessary heals in plac
 The next chapter is therefore not another accuracy card. It is an executable overworld contract and
 metrics that count wasted trips, unsafe continuation, and premature stopping directly.
 
+That contract immediately prevented another misleading campaign. Optional model heals now execute
+and spend the real budget, while skipped required recovery and missed stopping abort without
+fallback. Before the first three roots had produced artifacts, an observation audit grouped the old
+heal labels by cause: 356 were triggered by the Blastoise safety reserve and 283 by the trainee.
+Only the trainee existed in the model input. The roots were stopped and excluded. Feature schema v2
+adds portable reserve HP, status, attack PP, and PP margin so the replacement is asked to learn only
+from causes it can observe.
+
 The first causal root ended after 480 decisions, exactly as the fail-closed contract required. The
 model agreed with 479 teacher decisions, then chose `fight` after every admissible training attack
 had been exhausted or disabled. The immediately preceding safe fight and the rejected decision had

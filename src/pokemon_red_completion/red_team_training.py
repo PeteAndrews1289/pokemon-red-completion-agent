@@ -778,6 +778,16 @@ def run_red_team_balancing(
         nonlocal decision_index
         pp = training_attack_pp(trainee) if trainee is not None else None
         reserve = training_attack_pp_reserve(trainee, policy) if trainee is not None else None
+        safety_reserve = next(
+            (member for member in party.members if member.species_id == BLASTOISE_SPECIES_ID),
+            None,
+        )
+        safety_pp = training_attack_pp(safety_reserve) if safety_reserve is not None else None
+        safety_pp_reserve = (
+            training_attack_pp_reserve(safety_reserve, policy)
+            if safety_reserve is not None
+            else None
+        )
         observation = project_training_control_observation(
             party,
             policy,
@@ -786,6 +796,9 @@ def run_red_team_balancing(
             trainee=trainee,
             attack_pp=pp,
             attack_pp_reserve=reserve,
+            safety_reserve=safety_reserve,
+            safety_reserve_attack_pp=safety_pp,
+            safety_reserve_attack_pp_reserve=safety_pp_reserve,
             enemy_level=enemy_level,
             venue=current_venue.band,
             consecutive_flees=consecutive_flees,

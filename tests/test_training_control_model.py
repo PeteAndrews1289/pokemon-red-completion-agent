@@ -85,6 +85,14 @@ def test_candidate_uses_whole_lineage_validation_and_class_balancing() -> None:
 
     assert candidate.training.balanced_accuracy > 0.99
     assert candidate.validation.balanced_accuracy > 0.99
+    assert candidate.validation.genuine_examples == 30
+    assert candidate.validation.genuine_accuracy > 0.99
+    assert candidate.validation.operational_errors == {
+        "unnecessary_heal": 0,
+        "missed_required_heal": 0,
+        "premature_stop": 0,
+        "missed_stop": 0,
+    }
     assert candidate.training_lineages == ("train-root",)
     assert candidate.validation_lineages == ("validation-root",)
     assert candidate.public_summary()["promotion_eligible"] is False

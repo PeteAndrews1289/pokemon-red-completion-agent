@@ -158,6 +158,13 @@ predicted as unnecessary heals. See the [candidate](docs/evidence/training-contr
 [shadow](docs/evidence/training-control-shadow-02-2026-08-08.json), and
 [controlled success](docs/evidence/training-control-battle-control-success-2026-08-08.json) receipts.
 
+The first overworld-control collection was stopped before producing a training artifact. The audit
+found that 356 required heals in a representative lineage were caused by the safety escort, while
+the v1 observation exposed only the trainee's health and PP. That missing cause explains why held-out
+heal precision was only 3.49%. Feature schema v2 now adds game-neutral safety-reserve health,
+status, attack PP, and PP margin; the three exposed roots are excluded rather than replayed. See the
+[observation audit](docs/evidence/training-control-overworld-observation-audit-2026-08-08.json).
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

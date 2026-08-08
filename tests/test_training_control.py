@@ -63,6 +63,9 @@ def test_training_projection_is_normalized_and_identity_free() -> None:
         trainee=party.lead,
         attack_pp=12,
         attack_pp_reserve=3,
+        safety_reserve=party.members[1],
+        safety_reserve_attack_pp=9,
+        safety_reserve_attack_pp_reserve=2,
         venue=venue,
         consecutive_flees=2,
         max_consecutive_flees=10,
@@ -82,6 +85,11 @@ def test_training_projection_is_normalized_and_identity_free() -> None:
     assert "portable_venue" not in rendered
     assert "1001" not in rendered
     assert "2001" not in rendered
+    features = public["features"]
+    assert isinstance(features, dict)
+    assert features["reserve.hp_ratio"] == pytest.approx(0.8)
+    assert features["reserve.status_healthy"] == 1.0
+    assert features["reserve.attack_pp_margin"] == pytest.approx(7 / 64)
 
 
 def test_battle_projection_exposes_relative_matchup_without_species_identity() -> None:

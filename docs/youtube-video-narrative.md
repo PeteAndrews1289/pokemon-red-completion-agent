@@ -232,6 +232,13 @@ Reveal the replacement card: **78.06% raw / 89.25% balanced validation**, then t
 confusion: 12,405 safe seeks predicted as heals. The next problem is no longer “train a model”; it
 is “give the model a real overworld control surface and score the cost of its mistakes.”
 
+Open the next episode by stopping the first collection early. Split 639 old heal labels into 356
+caused by the escort and 283 caused by the trainee, then highlight that the observation shows only
+the trainee. The 3.49% heal precision is not merely a tuning problem; half the causes were invisible.
+Cross out all three exposed roots before adding four game-neutral reserve signals. This is the
+project's recurring thesis in miniature: do not ask a model to learn an answer from information it
+was never given.
+
 Reveal the completed shadow card: **55,904 decisions; 75.57% raw; 76.73% balanced; zero faints;
 all 55; authority false.** Then zoom into the confusion matrix. The model catches 96.53% of flees
 but only 42.05% of fights, replacing 1,134 safe fights with conservative exits; it also replaces

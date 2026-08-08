@@ -1,0 +1,26 @@
+{
+  "schema": "pokemon-training-control-observation-audit-v1",
+  "status": "interface_rejected_before_collection",
+  "source_commit": "da54aa5d6b6a35ce9e1d495bddc707ff927b6fe2",
+  "prior_lineage": {
+    "lineage_id": "training-control-v3-train-01",
+    "decision_stream_sha256": "76dcbe0b9cef42c462b468f32c940ef11a054a79f70dd7af0c5d02ab163c2480",
+    "required_heal_reasons": {
+      "escort_is_unsafe": 356,
+      "trainee_is_unsafe": 283
+    }
+  },
+  "held_out_failure": {
+    "heal_precision": 0.034907,
+    "safe_seek_false_heal_rate": 0.232703
+  },
+  "root_states_excluded_without_training_artifacts": [
+    "0f03ce4963f6699568014611ea43df889031470e0a718164cb103100816f5c61",
+    "22b94fd2a65263041183aa6bc3452699342c8a427867a52ef3c579077c03f2d9",
+    "8b6559f7ee6897ff29405d6a99afce8d0e43288a00d158253a53eab5cfdc519b"
+  ],
+  "finding": "The v1 observation exposed trainee health and PP but omitted the safety reserve whose state caused 356 required-heal labels in the audited lineage.",
+  "repair": "Feature schema v2 adds normalized safety-reserve health, status, attack PP, and PP margin before any replacement lineage is admitted.",
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}

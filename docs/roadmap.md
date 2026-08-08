@@ -215,6 +215,11 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   sole source of control, and the replacement predicted 12,405 unnecessary heals in its causal
   audit. Report forced versus genuine choices and operational false-heal cost rather than relying
   on balanced accuracy.
+- [x] Make overworld selections causal and audit whether their labels are observable. Optional model
+  heals now execute and spend the real budget; skipped mandatory heals, premature continuation, and
+  missed stop decisions fail closed. The first v4 collection was stopped before artifact creation
+  because 356 required-heal labels depended on an unobserved safety escort. Feature schema v2 adds
+  portable reserve health/status/PP signals; all three exposed roots are excluded.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
