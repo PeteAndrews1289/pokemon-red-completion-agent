@@ -34,26 +34,35 @@ This section supersedes the older starting-point and test-count notes below.
   authenticated. The public result is in
   [the offline receipt](docs/evidence/training-candidate-ranker-v1-offline-2026-08-08.json).
 - Commit `d05dbb7` adds authenticated shadow/control loading, exact ephemeral candidate binding,
-  alternate trainee/venue execution, no-fallback auditing, and an offline runtime gate checker. Its
-  full local gate reports **2,018 passed, 3 deselected**, with registry, artifact, documentation,
-  Ruff, and mypy checks green. GitHub CI is also green. The collection registry was regenerated in
-  the same source commit; do not manually edit its hashes.
+  alternate trainee/venue execution, no-fallback auditing, and an offline runtime gate checker.
+  The collection registry is source-bound and must always be regenerated; never hand-edit hashes.
 - The preregistered shadow root passed all eight gates: 119,353 genuine choices at 99.9941%
   agreement, both choice kinds, 1,802 battles, 1,098 heals, all six at level 55, and zero faints.
-- The reserved v1 causal root is **rejected and immutable**. It executed 15,449 authenticated
+- The first reserved causal root is **rejected and immutable**. It executed 15,449 authenticated
   model-authority decisions with no fallback, but exhausted the training healing budget and ended
   at 51/32/32/31/31/31. The model agreed with every teacher candidate label before termination, so
   it did not create the required causal disagreement. The public receipt is
   [here](docs/evidence/training-candidate-ranker-v1-runtime-rejection-2026-08-08.json).
 - The runtime gate checker now writes an authenticated rejection for a failed-but-valid runtime
-  chain instead of crashing before evidence output. Run a same-root teacher-only diagnostic next,
-  then preregister a paired teacher/model v2 design. Do not integrate the strategic ranker into the
-  portable loop while `portable_training_loop_may_start` is false.
+  chain instead of crashing before evidence output.
+- The same-root teacher-only diagnostic completed normally at all six level 55, proving the model
+  had not caused the stop. It exposed a wrapper bug: the mere presence of an agreeing authority
+  callback recomputed the downstream directive. Commit `a089988` makes candidate agreement a
+  behavioral no-op and adds a ROM-free invariant test.
+- A newly preregistered byte-distinct root then passed every causal gate with the unchanged model:
+  **119,668 controlled choices, 191 executed trainee disagreements, 1,803 battles, 1,114 heals,
+  all six at level 55, zero faints, and no fallback**. The authenticated gate evaluation passed
+  8/8 shadow and 11/11 causal checks. See the
+  [runtime qualification](docs/evidence/training-candidate-ranker-v1-runtime-qualification-2026-08-08.json).
+- `replay_selected_objective.py` now accepts an authenticated candidate model in shadow or live
+  authority mode and threads it through `DefeatBlaineObjectiveSkill`. This is source integration,
+  not a live portable qualification: its report explicitly emits
+  `portable_runtime_recertified=false` and `promotion_eligible=false`.
 
-The immediate dependency order is now: same-root teacher diagnostic → determine whether the
-healing exhaustion is a curriculum/root failure or an authority-binding defect → freeze a v2
-paired causal plan → require at least one executed disagreement, no fallback, all six at level 55,
-zero faints, at most 1,900 battles, and at most 1,150 heals → only then open portable integration.
+The immediate dependency order is now: publish the repaired causal receipt → run the authenticated
+strategic ranker through the portable post-Secret-Key objective path → require the existing
+Blaine terminal evidence plus nonzero controlled choices and no fallback → begin multi-root
+clean-start Red evaluation → run the bounded Crystal transfer benchmark.
 
 ---
 

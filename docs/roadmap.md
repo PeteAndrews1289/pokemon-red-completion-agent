@@ -18,16 +18,17 @@ trajectory in which nothing was ever chosen. Agreement rates measured on such a 
 measuring the wrong thing well. The learning milestones cannot mean what they say until the
 demonstrations do.
 
-The balanced-team and participation work below remains the foundation, but the dependency-ordered
-near-term work is now:
+The balanced-team and participation work below remains the foundation. The first two strategic
+dependencies are now closed: a same-root diagnostic isolated the agreement-wrapper defect, and a
+newly preregistered causal root completed with 191 executed model/teacher disagreements. The
+dependency-ordered near-term work is now:
 
-1. diagnose the rejected strategic-ranker causal root without changing its frozen result;
-2. preregister a paired teacher/model causal design that separates curriculum robustness from
-   model-caused execution changes;
-3. integrate the strategic ranker into the portable Red loop only after that causal gate passes;
-4. establish an 8/10 multi-root clean-start Red evaluation lane; and
-5. run the small Crystal zero-shot/few-shot/from-scratch falsification benchmark before expanding
-   the living-Pokédex curriculum.
+1. live-recertify the newly wired strategic ranker inside the portable Red objective loop;
+2. establish an 8/10 multi-root clean-start Red evaluation lane;
+3. run the small Crystal zero-shot/few-shot/from-scratch falsification benchmark;
+4. replace another teacher-authored mechanic boundary—navigation is the highest-leverage target;
+   and
+5. expand the living-Pokédex curriculum only through the portable loop.
 
 Historical curriculum priorities were:
 

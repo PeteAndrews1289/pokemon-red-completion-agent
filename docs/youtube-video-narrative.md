@@ -304,13 +304,17 @@ shape-only baseline**, with 99.7727% trainee and 100% venue accuracy. Let the sh
 **119,353 genuine choices and 99.9941% agreement**, then connect authority on the separately sealed
 root.
 
-Do not manufacture a redemption ending. The causal run stops after **15,449 controlled choices**
+Do not hide the failure on the way to the resolution. The first causal run stops after **15,449 controlled choices**
 with the party at 51/32/32/31/31/31 because the lesson exhausted its healing budget. Put the
 surprising denominator beside it: **model/teacher disagreements: zero**. The ranker did not make a
 different strategic choice before the failure, so the result is neither model success nor evidence
 that one bad prediction caused the stop. Stamp the root **“causal gate rejected”**, preserve it,
-and make the next episode a paired same-root teacher/model diagnosis. This is the cleanest example
-yet of why live operational gates matter more than a 99.9% offline score.
+and run the same-root teacher diagnosis. It completes normally, proving the curriculum and root are
+sound. Then reveal the instrumentation bug: merely installing an agreeing callback recomputed a
+downstream directive. After the agreement-no-op repair, a newly preregistered causal root finishes
+with **119,668 controlled choices, 191 executed trainee disagreements, 1,803 battles, 1,114 heals,
+all six level 55, and zero faints**. This failure–diagnosis–repair–causal-proof sequence is the
+cleanest example yet of why live operational gates matter more than a 99.9% offline score.
 
 ### Act VII: the Crystal test — 10:10–11:15
 
@@ -350,8 +354,10 @@ version has to prove the model learned something worth carrying into a game it h
   operational gates passed, while the state-dependent-policy claim remains visibly rejected.
 - A shuffled trainee/venue candidate-card sequence showing that identity-free candidate order
   changes without changing the intended strategic selection.
-- The strategic shadow pass beside the preserved causal rejection: 119,353 shadow choices versus
-  15,449 controlled choices, zero disagreements, and the incomplete 51/32/32/31/31/31 terminal.
+- The strategic shadow pass, preserved causal rejection, same-root diagnosis, and repaired causal
+  success: 119,353 shadow choices; then 15,449 controlled choices with zero disagreements and an
+  incomplete 51/32/32/31/31/31 terminal; then 119,668 controlled choices with 191 executed
+  disagreements and an all-55 terminal.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video

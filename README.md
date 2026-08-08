@@ -28,7 +28,7 @@ demonstrations and a referee; it is not the final autonomous player.
 | Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
 | Learned battle control | Model-controlled Red battle qualifications with fail-closed safety and no disagreement fallback | Scripted curriculum; cross-title battle evaluation is still pending |
 | Learned objective dispatch | One uninterrupted captured-state loop reached Hall of Fame through 20 model dispatches | Nineteen dispatches were singletons; mechanics were fixed skills |
-| Learned training control | Safe-action authority passed; the trainee/venue ranker scored 99.9004% on sealed validation and passed a 119,353-choice shadow gate | Its first causal root exhausted the teacher's healing budget with zero model/teacher disagreements; authority remains rejected |
+| Learned training control | Safe-action authority passed; the trainee/venue ranker beat its shape baseline, passed shadow, and completed a no-fallback causal run with 191 executed disagreements | Portable objective-loop wiring exists, but that exact combined path still needs a live recertification run |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |
 
@@ -246,14 +246,24 @@ demonstrably beat choice shape.
 
 The separately preregistered shadow then passed: **119,353 genuine choices**, **99.9941% genuine
 agreement**, both choice kinds exercised, **1,802 battles / 1,098 heals**, all six at level 55, and
-zero faints. The causal root did not pass. It stopped after 15,449 model-authority decisions when
-the training lesson exhausted its healing budget, ending at 51/32/32/31/31/31. Crucially, the
-model agreed with the teacher on every candidate choice before termination. The result is therefore
-an operational rejection—not evidence of a bad prediction and not permission to weaken the gate.
-A same-root teacher-only diagnostic is next; portable integration of this ranker remains forbidden.
-See the
+zero faints. The first causal root did not pass. It stopped after 15,449 model-authority decisions
+when the training lesson exhausted its healing budget, ending at 51/32/32/31/31/31. Crucially, the
+model agreed with the teacher on every candidate choice before termination. The failed root remains
+an immutable operational rejection—not evidence of a bad prediction and not permission to weaken
+the gate. See the
 [offline strategic-ranker receipt](docs/evidence/training-candidate-ranker-v1-offline-2026-08-08.json)
 and [runtime rejection](docs/evidence/training-candidate-ranker-v1-runtime-rejection-2026-08-08.json).
+
+The same-root teacher diagnostic then completed normally, exposing an authority-wrapper defect:
+even an agreeing callback recomputed the downstream directive and changed mechanics. The repair
+makes teacher agreement a behavioral no-op and pins that invariant in a ROM-free regression test.
+On a newly preregistered byte-distinct root, the unchanged authenticated model then controlled
+**119,668 choices**, executed **191 real trainee disagreements** with no fallback, completed
+**1,803 battles / 1,114 heals**, and ended at **55/55/55/55/55/55 with zero faints**. All 19 runtime
+gates passed. The portable objective script now exposes authenticated shadow and live-authority
+modes for this ranker, but `portable_runtime_recertified` remains false until that combined emulator
+path runs. See the
+[runtime qualification](docs/evidence/training-candidate-ranker-v1-runtime-qualification-2026-08-08.json).
 
 That controller has now passed the final captured-state integration check inside the portable
 objective loop. Starting from the authenticated Secret Key terminal, the model controlled all

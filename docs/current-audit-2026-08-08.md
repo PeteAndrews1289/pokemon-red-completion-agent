@@ -28,14 +28,14 @@ Scores measure the repository against its stated end goal, not against a typical
 | Deterministic completion and referee | 9/10 | Clean power-on; 312/312 semantic checkpoints; 36/36 objectives; Champion and Hall of Fame. The remaining point is for more cartridge revisions/titles. |
 | Experimental honesty | 9/10 | Failed and rejected lineages remain visible, authority modes are separated, and operational gates can overrule headline accuracy. A few historical claims remain scattered through very long documents. |
 | Safety and artifact integrity | 9/10 | Exact hashes, clean-source binding, root-overlap rejection, atomic failed-stream retention, affordance masks, and fail-closed control. Private ROM-derived assets remain external. |
-| Tests and static checks | 8/10 | 2,006 non-integration test cases currently pass locally, with Ruff, documentation, public-artifact, registry, and mypy gates. Forty-four legacy modules still use mypy `ignore_errors` overrides. |
-| Architecture and modularity | 7/10 | Typed observations, objectives, skills, results, model loaders, and promotion gates are strong seams. The 134k-line Python surface and Red-specific chapter modules remain costly to reason about. |
+| Tests and static checks | 8/10 | 2,022 non-integration test cases currently pass locally, with Ruff, documentation, public-artifact, registry, and mypy gates. Forty-four legacy modules still use mypy `ignore_errors` overrides. |
+| Architecture and modularity | 7/10 | Typed observations, objectives, skills, results, model loaders, and promotion gates are strong seams. The 136,577-line Python surface and Red-specific chapter modules remain costly to reason about. |
 | Learned battle control | 7/10 | Real model-controlled qualifications exist with no disagreement fallback. Evaluation is still dominated by the authored Red curriculum and lacks a second-title test. |
 | Learned objective planning | 5/10 | A single process reached Hall of Fame through 20 model dispatches, but 19 dispatches offered only one executable candidate and fixed skills pressed the buttons. |
-| Learned training strategy | 4/10 | Full battle/overworld authority passed 57,644 causal decisions safely. The candidate-set-only baseline also achieved 100%, so the run proves control integration rather than state-feature use. |
+| Learned training strategy | 6/10 | The identity-free trainee/venue scorer beat its sealed shape baseline by 4.239 points and completed a 119,668-decision causal lesson with 191 executed disagreements. Evidence is still one Red training slice, with no portable-loop or cross-title qualification. |
 | Cross-title transfer | 2/10 | Several representations are intentionally identity-free, but no Crystal or other-title result exists yet. |
 | Autonomous living Pokédex / level 100 | 1/10 | Target and planning foundations exist; autonomous collection, storage, evolution, resource planning, and long-horizon recovery are not integrated. |
-| Portfolio presentation | 7/10 | The evidence is exceptional and the top-level capability boundary is now concise. The repository is still too large for a recruiter to absorb without a shorter demo and architecture tour. |
+| Portfolio presentation | 8/10 | The README now leads with a concise claim boundary, the architecture guide is current, and the failure/diagnosis/repair story is excellent. A two-minute visual demo remains the largest opportunity. |
 
 ## What is verified now
 
@@ -76,9 +76,9 @@ It also exposed the next scientific risk. The legal candidate set alone predicts
 label. Therefore the correct result is **safe authority integration passed; state-dependent policy
 learning not yet demonstrated**.
 
-### 4. A better next learning problem
+### 4. State-dependent trainee and venue strategy under real authority
 
-The next interface ranks variable-sized candidate sets for two strategic choices:
+The newest interface ranks variable-sized candidate sets for two strategic choices:
 
 - which viable below-floor party member should train next; and
 - which safe measured encounter band should be used.
@@ -88,9 +88,22 @@ party-slot identity, map IDs, area names, and memory addresses are excluded from
 The scorer shares one network across candidates and is permutation-equivariant. Unobservable ties
 that the teacher resolves by hidden identity are excluded rather than mislabeled.
 
-This is the first current training target designed so that a model must outperform a candidate-shape
-baseline on variable decisions. Its train roots, sealed validation root, operational thresholds,
-and no-validation-during-selection rule were preregistered before collection.
+This is the first current training target where state features demonstrably add value. On 7,030
+genuine sealed-validation choices, the shared scorer reached 99.9004% accuracy versus 95.6615% for
+the choice-shape baseline—a 4.239-point margin. A separate shadow root retained 119,353 genuine
+choices at 99.9941% agreement and completed at all six level 55 with zero faints.
+
+The first causal root then failed at 15,449 controlled choices despite zero model/teacher
+disagreements. A same-root teacher run completed, revealing that the authority wrapper recomputed a
+downstream directive merely because a callback existed. The failed lineage remains preserved. The
+repair makes agreement behaviorally identical to teacher execution; on a newly preregistered root,
+the unchanged model controlled 119,668 choices, executed 191 trainee disagreements with no
+fallback, completed 1,803 battles and 1,114 heals, and ended all six level 55 with zero faints. All
+8 shadow and 11 causal gates passed.
+
+The portable objective loop now has authenticated shadow and authority plumbing for this model,
+but the code correctly reports that the combined path is not recertified. Source integration is not
+being presented as emulator evidence.
 
 ## Principal risks
 
@@ -102,7 +115,7 @@ compose into a clean-start teacher-free run.
 
 ### The Red implementation is much larger than the portable core
 
-The Python surface is roughly 134,000 lines across 117 source modules, 23 scripts, and 120 test
+The Python surface is 136,577 lines across 117 source modules, 25 scripts, and 123 test
 files. Much of that size is earned evidence and hardened game mechanics, but it raises regression,
 review, and onboarding costs. A second title is the only convincing way to distinguish genuinely
 portable abstractions from carefully renamed Red assumptions.
@@ -126,31 +139,32 @@ Regeneration should be one isolated generated-file commit after verifying that i
 match the intended source diff. Repeated red mail from a known derived-artifact mismatch obscures
 real regressions and weakens the otherwise strong evidence story.
 
-**Resolved during this audit:** the registry was regenerated in an isolated commit, all four public
-golden identities were updated from the generator output, the full 2,006-test local gate passed,
-and the next four GitHub Actions runs completed successfully.
+**Resolved during this audit:** the stale registry was regenerated from source, all four public
+golden identities were updated from generator output, and the full 2,022-test local gate passed.
+At least eleven consecutive GitHub Actions runs were green after the fix before this final source
+change; the final push is required to reconfirm that streak. This is why the prior email storm was
+not intended behavior—it was one repeatedly retriggered derived-artifact mismatch, not useful
+Dependabot noise.
 
 ## Dependency-ordered next work
 
-1. **Qualify the trainee/venue ranker.** Collect two fresh training lineages, select
-   hyperparameters using only train-to-train folds, open the sealed validation lineage once, and
-   require a real margin over the shape-only baseline.
-2. **Give that ranker bounded authority.** Run a fresh shadow root, then a separate causal root in
-   which model-selected trainee and venue actually alter the lesson. Fail closed on invalid or
-   unsafe selections; never silently substitute the teacher.
-3. **Integrate the learned seams in one Red loop.** Combine objective dispatch, candidate training
-   strategy, and learned battle control. Publish exact ownership counts and preserve every remaining
-   fixed skill in the denominator.
-4. **Establish a clean-start evaluation lane.** No captured starting state, teacher query, answer
+1. **Live-recertify the portable strategic seam.** Use the authenticated post-Secret-Key capture,
+   objective model, and candidate model to run the wired `defeat_blaine` path. Require nonzero
+   controlled candidate decisions, no fallback, fresh Volcano Badge observation, the existing
+   balanced-party terminal, and a published receipt.
+2. **Establish a clean-start evaluation lane.** No captured starting state, teacher query, answer
    label, undeclared safety substitution, or restore. Score success rate across multiple declared
    roots instead of presenting one favorable completion.
-5. **Run the Crystal microbenchmark.** Port one local navigation task, one battle task, and one
+3. **Run the Crystal microbenchmark.** Port one local navigation task, one battle task, and one
    training choice. Compare zero-shot, few-shot, and from-scratch performance. Treat breakage as an
    abstraction audit, not a demo failure to hide.
-6. **Add recovery and correction learning.** A player that only acts on the happy path cannot
+4. **Add recovery and correction learning.** A player that only acts on the happy path cannot
    generalize. Deliberately perturb position, party order, resource levels, and battle outcomes;
    measure whether it detects and repairs the deviation.
-7. **Expand toward a living Pokédex only after transfer begins.** Collection is an excellent
+5. **Replace a mechanic boundary.** Navigation and recovery are the largest remaining authored
+   surfaces. Start with one bounded local route whose observation and failure conditions can be
+   shared with Crystal.
+6. **Expand toward a living Pokédex only after transfer begins.** Collection is an excellent
    curriculum for navigation, capture, storage, evolution, party construction, and resource
    planning. It should reuse the portable player loop rather than become another fixed Red route.
 
@@ -163,8 +177,9 @@ and the next four GitHub Actions runs completed successfully.
 > Then I replaced decision boundaries one at a time with authenticated learned policies, using
 > sealed lineages, causal emulator control, fail-closed safety, and receipts that distinguish real
 > choices from single-option decisions. The current system has completed 57,644 consecutive
-> model-controlled training decisions with zero faints, and the next benchmark tests whether its
-> identity-free strategy transfers to another Pokémon game.
+> model-controlled candidate decisions with 191 executed teacher disagreements and zero faints,
+> and the next benchmark tests whether that identity-free strategy transfers to another Pokémon
+> game.
 
 ### Resume bullets
 
@@ -172,7 +187,8 @@ and the next four GitHub Actions runs completed successfully.
   all 36 objectives, the Champion, and Hall of Fame from clean power-on.
 - Designed an auditable model-promotion pipeline with whole-lineage splits, exact SHA-256 artifact
   authentication, candidate masks, fail-closed causal control, and preserved rejected experiments;
-  qualified a 57,644-decision live controller across 1,801 battles with zero faints or fallback.
+  qualified a 119,668-decision trainee/venue controller across 1,803 battles, including 191
+  executed teacher disagreements, with zero faints or fallback.
 - Implemented an observation-driven objective loop that completed 20 sequential model dispatches
   and 502,175 mechanic actions in one emulator process, while publishing the crucial limitation
   that only one dispatch was a genuine multi-option ranking decision.
@@ -190,8 +206,11 @@ falsifications:
    lesson budget.
 4. A later controller passed causal evaluation, but a candidate-only baseline also scored 100%, so
    authority integration and state-dependent learning were separated.
-5. The next representation was redesigned around variable trainee and venue choices that can
-   actually falsify the learning claim.
+5. The next representation was redesigned around variable trainee and venue choices; it beat the
+   sealed shape baseline by 4.239 points.
+6. Its first causal run failed despite perfect agreement. A same-root control isolated an
+   authority-wrapper defect, an invariant test pinned the repair, and a fresh causal run completed
+   with 191 executed disagreements.
 
 That progression demonstrates systems engineering, ML evaluation, debugging discipline, and the
 ability to revise a hypothesis when the evidence contradicts it.

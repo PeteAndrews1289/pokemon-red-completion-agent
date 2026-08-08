@@ -35,6 +35,7 @@ from pokemon_red_completion.saffron import SaffronTiming, run_saffron_chapter
 from pokemon_red_completion.silph import SilphTiming, run_silph_chapter
 from pokemon_red_completion.strength import StrengthTiming, run_strength_chapter
 from pokemon_red_completion.tower import TowerTiming, run_tower_chapter
+from pokemon_red_completion.training_candidate_rank import TrainingCandidateDecision
 from pokemon_red_completion.training_control import (
     TrainingControlAction,
     TrainingControlDecision,
@@ -602,6 +603,12 @@ class DefeatBlaineObjectiveSkill:
     training_decision_authority: (
         Callable[[TrainingControlDecision], TrainingControlAction] | None
     ) = None
+    training_candidate_decision_sink: (
+        Callable[[TrainingCandidateDecision], None] | None
+    ) = None
+    training_candidate_decision_authority: (
+        Callable[[TrainingCandidateDecision], int] | None
+    ) = None
     objective_id: str = "defeat_blaine"
     specialist: Specialist = Specialist.BATTLE
     expected_facts: frozenset[str] = frozenset({"badge:volcano"})
@@ -632,6 +639,8 @@ class DefeatBlaineObjectiveSkill:
             self.executor,
             training_decision_sink=self.training_decision_sink,
             training_decision_authority=self.training_decision_authority,
+            training_candidate_decision_sink=self.training_candidate_decision_sink,
+            training_candidate_decision_authority=self.training_candidate_decision_authority,
         )
         return ObjectiveSkillExecution(
             actions_executed=report.actions_executed,

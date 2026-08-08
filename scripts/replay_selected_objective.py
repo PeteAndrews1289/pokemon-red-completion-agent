@@ -64,6 +64,12 @@ from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 from pokemon_red_completion.rom import resolve_rom_path
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.specialists import SpecialistRegistry
+from pokemon_red_completion.training_candidate_model import (
+    TrainingCandidateMLP,
+    TrainingCandidateShadowAudit,
+    load_training_candidate_model,
+)
+from pokemon_red_completion.training_candidate_rank import TrainingCandidateDecision
 from pokemon_red_completion.training_control import (
     TrainingControlAction,
     TrainingControlDecision,
@@ -93,6 +99,17 @@ def main(argv: list[str] | None = None) -> int:
         help="authenticated seek/fight/flee/heal/stop model used inside the Blaine skill",
     )
     parser.add_argument("--training-control-model-sha256")
+    parser.add_argument(
+        "--training-candidate-model",
+        type=Path,
+        help="authenticated trainee/venue ranker used inside the Blaine skill",
+    )
+    parser.add_argument("--training-candidate-model-sha256")
+    parser.add_argument(
+        "--training-candidate-authority",
+        action="store_true",
+        help="let the candidate ranker execute trainee and venue choices",
+    )
     parser.add_argument(
         "--training-control-battle-authority",
         action="store_true",
@@ -136,6 +153,19 @@ def main(argv: list[str] | None = None) -> int:
         or args.training_control_overworld_authority
     ) and args.training_control_model is None:
         parser.error("training-control authority requires an authenticated model")
+    candidate_model_values = (
+        args.training_candidate_model,
+        args.training_candidate_model_sha256,
+    )
+    if any(value is not None for value in candidate_model_values) and not all(
+        value is not None for value in candidate_model_values
+    ):
+        parser.error(
+            "training candidate control requires both --training-candidate-model and "
+            "--training-candidate-model-sha256"
+        )
+    if args.training_candidate_authority and args.training_candidate_model is None:
+        parser.error("training-candidate authority requires an authenticated model")
 
     source = detect_source_identity(REPOSITORY_ROOT, include_untracked=True)
     require_clean_source(source)
@@ -160,6 +190,16 @@ def main(argv: list[str] | None = None) -> int:
             expected_sha256=args.training_control_model_sha256,
         )
         training_audit = TrainingControlShadowAudit(training_model)
+    training_candidate_model: TrainingCandidateMLP | None = None
+    training_candidate_audit: TrainingCandidateShadowAudit | None = None
+    training_candidate_controlled_decisions = 0
+    if args.training_candidate_model is not None:
+        assert args.training_candidate_model_sha256 is not None
+        training_candidate_model = load_training_candidate_model(
+            args.training_candidate_model,
+            expected_sha256=args.training_candidate_model_sha256,
+        )
+        training_candidate_audit = TrainingCandidateShadowAudit(training_candidate_model)
 
     def training_decision_authority(
         decision: TrainingControlDecision,
@@ -177,6 +217,16 @@ def main(argv: list[str] | None = None) -> int:
             training_controlled_decisions += 1
             return training_model.predict(decision.observation)
         return decision.action
+
+    def training_candidate_decision_authority(
+        decision: TrainingCandidateDecision,
+    ) -> int:
+        nonlocal training_candidate_controlled_decisions
+        assert training_candidate_audit is not None
+        assert training_candidate_model is not None
+        training_candidate_audit.observe(decision)
+        training_candidate_controlled_decisions += 1
+        return training_candidate_model.predict(decision.observation)
 
     rom = resolve_rom_path(args.rom)
     with PyBoyAdapter(
@@ -216,6 +266,17 @@ def main(argv: list[str] | None = None) -> int:
                 executor,
                 training_decision_authority=(
                     training_decision_authority if training_model is not None else None
+                ),
+                training_candidate_decision_sink=(
+                    training_candidate_audit.observe
+                    if training_candidate_audit is not None
+                    and not args.training_candidate_authority
+                    else None
+                ),
+                training_candidate_decision_authority=(
+                    training_candidate_decision_authority
+                    if args.training_candidate_authority
+                    else None
                 ),
             ),
             DefeatGiovanniObjectiveSkill(emulator, reader, executor),
@@ -296,6 +357,12 @@ def main(argv: list[str] | None = None) -> int:
                 overworld_authority=args.training_control_overworld_authority,
                 controlled_decisions=training_controlled_decisions,
             ),
+            "training_candidate_control": _training_candidate_control_report(
+                training_candidate_audit,
+                model_file_sha256=args.training_candidate_model_sha256,
+                authority=args.training_candidate_authority,
+                controlled_decisions=training_candidate_controlled_decisions,
+            ),
             "limitations": [
                 "captured_state_diagnostic",
                 "bounded_model_decision_sequence",
@@ -362,6 +429,30 @@ def _training_control_report(
             "controlled_decisions": controlled_decisions,
             "model_had_execution_authority": controlled_decisions > 0,
             "teacher_fallback_on_model_disagreement": False,
+            "promotion_eligible": False,
+        }
+    )
+    return summary
+
+
+def _training_candidate_control_report(
+    audit: TrainingCandidateShadowAudit | None,
+    *,
+    model_file_sha256: str | None,
+    authority: bool,
+    controlled_decisions: int,
+) -> dict[str, object] | None:
+    if audit is None:
+        return None
+    summary = audit.public_dict()
+    summary.update(
+        {
+            "model_file_sha256": model_file_sha256,
+            "authority_choice_kinds": ["trainee", "venue"] if authority else [],
+            "controlled_decisions": controlled_decisions,
+            "model_had_execution_authority": authority and controlled_decisions > 0,
+            "teacher_fallback_on_model_disagreement": False if authority else None,
+            "portable_runtime_recertified": False,
             "promotion_eligible": False,
         }
     )

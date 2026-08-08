@@ -99,7 +99,7 @@ def test_red_tower_skill_matches_graph_and_preserves_mechanics_evidence(monkeypa
 def test_blaine_skill_forwards_training_control_without_changing_default_contract(
     monkeypatch,
 ) -> None:
-    received: list[tuple[object, object]] = []
+    received: list[tuple[object, object, object, object]] = []
 
     def fake_run(
         emulator,
@@ -108,8 +108,17 @@ def test_blaine_skill_forwards_training_control_without_changing_default_contrac
         *,
         training_decision_sink,
         training_decision_authority,
+        training_candidate_decision_sink,
+        training_candidate_decision_authority,
     ):
-        received.append((training_decision_sink, training_decision_authority))
+        received.append(
+            (
+                training_decision_sink,
+                training_decision_authority,
+                training_candidate_decision_sink,
+                training_candidate_decision_authority,
+            )
+        )
         return _Report()
 
     monkeypatch.setattr(
@@ -122,17 +131,25 @@ def test_blaine_skill_forwards_training_control_without_changing_default_contrac
     def authority(decision) -> TrainingControlAction:
         return TrainingControlAction.SEEK
 
+    def candidate_sink(decision) -> None:
+        return None
+
+    def candidate_authority(decision) -> int:
+        return decision.selected_candidate_index
+
     skill = DefeatBlaineObjectiveSkill(
         object(),
         object(),
         object(),
         training_decision_sink=sink,
         training_decision_authority=authority,
+        training_candidate_decision_sink=candidate_sink,
+        training_candidate_decision_authority=candidate_authority,
     )
 
     skill.execute()
 
-    assert received == [(sink, authority)]
+    assert received == [(sink, authority, candidate_sink, candidate_authority)]
 
 
 def test_red_fuchsia_skill_matches_graph_and_preserves_mechanics_evidence(monkeypatch) -> None:

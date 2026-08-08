@@ -52,6 +52,22 @@ preserved as rejected. A same-root teacher-only diagnostic now precedes a paired
 portable loop remains closed to this ranker until a successful causal run executes at least one
 real disagreement.
 
+The diagnostic paid off. Replaying the same root under the teacher completed 1,802 battles and
+1,031 healing trips, ending with all six members at level 55. Every candidate choice made before
+the failed run stopped was an exact prefix of that successful teacher stream. The fault was not a
+prediction: installing the callback caused the wrapper to recompute the downstream training
+directive even when the callback returned the teacher's own candidate. The repair made agreement a
+mechanical no-op and pinned that rule in a ROM-free regression test.
+
+The unchanged model then received authority on a newly preregistered byte-distinct root. This time
+it completed **119,668 controlled choices**, including **191 executed trainee disagreements**, with
+no teacher fallback. The lesson finished after 1,803 battles and 1,114 healing trips with a
+55/55/55/55/55/55 party and zero faints. All eight shadow gates and eleven causal gates passed.
+This is a stronger story than silently rerunning the failure: the repository preserves the bad
+experiment, identifies a causal instrumentation defect, proves the repair against the same root,
+and only then opens the portable integration boundary. The objective-loop seam is now implemented,
+but its combined live runtime remains deliberately unclaimed until a fresh emulator receipt exists.
+
 Before moving on, v6 passed one final integration test. The portable objective loop loaded the
 authenticated post-Secret-Key state, selected its sole executable objective (`defeat_blaine`), and
 injected the same training controller into the bounded skill. The model controlled all 57,548

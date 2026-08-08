@@ -6,12 +6,12 @@
 > Its training-only selection and sealed validation are complete: 99.9004% genuine held-out accuracy
 > versus a 95.6615% shape baseline. Training-control v6 has already passed causal and portable
 > authority integration; its perfect candidate-only baseline means further seek/fight/flee/heal/stop
-> imitation is off the critical path. The strategic shadow passed, but the reserved causal root is
-> permanently rejected after exhausting the teacher's healing budget at 15,449 controlled choices;
-> the model had zero disagreements before failure. Run the same-root teacher diagnostic, preserve
-> the v1 artifacts, and preregister a paired v2 design. Portable strategic-ranker integration is
-> forbidden while its runtime gate remains false. The pre-diagnostic local gate was 2,018 passed /
-> 3 deselected.
+> imitation is off the critical path. Preserve the first causal rejection: a same-root teacher
+> diagnostic proved that an agreeing callback was incorrectly recomputing downstream mechanics.
+> Commit `a089988` makes agreement a behavioral no-op. The repaired preregistered root then passed:
+> 119,668 controlled choices, 191 executed trainee disagreements, 1,803 battles, 1,114 heals, all
+> six at level 55, zero faints, and no fallback. The portable objective seam is now wired, but its
+> report must keep `portable_runtime_recertified=false` until a live combined run passes.
 
 **New here? Read [HANDOFF.md](HANDOFF.md) first** — it is the complete orientation, including what
 is unproven and how this codebase repeatedly fools people. Then [MISSION.md](MISSION.md) for why the

@@ -92,6 +92,7 @@ from pokemon_red_completion.training import (
     choose_training_directive,
     choose_training_move_slot,
 )
+from pokemon_red_completion.training_candidate_rank import TrainingCandidateDecision
 from pokemon_red_completion.training_control import (
     TrainingControlAction,
     TrainingControlDecision,
@@ -1604,6 +1605,10 @@ def run_blaine_after_mansion_chapter(
         [TrainingControlDecision], TrainingControlAction
     ]
     | None = None,
+    training_candidate_decision_sink: Callable[[TrainingCandidateDecision], None]
+    | None = None,
+    training_candidate_decision_authority: Callable[[TrainingCandidateDecision], int]
+    | None = None,
 ) -> BlaineAfterMansionReport:
     """Train the party and defeat Blaine after the Secret Key skill releases control."""
 
@@ -1662,6 +1667,8 @@ def run_blaine_after_mansion_chapter(
             cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
             decision_sink=training_decision_sink,
             decision_authority=training_decision_authority,
+            candidate_decision_sink=training_candidate_decision_sink,
+            candidate_decision_authority=training_candidate_decision_authority,
             evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
             report_label="Mansion team training",
             checkpoint_count=BLAINE_AFTER_MANSION_CHECKPOINT_COUNT,
@@ -1694,6 +1701,8 @@ def run_blaine_after_mansion_chapter(
         cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
         decision_sink=training_decision_sink,
         decision_authority=training_decision_authority,
+        candidate_decision_sink=training_candidate_decision_sink,
+        candidate_decision_authority=training_candidate_decision_authority,
         progress_sink=(
             (
                 lambda message: progress(

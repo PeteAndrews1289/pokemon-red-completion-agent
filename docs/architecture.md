@@ -48,7 +48,7 @@ referee then reobserves the cartridge instead of trusting a skill's success clai
 | Long-horizon objective dispatch | Learned ranker behind a live affordance mask | One uninterrupted captured-state loop completed 20 dispatches and reached Hall of Fame | 19/20 dispatches were single-option; registered skills executed the mechanics |
 | Battle action ranking | Learned policy with legal-action masks | Model-controlled Red battle qualifications with no disagreement fallback | Authored curriculum and Red battle executor |
 | Training action control | Learned five-action controller | Portable Blaine proof: 57,548 controlled battle/overworld decisions, 1,796 development battles, zero fallback | Candidate masks, hard safety gates, navigation and menu execution |
-| Trainee and venue strategy | Shared identity-free candidate scorer | 99.9004% sealed validation and a 119,353-choice shadow pass | First causal root hit the teacher's healing budget with zero model/teacher disagreements; authority is rejected pending diagnosis |
+| Trainee and venue strategy | Shared identity-free candidate scorer | 99.9004% sealed validation, 119,353-choice shadow, and causal completion with 191 executed disagreements | Portable seam is wired but its combined live path is not yet recertified |
 | Navigation, menus and recovery | Deterministic bounded skills | Full Red completion and captured-state portable-loop receipts | Not yet replaced by a learned cross-title controller |
 | Collection planning | Typed deterministic planner | Red living-set targets, storage/evolution directives and multi-run coverage planning | No autonomous living-Pokédex execution yet |
 
