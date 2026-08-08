@@ -27,7 +27,7 @@ def _provenance(
 
 
 def _run_gate(
-    tmp_path: Path, *, disagreements: int
+    tmp_path: Path, *, disagreements: int, failed_control: bool = False
 ) -> subprocess.CompletedProcess[str]:
     model = tmp_path / "model.json"
     model.write_text("candidate-model")
@@ -90,6 +90,15 @@ def _run_gate(
 
     def write_runtime(stem: str, lineage_id: str, root: str, *, authority: bool) -> tuple[str, str]:
         replay = tmp_path / f"{stem}-replay.json"
+        failed = authority and failed_control
+        status = "failed" if failed else "ok"
+        error = "RuntimeError: healing budget exhausted" if failed else None
+        outcome = {
+            "final_party_levels": (
+                [51, 32, 32, 31, 31, 31] if failed else [55, 55, 55, 55, 55, 55]
+            ),
+            "final_fainted_count": 0,
+        }
         provenance = _provenance(
             lineage_id,
             root,
@@ -99,13 +108,10 @@ def _run_gate(
             replay,
             {
                 "schema": "pokemon-training-candidate-replay-v1",
-                "status": "ok",
-                "error": None,
+                "status": status,
+                "error": error,
                 "provenance": provenance,
-                "outcome": {
-                    "final_party_levels": [55, 55, 55, 55, 55, 55],
-                    "final_fainted_count": 0,
-                },
+                "outcome": outcome,
             },
         )
         audit = tmp_path / f"{stem}-audit.json"
@@ -113,8 +119,8 @@ def _run_gate(
             audit,
             {
                 "schema": "pokemon-training-candidate-runtime-audit-v1",
-                "status": "ok",
-                "error": None,
+                "status": status,
+                "error": error,
                 "provenance": provenance,
                 "model_artifact_sha256": model_sha,
                 "candidate_replay_sha256": replay_sha,
@@ -127,14 +133,15 @@ def _run_gate(
                 "genuine_decisions": 180,
                 "genuine_accuracy": 0.95,
                 "genuine_kind_accuracy": {"trainee": 0.9, "venue": 1.0},
-                "outcome": {
-                    "final_party_levels": [55, 55, 55, 55, 55, 55],
-                    "final_fainted_count": 0,
-                },
-                "execution": {
-                    "total_battles": 1800,
-                    "total_healing_trips": 1000,
-                },
+                "outcome": outcome,
+                "execution": (
+                    None
+                    if failed
+                    else {
+                        "total_battles": 1800,
+                        "total_healing_trips": 1000,
+                    }
+                ),
             },
         )
         return replay_sha, audit_sha
@@ -198,3 +205,25 @@ def test_runtime_gate_rejects_control_that_never_disagreed(tmp_path: Path) -> No
     assert payload["shadow_eligible"] is True
     assert payload["causal_control_eligible"] is False
     assert payload["causal_checks"]["model_teacher_disagreements"]["passed"] is False
+
+
+def test_runtime_gate_preserves_authentic_failed_control_as_rejection(
+    tmp_path: Path,
+) -> None:
+    rejected = _run_gate(tmp_path, disagreements=0, failed_control=True)
+
+    assert rejected.returncode == 2, rejected.stderr
+    payload = json.loads((tmp_path / "gate.json").read_text())
+    assert payload["shadow_eligible"] is True
+    assert payload["causal_control_eligible"] is False
+    assert payload["causal_checks"]["status"] == {
+        "comparison": "equal",
+        "observed": "failed",
+        "expected": "ok",
+        "passed": False,
+    }
+    assert payload["causal_checks"]["battles"]["observed"] is None
+    assert payload["causal_checks"]["battles"]["passed"] is False
+    assert payload["causal_checks"]["healing_trips"]["observed"] is None
+    assert payload["causal_checks"]["healing_trips"]["passed"] is False
+    assert payload["portable_training_loop_may_start"] is False

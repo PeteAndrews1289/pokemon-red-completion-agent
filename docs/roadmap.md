@@ -9,14 +9,27 @@ The milestones below are largely written in terms of *the teacher completing Red
 components reaching agreement rates*. Both are real and both are recorded honestly. Neither is the
 bottleneck any more.
 
-**The bottleneck is that the demonstrations still underuse the team they develop.**
+**The bottleneck is no longer completing Red or building a balanced teacher. It is proving that a
+learned policy adds state-dependent judgment and remains useful when its choices affect the live
+game.**
 
 A run that finishes with one overleveled Pokémon sweeping the League in six turns produces a
 trajectory in which nothing was ever chosen. Agreement rates measured on such a trajectory are
 measuring the wrong thing well. The learning milestones cannot mean what they say until the
 demonstrations do.
 
-So the near-term work is not another point of agreement. It is:
+The balanced-team and participation work below remains the foundation, but the dependency-ordered
+near-term work is now:
+
+1. diagnose the rejected strategic-ranker causal root without changing its frozen result;
+2. preregister a paired teacher/model causal design that separates curriculum robustness from
+   model-caused execution changes;
+3. integrate the strategic ranker into the portable Red loop only after that causal gate passes;
+4. establish an 8/10 multi-root clean-start Red evaluation lane; and
+5. run the small Crystal zero-shot/few-shot/from-scratch falsification benchmark before expanding
+   the living-Pokédex curriculum.
+
+Historical curriculum priorities were:
 
 **A. Make the team participate.** The level floor is proven in a real clean-power budget. Lorelei,
 Bruno, and Agatha now have qualified species- and matchup-aware roles. Agatha no longer uses
@@ -272,10 +285,13 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   versus 95.6615% for the choice-shape baseline, with 99.7727% trainee and 100% venue accuracy.
   All collection, identity, selection, and offline gates passed; see the
   [offline receipt](evidence/training-candidate-ranker-v1-offline-2026-08-08.json).
-- [ ] Pass the separately preregistered shadow and causal gates. The causal run must execute at
-  least one real model/teacher disagreement with no fallback while still finishing all six at level
-  55, zero faints, at most 1,900 battles, and at most 1,150 healing trips. See the
-  [runtime promotion plan](evidence/training-candidate-ranker-v1-runtime-promotion-plan-2026-08-08.json).
+- [x] Pass the separately preregistered shadow gate: 119,353 genuine choices at 99.9941% agreement,
+  both choice kinds, 1,802 battles, 1,098 heals, all six at level 55, and zero faints.
+- [ ] Pass causal authority. V1 is preserved as rejected: its reserved root exhausted the training
+  healing budget after 15,449 controlled candidate decisions and ended at 51/32/32/31/31/31. The
+  model had zero disagreements with the teacher before failure, so the required causal difference
+  was absent and portable integration remains closed. See the
+  [runtime rejection](evidence/training-candidate-ranker-v1-runtime-rejection-2026-08-08.json).
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

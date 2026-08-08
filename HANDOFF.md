@@ -38,13 +38,22 @@ This section supersedes the older starting-point and test-count notes below.
   full local gate reports **2,018 passed, 3 deselected**, with registry, artifact, documentation,
   Ruff, and mypy checks green. GitHub CI is also green. The collection registry was regenerated in
   the same source commit; do not manually edit its hashes.
+- The preregistered shadow root passed all eight gates: 119,353 genuine choices at 99.9941%
+  agreement, both choice kinds, 1,802 battles, 1,098 heals, all six at level 55, and zero faints.
+- The reserved v1 causal root is **rejected and immutable**. It executed 15,449 authenticated
+  model-authority decisions with no fallback, but exhausted the training healing budget and ended
+  at 51/32/32/31/31/31. The model agreed with every teacher candidate label before termination, so
+  it did not create the required causal disagreement. The public receipt is
+  [here](docs/evidence/training-candidate-ranker-v1-runtime-rejection-2026-08-08.json).
+- The runtime gate checker now writes an authenticated rejection for a failed-but-valid runtime
+  chain instead of crashing before evidence output. Run a same-root teacher-only diagnostic next,
+  then preregister a paired teacher/model v2 design. Do not integrate the strategic ranker into the
+  portable loop while `portable_training_loop_may_start` is false.
 
-The immediate dependency order is now: complete the reserved shadow root → require both choice
-kinds, at least 100 genuine decisions, 90% genuine accuracy, and 85% per kind → open the separate
-causal root → require at least one executed disagreement, no fallback, all six at level 55, zero
-faints, at most 1,900 battles, and at most 1,150 heals. The exact runtime gates were
-[preregistered](docs/evidence/training-candidate-ranker-v1-runtime-promotion-plan-2026-08-08.json)
-before either runtime root opened.
+The immediate dependency order is now: same-root teacher diagnostic → determine whether the
+healing exhaustion is a curriculum/root failure or an authority-binding defect → freeze a v2
+paired causal plan → require at least one executed disagreement, no fallback, all six at level 55,
+zero faints, at most 1,900 battles, and at most 1,150 heals → only then open portable integration.
 
 ---
 

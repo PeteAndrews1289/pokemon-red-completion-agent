@@ -300,9 +300,17 @@ then three measured encounter bands competing to become the venue. Strip species
 map, and memory identities from the cards; retain only candidate-relative readiness, health,
 levels, attack reserve, and encounter safety. Shuffle the cards and require the same candidate to
 win. Then reveal the sealed result: **99.9004% on 7,030 genuine choices versus 95.6615% for the
-shape-only baseline**, with 99.7727% trainee and 100% venue accuracy. End the beat on the remaining
-causal challenge: make at least one non-teacher trainee or venue selection change the emulator for
-real, complete the lesson, and show that no fallback hid the disagreement.
+shape-only baseline**, with 99.7727% trainee and 100% venue accuracy. Let the shadow card pass at
+**119,353 genuine choices and 99.9941% agreement**, then connect authority on the separately sealed
+root.
+
+Do not manufacture a redemption ending. The causal run stops after **15,449 controlled choices**
+with the party at 51/32/32/31/31/31 because the lesson exhausted its healing budget. Put the
+surprising denominator beside it: **model/teacher disagreements: zero**. The ranker did not make a
+different strategic choice before the failure, so the result is neither model success nor evidence
+that one bad prediction caused the stop. Stamp the root **“causal gate rejected”**, preserve it,
+and make the next episode a paired same-root teacher/model diagnosis. This is the cleanest example
+yet of why live operational gates matter more than a 99.9% offline score.
 
 ### Act VII: the Crystal test — 10:10–11:15
 
@@ -342,6 +350,8 @@ version has to prove the model learned something worth carrying into a game it h
   operational gates passed, while the state-dependent-policy claim remains visibly rejected.
 - A shuffled trainee/venue candidate-card sequence showing that identity-free candidate order
   changes without changing the intended strategic selection.
+- The strategic shadow pass beside the preserved causal rejection: 119,353 shadow choices versus
+  15,449 controlled choices, zero disagreements, and the incomplete 51/32/32/31/31/31 terminal.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video

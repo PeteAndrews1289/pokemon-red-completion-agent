@@ -40,9 +40,17 @@ scorer, and only then did the sealed validation root open. It retained 7,080 str
 7,030 of them genuine choices. The model scored **99.9004%** on those genuine choices while the
 shape-only baseline scored **95.6615%**, a **4.239-point state-dependent margin**. Trainee selection
 reached 99.7727% and venue selection 100%. The result authenticates the model, roots, streams,
-terminal outcomes, and split; it does not yet authenticate live authority. Shadow and causal roots
-remain separate, with causal promotion requiring at least one executed disagreement and no teacher
-fallback.
+terminal outcomes, and split; it does not by itself authenticate live authority.
+
+The no-authority shadow root then passed every preregistered gate: 119,353 genuine choices at
+99.9941% agreement, both choice kinds, 1,802 battles, 1,098 healing trips, all six at level 55, and
+zero faints. Causal evaluation supplied the next falsification. The model owned 15,449 trainee and
+venue decisions with no fallback, but the reserved root exhausted the teacher's healing budget and
+stopped at 51/32/32/31/31/31. The model had agreed with the teacher on every choice before the
+failure, so this did not prove a harmful model disagreement—or any causal difference at all. V1 is
+preserved as rejected. A same-root teacher-only diagnostic now precedes a paired v2 plan, and the
+portable loop remains closed to this ranker until a successful causal run executes at least one
+real disagreement.
 
 Before moving on, v6 passed one final integration test. The portable objective loop loaded the
 authenticated post-Secret-Key state, selected its sole executable objective (`defeat_blaine`), and

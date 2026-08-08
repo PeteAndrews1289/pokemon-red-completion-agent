@@ -28,7 +28,7 @@ demonstrations and a referee; it is not the final autonomous player.
 | Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
 | Learned battle control | Model-controlled Red battle qualifications with fail-closed safety and no disagreement fallback | Scripted curriculum; cross-title battle evaluation is still pending |
 | Learned objective dispatch | One uninterrupted captured-state loop reached Hall of Fame through 20 model dispatches | Nineteen dispatches were singletons; mechanics were fixed skills |
-| Learned training control | Safe-action authority passed; a separate trainee/venue ranker scored 99.9004% on 7,030 genuine held-out choices versus a 95.6615% shape baseline | Strategic ranker is offline-qualified; live shadow and causal authority remain gated |
+| Learned training control | Safe-action authority passed; the trainee/venue ranker scored 99.9004% on sealed validation and passed a 119,353-choice shadow gate | Its first causal root exhausted the teacher's healing budget with zero model/teacher disagreements; authority remains rejected |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |
 
@@ -242,10 +242,18 @@ shared identity-free scorer reached **99.9004% on 7,030 genuine multi-candidate 
 **95.6615%** for a baseline that sees only choice kind and candidate count. Trainee accuracy was
 **99.7727%** and venue accuracy was **100%**; all three lineages ended at level 55 across all six
 members with zero faints. This is the first current training result where state-relative features
-demonstrably beat choice shape. It remains offline evidence until the separately preregistered
-shadow and causal roots pass. See the
+demonstrably beat choice shape.
+
+The separately preregistered shadow then passed: **119,353 genuine choices**, **99.9941% genuine
+agreement**, both choice kinds exercised, **1,802 battles / 1,098 heals**, all six at level 55, and
+zero faints. The causal root did not pass. It stopped after 15,449 model-authority decisions when
+the training lesson exhausted its healing budget, ending at 51/32/32/31/31/31. Crucially, the
+model agreed with the teacher on every candidate choice before termination. The result is therefore
+an operational rejection—not evidence of a bad prediction and not permission to weaken the gate.
+A same-root teacher-only diagnostic is next; portable integration of this ranker remains forbidden.
+See the
 [offline strategic-ranker receipt](docs/evidence/training-candidate-ranker-v1-offline-2026-08-08.json)
-and [runtime gates](docs/evidence/training-candidate-ranker-v1-runtime-promotion-plan-2026-08-08.json).
+and [runtime rejection](docs/evidence/training-candidate-ranker-v1-runtime-rejection-2026-08-08.json).
 
 That controller has now passed the final captured-state integration check inside the portable
 objective loop. Starting from the authenticated Secret Key terminal, the model controlled all
@@ -540,30 +548,27 @@ unproven—see the [Project Narrative](docs/project-narrative.md).
 ## Architecture
 
 ```mermaid
-flowchart TD
-    Game["PyBoy: pixels, tiles, read-only RAM"] --> State["Validated semantic state"]
-    State --> Quest["Objective graph"]
-    Quest --> Router["Skill router"]
-    State --> Router
-
-    Router --> Nav["A* navigation"]
-    Router --> Menu["Dialogue and menu state machines"]
-    Router --> Battle["Battle policy"]
-    Router --> Recovery["Bounded recovery"]
-
-    Nav --> Executor["Frame-safe button executor"]
-    Menu --> Executor
-    Battle --> Executor
-    Recovery --> Executor
+flowchart LR
+    Game["PyBoy + private ROM"] --> State["Validated semantic state"]
+    State --> Planner["Learned objective ranker"]
+    Planner --> Skills["Affordance-masked bounded skills"]
+    Skills --> Strategy["Learned trainee / venue ranker"]
+    Skills --> Control["Learned training-action controller"]
+    Skills --> Mechanics["Fixed navigation, menus, recovery"]
+    Strategy --> Mechanics
+    Control --> Mechanics
+    Mechanics --> Executor["Sole frame-safe executor"]
     Executor --> Game
-
-    State --> Referee["Independent completion referee"]
-    Router --> Dataset["Demonstration and correction recorder"]
+    State --> Referee["Independent completion + safety referee"]
+    Planner --> Evidence["Authenticated authority receipts"]
+    Strategy --> Evidence
+    Control --> Evidence
+    Referee --> Evidence
 ```
 
-The learned policy will choose goal-conditioned **macro-actions**, not rediscover controller timing
-one frame at a time. The objective graph carries long-term progress; specialists solve bounded
-navigation, dialogue, battle, inventory, puzzle, and recovery tasks.
+The diagram is also the claim boundary: learned policies choose objectives and bounded training
+decisions; fixed skills still perform most Red-specific navigation, dialogue, inventory, recovery,
+and battle mechanics. The referee independently reobserves effects instead of trusting the actor.
 
 See [Architecture](docs/architecture.md), the
 [Completion Contract](docs/completion-contract.md), and the

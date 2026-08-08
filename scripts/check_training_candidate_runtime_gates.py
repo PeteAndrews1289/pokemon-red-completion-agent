@@ -164,10 +164,8 @@ def _require_runtime_chain(
         raise ValueError(f"{subject} preregistered identity is invalid")
     _digest(root_sha256, f"{subject} root")
     if (
-        audit.get("status") != "ok"
-        or audit.get("error") is not None
-        or replay.get("status") != "ok"
-        or replay.get("error") is not None
+        audit.get("status") != replay.get("status")
+        or audit.get("error") != replay.get("error")
         or audit.get("model_artifact_sha256") != model_sha256
         or audit.get("candidate_replay_sha256") != replay_sha256
         or audit_provenance != replay_provenance
@@ -228,7 +226,8 @@ def _causal_checks(
     audit: Mapping[str, object], gates: Mapping[str, object]
 ) -> dict[str, dict[str, object]]:
     outcome = _mapping(audit.get("outcome"), subject="control outcome")
-    execution = _mapping(audit.get("execution"), subject="control execution")
+    execution_value = audit.get("execution")
+    execution = execution_value if isinstance(execution_value, Mapping) else {}
     return {
         "status": _equal_check(audit.get("status"), gates.get("required_status")),
         "execution_authority": _equal_check(audit.get("model_had_execution_authority"), True),
@@ -258,11 +257,11 @@ def _causal_checks(
             _integer(gates.get("maximum_candidate_decisions"), "maximum decisions"),
         ),
         "battles": _maximum_check(
-            _integer(execution.get("total_battles"), "control battles"),
+            _optional_integer(execution.get("total_battles")),
             _integer(gates.get("maximum_battles"), "maximum battles"),
         ),
         "healing_trips": _maximum_check(
-            _integer(execution.get("total_healing_trips"), "control healing trips"),
+            _optional_integer(execution.get("total_healing_trips")),
             _integer(gates.get("maximum_healing_trips"), "maximum healing trips"),
         ),
         "faints": _maximum_check(
@@ -345,6 +344,10 @@ def _integer(value: object, subject: str) -> int:
     return value
 
 
+def _optional_integer(value: object) -> int | None:
+    return value if type(value) is int else None  # noqa: E721
+
+
 def _digest(value: object, subject: str) -> None:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
         raise ValueError(f"{subject} is invalid")
@@ -377,12 +380,14 @@ def _minimum_check(observed: int | float, minimum: int | float) -> dict[str, obj
     }
 
 
-def _maximum_check(observed: int | float, maximum: int | float) -> dict[str, object]:
+def _maximum_check(
+    observed: int | float | None, maximum: int | float
+) -> dict[str, object]:
     return {
         "comparison": "less_than_or_equal",
         "observed": observed,
         "maximum": maximum,
-        "passed": observed <= maximum,
+        "passed": observed is not None and observed <= maximum,
     }
 
 
