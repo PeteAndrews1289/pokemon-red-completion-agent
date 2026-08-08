@@ -1,0 +1,111 @@
+{
+  "schema": "pokemon-training-control-promotion-plan-v2",
+  "status": "preregistered_before_collection_and_validation_open",
+  "source_commit": "e342dcea00258713c58b19fdf7594af1b573fd40",
+  "feature_schema_id": "pokemon.core.training.control.features.v2",
+  "candidate_contract": {
+    "safe_battle": [
+      "fight",
+      "flee"
+    ],
+    "unsafe_battle": [
+      "flee"
+    ],
+    "safe_optional_overworld": [
+      "seek",
+      "heal"
+    ],
+    "mandatory_recovery": [
+      "heal"
+    ],
+    "verified_readiness": [
+      "stop"
+    ],
+    "mechanical_travel_or_preparation": [
+      "seek"
+    ]
+  },
+  "lineages": {
+    "training": [
+      {
+        "lineage_id": "training-control-v6-train-01",
+        "root_sha256": "7be5e5b7125251099197dec1dd48fc7c86dd8abe68a8395d9d525a43625fb0df"
+      },
+      {
+        "lineage_id": "training-control-v6-train-02",
+        "root_sha256": "340f2e86754dd56a15ef0c27981de533c766eaeb4459ee32b59282a032cb22d8"
+      }
+    ],
+    "sealed_validation": {
+      "lineage_id": "training-control-v6-validation-01",
+      "root_sha256": "1b89e05d088450d32acb30dea886ba40bebabdd51ed000274d9326e6b7f181be"
+    },
+    "shadow": {
+      "lineage_id": "training-control-v6-shadow-01",
+      "root_sha256": "95792d64820caa98c670aa75da4d7673fe32473e7eeadb60786fc57ebf35d8a2"
+    },
+    "causal_control": {
+      "lineage_id": "training-control-v6-control-01",
+      "root_sha256": "94c33f009f83bd800bd4a891e8e331adecb003c3300a863935e15a4921cef982"
+    }
+  },
+  "retired_diagnostic_validation": {
+    "lineage_id": "training-control-v5-validation-01",
+    "artifact_sha256": "aa46b6e419502ba280232cc1bf94d6d5cf841322eee4fe5811e3a16541aee96c",
+    "may_be_reused_for_selection_or_claims": false
+  },
+  "model_selection": {
+    "validation_access": false,
+    "fixed_seed": 20260808,
+    "hidden_units": 24,
+    "epochs": 500,
+    "learning_rate": 0.01,
+    "l2": 0.0001,
+    "class_balance_power_grid": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "method": "bidirectional whole-lineage train-to-train cross-validation",
+    "selection_order": [
+      "zero missed required heals and missed stops in both directions",
+      "fewest unnecessary heals",
+      "highest genuine-choice accuracy",
+      "lowest cross-entropy",
+      "lowest class-balance power"
+    ]
+  },
+  "offline_validation_gates": {
+    "missed_required_heal": 0,
+    "premature_stop": 0,
+    "missed_stop": 0,
+    "maximum_unnecessary_heals": 50,
+    "maximum_safe_seek_false_heal_rate": 0.001,
+    "minimum_heal_precision": 0.92,
+    "minimum_genuine_accuracy": 0.995,
+    "minimum_battle_accuracy": 1.0
+  },
+  "causal_gates": {
+    "authority_phases": [
+      "battle",
+      "overworld"
+    ],
+    "teacher_fallback_on_model_disagreement": false,
+    "maximum_decisions": 65000,
+    "maximum_battles": 1900,
+    "maximum_healing_trips": 1150,
+    "maximum_faints": 0,
+    "required_final_party_levels": [
+      55,
+      55,
+      55,
+      55,
+      55,
+      55
+    ]
+  },
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}
