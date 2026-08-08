@@ -28,7 +28,17 @@ from pokemon_red_completion.pokedex import (
     summarize,
 )
 from pokemon_red_completion.red_pokedex import RED_POKEDEX_TARGET
-from pokemon_red_completion.team_training import LevelParityContract
+from pokemon_red_completion.team_training import (
+    BalancedTeamPolicy,
+    GrindingArea,
+    LevelParityContract,
+    TeamTrainingProgress,
+)
+from pokemon_red_completion.training_control import (
+    TrainingControlAction,
+    TrainingControlPhase,
+    project_training_control_observation,
+)
 
 #: Generation II's species count. The point is that this is a *parameter*.
 CRYSTAL_TOTAL_SPECIES = 251
@@ -122,3 +132,82 @@ def test_progress_reports_against_whichever_target_it_is_given() -> None:
     assert progress.completion == pytest.approx(2 / 250)
     # Celebi is excluded, so seeing it never inflates the denominator.
     assert 251 not in crystal.obtainable
+
+
+def test_training_control_projection_is_invariant_to_title_identity() -> None:
+    """Species, move, and venue identity must not become model shortcuts."""
+
+    red_party = PartyObservation(
+        members=(
+            PartyMemberObservation(
+                slot=1,
+                species_id=9,
+                level=35,
+                hp=70,
+                max_hp=100,
+                moves=(MoveObservation(55, 12, 25),),
+            ),
+            PartyMemberObservation(
+                slot=2,
+                species_id=3,
+                level=50,
+                hp=90,
+                max_hp=100,
+                moves=(MoveObservation(75, 9, 15),),
+            ),
+        )
+    )
+    crystal_party = PartyObservation(
+        members=(
+            PartyMemberObservation(
+                slot=1,
+                species_id=160,
+                level=35,
+                hp=70,
+                max_hp=100,
+                moves=(MoveObservation(57, 12, 25),),
+            ),
+            PartyMemberObservation(
+                slot=2,
+                species_id=154,
+                level=50,
+                hp=90,
+                max_hp=100,
+                moves=(MoveObservation(22, 9, 15),),
+            ),
+        )
+    )
+    policy = BalancedTeamPolicy(
+        minimum_level=55,
+        maximum_level_spread=5,
+        required_size=2,
+        max_battles=2_000,
+        max_steps=100_000,
+        max_healing_trips=1_000,
+    )
+    progress = TeamTrainingProgress(
+        battles_completed=500,
+        steps_taken=10_000,
+        healing_trips=40,
+    )
+
+    def project(party: PartyObservation, venue_name: str):
+        return project_training_control_observation(
+            party,
+            policy,
+            progress,
+            phase=TrainingControlPhase.OVERWORLD,
+            trainee=party.members[0],
+            attack_pp=12,
+            attack_pp_reserve=3,
+            safety_reserve=party.members[1],
+            safety_reserve_attack_pp=9,
+            safety_reserve_attack_pp_reserve=2,
+            venue=GrindingArea(venue_name, 30, 34, measured_samples=100),
+            candidate_actions=(TrainingControlAction.SEEK, TrainingControlAction.HEAL),
+        )
+
+    assert project(red_party, "pokemon_mansion") == project(
+        crystal_party,
+        "mount_silver",
+    )
