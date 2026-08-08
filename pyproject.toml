@@ -55,13 +55,11 @@ markers = [
 
 [tool.mypy]
 ignore_missing_imports = true
-# Scoped to the game-neutral layer and its adapters, which are fully annotated
-# and pass cleanly today. The chapter modules are excluded for one specific
-# reason: each of the twenty defines its own structurally identical
-# `_CountingExecutor`, so mypy reads them as twenty incompatible nominal types
-# and reports the cross-module calls as errors. Hoisting that into one shared
-# Protocol is the prerequisite for widening this scope, not a reason to skip
-# type checking entirely.
+# The whole package is in scope. Fully migrated modules fail the build normally;
+# the remaining legacy exceptions are named explicitly below. The former
+# `_CountingExecutor` duplication has already been consolidated in executor.py.
+# The largest current blockers are duplicated EmulatorState protocols and
+# optional RAM values passed to APIs that require concrete integers.
 files = ["src/"]
 
 # Type-checking debt register.
