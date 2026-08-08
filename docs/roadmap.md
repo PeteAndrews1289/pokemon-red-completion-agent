@@ -233,6 +233,10 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   nonzero status that forbids shadow whenever one fails.
 - [x] Add a cross-title falsification contract proving that different species, move, and venue
   identities project the same training-control observation when their semantic state is equal.
+- [x] Make causal promotion mechanical: authenticate the plan, candidate, offline approval,
+  no-authority shadow, controlled decisions, control audit, and terminal log as one chain; score
+  authority, fallback, decision, battle, healing, faint, and final-party gates; and return nonzero
+  before portable-loop integration when any requirement fails.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
