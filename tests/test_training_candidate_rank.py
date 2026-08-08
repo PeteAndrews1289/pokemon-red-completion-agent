@@ -13,6 +13,7 @@ from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingAre
 from pokemon_red_completion.training_candidate_rank import (
     TRAINING_CANDIDATE_FEATURE_NAMES,
     TrainingCandidateDecision,
+    TrainingCandidateDecisionRecorder,
     TrainingCandidateRankError,
     project_trainee_candidates,
     project_venue_candidates,
@@ -124,3 +125,28 @@ def test_decision_rejects_a_candidate_outside_the_choice_set() -> None:
 
     with pytest.raises(TrainingCandidateRankError, match="selected candidate"):
         TrainingCandidateDecision(0, 2, observation, "synthetic")
+
+
+def test_recorder_retains_per_kind_state_transitions_and_reindexes() -> None:
+    party = PartyObservation(
+        members=(member(1, 9, 35), member(2, 3, 50), member(3, 26, 50))
+    )
+    projected = project_venue_candidates(
+        party, POLICY, party.members[0], (CAVE, MANSION)
+    )
+    assert projected is not None
+    _, selected, observation = projected
+    recorder = TrainingCandidateDecisionRecorder()
+    first = TrainingCandidateDecision(7, selected, observation, "synthetic")
+    changed = TrainingCandidateDecision(9, selected, observation, "changed reason")
+
+    assert recorder.observe(first) is True
+    assert recorder.observe(first) is False
+    assert recorder.observe(changed) is True
+    assert tuple(decision.decision_index for decision in recorder.decisions) == (0, 1)
+    assert recorder.public_summary() == {
+        "method": "retain_first_and_per_kind_state_transitions",
+        "observed_decisions": 3,
+        "retained_decisions": 2,
+        "consecutive_duplicate_decisions_removed": 1,
+    }

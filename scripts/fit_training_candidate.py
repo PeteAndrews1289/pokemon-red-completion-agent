@@ -108,9 +108,11 @@ def main() -> int:
         json.dumps(
             {
                 "model_sha256": summary["model_sha256"],
-                "validation_accuracy": validation_metrics["accuracy"],
-                "validation_shape_baseline_accuracy": validation_metrics[
-                    "shape_baseline_accuracy"
+                "validation_genuine_accuracy": validation_metrics[
+                    "genuine_accuracy"
+                ],
+                "validation_genuine_shape_baseline_accuracy": validation_metrics[
+                    "genuine_shape_baseline_accuracy"
                 ],
             }
         )

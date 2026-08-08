@@ -321,8 +321,12 @@ def _replay_training(
     party_reader = PokemonRedPartyReader(emulator)
     evolution_decisions = []
     balance_decisions = []
-    evolution_candidate_decisions = []
-    balance_candidate_decisions = []
+    from pokemon_red_completion.training_candidate_rank import (
+        TrainingCandidateDecisionRecorder,
+    )
+
+    evolution_candidate_recorder = TrainingCandidateDecisionRecorder()
+    balance_candidate_recorder = TrainingCandidateDecisionRecorder()
 
     def record_evolution(decision) -> None:
         evolution_decisions.append(decision)
@@ -335,10 +339,10 @@ def _replay_training(
             shadow.observe(decision)
 
     def record_evolution_candidate(decision) -> None:
-        evolution_candidate_decisions.append(decision)
+        evolution_candidate_recorder.observe(decision)
 
     def record_balance_candidate(decision) -> None:
-        balance_candidate_decisions.append(decision)
+        balance_candidate_recorder.observe(decision)
 
     def note(message: str) -> None:
         levels = party_reader.read().levels
@@ -416,10 +420,11 @@ def _replay_training(
         _write_candidate_decisions(
             out_candidate_decisions,
             status="failed",
-            evolution=evolution_candidate_decisions,
-            balance=balance_candidate_decisions,
+            evolution=evolution_candidate_recorder,
+            balance=balance_candidate_recorder,
             error=f"{type(error).__name__}: {error}",
             provenance=provenance,
+            outcome=_candidate_outcome(party_reader),
         )
         _write_shadow(
             out_shadow,
@@ -449,9 +454,10 @@ def _replay_training(
     _write_candidate_decisions(
         out_candidate_decisions,
         status="ok",
-        evolution=evolution_candidate_decisions,
-        balance=balance_candidate_decisions,
+        evolution=evolution_candidate_recorder,
+        balance=balance_candidate_recorder,
         provenance=provenance,
+        outcome=_candidate_outcome(party_reader),
     )
     _write_shadow(
         out_shadow,
@@ -563,9 +569,10 @@ def _write_candidate_decisions(
     path: Path | None,
     *,
     status: str,
-    evolution: list,
-    balance: list,
+    evolution,
+    balance,
     provenance: dict[str, object] | None,
+    outcome: dict[str, object],
     error: str | None = None,
 ) -> None:
     """Atomically retain strategic ranking choices, including failed lessons."""
@@ -586,9 +593,14 @@ def _write_candidate_decisions(
         "feature_names": list(TRAINING_CANDIDATE_FEATURE_NAMES),
         "error": error,
         "provenance": provenance,
+        "outcome": outcome,
+        "sampling": {
+            "evolution": evolution.public_summary(),
+            "balance": balance.public_summary(),
+        },
         "segments": {
-            "evolution": [decision.public_dict() for decision in evolution],
-            "balance": [decision.public_dict() for decision in balance],
+            "evolution": [decision.public_dict() for decision in evolution.decisions],
+            "balance": [decision.public_dict() for decision in balance.decisions],
         },
     }
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -596,9 +608,21 @@ def _write_candidate_decisions(
     temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     temporary.replace(path)
     print(
-        f"wrote {len(evolution) + len(balance)} portable candidate decisions to {path}",
+        f"wrote {len(evolution.decisions) + len(balance.decisions)} changed candidate "
+        f"decisions from {evolution.observed_decisions + balance.observed_decisions} "
+        f"observations to {path}",
         flush=True,
     )
+
+
+def _candidate_outcome(party_reader) -> dict[str, object]:
+    """Bind a candidate stream to its actual terminal team state."""
+
+    party = party_reader.read()
+    return {
+        "final_party_levels": list(party.levels),
+        "final_fainted_count": party.fainted_count,
+    }
 
 
 def _collection_provenance(

@@ -95,8 +95,49 @@ def test_shared_scorer_learns_two_state_dependent_choice_kinds() -> None:
     metrics = evaluate_training_candidate_model(model, examples, baseline=baseline)
 
     assert metrics.accuracy == 1.0
+    assert metrics.genuine_accuracy == 1.0
     assert metrics.shape_baseline_accuracy < 0.6
+    assert metrics.genuine_shape_baseline_accuracy < 0.6
     assert dict(metrics.kind_accuracy) == {"trainee": 1.0, "venue": 1.0}
+    assert dict(metrics.genuine_kind_accuracy) == {"trainee": 1.0, "venue": 1.0}
+
+
+def test_genuine_metrics_are_not_inflated_by_singleton_choices() -> None:
+    genuine = _example(
+        0,
+        TrainingChoiceKind.TRAINEE,
+        (0.8, 0.1),
+        select_highest=False,
+    )
+    singletons = tuple(
+        _example(
+            index + 1,
+            TrainingChoiceKind.VENUE,
+            (0.5,),
+            select_highest=True,
+        )
+        for index in range(99)
+    )
+    rows = (genuine, *singletons)
+    width = len(TRAINING_CANDIDATE_FEATURE_NAMES)
+    always_zero = TrainingCandidateMLP(
+        weights1=np.zeros((width, 1)),
+        bias1=np.zeros(1),
+        weights2=np.zeros(1),
+        feature_mean=np.zeros(width),
+        feature_scale=np.ones(width),
+        training_seed=1,
+    )
+
+    metrics = evaluate_training_candidate_model(
+        always_zero,
+        rows,
+        baseline=CandidateShapeBaseline.fit(rows),
+    )
+
+    assert metrics.accuracy == 0.99
+    assert metrics.genuine_accuracy == 0.0
+    assert metrics.genuine_shape_baseline_accuracy == 1.0
 
 
 def test_candidate_scores_follow_candidates_when_the_set_is_permuted() -> None:

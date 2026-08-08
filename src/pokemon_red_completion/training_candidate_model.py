@@ -37,8 +37,13 @@ class TrainingCandidateMetrics:
     accuracy: float
     cross_entropy: float
     shape_baseline_accuracy: float
+    genuine_accuracy: float
+    genuine_cross_entropy: float
+    genuine_shape_baseline_accuracy: float
     kind_counts: tuple[tuple[str, int], ...]
     kind_accuracy: tuple[tuple[str, float], ...]
+    genuine_kind_counts: tuple[tuple[str, int], ...]
+    genuine_kind_accuracy: tuple[tuple[str, float], ...]
     candidate_count_accuracy: tuple[tuple[int, float], ...]
 
     def public_dict(self) -> dict[str, object]:
@@ -48,8 +53,13 @@ class TrainingCandidateMetrics:
             "accuracy": self.accuracy,
             "cross_entropy": self.cross_entropy,
             "shape_baseline_accuracy": self.shape_baseline_accuracy,
+            "genuine_accuracy": self.genuine_accuracy,
+            "genuine_cross_entropy": self.genuine_cross_entropy,
+            "genuine_shape_baseline_accuracy": self.genuine_shape_baseline_accuracy,
             "kind_counts": dict(self.kind_counts),
             "kind_accuracy": dict(self.kind_accuracy),
+            "genuine_kind_counts": dict(self.genuine_kind_counts),
+            "genuine_kind_accuracy": dict(self.genuine_kind_accuracy),
             "candidate_count_accuracy": {
                 str(count): accuracy for count, accuracy in self.candidate_count_accuracy
             },
@@ -304,8 +314,13 @@ def evaluate_training_candidate_model(
     correct = 0
     baseline_correct = 0
     loss = 0.0
+    genuine_correct = 0
+    genuine_baseline_correct = 0
+    genuine_loss = 0.0
     kind_counts: Counter[str] = Counter()
     kind_correct: Counter[str] = Counter()
+    genuine_kind_counts: Counter[str] = Counter()
+    genuine_kind_correct: Counter[str] = Counter()
     size_counts: Counter[int] = Counter()
     size_correct: Counter[int] = Counter()
     for row in rows:
@@ -321,15 +336,40 @@ def evaluate_training_candidate_model(
         kind_correct[kind] += int(agreed)
         size_counts[count] += 1
         size_correct[count] += int(agreed)
+        if count > 1:
+            genuine_correct += int(agreed)
+            genuine_baseline_correct += int(
+                baseline.predict(row.observation) == row.selected_candidate_index
+            )
+            genuine_loss -= math.log(
+                max(float(probabilities[row.selected_candidate_index]), 1e-12)
+            )
+            genuine_kind_counts[kind] += 1
+            genuine_kind_correct[kind] += int(agreed)
+    genuine_examples = sum(genuine_kind_counts.values())
+    if not genuine_examples:
+        raise TrainingCandidateModelError(
+            "candidate evaluation requires genuine multi-candidate choices"
+        )
     return TrainingCandidateMetrics(
         examples=len(rows),
         multi_candidate_examples=sum(len(row.observation.candidates) > 1 for row in rows),
         accuracy=correct / len(rows),
         cross_entropy=loss / len(rows),
         shape_baseline_accuracy=baseline_correct / len(rows),
+        genuine_accuracy=genuine_correct / genuine_examples,
+        genuine_cross_entropy=genuine_loss / genuine_examples,
+        genuine_shape_baseline_accuracy=(
+            genuine_baseline_correct / genuine_examples
+        ),
         kind_counts=tuple(sorted(kind_counts.items())),
         kind_accuracy=tuple(
             (kind, kind_correct[kind] / count) for kind, count in sorted(kind_counts.items())
+        ),
+        genuine_kind_counts=tuple(sorted(genuine_kind_counts.items())),
+        genuine_kind_accuracy=tuple(
+            (kind, genuine_kind_correct[kind] / count)
+            for kind, count in sorted(genuine_kind_counts.items())
         ),
         candidate_count_accuracy=tuple(
             (count, size_correct[count] / examples)

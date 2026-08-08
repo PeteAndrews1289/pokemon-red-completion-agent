@@ -79,8 +79,9 @@ def main() -> int:
                 {
                     "heldout_lineage": heldout.lineage_id,
                     "metrics": metrics.public_dict(),
-                    "model_margin_over_shape_baseline": (
-                        metrics.accuracy - metrics.shape_baseline_accuracy
+                    "genuine_model_margin_over_shape_baseline": (
+                        metrics.genuine_accuracy
+                        - metrics.genuine_shape_baseline_accuracy
                     ),
                 }
             )
@@ -88,18 +89,22 @@ def main() -> int:
             {
                 "kind_balance_power": power,
                 "folds": folds,
-                "mean_accuracy": sum(fold["metrics"]["accuracy"] for fold in folds)  # type: ignore[index]
-                / len(folds),
-                "mean_shape_baseline_accuracy": sum(
-                    fold["metrics"]["shape_baseline_accuracy"] for fold in folds  # type: ignore[index]
+                "mean_genuine_accuracy": sum(
+                    fold["metrics"]["genuine_accuracy"] for fold in folds  # type: ignore[index]
                 )
                 / len(folds),
-                "mean_model_margin_over_shape_baseline": sum(
-                    fold["model_margin_over_shape_baseline"] for fold in folds  # type: ignore[misc]
+                "mean_genuine_shape_baseline_accuracy": sum(
+                    fold["metrics"]["genuine_shape_baseline_accuracy"]  # type: ignore[index]
+                    for fold in folds
                 )
                 / len(folds),
-                "mean_cross_entropy": sum(
-                    fold["metrics"]["cross_entropy"] for fold in folds  # type: ignore[index]
+                "mean_genuine_model_margin_over_shape_baseline": sum(
+                    fold["genuine_model_margin_over_shape_baseline"]  # type: ignore[misc]
+                    for fold in folds
+                )
+                / len(folds),
+                "mean_genuine_cross_entropy": sum(
+                    fold["metrics"]["genuine_cross_entropy"] for fold in folds  # type: ignore[index]
                 )
                 / len(folds),
             }
@@ -107,9 +112,9 @@ def main() -> int:
     selected = max(
         trials,
         key=lambda trial: (
-            trial["mean_model_margin_over_shape_baseline"],
-            trial["mean_accuracy"],
-            -trial["mean_cross_entropy"],
+            trial["mean_genuine_model_margin_over_shape_baseline"],
+            trial["mean_genuine_accuracy"],
+            -trial["mean_genuine_cross_entropy"],
             -trial["kind_balance_power"],
         ),
     )

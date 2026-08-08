@@ -10,7 +10,7 @@ equivariant and cannot memorize species, party slots, or area names.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field, replace
 from enum import StrEnum
 
 import numpy as np
@@ -164,6 +164,60 @@ class TrainingCandidateDecision:
             "selected_candidate_index": self.selected_candidate_index,
             "reason": self.reason,
             "observation": self.observation.public_dict(),
+        }
+
+
+@dataclass(slots=True)
+class TrainingCandidateDecisionRecorder:
+    """Retain strategic state transitions instead of repeated identical polls.
+
+    The training loop recomputes trainee and venue choices before many mechanic
+    actions. Long walks can therefore emit the exact same choice thousands of
+    times. Keeping those duplicates would make route duration, rather than
+    strategic choice, dominate both storage and metrics. This recorder keeps
+    the first decision and every later change independently for each choice
+    kind, while reporting the full observed/retained denominator.
+    """
+
+    _decisions: list[TrainingCandidateDecision] = field(default_factory=list)
+    _last_by_kind: dict[TrainingChoiceKind, tuple[object, ...]] = field(
+        default_factory=dict
+    )
+    observed_decisions: int = 0
+
+    def observe(self, decision: TrainingCandidateDecision) -> bool:
+        """Record a changed choice state and return whether it was retained."""
+
+        self.observed_decisions += 1
+        signature = (
+            decision.selected_candidate_index,
+            decision.reason,
+            tuple(
+                candidate.features for candidate in decision.observation.candidates
+            ),
+        )
+        kind = decision.observation.kind
+        if self._last_by_kind.get(kind) == signature:
+            return False
+        self._last_by_kind[kind] = signature
+        self._decisions.append(
+            replace(decision, decision_index=len(self._decisions))
+        )
+        return True
+
+    @property
+    def decisions(self) -> tuple[TrainingCandidateDecision, ...]:
+        return tuple(self._decisions)
+
+    def public_summary(self) -> dict[str, object]:
+        retained = len(self._decisions)
+        return {
+            "method": "retain_first_and_per_kind_state_transitions",
+            "observed_decisions": self.observed_decisions,
+            "retained_decisions": retained,
+            "consecutive_duplicate_decisions_removed": (
+                self.observed_decisions - retained
+            ),
         }
 
 

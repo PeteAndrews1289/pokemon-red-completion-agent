@@ -54,6 +54,24 @@ def _write_replay(
             "source_dirty": dirty,
             "state_sha256": state * 64,
         },
+        "outcome": {
+            "final_party_levels": [55, 55, 55, 55, 55, 55],
+            "final_fainted_count": 0,
+        },
+        "sampling": {
+            "evolution": {
+                "method": "retain_first_and_per_kind_state_transitions",
+                "observed_decisions": 3,
+                "retained_decisions": 1,
+                "consecutive_duplicate_decisions_removed": 2,
+            },
+            "balance": {
+                "method": "retain_first_and_per_kind_state_transitions",
+                "observed_decisions": 5,
+                "retained_decisions": 1,
+                "consecutive_duplicate_decisions_removed": 4,
+            },
+        },
         "segments": {
             "evolution": [_decision(0, TrainingChoiceKind.VENUE)],
             "balance": [_decision(0, TrainingChoiceKind.TRAINEE)],
@@ -76,10 +94,15 @@ def test_loader_authenticates_and_summarizes_a_complete_lineage(tmp_path: Path) 
 
     assert dataset.lineage_qualified
     assert dataset.choice_kinds == frozenset({"trainee", "venue"})
+    assert dataset.final_party_levels == (55, 55, 55, 55, 55, 55)
+    assert dataset.final_fainted_count == 0
+    assert dataset.observed_decisions == 8
+    assert dataset.retained_decisions == 2
     summary = dataset.public_summary()
     assert summary["examples"] == 2
     assert summary["multi_candidate_decisions"] == 2
     assert summary["choice_kind_counts"] == {"trainee": 1, "venue": 1}
+    assert summary["consecutive_duplicate_decisions_removed"] == 6
 
 
 def test_loader_rejects_a_changed_candidate_artifact(tmp_path: Path) -> None:
@@ -93,6 +116,23 @@ def test_loader_rejects_a_changed_candidate_artifact(tmp_path: Path) -> None:
     replay.write_text(replay.read_text() + " ")
 
     with pytest.raises(TrainingCandidateDatasetError, match="authentication"):
+        load_training_candidate_replay(replay, expected_sha256=digest)
+
+
+def test_loader_rejects_sampling_counts_that_do_not_match_rows(tmp_path: Path) -> None:
+    replay = tmp_path / "train.json"
+    _write_replay(
+        replay,
+        lineage="candidate-train-one",
+        partition="train",
+        state="1",
+    )
+    payload = json.loads(replay.read_text())
+    payload["sampling"]["balance"]["retained_decisions"] = 2
+    replay.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    digest = hashlib.sha256(replay.read_bytes()).hexdigest()
+
+    with pytest.raises(TrainingCandidateDatasetError, match="sampling counts"):
         load_training_candidate_replay(replay, expected_sha256=digest)
 
 

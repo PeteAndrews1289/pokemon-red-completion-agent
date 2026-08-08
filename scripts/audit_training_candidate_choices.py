@@ -12,6 +12,10 @@ from collections import Counter, defaultdict
 from collections.abc import Mapping
 from pathlib import Path
 
+from pokemon_red_completion.training_candidate_dataset import (
+    TrainingCandidateDatasetError,
+    load_training_candidate_replay,
+)
 from pokemon_red_completion.training_candidate_rank import (
     TRAINING_CANDIDATE_FEATURE_NAMES,
     TRAINING_CANDIDATE_FEATURE_SCHEMA_ID,
@@ -28,6 +32,12 @@ def main() -> int:
     parser.add_argument("--replay", nargs=2, metavar=("PATH", "SHA256"), required=True)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
+    try:
+        dataset = load_training_candidate_replay(
+            args.replay[0], expected_sha256=args.replay[1]
+        )
+    except TrainingCandidateDatasetError as error:
+        parser.error(str(error))
     replay = _authenticated_json(*args.replay, subject="candidate replay")
     if replay.get("schema") != "pokemon-training-candidate-replay-v1":
         parser.error("candidate replay schema is unsupported")
@@ -104,6 +114,13 @@ def main() -> int:
         multi_candidate += int(len(candidates) > 1)
 
     correct = sum(max(counts.values()) for counts in selected_counts.values())
+    if not multi_candidate:
+        parser.error("candidate replay contains no genuine multi-candidate decisions")
+    genuine_correct = sum(
+        max(counts.values())
+        for group, counts in selected_counts.items()
+        if int(group.rsplit("/", 1)[1]) > 1
+    )
     variable_groups = sorted(
         group for group, counts in selected_counts.items() if len(counts) > 1
     )
@@ -116,12 +133,20 @@ def main() -> int:
         "kind_counts": dict(sorted(kind_counts.items())),
         "candidate_count_counts": dict(sorted(candidate_count_counts.items())),
         "multi_candidate_decisions": multi_candidate,
+        "observed_decisions": dataset.observed_decisions,
+        "retained_decisions": dataset.retained_decisions,
+        "consecutive_duplicate_decisions_removed": (
+            dataset.observed_decisions - dataset.retained_decisions
+        ),
+        "final_party_levels": list(dataset.final_party_levels),
+        "final_fainted_count": dataset.final_fainted_count,
         "unique_candidate_feature_rows": len(feature_rows),
         "selected_index_counts_by_shape": {
             group: {str(index): count for index, count in sorted(counts.items())}
             for group, counts in sorted(selected_counts.items())
         },
         "shape_only_majority_accuracy": correct / len(rows),
+        "genuine_shape_only_majority_accuracy": genuine_correct / multi_candidate,
         "variable_choice_shapes": variable_groups,
         "state_dependent_choice_demonstrated": bool(variable_groups),
         "identity_fields_present": False,
@@ -133,6 +158,9 @@ def main() -> int:
             {
                 "decisions": len(rows),
                 "shape_only_majority_accuracy": payload["shape_only_majority_accuracy"],
+                "genuine_shape_only_majority_accuracy": payload[
+                    "genuine_shape_only_majority_accuracy"
+                ],
                 "state_dependent_choice_demonstrated": bool(variable_groups),
             }
         )

@@ -63,6 +63,24 @@ def _write_replay(
             "source_dirty": False,
             "state_sha256": state * 64,
         },
+        "outcome": {
+            "final_party_levels": [55, 55, 55, 55, 55, 55],
+            "final_fainted_count": 0,
+        },
+        "sampling": {
+            "evolution": {
+                "method": "retain_first_and_per_kind_state_transitions",
+                "observed_decisions": 1,
+                "retained_decisions": 1,
+                "consecutive_duplicate_decisions_removed": 0,
+            },
+            "balance": {
+                "method": "retain_first_and_per_kind_state_transitions",
+                "observed_decisions": 5,
+                "retained_decisions": 2,
+                "consecutive_duplicate_decisions_removed": 3,
+            },
+        },
         "segments": {"evolution": evolution, "balance": balance},
     }
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
@@ -98,6 +116,10 @@ def test_choice_audit_detects_labels_that_choice_shape_cannot_determine(
     payload = json.loads((tmp_path / "audit.json").read_text())
     assert payload["decisions"] == 3
     assert payload["shape_only_majority_accuracy"] == 2 / 3
+    assert payload["genuine_shape_only_majority_accuracy"] == 2 / 3
+    assert payload["observed_decisions"] == 6
+    assert payload["retained_decisions"] == 3
+    assert payload["final_party_levels"] == [55, 55, 55, 55, 55, 55]
     assert payload["variable_choice_shapes"] == ["trainee/3"]
     assert payload["state_dependent_choice_demonstrated"] is True
     assert payload["promotion_eligible"] is False
@@ -107,7 +129,7 @@ def test_choice_audit_rejects_candidate_identity_fields(tmp_path: Path) -> None:
     rejected = _run_audit(tmp_path, add_identity=True)
 
     assert rejected.returncode == 2
-    assert "unexpected identity" in rejected.stderr
+    assert "unexpected field" in rejected.stderr
 
 
 def test_selection_stays_training_only_then_fit_opens_validation(tmp_path: Path) -> None:
@@ -152,6 +174,7 @@ def test_selection_stays_training_only_then_fit_opens_validation(tmp_path: Path)
     selection_payload = json.loads(selection.read_text())
     assert selection_payload["validation_opened"] is False
     assert len(selection_payload["trials"]) == 2
+    assert "mean_genuine_accuracy" in selection_payload["trials"][0]
 
     model = tmp_path / "model.json"
     summary = tmp_path / "summary.json"
@@ -185,6 +208,7 @@ def test_selection_stays_training_only_then_fit_opens_validation(tmp_path: Path)
     assert summary_payload["validation_opened"] is True
     assert summary_payload["partition_audit"]["promotion_eligible"] is True
     assert summary_payload["validation_lineages"] == ["validation-one"]
+    assert "genuine_accuracy" in summary_payload["validation"]
     assert hashlib.sha256(model.read_bytes()).hexdigest() == summary_payload[
         "private_model_file_sha256"
     ]

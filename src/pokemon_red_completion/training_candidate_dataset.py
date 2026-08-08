@@ -51,6 +51,10 @@ class TrainingCandidateDataset:
     source_dirty: bool
     status: str
     error: str | None
+    final_party_levels: tuple[int, ...]
+    final_fainted_count: int
+    observed_decisions: int
+    retained_decisions: int
     examples: tuple[TrainingCandidateExample, ...]
 
     @property
@@ -90,6 +94,13 @@ class TrainingCandidateDataset:
             "source_dirty": self.source_dirty,
             "status": self.status,
             "lineage_qualified": self.lineage_qualified,
+            "final_party_levels": list(self.final_party_levels),
+            "final_fainted_count": self.final_fainted_count,
+            "observed_decisions": self.observed_decisions,
+            "retained_decisions": self.retained_decisions,
+            "consecutive_duplicate_decisions_removed": (
+                self.observed_decisions - self.retained_decisions
+            ),
             "examples": len(self.examples),
             "unique_choice_feature_label_tuples": len(unique),
             "duplicate_choice_feature_label_tuples": len(self.examples) - len(unique),
@@ -185,14 +196,38 @@ def load_training_candidate_replay(
         raise TrainingCandidateDatasetError("candidate state digest is invalid")
     _digest(state_sha256, subject="state digest")
 
+    outcome = _mapping(value.get("outcome"), subject="candidate outcome")
+    raw_levels = outcome.get("final_party_levels")
+    raw_faints = outcome.get("final_fainted_count")
+    if (
+        not isinstance(raw_levels, list)
+        or not 1 <= len(raw_levels) <= 6
+        or not all(
+            type(level) is int and 1 <= level <= 100 for level in raw_levels  # noqa: E721
+        )
+        or type(raw_faints) is not int  # noqa: E721
+        or not 0 <= raw_faints <= len(raw_levels)
+    ):
+        raise TrainingCandidateDatasetError("candidate terminal outcome is invalid")
+    final_party_levels = tuple(raw_levels)
+    final_fainted_count = raw_faints
+
     segments = _mapping(value.get("segments"), subject="segments")
     if set(segments) != set(_SEGMENTS):
         raise TrainingCandidateDatasetError("candidate segment roster is invalid")
+    sampling = _mapping(value.get("sampling"), subject="candidate sampling")
+    if set(sampling) != set(_SEGMENTS):
+        raise TrainingCandidateDatasetError("candidate sampling roster is invalid")
     examples: list[TrainingCandidateExample] = []
+    observed_decisions = 0
+    retained_decisions = 0
     for segment in _SEGMENTS:
         rows = segments[segment]
         if not isinstance(rows, list):
             raise TrainingCandidateDatasetError("candidate segment is not a list")
+        observed, retained = _sampling_counts(sampling[segment], len(rows))
+        observed_decisions += observed
+        retained_decisions += retained
         for expected_index, row in enumerate(rows):
             examples.append(_example(row, lineage_id, segment, expected_index))
     if not examples:
@@ -206,6 +241,10 @@ def load_training_candidate_replay(
         source_dirty=source_dirty,
         status=str(status),
         error=error_value if isinstance(error_value, str) else None,
+        final_party_levels=final_party_levels,
+        final_fainted_count=final_fainted_count,
+        observed_decisions=observed_decisions,
+        retained_decisions=retained_decisions,
         examples=tuple(examples),
     )
 
@@ -317,6 +356,24 @@ def _example(
         observation=observation,
         reason=reason,
     )
+
+
+def _sampling_counts(raw: object, row_count: int) -> tuple[int, int]:
+    sampling = _mapping(raw, subject="candidate segment sampling")
+    observed = sampling.get("observed_decisions")
+    retained = sampling.get("retained_decisions")
+    removed = sampling.get("consecutive_duplicate_decisions_removed")
+    if (
+        sampling.get("method") != "retain_first_and_per_kind_state_transitions"
+        or type(observed) is not int  # noqa: E721
+        or type(retained) is not int  # noqa: E721
+        or type(removed) is not int  # noqa: E721
+        or observed < retained
+        or retained != row_count
+        or removed != observed - retained
+    ):
+        raise TrainingCandidateDatasetError("candidate sampling counts are invalid")
+    return observed, retained
 
 
 def _candidate(raw: object, *, expected_index: int) -> TrainingCandidate:
