@@ -204,6 +204,9 @@ offline-only. Next add authenticated loading and shadow inference; do not open t
 Authenticated model loading and teacher-authority shadow auditing are implemented on the current
 source. The real private model file digest is `8088efbf...52307f`. Collect a new unassigned shadow
 root next; never treat the shadow model's predictions as execution commands.
+Shadow root 01 passed with 55,904 decisions and 75.57% raw / 76.73% balanced agreement. The model
+still had no authority. Fight recall is only 42.05% and 12,285 seeks became heals; bounded control
+must address those measured risks without silently substituting teacher actions.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

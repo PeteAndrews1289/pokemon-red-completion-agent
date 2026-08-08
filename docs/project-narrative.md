@@ -266,6 +266,15 @@ confidence, action distribution, phase accuracy, balanced agreement, and confusi
 recorded. The mechanism deliberately writes evidence on failure as well as success; a shadow run
 cannot disappear merely because the underlying teacher lineage breaks.
 
+On the first fresh live shadow root, the teacher completed all six members at level 55 with zero
+faints while the model predicted 55,904 decisions beside it. Agreement was 75.57% raw and 76.73%
+balanced—nearly the offline validation result—so the held-out score generalized to live inference.
+The confusion matrix is more important than the headline. The model recognized 96.53% of flees and
+the single stop, but only 42.05% of fights; 1,134 safe fights became conservative flees. It also
+turned 12,285 seeks into heals. Those errors are usually safe but can prevent progress or waste
+recovery trips. Shadow therefore passed as evidence, not promotion. Bounded control must expose
+those consequences without hiding them behind teacher fallback.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

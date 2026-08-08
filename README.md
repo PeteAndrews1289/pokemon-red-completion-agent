@@ -113,6 +113,14 @@ records confidence, raw and balanced agreement, per-phase accuracy, action distr
 full teacher-to-model confusion matrix while the teacher alone retains execution authority. The
 next fresh root will produce the first live shadow receipt.
 
+That fresh-root shadow is now complete. Across **55,904 live decisions**, the authenticated model
+reached **75.57% raw / 76.73% balanced agreement**, closely matching held-out validation, while the
+teacher completed 1,743 battles with zero faints and all six at level 55. Battle agreement was
+65.42% and overworld agreement 76.23%. The confusion matrix exposes the control risks: fight recall
+is only 42.05% because 1,134 safe fights became conservative flees, while 12,285 seeks became
+unnecessary heals. Stop recall was exact. The model still had no authority. See the
+[live shadow receipt](docs/evidence/training-control-shadow-01-2026-08-08.json).
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

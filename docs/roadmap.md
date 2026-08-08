@@ -184,8 +184,12 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   under the unchanged teacher/referee safety envelope.
 - [x] Implement exact-file authenticated model loading and live teacher-authority shadow auditing;
   failed and successful runs both retain their disagreement evidence atomically.
-- [ ] Collect the first fresh live shadow lineage and analyze per-class/phase failures before any
+- [x] Collect the first fresh live shadow lineage and analyze per-class/phase failures before any
   model-controlled action is permitted.
+- [x] Complete fresh-root live shadow: 55,904 decisions, 75.57% raw / 76.73% balanced agreement,
+  zero faints, all level 55, with teacher-only execution authority.
+- [ ] Build a bounded control referee around the measured errors: conservative fight-to-flee and
+  unnecessary seek-to-heal. Attempt a fresh model-controlled lineage without teacher fallback.
   The class-balanced MLP, phase-masked inference, metrics, and fail-closed candidate fitter are
   implemented and tested synthetically; this item remains open until real v2 lineages exist.
 - [ ] Run the candidate in shadow mode, then model-controlled mode under the unchanged teacher

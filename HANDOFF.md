@@ -331,6 +331,10 @@ Authenticated loading and live shadow instrumentation are now implemented. The p
 digest is `8088efbf...52307f`; loading rejects links, altered bytes, schema drift, shape drift, and
 non-finite parameters. Shadow output reports confidence, raw/balanced agreement, phases, class
 counts, and confusion while explicitly recording that the model had no authority.
+Shadow root 01 completed at source `a9e6921`: 55,904 decisions, 75.57% raw / 76.73% balanced
+agreement, 65.42% battle and 76.23% overworld agreement, zero faints, all level 55. Fight recall is
+42.05%, flee 96.53%, heal 68.77%, seek 76.32%, stop 100%. Model authority remained false. Use these
+errors to design the bounded control gate; do not claim autonomous training yet.
 
 Counted v2 train lineage 01 is qualified from a retained 17-frame root at source `4c885d8`:
 46,687 decisions, all five actions, 1,726 battles, 815 healing trips, zero faints, and all level 55.

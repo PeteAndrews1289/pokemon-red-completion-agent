@@ -1,0 +1,49 @@
+{
+  "schema": "pokemon-training-control-shadow-summary-v1",
+  "status": "ok",
+  "lineage_id": "training-control-v2-shadow-01",
+  "source_commit": "a9e692111204a09349a44caf689c53e9112cbde3",
+  "root_state_sha256": "fe803d15a4a196ee918ccb5444fcdce8372b203297a3910a1e1a452b6cbc35f0",
+  "decision_stream_sha256": "5854a557b177fdc2b47a33cde1c04379a70fa534d9dab04e12ecfec5cf23e61c",
+  "private_shadow_summary_sha256": "5c1b536366a47e8e5e5170b0bdf768823a1a365e096b609191fb029ccafaa8a6",
+  "model_sha256": "d04546c2a999aa4b5f85da983b4cf3e24aab7b2d29b691dbe27e5157ddf91d7d",
+  "model_artifact_sha256": "8088efbf25ccd5df0fe7838c21df7636eed5a0ab7c095dff3caa561c3a52307f",
+  "execution": {
+    "total_battles": 1743,
+    "total_healing_trips": 1019,
+    "faints": 0,
+    "final_party_levels": [55, 55, 55, 55, 55, 55]
+  },
+  "shadow": {
+    "decisions": 55904,
+    "agreements": 42246,
+    "accuracy": 0.7556883228391529,
+    "balanced_accuracy": 0.7673463133266489,
+    "mean_confidence": 0.7384410118418598,
+    "phase_accuracy": {"battle": 0.6542165159031222, "overworld": 0.7623149189168588},
+    "teacher_counts": {"fight": 1957, "flee": 1470, "heal": 602, "seek": 51874, "stop": 1},
+    "predicted_counts": {"fight": 874, "flee": 2553, "heal": 12699, "seek": 39777, "stop": 1},
+    "per_class_recall": {
+      "fight": 0.42054164537557486,
+      "flee": 0.9653061224489796,
+      "heal": 0.6877076411960132,
+      "seek": 0.763246327640822,
+      "stop": 1.0
+    },
+    "confusion": {
+      "fight -> fight": 823,
+      "fight -> flee": 1134,
+      "flee -> fight": 51,
+      "flee -> flee": 1419,
+      "heal -> heal": 414,
+      "heal -> seek": 188,
+      "seek -> heal": 12285,
+      "seek -> seek": 39589,
+      "stop -> stop": 1
+    }
+  },
+  "model_had_execution_authority": false,
+  "promotion_eligible": false,
+  "next_gate": "bounded_model_control_under_teacher_referee",
+  "private_artifacts_tracked": false
+}

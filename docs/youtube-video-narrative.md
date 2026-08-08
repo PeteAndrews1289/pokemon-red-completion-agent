@@ -219,6 +219,12 @@ controller. Accumulate confidence, phase accuracy, balanced agreement, and the f
 confusion matrix live. Keep **“model authority: false”** on screen throughout; shadow success is
 evidence that the model understands decisions, not permission to press buttons.
 
+Reveal the completed shadow card: **55,904 decisions; 75.57% raw; 76.73% balanced; zero faints;
+all 55; authority false.** Then zoom into the confusion matrix. The model catches 96.53% of flees
+but only 42.05% of fights, replacing 1,134 safe fights with conservative exits; it also replaces
+12,285 seeks with heals. That makes the next episode concrete: can a safety referee permit genuine
+model authority without quietly turning every disagreement back into teacher control?
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local
