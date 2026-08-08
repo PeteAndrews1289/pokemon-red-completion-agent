@@ -66,6 +66,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--shadow-model", type=Path, default=None)
     parser.add_argument("--shadow-model-sha256", default=None)
     parser.add_argument("--out-shadow", type=Path, default=None)
+    parser.add_argument("--candidate-model", type=Path, default=None)
+    parser.add_argument("--candidate-model-sha256", default=None)
+    parser.add_argument("--out-candidate-audit", type=Path, default=None)
+    parser.add_argument(
+        "--candidate-control",
+        action="store_true",
+        help="grant the authenticated candidate model trainee and venue authority",
+    )
     parser.add_argument(
         "--battle-control",
         action="store_true",
@@ -139,6 +147,22 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("shadow mode requires --out-decisions and its lineage provenance")
     if (args.battle_control or args.overworld_control) and args.shadow_model is None:
         parser.error("control flags require the authenticated model/output bundle")
+    candidate_values = (
+        args.candidate_model,
+        args.candidate_model_sha256,
+        args.out_candidate_audit,
+    )
+    if any(value is not None for value in candidate_values) and not all(
+        value is not None for value in candidate_values
+    ):
+        parser.error(
+            "candidate mode requires --candidate-model, --candidate-model-sha256, "
+            "and --out-candidate-audit"
+        )
+    if args.out_candidate_audit is not None and args.out_candidate_decisions is None:
+        parser.error("candidate mode requires --out-candidate-decisions")
+    if args.candidate_control and args.candidate_model is None:
+        parser.error("--candidate-control requires the authenticated candidate bundle")
 
     shadow = None
     decision_authority = None
@@ -149,9 +173,9 @@ def main(argv: list[str] | None = None) -> int:
         )
 
         model = load_training_control_model(
-                args.shadow_model,
-                expected_sha256=args.shadow_model_sha256,
-            )
+            args.shadow_model,
+            expected_sha256=args.shadow_model_sha256,
+        )
         shadow = TrainingControlShadowAudit(model)
         if args.battle_control or args.overworld_control:
             from pokemon_red_completion.training_control import TrainingControlPhase
@@ -167,6 +191,26 @@ def main(argv: list[str] | None = None) -> int:
                 if controlled:
                     return model.predict(decision.observation)
                 return decision.action
+
+    candidate_shadow = None
+    candidate_decision_authority = None
+    if args.candidate_model is not None:
+        from pokemon_red_completion.training_candidate_model import (
+            TrainingCandidateShadowAudit,
+            load_training_candidate_model,
+        )
+
+        candidate_model = load_training_candidate_model(
+            args.candidate_model,
+            expected_sha256=args.candidate_model_sha256,
+        )
+        candidate_shadow = TrainingCandidateShadowAudit(candidate_model)
+        if args.candidate_control:
+
+            def candidate_decision_authority(decision):
+                assert candidate_shadow is not None
+                candidate_shadow.observe(decision)
+                return candidate_model.predict(decision.observation)
 
     emulator = PyBoyAdapter(resolve_rom_path(args.rom))
     emulator.start()
@@ -237,6 +281,11 @@ def main(argv: list[str] | None = None) -> int:
             decision_authority,
             args.battle_control,
             args.overworld_control,
+            candidate_shadow,
+            args.out_candidate_audit,
+            args.candidate_model_sha256,
+            candidate_decision_authority,
+            args.candidate_control,
         )
     finally:
         emulator.close()
@@ -307,6 +356,11 @@ def _replay_training(
     decision_authority,
     battle_control: bool,
     overworld_control: bool,
+    candidate_shadow,
+    out_candidate_audit: Path | None,
+    candidate_model_artifact_sha256: str | None,
+    candidate_decision_authority,
+    candidate_control: bool,
 ) -> int:
     """Run the Mansion evolution and balancing blocks exactly as Blaine does."""
 
@@ -340,9 +394,13 @@ def _replay_training(
 
     def record_evolution_candidate(decision) -> None:
         evolution_candidate_recorder.observe(decision)
+        if candidate_shadow is not None and candidate_decision_authority is None:
+            candidate_shadow.observe(decision)
 
     def record_balance_candidate(decision) -> None:
         balance_candidate_recorder.observe(decision)
+        if candidate_shadow is not None and candidate_decision_authority is None:
+            candidate_shadow.observe(decision)
 
     def note(message: str) -> None:
         levels = party_reader.read().levels
@@ -355,6 +413,8 @@ def _replay_training(
         )
         evolution_battles = 0
         evolution_heals = 0
+        balance_battles = 0
+        balance_heals = 0
         if development.directive is blaine.TeamTrainingDirective.EVOLVE_MEMBER:
             print("\nrunning participation-based Diglett evolution", flush=True)
             _, evolution_battles, evolution_heals = blaine.run_red_team_balancing(
@@ -378,12 +438,13 @@ def _replay_training(
                 evolution_target=(blaine.DIGLETT_SPECIES_ID, blaine.DUGTRIO_SPECIES_ID),
                 decision_sink=record_evolution,
                 candidate_decision_sink=record_evolution_candidate,
+                candidate_decision_authority=candidate_decision_authority,
                 decision_authority=decision_authority,
                 report_label="replay evolution",
                 checkpoint_count=blaine.BLAINE_CHECKPOINT_COUNT,
             )
         print("\nrunning the Mansion balancing block", flush=True)
-        report, battles, heals = blaine.run_red_team_balancing(
+        report, balance_battles, balance_heals = blaine.run_red_team_balancing(
             actions,
             reader,
             emulator,
@@ -404,6 +465,7 @@ def _replay_training(
             progress_sink=note,
             decision_sink=record_balance,
             candidate_decision_sink=record_balance_candidate,
+            candidate_decision_authority=candidate_decision_authority,
             decision_authority=decision_authority,
             report_label="replay training",
             checkpoint_count=blaine.BLAINE_CHECKPOINT_COUNT,
@@ -426,6 +488,21 @@ def _replay_training(
             provenance=provenance,
             outcome=_candidate_outcome(party_reader),
         )
+        _write_candidate_runtime_audit(
+            out_candidate_audit,
+            candidate_shadow,
+            status="failed",
+            error=f"{type(error).__name__}: {error}",
+            provenance=provenance,
+            model_artifact_sha256=candidate_model_artifact_sha256,
+            candidate_replay_path=out_candidate_decisions,
+            candidate_control=candidate_control,
+            outcome=_candidate_outcome(party_reader),
+            evolution_battles=None,
+            evolution_heals=None,
+            balance_battles=None,
+            balance_heals=None,
+        )
         _write_shadow(
             out_shadow,
             shadow,
@@ -442,7 +519,8 @@ def _replay_training(
     print(
         f"\nfinished: evolution_battles={evolution_battles}, "
         f"evolution_healing_trips={evolution_heals}, "
-        f"balance_battles={battles}, balance_healing_trips={heals}, report={report}"
+        f"balance_battles={balance_battles}, balance_healing_trips={balance_heals}, "
+        f"report={report}"
     )
     _write_decisions(
         out_decisions,
@@ -459,6 +537,20 @@ def _replay_training(
         provenance=provenance,
         outcome=_candidate_outcome(party_reader),
     )
+    _write_candidate_runtime_audit(
+        out_candidate_audit,
+        candidate_shadow,
+        status="ok",
+        provenance=provenance,
+        model_artifact_sha256=candidate_model_artifact_sha256,
+        candidate_replay_path=out_candidate_decisions,
+        candidate_control=candidate_control,
+        outcome=_candidate_outcome(party_reader),
+        evolution_battles=evolution_battles,
+        evolution_heals=evolution_heals,
+        balance_battles=balance_battles,
+        balance_heals=balance_heals,
+    )
     _write_shadow(
         out_shadow,
         shadow,
@@ -469,6 +561,74 @@ def _replay_training(
         overworld_control=overworld_control,
     )
     return 0
+
+
+def _write_candidate_runtime_audit(
+    path: Path | None,
+    audit,
+    *,
+    status: str,
+    provenance: dict[str, object] | None,
+    model_artifact_sha256: str | None,
+    candidate_replay_path: Path | None,
+    candidate_control: bool,
+    outcome: dict[str, object],
+    evolution_battles: int | None,
+    evolution_heals: int | None,
+    balance_battles: int | None,
+    balance_heals: int | None,
+    error: str | None = None,
+) -> None:
+    if path is None:
+        return
+    if (
+        audit is None
+        or provenance is None
+        or model_artifact_sha256 is None
+        or candidate_replay_path is None
+        or not candidate_replay_path.is_file()
+    ):
+        raise RuntimeError("candidate runtime audit lacks its model, replay, or provenance")
+    replay_sha256 = _sha256(candidate_replay_path)
+    payload = audit.public_dict()
+    counts = (evolution_battles, evolution_heals, balance_battles, balance_heals)
+    execution = None
+    if all(value is not None for value in counts):
+        assert all(isinstance(value, int) for value in counts)
+        execution = {
+            "evolution_battles": evolution_battles,
+            "evolution_healing_trips": evolution_heals,
+            "balance_battles": balance_battles,
+            "balance_healing_trips": balance_heals,
+            "total_battles": evolution_battles + balance_battles,
+            "total_healing_trips": evolution_heals + balance_heals,
+        }
+    authority_kinds = ["trainee", "venue"] if candidate_control else []
+    payload.update(
+        {
+            "status": status,
+            "error": error,
+            "provenance": provenance,
+            "model_artifact_sha256": model_artifact_sha256,
+            "candidate_replay_sha256": replay_sha256,
+            "model_had_execution_authority": candidate_control,
+            "authority_choice_kinds": authority_kinds,
+            "model_predictions_executed": audit.decisions if candidate_control else 0,
+            "teacher_fallback_on_model_disagreement": (
+                False if candidate_control else None
+            ),
+            "outcome": outcome,
+            "execution": execution,
+        }
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.tmp")
+    temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    temporary.replace(path)
+    print(
+        f"wrote candidate runtime audit for {audit.decisions} decisions to {path}",
+        flush=True,
+    )
 
 
 def _write_shadow(

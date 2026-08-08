@@ -15,6 +15,8 @@ from pokemon_red_completion.training_candidate_rank import (
     TrainingCandidateDecision,
     TrainingCandidateDecisionRecorder,
     TrainingCandidateRankError,
+    bind_trainee_candidate,
+    bind_venue_candidate,
     project_trainee_candidates,
     project_venue_candidates,
 )
@@ -125,6 +127,18 @@ def test_decision_rejects_a_candidate_outside_the_choice_set() -> None:
 
     with pytest.raises(TrainingCandidateRankError, match="selected candidate"):
         TrainingCandidateDecision(0, 2, observation, "synthetic")
+
+
+def test_ephemeral_candidate_indexes_bind_back_to_the_live_choice_set() -> None:
+    party = PartyObservation(
+        members=(member(1, 9, 35), member(2, 3, 50), member(3, 26, 45))
+    )
+
+    assert bind_trainee_candidate(party, POLICY, (CAVE, MANSION), 2) == party.members[2]
+    assert bind_venue_candidate(party, POLICY, party.members[0], (CAVE, MANSION), 0) == CAVE
+
+    with pytest.raises(TrainingCandidateRankError, match="candidate binding index"):
+        bind_venue_candidate(party, POLICY, party.members[0], (CAVE, MANSION), 9)
 
 
 def test_recorder_retains_per_kind_state_transitions_and_reindexes() -> None:

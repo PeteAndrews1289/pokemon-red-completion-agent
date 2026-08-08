@@ -9,7 +9,7 @@ import re
 import stat
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
@@ -19,6 +19,7 @@ from pokemon_red_completion.training_candidate_dataset import TrainingCandidateE
 from pokemon_red_completion.training_candidate_rank import (
     TRAINING_CANDIDATE_FEATURE_NAMES,
     TRAINING_CANDIDATE_FEATURE_SCHEMA_ID,
+    TrainingCandidateDecision,
     TrainingCandidateSet,
 )
 
@@ -300,6 +301,113 @@ class TrainingCandidateMLP:
                     np.sqrt(corrected_second) + 1e-8
                 )
         return cls(weights1, bias1, weights2, mean, scale, seed)
+
+
+@dataclass(slots=True)
+class TrainingCandidateShadowAudit:
+    """Measure teacher agreement without conflating it with live authority."""
+
+    model: TrainingCandidateMLP
+    decisions: int = 0
+    agreements: int = 0
+    confidence_total: float = 0.0
+    kind_counts: Counter[str] = field(default_factory=Counter)
+    kind_agreements: Counter[str] = field(default_factory=Counter)
+    genuine_kind_counts: Counter[str] = field(default_factory=Counter)
+    genuine_kind_agreements: Counter[str] = field(default_factory=Counter)
+    candidate_count_counts: Counter[int] = field(default_factory=Counter)
+    candidate_count_agreements: Counter[int] = field(default_factory=Counter)
+    confusion: Counter[str] = field(default_factory=Counter)
+    forced_decisions: int = 0
+    forced_agreements: int = 0
+    genuine_decisions: int = 0
+    genuine_agreements: int = 0
+    disagreement_examples: list[dict[str, object]] = field(default_factory=list)
+
+    def observe(self, decision: object) -> None:
+        if not isinstance(decision, TrainingCandidateDecision):
+            raise TypeError("candidate shadow input must be a TrainingCandidateDecision")
+        probabilities = self.model.probabilities(decision.observation)
+        predicted = int(np.argmax(probabilities))
+        actual = decision.selected_candidate_index
+        agreed = predicted == actual
+        kind = decision.observation.kind.value
+        candidate_count = len(decision.observation.candidates)
+        self.decisions += 1
+        self.agreements += int(agreed)
+        self.confidence_total += float(probabilities[predicted])
+        self.kind_counts[kind] += 1
+        self.kind_agreements[kind] += int(agreed)
+        self.candidate_count_counts[candidate_count] += 1
+        self.candidate_count_agreements[candidate_count] += int(agreed)
+        self.confusion[f"{kind}: {actual} -> {predicted}"] += 1
+        if candidate_count == 1:
+            self.forced_decisions += 1
+            self.forced_agreements += int(agreed)
+        else:
+            self.genuine_decisions += 1
+            self.genuine_agreements += int(agreed)
+            self.genuine_kind_counts[kind] += 1
+            self.genuine_kind_agreements[kind] += int(agreed)
+        if not agreed and len(self.disagreement_examples) < 20:
+            self.disagreement_examples.append(
+                {
+                    "decision": decision.public_dict(),
+                    "predicted_candidate_index": predicted,
+                    "probabilities": probabilities.tolist(),
+                }
+            )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon-training-candidate-runtime-audit-v1",
+            "model_id": self.model.model_id,
+            "model_sha256": canonical_training_candidate_model_sha256(self.model),
+            "decisions": self.decisions,
+            "agreements": self.agreements,
+            "disagreements": self.decisions - self.agreements,
+            "accuracy": self.agreements / self.decisions if self.decisions else 0.0,
+            "mean_confidence": (
+                self.confidence_total / self.decisions if self.decisions else 0.0
+            ),
+            "kind_counts": dict(sorted(self.kind_counts.items())),
+            "kind_accuracy": {
+                kind: self.kind_agreements[kind] / count
+                for kind, count in sorted(self.kind_counts.items())
+            },
+            "candidate_count_counts": {
+                str(count): examples
+                for count, examples in sorted(self.candidate_count_counts.items())
+            },
+            "candidate_count_accuracy": {
+                str(count): self.candidate_count_agreements[count] / examples
+                for count, examples in sorted(self.candidate_count_counts.items())
+            },
+            "forced_decisions": self.forced_decisions,
+            "forced_agreements": self.forced_agreements,
+            "forced_accuracy": (
+                self.forced_agreements / self.forced_decisions
+                if self.forced_decisions
+                else 0.0
+            ),
+            "genuine_decisions": self.genuine_decisions,
+            "genuine_agreements": self.genuine_agreements,
+            "genuine_accuracy": (
+                self.genuine_agreements / self.genuine_decisions
+                if self.genuine_decisions
+                else 0.0
+            ),
+            "genuine_kind_counts": dict(sorted(self.genuine_kind_counts.items())),
+            "genuine_kind_accuracy": {
+                kind: self.genuine_kind_agreements[kind] / count
+                for kind, count in sorted(self.genuine_kind_counts.items())
+            },
+            "confusion": dict(sorted(self.confusion.items())),
+            "disagreement_examples": self.disagreement_examples,
+            "model_had_execution_authority": False,
+            "authority_choice_kinds": [],
+            "teacher_fallback_on_model_disagreement": None,
+        }
 
 
 def evaluate_training_candidate_model(

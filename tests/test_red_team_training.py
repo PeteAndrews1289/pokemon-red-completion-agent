@@ -54,7 +54,10 @@ from pokemon_red_completion.red_team_training import (
     switch_active_battler,
 )
 from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingArea
-from pokemon_red_completion.training_candidate_rank import TrainingCandidateDecision
+from pokemon_red_completion.training_candidate_rank import (
+    TrainingCandidateDecision,
+    TrainingChoiceKind,
+)
 from pokemon_red_completion.training_control import TrainingControlAction, TrainingControlDecision
 from pokemon_red_completion.training_venue import TrainingVenue
 
@@ -598,6 +601,139 @@ def test_balancing_emits_identity_free_trainee_and_venue_choices() -> None:
     assert "species" not in serialized
     assert "area_id" not in serialized
     assert "map" not in serialized
+
+
+def test_candidate_authority_executes_an_alternate_trainee_binding(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (
+                species,
+                20
+                if species == DUX_SPECIES_ID
+                else 40
+                if species == BLASTOISE_SPECIES_ID
+                else 30,
+            )
+            for species in FINAL_FORM_ROSTER
+        ]
+    )
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+    chose_alternate = False
+
+    def authority(decision: TrainingCandidateDecision) -> int:
+        nonlocal chose_alternate
+        if decision.observation.kind is TrainingChoiceKind.TRAINEE and not chose_alternate:
+            chose_alternate = True
+            assert decision.selected_candidate_index == 2
+            return 1
+        return decision.selected_candidate_index
+
+    with pytest.raises(RuntimeError, match="stopped before readiness"):
+        run(
+            memory,
+            FakeReader([state()]),
+            policy=BalancedTeamPolicy(
+                minimum_level=55,
+                maximum_level_spread=40,
+                required_size=6,
+                max_steps=1,
+            ),
+            candidate_decision_authority=authority,
+        )
+
+    assert chose_alternate
+    assert (0, 1) in memory.swaps, memory.swaps
+
+
+def test_candidate_authority_executes_an_alternate_venue_binding(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (
+                species,
+                20
+                if species == DUX_SPECIES_ID
+                else 40
+                if species == BLASTOISE_SPECIES_ID
+                else 30,
+            )
+            for species in FINAL_FORM_ROSTER
+        ]
+    )
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+    walks = {"lower": 0, "higher": 0}
+
+    def venue(name: str, minimum: int, maximum: int) -> TrainingVenue:
+        def walk(*_args: object) -> int:
+            walks[name] += 1
+            return 1
+
+        return TrainingVenue(
+            band=GrindingArea(
+                name,
+                minimum,
+                maximum,
+                rare_maximum_encounter_level=maximum,
+                measured_samples=100,
+            ),
+            map_id=TRAINING_MAP,
+            walk_to_grass=walk,
+            heal_and_return=lambda *_args: None,
+            is_in_center=lambda raw: raw.map_id == CENTER_MAP,
+            move_slot=lambda _raw: 1,
+        )
+
+    def authority(decision: TrainingCandidateDecision) -> int:
+        if decision.observation.kind is TrainingChoiceKind.VENUE:
+            assert decision.selected_candidate_index == 1
+            return 0
+        return decision.selected_candidate_index
+
+    with pytest.raises(RuntimeError, match="stopped before readiness"):
+        run(
+            memory,
+            FakeReader([state()]),
+            policy=BalancedTeamPolicy(
+                minimum_level=55,
+                maximum_level_spread=40,
+                required_size=6,
+                max_steps=1,
+            ),
+            venues=[venue("lower", 1, 10), venue("higher", 5, 12)],
+            candidate_decision_authority=authority,
+        )
+
+    assert walks == {"lower": 1, "higher": 0}, memory.swaps
+
+
+@pytest.mark.parametrize("selected", [True, -1, 99])
+def test_candidate_authority_fails_closed_on_an_invalid_index(selected: object) -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (
+                species,
+                20
+                if species == DUX_SPECIES_ID
+                else 40
+                if species == BLASTOISE_SPECIES_ID
+                else 30,
+            )
+            for species in FINAL_FORM_ROSTER
+        ]
+    )
+
+    with pytest.raises(RuntimeError, match="invalid candidate index"):
+        run(
+            memory,
+            FakeReader([state()]),
+            candidate_decision_authority=lambda _decision: selected,
+        )
 
 
 def test_training_without_the_escort_fails_before_the_first_step() -> None:

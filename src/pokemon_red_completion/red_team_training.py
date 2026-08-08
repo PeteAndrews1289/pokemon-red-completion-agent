@@ -51,6 +51,8 @@ from pokemon_red_completion.team_training import (
 from pokemon_red_completion.training_candidate_rank import (
     TrainingCandidateDecision,
     TrainingCandidateSet,
+    bind_trainee_candidate,
+    bind_venue_candidate,
     project_trainee_candidates,
     project_venue_candidates,
 )
@@ -717,6 +719,7 @@ def run_red_team_balancing(
     progress_sink: Callable[[str], None] | None = None,
     decision_sink: Callable[[TrainingControlDecision], None] | None = None,
     candidate_decision_sink: Callable[[TrainingCandidateDecision], None] | None = None,
+    candidate_decision_authority: Callable[[TrainingCandidateDecision], int] | None = None,
     decision_authority: Callable[
         [TrainingControlDecision], TrainingControlAction
     ] | None = None,
@@ -754,8 +757,8 @@ def run_red_team_balancing(
         observation: TrainingCandidateSet,
         selected_index: int,
         reason: str,
-    ) -> None:
-        """Publish only choices whose label is observable from portable features."""
+    ) -> int:
+        """Publish the teacher label, then return the authorized live binding."""
 
         nonlocal candidate_decision_index
         decision = TrainingCandidateDecision(
@@ -767,6 +770,14 @@ def run_red_team_balancing(
         if candidate_decision_sink is not None:
             candidate_decision_sink(decision)
         candidate_decision_index += 1
+        if candidate_decision_authority is None:
+            return selected_index
+        authorized = candidate_decision_authority(decision)
+        if type(authorized) is not int or authorized not in range(  # noqa: E721
+            len(observation.candidates)
+        ):
+            raise RuntimeError("training-candidate authority selected an invalid candidate index")
+        return authorized
 
     def emit_progress() -> None:
         """Report progress as a message the caller renders in its own record type.
@@ -932,11 +943,22 @@ def run_red_team_balancing(
                 if trainee_projection is not None:
                     projected_trainee, selected_index, observation = trainee_projection
                     if projected_trainee == trainee:
-                        emit_candidate_decision(
+                        authorized_index = emit_candidate_decision(
                             observation,
                             selected_index,
                             "weakest venue-compatible member below the level floor",
                         )
+                        trainee = bind_trainee_candidate(
+                            party,
+                            policy,
+                            bands,
+                            authorized_index,
+                        )
+                        target_band = choose_grinding_area(bands, trainee, policy)
+                        if target_band is None:
+                            raise RuntimeError(
+                                "The authorized trainee has no executable training venue."
+                            )
                 venue_projection = project_venue_candidates(
                     party,
                     policy,
@@ -946,11 +968,36 @@ def run_red_team_balancing(
                 if venue_projection is not None:
                     projected_area, selected_index, observation = venue_projection
                     if projected_area == target_band:
-                        emit_candidate_decision(
+                        authorized_index = emit_candidate_decision(
                             observation,
                             selected_index,
                             "highest-yield safe measured venue",
                         )
+                        target_band = bind_venue_candidate(
+                            party,
+                            policy,
+                            trainee,
+                            bands,
+                            authorized_index,
+                        )
+                current_venue = next(v for v in venues if v.band == target_band)
+                if (
+                    candidate_decision_authority is not None
+                    and not party.fainted_count
+                    and decision.directive
+                    not in {TeamTrainingDirective.STOP, TeamTrainingDirective.RECRUIT_MEMBER}
+                ):
+                    if member_is_unsafe_for_team_training(trainee, policy):
+                        directive = TeamTrainingDirective.RESTORE_TEAM
+                    elif trainee.slot != 1:
+                        directive = TeamTrainingDirective.SWITCH_TRAINEE
+                    else:
+                        directive = TeamTrainingDirective.TRAIN_MEMBER
+                    decision = TeamTrainingDecision(
+                        directive,
+                        "candidate authority selected a below-floor trainee",
+                        target_slot=trainee.slot,
+                    )
 
         else:
             precursor_species, final_species = evolution_target
@@ -975,11 +1022,19 @@ def run_red_team_balancing(
             if venue_projection is not None:
                 projected_area, selected_index, observation = venue_projection
                 if projected_area == target_band:
-                    emit_candidate_decision(
+                    authorized_index = emit_candidate_decision(
                         observation,
                         selected_index,
                         "highest-yield safe measured evolution venue",
                     )
+                    target_band = bind_venue_candidate(
+                        party,
+                        policy,
+                        trainee,
+                        bands,
+                        authorized_index,
+                    )
+                    current_venue = next(v for v in venues if v.band == target_band)
 
             if member_is_unsafe_for_team_training(trainee, policy):
                 directive = TeamTrainingDirective.RESTORE_TEAM

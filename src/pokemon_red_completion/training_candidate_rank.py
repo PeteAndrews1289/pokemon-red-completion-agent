@@ -233,13 +233,7 @@ def project_trainee_candidates(
     from the feature vector.
     """
 
-    eligible = tuple(
-        member
-        for member in party.members
-        if member_needs_training(member, policy)
-        and member.is_trainable
-        and any(member_can_train_at(member, policy, area) for area in areas)
-    )
+    eligible = _eligible_trainees(party, policy, areas)
     if not eligible:
         return None
     candidates = tuple(
@@ -282,11 +276,11 @@ def project_venue_candidates(
 ) -> tuple[GrindingArea, int, TrainingCandidateSet] | None:
     """Project every safe venue and label the teacher's efficiency choice."""
 
-    eligible = tuple(
-        area
-        for area in areas
-        if member_can_train_at(trainee, policy, area)
-        and (area.has_nearby_healer or not require_healer)
+    eligible = _eligible_venues(
+        trainee,
+        policy,
+        areas,
+        require_healer=require_healer,
     )
     if not eligible:
         return None
@@ -314,6 +308,72 @@ def project_venue_candidates(
     selected = best[0]
     selected_index = eligible.index(selected)
     return selected, selected_index, observation
+
+
+def bind_trainee_candidate(
+    party: PartyObservation,
+    policy: BalancedTeamPolicy,
+    areas: tuple[GrindingArea, ...],
+    candidate_index: int,
+) -> PartyMemberObservation:
+    """Resolve one ephemeral model index against the exact live trainee set."""
+
+    eligible = _eligible_trainees(party, policy, areas)
+    if type(candidate_index) is not int or candidate_index not in range(len(eligible)):  # noqa: E721
+        raise TrainingCandidateRankError("trainee candidate binding index is invalid")
+    return eligible[candidate_index]
+
+
+def bind_venue_candidate(
+    party: PartyObservation,
+    policy: BalancedTeamPolicy,
+    trainee: PartyMemberObservation,
+    areas: tuple[GrindingArea, ...],
+    candidate_index: int,
+    *,
+    require_healer: bool = True,
+) -> GrindingArea:
+    """Resolve one ephemeral model index against the exact live venue set."""
+
+    del party  # kept in the public binding signature for projector symmetry
+    eligible = _eligible_venues(
+        trainee,
+        policy,
+        areas,
+        require_healer=require_healer,
+    )
+    if type(candidate_index) is not int or candidate_index not in range(len(eligible)):  # noqa: E721
+        raise TrainingCandidateRankError("venue candidate binding index is invalid")
+    return eligible[candidate_index]
+
+
+def _eligible_trainees(
+    party: PartyObservation,
+    policy: BalancedTeamPolicy,
+    areas: tuple[GrindingArea, ...],
+) -> tuple[PartyMemberObservation, ...]:
+    return tuple(
+        member
+        for member in party.members
+        if member_needs_training(member, policy)
+        and member.is_trainable
+        and any(member_can_train_at(member, policy, area) for area in areas)
+    )
+
+
+def _eligible_venues(
+    trainee: PartyMemberObservation,
+    policy: BalancedTeamPolicy,
+    areas: tuple[GrindingArea, ...],
+    *,
+    require_healer: bool,
+) -> tuple[GrindingArea, ...]:
+    return tuple(
+        area
+        for area in areas
+        if member_can_train_at(trainee, policy, area)
+        and (area.has_nearby_healer or not require_healer)
+    )
 
 
 def _candidate_features(
