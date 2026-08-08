@@ -275,6 +275,14 @@ turned 12,285 seeks into heals. Those errors are usually safe but can prevent pr
 recovery trips. Shadow therefore passed as evidence, not promotion. Bounded control must expose
 those consequences without hiding them behind teacher fallback.
 
+The first control boundary therefore grants the model authority only where the weakest evidence is:
+battle `fight` versus `flee`. If the model conservatively flees a matchup the teacher would fight,
+that exit really happens and the run pays its progress cost. If it requests a fight at an unsafe,
+volatile, excluded, exhausted, or capped-escort boundary, the referee terminates the run rather
+than substituting a teacher flee. Overworld decisions remain teacher-controlled and are reported as
+such. This is partial authority, but it is causal authority—model errors can now change or end the
+trajectory, and no disagreement is hidden.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

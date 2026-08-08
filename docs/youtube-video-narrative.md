@@ -225,6 +225,12 @@ but only 42.05% of fights, replacing 1,134 safe fights with conservative exits; 
 12,285 seeks with heals. That makes the next episode concrete: can a safety referee permit genuine
 model authority without quietly turning every disagreement back into teacher control?
 
+Answer with a deliberately narrow control diagram. Connect the model to `fight` and `flee` only;
+leave overworld actions connected to the teacher. A conservative model flee really exits and costs
+progress. An unsafe model fight hits a red referee wall and ends the run—there is no teacher arrow
+around it. Label the experiment **“battle authority: true; overworld authority: false; fallback:
+none.”** This makes the first controlled failure as scientifically useful as a completion.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

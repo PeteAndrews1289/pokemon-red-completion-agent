@@ -445,6 +445,23 @@ def test_a_wrong_venue_stops_early_and_names_the_band() -> None:
     assert "20" in message, f"our own levels must survive into the report: {message}"
 
 
+def test_battle_authority_fails_closed_instead_of_fighting_unsafe() -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [(DIGLETT_SPECIES_ID, 20), (BLASTOISE_SPECIES_ID, ESCORT_LEVEL_CAP - 5)]
+        + [(DUGTRIO_SPECIES_ID, 25) for _ in range(4)],
+        hp=30,
+    )
+    reader = FakeReader([state(battle_state=1, enemy_level=10, enemy_species_id=0x21)])
+
+    with pytest.raises(RuntimeError, match="referee rejected fight at unsafe boundary"):
+        run(
+            memory,
+            reader,
+            decision_authority=lambda _decision: TrainingControlAction.FIGHT,
+        )
+
+
 def test_an_unrelated_battle_runtime_failure_is_not_misreported_as_pp_exhaustion(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

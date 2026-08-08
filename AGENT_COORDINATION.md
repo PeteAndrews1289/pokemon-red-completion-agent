@@ -207,6 +207,9 @@ root next; never treat the shadow model's predictions as execution commands.
 Shadow root 01 passed with 55,904 decisions and 75.57% raw / 76.73% balanced agreement. The model
 still had no authority. Fight recall is only 42.05% and 12,285 seeks became heals; bounded control
 must address those measured risks without silently substituting teacher actions.
+Battle-only authority is now implemented. Safe model flee choices execute; unsafe model fights
+abort. Overworld remains teacher-controlled. Do not call this full training control, and do not
+permit teacher fallback on disagreement in the fresh controlled run.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

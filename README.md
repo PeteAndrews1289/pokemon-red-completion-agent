@@ -121,6 +121,14 @@ is only 42.05% because 1,134 safe fights became conservative flees, while 12,285
 unnecessary heals. Stop recall was exact. The model still had no authority. See the
 [live shadow receipt](docs/evidence/training-control-shadow-01-2026-08-08.json).
 
+The first authority boundary is now implemented as battle-only control. The authenticated model may
+choose `fight` or `flee`; overworld seeking, healing, and stopping remain teacher-controlled. A
+model-selected safe flee is executed even when the teacher would fight. A model-selected fight at
+any volatile, excluded, unsafe-health, capped-escort, or exhausted-PP boundary fails the run closed
+instead of substituting the teacher action. The control audit states its authority phase and that
+no teacher fallback occurred. This is intentionally narrower than full training control, but it is
+real model authority over the measured weakest phase.
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

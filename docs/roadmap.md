@@ -190,6 +190,10 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   zero faints, all level 55, with teacher-only execution authority.
 - [ ] Build a bounded control referee around the measured errors: conservative fight-to-flee and
   unnecessary seek-to-heal. Attempt a fresh model-controlled lineage without teacher fallback.
+- [x] Implement battle-only model authority: execute safe model fight/flee choices, fail closed on
+  unsafe fights, retain teacher overworld authority, and prohibit disagreement fallback.
+- [ ] Run a fresh battle-controlled lineage; preserve its first failure or complete terminal, then
+  use that evidence to decide whether retraining is required before overworld authority.
   The class-balanced MLP, phase-masked inference, metrics, and fail-closed candidate fitter are
   implemented and tested synthetically; this item remains open until real v2 lineages exist.
 - [ ] Run the candidate in shadow mode, then model-controlled mode under the unchanged teacher

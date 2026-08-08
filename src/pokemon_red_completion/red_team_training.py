@@ -693,6 +693,9 @@ def run_red_team_balancing(
     cancel_interval: int = 40,
     progress_sink: Callable[[str], None] | None = None,
     decision_sink: Callable[[TrainingControlDecision], None] | None = None,
+    decision_authority: Callable[
+        [TrainingControlDecision], TrainingControlAction
+    ] | None = None,
     completed_checkpoint_count: int = 0,
     evolution_target: tuple[int, int] | None = None,
     venues: Sequence[TrainingVenue],
@@ -767,12 +770,10 @@ def run_red_team_balancing(
         progress: TeamTrainingProgress,
         trainee: PartyMemberObservation | None,
         enemy_level: int | None = None,
-    ) -> None:
+    ) -> TrainingControlAction:
         """Publish supervision before the teacher executes the mechanic."""
 
         nonlocal decision_index
-        if decision_sink is None:
-            return
         pp = training_attack_pp(trainee) if trainee is not None else None
         reserve = training_attack_pp_reserve(trainee, policy) if trainee is not None else None
         observation = project_training_control_observation(
@@ -788,8 +789,22 @@ def run_red_team_balancing(
             consecutive_flees=consecutive_flees,
             max_consecutive_flees=max_consecutive_flees,
         )
-        decision_sink(TrainingControlDecision(decision_index, action, observation, reason))
+        decision = TrainingControlDecision(decision_index, action, observation, reason)
+        if decision_sink is not None:
+            decision_sink(decision)
         decision_index += 1
+        if decision_authority is None:
+            return action
+        selected = decision_authority(decision)
+        if selected not in observation.candidate_actions:
+            raise RuntimeError("training-control authority selected an illegal phase action")
+        return selected
+
+    def require_safe_exit(selected: TrainingControlAction, reason: str) -> None:
+        if selected is not TrainingControlAction.FLEE:
+            raise RuntimeError(
+                f"training-control referee rejected {selected.value} at unsafe boundary: {reason}"
+            )
 
     # Never None. A venue is needed before any trainee is matched to one --
     # ``plan_team_training`` can ask to RESTORE_TEAM on the first iteration, and
@@ -909,7 +924,7 @@ def run_red_team_balancing(
                     consecutive_flees = 0
                     emit_progress()
                     continue
-                emit_decision(
+                selected = emit_decision(
                     TrainingControlAction.FLEE,
                     "volatile matchup",
                     phase=TrainingControlPhase.BATTLE,
@@ -918,6 +933,7 @@ def run_red_team_balancing(
                     trainee=party_reader.read().lead,
                     enemy_level=raw.enemy_level,
                 )
+                require_safe_exit(selected, "volatile matchup")
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
                 require_zero_faints(party_reader, "volatile-matchup escape")
                 record_flee("volatile matchup")
@@ -936,7 +952,7 @@ def run_red_team_balancing(
                     battles += 1
                     consecutive_flees = 0
                     continue
-                emit_decision(
+                selected = emit_decision(
                     TrainingControlAction.FLEE,
                     "excluded matchup",
                     phase=TrainingControlPhase.BATTLE,
@@ -945,6 +961,7 @@ def run_red_team_balancing(
                     trainee=party_reader.read().lead,
                     enemy_level=raw.enemy_level,
                 )
+                require_safe_exit(selected, "excluded matchup")
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
                 require_zero_faints(party_reader, "excluded-matchup escape")
                 record_flee("excluded matchup")
@@ -973,7 +990,7 @@ def run_red_team_balancing(
                     battles += 1
                     consecutive_flees = 0
                     continue
-                emit_decision(
+                selected = emit_decision(
                     TrainingControlAction.FLEE,
                     "escort has reached the parity cap",
                     phase=TrainingControlPhase.BATTLE,
@@ -982,6 +999,7 @@ def run_red_team_balancing(
                     trainee=party_reader.read().lead,
                     enemy_level=raw.enemy_level,
                 )
+                require_safe_exit(selected, "escort at parity")
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
                 require_zero_faints(party_reader, "capped-escort escape")
                 record_flee("escort at parity")
@@ -995,7 +1013,7 @@ def run_red_team_balancing(
                 or training_attack_pp(fighter) <= training_attack_pp_reserve(fighter, policy)
             )
             if fighter_unsafe:
-                emit_decision(
+                selected = emit_decision(
                     TrainingControlAction.FLEE,
                     "selected fighter is unsafe",
                     phase=TrainingControlPhase.BATTLE,
@@ -1004,6 +1022,7 @@ def run_red_team_balancing(
                     trainee=trainee,
                     enemy_level=raw.enemy_level,
                 )
+                require_safe_exit(selected, "unsafe selected fighter")
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
                 require_zero_faints(party_reader, "unsafe-matchup escape")
                 record_flee("unsafe matchup")
@@ -1022,7 +1041,7 @@ def run_red_team_balancing(
                 continue
             if reader.read().battle_state != 1:
                 continue
-            emit_decision(
+            selected = emit_decision(
                 TrainingControlAction.FIGHT,
                 "matchup and resource gates permit a training battle",
                 phase=TrainingControlPhase.BATTLE,
@@ -1031,6 +1050,13 @@ def run_red_team_balancing(
                 trainee=trainee,
                 enemy_level=raw.enemy_level,
             )
+            if selected is TrainingControlAction.FLEE:
+                flee_func(actions, reader, emulator, flee_run, flee_timing)
+                require_zero_faints(party_reader, "model-selected safe escape")
+                record_flee("model-selected safe escape")
+                continue
+            if selected is not TrainingControlAction.FIGHT:
+                raise RuntimeError("battle authority did not select fight or flee")
             try:
                 run_adaptive_wild_battle(
                     reader,
@@ -1062,7 +1088,7 @@ def run_red_team_balancing(
                         consecutive_flees = 0
                         emit_progress()
                         continue
-                emit_decision(
+                selected = emit_decision(
                     TrainingControlAction.FLEE,
                     "live attack PP was exhausted or disabled",
                     phase=TrainingControlPhase.BATTLE,
@@ -1071,6 +1097,7 @@ def run_red_team_balancing(
                     trainee=party_reader.read().lead,
                     enemy_level=current.enemy_level,
                 )
+                require_safe_exit(selected, "live PP exhaustion or Disable")
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
                 require_zero_faints(party_reader, "PP-exhaustion escape")
                 record_flee("live PP exhaustion or Disable")
