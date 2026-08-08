@@ -1,0 +1,82 @@
+{
+  "schema": "pokemon-training-candidate-runtime-promotion-plan-v1",
+  "status": "preregistered_after_v1_authority_wrapper_repair_before_control_02",
+  "offline_promotion_plan_sha256": "7176a2e8685439f2e3936613709eb93e34331ecd229624fbb5a31c2a9db4b40a",
+  "required_offline_gate": {
+    "offline_candidate_eligible": true,
+    "shadow_may_start": true
+  },
+  "frozen_candidate": {
+    "model_file_sha256": "53104c999f0289f8a1dcef9816c34e6963963a047bf710a05544e383c328fdd3",
+    "canonical_model_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026",
+    "retrained_after_v1_failure": false
+  },
+  "repair": {
+    "source_commit": "a089988eb5717ea6b8f5449deb0b36c070b87495",
+    "rejected_v1_receipt_sha256": "e28d9355895f066ce64971bb068d9499523039aac82e2c6d97ac889672adde6d",
+    "failure": "candidate authority recomputed a downstream training directive despite returning the teacher candidate index",
+    "required_invariant": "returning the teacher candidate index is behaviorally identical to teacher-only execution",
+    "rom_free_regression_test": "test_candidate_authority_agreement_is_behaviorally_a_no_op"
+  },
+  "lineages": {
+    "shadow": {
+      "lineage_id": "training-candidate-v1-shadow-01",
+      "root_sha256": "0360a80ff93f9a3f45220671004d37192a92c5a30b2cb38fdc823a394ed9cbb8",
+      "reuse_reason": "the repair only changes the authority path; the frozen no-authority shadow remains valid"
+    },
+    "causal_control": {
+      "lineage_id": "training-candidate-v1-control-02",
+      "root_sha256": "1d89c037716bfffe4dabf6a0360f1a9e73d3b7cbb2dce379e4dc20e7edc0f73e",
+      "root_derivation_log_sha256": "7f26a659ea430c2abd265faf8db9235b2742633f1977a294f4be9ed3b1ac7463",
+      "opened_before_preregistration": false
+    }
+  },
+  "claim_boundary": {
+    "learned_authority": [
+      "select an ephemeral below-floor trainee candidate",
+      "select an ephemeral safe measured venue candidate"
+    ],
+    "fixed_referee": [
+      "candidate eligibility and feature projection",
+      "hard health, status, PP, encounter, budget, and terminal-readiness checks"
+    ],
+    "fixed_mechanics": [
+      "navigation",
+      "party-menu execution",
+      "healing",
+      "battle execution"
+    ],
+    "prohibited_claims": [
+      "end-to-end autonomous Pokemon play",
+      "learned navigation or battle tactics",
+      "cross-title transfer"
+    ]
+  },
+  "shadow_gates": {
+    "required_status": "ok",
+    "model_artifact_authenticated": true,
+    "model_had_execution_authority": false,
+    "required_choice_kinds": ["trainee", "venue"],
+    "minimum_genuine_multi_candidate_decisions": 100,
+    "minimum_genuine_accuracy": 0.9,
+    "minimum_genuine_per_kind_accuracy": 0.85,
+    "maximum_faints": 0,
+    "required_final_party_levels": [55, 55, 55, 55, 55, 55]
+  },
+  "causal_gates": {
+    "required_status": "ok",
+    "model_artifact_authenticated": true,
+    "authority_choice_kinds": ["trainee", "venue"],
+    "teacher_fallback_on_model_disagreement": false,
+    "minimum_controlled_genuine_decisions": 100,
+    "minimum_model_teacher_disagreements": 1,
+    "maximum_candidate_decisions": 125000,
+    "maximum_battles": 1900,
+    "maximum_healing_trips": 1150,
+    "maximum_faints": 0,
+    "required_final_party_levels": [55, 55, 55, 55, 55, 55]
+  },
+  "portable_training_loop_may_start": false,
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}
