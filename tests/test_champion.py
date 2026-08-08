@@ -2,6 +2,7 @@ from dataclasses import replace
 
 from pokemon_red_completion.champion import (
     CHAMPION_ARCANINE_FINISH_SAFE_HP,
+    CHAMPION_BATTLE_CHECKPOINT_COUNT,
     CHAMPION_CHECKPOINT_COUNT,
     CHAMPION_FORCED_SWITCH_LIMIT,
     CHAMPION_FULL_RESTORE_INPUT_RESERVE,
@@ -10,6 +11,7 @@ from pokemon_red_completion.champion import (
     CHAMPION_RHYDON_SAFE_HP,
     CHAMPION_RNG_DELAY_FRAMES,
     CHAMPION_SAFE_HP,
+    HALL_OF_FAME_CHECKPOINT_COUNT,
     ChampionChapterReport,
     ChampionCheckpoint,
     ChampionTurn,
@@ -33,6 +35,8 @@ def _events(*flags: EventFlag) -> bytes:
 
 def test_champion_source_contract_is_exact() -> None:
     assert CHAMPION_CHECKPOINT_COUNT == 3
+    assert CHAMPION_BATTLE_CHECKPOINT_COUNT == 3
+    assert HALL_OF_FAME_CHECKPOINT_COUNT == 1
     assert CHAMPION_RNG_DELAY_FRAMES == 150
     assert CHAMPION_SAFE_HP == 90
     assert CHAMPION_FULL_RESTORE_INPUT_RESERVE == 2

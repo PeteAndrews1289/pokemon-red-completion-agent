@@ -10,6 +10,7 @@ from pokemon_red_completion.blaine import (
     run_mansion_secret_key_chapter,
 )
 from pokemon_red_completion.bruno import run_bruno_chapter
+from pokemon_red_completion.champion import run_champion_chapter, run_hall_of_fame_chapter
 from pokemon_red_completion.cinnabar import run_cinnabar_chapter
 from pokemon_red_completion.dojo import run_dojo_chapter
 from pokemon_red_completion.domain import GameState
@@ -852,6 +853,85 @@ class DefeatLanceObjectiveSkill:
 
     def execute(self) -> ObjectiveSkillExecution:
         report = run_lance_chapter(self.emulator, self.reader, self.executor)
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class DefeatChampionObjectiveSkill:
+    """Defeat the Champion and stop before the Hall of Fame ceremony."""
+
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    objective_id: str = "defeat_champion"
+    specialist: Specialist = Specialist.BATTLE
+    expected_facts: frozenset[str] = frozenset({"league:champion_defeated"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 10_000
+    max_frames: int = 3_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "champions_room"
+            and "league:lance_defeated" in state.facts
+            and "league:champion_defeated" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            "Observed the qualified Champion room boundary."
+            if executable
+            else "Requires the Champion room after Lance.",
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_champion_chapter(
+            self.emulator,
+            self.reader,
+            self.executor,
+            stop_after_victory=True,
+        )
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class EnterHallOfFameObjectiveSkill:
+    """Advance only the post-Champion ceremony and verify Hall of Fame entry."""
+
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    objective_id: str = "enter_hall_of_fame"
+    specialist: Specialist = Specialist.VERIFICATION
+    expected_facts: frozenset[str] = frozenset({"game:hall_of_fame"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 1_000
+    max_frames: int = 1_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "champions_room"
+            and "league:champion_defeated" in state.facts
+            and "game:hall_of_fame" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            "Observed the post-Champion ceremony boundary."
+            if executable
+            else "Requires the defeated-Champion ceremony boundary.",
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_hall_of_fame_chapter(self.emulator, self.reader, self.executor)
         return ObjectiveSkillExecution(
             actions_executed=report.actions_executed,
             frames_executed=report.frames_executed,

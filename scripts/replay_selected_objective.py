@@ -42,12 +42,14 @@ from pokemon_red_completion.red_objective_skills import (
     DefeatAgathaObjectiveSkill,
     DefeatBlaineObjectiveSkill,
     DefeatBrunoObjectiveSkill,
+    DefeatChampionObjectiveSkill,
     DefeatErikaObjectiveSkill,
     DefeatGiovanniObjectiveSkill,
     DefeatKogaObjectiveSkill,
     DefeatLanceObjectiveSkill,
     DefeatLoreleiObjectiveSkill,
     DefeatSabrinaObjectiveSkill,
+    EnterHallOfFameObjectiveSkill,
     LiberateSilphObjectiveSkill,
     ObtainSecretKeyObjectiveSkill,
     ObtainStrengthObjectiveSkill,
@@ -88,9 +90,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--max-decisions",
         type=int,
-        choices=tuple(range(1, 20)),
+        choices=tuple(range(1, 22)),
         default=1,
-        help="execute one to nineteen decisions through the registered Red skills",
+        help="execute one to twenty-one decisions through the registered Red skills",
     )
     args = parser.parse_args(argv)
 
@@ -147,6 +149,8 @@ def main(argv: list[str] | None = None) -> int:
             DefeatBrunoObjectiveSkill(emulator, reader, executor),
             DefeatAgathaObjectiveSkill(emulator, reader, executor),
             DefeatLanceObjectiveSkill(emulator, reader, executor),
+            DefeatChampionObjectiveSkill(emulator, reader, executor),
+            EnterHallOfFameObjectiveSkill(emulator, reader, executor),
         ]
         loop = PortablePlayerLoop(
             graph=COMPLETION_QUEST,

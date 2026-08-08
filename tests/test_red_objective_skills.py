@@ -10,12 +10,14 @@ from pokemon_red_completion.red_objective_skills import (
     DefeatAgathaObjectiveSkill,
     DefeatBlaineObjectiveSkill,
     DefeatBrunoObjectiveSkill,
+    DefeatChampionObjectiveSkill,
     DefeatErikaObjectiveSkill,
     DefeatGiovanniObjectiveSkill,
     DefeatKogaObjectiveSkill,
     DefeatLanceObjectiveSkill,
     DefeatLoreleiObjectiveSkill,
     DefeatSabrinaObjectiveSkill,
+    EnterHallOfFameObjectiveSkill,
     LiberateSilphObjectiveSkill,
     ObtainSecretKeyObjectiveSkill,
     ObtainStrengthObjectiveSkill,
@@ -147,6 +149,8 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     bruno = DefeatBrunoObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     agatha = DefeatAgathaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     lance = DefeatLanceObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    champion = DefeatChampionObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    hall = EnterHallOfFameObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     celadon = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"item:silph_scope"}),
@@ -233,6 +237,15 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
         location="lances_room",
     )
     assert lance.availability(lance_room).executable
+    champion_room = GameState(
+        GameMode.OVERWORLD,
+        facts=lance_room.with_facts("league:lance_defeated").facts,
+        location="champions_room",
+    )
+    assert champion.availability(champion_room).executable
+    ceremony = champion_room.with_facts("league:champion_defeated")
+    assert hall.availability(ceremony).executable
+    assert not champion.availability(ceremony).executable
 
 
 def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
@@ -327,6 +340,20 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
         (DefeatBrunoObjectiveSkill, "run_bruno_chapter", "defeat_bruno", 800, 100_000),
         (DefeatAgathaObjectiveSkill, "run_agatha_chapter", "defeat_agatha", 800, 100_000),
         (DefeatLanceObjectiveSkill, "run_lance_chapter", "defeat_lance", 800, 100_000),
+        (
+            DefeatChampionObjectiveSkill,
+            "run_champion_chapter",
+            "defeat_champion",
+            800,
+            100_000,
+        ),
+        (
+            EnterHallOfFameObjectiveSkill,
+            "run_hall_of_fame_chapter",
+            "enter_hall_of_fame",
+            100,
+            20_000,
+        ),
     ),
 )
 def test_red_fuchsia_followup_skills_match_graph_and_preserve_evidence(

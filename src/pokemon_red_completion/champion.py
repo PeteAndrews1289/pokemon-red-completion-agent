@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Literal, Protocol, overload
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.agatha import AGATHA_X_SPECIAL_USE
@@ -63,6 +63,8 @@ from pokemon_red_completion.victory_road import (
 )
 
 CHAMPION_CHECKPOINT_COUNT = 3
+CHAMPION_BATTLE_CHECKPOINT_COUNT = 3
+HALL_OF_FAME_CHECKPOINT_COUNT = 1
 # Removed local level parity contract, using COMPLETION_LEVEL_PARITY instead
 CHAMPION_RNG_DELAY_FRAMES = 150
 CHAMPION_SAFE_HP = 90
@@ -272,6 +274,107 @@ class ChampionChapterReport:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class ChampionBattleReport:
+    """Evidence for defeating the Champion before the Hall of Fame transition."""
+
+    records: tuple[ChampionCheckpoint, ...]
+    final_raw: RawGameState
+    turns: tuple[ChampionTurn, ...]
+    party: tuple[tuple[int, int], ...]
+    hyper_potions_used: int
+    full_restores_used: int
+    full_heals_used: int
+    x_accuracy_used: int
+    x_specials_used: int
+    party_hp: tuple[int, ...]
+    party_levels: tuple[int, ...]
+    party_status: tuple[int, ...]
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            len(self.records) == CHAMPION_BATTLE_CHECKPOINT_COUNT
+            and _event(self.final_raw, EventFlag.BEAT_CHAMPION_RIVAL)
+            and self.final_raw.map_id == MapId.CHAMPIONS_ROOM
+            and self.party == CHAMPION_PARTY
+            and _turns_valid(self.turns)
+            and self.x_accuracy_used == 1
+            and self.x_specials_used == 6
+            and party_core_intact(self.final_raw.party_species_ids)
+            and self.controller_released
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        participation = summarize_party_participation(
+            (turn.active_party_index for turn in self.turns),
+            party_size=len(self.party_levels),
+        )
+        return {
+            "status": "ok" if self.passed else "failed",
+            "objective": "defeat_champion",
+            "party": [list(item) for item in self.party],
+            "participation": participation.public_dict(),
+            "resources": {
+                "hyper_potions_used": self.hyper_potions_used,
+                "full_restores_used": self.full_restores_used,
+                "full_heals_used": self.full_heals_used,
+                "x_accuracy_used": self.x_accuracy_used,
+                "x_specials_used": self.x_specials_used,
+            },
+            "terminal": {
+                "map": int(self.final_raw.map_id),
+                "position": [self.final_raw.player_x, self.final_raw.player_y],
+                "party_hp": list(self.party_hp),
+                "party_levels": list(self.party_levels),
+                "party_status": list(self.party_status),
+                "champion_event": _event(self.final_raw, EventFlag.BEAT_CHAMPION_RIVAL),
+                "hall_of_fame": self.final_raw.map_id == MapId.HALL_OF_FAME,
+            },
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class HallOfFameReport:
+    initial_raw: RawGameState
+    final_raw: RawGameState
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            self.initial_raw.map_id == MapId.CHAMPIONS_ROOM
+            and _event(self.initial_raw, EventFlag.BEAT_CHAMPION_RIVAL)
+            and self.final_raw.map_id == MapId.HALL_OF_FAME
+            and _event(self.final_raw, EventFlag.BEAT_CHAMPION_RIVAL)
+            and party_core_intact(self.final_raw.party_species_ids)
+            and self.controller_released
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "objective": "enter_hall_of_fame",
+            "champion_event": _event(self.final_raw, EventFlag.BEAT_CHAMPION_RIVAL),
+            "terminal": {
+                "map": int(self.final_raw.map_id),
+                "position": [self.final_raw.player_x, self.final_raw.player_y],
+            },
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
+
+
+@overload
 def run_champion_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -279,7 +382,31 @@ def run_champion_chapter(
     *,
     progress: ProgressSink | None = None,
     require_teacher_strategy_evidence: bool = True,
-) -> ChampionChapterReport:
+    stop_after_victory: Literal[True],
+) -> ChampionBattleReport: ...
+
+
+@overload
+def run_champion_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    progress: ProgressSink | None = None,
+    require_teacher_strategy_evidence: bool = True,
+    stop_after_victory: Literal[False] = False,
+) -> ChampionChapterReport: ...
+
+
+def run_champion_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    progress: ProgressSink | None = None,
+    require_teacher_strategy_evidence: bool = True,
+    stop_after_victory: bool = False,
+) -> ChampionChapterReport | ChampionBattleReport:
     start_frames = emulator.frame_count
     actions = CountingExecutor(executor)
     records: list[ChampionCheckpoint] = []
@@ -394,6 +521,8 @@ def run_champion_chapter(
     )
     while True:
         raw = reader.read()
+        if stop_after_victory and _champion_victory_observed(raw):
+            break
         if _completed(raw):
             break
         if raw.battle_state != 2:
@@ -503,6 +632,37 @@ def run_champion_chapter(
             last_recovery_turn = len(turns)
 
     final = reader.read()
+    if stop_after_victory:
+        _checkpoint(
+            records,
+            progress,
+            emulator,
+            final,
+            "champion_defeated",
+            "Champion defeated before Hall of Fame",
+        )
+        battle_report = ChampionBattleReport(
+            records=tuple(records),
+            final_raw=final,
+            turns=tuple(turns),
+            party=_encounter_party(turns),
+            hyper_potions_used=hyper_before - _bag(emulator).get(ItemId.HYPER_POTION, 0),
+            full_restores_used=restore_before - _bag(emulator).get(ItemId.FULL_RESTORE, 0),
+            full_heals_used=heal_before - _bag(emulator).get(ItemId.FULL_HEAL, 0),
+            x_accuracy_used=accuracy_before - _bag(emulator).get(ItemId.X_ACCURACY, 0),
+            x_specials_used=x_special_before - _bag(emulator).get(ItemId.X_SPECIAL, 0),
+            party_hp=_party_hp(emulator),
+            party_levels=_party_levels(emulator),
+            party_status=_party_status(emulator),
+            frames_executed=emulator.frame_count - start_frames,
+            actions_executed=actions.actions_executed,
+            controller_released=not emulator.pressed_buttons,
+        )
+        if not battle_report.passed:
+            raise ChampionChapterError(
+                f"Champion battle boundary evidence failed: {battle_report!r}."
+            )
+        return battle_report
     _checkpoint(
         records,
         progress,
@@ -532,6 +692,50 @@ def run_champion_chapter(
     if not report.passed:
         raise ChampionChapterError(f"Champion terminal evidence failed: {report!r}.")
     return report
+
+
+def run_hall_of_fame_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+) -> HallOfFameReport:
+    """Advance only the post-Champion ceremony and verify the Hall of Fame map."""
+
+    start_frames = emulator.frame_count
+    actions = CountingExecutor(executor)
+    initial = reader.read()
+    if (
+        initial.map_id != MapId.CHAMPIONS_ROOM
+        or not _event(initial, EventFlag.BEAT_CHAMPION_RIVAL)
+        or initial.battle_state != 0
+    ):
+        raise ChampionChapterError("Hall of Fame input boundary is not qualified.")
+    for _ in range(256):
+        raw = reader.read()
+        if raw.map_id == MapId.HALL_OF_FAME:
+            break
+        _pulse(actions, MacroActionKind.CONFIRM)
+    else:
+        raise ChampionChapterError("Champion ceremony did not reach the Hall of Fame.")
+    final = reader.read()
+    report = HallOfFameReport(
+        initial_raw=initial,
+        final_raw=final,
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=actions.actions_executed,
+        controller_released=not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise ChampionChapterError(f"Hall of Fame evidence failed: {report!r}.")
+    return report
+
+
+def _champion_victory_observed(raw: RawGameState) -> bool:
+    return (
+        raw.map_id == MapId.CHAMPIONS_ROOM
+        and raw.battle_state == 0
+        and _event(raw, EventFlag.BEAT_CHAMPION_RIVAL)
+    )
 
 
 def _battle_x_special(
