@@ -277,6 +277,24 @@ Animate mandatory recovery collapsing to singleton `heal`, verified readiness to
 and leave safe `seek`/optional-`heal` connected to the model. That visual carries the battle lesson
 forward: the referee defines safe affordances; the policy owns the choices that remain.
 
+Then allow the redesigned v6 controller to earn the narrow success. The offline card reads 100%,
+the fresh shadow completes, and the causal cable connects to both battle and overworld control.
+Let the counter finish at **57,644 controlled decisions; 1,801 battles; 1,046 heals; zero faints;
+all six level 55; zero fallback**. Show all seven operational gates turning green.
+
+Before calling it intelligence, put a second card beside it: **candidate-set-only baseline: 100%**.
+The legal choices already determine every label—safe battles say fight, safe movement says seek,
+and safety boundaries are singletons. Rename the green result on screen from “strategy learned” to
+**“live authority and safety integration verified.”** This is the episode's most important honest
+turn: even causal control can prove the plumbing without proving that state features matter.
+
+Move the camera one decision earlier. Show six party members competing to become the next trainee,
+then three measured encounter bands competing to become the venue. Strip species, slot, move, area,
+map, and memory identities from the cards; retain only candidate-relative readiness, health,
+levels, attack reserve, and encounter safety. Shuffle the cards and require the same candidate to
+win. End the beat on the preregistered challenge: **beat the shape-only baseline on a sealed lineage,
+then make the selected trainee and venue change the emulator for real.**
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

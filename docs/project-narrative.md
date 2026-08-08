@@ -1,5 +1,39 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 8: safe authority passed; useful strategy remains unproven
+
+The latest training-control campaign reached a result that is successful for engineering and
+deliberately inconclusive for learning. Two fresh training lineages and one sealed validation
+lineage all completed with six level-55 party members and zero faints. An authenticated v6 model
+then passed live shadow and received both battle and overworld authority on a fresh causal root.
+It owned all 57,644 strategic decisions, completed 1,801 battles and 1,046 healing trips, and
+finished at 55/55/55/55/55/55 with no teacher fallback.
+
+All seven preregistered operational gates passed. The model file, source commit, root state,
+candidate summary, offline approval, shadow report, causal report, and terminal conditions are
+independently authenticated. This proves that learned inference can occupy the live training seam,
+change execution, remain inside the referee's affordances, and complete the lesson without a hidden
+teacher substitution.
+
+The same campaign also invalidated the tempting interpretation of its perfect accuracy. A baseline
+that sees only the candidate set—not the 25 state features—also predicts every label: safe battle
+choices are always `fight`, safe overworld choices are always `seek`, and the safety-critical cases
+are singletons. V6 therefore qualifies the **authority path**, not a state-dependent training
+strategy. That negative result is now part of the public claim rather than an omitted footnote.
+
+The replacement question moves one level earlier in the teacher. Before `seek`, `fight`, `flee`,
+`heal`, or `stop`, the teacher still chooses which party member to develop and which measured
+encounter band to use. The new candidate-ranker interface records both variable-sized choices with
+27 normalized candidate-relative features. It excludes species, move, party-slot, area, map, and
+memory identity; scores every candidate through one shared network; follows candidate permutations;
+and drops ties that the current teacher can resolve only through hidden identity.
+
+Five mutually distinct roots and the full promotion contract were frozen before collection. Model
+selection uses only bidirectional train-to-train whole-lineage folds. The sealed validation lineage
+may open only after selection, and a candidate must beat the choice-shape baseline by at least two
+points while reaching 90% overall and 85% per choice kind. This is the first current training
+interface where a perfect shape-only baseline causes rejection rather than promotion.
+
 ## August 8: separating an answer checker from a player
 
 The architecture audit found a critical mismatch between the project's language and its runtime.
