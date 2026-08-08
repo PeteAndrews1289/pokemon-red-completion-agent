@@ -64,9 +64,9 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1940 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
-clean after the affordance-masked Silph adapter. The source-bound nine-step run uses published
-commit `568d58c` (the documentation receipt lands in the following commit).
+**Gate state:** 1941 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
+clean after the composite Dojo/Sabrina adapter. The source-bound ten-step run uses published commit
+`19a8fcd` (the documentation receipt lands in the following commit).
 
 ---
 
@@ -213,10 +213,16 @@ and 20,634 actions; eight are singletons and the Koga-versus-Strength choice rem
 ranking branch. See the
 [nine-decision receipt](docs/evidence/affordance-masked-nine-objective-sequence-2026-08-08.json).
 
-**Next:** connect the post-Silph Dojo/Sabrina curriculum as the bounded `defeat_sabrina` mechanic,
-or Cinnabar as a genuinely competing executable branch. Preserve the same typed availability,
-independent observation, and ownership distinction: the model selects objectives; current skills
-still choose navigation, battle, menu, and recovery actions.
+The post-Silph curriculum is now connected as one bounded `defeat_sabrina` skill. It recruited
+Hitmonlee after all five Dojo fights, completed the six-member party, followed the trainer-free Gym
+warp route, defeated Sabrina, and returned healed to Saffron Center. The skill used 3,058 actions /
+949,298 frames; the ten-step slice totals 23,692 actions with independent Marsh Badge observation.
+See the
+[ten-decision receipt](docs/evidence/affordance-masked-ten-objective-sequence-2026-08-08.json).
+
+**Next:** connect Cinnabar, the only legal objective at the verified terminal boundary. Preserve
+the same typed availability, independent observation, and ownership distinction: the model selects
+objectives; current skills still choose navigation, battle, menu, and recovery actions.
 
 ---
 

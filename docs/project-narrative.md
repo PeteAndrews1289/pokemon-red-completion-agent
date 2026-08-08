@@ -87,9 +87,17 @@ ranking branch, and zero labels, fallbacks, or replans. Fresh memory independent
 `story:silph_co_liberated`. See the
 [nine-decision receipt](evidence/affordance-masked-nine-objective-sequence-2026-08-08.json).
 
-The next frontier is `defeat_sabrina` versus `reach_cinnabar`. Connecting both would create the
-second genuine executable branch and therefore a more informative planner test than merely adding
-another singleton chapter.
+The tenth dispatch wrapped a meaningful curriculum inside `defeat_sabrina`: clear all five Fighting
+Dojo battles, choose Hitmonlee to complete the six-member party, then follow the trainer-free
+Saffron Gym warp route and defeat Sabrina. The combined skill used 3,058 actions / 949,298 frames,
+independently added the Marsh Badge, and returned the healed team to Saffron Center. The full slice
+now totals 23,692 fixed-skill actions, ten dispatches, nine singletons, one real ranking branch, and
+zero labels, fallbacks, or replans. See the
+[ten-decision receipt](evidence/affordance-masked-ten-objective-sequence-2026-08-08.json).
+
+The next frontier is Cinnabar, currently the only dependency-legal objective at the verified
+post-Sabrina boundary. It extends coverage, but another strong planner-ranking test will require a
+state where at least two skills are simultaneously executable.
 
 ## August 5: the learned planner authorizes the fixed objective sequence
 
