@@ -35,6 +35,7 @@ from pokemon_red_completion.provenance import (
 from pokemon_red_completion.quest import quest_graph_payload
 from pokemon_red_completion.red_objective_skills import (
     PokemonTowerObjectiveSkill,
+    ReachFuchsiaObjectiveSkill,
     RocketHideoutObjectiveSkill,
 )
 from pokemon_red_completion.red_player_observer import CapturedPokemonRedObserver
@@ -62,9 +63,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--max-decisions",
         type=int,
-        choices=(1, 2),
+        choices=(1, 2, 3),
         default=1,
-        help="execute one decision, or continue through the registered Tower skill",
+        help="execute one to three decisions through the registered Red skills",
     )
     args = parser.parse_args(argv)
 
@@ -104,6 +105,7 @@ def main(argv: list[str] | None = None) -> int:
         skills = (
             RocketHideoutObjectiveSkill(emulator, reader, executor),
             PokemonTowerObjectiveSkill(emulator, reader, executor),
+            ReachFuchsiaObjectiveSkill(emulator, reader, executor),
         )
         loop = PortablePlayerLoop(
             graph=COMPLETION_QUEST,

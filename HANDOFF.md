@@ -64,8 +64,9 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1926 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
-clean after the first model-selected objective dispatcher. CI is green through `e73bf05`.
+**Gate state:** 1927 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
+clean after the two-objective model-selected dispatcher. CI is green through the implementation
+lineage ending at `911e18c` (final documentation may be one later commit).
 
 ---
 
@@ -178,9 +179,20 @@ memory observation independently added both `story:rocket_hideout_cleared` and
 `reach_saffron`. See the
 [execution receipt](docs/evidence/model-selected-hideout-execution-2026-08-08.json).
 
-**Next:** adapt the Erika and Saffron branches to the same registry, then let the model make a
-second decision from the post-Hideout state. Preserve the distinction: the model selects the
-objective; the current chapter skills still choose navigation, battle, menu, and recovery actions.
+The next published slice added Pokémon Tower and ran both decisions uninterrupted. After Hideout,
+the same model selected `rescue_fuji` at **99.08% confidence** from `rescue_fuji`, `defeat_erika`,
+and `reach_saffron`. The Tower skill executed **2,508 actions / 167,351 frames**, fought ten required
+battles, obtained the Poké Flute, and returned the healed party to Lavender Center. Across both
+steps the model made two decisions with no expected labels or fallbacks; the loop executed **3,651
+actions / 265,588 frames** and independently verified all three new semantic facts. See the
+[two-decision receipt](docs/evidence/model-selected-two-objective-sequence-2026-08-08.json).
+
+**Next:** add an explicit skill-affordance mask before extending the sequence. The quest graph calls
+Erika and Saffron dependency-legal early, but their current fixed skills require later physical
+boundaries (post-Strength Fuchsia and post-Erika Celadon). A model must rank objectives it can
+actually execute from the observed state; do not hide that mismatch by registering an impossible
+skill. Preserve the distinction: the model selects objectives; current skills still choose
+navigation, battle, menu, and recovery actions.
 
 ---
 

@@ -47,6 +47,21 @@ selection, while the receipt plainly labels navigation, battles, menus, and reco
 teacher-authored bounded skill. See the
 [execution receipt](evidence/model-selected-hideout-execution-2026-08-08.json).
 
+The loop then replanned without resetting the emulator. From Pokémon Tower, Erika, and Saffron, the
+ranker chose `rescue_fuji` at 99.08% confidence. Its registered Tower skill handled ten required
+battles, the restless Marowak, item pickups, healing, and the return to Lavender Center in 2,508
+actions and 167,351 frames. The observer independently found `item:poke_flute`. Across both choices,
+the model owned two sequential objective decisions while fixed skills supplied 3,651 mechanic
+actions over 265,588 frames. No expected objective label or fallback entered either decision. See
+the [two-decision receipt](evidence/model-selected-two-objective-sequence-2026-08-08.json).
+
+That success also exposed the next architectural defect. The dependency graph presents Erika and
+Saffron as legal at Celadon, but their existing fixed skills are not executable there: Erika starts
+from the later Fuchsia/Strength boundary, and Saffron assumes post-Erika party, move, and economy
+state. Objective legality is therefore broader than live skill affordance. The next planner mask
+must combine dependency satisfaction with an observed, typed `can_execute` contract instead of
+letting impossible choices reach a chapter precondition failure.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

@@ -89,10 +89,14 @@ branching states and picks the candidate-local target in 237/317 opportunities; 
 misses form a concrete correction curriculum rather than a vague request for more planner data.
 The first real captured-state diagnostic now exposes three legal Celadon objectives; the model
 selects `clear_rocket_hideout` at 99.70% confidence without an expected label. The published
-dispatcher then executes its registered 1,143-action Hideout skill and independently observes both
-the Hideout-clear and Silph Scope facts. This is one model-owned branch over teacher-owned mechanics,
-not learned full-game play. Erika and Saffron adapters plus a second sequential model decision are
-next. See the [execution receipt](evidence/model-selected-hideout-execution-2026-08-08.json).
+dispatcher executes its registered 1,143-action Hideout skill and independently observes both the
+Hideout-clear and Silph Scope facts. It then replans from fresh state, selects `rescue_fuji` at
+99.08%, executes the 2,508-action Tower skill, and independently observes the Poké Flute at a healed
+Lavender boundary. The two-decision sequence totals 3,651 actions and 265,588 frames with no route
+labels or fallbacks. This is model-owned objective selection over teacher-owned mechanics, not
+learned full-game play. The next dependency is an explicit live skill-affordance mask: the graph
+currently exposes Erika and Saffron before their fixed skills' physical preconditions hold. See the
+[two-decision receipt](evidence/model-selected-two-objective-sequence-2026-08-08.json).
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

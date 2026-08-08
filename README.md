@@ -21,13 +21,14 @@ Pokémon game without quietly handing control back to the teacher.
 That distinction is the heart of the project and its public story. The teacher supplies verified
 demonstrations and a referee; it is not the final autonomous player.
 
-The first real Red vertical slice now runs through the portable closed loop. From an authenticated
-Celadon capture, the learned objective ranker chose the Rocket Hideout over two other legal branches
-at **99.70% confidence**, without an expected-route label or fallback. A registered fixed skill then
-executed 1,143 bounded actions, while a fresh emulator observation independently verified Giovanni's
-defeat and the Silph Scope. This transfers one real decision to the model; mechanics remain
-teacher-authored, and it is not yet end-to-end learned play. See the
-[execution receipt](docs/evidence/model-selected-hideout-execution-2026-08-08.json).
+The first uninterrupted Red vertical slice now runs through the portable closed loop. From an
+authenticated Celadon capture, the learned objective ranker chose the Rocket Hideout over two other
+legal branches at **99.70% confidence**, then chose Pokémon Tower at **99.08%** from the next three.
+No expected-route label or fallback was available. Registered fixed skills executed **3,651 bounded
+actions / 265,588 frames**, while fresh emulator observations independently verified the Hideout,
+Silph Scope, and Poké Flute facts. This transfers two real sequential decisions to the model;
+mechanics remain teacher-authored, and it is not yet end-to-end learned play. See the
+[two-decision receipt](docs/evidence/model-selected-two-objective-sequence-2026-08-08.json).
 
 - [Current technical handoff](HANDOFF.md)
 - [Dependency-ordered roadmap](docs/roadmap.md)

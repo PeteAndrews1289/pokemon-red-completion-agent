@@ -96,8 +96,10 @@ misses. Explain that sensitivity is encouraging but is not the same as knowing t
 Follow it with the first real-state branch: at Celadon the model sees three legal objectives and
 selects the Rocket Hideout without being shown the fixed route's answer. Then show the bounded skill
 clearing five trainers and the post-run observer confirming both the Hideout event and Silph Scope.
-Keep the screen labeled **“model chose the goal; fixed skill executed the mechanics”**. The useful
-headline is 1,143 actions and 98,237 frames under a model-selected branch, not an autonomous run.
+Do not cut there: show the loop observing again, choosing Pokémon Tower at 99.08%, and independently
+confirming the Poké Flute at Lavender Center. Keep the screen labeled **“model chose two goals;
+fixed skills executed 3,651 mechanic actions”**. The useful headline is two uninterrupted decisions
+over 265,588 frames, not an autonomous run.
 
 ### Act VII: the Crystal test — 10:10–11:15
 
@@ -124,8 +126,8 @@ version has to prove the model learned something worth carrying into a game it h
 - One preserved failed-run receipt and the measurement that diagnosed it.
 - Teacher versus learner control diagrams with individual decision ownership highlighted.
 - A strict-evaluation counter showing teacher queries at zero.
-- The Celadon three-way choice, model selection, and independently verified Hideout/Silph Scope
-  receipt, with model-versus-fixed-skill ownership labeled.
+- The Celadon three-way choice, the post-Hideout replan to Tower, and the independently verified
+  Hideout/Silph Scope/Poké Flute receipt, with model-versus-fixed-skill ownership labeled.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video
