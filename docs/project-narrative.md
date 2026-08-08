@@ -250,6 +250,14 @@ repair separates observation from termination: consecutive flees still saturate 
 feature, the early no-win check still rejects a genuinely unsuitable venue, and the global step
 budget bounds later non-progress. A fresh root must supply validation after this repair is frozen.
 
+Fresh validation root 02 completed the full lesson: 60,459 decisions, 1,767 battles, 1,021 healing
+trips, zero faints, and all six at level 55. Its trajectory was genuinely different—59,443 of
+59,609 unique action-feature pairs were absent from both training roots. The partition audit found
+no root overlap and no validation class missing from training. On that untouched lineage, the
+predeclared default class-balanced MLP reached 75.62% ordinary accuracy and 76.91% balanced
+accuracy. This is the first real learned training-control result. It is still an offline candidate:
+shadow inference and a bounded model-controlled emulator run must pass before it receives authority.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

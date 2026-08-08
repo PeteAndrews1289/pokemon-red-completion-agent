@@ -323,6 +323,10 @@ Validation root 01 failed immutably after 17,751 decisions and 725 completed bat
 rerun or count that root. The later anti-loop raise is removed; the early no-win venue mismatch and
 global step budget remain. See the
 [validation failure receipt](docs/evidence/training-control-v2-validation-01-failure-2026-08-08.json).
+Fresh validation root 02 qualified at source `6c65dcd`: 60,459 decisions, 1,767 battles, 1,021
+heals, zero faints, and all level 55. The default 500-epoch candidate scored 75.62% raw and 76.91%
+balanced accuracy on it, with zero state overlap and all five classes covered. Model SHA is
+`d04546c2...df91d7d`. It is offline-only; shadow and controlled emulator gates remain.
 
 Counted v2 train lineage 01 is qualified from a retained 17-frame root at source `4c885d8`:
 46,687 decisions, all five actions, 1,726 battles, 815 healing trips, zero faints, and all level 55.
@@ -331,7 +335,8 @@ its root-state SHA is `62f7862e6f7e15c6f7c14a4cbb7488d6ff946502809dde5e131517192
 It adds 45,831 novel unique action-feature pairs versus diagnostic lineage 01 (99.85% of its unique
 pairs). See the [sanitized receipt](docs/evidence/training-control-v2-train-01-2026-08-08.json).
 
-**Next:** freeze the repaired source and collect a fresh distinct validation root, split by root
+**Next:** add authenticated model loading and run shadow inference on a fresh root, then attempt
+bounded model control under the teacher referee. Keep test roots sealed.
 lineage rather than by row, train and shadow-evaluate the first candidate, then replace the
 469,232-action skill's teacher
 authority under the same safety envelope. Preserve the fixed skill as demonstrator and referee. Do

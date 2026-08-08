@@ -176,8 +176,12 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   Validation root 01 was genuinely disjoint but failed after 725 progressing wins when 33 safe
   exits crossed a 32-flee anti-loop threshold. It remains immutable and excluded. The repair
   separates feature saturation from termination; validation root 02 must be fresh.
-- [ ] Train a candidate with lineage-held-out validation; require every validation class to exist
+- [x] Train a candidate with lineage-held-out validation; require every validation class to exist
   in training and keep the sealed test partition closed.
+- [x] The first real offline candidate used two training roots and one fresh validation root:
+  75.62% raw / 76.91% balanced validation accuracy, zero root overlap, all five classes covered.
+- [ ] Authenticate the private model, shadow it on a fresh root, then grant bounded emulator control
+  only under the unchanged teacher/referee safety envelope.
   The class-balanced MLP, phase-masked inference, metrics, and fail-closed candidate fitter are
   implemented and tested synthetically; this item remains open until real v2 lineages exist.
 - [ ] Run the candidate in shadow mode, then model-controlled mode under the unchanged teacher

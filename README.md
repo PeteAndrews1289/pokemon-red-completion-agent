@@ -98,6 +98,14 @@ check, and relies on the global step budget for later non-progress; a fresh vali
 required. See the
 [failed-validation receipt](docs/evidence/training-control-v2-validation-01-failure-2026-08-08.json).
 
+Fresh validation root 02 then completed with 60,459 decisions, 1,767 battles, 1,021 healing trips,
+zero faints, and all level 55. The leakage audit passed with no root overlap and all five classes
+covered. The predeclared default MLP achieved **75.62% raw / 76.91% balanced accuracy** on this
+untouched lineage; 99.72% of its unique pairs were absent from training. This is the first real
+offline training-control model, but it remains non-promotable until shadow and model-controlled
+emulator runs pass. See the [validation receipt](docs/evidence/training-control-v2-validation-02-2026-08-08.json)
+and [candidate receipt](docs/evidence/training-control-candidate-v1-2026-08-08.json).
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

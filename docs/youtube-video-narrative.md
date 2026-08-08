@@ -207,6 +207,12 @@ though levels were progressing. Mark all 17,751 decisions **“failed validation
 lesson is subtle: a useful saturated feature is not automatically a valid termination condition.
 Freeze that repair, then require an entirely fresh validation root before showing a model score.
 
+The fresh root completes: **60,459 decisions; zero faints; all 55; 99.72% novel unique pairs.** Now
+reveal the first honest model card: **75.62% raw / 76.91% balanced validation accuracy** across all
+five actions. Contrast it with the 20% balanced majority baseline. End with the necessary caveat in
+large type: **offline candidate—no emulator authority yet.** The next episode is shadow inference,
+then bounded control under the teacher referee.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

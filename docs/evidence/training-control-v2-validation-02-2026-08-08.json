@@ -1,0 +1,29 @@
+{
+  "schema": "pokemon-training-control-lineage-summary-v2",
+  "status": "ok",
+  "lineage_id": "training-control-v2-validation-02",
+  "partition": "validation",
+  "lineage_qualified": true,
+  "source_commit": "6c65dcd79ed6edb7902fa193bc4d08ae9a9f3812",
+  "decision_stream_sha256": "751882000292993cf444366b721b2844cfa92fb0605d94955b9fbc4362ad4365",
+  "root_state_sha256": "7be3c1e3cc145bea3da95901fb47f49ca1ca857f618f26e6b9093c63c40b1186",
+  "execution": {
+    "total_battles": 1767,
+    "total_healing_trips": 1021,
+    "faints": 0,
+    "final_party_levels": [55, 55, 55, 55, 55, 55]
+  },
+  "dataset": {
+    "decisions": 60459,
+    "unique_action_feature_pairs": 59609,
+    "action_counts": {"fight": 1981, "flee": 1588, "heal": 611, "seek": 56278, "stop": 1},
+    "phase_counts": {"battle": 3569, "overworld": 56890},
+    "terminal_action": "stop"
+  },
+  "novelty_against_both_training_lineages": {
+    "shared_unique_action_feature_pairs": 166,
+    "novel_unique_action_feature_pairs": 59443,
+    "novel_pair_ratio": 0.9972151856263316
+  },
+  "private_artifacts_tracked": false
+}

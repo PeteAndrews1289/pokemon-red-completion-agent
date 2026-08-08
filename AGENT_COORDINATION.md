@@ -198,6 +198,9 @@ Collect one disjoint validation root next; do not fit before it passes.
 Validation root 01 failed after 17,751 decisions / 725 wins because 33 legitimate safe exits crossed
 the 32-flee feature horizon. Never rerun or count it. The repaired source removes that later raise
 while retaining the early no-win mismatch and global step budget. Use a fresh validation root 02.
+Validation root 02 qualified with 60,459 decisions and an all-55 zero-faint terminal. The default
+candidate scored 75.62% raw / 76.91% balanced held-out accuracy with no state overlap. It is still
+offline-only. Next add authenticated loading and shadow inference; do not open test roots.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.
