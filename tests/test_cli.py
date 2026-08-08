@@ -1196,6 +1196,7 @@ def test_play_command_runs_the_continuous_watched_boundary(
         battle_control_confidence_threshold: float,
         battle_model_confidence_threshold: float,
         require_battle_model_teacher_agreement: bool,
+        require_teacher_free_battle_policy: bool,
         battle_correction_sink,
         battle_control_sink,
         battle_start_offsets,
@@ -1211,6 +1212,7 @@ def test_play_command_runs_the_continuous_watched_boundary(
         assert battle_control_confidence_threshold == 0.0
         assert battle_model_confidence_threshold == 0.5
         assert require_battle_model_teacher_agreement is True
+        assert require_teacher_free_battle_policy is False
         assert battle_correction_sink is None
         assert battle_control_sink is None
         assert battle_start_offsets is None
@@ -1265,6 +1267,22 @@ def test_play_command_runs_the_continuous_watched_boundary(
         "Completion verified: Champion defeated and Hall of Fame entered.",
     ]
     assert str(private_path) not in captured.out
+    assert str(private_path) not in captured.err
+
+
+def test_play_rejects_teacher_free_battle_without_a_model(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    private_path = Path("/private/Pokemon Red.gb")
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda argument: private_path)
+
+    with pytest.raises(SystemExit) as error:
+        cli.main(["play", "--require-teacher-free-battle"])
+
+    captured = capsys.readouterr()
+    assert error.value.code == 2
+    assert "requires --battle-model" in captured.err
     assert str(private_path) not in captured.err
 
 

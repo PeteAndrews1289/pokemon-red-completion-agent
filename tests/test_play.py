@@ -1278,10 +1278,13 @@ def test_qualified_progress_emits_one_legal_label_for_every_completion_objective
     planner_decisions = [
         decision for decision in sink.decisions if decision.decision_type == "objective_selection"
     ]
-    assert tuple(
-        decision.action["objective_id"]  # type: ignore[index]
-        for decision in planner_decisions
-    ) == QUALIFIED_OBJECTIVE_SEQUENCE
+    assert (
+        tuple(
+            decision.action["objective_id"]  # type: ignore[index]
+            for decision in planner_decisions
+        )
+        == QUALIFIED_OBJECTIVE_SEQUENCE
+    )
     assert observer.completed_ids == frozenset(QUALIFIED_OBJECTIVE_SEQUENCE)
     assert observer.active_objective_id is None
     assert recorder.recording_failures == 0
@@ -1526,6 +1529,26 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
     serialized = json.dumps(public, sort_keys=True)
 
     assert report.passed
+    assert not replace(
+        report,
+        battle_policy_teacher_free_required=True,
+        battle_policy_report={
+            "teacher_queries_allowed": False,
+            "teacher_queries": 1,
+            "teacher_fallbacks": 0,
+            "fallback_reasons": {},
+        },
+    ).passed
+    assert replace(
+        report,
+        battle_policy_teacher_free_required=True,
+        battle_policy_report={
+            "teacher_queries_allowed": False,
+            "teacher_queries": 0,
+            "teacher_fallbacks": 0,
+            "fallback_reasons": {},
+        },
+    ).passed
     assert public["schema"] == "qualified-play-v26"
     assert public["status"] == "ok"
     assert public["qualified_through"] == "enter_hall_of_fame"
@@ -1902,9 +1925,39 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "missing": [
                 number
                 for number in range(1, 151)
-                if number not in {1, 2, 3, 4, 5, 6, 7, 8, 9, 27, 28, 37, 38, 52, 53,
-                                  65, 68, 69, 70, 71, 76, 94, 106, 107, 126, 127, 134,
-                                  136, 140, 141}
+                if number
+                not in {
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    27,
+                    28,
+                    37,
+                    38,
+                    52,
+                    53,
+                    65,
+                    68,
+                    69,
+                    70,
+                    71,
+                    76,
+                    94,
+                    106,
+                    107,
+                    126,
+                    127,
+                    134,
+                    136,
+                    140,
+                    141,
+                }
             ],
             "excluded_owned": [],
             "pokedex_target_complete": False,
@@ -2164,9 +2217,7 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
         < report.vermilion.final_raw.first_party_hp
         <= report.vermilion.final_raw.first_party_max_hp
     )
-    assert all(
-        (value & 0x3F) > 0 for value in report.vermilion.final_raw.first_party_pp
-    )
+    assert all((value & 0x3F) > 0 for value in report.vermilion.final_raw.first_party_pp)
     assert report.ss_anne.passed
     assert report.ss_anne.saw_rival_battle
     assert report.ss_anne.final_evidence.hm01_snapshot
@@ -2189,20 +2240,13 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     # Earlier encounter timing changes the health carried through the Surge
     # chapter.  The route contract is survival without persistent status, not
     # one seed's exact damage roll.
-    assert (
-        0
-        < report.surge.final_raw.first_party_hp
-        <= report.surge.final_raw.first_party_max_hp
-    )
+    assert 0 < report.surge.final_raw.first_party_hp <= report.surge.final_raw.first_party_max_hp
     assert report.surge.final_raw.first_party_status == 0
     assert report.lavender.passed
     assert len(report.lavender.trainers) == 11
     assert 0 <= len(report.lavender.wild_flees) <= 20
     assert all(
-        item.party_preserved
-        and item.pp_preserved
-        and item.hp_safe
-        and item.inventory_preserved
+        item.party_preserved and item.pp_preserved and item.hp_safe and item.inventory_preserved
         for item in report.lavender.wild_flees
     )
     assert report.lavender.party_hp == report.lavender.party_max_hp
@@ -2338,13 +2382,9 @@ def test_private_rom_enters_hall_of_fame_without_adjacent_artifacts() -> None:
     assert all(status == 0 for status in report.strength.party_status)
     assert report.erika.passed
     assert report.saffron.passed
+    assert report.saffron.money_before - report.saffron.money_after_stone == THUNDER_STONE_PRICE
     assert (
-        report.saffron.money_before - report.saffron.money_after_stone
-        == THUNDER_STONE_PRICE
-    )
-    assert (
-        report.saffron.money_after_stone - report.saffron.money_after_purchase
-        == FRESH_WATER_PRICE
+        report.saffron.money_after_stone - report.saffron.money_after_purchase == FRESH_WATER_PRICE
     )
     assert report.saffron.money_after_purchase == report.saffron.money_after
     assert (

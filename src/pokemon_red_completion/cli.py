@@ -477,6 +477,14 @@ def _parser() -> argparse.ArgumentParser:
         help="Evaluation mode: execute confident model choices even when the teacher disagrees.",
     )
     play.add_argument(
+        "--require-teacher-free-battle",
+        action="store_true",
+        help=(
+            "Strict evaluation: fail if the battle policy queries the teacher or uses "
+            "a fallback; requires --battle-model and --allow-model-disagreement."
+        ),
+    )
+    play.add_argument(
         "--battle-corrections-root",
         type=Path,
         help=(
@@ -1646,9 +1654,7 @@ def _run_corrected_battle_learning(
             repository_root=REPOSITORY_ROOT,
         )
         base_model = load_battle_model_artifact(args.base_model)
-        base_model_sha256 = hashlib.sha256(
-            base_model.to_json().encode("ascii")
-        ).hexdigest()
+        base_model_sha256 = hashlib.sha256(base_model.to_json().encode("ascii")).hexdigest()
         corrections = load_battle_correction_artifact(args.corrections)
         if corrections.source_model_sha256 != base_model_sha256:
             raise BattleTrainingError(
@@ -1897,22 +1903,26 @@ def main(arguments: Sequence[str] | None = None) -> int:
             _print_opening_summary(report)
             payload = report.public_dict()
         elif args.command == "play":
+            if args.require_teacher_free_battle and args.battle_model is None:
+                parser.error("--require-teacher-free-battle requires --battle-model")
+            if args.require_teacher_free_battle and not args.allow_model_disagreement:
+                parser.error("--require-teacher-free-battle requires --allow-model-disagreement")
+            if args.require_teacher_free_battle and (
+                args.battle_corrections_root is not None or args.battle_control_root is not None
+            ):
+                parser.error("--require-teacher-free-battle cannot collect teacher labels")
             if args.battle_corrections_root is not None and args.battle_model is None:
                 parser.error("--battle-corrections-root requires --battle-model")
             if args.battle_control_root is not None and args.battle_model is None:
                 parser.error("--battle-control-root requires --battle-model")
             if args.battle_control_root is not None and not args.allow_model_disagreement:
-                parser.error(
-                    "--battle-control-root requires --allow-model-disagreement"
-                )
+                parser.error("--battle-control-root requires --allow-model-disagreement")
             if args.battle_control_model is not None and args.battle_model is None:
                 parser.error("--battle-control-model requires --battle-model")
             if args.execute_battle_control and args.battle_control_model is None:
                 parser.error("--execute-battle-control requires --battle-control-model")
             if args.execute_battle_control and not args.allow_model_disagreement:
-                parser.error(
-                    "--execute-battle-control requires --allow-model-disagreement"
-                )
+                parser.error("--execute-battle-control requires --allow-model-disagreement")
             battle_model = (
                 load_battle_model_artifact(args.battle_model)
                 if args.battle_model is not None
@@ -1964,8 +1974,9 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     f"red-battle-control-{uuid.uuid4().hex}",
                     kind="battle_control_labels",
                 )
-            with correction_writer if correction_writer is not None else nullcontext(), (
-                control_writer if control_writer is not None else nullcontext()
+            with (
+                correction_writer if correction_writer is not None else nullcontext(),
+                control_writer if control_writer is not None else nullcontext(),
             ):
                 if correction_writer is not None:
                     assert battle_model is not None
@@ -2014,11 +2025,10 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     battle_model=battle_model,
                     battle_control_model=battle_control_model,
                     execute_battle_control_model=args.execute_battle_control,
-                    battle_control_confidence_threshold=(
-                        args.battle_control_confidence_threshold
-                    ),
+                    battle_control_confidence_threshold=(args.battle_control_confidence_threshold),
                     battle_model_confidence_threshold=args.battle_confidence_threshold,
                     require_battle_model_teacher_agreement=not args.allow_model_disagreement,
+                    require_teacher_free_battle_policy=(args.require_teacher_free_battle),
                     battle_correction_sink=(
                         (lambda record: correction_writer.append("corrections", record))
                         if correction_writer is not None
@@ -2031,9 +2041,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     ),
                     battle_start_offsets=diagnostic_offsets,
                     objective_model=objective_model,
-                    objective_model_confidence_threshold=(
-                        args.objective_confidence_threshold
-                    ),
+                    objective_model_confidence_threshold=(args.objective_confidence_threshold),
                 )
                 if correction_writer is not None:
                     qualified_public = qualified_report.public_dict()

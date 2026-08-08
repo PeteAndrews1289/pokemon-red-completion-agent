@@ -9,6 +9,26 @@
 **A completion-first autonomous system for Pokémon Red: verified quest planning, deterministic
 control, and progressively trained specialists.**
 
+## Current position
+
+The deterministic teacher is now a complete, reproducible expert oracle: **312/312 semantic
+checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of
+Fame in one clean-power process. Learned battle policies have also completed the scripted Red
+route. The remaining challenge is the important one: make a learned actor choose objectives,
+dispatch reusable skills, recover from unfamiliar states, and carry that competence into another
+Pokémon game without quietly handing control back to the teacher.
+
+That distinction is the heart of the project and its public story. The teacher supplies verified
+demonstrations and a referee; it is not the final autonomous player.
+
+- [Current technical handoff](HANDOFF.md)
+- [Dependency-ordered roadmap](docs/roadmap.md)
+- [Evidence-first project narrative](docs/project-narrative.md)
+- [Potential YouTube video narrative](docs/youtube-video-narrative.md)
+
+<details>
+<summary>Historical milestone archive</summary>
+
 > **Current status:** the deterministic teacher completes Pokémon Red from clean power-on through
 > the Hall of Fame in one uninterrupted, no-save-restore emulator session while developing a real
 > six-member party. Its team curriculum uses **1,716 battles** and **885 healing trips**, evolves
@@ -207,6 +227,8 @@ control, and progressively trained specialists.**
 > seeds. At that historical stage, V9 still required qualification and no learned model had yet
 > completed the game.
 
+</details>
+
 ## The goal
 
 Reach the Hall of Fame from clean power-on with:
@@ -344,6 +366,12 @@ pokemon-red-completion play \
   --battle-model /absolute/private/model-artifact/model.jsonl \
   --battle-corrections-root /absolute/private/trajectory-directory
 
+# Strict evaluation: execute the model without querying the teacher or collecting labels:
+pokemon-red-completion play \
+  --battle-model /absolute/private/model-artifact/model.jsonl \
+  --allow-model-disagreement \
+  --require-teacher-free-battle
+
 # One-time setup for an existing directory on a separate private volume:
 pokemon-red-completion private-data init --private-root /absolute/private/trajectory-directory
 
@@ -351,7 +379,7 @@ pokemon-red-completion private-data init --private-root /absolute/private/trajec
 pokemon-red-completion record --private-root /absolute/private/trajectory-directory
 
 # After the exact source/config commit is committed and pushed, run the required
-# unassigned, non-counted 71-battle schedule rehearsal before slot 01:
+# unassigned, non-counted 74-battle schedule rehearsal before slot 01:
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
   --schedule-dry-run

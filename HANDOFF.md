@@ -84,6 +84,49 @@ and keep living-Pokédex expansion and second-title transfer as explicit later s
 
 Then continue down [AGENT_COORDINATION.md](AGENT_COORDINATION.md) § *Open work, in priority order*.
 
+### Architecture-audit pivot — 2026-08-08
+
+The latest full audit changes what "start here" means. The deterministic teacher is now sufficiently
+complete to serve as the frozen expert oracle. Another Red-specific repair or League role is useful
+only when it fixes a genuine regression or adds a bounded, non-cosmetic lesson; it must no longer
+delay transferring control authority to the learner.
+
+What the audit established:
+
+- the clean teacher, referee, trajectory recorder, captured-state harnesses, and private lineage
+  controls are unusually strong and should be preserved;
+- the nonlinear battle model has real live Red completion evidence, but it predates the current
+  balanced-team curriculum;
+- `ModelObjectivePolicy` authorizes the objective that fixed code already intends to run, while
+  `run_qualified_play` still dispatches the chapter sequence directly;
+- live navigation is dominated by authored direction sequences even though reusable local A* exists;
+- resource planning, recovery, collection execution, and the second-game adapter remain teacher
+  owned, partial, or scaffolding; and
+- a normal completion report can pass without requiring a teacher-free battle-policy report, so
+  official learned evaluation needs a stricter, explicit contract.
+
+The dependency order is now:
+
+1. **Freeze and publish the Red oracle.** Keep this branch as the canonical source, merge the current
+   draft into `main`, and stop opening sealed campaigns for teacher-only tuning.
+2. **Create a portable player loop.** Observation → chosen objective → dispatched skill → typed
+   action → structured result → replan. Revision-specific reads and menu compilation stay behind the
+   game adapter.
+3. **Collect current balanced decision data.** Record decision spans, learner failures, and
+   corrections rather than treating roughly half a million controller actions as equally useful.
+4. **Enforce teacher-free learned evaluation.** Any teacher query, unsupported-observation fallback,
+   undeclared safety substitution, or expected-route label is a visible counted failure.
+5. **Complete Red with the learned stack.** The initial reliability gate remains at least 8/10
+   preregistered clean starts with frozen code and weights, no restore, and no teacher control.
+6. **Falsify transfer with Crystal.** Start with one battle and local-navigation vertical slice, then
+   compare zero-shot, few-shot, and from-scratch performance.
+7. **Use collection as the lifelong curriculum.** Expand capture, storage, evolution, and training
+   through the portable loop; do not write a second 120-species fixed route.
+
+Near-term code work starts with item 4 because it creates an enforceable boundary immediately, then
+items 2 and 3 proceed together. See [the roadmap](docs/roadmap.md) for the full gate sequence and
+[the video narrative](docs/youtube-video-narrative.md) for the public explanation of this pivot.
+
 ---
 
 ## 4. How to work here without burning hours

@@ -6,11 +6,11 @@ The public
 [`red-battle-collection-v95.json`](../configs/red-battle-collection-v95.json)
 registry freezes one prospective Pokémon Red teacher-collection campaign:
 
-- 73 stable public battle-plan identities in exact qualified-route order;
+- 74 stable public battle-plan identities in exact qualified-route order;
 - five `train`, two `validation`, and five `test` root-lineage slots;
 - partition-local ordinals `1/5` through `5/5`, `1/2` through `2/2`, and `1/5`
   through `5/5`, in addition to global collection ordinals `1/12` through `12/12`; and
-- one unique 73-offset timing schedule and one attempt for each slot.
+- one unique 74-offset timing schedule and one attempt for each slot.
 
 The v1 campaign's uncounted rehearsal completed all 312 checkpoints, all 36 objectives, and Hall
 of Fame with 68/68 schedule attestations. Its first one-shot training root then failed at Route 24:

@@ -525,6 +525,7 @@ class QualifiedPlayReport:
     pokedex_state: RedPokedexState | None = None
     collection_progress: RedCollectionProgress | None = None
     battle_policy_report: dict[str, object] | None = None
+    battle_policy_teacher_free_required: bool = False
     objective_policy_report: dict[str, object] | None = None
     battle_start_schedule_report: dict[str, object] | None = None
 
@@ -569,6 +570,10 @@ class QualifiedPlayReport:
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
             and (
+                not self.battle_policy_teacher_free_required
+                or self._teacher_free_battle_policy_passed
+            )
+            and (
                 self.objective_policy_report is None
                 or (
                     self.objective_policy_report.get("authorized_decisions")
@@ -578,6 +583,25 @@ class QualifiedPlayReport:
                     and self.objective_policy_report.get("teacher_fallbacks") == 0
                 )
             )
+        )
+
+    @property
+    def _teacher_free_battle_policy_passed(self) -> bool:
+        report = self.battle_policy_report
+        if report is None:
+            return False
+        if report.get("teacher_queries_allowed") is not False:
+            return False
+        if report.get("teacher_queries") != 0 or report.get("teacher_fallbacks") != 0:
+            return False
+        if report.get("fallback_reasons") not in ({}, None):
+            return False
+        execution = report.get("control_model_execution")
+        if not isinstance(execution, Mapping):
+            return True
+        return (
+            execution.get("safety_fallbacks") == 0
+            and execution.get("low_confidence_fallbacks") == 0
         )
 
     def public_dict(self) -> dict[str, object]:
@@ -749,6 +773,7 @@ class QualifiedPlayReport:
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
             "battle_policy": self.battle_policy_report,
+            "battle_policy_teacher_free_required": (self.battle_policy_teacher_free_required),
             "objective_policy": self.objective_policy_report,
             "battle_start_schedule": self.battle_start_schedule_report,
         }
@@ -795,6 +820,7 @@ def run_qualified_play(
     objective_model_confidence_threshold: float = 0.0,
     battle_model_confidence_threshold: float = 0.0,
     require_battle_model_teacher_agreement: bool = True,
+    require_teacher_free_battle_policy: bool = False,
     battle_correction_sink: Callable[[Mapping[str, object]], None] | None = None,
     battle_control_sink: Callable[[Mapping[str, object]], None] | None = None,
     _emulator: PyBoyAdapter | None = None,
@@ -815,6 +841,16 @@ def run_qualified_play(
         raise ValueError("battle_model_confidence_threshold must be between zero and one")
     if not isinstance(require_battle_model_teacher_agreement, bool):
         raise TypeError("require_battle_model_teacher_agreement must be a bool")
+    if not isinstance(require_teacher_free_battle_policy, bool):
+        raise TypeError("require_teacher_free_battle_policy must be a bool")
+    if require_teacher_free_battle_policy and battle_model is None:
+        raise ValueError("teacher-free battle evaluation requires a battle model")
+    if require_teacher_free_battle_policy and require_battle_model_teacher_agreement:
+        raise ValueError("teacher-free battle evaluation requires model-disagreement execution")
+    if require_teacher_free_battle_policy and (
+        battle_correction_sink is not None or battle_control_sink is not None
+    ):
+        raise ValueError("teacher-free battle evaluation cannot collect teacher labels")
     if battle_correction_sink is not None and battle_model is None:
         raise ValueError("battle_correction_sink requires a battle model")
     if battle_control_sink is not None and battle_model is None:
@@ -858,6 +894,7 @@ def run_qualified_play(
                     (battle_correction_sink is not None or battle_control_sink is not None)
                     and not require_battle_model_teacher_agreement
                 ),
+                allow_teacher_queries=not require_teacher_free_battle_policy,
             )
             stack.enter_context(bind_battle_policy_override(model_policy))
         base_executor: QualifiedExecutor = FrameSafeExecutor(
@@ -1430,6 +1467,7 @@ def run_qualified_play(
                 final_boxes,
             ),
             battle_policy_report=(model_policy.public_dict() if model_policy is not None else None),
+            battle_policy_teacher_free_required=require_teacher_free_battle_policy,
             objective_policy_report=(
                 objective_policy.public_dict() if objective_policy is not None else None
             ),
@@ -2471,9 +2509,7 @@ def _trajectory_progress_bridge(
                     objective_observer.complete(objective_id)
                     completed_count = len(objective_observer.completed_ids)
                     if completed_count < len(QUALIFIED_OBJECTIVE_SEQUENCE):
-                        objective_observer.select(
-                            QUALIFIED_OBJECTIVE_SEQUENCE[completed_count]
-                        )
+                        objective_observer.select(QUALIFIED_OBJECTIVE_SEQUENCE[completed_count])
             except Exception:
                 recorder.note_instrumentation_failure()
 

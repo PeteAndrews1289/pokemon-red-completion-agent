@@ -216,6 +216,7 @@ def test_model_assisted_policy_uses_confident_prediction_and_counts_coverage() -
     assert policy.choose_move(_observation(), lambda: 3) == 3
     assert policy.public_dict()["model_coverage"] == 1.0
     assert policy.teacher_fallbacks == 0
+    assert policy.teacher_queries == 1
 
 
 def test_model_assisted_policy_executes_and_counts_teacher_correction() -> None:
@@ -229,6 +230,7 @@ def test_model_assisted_policy_executes_and_counts_teacher_correction() -> None:
     assert policy.choose_move(_observation(), lambda: 1) == 1
     assert policy.model_decisions == 0
     assert policy.teacher_fallbacks == 1
+    assert policy.teacher_queries == 1
     assert policy.fallback_reasons == {"teacher_disagreement": 1}
 
 
@@ -243,6 +245,7 @@ def test_model_assisted_policy_defers_low_confidence_state_to_teacher() -> None:
     assert policy.choose_move(_observation(), lambda: 1) == 1
     assert policy.model_decisions == 0
     assert policy.teacher_fallbacks == 1
+    assert policy.teacher_queries == 1
     assert policy.fallback_reasons == {"low_confidence": 1}
 
 
@@ -304,8 +307,42 @@ def test_shadow_teacher_records_disagreement_but_model_still_acts() -> None:
     assert policy.choose_move(_observation(), lambda: 1) == 3
     assert policy.model_decisions == 1
     assert policy.teacher_fallbacks == 0
+    assert policy.teacher_queries == 1
     assert policy.shadow_teacher_disagreements == 1
     assert records[0]["teacher"] == {"chosen_candidate_index": 0}
+
+
+def test_teacher_free_policy_executes_confident_move_without_querying_teacher() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_Encoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.9,
+        require_teacher_agreement=False,
+        allow_teacher_queries=False,
+    )
+
+    def teacher_must_not_run() -> int:
+        raise AssertionError("teacher was queried")
+
+    assert policy.choose_move(_observation(), teacher_must_not_run) == 3
+    assert policy.teacher_queries == 0
+    assert policy.public_dict()["teacher_queries_allowed"] is False
+
+
+def test_teacher_free_policy_fails_instead_of_using_low_confidence_fallback() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(power_weight=0.0),
+        encoder=_Encoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.75,
+        require_teacher_agreement=False,
+        allow_teacher_queries=False,
+    )
+
+    with pytest.raises(LearnedBattlePolicyError, match="forbids teacher queries"):
+        policy.choose_move(_observation(), lambda: 1)
+    assert policy.teacher_queries == 0
 
 
 def test_shadow_teacher_preserves_non_move_control_signal() -> None:
@@ -418,11 +455,7 @@ def test_control_execution_emits_recovery_without_calling_teacher() -> None:
 
     with pytest.raises(LearnedBattleControlRequest) as raised:
         policy.choose_move(
-            _observation(
-                recovery_capabilities=frozenset(
-                    {BattleRecoveryCapability.RESTORE_HP}
-                )
-            ),
+            _observation(recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP})),
             teacher_must_not_run,
         )
 
@@ -456,6 +489,26 @@ def test_control_execution_can_suppress_a_teacher_recovery() -> None:
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
     assert execution["teacher_requests_suppressed"] == 1
+
+
+def test_teacher_free_control_move_does_not_query_teacher() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_control_model(0),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+        allow_teacher_queries=False,
+    )
+
+    def teacher_must_not_run() -> int:
+        raise AssertionError("teacher was queried")
+
+    assert policy.choose_move(_observation(), teacher_must_not_run) == 3
+    assert policy.teacher_queries == 0
+    assert policy.public_dict()["actor"] == "learned_policy_teacher_free"
 
 
 def test_control_execution_guards_an_unparameterized_special_action() -> None:
@@ -516,9 +569,7 @@ def test_control_execution_emits_switch_without_calling_teacher() -> None:
 
     with pytest.raises(LearnedBattleControlRequest) as raised:
         policy.choose_move(
-            _observation(
-                switch_capabilities=frozenset({BattleSwitchCapability.DIRECT})
-            ),
+            _observation(switch_capabilities=frozenset({BattleSwitchCapability.DIRECT})),
             teacher_must_not_run,
         )
 

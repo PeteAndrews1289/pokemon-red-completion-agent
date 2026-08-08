@@ -85,8 +85,10 @@ class ModelAssistedBattlePolicy:
     correction_sink: BattleCorrectionSink | None = None
     control_sink: BattleControlSink | None = None
     observe_teacher_when_not_required: bool = False
+    allow_teacher_queries: bool = True
     decisions: int = 0
     model_decisions: int = 0
+    teacher_queries: int = 0
     teacher_fallbacks: int = 0
     forced_decisions: int = 0
     fallback_reasons: Counter[str] = field(default_factory=Counter)
@@ -120,8 +122,14 @@ class ModelAssistedBattlePolicy:
             raise TypeError("require_teacher_agreement must be a bool")
         if not isinstance(self.observe_teacher_when_not_required, bool):
             raise TypeError("observe_teacher_when_not_required must be a bool")
+        if not isinstance(self.allow_teacher_queries, bool):
+            raise TypeError("allow_teacher_queries must be a bool")
         if self.observe_teacher_when_not_required and self.require_teacher_agreement:
             raise ValueError("shadow teacher observation requires model-disagreement execution")
+        if not self.allow_teacher_queries and self.require_teacher_agreement:
+            raise ValueError("teacher-free execution requires model-disagreement execution")
+        if not self.allow_teacher_queries and self.observe_teacher_when_not_required:
+            raise ValueError("teacher-free execution cannot observe the shadow teacher")
         if tuple(self.model.feature_names) != FEATURE_NAMES:
             raise LearnedBattlePolicyError(
                 "battle model feature names do not match the live transferable schema"
@@ -138,6 +146,15 @@ class ModelAssistedBattlePolicy:
         /,
     ) -> int:
         self.decisions += 1
+
+        def query_teacher() -> int:
+            if not self.allow_teacher_queries:
+                raise LearnedBattlePolicyError(
+                    "teacher-free battle evaluation forbids teacher queries"
+                )
+            self.teacher_queries += 1
+            return fallback()
+
         fallback_reason: str | None = None
         predicted_slot: int | None = None
         predicted_candidate: int | None = None
@@ -180,7 +197,7 @@ class ModelAssistedBattlePolicy:
         except Exception:
             fallback_reason = "unsupported_observation"
         if fallback_reason == "low_confidence":
-            teacher_slot = fallback()
+            teacher_slot = query_teacher()
             assert batch is not None
             assert predicted_candidate is not None
             assert confidence is not None
@@ -199,18 +216,18 @@ class ModelAssistedBattlePolicy:
             self._record_control_action(observation, BattleAction.move(teacher_slot))
             return teacher_slot
         if fallback_reason is not None:
-            teacher_slot = self._fallback(fallback, fallback_reason)
+            teacher_slot = self._fallback(query_teacher, fallback_reason)
             self._record_control_action(observation, BattleAction.move(teacher_slot))
             return teacher_slot
         assert predicted_slot is not None
         if self.execute_control_model:
             return self._execute_control_decision(
                 observation,
-                fallback,
+                query_teacher,
                 predicted_slot=predicted_slot,
             )
         if self.require_teacher_agreement:
-            teacher_slot = fallback()
+            teacher_slot = query_teacher()
             if teacher_slot != predicted_slot:
                 assert batch is not None
                 assert predicted_candidate is not None
@@ -231,7 +248,7 @@ class ModelAssistedBattlePolicy:
                 return teacher_slot
         elif self.observe_teacher_when_not_required:
             try:
-                teacher_slot = fallback()
+                teacher_slot = query_teacher()
             except BattleControlRequest as request:
                 self.shadow_teacher_unavailable += 1
                 self._record_control_action(observation, request.action)
@@ -329,9 +346,15 @@ class ModelAssistedBattlePolicy:
     def public_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
             "schema": "pokemon-model-assisted-battle-policy-v1",
-            "actor": "learned_policy_with_teacher_fallback",
+            "actor": (
+                "learned_policy_with_teacher_fallback"
+                if self.allow_teacher_queries
+                else "learned_policy_teacher_free"
+            ),
             "decisions": self.decisions,
             "model_decisions": self.model_decisions,
+            "teacher_queries": self.teacher_queries,
+            "teacher_queries_allowed": self.allow_teacher_queries,
             "teacher_fallbacks": self.teacher_fallbacks,
             "forced_decisions": self.forced_decisions,
             "model_coverage": (self.model_decisions / self.decisions if self.decisions else 0.0),
@@ -427,6 +450,12 @@ class ModelAssistedBattlePolicy:
             self._record_control_action(observation, BattleAction.move(teacher_slot))
             return teacher_slot
 
+        if predicted_ref == CONTROL_CLASS_REFS[0] and not self.allow_teacher_queries:
+            self.control_execution_decisions += 1
+            self.model_decisions += 1
+            self._record_control_action(observation, BattleAction.move(predicted_slot))
+            return predicted_slot
+
         resolved_action = None
         if predicted_ref != CONTROL_CLASS_REFS[0]:
             try:
@@ -498,6 +527,11 @@ class ModelAssistedBattlePolicy:
                     resolved_action.action,
                     party_slot=resolved_action.party_slot,
                 )
+
+        if not self.allow_teacher_queries:
+            raise LearnedBattlePolicyError(
+                f"teacher-free control cannot execute unresolved action {predicted_ref!r}"
+            )
 
         teacher_request: BattleControlRequest | None = None
         teacher_slot: int | None = None

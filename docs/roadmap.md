@@ -42,6 +42,54 @@ Red runs.
 Milestone 6 remains the end state. A, B and C are what make it reachable rather than aspirational,
 and D is the cheapest early evidence that it is possible at all.
 
+### Architecture audit and dependency reset — 2026-08-08
+
+The balanced-team work succeeded at improving the teacher, but the audit shows that more
+teacher-only refinement is no longer on the critical path. Four boundaries now determine the
+roadmap:
+
+- the objective model authorizes the objective fixed code already intends to run; it does not yet
+  own objective discovery and dispatch;
+- the ordinary completion pass contract does not require a strict battle-policy result;
+- most live navigation, recovery, resource planning, and chapter sequencing remain Red-specific;
+  and
+- the learned completion evidence predates the current balanced-team curriculum.
+
+The work therefore follows dependencies rather than adding more route milestones:
+
+```mermaid
+flowchart LR
+    T["Frozen Red teacher + referee"] --> E["Teacher-free evaluation contract"]
+    T --> D["Balanced decision and correction data"]
+    E --> L["Portable player loop"]
+    D --> L
+    L --> R["Closed-loop learned Red tasks"]
+    R --> F["8/10 clean-start Red evaluation"]
+    F --> X["Crystal transfer benchmark"]
+    L --> C["Autonomous collection curricula"]
+    X --> P["Cross-title living Pokédex"]
+    C --> P
+```
+
+**Gate 1 — make teacher-free mean teacher-free.** Add an explicit evaluation mode that counts
+teacher queries, not only teacher fallbacks. Low-confidence predictions, unsupported action
+classes, and execution failures must fail the evaluation instead of silently invoking the teacher.
+Teacher-assisted collection, shadow comparison, and strict evaluation remain separate modes. A
+strict run cannot pass if the battle policy queried the teacher.
+
+**Gate 2 — build the portable loop and current curriculum.** The learner must repeatedly observe,
+choose an objective, dispatch a bounded skill, receive a structured result, and replan. Collect
+decision spans and corrections from the current balanced teacher while moving revision-specific
+memory reads and menu compilation behind the game adapter.
+
+**Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
+8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
+on a small Crystal battle-and-navigation benchmark under zero-shot, few-shot, and from-scratch
+conditions. Collection expands only through those portable skills rather than a second fixed route.
+
+The public explanation of why this pivot matters is outlined in
+[the YouTube narrative](youtube-video-narrative.md).
+
 ### What changed on 2026-08-07
 
 Routing works: a member too weak for where the run is gets sent to a venue that suits it, travels
