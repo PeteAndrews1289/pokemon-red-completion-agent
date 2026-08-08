@@ -7,6 +7,7 @@ import pytest
 
 from pokemon_red_completion import blaine as blaine_module
 from pokemon_red_completion.blaine import (
+    BLAINE_AFTER_MANSION_CHECKPOINT_COUNT,
     BLAINE_ANTIDOTE_SALE_VALUE,
     BLAINE_CAPACITY_SALE_ITEM,
     BLAINE_CHECKPOINT_COUNT,
@@ -155,6 +156,23 @@ def test_mansion_only_runner_stops_before_training_and_blaine() -> None:
     assert "run_red_team_balancing" not in calls
     assert "_run_mansion_training" not in calls
     assert "run_adaptive_trainer_battle" not in calls
+
+
+def test_post_mansion_runner_does_not_repeat_the_secret_key_route() -> None:
+    tree = ast.parse(
+        textwrap.dedent(inspect.getsource(blaine_module.run_blaine_after_mansion_chapter))
+    )
+    calls = {
+        node.func.id
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+    }
+
+    assert BLAINE_AFTER_MANSION_CHECKPOINT_COUNT == 5
+    assert "_pick_up_secret_key" not in calls
+    assert "_move_mansion" not in calls
+    assert "run_red_team_balancing" in calls
+    assert "run_adaptive_trainer_battle" in calls
 
 
 def test_mansion_only_report_requires_key_and_preserves_blaine_boundary() -> None:

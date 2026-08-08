@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from pokemon_red_completion.blaine import run_mansion_secret_key_chapter
+from pokemon_red_completion.blaine import (
+    run_blaine_after_mansion_chapter,
+    run_mansion_secret_key_chapter,
+)
 from pokemon_red_completion.cinnabar import run_cinnabar_chapter
 from pokemon_red_completion.dojo import run_dojo_chapter
 from pokemon_red_completion.domain import GameState
@@ -565,6 +568,49 @@ class ObtainSecretKeyObjectiveSkill:
 
     def execute(self) -> ObjectiveSkillExecution:
         report = run_mansion_secret_key_chapter(
+            self.emulator,
+            self.reader,
+            self.executor,
+        )
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class DefeatBlaineObjectiveSkill:
+    """Execute party development and Cinnabar Gym after the Mansion lesson."""
+
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    objective_id: str = "defeat_blaine"
+    specialist: Specialist = Specialist.BATTLE
+    expected_facts: frozenset[str] = frozenset({"badge:volcano"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 500_000
+    max_frames: int = 20_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "cinnabar_pokecenter"
+            and "item:secret_key" in state.facts
+            and "badge:volcano" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the healed post-Mansion Cinnabar Center boundary."
+                if executable
+                else "Requires Cinnabar Center with the Secret Key before Blaine."
+            ),
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_blaine_after_mansion_chapter(
             self.emulator,
             self.reader,
             self.executor,

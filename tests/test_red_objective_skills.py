@@ -6,6 +6,7 @@ import pytest
 
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.red_objective_skills import (
+    DefeatBlaineObjectiveSkill,
     DefeatErikaObjectiveSkill,
     DefeatKogaObjectiveSkill,
     DefeatSabrinaObjectiveSkill,
@@ -131,6 +132,7 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     sabrina = DefeatSabrinaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     cinnabar = ReachCinnabarObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     mansion = ObtainSecretKeyObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    blaine = DefeatBlaineObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     celadon = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"item:silph_scope"}),
@@ -180,6 +182,9 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
         location="cinnabar_pokecenter",
     )
     assert mansion.availability(cinnabar_center).executable
+    post_mansion = cinnabar_center.with_facts("item:secret_key")
+    assert blaine.availability(post_mansion).executable
+    assert not mansion.availability(post_mansion).executable
 
 
 def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
@@ -248,6 +253,13 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
             "obtain_secret_key",
             3_000,
             450_000,
+        ),
+        (
+            DefeatBlaineObjectiveSkill,
+            "run_blaine_after_mansion_chapter",
+            "defeat_blaine",
+            400_000,
+            15_000_000,
         ),
     ),
 )

@@ -96,6 +96,7 @@ from pokemon_red_completion.training_venue import TrainingVenue
 
 BLAINE_CHECKPOINT_COUNT = 9
 MANSION_SECRET_KEY_CHECKPOINT_COUNT = 4
+BLAINE_AFTER_MANSION_CHECKPOINT_COUNT = 5
 BLAINE_CAPACITY_SALE_ITEM = ItemId.ANTIDOTE
 BLAINE_INPUT_BAG_SLOT_BOUNDS = (15, 20)
 BLAINE_GYM_TRAINER_INCOME = 6_930
@@ -807,6 +808,122 @@ class MansionSecretKeyReport:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class BlaineAfterMansionReport:
+    """Evidence for training and Blaine from the authenticated Secret Key boundary."""
+
+    records: tuple[BlaineCheckpoint, ...]
+    final_raw: RawGameState
+    training: TrainingReport
+    team_readiness: DevelopedTeamReport
+    team_training_battles: int
+    team_training_healing_trips: int
+    quiz_answers: tuple[bool, ...]
+    gym_gate_events_after_quizzes: tuple[bool, ...]
+    gym_trainer_events_before: tuple[bool, ...]
+    gym_trainer_events_after_quizzes: tuple[bool, ...]
+    quiz_trainer_battles: tuple[CinnabarGymTrainerReceipt, ...]
+    gym_trainer_events_after: tuple[bool, ...]
+    identity: tuple[int, int, int]
+    turns: tuple[BlaineTurn, ...]
+    got_tm38: bool
+    beat_blaine: bool
+    volcano_badge: bool
+    volcano_badge_mirror: bool
+    tm38_quantity: int
+    secret_key_quantity: int
+    tm14_quantity: int
+    x_accuracy_retained: bool
+    capacity_item_sold: ItemId
+    initial_money: int
+    money_remaining: int
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            len(self.records) == BLAINE_AFTER_MANSION_CHECKPOINT_COUNT
+            and self.training.passed
+            and self.team_readiness.passed
+            and self.quiz_answers == QUIZ_ANSWERS
+            and self.gym_gate_events_after_quizzes == (False,) + (True,) * 6
+            and self.gym_trainer_events_before == (False,) * 7
+            and self.gym_trainer_events_after_quizzes
+            == (False, True, False, True, False, False, False)
+            and tuple(item.quiz_index for item in self.quiz_trainer_battles)
+            == QUIZ_TRAINER_BATTLE_INDEXES
+            and all(item.passed for item in self.quiz_trainer_battles)
+            and self.gym_trainer_events_after == (True,) * 7
+            and self.identity == (BLAINE_OPPONENT, BLAINE_TRAINER_CLASS, BLAINE_TRAINER_SET)
+            and _encounter_party(self.turns) == BLAINE_PARTY
+            and bool(self.turns)
+            and all(turn.move_slot == 4 for turn in self.turns)
+            and self.got_tm38
+            and self.beat_blaine
+            and self.volcano_badge
+            and self.volcano_badge_mirror
+            and self.tm38_quantity == 1
+            and self.secret_key_quantity == 1
+            and self.tm14_quantity == 1
+            and self.x_accuracy_retained
+            and self.capacity_item_sold not in (self.final_raw.bag_item_ids or ())
+            and self.money_remaining > self.initial_money
+            and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
+            and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
+            and party_core_intact(self.final_raw.party_species_ids)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and all(status == 0 for status in self.party_status)
+            and self.controller_released
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "objective": "defeat_blaine",
+            "team_development": {
+                "levels": list(self.team_readiness.observed_levels),
+                "final_forms_complete": self.team_readiness.has_final_form_roster,
+                "battles": self.team_training_battles,
+                "healing_trips": self.team_training_healing_trips,
+            },
+            "training": {
+                "area": self.training.area_id,
+                "levels": [self.training.starting_level, self.training.final_level],
+                "battles_won": self.training.battles_won,
+                "healing_trips": self.training.healing_trips,
+            },
+            "quiz": {
+                "answers": ["yes" if answer else "no" for answer in self.quiz_answers],
+                "trainer_battles": [item.quiz_index for item in self.quiz_trainer_battles],
+            },
+            "blaine": {
+                "identity": list(self.identity),
+                "party": [list(member) for member in BLAINE_PARTY],
+                "move_slots": [turn.move_slot for turn in self.turns],
+            },
+            "rewards": {
+                "tm38": self.tm38_quantity,
+                "volcano_badge": self.volcano_badge,
+            },
+            "terminal": {
+                "map": int(self.final_raw.map_id),
+                "position": [self.final_raw.player_x, self.final_raw.player_y],
+                "party_hp": list(self.party_hp),
+                "party_max_hp": list(self.party_max_hp),
+                "party_status": list(self.party_status),
+            },
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
+
+
 def run_mansion_secret_key_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -1469,6 +1586,299 @@ def run_blaine_chapter(
             f"checks={report.failed_terminal_checks()!r}; report={report!r}."
         )
     return report
+
+
+def run_blaine_after_mansion_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    progress: ProgressSink | None = None,
+) -> BlaineAfterMansionReport:
+    """Train the party and defeat Blaine after the Secret Key skill releases control."""
+
+    start_frames = emulator.frame_count
+    actions = CountingExecutor(executor)
+    records: list[BlaineCheckpoint] = []
+    initial = reader.read()
+    _require(initial, MapId.CINNABAR_POKECENTER, (3, 3), "post-Mansion boundary")
+    initial_bag = _bag(emulator)
+    initial_money = _money(emulator)
+    if (
+        initial_bag.get(ItemId.SECRET_KEY, 0) != 1
+        or initial_bag.get(ItemId.TM14_BLIZZARD, 0) != 1
+        or initial_bag.get(ItemId.X_ACCURACY, 0) != 1
+        or _event(emulator, EventFlag.BEAT_BLAINE)
+        or _event(emulator, EventFlag.GOT_TM38)
+        or initial.badge_bits & Badge.VOLCANO
+    ):
+        raise BlaineChapterError("Post-Mansion Blaine boundary is not pristine.")
+    capacity_items = tuple(
+        item
+        for item in (ItemId.GREAT_BALL, ItemId.TM34_BIDE)
+        if initial_bag.get(item, 0) == 1
+    )
+    if len(capacity_items) != 1:
+        raise BlaineChapterError("Post-Mansion boundary lacks one declared TM38 capacity item.")
+    capacity_great_ball_required = capacity_items[0] is ItemId.GREAT_BALL
+    if _events(emulator, MANSION_TRAINER_EVENTS) != (False,) * 6:
+        raise BlaineChapterError("The Secret Key lesson changed an optional Mansion trainer.")
+    if _events(emulator, GYM_TRAINER_EVENTS) != (False,) * 7:
+        raise BlaineChapterError("A Cinnabar Gym trainer was already defeated.")
+
+    development = plan_team_development(
+        PokemonRedPartyReader(emulator).read(), MANSION_DEVELOPMENT_POLICY
+    )
+    team_battles = 0
+    team_healing_trips = 0
+    if development.directive is TeamTrainingDirective.EVOLVE_MEMBER:
+        _, evolution_battles, evolution_heals = run_red_team_balancing(
+            actions,
+            reader,
+            emulator,
+            policy=MANSION_TEAM_POLICY,
+            venues=(
+                ROUTE_11_TRAINING_VENUE,
+                DIGLETTS_CAVE_TRAINING_VENUE,
+                MANSION_TRAINING_VENUE,
+            ),
+            intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
+            flee_timing=MANSION_TRAINING_FLEE_TIMING,
+            hideout_timing=DEFAULT_HIDEOUT_TIMING,
+            flee_func=_flee,
+            volatile_enemy_species=MANSION_VOLATILE_ENEMY_SPECIES,
+            escort_enemy_species=MANSION_ESCORT_ENEMY_SPECIES,
+            max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
+            cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+            evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+            report_label="Mansion team training",
+            checkpoint_count=BLAINE_AFTER_MANSION_CHECKPOINT_COUNT,
+        )
+        team_battles += evolution_battles
+        team_healing_trips += evolution_heals
+
+    # The evolution pass breaks as soon as the final species appears, without
+    # checking readiness.  Until now it was the only call, so the balancing pass
+    # below -- the one that enforces MANSION_TEAM_POLICY's level floor and
+    # spread -- was never reached, and the party finished the game at
+    # [68, 20, 26, 30, 25, 30].  Run it.
+    _, balance_battles, balance_heals = run_red_team_balancing(
+        actions,
+        reader,
+        emulator,
+        policy=MANSION_TEAM_POLICY,
+        venues=(
+            ROUTE_11_TRAINING_VENUE,
+            DIGLETTS_CAVE_TRAINING_VENUE,
+            MANSION_TRAINING_VENUE,
+        ),
+        intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
+        flee_timing=MANSION_TRAINING_FLEE_TIMING,
+        hideout_timing=DEFAULT_HIDEOUT_TIMING,
+        flee_func=_flee,
+        volatile_enemy_species=MANSION_VOLATILE_ENEMY_SPECIES,
+        escort_enemy_species=MANSION_ESCORT_ENEMY_SPECIES,
+        max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
+        cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+        progress_sink=(
+            (
+                lambda message: progress(
+                    BlaineProgress(
+                        "mansion_team_training_progress",
+                        message,
+                        len(records),
+                        BLAINE_AFTER_MANSION_CHECKPOINT_COUNT,
+                        emulator.frame_count,
+                    )
+                )
+            )
+            if progress is not None
+            else None
+        ),
+        completed_checkpoint_count=len(records),
+        report_label="Mansion team training",
+        checkpoint_count=BLAINE_AFTER_MANSION_CHECKPOINT_COUNT,
+    )
+    team_battles += balance_battles
+    team_healing_trips += balance_heals
+
+    training = _run_mansion_training(actions, reader, emulator)
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "mansion_training_complete",
+        "Trained safely in Pokémon Mansion",
+    )
+
+    team_readiness = _qualify_mansion_team_development(reader, emulator)
+    if not team_readiness.passed:
+        raise BlaineChapterError("Team development failed the parity contract.")
+
+    _move(actions, reader, ("down",) * 5 + GYM_ENTRY_ROUTE, "Cinnabar Gym")
+    _require(reader.read(), MapId.CINNABAR_GYM, (16, 17), "Cinnabar Gym entrance")
+    gym_before = _events(emulator, GYM_TRAINER_EVENTS)
+    if gym_before != (False,) * 7:
+        raise BlaineChapterError("A Cinnabar Gym trainer was already defeated.")
+    quiz_trainer_battles: list[CinnabarGymTrainerReceipt] = []
+    for index, (route, answer, text_pulses) in enumerate(
+        zip(GYM_QUIZ_ROUTES, QUIZ_ANSWERS, QUIZ_TEXT_PULSES, strict=True),
+        1,
+    ):
+        _move(actions, reader, route, f"Cinnabar quiz {index}")
+        receipt = _answer_quiz(actions, reader, emulator, index, answer, text_pulses)
+        if receipt is not None:
+            quiz_trainer_battles.append(receipt)
+        expected_trainers = tuple(
+            trainer_index in {item.quiz_index for item in quiz_trainer_battles}
+            for trainer_index in range(7)
+        )
+        observed_trainers = _events(emulator, GYM_TRAINER_EVENTS)
+        if observed_trainers != expected_trainers:
+            raise BlaineChapterError(
+                f"Quiz {index} trainer state changed: expected {expected_trainers!r}, "
+                f"got {observed_trainers!r}."
+            )
+    gates_after = _events(emulator, GYM_GATE_EVENTS)
+    gym_after_quizzes = _events(emulator, GYM_TRAINER_EVENTS)
+    if gates_after != (False,) + (True,) * 6:
+        raise BlaineChapterError(f"Unexpected Cinnabar gate state: {gates_after!r}.")
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "gym_quizzes_cleared",
+        "Cleared six Gym quizzes",
+    )
+
+    _move(actions, reader, QUIZ_6_TO_BLAINE, "Blaine approach")
+    _require(reader.read(), MapId.CINNABAR_GYM, (3, 4), "Blaine approach")
+    _face_and_interact(actions, "up")
+    _await_trainer_battle(actions, reader, DEFAULT_SILPH_TIMING)
+    identity = (
+        emulator.read_u8(RamAddress.CURRENT_OPPONENT),
+        emulator.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
+        emulator.read_u8(RamAddress.ENGAGED_TRAINER_SET),
+    )
+    if identity != (BLAINE_OPPONENT, BLAINE_TRAINER_CLASS, BLAINE_TRAINER_SET):
+        raise BlaineChapterError(f"Unexpected Blaine identity: {identity!r}.")
+    turns: list[BlaineTurn] = []
+
+    def policy(raw: RawGameState) -> int:
+        turns.append(
+            BlaineTurn(
+                raw.enemy_species_id or 0,
+                raw.enemy_level or 0,
+                raw.enemy_hp or 0,
+                raw.first_party_hp or 0,
+                raw.first_party_status or 0,
+                raw.first_party_pp or (0, 0, 0, 0),
+                4,
+            )
+        )
+        return 4
+
+    run_adaptive_trainer_battle(
+        reader,
+        actions,
+        policy,
+        expected_map=MapId.CINNABAR_GYM,
+        intent=BattleIntent(
+            "defeat_blaine",
+            battle_plan_id=RedBattlePlanId.BLAINE_LEADER,
+            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+            required_move_ref=pokemon_red_move_ref(SURF_MOVE_ID),
+        ),
+        required_move_id=SURF_MOVE_ID,
+        label="Blaine",
+    )
+    if _encounter_party(tuple(turns)) != BLAINE_PARTY:
+        raise BlaineChapterError(f"Blaine party or Surf policy changed: {turns!r}.")
+    _checkpoint(records, progress, emulator, reader.read(), "blaine_defeated", "Defeated Blaine")
+    if not _event(emulator, EventFlag.BEAT_BLAINE):
+        raise BlaineChapterError("Blaine victory event did not settle.")
+    if _event(emulator, EventFlag.GOT_TM38):
+        raise BlaineChapterError("Full-bag reward boundary unexpectedly accepted TM38.")
+
+    _move(actions, reader, BLAINE_TO_GYM_EXIT, "Blaine to Gym exit")
+    _move(actions, reader, ("down", "down"), "Cinnabar Gym exit")
+    _require(reader.read(), MapId.CINNABAR_ISLAND, (18, 4), "Gym exterior")
+    _move(
+        actions,
+        reader,
+        ("down",) * 8 + ("left",) * 3 + ("up",),
+        "Cinnabar Mart return",
+    )
+    _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart return")
+    _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk return")
+    _pulse(actions, MacroActionKind.MOVE, "left", 120)
+    capacity_sale_item = ItemId.GREAT_BALL if capacity_great_ball_required else ItemId.TM34_BIDE
+    _sell_current_bag_item(actions, reader, emulator, capacity_sale_item)
+    if _bag(emulator).get(capacity_sale_item, 0):
+        raise BlaineChapterError(f"{capacity_sale_item.name} capacity sale did not settle.")
+    _close(actions, reader)
+    _move(actions, reader, MART_TO_GYM, "Mart to Cinnabar Gym")
+    _require(reader.read(), MapId.CINNABAR_GYM, (16, 16), "Gym reward return")
+    _move(actions, reader, GYM_RETURN_TO_BLAINE, "Blaine reward approach")
+    _require(reader.read(), MapId.CINNABAR_GYM, (3, 4), "Blaine reward approach")
+    _face_and_interact(actions, "up")
+    for _ in range(16):
+        if _event(emulator, EventFlag.GOT_TM38):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM)
+    else:
+        raise BlaineChapterError("Blaine did not award TM38 after the bag slot was freed.")
+    _checkpoint(records, progress, emulator, reader.read(), "tm38_received", "Received TM38")
+
+    _move(actions, reader, BLAINE_TO_GYM_EXIT, "Blaine reward to Gym exit")
+    _move(actions, reader, ("down", "down"), "Cinnabar Gym final exit")
+    _require(reader.read(), MapId.CINNABAR_ISLAND, (18, 4), "Gym final exterior")
+    _move(actions, reader, GYM_EXIT_TO_CENTER, "Cinnabar Center return")
+    _require(reader.read(), MapId.CINNABAR_POKECENTER, (3, 7), "Cinnabar Center return")
+    _move(actions, reader, ("up",) * 4, "Cinnabar final nurse")
+    _heal(actions, reader, emulator)
+    final = reader.read()
+    _checkpoint(records, progress, emulator, final, "blaine_terminal", "Blaine terminal ready")
+
+    report = BlaineAfterMansionReport(
+        records=tuple(records),
+        final_raw=final,
+        training=training,
+        team_readiness=team_readiness,
+        team_training_battles=team_battles,
+        team_training_healing_trips=team_healing_trips,
+        quiz_answers=QUIZ_ANSWERS,
+        gym_gate_events_after_quizzes=gates_after,
+        gym_trainer_events_before=gym_before,
+        gym_trainer_events_after_quizzes=gym_after_quizzes,
+        quiz_trainer_battles=tuple(quiz_trainer_battles),
+        gym_trainer_events_after=_events(emulator, GYM_TRAINER_EVENTS),
+        identity=identity,
+        turns=tuple(turns),
+        got_tm38=_event(emulator, EventFlag.GOT_TM38),
+        beat_blaine=_event(emulator, EventFlag.BEAT_BLAINE),
+        volcano_badge=bool(final.badge_bits & Badge.VOLCANO),
+        volcano_badge_mirror=bool(emulator.read_u8(RamAddress.BEAT_GYM_FLAGS) & Badge.VOLCANO),
+        tm38_quantity=_bag(emulator).get(ItemId.TM38_FIRE_BLAST, 0),
+        secret_key_quantity=_bag(emulator).get(ItemId.SECRET_KEY, 0),
+        tm14_quantity=_bag(emulator).get(ItemId.TM14_BLIZZARD, 0),
+        x_accuracy_retained=_bag(emulator).get(ItemId.X_ACCURACY, 0) == 1,
+        capacity_item_sold=capacity_items[0],
+        initial_money=initial_money,
+        money_remaining=_money(emulator),
+        party_hp=_party_hp(emulator),
+        party_max_hp=_party_max_hp(emulator),
+        party_status=_party_status(emulator),
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=actions.actions_executed,
+        controller_released=not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise BlaineChapterError(f"Post-Mansion Blaine evidence failed: {report.public_dict()!r}.")
+    return report
+
 
 
 def _sell_current_bag_item(actions, reader, emulator, item: ItemId) -> None:

@@ -38,6 +38,7 @@ from pokemon_red_completion.provenance import (
 )
 from pokemon_red_completion.quest import quest_graph_payload
 from pokemon_red_completion.red_objective_skills import (
+    DefeatBlaineObjectiveSkill,
     DefeatErikaObjectiveSkill,
     DefeatKogaObjectiveSkill,
     DefeatSabrinaObjectiveSkill,
@@ -81,9 +82,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--max-decisions",
         type=int,
-        choices=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+        choices=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13),
         default=1,
-        help="execute one to twelve decisions through the registered Red skills",
+        help="execute one to thirteen decisions through the registered Red skills",
     )
     args = parser.parse_args(argv)
 
@@ -133,6 +134,7 @@ def main(argv: list[str] | None = None) -> int:
             DefeatSabrinaObjectiveSkill(emulator, reader, executor),
             ReachCinnabarObjectiveSkill(emulator, reader, executor),
             ObtainSecretKeyObjectiveSkill(emulator, reader, executor),
+            DefeatBlaineObjectiveSkill(emulator, reader, executor),
         ]
         loop = PortablePlayerLoop(
             graph=COMPLETION_QUEST,

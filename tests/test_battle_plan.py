@@ -167,6 +167,7 @@ _EXPECTED_SOURCE_MEMBER_LEDGER = {
         "BLAINE_GYM_BURGLAR_SET_4",
         "BLAINE_GYM_BURGLAR_SET_5",
         "BLAINE_LEADER",
+        "BLAINE_LEADER",
     ),
     "giovanni.py": tuple(
         item.name for item in RedBattlePlanId if item.name.startswith("GIOVANNI_")
