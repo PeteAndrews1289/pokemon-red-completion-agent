@@ -145,9 +145,13 @@ real regressions and weakens the otherwise strong evidence story.
 
 **Resolved during this audit:** the stale registry was regenerated from source, all four public
 golden identities were updated from generator output, and the full 2,024-test local gate passed.
-The final **16 consecutive GitHub Actions runs** were green after the registry fix. This is why the
+The final **19 consecutive GitHub Actions runs** were green after the registry fix. This is why the
 prior email storm was not intended behavior—it was one repeatedly retriggered derived-artifact
-mismatch, not useful Dependabot noise.
+mismatch, not useful Dependabot noise. GitHub's repository APIs also report that Dependabot alerts
+are disabled, no CodeQL/code-scanning analysis exists, and secret scanning has zero alerts. The
+current email diagnosis is therefore specific: those messages came from failed Actions runs.
+Enabling dependency and code scanning is a separate future repository-hardening decision and should
+be done with a quiet, reviewed notification policy rather than during an experimental campaign.
 
 ### The branch now needs integration, not more accumulated history
 
@@ -190,7 +194,7 @@ after merge. Do not rewrite the shared branch or force-push its history.
 > expert teacher and independent referee that complete all 36 objectives through the Hall of Fame.
 > Then I replaced decision boundaries one at a time with authenticated learned policies, using
 > sealed lineages, causal emulator control, fail-closed safety, and receipts that distinguish real
-> choices from single-option decisions. The current system has completed 57,644 consecutive
+> choices from single-option decisions. The current system has completed 114,831 consecutive
 > model-controlled candidate decisions with 400 executed teacher disagreements inside the portable
 > Blaine objective and zero faints,
 > and the next benchmark tests whether that identity-free strategy transfers to another Pokémon
