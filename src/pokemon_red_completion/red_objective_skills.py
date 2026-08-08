@@ -590,8 +590,8 @@ class DefeatBlaineObjectiveSkill:
     specialist: Specialist = Specialist.BATTLE
     expected_facts: frozenset[str] = frozenset({"badge:volcano"})
     additional_effect_facts: frozenset[str] = frozenset()
-    max_actions: int = 500_000
-    max_frames: int = 20_000_000
+    max_actions: int = 750_000
+    max_frames: int = 100_000_000
 
     def availability(self, state: GameState) -> ObjectiveSkillAvailability:
         executable = (

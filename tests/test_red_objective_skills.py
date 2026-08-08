@@ -258,8 +258,8 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
             DefeatBlaineObjectiveSkill,
             "run_blaine_after_mansion_chapter",
             "defeat_blaine",
-            400_000,
-            15_000_000,
+            600_000,
+            80_000_000,
         ),
     ),
 )

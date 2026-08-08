@@ -127,6 +127,10 @@ that all optional trainers, Blaine, and the Volcano Badge remain untouched. Expl
 the old deterministic chapter quietly combined two graph objectives, while the portable loop now
 returns control to the model between them. End the act on **“twelve dispatches; 25,254 fixed-skill
 actions; zero labels, fallbacks, or replans”** and the separately selectable Blaine frontier.
+Keep the first Blaine rehearsal in the edit: the team-development skill returns, but the runtime
+rejects it for exceeding its declared frame budget. It is a clean demonstration that the safety
+envelope is enforced after real work, and that failed rehearsals are measured rather than relabeled
+as successes.
 
 ### Act VII: the Crystal test — 10:10–11:15
 

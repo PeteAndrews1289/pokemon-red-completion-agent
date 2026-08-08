@@ -237,6 +237,13 @@ branch, and zero labels, fallbacks, or replans. See the
 reintroduce the old combined Mansion-plus-Gym authority: the model owns the objective transition;
 current skills still own navigation, battle, menu, training, and recovery actions.
 
+That skill is now implemented and unit-qualified at the authenticated post-Mansion boundary. Its
+first private live rehearsal completed enough internal work to return an execution report, then the
+portable loop correctly rejected it for exceeding the initial 20,000,000-frame declaration. This
+is a safety-envelope measurement, not a gameplay qualification. The bound is now 100,000,000
+frames / 750,000 actions; rerun from `portable-loop-post-secret-key.state` and do not count the
+failed rehearsal as completion.
+
 ---
 
 ## 4. How to work here without burning hours

@@ -116,6 +116,14 @@ The next frontier is the separately selectable `defeat_blaine` objective. This i
 ownership and demonstration quality, but another strong planner-ranking test still requires a
 state where at least two skills are simultaneously executable.
 
+The first isolated Blaine rehearsal also measured the cost of the balanced-team lesson. The skill
+finished its internal execution far enough to return a report, but the portable loop rejected that
+report because genuine six-member development exceeded the initially declared 20,000,000-frame
+budget. No gameplay rule was relaxed: the replacement safety envelope is 100,000,000 frames and
+750,000 actions, and the failed rehearsal remains uncounted. This is precisely why the captured
+post-Mansion boundary matters—future attempts repeat the expensive lesson, not the preceding twelve
+objectives.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal
