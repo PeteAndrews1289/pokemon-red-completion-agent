@@ -226,7 +226,7 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   selection. Reject the candidate before shadow: it missed 26 mandatory heals, inserted 2,219
   unnecessary heals, reached only 20.72% heal precision and 95.97% genuine accuracy, and failed
   four offline gates despite perfect battle accuracy.
-- [ ] Collect fresh v6 lineages under safety-affordance masking, select without validation, and
+- [x] Collect fresh v6 lineages under safety-affordance masking, select without validation, and
   attempt shadow/full causal promotion only if every unchanged operational gate passes.
 - [x] Audit v6 against a candidate-set-only held-out baseline. That baseline also reaches 100%:
   every `fight/flee` row is labeled `fight`, every `seek/heal` row is labeled `seek`, and every
@@ -252,6 +252,12 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   choice-diversity audit, portable objective receipt, terminal emulator state, and progress envelope.
   It reports operational authority and state-dependent evidence as separate verdicts and always
   keeps clean-start, cross-title, and end-to-end claims closed at this captured-state stage.
+- [x] Pass that portable gate from the authenticated post-Secret-Key state. The model controlled
+  all 57,548 training decisions across both phases; the bounded skill completed 1,796 development
+  battles and 1,074 healing trips, defeated Blaine, reached 60/55/55/55/55/55 fully healed, and
+  fresh observation opened Giovanni. All ten authority-integration checks passed. State-dependent
+  policy evidence remains rejected because the candidate-only baseline is still perfect. See the
+  [portable receipt](evidence/training-control-affordance-v6-portable-2026-08-08.json).
 - [x] Expose the next genuinely variable teacher choices as a shared, permutation-equivariant
   candidate-ranking interface: which viable below-floor member to train and which safe measured
   venue to use. Species, moves, slots, area names, maps, and memory identities are absent from the

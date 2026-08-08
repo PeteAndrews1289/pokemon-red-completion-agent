@@ -1,0 +1,112 @@
+{
+  "schema": "pokemon-training-control-portable-qualification-v1",
+  "status": "portable_authority_integration_eligible",
+  "source_commit": "33be7eff197e0aefb2058a91e2a19712b90518ff",
+  "candidate_summary_sha256": "8ef5e857e42a2325a3c28b3346649c99b1d9a7fcb7110ac1abc3bb13becb5cec",
+  "causal_gate_evaluation_sha256": "d31a7a5c139418a12a29f857a545074021ce0e3c16d53dcd0986bc110c1a64f8",
+  "choice_diversity_audit_sha256": "c6b4516fd8f1f3984219824a226771fc3b4a9615aeffe5f1bbc86344f8a02c21",
+  "portable_report_sha256": "aca5510211f6200525c782e81e119e3310c5d2d44ca1b34ebedc6076678eb0ec",
+  "portable_gate_evaluation_sha256": "4714dfac619b13c46d57f1111872b93395fd74f545688e2d59dcea9874bedb63",
+  "terminal_state_sha256": "29612628862e11791101b3269a7c6410796baba7b4886dc45307ef7789aa4284",
+  "terminal_envelope_sha256": "6f38421ca6fcad34fc12a43736bc02a79edc2a32816b302ece92fe2109020e5f",
+  "model": {
+    "model_id": "pokemon.core.training.control.mlp.v1",
+    "canonical_sha256": "cd8463ba77edc6f37b4e2321f5b644d7bb04a84622fa7af3f09fad968e289bd6",
+    "file_sha256": "62f3eab12d9c3ecf0d2623b0c8ebbc7f55fc055673124cb3939e678677025b7b"
+  },
+  "objective": {
+    "before_available": [
+      "defeat_blaine"
+    ],
+    "selected": "defeat_blaine",
+    "after_available": [
+      "defeat_giovanni"
+    ],
+    "facts_added": [
+      "badge:volcano"
+    ],
+    "model_objective_decisions": 1,
+    "branching_objective_decisions": 0,
+    "expected_route_label_provided": false,
+    "teacher_fallbacks": 0
+  },
+  "training_control": {
+    "model_had_execution_authority": true,
+    "authority_phases": [
+      "battle",
+      "overworld"
+    ],
+    "teacher_fallback_on_model_disagreement": false,
+    "decisions": 57548,
+    "controlled_decisions": 57548,
+    "forced_decisions": 3741,
+    "genuine_decisions": 53807,
+    "accuracy": 1.0,
+    "genuine_accuracy": 1.0,
+    "mean_confidence": 0.9999259366716962,
+    "action_counts": {
+      "fight": 2021,
+      "flee": 1487,
+      "heal": 607,
+      "seek": 53432,
+      "stop": 1
+    },
+    "operational_errors": {
+      "missed_required_heal": 0,
+      "missed_stop": 0,
+      "premature_stop": 0,
+      "unnecessary_heal": 0
+    }
+  },
+  "skill": {
+    "actions_executed": 568457,
+    "frames_executed": 38213160,
+    "team_development_battles": 1796,
+    "team_development_healing_trips": 1074,
+    "final_forms_complete": true,
+    "final_party_levels": [
+      60,
+      55,
+      55,
+      55,
+      55,
+      55
+    ],
+    "terminal_party_fully_healed": true,
+    "terminal_party_status_free": true,
+    "blaine_defeated": true,
+    "volcano_badge_observed": true
+  },
+  "gates": {
+    "causal_chain": true,
+    "portable_status": true,
+    "published_clean_source": true,
+    "model_identity": true,
+    "full_training_authority": true,
+    "objective_boundary": true,
+    "fresh_completion_observation": true,
+    "developed_party": true,
+    "assistance_boundary": true,
+    "terminal_state": true
+  },
+  "claim_boundary": {
+    "verified": [
+      "the authenticated training controller integrated into the portable Red objective loop",
+      "the model controlled every exposed battle and overworld training decision without fallback",
+      "the bounded Blaine skill completed from an authenticated captured state and fresh observation opened Giovanni",
+      "the terminal emulator state and progress envelope authenticate the developed, fully healed party"
+    ],
+    "not_verified": [
+      "state-dependent value of the 25 training-control features",
+      "a genuine branching objective selection in this one-objective proof",
+      "clean-start completion",
+      "cross-title transfer",
+      "end-to-end learned gameplay"
+    ],
+    "reason": "The candidate-action-set-only baseline also achieved 100 percent, and defeat_blaine was the only executable objective."
+  },
+  "private_artifacts_tracked": false,
+  "portable_authority_integration_eligible": true,
+  "state_dependent_policy_evidence_eligible": false,
+  "promotion_eligible": false
+}
