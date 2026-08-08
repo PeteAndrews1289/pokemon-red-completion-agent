@@ -1,5 +1,13 @@
 # Three-agent coordination
 
+> **2026-08-08 active lane:** the teacher route is frozen except for genuine regressions. The
+> current work is the strategic trainee/venue ranker described in
+> [the preregistered promotion plan](docs/evidence/training-candidate-ranker-v1-promotion-plan-2026-08-08.json).
+> Training-control v6 has already passed causal and portable authority integration; its perfect
+> candidate-only baseline means further seek/fight/flee/heal/stop imitation is off the critical
+> path. Do not open the sealed candidate validation root before a training-only selection artifact
+> exists. The current local gate is 2,006 passed / 3 deselected.
+
 **New here? Read [HANDOFF.md](HANDOFF.md) first** — it is the complete orientation, including what
 is unproven and how this codebase repeatedly fools people. Then [MISSION.md](MISSION.md) for why the
 project exists. This document is about *who does what* and *how not to collide*.
@@ -51,7 +59,8 @@ question does not get re-answered three different ways in three sessions.
 
 ### Lane A — Route and emulator
 
-**Status:** Captured-state curriculum complete at six level-55 members and zero faints; full-route confirmation pending.
+**Status:** Clean route, v6 full-authority causal control, and portable Blaine integration are
+qualified. Strategic candidate collection is the active emulator campaign.
 **Owner:** @Codex
 
 Owns `src/pokemon_red_completion/` chapter modules (`blaine.py`, `victory_road.py`, `champion.py`,

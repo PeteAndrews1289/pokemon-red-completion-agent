@@ -8,6 +8,34 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## Current checkpoint — 2026-08-08
+
+This section supersedes the older starting-point and test-count notes below.
+
+- The deterministic teacher remains the expert oracle: clean power-on through 312/312 semantic
+  checkpoints, all 36 objectives, Champion, and Hall of Fame.
+- The captured-state portable objective loop has one uninterrupted twenty-dispatch Hall-of-Fame
+  proof. Nineteen objective dispatches were singletons and the mechanic skills remain authored.
+- Training-control v6 passed offline, shadow, causal, and portable integration. In the final
+  portable proof the authenticated model controlled all 57,548 battle/overworld training decisions;
+  the skill completed 1,796 development battles and 1,074 heals, defeated Blaine, finished at
+  60/55/55/55/55/55 fully healed, and fresh observation opened Giovanni. All ten integration checks
+  passed with no fallback.
+- V6 still does **not** prove state-dependent strategy. A candidate-set-only baseline also scores
+  100%, so the 25 state features have no demonstrated incremental value.
+- The active replacement is the preregistered trainee/venue candidate ranker in
+  [its promotion plan](docs/evidence/training-candidate-ranker-v1-promotion-plan-2026-08-08.json).
+  It records identity-free, variable-sized choice sets, collapses repeated identical polls into
+  explicit state-transition records, authenticates terminal party/faint evidence, and selects
+  hyperparameters only on genuine multi-candidate train-to-train accuracy.
+- The full local gate currently reports **2,006 passed, 3 deselected**, with registry, artifact,
+  documentation, Ruff, and mypy checks green. The collection registry was regenerated after the
+  strategic-ranker source change; do not manually edit its hashes.
+
+The immediate dependency order is: collect both training roots → select using training only → open
+sealed validation once → require a real genuine-choice margin over the shape baseline → shadow on
+a fresh root → grant candidate selection authority on a separate causal root.
+
 ---
 
 ## 1. What this project is for

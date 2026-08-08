@@ -128,6 +128,8 @@ def main() -> int:
         "schema": "pokemon-training-candidate-choice-audit-v1",
         "replay_sha256": args.replay[1],
         "provenance": dict(provenance),
+        "status": dataset.status,
+        "lineage_qualified": dataset.lineage_qualified,
         "decisions": len(rows),
         "segment_counts": segment_counts,
         "kind_counts": dict(sorted(kind_counts.items())),
