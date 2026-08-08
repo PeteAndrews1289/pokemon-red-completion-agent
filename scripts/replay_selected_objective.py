@@ -64,6 +64,16 @@ from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 from pokemon_red_completion.rom import resolve_rom_path
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.specialists import SpecialistRegistry
+from pokemon_red_completion.training_control import (
+    TrainingControlAction,
+    TrainingControlDecision,
+    TrainingControlPhase,
+)
+from pokemon_red_completion.training_control_model import (
+    TrainingControlMLP,
+    TrainingControlShadowAudit,
+    load_training_control_model,
+)
 
 REPOSITORY_ROOT = Path(__file__).resolve().parent.parent
 
@@ -77,6 +87,22 @@ def main(argv: list[str] | None = None) -> int:
         help="defaults to <state>.json",
     )
     parser.add_argument("--model", type=Path, required=True)
+    parser.add_argument(
+        "--training-control-model",
+        type=Path,
+        help="authenticated seek/fight/flee/heal/stop model used inside the Blaine skill",
+    )
+    parser.add_argument("--training-control-model-sha256")
+    parser.add_argument(
+        "--training-control-battle-authority",
+        action="store_true",
+        help="let the training-control model execute battle fight/flee choices",
+    )
+    parser.add_argument(
+        "--training-control-overworld-authority",
+        action="store_true",
+        help="let the training-control model execute overworld seek/heal/stop choices",
+    )
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument("--out", type=Path, help="also write the sanitized JSON report here")
     parser.add_argument(
@@ -94,6 +120,22 @@ def main(argv: list[str] | None = None) -> int:
         help="execute one to twenty decisions through the registered Red skills",
     )
     args = parser.parse_args(argv)
+    training_model_values = (
+        args.training_control_model,
+        args.training_control_model_sha256,
+    )
+    if any(value is not None for value in training_model_values) and not all(
+        value is not None for value in training_model_values
+    ):
+        parser.error(
+            "training control requires both --training-control-model and "
+            "--training-control-model-sha256"
+        )
+    if (
+        args.training_control_battle_authority
+        or args.training_control_overworld_authority
+    ) and args.training_control_model is None:
+        parser.error("training-control authority requires an authenticated model")
 
     source = detect_source_identity(REPOSITORY_ROOT, include_untracked=True)
     require_clean_source(source)
@@ -108,6 +150,33 @@ def main(argv: list[str] | None = None) -> int:
             objective_graph_document(quest_graph_payload(COMPLETION_QUEST))
         ),
     )
+    training_model: TrainingControlMLP | None = None
+    training_audit: TrainingControlShadowAudit | None = None
+    training_controlled_decisions = 0
+    if args.training_control_model is not None:
+        assert args.training_control_model_sha256 is not None
+        training_model = load_training_control_model(
+            args.training_control_model,
+            expected_sha256=args.training_control_model_sha256,
+        )
+        training_audit = TrainingControlShadowAudit(training_model)
+
+    def training_decision_authority(
+        decision: TrainingControlDecision,
+    ) -> TrainingControlAction:
+        nonlocal training_controlled_decisions
+        assert training_audit is not None
+        assert training_model is not None
+        training_audit.observe(decision)
+        controlled = (
+            args.training_control_battle_authority
+            if decision.observation.phase is TrainingControlPhase.BATTLE
+            else args.training_control_overworld_authority
+        )
+        if controlled:
+            training_controlled_decisions += 1
+            return training_model.predict(decision.observation)
+        return decision.action
 
     rom = resolve_rom_path(args.rom)
     with PyBoyAdapter(
@@ -141,7 +210,14 @@ def main(argv: list[str] | None = None) -> int:
             DefeatSabrinaObjectiveSkill(emulator, reader, executor),
             ReachCinnabarObjectiveSkill(emulator, reader, executor),
             ObtainSecretKeyObjectiveSkill(emulator, reader, executor),
-            DefeatBlaineObjectiveSkill(emulator, reader, executor),
+            DefeatBlaineObjectiveSkill(
+                emulator,
+                reader,
+                executor,
+                training_decision_authority=(
+                    training_decision_authority if training_model is not None else None
+                ),
+            ),
             DefeatGiovanniObjectiveSkill(emulator, reader, executor),
             CrossVictoryRoadObjectiveSkill(emulator, reader, executor),
             DefeatLoreleiObjectiveSkill(emulator, reader, executor),
@@ -213,6 +289,13 @@ def main(argv: list[str] | None = None) -> int:
                 "mechanic_execution": "teacher_authored_bounded_skill",
                 "teacher_fallbacks": 0,
             },
+            "training_control": _training_control_report(
+                training_audit,
+                model_file_sha256=args.training_control_model_sha256,
+                battle_authority=args.training_control_battle_authority,
+                overworld_authority=args.training_control_overworld_authority,
+                controlled_decisions=training_controlled_decisions,
+            ),
             "limitations": [
                 "captured_state_diagnostic",
                 "bounded_model_decision_sequence",
@@ -252,6 +335,37 @@ def main(argv: list[str] | None = None) -> int:
         args.out.write_text(payload, encoding="ascii")
     print(payload, end="")
     return 0
+
+
+def _training_control_report(
+    audit: TrainingControlShadowAudit | None,
+    *,
+    model_file_sha256: str | None,
+    battle_authority: bool,
+    overworld_authority: bool,
+    controlled_decisions: int,
+) -> dict[str, object] | None:
+    if audit is None:
+        return None
+    summary = audit.public_dict()
+    summary.update(
+        {
+            "model_file_sha256": model_file_sha256,
+            "authority_phases": [
+                phase
+                for phase, enabled in (
+                    ("battle", battle_authority),
+                    ("overworld", overworld_authority),
+                )
+                if enabled
+            ],
+            "controlled_decisions": controlled_decisions,
+            "model_had_execution_authority": controlled_decisions > 0,
+            "teacher_fallback_on_model_disagreement": False,
+            "promotion_eligible": False,
+        }
+    )
+    return summary
 
 
 if __name__ == "__main__":

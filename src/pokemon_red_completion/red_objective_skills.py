@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from pokemon_red_completion.agatha import run_agatha_chapter
@@ -34,6 +35,10 @@ from pokemon_red_completion.saffron import SaffronTiming, run_saffron_chapter
 from pokemon_red_completion.silph import SilphTiming, run_silph_chapter
 from pokemon_red_completion.strength import StrengthTiming, run_strength_chapter
 from pokemon_red_completion.tower import TowerTiming, run_tower_chapter
+from pokemon_red_completion.training_control import (
+    TrainingControlAction,
+    TrainingControlDecision,
+)
 from pokemon_red_completion.victory_road import run_victory_road_chapter
 
 
@@ -593,6 +598,10 @@ class DefeatBlaineObjectiveSkill:
     emulator: EmulatorState
     reader: PokemonRedStateReader
     executor: ChapterExecutor
+    training_decision_sink: Callable[[TrainingControlDecision], None] | None = None
+    training_decision_authority: (
+        Callable[[TrainingControlDecision], TrainingControlAction] | None
+    ) = None
     objective_id: str = "defeat_blaine"
     specialist: Specialist = Specialist.BATTLE
     expected_facts: frozenset[str] = frozenset({"badge:volcano"})
@@ -621,6 +630,8 @@ class DefeatBlaineObjectiveSkill:
             self.emulator,
             self.reader,
             self.executor,
+            training_decision_sink=self.training_decision_sink,
+            training_decision_authority=self.training_decision_authority,
         )
         return ObjectiveSkillExecution(
             actions_executed=report.actions_executed,

@@ -28,6 +28,7 @@ from pokemon_red_completion.red_objective_skills import (
     RocketHideoutObjectiveSkill,
 )
 from pokemon_red_completion.route import COMPLETION_QUEST
+from pokemon_red_completion.training_control import TrainingControlAction
 
 
 @dataclass
@@ -93,6 +94,45 @@ def test_red_tower_skill_matches_graph_and_preserves_mechanics_evidence(monkeypa
     assert result.frames_executed == 222_333
     assert result.evidence == {"status": "ok", "trainers": 5}
     assert calls == [(emulator, reader, executor)]
+
+
+def test_blaine_skill_forwards_training_control_without_changing_default_contract(
+    monkeypatch,
+) -> None:
+    received: list[tuple[object, object]] = []
+
+    def fake_run(
+        emulator,
+        reader,
+        executor,
+        *,
+        training_decision_sink,
+        training_decision_authority,
+    ):
+        received.append((training_decision_sink, training_decision_authority))
+        return _Report()
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_objective_skills.run_blaine_after_mansion_chapter",
+        fake_run,
+    )
+    def sink(decision) -> None:
+        return None
+
+    def authority(decision) -> TrainingControlAction:
+        return TrainingControlAction.SEEK
+
+    skill = DefeatBlaineObjectiveSkill(
+        object(),
+        object(),
+        object(),
+        training_decision_sink=sink,
+        training_decision_authority=authority,
+    )
+
+    skill.execute()
+
+    assert received == [(sink, authority)]
 
 
 def test_red_fuchsia_skill_matches_graph_and_preserves_mechanics_evidence(monkeypatch) -> None:

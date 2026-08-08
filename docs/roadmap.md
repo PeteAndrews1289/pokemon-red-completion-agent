@@ -210,16 +210,21 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   teacher referee and action/frame/faint bounds. The 57,342-decision shadow reached 100% battle
   agreement. A fresh 59,137-decision causal lesson then completed 1,743 battles with zero faints,
   all six at level 55, and no teacher fallback.
-- [ ] Redesign the overworld authority boundary before granting it control. All current overworld
-  observations advertise `seek`, `heal`, and `stop`, the selected return is not yet the mechanic's
-  sole source of control, and the replacement predicted 12,405 unnecessary heals in its causal
-  audit. Report forced versus genuine choices and operational false-heal cost rather than relying
-  on balanced accuracy.
+- [x] Redesign the overworld authority boundary before granting it control. Safe optional decisions
+  advertise `seek`, `heal`, and `stop`; mandatory runtime transitions retain the full candidate set
+  but fail closed on the wrong choice. The selected return is now the mechanic's sole source of
+  control, and receipts separate forced, genuine, operational-error, and causal-cost metrics.
 - [x] Make overworld selections causal and audit whether their labels are observable. Optional model
   heals now execute and spend the real budget; skipped mandatory heals, premature continuation, and
   missed stop decisions fail closed. The first v4 collection was stopped before artifact creation
   because 356 required-heal labels depended on an unobserved safety escort. Feature schema v2 adds
   portable reserve health/status/PP signals; all three exposed roots are excluded.
+- [x] Thread authenticated training-control inference through the portable Red loop's
+  `defeat_blaine` objective skill. Battle and overworld authority are independently configurable,
+  model decisions are audited in the objective receipt, and no disagreement fallback exists.
+- [ ] Finish the preregistered v5 lineages, select class balance from training roots only, open the
+  sealed validation lineage once, and attempt fresh shadow and full causal promotion only if every
+  offline gate passes.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

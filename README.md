@@ -165,6 +165,14 @@ heal precision was only 3.49%. Feature schema v2 now adds game-neutral safety-re
 status, attack PP, and PP margin; the three exposed roots are excluded rather than replayed. See the
 [observation audit](docs/evidence/training-control-overworld-observation-audit-2026-08-08.json).
 
+The replacement promotion is now preregistered before opening validation: whole-lineage
+train-to-train selection fixes the class-balance power, then one sealed validation lineage must
+clear explicit false-heal, missed-heal, missed-stop, accuracy, and causal budget gates. The
+authenticated controller can now be injected into the portable Red loop's `defeat_blaine` skill;
+battle and overworld authority are enabled separately, every decision is audited, and disagreement
+never falls back to the teacher. See the
+[promotion plan](docs/evidence/training-control-overworld-promotion-plan-2026-08-08.json).
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,
