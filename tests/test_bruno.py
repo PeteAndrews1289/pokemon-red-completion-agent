@@ -1,3 +1,4 @@
+from dataclasses import replace
 from inspect import getsource
 
 import pytest
@@ -12,8 +13,10 @@ from pokemon_red_completion.bruno import (
     BRUNO_PARTY,
     BRUNO_RNG_DELAY_FRAMES,
     BrunoTurn,
+    _bruno_matchup_switch_target,
     _bruno_move_slot,
     _bruno_recovery_threshold,
+    _bruno_team_participation_satisfied,
     _encounter_party,
     _settle_bruno_victory,
     _turns_valid,
@@ -58,6 +61,39 @@ def test_bruno_receipt_reconstructs_party_and_policy() -> None:
     assert _turns_valid((BrunoTurn(0x2C, 55, 63, 193, 0x20, (19, 10, 10, 14), 1),))
     assert not _turns_valid((BrunoTurn(0x22, 53, 1, 0, 0, (1, 1, 1, 1), 4),))
     assert not _turns_valid((BrunoTurn(0x22, 53, 1, 70, 0x80, (1, 1, 1, 1), 4),))
+
+
+def test_bruno_participation_requires_a_real_reserve_attack() -> None:
+    lead = BrunoTurn(0x22, 53, 1, 200, 0, (1, 1, 1, 1), 4, 0)
+    reserve = BrunoTurn(0x22, 53, 1, 130, 0, (30, 40, 0, 0), 1, 5)
+
+    assert not _bruno_team_participation_satisfied((lead,))
+    assert _bruno_team_participation_satisfied((reserve, lead))
+    assert not _bruno_team_participation_satisfied(
+        (replace(reserve, active_party_index=None), lead)
+    )
+
+
+def test_bruno_matchup_switch_targets_the_living_hitmonlee() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.BRUNOS_ROOM,
+        player_x=4,
+        player_y=5,
+        party_count=6,
+        battle_state=2,
+        active_party_index=0,
+        party_species_ids=(0x1C, 0x40, 0x76, 0x84, 0x68, 0x2B),
+        party_hp=(200, 130, 120, 250, 125, 140),
+    )
+
+    assert _bruno_matchup_switch_target(raw, 0x2B) == 5
+    assert (
+        _bruno_matchup_switch_target(
+            replace(raw, party_hp=(*raw.party_hp[:-1], 0)), 0x2B
+        )
+        is None
+    )
 
 
 def test_bruno_recovery_threshold_accounts_for_hitmonlee_damage() -> None:

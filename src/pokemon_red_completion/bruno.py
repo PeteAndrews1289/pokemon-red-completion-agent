@@ -18,12 +18,14 @@ from pokemon_red_completion.battle_actions import (
     recovery_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    BattleSwitchCapability,
     note_observed_trainer_battle_exit,
     recovery_action_due,
     run_adaptive_trainer_battle,
@@ -53,6 +55,7 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.participation import summarize_party_participation
+from pokemon_red_completion.red_party import BLASTOISE_SPECIES_ID, HITMONLEE_SPECIES_ID
 from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
     SilphChapterError,
@@ -141,6 +144,7 @@ class BrunoChapterReport:
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    team_switches: int
 
     @property
     def passed(self) -> bool:
@@ -153,6 +157,8 @@ class BrunoChapterReport:
             and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
             and all(status == 0 for status in self.party_status)
+            and _bruno_team_participation_satisfied(self.turns)
+            and self.team_switches == 2
             and self.controller_released
         )
 
@@ -182,6 +188,7 @@ class BrunoChapterReport:
                 for item in self.turns
             ],
             "participation": participation.public_dict(),
+            "team_switches": self.team_switches,
             "recovery": {
                 "hyper_potions_used": self.hyper_potions_used,
                 "full_restores_used": self.full_restores_used,
@@ -239,11 +246,32 @@ def run_bruno_chapter(
     class _HealBoundary(BattleControlRequest):
         default_action = BattleAction.recovery()
 
+    class _TeamSwitchBoundary(BattleControlRequest):
+        pass
+
     last_recovery_turn = -1
+    team_switches = 0
 
     def policy(raw: RawGameState) -> int:
-        hp = raw.first_party_hp or 0
-        status = raw.first_party_status or 0
+        hp = raw.battler_hp or 0
+        status = raw.battler_status or 0
+        reserve_has_attacked = any(
+            turn.active_party_index not in {None, 0} for turn in turns
+        )
+        if raw.active_party_index not in {None, 0} and reserve_has_attacked:
+            target = _bruno_matchup_switch_target(raw, BLASTOISE_SPECIES_ID)
+            if target is None:
+                raise BrunoChapterError("Bruno could not restore its protected lead.")
+            raise _TeamSwitchBoundary(BattleAction.switch(target + 1))
+        if (
+            raw.enemy_species_id == BRUNO_PARTY[0][0]
+            and raw.active_party_index in {None, 0}
+            and not reserve_has_attacked
+        ):
+            target = _bruno_matchup_switch_target(raw, HITMONLEE_SPECIES_ID)
+            if target is None:
+                raise BrunoChapterError("Bruno lacks its planned Hitmonlee participant.")
+            raise _TeamSwitchBoundary(BattleAction.switch(target + 1))
         if recovery_action_due(
             hp=hp,
             status=status,
@@ -253,7 +281,7 @@ def run_bruno_chapter(
         ):
             raise _HealBoundary
         species = raw.enemy_species_id or 0
-        pp = raw.first_party_pp or (0, 0, 0, 0)
+        pp = raw.battler_pp or (0, 0, 0, 0)
         slot = _bruno_move_slot(pp)
         turns.append(
             BrunoTurn(
@@ -262,7 +290,7 @@ def run_bruno_chapter(
                 raw.enemy_hp or 0,
                 hp,
                 status,
-                raw.first_party_pp or (0, 0, 0, 0),
+                pp,
                 slot,
                 raw.active_party_index,
             )
@@ -281,6 +309,7 @@ def run_bruno_chapter(
                 BattleRecoveryCapability.CURE_ANY_STATUS,
             }
         ),
+        switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
     )
     while reader.read().battle_state:
         try:
@@ -294,6 +323,26 @@ def run_bruno_chapter(
                 label="Bruno",
             )
         except BattleRuntimeError as error:
+            cause = error.__cause__
+            if isinstance(cause, _TeamSwitchBoundary):
+                party_slot = cause.action.party_slot
+                if party_slot is None:
+                    raise BrunoChapterError("Bruno team switch lacked a party target.") from error
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        party_slot - 1,
+                        label="Bruno matchup-aware participation",
+                        wait_frames=DEFAULT_SILPH_TIMING.wait_frames,
+                    )
+                except ProtectedRecoveryError as switch_error:
+                    raise BrunoChapterError(
+                        f"Bruno matchup-aware switch failed: {switch_error}"
+                    ) from switch_error
+                team_switches += 1
+                continue
             if not recovery_request_matches(error.__cause__, _HealBoundary):
                 current = reader.read()
                 raise BrunoChapterError(
@@ -380,6 +429,7 @@ def run_bruno_chapter(
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,
         controller_released=not emulator.pressed_buttons,
+        team_switches=team_switches,
     )
     if not report.passed:
         raise BrunoChapterError(f"Bruno terminal evidence failed: {report!r}.")
@@ -460,6 +510,28 @@ def _turns_valid(turns: Iterable[BrunoTurn]) -> bool:
         and 0 <= item.lead_status <= 0x7F
         for item in items
     )
+
+
+def _bruno_team_participation_satisfied(turns: Iterable[BrunoTurn]) -> bool:
+    """Require at least one real attack from the lead and from a teammate."""
+    indexes = {
+        turn.active_party_index for turn in turns if turn.active_party_index is not None
+    }
+    return 0 in indexes and any(index > 0 for index in indexes)
+
+
+def _bruno_matchup_switch_target(raw: RawGameState, species_id: int) -> int | None:
+    """Resolve a living matchup role by species instead of a brittle party slot."""
+    party_hp = raw.party_hp or ()
+    for index, species in enumerate(raw.party_species_ids or ()):
+        if (
+            species == species_id
+            and index < len(party_hp)
+            and party_hp[index] > 0
+            and index != raw.active_party_index
+        ):
+            return index
+    return None
 
 
 def _bruno_move_slot(pp: tuple[int, int, int, int]) -> int:
