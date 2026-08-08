@@ -1,0 +1,92 @@
+{
+  "schema": "pokemon-training-candidate-promotion-plan-v1",
+  "status": "preregistered_before_collection",
+  "source_commit": "d9e6b0e00f81dd8da45f6b9b4a610b7b9daf0d91",
+  "feature_schema_id": "pokemon.core.training.candidate-ranker.v1",
+  "claim_boundary": {
+    "learned_target": [
+      "select a venue-compatible below-floor trainee from identity-free party candidates",
+      "select the highest-yield safe measured venue from identity-free encounter-band candidates"
+    ],
+    "not_learned": [
+      "navigation to the venue",
+      "party menu execution",
+      "battle move selection",
+      "healing mechanics",
+      "story progression"
+    ],
+    "unobservable_ties": "excluded rather than labeled by party slot or area identity"
+  },
+  "lineages": {
+    "training": [
+      {
+        "lineage_id": "training-candidate-v1-train-01",
+        "root_sha256": "7b6f6bb4dbbf8478b9bb6addfd0b86863b6dfd5ca198d7859cd32e1c03147af5"
+      },
+      {
+        "lineage_id": "training-candidate-v1-train-02",
+        "root_sha256": "ab7bb41c3e220a8d094cf39cb8b2b75694195c2e272cfd62fb127b053fcd0965"
+      }
+    ],
+    "sealed_validation": {
+      "lineage_id": "training-candidate-v1-validation-01",
+      "root_sha256": "20de5cee4a644c4d339f3277bc78fc8cf9058fb87198f4e464d34f37c3d8d3cb"
+    },
+    "shadow": {
+      "lineage_id": "training-candidate-v1-shadow-01",
+      "root_sha256": "0360a80ff93f9a3f45220671004d37192a92c5a30b2cb38fdc823a394ed9cbb8"
+    },
+    "causal_control": {
+      "lineage_id": "training-candidate-v1-control-01",
+      "root_sha256": "fccacf52b335d449b405588518d1c2313e38bf904a69a112a11c7139b991648d"
+    }
+  },
+  "root_audit": {
+    "semantically_equal_to_checkpoint": true,
+    "mutually_distinct": true,
+    "absent_from_prior_training_control_registry": true,
+    "motion_cycles": {
+      "training-candidate-v1-train-01": 29,
+      "training-candidate-v1-train-02": 30,
+      "training-candidate-v1-validation-01": 31,
+      "training-candidate-v1-shadow-01": 32,
+      "training-candidate-v1-control-01": 33
+    }
+  },
+  "collection_gates": {
+    "required_status": "ok",
+    "source_dirty": false,
+    "maximum_faints": 0,
+    "required_final_party_levels": [
+      55,
+      55,
+      55,
+      55,
+      55,
+      55
+    ],
+    "required_choice_kinds": [
+      "trainee",
+      "venue"
+    ],
+    "minimum_multi_candidate_decisions": 100,
+    "identity_fields_present": false
+  },
+  "offline_validation_gates": {
+    "state_dependent_choice_demonstrated": true,
+    "maximum_shape_only_majority_accuracy": 0.99,
+    "minimum_heldout_model_margin_over_shape_baseline": 0.02,
+    "minimum_heldout_accuracy": 0.9,
+    "minimum_per_kind_accuracy": 0.85,
+    "whole_lineage_partitioning": true,
+    "validation_opened_during_selection": false
+  },
+  "model_selection": {
+    "method": "bidirectional whole-lineage train-to-train cross-validation",
+    "candidate_scoring": "shared permutation-equivariant scorer",
+    "validation_access": false,
+    "fixed_seed": 20260808
+  },
+  "private_artifacts_tracked": false,
+  "promotion_eligible": false
+}
