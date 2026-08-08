@@ -11,21 +11,22 @@ control, and progressively trained specialists.**
 
 > **Current status:** the deterministic teacher completes Pokémon Red from clean power-on through
 > the Hall of Fame in one uninterrupted, no-save-restore emulator session while developing a real
-> six-member party. The August 7 run verified **312/312 checkpoints** and **36/36 objectives** in
-> **540,247 actions**. Its team curriculum used **1,716 battles** and **885 healing trips**, evolved
-> Diglett, and passed the readiness gate at levels **60/55/55/55/55/55** with every member in its
-> final form. It then defeated Blaine, Giovanni, Lorelei, Bruno, Agatha, Lance, and the Champion and
-> entered the Hall of Fame in the same process. This is verified deterministic-teacher completion—not
-> a learned-policy or unseen-seed generalization claim. See the
+> six-member party. Its team curriculum uses **1,716 battles** and **885 healing trips**, evolves
+> Diglett, and passes the readiness gate at levels **60/55/55/55/55/55** with every member in its
+> final form. The latest exact-source run verified **312/312 checkpoints**, **36/36 objectives**,
+> Champion, and Hall of Fame in **540,273 actions**. This is verified deterministic-teacher
+> completion—not a learned-policy or unseen-seed generalization claim. See the
 > [full-route balanced-team receipt](docs/evidence/measured-balanced-team-full-route-success-2026-08-07.json)
 > and the earlier
 > [captured-state diagnostic](docs/evidence/measured-balanced-team-captured-state-success-2026-08-07.json).
-> **Important limitation:** whole-League instrumentation then measured all **49/49 attack
-> decisions** on party slot 1: only **one of six members participated**, and the busiest-member share
-> was **100%** in every League chapter. The roster is now developed, but League combat is still a
-> single-carry teacher demonstration. The next curriculum change is matchup-aware team switching,
-> not more grinding. See the
-> [whole-League participation receipt](docs/evidence/measured-whole-league-participation-2026-08-07.json).
+> Whole-League instrumentation first exposed a **49/49 single-carry baseline**. The next lesson now
+> selects Hitmonlee by observed species and health, switches it into Bruno's opening Onix, records a
+> real Jump Kick attack, restores Blastoise, and heals the teammate that actually took damage. The
+> clean-power proof records **2/6 participating members**, `[51, 0, 0, 0, 0, 1]` decisions, and a
+> **98.08%** whole-League busiest-member share; Bruno alone improves to **83.33%** with both switches
+> verified. This is the first non-cosmetic team battle lesson, not yet a complete six-member League
+> curriculum. See the [single-carry baseline](docs/evidence/measured-whole-league-participation-2026-08-07.json)
+> and the [qualified Bruno team-participation receipt](docs/evidence/measured-bruno-team-participation-2026-08-07.json).
 > **August 5 collection update:** the first battle model is trained from five complete teacher
 > lineages and reaches **85.8% held-out validation accuracy** across two validation lineages. Its
 > sealed test partition remains unopened. Broader teacher stress then exposed a legitimate

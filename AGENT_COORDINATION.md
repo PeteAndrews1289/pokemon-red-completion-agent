@@ -249,7 +249,7 @@ arguments where it takes four, and a typed progress sink called with `None`.
 Each cost a 25-minute emulator run to discover. A type checker reports them in
 seconds, and the neutral layer is now covered.
 
-Current state: **1891 passed, 3 deselected**, all checks green, on trunk
+Current state: **1899 passed, 3 deselected**, all checks green, on trunk
 `agent/balanced-team-curriculum`.
 
 ## Open work, in priority order
@@ -260,10 +260,12 @@ These are ordered by how much they serve the mission, not by difficulty.
 battles and 885 healing trips, passed the final-form team gate at 60/55/55/55/55/55, completed
 312/312 checkpoints and 36/36 objectives, and entered the Hall of Fame.
 
-**2. Whole-League participation measurement complete.** All five chapters now record active-party
-indexes and derive participating-member count and busiest-member share. The exact clean-power run
-measured `[49, 0, 0, 0, 0, 0]`: 1/6 participation and 100% busiest-member share. The next task is
-matchup-aware League switching that reduces that share without weakening completion safety.
+**2. First matchup-aware League lesson complete.** All five chapters record active-party indexes
+and derive participating-member count and busiest-member share. Bruno now resolves Hitmonlee by
+species and living HP, records a real Jump Kick against opening Onix, returns Blastoise, and recovers
+the damaged participant. The exact clean-power run measured `[51, 0, 0, 0, 0, 1]`: 2/6
+participation and 98.08% busiest-member share while retaining Hall of Fame. Extend this to another
+genuine matchup; do not add cosmetic switches.
 
 **3. Tolerance conflict resolved.** Mansion development and Champion readiness now share
 `COMPLETION_LEVEL_PARITY`, which requires level 55 against the League's level-65 ceiling. Do not

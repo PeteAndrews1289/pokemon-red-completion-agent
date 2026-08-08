@@ -44,9 +44,11 @@ of whether it serves this.
   the same process: 312/312 checkpoints, 36/36 objectives, Champion defeated, and Hall of Fame
   entered. The curriculum used 1,716 battles and 885 heals and passed with a final-form party at
   levels 60/55/55/55/55/55.
-- Whole-League instrumentation on the next exact-source completion recorded 49/49 attack decisions
-  from party slot 1. The roster is balanced; League behavior is not. Participation is 1/6 and the
-  busiest-member share is 100% in Lorelei, Bruno, Agatha, Lance, and Champion alike.
+- Whole-League instrumentation first recorded 49/49 attack decisions from party slot 1. The first
+  matchup-aware lesson now selects Hitmonlee by species and health, uses Jump Kick against Bruno's
+  opening Onix, restores Blastoise, and targets post-battle recovery at the member actually damaged.
+  A clean-power completion records `[51, 0, 0, 0, 0, 1]`: 2/6 League participants, 98.08% busiest
+  share overall, and 83.33% inside Bruno. All 312 checkpoints and Hall of Fame still pass.
 
 **Not true, however it may look:**
 
@@ -60,23 +62,23 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1892 tests, 3 deselected; ruff, mypy (103 files), artifacts, docs and registry all
-clean before the full-route documentation update.
+**Gate state:** 1899 tests, 3 deselected; ruff, mypy (104 files), artifacts, docs and registry all
+clean before the team-participation documentation update.
 
 ---
 
 ## 3. Start here
 
-**Fix League participation before collecting this curriculum.** The clean-power run now reproduces the balanced
-curriculum, continues through all five League battles, and preserves concurrent Champion and
-Hall-of-Fame evidence. Keep the captured-state harness for bounded trainer regressions, but do not
-spend more time re-proving the deterministic route without a concrete source change.
+**Extend the first qualified League team lesson.** Bruno now proves one safe, non-cosmetic reserve
+attack and the whole-League gate is above one participant and below 100% busiest share. That closes
+the first participation increment, not the curriculum: only Hitmonlee joins Blastoise and the
+overall share is still 98.08%.
 
-The next useful experiment is matchup-aware switching across the five League battles, with the
-whole-League participation report as its judgement. Require more than one participating member and
-a busiest-member share below 100% before collecting the newly qualified curriculum under the
-existing lineage and partition contracts. Keep living-Pokédex expansion and second-title transfer
-as explicit later stages rather than inflating the Red completion claim.
+The next useful experiment is another species- and matchup-resolved lesson in a different League
+battle, judged by the same clean-power whole-League report. Prefer a role that creates genuine type
+or resource value; never switch merely to satisfy a counter. Keep the private Bruno checkpoint for
+bounded regressions, preserve the existing lineage and partition contracts, and keep living-Pokédex
+expansion and second-title transfer as explicit later stages.
 
 Then continue down [AGENT_COORDINATION.md](AGENT_COORDINATION.md) § *Open work, in priority order*.
 
@@ -156,6 +158,7 @@ Each cost at least one emulator run to establish. Each has an evidence file.
 | Captured-state development reached six level-55 members in 1,716 battles with zero faints | `measured-balanced-team-captured-state-success-2026-08-07.json` |
 | A clean-power run passed the final-form 60/55/55/55/55/55 team gate and completed 312/312 checkpoints through Hall of Fame | `measured-balanced-team-full-route-success-2026-08-07.json` |
 | The next full run measured all 49 League attack decisions on party slot 1: 1/6 participation and 100% busiest-member share | `measured-whole-league-participation-2026-08-07.json` |
+| A clean-power run qualified the first matchup-aware League lesson: Hitmonlee attacked Bruno's Onix, recovery followed the damaged member, League participation reached 2/6, and Hall of Fame still passed | `measured-bruno-team-participation-2026-08-07.json` |
 
 ---
 
@@ -252,10 +255,10 @@ how a wrong band survived 155 samples that contradicted it.
   Dijkstra, three tests, no call site, a hand-written five-node graph, and edges carrying no warp
   coordinates — it cannot drive navigation as it stands. `run_collection` reads the collection
   correctly then raises `NotImplementedError` at routing. Give them a job or park them.
-- **Participation is measured for one of five League battles.** `turns_per_member` exists in
-  `champion.py` only; `agatha.py` records the per-turn index without aggregating; Lorelei, Bruno and
-  Lance record neither. And a raw list does not embarrass anyone — `[6, 0, 0, 0, 0, 0]` needs
-  reading carefully before it bothers you, which is roughly how the escort problem survived.
+- **Participation is measured across all five League battles, but still concentrated.** Every
+  chapter records active-party indexes and publishes participating-member count plus busiest-member
+  share. Bruno is the first chapter with an explicit two-member pass condition. The remaining work
+  is behavioral: extend real matchup participation beyond Hitmonlee's one attack.
 - **The ROM path is in git history.** `a9d0bb4` added it in source, `371be10` removed it. Not in the
   current tree; `a9d0bb4` is on no remote, so exposure is local only. Rewriting history is
   destructive and belongs to the repository owner.

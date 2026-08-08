@@ -1457,6 +1457,22 @@ useful negative result: balanced preparation prevents disposable teammates and c
 capacity, but the battle teacher must still learn when to use that capacity. The next curriculum
 target is matchup-aware switching with an explicit participation judgement, not additional levels.
 
+The first participation lesson is now qualified. Bruno resolves a living Hitmonlee by species,
+switches it into the opening Onix, records one real Jump Kick decision, and restores Blastoise for
+the remaining matchup. That attack exposed another single-carry assumption after the battle: field
+recovery always targeted party slot one even when Hitmonlee was the member that took damage. The
+recovery planner now inspects every member's HP and status, selects the affected party member, and
+proves both the state change and item consumption. A private pre-Bruno replay made that boundary
+fast to test; the exact pushed source was then started from clean power and completed all 312
+checkpoints, all 36 objectives, the Champion, and Hall of Fame in 540,273 actions.
+
+The resulting whole-League receipt is `[51, 0, 0, 0, 0, 1]`: two of six members participated over
+52 observed attack decisions, reducing the busiest-member share from 100% to 98.08%. Inside Bruno,
+the split is `[5, 0, 0, 0, 0, 1]`, or 83.33%. This is deliberately described as the first team
+lesson, not balanced League play. It establishes the reusable pattern—observe a matchup, resolve a
+role by species and health, act, return the anchor when appropriate, and recover whoever actually
+needs it—while leaving four party roles and cross-game transfer open.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
@@ -1478,9 +1494,12 @@ A concise interview description is:
 > training data. I redesigned the curriculum around measured encounter difficulty, type-aware
 > safety, participation-based evolution, and balanced experience allocation. A clean-power run now
 > builds a six-member final-form party at levels 60/55/55/55/55/55, clears the League, and enters the
-> Hall of Fame in the same uninterrupted process. The system records integrity-checked private
-> demonstrations and keeps train, validation, and test roots sealed; the next research question is
-> how much of this team-building behavior a learned policy can reproduce and transfer.
+> Hall of Fame in the same uninterrupted process. Instrumentation exposed that the first version
+> still used one carry for every League decision, so I added a species- and state-resolved Bruno
+> lesson in which Hitmonlee attacks Onix and receives targeted recovery. The exact clean-power run
+> preserved all 312 checkpoints while proving the first two-member League behavior. The system keeps
+> private demonstrations integrity-checked and evaluation roots sealed; the next research question
+> is how much of this team-building and matchup behavior a learned policy can reproduce and transfer.
 
 ## Related documentation
 

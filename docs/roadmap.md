@@ -9,7 +9,7 @@ The milestones below are largely written in terms of *the teacher completing Red
 components reaching agreement rates*. Both are real and both are recorded honestly. Neither is the
 bottleneck any more.
 
-**The bottleneck is that the demonstrations contain almost no decisions.**
+**The bottleneck is that the demonstrations still underuse the team they develop.**
 
 A run that finishes with one overleveled Pokémon sweeping the League in six turns produces a
 trajectory in which nothing was ever chosen. Agreement rates measured on such a trajectory are
@@ -18,14 +18,14 @@ demonstrations do.
 
 So the near-term work is not another point of agreement. It is:
 
-**A. Make the team participate.** Six members that fight, not one escort that sweeps. This is
-currently blocked on the training block reaching the level floor within a real budget, which has
-never been shown. Everything in Milestone 3 and beyond inherits whatever this produces.
+**A. Make the team participate.** The level floor is now proven in a real clean-power budget, and
+Bruno has the first qualified species- and matchup-aware reserve attack. Whole-League participation
+is 2/6, however, with a 98.08% busiest-member share. Extend genuine roles rather than adding switches
+for the metric.
 
-**B. Make participation measurable, and embarrassing when absent.** Turns-per-party-member exists in
-`champion.py` alone, as a raw list. Two derived numbers — how many members acted, and the busiest
-one's share — would have caught the escort problem on its first run instead of after four thousand
-battles. Until absence of participation is loud, it will keep being tolerated.
+**B. Make participation measurable, and embarrassing when absent.** Done across all five League
+chapters. The first measurement exposed `[49, 0, 0, 0, 0, 0]`; the first team lesson improves that
+to `[51, 0, 0, 0, 0, 1]` and makes Bruno's two switches part of its pass contract.
 
 **C. Start the living Pokédex.** `red_target(RedRunChoices(...))` and `plan_next_run()` exist and
 have no schedule behind them. Two opposed Red runs reach 132 of 151. This is the constraint that
@@ -43,6 +43,11 @@ and D is the cheapest early evidence that it is possible at all.
 
 Routing works: a member too weak for where the run is gets sent to a venue that suits it, travels
 there, and gains levels. That mechanism did not exist before and A depends entirely on it.
+
+The complete curriculum now reaches its 60/55/55/55/55/55 readiness gate, and the first League
+participation increment is qualified from clean power through Hall of Fame. Hitmonlee attacks
+Bruno's opening Onix with Jump Kick, Blastoise resumes the anchor role, and field recovery selects
+the actually damaged member rather than assuming party slot one.
 
 The session also produced a working practice worth keeping, described in the handoff: measure rather
 than infer, predict before running, capture a mid-route state so iteration costs a second instead of
