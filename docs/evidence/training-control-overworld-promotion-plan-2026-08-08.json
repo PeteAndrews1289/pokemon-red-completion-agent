@@ -1,0 +1,66 @@
+{
+  "schema": "pokemon-training-control-promotion-plan-v1",
+  "status": "preregistered_before_validation_open",
+  "source_commit": "ec368b409582beb1f9b79709e16694e321ac9a53",
+  "feature_schema_id": "pokemon.core.training.control.features.v2",
+  "training_lineages": [
+    "training-control-v5-train-01",
+    "training-control-v5-train-02"
+  ],
+  "sealed_validation_lineage": "training-control-v5-validation-01",
+  "sealed_validation_root_sha256": "ae564c793aa8c9f193dadea5440b75b85102ba74fdb9b2db397a335b4ac9b20d",
+  "model_selection": {
+    "validation_access": false,
+    "fixed_seed": 20260808,
+    "hidden_units": 24,
+    "epochs": 500,
+    "learning_rate": 0.01,
+    "l2": 0.0001,
+    "class_balance_power_grid": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "method": "bidirectional whole-lineage train-to-train cross-validation",
+    "selection_order": [
+      "zero missed required heals and missed stops in both directions",
+      "fewest unnecessary heals",
+      "highest genuine-choice accuracy",
+      "lowest cross-entropy",
+      "lowest class-balance power"
+    ]
+  },
+  "offline_validation_gates": {
+    "missed_required_heal": 0,
+    "premature_stop": 0,
+    "missed_stop": 0,
+    "maximum_unnecessary_heals": 50,
+    "maximum_safe_seek_false_heal_rate": 0.001,
+    "minimum_heal_precision": 0.92,
+    "minimum_genuine_accuracy": 0.995,
+    "minimum_battle_accuracy": 1.0
+  },
+  "causal_gates": {
+    "authority_phases": [
+      "battle",
+      "overworld"
+    ],
+    "teacher_fallback_on_model_disagreement": false,
+    "maximum_decisions": 65000,
+    "maximum_battles": 1900,
+    "maximum_healing_trips": 1150,
+    "maximum_faints": 0,
+    "required_final_party_levels": [
+      55,
+      55,
+      55,
+      55,
+      55,
+      55
+    ]
+  },
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}
