@@ -170,7 +170,9 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   checkpoint, requires a different serialized digest, and fails closed before collection when
   either condition is false. The tool now enforces both checks. The first motion-derived root
   passed them, then exposed an in-battle health-gate failure after 11,122 decisions. Its 99.46%
-  novel diagnostic pairs are excluded; the repaired source must now replay that root.
+  novel diagnostic pairs are excluded. The repaired replay of that exact root then qualified with
+  60,192 decisions, zero faints, an all-55 terminal, and 99.89% novel pairs versus train lineage 01.
+  Two training roots are now ready; one disjoint validation root remains before fitting.
 - [ ] Train a candidate with lineage-held-out validation; require every validation class to exist
   in training and keep the sealed test partition closed.
   The class-balanced MLP, phase-masked inference, metrics, and fail-closed candidate fitter are

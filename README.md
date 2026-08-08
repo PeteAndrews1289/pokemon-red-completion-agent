@@ -83,6 +83,13 @@ The repair applies the declared health retreat floor before every in-battle move
 existing bounded escort-and-flee path. See the
 [failed-lineage receipt](docs/evidence/training-control-v2-train-02-motion-failure-2026-08-08.json).
 
+The same motion root then passed under the repaired teacher: **60,192 decisions**, **1,740
+battles**, **1,017 healing trips**, zero faints, and all six at level 55. Its five-class stream is
+production-loader qualified, and 59,303 of 59,368 unique action-feature pairs (**99.89%**) are new
+versus train lineage 01. Two training roots now exist; a disjoint validation root is the last data
+gate before fitting the first real candidate. See the
+[repaired motion-lineage receipt](docs/evidence/training-control-v2-train-02-motion-repair-2026-08-08.json).
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,

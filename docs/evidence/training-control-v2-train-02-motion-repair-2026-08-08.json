@@ -1,0 +1,65 @@
+{
+  "schema": "pokemon-training-control-lineage-summary-v2",
+  "status": "ok",
+  "lineage_id": "training-control-v2-train-02-motion-repair",
+  "partition": "train",
+  "lineage_qualified": true,
+  "source": {
+    "git_commit": "71205a81ea30f911c70823f670763564fea584de",
+    "worktree_dirty": false
+  },
+  "private_artifacts": {
+    "decision_stream_sha256": "5f12aa21a4992ca55380b08caa982e05535110d2ee7fce2dfa2fbef304a8456a",
+    "root_state_sha256": "b900d039a0c4df47b712867ddcb448bcff7fa79b88616bdf1e2e5fdf9e96b9b7",
+    "tracked": false
+  },
+  "root_derivation": {
+    "method": "reversible_down_and_back_movement",
+    "parent_checkpoint_id": "portable_loop_post_secret_key",
+    "same_map_position_battle_and_party_afterward": true,
+    "serialized_digest_distinct_from_parent": true,
+    "exact_resulting_state_retained": true
+  },
+  "execution": {
+    "evolution_battles": 65,
+    "evolution_healing_trips": 41,
+    "balance_battles": 1675,
+    "balance_healing_trips": 976,
+    "total_battles": 1740,
+    "total_healing_trips": 1017,
+    "faints": 0,
+    "final_party_levels": [55, 55, 55, 55, 55, 55],
+    "final_level_spread": 0
+  },
+  "dataset": {
+    "feature_schema_id": "pokemon.core.training.control.features.v1",
+    "feature_count": 21,
+    "decisions": 60192,
+    "unique_action_feature_pairs": 59368,
+    "duplicate_action_feature_pairs": 824,
+    "action_counts": {
+      "fight": 1953,
+      "flee": 1646,
+      "heal": 617,
+      "seek": 55975,
+      "stop": 1
+    },
+    "phase_counts": {
+      "battle": 3599,
+      "overworld": 56593
+    },
+    "phase_legality_violations": 0,
+    "terminal_action": "stop"
+  },
+  "diversity_against_v2_train_lineage_01": {
+    "shared_unique_action_feature_pairs": 65,
+    "novel_unique_action_feature_pairs": 59303,
+    "novel_pair_ratio": 0.9989051340789651
+  },
+  "limitations": [
+    "two_training_lineages_only",
+    "no_validation_lineage_yet",
+    "no_real_model_trained",
+    "not_promotion_eligible"
+  ]
+}

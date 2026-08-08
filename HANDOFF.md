@@ -314,6 +314,10 @@ The teacher now reapplies its health floor before every battle turn and escapes 
 escort path when crossed. Root creation also fails closed on unchanged bytes or changed checkpoint
 semantics. See the
 [failed-lineage receipt](docs/evidence/training-control-v2-train-02-motion-failure-2026-08-08.json).
+The same root then passed at source `71205a8`: 60,192 decisions, 1,740 battles, 1,017 healing trips,
+zero faints, and all level 55. It adds 59,303 novel unique pairs versus train lineage 01 (99.89%)
+and is the second qualified training root. See the
+[repaired receipt](docs/evidence/training-control-v2-train-02-motion-repair-2026-08-08.json).
 
 Counted v2 train lineage 01 is qualified from a retained 17-frame root at source `4c885d8`:
 46,687 decisions, all five actions, 1,726 battles, 815 healing trips, zero faints, and all level 55.
@@ -322,7 +326,7 @@ its root-state SHA is `62f7862e6f7e15c6f7c14a4cbb7488d6ff946502809dde5e131517192
 It adds 45,831 novel unique action-feature pairs versus diagnostic lineage 01 (99.85% of its unique
 pairs). See the [sanitized receipt](docs/evidence/training-control-v2-train-01-2026-08-08.json).
 
-**Next:** replay the repaired teacher on the motion root, collect a distinct validation root, split by root
+**Next:** collect a distinct validation root, split by root
 lineage rather than by row, train and shadow-evaluate the first candidate, then replace the
 469,232-action skill's teacher
 authority under the same safety envelope. Preserve the fixed skill as demonstrator and referee. Do

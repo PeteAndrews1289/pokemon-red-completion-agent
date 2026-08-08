@@ -196,6 +196,11 @@ next to **“failed—excluded from training.”** Show the repair: the same hea
 before every move, and the safe escort takes over to flee. End the card with “training lineage 1
 accepted; lineage 2 taught the teacher; validation still empty.”
 
+Pay off the repair by replaying the exact same root: **60,192 decisions; 1,740 battles; 1,017
+heals; zero faints; all 55.** Put **99.89% novel pairs versus training lineage 1** on screen. The
+honest distinction matters: this earns a second training lineage, not a validation score. The next
+card remains “validation lineage: empty” until a root that never influenced the repair completes.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

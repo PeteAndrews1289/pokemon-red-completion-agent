@@ -86,6 +86,11 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="private state created by one seed perturbation for exact lineage replay",
     )
+    parser.add_argument(
+        "--root-only",
+        action="store_true",
+        help="derive and verify --out-root-state without running the training lesson",
+    )
     args = parser.parse_args(argv)
     if args.out_decisions is not None and not args.lineage_id:
         parser.error("--lineage-id is required with --out-decisions")
@@ -102,6 +107,8 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--out-root-state requires a positive seed perturbation")
     if args.out_root_state is not None and args.out_root_state.resolve() == args.state.resolve():
         parser.error("--out-root-state must not overwrite the input state")
+    if args.root_only and not seed_perturbation:
+        parser.error("--root-only requires a seed perturbation and --out-root-state")
 
     emulator = PyBoyAdapter(resolve_rom_path(args.rom))
     emulator.start()
@@ -154,6 +161,8 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(f"party: {described}")
 
+        if args.root_only:
+            return 0
         if args.swap_only:
             return _replay_swap(actions, reader, emulator, party_reader)
         return _replay_training(

@@ -235,6 +235,13 @@ new. The repair applies the same portable health rule before each move and trans
 existing escort-and-flee mechanism. This is exactly the teacher's role: varied experience should
 break hidden assumptions now, before a learner imitates them.
 
+Replaying the exact same difficult root under the repair completed the curriculum. The teacher
+recorded 60,192 decisions across 1,740 battles and 1,017 healing trips, reached all six members at
+level 55 with zero faints, and ended with the exact stop action. Only 65 of its 59,368 unique
+action-feature pairs overlapped train lineage 01; 59,303 were new. That makes it the second real
+training root, not validation evidence. One disjoint validation lineage still stands between these
+demonstrations and the first honest model score.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal
