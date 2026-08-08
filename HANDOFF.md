@@ -64,8 +64,8 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1919 tests, 3 deselected; ruff, mypy (107 files), artifacts, docs and registry all
-clean after the portable-loop and counterfactual-planner audit.
+**Gate state:** 1926 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
+clean after the first model-selected objective dispatcher. CI is green through `e73bf05`.
 
 ---
 
@@ -142,10 +142,10 @@ The first two architecture boundaries now exist and are ROM-independent:
 - the deterministic objective policy uses the identical loop interface, so teacher and learner
   ownership can be compared without two runtimes.
 
-This is **not live Red autonomy yet**. `run_qualified_play` still invokes chapter functions in a
-fixed Python sequence. The next slice is an adapter that exposes bounded Red objective skills to
-this loop, starting with a captured-state vertical slice where at least two objectives are genuinely
-legal. Do not claim the new `select` method completed Red until that dispatch path has a receipt.
+This is **not end-to-end Red autonomy yet**. `run_qualified_play` still invokes most chapter
+functions in a fixed Python sequence. The portable loop now has an explicit composite-skill
+registry, action/frame bounds, declared side effects, and independent post-skill semantic
+verification. Unsupported model choices stop visibly rather than falling back to the fixed route.
 
 The bounded exhaustive counterfactual audit of the historical planner enumerates **166 reachable
 dependency-valid states**, including **129 branching states** and **446 neutral/candidate-local
@@ -167,6 +167,20 @@ prefix, and refuses a modified state. The resumed Red observer now reconstructs 
 state and its three legal objectives from that envelope plus live memory. The dispatcher remains
 next. See the
 [selection receipt](docs/evidence/model-selected-celadon-objective-2026-08-08.json).
+
+The next published slice then executed that choice. From the same three legal branches, the model
+selected `clear_rocket_hideout` at **99.70% confidence** with no expected label or fallback. Its
+registered teacher-authored skill executed **1,143 actions / 98,237 frames**, defeated five exact
+trainers, bypassed eight optional trainers, returned the fully healed party to Celadon Center, and
+released the controller. Crucially, the loop did not accept the skill report as completion: a fresh
+memory observation independently added both `story:rocket_hideout_cleared` and
+`item:silph_scope`. The resulting legal frontier is `rescue_fuji`, `defeat_erika`, and
+`reach_saffron`. See the
+[execution receipt](docs/evidence/model-selected-hideout-execution-2026-08-08.json).
+
+**Next:** adapt the Erika and Saffron branches to the same registry, then let the model make a
+second decision from the post-Hideout state. Preserve the distinction: the model selects the
+objective; the current chapter skills still choose navigation, battle, menu, and recovery actions.
 
 ---
 

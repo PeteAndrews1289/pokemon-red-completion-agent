@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-07)
+## Current focus (2026-08-08)
 
 The milestones below are largely written in terms of *the teacher completing Red* and *learned
 components reaching agreement rates*. Both are real and both are recorded honestly. Neither is the
@@ -81,16 +81,18 @@ full strict-ROM qualification remains pending.**
 **Gate 2 — build the portable loop and current curriculum.** The learner must repeatedly observe,
 choose an objective, dispatch a bounded skill, receive a structured result, and replan. Collect
 decision spans and corrections from the current balanced teacher while moving revision-specific
-memory reads and menu compilation behind the game adapter. **The game-neutral loop and real
-model-selected objective interface are implemented and ROM-independent tests pass. The Red chapter
-adapter and current balanced decision corpus remain pending.** A bounded exhaustive diagnostic now
+memory reads and menu compilation behind the game adapter. **The game-neutral loop, model-selected
+objective interface, composite-skill registry, and first Red chapter adapter are implemented. The
+current balanced decision corpus and broader Red adapter remain pending.** A bounded exhaustive diagnostic now
 enumerates 166 reachable graph states. The historical model is location-sensitive in 73/129
 branching states and picks the candidate-local target in 237/317 opportunities; the remaining 80
 misses form a concrete correction curriculum rather than a vague request for more planner data.
 The first real captured-state diagnostic now exposes three legal Celadon objectives; the model
-selects `clear_rocket_hideout` at 99.70% confidence without an expected label. Dispatch and
-completion are still pending. Captures now carry a digest-bound progress envelope for transient
-verified facts; connecting that envelope to the resumed Red observer and dispatcher is next.
+selects `clear_rocket_hideout` at 99.70% confidence without an expected label. The published
+dispatcher then executes its registered 1,143-action Hideout skill and independently observes both
+the Hideout-clear and Silph Scope facts. This is one model-owned branch over teacher-owned mechanics,
+not learned full-game play. Erika and Saffron adapters plus a second sequential model decision are
+next. See the [execution receipt](evidence/model-selected-hideout-execution-2026-08-08.json).
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

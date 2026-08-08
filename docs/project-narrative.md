@@ -32,11 +32,20 @@ choose a different target. Those misses are now a bounded correction curriculum.
 The next diagnostic used a real current-source capture at the stable Celadon Center. Combining the
 captured cartridge observation with the verified checkpoint prefix produced three legal objectives:
 clear the Rocket Hideout, challenge Erika, or enter Saffron. The historical model selected the
-Rocket Hideout at 99.70% confidence without receiving an expected objective label. It did not yet
-dispatch a skill or press a button. That narrow result matters because it is the first model-selected
-branch from real emulator state, while its limitations define the next engineering task: bind a
-source-authenticated semantic progress envelope to each private capture, then let the portable loop
-execute and verify one selected branch.
+Rocket Hideout at 99.70% confidence without receiving an expected objective label. That selection
+first ran without action so the authority boundary could be inspected in isolation.
+
+The following published vertical slice completed the loop. A typed registry resolved only the
+model-selected Hideout objective; either alternate choice would have stopped as unsupported instead
+of falling back to the route. The fixed Hideout mechanic skill executed 1,143 actions across 98,237
+emulator frames, defeated five exact trainers, bypassed eight optional trainers, obtained the Lift
+Key and Silph Scope, healed the full party, and returned to the Celadon Center boundary. The loop
+then ignored the skill's success claim until a fresh observation independently exposed both
+`story:rocket_hideout_cleared` and `item:silph_scope`. The next legal choices became Pokémon Tower,
+Erika, and Saffron. This is the first real game-state change caused by model-owned objective
+selection, while the receipt plainly labels navigation, battles, menus, and recovery as a
+teacher-authored bounded skill. See the
+[execution receipt](evidence/model-selected-hideout-execution-2026-08-08.json).
 
 ## August 5: the learned planner authorizes the fixed objective sequence
 

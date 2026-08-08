@@ -85,16 +85,19 @@ referee. It stops being the hidden decision-maker. A strict evaluation lane fail
 query, fallback, unsupported action, or undeclared safety substitution.
 
 Implementation checkpoint: the game-neutral loop and no-answer-label objective-selection interface
-now exist and pass ROM-independent tests. Until Red's fixed chapter runner is adapted to them, show
-this as the new architecture—not as footage of an autonomous completion.
+now exist, and the first Red chapter is connected through a typed bounded-skill registry. Most of
+Red's chapter runner is still fixed, so show this as one transferred decision—not autonomous
+completion.
 
 Useful visual: show the exhaustive planner audit as 166 reachable quest states, highlight the 129
 branch points, then split the 317 candidate-local evaluations into 237 matching selections and 80
 misses. Explain that sensitivity is encouraging but is not the same as knowing the correct goal.
 
 Follow it with the first real-state branch: at Celadon the model sees three legal objectives and
-selects the Rocket Hideout without being shown the fixed route's answer. Keep the screen labeled
-“selection only—no action dispatched yet” so the visual advances the story without overstating it.
+selects the Rocket Hideout without being shown the fixed route's answer. Then show the bounded skill
+clearing five trainers and the post-run observer confirming both the Hideout event and Silph Scope.
+Keep the screen labeled **“model chose the goal; fixed skill executed the mechanics”**. The useful
+headline is 1,143 actions and 98,237 frames under a model-selected branch, not an autonomous run.
 
 ### Act VII: the Crystal test — 10:10–11:15
 
@@ -121,6 +124,8 @@ version has to prove the model learned something worth carrying into a game it h
 - One preserved failed-run receipt and the measurement that diagnosed it.
 - Teacher versus learner control diagrams with individual decision ownership highlighted.
 - A strict-evaluation counter showing teacher queries at zero.
+- The Celadon three-way choice, model selection, and independently verified Hideout/Silph Scope
+  receipt, with model-versus-fixed-skill ownership labeled.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video

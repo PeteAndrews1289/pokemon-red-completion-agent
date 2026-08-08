@@ -21,11 +21,13 @@ Pokémon game without quietly handing control back to the teacher.
 That distinction is the heart of the project and its public story. The teacher supplies verified
 demonstrations and a referee; it is not the final autonomous player.
 
-The first portable closed-loop runtime now exists in ROM-independent form. It can observe semantic
-state, let a policy choose among legal objectives without an expected-route label, dispatch one
-bounded typed action, verify the resulting facts, reject progress regression, and replan. It is not
-yet connected to the monolithic Red chapter runner, so this is an architecture milestone rather
-than a new gameplay-completion claim.
+The first real Red vertical slice now runs through the portable closed loop. From an authenticated
+Celadon capture, the learned objective ranker chose the Rocket Hideout over two other legal branches
+at **99.70% confidence**, without an expected-route label or fallback. A registered fixed skill then
+executed 1,143 bounded actions, while a fresh emulator observation independently verified Giovanni's
+defeat and the Silph Scope. This transfers one real decision to the model; mechanics remain
+teacher-authored, and it is not yet end-to-end learned play. See the
+[execution receipt](docs/evidence/model-selected-hideout-execution-2026-08-08.json).
 
 - [Current technical handoff](HANDOFF.md)
 - [Dependency-ordered roadmap](docs/roadmap.md)

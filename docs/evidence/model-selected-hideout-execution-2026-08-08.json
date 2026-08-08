@@ -1,0 +1,205 @@
+{
+  "after": {
+    "available_objectives": [
+      "rescue_fuji",
+      "defeat_erika",
+      "reach_saffron"
+    ],
+    "completed_objectives": [
+      "begin_adventure",
+      "choose_starter",
+      "clear_rocket_hideout",
+      "defeat_brock",
+      "defeat_misty",
+      "defeat_surge",
+      "help_bill",
+      "obtain_cut",
+      "obtain_silph_scope",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_vermilion",
+      "receive_pokedex"
+    ],
+    "facts_added": [
+      "item:silph_scope",
+      "story:rocket_hideout_cleared"
+    ],
+    "location": "celadon_pokecenter",
+    "mode": "overworld"
+  },
+  "assistance": {
+    "expected_route_label_provided": false,
+    "mechanic_execution": "teacher_authored_bounded_skill",
+    "objective_selection": "learned_ranker",
+    "teacher_fallbacks": 0
+  },
+  "before": {
+    "available_objectives": [
+      "clear_rocket_hideout",
+      "defeat_erika",
+      "reach_saffron"
+    ],
+    "completed_objectives": [
+      "begin_adventure",
+      "choose_starter",
+      "defeat_brock",
+      "defeat_misty",
+      "defeat_surge",
+      "help_bill",
+      "obtain_cut",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_vermilion",
+      "receive_pokedex"
+    ],
+    "location": "celadon_pokecenter",
+    "mode": "overworld"
+  },
+  "capture": {
+    "checkpoint_id": "celadon_stable",
+    "checkpoints_completed": 124,
+    "state_sha256": "2f5adf158fced5dfddf9695c178abd75a272bc74befe6ae8f712db73d49f4d22"
+  },
+  "claim": "A learned ranker selected one legal objective without an expected label; a registered fixed skill executed it; fresh emulator observations verified the declared objective and side effects.",
+  "decision_and_execution": {
+    "action": null,
+    "facts_added": [
+      "item:silph_scope",
+      "story:rocket_hideout_cleared"
+    ],
+    "kind": "skill_completed",
+    "objective_id": "clear_rocket_hideout",
+    "reason": "Executed a registered bounded objective skill and independently verified it.",
+    "skill_actions_executed": 1143,
+    "skill_evidence": {
+      "actions_executed": 1143,
+      "controller_released": true,
+      "entered_hideout_bug_event": false,
+      "frames_executed": 98237,
+      "inventory": {
+        "lift_key_carried": true,
+        "money_before": 6371,
+        "money_remaining": 11852,
+        "silph_scope_carried": true,
+        "super_potions_remaining": 10,
+        "super_potions_used": 2
+      },
+      "objectives": [
+        "clear_rocket_hideout",
+        "obtain_silph_scope"
+      ],
+      "optional_trainers_bypassed": 8,
+      "party": {
+        "hp": [
+          98,
+          53,
+          37
+        ],
+        "max_hp": [
+          98,
+          53,
+          37
+        ],
+        "species": [
+          179,
+          64,
+          59
+        ],
+        "status": [
+          0,
+          0,
+          0
+        ]
+      },
+      "status": "ok",
+      "trainer_battles": [
+        {
+          "class": 30,
+          "event": null,
+          "label": "Game Corner guard",
+          "move_id": 44,
+          "opponent": 230,
+          "selected_pp_spent": 3,
+          "set": 7
+        },
+        {
+          "class": 30,
+          "event": 1700,
+          "label": "Lift Key Rocket",
+          "move_id": 44,
+          "opponent": 230,
+          "selected_pp_spent": 5,
+          "set": 18
+        },
+        {
+          "class": 30,
+          "event": 1699,
+          "label": "B4 door guard 2",
+          "move_id": 61,
+          "opponent": 230,
+          "selected_pp_spent": 4,
+          "set": 17
+        },
+        {
+          "class": 30,
+          "event": 1698,
+          "label": "B4 door guard 1",
+          "move_id": 61,
+          "opponent": 230,
+          "selected_pp_spent": 3,
+          "set": 16
+        },
+        {
+          "class": 29,
+          "event": 1703,
+          "label": "Rocket Hideout Giovanni",
+          "move_id": 61,
+          "opponent": 229,
+          "selected_pp_spent": 4,
+          "set": 1
+        }
+      ]
+    },
+    "skill_frames_executed": 98237,
+    "specialist": "battle"
+  },
+  "limitations": [
+    "captured_state_diagnostic",
+    "single_model_decision",
+    "fixed_teacher_authored_mechanic_skill",
+    "not_a_clean_start_evaluation",
+    "not_end_to_end_learned_gameplay"
+  ],
+  "loop": {
+    "actions_executed": 1143,
+    "decisions": 1,
+    "objectives_completed": 1,
+    "replans": 0,
+    "schema": "pokemon-portable-player-loop-v1"
+  },
+  "policy": {
+    "authorized_decisions": 0,
+    "completed_objectives": 1,
+    "decisions": 1,
+    "mean_confidence": 0.9970024147810569,
+    "minimum_confidence": 0.9970024147810569,
+    "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+    "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "route_dispatch_mode": "model_selected_specialists",
+    "schema": "pokemon-semantic-objective-live-policy-v1",
+    "selected_decisions": 1,
+    "teacher_fallbacks": 0
+  },
+  "schema": "pokemon-model-selected-objective-execution-v1",
+  "source": {
+    "git_commit": "e73bf05fe548dea09079cc82529a9e9c19f51b10",
+    "worktree_dirty": false
+  },
+  "status": "ok"
+}
