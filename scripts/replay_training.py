@@ -117,8 +117,8 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--lineage-id is required with decision output")
     if args.seed_wait_frames < 0:
         parser.error("--seed-wait-frames must be non-negative")
-    if not 0 <= args.seed_walk_cycles <= 16:
-        parser.error("--seed-walk-cycles must be between zero and sixteen")
+    if not 0 <= args.seed_walk_cycles <= 64:
+        parser.error("--seed-walk-cycles must be between zero and sixty-four")
     if args.seed_wait_frames and args.seed_walk_cycles:
         parser.error("choose only one seed perturbation")
     seed_perturbation = bool(args.seed_wait_frames or args.seed_walk_cycles)
