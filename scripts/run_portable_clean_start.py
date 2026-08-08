@@ -9,7 +9,6 @@ import json
 from pathlib import Path
 
 from pokemon_red_completion.battle_control_model import load_battle_control_model_artifact
-from pokemon_red_completion.battle_neural_model import load_battle_model_artifact
 from pokemon_red_completion.clean_start_campaign import derive_initial_wait_frames
 from pokemon_red_completion.clean_start_player import run_portable_clean_start
 from pokemon_red_completion.collection_protocol import (
@@ -17,6 +16,7 @@ from pokemon_red_completion.collection_protocol import (
     load_committed_collection_registry,
     objective_graph_document,
 )
+from pokemon_red_completion.learned_battle_policy import load_battle_model_artifact
 from pokemon_red_completion.planner_model import load_objective_model_artifact
 from pokemon_red_completion.planner_semantics import ObjectiveFeatureProjector
 from pokemon_red_completion.provenance import (
