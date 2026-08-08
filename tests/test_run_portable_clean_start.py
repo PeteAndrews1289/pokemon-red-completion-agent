@@ -29,6 +29,7 @@ def test_portable_clean_start_cli_imports_and_exposes_help(
     assert "uncounted portable clean-start" in captured.out
     assert "--diagnostic-seed" in captured.out
     assert "--objective-model" in captured.out
+    assert "--baseline-timing" in captured.out
 
 
 def test_model_identity_binds_raw_artifact_and_canonical_model(tmp_path: Path) -> None:

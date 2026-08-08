@@ -55,6 +55,14 @@ def main(argv: list[str] | None = None) -> int:
         required=True,
         help="uncounted root; counted campaign assignments are intentionally unsupported",
     )
+    parser.add_argument(
+        "--baseline-timing",
+        action="store_true",
+        help=(
+            "disable initial-wait and battle-start perturbations for an explicitly uncounted "
+            "integration baseline"
+        ),
+    )
     parser.add_argument("--rom", type=Path)
     parser.add_argument("--out", type=Path)
     parser.add_argument("--watch", action="store_true")
@@ -121,14 +129,23 @@ def main(argv: list[str] | None = None) -> int:
         else None
     )
     schedule = load_committed_collection_registry(REPOSITORY_ROOT).schedule
-    offsets = schedule.offsets(args.diagnostic_seed)
-    schedule_sha256 = schedule.schedule_sha256(args.diagnostic_seed)
-    initial_wait_frames = derive_initial_wait_frames(args.diagnostic_seed)
+    offsets = None if args.baseline_timing else schedule.offsets(args.diagnostic_seed)
+    schedule_sha256 = (
+        None if args.baseline_timing else schedule.schedule_sha256(args.diagnostic_seed)
+    )
+    initial_wait_frames = (
+        0 if args.baseline_timing else derive_initial_wait_frames(args.diagnostic_seed)
+    )
     diagnostic_root = {
         "battle_schedule_sha256": schedule_sha256,
         "counted": False,
         "harness_seed": args.diagnostic_seed,
         "initial_wait_frames": initial_wait_frames,
+        "timing_mode": (
+            "canonical_unperturbed_baseline"
+            if args.baseline_timing
+            else "derived_initial_wait_and_battle_offsets"
+        ),
     }
     model_identities = {
         "battle_control": (
