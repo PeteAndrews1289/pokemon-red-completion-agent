@@ -16,6 +16,7 @@ Before opening a change:
    python scripts/check_public_artifacts.py
    python scripts/check_docs.py
    ruff check .
+   python -m mypy
    pytest -m "not integration"
    ```
 
