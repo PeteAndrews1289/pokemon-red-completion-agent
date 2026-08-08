@@ -41,7 +41,7 @@ run, making learned training control the next concrete replacement target. See
 the [post-Mansion Blaine receipt](docs/evidence/affordance-masked-post-mansion-blaine-2026-08-08.json).
 
 That replacement now has a data boundary. The live teacher can emit every strategic training
-choice as one of `seek`, `fight`, `flee`, `heal`, or `stop` before executing it. Its 21 normalized
+choice as one of `seek`, `fight`, `flee`, `heal`, or `stop` before executing it. Its 25 normalized
 features describe party readiness, relative matchup safety, resources, venue suitability, and
 bounded progress without retaining Red map IDs, species IDs, move IDs, or memory addresses. The
 captured-state replay tool can preserve successful or failed decision streams for later lineage
@@ -177,6 +177,15 @@ exposed a rare direct-fight knockout; the other confirmed the escort switch in m
 re-exposed the battle menu inside the bounded settle loop. Both partial streams are excluded, their
 fresh replacements were preregistered before collection, and the failures remain visible in the
 [teacher-failure audit](docs/evidence/training-control-v5-teacher-failures-2026-08-08.json).
+
+The preregistered feature-v2 candidate did not pass. Its untouched validation lineage reached
+96.18% raw / 98.33% balanced accuracy and perfect battle accuracy, but still missed 26 mandatory
+heals and predicted 2,219 unnecessary heals—4.06% of safe seeks. Heal precision was only 20.72%,
+well below the 92% gate, so shadow and causal control were not attempted. The
+[offline rejection](docs/evidence/training-control-candidate-v3-rejected-2026-08-08.json) retires
+that validation lineage. V6 applies the same safety-affordance principle already proven in battle:
+mandatory recovery exposes only `heal`, verified readiness exposes only `stop`, and genuinely safe
+overworld states retain the causal `seek`/optional-`heal` choice. Fresh roots must evaluate it.
 
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the

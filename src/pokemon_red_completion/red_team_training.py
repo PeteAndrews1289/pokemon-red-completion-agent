@@ -614,9 +614,11 @@ def switch_active_battler(
         raise RuntimeError(f"Could not select SWITCH for {label}.")
     pulse(actions, MacroActionKind.CONFIRM, frames=240)
 
+    post_switch_phases: list[str] = []
     for _p in range(48):
         settled = reader.read()
         menu = reader.read_battle_menu_state(settled)
+        post_switch_phases.append(menu.phase.name)
         if (
             settled.battle_state == 1
             and menu.phase is BattleMenuPhase.MAIN
@@ -640,10 +642,25 @@ def switch_active_battler(
             actions.execute(MacroAction(MacroActionKind.WAIT, 120))
             continue
         advance_toward_main(actions, menu.phase)
+    settled = reader.read()
     active = emulator.read_u8(RamAddress.PLAYER_MON_NUMBER)
+    party_hp = _party_hp(emulator)
+    # A held-out collection observed the causal switch in PLAYER_MON_NUMBER,
+    # but the cursor signature stayed UNKNOWN through the complete bounded
+    # settle loop. The next flee or battle primitive has its own menu settle
+    # logic, so the verified live target is stronger evidence than rejecting a
+    # successful switch solely because one presentation-layer cursor was late.
+    if (
+        settled.battle_state == 1
+        and active == target_index
+        and target_index < len(party_hp)
+        and party_hp[target_index] > 0
+    ):
+        return True
     raise RuntimeError(
         f"Switch to {label} did not return to the battle menu: "
-        f"active slot {active + 1}, wanted {target_index + 1}."
+        f"active slot {active + 1}, wanted {target_index + 1}; "
+        f"phases={sorted(set(post_switch_phases))!r}."
     )
 
 
@@ -834,10 +851,9 @@ def run_red_team_balancing(
                 f"{required.value} was required"
             )
 
-    overworld_choices = (
+    optional_overworld_choices = (
         TrainingControlAction.SEEK,
         TrainingControlAction.HEAL,
-        TrainingControlAction.STOP,
     )
 
     # Never None. A venue is needed before any trainee is matched to one --
@@ -922,7 +938,7 @@ def run_red_team_balancing(
                 party=party,
                 progress=progress,
                 trainee=trainee,
-                candidate_actions=overworld_choices,
+                candidate_actions=(TrainingControlAction.STOP,),
             )
             require_overworld_action(
                 selected,
@@ -1164,7 +1180,7 @@ def run_red_team_balancing(
                 party=party,
                 progress=progress,
                 trainee=trainee,
-                candidate_actions=overworld_choices,
+                candidate_actions=(TrainingControlAction.HEAL,),
             )
             require_overworld_action(
                 selected,
@@ -1234,7 +1250,7 @@ def run_red_team_balancing(
             party=party,
             progress=progress,
             trainee=trainee,
-            candidate_actions=overworld_choices,
+            candidate_actions=optional_overworld_choices,
         )
         if selected is TrainingControlAction.HEAL:
             if healing_trips >= policy.max_healing_trips:

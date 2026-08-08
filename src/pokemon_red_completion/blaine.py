@@ -230,9 +230,11 @@ SURF_MOVE_ID = 0x39
 STRENGTH_MOVE_ID = 0x46
 FIELD_MOVE_IDS = frozenset({CUT_MOVE_ID, DIG, FLY_MOVE_ID, SURF_MOVE_ID, STRENGTH_MOVE_ID})
 # Muk can outlast a trainee's weak coverage and turn a safe starting-HP check
-# into a long attritional knockout. It is fled rather than feeding still more
-# experience to the already-high Blastoise escort.
-MANSION_ESCORT_ENEMY_SPECIES = frozenset({0x88})
+# into a long attritional knockout. A held-out feature-v2 collection also
+# observed a level-29 Dugtrio knock out a full-health level-34 trainee before
+# the per-turn retreat callback could protect it. Both are fled rather than
+# gambling the zero-faint contract or feeding the already-high Blastoise.
+MANSION_ESCORT_ENEMY_SPECIES = frozenset({0x88, DUGTRIO_SPECIES_ID})
 # Koffing and Weezing can end an encounter with Selfdestruct while a trainee is
 # switching to the escort. They are never assigned to a trainee directly. A
 # terminal Selfdestruct is counted only after the zero-faint check; otherwise

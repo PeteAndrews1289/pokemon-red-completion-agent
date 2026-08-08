@@ -317,6 +317,21 @@ party memory but never recovered an observable battle command menu inside the bo
 Neither partial stream enters a split. Their atomic failure artifacts and root hashes remain in the
 public audit, and each replacement was fixed before its run while validation metrics stayed sealed.
 
+The completed v5 corpus still did not earn control. Two qualified training lineages supplied
+117,943 decisions; only after their class-balance selection was fixed did the 58,823-decision
+validation lineage open. The candidate had perfect battle accuracy and recognized the one terminal
+stop, yet class weighting could not satisfy both sides of recovery: it missed 26 required heals and
+inserted 2,219 unnecessary ones, reducing heal precision to 20.72%. The preregistered gates stopped
+the campaign before shadow. The validation result becomes diagnostic and is never reused as a
+promotion score.
+
+The next correction applies the same principle that fixed unavailable battle attacks. Recovery is
+mandatory only when the portable safety envelope says continuing is unsafe, so that boundary now
+offers a singleton `heal`; verified readiness similarly offers a singleton `stop`. Safe states keep
+the genuine `seek` versus optional `heal` choice, where a wasteful prediction still executes and
+costs a trip. This is not hiding model errors—it removes actions the referee cannot safely permit
+and measures the remaining decisions causally. V6 starts from fresh roots.
+
 The first causal root ended after 480 decisions, exactly as the fail-closed contract required. The
 model agreed with 479 teacher decisions, then chose `fight` after every admissible training attack
 had been exhausted or disabled. The immediately preceding safe fight and the rejected decision had

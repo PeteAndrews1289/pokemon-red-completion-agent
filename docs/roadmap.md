@@ -211,9 +211,9 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   agreement. A fresh 59,137-decision causal lesson then completed 1,743 battles with zero faints,
   all six at level 55, and no teacher fallback.
 - [x] Redesign the overworld authority boundary before granting it control. Safe optional decisions
-  advertise `seek`, `heal`, and `stop`; mandatory runtime transitions retain the full candidate set
-  but fail closed on the wrong choice. The selected return is now the mechanic's sole source of
-  control, and receipts separate forced, genuine, operational-error, and causal-cost metrics.
+  advertise `seek` and `heal`; mandatory recovery advertises only `heal`, and verified readiness
+  advertises only `stop`. The selected return is the mechanic's sole source of control, and receipts
+  separate forced, genuine, operational-error, and causal-cost metrics.
 - [x] Make overworld selections causal and audit whether their labels are observable. Optional model
   heals now execute and spend the real budget; skipped mandatory heals, premature continuation, and
   missed stop decisions fail closed. The first v4 collection was stopped before artifact creation
@@ -222,9 +222,12 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
 - [x] Thread authenticated training-control inference through the portable Red loop's
   `defeat_blaine` objective skill. Battle and overworld authority are independently configurable,
   model decisions are audited in the objective receipt, and no disagreement fallback exists.
-- [ ] Finish the preregistered v5 lineages, select class balance from training roots only, open the
-  sealed validation lineage once, and attempt fresh shadow and full causal promotion only if every
-  offline gate passes.
+- [x] Finish the preregistered v5 lineages and open sealed validation only after training-only
+  selection. Reject the candidate before shadow: it missed 26 mandatory heals, inserted 2,219
+  unnecessary heals, reached only 20.72% heal precision and 95.97% genuine accuracy, and failed
+  four offline gates despite perfect battle accuracy.
+- [ ] Collect fresh v6 lineages under safety-affordance masking, select without validation, and
+  attempt shadow/full causal promotion only if every unchanged operational gate passes.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

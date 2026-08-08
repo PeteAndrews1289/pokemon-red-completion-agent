@@ -1,0 +1,64 @@
+{
+  "schema": "pokemon-training-control-offline-rejection-v1",
+  "status": "rejected_before_shadow",
+  "feature_schema_id": "pokemon.core.training.control.features.v2",
+  "model_id": "pokemon.core.training.control.mlp.v1",
+  "model_sha256": "da7970e1c188fdb4ea1fd9b99a0e8988632f7bc1d0cb4257d6d573f86c24519f",
+  "private_model_file_sha256": "2b4b5cd49efb7ab3f23de589acfffffe1b3e09901574eebee77517295c643aab",
+  "selection_artifact_sha256": "a6c7a1143c033c8b6245df5b5d3ef2d68de0e41042683de0f388697ae32d3534",
+  "fit": {
+    "seed": 20260808,
+    "hidden_units": 24,
+    "epochs": 500,
+    "learning_rate": 0.01,
+    "l2": 0.0001,
+    "selected_class_balance_power": 1.0,
+    "selection_used_validation": false
+  },
+  "partitions": {
+    "training_lineages": [
+      "training-control-v5-train-01",
+      "training-control-v5-train-04"
+    ],
+    "validation_lineages": [
+      "training-control-v5-validation-01"
+    ],
+    "training_examples": 117943,
+    "validation_examples": 58823,
+    "root_overlap_count": 0,
+    "validation_classes_missing_from_training": []
+  },
+  "validation": {
+    "accuracy": 0.9618346565119086,
+    "balanced_accuracy": 0.9833040161096273,
+    "genuine_accuracy": 0.9597114297507313,
+    "battle_accuracy": 1.0,
+    "heal_precision": 0.2072168631654162,
+    "safe_seek_false_heal_rate": 0.040575629022820366,
+    "operational_errors": {
+      "missed_required_heal": 26,
+      "premature_stop": 0,
+      "missed_stop": 0,
+      "unnecessary_heal": 2219
+    }
+  },
+  "gate_results": {
+    "missed_required_heal_equals_0": false,
+    "premature_stop_equals_0": true,
+    "missed_stop_equals_0": true,
+    "unnecessary_heal_at_most_50": false,
+    "safe_seek_false_heal_rate_at_most_0_001": false,
+    "heal_precision_at_least_0_92": false,
+    "genuine_accuracy_at_least_0_995": false,
+    "battle_accuracy_equals_1": true
+  },
+  "qualification": {
+    "shadow_attempted": false,
+    "causal_control_attempted": false,
+    "model_had_execution_authority": false,
+    "promotion_eligible": false,
+    "validation_lineage_may_be_reused_for_selection_or_claims": false
+  },
+  "interpretation": "Class weighting traded fewer missed heals for thousands of unnecessary heals. Mandatory recovery and verified completion are referee affordances, not genuine policy choices; v6 masks them before ranking and requires fresh lineages.",
+  "private_artifacts_tracked": false
+}

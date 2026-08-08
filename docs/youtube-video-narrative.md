@@ -269,6 +269,14 @@ Then reveal the second mismatch: inference masked impossible actions, while the 
 still learned from them. Show singleton rows fading out of the loss—not out of the evidence—and end
 the beat on the new rule: **learn only where there was a choice; audit every boundary.**
 
+Do not skip the feature-v2 rejection. Show the preregistered card before its numbers: zero missed
+heals, at most 50 wasted heals, at least 92% heal precision. Then reveal **26 missed heals; 2,219
+wasted heals; 20.72% precision** and stamp **“stopped before shadow.”** The story is not that 96.18%
+accuracy was secretly good enough; it is that the operational contract overruled the headline.
+Animate mandatory recovery collapsing to singleton `heal`, verified readiness to singleton `stop`,
+and leave safe `seek`/optional-`heal` connected to the model. That visual carries the battle lesson
+forward: the referee defines safe affordances; the policy owns the choices that remain.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

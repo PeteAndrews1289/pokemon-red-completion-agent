@@ -49,6 +49,7 @@ from pokemon_red_completion.red_team_training import (
     ESCORT_LEVEL_CAP,
     VENUE_MISMATCH_FLEES,
     run_red_team_balancing,
+    switch_active_battler,
 )
 from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingArea
 from pokemon_red_completion.training_control import TrainingControlAction, TrainingControlDecision
@@ -293,6 +294,73 @@ def state(**changes: object) -> RawGameState:
     return RawGameState(**values)  # type: ignore[arg-type]
 
 
+def test_verified_battle_switch_survives_a_delayed_menu_cursor_signature() -> None:
+    class SwitchMemory:
+        def __init__(self) -> None:
+            self.player_reads = 0
+            self.cursor_reads = 0
+
+        def read_u8(self, address: int) -> int:
+            address = int(address)
+            if address == int(RamAddress.PLAYER_MON_NUMBER):
+                self.player_reads += 1
+                return 0 if self.player_reads == 1 else 1
+            if address == int(RamAddress.CURRENT_MENU_ITEM):
+                self.cursor_reads += 1
+                return 1 if self.cursor_reads == 1 else 0
+            if address == int(RamAddress.PARTY_COUNT):
+                return 2
+            hp_base = int(RamAddress.PARTY_MON_1_HP)
+            if address in {hp_base, hp_base + PARTY_STRUCT_STRIDE}:
+                return 0
+            if address in {hp_base + 1, hp_base + PARTY_STRUCT_STRIDE + 1}:
+                return 80
+            return 0
+
+    class SwitchReader:
+        def __init__(self) -> None:
+            self.menu_reads = 0
+
+        def read(self) -> RawGameState:
+            return state(
+                battle_state=1,
+                party_count=2,
+                party_species_ids=(DUGTRIO_SPECIES_ID, BLASTOISE_SPECIES_ID),
+            )
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            self.menu_reads += 1
+            if self.menu_reads <= 2:
+                return BattleMenuState(
+                    BattleMenuPhase.MAIN,
+                    selected_main_command=2,
+                )
+            return BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    class SwitchActions:
+        def __init__(self) -> None:
+            self.actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+
+    memory = SwitchMemory()
+    reader = SwitchReader()
+    actions = SwitchActions()
+
+    switched = switch_active_battler(
+        actions,
+        reader,  # type: ignore[arg-type]
+        memory,  # type: ignore[arg-type]
+        target_index=1,
+        label="Blastoise escort",
+    )
+
+    assert switched
+    assert memory.player_reads == 2
+    assert reader.menu_reads == 50
+
+
 def _venue(band: GrindingArea, map_id: int = TRAINING_MAP) -> TrainingVenue:
     """A venue over a measured band, with navigation the fake can satisfy."""
 
@@ -384,18 +452,22 @@ def test_a_finished_team_emits_stop_supervision_before_cleanup() -> None:
     assert [decision.action for decision in decisions] == [TrainingControlAction.STOP]
     assert decisions[0].decision_index == 0
     assert decisions[0].observation.phase.value == "overworld"
+    assert decisions[0].observation.candidate_actions == (TrainingControlAction.STOP,)
 
 
 def test_overworld_authority_must_stop_at_verified_readiness() -> None:
     memory = FakeMemory()
     memory.set_party([(species, 60) for species in FINAL_FORM_ROSTER])
+    decisions: list[TrainingControlDecision] = []
 
-    with pytest.raises(RuntimeError, match="verified training readiness"):
+    with pytest.raises(RuntimeError, match="illegal phase action"):
         run(
             memory,
             FakeReader([state()]),
+            decision_sink=decisions.append,
             decision_authority=lambda _decision: TrainingControlAction.SEEK,
         )
+    assert decisions[0].observation.candidate_actions == (TrainingControlAction.STOP,)
 
 
 def test_overworld_authority_cannot_skip_required_recovery() -> None:
@@ -405,13 +477,16 @@ def test_overworld_authority_cannot_skip_required_recovery() -> None:
         hp=1,
         max_hp=80,
     )
+    decisions: list[TrainingControlDecision] = []
 
-    with pytest.raises(RuntimeError, match="required recovery boundary"):
+    with pytest.raises(RuntimeError, match="illegal phase action"):
         run(
             memory,
             FakeReader([state()]),
+            decision_sink=decisions.append,
             decision_authority=lambda _decision: TrainingControlAction.SEEK,
         )
+    assert decisions[0].observation.candidate_actions == (TrainingControlAction.HEAL,)
 
 
 def test_model_selected_optional_heal_executes_and_pays_its_budget(
@@ -450,6 +525,10 @@ def test_model_selected_optional_heal_executes_and_pays_its_budget(
             not chose_optional_heal
             and decision.reason == "seek a bounded encounter in the selected venue"
         ):
+            assert decision.observation.candidate_actions == (
+                TrainingControlAction.SEEK,
+                TrainingControlAction.HEAL,
+            )
             chose_optional_heal = True
             return TrainingControlAction.HEAL
         return decision.action
