@@ -288,6 +288,13 @@ and safety boundaries are singletons. Rename the green result on screen from “
 **“live authority and safety integration verified.”** This is the episode's most important honest
 turn: even causal control can prove the plumbing without proving that state features matter.
 
+Carry the same controller into the portable loop rather than ending on the isolated lesson. From
+the post-Secret-Key capture, show one `defeat_blaine` dispatch feeding the authenticated controller
+into the fixed skill, then returning to fresh observation: **57,548 controlled decisions; 1,796
+development battles; 1,074 heals; 60/55/55/55/55/55 fully healed; Volcano Badge added; Giovanni
+opened; all ten integration checks passed.** Keep “singleton objective dispatch” and “captured-state
+integration” visible so this card closes system composition without inventing planner evidence.
+
 Move the camera one decision earlier. Show six party members competing to become the next trainee,
 then three measured encounter bands competing to become the venue. Strip species, slot, move, area,
 map, and memory identities from the cards; retain only candidate-relative readiness, health,

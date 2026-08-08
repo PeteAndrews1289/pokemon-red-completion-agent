@@ -34,6 +34,15 @@ may open only after selection, and a candidate must beat the choice-shape baseli
 points while reaching 90% overall and 85% per choice kind. This is the first current training
 interface where a perfect shape-only baseline causes rejection rather than promotion.
 
+Before moving on, v6 passed one final integration test. The portable objective loop loaded the
+authenticated post-Secret-Key state, selected its sole executable objective (`defeat_blaine`), and
+injected the same training controller into the bounded skill. The model controlled all 57,548
+training decisions; the skill executed 568,457 actions / 38,213,160 frames, completed 1,796
+development battles and 1,074 healing trips, defeated Blaine, and returned a fully healed
+60/55/55/55/55/55 party. Fresh observation—not the skill's status—added the Volcano Badge and
+opened Giovanni. All ten chain checks passed. This closes portable captured-state authority
+integration while leaving the same state-feature and singleton-objective limitations explicit.
+
 ## August 8: separating an answer checker from a player
 
 The architecture audit found a critical mismatch between the project's language and its runtime.

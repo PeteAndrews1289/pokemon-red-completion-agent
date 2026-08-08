@@ -228,6 +228,16 @@ choices—the first interface designed to make state-dependent strategy identifi
 [causal qualification](docs/evidence/training-control-affordance-v6-causal-2026-08-08.json) and its
 [frozen candidate-ranker plan](docs/evidence/training-candidate-ranker-v1-promotion-plan-2026-08-08.json).
 
+That controller has now passed the final captured-state integration check inside the portable
+objective loop. Starting from the authenticated Secret Key terminal, the model controlled all
+**57,548** exposed training decisions across battle and overworld phases. The registered skill
+completed **1,796 development battles / 1,074 healing trips**, defeated Blaine, finished with a
+fully healed **60/55/55/55/55/55** party, and returned control to a fresh observation that opened
+Giovanni. All ten authority-chain checks passed; the objective dispatch itself was a singleton and
+the candidate-only training baseline remains perfect, so clean-start, branching-planner,
+state-feature-value, cross-title, and end-to-end claims remain closed. See the
+[portable authority receipt](docs/evidence/training-control-affordance-v6-portable-2026-08-08.json).
+
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the
 declared capacity TM, clear six exact Viridian Gym lessons while bypassing two optional trainers,
