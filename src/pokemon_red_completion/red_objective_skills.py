@@ -4,10 +4,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from pokemon_red_completion.agatha import run_agatha_chapter
 from pokemon_red_completion.blaine import (
     run_blaine_after_mansion_chapter,
     run_mansion_secret_key_chapter,
 )
+from pokemon_red_completion.bruno import run_bruno_chapter
 from pokemon_red_completion.cinnabar import run_cinnabar_chapter
 from pokemon_red_completion.dojo import run_dojo_chapter
 from pokemon_red_completion.domain import GameState
@@ -17,6 +19,8 @@ from pokemon_red_completion.fuchsia import FuchsiaTiming, run_fuchsia_chapter
 from pokemon_red_completion.giovanni import run_giovanni_chapter
 from pokemon_red_completion.hideout import EmulatorState, HideoutTiming, run_hideout_chapter
 from pokemon_red_completion.koga import KogaTiming, run_koga_chapter
+from pokemon_red_completion.lance import run_lance_chapter
+from pokemon_red_completion.lorelei import run_lorelei_chapter
 from pokemon_red_completion.objective_skills import (
     ObjectiveSkillAvailability,
     ObjectiveSkillExecution,
@@ -704,6 +708,150 @@ class CrossVictoryRoadObjectiveSkill:
             self.reader,
             self.executor,
         )
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class DefeatLoreleiObjectiveSkill:
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    objective_id: str = "defeat_lorelei"
+    specialist: Specialist = Specialist.BATTLE
+    expected_facts: frozenset[str] = frozenset({"league:lorelei_defeated"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 10_000
+    max_frames: int = 3_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "indigo_plateau_lobby"
+            and "story:victory_road_cleared" in state.facts
+            and "league:lorelei_defeated" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            "Observed the qualified Indigo terminal." if executable else "Requires Indigo.",
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_lorelei_chapter(self.emulator, self.reader, self.executor)
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class DefeatBrunoObjectiveSkill:
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    objective_id: str = "defeat_bruno"
+    specialist: Specialist = Specialist.BATTLE
+    expected_facts: frozenset[str] = frozenset({"league:bruno_defeated"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 10_000
+    max_frames: int = 3_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "brunos_room"
+            and "league:lorelei_defeated" in state.facts
+            and "league:bruno_defeated" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the qualified Bruno room boundary."
+                if executable
+                else "Requires Bruno's room."
+            ),
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_bruno_chapter(self.emulator, self.reader, self.executor)
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class DefeatAgathaObjectiveSkill:
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    objective_id: str = "defeat_agatha"
+    specialist: Specialist = Specialist.BATTLE
+    expected_facts: frozenset[str] = frozenset({"league:agatha_defeated"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 10_000
+    max_frames: int = 3_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "agathas_room"
+            and "league:bruno_defeated" in state.facts
+            and "league:agatha_defeated" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the qualified Agatha room boundary."
+                if executable
+                else "Requires Agatha's room."
+            ),
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_agatha_chapter(self.emulator, self.reader, self.executor)
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class DefeatLanceObjectiveSkill:
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    objective_id: str = "defeat_lance"
+    specialist: Specialist = Specialist.BATTLE
+    expected_facts: frozenset[str] = frozenset({"league:lance_defeated"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 10_000
+    max_frames: int = 3_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "lances_room"
+            and "league:agatha_defeated" in state.facts
+            and "league:lance_defeated" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the qualified Lance room boundary."
+                if executable
+                else "Requires Lance's room."
+            ),
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_lance_chapter(self.emulator, self.reader, self.executor)
         return ObjectiveSkillExecution(
             actions_executed=report.actions_executed,
             frames_executed=report.frames_executed,

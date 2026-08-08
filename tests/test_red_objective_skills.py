@@ -7,10 +7,14 @@ import pytest
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.red_objective_skills import (
     CrossVictoryRoadObjectiveSkill,
+    DefeatAgathaObjectiveSkill,
     DefeatBlaineObjectiveSkill,
+    DefeatBrunoObjectiveSkill,
     DefeatErikaObjectiveSkill,
     DefeatGiovanniObjectiveSkill,
     DefeatKogaObjectiveSkill,
+    DefeatLanceObjectiveSkill,
+    DefeatLoreleiObjectiveSkill,
     DefeatSabrinaObjectiveSkill,
     LiberateSilphObjectiveSkill,
     ObtainSecretKeyObjectiveSkill,
@@ -139,6 +143,10 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     victory_road = CrossVictoryRoadObjectiveSkill(  # type: ignore[arg-type]
         emulator, reader, executor
     )
+    lorelei = DefeatLoreleiObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    bruno = DefeatBrunoObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    agatha = DefeatAgathaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    lance = DefeatLanceObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     celadon = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"item:silph_scope"}),
@@ -201,6 +209,30 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     )
     assert victory_road.availability(post_giovanni).executable
     assert not giovanni.availability(post_giovanni).executable
+    indigo = GameState(
+        GameMode.OVERWORLD,
+        facts=post_giovanni.with_facts("story:victory_road_cleared").facts,
+        location="indigo_plateau_lobby",
+    )
+    assert lorelei.availability(indigo).executable
+    bruno_room = GameState(
+        GameMode.OVERWORLD,
+        facts=indigo.with_facts("league:lorelei_defeated").facts,
+        location="brunos_room",
+    )
+    assert bruno.availability(bruno_room).executable
+    agatha_room = GameState(
+        GameMode.OVERWORLD,
+        facts=bruno_room.with_facts("league:bruno_defeated").facts,
+        location="agathas_room",
+    )
+    assert agatha.availability(agatha_room).executable
+    lance_room = GameState(
+        GameMode.OVERWORLD,
+        facts=agatha_room.with_facts("league:agatha_defeated").facts,
+        location="lances_room",
+    )
+    assert lance.availability(lance_room).executable
 
 
 def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
@@ -291,6 +323,10 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
             4_000,
             500_000,
         ),
+        (DefeatLoreleiObjectiveSkill, "run_lorelei_chapter", "defeat_lorelei", 800, 100_000),
+        (DefeatBrunoObjectiveSkill, "run_bruno_chapter", "defeat_bruno", 800, 100_000),
+        (DefeatAgathaObjectiveSkill, "run_agatha_chapter", "defeat_agatha", 800, 100_000),
+        (DefeatLanceObjectiveSkill, "run_lance_chapter", "defeat_lance", 800, 100_000),
     ),
 )
 def test_red_fuchsia_followup_skills_match_graph_and_preserve_evidence(
