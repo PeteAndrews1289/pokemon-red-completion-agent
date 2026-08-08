@@ -322,6 +322,14 @@ trainee/venue choices** and executing **400 disagreements** inside the bounded s
 fresh Volcano Badge observation, fully healed 60/55/55/55/55/55 party, and Giovanni becoming
 available. Keep “singleton objective” and “authored mechanics” on screen throughout.
 
+Then remove the captured-state card and rewind to clean power-on. Run the same frozen strategic
+ranker through the newly wired full-route seam: **312/312 checkpoints, 36/36 objectives, 114,831
+controlled trainee/venue choices, 400 executed disagreements, 1,803 development battles, zero
+fallback, and Hall of Fame in one process**. The party leaves development fully healed at
+60/55/55/55/55/55. This is the strongest ending available now because the model-controlled
+strategy survives the entire route around it. Keep the boundary equally large on screen:
+**“uncounted single root; fixed objective sequence and mechanics; not 8/10 autonomy.”**
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local
@@ -367,6 +375,9 @@ version has to prove the model learned something worth carrying into a game it h
 - The portable strategic proof: 114,831 controlled choices, 400 disagreements, 1,803 development
   battles, 1,048 heals, fresh Volcano Badge observation, and Giovanni available—alongside the
   singleton-objective and fixed-mechanics limitations.
+- The uncounted clean-power strategic rehearsal: boot, 312/312 checkpoint counter, the same
+  114,831-choice / 400-disagreement authority receipt, balanced party, and Hall of Fame. Keep
+  “fixed route, one uncounted root” visible rather than presenting it as end-to-end learned play.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video
