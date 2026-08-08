@@ -63,12 +63,25 @@ slice therefore covers three model-owned objectives, 6,783 teacher-owned mechani
 638,660 frames with zero route labels, fallbacks, or replans. See the
 [three-decision receipt](evidence/model-selected-three-objective-sequence-2026-08-08.json).
 
-That success also exposed the next architectural defect. The dependency graph presents Erika and
-Saffron as legal at Celadon, but their existing fixed skills are not executable there: Erika starts
-from the later Fuchsia/Strength boundary, and Saffron assumes post-Erika party, move, and economy
-state. Objective legality is therefore broader than live skill affordance. The next planner mask
-must combine dependency satisfaction with an observed, typed `can_execute` contract instead of
-letting impossible choices reach a chapter precondition failure.
+That success exposed—and the next implementation resolved—an architectural defect. Dependency
+legality is broader than physical executability: Erika may be graph-legal in Celadon while its
+bounded skill requires the later post-Koga, post-Strength Fuchsia boundary. Every registered skill
+now publishes a live typed affordance. Before ranking, the loop intersects dependency-legal goals
+with executable goals and records why each alternative was excluded. Unsupported objectives stop
+visibly instead of reaching a misleading chapter failure.
+
+The resulting replay continued in the same emulator process through Safari/Surf, Koga, Strength,
+Erika, and Saffron. It completed eight model dispatches and 15,593 fixed-skill actions with zero
+expected labels, fallbacks, or replans, ending healed in Saffron with a five-member party. Seven
+dispatches had only one executable candidate and are labeled singleton dispatches—not model ranking
+wins. At the one genuine branch, both `defeat_koga` and `obtain_strength` were executable; the model
+selected Koga at 96.41% confidence. Fresh observations verified all declared effects, including
+Gold Teeth as a temporary Safari affordance and their removal after the Strength lesson. See the
+[eight-decision receipt](evidence/affordance-masked-eight-objective-sequence-2026-08-08.json).
+
+The next frontier is Saffron: `liberate_silph` and `reach_cinnabar` are dependency-legal, but neither
+has yet been connected to this replay harness. Silph is the next bounded adapter because it starts
+at the verified terminal boundary and adds a substantial multi-floor battle-and-navigation skill.
 
 ## August 5: the learned planner authorizes the fixed objective sequence
 

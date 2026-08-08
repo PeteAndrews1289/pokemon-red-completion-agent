@@ -64,9 +64,9 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1928 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
-clean after the three-objective model-selected dispatcher. The source-bound three-step run uses
-published commit `0e92d12` (final documentation may be one later commit).
+**Gate state:** 1939 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
+clean after the affordance-masked eight-objective dispatcher. The source-bound eight-step run uses
+published commit `bb2c3a2` (the documentation receipt lands in the following commit).
 
 ---
 
@@ -195,12 +195,22 @@ actions / 638,660 frames**, three model selections, four independently observed 
 zero expected labels, zero fallbacks, and zero replans. See the
 [three-decision receipt](docs/evidence/model-selected-three-objective-sequence-2026-08-08.json).
 
-**Next:** add an explicit skill-affordance mask before extending the sequence. The quest graph calls
-Erika and Saffron dependency-legal early, but their current fixed skills require later physical
-boundaries (post-Strength Fuchsia and post-Erika Celadon). A model must rank objectives it can
-actually execute from the observed state; do not hide that mismatch by registering an impossible
-skill. Preserve the distinction: the model selects objectives; current skills still choose
-navigation, battle, menu, and recovery actions.
+The explicit skill-affordance mask is now implemented. It reports dependency-legal objectives,
+executable objectives, and an exclusion reason for every unavailable skill. The uninterrupted live
+run extends through Surf, a real Koga-versus-Strength branch, Strength, Erika, and Saffron: eight
+model dispatches, **15,593 fixed-skill actions**, zero expected labels, zero fallbacks, and zero
+replans. The model chose Koga from two executable candidates at **96.41% confidence**; the other
+seven decisions were singleton dispatches and are recorded separately so their near-100%
+confidences cannot be mistaken for ranking evidence. The observer also stopped latching transient
+inventory facts, so Gold Teeth disappear after the Warden consumes them while durable objective
+progress remains. See the
+[eight-decision receipt](docs/evidence/affordance-masked-eight-objective-sequence-2026-08-08.json).
+
+**Next:** extend the portable sequence from Saffron through Silph while preserving the same typed
+availability, bounded execution, independent observation, and honest branch metrics. The current
+frontier is `liberate_silph` versus `reach_cinnabar`; neither is yet registered in this replay
+harness. Preserve the ownership distinction: the model selects objectives; current skills still
+choose navigation, battle, menu, and recovery actions.
 
 ---
 

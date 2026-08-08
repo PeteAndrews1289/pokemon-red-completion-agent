@@ -105,6 +105,20 @@ Then let the third replan breathe: the model chooses Fuchsia, the fixed skill ca
 two throws, and the observer confirms Fuchsia Center. Update the label to **“three model goals;
 6,783 fixed-skill actions; zero route labels or fallbacks.”**
 
+Now reveal the measurement trap. The quest graph can call a goal legal before its mechanic skill is
+physically runnable from the current map and inventory. Add the live affordance mask, then show its
+on-screen exclusions: dependency-legal goals remain visible, but each impossible skill has a typed
+reason. This is the point where the demo stops confusing “allowed eventually” with “executable
+now.”
+
+Continue the same emulator process through Safari, Koga, Strength, Erika, and Saffron. The final
+counter reads **“eight model dispatches; 15,593 fixed-skill actions; zero labels, fallbacks, or
+replans.”** Do not present all eight decisions as equal evidence. Seven had only one executable
+candidate. At the first true branch, Koga and Strength were both runnable and the model chose Koga
+at **96.41% confidence**. Make that distinction part of the visual: seven grey singleton dispatches,
+one highlighted ranking decision. End the act on the healed five-member party in Saffron and the
+next open frontier—Silph or Cinnabar.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local
@@ -132,6 +146,8 @@ version has to prove the model learned something worth carrying into a game it h
 - A strict-evaluation counter showing teacher queries at zero.
 - The Celadon three-way choice, the post-Hideout replan to Tower, and the independently verified
   Hideout/Silph Scope/Poké Flute receipt, with model-versus-fixed-skill ownership labeled.
+- The eight-step Saffron receipt, with seven singleton dispatches visually separated from the real
+  Koga-versus-Strength branch and the transient Gold Teeth fact disappearing after use.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video

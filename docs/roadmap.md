@@ -82,7 +82,7 @@ full strict-ROM qualification remains pending.**
 choose an objective, dispatch a bounded skill, receive a structured result, and replan. Collect
 decision spans and corrections from the current balanced teacher while moving revision-specific
 memory reads and menu compilation behind the game adapter. **The game-neutral loop, model-selected
-objective interface, composite-skill registry, and first Red chapter adapter are implemented. The
+objective interface, composite-skill registry, and Red adapters through Saffron are implemented. The
 current balanced decision corpus and broader Red adapter remain pending.** A bounded exhaustive diagnostic now
 enumerates 166 reachable graph states. The historical model is location-sensitive in 73/129
 branching states and picks the candidate-local target in 237/317 opportunities; the remaining 80
@@ -94,10 +94,14 @@ Hideout-clear and Silph Scope facts. It then replans from fresh state, selects `
 99.08%, executes the 2,508-action Tower skill, and independently observes the Poké Flute at a healed
 Lavender boundary. A third replan selects `reach_fuchsia`; 3,132 more actions capture Snorlax and
 reach a healed Fuchsia Center boundary. The three-decision sequence totals 6,783 actions and 638,660
-frames with no route labels, fallbacks, or replans. This is model-owned objective selection over
-teacher-owned mechanics, not learned full-game play. The next dependency is an explicit live skill-affordance mask: the graph
-currently exposes Erika and Saffron before their fixed skills' physical preconditions hold. See the
-[three-decision receipt](evidence/model-selected-three-objective-sequence-2026-08-08.json).
+frames with no route labels, fallbacks, or replans. The added live skill-affordance mask then
+extended that same run through Surf, Koga, Strength, Erika, and Saffron. The final eight-decision
+sequence executed 15,593 bounded mechanic actions with no labels, fallbacks, or replans. It records
+seven singleton dispatches separately from the one true executable branch: Koga versus Strength,
+where the model selected Koga at 96.41% confidence. This is model-owned objective selection over
+teacher-owned mechanics, not learned full-game play. The next adapter is Silph from the verified
+Saffron Center boundary. See the
+[eight-decision receipt](evidence/affordance-masked-eight-objective-sequence-2026-08-08.json).
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

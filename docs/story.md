@@ -247,6 +247,33 @@ process that looks like work. Both survive any amount of care. Neither survives 
 
 ---
 
+## Act VII: taking the answer key away
+
+The teacher eventually became extremely good at Red: it could complete all 312 checkpoints, build
+a six-member final-form team, defeat the Champion, and verify the Hall of Fame. But it still owned
+the route. An objective model could approve the answer the fixed sequence expected without ever
+choosing among genuinely executable alternatives.
+
+So the runtime changed. It now observes the game, asks the model for an objective, resolves only a
+skill that can physically run from the live state, executes that bounded skill, observes the result
+again, and replans. An impossible choice cannot quietly fall back to the teacher.
+
+From one authenticated Celadon capture, that loop completed eight objectives in the same emulator
+process: Rocket Hideout, Pokémon Tower, Fuchsia, Surf, Koga, Strength, Erika, and Saffron. The fixed
+skills performed 15,593 mechanic actions. The model received no route labels, used no teacher
+fallbacks, and required no replans. Fresh memory observations—not the skills' own success reports—
+verified each result.
+
+That sounds like eight planning victories. It is not. Seven times only one registered skill was
+physically executable. Those are useful dispatch and integration tests, but they do not measure
+ranking quality. Once, both Koga and Strength were executable. The model chose Koga at 96.41%
+confidence, and the run continued.
+
+That distinction is the project in miniature: the number matters only after asking what it actually
+measured.
+
+---
+
 ## Why a living Pokédex
 
 Every failure in this story has the same shape: a fixed sequence standing in where a decision should
@@ -288,14 +315,15 @@ Being precise about this matters more than the story sounding finished.
 
 - The deterministic teacher completes Pokémon Red repeatedly, with genuine Champion and
   Hall-of-Fame evidence in the same run.
-- A trained model authorizes all 36 objectives with zero fallbacks — but fixed code executes them.
-  It selects objectives; it does not yet play.
+- A trained model has selected and completed eight consecutive objectives in a portable closed
+  loop with no expected labels or fallbacks. Fixed skills still execute navigation, battles,
+  menus, and recovery; only one of the eight decisions had multiple executable candidates.
 - Encounter bands for five areas are measured rather than recalled, with sample counts, and they
   reproduce exactly across runs because the route is deterministic.
 - A member that is too weak for where the run happens to be is now routed somewhere that suits it,
   travels there, and gains levels. That is new, and it is the mechanism the rest depends on.
-- Whether it reaches the League floor within a real budget has **not** been shown. A captured state
-  proves the machinery works from one starting point; it does not prove the route arrives there.
+- A clean-power teacher run reaches its 60/55/55/55/55/55 readiness gate and completes the game,
+  but the learned portable loop has not yet reproduced that full route.
 - The team still does not choose its own battles. The escort still does most of the fighting.
 - No learned policy has completed the game. No cross-game transfer has been measured. The living
   Pokédex has not been started.
