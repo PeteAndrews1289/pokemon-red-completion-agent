@@ -29,6 +29,15 @@ snapshots are synthetic, there are no correctness labels, and 80 local-context o
 choose a different target. Those misses are now a bounded correction curriculum. See the
 [counterfactual receipt](evidence/semantic-objective-counterfactual-audit-2026-08-08.json).
 
+The next diagnostic used a real current-source capture at the stable Celadon Center. Combining the
+captured cartridge observation with the verified checkpoint prefix produced three legal objectives:
+clear the Rocket Hideout, challenge Erika, or enter Saffron. The historical model selected the
+Rocket Hideout at 99.70% confidence without receiving an expected objective label. It did not yet
+dispatch a skill or press a button. That narrow result matters because it is the first model-selected
+branch from real emulator state, while its limitations define the next engineering task: bind a
+source-authenticated semantic progress envelope to each private capture, then let the portable loop
+execute and verify one selected branch.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

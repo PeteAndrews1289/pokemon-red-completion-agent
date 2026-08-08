@@ -155,6 +155,15 @@ This proves some context sensitivity, not correct gameplay. The 80 local-context
 first explicit planner-curriculum queue. See the
 [sanitized receipt](docs/evidence/semantic-objective-counterfactual-audit-2026-08-08.json).
 
+A current-source private capture at the stable Celadon Center boundary then reconstructed fourteen
+verified objectives and exposed three genuinely legal choices: `clear_rocket_hideout`,
+`defeat_erika`, and `reach_saffron`. Without an expected label, the historical model selected
+`clear_rocket_hideout` at **99.70% confidence**. No skill or action was executed, so this is the
+first real-state selection diagnostic—not live objective completion. The capture also proves that
+resumed evaluation needs an authenticated progress envelope because transient historical location
+facts are not recoverable from current cartridge memory alone. See the
+[selection receipt](docs/evidence/model-selected-celadon-objective-2026-08-08.json).
+
 ---
 
 ## 4. How to work here without burning hours

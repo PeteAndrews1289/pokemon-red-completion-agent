@@ -92,6 +92,10 @@ Useful visual: show the exhaustive planner audit as 166 reachable quest states, 
 branch points, then split the 317 candidate-local evaluations into 237 matching selections and 80
 misses. Explain that sensitivity is encouraging but is not the same as knowing the correct goal.
 
+Follow it with the first real-state branch: at Celadon the model sees three legal objectives and
+selects the Rocket Hideout without being shown the fixed route's answer. Keep the screen labeled
+“selection only—no action dispatched yet” so the visual advances the story without overstating it.
+
 ### Act VII: the Crystal test — 10:10–11:15
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local

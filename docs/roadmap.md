@@ -87,6 +87,10 @@ adapter and current balanced decision corpus remain pending.** A bounded exhaust
 enumerates 166 reachable graph states. The historical model is location-sensitive in 73/129
 branching states and picks the candidate-local target in 237/317 opportunities; the remaining 80
 misses form a concrete correction curriculum rather than a vague request for more planner data.
+The first real captured-state diagnostic now exposes three legal Celadon objectives; the model
+selects `clear_rocket_hideout` at 99.70% confidence without an expected label. Dispatch and
+completion are still pending. Before replay can be a trustworthy evaluation lane, captured states
+must carry a source-bound progress envelope for transient verified facts.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
