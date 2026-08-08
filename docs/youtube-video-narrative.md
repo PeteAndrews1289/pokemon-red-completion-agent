@@ -329,6 +329,10 @@ version has to prove the model learned something worth carrying into a game it h
 - The uninterrupted twenty-dispatch Hall-of-Fame receipt and a proportional action bar showing
   469,232 of 502,175 actions inside the team-development/Blaine skill. Label the captured Celadon
   start and teacher-authored mechanics on screen for the entire sequence.
+- The v6 causal receipt beside its candidate-only baseline: 57,644 controlled decisions and all
+  operational gates passed, while the state-dependent-policy claim remains visibly rejected.
+- A shuffled trainee/venue candidate-card sequence showing that identity-free candidate order
+  changes without changing the intended strategic selection.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video
