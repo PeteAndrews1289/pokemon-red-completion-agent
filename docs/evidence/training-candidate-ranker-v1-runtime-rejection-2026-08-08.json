@@ -48,6 +48,28 @@
     "final_fainted_count": 0,
     "complete_execution_counts_available": false
   },
+  "same_root_teacher_diagnostic": {
+    "status": "ok",
+    "source_commit": "de4c874a9d23727dba2e3b8c913c3038b24b5d13",
+    "root_sha256": "fccacf52b335d449b405588518d1c2313e38bf904a69a112a11c7139b991648d",
+    "action_replay_sha256": "52c9a37691d0541b46f8cc3915acd37c6e5783a1c56659d961f0cdf3dc5768a2",
+    "candidate_replay_sha256": "a461c99802b970ccff1a07f59a08678bf9277dd519424c2ae3c0ab9524646033",
+    "terminal_log_sha256": "ddefd40af581469eac7bcfd0d800f3990b4e78814c9cd012b245b0eeb8ba961f",
+    "portable_training_decisions": 57917,
+    "observed_candidate_decisions": 113267,
+    "retained_candidate_decisions": 6844,
+    "evolution_battles": 69,
+    "evolution_healing_trips": 45,
+    "balance_battles": 1733,
+    "balance_healing_trips": 986,
+    "total_battles": 1802,
+    "total_healing_trips": 1031,
+    "final_party_levels": [55, 55, 55, 55, 55, 55],
+    "final_fainted_count": 0,
+    "controlled_candidate_stream_is_exact_teacher_prefix": true,
+    "shared_evolution_transitions": 92,
+    "shared_balance_transitions_before_control_failure": 1259
+  },
   "gate_evaluation": {
     "sha256": "60dd60cbfd3507c57f37e259c79eacd595c78a006aba3377d447ca8ec8fb6b56",
     "shadow_eligible": true,
@@ -77,9 +99,9 @@
       "cross-title transfer",
       "living Pokedex completion"
     ],
-    "diagnostic_boundary": "The model agreed with every teacher candidate label before failure. A same-root teacher-only replay is required to distinguish a root/curriculum robustness failure from an execution-binding defect."
+    "diagnostic_boundary": "The same-root teacher completed under every operational bound, and every controlled candidate transition was an exact prefix of that successful teacher stream. Merely enabling the authority wrapper changed a downstream directive despite zero alternate model selections."
   },
-  "next_gate": "Preserve v1 as rejected, run the same-root teacher diagnostic, then preregister a paired teacher/model v2 causal design before opening any new authority root.",
+  "next_gate": "Preserve v1 as rejected, require agreement to be a behaviorally exact no-op, then preregister a fresh repaired causal root before portable integration.",
   "private_artifacts_tracked": false,
   "promotion_eligible": false
 }

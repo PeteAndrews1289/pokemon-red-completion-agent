@@ -648,6 +648,87 @@ def test_candidate_authority_executes_an_alternate_trainee_binding(
     assert (0, 1) in memory.swaps, memory.swaps
 
 
+def test_candidate_authority_agreement_is_behaviorally_a_no_op(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Merely installing authority cannot change the teacher's mechanic path."""
+
+    monkeypatch.setattr(
+        red_team_training,
+        "member_is_unsafe_for_team_training",
+        lambda _member, _policy: True,
+    )
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+
+    def exercise(*, authority: bool) -> tuple[list[tuple[int, int]], dict[str, int], list[str]]:
+        memory = FakeMemory()
+        memory.set_party(
+            [
+                (
+                    species,
+                    20
+                    if species == DUGTRIO_SPECIES_ID
+                    else 40
+                    if species == BLASTOISE_SPECIES_ID
+                    else 30,
+                )
+                for species in FINAL_FORM_ROSTER
+            ]
+        )
+        calls = {"walk": 0, "heal": 0}
+        kinds: list[str] = []
+
+        def walk(*_args: object) -> int:
+            calls["walk"] += 1
+            return 1
+
+        def heal(*_args: object) -> None:
+            calls["heal"] += 1
+
+        venue = TrainingVenue(
+            band=GrindingArea(
+                "agreement-venue",
+                1,
+                10,
+                rare_maximum_encounter_level=10,
+                measured_samples=100,
+            ),
+            map_id=TRAINING_MAP,
+            walk_to_grass=walk,
+            heal_and_return=heal,
+            is_in_center=lambda raw: raw.map_id == CENTER_MAP,
+            move_slot=lambda _raw: 1,
+        )
+
+        def agree(decision: TrainingCandidateDecision) -> int:
+            kinds.append(decision.observation.kind.value)
+            return decision.selected_candidate_index
+
+        with pytest.raises(RuntimeError, match="step budget exhausted"):
+            run(
+                memory,
+                FakeReader([state()]),
+                policy=BalancedTeamPolicy(
+                    minimum_level=55,
+                    maximum_level_spread=40,
+                    required_size=6,
+                    max_steps=1,
+                    max_healing_trips=1,
+                ),
+                venues=[venue],
+                candidate_decision_authority=agree if authority else None,
+            )
+        return memory.swaps, calls, kinds
+
+    teacher_swaps, teacher_calls, teacher_kinds = exercise(authority=False)
+    authority_swaps, authority_calls, authority_kinds = exercise(authority=True)
+
+    assert teacher_kinds == []
+    assert authority_kinds[:2] == ["trainee", "venue"]
+    assert authority_swaps == teacher_swaps
+    assert authority_calls == teacher_calls == {"walk": 1, "heal": 0}
+
+
 def test_candidate_authority_executes_an_alternate_venue_binding(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

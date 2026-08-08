@@ -913,6 +913,7 @@ def run_red_team_balancing(
             decision = plan_team_training(party, policy, progress)
             trainee = None
             target_band = None
+            trainee_selection_changed = False
             bands = tuple(venue.band for venue in venues)
             trainable_members = [m for m in party.members if member_needs_training(m, policy)]
             for member in sorted(trainable_members, key=lambda m: (m.level, m.slot)):
@@ -948,6 +949,7 @@ def run_red_team_balancing(
                             selected_index,
                             "weakest venue-compatible member below the level floor",
                         )
+                        trainee_selection_changed = authorized_index != selected_index
                         trainee = bind_trainee_candidate(
                             party,
                             policy,
@@ -982,11 +984,16 @@ def run_red_team_balancing(
                         )
                 current_venue = next(v for v in venues if v.band == target_band)
                 if (
-                    candidate_decision_authority is not None
+                    trainee_selection_changed
                     and not party.fainted_count
                     and decision.directive
                     not in {TeamTrainingDirective.STOP, TeamTrainingDirective.RECRUIT_MEMBER}
                 ):
+                    # Returning the teacher's candidate must be a behavioral no-op.
+                    # Recomputing this directive merely because an authority callback
+                    # existed caused an all-agreement causal run to exhaust 1,250 heals
+                    # while the same-root teacher completed in 1,031. Only an actual
+                    # alternate trainee needs a new directive binding.
                     if member_is_unsafe_for_team_training(trainee, policy):
                         directive = TeamTrainingDirective.RESTORE_TEAM
                     elif trainee.slot != 1:
