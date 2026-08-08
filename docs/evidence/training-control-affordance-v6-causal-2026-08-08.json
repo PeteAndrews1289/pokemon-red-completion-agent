@@ -1,0 +1,103 @@
+{
+  "schema": "pokemon-training-control-causal-qualification-v1",
+  "status": "causal_control_eligible",
+  "source_commit": "e342dcea00258713c58b19fdf7594af1b573fd40",
+  "promotion_plan_sha256": "fb3d764a01e6871dfe22d65df03e1af2539038771ee67047658173c6b4e759b8",
+  "candidate_summary_sha256": "8ef5e857e42a2325a3c28b3346649c99b1d9a7fcb7110ac1abc3bb13becb5cec",
+  "offline_gate_evaluation_sha256": "59331a83b4dbb4359aab939c8ad7a3c0696f7a9dfa7cc7a21e62779f3778f58a",
+  "choice_diversity_audit_sha256": "c6b4516fd8f1f3984219824a226771fc3b4a9615aeffe5f1bbc86344f8a02c21",
+  "shadow": {
+    "lineage_id": "training-control-v6-shadow-01",
+    "root_sha256": "95792d64820caa98c670aa75da4d7673fe32473e7eeadb60786fc57ebf35d8a2",
+    "audit_sha256": "6e3a217e04908e8fa578bacd5905ff8ad025f7b447e3a955a9140dce04e15cad",
+    "model_had_execution_authority": false,
+    "decisions": 57066,
+    "accuracy": 1.0,
+    "final_party_levels": [
+      55,
+      55,
+      55,
+      55,
+      55,
+      55
+    ],
+    "faints": 0
+  },
+  "causal_control": {
+    "lineage_id": "training-control-v6-control-01",
+    "root_sha256": "94c33f009f83bd800bd4a891e8e331adecb003c3300a863935e15a4921cef982",
+    "decisions_sha256": "baf18ae3774f3c87b11aacd993a24b20f7831c7348e5cb82454dee6421322af4",
+    "audit_sha256": "aa063efa6542e756ebbaa0d918f6dbc0cd16e209a905f1600e865edaef2d6ed4",
+    "log_sha256": "cb8bebb0d2ade5d4b4998bb48436b7184e6296ba535ed12bab5a2a21c353c715",
+    "gate_evaluation_sha256": "d31a7a5c139418a12a29f857a545074021ce0e3c16d53dcd0986bc110c1a64f8",
+    "model_had_execution_authority": true,
+    "authority_phases": [
+      "battle",
+      "overworld"
+    ],
+    "teacher_fallback_on_model_disagreement": false,
+    "decisions": 57644,
+    "controlled_decisions": 57644,
+    "forced_decisions": 3672,
+    "genuine_decisions": 53972,
+    "accuracy": 1.0,
+    "genuine_accuracy": 1.0,
+    "mean_confidence": 0.9999255617722934,
+    "action_counts": {
+      "fight": 2020,
+      "flee": 1475,
+      "heal": 592,
+      "seek": 53556,
+      "stop": 1
+    },
+    "operational_errors": {
+      "missed_required_heal": 0,
+      "missed_stop": 0,
+      "premature_stop": 0,
+      "unnecessary_heal": 0
+    },
+    "battles": 1801,
+    "healing_trips": 1046,
+    "faints": 0,
+    "final_party_levels": [
+      55,
+      55,
+      55,
+      55,
+      55,
+      55
+    ]
+  },
+  "model": {
+    "model_id": "pokemon.core.training.control.mlp.v1",
+    "canonical_sha256": "cd8463ba77edc6f37b4e2321f5b644d7bb04a84622fa7af3f09fad968e289bd6",
+    "file_sha256": "62f3eab12d9c3ecf0d2623b0c8ebbc7f55fc055673124cb3939e678677025b7b"
+  },
+  "gates": {
+    "authority_phases": true,
+    "teacher_fallback": true,
+    "maximum_decisions": true,
+    "maximum_battles": true,
+    "maximum_healing_trips": true,
+    "maximum_faints": true,
+    "required_final_party_levels": true
+  },
+  "claim_boundary": {
+    "verified": [
+      "authenticated model controlled every exposed battle and overworld training decision",
+      "the unchanged referee permitted no disagreement fallback",
+      "a fresh emulator lineage reached the exact all-level-55 zero-faint terminal"
+    ],
+    "not_verified": [
+      "the 25 state features add predictive value",
+      "state-dependent training strategy",
+      "clean-start completion",
+      "cross-title transfer",
+      "end-to-end learned gameplay"
+    ],
+    "reason": "The candidate-action-set-only held-out baseline also achieved 100 percent accuracy."
+  },
+  "private_artifacts_tracked": false,
+  "portable_loop_may_start": true,
+  "promotion_eligible": false
+}

@@ -5,9 +5,12 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import re
+import stat
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 from numpy.typing import NDArray
@@ -20,6 +23,7 @@ from pokemon_red_completion.training_candidate_rank import (
 )
 
 TRAINING_CANDIDATE_MODEL_ID = "pokemon.core.training.candidate-ranker.mlp.v1"
+_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
 
 class TrainingCandidateModelError(ValueError):
@@ -339,6 +343,34 @@ def canonical_training_candidate_model_sha256(model: TrainingCandidateMLP) -> st
         model.to_dict(), sort_keys=True, separators=(",", ":"), ensure_ascii=True
     ).encode("ascii")
     return hashlib.sha256(payload).hexdigest()
+
+
+def load_training_candidate_model(
+    path: str | Path,
+    *,
+    expected_sha256: str,
+) -> TrainingCandidateMLP:
+    """Authenticate and decode one candidate model without following links."""
+
+    if _SHA256.fullmatch(expected_sha256) is None:
+        raise TrainingCandidateModelError("expected candidate model digest is invalid")
+    source = Path(path)
+    try:
+        metadata = source.lstat()
+        payload = source.read_bytes()
+    except OSError as error:
+        raise TrainingCandidateModelError("candidate model cannot be read") from error
+    if source.is_symlink() or not stat.S_ISREG(metadata.st_mode):
+        raise TrainingCandidateModelError("candidate model must be a regular file")
+    if hashlib.sha256(payload).hexdigest() != expected_sha256:
+        raise TrainingCandidateModelError("candidate model failed authentication")
+    try:
+        raw = json.loads(payload)
+    except (UnicodeError, json.JSONDecodeError) as error:
+        raise TrainingCandidateModelError("candidate model is invalid JSON") from error
+    if not isinstance(raw, Mapping):
+        raise TrainingCandidateModelError("candidate model must be an object")
+    return TrainingCandidateMLP.from_dict(raw)
 
 
 def _collapse_examples(

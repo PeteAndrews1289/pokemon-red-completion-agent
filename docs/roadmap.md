@@ -242,6 +242,28 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   no-authority shadow, controlled decisions, control audit, and terminal log as one chain; score
   authority, fallback, decision, battle, healing, faint, and final-party gates; and return nonzero
   before portable-loop integration when any requirement fails.
+- [x] Complete the preregistered v6 shadow and full-authority causal lineages. The causal model owned
+  all 57,644 exposed decisions across battle and overworld phases, completed 1,801 battles and 1,046
+  healing trips with no fallback or faint, and reached the exact 55/55/55/55/55/55 terminal. All
+  seven causal gates passed. This verifies the authority and safety integration, not state-feature
+  value, because the candidate-set-only baseline remains perfect. See the
+  [causal receipt](evidence/training-control-affordance-v6-causal-2026-08-08.json).
+- [x] Add a final authenticated portable gate that binds the candidate, causal approval,
+  choice-diversity audit, portable objective receipt, terminal emulator state, and progress envelope.
+  It reports operational authority and state-dependent evidence as separate verdicts and always
+  keeps clean-start, cross-title, and end-to-end claims closed at this captured-state stage.
+- [x] Expose the next genuinely variable teacher choices as a shared, permutation-equivariant
+  candidate-ranking interface: which viable below-floor member to train and which safe measured
+  venue to use. Species, moves, slots, area names, maps, and memory identities are absent from the
+  feature vectors; choices whose teacher label depends only on an unobservable identity tie are
+  excluded rather than learned.
+- [x] Add atomic candidate-decision replay output, a leakage-rejecting whole-lineage loader, a
+  choice-shape baseline audit, a shared candidate-scoring MLP, training-only bidirectional selection,
+  and sealed-validation fitting. The v1 curriculum and five historically disjoint roots are
+  [preregistered](evidence/training-candidate-ranker-v1-promotion-plan-2026-08-08.json).
+- [ ] Collect both v1 training lineages, select without validation, open and score the sealed
+  validation lineage, then require a real held-out margin over the choice-shape baseline before any
+  shadow or causal authority.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

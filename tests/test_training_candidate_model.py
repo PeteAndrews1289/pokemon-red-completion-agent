@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import hashlib
+import json
+
 import numpy as np
 import pytest
 
@@ -10,6 +13,7 @@ from pokemon_red_completion.training_candidate_model import (
     TrainingCandidateModelError,
     canonical_training_candidate_model_sha256,
     evaluate_training_candidate_model,
+    load_training_candidate_model,
 )
 from pokemon_red_completion.training_candidate_rank import (
     TRAINING_CANDIDATE_FEATURE_NAMES,
@@ -137,3 +141,19 @@ def test_fit_rejects_only_singleton_choices() -> None:
 
     with pytest.raises(TrainingCandidateModelError, match="genuine choices"):
         TrainingCandidateMLP.fit((example,))
+
+
+def test_file_loader_authenticates_the_exact_model(tmp_path) -> None:
+    model = TrainingCandidateMLP.fit(_examples(), hidden_units=4, epochs=10, seed=7)
+    path = tmp_path / "candidate.json"
+    path.write_text(json.dumps(model.to_dict(), indent=2, sort_keys=True) + "\n")
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+
+    restored = load_training_candidate_model(path, expected_sha256=digest)
+
+    assert canonical_training_candidate_model_sha256(restored) == (
+        canonical_training_candidate_model_sha256(model)
+    )
+    path.write_text(path.read_text() + " ")
+    with pytest.raises(TrainingCandidateModelError, match="authentication"):
+        load_training_candidate_model(path, expected_sha256=digest)
