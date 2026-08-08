@@ -76,6 +76,15 @@ def main() -> int:
                 "class_balance_power": args.class_balance_power,
             },
             "partition_audit": audit.public_dict(),
+            "lineage_roots": [
+                {
+                    "lineage_id": dataset.lineage_id,
+                    "partition": dataset.partition,
+                    "state_sha256": dataset.state_sha256,
+                    "artifact_sha256": dataset.artifact_sha256,
+                }
+                for dataset in (*training, *validation)
+            ],
             "private_model_file_sha256": model_sha256,
         }
     )

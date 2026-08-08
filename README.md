@@ -188,6 +188,9 @@ mandatory recovery exposes only `heal`, verified readiness exposes only `stop`, 
 overworld states retain the causal `seek`/optional-`heal` choice. Five fresh roots, their split,
 unchanged gates, and the no-reuse rule are frozen in the
 [v6 promotion plan](docs/evidence/training-control-affordance-v6-promotion-plan-2026-08-08.json).
+Candidate summaries now expose authenticated lineage/root identities, and the offline gate checker
+authenticates both the plan and summary before scoring all eight thresholds. It exits nonzero and
+forbids shadow automatically when any operational gate fails.
 
 The next bounded dispatch is also qualified. From the authenticated post-Blaine capture, the model
 selected `defeat_giovanni`; its fixed skill used **1,409 actions / 156,305 frames** to sell the

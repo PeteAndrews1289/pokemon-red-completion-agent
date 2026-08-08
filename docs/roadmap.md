@@ -228,6 +228,9 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   four offline gates despite perfect battle accuracy.
 - [ ] Collect fresh v6 lineages under safety-affordance masking, select without validation, and
   attempt shadow/full causal promotion only if every unchanged operational gate passes.
+- [x] Make offline promotion mechanical: emit path-free lineage/root identities from fitting,
+  authenticate the preregistration and candidate summary, evaluate all eight gates, and return a
+  nonzero status that forbids shadow whenever one fails.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
