@@ -75,6 +75,12 @@ expected-objective authorization over a fixed sequence, it cannot inject the qua
 ranker, and its ordinary report is not one source/model/root-bound series envelope. Build those
 contracts and run one uncounted rehearsal before freezing the 8/10 campaign.
 
+PR #8 is still intentionally draft and cleanly mergeable, but it now represents the whole
+accumulated project: 655 commits / 622 changed files versus `main`. Do not force-push or attempt a
+history rewrite. After Peter reviews the final audit, the safe integration path is a GitHub squash
+merge, followed immediately by a new short-lived branch and a full post-merge gate. No merge was
+performed during this handoff.
+
 ---
 
 ## 1. What this project is for

@@ -145,10 +145,21 @@ real regressions and weakens the otherwise strong evidence story.
 
 **Resolved during this audit:** the stale registry was regenerated from source, all four public
 golden identities were updated from generator output, and the full 2,024-test local gate passed.
-At least eleven consecutive GitHub Actions runs were green after the fix before this final source
-change; the final push is required to reconfirm that streak. This is why the prior email storm was
-not intended behavior—it was one repeatedly retriggered derived-artifact mismatch, not useful
-Dependabot noise.
+The final **16 consecutive GitHub Actions runs** were green after the registry fix. This is why the
+prior email storm was not intended behavior—it was one repeatedly retriggered derived-artifact
+mismatch, not useful Dependabot noise.
+
+### The branch now needs integration, not more accumulated history
+
+Draft PR #8 is mergeable and its current checks are green, but it spans **655 commits, 622 changed
+files, 123,184 additions, and 3,828 deletions** relative to `main`. That is the accumulated project,
+not a focused review unit. Continuing indefinitely on the same branch raises recovery and review
+risk even when every commit is sound.
+
+The controlled handoff is: keep PR #8 draft until the owner reviews this audit; preserve/tag the
+current `main`; use GitHub's squash merge so the canonical branch receives one coherent project
+snapshot; immediately create a fresh short-lived branch; and rerun the full local and GitHub gates
+after merge. Do not rewrite the shared branch or force-push its history.
 
 ## Dependency-ordered next work
 
