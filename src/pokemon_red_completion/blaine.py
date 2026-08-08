@@ -95,6 +95,7 @@ from pokemon_red_completion.training import (
 from pokemon_red_completion.training_venue import TrainingVenue
 
 BLAINE_CHECKPOINT_COUNT = 9
+MANSION_SECRET_KEY_CHECKPOINT_COUNT = 4
 BLAINE_CAPACITY_SALE_ITEM = ItemId.ANTIDOTE
 BLAINE_INPUT_BAG_SLOT_BOUNDS = (15, 20)
 BLAINE_GYM_TRAINER_INCOME = 6_930
@@ -707,6 +708,287 @@ class BlaineChapterReport:
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
         }
+
+
+@dataclass(frozen=True, slots=True)
+class MansionSecretKeyReport:
+    """Evidence for the Mansion-only objective boundary before team training and Blaine."""
+
+    records: tuple[BlaineCheckpoint, ...]
+    final_raw: RawGameState
+    switch_trace: tuple[bool, ...]
+    trainer_events_before: tuple[bool, ...]
+    trainer_events_after: tuple[bool, ...]
+    wild_flees: tuple[CeladonWildFleeEvidence, ...]
+    secret_key_quantity: int
+    tm14_quantity: int
+    x_accuracy_retained: bool
+    blaine_defeated: bool
+    volcano_badge: bool
+    initial_bag_slots: int
+    final_bag_slots: int
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            len(self.records) == MANSION_SECRET_KEY_CHECKPOINT_COUNT
+            and self.switch_trace == (False, True, False, True)
+            and self.trainer_events_before == (False,) * 6
+            and self.trainer_events_after == (False,) * 6
+            and len(self.wild_flees) <= BLAINE_MAX_WILD_FLEES
+            and all(
+                item.party_preserved
+                and item.pp_preserved
+                and item.hp_safe
+                and item.inventory_preserved
+                for item in self.wild_flees
+            )
+            and self.secret_key_quantity == 1
+            and self.tm14_quantity == 1
+            and self.x_accuracy_retained
+            and not self.blaine_defeated
+            and not self.volcano_badge
+            and BLAINE_INPUT_BAG_SLOT_BOUNDS[0]
+            <= self.initial_bag_slots
+            <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]
+            and self.final_bag_slots <= 20
+            and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
+            and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
+            and party_core_intact(self.final_raw.party_species_ids)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and all(status == 0 for status in self.party_status)
+            and self.controller_released
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "objective": "obtain_secret_key",
+            "switch_trace": list(self.switch_trace),
+            "optional_trainers_before": list(self.trainer_events_before),
+            "optional_trainers_after": list(self.trainer_events_after),
+            "wild_flees": [
+                {
+                    "map": item.map_id,
+                    "position": [item.x, item.y],
+                    "species": item.species,
+                    "level": item.level,
+                    "party_preserved": item.party_preserved,
+                    "pp_preserved": item.pp_preserved,
+                    "hp_safe": item.hp_safe,
+                    "inventory_preserved": item.inventory_preserved,
+                }
+                for item in self.wild_flees
+            ],
+            "inventory": {
+                "secret_key": self.secret_key_quantity,
+                "tm14_blizzard": self.tm14_quantity,
+                "x_accuracy_retained": self.x_accuracy_retained,
+                "bag_slots": [self.initial_bag_slots, self.final_bag_slots],
+            },
+            "blaine_untouched": not self.blaine_defeated and not self.volcano_badge,
+            "terminal": {
+                "map": int(self.final_raw.map_id),
+                "position": [self.final_raw.player_x, self.final_raw.player_y],
+                "party_hp": list(self.party_hp),
+                "party_max_hp": list(self.party_max_hp),
+                "party_status": list(self.party_status),
+            },
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
+
+
+def run_mansion_secret_key_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    progress: ProgressSink | None = None,
+) -> MansionSecretKeyReport:
+    """Recover the Secret Key and stop before training or entering Cinnabar Gym."""
+
+    start_frames = emulator.frame_count
+    actions = CountingExecutor(executor)
+    records: list[BlaineCheckpoint] = []
+    initial = reader.read()
+    _require(initial, MapId.CINNABAR_POKECENTER, (3, 3), "post-Cinnabar boundary")
+    initial_bag = _bag(emulator)
+    bide_present = initial_bag.get(ItemId.TM34_BIDE, 0) == 1
+    capacity_input_slots, potion_sold_quantity = _blaine_capacity_input_slots(
+        len(initial_bag),
+        initial_bag.get(ItemId.POTION, 0),
+        bide_present=bide_present,
+    )
+    (
+        capacity_great_ball_required,
+        capacity_ultra_ball_bought,
+        repel_purchase_quantity,
+        effective_input_slots,
+    ) = _blaine_capacity_plan(capacity_input_slots, bide_present=bide_present)
+    if (
+        initial_bag.get(ItemId.SECRET_KEY, 0)
+        or _event(emulator, EventFlag.BEAT_BLAINE)
+        or _event(emulator, EventFlag.GOT_TM38)
+        or initial.badge_bits & Badge.VOLCANO
+    ):
+        raise BlaineChapterError("Mansion input boundary is not pristine.")
+    if (
+        not BLAINE_INPUT_BAG_SLOT_BOUNDS[0] <= len(initial_bag) <= BLAINE_INPUT_BAG_SLOT_BOUNDS[1]
+        or initial_bag.get(ItemId.X_ACCURACY, 0) != 1
+        or initial_bag.get(ItemId.TM34_BIDE, 0) not in {0, 1}
+        or (capacity_great_ball_required and initial_bag.get(ItemId.POKE_BALL, 0) != 1)
+        or not 16 <= effective_input_slots <= 20
+        or not 0 <= initial_bag.get(ItemId.ANTIDOTE, 0) <= 99
+        or (
+            effective_input_slots in {19, 20}
+            and initial_bag.get(ItemId.ANTIDOTE, 0) == 0
+            and initial_bag.get(ItemId.TM21_MEGA_DRAIN, 0) != 1
+        )
+        or (len(initial_bag) == 20 and potion_sold_quantity == 0)
+    ):
+        raise BlaineChapterError("Cinnabar input inventory lacks Mansion capacity items.")
+    mansion_before = _events(emulator, MANSION_TRAINER_EVENTS)
+    if mansion_before != (False,) * 6:
+        raise BlaineChapterError("A Pokémon Mansion trainer was already defeated.")
+    switch_trace = [_event(emulator, EventFlag.MANSION_SWITCH_ON)]
+    if switch_trace != [False]:
+        raise BlaineChapterError("Pokémon Mansion switch did not start off.")
+    _checkpoint(records, progress, emulator, initial, "mansion_ready", "Mansion route ready")
+
+    _move(actions, reader, CENTER_TO_MART, "Cinnabar Mart")
+    _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart entry")
+    _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk")
+    _pulse(actions, MacroActionKind.MOVE, "left", 120)
+    if potion_sold_quantity:
+        _sell_bag_item_stack(actions, reader, emulator, ItemId.POTION, potion_sold_quantity)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    sell_antidote_early = _sell_antidote_before_mansion(
+        effective_input_slots,
+        initial_bag.get(ItemId.ANTIDOTE, 0),
+    )
+    sell_tm21_early = effective_input_slots in {19, 20} and initial_bag.get(ItemId.ANTIDOTE, 0) == 0
+    if sell_antidote_early:
+        _sell_bag_item_stack(
+            actions,
+            reader,
+            emulator,
+            BLAINE_CAPACITY_SALE_ITEM,
+            initial_bag.get(BLAINE_CAPACITY_SALE_ITEM, 0),
+        )
+    elif sell_tm21_early:
+        _sell_bag_item_stack(actions, reader, emulator, ItemId.TM21_MEGA_DRAIN, 1)
+    else:
+        _open_sell_menu(actions, emulator)
+    _buy_repel(
+        actions,
+        reader,
+        emulator,
+        quantity=repel_purchase_quantity,
+        buy_ultra_ball=capacity_ultra_ball_bought,
+        buy_great_ball=capacity_great_ball_required,
+    )
+    _use_bag_item(actions, reader, emulator, DEFAULT_LAVENDER_TIMING, ItemId.MAX_REPEL)
+
+    _move(actions, reader, MART_TO_MANSION, "Cinnabar Mart to Mansion")
+    _require(reader.read(), MapId.POKEMON_MANSION_1F, (5, 27), "Mansion entrance")
+    _checkpoint(records, progress, emulator, reader.read(), "mansion_entered", "Entered Mansion")
+
+    wilds = _move_mansion(
+        actions,
+        reader,
+        emulator,
+        MANSION_1F_TO_3F + MANSION_3F_TO_STATUE,
+        "Mansion 3F statue",
+    )
+    _toggle_statue(actions, reader, emulator, expected=True)
+    switch_trace.append(True)
+    wilds += _move_mansion(
+        actions,
+        reader,
+        emulator,
+        MANSION_3F_TO_B1F + MANSION_B1F_TO_STATUE,
+        "Mansion B1F south statue",
+    )
+    _toggle_statue(actions, reader, emulator, expected=False)
+    switch_trace.append(False)
+    _move(actions, reader, ("right",), "Mansion TM14 approach")
+    _pick_up_mansion_item(actions, reader, emulator, ItemId.TM14_BLIZZARD, "TM14 Blizzard")
+    _move(actions, reader, ("left",), "Mansion south statue return")
+    wilds += _move_mansion(
+        actions,
+        reader,
+        emulator,
+        MANSION_B1F_TO_NORTH_STATUE,
+        "Mansion B1F north statue",
+    )
+    _toggle_statue(actions, reader, emulator, expected=True)
+    switch_trace.append(True)
+    wilds += _move_mansion(
+        actions,
+        reader,
+        emulator,
+        MANSION_B1F_TO_SECRET_KEY,
+        "Mansion Secret Key",
+    )
+    _pick_up_secret_key(actions, reader, emulator)
+    mansion_after = _events(emulator, MANSION_TRAINER_EVENTS)
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "secret_key_obtained",
+        "Recovered Secret Key",
+    )
+
+    _field_dig(actions, reader, emulator)
+    _field_fly_to_cinnabar(actions, reader, emulator)
+    _move(actions, reader, ("up",), "Cinnabar Center entry")
+    _move(actions, reader, ("up",) * 4, "Cinnabar nurse")
+    _heal(actions, reader, emulator)
+    final = reader.read()
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        final,
+        "mansion_returned",
+        "Returned safely from Mansion",
+    )
+
+    report = MansionSecretKeyReport(
+        records=tuple(records),
+        final_raw=final,
+        switch_trace=tuple(switch_trace),
+        trainer_events_before=mansion_before,
+        trainer_events_after=mansion_after,
+        wild_flees=tuple(wilds),
+        secret_key_quantity=_bag(emulator).get(ItemId.SECRET_KEY, 0),
+        tm14_quantity=_bag(emulator).get(ItemId.TM14_BLIZZARD, 0),
+        x_accuracy_retained=_bag(emulator).get(ItemId.X_ACCURACY, 0) == 1,
+        blaine_defeated=_event(emulator, EventFlag.BEAT_BLAINE),
+        volcano_badge=bool(final.badge_bits & Badge.VOLCANO),
+        initial_bag_slots=len(initial_bag),
+        final_bag_slots=len(_bag(emulator)),
+        party_hp=_party_hp(emulator),
+        party_max_hp=_party_max_hp(emulator),
+        party_status=_party_status(emulator),
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=actions.actions_executed,
+        controller_released=not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise BlaineChapterError(f"Mansion evidence contract failed: {report.public_dict()!r}.")
+    return report
 
 
 def run_blaine_chapter(

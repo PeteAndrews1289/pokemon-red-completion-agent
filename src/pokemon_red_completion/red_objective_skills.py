@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from pokemon_red_completion.blaine import run_mansion_secret_key_chapter
 from pokemon_red_completion.cinnabar import run_cinnabar_chapter
 from pokemon_red_completion.dojo import run_dojo_chapter
 from pokemon_red_completion.domain import GameState
@@ -521,6 +522,49 @@ class ReachCinnabarObjectiveSkill:
 
     def execute(self) -> ObjectiveSkillExecution:
         report = run_cinnabar_chapter(
+            self.emulator,
+            self.reader,
+            self.executor,
+        )
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class ObtainSecretKeyObjectiveSkill:
+    """Execute only the Mansion objective, leaving Blaine untouched."""
+
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    objective_id: str = "obtain_secret_key"
+    specialist: Specialist = Specialist.NAVIGATION
+    expected_facts: frozenset[str] = frozenset({"item:secret_key"})
+    additional_effect_facts: frozenset[str] = frozenset()
+    max_actions: int = 10_000
+    max_frames: int = 5_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "cinnabar_pokecenter"
+            and "location:cinnabar_island" in state.facts
+            and "item:secret_key" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the pristine Cinnabar Center boundary."
+                if executable
+                else "Requires Cinnabar Center before the Mansion Secret Key route."
+            ),
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_mansion_secret_key_chapter(
             self.emulator,
             self.reader,
             self.executor,

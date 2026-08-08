@@ -10,6 +10,7 @@ from pokemon_red_completion.red_objective_skills import (
     DefeatKogaObjectiveSkill,
     DefeatSabrinaObjectiveSkill,
     LiberateSilphObjectiveSkill,
+    ObtainSecretKeyObjectiveSkill,
     ObtainStrengthObjectiveSkill,
     ObtainSurfObjectiveSkill,
     PokemonTowerObjectiveSkill,
@@ -129,6 +130,7 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     silph = LiberateSilphObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     sabrina = DefeatSabrinaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     cinnabar = ReachCinnabarObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    mansion = ObtainSecretKeyObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     celadon = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"item:silph_scope"}),
@@ -171,6 +173,13 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     assert sabrina.availability(post_silph).executable
     post_sabrina = post_silph.with_facts("badge:marsh", "move:surf_available")
     assert cinnabar.availability(post_sabrina).executable
+    cinnabar_center = post_sabrina.with_facts("location:cinnabar_island")
+    cinnabar_center = GameState(
+        cinnabar_center.mode,
+        cinnabar_center.facts,
+        location="cinnabar_pokecenter",
+    )
+    assert mansion.availability(cinnabar_center).executable
 
 
 def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
@@ -232,6 +241,13 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
             "reach_cinnabar",
             2_500,
             350_000,
+        ),
+        (
+            ObtainSecretKeyObjectiveSkill,
+            "run_mansion_secret_key_chapter",
+            "obtain_secret_key",
+            3_000,
+            450_000,
         ),
     ),
 )

@@ -33,6 +33,7 @@ from pokemon_red_completion.blaine import (
     MANSION_DEVELOPMENT_POLICY,
     MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
     MANSION_MAX_CONSECUTIVE_FLEES,
+    MANSION_SECRET_KEY_CHECKPOINT_COUNT,
     MANSION_TEAM_POLICY,
     MANSION_TRAINER_EVENTS,
     MANSION_TRAINING_POLICY,
@@ -43,8 +44,10 @@ from pokemon_red_completion.blaine import (
     QUIZ_TRAINER_BATTLE_INDEXES,
     ROUTE_11_TRAINING_VENUE,
     BlaineChapterError,
+    BlaineCheckpoint,
     BlaineTurn,
     CinnabarGymTrainerReceipt,
+    MansionSecretKeyReport,
     _blaine_capacity_input_slots,
     _blaine_capacity_plan,
     _encounter_party,
@@ -96,6 +99,7 @@ def test_blaine_training_calls_only_use_the_shared_balancer_signature() -> None:
 
 def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert BLAINE_CHECKPOINT_COUNT == 9
+    assert MANSION_SECRET_KEY_CHECKPOINT_COUNT == 4
     assert len(MANSION_1F_TO_3F) == 36
     assert len(MANSION_3F_TO_B1F) == 34
     assert len(MANSION_B1F_TO_NORTH_STATUE) == 54
@@ -135,6 +139,65 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert ROUTE_11_TRAINING_VENUE.map_id == int(MapId.ROUTE_11)
     assert MANSION_MAX_CONSECUTIVE_FLEES == 32
     assert frozenset({0x37, 0x8F}) == MANSION_VOLATILE_ENEMY_SPECIES
+
+
+def test_mansion_only_runner_stops_before_training_and_blaine() -> None:
+    tree = ast.parse(
+        textwrap.dedent(inspect.getsource(blaine_module.run_mansion_secret_key_chapter))
+    )
+    calls = {
+        node.func.id
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+    }
+
+    assert "_pick_up_secret_key" in calls
+    assert "run_red_team_balancing" not in calls
+    assert "_run_mansion_training" not in calls
+    assert "run_adaptive_trainer_battle" not in calls
+
+
+def test_mansion_only_report_requires_key_and_preserves_blaine_boundary() -> None:
+    terminal = RawGameState(
+        game_started=True,
+        map_id=MapId.CINNABAR_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=6,
+        battle_state=0,
+        party_species_ids=(28, 64, 59, 132, 104, 43),
+        first_party_hp=150,
+        first_party_max_hp=150,
+    )
+    records = tuple(
+        BlaineCheckpoint(f"mansion_{index}", f"Mansion {index}", terminal)
+        for index in range(MANSION_SECRET_KEY_CHECKPOINT_COUNT)
+    )
+    report = MansionSecretKeyReport(
+        records=records,
+        final_raw=terminal,
+        switch_trace=(False, True, False, True),
+        trainer_events_before=(False,) * 6,
+        trainer_events_after=(False,) * 6,
+        wild_flees=(),
+        secret_key_quantity=1,
+        tm14_quantity=1,
+        x_accuracy_retained=True,
+        blaine_defeated=False,
+        volcano_badge=False,
+        initial_bag_slots=17,
+        final_bag_slots=19,
+        party_hp=(150, 53, 37, 144, 75, 79),
+        party_max_hp=(150, 53, 37, 144, 75, 79),
+        party_status=(0,) * 6,
+        frames_executed=400_000,
+        actions_executed=3_000,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["blaine_untouched"] is True
+    assert not replace(report, blaine_defeated=True).passed
 
 
 def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -> None:
