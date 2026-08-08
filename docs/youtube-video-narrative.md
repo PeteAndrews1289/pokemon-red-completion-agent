@@ -143,6 +143,11 @@ contrast makes the real bottleneck visible: broad team development, not high-lev
 Then compress Victory Road into a navigation montage: Route 22 rival, seven badge gates, five
 boulder-switch proofs, the League shopping ledger, and the healed Indigo terminal. Overlay
 **3,857 actions / 453,733 frames** and end with Lorelei appearing from fresh observation.
+For the League montage, keep the role vectors on screen: Lorelei `[5,0,0,0,3,0]`, Bruno
+`[6,0,0,0,0,1]`, Agatha `[0,0,4,0,2,0]`, and Lance `[6,0,0,0,0,0]`. The last vector is important:
+the loop completed the room, but it did not invent team diversity that the teacher had not taught.
+Pause before the Champion to explain the final authority split—defeating the Champion and verifying
+the Hall of Fame are two graph objectives even though the game may chain them automatically.
 
 ### Act VII: the Crystal test — 10:10–11:15
 

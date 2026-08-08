@@ -150,6 +150,17 @@ assembled the exact League supply reserve, and returned the full party healed at
 memory added `story:victory_road_cleared` and exposed Lorelei. See the
 [Victory Road receipt](evidence/affordance-masked-post-giovanni-victory-road-2026-08-08.json).
 
+Four successive captured-state dispatches then qualified the League through Lance. Lorelei used
+480 actions / 42,783 frames with Jolteon and Blastoise splitting eight observed decisions. Bruno
+used 328 / 32,538 with Hitmonlee taking the opening Onix lesson. Agatha used 466 / 45,854 with
+Dugtrio and Jolteon splitting all six decisions. Lance used 582 / 51,905 but remained entirely
+Blastoise-owned; that is completion evidence, not broader team-role progress. Each skill ended at
+the next room with the full party recovered and each fresh observation—not the skill report—opened
+the next objective. See the [Lorelei](evidence/affordance-masked-post-victory-road-lorelei-2026-08-08.json),
+[Bruno](evidence/affordance-masked-post-lorelei-bruno-2026-08-08.json),
+[Agatha](evidence/affordance-masked-post-bruno-agatha-2026-08-08.json), and
+[Lance](evidence/affordance-masked-post-agatha-lance-2026-08-08.json) receipts.
+
 ## August 5: the learned planner authorizes the fixed objective sequence
 
 A graph-authenticated objective ranker reads live semantic state, considers only currently legal

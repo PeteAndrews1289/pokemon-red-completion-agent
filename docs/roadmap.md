@@ -124,6 +124,12 @@ frames, including the Route 22 rival, seven badge gates, all five boulder switch
 supplies, and a healed Indigo terminal. Fresh observation exposes Lorelei. See the
 [Victory Road receipt](evidence/affordance-masked-post-giovanni-victory-road-2026-08-08.json).
 
+The captured-state League chain now passes through Lance: Lorelei 480 actions / 42,783 frames,
+Bruno 328 / 32,538, Agatha 466 / 45,854, and Lance 582 / 51,905. Lorelei, Bruno, and Agatha preserve
+two-member role evidence; Lance remains single-member. The current frontier is the Champion-room
+authority split because the historical chapter also enters the Hall of Fame while the graph treats
+those as two objectives.
+
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces
 on a small Crystal battle-and-navigation benchmark under zero-shot, few-shot, and from-scratch

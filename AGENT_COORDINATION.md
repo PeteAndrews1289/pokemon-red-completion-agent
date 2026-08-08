@@ -157,6 +157,9 @@ Victory Road frontier. It is not yet a contiguous fourteen-step claim.
 Victory Road is separately qualified in 3,857 actions / 453,733 frames with the Route 22 rival,
 seven badge gates, five boulder switches, exact League supplies, a healed Indigo terminal, and a
 fresh Lorelei frontier.
+Successive captured-state skills now pass Lorelei (480 actions), Bruno (328), Agatha (466), and
+Lance (582). Their participation vectors are `[5,0,0,0,3,0]`, `[6,0,0,0,0,1]`,
+`[0,0,4,0,2,0]`, and `[6,0,0,0,0,0]`; do not describe Lance as a team lesson.
 From a captured post-Mansion state, the team now reaches League parity at a measured combined cost
 of 1,716 battles and 885 healing trips, with all six members exactly level 55 and zero faints. A full
 uninterrupted route has not reproduced that result yet.

@@ -262,6 +262,14 @@ gates, satisfied all five boulder-switch events, normalized the exact League res
 with the full party healed at Indigo. Fresh observation opened `defeat_lorelei`. See the
 [Victory Road receipt](docs/evidence/affordance-masked-post-giovanni-victory-road-2026-08-08.json).
 
+The portable League chain is qualified through Lance from successive authenticated room terminals:
+Lorelei 480 actions / 42,783 frames, Bruno 328 / 32,538, Agatha 466 / 45,854, and Lance 582 /
+51,905. The first three preserve their measured two-member role lessons; Lance is still a
+single-member chapter. The current private boundary is `portable-loop-post-lance.state`, with
+`defeat_champion` available. Before wrapping the historical Champion chapter, split its automatic
+Champion/Hall-of-Fame transition into honest graph authority if the live game exposes a stable
+post-victory boundary.
+
 ---
 
 ## 4. How to work here without burning hours

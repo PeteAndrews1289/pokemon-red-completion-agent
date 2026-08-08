@@ -56,6 +56,15 @@ frames**, the exact Route 22 rival party, seven badge gates, five Strength-switc
 League supply reserves, and a fully healed Indigo terminal. Fresh observation opened Lorelei. See
 the [Victory Road receipt](docs/evidence/affordance-masked-post-giovanni-victory-road-2026-08-08.json).
 
+The portable loop now continues through the first four League rooms from authenticated terminals:
+Lorelei **480 actions / 42,783 frames**, Bruno **328 / 32,538**, Agatha **466 / 45,854**, and Lance
+**582 / 51,905**. Lorelei, Bruno, and Agatha each verify two real party roles; Lance remains an
+honestly labeled single-member lesson. Each fresh observation opened the next room. See the
+[Lorelei](docs/evidence/affordance-masked-post-victory-road-lorelei-2026-08-08.json),
+[Bruno](docs/evidence/affordance-masked-post-lorelei-bruno-2026-08-08.json),
+[Agatha](docs/evidence/affordance-masked-post-bruno-agatha-2026-08-08.json), and
+[Lance](docs/evidence/affordance-masked-post-agatha-lance-2026-08-08.json) receipts.
+
 - [Current technical handoff](HANDOFF.md)
 - [Dependency-ordered roadmap](docs/roadmap.md)
 - [Evidence-first project narrative](docs/project-narrative.md)
