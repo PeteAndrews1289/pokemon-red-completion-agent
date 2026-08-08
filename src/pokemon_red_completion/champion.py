@@ -64,7 +64,6 @@ from pokemon_red_completion.victory_road import (
 
 CHAMPION_CHECKPOINT_COUNT = 3
 CHAMPION_BATTLE_CHECKPOINT_COUNT = 3
-HALL_OF_FAME_CHECKPOINT_COUNT = 1
 # Removed local level parity contract, using COMPLETION_LEVEL_PARITY instead
 CHAMPION_RNG_DELAY_FRAMES = 150
 CHAMPION_SAFE_HP = 90
@@ -299,7 +298,9 @@ class ChampionBattleReport:
         return (
             len(self.records) == CHAMPION_BATTLE_CHECKPOINT_COUNT
             and _event(self.final_raw, EventFlag.BEAT_CHAMPION_RIVAL)
-            and self.final_raw.map_id == MapId.CHAMPIONS_ROOM
+            # Red couples the victory event to its automatic Hall-of-Fame
+            # transition; no stable Champion-room input boundary exists.
+            and self.final_raw.map_id == MapId.HALL_OF_FAME
             and self.party == CHAMPION_PARTY
             and _turns_valid(self.turns)
             and self.x_accuracy_used == 1
@@ -333,40 +334,6 @@ class ChampionBattleReport:
                 "party_status": list(self.party_status),
                 "champion_event": _event(self.final_raw, EventFlag.BEAT_CHAMPION_RIVAL),
                 "hall_of_fame": self.final_raw.map_id == MapId.HALL_OF_FAME,
-            },
-            "frames_executed": self.frames_executed,
-            "actions_executed": self.actions_executed,
-            "controller_released": self.controller_released,
-        }
-
-
-@dataclass(frozen=True, slots=True)
-class HallOfFameReport:
-    initial_raw: RawGameState
-    final_raw: RawGameState
-    frames_executed: int
-    actions_executed: int
-    controller_released: bool
-
-    @property
-    def passed(self) -> bool:
-        return (
-            self.initial_raw.map_id == MapId.CHAMPIONS_ROOM
-            and _event(self.initial_raw, EventFlag.BEAT_CHAMPION_RIVAL)
-            and self.final_raw.map_id == MapId.HALL_OF_FAME
-            and _event(self.final_raw, EventFlag.BEAT_CHAMPION_RIVAL)
-            and party_core_intact(self.final_raw.party_species_ids)
-            and self.controller_released
-        )
-
-    def public_dict(self) -> dict[str, object]:
-        return {
-            "status": "ok" if self.passed else "failed",
-            "objective": "enter_hall_of_fame",
-            "champion_event": _event(self.final_raw, EventFlag.BEAT_CHAMPION_RIVAL),
-            "terminal": {
-                "map": int(self.final_raw.map_id),
-                "position": [self.final_raw.player_x, self.final_raw.player_y],
             },
             "frames_executed": self.frames_executed,
             "actions_executed": self.actions_executed,
@@ -521,8 +488,6 @@ def run_champion_chapter(
     )
     while True:
         raw = reader.read()
-        if stop_after_victory and _champion_victory_observed(raw):
-            break
         if _completed(raw):
             break
         if raw.battle_state != 2:
@@ -692,50 +657,6 @@ def run_champion_chapter(
     if not report.passed:
         raise ChampionChapterError(f"Champion terminal evidence failed: {report!r}.")
     return report
-
-
-def run_hall_of_fame_chapter(
-    emulator: EmulatorState,
-    reader: PokemonRedStateReader,
-    executor: ChapterExecutor,
-) -> HallOfFameReport:
-    """Advance only the post-Champion ceremony and verify the Hall of Fame map."""
-
-    start_frames = emulator.frame_count
-    actions = CountingExecutor(executor)
-    initial = reader.read()
-    if (
-        initial.map_id != MapId.CHAMPIONS_ROOM
-        or not _event(initial, EventFlag.BEAT_CHAMPION_RIVAL)
-        or initial.battle_state != 0
-    ):
-        raise ChampionChapterError("Hall of Fame input boundary is not qualified.")
-    for _ in range(256):
-        raw = reader.read()
-        if raw.map_id == MapId.HALL_OF_FAME:
-            break
-        _pulse(actions, MacroActionKind.CONFIRM)
-    else:
-        raise ChampionChapterError("Champion ceremony did not reach the Hall of Fame.")
-    final = reader.read()
-    report = HallOfFameReport(
-        initial_raw=initial,
-        final_raw=final,
-        frames_executed=emulator.frame_count - start_frames,
-        actions_executed=actions.actions_executed,
-        controller_released=not emulator.pressed_buttons,
-    )
-    if not report.passed:
-        raise ChampionChapterError(f"Hall of Fame evidence failed: {report!r}.")
-    return report
-
-
-def _champion_victory_observed(raw: RawGameState) -> bool:
-    return (
-        raw.map_id == MapId.CHAMPIONS_ROOM
-        and raw.battle_state == 0
-        and _event(raw, EventFlag.BEAT_CHAMPION_RIVAL)
-    )
 
 
 def _battle_x_special(

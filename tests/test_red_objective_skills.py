@@ -17,7 +17,6 @@ from pokemon_red_completion.red_objective_skills import (
     DefeatLanceObjectiveSkill,
     DefeatLoreleiObjectiveSkill,
     DefeatSabrinaObjectiveSkill,
-    EnterHallOfFameObjectiveSkill,
     LiberateSilphObjectiveSkill,
     ObtainSecretKeyObjectiveSkill,
     ObtainStrengthObjectiveSkill,
@@ -150,7 +149,6 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     agatha = DefeatAgathaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     lance = DefeatLanceObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     champion = DefeatChampionObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
-    hall = EnterHallOfFameObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     celadon = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"item:silph_scope"}),
@@ -243,9 +241,11 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
         location="champions_room",
     )
     assert champion.availability(champion_room).executable
-    ceremony = champion_room.with_facts("league:champion_defeated")
-    assert hall.availability(ceremony).executable
-    assert not champion.availability(ceremony).executable
+    assert champion.additional_effect_facts == frozenset({"game:hall_of_fame"})
+    automatic_terminal = champion_room.with_facts(
+        "league:champion_defeated", "game:hall_of_fame"
+    )
+    assert not champion.availability(automatic_terminal).executable
 
 
 def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
@@ -346,13 +346,6 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
             "defeat_champion",
             800,
             100_000,
-        ),
-        (
-            EnterHallOfFameObjectiveSkill,
-            "run_hall_of_fame_chapter",
-            "enter_hall_of_fame",
-            100,
-            20_000,
         ),
     ),
 )
