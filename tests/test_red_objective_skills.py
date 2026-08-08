@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.red_objective_skills import (
+    ObtainSurfObjectiveSkill,
     PokemonTowerObjectiveSkill,
     ReachFuchsiaObjectiveSkill,
     RocketHideoutObjectiveSkill,
@@ -111,6 +112,7 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     hideout = RocketHideoutObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     tower = PokemonTowerObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     fuchsia = ReachFuchsiaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    safari = ObtainSurfObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     celadon = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"item:silph_scope"}),
@@ -121,8 +123,41 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
         facts=frozenset({"item:poke_flute"}),
         location="lavender_pokecenter",
     )
+    fuchsia_center = GameState(
+        GameMode.OVERWORLD,
+        facts=frozenset({"location:fuchsia_city"}),
+        location="fuchsia_pokecenter",
+    )
 
     assert tower.availability(celadon).executable
     assert not hideout.availability(celadon).executable
     assert fuchsia.availability(lavender).executable
     assert not tower.availability(lavender).executable
+    assert safari.availability(fuchsia_center).executable
+
+
+def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
+    calls: list[tuple[object, object, object]] = []
+
+    def fake_run(emulator, reader, executor, *, timing):
+        calls.append((emulator, reader, executor))
+        return _Report(actions_executed=1_111, frames_executed=222_222)
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_objective_skills.run_safari_chapter",
+        fake_run,
+    )
+    emulator = object()
+    reader = object()
+    executor = object()
+    skill = ObtainSurfObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+
+    result = skill.execute()
+
+    objective = COMPLETION_QUEST.objective("obtain_surf")
+    assert skill.specialist is objective.specialist
+    assert skill.expected_facts == objective.completion_facts
+    assert skill.additional_effect_facts == frozenset({"item:gold_teeth"})
+    assert result.actions_executed == 1_111
+    assert result.frames_executed == 222_222
+    assert calls == [(emulator, reader, executor)]

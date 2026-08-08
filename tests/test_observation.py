@@ -153,6 +153,12 @@ def test_celadon_center_has_public_location_and_objective_fact() -> None:
     assert "location:celadon_city" in semantic_facts(raw)
 
 
+def test_gold_teeth_have_a_semantic_skill_affordance_fact() -> None:
+    raw = replace(_raw(map_id=MapId.FUCHSIA_POKECENTER), bag_item_ids=(ItemId.GOLD_TEETH,))
+
+    assert "item:gold_teeth" in semantic_facts(raw)
+
+
 def test_reader_hides_pregame_scratch_state() -> None:
     memory = RecordingMemory(
         {

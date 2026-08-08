@@ -14,6 +14,7 @@ from pokemon_red_completion.objective_skills import (
 )
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.quest import Specialist
+from pokemon_red_completion.safari import SafariTiming, run_safari_chapter
 from pokemon_red_completion.tower import TowerTiming, run_tower_chapter
 
 
@@ -140,6 +141,51 @@ class ReachFuchsiaObjectiveSkill:
 
     def execute(self) -> ObjectiveSkillExecution:
         report = run_fuchsia_chapter(
+            self.emulator,
+            self.reader,
+            self.executor,
+            timing=self.timing,
+        )
+        return ObjectiveSkillExecution(
+            actions_executed=report.actions_executed,
+            frames_executed=report.frames_executed,
+            evidence=report.public_dict(),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class ObtainSurfObjectiveSkill:
+    """Execute the qualified Safari Zone traversal and Surf lesson."""
+
+    emulator: EmulatorState
+    reader: PokemonRedStateReader
+    executor: ChapterExecutor
+    timing: SafariTiming = SafariTiming()
+    objective_id: str = "obtain_surf"
+    specialist: Specialist = Specialist.NAVIGATION
+    expected_facts: frozenset[str] = frozenset({"move:surf_available"})
+    additional_effect_facts: frozenset[str] = frozenset({"item:gold_teeth"})
+    max_actions: int = 5_000
+    max_frames: int = 3_000_000
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        executable = (
+            state.mode.value == "overworld"
+            and state.location == "fuchsia_pokecenter"
+            and "location:fuchsia_city" in state.facts
+            and "move:surf_available" not in state.facts
+        )
+        return ObjectiveSkillAvailability(
+            executable,
+            (
+                "Observed the pre-Safari Fuchsia Center boundary."
+                if executable
+                else "Requires Fuchsia Center before Surf is obtained."
+            ),
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        report = run_safari_chapter(
             self.emulator,
             self.reader,
             self.executor,

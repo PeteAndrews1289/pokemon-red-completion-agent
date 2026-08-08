@@ -4706,6 +4706,8 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         facts.add("item:silph_scope")
     if ItemId.POKE_FLUTE in items or _event(events, EventFlag.GOT_POKE_FLUTE):
         facts.add("item:poke_flute")
+    if ItemId.GOLD_TEETH in items:
+        facts.add("item:gold_teeth")
     if ItemId.SECRET_KEY in items:
         facts.add("item:secret_key")
     if ItemId.HM01_CUT in items or _event(events, EventFlag.GOT_HM01):
