@@ -28,7 +28,7 @@ demonstrations and a referee; it is not the final autonomous player.
 | Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
 | Learned battle control | Model-controlled Red battle qualifications with fail-closed safety and no disagreement fallback | Scripted curriculum; cross-title battle evaluation is still pending |
 | Learned objective dispatch | One uninterrupted captured-state loop reached Hall of Fame through 20 model dispatches | Nineteen dispatches were singletons; mechanics were fixed skills |
-| Learned training control | The trainee/venue ranker beat its shape baseline, passed causal control, then controlled 114,831 choices inside the portable Blaine objective | One captured Red training slice; navigation, menus, recovery, and battle mechanics remain authored |
+| Learned training control | The trainee/venue ranker beat its shape baseline, passed causal and portable control, then completed one clean-power Hall-of-Fame rehearsal with 114,831 controlled choices and 400 disagreements | One uncounted fixed-route Red root; navigation, menus, recovery, and battle mechanics remain authored |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |
 
