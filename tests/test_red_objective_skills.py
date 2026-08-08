@@ -26,6 +26,7 @@ from pokemon_red_completion.red_objective_skills import (
     ReachFuchsiaObjectiveSkill,
     ReachSaffronObjectiveSkill,
     RocketHideoutObjectiveSkill,
+    build_red_midgame_objective_skill_registry,
 )
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.training_control import TrainingControlAction
@@ -38,6 +39,62 @@ class _Report:
 
     def public_dict(self) -> dict[str, object]:
         return {"status": "ok", "trainers": 5}
+
+
+def test_midgame_registry_has_one_canonical_skill_for_every_composite_boundary() -> None:
+    registry = build_red_midgame_objective_skill_registry(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+    )
+
+    assert tuple(
+        objective_id
+        for objective_id in (
+            "clear_rocket_hideout",
+            "rescue_fuji",
+            "reach_fuchsia",
+            "obtain_surf",
+            "defeat_koga",
+            "obtain_strength",
+            "defeat_erika",
+            "reach_saffron",
+            "liberate_silph",
+            "defeat_sabrina",
+            "reach_cinnabar",
+            "obtain_secret_key",
+            "defeat_blaine",
+            "defeat_giovanni",
+            "cross_victory_road",
+            "defeat_lorelei",
+            "defeat_bruno",
+            "defeat_agatha",
+            "defeat_lance",
+            "defeat_champion",
+        )
+        if registry.get(objective_id) is not None
+    ) == (
+        "clear_rocket_hideout",
+        "rescue_fuji",
+        "reach_fuchsia",
+        "obtain_surf",
+        "defeat_koga",
+        "obtain_strength",
+        "defeat_erika",
+        "reach_saffron",
+        "liberate_silph",
+        "defeat_sabrina",
+        "reach_cinnabar",
+        "obtain_secret_key",
+        "defeat_blaine",
+        "defeat_giovanni",
+        "cross_victory_road",
+        "defeat_lorelei",
+        "defeat_bruno",
+        "defeat_agatha",
+        "defeat_lance",
+        "defeat_champion",
+    )
 
 
 def test_red_hideout_skill_matches_graph_and_preserves_mechanics_evidence(monkeypatch) -> None:

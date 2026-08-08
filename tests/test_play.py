@@ -1290,11 +1290,11 @@ def test_qualified_progress_emits_one_legal_label_for_every_completion_objective
     assert recorder.recording_failures == 0
 
 
-def test_objective_model_progress_requires_every_live_objective_boundary() -> None:
+def test_objective_model_progress_scores_every_fixed_boundary_without_answer_labels() -> None:
     class Policy:
         def __init__(self) -> None:
             self.completed: list[str] = []
-            self.authorized: list[str] = []
+            self.dispatched: list[str] = []
 
         @property
         def completed_objective_count(self) -> int:
@@ -1303,12 +1303,12 @@ def test_objective_model_progress_requires_every_live_objective_boundary() -> No
         def complete(self, objective_id: str) -> None:
             self.completed.append(objective_id)
 
-        def authorize(self, objective_id: str) -> str:
-            self.authorized.append(objective_id)
+        def dispatch_fixed(self, objective_id: str) -> str:
+            self.dispatched.append(objective_id)
             return objective_id
 
     policy = Policy()
-    policy.authorize(QUALIFIED_OBJECTIVE_SEQUENCE[0])
+    policy.dispatch_fixed(QUALIFIED_OBJECTIVE_SEQUENCE[0])
     emit = _objective_model_progress_bridge(None, policy)  # type: ignore[arg-type]
     for completed, _ in dict(QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS).items():
         emit(
@@ -1321,7 +1321,7 @@ def test_objective_model_progress_requires_every_live_objective_boundary() -> No
             )
         )
 
-    assert tuple(policy.authorized) == QUALIFIED_OBJECTIVE_SEQUENCE
+    assert tuple(policy.dispatched) == QUALIFIED_OBJECTIVE_SEQUENCE
     assert tuple(policy.completed) == QUALIFIED_OBJECTIVE_SEQUENCE
 
 
@@ -1557,6 +1557,28 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "model_had_execution_authority": True,
             "controlled_decisions": 1,
             "teacher_fallback_on_model_disagreement": False,
+        },
+    ).passed
+    assert replace(
+        report,
+        objective_policy_report={
+            "authorized_decisions": 0,
+            "completed_objectives": len(COMPLETION_QUEST),
+            "expected_answer_labels_supplied": 0,
+            "fixed_dispatch_decisions": len(COMPLETION_QUEST),
+            "learned_choice_decisions": 0,
+            "teacher_fallbacks": 0,
+        },
+    ).passed
+    assert not replace(
+        report,
+        objective_policy_report={
+            "authorized_decisions": 0,
+            "completed_objectives": len(COMPLETION_QUEST),
+            "expected_answer_labels_supplied": 0,
+            "fixed_dispatch_decisions": len(COMPLETION_QUEST) - 1,
+            "learned_choice_decisions": 0,
+            "teacher_fallbacks": 0,
         },
     ).passed
     assert public["schema"] == "qualified-play-v26"

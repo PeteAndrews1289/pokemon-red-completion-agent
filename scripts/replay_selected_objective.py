@@ -22,7 +22,6 @@ from pokemon_red_completion.collection_protocol import (
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import FrameSafeExecutor
 from pokemon_red_completion.learned_planner_policy import ModelObjectivePolicy
-from pokemon_red_completion.objective_skills import ObjectiveSkill, ObjectiveSkillRegistry
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.planner_model import load_objective_model_artifact
 from pokemon_red_completion.planner_semantics import ObjectiveFeatureProjector
@@ -38,26 +37,7 @@ from pokemon_red_completion.provenance import (
 )
 from pokemon_red_completion.quest import quest_graph_payload
 from pokemon_red_completion.red_objective_skills import (
-    CrossVictoryRoadObjectiveSkill,
-    DefeatAgathaObjectiveSkill,
-    DefeatBlaineObjectiveSkill,
-    DefeatBrunoObjectiveSkill,
-    DefeatChampionObjectiveSkill,
-    DefeatErikaObjectiveSkill,
-    DefeatGiovanniObjectiveSkill,
-    DefeatKogaObjectiveSkill,
-    DefeatLanceObjectiveSkill,
-    DefeatLoreleiObjectiveSkill,
-    DefeatSabrinaObjectiveSkill,
-    LiberateSilphObjectiveSkill,
-    ObtainSecretKeyObjectiveSkill,
-    ObtainStrengthObjectiveSkill,
-    ObtainSurfObjectiveSkill,
-    PokemonTowerObjectiveSkill,
-    ReachCinnabarObjectiveSkill,
-    ReachFuchsiaObjectiveSkill,
-    ReachSaffronObjectiveSkill,
-    RocketHideoutObjectiveSkill,
+    build_red_midgame_objective_skill_registry,
 )
 from pokemon_red_completion.red_player_observer import CapturedPokemonRedObserver
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
@@ -247,46 +227,24 @@ def main(argv: list[str] | None = None) -> int:
             snapshot_provider=PokemonRedObservationEncoder.from_state_reader(reader),
         )
         executor = FrameSafeExecutor(emulator, DEFAULT_NEW_GAME_TIMING.controller_timing())
-        skills: list[ObjectiveSkill] = [
-            RocketHideoutObjectiveSkill(emulator, reader, executor),
-            PokemonTowerObjectiveSkill(emulator, reader, executor),
-            ReachFuchsiaObjectiveSkill(emulator, reader, executor),
-            ObtainSurfObjectiveSkill(emulator, reader, executor),
-            DefeatKogaObjectiveSkill(emulator, reader, executor),
-            ObtainStrengthObjectiveSkill(emulator, reader, executor),
-            DefeatErikaObjectiveSkill(emulator, reader, executor),
-            ReachSaffronObjectiveSkill(emulator, reader, executor),
-            LiberateSilphObjectiveSkill(emulator, reader, executor),
-            DefeatSabrinaObjectiveSkill(emulator, reader, executor),
-            ReachCinnabarObjectiveSkill(emulator, reader, executor),
-            ObtainSecretKeyObjectiveSkill(emulator, reader, executor),
-            DefeatBlaineObjectiveSkill(
-                emulator,
-                reader,
-                executor,
-                training_decision_authority=(
-                    training_decision_authority if training_model is not None else None
-                ),
-                training_candidate_decision_sink=(
-                    training_candidate_audit.observe
-                    if training_candidate_audit is not None
-                    and not args.training_candidate_authority
-                    else None
-                ),
-                training_candidate_decision_authority=(
-                    training_candidate_decision_authority
-                    if args.training_candidate_authority
-                    else None
-                ),
+        skills = build_red_midgame_objective_skill_registry(
+            emulator,
+            reader,
+            executor,
+            training_decision_authority=(
+                training_decision_authority if training_model is not None else None
             ),
-            DefeatGiovanniObjectiveSkill(emulator, reader, executor),
-            CrossVictoryRoadObjectiveSkill(emulator, reader, executor),
-            DefeatLoreleiObjectiveSkill(emulator, reader, executor),
-            DefeatBrunoObjectiveSkill(emulator, reader, executor),
-            DefeatAgathaObjectiveSkill(emulator, reader, executor),
-            DefeatLanceObjectiveSkill(emulator, reader, executor),
-            DefeatChampionObjectiveSkill(emulator, reader, executor),
-        ]
+            training_candidate_decision_sink=(
+                training_candidate_audit.observe
+                if training_candidate_audit is not None and not args.training_candidate_authority
+                else None
+            ),
+            training_candidate_decision_authority=(
+                training_candidate_decision_authority
+                if args.training_candidate_authority
+                else None
+            ),
+        )
         loop = PortablePlayerLoop(
             graph=COMPLETION_QUEST,
             observer=observer,
@@ -296,7 +254,7 @@ def main(argv: list[str] | None = None) -> int:
             # falling back to a generic or fixed-route planner.
             specialists=SpecialistRegistry(()),
             executor=executor,
-            objective_skills=ObjectiveSkillRegistry(skills),
+            objective_skills=skills,
         )
         steps = tuple(loop.step() for _ in range(args.max_decisions))
         after = observer.observe()

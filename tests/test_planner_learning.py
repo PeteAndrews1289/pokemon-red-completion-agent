@@ -322,6 +322,33 @@ def test_live_policy_authorizes_model_choice_and_rejects_route_disagreement() ->
     assert policy.public_dict()["teacher_fallbacks"] == 0
 
 
+def test_live_policy_scores_fixed_dispatch_outside_learned_choice_denominator() -> None:
+    provider = _Provider()
+    projector = ObjectiveFeatureProjector(COMPLETION_QUEST)
+    policy = ModelObjectivePolicy(
+        model=ObjectiveRanker(
+            feature_names=projector.feature_names,
+            weights=[0.0] * len(projector.feature_names),
+        ),
+        graph=COMPLETION_QUEST,
+        snapshot_provider=provider,
+    )
+
+    for objective_id in QUALIFIED_OBJECTIVE_SEQUENCE[:8]:
+        assert policy.dispatch_fixed(objective_id) == objective_id
+        policy.complete(objective_id)
+
+    report = policy.public_dict()
+    assert report["fixed_dispatch_decisions"] == 8
+    assert report["learned_choice_decisions"] == 0
+    assert report["expected_answer_labels_supplied"] == 0
+    assert report["selected_decisions"] == 0
+    assert report["authorized_decisions"] == 0
+    assert report["singleton_decisions"] == 8
+    assert report["branching_decisions"] == 0
+    assert report["route_dispatch_mode"] == "model_scored_fixed_singleton_dispatches"
+
+
 def test_live_policy_selects_among_legal_objectives_without_expected_route_label() -> None:
     graph = QuestGraph(
         (

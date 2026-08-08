@@ -93,6 +93,11 @@ class ObjectiveSkillRegistry:
     def get(self, objective_id: str) -> ObjectiveSkill | None:
         return self._by_objective.get(objective_id)
 
+    def skills(self) -> tuple[ObjectiveSkill, ...]:
+        """Return the immutable registration order for safe registry composition."""
+
+        return tuple(self._by_objective.values())
+
     def require_for(self, objective: Objective) -> ObjectiveSkill:
         skill = self.get(objective.id)
         if skill is None:

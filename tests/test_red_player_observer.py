@@ -8,6 +8,7 @@ from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
 from pokemon_red_completion.observation import ItemId, MapId, RawGameState
 from pokemon_red_completion.red_player_observer import (
     CapturedPokemonRedObserver,
+    LivePokemonRedObserver,
     ResumedStateError,
 )
 from pokemon_red_completion.route import COMPLETION_QUEST
@@ -110,3 +111,44 @@ def test_resumed_observer_does_not_latch_transient_inventory_affordances() -> No
 
     assert "item:gold_teeth" not in state.facts
     assert "location:celadon_city" in state.facts
+
+
+def test_live_observer_latches_only_consistent_verified_quest_facts() -> None:
+    reader = _Reader(replace(_celadon_raw(), game_started=False, map_id=None))
+    observer = LivePokemonRedObserver(reader, COMPLETION_QUEST)
+
+    assert observer.observe().facts == frozenset()
+    with pytest.raises(ResumedStateError, match="prerequisites"):
+        observer.latch_verified_facts(frozenset({"badge:boulder"}))
+    with pytest.raises(ResumedStateError, match="outside the quest contract"):
+        observer.latch_verified_facts(frozenset({"private:route_hint"}))
+
+    early_ids = (
+        "power_on",
+        "begin_adventure",
+        "choose_starter",
+        "receive_pokedex",
+        "reach_pewter",
+        "defeat_brock",
+        "reach_cerulean",
+        "help_bill",
+        "defeat_misty",
+        "reach_vermilion",
+        "obtain_cut",
+        "defeat_surge",
+        "reach_lavender",
+        "reach_celadon",
+    )
+    observer.latch_verified_facts(
+        frozenset(
+            fact
+            for objective_id in early_ids
+            for fact in COMPLETION_QUEST.objective(objective_id).completion_facts
+        )
+    )
+    reader.raw = _celadon_raw()
+
+    state = observer.observe()
+
+    assert set(early_ids).issubset(COMPLETION_QUEST.completed_ids(state))
+    assert observer.public_dict()["latched_fact_count"] == len(early_ids)

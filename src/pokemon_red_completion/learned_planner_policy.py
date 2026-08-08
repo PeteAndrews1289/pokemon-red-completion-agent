@@ -36,6 +36,7 @@ class ModelObjectivePolicy:
     decisions: int = field(default=0, init=False)
     authorized_decisions: int = field(default=0, init=False)
     selected_decisions: int = field(default=0, init=False)
+    fixed_dispatch_decisions: int = field(default=0, init=False)
     confidence_total: float = field(default=0.0, init=False)
     minimum_confidence: float = field(default=1.0, init=False)
     candidate_total: int = field(default=0, init=False)
@@ -74,6 +75,30 @@ class ModelObjectivePolicy:
         self.selected_decisions += 1
         return selected
 
+    def dispatch_fixed(self, objective_id: str) -> str:
+        """Score one fixed executable segment without receiving an answer label.
+
+        The deterministic clean-power runner cannot yet reorder its chapter
+        calls.  This boundary therefore exposes exactly one executable
+        objective to the model and records the result outside the learned
+        selection denominator.  Unlike :meth:`authorize`, it never ranks the
+        full legal set and never compares the prediction with an expected
+        answer after inference.
+        """
+
+        objective = self.graph.objective(objective_id)
+        state = GameState(
+            mode=GameMode.OVERWORLD,
+            facts=frozenset(self._completion_facts),
+        )
+        selected = self._choose(
+            state,
+            expected_objective_id=None,
+            candidates=(objective,),
+        )
+        self.fixed_dispatch_decisions += 1
+        return selected
+
     def _choose(
         self,
         state: GameState,
@@ -93,7 +118,12 @@ class ModelObjectivePolicy:
             facts=tuple(sorted(set(source.facts).union(state.facts, self._completion_facts))),
             features=source.features,
         )
-        graph_legal = self.graph.available_objectives(state)
+        authoritative_state = GameState(
+            mode=state.mode,
+            facts=frozenset(set(state.facts).union(self._completion_facts)),
+            location=state.location,
+        )
+        graph_legal = self.graph.available_objectives(authoritative_state)
         if candidates is None:
             legal = graph_legal
         else:
@@ -179,6 +209,9 @@ class ModelObjectivePolicy:
             "decisions": self.decisions,
             "authorized_decisions": self.authorized_decisions,
             "selected_decisions": self.selected_decisions,
+            "fixed_dispatch_decisions": self.fixed_dispatch_decisions,
+            "learned_choice_decisions": self.selected_decisions,
+            "expected_answer_labels_supplied": self.authorized_decisions,
             "completed_objectives": self.completed_objective_count,
             "mean_confidence": mean_confidence,
             "minimum_confidence": self.minimum_confidence if self.decisions else 0.0,
@@ -195,6 +228,10 @@ class ModelObjectivePolicy:
             "route_dispatch_mode": (
                 "model_selected_specialists"
                 if self.selected_decisions
-                else "model_authorized_fixed_specialists"
+                else (
+                    "model_scored_fixed_singleton_dispatches"
+                    if self.fixed_dispatch_decisions
+                    else "model_authorized_fixed_specialists"
+                )
             ),
         }

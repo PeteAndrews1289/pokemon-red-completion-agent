@@ -478,6 +478,48 @@ ProgressSink = Callable[[QualifiedPlayProgress], None]
 
 
 @dataclass(frozen=True, slots=True)
+class OaksErrandChapterReport:
+    """Reusable post-starter chapter through the verified Pokédex boundary."""
+
+    rival_defeated: RawGameState
+    rival_evidence: OaksErrandState
+    saw_trainer_battle: bool
+    viridian_reached: RawGameState
+    parcel_received: RawGameState
+    parcel_evidence: OaksErrandState
+    pallet_returned: RawGameState
+    pokedex_received: RawGameState
+    pokedex_evidence: OaksErrandState
+    frames_executed: int
+    actions_executed: int
+
+    @property
+    def passed(self) -> bool:
+        return (
+            is_rival_victory_verified(
+                self.rival_evidence,
+                saw_trainer_battle=self.saw_trainer_battle,
+            )
+            and is_parcel_verified(self.parcel_evidence)
+            and is_pokedex_verified(self.pokedex_evidence)
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "actions_executed": self.actions_executed,
+            "frames_executed": self.frames_executed,
+            "parcel_verified": is_parcel_verified(self.parcel_evidence),
+            "pokedex_verified": is_pokedex_verified(self.pokedex_evidence),
+            "rival_victory_verified": is_rival_victory_verified(
+                self.rival_evidence,
+                saw_trainer_battle=self.saw_trainer_battle,
+            ),
+            "schema": "pokemon-red-oaks-errand-chapter-v1",
+            "status": "ok" if self.passed else "failed",
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class QualifiedPlayReport:
     rom: RomFingerprint
     pyboy_version: str
@@ -582,13 +624,7 @@ class QualifiedPlayReport:
             )
             and (
                 self.objective_policy_report is None
-                or (
-                    self.objective_policy_report.get("authorized_decisions")
-                    == len(COMPLETION_QUEST)
-                    and self.objective_policy_report.get("completed_objectives")
-                    == len(COMPLETION_QUEST)
-                    and self.objective_policy_report.get("teacher_fallbacks") == 0
-                )
+                or self._objective_policy_passed
             )
             and (
                 not self.training_candidate_authority_required
@@ -626,6 +662,29 @@ class QualifiedPlayReport:
             and isinstance(controlled_decisions, int)
             and controlled_decisions > 0
             and report.get("teacher_fallback_on_model_disagreement") is False
+        )
+
+    @property
+    def _objective_policy_passed(self) -> bool:
+        report = self.objective_policy_report
+        if report is None:
+            return False
+        common = (
+            report.get("completed_objectives") == len(COMPLETION_QUEST)
+            and report.get("teacher_fallbacks") == 0
+        )
+        if not common:
+            return False
+        # Historical receipts used expected-answer authorization. New runs
+        # score the same fixed route as singleton dispatches and explicitly
+        # keep them outside the learned-choice denominator.
+        return (
+            report.get("authorized_decisions") == len(COMPLETION_QUEST)
+            or (
+                report.get("fixed_dispatch_decisions") == len(COMPLETION_QUEST)
+                and report.get("expected_answer_labels_supplied") == 0
+                and report.get("learned_choice_decisions") == 0
+            )
         )
 
     def public_dict(self) -> dict[str, object]:
@@ -826,6 +885,97 @@ def is_pokedex_verified(state: OaksErrandState) -> bool:
     return state.pokedex_snapshot
 
 
+def run_oaks_errand_chapter(
+    emulator: PyBoyAdapter,
+    reader: PokemonRedStateReader,
+    executor: CountingExecutor,
+    *,
+    timing: QualifiedPlayTiming = DEFAULT_QUALIFIED_PLAY_TIMING,
+    progress: ProgressSink | None = None,
+) -> OaksErrandChapterReport:
+    """Continue the live opening boundary through Oak's verified Pokédex handoff."""
+
+    start_frames = emulator.frame_count
+    start_actions = executor.actions_executed
+    _move(executor, reader, LAB_RIVAL_TRIGGER_DIRECTIONS, "lab rival trigger")
+    _expect_position(reader.read(), MapId.OAKS_LAB, 4, 6, "lab rival trigger")
+    _wait(executor, timing.rival_trigger_wait_frames)
+    rival_raw, rival_evidence, saw_trainer_battle = _defeat_lab_rival(
+        executor,
+        reader,
+        timing,
+    )
+    _emit(progress, emulator, "rival_defeated", "Defeated the lab rival", 7)
+
+    _move(executor, reader, LAB_EXIT_DIRECTIONS, "Oak's Lab exit")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.PALLET_TOWN, 12, 12, "Oak's Lab exit")
+    _move(executor, reader, PALLET_TO_ROUTE_1_DIRECTIONS, "Pallet Town north route")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.ROUTE_1, 10, 35, "Route 1 south entrance")
+
+    _wait(executor, timing.route_1_north_seed_wait_frames)
+    _move(executor, reader, ROUTE_1_TO_VIRIDIAN_DIRECTIONS, "Route 1 northbound")
+    _wait(executor, timing.transition_wait_frames)
+    viridian = reader.read()
+    _expect_position(viridian, MapId.VIRIDIAN_CITY, 21, 35, "Viridian City entrance")
+    _emit(progress, emulator, "viridian_reached", "Reached Viridian City", 8)
+
+    _move(executor, reader, VIRIDIAN_TO_MART_DIRECTIONS, "Viridian Mart route")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.VIRIDIAN_MART, 3, 7, "Viridian Mart entrance")
+    _wait(executor, timing.mart_prompt_wait_frames)
+    parcel_raw, parcel_evidence = _receive_parcel(executor, reader, timing)
+    _emit(progress, emulator, "parcel_received", "Received Oak's Parcel", 9)
+
+    _move(executor, reader, MART_EXIT_DIRECTIONS, "Viridian Mart exit")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.VIRIDIAN_CITY, 29, 20, "Viridian Mart exterior")
+    _move(executor, reader, VIRIDIAN_TO_ROUTE_1_DIRECTIONS, "Viridian City south route")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.ROUTE_1, 11, 0, "Route 1 north entrance")
+
+    _wait(executor, timing.route_1_south_seed_wait_frames)
+    _move(executor, reader, ROUTE_1_TO_PALLET_DIRECTIONS, "Route 1 southbound")
+    _wait(executor, timing.transition_wait_frames)
+    pallet_returned = reader.read()
+    _expect_position(pallet_returned, MapId.PALLET_TOWN, 10, 0, "Pallet Town return")
+    _emit(progress, emulator, "pallet_returned", "Returned safely to Pallet Town", 10)
+
+    _move(executor, reader, PALLET_TO_LAB_DIRECTIONS, "Professor Oak return")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.OAKS_LAB, 5, 11, "Oak's Lab return")
+    _move(executor, reader, LAB_TO_OAK_DIRECTIONS, "Professor Oak approach")
+    _expect_position(reader.read(), MapId.OAKS_LAB, 5, 3, "Professor Oak")
+    executor.execute(MacroAction(MacroActionKind.INTERACT))
+    _wait(executor, timing.dialogue_wait_frames)
+    pokedex_raw, pokedex_evidence = _receive_pokedex(executor, reader, timing)
+    _emit(
+        progress,
+        emulator,
+        "pokedex_received",
+        "Delivered the parcel and received the Pokédex",
+        11,
+    )
+
+    report = OaksErrandChapterReport(
+        rival_defeated=rival_raw,
+        rival_evidence=rival_evidence,
+        saw_trainer_battle=saw_trainer_battle,
+        viridian_reached=viridian,
+        parcel_received=parcel_raw,
+        parcel_evidence=parcel_evidence,
+        pallet_returned=pallet_returned,
+        pokedex_received=pokedex_raw,
+        pokedex_evidence=pokedex_evidence,
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=executor.actions_executed - start_actions,
+    )
+    if not report.passed:
+        raise QualifiedPlayError("Oak's errand evidence failed its public contract.")
+    return report
+
+
 def _training_candidate_runtime_report(
     audit: TrainingCandidateShadowAudit | None,
     *,
@@ -993,8 +1143,8 @@ def run_qualified_play(
                 snapshot_provider=snapshot_encoder,
                 confidence_threshold=objective_model_confidence_threshold,
             )
-            objective_policy.authorize(QUALIFIED_OBJECTIVE_SEQUENCE[0])
-            effective_progress = _objective_model_progress_bridge(
+            objective_policy.dispatch_fixed(QUALIFIED_OBJECTIVE_SEQUENCE[0])
+            effective_progress = _objective_model_fixed_dispatch_bridge(
                 effective_progress,
                 objective_policy,
             )
@@ -1056,103 +1206,22 @@ def run_qualified_play(
         )
         executor = CountingExecutor(base_executor)
 
-        _move(executor, reader, LAB_RIVAL_TRIGGER_DIRECTIONS, "lab rival trigger")
-        _expect_position(reader.read(), MapId.OAKS_LAB, 4, 6, "lab rival trigger")
-        _wait(executor, play_timing.rival_trigger_wait_frames)
-        rival_raw, rival_evidence, saw_trainer_battle = _defeat_lab_rival(
-            executor,
-            reader,
-            play_timing,
-        )
-        _emit(progress, emulator, "rival_defeated", "Defeated the lab rival", 7)
-
-        _move(executor, reader, LAB_EXIT_DIRECTIONS, "Oak's Lab exit")
-        _wait(executor, play_timing.transition_wait_frames)
-        _expect_position(reader.read(), MapId.PALLET_TOWN, 12, 12, "Oak's Lab exit")
-
-        _move(
-            executor,
-            reader,
-            PALLET_TO_ROUTE_1_DIRECTIONS,
-            "Pallet Town north route",
-        )
-        _wait(executor, play_timing.transition_wait_frames)
-        _expect_position(reader.read(), MapId.ROUTE_1, 10, 35, "Route 1 south entrance")
-
-        _wait(executor, play_timing.route_1_north_seed_wait_frames)
-        _move(
-            executor,
-            reader,
-            ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
-            "Route 1 northbound",
-        )
-        _wait(executor, play_timing.transition_wait_frames)
-        viridian = reader.read()
-        _expect_position(viridian, MapId.VIRIDIAN_CITY, 21, 35, "Viridian City entrance")
-        _emit(progress, emulator, "viridian_reached", "Reached Viridian City", 8)
-
-        _move(executor, reader, VIRIDIAN_TO_MART_DIRECTIONS, "Viridian Mart route")
-        _wait(executor, play_timing.transition_wait_frames)
-        _expect_position(reader.read(), MapId.VIRIDIAN_MART, 3, 7, "Viridian Mart entrance")
-        _wait(executor, play_timing.mart_prompt_wait_frames)
-        parcel_raw, parcel_evidence = _receive_parcel(
-            executor,
-            reader,
-            play_timing,
-        )
-        _emit(progress, emulator, "parcel_received", "Received Oak's Parcel", 9)
-
-        _move(executor, reader, MART_EXIT_DIRECTIONS, "Viridian Mart exit")
-        _wait(executor, play_timing.transition_wait_frames)
-        _expect_position(reader.read(), MapId.VIRIDIAN_CITY, 29, 20, "Viridian Mart exterior")
-
-        _move(
-            executor,
-            reader,
-            VIRIDIAN_TO_ROUTE_1_DIRECTIONS,
-            "Viridian City south route",
-        )
-        _wait(executor, play_timing.transition_wait_frames)
-        _expect_position(reader.read(), MapId.ROUTE_1, 11, 0, "Route 1 north entrance")
-
-        _wait(executor, play_timing.route_1_south_seed_wait_frames)
-        _move(
-            executor,
-            reader,
-            ROUTE_1_TO_PALLET_DIRECTIONS,
-            "Route 1 southbound",
-        )
-        _wait(executor, play_timing.transition_wait_frames)
-        pallet_returned = reader.read()
-        _expect_position(pallet_returned, MapId.PALLET_TOWN, 10, 0, "Pallet Town return")
-        _emit(
-            progress,
+        oaks_errand = run_oaks_errand_chapter(
             emulator,
-            "pallet_returned",
-            "Returned safely to Pallet Town",
-            10,
-        )
-
-        _move(executor, reader, PALLET_TO_LAB_DIRECTIONS, "Professor Oak return")
-        _wait(executor, play_timing.transition_wait_frames)
-        _expect_position(reader.read(), MapId.OAKS_LAB, 5, 11, "Oak's Lab return")
-        _move(executor, reader, LAB_TO_OAK_DIRECTIONS, "Professor Oak approach")
-        _expect_position(reader.read(), MapId.OAKS_LAB, 5, 3, "Professor Oak")
-
-        executor.execute(MacroAction(MacroActionKind.INTERACT))
-        _wait(executor, play_timing.dialogue_wait_frames)
-        pokedex_raw, pokedex_evidence = _receive_pokedex(
-            executor,
             reader,
-            play_timing,
+            executor,
+            timing=play_timing,
+            progress=progress,
         )
-        _emit(
-            progress,
-            emulator,
-            "pokedex_received",
-            "Delivered the parcel and received the Pokédex",
-            11,
-        )
+        rival_raw = oaks_errand.rival_defeated
+        rival_evidence = oaks_errand.rival_evidence
+        saw_trainer_battle = oaks_errand.saw_trainer_battle
+        viridian = oaks_errand.viridian_reached
+        parcel_raw = oaks_errand.parcel_received
+        parcel_evidence = oaks_errand.parcel_evidence
+        pallet_returned = oaks_errand.pallet_returned
+        pokedex_raw = oaks_errand.pokedex_received
+        pokedex_evidence = oaks_errand.pokedex_evidence
 
         try:
             pewter = run_pewter_chapter(
@@ -2607,11 +2676,11 @@ def _trajectory_progress_bridge(
     return emit
 
 
-def _objective_model_progress_bridge(
+def _objective_model_fixed_dispatch_bridge(
     downstream: ProgressSink | None,
     policy: ModelObjectivePolicy,
 ) -> ProgressSink:
-    """Advance verifier facts and require the model to authorize every next objective."""
+    """Advance facts and score every fixed segment outside the learned denominator."""
 
     def emit(progress: QualifiedPlayProgress) -> None:
         if downstream is not None:
@@ -2623,9 +2692,14 @@ def _objective_model_progress_bridge(
             policy.complete(objective_id)
             completed_count = policy.completed_objective_count
             if completed_count < len(QUALIFIED_OBJECTIVE_SEQUENCE):
-                policy.authorize(QUALIFIED_OBJECTIVE_SEQUENCE[completed_count])
+                policy.dispatch_fixed(QUALIFIED_OBJECTIVE_SEQUENCE[completed_count])
 
     return emit
+
+
+# Kept as an import-compatible alias for historical tests and downstream tools.
+# The implementation no longer supplies an expected answer to ``authorize``.
+_objective_model_progress_bridge = _objective_model_fixed_dispatch_bridge
 
 
 def _emit(

@@ -26,6 +26,7 @@ from pokemon_red_completion.lorelei import run_lorelei_chapter
 from pokemon_red_completion.objective_skills import (
     ObjectiveSkillAvailability,
     ObjectiveSkillExecution,
+    ObjectiveSkillRegistry,
 )
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.quest import Specialist
@@ -920,3 +921,55 @@ class DefeatChampionObjectiveSkill:
             frames_executed=report.frames_executed,
             evidence=report.public_dict(),
         )
+
+
+def build_red_midgame_objective_skill_registry(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    training_decision_sink: Callable[[TrainingControlDecision], None] | None = None,
+    training_decision_authority: (
+        Callable[[TrainingControlDecision], TrainingControlAction] | None
+    ) = None,
+    training_candidate_decision_sink: (
+        Callable[[TrainingCandidateDecision], None] | None
+    ) = None,
+    training_candidate_decision_authority: (
+        Callable[[TrainingCandidateDecision], int] | None
+    ) = None,
+) -> ObjectiveSkillRegistry:
+    """Build the one canonical Celadon-to-Hall-of-Fame skill allow-list."""
+
+    return ObjectiveSkillRegistry(
+        (
+            RocketHideoutObjectiveSkill(emulator, reader, executor),
+            PokemonTowerObjectiveSkill(emulator, reader, executor),
+            ReachFuchsiaObjectiveSkill(emulator, reader, executor),
+            ObtainSurfObjectiveSkill(emulator, reader, executor),
+            DefeatKogaObjectiveSkill(emulator, reader, executor),
+            ObtainStrengthObjectiveSkill(emulator, reader, executor),
+            DefeatErikaObjectiveSkill(emulator, reader, executor),
+            ReachSaffronObjectiveSkill(emulator, reader, executor),
+            LiberateSilphObjectiveSkill(emulator, reader, executor),
+            DefeatSabrinaObjectiveSkill(emulator, reader, executor),
+            ReachCinnabarObjectiveSkill(emulator, reader, executor),
+            ObtainSecretKeyObjectiveSkill(emulator, reader, executor),
+            DefeatBlaineObjectiveSkill(
+                emulator,
+                reader,
+                executor,
+                training_decision_sink=training_decision_sink,
+                training_decision_authority=training_decision_authority,
+                training_candidate_decision_sink=training_candidate_decision_sink,
+                training_candidate_decision_authority=training_candidate_decision_authority,
+            ),
+            DefeatGiovanniObjectiveSkill(emulator, reader, executor),
+            CrossVictoryRoadObjectiveSkill(emulator, reader, executor),
+            DefeatLoreleiObjectiveSkill(emulator, reader, executor),
+            DefeatBrunoObjectiveSkill(emulator, reader, executor),
+            DefeatAgathaObjectiveSkill(emulator, reader, executor),
+            DefeatLanceObjectiveSkill(emulator, reader, executor),
+            DefeatChampionObjectiveSkill(emulator, reader, executor),
+        )
+    )
