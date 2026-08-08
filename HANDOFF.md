@@ -95,6 +95,9 @@ POKEMON_RED_ROM=<path> python scripts/capture_checkpoint.py \
 POKEMON_RED_ROM=<path> python scripts/replay_training.py --state <scratch>/mansion.state
 POKEMON_RED_ROM=<path> python scripts/replay_training.py --state <scratch>/mansion.state --swap-only
 POKEMON_RED_ROM=<path> python scripts/replay_training.py --state <scratch>/mansion.state --max-steps 40
+POKEMON_RED_ROM=<path> python scripts/capture_checkpoint.py \
+    --at "Bruno room ready" --out <scratch>/bruno.state
+POKEMON_RED_ROM=<path> python scripts/replay_bruno.py --state <scratch>/bruno.state
 ```
 
 `--max-steps` shrinks the policy's step budget so a spinning loop fails in seconds instead of
