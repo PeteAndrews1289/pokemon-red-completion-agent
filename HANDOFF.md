@@ -64,8 +64,11 @@ This section supersedes the older starting-point and test-count notes below.
   [portable receipt](docs/evidence/training-candidate-ranker-v1-portable-qualification-2026-08-08.json).
 - The clean-power `play` path now accepts the same exact-hash trainee/venue model in shadow or live
   authority mode, threads it through both party-development passes, records controlled decisions
-  and fallback status, and fails completion when requested authority never executes. This interface
-  is ROM-free tested but has **not** yet passed an uncounted clean-power runtime rehearsal.
+  and fallback status, and fails completion when requested authority never executes. Its uncounted
+  rehearsal passed **312/312 checkpoints, 36/36 objectives, and Hall of Fame** with 114,831
+  controlled choices, 400 executed disagreements, zero fallback, and a fully healed
+  60/55/55/55/55/55 party. See the
+  [rehearsal receipt](docs/evidence/training-candidate-ranker-v1-clean-power-rehearsal-2026-08-08.json).
 
 The immediate dependency order is now: build the multi-root clean-start Red evaluation
 infrastructure → run the
@@ -77,8 +80,8 @@ Do **not** open the ten counted clean-start roots yet. The
 three blocking interfaces: early-game portable skills are incomplete, the clean-start runner still
 uses expected-objective authorization over a fixed sequence, and its ordinary report is not one
 source/model/root-bound series envelope. The strategic-ranker injection is implemented but still
-needs the same uncounted rehearsal. Build those contracts and run that rehearsal before freezing
-the 8/10 campaign.
+needed runtime proof; that uncounted rehearsal now passes, but it did not launch inside the missing
+prospective envelope. Build the remaining contracts before freezing the 8/10 campaign.
 
 PR #8 is still intentionally draft and cleanly mergeable, but it now represents the whole
 accumulated project: 655 commits / 622 changed files versus `main`. Do not force-push or attempt a

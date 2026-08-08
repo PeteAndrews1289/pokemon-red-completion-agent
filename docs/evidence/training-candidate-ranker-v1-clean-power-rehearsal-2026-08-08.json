@@ -1,0 +1,99 @@
+{
+  "schema": "pokemon-training-candidate-clean-power-rehearsal-v1",
+  "status": "passed_uncounted_rehearsal",
+  "recorded_on": "2026-08-08",
+  "source": {
+    "git_commit": "3dbacc54c29a8728480870776ee66007f85fc19c",
+    "clean_before_and_after": true,
+    "published_before_launch": true
+  },
+  "runtime": {
+    "emulator": "PyBoy",
+    "emulator_version": "2.7.0",
+    "headless": true,
+    "human_input": false,
+    "save_state_loaded": false,
+    "save_on_exit": false,
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+  },
+  "model": {
+    "model_id": "pokemon.core.training.candidate-ranker.mlp.v1",
+    "model_file_sha256": "53104c999f0289f8a1dcef9816c34e6963963a047bf710a05544e383c328fdd3",
+    "canonical_model_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026",
+    "authority_choice_kinds": [
+      "trainee",
+      "venue"
+    ]
+  },
+  "private_report": {
+    "bytes": 391328,
+    "sha256": "422deb56767995cfcc2f1118d77d427973c61cb9a1b5e01ef384b6a8a80df7ba",
+    "published": false
+  },
+  "completion": {
+    "clean_power_on": true,
+    "semantic_checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "qualified_through": "enter_hall_of_fame",
+    "game_complete": true,
+    "controller_released": true,
+    "actions_executed": 638520,
+    "frames_executed": 45766774
+  },
+  "candidate_authority": {
+    "decisions": 114831,
+    "controlled_decisions": 114831,
+    "agreements": 114431,
+    "executed_disagreements": 400,
+    "accuracy": 0.9965166200764601,
+    "forced_decisions": 846,
+    "genuine_decisions": 113985,
+    "genuine_agreements": 113585,
+    "genuine_accuracy": 0.9964907663289029,
+    "trainee_decisions": 56340,
+    "venue_decisions": 58491,
+    "teacher_fallback_on_model_disagreement": false,
+    "model_had_execution_authority": true
+  },
+  "team_development": {
+    "battles": 1803,
+    "healing_trips": 1048,
+    "final_levels": [
+      60,
+      55,
+      55,
+      55,
+      55,
+      55
+    ],
+    "final_forms_complete": true,
+    "zero_faints": true,
+    "terminal_fully_healed": true,
+    "terminal_status_free": true
+  },
+  "gates": {
+    "exact_model_file_authenticated": true,
+    "clean_power_completion_contract_passed": true,
+    "candidate_authority_nonzero": true,
+    "both_choice_kinds_exercised": true,
+    "genuine_choices_nonzero": true,
+    "executed_disagreements_nonzero": true,
+    "teacher_fallback_zero": true,
+    "balanced_party_ready": true,
+    "hall_of_fame_verified": true
+  },
+  "claim": "The frozen identity-free trainee/venue ranker owned every exposed strategic candidate choice inside one uncounted clean-power fixed-route Red rehearsal and the same process reached the Hall of Fame.",
+  "limitations": [
+    "uncounted_single_root_rehearsal",
+    "fixed_teacher_authored_objective_sequence",
+    "teacher_authored_navigation_menus_recovery_and_battle_mechanics",
+    "no_objective_model_was_deployed",
+    "no_battle_model_was_deployed",
+    "raw_report_did_not_launch_inside_a_preregistered_source_model_root_series_envelope",
+    "not_an_8_of_10_success_rate",
+    "not_cross_title_transfer",
+    "not_promotion_eligible"
+  ],
+  "promotion_eligible": false,
+  "counted_campaign_may_start": false
+}

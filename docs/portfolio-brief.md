@@ -28,6 +28,7 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | State-dependent training strategy | 99.9004% sealed validation versus 95.6615% for the shape-only baseline | One Red training curriculum; no cross-title result |
 | Isolated strategic authority | 119,668 controlled trainee/venue choices, 191 executed teacher disagreements, all six level 55, zero faints | Captured-state training lesson |
 | Portable strategic authority | 114,831 controlled choices, 400 executed disagreements, 1,803 development battles, no fallback; fresh observation opened Giovanni | Singleton objective dispatch and authored mechanics remain |
+| Clean-power strategic rehearsal | 312 checkpoints, 36 objectives, and Hall of Fame with 114,831 controlled choices and 400 disagreements | One uncounted fixed-route root; no prospective series envelope |
 | Repository gate | 2,026 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
 
 ## Architecture in one minute

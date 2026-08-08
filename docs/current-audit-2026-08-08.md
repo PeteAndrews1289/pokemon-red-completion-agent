@@ -109,6 +109,12 @@ observation added the Volcano Badge and opened Giovanni. Ten independent integra
 The objective choice was a singleton and mechanics remained authored, so this is captured-state
 portable composition rather than clean-start autonomy.
 
+The same frozen ranker then passed one explicitly uncounted clean-power rehearsal. It owned 114,831
+candidate choices, executed 400 disagreements with zero fallback, developed the party through 1,803
+battles to 60/55/55/55/55/55, and the same process verified all 312 checkpoints, all 36 objectives,
+and Hall of Fame. This removes the runtime uncertainty around clean-power injection. It remains a
+single fixed-route rehearsal, not a teacher-free objective planner or an 8/10 campaign result.
+
 ## Principal risks
 
 ### The learned surface is still small relative to the scripted surface
@@ -172,10 +178,9 @@ after merge. Do not rewrite the shared branch or force-push its history.
    label, undeclared safety substitution, or restore. Score success rate across multiple declared
    roots instead of presenting one favorable completion.
    The readiness audit found this lane is not yet safe to open. The exact-hash candidate-ranker
-   injection and ownership receipt are now implemented in the clean-power runner, but they have not
-   been exercised in a clean-power rehearsal. The path still uses expected-objective authorization
-   and has no source-bound ten-root envelope. Build those remaining interfaces and run one
-   uncounted rehearsal before freezing roots.
+   injection and ownership receipt are implemented, and their uncounted clean-power rehearsal now
+   passes. The path still uses expected-objective authorization and has no prospective source-bound
+   ten-root envelope. Build those remaining interfaces before freezing roots.
 2. **Run the Crystal microbenchmark.** Port one local navigation task, one battle task, and one
    training choice. Compare zero-shot, few-shot, and from-scratch performance. Treat breakage as an
    abstraction audit, not a demo failure to hide.

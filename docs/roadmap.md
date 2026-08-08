@@ -309,8 +309,10 @@ run, so it is both the largest scripted surface and the highest-leverage learnin
   Giovanni from fresh observation. This remains a captured-state, singleton-objective proof.
 - [x] Add exact-hash strategic-ranker injection and ownership accounting to the clean-power runner.
   Both Blaine development passes receive the model; the report fails closed when requested
-  authority owns zero choices. ROM-free gates pass, but an uncounted clean-power rehearsal remains
-  required before the ten-root campaign can be frozen.
+  authority owns zero choices. ROM-free gates and one uncounted clean-power rehearsal pass. That
+  rehearsal reached Hall of Fame with 114,831 controlled choices, 400 disagreements, and zero
+  fallback, but it is non-promotional because the prospective ten-root envelope did not exist at
+  launch.
 
 **Gate 3 — prove Red, then test transfer.** Qualify frozen learned code and weights on at least
 8/10 preregistered clean starts without teacher control or restore. Then measure the same interfaces

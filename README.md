@@ -280,8 +280,12 @@ The clean-power `play` command can now authenticate the same candidate-model fil
 observe it in shadow or grant it trainee/venue authority, thread it through both Cinnabar party-
 development passes, and publish controlled-decision and fallback accounting in the completion
 report. Completion fails if requested authority never executes. This closes the code-level
-injection gap; it is not yet runtime qualification from clean power, and the fixed objective
-sequence remains outside the learned denominator.
+injection gap. One explicitly uncounted clean-power rehearsal then passed all **312 checkpoints / 36
+objectives** through Hall of Fame: **114,831 controlled choices, 400 executed disagreements, zero
+fallback, 1,803 development battles**, and a fully healed 60/55/55/55/55/55 party. The fixed
+objective sequence remains outside the learned denominator, and the run did not launch inside the
+prospective ten-root campaign envelope. See the
+[clean-power rehearsal receipt](docs/evidence/training-candidate-ranker-v1-clean-power-rehearsal-2026-08-08.json).
 
 That controller has now passed the final captured-state integration check inside the portable
 objective loop. Starting from the authenticated Secret Key terminal, the model controlled all

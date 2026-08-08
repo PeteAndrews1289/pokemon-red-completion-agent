@@ -31,7 +31,8 @@
       "captured_state_portable_authority_qualified": true,
       "clean_start_runner_accepts_authenticated_candidate_model": true,
       "clean_start_runner_records_candidate_ownership": true,
-      "clean_start_candidate_authority_runtime_rehearsed": false
+      "clean_start_candidate_authority_runtime_rehearsed": true,
+      "clean_start_rehearsal_receipt": "training-candidate-ranker-v1-clean-power-rehearsal-2026-08-08.json"
     }
   },
   "blocking_interfaces": [
@@ -56,7 +57,7 @@
       "id": "strategic_model_injection",
       "finding": "the clean-start runner now authenticates an exact candidate-model file digest, supports shadow or trainee/venue authority, threads the model through both Blaine development passes, and records controlled decisions and fallback status",
       "verification": "ROM-free CLI, report-contract, callback-threading, Ruff, and mypy gates pass",
-      "remaining_runtime_gate": "one uncounted clean-power rehearsal must still prove nonzero authority under the source-bound campaign envelope"
+      "remaining_runtime_gate": "the uncounted clean-power rehearsal passed with 114831 controlled choices and 400 disagreements, but the prospective source/model/root series envelope did not exist at launch"
     }
   ],
   "required_before_counted_roots": [
@@ -69,7 +70,7 @@
   ],
   "recommended_implementation_order": [
     "add early-game typed objective skills or a documented composite boundary to the portable registry",
-    "exercise the implemented clean-start strategic-ranker injection in the uncounted rehearsal",
+    "preserve the passed uncounted clean-start strategic-ranker rehearsal as non-promotional evidence",
     "add one source-bound learned-stack run envelope",
     "add the ten-root campaign registry and independent series gate",
     "run the uncounted rehearsal",
