@@ -9,6 +9,10 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, SkillOutcome
 from pokemon_red_completion.domain import GameState
+from pokemon_red_completion.objective_skills import (
+    ObjectiveSkillError,
+    ObjectiveSkillRegistry,
+)
 from pokemon_red_completion.quest import Objective, QuestGraph, Specialist
 from pokemon_red_completion.specialists import SpecialistRegistry, SpecialistRegistryError
 
@@ -35,6 +39,7 @@ class ActionExecutor(Protocol):
 
 class PlayerStepKind(StrEnum):
     ACTED = "acted"
+    SKILL_COMPLETED = "skill_completed"
     OBJECTIVE_COMPLETED = "objective_completed"
     REPLAN = "replan"
     COMPLETE = "complete"
@@ -46,6 +51,9 @@ class PlayerStepResult:
     objective_id: str | None = None
     specialist: Specialist | None = None
     action: MacroAction | None = None
+    skill_actions_executed: int = 0
+    skill_frames_executed: int = 0
+    skill_evidence: Mapping[str, object] | None = None
     facts_added: frozenset[str] = field(default_factory=frozenset)
     reason: str = ""
 
@@ -64,6 +72,9 @@ class PlayerStepResult:
                 if action is not None
                 else None
             ),
+            "skill_actions_executed": self.skill_actions_executed,
+            "skill_frames_executed": self.skill_frames_executed,
+            "skill_evidence": self.skill_evidence,
             "facts_added": sorted(self.facts_added),
             "reason": self.reason,
         }
@@ -136,6 +147,7 @@ class PortablePlayerLoop:
     objective_policy: ObjectivePolicy
     specialists: SpecialistRegistry
     executor: ActionExecutor
+    objective_skills: ObjectiveSkillRegistry = field(default_factory=ObjectiveSkillRegistry)
     decisions: int = field(default=0, init=False)
     actions_executed: int = field(default=0, init=False)
     objectives_completed: int = field(default=0, init=False)
@@ -151,6 +163,9 @@ class PortablePlayerLoop:
             )
 
         objective = self._select_legal_objective(before)
+        composite = self.objective_skills.get(objective.id)
+        if composite is not None:
+            return self._execute_objective_skill(before, objective)
         try:
             specialist = self.specialists.require(objective.specialist)
         except SpecialistRegistryError as error:
@@ -204,6 +219,44 @@ class PortablePlayerLoop:
             action=action,
             facts_added=frozenset(facts_added),
             reason=plan.rationale,
+        )
+
+    def _execute_objective_skill(
+        self,
+        before: GameState,
+        objective: Objective,
+    ) -> PlayerStepResult:
+        try:
+            skill = self.objective_skills.require_for(objective)
+            execution = self.objective_skills.execute_bounded(skill)
+        except ObjectiveSkillError as error:
+            self._abandon_unfinished_objective(objective.id)
+            raise PlayerLoopError(str(error)) from error
+        except Exception:
+            self._abandon_unfinished_objective(objective.id)
+            raise
+        after = self.observer.observe()
+        self._require_no_progress_regression(before, after)
+        missing = objective.completion_facts.difference(after.facts)
+        missing_effects = skill.additional_effect_facts.difference(after.facts)
+        if missing or missing_effects:
+            self._abandon_unfinished_objective(objective.id)
+            absent = sorted(missing.union(missing_effects))
+            raise PlayerLoopError(
+                "objective skill lacks independently observed effects: " + ", ".join(absent)
+            )
+        self.objective_policy.complete(objective.id)
+        self.actions_executed += execution.actions_executed
+        self.objectives_completed += 1
+        return PlayerStepResult(
+            kind=PlayerStepKind.SKILL_COMPLETED,
+            objective_id=objective.id,
+            specialist=objective.specialist,
+            skill_actions_executed=execution.actions_executed,
+            skill_frames_executed=execution.frames_executed,
+            skill_evidence=execution.evidence,
+            facts_added=frozenset(after.facts.difference(before.facts)),
+            reason="Executed a registered bounded objective skill and independently verified it.",
         )
 
     def run(self, *, max_steps: int) -> PlayerRunReport:
