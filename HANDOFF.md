@@ -307,6 +307,14 @@ registry were clean after the Secret Key adapter. The current superseding gate i
 
 ## 3. Start here
 
+> **Superseded by the 2026-08-09 checkpoint at the top of this file.** The reserve-schema work
+> below is done and the target head now passes its held-out test at 17/17. The current next
+> dependency is: build an authenticated target artifact, bind it at runtime, shadow it, then run one
+> fresh causal completion. Do not load the head into the emulator before that — its receipt says
+> `deployment_authority: false` and means it.
+>
+> The paragraph below is kept because its reasoning still applies to the next schema you freeze.
+
 **Teach the battle controller to see and choose useful reserves.** Preserve the current Lorelei
 failure as the regression target. Add identity-free reserve type/move summaries and
 candidate-relative offensive and defensive matchup margins, then make generic switch resolution
