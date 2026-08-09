@@ -5,6 +5,7 @@ from dataclasses import replace
 import pytest
 
 from pokemon_red_completion.clean_start_player import (
+    CleanStartPlayerError,
     CleanStartPortableReport,
     run_portable_clean_start,
 )
@@ -179,3 +180,16 @@ def test_portable_runner_rejects_incomplete_authority_configuration_before_emula
             objective_model=None,  # type: ignore[arg-type]
             execute_training_candidate_model=True,
         )
+
+
+def test_clean_start_error_preserves_detached_failure_evidence() -> None:
+    original = {"stage": "objective_loop_execution", "frames_executed": 123}
+
+    error = CleanStartPlayerError("failed closed", evidence=original)
+    original["frames_executed"] = 999
+
+    assert str(error) == "failed closed"
+    assert error.evidence == {
+        "stage": "objective_loop_execution",
+        "frames_executed": 123,
+    }

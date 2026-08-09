@@ -56,6 +56,15 @@ PORTABLE_CLEAN_START_MAX_STEPS = 24
 class CleanStartPlayerError(RuntimeError):
     """Raised when the portable clean-start process fails its authority contract."""
 
+    def __init__(
+        self,
+        message: str,
+        *,
+        evidence: Mapping[str, object] | None = None,
+    ) -> None:
+        super().__init__(message)
+        self.evidence = dict(evidence) if evidence is not None else None
+
 
 @dataclass(frozen=True, slots=True)
 class CleanStartPortableReport:
@@ -332,9 +341,29 @@ def run_portable_clean_start(
             executor=executor,
             objective_skills=ObjectiveSkillRegistry((early, *midgame.skills())),
         )
-        run = loop.run(max_steps=PORTABLE_CLEAN_START_MAX_STEPS)
-        if schedule is not None:
-            schedule.require_complete()
+        try:
+            run = loop.run(max_steps=PORTABLE_CLEAN_START_MAX_STEPS)
+            if schedule is not None:
+                schedule.require_complete()
+        except Exception as error:
+            raise CleanStartPlayerError(
+                "portable clean-start execution failed closed",
+                evidence=_partial_failure_evidence(
+                    error=error,
+                    emulator=emulator,
+                    loop=loop,
+                    observer=observer,
+                    objective_policy=objective_policy,
+                    battle_policy=battle_policy,
+                    training_audit=training_audit,
+                    training_controlled=training_controlled,
+                    candidate_audit=candidate_audit,
+                    candidate_controlled=candidate_controlled,
+                    execute_training_control_model=execute_training_control_model,
+                    execute_training_candidate_model=execute_training_candidate_model,
+                    schedule=schedule,
+                ),
+            ) from error
         selected_ids = tuple(
             step.objective_id for step in run.steps if step.objective_id is not None
         )
@@ -384,8 +413,69 @@ def run_portable_clean_start(
             frames_executed=emulator.frame_count,
         )
         if not report.passed:
-            raise CleanStartPlayerError("portable clean-start evidence failed its contract")
+            raise CleanStartPlayerError(
+                "portable clean-start evidence failed its contract",
+                evidence={
+                    "report": report.public_dict(),
+                    "schema": "pokemon-red-portable-clean-start-failure-evidence-v1",
+                    "stage": "final_evidence_contract",
+                },
+            )
         return report
+
+
+def _partial_failure_evidence(
+    *,
+    error: Exception,
+    emulator: PyBoyAdapter,
+    loop: PortablePlayerLoop,
+    observer: LivePokemonRedObserver,
+    objective_policy: ModelObjectivePolicy,
+    battle_policy: ModelAssistedBattlePolicy | None,
+    training_audit: TrainingControlShadowAudit | None,
+    training_controlled: int,
+    candidate_audit: TrainingCandidateShadowAudit | None,
+    candidate_controlled: int,
+    execute_training_control_model: bool,
+    execute_training_candidate_model: bool,
+    schedule: BattleStartScheduleController | None,
+) -> dict[str, object]:
+    return {
+        "battle_policy": battle_policy.public_dict() if battle_policy is not None else None,
+        "battle_schedule": (
+            {
+                "complete": schedule.finished_count == schedule.expected_count,
+                "expected_battles": schedule.expected_count,
+                "finished_battles": schedule.finished_count,
+                "schedule_sha256": schedule.schedule_sha256,
+            }
+            if schedule is not None
+            else None
+        ),
+        "cause": {
+            "exception_type": type(error).__name__,
+            "message": str(error),
+        },
+        "controller_released": not emulator.pressed_buttons,
+        "frames_executed": emulator.frame_count,
+        "loop": dict(loop.public_dict()),
+        "objective_policy": objective_policy.public_dict(),
+        "observer": observer.public_dict(),
+        "schema": "pokemon-red-portable-clean-start-failure-evidence-v1",
+        "stage": "objective_loop_execution",
+        "training_candidate": _authority_report(
+            candidate_audit.public_dict() if candidate_audit is not None else None,
+            authority=execute_training_candidate_model,
+            controlled_decisions=candidate_controlled,
+            phases=("trainee", "venue"),
+        ),
+        "training_control": _authority_report(
+            training_audit.public_dict() if training_audit is not None else None,
+            authority=execute_training_control_model,
+            controlled_decisions=training_controlled,
+            phases=(TrainingControlPhase.BATTLE.value, TrainingControlPhase.OVERWORLD.value),
+        ),
+    }
 
 
 def _authority_report(

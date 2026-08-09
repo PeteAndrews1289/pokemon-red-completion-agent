@@ -10,7 +10,10 @@ from pathlib import Path
 
 from pokemon_red_completion.battle_control_model import load_battle_control_model_artifact
 from pokemon_red_completion.clean_start_campaign import derive_initial_wait_frames
-from pokemon_red_completion.clean_start_player import run_portable_clean_start
+from pokemon_red_completion.clean_start_player import (
+    CleanStartPlayerError,
+    run_portable_clean_start,
+)
 from pokemon_red_completion.collection_protocol import (
     collection_document_sha256,
     load_committed_collection_registry,
@@ -190,6 +193,13 @@ def main(argv: list[str] | None = None) -> int:
             speed=args.speed if args.watch else None,
         )
     except Exception as error:
+        failure: dict[str, object] = {
+            "exception_type": type(error).__name__,
+            "message": str(error),
+            "stage": "portable_clean_start_execution",
+        }
+        if isinstance(error, CleanStartPlayerError) and error.evidence is not None:
+            failure["evidence"] = error.evidence
         _emit(
             {
                 "claim": (
@@ -197,11 +207,7 @@ def main(argv: list[str] | None = None) -> int:
                     "the future ten-root campaign."
                 ),
                 "diagnostic_root": diagnostic_root,
-                "failure": {
-                    "exception_type": type(error).__name__,
-                    "message": str(error),
-                    "stage": "portable_clean_start_execution",
-                },
+                "failure": failure,
                 "model_identities": model_identities,
                 "promotion_eligible": False,
                 "schema": "pokemon-red-portable-clean-start-rehearsal-v1",
