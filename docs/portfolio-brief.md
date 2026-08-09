@@ -169,6 +169,10 @@ The following root proved Route 2 and found the next semantic distinction in Vir
 incidental wilds during travel should be fled, while three planned Kakuna lessons must be fought.
 One cumulative, evidence-bearing travel budget now coexists with the separate curriculum contracts.
 
+Seed `990024` then revealed that the named Kakuna lesson never checked species and depended on one
+frame wait to create a battle. The replacement performs a bounded semantic search for observed
+Kakuna and publishes target identities and attempt counts.
+
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
 until the now-canonical-qualified reserve-aware stack also passes a perturbation rehearsal.

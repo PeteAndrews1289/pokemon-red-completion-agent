@@ -2325,6 +2325,13 @@ intentional curriculum fights, while an earlier random encounter is travel noise
 routes every movement segment through one cumulative incidental-flee contract and leaves the
 deliberate battles outside it. Generalization requires semantic role as well as shared mechanics.
 
+That distinction exposed one more illusion: the “Kakuna lesson” was a frame wait followed by a
+check for any wild battle. Once incidental encounters changed RNG consumption, the trigger could
+produce no battle at all—and the old verifier would also have accepted the wrong species. The new
+lesson searches a bounded local oscillation for observed Kakuna, returns after empty grass, and
+spends the same authenticated budget on non-targets. A label is now proved by state, not inferred
+from the line of Python that intended it.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

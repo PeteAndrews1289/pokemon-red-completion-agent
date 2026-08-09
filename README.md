@@ -158,6 +158,12 @@ uses the same map-bound contract under one twelve-flee budget, while the three i
 battles and mandatory Bug Catcher remain separate fight contracts. Upper and lower Route 2 also
 share one eight-flee budget. See the
 [eighth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-08-failure-2026-08-09.json).
+Seed `990024` qualified that separation, then the fixed first-Kakuna frame wait produced no battle.
+The three lessons now seek observed Kakuna species `0x71` by bounded one-step oscillation, return to
+the exact origin after empty grass, authenticate and budget non-target flees, and complete a
+deferred step when a target triggers before coordinate progress. Search attempts and all three
+species IDs are public evidence; see the
+[ninth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95
 reliability campaign remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.

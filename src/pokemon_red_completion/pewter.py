@@ -27,11 +27,13 @@ from pokemon_red_completion.observation import (
 )
 from pokemon_red_completion.route_1_wild import (
     Route1WildFleeEvidence,
+    flee_wild,
     move_route_1_with_wild_flees,
     move_with_wild_flees,
 )
 
 PEWTER_CHECKPOINT_COUNT = 10
+KAKUNA_SPECIES_ID = 0x71
 
 LAB_TO_PALLET_DIRECTIONS = ("down",) * 9
 PALLET_TO_ROUTE_1_DIRECTIONS = (
@@ -192,6 +194,7 @@ class PewterTiming:
     max_route_2_step_attempts: int = 8
     max_forest_wild_flees: int = 12
     max_forest_step_attempts: int = 8
+    max_forest_target_search_cycles: int = 64
 
     def __post_init__(self) -> None:
         for name, value in (
@@ -241,6 +244,8 @@ class PewterChapterReport:
     route_2_movement_retries: int
     forest_wild_flees: tuple[Route1WildFleeEvidence, ...]
     forest_movement_retries: int
+    forest_target_search_attempts: tuple[int, ...]
+    forest_training_species_ids: tuple[int, ...]
     overworld_control_verified: bool
     frames_executed: int
     actions_executed: int
@@ -264,6 +269,9 @@ class PewterChapterReport:
             and self.route_2_movement_retries >= 0
             and all(item.verified for item in self.forest_wild_flees)
             and self.forest_movement_retries >= 0
+            and len(self.forest_target_search_attempts) == 3
+            and all(attempts > 0 for attempts in self.forest_target_search_attempts)
+            and self.forest_training_species_ids == (KAKUNA_SPECIES_ID,) * 3
             and self.brock_battle_evidence.brock_battle_snapshot
             and self.brock_victory_evidence.brock_victory_snapshot
             and self.overworld_control_verified
@@ -318,6 +326,8 @@ class PewterChapterReport:
                 "route_2_movement_retries": self.route_2_movement_retries,
                 "forest_wild_flees": [item.public_dict() for item in self.forest_wild_flees],
                 "forest_movement_retries": self.forest_movement_retries,
+                "forest_target_search_attempts": list(self.forest_target_search_attempts),
+                "forest_training_species_ids": list(self.forest_training_species_ids),
             },
             "brock": {
                 "victory_verified": self.brock_victory_evidence.brock_victory_snapshot,
@@ -454,14 +464,23 @@ def run_pewter_chapter(
         timing=timing,
         used_flees=0,
     )
-    _trigger_wild_battle(
-        chapter_executor,
-        reader,
-        "down",
-        timing.first_kakuna_seed_wait_frames,
-        timing,
-        "first Kakuna",
+    forest_target_search_attempts: tuple[int, ...] = ()
+    forest_training_species_ids: tuple[int, ...] = ()
+    first_encounter, more_flees, more_retries, search_attempts, step_consumed = (
+        _seek_forest_training_battle(
+            chapter_executor,
+            reader,
+            "down",
+            timing.first_kakuna_seed_wait_frames,
+            timing,
+            "first Kakuna",
+            used_flees=len(forest_wild_flees),
+        )
     )
+    forest_wild_flees += more_flees
+    forest_movement_retries += more_retries
+    forest_target_search_attempts += (search_attempts,)
+    forest_training_species_ids += (first_encounter.enemy_species_id or 0,)
     _finish_battle(
         chapter_executor,
         reader,
@@ -470,6 +489,17 @@ def run_pewter_chapter(
         timing=timing,
         label="first Kakuna",
     )
+    if not step_consumed:
+        _, more_flees, more_retries = _move_forest_with_wild_flees(
+            chapter_executor,
+            reader,
+            ("down",),
+            "first Kakuna deferred step",
+            timing=timing,
+            used_flees=len(forest_wild_flees),
+        )
+        forest_wild_flees += more_flees
+        forest_movement_retries += more_retries
     _expect_party(reader.read(), level=7, minimum_hp=1, label="first Kakuna")
 
     _, more_flees, more_retries = _move_forest_with_wild_flees(
@@ -482,14 +512,21 @@ def run_pewter_chapter(
     )
     forest_wild_flees += more_flees
     forest_movement_retries += more_retries
-    _trigger_wild_battle(
-        chapter_executor,
-        reader,
-        "down",
-        timing.second_kakuna_seed_wait_frames,
-        timing,
-        "second Kakuna",
+    second_encounter, more_flees, more_retries, search_attempts, step_consumed = (
+        _seek_forest_training_battle(
+            chapter_executor,
+            reader,
+            "down",
+            timing.second_kakuna_seed_wait_frames,
+            timing,
+            "second Kakuna",
+            used_flees=len(forest_wild_flees),
+        )
     )
+    forest_wild_flees += more_flees
+    forest_movement_retries += more_retries
+    forest_target_search_attempts += (search_attempts,)
+    forest_training_species_ids += (second_encounter.enemy_species_id or 0,)
     _finish_battle(
         chapter_executor,
         reader,
@@ -498,6 +535,17 @@ def run_pewter_chapter(
         timing=timing,
         label="second Kakuna",
     )
+    if not step_consumed:
+        _, more_flees, more_retries = _move_forest_with_wild_flees(
+            chapter_executor,
+            reader,
+            ("down",),
+            "second Kakuna deferred step",
+            timing=timing,
+            used_flees=len(forest_wild_flees),
+        )
+        forest_wild_flees += more_flees
+        forest_movement_retries += more_retries
     _expect_party(reader.read(), level=7, minimum_hp=1, label="second Kakuna")
 
     _, more_flees, more_retries = _move_forest_with_wild_flees(
@@ -510,14 +558,21 @@ def run_pewter_chapter(
     )
     forest_wild_flees += more_flees
     forest_movement_retries += more_retries
-    _trigger_wild_battle(
-        chapter_executor,
-        reader,
-        "down",
-        timing.third_kakuna_seed_wait_frames,
-        timing,
-        "third Kakuna",
+    third_encounter, more_flees, more_retries, search_attempts, step_consumed = (
+        _seek_forest_training_battle(
+            chapter_executor,
+            reader,
+            "down",
+            timing.third_kakuna_seed_wait_frames,
+            timing,
+            "third Kakuna",
+            used_flees=len(forest_wild_flees),
+        )
     )
+    forest_wild_flees += more_flees
+    forest_movement_retries += more_retries
+    forest_target_search_attempts += (search_attempts,)
+    forest_training_species_ids += (third_encounter.enemy_species_id or 0,)
     _finish_battle(
         chapter_executor,
         reader,
@@ -526,6 +581,17 @@ def run_pewter_chapter(
         timing=timing,
         label="third Kakuna",
     )
+    if not step_consumed:
+        _, more_flees, more_retries = _move_forest_with_wild_flees(
+            chapter_executor,
+            reader,
+            ("down",),
+            "third Kakuna deferred step",
+            timing=timing,
+            used_flees=len(forest_wild_flees),
+        )
+        forest_wild_flees += more_flees
+        forest_movement_retries += more_retries
     _expect_party(
         reader.read(),
         level=8,
@@ -729,6 +795,8 @@ def run_pewter_chapter(
         route_2_movement_retries=route_2_movement_retries,
         forest_wild_flees=forest_wild_flees,
         forest_movement_retries=forest_movement_retries,
+        forest_target_search_attempts=forest_target_search_attempts,
+        forest_training_species_ids=forest_training_species_ids,
         overworld_control_verified=True,
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=chapter_executor.actions_executed,
@@ -838,23 +906,129 @@ def _move_forest_with_wild_flees(
     )
 
 
-def _trigger_wild_battle(
+def _seek_forest_training_battle(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
     direction: str,
     seed_wait_frames: int,
     timing: PewterTiming,
     label: str,
-) -> RawGameState:
+    *,
+    used_flees: int,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int, int, bool]:
+    """Seek one exact Kakuna while preserving the authored route coordinate."""
+
+    if direction not in {"up", "down", "left", "right"}:
+        raise PewterChapterError(f"{label} has an invalid search direction.")
+    if not 0 <= used_flees <= timing.max_forest_wild_flees:
+        raise PewterChapterError(f"{label} has invalid prior flee accounting.")
     _wait(executor, seed_wait_frames)
-    if reader.read().battle_state:
+    origin = reader.read()
+    if origin.battle_state:
         raise PewterChapterError(f"{label} began before its intentional trigger.")
-    executor.execute(MacroAction(MacroActionKind.MOVE, direction))
-    _wait(executor, timing.encounter_wait_frames)
-    raw = reader.read()
-    if raw.battle_state != 1:
-        raise PewterChapterError(f"{label} failed its expected wild-battle gate.")
-    return raw
+    if (
+        origin.map_id != MapId.VIRIDIAN_FOREST
+        or origin.player_x is None
+        or origin.player_y is None
+    ):
+        raise PewterChapterError(f"{label} lacks its exact Forest search origin.")
+    origin_position = (origin.player_x, origin.player_y)
+    flees: tuple[Route1WildFleeEvidence, ...] = ()
+    movement_retries = 0
+    opposite = {
+        "up": "down",
+        "down": "up",
+        "left": "right",
+        "right": "left",
+    }[direction]
+
+    for search_attempt in range(1, timing.max_forest_target_search_cycles + 1):
+        before = reader.read()
+        if (
+            before.battle_state
+            or before.map_id != MapId.VIRIDIAN_FOREST
+            or (before.player_x, before.player_y) != origin_position
+        ):
+            raise PewterChapterError(f"{label} lost its bounded search origin.")
+
+        observed: RawGameState | None = None
+        for movement_attempt in range(1, timing.max_forest_step_attempts + 1):
+            executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+            _wait(executor, timing.encounter_wait_frames)
+            candidate = reader.read()
+            if candidate.battle_state or _direction_progressed(before, candidate, direction):
+                observed = candidate
+                break
+            if (
+                candidate.map_id != MapId.VIRIDIAN_FOREST
+                or (candidate.player_x, candidate.player_y) != origin_position
+                or candidate.first_party_hp == 0
+            ):
+                raise PewterChapterError(f"{label} drifted during its search step.")
+            if movement_attempt == timing.max_forest_step_attempts:
+                raise PewterChapterError(f"{label} exhausted its search-step retry bound.")
+            movement_retries += 1
+            _wait(executor, timing.forest_step_retry_wait_frames)
+        if observed is None:  # pragma: no cover - loop always assigns or raises
+            raise AssertionError("unreachable Forest target-search movement")
+
+        consumed = _direction_progressed(before, observed, direction)
+        if observed.battle_state:
+            if observed.battle_state != 1 or observed.map_id != MapId.VIRIDIAN_FOREST:
+                raise PewterChapterError(f"{label} encountered a non-wild battle while searching.")
+            if not consumed and (observed.player_x, observed.player_y) != origin_position:
+                raise PewterChapterError(f"{label} wild encounter drifted from its search step.")
+            if observed.enemy_species_id == KAKUNA_SPECIES_ID:
+                return observed, flees, movement_retries, search_attempt, consumed
+            if used_flees + len(flees) >= timing.max_forest_wild_flees:
+                raise PewterChapterError(f"{label} exhausted the shared Forest flee budget.")
+            flees += (
+                flee_wild(
+                    executor,
+                    reader,
+                    observed,
+                    expected_map_id=MapId.VIRIDIAN_FOREST,
+                    route_name="Viridian Forest",
+                    stabilization_frames=timing.forest_wild_exit_stabilization_frames,
+                    error_type=PewterChapterError,
+                ),
+            )
+
+        if consumed:
+            _, return_flees, return_retries = move_with_wild_flees(
+                executor,
+                reader,
+                (opposite,),
+                f"{label} search-origin return",
+                expected_map_id=MapId.VIRIDIAN_FOREST,
+                route_name="Viridian Forest",
+                maximum_flees=timing.max_forest_wild_flees - used_flees - len(flees),
+                stabilization_frames=timing.forest_wild_exit_stabilization_frames,
+                maximum_step_attempts=timing.max_forest_step_attempts,
+                step_retry_wait_frames=timing.forest_step_retry_wait_frames,
+                error_type=PewterChapterError,
+            )
+            flees += return_flees
+            movement_retries += return_retries
+
+    raise PewterChapterError(f"{label} exhausted its bounded Kakuna search.")
+
+
+def _direction_progressed(before: RawGameState, after: RawGameState, direction: str) -> bool:
+    if before.map_id != after.map_id:
+        return True
+    if None in (before.player_x, before.player_y, after.player_x, after.player_y):
+        return False
+    assert before.player_x is not None
+    assert before.player_y is not None
+    assert after.player_x is not None
+    assert after.player_y is not None
+    return {
+        "up": (after.player_x == before.player_x and after.player_y < before.player_y),
+        "down": (after.player_x == before.player_x and after.player_y > before.player_y),
+        "left": (after.player_y == before.player_y and after.player_x < before.player_x),
+        "right": (after.player_y == before.player_y and after.player_x > before.player_x),
+    }.get(direction, False)
 
 
 def _enter_trainer_battle(

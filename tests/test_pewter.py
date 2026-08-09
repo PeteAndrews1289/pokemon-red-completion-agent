@@ -5,6 +5,7 @@ from dataclasses import FrozenInstanceError, fields, replace
 
 import pytest
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.observation import (
     BROCK_GYM_LEADER_NUMBER,
     BROCK_OPPONENT_ID,
@@ -34,6 +35,7 @@ from pokemon_red_completion.pewter import (
     PewterChapterReport,
     PewterProgress,
     PewterTiming,
+    _seek_forest_training_battle,
 )
 
 
@@ -207,6 +209,8 @@ def _report() -> PewterChapterReport:
         route_2_movement_retries=0,
         forest_wild_flees=(),
         forest_movement_retries=0,
+        forest_target_search_attempts=(1, 1, 1),
+        forest_training_species_ids=(0x71, 0x71, 0x71),
         overworld_control_verified=True,
         frames_executed=70_043,
         actions_executed=954,
@@ -249,6 +253,60 @@ def test_pewter_timing_rejects_unbounded_values(invalid: object) -> None:
             replace(DEFAULT_PEWTER_TIMING, **{field.name: invalid})
 
 
+def test_forest_training_search_retries_empty_grass_and_authenticates_kakuna() -> None:
+    origin = _raw(MapId.VIRIDIAN_FOREST, 10, 10)
+    destination = _raw(MapId.VIRIDIAN_FOREST, 10, 11)
+    kakuna = replace(
+        destination,
+        battle_state=1,
+        enemy_species_id=0x71,
+        enemy_level=4,
+    )
+
+    class _Reader:
+        state = origin
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = _Reader()
+
+    class _Executor:
+        actions: list[MacroAction] = []
+        down_steps = 0
+
+        def execute(self, action: MacroAction) -> object:
+            self.actions.append(action)
+            if action.kind is not MacroActionKind.MOVE:
+                return object()
+            if action.value == "down":
+                self.down_steps += 1
+                reader.state = destination if self.down_steps == 1 else kakuna
+            elif action.value == "up":
+                reader.state = origin
+            return object()
+
+    executor = _Executor()
+    encounter, flees, retries, attempts, consumed = _seek_forest_training_battle(  # type: ignore[arg-type]
+        executor,
+        reader,  # type: ignore[arg-type]
+        "down",
+        1,
+        replace(DEFAULT_PEWTER_TIMING, max_forest_target_search_cycles=3),
+        "unit Kakuna",
+        used_flees=0,
+    )
+
+    assert encounter is kakuna
+    assert not flees
+    assert retries == 0
+    assert attempts == 2
+    assert consumed
+    assert [
+        action.value for action in executor.actions if action.kind is MacroActionKind.MOVE
+    ] == ["down", "up", "down"]
+
+
 def test_pewter_progress_is_sanitized_and_immutable() -> None:
     progress = PewterProgress(
         checkpoint_id="brock_defeated",
@@ -282,6 +340,8 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         "route_2_movement_retries": 0,
         "forest_wild_flees": [],
         "forest_movement_retries": 0,
+        "forest_target_search_attempts": [1, 1, 1],
+        "forest_training_species_ids": [0x71, 0x71, 0x71],
     }
     assert public["brock"] == {
         "victory_verified": True,
@@ -314,6 +374,8 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         {"overworld_control_verified": False},
         {"controller_released": False},
         {"reached_boundaries": tuple(TravelBoundary)[1:-1]},
+        {"forest_target_search_attempts": (1, 1)},
+        {"forest_training_species_ids": (0x71, 0x71, 0x70)},
         {"gym_entry_evidence": replace(_gym_ready(), first_party_hp=18)},
         {
             "brock_battle_evidence": replace(

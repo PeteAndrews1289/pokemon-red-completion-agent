@@ -1,0 +1,48 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_perturbation_with_fixed_rng_lesson_trigger",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990024 passed the generalized intro, Route 2, and Forest travel contracts, then the fixed first-Kakuna trigger produced no battle. The failure preceded scheduled battles and every learned battle or training decision. It exposes a teacher lesson coupled to one RNG timing, not a model failure.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990024,
+    "initial_wait_frames": 33,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "33b48834ecfb28413f729fdb2f356e8fda6942d2539ad7dffd485f1286794a2c"
+  },
+  "source": {
+    "git_commit": "26fd5e646e5cb7a74c137ac64626e4315d2e721a",
+    "worktree_dirty": false
+  },
+  "raw_report_sha256": "216baf5de9bf00c10773b2830e99b9060dc2d8469506ebbd5173548a6501fc16",
+  "failure": {
+    "stage": "objective_loop_execution",
+    "exception_type": "PewterChapterError",
+    "message": "first Kakuna failed its expected wild-battle gate.",
+    "frames_executed": 72842,
+    "objective_decisions": 1,
+    "objectives_completed": 0,
+    "battle_schedule_entries_consumed": 0,
+    "battle_model_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "diagnosis": {
+    "category": "fixed_rng_wait_used_as_semantic_training_target",
+    "finding": "The chapter waited a root-specific frame count, pressed Down once, and required only battle-state one. Earlier incidental encounters legitimately changed RNG consumption, so the same step produced no encounter. The code also called the lesson Kakuna without checking the observed species.",
+    "model_boundary": "The failure occurred inside the authored first composite before a scheduled or learned battle. All learned battle, target, and training counters remained zero."
+  },
+  "repair": {
+    "status": "implemented_and_qualified_rom_free_pending_fresh_perturbation",
+    "behavior": "Each of the three cocoon lessons now searches a one-step Forest oscillation for observed species 0x71 under a 64-cycle cap. Empty grass returns to the exact origin. Non-target wilds are fled through the shared chapter budget and authenticated exit receipt. A target that triggers before coordinate progress is fought and the deferred route step is completed afterward. The report publishes all three species IDs and search-attempt counts.",
+    "bounds": {
+      "maximum_search_cycles_per_lesson": 64,
+      "maximum_step_attempts": 8,
+      "shared_forest_wild_flees": 12,
+      "target_species_id": 113
+    },
+    "rom_free_gate": "Public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,185 tests passed; three integration tests were deselected and one expected failure remained expected.",
+    "next_gate": "Commit and push the qualified repair, then run a fresh uncounted derived-timing root. Counted v95 remains unopened."
+  }
+}

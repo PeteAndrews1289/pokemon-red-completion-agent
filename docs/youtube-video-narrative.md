@@ -199,6 +199,10 @@ Use `990023` to add the missing nuance: in Viridian Forest, some wild battles ar
 are the lesson. Split the route into **travel: flee with receipt** and **curriculum: fight and prove
 progress**. Caption it: **“The same event can have a different semantic role.”**
 
+Let `990024` deliver the punchline: the function is named “Kakuna,” but the evidence checks only
+“some wild battle”—and this time no battle appears. Replace the source-code label with live species
+`0x71` and a bounded search counter. Caption it: **“Intent is not evidence.”**
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

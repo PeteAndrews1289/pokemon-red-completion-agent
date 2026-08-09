@@ -126,6 +126,15 @@ remain fatal. Regenerate, qualify, push, and use another fresh root; v95 remains
 The public-artifact, docs, regenerated-registry, Ruff, mypy, and 2,181-test ROM-free gate passes;
 commit and push remain before replay.
 
+Seed `990024` qualified incidental Forest travel but the fixed first-Kakuna frame wait produced no
+battle. The [ninth perturbation failure](evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json)
+is preserved. Each lesson now semantically seeks observed Kakuna `0x71` under a 64-cycle bound,
+returns after empty grass, spends the shared Forest budget on authenticated non-target flees, and
+completes a deferred step if the target began before movement. Regenerate, qualify, push, and use a
+fresh root; v95 remains 0/10.
+The public-artifact, docs, regenerated-registry, Ruff, mypy, and 2,185-test ROM-free gate passes;
+commit and push remain before replay.
+
 Seed `990023` qualified the Route 2 repair and then hit an incidental Forest battle at training
 route step 65, before the first intentionally seeded Kakuna. The
 [eighth perturbation failure](evidence/portable-clean-start-six-role-perturbation-08-failure-2026-08-09.json)
