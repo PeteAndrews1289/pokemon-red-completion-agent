@@ -18,7 +18,7 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
-**Late audit and runtime checkpoint:** the full repository gate now passes **2,192 tests with 3
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,196 tests with 3
 integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
 public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
 errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
@@ -141,7 +141,10 @@ preserves the missing post-Forest recovery mechanic. Seed `990026` passed the wa
 Forest lesson, then failed the aggregate Brock gate at 158,394 frames. A clean same-root probe found
 level 9, 19/27 HP, 26 Bubble PP, and poison `0x08`. Transit now admits only healthy or poison behind
 the unchanged HP/PP floor, takes a direct 15-input Center route, proves full recovery, and reapplies
-the healthy Gym gate. The full 2,192-test ROM-free gate is green; push before causal replay.
+the healthy Gym gate. Replay from `87343ec` advanced 578 frames and exposed the independent
+progress referee's duplicate status-zero assumption at the Forest north gate. That referee now
+permits poison only at Forest north, upper Route 2, and Pewter south. The full 2,196-test gate is
+green; another clean push remains before causal replay.
 Counted v95 remains 0/10.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the

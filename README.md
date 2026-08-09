@@ -174,6 +174,8 @@ Brock-readiness resource gate after the mandatory Bug Catcher. A clean same-root
 exact missing predicate: level 9, 19/27 HP, and 26 Bubble PP were valid, but Weedle had inflicted
 poison. The repaired transit accepts only healthy or poisoned state behind the same HP/PP floor,
 takes the direct Pewter Center route, proves full recovery, and reapplies the unchanged Gym gate;
+the first replay then exposed the same global status-zero assumption in the independent progress
+referee, which now permits poison only on the three post-Forest boundaries leading to that Center;
 see the
 [eleventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95

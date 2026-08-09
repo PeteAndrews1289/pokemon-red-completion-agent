@@ -18,7 +18,7 @@ semantics, fixed front-end timing, and zero-wild assumptions on Route 2 and insi
 The ninth failure showed that a fixed RNG wait was not a semantic Kakuna lesson; the tenth reached
 the already-known Route 1 youngster collision; the eleventh proved that a legal Bug Catcher poison
 could not reach the recovery action intended to clear it. Each failure is preserved rather than
-rerun as a favorable root. The Center repair passes its 2,192-test ROM-free gate and awaits a clean
+rerun as a favorable root. The Center repair passes its 2,196-test ROM-free gate and awaits a clean
 push and causal replay.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
@@ -261,7 +261,10 @@ Catcher, then failed the aggregate Brock-readiness resource gate at 158,394 fram
 same-root probe observed level 9, 19/27 HP, Bubble at 26 PP, and poison `0x08`: only status missed.
 The first Center repair reproduced the failure because it still demanded healthy status before
 travel. The refined transit admits only healthy or poison behind the unchanged HP/PP floor, takes
-the 15-input direct Center route, proves full recovery, and repeats the Gym gate. See the
+the 15-input direct Center route, proves full recovery, and repeats the Gym gate. Its first replay
+advanced 578 frames and exposed the same status-zero assumption in the independent progress
+referee. That referee now admits poison only at the Forest north gate, upper Route 2, and Pewter
+south edge; every earlier boundary and the Gym remain healthy-only. See the
 [eleventh perturbation failure](evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json).
 
 The audit also found and repaired three foundations that would have invalidated later transfer and
@@ -290,7 +293,7 @@ silently acting at night.
 ## Code and test health
 
 - 128 source modules and 135 test modules cover roughly 88,500 source lines and 53,000 test lines.
-- The current full gate passes **2,192 tests** with 3 emulator-integration tests deselected and 1
+- The current full gate passes **2,196 tests** with 3 emulator-integration tests deselected and 1
   expected failure, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.

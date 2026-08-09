@@ -1299,10 +1299,31 @@ class PewterChapterState:
     @property
     def stable_travel_snapshot(self) -> bool:
         return (
-            self.unbeaten_brock_invariants
+            self.unbeaten_brock_transit_invariants
             and self.battle_state == 0
             and self.controls.ready
             and self.current_map_script == 0
+        )
+
+    @property
+    def unbeaten_brock_transit_invariants(self) -> bool:
+        status_is_safe = self.first_party_status == 0 or (
+            self.first_party_status == 0x08
+            and self.boundary
+            in {
+                TravelBoundary.FOREST_NORTH_GATE,
+                TravelBoundary.ROUTE_2_NORTH_RETURN,
+                TravelBoundary.PEWTER_SOUTH_EDGE,
+            }
+        )
+        return (
+            self.post_pokedex_invariants
+            and status_is_safe
+            and not self.beat_brock
+            and not self.got_tm34
+            and not self.tm34_in_bag
+            and not self.boulder_badge
+            and not self.boulder_badge_mirror
         )
 
     @property

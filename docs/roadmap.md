@@ -139,9 +139,12 @@ Seed `990026` qualified the shared walker and completed all three exact Kakuna l
 mandatory Bug Catcher, then failed the aggregate Brock-readiness resource gate. A same-root probe
 localized the miss to poison `0x08` at level 9, 19/27 HP, and 26 Bubble PP. Transit now accepts only
 healthy or poisoned state behind the same 19-HP/four-Bubble-PP floor, takes the direct 15-input
-Pewter Center route, proves full recovery, then reapplies the Brock gate at the Gym. The
+Pewter Center route, proves full recovery, then reapplies the Brock gate at the Gym. Its first
+replay advanced to the Forest north-gate checkpoint and exposed the same healthy-only rule in the
+independent progress referee. Only the three post-Forest boundaries leading to the Center may now
+carry poison; the Gym remains healthy-only. The
 [eleventh perturbation failure](evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json)
-is preserved; the full 2,192-test ROM-free gate passes and a clean causal replay is next. Counted
+is preserved; the full 2,196-test ROM-free gate passes and a clean causal replay is next. Counted
 v95 remains 0/10.
 
 Seed `990024` qualified incidental Forest travel but the fixed first-Kakuna frame wait produced no

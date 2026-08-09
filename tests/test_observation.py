@@ -1253,6 +1253,34 @@ def test_travel_boundaries_require_an_unbeaten_healthy_lineage(
     assert not replace(state, **changes).travel_boundary_snapshot
 
 
+@pytest.mark.parametrize(
+    ("map_id", "x", "y"),
+    (
+        (MapId.VIRIDIAN_FOREST_NORTH_GATE, 4, 7),
+        (MapId.ROUTE_2, 3, 11),
+        (MapId.PEWTER_CITY, 18, 35),
+    ),
+)
+def test_post_forest_travel_boundaries_admit_recoverable_poison(
+    map_id: MapId,
+    x: int,
+    y: int,
+) -> None:
+    poisoned = replace(_boundary_state(map_id, x, y), first_party_status=0x08)
+
+    assert poisoned.travel_boundary_snapshot
+    assert poisoned.stable_travel_snapshot
+    assert poisoned.unbeaten_brock_transit_invariants
+    assert not poisoned.unbeaten_brock_invariants
+
+
+def test_gym_boundary_remains_healthy_only_after_poison_transit() -> None:
+    poisoned = replace(_brock_ready_state(), first_party_status=0x08)
+
+    assert not poisoned.travel_boundary_snapshot
+    assert not poisoned.brock_ready_snapshot
+
+
 def test_pewter_snapshot_requires_a_stable_unbeaten_post_pokedex_state() -> None:
     state = _stable_pewter_state()
 
