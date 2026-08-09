@@ -9,7 +9,9 @@
 > no deployment authority. The active work is additional complete timing/RNG-varied teacher
 > lineages, followed by a preassigned target train/validation/test gate. Do not rerun the full
 > causal route, tune the heuristic on the failed case, build a complete Crystal route, relax the
-> verifier, or consume a counted v95 root. Counted status remains 0/10. See the
+> verifier, or consume a counted v95 root. Timing seed `990003` is also retired after a retained
+> checkpoint-275 Route 11 repeated-sleep failure; its partial labels are excluded. The venue-specific
+> four-reapplication repair awaits a fresh seed. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).
 
 **New here? Read [HANDOFF.md](HANDOFF.md) first** — it is the complete orientation, including what

@@ -1251,6 +1251,7 @@ def run_red_team_balancing(
                     expected_map=current_venue.map_id,
                     intent=intent,
                     label="team training encounter",
+                    timing=current_venue.battle_timing,
                     unknown_cancel_interval=cancel_interval,
                     move_decision_guard=current_venue.move_guard,
                 )

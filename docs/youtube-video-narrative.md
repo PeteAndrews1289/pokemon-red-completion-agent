@@ -56,6 +56,12 @@ Put `deployment_authority: false` on screen. The next work is more timing/RNG-va
 teacher lineages, offline party-order permutations, and a genuinely unopened target test set—not
 another full-game replay with a scorer we already know is wrong.
 
+Keep the first replacement-data failure too. The fresh seed reaches checkpoint 275, then a level-9
+Drowzee puts DUX back to sleep for a third episode and the generic two-episode bound stops the run.
+The partial labels are rejected. Reuse Route 11's already-tested four-episode curriculum timing only
+for that measured venue, leave the global bound at two, and move to a fresh seed. It is a compact
+example of the project treating retries as declared environment budgets rather than invisible luck.
+
 Keep the most important scientific detail on screen: the action-model weights did not change
 between these causal attempts. The first failures repaired a game-neutral actor/referee interface;
 the last exposed missing learned authority. No Agatha map, species, or opponent-position identity

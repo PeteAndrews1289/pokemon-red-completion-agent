@@ -23,6 +23,10 @@ from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 from typing import Any, Protocol
 
+from pokemon_red_completion.battle_runtime import (
+    DEFAULT_BATTLE_RUNTIME_TIMING,
+    BattleRuntimeTiming,
+)
 from pokemon_red_completion.observation import RawGameState
 from pokemon_red_completion.party import PartyMemberObservation
 from pokemon_red_completion.team_training import (
@@ -67,6 +71,7 @@ class TrainingVenue:
     is_in_center: Callable[[RawGameState], bool]
     move_slot: Callable[[RawGameState], int]
     move_guard: MoveGuard | None = None
+    battle_timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING
 
     def __post_init__(self) -> None:
         if not isinstance(self.band, GrindingArea):
@@ -78,6 +83,8 @@ class TrainingVenue:
             )
         if type(self.map_id) is not int or self.map_id < 0:
             raise VenueNavigationError(f"venue {self.band.area_id} has no valid map id")
+        if not isinstance(self.battle_timing, BattleRuntimeTiming):
+            raise TypeError("battle_timing must be a BattleRuntimeTiming")
 
     @property
     def area_id(self) -> str:

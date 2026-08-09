@@ -17,6 +17,10 @@
   projection, deterministic-baseline comparison, and six focused tests. It improves the untouched
   lineage from 10/13 to 11/13 targets but remains explicitly unpromoted because it still misses the
   causal Golbat choice.
+- Preserved an additional timing/RNG lineage that failed at checkpoint 275 when Route 11 Drowzee
+  reapplied sleep three times, excluded all 469 partial labels from fitting, and threaded bounded
+  venue-specific battle timing through the generic team trainer while leaving the global sleep
+  limit unchanged.
 - Added the August 9 capability audit and expanded the project and video narratives around the
   distinction between offline agreement, causal high-level authority, typed intent enforcement,
   and combined teacher-free play.

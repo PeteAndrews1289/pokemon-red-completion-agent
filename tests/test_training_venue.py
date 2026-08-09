@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import pytest
 
+from pokemon_red_completion.battle_runtime import DEFAULT_BATTLE_RUNTIME_TIMING
 from pokemon_red_completion.observation import MapId, RawGameState
 from pokemon_red_completion.party import (
     MoveObservation,
@@ -147,3 +148,4 @@ def test_a_venue_recognises_its_own_map_and_describes_itself() -> None:
     assert "15-21" in described
     assert "rare to 31" in described
     assert "29 encounters" in described, "a description without its sample count is a claim"
+    assert cave.battle_timing is DEFAULT_BATTLE_RUNTIME_TIMING

@@ -17,6 +17,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleResourcePolicy,
     BattleRuntimeError,
+    BattleRuntimeTiming,
     RequiredMovePolicy,
     run_adaptive_trainer_battle,
     run_adaptive_wild_battle,
@@ -2746,6 +2747,7 @@ def _route_11_training_venue() -> TrainingVenue:
         is_in_center=lambda raw: raw.map_id == MapId.VERMILION_POKECENTER,
         move_slot=_team_training_move_slot,
         move_guard=_team_training_move_guard,
+        battle_timing=BattleRuntimeTiming(max_sleep_reapplications=4),
     )
 
 

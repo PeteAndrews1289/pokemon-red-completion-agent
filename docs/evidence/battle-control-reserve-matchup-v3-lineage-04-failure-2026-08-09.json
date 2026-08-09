@@ -1,0 +1,69 @@
+{
+  "schema": "pokemon-red-battle-control-v3-lineage-failure-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_retained_excluded_from_fitting",
+  "source_commit": "017c6169def7ac77cd91f1fad5eb68af5636fb7a",
+  "authority": {
+    "battle_moves": "authenticated_nonlinear_move_ranker_with_teacher_queries_allowed",
+    "high_level_labels": "deterministic_teacher",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "perturbation": {
+    "kind": "reproducible_battle_start_timing_schedule",
+    "harness_seed": 990003,
+    "schedule_sha256": "56e6293def953a9682fbcde28933b0185b60136888b96b1fb6d4382ccb38394c",
+    "counted_campaign_root": false
+  },
+  "progress": {
+    "verified_checkpoints": 275,
+    "total_checkpoints": 312,
+    "secret_key_recovered": true,
+    "snorlax_capture_throws": 6,
+    "balanced_team_training_complete": false,
+    "game_complete": false
+  },
+  "private_artifact": {
+    "artifact_id": "red-battle-control-64dc4be87867475fbd5891dbc97d48e7",
+    "manifest_sha256": "a6d5d77147d7e3285e4f84bce361c04bfb21cf4f6a24620837faec890a17331d",
+    "status": "failed",
+    "reason_code": "unhandled_exception",
+    "label_records": 469,
+    "total_records": 470,
+    "bytes": 1536891,
+    "private_path_published": false
+  },
+  "failure": {
+    "phase": "route_11_balanced_team_training",
+    "active_role": "level_20_dux",
+    "active_hp": 48,
+    "active_max_hp": 51,
+    "opponent": "level_9_drowzee",
+    "observed_status": "sleep",
+    "error": "team training encounter exceeded its bounded sleep reapplications"
+  },
+  "diagnosis": {
+    "direct_cause": "Drowzee legally reapplied sleep a third time while the generic battle runtime allowed two immediate reapplications.",
+    "existing_evidence": "The same Route 11 encounter band already uses a tested four-reapplication bound during pre-ship training.",
+    "correct_abstraction": "A training venue must carry the bounded battle timing needed by its measured encounter mechanics; the global runtime default remains conservative.",
+    "progress_loop_observed": true,
+    "route_regression": false,
+    "model_target_error": false
+  },
+  "repair": {
+    "direction": "Thread venue-specific BattleRuntimeTiming into adaptive wild battles and declare four sleep reapplications only for the measured Route 11 training venue.",
+    "global_sleep_bound_changed": false,
+    "route_11_bound_before": 2,
+    "route_11_bound_after": 4,
+    "same_failed_seed_rerun": false,
+    "failed_labels_used_for_fitting": false,
+    "counted_root_consumed": false
+  },
+  "claim_scope": {
+    "new_complete_lineage": false,
+    "sleep_reapplication_repair_unit_qualified": true,
+    "sleep_reapplication_repair_emulator_qualified": false,
+    "switch_target_candidate_retrained": false,
+    "cross_game_transfer_complete": false
+  }
+}

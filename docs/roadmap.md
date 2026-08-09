@@ -39,6 +39,12 @@ summary deliberately says `deployment_authority: false`. The next dependency is 
 timing/RNG-varied full teacher lineages and an unopened target test split—not another full causal
 replay and not a weight tweak to the old scorer. Counted v95 remains 0/10.
 
+Fresh timing seed 990003 then reached checkpoint 275 before a third legal Drowzee sleep
+reapplication exceeded team training's generic bound. The failed private artifact is retained with
+469 labels excluded from fitting. Route 11 now carries its previously tested four-reapplication
+bound through a venue-specific battle-timing field; the global default remains two. This repair is
+ROM-free qualified and needs a fresh diagnostic seed before target-data collection resumes.
+
 After the learned target passes offline and causal Red gates, then one canonical and one uncounted
 perturbation result, begin Crystal's bounded battle adapter.
 Do not build the complete Crystal route first. Compare frozen-Red zero-shot, preregistered few-shot,

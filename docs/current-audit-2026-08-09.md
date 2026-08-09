@@ -65,6 +65,13 @@ it still chooses Blastoise for the held-out Agatha Golbat target. The
 [offline receipt](evidence/battle-switch-target-offline-candidate-2026-08-09.json) therefore records
 `deployment_authority: false`, and no new full-game replay is authorized from that model.
 
+The first post-audit data attempt used fresh uncounted timing seed 990003. It reached checkpoint
+275, including a distinct six-throw Snorlax capture, then failed closed when Route 11 Drowzee
+reapplied sleep three times during team training. Its 469 partial labels are excluded. The repair
+threads a venue's bounded battle timing into the generic trainer and applies the existing tested
+four-reapplication allowance only to Route 11; the global default remains two. A fresh seed, not a
+rerun, is required for emulator qualification.
+
 ## Capability scorecard
 
 | Capability | Rating | Evidence and boundary |

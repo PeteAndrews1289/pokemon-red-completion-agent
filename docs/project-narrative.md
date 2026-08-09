@@ -2124,6 +2124,15 @@ full-game model-authority replay begin. This is also the correct dependency for 
 experiment needs a thin Gen II task teacher and semantic adapter—not an immediate second fixed
 walkthrough.
 
+The first new data seed immediately demonstrated why those lineages must stay fail-closed. It
+passed 275 checkpoints and produced a distinct six-throw Snorlax capture, then a level-9 Drowzee
+reapplied sleep three times against a healthy level-20 DUX during Route 11 training. The generic
+battle runtime allowed two reapplications. The 469 partial labels were retained but excluded.
+Earlier pre-ship Route 11 training already had a tested bound of four, so the repair did not raise a
+global retry constant: `TrainingVenue` now owns bounded battle timing, the generic team trainer
+passes it to the battle runtime, and only Route 11 declares four. The failed seed is retired and a
+fresh timing lineage must qualify the repair.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

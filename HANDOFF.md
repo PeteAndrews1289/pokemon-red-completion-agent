@@ -41,6 +41,15 @@ deterministic baseline, reserve-permutation equivariance, counterfactual matchup
 the held-out Golbat role. Only then grant target authority and rerun the 312-checkpoint causal gate.
 The counted v95 campaign remains unopened at **0/10** and must not supply this development data.
 
+**Latest collection attempt:** uncounted timing seed `990003` reached checkpoint 275 and produced a
+distinct six-throw Snorlax lineage before Route 11 Drowzee reapplied sleep three times against a
+healthy level-20 DUX. The generic default allowed two reapplications and failed closed. Artifact
+`red-battle-control-64dc4be87867475fbd5891dbc97d48e7` is retained failed with 469 labels and must
+never enter fitting. The source now lets each `TrainingVenue` declare `BattleRuntimeTiming`, passes
+that timing into every adaptive wild battle, and gives only Route 11 the already-tested bound of
+four. Do not rerun seed `990003`; use a fresh diagnostic seed after commit/push and full gate. See
+the [failure receipt](docs/evidence/battle-control-reserve-matchup-v3-lineage-04-failure-2026-08-09.json).
+
 **Crystal:** do not build a full second walkthrough now. After the Red target head qualifies, add a
 thin Crystal semantics/mechanics adapter and three bounded teacher tasks: one reserve-choice battle,
 one local-navigation round trip, and one trainee/venue choice. Crystal needs new teacher code for

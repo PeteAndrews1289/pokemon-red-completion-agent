@@ -44,6 +44,12 @@ is recorded as `deployment_authority: false` and has not changed emulator behavi
 [offline target-head receipt](docs/evidence/battle-switch-target-offline-candidate-2026-08-09.json),
 and [Crystal transfer benchmark](docs/crystal-transfer-benchmark.md).
 
+The first additional timing/RNG lineage reached **275/312** before a level-9 Drowzee legally
+reapplied sleep a third time during Route 11 team training. Its 469 partial labels are retained and
+excluded from fitting. The global runtime still allows two reapplications; only the measured Route
+11 venue now carries the already-tested four-reapplication curriculum bound. That repair is
+unit-qualified and awaits a fresh diagnostic seed, not a rerun of the failed one.
+
 The controller is still unpromoted. The active gate is now more late-game, timing/RNG-varied teacher
 data followed by a switch-target candidate that passes held-out, counterfactual, and party-order
 equivariance gates.

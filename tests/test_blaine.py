@@ -150,6 +150,7 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert MANSION_TEAM_POLICY.max_enemy_level_delta == 0
     assert ROUTE_11_TRAINING_VENUE.band.area_id == "route_11"
     assert ROUTE_11_TRAINING_VENUE.map_id == int(MapId.ROUTE_11)
+    assert ROUTE_11_TRAINING_VENUE.battle_timing.max_sleep_reapplications == 4
     assert MANSION_MAX_CONSECUTIVE_FLEES == 32
     assert frozenset({0x76, 0x88}) == MANSION_ESCORT_ENEMY_SPECIES
     assert frozenset({0x37, 0x8F}) == MANSION_VOLATILE_ENEMY_SPECIES

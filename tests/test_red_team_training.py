@@ -22,7 +22,11 @@ import pytest
 
 from pokemon_red_completion import red_team_training
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import BattleIntent, BattleRuntimeError
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRuntimeError,
+    BattleRuntimeTiming,
+)
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     BattleMenuState,
@@ -922,13 +926,36 @@ def test_an_unrelated_battle_runtime_failure_is_not_misreported_as_pp_exhaustion
 
     monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
 
-    def fail_battle(*_args: object, **_kwargs: object) -> None:
+    observed_timing: list[BattleRuntimeTiming] = []
+
+    def fail_battle(*_args: object, **kwargs: object) -> None:
+        timing = kwargs.get("timing")
+        assert isinstance(timing, BattleRuntimeTiming)
+        observed_timing.append(timing)
         raise BattleRuntimeError("semantic battle observation failed")
 
     monkeypatch.setattr(red_team_training, "run_adaptive_wild_battle", fail_battle)
+    route_sleep_timing = BattleRuntimeTiming(max_sleep_reapplications=4)
+    training_venue = TrainingVenue(
+        band=GrindingArea(
+            area_id="route_11",
+            minimum_encounter_level=9,
+            maximum_encounter_level=15,
+            rare_maximum_encounter_level=17,
+            measured_samples=81,
+        ),
+        map_id=TRAINING_MAP,
+        walk_to_grass=lambda *_args: 1,
+        heal_and_return=lambda *_args: None,
+        is_in_center=lambda raw: raw.map_id == CENTER_MAP,
+        move_slot=lambda _raw: 1,
+        battle_timing=route_sleep_timing,
+    )
 
     with pytest.raises(BattleRuntimeError, match="semantic battle observation failed"):
-        run(memory, reader)
+        run(memory, reader, venues=(training_venue,))
+
+    assert observed_timing == [route_sleep_timing]
 
 
 def test_a_run_that_never_finds_a_battle_is_reported_as_unfinished() -> None:
