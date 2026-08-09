@@ -131,6 +131,13 @@ the last exposed missing learned authority. No Agatha map, species, or opponent-
 entered either feature vector. Even a later completed constrained rollout would qualify the
 high-level authority path, not yet the combined teacher-free move stack.
 
+Then show `990013` crossing both repair cards and reaching Lorelei: **3,265 battle decisions, zero
+teacher queries, 13/13 learned targets**. Lorelei is defeated and Bruno's room loads—then the
+verifier turns red because one attack began at 59 HP under a declared 70-HP floor. Put the two
+numbers side by side. The repair is not “heal more at Lorelei”; it publishes the floor through a
+typed battle intent and ranks the model only over actions the live executor can perform. Close the
+scene with report v2 checking that every requested learned role actually made a decision.
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

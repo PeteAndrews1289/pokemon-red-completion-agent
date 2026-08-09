@@ -32,7 +32,7 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
 | Reserve-aware controller | Four complete lineages; 98.2394% / 94.7537% held-out class metrics; target head passed 17/17 fresh offline targets, 13/13 shadow, and 13/13 causal bindings through Hall of Fame | Completed target trial kept switch timing and moves teacher-gated; combined and perturbation authority remain |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
-| Repository gate | 2,155 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
+| Repository gate | 2,156 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
 
 ## Architecture in one minute
 
@@ -91,7 +91,7 @@ development score—is the next promotion gate.
 - Why shadow agreement cannot substitute for causal authority, and why causal authority can still
   prove integration without proving feature value.
 - How the candidate scorer remains permutation-equivariant and excludes title-specific identity.
-- How an emulator-scale system is tested without redistributing the ROM: 2,155 ROM-free tests plus
+- How an emulator-scale system is tested without redistributing the ROM: 2,156 ROM-free tests plus
   private authenticated runtime receipts.
 
 ## Honest limitations
@@ -116,7 +116,12 @@ that recognized a learned HP recovery semantically but still required the teache
 exception class. That failure is preserved and repaired; a fresh combined replay remains.
 The retry qualified S.S. Anne and then found a Route 11 intent advertising recovery effects that
 the pre-Mart protected inventory could not legally spend. Capabilities now derive from live surplus
-and remaining allowance on each dispatch; the next fresh combined replay remains.
+and remaining allowance on each dispatch. Seed `990013` qualified both repairs and defeated
+Lorelei with no battle-teacher query, 13/13 learned target bindings, and live authority from both
+training models. The evaluator still rejected attacks at 59 HP beneath Lorelei's 70-HP contract.
+That negative result produced a portable HP intent, pre-ranking affordance masks, and a report-v2
+contract that requires every requested learned authority. The repaired source still needs a fresh
+canonical replay.
 
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
@@ -132,7 +137,7 @@ until a reserve-aware battle artifact passes canonical and perturbation rehearsa
 - Qualified a strategic trainee/venue controller inside a portable objective loop across 114,831
   live choices and 400 executed teacher disagreements, completing 1,803 development battles with no
   fallback before fresh emulator observation verified the Volcano Badge.
-- Hardened a 142k-line Python research system with 2,155 tests, Ruff, mypy, documentation/privacy
+- Hardened a 142k-line Python research system with 2,156 tests, Ruff, mypy, documentation/privacy
   gates, deterministic source registries, and at least 19 consecutive green GitHub Actions runs after
   diagnosing one derived-artifact CI regression.
 - Built a prospective one-attempt 8-of-10 clean-start evaluator and used its strict rehearsal to
@@ -152,6 +157,7 @@ until a reserve-aware battle artifact passes canonical and perturbation rehearsa
    with `[19, 0, 0, 0, 0, 0]` and the verifier's red result.
 6. End on the causal staircase: `990007: 17/17 prospective`, `990009: 13/13 shadow`, and
    `990010: 13/13 causal + Hall of Fame`. Then show `990011` removing the S.S. Anne teacher-class
-   check and `990012` replacing a static Route 11 capability claim with live resource authority.
+   check, `990012` replacing a static Route 11 capability claim with live resource authority, and
+   `990013` turning a 59-HP Lorelei attack into an explicit legal-action boundary.
    Boundary card: “Causal success at one layer is the next composition test—not the end of the
    project.”

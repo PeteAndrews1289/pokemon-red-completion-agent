@@ -18,7 +18,7 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
-**Late audit and runtime checkpoint:** the full repository gate now passes **2,155 tests with 3
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,156 tests with 3
 integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
 public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
 errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
@@ -52,14 +52,21 @@ inventory, and retains exact HP/item/menu proofs; a non-lead request still fails
 had advertised HP, sleep, and paralysis recovery even though this battle declared zero HP uses and
 only the protected final status-item copies existed. The executor correctly refused to spend the
 reserve; the static intent mask was wrong. Recovery capabilities now recompute before every runtime
-dispatch from live inventory, protected floors, and remaining HP allowance. Push and retry on a
-fresh uncounted root. Counted v95 remains **0/10** and `990007` remains test-only. See the
-[first failure](docs/evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json)
-and [second failure](docs/evidence/portable-clean-start-six-role-rehearsal-02-failure-2026-08-09.json).
+dispatch from live inventory, protected floors, and remaining HP allowance. Seed `990013`
+qualified both earlier repairs and defeated Lorelei after 3,265 teacher-free battle decisions,
+13/13 learned target bindings, 64,337 training-control decisions, and 125,800 trainee/venue
+decisions. Lorelei's verifier rejected attacks issued at 59 HP beneath its declared 70-HP floor.
+The repair expresses that floor in `BattleIntent`, ranks only executable high-level affordances,
+and upgrades the clean-start report so every requested learned role must prove live authority.
+Validate, regenerate, commit, push, and retry on a fresh uncounted canonical root. Counted v95
+remains **0/10** and `990007` remains test-only. See the
+[first failure](docs/evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json),
+the [second failure](docs/evidence/portable-clean-start-six-role-rehearsal-02-failure-2026-08-09.json),
+and the [Lorelei failure](docs/evidence/portable-clean-start-six-role-rehearsal-03-failure-2026-08-09.json).
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `a5e92f0`
 records live Agatha role switches and the passed prospective target test; `edfa676` contains the
-measured recovery-envelope repair. The full local gate passes **2,155 tests with 3 integration
+measured recovery-envelope repair. The full local gate passes **2,156 tests with 3 integration
 tests deselected**, Ruff, mypy, documentation, public-artifact, and source-registry checks. Push
 before any new emulator run. Only Codex pushes this branch; do not create a second worktree or
 force-push it.

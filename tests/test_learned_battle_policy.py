@@ -75,9 +75,12 @@ def _observation(
     switch_limit: int | None = None,
     required_boost_before_first_move: BattleBoostStat | None = None,
     require_status_clear_before_move: bool = False,
+    minimum_hp_before_move: int | None = None,
     require_move_before_first_switch: bool = False,
     require_move_between_switches: bool = False,
     battler_status: int | None = None,
+    battler_hp: int = 50,
+    battler_max_hp: int = 100,
 ) -> BattlePolicyObservation:
     return BattlePolicyObservation(
         RawGameState(
@@ -89,6 +92,8 @@ def _observation(
             battle_state=2,
             first_party_moves=(33, 0, 55),
             first_party_pp=(10, 0, 10),
+            first_party_hp=battler_hp,
+            first_party_max_hp=battler_max_hp,
             first_party_status=battler_status,
         ),
         BattleIntent(
@@ -105,6 +110,7 @@ def _observation(
             switch_capabilities=switch_capabilities,
             switch_limit=switch_limit,
             required_boost_before_first_move=required_boost_before_first_move,
+            minimum_hp_before_move=minimum_hp_before_move,
             require_status_clear_before_move=require_status_clear_before_move,
             require_move_before_first_switch=require_move_before_first_switch,
             require_move_between_switches=require_move_between_switches,
@@ -782,7 +788,7 @@ def test_teacher_free_control_move_does_not_query_teacher() -> None:
     assert policy.public_dict()["actor"] == "learned_policy_teacher_free"
 
 
-def test_control_execution_guards_an_unparameterized_special_action() -> None:
+def test_control_execution_masks_an_unparameterized_special_action() -> None:
     policy = ModelAssistedBattlePolicy(
         model=_model(),
         control_model=_control_model(),
@@ -796,11 +802,13 @@ def test_control_execution_guards_an_unparameterized_special_action() -> None:
     assert policy.choose_move(_observation(), lambda: 1) == 3
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
-    assert execution["safety_fallbacks"] == 1
-    assert execution["target_resolution_failures"] == {"capability_mask": 1}
+    assert execution["safety_fallbacks"] == 0
+    assert execution["affordance_masked_decisions"] == 1
+    assert execution["affordance_masks"] == {"capability_or_target_mask": 1}
+    assert execution["target_resolution_failures"] == {}
 
 
-def test_control_safety_fallback_preserves_move_teacher_gate() -> None:
+def test_control_affordance_mask_preserves_move_teacher_gate() -> None:
     policy = ModelAssistedBattlePolicy(
         model=_model(),
         control_model=_control_model(),
@@ -818,8 +826,10 @@ def test_control_safety_fallback_preserves_move_teacher_gate() -> None:
     assert policy.model_decisions == 0
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
-    assert execution["safety_fallbacks"] == 1
-    assert execution["target_resolution_failures"] == {"capability_mask": 1}
+    assert execution["safety_fallbacks"] == 0
+    assert execution["affordance_masked_decisions"] == 1
+    assert execution["affordance_masks"] == {"capability_or_target_mask": 1}
+    assert execution["target_resolution_failures"] == {}
 
 
 def test_control_execution_emits_boost_without_calling_teacher() -> None:
@@ -863,8 +873,10 @@ def test_control_execution_masks_boost_without_bound_executor_capability() -> No
     assert policy.choose_move(_observation(), lambda: 1) == 3
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
-    assert execution["safety_fallbacks"] == 1
-    assert execution["target_resolution_failures"] == {"capability_mask": 1}
+    assert execution["safety_fallbacks"] == 0
+    assert execution["affordance_masked_decisions"] == 1
+    assert execution["affordance_masks"] == {"capability_or_target_mask": 1}
+    assert execution["target_resolution_failures"] == {}
     assert execution["typed_requests_executed"] == 0
 
 
@@ -890,8 +902,10 @@ def test_control_execution_masks_boost_after_intent_budget_is_consumed() -> None
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
     assert execution["typed_requests_executed"] == 1
-    assert execution["safety_fallbacks"] == 1
-    assert execution["target_resolution_failures"] == {"budget_mask": 1}
+    assert execution["safety_fallbacks"] == 0
+    assert execution["affordance_masked_decisions"] == 1
+    assert execution["affordance_masks"] == {"budget_mask": 1}
+    assert execution["target_resolution_failures"] == {}
     assert execution["last_intent_mask"] == {
         "reason": "budget_mask",
         "predicted_action": "pokemon.core:battle:boost:accuracy",
@@ -975,8 +989,10 @@ def test_control_execution_masks_switch_after_intent_budget_is_consumed() -> Non
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
     assert execution["typed_requests_executed"] == 1
-    assert execution["safety_fallbacks"] == 1
-    assert execution["target_resolution_failures"] == {"budget_mask": 1}
+    assert execution["safety_fallbacks"] == 0
+    assert execution["affordance_masked_decisions"] == 1
+    assert execution["affordance_masks"] == {"budget_mask": 1}
+    assert execution["target_resolution_failures"] == {}
 
 
 def test_control_execution_requires_move_residency_between_switches() -> None:
@@ -1004,8 +1020,10 @@ def test_control_execution_requires_move_residency_between_switches() -> None:
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
     assert execution["typed_requests_executed"] == 2
-    assert execution["safety_fallbacks"] == 1
-    assert execution["target_resolution_failures"] == {"switch_residency_mask": 1}
+    assert execution["safety_fallbacks"] == 0
+    assert execution["affordance_masked_decisions"] == 1
+    assert execution["affordance_masks"] == {"switch_residency_mask": 1}
+    assert execution["target_resolution_failures"] == {}
     last_mask = execution["last_intent_mask"]
     assert isinstance(last_mask, dict)
     assert last_mask["reason"] == "switch_residency_mask"
@@ -1034,7 +1052,9 @@ def test_switch_residency_is_not_satisfied_by_a_recovery_action() -> None:
 
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
-    assert execution["target_resolution_failures"] == {"switch_residency_mask": 1}
+    assert execution["affordance_masked_decisions"] == 1
+    assert execution["affordance_masks"] == {"switch_residency_mask": 1}
+    assert execution["target_resolution_failures"] == {}
 
 
 def test_control_execution_forces_setup_then_real_residency_move() -> None:
@@ -1071,8 +1091,9 @@ def test_control_execution_forces_setup_then_real_residency_move() -> None:
     assert execution["intent_forced_requests"] == 1
     assert execution["target_resolution_failures"] == {
         "required_boost_before_first_move_mask": 1,
-        "switch_residency_mask": 1,
     }
+    assert execution["affordance_masked_decisions"] == 2
+    assert execution["affordance_masks"] == {"switch_residency_mask": 2}
 
 
 def test_control_execution_requires_move_before_first_switch() -> None:
@@ -1097,8 +1118,10 @@ def test_control_execution_requires_move_before_first_switch() -> None:
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
     assert execution["typed_requests_executed"] == 1
-    assert execution["safety_fallbacks"] == 1
-    assert execution["target_resolution_failures"] == {"initial_switch_residency_mask": 1}
+    assert execution["safety_fallbacks"] == 0
+    assert execution["affordance_masked_decisions"] == 1
+    assert execution["affordance_masks"] == {"initial_switch_residency_mask": 1}
+    assert execution["target_resolution_failures"] == {}
     last_mask = execution["last_intent_mask"]
     assert isinstance(last_mask, dict)
     assert last_mask["reason"] == "initial_switch_residency_mask"
@@ -1140,12 +1163,45 @@ def test_control_execution_forces_declared_status_clearance_before_dispatch(
     assert execution["intent_forced_requests"] == 1
     assert execution["teacher_free_requests"] == 0
     assert execution["typed_requests_executed"] == 1
-    assert execution["safety_fallbacks"] == 1
+    assert execution["safety_fallbacks"] == 0
     assert execution["target_resolution_failures"] == {"status_clear_before_move_mask": 1}
     last_mask = execution["last_intent_mask"]
     assert isinstance(last_mask, dict)
     assert last_mask["reason"] == "status_clear_before_move_mask"
-    assert last_mask["predicted_action"] == CONTROL_CLASS_REFS[predicted_class_index]
+    assert last_mask["predicted_action"] == CONTROL_CLASS_REFS[0]
+
+
+def test_control_execution_forces_declared_hp_floor_before_move() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_full_control_model(0),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+
+    def teacher_must_not_run() -> int:
+        raise AssertionError("intent-forced recovery queried the teacher")
+
+    with pytest.raises(LearnedBattleControlRequest) as raised:
+        policy.choose_move(
+            _observation(
+                recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
+                minimum_hp_before_move=70,
+                battler_hp=59,
+                battler_max_hp=151,
+            ),
+            teacher_must_not_run,
+        )
+
+    assert raised.value.party_slot == 1
+    assert raised.value.recovery_need == "hp"
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["intent_forced_requests"] == 1
+    assert execution["target_resolution_failures"] == {"minimum_hp_before_move_mask": 1}
 
 
 @pytest.mark.parametrize(

@@ -53,6 +53,8 @@ def _report() -> CleanStartPortableReport:
         automatic_objective_ids=("begin_adventure", "enter_hall_of_fame"),
         selected_objective_ids=("power_on", "defeat_champion"),
         strict_teacher_free_battle_required=False,
+        battle_control_authority_required=False,
+        battle_switch_target_authority_required=False,
         training_control_authority_required=False,
         training_candidate_authority_required=False,
         controller_released=True,
@@ -131,16 +133,58 @@ def test_portable_report_enforces_requested_battle_and_training_authority() -> N
         },
     ).passed
 
+    six_role_battle = replace(
+        strict,
+        battle_control_authority_required=True,
+        battle_switch_target_authority_required=True,
+        battle_policy={
+            "decisions": 31,
+            "teacher_fallbacks": 0,
+            "teacher_queries": 0,
+            "teacher_queries_allowed": False,
+            "control_model_execution": {
+                "decisions": 31,
+                "low_confidence_fallbacks": 0,
+                "safety_fallbacks": 0,
+            },
+            "switch_target_model": {
+                "execution": {
+                    "decisions": 3,
+                    "enabled": True,
+                    "fallbacks": {},
+                    "rebindings": 3,
+                }
+            },
+        },
+    )
+    assert six_role_battle.passed
+    assert not replace(
+        six_role_battle,
+        battle_policy={
+            **six_role_battle.battle_policy,
+            "switch_target_model": {
+                "execution": {
+                    "decisions": 3,
+                    "enabled": True,
+                    "fallbacks": {"projection": 1},
+                    "rebindings": 2,
+                }
+            },
+        },
+    ).passed
+
     controlled = replace(
         _report(),
         training_control_authority_required=True,
         training_candidate_authority_required=True,
         training_control={
             "controlled_decisions": 100,
+            "model_had_execution_authority": True,
             "teacher_fallback_on_model_disagreement": False,
         },
         training_candidate={
             "controlled_decisions": 100,
+            "model_had_execution_authority": True,
             "teacher_fallback_on_model_disagreement": False,
         },
     )
@@ -149,6 +193,7 @@ def test_portable_report_enforces_requested_battle_and_training_authority() -> N
         controlled,
         training_candidate={
             "controlled_decisions": 0,
+            "model_had_execution_authority": False,
             "teacher_fallback_on_model_disagreement": False,
         },
     ).passed

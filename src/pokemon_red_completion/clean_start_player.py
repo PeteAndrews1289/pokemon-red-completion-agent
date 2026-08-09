@@ -81,6 +81,8 @@ class CleanStartPortableReport:
     automatic_objective_ids: tuple[str, ...]
     selected_objective_ids: tuple[str, ...]
     strict_teacher_free_battle_required: bool
+    battle_control_authority_required: bool
+    battle_switch_target_authority_required: bool
     training_control_authority_required: bool
     training_candidate_authority_required: bool
     controller_released: bool
@@ -101,6 +103,13 @@ class CleanStartPortableReport:
         ):
             return False
         if self.strict_teacher_free_battle_required and not self._strict_battle_passed:
+            return False
+        if self.battle_control_authority_required and not self._battle_control_passed:
+            return False
+        if (
+            self.battle_switch_target_authority_required
+            and not self._battle_switch_target_passed
+        ):
             return False
         if self.training_control_authority_required and not self._training_control_passed:
             return False
@@ -134,6 +143,7 @@ class CleanStartPortableReport:
         return bool(
             report is not None
             and _counter(report, "controlled_decisions") > 0
+            and report.get("model_had_execution_authority") is True
             and report.get("teacher_fallback_on_model_disagreement") is False
         )
 
@@ -143,7 +153,42 @@ class CleanStartPortableReport:
         return bool(
             report is not None
             and _counter(report, "controlled_decisions") > 0
+            and report.get("model_had_execution_authority") is True
             and report.get("teacher_fallback_on_model_disagreement") is False
+        )
+
+    @property
+    def _battle_control_passed(self) -> bool:
+        policy = self.battle_policy
+        if policy is None:
+            return False
+        execution = policy.get("control_model_execution")
+        return bool(
+            isinstance(execution, Mapping)
+            and _counter(execution, "decisions") > 0
+            and execution.get("safety_fallbacks") == 0
+            and execution.get("low_confidence_fallbacks") == 0
+        )
+
+    @property
+    def _battle_switch_target_passed(self) -> bool:
+        policy = self.battle_policy
+        if policy is None:
+            return False
+        target = policy.get("switch_target_model")
+        if not isinstance(target, Mapping):
+            return False
+        execution = target.get("execution")
+        if not isinstance(execution, Mapping):
+            return False
+        decisions = _counter(execution, "decisions")
+        fallbacks = execution.get("fallbacks")
+        return bool(
+            execution.get("enabled") is True
+            and decisions > 0
+            and _counter(execution, "rebindings") == decisions
+            and isinstance(fallbacks, Mapping)
+            and not fallbacks
         )
 
     def public_dict(self) -> dict[str, object]:
@@ -167,8 +212,12 @@ class CleanStartPortableReport:
         return {
             "assistance": assistance,
             "automatic_objective_ids": list(self.automatic_objective_ids),
+            "battle_control_authority_required": self.battle_control_authority_required,
             "battle_policy": self.battle_policy,
             "battle_schedule": self.battle_schedule,
+            "battle_switch_target_authority_required": (
+                self.battle_switch_target_authority_required
+            ),
             "claim": (
                 "A learned objective ranker selected every executable composite from clean power; "
                 "registered fixed skills executed mechanics; fresh observations verified effects."
@@ -186,7 +235,7 @@ class CleanStartPortableReport:
             "objective_policy": dict(self.objective_policy),
             "observer": dict(self.observer),
             "run": self.run.public_dict(),
-            "schema": "pokemon-red-portable-clean-start-run-v1",
+            "schema": "pokemon-red-portable-clean-start-run-v2",
             "selected_objective_ids": list(self.selected_objective_ids),
             "status": "ok" if self.passed else "failed",
             "strict_teacher_free_battle_required": self.strict_teacher_free_battle_required,
@@ -415,6 +464,8 @@ def run_portable_clean_start(
             automatic_objective_ids=automatic_ids,
             selected_objective_ids=selected_ids,
             strict_teacher_free_battle_required=require_teacher_free_battle,
+            battle_control_authority_required=execute_battle_control_model,
+            battle_switch_target_authority_required=execute_battle_switch_target_model,
             training_control_authority_required=execute_training_control_model,
             training_candidate_authority_required=execute_training_candidate_model,
             controller_released=not emulator.pressed_buttons,

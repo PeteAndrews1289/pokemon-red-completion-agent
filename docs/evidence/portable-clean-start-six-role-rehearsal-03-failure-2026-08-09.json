@@ -1,0 +1,86 @@
+{
+  "claim": "One uncounted canonical six-role rehearsal crossed both repaired early-game integration seams and defeated Lorelei without a battle-teacher query, then failed the declared per-turn HP contract. It is a preserved negative result, not campaign evidence.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990013,
+    "initial_wait_frames": 0,
+    "timing_mode": "canonical_unperturbed_baseline"
+  },
+  "failure": {
+    "active_party_indices_observed": [
+      3,
+      0
+    ],
+    "chapter": "Lorelei",
+    "chapter_actions": 720,
+    "chapter_frames": 66659,
+    "declared_minimum_hp_before_move": 70,
+    "exception_type": "LoreleiChapterError",
+    "lowest_recorded_pre-move_hp": 59,
+    "opponents_defeated": 5,
+    "post_battle_party_fully_healed": true,
+    "post_battle_status_clear": true,
+    "reached_next_room": true,
+    "team_switches": 2
+  },
+  "model_execution": {
+    "battle_control": {
+      "class_accuracy_against_teacher_labels": 0.9960183767228178,
+      "decisions": 3265,
+      "intent_forced_requests": 0,
+      "model_decisions": 3226,
+      "safety_fallbacks": 13,
+      "safety_fallbacks_by_reason": {
+        "BattleActionTargetError": 1,
+        "budget_mask": 1,
+        "capability_mask": 10,
+        "initial_switch_residency_mask": 1
+      },
+      "teacher_fallbacks": 0,
+      "teacher_queries": 0,
+      "typed_requests_executed": 39
+    },
+    "battle_switch_target": {
+      "decisions": 13,
+      "fallbacks": {},
+      "model_sha256": "bd1ba4bd1ca6e9de1a94bc6f958bb54f80c45cce3e14421df3a4eded7a70186e",
+      "rebindings": 13
+    },
+    "training_candidate": {
+      "accuracy_against_teacher_labels": 0.9979173290937997,
+      "controlled_decisions": 125800,
+      "disagreements": 262,
+      "model_had_execution_authority": true
+    },
+    "training_control": {
+      "accuracy_against_teacher_labels": 1.0,
+      "controlled_decisions": 64337,
+      "model_had_execution_authority": true,
+      "operational_errors": {
+        "missed_required_heal": 0,
+        "missed_stop": 0,
+        "premature_stop": 0,
+        "unnecessary_heal": 0
+      }
+    }
+  },
+  "progress": {
+    "frames_executed": 50806733,
+    "loop_decisions": 17,
+    "objectives_completed_by_loop": 16,
+    "semantic_facts_latched": 30
+  },
+  "promotion_eligible": false,
+  "raw_report_sha256": "99274c07f64f15e626dd3fe4f299492bde489d3f21d62ec78a8ce61865ba824b",
+  "repair": {
+    "authority_contract": "The clean-start v2 report requires positive high-level control decisions, exact no-fallback target rebindings, and explicit execution authority for every requested training role.",
+    "legal_action_mask": "The high-level model now ranks only action classes that the live typed intent, resource observation, action budget, and target resolver can execute. Masked top classes remain counted separately.",
+    "minimum_hp_intent": "BattleIntent can declare a positive minimum_hp_before_move only when HP recovery is executable. Lorelei binds its existing 70-HP verifier threshold to that intent, and a move below the floor becomes a typed learned recovery request."
+  },
+  "schema": "pokemon-red-portable-clean-start-six-role-failure-v1",
+  "source": {
+    "git_commit": "b53ba8651b01d362caa1aba578c7f695cddc6fae",
+    "worktree_dirty": false
+  },
+  "status": "failed_uncounted_rehearsal"
+}

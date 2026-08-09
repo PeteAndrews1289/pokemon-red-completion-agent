@@ -409,9 +409,15 @@ def test_battle_intent_accepts_typed_action_budgets() -> None:
         boost_use_limits=((BattleBoostStat.ACCURACY, 1),),
         required_boost_before_first_move=BattleBoostStat.ACCURACY,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
-        recovery_capabilities=frozenset({BattleRecoveryCapability.CURE_ANY_STATUS}),
+        recovery_capabilities=frozenset(
+            {
+                BattleRecoveryCapability.CURE_ANY_STATUS,
+                BattleRecoveryCapability.RESTORE_HP,
+            }
+        ),
         switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
         switch_limit=2,
+        minimum_hp_before_move=70,
         require_status_clear_before_move=True,
         require_move_before_first_switch=True,
         require_move_between_switches=True,
@@ -420,6 +426,7 @@ def test_battle_intent_accepts_typed_action_budgets() -> None:
     assert intent.boost_use_limits == ((BattleBoostStat.ACCURACY, 1),)
     assert intent.required_boost_before_first_move is BattleBoostStat.ACCURACY
     assert intent.switch_limit == 2
+    assert intent.minimum_hp_before_move == 70
     assert intent.require_status_clear_before_move is True
     assert intent.require_move_before_first_switch is True
     assert intent.require_move_between_switches is True
@@ -464,6 +471,20 @@ def test_battle_intent_rejects_budget_without_matching_capability() -> None:
             "defeat_rival",
             TEST_BATTLE_PLAN_ID,
             require_status_clear_before_move=True,
+        )
+    with pytest.raises(ValueError, match="HP recovery capability"):
+        BattleIntent(
+            "defeat_rival",
+            TEST_BATTLE_PLAN_ID,
+            minimum_hp_before_move=70,
+        )
+    with pytest.raises(TypeError, match="positive integer"):
+        BattleIntent(
+            "defeat_rival",
+            TEST_BATTLE_PLAN_ID,
+            resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+            recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
+            minimum_hp_before_move=0,
         )
 
 

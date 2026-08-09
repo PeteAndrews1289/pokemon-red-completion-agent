@@ -13,6 +13,7 @@ import numpy as np
 
 from pokemon_red_completion.battle_action_targets import (
     BattleActionTargetError,
+    ResolvedBattleAction,
     authorize_recovery_target,
     authorize_switch_target,
     resolve_battle_action_target,
@@ -120,6 +121,8 @@ class ModelAssistedBattlePolicy:
     control_execution_requests: int = 0
     control_suppressed_teacher_requests: int = 0
     control_safety_fallbacks: int = 0
+    control_affordance_masked_decisions: int = 0
+    control_affordance_masks: Counter[str] = field(default_factory=Counter)
     control_low_confidence_fallbacks: int = 0
     control_resolved_targets: Counter[str] = field(default_factory=Counter)
     control_target_resolution_failures: Counter[str] = field(default_factory=Counter)
@@ -485,6 +488,8 @@ class ModelAssistedBattlePolicy:
                 "typed_requests_executed": self.control_execution_requests,
                 "teacher_requests_suppressed": self.control_suppressed_teacher_requests,
                 "safety_fallbacks": self.control_safety_fallbacks,
+                "affordance_masked_decisions": self.control_affordance_masked_decisions,
+                "affordance_masks": dict(sorted(self.control_affordance_masks.items())),
                 "low_confidence_fallbacks": self.control_low_confidence_fallbacks,
                 "confidence_threshold": self.control_confidence_threshold,
                 "resolved_targets": dict(sorted(self.control_resolved_targets.items())),
@@ -527,8 +532,12 @@ class ModelAssistedBattlePolicy:
                     catalog=getattr(self.projector, "catalog", None),
                 )
             )
-            predicted_ref = self.control_model.class_refs[int(np.argmax(probabilities))]
-            confidence = float(np.max(probabilities))
+            predicted_ref, confidence, resolved_action = self._rank_executable_control_action(
+                observation,
+                encoded=encoded,
+                history=history,
+                probabilities=probabilities,
+            )
         except Exception as error:
             raise LearnedBattlePolicyError(
                 "control execution could not project the live decision"
@@ -562,7 +571,44 @@ class ModelAssistedBattlePolicy:
                 ) from error
             self.control_execution_decisions += 1
             self.control_execution_requests += 1
-            self.control_safety_fallbacks += 1
+            self.control_intent_forced_requests += 1
+            self._record_control_action(observation, forced_recovery.action)
+            assert forced_recovery.recovery_need is not None
+            raise LearnedBattleControlRequest(
+                forced_recovery.action,
+                party_slot=forced_recovery.party_slot,
+                recovery_need=forced_recovery.recovery_need.value,
+                status=forced_recovery.status,
+            )
+        if (
+            predicted_ref == CONTROL_CLASS_REFS[0]
+            and intent.minimum_hp_before_move is not None
+            and (observation.state.battler_hp or 0) < intent.minimum_hp_before_move
+        ):
+            predicted_action = BattleAction.move(predicted_slot)
+            intent_mask = "minimum_hp_before_move_mask"
+            self.control_target_resolution_failures[intent_mask] += 1
+            self.control_last_intent_mask = _control_intent_mask_context(
+                observation,
+                predicted_action,
+                history=history,
+                reason=intent_mask,
+            )
+            try:
+                forced_recovery = authorize_recovery_target(
+                    resolve_battle_action_target(
+                        BattleAction.recovery(),
+                        encoded,
+                        catalog=getattr(self.projector, "catalog", None),
+                    ),
+                    intent.recovery_capabilities,
+                )
+            except BattleActionTargetError as error:
+                raise LearnedBattlePolicyError(
+                    "intent-forced HP recovery lacks an executable target"
+                ) from error
+            self.control_execution_decisions += 1
+            self.control_execution_requests += 1
             self.control_intent_forced_requests += 1
             self._record_control_action(observation, forced_recovery.action)
             assert forced_recovery.recovery_need is not None
@@ -617,7 +663,6 @@ class ModelAssistedBattlePolicy:
                     ) from error
                 self.control_execution_decisions += 1
                 self.control_execution_requests += 1
-                self.control_safety_fallbacks += 1
                 self.control_intent_forced_requests += 1
                 self._record_control_action(observation, forced_boost)
                 raise LearnedBattleControlRequest(forced_boost)
@@ -646,76 +691,8 @@ class ModelAssistedBattlePolicy:
                 move_confidence=move_confidence,
             )
 
-        resolved_action = None
         if predicted_ref != CONTROL_CLASS_REFS[0]:
-            try:
-                predicted_action = action_from_control_class_ref(predicted_ref)
-                intent_mask = _control_action_intent_mask(
-                    predicted_action,
-                    observation=observation,
-                    history=history,
-                )
-                if intent_mask is not None:
-                    self.control_target_resolution_failures[intent_mask] += 1
-                    self.control_last_intent_mask = _control_intent_mask_context(
-                        observation,
-                        predicted_action,
-                        history=history,
-                        reason=intent_mask,
-                    )
-                    self.control_execution_decisions += 1
-                    self.control_safety_fallbacks += 1
-                    return self._return_control_move(
-                        observation,
-                        fallback,
-                        predicted_slot=predicted_slot,
-                        move_context=move_context,
-                        move_batch=move_batch,
-                        move_legal_mask=move_legal_mask,
-                        move_predicted_candidate=move_predicted_candidate,
-                        move_confidence=move_confidence,
-                    )
-                catalog = getattr(self.projector, "catalog", None)
-                if (
-                    predicted_action.kind is BattleActionKind.SWITCH
-                    and self.execute_switch_target_model
-                ):
-                    assert self.switch_target_model is not None
-                    if catalog is None:
-                        raise BattleActionTargetError(
-                            "learned switch target catalog is unavailable"
-                        )
-                    resolved_action = resolve_learned_switch_target(
-                        predicted_action,
-                        encoded,
-                        catalog=catalog,
-                        model=self.switch_target_model,
-                    )
-                else:
-                    resolved_action = resolve_battle_action_target(
-                        predicted_action,
-                        encoded,
-                        catalog=catalog,
-                    )
-            except BattleActionTargetError as error:
-                if (
-                    predicted_ref == "pokemon.core:battle:switch"
-                    and self.execute_switch_target_model
-                ):
-                    self.switch_target_execution_fallbacks[type(error).__name__] += 1
-                self.control_target_resolution_failures[type(error).__name__] += 1
-                self.control_execution_decisions += 1
-                self.control_safety_fallbacks += 1
-                return self._return_control_move(
-                    observation,
-                    fallback,
-                    predicted_slot=predicted_slot,
-                    move_context=move_context,
-                    move_batch=move_batch,
-                    move_legal_mask=move_legal_mask,
-                    move_predicted_candidate=move_predicted_candidate,
-                    move_confidence=move_confidence,
-                )
+            assert resolved_action is not None
             target_key = predicted_ref
             if resolved_action.recovery_need is not None:
                 target_key = f"{target_key}:{resolved_action.recovery_need.value}"
@@ -724,63 +701,7 @@ class ModelAssistedBattlePolicy:
             if resolved_action.switch_basis is not None:
                 target_key = f"{target_key}:{resolved_action.switch_basis.value}"
             self.control_resolved_targets[target_key] += 1
-            if resolved_action.action.kind is BattleActionKind.USE_RECOVERY:
-                try:
-                    resolved_action = authorize_recovery_target(
-                        resolved_action,
-                        intent.recovery_capabilities,
-                    )
-                except BattleActionTargetError:
-                    self.control_target_resolution_failures["capability_mask"] += 1
-                    self.control_execution_decisions += 1
-                    self.control_safety_fallbacks += 1
-                    return self._return_control_move(
-                        observation,
-                        fallback,
-                        predicted_slot=predicted_slot,
-                        move_context=move_context,
-                        move_batch=move_batch,
-                        move_legal_mask=move_legal_mask,
-                        move_predicted_candidate=move_predicted_candidate,
-                        move_confidence=move_confidence,
-                    )
-            if resolved_action.action.kind is BattleActionKind.SWITCH:
-                try:
-                    resolved_action = authorize_switch_target(
-                        resolved_action,
-                        intent.switch_capabilities,
-                        observation=encoded,
-                    )
-                except BattleActionTargetError:
-                    self.control_target_resolution_failures["capability_mask"] += 1
-                    self.control_execution_decisions += 1
-                    self.control_safety_fallbacks += 1
-                    return self._return_control_move(
-                        observation,
-                        fallback,
-                        predicted_slot=predicted_slot,
-                        move_context=move_context,
-                        move_batch=move_batch,
-                        move_legal_mask=move_legal_mask,
-                        move_predicted_candidate=move_predicted_candidate,
-                        move_confidence=move_confidence,
-                    )
             if resolved_action.action.kind is BattleActionKind.USE_BOOST:
-                boost_stat = resolved_action.action.boost_stat
-                if boost_stat not in intent.boost_capabilities:
-                    self.control_target_resolution_failures["capability_mask"] += 1
-                    self.control_execution_decisions += 1
-                    self.control_safety_fallbacks += 1
-                    return self._return_control_move(
-                        observation,
-                        fallback,
-                        predicted_slot=predicted_slot,
-                        move_context=move_context,
-                        move_batch=move_batch,
-                        move_legal_mask=move_legal_mask,
-                        move_predicted_candidate=move_predicted_candidate,
-                        move_confidence=move_confidence,
-                    )
                 self.control_execution_decisions += 1
                 self.control_execution_requests += 1
                 self.control_teacher_free_requests += 1
@@ -869,6 +790,94 @@ class ModelAssistedBattlePolicy:
             teacher_slot=teacher_slot,
             teacher_request=teacher_request,
         )
+
+    def _rank_executable_control_action(
+        self,
+        observation: BattlePolicyObservation,
+        *,
+        encoded: Mapping[str, object],
+        history: BattleControlHistory,
+        probabilities: np.ndarray,
+    ) -> tuple[str, float, ResolvedBattleAction | None]:
+        """Rank only executable high-level affordances without querying a teacher."""
+
+        intent = observation.intent
+        assert intent is not None
+        assert self.control_model is not None
+        catalog = getattr(self.projector, "catalog", None)
+        masked: list[tuple[str, str]] = []
+        raw_index = int(np.argmax(probabilities))
+        for index in np.argsort(-probabilities, kind="stable"):
+            predicted_ref = self.control_model.class_refs[int(index)]
+            if predicted_ref == CONTROL_CLASS_REFS[0]:
+                resolved: ResolvedBattleAction | None = None
+            else:
+                predicted_action = action_from_control_class_ref(predicted_ref)
+                intent_mask = _control_action_intent_mask(
+                    predicted_action,
+                    observation=observation,
+                    history=history,
+                )
+                if intent_mask is not None:
+                    masked.append((predicted_ref, intent_mask))
+                    continue
+                try:
+                    if (
+                        predicted_action.kind is BattleActionKind.SWITCH
+                        and self.execute_switch_target_model
+                    ):
+                        assert self.switch_target_model is not None
+                        if catalog is None:
+                            raise BattleActionTargetError(
+                                "learned switch target catalog is unavailable"
+                            )
+                        resolved = resolve_learned_switch_target(
+                            predicted_action,
+                            encoded,
+                            catalog=catalog,
+                            model=self.switch_target_model,
+                        )
+                    else:
+                        resolved = resolve_battle_action_target(
+                            predicted_action,
+                            encoded,
+                            catalog=catalog,
+                        )
+                    if predicted_action.kind is BattleActionKind.USE_RECOVERY:
+                        resolved = authorize_recovery_target(
+                            resolved,
+                            intent.recovery_capabilities,
+                        )
+                    elif predicted_action.kind is BattleActionKind.SWITCH:
+                        resolved = authorize_switch_target(
+                            resolved,
+                            intent.switch_capabilities,
+                            observation=encoded,
+                        )
+                    elif (
+                        predicted_action.kind is BattleActionKind.USE_BOOST
+                        and predicted_action.boost_stat not in intent.boost_capabilities
+                    ):
+                        raise BattleActionTargetError(
+                            "boost action lacks an executor capability"
+                        )
+                except BattleActionTargetError:
+                    masked.append((predicted_ref, "capability_or_target_mask"))
+                    continue
+            if int(index) != raw_index:
+                self.control_affordance_masked_decisions += 1
+                for _class_ref, reason in masked:
+                    self.control_affordance_masks[reason] += 1
+                raw_ref, reason = masked[0]
+                raw_action = action_from_control_class_ref(raw_ref)
+                self.control_last_intent_mask = _control_intent_mask_context(
+                    observation,
+                    raw_action,
+                    history=history,
+                    reason=reason,
+                )
+            return predicted_ref, float(probabilities[int(index)]), resolved
+        raise LearnedBattlePolicyError("control execution has no legal action class")
 
     def _return_control_move(
         self,

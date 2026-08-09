@@ -344,6 +344,7 @@ def run_lorelei_chapter(
         boost_use_limits=((BattleBoostStat.ACCURACY, 1),),
         switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
         switch_limit=2,
+        minimum_hp_before_move=LORELEI_SAFE_HP,
         require_status_clear_before_move=True,
         require_move_between_switches=True,
     )

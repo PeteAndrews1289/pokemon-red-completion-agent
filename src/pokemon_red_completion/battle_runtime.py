@@ -134,6 +134,7 @@ class BattleIntent:
     switch_capabilities: frozenset[BattleSwitchCapability] = frozenset()
     switch_limit: int | None = None
     required_boost_before_first_move: BattleBoostStat | None = None
+    minimum_hp_before_move: int | None = None
     require_status_clear_before_move: bool = False
     require_move_before_first_switch: bool = False
     require_move_between_switches: bool = False
@@ -215,6 +216,16 @@ class BattleIntent:
                 )
             if dict(self.boost_use_limits).get(self.required_boost_before_first_move, 0) < 1:
                 raise ValueError("required pre-move boost requires a matching use budget")
+        if self.minimum_hp_before_move is not None and (
+            type(self.minimum_hp_before_move) is not int  # noqa: E721
+            or self.minimum_hp_before_move < 1
+        ):
+            raise TypeError("minimum_hp_before_move must be a positive integer or None")
+        if (
+            self.minimum_hp_before_move is not None
+            and BattleRecoveryCapability.RESTORE_HP not in self.recovery_capabilities
+        ):
+            raise ValueError("minimum move HP requires an HP recovery capability")
         if not isinstance(self.require_status_clear_before_move, bool):
             raise TypeError("require_status_clear_before_move must be a bool")
         status_recovery_capabilities = frozenset(

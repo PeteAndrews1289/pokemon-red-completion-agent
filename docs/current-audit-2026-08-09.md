@@ -13,7 +13,8 @@ The present Red milestone is narrower and measurable: qualify the reserve-aware 
 controller on a fresh full-game rollout, then combine it with teacher-free ordinary move selection.
 The target-binding layer now has canonical shadow and isolated causal Hall-of-Fame completion. The
 first two six-role compositions exposed and repaired S.S. Anne typed-recovery and Route 11
-live-capability mismatches; their fresh replay remains.
+live-capability mismatches. Their fresh replay qualified both repairs and reached a Lorelei win,
+where a missing typed HP-floor intent produced the next fail-closed result.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -144,6 +145,16 @@ correctly refused the item; authorization had received a false capability mask. 
 recomputes capabilities from live surplus and remaining allowance before every dispatch. See the
 [second preserved failure](evidence/portable-clean-start-six-role-rehearsal-02-failure-2026-08-09.json).
 
+Seed `990013` advanced through Lorelei with no battle-teacher query: 3,265 battle decisions, 13/13
+learned target rebindings, 64,337 training-control choices, and 125,800 trainee/venue choices. The
+chapter still rejected its win because the learned controller attacked at 59 HP beneath the
+existing 70-HP per-turn contract. This exposed two missing evaluator inputs rather than a route
+failure: the executable intent did not publish the HP floor, and the controller selected first and
+masked unavailable action classes afterward. The repair adds a typed positive HP floor, ranks the
+model over only live executable affordances, records masked top classes separately, and upgrades
+the final clean-start contract to require positive authority from all requested roles. See the
+[third preserved failure](evidence/portable-clean-start-six-role-rehearsal-03-failure-2026-08-09.json).
+
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared
 gap calculation intersected Blue with itself. One canonical Generation I facts module now derives
@@ -170,7 +181,7 @@ silently acting at night.
 ## Code and test health
 
 - 127 source modules and 135 test modules cover roughly 88,000 source lines and 52,500 test lines.
-- The current full gate passes **2,155 tests** with 3 emulator-integration tests deselected and 1
+- The current full gate passes **2,156 tests** with 3 emulator-integration tests deselected and 1
   expected failure, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.
@@ -204,12 +215,12 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Complete the full ROM-free gate for the live Lavender recovery-capability repair, commit, and
-   push the regenerated source identity.
+1. Complete the full ROM-free gate for the HP-intent, legal-action-mask, and clean-start report-v2
+   repair; commit and push the regenerated source identity.
 2. Run a fresh uncounted canonical six-role replay with teacher battle queries disabled; preserve
    either its Hall-of-Fame receipt or its next fail-closed integration defect.
-3. If it passes, separate typed intent enforcement from true model safety fallbacks in the strict
-   report and freeze the exact combined artifact set.
+3. If it passes, freeze the exact combined artifact set. Typed intent enforcement and live
+   affordance masking are now separate from true safety fallback in the report.
 4. Run at least one uncounted timing perturbation with the same frozen source and artifacts. Only
    after canonical and perturbation gates pass should v95's ten one-attempt roots open.
 5. Build Crystal as a thin adapter plus three bounded tasks: one reserve-choice battle, one local

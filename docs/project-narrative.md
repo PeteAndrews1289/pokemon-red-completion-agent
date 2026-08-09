@@ -2223,6 +2223,22 @@ their protected one-item floors. When a capability disappears, the high-level re
 the teacher-free move model continues instead. This makes resource availability part of the live
 action space rather than a static chapter promise.
 
+Seed `990013` proved both executor repairs and carried all six learned decision roles to Lorelei.
+It made 3,265 battle decisions without a teacher query, rebound 13/13 switches through the learned
+target head, and gave the two training models authority over 64,337 control choices and 125,800
+trainee/venue choices. It defeated Lorelei and entered Bruno's room. The evaluator still said no.
+
+The turn trace showed attacks beginning at 59 HP, below Lorelei's longstanding 70-HP safety floor.
+The teacher callback knew that floor and the terminal receipt checked it, but the executable intent
+never exposed it to teacher-free control. The same audit found that unavailable high-level classes
+were selected first and converted to moves afterward, making an ordinary legal-action mask look
+like a safety fallback. The repair adds a positive `minimum_hp_before_move` intent that requires an
+HP-recovery capability, ranks model probabilities only across live executable affordances, and
+records masked top classes separately from true fallback. Clean-start report v2 also refuses to
+pass unless requested high-level, switch-target, training-control, and trainee/venue authorities
+all executed. The failed root remains the evidence that motivated those contracts; it is not
+silently relabeled as a near-pass.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

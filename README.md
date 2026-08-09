@@ -81,8 +81,15 @@ failure is preserved, the executor now accepts only a complete learned lead-HP t
 existing bounded inventory and exact recovery proofs. Fresh seed `990012` qualified that repair,
 then exposed a Route 11 intent that advertised status and HP recovery before the Mart stock-up even
 though only protected status copies existed and HP allowance was zero. Capabilities now recompute
-from live surplus and remaining allowance before every dispatch. These are executor repairs, not
-evidence that the six-role model already completes Red. Navigation, menus,
+from live surplus and remaining allowance before every dispatch. Seed `990013` qualified both
+repairs and advanced through all eight badges, balanced development, Victory Road, and a Lorelei
+win with zero battle-teacher queries. The verifier still rejected it: the controller attacked at
+59 HP even though Lorelei's teacher and receipt require 70. That floor is now an explicit typed
+intent, unavailable action classes are masked before ranking, and the final report independently
+requires every requested model role to exercise authority. See the
+[third preserved failure](docs/evidence/portable-clean-start-six-role-rehearsal-03-failure-2026-08-09.json).
+These are interface and evaluation repairs, not evidence that the six-role model already completes
+Red. Navigation, menus,
 chapter mechanics, and resource execution remain authored. The counted v95 reliability campaign
 remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.
@@ -97,7 +104,7 @@ demonstrations and a referee; it is not the final autonomous player.
 | Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
 | Learned objective dispatch | One clean-start run selected 21 composite objectives and verified 15 automatic effects through Hall of Fame | Many choices remain affordance-masked; mechanics are fixed skills |
 | Learned training control | The trainee/venue ranker beat its shape baseline and completed clean start with 114,831 controlled choices and 400 disagreements | One uncounted Red root; navigation and menus remain authored |
-| Strict learned-stack composition | Two uncounted roots executed 169 teacher-free battle decisions, 8 HP recoveries, 2 status recoveries, and 2 learned switches while exposing S.S. Anne request typing and Route 11 live-capability gaps | Both repairs are ROM-free verified; a fresh full replay remains |
+| Strict learned-stack composition | Seed 990013 reached and defeated Lorelei after 3,265 teacher-free battle decisions, 13/13 learned target bindings, 64,337 training-control choices, and 125,800 trainee/venue choices | Rejected for one missing 70-HP intent boundary; repaired source still needs a fresh canonical replay |
 | Reserve-aware battle control | Frozen target head passed 17/17 prospective targets, 13/13 canonical shadow, and 13/13 causal bindings through Hall of Fame with zero target fallback | Switch timing and ordinary moves were teacher-gated in the completed causal run; perturbation and combined qualification remain |
 | Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Counted campaign remains 0/10 until reserve-aware battle control passes canonical and perturbation rehearsals |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |

@@ -36,6 +36,15 @@ preserved. Recovery capabilities now derive before every runtime dispatch from l
 protected status-item floors, and remaining HP allowance. The immediate gate is full ROM-free
 validation, clean push, and one fresh uncounted six-role replay; v95 remains 0/10.
 
+Seed `990013` then qualified both boundaries and defeated Lorelei after 3,265 teacher-free battle
+decisions. The target head rebound all 13 switches with zero fallback, training control owned
+64,337 choices, and the trainee/venue model owned 125,800. The chapter verifier still rejected the
+win because attacks occurred at 59 HP below Lorelei's existing 70-HP floor. The
+[third failure](evidence/portable-clean-start-six-role-rehearsal-03-failure-2026-08-09.json) is
+preserved. `BattleIntent` now exposes that floor, the action-class head ranks only live executable
+affordances, and clean-start report v2 requires positive high-level, exact switch-target, and both
+training authorities. The immediate gate is a full clean validation and a fresh canonical replay.
+
 The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's
 Red/Blue reciprocal version gaps now come from one canonical table and include the previously
 omitted Pinsir and Scyther. Trading requires an explicit compatibility edge between saves; merely
@@ -104,7 +113,7 @@ Bruno 2/2 and Agatha 7/7. The route stopped at 306/312 because the terminal rece
 five role changes from move turns while seven valid switches had executed between opponent changes.
 Commit `a5e92f0` records and verifies those live switches directly. Runtime artifact and binding
 code and exact private publication are complete; canonical shadow and isolated causal completion
-have now passed. The active gate is the repaired six-role teacher-free composition.
+have now passed. The active gate is the HP-floor/action-mask/report-v2 six-role replay.
 
 After the learned target passes offline and causal Red gates, then one canonical and one uncounted
 perturbation result, begin Crystal's bounded battle adapter.
