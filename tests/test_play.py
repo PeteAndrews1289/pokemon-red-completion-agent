@@ -36,10 +36,12 @@ from pokemon_red_completion.play import (
     QUALIFIED_PLAY_CHECKPOINT_COUNT,
     ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
     VIRIDIAN_TO_MART_DIRECTIONS,
+    QualifiedPlayError,
     QualifiedPlayProgress,
     QualifiedPlayReport,
     QualifiedPlayTiming,
     _objective_model_progress_bridge,
+    _qualified_play_chapter_error,
     _trajectory_progress_bridge,
     is_parcel_verified,
     is_pokedex_verified,
@@ -1204,6 +1206,18 @@ def test_qualified_play_progress_is_sanitized_and_immutable() -> None:
     assert progress.frames_executed == 252_989
     with pytest.raises(FrozenInstanceError):
         progress.completed = 10  # type: ignore[misc]
+
+
+def test_qualified_play_chapter_error_carries_sanitized_policy_evidence() -> None:
+    error = _qualified_play_chapter_error(RuntimeError("chapter failed"), None)
+
+    assert isinstance(error, QualifiedPlayError)
+    assert str(error) == "chapter failed"
+    assert error.evidence == {
+        "schema": "pokemon-red-qualified-play-failure-evidence-v1",
+        "exception_type": "RuntimeError",
+        "battle_policy": None,
+    }
 
 
 def test_repeated_training_progress_uses_the_execution_step_in_event_identity() -> None:

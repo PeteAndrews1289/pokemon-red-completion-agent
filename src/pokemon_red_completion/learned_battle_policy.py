@@ -117,6 +117,7 @@ class ModelAssistedBattlePolicy:
     control_resolved_targets: Counter[str] = field(default_factory=Counter)
     control_target_resolution_failures: Counter[str] = field(default_factory=Counter)
     control_teacher_free_requests: int = 0
+    control_last_intent_mask: dict[str, object] | None = None
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.confidence_threshold <= 1.0:
@@ -435,6 +436,7 @@ class ModelAssistedBattlePolicy:
                     sorted(self.control_target_resolution_failures.items())
                 ),
                 "teacher_free_requests": self.control_teacher_free_requests,
+                "last_intent_mask": self.control_last_intent_mask,
             }
         return result
     def _execute_control_decision(
@@ -507,6 +509,12 @@ class ModelAssistedBattlePolicy:
                 )
                 if intent_mask is not None:
                     self.control_target_resolution_failures[intent_mask] += 1
+                    self.control_last_intent_mask = _control_intent_mask_context(
+                        observation,
+                        predicted_action,
+                        history=history,
+                        reason=intent_mask,
+                    )
                     self.control_execution_decisions += 1
                     self.control_safety_fallbacks += 1
                     return self._return_control_move(
@@ -842,6 +850,53 @@ def _control_action_intent_mask(
         ):
             return "switch_residency_mask"
     return None
+
+
+def _control_intent_mask_context(
+    observation: BattlePolicyObservation,
+    action: BattleAction,
+    *,
+    history: BattleControlHistory,
+    reason: str,
+) -> dict[str, object]:
+    """Sanitize the latest constrained decision for failed-run diagnosis."""
+
+    raw = observation.state
+    intent = observation.intent
+    return {
+        "reason": reason,
+        "predicted_action": control_class_ref(action),
+        "battle_plan_id": intent.battle_plan_id if intent is not None else None,
+        "objective_id": intent.objective_id if intent is not None else None,
+        "history": {
+            "battle_turn": history.battle_turn,
+            "opponent_index": history.opponent_index,
+            "opponent_turn": history.opponent_turn,
+            "previous_action": (
+                CONTROL_CLASS_REFS[history.previous_class_index]
+                if history.previous_class_index is not None
+                else None
+            ),
+            "action_counts": {
+                class_ref: history.action_counts[index]
+                for index, class_ref in enumerate(CONTROL_CLASS_REFS)
+            },
+        },
+        "active": {
+            "party_index": raw.active_party_index,
+            "species_id": raw.active_party_species_id,
+            "level": raw.active_party_level,
+            "hp": raw.active_party_hp,
+            "max_hp": raw.active_party_max_hp,
+            "status": raw.active_party_status,
+        },
+        "opponent": {
+            "species_id": raw.enemy_species_id,
+            "level": raw.enemy_level,
+            "hp": raw.enemy_hp,
+            "max_hp": raw.enemy_max_hp,
+        },
+    }
 
 
 def _unsupported_observation_context(

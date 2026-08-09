@@ -1,0 +1,57 @@
+{
+  "schema": "pokemon-red-battle-control-v3-causal-failure-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "rejected_fail_closed",
+  "source_commit": "9f9ef5cc21dfd61e16a1c55eab1e0a62d52c4b0c",
+  "candidate": {
+    "artifact_id": "red-battle-control-model-d4bc15ba53354fa2980a47b57f2dda78",
+    "manifest_sha256": "e742f32893ddca66911e1dbeb31bea1fca93f07ad6f09d6dedfeb8d07c3b382e",
+    "model_sha256": "916aa21097d7b087125dce6cb9b01180c2ee3aa929a843d7b580021ac00246e0",
+    "private_path_published": false
+  },
+  "authority": {
+    "ordinary_move_selection": "authenticated_move_ranker_teacher_gated_on_every_path",
+    "high_level_battle_control": "model_authority_with_typed_intent_constraints",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "outcome": {
+    "verified_checkpoints": 305,
+    "total_checkpoints": 312,
+    "lorelei_strict_contract_passed": true,
+    "bruno_strict_contract_passed": true,
+    "agatha_engaged": true,
+    "agatha_defeated": false,
+    "party_hp_at_failure": [202, 151, 0, 161, 270, 148],
+    "active_party_index_at_failure": 3,
+    "active_species_at_failure": 104,
+    "required_specialist_species": 118,
+    "opponent_species_at_failure": 14,
+    "opponent_hp_at_failure": 142,
+    "opponent_level_at_failure": 56,
+    "game_complete": false,
+    "counted_campaign_root_consumed": false
+  },
+  "diagnosis": {
+    "prior_residency_repair_worked": "Bruno passed its strict two-role participation verifier after failing at the same boundary in causal attempt 06.",
+    "remaining_policy_error": "The Dugtrio specialist fainted under a model-induced Agatha trajectory. A later constrained-action fallback queried the strict teacher, which correctly refused to claim that the unavailable specialist was active.",
+    "offline_comparison": "The candidate predicts the demonstrated Agatha switch, recovery, boost, and move classes on both authenticated teacher lineages; the failure therefore exposes trajectory-state coverage rather than an unimplemented action class.",
+    "verifier_relaxed": false,
+    "failure_hidden_by_teacher": false
+  },
+  "repair": {
+    "direction": "Improve failed-run policy observability and add disjoint perturbed teacher lineages before deciding whether the controller needs retraining or a portable risk constraint.",
+    "increase_retry_budget": false,
+    "change_teacher_route": false,
+    "change_model_weights_without_new_data": false,
+    "open_counted_root": false
+  },
+  "claim_scope": {
+    "causal_control_qualified": false,
+    "lorelei_causal_control_qualified_in_lineage": true,
+    "bruno_causal_control_qualified_in_lineage": true,
+    "agatha_causal_control_qualified": false,
+    "candidate_retrained_after_failure": false,
+    "cross_game_transfer_complete": false
+  }
+}

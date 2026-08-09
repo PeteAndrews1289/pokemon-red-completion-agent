@@ -745,6 +745,36 @@ def test_control_execution_masks_boost_after_intent_budget_is_consumed() -> None
     assert execution["typed_requests_executed"] == 1
     assert execution["safety_fallbacks"] == 1
     assert execution["target_resolution_failures"] == {"budget_mask": 1}
+    assert execution["last_intent_mask"] == {
+        "reason": "budget_mask",
+        "predicted_action": "pokemon.core:battle:boost:accuracy",
+        "battle_plan_id": "battle-test",
+        "objective_id": "test_battle",
+        "history": {
+            "battle_turn": 1,
+            "opponent_index": 0,
+            "opponent_turn": 1,
+            "previous_action": "pokemon.core:battle:boost:accuracy",
+            "action_counts": {
+                class_ref: int(class_ref == "pokemon.core:battle:boost:accuracy")
+                for class_ref in CONTROL_CLASS_REFS
+            },
+        },
+        "active": {
+            "party_index": None,
+            "species_id": None,
+            "level": None,
+            "hp": None,
+            "max_hp": None,
+            "status": None,
+        },
+        "opponent": {
+            "species_id": None,
+            "level": None,
+            "hp": None,
+            "max_hp": None,
+        },
+    }
 
 
 def test_control_execution_emits_switch_without_calling_teacher() -> None:
@@ -828,6 +858,10 @@ def test_control_execution_requires_move_residency_between_switches() -> None:
     assert execution["typed_requests_executed"] == 2
     assert execution["safety_fallbacks"] == 1
     assert execution["target_resolution_failures"] == {"switch_residency_mask": 1}
+    last_mask = execution["last_intent_mask"]
+    assert isinstance(last_mask, dict)
+    assert last_mask["reason"] == "switch_residency_mask"
+    assert last_mask["predicted_action"] == "pokemon.core:battle:switch"
 
 
 @pytest.mark.parametrize(

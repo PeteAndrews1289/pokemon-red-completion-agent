@@ -431,6 +431,35 @@ LAB_TO_OAK_DIRECTIONS = ("left", *(("up",) * 6), "right", "up", "up")
 class QualifiedPlayError(RuntimeError):
     """Raised when the clean run misses a bounded route or semantic gate."""
 
+    def __init__(
+        self,
+        message: str,
+        *,
+        evidence: Mapping[str, object] | None = None,
+    ) -> None:
+        super().__init__(message)
+        if evidence is not None and not isinstance(evidence, Mapping):
+            raise TypeError("qualified-play failure evidence must be a mapping or None")
+        self.evidence = dict(evidence) if evidence is not None else None
+
+
+def _qualified_play_chapter_error(
+    error: Exception,
+    model_policy: ModelAssistedBattlePolicy | None,
+) -> QualifiedPlayError:
+    """Attach the sanitized learned-policy audit to a failed chapter boundary."""
+
+    return QualifiedPlayError(
+        str(error),
+        evidence={
+            "schema": "pokemon-red-qualified-play-failure-evidence-v1",
+            "exception_type": type(error).__name__,
+            "battle_policy": (
+                model_policy.public_dict() if model_policy is not None else None
+            ),
+        },
+    )
+
 
 @dataclass(frozen=True, slots=True)
 class QualifiedPlayTiming:
@@ -1472,7 +1501,7 @@ def run_qualified_play(
                 progress=_lorelei_progress_bridge(progress),
             )
         except LoreleiChapterError as error:
-            raise QualifiedPlayError(str(error)) from error
+            raise _qualified_play_chapter_error(error, model_policy) from error
 
         try:
             bruno = run_bruno_chapter(
@@ -1482,7 +1511,7 @@ def run_qualified_play(
                 progress=_bruno_progress_bridge(progress),
             )
         except BrunoChapterError as error:
-            raise QualifiedPlayError(str(error)) from error
+            raise _qualified_play_chapter_error(error, model_policy) from error
 
         try:
             agatha = run_agatha_chapter(
@@ -1492,7 +1521,7 @@ def run_qualified_play(
                 progress=_agatha_progress_bridge(progress),
             )
         except AgathaChapterError as error:
-            raise QualifiedPlayError(str(error)) from error
+            raise _qualified_play_chapter_error(error, model_policy) from error
 
         try:
             lance = run_lance_chapter(
@@ -1502,7 +1531,7 @@ def run_qualified_play(
                 progress=_lance_progress_bridge(progress),
             )
         except LanceChapterError as error:
-            raise QualifiedPlayError(str(error)) from error
+            raise _qualified_play_chapter_error(error, model_policy) from error
 
         try:
             champion = run_champion_chapter(
@@ -1513,7 +1542,7 @@ def run_qualified_play(
                 require_teacher_strategy_evidence=(not execute_battle_control_model),
             )
         except ChampionChapterError as error:
-            raise QualifiedPlayError(str(error)) from error
+            raise _qualified_play_chapter_error(error, model_policy) from error
 
         facts = (
             opening.facts
