@@ -906,10 +906,13 @@ def test_control_execution_requires_move_before_first_switch() -> None:
     assert last_mask["predicted_action"] == "pokemon.core:battle:switch"
 
 
-def test_control_execution_forces_declared_status_clearance_before_move() -> None:
+@pytest.mark.parametrize("predicted_class_index", (0, 2, 5))
+def test_control_execution_forces_declared_status_clearance_before_dispatch(
+    predicted_class_index: int,
+) -> None:
     policy = ModelAssistedBattlePolicy(
         model=_model(),
-        control_model=_full_control_model(0),
+        control_model=_full_control_model(predicted_class_index),
         execute_control_model=True,
         encoder=_ShadowEncoder(),  # type: ignore[arg-type]
         projector=_Projector(),  # type: ignore[arg-type]
@@ -947,7 +950,7 @@ def test_control_execution_forces_declared_status_clearance_before_move() -> Non
     last_mask = execution["last_intent_mask"]
     assert isinstance(last_mask, dict)
     assert last_mask["reason"] == "status_clear_before_move_mask"
-    assert last_mask["predicted_action"] == "pokemon.core:battle:select_move"
+    assert last_mask["predicted_action"] == CONTROL_CLASS_REFS[predicted_class_index]
 
 
 @pytest.mark.parametrize(

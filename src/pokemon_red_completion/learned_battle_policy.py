@@ -476,6 +476,45 @@ class ModelAssistedBattlePolicy:
             raise LearnedBattlePolicyError(
                 "control execution could not project the live decision"
             ) from error
+        if intent.require_status_clear_before_move and bool(observation.state.battler_status):
+            predicted_action = (
+                BattleAction.move(predicted_slot)
+                if predicted_ref == CONTROL_CLASS_REFS[0]
+                else action_from_control_class_ref(predicted_ref)
+            )
+            intent_mask = "status_clear_before_move_mask"
+            self.control_target_resolution_failures[intent_mask] += 1
+            self.control_last_intent_mask = _control_intent_mask_context(
+                observation,
+                predicted_action,
+                history=history,
+                reason=intent_mask,
+            )
+            try:
+                forced_recovery = authorize_recovery_target(
+                    resolve_battle_action_target(
+                        BattleAction.recovery(),
+                        encoded,
+                        catalog=getattr(self.projector, "catalog", None),
+                    ),
+                    intent.recovery_capabilities,
+                )
+            except BattleActionTargetError as error:
+                raise LearnedBattlePolicyError(
+                    "intent-forced status recovery lacks an executable target"
+                ) from error
+            self.control_execution_decisions += 1
+            self.control_execution_requests += 1
+            self.control_safety_fallbacks += 1
+            self.control_intent_forced_requests += 1
+            self._record_control_action(observation, forced_recovery.action)
+            assert forced_recovery.recovery_need is not None
+            raise LearnedBattleControlRequest(
+                forced_recovery.action,
+                party_slot=forced_recovery.party_slot,
+                recovery_need=forced_recovery.recovery_need.value,
+                status=forced_recovery.status,
+            )
         if confidence < self.control_confidence_threshold:
             self.control_low_confidence_fallbacks += 1
             try:
@@ -485,47 +524,6 @@ class ModelAssistedBattlePolicy:
                 raise
             self._record_control_action(observation, BattleAction.move(teacher_slot))
             return teacher_slot
-
-        if predicted_ref == CONTROL_CLASS_REFS[0]:
-            predicted_action = BattleAction.move(predicted_slot)
-            intent_mask = _control_action_intent_mask(
-                predicted_action,
-                observation=observation,
-                history=history,
-            )
-            if intent_mask is not None:
-                self.control_target_resolution_failures[intent_mask] += 1
-                self.control_last_intent_mask = _control_intent_mask_context(
-                    observation,
-                    predicted_action,
-                    history=history,
-                    reason=intent_mask,
-                )
-                try:
-                    forced_recovery = authorize_recovery_target(
-                        resolve_battle_action_target(
-                            BattleAction.recovery(),
-                            encoded,
-                            catalog=getattr(self.projector, "catalog", None),
-                        ),
-                        intent.recovery_capabilities,
-                    )
-                except BattleActionTargetError as error:
-                    raise LearnedBattlePolicyError(
-                        "intent-forced status recovery lacks an executable target"
-                    ) from error
-                self.control_execution_decisions += 1
-                self.control_execution_requests += 1
-                self.control_safety_fallbacks += 1
-                self.control_intent_forced_requests += 1
-                self._record_control_action(observation, forced_recovery.action)
-                assert forced_recovery.recovery_need is not None
-                raise LearnedBattleControlRequest(
-                    forced_recovery.action,
-                    party_slot=forced_recovery.party_slot,
-                    recovery_need=forced_recovery.recovery_need.value,
-                    status=forced_recovery.status,
-                )
 
         if predicted_ref == CONTROL_CLASS_REFS[0] and not self.allow_teacher_queries:
             self.control_execution_decisions += 1
@@ -872,12 +870,6 @@ def _control_action_intent_mask(
     intent = observation.intent
     if intent is None:
         return None
-    if (
-        action.kind is BattleActionKind.SELECT_MOVE
-        and intent.require_status_clear_before_move
-        and bool(observation.state.battler_status)
-    ):
-        return "status_clear_before_move_mask"
     if action.kind is BattleActionKind.USE_BOOST:
         assert action.boost_stat is not None
         limit = dict(intent.boost_use_limits).get(action.boost_stat)
