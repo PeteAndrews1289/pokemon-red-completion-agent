@@ -1,82 +1,93 @@
 {
-  "schema": "pokemon-clean-start-learned-stack-readiness-audit-v1",
-  "status": "not_ready_to_preregister_ten_counted_roots",
+  "schema": "pokemon-clean-start-learned-stack-readiness-audit-v2",
+  "status": "infrastructure_ready_model_stack_not_ready",
   "recorded_on": "2026-08-08",
-  "current_evidence": {
-    "clean_power_teacher_completion": {
-      "checkpoints": 312,
-      "objectives": 36,
-      "champion_defeated": true,
-      "hall_of_fame_entered": true
-    },
-    "historical_teacher_free_battle_completion": {
-      "receipt": "teacher-free-battle-control-hall-of-fame-2026-08-05.json",
-      "teacher_free_typed_requests": 31,
-      "safety_fallbacks": 4,
-      "meets_current_zero_fallback_contract": false
-    },
-    "strict_battle_runtime": {
-      "teacher_queries_forbidden": true,
-      "teacher_fallbacks_forbidden": true,
-      "teacher_label_collection_forbidden": true,
-      "safety_fallbacks_forbidden": true,
-      "low_confidence_fallbacks_forbidden": true
-    },
-    "objective_runtime": {
-      "clean_start_runner_mode": "model_authorized_fixed_sequence",
-      "expected_objective_is_supplied_to_authorize": true,
-      "portable_observe_select_dispatch_loop_used_from_power_on": false
-    },
-    "strategic_training_runtime": {
-      "captured_state_portable_authority_qualified": true,
-      "clean_start_runner_accepts_authenticated_candidate_model": true,
-      "clean_start_runner_records_candidate_ownership": true,
-      "clean_start_candidate_authority_runtime_rehearsed": true,
-      "clean_start_rehearsal_receipt": "training-candidate-ranker-v1-clean-power-rehearsal-2026-08-08.json"
-    }
+  "counted_campaign": {
+    "campaign_started": false,
+    "counted_roots_consumed": 0,
+    "required_successes": 8,
+    "total_roots": 10
   },
-  "blocking_interfaces": [
+  "resolved_interfaces": [
     {
       "id": "portable_early_game_skills",
-      "finding": "the portable objective registry begins at the midgame bounded skills and does not yet own power-on through the Celadon boundary",
-      "why_it_matters": "a clean-start portable loop cannot currently dispatch the whole quest graph"
+      "finding": "the portable clean-start player now owns power-on through the existing midgame and endgame skill registry"
     },
     {
-      "id": "expected_objective_authorization",
-      "finding": "the clean-start completion runner asks the objective model to authorize the fixed sequence rather than letting it select the next objective",
-      "why_it_matters": "ten successful runs would still not measure open objective dispatch"
+      "id": "model_selected_objective_dispatch",
+      "finding": "the clean-start player selects executable objectives without expected labels and records learned selections separately from automatic cartridge effects"
+    },
+    {
+      "id": "learned_stack_binding",
+      "finding": "one process can authenticate and inject the objective, battle-move, battle-control, and trainee/venue artifacts"
     },
     {
       "id": "series_provenance",
-      "finding": "plain completion reports do not bind the source commit, all model-file hashes, root assignment, and immutable ten-run series in one authenticated record",
-      "why_it_matters": "an 8/10 claim needs failures and successes from one frozen prospective campaign"
-    }
-  ],
-  "resolved_interfaces": [
+      "finding": "the campaign registry, assignment contract, outcome loader, and independent 8-of-10 checker bind source, runtime, model, graph, behavior, and perturbation identities before a root can count"
+    },
     {
-      "id": "strategic_model_injection",
-      "finding": "the clean-start runner now authenticates an exact candidate-model file digest, supports shadow or trainee/venue authority, threads the model through both Blaine development passes, and records controlled decisions and fallback status",
-      "verification": "ROM-free CLI, report-contract, callback-threading, Ruff, and mypy gates pass",
-      "remaining_runtime_gate": "the uncounted clean-power rehearsal passed with 114831 controlled choices and 400 disagreements, but the prospective source/model/root series envelope did not exist at launch"
+      "id": "uncounted_clean_start_baseline",
+      "finding": "the objective and trainee/venue models completed one uninterrupted clean-power rehearsal through Hall of Fame",
+      "selected_composite_objectives": 21,
+      "automatic_objectives": 15,
+      "total_verified_objectives": 36,
+      "expected_objective_labels": 0,
+      "fixed_objective_dispatches": 0,
+      "replans": 0,
+      "actions": 638520,
+      "frames": 45766774,
+      "controlled_training_choices": 114831,
+      "executed_training_disagreements": 400
     }
   ],
+  "current_strict_rehearsal": {
+    "receipt": "portable-clean-start-five-role-rehearsal-2026-08-08.json",
+    "source_commit": "fcf2b9050aecebe680e0df69922d1217e6479035",
+    "outcome": "failed_closed_at_lorelei_curriculum_contract",
+    "objective_composites_completed": 16,
+    "objective_decisions": 17,
+    "teacher_queries": 0,
+    "teacher_fallbacks": 0,
+    "safety_fallbacks": 0,
+    "reason": "the learned controller won Lorelei with only party slot 1 and made zero role switches; the verifier correctly rejected the single-carry result"
+  },
+  "blocking_capability": {
+    "id": "reserve_matchup_representation",
+    "finding": "battle-control schema v2 represents the active battler and aggregate reserve health and level, but not reserve types, moves, or candidate-relative matchup advantage",
+    "execution_limit": "the generic switch target resolver chooses a healthy high-level reserve rather than the reserve with the best semantic matchup",
+    "consequence": "the current artifact cannot reliably learn or execute the balanced Lorelei, Bruno, Agatha, and Lance role curriculum",
+    "decision": "do not weaken the chapter verifier and do not open counted roots with the current battle-control artifact"
+  },
+  "additional_open_risk": {
+    "id": "perturbation_robustness",
+    "finding": "three uncounted perturbation probes failed at the lab rival, Diglett capture, and Rocket-thief inventory binding",
+    "interpretation": "the current robustness envelope mixes deterministic specialist timing brittleness with learned authority and is not yet an 8-of-10-ready distribution"
+  },
   "required_before_counted_roots": [
-    "extend one observation-driven orchestrator from clean power-on through Hall of Fame, or explicitly publish every fixed dispatch outside its learned denominator",
-    "thread authenticated battle, training-action, objective, and trainee/venue artifacts through one source-bound process; the trainee/venue CLI seam is implemented but not yet rehearsed from clean power",
-    "fail on any teacher query, fallback, expected-route label, undeclared safety substitution, save-state load, or human input",
-    "bind source commit, ROM identity, runtime identity, model files, objective graph, and ten distinct perturbation assignments before opening root 01",
-    "write the independent 8-of-10 checker and its failure-path tests before the campaign",
-    "run one uncounted end-to-end rehearsal before freezing the counted roots"
+    "add identity-free reserve type and matchup observations to the battle-control interface",
+    "make generic switch-target resolution candidate-relative and matchup-aware while preserving hard safety constraints",
+    "collect balanced-team control demonstrations under the new feature schema and retrain the battle-control artifact with explicit role-switch coverage",
+    "pass offline held-out and counterfactual gates for reserve selection and role switching",
+    "complete one strict canonical five-role clean-start rehearsal with zero teacher query, fallback, or undeclared substitution and with all League chapter contracts satisfied",
+    "repair or bound the three exposed perturbation failures, then pass an uncounted perturbation rehearsal",
+    "freeze the source, four model artifacts, behavior, objective graph, runtime, and ten assignments before opening root 01"
   ],
   "recommended_implementation_order": [
-    "add early-game typed objective skills or a documented composite boundary to the portable registry",
-    "preserve the passed uncounted clean-start strategic-ranker rehearsal as non-promotional evidence",
-    "add one source-bound learned-stack run envelope",
-    "add the ten-root campaign registry and independent series gate",
-    "run the uncounted rehearsal",
-    "freeze and open the ten counted roots sequentially"
+    "battle observation schema v3: reserve types, move coverage, and best offensive and defensive matchup margins",
+    "matchup-aware switch candidate ranking and target resolution",
+    "new balanced-team battle-control demonstrations and artifact training",
+    "offline held-out and counterfactual qualification",
+    "strict canonical five-role clean-start rehearsal",
+    "uncounted perturbation diagnostics and repair",
+    "freeze and execute the ten-root campaign sequentially"
   ],
-  "decision": "do not spend roughly ten full-game runtimes collecting a misleading fixed-dispatch series",
+  "claims_not_supported": [
+    "five-model teacher-free Red completion",
+    "multi-root clean-start reliability",
+    "seed or timing-perturbation robustness",
+    "cross-title transfer",
+    "living-Pokedex autonomy"
+  ],
   "clean_start_series_may_start": false,
   "promotion_eligible": false
 }

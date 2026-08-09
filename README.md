@@ -11,12 +11,19 @@ control, and progressively trained specialists.**
 
 ## Current position
 
-The deterministic teacher is now a complete, reproducible expert oracle: **312/312 semantic
+The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of
-Fame in one clean-power process. Learned battle policies have also completed the scripted Red
-route. The remaining challenge is the important one: make a learned actor choose objectives,
-dispatch reusable skills, recover from unfamiliar states, and carry that competence into another
-Pokémon game without quietly handing control back to the teacher.
+Fame in one clean-power process. The portable clean-start player now also selects objectives from
+fresh semantic observations without receiving expected labels. In one explicitly uncounted
+baseline, the objective and trainee/venue models completed all 36 objectives through Hall of Fame
+with **114,831 controlled training choices**, **400 executed disagreements**, and no fallback.
+
+The stricter five-role rehearsal then did exactly what a useful evaluation should do: it rejected a
+win. Four authenticated models reached the Elite Four with a healthy **63/55/55/55/55/55** team,
+zero teacher queries, and zero fallback. They defeated Lorelei, but the learned battle controller
+used only party slot 1 for all 19 attack turns and made no role switch. The balanced-team contract
+therefore failed closed instead of relabeling a single-carry victory as learned team strategy. See
+the [sanitized rehearsal audit](docs/evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).
 
 That distinction is the heart of the project and its public story. The teacher supplies verified
 demonstrations and a referee; it is not the final autonomous player.
@@ -26,9 +33,10 @@ demonstrations and a referee; it is not the final autonomous player.
 | Layer | Best verified evidence | Honest boundary |
 | --- | --- | --- |
 | Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
-| Learned battle control | Model-controlled Red battle qualifications with fail-closed safety and no disagreement fallback | Scripted curriculum; cross-title battle evaluation is still pending |
-| Learned objective dispatch | One uninterrupted captured-state loop reached Hall of Fame through 20 model dispatches | Nineteen dispatches were singletons; mechanics were fixed skills |
-| Learned training control | The trainee/venue ranker beat its shape baseline, passed causal and portable control, then completed one clean-power Hall-of-Fame rehearsal with 114,831 controlled choices and 400 disagreements | One uncounted fixed-route Red root; navigation, menus, recovery, and battle mechanics remain authored |
+| Learned objective dispatch | One clean-start run selected 21 composite objectives and verified 15 automatic effects through Hall of Fame | Many choices remain affordance-masked; mechanics are fixed skills |
+| Learned training control | The trainee/venue ranker beat its shape baseline and completed clean start with 114,831 controlled choices and 400 disagreements | One uncounted Red root; navigation and menus remain authored |
+| Strict learned-stack composition | Four authenticated models, 3,220 model move choices, 16 teacher-free control actions, and zero teacher query/fallback through Lorelei | Correctly rejected: all 19 Lorelei attacks came from slot 1 and no role switch occurred |
+| Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Counted campaign remains 0/10 until reserve-aware battle control passes canonical and perturbation rehearsals |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |
 

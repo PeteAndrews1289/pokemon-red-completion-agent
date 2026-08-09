@@ -5,38 +5,34 @@
 
 ## Current focus (2026-08-08)
 
-The milestones below are largely written in terms of *the teacher completing Red* and *learned
-components reaching agreement rates*. Both are real and both are recorded honestly. Neither is the
-bottleneck any more.
+The clean-start infrastructure gap is closed. One uncounted baseline selected 21 composite
+objectives, verified 15 automatic cartridge effects, and reached Hall of Fame with no expected
+objective label, fixed dispatch, or fallback. The source/model/root-bound ten-run registry and
+independent 8-of-10 checker also exist. No counted v95 root has been opened.
 
-**The bottleneck is no longer completing Red or building a balanced teacher. It is proving that a
-learned policy adds state-dependent judgment and remains useful when its choices affect the live
-game.**
+The strict four-model rehearsal exposed the new bottleneck. It completed 16 composite objectives,
+trained a healthy 63/55/55/55/55/55 party, and defeated Lorelei with 3,220 learned move decisions
+and zero teacher query or fallback. It then failed the curriculum contract because all 19 Lorelei
+attack turns came from slot 1 and the model made zero role switches. This is a correct rejection,
+not a route regression. See the
+[five-role rehearsal audit](evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).
 
-A run that finishes with one overleveled Pokémon sweeping the League in six turns produces a
-trajectory in which nothing was ever chosen. Agreement rates measured on such a trajectory are
-measuring the wrong thing well. The learning milestones cannot mean what they say until the
-demonstrations do.
+Battle-control schema v2 cannot express the teacher's balanced-team lesson: it sees the active
+Pokémon and aggregate reserve readiness, but not reserve types, moves, or candidate-relative
+matchup advantage. Generic switch targeting also chooses a healthy high-level reserve without
+semantic matchup scoring. The dependency-ordered work is now:
 
-The balanced-team and participation work below remains the foundation. The first two strategic
-dependencies are now closed: a same-root diagnostic isolated the agreement-wrapper defect, a newly
-preregistered causal root completed with 191 executed model/teacher disagreements, and the portable
-Blaine objective completed with 400 disagreements. The dependency-ordered near-term work is now:
+1. add portable reserve offensive and defensive matchup observations;
+2. make generic switch targeting rank safe reserves by matchup value;
+3. collect fresh balanced-role demonstrations and train a new battle-control artifact;
+4. pass held-out, counterfactual, and strict canonical five-role gates;
+5. repair or bound the lab-rival, Diglett-capture, and Rocket-thief perturbation failures;
+6. freeze and execute the ten counted roots sequentially; and
+7. use the resulting stable Red benchmark for Crystal transfer and learned navigation.
 
-1. establish an 8/10 multi-root clean-start Red evaluation lane;
-2. run the small Crystal zero-shot/few-shot/from-scratch falsification benchmark;
-3. replace another teacher-authored mechanic boundary—navigation is the highest-leverage target;
-   and
-4. expand the living-Pokédex curriculum only through the portable loop.
-
-The clean-start readiness audit is now explicit: counted roots must **not** begin yet. The current
-clean-start runner still supplies expected objectives to a fixed sequence, does not inject the
-qualified trainee/venue model, and cannot bind the whole learned stack into one prospective series
-record. The historical teacher-free battle completion also used four safety fallbacks and does not
-meet today's strict zero-fallback contract. See the
-[readiness audit](evidence/clean-start-learned-stack-readiness-audit-2026-08-08.json). The correct
-next implementation is the clean-start portable orchestrator and source-bound run envelope—not ten
-expensive fixed-dispatch reruns.
+Do not weaken the Lorelei verifier and do not spend counted roots on the old artifact. The updated
+[readiness audit](evidence/clean-start-learned-stack-readiness-audit-2026-08-08.json) distinguishes
+infrastructure readiness from model-stack readiness.
 
 Historical curriculum priorities were:
 
@@ -162,7 +158,7 @@ with zero labels, fallbacks, or replans. Nineteen dispatches were singletons and
 ranking branch. The captured-state result is not a clean-start evaluation. See the
 [twenty-decision receipt](evidence/affordance-masked-twenty-objective-hall-of-fame-2026-08-08.json).
 
-**Immediate implementation gate:** extract the teacher's training decisions into a portable
+**Historical implementation gate (completed):** extract the teacher's training decisions into a portable
 seek/fight/flee/heal/stop dataset and replace that authority with a learned controller under the
 same safety envelope. The 469,232-action development block accounts for 93.44% of the integrated
 run, so it is both the largest scripted surface and the highest-leverage learning target.

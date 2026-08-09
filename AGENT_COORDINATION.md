@@ -1,23 +1,15 @@
 # Three-agent coordination
 
-> **2026-08-08 active lane:** the teacher route is frozen except for genuine regressions. The
-> current work is the strategic trainee/venue ranker described in
-> [the preregistered promotion plan](docs/evidence/training-candidate-ranker-v1-promotion-plan-2026-08-08.json).
-> Its training-only selection and sealed validation are complete: 99.9004% genuine held-out accuracy
-> versus a 95.6615% shape baseline. Training-control v6 has already passed causal and portable
-> authority integration; its perfect candidate-only baseline means further seek/fight/flee/heal/stop
-> imitation is off the critical path. Preserve the first causal rejection: a same-root teacher
-> diagnostic proved that an agreeing callback was incorrectly recomputing downstream mechanics.
-> Commit `a089988` makes agreement a behavioral no-op. The repaired preregistered root then passed:
-> 119,668 controlled choices, 191 executed trainee disagreements, 1,803 battles, 1,114 heals, all
-> six at level 55, zero faints, and no fallback. Portable integration also passed: 114,831
-> controlled candidate choices, 400 executed disagreements, 1,803 development battles, 1,048
-> heals, a fully healed 60/55/55/55/55/55 terminal, fresh Volcano Badge observation, and Giovanni
-> available. The clean-power runner can now inject that same exact-hash ranker and account for its
-> authority. Its uncounted clean-power rehearsal passed 312/312 checkpoints and Hall of Fame with
-> 114,831 controlled choices, 400 disagreements, and zero fallback. Clean-start multi-root Red and
-> the Crystal falsification benchmark are next; do not open counted roots before the prospective
-> source/model/root envelope and portable objective-dispatch blockers are closed.
+> **2026-08-08 active lane:** clean-start orchestration, four-model binding, a frozen ten-root
+> campaign contract, and the independent 8-of-10 checker are implemented. Counted v95 remains
+> unopened at 0/10. The latest strict canonical rehearsal safely developed a
+> 63/55/55/55/55/55 party and reached Lorelei with zero teacher query or fallback. It defeated her,
+> but all 19 attacks came from party slot 1 and no role switch occurred, so the balanced-team
+> verifier correctly rejected the chapter. The active work is now battle-control feature schema v3:
+> identity-free reserve type/move matchup observations, matchup-aware switch targeting, fresh role
+> demonstrations, and a replacement artifact. Preserve the failure in
+> [the five-role audit](docs/evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).
+> Do not relax the verifier, reopen the teacher route, or consume a counted root.
 
 **New here? Read [HANDOFF.md](HANDOFF.md) first** — it is the complete orientation, including what
 is unproven and how this codebase repeatedly fools people. Then [MISSION.md](MISSION.md) for why the
@@ -356,57 +348,50 @@ arguments where it takes four, and a typed progress sink called with `None`.
 Each cost a 25-minute emulator run to discover. A type checker reports them in
 seconds, and the neutral layer is now covered.
 
-Current state: **1906 passed, 3 deselected**, all checks green, on trunk
+Current state: **2,059 passed, 3 deselected**, all checks green, on trunk
 `agent/balanced-team-curriculum`.
 
 ## Open work, in priority order
 
 These are ordered by how much they serve the mission, not by difficulty.
 
-**1. Full uninterrupted reproduction complete.** The clean-power route reproduced 1,716 combined
-battles and 885 healing trips, passed the final-form team gate at 60/55/55/55/55/55, completed
-312/312 checkpoints and 36/36 objectives, and entered the Hall of Fame.
+**1. Add reserve-aware battle observations. (Lane B)** Version the feature contract. Represent each
+living reserve with semantic type coverage, move availability, offensive advantage, defensive
+resistance, health/status, and level margin. Do not expose species, party-slot, map, or opponent
+identity as a shortcut.
 
-**2. Three matchup-aware League lessons complete.** All five chapters record active-party indexes
-and derive participating-member count and busiest-member share. Bruno resolves Hitmonlee for Onix;
-Lorelei resolves Jolteon for its Water core; Agatha resolves Jolteon for Golbat and Dugtrio for all
-four grounded Poison targets. The exact clean-power run measured `[24, 0, 4, 0, 5, 1]`: 4/6
-participation and 70.59% busiest-member share while retaining Hall of Fame. Agatha fell from 15
-single-carry decisions and ten healing items to six decisions and one item. Extend this to a fifth
-genuine role; do not add cosmetic switches.
+**2. Bind switch choice to switch execution. (Lane A/B)** Rank safe reserves with the same semantic
+features and resolve the chosen candidate to the live menu slot. Preserve hard constraints for
+faints, status, health, required party members, and unavailable moves.
 
-**3. Tolerance conflict resolved.** Mansion development and Champion readiness now share
-`COMPLETION_LEVEL_PARITY`, which requires level 55 against the League's level-65 ceiling. Do not
-restore separate local tolerance contracts.
+**3. Collect and train a new balanced-role artifact. (Lane A/C)** Freeze the schema before opening
+fresh demonstrations. Report opponent-position and chapter coverage, especially Lorelei, Bruno,
+Agatha, and Lance switches. Use whole-lineage splits and keep the old artifact as a historical
+baseline rather than mutating it.
 
-**4. Combined training-safety policy validated.** The five-level, type-aware, immediate-attack
-replacement now has both captured-state and repeated clean-power full-route completion evidence.
+**4. Qualify the role model without the ROM first. (Lane B/C)** Add reserve-permutation,
+counterfactual-matchup, candidate-binding, and held-out role gates. A switch-class accuracy score
+without target accuracy does not count.
 
-**5. Turn the balance assertion on. (Lane B, after 1)** `DevelopedTeamReport.passed` asserts a
-complete roster, one trained workhorse, and zero faints — nothing about the other five members. It
-is deliberately reporting-only today because enabling it fails every run. That failure is correct,
-but switch it on knowingly.
+**5. Repeat one strict canonical rehearsal. (Lane A)** Require 36/36 objectives, Hall of Fame, zero
+teacher query/fallback/substitution, and every League chapter's existing role contract. Preserve
+any failure and its partial receipt.
 
-**6. Decide what `global_router.py` and `collection_chapter.py` are for. (Lane B)** Both landed as
-scaffolding. The router has a correct Dijkstra, three tests, no call site, a hand-written five-node
-graph, and edges carrying no warp coordinates — so it cannot drive navigation as it stands.
-`run_collection` reads the collection correctly and then raises `NotImplementedError` at routing.
-Either give them a job or park them; they currently cost gate time and imply more than exists.
+**6. Harden the perturbation envelope. (Lane A)** Diagnose the lab-rival, Diglett-capture, and
+Rocket-thief failures already exposed by uncounted probes. Keep route-timing brittleness separate
+from learned-policy failures in the report.
 
-**7. Start the second-game adapter — battle layer only. (Lane B)** `party.py`, `team_training.py`,
-`capture.py` and `pokedex.py` all *claim* game-neutrality and nothing has ever falsified that claim.
-Moving the battle observation contract to one other title will teach more about transfer readiness
-than another ten Red runs.
+**7. Open the counted campaign only after 1–6. (Lane A/C)** Freeze all source/model/root identities,
+run the ten assignments once each, and let the independent checker enforce 8/10. Current status is
+0/10; no root has been consumed.
 
-**8. Plan multi-run dex coverage. (Lane B/C)** `red_target(RedRunChoices(...))` and `plan_next_run()`
-exist. Two opposed Red runs reach 132 of 151; the remaining nineteen are ten Blue exclusives, four
-trade evolutions, Mew, the third starter line and the third Eevee stone. Red alone needs three runs.
-Wire the planner to an actual run schedule.
+**8. Start Crystal and learned navigation from the stable Red benchmark. (Lane B)** Compare
+zero-shot, few-shot, and from-scratch behavior on one battle, local-navigation, and training task.
+Use the result to revise the portable schema before expanding the living-Pokédex curriculum.
 
-**9. Scrub the ROM path from git history. (Owner's call)** `a9d0bb4` added an absolute ROM path in
-source and `371be10` removed it. It is not in the current tree and `a9d0bb4` is on no remote, so the
-exposure is local only. Rewriting history is destructive and belongs to the repository owner, not to
-an agent.
+**9. Keep deferred maintenance visible.** Decide whether `global_router.py` and
+`collection_chapter.py` should become real portable-loop components, shrink the 44-module mypy debt
+register, and leave any history rewrite to the repository owner.
 
 ## Recent history
 

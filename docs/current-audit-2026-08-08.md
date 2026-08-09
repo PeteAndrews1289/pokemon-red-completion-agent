@@ -19,6 +19,12 @@ The project is **not yet a general Pokémon-playing model**. The cleanest curren
 That wording is both credible and compelling. It gives the finished Red route its proper weight
 without claiming that a model discovered the route, navigation, team strategy, or recovery logic.
 
+The newest result sharpens that boundary. The portable clean-start player and prospective 8-of-10
+campaign machinery are implemented. A lighter learned stack completed all 36 objectives through
+Hall of Fame, but the strict four-model stack failed closed after defeating Lorelei because every
+attack came from one party member. The infrastructure can now measure the intended experiment; the
+current battle representation cannot yet learn the intended team behavior.
+
 ## Scorecard
 
 Scores measure the repository against its stated end goal, not against a typical hobby project.
@@ -28,10 +34,10 @@ Scores measure the repository against its stated end goal, not against a typical
 | Deterministic completion and referee | 9/10 | Clean power-on; 312/312 semantic checkpoints; 36/36 objectives; Champion and Hall of Fame. The remaining point is for more cartridge revisions/titles. |
 | Experimental honesty | 9/10 | Failed and rejected lineages remain visible, authority modes are separated, and operational gates can overrule headline accuracy. A few historical claims remain scattered through very long documents. |
 | Safety and artifact integrity | 9/10 | Exact hashes, clean-source binding, root-overlap rejection, atomic failed-stream retention, affordance masks, and fail-closed control. Private ROM-derived assets remain external. |
-| Tests and static checks | 8/10 | 2,026 non-integration test cases currently pass locally, with Ruff, documentation, public-artifact, registry, and mypy gates. Forty-four legacy modules still use mypy `ignore_errors` overrides. |
-| Architecture and modularity | 7/10 | Typed observations, objectives, skills, results, model loaders, and promotion gates are strong seams. The 136,980-line Python surface and Red-specific chapter modules remain costly to reason about. |
-| Learned battle control | 7/10 | Real model-controlled qualifications exist with no disagreement fallback. Evaluation is still dominated by the authored Red curriculum and lacks a second-title test. |
-| Learned objective planning | 5/10 | A single process reached Hall of Fame through 20 model dispatches, but 19 dispatches offered only one executable candidate and fixed skills pressed the buttons. |
+| Tests and static checks | 8/10 | 2,059 non-integration tests pass locally, with Ruff, documentation, public-artifact, registry, and mypy gates. Forty-four legacy modules still use mypy `ignore_errors` overrides. |
+| Architecture and modularity | 8/10 | Typed observations, objectives, skills, results, four-model binding, prospective campaign identities, and fail-closed series evaluation are strong seams. The 140,787-line Python surface remains costly to reason about. |
+| Learned battle control | 6/10 | Strict clean-start execution reached and defeated Lorelei with 3,220 model move decisions and no teacher query/fallback, but failed the balanced role contract. Reserve-matchup representation is missing. |
+| Learned objective planning | 6/10 | One clean-start run selected 21 composites and verified 15 automatic effects through Hall of Fame without expected labels. Affordance masking still makes many decisions singletons and fixed skills press the buttons. |
 | Learned training strategy | 7/10 | The identity-free trainee/venue scorer beat its sealed shape baseline by 4.239 points, completed isolated causal control with 191 disagreements, and controlled 114,831 choices with 400 disagreements in both portable and clean-power execution. Evidence remains one fixed Red curriculum and one uncounted clean-power root. |
 | Cross-title transfer | 2/10 | Several representations are intentionally identity-free, but no Crystal or other-title result exists yet. |
 | Autonomous living Pokédex / level 100 | 1/10 | Target and planning foundations exist; autonomous collection, storage, evolution, resource planning, and long-horizon recovery are not integrated. |
@@ -115,6 +121,35 @@ battles to 60/55/55/55/55/55, and the same process verified all 312 checkpoints,
 and Hall of Fame. This removes the runtime uncertainty around clean-power injection. It remains a
 single fixed-route rehearsal, not a teacher-free objective planner or an 8/10 campaign result.
 
+### 5. A clean-start evaluator that rejects the wrong kind of win
+
+The new portable clean-start runner closes three previous infrastructure gaps: early-game typed
+skills now join the midgame registry, objective dispatch no longer receives the expected answer,
+and one authenticated envelope can bind source, runtime, objective graph, behavior, and all four
+model artifacts. A frozen campaign registry and independent checker enforce one attempt per root
+and require at least 8 of 10 valid successes. The campaign remains unopened at 0/10.
+
+The first objective-plus-trainee/venue baseline completed 21 selected composites and 15 automatic
+effects through Hall of Fame. It used 638,520 actions / 45,766,774 frames, recorded 114,831
+controlled training choices with 400 disagreements, and had zero expected labels, fixed objective
+dispatches, or replans. This proves the new orchestration lane can finish Red; it is not evidence
+for battle-model ownership because the authored battle path remained available.
+
+The strict rehearsal bound the objective, battle-move, battle-control, and trainee/venue models in
+one clean-start process. Two defects were found and fixed before interpreting the result: learned
+move choices bypassed the normal evidence sink, and teacher-free training moves bypassed the
+teacher callback that had contained the live retreat and PP guard. Moving evidence and safety to
+policy-neutral runtime seams let the model safely train the full party to 63/55/55/55/55/55, clear
+Blaine and Giovanni, cross Victory Road, and defeat Lorelei with zero teacher query or fallback.
+
+The run still failed—and should have. All 19 Lorelei attack turns came from party slot 1 and the
+model made no role switch, below the declared minimum of two. Battle-control schema v2 sees active
+types and aggregate reserve readiness, but no reserve types, moves, or candidate-relative matchup
+advantage. The generic switch resolver likewise favors a healthy high-level reserve rather than
+the best matchup. The correct response is a reserve-aware schema and new artifact, not relaxing the
+verifier. The complete sanitized result is in the
+[five-role rehearsal audit](evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).
+
 ## Principal risks
 
 ### The learned surface is still small relative to the scripted surface
@@ -125,10 +160,10 @@ compose into a clean-start teacher-free run.
 
 ### The Red implementation is much larger than the portable core
 
-The Python surface is 136,980 lines across 117 source modules, 26 scripts, and 124 test
-files. Much of that size is earned evidence and hardened game mechanics, but it raises regression,
-review, and onboarding costs. A second title is the only convincing way to distinguish genuinely
-portable abstractions from carefully renamed Red assumptions.
+The Python surface is 140,787 lines across 120 source modules, 28 scripts, and 128 test files. Much
+of that size is earned evidence and hardened game mechanics, but it raises regression, review, and
+onboarding costs. A second title is the only convincing way to distinguish genuinely portable
+abstractions from carefully renamed Red assumptions.
 
 ### Static typing is a gate with explicit debt, not a finished migration
 
@@ -150,7 +185,7 @@ match the intended source diff. Repeated red mail from a known derived-artifact 
 real regressions and weakens the otherwise strong evidence story.
 
 **Resolved during this audit:** the stale registry was regenerated from source, all four public
-golden identities were updated from generator output, and the full 2,026-test local gate passed.
+golden identities were updated from generator output, and the full 2,059-test local gate passed.
 At least **19 consecutive GitHub Actions runs** were green after the registry fix, with later audit
 and interface commits also passing. This is why the
 prior email storm was not intended behavior—it was one repeatedly retriggered derived-artifact
@@ -175,25 +210,25 @@ after merge. Do not rewrite the shared branch or force-push its history.
 
 ## Dependency-ordered next work
 
-1. **Establish a clean-start evaluation lane.** No captured starting state, teacher query, answer
-   label, undeclared safety substitution, or restore. Score success rate across multiple declared
-   roots instead of presenting one favorable completion.
-   The readiness audit found this lane is not yet safe to open. The exact-hash candidate-ranker
-   injection and ownership receipt are implemented, and their uncounted clean-power rehearsal now
-   passes. The path still uses expected-objective authorization and has no prospective source-bound
-   ten-root envelope. Build those remaining interfaces before freezing roots.
-2. **Run the Crystal microbenchmark.** Port one local navigation task, one battle task, and one
-   training choice. Compare zero-shot, few-shot, and from-scratch performance. Treat breakage as an
-   abstraction audit, not a demo failure to hide.
-3. **Add recovery and correction learning.** A player that only acts on the happy path cannot
-   generalize. Deliberately perturb position, party order, resource levels, and battle outcomes;
-   measure whether it detects and repairs the deviation.
-4. **Replace a mechanic boundary.** Navigation and recovery are the largest remaining authored
-   surfaces. Start with one bounded local route whose observation and failure conditions can be
-   shared with Crystal.
-5. **Expand toward a living Pokédex only after transfer begins.** Collection is an excellent
-   curriculum for navigation, capture, storage, evolution, party construction, and resource
-   planning. It should reuse the portable player loop rather than become another fixed Red route.
+1. **Represent the reserve party semantically.** Add identity-free reserve type and move coverage,
+   offensive advantage, defensive resistance, health, status, and level margins to a versioned
+   battle-control feature schema.
+2. **Make switches executable for the same reason they were selected.** Rank safe reserve
+   candidates by matchup value and bind the chosen semantic candidate to the menu target. Keep
+   health, faint, status, and required-party constraints as hard referee rules.
+3. **Train a balanced-role artifact.** Collect fresh demonstrations under the new schema and
+   preserve chapter and opponent-position coverage. Use whole-lineage splits and class weighting so
+   Lorelei, Bruno, Agatha, and Lance switches are not washed out by attack-heavy turns.
+4. **Qualify before replaying the whole game.** Require offline held-out role accuracy,
+   counterfactual reserve permutation tests, and target-binding tests before one strict canonical
+   clean-start rehearsal.
+5. **Harden perturbations before counting.** Diagnose the exposed lab-rival, Diglett-capture, and
+   Rocket-thief failures, then pass a fresh uncounted perturbation rehearsal with the frozen stack.
+6. **Only then open v95.** Freeze source and all artifact hashes, execute the ten assignments once
+   each, and let the independent checker decide whether at least eight count as successes.
+7. **Use the stable Red benchmark for transfer.** Compare zero-shot, few-shot, and from-scratch
+   behavior on a small Crystal battle/navigation/training benchmark, then expand collection through
+   the portable loop.
 
 ## Portfolio narrative
 
@@ -203,11 +238,10 @@ after merge. Do not rewrite the shared branch or force-push its history.
 > expert teacher and independent referee that complete all 36 objectives through the Hall of Fame.
 > Then I replaced decision boundaries one at a time with authenticated learned policies, using
 > sealed lineages, causal emulator control, fail-closed safety, and receipts that distinguish real
-> choices from single-option decisions. The current system has completed 114,831 consecutive
-> model-controlled candidate decisions with 400 executed teacher disagreements inside the portable
-> Blaine objective and zero faints,
-> and the next benchmark tests whether that identity-free strategy transfers to another Pokémon
-> game.
+> choices from single-option decisions. The new clean-start evaluator completed Red with the
+> objective and training models, then correctly rejected the stricter four-model run after Lorelei
+> because its battle controller reverted to a one-Pokémon sweep. That failure exposed a precise
+> missing representation—reserve matchup value—which is now the next training target.
 
 ### Resume bullets
 
@@ -221,6 +255,9 @@ after merge. Do not rewrite the shared branch or force-push its history.
 - Implemented an observation-driven objective loop that completed 20 sequential model dispatches
   and 502,175 mechanic actions in one emulator process, while publishing the crucial limitation
   that only one dispatch was a genuine multi-option ranking decision.
+- Built a source- and artifact-bound clean-start evaluation lane with one-attempt assignments and an
+  independent 8-of-10 gate; its strict rehearsal preserved a failed single-carry Lorelei result and
+  localized the next model gap to reserve matchup representation.
 
 ### Interview story
 
@@ -242,6 +279,9 @@ falsifications:
    with 191 executed disagreements.
 7. The unchanged ranker then composed with learned objective dispatch and the fixed Blaine skill,
    executing 400 disagreements before fresh observation opened Giovanni.
+8. The clean-start infrastructure then composed four learned roles with zero fallback, but the
+   curriculum verifier rejected a Lorelei win because all 19 attacks came from one slot. Inspecting
+   the feature and target-resolution seams showed that reserve matchup information did not exist.
 
 That progression demonstrates systems engineering, ML evaluation, debugging discipline, and the
 ability to revise a hypothesis when the evidence contradicts it.

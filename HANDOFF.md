@@ -12,6 +12,28 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 
 This section supersedes the older starting-point and test-count notes below.
 
+**Latest natural boundary:** clean-start orchestration and campaign accounting are implemented and
+the counted v95 campaign remains unopened at **0/10**. An uncounted objective-plus-trainee/venue
+baseline completed all 36 objectives through Hall of Fame with 21 selected composites, 15 automatic
+effects, 114,831 controlled training choices, 400 disagreements, and no expected labels or fixed
+dispatches. The strict four-model rehearsal at source `fcf2b90` then reached and defeated Lorelei
+with zero teacher query or fallback, but correctly failed the chapter contract: all 19 attack turns
+came from party slot 1 and the model made zero role switches. The public evidence is
+[portable-clean-start-five-role-rehearsal-2026-08-08.json](docs/evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).
+
+Two authority-boundary bugs were repaired before that result. Learned move decisions now reach the
+same evidence sink as teacher decisions, and the live training retreat/PP guard executes before
+either policy chooses a move. The second repair carried the party safely through the full
+63/55/55/55/55/55 training curriculum, Blaine, Giovanni, Victory Road, and Lorelei. Do not move
+those safety checks back into the teacher callback.
+
+The next blocker is representational, not another route patch. Battle-control feature schema v2
+describes the active battler and aggregate reserve readiness, but not reserve types, moves, or
+candidate-relative matchup value; generic switch resolution likewise chooses a healthy high-level
+reserve rather than the best semantic matchup. Build schema v3, matchup-aware switch targeting,
+and a fresh balanced-role artifact before repeating the strict canonical rehearsal. Do not weaken
+the Lorelei verifier and do not open counted roots with the old artifact.
+
 - The deterministic teacher remains the expert oracle: clean power-on through 312/312 semantic
   checkpoints, all 36 objectives, Champion, and Hall of Fame.
 - The captured-state portable objective loop has one uninterrupted twenty-dispatch Hall-of-Fame
@@ -23,7 +45,7 @@ This section supersedes the older starting-point and test-count notes below.
   passed with no fallback.
 - V6 still does **not** prove state-dependent strategy. A candidate-set-only baseline also scores
   100%, so the 25 state features have no demonstrated incremental value.
-- The active replacement is the preregistered trainee/venue candidate ranker in
+- The completed trainee/venue replacement is the preregistered candidate ranker in
   [its promotion plan](docs/evidence/training-candidate-ranker-v1-promotion-plan-2026-08-08.json).
   It records identity-free, variable-sized choice sets, collapses repeated identical polls into
   explicit state-transition records, authenticates terminal party/faint evidence, and selects
@@ -70,18 +92,18 @@ This section supersedes the older starting-point and test-count notes below.
   60/55/55/55/55/55 party. See the
   [rehearsal receipt](docs/evidence/training-candidate-ranker-v1-clean-power-rehearsal-2026-08-08.json).
 
-The immediate dependency order is now: build the multi-root clean-start Red evaluation
-infrastructure → run the
-bounded Crystal transfer benchmark → replace one small navigation/recovery mechanic seam → expand
-collection only through the portable loop.
+The immediate dependency order is now: add portable reserve matchup observations → make switch
+targeting matchup-aware → collect and train a balanced-role battle-control artifact → pass offline
+and counterfactual role gates → pass one strict canonical rehearsal → repair the exposed
+perturbation failures → freeze and open the 8/10 campaign. Crystal and learned navigation follow
+that stable Red benchmark.
 
-Do **not** open the ten counted clean-start roots yet. The
-[readiness audit](docs/evidence/clean-start-learned-stack-readiness-audit-2026-08-08.json) now has
-three blocking interfaces: early-game portable skills are incomplete, the clean-start runner still
-uses expected-objective authorization over a fixed sequence, and its ordinary report is not one
-source/model/root-bound series envelope. The strategic-ranker injection is implemented but still
-needed runtime proof; that uncounted rehearsal now passes, but it did not launch inside the missing
-prospective envelope. Build the remaining contracts before freezing the 8/10 campaign.
+Do **not** open the ten counted clean-start roots yet. The updated
+[readiness audit](docs/evidence/clean-start-learned-stack-readiness-audit-2026-08-08.json) records
+the former orchestration, expected-label, and series-provenance blockers as resolved. The current
+blocker is the old battle-control artifact's inability to observe and target useful reserve
+matchups, followed by three exposed timing-perturbation failures. The infrastructure is ready; the
+model stack is not.
 
 PR #8 is still intentionally draft and cleanly mergeable, but it now represents the whole
 accumulated project: more than 650 commits / 620 changed files versus `main`. Do not force-push or attempt a
@@ -145,24 +167,20 @@ of whether it serves this.
   refusal, participation-based evolution, and immediate attacks; that replacement now has both
   captured-state and full-route proof.
 
-**Gate state:** 1945 tests, 3 deselected; ruff, mypy (111 files), artifacts, docs and registry all
-clean after the Secret Key adapter. The source-bound twelve-step run uses published commit
-`e2875c4` (the documentation receipt lands in the following commit).
+**Historical gate at that checkpoint:** 1,945 tests, 3 deselected; Ruff, mypy, artifacts, docs, and
+registry were clean after the Secret Key adapter. The current superseding gate is 2,059 passed,
+3 deselected, with mypy checking all 120 source modules.
 
 ---
 
 ## 3. Start here
 
-**Extend the qualified League roles beyond four members.** Lorelei, Bruno, and Agatha now prove
-non-cosmetic specialist roles, but DUX and Snorlax still supply no recorded League attacks and
-Blastoise still owns 70.59% of the whole-League decisions.
-
-The next useful experiment is a fifth species- and matchup-resolved role, judged by the same
-clean-power whole-League report. DUX or Snorlax needs a matchup that creates genuine offensive,
-defensive, or resource value; never switch merely to satisfy a counter. Lance and the Champion are
-still single-participant chapters, so they are the clearest candidates. Keep the private chained
-League checkpoints for bounded regressions, preserve the existing lineage and partition contracts,
-and keep living-Pokédex expansion and second-title transfer as explicit later stages.
+**Teach the battle controller to see and choose useful reserves.** Preserve the current Lorelei
+failure as the regression target. Add identity-free reserve type/move summaries and
+candidate-relative offensive and defensive matchup margins, then make generic switch resolution
+score the same candidates under health, status, and level safety constraints. Collect fresh
+balanced-role demonstrations only after freezing that schema; the historical six-class artifact
+predates this curriculum and cannot be patched into understanding it.
 
 Then continue down [AGENT_COORDINATION.md](AGENT_COORDINATION.md) § *Open work, in priority order*.
 

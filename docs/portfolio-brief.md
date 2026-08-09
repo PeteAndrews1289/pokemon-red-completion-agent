@@ -28,8 +28,10 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | State-dependent training strategy | 99.9004% sealed validation versus 95.6615% for the shape-only baseline | One Red training curriculum; no cross-title result |
 | Isolated strategic authority | 119,668 controlled trainee/venue choices, 191 executed teacher disagreements, all six level 55, zero faints | Captured-state training lesson |
 | Portable strategic authority | 114,831 controlled choices, 400 executed disagreements, 1,803 development battles, no fallback; fresh observation opened Giovanni | Singleton objective dispatch and authored mechanics remain |
-| Clean-power strategic rehearsal | 312 checkpoints, 36 objectives, and Hall of Fame with 114,831 controlled choices and 400 disagreements | One uncounted fixed-route root; no prospective series envelope |
-| Repository gate | 2,026 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
+| Portable clean-start baseline | 21 selected composites plus 15 automatic effects through Hall of Fame; no expected label, fixed dispatch, or fallback | Battle mechanics were not under the full strict learned stack |
+| Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
+| Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
+| Repository gate | 2,059 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
 
 ## Architecture in one minute
 
@@ -78,19 +80,20 @@ invariant testing, and the discipline to preserve a negative result rather than 
 - Why shadow agreement cannot substitute for causal authority, and why causal authority can still
   prove integration without proving feature value.
 - How the candidate scorer remains permutation-equivariant and excludes title-specific identity.
-- How an emulator-scale system is tested without redistributing the ROM: 2,026 ROM-free tests plus
+- How an emulator-scale system is tested without redistributing the ROM: 2,059 ROM-free tests plus
   private authenticated runtime receipts.
 
 ## Honest limitations
 
 This is not yet a general Pokémon-playing model. Navigation, menus, recovery, resource handling,
-and many mechanic skills remain authored. The strongest objective-loop proof is captured-state and
-mostly singleton dispatch. There is no Crystal benchmark, clean-start 8/10 learned-stack series, or
-autonomous living-Pokédex result yet.
+and many mechanic skills remain authored. A portable clean-start objective loop now reaches Hall of
+Fame, but many choices are affordance-masked and the strict battle model fails the balanced Lorelei
+role contract. There is no Crystal benchmark, clean-start 8/10 learned-stack series, or autonomous
+living-Pokédex result yet.
 
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-08.md) explains why the ten clean-start roots should not open
-until one source-bound portable orchestrator can carry the full learned stack from power-on.
+until a reserve-aware battle artifact passes canonical and perturbation rehearsals.
 
 ## Resume-ready bullets
 
@@ -102,9 +105,12 @@ until one source-bound portable orchestrator can carry the full learned stack fr
 - Qualified a strategic trainee/venue controller inside a portable objective loop across 114,831
   live choices and 400 executed teacher disagreements, completing 1,803 development battles with no
   fallback before fresh emulator observation verified the Volcano Badge.
-- Hardened a 136k-line Python research system with 2,026 tests, Ruff, mypy, documentation/privacy
+- Hardened a 140k-line Python research system with 2,059 tests, Ruff, mypy, documentation/privacy
   gates, deterministic source registries, and at least 19 consecutive green GitHub Actions runs after
   diagnosing one derived-artifact CI regression.
+- Built a prospective one-attempt 8-of-10 clean-start evaluator and used its strict rehearsal to
+  reject a mechanically successful Lorelei battle when the model failed the declared team-role
+  curriculum, localizing the next representation gap before any counted root was consumed.
 
 ## Suggested two-minute demo
 
@@ -115,7 +121,7 @@ until one source-bound portable orchestrator can carry the full learned stack fr
    candidate interface.
 4. Show the offline baseline margin, the preserved causal failure, the same-root diagnostic, and
    the agreement-no-op regression test.
-5. Finish with the portable 114,831-choice run: 400 disagreements, no fallback, a healthy developed
-   party, fresh Volcano Badge observation, and Giovanni becoming available.
-6. End on the boundary card: “Red captured-state strategic authority: yes. General Pokémon player:
-   not yet.”
+5. Show the clean-start baseline reaching Hall of Fame, then contrast the strict run's Lorelei win
+   with `[19, 0, 0, 0, 0, 0]` and the verifier's red result.
+6. End on the feature gap: the active Pokémon is richly described while reserves are anonymous
+   aggregates. Boundary card: “The evaluator is ready. Reserve-aware team strategy is next.”

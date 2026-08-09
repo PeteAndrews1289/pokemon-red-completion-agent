@@ -1,0 +1,79 @@
+{
+  "schema": "pokemon-red-portable-clean-start-five-role-audit-v1",
+  "recorded_on": "2026-08-08",
+  "status": "failed_uncounted_rehearsal_with_actionable_model_gap",
+  "promotion_eligible": false,
+  "counted": false,
+  "counted_roots_consumed": 0,
+  "source": {
+    "commit": "fcf2b9050aecebe680e0df69922d1217e6479035",
+    "dirty": false,
+    "registry_sha256": "572cdb78f60218536ea43ab34b140ba42279574110f7004b76c9ace7dfde74d6",
+    "source_bundle_sha256": "d75193862bf9ff4bc5dacb3068d46927f8e1a9b4c6a58e4b1af377d79e9a42bc"
+  },
+  "model_artifacts": {
+    "objective_semantic_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "battle_move_semantic_sha256": "535b8a07a590afac6c0d8c24d882cd4adb80d8ac73fd002f1b991be816b434dc",
+    "battle_control_semantic_sha256": "9542220ad090c4014fd089f654d88dd523055832561952d4d44a99ad3f1be28a",
+    "training_candidate_canonical_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026"
+  },
+  "run": {
+    "outcome": "failed_closed",
+    "failure_stage": "lorelei_curriculum_verification",
+    "actions": 743648,
+    "frames": 51977358,
+    "objective_decisions": 17,
+    "composite_objectives_completed": 16,
+    "replans": 0,
+    "last_verified_progress": [
+      "defeat_blaine",
+      "defeat_giovanni",
+      "cross_victory_road"
+    ],
+    "lorelei_event_observed": true,
+    "bruno_room_observed": true
+  },
+  "authority": {
+    "teacher_queries": 0,
+    "teacher_fallbacks": 0,
+    "safety_fallbacks": 0,
+    "expected_objective_labels": 0,
+    "fixed_objective_dispatches": 0
+  },
+  "battle_policy": {
+    "decisions": 3236,
+    "model_move_decisions": 3220,
+    "teacher_free_control_requests": 16,
+    "model_coverage_ratio": 0.9950556242274413,
+    "low_confidence_failures": 0,
+    "target_resolution_failures": 0
+  },
+  "training_candidate_policy": {
+    "controlled_decisions": 126902,
+    "agreement_ratio": 0.998526421971285,
+    "disagreements": 187,
+    "trainee_accuracy_ratio": 0.997002,
+    "venue_accuracy_ratio": 1.0
+  },
+  "balanced_team_terminal": {
+    "levels_at_lorelei_start": [63, 55, 55, 55, 55, 55],
+    "levels_after_lorelei": [64, 55, 55, 55, 55, 55],
+    "all_members_living": true,
+    "all_members_fully_healed": true
+  },
+  "lorelei_contract": {
+    "battle_won": true,
+    "attack_turns": 19,
+    "attack_turns_by_party_index": [19, 0, 0, 0, 0, 0],
+    "team_switches": 0,
+    "minimum_team_switches": 2,
+    "satisfied": false
+  },
+  "diagnosis": {
+    "model_gap": "reserve_matchup_representation",
+    "observation_gap": "battle-control schema v2 has aggregate reserve readiness but no reserve type, move, or candidate-relative matchup features",
+    "execution_gap": "generic switch resolution favors healthy high-level reserves without semantic matchup scoring",
+    "verifier_decision": "preserve the failure; do not relax the balanced-team chapter contract"
+  },
+  "next_gate": "implement reserve-aware battle-control schema v3, retrain with balanced role demonstrations, and repeat this strict uncounted canonical rehearsal"
+}

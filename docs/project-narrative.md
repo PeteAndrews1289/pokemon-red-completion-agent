@@ -1,5 +1,54 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 8: the evaluator rejected a win—and found the next real model gap
+
+The clean-start evaluation lane is no longer a proposal. A portable player now boots from power-on,
+observes semantic state, lets the objective model select from executable goals without an expected
+label, dispatches bounded skills, verifies their effects, and returns control after every composite.
+The accompanying campaign contract binds source, runtime, objective graph, behavior, four model
+artifacts, and ten deterministic perturbation assignments before a root can count. Its independent
+checker requires eight valid successes and rejects identity drift, assistance, fixed dispatch, and
+duplicate attempts. The counted campaign has deliberately not started.
+
+The first uncounted baseline proved the orchestration itself. The objective and trainee/venue
+models completed 21 selected composites plus 15 automatic cartridge effects through Hall of Fame:
+638,520 actions, 45,766,774 frames, 114,831 controlled training choices, 400 executed disagreements,
+zero expected labels, zero fixed objective dispatches, and zero replans. This is a clean-start
+learned-dispatch result over authored mechanics, not full learned control.
+
+The strict rehearsal then loaded the objective, battle-move, battle-control, and trainee/venue
+artifacts together. It first exposed two authority-boundary defects. Learned move choices were not
+reaching the evidence sink because the sink lived inside the teacher callback. More seriously, the
+90%-health retreat and preferred-attack PP checks for training battles lived there too, so a
+teacher-free model could bypass the teacher's safety rule. The repair moved both concerns to the
+policy-neutral runtime: every validated move is recorded, and the safety guard runs before either
+policy selects an action without supplying a label.
+
+With those repairs, the same strict lane safely developed the party to 63/55/55/55/55/55, defeated
+Blaine and Giovanni, crossed Victory Road, and defeated Lorelei. Across the run the battle policy
+made 3,220 model move decisions and 16 teacher-free control requests with zero teacher query,
+fallback, low-confidence failure, or target-resolution failure. The trainee/venue ranker owned
+126,902 decisions at 99.85% agreement.
+
+The run still failed its declared objective. All 19 Lorelei attack turns came from party slot 1,
+and the model made zero team switches against a minimum of two. The game had advanced to Bruno's
+room and the full party was alive and healed, but the chapter report correctly refused to certify
+the balanced-team lesson. This is the project's most useful kind of failure: a mechanically winning
+run that the evidence contract rejects because it did not demonstrate the intended capability.
+
+The audit localized the cause. Battle-control feature schema v2 represents active types and
+aggregate reserve health and levels, but not reserve types, reserve moves, or candidate-relative
+offensive and defensive matchup value. Even a generic `switch` prediction cannot reliably recover
+the teacher's lesson because the target resolver chooses a healthy high-level reserve rather than
+the best semantic matchup. The next model must observe and rank reserve candidates directly. The
+verifier will not be weakened, and no counted root will be spent on the old artifact.
+
+This changes the near-term story from “finish building the evaluator” to “teach the player why a
+reserve is useful.” That abstraction is also the right transfer boundary: Water resistance,
+Electric coverage, health margin, and move availability can survive a title change; Jolteon's
+species ID or Lorelei's party slot cannot. The sanitized evidence is in the
+[five-role rehearsal audit](evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).
+
 ## August 8: safe authority passed; useful strategy remains unproven
 
 The latest training-control campaign reached a result that is successful for engineering and

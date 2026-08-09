@@ -15,6 +15,31 @@ Follow an evidence-driven attempt to turn a reliable Pokémon Red speed-running 
 learned player that can make decisions, recover from surprises, and eventually transfer what it
 learns to other Pokémon games.
 
+## Latest episode payoff: the AI won, and the evaluator still said no
+
+The clean-start evaluator is now real. In the first uncounted baseline, the objective and
+trainee/venue models select 21 composite goals, verify 15 automatic cartridge effects, and reach
+Hall of Fame with 114,831 controlled training choices, 400 executed disagreements, and no expected
+objective label or fixed dispatch. Put the denominator on screen: the model chooses goals and
+trainees; bounded authored skills still navigate and operate menus.
+
+Then run the stricter four-model composition. Show the party reaching Lorelei at
+63/55/55/55/55/55, the teacher-query and fallback counters pinned at zero, and 3,220 model move
+decisions accumulating. Lorelei is defeated. The game enters Bruno's room. Then freeze on the
+verifier result: **failed**.
+
+The reveal is the battle vector: `[19, 0, 0, 0, 0, 0]`. The model never switched and every attack
+came from the first party member, so the run violated the lesson it was supposed to demonstrate.
+This is the coldest, clearest version of the project's thesis: finishing the game and learning to
+play Pokémon are not the same objective.
+
+Follow the failure into the code. The active battler has type, move, and matchup features; the five
+reserves are reduced to aggregate health and level statistics. Even when the controller asks to
+switch, the resolver prefers a healthy high-level reserve rather than the one with the best
+offensive and defensive matchup. The next training phase is therefore concrete and portable:
+represent each reserve by semantic matchup value, rank switch candidates, retrain on balanced-team
+demonstrations, and repeat the exact same verifier. Do not edit around the red result.
+
 ## Story outline
 
 ### Cold open — 0:00–0:35
@@ -378,6 +403,12 @@ version has to prove the model learned something worth carrying into a game it h
 - The uncounted clean-power strategic rehearsal: boot, 312/312 checkpoint counter, the same
   114,831-choice / 400-disagreement authority receipt, balanced party, and Hall of Fame. Keep
   “fixed route, one uncounted root” visible rather than presenting it as end-to-end learned play.
+- The portable clean-start baseline card: 21 selected composites, 15 automatic effects, 638,520
+  actions, 45,766,774 frames, no expected labels, fixed dispatches, fallbacks, or replans.
+- The strict four-model contrast: 63/55/55/55/55/55 at Lorelei, 3,220 model moves, zero teacher
+  query/fallback, the battle win, then the rejected `[19,0,0,0,0,0]` participation vector.
+- A split-screen feature visualization: rich active-Pokémon matchup features on the left and five
+  anonymous reserve aggregates on the right, followed by the proposed candidate-relative schema.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video
@@ -388,3 +419,4 @@ version has to prove the model learned something worth carrying into a game it h
 - Keep training seeds, rehearsal runs, and sealed evaluation starts visibly separate.
 - Label future architecture and Crystal footage as planned until receipts exist.
 - Put source hashes, manifests, and full receipts in the description rather than crowding the edit.
+- Do not present defeating Lorelei as passing the learned-team curriculum; the verifier rejected it.
