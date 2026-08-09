@@ -115,8 +115,10 @@ the exact frozen model from the original authenticated lineages and refuses any 
 schema, model payload, disjoint development lineages, and separate perfect prospective test. The
 live policy records target agreement and confidence in shadow, then supports an explicitly
 uncounted isolated trial where the teacher decides *when* to switch and the learned head alone binds
-the living reserve. This is causal-trial authority, not deployment authority. Exact private
-publication, live shadow, and a fresh completion remain before promotion.
+the living reserve. This is causal-trial authority, not deployment authority. The exact `bd1ba4…`
+payload is now published under a complete write-once manifest and has passed an independent loader
+round trip; see the [sanitized receipt](evidence/battle-switch-target-runtime-artifact-2026-08-09.json).
+Live shadow and a fresh completion remain before promotion.
 
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared
@@ -178,9 +180,9 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Publish the exact hash-checked private target artifact from the clean pushed source; do not add
-   seed 990007 to training.
-2. Run one live shadow rehearsal and require complete target availability plus the expected
+1. Run one live shadow rehearsal from the clean pushed source and exact authenticated target
+   artifact; keep seed 990007 test-only.
+2. Require complete target availability plus the expected
    agreement/confidence audit before enabling the isolated trial flag.
 3. Rerun the fresh power-on reserve-controller gate with only target binding under learned
    authority. Preserve

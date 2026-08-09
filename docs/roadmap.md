@@ -7,8 +7,10 @@
 
 ### Superseding battle-control checkpoint
 
-The authenticated runtime seam is now implemented. The target-model artifact binds the canonical
-payload to its feature schema, three training lineages, one validation lineage, and the separate
+The authenticated runtime seam is now implemented and the exact frozen target has been privately
+published. The [sanitized artifact receipt](evidence/battle-switch-target-runtime-artifact-2026-08-09.json)
+binds its `bd1ba4…` canonical payload and manifest `6ec25dd…` to the feature schema, three training
+lineages, one validation lineage, and the separate
 17/17 seed-990007 prospective test. Its loader rejects symlinks, undeclared files, noncanonical
 JSONL, digest changes, overlapping lineage identities, and any test result below perfect. The clean
 start harness can first shadow target choices, then conduct an explicitly uncounted isolated causal
@@ -21,7 +23,7 @@ Red/Blue reciprocal version gaps now come from one canonical table and include t
 omitted Pinsir and Scyther. Trading requires an explicit compatibility edge between saves; merely
 running two vessels no longer invents trade evolutions. Encounter conditions now flow through
 venue selection, candidate projection, and live binding, so a future Crystal day table cannot be
-selected at night. These changes deliberately precede artifact publication and any new emulator
+selected at night. These changes deliberately preceded artifact publication and any new emulator
 evidence.
 
 The reserve-aware lane has advanced beyond the single-lineage diagnostic described below. Three
@@ -83,7 +85,7 @@ frozen candidate passed 17/17 with 0.07965 cross-entropy versus 12/17 for the ba
 Bruno 2/2 and Agatha 7/7. The route stopped at 306/312 because the terminal receipt inferred only
 five role changes from move turns while seven valid switches had executed between opponent changes.
 Commit `a5e92f0` records and verifies those live switches directly. Runtime artifact and binding
-code are now complete; exact private publication, live shadow, and isolated causal completion are
+code and exact private publication are now complete; live shadow and isolated causal completion are
 the next gates.
 
 After the learned target passes offline and causal Red gates, then one canonical and one uncounted

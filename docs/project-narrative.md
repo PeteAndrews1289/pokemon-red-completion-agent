@@ -87,6 +87,10 @@ alone binds the living reserve. Agreement, confidence, rebinding, and fallback c
 This is a deliberately narrow causal claim, and deployment remains false until a fresh completion
 passes.
 
+The exact frozen payload has now been published under a complete write-once manifest and passed an
+independent authenticated loader round trip. The public receipt exposes its hashes, lineage IDs,
+and authority boundary without exposing the private storage path.
+
 The same audit corrected the long-horizon collection substrate before it could produce misleading
 Gen II or living-Pokédex results: reciprocal Red/Blue gaps now include Pinsir and Scyther, trading
 requires explicit compatible-save links, and conditional encounter bands flow into both candidate

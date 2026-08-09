@@ -30,7 +30,7 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Portable strategic authority | 114,831 controlled choices, 400 executed disagreements, 1,803 development battles, no fallback; fresh observation opened Giovanni | Singleton objective dispatch and authored mechanics remain |
 | Portable clean-start baseline | 21 selected composites plus 15 automatic effects through Hall of Fame; no expected label, fixed dispatch, or fallback | Battle mechanics were not under the full strict learned stack |
 | Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
-| Reserve-aware controller | Four complete clean-power lineages; 98.2394% held-out class accuracy / 94.7537% balance; frozen target head passed 17/17 fresh targets versus 12/17 baseline; authenticated runtime seam implemented | Exact publication, live shadow, causal completion, and combined authority remain |
+| Reserve-aware controller | Four complete clean-power lineages; 98.2394% held-out class accuracy / 94.7537% balance; frozen target head passed 17/17 fresh targets versus 12/17 baseline; exact artifact published and authenticated | Live shadow, causal completion, and combined authority remain |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
 | Repository gate | 2,110 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
 

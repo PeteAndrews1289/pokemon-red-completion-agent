@@ -65,9 +65,11 @@ The route stopped at 306/312 because its terminal receipt reconstructed only fiv
 role switches from move turns; explicit live switch receipts now fix that referee boundary. The
 authenticated target-artifact format and runtime binding are now implemented. The loader binds the
 canonical payload to its feature schema, disjoint development lineages, and the 17/17 prospective
-test. Runtime can shadow the target head or let it replace only the reserve bound to a
-teacher-authored switch request while ordinary moves remain teacher-gated. The active gate is exact
-private publication, live shadow, then another 312-checkpoint isolated causal completion, followed
+test. The exact frozen payload has now been privately published and independently loaded; see the
+[sanitized runtime-artifact receipt](docs/evidence/battle-switch-target-runtime-artifact-2026-08-09.json).
+Runtime can shadow the target head or let it replace only the reserve bound to a
+teacher-authored switch request while ordinary moves remain teacher-gated. The active gate is live
+shadow, then another 312-checkpoint isolated causal completion, followed
 by a separate run that forbids teacher queries for ordinary move selection. Navigation, menus,
 chapter mechanics, and resource execution remain authored. The counted v95 reliability campaign
 remains unopened at

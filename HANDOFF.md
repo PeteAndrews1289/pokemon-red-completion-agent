@@ -26,7 +26,9 @@ from one canonical Generation I table (including Pinsir and Scyther), campaigns 
 compatible `TradeLink` edges rather than treating any two saves as trade partners, and conditional
 encounter bands now participate in live trainee/venue projection and exact ephemeral binding.
 
-The exact switch-target head now has the missing runtime seam. A private artifact loader verifies
+The exact switch-target head now has the missing runtime seam. Artifact
+`red-battle-switch-target-model-28a63094f845403bb5254fc4bc3ec449` is complete with manifest
+`6ec25dd…`; its canonical model payload is the frozen `bd1ba4…`. A private artifact loader verifies
 the typed manifest, canonical JSONL streams, feature schema, canonical model payload, disjoint
 development lineages, and the separate 17/17 prospective lineage. A write-once publisher rebuilds
 the frozen `bd1ba4…` payload from the original authenticated lineages and refuses a digest mismatch.
@@ -35,7 +37,8 @@ the reserve bound to a teacher switch request; ordinary move choice remains teac
 portable clean-start harness accepts the authenticated target artifact, reports target confidence,
 agreement, rebinding, and fallback counters, and keeps deployment authority false. Next publish the
 exact artifact from a clean pushed commit, run shadow first, then run one fresh isolated causal
-completion. Counted v95 remains **0/10** and seed `990007` remains test-only.
+completion. Counted v95 remains **0/10** and seed `990007` remains test-only. See the
+[runtime artifact receipt](docs/evidence/battle-switch-target-runtime-artifact-2026-08-09.json).
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `a5e92f0`
 records live Agatha role switches and the passed prospective target test; `edfa676` contains the
