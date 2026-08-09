@@ -1,0 +1,44 @@
+{
+  "schema": "pokemon-red-battle-control-v3-causal-failure-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "invalidated_and_stopped",
+  "source_commit": "789bb81c95e17410f2d3f86b8fcb4fbe7d418c54",
+  "candidate": {
+    "artifact_id": "red-battle-control-model-d4bc15ba53354fa2980a47b57f2dda78",
+    "manifest_sha256": "e742f32893ddca66911e1dbeb31bea1fca93f07ad6f09d6dedfeb8d07c3b382e",
+    "model_sha256": "916aa21097d7b087125dce6cb9b01180c2ee3aa929a843d7b580021ac00246e0",
+    "private_path_published": false
+  },
+  "authority": {
+    "declared_ordinary_move_selection": "authenticated_move_ranker_teacher_gated",
+    "actual_safety_fallback_move_selection": "move_ranker_without_teacher_agreement",
+    "high_level_battle_control": "model_authority",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "outcome": {
+    "passed_route_12_failure_boundary": true,
+    "passed_koga_failure_boundary": true,
+    "stopped_by_operator_after_code_audit": true,
+    "game_complete": false,
+    "counted_campaign_root_consumed": false
+  },
+  "diagnosis": {
+    "resource_gate_worked": "The replay advanced beyond both earlier causal failures.",
+    "authority_leak": "A masked high-level action returned the move ranker's legal slot directly instead of applying the configured move-teacher agreement gate.",
+    "why_invalidated": "Continuing could have produced a completion whose ordinary move authority differed from the declared isolated-control experiment."
+  },
+  "repair": {
+    "direction": "Route target-resolution, capability-mask, and unmatched-control fallbacks through one shared move-authority function and regression-test teacher disagreement at the safety boundary.",
+    "increase_retry_budget": false,
+    "change_teacher_route": false,
+    "change_model_weights": false,
+    "open_counted_root": false
+  },
+  "claim_scope": {
+    "causal_control_qualified": false,
+    "shadow_qualification_preserved": true,
+    "candidate_retrained_after_stop": false,
+    "cross_game_transfer_complete": false
+  }
+}

@@ -484,9 +484,16 @@ class ModelAssistedBattlePolicy:
 
         if predicted_ref == CONTROL_CLASS_REFS[0] and not self.allow_teacher_queries:
             self.control_execution_decisions += 1
-            self.model_decisions += 1
-            self._record_control_action(observation, BattleAction.move(predicted_slot))
-            return predicted_slot
+            return self._return_control_move(
+                observation,
+                fallback,
+                predicted_slot=predicted_slot,
+                move_context=move_context,
+                move_batch=move_batch,
+                move_legal_mask=move_legal_mask,
+                move_predicted_candidate=move_predicted_candidate,
+                move_confidence=move_confidence,
+            )
 
         resolved_action = None
         if predicted_ref != CONTROL_CLASS_REFS[0]:
@@ -501,9 +508,16 @@ class ModelAssistedBattlePolicy:
                 self.control_target_resolution_failures[type(error).__name__] += 1
                 self.control_execution_decisions += 1
                 self.control_safety_fallbacks += 1
-                self.model_decisions += 1
-                self._record_control_action(observation, BattleAction.move(predicted_slot))
-                return predicted_slot
+                return self._return_control_move(
+                    observation,
+                    fallback,
+                    predicted_slot=predicted_slot,
+                    move_context=move_context,
+                    move_batch=move_batch,
+                    move_legal_mask=move_legal_mask,
+                    move_predicted_candidate=move_predicted_candidate,
+                    move_confidence=move_confidence,
+                )
             target_key = predicted_ref
             if resolved_action.recovery_need is not None:
                 target_key = f"{target_key}:{resolved_action.recovery_need.value}"
@@ -522,9 +536,16 @@ class ModelAssistedBattlePolicy:
                     self.control_target_resolution_failures["capability_mask"] += 1
                     self.control_execution_decisions += 1
                     self.control_safety_fallbacks += 1
-                    self.model_decisions += 1
-                    self._record_control_action(observation, BattleAction.move(predicted_slot))
-                    return predicted_slot
+                    return self._return_control_move(
+                        observation,
+                        fallback,
+                        predicted_slot=predicted_slot,
+                        move_context=move_context,
+                        move_batch=move_batch,
+                        move_legal_mask=move_legal_mask,
+                        move_predicted_candidate=move_predicted_candidate,
+                        move_confidence=move_confidence,
+                    )
             if resolved_action.action.kind is BattleActionKind.SWITCH:
                 try:
                     resolved_action = authorize_switch_target(
@@ -536,21 +557,32 @@ class ModelAssistedBattlePolicy:
                     self.control_target_resolution_failures["capability_mask"] += 1
                     self.control_execution_decisions += 1
                     self.control_safety_fallbacks += 1
-                    self.model_decisions += 1
-                    self._record_control_action(observation, BattleAction.move(predicted_slot))
-                    return predicted_slot
+                    return self._return_control_move(
+                        observation,
+                        fallback,
+                        predicted_slot=predicted_slot,
+                        move_context=move_context,
+                        move_batch=move_batch,
+                        move_legal_mask=move_legal_mask,
+                        move_predicted_candidate=move_predicted_candidate,
+                        move_confidence=move_confidence,
+                    )
             if resolved_action.action.kind is BattleActionKind.USE_BOOST:
                 boost_stat = resolved_action.action.boost_stat
                 if boost_stat not in intent.boost_capabilities:
                     self.control_target_resolution_failures["capability_mask"] += 1
                     self.control_execution_decisions += 1
                     self.control_safety_fallbacks += 1
-                    self.model_decisions += 1
-                    self._record_control_action(
+                    return self._return_control_move(
                         observation,
-                        BattleAction.move(predicted_slot),
+                        fallback,
+                        predicted_slot=predicted_slot,
+                        move_context=move_context,
+                        move_batch=move_batch,
+                        move_legal_mask=move_legal_mask,
+                        move_predicted_candidate=move_predicted_candidate,
+                        move_confidence=move_confidence,
                     )
-                    return predicted_slot
                 self.control_execution_decisions += 1
                 self.control_execution_requests += 1
                 self.control_teacher_free_requests += 1
@@ -591,31 +623,19 @@ class ModelAssistedBattlePolicy:
 
         self.control_execution_decisions += 1
         if predicted_ref == CONTROL_CLASS_REFS[0]:
-            if teacher_request is not None:
-                self.control_suppressed_teacher_requests += 1
-            elif self.require_teacher_agreement:
-                assert teacher_slot is not None
-                if teacher_slot != predicted_slot:
-                    self._record_correction(
-                        observation=observation,
-                        context=move_context,
-                        batch=move_batch,
-                        legal_mask=move_legal_mask,
-                        predicted_candidate=move_predicted_candidate,
-                        confidence=move_confidence,
-                        teacher_slot=teacher_slot,
-                        reason="teacher_disagreement",
-                    )
-                    self.teacher_fallbacks += 1
-                    self.fallback_reasons["teacher_disagreement"] += 1
-                    self._record_control_action(
-                        observation,
-                        BattleAction.move(teacher_slot),
-                    )
-                    return teacher_slot
-            self.model_decisions += 1
-            self._record_control_action(observation, BattleAction.move(predicted_slot))
-            return predicted_slot
+            return self._return_control_move(
+                observation,
+                fallback,
+                predicted_slot=predicted_slot,
+                move_context=move_context,
+                move_batch=move_batch,
+                move_legal_mask=move_legal_mask,
+                move_predicted_candidate=move_predicted_candidate,
+                move_confidence=move_confidence,
+                teacher_observed=True,
+                teacher_slot=teacher_slot,
+                teacher_request=teacher_request,
+            )
 
         if (
             teacher_request is not None
@@ -628,8 +648,65 @@ class ModelAssistedBattlePolicy:
         # The class model intentionally does not yet own cartridge-specific item or
         # party targets. A false-positive special action therefore degrades to the
         # learned legal move rather than spending an unverified resource.
-        del teacher_slot
         self.control_safety_fallbacks += 1
+        return self._return_control_move(
+            observation,
+            fallback,
+            predicted_slot=predicted_slot,
+            move_context=move_context,
+            move_batch=move_batch,
+            move_legal_mask=move_legal_mask,
+            move_predicted_candidate=move_predicted_candidate,
+            move_confidence=move_confidence,
+            teacher_observed=True,
+            teacher_slot=teacher_slot,
+            teacher_request=teacher_request,
+        )
+
+    def _return_control_move(
+        self,
+        observation: BattlePolicyObservation,
+        fallback: Callable[[], int],
+        *,
+        predicted_slot: int,
+        move_context: BattleMovePolicyContext | None,
+        move_batch: BattleFeatureBatch,
+        move_legal_mask: list[bool],
+        move_predicted_candidate: int,
+        move_confidence: float,
+        teacher_observed: bool = False,
+        teacher_slot: int | None = None,
+        teacher_request: BattleControlRequest | None = None,
+    ) -> int:
+        """Return a legal move without bypassing the configured move authority."""
+
+        if self.require_teacher_agreement and not teacher_observed:
+            try:
+                teacher_slot = fallback()
+            except BattleControlRequest as request:
+                teacher_request = request
+        if teacher_request is not None:
+            self.control_suppressed_teacher_requests += 1
+        elif self.require_teacher_agreement:
+            assert teacher_slot is not None
+            if teacher_slot != predicted_slot:
+                self._record_correction(
+                    observation=observation,
+                    context=move_context,
+                    batch=move_batch,
+                    legal_mask=move_legal_mask,
+                    predicted_candidate=move_predicted_candidate,
+                    confidence=move_confidence,
+                    teacher_slot=teacher_slot,
+                    reason="teacher_disagreement",
+                )
+                self.teacher_fallbacks += 1
+                self.fallback_reasons["teacher_disagreement"] += 1
+                self._record_control_action(
+                    observation,
+                    BattleAction.move(teacher_slot),
+                )
+                return teacher_slot
         self.model_decisions += 1
         self._record_control_action(observation, BattleAction.move(predicted_slot))
         return predicted_slot

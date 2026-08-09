@@ -647,6 +647,28 @@ def test_control_execution_guards_an_unparameterized_special_action() -> None:
     assert execution["target_resolution_failures"] == {"capability_mask": 1}
 
 
+def test_control_safety_fallback_preserves_move_teacher_gate() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_control_model(),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=True,
+    )
+
+    assert policy.choose_move(_observation(), lambda: 1) == 1
+    assert policy.teacher_queries == 1
+    assert policy.teacher_fallbacks == 1
+    assert policy.fallback_reasons == {"teacher_disagreement": 1}
+    assert policy.model_decisions == 0
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["safety_fallbacks"] == 1
+    assert execution["target_resolution_failures"] == {"capability_mask": 1}
+
+
 def test_control_execution_emits_boost_without_calling_teacher() -> None:
     policy = ModelAssistedBattlePolicy(
         model=_model(),
