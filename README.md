@@ -170,10 +170,11 @@ steps east, waits under a 24-attempt bound, restores the approach, and proves th
 every sub-step retains the incidental-wild receipt. See the
 [tenth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-10-failure-2026-08-09.json).
 Seed `990026` passed that crossing and every species-authenticated Forest lesson, then failed the
-Brock-readiness resource gate after the mandatory Bug Catcher. The route demanded HP and Bubble-PP
-reserves without supplying a recovery mechanic. It now preserves the level-9/Bubble Forest lesson,
-visits the Pewter Center, proves full HP, clear status, and restored learned-move PP, and reapplies
-the unchanged Brock gate at the Gym; see the
+Brock-readiness resource gate after the mandatory Bug Catcher. A clean same-root probe found the
+exact missing predicate: level 9, 19/27 HP, and 26 Bubble PP were valid, but Weedle had inflicted
+poison. The repaired transit accepts only healthy or poisoned state behind the same HP/PP floor,
+takes the direct Pewter Center route, proves full recovery, and reapplies the unchanged Gym gate;
+see the
 [eleventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95
 reliability campaign remains unopened at

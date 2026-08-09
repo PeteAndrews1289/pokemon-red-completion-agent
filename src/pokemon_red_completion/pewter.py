@@ -136,11 +136,8 @@ PEWTER_TO_GYM_DIRECTIONS = (
     "up",
 )
 PEWTER_TO_CENTER_DIRECTIONS = (
-    *(("up",) * 13),
-    "right",
     *(("up",) * 9),
-    *(("down",) * 13),
-    *(("left",) * 6),
+    *(("left",) * 5),
     "up",
 )
 PEWTER_CENTER_HEAL_APPROACH_DIRECTIONS = ("up",) * 4
@@ -661,13 +658,7 @@ def run_pewter_chapter(
         timing=timing,
         label="Viridian Forest Bug Catcher",
     )
-    _expect_party(
-        reader.read(),
-        level=9,
-        minimum_hp=1,
-        required_move=BUBBLE_MOVE_ID,
-        label="Viridian Forest exit",
-    )
+    _expect_brock_transit_ready(reader.read(), "Viridian Forest exit")
 
     _, more_flees, more_retries = _move_forest_with_wild_flees(
         chapter_executor,
@@ -1327,6 +1318,19 @@ def _expect_brock_party_ready(raw: RawGameState, label: str) -> None:
         or bubble_pp < 4
     ):
         raise PewterChapterError(f"{label} failed the Brock-readiness party gate.")
+
+
+def _expect_brock_transit_ready(raw: RawGameState, label: str) -> None:
+    bubble_pp = _move_pp(raw, BUBBLE_MOVE_ID)
+    if (
+        raw.party_count != 1
+        or raw.first_party_level != 9
+        or (raw.first_party_hp or 0) < 19
+        or raw.first_party_status not in {0, 0x08}
+        or bubble_pp is None
+        or bubble_pp < 4
+    ):
+        raise PewterChapterError(f"{label} failed the Brock-transit party gate.")
 
 
 def _is_healed_brock_party(raw: RawGameState) -> bool:

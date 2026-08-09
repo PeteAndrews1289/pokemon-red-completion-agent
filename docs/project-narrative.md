@@ -2340,9 +2340,10 @@ through every sub-step. Robustness also means consolidating knowledge instead of
 each chapter.
 
 The following root finally passed that crossing and every authored Forest lesson, only to fail at
-the Brock-readiness resource gate. The teacher required a healthy lead and Bubble reserve but had
-no recovery action between the variable-damage curriculum and the Gym. The repair preserves the
-level-9 and move lesson, visits the Pewter Center, proves full health, clear status, and restored PP,
+the Brock-readiness resource gate. A same-root probe found level 9, 19/27 HP, 26 Bubble PP, and
+poison `0x08`: recovery was available downstream but the healthy-status precondition blocked it.
+The repair preserves the level, HP, and move floors, admits only healthy or poison in transit,
+visits the Pewter Center, proves full health, clear status, and restored PP,
 and reapplies the same readiness contract at the Gym. It is a small but important distinction:
 declaring a safe precondition does not teach the agent how to establish it.
 

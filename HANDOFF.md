@@ -18,7 +18,7 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
-**Late audit and runtime checkpoint:** the full repository gate now passes **2,187 tests with 3
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,192 tests with 3
 integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
 public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
 errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
@@ -138,10 +138,11 @@ The [tenth perturbation failure](docs/evidence/portable-clean-start-six-role-per
 preserves the duplicated Route 1 youngster-collision counterexample.
 The [eleventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json)
 preserves the missing post-Forest recovery mechanic. Seed `990026` passed the walker and every
-Forest lesson, then failed the aggregate Brock-ready HP/PP gate at 158,394 frames. The repair keeps
-the level-9/Bubble exit requirement, visits the Pewter Center, proves full HP, clear status, and
-restored learned-move PP, and reapplies the Brock gate at the Gym. Its complete ROM-free gate is
-green at 2,187 tests; push before replay. Counted v95 remains 0/10.
+Forest lesson, then failed the aggregate Brock gate at 158,394 frames. A clean same-root probe found
+level 9, 19/27 HP, 26 Bubble PP, and poison `0x08`. Transit now admits only healthy or poison behind
+the unchanged HP/PP floor, takes a direct 15-input Center route, proves full recovery, and reapplies
+the healthy Gym gate. The full 2,192-test ROM-free gate is green; push before causal replay.
+Counted v95 remains 0/10.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the
 source of the passed canonical receipt and `4f5f870` qualified the lab-rival repair through the next

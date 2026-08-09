@@ -208,8 +208,8 @@ repository. Overlay the duplicate early and collection routes, then merge them i
 primitive. Caption it: **“A system only learns when its fixes become shared knowledge.”**
 
 Then let `990026` reach the Forest exit with every lesson complete and fail a resource gate. Put the
-requirement on screen—HP and Bubble PP—beside the missing recovery action. Route through the Pewter
-Center, verify the healed state, and keep the original Gym gate unchanged. Caption it:
+requirement on screen beside the probe result—19/27 HP, 26 Bubble PP, poison `0x08`. Route through
+the Pewter Center, verify the healed state, and keep the original Gym gate unchanged. Caption it:
 **“A requirement is not a plan.”**
 
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the

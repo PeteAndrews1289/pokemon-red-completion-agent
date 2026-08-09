@@ -34,9 +34,11 @@ from pokemon_red_completion.pewter import (
     ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
     ROUTE_2_TO_FOREST_GATE_DIRECTIONS,
     VIRIDIAN_TO_ROUTE_2_DIRECTIONS,
+    PewterChapterError,
     PewterChapterReport,
     PewterProgress,
     PewterTiming,
+    _expect_brock_transit_ready,
     _seek_forest_training_battle,
 )
 
@@ -235,7 +237,7 @@ def test_pewter_route_is_source_stable_at_critical_segments() -> None:
         "up",
     )
     assert len(PEWTER_TO_GYM_DIRECTIONS) == 44
-    assert len(PEWTER_TO_CENTER_DIRECTIONS) == 43
+    assert len(PEWTER_TO_CENTER_DIRECTIONS) == 15
     assert len(PEWTER_CENTER_TO_GYM_DIRECTIONS) == 41
     assert len(GYM_TO_BROCK_DIRECTIONS) == 17
 
@@ -249,6 +251,27 @@ def test_pewter_timing_defaults_are_positive_bounded_integers() -> None:
         and getattr(DEFAULT_PEWTER_TIMING, field.name) > 0
         for field in fields(PewterTiming)
     )
+
+
+@pytest.mark.parametrize("status", (0, 0x08))
+def test_brock_transit_accepts_only_healthy_or_poisoned_ready_party(status: int) -> None:
+    _expect_brock_transit_ready(
+        replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=19), first_party_status=status),
+        "unit Forest exit",
+    )
+
+
+@pytest.mark.parametrize(
+    "raw",
+    (
+        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=18),
+        replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=19), first_party_status=0x40),
+        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=19, bubble_pp=3),
+    ),
+)
+def test_brock_transit_rejects_unsafe_resource_or_status_boundary(raw: RawGameState) -> None:
+    with pytest.raises(PewterChapterError, match="Brock-transit"):
+        _expect_brock_transit_ready(raw, "unit Forest exit")
 
 
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))

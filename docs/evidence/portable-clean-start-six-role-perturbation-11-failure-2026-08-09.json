@@ -30,20 +30,30 @@
   },
   "diagnosis": {
     "category": "required_resource_boundary_without_a_recovery_mechanic",
-    "finding": "The authored Forest curriculum proved level 9, a living lead, Bubble, three exact Kakuna victories, and the required Bug Catcher victory, but then demanded at least 19 HP and four Bubble PP without visiting a healer. Legal battle variance can consume HP or PP. The v1 failure report did not expose which scalar missed the aggregate gate, so the repair addresses both resources rather than weakening either requirement.",
+    "finding": "The authored Forest curriculum proved level 9, a living lead, Bubble, three exact Kakuna victories, and the required Bug Catcher victory, but then demanded a zero status byte without supplying recovery. A clean same-root runtime probe observed level 9, 19/27 HP, Bubble at 26 PP, and poison status 0x08. The first repair still reused the healthy-status gate before the Center and therefore reproduced the failure at the same 158,394-frame boundary.",
     "model_boundary": "The failure remained inside the authored first composite. Objective selection made one singleton choice; all learned battle, target, and training counters were zero."
   },
   "repair": {
-    "status": "implemented_and_rom_free_qualified_pending_live_causal_replay",
-    "behavior": "The Forest exit still requires the exact level-9 living Squirtle and Bubble lesson. After reaching Pewter, the teacher follows a finite source-stable route to the Pokémon Center, proves full HP, clear status, and positive PP for every learned move, exits, and follows a finite route to the Gym. The existing Brock gate is applied again at the Gym entrance; no training or battle requirement is relaxed.",
+    "status": "refined_from_same_root_probe_and_rom_free_qualified_pending_live_causal_replay",
+    "behavior": "The Forest exit still requires the exact level-9 lead, at least 19 HP, at least four Bubble PP, and either healthy or poison status; every other status remains fatal. The teacher takes the direct finite Pewter route to the Pokémon Center, proves full HP, clear status, and positive PP for every learned move, exits, and follows a finite route to the Gym. The original healthy Brock gate is applied again at the Gym entrance; no training, HP, PP, or Gym requirement is relaxed.",
     "bounds": {
-      "center_route_inputs": 43,
+      "center_route_inputs": 15,
       "nurse_approach_inputs": 4,
       "heal_dialogue_pulses": 9,
       "center_exit_inputs": 5,
       "center_to_gym_inputs": 41
     },
-    "rom_free_gate": "Public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,187 tests passed; three integration tests were deselected and one expected failure remained expected.",
+    "same_root_probe": {
+      "source_commit": "0773d75df57663f52269e14684732f879ea89d84",
+      "raw_report_sha256": "416f086079c2d037282ca91886a48bf9455677c60eacd185444017957ab428d4",
+      "frames_executed": 158394,
+      "observed_level": 9,
+      "observed_hp": 19,
+      "observed_max_hp": 27,
+      "observed_status": 8,
+      "observed_bubble_pp": 26
+    },
+    "rom_free_gate": "Public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,192 tests passed after the poison-specific refinement; three integration tests were deselected and one expected failure remained expected.",
     "next_gate": "Complete the full ROM-free gate, commit and push the repair, then replay the failed seed causally before assigning a fresh uncounted derived-timing root. Counted v95 remains unopened."
   }
 }
