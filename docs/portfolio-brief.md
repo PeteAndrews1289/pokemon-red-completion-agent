@@ -161,6 +161,10 @@ The replacement is a finite state-authenticated recovery, not a favorable delay:
 accept only its exact input-ready gate. The failed root recovered in 18 inputs plus one input-free
 settling wait and obtained Squirtle; no learned role had been reached in the original failure.
 
+Seed `990022` qualified the intro repair and then hit an incidental battle on Route 2. The shared
+traversal now takes an explicit map contract, so Route 2 can reuse the exact authenticated flee and
+movement receipt without accepting trainers, wrong maps, or a global “ignore battles” shortcut.
+
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
 until the now-canonical-qualified reserve-aware stack also passes a perturbation rehearsal.

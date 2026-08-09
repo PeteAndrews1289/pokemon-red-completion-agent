@@ -1,4 +1,4 @@
-"""Bounded, evidence-bearing handling for incidental Route 1 wild battles."""
+"""Bounded, evidence-bearing handling for incidental overworld wild battles."""
 
 from __future__ import annotations
 
@@ -22,11 +22,16 @@ class ActionExecutor(Protocol):
 
 @dataclass(frozen=True, slots=True)
 class Route1WildFleeEvidence:
-    """One incidental encounter dismissed without changing protected state."""
+    """One incidental encounter dismissed without changing protected state.
+
+    The historical name remains public for compatibility; ``expected_map_id``
+    makes the receipt safe for other authored overworld corridors.
+    """
 
     initial_battle_state: int
     final_battle_state: int
     battle_result: int
+    expected_map_id: int
     map_id: int
     player_x: int
     player_y: int
@@ -49,7 +54,7 @@ class Route1WildFleeEvidence:
             self.initial_battle_state == 1
             and self.final_battle_state == 0
             and self.battle_result == 2
-            and self.map_id == MapId.ROUTE_1
+            and self.map_id == self.expected_map_id
             and self.player_x >= 0
             and self.player_y >= 0
             and self.enemy_species_id > 0
@@ -71,6 +76,7 @@ class Route1WildFleeEvidence:
             "control_ready": self.control_ready,
             "enemy_level": self.enemy_level,
             "enemy_species_id": self.enemy_species_id,
+            "expected_map": self.expected_map_id,
             "final_battle_state": self.final_battle_state,
             "final_hp": self.final_hp,
             "initial_battle_state": self.initial_battle_state,
@@ -88,19 +94,21 @@ class Route1WildFleeEvidence:
         }
 
 
-def move_route_1_with_wild_flees(
+def move_with_wild_flees(
     executor: ActionExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     label: str,
     *,
+    expected_map_id: MapId,
+    route_name: str,
     maximum_flees: int,
     stabilization_frames: int,
     maximum_step_attempts: int,
     step_retry_wait_frames: int,
     error_type: type[Exception],
 ) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
-    """Follow Route 1 and fail closed around a finite number of ordinary wilds."""
+    """Follow one map corridor around a finite number of ordinary wilds."""
 
     if type(maximum_flees) is not int or maximum_flees < 0:  # noqa: E721
         raise ValueError("maximum_flees must be a non-negative integer")
@@ -121,24 +129,30 @@ def move_route_1_with_wild_flees(
             executor.execute(MacroAction(MacroActionKind.MOVE, direction))
             moved = reader.read()
             if moved.battle_state:
-                if moved.battle_state != 1 or moved.map_id != MapId.ROUTE_1:
+                if moved.battle_state != 1 or moved.map_id != expected_map_id:
                     raise error_type(
                         f"Unexpected non-wild battle interrupted {label} at step {step}."
                     )
                 consumed = _direction_was_consumed(before, moved, direction)
-                if not consumed and not _same_encounter_boundary(before, moved):
+                if not consumed and not _same_encounter_boundary(
+                    before,
+                    moved,
+                    expected_map_id,
+                ):
                     raise error_type(
-                        f"Route 1 wild battle drifted before {label} step {step}."
+                        f"{route_name} wild battle drifted before {label} step {step}."
                     )
                 if len(flees) >= maximum_flees:
                     raise error_type(
                         f"{label} exceeded its bounded {maximum_flees}-encounter flee allowance."
                     )
                 flees.append(
-                    flee_route_1_wild(
+                    flee_wild(
                         executor,
                         reader,
                         moved,
+                        expected_map_id=expected_map_id,
+                        route_name=route_name,
                         stabilization_frames=stabilization_frames,
                         error_type=error_type,
                     )
@@ -160,7 +174,7 @@ def move_route_1_with_wild_flees(
             if _direction_was_consumed(before, moved, direction):
                 state = moved
                 break
-            if not _same_route_boundary(before, moved):
+            if not _same_route_boundary(before, moved, expected_map_id):
                 raise error_type(f"{label} step {step} moved outside its requested direction.")
             if attempt == maximum_step_attempts:
                 raise error_type(
@@ -171,8 +185,37 @@ def move_route_1_with_wild_flees(
             _wait(executor, step_retry_wait_frames)
             state = reader.read()
         else:  # pragma: no cover - the bounded loop always breaks or raises
-            raise AssertionError("unreachable Route 1 movement loop")
+            raise AssertionError("unreachable bounded movement loop")
     return state, tuple(flees), movement_retries
+
+
+def move_route_1_with_wild_flees(
+    executor: ActionExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    label: str,
+    *,
+    maximum_flees: int,
+    stabilization_frames: int,
+    maximum_step_attempts: int,
+    step_retry_wait_frames: int,
+    error_type: type[Exception],
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
+    """Compatibility wrapper for the original Route 1 contract."""
+
+    return move_with_wild_flees(
+        executor,
+        reader,
+        directions,
+        label,
+        expected_map_id=MapId.ROUTE_1,
+        route_name="Route 1",
+        maximum_flees=maximum_flees,
+        stabilization_frames=stabilization_frames,
+        maximum_step_attempts=maximum_step_attempts,
+        step_retry_wait_frames=step_retry_wait_frames,
+        error_type=error_type,
+    )
 
 
 def _direction_was_consumed(
@@ -199,9 +242,13 @@ def _direction_was_consumed(
     return False
 
 
-def _same_route_boundary(before: RawGameState, after: RawGameState) -> bool:
+def _same_route_boundary(
+    before: RawGameState,
+    after: RawGameState,
+    expected_map_id: MapId,
+) -> bool:
     return (
-        before.map_id == after.map_id == MapId.ROUTE_1
+        before.map_id == after.map_id == expected_map_id
         and before.player_x == after.player_x
         and before.player_y == after.player_y
         and after.battle_state == 0
@@ -214,9 +261,13 @@ def _same_route_boundary(before: RawGameState, after: RawGameState) -> bool:
     )
 
 
-def _same_encounter_boundary(before: RawGameState, encounter: RawGameState) -> bool:
+def _same_encounter_boundary(
+    before: RawGameState,
+    encounter: RawGameState,
+    expected_map_id: MapId,
+) -> bool:
     return (
-        before.map_id == encounter.map_id == MapId.ROUTE_1
+        before.map_id == encounter.map_id == expected_map_id
         and before.player_x == encounter.player_x
         and before.player_y == encounter.player_y
         and before.battle_state == 0
@@ -230,18 +281,20 @@ def _same_encounter_boundary(before: RawGameState, encounter: RawGameState) -> b
     )
 
 
-def flee_route_1_wild(
+def flee_wild(
     executor: ActionExecutor,
     reader: PokemonRedStateReader,
     encounter: RawGameState,
     *,
+    expected_map_id: MapId,
+    route_name: str,
     stabilization_frames: int,
     error_type: type[Exception],
 ) -> Route1WildFleeEvidence:
     """Select RUN, wait out the handoff, and verify a position-preserving exit."""
 
-    if encounter.battle_state != 1 or encounter.map_id != MapId.ROUTE_1:
-        raise error_type("Route 1 flee requires an active Route 1 wild battle.")
+    if encounter.battle_state != 1 or encounter.map_id != expected_map_id:
+        raise error_type(f"{route_name} flee requires an active wild battle on its route.")
     expected_position = (encounter.player_x, encounter.player_y)
     expected_party = encounter.party_species_ids
     expected_level = encounter.first_party_level
@@ -261,10 +314,9 @@ def flee_route_1_wild(
             control_ready = reader.read_input_readiness().ready
             evidence = Route1WildFleeEvidence(
                 initial_battle_state=encounter.battle_state,
-                final_battle_state=(
-                    raw.battle_state if raw.battle_state is not None else -1
-                ),
+                final_battle_state=(raw.battle_state if raw.battle_state is not None else -1),
                 battle_result=raw.battle_result if raw.battle_result is not None else -1,
+                expected_map_id=int(expected_map_id),
                 map_id=raw.map_id if raw.map_id is not None else -1,
                 player_x=raw.player_x if raw.player_x is not None else -1,
                 player_y=raw.player_y if raw.player_y is not None else -1,
@@ -282,17 +334,17 @@ def flee_route_1_wild(
                 stabilization_frames=stabilization_frames,
             )
             if expected_position != (raw.player_x, raw.player_y) or not evidence.verified:
-                raise error_type("Route 1 flee failed its stabilized semantic evidence gate.")
+                raise error_type(f"{route_name} flee failed its stabilized semantic evidence gate.")
             note_observed_battle_exit()
             return evidence
         if (
             raw.battle_state != 1
-            or raw.map_id != MapId.ROUTE_1
+            or raw.map_id != expected_map_id
             or expected_position != (raw.player_x, raw.player_y)
             or raw.party_species_ids != expected_party
             or (raw.first_party_hp or 0) <= 0
         ):
-            raise error_type("Route 1 flee lost its protected encounter boundary.")
+            raise error_type(f"{route_name} flee lost its protected encounter boundary.")
         menu = reader.read_battle_menu_state(raw)
         if menu.phase is BattleMenuPhase.UNKNOWN:
             executor.execute(MacroAction(MacroActionKind.CANCEL))
@@ -305,22 +357,41 @@ def flee_route_1_wild(
         command = menu.selected_main_command
         if command == 3:
             if run_attempts >= 16:
-                raise error_type("Route 1 flee exceeded its bounded RUN attempts.")
+                raise error_type(f"{route_name} flee exceeded its bounded RUN attempts.")
             executor.execute(MacroAction(MacroActionKind.CONFIRM))
             _wait(executor, 240)
             run_attempts += 1
             continue
         direction = (
-            {0: "right", 1: "right", 2: "down"}.get(command)
-            if command is not None
-            else None
+            {0: "right", 1: "right", 2: "down"}.get(command) if command is not None else None
         )
         if direction is None:
-            raise error_type("Route 1 flee exposed an invalid battle-menu cursor.")
+            raise error_type(f"{route_name} flee exposed an invalid battle-menu cursor.")
         executor.execute(MacroAction(MacroActionKind.MOVE, direction))
         _wait(executor, 120)
     raise error_type(
-        f"Route 1 flee exceeded its bounded transition after {run_attempts} RUN attempts."
+        f"{route_name} flee exceeded its bounded transition after {run_attempts} RUN attempts."
+    )
+
+
+def flee_route_1_wild(
+    executor: ActionExecutor,
+    reader: PokemonRedStateReader,
+    encounter: RawGameState,
+    *,
+    stabilization_frames: int,
+    error_type: type[Exception],
+) -> Route1WildFleeEvidence:
+    """Compatibility wrapper for an authenticated Route 1 wild exit."""
+
+    return flee_wild(
+        executor,
+        reader,
+        encounter,
+        expected_map_id=MapId.ROUTE_1,
+        route_name="Route 1",
+        stabilization_frames=stabilization_frames,
+        error_type=error_type,
     )
 
 

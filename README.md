@@ -146,6 +146,12 @@ waits without pressing buttons once the bedroom exists, and rejects any other in
 The direct same-root reproduction recovered in 18 inputs plus one input-free settling wait and
 selected Squirtle; see the
 [sixth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-06-failure-2026-08-09.json).
+Fresh seed `990022` qualified that recovery and reached Route 2, where an incidental battle at
+forest-gate step 25 exposed the same zero-wild assumption outside Route 1. The shared primitive is
+now explicitly map-bound and the 43-step Route 2 corridor permits at most four authenticated wild
+flees while retaining directional acknowledgement and exact protected-state proofs; trainers and
+map drift still fail. See the
+[seventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-07-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95
 reliability campaign remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.

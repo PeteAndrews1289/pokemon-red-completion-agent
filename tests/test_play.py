@@ -56,6 +56,7 @@ from pokemon_red_completion.play import (
 )
 from pokemon_red_completion.rom import RomFingerprint
 from pokemon_red_completion.route import COMPLETION_QUEST
+from pokemon_red_completion.route_1_wild import move_with_wild_flees
 from pokemon_red_completion.saffron import FRESH_WATER_PRICE, THUNDER_STONE_PRICE
 from pokemon_red_completion.trajectory import (
     InMemoryTrajectorySink,
@@ -2102,9 +2103,12 @@ def test_rival_victory_accepts_supported_squirtle_dvs_and_surviving_hp(
     assert is_rival_victory_verified(victory, saw_trainer_battle=True)
 
 
-def test_route_1_traversal_flees_one_wild_and_preserves_the_consumed_step() -> None:
+@pytest.mark.parametrize("map_id", (MapId.ROUTE_1, MapId.ROUTE_2))
+def test_overworld_traversal_flees_one_wild_and_preserves_the_consumed_step(
+    map_id: MapId,
+) -> None:
     before = replace(
-        _raw(MapId.ROUTE_1, 10, 35),
+        _raw(map_id, 10, 35),
         first_party_hp=23,
         first_party_max_hp=23,
         first_party_pp=(35, 30, 0, 0),
@@ -2151,22 +2155,38 @@ def test_route_1_traversal_flees_one_wild_and_preserves_the_consumed_step() -> N
             return object()
 
     executor = _Executor()
-    terminal, flees, movement_retries = _move_route_1_with_wild_flees(  # type: ignore[arg-type]
-        executor,
-        reader,  # type: ignore[arg-type]
-        ("up",),
-        "Route 1 unit route",
-        maximum_flees=1,
-        stabilization_frames=120,
-        maximum_step_attempts=8,
-        step_retry_wait_frames=24,
-    )
+    if map_id is MapId.ROUTE_1:
+        terminal, flees, movement_retries = _move_route_1_with_wild_flees(  # type: ignore[arg-type]
+            executor,
+            reader,  # type: ignore[arg-type]
+            ("up",),
+            "Route 1 unit route",
+            maximum_flees=1,
+            stabilization_frames=120,
+            maximum_step_attempts=8,
+            step_retry_wait_frames=24,
+        )
+    else:
+        terminal, flees, movement_retries = move_with_wild_flees(  # type: ignore[arg-type]
+            executor,
+            reader,  # type: ignore[arg-type]
+            ("up",),
+            "Route 2 unit route",
+            expected_map_id=MapId.ROUTE_2,
+            route_name="Route 2",
+            maximum_flees=1,
+            stabilization_frames=120,
+            maximum_step_attempts=8,
+            step_retry_wait_frames=24,
+            error_type=QualifiedPlayError,
+        )
 
     assert terminal is final
     assert len(flees) == 1
     assert movement_retries == 0
     assert isinstance(flees[0], Route1WildFleeEvidence)
     assert flees[0].verified
+    assert flees[0].public_dict()["expected_map"] == int(map_id)
     assert flees[0].public_dict()["run_attempts"] == 1
     assert flees[0].public_dict()["stabilization_frames"] == 120
     assert executor.kinds.count(MacroActionKind.MOVE) == 1

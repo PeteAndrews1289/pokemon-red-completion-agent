@@ -24,7 +24,12 @@
 > A bounded state-authenticated `Start,A,A,A` recovery reached the exact input-ready bedroom in 18
 > inputs plus one input-free settling wait on the same root and obtained Squirtle; any other started
 > map fails closed. The full 2,180-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry
-> checks passes. Commit, push, then run a fresh uncounted perturbation. Do
+> checks passed at `3f11647`, which also passed CI. Seed `990022` qualified the intro recovery and
+> then hit an incidental battle at Route 2 forest-gate step 25. The shared traversal now takes an
+> explicit expected map; only that Route 2 corridor opts into four authenticated flees, while
+> trainers and drift remain fatal. The 2,181-test ROM-free gate plus Ruff, mypy, docs, privacy, and
+> registry checks passes. Commit, push, then run a fresh uncounted
+> perturbation. Do
 > not add `990007` to fitting, rerun retired model-test roots, build a complete Crystal route, weaken
 > the curriculum lesson, or consume a counted v95 root. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).

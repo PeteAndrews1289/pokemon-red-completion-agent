@@ -2311,6 +2311,14 @@ settling wait and selected Squirtle. This is a useful transfer lesson: even boot
 interactive control problem, not a tape
 of buttons that can be assumed to replay.
 
+The next fresh root proved that recovery and then met an incidental battle on Route 2. The earlier
+repair had encoded the right contract under the wrong scope: Route 1 could authenticate a flee,
+but the next grass corridor still assumed zero encounters. The primitive now takes an explicit map
+identity and preserves the same encounter, movement, stabilization, party, and control proofs. The
+Route 2 caller receives its own finite budget; a trainer remains an error. Transferability here
+means reusing verified semantics under declared context, not turning one route exception into a
+global ignore-battles switch.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

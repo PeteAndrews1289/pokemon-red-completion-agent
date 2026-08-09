@@ -109,8 +109,11 @@ any learned role. A bounded state-checked `Start,A,A,A` recovery now samples the
 bedroom/input-ready gate after each input, waits without input once the bedroom exists, and rejects
 any other started map. The same root recovered in 18 inputs plus one input-free settling wait and
 obtained Squirtle. The full 2,180-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry
-checks passes. Commit, push, then use a fresh perturbation. Counted v95 remains **0/10** and `990007`
-remains test-only. See the
+checks passed at `3f11647`, which also passed CI. Seed `990022` qualified that recovery and then
+found an unexpected battle at Route 2 forest-gate step 25 before any learned battle or training
+decision. The shared traversal now requires an explicit expected map; the Route 2 caller receives
+four finite authenticated flees while trainers and drift remain fatal. Regenerate, qualify, push,
+then use a fresh perturbation. Counted v95 remains **0/10** and `990007` remains test-only. See the
 [first failure](docs/evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json),
 the [second failure](docs/evidence/portable-clean-start-six-role-rehearsal-02-failure-2026-08-09.json),
 the [Lorelei failure](docs/evidence/portable-clean-start-six-role-rehearsal-03-failure-2026-08-09.json),
@@ -125,6 +128,8 @@ The [fifth perturbation failure](docs/evidence/portable-clean-start-six-role-per
 preserves the pre-step encounter counterexample.
 The [sixth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-06-failure-2026-08-09.json)
 preserves the fixed-front-end timing counterexample.
+The [seventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-07-failure-2026-08-09.json)
+preserves the Route 2 zero-incidental-encounter counterexample.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the
 source of the passed canonical receipt and `4f5f870` qualified the lab-rival repair through the next
@@ -132,9 +137,10 @@ Route 1 boundary; `883be4f` qualified the first bounded-flee implementation and 
 source for the preserved `990018` counterexample; `d3461f0` qualified stabilized shared exits and
 supplied the `990019` movement counterexample; `869e9a8` qualified closed-loop movement and supplied
 the `990020` pre-step encounter; `60d0842` qualified that repair and supplied the `990021`
-front-end timing counterexample. The bounded bedroom recovery and its regenerated v95 registry are
-the current uncommitted lane. Their full local gate is green; they need a clean push before replay.
-Only Codex
+front-end timing counterexample; `3f11647` qualified the bounded bedroom recovery and supplied the
+`990022` Route 2 encounter. The map-bound authenticated wild traversal, Route 2 report fields, and
+regenerated v95 registry are the current uncommitted lane. Their full local gate is green; they
+need a clean push before replay. Only Codex
 pushes this branch; do not create a second worktree or force-push it.
 
 **Latest causal result:** attempt 13 ran from source `4ea7e93` with the frozen reserve-aware action

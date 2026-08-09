@@ -12,11 +12,12 @@ evaluation gap is timing/RNG reliability.
 
 The present Red milestone is narrower and measurable: qualify the already-passed combined stack on
 a fresh derived-timing root. Canonical seed `990015` is terminal evidence; seeds `990016` through
-`990021` exposed six successive pre-model assumptions in the rival receipt, ordinary-wild
+`990022` exposed seven successive pre-model assumptions in the rival receipt, ordinary-wild
 handling, battle-exit input handoff, open-loop movement acknowledgement, pre-step encounter
-semantics, and fixed front-end timing. Each failure is preserved rather than rerun as a favorable
-root. The latest repair passed direct same-root reproduction and the full 2,180-test ROM-free gate;
-it awaits a clean push and a fresh perturbation.
+semantics, fixed front-end timing, and the same zero-wild assumption on Route 2. Each failure is
+preserved rather than rerun as a favorable root. The intro repair passed its full 2,180-test gate
+and CI; the Route 2 generalization passes its 2,181-test ROM-free gate and awaits a clean push and
+fresh perturbation.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -225,6 +226,13 @@ gate in 18 inputs plus one input-free settling wait on the same root and then co
 selection. The production repair waits without input once the bedroom exists, rejects any other
 started map, and publishes the actual input count. See the
 [sixth perturbation failure](evidence/portable-clean-start-six-role-perturbation-06-failure-2026-08-09.json).
+
+Seed `990022` qualified that front-end recovery and reached Route 2, where an incidental battle on
+forest-gate step 25 hit another zero-encounter corridor. The historical error did not expose battle
+type, so the repair does not assume it: the generalized traversal accepts only a wild battle on the
+declared Route 2 map, retains the exact directional and protected-state receipts, and still rejects
+trainers or drift. All learned battle and training counters were zero. See the
+[seventh perturbation failure](evidence/portable-clean-start-six-role-perturbation-07-failure-2026-08-09.json).
 
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared

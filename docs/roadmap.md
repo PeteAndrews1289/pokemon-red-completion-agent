@@ -116,6 +116,16 @@ inputs plus one input-free settling wait and obtained Squirtle. The public-artif
 regenerated-registry, Ruff, mypy, and 2,180-test ROM-free gate passes. Commit, push, and use a fresh
 uncounted perturbation; v95 remains 0/10.
 
+Fresh seed `990022` qualified the recovered front end and then found an unexpected battle on Route
+2 forest-gate step 25 before any learned battle or training decision. The
+[seventh perturbation failure](evidence/portable-clean-start-six-role-perturbation-07-failure-2026-08-09.json)
+is preserved. The authenticated wild-exit traversal now takes an explicit expected map; only the
+43-step Route 2 corridor opts into four finite flees, eight movement attempts, 24-frame retry waits,
+and 120-frame stabilized exits. Trainer battles, wrong maps, state drift, and budget exhaustion
+remain fatal. Regenerate, qualify, push, and use another fresh root; v95 remains 0/10.
+The public-artifact, docs, regenerated-registry, Ruff, mypy, and 2,181-test ROM-free gate passes;
+commit and push remain before replay.
+
 The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's
 Red/Blue reciprocal version gaps now come from one canonical table and include the previously
 omitted Pinsir and Scyther. Trading requires an explicit compatibility edge between saves; merely

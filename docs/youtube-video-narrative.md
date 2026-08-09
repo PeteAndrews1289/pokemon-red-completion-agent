@@ -190,6 +190,11 @@ each `Start,A,A,A` input, reaches the bedroom on input 18, and turns green after
 settling wait. Caption it:
 **“Every layer is a control loop—even pressing New Game.”**
 
+Then show `990022` reaching Route 2 and failing on another ordinary encounter. Reframe the earlier
+Route 1 fix as an abstraction test: first a route-specific exception, then a map-parameterized
+semantic contract reused by the next grass corridor. Caption it: **“Generalize the proof, not the
+special case.”**
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different
