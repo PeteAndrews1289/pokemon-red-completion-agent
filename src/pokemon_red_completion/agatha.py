@@ -13,6 +13,7 @@ from pokemon_red_completion.battle_actions import (
     BattleControlRequest,
     control_request_matches,
     recovery_request_matches,
+    switch_request_party_index,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_recovery import (
@@ -362,16 +363,16 @@ def run_agatha_chapter(
             )
         except BattleRuntimeError as error:
             cause = error.__cause__
-            if isinstance(cause, _TeamSwitchBoundary):
-                party_slot = cause.action.party_slot
-                if party_slot is None:
+            switch_target = switch_request_party_index(cause, _TeamSwitchBoundary)
+            if isinstance(cause, _TeamSwitchBoundary) or switch_target is not None:
+                if switch_target is None:
                     raise AgathaChapterError("Agatha team switch lacked a party target.") from error
                 try:
                     switch_active_battler(
                         actions,
                         reader,
                         emulator,
-                        party_slot - 1,
+                        switch_target,
                         label="Agatha matchup-aware participation",
                         wait_frames=DEFAULT_SILPH_TIMING.menu_frames,
                     )

@@ -232,3 +232,22 @@ def learned_switch_party_index(cause: BaseException | None) -> int | None:
     ):
         return None
     return cause.party_slot - 1
+
+
+def switch_request_party_index(
+    cause: BaseException | None,
+    teacher_request_type: type[BattleControlRequest],
+) -> int | None:
+    """Resolve teacher-specific and learned switches to one executor target."""
+
+    if not issubclass(teacher_request_type, BattleControlRequest):
+        raise TypeError("teacher_request_type must be a BattleControlRequest type")
+    if isinstance(cause, LearnedBattleControlRequest):
+        return learned_switch_party_index(cause)
+    if (
+        isinstance(cause, teacher_request_type)
+        and cause.action.kind is BattleActionKind.SWITCH
+        and cause.action.party_slot is not None
+    ):
+        return cause.action.party_slot - 1
+    return None

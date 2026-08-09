@@ -1,0 +1,46 @@
+{
+  "schema": "pokemon-red-battle-control-v3-causal-failure-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "rejected_fail_closed",
+  "source_commit": "2f1c734b531026818659969913a424193340277d",
+  "candidate": {
+    "artifact_id": "red-battle-control-model-d4bc15ba53354fa2980a47b57f2dda78",
+    "manifest_sha256": "e742f32893ddca66911e1dbeb31bea1fca93f07ad6f09d6dedfeb8d07c3b382e",
+    "model_sha256": "916aa21097d7b087125dce6cb9b01180c2ee3aa929a843d7b580021ac00246e0",
+    "private_path_published": false
+  },
+  "authority": {
+    "ordinary_move_selection": "authenticated_move_ranker_teacher_gated_on_every_path",
+    "high_level_battle_control": "model_authority",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "failure": {
+    "chapter": "Lorelei",
+    "predicted_action": "pokemon.core:battle:switch:select",
+    "resolved_target_present": true,
+    "executor_boundary": "teacher-specific switch exception only",
+    "game_complete": false,
+    "counted_campaign_root_consumed": false
+  },
+  "diagnosis": {
+    "prior_repairs_worked": "The replay crossed Route 12, Koga, and the complete balanced development curriculum under the exact isolated authority contract.",
+    "remaining_contract_error": "Lorelei declared a portable switch capability, but its wrapper dispatched only its local teacher exception instead of the semantically equivalent complete learned request.",
+    "model_target_error": false,
+    "why_failure_is_useful": "The generic runtime preserved the typed request and failed closed before any unverified party-menu input."
+  },
+  "repair": {
+    "direction": "Use one tested teacher-or-learned switch target adapter in every League chapter that declares switch capability.",
+    "chapters_audited": ["Lorelei", "Bruno", "Agatha"],
+    "increase_retry_budget": false,
+    "change_teacher_route": false,
+    "change_model_weights": false,
+    "open_counted_root": false
+  },
+  "claim_scope": {
+    "causal_control_qualified": false,
+    "shadow_qualification_preserved": true,
+    "candidate_retrained_after_failure": false,
+    "cross_game_transfer_complete": false
+  }
+}

@@ -11,6 +11,7 @@ from pokemon_red_completion.battle_actions import (
     control_request_matches,
     learned_switch_party_index,
     recovery_request_matches,
+    switch_request_party_index,
 )
 
 
@@ -103,3 +104,16 @@ def test_learned_switch_request_exposes_zero_based_executor_target() -> None:
 
     assert learned_switch_party_index(request) == 3
     assert learned_switch_party_index(BattleControlRequest(BattleAction.switch())) is None
+
+
+def test_teacher_and_learned_switches_share_one_executor_target_contract() -> None:
+    class TeacherSwitch(BattleControlRequest):
+        pass
+
+    teacher = TeacherSwitch(BattleAction.switch(2))
+    learned = LearnedBattleControlRequest(BattleAction.switch(), party_slot=4)
+
+    assert switch_request_party_index(teacher, TeacherSwitch) == 1
+    assert switch_request_party_index(learned, TeacherSwitch) == 3
+    unresolved = BattleControlRequest(BattleAction.switch())
+    assert switch_request_party_index(unresolved, TeacherSwitch) is None
