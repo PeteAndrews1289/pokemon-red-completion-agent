@@ -59,6 +59,18 @@ candidate score selects the actual switch target, so the classifier cannot earn 
 switch-target accuracy. The historical v2 artifact is rejected rather than padded with zeros; the
 next evidence must come from fresh demonstrations.
 
+The first such demonstration now exists. Starting from clean power, the corrected nonlinear move
+ranker and deterministic high-level teacher completed 312/312 checkpoints and Hall of Fame while
+recording 3,112 v3 control labels. The corpus contains 3,068 move choices, 19 recoveries, 13 boosts,
+and 12 switches. The team-development block supplied most of the decisions; the League supplied
+the rarer causal switch and resource examples, including multi-member participation against
+Lorelei, Bruno, and Agatha. A failed first attempt also caught a model-selection error: the original
+linear artifact stopped at the Cerulean rival, while the previously qualified nonlinear correction
+passed that boundary and completed. One early generic switch request lacked an explicit target, so
+the trainer failed closed. Collection now resolves every future generic teacher switch against the
+observed party before writing it; the historical generic row remains an action-class example but
+does not inflate switch-target accuracy.
+
 Crystal will follow as a small falsification benchmark rather than a second full scripted route.
 One battle, one local navigation task, and one trainee/venue choice will compare the frozen Red
 model zero-shot, few-shot, and from scratch. A playthrough video can guide the route graph and task

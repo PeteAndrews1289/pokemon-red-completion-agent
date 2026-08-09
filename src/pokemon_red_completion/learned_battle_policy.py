@@ -593,10 +593,24 @@ class ModelAssistedBattlePolicy:
         if intent is None:
             raise LearnedBattlePolicyError("battle control label lacks planner intent")
         snapshot = self.encoder.snapshot_from_raw(observation.state)
+        snapshot_payload = snapshot.to_dict()
+        if action.kind is BattleActionKind.SWITCH and action.party_slot is None:
+            try:
+                resolved = resolve_battle_action_target(
+                    action,
+                    snapshot_payload,
+                    catalog=getattr(self.projector, "catalog", None),
+                )
+            except BattleActionTargetError as error:
+                raise LearnedBattlePolicyError(
+                    "battle control switch label lacks a resolvable reserve target"
+                ) from error
+            assert resolved.party_slot is not None
+            action = BattleAction.switch(resolved.party_slot)
         if self.control_model is not None:
-            history = self.control_history.before(intent.battle_plan_id, snapshot.to_dict())
+            history = self.control_history.before(intent.battle_plan_id, snapshot_payload)
             self._observe_control_model(snapshot, action, history)
-            self.control_history.advance(action, snapshot.to_dict())
+            self.control_history.advance(action, snapshot_payload)
         if self.control_sink is None:
             return
         self.control_records += 1
@@ -611,7 +625,7 @@ class ModelAssistedBattlePolicy:
                 "decision_index": self.decisions,
                 "battle_plan_id": intent.battle_plan_id,
                 "objective_id": intent.objective_id,
-                "observation": snapshot.to_dict(),
+                "observation": snapshot_payload,
                 "teacher_action": action.public_dict(),
             }
         )

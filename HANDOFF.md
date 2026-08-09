@@ -39,8 +39,13 @@ records moves and PP for every party member; the shared projector compares reser
 power, type advantage, defensive resistance, health/status, and level margin without placing any
 identity in the model vector. Generic switch execution binds the same best candidate, fails closed
 when every reserve is below 50% HP, and reports target accuracy separately from the switch class.
-The old v2 artifact now fails authentication by design. No v3 lineage or runtime result exists yet.
-Start by collecting fresh balanced-role demonstrations, not by replaying the old model. See the
+The old v2 artifact now fails authentication by design. One fresh uncounted v3 lineage has completed
+312/312 checkpoints and Hall of Fame with 3,112 labels: 3,068 moves, 19 recoveries, 13 boosts, and
+12 switches. Eleven switches carry explicit targets. The one generic early-game switch remains a
+valid class label but is excluded from target scoring; future collection binds generic requests to
+an observed reserve before persistence. Fit a diagnostic candidate from this lineage, then collect
+disjoint train/validation lineages before any promotion claim. See the
+[lineage receipt](docs/evidence/battle-control-reserve-matchup-v3-lineage-01-2026-08-08.json) and
 [design receipt](docs/evidence/battle-control-reserve-matchup-v3-design-2026-08-08.json).
 
 - The deterministic teacher remains the expert oracle: clean power-on through 312/312 semantic

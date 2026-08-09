@@ -158,3 +158,19 @@ def test_switch_target_metric_requires_the_resolved_member_to_match() -> None:
     assert metrics.examples == 2
     assert metrics.correct == 1
     assert metrics.accuracy == 0.5
+
+
+def test_switch_target_metric_accepts_but_does_not_score_legacy_generic_switch() -> None:
+    generic = BattleControlLabel(
+        decision_index=1,
+        battle_plan_id="switch-test",
+        objective_id="test",
+        observation=_observation(),
+        teacher_action=BattleAction.switch(),
+    )
+
+    metrics = evaluate_switch_target_resolution((generic,))
+
+    assert metrics.examples == 0
+    assert metrics.correct == 0
+    assert metrics.accuracy is None

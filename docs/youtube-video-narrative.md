@@ -417,6 +417,9 @@ version has to prove the model learned something worth carrying into a game it h
   query/fallback, the battle win, then the rejected `[19,0,0,0,0,0]` participation vector.
 - A split-screen feature visualization: rich active-Pokémon matchup features on the left and five
   anonymous reserve aggregates on the right, followed by the proposed candidate-relative schema.
+- The first v3 collection counter: 312/312 checkpoints, 3,112 labels, 44 typed non-move actions,
+  and 12 switches. Show the trainer refusing the one targetless historical switch before the
+  collection seam is repaired; that is a concise example of fail-closed dataset engineering.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video

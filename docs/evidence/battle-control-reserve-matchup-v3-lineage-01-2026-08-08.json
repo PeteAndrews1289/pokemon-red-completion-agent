@@ -1,0 +1,61 @@
+{
+  "schema": "pokemon-red-battle-control-v3-lineage-receipt-v1",
+  "recorded_on": "2026-08-08",
+  "status": "complete_unpromoted_training_lineage",
+  "source_commit": "dd25164a8392dcecd89391db7680bf75b9073f80",
+  "authority": {
+    "battle_moves": "authenticated_nonlinear_move_ranker_with_teacher_queries_allowed",
+    "high_level_labels": "deterministic_teacher",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "completion": {
+    "checkpoints": "312/312",
+    "objectives": "36/36",
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 694234
+  },
+  "private_artifact": {
+    "artifact_id": "red-battle-control-4121905b04bd438f999cc52f6351cdc9",
+    "manifest_sha256": "2b24e5eb0b257c9172a0e11c0ed0388c0835bf9f9fc37b4b4650cfb8ac0d91d4",
+    "records": 3112,
+    "bytes": 13808780,
+    "private_path_published": false
+  },
+  "label_distribution": {
+    "select_move": 3068,
+    "use_recovery": 19,
+    "use_boost": 13,
+    "switch": 12,
+    "typed_non_move_total": 44,
+    "explicit_switch_targets": 11,
+    "legacy_generic_switch_targets": 1
+  },
+  "battle_move_runtime": {
+    "decisions": 3113,
+    "model_decisions": 3062,
+    "teacher_fallbacks": 6,
+    "shadow_teacher_disagreements": 1435,
+    "teacher_queries": 3113
+  },
+  "team_development": {
+    "battles": 1782,
+    "healing_trips": 1158,
+    "final_forms_complete": true,
+    "observed_levels": [60, 55, 55, 55, 55, 55],
+    "fainted_count": 0
+  },
+  "collection_diagnosis": {
+    "discarded_attempt": "The original linear move artifact stopped at the Cerulean rival; the previously qualified nonlinear correction completed the same collection path.",
+    "target_label_boundary": "One generic early-game switch was executable but lacked an independent target label. It remains a class example and is excluded from target scoring. New collection binds generic switches before persistence."
+  },
+  "claim_scope": {
+    "fresh_v3_demonstration_complete": true,
+    "battle_control_model_trained": false,
+    "heldout_lineage_validation_complete": false,
+    "strict_model_control_complete": false,
+    "counted_campaign_roots_consumed": 0,
+    "cross_game_transfer_complete": false
+  }
+}

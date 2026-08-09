@@ -5,6 +5,8 @@
 - Added battle-control feature schema v3 with observable moves and PP for every party member,
   identity-free reserve matchup features, a 50%-HP fail-closed switch floor, semantic target
   binding, separate switch-target metrics, and an explicit rejection of pre-reserve v2 artifacts.
+- Completed the first uncounted v3 full-game label lineage with 3,112 records and bound future
+  generic teacher switches to explicit observed reserve targets before persistence.
 - Added a bounded Crystal transfer benchmark that starts with battle, local-navigation, and
   trainee/venue microtasks instead of requiring a complete second-game teacher before transfer is
   measured.

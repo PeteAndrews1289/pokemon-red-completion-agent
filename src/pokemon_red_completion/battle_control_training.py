@@ -125,8 +125,6 @@ def evaluate_switch_target_resolution(
         teacher_action = label.teacher_action
         if teacher_action.kind is not BattleActionKind.SWITCH:
             continue
-        if teacher_action.party_slot is None:
-            raise BattleControlModelError("teacher switch label lacks a party target")
         try:
             resolved = resolve_battle_action_target(
                 BattleAction.switch(),
@@ -137,6 +135,13 @@ def evaluate_switch_target_resolution(
             raise BattleControlModelError(
                 "switch target label lacks reserve matchup semantics"
             ) from error
+        # Historical v1 label streams may contain a generic switch request. It
+        # remains a valid action-class example, and the successful resolution
+        # above proves it is executable, but it supplies no independent target
+        # label to score. New recordings bind the selected reserve before they
+        # are persisted.
+        if teacher_action.party_slot is None:
+            continue
         examples += 1
         correct += int(resolved.party_slot == teacher_action.party_slot)
     return BattleSwitchTargetMetrics(examples=examples, correct=correct)

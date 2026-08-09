@@ -435,6 +435,28 @@ def test_shadow_teacher_records_typed_control_signal() -> None:
     assert records[0]["teacher_action"] == BattleAction.recovery().public_dict()
 
 
+def test_control_sink_binds_targetless_teacher_switch_to_observed_reserve() -> None:
+    records: list[dict[str, object]] = []
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+        observe_teacher_when_not_required=True,
+        control_sink=lambda record: records.append(dict(record)),
+    )
+
+    def request_switch() -> int:
+        raise BattleControlRequest(BattleAction.switch())
+
+    with pytest.raises(BattleControlRequest):
+        policy.choose_move(_observation(), request_switch)
+
+    assert policy.control_signals == {"pokemon.core:battle:switch:2": 1}
+    assert records[0]["teacher_action"] == BattleAction.switch(2).public_dict()
+
+
 def test_control_sink_records_normal_model_move() -> None:
     records: list[dict[str, object]] = []
     policy = ModelAssistedBattlePolicy(
