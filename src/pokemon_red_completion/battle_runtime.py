@@ -133,6 +133,7 @@ class BattleIntent:
     boost_use_limits: tuple[tuple[BattleBoostStat, int], ...] = ()
     switch_capabilities: frozenset[BattleSwitchCapability] = frozenset()
     switch_limit: int | None = None
+    require_status_clear_before_move: bool = False
     require_move_before_first_switch: bool = False
     require_move_between_switches: bool = False
 
@@ -204,6 +205,25 @@ class BattleIntent:
             raise TypeError("switch_limit must be a positive integer or None")
         if self.switch_limit is not None and not self.switch_capabilities:
             raise ValueError("switch limit requires a switch executor capability")
+        if not isinstance(self.require_status_clear_before_move, bool):
+            raise TypeError("require_status_clear_before_move must be a bool")
+        status_recovery_capabilities = frozenset(
+            {
+                BattleRecoveryCapability.CURE_SLEEP,
+                BattleRecoveryCapability.CURE_PARALYSIS,
+                BattleRecoveryCapability.CURE_POISON,
+                BattleRecoveryCapability.CURE_BURN,
+                BattleRecoveryCapability.CURE_FREEZE,
+                BattleRecoveryCapability.CURE_ANY_STATUS,
+            }
+        )
+        if (
+            self.require_status_clear_before_move
+            and not self.recovery_capabilities & status_recovery_capabilities
+        ):
+            raise ValueError(
+                "status-clear move constraint requires a status recovery capability"
+            )
         if not isinstance(self.require_move_before_first_switch, bool):
             raise TypeError("require_move_before_first_switch must be a bool")
         if self.require_move_before_first_switch and not self.switch_capabilities:

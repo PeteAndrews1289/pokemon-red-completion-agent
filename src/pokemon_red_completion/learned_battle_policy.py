@@ -43,7 +43,6 @@ from pokemon_red_completion.battle_neural_model import (
     MaskedMLPMoveRanker,
 )
 from pokemon_red_completion.battle_runtime import (
-    BattleIntent,
     BattlePolicyObservation,
     RequiredMovePolicy,
 )
@@ -117,6 +116,7 @@ class ModelAssistedBattlePolicy:
     control_resolved_targets: Counter[str] = field(default_factory=Counter)
     control_target_resolution_failures: Counter[str] = field(default_factory=Counter)
     control_teacher_free_requests: int = 0
+    control_intent_forced_requests: int = 0
     control_last_intent_mask: dict[str, object] | None = None
 
     def __post_init__(self) -> None:
@@ -436,6 +436,7 @@ class ModelAssistedBattlePolicy:
                     sorted(self.control_target_resolution_failures.items())
                 ),
                 "teacher_free_requests": self.control_teacher_free_requests,
+                "intent_forced_requests": self.control_intent_forced_requests,
                 "last_intent_mask": self.control_last_intent_mask,
             }
         return result
@@ -485,6 +486,47 @@ class ModelAssistedBattlePolicy:
             self._record_control_action(observation, BattleAction.move(teacher_slot))
             return teacher_slot
 
+        if predicted_ref == CONTROL_CLASS_REFS[0]:
+            predicted_action = BattleAction.move(predicted_slot)
+            intent_mask = _control_action_intent_mask(
+                predicted_action,
+                observation=observation,
+                history=history,
+            )
+            if intent_mask is not None:
+                self.control_target_resolution_failures[intent_mask] += 1
+                self.control_last_intent_mask = _control_intent_mask_context(
+                    observation,
+                    predicted_action,
+                    history=history,
+                    reason=intent_mask,
+                )
+                try:
+                    forced_recovery = authorize_recovery_target(
+                        resolve_battle_action_target(
+                            BattleAction.recovery(),
+                            encoded,
+                            catalog=getattr(self.projector, "catalog", None),
+                        ),
+                        intent.recovery_capabilities,
+                    )
+                except BattleActionTargetError as error:
+                    raise LearnedBattlePolicyError(
+                        "intent-forced status recovery lacks an executable target"
+                    ) from error
+                self.control_execution_decisions += 1
+                self.control_execution_requests += 1
+                self.control_safety_fallbacks += 1
+                self.control_intent_forced_requests += 1
+                self._record_control_action(observation, forced_recovery.action)
+                assert forced_recovery.recovery_need is not None
+                raise LearnedBattleControlRequest(
+                    forced_recovery.action,
+                    party_slot=forced_recovery.party_slot,
+                    recovery_need=forced_recovery.recovery_need.value,
+                    status=forced_recovery.status,
+                )
+
         if predicted_ref == CONTROL_CLASS_REFS[0] and not self.allow_teacher_queries:
             self.control_execution_decisions += 1
             return self._return_control_move(
@@ -504,7 +546,7 @@ class ModelAssistedBattlePolicy:
                 predicted_action = action_from_control_class_ref(predicted_ref)
                 intent_mask = _control_action_intent_mask(
                     predicted_action,
-                    intent=intent,
+                    observation=observation,
                     history=history,
                 )
                 if intent_mask is not None:
@@ -822,11 +864,20 @@ class ModelAssistedBattlePolicy:
 def _control_action_intent_mask(
     action: BattleAction,
     *,
-    intent: BattleIntent,
+    observation: BattlePolicyObservation,
     history: BattleControlHistory,
 ) -> str | None:
     """Return the game-neutral planner constraint that masks one typed action."""
 
+    intent = observation.intent
+    if intent is None:
+        return None
+    if (
+        action.kind is BattleActionKind.SELECT_MOVE
+        and intent.require_status_clear_before_move
+        and bool(observation.state.battler_status)
+    ):
+        return "status_clear_before_move_mask"
     if action.kind is BattleActionKind.USE_BOOST:
         assert action.boost_stat is not None
         limit = dict(intent.boost_use_limits).get(action.boost_stat)

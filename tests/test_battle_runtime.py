@@ -407,14 +407,18 @@ def test_battle_intent_accepts_typed_action_budgets() -> None:
         TEST_BATTLE_PLAN_ID,
         boost_capabilities=frozenset({BattleBoostStat.ACCURACY}),
         boost_use_limits=((BattleBoostStat.ACCURACY, 1),),
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset({BattleRecoveryCapability.CURE_ANY_STATUS}),
         switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
         switch_limit=2,
+        require_status_clear_before_move=True,
         require_move_before_first_switch=True,
         require_move_between_switches=True,
     )
 
     assert intent.boost_use_limits == ((BattleBoostStat.ACCURACY, 1),)
     assert intent.switch_limit == 2
+    assert intent.require_status_clear_before_move is True
     assert intent.require_move_before_first_switch is True
     assert intent.require_move_between_switches is True
 
@@ -439,6 +443,12 @@ def test_battle_intent_rejects_budget_without_matching_capability() -> None:
             "defeat_rival",
             TEST_BATTLE_PLAN_ID,
             require_move_before_first_switch=True,
+        )
+    with pytest.raises(ValueError, match="status recovery capability"):
+        BattleIntent(
+            "defeat_rival",
+            TEST_BATTLE_PLAN_ID,
+            require_status_clear_before_move=True,
         )
 
 

@@ -64,8 +64,10 @@ def _observation(
     boost_use_limits: tuple[tuple[BattleBoostStat, int], ...] = (),
     switch_capabilities: frozenset[BattleSwitchCapability] = frozenset(),
     switch_limit: int | None = None,
+    require_status_clear_before_move: bool = False,
     require_move_before_first_switch: bool = False,
     require_move_between_switches: bool = False,
+    battler_status: int | None = None,
 ) -> BattlePolicyObservation:
     return BattlePolicyObservation(
         RawGameState(
@@ -77,6 +79,7 @@ def _observation(
             battle_state=2,
             first_party_moves=(33, 0, 55),
             first_party_pp=(10, 0, 10),
+            first_party_status=battler_status,
         ),
         BattleIntent(
             "test_battle",
@@ -91,6 +94,7 @@ def _observation(
             boost_use_limits=boost_use_limits,
             switch_capabilities=switch_capabilities,
             switch_limit=switch_limit,
+            require_status_clear_before_move=require_status_clear_before_move,
             require_move_before_first_switch=require_move_before_first_switch,
             require_move_between_switches=require_move_between_switches,
         ),
@@ -133,6 +137,9 @@ class _RejectingProjector:
 
 class _ShadowEncoder:
     class Snapshot:
+        def __init__(self, status: str | None = None) -> None:
+            self.status = status
+
         def to_dict(self) -> dict[str, object]:
             return {
                 "schema_version": 1,
@@ -161,7 +168,7 @@ class _ShadowEncoder:
                             "hp": 50,
                             "max_hp": 100,
                             "hp_ratio": 1.0,
-                            "status": None,
+                            "status": self.status,
                         },
                         "members": [
                             {
@@ -170,7 +177,7 @@ class _ShadowEncoder:
                                 "hp": 50,
                                 "max_hp": 100,
                                 "hp_ratio": 1.0,
-                                "status": None,
+                                "status": self.status,
                             },
                             {
                                 "species_ref": "pokemon:reserve",
@@ -185,7 +192,7 @@ class _ShadowEncoder:
                     "resources": {
                         "capture_item_count": 0,
                         "healing_item_count": 1,
-                        "status_recovery_item_count": 0,
+                        "status_recovery_item_count": int(self.status is not None),
                         "revive_item_count": 0,
                         "accuracy_boost_count": 1,
                         "attack_boost_count": 1,
@@ -196,7 +203,8 @@ class _ShadowEncoder:
             }
 
     def snapshot_from_raw(self, raw: RawGameState) -> Snapshot:
-        return self.Snapshot()
+        status = {0x40: "paralysis"}.get(raw.battler_status or 0)
+        return self.Snapshot(status)
 
 
 def _control_model(class_index: int = 1) -> BattleControlMLP:
@@ -896,6 +904,50 @@ def test_control_execution_requires_move_before_first_switch() -> None:
     assert isinstance(last_mask, dict)
     assert last_mask["reason"] == "initial_switch_residency_mask"
     assert last_mask["predicted_action"] == "pokemon.core:battle:switch"
+
+
+def test_control_execution_forces_declared_status_clearance_before_move() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_full_control_model(0),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+
+    def teacher_must_not_run() -> int:
+        raise AssertionError("intent-forced recovery queried the teacher")
+
+    with pytest.raises(LearnedBattleControlRequest) as raised:
+        policy.choose_move(
+            _observation(
+                recovery_capabilities=frozenset(
+                    {BattleRecoveryCapability.CURE_PARALYSIS}
+                ),
+                require_status_clear_before_move=True,
+                battler_status=0x40,
+            ),
+            teacher_must_not_run,
+        )
+
+    assert raised.value.party_slot == 1
+    assert raised.value.recovery_need == "status"
+    assert raised.value.status == "paralysis"
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["intent_forced_requests"] == 1
+    assert execution["teacher_free_requests"] == 0
+    assert execution["typed_requests_executed"] == 1
+    assert execution["safety_fallbacks"] == 1
+    assert execution["target_resolution_failures"] == {
+        "status_clear_before_move_mask": 1
+    }
+    last_mask = execution["last_intent_mask"]
+    assert isinstance(last_mask, dict)
+    assert last_mask["reason"] == "status_clear_before_move_mask"
+    assert last_mask["predicted_action"] == "pokemon.core:battle:select_move"
 
 
 @pytest.mark.parametrize(
