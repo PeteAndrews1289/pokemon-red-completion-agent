@@ -15,6 +15,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleResourcePolicy,
     BattleRuntimeTiming,
+    battle_policy_override_active,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import _party_hp, _party_max_hp, _party_status
@@ -122,6 +123,7 @@ class DojoBattleEvidence:
     party: tuple[tuple[int, int], ...]
     turns: tuple[DojoTurn, ...]
     event: int
+    turn_evidence_mode: str = "teacher_callback"
 
 
 @dataclass(frozen=True, slots=True)
@@ -153,6 +155,11 @@ class DojoChapterReport:
             and self.events_after == (True,) * len(DOJO_TRAINER_EVENTS)
             and tuple(battle.identity for battle in self.battles) == DOJO_BATTLE_IDENTITIES
             and tuple(battle.party for battle in self.battles) == DOJO_BATTLE_PARTIES
+            and all(
+                battle.turn_evidence_mode
+                in {"teacher_callback", "independent_event_and_source_identity"}
+                for battle in self.battles
+            )
             and all(
                 turn.move_slot in (1, 2, 3, 4)
                 for battle in self.battles
@@ -188,6 +195,7 @@ class DojoChapterReport:
             "trainer_parties": [
                 [list(member) for member in battle.party] for battle in self.battles
             ],
+            "turn_evidence_modes": [battle.turn_evidence_mode for battle in self.battles],
             "party_before": list(self.party_before),
             "party_after": list(self.party_after),
             "hitmonlee_level": self.party_levels[-1] if self.party_levels else None,
@@ -394,7 +402,12 @@ def _fight_next(
         unknown_cancel_interval=3,
     )
     _settle_battle_event(actions, reader, emulator, timing, event, label)
-    turns_match = _turns_match_source_party(turns, expected_party)
+    policy_override_active = battle_policy_override_active()
+    turns_match = _turn_evidence_satisfied(
+        turns,
+        expected_party,
+        learned_policy_active=policy_override_active,
+    )
     event_set = _event(emulator, event)
     party_hp = _party_hp(emulator)
     if not turns_match or not event_set or any(hp <= 0 for hp in party_hp):
@@ -403,7 +416,28 @@ def _fight_next(
             f"turns_match={turns_match}, turns={turns!r}, expected={expected_party!r}, "
             f"event={event_set}, party_hp={party_hp!r}."
         )
-    return DojoBattleEvidence(observed_identity, expected_party, tuple(turns), int(event))
+    return DojoBattleEvidence(
+        observed_identity,
+        expected_party,
+        tuple(turns),
+        int(event),
+        (
+            "teacher_callback"
+            if turns
+            else "independent_event_and_source_identity"
+        ),
+    )
+
+
+def _turn_evidence_satisfied(
+    turns: list[DojoTurn] | tuple[DojoTurn, ...],
+    expected: tuple[tuple[int, int], ...],
+    *,
+    learned_policy_active: bool,
+) -> bool:
+    if turns:
+        return _turns_match_source_party(turns, expected)
+    return learned_policy_active
 
 
 def _encounter_party(turns: list[DojoTurn] | tuple[DojoTurn, ...]) -> tuple[tuple[int, int], ...]:
