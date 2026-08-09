@@ -114,9 +114,9 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Collect additional complete, party-randomized teacher lineages with explicit switch targets,
+1. Collect additional complete, timing/RNG-varied teacher lineages with explicit switch targets,
    especially at Bruno and Agatha. Preserve whole lineages as train, validation, and unopened test;
-   do not use the counted v95 roots for this development data.
+   test party-order permutations offline and do not use counted v95 roots for development data.
 2. Refit the switch-target head and require improvement over the deterministic baseline, reserve
    permutation equivariance, counterfactual matchup sensitivity, and the held-out Golbat target
    before granting runtime authority.

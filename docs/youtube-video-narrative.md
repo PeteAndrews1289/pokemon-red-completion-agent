@@ -52,9 +52,9 @@ target heuristic.
 Now show the first learned target head. It scores every anonymous reserve independently, remains
 equivariant when the party cards are shuffled, and improves an untouched complete lineage from
 10/13 to 11/13 target choices. Then refuse the easy victory: it still makes the exact Golbat mistake.
-Put `deployment_authority: false` on screen. The next work is more randomized late-game teacher
-lineages and a genuinely unopened target test set, not another full-game replay with a scorer we
-already know is wrong.
+Put `deployment_authority: false` on screen. The next work is more timing/RNG-varied late-game
+teacher lineages, offline party-order permutations, and a genuinely unopened target test set—not
+another full-game replay with a scorer we already know is wrong.
 
 Keep the most important scientific detail on screen: the action-model weights did not change
 between these causal attempts. The first failures repaired a game-neutral actor/referee interface;

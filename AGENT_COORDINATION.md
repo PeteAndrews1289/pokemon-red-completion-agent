@@ -6,7 +6,7 @@
 > `switch` while the deterministic target resolver selected Blastoise instead of Jolteon for
 > Golbat. Commit `93faeed` adds a permutation-equivariant offline target head. It improves the
 > untouched lineage from 10/13 to 11/13 targets but still misses that exact Golbat choice, so it has
-> no deployment authority. The active work is additional complete party-randomized teacher
+> no deployment authority. The active work is additional complete timing/RNG-varied teacher
 > lineages, followed by a preassigned target train/validation/test gate. Do not rerun the full
 > causal route, tune the heuristic on the failed case, build a complete Crystal route, relax the
 > verifier, or consume a counted v95 root. Counted status remains 0/10. See the
@@ -357,8 +357,9 @@ Current state: **2,107 passed, 3 deselected**, all checks green, on trunk
 These are ordered by how much they serve the mission, not by difficulty.
 
 **1. Collect more explicit switch-target data. (Lane A/C)** Run additional complete,
-party-randomized v3 teacher lineages, with deliberate late-game Bruno and Agatha coverage. Assign
-whole lineages to train, validation, and unopened test before fitting. Do not use counted v95 roots.
+timing/RNG-varied v3 teacher lineages, with deliberate late-game Bruno and Agatha coverage. Assign
+whole lineages to train, validation, and unopened test before fitting. Test party-order permutations
+offline; do not use counted v95 roots.
 
 **2. Qualify the target head offline. (Lane B/C)** Beat the deterministic target baseline, preserve
 reserve-permutation equivariance, pass counterfactual matchup tests, and select Jolteon for the

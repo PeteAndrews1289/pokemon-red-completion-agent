@@ -2115,9 +2115,10 @@ still selects Blastoise for the held-out Agatha Golbat choice, exactly matching 
 and has only 41 labels across three completed lineages. Its public summary therefore records no
 deployment authority.
 
-The next curriculum is data, not another heuristic patch: complete party-randomized teacher
-lineages with more late-game switch targets, whole-lineage train/validation/test assignment, and a
-counterfactual gate that requires the useful role to follow its mechanics rather than a slot. Only
+The next curriculum is data, not another heuristic patch: complete timing/RNG-varied teacher
+lineages with more late-game switch targets, whole-lineage train/validation/test assignment, and
+party-permutation/counterfactual gates that require the useful role to follow mechanics rather than
+a slot. Only
 after that head beats the deterministic baseline and passes the causal Golbat case should another
 full-game model-authority replay begin. This is also the correct dependency for Crystal, where the
 experiment needs a thin Gen II task teacher and semantic adapter—not an immediate second fixed

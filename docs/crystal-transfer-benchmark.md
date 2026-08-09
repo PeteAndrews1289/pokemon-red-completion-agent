@@ -80,7 +80,7 @@ reference, not proof that the model learned the demonstrated behavior.
 
 ## Dependency order
 
-1. Collect more complete, party-randomized Red demonstrations with explicit late-game targets.
+1. Collect more complete, timing/RNG-varied Red demonstrations with explicit late-game targets.
 2. Train and qualify switch-class and switch-target behavior offline, including the held-out
    Agatha Golbat choice.
 3. Pass the strict canonical Red rehearsal and one perturbation rehearsal.

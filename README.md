@@ -44,8 +44,9 @@ is recorded as `deployment_authority: false` and has not changed emulator behavi
 [offline target-head receipt](docs/evidence/battle-switch-target-offline-candidate-2026-08-09.json),
 and [Crystal transfer benchmark](docs/crystal-transfer-benchmark.md).
 
-The controller is still unpromoted. The active gate is now more late-game, party-randomized teacher
-data followed by a switch-target candidate that passes held-out target and counterfactual gates.
+The controller is still unpromoted. The active gate is now more late-game, timing/RNG-varied teacher
+data followed by a switch-target candidate that passes held-out, counterfactual, and party-order
+equivariance gates.
 Only then should another 312-checkpoint causal completion run, followed by a separate run that
 forbids teacher queries for ordinary move selection. Navigation, menus, chapter mechanics, and
 resource execution remain authored. The counted v95 reliability campaign remains unopened at

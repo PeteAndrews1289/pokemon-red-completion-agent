@@ -34,7 +34,7 @@ lineage 02 (13 targets). It fits 28/28 versus the deterministic baseline's 22/28
 The public receipt therefore says `deployment_authority: false`; do not load it into the emulator or
 start another full causal replay yet.
 
-**Exact next dependency:** collect additional complete, party-randomized v3 teacher lineages with
+**Exact next dependency:** collect additional complete, timing/RNG-varied v3 teacher lineages with
 explicit late-game targets, especially Bruno and Agatha. Preassign whole lineages to train,
 validation, and an unopened test split. Refit the target head and require: improvement over the
 deterministic baseline, reserve-permutation equivariance, counterfactual matchup sensitivity, and

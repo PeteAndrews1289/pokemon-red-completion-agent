@@ -36,7 +36,7 @@ Commit `93faeed` adds an offline permutation-equivariant target head and whole-l
 fits 28/28 explicit targets from lineages 01 and 03 and scores 11/13 on untouched lineage 02, up
 from the deterministic resolver's 10/13. It still misses the held-out Agatha Golbat target, so its
 summary deliberately says `deployment_authority: false`. The next dependency is additional
-party-randomized full teacher lineages and an unopened target test split—not another full causal
+timing/RNG-varied full teacher lineages and an unopened target test split—not another full causal
 replay and not a weight tweak to the old scorer. Counted v95 remains 0/10.
 
 After the learned target passes offline and causal Red gates, then one canonical and one uncounted
