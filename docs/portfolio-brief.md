@@ -155,6 +155,12 @@ Seed `990020` supplied the complementary boundary: an ordinary encounter began b
 progress. The helper now spends a flee allowance, preserves the unchanged pre-step party, and
 retries the direction instead of counting false movement or rejecting normal gameplay.
 
+Seed `990021` shifted the title/menu timing enough that the fixed intro never entered the game.
+The replacement is a finite state-authenticated recovery, not a favorable delay: cycle
+`Start,A,A,A`, observe after every input, wait without input once the clean bedroom exists, and
+accept only its exact input-ready gate. The failed root recovered in 18 inputs plus one input-free
+settling wait and obtained Squirtle; no learned role had been reached in the original failure.
+
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
 until the now-canonical-qualified reserve-aware stack also passes a perturbation rehearsal.

@@ -19,8 +19,12 @@
 > The 2,167-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry checks passes. Commit,
 > `869e9a8` passed CI. Seed `990020` then triggered a wild at the unchanged pre-step tile; the
 > helper now authenticates and flees it, counts a movement retry, and reissues the same direction.
-> The 2,168-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry checks passes. Commit,
-> push, then run a fresh uncounted perturbation. Do
+> The 2,168-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry checks passed at
+> `60d0842`. Seed `990021` then remained outside the running game after its shifted fixed intro.
+> A bounded state-authenticated `Start,A,A,A` recovery reached the exact input-ready bedroom in 18
+> inputs plus one input-free settling wait on the same root and obtained Squirtle; any other started
+> map fails closed. The full 2,180-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry
+> checks passes. Commit, push, then run a fresh uncounted perturbation. Do
 > not add `990007` to fitting, rerun retired model-test roots, build a complete Crystal route, weaken
 > the curriculum lesson, or consume a counted v95 root. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).

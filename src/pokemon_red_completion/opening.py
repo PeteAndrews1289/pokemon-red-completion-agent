@@ -106,6 +106,8 @@ class OpeningTiming:
     max_escort_pulses: int = 32
     max_starter_confirm_pulses: int = 12
     max_starter_cancel_pulses: int = 12
+    max_bedroom_recovery_pulses: int = 32
+    bedroom_recovery_wait_frames: int = 240
 
     def __post_init__(self) -> None:
         for name, value in (
@@ -116,6 +118,8 @@ class OpeningTiming:
             ("max_escort_pulses", self.max_escort_pulses),
             ("max_starter_confirm_pulses", self.max_starter_confirm_pulses),
             ("max_starter_cancel_pulses", self.max_starter_cancel_pulses),
+            ("max_bedroom_recovery_pulses", self.max_bedroom_recovery_pulses),
+            ("bedroom_recovery_wait_frames", self.bedroom_recovery_wait_frames),
         ):
             if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
                 raise ValueError(f"{name} must be a positive integer")
@@ -143,6 +147,7 @@ class OpeningChapterReport:
     emulator_window: str
     emulator_speed: int
     clean_power_on: bool
+    bedroom_recovery_pulses: int
     bedroom: RawGameState
     downstairs: RawGameState
     outside: RawGameState
@@ -162,6 +167,7 @@ class OpeningChapterReport:
     def passed(self) -> bool:
         return (
             self.clean_power_on
+            and self.bedroom_recovery_pulses >= 0
             and is_clean_bedroom_start(self.bedroom)
             and self.downstairs.map_id == MapId.REDS_HOUSE_1F
             and self.outside.map_id == MapId.PALLET_TOWN
@@ -194,6 +200,7 @@ class OpeningChapterReport:
                 "save_on_exit": False,
             },
             "clean_power_on": self.clean_power_on,
+            "bedroom_recovery_pulses": self.bedroom_recovery_pulses,
             "checkpoints": [
                 {
                     "id": checkpoint_id,
@@ -252,14 +259,11 @@ def run_opening_chapter(
         )
 
         play_new_game_intro(executor, timing=new_game_timing)
-        bedroom = reader.read()
-        bedroom_input = reader.read_bedroom_input_state()
-        bedroom_control = reader.read_opening_control_state(bedroom)
-        if (
-            not is_bedroom_input_ready(bedroom, bedroom_input)
-            or bedroom_control.phase is not OpeningPhase.BEDROOM_READY
-        ):
-            raise OpeningChapterError("The clean run missed the input-ready bedroom gate.")
+        bedroom, bedroom_recovery_pulses = _advance_to_bedroom_ready(
+            executor,
+            reader,
+            opening_timing,
+        )
         _emit(progress, emulator, "bedroom_ready", "Bedroom input ready", 1)
 
         downstairs = _follow_corridor(
@@ -377,6 +381,7 @@ def run_opening_chapter(
             emulator_window=emulator.window_name,
             emulator_speed=emulator.speed,
             clean_power_on="system:clean_power_on" in state.facts,
+            bedroom_recovery_pulses=bedroom_recovery_pulses,
             bedroom=bedroom,
             downstairs=downstairs,
             outside=outside,
@@ -395,6 +400,48 @@ def run_opening_chapter(
         if not report.passed:
             raise OpeningChapterError("Opening chapter evidence failed its public contract.")
         return report
+
+
+def _advance_to_bedroom_ready(
+    executor: OpeningExecutor,
+    reader: PokemonRedStateReader,
+    timing: OpeningTiming,
+) -> tuple[RawGameState, int]:
+    """Recover a timing-shifted intro until the exact bedroom gate is ready."""
+
+    actions = (
+        MacroActionKind.OPEN_MENU,
+        MacroActionKind.CONFIRM,
+        MacroActionKind.CONFIRM,
+        MacroActionKind.CONFIRM,
+    )
+    input_pulses = 0
+    settling_waits = 0
+    while True:
+        state = reader.read()
+        input_state = reader.read_bedroom_input_state()
+        control = reader.read_opening_control_state(state)
+        if (
+            is_bedroom_input_ready(state, input_state)
+            and control.phase is OpeningPhase.BEDROOM_READY
+        ):
+            return state, input_pulses
+        if state.game_started and not is_clean_bedroom_start(state):
+            raise OpeningChapterError(
+                "The timing-shifted intro entered an unexpected in-game boundary."
+            )
+        if is_clean_bedroom_start(state):
+            if settling_waits == timing.max_bedroom_recovery_pulses:
+                break
+            settling_waits += 1
+            _wait(executor, timing.bedroom_recovery_wait_frames)
+            continue
+        if input_pulses == timing.max_bedroom_recovery_pulses:
+            break
+        executor.execute(MacroAction(actions[input_pulses % len(actions)]))
+        input_pulses += 1
+        _wait(executor, timing.bedroom_recovery_wait_frames)
+    raise OpeningChapterError("The clean run missed the bounded input-ready bedroom gate.")
 
 
 def _follow_corridor(
@@ -477,7 +524,7 @@ def _advance_until_party(
     raise OpeningChapterError("Starter selection failed to populate the party.")
 
 
-def _wait(executor: CountingExecutor, frames: int) -> None:
+def _wait(executor: OpeningExecutor, frames: int) -> None:
     executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 

@@ -14,6 +14,7 @@ from pokemon_red_completion.navigation import Coordinate, Direction, path_to_dir
 from pokemon_red_completion.observation import (
     EVENT_FLAG_BYTES,
     SQUIRTLE_SPECIES_ID,
+    BedroomInputState,
     MapId,
     OpeningControlState,
     OpeningPhase,
@@ -29,6 +30,7 @@ from pokemon_red_completion.opening import (
     OpeningChapterError,
     OpeningChapterReport,
     OpeningTiming,
+    _advance_to_bedroom_ready,
 )
 from pokemon_red_completion.rom import RomFingerprint
 
@@ -157,6 +159,8 @@ def test_qualified_opening_corridors_are_exact_and_cardinal() -> None:
         "max_escort_pulses",
         "max_starter_confirm_pulses",
         "max_starter_cancel_pulses",
+        "max_bedroom_recovery_pulses",
+        "bedroom_recovery_wait_frames",
     ),
 )
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
@@ -177,7 +181,174 @@ def test_opening_timing_defaults_are_source_stable() -> None:
         max_escort_pulses=32,
         max_starter_confirm_pulses=12,
         max_starter_cancel_pulses=12,
+        max_bedroom_recovery_pulses=32,
+        bedroom_recovery_wait_frames=240,
     )
+
+
+def test_bedroom_gate_recovers_a_timing_shifted_frontend_with_bounded_pulses() -> None:
+    frontend = replace(
+        _raw(MapId.REDS_HOUSE_2F, 3, 6),
+        game_started=False,
+        map_id=None,
+        player_x=None,
+        player_y=None,
+        party_count=None,
+        battle_state=None,
+    )
+    bedroom = _raw(MapId.REDS_HOUSE_2F, 3, 6)
+
+    class _Reader:
+        state = frontend
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_bedroom_input_state(self) -> BedroomInputState:
+            return BedroomInputState(joy_ignore=0, map_script=1)
+
+        def read_opening_control_state(self, raw: RawGameState) -> OpeningControlState:
+            return _control(OpeningPhase.BEDROOM_READY if raw is bedroom else OpeningPhase.UNKNOWN)
+
+    reader = _Reader()
+
+    class _Executor:
+        actions: list[MacroAction] = []
+        frontend_pulses = 0
+
+        def execute(self, action: MacroAction) -> object:
+            self.actions.append(action)
+            if action.kind is not MacroActionKind.WAIT:
+                self.frontend_pulses += 1
+                if self.frontend_pulses == 2:
+                    reader.state = bedroom
+            return object()
+
+    executor = _Executor()
+    observed, pulses = _advance_to_bedroom_ready(  # type: ignore[arg-type]
+        executor,
+        reader,  # type: ignore[arg-type]
+        DEFAULT_OPENING_TIMING,
+    )
+
+    assert observed is bedroom
+    assert pulses == 2
+    assert [action.kind for action in executor.actions] == [
+        MacroActionKind.OPEN_MENU,
+        MacroActionKind.WAIT,
+        MacroActionKind.CONFIRM,
+        MacroActionKind.WAIT,
+    ]
+
+
+def test_bedroom_gate_rejects_an_unexpected_started_map_without_input() -> None:
+    wrong_map = _raw(MapId.PALLET_TOWN, 5, 6)
+
+    class _Reader:
+        def read(self) -> RawGameState:
+            return wrong_map
+
+        def read_bedroom_input_state(self) -> BedroomInputState:
+            return BedroomInputState(joy_ignore=0, map_script=0)
+
+        def read_opening_control_state(self, _raw: RawGameState) -> OpeningControlState:
+            return _control(OpeningPhase.PALLET_FREE)
+
+    class _Executor:
+        def execute(self, _action: MacroAction) -> object:
+            raise AssertionError("unexpected input")
+
+    with pytest.raises(OpeningChapterError, match="unexpected in-game boundary"):
+        _advance_to_bedroom_ready(  # type: ignore[arg-type]
+            _Executor(),
+            _Reader(),  # type: ignore[arg-type]
+            DEFAULT_OPENING_TIMING,
+        )
+
+
+def test_bedroom_gate_fails_after_the_declared_frontend_input_bound() -> None:
+    frontend = replace(
+        _raw(MapId.REDS_HOUSE_2F, 3, 6),
+        game_started=False,
+        map_id=None,
+        player_x=None,
+        player_y=None,
+        party_count=None,
+        battle_state=None,
+    )
+
+    class _Reader:
+        def read(self) -> RawGameState:
+            return frontend
+
+        def read_bedroom_input_state(self) -> BedroomInputState:
+            return BedroomInputState(joy_ignore=0, map_script=0)
+
+        def read_opening_control_state(self, _raw: RawGameState) -> OpeningControlState:
+            return _control(OpeningPhase.UNKNOWN)
+
+    class _Executor:
+        actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> object:
+            self.actions.append(action)
+            return object()
+
+    executor = _Executor()
+    timing = replace(DEFAULT_OPENING_TIMING, max_bedroom_recovery_pulses=3)
+    with pytest.raises(OpeningChapterError, match="bounded input-ready bedroom gate"):
+        _advance_to_bedroom_ready(  # type: ignore[arg-type]
+            executor,
+            _Reader(),  # type: ignore[arg-type]
+            timing,
+        )
+
+    assert [action.kind for action in executor.actions] == [
+        MacroActionKind.OPEN_MENU,
+        MacroActionKind.WAIT,
+        MacroActionKind.CONFIRM,
+        MacroActionKind.WAIT,
+        MacroActionKind.CONFIRM,
+        MacroActionKind.WAIT,
+    ]
+
+
+def test_bedroom_gate_settles_clean_bedroom_without_counting_an_input() -> None:
+    bedroom = _raw(MapId.REDS_HOUSE_2F, 3, 6)
+
+    class _Reader:
+        ready = False
+
+        def read(self) -> RawGameState:
+            return bedroom
+
+        def read_bedroom_input_state(self) -> BedroomInputState:
+            return BedroomInputState(joy_ignore=0, map_script=1 if self.ready else 0)
+
+        def read_opening_control_state(self, _raw: RawGameState) -> OpeningControlState:
+            return _control(OpeningPhase.BEDROOM_READY)
+
+    reader = _Reader()
+
+    class _Executor:
+        actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> object:
+            self.actions.append(action)
+            if action.kind is MacroActionKind.WAIT:
+                reader.ready = True
+            return object()
+
+    executor = _Executor()
+    observed, pulses = _advance_to_bedroom_ready(  # type: ignore[arg-type]
+        executor,
+        reader,  # type: ignore[arg-type]
+        DEFAULT_OPENING_TIMING,
+    )
+
+    assert observed is bedroom
+    assert pulses == 0
+    assert [action.kind for action in executor.actions] == [MacroActionKind.WAIT]
 
 
 def test_public_opening_report_is_complete_and_privacy_safe() -> None:
@@ -205,6 +376,7 @@ def test_public_opening_report_is_complete_and_privacy_safe() -> None:
         emulator_window="SDL2",
         emulator_speed=2,
         clean_power_on=True,
+        bedroom_recovery_pulses=0,
         bedroom=bedroom,
         downstairs=downstairs,
         outside=outside,
@@ -241,6 +413,7 @@ def test_public_opening_report_is_complete_and_privacy_safe() -> None:
     assert report.passed
     assert public["schema"] == "opening-chapter-v1"
     assert public["status"] == "ok"
+    assert public["bedroom_recovery_pulses"] == 0
     assert [checkpoint["id"] for checkpoint in public["checkpoints"]] == [
         "bedroom_ready",
         "downstairs",

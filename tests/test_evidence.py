@@ -12,7 +12,6 @@ from pokemon_red_completion.navigation import path_to_directions
 from pokemon_red_completion.observation import ItemId, MapId
 from pokemon_red_completion.opening import (
     BEDROOM_CORRIDOR,
-    DEFAULT_OPENING_TIMING,
     HOUSE_1F_CORRIDOR,
     PALLET_CORRIDOR,
     PRET_POKERED_COMMIT,
@@ -101,6 +100,15 @@ JULY_28_QUALIFIED_PLAY_TIMING = {
     "rival_trigger_wait_frames": 360,
     "route_1_north_seed_wait_frames": 192,
     "route_1_south_seed_wait_frames": 48,
+    "transition_wait_frames": 120,
+}
+JULY_28_OPENING_TIMING = {
+    "dialogue_wait_frames": 240,
+    "max_escort_pulses": 32,
+    "max_starter_cancel_pulses": 12,
+    "max_starter_confirm_pulses": 12,
+    "oak_trigger_wait_frames": 360,
+    "starter_text_wait_frames": 180,
     "transition_wait_frames": 120,
 }
 JULY_28_PEWTER_TIMING = {
@@ -219,7 +227,6 @@ def test_opening_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["recorded_on"] == "2026-07-28"
 
     intro = DEFAULT_NEW_GAME_TIMING
-    timing = DEFAULT_OPENING_TIMING
     expected_configuration = {
         "controller_timing": {
             "press_frames": intro.press_frames,
@@ -242,15 +249,7 @@ def test_opening_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
             "normal_wait_frames": intro.normal_wait_frames,
         },
         "new_game_names": "built_in_red_blue",
-        "opening_timing": {
-            "dialogue_wait_frames": timing.dialogue_wait_frames,
-            "max_escort_pulses": timing.max_escort_pulses,
-            "max_starter_cancel_pulses": timing.max_starter_cancel_pulses,
-            "max_starter_confirm_pulses": timing.max_starter_confirm_pulses,
-            "oak_trigger_wait_frames": timing.oak_trigger_wait_frames,
-            "starter_text_wait_frames": timing.starter_text_wait_frames,
-            "transition_wait_frames": timing.transition_wait_frames,
-        },
+        "opening_timing": JULY_28_OPENING_TIMING,
         "pret_pokered_commit": PRET_POKERED_COMMIT,
         "qualified_actions": {
             "bedroom": [direction.value for direction in path_to_directions(BEDROOM_CORRIDOR)],
@@ -333,7 +332,6 @@ def test_pokedex_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["recorded_on"] == "2026-07-28"
 
     intro = DEFAULT_NEW_GAME_TIMING
-    opening = DEFAULT_OPENING_TIMING
     expected_configuration = {
         "controller_timing": {
             "press_frames": intro.press_frames,
@@ -356,7 +354,7 @@ def test_pokedex_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
             "normal_wait_frames": intro.normal_wait_frames,
         },
         "new_game_names": "built_in_red_blue",
-        "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
+        "opening_timing": JULY_28_OPENING_TIMING,
         "pret_pokered_commit": PRET_POKERED_COMMIT,
         "qualified_play_timing": JULY_28_QUALIFIED_PLAY_TIMING,
         "route_encounter_policy": "fail_closed",
@@ -439,7 +437,6 @@ def test_brock_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["recorded_on"] == "2026-07-28"
 
     intro = DEFAULT_NEW_GAME_TIMING
-    opening = DEFAULT_OPENING_TIMING
     expected_configuration = {
         "controller_timing": {
             "press_frames": intro.press_frames,
@@ -462,7 +459,7 @@ def test_brock_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
             "normal_wait_frames": intro.normal_wait_frames,
         },
         "new_game_names": "built_in_red_blue",
-        "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
+        "opening_timing": JULY_28_OPENING_TIMING,
         "pewter_timing": JULY_28_PEWTER_TIMING,
         "pret_pokered_commit": PRET_POKERED_COMMIT,
         "qualified_play_timing": JULY_28_QUALIFIED_PLAY_TIMING,
@@ -550,7 +547,6 @@ def test_cerulean_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["recorded_on"] == "2026-07-28"
 
     intro = DEFAULT_NEW_GAME_TIMING
-    opening = DEFAULT_OPENING_TIMING
     cerulean = DEFAULT_CERULEAN_TIMING
     expected_configuration = {
         "controller_timing": {
@@ -574,7 +570,7 @@ def test_cerulean_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
             "normal_wait_frames": intro.normal_wait_frames,
         },
         "new_game_names": "built_in_red_blue",
-        "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
+        "opening_timing": JULY_28_OPENING_TIMING,
         "pewter_timing": JULY_28_PEWTER_TIMING,
         "cerulean_timing": {
             name: getattr(cerulean, name) for name in cerulean.__dataclass_fields__

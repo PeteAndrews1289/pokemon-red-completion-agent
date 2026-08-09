@@ -106,6 +106,16 @@ performs the authenticated flee, counts a movement retry, and reissues the same 
 existing ceiling. The 2,168-test ROM-free gate plus Ruff, mypy, docs, public-artifact, and registry
 checks passes. A clean push and fresh perturbation remain immediate; v95 is 0/10.
 
+Seed `990021` then stopped before the bedroom: its 124-frame initial perturbation changed which
+front-end inputs were consumed, so the fixed title/menu script ended outside the running game.
+The [sixth perturbation failure](evidence/portable-clean-start-six-role-perturbation-06-failure-2026-08-09.json)
+is preserved. The opening gate now uses at most 32 state-checked inputs in a repeating
+`Start,A,A,A` pattern, waits without input if the clean bedroom is still settling, and accepts only
+the exact bedroom coordinate plus input-ready semantic state. The same failed root recovered in 18
+inputs plus one input-free settling wait and obtained Squirtle. The public-artifact, docs,
+regenerated-registry, Ruff, mypy, and 2,180-test ROM-free gate passes. Commit, push, and use a fresh
+uncounted perturbation; v95 remains 0/10.
+
 The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's
 Red/Blue reciprocal version gaps now come from one canonical table and include the previously
 omitted Pinsir and Scyther. Trading requires an explicit compatibility edge between saves; merely

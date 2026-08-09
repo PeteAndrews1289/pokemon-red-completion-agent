@@ -12,10 +12,11 @@ evaluation gap is timing/RNG reliability.
 
 The present Red milestone is narrower and measurable: qualify the already-passed combined stack on
 a fresh derived-timing root. Canonical seed `990015` is terminal evidence; seeds `990016` through
-`990020` exposed five successive pre-model assumptions in the rival receipt, ordinary-wild
-handling, battle-exit input handoff, open-loop movement acknowledgement, and pre-step encounter
-semantics. Each failure is preserved rather than rerun as a favorable root. The latest repair
-passed the full ROM-free gate and awaits a clean push and fresh perturbation.
+`990021` exposed six successive pre-model assumptions in the rival receipt, ordinary-wild
+handling, battle-exit input handoff, open-loop movement acknowledgement, pre-step encounter
+semantics, and fixed front-end timing. Each failure is preserved rather than rerun as a favorable
+root. The latest repair passed direct same-root reproduction and the full 2,180-test ROM-free gate;
+it awaits a clean push and a fresh perturbation.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -215,6 +216,15 @@ The movement verifier correctly refused to count northward progress, but initial
 encounter. The generalized helper proves the unchanged party and stats, authenticates the flee,
 counts one retry, and reissues the same direction under the existing ceiling. See the
 [fifth perturbation failure](evidence/portable-clean-start-six-role-perturbation-05-failure-2026-08-09.json).
+
+Seed `990021` stopped even earlier, before the cartridge entered the bedroom. The derived
+124-frame initial wait changed which title/menu inputs were accepted, and the fixed intro sequence
+ended with `game_started=false`; objective, battle, target, and training authorities had therefore
+made no decisions. A bounded `Start,A,A,A` state-checked recovery reached the exact clean-bedroom
+gate in 18 inputs plus one input-free settling wait on the same root and then completed Squirtle
+selection. The production repair waits without input once the bedroom exists, rejects any other
+started map, and publishes the actual input count. See the
+[sixth perturbation failure](evidence/portable-clean-start-six-role-perturbation-06-failure-2026-08-09.json).
 
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared

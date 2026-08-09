@@ -1363,6 +1363,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         emulator_window="SDL2",
         emulator_speed=4,
         clean_power_on=True,
+        bedroom_recovery_pulses=0,
         bedroom=_raw(
             MapId.REDS_HOUSE_2F,
             3,

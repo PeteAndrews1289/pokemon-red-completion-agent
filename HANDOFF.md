@@ -102,8 +102,14 @@ commit `869e9a8` passed that gate. Seed `990020` then produced a legitimate wild
 `(14,14)` before the requested north step changed coordinates. That should consume a flee, not the
 step. The helper now accepts only an unchanged protected pre-step boundary, performs the same
 authenticated flee, counts one retry, and reissues the direction under the existing ceiling.
-The full 2,168-test gate plus Ruff, mypy, docs, privacy, and registry checks passes; commit, push,
-then use a fresh perturbation. Counted v95 remains **0/10** and `990007`
+The full 2,168-test gate plus Ruff, mypy, docs, privacy, and registry checks passed at `60d0842`.
+Seed `990021` then stopped before the bedroom because its 124-frame initial perturbation changed
+which title/menu inputs were accepted; the original run remained at `game_started=false`, before
+any learned role. A bounded state-checked `Start,A,A,A` recovery now samples the exact clean
+bedroom/input-ready gate after each input, waits without input once the bedroom exists, and rejects
+any other started map. The same root recovered in 18 inputs plus one input-free settling wait and
+obtained Squirtle. The full 2,180-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry
+checks passes. Commit, push, then use a fresh perturbation. Counted v95 remains **0/10** and `990007`
 remains test-only. See the
 [first failure](docs/evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json),
 the [second failure](docs/evidence/portable-clean-start-six-role-rehearsal-02-failure-2026-08-09.json),
@@ -117,15 +123,18 @@ The [fourth perturbation failure](docs/evidence/portable-clean-start-six-role-pe
 preserves the movement-acknowledgement counterexample.
 The [fifth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-05-failure-2026-08-09.json)
 preserves the pre-step encounter counterexample.
+The [sixth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-06-failure-2026-08-09.json)
+preserves the fixed-front-end timing counterexample.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the
 source of the passed canonical receipt and `4f5f870` qualified the lab-rival repair through the next
 Route 1 boundary; `883be4f` qualified the first bounded-flee implementation and supplied the
 source for the preserved `990018` counterexample; `d3461f0` qualified stabilized shared exits and
 supplied the `990019` movement counterexample; `869e9a8` qualified closed-loop movement and supplied
-the `990020` pre-step encounter. Retrying that authenticated encounter without consuming the step
-and its regenerated v95 registry are the current uncommitted lane. The full local gate is green;
-they need a clean push before replay. Only Codex
+the `990020` pre-step encounter; `60d0842` qualified that repair and supplied the `990021`
+front-end timing counterexample. The bounded bedroom recovery and its regenerated v95 registry are
+the current uncommitted lane. Their full local gate is green; they need a clean push before replay.
+Only Codex
 pushes this branch; do not create a second worktree or force-push it.
 
 **Latest causal result:** attempt 13 ran from source `4ea7e93` with the frozen reserve-aware action

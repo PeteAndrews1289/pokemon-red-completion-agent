@@ -183,6 +183,13 @@ Use `990020` as a brief coda: the north arrow triggers a battle while the coordi
 Show two counters increment separately—**wild handled: +1; movement completed: +0**—then RUN and
 retry the same arrow. It makes the closed-loop idea visual without another long explanation.
 
+Add `990021` as the final bootstrap reversal. The run does not even reach the bedroom because a
+124-frame timing shift changes which title/menu inputs the game consumes. Show the old button tape
+continuing over a blank `game_started=false` signal, then replace it with a loop that observes after
+each `Start,A,A,A` input, reaches the bedroom on input 18, and turns green after one input-free
+settling wait. Caption it:
+**“Every layer is a control loop—even pressing New Game.”**
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

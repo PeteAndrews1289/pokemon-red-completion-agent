@@ -139,6 +139,13 @@ still on the pre-step tile. That consumes a flee allowance, not the requested di
 closed-loop helper now authenticates the same-coordinate encounter against the pre-step party,
 flees, counts a movement retry, and reissues the direction; a drifted encounter still fails. See
 the [fifth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-05-failure-2026-08-09.json).
+Seed `990021` then shifted the front end far enough that the fixed title/menu input sequence never
+started the game. No learned role had executed. The opening teacher now cycles a bounded
+`Start,A,A,A` recovery, samples the exact clean-bedroom and input-ready gates after every input,
+waits without pressing buttons once the bedroom exists, and rejects any other in-game boundary.
+The direct same-root reproduction recovered in 18 inputs plus one input-free settling wait and
+selected Squirtle; see the
+[sixth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-06-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95
 reliability campaign remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.

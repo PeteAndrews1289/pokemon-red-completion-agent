@@ -1,0 +1,64 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_perturbation_with_verified_frontend_timing_defect",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990021 stopped before the bedroom because the fixed intro script assumed every front-end input was consumed. The failure preceded objective execution, battles, and every learned control role. It is a preserved bootstrap robustness defect, not a model-prediction failure.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990021,
+    "initial_wait_frames": 124,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "4fc7c3f1cfa5ecc02ab8e2c98a06bf9824ad2a9be41defc1bba55bc311d1d0ce"
+  },
+  "source": {
+    "git_commit": "60d0842c19081c6d05506827ce9f86a468ec3d1d",
+    "worktree_dirty": false
+  },
+  "raw_report_sha256": "42d04be931389913de3da56e167c89617828c768b524225b1d7577599266728c",
+  "failure": {
+    "stage": "objective_loop_execution",
+    "exception_type": "OpeningChapterError",
+    "message": "The clean run missed the input-ready bedroom gate.",
+    "frames_executed": 9928,
+    "objective_decisions": 1,
+    "objectives_completed": 0,
+    "battle_schedule_entries_consumed": 0,
+    "battle_model_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "direct_reproduction": {
+    "post_intro_state": {
+      "game_started": false,
+      "map": null,
+      "position": null,
+      "joy_ignore": 0,
+      "map_script": 0
+    },
+    "blind_confirm_trial": "Sixteen A pulses did not start the game.",
+    "bounded_frontend_trial": "Repeating Start,A,A,A under 240-frame waits reached the bedroom on the eighteenth input; one readiness wait settled the exact gate.",
+    "revised_opening_trial": {
+      "passed": true,
+      "frontend_inputs": 18,
+      "settling_waits_after_bedroom": 1,
+      "pre_accounting_fix_recovery_cycles": 19,
+      "bedroom_map": 38,
+      "bedroom_position": [3, 6],
+      "starter_species_ids": [177]
+    }
+  },
+  "diagnosis": {
+    "category": "open_loop_frontend_inputs_under_initial_timing_shift",
+    "finding": "The initial 0–255-frame perturbation can change which title/menu inputs are accepted. The old intro issued a fixed sequence and sampled the bedroom once; this seed remained outside the running game.",
+    "model_boundary": "No mechanic objective, learned battle, switch-target, training-control, or trainee/venue decision had occurred. The scheduled battle controller consumed zero of 74 entries."
+  },
+  "repair": {
+    "status": "implemented_and_qualified_rom_free_pending_fresh_perturbation",
+    "behavior": "After the original intro sequence, a bounded 32-input recovery cycles Start,A,A,A with 240-frame waits until the exact clean bedroom and input-ready semantic gate is observed. Once the bedroom exists but controls are still settling, it waits without sending input. Any other started map fails immediately.",
+    "public_receipt": "The opening report publishes the number of actual bedroom-recovery input pulses, excluding input-free settling waits, and requires it to be nonnegative.",
+    "historical_integrity": "July source-bound receipts use a pinned historical opening-timing dictionary; current robustness fields do not rewrite old evidence.",
+    "rom_free_gate": "Public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,180 tests passed; three integration tests were deselected and one expected failure remained expected.",
+    "next_gate": "Commit and push the qualified repair, then run a fresh uncounted derived-timing root. Counted v95 remains unopened."
+  }
+}

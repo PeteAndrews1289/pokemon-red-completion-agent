@@ -2302,6 +2302,15 @@ away under the existing receipt, and retries the same direction. It spends both 
 one encounter and one movement retry—without claiming either that nothing happened or that the
 player advanced.
 
+The sixth root removed the game itself. A 124-frame initial timing shift changed which title-screen
+and menu inputs were accepted, leaving the old fixed intro outside `game_started` before any learned
+decision. Blind confirmation was not enough. A bounded `Start,A,A,A` recovery instead observed the
+state after every input, stopped sending input once the clean bedroom appeared, and required the
+exact input-ready semantic gate. The same failed root recovered in 18 inputs plus one input-free
+settling wait and selected Squirtle. This is a useful transfer lesson: even bootstrapping is an
+interactive control problem, not a tape
+of buttons that can be assumed to replay.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
