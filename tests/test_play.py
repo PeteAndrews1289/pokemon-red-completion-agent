@@ -1175,6 +1175,9 @@ def test_qualified_play_timing_defaults_are_positive_bounded_integers() -> None:
         mart_prompt_wait_frames=240,
         route_1_south_seed_wait_frames=48,
         max_route_1_wild_flees=8,
+        route_1_wild_exit_stabilization_frames=120,
+        max_route_1_step_attempts=8,
+        route_1_step_retry_wait_frames=24,
         max_rival_pulses=96,
         max_parcel_pulses=5,
         max_pokedex_pulses=42,
@@ -2147,17 +2150,20 @@ def test_route_1_traversal_flees_one_wild_and_preserves_the_consumed_step() -> N
             return object()
 
     executor = _Executor()
-    terminal, flees = _move_route_1_with_wild_flees(  # type: ignore[arg-type]
+    terminal, flees, movement_retries = _move_route_1_with_wild_flees(  # type: ignore[arg-type]
         executor,
         reader,  # type: ignore[arg-type]
         ("up",),
         "Route 1 unit route",
         maximum_flees=1,
         stabilization_frames=120,
+        maximum_step_attempts=8,
+        step_retry_wait_frames=24,
     )
 
     assert terminal is final
     assert len(flees) == 1
+    assert movement_retries == 0
     assert isinstance(flees[0], Route1WildFleeEvidence)
     assert flees[0].verified
     assert flees[0].public_dict()["run_attempts"] == 1
@@ -2197,7 +2203,90 @@ def test_route_1_traversal_rejects_wilds_beyond_its_declared_allowance() -> None
             "Route 1 unit route",
             maximum_flees=0,
             stabilization_frames=120,
+            maximum_step_attempts=8,
+            step_retry_wait_frames=24,
         )
+
+
+def test_route_1_traversal_retries_one_unconsumed_direction() -> None:
+    before = replace(
+        _raw(MapId.ROUTE_1, 10, 35),
+        first_party_hp=23,
+        first_party_max_hp=23,
+        first_party_pp=(35, 30, 0, 0),
+    )
+    terminal = replace(before, player_y=34)
+
+    class _Reader:
+        state = before
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = _Reader()
+
+    class _Executor:
+        move_attempts = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.MOVE:
+                self.move_attempts += 1
+                if self.move_attempts == 2:
+                    reader.state = terminal
+            return object()
+
+    executor = _Executor()
+    observed, flees, movement_retries = _move_route_1_with_wild_flees(  # type: ignore[arg-type]
+        executor,
+        reader,  # type: ignore[arg-type]
+        ("up",),
+        "Route 1 unit route",
+        maximum_flees=1,
+        stabilization_frames=120,
+        maximum_step_attempts=8,
+        step_retry_wait_frames=24,
+    )
+
+    assert observed is terminal
+    assert flees == ()
+    assert movement_retries == 1
+    assert executor.move_attempts == 2
+
+
+def test_route_1_traversal_rejects_an_exhausted_movement_allowance() -> None:
+    before = replace(
+        _raw(MapId.ROUTE_1, 10, 35),
+        first_party_hp=23,
+        first_party_max_hp=23,
+        first_party_pp=(35, 30, 0, 0),
+    )
+
+    class _Reader:
+        def read(self) -> RawGameState:
+            return before
+
+    class _Executor:
+        move_attempts = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.MOVE:
+                self.move_attempts += 1
+            return object()
+
+    executor = _Executor()
+    with pytest.raises(QualifiedPlayError, match="bounded 2-attempt movement allowance"):
+        _move_route_1_with_wild_flees(  # type: ignore[arg-type]
+            executor,
+            _Reader(),  # type: ignore[arg-type]
+            ("up",),
+            "Route 1 unit route",
+            maximum_flees=1,
+            stabilization_frames=120,
+            maximum_step_attempts=2,
+            step_retry_wait_frames=24,
+        )
+
+    assert executor.move_attempts == 2
 
 
 def test_route_1_flee_revalidates_position_after_the_stabilization_wait() -> None:
@@ -2253,6 +2342,8 @@ def test_route_1_flee_revalidates_position_after_the_stabilization_wait() -> Non
             "Route 1 unit route",
             maximum_flees=1,
             stabilization_frames=120,
+            maximum_step_attempts=8,
+            step_retry_wait_frames=24,
         )
 
 

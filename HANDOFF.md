@@ -18,7 +18,7 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
-**Late audit and runtime checkpoint:** the full repository gate now passes **2,165 tests with 3
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,167 tests with 3
 integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
 public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
 errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
@@ -92,7 +92,13 @@ at Route 1 `(11,6)` rather than Viridian `(21,35)`. A direct reproduction that c
 in Pewter's separate post-Pokédex Route 1 traversal. A shared helper now waits, rereads, and
 revalidates the complete protected-state receipt before resuming, and both chapters carry bounded
 flee evidence. The full 2,165-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry checks
-passes; commit, push, then use a fresh perturbation. Counted v95 remains **0/10** and `990007`
+passed and commit `d3461f0` went green in GitHub CI. Fresh seed `990019` still ended one tile short:
+five stabilized flee receipts passed, but the open-loop corridor counted one north request that the
+game did not consume. Direct reproduction reached Viridian with one coordinate-verified retry. The
+shared traversal now requires directional coordinate progress or a map transition after every
+MOVE, waits 24 frames and retries an unchanged safe boundary at most eight times, and records the
+retry count. The full 2,167-test gate plus Ruff, mypy, docs, privacy, and registry checks passes;
+commit, push, then use a fresh perturbation. Counted v95 remains **0/10** and `990007`
 remains test-only. See the
 [first failure](docs/evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json),
 the [second failure](docs/evidence/portable-clean-start-six-role-rehearsal-02-failure-2026-08-09.json),
@@ -102,13 +108,16 @@ the [canonical qualification](docs/evidence/portable-clean-start-six-role-canoni
 the [first perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-01-failure-2026-08-09.json),
 the [second perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-02-failure-2026-08-09.json),
 and the [third perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-03-failure-2026-08-09.json).
+The [fourth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-04-failure-2026-08-09.json)
+preserves the movement-acknowledgement counterexample.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the
 source of the passed canonical receipt and `4f5f870` qualified the lab-rival repair through the next
 Route 1 boundary; `883be4f` qualified the first bounded-flee implementation and supplied the
-source for the preserved `990018` counterexample. The stabilized shared Route 1 helper and its
-regenerated v95 registry are the current uncommitted lane. The full local gate is green; they need a
-clean commit and push before replay. Only Codex
+source for the preserved `990018` counterexample; `d3461f0` qualified stabilized shared exits and
+supplied the `990019` movement counterexample. Closed-loop step acknowledgement and its regenerated
+v95 registry are the current uncommitted lane. The full local gate is green; they need a clean push
+before replay. Only Codex
 pushes this branch; do not create a second worktree or force-push it.
 
 **Latest causal result:** attempt 13 ran from source `4ea7e93` with the frozen reserve-aware action

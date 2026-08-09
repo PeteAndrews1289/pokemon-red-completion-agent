@@ -87,6 +87,16 @@ eight-encounter and sixteen-RUN-attempt bounds. The 2,165-test ROM-free gate plu
 documentation, public-artifact, and registry checks passes. A clean push and fresh uncounted
 perturbation remain the immediate gate; v95 remains 0/10.
 
+Seed `990019` showed that time alone is not acknowledgement. Five stabilized flee receipts passed,
+but one later MOVE was ignored and the fixed sequence stopped at Route 1 `(11,1)`, one tile short.
+The [fourth perturbation failure](evidence/portable-clean-start-six-role-perturbation-04-failure-2026-08-09.json)
+is preserved. A causal wrapper reached Viridian with one retry. The implementation now verifies
+directional coordinate progress or a map transition after every requested step, retries only an
+otherwise unchanged protected Route 1 boundary under an eight-attempt/24-frame bound, and publishes
+the retry count. The 2,167-test ROM-free gate plus Ruff, mypy, documentation, public-artifact, and
+registry checks passes. A clean push and another fresh perturbation are the immediate gate; v95
+remains 0/10.
+
 The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's
 Red/Blue reciprocal version gaps now come from one canonical table and include the previously
 omitted Pinsir and Scyther. Trading requires an explicit compatibility edge between saves; merely

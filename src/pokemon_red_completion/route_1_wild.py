@@ -96,42 +96,111 @@ def move_route_1_with_wild_flees(
     *,
     maximum_flees: int,
     stabilization_frames: int,
+    maximum_step_attempts: int,
+    step_retry_wait_frames: int,
     error_type: type[Exception],
-) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...]]:
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
     """Follow Route 1 and fail closed around a finite number of ordinary wilds."""
 
     if type(maximum_flees) is not int or maximum_flees < 0:  # noqa: E721
         raise ValueError("maximum_flees must be a non-negative integer")
     if type(stabilization_frames) is not int or stabilization_frames <= 0:  # noqa: E721
         raise ValueError("stabilization_frames must be a positive integer")
+    if type(maximum_step_attempts) is not int or maximum_step_attempts <= 0:  # noqa: E721
+        raise ValueError("maximum_step_attempts must be a positive integer")
+    if type(step_retry_wait_frames) is not int or step_retry_wait_frames <= 0:  # noqa: E721
+        raise ValueError("step_retry_wait_frames must be a positive integer")
     state = reader.read()
     flees: list[Route1WildFleeEvidence] = []
+    movement_retries = 0
     for step, direction in enumerate(directions, start=1):
-        if state.battle_state:
-            raise error_type(f"Unexpected battle interrupted {label} before step {step}.")
-        executor.execute(MacroAction(MacroActionKind.MOVE, direction))
-        state = reader.read()
-        if not state.battle_state:
-            if state.first_party_hp == 0:
+        for attempt in range(1, maximum_step_attempts + 1):
+            before = state
+            if before.battle_state:
+                raise error_type(f"Unexpected battle interrupted {label} before step {step}.")
+            executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+            moved = reader.read()
+            if moved.battle_state:
+                if moved.battle_state != 1 or moved.map_id != MapId.ROUTE_1:
+                    raise error_type(
+                        f"Unexpected non-wild battle interrupted {label} at step {step}."
+                    )
+                if not _direction_was_consumed(before, moved, direction):
+                    raise error_type(
+                        f"Route 1 wild battle did not consume {label} step {step}."
+                    )
+                if len(flees) >= maximum_flees:
+                    raise error_type(
+                        f"{label} exceeded its bounded {maximum_flees}-encounter flee allowance."
+                    )
+                flees.append(
+                    flee_route_1_wild(
+                        executor,
+                        reader,
+                        moved,
+                        stabilization_frames=stabilization_frames,
+                        error_type=error_type,
+                    )
+                )
+                state = reader.read()
+                break
+            if moved.first_party_hp == 0:
                 raise error_type(f"The active party member fainted during {label}.")
-            continue
-        if state.battle_state != 1 or state.map_id != MapId.ROUTE_1:
-            raise error_type(f"Unexpected non-wild battle interrupted {label} at step {step}.")
-        if len(flees) >= maximum_flees:
-            raise error_type(
-                f"{label} exceeded its bounded {maximum_flees}-encounter flee allowance."
-            )
-        flees.append(
-            flee_route_1_wild(
-                executor,
-                reader,
-                state,
-                stabilization_frames=stabilization_frames,
-                error_type=error_type,
-            )
-        )
-        state = reader.read()
-    return state, tuple(flees)
+            if _direction_was_consumed(before, moved, direction):
+                state = moved
+                break
+            if not _same_route_boundary(before, moved):
+                raise error_type(f"{label} step {step} moved outside its requested direction.")
+            if attempt == maximum_step_attempts:
+                raise error_type(
+                    f"{label} step {step} exceeded its bounded "
+                    f"{maximum_step_attempts}-attempt movement allowance."
+                )
+            movement_retries += 1
+            _wait(executor, step_retry_wait_frames)
+            state = reader.read()
+        else:  # pragma: no cover - the bounded loop always breaks or raises
+            raise AssertionError("unreachable Route 1 movement loop")
+    return state, tuple(flees), movement_retries
+
+
+def _direction_was_consumed(
+    before: RawGameState,
+    after: RawGameState,
+    direction: str,
+) -> bool:
+    if before.map_id != after.map_id:
+        return True
+    if None in (before.player_x, before.player_y, after.player_x, after.player_y):
+        return False
+    assert before.player_x is not None
+    assert before.player_y is not None
+    assert after.player_x is not None
+    assert after.player_y is not None
+    if direction == "up":
+        return after.player_x == before.player_x and after.player_y < before.player_y
+    if direction == "down":
+        return after.player_x == before.player_x and after.player_y > before.player_y
+    if direction == "left":
+        return after.player_y == before.player_y and after.player_x < before.player_x
+    if direction == "right":
+        return after.player_y == before.player_y and after.player_x > before.player_x
+    return False
+
+
+def _same_route_boundary(before: RawGameState, after: RawGameState) -> bool:
+    return (
+        before.map_id == after.map_id == MapId.ROUTE_1
+        and before.player_x == after.player_x
+        and before.player_y == after.player_y
+        and after.battle_state == 0
+        and before.party_species_ids == after.party_species_ids
+        and before.first_party_level == after.first_party_level
+        and before.first_party_max_hp == after.first_party_max_hp
+        and before.first_party_pp == after.first_party_pp
+        and before.first_party_status == after.first_party_status
+        and before.first_party_hp == after.first_party_hp
+    )
 
 
 def flee_route_1_wild(

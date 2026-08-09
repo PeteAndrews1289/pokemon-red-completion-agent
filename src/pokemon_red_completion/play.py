@@ -476,6 +476,8 @@ class QualifiedPlayTiming:
     route_1_south_seed_wait_frames: int = 48
     max_route_1_wild_flees: int = 8
     route_1_wild_exit_stabilization_frames: int = 120
+    max_route_1_step_attempts: int = 8
+    route_1_step_retry_wait_frames: int = 24
     max_rival_pulses: int = 96
     max_parcel_pulses: int = 5
     max_pokedex_pulses: int = 42
@@ -494,6 +496,8 @@ class QualifiedPlayTiming:
                 "route_1_wild_exit_stabilization_frames",
                 self.route_1_wild_exit_stabilization_frames,
             ),
+            ("max_route_1_step_attempts", self.max_route_1_step_attempts),
+            ("route_1_step_retry_wait_frames", self.route_1_step_retry_wait_frames),
             ("max_rival_pulses", self.max_rival_pulses),
             ("max_parcel_pulses", self.max_parcel_pulses),
             ("max_pokedex_pulses", self.max_pokedex_pulses),
@@ -531,6 +535,7 @@ class OaksErrandChapterReport:
     pokedex_received: RawGameState
     pokedex_evidence: OaksErrandState
     route_1_wild_flees: tuple[Route1WildFleeEvidence, ...]
+    route_1_movement_retries: int
     frames_executed: int
     actions_executed: int
 
@@ -544,6 +549,7 @@ class OaksErrandChapterReport:
             and is_parcel_verified(self.parcel_evidence)
             and is_pokedex_verified(self.pokedex_evidence)
             and all(item.verified for item in self.route_1_wild_flees)
+            and self.route_1_movement_retries >= 0
         )
 
     def public_dict(self) -> dict[str, object]:
@@ -557,6 +563,7 @@ class OaksErrandChapterReport:
                 saw_trainer_battle=self.saw_trainer_battle,
             ),
             "route_1_wild_flees": [item.public_dict() for item in self.route_1_wild_flees],
+            "route_1_movement_retries": self.route_1_movement_retries,
             "schema": "pokemon-red-oaks-errand-chapter-v1",
             "status": "ok" if self.passed else "failed",
         }
@@ -958,14 +965,16 @@ def run_oaks_errand_chapter(
     _expect_position(reader.read(), MapId.ROUTE_1, 10, 35, "Route 1 south entrance")
 
     _wait(executor, timing.route_1_north_seed_wait_frames)
-    northbound_flees = _move_route_1_with_wild_flees(
+    _, northbound_flees, northbound_retries = _move_route_1_with_wild_flees(
         executor,
         reader,
         ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
         "Route 1 northbound",
         maximum_flees=timing.max_route_1_wild_flees,
         stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
-    )[1]
+        maximum_step_attempts=timing.max_route_1_step_attempts,
+        step_retry_wait_frames=timing.route_1_step_retry_wait_frames,
+    )
     _wait(executor, timing.transition_wait_frames)
     viridian = reader.read()
     _expect_position(viridian, MapId.VIRIDIAN_CITY, 21, 35, "Viridian City entrance")
@@ -986,14 +995,16 @@ def run_oaks_errand_chapter(
     _expect_position(reader.read(), MapId.ROUTE_1, 11, 0, "Route 1 north entrance")
 
     _wait(executor, timing.route_1_south_seed_wait_frames)
-    southbound_flees = _move_route_1_with_wild_flees(
+    _, southbound_flees, southbound_retries = _move_route_1_with_wild_flees(
         executor,
         reader,
         ROUTE_1_TO_PALLET_DIRECTIONS,
         "Route 1 southbound",
         maximum_flees=timing.max_route_1_wild_flees - len(northbound_flees),
         stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
-    )[1]
+        maximum_step_attempts=timing.max_route_1_step_attempts,
+        step_retry_wait_frames=timing.route_1_step_retry_wait_frames,
+    )
     _wait(executor, timing.transition_wait_frames)
     pallet_returned = reader.read()
     _expect_position(pallet_returned, MapId.PALLET_TOWN, 10, 0, "Pallet Town return")
@@ -1026,6 +1037,7 @@ def run_oaks_errand_chapter(
         pokedex_received=pokedex_raw,
         pokedex_evidence=pokedex_evidence,
         route_1_wild_flees=(*northbound_flees, *southbound_flees),
+        route_1_movement_retries=northbound_retries + southbound_retries,
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=executor.actions_executed - start_actions,
     )
@@ -1840,7 +1852,9 @@ def _move_route_1_with_wild_flees(
     *,
     maximum_flees: int,
     stabilization_frames: int,
-) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...]]:
+    maximum_step_attempts: int,
+    step_retry_wait_frames: int,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
     return move_route_1_with_wild_flees(
         executor,
         reader,
@@ -1848,6 +1862,8 @@ def _move_route_1_with_wild_flees(
         label,
         maximum_flees=maximum_flees,
         stabilization_frames=stabilization_frames,
+        maximum_step_attempts=maximum_step_attempts,
+        step_retry_wait_frames=step_retry_wait_frames,
         error_type=QualifiedPlayError,
     )
 

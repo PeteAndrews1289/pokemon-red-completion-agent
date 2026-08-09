@@ -202,6 +202,7 @@ def _report() -> PewterChapterReport:
         reached_boundaries=tuple(TravelBoundary)[1:],
         saw_brock_battle=True,
         route_1_wild_flees=(),
+        route_1_movement_retries=0,
         overworld_control_verified=True,
         frames_executed=70_043,
         actions_executed=954,
@@ -272,6 +273,7 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         "ordered_boundaries_total": 9,
         "brock_battle_observed": True,
         "route_1_wild_flees": [],
+        "route_1_movement_retries": 0,
     }
     assert public["brock"] == {
         "victory_verified": True,

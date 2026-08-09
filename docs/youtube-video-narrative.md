@@ -173,6 +173,12 @@ gate; adding only 120 idle frames reaches it exactly. The final shared Oak/Pewte
 rereads, and revalidates the protected state before returning. Caption it: **“Verify the handoff,
 not just both sides of it.”**
 
+Then let `990019` sharpen the point one final time. Five stabilized flee receipts go green, but the
+fixed corridor stops at `(11,1)`, one tile below the exit, because it counted a button request the
+game never consumed. Replace the action counter with a closed loop: requested arrow, observed
+coordinate delta, acknowledgement. One bounded retry reaches Viridian. Caption it: **“Sending an
+action is not executing an action.”** This is also the cleanest visual bridge to learned navigation.
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

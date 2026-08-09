@@ -161,6 +161,7 @@ class PewterTiming:
     transition_wait_frames: int = 120
     route_1_seed_wait_frames: int = 6
     route_1_wild_exit_stabilization_frames: int = 120
+    route_1_step_retry_wait_frames: int = 24
     encounter_wait_frames: int = 240
     battle_wait_frames: int = 180
     dialogue_wait_frames: int = 240
@@ -181,6 +182,7 @@ class PewterTiming:
     max_brock_reward_pulses: int = 40
     max_control_release_pulses: int = 10
     max_route_1_wild_flees: int = 8
+    max_route_1_step_attempts: int = 8
 
     def __post_init__(self) -> None:
         for name, value in (
@@ -225,6 +227,7 @@ class PewterChapterReport:
     reached_boundaries: tuple[TravelBoundary, ...]
     saw_brock_battle: bool
     route_1_wild_flees: tuple[Route1WildFleeEvidence, ...]
+    route_1_movement_retries: int
     overworld_control_verified: bool
     frames_executed: int
     actions_executed: int
@@ -243,6 +246,7 @@ class PewterChapterReport:
             and self.gym_entry_evidence.brock_ready_snapshot
             and self.saw_brock_battle
             and all(item.verified for item in self.route_1_wild_flees)
+            and self.route_1_movement_retries >= 0
             and self.brock_battle_evidence.brock_battle_snapshot
             and self.brock_victory_evidence.brock_victory_snapshot
             and self.overworld_control_verified
@@ -292,6 +296,7 @@ class PewterChapterReport:
                 "route_1_wild_flees": [
                     item.public_dict() for item in self.route_1_wild_flees
                 ],
+                "route_1_movement_retries": self.route_1_movement_retries,
             },
             "brock": {
                 "victory_verified": self.brock_victory_evidence.brock_victory_snapshot,
@@ -358,13 +363,15 @@ def run_pewter_chapter(
     _wait(chapter_executor, timing.transition_wait_frames)
     _expect_position(reader.read(), MapId.ROUTE_1, 10, 35, "Route 1 south entrance")
     _wait(chapter_executor, timing.route_1_seed_wait_frames)
-    _, route_1_wild_flees = _move_route_1_with_wild_flees(
+    _, route_1_wild_flees, route_1_movement_retries = _move_route_1_with_wild_flees(
         chapter_executor,
         reader,
         ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
         "Route 1 northbound",
         maximum_flees=timing.max_route_1_wild_flees,
         stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
+        maximum_step_attempts=timing.max_route_1_step_attempts,
+        step_retry_wait_frames=timing.route_1_step_retry_wait_frames,
     )
     _wait(chapter_executor, timing.transition_wait_frames)
     viridian_reached, _ = _observe_boundary(
@@ -625,6 +632,7 @@ def run_pewter_chapter(
         reached_boundaries=tracker.reached_boundaries,
         saw_brock_battle=tracker.saw_brock_battle,
         route_1_wild_flees=route_1_wild_flees,
+        route_1_movement_retries=route_1_movement_retries,
         overworld_control_verified=True,
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=chapter_executor.actions_executed,
@@ -666,7 +674,9 @@ def _move_route_1_with_wild_flees(
     *,
     maximum_flees: int,
     stabilization_frames: int,
-) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...]]:
+    maximum_step_attempts: int,
+    step_retry_wait_frames: int,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
     return move_route_1_with_wild_flees(
         executor,
         reader,
@@ -674,6 +684,8 @@ def _move_route_1_with_wild_flees(
         label,
         maximum_flees=maximum_flees,
         stabilization_frames=stabilization_frames,
+        maximum_step_attempts=maximum_step_attempts,
+        step_retry_wait_frames=step_retry_wait_frames,
         error_type=PewterChapterError,
     )
 

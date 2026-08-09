@@ -13,7 +13,11 @@
 > `990018` accepted two flees, then proved that the first ready-looking overworld frame could still
 > swallow movement. The shared Oak/Pewter helper now waits 120 frames and revalidates the full
 > receipt before returning. The 2,165-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry
-> checks passes; commit, push, then run a fresh uncounted perturbation. Do
+> checks passed at `d3461f0`. Seed `990019` still counted one ignored north input and ended a tile
+> short after five verified flees. Route 1 now acknowledges every step from directional coordinate
+> progress or a map transition and retries an unchanged safe boundary under a finite envelope.
+> The 2,167-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry checks passes. Commit,
+> push, then run a fresh uncounted perturbation. Do
 > not add `990007` to fitting, rerun retired model-test roots, build a complete Crystal route, weaken
 > the curriculum lesson, or consume a counted v95 root. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).

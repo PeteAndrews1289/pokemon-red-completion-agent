@@ -2286,6 +2286,15 @@ Oak's errand and the later Pewter crossing now share it. This is the project's r
 miniature: the right abstraction is not “ignore random battles,” but “dismiss a bounded encounter
 and authenticate the state transition that makes the next decision executable.”
 
+The next root found the final distinction: a stable handoff still does not prove that every later
+input was consumed. Five flee receipts passed, yet one requested north step left the player on the
+same tile. The fixed corridor advanced its Python index anyway and arrived one tile short of the
+map transition. A causal wrapper that compared the requested direction with observed coordinate
+progress reached Viridian after exactly one retry. The reusable contract now acknowledges each
+step from state, retries only an otherwise unchanged protected boundary under a finite envelope,
+and records retry counts. In other words, the teacher is becoming closed-loop at the same seams a
+future learned navigator will need; “I sent the button” is no longer evidence that the game moved.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
