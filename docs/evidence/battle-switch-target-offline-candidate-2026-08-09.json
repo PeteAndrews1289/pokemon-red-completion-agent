@@ -1,0 +1,107 @@
+{
+  "schema": "pokemon-battle-switch-target-offline-candidate-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "offline_candidate_not_promoted",
+  "source_commit": "93faeedb12797b0efc742ea5ed4a7f7e52fbbcc1",
+  "model": {
+    "model_id": "pokemon.core.battle.switch-target-ranker.mlp.v1",
+    "feature_schema_id": "pokemon.core.battle.switch-target.features.v1",
+    "canonical_payload_sha256": "bb2d6d10aa18185c8ef906c430fc3450cb68fa36531dcbdacfa999a87a4b4411",
+    "canonical_payload_bytes": 1377,
+    "hidden_units": 2,
+    "epochs": 1000,
+    "learning_rate": 0.01,
+    "l2": 0.03,
+    "seed": 0,
+    "private_path_published": false
+  },
+  "features": {
+    "candidate_relative": true,
+    "permutation_equivariant": true,
+    "party_slot_used_as_input": false,
+    "species_identity_used_as_input": false,
+    "move_identity_used_as_input": false,
+    "opponent_identity_used_as_input": false,
+    "map_identity_used_as_input": false,
+    "objective_identity_used_as_input": false,
+    "names": [
+      "candidate.hp_ratio",
+      "candidate.has_status",
+      "candidate.safe_hp",
+      "candidate.level",
+      "candidate.level_margin",
+      "candidate.offensive_type_margin",
+      "candidate.offensive_power",
+      "candidate.defensive_resistance",
+      "candidate.usable_move_fraction",
+      "candidate.mean_pp_fraction"
+    ]
+  },
+  "lineage_split": {
+    "training_artifact_ids": [
+      "red-battle-control-4121905b04bd438f999cc52f6351cdc9",
+      "red-battle-control-b5e47ba327754f1dbd412d6dd8fd5b74"
+    ],
+    "validation_artifact_ids": [
+      "red-battle-control-517db549407846dfad8b0ded219e02d1"
+    ],
+    "source_manifest_sha256s": [
+      "2b24e5eb0b257c9172a0e11c0ed0388c0835bf9f9fc37b4b4650cfb8ac0d91d4",
+      "75b17c70420a2eff208e8cc7ce13f92a54032cce840859fd5f9e69f934166460",
+      "21a7ebf2617588ad368f551def2cc5fd2c53304fdee0789bfad7ab097e93ff50"
+    ],
+    "whole_lineage_disjoint": true,
+    "same_authenticated_move_model": true
+  },
+  "results": {
+    "training": {
+      "examples": 28,
+      "deterministic_baseline_correct": 22,
+      "deterministic_baseline_accuracy": 0.7857142857142857,
+      "learned_correct": 28,
+      "learned_accuracy": 1.0,
+      "learned_cross_entropy": 0.12144869948692576
+    },
+    "validation": {
+      "examples": 13,
+      "deterministic_baseline_correct": 10,
+      "deterministic_baseline_accuracy": 0.7692307692307693,
+      "learned_correct": 11,
+      "learned_accuracy": 0.8461538461538461,
+      "learned_cross_entropy": 0.2902969864087209,
+      "battle_plan_accuracy": {
+        "battle-001-cascade-cerulean-rival": 1.0,
+        "battle-011-lavender-rock-tunnel-b1f-trainer-5": 1.0,
+        "battle-016-lavender-rock-tunnel-1f-trainer-4": 1.0,
+        "battle-017-lavender-rock-tunnel-1f-trainer-5": 1.0,
+        "battle-059-league-lorelei": 1.0,
+        "battle-060-league-bruno": 0.5,
+        "battle-061-league-agatha": 0.6666666666666666
+      }
+    }
+  },
+  "causal_relevance": {
+    "heldout_agatha_golbat_target_correct": false,
+    "deterministic_target": "blastoise_role",
+    "learned_target": "blastoise_role",
+    "teacher_target": "jolteon_role",
+    "full_replay_authorized": false
+  },
+  "limitations": {
+    "explicit_switch_labels": 41,
+    "completed_lineages": 3,
+    "validation_opened_for_diagnostic": true,
+    "unopened_test_lineage_available": false,
+    "late_game_target_diversity_sufficient": false,
+    "runtime_deployment_authority": false,
+    "cross_game_transfer_complete": false
+  },
+  "next_gate": {
+    "collect_more_complete_randomized_teacher_lineages": true,
+    "preserve_whole_lineage_partitions": true,
+    "require_heldout_agatha_golbat_target": true,
+    "require_permutation_equivariance": true,
+    "require_improvement_over_deterministic_baseline": true,
+    "open_counted_campaign_root": false
+  }
+}

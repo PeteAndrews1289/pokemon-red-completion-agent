@@ -1,5 +1,54 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 9: offline accuracy met causal reality
+
+The reserve-aware battle curriculum now has three complete clean-power demonstrations rather than
+one run split into convenient rows. The third lineage followed a new timing/RNG schedule, completed
+312/312 checkpoints and Hall of Fame, developed the party through 1,800 battles, and recorded 3,322
+high-level actions. Its Agatha sequence required seven role switches instead of the canonical three,
+and the teacher derived and completed all seven from observed opponent roles rather than a fixed
+switch count.
+
+A new controller trained on two whole lineages improved on the untouched validation lineage from
+90.38% to **94.75% balanced accuracy**, while ordinary accuracy rose from 98.02% to **98.24%**. That
+is a real rare-class improvement, but causal authority immediately showed why an offline score is
+only an admission ticket.
+
+The first rollout stopped at Rock Tunnel because the model legally switched before the declared
+lead spent a move PP and demonstrated its role. A typed initial-residency constraint carried the
+unchanged model to Lorelei. There it won but attacked once while paralyzed. Masking only a predicted
+move did not work: the same attack returned through another action-class fallback, proving status
+safety had to run before dispatch. The next unchanged-model replay passed Lorelei and Bruno and
+defeated Agatha, but its twelve recorded attacks all came from Blastoise. Two switches plus an
+intervening recovery had fooled a check that looked only at the immediately previous action, and a
+maximum boost budget had never expressed that the planned setup was required.
+
+The latest repair changes the semantics, not the answer key. Battle history remembers the number of
+moves completed at the last switch, so healing or boosting cannot stand in for real residency. A
+typed bounded setup can be required before the first attack while still allowing an initial role
+switch or necessary recovery. Status clearance remains a pre-dispatch singleton affordance. None of
+these constraints contains a Red map, species, opponent position, or menu identity.
+
+The following replay showed both repairs working. Dugtrio covered all four grounded targets,
+Jolteon covered Golbat, and the setup item was used. The exact role verifier still rejected four
+switches for three observed role transitions. One Dugtrio attack had occurred while statused and
+the trace detoured through one Blastoise attack, revealing that Agatha exposed status recovery but
+had not declared the same pre-move clearance rule already qualified at Lorelei. The next source
+adds only that existing typed intent; it does not relax the switch count or change the model.
+
+This sequence clarifies the project's actual contribution. The learned controller proposes actions;
+the planner declares evidence-bearing intent; the executor resolves typed targets; and the referee
+rejects a win that does not demonstrate the lesson. That hybrid boundary is useful for transfer,
+but it must not be described as unconstrained model reasoning. The current promotion gate is one
+fresh power-on completion with high-level model authority, followed by a separate combined run in
+which ordinary move selection cannot query the teacher.
+
+Crystal remains the next falsification target, not a shortcut around Red. It needs a thin Gen II
+observer and mechanics catalog plus one battle, one local navigation round trip, and one
+trainee/venue choice. A complete YouTube playthrough is valuable for the route graph, milestones,
+and corner cases; synchronized emulator observations and controller actions are still required for
+actual behavioral labels.
+
 ## August 8: the evaluator rejected a win—and found the next real model gap
 
 The clean-start evaluation lane is no longer a proposal. A portable player now boots from power-on,
@@ -2037,6 +2086,42 @@ Hall of Fame in 539,957 actions. Whole-League participation became `[24, 0, 4, 0
 six members across 34 decisions, with a 70.59% busiest-member share. Compared with the preceding
 qualification, that adds a fourth participant, removes nine low-value attack decisions and nine
 Agatha healing items, and saves 322 controller actions without weakening the completion gate.
+
+## From learning when to switch to learning who should enter
+
+The reserve-aware battle controller initially treated a generic switch as one learned decision.
+Causal execution proved that description was too generous. The classifier selected the high-level
+`switch` action, but a deterministic matchup score selected the live party member. That boundary
+stayed hidden while both components agreed with the teacher often enough.
+
+The thirteenth causal rehearsal separated them cleanly. It reached checkpoint 306, passed Rock
+Tunnel, Lorelei, and Bruno, defeated Agatha, used the required X Special, cleared every status before
+attacking, assigned all grounded opponents to Dugtrio, and made exactly three observed-role
+switches. The strict contract still rejected the win because Golbat went to Blastoise and Jolteon
+made zero attacks. This was no longer a route, setup, status, or switch-count failure. The model
+owned switch timing; the scorer owned the wrong target.
+
+The first replacement is a small listwise target head. Each living reserve is projected
+independently through ten portable mechanics fields—health, status, a safety threshold, level and
+level margin, offensive type margin and power, defensive resistance, usable moves, and PP. Party
+slot is retained only as an ephemeral executor binding and never enters the vector. Tests prove that
+candidate probabilities and the selected member follow reserve permutations.
+
+Two complete v3 lineages provide 28 explicit training targets, and the untouched third provides 13
+validation targets. The deterministic resolver scores 22/28 training and 10/13 validation. The
+two-hidden-unit target head fits 28/28 and reaches 11/13 held out. That is evidence that target
+binding is learnable from candidate-relative mechanics; it is not promotion evidence. The model
+still selects Blastoise for the held-out Agatha Golbat choice, exactly matching the causal failure,
+and has only 41 labels across three completed lineages. Its public summary therefore records no
+deployment authority.
+
+The next curriculum is data, not another heuristic patch: complete party-randomized teacher
+lineages with more late-game switch targets, whole-lineage train/validation/test assignment, and a
+counterfactual gate that requires the useful role to follow its mechanics rather than a slot. Only
+after that head beats the deterministic baseline and passes the causal Golbat case should another
+full-game model-authority replay begin. This is also the correct dependency for Crystal, where the
+experiment needs a thin Gen II task teacher and semantic adapter—not an immediate second fixed
+walkthrough.
 
 ## Engineering and portfolio takeaways
 

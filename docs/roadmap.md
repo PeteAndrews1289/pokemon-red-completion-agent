@@ -3,7 +3,47 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-08)
+## Current focus (2026-08-09)
+
+### Superseding battle-control checkpoint
+
+The reserve-aware lane has advanced beyond the single-lineage diagnostic described below. Three
+complete feature-v3 lineages now exist. A replacement model trained on whole lineages 01 and 03 and
+held out lineage 02 scores **98.2394% accuracy / 94.7537% balanced accuracy**, compared with
+98.0154% / 90.3798% for the prior candidate. The newest teacher lineage independently completed
+312/312 checkpoints, Hall of Fame, 1,800 development battles, and an observed-role-derived
+seven-switch Agatha lesson.
+
+The same frozen replacement candidate has progressed under causal high-level authority through five
+successively preserved failures:
+
+- checkpoint 109: switched before a declared lead-role move;
+- checkpoint 300: attacked once while paralyzed at Lorelei; and
+- checkpoint 306: defeated Agatha but let recovery satisfy a weak switch-residency check, producing
+  zero specialist attacks and zero required setup boosts; and
+- checkpoint 306 again: completed every specialist role and used the setup, but one statused attack
+  preceded an extra Blastoise excursion, producing four switches for three role transitions; and
+- checkpoint 306 again: passed setup, status safety, residency, and exactly three role transitions,
+  but a hand-written target scorer bound Golbat to Blastoise instead of Jolteon after the model
+  requested a switch.
+
+The repairs are typed, title-neutral intent constraints rather than route exceptions: real
+move-count residency, status clearance before dispatch, and a bounded pre-attack setup. The fifth
+failure revealed a different ownership problem: switch timing was learned, while target binding was
+still deterministic.
+
+Commit `93faeed` adds an offline permutation-equivariant target head and whole-lineage audit. It
+fits 28/28 explicit targets from lineages 01 and 03 and scores 11/13 on untouched lineage 02, up
+from the deterministic resolver's 10/13. It still misses the held-out Agatha Golbat target, so its
+summary deliberately says `deployment_authority: false`. The next dependency is additional
+party-randomized full teacher lineages and an unopened target test split—not another full causal
+replay and not a weight tweak to the old scorer. Counted v95 remains 0/10.
+
+After the learned target passes offline and causal Red gates, then one canonical and one uncounted
+perturbation result, begin Crystal's bounded battle adapter.
+Do not build the complete Crystal route first. Compare frozen-Red zero-shot, preregistered few-shot,
+and from-scratch learning on the same examples before deciding whether a full Gen II teacher is
+worth the route cost.
 
 The clean-start infrastructure gap is closed. One uncounted baseline selected 21 composite
 objectives, verified 15 automatic cartridge effects, and reached Hall of Fame with no expected
@@ -26,9 +66,10 @@ semantic matchup scoring. The dependency-ordered work is now:
    schema v3**;
 2. make generic switch targeting rank safe reserves by matchup value — **implemented with a 50%
    HP floor and separate target metrics**;
-3. collect fresh balanced-role demonstrations and train a new battle-control artifact — **one
-   uncounted 312/312-checkpoint lineage with 3,112 labels is complete; its first diagnostic was
-   rejected at 61.5% held-out accuracy, and disjoint train/validation lineages remain required**;
+3. collect fresh balanced-role demonstrations and train a new battle-control artifact — **three
+   uncounted 312/312-checkpoint lineages are complete; the action-class candidate improved to
+   98.2394% / 94.7537% held-out accuracy/balance, while a separate target head improved 10/13 to
+   11/13 but remains unpromoted**;
 4. pass held-out, counterfactual, and strict canonical five-role gates;
 5. repair or bound the lab-rival, Diglett-capture, and Rocket-thief perturbation failures;
 6. freeze and execute the ten counted roots sequentially; and

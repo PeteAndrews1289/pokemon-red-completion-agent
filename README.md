@@ -19,29 +19,37 @@ baseline, the objective and trainee/venue models completed all 36 objectives thr
 with **114,831 controlled training choices**, **400 executed disagreements**, and no fallback.
 
 The stricter five-role rehearsal then did exactly what a useful evaluation should do: it rejected a
-win. Four authenticated models reached the Elite Four with a healthy **63/55/55/55/55/55** team,
-zero teacher queries, and zero fallback. They defeated Lorelei, but the learned battle controller
-used only party slot 1 for all 19 attack turns and made no role switch. The balanced-team contract
-therefore failed closed instead of relabeling a single-carry victory as learned team strategy. See
-the [sanitized rehearsal audit](docs/evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).
+win. Its historical controller defeated Lorelei but used only party slot 1 for all 19 attacks. That
+failure drove feature schema v3, which represents every reserve through identity-free health,
+level, usable moves, type advantage, defensive resistance, and PP, then binds a semantic switch to
+the actual live party target.
 
-The first repair is now implemented and has produced one fresh full-game lineage. Battle-control
-feature schema v3 projects every
-living reserve through identity-free health, level, move-availability, offensive-power, type, and
-defensive-resistance signals. A generic switch is bound to the same best semantic candidate, with a
-50% HP floor and separate switch-target accuracy. The first uncounted collection completed all
-312 checkpoints and recorded 3,112 authenticated labels, including 44 typed non-move actions and
-12 switches. Future generic teacher switches are persisted with an explicit observed reserve;
-one legacy generic label in this first lineage remains valid for class learning but is excluded
-from target-accuracy scoring. The first diagnostic model was correctly rejected: 99.1% training
-accuracy fell to 61.5% on held-out Lorelei/Bruno groups, and switch-target agreement was only 50%.
-That audit added a portable level term to the reserve score and raised whole-lineage target
-agreement from 5/11 to 9/11; a disjoint perturbed lineage is still required. The historical v2
-model remains deliberately incompatible. See the
-[v3 lineage receipt](docs/evidence/battle-control-reserve-matchup-v3-lineage-01-2026-08-08.json),
-[first diagnostic receipt](docs/evidence/battle-control-reserve-matchup-v3-diagnostic-01-2026-08-08.json),
-[v3 design receipt](docs/evidence/battle-control-reserve-matchup-v3-design-2026-08-08.json), and the
-[Crystal transfer benchmark](docs/crystal-transfer-benchmark.md).
+Three complete clean-power v3 teacher lineages now exist. The newest records **3,322** high-level
+labels, **17 explicitly targeted switches**, **1,800 development battles**, a final
+60/55/55/55/55/55 team, and Hall of Fame. A replacement controller trained on two whole lineages
+scores **98.2394% accuracy / 94.7537% balanced accuracy** on the untouched third split, with 10/13
+deterministic switch targets correct. Causal execution has progressed through Rock Tunnel, Lorelei,
+Bruno, and an Agatha win while preserving every rejected contract: initial-role residency, status
+safety, specialist residency, bounded setup, and exact observed-role switching. The latest replay
+passed all of those constraints together but failed because the model requested a switch while the
+hand-written target scorer chose Blastoise instead of the demonstrated Jolteon role for Golbat.
+
+That failure is now an explicit learning seam. A new identity-free, permutation-equivariant
+switch-target head trains on two complete lineages and improves the untouched lineage from **10/13
+(76.9%)** deterministic agreement to **11/13 (84.6%)**. It still makes the same Golbat error, so it
+is recorded as `deployment_authority: false` and has not changed emulator behavior. See the
+[third lineage](docs/evidence/battle-control-reserve-matchup-v3-lineage-03-2026-08-09.json),
+[candidate](docs/evidence/battle-control-reserve-matchup-v3-lineage-candidate-02-2026-08-09.json),
+[latest preserved failure](docs/evidence/battle-control-reserve-matchup-v3-causal-13-failure-2026-08-09.json),
+[offline target-head receipt](docs/evidence/battle-switch-target-offline-candidate-2026-08-09.json),
+and [Crystal transfer benchmark](docs/crystal-transfer-benchmark.md).
+
+The controller is still unpromoted. The active gate is now more late-game, party-randomized teacher
+data followed by a switch-target candidate that passes held-out target and counterfactual gates.
+Only then should another 312-checkpoint causal completion run, followed by a separate run that
+forbids teacher queries for ordinary move selection. Navigation, menus, chapter mechanics, and
+resource execution remain authored. The counted v95 reliability campaign remains unopened at
+**0/10**, and no Crystal or living-Pokédex result is claimed.
 
 That distinction is the heart of the project and its public story. The teacher supplies verified
 demonstrations and a referee; it is not the final autonomous player.
@@ -53,8 +61,8 @@ demonstrations and a referee; it is not the final autonomous player.
 | Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
 | Learned objective dispatch | One clean-start run selected 21 composite objectives and verified 15 automatic effects through Hall of Fame | Many choices remain affordance-masked; mechanics are fixed skills |
 | Learned training control | The trainee/venue ranker beat its shape baseline and completed clean start with 114,831 controlled choices and 400 disagreements | One uncounted Red root; navigation and menus remain authored |
-| Strict learned-stack composition | Four authenticated models, 3,220 model move choices, 16 teacher-free control actions, and zero teacher query/fallback through Lorelei | Correctly rejected: all 19 Lorelei attacks came from slot 1 and no role switch occurred |
-| Reserve-aware battle schema | Identity-free matchup features, a 312/312-checkpoint lineage, and measured 9/11 target resolution after repair | First model rejected at 61.5% held-out accuracy; disjoint-lineage fitting remains |
+| Strict learned-stack composition | Prior four-model run reached a Lorelei win with zero teacher query/fallback; the new high-level controller has causal authority through an Agatha win | Current reserve-controller lane still teacher-gates ordinary moves and has not completed the strict terminal contract |
+| Reserve-aware battle control | Three complete lineages; 98.2394% / 94.7537% held-out class accuracy/balance; offline target head improves 10/13 to 11/13 | Target head still misses the causal Golbat choice; canonical, perturbation, and combined teacher-free qualification remain |
 | Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Counted campaign remains 0/10 until reserve-aware battle control passes canonical and perturbation rehearsals |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |
@@ -65,7 +73,7 @@ receipt separates teacher, shadow, constrained, and model-controlled authority s
 cannot blur that boundary.
 
 For a compact technical review, read the
-[current capability and portfolio audit](docs/current-audit-2026-08-08.md). The complete evidence
+[current capability and portfolio audit](docs/current-audit-2026-08-09.md). The complete evidence
 log is preserved below for reproducibility, but collapsed so the repository's first screen states
 the result and boundary before the experiment history.
 

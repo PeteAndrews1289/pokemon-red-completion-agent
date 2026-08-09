@@ -8,6 +8,52 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## Superseding current checkpoint — 2026-08-09
+
+This section supersedes every older “next” statement below.
+
+**Branch and pushed code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93faeed` adds the
+offline switch-target learning seam and is pushed. Its full local gate passed **2,107 tests with 3
+integration tests deselected**, Ruff, mypy, documentation, public-artifact, and source-registry
+checks. Only Codex pushes this branch; do not create a second worktree or force-push it.
+
+**Latest causal result:** attempt 13 ran from source `4ea7e93` with the frozen reserve-aware action
+candidate. It reached checkpoint 306, passed Rock Tunnel, Lorelei, and Bruno, defeated Agatha, used
+one X Special, made exactly three required role switches, made zero statused attacks, and assigned
+all grounded opponents to Dugtrio. The contract still rejected the run: Golbat went to Blastoise,
+Jolteon made zero attacks, and specialist coverage failed. The model owned the high-level switch
+class; `best_reserve_matchup` still owned the party target. See the
+[causal receipt](docs/evidence/battle-control-reserve-matchup-v3-causal-13-failure-2026-08-09.json).
+
+**Offline target head:** `battle_switch_target.py`, `battle_switch_target_model.py`, and
+`battle_switch_target_training.py` now implement identity-free candidate projection, a shared
+listwise MLP, and whole-lineage authentication/evaluation. Party slots are ephemeral executor
+bindings only. The head trains on lineages 01 and 03 (28 explicit targets) and validates on untouched
+lineage 02 (13 targets). It fits 28/28 versus the deterministic baseline's 22/28 and validates at
+11/13 (84.6%) versus 10/13 (76.9%). It still selects Blastoise on the held-out Agatha Golbat label.
+The public receipt therefore says `deployment_authority: false`; do not load it into the emulator or
+start another full causal replay yet.
+
+**Exact next dependency:** collect additional complete, party-randomized v3 teacher lineages with
+explicit late-game targets, especially Bruno and Agatha. Preassign whole lineages to train,
+validation, and an unopened test split. Refit the target head and require: improvement over the
+deterministic baseline, reserve-permutation equivariance, counterfactual matchup sensitivity, and
+the held-out Golbat role. Only then grant target authority and rerun the 312-checkpoint causal gate.
+The counted v95 campaign remains unopened at **0/10** and must not supply this development data.
+
+**Crystal:** do not build a full second walkthrough now. After the Red target head qualifies, add a
+thin Crystal semantics/mechanics adapter and three bounded teacher tasks: one reserve-choice battle,
+one local-navigation round trip, and one trainee/venue choice. Crystal needs new teacher code for
+those tasks, not initially a complete route script. A commentary-light complete playthrough is
+useful for the route graph, milestones, recovery points, and corner cases; it is not synchronized
+behavioral-cloning data. The owner can help by supplying the video URL, exact private cartridge
+revision, desired completion definition (recommended long-term target: Red at Mt. Silver), and
+permission to create private local checkpoints.
+
+**Do not blur these claims:** the action-class controller, target head, ordinary move model, typed
+intent constraints, deterministic target baseline, and authored menu/route executor are separate
+authorities. A win counts only for the authority actually exercised.
+
 ## Current checkpoint — 2026-08-08
 
 This section supersedes the older starting-point and test-count notes below.

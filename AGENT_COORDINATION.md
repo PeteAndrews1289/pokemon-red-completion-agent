@@ -1,20 +1,16 @@
 # Three-agent coordination
 
-> **2026-08-08 active lane:** clean-start orchestration, four-model binding, a frozen ten-root
-> campaign contract, and the independent 8-of-10 checker are implemented. Counted v95 remains
-> unopened at 0/10. The latest strict canonical rehearsal safely developed a
-> 63/55/55/55/55/55 party and reached Lorelei with zero teacher query or fallback. It defeated her,
-> but all 19 attacks came from party slot 1 and no role switch occurred, so the balanced-team
-> verifier correctly rejected the chapter. Battle-control feature schema v3 and matchup-aware
-> switch targeting are now implemented ROM-free: every reserve exposes identity-free mechanics, a
-> generic switch binds the best safe semantic candidate, and offline reports separate switch-class
-> from switch-target accuracy. The old v2 artifact is intentionally incompatible. The active work
-> is collecting a disjoint perturbed lineage after the first v3 diagnostic was rejected at 61.5%
-> held-out accuracy. One uncounted full-game
-> v3 lineage now contributes 3,112 authenticated labels, including 12 switches; future generic
-> teacher switches are bound to an explicit observed reserve before persistence. Preserve the failure in
-> [the five-role audit](docs/evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).
-> Do not relax the verifier, reopen the teacher route, or consume a counted root.
+> **2026-08-09 active lane:** three complete feature-v3 teacher lineages and a stronger high-level
+> controller exist. Causal attempt 13 passed Rock Tunnel, Lorelei, Bruno, Agatha setup, status
+> safety, real residency, and exactly three role switches, then failed because the model selected
+> `switch` while the deterministic target resolver selected Blastoise instead of Jolteon for
+> Golbat. Commit `93faeed` adds a permutation-equivariant offline target head. It improves the
+> untouched lineage from 10/13 to 11/13 targets but still misses that exact Golbat choice, so it has
+> no deployment authority. The active work is additional complete party-randomized teacher
+> lineages, followed by a preassigned target train/validation/test gate. Do not rerun the full
+> causal route, tune the heuristic on the failed case, build a complete Crystal route, relax the
+> verifier, or consume a counted v95 root. Counted status remains 0/10. See the
+> [current audit](docs/current-audit-2026-08-09.md).
 
 **New here? Read [HANDOFF.md](HANDOFF.md) first** — it is the complete orientation, including what
 is unproven and how this codebase repeatedly fools people. Then [MISSION.md](MISSION.md) for why the
@@ -353,34 +349,32 @@ arguments where it takes four, and a typed progress sink called with `None`.
 Each cost a 25-minute emulator run to discover. A type checker reports them in
 seconds, and the neutral layer is now covered.
 
-Current state: **2,074 passed, 3 deselected**, all checks green, on trunk
+Current state: **2,107 passed, 3 deselected**, all checks green, on trunk
 `agent/balanced-team-curriculum`.
 
 ## Open work, in priority order
 
 These are ordered by how much they serve the mission, not by difficulty.
 
-**1. Add reserve-aware battle observations. (Lane B)** Version the feature contract. Represent each
-living reserve with semantic type coverage, move availability, offensive advantage, defensive
-resistance, health/status, and level margin. Do not expose species, party-slot, map, or opponent
-identity as a shortcut.
+**1. Collect more explicit switch-target data. (Lane A/C)** Run additional complete,
+party-randomized v3 teacher lineages, with deliberate late-game Bruno and Agatha coverage. Assign
+whole lineages to train, validation, and unopened test before fitting. Do not use counted v95 roots.
 
-**2. Bind switch choice to switch execution. (Lane A/B)** Rank safe reserves with the same semantic
-features and resolve the chosen candidate to the live menu slot. Preserve hard constraints for
-faints, status, health, required party members, and unavailable moves.
+**2. Qualify the target head offline. (Lane B/C)** Beat the deterministic target baseline, preserve
+reserve-permutation equivariance, pass counterfactual matchup tests, and select Jolteon for the
+held-out Agatha Golbat role. A switch-class score without target accuracy does not count.
 
-**3. Collect and train a new balanced-role artifact. (Lane A/C)** Freeze the schema before opening
-fresh demonstrations. Report opponent-position and chapter coverage, especially Lorelei, Bruno,
-Agatha, and Lance switches. Use whole-lineage splits and keep the old artifact as a historical
-baseline rather than mutating it.
+**3. Bind learned target choice to execution. (Lane A/B)** Load the exact authenticated candidate,
+resolve its ephemeral candidate index to the current live menu slot, and preserve hard constraints
+for faints, status, health, required members, and unavailable moves. Shadow and captured-state gates
+precede full authority.
 
-**4. Qualify the role model without the ROM first. (Lane B/C)** Add reserve-permutation,
-counterfactual-matchup, candidate-binding, and held-out role gates. A switch-class accuracy score
-without target accuracy does not count.
+**4. Repeat one strict canonical rehearsal. (Lane A)** Require 36/36 objectives, Hall of Fame, zero
+target fallback/substitution, and every League chapter's existing role contract. Preserve any
+failure and its partial receipt.
 
-**5. Repeat one strict canonical rehearsal. (Lane A)** Require 36/36 objectives, Hall of Fame, zero
-teacher query/fallback/substitution, and every League chapter's existing role contract. Preserve
-any failure and its partial receipt.
+**5. Combine with teacher-free ordinary moves. (Lane A/C)** The reserve-control lane currently
+teacher-gates ordinary move selection. Run the combined stack only after the target head passes.
 
 **6. Harden the perturbation envelope. (Lane A)** Diagnose the lab-rival, Diglett-capture, and
 Rocket-thief failures already exposed by uncounted probes. Keep route-timing brittleness separate

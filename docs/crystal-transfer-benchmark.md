@@ -14,6 +14,14 @@ needed to answer three questions:
 A complete Crystal teacher would take substantial route work before discovering whether the shared
 representations transfer at all. These microbenchmarks are designed to fail early and explain why.
 
+The August 9 Red controller makes this dependency sharper. Its two-lineage action model improved to
+98.2394% held-out accuracy and 94.7537% balanced accuracy, but causal execution proved that switch
+timing and switch-target binding are different learned decisions. The first target head improves an
+untouched lineage from 10/13 to 11/13 and still misses the exact Agatha Golbat role that triggered
+the work. Crystal should therefore begin after the Red target head has enough randomized late-game
+data to pass its offline and causal gates. It should not wait for the ten-root Red reliability
+campaign, and it should not begin as a second 300-plus-checkpoint route.
+
 ## What Crystal needs first
 
 - A lawfully obtained, emulator-compatible Crystal ROM supplied only through the environment.
@@ -28,6 +36,11 @@ representations transfer at all. These microbenchmarks are designed to fail earl
   - one short training lesson with at least two viable trainees or venues.
 - Fresh observations and action labels recorded through the same actor/referee separation used for
   Red.
+
+This does require new teacher code, but initially it is a **thin Crystal task adapter**, not a full
+Crystal walkthrough script. The adapter only has to create and verify the three microtasks, expose
+the shared semantics, and record synchronized state/action labels. A complete route teacher is a
+later decision informed by the transfer result.
 
 The benchmark compares the frozen Red model zero-shot, a small preregistered few-shot adaptation,
 and an identical model trained from scratch on the same Crystal examples. Transfer means the Red
@@ -58,13 +71,18 @@ The most helpful owner-provided material will be:
    or a broader 100% checklist; and
 4. permission to create private local checkpoint states for rapid adapter development.
 
+For the first benchmark, the most useful scope choice is **Red at Mt. Silver** as the long-term
+Crystal completion target, while the implementation remains limited to the three microtasks. That
+keeps the destination ambitious without confusing a route reference with training data.
+
 Timestamps are welcome but not required. The video should be treated as disclosed teacher
 reference, not proof that the model learned the demonstrated behavior.
 
 ## Dependency order
 
-1. Collect fresh Red balanced-role battle demonstrations under feature schema v3.
-2. Train and qualify switch-class and switch-target behavior offline.
+1. Collect more complete, party-randomized Red demonstrations with explicit late-game targets.
+2. Train and qualify switch-class and switch-target behavior offline, including the held-out
+   Agatha Golbat choice.
 3. Pass the strict canonical Red rehearsal and one perturbation rehearsal.
 4. Add Crystal's mechanics catalog and semantic battle observer.
 5. Run the battle microbenchmark zero-shot, few-shot, and from scratch.

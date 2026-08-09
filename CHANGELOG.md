@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+- Completed a third full feature-v3 battle-control lineage with 3,322 labels, 17 explicitly
+  targeted switches, 1,800 development battles, an all-final-form 60/55/55/55/55/55 party, and a
+  seven-switch observed-role Agatha lesson through Hall of Fame.
+- Trained the second reserve-aware controller on two whole lineages and improved untouched-lineage
+  validation to 98.2394% accuracy / 94.7537% balanced accuracy, while keeping it unpromoted until a
+  fresh causal rollout completes.
+- Preserved causal rejections at Rock Tunnel, Lorelei, and Agatha, then added game-neutral initial
+  residency, pre-dispatch status safety, real move-count residency between switches, bounded action
+  budgets, and typed pre-attack setup without adding route, map, species, or opponent identity.
+- Isolated switch timing from switch-target authority after a causal Agatha replay passed status,
+  setup, residency, and exact-switch gates but bound Golbat to Blastoise instead of Jolteon.
+- Added an offline permutation-equivariant switch-target ranker, authenticated whole-lineage
+  projection, deterministic-baseline comparison, and six focused tests. It improves the untouched
+  lineage from 10/13 to 11/13 targets but remains explicitly unpromoted because it still misses the
+  causal Golbat choice.
+- Added the August 9 capability audit and expanded the project and video narratives around the
+  distinction between offline agreement, causal high-level authority, typed intent enforcement,
+  and combined teacher-free play.
 - Added battle-control feature schema v3 with observable moves and PP for every party member,
   identity-free reserve matchup features, a 50%-HP fail-closed switch floor, semantic target
   binding, separate switch-target metrics, and an explicit rejection of pre-reserve v2 artifacts.

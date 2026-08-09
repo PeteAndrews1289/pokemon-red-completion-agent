@@ -15,6 +15,58 @@ Follow an evidence-driven attempt to turn a reliable Pokémon Red speed-running 
 learned player that can make decisions, recover from surprises, and eventually transfer what it
 learns to other Pokémon games.
 
+## August 9 episode: 98% accurate—and still wrong in four different ways
+
+Open on the new controller's held-out score: **98.24% accuracy, 94.75% balanced accuracy**. Then put
+it in the emulator and let the apparent success unravel one contract at a time.
+
+At Rock Tunnel the battle is won, but the planned lead switches out before demonstrating its role.
+At Lorelei the team wins, but one attack occurs while paralyzed. The first repair masks the model's
+move class, yet the identical attack returns through another dispatch path. At Agatha the model
+finally defeats her after passing Rock Tunnel, Lorelei, and Bruno—but all twelve recorded attacks
+come from Blastoise, no specialist attacks, and the planned X Special is never used.
+
+The visual explanation is a three-card constraint timeline:
+
+1. **Initial residency:** one real move must happen before the first switch when a lesson declares
+   that evidence.
+2. **Status safety:** status clearance is a singleton plan affordance before *any* action-class
+   dispatch, not merely a mask on the predicted move class.
+3. **Role residency and setup:** healing or boosting does not count as fighting; after switching,
+   the active member must attack before another voluntary switch, and a declared bounded setup must
+   happen before the first attack.
+
+Then show the partial payoff and another rejection. The next replay gives every Agatha target to
+its intended specialist and uses the X Special, but makes four switches for three observed role
+transitions. The trace contains one statused Dugtrio attack followed by one Blastoise attack. Agatha
+already declared status-recovery capability; it had not declared Lorelei's status-clear-before-move
+intent. Reuse the same semantic constraint and leave the exact switch verifier red.
+
+The following replay is the architectural reveal. It clears status before every attack, uses the
+setup, gives every grounded target to Dugtrio, and makes exactly three switches. It still fails:
+Golbat goes to Blastoise and Jolteon never attacks. Split the on-screen “switch” decision into two
+cards. The model owned **when** to switch; a deterministic matchup score still owned **who** entered.
+The result was not a model learning team selection—it was a classifier calling a hand-written
+target heuristic.
+
+Now show the first learned target head. It scores every anonymous reserve independently, remains
+equivariant when the party cards are shuffled, and improves an untouched complete lineage from
+10/13 to 11/13 target choices. Then refuse the easy victory: it still makes the exact Golbat mistake.
+Put `deployment_authority: false` on screen. The next work is more randomized late-game teacher
+lineages and a genuinely unopened target test set, not another full-game replay with a scorer we
+already know is wrong.
+
+Keep the most important scientific detail on screen: the action-model weights did not change
+between these causal attempts. The first failures repaired a game-neutral actor/referee interface;
+the last exposed missing learned authority. No Agatha map, species, or opponent-position identity
+entered either feature vector. Even a later completed constrained rollout would qualify the
+high-level authority path, not yet the combined teacher-free move stack.
+
+This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
+semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
+Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different
+map, and different menus.
+
 ## Latest episode payoff: the AI won, and the evaluator still said no
 
 The clean-start evaluator is now real. In the first uncounted baseline, the objective and
