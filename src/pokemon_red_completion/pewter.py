@@ -146,7 +146,7 @@ PEWTER_CENTER_TO_GYM_DIRECTIONS = (
     *(("right",) * 3),
     *(("up",) * 4),
     *(("right",) * 3),
-    *(("up",) * 10),
+    *(("up",) * 9),
     *(("left",) * 8),
     *(("down",) * 3),
     "left",

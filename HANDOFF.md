@@ -144,7 +144,10 @@ the unchanged HP/PP floor, takes a direct 15-input Center route, proves full rec
 the healthy Gym gate. Replay from `87343ec` advanced 578 frames and exposed the independent
 progress referee's duplicate status-zero assumption at the Forest north gate. That referee now
 permits poison only at Forest north, upper Route 2, and Pewter south. The full 2,196-test gate is
-green; another clean push remains before causal replay.
+green. Replay from `fb2da00` then proved the 27/27, status-zero, full-PP Center state but stopped at
+Pewter `(10,16)`: the route assumed exterior `(13,27)`, while the measured exit is `(13,26)`. The
+Center-to-Gym route now uses nine rather than ten north inputs (40 total). The full 2,196-test gate
+is green; push before causal replay.
 Counted v95 remains 0/10.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the

@@ -27,6 +27,7 @@ from pokemon_red_completion.pewter import (
     FOREST_ROUTE_DIRECTIONS,
     GYM_TO_BROCK_DIRECTIONS,
     LAB_TO_PALLET_DIRECTIONS,
+    PALLET_TO_ROUTE_1_DIRECTIONS,
     PEWTER_CENTER_TO_GYM_DIRECTIONS,
     PEWTER_CHECKPOINT_COUNT,
     PEWTER_TO_CENTER_DIRECTIONS,
@@ -225,6 +226,7 @@ def _report() -> PewterChapterReport:
 
 def test_pewter_route_is_source_stable_at_critical_segments() -> None:
     assert LAB_TO_PALLET_DIRECTIONS == ("down",) * 9
+    assert len(PALLET_TO_ROUTE_1_DIRECTIONS) == 17
     assert len(ROUTE_1_TO_VIRIDIAN_DIRECTIONS) == 53
     assert len(VIRIDIAN_TO_ROUTE_2_DIRECTIONS) == 39
     assert len(ROUTE_2_TO_FOREST_GATE_DIRECTIONS) == 43
@@ -238,7 +240,7 @@ def test_pewter_route_is_source_stable_at_critical_segments() -> None:
     )
     assert len(PEWTER_TO_GYM_DIRECTIONS) == 44
     assert len(PEWTER_TO_CENTER_DIRECTIONS) == 15
-    assert len(PEWTER_CENTER_TO_GYM_DIRECTIONS) == 41
+    assert len(PEWTER_CENTER_TO_GYM_DIRECTIONS) == 40
     assert len(GYM_TO_BROCK_DIRECTIONS) == 17
 
 

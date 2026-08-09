@@ -34,14 +34,14 @@
     "model_boundary": "The failure remained inside the authored first composite. Objective selection made one singleton choice; all learned battle, target, and training counters were zero."
   },
   "repair": {
-    "status": "controller_and_referee_refined_pending_live_causal_replay",
+    "status": "controller_referee_and_center_route_refined_pending_live_causal_replay",
     "behavior": "The Forest exit still requires the exact level-9 lead, at least 19 HP, at least four Bubble PP, and either healthy or poison status; every other status remains fatal. The independent progress referee admits poison only at the Forest north gate, upper Route 2 return, and Pewter south edge. The teacher takes the direct finite Pewter route to the Pokémon Center, proves full HP, clear status, and positive PP for every learned move, exits, and follows a finite route to the Gym. The original healthy Brock gate is applied again at the Gym entrance; no training, HP, PP, or Gym requirement is relaxed.",
     "bounds": {
       "center_route_inputs": 15,
       "nurse_approach_inputs": 4,
       "heal_dialogue_pulses": 9,
       "center_exit_inputs": 5,
-      "center_to_gym_inputs": 41
+      "center_to_gym_inputs": 40
     },
     "same_root_probe": {
       "source_commit": "0773d75df57663f52269e14684732f879ea89d84",
@@ -61,7 +61,24 @@
       "message": "Travel boundary failed its stable semantic snapshot.",
       "finding": "The controller crossed the repaired Forest-exit gate, but the independent progress referee duplicated the old global status-zero assumption at the first north-gate checkpoint."
     },
-    "rom_free_gate": "Public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,196 tests passed after the controller and independent-referee refinements; three integration tests were deselected and one expected failure remained expected.",
+    "same_root_center_route_replay": {
+      "source_commit": "fb2da00e9f4a8fccf1ad31b9d12e9806b43a7ab7",
+      "raw_report_sha256": "cc15b96c4f58bd4c996d6631c78bb4214709e49975ae2d6ec2452e6eed330781",
+      "frames_executed": 167565,
+      "exception_type": "PewterChapterError",
+      "message": "The clean run missed the pewter_gym_entrance boundary.",
+      "observed_endpoint": {
+        "map_id": 2,
+        "position": [10, 16],
+        "level": 9,
+        "hp": 27,
+        "max_hp": 27,
+        "status": 0,
+        "bubble_pp": 30
+      },
+      "finding": "The Center recovery passed completely. The assumed exterior start was one tile too low, so ten north inputs overshot the proven corridor before the final Gym leg. The measured Center exit is Pewter (13,26); nine north inputs restore the source-stable (19,13) junction."
+    },
+    "rom_free_gate": "Public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,196 tests passed after the controller, independent-referee, and measured-route refinements; three integration tests were deselected and one expected failure remained expected.",
     "next_gate": "Complete the full ROM-free gate, commit and push the repair, then replay the failed seed causally before assigning a fresh uncounted derived-timing root. Counted v95 remains unopened."
   }
 }
