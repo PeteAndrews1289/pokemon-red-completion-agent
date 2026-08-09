@@ -1,0 +1,89 @@
+{
+  "schema": "pokemon-red-battle-control-v3-lineage-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "complete_unpromoted_training_lineage",
+  "source_commit": "08f6f62d6318d95f52c17ab5e55621f74a9f332b",
+  "authority": {
+    "battle_moves": "authenticated_nonlinear_move_ranker_with_teacher_queries_allowed",
+    "high_level_labels": "deterministic_teacher",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "perturbation": {
+    "kind": "reproducible_battle_start_timing_schedule",
+    "harness_seed": 990002,
+    "schedule_sha256": "d2dedf18540d50ce70726c7a9defc31e67a11cfe9de9b9b02639ddce19fecd71",
+    "scheduled_battles": 74,
+    "schedule_complete": true
+  },
+  "completion": {
+    "checkpoints": "312/312",
+    "objectives": "36/36",
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 705261
+  },
+  "private_artifact": {
+    "artifact_id": "red-battle-control-b5e47ba327754f1dbd412d6dd8fd5b74",
+    "manifest_sha256": "75b17c70420a2eff208e8cc7ce13f92a54032cce840859fd5f9e69f934166460",
+    "records": 3322,
+    "bytes": 14765242,
+    "private_path_published": false
+  },
+  "label_distribution": {
+    "select_move": 3268,
+    "use_recovery": 24,
+    "use_boost": 13,
+    "switch": 17,
+    "typed_non_move_total": 54,
+    "explicit_switch_targets": 17,
+    "legacy_generic_switch_targets": 0
+  },
+  "battle_move_runtime": {
+    "decisions": 3322,
+    "model_decisions": 3262,
+    "teacher_fallbacks": 6,
+    "shadow_teacher_disagreements": 1603,
+    "teacher_queries": 3322
+  },
+  "team_development": {
+    "battles": 1800,
+    "healing_trips": 1234,
+    "final_forms_complete": true,
+    "observed_levels": [
+      60,
+      55,
+      55,
+      55,
+      55,
+      55
+    ],
+    "fainted_count": 0
+  },
+  "league_variation": {
+    "lorelei_strict_contract_passed": true,
+    "bruno_strict_contract_passed": true,
+    "agatha_strict_contract_passed": true,
+    "agatha_required_role_switches": 7,
+    "agatha_observed_role_switches": 7,
+    "agatha_participating_specialists": 2,
+    "lance_defeated": true,
+    "champion_defeated": true
+  },
+  "independence": {
+    "different_from_prior_lineages": true,
+    "observable_examples": [
+      "Snorlax required nine throws.",
+      "The balanced training milestones followed a distinct party-level trajectory.",
+      "Agatha's opponent-role sequence required seven switches rather than the canonical three."
+    ],
+    "held_out_from_original_candidate_training": true,
+    "used_as_whole_lineage_training_for_next_candidate": true
+  },
+  "claim_scope": {
+    "fresh_v3_demonstration_complete": true,
+    "strict_model_control_complete": false,
+    "counted_campaign_roots_consumed": 0,
+    "cross_game_transfer_complete": false
+  }
+}

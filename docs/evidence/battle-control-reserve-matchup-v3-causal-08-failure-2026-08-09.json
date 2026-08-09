@@ -1,0 +1,47 @@
+{
+  "schema": "pokemon-red-battle-control-v3-causal-failure-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "rejected_fail_closed",
+  "source_commit": "08f6f62d6318d95f52c17ab5e55621f74a9f332b",
+  "candidate": {
+    "artifact_id": "red-battle-control-model-980012a5698c4d9b93bb381d855ca2ba",
+    "manifest_sha256": "0cd3fb11f1387aee51c0c0056b2ee3be3edbda46620c0c75bda49eb6652e210a",
+    "model_sha256": "a9f9cb03be12225e728ed02983645df338de4a48f35541f1bdddafb9c422e0dc",
+    "private_path_published": false
+  },
+  "authority": {
+    "ordinary_move_selection": "authenticated_move_ranker_teacher_gated_on_every_path",
+    "high_level_battle_control": "model_authority_with_typed_intent_constraints",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "outcome": {
+    "verified_checkpoints": 109,
+    "total_checkpoints": 312,
+    "chapter": "Rock Tunnel",
+    "battle": "Rock Tunnel 1F trainer 4",
+    "failure": "declared lead-role move did not spend PP",
+    "game_complete": false,
+    "counted_campaign_root_consumed": false
+  },
+  "diagnosis": {
+    "observed_fact": "The battle ended without PP consumption by the declared lead's required evidence move.",
+    "inference": "The learned switch class was executable before the lead demonstrated its role, allowing a legal battle win to violate the curriculum contract.",
+    "teacher_route_failure": false,
+    "verifier_relaxed": false,
+    "failure_hidden_by_teacher": false
+  },
+  "repair": {
+    "direction": "Add a game-neutral intent constraint requiring one move before the first voluntary switch, and apply it to curriculum battles that require lead-role move evidence.",
+    "species_or_map_identity_added": false,
+    "increase_retry_budget": false,
+    "change_model_weights_after_validation": false,
+    "open_counted_root": false
+  },
+  "claim_scope": {
+    "causal_control_qualified": false,
+    "early_route_completed_through_rock_tunnel_entry": true,
+    "candidate_retrained_after_failure": false,
+    "cross_game_transfer_complete": false
+  }
+}

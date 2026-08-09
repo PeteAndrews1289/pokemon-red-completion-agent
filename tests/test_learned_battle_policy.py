@@ -64,6 +64,7 @@ def _observation(
     boost_use_limits: tuple[tuple[BattleBoostStat, int], ...] = (),
     switch_capabilities: frozenset[BattleSwitchCapability] = frozenset(),
     switch_limit: int | None = None,
+    require_move_before_first_switch: bool = False,
     require_move_between_switches: bool = False,
 ) -> BattlePolicyObservation:
     return BattlePolicyObservation(
@@ -90,6 +91,7 @@ def _observation(
             boost_use_limits=boost_use_limits,
             switch_capabilities=switch_capabilities,
             switch_limit=switch_limit,
+            require_move_before_first_switch=require_move_before_first_switch,
             require_move_between_switches=require_move_between_switches,
         ),
     )
@@ -861,6 +863,38 @@ def test_control_execution_requires_move_residency_between_switches() -> None:
     last_mask = execution["last_intent_mask"]
     assert isinstance(last_mask, dict)
     assert last_mask["reason"] == "switch_residency_mask"
+    assert last_mask["predicted_action"] == "pokemon.core:battle:switch"
+
+
+def test_control_execution_requires_move_before_first_switch() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_full_control_model(5),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+    observation = _observation(
+        switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
+        require_move_before_first_switch=True,
+    )
+
+    assert policy.choose_move(observation, lambda: 1) == 3
+    with pytest.raises(LearnedBattleControlRequest):
+        policy.choose_move(observation, lambda: 1)
+
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["typed_requests_executed"] == 1
+    assert execution["safety_fallbacks"] == 1
+    assert execution["target_resolution_failures"] == {
+        "initial_switch_residency_mask": 1
+    }
+    last_mask = execution["last_intent_mask"]
+    assert isinstance(last_mask, dict)
+    assert last_mask["reason"] == "initial_switch_residency_mask"
     assert last_mask["predicted_action"] == "pokemon.core:battle:switch"
 
 

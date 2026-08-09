@@ -1556,6 +1556,7 @@ def _trainer(
             }
         ),
         switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
+        require_move_before_first_switch=True,
         required_move_policy=RequiredMovePolicy.ANY_USABLE,
     )
     final = _run_lavender_trainer_battle(

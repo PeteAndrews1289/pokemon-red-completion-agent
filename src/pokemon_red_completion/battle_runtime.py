@@ -133,6 +133,7 @@ class BattleIntent:
     boost_use_limits: tuple[tuple[BattleBoostStat, int], ...] = ()
     switch_capabilities: frozenset[BattleSwitchCapability] = frozenset()
     switch_limit: int | None = None
+    require_move_before_first_switch: bool = False
     require_move_between_switches: bool = False
 
     def __post_init__(self) -> None:
@@ -203,6 +204,10 @@ class BattleIntent:
             raise TypeError("switch_limit must be a positive integer or None")
         if self.switch_limit is not None and not self.switch_capabilities:
             raise ValueError("switch limit requires a switch executor capability")
+        if not isinstance(self.require_move_before_first_switch, bool):
+            raise TypeError("require_move_before_first_switch must be a bool")
+        if self.require_move_before_first_switch and not self.switch_capabilities:
+            raise ValueError("initial switch residency requires a switch executor capability")
         if not isinstance(self.require_move_between_switches, bool):
             raise TypeError("require_move_between_switches must be a bool")
         if self.require_move_between_switches and not self.switch_capabilities:

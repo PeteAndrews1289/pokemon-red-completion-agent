@@ -839,11 +839,18 @@ def _control_action_intent_mask(
     if action.kind is BattleActionKind.SWITCH:
         class_ref = "pokemon.core:battle:switch"
         class_index = CONTROL_CLASS_REFS.index(class_ref)
+        move_class_index = CONTROL_CLASS_REFS.index("pokemon.core:battle:select_move")
         if (
             intent.switch_limit is not None
             and history.action_counts[class_index] >= intent.switch_limit
         ):
             return "budget_mask"
+        if (
+            intent.require_move_before_first_switch
+            and history.action_counts[class_index] == 0
+            and history.action_counts[move_class_index] == 0
+        ):
+            return "initial_switch_residency_mask"
         if (
             intent.require_move_between_switches
             and history.previous_class_index == class_index
