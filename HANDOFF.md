@@ -8,6 +8,12 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+**How to read this document.** Dated checkpoint sections accumulate at the top, newest first, and
+supersede anything older that disagrees with them. Sections 1 through 10 below are the durable
+orientation. If a number in a numbered section disagrees with a dated checkpoint above it, the
+checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
+going stale is exactly the failure this project keeps having.
+
 ## Superseding current checkpoint — 2026-08-09
 
 This section supersedes every older “next” statement below.
@@ -253,11 +259,19 @@ of whether it serves this.
 
 - The deterministic teacher completes Red repeatedly, with genuine Champion and Hall-of-Fame
   evidence in the same run.
-- A trained model authorizes all 36 expected objectives with zero fallbacks. Fixed code selects and
-  executes them. Do not describe it as an autonomous player — it runs as
-  `model_authorized_fixed_specialists`.
+- A trained model has *selected* and completed twenty consecutive objectives from an authenticated
+  Celadon capture through the Hall of Fame, in one closed loop with no expected labels, fallbacks or
+  replans. Fixed skills still execute navigation, battles, menus and recovery, and only one of those
+  twenty decisions had more than one executable candidate — so this is objective selection under
+  light branching, not autonomous play. A separate, older result is that a model authorizes all 36
+  expected objectives with zero fallbacks while fixed code selects and executes them
+  (`model_authorized_fixed_specialists`). Keep the two claims apart.
 - Encounter bands for five areas are measured with sample counts and reproduce exactly across runs
   (the route is deterministic).
+- A clean-power teacher run reaches its readiness gate at **60/55/55/55/55/55** with zero faints and
+  completes the game — 312/312 checkpoints, 36/36 objectives, Champion and Hall of Fame, over 1,808
+  development battles, consuming **no counted campaign root**. When this handoff was first written
+  the training block had never reached the level floor in a full run; it now does.
 - A party member too weak for where the run happens to be is now routed to a venue that suits it,
   travels there, and gains levels. This is new as of 2026-08-07 and is the mechanism everything
   downstream depends on.
