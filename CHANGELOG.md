@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Added battle-control feature schema v3 with observable moves and PP for every party member,
+  identity-free reserve matchup features, a 50%-HP fail-closed switch floor, semantic target
+  binding, separate switch-target metrics, and an explicit rejection of pre-reserve v2 artifacts.
+- Added a bounded Crystal transfer benchmark that starts with battle, local-navigation, and
+  trainee/venue microtasks instead of requiring a complete second-game teacher before transfer is
+  measured.
 - Added game-neutral objective-selection records for all 36 completion objectives. Policy inputs
   contain only the live semantic observation and verifier-confirmed cumulative completion facts;
   teacher labels and legal candidate sets remain separate supervision fields.

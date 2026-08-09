@@ -5,9 +5,11 @@
 > unopened at 0/10. The latest strict canonical rehearsal safely developed a
 > 63/55/55/55/55/55 party and reached Lorelei with zero teacher query or fallback. It defeated her,
 > but all 19 attacks came from party slot 1 and no role switch occurred, so the balanced-team
-> verifier correctly rejected the chapter. The active work is now battle-control feature schema v3:
-> identity-free reserve type/move matchup observations, matchup-aware switch targeting, fresh role
-> demonstrations, and a replacement artifact. Preserve the failure in
+> verifier correctly rejected the chapter. Battle-control feature schema v3 and matchup-aware
+> switch targeting are now implemented ROM-free: every reserve exposes identity-free mechanics, a
+> generic switch binds the best safe semantic candidate, and offline reports separate switch-class
+> from switch-target accuracy. The old v2 artifact is intentionally incompatible. The active work
+> is fresh balanced-role demonstrations and a replacement artifact. Preserve the failure in
 > [the five-role audit](docs/evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).
 > Do not relax the verifier, reopen the teacher route, or consume a counted root.
 
@@ -348,7 +350,7 @@ arguments where it takes four, and a typed progress sink called with `None`.
 Each cost a 25-minute emulator run to discover. A type checker reports them in
 seconds, and the neutral layer is now covered.
 
-Current state: **2,059 passed, 3 deselected**, all checks green, on trunk
+Current state: **2,074 passed, 3 deselected**, all checks green, on trunk
 `agent/balanced-team-curriculum`.
 
 ## Open work, in priority order

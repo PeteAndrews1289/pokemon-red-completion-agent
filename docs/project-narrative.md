@@ -49,6 +49,22 @@ Electric coverage, health margin, and move availability can survive a title chan
 species ID or Lorelei's party slot cannot. The sanitized evidence is in the
 [five-role rehearsal audit](evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).
 
+The first implementation of that answer is now live in the ROM-free layer. Feature schema v3 reads
+the observable moves and PP of every party member, resolves their title-specific references through
+a mechanics catalog, and exposes only candidate-relative scalars: health, status, level margin,
+best usable type advantage, accuracy-weighted power, defensive resistance, and PP reserve. Party
+order, species, moves, opponent identity, map, and objective do not enter the vector. The same
+candidate score selects the actual switch target, so the classifier cannot earn credit for saying
+“switch” while a hidden rule chooses the useful Pokémon. Held-out reports now include separate
+switch-target accuracy. The historical v2 artifact is rejected rather than padded with zeros; the
+next evidence must come from fresh demonstrations.
+
+Crystal will follow as a small falsification benchmark rather than a second full scripted route.
+One battle, one local navigation task, and one trainee/venue choice will compare the frozen Red
+model zero-shot, few-shot, and from scratch. A playthrough video can guide the route graph and task
+selection, but actual learning examples still require synchronized semantic state and controller
+actions from the emulator. See the [benchmark contract](crystal-transfer-benchmark.md).
+
 ## August 8: safe authority passed; useful strategy remains unproven
 
 The latest training-control campaign reached a result that is successful for engineering and

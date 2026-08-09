@@ -251,6 +251,8 @@ class BattleControlMLP:
                 feature_schema_id=str(value["feature_schema_id"]),
                 training_seed=value["training_seed"],  # type: ignore[arg-type]
             )
+        except BattleControlModelError:
+            raise
         except (KeyError, TypeError, ValueError) as error:
             raise BattleControlModelError("control model payload is invalid") from error
 

@@ -198,9 +198,32 @@ def _party_members(raw: RawGameState) -> tuple[dict[str, object], ...]:
                 max_hp[index] if index < len(max_hp) else None,
             ),
             "status": _status_ref(statuses[index] if index < len(statuses) else None),
+            "moves": _party_member_moves(raw, index),
         }
         for index, species_id in enumerate(species)
     )
+
+
+def _party_member_moves(raw: RawGameState, index: int) -> tuple[dict[str, object], ...]:
+    observed_moves = (
+        raw.party_moves[index]
+        if raw.party_moves is not None and index < len(raw.party_moves)
+        else raw.active_party_moves
+        if raw.active_party_index == index and raw.active_party_moves is not None
+        else raw.first_party_moves
+        if index == 0
+        else ()
+    )
+    observed_pp = (
+        raw.party_pp[index]
+        if raw.party_pp is not None and index < len(raw.party_pp)
+        else raw.active_party_pp
+        if raw.active_party_index == index and raw.active_party_pp is not None
+        else raw.first_party_pp
+        if index == 0
+        else ()
+    )
+    return _observable_move_values(observed_moves, observed_pp)
 
 
 def _battle_resources(raw: RawGameState) -> dict[str, object]:
@@ -506,15 +529,22 @@ def _observable_moves(
     *,
     use_active_battler: bool = False,
 ) -> tuple[dict[str, object], ...]:
-    moves: list[dict[str, object]] = []
     observed_moves = raw.battler_moves if use_active_battler else raw.first_party_moves
     observed_pp = raw.battler_pp if use_active_battler else raw.first_party_pp
+    return _observable_move_values(observed_moves or (), observed_pp or ())
+
+
+def _observable_move_values(
+    observed_moves: tuple[int, ...],
+    observed_pp: tuple[int, ...],
+) -> tuple[dict[str, object], ...]:
+    moves: list[dict[str, object]] = []
     for slot_index, move_id in enumerate(observed_moves or ()):
         if move_id == 0:
             continue
         pp = (
             observed_pp[slot_index] & 0x3F
-            if observed_pp and slot_index < len(observed_pp)
+            if slot_index < len(observed_pp)
             else None
         )
         moves.append(

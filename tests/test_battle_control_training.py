@@ -12,6 +12,7 @@ from pokemon_red_completion.battle_control_labels import (
 from pokemon_red_completion.battle_control_model import BattleControlModelError
 from pokemon_red_completion.battle_control_training import (
     control_examples,
+    evaluate_switch_target_resolution,
     fit_group_heldout_control_candidate,
 )
 
@@ -25,8 +26,15 @@ def _observation() -> dict[str, object]:
             "max_hp": 100,
             "hp_ratio": 1.0,
             "status": None,
+            "moves": [
+                {
+                    "slot_index": 0,
+                    "move_ref": "pokemon.red.gb.us.rev0:move:033",
+                    "pp": 20,
+                }
+            ],
         }
-        for index in range(1, 4)
+        for _index in range(1, 4)
     ]
     return {
         "schema_version": 1,
@@ -118,6 +126,8 @@ def test_group_heldout_candidate_has_disjoint_battle_identity() -> None:
     assert candidate.training.examples == 32
     assert candidate.validation.examples == 8
     assert candidate.validation.accuracy >= 0.75
+    assert candidate.training_switch_targets.examples == 0
+    assert candidate.validation_switch_targets.examples == 0
     assert candidate.validation_battle_plan_ids == ("validation",)
 
 
@@ -130,3 +140,21 @@ def test_group_holdout_rejects_validation_only_class() -> None:
             replace(dataset, labels=tuple(labels)),
             validation_battle_plan_ids=("validation",),
         )
+
+
+def test_switch_target_metric_requires_the_resolved_member_to_match() -> None:
+    observation = _observation()
+    correct = BattleControlLabel(
+        decision_index=1,
+        battle_plan_id="switch-test",
+        objective_id="test",
+        observation=observation,
+        teacher_action=BattleAction.switch(2),
+    )
+    wrong = replace(correct, decision_index=2, teacher_action=BattleAction.switch(3))
+
+    metrics = evaluate_switch_target_resolution((correct, wrong))
+
+    assert metrics.examples == 2
+    assert metrics.correct == 1
+    assert metrics.accuracy == 0.5

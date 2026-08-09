@@ -114,6 +114,18 @@ def test_red_encoder_exposes_normalized_and_namespaced_semantics() -> None:
             "max_hp": None,
             "hp_ratio": None,
             "status": None,
+            "moves": [
+                {
+                    "slot_index": 0,
+                    "move_ref": "pokemon.red.gb.us.rev0:move:033",
+                    "pp": 35,
+                },
+                {
+                    "slot_index": 1,
+                    "move_ref": "pokemon.red.gb.us.rev0:move:039",
+                    "pp": 30,
+                },
+            ],
         }
     ]
     assert features["resources"] == {
@@ -254,6 +266,43 @@ def test_battle_snapshot_describes_switched_active_battler_not_field_lead() -> N
         "save_state",
     ):
         assert forbidden not in serialized
+
+
+def test_red_encoder_exposes_all_party_moves_for_matchup_ranking() -> None:
+    raw = replace(
+        _raw(),
+        battle_state=2,
+        party_count=3,
+        party_species_ids=(0x1C, 0x68, 0x84),
+        party_levels=(63, 55, 55),
+        party_hp=(180, 120, 220),
+        party_max_hp=(180, 120, 220),
+        party_status=(0, 0, 0),
+        party_moves=((0x39, 0x3A, 0, 0), (0x57, 0x62, 0, 0), (0x22, 0x1D, 0, 0)),
+        party_pp=((15, 10, 0, 0), (10, 20, 0, 0), (15, 10, 0, 0)),
+        active_party_index=0,
+        active_party_species_id=0x1C,
+        active_party_level=63,
+        active_party_hp=180,
+        active_party_max_hp=180,
+        active_party_status=0,
+        active_party_moves=(0x39, 0x3A, 0, 0),
+        active_party_pp=(15, 10, 0, 0),
+        enemy_species_id=0x78,
+        enemy_level=54,
+        enemy_hp=150,
+        enemy_max_hp=150,
+    )
+
+    members = PokemonRedObservationEncoder(
+        _Reader(raw, BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0))
+    ).snapshot().to_dict()["features"]["party"]["members"]
+
+    assert [move["move_ref"] for move in members[1]["moves"]] == [
+        pokemon_red_move_ref(0x57),
+        pokemon_red_move_ref(0x62),
+    ]
+    assert members[1]["moves"][0]["pp"] == 10
 
 
 def test_privileged_event_changes_do_not_change_policy_snapshot() -> None:

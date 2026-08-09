@@ -40,6 +40,14 @@ offensive and defensive matchup. The next training phase is therefore concrete a
 represent each reserve by semantic matchup value, rank switch candidates, retrain on balanced-team
 demonstrations, and repeat the exact same verifier. Do not edit around the red result.
 
+Then show the repair as a feature-panel transformation. Six party cards now expose the same
+identity-free measurements: health, status, level margin, usable PP, best offensive type margin,
+accuracy-weighted power, and defensive resistance. Shuffle the reserve cards and show the same
+matchup following the candidate to its new slot. Change only the opponent's types and show the
+selected reserve change. Finally split the scorecard into **switch class** and **switch target**;
+the model does not get credit unless both the action and the member are correct. Keep the final card
+honest: **schema implemented; fresh model not trained yet**.
+
 ## Story outline
 
 ### Cold open — 0:00–0:35

@@ -10,12 +10,16 @@ import numpy as np
 from numpy.typing import NDArray
 
 from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind, BattleBoostStat
+from pokemon_red_completion.battle_matchups import (
+    RESERVE_CONTROL_FEATURE_NAMES,
+    project_reserve_control_features,
+)
 from pokemon_red_completion.battle_semantics import (
     FEATURE_NAMES as MOVE_FEATURE_NAMES,
 )
-from pokemon_red_completion.battle_semantics import BattleFeatureBatch
+from pokemon_red_completion.battle_semantics import BattleFeatureBatch, BattleMechanicsCatalog
 
-CONTROL_FEATURE_SCHEMA_ID = "pokemon.core.battle.control.features.v2"
+CONTROL_FEATURE_SCHEMA_ID = "pokemon.core.battle.control.features.v3"
 CONTROL_CLASS_REFS = (
     "pokemon.core:battle:select_move",
     "pokemon.core:battle:recovery",
@@ -51,6 +55,7 @@ CONTROL_FEATURE_NAMES = (
     "party.mean_level",
     "party.minimum_level",
     "party.maximum_level",
+    *RESERVE_CONTROL_FEATURE_NAMES,
     "resources.capture_items",
     "resources.healing_items",
     "resources.status_recovery_items",
@@ -262,6 +267,7 @@ def project_control_features(
     *,
     move_batch: BattleFeatureBatch | None = None,
     history: BattleControlHistory | None = None,
+    catalog: BattleMechanicsCatalog | None = None,
 ) -> NDArray[np.float64]:
     """Project one privacy-safe semantic snapshot into normalized transferable state."""
 
@@ -287,6 +293,11 @@ def project_control_features(
     if kind not in {"trainer", "wild"}:
         raise BattleControlFeatureError("battle kind must be trainer or wild")
     temporal = history if history is not None else BattleControlHistory()
+    reserve_features = (
+        project_reserve_control_features(observation, catalog)
+        if catalog is not None
+        else (0.0,) * len(RESERVE_CONTROL_FEATURE_NAMES)
+    )
     values = (
         float(kind == "trainer"),
         float(kind == "wild"),
@@ -312,6 +323,7 @@ def project_control_features(
         math.fsum(levels) / (100.0 * len(levels)),
         min(levels) / 100.0,
         max(levels) / 100.0,
+        *reserve_features,
         _resource(resources, "capture_item_count", 50, default=0),
         _resource(resources, "healing_item_count", 20),
         _resource(resources, "status_recovery_item_count", 20),

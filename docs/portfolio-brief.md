@@ -30,8 +30,9 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Portable strategic authority | 114,831 controlled choices, 400 executed disagreements, 1,803 development battles, no fallback; fresh observation opened Giovanni | Singleton objective dispatch and authored mechanics remain |
 | Portable clean-start baseline | 21 selected composites plus 15 automatic effects through Hall of Fame; no expected label, fixed dispatch, or fallback | Battle mechanics were not under the full strict learned stack |
 | Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
+| Reserve-aware repair | Versioned identity-free matchup features, safe semantic switch binding, permutation/counterfactual tests, and separate target metrics | Interface implemented; fresh demonstrations and model qualification remain |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
-| Repository gate | 2,059 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
+| Repository gate | 2,074 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
 
 ## Architecture in one minute
 
@@ -80,7 +81,7 @@ invariant testing, and the discipline to preserve a negative result rather than 
 - Why shadow agreement cannot substitute for causal authority, and why causal authority can still
   prove integration without proving feature value.
 - How the candidate scorer remains permutation-equivariant and excludes title-specific identity.
-- How an emulator-scale system is tested without redistributing the ROM: 2,059 ROM-free tests plus
+- How an emulator-scale system is tested without redistributing the ROM: 2,074 ROM-free tests plus
   private authenticated runtime receipts.
 
 ## Honest limitations
@@ -90,6 +91,10 @@ and many mechanic skills remain authored. A portable clean-start objective loop 
 Fame, but many choices are affordance-masked and the strict battle model fails the balanced Lorelei
 role contract. There is no Crystal benchmark, clean-start 8/10 learned-stack series, or autonomous
 living-Pokédex result yet.
+
+The immediate modeling gap is no longer vague. The old battle controller could not observe reserve
+matchups. Feature schema v3 now can, and it binds the chosen semantic candidate to switch execution,
+but no fresh v3 artifact has earned an offline or emulator result yet.
 
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-08.md) explains why the ten clean-start roots should not open
@@ -105,7 +110,7 @@ until a reserve-aware battle artifact passes canonical and perturbation rehearsa
 - Qualified a strategic trainee/venue controller inside a portable objective loop across 114,831
   live choices and 400 executed teacher disagreements, completing 1,803 development battles with no
   fallback before fresh emulator observation verified the Volcano Badge.
-- Hardened a 140k-line Python research system with 2,059 tests, Ruff, mypy, documentation/privacy
+- Hardened a 142k-line Python research system with 2,074 tests, Ruff, mypy, documentation/privacy
   gates, deterministic source registries, and at least 19 consecutive green GitHub Actions runs after
   diagnosing one derived-artifact CI regression.
 - Built a prospective one-attempt 8-of-10 clean-start evaluator and used its strict rehearsal to

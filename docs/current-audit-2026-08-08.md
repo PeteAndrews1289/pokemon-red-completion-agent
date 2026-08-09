@@ -34,8 +34,8 @@ Scores measure the repository against its stated end goal, not against a typical
 | Deterministic completion and referee | 9/10 | Clean power-on; 312/312 semantic checkpoints; 36/36 objectives; Champion and Hall of Fame. The remaining point is for more cartridge revisions/titles. |
 | Experimental honesty | 9/10 | Failed and rejected lineages remain visible, authority modes are separated, and operational gates can overrule headline accuracy. A few historical claims remain scattered through very long documents. |
 | Safety and artifact integrity | 9/10 | Exact hashes, clean-source binding, root-overlap rejection, atomic failed-stream retention, affordance masks, and fail-closed control. Private ROM-derived assets remain external. |
-| Tests and static checks | 8/10 | 2,059 non-integration tests pass locally, with Ruff, documentation, public-artifact, registry, and mypy gates. Forty-four legacy modules still use mypy `ignore_errors` overrides. |
-| Architecture and modularity | 8/10 | Typed observations, objectives, skills, results, four-model binding, prospective campaign identities, and fail-closed series evaluation are strong seams. The 140,787-line Python surface remains costly to reason about. |
+| Tests and static checks | 8/10 | 2,074 non-integration tests pass locally, with Ruff, documentation, public-artifact, registry, and mypy gates. Forty-four legacy modules still use mypy `ignore_errors` overrides. |
+| Architecture and modularity | 8/10 | Typed observations, objectives, skills, results, four-model binding, prospective campaign identities, and fail-closed series evaluation are strong seams. The 141,647-line Python surface remains costly to reason about. |
 | Learned battle control | 6/10 | Strict clean-start execution reached and defeated Lorelei with 3,220 model move decisions and no teacher query/fallback, but failed the balanced role contract. Reserve-matchup representation is missing. |
 | Learned objective planning | 6/10 | One clean-start run selected 21 composites and verified 15 automatic effects through Hall of Fame without expected labels. Affordance masking still makes many decisions singletons and fixed skills press the buttons. |
 | Learned training strategy | 7/10 | The identity-free trainee/venue scorer beat its sealed shape baseline by 4.239 points, completed isolated causal control with 191 disagreements, and controlled 114,831 choices with 400 disagreements in both portable and clean-power execution. Evidence remains one fixed Red curriculum and one uncounted clean-power root. |
@@ -150,6 +150,14 @@ the best matchup. The correct response is a reserve-aware schema and new artifac
 verifier. The complete sanitized result is in the
 [five-role rehearsal audit](evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).
 
+That response is now implemented at the interface level. Feature schema v3 records all observable
+party moves and PP, projects identity-free reserve matchup values, binds generic switches to the
+same best candidate above a 50% HP floor, and measures teacher-target agreement separately from the
+switch action class. Candidate-order permutation and opponent-type counterfactual tests pass. The
+old v2 artifact is intentionally incompatible, so this is not yet a new model result; fresh v3
+lineages remain the next gate. The design is preserved in the
+[v3 receipt](evidence/battle-control-reserve-matchup-v3-design-2026-08-08.json).
+
 ## Principal risks
 
 ### The learned surface is still small relative to the scripted surface
@@ -160,7 +168,7 @@ compose into a clean-start teacher-free run.
 
 ### The Red implementation is much larger than the portable core
 
-The Python surface is 140,787 lines across 120 source modules, 28 scripts, and 128 test files. Much
+The Python surface is 141,647 lines across 121 source modules, 28 scripts, and 129 test files. Much
 of that size is earned evidence and hardened game mechanics, but it raises regression, review, and
 onboarding costs. A second title is the only convincing way to distinguish genuinely portable
 abstractions from carefully renamed Red assumptions.
@@ -185,7 +193,7 @@ match the intended source diff. Repeated red mail from a known derived-artifact 
 real regressions and weakens the otherwise strong evidence story.
 
 **Resolved during this audit:** the stale registry was regenerated from source, all four public
-golden identities were updated from generator output, and the full 2,059-test local gate passed.
+golden identities were updated from generator output, and the full 2,074-test local gate passed.
 At least **19 consecutive GitHub Actions runs** were green after the registry fix, with later audit
 and interface commits also passing. This is why the
 prior email storm was not intended behavior—it was one repeatedly retriggered derived-artifact

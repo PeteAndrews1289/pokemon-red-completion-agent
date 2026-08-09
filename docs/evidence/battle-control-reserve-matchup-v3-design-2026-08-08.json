@@ -1,0 +1,68 @@
+{
+  "schema": "pokemon-battle-control-reserve-matchup-design-v1",
+  "recorded_on": "2026-08-08",
+  "status": "implemented_rom_free_pending_fresh_demonstrations",
+  "promotion_eligible": false,
+  "emulator_run_claimed": false,
+  "collection_registry": {
+    "registry_sha256": "19a8798afb4f8a6d766b3679c1ccb4e0363f8287e18e83dfe546ac89ab40b723",
+    "source_bundle_sha256": "cae2a4a343e95ece4049719507128125fac31ae7dd7a648363c8f0420c86afef",
+    "teacher_execution_sha256": "a9622f575080bb29db7c97df2f70c683f73c1366c15d589d5174474cd18cf1c5"
+  },
+  "feature_schema_id": "pokemon.core.battle.control.features.v3",
+  "candidate_observation": [
+    "health ratio",
+    "status presence",
+    "level and opponent-relative level margin",
+    "best usable move type advantage",
+    "best accuracy-weighted effective power",
+    "opponent-type defensive resistance",
+    "usable move fraction",
+    "mean usable PP fraction"
+  ],
+  "aggregate_control_observation": [
+    "best reserve readiness",
+    "best reserve matchup values",
+    "best reserve advantage over the active battler"
+  ],
+  "identity_exclusions": [
+    "species identity",
+    "move identity",
+    "party-slot identity",
+    "opponent identity",
+    "map identity",
+    "objective identity",
+    "memory addresses"
+  ],
+  "switch_execution": {
+    "basis": "same candidate-relative matchup score used by the observation",
+    "minimum_hp_ratio": 0.5,
+    "all_reserves_below_floor": "fail_closed",
+    "explicit_legal_target_preserved": true,
+    "matchup_target_preserved_across_executor_capability_authorization": true
+  },
+  "offline_evaluation": {
+    "switch_class_metrics": "existing class-level raw and balanced accuracy",
+    "switch_target_metrics": "new separate teacher-target examples, correct count, and accuracy",
+    "candidate_permutation_tested": true,
+    "opponent_type_counterfactual_tested": true
+  },
+  "artifact_compatibility": {
+    "previous_schema": "pokemon.core.battle.control.features.v2",
+    "previous_artifact_accepted": false,
+    "reason": "the old artifact never observed reserve matchup mechanics and must not be presented as understanding them"
+  },
+  "data_status": {
+    "fresh_schema_v3_training_lineages": 0,
+    "fresh_schema_v3_validation_lineages": 0,
+    "counted_clean_start_roots_consumed": 0
+  },
+  "next_gates": [
+    "collect fresh balanced-role demonstrations with opponent-position coverage",
+    "fit with whole-lineage train and validation separation",
+    "require both switch-class and switch-target held-out evidence",
+    "run reserve-permutation and matchup counterfactual evaluation",
+    "repeat the strict uncounted canonical clean-start rehearsal",
+    "run one uncounted perturbation rehearsal before opening the counted campaign"
+  ]
+}

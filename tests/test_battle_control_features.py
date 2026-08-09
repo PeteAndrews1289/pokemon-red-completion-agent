@@ -8,11 +8,17 @@ from pokemon_red_completion.battle_actions import BattleAction, BattleBoostStat
 from pokemon_red_completion.battle_control_features import (
     CONTROL_CLASS_REFS,
     CONTROL_FEATURE_NAMES,
+    CONTROL_FEATURE_SCHEMA_ID,
     BattleControlFeatureError,
     BattleControlHistoryTracker,
     action_from_control_class_ref,
     control_class_ref,
     project_control_features,
+)
+from pokemon_red_completion.red_battle_catalog import (
+    RED_BATTLE_CATALOG,
+    pokemon_red_move_ref,
+    pokemon_red_species_ref,
 )
 
 
@@ -24,7 +30,7 @@ def _observation() -> dict[str, object]:
                 "count": 3,
                 "active_index": 1,
                 "lead": {
-                    "species_ref": "pokemon:test:two",
+                    "species_ref": pokemon_red_species_ref(0x68),
                     "level": 40,
                     "hp": 25,
                     "max_hp": 100,
@@ -33,28 +39,49 @@ def _observation() -> dict[str, object]:
                 },
                 "members": [
                     {
-                        "species_ref": "pokemon:test:one",
+                        "species_ref": pokemon_red_species_ref(0x1C),
                         "level": 42,
                         "hp": 100,
                         "max_hp": 100,
                         "hp_ratio": 1.0,
                         "status": None,
+                        "moves": [
+                            {
+                                "slot_index": 0,
+                                "move_ref": pokemon_red_move_ref(0x39),
+                                "pp": 15,
+                            }
+                        ],
                     },
                     {
-                        "species_ref": "pokemon:test:two",
+                        "species_ref": pokemon_red_species_ref(0x68),
                         "level": 40,
                         "hp": 25,
                         "max_hp": 100,
                         "hp_ratio": 0.25,
                         "status": "paralysis",
+                        "moves": [
+                            {
+                                "slot_index": 0,
+                                "move_ref": pokemon_red_move_ref(0x57),
+                                "pp": 10,
+                            }
+                        ],
                     },
                     {
-                        "species_ref": "pokemon:test:three",
+                        "species_ref": pokemon_red_species_ref(0x84),
                         "level": 38,
                         "hp": 0,
                         "max_hp": 100,
                         "hp_ratio": 0.0,
                         "status": None,
+                        "moves": [
+                            {
+                                "slot_index": 0,
+                                "move_ref": pokemon_red_move_ref(0x22),
+                                "pp": 15,
+                            }
+                        ],
                     },
                 ],
             },
@@ -69,7 +96,7 @@ def _observation() -> dict[str, object]:
             },
             "battle": {
                 "kind": "trainer",
-                "opponent_species_ref": "pokemon:test:opponent-one",
+                "opponent_species_ref": pokemon_red_species_ref(0x78),
                 "opponent_level": 41,
                 "opponent_hp_ratio": 0.5,
                 "player_attack_stage": 2,
@@ -84,7 +111,7 @@ def _observation() -> dict[str, object]:
 
 
 def test_control_projector_exposes_normalized_party_and_resource_state() -> None:
-    vector = project_control_features(_observation())
+    vector = project_control_features(_observation(), catalog=RED_BATTLE_CATALOG)
     values = dict(zip(CONTROL_FEATURE_NAMES, vector, strict=True))
 
     assert vector.shape == (len(CONTROL_FEATURE_NAMES),)
@@ -95,6 +122,9 @@ def test_control_projector_exposes_normalized_party_and_resource_state() -> None
     assert values["party.mean_level"] == pytest.approx(0.4)
     assert values["resources.healing_items"] == pytest.approx(0.2)
     assert values["progress.badge_count"] == 0.5
+    assert CONTROL_FEATURE_SCHEMA_ID.endswith(".v3")
+    assert values["party.reserve_matchup.available"] == 1.0
+    assert values["party.reserve_matchup.candidate_count"] == pytest.approx(1 / 5)
 
 
 def test_control_action_classes_drop_game_specific_targets() -> None:
@@ -121,12 +151,28 @@ def test_control_projector_rejects_missing_or_impossible_state() -> None:
     missing = deepcopy(_observation())
     del missing["features"]["resources"]  # type: ignore[index]
     with pytest.raises(BattleControlFeatureError):
-        project_control_features(missing)
+        project_control_features(missing, catalog=RED_BATTLE_CATALOG)
 
     impossible = deepcopy(_observation())
     impossible["features"]["party"]["members"][0]["hp_ratio"] = 2.0  # type: ignore[index]
     with pytest.raises(BattleControlFeatureError):
-        project_control_features(impossible)
+        project_control_features(impossible, catalog=RED_BATTLE_CATALOG)
+
+
+def test_control_projector_without_catalog_marks_matchup_unavailable() -> None:
+    vector = project_control_features(_observation())
+    values = dict(zip(CONTROL_FEATURE_NAMES, vector, strict=True))
+
+    assert values["party.reserve_matchup.available"] == 0.0
+    assert values["party.reserve_matchup.advantage.score"] == 0.0
+
+
+def test_control_schema_contains_no_party_or_opponent_identity_shortcut() -> None:
+    assert not any(
+        token in name
+        for name in CONTROL_FEATURE_NAMES
+        for token in ("species", "move_ref", "party_slot", "opponent_id", "map")
+    )
 
 
 def test_control_history_tracks_causal_actions_and_opponent_changes() -> None:

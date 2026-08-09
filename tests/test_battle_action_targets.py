@@ -3,6 +3,7 @@ import pytest
 from pokemon_red_completion.battle_action_targets import (
     BattleActionTargetError,
     RecoveryNeed,
+    SwitchTargetBasis,
     authorize_recovery_target,
     authorize_switch_target,
     resolve_battle_action_target,
@@ -11,6 +12,11 @@ from pokemon_red_completion.battle_actions import BattleAction, BattleBoostStat
 from pokemon_red_completion.battle_runtime import (
     BattleRecoveryCapability,
     BattleSwitchCapability,
+)
+from pokemon_red_completion.red_battle_catalog import (
+    RED_BATTLE_CATALOG,
+    pokemon_red_move_ref,
+    pokemon_red_species_ref,
 )
 
 
@@ -79,11 +85,74 @@ def test_recovery_can_infer_active_slot_from_legacy_lead_observation() -> None:
 def test_switch_selects_healthiest_living_reserve_without_game_identity() -> None:
     resolved = resolve_battle_action_target(BattleAction.switch(), _observation())
     assert resolved.party_slot == 3
+    assert resolved.switch_basis is SwitchTargetBasis.READINESS
 
 
 def test_switch_honors_an_explicit_legal_target() -> None:
     resolved = resolve_battle_action_target(BattleAction.switch(2), _observation())
     assert resolved.party_slot == 2
+    assert resolved.switch_basis is SwitchTargetBasis.EXPLICIT
+
+
+def test_switch_selects_and_preserves_the_best_semantic_matchup() -> None:
+    observation = {
+        "features": {
+            "party": {
+                "active_index": 0,
+                "members": [
+                    {
+                        "species_ref": pokemon_red_species_ref(0x1C),
+                        "hp": 100,
+                        "max_hp": 100,
+                        "level": 63,
+                        "status": None,
+                        "moves": [
+                            {"move_ref": pokemon_red_move_ref(0x39), "pp": 15}
+                        ],
+                    },
+                    {
+                        "species_ref": pokemon_red_species_ref(0x68),
+                        "hp": 100,
+                        "max_hp": 100,
+                        "level": 55,
+                        "status": None,
+                        "moves": [
+                            {"move_ref": pokemon_red_move_ref(0x57), "pp": 10}
+                        ],
+                    },
+                    {
+                        "species_ref": pokemon_red_species_ref(0x84),
+                        "hp": 100,
+                        "max_hp": 100,
+                        "level": 55,
+                        "status": None,
+                        "moves": [
+                            {"move_ref": pokemon_red_move_ref(0x22), "pp": 15}
+                        ],
+                    },
+                ],
+            },
+            "battle": {
+                "opponent_species_ref": pokemon_red_species_ref(0x78),
+                "opponent_level": 54,
+            },
+        }
+    }
+
+    resolved = resolve_battle_action_target(
+        BattleAction.switch(),
+        observation,
+        catalog=RED_BATTLE_CATALOG,
+    )
+    authorized = authorize_switch_target(
+        resolved,
+        frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
+        observation=observation,
+    )
+
+    assert resolved.party_slot == 2
+    assert resolved.switch_basis is SwitchTargetBasis.MATCHUP
+    assert authorized == resolved
 
 
 def test_switch_target_requires_a_declared_executor_capability() -> None:

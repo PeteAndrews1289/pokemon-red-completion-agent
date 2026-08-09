@@ -34,6 +34,15 @@ reserve rather than the best semantic matchup. Build schema v3, matchup-aware sw
 and a fresh balanced-role artifact before repeating the strict canonical rehearsal. Do not weaken
 the Lorelei verifier and do not open counted roots with the old artifact.
 
+**Implementation checkpoint:** that representation is now feature schema v3. The Red observer
+records moves and PP for every party member; the shared projector compares reserves by usable move
+power, type advantage, defensive resistance, health/status, and level margin without placing any
+identity in the model vector. Generic switch execution binds the same best candidate, fails closed
+when every reserve is below 50% HP, and reports target accuracy separately from the switch class.
+The old v2 artifact now fails authentication by design. No v3 lineage or runtime result exists yet.
+Start by collecting fresh balanced-role demonstrations, not by replaying the old model. See the
+[design receipt](docs/evidence/battle-control-reserve-matchup-v3-design-2026-08-08.json).
+
 - The deterministic teacher remains the expert oracle: clean power-on through 312/312 semantic
   checkpoints, all 36 objectives, Champion, and Hall of Fame.
 - The captured-state portable objective loop has one uninterrupted twenty-dispatch Hall-of-Fame
@@ -97,6 +106,10 @@ targeting matchup-aware → collect and train a balanced-role battle-control art
 and counterfactual role gates → pass one strict canonical rehearsal → repair the exposed
 perturbation failures → freeze and open the 8/10 campaign. Crystal and learned navigation follow
 that stable Red benchmark.
+
+The first two arrows are implemented ROM-free. The collection and training arrow is now active.
+Crystal begins as the bounded [transfer benchmark](docs/crystal-transfer-benchmark.md), not as a
+second complete teacher route.
 
 Do **not** open the ten counted clean-start roots yet. The updated
 [readiness audit](docs/evidence/clean-start-learned-stack-readiness-audit-2026-08-08.json) records
@@ -168,8 +181,8 @@ of whether it serves this.
   captured-state and full-route proof.
 
 **Historical gate at that checkpoint:** 1,945 tests, 3 deselected; Ruff, mypy, artifacts, docs, and
-registry were clean after the Secret Key adapter. The current superseding gate is 2,059 passed,
-3 deselected, with mypy checking all 120 source modules.
+registry were clean after the Secret Key adapter. The current superseding gate is 2,074 passed,
+3 deselected, with mypy checking all 121 source modules.
 
 ---
 

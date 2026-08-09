@@ -7,10 +7,12 @@ from dataclasses import dataclass, replace
 from enum import StrEnum
 
 from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
+from pokemon_red_completion.battle_matchups import best_reserve_matchup
 from pokemon_red_completion.battle_runtime import (
     BattleRecoveryCapability,
     BattleSwitchCapability,
 )
+from pokemon_red_completion.battle_semantics import BattleMechanicsCatalog
 
 
 class BattleActionTargetError(ValueError):
@@ -25,6 +27,14 @@ class RecoveryNeed(StrEnum):
     HP_AND_STATUS = "hp_and_status"
 
 
+class SwitchTargetBasis(StrEnum):
+    """Why a portable switch target was selected."""
+
+    EXPLICIT = "explicit"
+    MATCHUP = "matchup"
+    READINESS = "readiness"
+
+
 @dataclass(frozen=True, slots=True)
 class ResolvedBattleAction:
     """A high-level action plus its game-neutral party/effect target."""
@@ -33,6 +43,7 @@ class ResolvedBattleAction:
     party_slot: int | None = None
     recovery_need: RecoveryNeed | None = None
     status: str | None = None
+    switch_basis: SwitchTargetBasis | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.action, BattleAction):
@@ -46,12 +57,18 @@ class ResolvedBattleAction:
             elif self.status is not None:
                 raise ValueError("HP-only recovery cannot name a status")
         elif self.action.kind is BattleActionKind.SWITCH:
-            if self.party_slot is None or self.recovery_need is not None or self.status is not None:
+            if (
+                self.party_slot is None
+                or self.recovery_need is not None
+                or self.status is not None
+                or self.switch_basis is None
+            ):
                 raise ValueError("switch actions require only a party slot")
         elif (
             self.party_slot is not None
             or self.recovery_need is not None
             or self.status is not None
+            or self.switch_basis is not None
         ):
             raise ValueError("this action kind does not accept a target")
         if self.party_slot is not None and not 1 <= self.party_slot <= 6:
@@ -63,12 +80,17 @@ class ResolvedBattleAction:
             "party_slot": self.party_slot,
             "recovery_need": (self.recovery_need.value if self.recovery_need is not None else None),
             "status": self.status,
+            "switch_basis": (
+                self.switch_basis.value if self.switch_basis is not None else None
+            ),
         }
 
 
 def resolve_battle_action_target(
     action: BattleAction,
     observation: Mapping[str, object],
+    *,
+    catalog: BattleMechanicsCatalog | None = None,
 ) -> ResolvedBattleAction:
     """Resolve legal targets using only the portable semantic observation."""
 
@@ -127,7 +149,26 @@ def resolve_battle_action_target(
             raise BattleActionTargetError("requested switch target is already active")
         if _nonnegative_int(members[requested_index].get("hp"), "target hp") == 0:
             raise BattleActionTargetError("requested switch target has fainted")
-        return ResolvedBattleAction(action, party_slot=requested_index + 1)
+        return ResolvedBattleAction(
+            action,
+            party_slot=requested_index + 1,
+            switch_basis=SwitchTargetBasis.EXPLICIT,
+        )
+
+    if catalog is not None:
+        try:
+            matchup = best_reserve_matchup(observation, catalog)
+        except ValueError as error:
+            raise BattleActionTargetError(
+                "switch matchup projection is unavailable"
+            ) from error
+        if matchup is None:
+            raise BattleActionTargetError("no living switch target is available")
+        return ResolvedBattleAction(
+            action,
+            party_slot=matchup.party_slot,
+            switch_basis=SwitchTargetBasis.MATCHUP,
+        )
 
     candidates: list[tuple[float, int, int, int]] = []
     for index, member in enumerate(members):
@@ -142,7 +183,11 @@ def resolve_battle_action_target(
     if not candidates:
         raise BattleActionTargetError("no living switch target is available")
     chosen_index = -max(candidates)[3]
-    return ResolvedBattleAction(action, party_slot=chosen_index + 1)
+    return ResolvedBattleAction(
+        action,
+        party_slot=chosen_index + 1,
+        switch_basis=SwitchTargetBasis.READINESS,
+    )
 
 
 def authorize_recovery_target(
@@ -202,6 +247,8 @@ def authorize_switch_target(
         raise BattleActionTargetError("switch effect is not declared by the executor")
     if resolved.party_slot is None:
         raise BattleActionTargetError("switch action lacks a complete party target")
+    if resolved.switch_basis in {SwitchTargetBasis.EXPLICIT, SwitchTargetBasis.MATCHUP}:
+        return resolved
     if observation is not None and capabilities & {
         BattleSwitchCapability.RESET_STAT_STAGES,
         BattleSwitchCapability.TEMPORARY_ROLE_PIVOT,

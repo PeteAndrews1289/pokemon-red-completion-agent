@@ -5,6 +5,8 @@ from __future__ import annotations
 from collections.abc import Iterable
 from dataclasses import dataclass
 
+from pokemon_red_completion.battle_action_targets import resolve_battle_action_target
+from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
 from pokemon_red_completion.battle_control_features import (
     CONTROL_CLASS_REFS,
     BattleControlExample,
@@ -12,7 +14,7 @@ from pokemon_red_completion.battle_control_features import (
     control_class_ref,
     project_control_features,
 )
-from pokemon_red_completion.battle_control_labels import BattleControlDataset
+from pokemon_red_completion.battle_control_labels import BattleControlDataset, BattleControlLabel
 from pokemon_red_completion.battle_control_model import (
     BattleControlMetrics,
     BattleControlMLP,
@@ -25,6 +27,34 @@ from pokemon_red_completion.trajectory import SemanticSnapshot
 
 
 @dataclass(frozen=True, slots=True)
+class BattleSwitchTargetMetrics:
+    """Teacher-target agreement for generic semantic switch resolution."""
+
+    examples: int
+    correct: int
+
+    def __post_init__(self) -> None:
+        if (
+            type(self.examples) is not int  # noqa: E721
+            or type(self.correct) is not int  # noqa: E721
+            or self.examples < 0
+            or not 0 <= self.correct <= self.examples
+        ):
+            raise ValueError("switch target metric counts are invalid")
+
+    @property
+    def accuracy(self) -> float | None:
+        return self.correct / self.examples if self.examples else None
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "examples": self.examples,
+            "correct": self.correct,
+            "accuracy": self.accuracy,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class BattleControlCandidate:
     model: BattleControlMLP
     training: BattleControlMetrics
@@ -33,6 +63,8 @@ class BattleControlCandidate:
     training_artifact_ids: tuple[str, ...]
     validation_artifact_ids: tuple[str, ...]
     source_manifest_sha256s: tuple[str, ...]
+    training_switch_targets: BattleSwitchTargetMetrics
+    validation_switch_targets: BattleSwitchTargetMetrics
 
     def public_summary(self) -> dict[str, object]:
         return {
@@ -45,6 +77,8 @@ class BattleControlCandidate:
             "training_artifact_ids": list(self.training_artifact_ids),
             "validation_artifact_ids": list(self.validation_artifact_ids),
             "source_manifest_sha256s": list(self.source_manifest_sha256s),
+            "training_switch_targets": self.training_switch_targets.public_dict(),
+            "validation_switch_targets": self.validation_switch_targets.public_dict(),
         }
 
 
@@ -69,6 +103,7 @@ def control_examples(dataset: BattleControlDataset) -> tuple[BattleControlExampl
                 observation,
                 move_batch=projector.project(snapshot),
                 history=history.before(label.battle_plan_id, observation),
+                catalog=projector.catalog,
             ),
             class_index=CONTROL_CLASS_REFS.index(control_class_ref(label.teacher_action)),
             battle_plan_id=label.battle_plan_id,
@@ -76,6 +111,35 @@ def control_examples(dataset: BattleControlDataset) -> tuple[BattleControlExampl
         ))
         history.advance(label.teacher_action, observation)
     return tuple(examples)
+
+
+def evaluate_switch_target_resolution(
+    labels: Iterable[BattleControlLabel],
+) -> BattleSwitchTargetMetrics:
+    """Measure whether a targetless switch resolves to the demonstrated member."""
+
+    projector = BattleFeatureProjector(PokemonRedBattleCatalog())
+    examples = 0
+    correct = 0
+    for label in labels:
+        teacher_action = label.teacher_action
+        if teacher_action.kind is not BattleActionKind.SWITCH:
+            continue
+        if teacher_action.party_slot is None:
+            raise BattleControlModelError("teacher switch label lacks a party target")
+        try:
+            resolved = resolve_battle_action_target(
+                BattleAction.switch(),
+                label.observation,
+                catalog=projector.catalog,
+            )
+        except ValueError as error:
+            raise BattleControlModelError(
+                "switch target label lacks reserve matchup semantics"
+            ) from error
+        examples += 1
+        correct += int(resolved.party_slot == teacher_action.party_slot)
+    return BattleSwitchTargetMetrics(examples=examples, correct=correct)
 
 
 def fit_group_heldout_control_candidate(
@@ -101,6 +165,12 @@ def fit_group_heldout_control_candidate(
     validation_set = set(validation_groups)
     train = tuple(row for row in rows if row.battle_plan_id not in validation_set)
     validation = tuple(row for row in rows if row.battle_plan_id in validation_set)
+    training_labels = tuple(
+        label for label in dataset.labels if label.battle_plan_id not in validation_set
+    )
+    validation_labels = tuple(
+        label for label in dataset.labels if label.battle_plan_id in validation_set
+    )
     if not train or not validation:
         raise BattleControlModelError("control train/validation split is empty")
     train_classes = {CONTROL_CLASS_REFS[row.class_index] for row in train}
@@ -127,6 +197,8 @@ def fit_group_heldout_control_candidate(
         training_artifact_ids=(dataset.artifact_id,),
         validation_artifact_ids=(dataset.artifact_id,),
         source_manifest_sha256s=(dataset.manifest_sha256,),
+        training_switch_targets=evaluate_switch_target_resolution(training_labels),
+        validation_switch_targets=evaluate_switch_target_resolution(validation_labels),
     )
 
 
@@ -182,4 +254,10 @@ def fit_preassigned_control_candidate(
         training_artifact_ids=tuple(dataset.artifact_id for dataset in training_roots),
         validation_artifact_ids=tuple(dataset.artifact_id for dataset in validation_roots),
         source_manifest_sha256s=manifests,
+        training_switch_targets=evaluate_switch_target_resolution(
+            label for dataset in training_roots for label in dataset.labels
+        ),
+        validation_switch_targets=evaluate_switch_target_resolution(
+            label for dataset in validation_roots for label in dataset.labels
+        ),
     )

@@ -22,8 +22,10 @@ Pokémon and aggregate reserve readiness, but not reserve types, moves, or candi
 matchup advantage. Generic switch targeting also chooses a healthy high-level reserve without
 semantic matchup scoring. The dependency-ordered work is now:
 
-1. add portable reserve offensive and defensive matchup observations;
-2. make generic switch targeting rank safe reserves by matchup value;
+1. add portable reserve offensive and defensive matchup observations — **implemented as feature
+   schema v3**;
+2. make generic switch targeting rank safe reserves by matchup value — **implemented with a 50%
+   HP floor and separate target metrics**;
 3. collect fresh balanced-role demonstrations and train a new battle-control artifact;
 4. pass held-out, counterfactual, and strict canonical five-role gates;
 5. repair or bound the lab-rival, Diglett-capture, and Rocket-thief perturbation failures;
@@ -33,6 +35,11 @@ semantic matchup scoring. The dependency-ordered work is now:
 Do not weaken the Lorelei verifier and do not spend counted roots on the old artifact. The updated
 [readiness audit](evidence/clean-start-learned-stack-readiness-audit-2026-08-08.json) distinguishes
 infrastructure readiness from model-stack readiness.
+
+The bounded [Crystal transfer benchmark](crystal-transfer-benchmark.md) follows a qualified Red v3
+artifact. It deliberately starts with one battle, one local navigation task, and one training
+choice; a complete Crystal teacher is not a prerequisite for learning whether the abstractions
+transfer.
 
 Historical curriculum priorities were:
 

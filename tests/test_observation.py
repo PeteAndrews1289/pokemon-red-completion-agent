@@ -186,6 +186,30 @@ def test_reader_decodes_money_as_a_semantic_decimal_resource() -> None:
     assert PokemonRedStateReader(memory).read().player_money == 12_345
 
 
+def test_reader_exposes_every_party_members_moves_and_pp() -> None:
+    memory = RecordingMemory(
+        {
+            RamAddress.STATUS_FLAGS_6: 1,
+            RamAddress.PARTY_COUNT: 2,
+            RamAddress.PARTY_SPECIES: 0x1C,
+            int(RamAddress.PARTY_SPECIES) + 1: 0x68,
+            RamAddress.PARTY_MON_1_MOVES: 0x39,
+            int(RamAddress.PARTY_MON_1_MOVES) + 1: 0x3A,
+            RamAddress.PARTY_MON_1_PP: 15,
+            int(RamAddress.PARTY_MON_1_PP) + 1: 10,
+            RamAddress.PARTY_MON_2_MOVES: 0x57,
+            int(RamAddress.PARTY_MON_2_MOVES) + 1: 0x62,
+            RamAddress.PARTY_MON_2_PP: 10,
+            int(RamAddress.PARTY_MON_2_PP) + 1: 20,
+        }
+    )
+
+    raw = PokemonRedStateReader(memory).read()
+
+    assert raw.party_moves == ((0x39, 0x3A, 0, 0), (0x57, 0x62, 0, 0))
+    assert raw.party_pp == ((15, 10, 0, 0), (10, 20, 0, 0))
+
+
 def test_reader_rejects_invalid_money_digits() -> None:
     memory = RecordingMemory(
         {

@@ -443,6 +443,7 @@ class ModelAssistedBattlePolicy:
                     encoded,
                     move_batch=self.projector.project(snapshot),
                     history=history,
+                    catalog=getattr(self.projector, "catalog", None),
                 )
             )
             predicted_ref = self.control_model.class_refs[int(np.argmax(probabilities))]
@@ -471,7 +472,11 @@ class ModelAssistedBattlePolicy:
         if predicted_ref != CONTROL_CLASS_REFS[0]:
             try:
                 predicted_action = action_from_control_class_ref(predicted_ref)
-                resolved_action = resolve_battle_action_target(predicted_action, encoded)
+                resolved_action = resolve_battle_action_target(
+                    predicted_action,
+                    encoded,
+                    catalog=getattr(self.projector, "catalog", None),
+                )
             except BattleActionTargetError as error:
                 self.control_target_resolution_failures[type(error).__name__] += 1
                 self.control_execution_decisions += 1
@@ -484,6 +489,8 @@ class ModelAssistedBattlePolicy:
                 target_key = f"{target_key}:{resolved_action.recovery_need.value}"
             if resolved_action.party_slot is not None:
                 target_key = f"{target_key}:party_slot"
+            if resolved_action.switch_basis is not None:
+                target_key = f"{target_key}:{resolved_action.switch_basis.value}"
             self.control_resolved_targets[target_key] += 1
             if resolved_action.action.kind is BattleActionKind.USE_RECOVERY:
                 try:
@@ -625,6 +632,7 @@ class ModelAssistedBattlePolicy:
                 observation,
                 move_batch=move_batch,
                 history=history,
+                catalog=getattr(self.projector, "catalog", None),
             )
             probabilities = self.control_model.predict_proba(features)
             predicted = self.control_model.class_refs[int(np.argmax(probabilities))]

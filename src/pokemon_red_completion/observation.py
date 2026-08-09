@@ -985,6 +985,8 @@ class RawGameState:
     party_hp: tuple[int, ...] | None = None
     party_max_hp: tuple[int, ...] | None = None
     party_status: tuple[int, ...] | None = None
+    party_moves: tuple[tuple[int, ...], ...] | None = None
+    party_pp: tuple[tuple[int, ...], ...] | None = None
     first_party_level: int | None = None
     first_party_hp: int | None = None
     first_party_max_hp: int | None = None
@@ -3322,6 +3324,20 @@ class PokemonRedStateReader:
         party_status = tuple(
             self._memory.read_u8(base + PARTY_STATUS_OFFSET) for base in party_bases
         )
+        party_moves = tuple(
+            tuple(
+                self._memory.read_u8(base + PARTY_MOVES_OFFSET + index)
+                for index in range(4)
+            )
+            for base in party_bases
+        )
+        party_pp = tuple(
+            tuple(
+                self._memory.read_u8(base + PARTY_PP_OFFSET + index)
+                for index in range(4)
+            )
+            for base in party_bases
+        )
         first_party_level = (
             self._memory.read_u8(RamAddress.PARTY_MON_1_LEVEL) if party_count else None
         )
@@ -3395,6 +3411,8 @@ class PokemonRedStateReader:
             party_hp=party_hp,
             party_max_hp=party_max_hp,
             party_status=party_status,
+            party_moves=party_moves,
+            party_pp=party_pp,
             first_party_level=first_party_level,
             first_party_hp=first_party_hp,
             first_party_max_hp=first_party_max_hp,
