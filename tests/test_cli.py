@@ -1361,6 +1361,64 @@ def test_play_wires_authenticated_training_candidate_authority(
     assert json.loads(capsys.readouterr().out)["game_complete"] is True
 
 
+def test_play_can_execute_battle_control_while_move_model_remains_teacher_gated(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    class FakeModel:
+        pass
+
+    class FakeReport:
+        verified_objectives = tuple(objective.id for objective in cli.COMPLETION_QUEST)
+        next_objective = None
+
+        def public_dict(self) -> dict[str, object]:
+            return {"status": "ok", "game_complete": True}
+
+    private_path = Path("/private/Pokemon Red.gb")
+    move_model_path = Path("/private/move/model.jsonl")
+    control_model_path = Path("/private/control")
+    move_model = FakeModel()
+    control_model = FakeModel()
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda argument: private_path)
+    monkeypatch.setattr(
+        cli,
+        "load_battle_model_artifact",
+        lambda path: move_model,
+    )
+    monkeypatch.setattr(
+        cli,
+        "load_battle_control_model_artifact",
+        lambda path: control_model,
+    )
+
+    def fake_play(*args, **kwargs) -> FakeReport:
+        assert kwargs["battle_model"] is move_model
+        assert kwargs["battle_control_model"] is control_model
+        assert kwargs["execute_battle_control_model"] is True
+        assert kwargs["require_battle_model_teacher_agreement"] is True
+        return FakeReport()
+
+    monkeypatch.setattr(cli, "run_qualified_play", fake_play)
+
+    assert (
+        cli.main(
+            [
+                "play",
+                "--rom",
+                str(private_path),
+                "--battle-model",
+                str(move_model_path),
+                "--battle-control-model",
+                str(control_model_path),
+                "--execute-battle-control",
+            ]
+        )
+        == 0
+    )
+    assert json.loads(capsys.readouterr().out)["game_complete"] is True
+
+
 def test_play_command_finalizes_private_battle_corrections(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],

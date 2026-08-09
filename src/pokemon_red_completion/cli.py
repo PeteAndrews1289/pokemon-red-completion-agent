@@ -518,8 +518,8 @@ def _parser() -> argparse.ArgumentParser:
         action="store_true",
         help=(
             "Promotion mode: let the full-battle controller gate typed recovery, "
-            "boost, and switch requests; requires --battle-control-model and "
-            "--allow-model-disagreement."
+            "boost, and switch requests; requires --battle-control-model. Move "
+            "selection remains teacher-gated unless --allow-model-disagreement is set."
         ),
     )
     play.add_argument(
@@ -1952,8 +1952,6 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 parser.error("--battle-control-model requires --battle-model")
             if args.execute_battle_control and args.battle_control_model is None:
                 parser.error("--execute-battle-control requires --battle-control-model")
-            if args.execute_battle_control and not args.allow_model_disagreement:
-                parser.error("--execute-battle-control requires --allow-model-disagreement")
             battle_model = (
                 load_battle_model_artifact(args.battle_model)
                 if args.battle_model is not None

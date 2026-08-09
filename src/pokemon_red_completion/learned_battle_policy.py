@@ -229,13 +229,28 @@ class ModelAssistedBattlePolicy:
             return teacher_slot
         assert predicted_slot is not None
         if self.execute_control_model:
+            assert batch is not None
+            assert predicted_candidate is not None
+            assert confidence is not None
             return self._execute_control_decision(
                 observation,
                 query_teacher,
                 predicted_slot=predicted_slot,
+                move_context=context,
+                move_batch=batch,
+                move_legal_mask=legal_mask,
+                move_predicted_candidate=predicted_candidate,
+                move_confidence=confidence,
             )
         if self.require_teacher_agreement:
-            teacher_slot = query_teacher()
+            try:
+                teacher_slot = query_teacher()
+            except BattleControlRequest as request:
+                # Move-level teacher gating and high-level control shadowing are
+                # independent boundaries. Preserve the teacher request for the
+                # executor while still recording it for the controller audit.
+                self._record_control_action(observation, request.action)
+                raise
             if teacher_slot != predicted_slot:
                 assert batch is not None
                 assert predicted_candidate is not None
@@ -427,8 +442,13 @@ class ModelAssistedBattlePolicy:
         fallback: Callable[[], int],
         *,
         predicted_slot: int,
+        move_context: BattleMovePolicyContext | None,
+        move_batch: BattleFeatureBatch,
+        move_legal_mask: list[bool],
+        move_predicted_candidate: int,
+        move_confidence: float,
     ) -> int:
-        """Let the controller gate typed teacher parameterization during promotion."""
+        """Execute high-level control without implicitly promoting move selection."""
 
         assert self.control_model is not None
         intent = observation.intent
@@ -562,6 +582,26 @@ class ModelAssistedBattlePolicy:
         if predicted_ref == CONTROL_CLASS_REFS[0]:
             if teacher_request is not None:
                 self.control_suppressed_teacher_requests += 1
+            elif self.require_teacher_agreement:
+                assert teacher_slot is not None
+                if teacher_slot != predicted_slot:
+                    self._record_correction(
+                        observation=observation,
+                        context=move_context,
+                        batch=move_batch,
+                        legal_mask=move_legal_mask,
+                        predicted_candidate=move_predicted_candidate,
+                        confidence=move_confidence,
+                        teacher_slot=teacher_slot,
+                        reason="teacher_disagreement",
+                    )
+                    self.teacher_fallbacks += 1
+                    self.fallback_reasons["teacher_disagreement"] += 1
+                    self._record_control_action(
+                        observation,
+                        BattleAction.move(teacher_slot),
+                    )
+                    return teacher_slot
             self.model_decisions += 1
             self._record_control_action(observation, BattleAction.move(predicted_slot))
             return predicted_slot

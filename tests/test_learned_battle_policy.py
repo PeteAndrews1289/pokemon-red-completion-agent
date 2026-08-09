@@ -508,6 +508,32 @@ def test_control_model_scores_live_actions_without_executing_them() -> None:
     }
 
 
+def test_control_shadow_records_typed_request_while_move_model_is_teacher_gated() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_control_model(),
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=True,
+    )
+
+    with pytest.raises(BattleControlRequest):
+        policy.choose_move(
+            _observation(),
+            lambda: (_ for _ in ()).throw(BattleControlRequest(BattleAction.recovery())),
+        )
+
+    shadow = policy.public_dict()["control_model_shadow"]
+    assert isinstance(shadow, dict)
+    assert shadow["decisions"] == 1
+    assert shadow["agreements"] == 1
+    assert shadow["confusion"] == {
+        "pokemon.core:battle:recovery -> pokemon.core:battle:recovery": 1,
+    }
+    assert policy.teacher_queries == 1
+
+
 def test_control_execution_emits_recovery_without_calling_teacher() -> None:
     policy = ModelAssistedBattlePolicy(
         model=_model(),
@@ -558,6 +584,27 @@ def test_control_execution_can_suppress_a_teacher_recovery() -> None:
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
     assert execution["teacher_requests_suppressed"] == 1
+
+
+def test_control_execution_preserves_move_teacher_gate() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_control_model(0),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=True,
+    )
+
+    assert policy.choose_move(_observation(), lambda: 1) == 1
+    assert policy.teacher_queries == 1
+    assert policy.teacher_fallbacks == 1
+    assert policy.fallback_reasons == {"teacher_disagreement": 1}
+    assert policy.model_decisions == 0
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["decisions"] == 1
 
 
 def test_teacher_free_control_move_does_not_query_teacher() -> None:
