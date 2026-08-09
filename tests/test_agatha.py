@@ -24,6 +24,7 @@ from pokemon_red_completion.agatha import (
     _agatha_matchup_switch_target,
     _agatha_move_slot,
     _agatha_recovery_due,
+    _agatha_required_role_switches,
     _agatha_team_lesson_satisfied,
     _battle_x_special,
     _encounter_party,
@@ -279,6 +280,29 @@ def test_agatha_team_lesson_requires_every_declared_role_position() -> None:
 
     assert _agatha_team_lesson_satisfied(turns)
     assert not _agatha_team_lesson_satisfied(turns[:-1])
+
+
+def test_agatha_switch_contract_follows_observed_role_transitions() -> None:
+    def turn(species: int) -> AgathaTurn:
+        return AgathaTurn(
+            species,
+            56,
+            1,
+            AGATHA_RESERVE_SAFE_HP,
+            0,
+            (1, 1, 1, 1),
+            1,
+        )
+
+    canonical = tuple(turn(species) for species in (0x0E, 0x82, 0x93, 0x2D, 0x0E))
+    perturbed = tuple(
+        turn(species)
+        for species in (0x0E, 0x0E, 0x82, 0x82, 0x93, 0x82, 0x82, 0x2D, 0x82, 0x0E)
+    )
+
+    assert _agatha_required_role_switches(()) == 0
+    assert _agatha_required_role_switches(canonical) == 3
+    assert _agatha_required_role_switches(perturbed) == 7
 
 
 def test_agatha_recovery_tracks_live_state_without_forcing_an_attack_between_items() -> None:

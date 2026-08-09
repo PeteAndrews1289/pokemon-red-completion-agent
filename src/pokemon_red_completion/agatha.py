@@ -185,7 +185,7 @@ class AgathaChapterReport:
             and self.party_hp == self.party_max_hp
             and all(status == 0 for status in self.party_status)
             and _agatha_team_lesson_satisfied(self.turns)
-            and self.team_switches == 3
+            and self.team_switches == _agatha_required_role_switches(self.turns)
             and self.controller_released
         )
 
@@ -345,7 +345,6 @@ def run_agatha_chapter(
         boost_capabilities=frozenset({BattleBoostStat.SPECIAL}),
         boost_use_limits=((BattleBoostStat.SPECIAL, AGATHA_X_SPECIAL_USE),),
         switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
-        switch_limit=3,
         require_move_between_switches=True,
     )
     while reader.read().battle_state:
@@ -564,7 +563,13 @@ def _turns_valid(turns: Iterable[AgathaTurn]) -> bool:
 
 def _agatha_matchup_species(raw: RawGameState) -> int:
     """Assign the airborne target to Jolteon and grounded Poison targets to Dugtrio."""
-    return JOLTEON_SPECIES_ID if raw.enemy_species_id == 0x82 else DUGTRIO_SPECIES_ID
+    return _agatha_matchup_species_id(raw.enemy_species_id)
+
+
+def _agatha_matchup_species_id(enemy_species_id: int | None) -> int:
+    """Map one observed opponent to its mechanics-defined specialist role."""
+
+    return JOLTEON_SPECIES_ID if enemy_species_id == 0x82 else DUGTRIO_SPECIES_ID
 
 
 def _agatha_matchup_switch_target(raw: RawGameState, species_id: int) -> int | None:
@@ -597,6 +602,18 @@ def _agatha_team_lesson_satisfied(turns: Iterable[AgathaTurn]) -> bool:
     return (
         dugtrio_positions >= AGATHA_DUGTRIO_TARGET_POSITIONS
         and jolteon_positions >= AGATHA_JOLTEON_TARGET_POSITIONS
+    )
+
+
+def _agatha_required_role_switches(turns: Iterable[AgathaTurn]) -> int:
+    """Count semantic role transitions under Agatha's observable switching order."""
+
+    roles = tuple(_agatha_matchup_species_id(turn.species) for turn in turns)
+    if not roles:
+        return 0
+    return 1 + sum(
+        previous != current
+        for previous, current in zip(roles, roles[1:], strict=False)
     )
 
 

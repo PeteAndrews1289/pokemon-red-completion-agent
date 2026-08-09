@@ -1,0 +1,54 @@
+{
+  "schema": "pokemon-red-battle-control-v3-lineage-failure-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "rejected_by_brittle_terminal_verifier",
+  "source_commit": "f94864b9914ba7adbe24a14af1d7194b347f7eea",
+  "authority": {
+    "battle_moves": "authenticated_nonlinear_move_ranker_with_teacher_observation",
+    "high_level_labels": "deterministic_teacher",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "perturbation": {
+    "kind": "reproducible_battle_start_timing_schedule",
+    "harness_seed": 990002,
+    "schedule_sha256": "d2dedf18540d50ce70726c7a9defc31e67a11cfe9de9b9b02639ddce19fecd71"
+  },
+  "outcome": {
+    "verified_checkpoints": 306,
+    "total_checkpoints": 312,
+    "agatha_defeated": true,
+    "advanced_to_lance_room": true,
+    "agatha_declared_roles_satisfied": true,
+    "agatha_team_switches_observed": 7,
+    "agatha_team_switches_hard_coded_by_old_verifier": 3,
+    "party_fully_healed": true,
+    "party_status_clear": true,
+    "game_complete": false,
+    "counted_campaign_root_consumed": false
+  },
+  "private_partial_artifact": {
+    "artifact_id": "red-battle-control-b2d0f70f0f5e4a56a5705f007692a83f",
+    "status": "failed_partial_not_training_eligible",
+    "records": 3294,
+    "private_path_published": false
+  },
+  "diagnosis": {
+    "teacher_failure": false,
+    "model_failure": false,
+    "verifier_failure": "Agatha's AI changed opponent order repeatedly. The teacher correctly pivoted between Dugtrio and Jolteon seven times, and both specialists covered every declared opponent role, but the terminal contract required exactly three switches from the canonical order.",
+    "why_this_matters_for_transfer": "A seed-robust agent must validate semantic role coverage under observed opponent transitions instead of assuming one fixed battle order."
+  },
+  "repair": {
+    "direction": "Derive the exact required role-switch count from the observed opponent-role sequence and retain the stricter specialist-coverage contract.",
+    "relax_specialist_coverage": false,
+    "increase_retry_budget": false,
+    "open_counted_root": false
+  },
+  "claim_scope": {
+    "lineage_complete": false,
+    "partial_labels_training_eligible": false,
+    "seed_robust_agatha_verifier_repaired": true,
+    "cross_game_transfer_complete": false
+  }
+}
