@@ -42,8 +42,13 @@ replay and not a weight tweak to the old scorer. Counted v95 remains 0/10.
 Fresh timing seed 990003 then reached checkpoint 275 before a third legal Drowzee sleep
 reapplication exceeded team training's generic bound. The failed private artifact is retained with
 469 labels excluded from fitting. Route 11 now carries its previously tested four-reapplication
-bound through a venue-specific battle-timing field; the global default remains two. This repair is
-ROM-free qualified and needs a fresh diagnostic seed before target-data collection resumes.
+bound through a venue-specific battle-timing field; the global default remains two. Fresh seed
+990004 qualified that repair, completed the 51/52/52/55/51/51 development curriculum and Blaine,
+then stopped at checkpoint 284 because legal opponent-inflicted poison violated an overstrict
+Viridian trainer receipt despite exact party, move-policy, and survival evidence. Its 3,123 partial
+labels are also excluded. The receipt now separates opponent status RNG from controlled choices,
+while the immediate pre-Giovanni Center recovery remains explicit and fail-closed. Use fresh seed
+990005 after the gate and push.
 
 After the learned target passes offline and causal Red gates, then one canonical and one uncounted
 perturbation result, begin Crystal's bounded battle adapter.

@@ -12,8 +12,9 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 
 This section supersedes every older “next” statement below.
 
-**Branch and pushed code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93faeed` adds the
-offline switch-target learning seam and is pushed. Its full local gate passed **2,107 tests with 3
+**Branch and pushed code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `7ce344c` includes
+the offline switch-target learning seam and the venue-scoped Route 11 sleep recovery. Its full
+local gate passed **2,107 tests with 3
 integration tests deselected**, Ruff, mypy, documentation, public-artifact, and source-registry
 checks. Only Codex pushes this branch; do not create a second worktree or force-push it.
 
@@ -41,14 +42,17 @@ deterministic baseline, reserve-permutation equivariance, counterfactual matchup
 the held-out Golbat role. Only then grant target authority and rerun the 312-checkpoint causal gate.
 The counted v95 campaign remains unopened at **0/10** and must not supply this development data.
 
-**Latest collection attempt:** uncounted timing seed `990003` reached checkpoint 275 and produced a
-distinct six-throw Snorlax lineage before Route 11 Drowzee reapplied sleep three times against a
-healthy level-20 DUX. The generic default allowed two reapplications and failed closed. Artifact
-`red-battle-control-64dc4be87867475fbd5891dbc97d48e7` is retained failed with 469 labels and must
-never enter fitting. The source now lets each `TrainingVenue` declare `BattleRuntimeTiming`, passes
-that timing into every adaptive wild battle, and gives only Route 11 the already-tested bound of
-four. Do not rerun seed `990003`; use a fresh diagnostic seed after commit/push and full gate. See
-the [failure receipt](docs/evidence/battle-control-reserve-matchup-v3-lineage-04-failure-2026-08-09.json).
+**Latest collection attempt:** fresh uncounted timing seed `990004` qualified the Route 11 repair,
+completed the balanced-team curriculum at 51/52/52/55/51/51, defeated Blaine, and reached checkpoint
+284. It then exposed an invalid Viridian Gym receipt assumption: Cooltrainer set 1 legally poisoned
+the surviving lead while the teacher still selected the exact required move against the exact
+required party. The route already visits the Center and requires full HP, clear status, and restored
+PP before Giovanni. Trainer receipts now measure controlled party/move/survival outcomes and retain
+the observed status trace; the explicit recovery boundary remains strict and now fails directly if
+healing does not settle. Artifact `red-battle-control-7e8c4f03db294b37b92b399b01cea187` is retained
+failed with 3,123 labels and must never enter fitting. Do not rerun seeds `990003` or `990004`; after
+commit/push and full gate, use fresh seed `990005`. See the
+[failure receipt](docs/evidence/battle-control-reserve-matchup-v3-lineage-05-failure-2026-08-09.json).
 
 **Crystal:** do not build a full second walkthrough now. After the Red target head qualifies, add a
 thin Crystal semantics/mechanics adapter and three bounded teacher tasks: one reserve-choice battle,

@@ -14,6 +14,7 @@ from pokemon_red_completion.giovanni import (
     REQUIRED_TRAINER_EVENTS,
     REQUIRED_TRAINERS,
     GiovanniTurn,
+    TrainerReceipt,
     _encounter_party,
 )
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId
@@ -73,3 +74,31 @@ def test_giovanni_turn_receipt_matches_source_party() -> None:
         for species, level in GIOVANNI_PARTY
     )
     assert _encounter_party(turns) == GIOVANNI_PARTY
+
+
+def test_required_trainer_receipt_accepts_opponent_inflicted_status() -> None:
+    expected_party = ((0xA7, 39), (0x07, 39))
+    turns = (
+        GiovanniTurn(0xA7, 39, 102, 193, 0, (5, 8, 6, 15), 3),
+        GiovanniTurn(0xA7, 39, 102, 190, 8, (5, 8, 5, 15), 3),
+        GiovanniTurn(0x07, 39, 118, 190, 8, (5, 8, 4, 15), 3),
+    )
+
+    assert TrainerReceipt(
+        "cooltrainer_set_1",
+        (0xE7, 0xE7, 1),
+        expected_party,
+        turns,
+    ).passed
+
+
+def test_required_trainer_receipt_still_rejects_fainted_lead() -> None:
+    expected_party = ((0xA7, 39),)
+    turns = (GiovanniTurn(0xA7, 39, 1, 0, 8, (5, 8, 5, 15), 3),)
+
+    assert not TrainerReceipt(
+        "cooltrainer_set_1",
+        (0xE7, 0xE7, 1),
+        expected_party,
+        turns,
+    ).passed

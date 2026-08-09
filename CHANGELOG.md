@@ -21,6 +21,10 @@
   reapplied sleep three times, excluded all 469 partial labels from fitting, and threaded bounded
   venue-specific battle timing through the generic team trainer while leaving the global sleep
   limit unchanged.
+- Qualified the Route 11 timing repair on a fresh lineage through balanced development and Blaine,
+  then corrected a Viridian trainer receipt that misclassified legal opponent-inflicted poison as
+  a controlled-policy failure. The exact party, move, survival, pre-Giovanni recovery, and terminal
+  status gates remain strict; all 3,123 partial labels from the stopped run remain excluded.
 - Added the August 9 capability audit and expanded the project and video narratives around the
   distinction between offline agreement, causal high-level authority, typed intent enforcement,
   and combined teacher-free play.

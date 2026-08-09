@@ -147,9 +147,17 @@ class TrainerReceipt:
 
     @property
     def passed(self) -> bool:
+        """Verify the controlled choices without rejecting legal opponent status RNG.
+
+        The required trainer circuit is followed immediately by a Pokémon Center
+        recovery.  A trainer may therefore inflict a persistent status without
+        changing the demonstrated party, move policy, or survival outcome.  The
+        chapter's pre-Giovanni and terminal boundaries independently require a
+        fully healed, status-free party.
+        """
         return (
             _encounter_party(self.turns) == self.expected_party
-            and all(turn.lead_hp > 0 and turn.lead_status == 0 for turn in self.turns)
+            and all(turn.lead_hp > 0 for turn in self.turns)
         )
 
 
@@ -267,6 +275,7 @@ class GiovanniChapterReport:
                         "identity": list(receipt.identity),
                         "party": [list(member) for member in receipt.expected_party],
                         "move_slots": [turn.move_slot for turn in receipt.turns],
+                        "lead_statuses": [turn.lead_status for turn in receipt.turns],
                     }
                     for receipt in self.trainer_receipts
                 ],
@@ -688,6 +697,10 @@ def _heal(actions, reader, emulator) -> None:
             and reader.read().first_party_pp == (5, 15, 10, 15)
         ):
             break
+    else:
+        raise GiovanniChapterError(
+            "Pokémon Center did not restore party HP, status, and lead PP."
+        )
     _close(actions, reader)
 
 

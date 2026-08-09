@@ -69,8 +69,16 @@ The first post-audit data attempt used fresh uncounted timing seed 990003. It re
 275, including a distinct six-throw Snorlax capture, then failed closed when Route 11 Drowzee
 reapplied sleep three times during team training. Its 469 partial labels are excluded. The repair
 threads a venue's bounded battle timing into the generic trainer and applies the existing tested
-four-reapplication allowance only to Route 11; the global default remains two. A fresh seed, not a
-rerun, is required for emulator qualification.
+four-reapplication allowance only to Route 11; the global default remains two.
+
+Fresh seed 990004 then qualified that repair in live execution: it completed balanced development
+at 51/52/52/55/51/51, defeated Blaine, and reached checkpoint 284. A required Viridian trainer
+legally inflicted poison while the teacher still used the exact required move, survived, and
+defeated the exact required party. The receipt had incorrectly treated zero status on every turn as
+a controlled policy choice. The 3,123 partial labels remain excluded. The repair accepts observed
+opponent status in that local receipt, records it publicly, and retains the immediate Center gate
+requiring full HP, clear status, and restored PP before Giovanni. Seed 990004 is retired; the next
+emulator qualification must use fresh seed 990005.
 
 ## Capability scorecard
 
