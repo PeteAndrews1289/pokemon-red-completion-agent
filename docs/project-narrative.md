@@ -2209,6 +2209,20 @@ consumed. This is the project's architecture thesis in miniature: replacing a te
 removing hidden teacher identity from every executor boundary, while keeping the mechanical safety
 contract just as strict.
 
+Fresh seed `990012` proved that boundary by executing the eighth HP recovery and leaving the ship.
+The next rejection came at the Route 11 supply Gambler, before Lavender's Mart stock-up. The model
+requested a status cure because the battle intent advertised one; the item executor refused because
+only the protected final copy existed. The same intent also advertised HP recovery despite an
+explicit zero-use allowance. Neither component was individually irrational: authorization trusted
+the declared affordance, and the executor protected its inventory invariant. The declaration was
+stale.
+
+Lavender now derives its recovery affordances before every runtime dispatch. HP recovery exists
+only while a Super Potion and per-battle allowance remain; sleep and paralysis cure exist only above
+their protected one-item floors. When a capability disappears, the high-level request is masked and
+the teacher-free move model continues instead. This makes resource availability part of the live
+action space rather than a static chapter promise.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

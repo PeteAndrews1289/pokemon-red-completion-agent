@@ -1042,6 +1042,47 @@ def test_lavender_public_report_exposes_exact_resources_and_trainers() -> None:
     assert public["party"]["species"] == list(PROTECTED_PARTY)
 
 
+def test_lavender_recovery_capabilities_follow_live_reserves_and_hp_limit(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    bag = {
+        ItemId.SUPER_POTION: 3,
+        ItemId.AWAKENING: 1,
+        ItemId.PARLYZ_HEAL: 1,
+    }
+    monkeypatch.setattr(lavender_module, "_bag", lambda _emulator: bag)
+
+    assert lavender_module._lavender_recovery_capabilities(
+        object(),  # type: ignore[arg-type]
+        hp_recoveries=0,
+        hp_recovery_limit=0,
+    ) == frozenset()
+
+    bag[ItemId.AWAKENING] = 2
+    bag[ItemId.PARLYZ_HEAL] = 3
+    assert lavender_module._lavender_recovery_capabilities(
+        object(),  # type: ignore[arg-type]
+        hp_recoveries=0,
+        hp_recovery_limit=1,
+    ) == frozenset(
+        {
+            lavender_module.BattleRecoveryCapability.RESTORE_HP,
+            lavender_module.BattleRecoveryCapability.CURE_SLEEP,
+            lavender_module.BattleRecoveryCapability.CURE_PARALYSIS,
+        }
+    )
+    assert lavender_module._lavender_recovery_capabilities(
+        object(),  # type: ignore[arg-type]
+        hp_recoveries=1,
+        hp_recovery_limit=1,
+    ) == frozenset(
+        {
+            lavender_module.BattleRecoveryCapability.CURE_SLEEP,
+            lavender_module.BattleRecoveryCapability.CURE_PARALYSIS,
+        }
+    )
+
+
 def test_move_retries_the_same_step_after_a_no_movement_wild_flee(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

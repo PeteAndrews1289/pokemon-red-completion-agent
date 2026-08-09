@@ -9,7 +9,7 @@ inside Lavender's Pokémon Center.
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
@@ -1122,13 +1122,21 @@ def _run_lavender_trainer_battle(
 
     recoveries = 0
     while True:
+        live_intent = replace(
+            intent,
+            recovery_capabilities=_lavender_recovery_capabilities(
+                emulator,
+                hp_recoveries=recoveries,
+                hp_recovery_limit=battle_recovery_limit,
+            ),
+        )
         try:
             return run_adaptive_trainer_battle(
                 reader,
                 executor,
                 guarded_policy,
                 expected_map=int(map_id),
-                intent=intent,
+                intent=live_intent,
                 label=label,
             )
         except BattleRuntimeError as error:
@@ -1222,6 +1230,28 @@ def _run_lavender_trainer_battle(
         recoveries += 1
         if recoveries > starting_reserve:
             raise LavenderChapterError(f"{label} exceeded its bounded recovery reserve.")
+
+
+def _lavender_recovery_capabilities(
+    emulator: EmulatorState,
+    *,
+    hp_recoveries: int,
+    hp_recovery_limit: int | None,
+) -> frozenset[BattleRecoveryCapability]:
+    """Advertise only recovery effects the current chapter executor can still prove."""
+
+    bag = _bag(emulator)
+    capabilities: set[BattleRecoveryCapability] = set()
+    if (
+        bag.get(ItemId.SUPER_POTION, 0) > 0
+        and (hp_recovery_limit is None or hp_recoveries < hp_recovery_limit)
+    ):
+        capabilities.add(BattleRecoveryCapability.RESTORE_HP)
+    if bag.get(ItemId.AWAKENING, 0) > 1:
+        capabilities.add(BattleRecoveryCapability.CURE_SLEEP)
+    if bag.get(ItemId.PARLYZ_HEAL, 0) > 1:
+        capabilities.add(BattleRecoveryCapability.CURE_PARALYSIS)
+    return frozenset(capabilities)
 
 
 def _fainted_battler_pivot_target(

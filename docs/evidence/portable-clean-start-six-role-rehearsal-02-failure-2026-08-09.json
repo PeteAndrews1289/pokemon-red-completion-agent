@@ -1,0 +1,65 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-audit-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_rehearsal_with_actionable_capability_gap",
+  "promotion_eligible": false,
+  "counted": false,
+  "counted_roots_consumed": 0,
+  "diagnostic_seed": 990012,
+  "timing_mode": "canonical_unperturbed_baseline",
+  "source": {
+    "commit": "aa9e0bf81af9f80f64183e37a0b8fc92b0ca833b",
+    "dirty": false
+  },
+  "raw_report_sha256": "4effe6f7dffb760d861e3f2505a5bc5c92c76f56868cb3559cb3cf1e24919b97",
+  "authority": {
+    "teacher_battle_queries_allowed": false,
+    "teacher_queries": 0,
+    "teacher_fallbacks": 0,
+    "expected_objective_labels": 0,
+    "fixed_objective_dispatches": 0
+  },
+  "run": {
+    "outcome": "failed_closed",
+    "failure_stage": "route_11_supply_gambler_status_capability",
+    "frames_executed": 1842398,
+    "objective_decisions": 1,
+    "battle_decisions": 169,
+    "model_move_decisions": 158,
+    "typed_control_requests_executed_before_failure": 11,
+    "resolved_hp_recoveries": 8,
+    "resolved_status_recoveries": 2,
+    "learned_switch_target_rebindings": 2,
+    "switch_target_fallbacks": 0,
+    "safety_fallbacks": 1,
+    "safety_fallback_reason": "capability_mask"
+  },
+  "battle_control_shadow": {
+    "decisions": 169,
+    "agreements": 168,
+    "accuracy": 0.9940828402366864,
+    "mean_confidence": 0.9821049324340013,
+    "disagreement": "one teacher select-move label was predicted as recovery"
+  },
+  "failure": {
+    "exception_type": "LavenderChapterError",
+    "message": "Route 11 supply Gambler status cure lacks its stable supported gate.",
+    "semantic_request": "pokemon.core:battle:recovery",
+    "request_was_complete": true,
+    "recovery_need": "status"
+  },
+  "diagnosis": {
+    "category": "declared_capability_exceeded_live_executor_resources",
+    "finding": "Every Lavender trainer intent advertised HP, sleep, and paralysis recovery even when the supply-income battle explicitly allowed zero HP recoveries and occurred before the Mart purchase with only the protected final status-item reserve.",
+    "executor_behavior": "The status-item executor correctly requires quantity greater than one so the final reserve cannot be consumed.",
+    "model_behavior": "The controller selected a declared recovery action. Authorization accepted it because the static intent mask falsely said the effect was available.",
+    "target_head_implicated": false
+  },
+  "repair": {
+    "status": "implemented_pending_full_gate_and_live_replay",
+    "behavior": "Recompute the BattleIntent recovery-capability mask before every battle-runtime dispatch from current inventory, protected status-item floors, remaining Super Potions, and the remaining per-battle HP allowance.",
+    "safety_effect": "Unavailable recovery is now masked before execution and falls back to the learned legal move path; protected inventory is never presented as spendable authority.",
+    "rom_free_regression": "The capability projector exposes no recovery with a zero HP allowance and one protected status item, exposes all three effects when live surplus exists, and removes HP after its allowance is consumed."
+  },
+  "next_gate": "Regenerate the source-bound registry, pass the full ROM-free gate, commit and push, then retry on a fresh uncounted diagnostic root."
+}

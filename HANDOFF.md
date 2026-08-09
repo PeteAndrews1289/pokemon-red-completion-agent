@@ -18,7 +18,7 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
-**Late audit and runtime checkpoint:** the full repository gate now passes **2,154 tests with 3
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,155 tests with 3
 integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
 public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
 errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
@@ -47,13 +47,19 @@ after 158 battle decisions. It had zero teacher queries/fallbacks, seven execute
 recoveries, and two learned target rebindings. The chapter recognized the eighth complete semantic
 recovery request, then incorrectly required its teacher-only Python exception subclass. The repair
 accepts only learned HP recovery for the executable lead, chooses from the same bounded item
-inventory, and retains exact HP/item/menu proofs; a non-lead request still fails closed. Regenerate,
-push, and retry on a fresh uncounted root. Counted v95 remains **0/10** and `990007` remains
-test-only. See the [preserved six-role failure](docs/evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json).
+inventory, and retains exact HP/item/menu proofs; a non-lead request still fails closed. Fresh seed
+`990012` qualified that repair, then failed later at the pre-Mart Route 11 supply Gambler. Lavender
+had advertised HP, sleep, and paralysis recovery even though this battle declared zero HP uses and
+only the protected final status-item copies existed. The executor correctly refused to spend the
+reserve; the static intent mask was wrong. Recovery capabilities now recompute before every runtime
+dispatch from live inventory, protected floors, and remaining HP allowance. Push and retry on a
+fresh uncounted root. Counted v95 remains **0/10** and `990007` remains test-only. See the
+[first failure](docs/evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json)
+and [second failure](docs/evidence/portable-clean-start-six-role-rehearsal-02-failure-2026-08-09.json).
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `a5e92f0`
 records live Agatha role switches and the passed prospective target test; `edfa676` contains the
-measured recovery-envelope repair. The full local gate passes **2,154 tests with 3 integration
+measured recovery-envelope repair. The full local gate passes **2,155 tests with 3 integration
 tests deselected**, Ruff, mypy, documentation, public-artifact, and source-registry checks. Push
 before any new emulator run. Only Codex pushes this branch; do not create a second worktree or
 force-push it.

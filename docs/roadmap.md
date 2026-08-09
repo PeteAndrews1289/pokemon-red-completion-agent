@@ -28,7 +28,12 @@ move, high-level control, and target models together. Seed `990011` failed close
 complete learned HP request, then mistakenly demanded the teacher-only request subclass. The
 [failure receipt](evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json)
 preserves the result. The repair accepts only an executable lead target and preserves the chapter's
-bounded item, exact-heal, item-ledger, and MAIN-menu proofs. The immediate gate is full ROM-free
+bounded item, exact-heal, item-ledger, and MAIN-menu proofs. Fresh seed `990012` qualified that
+boundary and advanced to the pre-Mart Route 11 supply Gambler, where a static intent advertised HP
+and status cures that the live protected inventory could not spend. The
+[second failure](evidence/portable-clean-start-six-role-rehearsal-02-failure-2026-08-09.json) is
+preserved. Recovery capabilities now derive before every runtime dispatch from live inventory,
+protected status-item floors, and remaining HP allowance. The immediate gate is full ROM-free
 validation, clean push, and one fresh uncounted six-role replay; v95 remains 0/10.
 
 The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's

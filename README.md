@@ -78,8 +78,11 @@ The first six-role teacher-free composition exposed the next interface gap at th
 after seven valid learned HP recoveries and two learned switches, the chapter recognized an eighth
 complete recovery request but still required its teacher-only exception subclass. That uncounted
 failure is preserved, the executor now accepts only a complete learned lead-HP target under the
-existing bounded inventory and exact recovery proofs, and a fresh replay remains. This is an
-executor repair, not evidence that the six-role model already completes Red. Navigation, menus,
+existing bounded inventory and exact recovery proofs. Fresh seed `990012` qualified that repair,
+then exposed a Route 11 intent that advertised status and HP recovery before the Mart stock-up even
+though only protected status copies existed and HP allowance was zero. Capabilities now recompute
+from live surplus and remaining allowance before every dispatch. These are executor repairs, not
+evidence that the six-role model already completes Red. Navigation, menus,
 chapter mechanics, and resource execution remain authored. The counted v95 reliability campaign
 remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.
@@ -94,7 +97,7 @@ demonstrations and a referee; it is not the final autonomous player.
 | Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
 | Learned objective dispatch | One clean-start run selected 21 composite objectives and verified 15 automatic effects through Hall of Fame | Many choices remain affordance-masked; mechanics are fixed skills |
 | Learned training control | The trainee/venue ranker beat its shape baseline and completed clean start with 114,831 controlled choices and 400 disagreements | One uncounted Red root; navigation and menus remain authored |
-| Strict learned-stack composition | The first six-role run executed 158 teacher-free battle decisions, 7 learned recoveries, and 2 learned switches before an S.S. Anne executor mismatch failed closed | Repair is ROM-free verified; a fresh full replay remains |
+| Strict learned-stack composition | Two uncounted roots executed 169 teacher-free battle decisions, 8 HP recoveries, 2 status recoveries, and 2 learned switches while exposing S.S. Anne request typing and Route 11 live-capability gaps | Both repairs are ROM-free verified; a fresh full replay remains |
 | Reserve-aware battle control | Frozen target head passed 17/17 prospective targets, 13/13 canonical shadow, and 13/13 causal bindings through Hall of Fame with zero target fallback | Switch timing and ordinary moves were teacher-gated in the completed causal run; perturbation and combined qualification remain |
 | Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Counted campaign remains 0/10 until reserve-aware battle control passes canonical and perturbation rehearsals |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |

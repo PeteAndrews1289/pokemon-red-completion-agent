@@ -12,8 +12,8 @@ depend on authored skills or teacher gating.
 The present Red milestone is narrower and measurable: qualify the reserve-aware high-level battle
 controller on a fresh full-game rollout, then combine it with teacher-free ordinary move selection.
 The target-binding layer now has canonical shadow and isolated causal Hall-of-Fame completion. The
-first six-role composition exposed and repaired one S.S. Anne typed-recovery executor mismatch; its
-fresh replay remains.
+first two six-role compositions exposed and repaired S.S. Anne typed-recovery and Route 11
+live-capability mismatches; their fresh replay remains.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -136,6 +136,14 @@ teacher-only exception subclass. This was an executor ownership mismatch, not a 
 The repair accepts only learned HP recovery for the executable lead and retains the existing exact
 item, HP, menu, and reserve proofs; see the [preserved failure](evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json).
 
+Seed `990012` qualified that S.S. Anne repair and advanced to the pre-Mart Route 11 supply Gambler.
+After 169 teacher-free battle decisions, eight HP recoveries, two status recoveries, and two learned
+target bindings, it failed because every Lavender intent advertised all recovery effects even when
+the local HP allowance was zero and only protected final status-item copies existed. The executor
+correctly refused the item; authorization had received a false capability mask. The repair
+recomputes capabilities from live surplus and remaining allowance before every dispatch. See the
+[second preserved failure](evidence/portable-clean-start-six-role-rehearsal-02-failure-2026-08-09.json).
+
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared
 gap calculation intersected Blue with itself. One canonical Generation I facts module now derives
@@ -162,7 +170,7 @@ silently acting at night.
 ## Code and test health
 
 - 127 source modules and 135 test modules cover roughly 88,000 source lines and 52,500 test lines.
-- The current full gate passes **2,154 tests** with 3 emulator-integration tests deselected and 1
+- The current full gate passes **2,155 tests** with 3 emulator-integration tests deselected and 1
   expected failure, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.
@@ -196,7 +204,7 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Complete the full ROM-free gate for the S.S. Anne learned-recovery executor repair, commit, and
+1. Complete the full ROM-free gate for the live Lavender recovery-capability repair, commit, and
    push the regenerated source identity.
 2. Run a fresh uncounted canonical six-role replay with teacher battle queries disabled; preserve
    either its Hall-of-Fame receipt or its next fail-closed integration defect.

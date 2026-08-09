@@ -118,6 +118,13 @@ This is a stronger cliffhanger than another unexplained route failure. The targe
 canonical causal authority, the combined player has produced a precise executor defect, and the
 official 8-of-10 roots are still untouched.
 
+Add one short sequel card: `990012 — S.S. ANNE PASSED`. The run reaches the pre-Mart Route 11
+Gambler, where the model asks for a status cure that the intent says is legal and the executor says
+would consume a protected final item. The repair is not “allow the item.” It is to make the action
+mask truthful: show HP, sleep, and paralysis icons turning on and off from live inventory and
+remaining allowance before every decision. Caption it **“An affordance is a live promise, not a
+chapter-wide boolean.”**
+
 Keep the most important scientific detail on screen: the action-model weights did not change
 between these causal attempts. The first failures repaired a game-neutral actor/referee interface;
 the last exposed missing learned authority. No Agatha map, species, or opponent-position identity
