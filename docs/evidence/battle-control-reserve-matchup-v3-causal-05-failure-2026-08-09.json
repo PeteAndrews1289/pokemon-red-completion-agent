@@ -1,0 +1,52 @@
+{
+  "schema": "pokemon-red-battle-control-v3-causal-failure-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "rejected_by_chapter_verifier",
+  "source_commit": "00e69114b24687835a1a1c612b9bf81fd0a68d92",
+  "candidate": {
+    "artifact_id": "red-battle-control-model-d4bc15ba53354fa2980a47b57f2dda78",
+    "manifest_sha256": "e742f32893ddca66911e1dbeb31bea1fca93f07ad6f09d6dedfeb8d07c3b382e",
+    "model_sha256": "916aa21097d7b087125dce6cb9b01180c2ee3aa929a843d7b580021ac00246e0",
+    "private_path_published": false
+  },
+  "authority": {
+    "ordinary_move_selection": "authenticated_move_ranker_teacher_gated_on_every_path",
+    "high_level_battle_control": "model_authority",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "outcome": {
+    "chapter": "Lorelei",
+    "defeated_lorelei": true,
+    "advanced_to_bruno_room": true,
+    "party_healed_after_battle": true,
+    "x_accuracy_used": 2,
+    "required_x_accuracy_used": 1,
+    "team_switches": 4,
+    "required_team_switches": 2,
+    "chapter_actions": 454,
+    "chapter_frames": 43476,
+    "game_complete": false,
+    "counted_campaign_root_consumed": false
+  },
+  "diagnosis": {
+    "prior_executor_repair_worked": "The learned switch request was resolved and dispatched successfully; the controller defeated Lorelei and used both planned party roles.",
+    "remaining_policy_error": "The model repeated two semantically valid high-level actions beyond the planner's exact resource and role-transition budget.",
+    "verifier_relaxed": false,
+    "why_failure_is_useful": "The cartridge advanced safely, but the strict chapter verifier rejected the over-action instead of treating victory alone as qualification."
+  },
+  "repair": {
+    "direction": "Add game-neutral per-intent boost and switch budgets, mask exhausted actions, and preserve the teacher-gated ordinary-move fallback.",
+    "increase_retry_budget": false,
+    "change_teacher_route": false,
+    "change_model_weights": false,
+    "open_counted_root": false
+  },
+  "claim_scope": {
+    "causal_control_qualified": false,
+    "learned_switch_execution_demonstrated": true,
+    "shadow_qualification_preserved": true,
+    "candidate_retrained_after_failure": false,
+    "cross_game_transfer_complete": false
+  }
+}

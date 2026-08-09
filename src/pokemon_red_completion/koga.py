@@ -574,6 +574,11 @@ def _fight(
             if x_accuracy_enemy_species is not None
             else frozenset()
         ),
+        boost_use_limits=(
+            ((BattleBoostStat.ACCURACY, 1),)
+            if x_accuracy_enemy_species is not None
+            else ()
+        ),
         switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
     )
     try:

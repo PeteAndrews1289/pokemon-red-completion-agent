@@ -43,6 +43,7 @@ from pokemon_red_completion.battle_neural_model import (
     MaskedMLPMoveRanker,
 )
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
     BattlePolicyObservation,
     RequiredMovePolicy,
 )
@@ -499,6 +500,24 @@ class ModelAssistedBattlePolicy:
         if predicted_ref != CONTROL_CLASS_REFS[0]:
             try:
                 predicted_action = action_from_control_class_ref(predicted_ref)
+                if _control_action_budget_exhausted(
+                    predicted_action,
+                    intent=intent,
+                    history=history,
+                ):
+                    self.control_target_resolution_failures["budget_mask"] += 1
+                    self.control_execution_decisions += 1
+                    self.control_safety_fallbacks += 1
+                    return self._return_control_move(
+                        observation,
+                        fallback,
+                        predicted_slot=predicted_slot,
+                        move_context=move_context,
+                        move_batch=move_batch,
+                        move_legal_mask=move_legal_mask,
+                        move_predicted_candidate=move_predicted_candidate,
+                        move_confidence=move_confidence,
+                    )
                 resolved_action = resolve_battle_action_target(
                     predicted_action,
                     encoded,
@@ -710,6 +729,7 @@ class ModelAssistedBattlePolicy:
         self.model_decisions += 1
         self._record_control_action(observation, BattleAction.move(predicted_slot))
         return predicted_slot
+
     def _record_control_action(
         self,
         observation: BattlePolicyObservation,
@@ -788,6 +808,29 @@ class ModelAssistedBattlePolicy:
         self.control_shadow_confusion[f"{actual} -> {predicted}"] += 1
         if predicted == actual:
             self.control_shadow_agreements += 1
+
+
+def _control_action_budget_exhausted(
+    action: BattleAction,
+    *,
+    intent: BattleIntent,
+    history: BattleControlHistory,
+) -> bool:
+    """Mask a typed action after its game-neutral intent budget is consumed."""
+
+    if action.kind is BattleActionKind.USE_BOOST:
+        assert action.boost_stat is not None
+        limit = dict(intent.boost_use_limits).get(action.boost_stat)
+        if limit is None:
+            return False
+        class_ref = f"pokemon.core:battle:boost:{action.boost_stat.value}"
+        return history.action_counts[CONTROL_CLASS_REFS.index(class_ref)] >= limit
+    if action.kind is BattleActionKind.SWITCH and intent.switch_limit is not None:
+        class_ref = "pokemon.core:battle:switch"
+        return history.action_counts[CONTROL_CLASS_REFS.index(class_ref)] >= (
+            intent.switch_limit
+        )
+    return False
 
 
 def _unsupported_observation_context(

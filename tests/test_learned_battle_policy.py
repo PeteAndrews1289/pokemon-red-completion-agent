@@ -61,7 +61,9 @@ def _observation(
     *,
     recovery_capabilities: frozenset[BattleRecoveryCapability] = frozenset(),
     boost_capabilities: frozenset[BattleBoostStat] = frozenset(),
+    boost_use_limits: tuple[tuple[BattleBoostStat, int], ...] = (),
     switch_capabilities: frozenset[BattleSwitchCapability] = frozenset(),
+    switch_limit: int | None = None,
 ) -> BattlePolicyObservation:
     return BattlePolicyObservation(
         RawGameState(
@@ -84,7 +86,9 @@ def _observation(
             ),
             recovery_capabilities=recovery_capabilities,
             boost_capabilities=boost_capabilities,
+            boost_use_limits=boost_use_limits,
             switch_capabilities=switch_capabilities,
+            switch_limit=switch_limit,
         ),
     )
 
@@ -715,6 +719,32 @@ def test_control_execution_masks_boost_without_bound_executor_capability() -> No
     assert execution["typed_requests_executed"] == 0
 
 
+def test_control_execution_masks_boost_after_intent_budget_is_consumed() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_full_control_model(2),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+    observation = _observation(
+        boost_capabilities=frozenset({BattleBoostStat.ACCURACY}),
+        boost_use_limits=((BattleBoostStat.ACCURACY, 1),),
+    )
+
+    with pytest.raises(LearnedBattleControlRequest):
+        policy.choose_move(observation, lambda: 1)
+    assert policy.choose_move(observation, lambda: 1) == 3
+
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["typed_requests_executed"] == 1
+    assert execution["safety_fallbacks"] == 1
+    assert execution["target_resolution_failures"] == {"budget_mask": 1}
+
+
 def test_control_execution_emits_switch_without_calling_teacher() -> None:
     policy = ModelAssistedBattlePolicy(
         model=_model(),
@@ -741,6 +771,32 @@ def test_control_execution_emits_switch_without_calling_teacher() -> None:
     assert isinstance(execution, dict)
     assert execution["teacher_free_requests"] == 1
     assert execution["typed_requests_executed"] == 1
+
+
+def test_control_execution_masks_switch_after_intent_budget_is_consumed() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_full_control_model(5),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+    observation = _observation(
+        switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
+        switch_limit=1,
+    )
+
+    with pytest.raises(LearnedBattleControlRequest):
+        policy.choose_move(observation, lambda: 1)
+    assert policy.choose_move(observation, lambda: 1) == 3
+
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["typed_requests_executed"] == 1
+    assert execution["safety_fallbacks"] == 1
+    assert execution["target_resolution_failures"] == {"budget_mask": 1}
 
 
 @pytest.mark.parametrize(

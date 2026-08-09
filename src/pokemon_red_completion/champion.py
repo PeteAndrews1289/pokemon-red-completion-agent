@@ -490,6 +490,10 @@ def run_champion_chapter(
                 BattleBoostStat.SPECIAL,
             }
         ),
+        boost_use_limits=(
+            (BattleBoostStat.ACCURACY, 1),
+            (BattleBoostStat.SPECIAL, 6),
+        ),
     )
     while True:
         raw = reader.read()

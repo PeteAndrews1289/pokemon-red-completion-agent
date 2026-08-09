@@ -976,6 +976,7 @@ def _defeat_route22_rival(
                     switch_capabilities=frozenset(
                         {BattleSwitchCapability.PROTECTED_RECOVERY}
                     ),
+                    switch_limit=ROUTE_22_MAX_TEAM_PIVOTS,
                 ),
                 timing=BattleRuntimeTiming(max_runtime_pulses=720),
                 label="Route 22 rival",

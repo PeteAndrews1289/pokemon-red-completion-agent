@@ -130,7 +130,9 @@ class BattleIntent:
     resource_policy: BattleResourcePolicy = BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
     recovery_capabilities: frozenset[BattleRecoveryCapability] = frozenset()
     boost_capabilities: frozenset[BattleBoostStat] = frozenset()
+    boost_use_limits: tuple[tuple[BattleBoostStat, int], ...] = ()
     switch_capabilities: frozenset[BattleSwitchCapability] = frozenset()
+    switch_limit: int | None = None
 
     def __post_init__(self) -> None:
         if (
@@ -171,11 +173,35 @@ class BattleIntent:
             not isinstance(value, BattleBoostStat) for value in self.boost_capabilities
         ):
             raise TypeError("boost_capabilities must contain boost stats")
+        if (
+            not isinstance(self.boost_use_limits, tuple)
+            or any(
+                not isinstance(value, tuple)
+                or len(value) != 2
+                or not isinstance(value[0], BattleBoostStat)
+                or type(value[1]) is not int  # noqa: E721
+                or value[1] < 1
+                for value in self.boost_use_limits
+            )
+            or len({stat for stat, _limit in self.boost_use_limits})
+            != len(self.boost_use_limits)
+        ):
+            raise TypeError("boost_use_limits must contain unique positive typed limits")
+        if any(
+            stat not in self.boost_capabilities for stat, _limit in self.boost_use_limits
+        ):
+            raise ValueError("boost use limits require matching executor capabilities")
         if not isinstance(self.switch_capabilities, frozenset) or any(
             not isinstance(value, BattleSwitchCapability)
             for value in self.switch_capabilities
         ):
             raise TypeError("switch_capabilities must contain switch capabilities")
+        if self.switch_limit is not None and (
+            type(self.switch_limit) is not int or self.switch_limit < 1  # noqa: E721
+        ):
+            raise TypeError("switch_limit must be a positive integer or None")
+        if self.switch_limit is not None and not self.switch_capabilities:
+            raise ValueError("switch limit requires a switch executor capability")
 
 
 @dataclass(frozen=True, slots=True)

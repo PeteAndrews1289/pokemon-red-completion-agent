@@ -341,7 +341,9 @@ def run_lorelei_chapter(
             }
         ),
         boost_capabilities=frozenset({BattleBoostStat.ACCURACY}),
+        boost_use_limits=((BattleBoostStat.ACCURACY, 1),),
         switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
+        switch_limit=2,
     )
     while reader.read().battle_state:
         try:

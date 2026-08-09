@@ -352,6 +352,11 @@ def run_lance_chapter(
                 BattleBoostStat.SPECIAL,
             }
         ),
+        boost_use_limits=(
+            (BattleBoostStat.ACCURACY, 1),
+            (BattleBoostStat.ATTACK, 1),
+            (BattleBoostStat.SPECIAL, LANCE_X_SPECIAL_USE),
+        ),
     )
     while reader.read().battle_state:
         try:

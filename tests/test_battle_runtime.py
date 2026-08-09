@@ -401,6 +401,31 @@ def test_battle_intent_rejects_untyped_boost_capabilities() -> None:
         )
 
 
+def test_battle_intent_accepts_typed_action_budgets() -> None:
+    intent = BattleIntent(
+        "defeat_rival",
+        TEST_BATTLE_PLAN_ID,
+        boost_capabilities=frozenset({BattleBoostStat.ACCURACY}),
+        boost_use_limits=((BattleBoostStat.ACCURACY, 1),),
+        switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
+        switch_limit=2,
+    )
+
+    assert intent.boost_use_limits == ((BattleBoostStat.ACCURACY, 1),)
+    assert intent.switch_limit == 2
+
+
+def test_battle_intent_rejects_budget_without_matching_capability() -> None:
+    with pytest.raises(ValueError, match="matching executor capabilities"):
+        BattleIntent(
+            "defeat_rival",
+            TEST_BATTLE_PLAN_ID,
+            boost_use_limits=((BattleBoostStat.ACCURACY, 1),),
+        )
+    with pytest.raises(ValueError, match="switch executor capability"):
+        BattleIntent("defeat_rival", TEST_BATTLE_PLAN_ID, switch_limit=1)
+
+
 def test_battle_intent_accepts_typed_switch_capabilities() -> None:
     intent = BattleIntent(
         "defeat_rival",
