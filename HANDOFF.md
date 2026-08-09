@@ -48,6 +48,15 @@ disjoint train/validation lineages before any promotion claim. See the
 [lineage receipt](docs/evidence/battle-control-reserve-matchup-v3-lineage-01-2026-08-08.json) and
 [design receipt](docs/evidence/battle-control-reserve-matchup-v3-design-2026-08-08.json).
 
+That first diagnostic has now run and is rejected. It fit the training groups at 99.1% but scored
+61.5% accuracy and 41.96% balanced accuracy on held-out Lorelei/Bruno groups. The original switch
+resolver matched 5/11 explicit targets. Adding the omitted portable level contribution raised the
+same lineage to 9/11; the remaining Bruno and Agatha disagreements expose teacher curriculum intent
+that battle mechanics alone cannot always identify. Collect a perturbed second lineage from this
+exact source, then use `learn control fit-lineages`; do not promote or open counted roots from the
+single-lineage diagnostic. See the
+[diagnostic receipt](docs/evidence/battle-control-reserve-matchup-v3-diagnostic-01-2026-08-08.json).
+
 - The deterministic teacher remains the expert oracle: clean power-on through 312/312 semantic
   checkpoints, all 36 objectives, Champion, and Hall of Fame.
 - The captured-state portable objective loop has one uninterrupted twenty-dispatch Hall-of-Fame

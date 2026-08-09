@@ -7,6 +7,9 @@
   binding, separate switch-target metrics, and an explicit rejection of pre-reserve v2 artifacts.
 - Completed the first uncounted v3 full-game label lineage with 3,112 records and bound future
   generic teacher switches to explicit observed reserve targets before persistence.
+- Rejected the first v3 diagnostic after its 99.1% training fit fell to 61.5% held-out accuracy,
+  then added the omitted portable level contribution and improved switch-target agreement from
+  5/11 to 9/11 on the recorded lineage.
 - Added a bounded Crystal transfer benchmark that starts with battle, local-navigation, and
   trainee/venue microtasks instead of requiring a complete second-game teacher before transfer is
   measured.

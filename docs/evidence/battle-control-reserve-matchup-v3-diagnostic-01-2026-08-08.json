@@ -1,0 +1,66 @@
+{
+  "schema": "pokemon-red-battle-control-v3-diagnostic-receipt-v1",
+  "recorded_on": "2026-08-08",
+  "status": "rejected_not_promotion_eligible",
+  "source_commit": "66a6b780b5ec23b297856cfc4ff083e944c544b9",
+  "source_lineage": {
+    "artifact_id": "red-battle-control-4121905b04bd438f999cc52f6351cdc9",
+    "manifest_sha256": "2b24e5eb0b257c9172a0e11c0ed0388c0835bf9f9fc37b4b4650cfb8ac0d91d4"
+  },
+  "candidate": {
+    "artifact_id": "red-battle-control-model-bcb204fdbf93497abf3854bbed69c409",
+    "manifest_sha256": "4373caed36c6a26519e15cab485d992b5670d2f8371f0d53c90014ed98116fc9",
+    "model_id": "pokemon.core.battle.control.mlp.v1",
+    "model_sha256": "d0c880770f1043400b971f57c4130552f6535bb0af694ef973ab4be1f235e96d",
+    "private_path_published": false
+  },
+  "split": {
+    "kind": "single_lineage_battle_plan_groups",
+    "held_out_battle_plans": [
+      "battle-059-league-lorelei",
+      "battle-060-league-bruno"
+    ],
+    "held_out_rollout_lineages": false
+  },
+  "training": {
+    "examples": 3073,
+    "accuracy": 0.9905629677839245,
+    "balanced_accuracy": 0.9984100877192983,
+    "switch_target_examples": 7,
+    "switch_target_accuracy": 0.42857142857142855
+  },
+  "validation": {
+    "examples": 39,
+    "accuracy": 0.6153846153846154,
+    "balanced_accuracy": 0.41964285714285715,
+    "switch_target_examples": 4,
+    "switch_target_accuracy": 0.5,
+    "confusion": {
+      "boost_accuracy_to_select_move": 1,
+      "recovery_to_recovery": 3,
+      "recovery_to_select_move": 2,
+      "recovery_to_switch": 1,
+      "select_move_to_recovery": 7,
+      "select_move_to_select_move": 19,
+      "select_move_to_switch": 2,
+      "switch_to_select_move": 2,
+      "switch_to_switch": 2
+    }
+  },
+  "diagnosis": {
+    "class_generalization": "The model nearly memorized training but did not generalize the rare recovery, boost, and switch boundary to the held-out League groups.",
+    "target_resolution": "The shared reserve score omitted level despite exposing it. Four early teacher switches selected the higher-level safe escort, while the power-heavy resolver selected a lower-level reserve.",
+    "repair": "Add a bounded portable level contribution, remeasure target agreement, and collect a disjoint perturbed lineage before fitting another candidate."
+  },
+  "qualification": {
+    "promotion_eligible": false,
+    "learned_policy_rollout": false,
+    "counted_campaign_roots_consumed": 0,
+    "reasons": [
+      "heldout_accuracy_insufficient",
+      "switch_target_accuracy_insufficient",
+      "no_disjoint_lineage_validation",
+      "no_fresh_model_control_rollout"
+    ]
+  }
+}

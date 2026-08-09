@@ -9,7 +9,8 @@
 > switch targeting are now implemented ROM-free: every reserve exposes identity-free mechanics, a
 > generic switch binds the best safe semantic candidate, and offline reports separate switch-class
 > from switch-target accuracy. The old v2 artifact is intentionally incompatible. The active work
-> is fitting the first v3 diagnostic, then collecting disjoint lineages. One uncounted full-game
+> is collecting a disjoint perturbed lineage after the first v3 diagnostic was rejected at 61.5%
+> held-out accuracy. One uncounted full-game
 > v3 lineage now contributes 3,112 authenticated labels, including 12 switches; future generic
 > teacher switches are bound to an explicit observed reserve before persistence. Preserve the failure in
 > [the five-role audit](docs/evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).

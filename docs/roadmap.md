@@ -27,8 +27,8 @@ semantic matchup scoring. The dependency-ordered work is now:
 2. make generic switch targeting rank safe reserves by matchup value — **implemented with a 50%
    HP floor and separate target metrics**;
 3. collect fresh balanced-role demonstrations and train a new battle-control artifact — **one
-   uncounted 312/312-checkpoint lineage with 3,112 labels is complete; diagnostic fitting is next,
-   while disjoint train/validation lineages remain required**;
+   uncounted 312/312-checkpoint lineage with 3,112 labels is complete; its first diagnostic was
+   rejected at 61.5% held-out accuracy, and disjoint train/validation lineages remain required**;
 4. pass held-out, counterfactual, and strict canonical five-role gates;
 5. repair or bound the lab-rival, Diglett-capture, and Rocket-thief perturbation failures;
 6. freeze and execute the ten counted roots sequentially; and

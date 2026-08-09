@@ -420,6 +420,9 @@ version has to prove the model learned something worth carrying into a game it h
 - The first v3 collection counter: 312/312 checkpoints, 3,112 labels, 44 typed non-move actions,
   and 12 switches. Show the trainer refusing the one targetless historical switch before the
   collection seam is repaired; that is a concise example of fail-closed dataset engineering.
+- The first v3 model card: 99.1% training accuracy beside 61.5% held-out accuracy, followed by the
+  reserve-target audit improving from 5/11 to 9/11 when level is restored as an observable combat
+  resource. Keep the candidate visibly marked rejected.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 
 ## Honesty rules for the video

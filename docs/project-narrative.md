@@ -71,6 +71,17 @@ the trainer failed closed. Collection now resolves every future generic teacher 
 observed party before writing it; the historical generic row remains an action-class example but
 does not inflate switch-target accuracy.
 
+The first fitted v3 diagnostic made the next limitation measurable. It reached 99.1% accuracy on
+the training groups but only 61.5% on held-out Lorelei and Bruno decisions; rare recoveries,
+switches, and the accuracy boost did not transfer cleanly from the rest of the same run. The initial
+resolver also matched only five of eleven explicit teacher targets. Four early disagreements shared
+one omission: a lower-level reserve had slightly higher move power, while the teacher selected the
+much higher-level safe escort. Adding level as a bounded, identity-free combat resource raised
+whole-lineage agreement to nine of eleven. The two remaining disagreements are instructive rather
+than noise: Bruno deliberately uses Hitmonlee despite Dugtrio's stronger raw attack, and Agatha's
+role assignment is not fully explained by the current type/power/level scalars. The candidate stays
+rejected until a disjoint perturbed lineage and a causal model-controlled rollout agree.
+
 Crystal will follow as a small falsification benchmark rather than a second full scripted route.
 One battle, one local navigation task, and one trainee/venue choice will compare the frozen Red
 model zero-shot, few-shot, and from scratch. A playthrough video can guide the route graph and task

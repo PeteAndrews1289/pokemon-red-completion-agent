@@ -33,8 +33,13 @@ defensive-resistance signals. A generic switch is bound to the same best semanti
 312 checkpoints and recorded 3,112 authenticated labels, including 44 typed non-move actions and
 12 switches. Future generic teacher switches are persisted with an explicit observed reserve;
 one legacy generic label in this first lineage remains valid for class learning but is excluded
-from target-accuracy scoring. The historical v2 model remains deliberately incompatible. See the
+from target-accuracy scoring. The first diagnostic model was correctly rejected: 99.1% training
+accuracy fell to 61.5% on held-out Lorelei/Bruno groups, and switch-target agreement was only 50%.
+That audit added a portable level term to the reserve score and raised whole-lineage target
+agreement from 5/11 to 9/11; a disjoint perturbed lineage is still required. The historical v2
+model remains deliberately incompatible. See the
 [v3 lineage receipt](docs/evidence/battle-control-reserve-matchup-v3-lineage-01-2026-08-08.json),
+[first diagnostic receipt](docs/evidence/battle-control-reserve-matchup-v3-diagnostic-01-2026-08-08.json),
 [v3 design receipt](docs/evidence/battle-control-reserve-matchup-v3-design-2026-08-08.json), and the
 [Crystal transfer benchmark](docs/crystal-transfer-benchmark.md).
 
@@ -49,7 +54,7 @@ demonstrations and a referee; it is not the final autonomous player.
 | Learned objective dispatch | One clean-start run selected 21 composite objectives and verified 15 automatic effects through Hall of Fame | Many choices remain affordance-masked; mechanics are fixed skills |
 | Learned training control | The trainee/venue ranker beat its shape baseline and completed clean start with 114,831 controlled choices and 400 disagreements | One uncounted Red root; navigation and menus remain authored |
 | Strict learned-stack composition | Four authenticated models, 3,220 model move choices, 16 teacher-free control actions, and zero teacher query/fallback through Lorelei | Correctly rejected: all 19 Lorelei attacks came from slot 1 and no role switch occurred |
-| Reserve-aware battle schema | Identity-free candidate-relative matchup features plus a 312/312-checkpoint lineage with 3,112 labels and 12 switches | One uncounted lineage; model fitting and disjoint-lineage qualification remain |
+| Reserve-aware battle schema | Identity-free matchup features, a 312/312-checkpoint lineage, and measured 9/11 target resolution after repair | First model rejected at 61.5% held-out accuracy; disjoint-lineage fitting remains |
 | Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Counted campaign remains 0/10 until reserve-aware battle control passes canonical and perturbation rehearsals |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |

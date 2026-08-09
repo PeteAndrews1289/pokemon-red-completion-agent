@@ -110,6 +110,24 @@ def test_switch_ranking_keeps_health_as_a_hard_first_boundary() -> None:
     assert selected.party_slot == 3
 
 
+def test_switch_ranking_values_level_when_candidates_have_the_same_type_matchup() -> None:
+    observation = _lorelei_observation()
+    party = observation["features"]["party"]  # type: ignore[index]
+    party["members"] = [  # type: ignore[index]
+        _member(0x1C, level=45, hp=100, moves=((0x39, 15),)),
+        _member(0xB1, level=40, hp=100, moves=((0x21, 20),)),
+        _member(0xB1, level=25, hp=100, moves=((0x0A, 35),)),
+    ]
+    battle = observation["features"]["battle"]  # type: ignore[index]
+    battle["opponent_species_ref"] = pokemon_red_species_ref(0xB1)
+    battle["opponent_level"] = 30
+
+    selected = best_reserve_matchup(observation, RED_BATTLE_CATALOG)
+
+    assert selected is not None
+    assert selected.party_slot == 2
+
+
 def test_switch_target_fails_closed_when_every_reserve_is_below_health_floor() -> None:
     observation = _lorelei_observation(jolteon_hp=49)
     members = observation["features"]["party"]["members"]  # type: ignore[index]

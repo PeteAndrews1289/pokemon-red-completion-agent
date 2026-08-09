@@ -90,14 +90,20 @@ class PartyMatchupProfile:
 
         type_value = (self.offensive_type_margin + 1.0) / 2.0
         defense_value = (self.defensive_resistance + 1.0) / 2.0
+        # Level is a real, portable combat resource. The first v3 lineage
+        # showed that omitting it preferred a fragile lower-level trainee over
+        # the established escort in four early switches. It stays below half
+        # the utility so type, power, defense, and health still decide between
+        # peers in the late-game roster.
         return min(
             1.0,
             max(
                 0.0,
-                0.50 * self.offensive_power
+                0.20 * self.offensive_power
                 + 0.25 * type_value
-                + 0.15 * defense_value
-                + 0.10 * self.hp_ratio,
+                + 0.10 * defense_value
+                + 0.10 * self.hp_ratio
+                + 0.35 * self.level_fraction,
             ),
         )
 
