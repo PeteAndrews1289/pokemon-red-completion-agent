@@ -308,25 +308,23 @@ def run_lorelei_chapter(
                 raise LoreleiChapterError("Lorelei could not restore its protected anchor.")
         if accuracy_used == 0:
             raise _AccuracyBoundary
-        hp = raw.battler_hp or 0
-        status = raw.battler_status or 0
-        if hp < LORELEI_SAFE_HP or status:
+        if (raw.battler_hp or 0) < LORELEI_SAFE_HP or (raw.battler_status or 0):
             raise _HealBoundary
-        pp = raw.battler_pp or (0, 0, 0, 0)
-        slot = _lorelei_move_slot(raw)
+        return _lorelei_move_slot(raw)
+
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             LoreleiTurn(
-                species,
+                raw.enemy_species_id or 0,
                 raw.enemy_level or 0,
                 raw.enemy_hp or 0,
-                hp,
-                status,
-                pp,
+                raw.battler_hp or 0,
+                raw.battler_status or 0,
+                raw.battler_pp or (0, 0, 0, 0),
                 slot,
                 raw.active_party_index,
             )
         )
-        return slot
 
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
@@ -357,6 +355,7 @@ def run_lorelei_chapter(
                     max_post_attack_transition_pulses=24,
                 ),
                 label="Lorelei",
+                move_decision_sink=record_turn,
             )
         except BattleRuntimeError as error:
             cause = error.__cause__

@@ -964,6 +964,44 @@ def test_intent_aware_policy_receives_the_predeclared_planner_context() -> None:
     assert all(observation.intent == intent for observation in policy.observations)
 
 
+def test_move_decision_sink_observes_learned_choices_without_querying_teacher() -> None:
+    runtime = AdaptiveRivalSimulation()
+    teacher_queries = 0
+    observed: list[tuple[int | None, int]] = []
+
+    def teacher(_raw: RawGameState) -> int:
+        nonlocal teacher_queries
+        teacher_queries += 1
+        raise AssertionError("the learned policy must not query its teacher")
+
+    class LearnedPolicy:
+        def choose_move(
+            self,
+            observation: BattlePolicyObservation,
+            _fallback: Callable[[], int],
+        ) -> int:
+            return choose_cerulean_rival_move_slot(observation.state)
+
+    with bind_battle_policy_override(LearnedPolicy()):
+        final = run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            teacher,
+            expected_map=MapId.CERULEAN_CITY,
+            move_decision_sink=lambda raw, slot: observed.append(
+                (raw.enemy_species_id, slot)
+            ),
+        )
+
+    assert final.battle_state == 0
+    assert teacher_queries == 0
+    assert observed == [
+        (PIDGEOTTO_SPECIES_ID, 4),
+        (BULBASAUR_SPECIES_ID, 2),
+        (BULBASAUR_SPECIES_ID, 3),
+    ]
+
+
 def test_preregistered_offset_runs_before_policy_on_the_refreshed_state() -> None:
     runtime = AdaptiveRivalSimulation()
     controller = BattleStartScheduleController(_scheduled_offsets(first_frames=7))

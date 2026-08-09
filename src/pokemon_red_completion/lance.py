@@ -312,23 +312,22 @@ def run_lance_chapter(
             and len(turns) != last_recovery_turn
         ):
             raise _HealBoundary
-        species = raw.enemy_species_id or 0
-        pp = raw.first_party_pp or (0, 0, 0, 0)
-        slot = _lance_move_slot(raw)
+        return _lance_move_slot(raw)
+
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             LanceTurn(
-                species,
+                raw.enemy_species_id or 0,
                 raw.enemy_level or 0,
                 raw.enemy_hp or 0,
-                hp,
-                status,
-                pp,
+                raw.first_party_hp or 0,
+                raw.first_party_status or 0,
+                raw.first_party_pp or (0, 0, 0, 0),
                 slot,
                 emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS),
                 raw.active_party_index,
             )
         )
-        return slot
 
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
@@ -360,6 +359,7 @@ def run_lance_chapter(
                     max_post_attack_transition_pulses=30,
                 ),
                 label="Lance",
+                move_decision_sink=record_turn,
             )
         except BattleRuntimeError as error:
             if control_request_matches(error.__cause__, _AccuracyBoundary.default_action):

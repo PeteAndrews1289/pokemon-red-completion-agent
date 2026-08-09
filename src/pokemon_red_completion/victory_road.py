@@ -904,11 +904,12 @@ def _defeat_route22_rival(
     turns: list[RivalTurn] = []
 
     def policy(raw: RawGameState) -> int:
-        species = raw.enemy_species_id or 0
-        slot = _route22_rival_move_slot(raw)
+        return _route22_rival_move_slot(raw)
+
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             RivalTurn(
-                species,
+                raw.enemy_species_id or 0,
                 raw.enemy_level or 0,
                 raw.enemy_hp or 0,
                 raw.battler_hp or 0,
@@ -916,7 +917,6 @@ def _defeat_route22_rival(
                 slot,
             )
         )
-        return slot
 
     class _HealBoundary(BattleControlRequest):
         default_action = BattleAction.recovery()
@@ -940,7 +940,7 @@ def _defeat_route22_rival(
             # before yielding to recovery. With a stronger reserve the pivot
             # itself can end the battle, leaving no later MAIN-menu turn on
             # which to record this final species.
-            policy(raw)
+            record_turn(raw, policy(raw))
             raise _PivotBoundary
         heal_threshold = {
             0x95: 140,
@@ -979,6 +979,7 @@ def _defeat_route22_rival(
                 ),
                 timing=BattleRuntimeTiming(max_runtime_pulses=720),
                 label="Route 22 rival",
+                move_decision_sink=record_turn,
             )
         except BattleRuntimeError as error:
             cause = error.__cause__

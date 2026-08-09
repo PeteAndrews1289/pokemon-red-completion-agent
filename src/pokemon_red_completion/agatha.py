@@ -308,28 +308,25 @@ def run_agatha_chapter(
             )
         if boosts_used < AGATHA_X_SPECIAL_USE and target_species == JOLTEON_SPECIES_ID:
             raise _BoostBoundary
-        hp = raw.battler_hp or 0
-        status = raw.battler_status or 0
         if _agatha_recovery_due(raw):
             raise _HealBoundary
-        species = raw.enemy_species_id or 0
-        pp = raw.battler_pp or (0, 0, 0, 0)
-        slot = _agatha_move_slot(raw)
+        return _agatha_move_slot(raw)
+
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             AgathaTurn(
-                species,
+                raw.enemy_species_id or 0,
                 raw.enemy_level or 0,
                 raw.enemy_hp or 0,
-                hp,
-                status,
-                pp,
+                raw.battler_hp or 0,
+                raw.battler_status or 0,
+                raw.battler_pp or (0, 0, 0, 0),
                 slot,
                 emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS),
                 raw.active_party_index,
                 raw.active_party_species_id,
             )
         )
-        return slot
 
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
@@ -360,6 +357,7 @@ def run_agatha_chapter(
                     max_post_attack_transition_pulses=30,
                 ),
                 label="Agatha",
+                move_decision_sink=record_turn,
             )
         except BattleRuntimeError as error:
             cause = error.__cause__

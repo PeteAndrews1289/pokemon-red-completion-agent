@@ -1469,7 +1469,7 @@ def run_blaine_chapter(
         raise BlaineChapterError(f"Unexpected Blaine identity: {identity!r}.")
     turns: list[BlaineTurn] = []
 
-    def policy(raw: RawGameState) -> int:
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             BlaineTurn(
                 raw.enemy_species_id or 0,
@@ -1478,15 +1478,14 @@ def run_blaine_chapter(
                 raw.first_party_hp or 0,
                 raw.first_party_status or 0,
                 raw.first_party_pp or (0, 0, 0, 0),
-                4,
+                slot,
             )
         )
-        return 4
 
     run_adaptive_trainer_battle(
         reader,
         actions,
-        policy,
+        lambda _raw: 4,
         expected_map=MapId.CINNABAR_GYM,
         intent=BattleIntent(
             "defeat_blaine",
@@ -1496,6 +1495,7 @@ def run_blaine_chapter(
         ),
         required_move_id=SURF_MOVE_ID,
         label="Blaine",
+        move_decision_sink=record_turn,
     )
     if _encounter_party(tuple(turns)) != BLAINE_PARTY:
         raise BlaineChapterError(f"Blaine party or Surf policy changed: {turns!r}.")
@@ -1795,7 +1795,7 @@ def run_blaine_after_mansion_chapter(
         raise BlaineChapterError(f"Unexpected Blaine identity: {identity!r}.")
     turns: list[BlaineTurn] = []
 
-    def policy(raw: RawGameState) -> int:
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             BlaineTurn(
                 raw.enemy_species_id or 0,
@@ -1804,15 +1804,14 @@ def run_blaine_after_mansion_chapter(
                 raw.first_party_hp or 0,
                 raw.first_party_status or 0,
                 raw.first_party_pp or (0, 0, 0, 0),
-                4,
+                slot,
             )
         )
-        return 4
 
     run_adaptive_trainer_battle(
         reader,
         actions,
-        policy,
+        lambda _raw: 4,
         expected_map=MapId.CINNABAR_GYM,
         intent=BattleIntent(
             "defeat_blaine",
@@ -1822,6 +1821,7 @@ def run_blaine_after_mansion_chapter(
         ),
         required_move_id=SURF_MOVE_ID,
         label="Blaine",
+        move_decision_sink=record_turn,
     )
     if _encounter_party(tuple(turns)) != BLAINE_PARTY:
         raise BlaineChapterError(f"Blaine party or Surf policy changed: {turns!r}.")
@@ -2980,7 +2980,7 @@ def _answer_quiz(
         )
     turns: list[BlaineTurn] = []
 
-    def policy(raw: RawGameState) -> int:
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             BlaineTurn(
                 raw.enemy_species_id or 0,
@@ -2989,15 +2989,14 @@ def _answer_quiz(
                 raw.first_party_hp or 0,
                 raw.first_party_status or 0,
                 raw.first_party_pp or (0, 0, 0, 0),
-                4,
+                slot,
             )
         )
-        return 4
 
     run_adaptive_trainer_battle(
         reader,
         actions,
-        policy,
+        lambda _raw: 4,
         expected_map=MapId.CINNABAR_GYM,
         intent=BattleIntent(
             "build_income_and_experience_buffer",
@@ -3007,6 +3006,7 @@ def _answer_quiz(
         ),
         required_move_id=SURF_MOVE_ID,
         label=label,
+        move_decision_sink=record_turn,
     )
     for _ in range(DEFAULT_SILPH_TIMING.max_script_pulses):
         if _event(emulator, target_event) and reader.read_input_readiness().ready:

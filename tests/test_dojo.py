@@ -12,7 +12,6 @@ from pokemon_red_completion.dojo import (
     DojoCheckpoint,
     DojoTurn,
     _encounter_party,
-    _turn_evidence_satisfied,
     _turns_match_source_party,
 )
 from pokemon_red_completion.observation import EventFlag, MapId, RawGameState
@@ -73,21 +72,6 @@ def test_dojo_encounter_party_collapses_repeated_turns_only() -> None:
         turns,
         ((0x39, 31), (0x39, 31), (0x75, 31)),
     )
-    assert not _turn_evidence_satisfied(
-        (),
-        ((0x39, 31),),
-        learned_policy_active=False,
-    )
-    assert _turn_evidence_satisfied(
-        (),
-        ((0x39, 31),),
-        learned_policy_active=True,
-    )
-    assert not _turn_evidence_satisfied(
-        (DojoTurn(0x75, 31, 4),),
-        ((0x39, 31),),
-        learned_policy_active=True,
-    )
 
 
 def test_dojo_report_qualifies_full_six_member_gift_boundary() -> None:
@@ -102,7 +86,7 @@ def test_dojo_report_qualifies_full_six_member_gift_boundary() -> None:
             party,
             tuple(DojoTurn(species, level, 4) for species, level in party),
             int(event),
-            "teacher_callback",
+            "selected_move_sink",
         )
         for identity, party, event in zip(
             DOJO_BATTLE_IDENTITIES,

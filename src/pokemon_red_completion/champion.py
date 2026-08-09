@@ -449,23 +449,22 @@ def run_champion_chapter(
             raise _HealBoundary
         if boosts_used < 6:
             raise _BoostBoundary
-        species = raw.enemy_species_id or 0
-        pp = raw.battler_pp or (0, 0, 0, 0)
-        slot = _champion_move_slot(raw)
+        return _champion_move_slot(raw)
+
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             ChampionTurn(
-                species=species,
+                species=raw.enemy_species_id or 0,
                 level=raw.enemy_level or 0,
                 enemy_hp=raw.enemy_hp or 0,
-                lead_hp=hp,
-                lead_status=status,
-                pp=pp,
+                lead_hp=raw.battler_hp or 0,
+                lead_status=raw.battler_status or 0,
+                pp=raw.battler_pp or (0, 0, 0, 0),
                 move_slot=slot,
                 party_position=emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS),
                 active_party_index=raw.active_party_index,
             )
         )
-        return slot
 
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
@@ -505,6 +504,7 @@ def run_champion_chapter(
                     max_post_attack_transition_pulses=30,
                 ),
                 label="Champion",
+                move_decision_sink=record_turn,
             )
         except BattleRuntimeError as error:
             if _completed(reader.read()):

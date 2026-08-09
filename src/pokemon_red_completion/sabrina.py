@@ -316,7 +316,9 @@ def run_sabrina_chapter(
     turns: list[SabrinaTurn] = []
 
     def policy(raw: RawGameState) -> int:
-        slot = _sabrina_move_slot(raw)
+        return _sabrina_move_slot(raw)
+
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             SabrinaTurn(
                 raw.enemy_species_id or 0,
@@ -328,7 +330,6 @@ def run_sabrina_chapter(
                 slot,
             )
         )
-        return slot
 
     hyper_before = initial_bag.get(ItemId.HYPER_POTION, 0)
     while True:
@@ -336,6 +337,7 @@ def run_sabrina_chapter(
             reader,
             actions,
             policy,
+            record_turn,
             _sabrina_recovery_required,
             "Sabrina",
         )
@@ -455,6 +457,7 @@ def _run_until_sabrina(
     reader: PokemonRedStateReader,
     actions: CountingExecutor,
     policy: Callable[[RawGameState], int],
+    record_turn: Callable[[RawGameState, int], None],
     pause: Callable[[RawGameState], bool],
     label: str,
 ) -> bool:
@@ -480,6 +483,7 @@ def _run_until_sabrina(
             timing=SABRINA_BATTLE_TIMING,
             label=label,
             unknown_cancel_interval=3,
+            move_decision_sink=record_turn,
         )
     except BattleRuntimeError as error:
         if not recovery_request_matches(

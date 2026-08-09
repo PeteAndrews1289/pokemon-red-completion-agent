@@ -64,6 +64,12 @@ class MoveSlotPolicy(Protocol):
     def __call__(self, state: RawGameState, /) -> int: ...
 
 
+class MoveDecisionSink(Protocol):
+    """Non-authoritative observer of one validated move selection."""
+
+    def __call__(self, state: RawGameState, slot: int, /) -> None: ...
+
+
 class BattleGoal(StrEnum):
     """Game-neutral outcome requested by the actor for one battle."""
 
@@ -362,15 +368,19 @@ def run_adaptive_trainer_battle(
     unknown_cancel_interval: int = 3,
     transient_zero_pp_main_is_dialogue: bool = False,
     consume_battle_start_schedule: bool = True,
+    move_decision_sink: MoveDecisionSink | None = None,
 ) -> RawGameState:
     """Finish one already-active trainer battle with semantic feedback.
 
-    The policy is called exactly once for each newly observed main battle-menu
-    turn. Its choice is latched while the controller moves to FIGHT, proves the
-    requested move cursor, and proves that the selected move spent exactly one
-    current PP. Unknown menu state is treated as dialogue between turns and
-    after a cursor-proven attack confirmation, where bounded CONFIRM pulses
-    cover opponent-first attack text, level-up text, and move-learning prompts.
+    The selected policy is called exactly once for each newly observed main
+    battle-menu turn. Its choice is latched while the controller moves to
+    FIGHT, proves the requested move cursor, and proves that the selected move
+    spent exactly one current PP. ``move_decision_sink`` observes the validated
+    selection without participating in it, so chapter receipts remain complete
+    whether the legacy teacher or a bound learned policy chose the move. Unknown
+    menu state is treated as dialogue between turns and after a cursor-proven
+    attack confirmation, where bounded CONFIRM pulses cover opponent-first
+    attack text, level-up text, and move-learning prompts.
     """
 
     if (
@@ -391,6 +401,8 @@ def run_adaptive_trainer_battle(
         raise TypeError("transient_zero_pp_main_is_dialogue must be a bool")
     if not isinstance(consume_battle_start_schedule, bool):
         raise TypeError("consume_battle_start_schedule must be a bool")
+    if move_decision_sink is not None and not callable(move_decision_sink):
+        raise TypeError("move_decision_sink must be callable or None")
     if required_move_id is not None and (
         not isinstance(required_move_id, int)
         or isinstance(required_move_id, bool)
@@ -530,6 +542,8 @@ def run_adaptive_trainer_battle(
             intent=intent,
             label=label,
         )
+        if move_decision_sink is not None:
+            move_decision_sink(raw, slot)
         initial_pp = _current_pp(raw, slot=slot, label=label)
         with _battle_decision_scope(
             policy_state=raw,

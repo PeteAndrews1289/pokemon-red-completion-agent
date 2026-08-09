@@ -629,7 +629,7 @@ def _run_policy_battle(
 ) -> tuple[GiovanniTurn, ...]:
     turns: list[GiovanniTurn] = []
 
-    def policy(raw: RawGameState) -> int:
+    def record_turn(raw: RawGameState, selected_slot: int) -> None:
         turns.append(
             GiovanniTurn(
                 raw.enemy_species_id or 0,
@@ -638,15 +638,14 @@ def _run_policy_battle(
                 raw.first_party_hp or 0,
                 raw.first_party_status or 0,
                 raw.first_party_pp or (0, 0, 0, 0),
-                move_slot,
+                selected_slot,
             )
         )
-        return move_slot
 
     run_adaptive_trainer_battle(
         reader,
         actions,
-        policy,
+        lambda _raw: move_slot,
         expected_map=MapId.VIRIDIAN_GYM,
         intent=BattleIntent(
             "defeat_giovanni",
@@ -658,6 +657,7 @@ def _run_policy_battle(
         ),
         required_move_id={2: 0x46, 3: ICE_BEAM_MOVE_ID, 4: SURF_MOVE_ID}[move_slot],
         label=label,
+        move_decision_sink=record_turn,
     )
     return tuple(turns)
 

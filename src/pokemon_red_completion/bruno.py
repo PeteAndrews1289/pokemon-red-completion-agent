@@ -280,22 +280,22 @@ def run_bruno_chapter(
             last_recovery_decision=last_recovery_turn,
         ):
             raise _HealBoundary
-        species = raw.enemy_species_id or 0
         pp = raw.battler_pp or (0, 0, 0, 0)
-        slot = _bruno_move_slot(pp)
+        return _bruno_move_slot(pp)
+
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             BrunoTurn(
-                species,
+                raw.enemy_species_id or 0,
                 raw.enemy_level or 0,
                 raw.enemy_hp or 0,
-                hp,
-                status,
-                pp,
+                raw.battler_hp or 0,
+                raw.battler_status or 0,
+                raw.battler_pp or (0, 0, 0, 0),
                 slot,
                 raw.active_party_index,
             )
         )
-        return slot
 
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
@@ -321,6 +321,7 @@ def run_bruno_chapter(
                 intent=battle_intent,
                 timing=BattleRuntimeTiming(max_runtime_pulses=1200),
                 label="Bruno",
+                move_decision_sink=record_turn,
             )
         except BattleRuntimeError as error:
             cause = error.__cause__
