@@ -1002,6 +1002,50 @@ def test_move_decision_sink_observes_learned_choices_without_querying_teacher() 
     ]
 
 
+def test_move_decision_guard_rejects_before_any_teacher_free_move_selection() -> None:
+    runtime = FakeRuntime()
+    teacher_queries = 0
+    learned_queries = 0
+
+    def teacher(_raw: RawGameState) -> int:
+        nonlocal teacher_queries
+        teacher_queries += 1
+        return 1
+
+    class LearnedPolicy:
+        def choose_move(
+            self,
+            _observation: BattlePolicyObservation,
+            _fallback: Callable[[], int],
+        ) -> int:
+            nonlocal learned_queries
+            learned_queries += 1
+            return 1
+
+    class UnsafeTurn(RuntimeError):
+        pass
+
+    def reject(_raw: RawGameState) -> None:
+        raise UnsafeTurn("retreat boundary crossed")
+
+    with (
+        bind_battle_policy_override(LearnedPolicy()),
+        pytest.raises(BattleRuntimeError, match="move-decision guard") as captured,
+    ):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            teacher,
+            expected_map=MapId.CERULEAN_CITY,
+            move_decision_guard=reject,
+        )
+
+    assert isinstance(captured.value.__cause__, UnsafeTurn)
+    assert teacher_queries == 0
+    assert learned_queries == 0
+    assert runtime.actions == []
+
+
 def test_preregistered_offset_runs_before_policy_on_the_refreshed_state() -> None:
     runtime = AdaptiveRivalSimulation()
     controller = BattleStartScheduleController(_scheduled_offsets(first_frames=7))

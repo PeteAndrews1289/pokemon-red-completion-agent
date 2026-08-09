@@ -46,6 +46,7 @@ WalkToGrass = Callable[[_Executor, Any, Any], int]
 
 #: Heal at this venue's own healer and come back to the grass.
 HealAndReturn = Callable[[_Executor, Any, Any], None]
+MoveGuard = Callable[[RawGameState], None]
 
 
 @dataclass(frozen=True, slots=True)
@@ -65,6 +66,7 @@ class TrainingVenue:
     heal_and_return: HealAndReturn
     is_in_center: Callable[[RawGameState], bool]
     move_slot: Callable[[RawGameState], int]
+    move_guard: MoveGuard | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.band, GrindingArea):

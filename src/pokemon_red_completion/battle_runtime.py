@@ -70,6 +70,12 @@ class MoveDecisionSink(Protocol):
     def __call__(self, state: RawGameState, slot: int, /) -> None: ...
 
 
+class MoveDecisionGuard(Protocol):
+    """Fail-closed semantic precondition checked before any policy selects."""
+
+    def __call__(self, state: RawGameState, /) -> None: ...
+
+
 class BattleGoal(StrEnum):
     """Game-neutral outcome requested by the actor for one battle."""
 
@@ -368,6 +374,7 @@ def run_adaptive_trainer_battle(
     unknown_cancel_interval: int = 3,
     transient_zero_pp_main_is_dialogue: bool = False,
     consume_battle_start_schedule: bool = True,
+    move_decision_guard: MoveDecisionGuard | None = None,
     move_decision_sink: MoveDecisionSink | None = None,
 ) -> RawGameState:
     """Finish one already-active trainer battle with semantic feedback.
@@ -375,12 +382,14 @@ def run_adaptive_trainer_battle(
     The selected policy is called exactly once for each newly observed main
     battle-menu turn. Its choice is latched while the controller moves to
     FIGHT, proves the requested move cursor, and proves that the selected move
-    spent exactly one current PP. ``move_decision_sink`` observes the validated
-    selection without participating in it, so chapter receipts remain complete
-    whether the legacy teacher or a bound learned policy chose the move. Unknown
-    menu state is treated as dialogue between turns and after a cursor-proven
-    attack confirmation, where bounded CONFIRM pulses cover opponent-first
-    attack text, level-up text, and move-learning prompts.
+    spent exactly one current PP. ``move_decision_guard`` enforces semantic
+    execution preconditions before either policy can act; it never supplies a
+    move label. ``move_decision_sink`` observes the validated selection without
+    participating in it, so chapter receipts remain complete whether the legacy
+    teacher or a bound learned policy chose the move. Unknown menu state is
+    treated as dialogue between turns and after a cursor-proven attack
+    confirmation, where bounded CONFIRM pulses cover opponent-first attack text,
+    level-up text, and move-learning prompts.
     """
 
     if (
@@ -401,6 +410,8 @@ def run_adaptive_trainer_battle(
         raise TypeError("transient_zero_pp_main_is_dialogue must be a bool")
     if not isinstance(consume_battle_start_schedule, bool):
         raise TypeError("consume_battle_start_schedule must be a bool")
+    if move_decision_guard is not None and not callable(move_decision_guard):
+        raise TypeError("move_decision_guard must be callable or None")
     if move_decision_sink is not None and not callable(move_decision_sink):
         raise TypeError("move_decision_sink must be callable or None")
     if required_move_id is not None and (
@@ -536,6 +547,13 @@ def run_adaptive_trainer_battle(
             policy_menu=menu,
             label=label,
         )
+        if move_decision_guard is not None:
+            try:
+                move_decision_guard(raw)
+            except Exception as error:
+                raise BattleRuntimeError(
+                    f"{label} move-decision guard rejected the current MAIN-menu turn."
+                ) from error
         slot = _choose_usable_slot(
             move_slot_policy,
             raw,
@@ -591,6 +609,7 @@ def run_adaptive_wild_battle(
     label: str = "wild battle",
     unknown_cancel_interval: int = 3,
     transient_zero_pp_main_is_dialogue: bool = False,
+    move_decision_guard: MoveDecisionGuard | None = None,
 ) -> RawGameState:
     """Finish one active wild battle using the same semantic turn controller.
 
@@ -611,6 +630,7 @@ def run_adaptive_wild_battle(
             label=label,
             unknown_cancel_interval=unknown_cancel_interval,
             transient_zero_pp_main_is_dialogue=transient_zero_pp_main_is_dialogue,
+            move_decision_guard=move_decision_guard,
         )
     finally:
         _ACTIVE_BATTLE_STATE.reset(token)

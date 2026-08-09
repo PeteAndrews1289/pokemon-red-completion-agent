@@ -22,6 +22,7 @@ from pokemon_red_completion.blaine import (
     BLAINE_TM21_SALE_VALUE,
     BLAINE_TO_GYM_EXIT,
     CENTER_TO_MANSION,
+    DIGLETTS_CAVE_TRAINING_VENUE,
     GYM_GATE_EVENTS,
     GYM_QUIZ_ROUTES,
     GYM_RETURN_TO_BLAINE,
@@ -39,6 +40,7 @@ from pokemon_red_completion.blaine import (
     MANSION_TEAM_POLICY,
     MANSION_TRAINER_EVENTS,
     MANSION_TRAINING_POLICY,
+    MANSION_TRAINING_VENUE,
     MANSION_VOLATILE_ENEMY_SPECIES,
     QUIZ_ANSWERS,
     QUIZ_CORRECT_ANSWERS,
@@ -55,6 +57,7 @@ from pokemon_red_completion.blaine import (
     _encounter_party,
     _mansion_training_move_slot,
     _sell_antidote_before_mansion,
+    _team_training_move_guard,
     _team_training_move_slot,
 )
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGameState
@@ -408,6 +411,17 @@ def test_team_training_requests_escape_after_live_hp_crosses_retreat_floor() -> 
         _team_training_move_slot(base)
 
     assert _team_training_move_slot(replace(base, first_party_hp=91)) == 1
+
+
+def test_balanced_training_venues_bind_the_policy_independent_retreat_guard() -> None:
+    assert all(
+        venue.move_guard is _team_training_move_guard
+        for venue in (
+            ROUTE_11_TRAINING_VENUE,
+            DIGLETTS_CAVE_TRAINING_VENUE,
+            MANSION_TRAINING_VENUE,
+        )
+    )
 
 
 def test_the_policy_margin_governs_and_no_species_silently_overrides_it() -> None:

@@ -1252,6 +1252,7 @@ def run_red_team_balancing(
                     intent=intent,
                     label="team training encounter",
                     unknown_cancel_interval=cancel_interval,
+                    move_decision_guard=current_venue.move_guard,
                 )
             except BattleRuntimeError as error:
                 if not isinstance(error.__cause__, _PauseForTeamTrainingRecovery):

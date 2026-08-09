@@ -2387,24 +2387,10 @@ def _team_training_move_slot(state: RawGameState) -> int:
     path before selecting another attack.
     """
 
-    hp = state.battler_hp
-    max_hp = state.battler_max_hp
-    if hp is None or max_hp is None or max_hp <= 0:
-        raise _PauseForTeamTrainingRecovery
-    if hp / max_hp <= MANSION_TEAM_POLICY.retreat_hp_ratio:
-        raise _PauseForTeamTrainingRecovery
+    _team_training_move_guard(state)
+    preferred_slots = _team_training_preferred_slots(state)
     disabled = state.player_disabled_move_slot or 0
-    moves = state.battler_moves or ()
     pp = state.battler_pp or ()
-    preferred_move_ids = TRAINING_MOVE_IDS.get(state.active_party_species_id or 0, ())
-    preferred_slots = tuple(
-        index + 1
-        for move_id in preferred_move_ids
-        for index, observed in enumerate(moves)
-        if (observed == move_id and index + 1 != disabled and index < len(pp) and pp[index] > 0)
-    )
-    if preferred_move_ids and not preferred_slots:
-        raise _PauseForTeamTrainingRecovery
     fallback_slots = tuple(
         slot
         for slot in MANSION_TRAINING_POLICY.preferred_move_slots
@@ -2412,6 +2398,33 @@ def _team_training_move_slot(state: RawGameState) -> int:
     )
     slots = preferred_slots or fallback_slots
     return choose_training_move_slot(pp, slots)
+
+
+def _team_training_move_guard(state: RawGameState) -> None:
+    """Preserve per-turn retreat and preferred-attack constraints for any policy."""
+
+    hp = state.battler_hp
+    max_hp = state.battler_max_hp
+    if hp is None or max_hp is None or max_hp <= 0:
+        raise _PauseForTeamTrainingRecovery
+    if hp / max_hp <= MANSION_TEAM_POLICY.retreat_hp_ratio:
+        raise _PauseForTeamTrainingRecovery
+    preferred_move_ids = TRAINING_MOVE_IDS.get(state.active_party_species_id or 0, ())
+    if preferred_move_ids and not _team_training_preferred_slots(state):
+        raise _PauseForTeamTrainingRecovery
+
+
+def _team_training_preferred_slots(state: RawGameState) -> tuple[int, ...]:
+    disabled = state.player_disabled_move_slot or 0
+    moves = state.battler_moves or ()
+    pp = state.battler_pp or ()
+    preferred_move_ids = TRAINING_MOVE_IDS.get(state.active_party_species_id or 0, ())
+    return tuple(
+        index + 1
+        for move_id in preferred_move_ids
+        for index, observed in enumerate(moves)
+        if (observed == move_id and index + 1 != disabled and index < len(pp) and pp[index] > 0)
+    )
 
 
 def _mansion_training_move_slot(state: RawGameState) -> int:
@@ -2732,6 +2745,7 @@ def _route_11_training_venue() -> TrainingVenue:
         heal_and_return=_route_11_heal_and_return,
         is_in_center=lambda raw: raw.map_id == MapId.VERMILION_POKECENTER,
         move_slot=_team_training_move_slot,
+        move_guard=_team_training_move_guard,
     )
 
 
@@ -2757,6 +2771,7 @@ def _digletts_cave_training_venue() -> TrainingVenue:
         heal_and_return=_digletts_cave_heal_and_return,
         is_in_center=lambda r: r.map_id == MapId.VERMILION_POKECENTER,
         move_slot=_team_training_move_slot,
+        move_guard=_team_training_move_guard,
     )
 
 DIGLETTS_CAVE_TRAINING_VENUE = _digletts_cave_training_venue()
@@ -2778,6 +2793,7 @@ def _mansion_training_venue() -> TrainingVenue:
         heal_and_return=_mansion_heal_and_return,
         is_in_center=lambda raw: raw.map_id == MapId.CINNABAR_POKECENTER,
         move_slot=_team_training_move_slot,
+        move_guard=_team_training_move_guard,
     )
 
 
