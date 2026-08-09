@@ -83,6 +83,14 @@ Label it **“infrastructure failure; model untested”**. Exclude all 3,118 par
 seed, preserve the 90% retreat rule, and derive a finite 2,000-trip envelope from the largest
 completed 1,808-battle block. The next sealed card becomes `seed 990007: unopened`.
 
+Pay off the test immediately: the repaired seed crosses the old cap, finishes the curriculum, and
+reaches an Agatha win with 17 fresh target rows. The unchanged hash-matched candidate scores
+**17/17** with 0.07965 cross-entropy; the hand-written resolver scores **12/17**. Show Bruno 2/2,
+Agatha 7/7, and Golbat 3/3. Then keep the evaluator honest: the route still stops at 306/312 because
+attack turns reveal only five transitions while seven valid specialist switches occurred between
+opponent changes. Replace inferred counts with live switch receipts; label the model result
+**“offline target gate passed; runtime authority not yet granted.”**
+
 Keep the most important scientific detail on screen: the action-model weights did not change
 between these causal attempts. The first failures repaired a game-neutral actor/referee interface;
 the last exposed missing learned authority. No Agatha map, species, or opponent-position identity

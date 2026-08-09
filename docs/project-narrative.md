@@ -70,8 +70,13 @@ test lineage—but it never reached the test boundary. After 1,500 zero-faint tr
 members were level 55 and two were 54 when the old 1,250-trip recovery cap expired. Bruno and
 Agatha produced no target rows, all 3,118 partial labels are excluded, and the frozen candidate was
 not evaluated. The repair preserves the 90% retreat contract and replaces the stale cap with a
-measured finite 2,000-trip envelope. Fresh seed 990007 is now the one-time unopened test. Even a
-perfect offline result only authorizes the next engineering step—an authenticated target artifact
+measured finite 2,000-trip envelope. Fresh seed 990007 crossed the old failure point, completed team
+training, and defeated Agatha. Its task-complete prefix contained 17 targets; the exact frozen model
+passed all 17 with 0.07965 cross-entropy while the deterministic resolver reached 12/17. Bruno was
+2/2, Agatha 7/7, and all three Golbat targets were correct. The route stopped afterward because the
+terminal referee could see only five role transitions in attack turns while seven valid specialist
+switches had executed around opponent changes. Live switch receipts now preserve and validate that
+missing evidence. The result authorizes the next engineering step—an authenticated target artifact
 and live binding—before a causal full-game replay can claim learned target control.
 
 ## August 8: the evaluator rejected a win—and found the next real model gap

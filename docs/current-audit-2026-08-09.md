@@ -98,8 +98,16 @@ Fresh seed 990006 did not reach the model test. It progressed through checkpoint
 zero-faint balanced-team wins, ending with four members at level 55 and two at 54. The old finite
 1,250-trip recovery budget expired before Bruno or Agatha emitted switch-target rows. Its 3,118
 partial labels are excluded from training and evaluation, the seed is retired, and the frozen
-candidate remains untested. Commit `edfa676` retains the 90% retreat and zero-faint contracts while
-setting a measured 2,000-trip ceiling. Fresh seed 990007 is the one-time unopened test.
+candidate remained untested. Commit `edfa676` retained the 90% retreat and zero-faint contracts while
+setting a measured 2,000-trip ceiling.
+
+Fresh seed 990007 crossed that failure point, completed the curriculum, defeated Agatha, and
+produced a task-complete prefix containing 17 switch targets. The exact frozen model scored 17/17
+with 0.07965 cross-entropy versus 12/17 for the deterministic resolver, including Bruno 2/2,
+Agatha 7/7, and all three Golbat targets. It was evaluated once without refitting. The route stopped
+at 306/312 because its terminal receipt reconstructed five role changes from move turns even though
+seven correct specialist switches executed around opponent changes. Commit `a5e92f0` records each
+live switch and validates its target directly. Artifact publication and runtime authority remain.
 
 ## Capability scorecard
 
@@ -108,7 +116,7 @@ setting a measured 2,000-trip ceiling. Fresh seed 990007 is the one-time unopene
 | Deterministic Red teacher/referee | 9/10 | Repeated clean-power 312/312, 36/36, Hall-of-Fame runs with strict chapter contracts. This is an expert oracle, not learned autonomy. |
 | Experiment integrity | 9/10 | Source/model/root hashes, whole-lineage splits, private artifact boundaries, preserved failures, one-attempt accounting, and 0/10 counted roots consumed. |
 | Learned battle moves | 7/10 | A nonlinear ranker has prior live completion evidence, but the current reserve-controller causal lane keeps ordinary moves teacher-gated. The combined teacher-free stack remains unqualified. |
-| Learned high-level battle control | 7/10 | Strong held-out class balance, causal progress through Agatha, and 54/54 target accuracy across opened whole-lineage folds; seed 990006 stopped before target evaluation, so seed 990007 and runtime target authority remain. |
+| Learned high-level battle control | 8/10 | Strong held-out class balance, causal progress through Agatha, and a frozen target head that passed 17/17 fresh targets versus 12/17 baseline; runtime target authority and terminal completion remain. |
 | Learned objective selection | 6/10 | Clean start selects registered composite goals from semantic state, but most candidate sets are singleton and fixed authored skills perform the mechanics. |
 | Learned trainee/venue strategy | 7/10 | The identity-free candidate ranker beat its shape baseline and completed a clean-power curriculum with real disagreements. It remains Red-only evidence. |
 | Navigation and menu autonomy | 3/10 | Reusable local planning exists, but the completion path is still dominated by authored chapter routes and menu executors. |
@@ -150,11 +158,10 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Push the exact fully gated `edfa676` source, then collect fresh seed 990007 once. Keep the frozen
-   candidate unchanged and evaluate it before opening any completed lineage for development.
-2. Require improvement over the deterministic baseline, reserve
-   permutation equivariance, counterfactual matchup sensitivity, and the held-out Golbat target
-   before granting runtime authority.
+1. Publish and authenticate the exact frozen `bd1ba4…` target candidate without refitting it or
+   adding seed 990007 to training.
+2. Bind its candidate-relative choice to the ephemeral live party menu slot while retaining hard
+   safety masks, permutation equivariance, and counterfactual matchup tests. Shadow before authority.
 3. Rerun the fresh power-on reserve-controller gate only after the target head qualifies. Preserve
    either its Hall-of-Fame receipt or its next causal rejection.
 4. If it passes, separate typed intent enforcement from true model safety fallbacks in the strict

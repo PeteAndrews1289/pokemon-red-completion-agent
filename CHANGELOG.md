@@ -37,6 +37,11 @@
   partial labels never reached the switch-target test boundary and remain excluded. Kept the 90%
   retreat contract while replacing the stale cap with a measured finite 2,000-trip envelope; fresh
   seed 990007 is the next unopened test.
+- Evaluated the unchanged frozen target head once on seed 990007's authenticated task-complete
+  prefix: 17/17 targets and 0.07965 cross-entropy versus 12/17 for the deterministic resolver,
+  including Bruno 2/2, Agatha 7/7, and all three Golbat targets. The route had already defeated
+  Agatha but stopped at 306/312 because move-turn reconstruction missed two valid opponent-driven
+  switches. Added explicit live role-switch receipts and direct matchup-target validation.
 - Added the August 9 capability audit and expanded the project and video narratives around the
   distinction between offline agreement, causal high-level authority, typed intent enforcement,
   and combined teacher-free play.

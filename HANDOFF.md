@@ -12,10 +12,10 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 
 This section supersedes every older “next” statement below.
 
-**Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `edfa676`
-preserves the failed seed-990006 receipt and replaces the obsolete 1,250-heal training cap with a
-measured finite 2,000-trip envelope. Its full local gate passed **2,110 tests with 3 integration
-tests deselected**, Ruff, mypy, documentation, public-artifact, and source-registry checks. Push it
+**Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `a5e92f0`
+records live Agatha role switches and the passed prospective target test; `edfa676` contains the
+measured recovery-envelope repair. The full local gate passes **2,111 tests with 3 integration
+tests deselected**, Ruff, mypy, documentation, public-artifact, and source-registry checks. Push
 before any new emulator run. Only Codex pushes this branch; do not create a second worktree or
 force-push it.
 
@@ -36,16 +36,20 @@ lineage 02 (13 targets). It fits 28/28 versus the deterministic baseline's 22/28
 The public receipt therefore says `deployment_authority: false`; do not load it into the emulator or
 start another full causal replay yet.
 
-**Exact next dependency:** push `edfa676`, then collect seed `990007` from that exact source as a
-one-time unopened test. The frozen development candidate uses
+**Target test result and exact next dependency:** the frozen development candidate uses
 two hidden units, 1,000 epochs, learning rate 0.01, L2 0.003, and equal total optimization weight per
 battle plan. It reached 54/54 across four opened leave-one-whole-lineage-out folds, then fit 41/41
-training targets and 13/13 existing validation targets. These are development results, not a test.
-Require every target—including Bruno and Agatha's Golbat—to pass seed 990007 before building an
-authenticated target artifact and runtime binding. The counted v95 campaign remains unopened at
-**0/10** and must not supply this development data.
+training targets and 13/13 existing validation targets. On fresh seed `990007`, the exact frozen
+model then scored **17/17** targets with 0.07965 cross-entropy versus the deterministic baseline's
+**12/17**. That includes Bruno 2/2, Agatha 7/7, and every Golbat target 3/3. The lineage stopped
+after defeating Agatha because the old terminal receipt undercounted two opponent-driven role
+changes that happened between recorded move turns; the task-complete target prefix is authenticated
+and the model was evaluated once. Commit `a5e92f0` records every executed live role switch and
+verifies its target directly. Next build an authenticated target artifact and runtime binding,
+shadow it, then run one fresh causal completion. The counted v95 campaign remains unopened at
+**0/10**.
 
-**Latest unopened attempt:** seed `990006` progressed cleanly through checkpoint 275 and 1,500
+**Previous unopened attempt:** seed `990006` progressed cleanly through checkpoint 275 and 1,500
 balanced-team wins with zero faints. Four members reached level 55 and the remaining two reached
 54, but the run consumed the old 1,250-trip recovery cap before Bruno or Agatha could emit target
 test rows. Its 3,118 partial battle labels are excluded from both fitting and evaluation, the
@@ -53,6 +57,13 @@ frozen target candidate was not evaluated, and the seed is retired. The 90% retr
 unchanged; the new 2,000 ceiling is finite and permits one recovery per fight across the largest
 completed 1,808-battle development block. See the
 [failure receipt](docs/evidence/battle-control-reserve-matchup-v3-lineage-07-failure-2026-08-09.json).
+
+**Latest run:** seed `990007` qualified the recovery-envelope repair, completed team training,
+defeated Blaine, Giovanni, Lorelei, Bruno, and Agatha, and reached 306/312. The frozen target head
+passed all 17 explicit rows. The route then failed only because attack-turn records showed five
+role transitions while seven valid target switches had actually executed. The failed artifact's
+3,188 labels are not training data. See the
+[prospective target receipt](docs/evidence/battle-switch-target-prospective-prefix-test-2026-08-09.json).
 
 **Latest collection attempt:** fresh uncounted timing seed `990004` qualified the Route 11 repair,
 completed the balanced-team curriculum at 51/52/52/55/51/51, defeated Blaine, and reached checkpoint

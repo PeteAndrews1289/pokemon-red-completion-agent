@@ -60,9 +60,13 @@ lineage. These are development metrics. Seed 990006 was opened once but stopped 
 after 1,500 safe training wins because the old 1,250-trip recovery cap expired with four members at
 55 and two at 54. It emitted no Bruno/Agatha target test rows, so its partial labels are excluded
 and the candidate remains untested. Commit `edfa676` preserves the 90% retreat rule while raising
-the finite measured envelope to 2,000 trips. Push it, then use fresh seed 990007 once as the
-unopened offline test. Runtime target deployment and causal authority remain later gates even if
-that test passes.
+the finite measured envelope to 2,000 trips. Fresh seed 990007 then crossed the old failure point,
+completed training, and produced a task-complete target prefix through an Agatha win. The exact
+frozen candidate passed 17/17 with 0.07965 cross-entropy versus 12/17 for the baseline, including
+Bruno 2/2 and Agatha 7/7. The route stopped at 306/312 because the terminal receipt inferred only
+five role changes from move turns while seven valid switches had executed between opponent changes.
+Commit `a5e92f0` records and verifies those live switches directly. Runtime artifact publication,
+binding, shadow, and causal authority are the next gates.
 
 After the learned target passes offline and causal Red gates, then one canonical and one uncounted
 perturbation result, begin Crystal's bounded battle adapter.

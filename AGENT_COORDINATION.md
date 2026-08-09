@@ -10,8 +10,12 @@
 > stopped at the old 1,250-heal bound with four members at 55 and two at 54, before producing any
 > Bruno/Agatha test targets. Its partial labels are excluded and the frozen model remains untested.
 > Commit `edfa676` preserves the 90% retreat and zero-faint rules while setting a measured finite
-> 2,000-trip envelope; after push, seed `990007` is the unopened test. Do not tune on its outcome, add it to
-> fitting before recording the test, rerun retired seeds `990003`–`990006`, build a complete Crystal
+> 2,000-trip envelope. Seed `990007` then passed the frozen target test 17/17 versus 12/17 for the
+> deterministic baseline, including Bruno 2/2 and Agatha 7/7, before an attack-turn-based Agatha
+> receipt undercounted two valid between-move role switches. Commit `a5e92f0` records and validates
+> live switch evidence directly. Next publish/authenticate the target model, bind it at runtime,
+> shadow it, and run fresh causal completion. Do not add seed 990007 to
+> fitting, rerun retired seeds `990003`–`990007`, build a complete Crystal
 > route, relax the verifier, or consume a counted v95 root. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).
 
@@ -359,19 +363,17 @@ Current state: **2,110 passed, 3 deselected**, all checks green, on trunk
 
 These are ordered by how much they serve the mission, not by difficulty.
 
-**1. Run the frozen unopened target test. (Lane A/C)** After `edfa676` is pushed and GitHub CI is
-green, collect seed `990007` once. Evaluate the frozen two-unit, plan-balanced, L2 0.003
-candidate before any reuse of that lineage. Do not use counted v95 roots.
+**1. Publish the passed target head. (Lane B/C)** Serialize the exact frozen two-unit,
+plan-balanced, L2 0.003 candidate with model, feature-schema, source-lineage, and canonical-payload
+authentication. Do not refit it or add seed 990007 to training.
 
-**2. Qualify the target head offline. (Lane B/C)** Beat the deterministic target baseline on seed
-990007, preserve reserve-permutation equivariance, pass counterfactual matchup tests, and select
-Jolteon for the
-held-out Agatha Golbat role. A switch-class score without target accuracy does not count.
+**2. Bind learned target choice to execution. (Lane A/B)** Resolve the model's candidate index to
+the live menu slot while preserving permutation equivariance and hard health/status/availability
+constraints. Shadow evaluation precedes authority.
 
-**3. Bind learned target choice to execution. (Lane A/B)** Load the exact authenticated candidate,
-resolve its ephemeral candidate index to the current live menu slot, and preserve hard constraints
-for faints, status, health, required members, and unavailable moves. Shadow and captured-state gates
-precede full authority.
+**3. Run a fresh causal completion. (Lane A/C)** Require the repaired live Agatha role receipt,
+36/36 objectives, Hall of Fame, 100% target-head agreement or explicitly measured disagreements,
+and no target fallback. Keep ordinary moves teacher-gated for this isolated target test.
 
 **4. Repeat one strict canonical rehearsal. (Lane A)** Require 36/36 objectives, Hall of Fame, zero
 target fallback/substitution, and every League chapter's existing role contract. Preserve any

@@ -58,10 +58,13 @@ Center boundary still requires full HP, clear status, and restored PP.
 
 Seed `990006` stopped before that test boundary after 1,500 zero-faint training wins: four members
 were level 55, two were level 54, and the old 1,250-trip recovery cap expired. Its partial labels
-are excluded and the frozen target candidate remains untested. The active gate is fresh seed
-`990007` from the measured 2,000-trip source as a one-time unopened offline test. Only after that
-passes should the repository add an
-authenticated target-model artifact and runtime binding, then run another 312-checkpoint causal
+are excluded. Fresh seed `990007` then qualified the recovery repair and produced 17 authenticated
+target rows through an Agatha win. The unchanged frozen candidate passed **17/17** with 0.07965
+cross-entropy versus **12/17** for the deterministic resolver, including all seven Agatha targets.
+The route stopped at 306/312 because its terminal receipt reconstructed only five of seven executed
+role switches from move turns; explicit live switch receipts now fix that referee boundary. The
+active gate is an authenticated target-model artifact and runtime binding, then another
+312-checkpoint causal
 completion, followed by a separate run that
 forbids teacher queries for ordinary move selection. Navigation, menus, chapter mechanics, and
 resource execution remain authored. The counted v95 reliability campaign remains unopened at
@@ -78,7 +81,7 @@ demonstrations and a referee; it is not the final autonomous player.
 | Learned objective dispatch | One clean-start run selected 21 composite objectives and verified 15 automatic effects through Hall of Fame | Many choices remain affordance-masked; mechanics are fixed skills |
 | Learned training control | The trainee/venue ranker beat its shape baseline and completed clean start with 114,831 controlled choices and 400 disagreements | One uncounted Red root; navigation and menus remain authored |
 | Strict learned-stack composition | Prior four-model run reached a Lorelei win with zero teacher query/fallback; the new high-level controller has causal authority through an Agatha win | Current reserve-controller lane still teacher-gates ordinary moves and has not completed the strict terminal contract |
-| Reserve-aware battle control | Four complete lineages; 98.2394% / 94.7537% held-out class accuracy/balance; frozen target candidate is 54/54 across opened leave-one-lineage-out folds | The 54 targets are opened development evidence; seed 990006 stopped before target evaluation, so seed 990007, runtime binding, causal, and combined teacher-free qualification remain |
+| Reserve-aware battle control | Four complete lineages; 98.2394% / 94.7537% held-out class accuracy/balance; frozen target head passed a fresh 17/17 task-complete prefix versus 12/17 baseline | Runtime artifact/binding, shadow, causal completion, and combined teacher-free qualification remain |
 | Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Counted campaign remains 0/10 until reserve-aware battle control passes canonical and perturbation rehearsals |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |
