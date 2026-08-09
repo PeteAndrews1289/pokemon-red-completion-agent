@@ -85,6 +85,18 @@ class EncounterBand:
     typical_maximum_level: int
     observed_maximum_level: int
     species_ids: tuple[int, ...]
+    #: Sorted labels for the conditions in force while these encounters were
+    #: seen, empty where the title has none to report.
+    #:
+    #: Red has none: its encounter tables do not vary, so every row belongs to
+    #: the same table and merging them is correct. From Gen 2 a route fields
+    #: different species by time of day. Keying a band on the map alone would
+    #: average two tables into a band describing neither, and would do it
+    #: silently -- there is no error to notice, just a wrong number. Carrying
+    #: the key now means a second adapter reports conditions and gets separate
+    #: bands, instead of discovering the merge from a training run that will
+    #: not converge.
+    conditions: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         if self.samples <= 0:
@@ -126,6 +138,7 @@ class EncounterBand:
             "typical_maximum_level": self.typical_maximum_level,
             "observed_maximum_level": self.observed_maximum_level,
             "species_ids": list(self.species_ids),
+            "conditions": list(self.conditions),
         }
 
 
@@ -151,8 +164,8 @@ def read_encounter_log(path: Path) -> Iterator[Mapping[str, object]]:
 def summarize_encounters(entries: Iterable[Mapping[str, object]]) -> tuple[EncounterBand, ...]:
     """Reduce raw encounter rows to one band per area, ordered by map."""
 
-    levels: dict[int, list[int]] = {}
-    species: dict[int, Counter[int]] = {}
+    levels: dict[tuple[int, tuple[str, ...]], list[int]] = {}
+    species: dict[tuple[int, tuple[str, ...]], Counter[int]] = {}
     for entry in entries:
         if not is_wild_encounter(_Row(entry)):
             continue
@@ -165,17 +178,27 @@ def summarize_encounters(entries: Iterable[Mapping[str, object]]) -> tuple[Encou
             or not isinstance(species_id, int)
         ):
             continue
-        levels.setdefault(map_id, []).append(level)
-        species.setdefault(map_id, Counter())[species_id] += 1
+        raw_conditions = entry.get("conditions", ())
+        conditions = (
+            tuple(sorted(str(label) for label in raw_conditions))
+            if isinstance(raw_conditions, (list, tuple))
+            else ()
+        )
+        key = (map_id, conditions)
+        levels.setdefault(key, []).append(level)
+        species.setdefault(key, Counter())[species_id] += 1
     return tuple(
-        _band(map_id, sorted(observed), species[map_id])
-        for map_id, observed in sorted(levels.items())
+        _band(key, sorted(observed), species[key]) for key, observed in sorted(levels.items())
     )
 
 
-def _band(map_id: int, levels: Sequence[int], species: Counter[int]) -> EncounterBand:
+def _band(
+    key: tuple[int, tuple[str, ...]], levels: Sequence[int], species: Counter[int]
+) -> EncounterBand:
+    map_id, conditions = key
     return EncounterBand(
         map_id=map_id,
+        conditions=conditions,
         samples=len(levels),
         minimum_level=levels[0],
         typical_maximum_level=_percentile(levels, TYPICAL_ENCOUNTER_SHARE),
@@ -214,6 +237,7 @@ def load_measured_bands(path: Path) -> tuple[EncounterBand, ...]:
             typical_maximum_level=int(row["typical_maximum_level"]),
             observed_maximum_level=int(row["observed_maximum_level"]),
             species_ids=tuple(int(value) for value in row.get("species_ids", ())),
+            conditions=tuple(sorted(str(label) for label in row.get("conditions", ()))),
         )
         for row in rows
     )
@@ -240,6 +264,7 @@ def grinding_areas(
             has_nearby_healer=band.map_id in healers,
             rare_maximum_encounter_level=band.observed_maximum_level,
             measured_samples=band.samples,
+            conditions=band.conditions,
         )
         for band in bands
         if band.is_trusted

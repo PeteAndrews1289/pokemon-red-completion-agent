@@ -512,6 +512,16 @@ class GrindingArea:
     has_nearby_healer: bool = True
     rare_maximum_encounter_level: int | None = None
     measured_samples: int | None = None
+    #: Conditions under which this band was measured, as sorted labels such as
+    #: ``("night",)``.
+    #:
+    #: Empty means "no condition was observed", which is the honest reading for
+    #: Gen 1: its encounter tables do not vary, so a Red adapter has nothing to
+    #: report. From Gen 2 a route fields different species by time of day, and
+    #: a band that cannot say which one it measured is two tables averaged into
+    #: a number describing neither. That failure is silent, which is why the
+    #: field exists before a second adapter needs it rather than after.
+    conditions: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         if not self.area_id.strip():
@@ -531,6 +541,24 @@ class GrindingArea:
         samples = self.measured_samples
         if samples is not None and (type(samples) is not int or samples <= 0):
             raise ValueError("measured_samples must be a positive count when given")
+        if not isinstance(self.conditions, tuple) or any(
+            not isinstance(label, str) or not label.strip() for label in self.conditions
+        ):
+            raise ValueError("conditions must be a tuple of non-empty labels")
+        if list(self.conditions) != sorted(self.conditions):
+            raise ValueError("conditions must be sorted so an area's identity is stable")
+        if len(set(self.conditions)) != len(self.conditions):
+            raise ValueError("conditions must not repeat")
+
+    @property
+    def identity(self) -> tuple[str, tuple[str, ...]]:
+        """What distinguishes this band from another of the same place.
+
+        Two bands for one area under different conditions are different bands.
+        Keying on ``area_id`` alone silently merges them.
+        """
+
+        return (self.area_id, self.conditions)
 
     @property
     def is_measured(self) -> bool:

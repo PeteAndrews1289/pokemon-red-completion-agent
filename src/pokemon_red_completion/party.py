@@ -37,6 +37,25 @@ class StatusCondition(StrEnum):
     BURN = "burn"
     FREEZE = "freeze"
     PARALYSIS = "paralysis"
+    #: Badly poisoned. Gen 1 carries this as a volatile battle flag and reports
+    #: plain poison in the persistent status byte, so a Red adapter never emits
+    #: it. Gen 2 onward stores it persistently and its damage escalates each
+    #: turn, which changes whether a member is safe to keep in. A contract that
+    #: cannot say "toxic" forces every later adapter to lie about it.
+    TOXIC = "toxic"
+
+
+class Gender(StrEnum):
+    """A member's gender, where the title tracks one.
+
+    Gen 1 has no concept of gender at all, so a Red adapter leaves this unset
+    rather than guessing. From Gen 2 it decides breeding compatibility, which
+    is an acquisition route a living Pokedex needs.
+    """
+
+    MALE = "male"
+    FEMALE = "female"
+    GENDERLESS = "genderless"
 
 
 class PartyRole(StrEnum):
@@ -104,6 +123,13 @@ class PartyMemberObservation:
     experience: int | None = None
     experience_floor: int | None = None
     experience_next: int | None = None
+    #: What this member is carrying, as a namespaced reference, or ``None``
+    #: where the title has no held items. Gen 1 has none; from Gen 2 a held
+    #: item decides whether a member survives a turn it otherwise would not,
+    #: so a planner that cannot see it is reasoning about a different game.
+    held_item_ref: str | None = None
+    #: ``None`` where the title does not track gender, which is Gen 1 only.
+    gender: Gender | None = None
 
     def __post_init__(self) -> None:
         if type(self.slot) is not int or not 1 <= self.slot <= PARTY_SLOT_LIMIT:
@@ -118,6 +144,12 @@ class PartyMemberObservation:
             raise ValueError("hp must be between zero and max_hp")
         if not isinstance(self.status, StatusCondition):
             raise TypeError("status must be a StatusCondition")
+        if self.held_item_ref is not None and (
+            not isinstance(self.held_item_ref, str) or ":" not in self.held_item_ref
+        ):
+            raise ValueError("held_item_ref must be a namespaced reference or None")
+        if self.gender is not None and not isinstance(self.gender, Gender):
+            raise TypeError("gender must be a Gender or None")
         if len(self.moves) > MOVE_SLOT_LIMIT:
             raise ValueError(f"a member cannot know more than {MOVE_SLOT_LIMIT} moves")
         if any(not isinstance(move, MoveObservation) for move in self.moves):
