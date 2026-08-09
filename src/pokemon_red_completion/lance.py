@@ -345,6 +345,13 @@ def run_lance_chapter(
                 BattleRecoveryCapability.CURE_ANY_STATUS,
             }
         ),
+        boost_capabilities=frozenset(
+            {
+                BattleBoostStat.ACCURACY,
+                BattleBoostStat.ATTACK,
+                BattleBoostStat.SPECIAL,
+            }
+        ),
     )
     while reader.read().battle_state:
         try:

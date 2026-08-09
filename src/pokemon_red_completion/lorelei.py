@@ -339,6 +339,7 @@ def run_lorelei_chapter(
                 BattleRecoveryCapability.CURE_ANY_STATUS,
             }
         ),
+        boost_capabilities=frozenset({BattleBoostStat.ACCURACY}),
         switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
     )
     while reader.read().battle_state:

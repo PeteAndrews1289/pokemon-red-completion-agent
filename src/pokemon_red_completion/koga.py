@@ -569,6 +569,11 @@ def _fight(
         required_move_ref=(
             None if allow_disable_fallback else pokemon_red_move_ref(SURF)
         ),
+        boost_capabilities=(
+            frozenset({BattleBoostStat.ACCURACY})
+            if x_accuracy_enemy_species is not None
+            else frozenset()
+        ),
         switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
     )
     try:

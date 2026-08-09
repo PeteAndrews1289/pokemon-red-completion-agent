@@ -7,6 +7,7 @@ from dataclasses import replace
 import pytest
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleBoostStat
 from pokemon_red_completion.battle_plan import RED_BATTLE_PLAN_IDS
 from pokemon_red_completion.battle_policy import choose_cerulean_rival_move_slot
 from pokemon_red_completion.battle_runtime import (
@@ -378,6 +379,25 @@ def test_battle_intent_rejects_untyped_recovery_capabilities() -> None:
             TEST_BATTLE_PLAN_ID,
             resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
             recovery_capabilities=frozenset({"restore_hp"}),  # type: ignore[arg-type]
+        )
+
+
+def test_battle_intent_accepts_typed_boost_capabilities() -> None:
+    intent = BattleIntent(
+        "defeat_rival",
+        TEST_BATTLE_PLAN_ID,
+        boost_capabilities=frozenset({BattleBoostStat.ACCURACY}),
+    )
+
+    assert intent.boost_capabilities == frozenset({BattleBoostStat.ACCURACY})
+
+
+def test_battle_intent_rejects_untyped_boost_capabilities() -> None:
+    with pytest.raises(TypeError, match="must contain boost stats"):
+        BattleIntent(
+            "defeat_rival",
+            TEST_BATTLE_PLAN_ID,
+            boost_capabilities=frozenset({"accuracy"}),  # type: ignore[arg-type]
         )
 
 

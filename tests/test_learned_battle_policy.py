@@ -60,6 +60,7 @@ def _batch() -> BattleFeatureBatch:
 def _observation(
     *,
     recovery_capabilities: frozenset[BattleRecoveryCapability] = frozenset(),
+    boost_capabilities: frozenset[BattleBoostStat] = frozenset(),
     switch_capabilities: frozenset[BattleSwitchCapability] = frozenset(),
 ) -> BattlePolicyObservation:
     return BattlePolicyObservation(
@@ -82,6 +83,7 @@ def _observation(
                 else BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
             ),
             recovery_capabilities=recovery_capabilities,
+            boost_capabilities=boost_capabilities,
             switch_capabilities=switch_capabilities,
         ),
     )
@@ -660,13 +662,35 @@ def test_control_execution_emits_boost_without_calling_teacher() -> None:
         raise AssertionError("high-confidence boost queried the teacher")
 
     with pytest.raises(LearnedBattleControlRequest) as raised:
-        policy.choose_move(_observation(), teacher_must_not_run)
+        policy.choose_move(
+            _observation(boost_capabilities=frozenset({BattleBoostStat.SPECIAL})),
+            teacher_must_not_run,
+        )
 
     assert raised.value.action == BattleAction.boost(BattleBoostStat.SPECIAL)
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
     assert execution["teacher_free_requests"] == 1
     assert execution["typed_requests_executed"] == 1
+
+
+def test_control_execution_masks_boost_without_bound_executor_capability() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_full_control_model(2),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+
+    assert policy.choose_move(_observation(), lambda: 1) == 3
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["safety_fallbacks"] == 1
+    assert execution["target_resolution_failures"] == {"capability_mask": 1}
+    assert execution["typed_requests_executed"] == 0
 
 
 def test_control_execution_emits_switch_without_calling_teacher() -> None:

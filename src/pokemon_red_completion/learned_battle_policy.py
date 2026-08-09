@@ -540,6 +540,17 @@ class ModelAssistedBattlePolicy:
                     self._record_control_action(observation, BattleAction.move(predicted_slot))
                     return predicted_slot
             if resolved_action.action.kind is BattleActionKind.USE_BOOST:
+                boost_stat = resolved_action.action.boost_stat
+                if boost_stat not in intent.boost_capabilities:
+                    self.control_target_resolution_failures["capability_mask"] += 1
+                    self.control_execution_decisions += 1
+                    self.control_safety_fallbacks += 1
+                    self.model_decisions += 1
+                    self._record_control_action(
+                        observation,
+                        BattleAction.move(predicted_slot),
+                    )
+                    return predicted_slot
                 self.control_execution_decisions += 1
                 self.control_execution_requests += 1
                 self.control_teacher_free_requests += 1

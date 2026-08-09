@@ -16,6 +16,7 @@ from enum import StrEnum
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleBoostStat
 from pokemon_red_completion.battle_schedule import (
     BattleStartScheduleController,
     bound_battle_start_schedule,
@@ -128,6 +129,7 @@ class BattleIntent:
     required_move_ref: str | None = None
     resource_policy: BattleResourcePolicy = BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
     recovery_capabilities: frozenset[BattleRecoveryCapability] = frozenset()
+    boost_capabilities: frozenset[BattleBoostStat] = frozenset()
     switch_capabilities: frozenset[BattleSwitchCapability] = frozenset()
 
     def __post_init__(self) -> None:
@@ -165,6 +167,10 @@ class BattleIntent:
             and self.resource_policy is not BattleResourcePolicy.BOUNDED_RECOVERY
         ):
             raise ValueError("recovery capabilities require bounded recovery policy")
+        if not isinstance(self.boost_capabilities, frozenset) or any(
+            not isinstance(value, BattleBoostStat) for value in self.boost_capabilities
+        ):
+            raise TypeError("boost_capabilities must contain boost stats")
         if not isinstance(self.switch_capabilities, frozenset) or any(
             not isinstance(value, BattleSwitchCapability)
             for value in self.switch_capabilities

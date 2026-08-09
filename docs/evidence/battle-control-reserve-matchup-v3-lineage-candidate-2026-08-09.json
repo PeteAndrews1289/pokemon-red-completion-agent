@@ -1,0 +1,63 @@
+{
+  "schema": "pokemon-red-battle-control-v3-lineage-candidate-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "offline_candidate_pending_fresh_rollout",
+  "source_commit": "1b4b0b2f0ecbcbcec1e7b94e73af601f2f5ba7ae",
+  "candidate": {
+    "artifact_id": "red-battle-control-model-d4bc15ba53354fa2980a47b57f2dda78",
+    "manifest_sha256": "e742f32893ddca66911e1dbeb31bea1fca93f07ad6f09d6dedfeb8d07c3b382e",
+    "model_id": "pokemon.core.battle.control.mlp.v1",
+    "model_sha256": "916aa21097d7b087125dce6cb9b01180c2ee3aa929a843d7b580021ac00246e0",
+    "feature_schema_id": "pokemon.core.battle.control.features.v3",
+    "private_path_published": false
+  },
+  "split": {
+    "kind": "complete_rollout_lineages",
+    "held_out_rollout_lineages": true,
+    "training_artifacts": [
+      {
+        "artifact_id": "red-battle-control-4121905b04bd438f999cc52f6351cdc9",
+        "manifest_sha256": "2b24e5eb0b257c9172a0e11c0ed0388c0835bf9f9fc37b4b4650cfb8ac0d91d4"
+      }
+    ],
+    "validation_artifacts": [
+      {
+        "artifact_id": "red-battle-control-517db549407846dfad8b0ded219e02d1",
+        "manifest_sha256": "21a7ebf2617588ad368f551def2cc5fd2c53304fdee0789bfad7ab097e93ff50"
+      }
+    ]
+  },
+  "training": {
+    "examples": 3112,
+    "accuracy": 0.9938946015424165,
+    "balanced_accuracy": 0.9989678400695349,
+    "cross_entropy": 0.017543515609129697,
+    "switch_target_examples": 11,
+    "switch_target_correct": 9,
+    "switch_target_accuracy": 0.8181818181818182
+  },
+  "validation": {
+    "examples": 3124,
+    "accuracy": 0.9801536491677336,
+    "balanced_accuracy": 0.9037984539992573,
+    "cross_entropy": 0.07134742846701997,
+    "switch_target_examples": 13,
+    "switch_target_correct": 10,
+    "switch_target_accuracy": 0.7692307692307693
+  },
+  "comparison_to_rejected_single_lineage_diagnostic": {
+    "old_validation_accuracy": 0.6153846153846154,
+    "old_validation_balanced_accuracy": 0.41964285714285715,
+    "new_validation_accuracy": 0.9801536491677336,
+    "new_validation_balanced_accuracy": 0.9037984539992573,
+    "interpretation": "The reserve-aware schema and disjoint lineage split produced a strong candidate, but offline agreement alone cannot authorize promotion."
+  },
+  "qualification": {
+    "promotion_eligible": false,
+    "fresh_shadow_rollout_complete": false,
+    "fresh_model_control_rollout_complete": false,
+    "counted_campaign_roots_consumed": 0,
+    "cross_game_transfer_complete": false,
+    "reason": "fresh_full_control_rollout_required"
+  }
+}

@@ -484,6 +484,12 @@ def run_champion_chapter(
                 BattleRecoveryCapability.CURE_ANY_STATUS,
             }
         ),
+        boost_capabilities=frozenset(
+            {
+                BattleBoostStat.ACCURACY,
+                BattleBoostStat.SPECIAL,
+            }
+        ),
     )
     while True:
         raw = reader.read()
