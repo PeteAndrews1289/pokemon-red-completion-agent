@@ -708,6 +708,8 @@ def test_route_3_battle_recovery_preserves_the_twelve_potion_floor() -> None:
         def execute(self, action: MacroAction) -> None:
             if action.kind is MacroActionKind.MOVE and action.value == "down":
                 reader.selected_main_command = 1
+            elif action.kind is MacroActionKind.MOVE and action.value == "up":
+                reader.selected_main_command = 0
             if action.kind is not MacroActionKind.CONFIRM:
                 return
             self.confirms += 1
@@ -726,6 +728,7 @@ def test_route_3_battle_recovery_preserves_the_twelve_potion_floor() -> None:
 
     assert reader.state.first_party_hp == 33
     assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 12
+    assert reader.selected_main_command == 0
 
 
 def test_cerulean_qualification_stops_at_city_entry_not_the_gym() -> None:

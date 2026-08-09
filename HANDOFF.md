@@ -176,7 +176,10 @@ counterexample. The shared exact-gate yield maneuver was qualified at `8efd140`,
 qualified Center routing, the poison-transit controller/referee split, and the measured Gym route.
 The early PC-Potion repair is published at `55b255e`. The traced one-use Route 3 battle recovery and
 its regenerated v95 registry are the current uncommitted lane. Public artifacts, docs, registry,
-Ruff, mypy, and 2,198 tests are green; push before exact causal replay.
+Ruff, mypy, and 2,198 tests passed at `1a2892b`. Replay 16 proved the Potion prevented the faint but
+returned to MAIN with `ITEM` selected, so the legacy finisher reopened the bag until its cap
+expired. The current uncommitted delta restores `FIGHT` through the semantic cursor; its full
+public-artifact, docs, registry, Ruff, mypy, and 2,198-test gate is green. Push before exact replay.
 Only Codex
 pushes this branch; do not create a second worktree or force-push it.
 

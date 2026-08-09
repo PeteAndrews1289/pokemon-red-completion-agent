@@ -284,7 +284,10 @@ only at a live MAIN boundary at or below 13 HP, proves the exact heal and item d
 crosses a twelve-Potion floor. Cerulean buys the original four from a measured 12–14 starting
 window and the rival accepts 16–18; the existing cleanup still retains six, so total spend and every
 downstream reserve are unchanged. The complete 2,198-test ROM-free gate passes; publish and
-causally replay the same root. Counted v95 remains unopened.
+causally replay the same root. That replay proved the heal but revealed that item use returned to
+MAIN with `ITEM` selected, so the confirmation-only finisher reopened the bag until its cap expired.
+The receipt now restores `FIGHT` through the semantic cursor before handing control back. Re-run
+the same root from the now-green 2,198-test gate; counted v95 remains unopened.
 
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared

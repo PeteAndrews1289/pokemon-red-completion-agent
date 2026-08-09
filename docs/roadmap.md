@@ -153,6 +153,9 @@ post-rival floor. That replay crossed the return, then trainer one's second oppo
 verified MAIN boundary, protect a floor of twelve, accept the resulting 16–18 pre-rival window,
 regenerate, pass the full ROM-free gate, push, and causally replay `990026` before assigning another
 root. The 2,198-test gate is green; counted v95 remains 0/10.
+Replay 16 proved the heal and then exhausted the finisher bound because MAIN returned with `ITEM`
+selected. Post-item `FIGHT` restoration now passes the 2,198-test gate; push and repeat the exact
+root before any new seed.
 
 Seed `990024` qualified incidental Forest travel but the fixed first-Kakuna frame wait produced no
 battle. The [ninth perturbation failure](evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json)

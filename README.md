@@ -188,7 +188,9 @@ the lead down to zero while the controller kept confirming attacks. The repaired
 spend one further Potion only at a verified MAIN boundary at or below 13 HP, never crossing the
 twelve-Potion floor. Cerulean now accepts the resulting 16–18 Potion window, while the existing
 cleanup still protects the identical six-Potion downstream reserve and the money ledger is
-unchanged;
+unchanged. The first replay proved the heal prevented the faint, then exhausted the battle cap
+because item use returned to MAIN with `ITEM` still selected; the recovery receipt now restores
+`FIGHT` through the observed cursor before returning control;
 see the
 [eleventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95

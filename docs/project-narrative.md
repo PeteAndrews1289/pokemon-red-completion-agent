@@ -2357,6 +2357,11 @@ repair may spend one additional Potion only at a verified MAIN boundary and prot
 resulting 16–18 Potion rival window still cleans down to the same six-Potion floor, so the change is
 resource planning, not a smaller downstream safety margin.
 
+The first replay proved the Potion prevented the faint and then found a smaller state-machine bug:
+item use returned to MAIN with `ITEM` still highlighted, while the old finisher assumed `FIGHT`.
+The item receipt now restores the semantic cursor before handing control back. Surviving is not
+enough; an action must also return a composable control state.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

@@ -1846,7 +1846,21 @@ def _use_route_3_battle_potion(
             and (current.first_party_hp or 0) > 0
             and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
         ):
-            return
+            selected_main = reader.read_battle_menu_state(current).selected_main_command
+            if selected_main == 0:
+                return
+            restore_direction = {1: "up", 2: "left", 3: "up"}.get(selected_main)
+            if restore_direction is None:
+                raise CeruleanChapterError(
+                    f"{label} exposed an invalid post-recovery MAIN cursor."
+                )
+            _pulse(
+                executor,
+                MacroActionKind.MOVE,
+                restore_direction,
+                timing.move_cursor_wait_frames,
+            )
+            continue
         if current.battle_state != 2 or (current.first_party_hp or 0) <= 0:
             raise CeruleanChapterError(f"{label} lost its living battle during recovery.")
         executor.execute(MacroAction(MacroActionKind.CANCEL))

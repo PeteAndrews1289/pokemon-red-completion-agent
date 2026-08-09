@@ -34,7 +34,7 @@
     "model_boundary": "The failure remained inside the authored first composite. Objective selection made one singleton choice; all learned battle, target, and training counters were zero."
   },
   "repair": {
-    "status": "route3_wrap_recovery_validated_rom_free_pending_live_causal_replay",
+    "status": "route3_post_item_menu_handoff_validated_rom_free_pending_replay",
     "behavior": "The Forest exit still requires the exact level-9 lead, at least 19 HP, at least four Bubble PP, and either healthy or poison status; every other status remains fatal. The independent progress referee admits poison only at the Forest north gate, upper Route 2 return, and Pewter south edge. The teacher takes the direct finite Pewter route to the Pokémon Center, proves full HP, clear status, and positive PP for every learned move, withdraws exactly RED's guaranteed PC Potion, exits, and follows the measured finite route to the Gym. After the first required Route 3 trainer, it consumes exactly that Potion under map, HP, inventory, and field-control gates before the 51-step return. During trainer one it may consume one further Potion only at a verified MAIN menu at or below 13 HP and above a twelve-Potion floor. Cerulean purchases the original four from a measured 12–14 starting window; the rival accepts 16–18, and the existing cleanup still protects six, so downstream reserves and total spend are unchanged.",
     "bounds": {
       "center_route_inputs": 15,
@@ -113,7 +113,15 @@
       },
       "finding": "The field Potion qualified the former recovery-walk defect. Trainer one's second opponent then used repeated Wrap while the confirmation-only finisher had no recovery branch. A legal Potion was available at multiple verified MAIN boundaries; this remained authored early-game execution before every learned battle and training decision."
     },
-    "rom_free_gate": "The one-use Wrap recovery passes public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,198 tests; three integration tests are deselected and one expected failure remains expected. Its regenerated source-bound v95 registry is SHA-256 eaa5bfc13113dafbb899ca308c345a4733c40e967d38a7cf887d3eaed596e0eb and source bundle SHA-256 2bb15d11bf42e12942a78e1dfc14b799d35a6aaf8da0183df947991cdb9fe73b.",
+    "same_root_route3_menu_handoff_replay": {
+      "source_commit": "1a2892bdae79f720b318a6b22520c683723d3144",
+      "raw_report_sha256": "3cc27c0721ee8a5de4bfe250555aeab61b72d60c58ec261e81c9772c538cb99d",
+      "frames_executed": 268674,
+      "exception_type": "CeruleanChapterError",
+      "message": "Route 3 trainer 1 failed its bounded battle-completion gate.",
+      "finding": "The Potion prevented the prior faint but returned at a stable MAIN menu with ITEM still selected. The legacy confirmation-only finisher therefore reopened the bag until its 180-pulse cap expired. The item receipt now restores FIGHT through the observed semantic cursor before returning control."
+    },
+    "rom_free_gate": "The post-item FIGHT restoration passes public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,198 tests; three integration tests are deselected and one expected failure remains expected. Its source-bound v95 registry is SHA-256 0dd65da7dbf80793b980de26c020beb067eeecfcc8e2d712b1307bdcd09c3c92 and source bundle SHA-256 55be5de5bc6513a6216af559e1124db72ae195c0f24acce2f61a0926363378c9.",
     "next_gate": "Complete the full ROM-free gate, commit and push the repair, then replay the failed seed causally before assigning a fresh uncounted derived-timing root. Counted v95 remains unopened."
   }
 }

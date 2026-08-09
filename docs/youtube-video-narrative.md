@@ -219,6 +219,10 @@ traced repair makes one MAIN-menu recovery at 13/35 HP and produces the exact le
 `14 → 13 → 12 → 16 → 6`. The money total and downstream floor do not change. Caption it:
 **“Resources are part of the policy.”**
 
+Keep one final beat: the heal works, but `ITEM` remains highlighted and the next generic confirm
+opens the bag again. Restore `FIGHT` and caption the state-machine lesson: **“Every skill needs a
+postcondition.”**
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different
