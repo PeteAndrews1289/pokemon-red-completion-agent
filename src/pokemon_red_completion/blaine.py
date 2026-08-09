@@ -209,12 +209,14 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
     # generous headroom over the parity requirement rather than the overshoot.
     max_battles=7_000,
     max_steps=500_000,
-    # The live acquisition lineage changes Mansion RNG and requires the escort
-    # to absorb volatile encounters before escaping. A clean replay reached a
-    # six-level spread at 1,000 heals, one trainee level short of readiness.
-    # Preserve the 90% retreat threshold and zero-faint contract while giving
-    # that measured safe strategy 25% bounded headroom.
-    max_healing_trips=1_250,
+    # Recovery demand varies with encounter damage, not only with the number of
+    # wins. One complete development lineage required 1,808 battles and 1,175
+    # Center trips; a later unopened lineage safely reached 1,500 wins but used
+    # the old 1,250-trip cap with two trainees only one level short. Preserve
+    # the measured 90% retreat threshold and zero-faint contract. A rounded
+    # 2,000-trip ceiling permits one recovery per battle across the largest
+    # completed block while remaining a finite, independently enforced bound.
+    max_healing_trips=2_000,
     max_faints=0,
 )
 BATTLE_PARTY_MENU_COMMAND = 2

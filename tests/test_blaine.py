@@ -145,7 +145,7 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert MANSION_TEAM_POLICY.required_size == 6
     assert MANSION_TEAM_POLICY.max_battles == 7_000
     assert MANSION_TEAM_POLICY.max_battles < MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL
-    assert MANSION_TEAM_POLICY.max_healing_trips == 1_250
+    assert MANSION_TEAM_POLICY.max_healing_trips == 2_000
     assert MANSION_TEAM_POLICY.minimum_direct_level_advantage == 5
     assert MANSION_TEAM_POLICY.max_enemy_level_delta == 0
     assert ROUTE_11_TRAINING_VENUE.band.area_id == "route_11"
