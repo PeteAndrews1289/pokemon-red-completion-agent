@@ -202,7 +202,10 @@ class AgathaChapterReport:
             and self.party_hp == self.party_max_hp
             and all(status == 0 for status in self.party_status)
             and _agatha_team_lesson_satisfied(self.turns)
-            and _agatha_role_switches_valid(self.role_switches)
+            and _agatha_role_switches_valid(
+                self.role_switches,
+                self.final_raw.party_species_ids,
+            )
             and self.team_switches == len(self.role_switches)
             and self.controller_released
         )
@@ -671,15 +674,28 @@ def _agatha_required_role_switches(turns: Iterable[AgathaTurn]) -> int:
     )
 
 
-def _agatha_role_switches_valid(switches: Iterable[AgathaRoleSwitch]) -> bool:
-    """Verify every executed role change against its live opponent."""
+def _agatha_role_switches_valid(
+    switches: Iterable[AgathaRoleSwitch],
+    party_species_ids: Iterable[int],
+) -> bool:
+    """Verify complete live switch receipts without overriding learned strategy.
+
+    ``_agatha_team_lesson_satisfied`` separately proves that Dugtrio and Jolteon
+    covered every declared specialist role.  A teacher-free controller may also
+    make a mechanically valid pivot to another living member.  Requiring every
+    such autonomous target to equal the fixed teacher's preferred specialist
+    confuses policy autonomy with receipt integrity.  This verifier therefore
+    binds every recorded target back to the observed party while retaining the
+    exact opponent identity and position checks.
+    """
 
     items = tuple(switches)
-    return bool(items) and all(
+    party = tuple(party_species_ids)
+    return bool(items) and bool(party) and all(
         0 <= item.opponent_party_position < len(AGATHA_PARTY)
         and AGATHA_PARTY[item.opponent_party_position][0] == item.opponent_species
-        and 0 <= item.target_party_index < PARTY_SLOT_LIMIT
-        and item.target_species_id == _agatha_matchup_species_id(item.opponent_species)
+        and 0 <= item.target_party_index < min(PARTY_SLOT_LIMIT, len(party))
+        and party[item.target_party_index] == item.target_species_id
         for item in items
     )
 

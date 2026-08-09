@@ -1,22 +1,17 @@
 # Three-agent coordination
 
-> **2026-08-09 active lane:** four complete feature-v3 teacher lineages and a stronger high-level
-> controller exist. Causal attempt 13 isolated the remaining learned-target gap after passing Rock
-> Tunnel, Lorelei, Bruno, Agatha setup, status, residency, and switch-count gates. Seed `990005`
-> later completed 312/312 and supplied the fourth lineage while independently qualifying the Route
-> 11 and Viridian repairs. The first frozen target head scored 11/13 on it versus the baseline's
-> 9/13. Plan-balanced training with L2 0.003 then reached 54/54 across all four opened
-> leave-one-lineage-out folds and 13/13 on the existing validation lineage. Seed `990006` then
-> stopped at the old 1,250-heal bound with four members at 55 and two at 54, before producing any
-> Bruno/Agatha test targets. Its partial labels are excluded and the frozen model remains untested.
-> Commit `edfa676` preserves the 90% retreat and zero-faint rules while setting a measured finite
-> 2,000-trip envelope. Seed `990007` then passed the frozen target test 17/17 versus 12/17 for the
-> deterministic baseline, including Bruno 2/2 and Agatha 7/7, before an attack-turn-based Agatha
-> receipt undercounted two valid between-move role switches. Commit `a5e92f0` records and validates
-> live switch evidence directly. Next publish/authenticate the target model, bind it at runtime,
-> shadow it, and run fresh causal completion. Do not add seed 990007 to
-> fitting, rerun retired seeds `990003`–`990007`, build a complete Crystal
-> route, relax the verifier, or consume a counted v95 root. Counted status remains 0/10. See the
+> **2026-08-09 active lane:** the authenticated switch-target head passed 17/17 prospective,
+> 13/13 canonical shadow, and 13/13 isolated causal Hall-of-Fame binding gates. The combined
+> six-role stack is now the active falsification campaign. Seeds `990011`–`990013` exposed and
+> repaired a teacher-subclass executor leak, stale protected-inventory affordances, and a missing
+> Lorelei HP-floor/action-mask/report-authority contract. Commit `e00f083` passed the full local and
+> GitHub gates. Seed `990014` then defeated Lorelei, Bruno, and Agatha with 3,286 teacher-free
+> battle decisions, 21/21 learned switch bindings, and both training heads in causal control before
+> Agatha's receipt misclassified one valid autonomous pivot as a fixed teacher-role choice. The
+> receipt now proves live target-slot identity separately from the already-strict specialist turn
+> lesson. Regenerate, validate, commit, push, and run fresh canonical seed `990015`. Do not add
+> `990007` to fitting, rerun retired seeds `990003`–`990014`, build a complete Crystal route, weaken
+> the curriculum lesson, or consume a counted v95 root. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).
 
 **New here? Read [HANDOFF.md](HANDOFF.md) first** — it is the complete orientation, including what

@@ -2239,6 +2239,22 @@ pass unless requested high-level, switch-target, training-control, and trainee/v
 all executed. The failed root remains the evidence that motivated those contracts; it is not
 silently relabeled as a near-pass.
 
+Seed `990014` then crossed that repaired boundary and made the deeper distinction visible. It
+defeated Lorelei, Bruno, and Agatha, entered Lance's room, and exercised every requested learned
+authority: 3,286 high-level battle decisions, 21/21 learned switch bindings, 64,337 training-control
+choices, and 125,800 trainee/venue choices. There were no teacher, safety, or low-confidence
+fallbacks. The evaluator still rejected the run.
+
+The strategy lesson itself had passed: Jolteon and Dugtrio attacked every declared Agatha role. But
+the separate switch receipt demanded that every autonomous learned pivot equal the deterministic
+teacher's preferred specialist. One target-head pivot to a different real party member against
+Golbat was therefore treated as corrupt evidence. That is the wrong equivalence. Receipt integrity
+asks whether the switch happened against the recorded opponent and landed on the recorded living
+party member; policy agreement asks whether it copied the teacher. The repaired verifier retains
+the first proof and leaves specialist coverage to the independent turn trace. This is a stronger
+model-evaluation story than simply accepting the win: the system now distinguishes a novel legal
+choice from a forged or incomplete action receipt.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

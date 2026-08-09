@@ -18,7 +18,7 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
-**Late audit and runtime checkpoint:** the full repository gate now passes **2,156 tests with 3
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,157 tests with 3
 integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
 public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
 errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
@@ -58,18 +58,33 @@ qualified both earlier repairs and defeated Lorelei after 3,265 teacher-free bat
 decisions. Lorelei's verifier rejected attacks issued at 59 HP beneath its declared 70-HP floor.
 The repair expresses that floor in `BattleIntent`, ranks only executable high-level affordances,
 and upgrades the clean-start report so every requested learned role must prove live authority.
-Validate, regenerate, commit, push, and retry on a fresh uncounted canonical root. Counted v95
-remains **0/10** and `990007` remains test-only. See the
+Commit `e00f083` passed the full gate and GitHub CI. Fresh seed `990014` then defeated Lorelei,
+Bruno, and Agatha and reached Lance's room after 3,286 battle decisions. High-level execution made
+51 typed requests with zero teacher, safety, or low-confidence fallback; live affordance masks
+accounted for 19 decisions. The target model owned 21/21 bindings with no fallback, training control
+owned all 64,337 choices with zero operational error, and trainee/venue selection owned all 125,800
+choices at 99.79% agreement.
+
+The run still failed closed. Agatha's independent turn trace had already proved every Dugtrio and
+Jolteon curriculum role, the event was set, the party was healed, and Lance's room loaded. Its
+switch receipt nevertheless required *every* learned autonomous pivot to equal the fixed teacher's
+preferred specialist; one legal Golbat pivot to party slot 0 therefore invalidated an otherwise
+complete receipt. The repair keeps exact opponent identity/position and target-slot/party-identity
+proofs while leaving specialist strategy to the existing turn-level lesson. Regenerate, validate,
+commit, push, then retry on fresh uncounted canonical seed `990015`. Counted v95 remains **0/10**
+and `990007` remains test-only. See the
 [first failure](docs/evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json),
 the [second failure](docs/evidence/portable-clean-start-six-role-rehearsal-02-failure-2026-08-09.json),
-and the [Lorelei failure](docs/evidence/portable-clean-start-six-role-rehearsal-03-failure-2026-08-09.json).
+the [Lorelei failure](docs/evidence/portable-clean-start-six-role-rehearsal-03-failure-2026-08-09.json),
+and the [Agatha receipt failure](docs/evidence/portable-clean-start-six-role-rehearsal-04-failure-2026-08-09.json).
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `a5e92f0`
 records live Agatha role switches and the passed prospective target test; `edfa676` contains the
-measured recovery-envelope repair. The full local gate passes **2,156 tests with 3 integration
+measured recovery-envelope repair. The full local gate passes **2,157 tests with 3 integration
 tests deselected**, Ruff, mypy, documentation, public-artifact, and source-registry checks. Push
-before any new emulator run. Only Codex pushes this branch; do not create a second worktree or
-force-push it.
+before any new emulator run. The Agatha autonomous-receipt repair and seed-990014 evidence are the
+current uncommitted lane and must complete the same gate before replay. Only Codex pushes this
+branch; do not create a second worktree or force-push it.
 
 **Latest causal result:** attempt 13 ran from source `4ea7e93` with the frozen reserve-aware action
 candidate. It reached checkpoint 306, passed Rock Tunnel, Lorelei, and Bruno, defeated Agatha, used

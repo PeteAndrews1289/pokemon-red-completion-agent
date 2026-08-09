@@ -155,6 +155,23 @@ model over only live executable affordances, records masked top classes separate
 the final clean-start contract to require positive authority from all requested roles. See the
 [third preserved failure](evidence/portable-clean-start-six-role-rehearsal-03-failure-2026-08-09.json).
 
+Seed `990014` qualified that repair and carried the combined stack through three League wins. It
+defeated Lorelei, Bruno, and Agatha and entered Lance's room after 3,286 battle decisions. The
+high-level head executed 51 typed requests with zero teacher, safety, or low-confidence fallback;
+19 top-ranked unavailable choices were recorded as ordinary affordance masks. The target head
+owned 21/21 switch bindings with no fallback. Training control owned 64,337 decisions at 100%
+agreement and zero operational error, while the trainee/venue ranker owned 125,800 at 99.79%.
+
+The run still failed closed on a real measurement ambiguity. Agatha's turn trace proved all
+declared Jolteon and Dugtrio specialist coverage, the event was set, the party was healed, and
+Lance's room loaded. A separate receipt required every switch target—including autonomous learned
+pivots—to equal the fixed teacher's preferred specialist. One learned Golbat pivot to a different
+observed party member therefore failed a teacher-equality rule even though receipt integrity and
+the curriculum lesson were both independently provable. The repair now binds target index to the
+observed party identity, retains exact live opponent position/identity checks, and leaves strategy
+quality to the turn lesson. See the
+[fourth preserved failure](evidence/portable-clean-start-six-role-rehearsal-04-failure-2026-08-09.json).
+
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared
 gap calculation intersected Blue with itself. One canonical Generation I facts module now derives
@@ -181,7 +198,7 @@ silently acting at night.
 ## Code and test health
 
 - 127 source modules and 135 test modules cover roughly 88,000 source lines and 52,500 test lines.
-- The current full gate passes **2,156 tests** with 3 emulator-integration tests deselected and 1
+- The current full gate passes **2,157 tests** with 3 emulator-integration tests deselected and 1
   expected failure, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.
@@ -215,9 +232,9 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Complete the full ROM-free gate for the HP-intent, legal-action-mask, and clean-start report-v2
-   repair; commit and push the regenerated source identity.
-2. Run a fresh uncounted canonical six-role replay with teacher battle queries disabled; preserve
+1. Complete the full ROM-free gate for the Agatha autonomous-switch receipt repair; commit and push
+   the regenerated source identity.
+2. Run fresh uncounted canonical seed `990015` with teacher battle queries disabled; preserve
    either its Hall-of-Fame receipt or its next fail-closed integration defect.
 3. If it passes, freeze the exact combined artifact set. Typed intent enforcement and live
    affordance masking are now separate from true safety fallback in the report.

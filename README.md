@@ -88,6 +88,15 @@ win with zero battle-teacher queries. The verifier still rejected it: the contro
 intent, unavailable action classes are masked before ranking, and the final report independently
 requires every requested model role to exercise authority. See the
 [third preserved failure](docs/evidence/portable-clean-start-six-role-rehearsal-03-failure-2026-08-09.json).
+Fresh seed `990014` qualified that HP/action-mask boundary and reached Lance's room after defeating
+Lorelei, Bruno, and Agatha. Across 3,286 battle decisions it made 51 typed high-level requests with
+zero teacher, safety, or low-confidence fallback; the target head owned 21/21 switch bindings and
+both training models retained causal authority. The evaluator again rejected the result, this time
+because Agatha's receipt treated one valid learned pivot to another real party member as though it
+had to equal the fixed teacher's preferred specialist. Specialist attack coverage had already
+passed. The repaired receipt now proves every target against the observed party and leaves the
+strategy lesson to the independent turn trace; see the
+[fourth preserved failure](docs/evidence/portable-clean-start-six-role-rehearsal-04-failure-2026-08-09.json).
 These are interface and evaluation repairs, not evidence that the six-role model already completes
 Red. Navigation, menus,
 chapter mechanics, and resource execution remain authored. The counted v95 reliability campaign
@@ -104,7 +113,7 @@ demonstrations and a referee; it is not the final autonomous player.
 | Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
 | Learned objective dispatch | One clean-start run selected 21 composite objectives and verified 15 automatic effects through Hall of Fame | Many choices remain affordance-masked; mechanics are fixed skills |
 | Learned training control | The trainee/venue ranker beat its shape baseline and completed clean start with 114,831 controlled choices and 400 disagreements | One uncounted Red root; navigation and menus remain authored |
-| Strict learned-stack composition | Seed 990013 reached and defeated Lorelei after 3,265 teacher-free battle decisions, 13/13 learned target bindings, 64,337 training-control choices, and 125,800 trainee/venue choices | Rejected for one missing 70-HP intent boundary; repaired source still needs a fresh canonical replay |
+| Strict learned-stack composition | Seed 990014 defeated Lorelei, Bruno, and Agatha after 3,286 teacher-free battle decisions, 21/21 learned target bindings, 64,337 training-control choices, and 125,800 trainee/venue choices | Rejected in Lance's room because one valid autonomous Agatha pivot was misclassified as a fixed teacher-role switch; repaired receipt needs a fresh canonical replay |
 | Reserve-aware battle control | Frozen target head passed 17/17 prospective targets, 13/13 canonical shadow, and 13/13 causal bindings through Hall of Fame with zero target fallback | Switch timing and ordinary moves were teacher-gated in the completed causal run; perturbation and combined qualification remain |
 | Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Counted campaign remains 0/10 until reserve-aware battle control passes canonical and perturbation rehearsals |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |

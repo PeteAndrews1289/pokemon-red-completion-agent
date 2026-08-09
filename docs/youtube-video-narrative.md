@@ -138,6 +138,16 @@ numbers side by side. The repair is not “heal more at Lorelei”; it publishes
 typed battle intent and ranks the model only over actions the live executor can perform. Close the
 scene with report v2 checking that every requested learned role actually made a decision.
 
+Then let `990014` move the cliffhanger forward. Put four counters on screen: **3,286 battle
+decisions, 21/21 target bindings, 64,337 training-control choices, 125,800 trainee/venue choices**.
+Lorelei falls. Bruno falls. Agatha falls. Lance's room loads. Teacher, safety, and low-confidence
+fallback all remain zero—and the evaluator still turns red. This time the curriculum trace is
+correct; Jolteon and Dugtrio covered every assigned Agatha role. The failing receipt instead assumes
+that every autonomous switch must copy the fixed teacher's preferred target. Show the one learned
+Golbat pivot landing on another real party member, then split the screen into two questions:
+**“Did the recorded switch really happen?”** and **“Did it imitate the teacher?”** The repair keeps
+the first as a hard evidence gate and lets the independent battle lesson judge the strategy.
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

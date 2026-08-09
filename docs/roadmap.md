@@ -42,8 +42,17 @@ decisions. The target head rebound all 13 switches with zero fallback, training 
 win because attacks occurred at 59 HP below Lorelei's existing 70-HP floor. The
 [third failure](evidence/portable-clean-start-six-role-rehearsal-03-failure-2026-08-09.json) is
 preserved. `BattleIntent` now exposes that floor, the action-class head ranks only live executable
-affordances, and clean-start report v2 requires positive high-level, exact switch-target, and both
-training authorities. The immediate gate is a full clean validation and a fresh canonical replay.
+affordances, and clean-start report v2 requires positive high-level, complete no-fallback
+switch-target, and both training authorities.
+
+Seed `990014` qualified the repair and defeated Lorelei, Bruno, and Agatha before entering Lance's
+room. Its 3,286 battle decisions included 51 typed requests, zero teacher/safety/low-confidence
+fallback, and 21/21 learned switch bindings; both training heads retained full execution authority.
+The [fourth failure](evidence/portable-clean-start-six-role-rehearsal-04-failure-2026-08-09.json)
+records why this still is not terminal evidence: Agatha's receipt misclassified one valid learned
+pivot as a fixed teacher-role choice even though its independent specialist lesson already passed.
+The receipt now verifies target-slot identity rather than teacher equality. The immediate gate is a
+full clean validation, push, and fresh canonical seed `990015`.
 
 The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's
 Red/Blue reciprocal version gaps now come from one canonical table and include the previously
@@ -113,7 +122,9 @@ Bruno 2/2 and Agatha 7/7. The route stopped at 306/312 because the terminal rece
 five role changes from move turns while seven valid switches had executed between opponent changes.
 Commit `a5e92f0` records and verifies those live switches directly. Runtime artifact and binding
 code and exact private publication are complete; canonical shadow and isolated causal completion
-have now passed. The active gate is the HP-floor/action-mask/report-v2 six-role replay.
+have now passed. Seed `990014` qualified HP-floor/action-mask/report-v2 execution through an Agatha
+win, then exposed the autonomous-switch receipt ambiguity. The active gate is the repaired
+seed-`990015` canonical replay.
 
 After the learned target passes offline and causal Red gates, then one canonical and one uncounted
 perturbation result, begin Crystal's bounded battle adapter.

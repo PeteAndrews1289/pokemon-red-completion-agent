@@ -311,6 +311,7 @@ def test_agatha_switch_contract_follows_observed_role_transitions() -> None:
 
 
 def test_agatha_switch_receipt_keeps_between_move_role_changes() -> None:
+    party = (0x1C, 0x40, DUGTRIO_SPECIES_ID, JOLTEON_SPECIES_ID, 0x2B, 0x84)
     switches = tuple(
         AgathaRoleSwitch(
             opponent_species=AGATHA_PARTY[position][0],
@@ -321,9 +322,34 @@ def test_agatha_switch_receipt_keeps_between_move_role_changes() -> None:
         for position in (0, 1, 0, 1, 2, 1, 3)
     )
 
-    assert _agatha_role_switches_valid(switches)
+    assert _agatha_role_switches_valid(switches, party)
     assert not _agatha_role_switches_valid(
-        (*switches[:-1], replace(switches[-1], target_species_id=JOLTEON_SPECIES_ID))
+        (*switches[:-1], replace(switches[-1], target_species_id=JOLTEON_SPECIES_ID)),
+        party,
+    )
+
+
+def test_agatha_switch_receipt_accepts_audited_autonomous_pivot() -> None:
+    party = (0x1C, 0x40, DUGTRIO_SPECIES_ID, JOLTEON_SPECIES_ID, 0x2B, 0x84)
+    learned_pivot = AgathaRoleSwitch(
+        opponent_species=AGATHA_PARTY[1][0],
+        opponent_party_position=1,
+        target_party_index=0,
+        target_species_id=party[0],
+    )
+
+    assert _agatha_role_switches_valid((learned_pivot,), party)
+    assert not _agatha_role_switches_valid(
+        (replace(learned_pivot, target_species_id=party[1]),),
+        party,
+    )
+    assert not _agatha_role_switches_valid(
+        (replace(learned_pivot, opponent_party_position=0),),
+        party,
+    )
+    assert not _agatha_role_switches_valid(
+        (replace(learned_pivot, target_party_index=len(party)),),
+        party,
     )
 
 
