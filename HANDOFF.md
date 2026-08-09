@@ -134,6 +134,8 @@ The [eighth perturbation failure](docs/evidence/portable-clean-start-six-role-pe
 preserves the Forest travel-versus-curriculum encounter counterexample.
 The [ninth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json)
 preserves the fixed-RNG, unverified-species lesson counterexample.
+The [tenth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-10-failure-2026-08-09.json)
+preserves the duplicated Route 1 youngster-collision counterexample.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the
 source of the passed canonical receipt and `4f5f870` qualified the lab-rival repair through the next
@@ -145,8 +147,10 @@ front-end timing counterexample; `3f11647` qualified the bounded bedroom recover
 `990022` Route 2 encounter; `cea2da8` qualified that repair and supplied the `990023` Forest
 encounter. Cumulative Forest/Route 2 flee evidence, report fields, and the regenerated v95 registry
 were qualified at `26fd5e6`, which supplied the `990024` lesson-trigger counterexample. Bounded
-semantic Kakuna search, target evidence, and its regenerated v95 registry are the current
-uncommitted lane. Their full local gate is green; they need a clean push before replay. Only Codex
+semantic Kakuna search was qualified at `e579e76`, which supplied the `990025` walker
+counterexample. The shared exact-gate yield maneuver and its regenerated v95 registry are the
+current uncommitted lane. Their full local gate is green; they need a clean push before replay.
+Only Codex
 pushes this branch; do not create a second worktree or force-push it.
 
 **Latest causal result:** attempt 13 ran from source `4ea7e93` with the frozen reserve-aware action

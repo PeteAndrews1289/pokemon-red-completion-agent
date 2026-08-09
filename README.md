@@ -164,6 +164,11 @@ the exact origin after empty grass, authenticate and budget non-target flees, an
 deferred step when a target triggers before coordinate progress. Search attempts and all three
 species IDs are public evidence; see the
 [ninth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json).
+Seed `990025` then stopped at the source-known Route 1 youngster crossing: north from `(14,14)`
+remained blocked through eight retries. The shared traversal now recognizes only that exact gate,
+steps east, waits under a 24-attempt bound, restores the approach, and proves the north crossing;
+every sub-step retains the incidental-wild receipt. See the
+[tenth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-10-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95
 reliability campaign remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.

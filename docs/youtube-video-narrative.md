@@ -203,6 +203,10 @@ Let `990024` deliver the punchline: the function is named “Kakuna,” but the 
 “some wild battle”—and this time no battle appears. Replace the source-code label with live species
 `0x71` and a bounded search counter. Caption it: **“Intent is not evidence.”**
 
+Use `990025` as the callback: the youngster collision was already solved elsewhere in the same
+repository. Overlay the duplicate early and collection routes, then merge them into one exact-gate
+primitive. Caption it: **“A system only learns when its fixes become shared knowledge.”**
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

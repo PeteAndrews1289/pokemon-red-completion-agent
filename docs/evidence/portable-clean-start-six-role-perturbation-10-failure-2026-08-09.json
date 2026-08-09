@@ -1,0 +1,48 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_perturbation_with_route_1_walker_collision",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990025 stopped at Route 1 northbound step 36 after eight unchanged movement attempts. The exact (14,14) northbound boundary is the source-known horizontal youngster crossing already handled in the later collection controller. No learned battle or training decision occurred.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990025,
+    "initial_wait_frames": 3,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "f791ea31a57cad09bc1d605b9494e0a3f689cd272f9805ec6b34b10c769c6832"
+  },
+  "source": {
+    "git_commit": "e579e76778574bc920b0ae9110937c3f3a8ede02",
+    "worktree_dirty": false
+  },
+  "raw_report_sha256": "1eedd69a9a005e4a6a744d85aa23d12764cce9581b908d35f9010ea6b3cdb5ac",
+  "failure": {
+    "stage": "objective_loop_execution",
+    "exception_type": "PewterChapterError",
+    "message": "Route 1 northbound step 36 exceeded its bounded 8-attempt movement allowance.",
+    "frames_executed": 61677,
+    "objective_decisions": 1,
+    "objectives_completed": 0,
+    "battle_schedule_entries_consumed": 0,
+    "battle_model_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "diagnosis": {
+    "category": "source_known_dynamic_npc_collision_misclassified_as_transient_input_loss",
+    "finding": "Step 36 requests north from Route 1 (14,14), the same wandering-youngster crossing documented and tested in the later collection survey. Repeating the blocked request cannot create space for a horizontal patrol; increasing a generic retry count would hide the mechanic rather than solve it.",
+    "model_boundary": "The failure remained inside the authored first composite. All learned battle, target, and training counters were zero."
+  },
+  "repair": {
+    "status": "implemented_and_qualified_rom_free_pending_fresh_perturbation",
+    "behavior": "Only at Route 1 (14,14) on a north request, the shared traversal may step east to (15,14), wait under a 24-attempt increasing bound, restore (14,14), and retry north to (14,13). Every sub-step is coordinate checked, incidental wilds consume the same flee budget and semantic receipt, and any other collision remains fatal.",
+    "bounds": {
+      "maximum_clear_attempts": 24,
+      "approach": [14, 14],
+      "yield": [15, 14],
+      "crossed": [14, 13]
+    },
+    "rom_free_gate": "Public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,186 tests passed; three integration tests were deselected and one expected failure remained expected.",
+    "next_gate": "Commit and push the qualified repair, then run a fresh uncounted derived-timing root. Counted v95 remains unopened."
+  }
+}

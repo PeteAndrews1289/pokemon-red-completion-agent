@@ -12,13 +12,13 @@ evaluation gap is timing/RNG reliability.
 
 The present Red milestone is narrower and measurable: qualify the already-passed combined stack on
 a fresh derived-timing root. Canonical seed `990015` is terminal evidence; seeds `990016` through
-`990024` exposed nine successive pre-model assumptions in the rival receipt, ordinary-wild
+`990025` exposed ten successive pre-model assumptions in the rival receipt, ordinary-wild
 handling, battle-exit input handoff, open-loop movement acknowledgement, pre-step encounter
 semantics, fixed front-end timing, and zero-wild assumptions on Route 2 and inside Viridian Forest.
-The ninth failure showed that a fixed RNG wait was not a semantic Kakuna lesson. Each failure is
-preserved rather than rerun as a favorable root. The earlier repairs passed their full gates and
-CI; the semantic target search passes its 2,185-test ROM-free gate and awaits a clean push and
-fresh perturbation.
+The ninth failure showed that a fixed RNG wait was not a semantic Kakuna lesson; the tenth reached
+the already-known Route 1 youngster collision. Each failure is preserved rather than rerun as a
+favorable root. The earlier repairs passed their full gates and CI; the exact-gate walker maneuver
+passes its 2,186-test ROM-free gate and awaits a clean push and fresh perturbation.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -248,6 +248,12 @@ replacement searches a bounded adjacent-tile loop for actual Kakuna `0x71`, retu
 origin after empty grass, authenticates non-target flees, and publishes all target species and
 attempt counts. See the
 [ninth perturbation failure](evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json).
+
+Seed `990025` reached Route 1 `(14,14)` and exhausted eight northward retries. That is the exact
+wandering-youngster crossing already solved and tested in the later collection controller. The
+shared early-game traversal now reuses the bounded source-specific mechanic: yield east, wait,
+restore, cross, and authenticate any incidental wild on every sub-step. See the
+[tenth perturbation failure](evidence/portable-clean-start-six-role-perturbation-10-failure-2026-08-09.json).
 
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared

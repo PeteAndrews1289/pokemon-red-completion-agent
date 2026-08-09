@@ -2332,6 +2332,13 @@ lesson searches a bounded local oscillation for observed Kakuna, returns after e
 spends the same authenticated budget on non-targets. A label is now proved by state, not inferred
 from the line of Python that intended it.
 
+The next root looped back to an old lesson the repository already knew. Route 1 north from
+`(14,14)` was not swallowing inputs; a horizontal youngster occupied the crossing. The later
+collection controller had a source-bound yield/restore maneuver, while the early-game teacher only
+retried. The shared traversal now recognizes that exact mechanic and carries its flee evidence
+through every sub-step. Robustness also means consolidating knowledge instead of relearning it in
+each chapter.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

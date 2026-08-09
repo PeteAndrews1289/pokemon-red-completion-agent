@@ -15,6 +15,11 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 
+ROUTE_1_WALKER_APPROACH = (14, 14)
+ROUTE_1_WALKER_YIELD = (15, 14)
+ROUTE_1_WALKER_CROSSED = (14, 13)
+ROUTE_1_WALKER_CLEAR_ATTEMPTS = 24
+
 
 class ActionExecutor(Protocol):
     def execute(self, action: MacroAction) -> object: ...
@@ -176,6 +181,20 @@ def move_with_wild_flees(
                 break
             if not _same_route_boundary(before, moved, expected_map_id):
                 raise error_type(f"{label} step {step} moved outside its requested direction.")
+            if _is_route_1_walker_gate(before, direction, expected_map_id):
+                crossed, walker_flees, walker_retries = _yield_to_route_1_walker(
+                    executor,
+                    reader,
+                    maximum_flees=maximum_flees - len(flees),
+                    stabilization_frames=stabilization_frames,
+                    maximum_step_attempts=maximum_step_attempts,
+                    step_retry_wait_frames=step_retry_wait_frames,
+                    error_type=error_type,
+                )
+                flees.extend(walker_flees)
+                movement_retries += walker_retries + 1
+                state = crossed
+                break
             if attempt == maximum_step_attempts:
                 raise error_type(
                     f"{label} step {step} exceeded its bounded "
@@ -187,6 +206,152 @@ def move_with_wild_flees(
         else:  # pragma: no cover - the bounded loop always breaks or raises
             raise AssertionError("unreachable bounded movement loop")
     return state, tuple(flees), movement_retries
+
+
+def _is_route_1_walker_gate(
+    state: RawGameState,
+    direction: str,
+    expected_map_id: MapId,
+) -> bool:
+    return (
+        expected_map_id == MapId.ROUTE_1
+        and state.map_id == MapId.ROUTE_1
+        and state.battle_state == 0
+        and (state.player_x, state.player_y) == ROUTE_1_WALKER_APPROACH
+        and direction == "up"
+    )
+
+
+def _yield_to_route_1_walker(
+    executor: ActionExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    maximum_flees: int,
+    stabilization_frames: int,
+    maximum_step_attempts: int,
+    step_retry_wait_frames: int,
+    error_type: type[Exception],
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
+    """Create space for Route 1's horizontal youngster at one exact crossing."""
+
+    flees: tuple[Route1WildFleeEvidence, ...] = ()
+    movement_retries = 0
+    for clear_attempt in range(1, ROUTE_1_WALKER_CLEAR_ATTEMPTS + 1):
+        state = reader.read()
+        if (
+            state.map_id != MapId.ROUTE_1
+            or state.battle_state != 0
+            or (state.player_x, state.player_y) != ROUTE_1_WALKER_APPROACH
+        ):
+            raise error_type("Route 1 walker recovery left its exact approach gate.")
+
+        _, new_flees, retries, progressed = _move_walker_step(
+            executor,
+            reader,
+            "right",
+            ROUTE_1_WALKER_YIELD,
+            maximum_flees=maximum_flees - len(flees),
+            stabilization_frames=stabilization_frames,
+            maximum_step_attempts=maximum_step_attempts,
+            step_retry_wait_frames=step_retry_wait_frames,
+            allow_blocked=False,
+            error_type=error_type,
+        )
+        flees += new_flees
+        movement_retries += retries
+        if not progressed:
+            raise error_type("Route 1 walker recovery could not yield east.")
+
+        _wait(executor, step_retry_wait_frames * clear_attempt)
+        _, new_flees, retries, progressed = _move_walker_step(
+            executor,
+            reader,
+            "left",
+            ROUTE_1_WALKER_APPROACH,
+            maximum_flees=maximum_flees - len(flees),
+            stabilization_frames=stabilization_frames,
+            maximum_step_attempts=maximum_step_attempts,
+            step_retry_wait_frames=step_retry_wait_frames,
+            allow_blocked=False,
+            error_type=error_type,
+        )
+        flees += new_flees
+        movement_retries += retries
+        if not progressed:
+            raise error_type("Route 1 walker recovery could not restore its approach.")
+
+        crossed, new_flees, retries, progressed = _move_walker_step(
+            executor,
+            reader,
+            "up",
+            ROUTE_1_WALKER_CROSSED,
+            maximum_flees=maximum_flees - len(flees),
+            stabilization_frames=stabilization_frames,
+            maximum_step_attempts=1,
+            step_retry_wait_frames=step_retry_wait_frames,
+            allow_blocked=True,
+            error_type=error_type,
+        )
+        flees += new_flees
+        movement_retries += retries
+        if progressed:
+            return crossed, flees, movement_retries
+        movement_retries += 1
+    raise error_type("Route 1 youngster did not clear within its bounded retries.")
+
+
+def _move_walker_step(
+    executor: ActionExecutor,
+    reader: PokemonRedStateReader,
+    direction: str,
+    expected_position: tuple[int, int],
+    *,
+    maximum_flees: int,
+    stabilization_frames: int,
+    maximum_step_attempts: int,
+    step_retry_wait_frames: int,
+    allow_blocked: bool,
+    error_type: type[Exception],
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int, bool]:
+    flees: tuple[Route1WildFleeEvidence, ...] = ()
+    retries = 0
+    for attempt in range(1, maximum_step_attempts + 1):
+        before = reader.read()
+        executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+        moved = reader.read()
+        consumed = _direction_was_consumed(before, moved, direction)
+        if moved.battle_state:
+            if moved.battle_state != 1 or moved.map_id != MapId.ROUTE_1:
+                raise error_type("Route 1 walker recovery entered a non-wild battle.")
+            if not consumed and not _same_encounter_boundary(before, moved, MapId.ROUTE_1):
+                raise error_type("Route 1 walker encounter drifted from its protected step.")
+            if len(flees) >= maximum_flees:
+                raise error_type("Route 1 walker recovery exhausted its flee allowance.")
+            flees += (
+                flee_wild(
+                    executor,
+                    reader,
+                    moved,
+                    expected_map_id=MapId.ROUTE_1,
+                    route_name="Route 1",
+                    stabilization_frames=stabilization_frames,
+                    error_type=error_type,
+                ),
+            )
+            moved = reader.read()
+        if consumed:
+            if (moved.player_x, moved.player_y) != expected_position:
+                raise error_type("Route 1 walker recovery crossed to an unexpected tile.")
+            return moved, flees, retries, True
+        if not _same_route_boundary(before, moved, MapId.ROUTE_1):
+            raise error_type("Route 1 walker recovery drifted from its protected corridor.")
+        if allow_blocked:
+            return moved, flees, retries, False
+        if attempt == maximum_step_attempts:
+            break
+        retries = attempt
+        _wait(executor, step_retry_wait_frames)
+    raise error_type("Route 1 walker recovery exhausted its movement attempts.")
 
 
 def move_route_1_with_wild_flees(

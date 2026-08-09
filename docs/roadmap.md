@@ -96,6 +96,8 @@ otherwise unchanged protected Route 1 boundary under an eight-attempt/24-frame b
 the retry count. The 2,167-test ROM-free gate plus Ruff, mypy, documentation, public-artifact, and
 registry checks passes. A clean push and another fresh perturbation are the immediate gate; v95
 remains 0/10.
+The public-artifact, docs, regenerated-registry, Ruff, mypy, and 2,186-test ROM-free gate passes;
+commit and push remain before replay.
 
 Seed `990020` reached the closed-loop gate and produced a wild encounter at the unchanged pre-step
 coordinate. The verifier correctly refused to count the north movement but initially rejected the
@@ -125,6 +127,13 @@ and 120-frame stabilized exits. Trainer battles, wrong maps, state drift, and bu
 remain fatal. Regenerate, qualify, push, and use another fresh root; v95 remains 0/10.
 The public-artifact, docs, regenerated-registry, Ruff, mypy, and 2,181-test ROM-free gate passes;
 commit and push remain before replay.
+
+Seed `990025` then stopped at Route 1 step 36, north from `(14,14)`, after eight unchanged attempts.
+The [tenth perturbation failure](evidence/portable-clean-start-six-role-perturbation-10-failure-2026-08-09.json)
+connects this to the already source-known wandering youngster crossing in the later collection
+controller. Only that exact gate may step east, wait under 24 attempts, restore, and cross north;
+each sub-step retains the shared flee receipt. Regenerate, qualify, push, and use a fresh root; v95
+remains 0/10.
 
 Seed `990024` qualified incidental Forest travel but the fixed first-Kakuna frame wait produced no
 battle. The [ninth perturbation failure](evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json)

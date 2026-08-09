@@ -173,6 +173,10 @@ Seed `990024` then revealed that the named Kakuna lesson never checked species a
 frame wait to create a battle. The replacement performs a bounded semantic search for observed
 Kakuna and publishes target identities and attempt counts.
 
+Seed `990025` found that the early-game route had not reused the repository's own later solution
+for Route 1's wandering youngster. The exact source gate now shares one bounded yield/restore/cross
+contract, illustrating why mechanic knowledge must outlive the chapter that first discovered it.
+
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
 until the now-canonical-qualified reserve-aware stack also passes a perturbation rehearsal.

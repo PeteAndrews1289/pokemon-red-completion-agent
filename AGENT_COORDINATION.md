@@ -37,7 +37,10 @@
 > repairs but the fixed first-Kakuna wait produced no battle. All three lessons now seek observed
 > species `0x71` under a bounded origin-return loop, budget non-target flees, and publish attempts
 > and identities. The 2,185-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry checks
-> passes. Commit, push, then use a fresh root. Do
+> passed at `e579e76`. Seed `990025` then reached the source-known Route 1 youngster block at
+> `(14,14)`. The shared traversal now reuses the exact east-yield/restore/north-cross maneuver under
+> a 24-attempt bound while preserving wild receipts. The 2,186-test ROM-free gate plus Ruff, mypy,
+> docs, privacy, and registry checks passes. Commit, push, then use a fresh root. Do
 > not add `990007` to fitting, rerun retired model-test roots, build a complete Crystal route, weaken
 > the curriculum lesson, or consume a counted v95 root. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).

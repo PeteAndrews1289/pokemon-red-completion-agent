@@ -2232,6 +2232,56 @@ def test_route_1_traversal_rejects_wilds_beyond_its_declared_allowance() -> None
         )
 
 
+def test_route_1_traversal_yields_to_the_exact_northbound_walker_gate() -> None:
+    approach = _raw(MapId.ROUTE_1, 14, 14)
+    yielded = replace(approach, player_x=15)
+    crossed = replace(approach, player_y=13)
+
+    class _Reader:
+        state = approach
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = _Reader()
+
+    class _Executor:
+        directions: list[str] = []
+        first_up = True
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is not MacroActionKind.MOVE:
+                return object()
+            assert isinstance(action.value, str)
+            self.directions.append(action.value)
+            if action.value == "up" and self.first_up:
+                self.first_up = False
+            elif action.value == "right":
+                reader.state = yielded
+            elif action.value == "left":
+                reader.state = approach
+            elif action.value == "up":
+                reader.state = crossed
+            return object()
+
+    executor = _Executor()
+    terminal, flees, movement_retries = _move_route_1_with_wild_flees(  # type: ignore[arg-type]
+        executor,
+        reader,  # type: ignore[arg-type]
+        ("up",),
+        "Route 1 walker unit route",
+        maximum_flees=0,
+        stabilization_frames=120,
+        maximum_step_attempts=8,
+        step_retry_wait_frames=24,
+    )
+
+    assert terminal is crossed
+    assert not flees
+    assert movement_retries == 1
+    assert executor.directions == ["up", "right", "left", "up"]
+
+
 def test_route_1_traversal_flees_then_retries_an_unconsumed_encounter_step() -> None:
     before = replace(
         _raw(MapId.ROUTE_1, 10, 35),
