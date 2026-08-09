@@ -6,7 +6,11 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, replace
 from enum import StrEnum
 
-from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleActionKind,
+    BattleBoostStat,
+)
 from pokemon_red_completion.battle_matchups import best_reserve_matchup
 from pokemon_red_completion.battle_runtime import (
     BattleRecoveryCapability,
@@ -98,10 +102,22 @@ def resolve_battle_action_target(
         raise TypeError("action must be a BattleAction")
     if not isinstance(observation, Mapping):
         raise TypeError("observation must be a mapping")
-    if action.kind not in {BattleActionKind.USE_RECOVERY, BattleActionKind.SWITCH}:
+    if action.kind is BattleActionKind.SELECT_MOVE:
         return ResolvedBattleAction(action)
 
     features = _mapping(observation.get("features"), "features")
+    if action.kind is BattleActionKind.USE_BOOST:
+        assert action.boost_stat is not None
+        resources = _mapping(features.get("resources"), "resources")
+        resource_key = {
+            BattleBoostStat.ACCURACY: "accuracy_boost_count",
+            BattleBoostStat.ATTACK: "attack_boost_count",
+            BattleBoostStat.SPECIAL: "special_boost_count",
+        }[action.boost_stat]
+        if _nonnegative_int(resources.get(resource_key), resource_key) == 0:
+            raise BattleActionTargetError("boost resource is not observably available")
+        return ResolvedBattleAction(action)
+
     party = _mapping(features.get("party"), "party")
     members_value = party.get("members")
     members = (

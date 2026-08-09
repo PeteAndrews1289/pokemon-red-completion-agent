@@ -82,6 +82,33 @@ def test_recovery_can_infer_active_slot_from_legacy_lead_observation() -> None:
     assert resolved.recovery_need is RecoveryNeed.HP
 
 
+@pytest.mark.parametrize(
+    ("stat", "resource_key"),
+    (
+        (BattleBoostStat.ACCURACY, "accuracy_boost_count"),
+        (BattleBoostStat.ATTACK, "attack_boost_count"),
+        (BattleBoostStat.SPECIAL, "special_boost_count"),
+    ),
+)
+def test_boost_requires_matching_observed_inventory(
+    stat: BattleBoostStat,
+    resource_key: str,
+) -> None:
+    observation = _observation()
+    features = observation["features"]
+    assert isinstance(features, dict)
+    features["resources"] = {resource_key: 1}
+
+    assert resolve_battle_action_target(
+        BattleAction.boost(stat),
+        observation,
+    ).action == BattleAction.boost(stat)
+
+    features["resources"] = {resource_key: 0}
+    with pytest.raises(BattleActionTargetError, match="not observably available"):
+        resolve_battle_action_target(BattleAction.boost(stat), observation)
+
+
 def test_switch_selects_healthiest_living_reserve_without_game_identity() -> None:
     resolved = resolve_battle_action_target(BattleAction.switch(), _observation())
     assert resolved.party_slot == 3
@@ -242,10 +269,14 @@ def test_target_resolution_rejects_actions_without_legal_effect(
         resolve_battle_action_target(action, observation)
 
 
-def test_targetless_action_stays_targetless() -> None:
+def test_available_boost_stays_targetless() -> None:
+    observation = _observation()
+    features = observation["features"]
+    assert isinstance(features, dict)
+    features["resources"] = {"special_boost_count": 1}
     resolved = resolve_battle_action_target(
         BattleAction.boost(BattleBoostStat.SPECIAL),
-        {},
+        observation,
     )
     assert resolved.party_slot is None
     assert resolved.recovery_need is None
