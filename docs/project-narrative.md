@@ -2276,6 +2276,16 @@ not Pokémon. The route now performs a bounded RUN action, records the encounter
 change, and refuses to resume until the map, coordinate, party, level, maximum HP, PP, status, and
 controls are independently preserved. A trainer battle or ninth encounter still fails closed.
 
+The following root demonstrated why even that receipt was not sufficient. It safely fled two wild
+Pokémon and reported ready controls, yet finished several tiles short because the game's first
+ready-looking frame still preceded stable overworld input. The route had proved safety but not the
+handoff required by its next action. A direct reproduction adding only 120 idle frames reached the
+exact Viridian entrance, converting a timing hunch into a causal diagnosis. The final primitive
+waits, rereads, and proves the same protected state after that interval before it returns control;
+Oak's errand and the later Pewter crossing now share it. This is the project's recurring lesson in
+miniature: the right abstraction is not “ignore random battles,” but “dismiss a bounded encounter
+and authenticate the state transition that makes the next decision executable.”
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

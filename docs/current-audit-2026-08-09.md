@@ -11,9 +11,10 @@ largest remaining authority gaps are navigation, menus, and authored route mecha
 evaluation gap is timing/RNG reliability.
 
 The present Red milestone is narrower and measurable: qualify the already-passed combined stack on
-a fresh derived-timing root. Canonical seed `990015` is terminal evidence; paired seed `990016`
-exposed a lab-rival referee assumption before any model battle decision. The repair is implemented
-and awaiting the full gate and fresh perturbation.
+a fresh derived-timing root. Canonical seed `990015` is terminal evidence; seeds `990016` through
+`990018` exposed three successive pre-model assumptions in the rival receipt, ordinary-wild
+handling, and battle-exit input handoff. Each failure is preserved rather than rerun as a favorable
+root. The latest repair has passed the full ROM-free gate and awaits a clean push and fresh perturbation.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -192,6 +193,15 @@ eight Route 1 flees across the round trip and independently proves result two, r
 the same coordinate, living HP, and exact party/level/max-HP/PP/status preservation. See the
 [second perturbation failure](evidence/portable-clean-start-six-role-perturbation-02-failure-2026-08-09.json).
 
+Seed `990018` accepted two verified Route 1 flees, then stopped at Route 1 `(11,6)` instead of the
+Viridian entrance because route inputs resumed before the battle-to-overworld transition was truly
+stable. A causal reproduction changed only the post-flee wait to 120 frames and reached the exact
+gate. It then exposed a second copy of the zero-wild assumption in Pewter's post-Pokédex crossing.
+The shared repair now waits, rereads, and revalidates result, coordinate, controls, living HP, party,
+level, max HP, PP, and status before movement resumes; both chapter reports retain the flee
+receipts. See the
+[third perturbation failure](evidence/portable-clean-start-six-role-perturbation-03-failure-2026-08-09.json).
+
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared
 gap calculation intersected Blue with itself. One canonical Generation I facts module now derives
@@ -217,8 +227,8 @@ silently acting at night.
 
 ## Code and test health
 
-- 127 source modules and 135 test modules cover roughly 88,000 source lines and 52,500 test lines.
-- The current full gate passes **2,164 tests** with 3 emulator-integration tests deselected and 1
+- 128 source modules and 135 test modules cover roughly 88,500 source lines and 53,000 test lines.
+- The current full gate passes **2,165 tests** with 3 emulator-integration tests deselected and 1
   expected failure, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.
@@ -252,8 +262,8 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Complete the full ROM-free gate for the bounded Route 1 flee repair; commit and push the
-   regenerated source identity.
+1. Commit and push the shared, stabilized Route 1 flee repair and its already-verified regenerated
+   source identity.
 2. Run a fresh uncounted derived-timing seed with the exact combined artifact set. Preserve any
    next route or model defect without weakening its semantic contract.
 3. Only after that perturbation passes should v95's ten one-attempt roots open.

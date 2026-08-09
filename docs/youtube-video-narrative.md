@@ -165,6 +165,14 @@ the route turns red again. Use the absurdity: an agent that claims to play Poké
 Pokémon never to appear. Show the bounded RUN action and the receipt checking the exact party,
 level, max HP, PP, status, tile, and released controls before the corridor resumes.
 
+Give that repair its own falsification instead of cutting directly to Crystal. Seed `990018`
+successfully records two verified RUN receipts, yet the player ends at Route 1 `(11,6)` rather than
+Viridian `(21,35)`. Animate the hidden gap between **“controls look ready”** and **“the overworld
+will accept the next movement.”** Then show the causal split screen: immediate resume misses the
+gate; adding only 120 idle frames reaches it exactly. The final shared Oak/Pewter primitive waits,
+rereads, and revalidates the protected state before returning. Caption it: **“Verify the handoff,
+not just both sides of it.”**
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

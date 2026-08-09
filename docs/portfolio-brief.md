@@ -32,7 +32,7 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
 | Reserve-aware controller | Four complete lineages; 98.2394% / 94.7537% held-out class metrics; 17/17 fresh offline targets; 13/13 isolated causal bindings; combined canonical Hall of Fame with 21/21 targets | Paired timing root exposed a deterministic early-game referee defect before model decisions; perturbation qualification remains |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
-| Repository gate | 2,164 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
+| Repository gate | 2,165 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
 
 ## Architecture in one minute
 
@@ -91,7 +91,7 @@ development score—is the next promotion gate.
 - Why shadow agreement cannot substitute for causal authority, and why causal authority can still
   prove integration without proving feature value.
 - How the candidate scorer remains permutation-equivariant and excludes title-specific identity.
-- How an emulator-scale system is tested without redistributing the ROM: 2,164 ROM-free tests plus
+- How an emulator-scale system is tested without redistributing the ROM: 2,165 ROM-free tests plus
   private authenticated runtime receipts.
 
 ## Honest limitations
@@ -141,6 +141,11 @@ fixed corridor rejected. The repair is deliberately game-like rather than seed-l
 evidence-bearing flee resumes the route while proving the party, level, max HP, PP, status,
 coordinate, and controls remained valid.
 
+The next perturbation accepted two flees and found a second-order defect: the first ready-looking
+overworld frame did not yet accept movement, so the route silently drifted. A causal delay-only
+trial reached the exact gate. The shared repair now authenticates the post-wait state and covers
+both early Route 1 chapters, turning another favorable timing assumption into an explicit contract.
+
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
 until the now-canonical-qualified reserve-aware stack also passes a perturbation rehearsal.
@@ -155,7 +160,7 @@ until the now-canonical-qualified reserve-aware stack also passes a perturbation
 - Qualified a strategic trainee/venue controller inside a portable objective loop across 114,831
   live choices and 400 executed teacher disagreements, completing 1,803 development battles with no
   fallback before fresh emulator observation verified the Volcano Badge.
-- Hardened a 142k-line Python research system with 2,164 tests, Ruff, mypy, documentation/privacy
+- Hardened a 142k-line Python research system with 2,165 tests, Ruff, mypy, documentation/privacy
   gates, deterministic source registries, and at least 19 consecutive green GitHub Actions runs after
   diagnosing one derived-artifact CI regression.
 - Built a prospective one-attempt 8-of-10 clean-start evaluator and used its strict rehearsal to

@@ -2153,6 +2153,7 @@ def test_route_1_traversal_flees_one_wild_and_preserves_the_consumed_step() -> N
         ("up",),
         "Route 1 unit route",
         maximum_flees=1,
+        stabilization_frames=120,
     )
 
     assert terminal is final
@@ -2160,6 +2161,7 @@ def test_route_1_traversal_flees_one_wild_and_preserves_the_consumed_step() -> N
     assert isinstance(flees[0], Route1WildFleeEvidence)
     assert flees[0].verified
     assert flees[0].public_dict()["run_attempts"] == 1
+    assert flees[0].public_dict()["stabilization_frames"] == 120
     assert executor.kinds.count(MacroActionKind.MOVE) == 1
     assert executor.kinds.count(MacroActionKind.CONFIRM) == 1
 
@@ -2194,6 +2196,63 @@ def test_route_1_traversal_rejects_wilds_beyond_its_declared_allowance() -> None
             ("up",),
             "Route 1 unit route",
             maximum_flees=0,
+            stabilization_frames=120,
+        )
+
+
+def test_route_1_flee_revalidates_position_after_the_stabilization_wait() -> None:
+    before = replace(
+        _raw(MapId.ROUTE_1, 10, 35),
+        first_party_hp=23,
+        first_party_max_hp=23,
+        first_party_pp=(35, 30, 0, 0),
+    )
+    encounter = replace(
+        before,
+        player_y=34,
+        battle_state=1,
+        enemy_species_id=165,
+        enemy_level=3,
+    )
+    early_exit = replace(encounter, battle_state=0, battle_result=2)
+    drifted_exit = replace(early_exit, player_y=35)
+
+    class _Reader:
+        state = before
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=3)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return InputReadiness(0, 0, 0, 0, 0)
+
+    reader = _Reader()
+
+    class _Executor:
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.MOVE and reader.state is before:
+                reader.state = encounter
+            elif action.kind is MacroActionKind.CONFIRM and reader.state is encounter:
+                reader.state = early_exit
+            elif (
+                action.kind is MacroActionKind.WAIT
+                and action.repeat == 120
+                and reader.state is early_exit
+            ):
+                reader.state = drifted_exit
+            return object()
+
+    with pytest.raises(QualifiedPlayError, match="stabilized semantic evidence gate"):
+        _move_route_1_with_wild_flees(  # type: ignore[arg-type]
+            _Executor(),
+            reader,  # type: ignore[arg-type]
+            ("up",),
+            "Route 1 unit route",
+            maximum_flees=1,
+            stabilization_frames=120,
         )
 
 

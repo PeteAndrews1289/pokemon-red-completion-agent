@@ -9,8 +9,11 @@
 > the legal 21–23 DV range while retaining the win/event/map/script/control proof, and its bounded
 > pulse cap is 96. Seed `990017` passed that gate, then a normal Route 1 wild encounter hit the old
 > zero-encounter corridor. Route 1 now permits eight evidence-bearing flees across the round trip
-> while preserving party, level, max HP, PP, status, coordinate, and released control. Regenerate,
-> validate, commit, push, then run a fresh uncounted perturbation. Do
+> while preserving party, level, max HP, PP, status, coordinate, and released control. Seed
+> `990018` accepted two flees, then proved that the first ready-looking overworld frame could still
+> swallow movement. The shared Oak/Pewter helper now waits 120 frames and revalidates the full
+> receipt before returning. The 2,165-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry
+> checks passes; commit, push, then run a fresh uncounted perturbation. Do
 > not add `990007` to fitting, rerun retired model-test roots, build a complete Crystal route, weaken
 > the curriculum lesson, or consume a counted v95 root. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).

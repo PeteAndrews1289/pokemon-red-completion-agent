@@ -137,18 +137,18 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     registry = parse_collection_registry(payload)
     first = registry.assignment("red-battle-v95-01-train")
 
-    assert len(payload) == 6821
+    assert len(payload) == 6866
     assert (
         registry.registry_sha256
-        == "932e02e03f89d1b0f41abbb8ee4d30dbd0399307eb1b1621736410cc7ce4dbd0"
+        == "537ade32f54e3758427a03d818c6d3fc9a2d7ec154de7399efbb4f7116d4638d"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "73f32bb47aea37e4f2431e2b30c9c86820873316b071847080896e3b8dcce8a8"
+        == "c0ada6983502f341ebe515adbeb6516053bc8baaf71cfe9dcc1142928325dd8c"
     )
     assert (
         registry.execution.behavior_configuration_sha256
-        == "701138880963fa7c405c08ecdf08a6b6d63c0b45e17c82ac03d26129bac06fd5"
+        == "828e01291d837df9650fbf8473a7c84c77a8aec9b16d81238345ca494bc0defa"
     )
     assert (
         registry.execution.objective_graph_sha256
@@ -156,9 +156,9 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "b0b90aee4f1a8cf3050035a310515ac8b92d0f053ba81f83d8a47bab3c708798"
+        == "cf1d940b0a46c0ef6953ecf5b1cdef29df1b072c882b8504ca6efcb06bec728d"
     )
-    assert first.assignment_id == "fad51a184128272a0dcaec20c4ecaa2b8bd164574b9ef986b386920a08914d07"
+    assert first.assignment_id == "8cdc0fcd9437c3b1b819c74060b7a173567c66210f79a73677c2b9cbf3f04ff0"
 
 
 def test_canonical_newline_hash_has_an_independent_golden_vector() -> None:

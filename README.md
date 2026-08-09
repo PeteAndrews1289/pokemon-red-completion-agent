@@ -118,6 +118,14 @@ attempt count, released-control proof, and exact party/level/max-HP/PP/status pr
 trainer battle, wrong map, dead starter, changed protected state, or ninth encounter still fails
 closed. See the
 [second perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-02-failure-2026-08-09.json).
+Fresh seed `990018` accepted two such flees, then exposed a subtler handoff defect: the first
+battle-state-zero/readiness observation arrived before overworld input was stable, so subsequent
+movement pulses were silently ignored and the exact Viridian gate was missed. A direct causal
+trial changed only the post-flee delay and reached the intended coordinate. Route 1 escape is now a
+shared early-game primitive: after RUN it waits a declared 120 frames, rereads and revalidates the
+same protected state, and only then resumes. The same bounded receipt now covers Oak's errand and
+the later post-Pokédex Pewter crossing. See the
+[third perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-03-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95
 reliability campaign remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.

@@ -18,7 +18,6 @@ from pokemon_red_completion.opening import (
     PRET_POKERED_COMMIT,
     SQUIRTLE_APPROACH,
 )
-from pokemon_red_completion.pewter import DEFAULT_PEWTER_TIMING
 from pokemon_red_completion.provenance import GIT_COMMIT, canonical_sha256
 from pokemon_red_completion.vermilion import DEFAULT_VERMILION_TIMING
 
@@ -102,6 +101,29 @@ JULY_28_QUALIFIED_PLAY_TIMING = {
     "rival_trigger_wait_frames": 360,
     "route_1_north_seed_wait_frames": 192,
     "route_1_south_seed_wait_frames": 48,
+    "transition_wait_frames": 120,
+}
+JULY_28_PEWTER_TIMING = {
+    "battle_wait_frames": 180,
+    "brock_setup_pulses": 3,
+    "dialogue_wait_frames": 240,
+    "encounter_wait_frames": 240,
+    "fight_menu_wait_frames": 120,
+    "final_stability_wait_frames": 1,
+    "first_kakuna_seed_wait_frames": 467,
+    "forest_exit_seed_wait_frames": 2,
+    "max_attack_start_pulses": 20,
+    "max_battle_pulses": 120,
+    "max_brock_battle_pulses": 100,
+    "max_brock_reward_pulses": 40,
+    "max_control_release_pulses": 10,
+    "max_trainer_intro_pulses": 12,
+    "move_cursor_wait_frames": 60,
+    "pewter_seed_wait_frames": 1,
+    "route_1_seed_wait_frames": 6,
+    "second_kakuna_seed_wait_frames": 420,
+    "selected_move_wait_frames": 600,
+    "third_kakuna_seed_wait_frames": 2,
     "transition_wait_frames": 120,
 }
 
@@ -418,7 +440,6 @@ def test_brock_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
 
     intro = DEFAULT_NEW_GAME_TIMING
     opening = DEFAULT_OPENING_TIMING
-    pewter = DEFAULT_PEWTER_TIMING
     expected_configuration = {
         "controller_timing": {
             "press_frames": intro.press_frames,
@@ -442,7 +463,7 @@ def test_brock_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
         },
         "new_game_names": "built_in_red_blue",
         "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
-        "pewter_timing": {name: getattr(pewter, name) for name in pewter.__dataclass_fields__},
+        "pewter_timing": JULY_28_PEWTER_TIMING,
         "pret_pokered_commit": PRET_POKERED_COMMIT,
         "qualified_play_timing": JULY_28_QUALIFIED_PLAY_TIMING,
         "route_encounter_policy": ("fail_closed_except_three_verified_kakuna_and_one_bug_catcher"),
@@ -530,7 +551,6 @@ def test_cerulean_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
 
     intro = DEFAULT_NEW_GAME_TIMING
     opening = DEFAULT_OPENING_TIMING
-    pewter = DEFAULT_PEWTER_TIMING
     cerulean = DEFAULT_CERULEAN_TIMING
     expected_configuration = {
         "controller_timing": {
@@ -555,7 +575,7 @@ def test_cerulean_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
         },
         "new_game_names": "built_in_red_blue",
         "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
-        "pewter_timing": {name: getattr(pewter, name) for name in pewter.__dataclass_fields__},
+        "pewter_timing": JULY_28_PEWTER_TIMING,
         "cerulean_timing": {
             name: getattr(cerulean, name) for name in cerulean.__dataclass_fields__
         },

@@ -28,7 +28,6 @@ from pokemon_red_completion.battle_runtime import (
     bind_battle_decision_observer,
     bind_battle_policy_override,
     bind_battle_schedule_observer,
-    note_observed_battle_exit,
 )
 from pokemon_red_completion.battle_schedule import (
     BattleStartScheduleController,
@@ -158,7 +157,6 @@ from pokemon_red_completion.lorelei import (
     run_lorelei_chapter,
 )
 from pokemon_red_completion.observation import (
-    BattleMenuPhase,
     MapId,
     OaksErrandPhase,
     OaksErrandState,
@@ -201,6 +199,10 @@ from pokemon_red_completion.red_trajectory import (
 )
 from pokemon_red_completion.rom import RomFingerprint
 from pokemon_red_completion.route import COMPLETION_QUEST
+from pokemon_red_completion.route_1_wild import (
+    Route1WildFleeEvidence,
+    move_route_1_with_wild_flees,
+)
 from pokemon_red_completion.sabrina import (
     SABRINA_CHECKPOINT_COUNT,
     SabrinaChapterError,
@@ -473,6 +475,7 @@ class QualifiedPlayTiming:
     mart_prompt_wait_frames: int = 240
     route_1_south_seed_wait_frames: int = 48
     max_route_1_wild_flees: int = 8
+    route_1_wild_exit_stabilization_frames: int = 120
     max_rival_pulses: int = 96
     max_parcel_pulses: int = 5
     max_pokedex_pulses: int = 42
@@ -487,6 +490,10 @@ class QualifiedPlayTiming:
             ("mart_prompt_wait_frames", self.mart_prompt_wait_frames),
             ("route_1_south_seed_wait_frames", self.route_1_south_seed_wait_frames),
             ("max_route_1_wild_flees", self.max_route_1_wild_flees),
+            (
+                "route_1_wild_exit_stabilization_frames",
+                self.route_1_wild_exit_stabilization_frames,
+            ),
             ("max_rival_pulses", self.max_rival_pulses),
             ("max_parcel_pulses", self.max_parcel_pulses),
             ("max_pokedex_pulses", self.max_pokedex_pulses),
@@ -508,71 +515,6 @@ class QualifiedPlayProgress:
 
 
 ProgressSink = Callable[[QualifiedPlayProgress], None]
-
-
-@dataclass(frozen=True, slots=True)
-class Route1WildFleeEvidence:
-    """One bounded incidental Route 1 encounter dismissed without route drift."""
-
-    initial_battle_state: int
-    final_battle_state: int
-    battle_result: int
-    map_id: int
-    player_x: int
-    player_y: int
-    enemy_species_id: int
-    enemy_level: int
-    initial_hp: int
-    final_hp: int
-    maximum_hp_preserved: bool
-    party_preserved: bool
-    level_preserved: bool
-    pp_preserved: bool
-    status_preserved: bool
-    control_ready: bool
-    run_attempts: int
-
-    @property
-    def verified(self) -> bool:
-        return (
-            self.initial_battle_state == 1
-            and self.final_battle_state == 0
-            and self.battle_result == 2
-            and self.map_id == MapId.ROUTE_1
-            and self.player_x >= 0
-            and self.player_y >= 0
-            and self.enemy_species_id > 0
-            and self.enemy_level > 0
-            and 0 < self.final_hp <= self.initial_hp
-            and self.maximum_hp_preserved
-            and self.party_preserved
-            and self.level_preserved
-            and self.pp_preserved
-            and self.status_preserved
-            and self.control_ready
-            and 1 <= self.run_attempts <= 16
-        )
-
-    def public_dict(self) -> dict[str, object]:
-        return {
-            "battle_result": self.battle_result,
-            "control_ready": self.control_ready,
-            "enemy_level": self.enemy_level,
-            "enemy_species_id": self.enemy_species_id,
-            "final_battle_state": self.final_battle_state,
-            "final_hp": self.final_hp,
-            "initial_battle_state": self.initial_battle_state,
-            "initial_hp": self.initial_hp,
-            "level_preserved": self.level_preserved,
-            "map": self.map_id,
-            "maximum_hp_preserved": self.maximum_hp_preserved,
-            "party_preserved": self.party_preserved,
-            "position": [self.player_x, self.player_y],
-            "pp_preserved": self.pp_preserved,
-            "run_attempts": self.run_attempts,
-            "status_preserved": self.status_preserved,
-            "verified": self.verified,
-        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -1022,6 +964,7 @@ def run_oaks_errand_chapter(
         ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
         "Route 1 northbound",
         maximum_flees=timing.max_route_1_wild_flees,
+        stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
     )[1]
     _wait(executor, timing.transition_wait_frames)
     viridian = reader.read()
@@ -1049,6 +992,7 @@ def run_oaks_errand_chapter(
         ROUTE_1_TO_PALLET_DIRECTIONS,
         "Route 1 southbound",
         maximum_flees=timing.max_route_1_wild_flees - len(northbound_flees),
+        stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
     )[1]
     _wait(executor, timing.transition_wait_frames)
     pallet_returned = reader.read()
@@ -1895,111 +1839,16 @@ def _move_route_1_with_wild_flees(
     label: str,
     *,
     maximum_flees: int,
+    stabilization_frames: int,
 ) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...]]:
-    """Follow Route 1 while dismissing a finite number of ordinary wild encounters."""
-
-    if type(maximum_flees) is not int or maximum_flees < 0:  # noqa: E721
-        raise ValueError("maximum_flees must be a non-negative integer")
-    state = reader.read()
-    flees: list[Route1WildFleeEvidence] = []
-    for step, direction in enumerate(directions, start=1):
-        if state.battle_state:
-            raise QualifiedPlayError(f"Unexpected battle interrupted {label} before step {step}.")
-        executor.execute(MacroAction(MacroActionKind.MOVE, direction))
-        state = reader.read()
-        if not state.battle_state:
-            continue
-        if state.battle_state != 1 or state.map_id != MapId.ROUTE_1:
-            raise QualifiedPlayError(
-                f"Unexpected non-wild battle interrupted {label} at step {step}."
-            )
-        if len(flees) >= maximum_flees:
-            raise QualifiedPlayError(
-                f"{label} exceeded its bounded {maximum_flees}-encounter flee allowance."
-            )
-        flees.append(_flee_route_1_wild(executor, reader, state))
-        state = reader.read()
-    return state, tuple(flees)
-
-
-def _flee_route_1_wild(
-    executor: CountingExecutor,
-    reader: PokemonRedStateReader,
-    encounter: RawGameState,
-) -> Route1WildFleeEvidence:
-    """Select RUN and independently verify a safe, position-preserving Route 1 exit."""
-
-    if encounter.battle_state != 1 or encounter.map_id != MapId.ROUTE_1:
-        raise QualifiedPlayError("Route 1 flee requires an active Route 1 wild battle.")
-    expected_position = (encounter.player_x, encounter.player_y)
-    expected_party = encounter.party_species_ids
-    expected_level = encounter.first_party_level
-    expected_max_hp = encounter.first_party_max_hp
-    expected_pp = encounter.first_party_pp
-    expected_status = encounter.first_party_status
-    initial_hp = encounter.first_party_hp or 0
-    run_attempts = 0
-    for _ in range(128):
-        raw = reader.read()
-        if raw.battle_state == 0:
-            if not reader.read_input_readiness().ready:
-                _wait(executor, 24)
-                continue
-            evidence = Route1WildFleeEvidence(
-                initial_battle_state=encounter.battle_state,
-                final_battle_state=raw.battle_state,
-                battle_result=raw.battle_result if raw.battle_result is not None else -1,
-                map_id=raw.map_id if raw.map_id is not None else -1,
-                player_x=raw.player_x if raw.player_x is not None else -1,
-                player_y=raw.player_y if raw.player_y is not None else -1,
-                enemy_species_id=encounter.enemy_species_id or 0,
-                enemy_level=encounter.enemy_level or 0,
-                initial_hp=initial_hp,
-                final_hp=raw.first_party_hp or 0,
-                maximum_hp_preserved=raw.first_party_max_hp == expected_max_hp,
-                party_preserved=raw.party_species_ids == expected_party,
-                level_preserved=raw.first_party_level == expected_level,
-                pp_preserved=raw.first_party_pp == expected_pp,
-                status_preserved=raw.first_party_status == expected_status,
-                control_ready=True,
-                run_attempts=run_attempts,
-            )
-            if expected_position != (raw.player_x, raw.player_y) or not evidence.verified:
-                raise QualifiedPlayError("Route 1 flee failed its semantic evidence gate.")
-            note_observed_battle_exit()
-            return evidence
-        if (
-            raw.battle_state != 1
-            or raw.map_id != MapId.ROUTE_1
-            or expected_position != (raw.player_x, raw.player_y)
-            or raw.party_species_ids != expected_party
-            or (raw.first_party_hp or 0) <= 0
-        ):
-            raise QualifiedPlayError("Route 1 flee lost its protected encounter boundary.")
-        menu = reader.read_battle_menu_state(raw)
-        if menu.phase is BattleMenuPhase.UNKNOWN:
-            executor.execute(MacroAction(MacroActionKind.CANCEL))
-            _wait(executor, 240)
-            continue
-        if menu.phase is BattleMenuPhase.MOVE:
-            executor.execute(MacroAction(MacroActionKind.CANCEL))
-            _wait(executor, 120)
-            continue
-        command = menu.selected_main_command
-        if command == 3:
-            if run_attempts >= 16:
-                raise QualifiedPlayError("Route 1 flee exceeded its bounded RUN attempts.")
-            executor.execute(MacroAction(MacroActionKind.CONFIRM))
-            _wait(executor, 240)
-            run_attempts += 1
-            continue
-        direction = {0: "right", 1: "right", 2: "down"}.get(command)
-        if direction is None:
-            raise QualifiedPlayError("Route 1 flee exposed an invalid battle-menu cursor.")
-        executor.execute(MacroAction(MacroActionKind.MOVE, direction))
-        _wait(executor, 120)
-    raise QualifiedPlayError(
-        f"Route 1 flee exceeded its bounded transition after {run_attempts} RUN attempts."
+    return move_route_1_with_wild_flees(
+        executor,
+        reader,
+        directions,
+        label,
+        maximum_flees=maximum_flees,
+        stabilization_frames=stabilization_frames,
+        error_type=QualifiedPlayError,
     )
 
 

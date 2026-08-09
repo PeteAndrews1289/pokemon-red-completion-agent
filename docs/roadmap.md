@@ -75,6 +75,18 @@ is preserved. Route 1 now has a bounded eight-flee round-trip allowance with exp
 coordinate, HP, RUN-attempt, control, party, level, max-HP, PP, and status evidence. The next gate
 remains one fresh complete uncounted perturbation; v95 remains 0/10.
 
+Seed `990018` accepted two verified flees but then missed the exact Viridian entrance. Direct
+reproduction localized the defect to the battle-exit handoff: the first ready observation still
+preceded stable overworld input, so route actions could be swallowed without an immediate error.
+Adding only a 120-frame stabilization reached the exact gate and then exposed Pewter's separate
+zero-wild Route 1 corridor. The
+[third perturbation failure](evidence/portable-clean-start-six-role-perturbation-03-failure-2026-08-09.json)
+is preserved. One shared primitive now handles both chapters, rereads and verifies the protected
+state after the stabilization interval, records that interval in each receipt, and retains the
+eight-encounter and sixteen-RUN-attempt bounds. The 2,165-test ROM-free gate plus Ruff, mypy,
+documentation, public-artifact, and registry checks passes. A clean push and fresh uncounted
+perturbation remain the immediate gate; v95 remains 0/10.
+
 The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's
 Red/Blue reciprocal version gaps now come from one canonical table and include the previously
 omitted Pinsir and Scyther. Trading requires an explicit compatibility edge between saves; merely
