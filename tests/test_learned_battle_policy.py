@@ -373,6 +373,23 @@ def test_teacher_free_policy_preserves_unsupported_observation_cause() -> None:
     assert policy.teacher_fallbacks == 0
     assert policy.unsupported_observation_errors == {"KeyError": 1}
     assert policy.public_dict()["unsupported_observation_errors"] == {"KeyError": 1}
+    assert policy.public_dict()["last_unsupported_observation"] == {
+        "active_party_hp": None,
+        "active_party_index": None,
+        "active_party_level": None,
+        "active_party_max_hp": None,
+        "active_party_moves": [],
+        "active_party_pp": [],
+        "active_party_species_id": None,
+        "battle_plan_id": "battle-test",
+        "battle_state": 2,
+        "disabled_move_slot": None,
+        "enemy_hp": None,
+        "enemy_species_id": None,
+        "objective_id": "test_battle",
+        "required_move_policy": "any_usable",
+        "required_move_ref": None,
+    }
 
 
 def test_shadow_teacher_preserves_non_move_control_signal() -> None:

@@ -93,6 +93,7 @@ class ModelAssistedBattlePolicy:
     forced_decisions: int = 0
     fallback_reasons: Counter[str] = field(default_factory=Counter)
     unsupported_observation_errors: Counter[str] = field(default_factory=Counter)
+    last_unsupported_observation: dict[str, object] | None = None
     correction_records: int = 0
     shadow_teacher_disagreements: int = 0
     shadow_teacher_unavailable: int = 0
@@ -197,6 +198,7 @@ class ModelAssistedBattlePolicy:
                     predicted_slot = batch.slot_indices[candidate] + 1
         except Exception as error:
             self.unsupported_observation_errors[type(error).__name__] += 1
+            self.last_unsupported_observation = _unsupported_observation_context(observation)
             if not self.allow_teacher_queries:
                 raise LearnedBattlePolicyError(
                     "teacher-free battle evaluation rejected an unsupported live observation"
@@ -370,6 +372,7 @@ class ModelAssistedBattlePolicy:
             "unsupported_observation_errors": dict(
                 sorted(self.unsupported_observation_errors.items())
             ),
+            "last_unsupported_observation": self.last_unsupported_observation,
             "correction_records": self.correction_records,
             "shadow_teacher_disagreements": self.shadow_teacher_disagreements,
             "shadow_teacher_unavailable": self.shadow_teacher_unavailable,
@@ -418,7 +421,6 @@ class ModelAssistedBattlePolicy:
                 "teacher_free_requests": self.control_teacher_free_requests,
             }
         return result
-
     def _execute_control_decision(
         self,
         observation: BattlePolicyObservation,
@@ -573,7 +575,6 @@ class ModelAssistedBattlePolicy:
         self.model_decisions += 1
         self._record_control_action(observation, BattleAction.move(predicted_slot))
         return predicted_slot
-
     def _record_control_action(
         self,
         observation: BattlePolicyObservation,
@@ -637,6 +638,32 @@ class ModelAssistedBattlePolicy:
         self.control_shadow_confusion[f"{actual} -> {predicted}"] += 1
         if predicted == actual:
             self.control_shadow_agreements += 1
+
+
+def _unsupported_observation_context(
+    observation: BattlePolicyObservation,
+) -> dict[str, object]:
+    raw = observation.state
+    intent = observation.intent
+    return {
+        "active_party_hp": raw.active_party_hp,
+        "active_party_index": raw.active_party_index,
+        "active_party_level": raw.active_party_level,
+        "active_party_max_hp": raw.active_party_max_hp,
+        "active_party_moves": list(raw.active_party_moves or ()),
+        "active_party_pp": list(raw.active_party_pp or ()),
+        "active_party_species_id": raw.active_party_species_id,
+        "battle_plan_id": intent.battle_plan_id if intent is not None else None,
+        "battle_state": raw.battle_state,
+        "disabled_move_slot": raw.player_disabled_move_slot,
+        "enemy_hp": raw.enemy_hp,
+        "enemy_species_id": raw.enemy_species_id,
+        "objective_id": intent.objective_id if intent is not None else None,
+        "required_move_policy": (
+            intent.required_move_policy.value if intent is not None else None
+        ),
+        "required_move_ref": intent.required_move_ref if intent is not None else None,
+    }
 
 
 def load_battle_model_artifact(model_stream: str | Path) -> BattleMoveRanker:
