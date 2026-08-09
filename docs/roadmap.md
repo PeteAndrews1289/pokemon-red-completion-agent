@@ -50,6 +50,16 @@ labels are also excluded. The receipt now separates opponent status RNG from con
 while the immediate pre-Giovanni Center recovery remains explicit and fail-closed. Use fresh seed
 990005 after the gate and push.
 
+Seed 990005 completed 312/312 checkpoints and Hall of Fame with 3,166 labels, 13 explicit switch
+targets, and a 60/55/55/55/55/55 final-form team after 1,808 development battles. The first frozen
+target head scored 11/13 against this new lineage while the deterministic resolver scored 9/13;
+both misses remained concentrated at Bruno and Agatha. The lineage was then opened as development
+data. Equal-total battle-plan weighting plus L2 0.003 produced a two-unit candidate that scores
+54/54 across the four opened leave-one-lineage-out folds and 13/13 on the existing validation
+lineage. These are development metrics. Freeze the settings, commit and push the exact source, then
+use seed 990006 once as the unopened offline test. Runtime target deployment and causal authority
+remain later gates even if that test passes.
+
 After the learned target passes offline and causal Red gates, then one canonical and one uncounted
 perturbation result, begin Crystal's bounded battle adapter.
 Do not build the complete Crystal route first. Compare frozen-Red zero-shot, preregistered few-shot,

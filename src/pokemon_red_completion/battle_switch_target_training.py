@@ -137,7 +137,7 @@ def fit_preassigned_switch_target_candidate(
     hidden_units: int = 2,
     epochs: int = 1000,
     learning_rate: float = 0.01,
-    l2: float = 0.03,
+    l2: float = 0.003,
     seed: int = 0,
 ) -> BattleSwitchTargetCandidateModel:
     """Fit on complete lineages and evaluate once on disjoint lineages."""

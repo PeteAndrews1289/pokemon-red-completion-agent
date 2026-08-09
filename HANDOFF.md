@@ -12,9 +12,9 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 
 This section supersedes every older “next” statement below.
 
-**Branch and pushed code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `7ce344c` includes
-the offline switch-target learning seam and the venue-scoped Route 11 sleep recovery. Its full
-local gate passed **2,107 tests with 3
+**Branch and pushed code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `119984b` includes
+the offline switch-target learning seam, venue-scoped Route 11 sleep recovery, and corrected
+Viridian status receipt. Its full local gate passed **2,109 tests with 3
 integration tests deselected**, Ruff, mypy, documentation, public-artifact, and source-registry
 checks. Only Codex pushes this branch; do not create a second worktree or force-push it.
 
@@ -35,12 +35,14 @@ lineage 02 (13 targets). It fits 28/28 versus the deterministic baseline's 22/28
 The public receipt therefore says `deployment_authority: false`; do not load it into the emulator or
 start another full causal replay yet.
 
-**Exact next dependency:** collect additional complete, timing/RNG-varied v3 teacher lineages with
-explicit late-game targets, especially Bruno and Agatha. Preassign whole lineages to train,
-validation, and an unopened test split. Refit the target head and require: improvement over the
-deterministic baseline, reserve-permutation equivariance, counterfactual matchup sensitivity, and
-the held-out Golbat role. Only then grant target authority and rerun the 312-checkpoint causal gate.
-The counted v95 campaign remains unopened at **0/10** and must not supply this development data.
+**Exact next dependency:** commit and push the plan-balanced target learner, then collect seed
+`990006` from that exact source as a one-time unopened test. The frozen development candidate uses
+two hidden units, 1,000 epochs, learning rate 0.01, L2 0.003, and equal total optimization weight per
+battle plan. It reached 54/54 across four opened leave-one-whole-lineage-out folds, then fit 41/41
+training targets and 13/13 existing validation targets. These are development results, not a test.
+Require every target—including Bruno and Agatha's Golbat—to pass seed 990006 before building an
+authenticated target artifact and runtime binding. The counted v95 campaign remains unopened at
+**0/10** and must not supply this development data.
 
 **Latest collection attempt:** fresh uncounted timing seed `990004` qualified the Route 11 repair,
 completed the balanced-team curriculum at 51/52/52/55/51/51, defeated Blaine, and reached checkpoint
@@ -50,9 +52,18 @@ required party. The route already visits the Center and requires full HP, clear 
 PP before Giovanni. Trainer receipts now measure controlled party/move/survival outcomes and retain
 the observed status trace; the explicit recovery boundary remains strict and now fails directly if
 healing does not settle. Artifact `red-battle-control-7e8c4f03db294b37b92b399b01cea187` is retained
-failed with 3,123 labels and must never enter fitting. Do not rerun seeds `990003` or `990004`; after
-commit/push and full gate, use fresh seed `990005`. See the
+failed with 3,123 labels and must never enter fitting. Do not rerun seeds `990003` or `990004`.
+The former instruction to use seed `990005` was completed by the successful lineage below. See the
 [failure receipt](docs/evidence/battle-control-reserve-matchup-v3-lineage-05-failure-2026-08-09.json).
+
+**Latest successful collection:** seed `990005` completed **312/312 checkpoints**, **36/36
+objectives**, Champion, and Hall of Fame from clean power. It recorded 3,166 labels with 13 explicit
+targets, completed 1,808 development battles at 60/55/55/55/55/55, and independently passed both
+the Route 11 and Viridian repairs. The first frozen target head scored 11/13 on this lineage versus
+the deterministic resolver's 9/13. That test was then explicitly opened as development data for
+the second candidate; it is not reusable as the next unopened test. See the
+[lineage receipt](docs/evidence/battle-control-reserve-matchup-v3-lineage-06-2026-08-09.json) and
+[candidate receipt](docs/evidence/battle-switch-target-development-candidate-02-2026-08-09.json).
 
 **Crystal:** do not build a full second walkthrough now. After the Red target head qualifies, add a
 thin Crystal semantics/mechanics adapter and three bounded teacher tasks: one reserve-choice battle,

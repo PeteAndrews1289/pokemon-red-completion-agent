@@ -24,8 +24,8 @@ failure drove feature schema v3, which represents every reserve through identity
 level, usable moves, type advantage, defensive resistance, and PP, then binds a semantic switch to
 the actual live party target.
 
-Three complete clean-power v3 teacher lineages now exist. The newest records **3,322** high-level
-labels, **17 explicitly targeted switches**, **1,800 development battles**, a final
+Four complete clean-power v3 teacher lineages now exist. The newest records **3,166** high-level
+labels, **13 explicitly targeted switches**, **1,808 development battles**, a final
 60/55/55/55/55/55 team, and Hall of Fame. A replacement controller trained on two whole lineages
 scores **98.2394% accuracy / 94.7537% balanced accuracy** on the untouched third split, with 10/13
 deterministic switch targets correct. Causal execution has progressed through Rock Tunnel, Lorelei,
@@ -34,26 +34,32 @@ safety, specialist residency, bounded setup, and exact observed-role switching. 
 passed all of those constraints together but failed because the model requested a switch while the
 hand-written target scorer chose Blastoise instead of the demonstrated Jolteon role for Golbat.
 
-That failure is now an explicit learning seam. A new identity-free, permutation-equivariant
-switch-target head trains on two complete lineages and improves the untouched lineage from **10/13
-(76.9%)** deterministic agreement to **11/13 (84.6%)**. It still makes the same Golbat error, so it
-is recorded as `deployment_authority: false` and has not changed emulator behavior. See the
+That failure is now an explicit learning seam. The first identity-free, permutation-equivariant
+switch-target head improved an untouched lineage from **10/13 (76.9%)** deterministic agreement to
+**11/13 (84.6%)**. On the fresh fourth lineage it again scored 11/13, while the deterministic
+resolver fell to 9/13; the same Bruno and Agatha transitions remained. After that one-time test was
+opened as development evidence, plan-balanced training and lower preregistered regularization
+reached **54/54** across four leave-one-whole-lineage-out folds. The frozen second candidate fits
+41/41 development targets and scores 13/13 on the existing whole-lineage validation set, but it
+remains `deployment_authority: false` until a new unopened lineage passes. See the
 [third lineage](docs/evidence/battle-control-reserve-matchup-v3-lineage-03-2026-08-09.json),
 [candidate](docs/evidence/battle-control-reserve-matchup-v3-lineage-candidate-02-2026-08-09.json),
 [latest preserved failure](docs/evidence/battle-control-reserve-matchup-v3-causal-13-failure-2026-08-09.json),
 [offline target-head receipt](docs/evidence/battle-switch-target-offline-candidate-2026-08-09.json),
+[fourth complete lineage](docs/evidence/battle-control-reserve-matchup-v3-lineage-06-2026-08-09.json),
+[second target candidate](docs/evidence/battle-switch-target-development-candidate-02-2026-08-09.json),
 and [Crystal transfer benchmark](docs/crystal-transfer-benchmark.md).
 
-The first additional timing/RNG lineage reached **275/312** before a level-9 Drowzee legally
-reapplied sleep a third time during Route 11 team training. Its 469 partial labels are retained and
-excluded from fitting. The global runtime still allows two reapplications; only the measured Route
-11 venue now carries the already-tested four-reapplication curriculum bound. That repair is
-unit-qualified and awaits a fresh diagnostic seed, not a rerun of the failed one.
+Two failed timing/RNG attempts remain preserved and excluded from fitting: one stopped at 275/312
+on a third legal Route 11 sleep episode, and the next reached 284/312 before an overstrict receipt
+misclassified opponent-inflicted poison. The fourth complete lineage independently qualified both
+repairs through Hall of Fame. The global sleep bound remains conservative, and the pre-Giovanni
+Center boundary still requires full HP, clear status, and restored PP.
 
-The controller is still unpromoted. The active gate is now more late-game, timing/RNG-varied teacher
-data followed by a switch-target candidate that passes held-out, counterfactual, and party-order
-equivariance gates.
-Only then should another 312-checkpoint causal completion run, followed by a separate run that
+The controller is still unpromoted. The active gate is fresh seed `990006` as a one-time unopened
+offline test of the frozen target candidate. Only after that passes should the repository add an
+authenticated target-model artifact and runtime binding, then run another 312-checkpoint causal
+completion, followed by a separate run that
 forbids teacher queries for ordinary move selection. Navigation, menus, chapter mechanics, and
 resource execution remain authored. The counted v95 reliability campaign remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.
@@ -69,7 +75,7 @@ demonstrations and a referee; it is not the final autonomous player.
 | Learned objective dispatch | One clean-start run selected 21 composite objectives and verified 15 automatic effects through Hall of Fame | Many choices remain affordance-masked; mechanics are fixed skills |
 | Learned training control | The trainee/venue ranker beat its shape baseline and completed clean start with 114,831 controlled choices and 400 disagreements | One uncounted Red root; navigation and menus remain authored |
 | Strict learned-stack composition | Prior four-model run reached a Lorelei win with zero teacher query/fallback; the new high-level controller has causal authority through an Agatha win | Current reserve-controller lane still teacher-gates ordinary moves and has not completed the strict terminal contract |
-| Reserve-aware battle control | Three complete lineages; 98.2394% / 94.7537% held-out class accuracy/balance; offline target head improves 10/13 to 11/13 | Target head still misses the causal Golbat choice; canonical, perturbation, and combined teacher-free qualification remain |
+| Reserve-aware battle control | Four complete lineages; 98.2394% / 94.7537% held-out class accuracy/balance; frozen target candidate is 54/54 across opened leave-one-lineage-out folds | The 54 targets are opened development evidence; seed 990006, runtime binding, causal, and combined teacher-free qualification remain |
 | Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Counted campaign remains 0/10 until reserve-aware battle control passes canonical and perturbation rehearsals |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |

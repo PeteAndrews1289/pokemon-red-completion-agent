@@ -30,9 +30,9 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Portable strategic authority | 114,831 controlled choices, 400 executed disagreements, 1,803 development battles, no fallback; fresh observation opened Giovanni | Singleton objective dispatch and authored mechanics remain |
 | Portable clean-start baseline | 21 selected composites plus 15 automatic effects through Hall of Fame; no expected label, fixed dispatch, or fallback | Battle mechanics were not under the full strict learned stack |
 | Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
-| Reserve-aware controller | Three complete clean-power lineages; 98.2394% held-out class accuracy / 94.7537% balance; causal authority through Rock Tunnel, Lorelei, Bruno, and an Agatha win | Switch timing is learned, but the first target head is only 11/13 held out and still misses the causal Golbat role |
+| Reserve-aware controller | Four complete clean-power lineages; 98.2394% held-out class accuracy / 94.7537% balance; second target candidate is 54/54 across opened whole-lineage folds | The target settings were selected on those opened lineages; seed 990006, runtime binding, and causal authority remain |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
-| Repository gate | 2,107 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
+| Repository gate | 2,110 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
 
 ## Architecture in one minute
 
@@ -75,7 +75,11 @@ The current battle lane repeats that discipline at a finer boundary. One Agatha 
 status, residency, and exact-switch gates but still failed because the classifier chose “switch”
 while a deterministic scorer chose the wrong party member. A new permutation-equivariant target
 head improves held-out labels from 10/13 to 11/13, yet still misses that exact Golbat choice. It is
-committed as an offline candidate with no runtime authority rather than presented as a fix.
+committed as an offline candidate with no runtime authority rather than presented as a fix. A
+fourth complete lineage reproduced 11/13 against a weaker 9/13 baseline. Equal-total loss weighting
+per battle plan then reached 54/54 across four opened leave-one-lineage-out folds without adding
+identity. Because those settings were chosen after seeing all four, a fifth fresh lineage—not the
+development score—is the next promotion gate.
 
 ## What I would discuss in an interview
 
@@ -87,7 +91,7 @@ committed as an offline candidate with no runtime authority rather than presente
 - Why shadow agreement cannot substitute for causal authority, and why causal authority can still
   prove integration without proving feature value.
 - How the candidate scorer remains permutation-equivariant and excludes title-specific identity.
-- How an emulator-scale system is tested without redistributing the ROM: 2,107 ROM-free tests plus
+- How an emulator-scale system is tested without redistributing the ROM: 2,110 ROM-free tests plus
   private authenticated runtime receipts.
 
 ## Honest limitations
@@ -101,9 +105,11 @@ living-Pokédex result yet.
 The immediate modeling gap is no longer vague. The old battle controller could not observe reserve
 matchups. Feature schema v3 now can, and it binds the chosen semantic candidate to switch execution.
 A fresh artifact improved rare-class held-out balance and has causal evidence through an Agatha win.
-The new switch-target head also beats its deterministic baseline, but only across 41 labels and not
-on the causal Golbat case. More complete randomized teacher lineages are required before target
-authority, strict canonical completion, or combination with teacher-free ordinary moves.
+The first switch-target head also beat its deterministic baseline but repeated the causal Golbat
+case. The second candidate is perfect across 54 opened development labels after plan-balanced
+training, which is promising but not prospective evidence. Fresh seed 990006 must pass once before
+target-artifact authentication, runtime authority, strict canonical completion, or combination with
+teacher-free ordinary moves.
 
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
@@ -119,7 +125,7 @@ until a reserve-aware battle artifact passes canonical and perturbation rehearsa
 - Qualified a strategic trainee/venue controller inside a portable objective loop across 114,831
   live choices and 400 executed teacher disagreements, completing 1,803 development battles with no
   fallback before fresh emulator observation verified the Volcano Badge.
-- Hardened a 142k-line Python research system with 2,107 tests, Ruff, mypy, documentation/privacy
+- Hardened a 142k-line Python research system with 2,110 tests, Ruff, mypy, documentation/privacy
   gates, deterministic source registries, and at least 19 consecutive green GitHub Actions runs after
   diagnosing one derived-artifact CI regression.
 - Built a prospective one-attempt 8-of-10 clean-start evaluator and used its strict rehearsal to
@@ -138,5 +144,6 @@ until a reserve-aware battle artifact passes canonical and perturbation rehearsa
 5. Show the clean-start baseline reaching Hall of Fame, then contrast the strict run's Lorelei win
    with `[19, 0, 0, 0, 0, 0]` and the verifier's red result.
 6. End on the causal staircase: Rock Tunnel residency, Lorelei status safety, Agatha role residency,
-   then split the final “switch” card into timing and target heads. Boundary card: “98% offline was
-   the beginning of evaluation, not the end.”
+   then split the final “switch” card into timing and target heads. Show 54/54 opened development
+   beside `seed 990006: unopened`. Boundary card: “100% development was the beginning of the test,
+   not the end.”

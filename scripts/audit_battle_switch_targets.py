@@ -19,7 +19,7 @@ def main() -> int:
     parser.add_argument("--hidden-units", type=int, default=2)
     parser.add_argument("--epochs", type=int, default=1000)
     parser.add_argument("--learning-rate", type=float, default=0.01)
-    parser.add_argument("--l2", type=float, default=0.03)
+    parser.add_argument("--l2", type=float, default=0.003)
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
     candidate = fit_preassigned_switch_target_candidate(

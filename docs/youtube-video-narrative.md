@@ -62,6 +62,20 @@ The partial labels are rejected. Reuse Route 11's already-tested four-episode cu
 for that measured venue, leave the global bound at two, and move to a fresh seed. It is a compact
 example of the project treating retries as declared environment budgets rather than invisible luck.
 
+Then pay that patience off. The following seed completes the entire 312-checkpoint game, all 36
+objectives, Champion, and Hall of Fame while recording 3,166 labels and developing every final-form
+team member to 60/55/55/55/55/55. The original frozen target head beats the hand-written resolver
+11/13 to 9/13—but repeats one Bruno miss and the exact Golbat miss. Put both red marks on screen.
+
+The fix is a good machine-learning story rather than a Pokémon exception. A two-switch battle and
+a seven-switch battle had been contributing radically different weight to the loss. Give every
+whole battle plan equal total weight and reduce over-regularization; do not add a Golbat flag,
+Jolteon ID, or party slot. Across the four now-open development lineages, the same two-unit network
+reaches 54/54 leave-one-lineage-out targets and 13/13 on the existing validation lineage. Then stop
+the celebration again: those settings were chosen after seeing all four lineages. Freeze them and
+put `seed 990006: unopened` on screen. The honest climax is not the 100%; it is refusing to call an
+opened development score a final test.
+
 Keep the most important scientific detail on screen: the action-model weights did not change
 between these causal attempts. The first failures repaired a game-neutral actor/referee interface;
 the last exposed missing learned authority. No Agatha map, species, or opponent-position identity

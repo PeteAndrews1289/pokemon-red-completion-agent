@@ -80,6 +80,20 @@ opponent status in that local receipt, records it publicly, and retains the imme
 requiring full HP, clear status, and restored PP before Giovanni. Seed 990004 is retired; the next
 emulator qualification must use fresh seed 990005.
 
+Seed 990005 then completed **312/312 checkpoints**, **36/36 objectives**, Champion, and Hall of Fame
+from clean power. Its authenticated artifact contains 3,166 labels and 13 explicit switch targets;
+the team completed 1,808 development battles and reached 60/55/55/55/55/55. The first frozen target
+head scored 11/13 on this lineage, beating the deterministic resolver's 9/13 but repeating one
+Bruno miss and the Agatha Golbat miss. After that result was recorded, the lineage was explicitly
+opened for development rather than relabeled as an untouched test.
+
+The second target candidate gives each battle plan equal total loss weight so a seven-switch timing
+trace cannot dominate a two-switch trace, and reduces L2 from 0.03 to 0.003. With no identity added
+to model inputs, the selected two-unit model scores 54/54 across the four opened
+leave-one-whole-lineage-out folds, fits 41/41 development targets, and scores 13/13 on the existing
+whole-lineage validation set. Because those settings were selected after opening all four lineages,
+deployment authority remains false. Fresh seed 990006 is the one-time unopened test.
+
 ## Capability scorecard
 
 | Capability | Rating | Evidence and boundary |
@@ -87,7 +101,7 @@ emulator qualification must use fresh seed 990005.
 | Deterministic Red teacher/referee | 9/10 | Repeated clean-power 312/312, 36/36, Hall-of-Fame runs with strict chapter contracts. This is an expert oracle, not learned autonomy. |
 | Experiment integrity | 9/10 | Source/model/root hashes, whole-lineage splits, private artifact boundaries, preserved failures, one-attempt accounting, and 0/10 counted roots consumed. |
 | Learned battle moves | 7/10 | A nonlinear ranker has prior live completion evidence, but the current reserve-controller causal lane keeps ordinary moves teacher-gated. The combined teacher-free stack remains unqualified. |
-| Learned high-level battle control | 7/10 | Strong held-out class balance and causal progress through Rock Tunnel, Lorelei, Bruno, and Agatha; switch timing is learned but target binding is not yet qualified. |
+| Learned high-level battle control | 7/10 | Strong held-out class balance, causal progress through Agatha, and 54/54 target accuracy across opened whole-lineage folds; seed 990006 and runtime target authority remain. |
 | Learned objective selection | 6/10 | Clean start selects registered composite goals from semantic state, but most candidate sets are singleton and fixed authored skills perform the mechanics. |
 | Learned trainee/venue strategy | 7/10 | The identity-free candidate ranker beat its shape baseline and completed a clean-power curriculum with real disagreements. It remains Red-only evidence. |
 | Navigation and menu autonomy | 3/10 | Reusable local planning exists, but the completion path is still dominated by authored chapter routes and menu executors. |
@@ -98,7 +112,7 @@ emulator qualification must use fresh seed 990005.
 ## Code and test health
 
 - 122 source modules and 131 test modules cover roughly 87,000 source lines and 51,000 test lines.
-- The current full gate passes **2,107 tests** with 3 emulator-integration tests deselected, plus
+- The current full gate passes **2,110 tests** with 3 emulator-integration tests deselected, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.
 - The repository is evidence-rich but too large for its current capability surface. Route chapters,

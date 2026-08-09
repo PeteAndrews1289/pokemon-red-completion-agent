@@ -25,6 +25,13 @@
   then corrected a Viridian trainer receipt that misclassified legal opponent-inflicted poison as
   a controlled-policy failure. The exact party, move, survival, pre-Giovanni recovery, and terminal
   status gates remain strict; all 3,123 partial labels from the stopped run remain excluded.
+- Completed a fourth feature-v3 teacher lineage through 312/312 checkpoints and Hall of Fame with
+  3,166 labels, 13 explicit switch targets, and 1,808 balanced-development battles; it independently
+  qualified the Route 11 and Viridian status repairs.
+- Evaluated the first frozen switch-target head once on that lineage at 11/13 versus the
+  deterministic resolver's 9/13, then explicitly opened the result for development. Added
+  equal-total battle-plan loss weighting and selected L2 0.003, reaching 54/54 across four opened
+  leave-one-lineage-out folds and freezing seed 990006 as the next unopened test.
 - Added the August 9 capability audit and expanded the project and video narratives around the
   distinction between offline agreement, causal high-level authority, typed intent enforcement,
   and combined teacher-free play.

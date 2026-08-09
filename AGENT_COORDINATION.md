@@ -1,20 +1,15 @@
 # Three-agent coordination
 
-> **2026-08-09 active lane:** three complete feature-v3 teacher lineages and a stronger high-level
-> controller exist. Causal attempt 13 passed Rock Tunnel, Lorelei, Bruno, Agatha setup, status
-> safety, real residency, and exactly three role switches, then failed because the model selected
-> `switch` while the deterministic target resolver selected Blastoise instead of Jolteon for
-> Golbat. Commit `93faeed` adds a permutation-equivariant offline target head. It improves the
-> untouched lineage from 10/13 to 11/13 targets but still misses that exact Golbat choice, so it has
-> no deployment authority. The active work is additional complete timing/RNG-varied teacher
-> lineages, followed by a preassigned target train/validation/test gate. Do not rerun the full
-> causal route, tune the heuristic on the failed case, build a complete Crystal route, relax the
-> verifier, or consume a counted v95 root. Timing seeds `990003` and `990004` are retired and their
-> partial labels are excluded. Seed `990004` qualified the Route 11 sleep repair, completed balanced
-> development and Blaine, then exposed an overstrict Viridian trainer receipt when the opponent
-> legally inflicted poison. The receipt now evaluates controlled party/move/survival outcomes while
-> the immediate Center recovery remains mandatory and status-free. Use fresh seed `990005` only
-> after the repair is committed, pushed, and fully gated. Counted status remains 0/10. See the
+> **2026-08-09 active lane:** four complete feature-v3 teacher lineages and a stronger high-level
+> controller exist. Causal attempt 13 isolated the remaining learned-target gap after passing Rock
+> Tunnel, Lorelei, Bruno, Agatha setup, status, residency, and switch-count gates. Seed `990005`
+> later completed 312/312 and supplied the fourth lineage while independently qualifying the Route
+> 11 and Viridian repairs. The first frozen target head scored 11/13 on it versus the baseline's
+> 9/13. Plan-balanced training with L2 0.003 then reached 54/54 across all four opened
+> leave-one-lineage-out folds and 13/13 on the existing validation lineage. Freeze those settings;
+> after commit/push, seed `990006` is the unopened test. Do not tune on its outcome, add it to
+> fitting before recording the test, rerun retired seeds `990003`–`990005`, build a complete Crystal
+> route, relax the verifier, or consume a counted v95 root. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).
 
 **New here? Read [HANDOFF.md](HANDOFF.md) first** — it is the complete orientation, including what
@@ -354,20 +349,20 @@ arguments where it takes four, and a typed progress sink called with `None`.
 Each cost a 25-minute emulator run to discover. A type checker reports them in
 seconds, and the neutral layer is now covered.
 
-Current state: **2,107 passed, 3 deselected**, all checks green, on trunk
+Current state: **2,110 passed, 3 deselected**, all checks green, on trunk
 `agent/balanced-team-curriculum`.
 
 ## Open work, in priority order
 
 These are ordered by how much they serve the mission, not by difficulty.
 
-**1. Collect more explicit switch-target data. (Lane A/C)** Run additional complete,
-timing/RNG-varied v3 teacher lineages, with deliberate late-game Bruno and Agatha coverage. Assign
-whole lineages to train, validation, and unopened test before fitting. Test party-order permutations
-offline; do not use counted v95 roots.
+**1. Run the frozen unopened target test. (Lane A/C)** After the exact source is committed, pushed,
+and fully gated, collect seed `990006` once. Evaluate the frozen two-unit, plan-balanced, L2 0.003
+candidate before any reuse of that lineage. Do not use counted v95 roots.
 
-**2. Qualify the target head offline. (Lane B/C)** Beat the deterministic target baseline, preserve
-reserve-permutation equivariance, pass counterfactual matchup tests, and select Jolteon for the
+**2. Qualify the target head offline. (Lane B/C)** Beat the deterministic target baseline on seed
+990006, preserve reserve-permutation equivariance, pass counterfactual matchup tests, and select
+Jolteon for the
 held-out Agatha Golbat role. A switch-class score without target accuracy does not count.
 
 **3. Bind learned target choice to execution. (Lane A/B)** Load the exact authenticated candidate,

@@ -49,6 +49,26 @@ trainee/venue choice. A complete YouTube playthrough is valuable for the route g
 and corner cases; synchronized emulator observations and controller actions are still required for
 actual behavioral labels.
 
+The next clean-power lineage closed two infrastructure loops at once. Seed 990005 completed all
+312 checkpoints and 36 objectives through Hall of Fame, produced 3,166 authenticated high-level
+labels, and developed the final-form team through 1,808 battles to 60/55/55/55/55/55. It passed
+the venue-scoped Route 11 sleep allowance and the corrected Viridian receipt that separates legal
+opponent-inflicted status from the actor's controlled decisions.
+
+The frozen first target head was evaluated once before that lineage was reused: 11/13 targets,
+versus 9/13 for the deterministic resolver. It repeated one Bruno transition and Agatha's
+Golbat-to-Jolteon error. The result was recorded, then explicitly opened as development evidence.
+Analysis found that timing variation changed the number of switches per battle plan from two to
+seven, so an ordinary per-row loss let longer scripts dominate the target lesson. Equalizing total
+loss weight per battle plan and reducing L2 from 0.03 to 0.003 produced a two-unit candidate with
+54/54 accuracy across four leave-one-whole-lineage-out folds, 41/41 on the selected training split,
+and 13/13 on the existing validation lineage. No identity entered the model vector.
+
+That apparent 100% is intentionally not the conclusion. The weighting and regularization were
+chosen after all four lineages were visible. Seed 990006 is therefore frozen as a one-time unopened
+test. Even a perfect offline result only authorizes the next engineering step—an authenticated
+target artifact and live binding—before a causal full-game replay can claim learned target control.
+
 ## August 8: the evaluator rejected a win—and found the next real model gap
 
 The clean-start evaluation lane is no longer a proposal. A portable player now boots from power-on,

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from collections import Counter
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
@@ -165,7 +166,7 @@ class BattleSwitchTargetMLP:
         hidden_units: int = 2,
         epochs: int = 1000,
         learning_rate: float = 0.01,
-        l2: float = 0.03,
+        l2: float = 0.003,
         seed: int = 0,
     ) -> BattleSwitchTargetMLP:
         rows = tuple(examples)
@@ -197,6 +198,7 @@ class BattleSwitchTargetMLP:
         mean = np.mean(all_features, axis=0)
         scale = np.std(all_features, axis=0)
         scale[scale < 1e-8] = 1.0
+        sample_weights = _plan_balanced_weights(rows)
         random = np.random.default_rng(seed)
         weights1 = random.normal(
             0.0,
@@ -210,7 +212,7 @@ class BattleSwitchTargetMLP:
         second = [np.zeros_like(value) for value in parameters]
         for epoch in range(1, epochs + 1):
             gradients = [np.zeros_like(value) for value in parameters]
-            for row in rows:
+            for row, sample_weight in zip(rows, sample_weights, strict=True):
                 features = np.asarray(
                     [candidate.features for candidate in row.observation.candidates],
                     dtype=np.float64,
@@ -221,11 +223,11 @@ class BattleSwitchTargetMLP:
                 probabilities = np.exp(logits - np.max(logits))
                 probabilities /= np.sum(probabilities)
                 probabilities[row.selected_candidate_index] -= 1.0
-                gradients[2] += hidden.T @ probabilities
+                gradients[2] += sample_weight * (hidden.T @ probabilities)
                 hidden_gradient = probabilities[:, None] * weights2[None, :]
                 hidden_gradient *= 1.0 - hidden * hidden
-                gradients[0] += normalized.T @ hidden_gradient
-                gradients[1] += np.sum(hidden_gradient, axis=0)
+                gradients[0] += sample_weight * (normalized.T @ hidden_gradient)
+                gradients[1] += sample_weight * np.sum(hidden_gradient, axis=0)
             gradients[0] = gradients[0] / len(rows) + l2 * weights1
             gradients[1] /= len(rows)
             gradients[2] = gradients[2] / len(rows) + l2 * weights2
@@ -242,6 +244,31 @@ class BattleSwitchTargetMLP:
                     np.sqrt(corrected_second) + 1e-8
                 )
         return cls(weights1, bias1, weights2, mean, scale, seed)
+
+
+def _plan_balanced_weights(
+    examples: Iterable[BattleSwitchTargetExample],
+) -> NDArray[np.float64]:
+    """Give every represented battle plan equal total optimization weight.
+
+    Timing variation can produce two switches in one late-game plan and seven
+    in another.  Treating every recorded switch as an independent equal vote
+    makes the longer trace dominate even though both are one complete lesson.
+    Plan identity is used only to weight training examples; it never enters a
+    candidate feature vector or live model input.
+    """
+
+    rows = tuple(examples)
+    if not rows:
+        raise BattleSwitchTargetModelError("switch target weighting requires examples")
+    counts = Counter(row.battle_plan_id for row in rows)
+    weights = np.asarray(
+        [1.0 / counts[row.battle_plan_id] for row in rows],
+        dtype=np.float64,
+    )
+    weights *= len(rows) / float(np.sum(weights))
+    weights.setflags(write=False)
+    return weights
 
 
 def evaluate_switch_target_model(

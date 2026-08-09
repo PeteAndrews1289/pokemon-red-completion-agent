@@ -11,6 +11,7 @@ from pokemon_red_completion.battle_switch_target import (
 )
 from pokemon_red_completion.battle_switch_target_model import (
     BattleSwitchTargetMLP,
+    _plan_balanced_weights,
     evaluate_switch_target_model,
 )
 from pokemon_red_completion.red_battle_catalog import (
@@ -138,3 +139,20 @@ def test_small_ranker_fits_candidate_relative_choices_and_round_trips() -> None:
     assert metrics.accuracy == 1.0
     assert restored.predict_party_slot(examples[0].observation) == 2
     assert dict(metrics.battle_plan_accuracy) == {"battle-0": 1.0, "battle-1": 1.0}
+
+
+def test_plan_balanced_weights_prevent_long_trace_from_dominating() -> None:
+    examples = tuple(
+        BattleSwitchTargetExample(
+            observation=BattleSwitchTargetSet((_candidate(0.1, 1), _candidate(0.9, 2))),
+            selected_candidate_index=1,
+            battle_plan_id="long-plan" if index < 3 else "short-plan",
+            decision_index=index + 1,
+        )
+        for index in range(4)
+    )
+
+    weights = _plan_balanced_weights(examples)
+
+    assert np.mean(weights) == 1.0
+    assert np.sum(weights[:3]) == np.sum(weights[3:])
