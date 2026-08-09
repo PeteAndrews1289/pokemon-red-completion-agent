@@ -135,6 +135,28 @@ PEWTER_TO_GYM_DIRECTIONS = (
     *(("right",) * 6),
     "up",
 )
+PEWTER_TO_CENTER_DIRECTIONS = (
+    *(("up",) * 13),
+    "right",
+    *(("up",) * 9),
+    *(("down",) * 13),
+    *(("left",) * 6),
+    "up",
+)
+PEWTER_CENTER_HEAL_APPROACH_DIRECTIONS = ("up",) * 4
+PEWTER_CENTER_EXIT_DIRECTIONS = ("down",) * 5
+PEWTER_CENTER_TO_GYM_DIRECTIONS = (
+    *(("right",) * 3),
+    *(("up",) * 4),
+    *(("right",) * 3),
+    *(("up",) * 10),
+    *(("left",) * 8),
+    *(("down",) * 3),
+    "left",
+    *(("down",) * 2),
+    *(("right",) * 6),
+    "up",
+)
 GYM_TO_BROCK_DIRECTIONS = (
     *(("up",) * 5),
     *(("left",) * 3),
@@ -195,6 +217,7 @@ class PewterTiming:
     max_forest_wild_flees: int = 12
     max_forest_step_attempts: int = 8
     max_forest_target_search_cycles: int = 64
+    heal_dialogue_pulses: int = 9
 
     def __post_init__(self) -> None:
         for name, value in (
@@ -230,6 +253,7 @@ class PewterChapterReport:
     forest_entered: RawGameState
     forest_cleared: RawGameState
     pewter_reached: RawGameState
+    pewter_center_healed: RawGameState
     gym_entered: RawGameState
     brock_battle: RawGameState
     brock_defeated: RawGameState
@@ -262,6 +286,7 @@ class PewterChapterReport:
                 if boundary is not TravelBoundary.UNKNOWN
             )
             and self.gym_entry_evidence.brock_ready_snapshot
+            and _is_healed_brock_party(self.pewter_center_healed)
             and self.saw_brock_battle
             and all(item.verified for item in self.route_1_wild_flees)
             and self.route_1_movement_retries >= 0
@@ -330,6 +355,9 @@ class PewterChapterReport:
                 "forest_training_species_ids": list(self.forest_training_species_ids),
             },
             "brock": {
+                "pre_battle_healing_verified": _is_healed_brock_party(
+                    self.pewter_center_healed
+                ),
                 "victory_verified": self.brock_victory_evidence.brock_victory_snapshot,
                 "boulder_badge_verified": (
                     self.brock_victory_evidence.boulder_badge
@@ -633,7 +661,13 @@ def run_pewter_chapter(
         timing=timing,
         label="Viridian Forest Bug Catcher",
     )
-    _expect_brock_party_ready(reader.read(), "Viridian Forest exit")
+    _expect_party(
+        reader.read(),
+        level=9,
+        minimum_hp=1,
+        required_move=BUBBLE_MOVE_ID,
+        label="Viridian Forest exit",
+    )
 
     _, more_flees, more_retries = _move_forest_with_wild_flees(
         chapter_executor,
@@ -712,8 +746,27 @@ def run_pewter_chapter(
     )
     _emit(progress, emulator, "pewter_reached", "Reached Pewter City", 7)
 
-    _move(chapter_executor, reader, PEWTER_TO_GYM_DIRECTIONS, "Pewter Gym route")
+    _move(
+        chapter_executor,
+        reader,
+        PEWTER_TO_CENTER_DIRECTIONS,
+        "Pewter Center route",
+    )
     _wait(chapter_executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.PEWTER_POKECENTER, 3, 7, "Pewter Center")
+    pewter_center_healed = _heal_pewter_center(
+        chapter_executor,
+        reader,
+        timing,
+    )
+    _move(
+        chapter_executor,
+        reader,
+        PEWTER_CENTER_TO_GYM_DIRECTIONS,
+        "Pewter Center to Gym route",
+    )
+    _wait(chapter_executor, timing.transition_wait_frames)
+    _expect_brock_party_ready(reader.read(), "Pewter Gym entrance")
     gym_entered, gym_entry_evidence = _observe_boundary(
         reader,
         tracker,
@@ -781,6 +834,7 @@ def run_pewter_chapter(
         forest_entered=forest_entered,
         forest_cleared=forest_cleared,
         pewter_reached=pewter_reached,
+        pewter_center_healed=pewter_center_healed,
         gym_entered=gym_entered,
         brock_battle=brock_battle,
         brock_defeated=brock_defeated,
@@ -1273,6 +1327,50 @@ def _expect_brock_party_ready(raw: RawGameState, label: str) -> None:
         or bubble_pp < 4
     ):
         raise PewterChapterError(f"{label} failed the Brock-readiness party gate.")
+
+
+def _is_healed_brock_party(raw: RawGameState) -> bool:
+    pp = tuple(value & 0x3F for value in (raw.first_party_pp or ()))
+    learned_pp = tuple(
+        value
+        for move, value in zip(raw.first_party_moves or (), pp, strict=False)
+        if move
+    )
+    return (
+        raw.map_id == MapId.PEWTER_POKECENTER
+        and raw.battle_state == 0
+        and raw.party_count == 1
+        and raw.first_party_level == 9
+        and raw.first_party_hp is not None
+        and raw.first_party_hp == raw.first_party_max_hp
+        and raw.first_party_status == 0
+        and BUBBLE_MOVE_ID in set(raw.first_party_moves or ())
+        and bool(learned_pp)
+        and all(value > 0 for value in learned_pp)
+    )
+
+
+def _heal_pewter_center(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: PewterTiming,
+) -> RawGameState:
+    _expect_position(reader.read(), MapId.PEWTER_POKECENTER, 3, 7, "Pewter Center")
+    _move(
+        executor,
+        reader,
+        PEWTER_CENTER_HEAL_APPROACH_DIRECTIONS,
+        "Pewter Center nurse",
+    )
+    for _ in range(timing.heal_dialogue_pulses):
+        executor.execute(MacroAction(MacroActionKind.CONFIRM))
+        _wait(executor, timing.dialogue_wait_frames)
+    healed = reader.read()
+    if not _is_healed_brock_party(healed):
+        raise PewterChapterError("Pewter Center failed its persistent healing gate.")
+    _move(executor, reader, PEWTER_CENTER_EXIT_DIRECTIONS, "Pewter Center exit")
+    _wait(executor, timing.transition_wait_frames)
+    return healed
 
 
 def _move_pp(raw: RawGameState, move_id: int) -> int | None:

@@ -1,0 +1,49 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_perturbation_with_unrecovered_brock_resources",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990026 passed the repaired front end, Route 1, Route 2, all three species-authenticated Kakuna lessons, and the mandatory Forest trainer before the post-Forest Brock-readiness gate failed. No learned battle or training decision occurred.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990026,
+    "initial_wait_frames": 215,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "ffd40e598b7f28e7f038785c21abe035ee5c31588d946e3a71f86eabd58f6d9c"
+  },
+  "source": {
+    "git_commit": "8efd140184b698e6af5eb34c4d72ca9bc2192708",
+    "worktree_dirty": false
+  },
+  "raw_report_sha256": "31136e702e40281a0797409620ca54c6b0cd3f2661fdc4af3d5940991dcc8310",
+  "failure": {
+    "stage": "objective_loop_execution",
+    "exception_type": "PewterChapterError",
+    "message": "Viridian Forest exit failed the Brock-readiness party gate.",
+    "frames_executed": 158394,
+    "objective_decisions": 1,
+    "objectives_completed": 0,
+    "battle_schedule_entries_consumed": 0,
+    "battle_model_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "diagnosis": {
+    "category": "required_resource_boundary_without_a_recovery_mechanic",
+    "finding": "The authored Forest curriculum proved level 9, a living lead, Bubble, three exact Kakuna victories, and the required Bug Catcher victory, but then demanded at least 19 HP and four Bubble PP without visiting a healer. Legal battle variance can consume HP or PP. The v1 failure report did not expose which scalar missed the aggregate gate, so the repair addresses both resources rather than weakening either requirement.",
+    "model_boundary": "The failure remained inside the authored first composite. Objective selection made one singleton choice; all learned battle, target, and training counters were zero."
+  },
+  "repair": {
+    "status": "implemented_and_rom_free_qualified_pending_live_causal_replay",
+    "behavior": "The Forest exit still requires the exact level-9 living Squirtle and Bubble lesson. After reaching Pewter, the teacher follows a finite source-stable route to the Pokémon Center, proves full HP, clear status, and positive PP for every learned move, exits, and follows a finite route to the Gym. The existing Brock gate is applied again at the Gym entrance; no training or battle requirement is relaxed.",
+    "bounds": {
+      "center_route_inputs": 43,
+      "nurse_approach_inputs": 4,
+      "heal_dialogue_pulses": 9,
+      "center_exit_inputs": 5,
+      "center_to_gym_inputs": 41
+    },
+    "rom_free_gate": "Public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,187 tests passed; three integration tests were deselected and one expected failure remained expected.",
+    "next_gate": "Complete the full ROM-free gate, commit and push the repair, then replay the failed seed causally before assigning a fresh uncounted derived-timing root. Counted v95 remains unopened."
+  }
+}

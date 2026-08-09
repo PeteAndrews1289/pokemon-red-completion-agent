@@ -18,7 +18,7 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
-**Late audit and runtime checkpoint:** the full repository gate now passes **2,168 tests with 3
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,187 tests with 3
 integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
 public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
 errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
@@ -136,6 +136,12 @@ The [ninth perturbation failure](docs/evidence/portable-clean-start-six-role-per
 preserves the fixed-RNG, unverified-species lesson counterexample.
 The [tenth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-10-failure-2026-08-09.json)
 preserves the duplicated Route 1 youngster-collision counterexample.
+The [eleventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json)
+preserves the missing post-Forest recovery mechanic. Seed `990026` passed the walker and every
+Forest lesson, then failed the aggregate Brock-ready HP/PP gate at 158,394 frames. The repair keeps
+the level-9/Bubble exit requirement, visits the Pewter Center, proves full HP, clear status, and
+restored learned-move PP, and reapplies the Brock gate at the Gym. Its complete ROM-free gate is
+green at 2,187 tests; push before replay. Counted v95 remains 0/10.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the
 source of the passed canonical receipt and `4f5f870` qualified the lab-rival repair through the next
@@ -148,8 +154,10 @@ front-end timing counterexample; `3f11647` qualified the bounded bedroom recover
 encounter. Cumulative Forest/Route 2 flee evidence, report fields, and the regenerated v95 registry
 were qualified at `26fd5e6`, which supplied the `990024` lesson-trigger counterexample. Bounded
 semantic Kakuna search was qualified at `e579e76`, which supplied the `990025` walker
-counterexample. The shared exact-gate yield maneuver and its regenerated v95 registry are the
-current uncommitted lane. Their full local gate is green; they need a clean push before replay.
+counterexample. The shared exact-gate yield maneuver was qualified at `8efd140`, which supplied the
+`990026` resource counterexample. The Pewter Center recovery, public evidence, and regenerated v95
+registry are the current uncommitted lane. Their full local gate is green; they need a clean push
+before causal replay.
 Only Codex
 pushes this branch; do not create a second worktree or force-push it.
 

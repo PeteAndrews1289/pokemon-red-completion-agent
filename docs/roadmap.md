@@ -135,6 +135,15 @@ controller. Only that exact gate may step east, wait under 24 attempts, restore,
 each sub-step retains the shared flee receipt. Regenerate, qualify, push, and use a fresh root; v95
 remains 0/10.
 
+Seed `990026` qualified the shared walker and completed all three exact Kakuna lessons plus the
+mandatory Bug Catcher, then failed the aggregate Brock-readiness resource gate. The chapter had no
+mechanic capable of restoring the HP and PP it required. The repair keeps the level-9 living-lead
+and Bubble lesson at the Forest exit, routes through the Pewter Center, proves full HP, clear status,
+and positive PP for every learned move, then reapplies the Brock gate at the Gym. The
+[eleventh perturbation failure](evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json)
+is preserved; the full 2,187-test ROM-free gate passes and a clean causal replay is next. Counted
+v95 remains 0/10.
+
 Seed `990024` qualified incidental Forest travel but the fixed first-Kakuna frame wait produced no
 battle. The [ninth perturbation failure](evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json)
 is preserved. Each lesson now semantically seeks observed Kakuna `0x71` under a 64-cycle bound,

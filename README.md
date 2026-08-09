@@ -169,6 +169,12 @@ remained blocked through eight retries. The shared traversal now recognizes only
 steps east, waits under a 24-attempt bound, restores the approach, and proves the north crossing;
 every sub-step retains the incidental-wild receipt. See the
 [tenth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-10-failure-2026-08-09.json).
+Seed `990026` passed that crossing and every species-authenticated Forest lesson, then failed the
+Brock-readiness resource gate after the mandatory Bug Catcher. The route demanded HP and Bubble-PP
+reserves without supplying a recovery mechanic. It now preserves the level-9/Bubble Forest lesson,
+visits the Pewter Center, proves full HP, clear status, and restored learned-move PP, and reapplies
+the unchanged Brock gate at the Gym; see the
+[eleventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95
 reliability campaign remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.

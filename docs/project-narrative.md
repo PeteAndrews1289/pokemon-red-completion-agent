@@ -2339,6 +2339,13 @@ retried. The shared traversal now recognizes that exact mechanic and carries its
 through every sub-step. Robustness also means consolidating knowledge instead of relearning it in
 each chapter.
 
+The following root finally passed that crossing and every authored Forest lesson, only to fail at
+the Brock-readiness resource gate. The teacher required a healthy lead and Bubble reserve but had
+no recovery action between the variable-damage curriculum and the Gym. The repair preserves the
+level-9 and move lesson, visits the Pewter Center, proves full health, clear status, and restored PP,
+and reapplies the same readiness contract at the Gym. It is a small but important distinction:
+declaring a safe precondition does not teach the agent how to establish it.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

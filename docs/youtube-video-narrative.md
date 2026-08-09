@@ -207,6 +207,11 @@ Use `990025` as the callback: the youngster collision was already solved elsewhe
 repository. Overlay the duplicate early and collection routes, then merge them into one exact-gate
 primitive. Caption it: **“A system only learns when its fixes become shared knowledge.”**
 
+Then let `990026` reach the Forest exit with every lesson complete and fail a resource gate. Put the
+requirement on screen—HP and Bubble PP—beside the missing recovery action. Route through the Pewter
+Center, verify the healed state, and keep the original Gym gate unchanged. Caption it:
+**“A requirement is not a plan.”**
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

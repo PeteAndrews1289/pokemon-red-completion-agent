@@ -27,7 +27,9 @@ from pokemon_red_completion.pewter import (
     FOREST_ROUTE_DIRECTIONS,
     GYM_TO_BROCK_DIRECTIONS,
     LAB_TO_PALLET_DIRECTIONS,
+    PEWTER_CENTER_TO_GYM_DIRECTIONS,
     PEWTER_CHECKPOINT_COUNT,
+    PEWTER_TO_CENTER_DIRECTIONS,
     PEWTER_TO_GYM_DIRECTIONS,
     ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
     ROUTE_2_TO_FOREST_GATE_DIRECTIONS,
@@ -185,6 +187,7 @@ def _report() -> PewterChapterReport:
         forest_entered=_raw(MapId.VIRIDIAN_FOREST, 17, 47, level=6, max_hp=21),
         forest_cleared=_raw(MapId.VIRIDIAN_FOREST_NORTH_GATE, 4, 7),
         pewter_reached=_raw(MapId.PEWTER_CITY, 18, 35),
+        pewter_center_healed=_raw(MapId.PEWTER_POKECENTER, 3, 3, hp=27),
         gym_entered=_raw(MapId.PEWTER_GYM, 4, 13),
         brock_battle=_raw(MapId.PEWTER_GYM, 4, 2, battle_state=2),
         brock_defeated=_raw(
@@ -232,6 +235,8 @@ def test_pewter_route_is_source_stable_at_critical_segments() -> None:
         "up",
     )
     assert len(PEWTER_TO_GYM_DIRECTIONS) == 44
+    assert len(PEWTER_TO_CENTER_DIRECTIONS) == 43
+    assert len(PEWTER_CENTER_TO_GYM_DIRECTIONS) == 41
     assert len(GYM_TO_BROCK_DIRECTIONS) == 17
 
 
@@ -344,6 +349,7 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         "forest_training_species_ids": [0x71, 0x71, 0x71],
     }
     assert public["brock"] == {
+        "pre_battle_healing_verified": True,
         "victory_verified": True,
         "boulder_badge_verified": True,
         "tm34_verified": True,
@@ -376,6 +382,12 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         {"reached_boundaries": tuple(TravelBoundary)[1:-1]},
         {"forest_target_search_attempts": (1, 1)},
         {"forest_training_species_ids": (0x71, 0x71, 0x70)},
+        {
+            "pewter_center_healed": replace(
+                _report().pewter_center_healed,
+                first_party_hp=26,
+            )
+        },
         {"gym_entry_evidence": replace(_gym_ready(), first_party_hp=18)},
         {
             "brock_battle_evidence": replace(
