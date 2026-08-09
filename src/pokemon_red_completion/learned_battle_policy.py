@@ -515,6 +515,59 @@ class ModelAssistedBattlePolicy:
                 recovery_need=forced_recovery.recovery_need.value,
                 status=forced_recovery.status,
             )
+        required_boost = intent.required_boost_before_first_move
+        if required_boost is not None:
+            move_class_index = CONTROL_CLASS_REFS.index(
+                "pokemon.core:battle:select_move"
+            )
+            switch_class_index = CONTROL_CLASS_REFS.index(
+                "pokemon.core:battle:switch"
+            )
+            boost_ref = f"pokemon.core:battle:boost:{required_boost.value}"
+            boost_class_index = CONTROL_CLASS_REFS.index(boost_ref)
+            first_switch_is_available = (
+                predicted_ref == CONTROL_CLASS_REFS[switch_class_index]
+                and history.action_counts[switch_class_index] == 0
+            )
+            recovery_is_available = predicted_ref == CONTROL_CLASS_REFS[1]
+            required_boost_is_selected = predicted_ref == boost_ref
+            if (
+                history.action_counts[move_class_index] == 0
+                and history.action_counts[boost_class_index] == 0
+                and not first_switch_is_available
+                and not recovery_is_available
+                and not required_boost_is_selected
+            ):
+                predicted_action = (
+                    BattleAction.move(predicted_slot)
+                    if predicted_ref == CONTROL_CLASS_REFS[0]
+                    else action_from_control_class_ref(predicted_ref)
+                )
+                intent_mask = "required_boost_before_first_move_mask"
+                self.control_target_resolution_failures[intent_mask] += 1
+                self.control_last_intent_mask = _control_intent_mask_context(
+                    observation,
+                    predicted_action,
+                    history=history,
+                    reason=intent_mask,
+                )
+                forced_boost = BattleAction.boost(required_boost)
+                try:
+                    resolve_battle_action_target(
+                        forced_boost,
+                        encoded,
+                        catalog=getattr(self.projector, "catalog", None),
+                    )
+                except BattleActionTargetError as error:
+                    raise LearnedBattlePolicyError(
+                        "intent-forced pre-move boost lacks an observable resource"
+                    ) from error
+                self.control_execution_decisions += 1
+                self.control_execution_requests += 1
+                self.control_safety_fallbacks += 1
+                self.control_intent_forced_requests += 1
+                self._record_control_action(observation, forced_boost)
+                raise LearnedBattleControlRequest(forced_boost)
         if confidence < self.control_confidence_threshold:
             self.control_low_confidence_fallbacks += 1
             try:
@@ -896,7 +949,9 @@ def _control_action_intent_mask(
             return "initial_switch_residency_mask"
         if (
             intent.require_move_between_switches
-            and history.previous_class_index == class_index
+            and history.action_counts[class_index] > 0
+            and history.action_counts[move_class_index]
+            <= history.move_count_at_last_switch
         ):
             return "switch_residency_mask"
     return None
@@ -931,6 +986,7 @@ def _control_intent_mask_context(
                 class_ref: history.action_counts[index]
                 for index, class_ref in enumerate(CONTROL_CLASS_REFS)
             },
+            "move_count_at_last_switch": history.move_count_at_last_switch,
         },
         "active": {
             "party_index": raw.active_party_index,

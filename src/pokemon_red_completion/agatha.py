@@ -344,6 +344,7 @@ def run_agatha_chapter(
         ),
         boost_capabilities=frozenset({BattleBoostStat.SPECIAL}),
         boost_use_limits=((BattleBoostStat.SPECIAL, AGATHA_X_SPECIAL_USE),),
+        required_boost_before_first_move=BattleBoostStat.SPECIAL,
         switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
         require_move_between_switches=True,
     )

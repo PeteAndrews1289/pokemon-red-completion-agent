@@ -8,6 +8,7 @@ import pytest
 
 from pokemon_red_completion.battle_actions import (
     BattleAction,
+    BattleActionKind,
     BattleBoostStat,
     BattleControlRequest,
     LearnedBattleControlRequest,
@@ -64,6 +65,7 @@ def _observation(
     boost_use_limits: tuple[tuple[BattleBoostStat, int], ...] = (),
     switch_capabilities: frozenset[BattleSwitchCapability] = frozenset(),
     switch_limit: int | None = None,
+    required_boost_before_first_move: BattleBoostStat | None = None,
     require_status_clear_before_move: bool = False,
     require_move_before_first_switch: bool = False,
     require_move_between_switches: bool = False,
@@ -94,6 +96,7 @@ def _observation(
             boost_use_limits=boost_use_limits,
             switch_capabilities=switch_capabilities,
             switch_limit=switch_limit,
+            required_boost_before_first_move=required_boost_before_first_move,
             require_status_clear_before_move=require_status_clear_before_move,
             require_move_before_first_switch=require_move_before_first_switch,
             require_move_between_switches=require_move_between_switches,
@@ -769,6 +772,7 @@ def test_control_execution_masks_boost_after_intent_budget_is_consumed() -> None
                 class_ref: int(class_ref == "pokemon.core:battle:boost:accuracy")
                 for class_ref in CONTROL_CLASS_REFS
             },
+            "move_count_at_last_switch": 0,
         },
         "active": {
             "party_index": None,
@@ -872,6 +876,71 @@ def test_control_execution_requires_move_residency_between_switches() -> None:
     assert isinstance(last_mask, dict)
     assert last_mask["reason"] == "switch_residency_mask"
     assert last_mask["predicted_action"] == "pokemon.core:battle:switch"
+
+
+def test_switch_residency_is_not_satisfied_by_a_recovery_action() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_full_control_model(5),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+    observation = _observation(
+        switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
+        require_move_between_switches=True,
+    )
+
+    with pytest.raises(LearnedBattleControlRequest):
+        policy.choose_move(observation, lambda: 1)
+    policy._record_control_action(observation, BattleAction.recovery())
+    assert policy.choose_move(observation, lambda: 1) == 3
+
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["target_resolution_failures"] == {
+        "switch_residency_mask": 1
+    }
+
+
+def test_control_execution_forces_setup_then_real_residency_move() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_full_control_model(5),
+        execute_control_model=True,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+    observation = _observation(
+        boost_capabilities=frozenset({BattleBoostStat.SPECIAL}),
+        boost_use_limits=((BattleBoostStat.SPECIAL, 1),),
+        required_boost_before_first_move=BattleBoostStat.SPECIAL,
+        switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
+        require_move_between_switches=True,
+    )
+
+    with pytest.raises(LearnedBattleControlRequest) as switched:
+        policy.choose_move(observation, lambda: 1)
+    assert switched.value.action.kind is BattleActionKind.SWITCH
+    with pytest.raises(LearnedBattleControlRequest) as boosted:
+        policy.choose_move(observation, lambda: 1)
+    assert boosted.value.action == BattleAction.boost(BattleBoostStat.SPECIAL)
+    assert policy.choose_move(observation, lambda: 1) == 3
+    with pytest.raises(LearnedBattleControlRequest) as switched_again:
+        policy.choose_move(observation, lambda: 1)
+    assert switched_again.value.action.kind is BattleActionKind.SWITCH
+
+    execution = policy.public_dict()["control_model_execution"]
+    assert isinstance(execution, dict)
+    assert execution["intent_forced_requests"] == 1
+    assert execution["target_resolution_failures"] == {
+        "required_boost_before_first_move_mask": 1,
+        "switch_residency_mask": 1,
+    }
 
 
 def test_control_execution_requires_move_before_first_switch() -> None:

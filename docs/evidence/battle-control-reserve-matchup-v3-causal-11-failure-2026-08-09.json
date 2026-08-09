@@ -1,0 +1,56 @@
+{
+  "schema": "pokemon-red-battle-control-v3-causal-failure-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "rejected_fail_closed",
+  "source_commit": "1d49516054a13a049921f9b1fc6a0b775aafdada",
+  "candidate": {
+    "artifact_id": "red-battle-control-model-980012a5698c4d9b93bb381d855ca2ba",
+    "manifest_sha256": "0cd3fb11f1387aee51c0c0056b2ee3be3edbda46620c0c75bda49eb6652e210a",
+    "model_sha256": "a9f9cb03be12225e728ed02983645df338de4a48f35541f1bdddafb9c422e0dc",
+    "private_path_published": false
+  },
+  "authority": {
+    "ordinary_move_selection": "authenticated_move_ranker_teacher_gated_on_every_path",
+    "high_level_battle_control": "model_authority_with_typed_intent_constraints",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "outcome": {
+    "verified_checkpoints": 306,
+    "total_checkpoints": 312,
+    "rock_tunnel_contract_passed": true,
+    "lorelei_defeated": true,
+    "lorelei_strict_contract_passed": true,
+    "bruno_defeated": true,
+    "bruno_strict_contract_passed": true,
+    "agatha_defeated": true,
+    "agatha_strict_contract_passed": false,
+    "agatha_recorded_attack_turns": 12,
+    "agatha_team_switches": 2,
+    "agatha_specialist_attack_turns": 0,
+    "agatha_x_specials_used": 0,
+    "game_complete": false,
+    "counted_campaign_root_consumed": false
+  },
+  "diagnosis": {
+    "status_clearance_repair_qualified": true,
+    "switch_residency_gap": "A recovery or boost between two switches satisfied the prior previous-action-only mask even though the new active member had not attacked.",
+    "setup_gap": "The typed maximum boost budget prevented overspending but did not express the plan's required pre-attack setup.",
+    "correct_abstraction": "Track the move count at the last switch and expose a bounded typed boost prerequisite before the first attack.",
+    "verifier_relaxed": false,
+    "failure_hidden_by_teacher": false
+  },
+  "repair": {
+    "direction": "Require a real move before a second switch regardless of intervening item actions, and force one observable declared setup boost before the first move while still permitting an initial role switch or recovery.",
+    "species_or_map_identity_added": false,
+    "increase_retry_budget": false,
+    "change_model_weights_after_validation": false,
+    "open_counted_root": false
+  },
+  "claim_scope": {
+    "causal_control_qualified": false,
+    "agatha_role_policy_qualified": false,
+    "candidate_retrained_after_failure": false,
+    "cross_game_transfer_complete": false
+  }
+}

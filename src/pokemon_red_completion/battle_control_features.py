@@ -98,6 +98,7 @@ class BattleControlHistory:
     opponent_turn: int = 0
     previous_class_index: int | None = None
     action_counts: tuple[int, ...] = (0,) * len(CONTROL_CLASS_REFS)
+    move_count_at_last_switch: int = 0
 
     def __post_init__(self) -> None:
         if any(
@@ -114,6 +115,12 @@ class BattleControlHistory:
             type(value) is not int or value < 0 for value in self.action_counts  # noqa: E721
         ):
             raise BattleControlFeatureError("control action counts are invalid")
+        if (
+            type(self.move_count_at_last_switch) is not int  # noqa: E721
+            or self.move_count_at_last_switch < 0
+            or self.move_count_at_last_switch > self.action_counts[0]
+        ):
+            raise BattleControlFeatureError("last-switch move count is invalid")
 
     def feature_values(self) -> tuple[float, ...]:
         previous = tuple(
@@ -170,6 +177,7 @@ class BattleControlHistoryTracker:
                 opponent_index=self.history.opponent_index + 1,
                 action_counts=self.history.action_counts,
                 previous_class_index=self.history.previous_class_index,
+                move_count_at_last_switch=self.history.move_count_at_last_switch,
             )
         return self.history
 
@@ -181,6 +189,10 @@ class BattleControlHistoryTracker:
         class_index = CONTROL_CLASS_REFS.index(control_class_ref(action))
         counts = list(self.history.action_counts)
         counts[class_index] += 1
+        switch_class_index = CONTROL_CLASS_REFS.index("pokemon.core:battle:switch")
+        move_count_at_last_switch = self.history.move_count_at_last_switch
+        if class_index == switch_class_index:
+            move_count_at_last_switch = counts[0]
         battle = _mapping(
             _mapping(observation.get("features"), "features").get("battle"),
             "battle",
@@ -195,6 +207,7 @@ class BattleControlHistoryTracker:
             opponent_turn=self.history.opponent_turn + 1,
             previous_class_index=class_index,
             action_counts=tuple(counts),
+            move_count_at_last_switch=move_count_at_last_switch,
         )
 
 

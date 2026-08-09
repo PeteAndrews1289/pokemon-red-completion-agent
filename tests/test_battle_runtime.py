@@ -407,6 +407,7 @@ def test_battle_intent_accepts_typed_action_budgets() -> None:
         TEST_BATTLE_PLAN_ID,
         boost_capabilities=frozenset({BattleBoostStat.ACCURACY}),
         boost_use_limits=((BattleBoostStat.ACCURACY, 1),),
+        required_boost_before_first_move=BattleBoostStat.ACCURACY,
         resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
         recovery_capabilities=frozenset({BattleRecoveryCapability.CURE_ANY_STATUS}),
         switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
@@ -417,6 +418,7 @@ def test_battle_intent_accepts_typed_action_budgets() -> None:
     )
 
     assert intent.boost_use_limits == ((BattleBoostStat.ACCURACY, 1),)
+    assert intent.required_boost_before_first_move is BattleBoostStat.ACCURACY
     assert intent.switch_limit == 2
     assert intent.require_status_clear_before_move is True
     assert intent.require_move_before_first_switch is True
@@ -429,6 +431,19 @@ def test_battle_intent_rejects_budget_without_matching_capability() -> None:
             "defeat_rival",
             TEST_BATTLE_PLAN_ID,
             boost_use_limits=((BattleBoostStat.ACCURACY, 1),),
+        )
+    with pytest.raises(ValueError, match="matching executor capability"):
+        BattleIntent(
+            "defeat_rival",
+            TEST_BATTLE_PLAN_ID,
+            required_boost_before_first_move=BattleBoostStat.ACCURACY,
+        )
+    with pytest.raises(ValueError, match="matching use budget"):
+        BattleIntent(
+            "defeat_rival",
+            TEST_BATTLE_PLAN_ID,
+            boost_capabilities=frozenset({BattleBoostStat.ACCURACY}),
+            required_boost_before_first_move=BattleBoostStat.ACCURACY,
         )
     with pytest.raises(ValueError, match="switch executor capability"):
         BattleIntent("defeat_rival", TEST_BATTLE_PLAN_ID, switch_limit=1)
