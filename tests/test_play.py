@@ -2208,6 +2208,66 @@ def test_route_1_traversal_rejects_wilds_beyond_its_declared_allowance() -> None
         )
 
 
+def test_route_1_traversal_flees_then_retries_an_unconsumed_encounter_step() -> None:
+    before = replace(
+        _raw(MapId.ROUTE_1, 10, 35),
+        first_party_hp=23,
+        first_party_max_hp=23,
+        first_party_pp=(35, 30, 0, 0),
+    )
+    encounter = replace(
+        before,
+        battle_state=1,
+        enemy_species_id=165,
+        enemy_level=3,
+    )
+    exited = replace(encounter, battle_state=0, battle_result=2)
+    terminal = replace(exited, player_y=34)
+
+    class _Reader:
+        state = before
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=3)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return InputReadiness(0, 0, 0, 0, 0)
+
+    reader = _Reader()
+
+    class _Executor:
+        move_attempts = 0
+
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.MOVE:
+                self.move_attempts += 1
+                reader.state = encounter if self.move_attempts == 1 else terminal
+            elif action.kind is MacroActionKind.CONFIRM and reader.state is encounter:
+                reader.state = exited
+            return object()
+
+    executor = _Executor()
+    observed, flees, movement_retries = _move_route_1_with_wild_flees(  # type: ignore[arg-type]
+        executor,
+        reader,  # type: ignore[arg-type]
+        ("up",),
+        "Route 1 unit route",
+        maximum_flees=1,
+        stabilization_frames=120,
+        maximum_step_attempts=8,
+        step_retry_wait_frames=24,
+    )
+
+    assert observed is terminal
+    assert len(flees) == 1
+    assert flees[0].verified
+    assert movement_retries == 1
+    assert executor.move_attempts == 2
+
+
 def test_route_1_traversal_retries_one_unconsumed_direction() -> None:
     before = replace(
         _raw(MapId.ROUTE_1, 10, 35),

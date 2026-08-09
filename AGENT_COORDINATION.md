@@ -17,6 +17,9 @@
 > short after five verified flees. Route 1 now acknowledges every step from directional coordinate
 > progress or a map transition and retries an unchanged safe boundary under a finite envelope.
 > The 2,167-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry checks passes. Commit,
+> `869e9a8` passed CI. Seed `990020` then triggered a wild at the unchanged pre-step tile; the
+> helper now authenticates and flees it, counts a movement retry, and reissues the same direction.
+> The 2,168-test ROM-free gate plus Ruff, mypy, docs, privacy, and registry checks passes. Commit,
 > push, then run a fresh uncounted perturbation. Do
 > not add `990007` to fitting, rerun retired model-test roots, build a complete Crystal route, weaken
 > the curriculum lesson, or consume a counted v95 root. Counted status remains 0/10. See the

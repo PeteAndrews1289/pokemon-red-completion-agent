@@ -12,10 +12,10 @@ evaluation gap is timing/RNG reliability.
 
 The present Red milestone is narrower and measurable: qualify the already-passed combined stack on
 a fresh derived-timing root. Canonical seed `990015` is terminal evidence; seeds `990016` through
-`990019` exposed four successive pre-model assumptions in the rival receipt, ordinary-wild
-handling, battle-exit input handoff, and open-loop movement acknowledgement. Each failure is
-preserved rather than rerun as a favorable root. The latest repair passed the full ROM-free gate
-and awaits a clean push and fresh perturbation.
+`990020` exposed five successive pre-model assumptions in the rival receipt, ordinary-wild
+handling, battle-exit input handoff, open-loop movement acknowledgement, and pre-step encounter
+semantics. Each failure is preserved rather than rerun as a favorable root. The latest repair
+passed the full ROM-free gate and awaits a clean push and fresh perturbation.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -210,6 +210,12 @@ requires directional progress or a map transition, retries an unchanged protecte
 finite eight-attempt/24-frame envelope, and publishes the retry count. See the
 [fourth perturbation failure](evidence/portable-clean-start-six-role-perturbation-04-failure-2026-08-09.json).
 
+Seed `990020` then began a legitimate wild battle at the unchanged `(14,14)` pre-step boundary.
+The movement verifier correctly refused to count northward progress, but initially rejected the
+encounter. The generalized helper proves the unchanged party and stats, authenticates the flee,
+counts one retry, and reissues the same direction under the existing ceiling. See the
+[fifth perturbation failure](evidence/portable-clean-start-six-role-perturbation-05-failure-2026-08-09.json).
+
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared
 gap calculation intersected Blue with itself. One canonical Generation I facts module now derives
@@ -236,7 +242,7 @@ silently acting at night.
 ## Code and test health
 
 - 128 source modules and 135 test modules cover roughly 88,500 source lines and 53,000 test lines.
-- The current full gate passes **2,167 tests** with 3 emulator-integration tests deselected and 1
+- The current full gate passes **2,168 tests** with 3 emulator-integration tests deselected and 1
   expected failure, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.
@@ -270,7 +276,7 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Regenerate, validate, commit, and push the shared closed-loop Route 1 movement repair.
+1. Commit and push the validated shared pre-step encounter retry repair.
 2. Run a fresh uncounted derived-timing seed with the exact combined artifact set. Preserve any
    next route or model defect without weakening its semantic contract.
 3. Only after that perturbation passes should v95's ten one-attempt roots open.

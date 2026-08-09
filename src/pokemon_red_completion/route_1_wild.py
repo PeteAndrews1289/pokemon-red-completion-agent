@@ -125,9 +125,10 @@ def move_route_1_with_wild_flees(
                     raise error_type(
                         f"Unexpected non-wild battle interrupted {label} at step {step}."
                     )
-                if not _direction_was_consumed(before, moved, direction):
+                consumed = _direction_was_consumed(before, moved, direction)
+                if not consumed and not _same_encounter_boundary(before, moved):
                     raise error_type(
-                        f"Route 1 wild battle did not consume {label} step {step}."
+                        f"Route 1 wild battle drifted before {label} step {step}."
                     )
                 if len(flees) >= maximum_flees:
                     raise error_type(
@@ -143,7 +144,17 @@ def move_route_1_with_wild_flees(
                     )
                 )
                 state = reader.read()
-                break
+                if consumed:
+                    break
+                if attempt == maximum_step_attempts:
+                    raise error_type(
+                        f"{label} step {step} exceeded its bounded "
+                        f"{maximum_step_attempts}-attempt movement allowance after a wild exit."
+                    )
+                movement_retries += 1
+                _wait(executor, step_retry_wait_frames)
+                state = reader.read()
+                continue
             if moved.first_party_hp == 0:
                 raise error_type(f"The active party member fainted during {label}.")
             if _direction_was_consumed(before, moved, direction):
@@ -200,6 +211,22 @@ def _same_route_boundary(before: RawGameState, after: RawGameState) -> bool:
         and before.first_party_pp == after.first_party_pp
         and before.first_party_status == after.first_party_status
         and before.first_party_hp == after.first_party_hp
+    )
+
+
+def _same_encounter_boundary(before: RawGameState, encounter: RawGameState) -> bool:
+    return (
+        before.map_id == encounter.map_id == MapId.ROUTE_1
+        and before.player_x == encounter.player_x
+        and before.player_y == encounter.player_y
+        and before.battle_state == 0
+        and encounter.battle_state == 1
+        and before.party_species_ids == encounter.party_species_ids
+        and before.first_party_level == encounter.first_party_level
+        and before.first_party_hp == encounter.first_party_hp
+        and before.first_party_max_hp == encounter.first_party_max_hp
+        and before.first_party_pp == encounter.first_party_pp
+        and before.first_party_status == encounter.first_party_status
     )
 
 

@@ -179,6 +179,10 @@ game never consumed. Replace the action counter with a closed loop: requested ar
 coordinate delta, acknowledgement. One bounded retry reaches Viridian. Caption it: **“Sending an
 action is not executing an action.”** This is also the cleanest visual bridge to learned navigation.
 
+Use `990020` as a brief coda: the north arrow triggers a battle while the coordinate stays fixed.
+Show two counters increment separately—**wild handled: +1; movement completed: +0**—then RUN and
+retry the same arrow. It makes the closed-loop idea visual without another long explanation.
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

@@ -2295,6 +2295,13 @@ step from state, retries only an otherwise unchanged protected boundary under a 
 and records retry counts. In other words, the teacher is becoming closed-loop at the same seams a
 future learned navigator will need; “I sent the button” is no longer evidence that the game moved.
 
+One seed later, the game demonstrated the other half of that contract: a wild battle can begin
+while the coordinate is still unchanged. The encounter is valid, but the intended movement is not
+complete. The generalized transition proves that the pre-step party boundary did not drift, runs
+away under the existing receipt, and retries the same direction. It spends both budgets honestly—
+one encounter and one movement retry—without claiming either that nothing happened or that the
+player advanced.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

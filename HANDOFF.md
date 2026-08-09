@@ -18,7 +18,7 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
-**Late audit and runtime checkpoint:** the full repository gate now passes **2,167 tests with 3
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,168 tests with 3
 integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
 public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
 errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
@@ -98,7 +98,12 @@ game did not consume. Direct reproduction reached Viridian with one coordinate-v
 shared traversal now requires directional coordinate progress or a map transition after every
 MOVE, waits 24 frames and retries an unchanged safe boundary at most eight times, and records the
 retry count. The full 2,167-test gate plus Ruff, mypy, docs, privacy, and registry checks passes;
-commit, push, then use a fresh perturbation. Counted v95 remains **0/10** and `990007`
+commit `869e9a8` passed that gate. Seed `990020` then produced a legitimate wild battle at Route 1
+`(14,14)` before the requested north step changed coordinates. That should consume a flee, not the
+step. The helper now accepts only an unchanged protected pre-step boundary, performs the same
+authenticated flee, counts one retry, and reissues the direction under the existing ceiling.
+The full 2,168-test gate plus Ruff, mypy, docs, privacy, and registry checks passes; commit, push,
+then use a fresh perturbation. Counted v95 remains **0/10** and `990007`
 remains test-only. See the
 [first failure](docs/evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json),
 the [second failure](docs/evidence/portable-clean-start-six-role-rehearsal-02-failure-2026-08-09.json),
@@ -110,14 +115,17 @@ the [second perturbation failure](docs/evidence/portable-clean-start-six-role-pe
 and the [third perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-03-failure-2026-08-09.json).
 The [fourth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-04-failure-2026-08-09.json)
 preserves the movement-acknowledgement counterexample.
+The [fifth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-05-failure-2026-08-09.json)
+preserves the pre-step encounter counterexample.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the
 source of the passed canonical receipt and `4f5f870` qualified the lab-rival repair through the next
 Route 1 boundary; `883be4f` qualified the first bounded-flee implementation and supplied the
 source for the preserved `990018` counterexample; `d3461f0` qualified stabilized shared exits and
-supplied the `990019` movement counterexample. Closed-loop step acknowledgement and its regenerated
-v95 registry are the current uncommitted lane. The full local gate is green; they need a clean push
-before replay. Only Codex
+supplied the `990019` movement counterexample; `869e9a8` qualified closed-loop movement and supplied
+the `990020` pre-step encounter. Retrying that authenticated encounter without consuming the step
+and its regenerated v95 registry are the current uncommitted lane. The full local gate is green;
+they need a clean push before replay. Only Codex
 pushes this branch; do not create a second worktree or force-push it.
 
 **Latest causal result:** attempt 13 ran from source `4ea7e93` with the frozen reserve-aware action

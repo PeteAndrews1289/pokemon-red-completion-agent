@@ -97,6 +97,15 @@ the retry count. The 2,167-test ROM-free gate plus Ruff, mypy, documentation, pu
 registry checks passes. A clean push and another fresh perturbation are the immediate gate; v95
 remains 0/10.
 
+Seed `990020` reached the closed-loop gate and produced a wild encounter at the unchanged pre-step
+coordinate. The verifier correctly refused to count the north movement but initially rejected the
+ordinary encounter. The
+[fifth perturbation failure](evidence/portable-clean-start-six-role-perturbation-05-failure-2026-08-09.json)
+is preserved. The helper now requires the unchanged party/level/HP/max-HP/PP/status boundary,
+performs the authenticated flee, counts a movement retry, and reissues the same direction under the
+existing ceiling. The 2,168-test ROM-free gate plus Ruff, mypy, docs, public-artifact, and registry
+checks passes. A clean push and fresh perturbation remain immediate; v95 is 0/10.
+
 The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's
 Red/Blue reciprocal version gaps now come from one canonical table and include the previously
 omitted Pinsir and Scyther. Trading requires an explicit compatibility edge between saves; merely
