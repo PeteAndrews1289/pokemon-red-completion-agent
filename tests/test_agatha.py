@@ -1,4 +1,5 @@
 from dataclasses import replace
+from inspect import getsource
 
 import pokemon_red_completion.agatha as agatha_module
 from pokemon_red_completion.actions import MacroActionKind
@@ -30,6 +31,7 @@ from pokemon_red_completion.agatha import (
     _encounter_party,
     _observed_party_valid,
     _turns_valid,
+    run_agatha_chapter,
 )
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
@@ -62,6 +64,7 @@ def test_agatha_source_contract_is_exact() -> None:
         (0x2D, 58),
         (0x0E, 60),
     )
+    assert "require_status_clear_before_move=True" in getsource(run_agatha_chapter)
 
 
 def test_agatha_receipt_deduplicates_switches() -> None:

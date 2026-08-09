@@ -346,6 +346,7 @@ def run_agatha_chapter(
         boost_use_limits=((BattleBoostStat.SPECIAL, AGATHA_X_SPECIAL_USE),),
         required_boost_before_first_move=BattleBoostStat.SPECIAL,
         switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
+        require_status_clear_before_move=True,
         require_move_between_switches=True,
     )
     while reader.read().battle_state:
