@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 import math
+import stat
 from collections import Counter
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 from numpy.typing import NDArray
@@ -22,6 +26,35 @@ SWITCH_TARGET_MODEL_ID = "pokemon.core.battle.switch-target-ranker.mlp.v1"
 
 class BattleSwitchTargetModelError(ValueError):
     """Raised when a switch-target model or training request is invalid."""
+
+
+@dataclass(frozen=True, slots=True)
+class BattleSwitchTargetArtifact:
+    """One authenticated target model plus its path-free lineage contract."""
+
+    model: BattleSwitchTargetMLP
+    artifact_id: str
+    manifest_sha256: str
+    model_sha256: str
+    training_artifact_ids: tuple[str, ...]
+    validation_artifact_ids: tuple[str, ...]
+    source_manifest_sha256s: tuple[str, ...]
+    prospective_test_artifact_id: str
+    prospective_test_manifest_sha256: str
+    prospective_test_examples: int
+    prospective_test_correct: int
+
+    @property
+    def shadow_authority(self) -> bool:
+        return True
+
+    @property
+    def causal_trial_authority(self) -> bool:
+        return True
+
+    @property
+    def deployment_authority(self) -> bool:
+        return False
 
 
 @dataclass(frozen=True, slots=True)
@@ -231,18 +264,14 @@ class BattleSwitchTargetMLP:
             gradients[0] = gradients[0] / len(rows) + l2 * weights1
             gradients[1] /= len(rows)
             gradients[2] = gradients[2] / len(rows) + l2 * weights2
-            for index, (parameter, gradient) in enumerate(
-                zip(parameters, gradients, strict=True)
-            ):
+            for index, (parameter, gradient) in enumerate(zip(parameters, gradients, strict=True)):
                 first[index] *= 0.9
                 first[index] += 0.1 * gradient
                 second[index] *= 0.999
                 second[index] += 0.001 * gradient * gradient
                 corrected_first = first[index] / (1.0 - math.pow(0.9, epoch))
                 corrected_second = second[index] / (1.0 - math.pow(0.999, epoch))
-                parameter -= learning_rate * corrected_first / (
-                    np.sqrt(corrected_second) + 1e-8
-                )
+                parameter -= learning_rate * corrected_first / (np.sqrt(corrected_second) + 1e-8)
         return cls(weights1, bias1, weights2, mean, scale, seed)
 
 
@@ -297,4 +326,220 @@ def evaluate_switch_target_model(
         battle_plan_accuracy=tuple(
             (plan_id, counts[0] / counts[1]) for plan_id, counts in sorted(plans.items())
         ),
+    )
+
+
+def canonical_switch_target_model_sha256(model: BattleSwitchTargetMLP) -> str:
+    """Return the stable digest used to freeze one target-model payload."""
+
+    return _canonical_sha256(model.to_dict())
+
+
+def load_battle_switch_target_model_artifact(
+    artifact_directory: str | Path,
+) -> BattleSwitchTargetArtifact:
+    """Authenticate a shadow-qualified switch-target model and its lineage."""
+
+    root = Path(artifact_directory)
+    manifest_path = root / "manifest.json"
+    if root.is_symlink() or not root.is_dir() or manifest_path.is_symlink():
+        raise BattleSwitchTargetModelError(
+            "switch target model artifact is not a regular directory"
+        )
+    try:
+        manifest_payload = manifest_path.read_bytes()
+        manifest = json.loads(manifest_payload.decode("ascii"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise BattleSwitchTargetModelError("switch target model manifest cannot be read") from error
+    artifact_id = manifest.get("artifact_id") if isinstance(manifest, Mapping) else None
+    if (
+        not isinstance(manifest, Mapping)
+        or manifest.get("format") != "pokemon-red-completion-private-artifact-jsonl"
+        or manifest.get("kind") != "battle_switch_target_model"
+        or manifest.get("schema_version") != 1
+        or manifest.get("status") != "complete"
+        or not isinstance(artifact_id, str)
+        or artifact_id != root.name
+    ):
+        raise BattleSwitchTargetModelError("switch target model artifact is not complete and typed")
+    files = manifest.get("files")
+    if not isinstance(files, list):
+        raise BattleSwitchTargetModelError("switch target model file inventory is absent")
+    entries = {
+        str(entry.get("filename")): entry
+        for entry in files
+        if isinstance(entry, Mapping) and isinstance(entry.get("filename"), str)
+    }
+    expected = {"model.jsonl", "training.jsonl", "qualification.jsonl"}
+    if set(entries) != expected or len(entries) != len(files):
+        raise BattleSwitchTargetModelError("switch target model file inventory is invalid")
+    try:
+        visible = {child.name for child in root.iterdir() if child.name != "manifest.json"}
+    except OSError as error:
+        raise BattleSwitchTargetModelError(
+            "switch target model artifact cannot be inspected"
+        ) from error
+    if visible != expected:
+        raise BattleSwitchTargetModelError(
+            "switch target model artifact contains undeclared entries"
+        )
+    rows: dict[str, list[Mapping[str, object]]] = {}
+    for filename, entry in entries.items():
+        path = root / filename
+        try:
+            metadata = path.lstat()
+            payload = path.read_bytes()
+        except OSError as error:
+            raise BattleSwitchTargetModelError(
+                "switch target model stream cannot be read"
+            ) from error
+        if (
+            path.is_symlink()
+            or not stat.S_ISREG(metadata.st_mode)
+            or entry.get("bytes") != len(payload)
+            or entry.get("sha256") != hashlib.sha256(payload).hexdigest()
+        ):
+            raise BattleSwitchTargetModelError("switch target model stream failed authentication")
+        parsed = _canonical_records(payload)
+        if entry.get("records") != len(parsed):
+            raise BattleSwitchTargetModelError("switch target model record count is invalid")
+        rows[filename] = parsed
+    if any(len(value) != 1 for value in rows.values()):
+        raise BattleSwitchTargetModelError(
+            "switch target model streams must contain one record each"
+        )
+
+    model_record = rows["model.jsonl"][0]
+    model_payload = model_record.get("model")
+    if (
+        model_record.get("record_type") != "battle_switch_target_model"
+        or not isinstance(model_payload, Mapping)
+        or model_record.get("model_sha256") != _canonical_sha256(model_payload)
+    ):
+        raise BattleSwitchTargetModelError("switch target model record is invalid")
+    model = BattleSwitchTargetMLP.from_dict(model_payload)
+    model_sha256 = canonical_switch_target_model_sha256(model)
+
+    training = rows["training.jsonl"][0]
+    training_artifacts = _lineage_entries(training.get("training_artifacts"))
+    validation_artifacts = _lineage_entries(training.get("validation_artifacts"))
+    all_lineages = (*training_artifacts, *validation_artifacts)
+    if (
+        training.get("record_type") != "battle_switch_target_training"
+        or training.get("feature_schema_id") != SWITCH_TARGET_FEATURE_SCHEMA_ID
+        or not training_artifacts
+        or not validation_artifacts
+        or len({artifact for artifact, _manifest in all_lineages}) != len(all_lineages)
+        or len({manifest for _artifact, manifest in all_lineages}) != len(all_lineages)
+    ):
+        raise BattleSwitchTargetModelError("switch target model lineage contract is invalid")
+
+    qualification = rows["qualification.jsonl"][0]
+    test = qualification.get("prospective_test")
+    if not isinstance(test, Mapping):
+        raise BattleSwitchTargetModelError(
+            "switch target model prospective qualification is absent"
+        )
+    test_artifact_id = test.get("artifact_id")
+    test_manifest_sha256 = test.get("manifest_sha256")
+    test_examples = test.get("examples")
+    test_correct = test.get("correct")
+    if (
+        qualification.get("record_type") != "battle_switch_target_qualification"
+        or qualification.get("model_sha256") != model_sha256
+        or qualification.get("shadow_authority") is not True
+        or qualification.get("causal_trial_authority") is not True
+        or qualification.get("deployment_authority") is not False
+        or not isinstance(test_artifact_id, str)
+        or not test_artifact_id
+        or not isinstance(test_manifest_sha256, str)
+        or not _is_sha256(test_manifest_sha256)
+        or test_artifact_id in {artifact for artifact, _manifest in all_lineages}
+        or test_manifest_sha256 in {manifest for _artifact, manifest in all_lineages}
+        or type(test_examples) is not int  # noqa: E721
+        or type(test_correct) is not int  # noqa: E721
+        or test_examples < 1
+        or test_correct != test_examples
+    ):
+        raise BattleSwitchTargetModelError(
+            "switch target model prospective qualification is invalid"
+        )
+    return BattleSwitchTargetArtifact(
+        model=model,
+        artifact_id=artifact_id,
+        manifest_sha256=hashlib.sha256(manifest_payload).hexdigest(),
+        model_sha256=model_sha256,
+        training_artifact_ids=tuple(artifact for artifact, _manifest in training_artifacts),
+        validation_artifact_ids=tuple(artifact for artifact, _manifest in validation_artifacts),
+        source_manifest_sha256s=tuple(manifest for _artifact, manifest in all_lineages),
+        prospective_test_artifact_id=test_artifact_id,
+        prospective_test_manifest_sha256=test_manifest_sha256,
+        prospective_test_examples=test_examples,
+        prospective_test_correct=test_correct,
+    )
+
+
+def _lineage_entries(value: object) -> tuple[tuple[str, str], ...]:
+    if not isinstance(value, list):
+        raise BattleSwitchTargetModelError("switch target model lineage entries are invalid")
+    result: list[tuple[str, str]] = []
+    for entry in value:
+        if not isinstance(entry, Mapping):
+            raise BattleSwitchTargetModelError("switch target model lineage entries are invalid")
+        artifact_id = entry.get("artifact_id")
+        manifest_sha256 = entry.get("manifest_sha256")
+        if (
+            not isinstance(artifact_id, str)
+            or not artifact_id
+            or not isinstance(manifest_sha256, str)
+            or not _is_sha256(manifest_sha256)
+        ):
+            raise BattleSwitchTargetModelError("switch target model lineage entries are invalid")
+        result.append((artifact_id, manifest_sha256))
+    return tuple(result)
+
+
+def _canonical_records(payload: bytes) -> list[Mapping[str, object]]:
+    try:
+        text = payload.decode("ascii")
+    except UnicodeError as error:
+        raise BattleSwitchTargetModelError("switch target model stream is not ASCII") from error
+    if not text or not text.endswith("\n"):
+        raise BattleSwitchTargetModelError("switch target model stream is not canonical JSONL")
+    result: list[Mapping[str, object]] = []
+    for line in text.splitlines():
+        try:
+            value = json.loads(line)
+        except json.JSONDecodeError as error:
+            raise BattleSwitchTargetModelError(
+                "switch target model stream contains invalid JSON"
+            ) from error
+        if not isinstance(value, Mapping) or line != json.dumps(
+            value,
+            allow_nan=False,
+            ensure_ascii=True,
+            separators=(",", ":"),
+            sort_keys=True,
+        ):
+            raise BattleSwitchTargetModelError("switch target model stream is not canonical JSONL")
+        result.append(value)
+    return result
+
+
+def _canonical_sha256(value: object) -> str:
+    payload = json.dumps(
+        value,
+        allow_nan=False,
+        ensure_ascii=True,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("ascii")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _is_sha256(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(character in "0123456789abcdef" for character in value)
     )

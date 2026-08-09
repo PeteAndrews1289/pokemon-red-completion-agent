@@ -16,6 +16,7 @@ from pokemon_red_completion.battle_schedule import (
     BattleStartScheduleController,
     bind_battle_start_schedule,
 )
+from pokemon_red_completion.battle_switch_target_model import BattleSwitchTargetMLP
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
 from pokemon_red_completion.collection_protocol import BattleStartOffset
 from pokemon_red_completion.emulator import PyBoyAdapter
@@ -104,8 +105,7 @@ class CleanStartPortableReport:
         if self.training_control_authority_required and not self._training_control_passed:
             return False
         return not (
-            self.training_candidate_authority_required
-            and not self._training_candidate_passed
+            self.training_candidate_authority_required and not self._training_candidate_passed
         )
 
     @property
@@ -205,6 +205,8 @@ def run_portable_clean_start(
     battle_model: BattleMoveRanker | None = None,
     battle_control_model: BattleControlMLP | None = None,
     execute_battle_control_model: bool = False,
+    battle_switch_target_model: BattleSwitchTargetMLP | None = None,
+    execute_battle_switch_target_model: bool = False,
     battle_confidence_threshold: float = 0.0,
     battle_control_confidence_threshold: float = 0.0,
     require_teacher_free_battle: bool = False,
@@ -224,6 +226,10 @@ def run_portable_clean_start(
         raise ValueError("initial_wait_frames must be an integer from zero through 255")
     if execute_battle_control_model and battle_control_model is None:
         raise ValueError("battle-control execution requires a battle-control model")
+    if execute_battle_switch_target_model and battle_switch_target_model is None:
+        raise ValueError("switch-target execution requires a switch-target model")
+    if battle_switch_target_model is not None and battle_model is None:
+        raise ValueError("switch-target inference requires a battle move model")
     if battle_control_model is not None and battle_model is None:
         raise ValueError("battle-control inference requires a battle move model")
     if require_teacher_free_battle and battle_model is None:
@@ -258,6 +264,8 @@ def run_portable_clean_start(
                 control_model=battle_control_model,
                 execute_control_model=execute_battle_control_model,
                 control_confidence_threshold=battle_control_confidence_threshold,
+                switch_target_model=battle_switch_target_model,
+                execute_switch_target_model=execute_battle_switch_target_model,
                 require_teacher_agreement=not require_teacher_free_battle,
                 allow_teacher_queries=not require_teacher_free_battle,
             )

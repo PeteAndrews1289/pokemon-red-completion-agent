@@ -55,9 +55,10 @@ def memory_with(owned: set[int], seen: set[int] | None = None) -> Memory:
 def test_nickname_block_anchors_the_pokedex_addresses() -> None:
     """Both offsets derive from committed symbols, so neither can drift alone."""
 
-    assert int(RamAddress.PARTY_MON_3_NICKNAME) - int(
-        RamAddress.PARTY_MON_2_NICKNAME
-    ) == NICKNAME_LENGTH
+    assert (
+        int(RamAddress.PARTY_MON_3_NICKNAME) - int(RamAddress.PARTY_MON_2_NICKNAME)
+        == NICKNAME_LENGTH
+    )
     assert int(RamAddress.PARTY_MON_2_NICKNAME) - NICKNAME_LENGTH == PARTY_NICKNAMES_BASE
     assert POKEDEX_OWNED == PARTY_NICKNAMES_BASE + PARTY_NICKNAME_COUNT * NICKNAME_LENGTH
     assert POKEDEX_SEEN == POKEDEX_OWNED + POKEDEX_FLAG_BYTES
@@ -114,29 +115,27 @@ def test_red_target_is_not_the_full_national_count() -> None:
     """151 is not a coherent goal for one cartridge; the real number is stated."""
 
     assert RED_POKEDEX_TARGET.total_species == 151
-    assert RED_POKEDEX_TARGET.obtainable_count == 125
-    assert len(RED_POKEDEX_TARGET.exclusions) == 26
+    assert RED_POKEDEX_TARGET.obtainable_count == 124
+    assert len(RED_POKEDEX_TARGET.exclusions) == 27
 
 
 @pytest.mark.parametrize(
     ("reason", "count"),
     (
-        (ExclusionReason.VERSION_EXCLUSIVE, 10),
+        (ExclusionReason.VERSION_EXCLUSIVE, 11),
         (ExclusionReason.REQUIRES_TRADE, 4),
         (ExclusionReason.EVENT_DISTRIBUTION, 1),
         (ExclusionReason.MUTUALLY_EXCLUSIVE_CHOICE, 11),
     ),
 )
-def test_red_exclusions_are_grouped_by_stated_reason(
-    reason: ExclusionReason, count: int
-) -> None:
+def test_red_exclusions_are_grouped_by_stated_reason(reason: ExclusionReason, count: int) -> None:
     assert len(RED_POKEDEX_TARGET.excluded_for(reason)) == count
 
 
 def test_red_excludes_the_lines_a_single_cartridge_cannot_reach() -> None:
     excluded = frozenset(RED_POKEDEX_TARGET.exclusions)
     # Blue-exclusive.
-    assert {27, 28, 37, 38, 52, 53, 69, 70, 71, 126} <= excluded
+    assert {27, 28, 37, 38, 52, 53, 69, 70, 71, 126, 127} <= excluded
     # Trade evolutions.
     assert {65, 68, 76, 94} <= excluded
     # Forfeited by this route's own choices.
@@ -218,7 +217,7 @@ def test_run_choices_change_which_species_are_reachable() -> None:
     a = red_target()
     b = red_target(RedRunChoices("charmander", "dome", "hitmonchan", "flareon"))
 
-    assert a.obtainable_count == b.obtainable_count == 125
+    assert a.obtainable_count == b.obtainable_count == 124
     # Squirtle's line and the Helix fossil belong to A, not B.
     assert {7, 8, 9, 138, 139, 106, 135} <= a.obtainable
     assert not {7, 8, 9} & b.obtainable
@@ -233,11 +232,11 @@ def test_two_opposed_red_runs_still_cannot_finish_the_dex() -> None:
     b = red_target(RedRunChoices("charmander", "dome", "hitmonchan", "flareon"))
     union = a.obtainable | b.obtainable
 
-    assert len(union) == 132
+    assert len(union) == 131
     # What two Red runs leave open: Blue exclusives, trade evolutions, Mew, plus
     # the third starter line and the third Eevee stone no pair of runs reaches.
     remaining = frozenset(range(1, 152)) - union
-    assert {27, 37, 52, 69, 126} <= remaining  # Blue-exclusive
+    assert {27, 37, 52, 69, 126, 127} <= remaining  # Blue-exclusive
     assert {65, 68, 76, 94} <= remaining  # trade evolutions
     assert 151 in remaining  # Mew, deferred to a later title
     assert {1, 2, 3} <= remaining  # the untaken starter line

@@ -75,7 +75,7 @@ def test_a_living_dex_accumulates_across_generations() -> None:
     assert living.remaining(RED_POKEDEX_TARGET) == frozenset()
     # ...and still leaves most of Generation II open.
     remaining = living.remaining(crystal)
-    assert len(remaining) == 125
+    assert len(remaining) == 126
     # Everything Red could reach counts toward Crystal too; ordinals are shared.
     assert not remaining & RED_POKEDEX_TARGET.obtainable
 

@@ -560,6 +560,17 @@ class GrindingArea:
 
         return (self.area_id, self.conditions)
 
+    def conditions_match(self, active_conditions: tuple[str, ...]) -> bool:
+        """Whether this measured table is active in the observed world state."""
+
+        if not isinstance(active_conditions, tuple) or any(
+            not isinstance(label, str) or not label.strip() for label in active_conditions
+        ):
+            raise ValueError("active_conditions must be a tuple of non-empty labels")
+        if tuple(sorted(set(active_conditions))) != active_conditions:
+            raise ValueError("active_conditions must be sorted and unique")
+        return self.conditions == active_conditions
+
     @property
     def is_measured(self) -> bool:
         """Whether this band came from counted encounters rather than memory."""
@@ -825,9 +836,7 @@ def training_safety_ceiling(trainee: PartyMemberObservation, policy: BalancedTea
     return trainee.level + policy.max_enemy_level_delta
 
 
-def member_needs_training(
-    member: PartyMemberObservation, policy: BalancedTeamPolicy
-) -> bool:
+def member_needs_training(member: PartyMemberObservation, policy: BalancedTeamPolicy) -> bool:
     """Whether this member is still short of the level floor.
 
     Kept separate from *can* it train here, and load-bearing rather than
@@ -908,6 +917,8 @@ def choose_grinding_area(
     trainee: PartyMemberObservation,
     policy: BalancedTeamPolicy,
     require_healer: bool = True,
+    *,
+    active_conditions: tuple[str, ...] = (),
 ) -> GrindingArea | None:
     """Pick the fastest training area whose encounters stay inside the safety band.
 
@@ -926,6 +937,7 @@ def choose_grinding_area(
         for area in areas
         if member_can_train_at(trainee, policy, area)
         and (area.has_nearby_healer or not require_healer)
+        and area.conditions_match(active_conditions)
     ]
     if not safe:
         return None

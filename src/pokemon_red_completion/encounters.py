@@ -110,6 +110,12 @@ class EncounterBand:
             raise EncounterLogError(f"band for map {self.map_id:#04x} holds an invalid level")
         if not self.minimum_level <= self.typical_maximum_level <= self.observed_maximum_level:
             raise EncounterLogError(f"band for map {self.map_id:#04x} is not ordered")
+        if not isinstance(self.conditions, tuple) or any(
+            not isinstance(label, str) or not label.strip() for label in self.conditions
+        ):
+            raise EncounterLogError("band conditions must be a tuple of non-empty labels")
+        if tuple(sorted(set(self.conditions))) != self.conditions:
+            raise EncounterLogError("band conditions must be sorted and unique")
 
     @property
     def is_trusted(self) -> bool:

@@ -21,11 +21,12 @@ from .collection import (
     LivingSpecimen,
     summarize_collection,
 )
+from .generation_one import GENERATION_ONE_SPECIES_COUNT, UNAVAILABLE_IN_RED
 from .observation import RedBoxCollectionState, RedCurrentBoxState, RedPokedexState
 from .party import PartyObservation
 
 RED_COLLECTION_GAME_ID = "pokemon.mainline:red:gb:us:rev0"
-NATIONAL_DEX_SIZE_GENERATION_ONE = 151
+NATIONAL_DEX_SIZE_GENERATION_ONE = GENERATION_ONE_SPECIES_COUNT
 RED_SOLO_POKEDEX_TARGET_COUNT = 124
 RED_SOLO_LIVING_TARGET_COUNT = 120
 
@@ -362,9 +363,8 @@ def _exclusion(
     return CollectionExclusion(red_species_ref(national_dex_number), reason)
 
 
-# Red-version absences: Sandshrew, Vulpix, Meowth, Bellsprout, Magmar, and
-# Pinsir families cannot be encountered or received in Pokémon Red.
-_VERSION_EXCLUSIONS = (27, 28, 37, 38, 52, 53, 69, 70, 71, 126, 127)
+# Red-version absences shared with the lighter registration target.
+_VERSION_EXCLUSIONS = tuple(sorted(UNAVAILABLE_IN_RED))
 # These final evolutions require an external link trade in Generation I.
 _LINK_EXCLUSIONS = (65, 68, 76, 94)
 # The clean route's mutually exclusive choices. Earlier forms remain owned only

@@ -90,9 +90,7 @@ class TrainingCandidate:
             raise TrainingCandidateRankError("candidate feature vector has the wrong width")
         values = np.asarray(self.features, dtype=np.float64)
         if not np.all(np.isfinite(values)) or np.any(values < -1.0) or np.any(values > 1.0):
-            raise TrainingCandidateRankError(
-                "candidate features must be finite and normalized"
-            )
+            raise TrainingCandidateRankError("candidate features must be finite and normalized")
 
     def vector(self) -> NDArray[np.float64]:
         """Return a detached numeric vector for a shared candidate scorer."""
@@ -105,9 +103,7 @@ class TrainingCandidate:
         return {
             "candidate_index": self.candidate_index,
             "feature_schema_id": self.feature_schema_id,
-            "features": dict(
-                zip(TRAINING_CANDIDATE_FEATURE_NAMES, self.features, strict=True)
-            ),
+            "features": dict(zip(TRAINING_CANDIDATE_FEATURE_NAMES, self.features, strict=True)),
         }
 
 
@@ -180,9 +176,7 @@ class TrainingCandidateDecisionRecorder:
     """
 
     _decisions: list[TrainingCandidateDecision] = field(default_factory=list)
-    _last_by_kind: dict[TrainingChoiceKind, tuple[object, ...]] = field(
-        default_factory=dict
-    )
+    _last_by_kind: dict[TrainingChoiceKind, tuple[object, ...]] = field(default_factory=dict)
     observed_decisions: int = 0
 
     def observe(self, decision: TrainingCandidateDecision) -> bool:
@@ -192,17 +186,13 @@ class TrainingCandidateDecisionRecorder:
         signature = (
             decision.selected_candidate_index,
             decision.reason,
-            tuple(
-                candidate.features for candidate in decision.observation.candidates
-            ),
+            tuple(candidate.features for candidate in decision.observation.candidates),
         )
         kind = decision.observation.kind
         if self._last_by_kind.get(kind) == signature:
             return False
         self._last_by_kind[kind] = signature
-        self._decisions.append(
-            replace(decision, decision_index=len(self._decisions))
-        )
+        self._decisions.append(replace(decision, decision_index=len(self._decisions)))
         return True
 
     @property
@@ -215,9 +205,7 @@ class TrainingCandidateDecisionRecorder:
             "method": "retain_first_and_per_kind_state_transitions",
             "observed_decisions": self.observed_decisions,
             "retained_decisions": retained,
-            "consecutive_duplicate_decisions_removed": (
-                self.observed_decisions - retained
-            ),
+            "consecutive_duplicate_decisions_removed": (self.observed_decisions - retained),
         }
 
 
@@ -225,6 +213,8 @@ def project_trainee_candidates(
     party: PartyObservation,
     policy: BalancedTeamPolicy,
     areas: tuple[GrindingArea, ...],
+    *,
+    active_conditions: tuple[str, ...] = (),
 ) -> tuple[PartyMemberObservation, int, TrainingCandidateSet] | None:
     """Project every trainable below-floor member and label the teacher choice.
 
@@ -233,7 +223,12 @@ def project_trainee_candidates(
     from the feature vector.
     """
 
-    eligible = _eligible_trainees(party, policy, areas)
+    eligible = _eligible_trainees(
+        party,
+        policy,
+        areas,
+        active_conditions=active_conditions,
+    )
     if not eligible:
         return None
     candidates = tuple(
@@ -273,6 +268,7 @@ def project_venue_candidates(
     areas: tuple[GrindingArea, ...],
     *,
     require_healer: bool = True,
+    active_conditions: tuple[str, ...] = (),
 ) -> tuple[GrindingArea, int, TrainingCandidateSet] | None:
     """Project every safe venue and label the teacher's efficiency choice."""
 
@@ -281,6 +277,7 @@ def project_venue_candidates(
         policy,
         areas,
         require_healer=require_healer,
+        active_conditions=active_conditions,
     )
     if not eligible:
         return None
@@ -315,10 +312,17 @@ def bind_trainee_candidate(
     policy: BalancedTeamPolicy,
     areas: tuple[GrindingArea, ...],
     candidate_index: int,
+    *,
+    active_conditions: tuple[str, ...] = (),
 ) -> PartyMemberObservation:
     """Resolve one ephemeral model index against the exact live trainee set."""
 
-    eligible = _eligible_trainees(party, policy, areas)
+    eligible = _eligible_trainees(
+        party,
+        policy,
+        areas,
+        active_conditions=active_conditions,
+    )
     if type(candidate_index) is not int or candidate_index not in range(len(eligible)):  # noqa: E721
         raise TrainingCandidateRankError("trainee candidate binding index is invalid")
     return eligible[candidate_index]
@@ -332,6 +336,7 @@ def bind_venue_candidate(
     candidate_index: int,
     *,
     require_healer: bool = True,
+    active_conditions: tuple[str, ...] = (),
 ) -> GrindingArea:
     """Resolve one ephemeral model index against the exact live venue set."""
 
@@ -341,6 +346,7 @@ def bind_venue_candidate(
         policy,
         areas,
         require_healer=require_healer,
+        active_conditions=active_conditions,
     )
     if type(candidate_index) is not int or candidate_index not in range(len(eligible)):  # noqa: E721
         raise TrainingCandidateRankError("venue candidate binding index is invalid")
@@ -351,13 +357,16 @@ def _eligible_trainees(
     party: PartyObservation,
     policy: BalancedTeamPolicy,
     areas: tuple[GrindingArea, ...],
+    *,
+    active_conditions: tuple[str, ...],
 ) -> tuple[PartyMemberObservation, ...]:
+    active_areas = tuple(area for area in areas if area.conditions_match(active_conditions))
     return tuple(
         member
         for member in party.members
         if member_needs_training(member, policy)
         and member.is_trainable
-        and any(member_can_train_at(member, policy, area) for area in areas)
+        and any(member_can_train_at(member, policy, area) for area in active_areas)
     )
 
 
@@ -367,12 +376,14 @@ def _eligible_venues(
     areas: tuple[GrindingArea, ...],
     *,
     require_healer: bool,
+    active_conditions: tuple[str, ...],
 ) -> tuple[GrindingArea, ...]:
     return tuple(
         area
         for area in areas
         if member_can_train_at(trainee, policy, area)
         and (area.has_nearby_healer or not require_healer)
+        and area.conditions_match(active_conditions)
     )
 
 

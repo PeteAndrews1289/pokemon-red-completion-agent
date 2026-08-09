@@ -107,7 +107,24 @@ with 0.07965 cross-entropy versus 12/17 for the deterministic resolver, includin
 Agatha 7/7, and all three Golbat targets. It was evaluated once without refitting. The route stopped
 at 306/312 because its terminal receipt reconstructed five role changes from move turns even though
 seven correct specialist switches executed around opponent changes. Commit `a5e92f0` records each
-live switch and validates its target directly. Artifact publication and runtime authority remain.
+live switch and validates its target directly.
+
+The missing runtime seam is now implemented and ROM-free verified. A write-once publisher rebuilds
+the exact frozen model from the original authenticated lineages and refuses any digest other than
+`bd1ba4…`. Its loader authenticates the manifest, exact stream roster, canonical JSONL, feature
+schema, model payload, disjoint development lineages, and separate perfect prospective test. The
+live policy records target agreement and confidence in shadow, then supports an explicitly
+uncounted isolated trial where the teacher decides *when* to switch and the learned head alone binds
+the living reserve. This is causal-trial authority, not deployment authority. Exact private
+publication, live shadow, and a fresh completion remain before promotion.
+
+The audit also found and repaired three foundations that would have invalidated later transfer and
+living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared
+gap calculation intersected Blue with itself. One canonical Generation I facts module now derives
+the reciprocal eleven-species tables. Campaigns require explicit compatible trade links rather than
+inventing trade ability from two concurrent saves. Encounter-condition labels now filter both
+teacher selection and exact live trainee/venue binding, preventing a future Crystal day table from
+silently acting at night.
 
 ## Capability scorecard
 
@@ -116,7 +133,7 @@ live switch and validates its target directly. Artifact publication and runtime 
 | Deterministic Red teacher/referee | 9/10 | Repeated clean-power 312/312, 36/36, Hall-of-Fame runs with strict chapter contracts. This is an expert oracle, not learned autonomy. |
 | Experiment integrity | 9/10 | Source/model/root hashes, whole-lineage splits, private artifact boundaries, preserved failures, one-attempt accounting, and 0/10 counted roots consumed. |
 | Learned battle moves | 7/10 | A nonlinear ranker has prior live completion evidence, but the current reserve-controller causal lane keeps ordinary moves teacher-gated. The combined teacher-free stack remains unqualified. |
-| Learned high-level battle control | 8/10 | Strong held-out class balance, causal progress through Agatha, and a frozen target head that passed 17/17 fresh targets versus 12/17 baseline; runtime target authority and terminal completion remain. |
+| Learned high-level battle control | 8/10 | Strong held-out class balance, causal progress through Agatha, a frozen target head that passed 17/17 fresh targets versus 12/17 baseline, and an authenticated runtime seam; live shadow and terminal causal completion remain. |
 | Learned objective selection | 6/10 | Clean start selects registered composite goals from semantic state, but most candidate sets are singleton and fixed authored skills perform the mechanics. |
 | Learned trainee/venue strategy | 7/10 | The identity-free candidate ranker beat its shape baseline and completed a clean-power curriculum with real disagreements. It remains Red-only evidence. |
 | Navigation and menu autonomy | 3/10 | Reusable local planning exists, but the completion path is still dominated by authored chapter routes and menu executors. |
@@ -126,8 +143,9 @@ live switch and validates its target directly. Artifact publication and runtime 
 
 ## Code and test health
 
-- 122 source modules and 131 test modules cover roughly 87,000 source lines and 51,000 test lines.
-- The current full gate passes **2,110 tests** with 3 emulator-integration tests deselected, plus
+- 127 source modules and 135 test modules cover roughly 88,000 source lines and 52,500 test lines.
+- The current full gate passes **2,152 tests** with 3 emulator-integration tests deselected and 1
+  expected failure, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.
 - The repository is evidence-rich but too large for its current capability surface. Route chapters,
@@ -145,8 +163,10 @@ The current stack is layered rather than monolithic:
 
 1. semantic observers convert revision-specific emulator state into portable facts;
 2. learned rankers choose objectives, trainees/venues, moves, or high-level battle action classes;
-3. the new offline listwise head can learn a party target, but it has no runtime authority yet;
-4. typed constraints and deterministic target resolvers turn deployed choices into executable
+3. the listwise target head can shadow or bind a live reserve during an isolated causal trial, but
+   does not yet have deployment authority;
+4. typed constraints and deterministic or authenticated learned target resolvers turn choices into
+   executable
    affordances;
 5. authored chapter and menu skills still carry out most long-horizon mechanics; and
 6. an independent referee verifies progress and rejects behavior that wins without satisfying the
@@ -158,11 +178,12 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Publish and authenticate the exact frozen `bd1ba4…` target candidate without refitting it or
-   adding seed 990007 to training.
-2. Bind its candidate-relative choice to the ephemeral live party menu slot while retaining hard
-   safety masks, permutation equivariance, and counterfactual matchup tests. Shadow before authority.
-3. Rerun the fresh power-on reserve-controller gate only after the target head qualifies. Preserve
+1. Publish the exact hash-checked private target artifact from the clean pushed source; do not add
+   seed 990007 to training.
+2. Run one live shadow rehearsal and require complete target availability plus the expected
+   agreement/confidence audit before enabling the isolated trial flag.
+3. Rerun the fresh power-on reserve-controller gate with only target binding under learned
+   authority. Preserve
    either its Hall-of-Fame receipt or its next causal rejection.
 4. If it passes, separate typed intent enforcement from true model safety fallbacks in the strict
    report, then run the combined stack with teacher queries disabled for ordinary move selection.

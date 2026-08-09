@@ -33,7 +33,11 @@ from pokemon_red_completion.party import (
     PartyMemberObservation,
     StatusCondition,
 )
-from pokemon_red_completion.team_training import GrindingArea
+from pokemon_red_completion.team_training import (
+    BalancedTeamPolicy,
+    GrindingArea,
+    choose_grinding_area,
+)
 
 GEN2 = "crystal"
 
@@ -110,12 +114,18 @@ def test_one_area_can_hold_two_bands_under_different_conditions() -> None:
     """
 
     day = GrindingArea(
-        area_id="route_29", minimum_encounter_level=2, maximum_encounter_level=4,
-        measured_samples=40, conditions=("day",),
+        area_id="route_29",
+        minimum_encounter_level=2,
+        maximum_encounter_level=4,
+        measured_samples=40,
+        conditions=("day",),
     )
     night = GrindingArea(
-        area_id="route_29", minimum_encounter_level=3, maximum_encounter_level=6,
-        measured_samples=40, conditions=("night",),
+        area_id="route_29",
+        minimum_encounter_level=3,
+        maximum_encounter_level=6,
+        measured_samples=40,
+        conditions=("night",),
     )
 
     assert day.identity != night.identity, "the same place under two conditions is two bands"
@@ -126,8 +136,10 @@ def test_red_reports_no_conditions_rather_than_guessing() -> None:
     """Empty is a claim: 'this title's tables do not vary'. It is true of Red."""
 
     band = GrindingArea(
-        area_id="pokemon_mansion_1f", minimum_encounter_level=28,
-        maximum_encounter_level=34, measured_samples=164,
+        area_id="pokemon_mansion_1f",
+        minimum_encounter_level=28,
+        maximum_encounter_level=34,
+        measured_samples=164,
     )
 
     assert band.conditions == ()
@@ -139,7 +151,9 @@ def test_conditions_have_a_stable_order_so_identity_is_stable() -> None:
 
     with pytest.raises(ValueError, match="sorted"):
         GrindingArea(
-            area_id="route_29", minimum_encounter_level=2, maximum_encounter_level=4,
+            area_id="route_29",
+            minimum_encounter_level=2,
+            maximum_encounter_level=4,
             conditions=("night", "day"),
         )
 
@@ -148,12 +162,22 @@ def test_the_harvest_separates_bands_by_condition() -> None:
     """The contract change is cosmetic unless measurement carries it through."""
 
     rows = [
-        {"map_id": 29, "enemy_species": 16, "enemy_level": 3, "battle_state": 1,
-         "conditions": ["day"]}
+        {
+            "map_id": 29,
+            "enemy_species": 16,
+            "enemy_level": 3,
+            "battle_state": 1,
+            "conditions": ["day"],
+        }
         for _ in range(5)
     ] + [
-        {"map_id": 29, "enemy_species": 163, "enemy_level": 6, "battle_state": 1,
-         "conditions": ["night"]}
+        {
+            "map_id": 29,
+            "enemy_species": 163,
+            "enemy_level": 6,
+            "battle_state": 1,
+            "conditions": ["night"],
+        }
         for _ in range(5)
     ]
 
@@ -163,6 +187,32 @@ def test_the_harvest_separates_bands_by_condition() -> None:
     by_condition = {band.conditions: band for band in bands}
     assert by_condition[("day",)].species_ids == (16,)
     assert by_condition[("night",)].species_ids == (163,)
+
+
+def test_venue_selection_refuses_a_band_from_the_wrong_condition() -> None:
+    """Separating rows is insufficient unless runtime choice honors the key."""
+
+    day = GrindingArea(
+        area_id="route_29",
+        minimum_encounter_level=2,
+        maximum_encounter_level=4,
+        measured_samples=40,
+        conditions=("day",),
+    )
+    night = GrindingArea(
+        area_id="route_29",
+        minimum_encounter_level=3,
+        maximum_encounter_level=6,
+        measured_samples=40,
+        conditions=("night",),
+    )
+    policy = BalancedTeamPolicy(minimum_level=20, maximum_level_spread=5, required_size=1)
+
+    assert (
+        choose_grinding_area((night, day), member(level=10), policy, active_conditions=("day",))
+        == day
+    )
+    assert choose_grinding_area((night, day), member(level=10), policy) is None
 
 
 def test_a_log_without_conditions_still_produces_one_band() -> None:

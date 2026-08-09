@@ -42,9 +42,7 @@ def member(slot: int, species: int, level: int, *, hp: int = 100) -> PartyMember
 
 
 def test_trainee_projection_labels_the_unique_weakest_without_identity() -> None:
-    party = PartyObservation(
-        members=(member(1, 9, 45), member(2, 3, 30), member(3, 26, 40))
-    )
+    party = PartyObservation(members=(member(1, 9, 45), member(2, 3, 30), member(3, 26, 40)))
 
     projected = project_trainee_candidates(party, POLICY, (CAVE, MANSION))
 
@@ -65,17 +63,13 @@ def test_trainee_projection_labels_the_unique_weakest_without_identity() -> None
 
 
 def test_trainee_projection_excludes_an_unobservable_nonlead_tie() -> None:
-    party = PartyObservation(
-        members=(member(1, 9, 45), member(2, 3, 30), member(3, 26, 30))
-    )
+    party = PartyObservation(members=(member(1, 9, 45), member(2, 3, 30), member(3, 26, 30)))
 
     assert project_trainee_candidates(party, POLICY, (CAVE, MANSION)) is None
 
 
 def test_venue_projection_is_equivariant_to_candidate_order() -> None:
-    party = PartyObservation(
-        members=(member(1, 9, 35), member(2, 3, 50), member(3, 26, 50))
-    )
+    party = PartyObservation(members=(member(1, 9, 35), member(2, 3, 50), member(3, 26, 50)))
     trainee = party.members[0]
 
     forward = project_venue_candidates(party, POLICY, trainee, (CAVE, MANSION))
@@ -93,12 +87,8 @@ def test_venue_projection_is_equivariant_to_candidate_order() -> None:
 
 
 def test_title_identities_do_not_change_candidate_features() -> None:
-    red = PartyObservation(
-        members=(member(1, 9, 35), member(2, 3, 50), member(3, 26, 50))
-    )
-    crystal = PartyObservation(
-        members=(member(1, 160, 35), member(2, 154, 50), member(3, 181, 50))
-    )
+    red = PartyObservation(members=(member(1, 9, 35), member(2, 3, 50), member(3, 26, 50)))
+    crystal = PartyObservation(members=(member(1, 160, 35), member(2, 154, 50), member(3, 181, 50)))
     red_areas = (
         GrindingArea("diglett_cave", 15, 21, measured_samples=100),
         GrindingArea("pokemon_mansion", 28, 34, measured_samples=100),
@@ -117,10 +107,41 @@ def test_title_identities_do_not_change_candidate_features() -> None:
     assert red_projection[1:] == crystal_projection[1:]
 
 
-def test_decision_rejects_a_candidate_outside_the_choice_set() -> None:
-    party = PartyObservation(
-        members=(member(1, 9, 35), member(2, 3, 50), member(3, 26, 50))
+def test_condition_mask_reaches_projection_and_live_binding() -> None:
+    """A night table must be absent from the candidate set during the day."""
+
+    party = PartyObservation(members=(member(1, 160, 20), member(2, 154, 50), member(3, 181, 50)))
+    day = GrindingArea("route_29", 15, 21, measured_samples=100, conditions=("day",))
+    night = GrindingArea("route_29", 25, 31, measured_samples=100, conditions=("night",))
+
+    projected = project_venue_candidates(
+        party,
+        POLICY,
+        party.members[0],
+        (night, day),
+        active_conditions=("day",),
     )
+
+    assert projected is not None
+    selected, selected_index, observation = projected
+    assert selected == day
+    assert selected_index == 0
+    assert len(observation.candidates) == 1
+    assert (
+        bind_venue_candidate(
+            party,
+            POLICY,
+            party.members[0],
+            (night, day),
+            0,
+            active_conditions=("day",),
+        )
+        == day
+    )
+
+
+def test_decision_rejects_a_candidate_outside_the_choice_set() -> None:
+    party = PartyObservation(members=(member(1, 9, 35), member(2, 3, 50), member(3, 26, 50)))
     projected = project_venue_candidates(party, POLICY, party.members[0], (CAVE, MANSION))
     assert projected is not None
     _, _, observation = projected
@@ -130,9 +151,7 @@ def test_decision_rejects_a_candidate_outside_the_choice_set() -> None:
 
 
 def test_ephemeral_candidate_indexes_bind_back_to_the_live_choice_set() -> None:
-    party = PartyObservation(
-        members=(member(1, 9, 35), member(2, 3, 50), member(3, 26, 45))
-    )
+    party = PartyObservation(members=(member(1, 9, 35), member(2, 3, 50), member(3, 26, 45)))
 
     assert bind_trainee_candidate(party, POLICY, (CAVE, MANSION), 2) == party.members[2]
     assert bind_venue_candidate(party, POLICY, party.members[0], (CAVE, MANSION), 0) == CAVE
@@ -142,12 +161,8 @@ def test_ephemeral_candidate_indexes_bind_back_to_the_live_choice_set() -> None:
 
 
 def test_recorder_retains_per_kind_state_transitions_and_reindexes() -> None:
-    party = PartyObservation(
-        members=(member(1, 9, 35), member(2, 3, 50), member(3, 26, 50))
-    )
-    projected = project_venue_candidates(
-        party, POLICY, party.members[0], (CAVE, MANSION)
-    )
+    party = PartyObservation(members=(member(1, 9, 35), member(2, 3, 50), member(3, 26, 50)))
+    projected = project_venue_candidates(party, POLICY, party.members[0], (CAVE, MANSION))
     assert projected is not None
     _, selected, observation = projected
     recorder = TrainingCandidateDecisionRecorder()

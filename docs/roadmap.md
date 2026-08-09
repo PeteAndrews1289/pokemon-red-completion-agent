@@ -7,6 +7,23 @@
 
 ### Superseding battle-control checkpoint
 
+The authenticated runtime seam is now implemented. The target-model artifact binds the canonical
+payload to its feature schema, three training lineages, one validation lineage, and the separate
+17/17 seed-990007 prospective test. Its loader rejects symlinks, undeclared files, noncanonical
+JSONL, digest changes, overlapping lineage identities, and any test result below perfect. The clean
+start harness can first shadow target choices, then conduct an explicitly uncounted isolated causal
+trial in which the teacher still decides *when* to switch and the learned head decides only *which
+living reserve* receives that request. Shadow and causal-trial authority are distinct from
+deployment authority, which remains false until a fresh completion passes.
+
+The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's
+Red/Blue reciprocal version gaps now come from one canonical table and include the previously
+omitted Pinsir and Scyther. Trading requires an explicit compatibility edge between saves; merely
+running two vessels no longer invents trade evolutions. Encounter conditions now flow through
+venue selection, candidate projection, and live binding, so a future Crystal day table cannot be
+selected at night. These changes deliberately precede artifact publication and any new emulator
+evidence.
+
 The reserve-aware lane has advanced beyond the single-lineage diagnostic described below. Three
 complete feature-v3 lineages now exist. A replacement model trained on whole lineages 01 and 03 and
 held out lineage 02 scores **98.2394% accuracy / 94.7537% balanced accuracy**, compared with
@@ -65,8 +82,9 @@ completed training, and produced a task-complete target prefix through an Agatha
 frozen candidate passed 17/17 with 0.07965 cross-entropy versus 12/17 for the baseline, including
 Bruno 2/2 and Agatha 7/7. The route stopped at 306/312 because the terminal receipt inferred only
 five role changes from move turns while seven valid switches had executed between opponent changes.
-Commit `a5e92f0` records and verifies those live switches directly. Runtime artifact publication,
-binding, shadow, and causal authority are the next gates.
+Commit `a5e92f0` records and verifies those live switches directly. Runtime artifact and binding
+code are now complete; exact private publication, live shadow, and isolated causal completion are
+the next gates.
 
 After the learned target passes offline and causal Red gates, then one canonical and one uncounted
 perturbation result, begin Crystal's bounded battle adapter.

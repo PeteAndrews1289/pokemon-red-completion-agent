@@ -16,6 +16,7 @@ from pokemon_red_completion.battle_action_targets import (
     authorize_recovery_target,
     authorize_switch_target,
     resolve_battle_action_target,
+    resolve_learned_switch_target,
 )
 from pokemon_red_completion.battle_actions import (
     BattleAction,
@@ -52,6 +53,11 @@ from pokemon_red_completion.battle_semantics import (
     BattleFeatureProjector,
     BattleMovePolicyContext,
 )
+from pokemon_red_completion.battle_switch_target import project_switch_target_candidates
+from pokemon_red_completion.battle_switch_target_model import (
+    BattleSwitchTargetMLP,
+    canonical_switch_target_model_sha256,
+)
 from pokemon_red_completion.red_battle_catalog import (
     PokemonRedBattleCatalog,
     pokemon_red_move_ref,
@@ -78,6 +84,8 @@ class ModelAssistedBattlePolicy:
     control_model: BattleControlMLP | None = None
     execute_control_model: bool = False
     control_confidence_threshold: float = 0.0
+    switch_target_model: BattleSwitchTargetMLP | None = None
+    execute_switch_target_model: bool = False
     require_teacher_agreement: bool = True
     projector: BattleFeatureProjector = field(
         default_factory=lambda: BattleFeatureProjector(PokemonRedBattleCatalog())
@@ -118,6 +126,13 @@ class ModelAssistedBattlePolicy:
     control_teacher_free_requests: int = 0
     control_intent_forced_requests: int = 0
     control_last_intent_mask: dict[str, object] | None = None
+    switch_target_shadow_decisions: int = 0
+    switch_target_shadow_agreements: int = 0
+    switch_target_shadow_confidence_total: float = 0.0
+    switch_target_shadow_unavailable: Counter[str] = field(default_factory=Counter)
+    switch_target_execution_decisions: int = 0
+    switch_target_execution_rebindings: int = 0
+    switch_target_execution_fallbacks: Counter[str] = field(default_factory=Counter)
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.confidence_threshold <= 1.0:
@@ -140,6 +155,16 @@ class ModelAssistedBattlePolicy:
             )
         if self.execute_control_model and self.control_model is None:
             raise ValueError("control execution requires a control model")
+        if self.execute_switch_target_model and self.switch_target_model is None:
+            raise ValueError("switch target execution requires a switch target model")
+        if (
+            self.execute_switch_target_model
+            and not self.allow_teacher_queries
+            and not self.execute_control_model
+        ):
+            raise ValueError(
+                "teacher-free switch target execution requires control-model execution"
+            )
         if not 0.0 <= self.control_confidence_threshold <= 1.0:
             raise ValueError("control_confidence_threshold must be between zero and one")
 
@@ -251,8 +276,10 @@ class ModelAssistedBattlePolicy:
                 # Move-level teacher gating and high-level control shadowing are
                 # independent boundaries. Preserve the teacher request for the
                 # executor while still recording it for the controller audit.
-                self._record_control_action(observation, request.action)
-                raise
+                replacement = self._handle_teacher_request(observation, request)
+                if replacement is request:
+                    raise
+                raise replacement from request
             if teacher_slot != predicted_slot:
                 assert batch is not None
                 assert predicted_candidate is not None
@@ -276,8 +303,10 @@ class ModelAssistedBattlePolicy:
                 teacher_slot = query_teacher()
             except BattleControlRequest as request:
                 self.shadow_teacher_unavailable += 1
-                self._record_control_action(observation, request.action)
-                raise
+                replacement = self._handle_teacher_request(observation, request)
+                if replacement is request:
+                    raise
+                raise replacement from request
             except Exception:
                 self.shadow_teacher_unavailable += 1
                 raise
@@ -423,6 +452,33 @@ class ModelAssistedBattlePolicy:
                 "unavailable": dict(sorted(self.control_shadow_unavailable.items())),
                 "confusion": dict(sorted(self.control_shadow_confusion.items())),
             }
+        if self.switch_target_model is not None:
+            result["switch_target_model"] = {
+                "model_id": self.switch_target_model.model_id,
+                "model_sha256": canonical_switch_target_model_sha256(self.switch_target_model),
+                "shadow": {
+                    "decisions": self.switch_target_shadow_decisions,
+                    "agreements": self.switch_target_shadow_agreements,
+                    "accuracy": (
+                        self.switch_target_shadow_agreements / self.switch_target_shadow_decisions
+                        if self.switch_target_shadow_decisions
+                        else 0.0
+                    ),
+                    "mean_confidence": (
+                        self.switch_target_shadow_confidence_total
+                        / self.switch_target_shadow_decisions
+                        if self.switch_target_shadow_decisions
+                        else 0.0
+                    ),
+                    "unavailable": dict(sorted(self.switch_target_shadow_unavailable.items())),
+                },
+                "execution": {
+                    "enabled": self.execute_switch_target_model,
+                    "decisions": self.switch_target_execution_decisions,
+                    "rebindings": self.switch_target_execution_rebindings,
+                    "fallbacks": dict(sorted(self.switch_target_execution_fallbacks.items())),
+                },
+            }
         if self.execute_control_model:
             result["control_model_execution"] = {
                 "decisions": self.control_execution_decisions,
@@ -440,6 +496,7 @@ class ModelAssistedBattlePolicy:
                 "last_intent_mask": self.control_last_intent_mask,
             }
         return result
+
     def _execute_control_decision(
         self,
         observation: BattlePolicyObservation,
@@ -517,12 +574,8 @@ class ModelAssistedBattlePolicy:
             )
         required_boost = intent.required_boost_before_first_move
         if required_boost is not None:
-            move_class_index = CONTROL_CLASS_REFS.index(
-                "pokemon.core:battle:select_move"
-            )
-            switch_class_index = CONTROL_CLASS_REFS.index(
-                "pokemon.core:battle:switch"
-            )
+            move_class_index = CONTROL_CLASS_REFS.index("pokemon.core:battle:select_move")
+            switch_class_index = CONTROL_CLASS_REFS.index("pokemon.core:battle:switch")
             boost_ref = f"pokemon.core:battle:boost:{required_boost.value}"
             boost_class_index = CONTROL_CLASS_REFS.index(boost_ref)
             first_switch_is_available = (
@@ -573,8 +626,10 @@ class ModelAssistedBattlePolicy:
             try:
                 teacher_slot = fallback()
             except BattleControlRequest as request:
-                self._record_control_action(observation, request.action)
-                raise
+                replacement = self._handle_teacher_request(observation, request)
+                if replacement is request:
+                    raise
+                raise replacement from request
             self._record_control_action(observation, BattleAction.move(teacher_slot))
             return teacher_slot
 
@@ -620,12 +675,34 @@ class ModelAssistedBattlePolicy:
                         move_predicted_candidate=move_predicted_candidate,
                         move_confidence=move_confidence,
                     )
-                resolved_action = resolve_battle_action_target(
-                    predicted_action,
-                    encoded,
-                    catalog=getattr(self.projector, "catalog", None),
-                )
+                catalog = getattr(self.projector, "catalog", None)
+                if (
+                    predicted_action.kind is BattleActionKind.SWITCH
+                    and self.execute_switch_target_model
+                ):
+                    assert self.switch_target_model is not None
+                    if catalog is None:
+                        raise BattleActionTargetError(
+                            "learned switch target catalog is unavailable"
+                        )
+                    resolved_action = resolve_learned_switch_target(
+                        predicted_action,
+                        encoded,
+                        catalog=catalog,
+                        model=self.switch_target_model,
+                    )
+                else:
+                    resolved_action = resolve_battle_action_target(
+                        predicted_action,
+                        encoded,
+                        catalog=catalog,
+                    )
             except BattleActionTargetError as error:
+                if (
+                    predicted_ref == "pokemon.core:battle:switch"
+                    and self.execute_switch_target_model
+                ):
+                    self.switch_target_execution_fallbacks[type(error).__name__] += 1
                 self.control_target_resolution_failures[type(error).__name__] += 1
                 self.control_execution_decisions += 1
                 self.control_safety_fallbacks += 1
@@ -724,7 +801,14 @@ class ModelAssistedBattlePolicy:
                 self.control_execution_decisions += 1
                 self.control_execution_requests += 1
                 self.control_teacher_free_requests += 1
-                self._record_control_action(observation, resolved_action.action)
+                if self.execute_switch_target_model:
+                    self.switch_target_execution_decisions += 1
+                    self.switch_target_execution_rebindings += 1
+                assert resolved_action.party_slot is not None
+                self._record_control_action(
+                    observation,
+                    BattleAction.switch(resolved_action.party_slot),
+                )
                 raise LearnedBattleControlRequest(
                     resolved_action.action,
                     party_slot=resolved_action.party_slot,
@@ -763,8 +847,10 @@ class ModelAssistedBattlePolicy:
             and control_class_ref(teacher_request.action) == predicted_ref
         ):
             self.control_execution_requests += 1
-            self._record_control_action(observation, teacher_request.action)
-            raise teacher_request
+            replacement = self._handle_teacher_request(observation, teacher_request)
+            if replacement is teacher_request:
+                raise teacher_request
+            raise replacement from teacher_request
 
         # The class model intentionally does not yet own cartridge-specific item or
         # party targets. A false-positive special action therefore degrades to the
@@ -831,6 +917,73 @@ class ModelAssistedBattlePolicy:
         self.model_decisions += 1
         self._record_control_action(observation, BattleAction.move(predicted_slot))
         return predicted_slot
+
+    def _handle_teacher_request(
+        self,
+        observation: BattlePolicyObservation,
+        request: BattleControlRequest,
+    ) -> BattleControlRequest:
+        """Audit a teacher switch and optionally replace only its target binding."""
+
+        action = request.action
+        if action.kind is not BattleActionKind.SWITCH or self.switch_target_model is None:
+            self._record_control_action(observation, action)
+            return request
+
+        snapshot = self.encoder.snapshot_from_raw(observation.state)
+        encoded = snapshot.to_dict()
+        teacher_action = action
+        if teacher_action.party_slot is None:
+            try:
+                resolved_teacher = resolve_battle_action_target(
+                    teacher_action,
+                    encoded,
+                    catalog=getattr(self.projector, "catalog", None),
+                )
+            except BattleActionTargetError:
+                self.switch_target_shadow_unavailable["teacher_target_unavailable"] += 1
+            else:
+                assert resolved_teacher.party_slot is not None
+                teacher_action = BattleAction.switch(resolved_teacher.party_slot)
+
+        try:
+            predicted_party_slot, confidence = self._predict_switch_target(encoded)
+        except Exception as error:
+            self.switch_target_shadow_unavailable[type(error).__name__] += 1
+            self._record_control_action(observation, teacher_action)
+            if self.execute_switch_target_model:
+                self.switch_target_execution_decisions += 1
+                self.switch_target_execution_fallbacks[type(error).__name__] += 1
+            return request
+
+        if teacher_action.party_slot is not None:
+            self.switch_target_shadow_decisions += 1
+            self.switch_target_shadow_confidence_total += confidence
+            self.switch_target_shadow_agreements += int(
+                predicted_party_slot == teacher_action.party_slot
+            )
+        self._record_control_action(observation, teacher_action)
+        if not self.execute_switch_target_model:
+            return request
+        self.switch_target_execution_decisions += 1
+        self.switch_target_execution_rebindings += 1
+        return LearnedBattleControlRequest(
+            BattleAction.switch(),
+            party_slot=predicted_party_slot,
+        )
+
+    def _predict_switch_target(
+        self,
+        encoded: Mapping[str, object],
+    ) -> tuple[int, float]:
+        assert self.switch_target_model is not None
+        catalog = getattr(self.projector, "catalog", None)
+        if catalog is None:
+            raise LearnedBattlePolicyError("switch target mechanics catalog is unavailable")
+        candidates = project_switch_target_candidates(encoded, catalog)
+        probabilities = self.switch_target_model.probabilities(candidates)
+        selected = int(np.argmax(probabilities))
+        return candidates.candidates[selected].party_slot, float(probabilities[selected])
 
     def _record_control_action(
         self,
@@ -950,8 +1103,7 @@ def _control_action_intent_mask(
         if (
             intent.require_move_between_switches
             and history.action_counts[class_index] > 0
-            and history.action_counts[move_class_index]
-            <= history.move_count_at_last_switch
+            and history.action_counts[move_class_index] <= history.move_count_at_last_switch
         ):
             return "switch_residency_mask"
     return None
@@ -1024,9 +1176,7 @@ def _unsupported_observation_context(
         "enemy_hp": raw.enemy_hp,
         "enemy_species_id": raw.enemy_species_id,
         "objective_id": intent.objective_id if intent is not None else None,
-        "required_move_policy": (
-            intent.required_move_policy.value if intent is not None else None
-        ),
+        "required_move_policy": (intent.required_move_policy.value if intent is not None else None),
         "required_move_ref": intent.required_move_ref if intent is not None else None,
     }
 

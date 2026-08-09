@@ -9,6 +9,9 @@ import json
 from pathlib import Path
 
 from pokemon_red_completion.battle_control_model import load_battle_control_model_artifact
+from pokemon_red_completion.battle_switch_target_model import (
+    load_battle_switch_target_model_artifact,
+)
 from pokemon_red_completion.clean_start_campaign import derive_initial_wait_frames
 from pokemon_red_completion.clean_start_player import (
     CleanStartPlayerError,
@@ -43,6 +46,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--battle-model", type=Path)
     parser.add_argument("--battle-control-model", type=Path)
     parser.add_argument("--execute-battle-control", action="store_true")
+    parser.add_argument("--battle-switch-target-model", type=Path)
+    parser.add_argument("--execute-battle-switch-target", action="store_true")
     parser.add_argument("--require-teacher-free-battle", action="store_true")
     parser.add_argument("--battle-confidence-threshold", type=float, default=0.0)
     parser.add_argument("--battle-control-confidence-threshold", type=float, default=0.0)
@@ -85,8 +90,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     if args.execute_battle_control and args.battle_control_model is None:
         parser.error("--execute-battle-control requires --battle-control-model")
+    if args.execute_battle_switch_target and args.battle_switch_target_model is None:
+        parser.error("--execute-battle-switch-target requires --battle-switch-target-model")
     if args.require_teacher_free_battle and args.battle_model is None:
         parser.error("--require-teacher-free-battle requires --battle-model")
+    if args.battle_switch_target_model is not None and args.battle_model is None:
+        parser.error("--battle-switch-target-model requires --battle-model")
     if args.execute_training_control and args.training_control_model is None:
         parser.error("--execute-training-control requires --training-control-model")
     if args.execute_training_candidate and args.training_candidate_model is None:
@@ -106,15 +115,24 @@ def main(argv: list[str] | None = None) -> int:
         expected_objective_graph_sha256=graph_sha256,
     )
     battle_model = (
-        load_battle_model_artifact(args.battle_model)
-        if args.battle_model is not None
-        else None
+        load_battle_model_artifact(args.battle_model) if args.battle_model is not None else None
     )
     battle_control_model = (
         load_battle_control_model_artifact(args.battle_control_model)
         if args.battle_control_model is not None
         else None
     )
+    battle_switch_target_artifact = (
+        load_battle_switch_target_model_artifact(args.battle_switch_target_model)
+        if args.battle_switch_target_model is not None
+        else None
+    )
+    if (
+        args.execute_battle_switch_target
+        and battle_switch_target_artifact is not None
+        and not battle_switch_target_artifact.causal_trial_authority
+    ):
+        parser.error("switch-target artifact lacks isolated causal-trial authority")
     training_control_model = (
         load_training_control_model(
             args.training_control_model,
@@ -157,8 +175,14 @@ def main(argv: list[str] | None = None) -> int:
             else None
         ),
         "battle_move": (
-            _model_identity(args.battle_model, battle_model)
-            if battle_model is not None
+            _model_identity(args.battle_model, battle_model) if battle_model is not None else None
+        ),
+        "battle_switch_target": (
+            _model_identity(
+                args.battle_switch_target_model,
+                battle_switch_target_artifact.model,
+            )
+            if battle_switch_target_artifact is not None
             else None
         ),
         "objective": _model_identity(args.objective_model, objective_model),
@@ -180,6 +204,12 @@ def main(argv: list[str] | None = None) -> int:
             battle_model=battle_model,
             battle_control_model=battle_control_model,
             execute_battle_control_model=args.execute_battle_control,
+            battle_switch_target_model=(
+                battle_switch_target_artifact.model
+                if battle_switch_target_artifact is not None
+                else None
+            ),
+            execute_battle_switch_target_model=args.execute_battle_switch_target,
             battle_confidence_threshold=args.battle_confidence_threshold,
             battle_control_confidence_threshold=args.battle_control_confidence_threshold,
             require_teacher_free_battle=args.require_teacher_free_battle,

@@ -18,6 +18,25 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,152 tests with 3
+integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
+public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
+errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
+from one canonical Generation I table (including Pinsir and Scyther), campaigns require explicit
+compatible `TradeLink` edges rather than treating any two saves as trade partners, and conditional
+encounter bands now participate in live trainee/venue projection and exact ephemeral binding.
+
+The exact switch-target head now has the missing runtime seam. A private artifact loader verifies
+the typed manifest, canonical JSONL streams, feature schema, canonical model payload, disjoint
+development lineages, and the separate 17/17 prospective lineage. A write-once publisher rebuilds
+the frozen `bd1ba4…` payload from the original authenticated lineages and refuses a digest mismatch.
+The live policy can shadow teacher targets or, in an explicitly uncounted causal trial, replace only
+the reserve bound to a teacher switch request; ordinary move choice remains teacher-gated. The
+portable clean-start harness accepts the authenticated target artifact, reports target confidence,
+agreement, rebinding, and fallback counters, and keeps deployment authority false. Next publish the
+exact artifact from a clean pushed commit, run shadow first, then run one fresh isolated causal
+completion. Counted v95 remains **0/10** and seed `990007` remains test-only.
+
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `a5e92f0`
 records live Agatha role switches and the passed prospective target test; `edfa676` contains the
 measured recovery-envelope repair. The full local gate passes **2,111 tests with 3 integration

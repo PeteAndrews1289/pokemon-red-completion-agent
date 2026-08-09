@@ -1,8 +1,8 @@
 """What a Pokémon Blue cartridge can register.
 
-Blue exists in this repository for one reason: ten species are exclusive to it,
+Blue exists in this repository for one reason: eleven species are exclusive to it,
 and no amount of Red planning reaches them. With three concurrent Red saves the
-campaign reaches 140 of 151 and every remaining gap except Mew is a Blue
+campaign reaches 139 of 151 and every remaining gap except Mew is a Blue
 exclusive.
 
 Blue and Red are the same game with a different pair of encounter tables and a
@@ -17,11 +17,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from pokemon_red_completion.generation_one import (
+    GENERATION_ONE_EVENT_ONLY,
+    GENERATION_ONE_TRADE_EVOLUTIONS,
+    UNAVAILABLE_IN_BLUE,
+)
 from pokemon_red_completion.pokedex import ExclusionReason, PokedexTarget, declare_target
 from pokemon_red_completion.red_pokedex import (
     DOJO_PRIZES,
     EEVEE_EVOLUTIONS,
     FOSSIL_LINES,
+    RED_CARTRIDGE_EXCLUSIONS,
     RED_TOTAL_SPECIES,
     STARTER_LINES,
     RedRunChoices,
@@ -34,8 +40,8 @@ BLUE_TOTAL_SPECIES = RED_TOTAL_SPECIES
 #: The version-exclusive half is the mirror of Red's: each game's exclusives are
 #: the other's gap, which is the entire reason a living Pokédex needs both.
 #:
-#: **These ten are derived, not measured.** They are the complement of the ten
-#: Red declares, and that relationship is what makes the pair complete. The
+#: **These eleven are declared cartridge facts, not encounter-harvest results.**
+#: They are reciprocal to Red's eleven paired-version gaps. The
 #: repository can now check them — a Blue cartridge loads and reads under the
 #: existing adapter — by harvesting encounters the same way Red's bands were
 #: measured. Until that harvest exists this table is a stated assumption, and it
@@ -44,25 +50,9 @@ BLUE_TOTAL_SPECIES = RED_TOTAL_SPECIES
 #: The trade evolutions and Mew are cartridge properties shared with Red and
 #: carry over unchanged.
 BLUE_CARTRIDGE_EXCLUSIONS: dict[int, ExclusionReason] = {
-    # Red-exclusive lines. Mirror of RED_CARTRIDGE_EXCLUSIONS' Blue-exclusives.
-    23: ExclusionReason.VERSION_EXCLUSIVE,  # Ekans
-    24: ExclusionReason.VERSION_EXCLUSIVE,  # Arbok
-    43: ExclusionReason.VERSION_EXCLUSIVE,  # Oddish
-    44: ExclusionReason.VERSION_EXCLUSIVE,  # Gloom
-    45: ExclusionReason.VERSION_EXCLUSIVE,  # Vileplume
-    56: ExclusionReason.VERSION_EXCLUSIVE,  # Mankey
-    57: ExclusionReason.VERSION_EXCLUSIVE,  # Primeape
-    58: ExclusionReason.VERSION_EXCLUSIVE,  # Growlithe
-    59: ExclusionReason.VERSION_EXCLUSIVE,  # Arcanine
-    125: ExclusionReason.VERSION_EXCLUSIVE,  # Electabuzz
-    # Evolutions that only occur on trade. Shared with Red, and liftable by a
-    # campaign that runs a partner save -- see pokemon_red_completion.campaign.
-    65: ExclusionReason.REQUIRES_TRADE,  # Alakazam
-    68: ExclusionReason.REQUIRES_TRADE,  # Machamp
-    76: ExclusionReason.REQUIRES_TRADE,  # Golem
-    94: ExclusionReason.REQUIRES_TRADE,  # Gengar
-    # Never distributed in normal play.
-    151: ExclusionReason.EVENT_DISTRIBUTION,  # Mew
+    **{species: ExclusionReason.VERSION_EXCLUSIVE for species in UNAVAILABLE_IN_BLUE},
+    **{species: ExclusionReason.REQUIRES_TRADE for species in GENERATION_ONE_TRADE_EVOLUTIONS},
+    **{species: ExclusionReason.EVENT_DISTRIBUTION for species in GENERATION_ONE_EVENT_ONLY},
 }
 
 
@@ -91,7 +81,7 @@ def blue_target(choices: RedRunChoices | None = None) -> PokedexTarget:
 #: Computed rather than written down, so it cannot disagree with the tables
 #: above. If it is ever anything but Mew, one of the two exclusion sets is
 #: wrong.
-SHARED_CARTRIDGE_GAPS = frozenset(BLUE_CARTRIDGE_EXCLUSIONS) & frozenset(
+SHARED_CARTRIDGE_GAPS = frozenset(RED_CARTRIDGE_EXCLUSIONS) & frozenset(
     species
     for species, reason in BLUE_CARTRIDGE_EXCLUSIONS.items()
     if reason is ExclusionReason.EVENT_DISTRIBUTION

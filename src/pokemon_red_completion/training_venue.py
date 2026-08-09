@@ -117,6 +117,8 @@ def select_training_venue(
     trainee: PartyMemberObservation,
     policy: BalancedTeamPolicy,
     require_healer: bool = True,
+    *,
+    active_conditions: tuple[str, ...] = (),
 ) -> TrainingVenue | None:
     """Pick the venue this trainee should actually be trained in.
 
@@ -127,7 +129,13 @@ def select_training_venue(
     """
 
     by_band = {venue.band: venue for venue in venues}
-    chosen = choose_grinding_area(by_band, trainee, policy, require_healer=require_healer)
+    chosen = choose_grinding_area(
+        by_band,
+        trainee,
+        policy,
+        require_healer=require_healer,
+        active_conditions=active_conditions,
+    )
     return by_band.get(chosen) if chosen is not None else None
 
 

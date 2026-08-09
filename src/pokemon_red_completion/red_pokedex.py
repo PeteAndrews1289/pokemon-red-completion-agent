@@ -22,6 +22,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .generation_one import (
+    GENERATION_ONE_EVENT_ONLY,
+    GENERATION_ONE_SPECIES_COUNT,
+    GENERATION_ONE_TRADE_EVOLUTIONS,
+    UNAVAILABLE_IN_RED,
+)
 from .observation import RamAddress, ReadOnlyMemory
 from .pokedex import (
     ExclusionReason,
@@ -31,7 +37,7 @@ from .pokedex import (
     registration_from_flags,
 )
 
-RED_TOTAL_SPECIES = 151
+RED_TOTAL_SPECIES = GENERATION_ONE_SPECIES_COUNT
 NICKNAME_LENGTH = 11
 PARTY_NICKNAME_COUNT = 6
 #: Nickname block start, derived from the two committed nickname symbols.
@@ -46,25 +52,11 @@ POKEDEX_SEEN = POKEDEX_OWNED + POKEDEX_FLAG_BYTES
 #: declaration short enough to review.  These are properties of the cartridge:
 #: no route recovers them, and only a paired Blue run or a trade will.
 RED_CARTRIDGE_EXCLUSIONS: dict[int, ExclusionReason] = {
-    # Blue-exclusive lines.
-    27: ExclusionReason.VERSION_EXCLUSIVE,  # Sandshrew
-    28: ExclusionReason.VERSION_EXCLUSIVE,  # Sandslash
-    37: ExclusionReason.VERSION_EXCLUSIVE,  # Vulpix
-    38: ExclusionReason.VERSION_EXCLUSIVE,  # Ninetales
-    52: ExclusionReason.VERSION_EXCLUSIVE,  # Meowth
-    53: ExclusionReason.VERSION_EXCLUSIVE,  # Persian
-    69: ExclusionReason.VERSION_EXCLUSIVE,  # Bellsprout
-    70: ExclusionReason.VERSION_EXCLUSIVE,  # Weepinbell
-    71: ExclusionReason.VERSION_EXCLUSIVE,  # Victreebel
-    126: ExclusionReason.VERSION_EXCLUSIVE,  # Magmar
-    # Evolutions that only occur on trade.
-    65: ExclusionReason.REQUIRES_TRADE,  # Alakazam
-    68: ExclusionReason.REQUIRES_TRADE,  # Machamp
-    76: ExclusionReason.REQUIRES_TRADE,  # Golem
-    94: ExclusionReason.REQUIRES_TRADE,  # Gengar
+    **{species: ExclusionReason.VERSION_EXCLUSIVE for species in UNAVAILABLE_IN_RED},
+    **{species: ExclusionReason.REQUIRES_TRADE for species in GENERATION_ONE_TRADE_EVOLUTIONS},
     # Never distributed in normal play. Left open for a later title that
     # actually features it rather than pretended away here.
-    151: ExclusionReason.EVENT_DISTRIBUTION,  # Mew
+    **{species: ExclusionReason.EVENT_DISTRIBUTION for species in GENERATION_ONE_EVENT_ONLY},
 }
 
 #: The four branches a Red run must pick, and the lines each one forecloses.
@@ -114,9 +106,7 @@ class RedRunChoices:
         ):
             value = getattr(self, field_name)
             if value not in options:
-                raise ValueError(
-                    f"{field_name} must be one of {sorted(options)}; got {value!r}"
-                )
+                raise ValueError(f"{field_name} must be one of {sorted(options)}; got {value!r}")
 
     def forfeited(self) -> dict[int, ExclusionReason]:
         """Every species this run's choices put out of reach."""

@@ -76,8 +76,21 @@ passed all 17 with 0.07965 cross-entropy while the deterministic resolver reache
 2/2, Agatha 7/7, and all three Golbat targets were correct. The route stopped afterward because the
 terminal referee could see only five role transitions in attack turns while seven valid specialist
 switches had executed around opponent changes. Live switch receipts now preserve and validate that
-missing evidence. The result authorizes the next engineering step—an authenticated target artifact
-and live binding—before a causal full-game replay can claim learned target control.
+missing evidence.
+
+That engineering seam now exists. The private publisher reconstructs the exact frozen candidate
+from its authenticated source lineages and refuses publication unless the canonical payload remains
+`bd1ba4…`. The loader authenticates the model, feature schema, lineage manifests, and separate
+perfect prospective test as one contract. In live shadow the teacher's target still executes; in an
+explicitly uncounted isolated trial the teacher still decides switch timing while the learned head
+alone binds the living reserve. Agreement, confidence, rebinding, and fallback counts stay visible.
+This is a deliberately narrow causal claim, and deployment remains false until a fresh completion
+passes.
+
+The same audit corrected the long-horizon collection substrate before it could produce misleading
+Gen II or living-Pokédex results: reciprocal Red/Blue gaps now include Pinsir and Scyther, trading
+requires explicit compatible-save links, and conditional encounter bands flow into both candidate
+projection and exact live binding.
 
 ## August 8: the evaluator rejected a win—and found the next real model gap
 

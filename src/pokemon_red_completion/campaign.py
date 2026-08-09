@@ -39,6 +39,37 @@ class CampaignPlanError(ValueError):
 
 
 @dataclass(frozen=True, slots=True)
+class TradeLink:
+    """One explicitly compatible pair of concurrent saves.
+
+    Concurrency is necessary but not sufficient for trading. Two saves on
+    incompatible titles or systems can coexist without being able to exchange
+    a Pokémon, so compatibility belongs in the plan rather than being inferred
+    from the number of vessels.
+    """
+
+    first_vessel_id: str
+    second_vessel_id: str
+
+    def __post_init__(self) -> None:
+        for name in ("first_vessel_id", "second_vessel_id"):
+            value = getattr(self, name)
+            if not isinstance(value, str) or not value.strip():
+                raise CampaignPlanError(f"{name} must be a non-empty label")
+        if self.first_vessel_id == self.second_vessel_id:
+            raise CampaignPlanError("a vessel cannot trade with itself")
+
+    @property
+    def identity(self) -> frozenset[str]:
+        """Order-independent endpoints used for duplicate detection."""
+
+        return frozenset((self.first_vessel_id, self.second_vessel_id))
+
+    def includes(self, vessel_id: str) -> bool:
+        return vessel_id in self.identity
+
+
+@dataclass(frozen=True, slots=True)
 class Vessel:
     """One concurrent save, able to hold specimens and to trade.
 
@@ -91,6 +122,7 @@ class CampaignPlan:
     """Several vessels run together as one collection."""
 
     vessels: tuple[Vessel, ...]
+    trade_links: tuple[TradeLink, ...] = ()
 
     def __post_init__(self) -> None:
         if not self.vessels:
@@ -98,17 +130,40 @@ class CampaignPlan:
         identifiers = [vessel.vessel_id for vessel in self.vessels]
         if len(set(identifiers)) != len(identifiers):
             raise CampaignPlanError("vessel identifiers must be distinct")
+        if any(not isinstance(link, TradeLink) for link in self.trade_links):
+            raise TypeError("trade_links must contain TradeLink entries")
+        known = frozenset(identifiers)
+        for link in self.trade_links:
+            unknown = link.identity - known
+            if unknown:
+                raise CampaignPlanError(
+                    f"trade link names unknown vessels: {', '.join(sorted(unknown))}"
+                )
+        identities = [link.identity for link in self.trade_links]
+        if len(set(identities)) != len(identities):
+            raise CampaignPlanError("trade links must be distinct")
 
     @property
     def has_trade_partner(self) -> bool:
-        """Whether any vessel has somewhere to trade to.
+        """Whether the campaign declares at least one compatible pair.
 
-        One vessel cannot trade with itself, so a single-vessel campaign lifts
-        nothing — which is exactly the single-cartridge case the underlying
-        target already describes.
+        Merely running two saves is not enough: the titles and hardware must
+        actually permit an exchange.
         """
 
-        return len(self.vessels) >= 2
+        return bool(self.trade_links)
+
+    def trade_partners(self, vessel_id: str) -> frozenset[str]:
+        """Every save explicitly able to trade with ``vessel_id``."""
+
+        if vessel_id not in {vessel.vessel_id for vessel in self.vessels}:
+            raise CampaignPlanError(f"unknown vessel {vessel_id!r}")
+        partners: set[str] = set()
+        for link in self.trade_links:
+            if not link.includes(vessel_id):
+                continue
+            partners.update(link.identity - {vessel_id})
+        return frozenset(partners)
 
     @property
     def titles(self) -> frozenset[str]:
@@ -126,7 +181,7 @@ class CampaignPlan:
 def campaign_reach(
     plan: CampaignPlan,
     *,
-    trade_evolutions: Mapping[int, int] = {},
+    trade_evolutions: Mapping[int, int] | None = None,
 ) -> CampaignReach:
     """What the whole plan can register.
 
@@ -163,14 +218,18 @@ def campaign_reach(
                 still_excluded.setdefault(species, reason)
     lifted_by_version = frozenset(lifted)
 
+    evolutions = {} if trade_evolutions is None else trade_evolutions
     lifted_by_trade: set[int] = set()
     if plan.has_trade_partner:
-        for species, precursor in trade_evolutions.items():
+        for species, precursor in evolutions.items():
             if species not in still_excluded:
                 continue
             if still_excluded[species] is not ExclusionReason.REQUIRES_TRADE:
                 continue
-            if precursor in union:
+            precursor_sources = tuple(
+                vessel for vessel in plan.vessels if precursor in vessel.target.obtainable
+            )
+            if any(plan.trade_partners(vessel.vessel_id) for vessel in precursor_sources):
                 lifted_by_trade.add(species)
 
     for species in lifted_by_trade:
@@ -181,7 +240,7 @@ def campaign_reach(
         unreachable=dict(sorted(still_excluded.items())),
         lifted_by_trade=frozenset(lifted_by_trade),
         lifted_by_version=lifted_by_version,
-        )
+    )
 
 
 def consolidation_required(plan: CampaignPlan, reach: CampaignReach) -> frozenset[int]:

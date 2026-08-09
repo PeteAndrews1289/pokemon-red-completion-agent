@@ -91,6 +91,16 @@ attack turns reveal only five transitions while seven valid specialist switches 
 opponent changes. Replace inferred counts with live switch receipts; label the model result
 **“offline target gate passed; runtime authority not yet granted.”**
 
+The next scene is the authority handoff itself. Rebuild the exact frozen 1,381-byte payload from
+the original authenticated lineages and make the publisher stop unless its hash is `bd1ba4…`. Show
+the artifact binding that payload to the feature schema, development manifests, and the separate
+17/17 prospective lineage. Then put two switches side by side: in shadow, the teacher's target still
+executes while the model writes only agreement and confidence; in the isolated causal trial, the
+teacher still says *switch now* but the learned head binds the living reserve. Keep “deployment:
+false” on screen. That narrow transition is more convincing than silently replacing the whole
+battle system, because it identifies exactly which decision became learned and which decisions did
+not.
+
 Keep the most important scientific detail on screen: the action-model weights did not change
 between these causal attempts. The first failures repaired a game-neutral actor/referee interface;
 the last exposed missing learned authority. No Agatha map, species, or opponent-position identity

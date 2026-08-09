@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 from pokemon_red_completion.battle_actions import (
@@ -31,12 +32,19 @@ from pokemon_red_completion.battle_semantics import (
     FEATURE_NAMES,
     BattleFeatureBatch,
 )
+from pokemon_red_completion.battle_switch_target import SWITCH_TARGET_FEATURE_NAMES
+from pokemon_red_completion.battle_switch_target_model import BattleSwitchTargetMLP
 from pokemon_red_completion.learned_battle_policy import (
     LearnedBattlePolicyError,
     ModelAssistedBattlePolicy,
     load_battle_model_artifact,
 )
 from pokemon_red_completion.observation import RawGameState
+from pokemon_red_completion.red_battle_catalog import (
+    RED_BATTLE_CATALOG,
+    pokemon_red_move_ref,
+    pokemon_red_species_ref,
+)
 
 
 def _model(*, power_weight: float = 10.0) -> MaskedLinearMoveRanker:
@@ -136,6 +144,70 @@ class _RejectingProjector:
         policy_context: object | None = None,
     ) -> BattleFeatureBatch:
         raise KeyError("missing semantic battle field")
+
+
+class _TargetProjector(_Projector):
+    catalog = RED_BATTLE_CATALOG
+
+
+class _TargetEncoder:
+    class Snapshot:
+        def to_dict(self) -> dict[str, object]:
+            def member(species_id: int, level: int, hp: int) -> dict[str, object]:
+                return {
+                    "species_ref": pokemon_red_species_ref(species_id),
+                    "level": level,
+                    "hp": hp,
+                    "max_hp": 100,
+                    "hp_ratio": hp / 100,
+                    "status": None,
+                    "moves": [
+                        {
+                            "slot_index": 0,
+                            "move_ref": pokemon_red_move_ref(0x39),
+                            "pp": 10,
+                        }
+                    ],
+                }
+
+            return {
+                "schema_version": 1,
+                "game_id": "pokemon-red",
+                "mode": "battle",
+                "location": "test",
+                "facts": [],
+                "features": {
+                    "battle": {
+                        "opponent_species_ref": pokemon_red_species_ref(0x78),
+                        "opponent_level": 50,
+                    },
+                    "party": {
+                        "count": 3,
+                        "active_index": 0,
+                        "members": [
+                            member(0x1C, 60, 100),
+                            member(0x68, 50, 20),
+                            member(0x84, 50, 90),
+                        ],
+                    },
+                },
+            }
+
+    def snapshot_from_raw(self, raw: RawGameState) -> Snapshot:
+        return self.Snapshot()
+
+
+def _switch_target_model() -> BattleSwitchTargetMLP:
+    weights = np.zeros((len(SWITCH_TARGET_FEATURE_NAMES), 1))
+    weights[0, 0] = 5.0
+    return BattleSwitchTargetMLP(
+        weights1=weights,
+        bias1=np.zeros(1),
+        weights2=np.ones(1),
+        feature_mean=np.zeros(len(SWITCH_TARGET_FEATURE_NAMES)),
+        feature_scale=np.ones(len(SWITCH_TARGET_FEATURE_NAMES)),
+        training_seed=0,
+    )
 
 
 class _ShadowEncoder:
@@ -476,6 +548,68 @@ def test_control_sink_binds_targetless_teacher_switch_to_observed_reserve() -> N
 
     assert policy.control_signals == {"pokemon.core:battle:switch:2": 1}
     assert records[0]["teacher_action"] == BattleAction.switch(2).public_dict()
+
+
+def test_switch_target_model_shadows_teacher_without_changing_its_request() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_TargetEncoder(),  # type: ignore[arg-type]
+        projector=_TargetProjector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        switch_target_model=_switch_target_model(),
+    )
+
+    teacher_request = BattleControlRequest(BattleAction.switch(2))
+    with pytest.raises(BattleControlRequest) as raised:
+        policy.choose_move(
+            _observation(),
+            lambda: (_ for _ in ()).throw(teacher_request),
+        )
+
+    assert raised.value is teacher_request
+    target = policy.public_dict()["switch_target_model"]
+    assert isinstance(target, dict)
+    assert target["shadow"] == {
+        "decisions": 1,
+        "agreements": 0,
+        "accuracy": 0.0,
+        "mean_confidence": pytest.approx(0.5592599275355958),
+        "unavailable": {},
+    }
+    assert target["execution"] == {
+        "enabled": False,
+        "decisions": 0,
+        "rebindings": 0,
+        "fallbacks": {},
+    }
+
+
+def test_switch_target_execution_rebinds_only_teacher_switch_target() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_TargetEncoder(),  # type: ignore[arg-type]
+        projector=_TargetProjector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        switch_target_model=_switch_target_model(),
+        execute_switch_target_model=True,
+    )
+
+    with pytest.raises(LearnedBattleControlRequest) as raised:
+        policy.choose_move(
+            _observation(),
+            lambda: (_ for _ in ()).throw(BattleControlRequest(BattleAction.switch(2))),
+        )
+
+    assert raised.value.action == BattleAction.switch()
+    assert raised.value.party_slot == 3
+    target = policy.public_dict()["switch_target_model"]
+    assert isinstance(target, dict)
+    assert target["execution"] == {
+        "enabled": True,
+        "decisions": 1,
+        "rebindings": 1,
+        "fallbacks": {},
+    }
 
 
 def test_control_sink_records_normal_model_move() -> None:
@@ -900,9 +1034,7 @@ def test_switch_residency_is_not_satisfied_by_a_recovery_action() -> None:
 
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
-    assert execution["target_resolution_failures"] == {
-        "switch_residency_mask": 1
-    }
+    assert execution["target_resolution_failures"] == {"switch_residency_mask": 1}
 
 
 def test_control_execution_forces_setup_then_real_residency_move() -> None:
@@ -966,9 +1098,7 @@ def test_control_execution_requires_move_before_first_switch() -> None:
     assert isinstance(execution, dict)
     assert execution["typed_requests_executed"] == 1
     assert execution["safety_fallbacks"] == 1
-    assert execution["target_resolution_failures"] == {
-        "initial_switch_residency_mask": 1
-    }
+    assert execution["target_resolution_failures"] == {"initial_switch_residency_mask": 1}
     last_mask = execution["last_intent_mask"]
     assert isinstance(last_mask, dict)
     assert last_mask["reason"] == "initial_switch_residency_mask"
@@ -995,9 +1125,7 @@ def test_control_execution_forces_declared_status_clearance_before_dispatch(
     with pytest.raises(LearnedBattleControlRequest) as raised:
         policy.choose_move(
             _observation(
-                recovery_capabilities=frozenset(
-                    {BattleRecoveryCapability.CURE_PARALYSIS}
-                ),
+                recovery_capabilities=frozenset({BattleRecoveryCapability.CURE_PARALYSIS}),
                 require_status_clear_before_move=True,
                 battler_status=0x40,
             ),
@@ -1013,9 +1141,7 @@ def test_control_execution_forces_declared_status_clearance_before_dispatch(
     assert execution["teacher_free_requests"] == 0
     assert execution["typed_requests_executed"] == 1
     assert execution["safety_fallbacks"] == 1
-    assert execution["target_resolution_failures"] == {
-        "status_clear_before_move_mask": 1
-    }
+    assert execution["target_resolution_failures"] == {"status_clear_before_move_mask": 1}
     last_mask = execution["last_intent_mask"]
     assert isinstance(last_mask, dict)
     assert last_mask["reason"] == "status_clear_before_move_mask"

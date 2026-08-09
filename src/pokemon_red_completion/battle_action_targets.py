@@ -17,6 +17,8 @@ from pokemon_red_completion.battle_runtime import (
     BattleSwitchCapability,
 )
 from pokemon_red_completion.battle_semantics import BattleMechanicsCatalog
+from pokemon_red_completion.battle_switch_target import project_switch_target_candidates
+from pokemon_red_completion.battle_switch_target_model import BattleSwitchTargetMLP
 
 
 class BattleActionTargetError(ValueError):
@@ -35,6 +37,7 @@ class SwitchTargetBasis(StrEnum):
     """Why a portable switch target was selected."""
 
     EXPLICIT = "explicit"
+    LEARNED_MODEL = "learned_model"
     MATCHUP = "matchup"
     READINESS = "readiness"
 
@@ -84,9 +87,7 @@ class ResolvedBattleAction:
             "party_slot": self.party_slot,
             "recovery_need": (self.recovery_need.value if self.recovery_need is not None else None),
             "status": self.status,
-            "switch_basis": (
-                self.switch_basis.value if self.switch_basis is not None else None
-            ),
+            "switch_basis": (self.switch_basis.value if self.switch_basis is not None else None),
         }
 
 
@@ -175,9 +176,7 @@ def resolve_battle_action_target(
         try:
             matchup = best_reserve_matchup(observation, catalog)
         except ValueError as error:
-            raise BattleActionTargetError(
-                "switch matchup projection is unavailable"
-            ) from error
+            raise BattleActionTargetError("switch matchup projection is unavailable") from error
         if matchup is None:
             raise BattleActionTargetError("no living switch target is available")
         return ResolvedBattleAction(
@@ -203,6 +202,33 @@ def resolve_battle_action_target(
         action,
         party_slot=chosen_index + 1,
         switch_basis=SwitchTargetBasis.READINESS,
+    )
+
+
+def resolve_learned_switch_target(
+    action: BattleAction,
+    observation: Mapping[str, object],
+    *,
+    catalog: BattleMechanicsCatalog,
+    model: BattleSwitchTargetMLP,
+) -> ResolvedBattleAction:
+    """Bind one switch class to a legal reserve through the learned target head."""
+
+    if not isinstance(action, BattleAction) or action.kind is not BattleActionKind.SWITCH:
+        raise BattleActionTargetError("learned switch targeting requires a switch action")
+    if not isinstance(observation, Mapping):
+        raise TypeError("observation must be a mapping")
+    if not isinstance(model, BattleSwitchTargetMLP):
+        raise TypeError("model must be a battle switch target model")
+    try:
+        candidates = project_switch_target_candidates(observation, catalog)
+        party_slot = model.predict_party_slot(candidates)
+    except ValueError as error:
+        raise BattleActionTargetError("learned switch target projection failed") from error
+    return ResolvedBattleAction(
+        action,
+        party_slot=party_slot,
+        switch_basis=SwitchTargetBasis.LEARNED_MODEL,
     )
 
 
@@ -263,7 +289,11 @@ def authorize_switch_target(
         raise BattleActionTargetError("switch effect is not declared by the executor")
     if resolved.party_slot is None:
         raise BattleActionTargetError("switch action lacks a complete party target")
-    if resolved.switch_basis in {SwitchTargetBasis.EXPLICIT, SwitchTargetBasis.MATCHUP}:
+    if resolved.switch_basis in {
+        SwitchTargetBasis.EXPLICIT,
+        SwitchTargetBasis.LEARNED_MODEL,
+        SwitchTargetBasis.MATCHUP,
+    }:
         return resolved
     if observation is not None and capabilities & {
         BattleSwitchCapability.RESET_STAT_STAGES,
@@ -273,27 +303,21 @@ def authorize_switch_target(
         features = _mapping(observation.get("features"), "features")
         party = _mapping(features.get("party"), "party")
         members_value = party.get("members")
-        if not isinstance(members_value, Sequence) or isinstance(
-            members_value, (str, bytes)
-        ):
+        if not isinstance(members_value, Sequence) or isinstance(members_value, (str, bytes)):
             raise BattleActionTargetError("party members are unavailable for switching")
         members = tuple(_mapping(value, "party member") for value in members_value)
         active_index = _active_index(party, members)
         candidates = [
             (index, member)
             for index, member in enumerate(members)
-            if index != active_index
-            and _nonnegative_int(member.get("hp"), "party hp") > 0
+            if index != active_index and _nonnegative_int(member.get("hp"), "party hp") > 0
         ]
         if not candidates:
             raise BattleActionTargetError("no living switch target is available")
         if BattleSwitchCapability.TEMPORARY_ROLE_PIVOT in capabilities:
-            active_level = _positive_int(
-                members[active_index].get("level"), "active party level"
-            )
+            active_level = _positive_int(members[active_index].get("level"), "active party level")
             strongest_level = max(
-                _positive_int(member.get("level"), "party level")
-                for _index, member in candidates
+                _positive_int(member.get("level"), "party level") for _index, member in candidates
             )
             if active_level < strongest_level:
                 chosen_index = max(
@@ -301,9 +325,7 @@ def authorize_switch_target(
                     key=lambda candidate: (
                         _positive_int(candidate[1].get("level"), "party level"),
                         _nonnegative_int(candidate[1].get("hp"), "party hp")
-                        / _positive_int(
-                            candidate[1].get("max_hp"), "party max hp"
-                        ),
+                        / _positive_int(candidate[1].get("max_hp"), "party max hp"),
                         -candidate[0],
                     ),
                 )[0]
