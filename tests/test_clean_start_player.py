@@ -7,6 +7,7 @@ import pytest
 from pokemon_red_completion.clean_start_player import (
     CleanStartPlayerError,
     CleanStartPortableReport,
+    _exception_chain,
     run_portable_clean_start,
 )
 from pokemon_red_completion.domain import GameMode, GameState
@@ -193,3 +194,17 @@ def test_clean_start_error_preserves_detached_failure_evidence() -> None:
         "stage": "objective_loop_execution",
         "frames_executed": 123,
     }
+
+
+def test_failure_chain_retains_nested_runtime_causes() -> None:
+    root = KeyError("missing battle feature")
+    middle = RuntimeError("policy failed")
+    middle.__cause__ = root
+    outer = CleanStartPlayerError("objective failed")
+    outer.__cause__ = middle
+
+    assert _exception_chain(outer) == [
+        {"exception_type": "CleanStartPlayerError", "message": "objective failed"},
+        {"exception_type": "RuntimeError", "message": "policy failed"},
+        {"exception_type": "KeyError", "message": "'missing battle feature'"},
+    ]

@@ -92,6 +92,7 @@ class ModelAssistedBattlePolicy:
     teacher_fallbacks: int = 0
     forced_decisions: int = 0
     fallback_reasons: Counter[str] = field(default_factory=Counter)
+    unsupported_observation_errors: Counter[str] = field(default_factory=Counter)
     correction_records: int = 0
     shadow_teacher_disagreements: int = 0
     shadow_teacher_unavailable: int = 0
@@ -194,7 +195,12 @@ class ModelAssistedBattlePolicy:
                     fallback_reason = "low_confidence"
                 else:
                     predicted_slot = batch.slot_indices[candidate] + 1
-        except Exception:
+        except Exception as error:
+            self.unsupported_observation_errors[type(error).__name__] += 1
+            if not self.allow_teacher_queries:
+                raise LearnedBattlePolicyError(
+                    "teacher-free battle evaluation rejected an unsupported live observation"
+                ) from error
             fallback_reason = "unsupported_observation"
         if fallback_reason == "low_confidence":
             teacher_slot = query_teacher()
@@ -361,6 +367,9 @@ class ModelAssistedBattlePolicy:
             "confidence_threshold": self.confidence_threshold,
             "teacher_agreement_required": self.require_teacher_agreement,
             "fallback_reasons": dict(sorted(self.fallback_reasons.items())),
+            "unsupported_observation_errors": dict(
+                sorted(self.unsupported_observation_errors.items())
+            ),
             "correction_records": self.correction_records,
             "shadow_teacher_disagreements": self.shadow_teacher_disagreements,
             "shadow_teacher_unavailable": self.shadow_teacher_unavailable,

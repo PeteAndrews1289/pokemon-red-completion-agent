@@ -452,10 +452,8 @@ def _partial_failure_evidence(
             if schedule is not None
             else None
         ),
-        "cause": {
-            "exception_type": type(error).__name__,
-            "message": str(error),
-        },
+        "cause": {"exception_type": type(error).__name__, "message": str(error)},
+        "exception_chain": _exception_chain(error),
         "controller_released": not emulator.pressed_buttons,
         "frames_executed": emulator.frame_count,
         "loop": dict(loop.public_dict()),
@@ -476,6 +474,22 @@ def _partial_failure_evidence(
             phases=(TrainingControlPhase.BATTLE.value, TrainingControlPhase.OVERWORLD.value),
         ),
     }
+
+
+def _exception_chain(error: BaseException, *, maximum_depth: int = 8) -> list[dict[str, str]]:
+    chain: list[dict[str, str]] = []
+    seen: set[int] = set()
+    current: BaseException | None = error
+    while current is not None and len(chain) < maximum_depth and id(current) not in seen:
+        seen.add(id(current))
+        chain.append(
+            {
+                "exception_type": type(current).__name__,
+                "message": str(current),
+            }
+        )
+        current = current.__cause__ or current.__context__
+    return chain
 
 
 def _authority_report(

@@ -111,6 +111,16 @@ class _Projector:
         return _batch()
 
 
+class _RejectingProjector:
+    def project(
+        self,
+        snapshot: object,
+        *,
+        policy_context: object | None = None,
+    ) -> BattleFeatureBatch:
+        raise KeyError("missing semantic battle field")
+
+
 class _ShadowEncoder:
     class Snapshot:
         def to_dict(self) -> dict[str, object]:
@@ -343,6 +353,26 @@ def test_teacher_free_policy_fails_instead_of_using_low_confidence_fallback() ->
     with pytest.raises(LearnedBattlePolicyError, match="forbids teacher queries"):
         policy.choose_move(_observation(), lambda: 1)
     assert policy.teacher_queries == 0
+
+
+def test_teacher_free_policy_preserves_unsupported_observation_cause() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_Encoder(),  # type: ignore[arg-type]
+        projector=_RejectingProjector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+        allow_teacher_queries=False,
+    )
+
+    with pytest.raises(LearnedBattlePolicyError, match="unsupported live observation") as raised:
+        policy.choose_move(_observation(), lambda: 1)
+
+    assert isinstance(raised.value.__cause__, KeyError)
+    assert policy.teacher_queries == 0
+    assert policy.teacher_fallbacks == 0
+    assert policy.unsupported_observation_errors == {"KeyError": 1}
+    assert policy.public_dict()["unsupported_observation_errors"] == {"KeyError": 1}
 
 
 def test_shadow_teacher_preserves_non_move_control_signal() -> None:
