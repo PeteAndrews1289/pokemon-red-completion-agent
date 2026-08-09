@@ -12,11 +12,12 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 
 This section supersedes every older “next” statement below.
 
-**Branch and pushed code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `119984b` includes
-the offline switch-target learning seam, venue-scoped Route 11 sleep recovery, and corrected
-Viridian status receipt. Its full local gate passed **2,109 tests with 3
-integration tests deselected**, Ruff, mypy, documentation, public-artifact, and source-registry
-checks. Only Codex pushes this branch; do not create a second worktree or force-push it.
+**Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `edfa676`
+preserves the failed seed-990006 receipt and replaces the obsolete 1,250-heal training cap with a
+measured finite 2,000-trip envelope. Its full local gate passed **2,110 tests with 3 integration
+tests deselected**, Ruff, mypy, documentation, public-artifact, and source-registry checks. Push it
+before any new emulator run. Only Codex pushes this branch; do not create a second worktree or
+force-push it.
 
 **Latest causal result:** attempt 13 ran from source `4ea7e93` with the frozen reserve-aware action
 candidate. It reached checkpoint 306, passed Rock Tunnel, Lorelei, and Bruno, defeated Agatha, used
@@ -35,14 +36,23 @@ lineage 02 (13 targets). It fits 28/28 versus the deterministic baseline's 22/28
 The public receipt therefore says `deployment_authority: false`; do not load it into the emulator or
 start another full causal replay yet.
 
-**Exact next dependency:** commit and push the plan-balanced target learner, then collect seed
-`990006` from that exact source as a one-time unopened test. The frozen development candidate uses
+**Exact next dependency:** push `edfa676`, then collect seed `990007` from that exact source as a
+one-time unopened test. The frozen development candidate uses
 two hidden units, 1,000 epochs, learning rate 0.01, L2 0.003, and equal total optimization weight per
 battle plan. It reached 54/54 across four opened leave-one-whole-lineage-out folds, then fit 41/41
 training targets and 13/13 existing validation targets. These are development results, not a test.
-Require every target—including Bruno and Agatha's Golbat—to pass seed 990006 before building an
+Require every target—including Bruno and Agatha's Golbat—to pass seed 990007 before building an
 authenticated target artifact and runtime binding. The counted v95 campaign remains unopened at
 **0/10** and must not supply this development data.
+
+**Latest unopened attempt:** seed `990006` progressed cleanly through checkpoint 275 and 1,500
+balanced-team wins with zero faints. Four members reached level 55 and the remaining two reached
+54, but the run consumed the old 1,250-trip recovery cap before Bruno or Agatha could emit target
+test rows. Its 3,118 partial battle labels are excluded from both fitting and evaluation, the
+frozen target candidate was not evaluated, and the seed is retired. The 90% retreat rule remains
+unchanged; the new 2,000 ceiling is finite and permits one recovery per fight across the largest
+completed 1,808-battle development block. See the
+[failure receipt](docs/evidence/battle-control-reserve-matchup-v3-lineage-07-failure-2026-08-09.json).
 
 **Latest collection attempt:** fresh uncounted timing seed `990004` qualified the Route 11 repair,
 completed the balanced-team curriculum at 51/52/52/55/51/51, defeated Blaine, and reached checkpoint

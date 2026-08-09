@@ -49,11 +49,12 @@ single successful demo does not establish transfer.
 
 The fourth complete Red lineage has now passed Hall of Fame and tested the first frozen target head:
 11/13 learned targets versus 9/13 for the deterministic resolver. A plan-balanced second candidate
-reaches 54/54 across the four opened development folds, but fresh seed 990006 remains its unopened
-test and runtime target authority is not implemented. This improves the odds that the shared
-battle representation is useful; it does not change the sequencing decision. Crystal's first code
-still begins after that offline test and the Red runtime binding, as bounded microtasks rather than
-a complete route.
+reaches 54/54 across the four opened development folds. Seed 990006 stopped before target
+evaluation when its route exhausted an obsolete finite recovery cap; its partial labels are
+excluded and the model remains untested. Runtime target authority is also not implemented. This
+improves the odds that the shared battle representation is useful; it does not change the
+sequencing decision. Crystal's first code still begins after fresh seed 990007's offline test and
+the Red runtime binding, as bounded microtasks rather than a complete route.
 
 ## How a YouTube playthrough helps
 

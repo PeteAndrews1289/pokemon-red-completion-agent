@@ -30,7 +30,7 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Portable strategic authority | 114,831 controlled choices, 400 executed disagreements, 1,803 development battles, no fallback; fresh observation opened Giovanni | Singleton objective dispatch and authored mechanics remain |
 | Portable clean-start baseline | 21 selected composites plus 15 automatic effects through Hall of Fame; no expected label, fixed dispatch, or fallback | Battle mechanics were not under the full strict learned stack |
 | Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
-| Reserve-aware controller | Four complete clean-power lineages; 98.2394% held-out class accuracy / 94.7537% balance; second target candidate is 54/54 across opened whole-lineage folds | The target settings were selected on those opened lineages; seed 990006, runtime binding, and causal authority remain |
+| Reserve-aware controller | Four complete clean-power lineages; 98.2394% held-out class accuracy / 94.7537% balance; second target candidate is 54/54 across opened whole-lineage folds | Seed 990006 stopped before target evaluation; fresh seed 990007, runtime binding, and causal authority remain |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
 | Repository gate | 2,110 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
 
@@ -107,7 +107,8 @@ matchups. Feature schema v3 now can, and it binds the chosen semantic candidate 
 A fresh artifact improved rare-class held-out balance and has causal evidence through an Agatha win.
 The first switch-target head also beat its deterministic baseline but repeated the causal Golbat
 case. The second candidate is perfect across 54 opened development labels after plan-balanced
-training, which is promising but not prospective evidence. Fresh seed 990006 must pass once before
+training, which is promising but not prospective evidence. Seed 990006 stopped before producing
+target test rows and is excluded; fresh seed 990007 must pass once before
 target-artifact authentication, runtime authority, strict canonical completion, or combination with
 teacher-free ordinary moves.
 
@@ -144,6 +145,6 @@ until a reserve-aware battle artifact passes canonical and perturbation rehearsa
 5. Show the clean-start baseline reaching Hall of Fame, then contrast the strict run's Lorelei win
    with `[19, 0, 0, 0, 0, 0]` and the verifier's red result.
 6. End on the causal staircase: Rock Tunnel residency, Lorelei status safety, Agatha role residency,
-   then split the final “switch” card into timing and target heads. Show 54/54 opened development
-   beside `seed 990006: unopened`. Boundary card: “100% development was the beginning of the test,
-   not the end.”
+   then split the final “switch” card into timing and target heads. Show 54/54 opened development,
+   `seed 990006: infrastructure stop; model untested`, and `seed 990007: unopened`. Boundary card:
+   “100% development was the beginning of the test, not the end.”

@@ -32,6 +32,11 @@
   deterministic resolver's 9/13, then explicitly opened the result for development. Added
   equal-total battle-plan loss weighting and selected L2 0.003, reaching 54/54 across four opened
   leave-one-lineage-out folds and freezing seed 990006 as the next unopened test.
+- Preserved seed 990006 after it reached checkpoint 275 and 1,500 zero-faint team-training wins but
+  exhausted the old 1,250-trip recovery cap with four members at level 55 and two at 54. Its 3,118
+  partial labels never reached the switch-target test boundary and remain excluded. Kept the 90%
+  retreat contract while replacing the stale cap with a measured finite 2,000-trip envelope; fresh
+  seed 990007 is the next unopened test.
 - Added the August 9 capability audit and expanded the project and video narratives around the
   distinction between offline agreement, causal high-level authority, typed intent enforcement,
   and combined teacher-free play.

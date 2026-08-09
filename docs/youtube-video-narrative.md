@@ -76,6 +76,13 @@ the celebration again: those settings were chosen after seeing all four lineages
 put `seed 990006: unopened` on screen. The honest climax is not the 100%; it is refusing to call an
 opened development score a final test.
 
+Then show why even the test harness must earn trust. Seed 990006 reaches checkpoint 275 and 1,500
+safe training wins with zero faints. Four Pokémon are level 55 and two are level 54 when the old
+1,250-trip recovery cap stops the run before Bruno or Agatha can emit a single target test row.
+Label it **“infrastructure failure; model untested”**. Exclude all 3,118 partial labels, retire the
+seed, preserve the 90% retreat rule, and derive a finite 2,000-trip envelope from the largest
+completed 1,808-battle block. The next sealed card becomes `seed 990007: unopened`.
+
 Keep the most important scientific detail on screen: the action-model weights did not change
 between these causal attempts. The first failures repaired a game-neutral actor/referee interface;
 the last exposed missing learned authority. No Agatha map, species, or opponent-position identity

@@ -6,9 +6,12 @@
 > later completed 312/312 and supplied the fourth lineage while independently qualifying the Route
 > 11 and Viridian repairs. The first frozen target head scored 11/13 on it versus the baseline's
 > 9/13. Plan-balanced training with L2 0.003 then reached 54/54 across all four opened
-> leave-one-lineage-out folds and 13/13 on the existing validation lineage. Freeze those settings;
-> after commit/push, seed `990006` is the unopened test. Do not tune on its outcome, add it to
-> fitting before recording the test, rerun retired seeds `990003`–`990005`, build a complete Crystal
+> leave-one-lineage-out folds and 13/13 on the existing validation lineage. Seed `990006` then
+> stopped at the old 1,250-heal bound with four members at 55 and two at 54, before producing any
+> Bruno/Agatha test targets. Its partial labels are excluded and the frozen model remains untested.
+> Commit `edfa676` preserves the 90% retreat and zero-faint rules while setting a measured finite
+> 2,000-trip envelope; after push, seed `990007` is the unopened test. Do not tune on its outcome, add it to
+> fitting before recording the test, rerun retired seeds `990003`–`990006`, build a complete Crystal
 > route, relax the verifier, or consume a counted v95 root. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).
 
@@ -356,12 +359,12 @@ Current state: **2,110 passed, 3 deselected**, all checks green, on trunk
 
 These are ordered by how much they serve the mission, not by difficulty.
 
-**1. Run the frozen unopened target test. (Lane A/C)** After the exact source is committed, pushed,
-and fully gated, collect seed `990006` once. Evaluate the frozen two-unit, plan-balanced, L2 0.003
+**1. Run the frozen unopened target test. (Lane A/C)** After `edfa676` is pushed and GitHub CI is
+green, collect seed `990007` once. Evaluate the frozen two-unit, plan-balanced, L2 0.003
 candidate before any reuse of that lineage. Do not use counted v95 roots.
 
 **2. Qualify the target head offline. (Lane B/C)** Beat the deterministic target baseline on seed
-990006, preserve reserve-permutation equivariance, pass counterfactual matchup tests, and select
+990007, preserve reserve-permutation equivariance, pass counterfactual matchup tests, and select
 Jolteon for the
 held-out Agatha Golbat role. A switch-class score without target accuracy does not count.
 

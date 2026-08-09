@@ -92,7 +92,14 @@ trace cannot dominate a two-switch trace, and reduces L2 from 0.03 to 0.003. Wit
 to model inputs, the selected two-unit model scores 54/54 across the four opened
 leave-one-whole-lineage-out folds, fits 41/41 development targets, and scores 13/13 on the existing
 whole-lineage validation set. Because those settings were selected after opening all four lineages,
-deployment authority remains false. Fresh seed 990006 is the one-time unopened test.
+deployment authority remains false.
+
+Fresh seed 990006 did not reach the model test. It progressed through checkpoint 275 and 1,500
+zero-faint balanced-team wins, ending with four members at level 55 and two at 54. The old finite
+1,250-trip recovery budget expired before Bruno or Agatha emitted switch-target rows. Its 3,118
+partial labels are excluded from training and evaluation, the seed is retired, and the frozen
+candidate remains untested. Commit `edfa676` retains the 90% retreat and zero-faint contracts while
+setting a measured 2,000-trip ceiling. Fresh seed 990007 is the one-time unopened test.
 
 ## Capability scorecard
 
@@ -101,7 +108,7 @@ deployment authority remains false. Fresh seed 990006 is the one-time unopened t
 | Deterministic Red teacher/referee | 9/10 | Repeated clean-power 312/312, 36/36, Hall-of-Fame runs with strict chapter contracts. This is an expert oracle, not learned autonomy. |
 | Experiment integrity | 9/10 | Source/model/root hashes, whole-lineage splits, private artifact boundaries, preserved failures, one-attempt accounting, and 0/10 counted roots consumed. |
 | Learned battle moves | 7/10 | A nonlinear ranker has prior live completion evidence, but the current reserve-controller causal lane keeps ordinary moves teacher-gated. The combined teacher-free stack remains unqualified. |
-| Learned high-level battle control | 7/10 | Strong held-out class balance, causal progress through Agatha, and 54/54 target accuracy across opened whole-lineage folds; seed 990006 and runtime target authority remain. |
+| Learned high-level battle control | 7/10 | Strong held-out class balance, causal progress through Agatha, and 54/54 target accuracy across opened whole-lineage folds; seed 990006 stopped before target evaluation, so seed 990007 and runtime target authority remain. |
 | Learned objective selection | 6/10 | Clean start selects registered composite goals from semantic state, but most candidate sets are singleton and fixed authored skills perform the mechanics. |
 | Learned trainee/venue strategy | 7/10 | The identity-free candidate ranker beat its shape baseline and completed a clean-power curriculum with real disagreements. It remains Red-only evidence. |
 | Navigation and menu autonomy | 3/10 | Reusable local planning exists, but the completion path is still dominated by authored chapter routes and menu executors. |
@@ -143,10 +150,9 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Collect additional complete, timing/RNG-varied teacher lineages with explicit switch targets,
-   especially at Bruno and Agatha. Preserve whole lineages as train, validation, and unopened test;
-   test party-order permutations offline and do not use counted v95 roots for development data.
-2. Refit the switch-target head and require improvement over the deterministic baseline, reserve
+1. Push the exact fully gated `edfa676` source, then collect fresh seed 990007 once. Keep the frozen
+   candidate unchanged and evaluate it before opening any completed lineage for development.
+2. Require improvement over the deterministic baseline, reserve
    permutation equivariance, counterfactual matchup sensitivity, and the held-out Golbat target
    before granting runtime authority.
 3. Rerun the fresh power-on reserve-controller gate only after the target head qualifies. Preserve
