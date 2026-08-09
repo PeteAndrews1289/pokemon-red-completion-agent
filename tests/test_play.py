@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.fuchsia import (
     SNORLAX,
     SNORLAX_CAPTURE_POLICY,
@@ -16,6 +17,9 @@ from pokemon_red_completion.fuchsia import (
 from pokemon_red_completion.observation import (
     SQUIRTLE_SPECIES_ID,
     Badge,
+    BattleMenuPhase,
+    BattleMenuState,
+    InputReadiness,
     MapId,
     OaksErrandPhase,
     OaksErrandState,
@@ -40,6 +44,8 @@ from pokemon_red_completion.play import (
     QualifiedPlayProgress,
     QualifiedPlayReport,
     QualifiedPlayTiming,
+    Route1WildFleeEvidence,
+    _move_route_1_with_wild_flees,
     _objective_model_progress_bridge,
     _qualified_play_chapter_error,
     _trajectory_progress_bridge,
@@ -1168,6 +1174,7 @@ def test_qualified_play_timing_defaults_are_positive_bounded_integers() -> None:
         route_1_north_seed_wait_frames=192,
         mart_prompt_wait_frames=240,
         route_1_south_seed_wait_frames=48,
+        max_route_1_wild_flees=8,
         max_rival_pulses=96,
         max_parcel_pulses=5,
         max_pokedex_pulses=42,
@@ -2089,6 +2096,105 @@ def test_rival_victory_accepts_supported_squirtle_dvs_and_surviving_hp(
     )
 
     assert is_rival_victory_verified(victory, saw_trainer_battle=True)
+
+
+def test_route_1_traversal_flees_one_wild_and_preserves_the_consumed_step() -> None:
+    before = replace(
+        _raw(MapId.ROUTE_1, 10, 35),
+        first_party_hp=23,
+        first_party_max_hp=23,
+        first_party_pp=(35, 30, 0, 0),
+    )
+    encounter = replace(
+        before,
+        player_y=34,
+        battle_state=1,
+        battle_result=0,
+        enemy_species_id=165,
+        enemy_level=3,
+    )
+    final = replace(
+        encounter,
+        battle_state=0,
+        battle_result=2,
+        first_party_hp=22,
+    )
+
+    class _Reader:
+        state = before
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=3)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return InputReadiness(0, 0, 0, 0, 0)
+
+    reader = _Reader()
+
+    class _Executor:
+        kinds: list[MacroActionKind] = []
+
+        def execute(self, action: MacroAction) -> object:
+            kind = action.kind
+            self.kinds.append(kind)
+            if kind is MacroActionKind.MOVE and reader.state is before:
+                reader.state = encounter
+            elif kind is MacroActionKind.CONFIRM and reader.state is encounter:
+                reader.state = final
+            return object()
+
+    executor = _Executor()
+    terminal, flees = _move_route_1_with_wild_flees(  # type: ignore[arg-type]
+        executor,
+        reader,  # type: ignore[arg-type]
+        ("up",),
+        "Route 1 unit route",
+        maximum_flees=1,
+    )
+
+    assert terminal is final
+    assert len(flees) == 1
+    assert isinstance(flees[0], Route1WildFleeEvidence)
+    assert flees[0].verified
+    assert flees[0].public_dict()["run_attempts"] == 1
+    assert executor.kinds.count(MacroActionKind.MOVE) == 1
+    assert executor.kinds.count(MacroActionKind.CONFIRM) == 1
+
+
+def test_route_1_traversal_rejects_wilds_beyond_its_declared_allowance() -> None:
+    before = _raw(MapId.ROUTE_1, 10, 35)
+    encounter = replace(
+        before,
+        player_y=34,
+        battle_state=1,
+        enemy_species_id=165,
+        enemy_level=3,
+    )
+
+    class _Reader:
+        state = before
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = _Reader()
+
+    class _Executor:
+        def execute(self, _action: object) -> object:
+            reader.state = encounter
+            return object()
+
+    with pytest.raises(QualifiedPlayError, match="bounded 0-encounter flee allowance"):
+        _move_route_1_with_wild_flees(  # type: ignore[arg-type]
+            _Executor(),
+            reader,  # type: ignore[arg-type]
+            ("up",),
+            "Route 1 unit route",
+            maximum_flees=0,
+        )
 
 
 def test_captured_rival_checkpoint_survives_later_wild_escape_result() -> None:

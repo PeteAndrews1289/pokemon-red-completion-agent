@@ -7,7 +7,10 @@
 > lab-rival win produced a legal 23-HP level-6 Squirtle while the old verifier required exactly 21,
 > and 56 dialogue pulses stopped at script 13 before controls released. The gate now accepts only
 > the legal 21–23 DV range while retaining the win/event/map/script/control proof, and its bounded
-> pulse cap is 96. Regenerate, validate, commit, push, then run a fresh uncounted perturbation. Do
+> pulse cap is 96. Seed `990017` passed that gate, then a normal Route 1 wild encounter hit the old
+> zero-encounter corridor. Route 1 now permits eight evidence-bearing flees across the round trip
+> while preserving party, level, max HP, PP, status, coordinate, and released control. Regenerate,
+> validate, commit, push, then run a fresh uncounted perturbation. Do
 > not add `990007` to fitting, rerun retired model-test roots, build a complete Crystal route, weaken
 > the curriculum lesson, or consume a counted v95 root. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).

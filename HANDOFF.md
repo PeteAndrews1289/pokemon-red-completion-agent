@@ -18,7 +18,7 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
-**Late audit and runtime checkpoint:** the full repository gate now passes **2,162 tests with 3
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,164 tests with 3
 integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
 public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
 errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
@@ -80,18 +80,26 @@ starter had 23, and its 56-pulse cap stopped before the post-win script released
 reproduced run reached script 18 with battle result zero, the event set, and 23/23 HP under a larger
 bounded cap. The repair accepts only the legal 21–23 level-6 Squirtle range, retains every semantic
 win proof, and raises the cap to 96. Regenerate, validate, commit, push, then run a fresh uncounted
-perturbation. Counted v95 remains **0/10** and `990007` remains test-only. See the
+perturbation. Commit `4f5f870` completed that gate. Fresh seed `990017` passed the rival, then an
+ordinary Route 1 wild encounter at northbound step 2 hit the old zero-encounter movement helper.
+The new helper accepts only Route 1 wild battles, flees at most eight across both crossings, and
+requires result two, released controls, a living starter, the same coordinate, and exact
+party/level/max-HP/PP/status preservation before resuming the already-consumed step. Regenerate,
+validate, commit, push, then use a fresh perturbation. Counted v95 remains **0/10** and `990007`
+remains test-only. See the
 [first failure](docs/evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json),
 the [second failure](docs/evidence/portable-clean-start-six-role-rehearsal-02-failure-2026-08-09.json),
 the [Lorelei failure](docs/evidence/portable-clean-start-six-role-rehearsal-03-failure-2026-08-09.json),
 the [Agatha receipt failure](docs/evidence/portable-clean-start-six-role-rehearsal-04-failure-2026-08-09.json),
 the [canonical qualification](docs/evidence/portable-clean-start-six-role-canonical-qualification-2026-08-09.json),
-and the [perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-01-failure-2026-08-09.json).
+the [first perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-01-failure-2026-08-09.json),
+and the [second perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-02-failure-2026-08-09.json).
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the
-source of the passed canonical receipt. The lab-rival DV/dialogue repair and its regenerated v95
-registry are the current uncommitted lane and must complete the full local gate and clean push
-before replay. Only Codex pushes this branch; do not create a second worktree or force-push it.
+source of the passed canonical receipt and `4f5f870` qualified the lab-rival repair through the next
+Route 1 boundary. The bounded Route 1 flee helper and its regenerated v95 registry are the current
+uncommitted lane and must complete the full local gate and clean push before replay. Only Codex
+pushes this branch; do not create a second worktree or force-push it.
 
 **Latest causal result:** attempt 13 ran from source `4ea7e93` with the frozen reserve-aware action
 candidate. It reached checkpoint 306, passed Rock Tunnel, Lorelei, and Bruno, defeated Agatha, used

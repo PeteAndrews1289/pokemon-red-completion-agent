@@ -67,6 +67,14 @@ is preserved. The repaired gate accepts only the legal 21–23 max-HP range whil
 result, map, script, species, level, live-HP, and control proofs, with a 96-pulse cap. A fresh
 uncounted perturbation is now the immediate gate; v95 remains 0/10.
 
+Seed `990017` passed the repaired lab-rival boundary and then encountered a normal wild Pokémon on
+Route 1 northbound step 2. The deterministic corridor still required zero encounters and failed
+before model battle authority. The
+[second perturbation failure](evidence/portable-clean-start-six-role-perturbation-02-failure-2026-08-09.json)
+is preserved. Route 1 now has a bounded eight-flee round-trip allowance with explicit opponent,
+coordinate, HP, RUN-attempt, control, party, level, max-HP, PP, and status evidence. The next gate
+remains one fresh complete uncounted perturbation; v95 remains 0/10.
+
 The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's
 Red/Blue reciprocal version gaps now come from one canonical table and include the previously
 omitted Pinsir and Scyther. Trading requires an explicit compatibility edge between saves; merely

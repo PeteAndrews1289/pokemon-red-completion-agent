@@ -160,6 +160,11 @@ determinant values, and the old verifier mistook one stat vector for the semanti
 second defect—dialogue budget ending at script 13—then the reproduced script-18, controls-ready
 snapshot under a larger bounded cap. Caption it: **“A robust referee must generalize too.”**
 
+The next seed clears the rival and walks two steps into Route 1—then a wild encounter appears and
+the route turns red again. Use the absurdity: an agent that claims to play Pokémon cannot require
+Pokémon never to appear. Show the bounded RUN action and the receipt checking the exact party,
+level, max HP, PP, status, tile, and released controls before the corridor resumes.
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

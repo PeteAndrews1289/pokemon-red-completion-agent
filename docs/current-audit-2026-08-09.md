@@ -185,6 +185,13 @@ script 18 with battle result zero, the event set, and 23/23 HP. The repair retai
 win proof, accepts only the legal level-6 21–23 max-HP range, and raises the cap to 96. See the
 [perturbation failure](evidence/portable-clean-start-six-role-perturbation-01-failure-2026-08-09.json).
 
+Seed `990017` passed that repaired boundary, then produced an ordinary Route 1 wild encounter on
+northbound step 2. The opening corridor still required zero encounters and rejected normal game
+variance before any model battle or training decision. The replacement helper permits at most
+eight Route 1 flees across the round trip and independently proves result two, released controls,
+the same coordinate, living HP, and exact party/level/max-HP/PP/status preservation. See the
+[second perturbation failure](evidence/portable-clean-start-six-role-perturbation-02-failure-2026-08-09.json).
+
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared
 gap calculation intersected Blue with itself. One canonical Generation I facts module now derives
@@ -211,7 +218,7 @@ silently acting at night.
 ## Code and test health
 
 - 127 source modules and 135 test modules cover roughly 88,000 source lines and 52,500 test lines.
-- The current full gate passes **2,162 tests** with 3 emulator-integration tests deselected and 1
+- The current full gate passes **2,164 tests** with 3 emulator-integration tests deselected and 1
   expected failure, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.
@@ -245,7 +252,7 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Complete the full ROM-free gate for the lab-rival DV/dialogue repair; commit and push the
+1. Complete the full ROM-free gate for the bounded Route 1 flee repair; commit and push the
    regenerated source identity.
 2. Run a fresh uncounted derived-timing seed with the exact combined artifact set. Preserve any
    next route or model defect without weakening its semantic contract.

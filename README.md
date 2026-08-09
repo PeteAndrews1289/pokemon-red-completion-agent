@@ -111,6 +111,13 @@ result zero, the rival event set, level 6, and a legal 23/23 HP Squirtle. The re
 the cartridge win, event, species, level, map, script, and released-control proofs while accepting
 the legal 21–23 max-HP range; see the
 [perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-01-failure-2026-08-09.json).
+Fresh seed `990017` qualified that repair, then exposed the next deterministic assumption: an
+ordinary Route 1 wild encounter at northbound step 2 was treated as fatal. Route 1 now permits a
+finite eight flees across the round trip and records each opponent, coordinate, HP change, RUN
+attempt count, released-control proof, and exact party/level/max-HP/PP/status preservation. A
+trainer battle, wrong map, dead starter, changed protected state, or ninth encounter still fails
+closed. See the
+[second perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-02-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95
 reliability campaign remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.
@@ -127,7 +134,7 @@ demonstrations and a referee; it is not the final autonomous player.
 | Learned training control | The trainee/venue ranker beat its shape baseline and completed clean start with 114,831 controlled choices and 400 disagreements | One uncounted Red root; navigation and menus remain authored |
 | Strict learned-stack composition | Seed 990015 completed 36/36 objectives and Hall of Fame with 3,315 battle decisions, 21/21 learned target bindings, and both training heads in live control | One canonical root; authored route and menu skills still execute mechanics |
 | Reserve-aware battle control | Frozen target head passed 17/17 prospective targets, 13/13 isolated causal bindings, and 21/21 bindings inside the combined canonical completion | The first paired timing root exposed an early deterministic-referee defect before model decisions; fresh perturbation qualification remains |
-| Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Counted campaign remains 0/10 until a repaired perturbation rehearsal passes |
+| Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Two early deterministic route assumptions have been exposed by perturbation; counted campaign remains 0/10 until a complete repaired rehearsal passes |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |
 

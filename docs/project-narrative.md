@@ -2270,6 +2270,12 @@ keeps the observed battle, cartridge result, event, map, script, species, level,
 proofs while accepting only that legal range. Once again, the useful product is not a green badge;
 it is a verifier that can tell a genuine behavioral failure from its own accidental answer key.
 
+The next root proved the repair and found the next assumption two steps onto Route 1. A normal wild
+encounter appeared; the deterministic corridor called it fatal. That is not robustness and it is
+not Pokémon. The route now performs a bounded RUN action, records the encountered species and HP
+change, and refuses to resume until the map, coordinate, party, level, maximum HP, PP, status, and
+controls are independently preserved. A trainer battle or ninth encounter still fails closed.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:
