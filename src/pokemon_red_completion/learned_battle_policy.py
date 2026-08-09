@@ -500,12 +500,13 @@ class ModelAssistedBattlePolicy:
         if predicted_ref != CONTROL_CLASS_REFS[0]:
             try:
                 predicted_action = action_from_control_class_ref(predicted_ref)
-                if _control_action_budget_exhausted(
+                intent_mask = _control_action_intent_mask(
                     predicted_action,
                     intent=intent,
                     history=history,
-                ):
-                    self.control_target_resolution_failures["budget_mask"] += 1
+                )
+                if intent_mask is not None:
+                    self.control_target_resolution_failures[intent_mask] += 1
                     self.control_execution_decisions += 1
                     self.control_safety_fallbacks += 1
                     return self._return_control_move(
@@ -810,27 +811,37 @@ class ModelAssistedBattlePolicy:
             self.control_shadow_agreements += 1
 
 
-def _control_action_budget_exhausted(
+def _control_action_intent_mask(
     action: BattleAction,
     *,
     intent: BattleIntent,
     history: BattleControlHistory,
-) -> bool:
-    """Mask a typed action after its game-neutral intent budget is consumed."""
+) -> str | None:
+    """Return the game-neutral planner constraint that masks one typed action."""
 
     if action.kind is BattleActionKind.USE_BOOST:
         assert action.boost_stat is not None
         limit = dict(intent.boost_use_limits).get(action.boost_stat)
         if limit is None:
-            return False
+            return None
         class_ref = f"pokemon.core:battle:boost:{action.boost_stat.value}"
-        return history.action_counts[CONTROL_CLASS_REFS.index(class_ref)] >= limit
-    if action.kind is BattleActionKind.SWITCH and intent.switch_limit is not None:
+        if history.action_counts[CONTROL_CLASS_REFS.index(class_ref)] >= limit:
+            return "budget_mask"
+        return None
+    if action.kind is BattleActionKind.SWITCH:
         class_ref = "pokemon.core:battle:switch"
-        return history.action_counts[CONTROL_CLASS_REFS.index(class_ref)] >= (
-            intent.switch_limit
-        )
-    return False
+        class_index = CONTROL_CLASS_REFS.index(class_ref)
+        if (
+            intent.switch_limit is not None
+            and history.action_counts[class_index] >= intent.switch_limit
+        ):
+            return "budget_mask"
+        if (
+            intent.require_move_between_switches
+            and history.previous_class_index == class_index
+        ):
+            return "switch_residency_mask"
+    return None
 
 
 def _unsupported_observation_context(

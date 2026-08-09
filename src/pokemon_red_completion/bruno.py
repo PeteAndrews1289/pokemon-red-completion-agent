@@ -312,6 +312,7 @@ def run_bruno_chapter(
         ),
         switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
         switch_limit=2,
+        require_move_between_switches=True,
     )
     while reader.read().battle_state:
         try:

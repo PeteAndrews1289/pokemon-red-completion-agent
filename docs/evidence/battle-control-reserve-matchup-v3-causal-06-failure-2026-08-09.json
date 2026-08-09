@@ -1,0 +1,53 @@
+{
+  "schema": "pokemon-red-battle-control-v3-causal-failure-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "rejected_by_chapter_verifier",
+  "source_commit": "ee543231e801c365c81ef6d7f1ef5debc3afdcdf",
+  "candidate": {
+    "artifact_id": "red-battle-control-model-d4bc15ba53354fa2980a47b57f2dda78",
+    "manifest_sha256": "e742f32893ddca66911e1dbeb31bea1fca93f07ad6f09d6dedfeb8d07c3b382e",
+    "model_sha256": "916aa21097d7b087125dce6cb9b01180c2ee3aa929a843d7b580021ac00246e0",
+    "private_path_published": false
+  },
+  "authority": {
+    "ordinary_move_selection": "authenticated_move_ranker_teacher_gated_on_every_path",
+    "high_level_battle_control": "model_authority_with_typed_action_budgets",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "outcome": {
+    "verified_checkpoints": 303,
+    "total_checkpoints": 312,
+    "lorelei_strict_contract_passed": true,
+    "defeated_bruno": true,
+    "advanced_to_agatha_room": true,
+    "bruno_team_switches": 2,
+    "bruno_reserve_attacks": 0,
+    "bruno_chapter_actions": 334,
+    "bruno_chapter_frames": 30943,
+    "party_levels_after_bruno": [64, 55, 55, 55, 55, 55],
+    "game_complete": false,
+    "counted_campaign_root_consumed": false
+  },
+  "diagnosis": {
+    "prior_budget_repair_worked": "Lorelei passed its exact resource and switch verifier, and the replay advanced through Bruno without an executor failure.",
+    "remaining_policy_error": "The model spent both allowed Bruno switches consecutively, returning to the lead before a reserve could take a move turn.",
+    "strict_verifier_result": "Victory and two menu switches were insufficient because the balanced-team contract requires at least one observable reserve attack.",
+    "verifier_relaxed": false
+  },
+  "repair": {
+    "direction": "Add a portable switch-residency intent that masks a consecutive voluntary switch until at least one move action has occurred.",
+    "increase_retry_budget": false,
+    "change_teacher_route": false,
+    "change_model_weights": false,
+    "open_counted_root": false
+  },
+  "claim_scope": {
+    "causal_control_qualified": false,
+    "lorelei_causal_control_qualified_in_lineage": true,
+    "bruno_victory_demonstrated": true,
+    "bruno_balanced_participation_demonstrated": false,
+    "candidate_retrained_after_failure": false,
+    "cross_game_transfer_complete": false
+  }
+}

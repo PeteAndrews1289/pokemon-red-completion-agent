@@ -409,10 +409,12 @@ def test_battle_intent_accepts_typed_action_budgets() -> None:
         boost_use_limits=((BattleBoostStat.ACCURACY, 1),),
         switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
         switch_limit=2,
+        require_move_between_switches=True,
     )
 
     assert intent.boost_use_limits == ((BattleBoostStat.ACCURACY, 1),)
     assert intent.switch_limit == 2
+    assert intent.require_move_between_switches is True
 
 
 def test_battle_intent_rejects_budget_without_matching_capability() -> None:
@@ -424,6 +426,12 @@ def test_battle_intent_rejects_budget_without_matching_capability() -> None:
         )
     with pytest.raises(ValueError, match="switch executor capability"):
         BattleIntent("defeat_rival", TEST_BATTLE_PLAN_ID, switch_limit=1)
+    with pytest.raises(ValueError, match="switch residency"):
+        BattleIntent(
+            "defeat_rival",
+            TEST_BATTLE_PLAN_ID,
+            require_move_between_switches=True,
+        )
 
 
 def test_battle_intent_accepts_typed_switch_capabilities() -> None:
