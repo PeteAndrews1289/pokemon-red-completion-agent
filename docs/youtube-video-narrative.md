@@ -101,6 +101,23 @@ false” on screen. That narrow transition is more convincing than silently repl
 battle system, because it identifies exactly which decision became learned and which decisions did
 not.
 
+Now pay that setup off with two green cards and one honest red card. First: `990009 SHADOW — 13/13,
+95.66%, HALL OF FAME`. Second: `990010 CAUSAL TARGET — 13/13 REBOUND, 0 FALLBACK, HALL OF FAME`.
+Put the shared 45,819,749-frame total beneath both. Say plainly that the teacher still chose *when*
+to switch and still gated ordinary moves; the model owned only *who enters*.
+
+Then install the complete six-role stack and set the teacher-query counter to zero. At the S.S.
+Anne rival, freeze on `158 battle decisions / 7 learned heals / 2 learned switches`. The next
+learned HP request is complete and semantically authorized, yet the chapter rejects it because the
+exception is not the teacher's private subclass. Show the repair diff as an interface story: match
+semantic HP need, require the executable lead, keep the finite item reserve and exact heal/ledger
+proofs, reject any non-lead target. The line for the audience is: **“The model crossed the interface;
+the old teacher's type check was still hiding on the other side.”**
+
+This is a stronger cliffhanger than another unexplained route failure. The target layer has earned
+canonical causal authority, the combined player has produced a precise executor defect, and the
+official 8-of-10 roots are still untouched.
+
 Keep the most important scientific detail on screen: the action-model weights did not change
 between these causal attempts. The first failures repaired a game-neutral actor/referee interface;
 the last exposed missing learned authority. No Agatha map, species, or opponent-position identity

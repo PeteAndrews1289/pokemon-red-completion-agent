@@ -18,7 +18,7 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
-**Late audit and runtime checkpoint:** the full repository gate now passes **2,152 tests with 3
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,154 tests with 3
 integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
 public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
 errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
@@ -35,14 +35,25 @@ the frozen `bd1ba4…` payload from the original authenticated lineages and refu
 The live policy can shadow teacher targets or, in an explicitly uncounted causal trial, replace only
 the reserve bound to a teacher switch request; ordinary move choice remains teacher-gated. The
 portable clean-start harness accepts the authenticated target artifact, reports target confidence,
-agreement, rebinding, and fallback counters, and keeps deployment authority false. Next publish the
-exact artifact from a clean pushed commit, run shadow first, then run one fresh isolated causal
-completion. Counted v95 remains **0/10** and seed `990007` remains test-only. See the
-[runtime artifact receipt](docs/evidence/battle-switch-target-runtime-artifact-2026-08-09.json).
+agreement, rebinding, and fallback counters, and keeps deployment authority false. Canonical shadow
+seed `990009` completed Red with **13/13** target agreement, 95.66% mean confidence, and no
+unavailable projection. Fresh isolated causal seed `990010` then completed all 36 objectives and
+Hall of Fame in the same **45,819,749 frames** while the learned head rebound all **13/13** switch
+targets with zero target fallback. This qualifies narrow target-binding authority, not teacher-free
+battle control; see the [runtime qualification](docs/evidence/battle-switch-target-canonical-runtime-qualification-2026-08-09.json).
+
+The first six-role teacher-free composition, seed `990011`, failed closed at the S.S. Anne rival
+after 158 battle decisions. It had zero teacher queries/fallbacks, seven executed learned HP
+recoveries, and two learned target rebindings. The chapter recognized the eighth complete semantic
+recovery request, then incorrectly required its teacher-only Python exception subclass. The repair
+accepts only learned HP recovery for the executable lead, chooses from the same bounded item
+inventory, and retains exact HP/item/menu proofs; a non-lead request still fails closed. Regenerate,
+push, and retry on a fresh uncounted root. Counted v95 remains **0/10** and `990007` remains
+test-only. See the [preserved six-role failure](docs/evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json).
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `a5e92f0`
 records live Agatha role switches and the passed prospective target test; `edfa676` contains the
-measured recovery-envelope repair. The full local gate passes **2,111 tests with 3 integration
+measured recovery-envelope repair. The full local gate passes **2,154 tests with 3 integration
 tests deselected**, Ruff, mypy, documentation, public-artifact, and source-registry checks. Push
 before any new emulator run. Only Codex pushes this branch; do not create a second worktree or
 force-push it.

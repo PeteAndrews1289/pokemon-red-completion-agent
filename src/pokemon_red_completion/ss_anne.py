@@ -10,6 +10,7 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
     BattleAction,
     BattleControlRequest,
+    LearnedBattleControlRequest,
     recovery_request_matches,
 )
 from pokemon_red_completion.battle_plan import RedBattlePlanId
@@ -1129,14 +1130,29 @@ def _run_ss_anne_rival_with_potion(
                 label="S.S. Anne rival",
             )
         except BattleRuntimeError as error:
+            cause = error.__cause__
             if not recovery_request_matches(
-                error.__cause__, _PauseForSSAnneRivalPotion
+                cause,
+                _PauseForSSAnneRivalPotion,
+                accepted_needs=frozenset({"hp"}),
             ):
                 raise SSAnneChapterError(str(error)) from error
-            pause = error.__cause__
-            if not isinstance(pause, _PauseForSSAnneRivalPotion):
+            if isinstance(cause, _PauseForSSAnneRivalPotion):
+                recovery_item = cause.item
+            elif isinstance(cause, LearnedBattleControlRequest):
+                current = reader.read()
+                if cause.party_slot != 1 or current.active_party_index not in {None, 0}:
+                    raise SSAnneChapterError(
+                        "S.S. Anne rival learned recovery cannot target a non-lead battler."
+                    ) from error
+                recovery_item = (
+                    ItemId.SUPER_POTION
+                    if _bag_quantity(emulator, ItemId.SUPER_POTION) > 0
+                    else ItemId.POTION
+                )
+            else:  # pragma: no cover - recovery_request_matches establishes this
                 raise SSAnneChapterError(str(error)) from error
-            if pause.item is ItemId.SUPER_POTION:
+            if recovery_item is ItemId.SUPER_POTION:
                 if super_recoveries >= starting_super_potions:
                     raise SSAnneChapterError(
                         "S.S. Anne rival exhausted its bounded Super Potion reserve."

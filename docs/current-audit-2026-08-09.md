@@ -11,6 +11,9 @@ depend on authored skills or teacher gating.
 
 The present Red milestone is narrower and measurable: qualify the reserve-aware high-level battle
 controller on a fresh full-game rollout, then combine it with teacher-free ordinary move selection.
+The target-binding layer now has canonical shadow and isolated causal Hall-of-Fame completion. The
+first six-role composition exposed and repaired one S.S. Anne typed-recovery executor mismatch; its
+fresh replay remains.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -118,7 +121,20 @@ uncounted isolated trial where the teacher decides *when* to switch and the lear
 the living reserve. This is causal-trial authority, not deployment authority. The exact `bd1ba4…`
 payload is now published under a complete write-once manifest and has passed an independent loader
 round trip; see the [sanitized receipt](evidence/battle-switch-target-runtime-artifact-2026-08-09.json).
-Live shadow and a fresh completion remain before promotion.
+Canonical shadow seed `990009` completed all 36 objectives with 13/13 agreement, 95.66% mean
+confidence, and no unavailable target. Fresh causal seed `990010` completed the identical
+45,819,749-frame route through Hall of Fame while the target model rebound all 13 switch requests
+with zero fallback. The [runtime qualification](evidence/battle-switch-target-canonical-runtime-qualification-2026-08-09.json)
+therefore qualifies isolated target binding, while keeping ordinary moves and switch timing
+teacher-gated.
+
+Fresh uncounted seed `990011` then ran all six learned roles together with teacher battle queries
+forbidden. It reached the S.S. Anne rival with 158 battle decisions, seven executed learned HP
+recoveries, two learned target bindings, and zero teacher fallback before failing closed. The
+chapter matched the eighth complete learned recovery request, then incorrectly required its
+teacher-only exception subclass. This was an executor ownership mismatch, not a target-head miss.
+The repair accepts only learned HP recovery for the executable lead and retains the existing exact
+item, HP, menu, and reserve proofs; see the [preserved failure](evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json).
 
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared
@@ -135,7 +151,7 @@ silently acting at night.
 | Deterministic Red teacher/referee | 9/10 | Repeated clean-power 312/312, 36/36, Hall-of-Fame runs with strict chapter contracts. This is an expert oracle, not learned autonomy. |
 | Experiment integrity | 9/10 | Source/model/root hashes, whole-lineage splits, private artifact boundaries, preserved failures, one-attempt accounting, and 0/10 counted roots consumed. |
 | Learned battle moves | 7/10 | A nonlinear ranker has prior live completion evidence, but the current reserve-controller causal lane keeps ordinary moves teacher-gated. The combined teacher-free stack remains unqualified. |
-| Learned high-level battle control | 8/10 | Strong held-out class balance, causal progress through Agatha, a frozen target head that passed 17/17 fresh targets versus 12/17 baseline, and an authenticated runtime seam; live shadow and terminal causal completion remain. |
+| Learned high-level battle control | 8/10 | Strong held-out class balance, 17/17 fresh offline targets, 13/13 canonical shadow, and 13/13 causal target bindings through Hall of Fame; the combined teacher-free stack still needs a terminal replay. |
 | Learned objective selection | 6/10 | Clean start selects registered composite goals from semantic state, but most candidate sets are singleton and fixed authored skills perform the mechanics. |
 | Learned trainee/venue strategy | 7/10 | The identity-free candidate ranker beat its shape baseline and completed a clean-power curriculum with real disagreements. It remains Red-only evidence. |
 | Navigation and menu autonomy | 3/10 | Reusable local planning exists, but the completion path is still dominated by authored chapter routes and menu executors. |
@@ -146,7 +162,7 @@ silently acting at night.
 ## Code and test health
 
 - 127 source modules and 135 test modules cover roughly 88,000 source lines and 52,500 test lines.
-- The current full gate passes **2,152 tests** with 3 emulator-integration tests deselected and 1
+- The current full gate passes **2,154 tests** with 3 emulator-integration tests deselected and 1
   expected failure, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.
@@ -165,8 +181,8 @@ The current stack is layered rather than monolithic:
 
 1. semantic observers convert revision-specific emulator state into portable facts;
 2. learned rankers choose objectives, trainees/venues, moves, or high-level battle action classes;
-3. the listwise target head can shadow or bind a live reserve during an isolated causal trial, but
-   does not yet have deployment authority;
+3. the listwise target head has completed canonical shadow and isolated causal Hall-of-Fame gates,
+   but does not yet have combined or perturbation authority;
 4. typed constraints and deterministic or authenticated learned target resolvers turn choices into
    executable
    affordances;
@@ -180,21 +196,18 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Run one live shadow rehearsal from the clean pushed source and exact authenticated target
-   artifact; keep seed 990007 test-only.
-2. Require complete target availability plus the expected
-   agreement/confidence audit before enabling the isolated trial flag.
-3. Rerun the fresh power-on reserve-controller gate with only target binding under learned
-   authority. Preserve
-   either its Hall-of-Fame receipt or its next causal rejection.
-4. If it passes, separate typed intent enforcement from true model safety fallbacks in the strict
-   report, then run the combined stack with teacher queries disabled for ordinary move selection.
-5. Run at least one uncounted timing perturbation with the same frozen source and artifacts. Only
+1. Complete the full ROM-free gate for the S.S. Anne learned-recovery executor repair, commit, and
+   push the regenerated source identity.
+2. Run a fresh uncounted canonical six-role replay with teacher battle queries disabled; preserve
+   either its Hall-of-Fame receipt or its next fail-closed integration defect.
+3. If it passes, separate typed intent enforcement from true model safety fallbacks in the strict
+   report and freeze the exact combined artifact set.
+4. Run at least one uncounted timing perturbation with the same frozen source and artifacts. Only
    after canonical and perturbation gates pass should v95's ten one-attempt roots open.
-6. Build Crystal as a thin adapter plus three bounded tasks: one reserve-choice battle, one local
+5. Build Crystal as a thin adapter plus three bounded tasks: one reserve-choice battle, one local
    navigation round trip, and one trainee/venue decision. Compare the frozen Red model zero-shot,
    few-shot, and from scratch before writing a complete Crystal teacher.
-7. If transfer is measurable, expand the adapter and route graph. If it is not, use the failure to
+6. If transfer is measurable, expand the adapter and route graph. If it is not, use the failure to
    revise the semantic schema before adding more Red-specific logic.
 
 ## Portfolio narrative

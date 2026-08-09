@@ -1,0 +1,71 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-audit-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_rehearsal_with_actionable_executor_gap",
+  "promotion_eligible": false,
+  "counted": false,
+  "counted_roots_consumed": 0,
+  "diagnostic_seed": 990011,
+  "timing_mode": "canonical_unperturbed_baseline",
+  "source": {
+    "commit": "67da45eeca96c0ad56d9ed0036dab56165d88363",
+    "dirty": false
+  },
+  "raw_report_sha256": "bc52f976242f18f14e4a9a210b5641fed19970eae7255190f5916327db275bed",
+  "model_sha256s": {
+    "objective": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "battle_move": "535b8a07a590afac6c0d8c24d882cd4adb80d8ac73fd002f1b991be816b434dc",
+    "battle_control": "a9f9cb03be12225e728ed02983645df338de4a48f35541f1bdddafb9c422e0dc",
+    "battle_switch_target": "bd1ba4bd1ca6e9de1a94bc6f958bb54f80c45cce3e14421df3a4eded7a70186e",
+    "training_control": "cd8463ba77edc6f37b4e2321f5b644d7bb04a84622fa7af3f09fad968e289bd6",
+    "training_candidate": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026"
+  },
+  "authority": {
+    "teacher_battle_queries_allowed": false,
+    "teacher_queries": 0,
+    "teacher_fallbacks": 0,
+    "expected_objective_labels": 0,
+    "fixed_objective_dispatches": 0
+  },
+  "run": {
+    "outcome": "failed_closed",
+    "failure_stage": "ss_anne_rival_typed_recovery_execution",
+    "frames_executed": 878843,
+    "objective_decisions": 1,
+    "battle_decisions": 158,
+    "model_move_decisions": 150,
+    "typed_control_requests_executed_before_failure": 8,
+    "resolved_hp_recoveries": 7,
+    "learned_switch_target_rebindings": 2,
+    "switch_target_fallbacks": 0,
+    "safety_fallbacks": 1,
+    "safety_fallback_reason": "capability_mask"
+  },
+  "battle_control_shadow": {
+    "decisions": 158,
+    "agreements": 157,
+    "accuracy": 0.9936708860759493,
+    "mean_confidence": 0.9837704779698146,
+    "disagreement": "one teacher select-move label was predicted as recovery"
+  },
+  "failure": {
+    "exception_type": "SSAnneChapterError",
+    "message": "S.S. Anne rival move-slot policy rejected the current MAIN-menu turn.",
+    "semantic_request": "pokemon.core:battle:recovery",
+    "request_was_complete": true,
+    "recovery_need": "hp"
+  },
+  "diagnosis": {
+    "category": "typed_runtime_request_matched_but_teacher_subclass_was_still_required",
+    "finding": "The S.S. Anne wrapper correctly recognized a compatible learned recovery through recovery_request_matches, then immediately required the cause to be its teacher-only potion subclass and rejected the complete learned request.",
+    "target_head_implicated": false,
+    "model_error_implicated": false,
+    "why_model_error_is_not_the_executor_diagnosis": "The model intentionally owned this disagreement in the teacher-free rehearsal. The chapter declared bounded HP recovery capability, so the executor had to either execute the complete legal target or reject it for a real resource or target constraint; checking the Python teacher subclass was not such a constraint."
+  },
+  "repair": {
+    "status": "implemented_pending_full_gate_and_live_replay",
+    "behavior": "Accept complete learned HP recovery only for the executable lead, select from the chapter's bounded Super Potion then Potion inventory, and retain the existing exact HP, item-count, MAIN-menu, and reserve proofs.",
+    "negative_contract": "A learned request targeting a non-lead battler fails closed without consuming inventory."
+  },
+  "next_gate": "Regenerate the source-bound registry, pass the full ROM-free gate, commit and push, then retry with a fresh uncounted diagnostic root."
+}

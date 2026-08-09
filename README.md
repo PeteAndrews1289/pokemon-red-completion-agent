@@ -68,9 +68,18 @@ canonical payload to its feature schema, disjoint development lineages, and the 
 test. The exact frozen payload has now been privately published and independently loaded; see the
 [sanitized runtime-artifact receipt](docs/evidence/battle-switch-target-runtime-artifact-2026-08-09.json).
 Runtime can shadow the target head or let it replace only the reserve bound to a
-teacher-authored switch request while ordinary moves remain teacher-gated. The active gate is live
-shadow, then another 312-checkpoint isolated causal completion, followed
-by a separate run that forbids teacher queries for ordinary move selection. Navigation, menus,
+teacher-authored switch request while ordinary moves remain teacher-gated. Canonical shadow then
+completed Red with **13/13** target agreement and no unavailable projection; a fresh isolated causal
+run completed the same **45,819,749-frame** route through Hall of Fame with **13/13 learned target
+rebindings and zero target fallback**. See the
+[canonical runtime qualification](docs/evidence/battle-switch-target-canonical-runtime-qualification-2026-08-09.json).
+
+The first six-role teacher-free composition exposed the next interface gap at the S.S. Anne rival:
+after seven valid learned HP recoveries and two learned switches, the chapter recognized an eighth
+complete recovery request but still required its teacher-only exception subclass. That uncounted
+failure is preserved, the executor now accepts only a complete learned lead-HP target under the
+existing bounded inventory and exact recovery proofs, and a fresh replay remains. This is an
+executor repair, not evidence that the six-role model already completes Red. Navigation, menus,
 chapter mechanics, and resource execution remain authored. The counted v95 reliability campaign
 remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.
@@ -85,8 +94,8 @@ demonstrations and a referee; it is not the final autonomous player.
 | Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
 | Learned objective dispatch | One clean-start run selected 21 composite objectives and verified 15 automatic effects through Hall of Fame | Many choices remain affordance-masked; mechanics are fixed skills |
 | Learned training control | The trainee/venue ranker beat its shape baseline and completed clean start with 114,831 controlled choices and 400 disagreements | One uncounted Red root; navigation and menus remain authored |
-| Strict learned-stack composition | Prior four-model run reached a Lorelei win with zero teacher query/fallback; the new high-level controller has causal authority through an Agatha win | Current reserve-controller lane still teacher-gates ordinary moves and has not completed the strict terminal contract |
-| Reserve-aware battle control | Four complete lineages; 98.2394% / 94.7537% held-out class accuracy/balance; frozen target head passed a fresh 17/17 task-complete prefix versus 12/17 baseline; authenticated runtime seam implemented | Exact artifact publication, live shadow, causal completion, and combined teacher-free qualification remain |
+| Strict learned-stack composition | The first six-role run executed 158 teacher-free battle decisions, 7 learned recoveries, and 2 learned switches before an S.S. Anne executor mismatch failed closed | Repair is ROM-free verified; a fresh full replay remains |
+| Reserve-aware battle control | Frozen target head passed 17/17 prospective targets, 13/13 canonical shadow, and 13/13 causal bindings through Hall of Fame with zero target fallback | Switch timing and ordinary moves were teacher-gated in the completed causal run; perturbation and combined qualification remain |
 | Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Counted campaign remains 0/10 until reserve-aware battle control passes canonical and perturbation rehearsals |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |

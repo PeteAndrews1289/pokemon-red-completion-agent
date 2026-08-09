@@ -30,9 +30,9 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Portable strategic authority | 114,831 controlled choices, 400 executed disagreements, 1,803 development battles, no fallback; fresh observation opened Giovanni | Singleton objective dispatch and authored mechanics remain |
 | Portable clean-start baseline | 21 selected composites plus 15 automatic effects through Hall of Fame; no expected label, fixed dispatch, or fallback | Battle mechanics were not under the full strict learned stack |
 | Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
-| Reserve-aware controller | Four complete clean-power lineages; 98.2394% held-out class accuracy / 94.7537% balance; frozen target head passed 17/17 fresh targets versus 12/17 baseline; exact artifact published and authenticated | Live shadow, causal completion, and combined authority remain |
+| Reserve-aware controller | Four complete lineages; 98.2394% / 94.7537% held-out class metrics; target head passed 17/17 fresh offline targets, 13/13 shadow, and 13/13 causal bindings through Hall of Fame | Completed target trial kept switch timing and moves teacher-gated; combined and perturbation authority remain |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
-| Repository gate | 2,110 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
+| Repository gate | 2,154 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
 
 ## Architecture in one minute
 
@@ -91,7 +91,7 @@ development score—is the next promotion gate.
 - Why shadow agreement cannot substitute for causal authority, and why causal authority can still
   prove integration without proving feature value.
 - How the candidate scorer remains permutation-equivariant and excludes title-specific identity.
-- How an emulator-scale system is tested without redistributing the ROM: 2,110 ROM-free tests plus
+- How an emulator-scale system is tested without redistributing the ROM: 2,154 ROM-free tests plus
   private authenticated runtime receipts.
 
 ## Honest limitations
@@ -109,9 +109,11 @@ The first switch-target head also beat its deterministic baseline but repeated t
 case. The second candidate is perfect across 54 opened development labels after plan-balanced
 training, which was promising but not prospective evidence. Seed 990006 stopped before producing
 target rows and is excluded. The unchanged candidate then passed all 17 seed-990007 targets versus
-12/17 for the deterministic baseline, including all seven Agatha switches. It now needs
-target-artifact authentication, runtime authority, strict canonical completion, and combination
-with teacher-free ordinary moves.
+12/17 for the deterministic baseline, including all seven Agatha switches. Its authenticated
+artifact next passed 13/13 canonical shadow targets and causally rebound 13/13 live requests during
+a Hall-of-Fame completion. The first six-role teacher-free composition exposed a chapter executor
+that recognized a learned HP recovery semantically but still required the teacher's Python
+exception class. That failure is preserved and repaired; a fresh combined replay remains.
 
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
@@ -127,7 +129,7 @@ until a reserve-aware battle artifact passes canonical and perturbation rehearsa
 - Qualified a strategic trainee/venue controller inside a portable objective loop across 114,831
   live choices and 400 executed teacher disagreements, completing 1,803 development battles with no
   fallback before fresh emulator observation verified the Volcano Badge.
-- Hardened a 142k-line Python research system with 2,110 tests, Ruff, mypy, documentation/privacy
+- Hardened a 142k-line Python research system with 2,154 tests, Ruff, mypy, documentation/privacy
   gates, deterministic source registries, and at least 19 consecutive green GitHub Actions runs after
   diagnosing one derived-artifact CI regression.
 - Built a prospective one-attempt 8-of-10 clean-start evaluator and used its strict rehearsal to
@@ -145,8 +147,7 @@ until a reserve-aware battle artifact passes canonical and perturbation rehearsa
    the agreement-no-op regression test.
 5. Show the clean-start baseline reaching Hall of Fame, then contrast the strict run's Lorelei win
    with `[19, 0, 0, 0, 0, 0]` and the verifier's red result.
-6. End on the causal staircase: Rock Tunnel residency, Lorelei status safety, Agatha role residency,
-   then split the final “switch” card into timing and target heads. Show 54/54 opened development,
-   `seed 990006: infrastructure stop; model untested`, then `seed 990007: 17/17 target test` beside
-   `runtime authority: false`. Boundary card:
-   “100% development was the beginning of the test, not the end.”
+6. End on the causal staircase: `990007: 17/17 prospective`, `990009: 13/13 shadow`, and
+   `990010: 13/13 causal + Hall of Fame`. Then show the six-role `990011` S.S. Anne failure and the
+   teacher-subclass repair. Boundary card: “Causal success at one layer is the next composition
+   test—not the end of the project.”

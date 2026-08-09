@@ -16,7 +16,20 @@ JSONL, digest changes, overlapping lineage identities, and any test result below
 start harness can first shadow target choices, then conduct an explicitly uncounted isolated causal
 trial in which the teacher still decides *when* to switch and the learned head decides only *which
 living reserve* receives that request. Shadow and causal-trial authority are distinct from
-deployment authority, which remains false until a fresh completion passes.
+deployment authority. Canonical shadow seed `990009` completed all 36 objectives with 13/13 target
+agreement, 95.66% mean confidence, and no unavailable projection. Isolated causal seed `990010`
+then completed Hall of Fame in the identical 45,819,749 frames with 13/13 target rebindings and no
+target fallback. The [runtime qualification](evidence/battle-switch-target-canonical-runtime-qualification-2026-08-09.json)
+closes target binding under that narrow authority; it does not claim teacher-free battle control.
+
+The first six-role composition forbade all teacher battle queries and executed objective, training,
+move, high-level control, and target models together. Seed `990011` failed closed at S.S. Anne after
+158 battle decisions, seven learned HP recoveries, and two learned switches. The wrapper matched a
+complete learned HP request, then mistakenly demanded the teacher-only request subclass. The
+[failure receipt](evidence/portable-clean-start-six-role-rehearsal-01-failure-2026-08-09.json)
+preserves the result. The repair accepts only an executable lead target and preserves the chapter's
+bounded item, exact-heal, item-ledger, and MAIN-menu proofs. The immediate gate is full ROM-free
+validation, clean push, and one fresh uncounted six-role replay; v95 remains 0/10.
 
 The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's
 Red/Blue reciprocal version gaps now come from one canonical table and include the previously
@@ -85,8 +98,8 @@ frozen candidate passed 17/17 with 0.07965 cross-entropy versus 12/17 for the ba
 Bruno 2/2 and Agatha 7/7. The route stopped at 306/312 because the terminal receipt inferred only
 five role changes from move turns while seven valid switches had executed between opponent changes.
 Commit `a5e92f0` records and verifies those live switches directly. Runtime artifact and binding
-code and exact private publication are now complete; live shadow and isolated causal completion are
-the next gates.
+code and exact private publication are complete; canonical shadow and isolated causal completion
+have now passed. The active gate is the repaired six-role teacher-free composition.
 
 After the learned target passes offline and causal Red gates, then one canonical and one uncounted
 perturbation result, begin Crystal's bounded battle adapter.

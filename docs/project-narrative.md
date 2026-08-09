@@ -2180,6 +2180,35 @@ global retry constant: `TrainingVenue` now owns bounded battle timing, the gener
 passes it to the battle runtime, and only Route 11 declares four. The failed seed is retired and a
 fresh timing lineage must qualify the repair.
 
+## Canonical target authority passes, then composition finds the next seam
+
+The target head's promotion staircase now reaches the emulator. Canonical shadow seed `990009`
+completed all 36 objectives and Hall of Fame while the model observed 13 live reserve requests. It
+agreed on all 13, averaged 95.66% confidence, and had no unavailable candidate projection. Fresh
+seed `990010` changed one thing: every teacher-authored *switch now* request was rebound to the
+model's chosen living reserve. The run completed in the same 45,819,749 frames, with 13 rebindings
+and zero target fallback. That sameness is useful causal evidence: at the canonical root, learned
+target binding reproduced the verified teacher behavior without changing route execution.
+
+It is deliberately not described as a teacher-free completion. Ordinary moves still queried the
+teacher 2,959 times, and the teacher still decided whether and when to switch. The result qualifies
+one narrow authority boundary—*who enters*—and makes the next experiment legitimate.
+
+That next experiment installed all six learned decision roles and prohibited teacher battle
+queries. Seed `990011` reached the S.S. Anne rival after 158 battle decisions. Seven learned HP
+recoveries and two learned switch targets had already executed; then an eighth recovery failed.
+The semantic matcher accepted the complete learned HP target, but the chapter immediately demanded
+the teacher's private `_PauseForSSAnneRivalPotion` exception class. In other words, the portable
+request was valid and the game-specific executor still checked the identity of the old teacher
+signal.
+
+The repair does not grant an unbounded item action. It accepts only an HP request for the
+executable lead, selects from the same finite Super Potion/Potion reserve, and retains exact HP,
+inventory, menu-return, and downstream-ledger proofs. A non-lead request fails before inventory is
+consumed. This is the project's architecture thesis in miniature: replacing a teacher requires
+removing hidden teacher identity from every executor boundary, while keeping the mechanical safety
+contract just as strict.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

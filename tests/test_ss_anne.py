@@ -6,6 +6,7 @@ import pytest
 
 import pokemon_red_completion.ss_anne as ss_anne
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleAction, LearnedBattleControlRequest
 from pokemon_red_completion.battle_runtime import BattleResourcePolicy, BattleRuntimeError
 from pokemon_red_completion.observation import ItemId, MapId, RawGameState
 
@@ -350,3 +351,100 @@ def test_ss_anne_rival_preserves_an_unneeded_high_value_reserve(
 
     assert observed is terminal
     assert quantities[ItemId.SUPER_POTION] == 3
+
+
+def test_ss_anne_rival_executes_a_complete_learned_lead_recovery(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    quantities = {ItemId.POTION: 3, ItemId.SUPER_POTION: 3}
+    current = RawGameState(
+        True,
+        MapId.SS_ANNE_2F,
+        2,
+        4,
+        1,
+        2,
+        first_party_hp=55,
+        first_party_max_hp=71,
+        active_party_index=0,
+    )
+    terminal = replace(current, battle_state=0, first_party_hp=71)
+    calls = 0
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return current
+
+    monkeypatch.setattr(ss_anne, "_bag_quantity", lambda _emulator, item: quantities[item])
+
+    def fake_runtime(*_args: object, **_kwargs: object) -> RawGameState:
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            request = LearnedBattleControlRequest(
+                BattleAction.recovery(),
+                party_slot=1,
+                recovery_need="hp",
+            )
+            raise BattleRuntimeError("paused for learned recovery") from request
+        return terminal
+
+    def fake_use(*_args: object, **kwargs: object) -> None:
+        quantities[kwargs["item"]] -= 1
+
+    monkeypatch.setattr(ss_anne, "run_adaptive_trainer_battle", fake_runtime)
+    monkeypatch.setattr(ss_anne, "_use_battle_recovery_item", fake_use)
+
+    observed = ss_anne._run_ss_anne_rival_with_potion(
+        Reader(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        ss_anne.DEFAULT_SS_ANNE_TIMING,
+    )
+
+    assert observed is terminal
+    assert calls == 2
+    assert quantities == {ItemId.POTION: 3, ItemId.SUPER_POTION: 2}
+
+
+def test_ss_anne_rival_rejects_a_learned_non_lead_recovery(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    quantities = {ItemId.POTION: 3, ItemId.SUPER_POTION: 3}
+    current = RawGameState(
+        True,
+        MapId.SS_ANNE_2F,
+        2,
+        4,
+        1,
+        2,
+        first_party_hp=55,
+        first_party_max_hp=71,
+        active_party_index=0,
+    )
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return current
+
+    monkeypatch.setattr(ss_anne, "_bag_quantity", lambda _emulator, item: quantities[item])
+
+    def fake_runtime(*_args: object, **_kwargs: object) -> RawGameState:
+        request = LearnedBattleControlRequest(
+            BattleAction.recovery(),
+            party_slot=2,
+            recovery_need="hp",
+        )
+        raise BattleRuntimeError("paused for learned recovery") from request
+
+    monkeypatch.setattr(ss_anne, "run_adaptive_trainer_battle", fake_runtime)
+
+    with pytest.raises(ss_anne.SSAnneChapterError, match="non-lead battler"):
+        ss_anne._run_ss_anne_rival_with_potion(
+            Reader(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            object(),  # type: ignore[arg-type]
+            ss_anne.DEFAULT_SS_ANNE_TIMING,
+        )
+
+    assert quantities == {ItemId.POTION: 3, ItemId.SUPER_POTION: 3}
