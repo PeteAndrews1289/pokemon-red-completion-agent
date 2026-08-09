@@ -56,6 +56,7 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.participation import summarize_party_participation
+from pokemon_red_completion.party import PARTY_SLOT_LIMIT
 from pokemon_red_completion.red_battle_catalog import (
     RED_BATTLE_CATALOG,
     pokemon_red_move_ref,
@@ -155,6 +156,21 @@ class AgathaTurn:
 
 
 @dataclass(frozen=True, slots=True)
+class AgathaRoleSwitch:
+    """One executed specialist switch at the live opponent boundary.
+
+    Agatha can switch an opponent into an attack selected against somebody
+    else. That opponent may leave again before the teacher records another
+    move, so move turns alone cannot reconstruct every required role change.
+    """
+
+    opponent_species: int
+    opponent_party_position: int
+    target_party_index: int
+    target_species_id: int
+
+
+@dataclass(frozen=True, slots=True)
 class AgathaChapterReport:
     records: tuple[AgathaCheckpoint, ...]
     final_raw: RawGameState
@@ -170,6 +186,7 @@ class AgathaChapterReport:
     actions_executed: int
     controller_released: bool
     team_switches: int
+    role_switches: tuple[AgathaRoleSwitch, ...]
 
     @property
     def passed(self) -> bool:
@@ -185,7 +202,8 @@ class AgathaChapterReport:
             and self.party_hp == self.party_max_hp
             and all(status == 0 for status in self.party_status)
             and _agatha_team_lesson_satisfied(self.turns)
-            and self.team_switches == _agatha_required_role_switches(self.turns)
+            and _agatha_role_switches_valid(self.role_switches)
+            and self.team_switches == len(self.role_switches)
             and self.controller_released
         )
 
@@ -223,6 +241,16 @@ class AgathaChapterReport:
             ],
             "participation": participation.public_dict(),
             "team_switches": self.team_switches,
+            "move_visible_required_role_switches": _agatha_required_role_switches(self.turns),
+            "role_switches": [
+                {
+                    "opponent_species": item.opponent_species,
+                    "opponent_party_position": item.opponent_party_position,
+                    "target_party_index": item.target_party_index,
+                    "target_species_id": item.target_species_id,
+                }
+                for item in self.role_switches
+            ],
             "recovery": {
                 "hyper_potions_used": self.hyper_potions_used,
                 "full_restores_used": self.full_restores_used,
@@ -291,6 +319,7 @@ def run_agatha_chapter(
     boosts_used = 0
     forced_switches = 0
     team_switches = 0
+    role_switches: list[AgathaRoleSwitch] = []
 
     def policy(raw: RawGameState) -> int:
         target_species = _agatha_matchup_species(raw)
@@ -371,6 +400,22 @@ def run_agatha_chapter(
             if isinstance(cause, _TeamSwitchBoundary) or switch_target is not None:
                 if switch_target is None:
                     raise AgathaChapterError("Agatha team switch lacked a party target.") from error
+                current = reader.read()
+                if (
+                    current.enemy_species_id is None
+                    or switch_target not in range(len(current.party_species_ids))
+                ):
+                    raise AgathaChapterError(
+                        "Agatha team switch lacked a complete role observation."
+                    ) from error
+                role_switch = AgathaRoleSwitch(
+                    opponent_species=current.enemy_species_id,
+                    opponent_party_position=emulator.read_u8(
+                        RamAddress.ENEMY_MON_PARTY_POS
+                    ),
+                    target_party_index=switch_target,
+                    target_species_id=current.party_species_ids[switch_target],
+                )
                 try:
                     switch_active_battler(
                         actions,
@@ -384,6 +429,7 @@ def run_agatha_chapter(
                     raise AgathaChapterError(
                         f"Agatha matchup-aware switch failed: {switch_error}"
                     ) from switch_error
+                role_switches.append(role_switch)
                 team_switches += 1
                 continue
             current = reader.read()
@@ -499,6 +545,7 @@ def run_agatha_chapter(
         actions_executed=actions.actions_executed,
         controller_released=not emulator.pressed_buttons,
         team_switches=team_switches,
+        role_switches=tuple(role_switches),
     )
     if not report.passed:
         raise AgathaChapterError(f"Agatha terminal evidence failed: {report!r}.")
@@ -608,7 +655,12 @@ def _agatha_team_lesson_satisfied(turns: Iterable[AgathaTurn]) -> bool:
 
 
 def _agatha_required_role_switches(turns: Iterable[AgathaTurn]) -> int:
-    """Count semantic role transitions under Agatha's observable switching order."""
+    """Count the lower bound visible at recorded move decisions.
+
+    This diagnostic deliberately is not the terminal verifier. Agatha may
+    replace an opponent between move records, requiring a valid specialist
+    switch that cannot be recovered from ``turns`` alone.
+    """
 
     roles = tuple(_agatha_matchup_species_id(turn.species) for turn in turns)
     if not roles:
@@ -616,6 +668,19 @@ def _agatha_required_role_switches(turns: Iterable[AgathaTurn]) -> int:
     return 1 + sum(
         previous != current
         for previous, current in zip(roles, roles[1:], strict=False)
+    )
+
+
+def _agatha_role_switches_valid(switches: Iterable[AgathaRoleSwitch]) -> bool:
+    """Verify every executed role change against its live opponent."""
+
+    items = tuple(switches)
+    return bool(items) and all(
+        0 <= item.opponent_party_position < len(AGATHA_PARTY)
+        and AGATHA_PARTY[item.opponent_party_position][0] == item.opponent_species
+        and 0 <= item.target_party_index < PARTY_SLOT_LIMIT
+        and item.target_species_id == _agatha_matchup_species_id(item.opponent_species)
+        for item in items
     )
 
 

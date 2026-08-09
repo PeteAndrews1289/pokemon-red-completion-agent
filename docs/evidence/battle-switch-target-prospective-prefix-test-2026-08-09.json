@@ -1,0 +1,57 @@
+{
+  "schema": "pokemon-switch-target-prospective-prefix-test-v1",
+  "recorded_on": "2026-08-09",
+  "status": "target_gate_passed_route_terminal_failed",
+  "source_commit": "5d2fc9506873b05253dd08d305e4cdfbff1c475f",
+  "frozen_candidate": {
+    "model_id": "pokemon.core.battle.switch-target-ranker.mlp.v1",
+    "canonical_payload_sha256": "bd1ba4bd1ca6e9de1a94bc6f958bb54f80c45cce3e14421df3a4eded7a70186e",
+    "canonical_payload_bytes": 1381,
+    "hyperparameters_changed_before_test": false,
+    "test_evaluations": 1
+  },
+  "test_lineage": {
+    "harness_seed": 990007,
+    "schedule_sha256": "70e9e5bc1de883a5a07a13b4e1f7d2a8f7ecd4077227b1c1fb05ebe26093ba2d",
+    "artifact_id": "red-battle-control-01eddee2e2374b149d78fafae831ea42",
+    "manifest_sha256": "8fdd50bb5c46a0a8fd31b899a52d287e57ead0ff80d4a25e3c37112a7b55d43f",
+    "labels_sha256": "0099ea1648def905511e9f476e4efe2160567b8be45cb60bbeafef867e1a675e",
+    "metadata_sha256": "602c53d85e3e5000566b4add24721d694bab7f5410af98d8628e127ba735d54a",
+    "label_records": 3188,
+    "total_records": 3189,
+    "bytes": 14083934,
+    "game_complete": false,
+    "task_complete_prefix": true,
+    "checkpoints": "306/312",
+    "agatha_defeated": true,
+    "lance_reached": true,
+    "private_path_published": false
+  },
+  "target_evaluation": {
+    "examples": 17,
+    "learned_correct": 17,
+    "learned_accuracy": 1.0,
+    "learned_cross_entropy": 0.0796481565178015,
+    "deterministic_baseline_correct": 12,
+    "deterministic_baseline_accuracy": 0.7058823529411765,
+    "bruno_correct": "2/2",
+    "agatha_correct": "7/7",
+    "agatha_golbat_targets_correct": "3/3",
+    "all_battle_plans_perfect": true
+  },
+  "route_failure": {
+    "reason": "Agatha terminal evidence failed after the battle was won and the party entered Lance's room.",
+    "executed_role_switches": 7,
+    "move_visible_role_switch_lower_bound": 5,
+    "diagnosis": "Agatha can switch an opponent into an already-selected attack and replace it again before another move decision is recorded. The terminal verifier reconstructed switches from move turns and therefore undercounted two valid role changes.",
+    "model_caused_failure": false
+  },
+  "integrity": {
+    "partial_labels_used_for_training": false,
+    "test_rows_inspected_before_model_evaluation": true,
+    "candidate_refit_after_test": false,
+    "counted_campaign_root_consumed": false,
+    "deployment_authority": false,
+    "reason_deployment_still_false": "The target task passed offline, but authenticated artifact publication, runtime binding, shadow evaluation, and causal completion remain."
+  }
+}

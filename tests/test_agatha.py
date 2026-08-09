@@ -19,6 +19,7 @@ from pokemon_red_completion.agatha import (
     EARTHQUAKE_MOVE_ID,
     JOLTEON_SPECIES_ID,
     THUNDER_MOVE_ID,
+    AgathaRoleSwitch,
     AgathaTurn,
     _agatha_forced_switch_target,
     _agatha_matchup_species,
@@ -26,6 +27,7 @@ from pokemon_red_completion.agatha import (
     _agatha_move_slot,
     _agatha_recovery_due,
     _agatha_required_role_switches,
+    _agatha_role_switches_valid,
     _agatha_team_lesson_satisfied,
     _battle_x_special,
     _encounter_party,
@@ -306,6 +308,23 @@ def test_agatha_switch_contract_follows_observed_role_transitions() -> None:
     assert _agatha_required_role_switches(()) == 0
     assert _agatha_required_role_switches(canonical) == 3
     assert _agatha_required_role_switches(perturbed) == 7
+
+
+def test_agatha_switch_receipt_keeps_between_move_role_changes() -> None:
+    switches = tuple(
+        AgathaRoleSwitch(
+            opponent_species=AGATHA_PARTY[position][0],
+            opponent_party_position=position,
+            target_party_index=3 if position == 1 else 2,
+            target_species_id=(JOLTEON_SPECIES_ID if position == 1 else DUGTRIO_SPECIES_ID),
+        )
+        for position in (0, 1, 0, 1, 2, 1, 3)
+    )
+
+    assert _agatha_role_switches_valid(switches)
+    assert not _agatha_role_switches_valid(
+        (*switches[:-1], replace(switches[-1], target_species_id=JOLTEON_SPECIES_ID))
+    )
 
 
 def test_agatha_recovery_tracks_live_state_without_forcing_an_attack_between_items() -> None:
