@@ -8,6 +8,7 @@ from pathlib import Path
 from types import TracebackType
 from typing import Any, Protocol
 
+from pokemon_red_completion.constants import POKEMON_RED_US_REV_0, SupportedRom
 from pokemon_red_completion.rom import (
     RomFingerprint,
     resolve_rom_path,
@@ -130,9 +131,21 @@ class PyBoyAdapter:
         *,
         watch: bool = False,
         speed: int | None = None,
+        expected_rom: SupportedRom = POKEMON_RED_US_REV_0,
     ) -> None:
+        """``expected_rom`` names which cartridge this adapter will load.
+
+        It defaults to Red so every existing caller is unchanged. It exists
+        because a living Pokedex needs a second version -- ten species are
+        exclusive to Blue -- and until now the fingerprint check here was
+        hard-coded, so the repository could refuse a cartridge it had already
+        been told to expect.
+        """
+
         if not isinstance(watch, bool):
             raise TypeError("watch must be a boolean")
+        if not isinstance(expected_rom, SupportedRom):
+            raise TypeError("expected_rom must be a SupportedRom")
         if speed is not None and (not isinstance(speed, int) or isinstance(speed, bool)):
             raise TypeError("speed must be an integer or None")
         if watch:
@@ -148,6 +161,7 @@ class PyBoyAdapter:
             window_name = "null"
 
         self._rom_path = Path(rom_path)
+        self._expected_rom = expected_rom
         self._watch = watch
         self._window_name = window_name
         self._speed = resolved_speed
@@ -198,7 +212,7 @@ class PyBoyAdapter:
 
         path = resolve_rom_path(self._rom_path)
         payload = path.read_bytes()
-        fingerprint = verify_rom_bytes(payload)
+        fingerprint = verify_rom_bytes(payload, self._expected_rom)
         rom_stream = io.BytesIO(payload)
         factory = _load_pyboy_factory()
         window_event_pump = _load_sdl2_window_pump() if self._watch else None

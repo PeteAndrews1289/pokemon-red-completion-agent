@@ -156,8 +156,20 @@ environment, never in a file.
 
 ## Private inputs
 
-The ROM, the private artifact root, and the objective-model path are supplied per session by the
+The ROMs, the private artifact root, and the objective-model path are supplied per session by the
 repository owner and must never appear in a tracked or untracked file. Ask if you do not have them.
+
+**Two cartridges now exist.** The owner keeps both in one folder, which was renamed on 2026-08-09 —
+if a remembered path stops working, that is why. Each title reads its own variable, because one
+variable cannot name several cartridges and a campaign runs several:
+
+| title | variable |
+| --- | --- |
+| Red | `POKEMON_RED_ROM` |
+| Blue | `POKEMON_BLUE_ROM` |
+
+Point each at the file, not the folder. `scripts/check_public_artifacts.py` walks the whole working
+tree including untracked files, so a note containing either path fails the gate.
 
 ## Honest status
 

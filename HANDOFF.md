@@ -640,6 +640,33 @@ end-to-end learned completion.
 
 ## 4. How to work here without burning hours
 
+### Two cartridges, and a renamed folder (2026-08-09)
+
+Blue is now available, and a living Pokédex needs it: ten species are exclusive to it and no amount
+of Red planning reaches them.
+
+Each title reads its own environment variable, because one variable cannot name several cartridges
+and a campaign runs several:
+
+| title | variable |
+| --- | --- |
+| Red | `POKEMON_RED_ROM` |
+| Blue | `POKEMON_BLUE_ROM` |
+
+Point each at the **file**, not the folder. The owner keeps both ROMs in one folder that was
+**renamed on 2026-08-09** — if a path you remember stops working, that is why, and the new one comes
+from the owner rather than from this document, which must never contain it.
+
+``PyBoyAdapter`` now takes ``expected_rom`` and still defaults to Red, so nothing that already works
+changes. Before this the fingerprint check inside the adapter was hard-coded to Red while the
+function it called took the expected cartridge as an argument — so the repository could refuse a
+cartridge it had explicitly been told to expect.
+
+The Red adapter loads and reads a Blue cartridge unmodified. That is the first cross-cartridge
+evidence this project has, and it is worth being precise about what it shows: the ROM gate, the boot
+path, and the addresses touched at power-on transfer. It does **not** show that the whole memory map
+does. Verifying the rest means harvesting Blue encounters the same way Red's bands were measured.
+
 ### Iterate against a captured state, not a full run
 
 A run reaches the training block in about six minutes. A captured state reaches it in about one.

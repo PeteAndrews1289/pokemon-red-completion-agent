@@ -1,0 +1,36 @@
+{
+  "schema": "pokemon-cross-cartridge-v1",
+  "recorded_on": "2026-08-09",
+  "finding_id": "blue-declared-and-first-cross-cartridge-read",
+  "why": "A living Pokedex needs a second version. With three concurrent Red saves the campaign reaches 140 of 151, and every remaining gap except Mew is a Blue exclusive.",
+  "measured_identity": {
+    "title": "POKEMON BLUE",
+    "size_bytes": 1048576,
+    "sha1": "d7037c83e1ae5b39bde3c30787637ba1d4c48ce2",
+    "sha256": "2a951313c2640e8c2cb21f25d1db019ae6245d9c7121f754fa61afd7bee6452d",
+    "method": "read from the owner's cartridge, not transcribed from a reference list"
+  },
+  "defect_found": {
+    "what": "PyBoyAdapter.start() called verify_rom_bytes(payload) with the Red default, while verify_rom_bytes itself takes the expected cartridge as an argument.",
+    "consequence": "The repository could refuse a cartridge it had explicitly been told to expect. Every check outside the adapter was already selective; the one inside it was not.",
+    "fix": "PyBoyAdapter takes expected_rom, defaulting to Red so no existing caller changes."
+  },
+  "first_cross_cartridge_result": {
+    "observed": "The Red adapter loads a Blue cartridge and PokemonRedStateReader.read() returns without error at power-on.",
+    "what_this_shows": "The ROM gate, the boot path, and the addresses touched at power-on transfer between the two cartridges.",
+    "what_this_does_not_show": "That the whole memory map transfers. Only the power-on subset was exercised. Verifying the rest means harvesting Blue encounters the same way Red's bands were measured, which the existing pipeline can now do.",
+    "note": "Red and Blue share one engine, so this outcome was expected. Expected is not measured, and it is now measured."
+  },
+  "campaign_reach_with_blue": [
+    {"plan": "three concurrent Red saves", "reach": "140/151", "unreachable": "ten Blue exclusives and Mew"},
+    {"plan": "two Red plus one Blue", "reach": "150/151", "must_trade_home": 25, "unreachable": "Mew only"},
+    {"plan": "three Red plus one Blue", "reach": "150/151", "must_trade_home": 25, "unreachable": "Mew only"}
+  ],
+  "planning_result": "Three concurrent saves suffice, not four. The obvious plan -- three Reds for branch coverage plus a Blue for its exclusives -- buys a whole extra save and reaches exactly the same 150. An earlier estimate in this project said four; it was wrong and the model corrected it.",
+  "stated_assumption_not_yet_measured": {
+    "what": "The ten Blue version-exclusives in BLUE_CARTRIDGE_EXCLUSIONS are derived as the complement of Red's ten, not harvested from the Blue cartridge.",
+    "why_it_is_marked": "That relationship is what makes the pair complete, and a test asserts the two sets do not overlap -- an overlap would mean a species neither cartridge offers, short by that many with no way to notice. But derived is not measured, and the module says so where someone will read it.",
+    "how_to_settle_it": "Harvest Blue encounters with POKEMON_BLUE_ROM set, exactly as Red's bands were measured."
+  },
+  "self_correction": "Two of the first three mutation probes against this work passed, meaning two of my own tests were passing for the wrong reason: one left the Red variable unset so a fallback and a correct refusal produced the same error, and one never exercised the adapter's fingerprint wiring at all. Both were rewritten until the mutations turn them red."
+}

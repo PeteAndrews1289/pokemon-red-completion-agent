@@ -53,9 +53,7 @@ def simple(vessel_id: str, obtainable: set[int], exclusions: dict[int, Exclusion
 def test_one_vessel_lifts_nothing() -> None:
     """A save cannot trade with itself, so the single-cartridge answer stands."""
 
-    plan = CampaignPlan(
-        (simple("a", ALL_TEN - {5}, {5: ExclusionReason.REQUIRES_TRADE}),)
-    )
+    plan = CampaignPlan((simple("a", ALL_TEN - {5}, {5: ExclusionReason.REQUIRES_TRADE}),))
 
     reach = campaign_reach(plan, trade_evolutions={5: 4})
 
@@ -200,15 +198,32 @@ def test_two_concurrent_red_saves_reach_more_than_one_ever_can() -> None:
         return Vessel(vessel_id, "red", red_target(RedRunChoices(**choices)))  # type: ignore[arg-type]
 
     alone = CampaignPlan(
-        (red("a", starter="bulbasaur", fossil="dome", dojo_prize="hitmonchan",
-             eevee_evolution="flareon"),)
+        (
+            red(
+                "a",
+                starter="bulbasaur",
+                fossil="dome",
+                dojo_prize="hitmonchan",
+                eevee_evolution="flareon",
+            ),
+        )
     )
     paired = CampaignPlan(
         (
-            red("a", starter="bulbasaur", fossil="dome", dojo_prize="hitmonchan",
-                eevee_evolution="flareon"),
-            red("b", starter="charmander", fossil="helix", dojo_prize="hitmonlee",
-                eevee_evolution="jolteon"),
+            red(
+                "a",
+                starter="bulbasaur",
+                fossil="dome",
+                dojo_prize="hitmonchan",
+                eevee_evolution="flareon",
+            ),
+            red(
+                "b",
+                starter="charmander",
+                fossil="helix",
+                dojo_prize="hitmonlee",
+                eevee_evolution="jolteon",
+            ),
         )
     )
 
@@ -219,3 +234,134 @@ def test_two_concurrent_red_saves_reach_more_than_one_ever_can() -> None:
     assert two.total_obtainable == 136
     assert two.lifted_by_trade == frozenset({65, 68, 76, 94}), "the four trade evolutions"
     assert len(consolidation_required(paired, two)) == 11
+
+
+# -- the pair of cartridges ---------------------------------------------------
+
+
+def test_the_two_versions_have_no_shared_exclusive() -> None:
+    """The pair is only complete if each game covers the other's gap.
+
+    Any overlap here means some species neither cartridge offers, and the
+    living Pokedex would be short by that many with no way to notice.
+    """
+
+    from pokemon_red_completion.blue_pokedex import BLUE_CARTRIDGE_EXCLUSIONS
+    from pokemon_red_completion.red_pokedex import RED_CARTRIDGE_EXCLUSIONS
+
+    def exclusives(table: dict[int, ExclusionReason]) -> set[int]:
+        return {
+            species
+            for species, reason in table.items()
+            if reason is ExclusionReason.VERSION_EXCLUSIVE
+        }
+
+    red_only = exclusives(RED_CARTRIDGE_EXCLUSIONS)
+    blue_only = exclusives(BLUE_CARTRIDGE_EXCLUSIONS)
+
+    assert len(red_only) == len(blue_only) == 10
+    assert not red_only & blue_only, "a species neither cartridge offers would be invisible"
+
+
+def test_adding_blue_leaves_only_mew() -> None:
+    """The headline number for a Gen 1 living Pokedex, measured not asserted."""
+
+    from pokemon_red_completion.blue_pokedex import blue_target
+    from pokemon_red_completion.red_pokedex import RedRunChoices, red_target
+
+    def vessel(vessel_id: str, title: str, **choices: str) -> Vessel:
+        build = red_target if title == "red" else blue_target
+        return Vessel(vessel_id, title, build(RedRunChoices(**choices)))  # type: ignore[arg-type]
+
+    plan = CampaignPlan(
+        (
+            vessel(
+                "red-a",
+                "red",
+                starter="bulbasaur",
+                fossil="dome",
+                dojo_prize="hitmonchan",
+                eevee_evolution="flareon",
+            ),
+            vessel(
+                "red-b",
+                "red",
+                starter="charmander",
+                fossil="helix",
+                dojo_prize="hitmonlee",
+                eevee_evolution="jolteon",
+            ),
+            vessel(
+                "blue-a",
+                "blue",
+                starter="squirtle",
+                fossil="dome",
+                dojo_prize="hitmonchan",
+                eevee_evolution="vaporeon",
+            ),
+        )
+    )
+
+    reach = campaign_reach(plan, trade_evolutions=TRADE_EVOLUTIONS)
+
+    assert reach.total_obtainable == 150
+    assert set(reach.unreachable) == {151}, "only Mew"
+    assert reach.unreachable[151] is ExclusionReason.EVENT_DISTRIBUTION
+
+
+def test_a_third_red_save_adds_nothing_once_blue_is_present() -> None:
+    """Three concurrent saves suffice, not four.
+
+    Worth stating because the obvious plan -- three Reds for the branch
+    coverage, plus a Blue for its exclusives -- buys a whole extra save and
+    reaches exactly the same 150.
+    """
+
+    from pokemon_red_completion.blue_pokedex import blue_target
+    from pokemon_red_completion.red_pokedex import RedRunChoices, red_target
+
+    def red(vessel_id: str, **choices: str) -> Vessel:
+        return Vessel(vessel_id, "red", red_target(RedRunChoices(**choices)))  # type: ignore[arg-type]
+
+    blue = Vessel(
+        "blue-a",
+        "blue",
+        blue_target(
+            RedRunChoices(
+                starter="squirtle",
+                fossil="dome",
+                dojo_prize="hitmonchan",
+                eevee_evolution="vaporeon",
+            )
+        ),
+    )
+    two_red = (
+        red(
+            "a",
+            starter="bulbasaur",
+            fossil="dome",
+            dojo_prize="hitmonchan",
+            eevee_evolution="flareon",
+        ),
+        red(
+            "b",
+            starter="charmander",
+            fossil="helix",
+            dojo_prize="hitmonlee",
+            eevee_evolution="jolteon",
+        ),
+    )
+    three_red = two_red + (
+        red(
+            "c",
+            starter="squirtle",
+            fossil="dome",
+            dojo_prize="hitmonchan",
+            eevee_evolution="vaporeon",
+        ),
+    )
+
+    smaller = campaign_reach(CampaignPlan(two_red + (blue,)), trade_evolutions=TRADE_EVOLUTIONS)
+    larger = campaign_reach(CampaignPlan(three_red + (blue,)), trade_evolutions=TRADE_EVOLUTIONS)
+
+    assert smaller.total_obtainable == larger.total_obtainable == 150

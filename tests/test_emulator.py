@@ -67,7 +67,14 @@ class RecordingFactory:
         return self.backend
 
 
-def _fingerprint(payload: bytes) -> RomFingerprint:
+def _fingerprint(payload: bytes, expected: object | None = None) -> RomFingerprint:
+    """Stand-in for ``verify_rom_bytes``.
+
+    It accepts the expected cartridge because the real function does. The
+    adapter now passes which cartridge it was told to load, so a double that
+    takes only the payload would hide that argument rather than check it.
+    """
+
     return RomFingerprint(
         filename="<private>",
         title="POKEMON RED",
