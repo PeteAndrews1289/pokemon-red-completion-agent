@@ -79,7 +79,8 @@ CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS = {
     RATTATA_SPECIES_ID: 25,
     BULBASAUR_SPECIES_ID: 30,
 }
-CERULEAN_RIVAL_MAX_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE + 3
+CERULEAN_RIVAL_MIN_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE + 2
+CERULEAN_RIVAL_MAX_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE + 4
 CERULEAN_ANTIDOTE_RESERVE = 3
 POTION_HEAL_AMOUNT = 20
 TM01_FIELD_MENU_CLOSE_PULSES = 2
@@ -424,7 +425,9 @@ def run_cascade_chapter(
         or rival_staging.battle_state != 0
         or rival_staging.party_species_ids != (WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
         or rival_staging.first_party_moves != (0x21, 0x27, MEGA_PUNCH_MOVE_ID, 0x37)
-        or _bag_quantity(emulator, ItemId.POTION) != CERULEAN_RIVAL_MAX_POTION_RESERVE
+        or not CERULEAN_RIVAL_MIN_POTION_RESERVE
+        <= _bag_quantity(emulator, ItemId.POTION)
+        <= CERULEAN_RIVAL_MAX_POTION_RESERVE
         or _bag_quantity(emulator, ItemId.TM01_MEGA_PUNCH) != 0
     ):
         raise CascadeChapterError("Cerulean rival staging missed its bounded reserve gate.")
@@ -1068,7 +1071,9 @@ def _withdraw_cerulean_rival_potion(
         or before.battle_state != 0
         or not reader.read_input_readiness().ready
         or not 0 <= before_count < 20
-        or _bag_quantity(emulator, ItemId.POTION) != CERULEAN_RIVAL_POTION_RESERVE - 1
+        or not CERULEAN_RIVAL_POTION_RESERVE - 2
+        <= _bag_quantity(emulator, ItemId.POTION)
+        <= CERULEAN_RIVAL_POTION_RESERVE
     ):
         raise CascadeChapterError("Cerulean PC Potion withdrawal has an invalid starting gate.")
 
@@ -1900,11 +1905,12 @@ def _purchase_cerulean_supplies(
             )
         _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
 
+    expected_potion_quantity = _bag_quantity(emulator, ItemId.POTION) + 4
     buy_one(
         shop_index=1,
         item=ItemId.POTION,
         purchase_quantity=4,
-        expected_quantity=CERULEAN_RIVAL_MAX_POTION_RESERVE,
+        expected_quantity=expected_potion_quantity,
         label="Potions",
     )
     buy_one(
@@ -1937,7 +1943,9 @@ def _purchase_cerulean_supplies(
     if (
         returned.map_id != MapId.CERULEAN_CITY
         or (returned.player_x, returned.player_y) != (19, 18)
-        or _bag_quantity(emulator, ItemId.POTION) != CERULEAN_RIVAL_MAX_POTION_RESERVE
+        or not CERULEAN_RIVAL_MIN_POTION_RESERVE
+        <= _bag_quantity(emulator, ItemId.POTION)
+        <= CERULEAN_RIVAL_MAX_POTION_RESERVE
         or _bag_quantity(emulator, ItemId.ANTIDOTE) != CERULEAN_ANTIDOTE_RESERVE
         or _bag_quantity(emulator, ItemId.AWAKENING) != 1
         or not reader.read_input_readiness().ready

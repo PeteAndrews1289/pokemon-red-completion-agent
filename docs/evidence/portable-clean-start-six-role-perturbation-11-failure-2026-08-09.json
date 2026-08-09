@@ -34,8 +34,8 @@
     "model_boundary": "The failure remained inside the authored first composite. Objective selection made one singleton choice; all learned battle, target, and training counters were zero."
   },
   "repair": {
-    "status": "route3_resource_repair_validated_rom_free_pending_live_causal_replay",
-    "behavior": "The Forest exit still requires the exact level-9 lead, at least 19 HP, at least four Bubble PP, and either healthy or poison status; every other status remains fatal. The independent progress referee admits poison only at the Forest north gate, upper Route 2 return, and Pewter south edge. The teacher takes the direct finite Pewter route to the Pokémon Center, proves full HP, clear status, and positive PP for every learned move, withdraws exactly RED's guaranteed PC Potion, exits, and follows the measured finite route to the Gym. After the first required Route 3 trainer, it consumes exactly that Potion under map, HP, inventory, and field-control gates before the 51-step return. Cerulean restores the reserve from 13 to 17 with the original four-Potion purchase; the existing cleanup still protects six Potions, so downstream reserves and total spend are unchanged.",
+    "status": "route3_wrap_recovery_validated_rom_free_pending_live_causal_replay",
+    "behavior": "The Forest exit still requires the exact level-9 lead, at least 19 HP, at least four Bubble PP, and either healthy or poison status; every other status remains fatal. The independent progress referee admits poison only at the Forest north gate, upper Route 2 return, and Pewter south edge. The teacher takes the direct finite Pewter route to the Pokémon Center, proves full HP, clear status, and positive PP for every learned move, withdraws exactly RED's guaranteed PC Potion, exits, and follows the measured finite route to the Gym. After the first required Route 3 trainer, it consumes exactly that Potion under map, HP, inventory, and field-control gates before the 51-step return. During trainer one it may consume one further Potion only at a verified MAIN menu at or below 13 HP and above a twelve-Potion floor. Cerulean purchases the original four from a measured 12–14 starting window; the rival accepts 16–18, and the existing cleanup still protects six, so downstream reserves and total spend are unchanged.",
     "bounds": {
       "center_route_inputs": 15,
       "nurse_approach_inputs": 4,
@@ -61,7 +61,7 @@
       "message": "Travel boundary failed its stable semantic snapshot.",
       "finding": "The controller crossed the repaired Forest-exit gate, but the independent progress referee duplicated the old global status-zero assumption at the first north-gate checkpoint."
     },
-      "same_root_center_route_replay": {
+    "same_root_center_route_replay": {
       "source_commit": "fb2da00e9f4a8fccf1ad31b9d12e9806b43a7ab7",
       "raw_report_sha256": "cc15b96c4f58bd4c996d6631c78bb4214709e49975ae2d6ec2452e6eed330781",
       "frames_executed": 167565,
@@ -76,17 +76,17 @@
         "status": 0,
         "bubble_pp": 30
       },
-        "finding": "The Center recovery passed completely. The assumed exterior start was one tile too low, so ten north inputs overshot the proven corridor before the final Gym leg. The measured Center exit is Pewter (13,26); nine north inputs restore the source-stable (19,13) junction."
-      },
-      "same_root_measured_route_replay": {
+      "finding": "The Center recovery passed completely. The assumed exterior start was one tile too low, so ten north inputs overshot the proven corridor before the final Gym leg. The measured Center exit is Pewter (13,26); nine north inputs restore the source-stable (19,13) junction."
+    },
+    "same_root_measured_route_replay": {
         "source_commit": "e6c2ebeb7f80569a15563e740122dc7f4a6fccc2",
         "raw_report_sha256": "f0e7b742602e05969745d1fb358dea60117352ad3fb14313a9c9cc516c7e76c6",
         "frames_executed": 217494,
         "exception_type": "CeruleanChapterError",
         "message": "Squirtle's lineage fainted during Pewter Center recovery route: map=2, coordinate=(19,22), status=0.",
         "finding": "The measured route qualified the Center-to-Gym recovery and Brock. The first required Route 3 trainer then left a poisoned lead without enough HP to survive the authored return walk; the terminal status byte cleared only because the lead had already fainted. Every learned battle and training counter remained zero because the failure was still inside the first authored composite."
-      },
-      "same_root_route3_entry_probe": {
+    },
+    "same_root_route3_entry_probe": {
         "source_commit": "e6c2ebeb7f80569a15563e740122dc7f4a6fccc2",
         "private_probe_log_sha256": "6a2de893c98a7e86811b49c5b86e8c109f1c142ce322b78d61bf2118f4e05a7a",
         "map_id": 14,
@@ -97,8 +97,23 @@
         "observed_max_hp": 35,
         "observed_status": 8,
         "observed_bubble_pp": 18
+    },
+    "same_root_route3_wrap_replay": {
+      "source_commit": "55b255e3d0a39a1e0e20114c8358328865aa8bcc",
+      "raw_report_sha256": "41c7c405ab4c4936a08c1a3964be96e63b87884eb1b8c3cc9fcb8cdd0e58d0ea",
+      "private_trace_log_sha256": "251b5c6487f9b3a9bbe56aab8b303490d972b95e444dad0601db32480d338d3f",
+      "frames_executed": 237342,
+      "exception_type": "CeruleanChapterError",
+      "message": "Squirtle's lineage fainted during Route 3 trainer 1.",
+      "trace": {
+        "first_opponent_exit_hp": 13,
+        "second_opponent_max_hp": 30,
+        "lowest_verified_main_menu_hp_before_faint": 2,
+        "field_potion_repair_qualified": true
       },
-      "rom_free_gate": "Public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,197 tests pass for the PC-Potion resource repair; three integration tests are deselected and one expected failure remains expected. The source-bound v95 registry is SHA-256 afc288ac7ae31ca21e15f034ac7becd50e76b1b092b19dcf476b8a81db78091a and the source bundle is SHA-256 6f3bc77d8d3692729ac66249fd02d64f9905acec882feafb99678356afbd42ac.",
-      "next_gate": "Complete the full ROM-free gate, commit and push the repair, then replay the failed seed causally before assigning a fresh uncounted derived-timing root. Counted v95 remains unopened."
+      "finding": "The field Potion qualified the former recovery-walk defect. Trainer one's second opponent then used repeated Wrap while the confirmation-only finisher had no recovery branch. A legal Potion was available at multiple verified MAIN boundaries; this remained authored early-game execution before every learned battle and training decision."
+    },
+    "rom_free_gate": "The one-use Wrap recovery passes public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,198 tests; three integration tests are deselected and one expected failure remains expected. Its regenerated source-bound v95 registry is SHA-256 eaa5bfc13113dafbb899ca308c345a4733c40e967d38a7cf887d3eaed596e0eb and source bundle SHA-256 2bb15d11bf42e12942a78e1dfc14b799d35a6aaf8da0183df947991cdb9fe73b.",
+    "next_gate": "Complete the full ROM-free gate, commit and push the repair, then replay the failed seed causally before assigning a fresh uncounted derived-timing root. Counted v95 remains unopened."
   }
 }

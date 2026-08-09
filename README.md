@@ -182,9 +182,13 @@ the resulting causal replay crossed Brock and the first required Route 3 trainer
 same poison as a second missing recovery action: the lead began the 51-step return at Route 3
 `(11,6)` with 10/35 HP and poison and fainted at Pewter `(19,22)`. The teacher now withdraws RED's
 guaranteed PC Potion during the first Pewter Center visit, spends exactly that Potion after the
-trainer, and buys the original four-Potion Cerulean top-up. The rival reserve is therefore 17
-instead of 18, while the existing cleanup still protects the identical six-Potion downstream
-reserve and the money ledger is unchanged;
+trainer, and buys the original four-Potion Cerulean top-up. That replay survived the return and
+then exposed Wrap attrition in trainer one: the first opponent left 13/35 HP, and the second bound
+the lead down to zero while the controller kept confirming attacks. The repaired battle loop may
+spend one further Potion only at a verified MAIN boundary at or below 13 HP, never crossing the
+twelve-Potion floor. Cerulean now accepts the resulting 16–18 Potion window, while the existing
+cleanup still protects the identical six-Potion downstream reserve and the money ledger is
+unchanged;
 see the
 [eleventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95

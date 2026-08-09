@@ -21,8 +21,9 @@ could not reach the recovery action intended to clear it. Each failure is preser
 rerun as a favorable root. A later same-root replay crossed Brock and localized a second instance:
 the first Route 3 trainer left the lead at 10/35 HP with poison before a 51-step return. The pending
 resource repair withdraws the guaranteed PC Potion in Pewter, spends it at that exact post-trainer
-gate, preserves the original cash ledger, and retains the same six-Potion downstream floor. Its
-2,197-test ROM-free gate is green; exact causal replay is next.
+gate, preserves the original cash ledger, and retains the same six-Potion downstream floor. The
+next replay survived that return and exposed a distinct trainer-one Wrap boundary; its traced
+recovery policy is now the pending gate.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -276,10 +277,14 @@ Pewter Center at `(19,22)`. A clean entry probe measured Route 3 `(11,6)`, level
 poison `0x08`, and 18 Bubble PP. This is still authored resource execution inside the first
 composite: all learned battle and training counters remained zero. The repair moves RED's
 guaranteed PC Potion withdrawal from Cerulean to the first Pewter Center visit and consumes only
-that item after trainer zero. It begins Cerulean with 13 Potions, purchases the original four, and
-lowers only the pre-cleanup rival maximum from 18 to 17; the existing cleanup still retains six,
-so later reserves and total spend are unchanged. The complete 2,197-test gate passes; publish the
-clean source and run the exact same-root causal replay next. Counted v95 remains unopened.
+that item after trainer zero. The next exact replay survived the return and reached trainer one at
+full health. A same-root trace then observed 13/35 HP after the first opponent and repeated Wrap
+damage against the second until fainting at 237,342 frames. The bounded repair may use one Potion
+only at a live MAIN boundary at or below 13 HP, proves the exact heal and item decrement, and never
+crosses a twelve-Potion floor. Cerulean buys the original four from a measured 12–14 starting
+window and the rival accepts 16–18; the existing cleanup still retains six, so total spend and every
+downstream reserve are unchanged. The complete 2,198-test ROM-free gate passes; publish and
+causally replay the same root. Counted v95 remains unopened.
 
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared

@@ -66,6 +66,8 @@ CENTER_EXIT_DIRECTIONS = ("down",) * 5
 CENTER_HEAL_TO_PC_DIRECTIONS = ("down",) + ("right",) * 10
 CENTER_PC_TO_HEAL_DIRECTIONS = ("left",) * 10 + ("up",)
 FIELD_ITEM_MENU_CLOSE_PULSES = 4
+ROUTE_3_BATTLE_RECOVERY_HP = 13
+ROUTE_3_PROTECTED_POTION_FLOOR = 12
 CENTER_TO_ROUTE_3_DIRECTIONS = _directions("R" * 3 + "U" * 4 + "R" * 3 + "U" * 4 + "R" * 21)
 ROUTE_3_TO_PEWTER_CENTER_DIRECTIONS = _directions(
     "L" * 20 + "D" * 4 + "L" * 3 + "D" * 4 + "L" * 3 + "U"
@@ -488,6 +490,11 @@ def run_cerulean_chapter(
             timing,
             MapId.ROUTE_3,
             f"Route 3 trainer {trainer_index}",
+            emulator=emulator if position == 1 else None,
+            recovery_hp_threshold=(
+                ROUTE_3_BATTLE_RECOVERY_HP if position == 1 else None
+            ),
+            recovery_potion_floor=ROUTE_3_PROTECTED_POTION_FLOOR,
         )
         victory_evidence = reader.read_cerulean_chapter_state(victory)
         _expect_route_3_victory(victory_evidence, position)
@@ -1665,10 +1672,17 @@ def _finish_battle(
     timing: CeruleanTiming,
     expected_map: MapId,
     label: str,
+    *,
+    emulator: EmulatorState | None = None,
+    recovery_hp_threshold: int | None = None,
+    recovery_potion_floor: int = 0,
 ) -> RawGameState:
+    if (emulator is None) != (recovery_hp_threshold is None):
+        raise CeruleanChapterError(f"{label} has an incomplete recovery policy.")
     saw_battle = False
     stable_reads = 0
     post_ko_cancel_pulses: int | None = None
+    recovery_used = False
     for _ in range(timing.max_battle_pulses):
         before = reader.read()
         if before.map_id != expected_map:
@@ -1699,6 +1713,29 @@ def _finish_battle(
             post_ko_cancel_pulses is not None
             and post_ko_cancel_pulses < POST_KO_SWITCH_DECLINE_PULSES
         )
+        should_recover = (
+            emulator is not None
+            and recovery_hp_threshold is not None
+            and not recovery_used
+            and before.battle_state == 2
+            and (before.enemy_hp or 0) > 0
+            and before_menu is not None
+            and before_menu.phase is BattleMenuPhase.MAIN
+            and before.first_party_hp is not None
+            and 0 < before.first_party_hp <= recovery_hp_threshold
+            and _bag_quantity(emulator, ItemId.POTION) > recovery_potion_floor
+        )
+        if should_recover:
+            _use_route_3_battle_potion(
+                executor,
+                reader,
+                emulator,
+                timing,
+                quantity_floor=recovery_potion_floor,
+                label=label,
+            )
+            recovery_used = True
+            continue
         executor.execute(
             MacroAction(MacroActionKind.CANCEL if decline_switch else MacroActionKind.CONFIRM)
         )
@@ -1721,6 +1758,99 @@ def _finish_battle(
         else:
             stable_reads = 0
     raise CeruleanChapterError(f"{label} failed its bounded battle-completion gate.")
+
+
+def _use_route_3_battle_potion(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+    *,
+    quantity_floor: int,
+    label: str,
+) -> None:
+    """Spend at most one surplus Potion at a verified trainer MAIN boundary."""
+
+    before = reader.read()
+    menu = reader.read_battle_menu_state(before)
+    before_quantity = _bag_quantity(emulator, ItemId.POTION)
+    if (
+        before.battle_state != 2
+        or menu.phase is not BattleMenuPhase.MAIN
+        or before.first_party_hp is None
+        or before.first_party_max_hp is None
+        or not 0 < before.first_party_hp < before.first_party_max_hp
+        or before_quantity != quantity_floor + 1
+    ):
+        raise CeruleanChapterError(f"{label} Potion has an invalid recovery gate.")
+
+    command = menu.selected_main_command
+    directions = {
+        0: ("down",),
+        1: (),
+        2: ("left", "down"),
+        3: ("left",),
+    }.get(command)
+    if directions is None:
+        raise CeruleanChapterError(f"{label} exposed an invalid battle command cursor.")
+    for direction in directions:
+        _pulse(executor, MacroActionKind.MOVE, direction, timing.move_cursor_wait_frames)
+    selected = reader.read_battle_menu_state(reader.read())
+    if selected.phase is not BattleMenuPhase.MAIN or selected.selected_main_command != 1:
+        raise CeruleanChapterError(f"{label} could not select ITEM for recovery.")
+
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    for _ in range(24):
+        items = _bag_item_ids(emulator)
+        if ItemId.POTION not in items:
+            raise CeruleanChapterError(f"{label} lost its protected Potion.")
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        target = items.index(ItemId.POTION)
+        if absolute == target:
+            break
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if absolute < target else "up",
+            timing.move_cursor_wait_frames,
+        )
+    else:
+        raise CeruleanChapterError(f"{label} could not select its protected Potion.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+
+    for _ in range(6):
+        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) == 0:
+            break
+        _pulse(executor, MacroActionKind.MOVE, "up", timing.move_cursor_wait_frames)
+    else:
+        raise CeruleanChapterError(f"{label} could not select the party lead.")
+
+    executor.execute(MacroAction(MacroActionKind.CONFIRM))
+    expected_healed_hp = min(before.first_party_max_hp, before.first_party_hp + 20)
+    current = reader.read()
+    saw_exact_heal = (
+        current.first_party_hp == expected_healed_hp
+        and _bag_quantity(emulator, ItemId.POTION) == quantity_floor
+    )
+    for _ in range(30):
+        _wait(executor, timing.dialogue_wait_frames)
+        current = reader.read()
+        if current.first_party_hp == expected_healed_hp:
+            saw_exact_heal = True
+        if (
+            saw_exact_heal
+            and _bag_quantity(emulator, ItemId.POTION) == quantity_floor
+            and current.battle_state == 2
+            and (current.first_party_hp or 0) > 0
+            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+        ):
+            return
+        if current.battle_state != 2 or (current.first_party_hp or 0) <= 0:
+            raise CeruleanChapterError(f"{label} lost its living battle during recovery.")
+        executor.execute(MacroAction(MacroActionKind.CANCEL))
+    raise CeruleanChapterError(f"{label} missed its Potion or MAIN-menu recovery proof.")
 
 
 def _obtain_helix_fossil(

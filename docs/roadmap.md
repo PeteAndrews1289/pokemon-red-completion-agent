@@ -148,8 +148,11 @@ is preserved. The measured Center-to-Gym route then crossed Brock, but the same 
 first Route 3 recovery walk at only 10/35 HP with poison and fainted at Pewter `(19,22)`. Move the
 guaranteed PC Potion withdrawal to the first Pewter Center visit, consume exactly that Potion after
 trainer zero, restore the original four-Potion Cerulean purchase, and preserve the six-Potion
-post-rival floor. Regenerate, pass the full ROM-free gate, push, and causally replay `990026` before
-assigning another root. Counted v95 remains 0/10.
+post-rival floor. That replay crossed the return, then trainer one's second opponent trapped the
+13/35-HP lead under repeated Wrap until it fainted. Add one bounded in-battle Potion decision at a
+verified MAIN boundary, protect a floor of twelve, accept the resulting 16–18 pre-rival window,
+regenerate, pass the full ROM-free gate, push, and causally replay `990026` before assigning another
+root. The 2,198-test gate is green; counted v95 remains 0/10.
 
 Seed `990024` qualified incidental Forest travel but the fixed first-Kakuna frame wait produced no
 battle. The [ninth perturbation failure](evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json)

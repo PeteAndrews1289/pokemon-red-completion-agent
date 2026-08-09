@@ -150,10 +150,14 @@ Center-to-Gym route now uses nine rather than ten north inputs (40 total). The f
 is green. Replay from `e6c2ebe` crossed that route, defeated Brock and Route 3 trainer zero, then
 fainted on the 51-step Pewter return at `(19,22)`. A clean entry probe measured Route 3 `(11,6)`,
 level 13, 10/35 HP, poison `0x08`, and 18 Bubble PP. The current lane withdraws RED's guaranteed
-PC Potion in the first Pewter Center visit and spends exactly it after trainer zero. Cerulean starts
-with 13 Potions, buys the original four, and carries 17 rather than 18 into the rival; cleanup still
-stores down to the unchanged six-Potion floor and the money ledger is unchanged. Regenerate,
-complete the full gate, push, then replay the exact `990026` root before any fresh seed.
+PC Potion in the first Pewter Center visit and spends exactly it after trainer zero. Commit
+`55b255e` and its 2,197-test gate qualified that repair: replay 15 survived the return, then trainer
+one's first opponent left 13/35 HP and repeated Wrap from the second reduced the lead to zero at
+237,342 frames. The current lane adds one recovery only at a verified MAIN boundary at or below 13
+HP, proves heal and decrement, and protects twelve Potions. Cerulean buys the original four from a
+12–14 starting window; the rival may carry 16–18, while cleanup still stores down to six and the
+money ledger is unchanged. Regenerate, complete the full gate, push, then replay the exact `990026`
+root before any fresh seed.
 Counted v95 remains 0/10.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the
@@ -170,9 +174,9 @@ semantic Kakuna search was qualified at `e579e76`, which supplied the `990025` w
 counterexample. The shared exact-gate yield maneuver was qualified at `8efd140`, which supplied the
 `990026` resource counterexample. `0773d75`, `87343ec`, `fb2da00`, and `e6c2ebe` successively
 qualified Center routing, the poison-transit controller/referee split, and the measured Gym route.
-The early PC-Potion resource repair and regenerated v95 registry are the current uncommitted lane;
-their public-artifact, docs, registry, Ruff, mypy, and 2,197-test gate is green. Push before exact
-causal replay.
+The early PC-Potion repair is published at `55b255e`. The traced one-use Route 3 battle recovery and
+its regenerated v95 registry are the current uncommitted lane. Public artifacts, docs, registry,
+Ruff, mypy, and 2,198 tests are green; push before exact causal replay.
 Only Codex
 pushes this branch; do not create a second worktree or force-push it.
 

@@ -255,7 +255,7 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
     ) == ROUTE_24_AFTER_NPC_DIRECTIONS
     assert RIVAL_TRIGGER_DIRECTIONS == ("up",)
     assert TM01_FIELD_MENU_CLOSE_PULSES == 2
-    assert CERULEAN_RIVAL_MAX_POTION_RESERVE == CERULEAN_RIVAL_POTION_RESERVE + 3
+    assert CERULEAN_RIVAL_MAX_POTION_RESERVE == CERULEAN_RIVAL_POTION_RESERVE + 4
     assert ROUTE_24_RECOVERY_POTION_RESERVE == 6
     assert cascade_module.ROUTE_24_SECOND_RECOVERY_POSITION == 1
     assert (

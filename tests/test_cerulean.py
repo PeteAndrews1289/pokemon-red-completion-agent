@@ -48,6 +48,7 @@ from pokemon_red_completion.cerulean import (
     _reverse_directions,
     _route_3_victory_sequence,
     _select_battle_move,
+    _use_route_3_battle_potion,
     _use_route_3_recovery_potion,
 )
 from pokemon_red_completion.economy import (
@@ -665,6 +666,66 @@ def test_route_3_recovery_consumes_only_the_guaranteed_pc_potion() -> None:
     assert sum(
         action.kind is MacroActionKind.CANCEL for action in executor.actions
     ) == 4
+
+
+def test_route_3_battle_recovery_preserves_the_twelve_potion_floor() -> None:
+    class Emulator:
+        memory = {
+            int(RamAddress.NUM_BAG_ITEMS): 1,
+            int(RamAddress.BAG_ITEMS): int(ItemId.POTION),
+            int(RamAddress.BAG_ITEMS) + 1: 13,
+            int(RamAddress.CURRENT_MENU_ITEM): 0,
+        }
+
+        def read_u8(self, address: int) -> int:
+            return self.memory.get(int(address), 0)
+
+    emulator = Emulator()
+
+    class Reader:
+        state = replace(
+            _raw(MapId.ROUTE_3, 14, 6, battle_state=2, level=13, hp=13, max_hp=35),
+            enemy_hp=30,
+            enemy_max_hp=30,
+        )
+        selected_main_command = 0
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(
+                BattleMenuPhase.MAIN,
+                selected_main_command=self.selected_main_command,
+            )
+
+    reader = Reader()
+
+    class Executor:
+        confirms = 0
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.MOVE and action.value == "down":
+                reader.selected_main_command = 1
+            if action.kind is not MacroActionKind.CONFIRM:
+                return
+            self.confirms += 1
+            if self.confirms == 3:
+                reader.state = replace(reader.state, first_party_hp=33)
+                emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = 12
+
+    _use_route_3_battle_potion(
+        _CountingChapterExecutor(Executor()),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        emulator,  # type: ignore[arg-type]
+        DEFAULT_CERULEAN_TIMING,
+        quantity_floor=12,
+        label="Route 3 trainer 1",
+    )
+
+    assert reader.state.first_party_hp == 33
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 12
 
 
 def test_cerulean_qualification_stops_at_city_entry_not_the_gym() -> None:

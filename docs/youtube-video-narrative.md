@@ -214,8 +214,10 @@ the Pewter Center, verify the healed state, and keep the original Gym gate uncha
 
 Do not cut away after Brock. The same root reaches Route 3 with the lesson only half learned:
 10/35 HP, poison, and a Center 51 steps away. Show RED's unused PC Potion moving earlier in the
-timeline, then the reserve ledger `14 → 13 → 17 → 6`. The money total and downstream floor do not
-change. Caption it: **“Resources are part of the policy.”**
+timeline. Then show the same root survive the walk but lose to repeated Wrap in trainer one. The
+traced repair makes one MAIN-menu recovery at 13/35 HP and produces the exact ledger
+`14 → 13 → 12 → 16 → 6`. The money total and downstream floor do not change. Caption it:
+**“Resources are part of the policy.”**
 
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
