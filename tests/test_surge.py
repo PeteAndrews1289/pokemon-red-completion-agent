@@ -1436,6 +1436,7 @@ def test_surge_uses_shared_runtime_with_an_exact_dig_contract(
     assert super_potions_used == 0
     assert observed["required_move_id"] == DIG_MOVE_ID
     assert observed["intent"] == surge_module.SURGE_BATTLE_INTENT
+    assert surge_module.SURGE_BATTLE_INTENT.required_move_ref.endswith("move:091")
     assert observed["consume_battle_start_schedule"] is False
 
 

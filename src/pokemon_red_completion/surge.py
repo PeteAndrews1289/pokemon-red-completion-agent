@@ -62,6 +62,7 @@ from pokemon_red_completion.red_acquisition import (
     RedAreaExecutionReport,
     run_red_area_survey,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 from pokemon_red_completion.red_collection import (
     red_collection_observation,
     red_internal_species_number,
@@ -154,7 +155,7 @@ SURGE_BATTLE_INTENT = BattleIntent(
     "defeat_surge",
     battle_plan_id="red.vermilion.lt-surge",
     required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
-    required_move_ref="move:dig",
+    required_move_ref=pokemon_red_move_ref(DIG_MOVE_ID),
     resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
     recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
 )
