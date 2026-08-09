@@ -126,6 +126,16 @@ remain fatal. Regenerate, qualify, push, and use another fresh root; v95 remains
 The public-artifact, docs, regenerated-registry, Ruff, mypy, and 2,181-test ROM-free gate passes;
 commit and push remain before replay.
 
+Seed `990023` qualified the Route 2 repair and then hit an incidental Forest battle at training
+route step 65, before the first intentionally seeded Kakuna. The
+[eighth perturbation failure](evidence/portable-clean-start-six-role-perturbation-08-failure-2026-08-09.json)
+is preserved. Forest travel now accumulates authenticated incidental flees across every segment
+under one twelve-encounter budget; the three Kakuna lessons and mandatory Bug Catcher retain
+separate fight contracts. Lower and upper Route 2 likewise share one eight-flee budget. Regenerate,
+qualify, push, and use a fresh root; v95 remains 0/10.
+The public-artifact, docs, regenerated-registry, Ruff, mypy, and 2,182-test ROM-free gate passes;
+commit and push remain before replay.
+
 The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's
 Red/Blue reciprocal version gaps now come from one canonical table and include the previously
 omitted Pinsir and Scyther. Trading requires an explicit compatibility edge between saves; merely

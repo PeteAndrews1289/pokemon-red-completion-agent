@@ -195,6 +195,10 @@ Route 1 fix as an abstraction test: first a route-specific exception, then a map
 semantic contract reused by the next grass corridor. Caption it: **“Generalize the proof, not the
 special case.”**
 
+Use `990023` to add the missing nuance: in Viridian Forest, some wild battles are noise and three
+are the lesson. Split the route into **travel: flee with receipt** and **curriculum: fight and prove
+progress**. Caption it: **“The same event can have a different semantic role.”**
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

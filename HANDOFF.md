@@ -130,6 +130,8 @@ The [sixth perturbation failure](docs/evidence/portable-clean-start-six-role-per
 preserves the fixed-front-end timing counterexample.
 The [seventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-07-failure-2026-08-09.json)
 preserves the Route 2 zero-incidental-encounter counterexample.
+The [eighth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-08-failure-2026-08-09.json)
+preserves the Forest travel-versus-curriculum encounter counterexample.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the
 source of the passed canonical receipt and `4f5f870` qualified the lab-rival repair through the next
@@ -138,9 +140,10 @@ source for the preserved `990018` counterexample; `d3461f0` qualified stabilized
 supplied the `990019` movement counterexample; `869e9a8` qualified closed-loop movement and supplied
 the `990020` pre-step encounter; `60d0842` qualified that repair and supplied the `990021`
 front-end timing counterexample; `3f11647` qualified the bounded bedroom recovery and supplied the
-`990022` Route 2 encounter. The map-bound authenticated wild traversal, Route 2 report fields, and
-regenerated v95 registry are the current uncommitted lane. Their full local gate is green; they
-need a clean push before replay. Only Codex
+`990022` Route 2 encounter; `cea2da8` qualified that repair and supplied the `990023` Forest
+encounter. Cumulative Forest/Route 2 flee evidence, report fields, and the regenerated v95 registry
+are the current uncommitted lane. Their full local gate is green; they need a clean push before
+replay. Only Codex
 pushes this branch; do not create a second worktree or force-push it.
 
 **Latest causal result:** attempt 13 ran from source `4ea7e93` with the frozen reserve-aware action

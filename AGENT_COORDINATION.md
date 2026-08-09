@@ -29,7 +29,11 @@
 > explicit expected map; only that Route 2 corridor opts into four authenticated flees, while
 > trainers and drift remain fatal. The 2,181-test ROM-free gate plus Ruff, mypy, docs, privacy, and
 > registry checks passes. Commit, push, then run a fresh uncounted
-> perturbation. Do
+> perturbation. Seed `990023` qualified Route 2 and then met an incidental Forest wild at training
+> step 65 before the first planned Kakuna. Every Forest travel segment now shares one cumulative
+> authenticated flee budget while the three Kakuna and Bug Catcher remain fight contracts; upper
+> and lower Route 2 share their own cumulative budget. The 2,182-test ROM-free gate plus Ruff,
+> mypy, docs, privacy, and registry checks passes. Commit, push, then use a fresh root. Do
 > not add `990007` to fitting, rerun retired model-test roots, build a complete Crystal route, weaken
 > the curriculum lesson, or consume a counted v95 root. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).

@@ -2103,7 +2103,10 @@ def test_rival_victory_accepts_supported_squirtle_dvs_and_surviving_hp(
     assert is_rival_victory_verified(victory, saw_trainer_battle=True)
 
 
-@pytest.mark.parametrize("map_id", (MapId.ROUTE_1, MapId.ROUTE_2))
+@pytest.mark.parametrize(
+    "map_id",
+    (MapId.ROUTE_1, MapId.ROUTE_2, MapId.VIRIDIAN_FOREST),
+)
 def test_overworld_traversal_flees_one_wild_and_preserves_the_consumed_step(
     map_id: MapId,
 ) -> None:
@@ -2171,9 +2174,9 @@ def test_overworld_traversal_flees_one_wild_and_preserves_the_consumed_step(
             executor,
             reader,  # type: ignore[arg-type]
             ("up",),
-            "Route 2 unit route",
-            expected_map_id=MapId.ROUTE_2,
-            route_name="Route 2",
+            f"{map_id.name} unit route",
+            expected_map_id=map_id,
+            route_name=map_id.name,
             maximum_flees=1,
             stabilization_frames=120,
             maximum_step_attempts=8,

@@ -205,6 +205,8 @@ def _report() -> PewterChapterReport:
         route_1_movement_retries=0,
         route_2_wild_flees=(),
         route_2_movement_retries=0,
+        forest_wild_flees=(),
+        forest_movement_retries=0,
         overworld_control_verified=True,
         frames_executed=70_043,
         actions_executed=954,
@@ -278,6 +280,8 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         "route_1_movement_retries": 0,
         "route_2_wild_flees": [],
         "route_2_movement_retries": 0,
+        "forest_wild_flees": [],
+        "forest_movement_retries": 0,
     }
     assert public["brock"] == {
         "victory_verified": True,

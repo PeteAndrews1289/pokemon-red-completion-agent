@@ -165,6 +165,10 @@ Seed `990022` qualified the intro repair and then hit an incidental battle on Ro
 traversal now takes an explicit map contract, so Route 2 can reuse the exact authenticated flee and
 movement receipt without accepting trainers, wrong maps, or a global “ignore battles” shortcut.
 
+The following root proved Route 2 and found the next semantic distinction in Viridian Forest:
+incidental wilds during travel should be fled, while three planned Kakuna lessons must be fought.
+One cumulative, evidence-bearing travel budget now coexists with the separate curriculum contracts.
+
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
 until the now-canonical-qualified reserve-aware stack also passes a perturbation rehearsal.

@@ -12,12 +12,12 @@ evaluation gap is timing/RNG reliability.
 
 The present Red milestone is narrower and measurable: qualify the already-passed combined stack on
 a fresh derived-timing root. Canonical seed `990015` is terminal evidence; seeds `990016` through
-`990022` exposed seven successive pre-model assumptions in the rival receipt, ordinary-wild
+`990023` exposed eight successive pre-model assumptions in the rival receipt, ordinary-wild
 handling, battle-exit input handoff, open-loop movement acknowledgement, pre-step encounter
-semantics, fixed front-end timing, and the same zero-wild assumption on Route 2. Each failure is
-preserved rather than rerun as a favorable root. The intro repair passed its full 2,180-test gate
-and CI; the Route 2 generalization passes its 2,181-test ROM-free gate and awaits a clean push and
-fresh perturbation.
+semantics, fixed front-end timing, and zero-wild assumptions on Route 2 and inside Viridian Forest.
+Each failure is preserved rather than rerun as a favorable root. The intro and Route 2 repairs
+passed their full gates and CI; the Forest generalization passes its 2,182-test ROM-free gate and
+awaits a clean push and fresh perturbation.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -233,6 +233,13 @@ type, so the repair does not assume it: the generalized traversal accepts only a
 declared Route 2 map, retains the exact directional and protected-state receipts, and still rejects
 trainers or drift. All learned battle and training counters were zero. See the
 [seventh perturbation failure](evidence/portable-clean-start-six-role-perturbation-07-failure-2026-08-09.json).
+
+Seed `990023` qualified the Route 2 contract and then hit an incidental Forest battle on training
+route step 65, before the first deliberate Kakuna lesson. The chapter now distinguishes every
+travel segment from the three authored Kakuna fights: incidental wilds receive authenticated
+map/party/movement receipts under one cumulative budget, while the lessons still require victory.
+All learned battle and training counters again remained zero. See the
+[eighth perturbation failure](evidence/portable-clean-start-six-role-perturbation-08-failure-2026-08-09.json).
 
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared

@@ -152,6 +152,12 @@ now explicitly map-bound and the 43-step Route 2 corridor permits at most four a
 flees while retaining directional acknowledgement and exact protected-state proofs; trainers and
 map drift still fail. See the
 [seventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-07-failure-2026-08-09.json).
+Seed `990023` qualified that repair, then an incidental wild appeared at Viridian Forest
+training-route step 65 before the first deliberate Kakuna lesson. Every Forest travel segment now
+uses the same map-bound contract under one twelve-flee budget, while the three intentional Kakuna
+battles and mandatory Bug Catcher remain separate fight contracts. Upper and lower Route 2 also
+share one eight-flee budget. See the
+[eighth perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-08-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95
 reliability campaign remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.

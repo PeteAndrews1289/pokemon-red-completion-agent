@@ -2319,6 +2319,12 @@ Route 2 caller receives its own finite budget; a trainer remains an error. Trans
 means reusing verified semantics under declared context, not turning one route exception into a
 global ignore-battles switch.
 
+One root later, that generalized proof worked on Route 2 and failed its next scope test inside
+Viridian Forest. The important distinction there is not map identity alone: three wild Kakuna are
+intentional curriculum fights, while an earlier random encounter is travel noise. The chapter now
+routes every movement segment through one cumulative incidental-flee contract and leaves the
+deliberate battles outside it. Generalization requires semantic role as well as shared mechanics.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

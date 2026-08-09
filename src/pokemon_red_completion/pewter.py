@@ -165,6 +165,8 @@ class PewterTiming:
     route_1_step_retry_wait_frames: int = 24
     route_2_wild_exit_stabilization_frames: int = 120
     route_2_step_retry_wait_frames: int = 24
+    forest_wild_exit_stabilization_frames: int = 120
+    forest_step_retry_wait_frames: int = 24
     encounter_wait_frames: int = 240
     battle_wait_frames: int = 180
     dialogue_wait_frames: int = 240
@@ -186,8 +188,10 @@ class PewterTiming:
     max_control_release_pulses: int = 10
     max_route_1_wild_flees: int = 8
     max_route_1_step_attempts: int = 8
-    max_route_2_wild_flees: int = 4
+    max_route_2_wild_flees: int = 8
     max_route_2_step_attempts: int = 8
+    max_forest_wild_flees: int = 12
+    max_forest_step_attempts: int = 8
 
     def __post_init__(self) -> None:
         for name, value in (
@@ -235,6 +239,8 @@ class PewterChapterReport:
     route_1_movement_retries: int
     route_2_wild_flees: tuple[Route1WildFleeEvidence, ...]
     route_2_movement_retries: int
+    forest_wild_flees: tuple[Route1WildFleeEvidence, ...]
+    forest_movement_retries: int
     overworld_control_verified: bool
     frames_executed: int
     actions_executed: int
@@ -256,6 +262,8 @@ class PewterChapterReport:
             and self.route_1_movement_retries >= 0
             and all(item.verified for item in self.route_2_wild_flees)
             and self.route_2_movement_retries >= 0
+            and all(item.verified for item in self.forest_wild_flees)
+            and self.forest_movement_retries >= 0
             and self.brock_battle_evidence.brock_battle_snapshot
             and self.brock_victory_evidence.brock_victory_snapshot
             and self.overworld_control_verified
@@ -308,6 +316,8 @@ class PewterChapterReport:
                 "route_1_movement_retries": self.route_1_movement_retries,
                 "route_2_wild_flees": [item.public_dict() for item in self.route_2_wild_flees],
                 "route_2_movement_retries": self.route_2_movement_retries,
+                "forest_wild_flees": [item.public_dict() for item in self.forest_wild_flees],
+                "forest_movement_retries": self.forest_movement_retries,
             },
             "brock": {
                 "victory_verified": self.brock_victory_evidence.brock_victory_snapshot,
@@ -436,7 +446,14 @@ def run_pewter_chapter(
     )
     _emit(progress, emulator, "forest_entered", "Entered Viridian Forest", 5)
 
-    _move(chapter_executor, reader, FOREST_ROUTE_DIRECTIONS[:90], "forest training route")
+    _, forest_wild_flees, forest_movement_retries = _move_forest_with_wild_flees(
+        chapter_executor,
+        reader,
+        FOREST_ROUTE_DIRECTIONS[:90],
+        "forest training route",
+        timing=timing,
+        used_flees=0,
+    )
     _trigger_wild_battle(
         chapter_executor,
         reader,
@@ -455,7 +472,16 @@ def run_pewter_chapter(
     )
     _expect_party(reader.read(), level=7, minimum_hp=1, label="first Kakuna")
 
-    _move(chapter_executor, reader, ("down",) * 2, "second Kakuna approach")
+    _, more_flees, more_retries = _move_forest_with_wild_flees(
+        chapter_executor,
+        reader,
+        ("down",) * 2,
+        "second Kakuna approach",
+        timing=timing,
+        used_flees=len(forest_wild_flees),
+    )
+    forest_wild_flees += more_flees
+    forest_movement_retries += more_retries
     _trigger_wild_battle(
         chapter_executor,
         reader,
@@ -474,7 +500,16 @@ def run_pewter_chapter(
     )
     _expect_party(reader.read(), level=7, minimum_hp=1, label="second Kakuna")
 
-    _move(chapter_executor, reader, ("down",) * 2, "third Kakuna approach")
+    _, more_flees, more_retries = _move_forest_with_wild_flees(
+        chapter_executor,
+        reader,
+        ("down",) * 2,
+        "third Kakuna approach",
+        timing=timing,
+        used_flees=len(forest_wild_flees),
+    )
+    forest_wild_flees += more_flees
+    forest_movement_retries += more_retries
     _trigger_wild_battle(
         chapter_executor,
         reader,
@@ -499,12 +534,16 @@ def run_pewter_chapter(
         label="third Kakuna",
     )
 
-    _move(
+    _, more_flees, more_retries = _move_forest_with_wild_flees(
         chapter_executor,
         reader,
         FOREST_ROUTE_DIRECTIONS[97:117],
         "mandatory Bug Catcher approach",
+        timing=timing,
+        used_flees=len(forest_wild_flees),
     )
+    forest_wild_flees += more_flees
+    forest_movement_retries += more_retries
     _enter_trainer_battle(
         chapter_executor,
         reader,
@@ -530,10 +569,37 @@ def run_pewter_chapter(
     )
     _expect_brock_party_ready(reader.read(), "Viridian Forest exit")
 
-    _move(chapter_executor, reader, ("up",) * 5, "forest north route prefix")
+    _, more_flees, more_retries = _move_forest_with_wild_flees(
+        chapter_executor,
+        reader,
+        ("up",) * 5,
+        "forest north route prefix",
+        timing=timing,
+        used_flees=len(forest_wild_flees),
+    )
+    forest_wild_flees += more_flees
+    forest_movement_retries += more_retries
     _wait(chapter_executor, timing.forest_exit_seed_wait_frames)
-    _move(chapter_executor, reader, ("up",) * 13, "forest north route")
-    _move(chapter_executor, reader, ("up",), "forest north-gate transition")
+    _, more_flees, more_retries = _move_forest_with_wild_flees(
+        chapter_executor,
+        reader,
+        ("up",) * 13,
+        "forest north route",
+        timing=timing,
+        used_flees=len(forest_wild_flees),
+    )
+    forest_wild_flees += more_flees
+    forest_movement_retries += more_retries
+    _, more_flees, more_retries = _move_forest_with_wild_flees(
+        chapter_executor,
+        reader,
+        ("up",),
+        "forest north-gate transition",
+        timing=timing,
+        used_flees=len(forest_wild_flees),
+    )
+    forest_wild_flees += more_flees
+    forest_movement_retries += more_retries
     _wait(chapter_executor, timing.transition_wait_frames)
     forest_cleared, _ = _observe_boundary(
         reader,
@@ -551,19 +617,27 @@ def run_pewter_chapter(
     _wait(chapter_executor, timing.transition_wait_frames)
     _observe_boundary(reader, tracker, TravelBoundary.ROUTE_2_NORTH_RETURN)
 
-    _move(
+    _, more_flees, more_retries = _move_route_2_with_wild_flees(
         chapter_executor,
         reader,
         ROUTE_2_TO_PEWTER_PREFIX_DIRECTIONS,
         "upper Route 2 prefix",
+        timing=timing,
+        used_flees=len(route_2_wild_flees),
     )
+    route_2_wild_flees += more_flees
+    route_2_movement_retries += more_retries
     _wait(chapter_executor, timing.pewter_seed_wait_frames)
-    _move(
+    _, more_flees, more_retries = _move_route_2_with_wild_flees(
         chapter_executor,
         reader,
         ROUTE_2_TO_PEWTER_SUFFIX_DIRECTIONS,
         "upper Route 2 to Pewter",
+        timing=timing,
+        used_flees=len(route_2_wild_flees),
     )
+    route_2_wild_flees += more_flees
+    route_2_movement_retries += more_retries
     _wait(chapter_executor, timing.transition_wait_frames)
     pewter_reached, _ = _observe_boundary(
         reader,
@@ -653,6 +727,8 @@ def run_pewter_chapter(
         route_1_movement_retries=route_1_movement_retries,
         route_2_wild_flees=route_2_wild_flees,
         route_2_movement_retries=route_2_movement_retries,
+        forest_wild_flees=forest_wild_flees,
+        forest_movement_retries=forest_movement_retries,
         overworld_control_verified=True,
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=chapter_executor.actions_executed,
@@ -706,6 +782,58 @@ def _move_route_1_with_wild_flees(
         stabilization_frames=stabilization_frames,
         maximum_step_attempts=maximum_step_attempts,
         step_retry_wait_frames=step_retry_wait_frames,
+        error_type=PewterChapterError,
+    )
+
+
+def _move_route_2_with_wild_flees(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    label: str,
+    *,
+    timing: PewterTiming,
+    used_flees: int,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
+    if not 0 <= used_flees <= timing.max_route_2_wild_flees:
+        raise PewterChapterError("Route 2 traversal has invalid prior flee accounting.")
+    return move_with_wild_flees(
+        executor,
+        reader,
+        directions,
+        label,
+        expected_map_id=MapId.ROUTE_2,
+        route_name="Route 2",
+        maximum_flees=timing.max_route_2_wild_flees - used_flees,
+        stabilization_frames=timing.route_2_wild_exit_stabilization_frames,
+        maximum_step_attempts=timing.max_route_2_step_attempts,
+        step_retry_wait_frames=timing.route_2_step_retry_wait_frames,
+        error_type=PewterChapterError,
+    )
+
+
+def _move_forest_with_wild_flees(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    label: str,
+    *,
+    timing: PewterTiming,
+    used_flees: int,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
+    if not 0 <= used_flees <= timing.max_forest_wild_flees:
+        raise PewterChapterError("Forest traversal has invalid prior flee accounting.")
+    return move_with_wild_flees(
+        executor,
+        reader,
+        directions,
+        label,
+        expected_map_id=MapId.VIRIDIAN_FOREST,
+        route_name="Viridian Forest",
+        maximum_flees=timing.max_forest_wild_flees - used_flees,
+        stabilization_frames=timing.forest_wild_exit_stabilization_frames,
+        maximum_step_attempts=timing.max_forest_step_attempts,
+        step_retry_wait_frames=timing.forest_step_retry_wait_frames,
         error_type=PewterChapterError,
     )
 
