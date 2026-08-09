@@ -1132,6 +1132,8 @@ class OaksErrandState:
 
     @property
     def rival_victory_snapshot(self) -> bool:
+        hp = self.first_party_hp
+        max_hp = self.first_party_max_hp
         return (
             self.phase is OaksErrandPhase.RIVAL_DEFEATED
             and self.map_id == MapId.OAKS_LAB
@@ -1142,8 +1144,15 @@ class OaksErrandState:
             and self.battled_rival
             and self.first_party_species == SQUIRTLE_SPECIES_ID
             and self.first_party_level == 6
-            and self.first_party_hp == 21
-            and self.first_party_max_hp == 21
+            # Gen I DVs legitimately place a level-six, zero-stat-exp
+            # Squirtle between 21 and 23 max HP.  The clean-start timing root
+            # influences those DVs, so one exact stat vector is not semantic
+            # victory evidence.  Keep the cartridge win/event proof and
+            # require a living, internally consistent supported starter.
+            and hp is not None
+            and max_hp is not None
+            and 0 < hp <= max_hp
+            and 21 <= max_hp <= 23
         )
 
     @property

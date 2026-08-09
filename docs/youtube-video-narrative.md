@@ -148,6 +148,18 @@ Golbat pivot landing on another real party member, then split the screen into tw
 **“Did the recorded switch really happen?”** and **“Did it imitate the teacher?”** The repair keeps
 the first as a hard evidence gate and lets the independent battle lesson judge the strategy.
 
+Then pay off the whole sequence with `990015 — 36/36 — HALL OF FAME`. Keep the authority counters
+visible: **3,315 battle decisions, 21/21 learned targets, 64,337 training-control choices, 125,800
+trainee/venue choices, zero teacher query/fallback**. Say exactly what still remains authored:
+navigation, menu mechanics, and the bounded chapter skills.
+
+Do not end on the green card. Put the paired timing root beside it. Seed `990016` stops at the lab
+rival before any learned battle decision, even though the cartridge says victory and the event is
+set. The reveal is `21 HP required` versus `23 HP observed`: initial timing changed Squirtle's legal
+determinant values, and the old verifier mistook one stat vector for the semantic goal. Show the
+second defect—dialogue budget ending at script 13—then the reproduced script-18, controls-ready
+snapshot under a larger bounded cap. Caption it: **“A robust referee must generalize too.”**
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

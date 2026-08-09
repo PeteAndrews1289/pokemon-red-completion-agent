@@ -470,7 +470,7 @@ class QualifiedPlayTiming:
     route_1_north_seed_wait_frames: int = 192
     mart_prompt_wait_frames: int = 240
     route_1_south_seed_wait_frames: int = 48
-    max_rival_pulses: int = 56
+    max_rival_pulses: int = 96
     max_parcel_pulses: int = 5
     max_pokedex_pulses: int = 42
 

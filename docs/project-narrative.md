@@ -2255,6 +2255,21 @@ the first proof and leaves specialist coverage to the independent turn trace. Th
 model-evaluation story than simply accepting the win: the system now distinguishes a novel legal
 choice from a forged or incomplete action receipt.
 
+Seed `990015` supplied the payoff. From clean power, the exact six authenticated roles completed
+all 36 objectives and Hall of Fame in 50,997,251 frames. The stack made 3,315 battle decisions,
+bound 21/21 learned switch targets, gave the training-control and trainee/venue heads 64,337 and
+125,800 live choices, and made no battle-teacher query or fallback. That is the first canonical
+terminal receipt for the combined stack—not a claim that authored navigation and menus disappeared.
+
+The paired derived-timing root immediately made the result more credible by failing. Seed `990016`
+stopped at the lab rival before any model battle decision. A direct reproduction showed the battle
+had been won: result zero, event set, level 6, and a live 23/23 HP Squirtle. The old referee had
+hard-coded the canonical root's 21 max HP even though Gen I determinant values legally produce
+21–23 at that boundary, and its dialogue cap stopped before script 18 released controls. The repair
+keeps the observed battle, cartridge result, event, map, script, species, level, live HP, and control
+proofs while accepting only that legal range. Once again, the useful product is not a green badge;
+it is a verifier that can tell a genuine behavioral failure from its own accidental answer key.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

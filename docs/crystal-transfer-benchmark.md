@@ -47,15 +47,17 @@ and an identical model trained from scratch on the same Crystal examples. Transf
 initialization needs less Crystal teaching to reach the same held-out and causal performance. A
 single successful demo does not establish transfer.
 
-The fourth complete Red lineage has now passed Hall of Fame and tested the first frozen target head:
+The fourth complete Red lineage passed Hall of Fame and tested the first frozen target head at
 11/13 learned targets versus 9/13 for the deterministic resolver. A plan-balanced second candidate
-reaches 54/54 across the four opened development folds. Seed 990006 stopped before target
-evaluation when its route exhausted an obsolete finite recovery cap; its partial labels are
-excluded. The unchanged frozen model then passed all 17 seed-990007 targets versus 12/17 for the
-deterministic baseline. Runtime target authority is still not implemented. This
-improves the odds that the shared battle representation is useful; it does not change the
-sequencing decision. Crystal's first code still begins after the Red runtime binding and causal
-qualification, as bounded microtasks rather than a complete route.
+then reached 54/54 across four opened development folds. The unchanged frozen model passed all 17
+fresh seed-990007 targets versus 12/17 for the deterministic baseline. Runtime target authority is
+now implemented: it passed 13/13 canonical shadow bindings, 13/13 isolated causal bindings through
+Hall of Fame, and 21/21 bindings inside the combined canonical seed-990015 completion. The paired
+timing root failed earlier at a deterministic lab-rival referee defect before model authority, so
+Red still needs one repaired perturbation rehearsal before the counted campaign opens. Crystal no
+longer waits on target runtime implementation; after that perturbation boundary, its first code is
+the Gen II mechanics catalog, semantic battle observer, and one bounded reserve-choice task—not a
+complete walkthrough.
 
 ## How a YouTube playthrough helps
 
@@ -90,15 +92,13 @@ reference, not proof that the model learned the demonstrated behavior.
 
 ## Dependency order
 
-1. Collect more complete, timing/RNG-varied Red demonstrations with explicit late-game targets.
-2. Train and qualify switch-class and switch-target behavior offline, including the held-out
-   Agatha Golbat choice.
-3. Pass the strict canonical Red rehearsal and one perturbation rehearsal.
-4. Add Crystal's mechanics catalog and semantic battle observer.
-5. Run the battle microbenchmark zero-shot, few-shot, and from scratch.
-6. Add the local navigation and trainee/venue tasks only after the battle representation can be
+1. Pass one repaired Red derived-timing rehearsal with the exact canonical-qualified stack.
+2. Keep the official ten-root Red campaign frozen until that perturbation gate passes.
+3. Add Crystal's mechanics catalog and semantic battle observer.
+4. Run one reserve-choice battle microbenchmark zero-shot, few-shot, and from scratch.
+5. Add the local navigation and trainee/venue tasks only after the battle representation can be
    compared honestly.
-7. Decide whether a full Crystal teacher is warranted from those results.
+6. Decide whether a full Crystal teacher is warranted from those results.
 
 This sequence gives the model new context without spending weeks rebuilding a complete answer key
 before testing whether anything learned in Red is portable.

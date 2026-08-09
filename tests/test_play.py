@@ -1168,7 +1168,7 @@ def test_qualified_play_timing_defaults_are_positive_bounded_integers() -> None:
         route_1_north_seed_wait_frames=192,
         mart_prompt_wait_frames=240,
         route_1_south_seed_wait_frames=48,
-        max_rival_pulses=56,
+        max_rival_pulses=96,
         max_parcel_pulses=5,
         max_pokedex_pulses=42,
     )
@@ -2042,7 +2042,9 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
         ({"first_party_species": 0xB0}, True),
         ({"first_party_level": 5}, True),
         ({"first_party_hp": 0}, True),
-        ({"first_party_max_hp": 22}, True),
+        ({"first_party_hp": 22, "first_party_max_hp": 21}, True),
+        ({"first_party_max_hp": 20}, True),
+        ({"first_party_max_hp": 24}, True),
     ),
 )
 def test_rival_victory_gate_rejects_every_near_miss(
@@ -2066,6 +2068,27 @@ def test_rival_victory_requires_observed_entry_and_exact_result() -> None:
         replace(victory, battle_result=2),
         saw_trainer_battle=True,
     )
+
+
+@pytest.mark.parametrize(
+    ("hp", "max_hp"),
+    (
+        (21, 21),
+        (17, 22),
+        (23, 23),
+    ),
+)
+def test_rival_victory_accepts_supported_squirtle_dvs_and_surviving_hp(
+    hp: int,
+    max_hp: int,
+) -> None:
+    victory = replace(
+        _rival_victory(),
+        first_party_hp=hp,
+        first_party_max_hp=max_hp,
+    )
+
+    assert is_rival_victory_verified(victory, saw_trainer_battle=True)
 
 
 def test_captured_rival_checkpoint_survives_later_wild_escape_result() -> None:

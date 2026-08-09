@@ -5,16 +5,15 @@
 This is now a strong autonomous-systems research portfolio, but it is not yet an end-to-end learned
 Pokémon player. Its best assets are the clean-power expert, semantic observation boundary,
 authenticated experiment lineage, fail-closed evaluators, and the willingness to reject runs that
-win without demonstrating the intended lesson. Its largest remaining gap is authority: navigation,
-menus, route mechanics, and ordinary move selection in the newest causal battle experiment still
-depend on authored skills or teacher gating.
+win without demonstrating the intended lesson. The combined authenticated stack has now completed
+one canonical clean-power run through Hall of Fame with teacher battle queries forbidden. Its
+largest remaining authority gaps are navigation, menus, and authored route mechanics; its largest
+evaluation gap is timing/RNG reliability.
 
-The present Red milestone is narrower and measurable: qualify the reserve-aware high-level battle
-controller on a fresh full-game rollout, then combine it with teacher-free ordinary move selection.
-The target-binding layer now has canonical shadow and isolated causal Hall-of-Fame completion. The
-first two six-role compositions exposed and repaired S.S. Anne typed-recovery and Route 11
-live-capability mismatches. Their fresh replay qualified both repairs and reached a Lorelei win,
-where a missing typed HP-floor intent produced the next fail-closed result.
+The present Red milestone is narrower and measurable: qualify the already-passed combined stack on
+a fresh derived-timing root. Canonical seed `990015` is terminal evidence; paired seed `990016`
+exposed a lab-rival referee assumption before any model battle decision. The repair is implemented
+and awaiting the full gate and fresh perturbation.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -172,6 +171,20 @@ observed party identity, retains exact live opponent position/identity checks, a
 quality to the turn lesson. See the
 [fourth preserved failure](evidence/portable-clean-start-six-role-rehearsal-04-failure-2026-08-09.json).
 
+Fresh canonical seed `990015` then completed all 36 objectives and Hall of Fame in 50,997,251
+frames with the exact combined stack. It made 3,315 battle decisions, rebound all 21 switch
+requests through the learned target head, gave both training heads live authority, and recorded
+zero teacher query, teacher fallback, safety fallback, or low-confidence fallback. See the
+[canonical qualification](evidence/portable-clean-start-six-role-canonical-qualification-2026-08-09.json).
+
+The paired timing seed `990016` exposed a deterministic referee defect before any learned battle or
+training decision. The lab rival was actually defeated, but the old snapshot required the one
+canonical 21-HP Squirtle DV result; the perturbed root legally produced 23 HP. Its 56-pulse cap also
+stopped at script 13 before controls released. Under a larger bounded cap the unchanged run reached
+script 18 with battle result zero, the event set, and 23/23 HP. The repair retains every semantic
+win proof, accepts only the legal level-6 21–23 max-HP range, and raises the cap to 96. See the
+[perturbation failure](evidence/portable-clean-start-six-role-perturbation-01-failure-2026-08-09.json).
+
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared
 gap calculation intersected Blue with itself. One canonical Generation I facts module now derives
@@ -186,19 +199,19 @@ silently acting at night.
 | --- | ---: | --- |
 | Deterministic Red teacher/referee | 9/10 | Repeated clean-power 312/312, 36/36, Hall-of-Fame runs with strict chapter contracts. This is an expert oracle, not learned autonomy. |
 | Experiment integrity | 9/10 | Source/model/root hashes, whole-lineage splits, private artifact boundaries, preserved failures, one-attempt accounting, and 0/10 counted roots consumed. |
-| Learned battle moves | 7/10 | A nonlinear ranker has prior live completion evidence, but the current reserve-controller causal lane keeps ordinary moves teacher-gated. The combined teacher-free stack remains unqualified. |
-| Learned high-level battle control | 8/10 | Strong held-out class balance, 17/17 fresh offline targets, 13/13 canonical shadow, and 13/13 causal target bindings through Hall of Fame; the combined teacher-free stack still needs a terminal replay. |
+| Learned battle moves | 8/10 | The combined teacher-free stack completed canonical Red with 3,248 model move decisions; authored skills and a single unperturbed root remain the boundary. |
+| Learned high-level battle control | 8/10 | Strong held-out class balance, 17/17 fresh offline targets, 13/13 isolated causal targets, and 21/21 target bindings in the combined canonical completion; perturbation qualification remains. |
 | Learned objective selection | 6/10 | Clean start selects registered composite goals from semantic state, but most candidate sets are singleton and fixed authored skills perform the mechanics. |
 | Learned trainee/venue strategy | 7/10 | The identity-free candidate ranker beat its shape baseline and completed a clean-power curriculum with real disagreements. It remains Red-only evidence. |
 | Navigation and menu autonomy | 3/10 | Reusable local planning exists, but the completion path is still dominated by authored chapter routes and menu executors. |
-| Multi-seed reliability | 3/10 | Perturbed demonstrations exist, but the official frozen 8-of-10 learned-stack campaign remains 0/10. |
+| Multi-seed reliability | 4/10 | Canonical combined completion exists and the first paired perturbation produced an actionable early-game counterexample; the official frozen 8-of-10 campaign remains 0/10. |
 | Cross-title transfer | 2/10 | A bounded Crystal benchmark is designed; no Crystal adapter, dataset, or result exists yet. |
 | Living Pokédex / level 100 | 2/10 | Target and planning foundations exist; generic collection execution still contains explicit unimplemented adapter operations. |
 
 ## Code and test health
 
 - 127 source modules and 135 test modules cover roughly 88,000 source lines and 52,500 test lines.
-- The current full gate passes **2,157 tests** with 3 emulator-integration tests deselected and 1
+- The current full gate passes **2,162 tests** with 3 emulator-integration tests deselected and 1
   expected failure, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.
@@ -217,8 +230,8 @@ The current stack is layered rather than monolithic:
 
 1. semantic observers convert revision-specific emulator state into portable facts;
 2. learned rankers choose objectives, trainees/venues, moves, or high-level battle action classes;
-3. the listwise target head has completed canonical shadow and isolated causal Hall-of-Fame gates,
-   but does not yet have combined or perturbation authority;
+3. the listwise target head has completed canonical shadow, isolated causal, and combined
+   Hall-of-Fame gates, but does not yet have perturbation authority;
 4. typed constraints and deterministic or authenticated learned target resolvers turn choices into
    executable
    affordances;
@@ -232,18 +245,15 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Complete the full ROM-free gate for the Agatha autonomous-switch receipt repair; commit and push
-   the regenerated source identity.
-2. Run fresh uncounted canonical seed `990015` with teacher battle queries disabled; preserve
-   either its Hall-of-Fame receipt or its next fail-closed integration defect.
-3. If it passes, freeze the exact combined artifact set. Typed intent enforcement and live
-   affordance masking are now separate from true safety fallback in the report.
-4. Run at least one uncounted timing perturbation with the same frozen source and artifacts. Only
-   after canonical and perturbation gates pass should v95's ten one-attempt roots open.
-5. Build Crystal as a thin adapter plus three bounded tasks: one reserve-choice battle, one local
+1. Complete the full ROM-free gate for the lab-rival DV/dialogue repair; commit and push the
+   regenerated source identity.
+2. Run a fresh uncounted derived-timing seed with the exact combined artifact set. Preserve any
+   next route or model defect without weakening its semantic contract.
+3. Only after that perturbation passes should v95's ten one-attempt roots open.
+4. Build Crystal as a thin adapter plus three bounded tasks: one reserve-choice battle, one local
    navigation round trip, and one trainee/venue decision. Compare the frozen Red model zero-shot,
    few-shot, and from scratch before writing a complete Crystal teacher.
-6. If transfer is measurable, expand the adapter and route graph. If it is not, use the failure to
+5. If transfer is measurable, expand the adapter and route graph. If it is not, use the failure to
    revise the semantic schema before adding more Red-specific logic.
 
 ## Portfolio narrative

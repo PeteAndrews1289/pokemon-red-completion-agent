@@ -30,9 +30,9 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Portable strategic authority | 114,831 controlled choices, 400 executed disagreements, 1,803 development battles, no fallback; fresh observation opened Giovanni | Singleton objective dispatch and authored mechanics remain |
 | Portable clean-start baseline | 21 selected composites plus 15 automatic effects through Hall of Fame; no expected label, fixed dispatch, or fallback | Battle mechanics were not under the full strict learned stack |
 | Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
-| Reserve-aware controller | Four complete lineages; 98.2394% / 94.7537% held-out class metrics; target head passed 17/17 fresh offline targets, 13/13 shadow, and 13/13 causal bindings through Hall of Fame | Completed target trial kept switch timing and moves teacher-gated; combined and perturbation authority remain |
+| Reserve-aware controller | Four complete lineages; 98.2394% / 94.7537% held-out class metrics; 17/17 fresh offline targets; 13/13 isolated causal bindings; combined canonical Hall of Fame with 21/21 targets | Paired timing root exposed a deterministic early-game referee defect before model decisions; perturbation qualification remains |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
-| Repository gate | 2,157 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
+| Repository gate | 2,162 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
 
 ## Architecture in one minute
 
@@ -91,7 +91,7 @@ development score—is the next promotion gate.
 - Why shadow agreement cannot substitute for causal authority, and why causal authority can still
   prove integration without proving feature value.
 - How the candidate scorer remains permutation-equivariant and excludes title-specific identity.
-- How an emulator-scale system is tested without redistributing the ROM: 2,157 ROM-free tests plus
+- How an emulator-scale system is tested without redistributing the ROM: 2,162 ROM-free tests plus
   private authenticated runtime receipts.
 
 ## Honest limitations
@@ -113,7 +113,7 @@ target rows and is excluded. The unchanged candidate then passed all 17 seed-990
 artifact next passed 13/13 canonical shadow targets and causally rebound 13/13 live requests during
 a Hall-of-Fame completion. The first six-role teacher-free composition exposed a chapter executor
 that recognized a learned HP recovery semantically but still required the teacher's Python
-exception class. That failure is preserved and repaired; a fresh combined replay remains.
+exception class. That failure was preserved and repaired before the next combined replay.
 The retry qualified S.S. Anne and then found a Route 11 intent advertising recovery effects that
 the pre-Mart protected inventory could not legally spend. Capabilities now derive from live surplus
 and remaining allowance on each dispatch. Seed `990013` qualified both repairs and defeated
@@ -126,11 +126,19 @@ decisions with zero teacher/safety fallback and 21/21 learned targets. The evalu
 promotion because Agatha's switch receipt conflated one autonomous learned pivot with the fixed
 teacher's preferred role even though the independent specialist lesson passed. The repair preserves
 live opponent and target-slot identity evidence while separating receipt integrity from policy
-agreement; a fresh canonical replay remains.
+agreement; the next fresh canonical replay was the terminal test.
+
+That replay now exists. Seed `990015` completed all 36 objectives and Hall of Fame with the exact
+six-model stack, 3,315 battle decisions, 21/21 learned target bindings, both training heads in live
+control, and zero teacher query or fallback. Its paired timing root then failed before any model
+battle decision because the lab-rival referee mistook one legal Squirtle DV outcome for the only
+valid stat vector and exhausted its dialogue cap. Direct reproduction proved the battle win. The
+repair preserves the semantic result/event/script proof and makes a fresh perturbation—not another
+canonical replay—the next gate.
 
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
-until a reserve-aware battle artifact passes canonical and perturbation rehearsals.
+until the now-canonical-qualified reserve-aware stack also passes a perturbation rehearsal.
 
 ## Resume-ready bullets
 
@@ -142,7 +150,7 @@ until a reserve-aware battle artifact passes canonical and perturbation rehearsa
 - Qualified a strategic trainee/venue controller inside a portable objective loop across 114,831
   live choices and 400 executed teacher disagreements, completing 1,803 development battles with no
   fallback before fresh emulator observation verified the Volcano Badge.
-- Hardened a 142k-line Python research system with 2,157 tests, Ruff, mypy, documentation/privacy
+- Hardened a 142k-line Python research system with 2,162 tests, Ruff, mypy, documentation/privacy
   gates, deterministic source registries, and at least 19 consecutive green GitHub Actions runs after
   diagnosing one derived-artifact CI regression.
 - Built a prospective one-attempt 8-of-10 clean-start evaluator and used its strict rehearsal to

@@ -97,10 +97,22 @@ had to equal the fixed teacher's preferred specialist. Specialist attack coverag
 passed. The repaired receipt now proves every target against the observed party and leaves the
 strategy lesson to the independent turn trace; see the
 [fourth preserved failure](docs/evidence/portable-clean-start-six-role-rehearsal-04-failure-2026-08-09.json).
-These are interface and evaluation repairs, not evidence that the six-role model already completes
-Red. Navigation, menus,
-chapter mechanics, and resource execution remain authored. The counted v95 reliability campaign
-remains unopened at
+Fresh canonical seed `990015` then completed all 36 objectives and Hall of Fame with the exact
+six-role stack: 3,315 battle decisions, 21/21 learned switch bindings, 64,337 training-control
+choices, 125,800 trainee/venue choices, and zero teacher query, teacher fallback, safety fallback,
+or low-confidence fallback. The
+[canonical qualification](docs/evidence/portable-clean-start-six-role-canonical-qualification-2026-08-09.json)
+is the first source-bound terminal proof for the combined stack.
+
+The paired timing root `990016` correctly prevented promotion. It failed before any learned battle
+or training decision because the lab-rival verifier hard-coded one legal Squirtle HP determinant
+outcome and exhausted its post-win dialogue cap. Direct reproduction proved a real victory: battle
+result zero, the rival event set, level 6, and a legal 23/23 HP Squirtle. The repaired gate retains
+the cartridge win, event, species, level, map, script, and released-control proofs while accepting
+the legal 21–23 max-HP range; see the
+[perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-01-failure-2026-08-09.json).
+Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95
+reliability campaign remains unopened at
 **0/10**, and no Crystal or living-Pokédex result is claimed.
 
 That distinction is the heart of the project and its public story. The teacher supplies verified
@@ -113,9 +125,9 @@ demonstrations and a referee; it is not the final autonomous player.
 | Deterministic teacher and referee | Clean power-on, 312/312 semantic checkpoints, 36/36 objectives, Champion and Hall of Fame | Expert oracle, not a learned player |
 | Learned objective dispatch | One clean-start run selected 21 composite objectives and verified 15 automatic effects through Hall of Fame | Many choices remain affordance-masked; mechanics are fixed skills |
 | Learned training control | The trainee/venue ranker beat its shape baseline and completed clean start with 114,831 controlled choices and 400 disagreements | One uncounted Red root; navigation and menus remain authored |
-| Strict learned-stack composition | Seed 990014 defeated Lorelei, Bruno, and Agatha after 3,286 teacher-free battle decisions, 21/21 learned target bindings, 64,337 training-control choices, and 125,800 trainee/venue choices | Rejected in Lance's room because one valid autonomous Agatha pivot was misclassified as a fixed teacher-role switch; repaired receipt needs a fresh canonical replay |
-| Reserve-aware battle control | Frozen target head passed 17/17 prospective targets, 13/13 canonical shadow, and 13/13 causal bindings through Hall of Fame with zero target fallback | Switch timing and ordinary moves were teacher-gated in the completed causal run; perturbation and combined qualification remain |
-| Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Counted campaign remains 0/10 until reserve-aware battle control passes canonical and perturbation rehearsals |
+| Strict learned-stack composition | Seed 990015 completed 36/36 objectives and Hall of Fame with 3,315 battle decisions, 21/21 learned target bindings, and both training heads in live control | One canonical root; authored route and menu skills still execute mechanics |
+| Reserve-aware battle control | Frozen target head passed 17/17 prospective targets, 13/13 isolated causal bindings, and 21/21 bindings inside the combined canonical completion | The first paired timing root exposed an early deterministic-referee defect before model decisions; fresh perturbation qualification remains |
+| Multi-root evaluation | Source/model/root-bound 8-of-10 registry and independent checker are implemented | Counted campaign remains 0/10 until a repaired perturbation rehearsal passes |
 | Transfer | Identity-free observation contracts, typed skills and authenticated artifact boundaries | No second-title result yet |
 | Living Pokédex / level 100 | Target definition and planning foundations only | Autonomous collection and long-horizon development remain future work |
 

@@ -19,7 +19,6 @@ from pokemon_red_completion.opening import (
     SQUIRTLE_APPROACH,
 )
 from pokemon_red_completion.pewter import DEFAULT_PEWTER_TIMING
-from pokemon_red_completion.play import DEFAULT_QUALIFIED_PLAY_TIMING
 from pokemon_red_completion.provenance import GIT_COMMIT, canonical_sha256
 from pokemon_red_completion.vermilion import DEFAULT_VERMILION_TIMING
 
@@ -89,6 +88,22 @@ VIRIDIAN_FOREST_RECEIPT = (
     / "evidence"
     / "qualified-play-viridian-forest-2026-08-02.json"
 )
+
+# These source-bound July receipts must remain pinned to the timing that
+# produced them.  Reconstructing historical evidence from today's defaults
+# would make a later robustness repair look like receipt corruption.
+JULY_28_QUALIFIED_PLAY_TIMING = {
+    "battle_wait_frames": 180,
+    "dialogue_wait_frames": 240,
+    "mart_prompt_wait_frames": 240,
+    "max_parcel_pulses": 5,
+    "max_pokedex_pulses": 42,
+    "max_rival_pulses": 56,
+    "rival_trigger_wait_frames": 360,
+    "route_1_north_seed_wait_frames": 192,
+    "route_1_south_seed_wait_frames": 48,
+    "transition_wait_frames": 120,
+}
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -297,7 +312,6 @@ def test_pokedex_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
 
     intro = DEFAULT_NEW_GAME_TIMING
     opening = DEFAULT_OPENING_TIMING
-    play = DEFAULT_QUALIFIED_PLAY_TIMING
     expected_configuration = {
         "controller_timing": {
             "press_frames": intro.press_frames,
@@ -322,7 +336,7 @@ def test_pokedex_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
         "new_game_names": "built_in_red_blue",
         "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
         "pret_pokered_commit": PRET_POKERED_COMMIT,
-        "qualified_play_timing": {name: getattr(play, name) for name in play.__dataclass_fields__},
+        "qualified_play_timing": JULY_28_QUALIFIED_PLAY_TIMING,
         "route_encounter_policy": "fail_closed",
         "starter": "squirtle",
     }
@@ -404,7 +418,6 @@ def test_brock_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
 
     intro = DEFAULT_NEW_GAME_TIMING
     opening = DEFAULT_OPENING_TIMING
-    play = DEFAULT_QUALIFIED_PLAY_TIMING
     pewter = DEFAULT_PEWTER_TIMING
     expected_configuration = {
         "controller_timing": {
@@ -431,7 +444,7 @@ def test_brock_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
         "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
         "pewter_timing": {name: getattr(pewter, name) for name in pewter.__dataclass_fields__},
         "pret_pokered_commit": PRET_POKERED_COMMIT,
-        "qualified_play_timing": {name: getattr(play, name) for name in play.__dataclass_fields__},
+        "qualified_play_timing": JULY_28_QUALIFIED_PLAY_TIMING,
         "route_encounter_policy": ("fail_closed_except_three_verified_kakuna_and_one_bug_catcher"),
         "starter": "squirtle",
     }
@@ -517,7 +530,6 @@ def test_cerulean_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
 
     intro = DEFAULT_NEW_GAME_TIMING
     opening = DEFAULT_OPENING_TIMING
-    play = DEFAULT_QUALIFIED_PLAY_TIMING
     pewter = DEFAULT_PEWTER_TIMING
     cerulean = DEFAULT_CERULEAN_TIMING
     expected_configuration = {
@@ -548,7 +560,7 @@ def test_cerulean_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
             name: getattr(cerulean, name) for name in cerulean.__dataclass_fields__
         },
         "pret_pokered_commit": PRET_POKERED_COMMIT,
-        "qualified_play_timing": {name: getattr(play, name) for name in play.__dataclass_fields__},
+        "qualified_play_timing": JULY_28_QUALIFIED_PLAY_TIMING,
         "route_encounter_policy": (
             "fail_closed_except_three_verified_kakuna_and_required_trainers"
         ),

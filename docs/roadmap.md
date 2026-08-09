@@ -54,6 +54,19 @@ pivot as a fixed teacher-role choice even though its independent specialist less
 The receipt now verifies target-slot identity rather than teacher equality. The immediate gate is a
 full clean validation, push, and fresh canonical seed `990015`.
 
+That gate passed. Seed `990015` completed all 36 objectives and Hall of Fame with 3,315 battle
+decisions, 21/21 learned target rebindings, 64,337 training-control choices, 125,800 trainee/venue
+choices, and zero battle-teacher query or fallback. The
+[canonical qualification](evidence/portable-clean-start-six-role-canonical-qualification-2026-08-09.json)
+closes the combined canonical gate. Derived-timing seed `990016` then failed before model battle
+authority at the lab rival. Direct reproduction showed battle result zero, the event set, and a
+legal level-6 23/23 HP Squirtle; the verifier hard-coded the canonical 21-HP DV result and its old
+dialogue cap stopped before script 18 released controls. The
+[perturbation failure](evidence/portable-clean-start-six-role-perturbation-01-failure-2026-08-09.json)
+is preserved. The repaired gate accepts only the legal 21–23 max-HP range while keeping the event,
+result, map, script, species, level, live-HP, and control proofs, with a 96-pulse cap. A fresh
+uncounted perturbation is now the immediate gate; v95 remains 0/10.
+
 The same audit repaired the campaign layer needed for later living-Pokédex work. Generation I's
 Red/Blue reciprocal version gaps now come from one canonical table and include the previously
 omitted Pinsir and Scyther. Trading requires an explicit compatibility edge between saves; merely

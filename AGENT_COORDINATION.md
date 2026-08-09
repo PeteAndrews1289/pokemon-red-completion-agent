@@ -1,16 +1,14 @@
 # Three-agent coordination
 
-> **2026-08-09 active lane:** the authenticated switch-target head passed 17/17 prospective,
-> 13/13 canonical shadow, and 13/13 isolated causal Hall-of-Fame binding gates. The combined
-> six-role stack is now the active falsification campaign. Seeds `990011`–`990013` exposed and
-> repaired a teacher-subclass executor leak, stale protected-inventory affordances, and a missing
-> Lorelei HP-floor/action-mask/report-authority contract. Commit `e00f083` passed the full local and
-> GitHub gates. Seed `990014` then defeated Lorelei, Bruno, and Agatha with 3,286 teacher-free
-> battle decisions, 21/21 learned switch bindings, and both training heads in causal control before
-> Agatha's receipt misclassified one valid autonomous pivot as a fixed teacher-role choice. The
-> receipt now proves live target-slot identity separately from the already-strict specialist turn
-> lesson. Regenerate, validate, commit, push, and run fresh canonical seed `990015`. Do not add
-> `990007` to fitting, rerun retired seeds `990003`–`990014`, build a complete Crystal route, weaken
+> **2026-08-09 active lane:** fresh canonical seed `990015` completed 36/36 objectives and Hall of
+> Fame with the exact six authenticated model roles, 3,315 battle decisions, 21/21 learned target
+> bindings, both training heads in causal control, and zero battle-teacher query or fallback. The
+> paired derived-timing seed `990016` then failed before any learned battle decision: its legitimate
+> lab-rival win produced a legal 23-HP level-6 Squirtle while the old verifier required exactly 21,
+> and 56 dialogue pulses stopped at script 13 before controls released. The gate now accepts only
+> the legal 21–23 DV range while retaining the win/event/map/script/control proof, and its bounded
+> pulse cap is 96. Regenerate, validate, commit, push, then run a fresh uncounted perturbation. Do
+> not add `990007` to fitting, rerun retired model-test roots, build a complete Crystal route, weaken
 > the curriculum lesson, or consume a counted v95 root. Counted status remains 0/10. See the
 > [current audit](docs/current-audit-2026-08-09.md).
 
