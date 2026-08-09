@@ -182,6 +182,10 @@ failed. A same-root probe showed the precise legal state: level 9, 19/27 HP, 26 
 poison. The repair does not lower HP or PP requirements; it permits that one recoverable status on
 the direct Center transit, authenticates full recovery, then applies the healthy Gym gate. This is a compact
 example of separating a curriculum outcome from the recovery mechanic needed to make it portable.
+The next causal replay crossed Brock and found the same design gap after Route 3 trainer zero:
+10/35 HP plus poison could not survive the return. The repair relocates the guaranteed PC Potion,
+uses it at the observed boundary, and preserves the later six-Potion floor without changing total
+spend—a small example of state-aware resource scheduling rather than seed-specific input timing.
 
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-09.md) explains why the ten clean-start roots should not open

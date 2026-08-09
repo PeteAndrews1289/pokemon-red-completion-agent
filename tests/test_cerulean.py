@@ -7,6 +7,8 @@ import pytest
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.cerulean import (
+    CENTER_HEAL_TO_PC_DIRECTIONS,
+    CENTER_PC_TO_HEAL_DIRECTIONS,
     CENTER_TO_ROUTE_3_DIRECTIONS,
     CERULEAN_CHECKPOINT_COUNT,
     CERULEAN_QUALIFICATION_BOUNDARIES,
@@ -46,6 +48,11 @@ from pokemon_red_completion.cerulean import (
     _reverse_directions,
     _route_3_victory_sequence,
     _select_battle_move,
+    _use_route_3_recovery_potion,
+)
+from pokemon_red_completion.economy import (
+    CERULEAN_RIVAL_POTION_RESERVE,
+    PEWTER_POTION_PURCHASE_QUANTITY,
 )
 from pokemon_red_completion.observation import (
     MT_MOON_SUPER_NERD_OPPONENT_ID,
@@ -66,6 +73,7 @@ from pokemon_red_completion.observation import (
     MapId,
     NorthboundPhase,
     PewterChapterState,
+    RamAddress,
     RawGameState,
     TravelBoundary,
 )
@@ -561,6 +569,9 @@ def test_deterministic_seed_wait_rejects_duplicate_step_entries() -> None:
 
 
 def test_cerulean_route_is_pinned_at_critical_segments() -> None:
+    assert _reverse_directions(CENTER_HEAL_TO_PC_DIRECTIONS) == (
+        CENTER_PC_TO_HEAL_DIRECTIONS
+    )
     assert len(GYM_EXIT_APPROACH_DIRECTIONS) == 16
     assert len(PEWTER_TO_CENTER_DIRECTIONS) == 40
     assert len(CENTER_TO_ROUTE_3_DIRECTIONS) == 35
@@ -594,6 +605,66 @@ def test_cerulean_route_is_pinned_at_critical_segments() -> None:
     assert len(ROUTE_4_FIRST_LEDGE_APPROACH_DIRECTIONS) == 20
     assert len(ROUTE_4_MIDDLE_DIRECTIONS) == 39
     assert len(ROUTE_4_FINAL_APPROACH_DIRECTIONS) == 10
+
+
+def test_route_3_recovery_consumes_only_the_guaranteed_pc_potion() -> None:
+    class Emulator:
+        memory = {
+            int(RamAddress.NUM_BAG_ITEMS): 1,
+            int(RamAddress.BAG_ITEMS): int(ItemId.POTION),
+            int(RamAddress.BAG_ITEMS) + 1: CERULEAN_RIVAL_POTION_RESERVE,
+            int(RamAddress.CURRENT_MENU_ITEM): 2,
+        }
+
+        def read_u8(self, address: int) -> int:
+            return self.memory.get(int(address), 0)
+
+    emulator = Emulator()
+
+    class Reader:
+        state = replace(
+            _raw(MapId.ROUTE_3, 11, 6, level=13, hp=10, max_hp=35),
+            first_party_status=8,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_input_readiness(self) -> InputReadiness:
+            return READY
+
+    reader = Reader()
+
+    class Executor:
+        actions: list[MacroAction] = []
+        confirms = 0
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+            if action.kind is not MacroActionKind.CONFIRM:
+                return
+            self.confirms += 1
+            if self.confirms == 1:
+                emulator.memory[int(RamAddress.CURRENT_MENU_ITEM)] = 0
+            elif self.confirms == 3:
+                reader.state = replace(reader.state, first_party_hp=30)
+                emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = (
+                    PEWTER_POTION_PURCHASE_QUANTITY
+                )
+
+    executor = Executor()
+    _use_route_3_recovery_potion(
+        _CountingChapterExecutor(executor),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        emulator,  # type: ignore[arg-type]
+        DEFAULT_CERULEAN_TIMING,
+    )
+
+    assert reader.state.first_party_hp == 30
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 13
+    assert sum(
+        action.kind is MacroActionKind.CANCEL for action in executor.actions
+    ) == 4
 
 
 def test_cerulean_qualification_stops_at_city_entry_not_the_gym() -> None:

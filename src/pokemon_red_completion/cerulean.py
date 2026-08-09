@@ -14,6 +14,7 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.economy import (
+    CERULEAN_RIVAL_POTION_RESERVE,
     PEWTER_POTION_PURCHASE_QUANTITY,
     PEWTER_SUPPLY_COST,
 )
@@ -62,6 +63,9 @@ PEWTER_MART_EXIT_DIRECTIONS = _directions("RDDD")
 PEWTER_MART_TO_CENTER_DIRECTIONS = _directions("L" * 4 + "D" * 8 + "L" * 6 + "U")
 CENTER_HEAL_APPROACH_DIRECTIONS = ("up",) * 4
 CENTER_EXIT_DIRECTIONS = ("down",) * 5
+CENTER_HEAL_TO_PC_DIRECTIONS = ("down",) + ("right",) * 10
+CENTER_PC_TO_HEAL_DIRECTIONS = ("left",) * 10 + ("up",)
+FIELD_ITEM_MENU_CLOSE_PULSES = 4
 CENTER_TO_ROUTE_3_DIRECTIONS = _directions("R" * 3 + "U" * 4 + "R" * 3 + "U" * 4 + "R" * 21)
 ROUTE_3_TO_PEWTER_CENTER_DIRECTIONS = _directions(
     "L" * 20 + "D" * 4 + "L" * 3 + "D" * 4 + "L" * 3 + "U"
@@ -412,7 +416,15 @@ def run_cerulean_chapter(
     )
     _wait(chapter_executor, timing.transition_wait_frames)
     _expect_position(reader.read(), MapId.PEWTER_POKECENTER, 3, 7, "Pewter Center")
-    _heal(chapter_executor, reader, timing, MapId.PEWTER_POKECENTER, "Pewter Center")
+    _heal(
+        chapter_executor,
+        reader,
+        timing,
+        MapId.PEWTER_POKECENTER,
+        "Pewter Center",
+        emulator=emulator,
+        withdraw_pc_potion=True,
+    )
     _wait(chapter_executor, ROUTE_3_REJOIN_SEED_WAIT)
 
     _move(chapter_executor, reader, CENTER_TO_ROUTE_3_DIRECTIONS, "Route 3 entry")
@@ -488,6 +500,13 @@ def run_cerulean_chapter(
             f"Verified required Route 3 trainer {trainer_index}",
             position + 2,
         )
+        if position == 0:
+            _use_route_3_recovery_potion(
+                chapter_executor,
+                reader,
+                emulator,
+                timing,
+            )
         _recover_at_pewter_center(
             chapter_executor,
             reader,
@@ -1122,6 +1141,9 @@ def _heal(
     timing: CeruleanTiming,
     center_map: MapId,
     label: str,
+    *,
+    emulator: EmulatorState | None = None,
+    withdraw_pc_potion: bool = False,
 ) -> RawGameState:
     _expect_position(reader.read(), center_map, 3, 7, label)
     _move(executor, reader, CENTER_HEAL_APPROACH_DIRECTIONS, f"{label} nurse")
@@ -1149,9 +1171,211 @@ def _heal(
         or not all(value > 0 for value in learned_pp)
     ):
         raise CeruleanChapterError(f"{label} failed its persistent healing gate.")
+    if withdraw_pc_potion:
+        if emulator is None or center_map is not MapId.PEWTER_POKECENTER:
+            raise CeruleanChapterError("Early PC Potion withdrawal requires Pewter evidence.")
+        _withdraw_pewter_pc_potion(executor, reader, emulator, timing)
     _move(executor, reader, CENTER_EXIT_DIRECTIONS, f"{label} exit")
     _wait(executor, timing.transition_wait_frames)
     return reader.read()
+
+
+def _withdraw_pewter_pc_potion(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+) -> None:
+    """Withdraw the guaranteed new-game Potion before the Route 3 poison lesson."""
+
+    before = reader.read()
+    before_count = emulator.read_u8(RamAddress.NUM_BAG_ITEMS)
+    if (
+        before.map_id != MapId.PEWTER_POKECENTER
+        or (before.player_x, before.player_y) != (3, 3)
+        or before.battle_state != 0
+        or not reader.read_input_readiness().ready
+        or not 0 <= before_count < 20
+        or _bag_quantity(emulator, ItemId.POTION) != PEWTER_POTION_PURCHASE_QUANTITY
+    ):
+        raise CeruleanChapterError("Pewter PC Potion withdrawal has an invalid starting gate.")
+
+    _approach_center_pc(executor, reader, emulator, timing, MapId.PEWTER_POKECENTER)
+    _pulse(executor, MacroActionKind.INTERACT, frames=timing.dialogue_wait_frames)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    for _ in range(4):
+        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) == 1:
+            break
+        _pulse(executor, MacroActionKind.MOVE, "down", timing.dialogue_wait_frames)
+    else:
+        raise CeruleanChapterError("Pewter PC could not select RED's PC.")
+    for _ in range(3):
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
+        raise CeruleanChapterError("Pewter PC did not expose WITHDRAW ITEM.")
+    for _ in range(3):
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    if (
+        _bag_quantity(emulator, ItemId.POTION) != CERULEAN_RIVAL_POTION_RESERVE
+        or emulator.read_u8(RamAddress.NUM_BAG_ITEMS) != before_count
+    ):
+        raise CeruleanChapterError("Pewter PC did not withdraw exactly one Potion.")
+    for _ in range(4):
+        _pulse(executor, MacroActionKind.CANCEL, frames=timing.dialogue_wait_frames)
+    _return_from_center_pc(executor, reader, timing, MapId.PEWTER_POKECENTER)
+
+
+def _approach_center_pc(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+    center_map: MapId,
+) -> None:
+    _move(executor, reader, CENTER_HEAL_TO_PC_DIRECTIONS, "Pewter PC approach")
+    target = (13, 4)
+    for attempt in range(24):
+        state = reader.read()
+        position = (state.player_x, state.player_y)
+        if position == target:
+            break
+        if state.map_id != center_map or state.battle_state != 0:
+            raise CeruleanChapterError("Pewter PC approach left its safe Center map.")
+        if state.player_x is None or state.player_y is None:
+            raise CeruleanChapterError("Pewter PC approach lacks coordinates.")
+        if state.player_y < target[1]:
+            direction = "down"
+        elif state.player_y > target[1]:
+            direction = "up"
+        elif state.player_x < target[0]:
+            direction = "right"
+        else:
+            direction = "left"
+        executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+        moved = reader.read()
+        if (moved.player_x, moved.player_y) == position:
+            _wait(executor, max(1, timing.dialogue_wait_frames // 4) * (attempt + 1))
+    else:
+        raise CeruleanChapterError("Pewter PC approach exhausted its movement bound.")
+    _pulse(executor, MacroActionKind.MOVE, "up", timing.dialogue_wait_frames)
+    faced = reader.read()
+    if (
+        (faced.player_x, faced.player_y) != target
+        or emulator.read_u8(RamAddress.PLAYER_FACING_DIRECTION) != 0x04
+    ):
+        raise CeruleanChapterError("Pewter PC approach missed its interaction gate.")
+
+
+def _return_from_center_pc(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: CeruleanTiming,
+    center_map: MapId,
+) -> None:
+    _move(executor, reader, CENTER_PC_TO_HEAL_DIRECTIONS, "Pewter PC return")
+    target = (3, 3)
+    for attempt in range(24):
+        state = reader.read()
+        position = (state.player_x, state.player_y)
+        if position == target:
+            return
+        if state.map_id != center_map or state.battle_state != 0:
+            raise CeruleanChapterError("Pewter PC return left its safe Center map.")
+        if state.player_x is None or state.player_y is None:
+            raise CeruleanChapterError("Pewter PC return lacks coordinates.")
+        if state.player_y < target[1]:
+            direction = "down"
+        elif state.player_y > target[1]:
+            direction = "up"
+        elif state.player_x < target[0]:
+            direction = "right"
+        else:
+            direction = "left"
+        executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+        moved = reader.read()
+        if (moved.player_x, moved.player_y) == position:
+            _wait(executor, max(1, timing.dialogue_wait_frames // 4) * (attempt + 1))
+    raise CeruleanChapterError("Pewter PC return exhausted its movement bound.")
+
+
+def _use_route_3_recovery_potion(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+) -> None:
+    """Spend only RED's PC Potion to survive the first Route 3 recovery walk."""
+
+    before = reader.read()
+    before_quantity = _bag_quantity(emulator, ItemId.POTION)
+    if (
+        before.map_id != MapId.ROUTE_3
+        or before.battle_state != 0
+        or before.first_party_hp is None
+        or before.first_party_max_hp is None
+        or not 0 < before.first_party_hp < before.first_party_max_hp
+        or before_quantity != CERULEAN_RIVAL_POTION_RESERVE
+        or not reader.read_input_readiness().ready
+    ):
+        raise CeruleanChapterError("Route 3 recovery Potion has an invalid starting gate.")
+    executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
+    _wait(executor, 180)
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == 2:
+            break
+        _pulse(executor, MacroActionKind.MOVE, "down" if cursor < 2 else "up", 120)
+    else:
+        raise CeruleanChapterError("Route 3 recovery could not select ITEM.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=180)
+    for _ in range(24):
+        items = _bag_item_ids(emulator)
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        if ItemId.POTION not in items:
+            raise CeruleanChapterError("Route 3 recovery lost its PC Potion.")
+        target = items.index(ItemId.POTION)
+        if absolute == target:
+            break
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if absolute < target else "up",
+            120,
+        )
+    else:
+        raise CeruleanChapterError("Route 3 recovery could not select its PC Potion.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=180)
+    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+    expected_hp = min(before.first_party_max_hp, before.first_party_hp + 20)
+    for _ in range(24):
+        current = reader.read()
+        if (
+            current.first_party_hp == expected_hp
+            and _bag_quantity(emulator, ItemId.POTION) == PEWTER_POTION_PURCHASE_QUANTITY
+        ):
+            break
+        _pulse(executor, MacroActionKind.CONFIRM, frames=180)
+    else:
+        raise CeruleanChapterError("Route 3 recovery Potion missed its exact heal gate.")
+    for _ in range(FIELD_ITEM_MENU_CLOSE_PULSES):
+        _pulse(executor, MacroActionKind.CANCEL, frames=180)
+    for _ in range(6):
+        if reader.read_input_readiness().ready:
+            break
+        _pulse(executor, MacroActionKind.CANCEL, frames=180)
+    else:
+        raise CeruleanChapterError("Route 3 recovery Potion did not restore field control.")
+    final = reader.read()
+    if (
+        final.map_id != MapId.ROUTE_3
+        or final.battle_state != 0
+        or final.first_party_hp != expected_hp
+        or _bag_quantity(emulator, ItemId.POTION) != PEWTER_POTION_PURCHASE_QUANTITY
+        or not reader.read_input_readiness().ready
+    ):
+        raise CeruleanChapterError("Route 3 recovery Potion failed its persistent gate.")
 
 
 def _purchase_early_supplies(

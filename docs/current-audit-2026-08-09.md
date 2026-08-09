@@ -18,8 +18,11 @@ semantics, fixed front-end timing, and zero-wild assumptions on Route 2 and insi
 The ninth failure showed that a fixed RNG wait was not a semantic Kakuna lesson; the tenth reached
 the already-known Route 1 youngster collision; the eleventh proved that a legal Bug Catcher poison
 could not reach the recovery action intended to clear it. Each failure is preserved rather than
-rerun as a favorable root. The Center repair passes its 2,196-test ROM-free gate and awaits a clean
-push and causal replay.
+rerun as a favorable root. A later same-root replay crossed Brock and localized a second instance:
+the first Route 3 trainer left the lead at 10/35 HP with poison before a 51-step return. The pending
+resource repair withdraws the guaranteed PC Potion in Pewter, spends it at that exact post-trainer
+gate, preserves the original cash ledger, and retains the same six-Potion downstream floor. Its
+2,197-test ROM-free gate is green; exact causal replay is next.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -266,6 +269,17 @@ advanced 578 frames and exposed the same status-zero assumption in the independe
 referee. That referee now admits poison only at the Forest north gate, upper Route 2, and Pewter
 south edge; every earlier boundary and the Gym remain healthy-only. See the
 [eleventh perturbation failure](evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json).
+
+The measured 40-input Center-to-Gym route then qualified the entire Brock recovery. The same root
+defeated Brock and the first required Route 3 trainer before Wartortle fainted during the return to
+Pewter Center at `(19,22)`. A clean entry probe measured Route 3 `(11,6)`, level 13, 10/35 HP,
+poison `0x08`, and 18 Bubble PP. This is still authored resource execution inside the first
+composite: all learned battle and training counters remained zero. The repair moves RED's
+guaranteed PC Potion withdrawal from Cerulean to the first Pewter Center visit and consumes only
+that item after trainer zero. It begins Cerulean with 13 Potions, purchases the original four, and
+lowers only the pre-cleanup rival maximum from 18 to 17; the existing cleanup still retains six,
+so later reserves and total spend are unchanged. The complete 2,197-test gate passes; publish the
+clean source and run the exact same-root causal replay next. Counted v95 remains unopened.
 
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared

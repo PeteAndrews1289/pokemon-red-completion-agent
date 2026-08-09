@@ -2347,6 +2347,14 @@ visits the Pewter Center, proves full health, clear status, and restored PP,
 and reapplies the same readiness contract at the Gym. It is a small but important distinction:
 declaring a safe precondition does not teach the agent how to establish it.
 
+That fix carried the same root through Brock and into Route 3, where the first required trainer
+made the lesson concrete a second time. The lead started the long recovery walk at 10/35 HP with
+poison and fainted four tiles short of safety. The next repair does not add money or weaken the
+battle: it withdraws RED's guaranteed PC Potion during the first Pewter Center visit, spends that
+single resource after the trainer, and carries 17 rather than 18 Potions into the Cerulean rival.
+The existing cleanup still retains the same six-Potion floor, so the change is resource planning,
+not a smaller downstream safety margin.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

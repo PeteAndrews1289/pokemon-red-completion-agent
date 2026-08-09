@@ -144,8 +144,12 @@ replay advanced to the Forest north-gate checkpoint and exposed the same healthy
 independent progress referee. Only the three post-Forest boundaries leading to the Center may now
 carry poison; the Gym remains healthy-only. The
 [eleventh perturbation failure](evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json)
-is preserved; the full 2,196-test ROM-free gate passes and a clean causal replay is next. Counted
-v95 remains 0/10.
+is preserved. The measured Center-to-Gym route then crossed Brock, but the same root reached the
+first Route 3 recovery walk at only 10/35 HP with poison and fainted at Pewter `(19,22)`. Move the
+guaranteed PC Potion withdrawal to the first Pewter Center visit, consume exactly that Potion after
+trainer zero, restore the original four-Potion Cerulean purchase, and preserve the six-Potion
+post-rival floor. Regenerate, pass the full ROM-free gate, push, and causally replay `990026` before
+assigning another root. Counted v95 remains 0/10.
 
 Seed `990024` qualified incidental Forest travel but the fixed first-Kakuna frame wait produced no
 battle. The [ninth perturbation failure](evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json)

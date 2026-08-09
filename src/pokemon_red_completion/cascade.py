@@ -79,7 +79,7 @@ CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS = {
     RATTATA_SPECIES_ID: 25,
     BULBASAUR_SPECIES_ID: 30,
 }
-CERULEAN_RIVAL_MAX_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE + 4
+CERULEAN_RIVAL_MAX_POTION_RESERVE = CERULEAN_RIVAL_POTION_RESERVE + 3
 CERULEAN_ANTIDOTE_RESERVE = 3
 POTION_HEAL_AMOUNT = 20
 TM01_FIELD_MENU_CLOSE_PULSES = 2
@@ -390,7 +390,7 @@ def run_cascade_chapter(
         reader,
         timing,
         emulator=emulator,
-        withdraw_pc_potion=True,
+        withdraw_pc_potion=False,
     )
     _teach_cerulean_rival_mega_punch(
         reader,
@@ -1827,14 +1827,14 @@ def _purchase_cerulean_supplies(
     emulator: EmulatorState,
     timing: CascadeTiming,
 ) -> None:
-    """Buy four extra Potions plus bounded poison and sleep contingencies."""
+    """Restore the post-Route-3 reserve plus poison and sleep contingencies."""
 
     before = reader.read()
     if (
         before.map_id != MapId.CERULEAN_CITY
         or (before.player_x, before.player_y) != (19, 18)
         or before.battle_state != 0
-        or _bag_quantity(emulator, ItemId.POTION) != CERULEAN_RIVAL_POTION_RESERVE
+        or _bag_quantity(emulator, ItemId.POTION) != CERULEAN_RIVAL_POTION_RESERVE - 1
         or _bag_quantity(emulator, ItemId.ANTIDOTE) != 0
         or _bag_quantity(emulator, ItemId.AWAKENING) != 0
         or not reader.read_input_readiness().ready
