@@ -262,6 +262,7 @@ class PewterChapterReport:
     route_2_movement_retries: int
     forest_wild_flees: tuple[Route1WildFleeEvidence, ...]
     forest_movement_retries: int
+    lab_rival_loss_recovery_required: bool
     rival_loss_recovery_search_attempts: tuple[int, ...]
     rival_loss_recovery_species_ids: tuple[int, ...]
     forest_target_search_attempts: tuple[int, ...]
@@ -273,12 +274,7 @@ class PewterChapterReport:
 
     @property
     def passed(self) -> bool:
-        expected_recovery_battles = (
-            1
-            if self.pokedex_evidence.battle_result == 1
-            and self.pokedex_evidence.first_party_level == 5
-            else 0
-        )
+        expected_recovery_battles = int(self.lab_rival_loss_recovery_required)
         return (
             self.pokedex_evidence.pokedex_snapshot
             and self.reached_boundaries
@@ -353,6 +349,7 @@ class PewterChapterReport:
                 "route_2_movement_retries": self.route_2_movement_retries,
                 "forest_wild_flees": [item.public_dict() for item in self.forest_wild_flees],
                 "forest_movement_retries": self.forest_movement_retries,
+                "lab_rival_loss_recovery_required": (self.lab_rival_loss_recovery_required),
                 "rival_loss_recovery_search_attempts": list(
                     self.rival_loss_recovery_search_attempts
                 ),
@@ -401,8 +398,11 @@ def run_pewter_chapter(
     *,
     timing: PewterTiming = DEFAULT_PEWTER_TIMING,
     progress: ProgressSink | None = None,
+    lab_rival_loss_recovery_required: bool = False,
 ) -> PewterChapterReport:
     """Continue one clean run from the verified Pokédex gate through Brock."""
+    if type(lab_rival_loss_recovery_required) is not bool:  # noqa: E721
+        raise TypeError("lab_rival_loss_recovery_required must be a bool")
     start_frames = emulator.frame_count
     chapter_executor = _CountingChapterExecutor(executor)
     starting_raw = reader.read()
@@ -499,7 +499,7 @@ def run_pewter_chapter(
     rival_loss_recovery_species_ids: tuple[int, ...] = ()
     forest_training_origin = reader.read()
     if forest_training_origin.first_party_level == 5:
-        if pokedex_evidence.battle_result != 1:
+        if not lab_rival_loss_recovery_required:
             raise PewterChapterError(
                 "level-five Forest entry lacked an authenticated lab-rival loss."
             )
@@ -545,6 +545,10 @@ def run_pewter_chapter(
         )
     elif forest_training_origin.first_party_level != 6:
         raise PewterChapterError("Forest training origin had an unsupported starter level.")
+    elif lab_rival_loss_recovery_required:
+        raise PewterChapterError(
+            "authenticated lab-rival loss reached Forest without its level-five deficit."
+        )
     forest_target_search_attempts: tuple[int, ...] = ()
     forest_training_species_ids: tuple[int, ...] = ()
     first_encounter, more_flees, more_retries, search_attempts, step_consumed = (
@@ -896,6 +900,7 @@ def run_pewter_chapter(
         route_2_movement_retries=route_2_movement_retries,
         forest_wild_flees=forest_wild_flees,
         forest_movement_retries=forest_movement_retries,
+        lab_rival_loss_recovery_required=lab_rival_loss_recovery_required,
         rival_loss_recovery_search_attempts=rival_loss_recovery_search_attempts,
         rival_loss_recovery_species_ids=rival_loss_recovery_species_ids,
         forest_target_search_attempts=forest_target_search_attempts,

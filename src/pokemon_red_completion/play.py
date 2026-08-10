@@ -1327,6 +1327,10 @@ def run_qualified_play(
                 reader,
                 executor,
                 progress=_pewter_progress_bridge(progress),
+                lab_rival_loss_recovery_required=not is_rival_victory_verified(
+                    rival_evidence,
+                    saw_trainer_battle=saw_trainer_battle,
+                ),
             )
         except PewterChapterError as error:
             raise QualifiedPlayError(str(error)) from error

@@ -44,6 +44,7 @@ from pokemon_red_completion.play import (
     DEFAULT_QUALIFIED_PLAY_TIMING,
     OaksErrandChapterReport,
     QualifiedPlayTiming,
+    is_rival_victory_verified,
     run_oaks_errand_chapter,
 )
 from pokemon_red_completion.quest import Specialist
@@ -160,7 +161,15 @@ def run_early_game_composite(
         counted,
         timing=play_timing,
     )
-    pewter = run_pewter_chapter(chapter_emulator, reader, counted)
+    pewter = run_pewter_chapter(
+        chapter_emulator,
+        reader,
+        counted,
+        lab_rival_loss_recovery_required=not is_rival_victory_verified(
+            oaks_errand.rival_evidence,
+            saw_trainer_battle=oaks_errand.saw_trainer_battle,
+        ),
+    )
     cerulean = run_cerulean_chapter(chapter_emulator, reader, counted)
     cascade = run_cascade_chapter(chapter_emulator, reader, counted)
     vermilion = run_vermilion_chapter(emulator, reader, counted)
@@ -201,8 +210,7 @@ def run_early_game_composite(
     if not report.passed:
         missing = sorted(EARLY_GAME_VERIFIED_FACTS.difference(verified_facts))
         raise EarlyGameCompositeError(
-            "early-game composite evidence failed"
-            + (": " + ", ".join(missing) if missing else "")
+            "early-game composite evidence failed" + (": " + ", ".join(missing) if missing else "")
         )
     return report
 

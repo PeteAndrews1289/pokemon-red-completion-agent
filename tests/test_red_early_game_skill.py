@@ -39,11 +39,14 @@ class _Observer:
 def test_early_game_composite_declares_one_dispatch_and_every_automatic_objective() -> None:
     assert QUALIFIED_OBJECTIVE_SEQUENCE[:14] == EARLY_GAME_OBJECTIVE_IDS
     assert QUALIFIED_OBJECTIVE_SEQUENCE[1:14] == EARLY_GAME_AUTOMATIC_OBJECTIVE_IDS
-    assert frozenset(
-        fact
-        for objective_id in EARLY_GAME_OBJECTIVE_IDS
-        for fact in COMPLETION_QUEST.objective(objective_id).completion_facts
-    ) == EARLY_GAME_VERIFIED_FACTS
+    assert (
+        frozenset(
+            fact
+            for objective_id in EARLY_GAME_OBJECTIVE_IDS
+            for fact in COMPLETION_QUEST.objective(objective_id).completion_facts
+        )
+        == EARLY_GAME_VERIFIED_FACTS
+    )
 
 
 def test_early_game_skill_is_available_only_at_the_untouched_boot_boundary(monkeypatch) -> None:
@@ -108,6 +111,8 @@ def test_early_game_composite_runs_the_frozen_chapters_once_and_unions_evidence(
     oaks = SimpleNamespace(
         passed=True,
         pokedex_received=raw_by_name["receive_pokedex"],
+        rival_evidence=SimpleNamespace(rival_victory_snapshot=True),
+        saw_trainer_battle=True,
     )
     reports = {
         "pewter": SimpleNamespace(
