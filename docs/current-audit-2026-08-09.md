@@ -322,7 +322,7 @@ silently acting at night.
 | Learned objective selection | 6/10 | Clean start selects registered composite goals from semantic state, but most candidate sets are singleton and fixed authored skills perform the mechanics. |
 | Learned trainee/venue strategy | 7/10 | The identity-free candidate ranker beat its shape baseline and completed a clean-power curriculum with real disagreements. It remains Red-only evidence. |
 | Navigation and menu autonomy | 3/10 | Reusable local planning exists, but the completion path is still dominated by authored chapter routes and menu executors. |
-| Multi-seed reliability | 4/10 | Canonical combined completion exists and the first paired perturbation produced an actionable early-game counterexample; the official frozen 8-of-10 campaign remains 0/10. |
+| Multi-seed reliability | 4/10 | Canonical combined completion exists and eleven uncounted perturbations have hardened real boundaries, but no second changed-timing root has completed; the official frozen 8-of-10 campaign remains 0/10. |
 | Cross-title transfer | 2/10 | A bounded Crystal benchmark is designed; no Crystal adapter, dataset, or result exists yet. |
 | Living Pokédex / level 100 | 2/10 | Target and planning foundations exist; generic collection execution still contains explicit unimplemented adapter operations. |
 
@@ -335,6 +335,13 @@ silently acting at night.
   regeneration.
 - The repository is evidence-rich but too large for its current capability surface. Route chapters,
   receipts, historical protocol versions, and long narratives make orientation expensive.
+- Draft PR #8 spans 709 files, 737 branch commits, roughly 141,825 additions, and 4,045 deletions
+  against `main`. It is an integration branch, not a realistically reviewable incremental PR.
+  Freeze its scope after the Red reliability milestone, integrate it deliberately, and start
+  Crystal and generic collection work in smaller PRs.
+- README, handoff, roadmap, project narrative, current audit, video narrative, and portfolio brief
+  total 7,524 lines. The public evidence should remain, but the GitHub landing page should
+  eventually become a short capability/evidence index instead of carrying the chronological log.
 - Forty-four legacy source modules remain under mypy `ignore_errors` overrides. The register is
   documented and must only shrink, but a green top-level mypy result therefore does not mean the
   entire source tree is strictly typed.
@@ -351,8 +358,7 @@ The current stack is layered rather than monolithic:
 3. the listwise target head has completed canonical shadow, isolated causal, and combined
    Hall-of-Fame gates, but does not yet have perturbation authority;
 4. typed constraints and deterministic or authenticated learned target resolvers turn choices into
-   executable
-   affordances;
+   executable affordances;
 5. authored chapter and menu skills still carry out most long-horizon mechanics; and
 6. an independent referee verifies progress and rejects behavior that wins without satisfying the
    declared lesson.
