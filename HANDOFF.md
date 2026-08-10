@@ -14,6 +14,41 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Stateful Surf is a live cartridge-derived route — 2026-08-10
+
+Surf is now an explicit movement-mode transition rather than a static permission bit. The shared
+local search runs on `(coordinate, mode)` state. Its Generation I adapter derives water and shore
+edges from cartridge tiles and pair restrictions; entry is a typed `field_move`, water travel stays
+in `water`, and stepping back onto shore returns to `land`. Live capability requires Soul Badge,
+complete party memory and a living member that actually knows Surf. Forced Cycling Road state and
+Seafoam B4 remain closed rather than being guessed open.
+
+The bounded title adapter turns `surf:<direction>` into the real START → POKÉMON → member → Surf
+menu sequence and accepts it only after both the exact target coordinate and
+`wWalkBikeSurfState == SURFING` appear. The generic executor also now waits for an in-flight action
+to settle before it can infer a blocker. That ordering matters: the first live attempt nearly
+blacklisted a reachable square while Red's walk animation still exposed the source coordinate.
+
+Live falsification then found two independent map/controller truths that the ROM-free suite had not
+proved. A Center return warp at `(7,3)` is a square the player reaches first; one more Down action
+fires the return and lands adjacent to the exterior door at `(12,11)`. Also, the executor's minimal
+one-frame pulse can phase-lock between Red's joypad polls, so the live route reuses the established
+8-frame press/16-frame release timing. Both are now represented and regression-tested rather than
+special-cased for Cinnabar.
+
+Clean source `0d1fc43187fa0bed8d88fdfb16a1b2e9a0813a82` passed the authenticated post-Blaine
+probe. Cartridge search exited the Center, chose the lowest-cost water target requiring two real
+water-travel edges, boarded at `(13,11)`, reached `(16,11)`, returned through disembarkation, and
+finished at the exact `(12,11)` origin in land mode. All **13/13** route steps were acknowledged,
+with zero interruption or replan; 29 actions / 2,040 frames released every control and changed no
+ROM-adjacent artifact. Record:
+[cinnabar-cartridge-surf-route-probe-2026-08-10.json](docs/evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json).
+
+Do not mistake this for general route authority. Direct current-object observation, Cut map
+mutation, Strength push-state search and story-gate predicates remain open. The next task is visible
+occupancy projection with failed-step inference retained only as a bounded fallback. Counted v95 is
+still sealed at **0/10**.
+
 ## Composed routing became a closed live control loop — 2026-08-10
 
 The route executor milestone is closed at clean source

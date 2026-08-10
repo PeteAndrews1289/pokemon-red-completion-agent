@@ -1,5 +1,39 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 10: water became state, not scenery
+
+The land router could already choose a destination, cross maps and recover when the world refused a
+step. Surf asked a deeper question: can the same planner represent that one coordinate may be legal
+or illegal depending on how the player is moving?
+
+The answer was to search `(coordinate, mode)` rather than coordinates alone. Cartridge water tiles
+and pair-collision rules produce three different edges: boarding changes land to water through a
+semantic field action, water travel preserves water mode, and disembarking changes water back to
+land. Permission is observed, not presumed: the live state must contain the Soul Badge, a complete
+party and a living member that knows Surf. The Generation I adapter alone knows how to turn that
+semantic action into START, POKÉMON, the correct party member and the correct field-move row.
+
+The first live attempts were valuable because they disproved two green assumptions. The generic
+executor could replan while a walk animation still showed the source coordinate, inventing a
+blocker before the action settled. Then the map composer treated a Pokémon Center's boundary warp
+as if stepping onto it immediately exited. Live Red showed the actual contract: walk onto `(7,3)`,
+press Down once more, and arrive one square beyond the exterior door at `(12,11)`. A final low-level
+failure showed that one-frame pulses can phase-lock between joypad polls; the proof now uses the
+repository's already-established human-length controller timing.
+
+With those corrections committed, the authenticated post-Blaine state passed. Cartridge search
+exited Cinnabar Center, chose the cheapest target containing at least two genuine water-travel
+steps, boarded at `(13,11)`, reached `(16,11)`, and returned to the exact `(12,11)` shore origin in
+land mode. All 13 planned steps were acknowledged from live RAM, with no interruption, replan or
+private artifact write. The [public receipt](evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json)
+binds that result to clean source.
+
+This moves the project closer to training for the right reason. A learned navigator need not
+memorize Down, Down, Down. It can choose a strategic destination and whether crossing water is worth
+the capability and cost; a cartridge adapter supplies the mechanics and the live executor supplies
+the truth. The next transfer-critical seam is current visible occupancy, followed by Cut mutation,
+Strength push state and one observed story gate.
+
 ## August 10: the route noticed when the world disagreed
 
 The cartridge-generated Pallet walk and Route 1 ledge were useful local demonstrations. The next

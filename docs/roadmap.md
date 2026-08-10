@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-10): add stateful traversal to the closed route loop
+## Current focus (2026-08-10): advance from proved Surf to dynamic traversal
 
 The game-neutral route executor is implemented and live-qualified at source `6b2cf65`. It requires
 exact acknowledgement after every movement, tolerates Gen I's staggered map/coordinate transition,
@@ -19,28 +19,37 @@ encountered Route 1's moving youngster and replanned again before entering the M
 [control receipt](evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
 [replanning receipt](evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json).
 
-This closes the previous three runtime gates, but not general navigation. Current blocker discovery
-is causal—two unconsumed requests mark the target square unavailable—not a complete observation of
-visible moving objects. Static graph edges also do not yet encode live Surf mode, Cut mutations,
-Strength pushes, or story flags. The ordered gates are now:
+Surf is now the third clean source-bound route proof. Capability requires the Soul Badge, a complete
+party observation and a living move holder. The local search operates on `(coordinate, mode)` state,
+the title adapter compiles the semantic field action through bounded live menus, and RAM at
+`wWalkBikeSurfState` acknowledges board, travel and disembark transitions. From an authenticated
+post-Blaine state, cartridge data exited Cinnabar Center, chose a target with two genuine water
+travel edges, boarded at `(13, 11)`, reached `(16, 11)`, and returned to `(12, 11)` in land mode.
+The probe also corrected two false assumptions exposed only by live play: boundary returns require
+one action after reaching their warp coordinate, and one-frame controller pulses can phase-lock
+between Red's joypad polls. See the
+[Surf receipt](evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json).
 
-1. Add Surf as explicit state: observed badge plus living party move enables boarding, while live
-   movement mode distinguishes land, water travel and disembarking. Recompute legal local edges at
-   each mode transition and falsify the contract live.
-2. Add direct visible-object projection where revision-decoded state can support it. Keep failed-step
+This closes the Surf gate, but not general navigation. Current blocker discovery is causal—two
+settled, unconsumed requests mark the target square unavailable—not a complete observation of
+visible moving objects. Cut mutations, Strength pushes and story flags remain unavailable. The
+ordered gates are now:
+
+1. Add direct visible-object projection where revision-decoded state can support it. Keep failed-step
    discovery as the fallback, but do not infer that every permanent block is an NPC.
-3. Add Cut as an observed block replacement and recompute the local graph after use.
-4. Add Strength as bounded player/boulder search over observed push state; do not reduce it to a
+2. Add Cut as an observed block replacement and recompute the local graph after use.
+3. Add Strength as bounded player/boulder search over observed push state; do not reduce it to a
    possession flag.
-5. Filter one story-gated passage from observed semantic predicates, independently prove its closed
+4. Filter one story-gated passage from observed semantic predicates, independently prove its closed
    and open states, and keep unknown predicates unavailable.
-6. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
+5. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
    selecting a macro path before local cost is known.
-7. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
+6. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
    prizes—so one-cartridge reachability becomes complete rather than a lower bound.
-8. Record strategic destination choices, replans and interruption outcomes for learning. Exact
+7. Record strategic destination choices, replans and interruption outcomes for learning. Exact
    arrow sequences remain planner outputs, not imitation labels.
-9. Add Crystal's thin adapter after Surf and traversal observation stay title-neutral, then run the
+8. Add Crystal's thin adapter after direct occupancy and one story predicate preserve the neutral
+   executor contract, then run the
    defined zero-shot/few-shot/from-scratch navigation benchmark.
 
 The full reasoning, risks and admission criteria are in the

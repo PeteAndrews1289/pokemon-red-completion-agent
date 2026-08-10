@@ -386,6 +386,44 @@ whose availability must be proved from state.
 
 ---
 
+## Act XI: the shoreline changed the state space
+
+Water is not another blue floor tile. On land, stepping into it is illegal. With the Soul Badge and
+a living party member that knows Surf, the same edge becomes a menu action that changes how every
+later coordinate is interpreted. Leaving the water changes it back. A planner that stores only
+`(y,x)` cannot tell those worlds apart.
+
+The route graph now stores `(coordinate, mode)`. Boarding is a typed field action from land to
+water. Water travel stays in water. Disembarking returns to land. The Red adapter reads the badge,
+the entire party, the living move holder and `wWalkBikeSurfState`, then uses the real menu. The
+neutral executor still sees only an action and the exact state that must acknowledge it.
+
+The cartridge was again more useful than the code's confidence. The first probe exposed a race:
+after a direction press, Red could still publish the source coordinate while its walk animation was
+in flight. Blocker discovery ran before the settling wait and declared the destination unavailable.
+The order is now action, bounded settle, exact reobservation, and only then blocker inference.
+
+The second probe reached the bottom of Cinnabar Center and contradicted the router's warp model. The
+ROM says the return warp is at `(7,3)`, but entering that square is not the transition. The player
+stands there and presses Down again, arriving outside at `(12,11)`, one square beyond the exterior
+door record. The third probe showed one-frame direction taps can repeatedly miss Red's joypad poll
+when the retry interval keeps the same phase. The final route uses the longer controller timing
+already proved by the rest of the teacher.
+
+Then the round trip passed. From an authenticated post-Blaine state, cartridge search exited the
+Center, selected a target that required two real water-travel edges, boarded at `(13,11)`, reached
+`(16,11)`, disembarked and returned to the exact `(12,11)` origin in land mode. Thirteen planned
+steps, thirteen live acknowledgements, no wild battle, no replan, no leaked or modified private
+artifact.
+
+This is the kind of structure that can transfer. The learned layer can decide that a water route
+serves healing, capture or exploration. It does not need to rediscover how a particular cartridge
+stores shore collisions or which menu row means Surf. The next honest gaps are visible moving
+objects, Cut's map mutation, Strength's pushed-object state and story gates that change whether the
+same passage exists.
+
+---
+
 ## Why a living Pokédex
 
 Every failure in this story has the same shape: a fixed sequence standing in where a decision should
@@ -436,8 +474,10 @@ Being precise about this matters more than the story sounding finished.
 - Red and Blue's complete decoded map graphs, traversable terrain, fishing tables and evolution
   graphs are now measured from both cartridges. Two generated multi-map routes have entered the
   Viridian Center and Mart live while acknowledging every movement, handling four wild encounters,
-  and replanning around both a disclosed artificial blocker and a naturally moving NPC. Surf, Cut,
-  Strength, direct visible-object projection and story gates remain outside authority.
+  and replanning around both a disclosed artificial blocker and a naturally moving NPC. A third
+  generated route has boarded, traversed and exited Surf from observed movement mode, then returned
+  to its exact shore origin. Cut, Strength, direct visible-object projection and story gates remain
+  outside authority.
 - A member that is too weak for where the run happens to be is now routed somewhere that suits it,
   travels there, and gains levels. That is new, and it is the mechanism the rest depends on.
 - A clean-power teacher run reaches its 60/55/55/55/55/55 readiness gate and completes the game;

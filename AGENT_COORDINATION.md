@@ -1,5 +1,17 @@
 # Three-agent coordination
 
+> **2026-08-10 Lane A Surf checkpoint:** stateful cartridge routing is live-qualified at source
+> `0d1fc43`. The planner now searches `(coordinate, movement mode)`, enables boarding only from an
+> observed Soul Badge plus a complete party with a living Surf holder, and compiles the field move
+> through bounded Gen I menus. The clean post-Blaine probe exited Cinnabar Center, boarded at
+> `(13,11)`, traversed two true water edges to `(16,11)`, disembarked, and returned to the exact
+> `(12,11)` shore origin in land mode: 13/13 acknowledged route steps, no wild, no replan, released
+> controls and no ROM-adjacent writes. Live falsification also fixed boundary-return geometry and a
+> premature-replan race; do not revert the settle-before-blocker order. Record:
+> `docs/evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json`. Next: direct visible-object
+> projection, then Cut, Strength and one closed/open story gate. Generated routing remains outside
+> completion-run authority and counted v95 remains sealed at 0/10.
+
 > **2026-08-10 Lane A checkpoint:** the game-neutral closed-loop route executor is live-qualified at
 > source `6b2cf65`. The 86-step Pallet → Viridian Center control acknowledged every movement and
 > authenticated three natural wild interruptions with zero replans. The independent Mart probe

@@ -8,12 +8,16 @@
 > The newest navigation layer composes routes from Red and Blue cartridge geometry and executes
 > them as a live acknowledge/retry/replan loop. Two source-bound routes reached the Viridian Center
 > and Mart; together they handled four wild encounters, a disclosed injected blocker, and Route 1's
-> moving youngster without a typed corridor fallback. Counted v95 remains unopened at **0/10**, and
-> field/story-gated generated routing is not yet authorized inside a completion run. See the
+> moving youngster without a typed corridor fallback. A third source-bound probe now exited
+> Cinnabar Center, selected a water target from cartridge terrain, boarded through a living Surf
+> holder, traveled in observed water mode, and returned to the exact shore origin in land mode.
+> Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
+> inside a completion run. See the
 > [capability audit](docs/current-audit-2026-08-10.md),
 > [navigation audit](docs/traversal-audit-2026-08-10.md), and
 > [control route](docs/evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
-> [replanning route](docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json).
+> [replanning route](docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json),
+> plus the [Surf round trip](docs/evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json).
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -26,14 +30,18 @@ control, and progressively trained specialists.**
 
 Cartridge knowledge now covers 220 reachable maps, 48,216 standable coordinates, 154,653 directed
 static land edges, 1,484 exact connection transitions, 558 ordinary warp arrivals and 242 dynamic
-return warps. Red and Blue agree on the complete decoded structures. The first multi-map composer
+return warps. Boundary returns now retain the distinct action that walks out of the map and the
+adjacent exterior arrival rather than pretending that entering the warp tile is enough. Red and
+Blue agree on the complete decoded structures. The first multi-map composer
 selected reachable passage endpoints and produced an 86-action Pallet → Route 1 → Viridian → Center
 plan; live Red reached every decoded arrival and the final Center coordinate `(7, 3)`. A second
 Mart run acknowledged 108 executed steps, recovered from one disclosed artificial block, routed
 around the naturally moving Route 1 youngster, and authenticated a wild interruption. The shared
 executor now owns step acknowledgement, bounded retries, typed interruptions and replanning.
-Direct visible-object observation is still absent, and Surf, Cut and Strength remain stateful future
-adapters rather than pretend-open edges.
+The stateful local graph now distinguishes land, Surf boarding, water travel and disembarking; a
+live post-Blaine round trip acknowledged all 13 planned steps and returned to `(12, 11)` in land
+mode. Direct visible-object observation is still absent, while Cut and Strength remain stateful
+future adapters rather than pretend-open edges.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of
