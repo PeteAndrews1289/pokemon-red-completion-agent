@@ -237,7 +237,7 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
         14,
     )
     assert len(CENTER_TO_RIVAL_STAGING_DIRECTIONS) == 34
-    assert MART_CLERK_DIRECTIONS == ("up", "up")
+    assert MART_CLERK_DIRECTIONS == ("up",)
     assert MART_REPEAT_CLERK_DIRECTIONS == ("right", "up", "up", "left", "left")
     assert MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS[:4] == (
         "down",
@@ -409,7 +409,7 @@ def test_first_mart_clerk_approach_retries_customer_collision_and_proves_stance(
                 return
             if action.value == "up":
                 self.up_attempts += 1
-                if self.up_attempts != 2:
+                if self.up_attempts == 1 or self.up_attempts >= 12:
                     self.y -= 1
             elif action.value == "left":
                 self.left_attempts += 1
@@ -435,7 +435,7 @@ def test_first_mart_clerk_approach_retries_customer_collision_and_proves_stance(
     )
 
     assert (final.player_x, final.player_y) == (2, 5)
-    assert runtime.up_attempts == 3
+    assert runtime.up_attempts == 12
     assert runtime.left_attempts == 2
 
 

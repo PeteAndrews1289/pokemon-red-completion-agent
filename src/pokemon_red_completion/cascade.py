@@ -117,7 +117,7 @@ CENTER_HEAL_TO_PC_DIRECTIONS = _directions("D" + "R" * 10)
 CENTER_PC_TO_HEAL_DIRECTIONS = _directions("L" * 10 + "U")
 CENTER_EXIT_DIRECTIONS = _directions("DDDDD")
 CENTER_TO_MART_DIRECTIONS = _directions("D" * 5 + "L" * 2 + "D" * 3 + "R" * 8 + "U" * 3)
-MART_CLERK_DIRECTIONS = _directions("UU")
+MART_CLERK_DIRECTIONS = _directions("U")
 MART_REPEAT_CLERK_DIRECTIONS = _directions("RUULL")
 MART_TO_CENTER_STAGING_DIRECTIONS = _directions(
     "RR" + "D" * 3 + "L" * 10 + "U" * 3 + "R" * 2 + "U" * 5
@@ -2024,6 +2024,7 @@ def _approach_cerulean_mart_clerk(
         MART_CLERK_DIRECTIONS,
         "Cerulean Mart clerk northbound approach",
     )
+    state = _settle_mart_clerk_northbound_stance(executor, reader, timing)
     if (
         state.map_id != MapId.CERULEAN_MART
         or (state.player_x, state.player_y) != (3, 5)
@@ -2054,6 +2055,48 @@ def _approach_cerulean_mart_clerk(
             "Cerulean Mart clerk facing pulse left its interaction tile."
         )
     return faced
+
+
+def _settle_mart_clerk_northbound_stance(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: CascadeTiming,
+) -> RawGameState:
+    """Wait below the moving customer until the clerk aisle opens northward."""
+
+    for pulse in range(24):
+        before = reader.read()
+        position = (before.player_x, before.player_y)
+        if position == (3, 5):
+            return before
+        if (
+            before.map_id != MapId.CERULEAN_MART
+            or before.battle_state != 0
+            or position != (3, 6)
+        ):
+            raise CascadeChapterError(
+                "Cerulean Mart clerk northbound wait left its safe tile: "
+                f"position={(before.map_id, before.player_x, before.player_y)!r}."
+            )
+        after = _move(
+            executor,
+            reader,
+            ("up",),
+            f"Cerulean Mart clerk northbound progress {pulse + 1}",
+        )
+        if (
+            after.map_id != MapId.CERULEAN_MART
+            or after.player_x != 3
+            or after.player_y not in {before.player_y, before.player_y - 1}
+        ):
+            raise CascadeChapterError(
+                "Cerulean Mart clerk northbound wait made an invalid transition."
+            )
+        if after.player_y == before.player_y:
+            _wait(executor, max(1, timing.dialogue_wait_frames // 4) * (pulse + 1))
+    raise CascadeChapterError(
+        "Cerulean Mart clerk customer did not clear the northbound aisle within its bound."
+    )
 
 
 def _purchase_cerulean_awakening_topup(
