@@ -33,6 +33,9 @@ class FakeWorld:
         tuple[int, tuple[int, int], str], tuple[int, tuple[int, int], tuple[int, int]]
     ] = field(default_factory=dict)
     pending_arrival: tuple[int, tuple[int, int]] | None = None
+    delayed_transitions: dict[tuple[int, tuple[int, int], str], tuple[int, tuple[int, int]]] = (
+        field(default_factory=dict)
+    )
     actions: list[MacroAction] = field(default_factory=list)
 
     def execute(self, action: MacroAction) -> object:
@@ -57,6 +60,9 @@ class FakeWorld:
             target_map, transient_at, final_at = self.staged_transitions[key]
             self.map_id, self.at = target_map, transient_at
             self.pending_arrival = target_map, final_at
+            return action
+        if key in self.delayed_transitions:
+            self.pending_arrival = self.delayed_transitions[key]
             return action
         if key in self.transitions:
             self.map_id, self.at = self.transitions[key]
@@ -157,6 +163,37 @@ def test_an_unchanged_input_is_retried_instead_of_counted() -> None:
     assert report.movement_requests == 3
     assert report.executed_steps[0].movement_requests == 2
     assert report.wait_actions == 2, "one retry wait and one transition wait"
+
+
+def test_a_face_then_walk_step_accepts_its_delayed_acknowledgement() -> None:
+    local = {
+        1: LocalGraph(
+            {
+                (0, 0): (LocalEdge((1, 0), action="down"),),
+                (1, 0): (),
+            }
+        )
+    }
+    plan = plan_route(
+        MacroGraph({1: ()}),
+        local,
+        1,
+        (0, 0),
+        1,
+        goal_at=(1, 0),
+    )
+    key = (1, (0, 0), "down")
+    world = FakeWorld(
+        swallowed={key: 1},
+        delayed_transitions={key: (1, (1, 0))},
+    )
+
+    report = execute_route(plan, world, world)
+
+    assert report.passed
+    assert report.movement_requests == 2
+    assert report.wait_actions == 2
+    assert report.executed_steps[0].movement_requests == 2
 
 
 def test_field_actions_and_mode_changes_need_exact_live_acknowledgement() -> None:

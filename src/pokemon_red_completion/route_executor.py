@@ -351,6 +351,21 @@ def execute_route(
             interruptions.extend(new_receipts)
             step_interruptions += len(new_receipts)
             wait_actions += waits
+            if _matches(
+                current,
+                step.expected_map,
+                step.expected_at,
+                mode=step.expected_mode,
+            ):
+                executed.append(
+                    ExecutedRouteStep(
+                        step=step,
+                        movement_requests=attempts,
+                        interruption_count=step_interruptions,
+                    )
+                )
+                pending.pop(0)
+                break
             _require_position(
                 current,
                 step.source_map,
