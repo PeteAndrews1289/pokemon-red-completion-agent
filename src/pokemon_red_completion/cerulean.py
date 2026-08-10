@@ -9,7 +9,7 @@ specific memory directly; all gates come from the observation adapter.
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
@@ -79,6 +79,7 @@ ROUTE_3_STEP_RETRY_WAIT_FRAMES = 24
 ROUTE_3_WILD_STABILIZATION_FRAMES = 120
 MT_MOON_ZUBAT_SEARCH_CYCLES = 64
 MT_MOON_ZUBAT_SEARCH_MAX_FLEES = 32
+MT_MOON_MAX_WILD_FLEES = 64
 CENTER_TO_ROUTE_3_DIRECTIONS = _directions("R" * 3 + "U" * 4 + "R" * 3 + "U" * 4 + "R" * 21)
 ROUTE_3_TO_PEWTER_CENTER_DIRECTIONS = _directions(
     "L" * 20 + "D" * 4 + "L" * 3 + "D" * 4 + "L" * 3 + "U"
@@ -252,6 +253,8 @@ class CeruleanChapterReport:
     mt_moon_zubat_search_flees: tuple[Route1WildFleeEvidence, ...]
     mt_moon_zubat_search_attempts: int
     mt_moon_zubat_movement_retries: int
+    mt_moon_wild_flees: tuple[Route1WildFleeEvidence, ...]
+    mt_moon_movement_retries: int
     rocket_battle_evidence: CeruleanChapterState
     rocket_victory_evidence: CeruleanChapterState
     super_nerd_battle_evidence: CeruleanChapterState
@@ -280,6 +283,14 @@ class CeruleanChapterReport:
             and all(evidence.verified for evidence in self.mt_moon_zubat_search_flees)
             and 1 <= self.mt_moon_zubat_search_attempts <= MT_MOON_ZUBAT_SEARCH_CYCLES
             and self.mt_moon_zubat_movement_retries >= 0
+            and all(evidence.verified for evidence in self.mt_moon_wild_flees)
+            and len(self.mt_moon_wild_flees) <= MT_MOON_MAX_WILD_FLEES
+            and len(self.mt_moon_wild_flees) >= len(self.mt_moon_zubat_search_flees)
+            and all(
+                evidence in self.mt_moon_wild_flees
+                for evidence in self.mt_moon_zubat_search_flees
+            )
+            and self.mt_moon_movement_retries >= self.mt_moon_zubat_movement_retries
             and self.saw_required_rocket_battle
             and self.rocket_battle_evidence.required_rocket_battle_snapshot
             and self.rocket_victory_evidence.beat_required_rocket
@@ -364,6 +375,8 @@ class CeruleanChapterReport:
                 "zubat_search_flees": [
                     evidence.public_dict() for evidence in self.mt_moon_zubat_search_flees
                 ],
+                "wild_flees": [evidence.public_dict() for evidence in self.mt_moon_wild_flees],
+                "movement_retries": self.mt_moon_movement_retries,
             },
             "cerulean": {
                 "arrival_verified": self.cerulean_evidence.cerulean_snapshot,
@@ -387,6 +400,18 @@ class _CountingChapterExecutor:
         result = self._executor.execute(action)
         self.actions_executed += 1
         return result
+
+
+@dataclass(slots=True)
+class _MtMoonTraversalLedger:
+    """One cumulative evidence budget for every incidental cave encounter."""
+
+    flees: list[Route1WildFleeEvidence] = field(default_factory=list)
+    movement_retries: int = 0
+
+    @property
+    def remaining_flees(self) -> int:
+        return MT_MOON_MAX_WILD_FLEES - len(self.flees)
 
 
 def run_cerulean_chapter(
@@ -619,6 +644,7 @@ def run_cerulean_chapter(
     )
     _emit(progress, emulator, "mt_moon_entered", "Entered Mt. Moon", 7)
 
+    mt_moon_ledger = _MtMoonTraversalLedger()
     (
         mt_moon_zubat_search_flees,
         mt_moon_zubat_search_attempts,
@@ -628,26 +654,32 @@ def run_cerulean_chapter(
         reader,
         emulator,
         timing,
+        mt_moon_ledger,
     )
-    _move_with_seed_waits(
+    _move_mt_moon_with_seed_waits(
         chapter_executor,
         reader,
         MT_MOON_1F_DIRECTIONS[4:72],
         MT_MOON_1F_PRE_TM_SEED_WAITS,
         "Mt. Moon 1F route before TM01",
+        expected_map_id=MapId.MT_MOON_1F,
+        ledger=mt_moon_ledger,
     )
     _collect_mt_moon_tm01(
         chapter_executor,
         reader,
         emulator,
         timing,
+        mt_moon_ledger,
     )
-    _move_with_seed_waits(
+    _move_mt_moon_with_seed_waits(
         chapter_executor,
         reader,
         MT_MOON_1F_DIRECTIONS[72:],
         MT_MOON_1F_POST_TM_SEED_WAITS,
         "Mt. Moon 1F route after TM01",
+        expected_map_id=MapId.MT_MOON_1F,
+        ledger=mt_moon_ledger,
     )
     _wait(chapter_executor, timing.transition_wait_frames)
     mt_moon_b1f_reached, _ = _observe_boundary(
@@ -663,12 +695,14 @@ def run_cerulean_chapter(
         8,
     )
 
-    _move_with_seed_waits(
+    _move_mt_moon_with_seed_waits(
         chapter_executor,
         reader,
         MT_MOON_B1F_DIRECTIONS,
         MT_MOON_B1F_SEED_WAITS,
         "Mt. Moon B1F legal route",
+        expected_map_id=MapId.MT_MOON_B1F,
+        ledger=mt_moon_ledger,
     )
     _wait(chapter_executor, timing.transition_wait_frames)
     mt_moon_b2f_reached, _ = _observe_boundary(
@@ -684,12 +718,14 @@ def run_cerulean_chapter(
         9,
     )
 
-    _move_with_seed_waits(
+    _move_mt_moon_with_seed_waits(
         chapter_executor,
         reader,
         MT_MOON_B2F_TO_ROCKET_DIRECTIONS,
         MT_MOON_B2F_SEED_WAITS,
         "Mt. Moon Rocket approach",
+        expected_map_id=MapId.MT_MOON_B2F,
+        ledger=mt_moon_ledger,
     )
     _move(
         chapter_executor,
@@ -748,11 +784,19 @@ def run_cerulean_chapter(
         chapter_executor.execute(MacroAction(MacroActionKind.CANCEL))
         _wait(chapter_executor, timing.dialogue_wait_frames)
 
+    _move_mt_moon(
+        chapter_executor,
+        reader,
+        ROCKET_TO_SUPER_NERD_DIRECTIONS[:-1],
+        "Super Nerd approach",
+        expected_map_id=MapId.MT_MOON_B2F,
+        ledger=mt_moon_ledger,
+    )
     _move(
         chapter_executor,
         reader,
-        ROCKET_TO_SUPER_NERD_DIRECTIONS,
-        "Super Nerd approach",
+        ROCKET_TO_SUPER_NERD_DIRECTIONS[-1:],
+        "Super Nerd sight trigger",
         allow_trainer_trigger=True,
     )
     super_nerd_battle = _enter_trainer_battle(
@@ -795,11 +839,13 @@ def run_cerulean_chapter(
     if not super_nerd_victory_evidence.beat_super_nerd:
         raise CeruleanChapterError("The Super Nerd event did not persist.")
 
-    _move(
+    _move_mt_moon(
         chapter_executor,
         reader,
         SUPER_NERD_TO_HELIX_DIRECTIONS,
         "Helix Fossil approach",
+        expected_map_id=MapId.MT_MOON_B2F,
+        ledger=mt_moon_ledger,
     )
     chapter_executor.execute(MacroAction(MacroActionKind.INTERACT))
     fossil_obtained, fossil_evidence = _obtain_helix_fossil(
@@ -817,11 +863,13 @@ def run_cerulean_chapter(
     )
 
     _wait(chapter_executor, MT_MOON_B2F_EXIT_SEED_WAIT)
-    _move(
+    _move_mt_moon(
         chapter_executor,
         reader,
         MT_MOON_B2F_EXIT_DIRECTIONS,
         "Mt. Moon B2F exit route",
+        expected_map_id=MapId.MT_MOON_B2F,
+        ledger=mt_moon_ledger,
     )
     _wait(chapter_executor, timing.transition_wait_frames)
     mt_moon_b1f_ascent, _ = _observe_boundary(
@@ -837,11 +885,13 @@ def run_cerulean_chapter(
         13,
     )
     _wait(chapter_executor, MT_MOON_B1F_EXIT_SEED_WAIT)
-    _move(
+    _move_mt_moon(
         chapter_executor,
         reader,
         MT_MOON_B1F_EXIT_DIRECTIONS,
         "Mt. Moon final exit",
+        expected_map_id=MapId.MT_MOON_B1F,
+        ledger=mt_moon_ledger,
     )
     _wait(chapter_executor, timing.transition_wait_frames)
     mt_moon_exited, _ = _observe_boundary(
@@ -934,6 +984,8 @@ def run_cerulean_chapter(
         mt_moon_zubat_search_flees=mt_moon_zubat_search_flees,
         mt_moon_zubat_search_attempts=mt_moon_zubat_search_attempts,
         mt_moon_zubat_movement_retries=mt_moon_zubat_movement_retries,
+        mt_moon_wild_flees=tuple(mt_moon_ledger.flees),
+        mt_moon_movement_retries=mt_moon_ledger.movement_retries,
         rocket_battle_evidence=rocket_battle_evidence,
         rocket_victory_evidence=rocket_victory_evidence,
         super_nerd_battle_evidence=super_nerd_battle_evidence,
@@ -1004,20 +1056,95 @@ def _move_with_seed_waits(
     return state
 
 
+def _move_mt_moon(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    label: str,
+    *,
+    expected_map_id: MapId,
+    ledger: _MtMoonTraversalLedger,
+) -> RawGameState:
+    """Move through one cave segment while extending the chapter-wide ledger."""
+
+    if ledger.remaining_flees < 0:
+        raise CeruleanChapterError("Mt. Moon traversal exceeded its cumulative flee budget.")
+    state, flees, retries = move_with_wild_flees(
+        executor,
+        reader,
+        directions,
+        label,
+        expected_map_id=expected_map_id,
+        route_name="Mt. Moon",
+        maximum_flees=ledger.remaining_flees,
+        stabilization_frames=ROUTE_3_WILD_STABILIZATION_FRAMES,
+        maximum_step_attempts=ROUTE_3_MAX_STEP_ATTEMPTS,
+        step_retry_wait_frames=ROUTE_3_STEP_RETRY_WAIT_FRAMES,
+        error_type=CeruleanChapterError,
+    )
+    ledger.flees.extend(flees)
+    ledger.movement_retries += retries
+    return state
+
+
+def _move_mt_moon_with_seed_waits(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    directions: tuple[str, ...],
+    waits: tuple[tuple[int, int], ...],
+    label: str,
+    *,
+    expected_map_id: MapId,
+    ledger: _MtMoonTraversalLedger,
+) -> RawGameState:
+    """Retain the historical waits without losing closed-loop cave receipts."""
+
+    wait_by_step: Mapping[int, int] = dict(waits)
+    if len(wait_by_step) != len(waits) or any(
+        step < 1 or step > len(directions) for step in wait_by_step
+    ):
+        raise CeruleanChapterError(f"{label} has an invalid deterministic wait schedule.")
+    state = reader.read()
+    for step, direction in enumerate(directions, start=1):
+        if step in wait_by_step:
+            _wait(executor, wait_by_step[step])
+        state = _move_mt_moon(
+            executor,
+            reader,
+            (direction,),
+            f"{label} step {step}",
+            expected_map_id=expected_map_id,
+            ledger=ledger,
+        )
+    return state
+
+
 def _capture_mt_moon_zubat(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: CeruleanTiming,
+    ledger: _MtMoonTraversalLedger,
 ) -> tuple[tuple[Route1WildFleeEvidence, ...], int, int]:
     """Catch the pinned level-seven Zubat with the sole Poké Ball."""
 
     _wait(executor, MT_MOON_ZUBAT_SEED_WAIT)
-    _move(executor, reader, MT_MOON_1F_DIRECTIONS[:3], "Mt. Moon Zubat approach")
+    _move_mt_moon(
+        executor,
+        reader,
+        MT_MOON_1F_DIRECTIONS[:3],
+        "Mt. Moon Zubat approach",
+        expected_map_id=MapId.MT_MOON_1F,
+        ledger=ledger,
+    )
     encounter, search_flees, movement_retries, search_attempts = _seek_mt_moon_zubat(
         executor,
         reader,
     )
+    if len(search_flees) > ledger.remaining_flees:
+        raise CeruleanChapterError("Mt. Moon Zubat search exhausted the cave-wide flee budget.")
+    ledger.flees.extend(search_flees)
+    ledger.movement_retries += movement_retries
     if (
         encounter.map_id != MapId.MT_MOON_1F
         or encounter.battle_state != 1
@@ -1086,7 +1213,10 @@ def _capture_mt_moon_zubat(
             "Mt. Moon Zubat route rejoin",
             expected_map_id=MapId.MT_MOON_1F,
             route_name="Mt. Moon",
-            maximum_flees=MT_MOON_ZUBAT_SEARCH_MAX_FLEES - len(search_flees),
+            maximum_flees=min(
+                MT_MOON_ZUBAT_SEARCH_MAX_FLEES - len(search_flees),
+                ledger.remaining_flees,
+            ),
             stabilization_frames=ROUTE_3_WILD_STABILIZATION_FRAMES,
             maximum_step_attempts=ROUTE_3_MAX_STEP_ATTEMPTS,
             step_retry_wait_frames=ROUTE_3_STEP_RETRY_WAIT_FRAMES,
@@ -1094,6 +1224,8 @@ def _capture_mt_moon_zubat(
         )
         search_flees += return_flees
         movement_retries += return_retries
+        ledger.flees.extend(return_flees)
+        ledger.movement_retries += return_retries
     _expect_position(reader.read(), MapId.MT_MOON_1F, 14, 31, "Mt. Moon Zubat route rejoin")
     return search_flees, search_attempts, movement_retries
 
@@ -1179,6 +1311,7 @@ def _collect_mt_moon_tm01(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: CeruleanTiming,
+    ledger: _MtMoonTraversalLedger,
 ) -> None:
     """Collect TM01 from its legal side room and return to the exact route tile."""
 
@@ -1188,15 +1321,43 @@ def _collect_mt_moon_tm01(
         raise CeruleanChapterError("TM01 detour has an invalid starting gate.")
 
     _wait(executor, 1)
-    _move(executor, reader, ("right",), "TM01 B1F warp")
+    _move_mt_moon(
+        executor,
+        reader,
+        ("right",),
+        "TM01 B1F warp",
+        expected_map_id=MapId.MT_MOON_1F,
+        ledger=ledger,
+    )
     _wait(executor, timing.transition_wait_frames)
     _expect_position(reader.read(), MapId.MT_MOON_B1F, 25, 9, "TM01 B1F landing")
-    _move(executor, reader, _directions("DDL"), "TM01 B1F approach")
+    _move_mt_moon(
+        executor,
+        reader,
+        _directions("DDL"),
+        "TM01 B1F approach",
+        expected_map_id=MapId.MT_MOON_B1F,
+        ledger=ledger,
+    )
     _wait(executor, 1)
-    _move(executor, reader, _directions("L" * 7), "TM01 B2F warp")
+    _move_mt_moon(
+        executor,
+        reader,
+        _directions("L" * 7),
+        "TM01 B2F warp",
+        expected_map_id=MapId.MT_MOON_B1F,
+        ledger=ledger,
+    )
     _wait(executor, timing.transition_wait_frames)
     _expect_position(reader.read(), MapId.MT_MOON_B2F, 25, 9, "TM01 B2F landing")
-    _move(executor, reader, _directions("U" + "R" * 3 + "U" * 3), "TM01 pickup approach")
+    _move_mt_moon(
+        executor,
+        reader,
+        _directions("U" + "R" * 3 + "U" * 3),
+        "TM01 pickup approach",
+        expected_map_id=MapId.MT_MOON_B2F,
+        ledger=ledger,
+    )
     _expect_position(reader.read(), MapId.MT_MOON_B2F, 28, 5, "TM01 pickup stance")
     _move(executor, reader, ("right",), "TM01 pickup facing")
     chapter_faced = reader.read()
@@ -1215,17 +1376,52 @@ def _collect_mt_moon_tm01(
         or not _toggleable_object_flag(emulator, 0x70)
     ):
         raise CeruleanChapterError("TM01 pickup failed its item-and-toggle gate.")
-    _move(executor, reader, ("right",), "TM01 removed-object proof")
+    _move_mt_moon(
+        executor,
+        reader,
+        ("right",),
+        "TM01 removed-object proof",
+        expected_map_id=MapId.MT_MOON_B2F,
+        ledger=ledger,
+    )
     _expect_position(reader.read(), MapId.MT_MOON_B2F, 29, 5, "TM01 former object tile")
-    _move(executor, reader, ("left",), "TM01 pickup realignment")
+    _move_mt_moon(
+        executor,
+        reader,
+        ("left",),
+        "TM01 pickup realignment",
+        expected_map_id=MapId.MT_MOON_B2F,
+        ledger=ledger,
+    )
 
-    _move(executor, reader, _directions("D" * 3 + "L" * 3 + "D"), "TM01 B1F return")
+    _move_mt_moon(
+        executor,
+        reader,
+        _directions("D" * 3 + "L" * 3 + "D"),
+        "TM01 B1F return",
+        expected_map_id=MapId.MT_MOON_B2F,
+        ledger=ledger,
+    )
     _wait(executor, timing.transition_wait_frames)
     _expect_position(reader.read(), MapId.MT_MOON_B1F, 17, 11, "TM01 B1F return")
-    _move(executor, reader, _directions("R" * 8 + "U" * 2), "TM01 1F return")
+    _move_mt_moon(
+        executor,
+        reader,
+        _directions("R" * 8 + "U" * 2),
+        "TM01 1F return",
+        expected_map_id=MapId.MT_MOON_B1F,
+        ledger=ledger,
+    )
     _wait(executor, timing.transition_wait_frames)
     _expect_position(reader.read(), MapId.MT_MOON_1F, 17, 11, "TM01 1F return")
-    _move(executor, reader, ("left",), "TM01 route rejoin")
+    _move_mt_moon(
+        executor,
+        reader,
+        ("left",),
+        "TM01 route rejoin",
+        expected_map_id=MapId.MT_MOON_1F,
+        ledger=ledger,
+    )
     _expect_position(reader.read(), MapId.MT_MOON_1F, 16, 11, "TM01 route rejoin")
 
 

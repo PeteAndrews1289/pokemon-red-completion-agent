@@ -317,6 +317,8 @@ def _report() -> CeruleanChapterReport:
         mt_moon_zubat_search_flees=(),
         mt_moon_zubat_search_attempts=1,
         mt_moon_zubat_movement_retries=0,
+        mt_moon_wild_flees=(),
+        mt_moon_movement_retries=0,
         rocket_battle_evidence=rocket_battle_evidence,
         rocket_victory_evidence=rocket_victory_evidence,
         super_nerd_battle_evidence=nerd_battle_evidence,
@@ -933,6 +935,8 @@ def test_cerulean_report_is_complete_honest_and_privacy_safe() -> None:
         "zubat_search_attempts": 1,
         "zubat_movement_retries": 0,
         "zubat_search_flees": [],
+        "wild_flees": [],
+        "movement_retries": 0,
     }
     assert public["cerulean"] == {
         "arrival_verified": True,
