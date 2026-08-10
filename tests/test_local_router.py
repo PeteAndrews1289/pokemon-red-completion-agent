@@ -8,6 +8,7 @@ from pokemon_red_completion.local_router import (
     LocalRouterError,
     find_local_path,
     find_nearest_transition,
+    without_coordinates,
 )
 
 
@@ -24,6 +25,22 @@ def test_a_local_path_retains_the_exact_actions_selected() -> None:
     assert path.coordinates == ((0, 0), (0, 1), (0, 3))
     assert tuple(edge.action for edge in path.edges) == ("right", "down")
     assert tuple(edge.kind for edge in path.edges) == ("walk", "ledge")
+
+
+def test_a_live_blocker_removes_both_entry_and_exit_edges() -> None:
+    graph = LocalGraph(
+        {
+            (0, 0): (LocalEdge((0, 1), action="right"),),
+            (0, 1): (LocalEdge((0, 0), action="left"), LocalEdge((0, 2), action="right")),
+            (0, 2): (LocalEdge((0, 1), action="left"),),
+        }
+    )
+
+    filtered = without_coordinates(graph, {(0, 1)})
+
+    assert (0, 1) not in filtered.edges
+    assert filtered.neighbors((0, 0)) == ()
+    assert filtered.neighbors((0, 2)) == ()
 
 
 def test_missing_capability_closes_an_edge_instead_of_becoming_a_fallback() -> None:

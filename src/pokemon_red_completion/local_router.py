@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import heapq
-from collections.abc import Mapping
+from collections.abc import Collection, Mapping
 from dataclasses import dataclass
 
 Coordinate = tuple[int, int]
@@ -60,6 +60,26 @@ class PlannedTransition:
 
     approach: LocalPath
     transition: LocalEdge
+
+
+def without_coordinates(
+    graph: LocalGraph,
+    blocked: Collection[Coordinate],
+) -> LocalGraph:
+    """Return a graph that neither enters nor leaves currently blocked squares."""
+
+    unavailable = frozenset(blocked)
+    if not unavailable:
+        return graph
+    return LocalGraph(
+        {
+            source: tuple(
+                edge for edge in outgoing if edge.target not in unavailable
+            )
+            for source, outgoing in graph.edges.items()
+            if source not in unavailable
+        }
+    )
 
 
 def find_local_path(

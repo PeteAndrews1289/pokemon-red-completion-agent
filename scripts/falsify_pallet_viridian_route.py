@@ -1,4 +1,4 @@
-"""Try to disprove a fully composed Pallet-to-Viridian-Center route live.
+"""Try to disprove a closed-loop Pallet-to-Viridian route live.
 
 The qualified opening and Oak's-errand teachers establish a post-Pokédex state
 and exit the lab. From the resulting Pallet coordinate onward, no authored
@@ -8,7 +8,11 @@ indices, terrain and traversal rules produce every movement and arrival.
 Usage::
 
     POKEMON_RED_ROM=<path> python scripts/falsify_pallet_viridian_route.py \
-        --out docs/evidence/<name>.json
+        --destination center --out docs/evidence/<name>.json
+
+``--inject-first-step-blocker`` is an explicitly artificial fault used to
+prove that repeated unacknowledged movement causes a new cartridge-derived
+plan. It is evidence about recovery authority, not evidence of a live NPC.
 """
 
 from __future__ import annotations
@@ -17,6 +21,7 @@ import argparse
 import hashlib
 import json
 import sys
+from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 
@@ -35,13 +40,16 @@ from pokemon_red_completion.gen1_maps import (  # noqa: E402
     macro_graph_from_nodes,
     map_graph,
 )
+from pokemon_red_completion.gen1_route_runtime import (  # noqa: E402
+    Gen1TraversalObserver,
+    Gen1WildFleeHandler,
+)
 from pokemon_red_completion.gen1_terrain import walkable_world  # noqa: E402
 from pokemon_red_completion.gen1_traversal import (  # noqa: E402
     local_graph,
     map_object_events,
     traversal_rules,
 )
-from pokemon_red_completion.global_router import find_macro_path  # noqa: E402
 from pokemon_red_completion.observation import MapId, PokemonRedStateReader  # noqa: E402
 from pokemon_red_completion.opening import run_opening_chapter  # noqa: E402
 from pokemon_red_completion.pewter import (  # noqa: E402
@@ -60,15 +68,51 @@ from pokemon_red_completion.provenance import (  # noqa: E402
     require_clean_source,
 )
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom  # noqa: E402
-from pokemon_red_completion.route_1_wild import (  # noqa: E402
-    Route1WildFleeEvidence,
-    move_route_1_with_wild_flees,
+from pokemon_red_completion.route_executor import (  # noqa: E402
+    ReplanRequest,
+    RouteExecutionLimits,
+    RouteExecutionReport,
+    TraversalSnapshot,
+    execute_route,
 )
-from pokemon_red_completion.route_plan import RoutePlan, compose_route  # noqa: E402
+from pokemon_red_completion.route_plan import RoutePlan, plan_route  # noqa: E402
 
 
 class PalletViridianRouteProbeError(RuntimeError):
     """Raised when live play disagrees with the composed route."""
+
+
+DESTINATIONS = {
+    "center": MapId.VIRIDIAN_POKECENTER,
+    "mart": MapId.VIRIDIAN_MART,
+}
+
+
+@dataclass(slots=True)
+class FirstStepBlockerInjector:
+    """Suppress a disclosed movement so the live executor must replan."""
+
+    delegate: CountingExecutor
+    observer: Gen1TraversalObserver
+    source: TraversalSnapshot
+    direction: str
+    remaining: int
+    suppressed: int = 0
+
+    def execute(self, action: MacroAction) -> object:
+        current = self.observer.observe()
+        if (
+            self.remaining > 0
+            and action.kind is MacroActionKind.MOVE
+            and action.value == self.direction
+            and current.interruption is None
+            and current.map_id == self.source.map_id
+            and current.at == self.source.at
+        ):
+            self.remaining -= 1
+            self.suppressed += 1
+            return action
+        return self.delegate.execute(action)
 
 
 def _artifact_identity(path: Path) -> tuple[bool, str | None]:
@@ -113,11 +157,65 @@ def _public_plan(plan: RoutePlan) -> dict[str, object]:
     }
 
 
+def _public_execution(report: RouteExecutionReport) -> dict[str, object]:
+    return {
+        "passed": report.passed,
+        "movement_requests": report.movement_requests,
+        "wait_actions": report.wait_actions,
+        "acknowledged_steps": len(report.executed_steps),
+        "steps": [
+            {
+                "source_map_id": receipt.step.source_map,
+                "source_yx": list(receipt.step.source_at),
+                "action": receipt.step.action,
+                "expected_map_id": receipt.step.expected_map,
+                "expected_yx": list(receipt.step.expected_at),
+                "kind": receipt.step.kind,
+                "movement_requests": receipt.movement_requests,
+                "interruption_count": receipt.interruption_count,
+            }
+            for receipt in report.executed_steps
+        ],
+        "interruptions": [
+            {
+                "kind": receipt.kind,
+                "resumed_map_id": receipt.resumed_map,
+                "resumed_yx": list(receipt.resumed_at),
+                "details": dict(receipt.details),
+            }
+            for receipt in report.interruptions
+        ],
+        "replans": [
+            {
+                "ordinal": receipt.ordinal,
+                "map_id": receipt.map_id,
+                "at_yx": list(receipt.at),
+                "newly_blocked_yx": list(receipt.newly_blocked),
+                "replacement_steps": receipt.replacement_steps,
+            }
+            for receipt in report.replans
+        ],
+        "terminal_map_id": report.terminal.map_id,
+        "terminal_yx": list(report.terminal.at),
+        "terminal_ready": report.terminal.ready,
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--recorded-on", default=date.today().isoformat())
+    parser.add_argument(
+        "--destination",
+        choices=tuple(DESTINATIONS),
+        default="center",
+    )
+    parser.add_argument(
+        "--inject-first-step-blocker",
+        action="store_true",
+        help="suppress two first-step inputs to force a disclosed live replan",
+    )
     args = parser.parse_args(argv)
 
     rom_path = resolve_rom_path(args.rom)
@@ -138,21 +236,25 @@ def main(argv: list[str] | None = None) -> int:
     macro = macro_graph_from_nodes(maps)
     world = walkable_world(rom)
     rules = traversal_rules(rom, maps)
-    macro_path = find_macro_path(
-        macro,
-        MapId.PALLET_TOWN.value,
-        MapId.VIRIDIAN_POKECENTER.value,
-    )
+    destination = DESTINATIONS[args.destination]
     local_graphs = {
         map_id: local_graph(
-            world[map_id],
+            terrain,
             rules,
             blocked={event.at for event in map_object_events(rom, {map_id})},
         )
-        for map_id in macro_path.maps[:-1]
+        for map_id, terrain in world.items()
     }
     start_yx = (12, 12)
-    plan = compose_route(macro, macro_path, local_graphs, start_yx)
+    plan = plan_route(
+        macro,
+        local_graphs,
+        MapId.PALLET_TOWN.value,
+        start_yx,
+        destination.value,
+    )
+    if not plan.steps:
+        raise PalletViridianRouteProbeError("the composed route contains no movement")
     before_artifacts = _adjacent_artifacts(rom_path)
 
     timing = DEFAULT_PEWTER_TIMING
@@ -188,63 +290,53 @@ def main(argv: list[str] | None = None) -> int:
             start_yx[0],
             "composed-route Pallet start",
         )
-        actions_before_plan = executor.actions_executed
-        wild_flees: tuple[Route1WildFleeEvidence, ...] = ()
-        movement_retries = 0
-        live_arrivals: list[dict[str, object]] = []
+        observer = Gen1TraversalObserver(reader)
+        route_actions: CountingExecutor | FirstStepBlockerInjector = executor
+        limits = RouteExecutionLimits(
+            max_step_attempts=timing.max_route_1_step_attempts,
+            max_interruptions=timing.max_route_1_wild_flees,
+            replan_after_unchanged=2,
+            retry_wait_frames=timing.route_1_step_retry_wait_frames,
+            transition_settle_frames=timing.transition_wait_frames,
+        )
+        injected_blocker: FirstStepBlockerInjector | None = None
+        if args.inject_first_step_blocker:
+            first = plan.steps[0]
+            injected_blocker = FirstStepBlockerInjector(
+                executor,
+                observer,
+                TraversalSnapshot(first.source_map, first.source_at, True),
+                first.action,
+                limits.replan_after_unchanged,
+            )
+            route_actions = injected_blocker
+        wild_handler = Gen1WildFleeHandler(
+            route_actions,
+            reader,
+            maximum_flees=timing.max_route_1_wild_flees,
+            stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
+            route_name="closed-loop Pallet-to-Viridian route",
+        )
 
-        for segment in plan.segments:
-            actions = segment.actions
-            if segment.source_map == MapId.ROUTE_1.value:
-                _wait(executor, timing.route_1_seed_wait_frames)
-                _, wild_flees, movement_retries = move_route_1_with_wild_flees(
-                    executor,
-                    reader,
-                    actions,
-                    "cartridge-composed Route 1 segment",
-                    maximum_flees=timing.max_route_1_wild_flees,
-                    stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
-                    maximum_step_attempts=timing.max_route_1_step_attempts,
-                    step_retry_wait_frames=timing.route_1_step_retry_wait_frames,
-                    error_type=PalletViridianRouteProbeError,
-                )
-            else:
-                for index, action in enumerate(actions, start=1):
-                    executor.execute(MacroAction(MacroActionKind.MOVE, action))
-                    if index == len(actions):
-                        continue
-                    expected_y, expected_x = segment.approach.coordinates[index]
-                    observed = reader.read()
-                    if (
-                        observed.map_id != segment.source_map
-                        or observed.battle_state != 0
-                        or (observed.player_y, observed.player_x)
-                        != (expected_y, expected_x)
-                    ):
-                        raise PalletViridianRouteProbeError(
-                            f"map {segment.source_map} diverged at composed action {index}"
-                        )
-
-            _wait(executor, timing.transition_wait_frames)
-            arrived = reader.read()
-            expected_y, expected_x = segment.transition.arrival_at
-            if (
-                arrived.map_id != segment.target_map
-                or arrived.battle_state != 0
-                or (arrived.player_y, arrived.player_x) != (expected_y, expected_x)
-            ):
-                raise PalletViridianRouteProbeError(
-                    f"transition {segment.source_map}->{segment.target_map} missed "
-                    f"its decoded arrival {(expected_y, expected_x)}"
-                )
-            live_arrivals.append(
-                {
-                    "map": MapId(segment.target_map).name,
-                    "map_id": segment.target_map,
-                    "yx": [arrived.player_y, arrived.player_x],
-                }
+        def replan(request: ReplanRequest) -> RoutePlan:
+            return plan_route(
+                macro,
+                local_graphs,
+                request.current.map_id,
+                request.current.at,
+                request.goal_map,
+                blocked=request.blocked,
             )
 
+        actions_before_plan = executor.actions_executed
+        report = execute_route(
+            plan,
+            route_actions,
+            observer,
+            interruption_handler=wild_handler,
+            replanner=replan,
+            limits=limits,
+        )
         final = reader.read()
         plan_actions_executed = executor.actions_executed - actions_before_plan
         frames_executed = emulator.frame_count
@@ -257,7 +349,7 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     payload = {
-        "schema": "pallet-viridian-composed-route-probe-v1",
+        "schema": "pallet-viridian-closed-loop-route-probe-v2",
         "recorded_on": args.recorded_on,
         "status": "ok",
         "rom": fingerprint.public_dict(),
@@ -270,14 +362,29 @@ def main(argv: list[str] | None = None) -> int:
         "authority_under_test": (
             "From the Pallet start onward, cartridge map headers, exact connection "
             "geometry, destination warp indices, terrain and traversal rules supplied "
-            "the complete multi-map route. Live memory checked every non-wild local "
-            "step and every cross-map arrival; the bounded Route 1 runtime checked "
-            "movement consumption and incidental wild exits."
+            "the multi-map route. A game-neutral executor required live acknowledgement "
+            "for every requested movement, bounded readiness and retries, delegated "
+            "authenticated wild exits, and could replace its route around newly observed "
+            "blockers."
         ),
+        "destination": args.destination,
         "plan": _public_plan(plan),
-        "live_arrivals": live_arrivals,
-        "wild_flees": [flee.public_dict() for flee in wild_flees],
-        "movement_retries": movement_retries,
+        "execution": _public_execution(report),
+        "fault_injection": {
+            "enabled": args.inject_first_step_blocker,
+            "kind": "suppressed movement requests" if injected_blocker else None,
+            "source_map_id": plan.steps[0].source_map if injected_blocker else None,
+            "source_yx": list(plan.steps[0].source_at) if injected_blocker else None,
+            "blocked_yx": list(plan.steps[0].expected_at) if injected_blocker else None,
+            "direction": plan.steps[0].action if injected_blocker else None,
+            "suppressed_requests": injected_blocker.suppressed if injected_blocker else 0,
+            "disclosure": (
+                "Artificial fault for causal recovery testing; not a naturally observed NPC."
+                if injected_blocker
+                else None
+            ),
+        },
+        "wild_flees": [flee.public_dict() for flee in wild_handler.evidence],
         "final_map": {"id": int(final.map_id), "name": MapId(final.map_id).name},
         "final_yx": [final.player_y, final.player_x],
         "planned_actions": len(plan.actions),
@@ -289,8 +396,9 @@ def main(argv: list[str] | None = None) -> int:
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     print(
-        f"wrote {args.out}: {len(plan.actions)} composed actions, "
-        f"{len(wild_flees)} wild flees, entered Viridian Pokémon Center"
+        f"wrote {args.out}: {len(plan.actions)} initial actions, "
+        f"{len(report.executed_steps)} acknowledged steps, "
+        f"{len(report.replans)} replans, entered {destination.name}"
     )
     return 0
 

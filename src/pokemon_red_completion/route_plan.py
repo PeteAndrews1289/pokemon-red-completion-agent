@@ -22,17 +22,45 @@ from pokemon_red_completion.global_router import (
     MacroGraph,
     MacroPath,
     MacroTransition,
+    find_macro_path,
 )
 from pokemon_red_completion.local_router import (
     LocalGraph,
     LocalPath,
     LocalRouterError,
     find_local_path,
+    without_coordinates,
 )
 
 
 class RoutePlanningError(RuntimeError):
     """Raised when a map path cannot be turned into truthful actions."""
+
+
+@dataclass(frozen=True, slots=True)
+class RouteStep:
+    """One requested movement and the exact state that acknowledges it."""
+
+    source_map: int
+    source_at: Coordinate
+    action: str
+    expected_map: int
+    expected_at: Coordinate
+    kind: str
+
+    def __post_init__(self) -> None:
+        if not self.action:
+            raise ValueError("a route step needs an action")
+        if not self.kind:
+            raise ValueError("a route step needs a transition kind")
+
+    @property
+    def stays_on_map(self) -> bool:
+        return self.source_map == self.expected_map
+
+    @property
+    def can_discover_blocker(self) -> bool:
+        return self.kind == "walk" and self.stays_on_map
 
 
 @dataclass(frozen=True, slots=True)
@@ -43,11 +71,14 @@ class RouteSegment:
     target_map: int
     approach: LocalPath
     transition: MacroTransition
+    passage_kind: str
     #: Stepping onto a warp is itself the transition. Connections instead need
     #: one extra action after reaching the border coordinate.
     transition_action_in_approach: bool
 
     def __post_init__(self) -> None:
+        if not self.passage_kind:
+            raise ValueError("a route segment needs a passage kind")
         if self.approach.coordinates[-1] != self.transition.exit_at:
             raise ValueError("a route segment's approach must end at its transition")
         if self.transition_action_in_approach:
@@ -78,10 +109,54 @@ class RoutePlan:
             raise ValueError("a route plan needs one segment per macro edge")
         if self.segments and self.segments[0].approach.coordinates[0] != self.start_at:
             raise ValueError("the first segment must begin at the route start")
+        for previous, following in zip(self.segments, self.segments[1:], strict=False):
+            if previous.transition.arrival_at != following.approach.coordinates[0]:
+                raise ValueError("adjacent route segments must share an arrival coordinate")
 
     @property
     def actions(self) -> tuple[str, ...]:
-        return tuple(action for segment in self.segments for action in segment.actions)
+        return tuple(step.action for step in self.steps)
+
+    @property
+    def steps(self) -> tuple[RouteStep, ...]:
+        """Flatten local edges and passages into live acknowledgement contracts."""
+
+        steps: list[RouteStep] = []
+        for segment in self.segments:
+            coordinates = segment.approach.coordinates
+            for index, edge in enumerate(segment.approach.edges):
+                triggers_passage = (
+                    segment.transition_action_in_approach
+                    and index == len(segment.approach.edges) - 1
+                )
+                steps.append(
+                    RouteStep(
+                        source_map=segment.source_map,
+                        source_at=coordinates[index],
+                        action=edge.action,
+                        expected_map=(
+                            segment.target_map if triggers_passage else segment.source_map
+                        ),
+                        expected_at=(
+                            segment.transition.arrival_at
+                            if triggers_passage
+                            else edge.target
+                        ),
+                        kind=segment.passage_kind if triggers_passage else edge.kind,
+                    )
+                )
+            if not segment.transition_action_in_approach:
+                steps.append(
+                    RouteStep(
+                        source_map=segment.source_map,
+                        source_at=segment.transition.exit_at,
+                        action=segment.transition.action,
+                        expected_map=segment.target_map,
+                        expected_at=segment.transition.arrival_at,
+                        kind=segment.passage_kind,
+                    )
+                )
+        return tuple(steps)
 
     @property
     def terminal_map(self) -> int:
@@ -137,6 +212,7 @@ def compose_route(
                 target_map=target_map,
                 approach=approach,
                 transition=transition,
+                passage_kind=edge.kind,
                 transition_action_in_approach=action_in_approach,
             )
         )
@@ -146,6 +222,39 @@ def compose_route(
         start_at=start_at,
         segments=tuple(segments),
         terminal_at=current_at,
+    )
+
+
+def plan_route(
+    graph: MacroGraph,
+    local_graphs: Mapping[int, LocalGraph],
+    start_map: int,
+    start_at: Coordinate,
+    goal_map: int,
+    *,
+    blocked: Mapping[int, frozenset[Coordinate]] | None = None,
+    capabilities: frozenset[str] = frozenset(),
+    last_outside: int | None = None,
+) -> RoutePlan:
+    """Search both routing layers while excluding currently observed blockers."""
+
+    unavailable = {} if blocked is None else blocked
+    projected = {
+        map_id: without_coordinates(local, unavailable.get(map_id, frozenset()))
+        for map_id, local in local_graphs.items()
+    }
+    macro_path = find_macro_path(
+        graph,
+        start_map,
+        goal_map,
+        last_outside=last_outside,
+    )
+    return compose_route(
+        graph,
+        macro_path,
+        projected,
+        start_at,
+        capabilities=capabilities,
     )
 
 

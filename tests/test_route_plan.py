@@ -9,7 +9,7 @@ from pokemon_red_completion.global_router import (
     MacroTransition,
 )
 from pokemon_red_completion.local_router import LocalEdge, LocalGraph
-from pokemon_red_completion.route_plan import RoutePlanningError, compose_route
+from pokemon_red_completion.route_plan import RoutePlanningError, compose_route, plan_route
 
 
 def line(*coordinates: tuple[int, int]) -> LocalGraph:
@@ -46,6 +46,11 @@ def test_a_connection_selects_a_reachable_exact_endpoint() -> None:
     assert plan.segments[0].transition == reachable
     assert plan.terminal_at == (7, 2)
     assert plan.terminal_map == 2
+    assert [(step.kind, step.expected_map, step.expected_at) for step in plan.steps] == [
+        ("walk", 1, (1, 2)),
+        ("walk", 1, (0, 2)),
+        ("connection", 2, (7, 2)),
+    ]
 
 
 def test_stepping_onto_a_warp_is_not_duplicated_as_an_extra_action() -> None:
@@ -62,6 +67,9 @@ def test_stepping_onto_a_warp_is_not_duplicated_as_an_extra_action() -> None:
     assert plan.actions == ("right", "right")
     assert plan.terminal_at == (7, 3)
     assert plan.segments[0].transition_action_in_approach
+    assert plan.steps[-1].kind == "warp"
+    assert plan.steps[-1].source_at == (0, 1)
+    assert plan.steps[-1].expected_at == (7, 3)
 
 
 def test_a_return_resolves_its_arrival_after_its_map_target() -> None:
@@ -98,3 +106,34 @@ def test_composition_refuses_to_invent_how_to_retrigger_a_warp() -> None:
             {1: line((0, 0), (0, 1))},
             (0, 0),
         )
+
+
+def test_a_live_blocker_changes_the_composed_local_approach() -> None:
+    transition = MacroTransition((0, 2), (7, 2), "up")
+    macro = MacroGraph({1: (MacroEdge(2, coordinate_transitions=(transition,)),)})
+    local = LocalGraph(
+        {
+            (0, 0): (
+                LocalEdge((0, 1), action="right"),
+                LocalEdge((1, 0), action="down"),
+            ),
+            (0, 1): (LocalEdge((0, 2), action="right"),),
+            (1, 0): (LocalEdge((1, 1), action="right"),),
+            (1, 1): (LocalEdge((1, 2), action="right"),),
+            (1, 2): (LocalEdge((0, 2), action="up"),),
+            (0, 2): (),
+        }
+    )
+
+    original = plan_route(macro, {1: local}, 1, (0, 0), 2)
+    replanned = plan_route(
+        macro,
+        {1: local},
+        1,
+        (0, 0),
+        2,
+        blocked={1: frozenset({(0, 1)})},
+    )
+
+    assert original.actions == ("right", "right", "up")
+    assert replanned.actions == ("down", "right", "right", "up", "up")
