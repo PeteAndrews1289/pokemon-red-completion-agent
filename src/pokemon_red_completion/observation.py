@@ -54,6 +54,7 @@ class RamAddress(IntEnum):
     BATTLE_RESULT = 0xCF0B
     SHOP_SELECTED_ITEM = 0xCF91
     SHOP_QUANTITY = 0xCF96
+    WALK_COUNTER = 0xCFC5
     TILE_IN_FRONT_OF_PLAYER = 0xCFC6
     ENEMY_SPECIES = 0xCFE5
     ENEMY_HP = 0xCFE6
@@ -1257,6 +1258,7 @@ class InputReadiness:
     player_moving_direction: int
     status_flags_5: int
     movement_flags: int = 0
+    walk_counter: int = 0
 
     @property
     def ready(self) -> bool:
@@ -1267,6 +1269,7 @@ class InputReadiness:
             and self.player_moving_direction == 0
             and not bool(self.status_flags_5 & SCRIPTED_MOVEMENT_STATUS_MASK)
             and not bool(self.movement_flags & EXITING_DOOR_MOVEMENT_MASK)
+            and self.walk_counter == 0
         )
 
 
@@ -3921,6 +3924,7 @@ class PokemonRedStateReader:
             player_moving_direction=self._memory.read_u8(RamAddress.PLAYER_MOVING_DIRECTION),
             status_flags_5=self._memory.read_u8(RamAddress.STATUS_FLAGS_5),
             movement_flags=self._memory.read_u8(RamAddress.MOVEMENT_FLAGS),
+            walk_counter=self._memory.read_u8(RamAddress.WALK_COUNTER),
         )
 
     def read_overworld_movement_mode(self) -> OverworldMovementMode:

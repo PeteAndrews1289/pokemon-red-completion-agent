@@ -1089,7 +1089,9 @@ def test_reader_encapsulates_the_exact_input_readiness_symbols() -> None:
         RamAddress.PLAYER_MOVING_DIRECTION,
         RamAddress.STATUS_FLAGS_5,
         RamAddress.MOVEMENT_FLAGS,
+        RamAddress.WALK_COUNTER,
     ]
+    assert RamAddress.WALK_COUNTER == 0xCFC5
     assert SCRIPTED_MOVEMENT_STATUS_MASK == 0xA1
     assert EXITING_DOOR_MOVEMENT_MASK == 0x02
 
@@ -1133,6 +1135,7 @@ def test_reader_refuses_an_unknown_overworld_movement_mode() -> None:
         ("status_flags_5", 1 << 5),
         ("status_flags_5", 1 << 7),
         ("movement_flags", EXITING_DOOR_MOVEMENT_MASK),
+        ("walk_counter", 1),
     ),
 )
 def test_input_readiness_rejects_each_blocking_field(
