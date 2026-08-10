@@ -870,6 +870,15 @@ pokemon-red-completion play \
   --allow-model-disagreement \
   --require-teacher-free-battle
 
+# Collect one authenticated full-game control lineage under the exact portable
+# initial-wait and battle-offset perturbation used by learned-stack evaluation:
+python scripts/run_portable_clean_start.py \
+  --objective-model /absolute/private/objective-model-artifact \
+  --battle-model /absolute/private/battle-model-artifact/model.jsonl \
+  --allow-model-disagreement \
+  --battle-control-root /absolute/private/trajectory-directory \
+  --diagnostic-seed 990026
+
 # One-time setup for an existing directory on a separate private volume:
 pokemon-red-completion private-data init --private-root /absolute/private/trajectory-directory
 

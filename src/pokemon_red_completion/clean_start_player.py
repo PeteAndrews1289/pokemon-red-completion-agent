@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from contextlib import ExitStack, nullcontext
 from dataclasses import dataclass
 from pathlib import Path
@@ -258,7 +258,9 @@ def run_portable_clean_start(
     execute_battle_switch_target_model: bool = False,
     battle_confidence_threshold: float = 0.0,
     battle_control_confidence_threshold: float = 0.0,
+    allow_battle_model_disagreement: bool = False,
     require_teacher_free_battle: bool = False,
+    battle_control_sink: Callable[[Mapping[str, object]], None] | None = None,
     training_control_model: TrainingControlMLP | None = None,
     execute_training_control_model: bool = False,
     training_candidate_model: TrainingCandidateMLP | None = None,
@@ -283,6 +285,12 @@ def run_portable_clean_start(
         raise ValueError("battle-control inference requires a battle move model")
     if require_teacher_free_battle and battle_model is None:
         raise ValueError("teacher-free battle evaluation requires a battle model")
+    if battle_control_sink is not None and battle_model is None:
+        raise ValueError("battle-control label collection requires a battle model")
+    if battle_control_sink is not None and not allow_battle_model_disagreement:
+        raise ValueError("battle-control label collection requires model disagreement authority")
+    if require_teacher_free_battle and battle_control_sink is not None:
+        raise ValueError("teacher-free battle evaluation cannot collect teacher labels")
     if execute_training_control_model and training_control_model is None:
         raise ValueError("training-control execution requires a training-control model")
     if execute_training_candidate_model and training_candidate_model is None:
@@ -315,8 +323,12 @@ def run_portable_clean_start(
                 control_confidence_threshold=battle_control_confidence_threshold,
                 switch_target_model=battle_switch_target_model,
                 execute_switch_target_model=execute_battle_switch_target_model,
-                require_teacher_agreement=not require_teacher_free_battle,
+                require_teacher_agreement=not (
+                    require_teacher_free_battle or allow_battle_model_disagreement
+                ),
+                observe_teacher_when_not_required=battle_control_sink is not None,
                 allow_teacher_queries=not require_teacher_free_battle,
+                control_sink=battle_control_sink,
             )
             stack.enter_context(bind_battle_policy_override(battle_policy))
 

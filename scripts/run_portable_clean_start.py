@@ -6,6 +6,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import uuid
+from contextlib import nullcontext
 from pathlib import Path
 
 from pokemon_red_completion.battle_control_model import load_battle_control_model_artifact
@@ -25,6 +27,7 @@ from pokemon_red_completion.collection_protocol import (
 from pokemon_red_completion.learned_battle_policy import load_battle_model_artifact
 from pokemon_red_completion.planner_model import load_objective_model_artifact
 from pokemon_red_completion.planner_semantics import ObjectiveFeatureProjector
+from pokemon_red_completion.private_artifacts import open_private_root
 from pokemon_red_completion.provenance import (
     canonical_sha256,
     detect_source_identity,
@@ -51,6 +54,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--require-teacher-free-battle", action="store_true")
     parser.add_argument("--battle-confidence-threshold", type=float, default=0.0)
     parser.add_argument("--battle-control-confidence-threshold", type=float, default=0.0)
+    parser.add_argument(
+        "--allow-model-disagreement",
+        action="store_true",
+        help="execute confident battle-model choices while the routed teacher supplies labels",
+    )
+    parser.add_argument(
+        "--battle-control-root",
+        type=Path,
+        help=(
+            "write a complete authenticated high-level control-label lineage to an initialized "
+            "private root; requires --battle-model and --allow-model-disagreement"
+        ),
+    )
     parser.add_argument("--training-control-model", type=Path)
     parser.add_argument("--training-control-model-sha256")
     parser.add_argument("--execute-training-control", action="store_true")
@@ -94,6 +110,12 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--execute-battle-switch-target requires --battle-switch-target-model")
     if args.require_teacher_free_battle and args.battle_model is None:
         parser.error("--require-teacher-free-battle requires --battle-model")
+    if args.battle_control_root is not None and args.battle_model is None:
+        parser.error("--battle-control-root requires --battle-model")
+    if args.battle_control_root is not None and not args.allow_model_disagreement:
+        parser.error("--battle-control-root requires --allow-model-disagreement")
+    if args.require_teacher_free_battle and args.battle_control_root is not None:
+        parser.error("--require-teacher-free-battle cannot collect teacher labels")
     if args.battle_switch_target_model is not None and args.battle_model is None:
         parser.error("--battle-switch-target-model requires --battle-model")
     if args.execute_training_control and args.training_control_model is None:
@@ -197,31 +219,78 @@ def main(argv: list[str] | None = None) -> int:
             else None
         ),
     }
-    try:
-        report = run_portable_clean_start(
-            resolve_rom_path(args.rom),
-            objective_model=objective_model,
-            battle_model=battle_model,
-            battle_control_model=battle_control_model,
-            execute_battle_control_model=args.execute_battle_control,
-            battle_switch_target_model=(
-                battle_switch_target_artifact.model
-                if battle_switch_target_artifact is not None
-                else None
-            ),
-            execute_battle_switch_target_model=args.execute_battle_switch_target,
-            battle_confidence_threshold=args.battle_confidence_threshold,
-            battle_control_confidence_threshold=args.battle_control_confidence_threshold,
-            require_teacher_free_battle=args.require_teacher_free_battle,
-            training_control_model=training_control_model,
-            execute_training_control_model=args.execute_training_control,
-            training_candidate_model=training_candidate_model,
-            execute_training_candidate_model=args.execute_training_candidate,
-            initial_wait_frames=initial_wait_frames,
-            battle_start_offsets=offsets,
-            watch=args.watch,
-            speed=args.speed if args.watch else None,
+    control_writer = None
+    if args.battle_control_root is not None:
+        control_root = open_private_root(
+            args.battle_control_root,
+            repository_root=REPOSITORY_ROOT,
         )
+        control_writer = control_root.begin_artifact(
+            f"red-battle-control-{uuid.uuid4().hex}",
+            kind="battle_control_labels",
+        )
+    try:
+        with control_writer if control_writer is not None else nullcontext():
+            if control_writer is not None:
+                assert battle_model is not None
+                control_writer.append(
+                    "metadata",
+                    {
+                        "record_type": "battle_control_run",
+                        "schema_version": 1,
+                        "model_id": battle_model.model_id,
+                        "model_sha256": hashlib.sha256(
+                            battle_model.to_json().encode("ascii")
+                        ).hexdigest(),
+                        "action_schema": "pokemon.core.battle.action.v1",
+                        "diagnostic_schedule": {
+                            "harness_seed": args.diagnostic_seed,
+                            "initial_wait_frames": initial_wait_frames,
+                            "schedule_sha256": schedule_sha256,
+                            "timing_mode": diagnostic_root["timing_mode"],
+                        },
+                    },
+                )
+            report = run_portable_clean_start(
+                resolve_rom_path(args.rom),
+                objective_model=objective_model,
+                battle_model=battle_model,
+                battle_control_model=battle_control_model,
+                execute_battle_control_model=args.execute_battle_control,
+                battle_switch_target_model=(
+                    battle_switch_target_artifact.model
+                    if battle_switch_target_artifact is not None
+                    else None
+                ),
+                execute_battle_switch_target_model=args.execute_battle_switch_target,
+                battle_confidence_threshold=args.battle_confidence_threshold,
+                battle_control_confidence_threshold=args.battle_control_confidence_threshold,
+                allow_battle_model_disagreement=args.allow_model_disagreement,
+                require_teacher_free_battle=args.require_teacher_free_battle,
+                battle_control_sink=(
+                    (lambda record: control_writer.append("labels", record))
+                    if control_writer is not None
+                    else None
+                ),
+                training_control_model=training_control_model,
+                execute_training_control_model=args.execute_training_control,
+                training_candidate_model=training_candidate_model,
+                execute_training_candidate_model=args.execute_training_candidate,
+                initial_wait_frames=initial_wait_frames,
+                battle_start_offsets=offsets,
+                watch=args.watch,
+                speed=args.speed if args.watch else None,
+            )
+            if control_writer is not None:
+                control_writer.append(
+                    "summary",
+                    {
+                        "record_type": "battle_control_summary",
+                        "schema_version": 1,
+                        "battle_policy": report.battle_policy,
+                        "game_complete": report.passed,
+                    },
+                )
     except Exception as error:
         failure: dict[str, object] = {
             "exception_type": type(error).__name__,
@@ -230,22 +299,22 @@ def main(argv: list[str] | None = None) -> int:
         }
         if isinstance(error, CleanStartPlayerError) and error.evidence is not None:
             failure["evidence"] = error.evidence
-        _emit(
-            {
-                "claim": (
-                    "One uncounted diagnostic root failed closed. It cannot enter or replace "
-                    "the future ten-root campaign."
-                ),
-                "diagnostic_root": diagnostic_root,
-                "failure": failure,
-                "model_identities": model_identities,
-                "promotion_eligible": False,
-                "schema": "pokemon-red-portable-clean-start-rehearsal-v1",
-                "source": source.public_dict(),
-                "status": "failed_uncounted_rehearsal",
-            },
-            args.out,
-        )
+        failure_payload: dict[str, object] = {
+            "claim": (
+                "One uncounted diagnostic root failed closed. It cannot enter or replace "
+                "the future ten-root campaign."
+            ),
+            "diagnostic_root": diagnostic_root,
+            "failure": failure,
+            "model_identities": model_identities,
+            "promotion_eligible": False,
+            "schema": "pokemon-red-portable-clean-start-rehearsal-v1",
+            "source": source.public_dict(),
+            "status": "failed_uncounted_rehearsal",
+        }
+        if control_writer is not None:
+            failure_payload["battle_control_labels"] = control_writer.summary.public_dict()
+        _emit(failure_payload, args.out)
         return 2
     payload = {
         "claim": (
@@ -260,6 +329,8 @@ def main(argv: list[str] | None = None) -> int:
         "source": source.public_dict(),
         "status": "passed_uncounted_rehearsal",
     }
+    if control_writer is not None:
+        payload["battle_control_labels"] = control_writer.summary.public_dict()
     _emit(payload, args.out)
     return 0
 

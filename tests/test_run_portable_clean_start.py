@@ -30,6 +30,40 @@ def test_portable_clean_start_cli_imports_and_exposes_help(
     assert "--diagnostic-seed" in captured.out
     assert "--objective-model" in captured.out
     assert "--baseline-timing" in captured.out
+    assert "--allow-model-disagreement" in captured.out
+    assert "--battle-control-root" in captured.out
+
+
+def test_portable_clean_start_cli_rejects_incomplete_control_collection(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    with pytest.raises(SystemExit) as raised:
+        main([
+            "--objective-model",
+            "private-objective-model",
+            "--diagnostic-seed",
+            "990026",
+            "--battle-control-root",
+            "private-root",
+        ])
+
+    assert raised.value.code == 2
+    assert "--battle-control-root requires --battle-model" in capsys.readouterr().err
+
+    with pytest.raises(SystemExit) as raised:
+        main([
+            "--objective-model",
+            "private-objective-model",
+            "--battle-model",
+            "private-battle-model",
+            "--diagnostic-seed",
+            "990026",
+            "--battle-control-root",
+            "private-root",
+        ])
+
+    assert raised.value.code == 2
+    assert "requires --allow-model-disagreement" in capsys.readouterr().err
 
 
 def test_model_identity_binds_raw_artifact_and_canonical_model(tmp_path: Path) -> None:

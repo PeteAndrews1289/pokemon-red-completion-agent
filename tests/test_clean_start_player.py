@@ -214,6 +214,28 @@ def test_portable_runner_rejects_incomplete_authority_configuration_before_emula
             objective_model=None,  # type: ignore[arg-type]
             require_teacher_free_battle=True,
         )
+    with pytest.raises(ValueError, match="label collection requires a battle model"):
+        run_portable_clean_start(
+            "private.gb",
+            objective_model=None,  # type: ignore[arg-type]
+            battle_control_sink=lambda record: None,
+        )
+    with pytest.raises(ValueError, match="model disagreement authority"):
+        run_portable_clean_start(
+            "private.gb",
+            objective_model=None,  # type: ignore[arg-type]
+            battle_model=object(),  # type: ignore[arg-type]
+            battle_control_sink=lambda record: None,
+        )
+    with pytest.raises(ValueError, match="cannot collect teacher labels"):
+        run_portable_clean_start(
+            "private.gb",
+            objective_model=None,  # type: ignore[arg-type]
+            battle_model=object(),  # type: ignore[arg-type]
+            allow_battle_model_disagreement=True,
+            require_teacher_free_battle=True,
+            battle_control_sink=lambda record: None,
+        )
     with pytest.raises(ValueError, match="training-control execution"):
         run_portable_clean_start(
             "private.gb",
