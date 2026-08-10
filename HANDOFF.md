@@ -44,6 +44,13 @@ never encountered anywhere — each is only ever reached by evolving something t
 the arithmetic of that mistake. `blue_pokedex` no longer describes its table as a stated assumption.
 Record: [acquisition-routes-2026-08-10.json](docs/evidence/acquisition-routes-2026-08-10.json).
 
+**The ten in-game trades are read too, and they are worth four species.** Farfetch'd, Lickitung,
+Mr. Mime and Jynx appear in no wild table, on no rod, and at the end of no evolution — the only way
+one cartridge produces them is by swapping with somebody who lives there. The model had been counting
+all four as unreachable. A lone cartridge reaches **108** species, not 104; with a trade partner,
+112. A trade *spends* a specimen, so both halves are recorded — a collection that must keep one of
+everything needs a second of whatever it hands over.
+
 **The map graph is read, and it is the one that changes the trajectory.** Every chapter module in
 this repository is hand-written walk directions. `gen1_maps.map_graph` reads 220 reachable maps, 78
 edge connections and 917 warps out of the cartridge — identical on both. Header tables were found by
@@ -108,9 +115,18 @@ offset are the same number, so the single read that mattered most could not be t
 layout was symmetric enough that a wrong row stride read the same byte. The no-grass test used a map
 with no `$FF` tile on it. The walk had no diagonal shortcut on offer.
 
-Twelve of twelve and thirteen of thirteen now fail as they should. **If you add a reader here, assume
-your first test suite is decorative until a mutation proves otherwise — and check specifically that
-your fixture is capable of distinguishing the thing you are asserting.**
+Then the trade work left **eight of nine surviving** — all eight source probes, because every test
+read the record. Two further traps showed up in the fix: the fixture wrote entries using the module's
+own stride constant, so changing it changed both sides; and the closure test *reimplemented* the
+growth loop rather than calling it, which agrees with any bug in either copy. The fix for the second
+was to extract `grow_collection` as a pure function taking plain tables.
+
+Twelve of twelve, thirteen of thirteen and nine of nine now fail as they should. **If you add a
+reader here, assume your first test suite is decorative until a mutation proves otherwise.** Three
+specific traps, all of which caught me: a fixture built from the constants under test cannot fail;
+a fixture too symmetric to distinguish a stride cannot fail; and a test that reimplements the logic
+it checks cannot fail. Also clear `__pycache__` between probe runs, or the harness reports false
+survivors.
 
 ## Superseding terminal checkpoint — 2026-08-10
 

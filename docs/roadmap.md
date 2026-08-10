@@ -391,8 +391,10 @@ What is still hand-typed, in order of value:
    not whether the way is *open*. Surf, Cut, Strength, ledges, doors that open on a story flag and
    people standing in the way are all absent. A computed route is therefore a candidate to check
    rather than a plan to run, and this blocks putting routing into a live run.
-2. **Game Corner prizes and in-game trades** — the remaining acquisition routes a living Pokédex
-   needs. Wild tables, rods and evolution are read; gifts, fossils, prizes and trades are not.
+2. **Game Corner prizes, gifts and fossils** — the acquisition routes still unread. Wild tables,
+   rods, evolution and the ten in-game trades are derived; the Game Corner, the gift Pokémon and the
+   two fossils are not. The trades alone were worth four species the model had counted as
+   unreachable, so the remaining routes should be assumed to matter rather than assumed marginal.
 3. **Retiring the hand-written walks** — the chapter modules still press buttons from a script even
    though the grid to compute them from now exists. Nothing consumes `gen1_terrain` yet, so the
    reading has not paid off in behaviour.
