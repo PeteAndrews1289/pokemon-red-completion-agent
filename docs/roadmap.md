@@ -16,19 +16,19 @@ Counted v95 remains 0/10.
 
 Fresh seed `990027` then lost the lab rival before any learned head acted. The published teacher now
 authenticates that legal outcome, preserves it after mutable battle RAM changes, and recovers the
-starter from level five to level six. The official clean-source replay currently stops at the first
-post-recovery Kakuna search. Diagnosis shows why a timing-only patch is insufficient: the recovery
-also changes experience, HP, and damaging PP, and a deeper instrumented probe reached the last
-target with zero Tackle PP. See
+starter from level five to level six. Clean published `c2aeb12` then adapts the Forest suffix to the
+loss branch, completes two more lessons, and fails at 171,585 frames because no safe
+level-four-or-lower third Weedle appears within the bounded single-origin search. Diagnosis shows
+that a level-three Caterpie is safe but slightly short of Bubble, a level-five Weedle reaches Bubble
+at only 3/25 HP while poisoned, and Tail Whip cannot save PP against Harden. See
 [perturbation 13](evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json).
 
 The ordered gates are now:
 
-1. Implement one bounded semantic loss-recovery curriculum from the authenticated post-rival state
-   to level eight and Bubble. Choose prey from observed species, current HP, experience need, and
-   damaging PP rather than replaying the victory route's three fixed Kakuna timings.
-2. If the curriculum uses Tail Whip against high-defense prey, select it only at observed semantic
-   `MAIN` and `MOVE` menu gates and prove the PP decrement before returning to Tackle.
+1. Move only the authenticated-loss catch-up lessons to Route 1's lower-defense Pidgey/Rattata
+   venue; preserve the victory branch byte-for-byte.
+2. Prove a bounded Viridian Center visit restores HP, status, and PP and returns to the exact route
+   gate, then reuse the unchanged three-Kakuna Forest curriculum from the healed semantic floor.
 3. Pass public-artifact/docs/registry checks, Ruff, mypy, and the full test suite; commit and push the
    exact source before emulator qualification.
 4. Replay `990027` without monkeypatching until it passes or produces a later causal failure.

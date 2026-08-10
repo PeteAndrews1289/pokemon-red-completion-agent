@@ -38,25 +38,28 @@ as the reason the selected model is not simply the highest-accuracy model.
 
 **Fresh seed `990027` found the next real boundary.** It legitimately lost the lab rival, leaving a
 healed level-five starter and persisted loss result before any learned battle or training decision.
-Commits `68fdb7a`, `d33b69f`, `10ed903`, `f5aca26`, `d940c78`, and `35b62f3` authenticate that outcome,
-carry it across later mutable battle RAM, and teach a bounded Kakuna/Weedle recovery to level six.
-The latest official replay from clean published `35b62f3` reaches 136,720 frames and fails at the
-first post-recovery Kakuna search because the recovery changed encounter RNG. A non-promotable
-instrumented probe shifted those waits and reached the final target at level seven, 17/23 HP, zero
-Tackle PP, full Tail Whip PP, and a live Weedle. That probe is diagnosis only: its monkeypatch was
-outside source provenance. See
+Commits `68fdb7a`, `d33b69f`, `10ed903`, `f5aca26`, `d940c78`, `35b62f3`, and `c2aeb12` authenticate
+that outcome, carry it across later mutable battle RAM, teach a bounded Kakuna/Weedle recovery to
+level six, and adapt the later Forest lessons to the persisted loss branch. The latest official
+replay from clean published `c2aeb12` reaches 171,585 frames, completes the first two post-loss
+lessons, and fails closed because the single-origin search cannot find a safe level-four-or-lower
+third Weedle. Diagnosis established that an available level-three Caterpie leaves the starter
+healthy but slightly below the required capability floor, while accepting a level-five Weedle
+reaches level eight and Bubble at only 3/25 HP while poisoned. A non-promotable probe also showed
+that Tail Whip does not conserve Tackle PP against Kakuna because Harden cancels its defense drop.
+Those probes are diagnosis only: their monkeypatches were outside source provenance. See
 [perturbation 13](docs/evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json).
 
-**Immediate next gate:** replace the loss branch's fixed three-Kakuna victory suffix with one
-semantic level-to-eight recovery loop. Select observed prey from current HP, experience need, and
-damaging PP. If Kakuna requires Tail Whip, use the live `MAIN`/`MOVE` menu observer and publish PP
-and stage receipts. Stop immediately when level eight and Bubble are proven. Pass the full gate,
-publish, and replay `990027` without a runtime monkeypatch; then use a fresh uncounted root. Do not
-open v95. It remains **0/10**.
+**Immediate next gate:** move only the authenticated-loss catch-up lessons to Route 1, where
+low-defense Pidgey and Rattata provide a safer, less PP-intensive experience venue beside Viridian
+City. Prove a bounded return to the Viridian Center, full HP/status/PP restoration, and an exact
+return to the route. Then reuse the unchanged three-Kakuna Forest curriculum from a healed semantic
+floor. Pass the full gate, publish, and replay `990027` without a runtime monkeypatch; then use a
+fresh uncounted root. Do not open v95. It remains **0/10**.
 
 **Current branch and gate:** `agent/balanced-team-curriculum`, draft PR #8, clean published source
-`35b62f3`. Public-artifact and documentation checks, regenerated registry, Ruff, mypy over 128
-source modules, and 2,213 tests pass; three integration tests are deselected and one expected
+`c2aeb12`. Public-artifact and documentation checks, regenerated registry, Ruff, mypy over 128
+source modules, and 2,217 tests pass; three integration tests are deselected and one expected
 failure remains expected. The complete audit is
 [current-audit-2026-08-10.md](docs/current-audit-2026-08-10.md).
 

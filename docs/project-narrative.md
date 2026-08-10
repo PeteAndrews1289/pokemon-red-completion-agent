@@ -31,11 +31,12 @@ keeping the starter alive. Six clean, source-bound commits preserve each step.
 
 The next failure revealed why robust teachers cannot splice fixed scripts together. Those extra
 battles change the encounter stream, experience total, HP, and move PP. The latest official
-clean-source replay reaches 136,720 frames and cannot find the victory route's first Kakuna at its
-old timing. A deliberately non-promotable instrumented probe advanced farther and reached a final
-Weedle at 17/23 HP—but with Tackle exhausted and Tail Whip untouched. The problem is now a semantic
-resource curriculum: choose prey based on observed species, experience need, health, and damaging
-PP, and stop as soon as level eight and Bubble are proven.
+clean-source replay now completes two loss-specific Forest lessons and reaches 171,585 frames, but
+cannot find a safe low-level third Weedle from the same search origin. Deliberately non-promotable
+probes show that the available Caterpie is safe but slightly short of Bubble, while the available
+level-five Weedle reaches Bubble at only 3/25 HP while poisoned. The next design is therefore
+semantic and geographic: grind low-defense Pidgey/Rattata on Route 1, heal fully in Viridian, then
+rejoin the unchanged Forest curriculum from a restored capability floor.
 
 This is the most useful current project story. The model stack passed a real perturbation. The next
 perturbation failed before the models acted because the expert demonstration did not cover a legal

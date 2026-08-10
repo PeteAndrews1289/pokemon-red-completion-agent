@@ -13,9 +13,10 @@ to the lab rival. The old teacher assumed that battle must be won. The published
 the cartridge's real loss state, carries that outcome across later mutable battle RAM, and reaches a
 bounded Viridian Forest recovery. The remaining failure is narrower: that extra recovery changes
 encounter RNG, experience, HP, and Tackle PP, so the victory route's three fixed Kakuna lessons are
-not a valid suffix. The current clean-source replay fails closed at the first post-recovery target
-search; diagnosis then showed that a forced mixed suffix can reach the final target healthy but with
-zero damaging PP.
+not a valid suffix. The current clean-source replay completes two loss-specific lessons and fails
+closed only when no safe third Weedle appears within the single-origin bounded search. Diagnosis
+shows the safe design is to earn the loss-only experience on Route 1, heal in nearby Viridian City,
+then enter the unchanged Forest curriculum from a restored semantic floor.
 
 Counted v95 remains deliberately unopened at **0/10**. Crystal, cross-title transfer, and a living
 Pokedex remain future milestones.
@@ -75,7 +76,7 @@ remain stable.
 
 ## What changed in source
 
-The session published twelve source-bound repairs after the previous checkpoint:
+The session published thirteen source-bound repairs after the previous checkpoint:
 
 - semantic trainer-switch versus evolution handling;
 - fossil-route money accounting;
@@ -88,10 +89,11 @@ The session published twelve source-bound repairs after the previous checkpoint:
 - authenticated lab-loss recovery and immutable outcome threading;
 - a semantic level-six recovery floor;
 - correct Red Forest species identifiers; and
-- a balanced Kakuna/Weedle recovery sequence.
+- a balanced Kakuna/Weedle recovery sequence; and
+- a loss-aware Forest lesson sequence with an explicit safe-target level ceiling.
 
-The clean tree at `35b62f3` passes public-artifact and documentation checks, regenerated registry,
-Ruff, mypy over 128 source modules, and 2,213 tests; three integration tests are deselected and one
+The clean tree at `c2aeb12` passes public-artifact and documentation checks, regenerated registry,
+Ruff, mypy over 128 source modules, and 2,217 tests; three integration tests are deselected and one
 expected failure remains expected.
 
 ## The new failure is the right kind of work
@@ -102,12 +104,14 @@ single lucky speedrun. Six small published changes now distinguish win from loss
 outcome after later battles overwrite `BATTLE_RESULT`, and recover the level deficit without
 pretending the rival was beaten.
 
-The latest official replay from clean published source reaches 136,720 frames and fails because the
-first victory-route Kakuna search no longer matches the recovery-shifted encounter stream. A private
-instrumented probe advanced farther and found the deeper budget: level 7, 17/23 HP, no Tackle PP,
-full Tail Whip PP, and a live Weedle. That probe is explicitly non-promotable because its runtime
-monkeypatch was outside the source digest. The public failure receipt records both the official
-boundary and the diagnostic limitation:
+The latest official replay from clean published source reaches 171,585 frames, completes two
+post-loss lessons, and fails because it cannot find a safe level-four-or-lower third Weedle from the
+same search origin. Private instrumented probes established both sides of the safety boundary: a
+level-three Caterpie leaves the level-seven starter healthy but short of Bubble, while a level-five
+Weedle reaches level eight and Bubble at only 3/25 HP while poisoned. Tail Whip is not a PP solution
+against Kakuna because Harden cancels the defense reduction. Those probes are explicitly
+non-promotable because their runtime monkeypatches were outside the source digest. The public
+failure receipt records both the official boundary and the diagnostic limitation:
 [perturbation 13](evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json).
 
 ## Honest capability rating
@@ -125,10 +129,10 @@ boundary and the diagnostic limitation:
 
 ## Recommended next sequence
 
-1. Replace the loss branch's fixed three-Kakuna suffix with a semantic level-to-eight recovery loop.
-   Choose observed prey from HP, experience need, and damaging PP; stop as soon as Bubble is proven.
-2. If Tail Whip is used against Kakuna, select it through observed `MAIN` and `MOVE` menu states and
-   publish PP/defense-stage receipts. Do not use frame-only cursor assumptions.
+1. Move the authenticated-loss catch-up to Route 1's low-defense Pidgey/Rattata venue, where the
+   Viridian Center is available before the Forest curriculum.
+2. Prove the Center visit restores HP, status, and PP, returns to the exact expected route gate, and
+   preserves the authenticated lab outcome. Then reuse the unchanged three-Kakuna curriculum.
 3. Replay `990027` from clean published source until it either completes or exposes a later causal
    boundary. Preserve every failure.
 4. Run at least one fresh uncounted root after `990027` passes. Only then freeze and open v95.

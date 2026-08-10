@@ -36,8 +36,9 @@ missing lesson in the expert.
 Show the repair as a state diagram: `verified rival win -> level 6 route` and `verified rival loss
 -> bounded recovery -> same level 6 semantic floor`. Then show why the first repair is not enough.
 The recovery battles advance encounter RNG, consume HP and Tackle PP, and change the experience
-schedule. Reusing the victory route's three Kakuna timings fails. A diagnosis-only probe gets to the
-last Weedle with 17/23 HP but `Tackle 0/35`, while `Tail Whip 30/30` remains unused.
+schedule. The published loss-aware suffix gets through two more lessons but cannot safely accept the
+only final Weedle it finds. The choice is concrete: a level-three Caterpie leaves the starter healthy
+but short of Bubble; the level-five Weedle reaches Bubble at only `3/25 HP` while poisoned.
 
 The visual payoff is a resource dashboard rather than another code diff:
 
@@ -47,10 +48,11 @@ The visual payoff is a resource dashboard rather than another code diff:
 - observed prey and defense; and
 - the semantic stop condition: **Bubble learned**.
 
-The next teacher lesson should choose battles from that state. Against Kakuna it may use Tail Whip
-through the observed battle menus before attacking; against Weedle it must account for damage and
-poison risk. The important line is: **“A robust agent does not memorize three encounters. It knows
-what capability it is trying to earn and what resources remain.”**
+The next teacher lesson should change venue rather than squeeze the unsafe encounter stream. Use
+low-defense Pidgey and Rattata on Route 1 for loss-only catch-up, restore HP/status/PP at the nearby
+Viridian Center, and then enter the unchanged Forest curriculum. The important line is: **“A robust
+agent does not memorize three encounters. It chooses a safe place to earn a capability, restores
+its resources, and rejoins the plan.”**
 
 End with the honest campaign board: one derived-timing pass, one unresolved optional-loss branch,
 and official v95 still `0/10`. That is a better cliffhanger than quietly rerolling seed `990027`.

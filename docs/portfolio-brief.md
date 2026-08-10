@@ -6,8 +6,10 @@ The combined six-role learned stack now has a complete uncounted derived-timing 
 Fame: 74/74 scheduled battles, all 36 semantic objectives, 3,165 high-level battle decisions, 3,110
 learned move decisions, 12/12 learned switch targets, both training models in live authority, and
 zero battle-teacher query or fallback. The next fresh seed legitimately lost the lab rival and
-exposed a teacher-side recovery and move-PP gap before any learned head acted. The project preserved
-the failure instead of rerolling it; the official ten-root campaign remains 0/10.
+exposed a teacher-side recovery and encounter-availability gap before any learned head acted. The
+published branch now authenticates the loss and completes four recovery/training battles before
+rejecting an unsafe final target. The project preserved the failure instead of rerolling it; the
+official ten-root campaign remains 0/10.
 
 That pair is the best interview story in the repository. It demonstrates causal evaluation,
 calibration against rare actions, separation of model errors from executor errors, source-bound
