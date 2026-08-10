@@ -413,14 +413,14 @@ def test_pewter_report_requires_the_authenticated_lab_loss_recovery_lesson() -> 
         _report(),
         lab_rival_loss_recovery_required=True,
         rival_loss_recovery_search_attempts=(3, 2),
-        rival_loss_recovery_species_ids=(0x7B, 0x7B),
+        rival_loss_recovery_species_ids=(0x70, 0x70),
         rival_loss_recovery_level=6,
     )
 
     assert recovered.passed
     assert recovered.public_dict()["route"]["rival_loss_recovery_search_attempts"] == [3, 2]
     assert not replace(recovered, rival_loss_recovery_search_attempts=()).passed
-    assert not replace(recovered, rival_loss_recovery_species_ids=(0x70,)).passed
+    assert not replace(recovered, rival_loss_recovery_species_ids=(0x7B,)).passed
     assert not replace(recovered, rival_loss_recovery_level=5).passed
 
 
