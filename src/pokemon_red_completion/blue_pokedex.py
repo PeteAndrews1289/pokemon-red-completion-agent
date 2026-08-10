@@ -40,12 +40,17 @@ BLUE_TOTAL_SPECIES = RED_TOTAL_SPECIES
 #: The version-exclusive half is the mirror of Red's: each game's exclusives are
 #: the other's gap, which is the entire reason a living Pokédex needs both.
 #:
-#: **These eleven are declared cartridge facts, not encounter-harvest results.**
-#: They are reciprocal to Red's eleven paired-version gaps. The
-#: repository can now check them — a Blue cartridge loads and reads under the
-#: existing adapter — by harvesting encounters the same way Red's bands were
-#: measured. Until that harvest exists this table is a stated assumption, and it
-#: is marked as one rather than presented as a measurement.
+#: **These eleven are derived from both cartridges, not assumed.** They are
+#: reciprocal to Red's eleven paired-version gaps, and on 2026-08-10 the
+#: reciprocity stopped being a claim: reading each cartridge's wild tables,
+#: rods and evolution graph and differencing the two reachable sets returns
+#: exactly these eleven and exactly Red's eleven. See
+#: docs/evidence/acquisition-routes-2026-08-10.json.
+#:
+#: No encounter harvest was needed, and one would not have settled it anyway.
+#: Sampling shows what is *present*; proving Ekans absent from Blue would mean
+#: walking every area and then arguing about how much walking is enough. The
+#: tables are static data, so reading them settles presence and absence at once.
 #:
 #: The trade evolutions and Mew are cartridge properties shared with Red and
 #: carry over unchanged.

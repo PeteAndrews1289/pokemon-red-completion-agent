@@ -32,6 +32,19 @@ How each offset was found:
     Anchored on two facts already declared here: Diglett evolves at level 26 into
     Dugtrio, and Kadabra evolves by trade into Alakazam. Each byte pattern occurs
     exactly once in the ROM.
+
+The fishing anchors
+    Found by following code rather than by scanning for data. The Old Rod's only
+    bite is not in a table at all -- it is an immediate operand -- so the search
+    started from the one pair every rod shares, ``(level 5, Magikarp)``, and the
+    single occurrence that reads as a ``ld bc`` immediate turned out to sit in
+    bank 3 beside the wild data. The Good Rod and Super Rod tables are named by
+    ``ld hl`` instructions a few bytes away.
+
+    So these offsets point at *instructions*, and the table addresses are read
+    from their operands. A revision that moves the tables but keeps the code
+    still reads correctly, and one that moves the code fails on the opcode check
+    rather than silently decoding whatever now lives there.
 """
 
 from __future__ import annotations
@@ -50,6 +63,21 @@ WILD_DATA_BANK = 3
 WILD_POINTER_ARRAY = 0x0CEEB
 EVOLUTION_DATA_BANK = 14
 EVOLUTION_POINTER_ARRAY = 0x3B05C
+
+#: Fishing lives in the same bank as the wild data, and is reached through
+#: instructions rather than through a pointer array. Each address below is an
+#: opcode; the operand that follows it names the data.
+FISHING_BANK = 3
+OLD_ROD_ENCOUNTER = 0x6252  # ld bc, nn -- the only bite the Old Rod has
+GOOD_ROD_SLOT_COUNT = 0x6268  # cp n     -- how many slots the Good Rod rolls over
+GOOD_ROD_TABLE_POINTER = 0x626C  # ld hl, nn
+SUPER_ROD_TABLE_POINTER = 0x68F0  # ld hl, nn
+LOAD_BC_IMMEDIATE = 0x01
+LOAD_HL_IMMEDIATE = 0x21
+COMPARE_IMMEDIATE = 0xFE
+SUPER_ROD_ENTRY_STRIDE = 3
+SUPER_ROD_GROUP_LIMIT = 8
+MAXIMUM_LEVEL = 100
 
 #: Facts re-derived on every read. If any fails, the cartridge is not the one
 #: these offsets were located against and the read is refused.
@@ -238,6 +266,199 @@ def _verify_evolution_graph(graph: Mapping[int, list[Evolution]]) -> None:
         )
 
 
+class RodKind(StrEnum):
+    """Which rod produces a bite.
+
+    They differ in more than quality: the first two carry their own fixed slots
+    and work wherever fishing works at all, while the third is the only one that
+    varies by map. A planner that wants a particular species needs to know which
+    of those two shapes it is dealing with.
+    """
+
+    OLD = "old"
+    GOOD = "good"
+    SUPER = "super"
+
+
+@dataclass(frozen=True, slots=True)
+class FishingSlot:
+    """One ``(level, species)`` a rod can produce, keyed by Pokédex number."""
+
+    level: int
+    species: int
+    rod: RodKind
+
+
+@dataclass(frozen=True, slots=True)
+class FishingTables:
+    """What each rod can produce, read from the cartridge.
+
+    Split by shape rather than by rod. ``anywhere`` holds the slots that do not
+    depend on position, and ``by_map`` holds the Super Rod's per-map groups. A
+    map absent from ``by_map`` is one where the Super Rod never bites -- which
+    is not the same as a map where fishing is impossible, since the other two
+    rods still work there.
+    """
+
+    anywhere: tuple[FishingSlot, ...]
+    by_map: Mapping[int, tuple[FishingSlot, ...]]
+
+    def at(self, map_id: int) -> tuple[FishingSlot, ...]:
+        """Everything any rod can produce on one map."""
+
+        return self.anywhere + tuple(self.by_map.get(map_id, ()))
+
+    def species(self) -> frozenset[int]:
+        """Every species reachable with a rod, anywhere."""
+
+        found = {slot.species for slot in self.anywhere}
+        for slots in self.by_map.values():
+            found |= {slot.species for slot in slots}
+        return frozenset(found)
+
+
+def _fishing_offset(address: int) -> int:
+    return _bank_offset(FISHING_BANK, address)
+
+
+def _operand_address(rom: bytes, at: int, opcode: int, what: str) -> int:
+    """Read the address an instruction names, refusing if it is not that instruction."""
+
+    offset = _fishing_offset(at)
+    if rom[offset] != opcode:
+        raise CartridgeReadError(
+            f"{what} at {at:#06x} is {rom[offset]:#04x}, not the {opcode:#04x} it was "
+            "located against; this cartridge's fishing code is not where it was found"
+        )
+    address = int.from_bytes(rom[offset + 1 : offset + 3], "little")
+    if not 0x4000 <= address <= 0x7FFF:
+        raise CartridgeReadError(f"{what} names {address:#06x}, which is outside its bank")
+    return address
+
+
+def fishing_tables(rom: bytes) -> FishingTables:
+    """Every bite each rod can produce.
+
+    Fishing is a separate acquisition route from walking in grass, and the
+    difference is load-bearing for a living Pokédex: the wild tables alone make
+    four species look version-exclusive that are not, because both cartridges
+    offer them on a rod.
+    """
+
+    dex = internal_to_dex(rom)
+
+    old_rod_at = _fishing_offset(OLD_ROD_ENCOUNTER)
+    if rom[old_rod_at] != LOAD_BC_IMMEDIATE:
+        raise CartridgeReadError(
+            f"the Old Rod encounter at {OLD_ROD_ENCOUNTER:#06x} is "
+            f"{rom[old_rod_at]:#04x}, not the {LOAD_BC_IMMEDIATE:#04x} immediate load it "
+            "was located against"
+        )
+    anywhere = [_slot(dex, rom[old_rod_at + 2], rom[old_rod_at + 1], RodKind.OLD)]
+
+    count_at = _fishing_offset(GOOD_ROD_SLOT_COUNT)
+    if rom[count_at] != COMPARE_IMMEDIATE:
+        raise CartridgeReadError(
+            f"the Good Rod slot count at {GOOD_ROD_SLOT_COUNT:#06x} is not a compare"
+        )
+    good_rod_slots = rom[count_at + 1]
+    good_rod = _fishing_offset(
+        _operand_address(rom, GOOD_ROD_TABLE_POINTER, LOAD_HL_IMMEDIATE, "the Good Rod table")
+    )
+    anywhere.extend(
+        _slot(dex, rom[good_rod + 2 * slot], rom[good_rod + 2 * slot + 1], RodKind.GOOD)
+        for slot in range(good_rod_slots)
+    )
+
+    at = _fishing_offset(
+        _operand_address(rom, SUPER_ROD_TABLE_POINTER, LOAD_HL_IMMEDIATE, "the Super Rod table")
+    )
+    by_map: dict[int, tuple[FishingSlot, ...]] = {}
+    order: list[int] = []
+    while rom[at] != 0xFF:
+        map_id = rom[at]
+        group = int.from_bytes(rom[at + 1 : at + 3], "little")
+        if not 0x4000 <= group <= 0x7FFF:
+            raise CartridgeReadError(
+                f"Super Rod group for map {map_id} points at {group:#06x}, outside its bank"
+            )
+        cursor = _fishing_offset(group)
+        size = rom[cursor]
+        if not 1 <= size <= SUPER_ROD_GROUP_LIMIT:
+            raise CartridgeReadError(
+                f"Super Rod group for map {map_id} claims {size} slots; the table is "
+                "not where it was located"
+            )
+        by_map[map_id] = tuple(
+            _slot(dex, rom[cursor + 1 + 2 * slot], rom[cursor + 2 + 2 * slot], RodKind.SUPER)
+            for slot in range(size)
+        )
+        order.append(map_id)
+        at += SUPER_ROD_ENTRY_STRIDE
+
+    tables = FishingTables(anywhere=tuple(anywhere), by_map=by_map)
+    _verify_fishing(rom, tables, order)
+    return tables
+
+
+def _slot(dex: Mapping[int, int], level: int, internal: int, rod: RodKind) -> FishingSlot:
+    if internal not in dex:
+        raise CartridgeReadError(
+            f"the {rod.value} rod offers internal index {internal:#04x}, which is not a "
+            "species; the fishing tables are not where they were located"
+        )
+    if not 1 <= level <= MAXIMUM_LEVEL:
+        raise CartridgeReadError(f"the {rod.value} rod offers level {level}, which is not a level")
+    return FishingSlot(level=level, species=dex[internal], rod=rod)
+
+
+def _verify_fishing(rom: bytes, tables: FishingTables, order: list[int]) -> None:
+    """Re-derive what the located structure must satisfy, or refuse.
+
+    The strong check is the last one, and it is a cross-check rather than a
+    restatement: every map the *wild* tables give a water encounter rate must be
+    a map the Super Rod list names. Those water tables are verified separately
+    against bands measured from live play, so this ties the fishing read to a
+    measurement instead of to another read.
+    """
+
+    if len(set(order)) != len(order):
+        raise CartridgeReadError("the Super Rod table names a map twice")
+    if order != sorted(order):
+        raise CartridgeReadError(
+            "the Super Rod map ids are not ascending; the table is searched linearly "
+            "over sorted data, so this is not that table"
+        )
+    if not order:
+        raise CartridgeReadError("the Super Rod table is empty")
+
+    unfishable = sorted(_maps_with_water(rom) - set(order))
+    if unfishable:
+        raise CartridgeReadError(
+            f"maps {unfishable} carry a water encounter table but are absent from the "
+            "Super Rod list; the two structures disagree, so one was read wrongly"
+        )
+
+
+def _maps_with_water(rom: bytes) -> set[int]:
+    """Maps whose wild data carries a second table -- the ones you can surf."""
+
+    found: set[int] = set()
+    for map_id in range(MAP_ID_LIMIT):
+        at = WILD_POINTER_ARRAY + 2 * map_id
+        address = int.from_bytes(rom[at : at + 2], "little")
+        if not 0x4000 <= address <= 0x7FFF:
+            continue
+        cursor = _bank_offset(WILD_DATA_BANK, address)
+        grass_rate = rom[cursor]
+        cursor += 1
+        if grass_rate:
+            cursor += 2 * SLOTS_PER_TABLE
+        if rom[cursor]:
+            found.add(map_id)
+    return found
+
+
 def trade_evolutions(graph: Mapping[int, tuple[Evolution, ...]]) -> dict[int, int]:
     """Evolved species mapped to the precursor that must be traded for it.
 
@@ -252,3 +473,65 @@ def trade_evolutions(graph: Mapping[int, tuple[Evolution, ...]]) -> dict[int, in
         for step in steps
         if step.needs_a_trade_partner
     }
+
+
+def catchable_species(rom: bytes) -> frozenset[int]:
+    """Every species this cartridge yields directly, by grass, surf or rod.
+
+    Directly is the operative word: no evolution, no trade, no gift, no fossil,
+    no Game Corner. This is the seed set the other routes grow from.
+    """
+
+    dex = internal_to_dex(rom)
+    wild = {
+        dex[species]
+        for slots in wild_tables(rom).values()
+        for _, species in slots
+        if species in dex
+    }
+    return frozenset(wild | fishing_tables(rom).species())
+
+
+def reachable_species(rom: bytes, *, with_trade_partner: bool = False) -> frozenset[int]:
+    """What the catchable set grows into once evolution is applied.
+
+    ``with_trade_partner`` decides whether trade evolutions count. A lone
+    cartridge cannot perform them, so the default answers the single-save
+    question; a campaign with a declared trade link should pass ``True``.
+    """
+
+    graph = evolution_graph(rom)
+    reached = set(catchable_species(rom))
+    frontier = list(reached)
+    while frontier:
+        species = frontier.pop()
+        for step in graph.get(species, ()):
+            if step.needs_a_trade_partner and not with_trade_partner:
+                continue
+            if step.to_species not in reached:
+                reached.add(step.to_species)
+                frontier.append(step.to_species)
+    return frozenset(reached)
+
+
+def version_exclusives(
+    first_rom: bytes, second_rom: bytes
+) -> tuple[frozenset[int], frozenset[int]]:
+    """What each of two cartridges can reach and the other cannot.
+
+    This is the whole reason a living Pokédex needs more than one cartridge, and
+    it used to be a typed table. Deriving it is what caught the difference
+    between the two questions "which species appear in a cartridge's wild
+    tables" and "which species can a cartridge reach": four species differ in
+    the wild tables and are *not* exclusive, because both cartridges offer them
+    on a rod, and six more are exclusive without appearing in any wild table at
+    all, because they are only ever reached by evolving something that does.
+
+    Trade evolutions are included on both sides. Exclusivity is a property of
+    what a cartridge contains, not of how many saves are run beside it, and the
+    two cartridges carry the same evolution graph so the choice cancels.
+    """
+
+    first = reachable_species(first_rom, with_trade_partner=True)
+    second = reachable_species(second_rom, with_trade_partner=True)
+    return first - second, second - first
