@@ -122,7 +122,7 @@ def test_control_projector_exposes_normalized_party_and_resource_state() -> None
     assert values["party.mean_level"] == pytest.approx(0.4)
     assert values["resources.healing_items"] == pytest.approx(0.2)
     assert values["progress.badge_count"] == 0.5
-    assert CONTROL_FEATURE_SCHEMA_ID.endswith(".v3")
+    assert CONTROL_FEATURE_SCHEMA_ID.endswith(".v4")
     assert values["party.reserve_matchup.available"] == 1.0
     assert values["party.reserve_matchup.candidate_count"] == pytest.approx(1 / 5)
 
@@ -193,3 +193,18 @@ def test_control_history_tracks_causal_actions_and_opponent_changes() -> None:
     assert second.action_counts[1] == 1
     assert next_opponent.opponent_index == 1
     assert next_opponent.opponent_turn == 0
+
+
+def test_control_history_does_not_treat_opponent_healing_as_a_transition() -> None:
+    tracker = BattleControlHistoryTracker()
+    observation = _observation()
+    observation["features"]["battle"]["opponent_hp_ratio"] = 0.2  # type: ignore[index]
+
+    tracker.before("battle-one", observation)
+    tracker.advance(BattleAction.move(1), observation)
+    observation["features"]["battle"]["opponent_hp_ratio"] = 1.0  # type: ignore[index]
+    healed = tracker.before("battle-one", observation)
+
+    assert healed.battle_turn == 1
+    assert healed.opponent_index == 0
+    assert healed.opponent_turn == 1

@@ -73,9 +73,9 @@ def test_control_model_digest_matches_canonical_artifact_writer_contract() -> No
 def test_control_model_rejects_the_pre_reserve_feature_schema() -> None:
     model = BattleControlMLP.fit(_examples(), seed=7, epochs=2)
     payload = model.to_dict()
-    payload["feature_schema_id"] = "pokemon.core.battle.control.features.v2"
+    payload["feature_schema_id"] = "pokemon.core.battle.control.features.v3"
 
     with pytest.raises(BattleControlModelError, match="feature schema"):
         BattleControlMLP.from_dict(payload)
 
-    assert CONTROL_FEATURE_SCHEMA_ID == "pokemon.core.battle.control.features.v3"
+    assert CONTROL_FEATURE_SCHEMA_ID == "pokemon.core.battle.control.features.v4"

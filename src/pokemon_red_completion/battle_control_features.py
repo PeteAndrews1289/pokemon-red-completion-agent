@@ -19,7 +19,7 @@ from pokemon_red_completion.battle_semantics import (
 )
 from pokemon_red_completion.battle_semantics import BattleFeatureBatch, BattleMechanicsCatalog
 
-CONTROL_FEATURE_SCHEMA_ID = "pokemon.core.battle.control.features.v3"
+CONTROL_FEATURE_SCHEMA_ID = "pokemon.core.battle.control.features.v4"
 CONTROL_CLASS_REFS = (
     "pokemon.core:battle:select_move",
     "pokemon.core:battle:recovery",
@@ -143,11 +143,10 @@ class BattleControlHistory:
 
 @dataclass(slots=True)
 class BattleControlHistoryTracker:
-    """Derive causal temporal features without exposing game or objective identity."""
+    """Derive causal temporal features without treating recovery as a new opponent."""
 
     battle_plan_id: str | None = None
     opponent_key: tuple[object, object] | None = None
-    last_opponent_hp_ratio: float | None = None
     history: BattleControlHistory = BattleControlHistory()
 
     def before(
@@ -160,17 +159,11 @@ class BattleControlHistoryTracker:
             "battle",
         )
         opponent_key = (battle.get("opponent_species_ref"), battle.get("opponent_level"))
-        hp_ratio = _ratio(battle.get("opponent_hp_ratio"), "opponent hp ratio")
         if battle_plan_id != self.battle_plan_id:
             self.battle_plan_id = battle_plan_id
             self.opponent_key = opponent_key
-            self.last_opponent_hp_ratio = None
             self.history = BattleControlHistory()
-        elif opponent_key != self.opponent_key or (
-            self.last_opponent_hp_ratio is not None
-            and self.last_opponent_hp_ratio <= 0.25
-            and hp_ratio >= 0.9
-        ):
+        elif opponent_key != self.opponent_key:
             self.opponent_key = opponent_key
             self.history = BattleControlHistory(
                 battle_turn=self.history.battle_turn,
@@ -186,6 +179,7 @@ class BattleControlHistoryTracker:
         action: BattleAction,
         observation: Mapping[str, object],
     ) -> None:
+        del observation
         class_index = CONTROL_CLASS_REFS.index(control_class_ref(action))
         counts = list(self.history.action_counts)
         counts[class_index] += 1
@@ -193,14 +187,6 @@ class BattleControlHistoryTracker:
         move_count_at_last_switch = self.history.move_count_at_last_switch
         if class_index == switch_class_index:
             move_count_at_last_switch = counts[0]
-        battle = _mapping(
-            _mapping(observation.get("features"), "features").get("battle"),
-            "battle",
-        )
-        self.last_opponent_hp_ratio = _ratio(
-            battle.get("opponent_hp_ratio"),
-            "opponent hp ratio",
-        )
         self.history = BattleControlHistory(
             battle_turn=self.history.battle_turn + 1,
             opponent_index=self.history.opponent_index,
