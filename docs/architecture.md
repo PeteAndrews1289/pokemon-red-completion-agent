@@ -51,7 +51,7 @@ referee then reobserves the cartridge instead of trusting a skill's success clai
 | Battle action ranking | Learned policy with legal-action masks | Model-controlled Red battle qualifications with no disagreement fallback | Authored curriculum and Red battle executor |
 | Training action control | Learned five-action controller | Portable Blaine proof: 57,548 controlled battle/overworld decisions, 1,796 development battles, zero fallback | Candidate masks, hard safety gates, navigation and menu execution |
 | Trainee and venue strategy | Shared identity-free candidate scorer | 99.9004% sealed validation; isolated causal completion with 191 disagreements; portable Blaine completion and one clean-power Hall-of-Fame rehearsal with 400 disagreements | Still one uncounted fixed-route Red root; candidate eligibility and mechanics remain fixed |
-| Navigation, menus and recovery | Deterministic bounded skills plus cartridge-derived search | One live generated Pallet route and one source-bound directed-ledge probe | Macro/local composition, dynamic objects and stateful field mechanics are not yet completion-run ready |
+| Navigation, menus and recovery | Deterministic bounded skills plus cartridge-derived search and composition | One 86-action live four-map plan, one local Pallet route and one directed-ledge probe | Shared live replanning, dynamic objects and stateful field mechanics are not yet completion-run ready |
 | Collection planning | Typed deterministic planner | Red living-set targets, storage/evolution directives and multi-run coverage planning | No autonomous living-Pokédex execution yet |
 
 This table is the claim boundary. A model choosing an objective does not mean it navigated to the

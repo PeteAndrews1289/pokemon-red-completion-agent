@@ -1,5 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 10: four maps, one plan, zero typed directions
+
+The cartridge-generated Pallet walk and Route 1 ledge were useful local demonstrations. The next
+question was whether those facts could survive a map boundary without quietly falling back to the
+old route script. The missing bytes turned out to be exactly the bridge: connection alignments say
+which border coordinate becomes which coordinate on the neighboring map, and every warp names the
+destination event whose coordinate becomes the arrival.
+
+Red and Blue agree on all 1,484 exact connection transitions and all 558 ordinary warp arrivals.
+They also exposed a subtler mistake in the first router. A `$FF` exit does not mean “go to the map I
+just came from.” It means “return to the outdoor map retained by the engine.” In a nested interior,
+the immediately previous map may be another room or an underground passage. Replacing doorway
+history with retained outside state removed an accidental teleport that green tests had allowed.
+
+The new game-neutral composer joins map search and local search without teaching either one about
+Kanto. It chooses a reachable exact endpoint, searches the local coordinate graph, crosses the
+passage, and seeds the next search with the decoded arrival. From the verified post-Pokédex Pallet
+coordinate `(12, 12)`, it generated 86 actions across Pallet → Route 1 → Viridian → Pokémon Center.
+A clean, source-bound Red run executed the entire plan, checked all three arrivals, and finished at
+the Center's decoded `(7, 3)` coordinate with no save artifact and no typed route fallback.
+
+This is a better training story than behavioral cloning 86 arrows. Shortest-path arithmetic belongs
+to the planner. The learned agent should decide *why* to visit the Center, whether recovery is worth
+the detour, and what to do when an NPC or encounter changes the state. The next layer is therefore a
+stepwise observe/act/replan executor with live blockers, followed by Surf as a real movement mode.
+The [live receipt](evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
+[navigation audit](traversal-audit-2026-08-10.md) keep that boundary explicit.
+
 ## August 10: the map learned which way was down
 
 The first cartridge-generated Pallet route proved that Red's own map and terrain could replace one
@@ -15,12 +43,11 @@ bound to clean committed source and changed no save artifact. The implementation
 important distinction that the first draft lost: `action="down"` tells the controller what to do;
 `kind="ledge"` tells the planner what the transition means.
 
-The result is deliberately partial. Surf changes movement mode, Cut mutates a map block, and
-Strength moves a puzzle object; none has been disguised as a static “capability unlocked” edge. The
-audit also found that the macro map graph still discards destination-warp and connection-alignment
-geometry, so the next milestone is a continuous multi-map plan with closed-loop reobservation—not a
-neural network trained to memorize shortest-path steps. The model should learn where to go and how
-to recover; the cartridge and a search algorithm can supply honest geometry.
+The result was deliberately partial. Surf changes movement mode, Cut mutates a map block, and
+Strength moves a puzzle object; none was disguised as a static “capability unlocked” edge. The audit
+then identified destination-warp and connection-alignment geometry as the missing bridge to a
+continuous plan. The section above records that bridge and its live proof; closed-loop dynamic
+reobservation remains the next boundary.
 
 ## August 10: the model completed a perturbed run; the teacher did not know how to lose
 

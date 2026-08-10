@@ -15,6 +15,34 @@ Follow an evidence-driven attempt to turn a reliable Pokémon Red speed-running 
 learned player that can make decisions, recover from surprises, and eventually transfer what it
 learns to other Pokémon games.
 
+## August 10 navigation episode: delete 86 directions
+
+Open with an 86-arrow route from Pallet Town to the Viridian Pokémon Center. Then delete it.
+
+Replace it with three views of the cartridge: a map graph, a coordinate graph, and exact passage
+endpoints. Animate the first connection as `(0, 10) → (35, 10)`, the second as `(0, 11) → (35, 21)`,
+and the Center door as `(25, 23) → (7, 3)`. The reveal is that Red and Blue contain the same 1,484
+connection transitions and 558 ordinary warp arrivals. The route is no longer a memorized answer;
+it is a query against the game being played.
+
+Use the `$FF` return bug as the engineering turn. The first router remembered only the previous
+room. Draw an outdoor route entering an entrance room, descending into an underground path, and
+then returning. “Previous room” points back underground; the engine's retained outdoor map points
+home. Show the new state variable changing only when an outdoor map takes a warp. The line for the
+audience is: **“A graph can be complete and still model the wrong state.”**
+
+Then run the clean source-bound proof. The qualified teacher gets the Pokédex and exits Oak's Lab;
+from Pallet `(12, 12)` onward the composer owns every movement. Put the four map names across the
+screen, increment all 86 generated actions, and turn each decoded arrival green as live emulator
+memory agrees. End at Viridian Center `(7, 3)`, with zero movement retries, zero wild flees, and no
+save file changed.
+
+Do not call this learned navigation. Make that restraint the point: a neural network should not be
+paid to memorize shortest paths that cartridge data and search can compute exactly. The model's
+future job is strategic—choose the recovery destination, trade route cost against risk, and react
+when NPCs, story state, or encounters invalidate the static candidate. Close on the next card:
+**LIVE OBSERVE → ACT → VERIFY → REPLAN**, followed by **SURF IS A MODE, NOT AN EDGE**.
+
 ## August 10 episode: the AI won—then lost the first battle
 
 Open on two emulator cards.

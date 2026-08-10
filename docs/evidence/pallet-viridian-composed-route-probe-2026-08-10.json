@@ -1,0 +1,671 @@
+{
+  "schema": "pallet-viridian-composed-route-probe-v1",
+  "recorded_on": "2026-08-10",
+  "status": "ok",
+  "rom": {
+    "title": "POKEMON RED",
+    "size_bytes": 1048576,
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+  },
+  "source": {
+    "git_commit": "7d2addc4edd7f0e254b30b5fdecaf44359753837",
+    "worktree_dirty": false
+  },
+  "executable_source_bundle_sha256": "6f82ec0867e2f17c72c7859b3fc0a485a8b022ebc3fc8c0249838d5181d3c6b8",
+  "precondition": "Qualified teachers established a clean-power-on post-Pok\u00e9dex run and exited Oak's Lab to the verified Pallet coordinate (12, 12).",
+  "authority_under_test": "From the Pallet start onward, cartridge map headers, exact connection geometry, destination warp indices, terrain and traversal rules supplied the complete multi-map route. Live memory checked every non-wild local step and every cross-map arrival; the bounded Route 1 runtime checked movement consumption and incidental wild exits.",
+  "plan": {
+    "maps": [
+      "PALLET_TOWN",
+      "ROUTE_1",
+      "VIRIDIAN_CITY",
+      "VIRIDIAN_POKECENTER"
+    ],
+    "map_ids": [
+      0,
+      12,
+      1,
+      41
+    ],
+    "start_yx": [
+      12,
+      12
+    ],
+    "terminal_yx": [
+      7,
+      3
+    ],
+    "actions": [
+      "left",
+      "left",
+      "left",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "right",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "left",
+      "left",
+      "up",
+      "up",
+      "up",
+      "up",
+      "right",
+      "right",
+      "right",
+      "right",
+      "up",
+      "up",
+      "up",
+      "up",
+      "left",
+      "left",
+      "left",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "right",
+      "right",
+      "right",
+      "right",
+      "right",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "left",
+      "left",
+      "left",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "left",
+      "up",
+      "up",
+      "left",
+      "up",
+      "up",
+      "right",
+      "right",
+      "right",
+      "right",
+      "up"
+    ],
+    "segments": [
+      {
+        "source_map": "PALLET_TOWN",
+        "source_map_id": 0,
+        "target_map": "ROUTE_1",
+        "target_map_id": 12,
+        "approach_coordinates_yx": [
+          [
+            12,
+            12
+          ],
+          [
+            12,
+            11
+          ],
+          [
+            12,
+            10
+          ],
+          [
+            12,
+            9
+          ],
+          [
+            11,
+            9
+          ],
+          [
+            10,
+            9
+          ],
+          [
+            9,
+            9
+          ],
+          [
+            8,
+            9
+          ],
+          [
+            7,
+            9
+          ],
+          [
+            6,
+            9
+          ],
+          [
+            5,
+            9
+          ],
+          [
+            4,
+            9
+          ],
+          [
+            3,
+            9
+          ],
+          [
+            2,
+            9
+          ],
+          [
+            2,
+            10
+          ],
+          [
+            1,
+            10
+          ],
+          [
+            0,
+            10
+          ]
+        ],
+        "actions": [
+          "left",
+          "left",
+          "left",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "right",
+          "up",
+          "up",
+          "up"
+        ],
+        "transition": {
+          "exit_yx": [
+            0,
+            10
+          ],
+          "arrival_yx": [
+            35,
+            10
+          ],
+          "action": "up",
+          "action_in_approach": false
+        }
+      },
+      {
+        "source_map": "ROUTE_1",
+        "source_map_id": 12,
+        "target_map": "VIRIDIAN_CITY",
+        "target_map_id": 1,
+        "approach_coordinates_yx": [
+          [
+            35,
+            10
+          ],
+          [
+            34,
+            10
+          ],
+          [
+            33,
+            10
+          ],
+          [
+            32,
+            10
+          ],
+          [
+            31,
+            10
+          ],
+          [
+            30,
+            10
+          ],
+          [
+            29,
+            10
+          ],
+          [
+            28,
+            10
+          ],
+          [
+            28,
+            9
+          ],
+          [
+            28,
+            8
+          ],
+          [
+            27,
+            8
+          ],
+          [
+            26,
+            8
+          ],
+          [
+            25,
+            8
+          ],
+          [
+            24,
+            8
+          ],
+          [
+            24,
+            9
+          ],
+          [
+            24,
+            10
+          ],
+          [
+            24,
+            11
+          ],
+          [
+            24,
+            12
+          ],
+          [
+            23,
+            12
+          ],
+          [
+            22,
+            12
+          ],
+          [
+            21,
+            12
+          ],
+          [
+            20,
+            12
+          ],
+          [
+            20,
+            11
+          ],
+          [
+            20,
+            10
+          ],
+          [
+            20,
+            9
+          ],
+          [
+            19,
+            9
+          ],
+          [
+            18,
+            9
+          ],
+          [
+            17,
+            9
+          ],
+          [
+            16,
+            9
+          ],
+          [
+            15,
+            9
+          ],
+          [
+            14,
+            9
+          ],
+          [
+            14,
+            10
+          ],
+          [
+            14,
+            11
+          ],
+          [
+            14,
+            12
+          ],
+          [
+            14,
+            13
+          ],
+          [
+            14,
+            14
+          ],
+          [
+            13,
+            14
+          ],
+          [
+            12,
+            14
+          ],
+          [
+            11,
+            14
+          ],
+          [
+            10,
+            14
+          ],
+          [
+            9,
+            14
+          ],
+          [
+            8,
+            14
+          ],
+          [
+            7,
+            14
+          ],
+          [
+            6,
+            14
+          ],
+          [
+            5,
+            14
+          ],
+          [
+            4,
+            14
+          ],
+          [
+            3,
+            14
+          ],
+          [
+            2,
+            14
+          ],
+          [
+            2,
+            13
+          ],
+          [
+            2,
+            12
+          ],
+          [
+            2,
+            11
+          ],
+          [
+            1,
+            11
+          ],
+          [
+            0,
+            11
+          ]
+        ],
+        "actions": [
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "left",
+          "left",
+          "up",
+          "up",
+          "up",
+          "up",
+          "right",
+          "right",
+          "right",
+          "right",
+          "up",
+          "up",
+          "up",
+          "up",
+          "left",
+          "left",
+          "left",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "right",
+          "right",
+          "right",
+          "right",
+          "right",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "left",
+          "left",
+          "left",
+          "up",
+          "up",
+          "up"
+        ],
+        "transition": {
+          "exit_yx": [
+            0,
+            11
+          ],
+          "arrival_yx": [
+            35,
+            21
+          ],
+          "action": "up",
+          "action_in_approach": false
+        }
+      },
+      {
+        "source_map": "VIRIDIAN_CITY",
+        "source_map_id": 1,
+        "target_map": "VIRIDIAN_POKECENTER",
+        "target_map_id": 41,
+        "approach_coordinates_yx": [
+          [
+            35,
+            21
+          ],
+          [
+            34,
+            21
+          ],
+          [
+            33,
+            21
+          ],
+          [
+            32,
+            21
+          ],
+          [
+            31,
+            21
+          ],
+          [
+            30,
+            21
+          ],
+          [
+            30,
+            20
+          ],
+          [
+            29,
+            20
+          ],
+          [
+            28,
+            20
+          ],
+          [
+            28,
+            19
+          ],
+          [
+            27,
+            19
+          ],
+          [
+            26,
+            19
+          ],
+          [
+            26,
+            20
+          ],
+          [
+            26,
+            21
+          ],
+          [
+            26,
+            22
+          ],
+          [
+            26,
+            23
+          ],
+          [
+            25,
+            23
+          ]
+        ],
+        "actions": [
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "left",
+          "up",
+          "up",
+          "left",
+          "up",
+          "up",
+          "right",
+          "right",
+          "right",
+          "right",
+          "up"
+        ],
+        "transition": {
+          "exit_yx": [
+            25,
+            23
+          ],
+          "arrival_yx": [
+            7,
+            3
+          ],
+          "action": "up",
+          "action_in_approach": true
+        }
+      }
+    ]
+  },
+  "live_arrivals": [
+    {
+      "map": "ROUTE_1",
+      "map_id": 12,
+      "yx": [
+        35,
+        10
+      ]
+    },
+    {
+      "map": "VIRIDIAN_CITY",
+      "map_id": 1,
+      "yx": [
+        35,
+        21
+      ]
+    },
+    {
+      "map": "VIRIDIAN_POKECENTER",
+      "map_id": 41,
+      "yx": [
+        7,
+        3
+      ]
+    }
+  ],
+  "wild_flees": [],
+  "movement_retries": 0,
+  "final_map": {
+    "id": 41,
+    "name": "VIRIDIAN_POKECENTER"
+  },
+  "final_yx": [
+    7,
+    3
+  ],
+  "planned_actions": 86,
+  "actions_executed_during_plan": 90,
+  "frames_executed": 55722,
+  "controller_released": true,
+  "rom_adjacent_artifacts_unchanged": true
+}

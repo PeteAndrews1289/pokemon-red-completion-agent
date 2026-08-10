@@ -3,39 +3,41 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-10): compose cartridge knowledge into a route
+## Current focus (2026-08-10): make composed routing a closed control loop
 
-The first static traversal layer is complete. Red and Blue produce the same eight ledge rules,
-eleven land elevation-pair restrictions, three water-pair restrictions, nine Cut block swaps, 25
-initial boulders and complete static local graphs. The graph retains exact controller actions and
-distinguishes an ordinary walk from a directed ledge. Across each cartridge it contains 154,653
-directed land edges over 48,216 standable coordinates. See
-[the complete traversal record](evidence/traversal-rules-2026-08-10.json).
+The geometry and composition milestones are complete. Red and Blue agree on 1,484 exact connection
+transitions, 558 ordinary warp arrivals, 242 dynamic returns and the previously decoded 154,653
+directed land edges. `$FF` returns now use retained outside-map state rather than immediate doorway
+history, which is essential for nested interiors. The game-neutral `RoutePlan` joins macro and local
+search without importing Pokémon concepts.
 
-A clean source-bound live probe generated thirteen Route 1 approach inputs, crossed the selected
-ledge two squares downward to `(28, 10)`, and confirmed the reverse input was blocked. This closes
-one-way ledges under live authority; it does not make Cut, Surf or Strength static capabilities. See
-[the ledge probe](evidence/route1-cartridge-ledge-probe-2026-08-10.json).
+A clean source-bound live probe generated and executed 86 actions from post-Pokédex Pallet
+`(12, 12)` through Route 1 and Viridian into the Pokémon Center. Live memory matched all three
+decoded passage arrivals and finished at `(7, 3)` with zero retries, released controls and unchanged
+ROM-adjacent artifacts. See the
+[composed-route receipt](evidence/pallet-viridian-composed-route-probe-2026-08-10.json).
 
-The code audit changed the immediate order. The macro graph knows which map comes next, while the
-local graph knows which controller input moves between coordinates, but they cannot yet form one
-continuous plan. Warp decoding drops the destination warp index, connection decoding drops arrival
-alignment, and initial object tables are not live NPC positions. The ordered gates are now:
+The remaining risk is runtime state, not missing static geometry. The composer currently excludes
+initial object coordinates, while the probe delegates Route 1 interruptions to an already qualified
+title-specific helper. A reusable player must observe what is blocked *now*, acknowledge every
+input, and replan when the world changes. The ordered gates are now:
 
-1. Retain both endpoints of ordinary warps and the exact source/arrival geometry of connections;
-   independently fixture every byte and compare the full structures across Red and Blue.
-2. Compose macro passages and local edges into one game-neutral `RoutePlan`. Add a short-prefix
-   observe/act/reobserve executor with dynamic blockers and bounded wild-interruption handling.
-3. Prove Pallet → Route 1 → Viridian → Pokémon Center from clean source with no typed route
-   directions. This exercises both a border connection and a door warp.
-4. Add Surf as a stateful movement mode, then Cut as a block mutation, then Strength as a boulder
-   puzzle state space. Each receives a separate live falsification before completion-run authority.
-5. Filter story-gated passages with observed semantic predicates; unknown requirements fail closed.
-6. Read the remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
+1. Extract a public game-neutral overworld executor from the probe/chapter helpers. Execute one
+   planned edge at a time, reobserve map/coordinate/input readiness, and require progress receipts.
+2. Add live blocker overlays for visible NPC/object coordinates and short-suffix replanning. A
+   blocked step must never be counted merely because its input was sent.
+3. Generalize bounded battle interruption handling without hard-coding Route 1, then pass a second
+   source-bound composed route under an intentionally changed blocker or encounter lineage.
+4. Add Surf as a stateful movement mode with badge-plus-party capability, observed board/move/
+   disembark transitions and recomputed local graphs.
+5. Add Cut as an observed block mutation, then Strength as a bounded boulder puzzle state space.
+   Each receives a separate live falsification before completion-run authority.
+6. Filter story-gated passages with observed semantic predicates; unknown requirements fail closed.
+7. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
    prizes—so one-cartridge reachability becomes complete rather than a lower bound.
-7. Record semantic route decisions and interruptions for learning. Do not train a model to imitate
-   repeated shortest-path steps that an exact graph search already solves better.
-8. Add Crystal's thin adapter only after the route-plan and traversal-observation contracts are
+8. Record strategic destination choices, replans and interruption outcomes for learning. Do not
+   train a model to imitate shortest-path frames that exact search already solves.
+9. Add Crystal's thin adapter after the executor and traversal-observation contracts are
    title-neutral, then run the defined battle/navigation/training microbenchmarks.
 
 The full reasoning, risks and admission criteria are in the
@@ -426,29 +428,29 @@ Block and collision data followed the same day, so a path *within* a map is now 
 `gen1_terrain` gives 48,216 standable squares across Kanto and walks between any two of them. The
 sixteen-step route from Red's door to Oak's lab is searched, not typed.
 
-The first cross-cartridge evidence flags were weaker than their prose: map equality compared only
-adjacency, and terrain equality compared aggregate totals plus Pallet Town. The extractors now
-compare the complete decoded graph, every terrain grid and every tileset, but the public records
-must be regenerated from both verified ROMs before the stronger equality claims reopen. Contextual
-`$FF` return warps also carry the map that supplied their entry state, and actionable routes retain
-their selected edges, headings and coordinates rather than only a sequence of map ids.
+The first cross-cartridge evidence flags were weaker than their prose, so all complete structures
+were regenerated from both verified ROMs. Passage geometry now includes destination-warp indices,
+ordinary arrival coordinates and 1,484 exact reciprocal connection transitions. Contextual `$FF`
+returns use the engine's retained outside map rather than immediate entry history. The game-neutral
+composer consumes those structures, and its first live four-map route passed all decoded arrivals.
 
 What is still hand-typed, in order of value:
 
-1. **Traversal requirements** — the graph says which maps are joined and which squares are standable,
-   not whether the way is *open*. Surf, Cut, Strength, ledges, doors that open on a story flag and
-   people standing in the way are all absent. A computed route is therefore a candidate to check
-   rather than a plan to run, and this blocks putting routing into a live run.
+1. **Current runtime traversal state** — ledges and static land restrictions are decoded, but Surf,
+   Cut, Strength, story gates and current people/object positions still decide whether a candidate
+   edge is open. The composer ran live behind an experimental boundary; completion-run authority
+   still requires stepwise reobservation and replanning.
 2. **Game Corner prizes, gifts and fossils** — the acquisition routes still unread. Wild tables,
    rods, evolution and the ten in-game trades are derived; the Game Corner, the gift Pokémon and the
    two fossils are not. The trades alone were worth four species the model had counted as
    unreachable, so the remaining routes should be assumed to matter rather than assumed marginal.
-3. **Retiring the hand-written walks** — the chapter modules still press buttons from a script even
-   though the grid to compute them from now exists. Nothing consumes `gen1_terrain` yet, so the
-   reading has not paid off in behaviour.
+3. **Retiring the remaining hand-written walks** — one continuous Pallet-to-Center route now consumes
+   `gen1_terrain`, traversal rules and passage geometry. Chapter modules still recite most routes;
+   migrate them only after the shared live executor earns its admission gate.
 
-Items 1 and 3 together finish the argument. Until a chapter asks for a route instead of reciting
-one, "plays each and every game" still costs one hand-authored walk per objective.
+Items 1 and 3 together finish the argument. The first chapter-independent route proves the
+composition, while the shared closed-loop executor is what prevents each future game from costing
+one hand-authored walk per objective.
 
 **D. Falsify the game-neutrality claim.** `party.py`, `team_training.py`, `capture.py` and
 `pokedex.py` all claim to be game-neutral and nothing has ever tested that claim. Moving the battle

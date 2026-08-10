@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Decoded exact connection endpoints and destination-warp arrivals, corrected `$FF` returns to use
+  retained outside-map state, added a game-neutral multi-map route composer, and proved an 86-action
+  Pallet-to-Viridian-Center plan live from clean source across all three cartridge-declared arrivals.
 - Completed a third full feature-v3 battle-control lineage with 3,322 labels, 17 explicitly
   targeted switches, 1,800 development battles, an all-final-form 60/55/55/55/55/55 party, and a
   seven-switch observed-role Agatha lesson through Hall of Fame.
