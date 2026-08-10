@@ -31,6 +31,7 @@ def _terrain(*rows: tuple[bool, ...]) -> Terrain:
         tileset=0,
         walkable=rows,
         grass=tuple(tuple(False for _ in row) for row in rows),
+        tiles=tuple(tuple(1 if cell else 0 for cell in row) for row in rows),
     )
 
 

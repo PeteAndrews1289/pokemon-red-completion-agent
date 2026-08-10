@@ -107,6 +107,17 @@ class Terrain:
     walkable: tuple[tuple[bool, ...], ...]
     #: Where tall grass is, which is where wild encounters happen.
     grass: tuple[tuple[bool, ...], ...]
+    #: The exact tile under each step. Traversal rules such as ledges and
+    #: elevation-pair collisions depend on tile identity, not passability alone.
+    tiles: tuple[tuple[int, ...], ...]
+
+    def __post_init__(self) -> None:
+        shape = tuple(len(row) for row in self.walkable)
+        if not shape or not shape[0] or len(set(shape)) != 1:
+            raise ValueError("terrain walkability must be a non-empty rectangular grid")
+        for label, grid in (("grass", self.grass), ("tiles", self.tiles)):
+            if len(grid) != len(self.walkable) or tuple(len(row) for row in grid) != shape:
+                raise ValueError(f"terrain {label} must match the walkability grid")
 
     @property
     def height(self) -> int:
@@ -179,23 +190,28 @@ def terrain_for(rom: bytes, map_id: int, sets: Mapping[int, Tileset]) -> Terrain
 
     walkable: list[tuple[bool, ...]] = []
     grass: list[tuple[bool, ...]] = []
+    tile_rows: list[tuple[int, ...]] = []
     for y in range(height * STEPS_PER_BLOCK):
         row_walkable: list[bool] = []
         row_grass: list[bool] = []
+        row_tiles: list[int] = []
         for x in range(width * STEPS_PER_BLOCK):
             block = rom[blocks + (y // STEPS_PER_BLOCK) * width + (x // STEPS_PER_BLOCK)]
             row = (y % STEPS_PER_BLOCK) * STEPS_PER_BLOCK + FEET_ROW
             column = (x % STEPS_PER_BLOCK) * STEPS_PER_BLOCK + FEET_COLUMN
             tile = rom[blockset + BLOCK_TILES * block + BLOCK_SIDE * row + column]
+            row_tiles.append(tile)
             row_walkable.append(tile in tileset.walkable)
             row_grass.append(tileset.has_grass and tile == tileset.grass_tile)
         walkable.append(tuple(row_walkable))
         grass.append(tuple(row_grass))
+        tile_rows.append(tuple(row_tiles))
     return Terrain(
         map_id=map_id,
         tileset=tileset_id,
         walkable=tuple(walkable),
         grass=tuple(grass),
+        tiles=tuple(tile_rows),
     )
 
 

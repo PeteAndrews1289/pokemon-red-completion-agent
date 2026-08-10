@@ -126,6 +126,10 @@ def test_the_player_stands_on_the_lower_left_tile_of_a_cell() -> None:
 
     assert (terrain.height, terrain.width) == (2, 2)
     assert terrain.walkable == ((True, False), (False, False))
+    assert terrain.tiles == (
+        (WALKABLE_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE),
+    )
 
 
 def test_a_block_id_selects_which_sixteen_tiles_are_used() -> None:
@@ -233,7 +237,31 @@ def test_a_blockset_pointer_outside_the_bank_window_is_refused() -> None:
 
 def open_terrain(picture: list[str]) -> Terrain:
     walkable = tuple(tuple(cell != "#" for cell in row) for row in picture)
-    return Terrain(map_id=0, tileset=0, walkable=walkable, grass=walkable)
+    tiles = tuple(tuple(1 if cell != "#" else 0 for cell in row) for row in picture)
+    return Terrain(map_id=0, tileset=0, walkable=walkable, grass=walkable, tiles=tiles)
+
+
+def test_terrain_rejects_misaligned_coordinate_grids() -> None:
+    with pytest.raises(ValueError, match="non-empty rectangular"):
+        Terrain(map_id=0, tileset=0, walkable=(), grass=(), tiles=())
+
+    with pytest.raises(ValueError, match="grass must match"):
+        Terrain(
+            map_id=0,
+            tileset=0,
+            walkable=((True, True),),
+            grass=((False,),),
+            tiles=((1, 1),),
+        )
+
+    with pytest.raises(ValueError, match="tiles must match"):
+        Terrain(
+            map_id=0,
+            tileset=0,
+            walkable=((True, True),),
+            grass=((False, False),),
+            tiles=((1,),),
+        )
 
 
 def test_a_walk_goes_around_what_it_cannot_cross() -> None:
