@@ -413,7 +413,7 @@ def test_pewter_report_requires_the_authenticated_lab_loss_recovery_lesson() -> 
         _report(),
         lab_rival_loss_recovery_required=True,
         rival_loss_recovery_search_attempts=(3, 2),
-        rival_loss_recovery_species_ids=(0x70, 0x70),
+        rival_loss_recovery_species_ids=(0x71, 0x70),
         rival_loss_recovery_level=6,
     )
 

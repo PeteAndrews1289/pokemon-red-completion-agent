@@ -36,7 +36,7 @@ PEWTER_CHECKPOINT_COUNT = 10
 KAKUNA_SPECIES_ID = 0x71
 WEEDLE_SPECIES_ID = 0x70
 KAKUNA_TARGET_SPECIES_IDS = frozenset({KAKUNA_SPECIES_ID})
-LAB_RIVAL_LOSS_RECOVERY_SPECIES_IDS = frozenset({WEEDLE_SPECIES_ID})
+WEEDLE_TARGET_SPECIES_IDS = frozenset({WEEDLE_SPECIES_ID})
 MAX_LAB_RIVAL_LOSS_RECOVERY_BATTLES = 3
 
 LAB_TO_PALLET_DIRECTIONS = ("down",) * 9
@@ -280,6 +280,11 @@ class PewterChapterReport:
     @property
     def passed(self) -> bool:
         recovery_battles = len(self.rival_loss_recovery_search_attempts)
+        expected_recovery_species = (
+            ()
+            if recovery_battles == 0
+            else (KAKUNA_SPECIES_ID,) + (WEEDLE_SPECIES_ID,) * (recovery_battles - 1)
+        )
         return (
             self.pokedex_evidence.pokedex_snapshot
             and self.reached_boundaries
@@ -302,10 +307,7 @@ class PewterChapterReport:
             )
             and all(attempts > 0 for attempts in self.rival_loss_recovery_search_attempts)
             and len(self.rival_loss_recovery_species_ids) == recovery_battles
-            and all(
-                species_id in LAB_RIVAL_LOSS_RECOVERY_SPECIES_IDS
-                for species_id in self.rival_loss_recovery_species_ids
-            )
+            and self.rival_loss_recovery_species_ids == expected_recovery_species
             and self.rival_loss_recovery_level
             == (6 if self.lab_rival_loss_recovery_required else None)
             and len(self.forest_target_search_attempts) == 3
@@ -520,17 +522,22 @@ def run_pewter_chapter(
                 "level-five Forest entry lacked an authenticated lab-rival loss."
             )
         for recovery_battle in range(1, MAX_LAB_RIVAL_LOSS_RECOVERY_BATTLES + 1):
-            label = f"lab-rival loss recovery Kakuna {recovery_battle}"
+            recovery_species = "Kakuna" if recovery_battle == 1 else "Weedle"
+            target_species_ids = (
+                KAKUNA_TARGET_SPECIES_IDS if recovery_battle == 1 else WEEDLE_TARGET_SPECIES_IDS
+            )
+            seed_wait_frames = timing.first_kakuna_seed_wait_frames + int(recovery_battle > 1)
+            label = f"lab-rival loss recovery {recovery_species} {recovery_battle}"
             recovery_encounter, more_flees, more_retries, search_attempts, step_consumed = (
                 _seek_forest_training_battle(
                     chapter_executor,
                     reader,
                     "down",
-                    timing.first_kakuna_seed_wait_frames,
+                    seed_wait_frames,
                     timing,
                     label,
                     used_flees=len(forest_wild_flees),
-                    target_species_ids=LAB_RIVAL_LOSS_RECOVERY_SPECIES_IDS,
+                    target_species_ids=target_species_ids,
                 )
             )
             forest_wild_flees += more_flees
