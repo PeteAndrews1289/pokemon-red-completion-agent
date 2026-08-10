@@ -381,19 +381,24 @@ eleven-species exclusive lists be *derived* rather than declared. And the map gr
 hand-written five-node sketch that was both incomplete and wrong: it joined Viridian City to the
 Route 22 gate, which is reached from Routes 22 and 23 and nowhere else.
 
+Block and collision data followed the same day, so a path *within* a map is now computed too:
+`gen1_terrain` gives 48,216 standable squares across Kanto and walks between any two of them. The
+sixteen-step route from Red's door to Oak's lab is searched, not typed.
+
 What is still hand-typed, in order of value:
 
-1. **Traversal requirements** — the map graph says which maps are joined, not whether the way is
-   open. Surf, Cut, Strength and story gates are not in header data, so a computed route is a
-   candidate to check rather than a plan to run. This now blocks putting routing into a live run,
-   which makes it the top of the list.
+1. **Traversal requirements** — the graph says which maps are joined and which squares are standable,
+   not whether the way is *open*. Surf, Cut, Strength, ledges, doors that open on a story flag and
+   people standing in the way are all absent. A computed route is therefore a candidate to check
+   rather than a plan to run, and this blocks putting routing into a live run.
 2. **Game Corner prizes and in-game trades** — the remaining acquisition routes a living Pokédex
    needs. Wild tables, rods and evolution are read; gifts, fossils, prizes and trades are not.
-3. **Block and collision data** — what would turn a route between maps into actual directions, and
-   retire the hand-written walk sequences in every chapter module.
+3. **Retiring the hand-written walks** — the chapter modules still press buttons from a script even
+   though the grid to compute them from now exists. Nothing consumes `gen1_terrain` yet, so the
+   reading has not paid off in behaviour.
 
-Item 3 is the one that finishes the argument. Until a path *within* a map can be computed, "plays
-each and every game" still costs one hand-authored walk per objective and never converges.
+Items 1 and 3 together finish the argument. Until a chapter asks for a route instead of reciting
+one, "plays each and every game" still costs one hand-authored walk per objective.
 
 **D. Falsify the game-neutrality claim.** `party.py`, `team_training.py`, `capture.py` and
 `pokedex.py` all claim to be game-neutral and nothing has ever tested that claim. Moving the battle

@@ -70,21 +70,47 @@ requirement. The sketch was also wrong where it did speak: it joined Viridian Ci
 gate, which is reached from Routes 22 and 23 and nowhere else. That correction is pinned by a test.
 Record: [map-graph-2026-08-10.json](docs/evidence/map-graph-2026-08-10.json).
 
-**What a route promises, and what it does not.** It promises the maps are joined. It does *not*
-promise the way is open now — Surf, Cut, Strength and story gates are nowhere in header data. A
-computed route is a candidate to be checked, not a plan to be executed. Reading traversal
-requirements is the next step, and until it exists do not wire routing into a live run.
+**The ground itself is read too.** `gen1_terrain.walkable_world` gives every reachable map's
+walkable grid — 48,216 standable squares and 2,537 grass squares, identical on both cartridges — and
+`steps_between` walks across one. Pallet Town comes out looking like Pallet Town, and the walk from
+Red's door to Oak's is now sixteen computed steps rather than a typed button sequence.
 
-**A warning worth more than the feature.** The first ten mutation probes against the map work left
-**six survivors**. The tests compared a recorded read against other structures and never exercised
-the decoder, so breaking the connection stride or swapping two headings left every test green. The
-fix was a synthetic cartridge written byte by byte in `tests/test_gen1_map_decoding.py`, whose layout
-constants are stated *independently* of the module — a fixture that lays out bytes using the same
-constants the decoder reads them back with cannot fail. Two further real gaps surfaced: every fixture
-map had a single warp, so the four-byte stride was never exercised at all, and the probe harness
-itself reported false survivors until it cleared `__pycache__` between runs. Twelve of twelve probes
-now fail as they should. **If you add a reader here, assume your first test suite is decorative until
-a mutation proves otherwise.**
+The one thing there that cannot be guessed is *which* tile of a block the player stands on. All four
+choices produce a grid and three look plausible. It was settled by measurement: of Kanto's 919
+warps, the share landing on passable ground is **98.3%** under the lower-left reading and 34.7%,
+34.4%, 62.5% under the others. The six exceptions are bottom-edge tiles in Seafoam Islands and Rock
+Tunnel — landing spots you reach by falling, not by walking.
+
+The tileset table hid for an afternoon because the search assumed one pointer convention per entry.
+It is not: blockset pointers are banked, collision pointers name bank 0 and are flat offsets.
+
+**What a route promises, and what it does not.** It promises the maps are joined and the squares are
+standable. It does *not* promise the way is open — Surf, Cut, Strength, ledges, doors that open on a
+story flag and people standing in the way are all absent from this data. A computed route is a
+candidate to be checked, not a plan to be executed. **Do not wire routing into a live run until
+traversal requirements are read.** Record: [terrain-2026-08-10.json](docs/evidence/terrain-2026-08-10.json).
+
+**A warning worth more than the features.** Mutation testing caught eleven decorative tests across
+this work, and the pattern repeated even after I knew about it.
+
+The first ten probes against the map graph left **six survivors**: the tests compared a recorded read
+against other structures and never exercised the decoder, so breaking the connection stride or
+swapping two headings left everything green. The fix is a synthetic cartridge written byte by byte
+(`tests/test_gen1_map_decoding.py`) whose layout constants are stated *independently* of the module —
+a fixture that lays out bytes using the same constants the decoder reads them back with cannot fail.
+Two further gaps surfaced there: every fixture map had a single warp, so the four-byte stride was
+never exercised at all, and the probe harness reported false survivors until it cleared `__pycache__`
+between runs.
+
+Then the terrain work, written with all of that in mind, still left **five of thirteen surviving** —
+every one a fixture that could not fail. The tileset sat in bank 1, where a banked address and a flat
+offset are the same number, so the single read that mattered most could not be told apart. The block
+layout was symmetric enough that a wrong row stride read the same byte. The no-grass test used a map
+with no `$FF` tile on it. The walk had no diagonal shortcut on offer.
+
+Twelve of twelve and thirteen of thirteen now fail as they should. **If you add a reader here, assume
+your first test suite is decorative until a mutation proves otherwise — and check specifically that
+your fixture is capable of distinguishing the thing you are asserting.**
 
 ## Superseding terminal checkpoint — 2026-08-10
 
