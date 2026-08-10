@@ -1491,3 +1491,12 @@ failure replay subsequently completed 312/312 checkpoints, 36/36 objectives, 74/
 battles, Champion, and Hall of Fame with three Dig attacks and no Surge recovery item. V35 is
 preregistered on fresh validation seeds `1810001`–`1810005`; sealed test seeds
 `1820001`–`1820005` remain unopened until all five validations pass unchanged.
+
+The current clean-start reliability lane is now published at `d9a7beb`. Fresh perturbation
+`990027` legitimately loses the lab rival, trains Squirtle from level five to nine against bounded
+Route 1 prey with a verified Viridian Center reset after each lesson, clears Brock and Route 3,
+weakens and catches Zubat, balances the reduced-money inventory, accepts evolution, defeats Misty,
+and retains Bite for the Vermilion Rocket. The extended proof used temporary tracing on a dirty
+tree and therefore cannot qualify the source. The next step is one clean-power replay of `990027`
+under exact commit `d9a7beb`, followed by a fresh uncounted perturbation if it completes. V95 stays
+sealed at 0/10 until those source-bound gates pass.

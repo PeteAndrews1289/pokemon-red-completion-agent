@@ -2,21 +2,22 @@
 
 ## Executive verdict
 
-The project has crossed an important line: one noncanonical, derived-timing clean start now completes
-Pokemon Red through Hall of Fame with all six learned roles active and battle-teacher queries
-forbidden. That is stronger than the earlier canonical completion because it proves the composed
-stack can survive at least one real timing perturbation. It is still one uncounted root, not a
-reliability campaign and not a claim that a monolithic model learned Pokemon from pixels.
+The project has crossed two important lines. First, one noncanonical, derived-timing clean start
+completes Pokemon Red through Hall of Fame with all six learned roles active and battle-teacher
+queries forbidden. Second, the next fresh root legitimately lost the lab rival and the teacher now
+continues through Misty without rerolling or claiming a win. That second result matters because it
+turns a single successful trajectory into the beginning of a real outcome-conditioned curriculum.
+Neither result is yet a reliability campaign or proof that a monolithic model learned Pokemon from
+pixels.
 
-The next fresh root did exactly what a useful evaluation should do: it produced a legitimate loss
-to the lab rival. The old teacher assumed that battle must be won. The published code now recognizes
-the cartridge's real loss state, carries that outcome across later mutable battle RAM, and reaches a
-bounded Viridian Forest recovery. The remaining failure is narrower: that extra recovery changes
-encounter RNG, experience, HP, and Tackle PP, so the victory route's three fixed Kakuna lessons are
-not a valid suffix. The current clean-source replay completes two loss-specific lessons and fails
-closed only when no safe third Weedle appears within the single-origin bounded search. Diagnosis
-shows the safe design is to earn the loss-only experience on Route 1, heal in nearby Viridian City,
-then enter the unchanged Forest curriculum from a restored semantic floor.
+The repaired loss branch trains only on bounded level-four-or-lower Route 1 Pidgey/Rattata, returns
+to the Viridian Center after every lesson, and authenticates full HP, clear status, and restored PP
+before continuing. It reaches level nine with Bubble, clears the Forest trainer and Brock, survives
+Route 3, weakens and catches Zubat with the sole ball, balances the reduced-money route, accepts
+Wartortle's evolution, defeats Misty, and preserves the level-24 Bite lesson for the Vermilion
+Rocket. The long replay that proves this prefix began on a dirty tree with temporary tracing, so it
+is diagnostic rather than promotable. The exact committed source now needs its own clean-power
+replay.
 
 Counted v95 remains deliberately unopened at **0/10**. Crystal, cross-title transfer, and a living
 Pokedex remain future milestones.
@@ -76,7 +77,7 @@ remain stable.
 
 ## What changed in source
 
-The session published thirteen source-bound repairs after the previous checkpoint:
+The session published thirteen source-bound repairs before the latest checkpoint:
 
 - semantic trainer-switch versus evolution handling;
 - fossil-route money accounting;
@@ -92,27 +93,28 @@ The session published thirteen source-bound repairs after the previous checkpoin
 - a balanced Kakuna/Weedle recovery sequence; and
 - a loss-aware Forest lesson sequence with an explicit safe-target level ceiling.
 
-The clean tree at `c2aeb12` passes public-artifact and documentation checks, regenerated registry,
-Ruff, mypy over 128 source modules, and 2,217 tests; three integration tests are deselected and one
-expected failure remains expected.
+Commit `d9a7beb` adds the subsequent loss-route curriculum and downstream resource, capture,
+move-selection, and semantic switch-prompt repairs. Its v95 registry identity is
+`829c0fa8236ac976c37912559d4c6dbf543e0938694e22756b4d56f8456d09c4`. Public-artifact and
+documentation checks, regenerated registry verification, Ruff, mypy over 128 source modules, and
+2,227 tests pass; three integration tests are deselected and one expected failure remains expected.
+GitHub Actions run `31368161467` independently passed the same source commit.
 
-## The new failure is the right kind of work
+## The new branch is the right kind of work
 
 Seed `990027` lost the lab rival before any learned battle or training decision. Treating that loss
 as a valid game outcome is essential if the teacher is meant to cover Pokemon rather than replay a
-single lucky speedrun. Six small published changes now distinguish win from loss, preserve the
-outcome after later battles overwrite `BATTLE_RESULT`, and recover the level deficit without
-pretending the rival was beaten.
+single lucky speedrun. The published branch now distinguishes win from loss, preserves the outcome
+after later battles overwrite `BATTLE_RESULT`, and recovers the level deficit without pretending
+the rival was beaten.
 
-The latest official replay from clean published source reaches 171,585 frames, completes two
-post-loss lessons, and fails because it cannot find a safe level-four-or-lower third Weedle from the
-same search origin. Private instrumented probes established both sides of the safety boundary: a
-level-three Caterpie leaves the level-seven starter healthy but short of Bubble, while a level-five
-Weedle reaches level eight and Bubble at only 3/25 HP while poisoned. Tail Whip is not a PP solution
-against Kakuna because Harden cancels the defense reduction. Those probes are explicitly
-non-promotable because their runtime monkeypatches were outside the source digest. The public
-failure receipt records both the official boundary and the diagnostic limitation:
+The clean published failure at 171,585 frames remains preserved in
 [perturbation 13](evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json).
+It led to the Route 1 redesign. Temporary traced replays then verified thirteen low-defense lessons
+with thirteen Center heals, the weaker Pewter and Cerulean ledgers, every required Route 3 trainer,
+one weakened Zubat capture, Misty, evolution, and the Bite transition. Those traces are explicitly
+non-promotable because they began outside the final source digest. This is the correct boundary:
+the repair is implemented and deeply exercised, but the claim waits for a clean replay.
 
 ## Honest capability rating
 
@@ -122,31 +124,29 @@ failure receipt records both the official boundary and the diagnostic limitation
 | Learned objective selection | 8/10 | Full clean-start authority, one real branch, no expected labels |
 | Learned battle control | 8/10 | Full teacher-free completion with typed recovery/boost/switch actions |
 | Learned balanced-team curriculum | 8/10 | Full six-member development and live training authority |
-| Perturbation reliability | 5/10 | One derived-timing pass; next root exposes a real optional-loss gap |
+| Perturbation reliability | 5/10 | One full derived-timing pass and one deep loss-route diagnostic |
 | Learned navigation | 2/10 | Navigation remains mostly specialist code with semantic receipts |
 | Cross-game transfer | 1/10 | Architecture and benchmark exist; no Crystal causal result yet |
 | Living-Pokedex completion | 1/10 | Contracts exist; no complete acquisition/trade campaign yet |
 
 ## Recommended next sequence
 
-1. Move the authenticated-loss catch-up to Route 1's low-defense Pidgey/Rattata venue, where the
-   Viridian Center is available before the Forest curriculum.
-2. Prove the Center visit restores HP, status, and PP, returns to the exact expected route gate, and
-   preserves the authenticated lab outcome. Then reuse the unchanged three-Kakuna curriculum.
-3. Replay `990027` from clean published source until it either completes or exposes a later causal
-   boundary. Preserve every failure.
-4. Run at least one fresh uncounted root after `990027` passes. Only then freeze and open v95.
-5. Run the ten-root v95 campaign without code or model changes. Eight valid successes are the
+1. Replay `990027` from clean power and exact committed source until it either completes or exposes
+   a later causal boundary. Preserve every failure and its source identity.
+2. If it completes, run at least one fresh uncounted root. Only then freeze and open v95.
+3. Run the ten-root v95 campaign without code or model changes. Eight valid successes are the
    minimum promotion gate.
-6. After Red reliability closes, build the thin Crystal observer/mechanics adapter and run the
+4. After Red reliability closes, build the thin Crystal observer/mechanics adapter and run the
    predefined transfer probes before authoring a complete Crystal teacher.
 
 ## Portfolio and video story
 
 The strongest story is no longer merely “an AI beat Pokemon.” It is: **a six-role learned stack
 completed Red under a timing perturbation, and the very next seed revealed that the teacher—not the
-models—did not know how to lose the first battle.** The project then refused to reroll, authenticated
-the loss, recovered toward the same semantic curriculum, and exposed a second-order PP budget.
+models—did not know how to lose the first battle.** The project then refused to reroll,
+authenticated the loss, learned thirteen local lessons with a heal after each, and carried the
+weaker economy through Misty and evolution. Every newly exposed assumption became a state contract
+rather than a seed reroll.
 
 That story shows model evaluation, systems debugging, experiment lineage, calibrated claims, and
 the difference between solving one trajectory and building an agent that can survive a game.

@@ -101,6 +101,17 @@ development score—is the next promotion gate.
 
 ## What I would discuss in an interview
 
+### Latest reliability milestone
+
+Fresh timing seed `990027` produced a legitimate lab-rival loss. Rather than rerolling, the system
+now authenticates that outcome, builds the missing capability through thirteen bounded Route 1
+battles with verified healing, and carries the altered experience and money state through Brock,
+Route 3, a weakened Zubat capture, evolution, Misty, and the level-24 Bite transition. The repair
+also separates trainer-switch prompts from evolution semantically and accounts for every extra
+Potion and the conditional TM34 sale. Commit `d9a7beb` passes 2,227 ROM-free tests plus Ruff, mypy,
+documentation, privacy, and source-registry gates. The extended runtime result remains explicitly
+diagnostic until the exact committed source completes a clean-power replay.
+
 - How to separate an expert teacher, learned actor, safety referee, and game-specific executor.
 - Why a 100% model score can be meaningless when the legal candidate set already determines the
   answer.

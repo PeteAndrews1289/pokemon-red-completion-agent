@@ -2432,6 +2432,16 @@ immediately and attack with Mega Punch. The next replay won without changing the
 fixed post-KO CANCEL count also declined Squirtle's evolution. Once again, success exposed the next
 abstraction boundary: trainer switch prompts and evolution prompts need semantic identities.
 
+The replacement does not infer intent from another fixed delay. The battle runtime asks an
+independent reader whether the current unknown screen is specifically a trainer-switch prompt; it
+cancels immediately only in that state and otherwise leaves evolution dialogue alone. The same
+loss root then accepted Wartortle, learned Bite at level 24, and defeated the Vermilion Rocket.
+Reaching that point required carrying the original loss through the economy: buy one extra Potion
+in Pewter, spend only surplus healing on Route 3, weaken Zubat before the sole throw, and
+conditionally sell the unused Bide token when Cerulean cash is short. Each branch publishes an
+exact item or money receipt. The result is a better teaching story than a reroll: Pokemon includes
+losing, recovering, training, evolving, catching, and reallocating resources after the plan changes.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

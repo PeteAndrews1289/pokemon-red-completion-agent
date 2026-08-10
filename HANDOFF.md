@@ -14,6 +14,47 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Superseding late checkpoint — 2026-08-10
+
+This section supersedes the earlier 2026-08-10 next-step statement below.
+
+**The authenticated lab-rival loss route now reaches beyond Misty.** Commit `d9a7beb` replaces the
+failed Forest-only catch-up with thirteen bounded Route 1 Pidgey/Rattata lessons, each followed by
+an authenticated Viridian Center restoration. The starter reaches level nine with Bubble, skips
+the obsolete three-Kakuna victory curriculum, defeats the mandatory Forest trainer and Brock, and
+enters the existing Route 3/Mt. Moon/Cerulean route without pretending the lab rival was won.
+
+That changed route exposed and repaired four downstream assumptions rather than hiding them:
+
+- the lost rival prize requires one additional Pewter Potion and later conditional sale of the
+  unused TM34/Bide capacity token, with exact money and inventory ledgers;
+- Route 3 can spend every Potion above its protected floor, and its observed difficult trainers
+  select Bubble through a semantic move-menu gate;
+- the sole-ball Zubat lesson must weaken the live target before throwing and accept only the
+  cartridge's bounded one-HP normalization on capture; and
+- trainer-switch prompts and evolution prompts are both visually “unknown” to the generic battle
+  menu reader, so the runtime now CANCELs immediately only when the independent semantic switch
+  detector is true. Misty's evolution remains accepted and the level-24 Bite lesson remains
+  available for the Vermilion Rocket.
+
+The source was reviewed, regenerated into v95 registry identity
+`829c0fa8236ac976c37912559d4c6dbf543e0938694e22756b4d56f8456d09c4`, and passed public-artifact,
+documentation, registry, Ruff, mypy, and **2,227-test** gates; three integration tests are
+deselected and one expected failure remains expected. GitHub CI is green on `d9a7beb`, and the
+commit is pushed to draft PR #8. A long
+dirty-tree diagnostic replay of seed `990027` independently crossed Brock, all required Route 3
+trainers, a weakened level-seven Zubat capture, Mt. Moon, Cerulean supplies, Misty, evolution, and
+the level-24 Bite transition without a new failure. It is useful causal evidence but is
+**non-promotable** because the run began before `d9a7beb` existed and used temporary tracing.
+
+**Immediate next gate:** replay `990027` from clean power and the exact committed source. Do not
+copy the temporary diagnostic wrapper into the repository and
+do not count the dirty replay. If the clean replay completes, preserve its receipt, run one fresh
+uncounted perturbation, then decide whether v95 can finally open. Counted v95 remains **0/10**.
+
+**Current branch:** `agent/balanced-team-curriculum`, draft PR #8. Only Codex pushes this branch;
+do not force-push or create a competing worktree.
+
 ## Superseding current checkpoint — 2026-08-10
 
 This section supersedes every older “next” statement below.
