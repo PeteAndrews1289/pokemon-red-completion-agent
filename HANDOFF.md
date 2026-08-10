@@ -14,6 +14,31 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Codex audit hardening — 2026-08-10
+
+The cartridge-knowledge direction remains correct, but the first evidence pass claimed more than
+its checks established. This checkpoint narrows the claims and hardens the code before any live
+route consumes them:
+
+- the internal-to-dex reader now requires a complete one-to-one 151-species mapping rather than
+  accepting four anchors as a complete table;
+- the evolution reader verifies both Diglett and Kadabra plus the full 70-source/72-edge method
+  totals, refuses invalid pointers and targets, and has a reproducing extraction command;
+- the 108/112 acquisition figures are explicitly lower bounds through parsed routes, not complete
+  cartridge reach, and exclusives remain candidates until the unread acquisition routes are added;
+- the next evidence extraction compares every decoded fishing slot, complete map node/passage and
+  terrain/tileset, replacing aggregate-only equality checks;
+- `$FF` return warps carry the entry origin they require, so a shared interior cannot teleport a
+  route between its possible exteriors; and
+- macro paths retain the exact edges, headings and warp coordinates needed to act, while local
+  paths reject a blocked starting square.
+
+The three August 10 evidence records now state that their existing equality booleans predate these
+stronger comparisons. Do not upgrade those claims from prose: rerun the acquisition, map and terrain
+extractors against both verified private ROMs first, then perform the preregistered Pallet walk in a
+live emulator. None of this changes v95, consumes a held-out seed, or authorizes cartridge routing
+inside a live completion run.
+
 ## The cartridge knows the game — rods, exclusives, and the map graph — 2026-08-10
 
 This section is about the *knowledge* layer, not the run gates. Nothing below changes the v95 or
@@ -21,11 +46,13 @@ clean-start position: counted v95 remains **0/10** and the next run gate is stil
 the terminal checkpoint. Gate after this work: **2,274 tests**, ruff, mypy (130 files), docs,
 artifacts, registry all clean, at commit `fdae65e`.
 
-**Fishing, and the discrepancy it closed.** The rods were the last recorded open discrepancy: Red's
+**Fishing, and the discrepancy it narrowed.** The rods were the last recorded open discrepancy: Red's
 wild tables hold Horsea and Seadra where Blue's hold Krabby and Kingler, and neither pair is
-declared exclusive. Reading the rods settles it — the fishing tables are byte-identical across both
-cartridges and offer all four species in both. The wild-table comparison was simply asking a
-different question from the one a Pokédex asks.
+declared exclusive. Reading the rods shows all four species in both cartridges. The wild-table
+comparison was simply asking a different question from the one a Pokédex asks. The first evidence
+writer compared only aggregate rod species and Super Rod map ids, so its stronger “byte-identical”
+wording was not proved. The hardened writer now compares every decoded rod, level, map and slot; the
+public record must be regenerated from both verified ROMs before making that stronger claim again.
 
 They were found by following code rather than scanning for data. The Old Rod's only bite is an
 immediate operand, not a table, so the search started from the pair every rod shares — level 5,
@@ -34,10 +61,13 @@ data. So `OLD_ROD_ENCOUNTER`, `GOOD_ROD_TABLE_POINTER` and `SUPER_ROD_TABLE_POIN
 *instructions*, and the table addresses come from their operands: a revision that moves the tables
 but keeps the code still reads, and one that moves the code fails on the opcode check.
 
-**Both eleven-species exclusive lists are now derived, not declared.** With rods and the evolution
+**Both eleven-species exclusive lists now fall out of the routes parsed so far.** With rods and the evolution
 graph in hand, `gen1_cartridge.version_exclusives` reads each cartridge's reachable set — wild plus
 rods, closed under evolution — and differences them. The result is exactly the eleven a side that
-`generation_one` declares. That closes the ten-versus-eleven episode properly: the wild-table
+`generation_one` declares. It is strong independent agreement, but not yet a complete derivation:
+gifts, fossils, Game Corner prizes, starters and static encounters remain unread and could in
+principle change a difference. That still closes the arithmetic behind the ten-versus-eleven error:
+the wild-table
 comparison was wrong in *both* directions at once, counting four species that are not exclusive and
 missing six that are, because Vileplume, Primeape, Arcanine, Ninetales, Persian and Victreebel are
 never encountered anywhere — each is only ever reached by evolving something that is. Ten a side was
@@ -46,21 +76,26 @@ Record: [acquisition-routes-2026-08-10.json](docs/evidence/acquisition-routes-20
 
 **The ten in-game trades are read too, and they are worth four species.** Farfetch'd, Lickitung,
 Mr. Mime and Jynx appear in no wild table, on no rod, and at the end of no evolution — the only way
-one cartridge produces them is by swapping with somebody who lives there. The model had been counting
-all four as unreachable. A lone cartridge reaches **108** species, not 104; with a trade partner,
-112. A trade *spends* a specimen, so both halves are recorded — a collection that must keep one of
-everything needs a second of whatever it hands over.
+one cartridge produces them through the routes parsed here is by swapping with somebody who lives
+there. Those parsed routes account for **108** species without a link partner and 112 with one; they
+are lower bounds, not the complete reach of a lone cartridge. Sixteen known one-run targets still
+enter through unread gifts, choices or static encounters. A trade *spends* a specimen, so both
+halves are recorded — a collection that must keep one of everything needs a second of whatever it
+hands over.
 
 **The map graph is read, and it is the one that changes the trajectory.** Every chapter module in
 this repository is hand-written walk directions. `gen1_maps.map_graph` reads 220 reachable maps, 78
-edge connections and 917 warps out of the cartridge — identical on both. Header tables were found by
-brute search and confirmed by an invariant no wrong offset can meet: connections must be reciprocal.
+edge connections and 917 warps out of each cartridge. Their recorded adjacency is identical; the
+hardened extractor's next rerun will compare every decoded node and passage. Header tables were
+found by brute search and confirmed by an invariant no wrong offset can meet: connections must be
+reciprocal.
 
 Three things worth knowing before you touch it:
 
 - **A shop's exit warp names no destination.** One interior serves many towns, so the destination
   byte is `$FF`, "return to whoever led in". Read literally, every Pokémon Centre is a room with no
-  way out. The back edges are recovered from the maps that point in.
+  way out. The candidate back edges are recovered from the maps that point in and now carry the
+  required entry origin; the router may follow only the one matching its actual route state.
 - **Silph Co's lift is told its floor by a menu**, so its warp points at a slot holding no map. It is
   recorded as a `SCRIPTED` passage rather than dropped, because dropping it would make the lift look
   like a dead end. It is the only such map in Kanto.
@@ -75,12 +110,18 @@ costs, no Kanto. The five-node `BASIC_KANTO_GRAPH` is gone, and so is the test a
 unreachable — true of the sketch, false of the game, and an absence of data promoted into a
 requirement. The sketch was also wrong where it did speak: it joined Viridian City to the Route 22
 gate, which is reached from Routes 22 and 23 and nowhere else. That correction is pinned by a test.
+The router now retains the selected edges as well as map ids, including connection headings, warp
+coordinates and contextual-return requirements; a map sequence that discards those cannot be acted
+on safely.
 Record: [map-graph-2026-08-10.json](docs/evidence/map-graph-2026-08-10.json).
 
 **The ground itself is read too.** `gen1_terrain.walkable_world` gives every reachable map's
-walkable grid — 48,216 standable squares and 2,537 grass squares, identical on both cartridges — and
+walkable grid — 48,216 standable squares and 2,537 grass squares in each recorded summary — and
 `steps_between` walks across one. Pallet Town comes out looking like Pallet Town, and the walk from
 Red's door to Oak's is now sixteen computed steps rather than a typed button sequence.
+The original equality flag compared those totals and Pallet Town rather than all 220 grids. The
+hardened extractor compares every decoded `Terrain` and `Tileset`; rerun the record before calling
+the two complete worlds identical.
 
 The one thing there that cannot be guessed is *which* tile of a block the player stands on. All four
 choices produce a grid and three look plausible. It was settled by measurement: of Kanto's 919
@@ -241,7 +282,8 @@ failure remains expected. The complete audit is
 
 Game facts are now *read from the cartridge* rather than declared in Python.
 `pokemon_red_completion.gen1_cartridge` reads the internal-index-to-Pokédex map, the per-map wild
-encounter tables, and the complete evolution graph, from any Generation I cartridge.
+encounter tables, and the complete evolution graph, from the explicitly supported US Red and Blue
+revision-0 cartridges. Other Generation I revisions and Yellow remain unverified.
 
 Why this matters more than the tables themselves: a teacher that knows a game because somebody typed
 its facts in does not transfer. Every title costs another person-week of typing, and each typed fact

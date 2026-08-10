@@ -19,6 +19,7 @@ from pokemon_red_completion.global_router import (
     GlobalRouterError,
     MacroEdge,
     MacroGraph,
+    find_macro_path,
     find_macro_route,
 )
 
@@ -68,12 +69,44 @@ def test_an_edge_carries_how_to_cross_it() -> None:
     """
 
     warp = MacroEdge(5, kind="warp", at=(7, 3))
-    connection = MacroEdge(6)
+    connection = MacroEdge(6, heading="north")
 
     assert warp.at == (7, 3)
     assert warp.kind == "warp"
     assert connection.at is None
     assert connection.kind == "connection"
+    assert connection.heading == "north"
+
+
+def test_an_actionable_path_keeps_the_exact_edges_selected() -> None:
+    warp = MacroEdge(2, kind="warp", at=(7, 3))
+    connection = MacroEdge(3, heading="east")
+
+    path = find_macro_path(MacroGraph({1: (warp,), 2: (connection,)}), 1, 3)
+
+    assert path.maps == (1, 2, 3)
+    assert path.edges == (warp, connection)
+
+
+def test_a_shared_interior_cannot_teleport_between_its_origins() -> None:
+    """A return warp is legal only for the exterior that supplied its context."""
+
+    graph = MacroGraph(
+        {
+            0: (MacroEdge(2, kind="warp"), MacroEdge(3)),
+            1: (MacroEdge(2, kind="warp"),),
+            2: (
+                MacroEdge(0, kind="warp", return_origin=0),
+                MacroEdge(1, kind="warp", return_origin=1),
+            ),
+            3: (MacroEdge(1),),
+        }
+    )
+
+    assert find_macro_route(graph, 0, 1) == (0, 3, 1)
+    assert find_macro_route(graph, 2, 0, entered_from=0) == (2, 0)
+    with pytest.raises(GlobalRouterError):
+        find_macro_route(MacroGraph({2: graph.edges[2]}), 2, 1, entered_from=0)
 
 
 def test_an_edge_must_cost_something() -> None:

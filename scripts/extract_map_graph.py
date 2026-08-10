@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections.abc import Mapping
 from datetime import date
 from pathlib import Path
 
@@ -29,6 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from pokemon_red_completion.gen1_cartridge import fishing_tables, wild_tables  # noqa: E402
 from pokemon_red_completion.gen1_maps import (  # noqa: E402
     STARTING_MAP,
+    MapNode,
     PassageKind,
     map_graph,
     routes_between,
@@ -53,8 +55,10 @@ SAMPLE_JOURNEYS = (
 )
 
 
-def summarise(rom: bytes) -> dict[str, object]:
-    graph = map_graph(rom)
+def summarise(
+    rom: bytes, graph: Mapping[int, MapNode] | None = None
+) -> dict[str, object]:
+    graph = map_graph(rom) if graph is None else graph
     counts = {
         kind.value: sum(
             1 for node in graph.values() for passage in node.passages if passage.kind is kind
@@ -89,17 +93,20 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     summaries: dict[str, dict[str, object]] = {}
+    graphs: dict[str, dict[int, MapNode]] = {}
     for title in TITLES:
         path = resolve_title_rom_path(title)
         verify_rom(path, supported_rom_for(title))
-        summaries[title] = summarise(path.read_bytes())
+        rom = path.read_bytes()
+        graphs[title] = map_graph(rom)
+        summaries[title] = summarise(rom, graphs[title])
         found = summaries[title]
         print(
             f"{title}: {found['maps']} maps reachable from map {STARTING_MAP}, "
             f"passages {found['passage_counts']}"
         )
 
-    agree = summaries["red"]["adjacency"] == summaries["blue"]["adjacency"]
+    agree = graphs["red"] == graphs["blue"]
     print(f"\ncartridges carry the same map graph: {agree}")
     for label, route in summaries["red"]["sample_journeys"].items():  # type: ignore[union-attr]
         print(f"  {label}: {len(route)} maps")

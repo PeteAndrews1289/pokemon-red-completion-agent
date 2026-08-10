@@ -27,6 +27,7 @@ from pokemon_red_completion.gen1_maps import (
     MapNode,
     Passage,
     PassageKind,
+    macro_graph_from_nodes,
     map_graph,
     routes_between,
     verify_connections_are_two_sided,
@@ -84,9 +85,10 @@ def test_the_graph_agrees_with_the_encounter_reads(record: dict) -> None:
 
 
 def test_both_cartridges_carry_the_same_world(record: dict) -> None:
-    """Red and Blue differ in encounters and trades, not in geography."""
+    """Keep the legacy comparison's narrower evidence boundary visible."""
 
     assert record["cartridges_agree"] is True
+    assert "compared adjacency only" in record["comparison_scope"]
     assert record["by_title"]["red"]["passage_counts"] == {
         "connection": 78,
         "warp": 917,
@@ -197,6 +199,32 @@ def test_a_scripted_exit_is_not_followed_when_routing() -> None:
     assert routes_between(graph, 1, 2) == ()
     assert graph[1].neighbours() == frozenset()
     assert graph[1].has_a_scripted_exit
+
+
+def test_the_game_neutral_projection_keeps_action_and_return_context() -> None:
+    decoded = {
+        1: MapNode(
+            1,
+            4,
+            4,
+            (
+                Passage(2, PassageKind.CONNECTION, heading=Heading.EAST),
+                Passage(
+                    3,
+                    PassageKind.WARP,
+                    at=(7, 2),
+                    return_origin=3,
+                ),
+            ),
+        )
+    }
+
+    projected = macro_graph_from_nodes(decoded)
+    connection, return_warp = projected.edges[1]
+
+    assert connection.heading == "east"
+    assert return_warp.at == (7, 2)
+    assert return_warp.return_origin == 3
 
 
 def test_a_one_sided_connection_on_a_real_map_is_refused() -> None:

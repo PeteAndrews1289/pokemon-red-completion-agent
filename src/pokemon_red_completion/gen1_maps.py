@@ -53,7 +53,13 @@ from pokemon_red_completion.gen1_cartridge import (
     fishing_tables,
     wild_tables,
 )
-from pokemon_red_completion.global_router import MacroEdge, MacroGraph
+from pokemon_red_completion.global_router import (
+    GlobalRouterError,
+    MacroEdge,
+    MacroGraph,
+    find_macro_route,
+)
+from pokemon_red_completion.observation import MapId
 
 MAP_HEADER_POINTERS = 0x01AE
 MAP_HEADER_BANKS = 0xC23D
@@ -132,6 +138,9 @@ class Passage:
     heading: Heading | None = None
     #: Set for a warp: the ``(y, x)`` block the player must stand on.
     at: tuple[int, int] | None = None
+    #: Set only for ``$FF`` return warps. The passage is legal when the map was
+    #: entered from this origin, not merely because that origin can enter it.
+    return_origin: int | None = None
 
     @property
     def is_warp(self) -> bool:
@@ -200,6 +209,7 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
     graph = read_map_graph(rom)
     verify_against_encounter_reads(
         reachable=set(graph),
+        named_maps={item.value for item in MapId},
         with_wild_tables=set(wild_tables(rom)),
         fishable=set(fishing_tables(rom).by_map),
     )
@@ -307,21 +317,35 @@ def _assemble(
             # that leads in. Dropping these would strand every Pokémon Centre.
             for origin in sorted(entered.get(map_id, ())):
                 passages.setdefault(map_id, []).append(
-                    Passage(to_map=origin, kind=PassageKind.WARP, at=(y, x))
+                    Passage(
+                        to_map=origin,
+                        kind=PassageKind.WARP,
+                        at=(y, x),
+                        return_origin=origin,
+                    )
                 )
     return passages
 
 
 def _reachable_from(start: int, passages: Mapping[int, list[Passage]]) -> set[int]:
-    seen = {start}
-    frontier = [start]
+    start_state = (start, None)
+    seen_states: set[tuple[int, int | None]] = {start_state}
+    seen_maps = {start}
+    frontier: list[tuple[int, int | None]] = [start_state]
     while frontier:
-        node = frontier.pop()
+        node, entry_origin = frontier.pop()
         for passage in passages.get(node, ()):
-            if passage.to_map is not None and passage.to_map not in seen:
-                seen.add(passage.to_map)
-                frontier.append(passage.to_map)
-    return seen
+            if passage.to_map is None:
+                continue
+            if passage.return_origin is not None and passage.return_origin != entry_origin:
+                continue
+            following = (passage.to_map, node)
+            if following in seen_states:
+                continue
+            seen_states.add(following)
+            seen_maps.add(passage.to_map)
+            frontier.append(following)
+    return seen_maps
 
 
 def verify_connections_are_two_sided(
@@ -350,7 +374,11 @@ def verify_connections_are_two_sided(
 
 
 def verify_against_encounter_reads(
-    *, reachable: set[int], with_wild_tables: set[int], fishable: set[int]
+    *,
+    reachable: set[int],
+    with_wild_tables: set[int],
+    fishable: set[int],
+    named_maps: set[int] | None = None,
 ) -> None:
     """Refuse the read unless two independent reads of the cartridge agree.
 
@@ -362,6 +390,7 @@ def verify_against_encounter_reads(
     """
 
     for label, expected in (
+        ("the observation contract", set() if named_maps is None else named_maps),
         ("wild encounter tables", with_wild_tables),
         ("the Super Rod", fishable),
     ):
@@ -381,6 +410,12 @@ def macro_graph(rom: bytes) -> MacroGraph:
     that a second title can produce just as well.
     """
 
+    return macro_graph_from_nodes(map_graph(rom))
+
+
+def macro_graph_from_nodes(graph: Mapping[int, MapNode]) -> MacroGraph:
+    """Project decoded nodes without dropping the edge needed to act on a route."""
+
     return MacroGraph(
         edges={
             map_id: tuple(
@@ -388,11 +423,13 @@ def macro_graph(rom: bytes) -> MacroGraph:
                     target_map=passage.to_map,
                     kind=passage.kind.value,
                     at=passage.at,
+                    heading=passage.heading.value if passage.heading is not None else None,
+                    return_origin=passage.return_origin,
                 )
                 for passage in node.passages
                 if passage.to_map is not None
             )
-            for map_id, node in map_graph(rom).items()
+            for map_id, node in graph.items()
         }
     )
 
@@ -407,29 +444,8 @@ def routes_between(graph: Mapping[int, MapNode], start: int, goal: int) -> tuple
 
     if start not in graph:
         raise CartridgeReadError(f"map {start} is not in the graph")
-    if start == goal:
-        return (start,)
-    came_from: dict[int, int] = {}
-    seen = {start}
-    frontier = [start]
-    while frontier:
-        following: list[int] = []
-        for node in frontier:
-            for passage in graph[node].passages if node in graph else ():
-                other = passage.to_map
-                if other is None or other in seen:
-                    continue
-                seen.add(other)
-                came_from[other] = node
-                if other == goal:
-                    return _walk_back(came_from, start, goal)
-                following.append(other)
-        frontier = following
-    return ()
-
-
-def _walk_back(came_from: Mapping[int, int], start: int, goal: int) -> tuple[int, ...]:
-    path = [goal]
-    while path[-1] != start:
-        path.append(came_from[path[-1]])
-    return tuple(reversed(path))
+    routed = macro_graph_from_nodes(graph)
+    try:
+        return find_macro_route(routed, start, goal)
+    except GlobalRouterError:
+        return ()

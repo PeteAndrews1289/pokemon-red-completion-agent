@@ -2,6 +2,7 @@
   "schema": "pokemon-acquisition-routes-v1",
   "recorded_on": "2026-08-10",
   "scope": "wild grass and water tables, the three rods, the evolution graph and the ten in-game trades. Gifts, fossils and the Game Corner are further routes and are not read here.",
+  "interpretation": "The reachable-through-parsed-routes sets are lower bounds, not complete single-cartridge or single-run reach. Gifts, fossils, Game Corner prizes, starters and static encounters remain absent. The original fishing equality flag compared aggregate species and Super Rod map ids; the hardened extractor now compares every decoded slot, but this record predates that rerun.",
   "by_title": {
     "red": {
       "in_game_trades": [
@@ -310,7 +311,7 @@
         132,
         147
       ],
-      "reachable_alone": [
+      "reachable_through_parsed_routes_alone": [
         10,
         11,
         12,
@@ -420,7 +421,7 @@
         148,
         149
       ],
-      "reachable_with_a_trade_partner": [
+      "reachable_through_parsed_routes_with_a_trade_partner": [
         10,
         11,
         12,
@@ -842,7 +843,7 @@
         132,
         147
       ],
-      "reachable_alone": [
+      "reachable_through_parsed_routes_alone": [
         10,
         11,
         12,
@@ -952,7 +953,7 @@
         148,
         149
       ],
-      "reachable_with_a_trade_partner": [
+      "reachable_through_parsed_routes_with_a_trade_partner": [
         10,
         11,
         12,

@@ -105,8 +105,10 @@ def describe(rom: bytes) -> dict[str, object]:
             for slot in tables.anywhere
         ],
         "catchable": sorted(caught),
-        "reachable_alone": sorted(reachable),
-        "reachable_with_a_trade_partner": sorted(reachable_species(rom, with_trade_partner=True)),
+        "reachable_through_parsed_routes_alone": sorted(reachable),
+        "reachable_through_parsed_routes_with_a_trade_partner": sorted(
+            reachable_species(rom, with_trade_partner=True)
+        ),
     }
 
 
@@ -131,7 +133,8 @@ def main(argv: list[str] | None = None) -> int:
             f"{len(found['rod_species'])} on a rod "
             f"({len(found['rod_only_species'])} of them nowhere else), "
             f"{len(found['catchable'])} catchable, "
-            f"{len(found['reachable_alone'])} reachable alone"
+            f"{len(found['reachable_through_parsed_routes_alone'])} "
+            "reachable through parsed routes alone"
         )
 
     wild_difference = set(described["red"]["wild_table_species"]) ^ set(  # type: ignore[arg-type]
@@ -169,9 +172,7 @@ def main(argv: list[str] | None = None) -> int:
                     "wild_difference_that_is_not_exclusivity": false_positives,
                     "exclusive_but_absent_from_every_wild_table": invisible,
                     "fishing_tables_identical_across_cartridges": (
-                        described["red"]["rod_species"] == described["blue"]["rod_species"]
-                        and described["red"]["super_rod_maps"]
-                        == described["blue"]["super_rod_maps"]
+                        fishing_tables(roms["red"]) == fishing_tables(roms["blue"])
                     ),
                 },
                 indent=2,

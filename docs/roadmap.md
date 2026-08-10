@@ -374,16 +374,25 @@ read from the cartridge, each anchored on something this project had already mea
 lever that makes C and D affordable: a title's facts stop costing a person-week of transcription, and
 each becomes checkable rather than asserted.
 
-Two results have already paid for the effort. The rods settled the last open discrepancy — Red's wild
-tables hold Horsea and Seadra where Blue's hold Krabby and Kingler, and the fishing tables are
-identical across cartridges and offer all four in both — and with the evolution graph they let both
-eleven-species exclusive lists be *derived* rather than declared. And the map graph replaced a
+Two results have already paid for the effort. The rods explain the last open discrepancy — Red's wild
+tables hold Horsea and Seadra where Blue's hold Krabby and Kingler, while rods offer all four in
+both — and with the evolution graph the parsed routes produce both declared eleven-species
+exclusive lists independently. This remains a candidate derivation until gifts, fossils, Game
+Corner prizes, starters and static encounters are also read. The hardened evidence writer now
+compares every decoded fishing slot rather than aggregate species and map ids. And the map graph replaced a
 hand-written five-node sketch that was both incomplete and wrong: it joined Viridian City to the
 Route 22 gate, which is reached from Routes 22 and 23 and nowhere else.
 
 Block and collision data followed the same day, so a path *within* a map is now computed too:
 `gen1_terrain` gives 48,216 standable squares across Kanto and walks between any two of them. The
 sixteen-step route from Red's door to Oak's lab is searched, not typed.
+
+The first cross-cartridge evidence flags were weaker than their prose: map equality compared only
+adjacency, and terrain equality compared aggregate totals plus Pallet Town. The extractors now
+compare the complete decoded graph, every terrain grid and every tileset, but the public records
+must be regenerated from both verified ROMs before the stronger equality claims reopen. Contextual
+`$FF` return warps also carry the map that supplied their entry state, and actionable routes retain
+their selected edges, headings and coordinates rather than only a sequence of map ids.
 
 What is still hand-typed, in order of value:
 

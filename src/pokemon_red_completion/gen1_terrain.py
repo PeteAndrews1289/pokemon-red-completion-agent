@@ -272,7 +272,7 @@ def steps_between(
     cartridge says a player can stand on.
     """
 
-    if not terrain.can_stand(*goal):
+    if not terrain.can_stand(*start) or not terrain.can_stand(*goal):
         return ()
     if start == goal:
         return (start,)

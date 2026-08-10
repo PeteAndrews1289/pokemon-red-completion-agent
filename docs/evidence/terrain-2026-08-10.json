@@ -2,6 +2,7 @@
   "schema": "pokemon-terrain-v1",
   "recorded_on": "2026-08-10",
   "scope": "per-map walkability from tileset collision data. Says which squares are standable ground; does not model Surf, Cut, Strength, ledges, one-way jumps, doors that open on a story flag, or people standing in the way.",
+  "comparison_scope": "The original cartridges_agree flag compared aggregate totals and Pallet Town. The hardened extractor now compares every decoded Terrain and Tileset, but this record predates that rerun.",
   "cartridges_agree": true,
   "by_title": {
     "red": {

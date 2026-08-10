@@ -211,6 +211,7 @@ def test_an_interior_returns_to_whichever_map_led_in() -> None:
 
     assert graph[2].neighbours() == frozenset({0, 1})
     assert all(p.at == (3, 3) for p in graph[2].passages)
+    assert {p.return_origin for p in graph[2].passages} == {0, 1}
 
 
 def test_a_warp_to_a_slot_holding_no_map_is_marked_not_dropped() -> None:
@@ -294,8 +295,13 @@ def test_an_encounter_map_that_cannot_be_reached_refuses_the_read() -> None:
     """Two independent reads of one cartridge have to agree."""
 
     verify_against_encounter_reads(
-        reachable={0, 1, 2}, with_wild_tables={1}, fishable={2}
+        reachable={0, 1, 2}, named_maps={0}, with_wild_tables={1}, fishable={2}
     )
+
+    with pytest.raises(CartridgeReadError, match="observation contract"):
+        verify_against_encounter_reads(
+            reachable={0, 1}, named_maps={0, 9}, with_wild_tables=set(), fishable=set()
+        )
 
     with pytest.raises(CartridgeReadError, match="wild encounter tables"):
         verify_against_encounter_reads(

@@ -49,7 +49,8 @@ The fishing anchors
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Mapping
+from collections import Counter
+from collections.abc import Collection, Iterable, Mapping
 from dataclasses import dataclass
 from enum import StrEnum
 
@@ -119,6 +120,17 @@ class EvolutionMethod(StrEnum):
     TRADE = "trade"
 
 
+#: Whole-table invariants measured from both supported cartridges. The local
+#: anchors locate a structure; these totals prove that the complete structure
+#: survived the read instead of merely returning the anchored fragment.
+EVOLVING_SPECIES_COUNT = 70
+EVOLUTION_COUNT_BY_METHOD = {
+    EvolutionMethod.LEVEL: 52,
+    EvolutionMethod.STONE: 16,
+    EvolutionMethod.TRADE: 4,
+}
+
+
 @dataclass(frozen=True, slots=True)
 class Evolution:
     """One way a species can become another, read from the cartridge."""
@@ -149,18 +161,28 @@ def internal_to_dex(rom: bytes) -> dict[int, int]:
     and read by the other returns a different species entirely.
     """
 
-    for internal, expected in DEX_ANCHORS.items():
+    for internal, expected_dex in DEX_ANCHORS.items():
         actual = rom[INTERNAL_TO_DEX_TABLE + internal - 1]
-        if actual != expected:
+        if actual != expected_dex:
             raise CartridgeReadError(
-                f"internal index {internal:#04x} maps to {actual}, not the {expected} "
+                f"internal index {internal:#04x} maps to {actual}, not the {expected_dex} "
                 "the party adapter asserts; this is not the cartridge these offsets "
                 "were located against"
             )
     mapping = {
         index + 1: rom[INTERNAL_TO_DEX_TABLE + index] for index in range(INTERNAL_INDEX_LIMIT)
     }
-    return {internal: dex for internal, dex in mapping.items() if 1 <= dex <= SPECIES_COUNT}
+    valid = {internal: dex for internal, dex in mapping.items() if 1 <= dex <= SPECIES_COUNT}
+    dex_numbers = list(valid.values())
+    expected_numbers = set(range(1, SPECIES_COUNT + 1))
+    if len(valid) != SPECIES_COUNT or set(dex_numbers) != expected_numbers:
+        missing = sorted(expected_numbers - set(dex_numbers))
+        duplicates = sorted(dex for dex, count in Counter(dex_numbers).items() if count > 1)
+        raise CartridgeReadError(
+            f"the internal species table contains {len(valid)} valid entries instead of "
+            f"{SPECIES_COUNT}; missing dex numbers {missing}, duplicates {duplicates}"
+        )
+    return valid
 
 
 def bank_offset(bank: int, address: int) -> int:
@@ -239,7 +261,9 @@ def evolution_graph(rom: bytes) -> dict[int, tuple[Evolution, ...]]:
         at = EVOLUTION_POINTER_ARRAY + 2 * (internal - 1)
         address = int.from_bytes(rom[at : at + 2], "little")
         if not 0x4000 <= address <= 0x7FFF:
-            continue
+            raise CartridgeReadError(
+                f"species {species} has evolution pointer {address:#06x}, outside its bank"
+            )
         cursor = bank_offset(EVOLUTION_DATA_BANK, address)
         found: list[Evolution] = []
         while rom[cursor] != 0:
@@ -258,23 +282,29 @@ def evolution_graph(rom: bytes) -> dict[int, tuple[Evolution, ...]]:
                     f"unknown evolution kind {kind} for species {species}; the "
                     "evolution pointer array is not where it was located"
                 )
-            if target in dex:
-                found.append(
-                    Evolution(
-                        from_species=species,
-                        to_species=dex[target],
-                        method=method,
-                        requirement=requirement,
-                    )
+            if target not in dex:
+                raise CartridgeReadError(
+                    f"species {species} evolves into internal index {target:#04x}, which "
+                    "is not a species"
                 )
+            found.append(
+                Evolution(
+                    from_species=species,
+                    to_species=dex[target],
+                    method=method,
+                    requirement=requirement,
+                )
+            )
             cursor += step
         if found:
             graph[species] = found
-    _verify_evolution_graph(graph)
+    verify_evolution_graph(graph)
     return {species: tuple(items) for species, items in graph.items()}
 
 
-def _verify_evolution_graph(graph: Mapping[int, list[Evolution]]) -> None:
+def verify_evolution_graph(graph: Mapping[int, Collection[Evolution]]) -> None:
+    """Refuse an anchored fragment masquerading as the complete graph."""
+
     diglett = graph.get(50, [])
     if not any(
         step.method is EvolutionMethod.LEVEL
@@ -285,6 +315,23 @@ def _verify_evolution_graph(graph: Mapping[int, list[Evolution]]) -> None:
         raise CartridgeReadError(
             "Diglett does not evolve at level 26 into Dugtrio; the evolution "
             "pointer array is not where it was located"
+        )
+    kadabra = graph.get(64, [])
+    if not any(
+        step.method is EvolutionMethod.TRADE and step.to_species == 65 for step in kadabra
+    ):
+        raise CartridgeReadError(
+            "Kadabra does not evolve by trade into Alakazam; the evolution pointer "
+            "array is not where it was located"
+        )
+
+    by_method = Counter(step.method for steps in graph.values() for step in steps)
+    if len(graph) != EVOLVING_SPECIES_COUNT or by_method != EVOLUTION_COUNT_BY_METHOD:
+        rendered = {method.value: by_method[method] for method in EvolutionMethod}
+        expected = {method.value: count for method, count in EVOLUTION_COUNT_BY_METHOD.items()}
+        raise CartridgeReadError(
+            f"the evolution graph contains {len(graph)} evolving species and {rendered}; "
+            f"the supported cartridges contain {EVOLVING_SPECIES_COUNT} and {expected}"
         )
 
 
@@ -600,7 +647,7 @@ def catchable_species(rom: bytes) -> frozenset[int]:
 
 
 def reachable_species(rom: bytes, *, with_trade_partner: bool = False) -> frozenset[int]:
-    """What the catchable set grows into once every other route is applied.
+    """What the catchable set grows into through the routes parsed so far.
 
     Three routes compound, so they are applied until nothing more falls out
     rather than once each: evolving something you caught, swapping something you
@@ -608,7 +655,9 @@ def reachable_species(rom: bytes, *, with_trade_partner: bool = False) -> frozen
 
     ``with_trade_partner`` decides whether *trade evolutions* count -- those need
     a second concurrent save, which the in-game swaps do not. A lone cartridge
-    cannot perform them, so the default answers the single-save question.
+    cannot perform them. Gifts, static encounters, fossils, starters and Game
+    Corner prizes are deliberately absent, so this is a measured lower bound,
+    not the complete set a cartridge or one run can reach.
     """
 
     return grow_collection(
@@ -663,7 +712,7 @@ def grow_collection(
 def version_exclusives(
     first_rom: bytes, second_rom: bytes
 ) -> tuple[frozenset[int], frozenset[int]]:
-    """What each of two cartridges can reach and the other cannot.
+    """Differences between two cartridges through the routes parsed so far.
 
     This is the whole reason a living Pokédex needs more than one cartridge, and
     it used to be a typed table. Deriving it is what caught the difference
@@ -673,9 +722,12 @@ def version_exclusives(
     on a rod, and six more are exclusive without appearing in any wild table at
     all, because they are only ever reached by evolving something that does.
 
-    Trade evolutions are included on both sides. Exclusivity is a property of
-    what a cartridge contains, not of how many saves are run beside it, and the
-    two cartridges carry the same evolution graph so the choice cancels.
+    Trade evolutions are included on both sides. The result is a candidate
+    exclusivity set until every acquisition route is parsed: gifts, static
+    encounters, fossils, starters and Game Corner prizes could in principle
+    add a species to one side. The supported Red and Blue result agrees with the
+    declared eleven-species sets, but agreement is not a substitute for reading
+    the remaining routes.
     """
 
     first = reachable_species(first_rom, with_trade_partner=True)

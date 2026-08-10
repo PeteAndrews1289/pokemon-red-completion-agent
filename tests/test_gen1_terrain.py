@@ -273,6 +273,14 @@ def test_a_walk_to_somewhere_walled_off_is_empty_rather_than_wrong() -> None:
     assert steps_between(terrain, (0, 2), (0, 2)) == ()
 
 
+def test_a_walk_cannot_begin_inside_a_wall() -> None:
+    """Every square in a returned route includes its start and must be standable."""
+
+    terrain = open_terrain(["#.", ".."])
+
+    assert steps_between(terrain, (0, 0), (0, 1)) == ()
+
+
 def test_each_step_of_a_walk_is_one_square_in_one_direction() -> None:
     """A path that teleports is not a path a player can follow."""
 
@@ -307,6 +315,7 @@ def test_the_reading_that_makes_warps_stand_up_is_the_one_used(record: dict) -> 
 
 def test_both_cartridges_describe_the_same_ground(record: dict) -> None:
     assert record["cartridges_agree"] is True
+    assert "compared aggregate totals and Pallet Town" in record["comparison_scope"]
     assert record["by_title"]["red"]["standable_squares"] == 48216
     assert record["by_title"]["red"]["grass_squares"] == 2537
 

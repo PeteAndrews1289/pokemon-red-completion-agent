@@ -24,6 +24,7 @@ from pokemon_red_completion.gen1_cartridge import (
     EvolutionMethod,
     internal_to_dex,
     trade_evolutions,
+    verify_evolution_graph,
 )
 from pokemon_red_completion.generation_one import GENERATION_ONE_TRADE_EVOLUTIONS
 
@@ -94,6 +95,39 @@ def test_a_cartridge_that_does_not_match_is_refused() -> None:
 
     with pytest.raises(CartridgeReadError, match="not the cartridge"):
         internal_to_dex(bytes(0x50000))
+
+
+def test_four_valid_anchors_are_not_mistaken_for_a_complete_species_table() -> None:
+    """The anchors locate a table; they do not prove all 151 entries survived."""
+
+    rom = bytearray(0x100000)
+    for internal, expected in {0x1C: 9, 0x3B: 50, 0x76: 51, 0x84: 143}.items():
+        rom[0x41024 + internal - 1] = expected
+
+    with pytest.raises(CartridgeReadError, match="4 valid entries"):
+        internal_to_dex(bytes(rom))
+
+
+def test_the_complete_evolution_guard_checks_both_anchors_and_totals(record: dict) -> None:
+    graph = {
+        int(species): [
+            Evolution(
+                from_species=int(species),
+                to_species=step["to"],
+                method=EvolutionMethod(step["method"]),
+                requirement=step["requirement"],
+            )
+            for step in steps
+        ]
+        for species, steps in record["graph"].items()
+    }
+
+    verify_evolution_graph(graph)
+
+    without_kadabra = {species: list(steps) for species, steps in graph.items()}
+    without_kadabra.pop(64)
+    with pytest.raises(CartridgeReadError, match="Kadabra"):
+        verify_evolution_graph(without_kadabra)
 
 
 def test_the_stone_evolutions_include_the_eevee_branch(record: dict) -> None:

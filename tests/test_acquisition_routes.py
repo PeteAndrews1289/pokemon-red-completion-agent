@@ -19,7 +19,6 @@ from pathlib import Path
 import pytest
 
 from pokemon_red_completion.gen1_cartridge import (
-    DEX_ANCHORS,
     IN_GAME_TRADE_COUNT,
     IN_GAME_TRADE_TABLE,
     INTERNAL_TO_DEX_TABLE,
@@ -125,9 +124,18 @@ def test_a_trade_partner_is_worth_exactly_the_trade_evolutions(record: dict) -> 
     """What a second concurrent save buys, counted rather than assumed."""
 
     for title in ("red", "blue"):
-        alone = set(record["by_title"][title]["reachable_alone"])
-        partnered = set(record["by_title"][title]["reachable_with_a_trade_partner"])
+        alone = set(record["by_title"][title]["reachable_through_parsed_routes_alone"])
+        partnered = set(
+            record["by_title"][title][
+                "reachable_through_parsed_routes_with_a_trade_partner"
+            ]
+        )
         assert partnered - alone == {65, 68, 76, 94}
+
+
+def test_parsed_route_reach_is_not_presented_as_complete_cartridge_reach(record: dict) -> None:
+    assert "lower bounds" in record["interpretation"]
+    assert "static encounters remain absent" in record["interpretation"]
 
 
 def test_the_super_rod_is_the_only_rod_that_depends_on_where_you_stand() -> None:
@@ -166,7 +174,7 @@ def test_four_species_come_only_from_a_person_in_the_world(record: dict) -> None
             assert species not in found["wild_table_species"]
             assert species not in found["rod_species"]
             assert species not in found["catchable"]
-            assert species in found["reachable_alone"]
+            assert species in found["reachable_through_parsed_routes_alone"]
 
 
 def test_a_trade_reward_that_can_be_caught_anyway_is_not_trade_only(record: dict) -> None:
@@ -182,7 +190,7 @@ def test_a_trade_reward_that_can_be_caught_anyway_is_not_trade_only(record: dict
 
     assert 15 in rewards
     assert 15 not in record["by_title"]["red"]["species_only_an_in_game_trade_supplies"]
-    assert 15 in record["by_title"]["red"]["reachable_alone"]
+    assert 15 in record["by_title"]["red"]["reachable_through_parsed_routes_alone"]
 
 
 def test_a_trade_costs_a_specimen(record: dict) -> None:
@@ -253,12 +261,16 @@ def trade_cartridge(
     """A ROM holding a species table and a trade table, and nothing else."""
 
     data = bytearray(ROM_BYTES)
-    # A species map that satisfies the four anchors the reader checks, and maps
-    # every other index to itself so the fixtures can name species plainly.
-    for index in range(190):
-        data[INTERNAL_TO_DEX_TABLE + index] = index + 1 if index < 151 else 0
-    for internal, expected in DEX_ANCHORS.items():
-        data[INTERNAL_TO_DEX_TABLE + internal - 1] = expected
+    # A complete one-to-one species map with the four independently stated
+    # anchors. Start from identity and swap values rather than overwriting them:
+    # overwriting creates a duplicate and silently drops one Pokédex number.
+    mapping = [*range(1, 152), *([0] * 39)]
+    for internal, expected in {0x1C: 9, 0x3B: 50, 0x76: 51, 0x84: 143}.items():
+        previous = mapping[internal - 1]
+        owner = mapping.index(expected)
+        mapping[owner] = previous
+        mapping[internal - 1] = expected
+    data[INTERNAL_TO_DEX_TABLE : INTERNAL_TO_DEX_TABLE + len(mapping)] = bytes(mapping)
 
     written = list(entries)
     if eleventh is not None:
@@ -272,7 +284,7 @@ def trade_cartridge(
     return bytes(data)
 
 
-TEN = [(0x02 + n, 0x30 + n, f"NAME{chr(ord('A') + n)}") for n in range(IN_GAME_TRADE_COUNT)]
+TEN = [(0x0F + n, 0x40 + n, f"NAME{chr(ord('A') + n)}") for n in range(IN_GAME_TRADE_COUNT)]
 
 
 def test_the_reader_keeps_what_is_given_apart_from_what_is_got() -> None:
@@ -285,8 +297,8 @@ def test_the_reader_keeps_what_is_given_apart_from_what_is_got() -> None:
     trades = in_game_trades(trade_cartridge(TEN))
 
     assert len(trades) == IN_GAME_TRADE_COUNT
-    assert trades[0].give_species == 0x02
-    assert trades[0].get_species == 0x30
+    assert trades[0].give_species == 0x0F
+    assert trades[0].get_species == 0x40
     assert trades[0].nickname == "NAMEA"
 
 
@@ -295,8 +307,8 @@ def test_every_trade_is_read_from_its_own_fourteen_bytes() -> None:
 
     trades = in_game_trades(trade_cartridge(TEN))
 
-    assert [t.give_species for t in trades] == [0x02 + n for n in range(10)]
-    assert [t.get_species for t in trades] == [0x30 + n for n in range(10)]
+    assert [t.give_species for t in trades] == [0x0F + n for n in range(10)]
+    assert [t.get_species for t in trades] == [0x40 + n for n in range(10)]
     assert [t.nickname for t in trades] == [f"NAME{chr(ord('A') + n)}" for n in range(10)]
 
 

@@ -16,14 +16,16 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections.abc import Mapping
 from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from pokemon_red_completion.gen1_maps import read_map_graph  # noqa: E402
+from pokemon_red_completion.gen1_maps import MapNode, read_map_graph  # noqa: E402
 from pokemon_red_completion.gen1_terrain import (  # noqa: E402
     Terrain,
+    Tileset,
     steps_between,
     tilesets,
     walkable_world,
@@ -50,10 +52,16 @@ def picture(terrain: Terrain) -> list[str]:
     ]
 
 
-def summarise(rom: bytes) -> dict[str, object]:
-    world = walkable_world(rom)
-    graph = read_map_graph(rom)
-    sets = tilesets(rom)
+def summarise(
+    rom: bytes,
+    *,
+    world: Mapping[int, Terrain] | None = None,
+    graph: Mapping[int, MapNode] | None = None,
+    sets: Mapping[int, Tileset] | None = None,
+) -> dict[str, object]:
+    world = walkable_world(rom) if world is None else world
+    graph = read_map_graph(rom) if graph is None else graph
+    sets = tilesets(rom) if sets is None else sets
 
     standing = total = 0
     for map_id, node in graph.items():
@@ -95,10 +103,19 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     summaries: dict[str, dict[str, object]] = {}
+    worlds: dict[str, dict[int, Terrain]] = {}
+    graphs: dict[str, dict[int, MapNode]] = {}
+    tile_sets: dict[str, dict[int, Tileset]] = {}
     for title in TITLES:
         path = resolve_title_rom_path(title)
         verify_rom(path, supported_rom_for(title))
-        summaries[title] = summarise(path.read_bytes())
+        rom = path.read_bytes()
+        worlds[title] = walkable_world(rom)
+        graphs[title] = read_map_graph(rom)
+        tile_sets[title] = tilesets(rom)
+        summaries[title] = summarise(
+            rom, world=worlds[title], graph=graphs[title], sets=tile_sets[title]
+        )
         found = summaries[title]
         print(
             f"{title}: {found['maps']} maps, {found['standable_squares']} standable squares, "
@@ -106,7 +123,7 @@ def main(argv: list[str] | None = None) -> int:
             f"{found['warps_on_passable_ground']:.1%} of warps on passable ground"
         )
 
-    agree = summaries["red"] == summaries["blue"]
+    agree = worlds["red"] == worlds["blue"] and tile_sets["red"] == tile_sets["blue"]
     print(f"\ncartridges describe the same ground: {agree}")
     pallet = summaries["red"]["pallet_town"]
     print(f"\nPallet Town, {pallet['size'][0]} by {pallet['size'][1]} steps:")

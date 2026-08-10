@@ -1,7 +1,7 @@
 {
   "schema": "pokemon-evolution-graph-v1",
   "recorded_on": "2026-08-09",
-  "method": "Read from both cartridges. The pointer array was located by anchoring on two facts this repository already declared -- Diglett evolves at level 26 into Dugtrio, and Kadabra evolves by trade into Alakazam -- each of which matches exactly one byte pattern in the ROM. The reader re-derives the Diglett fact on every read and refuses to continue if it fails.",
+  "method": "Read from both cartridges. The pointer array was located by anchoring on two facts this repository already declared -- Diglett evolves at level 26 into Dugtrio, and Kadabra evolves by trade into Alakazam -- each of which matches exactly one byte pattern in the ROM. The reproducing reader now verifies both anchors, the complete 151-species mapping, 70 evolving species and all 72 evolution methods before it emits.",
   "cartridges_agree": true,
   "species_with_evolutions": 70,
   "totals_by_method": {
