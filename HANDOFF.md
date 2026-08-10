@@ -121,6 +121,48 @@ source modules, and 2,217 tests pass; three integration tests are deselected and
 failure remains expected. The complete audit is
 [current-audit-2026-08-10.md](docs/current-audit-2026-08-10.md).
 
+## Reading the cartridge instead of typing it — 2026-08-09
+
+**The most useful new capability, and it changes how a second title should be approached.**
+
+Game facts are now *read from the cartridge* rather than declared in Python.
+`pokemon_red_completion.gen1_cartridge` reads the internal-index-to-Pokédex map, the per-map wild
+encounter tables, and the complete evolution graph, from any Generation I cartridge.
+
+Why this matters more than the tables themselves: a teacher that knows a game because somebody typed
+its facts in does not transfer. Every title costs another person-week of typing, and each typed fact
+is an assertion nothing can falsify. That is exactly how eleven version exclusives were recorded as
+ten, and how a Mansion band of "30-32" outlived the 155 encounters that said 28-39.
+
+**Nothing was transcribed, and nothing is trusted.** Every structure was located by searching a ROM
+for a shape this repository had already *measured*, and every read re-derives those measurements and
+refuses to continue if they no longer hold:
+
+| structure | how it was found |
+| --- | --- |
+| internal → dex map | anchored on the four indices the party adapter asserts; exactly one table satisfies all four |
+| wild encounter tables | Diglett's Cave was measured to hold only Diglett and Dugtrio; exactly one structure matches, and its array puts the cave at index 197 — its map id — with the Mansion then at the measured 28-39 |
+| evolution graph | anchored on two declared facts, Diglett at level 26 and Kadabra by trade; each matches exactly one byte pattern |
+
+Corrupt the Diglett level in a ROM and the reader refuses it by name. That guard is the point: a
+table read at a wrong address still returns bytes.
+
+**What it has already settled.** All twenty-two version exclusives are accounted for — sixteen seen
+in exactly one cartridge's wild tables, six evolutions inheriting a confirmed pre-evolution. The
+hand-declared trade evolutions match the derived graph exactly. Both cartridges carry an identical
+72-evolution graph across 70 species: 52 by level, 16 by stone, 4 by trade.
+
+**Where to take it.** The same technique reads whatever else is still typed by hand. In rough order
+of value to the mission: fishing tables (would settle the one open discrepancy — Red's water tables
+hold Horsea and Seadra where Blue's hold Krabby and Kingler, and neither pair is declared exclusive);
+Game Corner and in-game trade tables, which complete the acquisition graph a living Pokédex needs;
+and map connections and warps, which would give `global_router` a real measured graph instead of the
+hand-written five-node one it has, and would make navigation computed rather than scripted.
+
+That last one is the one that changes the trajectory. Every chapter module is hand-written walk
+directions. Until a route can be computed from cartridge data, "plays each and every game" costs one
+hand-authored route per game and never converges.
+
 ## Superseding current checkpoint — 2026-08-09
 
 This section supersedes every older “next” statement below.

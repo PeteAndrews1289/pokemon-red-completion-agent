@@ -368,6 +368,14 @@ target sets as part of the chapter pass contracts.
 have no schedule behind them. Two opposed Red runs reach 132 of 151. This is the constraint that
 makes route tricks useless and transfer necessary, and it has not been started.
 
+**C2. Derive game knowledge instead of typing it.** As of 2026-08-09 the wild encounter tables, the
+internal-index map and the complete evolution graph are read from the cartridge, anchored on bands
+this project had already measured. This is the lever that makes C and D affordable: a title's facts
+stop costing a person-week of transcription, and each becomes checkable rather than asserted. The
+remaining hand-typed knowledge, in order of value: fishing tables, Game Corner and in-game trades,
+then map connections and warps — the last of which would let a route be computed instead of scripted,
+which is the only version of "plays each and every game" that converges.
+
 **D. Falsify the game-neutrality claim.** `party.py`, `team_training.py`, `capture.py` and
 `pokedex.py` all claim to be game-neutral and nothing has ever tested that claim. Moving the battle
 observation contract to one other title will teach more about transfer readiness than another ten
