@@ -70,12 +70,12 @@ def test_control_model_digest_matches_canonical_artifact_writer_contract() -> No
     assert _canonical_sha256(model.to_dict()) == hashlib.sha256(payload).hexdigest()
 
 
-def test_control_model_rejects_the_pre_reserve_feature_schema() -> None:
+def test_control_model_rejects_the_pre_permutation_invariant_feature_schema() -> None:
     model = BattleControlMLP.fit(_examples(), seed=7, epochs=2)
     payload = model.to_dict()
-    payload["feature_schema_id"] = "pokemon.core.battle.control.features.v3"
+    payload["feature_schema_id"] = "pokemon.core.battle.control.features.v4"
 
     with pytest.raises(BattleControlModelError, match="feature schema"):
         BattleControlMLP.from_dict(payload)
 
-    assert CONTROL_FEATURE_SCHEMA_ID == "pokemon.core.battle.control.features.v4"
+    assert CONTROL_FEATURE_SCHEMA_ID == "pokemon.core.battle.control.features.v5"

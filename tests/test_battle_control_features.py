@@ -122,7 +122,7 @@ def test_control_projector_exposes_normalized_party_and_resource_state() -> None
     assert values["party.mean_level"] == pytest.approx(0.4)
     assert values["resources.healing_items"] == pytest.approx(0.2)
     assert values["progress.badge_count"] == 0.5
-    assert CONTROL_FEATURE_SCHEMA_ID.endswith(".v4")
+    assert CONTROL_FEATURE_SCHEMA_ID.endswith(".v5")
     assert values["party.reserve_matchup.available"] == 1.0
     assert values["party.reserve_matchup.candidate_count"] == pytest.approx(1 / 5)
 
@@ -172,6 +172,23 @@ def test_control_schema_contains_no_party_or_opponent_identity_shortcut() -> Non
         token in name
         for name in CONTROL_FEATURE_NAMES
         for token in ("species", "move_ref", "party_slot", "opponent_id", "map")
+    )
+    assert "party.active_index" not in CONTROL_FEATURE_NAMES
+
+
+def test_control_projection_is_invariant_to_party_slot_permutation() -> None:
+    original = _observation()
+    permuted = deepcopy(original)
+    party = permuted["features"]["party"]  # type: ignore[index]
+    members = party["members"]
+    party["members"] = [members[1], members[2], members[0]]
+    party["active_index"] = 0
+
+    assert project_control_features(
+        original,
+        catalog=RED_BATTLE_CATALOG,
+    ) == pytest.approx(
+        project_control_features(permuted, catalog=RED_BATTLE_CATALOG)
     )
 
 

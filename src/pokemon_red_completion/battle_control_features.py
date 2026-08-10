@@ -19,7 +19,7 @@ from pokemon_red_completion.battle_semantics import (
 )
 from pokemon_red_completion.battle_semantics import BattleFeatureBatch, BattleMechanicsCatalog
 
-CONTROL_FEATURE_SCHEMA_ID = "pokemon.core.battle.control.features.v4"
+CONTROL_FEATURE_SCHEMA_ID = "pokemon.core.battle.control.features.v5"
 CONTROL_CLASS_REFS = (
     "pokemon.core:battle:select_move",
     "pokemon.core:battle:recovery",
@@ -45,7 +45,6 @@ CONTROL_FEATURE_NAMES = (
     "opponent.defense_stage",
     "opponent.is_trapping",
     "party.count",
-    "party.active_index",
     "party.living_count",
     "party.living_reserve_count",
     "party.fainted_count",
@@ -287,7 +286,6 @@ def project_control_features(
         for member in members
     )
     statuses = sum(member.get("status") is not None for member in members)
-    active_index = _active_index(party, lead, members)
     kind = battle.get("kind")
     if kind not in {"trainer", "wild"}:
         raise BattleControlFeatureError("battle kind must be trainer or wild")
@@ -312,7 +310,6 @@ def project_control_features(
         _stage(battle.get("opponent_defense_stage"), "opponent defense stage"),
         float(_boolean(battle.get("opponent_using_trapping_move"), "trapping state")),
         _bounded(party.get("count"), 1, 6, "party count") / 6.0,
-        active_index / 5.0,
         len(living) / 6.0,
         max(0, len(living) - 1) / 5.0,
         (len(members) - len(living)) / 6.0,
@@ -384,25 +381,6 @@ def _resource(
     if type(value) is not int or value < 0:  # noqa: E721
         raise BattleControlFeatureError(f"{name} must be a non-negative integer")
     return min(value, ceiling) / ceiling
-
-
-def _active_index(
-    party: Mapping[str, object],
-    lead: Mapping[str, object],
-    members: Sequence[Mapping[str, object]],
-) -> int:
-    explicit = party.get("active_index")
-    if explicit is not None:
-        return _bounded(explicit, 0, 5, "active party index")
-    identity_fields = ("species_ref", "level", "hp", "max_hp", "status")
-    matches = tuple(
-        index
-        for index, member in enumerate(members)
-        if all(member.get(name) == lead.get(name) for name in identity_fields)
-    )
-    if len(matches) != 1:
-        raise BattleControlFeatureError("active party index cannot be inferred uniquely")
-    return matches[0]
 
 
 def _move_control_features(batch: BattleFeatureBatch | None) -> tuple[float, ...]:
