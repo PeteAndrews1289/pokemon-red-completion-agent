@@ -22,9 +22,23 @@
     "note": "Red and Blue share one engine, so this outcome was expected. Expected is not measured, and it is now measured."
   },
   "campaign_reach_with_blue": [
-    {"plan": "three concurrent Red saves", "reach": "140/151", "unreachable": "ten Blue exclusives and Mew"},
-    {"plan": "two Red plus one Blue", "reach": "150/151", "must_trade_home": 25, "unreachable": "Mew only"},
-    {"plan": "three Red plus one Blue", "reach": "150/151", "must_trade_home": 25, "unreachable": "Mew only"}
+    {
+      "plan": "three concurrent Red saves",
+      "reach": "140/151",
+      "unreachable": "ten Blue exclusives and Mew"
+    },
+    {
+      "plan": "two Red plus one Blue",
+      "reach": "150/151",
+      "must_trade_home": 25,
+      "unreachable": "Mew only"
+    },
+    {
+      "plan": "three Red plus one Blue",
+      "reach": "150/151",
+      "must_trade_home": 25,
+      "unreachable": "Mew only"
+    }
   ],
   "planning_result": "Three concurrent saves suffice, not four. The obvious plan -- three Reds for branch coverage plus a Blue for its exclusives -- buys a whole extra save and reaches exactly the same 150. An earlier estimate in this project said four; it was wrong and the model corrected it.",
   "stated_assumption_not_yet_measured": {
@@ -32,5 +46,10 @@
     "why_it_is_marked": "That relationship is what makes the pair complete, and a test asserts the two sets do not overlap -- an overlap would mean a species neither cartridge offers, short by that many with no way to notice. But derived is not measured, and the module says so where someone will read it.",
     "how_to_settle_it": "Harvest Blue encounters with POKEMON_BLUE_ROM set, exactly as Red's bands were measured."
   },
-  "self_correction": "Two of the first three mutation probes against this work passed, meaning two of my own tests were passing for the wrong reason: one left the Red variable unset so a fallback and a correct refusal produced the same error, and one never exercised the adapter's fingerprint wiring at all. Both were rewritten until the mutations turn them red."
+  "self_correction": "Two of the first three mutation probes against this work passed, meaning two of my own tests were passing for the wrong reason: one left the Red variable unset so a fallback and a correct refusal produced the same error, and one never exercised the adapter's fingerprint wiring at all. Both were rewritten until the mutations turn them red.",
+  "correction_2026_08_09": {
+    "what_was_wrong": "This record says ten Blue exclusives and puts three concurrent Red saves at 140 of 151. There are eleven per cartridge -- Scyther in Red, Pinsir in Blue -- so three Red saves reach 139.",
+    "the_assumption_this_record_flagged_was_the_one_that_broke": "It stated that the ten Blue exclusives were derived rather than harvested and marked them as a stated assumption. The assumption was wrong in exactly the way the note allowed for, and it was corrected from a contradiction inside the repository rather than from a Blue encounter harvest -- which is still the way to settle the table properly.",
+    "what_still_holds": "The measured Blue fingerprint, the adapter defect and its repair, the first cross-cartridge read, and the conclusion that two Red plus one Blue reaches 150 of 151 with three concurrent saves rather than four."
+  }
 }

@@ -925,8 +925,10 @@ end-to-end learned completion.
 
 ### Two cartridges, and a renamed folder (2026-08-09)
 
-Blue is now available, and a living Pokédex needs it: ten species are exclusive to it and no amount
-of Red planning reaches them.
+Blue is now available, and a living Pokédex needs it: eleven species are exclusive to it and no
+amount of Red planning reaches them. (This said *ten* when first written. Scyther and Pinsir are
+the Game Corner pair and were missing from the exclusion table — see
+`docs/evidence/campaign-reach-2026-08-09.json` for how the miss was caught.)
 
 Each title reads its own environment variable, because one variable cannot name several cartridges
 and a campaign runs several:

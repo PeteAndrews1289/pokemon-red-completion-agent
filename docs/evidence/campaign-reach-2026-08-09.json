@@ -10,17 +10,58 @@
   },
   "model": "A campaign is concurrent vessels. A vessel is one save that exists at the same time as the others and can therefore trade. A trade-gated species is lifted only when the plan has at least two vessels AND some vessel can obtain the precursor -- trading requires something to send.",
   "measured": [
-    {"plan": "one Red save", "reach": "125/151", "lifted_by_trade": 0, "must_trade_home": 0, "unreachable": 26},
-    {"plan": "two concurrent Red saves", "reach": "136/151", "lifted_by_trade": 4, "must_trade_home": 11, "unreachable": 15},
-    {"plan": "three concurrent Red saves", "reach": "140/151", "lifted_by_trade": 4, "must_trade_home": 15, "unreachable": 11}
+    {
+      "plan": "one Red save",
+      "reach": "125/151",
+      "lifted_by_trade": 0,
+      "must_trade_home": 0,
+      "unreachable": 26
+    },
+    {
+      "plan": "two concurrent Red saves",
+      "reach": "136/151",
+      "lifted_by_trade": 4,
+      "must_trade_home": 11,
+      "unreachable": 15
+    },
+    {
+      "plan": "three concurrent Red saves",
+      "reach": "140/151",
+      "lifted_by_trade": 4,
+      "must_trade_home": 15,
+      "unreachable": 11
+    }
   ],
   "what_remains_at_three_red_saves": {
     "version_exclusive": 10,
     "event_distribution": 1,
-    "species": [27, 28, 37, 38, 52, 53, 69, 70, 71, 126],
+    "species": [
+      27,
+      28,
+      37,
+      38,
+      52,
+      53,
+      69,
+      70,
+      71,
+      126
+    ],
     "reading": "Every one of the ten is obtainable in Blue. Adding a Blue vessel would leave only Mew, which no amount of cartridge planning reaches. So Gen 1's living Pokedex is 150/151 with four concurrent saves -- a number this project has never stated."
   },
   "the_distinction_that_matters": "Replaying a cartridge is not running two of them. Three sequential runs register 136 species across time and hold zero of them simultaneously, because the second save overwrites the first. Only concurrency produces a living collection, and 'must_trade_home' is the real cost of one: fifteen species have to be moved for three saves to become one collection.",
   "next_concrete_step": "No blue_target() exists, so the campaign model cannot yet be given a Blue vessel. Declaring Blue's target is a small, ROM-free change that would take the measured reach from 140 to 150.",
-  "self_correction": "consolidation_required originally carried a has_trade_partner guard. Mutation testing showed no input could distinguish it -- a lone vessel's reach equals its own target by arithmetic -- so the test claiming to cover it was passing for the wrong reason. The guard was removed rather than kept untestable."
+  "self_correction": "consolidation_required originally carried a has_trade_partner guard. Mutation testing showed no input could distinguish it -- a lone vessel's reach equals its own target by arithmetic -- so the test claiming to cover it was passing for the wrong reason. The guard was removed rather than kept untestable.",
+  "superseded_by": "docs/evidence/second-cartridge-2026-08-09.json and the corrections below",
+  "correction_2026_08_09": {
+    "what_was_wrong": "Every figure here counted ten version exclusives per cartridge. There are eleven. Scyther is Red's Game Corner exclusive and Pinsir is Blue's, and both were missing from the exclusion table these numbers were computed from.",
+    "how_it_was_caught": "Two contracts in this repository disagreed about the one-save denominator -- the living-collection contract said 124 and the registration target said 125. That disagreement was noticed during an audit and dismissed as probably a difference of definition. It was not: it was this missing species, and chasing the discrepancy rather than rationalising it is what found it.",
+    "corrected_reach": {
+      "one Red save": "124/151, was 125",
+      "two concurrent linked Red saves": "135/151, was 136",
+      "three concurrent linked Red saves": "139/151, was 140"
+    },
+    "model_also_superseded": "This record lifts a trade evolution when a plan has at least two vessels. That is now wrong too. Concurrency is necessary but not sufficient: two saves on incompatible titles or hardware coexist without being able to exchange anything, so a campaign now declares explicit TradeLink pairs and lifting requires one. The same three vessels with no links reach 146 rather than 150.",
+    "what_still_holds": "Two Red plus one Blue still reaches 150 of 151 with Mew alone out of reach, and a third Red save still adds nothing once Blue is present. The headline survived the correction; the Red-only figures did not."
+  }
 }
