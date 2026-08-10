@@ -159,6 +159,13 @@ def main(argv: list[str] | None = None) -> int:
                 {
                     "schema": "pokemon-acquisition-routes-v1",
                     "recorded_on": args.recorded_on,
+                    "interpretation": (
+                        "The reachable-through-parsed-routes sets are lower bounds, "
+                        "not complete single-cartridge or single-run reach. Gifts, "
+                        "fossils, Game Corner prizes, starters and static encounters "
+                        "remain absent. Fishing equality compares every decoded rod, "
+                        "level, map and species slot across both verified cartridges."
+                    ),
                     "scope": (
                         "wild grass and water tables, the three rods, the evolution "
                         "graph and the ten in-game trades. Gifts, fossils and the Game "

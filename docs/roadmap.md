@@ -3,6 +3,36 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+## Current focus (2026-08-10): turn cartridge knowledge into safe action
+
+The hardened Red/Blue extraction pass is complete. Full evolution graphs, fishing tables and map
+nodes agree. Every decoded terrain grid and grass/passability rule agrees too; nine Blue tilesets
+use different raw blockset addresses, which are now reported separately instead of being mistaken
+for a traversal difference. The public records are reproducible from exact-fingerprint private
+cartridges without publishing their paths or bytes.
+
+The first live route falsification also passed. An existing qualified boot/house sequence established
+Pallet Town `(y=6, x=5)`; the cartridge graph selected Oak's Lab, terrain search produced fourteen
+movements to its `(11, 12)` warp, every one of the thirteen intermediate coordinates matched live
+memory, and the last input entered Oak's Lab. No adjacent save artifact changed. See
+[the live route record](evidence/pallet-cartridge-route-probe-2026-08-10.json).
+
+The ordered knowledge-layer gates are now:
+
+1. Decode traversal requirements—Cut, Surf, Strength, ledges and story-gated passages—without
+   promoting static connectivity into executable authority.
+2. Represent dynamic obstruction separately from permanent terrain, with observed-coordinate retry
+   and fail-closed bounds rather than assuming NPC-free paths.
+3. Reproduce a normal story route with generated local steps behind an explicitly uncounted probe;
+   only then consider replacing one authored completion-run corridor.
+4. Read the remaining acquisition routes: starters, gifts, fossils, static encounters and Game
+   Corner prizes, so parsed reachability becomes complete rather than a lower bound.
+5. Expose a game-neutral knowledge interface before beginning Crystal cartridge extraction. The
+   point is transfer, not a second title-specific teacher hidden behind a shared command.
+
+None of this opens v95. Counted v95 remains 0/10, and the existing source-bound reliability gates
+retain their own ordering.
+
 ## Current focus (2026-08-10)
 
 ### Close the optional-loss branch before opening v95

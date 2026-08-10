@@ -136,6 +136,7 @@ def test_a_trade_partner_is_worth_exactly_the_trade_evolutions(record: dict) -> 
 def test_parsed_route_reach_is_not_presented_as_complete_cartridge_reach(record: dict) -> None:
     assert "lower bounds" in record["interpretation"]
     assert "static encounters remain absent" in record["interpretation"]
+    assert "every decoded rod" in record["interpretation"]
 
 
 def test_the_super_rod_is_the_only_rod_that_depends_on_where_you_stand() -> None:

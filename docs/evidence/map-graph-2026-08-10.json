@@ -1,8 +1,8 @@
 {
   "schema": "pokemon-map-graph-v1",
   "recorded_on": "2026-08-10",
+  "comparison_scope": "cartridges_agree compares every decoded MapNode and Passage, including headings, coordinates and contextual return origins.",
   "scope": "map headers, edge connections and warps. Says which maps are joined, not whether the way is open: Surf, Cut, Strength and story gates are not in this data.",
-  "comparison_scope": "The original cartridges_agree flag compared adjacency only. The hardened extractor now compares complete MapNode and Passage structures, but this record predates that rerun.",
   "starting_map": 0,
   "cartridges_agree": true,
   "by_title": {

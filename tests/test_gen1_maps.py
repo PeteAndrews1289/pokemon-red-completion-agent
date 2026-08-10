@@ -88,7 +88,7 @@ def test_both_cartridges_carry_the_same_world(record: dict) -> None:
     """Keep the legacy comparison's narrower evidence boundary visible."""
 
     assert record["cartridges_agree"] is True
-    assert "compared adjacency only" in record["comparison_scope"]
+    assert "every decoded MapNode and Passage" in record["comparison_scope"]
     assert record["by_title"]["red"]["passage_counts"] == {
         "connection": 78,
         "warp": 917,

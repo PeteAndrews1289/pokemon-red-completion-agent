@@ -281,6 +281,38 @@ bounded, and large enough to become the next learned skill.
 
 ---
 
+## Act VIII: the cartridge becomes the guidebook
+
+Every route in the teacher was still written as directions. Press up eleven times. Turn right four.
+That can finish Red, but it cannot explain Red and transfers nothing to the next cartridge.
+
+So the project stopped transcribing the map and read it. Red and Blue contain 220 reachable maps,
+78 reciprocal edge connections, 917 ordinary warps, and 48,216 squares a player can stand on. Their
+evolution data contains 70 evolving species and 72 evolution edges. Fishing resolves the apparent
+Horsea/Krabby version discrepancy, and the acquisition routes parsed so far derive eleven candidate
+version-exclusive species on each side rather than relying on a typed list.
+
+The first comparison suite still managed to flatter itself. It called terrain equal by comparing
+totals and Pallet Town, called map graphs equal by comparing adjacency, and would accept a four-entry
+species mapping as if all 151 entries had been decoded. The hardened readers compare complete
+structures. That immediately found something the summary had hidden: nine Blue tilesets store their
+blocksets sixteen bytes earlier. The raw pointers differ; all 220 decoded terrain grids and every
+grass/passability rule are identical. A useful test does not merely return `True`. It tells you
+exactly what kind of equality you measured.
+
+Then the generated knowledge touched the live game. The old opening teacher was allowed to do one
+thing: establish a clean, verified state outside Red's house. From there, the cartridge graph chose
+Oak's Lab and the terrain search produced the route. Fourteen movements followed. Live memory agreed
+with all thirteen intermediate coordinates, and the final input entered the lab. No typed Pallet
+path supplied those movements.
+
+It is a small route, deliberately. The graph does not yet understand Cut, Surf, Strength, ledges,
+story flags or a person standing in the road. But it is the first part of the game completed from
+knowledge extracted from the game rather than from an answer key. That is the direction that can
+eventually survive a different seed—and, more importantly, a different Pokémon cartridge.
+
+---
+
 ## Why a living Pokédex
 
 Every failure in this story has the same shape: a fixed sequence standing in where a decision should
@@ -297,12 +329,12 @@ And it does not fit on one cartridge. The arithmetic is unforgiving:
 
 ```
 151  species in the generation
--10  Blue-exclusive, unreachable in Red
+-11  Blue-exclusive through the acquisition routes parsed so far
 - 4  evolve only on trade
 - 1  Mew, never distributed in normal play
 -11  forfeited by a run's own starter, fossil, Dojo and stone choices
 ────
-125  actually obtainable in one Red run
+124  obtainable under that simplified accounting
 ```
 
 Two Red runs taking opposite branches reach 132. Three are needed just for the starters and the Eevee
@@ -328,6 +360,10 @@ Being precise about this matters more than the story sounding finished.
   one of the twenty decisions had multiple executable candidates.
 - Encounter bands for five areas are measured rather than recalled, with sample counts, and they
   reproduce exactly across runs because the route is deterministic.
+- Red and Blue's complete decoded map graphs, traversable terrain, fishing tables and evolution
+  graphs are now measured from both cartridges. One generated 14-movement Pallet route has entered
+  Oak's Lab live while verifying every intermediate coordinate; traversal requirements and dynamic
+  obstructions are not yet modeled.
 - A member that is too weak for where the run happens to be is now routed somewhere that suits it,
   travels there, and gains levels. That is new, and it is the mechanism the rest depends on.
 - A clean-power teacher run reaches its 60/55/55/55/55/55 readiness gate and completes the game;

@@ -315,7 +315,15 @@ def test_the_reading_that_makes_warps_stand_up_is_the_one_used(record: dict) -> 
 
 def test_both_cartridges_describe_the_same_ground(record: dict) -> None:
     assert record["cartridges_agree"] is True
-    assert "compared aggregate totals and Pallet Town" in record["comparison_scope"]
+    assert "every decoded Terrain" in record["comparison_scope"]
+    assert "storage pointers" in record["comparison_scope"]
+    assert record["terrain_grids_agree"] is True
+    assert record["tileset_traversal_rules_agree"] is True
+    assert record["raw_tileset_records_agree"] is False
+    assert record["raw_tileset_differences"] == [
+        {"tileset": index, "fields": ["blockset"]}
+        for index in (2, 3, 5, 6, 7, 9, 10, 12, 22)
+    ]
     assert record["by_title"]["red"]["standable_squares"] == 48216
     assert record["by_title"]["red"]["grass_squares"] == 2537
 

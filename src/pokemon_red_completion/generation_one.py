@@ -74,7 +74,7 @@ UNAVAILABLE_IN_BLUE = frozenset(
 # Evolved species mapped to the precursor that evolves when traded.
 #
 # Confirmed against both cartridges on 2026-08-09 by reading the evolution
-# pointer array directly -- see docs/evidence/evolution-graph-2026-08-09.json and
+# pointer array directly -- see docs/evidence/evolution-graph-2026-08-10.json and
 # pokemon_red_completion.gen1_cartridge.trade_evolutions, which derives exactly
 # this mapping from the 72-evolution graph. The declaration is kept because the
 # planner must work without a ROM present; it is no longer the only statement of

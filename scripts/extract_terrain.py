@@ -17,6 +17,7 @@ import argparse
 import json
 import sys
 from collections.abc import Mapping
+from dataclasses import fields
 from datetime import date
 from pathlib import Path
 
@@ -38,6 +39,35 @@ from pokemon_red_completion.rom import (  # noqa: E402
 )
 
 TITLES = ("red", "blue")
+
+
+def traversal_rules(sets: Mapping[int, Tileset]) -> dict[int, tuple[int, frozenset[int]]]:
+    """The tileset facts that affect walking, excluding ROM storage addresses."""
+
+    return {
+        index: (tileset.grass_tile, tileset.walkable)
+        for index, tileset in sets.items()
+    }
+
+
+def raw_tileset_differences(
+    red: Mapping[int, Tileset], blue: Mapping[int, Tileset]
+) -> list[dict[str, object]]:
+    """Name raw-record differences without publishing irrelevant private inputs."""
+
+    compared_fields = tuple(field.name for field in fields(Tileset))
+    return [
+        {
+            "tileset": index,
+            "fields": [
+                name
+                for name in compared_fields
+                if getattr(red[index], name) != getattr(blue[index], name)
+            ],
+        }
+        for index in sorted(red)
+        if red[index] != blue[index]
+    ]
 
 
 def picture(terrain: Terrain) -> list[str]:
@@ -123,8 +153,18 @@ def main(argv: list[str] | None = None) -> int:
             f"{found['warps_on_passable_ground']:.1%} of warps on passable ground"
         )
 
-    agree = worlds["red"] == worlds["blue"] and tile_sets["red"] == tile_sets["blue"]
-    print(f"\ncartridges describe the same ground: {agree}")
+    terrain_agrees = worlds["red"] == worlds["blue"]
+    traversal_rules_agree = traversal_rules(tile_sets["red"]) == traversal_rules(
+        tile_sets["blue"]
+    )
+    raw_tilesets_agree = tile_sets["red"] == tile_sets["blue"]
+    raw_differences = raw_tileset_differences(tile_sets["red"], tile_sets["blue"])
+    agree = terrain_agrees and traversal_rules_agree
+    print(f"\ncartridges describe the same traversable ground: {agree}")
+    print(
+        "raw tileset records agree: "
+        f"{raw_tilesets_agree} ({len(raw_differences)} differing records)"
+    )
     pallet = summaries["red"]["pallet_town"]
     print(f"\nPallet Town, {pallet['size'][0]} by {pallet['size'][1]} steps:")
     for row in pallet["picture"]:
@@ -139,6 +179,12 @@ def main(argv: list[str] | None = None) -> int:
                 {
                     "schema": "pokemon-terrain-v1",
                     "recorded_on": args.recorded_on,
+                    "comparison_scope": (
+                        "cartridges_agree compares every decoded Terrain across all "
+                        "reachable maps plus every grass/passability rule. Raw ROM "
+                        "storage pointers are compared and reported separately because "
+                        "their addresses do not affect traversability."
+                    ),
                     "scope": (
                         "per-map walkability from tileset collision data. Says which "
                         "squares are standable ground; does not model Surf, Cut, "
@@ -146,6 +192,10 @@ def main(argv: list[str] | None = None) -> int:
                         "flag, or people standing in the way."
                     ),
                     "cartridges_agree": agree,
+                    "terrain_grids_agree": terrain_agrees,
+                    "tileset_traversal_rules_agree": traversal_rules_agree,
+                    "raw_tileset_records_agree": raw_tilesets_agree,
+                    "raw_tileset_differences": raw_differences,
                     "by_title": summaries,
                 },
                 indent=2,

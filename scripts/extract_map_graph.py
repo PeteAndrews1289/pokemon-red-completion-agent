@@ -118,6 +118,10 @@ def main(argv: list[str] | None = None) -> int:
                 {
                     "schema": "pokemon-map-graph-v1",
                     "recorded_on": args.recorded_on,
+                    "comparison_scope": (
+                        "cartridges_agree compares every decoded MapNode and Passage, "
+                        "including headings, coordinates and contextual return origins."
+                    ),
                     "scope": (
                         "map headers, edge connections and warps. Says which maps are "
                         "joined, not whether the way is open: Surf, Cut, Strength and "

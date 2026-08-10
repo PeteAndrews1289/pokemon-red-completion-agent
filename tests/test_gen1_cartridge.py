@@ -7,7 +7,7 @@ recorded as ten, and how a Mansion band of 30-32 outlived the 155 encounters
 saying 28-39.
 
 These tests need no ROM. The reads are the measurement and live in
-``docs/evidence/evolution-graph-2026-08-09.json``; this is the accounting that
+``docs/evidence/evolution-graph-2026-08-10.json``; this is the accounting that
 holds the hand-written declarations against them.
 """
 
@@ -28,7 +28,7 @@ from pokemon_red_completion.gen1_cartridge import (
 )
 from pokemon_red_completion.generation_one import GENERATION_ONE_TRADE_EVOLUTIONS
 
-RECORD = Path("docs/evidence/evolution-graph-2026-08-09.json")
+RECORD = Path("docs/evidence/evolution-graph-2026-08-10.json")
 
 
 @pytest.fixture(scope="module")

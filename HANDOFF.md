@@ -14,6 +14,35 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## The first cartridge-computed live route — 2026-08-10
+
+The hardened evidence was regenerated from exact-fingerprint US revision-0 Red and Blue cartridges.
+This closes the comparison caveats in the checkpoint below rather than merely deleting their prose:
+
+- both complete 70-source/72-edge evolution graphs agree;
+- every decoded fishing slot agrees, and the parsed acquisition routes still derive the eleven
+  candidate exclusives on each side;
+- every complete `MapNode` and `Passage` agrees across 220 reachable maps; and
+- all 220 terrain grids and every grass/passability rule agree, covering 48,216 standable squares.
+
+The terrain rerun found a useful distinction that the previous claim did not anticipate. Nine raw
+tileset records point to a blockset 16 bytes earlier in Blue. Their decoded terrain and traversal
+rules are identical; the raw storage addresses are not. The evidence now reports both facts rather
+than forcing one ambiguous equality boolean to carry them.
+
+Most importantly, the first live falsification passed. From a clean power-on, the existing qualified
+opening teacher established the stable Pallet Town state outside Red's house. From there the
+cartridge graph selected Oak's Lab, the terrain search generated a 14-movement route, live emulator
+memory verified all 13 intermediate coordinates, and the final movement entered map 40, Oak's Lab.
+The emulator released every control and changed no ROM-adjacent RAM, RTC or state artifact. Record:
+[pallet-cartridge-route-probe-2026-08-10.json](docs/evidence/pallet-cartridge-route-probe-2026-08-10.json).
+
+This is the first live replacement of a typed route segment with cartridge-derived knowledge. It is
+not permission to use the global router in a completion run: Cut, Surf, Strength, ledges, story-gated
+doors and moving people are still absent. The next knowledge gate is to decode and represent those
+traversal requirements, then falsify increasingly difficult routes behind an explicit experimental
+boundary. The v95 counted campaign remains sealed at 0/10.
+
 ## Codex audit hardening — 2026-08-10
 
 The cartridge-knowledge direction remains correct, but the first evidence pass claimed more than
