@@ -81,12 +81,20 @@ def test_controller_poisoning_prevents_partial_claim_retries() -> None:
         controller.start_or_resume(intent)
 
 
-def test_controller_rejects_changed_intent_and_unapplied_finish() -> None:
+def test_controller_keys_reentry_to_plan_identity_and_rejects_a_changed_plan() -> None:
     changed = BattleStartScheduleController(_offsets())
     first = _Intent(RED_BATTLE_PLAN_IDS[0])
     changed.start_or_resume(first)
-    with pytest.raises(BattleScheduleError, match="changed"):
-        changed.start_or_resume(_Intent(RED_BATTLE_PLAN_IDS[0], objective_id="different_objective"))
+    live_intent = _Intent(RED_BATTLE_PLAN_IDS[0], objective_id="live_capabilities_changed")
+    changed.start_or_resume(live_intent)
+    offset = changed.claim_at_main(live_intent)
+    assert offset is not None
+    changed.mark_applied(first, offset)
+    changed.finish(live_intent)
+
+    changed.start_or_resume(_Intent(RED_BATTLE_PLAN_IDS[1]))
+    with pytest.raises(BattleScheduleError, match="identity changed"):
+        changed.start_or_resume(_Intent(RED_BATTLE_PLAN_IDS[2]))
 
     unfinished = BattleStartScheduleController(_offsets())
     unfinished.start_or_resume(first)

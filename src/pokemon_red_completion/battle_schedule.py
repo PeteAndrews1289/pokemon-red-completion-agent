@@ -34,7 +34,7 @@ class BattleStartScheduleController:
     """Consume one frozen timing offset for every expected physical battle."""
 
     __slots__ = (
-        "_active_intent",
+        "_active_battle_plan_id",
         "_applied",
         "_claimed",
         "_failed",
@@ -64,7 +64,7 @@ class BattleStartScheduleController:
         self._offsets = frozen
         self._schedule_sha256 = battle_start_offsets_sha256(frozen)
         self._next_index = 0
-        self._active_intent: BattlePlanIntent | None = None
+        self._active_battle_plan_id: str | None = None
         self._claimed: BattleStartOffset | None = None
         self._applied = False
         self._failed = False
@@ -91,16 +91,17 @@ class BattleStartScheduleController:
         self._require_healthy()
         if intent is None or not isinstance(getattr(intent, "battle_plan_id", None), str):
             self._fail("planned battle is missing an explicit intent")
-        if self._active_intent is not None:
-            if intent != self._active_intent:
-                self._fail("planned battle intent changed during re-entry")
+        battle_plan_id = intent.battle_plan_id
+        if self._active_battle_plan_id is not None:
+            if battle_plan_id != self._active_battle_plan_id:
+                self._fail("planned battle identity changed during re-entry")
             return
         if self._next_index >= len(self._offsets):
             self._fail("planned run observed an unexpected extra battle")
         expected = self._offsets[self._next_index]
-        if intent.battle_plan_id != expected.battle_plan_id:
+        if battle_plan_id != expected.battle_plan_id:
             self._fail("planned battle order does not match the frozen roster")
-        self._active_intent = intent
+        self._active_battle_plan_id = battle_plan_id
         self._claimed = None
         self._applied = False
 
@@ -142,7 +143,7 @@ class BattleStartScheduleController:
         if not self._applied:
             self._fail("planned battle ended before its offset was applied")
         self._next_index += 1
-        self._active_intent = None
+        self._active_battle_plan_id = None
         self._claimed = None
         self._applied = False
 
@@ -150,7 +151,7 @@ class BattleStartScheduleController:
         """Close a matching battle settled by a bounded external recovery path."""
 
         self._require_healthy()
-        if self._active_intent is None:
+        if self._active_battle_plan_id is None:
             return False
         self.finish(intent)
         return True
@@ -159,14 +160,14 @@ class BattleStartScheduleController:
         """Fail unless every declared battle finished exactly once."""
 
         self._require_healthy()
-        if self._active_intent is not None or self._next_index != len(self._offsets):
+        if self._active_battle_plan_id is not None or self._next_index != len(self._offsets):
             self._fail("planned battle-start schedule is incomplete")
 
     def _require_active(self, intent: BattlePlanIntent | None) -> None:
         self._require_healthy()
-        if self._active_intent is None:
+        if self._active_battle_plan_id is None:
             self._fail("planned battle schedule has no active battle")
-        if intent is None or intent != self._active_intent:
+        if intent is None or intent.battle_plan_id != self._active_battle_plan_id:
             self._fail("planned battle intent does not match the active battle")
 
     def _require_healthy(self) -> None:
