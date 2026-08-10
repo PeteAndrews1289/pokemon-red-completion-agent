@@ -7,9 +7,13 @@ and Kingler in Blue -- because both cartridges offer all four on a rod. It also
 misses six that *are* exclusive and appear in no wild table at all, because they
 are only ever reached by evolving something that does.
 
-So this reads the wild tables, the three rods and the evolution graph together,
-closes the catchable set under evolution, and differences the two cartridges.
-The eleven-species exclusive lists fall out. They used to be typed.
+So this reads the wild tables, the three rods, the ten in-game trades and the
+evolution graph together, closes the catchable set under all of them, and
+differences the two cartridges. The eleven-species exclusive lists fall out.
+They used to be typed.
+
+Four more species come only from the trades: Farfetch'd, Lickitung, Mr. Mime and
+Jynx appear in no wild table, on no rod, and at the end of no evolution.
 
 Usage::
 
@@ -29,7 +33,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 from pokemon_red_completion.gen1_cartridge import (  # noqa: E402
     catchable_species,
+    evolution_graph,
     fishing_tables,
+    in_game_trades,
     internal_to_dex,
     reachable_species,
     version_exclusives,
@@ -49,11 +55,47 @@ def wild_species(rom: bytes) -> set[int]:
     return {dex[s] for slots in wild_tables(rom).values() for _, s in slots if s in dex}
 
 
+def without_trading(rom: bytes) -> set[int]:
+    """What a cartridge reaches by catching and evolving alone.
+
+    Needed to say which species *only* an in-game trade supplies, and computed
+    plainly rather than by subtracting sets that nearly mean the right thing.
+    An earlier one-liner here reported Beedrill as trade-only, which is wrong:
+    it is a trade reward, but it is also what a caught Weedle grows into.
+    """
+
+    graph = evolution_graph(rom)
+    reached = set(catchable_species(rom))
+    frontier = list(reached)
+    while frontier:
+        species = frontier.pop()
+        for step in graph.get(species, ()):
+            if step.needs_a_trade_partner or step.to_species in reached:
+                continue
+            reached.add(step.to_species)
+            frontier.append(step.to_species)
+    return reached
+
+
 def describe(rom: bytes) -> dict[str, object]:
     tables = fishing_tables(rom)
     wild = wild_species(rom)
     rods = tables.species()
+    trades = in_game_trades(rom)
+    caught = catchable_species(rom)
+    reachable = reachable_species(rom)
     return {
+        "in_game_trades": [
+            {
+                "give": trade.give_species,
+                "get": trade.get_species,
+                "nickname": trade.nickname,
+            }
+            for trade in trades
+        ],
+        "species_only_an_in_game_trade_supplies": sorted(
+            {trade.get_species for trade in trades} - without_trading(rom)
+        ),
         "wild_table_species": sorted(wild),
         "rod_species": sorted(rods),
         "rod_only_species": sorted(rods - wild),
@@ -62,8 +104,8 @@ def describe(rom: bytes) -> dict[str, object]:
             {"rod": slot.rod.value, "level": slot.level, "species": slot.species}
             for slot in tables.anywhere
         ],
-        "catchable": sorted(catchable_species(rom)),
-        "reachable_alone": sorted(reachable_species(rom)),
+        "catchable": sorted(caught),
+        "reachable_alone": sorted(reachable),
         "reachable_with_a_trade_partner": sorted(reachable_species(rom, with_trade_partner=True)),
     }
 
@@ -115,9 +157,9 @@ def main(argv: list[str] | None = None) -> int:
                     "schema": "pokemon-acquisition-routes-v1",
                     "recorded_on": args.recorded_on,
                     "scope": (
-                        "wild grass and water tables, the three rods, and the evolution "
-                        "graph. Gifts, fossils, the Game Corner and in-game trades are "
-                        "further routes and are not read here."
+                        "wild grass and water tables, the three rods, the evolution "
+                        "graph and the ten in-game trades. Gifts, fossils and the Game "
+                        "Corner are further routes and are not read here."
                     ),
                     "by_title": described,
                     "version_exclusives": {

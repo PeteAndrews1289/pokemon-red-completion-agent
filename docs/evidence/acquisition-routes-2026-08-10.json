@@ -1,9 +1,67 @@
 {
   "schema": "pokemon-acquisition-routes-v1",
   "recorded_on": "2026-08-10",
-  "scope": "wild grass and water tables, the three rods, and the evolution graph. Gifts, fossils, the Game Corner and in-game trades are further routes and are not read here.",
+  "scope": "wild grass and water tables, the three rods, the evolution graph and the ten in-game trades. Gifts, fossils and the Game Corner are further routes and are not read here.",
   "by_title": {
     "red": {
+      "in_game_trades": [
+        {
+          "give": 33,
+          "get": 30,
+          "nickname": "TERRY"
+        },
+        {
+          "give": 63,
+          "get": 122,
+          "nickname": "MARCEL"
+        },
+        {
+          "give": 12,
+          "get": 15,
+          "nickname": "CHIKUCHIKU"
+        },
+        {
+          "give": 77,
+          "get": 86,
+          "nickname": "SAILOR"
+        },
+        {
+          "give": 21,
+          "get": 83,
+          "nickname": "DUX"
+        },
+        {
+          "give": 80,
+          "get": 108,
+          "nickname": "MARC"
+        },
+        {
+          "give": 61,
+          "get": 124,
+          "nickname": "LOLA"
+        },
+        {
+          "give": 26,
+          "get": 101,
+          "nickname": "DORIS"
+        },
+        {
+          "give": 48,
+          "get": 114,
+          "nickname": "CRINKLES"
+        },
+        {
+          "give": 32,
+          "get": 29,
+          "nickname": "SPOT"
+        }
+      ],
+      "species_only_an_in_game_trade_supplies": [
+        83,
+        108,
+        122,
+        124
+      ],
       "wild_table_species": [
         10,
         11,
@@ -314,6 +372,7 @@
         80,
         81,
         82,
+        83,
         84,
         85,
         86,
@@ -335,6 +394,7 @@
         103,
         104,
         105,
+        108,
         109,
         110,
         111,
@@ -348,7 +408,9 @@
         119,
         120,
         121,
+        122,
         123,
+        124,
         125,
         128,
         129,
@@ -423,6 +485,7 @@
         80,
         81,
         82,
+        83,
         84,
         85,
         86,
@@ -445,6 +508,7 @@
         103,
         104,
         105,
+        108,
         109,
         110,
         111,
@@ -458,7 +522,9 @@
         119,
         120,
         121,
+        122,
         123,
+        124,
         125,
         128,
         129,
@@ -470,6 +536,64 @@
       ]
     },
     "blue": {
+      "in_game_trades": [
+        {
+          "give": 33,
+          "get": 30,
+          "nickname": "TERRY"
+        },
+        {
+          "give": 63,
+          "get": 122,
+          "nickname": "MARCEL"
+        },
+        {
+          "give": 12,
+          "get": 15,
+          "nickname": "CHIKUCHIKU"
+        },
+        {
+          "give": 77,
+          "get": 86,
+          "nickname": "SAILOR"
+        },
+        {
+          "give": 21,
+          "get": 83,
+          "nickname": "DUX"
+        },
+        {
+          "give": 80,
+          "get": 108,
+          "nickname": "MARC"
+        },
+        {
+          "give": 61,
+          "get": 124,
+          "nickname": "LOLA"
+        },
+        {
+          "give": 26,
+          "get": 101,
+          "nickname": "DORIS"
+        },
+        {
+          "give": 48,
+          "get": 114,
+          "nickname": "CRINKLES"
+        },
+        {
+          "give": 32,
+          "get": 29,
+          "nickname": "SPOT"
+        }
+      ],
+      "species_only_an_in_game_trade_supplies": [
+        83,
+        108,
+        122,
+        124
+      ],
       "wild_table_species": [
         10,
         11,
@@ -780,6 +904,7 @@
         80,
         81,
         82,
+        83,
         84,
         85,
         86,
@@ -801,6 +926,7 @@
         103,
         104,
         105,
+        108,
         109,
         110,
         111,
@@ -814,6 +940,8 @@
         119,
         120,
         121,
+        122,
+        124,
         126,
         127,
         128,
@@ -889,6 +1017,7 @@
         80,
         81,
         82,
+        83,
         84,
         85,
         86,
@@ -911,6 +1040,7 @@
         103,
         104,
         105,
+        108,
         109,
         110,
         111,
@@ -924,6 +1054,8 @@
         119,
         120,
         121,
+        122,
+        124,
         126,
         127,
         128,

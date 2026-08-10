@@ -19,11 +19,19 @@ from pathlib import Path
 import pytest
 
 from pokemon_red_completion.gen1_cartridge import (
+    DEX_ANCHORS,
+    IN_GAME_TRADE_COUNT,
+    IN_GAME_TRADE_TABLE,
+    INTERNAL_TO_DEX_TABLE,
     CartridgeReadError,
+    Evolution,
+    EvolutionMethod,
     FishingSlot,
     FishingTables,
     RodKind,
     fishing_tables,
+    grow_collection,
+    in_game_trades,
 )
 from pokemon_red_completion.generation_one import UNAVAILABLE_IN_BLUE, UNAVAILABLE_IN_RED
 
@@ -141,6 +149,222 @@ def test_the_super_rod_is_the_only_rod_that_depends_on_where_you_stand() -> None
     assert {slot.species for slot in tables.at(42)} == {129, 118, 116}
     assert {slot.species for slot in tables.at(7)} == {129, 118}
     assert tables.species() == frozenset({129, 118, 116})
+
+
+def test_four_species_come_only_from_a_person_in_the_world(record: dict) -> None:
+    """Farfetch'd, Lickitung, Mr. Mime and Jynx.
+
+    None appears in a wild table, on a rod, or at the end of any evolution. A
+    planner that knows every encounter table in the game and nothing else will
+    never obtain them, and a Pokédex counted without them is short by four.
+    """
+
+    for title in ("red", "blue"):
+        found = record["by_title"][title]
+        assert found["species_only_an_in_game_trade_supplies"] == [83, 108, 122, 124]
+        for species in (83, 108, 122, 124):
+            assert species not in found["wild_table_species"]
+            assert species not in found["rod_species"]
+            assert species not in found["catchable"]
+            assert species in found["reachable_alone"]
+
+
+def test_a_trade_reward_that_can_be_caught_anyway_is_not_trade_only(record: dict) -> None:
+    """Beedrill is a trade reward and is not on that list.
+
+    It is what a caught Weedle grows into, so the trade is a convenience. The
+    first version of this accounting called it trade-only, which would have
+    made a planner spend a Butterfree it did not need to.
+    """
+
+    trades = record["by_title"]["red"]["in_game_trades"]
+    rewards = {trade["get"] for trade in trades}
+
+    assert 15 in rewards
+    assert 15 not in record["by_title"]["red"]["species_only_an_in_game_trade_supplies"]
+    assert 15 in record["by_title"]["red"]["reachable_alone"]
+
+
+def test_a_trade_costs_a_specimen(record: dict) -> None:
+    """Every swap names what it takes as well as what it gives.
+
+    A living collection has to keep one of everything, so a trade that spends
+    its only specimen of the given species is a step backwards unless a second
+    can be caught. Recording both halves is what lets a plan notice.
+    """
+
+    trades = record["by_title"]["red"]["in_game_trades"]
+
+    assert len(trades) == 10
+    assert all(trade["give"] != trade["get"] for trade in trades)
+    assert all(trade["nickname"] for trade in trades)
+    assert {t["nickname"] for t in trades if t["get"] == 83} == {"DUX"}
+
+
+def test_both_cartridges_offer_the_same_trades(record: dict) -> None:
+    assert (
+        record["by_title"]["red"]["in_game_trades"]
+        == record["by_title"]["blue"]["in_game_trades"]
+    )
+
+
+def test_a_cartridge_whose_trade_table_moved_is_refused() -> None:
+    """Ten entries read from a blank cartridge must fail, not return ten blanks."""
+
+    with pytest.raises(CartridgeReadError):
+        in_game_trades(bytes(0x80000))
+
+
+# --------------------------------------------------------------------------
+# The decoder itself, against bytes laid out by hand.
+#
+# Everything above reads the committed record, and a record compared against
+# itself agrees with any bug: swap give and get in the reader, or shorten the
+# stride, and every assertion above stays green. This repository has now found
+# that same hole in three separate readers, so the decoding gets its own
+# cartridge, small enough to write out and assert against.
+# --------------------------------------------------------------------------
+
+ROM_BYTES = 0x80000
+UPPERCASE_A = 0x80
+TEXT_END = 0x50
+
+#: The entry layout, stated here rather than imported.
+#:
+#: A fixture that writes bytes with the same stride the decoder reads them back
+#: with cannot fail -- change the module constant and the fixture changes with
+#: it. These two lines are the second opinion that makes the stride assertions
+#: mean something.
+STRIDE = 14
+NICKNAME_BYTES = 11
+
+
+def encoded(name: str) -> bytes:
+    """A nickname the way the cartridge stores it, which is not ASCII."""
+
+    return bytes(UPPERCASE_A + ord(letter) - ord("A") for letter in name) + bytes(
+        [TEXT_END] * (NICKNAME_BYTES - len(name))
+    )
+
+
+def trade_cartridge(
+    entries: list[tuple[int, int, str]], *, eleventh: tuple[int, int, str] | None = None
+) -> bytes:
+    """A ROM holding a species table and a trade table, and nothing else."""
+
+    data = bytearray(ROM_BYTES)
+    # A species map that satisfies the four anchors the reader checks, and maps
+    # every other index to itself so the fixtures can name species plainly.
+    for index in range(190):
+        data[INTERNAL_TO_DEX_TABLE + index] = index + 1 if index < 151 else 0
+    for internal, expected in DEX_ANCHORS.items():
+        data[INTERNAL_TO_DEX_TABLE + internal - 1] = expected
+
+    written = list(entries)
+    if eleventh is not None:
+        written.append(eleventh)
+    for index, (give, get, nickname) in enumerate(written):
+        at = IN_GAME_TRADE_TABLE + STRIDE * index
+        data[at] = give
+        data[at + 1] = get
+        data[at + 2] = 0
+        data[at + 3 : at + 3 + NICKNAME_BYTES] = encoded(nickname)
+    return bytes(data)
+
+
+TEN = [(0x02 + n, 0x30 + n, f"NAME{chr(ord('A') + n)}") for n in range(IN_GAME_TRADE_COUNT)]
+
+
+def test_the_reader_keeps_what_is_given_apart_from_what_is_got() -> None:
+    """The two are adjacent bytes, and swapping them reverses every trade.
+
+    A planner working from a reversed table would hand over the species it was
+    trying to collect.
+    """
+
+    trades = in_game_trades(trade_cartridge(TEN))
+
+    assert len(trades) == IN_GAME_TRADE_COUNT
+    assert trades[0].give_species == 0x02
+    assert trades[0].get_species == 0x30
+    assert trades[0].nickname == "NAMEA"
+
+
+def test_every_trade_is_read_from_its_own_fourteen_bytes() -> None:
+    """A stride mistake makes later trades drift into their neighbours."""
+
+    trades = in_game_trades(trade_cartridge(TEN))
+
+    assert [t.give_species for t in trades] == [0x02 + n for n in range(10)]
+    assert [t.get_species for t in trades] == [0x30 + n for n in range(10)]
+    assert [t.nickname for t in trades] == [f"NAME{chr(ord('A') + n)}" for n in range(10)]
+
+
+def test_an_eleventh_trade_means_the_count_is_wrong() -> None:
+    """Reading ten from a longer table would parse cleanly and drop the rest."""
+
+    with pytest.raises(CartridgeReadError, match="more than 10"):
+        in_game_trades(trade_cartridge(TEN, eleventh=(0x05, 0x40, "EXTRA")))
+
+
+def test_a_swap_of_a_species_for_itself_is_not_a_trade() -> None:
+    with pytest.raises(CartridgeReadError, match="for itself"):
+        in_game_trades(trade_cartridge([(0x02, 0x02, "SAME"), *TEN[1:]]))
+
+
+def test_an_unreadable_nickname_means_the_stride_is_wrong() -> None:
+    rom = bytearray(trade_cartridge(TEN))
+    rom[IN_GAME_TRADE_TABLE + 3] = 0x00  # not a letter and not a terminator
+
+    with pytest.raises(CartridgeReadError, match="nickname"):
+        in_game_trades(bytes(rom))
+
+
+def test_a_trade_is_only_worth_something_if_its_price_can_be_paid() -> None:
+    """Reachability must not grant a reward nobody can hand anything over for.
+
+    Same conditional the campaign model applies to trade evolutions, and for the
+    same reason: a plan that cannot produce the price cannot produce the reward.
+    """
+
+    swaps = {30: 20, 40: 99}
+
+    grown = grow_collection({20}, evolutions={}, swaps=swaps)
+
+    assert grown == {20, 30}, "the swap whose price is missing pays out nothing"
+
+
+def test_evolution_and_trading_compound() -> None:
+    """Why the closure loops instead of applying each route once.
+
+    Catch 1, evolve it into 2, swap 2 for 3, evolve 3 into 4. A single pass in
+    either order stops early and undercounts what a cartridge can reach.
+    """
+
+    evolutions = {
+        1: (Evolution(1, 2, EvolutionMethod.LEVEL, 16),),
+        3: (Evolution(3, 4, EvolutionMethod.LEVEL, 32),),
+    }
+
+    grown = grow_collection({1}, evolutions=evolutions, swaps={3: 2})
+
+    assert grown == {1, 2, 3, 4}
+
+
+def test_a_trade_evolution_needs_a_second_save_but_an_in_game_swap_does_not() -> None:
+    """The two are different costs and must not be collapsed.
+
+    A person in the world will swap with one cartridge. Making a Machamp needs
+    two running at once.
+    """
+
+    evolutions = {1: (Evolution(1, 2, EvolutionMethod.TRADE),)}
+
+    alone = grow_collection({1}, evolutions=evolutions, swaps={9: 1})
+    partnered = grow_collection({1}, evolutions=evolutions, swaps={9: 1}, with_trade_partner=True)
+
+    assert alone == {1, 9}, "the swap happens, the trade evolution does not"
+    assert partnered == {1, 2, 9}
 
 
 def test_a_cartridge_whose_fishing_code_moved_is_refused() -> None:

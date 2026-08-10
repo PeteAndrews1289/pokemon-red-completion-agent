@@ -49,7 +49,7 @@ The fishing anchors
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from enum import StrEnum
 
@@ -78,6 +78,21 @@ COMPARE_IMMEDIATE = 0xFE
 SUPER_ROD_ENTRY_STRIDE = 3
 SUPER_ROD_GROUP_LIMIT = 8
 MAXIMUM_LEVEL = 100
+
+#: The ten people who will swap a Pokémon for one of yours.
+#:
+#: Found by the shape only this table has: a stride carrying two species indices,
+#: a small dialog selector, and eleven bytes of name text. Exactly one place in
+#: the ROM holds ten of those in a row, and no place holds twelve.
+IN_GAME_TRADE_TABLE = 0x71B7B
+IN_GAME_TRADE_STRIDE = 14
+IN_GAME_TRADE_COUNT = 10
+IN_GAME_TRADE_NICKNAME_BYTES = 11
+DIALOG_SELECTOR_LIMIT = 4
+TEXT_TERMINATOR = 0x50
+UPPERCASE_A = 0x80
+LOWERCASE_A = 0xA0
+LETTERS = 26
 
 #: Facts re-derived on every read. If any fails, the cartridge is not the one
 #: these offsets were located against and the read is refused.
@@ -482,6 +497,91 @@ def trade_evolutions(graph: Mapping[int, tuple[Evolution, ...]]) -> dict[int, in
     }
 
 
+@dataclass(frozen=True, slots=True)
+class InGameTrade:
+    """A swap an in-game character will make, keyed by Pokédex number.
+
+    The cost is the point. Unlike catching, a trade *spends* a specimen, so a
+    living collection needs two of the given species -- one to keep and one to
+    hand over -- or has to go and catch another afterwards.
+    """
+
+    give_species: int
+    get_species: int
+    nickname: str
+
+
+def _decode_text(raw: bytes) -> str:
+    """Read a cartridge string, which is not ASCII."""
+
+    letters: list[str] = []
+    for value in raw:
+        if value == TEXT_TERMINATOR:
+            break
+        if UPPERCASE_A <= value < UPPERCASE_A + LETTERS:
+            letters.append(chr(ord("A") + value - UPPERCASE_A))
+        elif LOWERCASE_A <= value < LOWERCASE_A + LETTERS:
+            letters.append(chr(ord("a") + value - LOWERCASE_A))
+        else:
+            letters.append("?")
+    return "".join(letters)
+
+
+def in_game_trades(rom: bytes) -> tuple[InGameTrade, ...]:
+    """Every swap a character in the world will make.
+
+    A separate acquisition route from catching, and not a minor one: four
+    species in Generation I -- Farfetch'd, Lickitung, Mr. Mime and Jynx --
+    appear in no wild table, on no rod, and at the end of no evolution. The only
+    way a cartridge produces them alone is by trading with somebody who lives
+    there.
+    """
+
+    dex = internal_to_dex(rom)
+    trades: list[InGameTrade] = []
+    for index in range(IN_GAME_TRADE_COUNT):
+        at = IN_GAME_TRADE_TABLE + IN_GAME_TRADE_STRIDE * index
+        give, get, dialog = rom[at], rom[at + 1], rom[at + 2]
+        if give not in dex or get not in dex:
+            raise CartridgeReadError(
+                f"trade {index} offers internal indices {give:#04x} and {get:#04x}, at least "
+                "one of which is not a species; the trade table is not where it was located"
+            )
+        if dialog > DIALOG_SELECTOR_LIMIT:
+            raise CartridgeReadError(f"trade {index} names dialog {dialog}, which is not one")
+        if give == get:
+            raise CartridgeReadError(f"trade {index} swaps a species for itself")
+        nickname = _decode_text(rom[at + 3 : at + 3 + IN_GAME_TRADE_NICKNAME_BYTES])
+        if not nickname or "?" in nickname:
+            raise CartridgeReadError(
+                f"trade {index} has no readable nickname; the stride is wrong"
+            )
+        trades.append(
+            InGameTrade(
+                give_species=dex[give], get_species=dex[get], nickname=nickname
+            )
+        )
+    _verify_the_trade_table_ends(rom, dex)
+    return tuple(trades)
+
+
+def _verify_the_trade_table_ends(rom: bytes, dex: Mapping[int, int]) -> None:
+    """The count has to be right, not merely survivable.
+
+    Reading ten entries from a longer table would parse cleanly and quietly drop
+    the rest, so the eleventh position must *fail* to look like a trade.
+    """
+
+    at = IN_GAME_TRADE_TABLE + IN_GAME_TRADE_STRIDE * IN_GAME_TRADE_COUNT
+    give, get = rom[at], rom[at + 1]
+    nickname = _decode_text(rom[at + 3 : at + 3 + IN_GAME_TRADE_NICKNAME_BYTES])
+    if give in dex and get in dex and nickname and "?" not in nickname:
+        raise CartridgeReadError(
+            f"an eleventh entry reads as a trade, so there are more than {IN_GAME_TRADE_COUNT}; "
+            "the count is wrong and trades are being dropped"
+        )
+
+
 def catchable_species(rom: bytes) -> frozenset[int]:
     """Every species this cartridge yields directly, by grass, surf or rod.
 
@@ -500,24 +600,63 @@ def catchable_species(rom: bytes) -> frozenset[int]:
 
 
 def reachable_species(rom: bytes, *, with_trade_partner: bool = False) -> frozenset[int]:
-    """What the catchable set grows into once evolution is applied.
+    """What the catchable set grows into once every other route is applied.
 
-    ``with_trade_partner`` decides whether trade evolutions count. A lone
-    cartridge cannot perform them, so the default answers the single-save
-    question; a campaign with a declared trade link should pass ``True``.
+    Three routes compound, so they are applied until nothing more falls out
+    rather than once each: evolving something you caught, swapping something you
+    caught with a character in the world, and evolving what they gave you.
+
+    ``with_trade_partner`` decides whether *trade evolutions* count -- those need
+    a second concurrent save, which the in-game swaps do not. A lone cartridge
+    cannot perform them, so the default answers the single-save question.
     """
 
-    graph = evolution_graph(rom)
-    reached = set(catchable_species(rom))
-    frontier = list(reached)
-    while frontier:
-        species = frontier.pop()
-        for step in graph.get(species, ()):
-            if step.needs_a_trade_partner and not with_trade_partner:
-                continue
-            if step.to_species not in reached:
-                reached.add(step.to_species)
-                frontier.append(step.to_species)
+    return grow_collection(
+        catchable_species(rom),
+        evolutions=evolution_graph(rom),
+        swaps={trade.get_species: trade.give_species for trade in in_game_trades(rom)},
+        with_trade_partner=with_trade_partner,
+    )
+
+
+def grow_collection(
+    seed: Iterable[int],
+    *,
+    evolutions: Mapping[int, tuple[Evolution, ...]],
+    swaps: Mapping[int, int],
+    with_trade_partner: bool = False,
+) -> frozenset[int]:
+    """Apply evolution and in-game trading until nothing more falls out.
+
+    The two routes compound, which is why this loops rather than doing each once:
+    a species you were given can evolve, and what it evolves into can be the
+    price of another swap.
+
+    Takes plain tables rather than a ROM so the closure can be exercised on its
+    own. Reached through a whole-cartridge read, its only possible test is one
+    that recomputes it, and a test that reimplements the thing it is checking
+    agrees with any bug in either copy.
+    """
+
+    reached = set(seed)
+    growing = True
+    while growing:
+        growing = False
+        frontier = list(reached)
+        while frontier:
+            species = frontier.pop()
+            for step in evolutions.get(species, ()):
+                if step.needs_a_trade_partner and not with_trade_partner:
+                    continue
+                if step.to_species not in reached:
+                    reached.add(step.to_species)
+                    frontier.append(step.to_species)
+                    growing = True
+        for reward, price in swaps.items():
+            # You have to have something to hand over.
+            if price in reached and reward not in reached:
+                reached.add(reward)
+                growing = True
     return frozenset(reached)
 
 
