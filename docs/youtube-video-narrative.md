@@ -227,6 +227,10 @@ Then show replay 17 clear every required trainer before one ordinary wild interr
 walk. Reuse the earlier flee primitive on screen. The callback matters: the repository is beginning
 to accumulate mechanics instead of accumulating chapter-specific exceptions.
 
+Replay 18 supplies the perfect callback: the fixed “Zubat” wait also produces no battle. Reuse the
+Kakuna lesson—show species `0x6B`, level seven, a bounded search counter, and the route coordinate
+restored after capture. Caption it again: **“Intent is not evidence.”**
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

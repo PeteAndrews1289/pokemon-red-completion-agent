@@ -193,7 +193,10 @@ because item use returned to MAIN with `ITEM` still selected; the recovery recei
 `FIGHT` through the observed cursor before returning control. Replay 17 then crossed all four
 required trainers and every recovery before an ordinary wild appeared on east Route 3. That
 corridor now reuses the repository's map-scoped bounded flee traversal and reports each receipt and
-movement retry;
+movement retry. Replay 18 qualified that repair and reached Mt. Moon, where the fixed 155-frame
+Zubat trigger produced no encounter. Capture now semantically searches a reversible grass edge for
+observed level-seven Zubat, authenticates bounded non-target flees, and restores the exact route
+coordinate before continuing;
 see the
 [eleventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95

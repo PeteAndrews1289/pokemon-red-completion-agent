@@ -2367,6 +2367,11 @@ then appeared on the remaining eastbound walk, revealing another chapter-local z
 assumption. The fix is intentionally shared rather than bespoke: the same map-scoped traversal that
 proved Route 1, Route 2, and Forest exits now supplies authenticated Route 3 flee and retry receipts.
 
+The next replay reached Mt. Moon and found a familiar smell: a fixed frame wait named “Zubat” had
+produced no encounter at all. The capture lesson now searches a reversible grass edge for the live
+species and level, flees authenticated non-targets under a finite budget, and restores the authored
+route coordinate after using the sole Poké Ball. The Kakuna fix became a reusable design rule.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

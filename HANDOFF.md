@@ -182,8 +182,12 @@ expired. The current uncommitted delta restores `FIGHT` through the semantic cur
 public-artifact, docs, registry, Ruff, mypy, and 2,198-test gate was published at `5869185`. Replay
 17 crossed all four required trainers and every recovery, then found a normal wild on east Route 3
 step seven. The current lane reuses `move_with_wild_flees` under Route 3 map scope and publishes
-the flee receipts and movement retries. Its public-artifact, docs, registry, Ruff, mypy, and
-2,198-test gate is green; push before exact replay.
+the flee receipts and movement retries. Its 2,198-test gate was published at `c48fb4b`. Replay 18
+qualified Route 3 and reached Mt. Moon, where the fixed 155-frame Zubat wait produced no encounter.
+The current lane semantically searches a reversible `(14,32) ↔ (14,31)` edge for species `0x6B`
+at level seven, records bounded non-target flees/attempts/retries, and restores `(14,31)` after the
+sole-ball capture. Its public-artifact, docs, registry, Ruff, mypy, and 2,198-test gate is green;
+push before exact replay.
 Only Codex
 pushes this branch; do not create a second worktree or force-push it.
 

@@ -159,6 +159,10 @@ root before any new seed.
 Replay 17 qualified that handoff and all four required Route 3 trainers, then met an ordinary wild
 on east-route step seven. Reuse the shared bounded flee traversal, publish its receipts/retries,
 pass the full gate, push, and repeat the same root. The 2,198-test gate is green.
+Replay 18 qualified Route 3, then the fixed Mt. Moon Zubat wait produced no encounter. Replace it
+with a finite species-and-level search on a reversible edge, retain sole-ball and route-rejoin
+proofs, publish search receipts, pass the gate, push, and repeat `990026`. The 2,198-test gate is
+green.
 
 Seed `990024` qualified incidental Forest travel but the fixed first-Kakuna frame wait produced no
 battle. The [ninth perturbation failure](evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json)

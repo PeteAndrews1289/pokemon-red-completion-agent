@@ -314,6 +314,9 @@ def _report() -> CeruleanChapterReport:
         route_3_victory_evidence=route_3_victory_evidence,
         route_3_wild_flees=(),
         route_3_movement_retries=0,
+        mt_moon_zubat_search_flees=(),
+        mt_moon_zubat_search_attempts=1,
+        mt_moon_zubat_movement_retries=0,
         rocket_battle_evidence=rocket_battle_evidence,
         rocket_victory_evidence=rocket_victory_evidence,
         super_nerd_battle_evidence=nerd_battle_evidence,
@@ -927,6 +930,9 @@ def test_cerulean_report_is_complete_honest_and_privacy_safe() -> None:
         "required_rocket_battle_observed": True,
         "super_nerd_battle_observed": True,
         "helix_fossil_verified": True,
+        "zubat_search_attempts": 1,
+        "zubat_movement_retries": 0,
+        "zubat_search_flees": [],
     }
     assert public["cerulean"] == {
         "arrival_verified": True,

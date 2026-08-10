@@ -38,6 +38,7 @@ from pokemon_red_completion.observation import (
 )
 from pokemon_red_completion.route_1_wild import (
     Route1WildFleeEvidence,
+    flee_wild,
     move_with_wild_flees,
 )
 
@@ -76,6 +77,8 @@ ROUTE_3_MAX_WILD_FLEES = 4
 ROUTE_3_MAX_STEP_ATTEMPTS = 8
 ROUTE_3_STEP_RETRY_WAIT_FRAMES = 24
 ROUTE_3_WILD_STABILIZATION_FRAMES = 120
+MT_MOON_ZUBAT_SEARCH_CYCLES = 64
+MT_MOON_ZUBAT_SEARCH_MAX_FLEES = 32
 CENTER_TO_ROUTE_3_DIRECTIONS = _directions("R" * 3 + "U" * 4 + "R" * 3 + "U" * 4 + "R" * 21)
 ROUTE_3_TO_PEWTER_CENTER_DIRECTIONS = _directions(
     "L" * 20 + "D" * 4 + "L" * 3 + "D" * 4 + "L" * 3 + "U"
@@ -246,6 +249,9 @@ class CeruleanChapterReport:
     route_3_victory_evidence: tuple[CeruleanChapterState, ...]
     route_3_wild_flees: tuple[Route1WildFleeEvidence, ...]
     route_3_movement_retries: int
+    mt_moon_zubat_search_flees: tuple[Route1WildFleeEvidence, ...]
+    mt_moon_zubat_search_attempts: int
+    mt_moon_zubat_movement_retries: int
     rocket_battle_evidence: CeruleanChapterState
     rocket_victory_evidence: CeruleanChapterState
     super_nerd_battle_evidence: CeruleanChapterState
@@ -271,6 +277,9 @@ class CeruleanChapterReport:
             and _route_3_victory_sequence(self.route_3_victory_evidence)
             and all(evidence.verified for evidence in self.route_3_wild_flees)
             and self.route_3_movement_retries >= 0
+            and all(evidence.verified for evidence in self.mt_moon_zubat_search_flees)
+            and 1 <= self.mt_moon_zubat_search_attempts <= MT_MOON_ZUBAT_SEARCH_CYCLES
+            and self.mt_moon_zubat_movement_retries >= 0
             and self.saw_required_rocket_battle
             and self.rocket_battle_evidence.required_rocket_battle_snapshot
             and self.rocket_victory_evidence.beat_required_rocket
@@ -350,6 +359,11 @@ class CeruleanChapterReport:
                 "super_nerd_battle_observed": self.saw_super_nerd_battle,
                 "helix_fossil_verified": self.fossil_evidence.fossil_snapshot
                 and self.fossil_evidence.got_helix_fossil,
+                "zubat_search_attempts": self.mt_moon_zubat_search_attempts,
+                "zubat_movement_retries": self.mt_moon_zubat_movement_retries,
+                "zubat_search_flees": [
+                    evidence.public_dict() for evidence in self.mt_moon_zubat_search_flees
+                ],
             },
             "cerulean": {
                 "arrival_verified": self.cerulean_evidence.cerulean_snapshot,
@@ -605,7 +619,11 @@ def run_cerulean_chapter(
     )
     _emit(progress, emulator, "mt_moon_entered", "Entered Mt. Moon", 7)
 
-    _capture_mt_moon_zubat(
+    (
+        mt_moon_zubat_search_flees,
+        mt_moon_zubat_search_attempts,
+        mt_moon_zubat_movement_retries,
+    ) = _capture_mt_moon_zubat(
         chapter_executor,
         reader,
         emulator,
@@ -913,6 +931,9 @@ def run_cerulean_chapter(
         route_3_victory_evidence=tuple(route_3_victory_evidence),
         route_3_wild_flees=route_3_wild_flees,
         route_3_movement_retries=route_3_movement_retries,
+        mt_moon_zubat_search_flees=mt_moon_zubat_search_flees,
+        mt_moon_zubat_search_attempts=mt_moon_zubat_search_attempts,
+        mt_moon_zubat_movement_retries=mt_moon_zubat_movement_retries,
         rocket_battle_evidence=rocket_battle_evidence,
         rocket_victory_evidence=rocket_victory_evidence,
         super_nerd_battle_evidence=super_nerd_battle_evidence,
@@ -988,13 +1009,15 @@ def _capture_mt_moon_zubat(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: CeruleanTiming,
-) -> RawGameState:
+) -> tuple[tuple[Route1WildFleeEvidence, ...], int, int]:
     """Catch the pinned level-seven Zubat with the sole Poké Ball."""
 
     _wait(executor, MT_MOON_ZUBAT_SEED_WAIT)
     _move(executor, reader, MT_MOON_1F_DIRECTIONS[:3], "Mt. Moon Zubat approach")
-    executor.execute(MacroAction(MacroActionKind.MOVE, MT_MOON_1F_DIRECTIONS[3]))
-    encounter = reader.read()
+    encounter, search_flees, movement_retries, search_attempts = _seek_mt_moon_zubat(
+        executor,
+        reader,
+    )
     if (
         encounter.map_id != MapId.MT_MOON_1F
         or encounter.battle_state != 1
@@ -1043,7 +1066,7 @@ def _capture_mt_moon_zubat(
     settled = reader.read()
     if (
         settled.map_id != MapId.MT_MOON_1F
-        or (settled.player_x, settled.player_y) != (14, 31)
+        or (settled.player_x, settled.player_y) not in {(14, 31), (14, 32)}
         or settled.battle_state != 0
         or settled.party_species_ids
         != (SQUIRTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
@@ -1055,7 +1078,100 @@ def _capture_mt_moon_zubat(
         or not reader.read_input_readiness().ready
     ):
         raise CeruleanChapterError("Mt. Moon Zubat capture failed its persistent gate.")
-    return settled
+    if (settled.player_x, settled.player_y) == (14, 32):
+        _, return_flees, return_retries = move_with_wild_flees(
+            executor,
+            reader,
+            ("up",),
+            "Mt. Moon Zubat route rejoin",
+            expected_map_id=MapId.MT_MOON_1F,
+            route_name="Mt. Moon",
+            maximum_flees=MT_MOON_ZUBAT_SEARCH_MAX_FLEES - len(search_flees),
+            stabilization_frames=ROUTE_3_WILD_STABILIZATION_FRAMES,
+            maximum_step_attempts=ROUTE_3_MAX_STEP_ATTEMPTS,
+            step_retry_wait_frames=ROUTE_3_STEP_RETRY_WAIT_FRAMES,
+            error_type=CeruleanChapterError,
+        )
+        search_flees += return_flees
+        movement_retries += return_retries
+    _expect_position(reader.read(), MapId.MT_MOON_1F, 14, 31, "Mt. Moon Zubat route rejoin")
+    return search_flees, search_attempts, movement_retries
+
+
+def _seek_mt_moon_zubat(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+) -> tuple[
+    RawGameState,
+    tuple[Route1WildFleeEvidence, ...],
+    int,
+    int,
+]:
+    """Search one reversible grass edge for the exact level-seven Zubat lesson."""
+
+    origin = reader.read()
+    if (
+        origin.map_id != MapId.MT_MOON_1F
+        or (origin.player_x, origin.player_y) != (14, 32)
+        or origin.battle_state != 0
+    ):
+        raise CeruleanChapterError("Mt. Moon Zubat search lacks its exact origin.")
+    flees: tuple[Route1WildFleeEvidence, ...] = ()
+    movement_retries = 0
+    for search_attempt in range(1, MT_MOON_ZUBAT_SEARCH_CYCLES + 1):
+        before = reader.read()
+        if (
+            before.map_id != MapId.MT_MOON_1F
+            or (before.player_x, before.player_y) != (14, 32)
+            or before.battle_state != 0
+        ):
+            raise CeruleanChapterError("Mt. Moon Zubat search lost its reversible origin.")
+        executor.execute(MacroAction(MacroActionKind.MOVE, "up"))
+        _wait(executor, 1)
+        observed = reader.read()
+        consumed = (observed.player_x, observed.player_y) == (14, 31)
+        if observed.battle_state:
+            if observed.battle_state != 1 or observed.map_id != MapId.MT_MOON_1F:
+                raise CeruleanChapterError("Mt. Moon Zubat search met a non-wild battle.")
+            if observed.enemy_species_id == ZUBAT_SPECIES_ID and observed.enemy_level == 7:
+                return observed, flees, movement_retries, search_attempt
+            if len(flees) >= MT_MOON_ZUBAT_SEARCH_MAX_FLEES:
+                raise CeruleanChapterError("Mt. Moon Zubat search exhausted its flee budget.")
+            flees += (
+                flee_wild(
+                    executor,
+                    reader,
+                    observed,
+                    expected_map_id=MapId.MT_MOON_1F,
+                    route_name="Mt. Moon",
+                    stabilization_frames=ROUTE_3_WILD_STABILIZATION_FRAMES,
+                    error_type=CeruleanChapterError,
+                ),
+            )
+        elif not consumed:
+            if (observed.player_x, observed.player_y) != (14, 32):
+                raise CeruleanChapterError("Mt. Moon Zubat search drifted off its grass edge.")
+            movement_retries += 1
+            _wait(executor, ROUTE_3_STEP_RETRY_WAIT_FRAMES)
+            continue
+
+        if consumed:
+            _, return_flees, return_retries = move_with_wild_flees(
+                executor,
+                reader,
+                ("down",),
+                "Mt. Moon Zubat search-origin return",
+                expected_map_id=MapId.MT_MOON_1F,
+                route_name="Mt. Moon",
+                maximum_flees=MT_MOON_ZUBAT_SEARCH_MAX_FLEES - len(flees),
+                stabilization_frames=ROUTE_3_WILD_STABILIZATION_FRAMES,
+                maximum_step_attempts=ROUTE_3_MAX_STEP_ATTEMPTS,
+                step_retry_wait_frames=ROUTE_3_STEP_RETRY_WAIT_FRAMES,
+                error_type=CeruleanChapterError,
+            )
+            flees += return_flees
+            movement_retries += return_retries
+    raise CeruleanChapterError("Mt. Moon Zubat search exhausted its bounded semantic search.")
 
 
 def _collect_mt_moon_tm01(
