@@ -36,6 +36,10 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.route_1_wild import (
+    Route1WildFleeEvidence,
+    move_with_wild_flees,
+)
 
 CERULEAN_CHECKPOINT_COUNT = 15
 ROUTE_3_REQUIRED_TRAINER_INDEXES = tuple(spec[0] for spec in ROUTE_3_REQUIRED_TRAINER_SPECS)
@@ -68,6 +72,10 @@ CENTER_PC_TO_HEAL_DIRECTIONS = ("left",) * 10 + ("up",)
 FIELD_ITEM_MENU_CLOSE_PULSES = 4
 ROUTE_3_BATTLE_RECOVERY_HP = 13
 ROUTE_3_PROTECTED_POTION_FLOOR = 12
+ROUTE_3_MAX_WILD_FLEES = 4
+ROUTE_3_MAX_STEP_ATTEMPTS = 8
+ROUTE_3_STEP_RETRY_WAIT_FRAMES = 24
+ROUTE_3_WILD_STABILIZATION_FRAMES = 120
 CENTER_TO_ROUTE_3_DIRECTIONS = _directions("R" * 3 + "U" * 4 + "R" * 3 + "U" * 4 + "R" * 21)
 ROUTE_3_TO_PEWTER_CENTER_DIRECTIONS = _directions(
     "L" * 20 + "D" * 4 + "L" * 3 + "D" * 4 + "L" * 3 + "U"
@@ -236,6 +244,8 @@ class CeruleanChapterReport:
     cerulean_reached: RawGameState
     route_3_battle_evidence: tuple[CeruleanChapterState, ...]
     route_3_victory_evidence: tuple[CeruleanChapterState, ...]
+    route_3_wild_flees: tuple[Route1WildFleeEvidence, ...]
+    route_3_movement_retries: int
     rocket_battle_evidence: CeruleanChapterState
     rocket_victory_evidence: CeruleanChapterState
     super_nerd_battle_evidence: CeruleanChapterState
@@ -259,6 +269,8 @@ class CeruleanChapterReport:
             and len(self.route_3_battle_evidence) == len(ROUTE_3_REQUIRED_TRAINER_INDEXES)
             and all(state.route_3_trainer_battle_snapshot for state in self.route_3_battle_evidence)
             and _route_3_victory_sequence(self.route_3_victory_evidence)
+            and all(evidence.verified for evidence in self.route_3_wild_flees)
+            and self.route_3_movement_retries >= 0
             and self.saw_required_rocket_battle
             and self.rocket_battle_evidence.required_rocket_battle_snapshot
             and self.rocket_victory_evidence.beat_required_rocket
@@ -328,6 +340,10 @@ class CeruleanChapterReport:
                 "ordered_boundaries_verified": len(self.reached_boundaries),
                 "ordered_boundaries_total": len(CERULEAN_QUALIFICATION_BOUNDARIES),
                 "required_route_3_trainers": list(self.observed_route_3_trainers),
+                "route_3_wild_flees": [
+                    evidence.public_dict() for evidence in self.route_3_wild_flees
+                ],
+                "route_3_movement_retries": self.route_3_movement_retries,
             },
             "mt_moon": {
                 "required_rocket_battle_observed": self.saw_required_rocket_battle,
@@ -521,11 +537,18 @@ def run_cerulean_chapter(
             route_prefix,
         )
 
-    _move(
+    _, route_3_wild_flees, route_3_movement_retries = move_with_wild_flees(
         chapter_executor,
         reader,
         ROUTE_3_REMAINDER_DIRECTIONS,
         "Route 3 east route",
+        expected_map_id=MapId.ROUTE_3,
+        route_name="Route 3",
+        maximum_flees=ROUTE_3_MAX_WILD_FLEES,
+        stabilization_frames=ROUTE_3_WILD_STABILIZATION_FRAMES,
+        maximum_step_attempts=ROUTE_3_MAX_STEP_ATTEMPTS,
+        step_retry_wait_frames=ROUTE_3_STEP_RETRY_WAIT_FRAMES,
+        error_type=CeruleanChapterError,
     )
     _move(
         chapter_executor,
@@ -888,6 +911,8 @@ def run_cerulean_chapter(
         cerulean_reached=cerulean_reached,
         route_3_battle_evidence=tuple(route_3_battle_evidence),
         route_3_victory_evidence=tuple(route_3_victory_evidence),
+        route_3_wild_flees=route_3_wild_flees,
+        route_3_movement_retries=route_3_movement_retries,
         rocket_battle_evidence=rocket_battle_evidence,
         rocket_victory_evidence=rocket_victory_evidence,
         super_nerd_battle_evidence=super_nerd_battle_evidence,

@@ -223,6 +223,10 @@ Keep one final beat: the heal works, but `ITEM` remains highlighted and the next
 opens the bag again. Restore `FIGHT` and caption the state-machine lesson: **“Every skill needs a
 postcondition.”**
 
+Then show replay 17 clear every required trainer before one ordinary wild interrupts the eastbound
+walk. Reuse the earlier flee primitive on screen. The callback matters: the repository is beginning
+to accumulate mechanics instead of accumulating chapter-specific exceptions.
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

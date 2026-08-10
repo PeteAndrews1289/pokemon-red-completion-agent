@@ -312,6 +312,8 @@ def _report() -> CeruleanChapterReport:
         cerulean_reached=_raw(MapId.CERULEAN_CITY, 0, 18, hp=26),
         route_3_battle_evidence=route_3_battle_evidence,
         route_3_victory_evidence=route_3_victory_evidence,
+        route_3_wild_flees=(),
+        route_3_movement_retries=0,
         rocket_battle_evidence=rocket_battle_evidence,
         rocket_victory_evidence=rocket_victory_evidence,
         super_nerd_battle_evidence=nerd_battle_evidence,
@@ -918,6 +920,8 @@ def test_cerulean_report_is_complete_honest_and_privacy_safe() -> None:
         "ordered_boundaries_verified": 8,
         "ordered_boundaries_total": 8,
         "required_route_3_trainers": [0, 1, 3, 6],
+        "route_3_wild_flees": [],
+        "route_3_movement_retries": 0,
     }
     assert public["mt_moon"] == {
         "required_rocket_battle_observed": True,

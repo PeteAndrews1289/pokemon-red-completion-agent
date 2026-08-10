@@ -2362,6 +2362,11 @@ item use returned to MAIN with `ITEM` still highlighted, while the old finisher 
 The item receipt now restores the semantic cursor before handing control back. Surviving is not
 enough; an action must also return a composable control state.
 
+That handoff repair carried the root through all four required Route 3 trainers. An ordinary wild
+then appeared on the remaining eastbound walk, revealing another chapter-local zero-encounter
+assumption. The fix is intentionally shared rather than bespoke: the same map-scoped traversal that
+proved Route 1, Route 2, and Forest exits now supplies authenticated Route 3 flee and retry receipts.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

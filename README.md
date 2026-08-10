@@ -190,7 +190,10 @@ twelve-Potion floor. Cerulean now accepts the resulting 16–18 Potion window, w
 cleanup still protects the identical six-Potion downstream reserve and the money ledger is
 unchanged. The first replay proved the heal prevented the faint, then exhausted the battle cap
 because item use returned to MAIN with `ITEM` still selected; the recovery receipt now restores
-`FIGHT` through the observed cursor before returning control;
+`FIGHT` through the observed cursor before returning control. Replay 17 then crossed all four
+required trainers and every recovery before an ordinary wild appeared on east Route 3. That
+corridor now reuses the repository's map-scoped bounded flee traversal and reports each receipt and
+movement retry;
 see the
 [eleventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95

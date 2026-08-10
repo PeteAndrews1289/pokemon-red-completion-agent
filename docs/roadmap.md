@@ -156,6 +156,9 @@ root. The 2,198-test gate is green; counted v95 remains 0/10.
 Replay 16 proved the heal and then exhausted the finisher bound because MAIN returned with `ITEM`
 selected. Post-item `FIGHT` restoration now passes the 2,198-test gate; push and repeat the exact
 root before any new seed.
+Replay 17 qualified that handoff and all four required Route 3 trainers, then met an ordinary wild
+on east-route step seven. Reuse the shared bounded flee traversal, publish its receipts/retries,
+pass the full gate, push, and repeat the same root. The 2,198-test gate is green.
 
 Seed `990024` qualified incidental Forest travel but the fixed first-Kakuna frame wait produced no
 battle. The [ninth perturbation failure](evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json)
