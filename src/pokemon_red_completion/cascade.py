@@ -117,7 +117,7 @@ CENTER_HEAL_TO_PC_DIRECTIONS = _directions("D" + "R" * 10)
 CENTER_PC_TO_HEAL_DIRECTIONS = _directions("L" * 10 + "U")
 CENTER_EXIT_DIRECTIONS = _directions("DDDDD")
 CENTER_TO_MART_DIRECTIONS = _directions("D" * 5 + "L" * 2 + "D" * 3 + "R" * 8 + "U" * 3)
-MART_CLERK_DIRECTIONS = _directions("UULL")
+MART_CLERK_DIRECTIONS = _directions("UU")
 MART_REPEAT_CLERK_DIRECTIONS = _directions("RUULL")
 MART_TO_CENTER_STAGING_DIRECTIONS = _directions(
     "RR" + "D" * 3 + "L" * 10 + "U" * 3 + "R" * 2 + "U" * 5
@@ -1870,8 +1870,7 @@ def _purchase_cerulean_supplies(
             f"map={entered.map_id!r}, position={(entered.player_x, entered.player_y)}."
         )
 
-    _move(executor, reader, MART_CLERK_DIRECTIONS, "Cerulean Mart clerk")
-    _battle_pulse(executor, MacroActionKind.MOVE, "left", timing, frames=60)
+    _approach_cerulean_mart_clerk(executor, reader, timing)
     _battle_pulse(executor, MacroActionKind.INTERACT, None, timing, frames=180)
     _battle_pulse(executor, MacroActionKind.CONFIRM, None, timing, frames=180)
 
@@ -2010,6 +2009,51 @@ def _settle_mart_repeat_clerk_stance(
     raise CascadeChapterError(
         "Cerulean Mart repeat clerk customer did not vacate within its bound."
     )
+
+
+def _approach_cerulean_mart_clerk(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: CascadeTiming,
+) -> RawGameState:
+    """Reach and face the clerk despite the Mart customer's collision timing."""
+
+    state = _move_verified(
+        executor,
+        reader,
+        MART_CLERK_DIRECTIONS,
+        "Cerulean Mart clerk northbound approach",
+    )
+    if (
+        state.map_id != MapId.CERULEAN_MART
+        or (state.player_x, state.player_y) != (3, 5)
+        or state.battle_state != 0
+    ):
+        raise CascadeChapterError(
+            "Cerulean Mart clerk northbound approach missed its pinned gate: "
+            f"position={(state.map_id, state.player_x, state.player_y)!r}."
+        )
+    state = _settle_mart_repeat_clerk_stance(executor, reader, timing)
+    if (
+        state.map_id != MapId.CERULEAN_MART
+        or (state.player_x, state.player_y) != (2, 5)
+        or not reader.read_input_readiness().ready
+    ):
+        raise CascadeChapterError(
+            "Cerulean Mart clerk approach missed its pinned interaction gate."
+        )
+    _battle_pulse(executor, MacroActionKind.MOVE, "left", timing, frames=60)
+    faced = reader.read()
+    if (
+        faced.map_id != MapId.CERULEAN_MART
+        or (faced.player_x, faced.player_y) != (2, 5)
+        or faced.battle_state != 0
+        or not reader.read_input_readiness().ready
+    ):
+        raise CascadeChapterError(
+            "Cerulean Mart clerk facing pulse left its interaction tile."
+        )
+    return faced
 
 
 def _purchase_cerulean_awakening_topup(

@@ -34,6 +34,7 @@ from pokemon_red_completion.cascade import (
     FIELD_ITEM_MENU_CLOSE_PULSES,
     GYM_TRAINER_DIRECTIONS,
     GYM_TRAINER_TO_MISTY_DIRECTIONS,
+    MART_CLERK_DIRECTIONS,
     MART_REPEAT_CLERK_DIRECTIONS,
     MART_REPEAT_CUSTOMER_CLEAR_ATTEMPTS,
     MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS,
@@ -236,6 +237,7 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
         14,
     )
     assert len(CENTER_TO_RIVAL_STAGING_DIRECTIONS) == 34
+    assert MART_CLERK_DIRECTIONS == ("up", "up")
     assert MART_REPEAT_CLERK_DIRECTIONS == ("right", "up", "up", "left", "left")
     assert MART_REPEAT_TO_CENTER_STAGING_DIRECTIONS[:4] == (
         "down",
@@ -389,6 +391,52 @@ def test_repeat_mart_clerk_waits_for_customer_to_vacate() -> None:
 
     assert (final.player_x, final.player_y) == (2, 5)
     assert runtime.left_pulses == 5
+
+
+def test_first_mart_clerk_approach_retries_customer_collision_and_proves_stance() -> None:
+    class Readiness:
+        ready = True
+
+    class Runtime:
+        def __init__(self) -> None:
+            self.x = 3
+            self.y = 7
+            self.up_attempts = 0
+            self.left_attempts = 0
+
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is not MacroActionKind.MOVE:
+                return
+            if action.value == "up":
+                self.up_attempts += 1
+                if self.up_attempts != 2:
+                    self.y -= 1
+            elif action.value == "left":
+                self.left_attempts += 1
+                if self.x == 3:
+                    self.x = 2
+
+        def read(self) -> RawGameState:
+            return replace(
+                _raw(),
+                map_id=MapId.CERULEAN_MART,
+                player_x=self.x,
+                player_y=self.y,
+            )
+
+        def read_input_readiness(self) -> Readiness:
+            return Readiness()
+
+    runtime = Runtime()
+    final = cascade_module._approach_cerulean_mart_clerk(
+        runtime,  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        replace(DEFAULT_CASCADE_TIMING, dialogue_wait_frames=1),
+    )
+
+    assert (final.player_x, final.player_y) == (2, 5)
+    assert runtime.up_attempts == 3
+    assert runtime.left_attempts == 2
 
 
 def test_repeat_mart_clerk_return_retries_blocked_exit_customer() -> None:
