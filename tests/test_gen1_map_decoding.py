@@ -19,9 +19,11 @@ from pokemon_red_completion.gen1_maps import (
     MAP_HEADER_BANKS,
     MAP_HEADER_POINTERS,
     RETURN_TO_LAST_MAP,
+    ConnectionGeometry,
     Heading,
     PassageKind,
     read_map_graph,
+    routes_between,
     verify_against_encounter_reads,
 )
 
@@ -54,8 +56,9 @@ class Cartridge:
         map_id: int,
         *,
         size: tuple[int, int] = (4, 5),
+        tileset: int = 0,
         connections: dict[Heading, int] | None = None,
-        warps: tuple[tuple[int, int, int], ...] = (),
+        warps: tuple[tuple[int, int, int, int], ...] = (),
     ) -> None:
         """Write one map: its header, its connections and its warps."""
 
@@ -66,7 +69,7 @@ class Cartridge:
             flags |= 1 << BIT_FOR[heading]
 
         body = bytearray()
-        body.append(0)  # tileset
+        body.append(tileset)
         body.append(size[0])
         body.append(size[1])
         body.extend(b"\x00" * 6)  # block, text and script pointers
@@ -75,16 +78,42 @@ class Cartridge:
         # is north is decided entirely by the order they are written in.
         for heading in WRITE_ORDER:
             if heading in connections:
-                body.append(connections[heading])
-                body.extend(b"\x00" * (CONNECTION_WIDTH - 1))
+                destination = connections[heading]
+                destination_width = size[1]
+                if heading is Heading.NORTH:
+                    geometry = (size[1], destination_width, size[0] * 2 - 1, 0)
+                elif heading is Heading.SOUTH:
+                    geometry = (size[1], destination_width, 0, 0)
+                elif heading is Heading.WEST:
+                    geometry = (size[0], destination_width, 0, size[1] * 2 - 1)
+                else:
+                    geometry = (size[0], destination_width, 0, 0)
+                # The pointer bytes are distinctive noise. Geometry begins at
+                # byte five, so a decoder using the wrong eleven-byte stride
+                # will not accidentally read another plausible destination.
+                body.extend(
+                    bytes(
+                        (
+                            destination,
+                            0x11,
+                            0x22,
+                            0x33,
+                            0x44,
+                            *geometry,
+                            0x55,
+                            0x66,
+                        )
+                    )
+                )
+                assert len(body) >= CONNECTION_WIDTH
 
         objects = header + len(body) + 2
         body.extend(objects.to_bytes(2, "little"))
         self.data[header : header + len(body)] = body
 
         doors = bytearray([0, len(warps)])
-        for y, x, destination in warps:
-            doors.extend([y, x, 0, destination])
+        for y, x, destination_warp, destination in warps:
+            doors.extend([y, x, destination_warp, destination])
             assert len(doors) % WARP_WIDTH == 2, "a warp is four bytes wide"
         self.data[objects : objects + len(doors)] = doors
 
@@ -120,6 +149,16 @@ def test_a_connection_is_decoded_with_its_heading() -> None:
     assert north.heading is Heading.NORTH
     assert north.to_map == 1
     assert north.kind is PassageKind.CONNECTION
+    assert north.connection == ConnectionGeometry(
+        strip_length=5,
+        destination_width=5,
+        y_alignment=7,
+        x_alignment=0,
+    )
+    assert north.coordinate_transitions[0].exit_at == (0, 0)
+    assert north.coordinate_transitions[0].arrival_at == (7, 0)
+    assert north.coordinate_transitions[-1].exit_at == (0, 9)
+    assert north.coordinate_transitions[-1].arrival_at == (7, 9)
     (south,) = graph[1].passages
     assert south.heading is Heading.SOUTH
     assert south.to_map == 0
@@ -161,8 +200,8 @@ def test_a_warp_carries_the_block_it_is_stood_on() -> None:
     """Its coordinates are what makes a warp actionable rather than notional."""
 
     cartridge = Cartridge()
-    cartridge.add(0, warps=((5, 13, 1),))
-    cartridge.add(1, warps=((7, 2, 0),))
+    cartridge.add(0, warps=((5, 13, 0, 1),))
+    cartridge.add(1, warps=((7, 2, 0, 0),))
 
     graph = read_map_graph(cartridge.bytes())
 
@@ -170,6 +209,26 @@ def test_a_warp_carries_the_block_it_is_stood_on() -> None:
     assert door.kind is PassageKind.WARP
     assert door.to_map == 1
     assert door.at == (5, 13)
+    assert door.arrival_at == (7, 2)
+    assert door.destination_warp_index == 0
+
+
+def test_a_warp_arrival_uses_its_destination_index() -> None:
+    """The third byte selects a target event; it is not padding."""
+
+    cartridge = Cartridge()
+    cartridge.add(0, warps=((5, 13, 1, 1),))
+    cartridge.add(
+        1,
+        tileset=1,
+        warps=((1, 2, 0, 200), (7, 8, 0, 201)),
+    )
+
+    graph = read_map_graph(cartridge.bytes())
+
+    (door,) = graph[0].passages
+    assert door.destination_warp_index == 1
+    assert door.arrival_at == (7, 8)
 
 
 def test_several_doors_on_one_map_are_kept_apart() -> None:
@@ -182,9 +241,9 @@ def test_several_doors_on_one_map_are_kept_apart() -> None:
     """
 
     cartridge = Cartridge()
-    cartridge.add(0, warps=((2, 3, 1), (4, 5, 2), (6, 7, 3)))
+    cartridge.add(0, warps=((2, 3, 0, 1), (4, 5, 0, 2), (6, 7, 0, 3)))
     for interior in (1, 2, 3):
-        cartridge.add(interior, warps=((0, 0, RETURN_TO_LAST_MAP),))
+        cartridge.add(interior, tileset=1, warps=((0, 0, 0, RETURN_TO_LAST_MAP),))
 
     graph = read_map_graph(cartridge.bytes())
 
@@ -203,23 +262,40 @@ def test_an_interior_returns_to_whichever_map_led_in() -> None:
     """
 
     cartridge = Cartridge()
-    cartridge.add(0, connections={Heading.NORTH: 1}, warps=((1, 1, 2),))
-    cartridge.add(1, connections={Heading.SOUTH: 0}, warps=((2, 2, 2),))
-    cartridge.add(2, warps=((3, 3, RETURN_TO_LAST_MAP),))
+    cartridge.add(0, connections={Heading.NORTH: 1}, warps=((1, 1, 0, 2),))
+    cartridge.add(1, connections={Heading.SOUTH: 0}, warps=((2, 2, 0, 2),))
+    cartridge.add(2, tileset=1, warps=((3, 3, 0, RETURN_TO_LAST_MAP),))
 
     graph = read_map_graph(cartridge.bytes())
 
-    assert graph[2].neighbours() == frozenset({0, 1})
-    assert all(p.at == (3, 3) for p in graph[2].passages)
-    assert {p.return_origin for p in graph[2].passages} == {0, 1}
+    assert graph[2].neighbours() == frozenset()
+    (return_warp,) = graph[2].passages
+    assert return_warp.kind is PassageKind.RETURN
+    assert return_warp.at == (3, 3)
+    assert return_warp.to_map is None
+    assert return_warp.destination_warp_index == 0
+
+
+def test_a_nested_interior_return_keeps_the_outdoor_map() -> None:
+    """The immediate previous map is not what ``LAST_MAP`` means."""
+
+    cartridge = Cartridge()
+    cartridge.add(0, warps=((1, 1, 0, 2),))
+    cartridge.add(2, tileset=1, warps=((2, 2, 0, 3),))
+    cartridge.add(3, tileset=1, warps=((3, 3, 0, RETURN_TO_LAST_MAP),))
+
+    graph = read_map_graph(cartridge.bytes())
+
+    assert routes_between(graph, 2, 0, last_outside=0) == (2, 3, 0)
+    assert routes_between(graph, 2, 3, last_outside=0) == (2, 3)
 
 
 def test_a_warp_to_a_slot_holding_no_map_is_marked_not_dropped() -> None:
     """A lift picks its floor at runtime, so the data cannot name one."""
 
     cartridge = Cartridge()
-    cartridge.add(0, warps=((1, 1, 1),))
-    cartridge.add(1, warps=((2, 2, 200),))  # slot 200 was never written
+    cartridge.add(0, warps=((1, 1, 0, 1),))
+    cartridge.add(1, warps=((2, 2, 0, 200),))  # slot 200 was never written
 
     graph = read_map_graph(cartridge.bytes())
 
@@ -241,8 +317,8 @@ def test_a_connection_only_one_slot_claims_never_enters_the_graph() -> None:
     """
 
     cartridge = Cartridge()
-    cartridge.add(0, warps=((1, 1, 1),))
-    cartridge.add(1, warps=((1, 1, 0),))
+    cartridge.add(0, warps=((1, 1, 0, 1),))
+    cartridge.add(1, warps=((1, 1, 0, 0),))
     cartridge.add(50, connections={Heading.NORTH: 0})
 
     graph = read_map_graph(cartridge.bytes())
@@ -259,8 +335,8 @@ def test_a_one_sided_connection_on_a_reachable_map_refuses_the_read() -> None:
     """
 
     cartridge = Cartridge()
-    cartridge.add(0, connections={Heading.NORTH: 1}, warps=((1, 1, 1),))
-    cartridge.add(1, connections={Heading.NORTH: 0}, warps=((1, 1, 0),))
+    cartridge.add(0, connections={Heading.NORTH: 1}, warps=((1, 1, 0, 1),))
+    cartridge.add(1, connections={Heading.NORTH: 0}, warps=((1, 1, 0, 0),))
 
     with pytest.raises(CartridgeReadError, match="read wrongly"):
         read_map_graph(cartridge.bytes())
@@ -270,10 +346,10 @@ def test_only_maps_reachable_from_the_start_are_in_the_graph() -> None:
     """An island nobody can get to is not part of the world."""
 
     cartridge = Cartridge()
-    cartridge.add(0, warps=((1, 1, 1),))
-    cartridge.add(1, warps=((1, 1, 0),))
-    cartridge.add(50, warps=((1, 1, 51),))
-    cartridge.add(51, warps=((1, 1, 50),))
+    cartridge.add(0, warps=((1, 1, 0, 1),))
+    cartridge.add(1, warps=((1, 1, 0, 0),))
+    cartridge.add(50, warps=((1, 1, 0, 51),))
+    cartridge.add(51, warps=((1, 1, 0, 50),))
 
     graph = read_map_graph(cartridge.bytes())
 

@@ -26,7 +26,22 @@ from __future__ import annotations
 
 import heapq
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+Coordinate = tuple[int, int]
+
+
+@dataclass(frozen=True, slots=True)
+class MacroTransition:
+    """One exact cross-map movement supplied by a game adapter."""
+
+    exit_at: Coordinate
+    arrival_at: Coordinate
+    action: str
+
+    def __post_init__(self) -> None:
+        if not self.action:
+            raise ValueError("a macro transition needs an action")
 
 
 @dataclass(frozen=True, slots=True)
@@ -38,16 +53,20 @@ class MacroEdge:
     leaving by a warp means standing on one particular block first.
     """
 
-    target_map: int
+    #: ``None`` only for a return edge, whose target is the router state's
+    #: retained outside map.
+    target_map: int | None
     kind: str = "connection"
     #: The ``(y, x)`` block to stand on, when the edge is a warp.
     at: tuple[int, int] | None = None
+    #: Exact coordinate reached after an ordinary warp.
+    arrival_at: tuple[int, int] | None = None
     #: Which border to cross for a connection, when the source game exposes it.
     heading: str | None = None
-    #: A context-sensitive return edge is legal only when the current map was
-    #: entered from this map. This prevents a shared interior from becoming a
-    #: teleport between every exterior that uses it.
-    return_origin: int | None = None
+    #: Exact candidates for crossing a map connection.
+    coordinate_transitions: tuple[MacroTransition, ...] = ()
+    #: Zero-based destination warp used by ordinary and return warps.
+    destination_warp_index: int | None = None
     #: How expensive this transition is. Uniform by default, because header
     #: data does not say how far apart two doors are.
     cost: int = 1
@@ -55,8 +74,13 @@ class MacroEdge:
     def __post_init__(self) -> None:
         if self.cost <= 0:
             raise ValueError("a macro edge must cost something to cross")
-        if self.return_origin is not None and self.return_origin != self.target_map:
-            raise ValueError("a contextual return must target the map that supplied its context")
+        if self.kind == "return":
+            if self.target_map is not None:
+                raise ValueError("a return edge resolves its target from retained outside state")
+        elif self.target_map is None:
+            raise ValueError("only a return edge may omit its target map")
+        if self.destination_warp_index is not None and self.destination_warp_index < 0:
+            raise ValueError("a destination warp index cannot be negative")
 
 
 @dataclass(frozen=True)
@@ -64,6 +88,12 @@ class MacroGraph:
     """Maps joined by edges, keyed by whatever identifier the title uses."""
 
     edges: Mapping[int, tuple[MacroEdge, ...]]
+    #: Maps for which the game updates ``wLastMap`` before taking a warp. This
+    #: is title data, not a generic assumption about map ids.
+    outside_nodes: frozenset[int] = frozenset()
+    #: Warp coordinates by map and cartridge order. Return edges use their
+    #: destination index to resolve an arrival after their target is known.
+    warp_locations: Mapping[int, tuple[Coordinate, ...]] = field(default_factory=dict)
 
     def neighbors(self, node: int) -> tuple[MacroEdge, ...]:
         return tuple(self.edges.get(node, ()))
@@ -96,7 +126,7 @@ def find_macro_path(
     start: int,
     goal: int,
     *,
-    entered_from: int | None = None,
+    last_outside: int | None = None,
 ) -> MacroPath:
     """The cheapest sequence of maps joining two points.
 
@@ -108,7 +138,7 @@ def find_macro_path(
     if start == goal:
         return MacroPath(maps=(start,), edges=())
 
-    start_state = (start, entered_from)
+    start_state = (start, last_outside)
     frontier: list[tuple[int, int, RouteState]] = [(0, 0, start_state)]
     came_from: dict[RouteState, tuple[RouteState, MacroEdge]] = {}
     best_cost: dict[RouteState, int] = {start_state: 0}
@@ -118,15 +148,26 @@ def find_macro_path(
         cost, _, state = heapq.heappop(frontier)
         if cost != best_cost.get(state):
             continue
-        current, entry_origin = state
+        current, retained_outside = state
         if current == goal:
             return _reconstruct_path(came_from, start_state, state)
 
         for edge in graph.neighbors(current):
-            if edge.return_origin is not None and edge.return_origin != entry_origin:
-                continue
-            neighbor = edge.target_map
-            next_state = (neighbor, current)
+            neighbor: int
+            next_last_outside: int | None
+            if edge.kind == "return":
+                if retained_outside is None:
+                    continue
+                neighbor = retained_outside
+                next_last_outside = retained_outside
+            else:
+                if edge.target_map is None:  # guarded by MacroEdge, defensive for adapters
+                    continue
+                neighbor = edge.target_map
+                next_last_outside = retained_outside
+                if edge.kind == "warp" and current in graph.outside_nodes:
+                    next_last_outside = current
+            next_state = (neighbor, next_last_outside)
             candidate_cost = cost + edge.cost
             if candidate_cost >= best_cost.get(next_state, candidate_cost + 1):
                 continue
@@ -143,11 +184,11 @@ def find_macro_route(
     start: int,
     goal: int,
     *,
-    entered_from: int | None = None,
+    last_outside: int | None = None,
 ) -> tuple[int, ...]:
     """Compatibility view of :func:`find_macro_path` containing only map ids."""
 
-    return find_macro_path(graph, start, goal, entered_from=entered_from).maps
+    return find_macro_path(graph, start, goal, last_outside=last_outside).maps
 
 
 def _reconstruct_path(

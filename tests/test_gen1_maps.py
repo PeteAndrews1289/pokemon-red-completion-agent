@@ -23,6 +23,7 @@ import pytest
 
 from pokemon_red_completion.gen1_cartridge import CartridgeReadError
 from pokemon_red_completion.gen1_maps import (
+    ConnectionGeometry,
     Heading,
     MapNode,
     Passage,
@@ -32,6 +33,7 @@ from pokemon_red_completion.gen1_maps import (
     routes_between,
     verify_connections_are_two_sided,
 )
+from pokemon_red_completion.global_router import MacroTransition
 from pokemon_red_completion.observation import MapId
 
 RECORD = Path("docs/evidence/map-graph-2026-08-10.json")
@@ -91,7 +93,8 @@ def test_both_cartridges_carry_the_same_world(record: dict) -> None:
     assert "every decoded MapNode and Passage" in record["comparison_scope"]
     assert record["by_title"]["red"]["passage_counts"] == {
         "connection": 78,
-        "warp": 917,
+        "warp": 558,
+        "return": 242,
         "scripted": 2,
     }
 
@@ -107,10 +110,13 @@ def test_the_hand_written_graph_had_an_edge_the_cartridge_denies(
 
     assert MapId.ROUTE_22_GATE.value not in adjacency[MapId.VIRIDIAN_CITY.value]
     assert MapId.ROUTE_22_GATE.value in adjacency[MapId.ROUTE_22.value]
-    assert MapId.ROUTE_22.value in adjacency[MapId.ROUTE_22_GATE.value]
+    assert MapId.ROUTE_22_GATE.value in adjacency[MapId.ROUTE_23.value]
+    # The gate's exit is a dynamic LAST_MAP return, so a context-free adjacency
+    # view must not claim either exterior as its fixed target.
+    assert adjacency[MapId.ROUTE_22_GATE.value] == set()
 
 
-def test_a_pokemon_centre_can_be_left_again(adjacency: dict[int, set[int]]) -> None:
+def test_a_pokemon_centre_can_be_left_again(record: dict) -> None:
     """The exit warp names no destination, so it has to be inferred.
 
     An interior that serves many towns returns the player to whichever one they
@@ -118,8 +124,12 @@ def test_a_pokemon_centre_can_be_left_again(adjacency: dict[int, set[int]]) -> N
     Dropping those warps would strand every Pokémon Centre in the game.
     """
 
-    assert MapId.VIRIDIAN_CITY.value in adjacency[MapId.VIRIDIAN_POKECENTER.value]
-    assert MapId.VIRIDIAN_POKECENTER.value in adjacency[MapId.VIRIDIAN_CITY.value]
+    journeys = record["by_title"]["red"]["contextual_return_journeys"]
+
+    assert journeys["VIRIDIAN_POKECENTER->VIRIDIAN_CITY"] == [
+        MapId.VIRIDIAN_POKECENTER.value,
+        MapId.VIRIDIAN_CITY.value,
+    ]
 
 
 def test_pallet_town_has_three_buildings_and_two_roads(adjacency: dict[int, set[int]]) -> None:
@@ -201,21 +211,30 @@ def test_a_scripted_exit_is_not_followed_when_routing() -> None:
     assert graph[1].has_a_scripted_exit
 
 
-def test_the_game_neutral_projection_keeps_action_and_return_context() -> None:
+def test_the_game_neutral_projection_keeps_endpoints_and_return_context() -> None:
+    transition = MacroTransition((2, 7), (2, 0), "east")
     decoded = {
         1: MapNode(
             1,
             4,
             4,
             (
-                Passage(2, PassageKind.CONNECTION, heading=Heading.EAST),
                 Passage(
-                    3,
-                    PassageKind.WARP,
+                    2,
+                    PassageKind.CONNECTION,
+                    heading=Heading.EAST,
+                    connection=ConnectionGeometry(4, 4, 0, 0),
+                    coordinate_transitions=(transition,),
+                ),
+                Passage(
+                    None,
+                    PassageKind.RETURN,
                     at=(7, 2),
-                    return_origin=3,
+                    destination_warp_index=0,
                 ),
             ),
+            tileset=0,
+            warp_locations=((7, 2),),
         )
     }
 
@@ -223,8 +242,12 @@ def test_the_game_neutral_projection_keeps_action_and_return_context() -> None:
     connection, return_warp = projected.edges[1]
 
     assert connection.heading == "east"
+    assert connection.coordinate_transitions == (transition,)
     assert return_warp.at == (7, 2)
-    assert return_warp.return_origin == 3
+    assert return_warp.target_map is None
+    assert return_warp.destination_warp_index == 0
+    assert projected.outside_nodes == frozenset({1})
+    assert projected.warp_locations[1] == ((7, 2),)
 
 
 def test_a_one_sided_connection_on_a_real_map_is_refused() -> None:

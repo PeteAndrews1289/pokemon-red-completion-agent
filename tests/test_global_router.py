@@ -88,25 +88,47 @@ def test_an_actionable_path_keeps_the_exact_edges_selected() -> None:
     assert path.edges == (warp, connection)
 
 
-def test_a_shared_interior_cannot_teleport_between_its_origins() -> None:
-    """A return warp is legal only for the exterior that supplied its context."""
+def test_a_nested_interior_returns_to_retained_outside_not_previous_map() -> None:
+    """``LAST_MAP`` survives travel through more than one interior.
+
+    Underground-path entrance rooms lead into another interior before their
+    return warp is used. Remembering only the immediate previous map would send
+    the player back underground instead of outdoors.
+    """
 
     graph = MacroGraph(
-        {
-            0: (MacroEdge(2, kind="warp"), MacroEdge(3)),
-            1: (MacroEdge(2, kind="warp"),),
-            2: (
-                MacroEdge(0, kind="warp", return_origin=0),
-                MacroEdge(1, kind="warp", return_origin=1),
-            ),
-            3: (MacroEdge(1),),
-        }
+        edges={
+            2: (MacroEdge(3, kind="warp"),),
+            3: (MacroEdge(None, kind="return"),),
+        },
+        outside_nodes=frozenset({0, 1}),
     )
 
-    assert find_macro_route(graph, 0, 1) == (0, 3, 1)
-    assert find_macro_route(graph, 2, 0, entered_from=0) == (2, 0)
+    assert find_macro_route(graph, 2, 0, last_outside=0) == (2, 3, 0)
     with pytest.raises(GlobalRouterError):
-        find_macro_route(MacroGraph({2: graph.edges[2]}), 2, 1, entered_from=0)
+        find_macro_route(graph, 2, 1, last_outside=0)
+
+
+def test_an_outside_warp_updates_the_retained_return_target() -> None:
+    graph = MacroGraph(
+        edges={
+            0: (MacroEdge(2, kind="warp"),),
+            2: (MacroEdge(None, kind="return"),),
+        },
+        outside_nodes=frozenset({0}),
+    )
+
+    # Supplying a stale value proves the outside warp replaces it: the return
+    # goes to 0, so map 99 is no longer reachable.
+    with pytest.raises(GlobalRouterError):
+        find_macro_route(graph, 0, 99, last_outside=99)
+
+    without_outside_semantics = MacroGraph(edges=graph.edges)
+    assert find_macro_route(without_outside_semantics, 0, 99, last_outside=99) == (
+        0,
+        2,
+        99,
+    )
 
 
 def test_an_edge_must_cost_something() -> None:

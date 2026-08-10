@@ -57,6 +57,7 @@ from pokemon_red_completion.global_router import (
     GlobalRouterError,
     MacroEdge,
     MacroGraph,
+    MacroTransition,
     find_macro_route,
 )
 from pokemon_red_completion.observation import MapId
@@ -77,6 +78,11 @@ RETURN_TO_LAST_MAP = 0xFF
 #: Where a run begins, and the root every reachability check is measured from.
 STARTING_MAP = 0
 
+#: The engine retains ``wLastMap`` before a warp only for maps using one of
+#: these two tilesets. The second is Indigo Plateau; treating every map entered
+#: from outdoors as "outside" breaks nested buildings and underground paths.
+OUTSIDE_TILESETS = frozenset({0, 23})
+
 
 class Heading(StrEnum):
     """Which edge of a map a connection leaves by."""
@@ -89,6 +95,15 @@ class Heading(StrEnum):
     @property
     def opposite(self) -> Heading:
         return _OPPOSITE[self]
+
+    @property
+    def action(self) -> str:
+        return {
+            Heading.NORTH: "up",
+            Heading.SOUTH: "down",
+            Heading.WEST: "left",
+            Heading.EAST: "right",
+        }[self]
 
 
 _OPPOSITE = {
@@ -124,7 +139,108 @@ class PassageKind(StrEnum):
 
     CONNECTION = "connection"
     WARP = "warp"
+    RETURN = "return"
     SCRIPTED = "scripted"
+
+
+def _signed_byte(value: int) -> int:
+    return value - 0x100 if value & 0x80 else value
+
+
+@dataclass(frozen=True, slots=True)
+class ConnectionGeometry:
+    """The coordinate fields of one eleven-byte connection record.
+
+    Rendering pointers occupy the other bytes. These four fields are the ones
+    the engine uses to reposition the player, and therefore the ones route
+    composition needs. Alignments are retained as cartridge bytes so the read
+    remains inspectable; the axis being adjusted is interpreted as signed.
+    """
+
+    strip_length: int
+    destination_width: int
+    y_alignment: int
+    x_alignment: int
+
+    def transitions(
+        self,
+        heading: Heading,
+        *,
+        source_size: tuple[int, int],
+        destination_size: tuple[int, int],
+    ) -> tuple[MacroTransition, ...]:
+        """Every exact border coordinate accepted by this connection."""
+
+        source_height, source_width = (dimension * 2 for dimension in source_size)
+        destination_height, destination_width = (
+            dimension * 2 for dimension in destination_size
+        )
+        if self.destination_width != destination_size[1]:
+            raise CartridgeReadError(
+                "a connection's destination width disagrees with its target header"
+            )
+
+        candidates: list[MacroTransition] = []
+        if heading in (Heading.NORTH, Heading.SOUTH):
+            source_y = 0 if heading is Heading.NORTH else source_height - 1
+            destination_y = self.y_alignment
+            x_adjustment = _signed_byte(self.x_alignment)
+            for source_x in range(source_width):
+                destination_x = source_x + x_adjustment
+                if (
+                    0 <= destination_y < destination_height
+                    and 0 <= destination_x < destination_width
+                ):
+                    candidates.append(
+                        MacroTransition(
+                            exit_at=(source_y, source_x),
+                            arrival_at=(destination_y, destination_x),
+                            action=heading.action,
+                        )
+                    )
+        else:
+            source_x = 0 if heading is Heading.WEST else source_width - 1
+            destination_x = self.x_alignment
+            y_adjustment = _signed_byte(self.y_alignment)
+            for source_y in range(source_height):
+                destination_y = source_y + y_adjustment
+                if (
+                    0 <= destination_y < destination_height
+                    and 0 <= destination_x < destination_width
+                ):
+                    candidates.append(
+                        MacroTransition(
+                            exit_at=(source_y, source_x),
+                            arrival_at=(destination_y, destination_x),
+                            action=heading.action,
+                        )
+                    )
+
+        if not candidates:
+            raise CartridgeReadError(
+                f"a {heading.value} connection exposes no in-bounds coordinates"
+            )
+        return tuple(candidates)
+
+
+@dataclass(frozen=True, slots=True)
+class _Header:
+    tileset: int
+    height: int
+    width: int
+    connections: dict[Heading, tuple[int, ConnectionGeometry]]
+
+
+@dataclass(frozen=True, slots=True)
+class _Warp:
+    y: int
+    x: int
+    destination_warp_index: int
+    destination_map: int
+
+    @property
+    def at(self) -> tuple[int, int]:
+        return self.y, self.x
 
 
 @dataclass(frozen=True, slots=True)
@@ -138,13 +254,19 @@ class Passage:
     heading: Heading | None = None
     #: Set for a warp: the ``(y, x)`` block the player must stand on.
     at: tuple[int, int] | None = None
-    #: Set only for ``$FF`` return warps. The passage is legal when the map was
-    #: entered from this origin, not merely because that origin can enter it.
-    return_origin: int | None = None
+    #: Exact coordinate reached after an ordinary warp.
+    arrival_at: tuple[int, int] | None = None
+    #: Zero-based destination warp from the source event. For a return it is
+    #: applied after the retained outside map resolves the target.
+    destination_warp_index: int | None = None
+    #: Raw coordinate-bearing connection record, when this is a connection.
+    connection: ConnectionGeometry | None = None
+    #: Exact executable border crossings derived from ``connection``.
+    coordinate_transitions: tuple[MacroTransition, ...] = ()
 
     @property
     def is_warp(self) -> bool:
-        return self.kind is PassageKind.WARP
+        return self.kind in (PassageKind.WARP, PassageKind.RETURN)
 
     @property
     def leads_somewhere_known(self) -> bool:
@@ -159,6 +281,8 @@ class MapNode:
     height: int
     width: int
     passages: tuple[Passage, ...]
+    tileset: int = -1
+    warp_locations: tuple[tuple[int, int], ...] = ()
 
     def neighbours(self) -> frozenset[int]:
         return frozenset(
@@ -170,6 +294,10 @@ class MapNode:
         """Whether some way out of here cannot be planned from static data."""
 
         return any(passage.kind is PassageKind.SCRIPTED for passage in self.passages)
+
+    @property
+    def is_outside(self) -> bool:
+        return self.tileset in OUTSIDE_TILESETS
 
 
 def read_map_graph(rom: bytes) -> dict[int, MapNode]:
@@ -184,14 +312,25 @@ def read_map_graph(rom: bytes) -> dict[int, MapNode]:
 
     headers, warps, one_sided = _read_headers(rom)
     passages = _assemble(headers, warps)
-    reachable = _reachable_from(STARTING_MAP, passages)
+    _verify_connection_transitions_are_reciprocal(passages)
+    reachable = _reachable_from(
+        STARTING_MAP,
+        passages,
+        outside_maps={
+            map_id
+            for map_id, header in headers.items()
+            if header.tileset in OUTSIDE_TILESETS
+        },
+    )
     verify_connections_are_two_sided(reachable, one_sided)
     return {
         map_id: MapNode(
             map_id=map_id,
-            height=headers[map_id][0],
-            width=headers[map_id][1],
+            height=headers[map_id].height,
+            width=headers[map_id].width,
             passages=tuple(passages.get(map_id, ())),
+            tileset=headers[map_id].tileset,
+            warp_locations=tuple(warp.at for warp in warps.get(map_id, ())),
         )
         for map_id in sorted(reachable)
         if map_id in headers
@@ -219,49 +358,68 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
 def _read_headers(
     rom: bytes,
 ) -> tuple[
-    dict[int, tuple[int, int, dict[Heading, int]]],
-    dict[int, list[tuple[int, int, int]]],
+    dict[int, _Header],
+    dict[int, list[_Warp]],
     list[tuple[int, Heading, int]],
 ]:
     """Decode every slot, keeping only connections both endpoints agree on."""
 
-    raw: dict[int, tuple[int, int, dict[Heading, int]]] = {}
-    warps: dict[int, list[tuple[int, int, int]]] = {}
+    raw: dict[int, _Header] = {}
+    warps: dict[int, list[_Warp]] = {}
     for map_id in range(MAP_ID_LIMIT):
         bank = rom[MAP_HEADER_BANKS + map_id]
         at = MAP_HEADER_POINTERS + 2 * map_id
         address = int.from_bytes(rom[at : at + 2], "little")
         if not 0x4000 <= address <= 0x7FFF or bank * 0x4000 >= len(rom):
             continue
-        header = bank_offset(bank, address)
-        flags = rom[header + CONNECTION_FLAGS_OFFSET]
+        header_offset = bank_offset(bank, address)
+        flags = rom[header_offset + CONNECTION_FLAGS_OFFSET]
         if flags > CONNECTION_FLAG_LIMIT:
             continue  # an unused slot; its bytes are not a header
-        cursor = header + CONNECTION_FLAGS_OFFSET + 1
-        found: dict[Heading, int] = {}
+        cursor = header_offset + CONNECTION_FLAGS_OFFSET + 1
+        found: dict[Heading, tuple[int, ConnectionGeometry]] = {}
         for heading, bit in CONNECTION_ORDER:
             if flags & (1 << bit):
-                found[heading] = rom[cursor]
+                found[heading] = (
+                    rom[cursor],
+                    ConnectionGeometry(
+                        strip_length=rom[cursor + 5],
+                        destination_width=rom[cursor + 6],
+                        y_alignment=rom[cursor + 7],
+                        x_alignment=rom[cursor + 8],
+                    ),
+                )
                 cursor += CONNECTION_STRUCT_BYTES
-        raw[map_id] = (rom[header + 1], rom[header + 2], found)
+        raw[map_id] = _Header(
+            tileset=rom[header_offset],
+            height=rom[header_offset + 1],
+            width=rom[header_offset + 2],
+            connections=found,
+        )
         warps[map_id] = _read_warps(rom, bank, cursor)
 
-    kept: dict[int, tuple[int, int, dict[Heading, int]]] = {}
+    kept: dict[int, _Header] = {}
     one_sided: list[tuple[int, Heading, int]] = []
-    for map_id, (height, width, found) in raw.items():
-        agreed: dict[Heading, int] = {}
-        for heading, other in found.items():
+    for map_id, header_record in raw.items():
+        agreed: dict[Heading, tuple[int, ConnectionGeometry]] = {}
+        for heading, (other, geometry) in header_record.connections.items():
             neighbour = raw.get(other)
-            if neighbour is not None and neighbour[2].get(heading.opposite) == map_id:
-                agreed[heading] = other
+            reverse = None if neighbour is None else neighbour.connections.get(heading.opposite)
+            if reverse is not None and reverse[0] == map_id:
+                agreed[heading] = (other, geometry)
             else:
                 one_sided.append((map_id, heading, other))
-        kept[map_id] = (height, width, agreed)
+        kept[map_id] = _Header(
+            tileset=header_record.tileset,
+            height=header_record.height,
+            width=header_record.width,
+            connections=agreed,
+        )
     return kept, warps, one_sided
 
 
-def _read_warps(rom: bytes, bank: int, cursor: int) -> list[tuple[int, int, int]]:
-    """The ``(y, x, destination)`` of each door on one map."""
+def _read_warps(rom: bytes, bank: int, cursor: int) -> list[_Warp]:
+    """Every door, including its destination warp index and map."""
 
     objects = int.from_bytes(rom[cursor : cursor + 2], "little")
     if not 0x4000 <= objects <= 0x7FFF:
@@ -272,78 +430,148 @@ def _read_warps(rom: bytes, bank: int, cursor: int) -> list[tuple[int, int, int]
         return []
     body = at + 2
     return [
-        (
-            rom[body + WARP_STRUCT_BYTES * index],
-            rom[body + WARP_STRUCT_BYTES * index + 1],
-            rom[body + WARP_STRUCT_BYTES * index + 3],
+        _Warp(
+            y=rom[body + WARP_STRUCT_BYTES * index],
+            x=rom[body + WARP_STRUCT_BYTES * index + 1],
+            destination_warp_index=rom[body + WARP_STRUCT_BYTES * index + 2],
+            destination_map=rom[body + WARP_STRUCT_BYTES * index + 3],
         )
         for index in range(count)
     ]
 
 
 def _assemble(
-    headers: Mapping[int, tuple[int, int, dict[Heading, int]]],
-    warps: Mapping[int, list[tuple[int, int, int]]],
+    headers: Mapping[int, _Header],
+    warps: Mapping[int, list[_Warp]],
 ) -> dict[int, list[Passage]]:
     """Turn agreed connections and warps into one list of exits per map."""
 
     passages: dict[int, list[Passage]] = {}
-    for map_id, (_, _, found) in headers.items():
-        for heading, other in found.items():
+    for map_id, header in headers.items():
+        for heading, (other, geometry) in header.connections.items():
+            target = headers[other]
             passages.setdefault(map_id, []).append(
-                Passage(to_map=other, kind=PassageKind.CONNECTION, heading=heading)
+                Passage(
+                    to_map=other,
+                    kind=PassageKind.CONNECTION,
+                    heading=heading,
+                    connection=geometry,
+                    coordinate_transitions=geometry.transitions(
+                        heading,
+                        source_size=(header.height, header.width),
+                        destination_size=(target.height, target.width),
+                    ),
+                )
             )
 
-    # Who enters each interior, so a "return to last map" warp can be resolved.
-    entered: dict[int, set[int]] = {}
     for map_id, doors in warps.items():
-        for _, _, destination in doors:
-            if destination != RETURN_TO_LAST_MAP and destination in headers:
-                entered.setdefault(destination, set()).add(map_id)
-
-    for map_id, doors in warps.items():
-        for y, x, destination in doors:
-            if destination != RETURN_TO_LAST_MAP:
-                kind = PassageKind.WARP if destination in headers else PassageKind.SCRIPTED
+        for door in doors:
+            destination = door.destination_map
+            if destination == RETURN_TO_LAST_MAP:
                 passages.setdefault(map_id, []).append(
                     Passage(
-                        to_map=destination if kind is PassageKind.WARP else None,
-                        kind=kind,
-                        at=(y, x),
+                        to_map=None,
+                        kind=PassageKind.RETURN,
+                        at=door.at,
+                        destination_warp_index=door.destination_warp_index,
                     )
                 )
                 continue
-            # One interior can serve many towns, so the way out is every map
-            # that leads in. Dropping these would strand every Pokémon Centre.
-            for origin in sorted(entered.get(map_id, ())):
-                passages.setdefault(map_id, []).append(
-                    Passage(
-                        to_map=origin,
-                        kind=PassageKind.WARP,
-                        at=(y, x),
-                        return_origin=origin,
+
+            kind = PassageKind.WARP if destination in headers else PassageKind.SCRIPTED
+            arrival_at: tuple[int, int] | None = None
+            if kind is PassageKind.WARP:
+                destination_warps = warps.get(destination, ())
+                if door.destination_warp_index >= len(destination_warps):
+                    raise CartridgeReadError(
+                        f"map {map_id} warp at {door.at} targets missing warp "
+                        f"{door.destination_warp_index} on map {destination}"
                     )
+                arrival_at = destination_warps[door.destination_warp_index].at
+            passages.setdefault(map_id, []).append(
+                Passage(
+                    to_map=destination if kind is PassageKind.WARP else None,
+                    kind=kind,
+                    at=door.at,
+                    arrival_at=arrival_at,
+                    destination_warp_index=door.destination_warp_index,
                 )
+            )
     return passages
 
 
-def _reachable_from(start: int, passages: Mapping[int, list[Passage]]) -> set[int]:
+def _verify_connection_transitions_are_reciprocal(
+    passages: Mapping[int, list[Passage]],
+) -> None:
+    """Refuse geometry whose reverse endpoint does not return to its source."""
+
+    for map_id, exits in passages.items():
+        for passage in exits:
+            if passage.kind is not PassageKind.CONNECTION:
+                continue
+            assert passage.to_map is not None
+            assert passage.heading is not None
+            reverse = next(
+                (
+                    candidate
+                    for candidate in passages.get(passage.to_map, ())
+                    if candidate.kind is PassageKind.CONNECTION
+                    and candidate.to_map == map_id
+                    and candidate.heading is passage.heading.opposite
+                ),
+                None,
+            )
+            if reverse is None:
+                raise CartridgeReadError(
+                    f"map {map_id}'s {passage.heading.value} connection has no reverse"
+                )
+            forward_pairs = {
+                (transition.exit_at, transition.arrival_at)
+                for transition in passage.coordinate_transitions
+            }
+            reverse_pairs = {
+                (transition.arrival_at, transition.exit_at)
+                for transition in reverse.coordinate_transitions
+            }
+            if forward_pairs != reverse_pairs:
+                raise CartridgeReadError(
+                    f"map {map_id}'s {passage.heading.value} connection coordinates "
+                    "do not agree with the reverse connection"
+                )
+
+
+def _reachable_from(
+    start: int,
+    passages: Mapping[int, list[Passage]],
+    *,
+    outside_maps: set[int],
+) -> set[int]:
     start_state = (start, None)
     seen_states: set[tuple[int, int | None]] = {start_state}
     seen_maps = {start}
     frontier: list[tuple[int, int | None]] = [start_state]
     while frontier:
-        node, entry_origin = frontier.pop()
+        node, last_outside = frontier.pop()
         for passage in passages.get(node, ()):
-            if passage.to_map is None:
-                continue
-            if passage.return_origin is not None and passage.return_origin != entry_origin:
-                continue
-            following = (passage.to_map, node)
+            destination: int
+            following_last_outside: int | None
+            if passage.kind is PassageKind.RETURN:
+                if last_outside is None:
+                    continue
+                destination = last_outside
+                following_last_outside = last_outside
+            else:
+                if passage.to_map is None:
+                    continue
+                destination = passage.to_map
+                following_last_outside = last_outside
+                if passage.kind is PassageKind.WARP and node in outside_maps:
+                    following_last_outside = node
+            following = (destination, following_last_outside)
             if following in seen_states:
                 continue
             seen_states.add(following)
-            seen_maps.add(passage.to_map)
+            seen_maps.add(destination)
             frontier.append(following)
     return seen_maps
 
@@ -423,18 +651,32 @@ def macro_graph_from_nodes(graph: Mapping[int, MapNode]) -> MacroGraph:
                     target_map=passage.to_map,
                     kind=passage.kind.value,
                     at=passage.at,
+                    arrival_at=passage.arrival_at,
                     heading=passage.heading.value if passage.heading is not None else None,
-                    return_origin=passage.return_origin,
+                    coordinate_transitions=passage.coordinate_transitions,
+                    destination_warp_index=passage.destination_warp_index,
                 )
                 for passage in node.passages
-                if passage.to_map is not None
+                if passage.kind is not PassageKind.SCRIPTED
             )
             for map_id, node in graph.items()
-        }
+        },
+        outside_nodes=frozenset(
+            map_id for map_id, node in graph.items() if node.is_outside
+        ),
+        warp_locations={
+            map_id: node.warp_locations for map_id, node in graph.items()
+        },
     )
 
 
-def routes_between(graph: Mapping[int, MapNode], start: int, goal: int) -> tuple[int, ...]:
+def routes_between(
+    graph: Mapping[int, MapNode],
+    start: int,
+    goal: int,
+    *,
+    last_outside: int | None = None,
+) -> tuple[int, ...]:
     """The shortest sequence of maps joining two points, or empty if none.
 
     Breadth-first because every passage costs the same here: a warp and an edge
@@ -446,6 +688,6 @@ def routes_between(graph: Mapping[int, MapNode], start: int, goal: int) -> tuple
         raise CartridgeReadError(f"map {start} is not in the graph")
     routed = macro_graph_from_nodes(graph)
     try:
-        return find_macro_route(routed, start, goal)
+        return find_macro_route(routed, start, goal, last_outside=last_outside)
     except GlobalRouterError:
         return ()

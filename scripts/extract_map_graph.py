@@ -65,9 +65,38 @@ def summarise(
         )
         for kind in PassageKind
     }
+    contextual_return_journeys = {
+        "VIRIDIAN_POKECENTER->VIRIDIAN_CITY": list(
+            routes_between(
+                graph,
+                MapId.VIRIDIAN_POKECENTER.value,
+                MapId.VIRIDIAN_CITY.value,
+                last_outside=MapId.VIRIDIAN_CITY.value,
+            )
+        )
+    }
     return {
         "maps": len(graph),
         "passage_counts": counts,
+        "outside_maps": sum(node.is_outside for node in graph.values()),
+        "connection_coordinate_transitions": sum(
+            len(passage.coordinate_transitions)
+            for node in graph.values()
+            for passage in node.passages
+            if passage.kind is PassageKind.CONNECTION
+        ),
+        "ordinary_warps_with_exact_arrival": sum(
+            passage.arrival_at is not None
+            for node in graph.values()
+            for passage in node.passages
+            if passage.kind is PassageKind.WARP
+        ),
+        "returns_with_destination_warp_index": sum(
+            passage.destination_warp_index is not None
+            for node in graph.values()
+            for passage in node.passages
+            if passage.kind is PassageKind.RETURN
+        ),
         "maps_with_a_scripted_exit": sorted(
             map_id for map_id, node in graph.items() if node.has_a_scripted_exit
         ),
@@ -83,6 +112,7 @@ def summarise(
             f"{start.name}->{goal.name}": list(routes_between(graph, start.value, goal.value))
             for start, goal in SAMPLE_JOURNEYS
         },
+        "contextual_return_journeys": contextual_return_journeys,
     }
 
 
@@ -116,16 +146,18 @@ def main(argv: list[str] | None = None) -> int:
         args.out.write_text(
             json.dumps(
                 {
-                    "schema": "pokemon-map-graph-v1",
+                    "schema": "pokemon-map-graph-v2",
                     "recorded_on": args.recorded_on,
                     "comparison_scope": (
                         "cartridges_agree compares every decoded MapNode and Passage, "
-                        "including headings, coordinates and contextual return origins."
+                        "including tilesets, warp indices and arrivals, raw connection "
+                        "geometry, exact coordinate transitions, and return semantics."
                     ),
                     "scope": (
-                        "map headers, edge connections and warps. Says which maps are "
-                        "joined, not whether the way is open: Surf, Cut, Strength and "
-                        "story gates are not in this data."
+                        "Map headers, coordinate-bearing edge connections and warps. "
+                        "Return warps resolve through retained outside-map state. This "
+                        "still does not say whether the way is open: Surf, Cut, Strength "
+                        "and story gates are separate state."
                     ),
                     "starting_map": STARTING_MAP,
                     "cartridges_agree": agree,
