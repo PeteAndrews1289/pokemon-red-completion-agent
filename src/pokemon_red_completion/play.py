@@ -458,9 +458,7 @@ def _qualified_play_chapter_error(
         evidence={
             "schema": "pokemon-red-qualified-play-failure-evidence-v1",
             "exception_type": type(error).__name__,
-            "battle_policy": (
-                model_policy.public_dict() if model_policy is not None else None
-            ),
+            "battle_policy": (model_policy.public_dict() if model_policy is not None else None),
         },
     )
 
@@ -542,7 +540,7 @@ class OaksErrandChapterReport:
     @property
     def passed(self) -> bool:
         return (
-            is_rival_victory_verified(
+            is_rival_resolution_verified(
                 self.rival_evidence,
                 saw_trainer_battle=self.saw_trainer_battle,
             )
@@ -553,18 +551,24 @@ class OaksErrandChapterReport:
         )
 
     def public_dict(self) -> dict[str, object]:
+        rival_won = is_rival_victory_verified(
+            self.rival_evidence,
+            saw_trainer_battle=self.saw_trainer_battle,
+        )
         return {
             "actions_executed": self.actions_executed,
             "frames_executed": self.frames_executed,
             "parcel_verified": is_parcel_verified(self.parcel_evidence),
             "pokedex_verified": is_pokedex_verified(self.pokedex_evidence),
-            "rival_victory_verified": is_rival_victory_verified(
+            "rival_battle_resolved": is_rival_resolution_verified(
                 self.rival_evidence,
                 saw_trainer_battle=self.saw_trainer_battle,
             ),
+            "rival_outcome": "victory" if rival_won else "loss",
+            "rival_victory_verified": rival_won,
             "route_1_wild_flees": [item.public_dict() for item in self.route_1_wild_flees],
             "route_1_movement_retries": self.route_1_movement_retries,
-            "schema": "pokemon-red-oaks-errand-chapter-v1",
+            "schema": "pokemon-red-oaks-errand-chapter-v2",
             "status": "ok" if self.passed else "failed",
         }
 
@@ -632,7 +636,7 @@ class QualifiedPlayReport:
     def passed(self) -> bool:
         return (
             self.opening.passed
-            and is_rival_victory_verified(
+            and is_rival_resolution_verified(
                 self.rival_evidence,
                 saw_trainer_battle=self.saw_trainer_battle,
             )
@@ -672,10 +676,7 @@ class QualifiedPlayReport:
                 not self.battle_policy_teacher_free_required
                 or self._teacher_free_battle_policy_passed
             )
-            and (
-                self.objective_policy_report is None
-                or self._objective_policy_passed
-            )
+            and (self.objective_policy_report is None or self._objective_policy_passed)
             and (
                 not self.training_candidate_authority_required
                 or self._training_candidate_authority_passed
@@ -728,16 +729,17 @@ class QualifiedPlayReport:
         # Historical receipts used expected-answer authorization. New runs
         # score the same fixed route as singleton dispatches and explicitly
         # keep them outside the learned-choice denominator.
-        return (
-            report.get("authorized_decisions") == len(COMPLETION_QUEST)
-            or (
-                report.get("fixed_dispatch_decisions") == len(COMPLETION_QUEST)
-                and report.get("expected_answer_labels_supplied") == 0
-                and report.get("learned_choice_decisions") == 0
-            )
+        return report.get("authorized_decisions") == len(COMPLETION_QUEST) or (
+            report.get("fixed_dispatch_decisions") == len(COMPLETION_QUEST)
+            and report.get("expected_answer_labels_supplied") == 0
+            and report.get("learned_choice_decisions") == 0
         )
 
     def public_dict(self) -> dict[str, object]:
+        rival_won = is_rival_victory_verified(
+            self.rival_evidence,
+            saw_trainer_battle=self.saw_trainer_battle,
+        )
         checkpoints = (
             (
                 "bedroom_ready",
@@ -761,7 +763,11 @@ class QualifiedPlayReport:
                 "Selected and verified Squirtle",
                 self.opening.starter,
             ),
-            ("rival_defeated", "Defeated the lab rival", self.rival_defeated),
+            (
+                "rival_defeated" if rival_won else "rival_loss_recovered",
+                "Defeated the lab rival" if rival_won else "Recovered from the lab rival loss",
+                self.rival_defeated,
+            ),
             ("viridian_reached", "Reached Viridian City", self.viridian_reached),
             ("parcel_received", "Received Oak's Parcel", self.parcel_received),
             ("pallet_returned", "Returned safely to Pallet Town", self.pallet_returned),
@@ -823,7 +829,7 @@ class QualifiedPlayReport:
             party_size=len(getattr(self.champion, "party_hp", (0,) * 6)),
         )
         return {
-            "schema": "qualified-play-v26",
+            "schema": "qualified-play-v27",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": True,
@@ -849,10 +855,12 @@ class QualifiedPlayReport:
             ],
             "rival": {
                 "trainer_battle_observed": self.saw_trainer_battle,
-                "victory_verified": is_rival_victory_verified(
+                "battle_resolved": is_rival_resolution_verified(
                     self.rival_evidence,
                     saw_trainer_battle=self.saw_trainer_battle,
                 ),
+                "outcome": "victory" if rival_won else "loss",
+                "victory_verified": rival_won,
                 "species": "squirtle",
                 "species_id": self.rival_evidence.first_party_species,
                 "level": self.rival_evidence.first_party_level,
@@ -927,6 +935,16 @@ def is_rival_victory_verified(
     return saw_trainer_battle and state.rival_victory_snapshot
 
 
+def is_rival_resolution_verified(
+    state: OaksErrandState,
+    *,
+    saw_trainer_battle: bool,
+) -> bool:
+    """Require observed battle entry and one authenticated legal terminal outcome."""
+
+    return saw_trainer_battle and state.rival_resolution_snapshot
+
+
 def is_parcel_verified(state: OaksErrandState) -> bool:
     return state.parcel_snapshot
 
@@ -950,12 +968,22 @@ def run_oaks_errand_chapter(
     _move(executor, reader, LAB_RIVAL_TRIGGER_DIRECTIONS, "lab rival trigger")
     _expect_position(reader.read(), MapId.OAKS_LAB, 4, 6, "lab rival trigger")
     _wait(executor, timing.rival_trigger_wait_frames)
-    rival_raw, rival_evidence, saw_trainer_battle = _defeat_lab_rival(
+    rival_raw, rival_evidence, saw_trainer_battle = _resolve_lab_rival(
         executor,
         reader,
         timing,
     )
-    _emit(progress, emulator, "rival_defeated", "Defeated the lab rival", 7)
+    rival_won = is_rival_victory_verified(
+        rival_evidence,
+        saw_trainer_battle=saw_trainer_battle,
+    )
+    _emit(
+        progress,
+        emulator,
+        "rival_defeated" if rival_won else "rival_loss_recovered",
+        "Defeated the lab rival" if rival_won else "Recovered from the lab rival loss",
+        7,
+    )
 
     _move(executor, reader, LAB_EXIT_DIRECTIONS, "Oak's Lab exit")
     _wait(executor, timing.transition_wait_frames)
@@ -1769,7 +1797,7 @@ def run_qualified_play(
         return report
 
 
-def _defeat_lab_rival(
+def _resolve_lab_rival(
     executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: QualifiedPlayTiming,
@@ -1780,7 +1808,7 @@ def _defeat_lab_rival(
         state = reader.read_oaks_errand_state(raw)
         if state.phase is OaksErrandPhase.RIVAL_BATTLE:
             saw_trainer_battle = True
-        if is_rival_victory_verified(
+        if is_rival_resolution_verified(
             state,
             saw_trainer_battle=saw_trainer_battle,
         ):
@@ -1790,7 +1818,7 @@ def _defeat_lab_rival(
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         wait_frames = timing.battle_wait_frames if raw.battle_state else timing.dialogue_wait_frames
         _wait(executor, wait_frames)
-    raise QualifiedPlayError("The lab rival failed the bounded verified-victory gate.")
+    raise QualifiedPlayError("The lab rival failed the bounded verified-resolution gate.")
 
 
 def _receive_parcel(

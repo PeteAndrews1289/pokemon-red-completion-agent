@@ -51,6 +51,7 @@ from pokemon_red_completion.play import (
     _trajectory_progress_bridge,
     is_parcel_verified,
     is_pokedex_verified,
+    is_rival_resolution_verified,
     is_rival_victory_verified,
     run_qualified_play,
 )
@@ -127,6 +128,16 @@ def _rival_victory() -> OaksErrandState:
         battle_result=0,
         map_id=MapId.OAKS_LAB,
         battle_state=0,
+    )
+
+
+def _rival_loss() -> OaksErrandState:
+    return replace(
+        _rival_victory(),
+        first_party_level=5,
+        first_party_hp=19,
+        first_party_max_hp=19,
+        battle_result=1,
     )
 
 
@@ -1607,7 +1618,7 @@ def test_qualified_play_report_is_complete_honest_and_privacy_safe() -> None:
             "teacher_fallbacks": 0,
         },
     ).passed
-    assert public["schema"] == "qualified-play-v26"
+    assert public["schema"] == "qualified-play-v27"
     assert public["status"] == "ok"
     assert public["qualified_through"] == "enter_hall_of_fame"
     assert public["game_complete"] is True
@@ -2078,6 +2089,18 @@ def test_rival_victory_requires_observed_entry_and_exact_result() -> None:
     assert not is_rival_victory_verified(victory, saw_trainer_battle=False)
     assert not is_rival_victory_verified(
         replace(victory, battle_result=2),
+        saw_trainer_battle=True,
+    )
+
+
+def test_rival_resolution_preserves_a_real_loss_without_calling_it_a_victory() -> None:
+    loss = _rival_loss()
+
+    assert is_rival_resolution_verified(loss, saw_trainer_battle=True)
+    assert not is_rival_victory_verified(loss, saw_trainer_battle=True)
+    assert not is_rival_resolution_verified(loss, saw_trainer_battle=False)
+    assert not is_rival_resolution_verified(
+        replace(loss, first_party_hp=18),
         saw_trainer_battle=True,
     )
 

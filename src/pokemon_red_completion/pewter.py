@@ -217,10 +217,7 @@ class PewterTiming:
     heal_dialogue_pulses: int = 9
 
     def __post_init__(self) -> None:
-        for name, value in (
-            (name, getattr(self, name))
-            for name in self.__dataclass_fields__
-        ):
+        for name, value in ((name, getattr(self, name)) for name in self.__dataclass_fields__):
             if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
                 raise ValueError(f"{name} must be a positive integer")
 
@@ -265,6 +262,8 @@ class PewterChapterReport:
     route_2_movement_retries: int
     forest_wild_flees: tuple[Route1WildFleeEvidence, ...]
     forest_movement_retries: int
+    rival_loss_recovery_search_attempts: tuple[int, ...]
+    rival_loss_recovery_species_ids: tuple[int, ...]
     forest_target_search_attempts: tuple[int, ...]
     forest_training_species_ids: tuple[int, ...]
     overworld_control_verified: bool
@@ -274,13 +273,17 @@ class PewterChapterReport:
 
     @property
     def passed(self) -> bool:
+        expected_recovery_battles = (
+            1
+            if self.pokedex_evidence.battle_result == 1
+            and self.pokedex_evidence.first_party_level == 5
+            else 0
+        )
         return (
             self.pokedex_evidence.pokedex_snapshot
             and self.reached_boundaries
             == tuple(
-                boundary
-                for boundary in TravelBoundary
-                if boundary is not TravelBoundary.UNKNOWN
+                boundary for boundary in TravelBoundary if boundary is not TravelBoundary.UNKNOWN
             )
             and self.gym_entry_evidence.brock_ready_snapshot
             and _is_healed_brock_party(self.pewter_center_healed)
@@ -291,6 +294,10 @@ class PewterChapterReport:
             and self.route_2_movement_retries >= 0
             and all(item.verified for item in self.forest_wild_flees)
             and self.forest_movement_retries >= 0
+            and len(self.rival_loss_recovery_search_attempts) == expected_recovery_battles
+            and all(attempts > 0 for attempts in self.rival_loss_recovery_search_attempts)
+            and self.rival_loss_recovery_species_ids
+            == (KAKUNA_SPECIES_ID,) * expected_recovery_battles
             and len(self.forest_target_search_attempts) == 3
             and all(attempts > 0 for attempts in self.forest_target_search_attempts)
             and self.forest_training_species_ids == (KAKUNA_SPECIES_ID,) * 3
@@ -340,29 +347,28 @@ class PewterChapterReport:
                 "ordered_boundaries_verified": len(self.reached_boundaries),
                 "ordered_boundaries_total": len(TravelBoundary) - 1,
                 "brock_battle_observed": self.saw_brock_battle,
-                "route_1_wild_flees": [
-                    item.public_dict() for item in self.route_1_wild_flees
-                ],
+                "route_1_wild_flees": [item.public_dict() for item in self.route_1_wild_flees],
                 "route_1_movement_retries": self.route_1_movement_retries,
                 "route_2_wild_flees": [item.public_dict() for item in self.route_2_wild_flees],
                 "route_2_movement_retries": self.route_2_movement_retries,
                 "forest_wild_flees": [item.public_dict() for item in self.forest_wild_flees],
                 "forest_movement_retries": self.forest_movement_retries,
+                "rival_loss_recovery_search_attempts": list(
+                    self.rival_loss_recovery_search_attempts
+                ),
+                "rival_loss_recovery_species_ids": list(self.rival_loss_recovery_species_ids),
                 "forest_target_search_attempts": list(self.forest_target_search_attempts),
                 "forest_training_species_ids": list(self.forest_training_species_ids),
             },
             "brock": {
-                "pre_battle_healing_verified": _is_healed_brock_party(
-                    self.pewter_center_healed
-                ),
+                "pre_battle_healing_verified": _is_healed_brock_party(self.pewter_center_healed),
                 "victory_verified": self.brock_victory_evidence.brock_victory_snapshot,
                 "boulder_badge_verified": (
                     self.brock_victory_evidence.boulder_badge
                     and self.brock_victory_evidence.boulder_badge_mirror
                 ),
                 "tm34_verified": (
-                    self.brock_victory_evidence.got_tm34
-                    and self.brock_victory_evidence.tm34_in_bag
+                    self.brock_victory_evidence.got_tm34 and self.brock_victory_evidence.tm34_in_bag
                 ),
                 "overworld_control_verified": self.overworld_control_verified,
                 "squirtle_level": self.brock_defeated.first_party_level,
@@ -489,6 +495,56 @@ def run_pewter_chapter(
         timing=timing,
         used_flees=0,
     )
+    rival_loss_recovery_search_attempts: tuple[int, ...] = ()
+    rival_loss_recovery_species_ids: tuple[int, ...] = ()
+    forest_training_origin = reader.read()
+    if forest_training_origin.first_party_level == 5:
+        if pokedex_evidence.battle_result != 1:
+            raise PewterChapterError(
+                "level-five Forest entry lacked an authenticated lab-rival loss."
+            )
+        recovery_encounter, more_flees, more_retries, search_attempts, step_consumed = (
+            _seek_forest_training_battle(
+                chapter_executor,
+                reader,
+                "down",
+                timing.first_kakuna_seed_wait_frames,
+                timing,
+                "lab-rival loss recovery Kakuna",
+                used_flees=len(forest_wild_flees),
+            )
+        )
+        forest_wild_flees += more_flees
+        forest_movement_retries += more_retries
+        rival_loss_recovery_search_attempts = (search_attempts,)
+        rival_loss_recovery_species_ids = (recovery_encounter.enemy_species_id or 0,)
+        _finish_battle(
+            chapter_executor,
+            reader,
+            expected_battle_state=1,
+            max_pulses=timing.max_battle_pulses,
+            timing=timing,
+            label="lab-rival loss recovery Kakuna",
+        )
+        if step_consumed:
+            _, more_flees, more_retries = _move_forest_with_wild_flees(
+                chapter_executor,
+                reader,
+                ("up",),
+                "lab-rival loss recovery origin return",
+                timing=timing,
+                used_flees=len(forest_wild_flees),
+            )
+            forest_wild_flees += more_flees
+            forest_movement_retries += more_retries
+        _expect_party(
+            reader.read(),
+            level=6,
+            minimum_hp=1,
+            label="lab-rival loss recovery Kakuna",
+        )
+    elif forest_training_origin.first_party_level != 6:
+        raise PewterChapterError("Forest training origin had an unsupported starter level.")
     forest_target_search_attempts: tuple[int, ...] = ()
     forest_training_species_ids: tuple[int, ...] = ()
     first_encounter, more_flees, more_retries, search_attempts, step_consumed = (
@@ -840,6 +896,8 @@ def run_pewter_chapter(
         route_2_movement_retries=route_2_movement_retries,
         forest_wild_flees=forest_wild_flees,
         forest_movement_retries=forest_movement_retries,
+        rival_loss_recovery_search_attempts=rival_loss_recovery_search_attempts,
+        rival_loss_recovery_species_ids=rival_loss_recovery_species_ids,
         forest_target_search_attempts=forest_target_search_attempts,
         forest_training_species_ids=forest_training_species_ids,
         overworld_control_verified=True,
@@ -861,15 +919,11 @@ def _move(
     state = reader.read()
     for step, direction in enumerate(directions, start=1):
         if state.battle_state:
-            raise PewterChapterError(
-                f"Unexpected battle interrupted {label} before step {step}."
-            )
+            raise PewterChapterError(f"Unexpected battle interrupted {label} before step {step}.")
         executor.execute(MacroAction(MacroActionKind.MOVE, direction))
         state = reader.read()
         if state.battle_state:
-            raise PewterChapterError(
-                f"Unexpected battle interrupted {label} at step {step}."
-            )
+            raise PewterChapterError(f"Unexpected battle interrupted {label} at step {step}.")
         if state.first_party_hp == 0:
             raise PewterChapterError(f"Squirtle fainted during {label}.")
     return state
@@ -971,11 +1025,7 @@ def _seek_forest_training_battle(
     origin = reader.read()
     if origin.battle_state:
         raise PewterChapterError(f"{label} began before its intentional trigger.")
-    if (
-        origin.map_id != MapId.VIRIDIAN_FOREST
-        or origin.player_x is None
-        or origin.player_y is None
-    ):
+    if origin.map_id != MapId.VIRIDIAN_FOREST or origin.player_x is None or origin.player_y is None:
         raise PewterChapterError(f"{label} lacks its exact Forest search origin.")
     origin_position = (origin.player_x, origin.player_y)
     flees: tuple[Route1WildFleeEvidence, ...] = ()
@@ -1155,29 +1205,19 @@ def _finish_battle(
         before = reader.read()
         if before.battle_state not in {0, expected_battle_state}:
             raise PewterChapterError(f"{label} changed to an unexpected battle type.")
-        saw_expected_battle = saw_expected_battle or (
-            before.battle_state == expected_battle_state
-        )
+        saw_expected_battle = saw_expected_battle or (before.battle_state == expected_battle_state)
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         _wait(
             executor,
-            timing.battle_wait_frames
-            if before.battle_state
-            else timing.dialogue_wait_frames,
+            timing.battle_wait_frames if before.battle_state else timing.dialogue_wait_frames,
         )
         after = reader.read()
         if after.first_party_hp == 0:
             raise PewterChapterError(f"Squirtle fainted during {label}.")
         if after.battle_state not in {0, expected_battle_state}:
             raise PewterChapterError(f"{label} changed to an unexpected battle type.")
-        saw_expected_battle = saw_expected_battle or (
-            after.battle_state == expected_battle_state
-        )
-        if (
-            saw_expected_battle
-            and after.battle_state == 0
-            and reader.read_input_readiness().ready
-        ):
+        saw_expected_battle = saw_expected_battle or (after.battle_state == expected_battle_state)
+        if saw_expected_battle and after.battle_state == 0 and reader.read_input_readiness().ready:
             stable_reads += 1
             if stable_reads >= 2:
                 return after
@@ -1218,9 +1258,7 @@ def _release_and_probe_overworld_control(
         before = reader.read()
         evidence = reader.read_pewter_chapter_state(before)
         if not evidence.brock_victory_snapshot:
-            raise PewterChapterError(
-                "Brock evidence changed while restoring overworld control."
-            )
+            raise PewterChapterError("Brock evidence changed while restoring overworld control.")
         if before.map_id != MapId.PEWTER_GYM or before.player_x != 4:
             raise PewterChapterError("Brock control probe left the expected Gym column.")
 
@@ -1239,9 +1277,7 @@ def _release_and_probe_overworld_control(
                 or stable.player_y != after.player_y
                 or not stable_evidence.brock_victory_snapshot
             ):
-                raise PewterChapterError(
-                    "Post-Brock overworld control did not remain stable."
-                )
+                raise PewterChapterError("Post-Brock overworld control did not remain stable.")
             return stable, stable_evidence
         if (
             after.map_id != before.map_id
@@ -1299,10 +1335,7 @@ def _expect_party(
         or raw.first_party_level != level
         or (raw.first_party_hp or 0) < minimum_hp
         or raw.first_party_status != 0
-        or (
-            required_move is not None
-            and required_move not in set(raw.first_party_moves or ())
-        )
+        or (required_move is not None and required_move not in set(raw.first_party_moves or ()))
     ):
         raise PewterChapterError(f"{label} failed its persistent party-state gate.")
 
@@ -1336,9 +1369,7 @@ def _expect_brock_transit_ready(raw: RawGameState, label: str) -> None:
 def _is_healed_brock_party(raw: RawGameState) -> bool:
     pp = tuple(value & 0x3F for value in (raw.first_party_pp or ()))
     learned_pp = tuple(
-        value
-        for move, value in zip(raw.first_party_moves or (), pp, strict=False)
-        if move
+        value for move, value in zip(raw.first_party_moves or (), pp, strict=False) if move
     )
     return (
         raw.map_id == MapId.PEWTER_POKECENTER

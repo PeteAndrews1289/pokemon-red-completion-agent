@@ -1161,6 +1161,39 @@ class OaksErrandState:
         )
 
     @property
+    def rival_resolution_snapshot(self) -> bool:
+        """Authenticate either legal terminal outcome of the optional lab battle.
+
+        Red advances Oak's script after both a win and a loss.  A loss restores the
+        level-five starter to full health, while a win leaves the surviving
+        level-six starter at its battle HP.  Keep those outcomes distinct so a
+        completion teacher can recover the missed experience without claiming a
+        victory that did not happen.
+        """
+
+        hp = self.first_party_hp
+        max_hp = self.first_party_max_hp
+        common = (
+            self.phase is OaksErrandPhase.RIVAL_DEFEATED
+            and self.map_id == MapId.OAKS_LAB
+            and self.battle_state == 0
+            and self.lab_script == 18
+            and self.controls_ready
+            and self.battled_rival
+            and self.first_party_species == SQUIRTLE_SPECIES_ID
+            and hp is not None
+            and max_hp is not None
+            and 0 < hp <= max_hp
+        )
+        if not common:
+            return False
+        if self.battle_result == 0:
+            return self.first_party_level == 6 and 21 <= max_hp <= 23
+        if self.battle_result == 1:
+            return self.first_party_level == 5 and hp == max_hp and 19 <= max_hp <= 21
+        return False
+
+    @property
     def parcel_snapshot(self) -> bool:
         return (
             self.phase is OaksErrandPhase.PARCEL_OBTAINED
@@ -3360,17 +3393,11 @@ class PokemonRedStateReader:
             self._memory.read_u8(base + PARTY_STATUS_OFFSET) for base in party_bases
         )
         party_moves = tuple(
-            tuple(
-                self._memory.read_u8(base + PARTY_MOVES_OFFSET + index)
-                for index in range(4)
-            )
+            tuple(self._memory.read_u8(base + PARTY_MOVES_OFFSET + index) for index in range(4))
             for base in party_bases
         )
         party_pp = tuple(
-            tuple(
-                self._memory.read_u8(base + PARTY_PP_OFFSET + index)
-                for index in range(4)
-            )
+            tuple(self._memory.read_u8(base + PARTY_PP_OFFSET + index) for index in range(4))
             for base in party_bases
         )
         first_party_level = (
@@ -3845,11 +3872,7 @@ class PokemonRedStateReader:
         transitions without relying on frame or button counts.
         """
 
-        if (
-            raw.battle_state != 2
-            or (raw.enemy_hp or 0) <= 0
-            or (raw.party_count or 0) <= 1
-        ):
+        if raw.battle_state != 2 or (raw.enemy_hp or 0) <= 0 or (raw.party_count or 0) <= 1:
             return False
         signature = (
             self._memory.read_u8(RamAddress.TOP_MENU_ITEM_Y),

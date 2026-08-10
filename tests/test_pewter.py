@@ -215,6 +215,8 @@ def _report() -> PewterChapterReport:
         route_2_movement_retries=0,
         forest_wild_flees=(),
         forest_movement_retries=0,
+        rival_loss_recovery_search_attempts=(),
+        rival_loss_recovery_species_ids=(),
         forest_target_search_attempts=(1, 1, 1),
         forest_training_species_ids=(0x71, 0x71, 0x71),
         overworld_control_verified=True,
@@ -332,9 +334,11 @@ def test_forest_training_search_retries_empty_grass_and_authenticates_kakuna() -
     assert retries == 0
     assert attempts == 2
     assert consumed
-    assert [
-        action.value for action in executor.actions if action.kind is MacroActionKind.MOVE
-    ] == ["down", "up", "down"]
+    assert [action.value for action in executor.actions if action.kind is MacroActionKind.MOVE] == [
+        "down",
+        "up",
+        "down",
+    ]
 
 
 def test_pewter_progress_is_sanitized_and_immutable() -> None:
@@ -370,6 +374,8 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         "route_2_movement_retries": 0,
         "forest_wild_flees": [],
         "forest_movement_retries": 0,
+        "rival_loss_recovery_search_attempts": [],
+        "rival_loss_recovery_species_ids": [],
         "forest_target_search_attempts": [1, 1, 1],
         "forest_training_species_ids": [0x71, 0x71, 0x71],
     }
@@ -398,6 +404,27 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         assert private_key not in serialized
 
 
+def test_pewter_report_requires_the_authenticated_lab_loss_recovery_lesson() -> None:
+    loss_evidence = replace(
+        _pokedex(),
+        first_party_level=5,
+        first_party_hp=19,
+        first_party_max_hp=19,
+        battle_result=1,
+    )
+    recovered = replace(
+        _report(),
+        pokedex_evidence=loss_evidence,
+        rival_loss_recovery_search_attempts=(3,),
+        rival_loss_recovery_species_ids=(0x71,),
+    )
+
+    assert recovered.passed
+    assert recovered.public_dict()["route"]["rival_loss_recovery_search_attempts"] == [3]
+    assert not replace(recovered, rival_loss_recovery_search_attempts=()).passed
+    assert not replace(recovered, rival_loss_recovery_species_ids=(0x70,)).passed
+
+
 @pytest.mark.parametrize(
     "changes",
     (
@@ -405,6 +432,8 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         {"overworld_control_verified": False},
         {"controller_released": False},
         {"reached_boundaries": tuple(TravelBoundary)[1:-1]},
+        {"rival_loss_recovery_search_attempts": (1,)},
+        {"rival_loss_recovery_species_ids": (0x71,)},
         {"forest_target_search_attempts": (1, 1)},
         {"forest_training_species_ids": (0x71, 0x71, 0x70)},
         {
