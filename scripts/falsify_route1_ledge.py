@@ -20,10 +20,15 @@ import sys
 from datetime import date
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind  # noqa: E402
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING  # noqa: E402
+from pokemon_red_completion.collection_protocol import (  # noqa: E402
+    committed_source_bundle_sha256,
+    working_source_bundle_sha256,
+)
 from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor  # noqa: E402
 from pokemon_red_completion.gen1_maps import map_graph  # noqa: E402
@@ -48,6 +53,10 @@ from pokemon_red_completion.play import (  # noqa: E402
     _move,
     _wait,
     run_oaks_errand_chapter,
+)
+from pokemon_red_completion.provenance import (  # noqa: E402
+    detect_source_identity,
+    require_clean_source,
 )
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom  # noqa: E402
 from pokemon_red_completion.route_1_wild import (  # noqa: E402
@@ -84,6 +93,16 @@ def main(argv: list[str] | None = None) -> int:
 
     rom_path = resolve_rom_path(args.rom)
     fingerprint = verify_rom(rom_path)
+    source = detect_source_identity(PROJECT_ROOT, include_untracked=False)
+    require_clean_source(source)
+    if source.git_commit is None:  # pragma: no cover - require_clean_source establishes it
+        raise Route1LedgeProbeError("the source commit is unavailable")
+    source_bundle = committed_source_bundle_sha256(
+        PROJECT_ROOT,
+        revision=source.git_commit,
+    )
+    if working_source_bundle_sha256(PROJECT_ROOT) != source_bundle:
+        raise Route1LedgeProbeError("the executable source differs from its commit")
     rom = rom_path.read_bytes()
     maps = map_graph(rom)
     world = walkable_world(rom)
@@ -195,6 +214,8 @@ def main(argv: list[str] | None = None) -> int:
         "recorded_on": args.recorded_on,
         "status": "ok",
         "rom": fingerprint.public_dict(),
+        "source": source.public_dict(),
+        "executable_source_bundle_sha256": source_bundle,
         "precondition": (
             "The qualified teacher established clean power-on, a verified starter, "
             "Oak's parcel delivery and the Pokédex before entering Route 1."
