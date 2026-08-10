@@ -285,6 +285,11 @@ class PewterChapterReport:
             if recovery_battles == 0
             else (KAKUNA_SPECIES_ID,) + (WEEDLE_SPECIES_ID,) * (recovery_battles - 1)
         )
+        expected_forest_species = (
+            (KAKUNA_SPECIES_ID, WEEDLE_SPECIES_ID, WEEDLE_SPECIES_ID)
+            if self.lab_rival_loss_recovery_required
+            else (KAKUNA_SPECIES_ID,) * 3
+        )
         return (
             self.pokedex_evidence.pokedex_snapshot
             and self.reached_boundaries
@@ -312,7 +317,7 @@ class PewterChapterReport:
             == (6 if self.lab_rival_loss_recovery_required else None)
             and len(self.forest_target_search_attempts) == 3
             and all(attempts > 0 for attempts in self.forest_target_search_attempts)
-            and self.forest_training_species_ids == (KAKUNA_SPECIES_ID,) * 3
+            and self.forest_training_species_ids == expected_forest_species
             and self.brock_battle_evidence.brock_battle_snapshot
             and self.brock_victory_evidence.brock_victory_snapshot
             and self.overworld_control_verified
@@ -584,14 +589,20 @@ def run_pewter_chapter(
         )
     forest_target_search_attempts: tuple[int, ...] = ()
     forest_training_species_ids: tuple[int, ...] = ()
+    first_training_seed_wait = timing.first_kakuna_seed_wait_frames + int(
+        lab_rival_loss_recovery_required
+    )
+    first_training_label = (
+        "first post-loss training Kakuna" if lab_rival_loss_recovery_required else "first Kakuna"
+    )
     first_encounter, more_flees, more_retries, search_attempts, step_consumed = (
         _seek_forest_training_battle(
             chapter_executor,
             reader,
             "down",
-            timing.first_kakuna_seed_wait_frames,
+            first_training_seed_wait,
             timing,
-            "first Kakuna",
+            first_training_label,
             used_flees=len(forest_wild_flees),
         )
     )
@@ -605,20 +616,20 @@ def run_pewter_chapter(
         expected_battle_state=1,
         max_pulses=timing.max_battle_pulses,
         timing=timing,
-        label="first Kakuna",
+        label=first_training_label,
     )
     if not step_consumed:
         _, more_flees, more_retries = _move_forest_with_wild_flees(
             chapter_executor,
             reader,
             ("down",),
-            "first Kakuna deferred step",
+            f"{first_training_label} deferred step",
             timing=timing,
             used_flees=len(forest_wild_flees),
         )
         forest_wild_flees += more_flees
         forest_movement_retries += more_retries
-    _expect_party(reader.read(), level=7, minimum_hp=1, label="first Kakuna")
+    _expect_party(reader.read(), level=7, minimum_hp=1, label=first_training_label)
 
     _, more_flees, more_retries = _move_forest_with_wild_flees(
         chapter_executor,
@@ -630,15 +641,25 @@ def run_pewter_chapter(
     )
     forest_wild_flees += more_flees
     forest_movement_retries += more_retries
+    second_training_seed_wait = timing.second_kakuna_seed_wait_frames + int(
+        lab_rival_loss_recovery_required
+    )
+    second_target_species_ids = (
+        WEEDLE_TARGET_SPECIES_IDS if lab_rival_loss_recovery_required else KAKUNA_TARGET_SPECIES_IDS
+    )
+    second_training_label = (
+        "second post-loss training Weedle" if lab_rival_loss_recovery_required else "second Kakuna"
+    )
     second_encounter, more_flees, more_retries, search_attempts, step_consumed = (
         _seek_forest_training_battle(
             chapter_executor,
             reader,
             "down",
-            timing.second_kakuna_seed_wait_frames,
+            second_training_seed_wait,
             timing,
-            "second Kakuna",
+            second_training_label,
             used_flees=len(forest_wild_flees),
+            target_species_ids=second_target_species_ids,
         )
     )
     forest_wild_flees += more_flees
@@ -651,20 +672,20 @@ def run_pewter_chapter(
         expected_battle_state=1,
         max_pulses=timing.max_battle_pulses,
         timing=timing,
-        label="second Kakuna",
+        label=second_training_label,
     )
     if not step_consumed:
         _, more_flees, more_retries = _move_forest_with_wild_flees(
             chapter_executor,
             reader,
             ("down",),
-            "second Kakuna deferred step",
+            f"{second_training_label} deferred step",
             timing=timing,
             used_flees=len(forest_wild_flees),
         )
         forest_wild_flees += more_flees
         forest_movement_retries += more_retries
-    _expect_party(reader.read(), level=7, minimum_hp=1, label="second Kakuna")
+    _expect_party(reader.read(), level=7, minimum_hp=1, label=second_training_label)
 
     _, more_flees, more_retries = _move_forest_with_wild_flees(
         chapter_executor,
@@ -676,15 +697,26 @@ def run_pewter_chapter(
     )
     forest_wild_flees += more_flees
     forest_movement_retries += more_retries
+    third_training_seed_wait = timing.third_kakuna_seed_wait_frames + int(
+        lab_rival_loss_recovery_required
+    )
+    third_target_species_ids = (
+        WEEDLE_TARGET_SPECIES_IDS if lab_rival_loss_recovery_required else KAKUNA_TARGET_SPECIES_IDS
+    )
+    third_training_label = (
+        "third post-loss training Weedle" if lab_rival_loss_recovery_required else "third Kakuna"
+    )
     third_encounter, more_flees, more_retries, search_attempts, step_consumed = (
         _seek_forest_training_battle(
             chapter_executor,
             reader,
             "down",
-            timing.third_kakuna_seed_wait_frames,
+            third_training_seed_wait,
             timing,
-            "third Kakuna",
+            third_training_label,
             used_flees=len(forest_wild_flees),
+            target_species_ids=third_target_species_ids,
+            maximum_target_level=(4 if lab_rival_loss_recovery_required else None),
         )
     )
     forest_wild_flees += more_flees
@@ -697,14 +729,14 @@ def run_pewter_chapter(
         expected_battle_state=1,
         max_pulses=timing.max_battle_pulses,
         timing=timing,
-        label="third Kakuna",
+        label=third_training_label,
     )
     if not step_consumed:
         _, more_flees, more_retries = _move_forest_with_wild_flees(
             chapter_executor,
             reader,
             ("down",),
-            "third Kakuna deferred step",
+            f"{third_training_label} deferred step",
             timing=timing,
             used_flees=len(forest_wild_flees),
         )
@@ -715,7 +747,7 @@ def run_pewter_chapter(
         level=8,
         minimum_hp=1,
         required_move=BUBBLE_MOVE_ID,
-        label="third Kakuna",
+        label=third_training_label,
     )
 
     _, more_flees, more_retries = _move_forest_with_wild_flees(
@@ -1054,6 +1086,7 @@ def _seek_forest_training_battle(
     *,
     used_flees: int,
     target_species_ids: frozenset[int] = KAKUNA_TARGET_SPECIES_IDS,
+    maximum_target_level: int | None = None,
 ) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int, int, bool]:
     """Seek one target species while preserving the authored route coordinate."""
 
@@ -1068,6 +1101,12 @@ def _seek_forest_training_battle(
         for species_id in target_species_ids
     ):
         raise PewterChapterError(f"{label} has invalid target species.")
+    if maximum_target_level is not None and (
+        not isinstance(maximum_target_level, int)
+        or isinstance(maximum_target_level, bool)
+        or maximum_target_level <= 0
+    ):
+        raise PewterChapterError(f"{label} has an invalid target-level ceiling.")
     _wait(executor, seed_wait_frames)
     origin = reader.read()
     if origin.battle_state:
@@ -1120,7 +1159,10 @@ def _seek_forest_training_battle(
                 raise PewterChapterError(f"{label} encountered a non-wild battle while searching.")
             if not consumed and (observed.player_x, observed.player_y) != origin_position:
                 raise PewterChapterError(f"{label} wild encounter drifted from its search step.")
-            if observed.enemy_species_id in target_species_ids:
+            target_level_matches = maximum_target_level is None or (
+                observed.enemy_level is not None and observed.enemy_level <= maximum_target_level
+            )
+            if observed.enemy_species_id in target_species_ids and target_level_matches:
                 return observed, flees, movement_retries, search_attempt, consumed
             if used_flees + len(flees) >= timing.max_forest_wild_flees:
                 raise PewterChapterError(f"{label} exhausted the shared Forest flee budget.")
@@ -1153,7 +1195,7 @@ def _seek_forest_training_battle(
             flees += return_flees
             movement_retries += return_retries
 
-    raise PewterChapterError(f"{label} exhausted its bounded Kakuna search.")
+    raise PewterChapterError(f"{label} exhausted its bounded target-species search.")
 
 
 def _direction_progressed(before: RawGameState, after: RawGameState, direction: str) -> bool:

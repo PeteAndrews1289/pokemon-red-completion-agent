@@ -343,6 +343,23 @@ def test_forest_training_search_retries_empty_grass_and_authenticates_kakuna() -
     ]
 
 
+@pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
+def test_forest_training_search_rejects_invalid_target_level_ceiling(
+    invalid: object,
+) -> None:
+    with pytest.raises(PewterChapterError, match="invalid target-level ceiling"):
+        _seek_forest_training_battle(  # type: ignore[arg-type]
+            None,
+            None,
+            "down",
+            1,
+            DEFAULT_PEWTER_TIMING,
+            "unit target",
+            used_flees=0,
+            maximum_target_level=invalid,  # type: ignore[arg-type]
+        )
+
+
 def test_pewter_progress_is_sanitized_and_immutable() -> None:
     progress = PewterProgress(
         checkpoint_id="brock_defeated",
@@ -415,6 +432,7 @@ def test_pewter_report_requires_the_authenticated_lab_loss_recovery_lesson() -> 
         rival_loss_recovery_search_attempts=(3, 2),
         rival_loss_recovery_species_ids=(0x71, 0x70),
         rival_loss_recovery_level=6,
+        forest_training_species_ids=(0x71, 0x70, 0x70),
     )
 
     assert recovered.passed
@@ -422,6 +440,7 @@ def test_pewter_report_requires_the_authenticated_lab_loss_recovery_lesson() -> 
     assert not replace(recovered, rival_loss_recovery_search_attempts=()).passed
     assert not replace(recovered, rival_loss_recovery_species_ids=(0x7B,)).passed
     assert not replace(recovered, rival_loss_recovery_level=5).passed
+    assert not replace(recovered, forest_training_species_ids=(0x71, 0x71, 0x71)).passed
 
 
 @pytest.mark.parametrize(
