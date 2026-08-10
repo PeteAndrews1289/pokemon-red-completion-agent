@@ -1083,6 +1083,29 @@ def test_lavender_recovery_capabilities_follow_live_reserves_and_hp_limit(
     )
 
 
+def test_protected_dux_masks_only_attacks_below_the_recoverable_hp_floor() -> None:
+    hp_recovery = frozenset(
+        {lavender_module.BattleRecoveryCapability.RESTORE_HP}
+    )
+
+    assert lavender_module._protected_dux_minimum_hp_before_move(
+        hp_recovery,
+        enabled=True,
+    ) == DUX_BATTLE_RECOVERY_THRESHOLD + 1
+    assert (
+        lavender_module._protected_dux_minimum_hp_before_move(
+            hp_recovery,
+            enabled=False,
+        )
+        is None
+    )
+    assert (
+        lavender_module._protected_dux_minimum_hp_before_move(
+            frozenset(),
+            enabled=True,
+        )
+        is None
+    )
 def test_move_retries_the_same_step_after_a_no_movement_wild_flee(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

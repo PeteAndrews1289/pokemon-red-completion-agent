@@ -1122,12 +1122,17 @@ def _run_lavender_trainer_battle(
 
     recoveries = 0
     while True:
+        recovery_capabilities = _lavender_recovery_capabilities(
+            emulator,
+            hp_recoveries=recoveries,
+            hp_recovery_limit=battle_recovery_limit,
+        )
         live_intent = replace(
             intent,
-            recovery_capabilities=_lavender_recovery_capabilities(
-                emulator,
-                hp_recoveries=recoveries,
-                hp_recovery_limit=battle_recovery_limit,
+            recovery_capabilities=recovery_capabilities,
+            minimum_hp_before_move=_protected_dux_minimum_hp_before_move(
+                recovery_capabilities,
+                enabled=protect_dux_status,
             ),
         )
         try:
@@ -1252,6 +1257,18 @@ def _lavender_recovery_capabilities(
     if bag.get(ItemId.PARLYZ_HEAL, 0) > 1:
         capabilities.add(BattleRecoveryCapability.CURE_PARALYSIS)
     return frozenset(capabilities)
+
+
+def _protected_dux_minimum_hp_before_move(
+    recovery_capabilities: frozenset[BattleRecoveryCapability],
+    *,
+    enabled: bool,
+) -> int | None:
+    """Mask only the observed lethal low-HP DUX attack while recovery remains legal."""
+
+    if enabled and BattleRecoveryCapability.RESTORE_HP in recovery_capabilities:
+        return DUX_BATTLE_RECOVERY_THRESHOLD + 1
+    return None
 
 
 def _fainted_battler_pivot_target(
