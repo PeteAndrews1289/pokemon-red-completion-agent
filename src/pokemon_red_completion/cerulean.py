@@ -19,6 +19,8 @@ from pokemon_red_completion.economy import (
     PEWTER_SUPPLY_COST,
 )
 from pokemon_red_completion.observation import (
+    BUBBLE_MOVE_ID,
+    MEGA_PUNCH_MOVE_ID,
     ROUTE_3_REQUIRED_TRAINER_SPECS,
     SQUIRTLE_SPECIES_ID,
     WARTORTLE_SPECIES_ID,
@@ -293,6 +295,9 @@ class CeruleanChapterReport:
             and self.mt_moon_movement_retries >= self.mt_moon_zubat_movement_retries
             and self.saw_required_rocket_battle
             and self.rocket_battle_evidence.required_rocket_battle_snapshot
+            and self.rocket_battle.first_party_moves is not None
+            and len(self.rocket_battle.first_party_moves) >= 3
+            and self.rocket_battle.first_party_moves[2] == MEGA_PUNCH_MOVE_ID
             and self.rocket_victory_evidence.beat_required_rocket
             and self.saw_super_nerd_battle
             and self.super_nerd_battle_evidence.super_nerd_battle_snapshot
@@ -367,6 +372,11 @@ class CeruleanChapterReport:
             },
             "mt_moon": {
                 "required_rocket_battle_observed": self.saw_required_rocket_battle,
+                "mega_punch_taught_before_rocket": (
+                    self.rocket_battle.first_party_moves is not None
+                    and len(self.rocket_battle.first_party_moves) >= 3
+                    and self.rocket_battle.first_party_moves[2] == MEGA_PUNCH_MOVE_ID
+                ),
                 "super_nerd_battle_observed": self.saw_super_nerd_battle,
                 "helix_fossil_verified": self.fossil_evidence.fossil_snapshot
                 and self.fossil_evidence.got_helix_fossil,
@@ -672,6 +682,12 @@ def run_cerulean_chapter(
         timing,
         mt_moon_ledger,
     )
+    _teach_mt_moon_mega_punch(
+        chapter_executor,
+        reader,
+        emulator,
+        timing,
+    )
     _move_mt_moon_with_seed_waits(
         chapter_executor,
         reader,
@@ -760,7 +776,7 @@ def run_cerulean_chapter(
         chapter_executor,
         reader,
         timing,
-        slot=4,
+        slot=3,
         label="Mt. Moon required Rocket",
     )
     rocket_defeated = _finish_battle(
@@ -1423,6 +1439,132 @@ def _collect_mt_moon_tm01(
         ledger=ledger,
     )
     _expect_position(reader.read(), MapId.MT_MOON_1F, 16, 11, "TM01 route rejoin")
+
+
+def _teach_mt_moon_mega_punch(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+) -> None:
+    """Turn the optional TM01 detour into a verified Rocket-battle lesson."""
+
+    before = reader.read()
+    if (
+        before.map_id != MapId.MT_MOON_1F
+        or (before.player_x, before.player_y) != (16, 11)
+        or before.battle_state != 0
+        or before.party_species_ids != (SQUIRTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+        or before.first_party_moves is None
+        or before.first_party_moves[2] != BUBBLE_MOVE_ID
+        or _bag_quantity(emulator, ItemId.TM01_MEGA_PUNCH) != 1
+        or not reader.read_input_readiness().ready
+    ):
+        raise CeruleanChapterError("Mt. Moon TM01 teaching has an invalid starting gate.")
+
+    executor.execute(MacroAction(MacroActionKind.OPEN_MENU))
+    _wait(executor, timing.dialogue_wait_frames)
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == 2:
+            break
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if cursor < 2 else "up",
+            timing.move_cursor_wait_frames,
+        )
+    else:
+        raise CeruleanChapterError("Mt. Moon TM01 teaching could not select ITEM.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+
+    for _ in range(24):
+        items = _bag_item_ids(emulator)
+        if ItemId.TM01_MEGA_PUNCH not in items:
+            raise CeruleanChapterError("Mt. Moon TM01 teaching lost the collected TM.")
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        target = items.index(ItemId.TM01_MEGA_PUNCH)
+        if absolute == target:
+            break
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if absolute < target else "up",
+            timing.move_cursor_wait_frames,
+        )
+    else:
+        raise CeruleanChapterError("Mt. Moon TM01 teaching could not select TM01.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+
+    for _ in range(24):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (0, 1):
+            break
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    else:
+        raise CeruleanChapterError("Mt. Moon TM01 teaching did not reach party selection.")
+
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == 0:
+            break
+        _pulse(executor, MacroActionKind.MOVE, "up", timing.move_cursor_wait_frames)
+    else:
+        raise CeruleanChapterError("Mt. Moon TM01 teaching could not select Squirtle.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+
+    for _ in range(24):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (5, 8):
+            break
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    else:
+        raise CeruleanChapterError("Mt. Moon TM01 teaching did not reach move deletion.")
+
+    for _ in range(8):
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == 2:
+            break
+        _pulse(
+            executor,
+            MacroActionKind.MOVE,
+            "down" if cursor < 2 else "up",
+            timing.move_cursor_wait_frames,
+        )
+    else:
+        raise CeruleanChapterError("Mt. Moon TM01 teaching could not select Bubble slot three.")
+    _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+
+    expected_moves = (
+        before.first_party_moves[0],
+        before.first_party_moves[1],
+        MEGA_PUNCH_MOVE_ID,
+        before.first_party_moves[3],
+    )
+    for _ in range(24):
+        learned = reader.read()
+        if (
+            learned.first_party_moves == expected_moves
+            and _bag_quantity(emulator, ItemId.TM01_MEGA_PUNCH) == 0
+        ):
+            break
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    else:
+        raise CeruleanChapterError("Mt. Moon TM01 did not replace Bubble and consume the item.")
+
+    for _ in range(2):
+        _pulse(executor, MacroActionKind.CANCEL, frames=timing.dialogue_wait_frames)
+    for _ in range(12):
+        if reader.read_input_readiness().ready:
+            return
+        _pulse(executor, MacroActionKind.CANCEL, frames=timing.dialogue_wait_frames)
+    raise CeruleanChapterError("Mt. Moon TM01 teaching did not restore field control.")
 
 
 def _navigate_wild_main_command(

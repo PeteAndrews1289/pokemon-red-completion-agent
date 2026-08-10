@@ -302,7 +302,10 @@ def _report() -> CeruleanChapterReport:
         mt_moon_entered=_raw(MapId.MT_MOON_1F, 14, 35),
         mt_moon_b1f_reached=_raw(MapId.MT_MOON_B1F, 5, 5),
         mt_moon_b2f_reached=_raw(MapId.MT_MOON_B2F, 21, 17),
-        rocket_battle=_raw(MapId.MT_MOON_B2F, 11, 19, battle_state=2),
+        rocket_battle=replace(
+            _raw(MapId.MT_MOON_B2F, 11, 19, battle_state=2),
+            first_party_moves=(0x21, 0x27, 0x05, 0x37),
+        ),
         rocket_defeated=_raw(MapId.MT_MOON_B2F, 11, 19),
         super_nerd_battle=_raw(MapId.MT_MOON_B2F, 13, 8, battle_state=2),
         super_nerd_defeated=_raw(MapId.MT_MOON_B2F, 13, 8),
@@ -930,6 +933,7 @@ def test_cerulean_report_is_complete_honest_and_privacy_safe() -> None:
     }
     assert public["mt_moon"] == {
         "required_rocket_battle_observed": True,
+        "mega_punch_taught_before_rocket": True,
         "super_nerd_battle_observed": True,
         "helix_fossil_verified": True,
         "zubat_search_attempts": 1,

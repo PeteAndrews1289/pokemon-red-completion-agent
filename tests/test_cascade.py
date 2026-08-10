@@ -285,6 +285,36 @@ def test_route_constants_capture_the_collision_qualified_teacher() -> None:
     assert _cerulean_return_direction((3, 4)) == "up"
 
 
+def test_cerulean_tm_lesson_accepts_verified_mt_moon_learning() -> None:
+    state = replace(
+        _raw(),
+        map_id=MapId.CERULEAN_CITY,
+        player_x=19,
+        player_y=18,
+        party_count=2,
+        party_species_ids=(WARTORTLE_SPECIES_ID, 0x6B),
+        first_party_moves=(0x21, 0x27, 0x05, 0x37),
+    )
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return state
+
+        def read_input_readiness(self) -> object:
+            return type("Readiness", (), {"ready": True})()
+
+    class Executor:
+        def execute(self, action: MacroAction) -> None:
+            raise AssertionError(f"pre-taught TM01 should be a behavioral no-op: {action!r}")
+
+    cascade_module._teach_cerulean_rival_mega_punch(
+        Reader(),  # type: ignore[arg-type]
+        Executor(),  # type: ignore[arg-type]
+        _MemoryEmulator(0),
+        DEFAULT_CASCADE_TIMING,
+    )
+
+
 def test_route_25_policy_falls_back_when_preferred_pp_is_exhausted() -> None:
     raw = replace(
         _raw(),

@@ -1139,6 +1139,16 @@ def _teach_cerulean_rival_mega_punch(
 
     before = reader.read()
     if (
+        before.map_id == MapId.CERULEAN_CITY
+        and before.battle_state == 0
+        and before.party_species_ids == (WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
+        and before.first_party_moves is not None
+        and before.first_party_moves[2] == MEGA_PUNCH_MOVE_ID
+        and _bag_quantity(emulator, ItemId.TM01_MEGA_PUNCH) == 0
+        and reader.read_input_readiness().ready
+    ):
+        return
+    if (
         before.map_id != MapId.CERULEAN_CITY
         or before.battle_state != 0
         or before.party_species_ids != (WARTORTLE_SPECIES_ID, ZUBAT_SPECIES_ID)
@@ -1839,7 +1849,9 @@ def _purchase_cerulean_supplies(
         before.map_id != MapId.CERULEAN_CITY
         or (before.player_x, before.player_y) != (19, 18)
         or before.battle_state != 0
-        or _bag_quantity(emulator, ItemId.POTION) != CERULEAN_RIVAL_POTION_RESERVE - 1
+        or not CERULEAN_RIVAL_POTION_RESERVE - 2
+        <= _bag_quantity(emulator, ItemId.POTION)
+        <= CERULEAN_RIVAL_POTION_RESERVE
         or _bag_quantity(emulator, ItemId.ANTIDOTE) != 0
         or _bag_quantity(emulator, ItemId.AWAKENING) != 0
         or not reader.read_input_readiness().ready
