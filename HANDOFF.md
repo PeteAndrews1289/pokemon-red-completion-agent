@@ -37,18 +37,22 @@ That changed route exposed and repaired four downstream assumptions rather than 
   detector is true. Misty's evolution remains accepted and the level-24 Bite lesson remains
   available for the Vermilion Rocket.
 
-The source was reviewed, regenerated into v95 registry identity
-`829c0fa8236ac976c37912559d4c6dbf543e0938694e22756b4d56f8456d09c4`, and passed public-artifact,
-documentation, registry, Ruff, mypy, and **2,227-test** gates; three integration tests are
-deselected and one expected failure remains expected. GitHub CI is green on `d9a7beb`, and the
-commit is pushed to draft PR #8. A long
-dirty-tree diagnostic replay of seed `990027` independently crossed Brock, all required Route 3
-trainers, a weakened level-seven Zubat capture, Mt. Moon, Cerulean supplies, Misty, evolution, and
-the level-24 Bite transition without a new failure. It is useful causal evidence but is
-**non-promotable** because the run began before `d9a7beb` existed and used temporary tracing.
+The loss-route source passed GitHub CI at `d9a7beb`. Its long dirty-tree diagnostic then continued
+to 47,180,832 frames, 18/19 selected objectives, and 71/74 scheduled battles before failing at
+Agatha: Dugtrio fainted while all three planned Revives remained, but the chapter could heal only
+living specialists. Commit `56e9be5` gives Agatha one bounded Revive, heals the restored specialist
+to the existing 60-HP switch floor, and preserves two Revives for Lance. Registry identity is now
+`91ee64aa12e70df57b2ad7d443557b05086bb4bff865492198d818f25a7ff341`; public-artifact,
+documentation, registry, Ruff, mypy, and **2,228-test** gates pass, with three integration tests
+deselected and one expected failure. The exact diagnostic receipt is
+[perturbation 14](docs/evidence/portable-clean-start-six-role-perturbation-14-failure-2026-08-10.json).
+It remains **non-promotable** because the run began before either final commit and used temporary
+tracing.
 
-**Immediate next gate:** replay `990027` from clean power and the exact committed source. Do not
-copy the temporary diagnostic wrapper into the repository and
+GitHub Actions run `31369044372` passed `56e9be5`.
+
+**Immediate next gate:** replay `990027` from clean power and exact commit `56e9be5`. Do not copy
+the temporary diagnostic wrapper into the repository and
 do not count the dirty replay. If the clean replay completes, preserve its receipt, run one fresh
 uncounted perturbation, then decide whether v95 can finally open. Counted v95 remains **0/10**.
 

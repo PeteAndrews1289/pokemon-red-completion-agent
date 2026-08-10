@@ -16,8 +16,10 @@ before continuing. It reaches level nine with Bubble, clears the Forest trainer 
 Route 3, weakens and catches Zubat with the sole ball, balances the reduced-money route, accepts
 Wartortle's evolution, defeats Misty, and preserves the level-24 Bite lesson for the Vermilion
 Rocket. The long replay that proves this prefix began on a dirty tree with temporary tracing, so it
-is diagnostic rather than promotable. The exact committed source now needs its own clean-power
-replay.
+is diagnostic rather than promotable. It nevertheless continued to Agatha, completing 18/19
+selected objectives and 71/74 scheduled battles before a fainted Dugtrio exposed a missing
+one-Revive recovery. That repair is now published; the exact committed source still needs its own
+clean-power replay.
 
 Counted v95 remains deliberately unopened at **0/10**. Crystal, cross-title transfer, and a living
 Pokedex remain future milestones.
@@ -93,12 +95,13 @@ The session published thirteen source-bound repairs before the latest checkpoint
 - a balanced Kakuna/Weedle recovery sequence; and
 - a loss-aware Forest lesson sequence with an explicit safe-target level ceiling.
 
-Commit `d9a7beb` adds the subsequent loss-route curriculum and downstream resource, capture,
-move-selection, and semantic switch-prompt repairs. Its v95 registry identity is
-`829c0fa8236ac976c37912559d4c6dbf543e0938694e22756b4d56f8456d09c4`. Public-artifact and
+Commit `d9a7beb` adds the loss-route curriculum and downstream resource, capture, move-selection,
+and semantic switch-prompt repairs; GitHub Actions run `31368161467` passed it. Commit `56e9be5`
+adds the one-Revive Agatha recovery while retaining two for Lance. Current v95 registry identity is
+`91ee64aa12e70df57b2ad7d443557b05086bb4bff865492198d818f25a7ff341`. Public-artifact and
 documentation checks, regenerated registry verification, Ruff, mypy over 128 source modules, and
-2,227 tests pass; three integration tests are deselected and one expected failure remains expected.
-GitHub Actions run `31368161467` independently passed the same source commit.
+2,228 tests pass; three integration tests are deselected and one expected failure remains expected.
+GitHub Actions run `31369044372` independently passed `56e9be5`.
 
 ## The new branch is the right kind of work
 
@@ -112,9 +115,14 @@ The clean published failure at 171,585 frames remains preserved in
 [perturbation 13](evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json).
 It led to the Route 1 redesign. Temporary traced replays then verified thirteen low-defense lessons
 with thirteen Center heals, the weaker Pewter and Cerulean ledgers, every required Route 3 trainer,
-one weakened Zubat capture, Misty, evolution, and the Bite transition. Those traces are explicitly
-non-promotable because they began outside the final source digest. This is the correct boundary:
-the repair is implemented and deeply exercised, but the claim waits for a clean replay.
+one weakened Zubat capture, Misty, evolution, the Bite transition, Lorelei, and Bruno. At Agatha,
+Dugtrio fainted while the bag still held three Revives. The new source allows exactly one revival
+and restores the specialist above its existing switch floor while preserving Lance's two-item
+reserve. The traced failure is preserved in
+[perturbation 14](evidence/portable-clean-start-six-role-perturbation-14-failure-2026-08-10.json).
+Those traces remain non-promotable because they began outside the final source digest. This is the
+correct boundary: the repair is implemented and deeply exercised, but the claim waits for a clean
+replay.
 
 ## Honest capability rating
 
@@ -146,7 +154,8 @@ completed Red under a timing perturbation, and the very next seed revealed that 
 models—did not know how to lose the first battle.** The project then refused to reroll,
 authenticated the loss, learned thirteen local lessons with a heal after each, and carried the
 weaker economy through Misty and evolution. Every newly exposed assumption became a state contract
-rather than a seed reroll.
+rather than a seed reroll. The same run reached Agatha, where three visible Revives converted a
+fainted specialist from another failure into an exact one-item recovery contract.
 
 That story shows model evaluation, systems debugging, experiment lineage, calibrated claims, and
 the difference between solving one trajectory and building an agent that can survive a game.

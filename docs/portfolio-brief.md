@@ -109,8 +109,11 @@ battles with verified healing, and carries the altered experience and money stat
 Route 3, a weakened Zubat capture, evolution, Misty, and the level-24 Bite transition. The repair
 also separates trainer-switch prompts from evolution semantically and accounts for every extra
 Potion and the conditional TM34 sale. Commit `d9a7beb` passes 2,227 ROM-free tests plus Ruff, mypy,
-documentation, privacy, and source-registry gates. The extended runtime result remains explicitly
-diagnostic until the exact committed source completes a clean-power replay.
+documentation, privacy, and source-registry gates. The traced run continued to 18/19 objectives and
+71/74 battles before Agatha exposed a missing specialist revive. Commit `56e9be5` permits exactly
+one, protects two Revives for Lance, and passes 2,228 ROM-free tests plus the same static gates. The
+extended runtime result remains explicitly diagnostic until the exact committed source completes a
+clean-power replay.
 
 - How to separate an expert teacher, learned actor, safety referee, and game-specific executor.
 - Why a 100% model score can be meaningless when the legal candidate set already determines the

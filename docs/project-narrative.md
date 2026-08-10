@@ -2442,6 +2442,14 @@ conditionally sell the unused Bide token when Cerulean cash is short. Each branc
 exact item or money receipt. The result is a better teaching story than a reroll: Pokemon includes
 losing, recovering, training, evolving, catching, and reallocating resources after the plan changes.
 
+That same diagnostic reached Agatha before failing again. Dugtrio, the declared grounded
+specialist, had fainted; Jolteon was healthy, all three Revives remained, and the executor rejected
+the mismatch rather than silently abandoning the role lesson. The inventory already encoded the
+solution: Lance can require at most two helper revivals, leaving one bounded recovery for Agatha.
+The new contract revives Dugtrio, heals it to the existing 60-HP switch floor, proves exact item
+consumption, and preserves the downstream reserve. A route branch had now propagated from the
+first battle to the penultimate League specialist without being rerolled.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

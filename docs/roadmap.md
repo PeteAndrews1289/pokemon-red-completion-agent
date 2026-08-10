@@ -1498,5 +1498,8 @@ Route 1 prey with a verified Viridian Center reset after each lesson, clears Bro
 weakens and catches Zubat, balances the reduced-money inventory, accepts evolution, defeats Misty,
 and retains Bite for the Vermilion Rocket. The extended proof used temporary tracing on a dirty
 tree and therefore cannot qualify the source. The next step is one clean-power replay of `990027`
-under exact commit `d9a7beb`, followed by a fresh uncounted perturbation if it completes. V95 stays
-sealed at 0/10 until those source-bound gates pass.
+under exact source. That diagnostic subsequently reached 18/19 selected objectives and 71/74
+scheduled battles before Dugtrio fainted at Agatha while three Revives remained. Commit `56e9be5`
+spends at most one Revive there, restores the specialist above the existing switch floor, and
+protects two for Lance. CI passed; replay exact `56e9be5`, followed by a fresh uncounted perturbation
+if it completes. V95 stays sealed at 0/10 until those source-bound gates pass.
