@@ -288,6 +288,47 @@ def execute_route(
                 )
             current = observed
 
+            _wait(actions, limits.retry_wait_frames)
+            wait_actions += 1
+            current = observer.observe()
+            current, new_receipts, waits = _wait_until_ready(
+                current,
+                actions,
+                observer,
+                interruption_handler,
+                limits,
+                used_interruptions=len(interruptions),
+            )
+            interruptions.extend(new_receipts)
+            step_interruptions += len(new_receipts)
+            wait_actions += waits
+            if _matches(
+                current,
+                step.expected_map,
+                step.expected_at,
+                mode=step.expected_mode,
+            ):
+                executed.append(
+                    ExecutedRouteStep(
+                        step=step,
+                        movement_requests=attempts,
+                        interruption_count=step_interruptions,
+                    )
+                )
+                pending.pop(0)
+                break
+            _require_position(
+                current,
+                step.source_map,
+                step.source_at,
+                "step retry",
+                mode=step.source_mode,
+            )
+
+            # Only infer a live blocker after the input has had a bounded
+            # chance to finish.  Gen I can leave the source coordinates
+            # visible while a walk animation is in flight; replanning before
+            # this settle would incorrectly blacklist a reachable square.
             if (
                 step.can_discover_blocker
                 and replanner is not None
@@ -337,42 +378,6 @@ def execute_route(
                     f"route step {step.action} at {step.source_at} exceeded "
                     f"{limits.max_step_attempts} attempts"
                 )
-            _wait(actions, limits.retry_wait_frames)
-            wait_actions += 1
-            current = observer.observe()
-            current, new_receipts, waits = _wait_until_ready(
-                current,
-                actions,
-                observer,
-                interruption_handler,
-                limits,
-                used_interruptions=len(interruptions),
-            )
-            interruptions.extend(new_receipts)
-            step_interruptions += len(new_receipts)
-            wait_actions += waits
-            if _matches(
-                current,
-                step.expected_map,
-                step.expected_at,
-                mode=step.expected_mode,
-            ):
-                executed.append(
-                    ExecutedRouteStep(
-                        step=step,
-                        movement_requests=attempts,
-                        interruption_count=step_interruptions,
-                    )
-                )
-                pending.pop(0)
-                break
-            _require_position(
-                current,
-                step.source_map,
-                step.source_at,
-                "step retry",
-                mode=step.source_mode,
-            )
 
         if replaced:
             continue

@@ -187,13 +187,19 @@ def test_a_face_then_walk_step_accepts_its_delayed_acknowledgement() -> None:
         swallowed={key: 1},
         delayed_transitions={key: (1, (1, 0))},
     )
+    replan_requests: list[ReplanRequest] = []
 
-    report = execute_route(plan, world, world)
+    def reject_false_blocker(request: ReplanRequest) -> RoutePlan:
+        replan_requests.append(request)
+        raise AssertionError("an in-flight walk must settle before blocker discovery")
+
+    report = execute_route(plan, world, world, replanner=reject_false_blocker)
 
     assert report.passed
     assert report.movement_requests == 2
     assert report.wait_actions == 2
     assert report.executed_steps[0].movement_requests == 2
+    assert replan_requests == []
 
 
 def test_field_actions_and_mode_changes_need_exact_live_acknowledgement() -> None:
