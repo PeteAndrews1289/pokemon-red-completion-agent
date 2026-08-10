@@ -74,6 +74,7 @@ from pokemon_red_completion.silph import (
 )
 from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
+    INDIGO_REVIVE_RESERVE,
     INDIGO_X_SPECIAL_RESERVE,
     _event,
     _menu_cursor_active,
@@ -99,6 +100,7 @@ AGATHA_APPROACH = ("right", "up", "up")
 AGATHA_SURF_RESERVE = 1
 AGATHA_X_SPECIAL_USE = 1
 AGATHA_ELIXIR_USE = 1
+AGATHA_REVIVE_USE_LIMIT = 1
 AGATHA_FORCED_SWITCH_LIMIT = 5
 AGATHA_RESERVE_SAFE_HP = 60
 AGATHA_DUGTRIO_TARGET_POSITIONS = frozenset({0, 2, 3, 4})
@@ -178,6 +180,7 @@ class AgathaChapterReport:
     party: tuple[tuple[int, int], ...]
     hyper_potions_used: int
     full_restores_used: int
+    revives_used: int
     x_specials_used: int
     party_hp: tuple[int, ...]
     party_max_hp: tuple[int, ...]
@@ -196,6 +199,7 @@ class AgathaChapterReport:
             and _observed_party_valid(self.turns)
             and _turns_valid(self.turns)
             and self.x_specials_used == AGATHA_X_SPECIAL_USE
+            and 0 <= self.revives_used <= AGATHA_REVIVE_USE_LIMIT
             and _event(self.final_raw, EventFlag.BEAT_AGATHA)
             and self.final_raw.map_id == MapId.LANCES_ROOM
             and party_core_intact(self.final_raw.party_species_ids)
@@ -257,6 +261,7 @@ class AgathaChapterReport:
             "recovery": {
                 "hyper_potions_used": self.hyper_potions_used,
                 "full_restores_used": self.full_restores_used,
+                "revives_used": self.revives_used,
                 "x_specials_used": self.x_specials_used,
             },
             "terminal": {
@@ -319,13 +324,27 @@ def run_agatha_chapter(
     class _TeamSwitchBoundary(BattleControlRequest):
         pass
 
+    class _SpecialistRecoveryBoundary(BattleControlRequest):
+        def __init__(self, party_index: int, item: ItemId) -> None:
+            self.party_index = party_index
+            self.item = item
+            super().__init__(BattleAction.recovery())
+
     boosts_used = 0
     forced_switches = 0
     team_switches = 0
+    revives_used = 0
     role_switches: list[AgathaRoleSwitch] = []
 
     def policy(raw: RawGameState) -> int:
         target_species = _agatha_matchup_species(raw)
+        specialist_recovery = _agatha_specialist_recovery_plan(
+            raw,
+            inventory=_bag(emulator),
+            revives_used=revives_used,
+        )
+        if specialist_recovery is not None:
+            raise _SpecialistRecoveryBoundary(*specialist_recovery)
         target = _agatha_matchup_switch_target(raw, target_species)
         if target is not None:
             raise _TeamSwitchBoundary(BattleAction.switch(target + 1))
@@ -363,6 +382,7 @@ def run_agatha_chapter(
 
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
+    revive_before = _bag(emulator).get(ItemId.REVIVE, 0)
     x_special_before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
     battle_intent = BattleIntent(
         "defeat_agatha",
@@ -371,6 +391,7 @@ def run_agatha_chapter(
         recovery_capabilities=frozenset(
             {
                 BattleRecoveryCapability.RESTORE_HP,
+                BattleRecoveryCapability.REVIVE_FAINTED,
                 BattleRecoveryCapability.CURE_ANY_STATUS,
             }
         ),
@@ -399,23 +420,41 @@ def run_agatha_chapter(
             )
         except BattleRuntimeError as error:
             cause = error.__cause__
+            if isinstance(cause, _SpecialistRecoveryBoundary):
+                try:
+                    terminal_exit = _battle_healing_item(
+                        reader,
+                        actions,
+                        emulator,
+                        DEFAULT_SILPH_TIMING,
+                        cause.item,
+                        party_index=cause.party_index,
+                    )
+                except SilphChapterError as recovery_error:
+                    raise AgathaChapterError(
+                        "Agatha specialist recovery failed: "
+                        f"item={cause.item.name}, target={cause.party_index + 1}, "
+                        f"party_hp={_party_hp(emulator)!r}, bag={_bag(emulator)!r}."
+                    ) from recovery_error
+                if cause.item is ItemId.REVIVE:
+                    revives_used += 1
+                if terminal_exit:
+                    note_observed_trainer_battle_exit(battle_intent)
+                continue
             switch_target = switch_request_party_index(cause, _TeamSwitchBoundary)
             if isinstance(cause, _TeamSwitchBoundary) or switch_target is not None:
                 if switch_target is None:
                     raise AgathaChapterError("Agatha team switch lacked a party target.") from error
                 current = reader.read()
-                if (
-                    current.enemy_species_id is None
-                    or switch_target not in range(len(current.party_species_ids))
+                if current.enemy_species_id is None or switch_target not in range(
+                    len(current.party_species_ids)
                 ):
                     raise AgathaChapterError(
                         "Agatha team switch lacked a complete role observation."
                     ) from error
                 role_switch = AgathaRoleSwitch(
                     opponent_species=current.enemy_species_id,
-                    opponent_party_position=emulator.read_u8(
-                        RamAddress.ENEMY_MON_PARTY_POS
-                    ),
+                    opponent_party_position=emulator.read_u8(RamAddress.ENEMY_MON_PARTY_POS),
                     target_party_index=switch_target,
                     target_species_id=current.party_species_ids[switch_target],
                 )
@@ -540,6 +579,7 @@ def run_agatha_chapter(
         party=_encounter_party(turns),
         hyper_potions_used=hyper_before - _bag(emulator).get(ItemId.HYPER_POTION, 0),
         full_restores_used=restore_before - _bag(emulator).get(ItemId.FULL_RESTORE, 0),
+        revives_used=revive_before - _bag(emulator).get(ItemId.REVIVE, 0),
         x_specials_used=x_special_before - _bag(emulator).get(ItemId.X_SPECIAL, 0),
         party_hp=_party_hp(emulator),
         party_max_hp=_party_max_hp(emulator),
@@ -624,6 +664,46 @@ def _agatha_matchup_species_id(enemy_species_id: int | None) -> int:
     return JOLTEON_SPECIES_ID if enemy_species_id == 0x82 else DUGTRIO_SPECIES_ID
 
 
+def _agatha_specialist_recovery_plan(
+    raw: RawGameState,
+    *,
+    inventory: dict[ItemId, int],
+    revives_used: int,
+) -> tuple[int, ItemId] | None:
+    """Restore an unavailable specialist while preserving Lance's two Revives."""
+
+    target_species = _agatha_matchup_species(raw)
+    if raw.active_party_species_id == target_species:
+        return None
+    try:
+        target = (raw.party_species_ids or ()).index(target_species)
+    except ValueError as error:
+        raise AgathaChapterError(
+            f"Agatha party lacks specialist species {target_species}."
+        ) from error
+    party_hp = raw.party_hp or ()
+    if target >= len(party_hp):
+        raise AgathaChapterError("Agatha specialist recovery lacks complete party HP.")
+    hp = party_hp[target]
+    if hp == 0:
+        remaining_lance_reserve = INDIGO_REVIVE_RESERVE - AGATHA_REVIVE_USE_LIMIT
+        if (
+            revives_used >= AGATHA_REVIVE_USE_LIMIT
+            or inventory.get(ItemId.REVIVE, 0) <= remaining_lance_reserve
+        ):
+            raise AgathaChapterError(
+                "Agatha specialist fainted after the bounded Revive allowance."
+            )
+        return target, ItemId.REVIVE
+    if hp < AGATHA_RESERVE_SAFE_HP:
+        if not inventory.get(ItemId.HYPER_POTION, 0):
+            raise AgathaChapterError(
+                "Agatha specialist is below its switch floor without a Hyper Potion."
+            )
+        return target, ItemId.HYPER_POTION
+    return None
+
+
 def _agatha_matchup_switch_target(raw: RawGameState, species_id: int) -> int | None:
     """Resolve one living Agatha specialist by observed species rather than slot."""
     party_hp = raw.party_hp or ()
@@ -642,14 +722,10 @@ def _agatha_team_lesson_satisfied(turns: Iterable[AgathaTurn]) -> bool:
     """Require both specialists to complete every declared opponent role."""
     items = tuple(turns)
     dugtrio_positions = {
-        turn.party_position
-        for turn in items
-        if turn.active_party_species_id == DUGTRIO_SPECIES_ID
+        turn.party_position for turn in items if turn.active_party_species_id == DUGTRIO_SPECIES_ID
     }
     jolteon_positions = {
-        turn.party_position
-        for turn in items
-        if turn.active_party_species_id == JOLTEON_SPECIES_ID
+        turn.party_position for turn in items if turn.active_party_species_id == JOLTEON_SPECIES_ID
     }
     return (
         dugtrio_positions >= AGATHA_DUGTRIO_TARGET_POSITIONS
@@ -668,10 +744,7 @@ def _agatha_required_role_switches(turns: Iterable[AgathaTurn]) -> int:
     roles = tuple(_agatha_matchup_species_id(turn.species) for turn in turns)
     if not roles:
         return 0
-    return 1 + sum(
-        previous != current
-        for previous, current in zip(roles, roles[1:], strict=False)
-    )
+    return 1 + sum(previous != current for previous, current in zip(roles, roles[1:], strict=False))
 
 
 def _agatha_role_switches_valid(
@@ -691,12 +764,16 @@ def _agatha_role_switches_valid(
 
     items = tuple(switches)
     party = tuple(party_species_ids)
-    return bool(items) and bool(party) and all(
-        0 <= item.opponent_party_position < len(AGATHA_PARTY)
-        and AGATHA_PARTY[item.opponent_party_position][0] == item.opponent_species
-        and 0 <= item.target_party_index < min(PARTY_SLOT_LIMIT, len(party))
-        and party[item.target_party_index] == item.target_species_id
-        for item in items
+    return (
+        bool(items)
+        and bool(party)
+        and all(
+            0 <= item.opponent_party_position < len(AGATHA_PARTY)
+            and AGATHA_PARTY[item.opponent_party_position][0] == item.opponent_species
+            and 0 <= item.target_party_index < min(PARTY_SLOT_LIMIT, len(party))
+            and party[item.target_party_index] == item.target_species_id
+            for item in items
+        )
     )
 
 
@@ -733,8 +810,7 @@ def _agatha_move_slot(raw: RawGameState) -> int:
                 move
                 and remaining & 0x3F
                 and not (
-                    raw.player_disabled_move_slot == slot
-                    and (raw.player_disable_turns or 0) > 0
+                    raw.player_disabled_move_slot == slot and (raw.player_disable_turns or 0) > 0
                 )
             ):
                 fallback.append(slot)
@@ -744,9 +820,7 @@ def _agatha_move_slot(raw: RawGameState) -> int:
                     enemy_types,
                 )
                 if mechanics.power > 0 and effectiveness > 0:
-                    ranked.append(
-                        (mechanics.power * mechanics.accuracy * effectiveness, slot)
-                    )
+                    ranked.append((mechanics.power * mechanics.accuracy * effectiveness, slot))
         if ranked:
             return max(ranked)[1]
         if fallback:

@@ -363,6 +363,7 @@ def test_battle_intent_accepts_declared_bounded_recovery_capabilities() -> None:
             {
                 BattleRecoveryCapability.RESTORE_HP,
                 BattleRecoveryCapability.CURE_PARALYSIS,
+                BattleRecoveryCapability.REVIVE_FAINTED,
             }
         ),
     )
@@ -371,6 +372,7 @@ def test_battle_intent_accepts_declared_bounded_recovery_capabilities() -> None:
         {
             BattleRecoveryCapability.RESTORE_HP,
             BattleRecoveryCapability.CURE_PARALYSIS,
+            BattleRecoveryCapability.REVIVE_FAINTED,
         }
     )
 

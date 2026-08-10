@@ -173,6 +173,8 @@ def test_battle_healing_uses_the_shared_long_settle_bound() -> None:
     source = getsource(_battle_healing_item)
     assert "for _ in range(BATTLE_ITEM_SETTLE_PULSES):" in source
     assert "cursor == party_index" in source
+    assert "ItemId.REVIVE" in source
+    assert "without reviving its target" in source
 
 
 def test_battle_healing_accepts_verified_enemy_recoil_knockout() -> None:

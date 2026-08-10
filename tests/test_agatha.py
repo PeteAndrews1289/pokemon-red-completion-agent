@@ -1,6 +1,8 @@
 from dataclasses import replace
 from inspect import getsource
 
+import pytest
+
 import pokemon_red_completion.agatha as agatha_module
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.agatha import (
@@ -12,6 +14,7 @@ from pokemon_red_completion.agatha import (
     AGATHA_JOLTEON_TARGET_POSITIONS,
     AGATHA_PARTY,
     AGATHA_RESERVE_SAFE_HP,
+    AGATHA_REVIVE_USE_LIMIT,
     AGATHA_RNG_DELAY_FRAMES,
     AGATHA_SURF_RESERVE,
     AGATHA_X_SPECIAL_USE,
@@ -28,6 +31,7 @@ from pokemon_red_completion.agatha import (
     _agatha_recovery_due,
     _agatha_required_role_switches,
     _agatha_role_switches_valid,
+    _agatha_specialist_recovery_plan,
     _agatha_team_lesson_satisfied,
     _battle_x_special,
     _encounter_party,
@@ -50,6 +54,7 @@ def test_agatha_source_contract_is_exact() -> None:
     assert AGATHA_APPROACH == ("right", "up", "up")
     assert AGATHA_RNG_DELAY_FRAMES == 85
     assert AGATHA_ELIXIR_USE == 1
+    assert AGATHA_REVIVE_USE_LIMIT == 1
     assert AGATHA_X_SPECIAL_USE == 1
     assert AGATHA_FORCED_SWITCH_LIMIT == 5
     assert AGATHA_RESERVE_SAFE_HP == 60
@@ -94,12 +99,8 @@ def test_agatha_receipt_deduplicates_switches() -> None:
     assert _encounter_party(turns) == AGATHA_PARTY
     assert _observed_party_valid(turns)
     assert _turns_valid(turns)
-    assert _turns_valid(
-        (AgathaTurn(0x82, 56, 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 0, 1, 1), 1),)
-    )
-    assert _turns_valid(
-        (AgathaTurn(0x82, 56, 1, AGATHA_RESERVE_SAFE_HP, 0x40, (1, 0, 1, 1), 1),)
-    )
+    assert _turns_valid((AgathaTurn(0x82, 56, 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 0, 1, 1), 1),))
+    assert _turns_valid((AgathaTurn(0x82, 56, 1, AGATHA_RESERVE_SAFE_HP, 0x40, (1, 0, 1, 1), 1),))
     assert not _turns_valid((AgathaTurn(0x82, 56, 1, 0, 0, (1, 0, 1, 1), 1),))
 
 
@@ -128,17 +129,11 @@ def test_agatha_receipt_accepts_switch_in_ko_between_decisions() -> None:
 def test_agatha_receipt_rejects_wrong_or_missing_terminal_opponents() -> None:
     wrong_identity = (
         AgathaTurn(0x82, 55, 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 1, 1, 1), 3, 1),
-        AgathaTurn(
-            *AGATHA_PARTY[4], 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 1, 1, 1), 3, 4
-        ),
+        AgathaTurn(*AGATHA_PARTY[4], 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 1, 1, 1), 3, 4),
     )
     missing_final = (
-        AgathaTurn(
-            *AGATHA_PARTY[0], 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 1, 1, 1), 3, 0
-        ),
-        AgathaTurn(
-            *AGATHA_PARTY[3], 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 1, 1, 1), 3, 3
-        ),
+        AgathaTurn(*AGATHA_PARTY[0], 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 1, 1, 1), 3, 0),
+        AgathaTurn(*AGATHA_PARTY[3], 1, AGATHA_RESERVE_SAFE_HP, 0, (1, 1, 1, 1), 3, 3),
     )
     assert not _observed_party_valid(wrong_identity)
     assert not _observed_party_valid(missing_final)
@@ -265,6 +260,54 @@ def test_agatha_matchups_resolve_living_specialists_by_species() -> None:
     assert _agatha_matchup_switch_target(active, DUGTRIO_SPECIES_ID) is None
 
 
+def test_agatha_recovers_a_fainted_specialist_without_spending_lances_reserve() -> None:
+    party = (0x1C, 0x40, DUGTRIO_SPECIES_ID, 0x84, JOLTEON_SPECIES_ID, 0x2B)
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.AGATHAS_ROOM,
+        player_x=4,
+        player_y=3,
+        party_count=6,
+        battle_state=2,
+        active_party_index=4,
+        active_party_species_id=JOLTEON_SPECIES_ID,
+        party_species_ids=party,
+        party_hp=(200, 140, 0, 135, 159, 159),
+        enemy_species_id=0x0E,
+    )
+    inventory = {ItemId.REVIVE: 3, ItemId.HYPER_POTION: 7}
+
+    assert _agatha_specialist_recovery_plan(
+        raw,
+        inventory=inventory,
+        revives_used=0,
+    ) == (2, ItemId.REVIVE)
+    weakened = replace(raw, party_hp=(200, 140, AGATHA_RESERVE_SAFE_HP - 1, 135, 159, 159))
+    assert _agatha_specialist_recovery_plan(
+        weakened,
+        inventory=inventory,
+        revives_used=1,
+    ) == (2, ItemId.HYPER_POTION)
+    ready = replace(raw, party_hp=(200, 140, AGATHA_RESERVE_SAFE_HP, 135, 159, 159))
+    assert (
+        _agatha_specialist_recovery_plan(
+            ready,
+            inventory=inventory,
+            revives_used=1,
+        )
+        is None
+    )
+
+    with pytest.raises(agatha_module.AgathaChapterError, match="bounded Revive"):
+        _agatha_specialist_recovery_plan(raw, inventory=inventory, revives_used=1)
+    with pytest.raises(agatha_module.AgathaChapterError, match="bounded Revive"):
+        _agatha_specialist_recovery_plan(
+            raw,
+            inventory={ItemId.REVIVE: 2, ItemId.HYPER_POTION: 7},
+            revives_used=0,
+        )
+
+
 def test_agatha_team_lesson_requires_every_declared_role_position() -> None:
     turns = tuple(
         AgathaTurn(
@@ -276,9 +319,7 @@ def test_agatha_team_lesson_requires_every_declared_role_position() -> None:
             move_slot=1,
             party_position=position,
             active_party_index=4 if position == 1 else 2,
-            active_party_species_id=(
-                JOLTEON_SPECIES_ID if position == 1 else DUGTRIO_SPECIES_ID
-            ),
+            active_party_species_id=(JOLTEON_SPECIES_ID if position == 1 else DUGTRIO_SPECIES_ID),
         )
         for position in range(len(AGATHA_PARTY))
     )
@@ -301,8 +342,7 @@ def test_agatha_switch_contract_follows_observed_role_transitions() -> None:
 
     canonical = tuple(turn(species) for species in (0x0E, 0x82, 0x93, 0x2D, 0x0E))
     perturbed = tuple(
-        turn(species)
-        for species in (0x0E, 0x0E, 0x82, 0x82, 0x93, 0x82, 0x82, 0x2D, 0x82, 0x0E)
+        turn(species) for species in (0x0E, 0x0E, 0x82, 0x82, 0x93, 0x82, 0x82, 0x2D, 0x82, 0x0E)
     )
 
     assert _agatha_required_role_switches(()) == 0
@@ -369,12 +409,8 @@ def test_agatha_recovery_tracks_live_state_without_forcing_an_attack_between_ite
     )
 
     assert _agatha_recovery_due(reserve)
-    assert _agatha_recovery_due(
-        replace(reserve, active_party_hp=118, active_party_status=0x04)
-    )
-    assert not _agatha_recovery_due(
-        replace(reserve, active_party_hp=118, active_party_status=0)
-    )
+    assert _agatha_recovery_due(replace(reserve, active_party_hp=118, active_party_status=0x04))
+    assert not _agatha_recovery_due(replace(reserve, active_party_hp=118, active_party_status=0))
     assert not _agatha_recovery_due(
         replace(reserve, active_party_hp=AGATHA_RESERVE_SAFE_HP, active_party_status=0)
     )

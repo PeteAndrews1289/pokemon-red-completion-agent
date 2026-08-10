@@ -1966,18 +1966,28 @@ def _battle_healing_item(
     _retry: bool = False,
 ) -> bool:
     """Use one healing item and report whether the item turn ended the battle."""
-    if item not in {ItemId.HYPER_POTION, ItemId.FULL_RESTORE, ItemId.FULL_HEAL}:
-        raise ValueError("battle healing item must be Hyper Potion, Full Restore, or Full Heal")
+    if item not in {
+        ItemId.HYPER_POTION,
+        ItemId.FULL_RESTORE,
+        ItemId.FULL_HEAL,
+        ItemId.REVIVE,
+    }:
+        raise ValueError(
+            "battle healing item must be Hyper Potion, Full Restore, Full Heal, or Revive"
+        )
     label = item.name.replace("_", " ").title()
     raw = reader.read()
     menu = reader.read_battle_menu_state(raw)
     if raw.battle_state != 2 or menu.phase is not BattleMenuPhase.MAIN:
         raise SilphChapterError(f"{label} gate requires the trainer MAIN menu.")
     party = raw.party_hp or _party_hp(emulator)
-    if not 0 <= party_index < len(party) or party[party_index] <= 0:
-        raise SilphChapterError(
-            f"{label} target {party_index + 1} is not a living party member."
-        )
+    target_valid = (
+        party[party_index] == 0
+        if item is ItemId.REVIVE and 0 <= party_index < len(party)
+        else 0 <= party_index < len(party) and party[party_index] > 0
+    )
+    if not target_valid:
+        raise SilphChapterError(f"{label} target {party_index + 1} has an invalid faint state.")
     command = menu.selected_main_command
     if command == 0:
         _pulse(
@@ -2071,10 +2081,12 @@ def _battle_healing_item(
             )
     after = _bag(emulator).get(item, 0)
     if before - after == 1:
+        if item is ItemId.REVIVE and _battle_healing_item_target_hp(current, party_index) == 0:
+            raise SilphChapterError(f"{label} was consumed without reviving its target.")
         return False
     current = reader.read()
     current_menu = reader.read_battle_menu_state(current)
-    if _battle_healing_item_target_fainted_before_consumption(
+    if item is not ItemId.REVIVE and _battle_healing_item_target_fainted_before_consumption(
         current,
         before,
         after,
@@ -2094,15 +2106,12 @@ def _battle_healing_item(
         and not _retry
         and current.battle_state == 2
         and current_menu.phase is BattleMenuPhase.MAIN
+        and (target_hp := _battle_healing_item_target_hp(current, party_index)) is not None
+        and (target_max_hp := _battle_healing_item_target_max_hp(current, party_index)) is not None
         and (
-            target_hp := _battle_healing_item_target_hp(current, party_index)
+            (item is ItemId.REVIVE and target_hp == 0)
+            or (item is not ItemId.REVIVE and 0 < target_hp < target_max_hp)
         )
-        is not None
-        and (
-            target_max_hp := _battle_healing_item_target_max_hp(current, party_index)
-        )
-        is not None
-        and 0 < target_hp < target_max_hp
     ):
         # A long battle animation can occasionally return to MAIN without the
         # party-target confirmation registering. Retry the complete semantic

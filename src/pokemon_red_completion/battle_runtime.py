@@ -101,6 +101,7 @@ class BattleRecoveryCapability(StrEnum):
     """Game-neutral recovery effects one bound executor can legally perform."""
 
     RESTORE_HP = "restore_hp"
+    REVIVE_FAINTED = "revive_fainted"
     CURE_SLEEP = "cure_sleep"
     CURE_PARALYSIS = "cure_paralysis"
     CURE_POISON = "cure_poison"
