@@ -133,6 +133,12 @@ MT_MOON_1F_DIRECTIONS = _directions(
 )
 MT_MOON_1F_PRE_TM_SEED_WAITS = ((1, 220), (10, 2), (30, 1), (31, 1))
 MT_MOON_1F_POST_TM_SEED_WAITS = ((6, 2), (28, 2))
+MT_MOON_POTION_DETOUR_ORIGIN = (31, 9)
+MT_MOON_POTION_APPROACH_DIRECTIONS = _directions("R" * 3 + "D" * 24 + "L" * 13)
+MT_MOON_POTION_RETURN_DIRECTIONS = _directions("R" * 13 + "U" * 24 + "L" * 3)
+MT_MOON_POTION_PICKUP_POSITION = (21, 33)
+MT_MOON_POTION_TOGGLE_INDEX = 0x6B
+MT_MOON_SUPER_NERD_RECOVERY_HP = 25
 MT_MOON_B1F_DIRECTIONS = _directions("R" * 2 + "D" * 11 + "R" * 14 + "D")
 MT_MOON_B1F_SEED_WAITS = ((1, 2), (14, 1))
 MT_MOON_B2F_TO_ROCKET_DIRECTIONS = _directions(
@@ -666,9 +672,24 @@ def run_cerulean_chapter(
     _move_mt_moon_with_seed_waits(
         chapter_executor,
         reader,
-        MT_MOON_1F_DIRECTIONS[4:72],
+        MT_MOON_1F_DIRECTIONS[4:43],
         MT_MOON_1F_PRE_TM_SEED_WAITS,
-        "Mt. Moon 1F route before TM01",
+        "Mt. Moon 1F route before recovery Potion",
+        expected_map_id=MapId.MT_MOON_1F,
+        ledger=mt_moon_ledger,
+    )
+    _collect_mt_moon_recovery_potion(
+        chapter_executor,
+        reader,
+        emulator,
+        timing,
+        mt_moon_ledger,
+    )
+    _move_mt_moon(
+        chapter_executor,
+        reader,
+        MT_MOON_1F_DIRECTIONS[43:72],
+        "Mt. Moon 1F route from recovery Potion to TM01",
         expected_map_id=MapId.MT_MOON_1F,
         ledger=mt_moon_ledger,
     )
@@ -847,6 +868,9 @@ def run_cerulean_chapter(
         timing,
         MapId.MT_MOON_B2F,
         "Mt. Moon Super Nerd",
+        emulator=emulator,
+        recovery_hp_threshold=MT_MOON_SUPER_NERD_RECOVERY_HP,
+        recovery_potion_floor=ROUTE_3_PROTECTED_POTION_FLOOR,
     )
     super_nerd_victory_evidence = reader.read_cerulean_chapter_state(super_nerd_defeated)
     if not super_nerd_victory_evidence.beat_super_nerd:
@@ -1436,6 +1460,75 @@ def _collect_mt_moon_tm01(
         ledger=ledger,
     )
     _expect_position(reader.read(), MapId.MT_MOON_1F, 16, 11, "TM01 route rejoin")
+
+
+def _collect_mt_moon_recovery_potion(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: CeruleanTiming,
+    ledger: _MtMoonTraversalLedger,
+) -> None:
+    """Collect a free cave Potion and return to the exact main-route tile."""
+
+    _expect_position(
+        reader.read(),
+        MapId.MT_MOON_1F,
+        *MT_MOON_POTION_DETOUR_ORIGIN,
+        "Mt. Moon recovery Potion detour origin",
+    )
+    if (
+        _toggleable_object_flag(emulator, MT_MOON_POTION_TOGGLE_INDEX)
+        or _bag_quantity(emulator, ItemId.POTION) != ROUTE_3_PROTECTED_POTION_FLOOR
+    ):
+        raise CeruleanChapterError("Mt. Moon recovery Potion has an invalid starting gate.")
+
+    _move_mt_moon(
+        executor,
+        reader,
+        MT_MOON_POTION_APPROACH_DIRECTIONS,
+        "Mt. Moon recovery Potion approach",
+        expected_map_id=MapId.MT_MOON_1F,
+        ledger=ledger,
+    )
+    _expect_position(
+        reader.read(),
+        MapId.MT_MOON_1F,
+        *MT_MOON_POTION_PICKUP_POSITION,
+        "Mt. Moon recovery Potion pickup",
+    )
+    _pulse(executor, MacroActionKind.MOVE, "left", 60)
+    faced = reader.read()
+    if (faced.player_x, faced.player_y) != MT_MOON_POTION_PICKUP_POSITION:
+        raise CeruleanChapterError("Mt. Moon recovery Potion facing missed the item.")
+    executor.execute(MacroAction(MacroActionKind.INTERACT))
+    _wait(executor, timing.dialogue_wait_frames)
+    for _ in range(12):
+        if reader.read_input_readiness().ready:
+            break
+        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.dialogue_wait_frames)
+    else:
+        raise CeruleanChapterError("Mt. Moon recovery Potion did not restore field control.")
+    if (
+        _bag_quantity(emulator, ItemId.POTION) != ROUTE_3_PROTECTED_POTION_FLOOR + 1
+        or not _toggleable_object_flag(emulator, MT_MOON_POTION_TOGGLE_INDEX)
+    ):
+        raise CeruleanChapterError("Mt. Moon recovery Potion failed its item-and-toggle gate.")
+
+    _move_mt_moon(
+        executor,
+        reader,
+        MT_MOON_POTION_RETURN_DIRECTIONS,
+        "Mt. Moon recovery Potion return",
+        expected_map_id=MapId.MT_MOON_1F,
+        ledger=ledger,
+    )
+    _expect_position(
+        reader.read(),
+        MapId.MT_MOON_1F,
+        *MT_MOON_POTION_DETOUR_ORIGIN,
+        "Mt. Moon recovery Potion route rejoin",
+    )
 
 
 def _teach_mt_moon_mega_punch(
@@ -2184,7 +2277,7 @@ def _finish_battle(
             and _bag_quantity(emulator, ItemId.POTION) > recovery_potion_floor
         )
         if should_recover:
-            _use_route_3_battle_potion(
+            _use_battle_potion(
                 executor,
                 reader,
                 emulator,
@@ -2216,7 +2309,7 @@ def _finish_battle(
     raise CeruleanChapterError(f"{label} failed its bounded battle-completion gate.")
 
 
-def _use_route_3_battle_potion(
+def _use_battle_potion(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,

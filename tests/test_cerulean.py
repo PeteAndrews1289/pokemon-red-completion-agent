@@ -25,6 +25,11 @@ from pokemon_red_completion.cerulean import (
     MT_MOON_B2F_EXIT_SEED_WAIT,
     MT_MOON_B2F_SEED_WAITS,
     MT_MOON_B2F_TO_ROCKET_DIRECTIONS,
+    MT_MOON_POTION_APPROACH_DIRECTIONS,
+    MT_MOON_POTION_DETOUR_ORIGIN,
+    MT_MOON_POTION_PICKUP_POSITION,
+    MT_MOON_POTION_RETURN_DIRECTIONS,
+    MT_MOON_POTION_TOGGLE_INDEX,
     MT_MOON_ZUBAT_PRE_THROW_WAIT,
     MT_MOON_ZUBAT_SEED_WAIT,
     PEWTER_TO_CENTER_DIRECTIONS,
@@ -47,7 +52,7 @@ from pokemon_red_completion.cerulean import (
     _reverse_directions,
     _route_3_victory_sequence,
     _select_battle_move,
-    _use_route_3_battle_potion,
+    _use_battle_potion,
     _use_route_3_recovery_potion,
 )
 from pokemon_red_completion.economy import (
@@ -726,7 +731,7 @@ def test_route_3_battle_recovery_preserves_the_twelve_potion_floor() -> None:
                 reader.state = replace(reader.state, first_party_hp=33)
                 emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = 12
 
-    _use_route_3_battle_potion(
+    _use_battle_potion(
         _CountingChapterExecutor(Executor()),  # type: ignore[arg-type]
         reader,  # type: ignore[arg-type]
         emulator,  # type: ignore[arg-type]
@@ -738,6 +743,36 @@ def test_route_3_battle_recovery_preserves_the_twelve_potion_floor() -> None:
     assert reader.state.first_party_hp == 33
     assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 12
     assert reader.selected_main_command == 0
+
+
+def test_mt_moon_free_potion_detour_is_exactly_reversible() -> None:
+    def endpoint(
+        start: tuple[int, int], directions: tuple[str, ...]
+    ) -> tuple[int, int]:
+        x, y = start
+        for direction in directions:
+            if direction == "left":
+                x -= 1
+            elif direction == "right":
+                x += 1
+            elif direction == "up":
+                y -= 1
+            else:
+                y += 1
+        return x, y
+
+    assert endpoint(
+        MT_MOON_POTION_DETOUR_ORIGIN,
+        MT_MOON_POTION_APPROACH_DIRECTIONS,
+    ) == MT_MOON_POTION_PICKUP_POSITION
+    assert endpoint(
+        MT_MOON_POTION_PICKUP_POSITION,
+        MT_MOON_POTION_RETURN_DIRECTIONS,
+    ) == MT_MOON_POTION_DETOUR_ORIGIN
+    assert _reverse_directions(
+        MT_MOON_POTION_APPROACH_DIRECTIONS
+    ) == MT_MOON_POTION_RETURN_DIRECTIONS
+    assert MT_MOON_POTION_TOGGLE_INDEX == 0x6B
 
 
 def test_cerulean_qualification_stops_at_city_entry_not_the_gym() -> None:
@@ -858,6 +893,78 @@ def test_battle_completion_declines_switch_without_cancelling_evolution() -> Non
         MacroActionKind.CONFIRM,
     ]
     assert final.party_species_ids == (WARTORTLE_SPECIES_ID, 0x6B)
+
+
+def test_battle_completion_uses_one_surplus_potion_at_threshold(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Emulator:
+        memory = {
+            int(RamAddress.NUM_BAG_ITEMS): 1,
+            int(RamAddress.BAG_ITEMS): int(ItemId.POTION),
+            int(RamAddress.BAG_ITEMS) + 1: 13,
+        }
+
+        def read_u8(self, address: int) -> int:
+            return self.memory.get(int(address), 0)
+
+    emulator = Emulator()
+
+    class Reader:
+        state = replace(
+            _raw(MapId.MT_MOON_B2F, 13, 8),
+            battle_state=2,
+            enemy_hp=43,
+            party_count=2,
+            party_species_ids=(WARTORTLE_SPECIES_ID, 0x6B),
+            first_party_hp=21,
+            first_party_max_hp=46,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return READY
+
+        def trainer_switch_prompt_visible(self, raw: RawGameState) -> bool:
+            del raw
+            return False
+
+    reader = Reader()
+    recovery_calls: list[tuple[int, str]] = []
+
+    def recover(*args: object, quantity_floor: int, label: str, **kwargs: object) -> None:
+        del args, kwargs
+        recovery_calls.append((quantity_floor, label))
+        reader.state = replace(reader.state, first_party_hp=41)
+        emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = 12
+
+    monkeypatch.setattr("pokemon_red_completion.cerulean._use_battle_potion", recover)
+
+    class Executor:
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.CONFIRM:
+                reader.state = replace(reader.state, battle_state=0)
+
+    final = _finish_battle(
+        Executor(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        DEFAULT_CERULEAN_TIMING,
+        MapId.MT_MOON_B2F,
+        "Mt. Moon Super Nerd",
+        emulator=emulator,  # type: ignore[arg-type]
+        recovery_hp_threshold=25,
+        recovery_potion_floor=12,
+    )
+
+    assert recovery_calls == [(12, "Mt. Moon Super Nerd")]
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 12
+    assert final.first_party_hp == 41
 
 
 def test_battle_completion_does_not_decline_a_nonexistent_single_party_switch() -> None:
