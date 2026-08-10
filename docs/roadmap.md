@@ -368,13 +368,32 @@ target sets as part of the chapter pass contracts.
 have no schedule behind them. Two opposed Red runs reach 132 of 151. This is the constraint that
 makes route tricks useless and transfer necessary, and it has not been started.
 
-**C2. Derive game knowledge instead of typing it.** As of 2026-08-09 the wild encounter tables, the
-internal-index map and the complete evolution graph are read from the cartridge, anchored on bands
-this project had already measured. This is the lever that makes C and D affordable: a title's facts
-stop costing a person-week of transcription, and each becomes checkable rather than asserted. The
-remaining hand-typed knowledge, in order of value: fishing tables, Game Corner and in-game trades,
-then map connections and warps — the last of which would let a route be computed instead of scripted,
-which is the only version of "plays each and every game" that converges.
+**C2. Derive game knowledge instead of typing it.** As of 2026-08-10 the wild encounter tables, the
+internal-index map, the complete evolution graph, the three fishing rods and the whole map graph are
+read from the cartridge, each anchored on something this project had already measured. This is the
+lever that makes C and D affordable: a title's facts stop costing a person-week of transcription, and
+each becomes checkable rather than asserted.
+
+Two results have already paid for the effort. The rods settled the last open discrepancy — Red's wild
+tables hold Horsea and Seadra where Blue's hold Krabby and Kingler, and the fishing tables are
+identical across cartridges and offer all four in both — and with the evolution graph they let both
+eleven-species exclusive lists be *derived* rather than declared. And the map graph replaced a
+hand-written five-node sketch that was both incomplete and wrong: it joined Viridian City to the
+Route 22 gate, which is reached from Routes 22 and 23 and nowhere else.
+
+What is still hand-typed, in order of value:
+
+1. **Traversal requirements** — the map graph says which maps are joined, not whether the way is
+   open. Surf, Cut, Strength and story gates are not in header data, so a computed route is a
+   candidate to check rather than a plan to run. This now blocks putting routing into a live run,
+   which makes it the top of the list.
+2. **Game Corner prizes and in-game trades** — the remaining acquisition routes a living Pokédex
+   needs. Wild tables, rods and evolution are read; gifts, fossils, prizes and trades are not.
+3. **Block and collision data** — what would turn a route between maps into actual directions, and
+   retire the hand-written walk sequences in every chapter module.
+
+Item 3 is the one that finishes the argument. Until a path *within* a map can be computed, "plays
+each and every game" still costs one hand-authored walk per objective and never converges.
 
 **D. Falsify the game-neutrality claim.** `party.py`, `team_training.py`, `capture.py` and
 `pokedex.py` all claim to be game-neutral and nothing has ever tested that claim. Moving the battle

@@ -14,6 +14,78 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## The cartridge knows the game — rods, exclusives, and the map graph — 2026-08-10
+
+This section is about the *knowledge* layer, not the run gates. Nothing below changes the v95 or
+clean-start position: counted v95 remains **0/10** and the next run gate is still the one stated in
+the terminal checkpoint. Gate after this work: **2,274 tests**, ruff, mypy (130 files), docs,
+artifacts, registry all clean, at commit `fdae65e`.
+
+**Fishing, and the discrepancy it closed.** The rods were the last recorded open discrepancy: Red's
+wild tables hold Horsea and Seadra where Blue's hold Krabby and Kingler, and neither pair is
+declared exclusive. Reading the rods settles it — the fishing tables are byte-identical across both
+cartridges and offer all four species in both. The wild-table comparison was simply asking a
+different question from the one a Pokédex asks.
+
+They were found by following code rather than scanning for data. The Old Rod's only bite is an
+immediate operand, not a table, so the search started from the pair every rod shares — level 5,
+Magikarp — and the single occurrence reading as a `ld bc` immediate sits in bank 3 beside the wild
+data. So `OLD_ROD_ENCOUNTER`, `GOOD_ROD_TABLE_POINTER` and `SUPER_ROD_TABLE_POINTER` point at
+*instructions*, and the table addresses come from their operands: a revision that moves the tables
+but keeps the code still reads, and one that moves the code fails on the opcode check.
+
+**Both eleven-species exclusive lists are now derived, not declared.** With rods and the evolution
+graph in hand, `gen1_cartridge.version_exclusives` reads each cartridge's reachable set — wild plus
+rods, closed under evolution — and differences them. The result is exactly the eleven a side that
+`generation_one` declares. That closes the ten-versus-eleven episode properly: the wild-table
+comparison was wrong in *both* directions at once, counting four species that are not exclusive and
+missing six that are, because Vileplume, Primeape, Arcanine, Ninetales, Persian and Victreebel are
+never encountered anywhere — each is only ever reached by evolving something that is. Ten a side was
+the arithmetic of that mistake. `blue_pokedex` no longer describes its table as a stated assumption.
+Record: [acquisition-routes-2026-08-10.json](docs/evidence/acquisition-routes-2026-08-10.json).
+
+**The map graph is read, and it is the one that changes the trajectory.** Every chapter module in
+this repository is hand-written walk directions. `gen1_maps.map_graph` reads 220 reachable maps, 78
+edge connections and 917 warps out of the cartridge — identical on both. Header tables were found by
+brute search and confirmed by an invariant no wrong offset can meet: connections must be reciprocal.
+
+Three things worth knowing before you touch it:
+
+- **A shop's exit warp names no destination.** One interior serves many towns, so the destination
+  byte is `$FF`, "return to whoever led in". Read literally, every Pokémon Centre is a room with no
+  way out. The back edges are recovered from the maps that point in.
+- **Silph Co's lift is told its floor by a menu**, so its warp points at a slot holding no map. It is
+  recorded as a `SCRIPTED` passage rather than dropped, because dropping it would make the lift look
+  like a dead end. It is the only such map in Kanto.
+- **Unused slots decode into plausible rubbish**, so reciprocity doubles as the filter — and the
+  filter is checked rather than trusted. Every one-sided connection must belong to a slot unreachable
+  from Pallet Town, or the read is refused. Three further cross-checks tie the graph to independent
+  reads: all 147 maps `MapId` names, every map with a wild table, and every map the Super Rod names
+  must be reachable.
+
+`global_router` kept the routing and lost the world model: opaque integer nodes, Dijkstra over edge
+costs, no Kanto. The five-node `BASIC_KANTO_GRAPH` is gone, and so is the test asserting Saffron City
+unreachable — true of the sketch, false of the game, and an absence of data promoted into a
+requirement. The sketch was also wrong where it did speak: it joined Viridian City to the Route 22
+gate, which is reached from Routes 22 and 23 and nowhere else. That correction is pinned by a test.
+Record: [map-graph-2026-08-10.json](docs/evidence/map-graph-2026-08-10.json).
+
+**What a route promises, and what it does not.** It promises the maps are joined. It does *not*
+promise the way is open now — Surf, Cut, Strength and story gates are nowhere in header data. A
+computed route is a candidate to be checked, not a plan to be executed. Reading traversal
+requirements is the next step, and until it exists do not wire routing into a live run.
+
+**A warning worth more than the feature.** The first ten mutation probes against the map work left
+**six survivors**. The tests compared a recorded read against other structures and never exercised
+the decoder, so breaking the connection stride or swapping two headings left every test green. The
+fix was a synthetic cartridge written byte by byte in `tests/test_gen1_map_decoding.py`, whose layout
+constants are stated *independently* of the module — a fixture that lays out bytes using the same
+constants the decoder reads them back with cannot fail. Two further real gaps surfaced: every fixture
+map had a single warp, so the four-byte stride was never exercised at all, and the probe harness
+itself reported false survivors until it cleared `__pycache__` between runs. Twelve of twelve probes
+now fail as they should. **If you add a reader here, assume your first test suite is decorative until
+a mutation proves otherwise.**
+
 ## Superseding terminal checkpoint — 2026-08-10
 
 **Seed `990027` now completes Red from its legitimate lab-rival loss.** Published clean source
