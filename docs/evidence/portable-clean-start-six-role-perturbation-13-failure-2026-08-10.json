@@ -1,0 +1,85 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-10",
+  "status": "failed_uncounted_perturbation_after_authenticated_lab_rival_loss",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990027 produced a legitimate lab-rival loss before any learned battle or training decision. The published recovery lane authenticates the loss and regains the semantic level floor, but the clean source replay currently exhausts the first post-recovery target search. Counted v95 remains unopened.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990027,
+    "initial_wait_frames": 48,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "1052d749759ddba2b2811c9138511158d5103f686f537e0db0cbcb596dca7c63"
+  },
+  "first_failure": {
+    "source_commit": "164e2687a18043afb0db7b71f9730a5f17786c97",
+    "raw_report_sha256": "fd606af162070d0e05363c87bf8c171ab0fbf7c2c227e3dfae303574999e5749",
+    "frames_executed": 43428,
+    "exception_type": "QualifiedPlayError",
+    "message": "The lab rival failed the bounded verified-victory gate.",
+    "observed_outcome": "Squirtle fainted; the cartridge persisted battle result 1 and returned a healed level-five starter rather than a level-six victory state.",
+    "learned_battle_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "published_repair_chain": [
+    {
+      "commit": "68fdb7a",
+      "change": "accept only an authenticated lab loss and enter a bounded recovery curriculum"
+    },
+    {
+      "commit": "d33b69f",
+      "change": "freeze the lab outcome before later wild battles overwrite mutable battle-result RAM"
+    },
+    {
+      "commit": "10ed903",
+      "change": "recover to the semantic level-six floor rather than accepting a weakened route"
+    },
+    {
+      "commit": "f5aca26",
+      "change": "target lower-defense recovery prey to bound damage and PP"
+    },
+    {
+      "commit": "d940c78",
+      "change": "use the correct Pokemon Red Viridian Forest encounter identifiers"
+    },
+    {
+      "commit": "35b62f3",
+      "change": "balance one Kakuna and one Weedle recovery lesson to reach level six alive"
+    }
+  ],
+  "current_clean_source_failure": {
+    "source_commit": "35b62f334a1e473eec9faefef0bb614381705e55",
+    "worktree_dirty": false,
+    "raw_report_sha256": "4a2add91425fc279ce6c83b1b90814e702071f5a1e0fd9591c6130a13ee71dec",
+    "frames_executed": 136720,
+    "exception_type": "PewterChapterError",
+    "message": "first Kakuna exhausted its bounded Kakuna search.",
+    "objective_decisions": 1,
+    "learned_battle_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "diagnosis": {
+    "category": "recovery_changes_rng_and_early_game_resource_budget",
+    "finding": "The loss branch is not equivalent to the victory branch. Extra recovery battles advance encounter RNG, consume Tackle PP, and change the experience schedule. Reusing the three victory-route Kakuna timings after recovery is therefore invalid.",
+    "instrumented_probe": "A non-promotable same-root probe offset the post-recovery target waits and replaced the last high-defense target with Weedle. It reached that battle at level seven and 17/23 HP, but Tackle was 0/35 while Tail Whip remained 30/30; the enemy Weedle remained at 17 HP. This isolates damaging-move PP as the next resource boundary. Because the probe monkeypatched runtime behavior outside the source provenance digest, it is diagnosis only and is not qualification evidence.",
+    "model_boundary": "Every failure occurs inside the authored opening composite before the learned battle, switch-target, training-control, or trainee/venue heads receive authority. It is a teacher/executor reliability defect, not evidence that the learned models chose incorrectly."
+  },
+  "next_gate": {
+    "implementation": "Replace the victory-route fixed three-target suffix on the loss branch with one semantic level-to-eight recovery loop. Select battles from observed species, current HP, experience need, and damaging PP; use live battle-menu state if Tail Whip is taught against high-defense prey; stop immediately once Bubble and the level-eight floor are verified.",
+    "required_receipts": [
+      "authenticated lab outcome",
+      "each observed recovery species and search attempt count",
+      "level and HP after every battle",
+      "damaging and status PP before and after each lesson",
+      "semantic MAIN and MOVE menu ownership for any status-move lesson",
+      "exact level-eight Bubble boundary before the mandatory trainer"
+    ],
+    "validation": "Pass the complete ROM-free gate, publish clean source, replay seed 990027 without monkeypatches, then use a fresh uncounted root. Do not open counted v95 yet."
+  },
+  "counted_v95": {
+    "consumed": 0,
+    "total": 10
+  }
+}

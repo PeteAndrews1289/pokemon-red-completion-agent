@@ -15,6 +15,46 @@ Follow an evidence-driven attempt to turn a reliable Pokémon Red speed-running 
 learned player that can make decisions, recover from surprises, and eventually transfer what it
 learns to other Pokémon games.
 
+## August 10 episode: the AI won—then lost the first battle
+
+Open on two emulator cards.
+
+The first says: **`990026 — HALL OF FAME`**. Roll the receipts underneath it: 74/74 scheduled
+battles, 36/36 objectives, 3,165 high-level decisions, 3,110 learned attacks, 12/12 learned switch
+targets, 61,497 training-control choices, 120,161 trainee/venue choices, and zero battle-teacher
+queries. Say the exact limitation out loud: this is one uncounted timing perturbation, not the final
+ten-root reliability campaign.
+
+The second card says: **`990027 — LOST TO THE LAB RIVAL`**.
+
+Do not frame that as bad luck. The cartridge handles it correctly: Squirtle faints, the result is
+recorded, the starter is healed at level five, and the adventure can continue. The teacher is the
+component that fails because it assumed the first battle always ends in victory. This is the clean
+story turn: the models just completed the game, and the next thing preventing reliable play is a
+missing lesson in the expert.
+
+Show the repair as a state diagram: `verified rival win -> level 6 route` and `verified rival loss
+-> bounded recovery -> same level 6 semantic floor`. Then show why the first repair is not enough.
+The recovery battles advance encounter RNG, consume HP and Tackle PP, and change the experience
+schedule. Reusing the victory route's three Kakuna timings fails. A diagnosis-only probe gets to the
+last Weedle with 17/23 HP but `Tackle 0/35`, while `Tail Whip 30/30` remains unused.
+
+The visual payoff is a resource dashboard rather than another code diff:
+
+- experience remaining to level eight;
+- current HP and status;
+- damaging PP versus status-move PP;
+- observed prey and defense; and
+- the semantic stop condition: **Bubble learned**.
+
+The next teacher lesson should choose battles from that state. Against Kakuna it may use Tail Whip
+through the observed battle menus before attacking; against Weedle it must account for damage and
+poison risk. The important line is: **“A robust agent does not memorize three encounters. It knows
+what capability it is trying to earn and what resources remain.”**
+
+End with the honest campaign board: one derived-timing pass, one unresolved optional-loss branch,
+and official v95 still `0/10`. That is a better cliffhanger than quietly rerolling seed `990027`.
+
 ## August 9 episode: 98% accurate—and still wrong in four different ways
 
 Open on the new controller's held-out score: **98.24% accuracy, 94.75% balanced accuracy**. Then put

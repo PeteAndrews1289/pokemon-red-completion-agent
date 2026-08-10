@@ -3,6 +3,46 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+## Current focus (2026-08-10)
+
+### Close the optional-loss branch before opening v95
+
+The complete six-role stack has now passed one derived-timing clean start. Uncounted seed `990026`
+completed 74/74 scheduled battles and all 36 observed objectives through Hall of Fame with 3,165
+high-level battle decisions, 3,110 learned move decisions, 12/12 learned target bindings, both
+training heads in live authority, and zero battle-teacher query or fallback. The exact receipt is
+[perturbation 12](evidence/portable-clean-start-six-role-perturbation-12-qualification-2026-08-10.json).
+Counted v95 remains 0/10.
+
+Fresh seed `990027` then lost the lab rival before any learned head acted. The published teacher now
+authenticates that legal outcome, preserves it after mutable battle RAM changes, and recovers the
+starter from level five to level six. The official clean-source replay currently stops at the first
+post-recovery Kakuna search. Diagnosis shows why a timing-only patch is insufficient: the recovery
+also changes experience, HP, and damaging PP, and a deeper instrumented probe reached the last
+target with zero Tackle PP. See
+[perturbation 13](evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json).
+
+The ordered gates are now:
+
+1. Implement one bounded semantic loss-recovery curriculum from the authenticated post-rival state
+   to level eight and Bubble. Choose prey from observed species, current HP, experience need, and
+   damaging PP rather than replaying the victory route's three fixed Kakuna timings.
+2. If the curriculum uses Tail Whip against high-defense prey, select it only at observed semantic
+   `MAIN` and `MOVE` menu gates and prove the PP decrement before returning to Tackle.
+3. Pass public-artifact/docs/registry checks, Ruff, mypy, and the full test suite; commit and push the
+   exact source before emulator qualification.
+4. Replay `990027` without monkeypatching until it passes or produces a later causal failure.
+5. Use at least one fresh uncounted timing root after the repaired `990027` pass.
+6. Freeze source, runtime, objective graph, schedule, and all six model identities. Only then open
+   the ten-root v95 campaign; require at least eight valid successes with no source/model changes.
+7. After Red reliability closes, run the already-defined Crystal transfer probes before deciding
+   how much Gen II teacher scripting is actually necessary.
+
+The selected feature-v5 control head uses calibration power `0.20`: 99.1677% ordinary and 96.7996%
+balanced validation accuracy. It was selected by live causal performance, not maximum top-line
+accuracy. The power `0.10` candidate scored higher ordinary accuracy but failed Koga's setup lesson;
+power `0.25` failed Route 24 recovery availability.
+
 ## Current focus (2026-08-09)
 
 ### Superseding battle-control checkpoint

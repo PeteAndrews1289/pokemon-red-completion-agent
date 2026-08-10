@@ -1,5 +1,50 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 10: the model completed a perturbed run; the teacher did not know how to lose
+
+The feature-v5 battle-control dataset removed raw active-slot identity and passed a party-permutation
+regression. A 3,259-label full-run lineage then supported a four-point calibration sweep. The model
+with the highest ordinary accuracy was not the best player: power `0.10` scored 99.39% but skipped
+Koga's required accuracy setup, while power `0.25` requested recovery where Route 24 could not
+supply it. Power `0.20` traded a little ordinary accuracy for 96.80% balanced accuracy and passed
+the live full-game gate.
+
+That gate matters. Derived-timing seed `990026` completed Pokemon Red from power-on through Hall of
+Fame in 49,085,008 frames. The objective model selected 21/21 executable composites and the observer
+verified all 36 game objectives. The battle schedule finished 74/74 entries. High-level control made
+3,165 decisions and executed 55 typed non-move actions; the move model supplied 3,110 attacks; the
+target head rebound all 12 learned switches. Training control owned 61,497 decisions at 100%, while
+the trainee/venue head owned 120,161 decisions. No battle teacher was queried and no fallback fired.
+The result is still one uncounted rehearsal, but it closes the long-running `990026` repair chain.
+
+Then the next seed did something simple and devastating: Squirtle lost the lab rival battle.
+
+The cartridge did not break. It recorded the loss, healed the level-five starter, and allowed the
+adventure to continue. The teacher broke because it had encoded victory as the only acceptable
+outcome. That distinction is central to the project's larger goal. A replay script can reroll; a
+Pokemon player must understand that some losses are recoverable state transitions.
+
+The repair did not pretend the battle was won. It added a separate authenticated loss snapshot,
+froze that outcome before later wild battles could overwrite `BATTLE_RESULT`, and entered a bounded
+Forest recovery curriculum. One Kakuna and one Weedle regain the semantic level-six floor while
+keeping the starter alive. Six clean, source-bound commits preserve each step.
+
+The next failure revealed why robust teachers cannot splice fixed scripts together. Those extra
+battles change the encounter stream, experience total, HP, and move PP. The latest official
+clean-source replay reaches 136,720 frames and cannot find the victory route's first Kakuna at its
+old timing. A deliberately non-promotable instrumented probe advanced farther and reached a final
+Weedle at 17/23 HP—but with Tackle exhausted and Tail Whip untouched. The problem is now a semantic
+resource curriculum: choose prey based on observed species, experience need, health, and damaging
+PP, and stop as soon as level eight and Bubble are proven.
+
+This is the most useful current project story. The model stack passed a real perturbation. The next
+perturbation failed before the models acted because the expert demonstration did not cover a legal
+game outcome. The system refused to reroll, separated model error from teacher error, and turned the
+failure into a precisely bounded next lesson. See the
+[passing receipt](evidence/portable-clean-start-six-role-perturbation-12-qualification-2026-08-10.json),
+the [failure receipt](evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json),
+and the [current audit](current-audit-2026-08-10.md).
+
 ## August 9: offline accuracy met causal reality
 
 The reserve-aware battle curriculum now has three complete clean-power demonstrations rather than

@@ -1,0 +1,116 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-qualification-v1",
+  "recorded_on": "2026-08-10",
+  "status": "passed_uncounted_derived_timing_rehearsal",
+  "promotion_eligible": false,
+  "claim": "Derived-timing seed 990026 completed Pokemon Red from power-on through Hall of Fame with the six-role learned stack active, no battle-teacher query or fallback, all 74 scheduled battles complete, and all 36 semantic objectives verified. This is an uncounted rehearsal and does not consume or replace a v95 campaign root.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990026,
+    "initial_wait_frames": 215,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "ffd40e598b7f28e7f038785c21abe035ee5c31588d946e3a71f86eabd58f6d9c"
+  },
+  "source": {
+    "git_commit": "164e2687a18043afb0db7b71f9730a5f17786c97",
+    "worktree_dirty": false
+  },
+  "raw_report_sha256": "f78af174c3865db8080cdbd0fa0a70282cb613bf914b0d46e63c3b19d8178754",
+  "selected_battle_control_model": {
+    "feature_schema_version": 5,
+    "calibration_power": 0.2,
+    "authenticated_control_labels": 3259,
+    "offline_accuracy": 0.991677,
+    "offline_balanced_accuracy": 0.967996,
+    "model_sha256": "aa533018f7bf56add5a6c5a80690cb99f98a9a6735db13ab0c68e80244bb5836",
+    "artifact_sha256": "0db5c3dedc7a79fd7a57b83cd72bd961694d37a6f39e23c79c3dd4c66c01ba60"
+  },
+  "model_identities": {
+    "objective_model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "battle_move_model_sha256": "535b8a07a590afac6c0d8c24d882cd4adb80d8ac73fd002f1b991be816b434dc",
+    "battle_control_model_sha256": "aa533018f7bf56add5a6c5a80690cb99f98a9a6735db13ab0c68e80244bb5836",
+    "battle_switch_target_model_sha256": "bd1ba4bd1ca6e9de1a94bc6f958bb54f80c45cce3e14421df3a4eded7a70186e",
+    "training_control_model_sha256": "cd8463ba77edc6f37b4e2321f5b644d7bb04a84622fa7af3f09fad968e289bd6",
+    "training_candidate_model_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026"
+  },
+  "completion": {
+    "frames_executed": 49085008,
+    "actions_executed": 699050,
+    "selected_objectives_completed": 21,
+    "semantic_objectives_verified": 36,
+    "expected_battles": 74,
+    "finished_battles": 74,
+    "hall_of_fame_verified": true,
+    "replans": 0
+  },
+  "battle_authority": {
+    "actor": "learned_policy_teacher_free",
+    "control_decisions": 3165,
+    "model_move_decisions": 3110,
+    "typed_non_move_requests_executed": 55,
+    "accuracy_boosts": 4,
+    "attack_boosts": 1,
+    "special_boosts": 7,
+    "hp_recoveries": 25,
+    "status_recoveries": 4,
+    "learned_switches": 12,
+    "switch_target_rebindings": 12,
+    "switch_target_fallbacks": 0,
+    "teacher_queries": 0,
+    "teacher_fallbacks": 0,
+    "safety_fallbacks": 0,
+    "low_confidence_fallbacks": 0
+  },
+  "training_authority": {
+    "control_decisions": 61497,
+    "control_accuracy": 1.0,
+    "control_balanced_accuracy": 1.0,
+    "control_operational_errors": 0,
+    "candidate_decisions": 120161,
+    "candidate_genuine_decisions": 119271,
+    "candidate_genuine_accuracy": 0.9958665559943323,
+    "candidate_disagreements": 493,
+    "model_had_execution_authority": true
+  },
+  "calibration_sweep": [
+    {
+      "power": 0.1,
+      "offline_accuracy": 0.993918,
+      "offline_balanced_accuracy": 0.907879,
+      "lorelei_probe": "passed",
+      "full_replay": "failed_at_koga_missing_accuracy_boost"
+    },
+    {
+      "power": 0.15,
+      "offline_accuracy": 0.992958,
+      "offline_balanced_accuracy": 0.926601,
+      "lorelei_probe": "passed",
+      "full_replay": "not_selected"
+    },
+    {
+      "power": 0.2,
+      "offline_accuracy": 0.991677,
+      "offline_balanced_accuracy": 0.967996,
+      "lorelei_probe": "passed",
+      "full_replay": "passed_seed_990026"
+    },
+    {
+      "power": 0.25,
+      "offline_accuracy": 0.990397,
+      "offline_balanced_accuracy": 0.967779,
+      "lorelei_probe": "passed",
+      "full_replay": "failed_at_route_24_unavailable_recovery"
+    }
+  ],
+  "limits": {
+    "counted_v95_roots_consumed": 0,
+    "counted_v95_roots_total": 10,
+    "qualification_scope": "one uncounted derived-timing root",
+    "does_not_claim": [
+      "multi-root reliability",
+      "unconstrained learned navigation",
+      "cross-title transfer",
+      "living-Pokedex completion"
+    ]
+  }
+}

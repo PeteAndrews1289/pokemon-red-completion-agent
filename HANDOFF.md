@@ -14,6 +14,52 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Superseding current checkpoint — 2026-08-10
+
+This section supersedes every older “next” statement below.
+
+**The derived-timing stack has now completed Red.** Source `164e268` passed uncounted seed `990026`
+from power-on through Hall of Fame in 49,085,008 frames. The run completed 74/74 scheduled battles,
+21/21 selected objectives, and 36/36 observed objectives. The battle stack made 3,165 high-level
+decisions and 3,110 learned move decisions; it executed 25 HP recoveries, four status recoveries,
+four accuracy boosts, one attack boost, seven special boosts, and 12 learned switches. The switch
+head owned 12/12 targets. Battle-teacher queries and every fallback counter were zero. Training
+control owned 61,497 decisions at 100%; trainee/venue selection owned 120,161 decisions with 493
+disagreements and 99.5867% genuine accuracy. The exact public receipt is
+[perturbation 12](docs/evidence/portable-clean-start-six-role-perturbation-12-qualification-2026-08-10.json).
+It is an uncounted qualification, not a v95 campaign result.
+
+The selected control head is feature schema v5, which removed raw `active_index` identity and
+passes a party-permutation regression. It was trained from 3,259 authenticated control labels.
+Calibration power `0.20` scored 99.1677% ordinary / 96.7996% balanced accuracy and was the only
+tested candidate to pass the full `990026` replay. Power `0.10` had higher ordinary accuracy but
+missed Koga's required accuracy setup; `0.25` requested unavailable Route 24 recovery. Preserve this
+as the reason the selected model is not simply the highest-accuracy model.
+
+**Fresh seed `990027` found the next real boundary.** It legitimately lost the lab rival, leaving a
+healed level-five starter and persisted loss result before any learned battle or training decision.
+Commits `68fdb7a`, `d33b69f`, `10ed903`, `f5aca26`, `d940c78`, and `35b62f3` authenticate that outcome,
+carry it across later mutable battle RAM, and teach a bounded Kakuna/Weedle recovery to level six.
+The latest official replay from clean published `35b62f3` reaches 136,720 frames and fails at the
+first post-recovery Kakuna search because the recovery changed encounter RNG. A non-promotable
+instrumented probe shifted those waits and reached the final target at level seven, 17/23 HP, zero
+Tackle PP, full Tail Whip PP, and a live Weedle. That probe is diagnosis only: its monkeypatch was
+outside source provenance. See
+[perturbation 13](docs/evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json).
+
+**Immediate next gate:** replace the loss branch's fixed three-Kakuna victory suffix with one
+semantic level-to-eight recovery loop. Select observed prey from current HP, experience need, and
+damaging PP. If Kakuna requires Tail Whip, use the live `MAIN`/`MOVE` menu observer and publish PP
+and stage receipts. Stop immediately when level eight and Bubble are proven. Pass the full gate,
+publish, and replay `990027` without a runtime monkeypatch; then use a fresh uncounted root. Do not
+open v95. It remains **0/10**.
+
+**Current branch and gate:** `agent/balanced-team-curriculum`, draft PR #8, clean published source
+`35b62f3`. Public-artifact and documentation checks, regenerated registry, Ruff, mypy over 128
+source modules, and 2,213 tests pass; three integration tests are deselected and one expected
+failure remains expected. The complete audit is
+[current-audit-2026-08-10.md](docs/current-audit-2026-08-10.md).
+
 ## Superseding current checkpoint — 2026-08-09
 
 This section supersedes every older “next” statement below.

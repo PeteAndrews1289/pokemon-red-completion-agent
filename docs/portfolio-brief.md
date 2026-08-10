@@ -1,5 +1,21 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 10 headline
+
+The combined six-role learned stack now has a complete uncounted derived-timing run through Hall of
+Fame: 74/74 scheduled battles, all 36 semantic objectives, 3,165 high-level battle decisions, 3,110
+learned move decisions, 12/12 learned switch targets, both training models in live authority, and
+zero battle-teacher query or fallback. The next fresh seed legitimately lost the lab rival and
+exposed a teacher-side recovery and move-PP gap before any learned head acted. The project preserved
+the failure instead of rerolling it; the official ten-root campaign remains 0/10.
+
+That pair is the best interview story in the repository. It demonstrates causal evaluation,
+calibration against rare actions, separation of model errors from executor errors, source-bound
+experiment lineage, and honest negative evidence. See the
+[current audit](current-audit-2026-08-10.md),
+[passing receipt](evidence/portable-clean-start-six-role-perturbation-12-qualification-2026-08-10.json),
+and [failure receipt](evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json).
+
 ## The one-sentence version
 
 I built a verified Pokémon Red teacher and independent referee, then replaced bounded decision
