@@ -29,11 +29,18 @@ class FakeWorld:
     ] = field(default_factory=dict)
     swallowed: dict[tuple[int, tuple[int, int], str], int] = field(default_factory=dict)
     interrupt_on: dict[tuple[int, tuple[int, int], str], str] = field(default_factory=dict)
+    staged_transitions: dict[
+        tuple[int, tuple[int, int], str], tuple[int, tuple[int, int], tuple[int, int]]
+    ] = field(default_factory=dict)
+    pending_arrival: tuple[int, tuple[int, int]] | None = None
     actions: list[MacroAction] = field(default_factory=list)
 
     def execute(self, action: MacroAction) -> object:
         self.actions.append(action)
         if action.kind is MacroActionKind.WAIT:
+            if self.pending_arrival is not None:
+                self.map_id, self.at = self.pending_arrival
+                self.pending_arrival = None
             self.ready = True
             return action
         assert action.kind is MacroActionKind.MOVE
@@ -45,6 +52,11 @@ class FakeWorld:
             return action
         if key in self.interrupt_on:
             self.interruption = self.interrupt_on.pop(key)
+            return action
+        if key in self.staged_transitions:
+            target_map, transient_at, final_at = self.staged_transitions[key]
+            self.map_id, self.at = target_map, transient_at
+            self.pending_arrival = target_map, final_at
             return action
         if key in self.transitions:
             self.map_id, self.at = self.transitions[key]
@@ -113,6 +125,22 @@ def test_an_unchanged_input_is_retried_instead_of_counted() -> None:
     assert report.movement_requests == 3
     assert report.executed_steps[0].movement_requests == 2
     assert report.wait_actions == 2, "one retry wait and one transition wait"
+
+
+def test_a_map_change_waits_for_staggered_destination_coordinates() -> None:
+    plan, _, _ = connection_plan()
+    world = FakeWorld(
+        transitions={(1, (0, 0), "right"): (1, (0, 1))},
+        staged_transitions={
+            (1, (0, 1), "up"): (2, (99, 99), (5, 0)),
+        },
+    )
+
+    report = execute_route(plan, world, world)
+
+    assert report.passed
+    assert report.terminal.at == (5, 0)
+    assert report.wait_actions == 1
 
 
 def test_an_interruption_does_not_consume_a_same_coordinate_step() -> None:
