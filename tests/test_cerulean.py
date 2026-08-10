@@ -28,7 +28,6 @@ from pokemon_red_completion.cerulean import (
     MT_MOON_ZUBAT_PRE_THROW_WAIT,
     MT_MOON_ZUBAT_SEED_WAIT,
     PEWTER_TO_CENTER_DIRECTIONS,
-    POST_KO_SWITCH_DECLINE_PULSES,
     ROCKET_TO_SUPER_NERD_DIRECTIONS,
     ROUTE_3_REJOIN_SEED_WAIT,
     ROUTE_3_REMAINDER_DIRECTIONS,
@@ -782,6 +781,7 @@ def test_cerulean_helpers_use_one_based_pp_and_exact_reverse_routes() -> None:
 
 def test_battle_completion_declines_switch_without_cancelling_evolution() -> None:
     class Reader:
+        switch_prompt_visible = False
         state = replace(
             _raw(MapId.MT_MOON_B2F, 21, 17),
             battle_state=2,
@@ -801,6 +801,10 @@ def test_battle_completion_declines_switch_without_cancelling_evolution() -> Non
         def read_input_readiness(self) -> InputReadiness:
             return READY
 
+        def trainer_switch_prompt_visible(self, raw: RawGameState) -> bool:
+            del raw
+            return self.switch_prompt_visible
+
     reader = Reader()
 
     class Executor:
@@ -809,15 +813,27 @@ def test_battle_completion_declines_switch_without_cancelling_evolution() -> Non
 
         def execute(self, action: MacroAction) -> None:
             self.actions.append(action)
+            if action.kind is MacroActionKind.CANCEL:
+                assert reader.switch_prompt_visible
+                reader.switch_prompt_visible = False
+                reader.state = replace(
+                    reader.state,
+                    enemy_hp=0,
+                    first_party_level=16,
+                )
+                return
             if action.kind is not MacroActionKind.CONFIRM:
                 return
             self.confirms += 1
             if self.confirms == 1:
+                reader.switch_prompt_visible = True
+                reader.state = replace(reader.state, enemy_hp=35)
+            elif self.confirms == 2:
                 reader.state = replace(
                     reader.state,
                     party_species_ids=(WARTORTLE_SPECIES_ID, 0x6B),
                 )
-            elif self.confirms == 2:
+            elif self.confirms == 3:
                 reader.state = replace(reader.state, battle_state=0)
 
     executor = Executor()
@@ -834,11 +850,10 @@ def test_battle_completion_declines_switch_without_cancelling_evolution() -> Non
         for action in executor.actions
         if action.kind is not MacroActionKind.WAIT
     ]
-    assert inputs[:POST_KO_SWITCH_DECLINE_PULSES] == [
-        MacroActionKind.CANCEL
-    ] * POST_KO_SWITCH_DECLINE_PULSES
-    assert inputs[POST_KO_SWITCH_DECLINE_PULSES:] == [
+    assert inputs.count(MacroActionKind.CANCEL) == 1
+    assert inputs[:4] == [
         MacroActionKind.CONFIRM,
+        MacroActionKind.CANCEL,
         MacroActionKind.CONFIRM,
         MacroActionKind.CONFIRM,
     ]
@@ -864,6 +879,10 @@ def test_battle_completion_does_not_decline_a_nonexistent_single_party_switch() 
 
         def read_input_readiness(self) -> InputReadiness:
             return READY
+
+        def trainer_switch_prompt_visible(self, raw: RawGameState) -> bool:
+            del raw
+            return False
 
     reader = Reader()
 

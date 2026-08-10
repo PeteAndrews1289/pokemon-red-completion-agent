@@ -300,6 +300,34 @@ def test_reader_exposes_semantic_linear_menu_cursor_state() -> None:
     assert state.selected_absolute_index == 7
 
 
+def test_reader_identifies_only_the_live_trainer_switch_prompt() -> None:
+    cursor_address = int(RamAddress.TILE_MAP) + 8 * 20 + 1
+    values = {
+        RamAddress.TOP_MENU_ITEM_Y: 8,
+        RamAddress.TOP_MENU_ITEM_X: 1,
+        RamAddress.CURRENT_MENU_ITEM: 0,
+        RamAddress.MAX_MENU_ITEM: 1,
+        RamAddress.MENU_WATCHED_KEYS: 0x03,
+        RamAddress.MENU_CURSOR_LOCATION: cursor_address & 0xFF,
+        int(RamAddress.MENU_CURSOR_LOCATION) + 1: cursor_address >> 8,
+        cursor_address: 0xED,
+    }
+    reader = PokemonRedStateReader(RecordingMemory(values))
+    prompt = RawGameState(
+        game_started=True,
+        map_id=MapId.MT_MOON_B2F,
+        player_x=11,
+        player_y=19,
+        party_count=2,
+        battle_state=2,
+        enemy_hp=35,
+    )
+
+    assert reader.trainer_switch_prompt_visible(prompt)
+    assert not reader.trainer_switch_prompt_visible(replace(prompt, enemy_hp=0))
+    assert not reader.trainer_switch_prompt_visible(replace(prompt, party_count=1))
+
+
 def test_reader_rejects_incoherent_current_box_memory() -> None:
     memory = RecordingMemory(
         {

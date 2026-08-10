@@ -151,9 +151,6 @@ MT_MOON_B2F_TO_ROCKET_DIRECTIONS = _directions(
 MT_MOON_B2F_SEED_WAITS = ((1, 9), (19, 1), (29, 2), (65, 2))
 ROCKET_TRIGGER_DIRECTIONS = ("up",)
 ROCKET_TO_SUPER_NERD_DIRECTIONS = _directions("L" + "U" * 3 + "R" * 2 + "U" * 7 + "R" + "U")
-# Eight B presses reliably decline trainer switch prompts; a ninth can cancel
-# the level-16 evolution that follows the final Mt. Moon Rocket knockout.
-POST_KO_SWITCH_DECLINE_PULSES = 8
 SUPER_NERD_TO_HELIX_DIRECTIONS = ("up",)
 MT_MOON_B2F_EXIT_DIRECTIONS = _directions("U" * 3 + "L" * 10 + "D" * 2 + "R" * 2 + "D")
 MT_MOON_B2F_EXIT_SEED_WAIT = 1
@@ -2160,7 +2157,6 @@ def _finish_battle(
         raise CeruleanChapterError(f"{label} has an incomplete recovery policy.")
     saw_battle = False
     stable_reads = 0
-    post_ko_cancel_pulses: int | None = None
     recovery_used = False
     for _ in range(timing.max_battle_pulses):
         before = reader.read()
@@ -2169,29 +2165,12 @@ def _finish_battle(
         if before.battle_state not in {0, 2}:
             raise CeruleanChapterError(f"{label} changed to an unexpected battle type.")
         saw_battle = saw_battle or before.battle_state == 2
-        if (
-            before.battle_state == 2
-            and before.enemy_hp == 0
-            and (before.party_count or 0) > 1
-            and post_ko_cancel_pulses is None
-        ):
-            post_ko_cancel_pulses = 0
         before_menu = (
             reader.read_battle_menu_state(before)
             if before.battle_state == 2
             else None
         )
-        if (
-            post_ko_cancel_pulses is not None
-            and before_menu is not None
-            and before_menu.phase is BattleMenuPhase.MAIN
-            and (before.enemy_hp or 0) > 0
-        ):
-            post_ko_cancel_pulses = None
-        decline_switch = (
-            post_ko_cancel_pulses is not None
-            and post_ko_cancel_pulses < POST_KO_SWITCH_DECLINE_PULSES
-        )
+        decline_switch = reader.trainer_switch_prompt_visible(before)
         should_recover = (
             emulator is not None
             and recovery_hp_threshold is not None
@@ -2218,8 +2197,6 @@ def _finish_battle(
         executor.execute(
             MacroAction(MacroActionKind.CANCEL if decline_switch else MacroActionKind.CONFIRM)
         )
-        if decline_switch:
-            post_ko_cancel_pulses += 1
         _wait(
             executor,
             timing.battle_wait_frames if before.battle_state else timing.dialogue_wait_frames,

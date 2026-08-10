@@ -839,6 +839,11 @@ ROUTE_6_JR_TRAINER_M_NUMBER = 5
 MAIN_BATTLE_MENU_LEFT_SIGNATURE = (0x0E, 0x09, 0x11)
 MAIN_BATTLE_MENU_RIGHT_SIGNATURE = (0x0E, 0x0F, 0x21)
 MOVE_BATTLE_MENU_SIGNATURE = (0x0C, 0x05, 0xC7)
+# ``EnemySendOut`` draws Red's two-option trainer-switch prompt at (1, 8).
+# The live prompt responds only to A/B and has exactly two entries.  Requiring
+# the already-loaded next enemy and an active cursor excludes stale menu RAM
+# during final-KO dialogue and evolution.
+TRAINER_SWITCH_PROMPT_SIGNATURE = (0x08, 0x01, 0x01, 0x03)
 FILLED_MENU_CURSOR_TILE = 0xED
 TILE_MAP_SIZE = 20 * 18
 MIN_BATTLE_COMMAND = 0
@@ -3830,6 +3835,34 @@ class PokemonRedStateReader:
                     selected_move_slot=selected_move_slot,
                 )
         return BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    def trainer_switch_prompt_visible(self, raw: RawGameState) -> bool:
+        """Return whether Red's live trainer-switch yes/no prompt owns input.
+
+        The pinned battle engine loads the next enemy before displaying this
+        prompt.  Evolution follows only after the final enemy has zero HP, so
+        the enemy-HP gate and active two-option cursor distinguish the two
+        transitions without relying on frame or button counts.
+        """
+
+        if (
+            raw.battle_state != 2
+            or (raw.enemy_hp or 0) <= 0
+            or (raw.party_count or 0) <= 1
+        ):
+            return False
+        signature = (
+            self._memory.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+            self._memory.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            self._memory.read_u8(RamAddress.MAX_MENU_ITEM),
+            self._memory.read_u8(RamAddress.MENU_WATCHED_KEYS),
+        )
+        selected = self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        return (
+            signature == TRAINER_SWITCH_PROMPT_SIGNATURE
+            and selected in {0, 1}
+            and self._active_menu_cursor()
+        )
 
     def _active_menu_cursor(self) -> bool:
         cursor_address = self._memory.read_u8(RamAddress.MENU_CURSOR_LOCATION)
