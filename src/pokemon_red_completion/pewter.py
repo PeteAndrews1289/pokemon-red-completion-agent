@@ -34,6 +34,9 @@ from pokemon_red_completion.route_1_wild import (
 
 PEWTER_CHECKPOINT_COUNT = 10
 KAKUNA_SPECIES_ID = 0x71
+CATERPIE_SPECIES_ID = 0x7B
+KAKUNA_TARGET_SPECIES_IDS = frozenset({KAKUNA_SPECIES_ID})
+LAB_RIVAL_LOSS_RECOVERY_SPECIES_IDS = frozenset({CATERPIE_SPECIES_ID})
 MAX_LAB_RIVAL_LOSS_RECOVERY_BATTLES = 3
 
 LAB_TO_PALLET_DIRECTIONS = ("down",) * 9
@@ -298,7 +301,11 @@ class PewterChapterReport:
                 else recovery_battles == 0
             )
             and all(attempts > 0 for attempts in self.rival_loss_recovery_search_attempts)
-            and self.rival_loss_recovery_species_ids == (KAKUNA_SPECIES_ID,) * recovery_battles
+            and len(self.rival_loss_recovery_species_ids) == recovery_battles
+            and all(
+                species_id in LAB_RIVAL_LOSS_RECOVERY_SPECIES_IDS
+                for species_id in self.rival_loss_recovery_species_ids
+            )
             and self.rival_loss_recovery_level
             == (6 if self.lab_rival_loss_recovery_required else None)
             and len(self.forest_target_search_attempts) == 3
@@ -523,6 +530,7 @@ def run_pewter_chapter(
                     timing,
                     label,
                     used_flees=len(forest_wild_flees),
+                    target_species_ids=LAB_RIVAL_LOSS_RECOVERY_SPECIES_IDS,
                 )
             )
             forest_wild_flees += more_flees
@@ -1038,13 +1046,21 @@ def _seek_forest_training_battle(
     label: str,
     *,
     used_flees: int,
+    target_species_ids: frozenset[int] = KAKUNA_TARGET_SPECIES_IDS,
 ) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int, int, bool]:
-    """Seek one exact Kakuna while preserving the authored route coordinate."""
+    """Seek one target species while preserving the authored route coordinate."""
 
     if direction not in {"up", "down", "left", "right"}:
         raise PewterChapterError(f"{label} has an invalid search direction.")
     if not 0 <= used_flees <= timing.max_forest_wild_flees:
         raise PewterChapterError(f"{label} has invalid prior flee accounting.")
+    if not target_species_ids or any(
+        not isinstance(species_id, int)
+        or isinstance(species_id, bool)
+        or not 0 <= species_id <= 0xFF
+        for species_id in target_species_ids
+    ):
+        raise PewterChapterError(f"{label} has invalid target species.")
     _wait(executor, seed_wait_frames)
     origin = reader.read()
     if origin.battle_state:
@@ -1097,7 +1113,7 @@ def _seek_forest_training_battle(
                 raise PewterChapterError(f"{label} encountered a non-wild battle while searching.")
             if not consumed and (observed.player_x, observed.player_y) != origin_position:
                 raise PewterChapterError(f"{label} wild encounter drifted from its search step.")
-            if observed.enemy_species_id == KAKUNA_SPECIES_ID:
+            if observed.enemy_species_id in target_species_ids:
                 return observed, flees, movement_retries, search_attempt, consumed
             if used_flees + len(flees) >= timing.max_forest_wild_flees:
                 raise PewterChapterError(f"{label} exhausted the shared Forest flee budget.")
