@@ -218,6 +218,7 @@ def _report() -> PewterChapterReport:
         lab_rival_loss_recovery_required=False,
         rival_loss_recovery_search_attempts=(),
         rival_loss_recovery_species_ids=(),
+        rival_loss_recovery_level=None,
         forest_target_search_attempts=(1, 1, 1),
         forest_training_species_ids=(0x71, 0x71, 0x71),
         overworld_control_verified=True,
@@ -378,6 +379,7 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         "lab_rival_loss_recovery_required": False,
         "rival_loss_recovery_search_attempts": [],
         "rival_loss_recovery_species_ids": [],
+        "rival_loss_recovery_level": None,
         "forest_target_search_attempts": [1, 1, 1],
         "forest_training_species_ids": [0x71, 0x71, 0x71],
     }
@@ -410,14 +412,16 @@ def test_pewter_report_requires_the_authenticated_lab_loss_recovery_lesson() -> 
     recovered = replace(
         _report(),
         lab_rival_loss_recovery_required=True,
-        rival_loss_recovery_search_attempts=(3,),
-        rival_loss_recovery_species_ids=(0x71,),
+        rival_loss_recovery_search_attempts=(3, 2),
+        rival_loss_recovery_species_ids=(0x71, 0x71),
+        rival_loss_recovery_level=6,
     )
 
     assert recovered.passed
-    assert recovered.public_dict()["route"]["rival_loss_recovery_search_attempts"] == [3]
+    assert recovered.public_dict()["route"]["rival_loss_recovery_search_attempts"] == [3, 2]
     assert not replace(recovered, rival_loss_recovery_search_attempts=()).passed
     assert not replace(recovered, rival_loss_recovery_species_ids=(0x70,)).passed
+    assert not replace(recovered, rival_loss_recovery_level=5).passed
 
 
 @pytest.mark.parametrize(
@@ -430,6 +434,7 @@ def test_pewter_report_requires_the_authenticated_lab_loss_recovery_lesson() -> 
         {"lab_rival_loss_recovery_required": True},
         {"rival_loss_recovery_search_attempts": (1,)},
         {"rival_loss_recovery_species_ids": (0x71,)},
+        {"rival_loss_recovery_level": 6},
         {"forest_target_search_attempts": (1, 1)},
         {"forest_training_species_ids": (0x71, 0x71, 0x70)},
         {

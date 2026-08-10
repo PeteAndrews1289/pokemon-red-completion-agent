@@ -34,6 +34,7 @@ from pokemon_red_completion.route_1_wild import (
 
 PEWTER_CHECKPOINT_COUNT = 10
 KAKUNA_SPECIES_ID = 0x71
+MAX_LAB_RIVAL_LOSS_RECOVERY_BATTLES = 3
 
 LAB_TO_PALLET_DIRECTIONS = ("down",) * 9
 PALLET_TO_ROUTE_1_DIRECTIONS = (
@@ -265,6 +266,7 @@ class PewterChapterReport:
     lab_rival_loss_recovery_required: bool
     rival_loss_recovery_search_attempts: tuple[int, ...]
     rival_loss_recovery_species_ids: tuple[int, ...]
+    rival_loss_recovery_level: int | None
     forest_target_search_attempts: tuple[int, ...]
     forest_training_species_ids: tuple[int, ...]
     overworld_control_verified: bool
@@ -274,7 +276,7 @@ class PewterChapterReport:
 
     @property
     def passed(self) -> bool:
-        expected_recovery_battles = int(self.lab_rival_loss_recovery_required)
+        recovery_battles = len(self.rival_loss_recovery_search_attempts)
         return (
             self.pokedex_evidence.pokedex_snapshot
             and self.reached_boundaries
@@ -290,10 +292,15 @@ class PewterChapterReport:
             and self.route_2_movement_retries >= 0
             and all(item.verified for item in self.forest_wild_flees)
             and self.forest_movement_retries >= 0
-            and len(self.rival_loss_recovery_search_attempts) == expected_recovery_battles
+            and (
+                1 <= recovery_battles <= MAX_LAB_RIVAL_LOSS_RECOVERY_BATTLES
+                if self.lab_rival_loss_recovery_required
+                else recovery_battles == 0
+            )
             and all(attempts > 0 for attempts in self.rival_loss_recovery_search_attempts)
-            and self.rival_loss_recovery_species_ids
-            == (KAKUNA_SPECIES_ID,) * expected_recovery_battles
+            and self.rival_loss_recovery_species_ids == (KAKUNA_SPECIES_ID,) * recovery_battles
+            and self.rival_loss_recovery_level
+            == (6 if self.lab_rival_loss_recovery_required else None)
             and len(self.forest_target_search_attempts) == 3
             and all(attempts > 0 for attempts in self.forest_target_search_attempts)
             and self.forest_training_species_ids == (KAKUNA_SPECIES_ID,) * 3
@@ -354,6 +361,7 @@ class PewterChapterReport:
                     self.rival_loss_recovery_search_attempts
                 ),
                 "rival_loss_recovery_species_ids": list(self.rival_loss_recovery_species_ids),
+                "rival_loss_recovery_level": self.rival_loss_recovery_level,
                 "forest_target_search_attempts": list(self.forest_target_search_attempts),
                 "forest_training_species_ids": list(self.forest_training_species_ids),
             },
@@ -497,51 +505,61 @@ def run_pewter_chapter(
     )
     rival_loss_recovery_search_attempts: tuple[int, ...] = ()
     rival_loss_recovery_species_ids: tuple[int, ...] = ()
+    rival_loss_recovery_level: int | None = None
     forest_training_origin = reader.read()
     if forest_training_origin.first_party_level == 5:
         if not lab_rival_loss_recovery_required:
             raise PewterChapterError(
                 "level-five Forest entry lacked an authenticated lab-rival loss."
             )
-        recovery_encounter, more_flees, more_retries, search_attempts, step_consumed = (
-            _seek_forest_training_battle(
-                chapter_executor,
-                reader,
-                "down",
-                timing.first_kakuna_seed_wait_frames,
-                timing,
-                "lab-rival loss recovery Kakuna",
-                used_flees=len(forest_wild_flees),
-            )
-        )
-        forest_wild_flees += more_flees
-        forest_movement_retries += more_retries
-        rival_loss_recovery_search_attempts = (search_attempts,)
-        rival_loss_recovery_species_ids = (recovery_encounter.enemy_species_id or 0,)
-        _finish_battle(
-            chapter_executor,
-            reader,
-            expected_battle_state=1,
-            max_pulses=timing.max_battle_pulses,
-            timing=timing,
-            label="lab-rival loss recovery Kakuna",
-        )
-        if step_consumed:
-            _, more_flees, more_retries = _move_forest_with_wild_flees(
-                chapter_executor,
-                reader,
-                ("up",),
-                "lab-rival loss recovery origin return",
-                timing=timing,
-                used_flees=len(forest_wild_flees),
+        for recovery_battle in range(1, MAX_LAB_RIVAL_LOSS_RECOVERY_BATTLES + 1):
+            label = f"lab-rival loss recovery Kakuna {recovery_battle}"
+            recovery_encounter, more_flees, more_retries, search_attempts, step_consumed = (
+                _seek_forest_training_battle(
+                    chapter_executor,
+                    reader,
+                    "down",
+                    timing.first_kakuna_seed_wait_frames,
+                    timing,
+                    label,
+                    used_flees=len(forest_wild_flees),
+                )
             )
             forest_wild_flees += more_flees
             forest_movement_retries += more_retries
+            rival_loss_recovery_search_attempts += (search_attempts,)
+            rival_loss_recovery_species_ids += (recovery_encounter.enemy_species_id or 0,)
+            _finish_battle(
+                chapter_executor,
+                reader,
+                expected_battle_state=1,
+                max_pulses=timing.max_battle_pulses,
+                timing=timing,
+                label=label,
+            )
+            if step_consumed:
+                _, more_flees, more_retries = _move_forest_with_wild_flees(
+                    chapter_executor,
+                    reader,
+                    ("up",),
+                    f"{label} origin return",
+                    timing=timing,
+                    used_flees=len(forest_wild_flees),
+                )
+                forest_wild_flees += more_flees
+                forest_movement_retries += more_retries
+            rival_loss_recovery_level = reader.read().first_party_level
+            if rival_loss_recovery_level == 6:
+                break
+            if rival_loss_recovery_level != 5:
+                raise PewterChapterError(
+                    "lab-rival loss recovery reached an unsupported starter level."
+                )
         _expect_party(
             reader.read(),
             level=6,
             minimum_hp=1,
-            label="lab-rival loss recovery Kakuna",
+            label="lab-rival loss recovery",
         )
     elif forest_training_origin.first_party_level != 6:
         raise PewterChapterError("Forest training origin had an unsupported starter level.")
@@ -903,6 +921,7 @@ def run_pewter_chapter(
         lab_rival_loss_recovery_required=lab_rival_loss_recovery_required,
         rival_loss_recovery_search_attempts=rival_loss_recovery_search_attempts,
         rival_loss_recovery_species_ids=rival_loss_recovery_species_ids,
+        rival_loss_recovery_level=rival_loss_recovery_level,
         forest_target_search_attempts=forest_target_search_attempts,
         forest_training_species_ids=forest_training_species_ids,
         overworld_control_verified=True,
