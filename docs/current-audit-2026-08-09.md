@@ -21,9 +21,11 @@ could not reach the recovery action intended to clear it. Each failure is preser
 rerun as a favorable root. A later same-root replay crossed Brock and localized a second instance:
 the first Route 3 trainer left the lead at 10/35 HP with poison before a 51-step return. The pending
 resource repair withdraws the guaranteed PC Potion in Pewter, spends it at that exact post-trainer
-gate, preserves the original cash ledger, and retains the same six-Potion downstream floor. The
-next replay survived that return and exposed a distinct trainer-one Wrap boundary; its traced
-recovery policy is now the pending gate.
+gate, preserves the original cash ledger, and retains the same six-Potion downstream floor. Later
+replays qualified the distinct trainer-one Wrap recovery, restored the post-item menu contract,
+crossed Route 3 with authenticated incidental-wild receipts, and replaced Mt. Moon's fixed Zubat
+wait with a species-and-level search. Replay 19 captured that exact Zubat and exposed the present
+boundary: the rest of Mt. Moon still assumes zero incidental wilds across several authored paths.
 The counted v95 clean-start campaign remains deliberately unopened at **0/10**. No cross-title or
 living-Pokédex result is claimed.
 
@@ -294,8 +296,12 @@ movement retries. The full 2,198-test gate passes; publish and replay the same r
 remains unopened. Replay 18 qualified Route 3 and reached Mt. Moon, where the fixed 155-frame Zubat
 trigger produced no encounter. The capture lesson now searches a reversible grass edge for live
 species `0x6B` at level seven, authenticates non-target flees, publishes attempts/retries, and
-restores the exact route coordinate. The complete 2,198-test gate passes; publish and replay the
-same root.
+restores the exact route coordinate. Commit `70b4f22` passed the complete 2,198-test gate and was
+published. Replay 19 qualified the level-seven Zubat capture with the sole Poké Ball and restored
+the route at `(14,31)`, then an ordinary wild interrupted a later 1F segment before TM01 step 10.
+The next repair must be one cumulative, report-visible Mt. Moon flee/retry ledger shared by 1F,
+B1F, B2F, item detours, and return paths. A coordinate-local exception would merely preserve the
+same chapter-level defect.
 
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared
@@ -322,8 +328,8 @@ silently acting at night.
 
 ## Code and test health
 
-- 128 source modules and 135 test modules cover roughly 88,500 source lines and 53,000 test lines.
-- The current full gate passes **2,196 tests** with 3 emulator-integration tests deselected and 1
+- 128 source modules and 135 test modules cover roughly 89,900 source lines and 53,700 test lines.
+- The current full gate passes **2,198 tests** with 3 emulator-integration tests deselected and 1
   expected failure, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.
@@ -357,10 +363,13 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Commit and push the validated shared pre-step encounter retry repair.
-2. Run a fresh uncounted derived-timing seed with the exact combined artifact set. Preserve any
-   next route or model defect without weakening its semantic contract.
-3. Only after that perturbation passes should v95's ten one-attempt roots open.
+1. Implement one cumulative, report-visible incidental-wild traversal ledger for every Mt. Moon
+   route segment, item detour, and return path; consolidate the duplicated Kakuna/Zubat encounter
+   search mechanics behind a shared semantic helper where their contracts truly match.
+2. Pass the complete ROM-free gate, publish the source and registry, then replay the exact
+   uncounted `990026` root before assigning another seed.
+3. Preserve the next counterexample without weakening its semantic contract. Only after a complete
+   perturbation passes should v95's ten one-attempt roots open.
 4. Build Crystal as a thin adapter plus three bounded tasks: one reserve-choice battle, one local
    navigation round trip, and one trainee/venue decision. Compare the frozen Red model zero-shot,
    few-shot, and from scratch before writing a complete Crystal teacher.

@@ -18,7 +18,7 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
-**Late audit and runtime checkpoint:** the full repository gate now passes **2,196 tests with 3
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,198 tests with 3
 integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
 public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
 errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
@@ -153,12 +153,17 @@ level 13, 10/35 HP, poison `0x08`, and 18 Bubble PP. The current lane withdraws 
 PC Potion in the first Pewter Center visit and spends exactly it after trainer zero. Commit
 `55b255e` and its 2,197-test gate qualified that repair: replay 15 survived the return, then trainer
 one's first opponent left 13/35 HP and repeated Wrap from the second reduced the lead to zero at
-237,342 frames. The current lane adds one recovery only at a verified MAIN boundary at or below 13
-HP, proves heal and decrement, and protects twelve Potions. Cerulean buys the original four from a
+237,342 frames. One bounded recovery now runs only at a verified MAIN boundary at or below 13 HP,
+proves heal and decrement, and protects twelve Potions. Cerulean buys the original four from a
 12–14 starting window; the rival may carry 16–18, while cleanup still stores down to six and the
-money ledger is unchanged. Regenerate, complete the full gate, push, then replay the exact `990026`
-root before any fresh seed.
-Counted v95 remains 0/10.
+money ledger is unchanged. The same root subsequently qualified the Potion, semantic `FIGHT`
+restoration, all four required Route 3 trainers, and the shared east-Route-3 incidental-wild
+traversal. Replay 18 then showed that Mt. Moon's named Zubat lesson was only a fixed frame wait.
+Replay 19 semantically found species `0x6B` at level seven on the reversible `(14,32) ↔ (14,31)`
+edge, captured it with the sole Poké Ball, and restored `(14,31)`. A later ordinary wild on 1F
+stopped the authored cave route before TM01 step 10. Do not patch only that coordinate: build one
+cumulative, report-visible Mt. Moon flee/retry ledger across 1F, B1F, B2F, item detours, and return
+paths, then replay the same `990026` root. Counted v95 remains 0/10.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the
 source of the passed canonical receipt and `4f5f870` qualified the lab-rival repair through the next
@@ -174,20 +179,20 @@ semantic Kakuna search was qualified at `e579e76`, which supplied the `990025` w
 counterexample. The shared exact-gate yield maneuver was qualified at `8efd140`, which supplied the
 `990026` resource counterexample. `0773d75`, `87343ec`, `fb2da00`, and `e6c2ebe` successively
 qualified Center routing, the poison-transit controller/referee split, and the measured Gym route.
-The early PC-Potion repair is published at `55b255e`. The traced one-use Route 3 battle recovery and
-its regenerated v95 registry are the current uncommitted lane. Public artifacts, docs, registry,
-Ruff, mypy, and 2,198 tests passed at `1a2892b`. Replay 16 proved the Potion prevented the faint but
+The early PC-Potion repair is published at `55b255e`. Public artifacts, docs, registry, Ruff,
+mypy, and 2,198 tests passed at `1a2892b`. Replay 16 proved the Potion prevented the faint but
 returned to MAIN with `ITEM` selected, so the legacy finisher reopened the bag until its cap
-expired. The current uncommitted delta restores `FIGHT` through the semantic cursor; its full
+expired. The repair restores `FIGHT` through the semantic cursor; its full
 public-artifact, docs, registry, Ruff, mypy, and 2,198-test gate was published at `5869185`. Replay
 17 crossed all four required trainers and every recovery, then found a normal wild on east Route 3
-step seven. The current lane reuses `move_with_wild_flees` under Route 3 map scope and publishes
-the flee receipts and movement retries. Its 2,198-test gate was published at `c48fb4b`. Replay 18
+step seven. `move_with_wild_flees` now runs under Route 3 map scope and publishes the flee receipts
+and movement retries; its 2,198-test gate was published at `c48fb4b`. Replay 18
 qualified Route 3 and reached Mt. Moon, where the fixed 155-frame Zubat wait produced no encounter.
-The current lane semantically searches a reversible `(14,32) ↔ (14,31)` edge for species `0x6B`
+Commit `70b4f22` semantically searches a reversible `(14,32) ↔ (14,31)` edge for species `0x6B`
 at level seven, records bounded non-target flees/attempts/retries, and restores `(14,31)` after the
-sole-ball capture. Its public-artifact, docs, registry, Ruff, mypy, and 2,198-test gate is green;
-push before exact replay.
+sole-ball capture. Its public-artifact, docs, registry, Ruff, mypy, and 2,198-test gate is green and
+published. Replay 19 qualified that lesson, then stopped on an ordinary wild in a later 1F segment.
+The next lane is the cave-wide cumulative traversal ledger described above.
 Only Codex
 pushes this branch; do not create a second worktree or force-push it.
 

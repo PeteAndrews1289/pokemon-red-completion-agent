@@ -231,6 +231,12 @@ Replay 18 supplies the perfect callback: the fixed “Zubat” wait also produce
 Kakuna lesson—show species `0x6B`, level seven, a bounded search counter, and the route coordinate
 restored after capture. Caption it again: **“Intent is not evidence.”**
 
+Then show replay 19 make the capture and fail on an ordinary wild later on the same floor. Zoom out
+from the one red route segment to every 1F/B1F/B2F path and draw one shared evidence ledger around
+them. Caption it: **“A fix becomes knowledge only when its scope is explicit.”** This is the clean
+stopping point for the episode: the counterexample is understood, the local lesson is proven, and
+the next implementation is a cave mechanic rather than another coordinate patch.
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

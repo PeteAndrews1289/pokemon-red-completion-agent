@@ -196,7 +196,10 @@ corridor now reuses the repository's map-scoped bounded flee traversal and repor
 movement retry. Replay 18 qualified that repair and reached Mt. Moon, where the fixed 155-frame
 Zubat trigger produced no encounter. Capture now semantically searches a reversible grass edge for
 observed level-seven Zubat, authenticates bounded non-target flees, and restores the exact route
-coordinate before continuing;
+coordinate before continuing. Replay 19 qualified that exact search, captured Zubat with the sole
+Poké Ball, and rejoined the route at `(14,31)` before an ordinary wild interrupted a later 1F
+segment. The next repair is therefore one cumulative, report-visible Mt. Moon traversal ledger
+covering 1F, B1F, B2F, item detours, and return paths—not another local exception;
 see the
 [eleventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95

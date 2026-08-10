@@ -2372,6 +2372,13 @@ produced no encounter at all. The capture lesson now searches a reversible grass
 species and level, flees authenticated non-targets under a finite budget, and restores the authored
 route coordinate after using the sole Poké Ball. The Kakuna fix became a reusable design rule.
 
+The same root then qualified the exact level-seven Zubat capture and immediately found the larger
+boundary: a later ordinary wild interrupted another 1F segment. That result changed the next task
+from “handle one encounter” to “make cave traversal a cumulative semantic capability.” One ledger
+must cover every 1F/B1F/B2F segment, item detour, and return path. The lesson is architectural:
+robustness comes from giving a mechanic explicit scope, budgets, and evidence—not from extending a
+route one failed coordinate at a time.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

@@ -163,6 +163,11 @@ Replay 18 qualified Route 3, then the fixed Mt. Moon Zubat wait produced no enco
 with a finite species-and-level search on a reversible edge, retain sole-ball and route-rejoin
 proofs, publish search receipts, pass the gate, push, and repeat `990026`. The 2,198-test gate is
 green.
+Replay 19 qualified that exact level-seven Zubat search, sole-ball capture, and `(14,31)` route
+rejoin. An ordinary wild then interrupted a later 1F route before TM01 step 10. The next unit of
+work is one cumulative, report-visible incidental-wild ledger across all Mt. Moon 1F/B1F/B2F
+segments, item detours, and return paths, followed by the full gate and the same `990026` replay.
+Do not spend a fresh root or open counted v95; it remains 0/10.
 
 Seed `990024` qualified incidental Forest travel but the fixed first-Kakuna frame wait produced no
 battle. The [ninth perturbation failure](evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json)

@@ -34,7 +34,7 @@
     "model_boundary": "The failure remained inside the authored first composite. Objective selection made one singleton choice; all learned battle, target, and training counters were zero."
   },
   "repair": {
-    "status": "mt_moon_zubat_semantic_search_validated_rom_free_pending_replay",
+    "status": "mt_moon_zubat_capture_qualified_cave_traversal_pending_design",
     "behavior": "The Forest exit still requires the exact level-9 lead, at least 19 HP, at least four Bubble PP, and either healthy or poison status; every other status remains fatal. The independent progress referee admits poison only at the Forest north gate, upper Route 2 return, and Pewter south edge. The teacher takes the direct finite Pewter route to the Pokémon Center, proves full HP, clear status, and positive PP for every learned move, withdraws exactly RED's guaranteed PC Potion, exits, and follows the measured finite route to the Gym. After the first required Route 3 trainer, it consumes exactly that Potion under map, HP, inventory, and field-control gates before the 51-step return. During trainer one it may consume one further Potion only at a verified MAIN menu at or below 13 HP and above a twelve-Potion floor. Cerulean purchases the original four from a measured 12–14 starting window; the rival accepts 16–18, and the existing cleanup still protects six, so downstream reserves and total spend are unchanged.",
     "bounds": {
       "center_route_inputs": 15,
@@ -137,7 +137,15 @@
       "message": "Mt. Moon capture missed the qualified Zubat encounter: map=59, battle=0, species=36, level=8, hp=(25,25), party=(177,), balls=1.",
       "finding": "The shared Route 3 traversal qualified the incidental wild and reached Mt. Moon. The fixed 155-frame Zubat trigger then produced no battle, repeating the earlier Kakuna lesson defect. The capture now searches a reversible grass edge for observed species 0x6B at level 7, authenticates and reports non-target flees, restores the route coordinate, and retains the sole-ball capture gate."
     },
+    "same_root_mt_moon_capture_qualification": {
+      "source_commit": "70b4f22004a58a09d1b9b8aebe2fd165dd4b8e07",
+      "raw_report_sha256": "644c43a367ddb1c8f0ad781cb5648d524b0092a9df3975f48eed6593b6086905",
+      "frames_executed": 307294,
+      "exception_type": "CeruleanChapterError",
+      "message": "Unexpected battle interrupted Mt. Moon 1F route before TM01 step 10 at step 1.",
+      "finding": "The semantic search found and captured the exact level-seven Zubat with the sole Ball, restored the route coordinate, and continued. A later ordinary wild exposed the remaining cave-wide zero-encounter movement assumption. The next repair must use one cumulative Mt. Moon flee/retry ledger across 1F, B1F, B2F, TM01 detours, and return paths rather than patching this single step."
+    },
     "rom_free_gate": "The bounded Zubat semantic search passes public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,198 tests; three integration tests are deselected and one expected failure remains expected. Its source-bound v95 registry is SHA-256 5a7f3faf0853841424f4642a8cdd456cdafa640c7e82ad0b36da1bcb0521c3d1 and source bundle SHA-256 b7eb7ae70081ca224276792147edc35d32f6469bd6f0af0c8b154d3c229ebe35.",
-    "next_gate": "Complete the full ROM-free gate, commit and push the repair, then replay the failed seed causally before assigning a fresh uncounted derived-timing root. Counted v95 remains unopened."
+    "next_gate": "Design one cumulative, report-visible Mt. Moon incidental-wild ledger across every cave segment; complete the full ROM-free gate, commit and push, then replay seed 990026 causally before assigning a fresh uncounted root. Counted v95 remains unopened."
   }
 }
