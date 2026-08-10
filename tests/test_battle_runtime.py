@@ -22,6 +22,7 @@ from pokemon_red_completion.battle_runtime import (
     RequiredMovePolicy,
     _confirm_attack_with_pp_gate,
     _require_present_state,
+    _trainer_switch_prompt_visible,
     battle_policy_override_active,
     bind_battle_decision_observer,
     bind_battle_policy_override,
@@ -83,6 +84,17 @@ def test_battle_policy_override_scope_is_observable_and_resets() -> None:
     with bind_battle_policy_override(Policy()):
         assert battle_policy_override_active()
     assert not battle_policy_override_active()
+
+
+def test_semantic_trainer_switch_detection_is_optional_and_explicit() -> None:
+    raw = _raw(enemy_hp=20, party_count=2)
+
+    class SemanticReader:
+        def trainer_switch_prompt_visible(self, state: RawGameState) -> bool:
+            return state is raw
+
+    assert _trainer_switch_prompt_visible(SemanticReader(), raw)  # type: ignore[arg-type]
+    assert not _trainer_switch_prompt_visible(object(), raw)  # type: ignore[arg-type]
 
 
 def _raw(

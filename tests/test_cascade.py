@@ -200,6 +200,7 @@ def _report() -> CascadeChapterReport:
             CeruleanChapterState,
             _StartingEvidence(),
         ),
+        cerulean_tm34_sale_proceeds=0,
         records=records,
         final_raw=raw,
         final_evidence=evidence,
@@ -754,12 +755,19 @@ def test_misty_spends_only_two_surplus_potions_and_reuses_intent(
     final = replace(low, battle_state=0, active_party_hp=43)
     intent = BattleIntent("defeat_misty", battle_plan_id="misty-test")
     intents: list[BattleIntent] = []
+    runtime_options: list[tuple[int, bool]] = []
     calls = 0
 
     def fake_runtime(*args: object, **kwargs: object) -> RawGameState:
         nonlocal calls
         calls += 1
         intents.append(cast(BattleIntent, kwargs["intent"]))
+        runtime_options.append(
+            (
+                cast(int, kwargs["unknown_cancel_interval"]),
+                cast(bool, kwargs["transient_zero_pp_main_is_dialogue"]),
+            )
+        )
         if calls <= 2:
             policy = cast(object, args[2])
             try:
@@ -787,6 +795,7 @@ def test_misty_spends_only_two_surplus_potions_and_reuses_intent(
     assert observed is final
     assert calls == 3
     assert intents == [intent, intent, intent]
+    assert runtime_options == [(10_000, True)] * 3
     assert _bag_quantity_for_test(emulator) == ROCKET_THIEF_POTION_RESERVE
 
 
@@ -1283,6 +1292,7 @@ def test_report_is_complete_honest_and_json_safe() -> None:
         "gym_trainer_battle_observed": True,
         "misty_battle_observed": True,
     }
+    assert payload["economy"] == {"early_tm34_sale_proceeds": 0}
     assert payload["cascade"] == {
         "victory_verified": True,
         "badge_verified": True,
@@ -1300,6 +1310,7 @@ def test_report_is_complete_honest_and_json_safe() -> None:
     "change",
     (
         {"records": ()},
+        {"cerulean_tm34_sale_proceeds": 999},
         {"observed_route_24_trainers": (5, 4, 3, 2)},
         {"observed_route_25_trainers": (8, 3, 2)},
         {"saw_cerulean_gym_trainer_battle": False},

@@ -33,14 +33,20 @@ from pokemon_red_completion.pewter import (
     PEWTER_TO_CENTER_DIRECTIONS,
     PEWTER_TO_GYM_DIRECTIONS,
     ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
+    ROUTE_1_TRAINING_TO_VIRIDIAN_DIRECTIONS,
     ROUTE_2_TO_FOREST_GATE_DIRECTIONS,
+    VIRIDIAN_CENTER_RETURN_DIRECTIONS,
+    VIRIDIAN_TO_CENTER_DIRECTIONS,
+    VIRIDIAN_TO_ROUTE_1_TRAINING_DIRECTIONS,
     VIRIDIAN_TO_ROUTE_2_DIRECTIONS,
     PewterChapterError,
     PewterChapterReport,
     PewterProgress,
     PewterTiming,
     _expect_brock_transit_ready,
+    _is_healed_rival_loss_party,
     _seek_forest_training_battle,
+    _seek_route_1_training_battle,
 )
 
 
@@ -219,6 +225,7 @@ def _report() -> PewterChapterReport:
         rival_loss_recovery_search_attempts=(),
         rival_loss_recovery_species_ids=(),
         rival_loss_recovery_level=None,
+        rival_loss_recovery_heals=(),
         forest_target_search_attempts=(1, 1, 1),
         forest_training_species_ids=(0x71, 0x71, 0x71),
         overworld_control_verified=True,
@@ -232,6 +239,10 @@ def test_pewter_route_is_source_stable_at_critical_segments() -> None:
     assert LAB_TO_PALLET_DIRECTIONS == ("down",) * 9
     assert len(PALLET_TO_ROUTE_1_DIRECTIONS) == 17
     assert len(ROUTE_1_TO_VIRIDIAN_DIRECTIONS) == 53
+    assert len(VIRIDIAN_TO_ROUTE_1_TRAINING_DIRECTIONS) == 11
+    assert len(ROUTE_1_TRAINING_TO_VIRIDIAN_DIRECTIONS) == 12
+    assert len(VIRIDIAN_TO_CENTER_DIRECTIONS) == 16
+    assert len(VIRIDIAN_CENTER_RETURN_DIRECTIONS) == 15
     assert len(VIRIDIAN_TO_ROUTE_2_DIRECTIONS) == 39
     assert len(ROUTE_2_TO_FOREST_GATE_DIRECTIONS) == 43
     assert len(FOREST_ROUTE_DIRECTIONS) == 135
@@ -278,6 +289,32 @@ def test_brock_transit_accepts_only_healthy_or_poisoned_ready_party(status: int)
 def test_brock_transit_rejects_unsafe_resource_or_status_boundary(raw: RawGameState) -> None:
     with pytest.raises(PewterChapterError, match="Brock-transit"):
         _expect_brock_transit_ready(raw, "unit Forest exit")
+
+
+def test_brock_transit_accepts_authenticated_loss_recovery_at_healthy_18_hp() -> None:
+    _expect_brock_transit_ready(
+        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=18),
+        "unit Forest exit",
+        authenticated_loss_recovery=True,
+    )
+
+
+@pytest.mark.parametrize(
+    "raw",
+    (
+        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=17),
+        replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=18), first_party_status=0x08),
+    ),
+)
+def test_brock_transit_rejects_unsafe_authenticated_loss_recovery(
+    raw: RawGameState,
+) -> None:
+    with pytest.raises(PewterChapterError, match="Brock-transit"):
+        _expect_brock_transit_ready(
+            raw,
+            "unit Forest exit",
+            authenticated_loss_recovery=True,
+        )
 
 
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
@@ -343,6 +380,73 @@ def test_forest_training_search_retries_empty_grass_and_authenticates_kakuna() -
     ]
 
 
+def test_route_1_loss_training_search_accepts_only_low_level_local_prey() -> None:
+    origin = _raw(MapId.ROUTE_1, 14, 8, level=5, hp=19, max_hp=19)
+    rattata = replace(
+        _raw(MapId.ROUTE_1, 14, 7, level=5, hp=19, max_hp=19),
+        battle_state=1,
+        enemy_species_id=0xA5,
+        enemy_level=3,
+    )
+
+    class _Reader:
+        state = origin
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = _Reader()
+
+    class _Executor:
+        actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> object:
+            self.actions.append(action)
+            if action.kind is MacroActionKind.MOVE and action.value == "up":
+                reader.state = rattata
+            return object()
+
+    executor = _Executor()
+    encounter, flees, retries, attempts, consumed = _seek_route_1_training_battle(  # type: ignore[arg-type]
+        executor,
+        reader,  # type: ignore[arg-type]
+        "up",
+        1,
+        DEFAULT_PEWTER_TIMING,
+        "unit Route 1 lesson",
+        used_flees=0,
+    )
+
+    assert encounter is rattata
+    assert not flees
+    assert retries == 0
+    assert attempts == 1
+    assert consumed
+
+
+def test_rival_loss_heal_requires_full_hp_status_and_move_pp() -> None:
+    healed = replace(
+        _raw(MapId.VIRIDIAN_POKECENTER, 3, 3, level=6, hp=21, max_hp=21),
+        first_party_moves=(0x21, 0x27, 0, 0),
+        first_party_pp=(35, 30, 0, 0),
+    )
+
+    assert _is_healed_rival_loss_party(healed)
+    assert _is_healed_rival_loss_party(replace(healed, first_party_level=5))
+    assert _is_healed_rival_loss_party(
+        replace(
+            healed,
+            first_party_level=8,
+            first_party_moves=(0x21, 0x27, BUBBLE_MOVE_ID, 0),
+            first_party_pp=(35, 30, 30, 0),
+        )
+    )
+    assert not _is_healed_rival_loss_party(None)
+    assert not _is_healed_rival_loss_party(replace(healed, first_party_hp=20))
+    assert not _is_healed_rival_loss_party(replace(healed, first_party_status=0x08))
+    assert not _is_healed_rival_loss_party(replace(healed, first_party_pp=(34, 30, 0, 0)))
+
+
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
 def test_forest_training_search_rejects_invalid_target_level_ceiling(
     invalid: object,
@@ -397,6 +501,7 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         "rival_loss_recovery_search_attempts": [],
         "rival_loss_recovery_species_ids": [],
         "rival_loss_recovery_level": None,
+        "rival_loss_recovery_heals": [],
         "forest_target_search_attempts": [1, 1, 1],
         "forest_training_species_ids": [0x71, 0x71, 0x71],
     }
@@ -426,20 +531,36 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
 
 
 def test_pewter_report_requires_the_authenticated_lab_loss_recovery_lesson() -> None:
+    healed = replace(
+        _raw(MapId.VIRIDIAN_POKECENTER, 3, 3, level=6, hp=21, max_hp=21),
+        first_party_moves=(0x21, 0x27, 0, 0),
+        first_party_pp=(35, 30, 0, 0),
+    )
+    healed_with_bubble = replace(
+        healed,
+        first_party_level=9,
+        first_party_hp=27,
+        first_party_max_hp=27,
+        first_party_moves=(0x21, 0x27, BUBBLE_MOVE_ID, 0),
+        first_party_pp=(35, 30, 30, 0),
+    )
     recovered = replace(
         _report(),
         lab_rival_loss_recovery_required=True,
         rival_loss_recovery_search_attempts=(3, 2),
-        rival_loss_recovery_species_ids=(0x71, 0x70),
-        rival_loss_recovery_level=6,
-        forest_training_species_ids=(0x71, 0x70, 0x70),
+        rival_loss_recovery_species_ids=(0x24, 0xA5),
+        rival_loss_recovery_level=9,
+        rival_loss_recovery_heals=(healed, healed_with_bubble),
+        forest_target_search_attempts=(),
+        forest_training_species_ids=(),
     )
 
     assert recovered.passed
     assert recovered.public_dict()["route"]["rival_loss_recovery_search_attempts"] == [3, 2]
     assert not replace(recovered, rival_loss_recovery_search_attempts=()).passed
     assert not replace(recovered, rival_loss_recovery_species_ids=(0x7B,)).passed
-    assert not replace(recovered, rival_loss_recovery_level=5).passed
+    assert not replace(recovered, rival_loss_recovery_level=7).passed
+    assert not replace(recovered, rival_loss_recovery_heals=(healed,)).passed
     assert not replace(recovered, forest_training_species_ids=(0x71, 0x71, 0x71)).passed
 
 

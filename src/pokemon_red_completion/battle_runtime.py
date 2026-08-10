@@ -561,11 +561,13 @@ def run_adaptive_trainer_battle(
         menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
         if menu.phase is BattleMenuPhase.UNKNOWN:
             unknown_menu_pulses += 1
+            trainer_switch_prompt = _trainer_switch_prompt_visible(reader, raw)
             _pulse(
                 executor,
                 MacroAction(
                     MacroActionKind.CANCEL
-                    if unknown_menu_pulses % unknown_cancel_interval == 0
+                    if trainer_switch_prompt
+                    or unknown_menu_pulses % unknown_cancel_interval == 0
                     else MacroActionKind.CONFIRM
                 ),
                 timing.dialogue_wait_frames,
@@ -679,6 +681,14 @@ def run_adaptive_trainer_battle(
     raise BattleRuntimeTimeoutError(
         f"{label} exceeded {timing.max_runtime_pulses} bounded runtime pulses."
     )
+
+
+def _trainer_switch_prompt_visible(
+    reader: BattleStateReader,
+    raw: RawGameState,
+) -> bool:
+    detector = getattr(reader, "trainer_switch_prompt_visible", None)
+    return bool(detector(raw)) if callable(detector) else False
 
 
 def run_adaptive_wild_battle(

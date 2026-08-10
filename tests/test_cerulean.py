@@ -34,6 +34,7 @@ from pokemon_red_completion.cerulean import (
     MT_MOON_ZUBAT_SEED_WAIT,
     PEWTER_TO_CENTER_DIRECTIONS,
     ROCKET_TO_SUPER_NERD_DIRECTIONS,
+    ROUTE_3_BUBBLE_TRAINER_INDEXES,
     ROUTE_3_REJOIN_SEED_WAIT,
     ROUTE_3_REMAINDER_DIRECTIONS,
     ROUTE_3_REQUIRED_TRAINER_INDEXES,
@@ -47,6 +48,7 @@ from pokemon_red_completion.cerulean import (
     CeruleanTiming,
     _CountingChapterExecutor,
     _finish_battle,
+    _is_persistent_weakened_capture_hp,
     _move_with_seed_waits,
     _pp_at,
     _reverse_directions,
@@ -349,20 +351,26 @@ class _ScriptedBattleReader:
         *,
         pp: int = 10,
         hp: int = 30,
+        battle_state: int = 2,
+        pp_slot: int = 4,
     ) -> None:
         self._menu_states = list(menu_states)
         self.pp = pp
         self.hp = hp
+        self.battle_state = battle_state
+        self.pp_slot = pp_slot
 
     def read(self) -> RawGameState:
+        pp = [34, 30, 20, 10]
+        pp[self.pp_slot - 1] = self.pp
         return replace(
-            _raw(MapId.ROUTE_3, 11, 6, battle_state=2),
+            _raw(MapId.ROUTE_3, 11, 6, battle_state=self.battle_state),
             first_party_hp=self.hp,
-            first_party_pp=(34, 30, 20, self.pp),
+            first_party_pp=tuple(pp),
         )
 
     def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
-        assert raw.battle_state == 2
+        assert raw.battle_state == self.battle_state
         if not self._menu_states:
             raise AssertionError("selector read beyond the scripted semantic menus")
         return self._menu_states.pop(0)
@@ -442,6 +450,30 @@ def test_battle_selector_navigates_non_fight_commands_before_confirming(
     assert first_confirm == len(expected_navigation)
     assert recording.confirm_count == 2
     assert reader.pp == 9
+
+
+def test_battle_selector_supports_a_semantic_wild_battle_move() -> None:
+    reader = _ScriptedBattleReader(
+        (
+            BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0),
+            BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=3),
+        ),
+        battle_state=1,
+        pp_slot=3,
+    )
+    recording = _RecordingBattleExecutor(reader, decrement_on_confirm=2)
+
+    _select_battle_move(
+        _CountingChapterExecutor(recording),
+        reader,  # type: ignore[arg-type]
+        DEFAULT_CERULEAN_TIMING,
+        slot=3,
+        label="wild Bubble selector test",
+        expected_battle_state=1,
+    )
+
+    assert reader.pp == 9
+    assert recording.confirm_count == 2
 
 
 def test_battle_selector_does_not_treat_unknown_menu_as_active() -> None:
@@ -616,6 +648,7 @@ def test_cerulean_route_is_pinned_at_critical_segments() -> None:
     assert MT_MOON_B1F_EXIT_SEED_WAIT == 1
     assert MT_MOON_ZUBAT_SEED_WAIT == 155
     assert MT_MOON_ZUBAT_PRE_THROW_WAIT == 3
+    assert frozenset({0, 3, 6}) == ROUTE_3_BUBBLE_TRAINER_INDEXES
     assert ROUTE_3_REJOIN_SEED_WAIT == 8
     assert len(ROUTE_4_FIRST_LEDGE_APPROACH_DIRECTIONS) == 20
     assert len(ROUTE_4_MIDDLE_DIRECTIONS) == 39
@@ -682,12 +715,19 @@ def test_route_3_recovery_consumes_only_the_guaranteed_pc_potion() -> None:
     ) == 4
 
 
-def test_route_3_battle_recovery_preserves_the_twelve_potion_floor() -> None:
+@pytest.mark.parametrize(
+    ("initial_quantity", "expected_quantity"),
+    ((13, 12), (14, 13)),
+)
+def test_route_3_battle_recovery_consumes_one_potion_above_the_floor(
+    initial_quantity: int,
+    expected_quantity: int,
+) -> None:
     class Emulator:
         memory = {
             int(RamAddress.NUM_BAG_ITEMS): 1,
             int(RamAddress.BAG_ITEMS): int(ItemId.POTION),
-            int(RamAddress.BAG_ITEMS) + 1: 13,
+            int(RamAddress.BAG_ITEMS) + 1: initial_quantity,
             int(RamAddress.CURRENT_MENU_ITEM): 0,
         }
 
@@ -729,7 +769,7 @@ def test_route_3_battle_recovery_preserves_the_twelve_potion_floor() -> None:
             self.confirms += 1
             if self.confirms == 3:
                 reader.state = replace(reader.state, first_party_hp=33)
-                emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = 12
+                emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = expected_quantity
 
     _use_battle_potion(
         _CountingChapterExecutor(Executor()),  # type: ignore[arg-type]
@@ -741,7 +781,7 @@ def test_route_3_battle_recovery_preserves_the_twelve_potion_floor() -> None:
     )
 
     assert reader.state.first_party_hp == 33
-    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 12
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == expected_quantity
     assert reader.selected_main_command == 0
 
 
@@ -812,6 +852,11 @@ def test_cerulean_helpers_use_one_based_pp_and_exact_reverse_routes() -> None:
         "left",
         "down",
     )
+    assert _is_persistent_weakened_capture_hp(13, 23, 13)
+    assert _is_persistent_weakened_capture_hp(14, 23, 13)
+    assert not _is_persistent_weakened_capture_hp(0, 23, 1)
+    assert not _is_persistent_weakened_capture_hp(23, 23, 22)
+    assert not _is_persistent_weakened_capture_hp(15, 23, 13)
 
 
 def test_battle_completion_declines_switch_without_cancelling_evolution() -> None:
@@ -965,6 +1010,83 @@ def test_battle_completion_uses_one_surplus_potion_at_threshold(
     assert recovery_calls == [(12, "Mt. Moon Super Nerd")]
     assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 12
     assert final.first_party_hp == 41
+
+
+def test_battle_completion_uses_each_surplus_potion_above_the_floor(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Emulator:
+        memory = {
+            int(RamAddress.NUM_BAG_ITEMS): 1,
+            int(RamAddress.BAG_ITEMS): int(ItemId.POTION),
+            int(RamAddress.BAG_ITEMS) + 1: 14,
+        }
+
+        def read_u8(self, address: int) -> int:
+            return self.memory.get(int(address), 0)
+
+    emulator = Emulator()
+
+    class Reader:
+        state = replace(
+            _raw(MapId.ROUTE_3, 14, 6),
+            battle_state=2,
+            enemy_hp=30,
+            first_party_hp=13,
+            first_party_max_hp=35,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return READY
+
+        def trainer_switch_prompt_visible(self, raw: RawGameState) -> bool:
+            del raw
+            return False
+
+    reader = Reader()
+    recovery_calls: list[tuple[int, str]] = []
+
+    def recover(*args: object, quantity_floor: int, label: str, **kwargs: object) -> None:
+        del args, kwargs
+        recovery_calls.append((quantity_floor, label))
+        remaining = emulator.memory[int(RamAddress.BAG_ITEMS) + 1] - 1
+        emulator.memory[int(RamAddress.BAG_ITEMS) + 1] = remaining
+        reader.state = replace(
+            reader.state,
+            first_party_hp=13 if remaining > quantity_floor else 33,
+        )
+
+    monkeypatch.setattr("pokemon_red_completion.cerulean._use_battle_potion", recover)
+
+    class Executor:
+        def execute(self, action: MacroAction) -> None:
+            if action.kind is MacroActionKind.CONFIRM:
+                reader.state = replace(reader.state, battle_state=0)
+
+    final = _finish_battle(
+        Executor(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        DEFAULT_CERULEAN_TIMING,
+        MapId.ROUTE_3,
+        "Route 3 trainer 1",
+        emulator=emulator,  # type: ignore[arg-type]
+        recovery_hp_threshold=13,
+        recovery_potion_floor=12,
+    )
+
+    assert recovery_calls == [
+        (12, "Route 3 trainer 1"),
+        (12, "Route 3 trainer 1"),
+    ]
+    assert emulator.read_u8(int(RamAddress.BAG_ITEMS) + 1) == 12
+    assert final.first_party_hp == 33
 
 
 def test_battle_completion_does_not_decline_a_nonexistent_single_party_switch() -> None:
