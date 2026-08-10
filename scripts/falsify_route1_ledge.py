@@ -172,7 +172,7 @@ def main(argv: list[str] | None = None) -> int:
 
         reverse_input = _OPPOSITE[planned.transition.action]
         executor.execute(MacroAction(MacroActionKind.MOVE, reverse_input))
-        _wait(executor, route_timing.step_retry_wait_frames)
+        _wait(executor, route_timing.route_1_step_retry_wait_frames)
         reversed_state = reader.read()
         if (
             reversed_state.map_id != MapId.ROUTE_1
