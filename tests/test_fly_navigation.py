@@ -36,6 +36,8 @@ SURF = 0x39
 STRENGTH = 0x46
 PECK = 0x40
 TACKLE = 0x21
+FLASH = 0x94
+TELEPORT = 0x64
 
 
 class FakeMemory:
@@ -147,6 +149,12 @@ def test_a_field_move_row_counts_only_field_moves_before_it() -> None:
 
     assert _field_move_menu_indices(memory, SURF, "Surf") == (0, 0)  # type: ignore[arg-type]
     assert _field_move_menu_indices(memory, STRENGTH, "Strength") == (0, 1)  # type: ignore[arg-type]
+
+
+def test_all_real_gen1_field_moves_shift_a_later_surf_row() -> None:
+    memory = FakeMemory([(0x1C, [FLASH, TELEPORT, TACKLE, SURF])])
+
+    assert _field_move_menu_indices(memory, SURF, "Surf") == (0, 2)  # type: ignore[arg-type]
 
 
 def test_a_party_without_the_move_names_it() -> None:

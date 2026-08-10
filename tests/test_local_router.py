@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pytest
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.local_router import (
     LocalEdge,
     LocalGraph,
@@ -45,11 +46,7 @@ def test_a_live_blocker_removes_both_entry_and_exit_edges() -> None:
 
 def test_missing_capability_closes_an_edge_instead_of_becoming_a_fallback() -> None:
     graph = LocalGraph(
-        {
-            (0, 0): (
-                LocalEdge((0, 1), action="surf", requirements=frozenset({"surf"})),
-            )
-        }
+        {(0, 0): (LocalEdge((0, 1), action="surf", requirements=frozenset({"surf"})),)}
     )
 
     with pytest.raises(LocalRouterError, match="no permitted local route"):
@@ -116,12 +113,15 @@ def test_an_unavailable_transition_capability_does_not_count_as_nearest() -> Non
     with pytest.raises(LocalRouterError, match="no permitted water_entry"):
         find_nearest_transition(graph, (0, 0), "water_entry")
 
-    assert find_nearest_transition(
-        graph,
-        (0, 0),
-        "water_entry",
-        capabilities=frozenset({"surf"}),
-    ).transition.action == "surf"
+    assert (
+        find_nearest_transition(
+            graph,
+            (0, 0),
+            "water_entry",
+            capabilities=frozenset({"surf"}),
+        ).transition.action
+        == "surf"
+    )
 
 
 def test_a_transition_query_needs_a_kind() -> None:
@@ -137,3 +137,74 @@ def test_local_edges_require_an_action_and_positive_cost() -> None:
         LocalEdge((0, 1), action="right", kind="")
     with pytest.raises(ValueError, match="must cost"):
         LocalEdge((0, 1), action="right", cost=0)
+
+
+def test_routing_tracks_mode_changes_as_part_of_the_search_state() -> None:
+    graph = LocalGraph(
+        {
+            (0, 0): (
+                LocalEdge(
+                    (0, 1),
+                    action="surf:right",
+                    kind="water_entry",
+                    action_kind=MacroActionKind.FIELD_MOVE,
+                    required_mode="land",
+                    result_mode="water",
+                ),
+            ),
+            (0, 1): (
+                LocalEdge(
+                    (0, 0),
+                    action="left",
+                    kind="water_exit",
+                    required_mode="water",
+                    result_mode="land",
+                ),
+                LocalEdge((0, 2), action="right", required_mode="water"),
+            ),
+        }
+    )
+
+    with pytest.raises(LocalRouterError, match="no permitted local route"):
+        find_local_path(graph, (0, 0), (0, 2), start_mode="water")
+
+    path = find_local_path(
+        graph,
+        (0, 0),
+        (0, 2),
+        start_mode="land",
+        goal_mode="water",
+    )
+
+    assert path.modes == ("land", "water", "water")
+    assert path.edges[0].macro_action == MacroAction(
+        MacroActionKind.FIELD_MOVE,
+        "surf:right",
+    )
+
+
+def test_a_goal_mode_is_not_satisfied_by_the_same_coordinate_in_another_mode() -> None:
+    graph = LocalGraph(
+        {
+            (0, 0): (
+                LocalEdge(
+                    (0, 0),
+                    action="surf:down",
+                    action_kind=MacroActionKind.FIELD_MOVE,
+                    required_mode="land",
+                    result_mode="water",
+                ),
+            )
+        }
+    )
+
+    path = find_local_path(
+        graph,
+        (0, 0),
+        (0, 0),
+        start_mode="land",
+        goal_mode="water",
+    )
+
+    assert path.modes == ("land", "water")
+    assert len(path.edges) == 1

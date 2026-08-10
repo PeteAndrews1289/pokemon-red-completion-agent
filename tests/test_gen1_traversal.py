@@ -8,6 +8,10 @@ import pytest
 from pokemon_red_completion.gen1_cartridge import CartridgeReadError
 from pokemon_red_completion.gen1_terrain import Terrain
 from pokemon_red_completion.gen1_traversal import (
+    LAND_MODE,
+    SURF_CAPABILITY,
+    SURF_MOVE_ID,
+    WATER_MODE,
     CutBlockSwap,
     Direction,
     LedgeRule,
@@ -19,8 +23,12 @@ from pokemon_red_completion.gen1_traversal import (
     ledge_rules,
     local_graph,
     map_object_events,
+    surf_capabilities,
+    surf_local_graph,
     water_pair_restrictions,
 )
+from pokemon_red_completion.local_router import LocalRouterError, find_local_path
+from pokemon_red_completion.observation import Badge, RawGameState
 
 TEST_LEDGE_TABLE = 0x1A6CF
 TEST_LAND_PAIRS = 0x0C7E
@@ -37,30 +45,76 @@ def traversal_cartridge() -> bytearray:
     data = bytearray(0x20000)
     data[TEST_LEDGE_TABLE : TEST_LEDGE_TABLE + 33] = bytes(
         (
-            0x00, 0x2C, 0x37, 0x80,
-            0x00, 0x39, 0x36, 0x80,
-            0x00, 0x39, 0x37, 0x80,
-            0x08, 0x2C, 0x27, 0x20,
-            0x08, 0x39, 0x27, 0x20,
-            0x0C, 0x2C, 0x0D, 0x10,
-            0x0C, 0x2C, 0x1D, 0x10,
-            0x0C, 0x39, 0x0D, 0x10,
+            0x00,
+            0x2C,
+            0x37,
+            0x80,
+            0x00,
+            0x39,
+            0x36,
+            0x80,
+            0x00,
+            0x39,
+            0x37,
+            0x80,
+            0x08,
+            0x2C,
+            0x27,
+            0x20,
+            0x08,
+            0x39,
+            0x27,
+            0x20,
+            0x0C,
+            0x2C,
+            0x0D,
+            0x10,
+            0x0C,
+            0x2C,
+            0x1D,
+            0x10,
+            0x0C,
+            0x39,
+            0x0D,
+            0x10,
             0xFF,
         )
     )
     data[TEST_LAND_PAIRS : TEST_LAND_PAIRS + 34] = bytes(
         (
-            17, 0x20, 0x05,
-            17, 0x41, 0x05,
-            3, 0x30, 0x2E,
-            17, 0x2A, 0x05,
-            17, 0x05, 0x21,
-            3, 0x52, 0x2E,
-            3, 0x55, 0x2E,
-            3, 0x56, 0x2E,
-            3, 0x20, 0x2E,
-            3, 0x5E, 0x2E,
-            3, 0x5F, 0x2E,
+            17,
+            0x20,
+            0x05,
+            17,
+            0x41,
+            0x05,
+            3,
+            0x30,
+            0x2E,
+            17,
+            0x2A,
+            0x05,
+            17,
+            0x05,
+            0x21,
+            3,
+            0x52,
+            0x2E,
+            3,
+            0x55,
+            0x2E,
+            3,
+            0x56,
+            0x2E,
+            3,
+            0x20,
+            0x2E,
+            3,
+            0x5E,
+            0x2E,
+            3,
+            0x5F,
+            0x2E,
             0xFF,
         )
     )
@@ -69,15 +123,24 @@ def traversal_cartridge() -> bytearray:
     )
     data[TEST_CUT_SWAPS : TEST_CUT_SWAPS + 19] = bytes(
         (
-            0x32, 0x6D,
-            0x33, 0x6C,
-            0x34, 0x6F,
-            0x35, 0x4C,
-            0x60, 0x6E,
-            0x0B, 0x0A,
-            0x3C, 0x35,
-            0x3F, 0x35,
-            0x3D, 0x36,
+            0x32,
+            0x6D,
+            0x33,
+            0x6C,
+            0x34,
+            0x6F,
+            0x35,
+            0x4C,
+            0x60,
+            0x6E,
+            0x0B,
+            0x0A,
+            0x3C,
+            0x35,
+            0x3F,
+            0x35,
+            0x3D,
+            0x36,
             0xFF,
         )
     )
@@ -119,14 +182,20 @@ def rules(
 
 
 def terrain(
-    tiles: tuple[tuple[int, ...], ...], *, tileset: int = 0
+    tiles: tuple[tuple[int, ...], ...],
+    *,
+    tileset: int = 0,
+    walkable: tuple[tuple[bool, ...], ...] | None = None,
+    water: tuple[tuple[bool, ...], ...] | None = None,
 ) -> Terrain:
-    walkable = tuple(tuple(True for _ in row) for row in tiles)
+    land_grid = walkable or tuple(tuple(True for _ in row) for row in tiles)
+    water_grid = water or tuple(tuple(False for _ in row) for row in tiles)
     return Terrain(
         map_id=0,
         tileset=tileset,
-        walkable=walkable,
+        walkable=land_grid,
         grass=tuple(tuple(False for _ in row) for row in tiles),
+        water=water_grid,
         tiles=tiles,
     )
 
@@ -200,9 +269,7 @@ def test_a_ledge_is_one_directed_action_that_skips_the_ledge_tile() -> None:
     )
 
     down = graph.neighbors((0, 0))
-    assert [(edge.target, edge.action, edge.kind) for edge in down] == [
-        ((2, 0), "down", "ledge")
-    ]
+    assert [(edge.target, edge.action, edge.kind) for edge in down] == [((2, 0), "down", "ledge")]
 
 
 def test_an_elevation_pair_blocks_two_otherwise_walkable_tiles() -> None:
@@ -223,6 +290,105 @@ def test_an_observed_dynamic_object_blocks_its_coordinate() -> None:
 
     assert graph.neighbors((0, 0)) == ()
     assert (0, 1) not in graph.edges
+
+
+def test_surf_requires_the_badge_and_a_living_observed_move_holder() -> None:
+    def observed(
+        *,
+        badges: Badge = Badge.SOUL,
+        hp: tuple[int, ...] = (20,),
+        moves: tuple[tuple[int, ...], ...] = ((SURF_MOVE_ID,),),
+    ) -> RawGameState:
+        return RawGameState(
+            game_started=True,
+            map_id=0,
+            player_x=0,
+            player_y=0,
+            party_count=len(hp),
+            battle_state=0,
+            badge_bits=int(badges),
+            party_hp=hp,
+            party_moves=moves,
+        )
+
+    assert surf_capabilities(observed(), surf_allowed=True) == frozenset({SURF_CAPABILITY})
+    assert not surf_capabilities(observed(), surf_allowed=False)
+    assert not surf_capabilities(observed(badges=Badge.CASCADE), surf_allowed=True)
+    assert not surf_capabilities(observed(hp=(0,)), surf_allowed=True)
+    assert not surf_capabilities(observed(moves=((0x0F,),)), surf_allowed=True)
+    assert not surf_capabilities(
+        observed(hp=(20, 20), moves=((SURF_MOVE_ID,),)),
+        surf_allowed=True,
+    )
+
+
+def test_surf_graph_keeps_land_and_water_as_explicit_search_modes() -> None:
+    world = terrain(
+        ((1, 0x14, 0x14, 1),),
+        walkable=((True, False, False, True),),
+        water=((False, True, True, False),),
+    )
+    graph = surf_local_graph(world, rules())
+
+    with pytest.raises(LocalRouterError, match="no permitted local route"):
+        find_local_path(graph, (0, 0), (0, 3), start_mode=LAND_MODE)
+
+    path = find_local_path(
+        graph,
+        (0, 0),
+        (0, 3),
+        capabilities=frozenset({SURF_CAPABILITY}),
+        start_mode=LAND_MODE,
+        goal_mode=LAND_MODE,
+    )
+
+    assert path.coordinates == ((0, 0), (0, 1), (0, 2), (0, 3))
+    assert path.modes == (LAND_MODE, WATER_MODE, WATER_MODE, LAND_MODE)
+    assert [(edge.action, edge.kind, edge.action_kind.value) for edge in path.edges] == [
+        ("surf:right", "water_entry", "field_move"),
+        ("right", "water_travel", "move"),
+        ("right", "water_exit", "move"),
+    ]
+
+
+def test_water_pair_restrictions_close_boarding_and_water_travel() -> None:
+    world = terrain(
+        ((0x2E, 0x14, 0x14),),
+        tileset=3,
+        walkable=((True, False, False),),
+        water=((False, True, True),),
+    )
+    blocked_boarding = surf_local_graph(
+        world,
+        rules(),
+    )
+    # No rule means the topology is present, proving the fixture itself routes.
+    assert find_local_path(
+        blocked_boarding,
+        (0, 0),
+        (0, 2),
+        capabilities=frozenset({SURF_CAPABILITY}),
+        start_mode=LAND_MODE,
+    ).coordinates[-1] == (0, 2)
+
+    restricted = surf_local_graph(
+        world,
+        TraversalRules(
+            ledges=(),
+            land_pair_restrictions=(),
+            water_pair_restrictions=(TilePairRestriction(3, 0x2E, 0x14),),
+            cut_block_swaps=(),
+            boulders=(),
+        ),
+    )
+    with pytest.raises(LocalRouterError, match="no permitted local route"):
+        find_local_path(
+            restricted,
+            (0, 0),
+            (0, 2),
+            capabilities=frozenset({SURF_CAPABILITY}),
+            start_mode=LAND_MODE,
+        )
 
 
 def test_both_cartridges_produce_the_same_truthful_static_graph() -> None:

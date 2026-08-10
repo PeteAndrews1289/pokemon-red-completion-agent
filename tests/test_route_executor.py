@@ -24,9 +24,9 @@ class FakeWorld:
     at: tuple[int, int] = (0, 0)
     ready: bool = True
     interruption: str | None = None
-    transitions: dict[
-        tuple[int, tuple[int, int], str], tuple[int, tuple[int, int]]
-    ] = field(default_factory=dict)
+    transitions: dict[tuple[int, tuple[int, int], str], tuple[int, tuple[int, int]]] = field(
+        default_factory=dict
+    )
     swallowed: dict[tuple[int, tuple[int, int], str], int] = field(default_factory=dict)
     interrupt_on: dict[tuple[int, tuple[int, int], str], str] = field(default_factory=dict)
     staged_transitions: dict[
@@ -110,6 +110,38 @@ def test_each_requested_movement_needs_live_acknowledgement() -> None:
     assert [receipt.movement_requests for receipt in report.executed_steps] == [1, 1]
 
 
+def test_a_same_map_coordinate_goal_executes_its_terminal_approach() -> None:
+    local = {
+        1: LocalGraph(
+            {
+                (0, 0): (LocalEdge((0, 1), action="right"),),
+                (0, 1): (LocalEdge((0, 2), action="right"),),
+                (0, 2): (),
+            }
+        )
+    }
+    plan = plan_route(
+        MacroGraph({1: ()}),
+        local,
+        1,
+        (0, 0),
+        1,
+        goal_at=(0, 2),
+    )
+    world = FakeWorld(
+        transitions={
+            (1, (0, 0), "right"): (1, (0, 1)),
+            (1, (0, 1), "right"): (1, (0, 2)),
+        }
+    )
+
+    report = execute_route(plan, world, world)
+
+    assert report.passed
+    assert report.movement_requests == 2
+    assert report.terminal.at == (0, 2)
+
+
 def test_an_unchanged_input_is_retried_instead_of_counted() -> None:
     plan, _, _ = connection_plan()
     world = FakeWorld(
@@ -125,6 +157,83 @@ def test_an_unchanged_input_is_retried_instead_of_counted() -> None:
     assert report.movement_requests == 3
     assert report.executed_steps[0].movement_requests == 2
     assert report.wait_actions == 2, "one retry wait and one transition wait"
+
+
+def test_field_actions_and_mode_changes_need_exact_live_acknowledgement() -> None:
+    transition = MacroTransition((0, 3), (5, 0), "right")
+    macro = MacroGraph({1: (MacroEdge(2, coordinate_transitions=(transition,)),)})
+    local = LocalGraph(
+        {
+            (0, 0): (
+                LocalEdge(
+                    (0, 1),
+                    action="surf:right",
+                    kind="water_entry",
+                    action_kind=MacroActionKind.FIELD_MOVE,
+                    required_mode="land",
+                    result_mode="water",
+                ),
+            ),
+            (0, 1): (
+                LocalEdge(
+                    (0, 2),
+                    action="right",
+                    kind="water_travel",
+                    required_mode="water",
+                ),
+            ),
+            (0, 2): (
+                LocalEdge(
+                    (0, 3),
+                    action="right",
+                    kind="water_exit",
+                    required_mode="water",
+                    result_mode="land",
+                ),
+            ),
+            (0, 3): (),
+        }
+    )
+    plan = plan_route(macro, {1: local}, 1, (0, 0), 2, start_mode="land")
+
+    @dataclass
+    class ModeWorld:
+        map_id: int = 1
+        at: tuple[int, int] = (0, 0)
+        mode: str = "land"
+        actions: list[MacroAction] = field(default_factory=list)
+
+        def execute(self, action: MacroAction) -> object:
+            self.actions.append(action)
+            if action.kind is MacroActionKind.WAIT:
+                return action
+            if action == MacroAction(MacroActionKind.FIELD_MOVE, "surf:right"):
+                self.at = (0, 1)
+                self.mode = "water"
+            elif action == MacroAction(MacroActionKind.MOVE, "right"):
+                if self.at == (0, 1):
+                    self.at = (0, 2)
+                elif self.at == (0, 2):
+                    self.at = (0, 3)
+                    self.mode = "land"
+                else:
+                    self.map_id, self.at = 2, (5, 0)
+            return action
+
+        def observe(self) -> TraversalSnapshot:
+            return TraversalSnapshot(self.map_id, self.at, True, mode=self.mode)
+
+    world = ModeWorld()
+    report = execute_route(plan, world, world)
+
+    assert report.passed
+    assert [action.kind for action in world.actions if action.kind is not MacroActionKind.WAIT] == [
+        MacroActionKind.FIELD_MOVE,
+        MacroActionKind.MOVE,
+        MacroActionKind.MOVE,
+        MacroActionKind.MOVE,
+    ]
+    assert report.terminal.mode == "land"
 
 
 def test_a_map_change_waits_for_staggered_destination_coordinates() -> None:

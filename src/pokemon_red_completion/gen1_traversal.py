@@ -9,10 +9,11 @@ grid cannot express:
 * Cut replaces one map block with another; and
 * Strength boulders are object events whose position changes during play.
 
-Only the first two are projected into a static local graph here. Cut and
-Strength are extracted and reported, but their state transitions are not
-pretended into existence. Surf likewise changes movement mode; its exceptional
-tile-pair table is decoded, while water-mode routing remains future work.
+Only the first two are projected into the default static local graph here. Cut
+and Strength are extracted and reported, but their state transitions are not
+pretended into existence. ``surf_local_graph`` is the explicit stateful
+alternative: land and water remain different search modes, and only a living
+party move plus Soul Badge permits the field transitions between them.
 """
 
 from __future__ import annotations
@@ -21,6 +22,7 @@ from collections.abc import Collection
 from dataclasses import dataclass
 from enum import StrEnum
 
+from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.gen1_cartridge import (
     MAP_ID_LIMIT,
     CartridgeReadError,
@@ -37,6 +39,7 @@ from pokemon_red_completion.gen1_maps import (
 )
 from pokemon_red_completion.gen1_terrain import Terrain
 from pokemon_red_completion.local_router import LocalEdge, LocalGraph
+from pokemon_red_completion.observation import Badge, RawGameState
 
 LEDGE_TABLE = 0x1A6CF
 LAND_PAIR_COLLISION_TABLE = 0x0C7E
@@ -58,6 +61,11 @@ SPRITE_BOULDER = 0x3F
 STRENGTH_BOULDER_MOVEMENT = 0x10
 TRAINER_TEXT_BIT = 0x40
 ITEM_TEXT_BIT = 0x80
+SURF_MOVE_ID = 0x39
+SURF_CAPABILITY = "move:surf"
+LAND_MODE = "land"
+WATER_MODE = "water"
+SURF_MODE_CHANGE_COST = 4
 
 
 class Direction(StrEnum):
@@ -218,9 +226,7 @@ def cut_block_swaps(rom: bytes) -> tuple[CutBlockSwap, ...]:
     return tuple(found)
 
 
-def map_object_events(
-    rom: bytes, map_ids: Collection[int]
-) -> tuple[MapObjectEvent, ...]:
+def map_object_events(rom: bytes, map_ids: Collection[int]) -> tuple[MapObjectEvent, ...]:
     """Decode initial object events for the requested real maps."""
 
     found: list[MapObjectEvent] = []
@@ -246,14 +252,9 @@ def _objects_for_map(rom: bytes, map_id: int) -> tuple[MapObjectEvent, ...]:
     if flags > CONNECTION_FLAG_LIMIT:
         raise CartridgeReadError(f"map {map_id} has invalid connection flags")
     object_pointer_at = (
-        header
-        + CONNECTION_FLAGS_OFFSET
-        + 1
-        + flags.bit_count() * CONNECTION_STRUCT_BYTES
+        header + CONNECTION_FLAGS_OFFSET + 1 + flags.bit_count() * CONNECTION_STRUCT_BYTES
     )
-    object_address = int.from_bytes(
-        rom[object_pointer_at : object_pointer_at + 2], "little"
-    )
+    object_address = int.from_bytes(rom[object_pointer_at : object_pointer_at + 2], "little")
     if not 0x4000 <= object_address <= 0x7FFF:
         raise CartridgeReadError(f"map {map_id} has no readable object block")
     cursor = bank_offset(bank, object_address) + 1  # border block
@@ -317,16 +318,62 @@ def local_graph(
     state of the puzzle and requires a state-space planner, not an edge flag.
     """
 
+    return _local_graph(terrain, rules, blocked=blocked, include_surf=False)
+
+
+def surf_local_graph(
+    terrain: Terrain,
+    rules: TraversalRules,
+    *,
+    blocked: Collection[tuple[int, int]] = (),
+) -> LocalGraph:
+    """Project land, water, boarding and disembarking as distinct modes."""
+
+    return _local_graph(terrain, rules, blocked=blocked, include_surf=True)
+
+
+def surf_capabilities(
+    raw: RawGameState,
+    *,
+    surf_allowed: bool,
+) -> frozenset[str]:
+    """Derive field Surf from permission, badge and a living move holder.
+
+    ``surf_allowed`` has no optimistic default.  The title adapter must first
+    rule out forced cycling and story-specific restrictions; cartridge
+    topology alone is deliberately insufficient to open a water edge.
+    """
+
+    if not surf_allowed or not (int(raw.badge_bits or 0) & int(Badge.SOUL)):
+        return frozenset()
+    hp = raw.party_hp or ()
+    moves = raw.party_moves or ()
+    if raw.party_count is None or raw.party_count != len(hp) or len(hp) != len(moves):
+        return frozenset()
+    if any(
+        current_hp > 0 and SURF_MOVE_ID in known
+        for current_hp, known in zip(hp, moves, strict=True)
+    ):
+        return frozenset({SURF_CAPABILITY})
+    return frozenset()
+
+
+def _local_graph(
+    terrain: Terrain,
+    rules: TraversalRules,
+    *,
+    blocked: Collection[tuple[int, int]],
+    include_surf: bool,
+) -> LocalGraph:
     unavailable = frozenset(blocked)
-    ledges = {
-        (rule.direction, rule.standing_tile, rule.ledge_tile): rule
-        for rule in rules.ledges
-    }
+    ledges = {(rule.direction, rule.standing_tile, rule.ledge_tile): rule for rule in rules.ledges}
     edges: dict[tuple[int, int], tuple[LocalEdge, ...]] = {}
     for y in range(terrain.height):
         for x in range(terrain.width):
             source = (y, x)
-            if source in unavailable or not terrain.can_stand(y, x):
+            source_is_land = terrain.can_stand(y, x)
+            source_is_water = include_surf and terrain.can_surf(y, x)
+            if source in unavailable or not (source_is_land or source_is_water):
                 continue
             outgoing: list[LocalEdge] = []
             for direction in Direction:
@@ -337,7 +384,8 @@ def local_graph(
                 source_tile = terrain.tiles[y][x]
                 adjacent_tile = terrain.tiles[adjacent[0]][adjacent[1]]
                 if (
-                    terrain.tileset == OVERWORLD_TILESET
+                    source_is_land
+                    and terrain.tileset == OVERWORLD_TILESET
                     and (direction, source_tile, adjacent_tile) in ledges
                 ):
                     landing = (y + 2 * dy, x + 2 * dx)
@@ -347,19 +395,68 @@ def local_graph(
                                 target=landing,
                                 action=direction.value,
                                 kind="ledge",
+                                required_mode=LAND_MODE if include_surf else None,
                             )
                         )
                     continue
-                if adjacent in unavailable or not terrain.can_stand(*adjacent):
+                if adjacent in unavailable:
+                    continue
+                adjacent_is_land = terrain.can_stand(*adjacent)
+                adjacent_is_water = include_surf and terrain.can_surf(*adjacent)
+                if source_is_land and adjacent_is_land:
+                    if any(
+                        rule.blocks(terrain.tileset, source_tile, adjacent_tile)
+                        for rule in rules.land_pair_restrictions
+                    ):
+                        continue
+                    outgoing.append(
+                        LocalEdge(
+                            target=adjacent,
+                            action=direction.value,
+                            kind="walk",
+                            required_mode=LAND_MODE if include_surf else None,
+                        )
+                    )
+                    continue
+                if not include_surf or not (adjacent_is_land or adjacent_is_water):
                     continue
                 if any(
                     rule.blocks(terrain.tileset, source_tile, adjacent_tile)
-                    for rule in rules.land_pair_restrictions
+                    for rule in rules.water_pair_restrictions
                 ):
                     continue
-                outgoing.append(
-                    LocalEdge(target=adjacent, action=direction.value, kind="walk")
-                )
+                if source_is_land and adjacent_is_water:
+                    outgoing.append(
+                        LocalEdge(
+                            target=adjacent,
+                            action=f"surf:{direction.value}",
+                            kind="water_entry",
+                            requirements=frozenset({SURF_CAPABILITY}),
+                            cost=SURF_MODE_CHANGE_COST,
+                            action_kind=MacroActionKind.FIELD_MOVE,
+                            required_mode=LAND_MODE,
+                            result_mode=WATER_MODE,
+                        )
+                    )
+                elif source_is_water and adjacent_is_water:
+                    outgoing.append(
+                        LocalEdge(
+                            target=adjacent,
+                            action=direction.value,
+                            kind="water_travel",
+                            required_mode=WATER_MODE,
+                        )
+                    )
+                elif source_is_water and adjacent_is_land:
+                    outgoing.append(
+                        LocalEdge(
+                            target=adjacent,
+                            action=direction.value,
+                            kind="water_exit",
+                            required_mode=WATER_MODE,
+                            result_mode=LAND_MODE,
+                        )
+                    )
             edges[source] = tuple(outgoing)
     return LocalGraph(edges)
 

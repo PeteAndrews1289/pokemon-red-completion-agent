@@ -16,6 +16,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from dataclasses import dataclass
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.global_router import (
     Coordinate,
     MacroEdge,
@@ -28,6 +29,7 @@ from pokemon_red_completion.local_router import (
     LocalGraph,
     LocalPath,
     LocalRouterError,
+    TraversalMode,
     find_local_path,
     without_coordinates,
 )
@@ -47,12 +49,21 @@ class RouteStep:
     expected_map: int
     expected_at: Coordinate
     kind: str
+    action_kind: MacroActionKind
+    source_mode: TraversalMode
+    expected_mode: TraversalMode
 
     def __post_init__(self) -> None:
         if not self.action:
             raise ValueError("a route step needs an action")
         if not self.kind:
             raise ValueError("a route step needs a transition kind")
+        if not isinstance(self.action_kind, MacroActionKind):
+            raise TypeError("a route step action kind must be a MacroActionKind")
+
+    @property
+    def macro_action(self) -> MacroAction:
+        return MacroAction(self.action_kind, self.action)
 
     @property
     def stays_on_map(self) -> bool:
@@ -60,7 +71,7 @@ class RouteStep:
 
     @property
     def can_discover_blocker(self) -> bool:
-        return self.kind == "walk" and self.stays_on_map
+        return self.kind == "walk" and self.stays_on_map and self.source_mode == self.expected_mode
 
 
 @dataclass(frozen=True, slots=True)
@@ -101,21 +112,46 @@ class RoutePlan:
 
     macro_path: MacroPath
     start_at: Coordinate
+    start_mode: TraversalMode
     segments: tuple[RouteSegment, ...]
+    terminal_approach: LocalPath | None
     terminal_at: Coordinate
+    terminal_mode: TraversalMode
 
     def __post_init__(self) -> None:
         if len(self.segments) != len(self.macro_path.edges):
             raise ValueError("a route plan needs one segment per macro edge")
-        if self.segments and self.segments[0].approach.coordinates[0] != self.start_at:
-            raise ValueError("the first segment must begin at the route start")
-        for previous, following in zip(self.segments, self.segments[1:], strict=False):
-            if previous.transition.arrival_at != following.approach.coordinates[0]:
+        current_at = self.start_at
+        current_mode = self.start_mode
+        for index, segment in enumerate(self.segments):
+            if (segment.source_map, segment.target_map) != (
+                self.macro_path.maps[index],
+                self.macro_path.maps[index + 1],
+            ):
+                raise ValueError("a route segment must follow its macro path")
+            if segment.approach.coordinates[0] != current_at:
                 raise ValueError("adjacent route segments must share an arrival coordinate")
+            if segment.approach.modes[0] != current_mode:
+                raise ValueError("adjacent route segments must preserve movement mode")
+            current_at = segment.transition.arrival_at
+            current_mode = segment.approach.modes[-1]
+        if self.terminal_approach is not None:
+            if self.terminal_approach.coordinates[0] != current_at:
+                raise ValueError("the terminal approach must begin at the last map arrival")
+            if self.terminal_approach.modes[0] != current_mode:
+                raise ValueError("the terminal approach must preserve movement mode")
+            current_at = self.terminal_approach.coordinates[-1]
+            current_mode = self.terminal_approach.modes[-1]
+        if (self.terminal_at, self.terminal_mode) != (current_at, current_mode):
+            raise ValueError("the route terminal must match its final local state")
 
     @property
     def actions(self) -> tuple[str, ...]:
         return tuple(step.action for step in self.steps)
+
+    @property
+    def macro_actions(self) -> tuple[MacroAction, ...]:
+        return tuple(step.macro_action for step in self.steps)
 
     @property
     def steps(self) -> tuple[RouteStep, ...]:
@@ -124,6 +160,7 @@ class RoutePlan:
         steps: list[RouteStep] = []
         for segment in self.segments:
             coordinates = segment.approach.coordinates
+            modes = segment.approach.modes
             for index, edge in enumerate(segment.approach.edges):
                 triggers_passage = (
                     segment.transition_action_in_approach
@@ -138,11 +175,12 @@ class RoutePlan:
                             segment.target_map if triggers_passage else segment.source_map
                         ),
                         expected_at=(
-                            segment.transition.arrival_at
-                            if triggers_passage
-                            else edge.target
+                            segment.transition.arrival_at if triggers_passage else edge.target
                         ),
                         kind=segment.passage_kind if triggers_passage else edge.kind,
+                        action_kind=edge.action_kind,
+                        source_mode=modes[index],
+                        expected_mode=modes[index + 1],
                     )
                 )
             if not segment.transition_action_in_approach:
@@ -154,8 +192,18 @@ class RoutePlan:
                         expected_map=segment.target_map,
                         expected_at=segment.transition.arrival_at,
                         kind=segment.passage_kind,
+                        action_kind=MacroActionKind.MOVE,
+                        source_mode=modes[-1],
+                        expected_mode=modes[-1],
                     )
                 )
+        if self.terminal_approach is not None:
+            steps.extend(
+                _local_steps(
+                    self.terminal_map,
+                    self.terminal_approach,
+                )
+            )
         return tuple(steps)
 
     @property
@@ -170,10 +218,17 @@ def compose_route(
     start_at: Coordinate,
     *,
     capabilities: frozenset[str] = frozenset(),
+    start_mode: TraversalMode = None,
+    goal_at: Coordinate | None = None,
+    goal_mode: TraversalMode = None,
 ) -> RoutePlan:
-    """Choose exact reachable endpoints for every edge in ``macro_path``."""
+    """Choose exact endpoints and optionally reach a coordinate on the final map."""
+
+    if goal_at is None and goal_mode is not None:
+        raise ValueError("a goal movement mode requires a goal coordinate")
 
     current_at = start_at
+    current_mode = start_mode
     segments: list[RouteSegment] = []
     for source_map, target_map, edge in zip(
         macro_path.maps[:-1],
@@ -190,6 +245,7 @@ def compose_route(
                 current_at,
                 edge,
                 capabilities=capabilities,
+                start_mode=current_mode,
             )
             action_in_approach = False
         elif edge.kind in {"warp", "return"}:
@@ -200,12 +256,11 @@ def compose_route(
                 target_map,
                 edge,
                 capabilities=capabilities,
+                start_mode=current_mode,
             )
             action_in_approach = True
         else:
-            raise RoutePlanningError(
-                f"map {source_map} uses unsupported {edge.kind!r} transition"
-            )
+            raise RoutePlanningError(f"map {source_map} uses unsupported {edge.kind!r} transition")
         segments.append(
             RouteSegment(
                 source_map=source_map,
@@ -217,11 +272,36 @@ def compose_route(
             )
         )
         current_at = transition.arrival_at
+        current_mode = approach.modes[-1]
+    terminal_approach: LocalPath | None = None
+    if goal_at is not None:
+        terminal_map = macro_path.maps[-1]
+        local = local_graphs.get(terminal_map)
+        if local is None:
+            raise RoutePlanningError(f"terminal map {terminal_map} has no local traversal graph")
+        try:
+            terminal_approach = find_local_path(
+                local,
+                current_at,
+                goal_at,
+                capabilities=capabilities,
+                start_mode=current_mode,
+                goal_mode=goal_mode,
+            )
+        except LocalRouterError as error:
+            raise RoutePlanningError(
+                f"terminal coordinate {goal_at} is not locally reachable"
+            ) from error
+        current_at = terminal_approach.coordinates[-1]
+        current_mode = terminal_approach.modes[-1]
     return RoutePlan(
         macro_path=macro_path,
         start_at=start_at,
+        start_mode=start_mode,
         segments=tuple(segments),
+        terminal_approach=terminal_approach,
         terminal_at=current_at,
+        terminal_mode=current_mode,
     )
 
 
@@ -235,6 +315,9 @@ def plan_route(
     blocked: Mapping[int, frozenset[Coordinate]] | None = None,
     capabilities: frozenset[str] = frozenset(),
     last_outside: int | None = None,
+    start_mode: TraversalMode = None,
+    goal_at: Coordinate | None = None,
+    goal_mode: TraversalMode = None,
 ) -> RoutePlan:
     """Search both routing layers while excluding currently observed blockers."""
 
@@ -255,6 +338,26 @@ def plan_route(
         projected,
         start_at,
         capabilities=capabilities,
+        start_mode=start_mode,
+        goal_at=goal_at,
+        goal_mode=goal_mode,
+    )
+
+
+def _local_steps(map_id: int, path: LocalPath) -> tuple[RouteStep, ...]:
+    return tuple(
+        RouteStep(
+            source_map=map_id,
+            source_at=path.coordinates[index],
+            action=edge.action,
+            expected_map=map_id,
+            expected_at=edge.target,
+            kind=edge.kind,
+            action_kind=edge.action_kind,
+            source_mode=path.modes[index],
+            expected_mode=path.modes[index + 1],
+        )
+        for index, edge in enumerate(path.edges)
     )
 
 
@@ -264,6 +367,7 @@ def _best_connection(
     edge: MacroEdge,
     *,
     capabilities: frozenset[str],
+    start_mode: TraversalMode,
 ) -> tuple[LocalPath, MacroTransition]:
     if not edge.coordinate_transitions:
         raise RoutePlanningError("a connection has no decoded coordinate transitions")
@@ -275,6 +379,7 @@ def _best_connection(
                 start,
                 transition.exit_at,
                 capabilities=capabilities,
+                start_mode=start_mode,
             )
         except LocalRouterError:
             continue
@@ -294,11 +399,18 @@ def _warp_transition(
     edge: MacroEdge,
     *,
     capabilities: frozenset[str],
+    start_mode: TraversalMode,
 ) -> tuple[LocalPath, MacroTransition]:
     if edge.at is None:
         raise RoutePlanningError("a warp has no trigger coordinate")
     try:
-        approach = find_local_path(local, start, edge.at, capabilities=capabilities)
+        approach = find_local_path(
+            local,
+            start,
+            edge.at,
+            capabilities=capabilities,
+            start_mode=start_mode,
+        )
     except LocalRouterError as error:
         raise RoutePlanningError(f"warp at {edge.at} is not locally reachable") from error
     if not approach.edges:
@@ -311,9 +423,7 @@ def _warp_transition(
         index = edge.destination_warp_index
         locations = graph.warp_locations.get(target_map, ())
         if index is None or index >= len(locations):
-            raise RoutePlanningError(
-                f"return to map {target_map} has no destination warp {index}"
-            )
+            raise RoutePlanningError(f"return to map {target_map} has no destination warp {index}")
         arrival = locations[index]
     if arrival is None:
         raise RoutePlanningError("an ordinary warp has no decoded arrival coordinate")

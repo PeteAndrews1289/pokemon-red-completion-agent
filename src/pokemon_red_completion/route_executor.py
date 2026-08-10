@@ -31,6 +31,7 @@ class TraversalSnapshot:
     at: Coordinate
     ready: bool
     interruption: str | None = None
+    mode: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -136,6 +137,10 @@ class RouteExecutionReport:
         return (
             self.terminal.map_id == self.initial_plan.terminal_map
             and self.terminal.at == self.initial_plan.terminal_at
+            and (
+                self.initial_plan.terminal_mode is None
+                or self.terminal.mode == self.initial_plan.terminal_mode
+            )
             and self.terminal.interruption is None
         )
 
@@ -152,7 +157,13 @@ def execute_route(
     """Execute until every movement is acknowledged or a bound fails closed."""
 
     current = observer.observe()
-    _require_position(current, plan.macro_path.maps[0], plan.start_at, "route start")
+    _require_position(
+        current,
+        plan.macro_path.maps[0],
+        plan.start_at,
+        "route start",
+        mode=plan.start_mode,
+    )
     pending = list(plan.steps)
     executed: list[ExecutedRouteStep] = []
     interruptions: list[InterruptionReceipt] = []
@@ -163,7 +174,13 @@ def execute_route(
 
     while pending:
         step = pending[0]
-        _require_position(current, step.source_map, step.source_at, "step source")
+        _require_position(
+            current,
+            step.source_map,
+            step.source_at,
+            "step source",
+            mode=step.source_mode,
+        )
         current, new_receipts, waits = _wait_until_ready(
             current,
             actions,
@@ -174,13 +191,19 @@ def execute_route(
         )
         interruptions.extend(new_receipts)
         wait_actions += waits
-        _require_position(current, step.source_map, step.source_at, "ready step source")
+        _require_position(
+            current,
+            step.source_map,
+            step.source_at,
+            "ready step source",
+            mode=step.source_mode,
+        )
 
         attempts = 0
         step_interruptions = 0
         replaced = False
         while True:
-            actions.execute(MacroAction(MacroActionKind.MOVE, step.action))
+            actions.execute(step.macro_action)
             movement_requests += 1
             attempts += 1
             observed = observer.observe()
@@ -216,9 +239,7 @@ def execute_route(
                 observed = observer.observe()
                 if observed.interruption is not None:
                     if len(interruptions) >= limits.max_interruptions:
-                        raise RouteExecutionError(
-                            "route exceeded its interruption budget"
-                        )
+                        raise RouteExecutionError("route exceeded its interruption budget")
                     if interruption_handler is None:
                         raise RouteExecutionError(
                             f"unhandled route interruption {observed.interruption!r}"
@@ -228,9 +249,7 @@ def execute_route(
                     step_interruptions += 1
                     observed = observer.observe()
                     if observed.interruption is not None:
-                        raise RouteExecutionError(
-                            "interruption handler did not restore traversal"
-                        )
+                        raise RouteExecutionError("interruption handler did not restore traversal")
                     if (receipt.resumed_map, receipt.resumed_at) != (
                         observed.map_id,
                         observed.at,
@@ -239,7 +258,12 @@ def execute_route(
                             "interruption receipt disagrees with resumed observation"
                         )
 
-            if _matches(observed, step.expected_map, step.expected_at):
+            if _matches(
+                observed,
+                step.expected_map,
+                step.expected_at,
+                mode=step.expected_mode,
+            ):
                 current = observed
                 executed.append(
                     ExecutedRouteStep(
@@ -251,7 +275,12 @@ def execute_route(
                 pending.pop(0)
                 break
 
-            if not _matches(observed, step.source_map, step.source_at):
+            if not _matches(
+                observed,
+                step.source_map,
+                step.source_at,
+                mode=step.source_mode,
+            ):
                 raise RouteExecutionError(
                     f"route drifted after {step.action}: expected "
                     f"{(step.expected_map, step.expected_at)}, observed "
@@ -265,9 +294,7 @@ def execute_route(
                 and attempts >= limits.replan_after_unchanged
                 and len(replans) < limits.max_replans
             ):
-                map_blocked = blocked.get(step.source_map, frozenset()) | {
-                    step.expected_at
-                }
+                map_blocked = blocked.get(step.source_map, frozenset()) | {step.expected_at}
                 blocked[step.source_map] = frozenset(map_blocked)
                 ordinal = len(replans) + 1
                 replacement = replanner(
@@ -284,10 +311,12 @@ def execute_route(
                     replacement.macro_path.maps[0],
                     replacement.start_at,
                     "replacement route start",
+                    mode=replacement.start_mode,
                 )
                 if (
                     replacement.terminal_map != plan.terminal_map
                     or replacement.terminal_at != plan.terminal_at
+                    or replacement.terminal_mode != plan.terminal_mode
                 ):
                     raise RouteExecutionError("replacement route changed the declared goal")
                 replans.append(
@@ -322,7 +351,13 @@ def execute_route(
             interruptions.extend(new_receipts)
             step_interruptions += len(new_receipts)
             wait_actions += waits
-            _require_position(current, step.source_map, step.source_at, "step retry")
+            _require_position(
+                current,
+                step.source_map,
+                step.source_at,
+                "step retry",
+                mode=step.source_mode,
+            )
 
         if replaced:
             continue
@@ -337,7 +372,13 @@ def execute_route(
     )
     interruptions.extend(new_receipts)
     wait_actions += waits
-    _require_position(current, plan.terminal_map, plan.terminal_at, "route terminal")
+    _require_position(
+        current,
+        plan.terminal_map,
+        plan.terminal_at,
+        "route terminal",
+        mode=plan.terminal_mode,
+    )
     report = RouteExecutionReport(
         initial_plan=plan,
         terminal=current,
@@ -369,9 +410,7 @@ def _wait_until_ready(
             if used_interruptions + len(receipts) >= limits.max_interruptions:
                 raise RouteExecutionError("route exceeded its interruption budget")
             if interruption_handler is None:
-                raise RouteExecutionError(
-                    f"unhandled route interruption {current.interruption!r}"
-                )
+                raise RouteExecutionError(f"unhandled route interruption {current.interruption!r}")
             receipt = interruption_handler.handle(current)
             receipts.append(receipt)
             current = observer.observe()
@@ -381,9 +420,7 @@ def _wait_until_ready(
                 current.map_id,
                 current.at,
             ):
-                raise RouteExecutionError(
-                    "interruption receipt disagrees with resumed observation"
-                )
+                raise RouteExecutionError("interruption receipt disagrees with resumed observation")
             continue
         if current.ready:
             return current, tuple(receipts), waits
@@ -397,8 +434,16 @@ def _wait(actions: RouteActionPort, frames: int) -> None:
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 
-def _matches(snapshot: TraversalSnapshot, map_id: int, at: Coordinate) -> bool:
-    return snapshot.map_id == map_id and snapshot.at == at
+def _matches(
+    snapshot: TraversalSnapshot,
+    map_id: int,
+    at: Coordinate,
+    *,
+    mode: str | None = None,
+) -> bool:
+    return (
+        snapshot.map_id == map_id and snapshot.at == at and (mode is None or snapshot.mode == mode)
+    )
 
 
 def _require_position(
@@ -406,8 +451,11 @@ def _require_position(
     map_id: int,
     at: Coordinate,
     label: str,
+    *,
+    mode: str | None = None,
 ) -> None:
-    if not _matches(snapshot, map_id, at):
+    if not _matches(snapshot, map_id, at, mode=mode):
         raise RouteExecutionError(
-            f"{label} expected {(map_id, at)}, observed {(snapshot.map_id, snapshot.at)}"
+            f"{label} expected {(map_id, at, mode)}, observed "
+            f"{(snapshot.map_id, snapshot.at, snapshot.mode)}"
         )

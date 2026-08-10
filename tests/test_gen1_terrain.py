@@ -29,6 +29,7 @@ from pokemon_red_completion.gen1_terrain import (
     steps_between,
     terrain_for,
     tilesets,
+    water_tilesets,
 )
 
 RECORD = Path("docs/evidence/terrain-2026-08-10.json")
@@ -47,6 +48,7 @@ BLOCKSET_ADDRESS = 0x5000
 BLOCKSET_AT = TILESET_BANK * 0x4000 + (BLOCKSET_ADDRESS - 0x4000)
 HEADER_AT = 0x4100
 BLOCKS_AT = 0x4200
+TEST_WATER_TILESETS_TABLE = 0xE8E0
 
 WALKABLE_TILE = 0x01
 SOLID_TILE = 0x02
@@ -68,6 +70,13 @@ def cartridge(
 
     data = bytearray(ROM_BYTES)
     height, width = len(block_ids), len(block_ids[0])
+
+    # Independent bytes from the cartridge's WaterTilesets table.  Keeping the
+    # fixture address literal means changing the production offset alone makes
+    # these decoder tests fail instead of moving the fixture with it.
+    data[TEST_WATER_TILESETS_TABLE : TEST_WATER_TILESETS_TABLE + 10] = bytes(
+        (0, 3, 5, 7, 13, 14, 17, 22, 23, 0xFF)
+    )
 
     data[COLLISION_AT : COLLISION_AT + len(walkable)] = bytes(walkable)
     data[COLLISION_AT + len(walkable)] = 0xFF
@@ -193,6 +202,35 @@ def test_a_tileset_without_grass_reports_none() -> None:
     assert not any(any(row) for row in terrain.grass), "$FF means no grass, not grass everywhere"
 
 
+def test_water_tilesets_are_decoded_from_the_cartridge_table() -> None:
+    rom = cartridge(block_ids=[[0]], blocks={0: CORNERS})
+
+    assert water_tilesets(rom) == frozenset({0, 3, 5, 7, 13, 14, 17, 22, 23})
+
+
+def test_water_and_shore_tiles_are_separate_from_walkable_ground() -> None:
+    water_block = block(*([(0x14,) * 4] * 4))
+    shore_block = block(*([(0x32,) * 4] * 4))
+    rom = cartridge(block_ids=[[0, 1]], blocks={0: water_block, 1: shore_block})
+
+    decoded = terrain_for(rom, 0, tilesets(rom))
+
+    assert not any(any(row) for row in decoded.walkable)
+    assert all(all(row) for row in decoded.water)
+
+
+def test_an_incomplete_or_duplicated_water_tileset_table_is_refused() -> None:
+    early = bytearray(cartridge(block_ids=[[0]], blocks={0: CORNERS}))
+    early[TEST_WATER_TILESETS_TABLE + 4] = 0xFF
+    with pytest.raises(CartridgeReadError, match="incomplete"):
+        water_tilesets(bytes(early))
+
+    duplicated = bytearray(cartridge(block_ids=[[0]], blocks={0: CORNERS}))
+    duplicated[TEST_WATER_TILESETS_TABLE + 8] = 0
+    with pytest.raises(CartridgeReadError, match="duplicated"):
+        water_tilesets(bytes(duplicated))
+
+
 def test_the_collision_pointer_is_a_flat_offset_not_a_banked_one() -> None:
     """The mismatch that hid this table for an afternoon.
 
@@ -238,12 +276,20 @@ def test_a_blockset_pointer_outside_the_bank_window_is_refused() -> None:
 def open_terrain(picture: list[str]) -> Terrain:
     walkable = tuple(tuple(cell != "#" for cell in row) for row in picture)
     tiles = tuple(tuple(1 if cell != "#" else 0 for cell in row) for row in picture)
-    return Terrain(map_id=0, tileset=0, walkable=walkable, grass=walkable, tiles=tiles)
+    water = tuple(tuple(False for _ in row) for row in picture)
+    return Terrain(
+        map_id=0,
+        tileset=0,
+        walkable=walkable,
+        grass=walkable,
+        water=water,
+        tiles=tiles,
+    )
 
 
 def test_terrain_rejects_misaligned_coordinate_grids() -> None:
     with pytest.raises(ValueError, match="non-empty rectangular"):
-        Terrain(map_id=0, tileset=0, walkable=(), grass=(), tiles=())
+        Terrain(map_id=0, tileset=0, walkable=(), grass=(), water=(), tiles=())
 
     with pytest.raises(ValueError, match="grass must match"):
         Terrain(
@@ -251,6 +297,17 @@ def test_terrain_rejects_misaligned_coordinate_grids() -> None:
             tileset=0,
             walkable=((True, True),),
             grass=((False,),),
+            water=((False, False),),
+            tiles=((1, 1),),
+        )
+
+    with pytest.raises(ValueError, match="water must match"):
+        Terrain(
+            map_id=0,
+            tileset=0,
+            walkable=((True, True),),
+            grass=((False, False),),
+            water=((False,),),
             tiles=((1, 1),),
         )
 
@@ -260,6 +317,7 @@ def test_terrain_rejects_misaligned_coordinate_grids() -> None:
             tileset=0,
             walkable=((True, True),),
             grass=((False, False),),
+            water=((False, False),),
             tiles=((1,),),
         )
 
@@ -349,8 +407,7 @@ def test_both_cartridges_describe_the_same_ground(record: dict) -> None:
     assert record["tileset_traversal_rules_agree"] is True
     assert record["raw_tileset_records_agree"] is False
     assert record["raw_tileset_differences"] == [
-        {"tileset": index, "fields": ["blockset"]}
-        for index in (2, 3, 5, 6, 7, 9, 10, 12, 22)
+        {"tileset": index, "fields": ["blockset"]} for index in (2, 3, 5, 6, 7, 9, 10, 12, 22)
     ]
     assert record["by_title"]["red"]["standable_squares"] == 48216
     assert record["by_title"]["red"]["grass_squares"] == 2537

@@ -12,6 +12,7 @@ from pokemon_red_completion.gen1_route_runtime import (
 from pokemon_red_completion.observation import (
     InputReadiness,
     MapId,
+    OverworldMovementMode,
     PokemonRedStateReader,
     RawGameState,
 )
@@ -28,7 +29,16 @@ class FakeReader:
         return self.raw
 
     def read_input_readiness(self) -> InputReadiness:
-        return InputReadiness(joy_ignore=0 if self.ready else 1, simulated_joypad_index=0)
+        return InputReadiness(
+            joy_ignore=0 if self.ready else 1,
+            simulated_joypad_index=0,
+            npc_movement_script_table=0,
+            player_moving_direction=0,
+            status_flags_5=0,
+        )
+
+    def read_overworld_movement_mode(self) -> OverworldMovementMode:
+        return OverworldMovementMode.WALKING
 
 
 @dataclass
@@ -62,6 +72,7 @@ def test_observer_keeps_coordinates_game_neutral_and_marks_wild_battle() -> None
         at=(8, 7),
         ready=False,
         interruption="wild_battle",
+        mode="land",
     )
 
 
@@ -130,15 +141,11 @@ def test_wild_handler_publishes_the_existing_authenticated_receipt(
         stabilization_frames=24,
     )
 
-    receipt = handler.handle(
-        TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "wild_battle")
-    )
+    receipt = handler.handle(TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "wild_battle"))
 
     assert receipt.kind == "wild_battle"
     assert receipt.resumed_at == (8, 7)
     assert receipt.details["verified"] is True
     assert handler.evidence == [evidence]
     with pytest.raises(RouteExecutionError, match="flee budget"):
-        handler.handle(
-            TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "wild_battle")
-        )
+        handler.handle(TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "wild_battle"))

@@ -36,6 +36,7 @@ from pokemon_red_completion.celadon import (
 )
 from pokemon_red_completion.cinnabar import _four
 from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
+from pokemon_red_completion.gen1_field_moves import GEN1_FIELD_MOVE_IDS
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING, DIG
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
@@ -232,7 +233,6 @@ CUT_MOVE_ID = 0x0F
 FLY_MOVE_ID = 0x13
 SURF_MOVE_ID = 0x39
 STRENGTH_MOVE_ID = 0x46
-FIELD_MOVE_IDS = frozenset({CUT_MOVE_ID, DIG, FLY_MOVE_ID, SURF_MOVE_ID, STRENGTH_MOVE_ID})
 # Muk can outlast a trainee's weak coverage and turn a safe starting-HP check
 # into a long attritional knockout. A held-out feature-v2 collection also
 # observed a level-29 Dugtrio knock out a full-health level-34 trainee before
@@ -2264,7 +2264,7 @@ def _field_move_menu_indices(emulator: EmulatorState, move_id: int, name: str) -
         move_ids = [move.move_id for move in member.known_moves]
         if move_id not in move_ids:
             continue
-        field_moves = [candidate for candidate in move_ids if candidate in FIELD_MOVE_IDS]
+        field_moves = [candidate for candidate in move_ids if candidate in GEN1_FIELD_MOVE_IDS]
         return index, field_moves.index(move_id)
     raise BlaineChapterError(f"No party member knows {name}.")
 

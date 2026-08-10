@@ -17,6 +17,7 @@ class MacroActionKind(StrEnum):
     SWITCH_PARTY = "switch_party"
     USE_ITEM = "use_item"
     RECOVER = "recover"
+    FIELD_MOVE = "field_move"
 
 
 @dataclass(frozen=True, slots=True)

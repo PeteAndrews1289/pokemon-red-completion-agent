@@ -31,14 +31,13 @@ class Gen1TraversalObserver:
         ):
             raise RouteExecutionError("Gen I traversal state is unavailable")
         interruption = _interruption_kind(raw.battle_state)
+        movement_mode = self.reader.read_overworld_movement_mode()
         return TraversalSnapshot(
             map_id=raw.map_id,
             at=(raw.player_y, raw.player_x),
-            ready=(
-                interruption is None
-                and self.reader.read_input_readiness().ready
-            ),
+            ready=(interruption is None and self.reader.read_input_readiness().ready),
             interruption=interruption,
+            mode=movement_mode.traversal_mode,
         )
 
 
@@ -56,19 +55,14 @@ class Gen1WildFleeHandler:
     def __post_init__(self) -> None:
         if type(self.maximum_flees) is not int or self.maximum_flees < 0:  # noqa: E721
             raise ValueError("maximum_flees must be a non-negative integer")
-        if (
-            type(self.stabilization_frames) is not int
-            or self.stabilization_frames <= 0
-        ):  # noqa: E721
+        if type(self.stabilization_frames) is not int or self.stabilization_frames <= 0:  # noqa: E721
             raise ValueError("stabilization_frames must be a positive integer")
         if not self.route_name:
             raise ValueError("a route name is required")
 
     def handle(self, interruption: TraversalSnapshot) -> InterruptionReceipt:
         if interruption.interruption != "wild_battle":
-            raise RouteExecutionError(
-                f"Gen I route cannot dismiss {interruption.interruption!r}"
-            )
+            raise RouteExecutionError(f"Gen I route cannot dismiss {interruption.interruption!r}")
         if len(self.evidence) >= self.maximum_flees:
             raise RouteExecutionError(
                 f"{self.route_name} exceeded its {self.maximum_flees}-flee budget"
@@ -82,9 +76,7 @@ class Gen1WildFleeHandler:
         try:
             expected_map = MapId(interruption.map_id)
         except ValueError as error:
-            raise RouteExecutionError(
-                f"unsupported Gen I map id {interruption.map_id}"
-            ) from error
+            raise RouteExecutionError(f"unsupported Gen I map id {interruption.map_id}") from error
         receipt = flee_wild(
             self.executor,
             self.reader,

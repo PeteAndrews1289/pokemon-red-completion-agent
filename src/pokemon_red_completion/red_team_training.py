@@ -11,6 +11,7 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_wild_battle,
 )
 from pokemon_red_completion.celadon import _RunState
+from pokemon_red_completion.gen1_field_moves import GEN1_FIELD_MOVE_IDS
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     PokemonRedStateReader,
@@ -95,7 +96,6 @@ TRAINING_MOVE_IDS = {
     0x87: (0x57, 0x54, 0x18, 0x2A, 0x62),  # Jolteon
     HITMONLEE_SPECIES_ID: (0x18, 0x1B, 0x1A, 0x88, 0x19),
 }
-FIELD_MOVE_IDS = frozenset({0x0F, DIG, 0x13, 0x39, 0x46})
 
 #: Training venues measured from real encounters, not recalled from a guide.
 #:
@@ -418,7 +418,9 @@ def swap_field_party_slots(
     expected = list(before.species_ids())
     expected[first_index], expected[second_index] = expected[second_index], expected[first_index]
     selected = before.members[first_index]
-    field_move_count = sum(move.move_id in FIELD_MOVE_IDS for move in selected.known_moves)
+    field_move_count = sum(
+        move.move_id in GEN1_FIELD_MOVE_IDS for move in selected.known_moves
+    )
 
     # Which submenu row means SWITCH has been guessed wrong three times: at
     # ``field_move_count + 1``, at ``field_move_count``, and by expecting the

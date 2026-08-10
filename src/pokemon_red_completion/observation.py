@@ -128,6 +128,7 @@ class RamAddress(IntEnum):
     STATUS_FLAGS_5 = 0xD730
     STATUS_FLAGS_6 = 0xD732
     MOVEMENT_FLAGS = 0xD736
+    WALK_BIKE_SURF_STATE = 0xD700
     NPC_TRADE_FLAGS = 0xD737
     VERMILION_GYM_FIRST_LOCK = 0xD743
     VERMILION_GYM_SECOND_LOCK = 0xD744
@@ -1267,6 +1268,22 @@ class InputReadiness:
             and not bool(self.status_flags_5 & SCRIPTED_MOVEMENT_STATUS_MASK)
             and not bool(self.movement_flags & EXITING_DOOR_MOVEMENT_MASK)
         )
+
+
+class OverworldMovementModeError(ValueError):
+    """Raised when the revision exposes an unknown locomotion byte."""
+
+
+class OverworldMovementMode(IntEnum):
+    """Revision-decoded player locomotion state from ``wWalkBikeSurfState``."""
+
+    WALKING = 0
+    BIKING = 1
+    SURFING = 2
+
+    @property
+    def traversal_mode(self) -> str:
+        return "water" if self is OverworldMovementMode.SURFING else "land"
 
 
 class BattleMenuPhase(StrEnum):
@@ -3905,6 +3922,15 @@ class PokemonRedStateReader:
             status_flags_5=self._memory.read_u8(RamAddress.STATUS_FLAGS_5),
             movement_flags=self._memory.read_u8(RamAddress.MOVEMENT_FLAGS),
         )
+
+    def read_overworld_movement_mode(self) -> OverworldMovementMode:
+        raw = self._memory.read_u8(RamAddress.WALK_BIKE_SURF_STATE)
+        try:
+            return OverworldMovementMode(raw)
+        except ValueError as error:
+            raise OverworldMovementModeError(
+                f"unsupported overworld movement mode {raw}"
+            ) from error
 
     def read_pewter_chapter_state(self, raw: RawGameState) -> PewterChapterState:
         """Translate route, script, battle, and badge evidence into one phase."""

@@ -33,6 +33,8 @@ from pokemon_red_completion.observation import (
     OaksErrandPhase,
     OaksErrandState,
     OpeningPhase,
+    OverworldMovementMode,
+    OverworldMovementModeError,
     PewterChapterState,
     PewterProgressError,
     PewterProgressTracker,
@@ -1090,6 +1092,34 @@ def test_reader_encapsulates_the_exact_input_readiness_symbols() -> None:
     ]
     assert SCRIPTED_MOVEMENT_STATUS_MASK == 0xA1
     assert EXITING_DOOR_MOVEMENT_MASK == 0x02
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected", "traversal_mode"),
+    (
+        (0, OverworldMovementMode.WALKING, "land"),
+        (1, OverworldMovementMode.BIKING, "land"),
+        (2, OverworldMovementMode.SURFING, "water"),
+    ),
+)
+def test_reader_decodes_the_revision_pinned_overworld_movement_mode(
+    raw: int,
+    expected: OverworldMovementMode,
+    traversal_mode: str,
+) -> None:
+    memory = RecordingMemory({0xD700: raw})
+
+    mode = PokemonRedStateReader(memory).read_overworld_movement_mode()
+
+    assert RamAddress.WALK_BIKE_SURF_STATE == 0xD700
+    assert memory.reads == [0xD700]
+    assert mode is expected
+    assert mode.traversal_mode == traversal_mode
+
+
+def test_reader_refuses_an_unknown_overworld_movement_mode() -> None:
+    with pytest.raises(OverworldMovementModeError, match="unsupported"):
+        PokemonRedStateReader(RecordingMemory({0xD700: 3})).read_overworld_movement_mode()
 
 
 @pytest.mark.parametrize(

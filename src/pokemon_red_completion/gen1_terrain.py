@@ -80,6 +80,16 @@ NO_GRASS_TILE = 0xFF
 #: 98.3%; the best wrong reading gives 62.5%.
 WARPS_ON_PASSABLE_GROUND = 0.95
 
+#: Exact source table used by ``IsNextTileShoreOrWater`` in the supported
+#: pret/pokered revision.  The list is cartridge data, not a Python tileset
+#: allowlist, so Red and Blue can be compared independently.
+WATER_TILESETS_TABLE = 0xE8E0
+WATER_TILESET_COUNT = 9
+WATER_TILE = 0x14
+EAST_SHORE_TILE = 0x48
+USUAL_SHORE_TILE = 0x32
+SHIP_PORT_TILESET = 14
+
 
 @dataclass(frozen=True, slots=True)
 class Tileset:
@@ -107,6 +117,8 @@ class Terrain:
     walkable: tuple[tuple[bool, ...], ...]
     #: Where tall grass is, which is where wild encounters happen.
     grass: tuple[tuple[bool, ...], ...]
+    #: Squares accepted as shore/water while the player is in Surf mode.
+    water: tuple[tuple[bool, ...], ...]
     #: The exact tile under each step. Traversal rules such as ledges and
     #: elevation-pair collisions depend on tile identity, not passability alone.
     tiles: tuple[tuple[int, ...], ...]
@@ -115,7 +127,11 @@ class Terrain:
         shape = tuple(len(row) for row in self.walkable)
         if not shape or not shape[0] or len(set(shape)) != 1:
             raise ValueError("terrain walkability must be a non-empty rectangular grid")
-        for label, grid in (("grass", self.grass), ("tiles", self.tiles)):
+        for label, grid in (
+            ("grass", self.grass),
+            ("water", self.water),
+            ("tiles", self.tiles),
+        ):
             if len(grid) != len(self.walkable) or tuple(len(row) for row in grid) != shape:
                 raise ValueError(f"terrain {label} must match the walkability grid")
 
@@ -131,6 +147,29 @@ class Terrain:
         if not (0 <= y < self.height and 0 <= x < self.width):
             return False
         return self.walkable[y][x]
+
+    def can_surf(self, y: int, x: int) -> bool:
+        if not (0 <= y < self.height and 0 <= x < self.width):
+            return False
+        return self.water[y][x]
+
+
+def water_tilesets(rom: bytes) -> frozenset[int]:
+    """Decode the complete list consulted before shore/water tile checks."""
+
+    found: list[int] = []
+    cursor = WATER_TILESETS_TABLE
+    while rom[cursor] != 0xFF:
+        if len(found) == WATER_TILESET_COUNT:
+            raise CartridgeReadError("the water tileset table does not end")
+        tileset = rom[cursor]
+        if tileset >= TILESET_COUNT:
+            raise CartridgeReadError("the water tileset table contains an invalid tileset")
+        found.append(tileset)
+        cursor += 1
+    if len(found) != WATER_TILESET_COUNT or len(set(found)) != WATER_TILESET_COUNT:
+        raise CartridgeReadError("the water tileset table is incomplete or duplicated")
+    return frozenset(found)
 
 
 def tilesets(rom: bytes) -> dict[int, Tileset]:
@@ -181,7 +220,13 @@ def _map_header(rom: bytes, map_id: int) -> tuple[int, int, int, int, int]:
     return rom[header], rom[header + 1], rom[header + 2], bank_offset(bank, blocks), bank
 
 
-def terrain_for(rom: bytes, map_id: int, sets: Mapping[int, Tileset]) -> Terrain:
+def terrain_for(
+    rom: bytes,
+    map_id: int,
+    sets: Mapping[int, Tileset],
+    *,
+    water_set_ids: frozenset[int] | None = None,
+) -> Terrain:
     """One map's walkable grid."""
 
     tileset_id, height, width, blocks, _ = _map_header(rom, map_id)
@@ -190,10 +235,13 @@ def terrain_for(rom: bytes, map_id: int, sets: Mapping[int, Tileset]) -> Terrain
 
     walkable: list[tuple[bool, ...]] = []
     grass: list[tuple[bool, ...]] = []
+    water: list[tuple[bool, ...]] = []
     tile_rows: list[tuple[int, ...]] = []
+    surf_tilesets = water_tilesets(rom) if water_set_ids is None else water_set_ids
     for y in range(height * STEPS_PER_BLOCK):
         row_walkable: list[bool] = []
         row_grass: list[bool] = []
+        row_water: list[bool] = []
         row_tiles: list[int] = []
         for x in range(width * STEPS_PER_BLOCK):
             block = rom[blocks + (y // STEPS_PER_BLOCK) * width + (x // STEPS_PER_BLOCK)]
@@ -203,14 +251,26 @@ def terrain_for(rom: bytes, map_id: int, sets: Mapping[int, Tileset]) -> Terrain
             row_tiles.append(tile)
             row_walkable.append(tile in tileset.walkable)
             row_grass.append(tileset.has_grass and tile == tileset.grass_tile)
+            row_water.append(
+                tileset_id in surf_tilesets
+                and (
+                    tile == WATER_TILE
+                    or (
+                        tileset_id != SHIP_PORT_TILESET
+                        and tile in {EAST_SHORE_TILE, USUAL_SHORE_TILE}
+                    )
+                )
+            )
         walkable.append(tuple(row_walkable))
         grass.append(tuple(row_grass))
+        water.append(tuple(row_water))
         tile_rows.append(tuple(row_tiles))
     return Terrain(
         map_id=map_id,
         tileset=tileset_id,
         walkable=tuple(walkable),
         grass=tuple(grass),
+        water=tuple(water),
         tiles=tuple(tile_rows),
     )
 
@@ -219,8 +279,17 @@ def walkable_world(rom: bytes) -> dict[int, Terrain]:
     """Every reachable map's walkable grid, verified against other reads."""
 
     sets = tilesets(rom)
+    surf_tilesets = water_tilesets(rom)
     graph = read_map_graph(rom)
-    world = {map_id: terrain_for(rom, map_id, sets) for map_id in graph}
+    world = {
+        map_id: terrain_for(
+            rom,
+            map_id,
+            sets,
+            water_set_ids=surf_tilesets,
+        )
+        for map_id in graph
+    }
     _verify_grass_matches_the_encounter_tables(rom, world, sets)
     _verify_warps_land_on_ground(graph, world)
     return world
