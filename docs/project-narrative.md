@@ -1,6 +1,6 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 10: four maps, one plan, zero typed directions
+## August 10: the route noticed when the world disagreed
 
 The cartridge-generated Pallet walk and Route 1 ledge were useful local demonstrations. The next
 question was whether those facts could survive a map boundary without quietly falling back to the
@@ -16,17 +16,39 @@ history with retained outside state removed an accidental teleport that green te
 
 The new game-neutral composer joins map search and local search without teaching either one about
 Kanto. It chooses a reachable exact endpoint, searches the local coordinate graph, crosses the
-passage, and seeds the next search with the decoded arrival. From the verified post-Pokédex Pallet
-coordinate `(12, 12)`, it generated 86 actions across Pallet → Route 1 → Viridian → Pokémon Center.
-A clean, source-bound Red run executed the entire plan, checked all three arrivals, and finished at
-the Center's decoded `(7, 3)` coordinate with no save artifact and no typed route fallback.
+passage, and seeds the next search with the decoded arrival. The next question was whether the plan
+could notice that pressing a button is not the same thing as moving.
 
-This is a better training story than behavioral cloning 86 arrows. Shortest-path arithmetic belongs
-to the planner. The learned agent should decide *why* to visit the Center, whether recovery is worth
-the detour, and what to do when an NPC or encounter changes the state. The next layer is therefore a
-stepwise observe/act/replan executor with live blockers, followed by Surf as a real movement mode.
-The [live receipt](evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
-[navigation audit](traversal-audit-2026-08-10.md) keep that boundary explicit.
+The shared executor turns every movement into a wager the emulator must settle. It records the exact
+map and coordinate before the request and refuses to advance until live state reaches the expected
+map and coordinate. An unchanged state is retried under a bound. Repeated failure declares the
+target square unavailable and asks the same cartridge planner for another route. A wild battle is a
+typed interruption with a semantic escape receipt, not a reason to restart the corridor.
+
+Its first Mart run failed for the right reason. Gen I briefly changed the map id before refreshing
+the player's destination coordinate; the executor rejected that half-transition instead of calling
+it progress. A bounded settling state and regression test fixed the contract. The evidence was then
+rerun from clean committed source.
+
+The control route generated and acknowledged all 86 movements across Pallet → Route 1 → Viridian →
+Pokémon Center. It encountered three wild Pokémon, fled all three while proving the starter's party,
+level, HP ceiling, PP and status were preserved, and still needed no movement retry or replan.
+
+The second run deliberately made the test adversarial. Exactly two first-step requests toward
+Pallet `(12, 11)` were suppressed and disclosed as artificial fault injection. The executor marked
+the square unavailable, found a longer approach in the opposite direction, and crossed into Route 1
+at `(35, 11)` rather than the initial plan's `(35, 10)`. Later, the naturally moving Route 1
+youngster blocked north from `(14, 14)`. The generic executor replanned again—without the old typed
+east/wait/return maneuver—authenticated one wild encounter, and entered Viridian Mart. It
+acknowledged 108 real steps from 112 movement requests.
+
+This is a better training story than behavioral cloning either list of arrows. Shortest-path
+arithmetic belongs to the planner. The learned agent should decide *why* to visit a Center or Mart,
+whether recovery or supplies justify the detour, and how to revise that destination after an
+interruption. The next layer is Surf as a real movement mode, followed separately by Cut, Strength
+and story gates. The [control receipt](evidence/pallet-viridian-composed-route-probe-2026-08-10.json),
+[replanning receipt](evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json), and
+[navigation audit](traversal-audit-2026-08-10.md) keep those boundaries explicit.
 
 ## August 10: the map learned which way was down
 

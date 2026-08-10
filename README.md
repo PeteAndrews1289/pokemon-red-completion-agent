@@ -5,13 +5,15 @@
 > **Latest verified results (August 10, 2026):** the six-role learned stack completed one uncounted
 > derived-timing clean start through Hall of Fame. A second root legitimately lost the lab rival,
 > recovered without a reroll, and later completed under the objective model plus authored skills.
-> The newest navigation layer composes complete routes from Red and Blue cartridge geometry. A
-> clean, source-bound live probe generated and executed all 86 movements from Pallet through Route 1
-> and Viridian into the Pokémon Center, checking every map arrival. Counted v95 remains unopened at
-> **0/10**, and generated routing is not yet authorized inside a completion run. See the
+> The newest navigation layer composes routes from Red and Blue cartridge geometry and executes
+> them as a live acknowledge/retry/replan loop. Two source-bound routes reached the Viridian Center
+> and Mart; together they handled four wild encounters, a disclosed injected blocker, and Route 1's
+> moving youngster without a typed corridor fallback. Counted v95 remains unopened at **0/10**, and
+> field/story-gated generated routing is not yet authorized inside a completion run. See the
 > [capability audit](docs/current-audit-2026-08-10.md),
 > [navigation audit](docs/traversal-audit-2026-08-10.md), and
-> [live composed-route evidence](docs/evidence/pallet-viridian-composed-route-probe-2026-08-10.json).
+> [control route](docs/evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
+> [replanning route](docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json).
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -26,9 +28,12 @@ Cartridge knowledge now covers 220 reachable maps, 48,216 standable coordinates,
 static land edges, 1,484 exact connection transitions, 558 ordinary warp arrivals and 242 dynamic
 return warps. Red and Blue agree on the complete decoded structures. The first multi-map composer
 selected reachable passage endpoints and produced an 86-action Pallet → Route 1 → Viridian → Center
-plan; live Red reached every decoded arrival and the final Center coordinate `(7, 3)`. The immediate
-engineering gate is a reusable stepwise executor with live dynamic-object overlays and replanning.
-Surf, Cut and Strength remain stateful future adapters rather than pretend-open edges.
+plan; live Red reached every decoded arrival and the final Center coordinate `(7, 3)`. A second
+Mart run acknowledged 108 executed steps, recovered from one disclosed artificial block, routed
+around the naturally moving Route 1 youngster, and authenticated a wild interruption. The shared
+executor now owns step acknowledgement, bounded retries, typed interruptions and replanning.
+Direct visible-object observation is still absent, and Surf, Cut and Strength remain stateful future
+adapters rather than pretend-open edges.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

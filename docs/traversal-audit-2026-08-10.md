@@ -2,15 +2,16 @@
 
 ## Executive verdict
 
-Static multi-map composition is now proved, including one continuous live route. The repository can
-read exact connection and warp endpoints from Red or Blue, select reachable passage coordinates,
-join local searches across map boundaries, and emit controller actions without consulting a typed
-Kanto corridor. A clean source-bound run executed 86 generated actions over four maps and entered
-the Viridian Pokémon Center at the cartridge-declared coordinate.
+Static composition and closed-loop land execution are now proved across two continuous live routes.
+The repository reads connection and warp endpoints from Red or Blue, joins local searches across map
+boundaries, turns each edge into an exact observation contract, and refuses to count an input until
+live state acknowledges it. A failed step can invalidate its target coordinate and produce a new
+cartridge-derived route without consulting a typed Kanto corridor.
 
-That is a real architectural milestone, not learned navigation. The remaining blocker is a shared
-closed-loop runtime: current NPC positions, script state, movement mode and interruptions must be
-observed after every action and allowed to invalidate a static candidate. The model should learn
+The 86-step Center control handled three natural wild interruptions with no retry or replan. The
+Mart falsification handled one wild, a disclosed artificial first-step blocker, and the naturally
+moving Route 1 youngster; it acknowledged 108 steps from 112 requests and entered the Mart after two
+replans. This is land-navigation infrastructure, not learned navigation. The model should learn
 strategic destination and recovery choices; graph search should continue to own exact geometry.
 
 ## What is proved now
@@ -21,12 +22,14 @@ strategic destination and recovery choices; graph search should continue to own 
 | Passage geometry | 1,484 exact connection transitions, 558 ordinary warp arrivals, 242 indexed dynamic returns and 2 scripted lift exits; full Red/Blue structures agree | Dynamic returns need retained outside-map state; lifts remain menu-scripted |
 | Static terrain | 48,216 standable coordinates and 154,653 directed land edges, including 749 ledge transitions | Initial land geometry, not current object or script state |
 | Stateful-mechanic inventory | 8 ledge rules, 11 land-pair rules, 3 water-pair rules, 9 Cut swaps and 25 initial boulders | Surf, Cut and Strength are facts, not executable static edges |
-| Route composition | Game-neutral `RoutePlan` selects reachable endpoints and preserves every arrival coordinate | Static candidate only; it does not replan around a live change |
-| Live falsification | 86 generated actions: Pallet `(12,12)` → Route 1 → Viridian → Center `(7,3)`, with all three passage arrivals verified | One clean uncounted probe; Route 1 interruption recovery reused a qualified title helper |
+| Route composition | Game-neutral `RoutePlan` selects reachable endpoints and flattens every edge into exact source/expected state | Macro path cost is still selected before local path cost |
+| Closed-loop execution | Game-neutral runtime acknowledges coordinates and map transitions, bounds readiness/retries/interruptions, discovers blockers and replans | Blockers are inferred from failed movement, not read as a complete visible-object overlay |
+| Live falsification | Center: 86/86 steps, 3 wilds, 0 replans. Mart: 108 acknowledged steps/112 requests, 1 wild, 2 replans, final `(7,3)` | Two clean uncounted Red probes; field modes, menus and story gates remain outside authority |
 
 The public records are [the complete map extraction](evidence/map-graph-2026-08-10.json),
-[the traversal extraction](evidence/traversal-rules-2026-08-10.json), and
-[the composed live route](evidence/pallet-viridian-composed-route-probe-2026-08-10.json).
+[the traversal extraction](evidence/traversal-rules-2026-08-10.json),
+[the control route](evidence/pallet-viridian-composed-route-probe-2026-08-10.json), and
+[the replanning route](evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json).
 
 ## Corrections made during this milestone
 
@@ -56,6 +59,14 @@ produce exact border source/arrival pairs. All 1,484 directed transitions revers
 78 reciprocal connections, and Red and Blue compare equal at the complete object level. Independent
 fixture bytes distinguish the struct stride and alignment fields.
 
+### A map change and an arrival coordinate are not atomic
+
+The first Mart probe reached map 42 while its coordinate bytes still held Viridian `(19, 29)`. The
+original executor treated that mixed observation as drift and failed closed. Gen I publishes the
+destination map before refreshing the destination coordinates, so cross-map acknowledgement now
+enters one bounded settling phase after seeing the target map and requires the exact decoded arrival
+afterward. A ROM-free staged-transition test preserves the timing boundary.
+
 ## Code strengths
 
 1. **The search and composition cores are game-neutral.** `global_router.py`, `local_router.py` and
@@ -73,22 +84,20 @@ fixture bytes distinguish the struct stride and alignment fields.
    equality is supporting evidence rather than the decoder's only test.
 6. **The live receipt is source-bound.** It proves clean tracked source, executable bundle identity,
    released controls and unchanged RAM/RTC/state artifacts.
+7. **Interruption policy stays outside the router.** The neutral runtime sees a typed interruption;
+   the Gen I adapter authenticates and flees only wild battles. Trainers and unknown battle states
+   remain fatal rather than becoming a hidden navigation policy.
 
 ## Ranked gaps and risks
 
-### P0 — runtime observation is still fragmented
-
-The live probe verifies ordinary-map intermediate coordinates and every transition, but delegates
-Route 1 battles and swallowed inputs to an existing title-specific helper. Several chapter-private
-functions already implement pieces of observe/act/acknowledge/retry. They should become one public
-executor that consumes a `RoutePlan`, executes one edge, reobserves, and emits a progress receipt.
-
-### P0 — initial objects are not current blockers
+### P0 — visible objects are still inferred rather than observed
 
 `map_object_events` gives ROM initial positions. It does not say which objects are hidden by flags,
 where a wandering NPC stands now, or where a boulder has moved. The planner currently blocks every
-initial event for the probe; that conservative snapshot happened not to affect the chosen route.
-A live overlay must expose visible current blockers and trigger short-suffix replanning.
+initial event, then treats two unconsumed movement requests as evidence that the requested target is
+currently unavailable. That recovered from Route 1's youngster, but it cannot distinguish a moving
+person from a closed gate or permanent collision. Add direct visible-object projection where the
+revision exposes it, while retaining bounded failed-step discovery as a safe fallback.
 
 ### P1 — passage availability lacks semantic predicates
 
@@ -122,32 +131,33 @@ and composition layer. Add that before completion-run authority.
 
 ## Ordered next milestones
 
-1. **Extract the shared route executor.** One planned action at a time; observe readiness and exact
-   movement/map acknowledgement; bound waits and retries; record progress without title-specific
-   route labels.
-2. **Add live blocker overlays and replanning.** Observe visible objects, reject unintended door
-   warps, and recompute a short suffix when the requested edge is not consumed.
-3. **Run a second composed-route falsification.** Choose a route or timing lineage that exercises a
-   moving blocker or wild interruption, and require no typed direction fallback.
-4. **Implement Surf as mode state.** Derive capability from badge plus a living party move, observe
+1. **Implement Surf as mode state.** Derive capability from badge plus a living party move, observe
    board/move/disembark transitions, and falsify them live.
-5. **Implement Cut and Strength separately.** Rebuild after Cut; search bounded push state for
+2. **Project visible dynamic objects.** Prefer observed occupancy over failed-input inference where
+   revision-decoded state supports it, and separately classify permanent/story-gated blocks.
+3. **Implement Cut and Strength separately.** Rebuild after Cut; search bounded push state for
    Strength; never conflate possession with an open passage.
-6. **Filter one closed/open story gate.** Establish both states independently and prove the same
+4. **Filter one closed/open story gate.** Establish both states independently and prove the same
    passage changes availability without changing static topology.
-7. **Collect strategic navigation examples.** Store candidate destinations, semantic need, route
+5. **Jointly price macro alternatives.** Compare local approach plus passage cost before selecting
+   the map path; the current layered optimizer can miss a cheaper recovery detour.
+6. **Collect strategic navigation examples.** Store candidate destinations, semantic need, route
    cost, interruption and outcome. Do not label every shortest-path frame as a learned decision.
-8. **Run the Crystal microbenchmark.** Add a thin adapter only after the executor contract is title
+7. **Run the Crystal microbenchmark.** Add a thin adapter only after the executor contract is title
    neutral, then compare frozen-Red zero-shot, preregistered few-shot and from-scratch baselines.
 
 ## Admission gate for completion-run routing
 
 Generated routing remains experimental until all of the following are true:
 
-- at least two clean source-bound continuous routes pass without typed direction fallbacks;
-- every action is acknowledged from live coordinates/map state before the plan advances;
-- current blockers trigger bounded replanning rather than permanent-terrain assumptions;
-- wild and menu/script interruptions use shared bounded semantic recovery;
+- at least two clean source-bound continuous routes pass without typed direction fallbacks (met for
+  ordinary land routes);
+- every action is acknowledged from live coordinates/map state before the plan advances (met for
+  those routes);
+- current blockers trigger bounded replanning rather than permanent-terrain assumptions (met by
+  failed-step discovery; direct occupancy remains open);
+- wild and menu/script interruptions use shared bounded semantic recovery (wild met; menu/script
+  remains open);
 - required field capabilities come from observed badge, party and movement-mode state;
 - unknown story and puzzle requirements fail closed;
 - relevant decoder/composer mutations are killed; and

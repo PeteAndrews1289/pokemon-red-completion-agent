@@ -348,6 +348,44 @@ answer key.
 
 ---
 
+## Act X: a route that can be wrong
+
+The completed composer produced 86 movements from Pallet Town through Route 1 and Viridian into the
+Pokémon Center. That solved geometry, but it still left a dangerous question: what happens when the
+world does not consume the next input?
+
+The new executor treats each movement as a claim that live memory must confirm. It knows the exact
+source map and coordinate, the requested direction, and the only map and coordinate that count as
+success. It waits for input readiness, sends one request, and observes again. A wild battle becomes
+a typed interruption with an authenticated escape receipt. An unchanged coordinate is retried under
+a finite budget. Two unchanged attempts mark the target square unavailable and send the current
+state back to the cartridge planner.
+
+The first Mart test caught a subtler problem before producing evidence. Gen I changed the map id to
+the Mart while the coordinate bytes still briefly held the old Viridian position. The executor
+rejected the half-transition. The repair added one bounded transition-settling state and a synthetic
+test that reproduces the staggered update.
+
+Then two clean-source runs passed. The Center control acknowledged all 86 movements and survived
+three naturally occurring wild encounters without a movement retry. For the Mart run, the harness
+openly suppressed exactly two requests for the first left-hand square. That was fault injection, not
+a story about an NPC. The executor marked the square unavailable and found a longer route that
+entered Route 1 through a different border coordinate.
+
+Halfway north, the real moving youngster blocked the next square. The old teacher carried a special
+instruction for this exact person: step east, wait, return, then cross. The generic executor knew
+none of that. It observed two failed movements, removed the occupied square, composed another route,
+and continued. One wild battle later it entered Viridian Mart: 108 acknowledged steps from 112
+requests, two replans, no typed corridor fallback.
+
+This is not a learned navigator. It is the machinery that makes useful navigation learning
+possible. The model should decide whether it needs healing, supplies, a capture area, or a different
+objective. Exact arrows and local obstacle recovery belong to search and observation. Next come Surf
+as a real movement mode, Cut as a map mutation, Strength as a moving-object puzzle, and story gates
+whose availability must be proved from state.
+
+---
+
 ## Why a living Pokédex
 
 Every failure in this story has the same shape: a fixed sequence standing in where a decision should
@@ -396,9 +434,10 @@ Being precise about this matters more than the story sounding finished.
 - Encounter bands for five areas are measured rather than recalled, with sample counts, and they
   reproduce exactly across runs because the route is deterministic.
 - Red and Blue's complete decoded map graphs, traversable terrain, fishing tables and evolution
-  graphs are now measured from both cartridges. One generated 14-movement Pallet route has entered
-  Oak's Lab live while verifying every intermediate coordinate; traversal requirements and dynamic
-  obstructions are not yet modeled.
+  graphs are now measured from both cartridges. Two generated multi-map routes have entered the
+  Viridian Center and Mart live while acknowledging every movement, handling four wild encounters,
+  and replanning around both a disclosed artificial blocker and a naturally moving NPC. Surf, Cut,
+  Strength, direct visible-object projection and story gates remain outside authority.
 - A member that is too weak for where the run happens to be is now routed somewhere that suits it,
   travels there, and gains levels. That is new, and it is the mechanism the rest depends on.
 - A clean-power teacher run reaches its 60/55/55/55/55/55 readiness gate and completes the game;

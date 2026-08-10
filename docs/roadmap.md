@@ -3,42 +3,45 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-10): make composed routing a closed control loop
+## Current focus (2026-08-10): add stateful traversal to the closed route loop
 
-The geometry and composition milestones are complete. Red and Blue agree on 1,484 exact connection
-transitions, 558 ordinary warp arrivals, 242 dynamic returns and the previously decoded 154,653
-directed land edges. `$FF` returns now use retained outside-map state rather than immediate doorway
-history, which is essential for nested interiors. The game-neutral `RoutePlan` joins macro and local
-search without importing Pokémon concepts.
+The game-neutral route executor is implemented and live-qualified at source `6b2cf65`. It requires
+exact acknowledgement after every movement, tolerates Gen I's staggered map/coordinate transition,
+bounds readiness and unchanged-state retries, delegates typed interruptions, accumulates newly
+discovered blockers and requests a replacement plan. No route-specific direction string exists in
+the executor.
 
-A clean source-bound live probe generated and executed 86 actions from post-Pokédex Pallet
-`(12, 12)` through Route 1 and Viridian into the Pokémon Center. Live memory matched all three
-decoded passage arrivals and finished at `(7, 3)` with zero retries, released controls and unchanged
-ROM-adjacent artifacts. See the
-[composed-route receipt](evidence/pallet-viridian-composed-route-probe-2026-08-10.json).
+Two source-bound routes now exercise that contract. The 86-step Center control authenticated three
+natural Route 1 wild encounters with zero movement retry or replan. The Mart probe began with a
+disclosed two-input artificial block, changed its Pallet connection after replanning, then naturally
+encountered Route 1's moving youngster and replanned again before entering the Mart. It acknowledged
+108 movements from 112 requests and authenticated one wild encounter. See the
+[control receipt](evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
+[replanning receipt](evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json).
 
-The remaining risk is runtime state, not missing static geometry. The composer currently excludes
-initial object coordinates, while the probe delegates Route 1 interruptions to an already qualified
-title-specific helper. A reusable player must observe what is blocked *now*, acknowledge every
-input, and replan when the world changes. The ordered gates are now:
+This closes the previous three runtime gates, but not general navigation. Current blocker discovery
+is causal—two unconsumed requests mark the target square unavailable—not a complete observation of
+visible moving objects. Static graph edges also do not yet encode live Surf mode, Cut mutations,
+Strength pushes, or story flags. The ordered gates are now:
 
-1. Extract a public game-neutral overworld executor from the probe/chapter helpers. Execute one
-   planned edge at a time, reobserve map/coordinate/input readiness, and require progress receipts.
-2. Add live blocker overlays for visible NPC/object coordinates and short-suffix replanning. A
-   blocked step must never be counted merely because its input was sent.
-3. Generalize bounded battle interruption handling without hard-coding Route 1, then pass a second
-   source-bound composed route under an intentionally changed blocker or encounter lineage.
-4. Add Surf as a stateful movement mode with badge-plus-party capability, observed board/move/
-   disembark transitions and recomputed local graphs.
-5. Add Cut as an observed block mutation, then Strength as a bounded boulder puzzle state space.
-   Each receives a separate live falsification before completion-run authority.
-6. Filter story-gated passages with observed semantic predicates; unknown requirements fail closed.
+1. Add Surf as explicit state: observed badge plus living party move enables boarding, while live
+   movement mode distinguishes land, water travel and disembarking. Recompute legal local edges at
+   each mode transition and falsify the contract live.
+2. Add direct visible-object projection where revision-decoded state can support it. Keep failed-step
+   discovery as the fallback, but do not infer that every permanent block is an NPC.
+3. Add Cut as an observed block replacement and recompute the local graph after use.
+4. Add Strength as bounded player/boulder search over observed push state; do not reduce it to a
+   possession flag.
+5. Filter one story-gated passage from observed semantic predicates, independently prove its closed
+   and open states, and keep unknown predicates unavailable.
+6. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
+   selecting a macro path before local cost is known.
 7. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
    prizes—so one-cartridge reachability becomes complete rather than a lower bound.
-8. Record strategic destination choices, replans and interruption outcomes for learning. Do not
-   train a model to imitate shortest-path frames that exact search already solves.
-9. Add Crystal's thin adapter after the executor and traversal-observation contracts are
-   title-neutral, then run the defined battle/navigation/training microbenchmarks.
+8. Record strategic destination choices, replans and interruption outcomes for learning. Exact
+   arrow sequences remain planner outputs, not imitation labels.
+9. Add Crystal's thin adapter after Surf and traversal observation stay title-neutral, then run the
+   defined zero-shot/few-shot/from-scratch navigation benchmark.
 
 The full reasoning, risks and admission criteria are in the
 [knowledge-to-action audit](traversal-audit-2026-08-10.md). None of this opens v95; counted v95

@@ -1,5 +1,16 @@
 # Three-agent coordination
 
+> **2026-08-10 Lane A checkpoint:** the game-neutral closed-loop route executor is live-qualified at
+> source `6b2cf65`. The 86-step Pallet → Viridian Center control acknowledged every movement and
+> authenticated three natural wild interruptions with zero replans. The independent Mart probe
+> disclosed a two-request artificial first-step block, changed its Pallet/Route 1 connection after
+> replanning, then naturally routed around Route 1's moving youngster, authenticated one wild and
+> entered the Mart after 108 acknowledged steps / 112 requests. The failed pre-evidence attempt also
+> exposed Gen I's staggered map/coordinate transition and produced a bounded settling contract. See
+> `HANDOFF.md` and `docs/traversal-audit-2026-08-10.md`. Next: Surf as explicit movement mode, then
+> visible-object projection, Cut, Strength and one story gate. Do not authorize generated routing in
+> a completion run yet, edit `src/` during an emulator run, or open counted v95; status remains 0/10.
+
 > **2026-08-09 active lane:** fresh canonical seed `990015` completed 36/36 objectives and Hall of
 > Fame with the exact six authenticated model roles, 3,315 battle decisions, 21/21 learned target
 > bindings, both training heads in causal control, and zero battle-teacher query or fallback. The

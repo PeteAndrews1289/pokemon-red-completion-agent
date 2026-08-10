@@ -14,42 +14,44 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
-## Passage geometry became a continuous live route — 2026-08-10
+## Composed routing became a closed live control loop — 2026-08-10
 
-The macro/local composition gate is closed. Exact-fingerprint Red and Blue agree on 220 reachable
-maps, 78 reciprocal connections with **1,484 exact coordinate transitions**, 558 ordinary warps
-with decoded destination coordinates, 242 dynamic `$FF` returns with retained destination-warp
-indices, and two scripted lift exits. The public graph record is
-[map-graph-2026-08-10.json](docs/evidence/map-graph-2026-08-10.json).
+The route executor milestone is closed at clean source
+`6b2cf65479391bf1a9ef57e998529120e653be7b`. `RoutePlan.steps` turns every local movement and
+cross-map passage into an exact source/expected-state contract. The game-neutral executor sends one
+movement, reobserves map, coordinate and readiness, counts nothing until the expected state appears,
+bounds unchanged retries and interruptions, and asks for a replacement plan after a repeated
+ordinary block. `gen1_route_runtime.py` is the thin title adapter: it projects Red's observation into
+the neutral state and delegates only authenticated wild-battle exits to the existing semantic
+receipt. Trainer battles and unknown battle states still fail closed.
 
-One correction is more important than the extra coordinates. `$FF` means the engine's retained
-outside map, not the immediately previous map. The old decoder expanded returns from direct incoming
-doors, which is wrong for nested interiors such as the Underground Path. `global_router` now carries
-`last_outside` state, updates it only when an outside-tileset map takes a warp, and resolves a return
-only at route time. Independent synthetic cartridges exercise destination-warp byte three,
-connection bytes five through eight, exact reciprocal endpoints, and a nested-interior return.
+The first attempted Mart proof found a real timing boundary: Gen I publishes a destination map id
+before refreshing the destination coordinates. The executor correctly rejected that mixed state,
+then gained an explicit bounded transition-settling phase and a synthetic regression. No failed run
+was promoted as evidence.
 
-`route_plan.py` is game-neutral. Given a macro path and per-map local graphs, it selects the cheapest
-reachable exact connection endpoint, routes to each warp, carries the cartridge-declared arrival
-into the next local search, and emits one continuous action plan. It fails closed when endpoint data
-is missing or when a route begins on a warp trigger whose re-entry action has not been planned.
+Two clean-power source-bound reruns then passed from the verified post-Pokédex Pallet coordinate
+`(12, 12)`:
 
-The source-bound live probe passed from clean commit
-`7d2addc4edd7f0e254b30b5fdecaf44359753837`. Qualified teachers established a clean-power-on,
-post-Pokédex state and exited Oak's Lab to Pallet `(12, 12)`. From there the composer—not the typed
-Pewter corridors—generated **86 actions** over Pallet → Route 1 → Viridian → Pokémon Center. Live
-memory verified Pallet `(0, 10)` → Route 1 `(35, 10)`, Route 1 `(0, 11)` → Viridian `(35, 21)`, and
-Viridian warp `(25, 23)` → Center `(7, 3)`. The run needed zero wild flees or movement retries,
-released every control, and changed no ROM-adjacent artifact. Record:
-[pallet-viridian-composed-route-probe-2026-08-10.json](docs/evidence/pallet-viridian-composed-route-probe-2026-08-10.json).
+- The no-injection control generated and acknowledged all **86** movements into Viridian Pokémon
+  Center. It authenticated and fled **three** naturally occurring Route 1 wild encounters without
+  adding a movement retry or replan, matched all three cartridge-derived arrivals, released every
+  control and changed no ROM-adjacent artifact. Record:
+  [pallet-viridian-composed-route-probe-2026-08-10.json](docs/evidence/pallet-viridian-composed-route-probe-2026-08-10.json).
+- The independent Mart proof began from a 98-step candidate and explicitly suppressed exactly two
+  requests for Pallet `(12, 12)` → `(12, 11)`. The executor disclosed that artificial fault, marked
+  the square unavailable and produced a 104-step replacement whose Pallet/Route 1 arrival changed
+  from `(35, 10)` to `(35, 11)`. It later found Route 1's moving youngster blocking `(13, 14)`,
+  replanned a second time without a typed maneuver, authenticated one natural wild encounter and
+  entered the Mart at `(7, 3)`. In total it acknowledged 108 steps from 112 requests. Record:
+  [pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json](docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json).
 
-This is not completion-run authority yet. The probe reuses qualified precondition and Route 1
-interruption machinery, while composition itself still sees initial cartridge objects rather than
-current NPC positions. The next priority is a public game-neutral stepwise executor that reobserves
-input readiness, map/coordinate progress, visible blockers and battles after every action, then
-replans a short suffix. After two source-bound routes pass that contract, implement Surf as the first
-stateful field mode. Cut, Strength and story-gated passages remain fail-closed. Counted v95 remains
-sealed at **0/10**.
+The distinction matters: the first blocker is causal fault injection, not an invented NPC claim;
+the second occurred naturally at the known youngster crossing. The executor infers blockers from
+repeated unconsumed movement—it does not yet read a complete visible-object overlay. Generated
+routing still lacks field-mode and story predicates, so it is not authorized in a completion run.
+The next gate is Surf as explicit board/move/disembark state, followed separately by Cut, Strength
+and one observed story gate. Counted v95 remains sealed at **0/10**.
 
 ## Static traversal became live action — 2026-08-10
 

@@ -15,19 +15,19 @@
   "executable_source_bundle_sha256": "3064b8a6c958e52ff62aa6e55737a226ecdc635268c63a4f64a1ccd4553c7d98",
   "precondition": "Qualified teachers established a clean-power-on post-Pok\u00e9dex run and exited Oak's Lab to the verified Pallet coordinate (12, 12).",
   "authority_under_test": "From the Pallet start onward, cartridge map headers, exact connection geometry, destination warp indices, terrain and traversal rules supplied the multi-map route. A game-neutral executor required live acknowledgement for every requested movement, bounded readiness and retries, delegated authenticated wild exits, and could replace its route around newly observed blockers.",
-  "destination": "center",
+  "destination": "mart",
   "plan": {
     "maps": [
       "PALLET_TOWN",
       "ROUTE_1",
       "VIRIDIAN_CITY",
-      "VIRIDIAN_POKECENTER"
+      "VIRIDIAN_MART"
     ],
     "map_ids": [
       0,
       12,
       1,
-      41
+      42
     ],
     "start_yx": [
       12,
@@ -119,6 +119,18 @@
       "left",
       "up",
       "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "right",
+      "right",
+      "right",
+      "right",
+      "right",
+      "right",
       "right",
       "right",
       "right",
@@ -523,8 +535,8 @@
       {
         "source_map": "VIRIDIAN_CITY",
         "source_map_id": 1,
-        "target_map": "VIRIDIAN_POKECENTER",
-        "target_map_id": 41,
+        "target_map": "VIRIDIAN_MART",
+        "target_map_id": 42,
         "approach_coordinates_yx": [
           [
             35,
@@ -575,24 +587,72 @@
             19
           ],
           [
-            26,
+            25,
+            19
+          ],
+          [
+            24,
+            19
+          ],
+          [
+            23,
+            19
+          ],
+          [
+            22,
+            19
+          ],
+          [
+            21,
+            19
+          ],
+          [
+            20,
+            19
+          ],
+          [
+            20,
             20
           ],
           [
-            26,
+            20,
             21
           ],
           [
-            26,
+            20,
             22
           ],
           [
-            26,
+            20,
             23
           ],
           [
-            25,
-            23
+            20,
+            24
+          ],
+          [
+            20,
+            25
+          ],
+          [
+            20,
+            26
+          ],
+          [
+            20,
+            27
+          ],
+          [
+            20,
+            28
+          ],
+          [
+            20,
+            29
+          ],
+          [
+            19,
+            29
           ]
         ],
         "actions": [
@@ -607,6 +667,18 @@
           "left",
           "up",
           "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "right",
+          "right",
+          "right",
+          "right",
+          "right",
+          "right",
           "right",
           "right",
           "right",
@@ -615,8 +687,8 @@
         ],
         "transition": {
           "exit_yx": [
-            25,
-            23
+            19,
+            29
           ],
           "arrival_yx": [
             7,
@@ -630,9 +702,9 @@
   },
   "execution": {
     "passed": true,
-    "movement_requests": 86,
-    "wait_actions": 3,
-    "acknowledged_steps": 86,
+    "movement_requests": 112,
+    "wait_actions": 5,
+    "acknowledged_steps": 108,
     "steps": [
       {
         "source_map_id": 0,
@@ -640,27 +712,11 @@
           12,
           12
         ],
-        "action": "left",
+        "action": "right",
         "expected_map_id": 0,
         "expected_yx": [
           12,
-          11
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 0,
-        "source_yx": [
-          12,
-          11
-        ],
-        "action": "left",
-        "expected_map_id": 0,
-        "expected_yx": [
-          12,
-          10
+          13
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -670,189 +726,205 @@
         "source_map_id": 0,
         "source_yx": [
           12,
-          10
-        ],
-        "action": "left",
-        "expected_map_id": 0,
-        "expected_yx": [
-          12,
-          9
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 0,
-        "source_yx": [
-          12,
-          9
-        ],
-        "action": "up",
-        "expected_map_id": 0,
-        "expected_yx": [
-          11,
-          9
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 0,
-        "source_yx": [
-          11,
-          9
-        ],
-        "action": "up",
-        "expected_map_id": 0,
-        "expected_yx": [
-          10,
-          9
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 0,
-        "source_yx": [
-          10,
-          9
-        ],
-        "action": "up",
-        "expected_map_id": 0,
-        "expected_yx": [
-          9,
-          9
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 0,
-        "source_yx": [
-          9,
-          9
-        ],
-        "action": "up",
-        "expected_map_id": 0,
-        "expected_yx": [
-          8,
-          9
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 0,
-        "source_yx": [
-          8,
-          9
-        ],
-        "action": "up",
-        "expected_map_id": 0,
-        "expected_yx": [
-          7,
-          9
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 0,
-        "source_yx": [
-          7,
-          9
-        ],
-        "action": "up",
-        "expected_map_id": 0,
-        "expected_yx": [
-          6,
-          9
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 0,
-        "source_yx": [
-          6,
-          9
-        ],
-        "action": "up",
-        "expected_map_id": 0,
-        "expected_yx": [
-          5,
-          9
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 0,
-        "source_yx": [
-          5,
-          9
-        ],
-        "action": "up",
-        "expected_map_id": 0,
-        "expected_yx": [
-          4,
-          9
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 0,
-        "source_yx": [
-          4,
-          9
-        ],
-        "action": "up",
-        "expected_map_id": 0,
-        "expected_yx": [
-          3,
-          9
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 0,
-        "source_yx": [
-          3,
-          9
-        ],
-        "action": "up",
-        "expected_map_id": 0,
-        "expected_yx": [
-          2,
-          9
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 0,
-        "source_yx": [
-          2,
-          9
+          13
         ],
         "action": "right",
         "expected_map_id": 0,
         "expected_yx": [
+          12,
+          14
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          12,
+          14
+        ],
+        "action": "right",
+        "expected_map_id": 0,
+        "expected_yx": [
+          12,
+          15
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          12,
+          15
+        ],
+        "action": "right",
+        "expected_map_id": 0,
+        "expected_yx": [
+          12,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          12,
+          16
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          11,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          11,
+          16
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          10,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          10,
+          16
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          9,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          9,
+          16
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          8,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          8,
+          16
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          7,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          7,
+          16
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          6,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          6,
+          16
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          5,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          5,
+          16
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          4,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          4,
+          16
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          3,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          3,
+          16
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
           2,
-          10
+          16
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -862,13 +934,93 @@
         "source_map_id": 0,
         "source_yx": [
           2,
-          10
+          16
+        ],
+        "action": "left",
+        "expected_map_id": 0,
+        "expected_yx": [
+          2,
+          15
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          2,
+          15
+        ],
+        "action": "left",
+        "expected_map_id": 0,
+        "expected_yx": [
+          2,
+          14
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          2,
+          14
+        ],
+        "action": "left",
+        "expected_map_id": 0,
+        "expected_yx": [
+          2,
+          13
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          2,
+          13
+        ],
+        "action": "left",
+        "expected_map_id": 0,
+        "expected_yx": [
+          2,
+          12
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          2,
+          12
+        ],
+        "action": "left",
+        "expected_map_id": 0,
+        "expected_yx": [
+          2,
+          11
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          2,
+          11
         ],
         "action": "up",
         "expected_map_id": 0,
         "expected_yx": [
           1,
-          10
+          11
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -878,13 +1030,13 @@
         "source_map_id": 0,
         "source_yx": [
           1,
-          10
+          11
         ],
         "action": "up",
         "expected_map_id": 0,
         "expected_yx": [
           0,
-          10
+          11
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -894,13 +1046,13 @@
         "source_map_id": 0,
         "source_yx": [
           0,
-          10
+          11
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           35,
-          10
+          11
         ],
         "kind": "connection",
         "movement_requests": 1,
@@ -910,29 +1062,29 @@
         "source_map_id": 12,
         "source_yx": [
           35,
-          10
+          11
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           34,
-          10
+          11
         ],
         "kind": "walk",
         "movement_requests": 1,
-        "interruption_count": 1
+        "interruption_count": 0
       },
       {
         "source_map_id": 12,
         "source_yx": [
           34,
-          10
+          11
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           33,
-          10
+          11
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -942,13 +1094,13 @@
         "source_map_id": 12,
         "source_yx": [
           33,
-          10
+          11
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           32,
-          10
+          11
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -958,13 +1110,13 @@
         "source_map_id": 12,
         "source_yx": [
           32,
-          10
+          11
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           31,
-          10
+          11
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -974,13 +1126,13 @@
         "source_map_id": 12,
         "source_yx": [
           31,
-          10
+          11
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           30,
-          10
+          11
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -990,13 +1142,13 @@
         "source_map_id": 12,
         "source_yx": [
           30,
-          10
+          11
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           29,
-          10
+          11
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1006,9 +1158,25 @@
         "source_map_id": 12,
         "source_yx": [
           29,
-          10
+          11
         ],
         "action": "up",
+        "expected_map_id": 12,
+        "expected_yx": [
+          28,
+          11
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 12,
+        "source_yx": [
+          28,
+          11
+        ],
+        "action": "left",
         "expected_map_id": 12,
         "expected_yx": [
           28,
@@ -1176,7 +1344,7 @@
         ],
         "kind": "walk",
         "movement_requests": 1,
-        "interruption_count": 1
+        "interruption_count": 0
       },
       {
         "source_map_id": 12,
@@ -1472,11 +1640,43 @@
           14,
           14
         ],
+        "action": "right",
+        "expected_map_id": 12,
+        "expected_yx": [
+          14,
+          15
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 12,
+        "source_yx": [
+          14,
+          15
+        ],
+        "action": "right",
+        "expected_map_id": 12,
+        "expected_yx": [
+          14,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 12,
+        "source_yx": [
+          14,
+          16
+        ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           13,
-          14
+          16
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1486,13 +1686,13 @@
         "source_map_id": 12,
         "source_yx": [
           13,
-          14
+          16
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           12,
-          14
+          16
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1502,13 +1702,13 @@
         "source_map_id": 12,
         "source_yx": [
           12,
-          14
+          16
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           11,
-          14
+          16
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1518,13 +1718,13 @@
         "source_map_id": 12,
         "source_yx": [
           11,
-          14
+          16
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           10,
-          14
+          16
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1534,13 +1734,13 @@
         "source_map_id": 12,
         "source_yx": [
           10,
-          14
+          16
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           9,
-          14
+          16
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1550,13 +1750,13 @@
         "source_map_id": 12,
         "source_yx": [
           9,
-          14
+          16
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           8,
-          14
+          16
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1566,13 +1766,13 @@
         "source_map_id": 12,
         "source_yx": [
           8,
-          14
+          16
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           7,
-          14
+          16
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1582,13 +1782,13 @@
         "source_map_id": 12,
         "source_yx": [
           7,
-          14
+          16
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           6,
-          14
+          16
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1598,13 +1798,13 @@
         "source_map_id": 12,
         "source_yx": [
           6,
-          14
+          16
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           5,
-          14
+          16
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1614,13 +1814,13 @@
         "source_map_id": 12,
         "source_yx": [
           5,
-          14
+          16
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           4,
-          14
+          16
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1630,13 +1830,13 @@
         "source_map_id": 12,
         "source_yx": [
           4,
-          14
+          16
         ],
         "action": "up",
         "expected_map_id": 12,
         "expected_yx": [
           3,
-          14
+          16
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1646,9 +1846,41 @@
         "source_map_id": 12,
         "source_yx": [
           3,
-          14
+          16
         ],
         "action": "up",
+        "expected_map_id": 12,
+        "expected_yx": [
+          2,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 12,
+        "source_yx": [
+          2,
+          16
+        ],
+        "action": "left",
+        "expected_map_id": 12,
+        "expected_yx": [
+          2,
+          15
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 12,
+        "source_yx": [
+          2,
+          15
+        ],
+        "action": "left",
         "expected_map_id": 12,
         "expected_yx": [
           2,
@@ -1936,11 +2168,11 @@
           26,
           19
         ],
-        "action": "right",
+        "action": "up",
         "expected_map_id": 1,
         "expected_yx": [
-          26,
-          20
+          25,
+          19
         ],
         "kind": "walk",
         "movement_requests": 1,
@@ -1949,59 +2181,251 @@
       {
         "source_map_id": 1,
         "source_yx": [
-          26,
-          20
-        ],
-        "action": "right",
-        "expected_map_id": 1,
-        "expected_yx": [
-          26,
-          21
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 1,
-        "source_yx": [
-          26,
-          21
-        ],
-        "action": "right",
-        "expected_map_id": 1,
-        "expected_yx": [
-          26,
-          22
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 1,
-        "source_yx": [
-          26,
-          22
-        ],
-        "action": "right",
-        "expected_map_id": 1,
-        "expected_yx": [
-          26,
-          23
-        ],
-        "kind": "walk",
-        "movement_requests": 1,
-        "interruption_count": 0
-      },
-      {
-        "source_map_id": 1,
-        "source_yx": [
-          26,
-          23
+          25,
+          19
         ],
         "action": "up",
-        "expected_map_id": 41,
+        "expected_map_id": 1,
+        "expected_yx": [
+          24,
+          19
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          24,
+          19
+        ],
+        "action": "up",
+        "expected_map_id": 1,
+        "expected_yx": [
+          23,
+          19
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          23,
+          19
+        ],
+        "action": "up",
+        "expected_map_id": 1,
+        "expected_yx": [
+          22,
+          19
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          22,
+          19
+        ],
+        "action": "up",
+        "expected_map_id": 1,
+        "expected_yx": [
+          21,
+          19
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          21,
+          19
+        ],
+        "action": "up",
+        "expected_map_id": 1,
+        "expected_yx": [
+          20,
+          19
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          20,
+          19
+        ],
+        "action": "right",
+        "expected_map_id": 1,
+        "expected_yx": [
+          20,
+          20
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          20,
+          20
+        ],
+        "action": "right",
+        "expected_map_id": 1,
+        "expected_yx": [
+          20,
+          21
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          20,
+          21
+        ],
+        "action": "right",
+        "expected_map_id": 1,
+        "expected_yx": [
+          20,
+          22
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          20,
+          22
+        ],
+        "action": "right",
+        "expected_map_id": 1,
+        "expected_yx": [
+          20,
+          23
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          20,
+          23
+        ],
+        "action": "right",
+        "expected_map_id": 1,
+        "expected_yx": [
+          20,
+          24
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          20,
+          24
+        ],
+        "action": "right",
+        "expected_map_id": 1,
+        "expected_yx": [
+          20,
+          25
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          20,
+          25
+        ],
+        "action": "right",
+        "expected_map_id": 1,
+        "expected_yx": [
+          20,
+          26
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          20,
+          26
+        ],
+        "action": "right",
+        "expected_map_id": 1,
+        "expected_yx": [
+          20,
+          27
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          20,
+          27
+        ],
+        "action": "right",
+        "expected_map_id": 1,
+        "expected_yx": [
+          20,
+          28
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          20,
+          28
+        ],
+        "action": "right",
+        "expected_map_id": 1,
+        "expected_yx": [
+          20,
+          29
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 1,
+        "source_yx": [
+          20,
+          29
+        ],
+        "action": "up",
+        "expected_map_id": 42,
         "expected_yx": [
           7,
           3
@@ -2016,40 +2440,8 @@
         "kind": "wild_battle",
         "resumed_map_id": 12,
         "resumed_yx": [
-          34,
-          10
-        ],
-        "details": {
-          "battle_result": 2,
-          "control_ready": true,
-          "enemy_level": 2,
-          "enemy_species_id": 36,
-          "expected_map": 12,
-          "final_battle_state": 0,
-          "final_hp": 21,
-          "initial_battle_state": 1,
-          "initial_hp": 21,
-          "level_preserved": true,
-          "map": 12,
-          "maximum_hp_preserved": true,
-          "party_preserved": true,
-          "position": [
-            10,
-            34
-          ],
-          "pp_preserved": true,
-          "run_attempts": 1,
-          "stabilization_frames": 120,
-          "status_preserved": true,
-          "verified": true
-        }
-      },
-      {
-        "kind": "wild_battle",
-        "resumed_map_id": 12,
-        "resumed_yx": [
-          24,
-          12
+          9,
+          16
         ],
         "details": {
           "battle_result": 2,
@@ -2066,8 +2458,8 @@
           "maximum_hp_preserved": true,
           "party_preserved": true,
           "position": [
-            12,
-            24
+            16,
+            9
           ],
           "pp_preserved": true,
           "run_attempts": 1,
@@ -2075,42 +2467,37 @@
           "status_preserved": true,
           "verified": true
         }
-      },
-      {
-        "kind": "wild_battle",
-        "resumed_map_id": 12,
-        "resumed_yx": [
-          9,
-          14
-        ],
-        "details": {
-          "battle_result": 2,
-          "control_ready": true,
-          "enemy_level": 4,
-          "enemy_species_id": 165,
-          "expected_map": 12,
-          "final_battle_state": 0,
-          "final_hp": 21,
-          "initial_battle_state": 1,
-          "initial_hp": 21,
-          "level_preserved": true,
-          "map": 12,
-          "maximum_hp_preserved": true,
-          "party_preserved": true,
-          "position": [
-            14,
-            9
-          ],
-          "pp_preserved": true,
-          "run_attempts": 2,
-          "stabilization_frames": 120,
-          "status_preserved": true,
-          "verified": true
-        }
       }
     ],
-    "replans": [],
-    "terminal_map_id": 41,
+    "replans": [
+      {
+        "ordinal": 1,
+        "map_id": 0,
+        "at_yx": [
+          12,
+          12
+        ],
+        "newly_blocked_yx": [
+          12,
+          11
+        ],
+        "replacement_steps": 104
+      },
+      {
+        "ordinal": 2,
+        "map_id": 12,
+        "at_yx": [
+          14,
+          14
+        ],
+        "newly_blocked_yx": [
+          13,
+          14
+        ],
+        "replacement_steps": 50
+      }
+    ],
+    "terminal_map_id": 42,
     "terminal_yx": [
       7,
       3
@@ -2118,40 +2505,22 @@
     "terminal_ready": true
   },
   "fault_injection": {
-    "enabled": false,
-    "kind": null,
-    "source_map_id": null,
-    "source_yx": null,
-    "blocked_yx": null,
-    "direction": null,
-    "suppressed_requests": 0,
-    "disclosure": null
+    "enabled": true,
+    "kind": "suppressed movement requests",
+    "source_map_id": 0,
+    "source_yx": [
+      12,
+      12
+    ],
+    "blocked_yx": [
+      12,
+      11
+    ],
+    "direction": "left",
+    "suppressed_requests": 2,
+    "disclosure": "Artificial fault for causal recovery testing; not a naturally observed NPC."
   },
   "wild_flees": [
-    {
-      "battle_result": 2,
-      "control_ready": true,
-      "enemy_level": 2,
-      "enemy_species_id": 36,
-      "expected_map": 12,
-      "final_battle_state": 0,
-      "final_hp": 21,
-      "initial_battle_state": 1,
-      "initial_hp": 21,
-      "level_preserved": true,
-      "map": 12,
-      "maximum_hp_preserved": true,
-      "party_preserved": true,
-      "position": [
-        10,
-        34
-      ],
-      "pp_preserved": true,
-      "run_attempts": 1,
-      "stabilization_frames": 120,
-      "status_preserved": true,
-      "verified": true
-    },
     {
       "battle_result": 2,
       "control_ready": true,
@@ -2167,51 +2536,27 @@
       "maximum_hp_preserved": true,
       "party_preserved": true,
       "position": [
-        12,
-        24
+        16,
+        9
       ],
       "pp_preserved": true,
       "run_attempts": 1,
       "stabilization_frames": 120,
       "status_preserved": true,
       "verified": true
-    },
-    {
-      "battle_result": 2,
-      "control_ready": true,
-      "enemy_level": 4,
-      "enemy_species_id": 165,
-      "expected_map": 12,
-      "final_battle_state": 0,
-      "final_hp": 21,
-      "initial_battle_state": 1,
-      "initial_hp": 21,
-      "level_preserved": true,
-      "map": 12,
-      "maximum_hp_preserved": true,
-      "party_preserved": true,
-      "position": [
-        14,
-        9
-      ],
-      "pp_preserved": true,
-      "run_attempts": 2,
-      "stabilization_frames": 120,
-      "status_preserved": true,
-      "verified": true
     }
   ],
   "final_map": {
-    "id": 41,
-    "name": "VIRIDIAN_POKECENTER"
+    "id": 42,
+    "name": "VIRIDIAN_MART"
   },
   "final_yx": [
     7,
     3
   ],
-  "planned_actions": 86,
-  "actions_executed_during_plan": 142,
-  "frames_executed": 61956,
+  "planned_actions": 98,
+  "actions_executed_during_plan": 130,
+  "frames_executed": 58068,
   "controller_released": true,
   "rom_adjacent_artifacts_unchanged": true
 }
