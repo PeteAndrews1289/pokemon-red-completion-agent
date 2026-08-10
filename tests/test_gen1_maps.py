@@ -230,6 +230,7 @@ def test_the_game_neutral_projection_keeps_endpoints_and_return_context() -> Non
                     None,
                     PassageKind.RETURN,
                     at=(7, 2),
+                    exit_action="down",
                     destination_warp_index=0,
                 ),
             ),
@@ -244,6 +245,7 @@ def test_the_game_neutral_projection_keeps_endpoints_and_return_context() -> Non
     assert connection.heading == "east"
     assert connection.coordinate_transitions == (transition,)
     assert return_warp.at == (7, 2)
+    assert return_warp.exit_action == "down"
     assert return_warp.target_map is None
     assert return_warp.destination_warp_index == 0
     assert projected.outside_nodes == frozenset({1})

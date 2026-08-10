@@ -249,7 +249,7 @@ def compose_route(
             )
             action_in_approach = False
         elif edge.kind in {"warp", "return"}:
-            approach, transition = _warp_transition(
+            approach, transition, action_in_approach = _warp_transition(
                 graph,
                 local,
                 current_at,
@@ -258,7 +258,6 @@ def compose_route(
                 capabilities=capabilities,
                 start_mode=current_mode,
             )
-            action_in_approach = True
         else:
             raise RoutePlanningError(f"map {source_map} uses unsupported {edge.kind!r} transition")
         segments.append(
@@ -400,7 +399,7 @@ def _warp_transition(
     *,
     capabilities: frozenset[str],
     start_mode: TraversalMode,
-) -> tuple[LocalPath, MacroTransition]:
+) -> tuple[LocalPath, MacroTransition, bool]:
     if edge.at is None:
         raise RoutePlanningError("a warp has no trigger coordinate")
     try:
@@ -413,7 +412,8 @@ def _warp_transition(
         )
     except LocalRouterError as error:
         raise RoutePlanningError(f"warp at {edge.at} is not locally reachable") from error
-    if not approach.edges:
+    action_in_approach = edge.exit_action is None
+    if action_in_approach and not approach.edges:
         raise RoutePlanningError(
             "route begins on a warp trigger; moving away and re-entering is not planned yet"
         )
@@ -425,10 +425,27 @@ def _warp_transition(
         if index is None or index >= len(locations):
             raise RoutePlanningError(f"return to map {target_map} has no destination warp {index}")
         arrival = locations[index]
+        if edge.exit_action is not None:
+            dy, dx = {
+                "up": (-1, 0),
+                "right": (0, 1),
+                "down": (1, 0),
+                "left": (0, -1),
+            }.get(edge.exit_action, (0, 0))
+            if (dy, dx) == (0, 0):
+                raise RoutePlanningError(
+                    f"unsupported boundary return action {edge.exit_action!r}"
+                )
+            arrival = arrival[0] + dy, arrival[1] + dx
     if arrival is None:
         raise RoutePlanningError("an ordinary warp has no decoded arrival coordinate")
-    return approach, MacroTransition(
-        exit_at=edge.at,
-        arrival_at=arrival,
-        action=approach.edges[-1].action,
+    action = edge.exit_action if edge.exit_action is not None else approach.edges[-1].action
+    return (
+        approach,
+        MacroTransition(
+            exit_at=edge.at,
+            arrival_at=arrival,
+            action=action,
+        ),
+        action_in_approach,
     )

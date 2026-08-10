@@ -63,6 +63,9 @@ class MacroEdge:
     arrival_at: tuple[int, int] | None = None
     #: Which border to cross for a connection, when the source game exposes it.
     heading: str | None = None
+    #: Direction pressed after reaching an edge warp. Generation I interior
+    #: returns sit on the map border and fire only when the player walks out.
+    exit_action: str | None = None
     #: Exact candidates for crossing a map connection.
     coordinate_transitions: tuple[MacroTransition, ...] = ()
     #: Zero-based destination warp used by ordinary and return warps.
@@ -81,6 +84,8 @@ class MacroEdge:
             raise ValueError("only a return edge may omit its target map")
         if self.destination_warp_index is not None and self.destination_warp_index < 0:
             raise ValueError("a destination warp index cannot be negative")
+        if self.exit_action is not None and not self.exit_action:
+            raise ValueError("a warp exit action cannot be empty")
 
 
 @dataclass(frozen=True)

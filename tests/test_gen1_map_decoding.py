@@ -276,6 +276,23 @@ def test_an_interior_returns_to_whichever_map_led_in() -> None:
     assert return_warp.destination_warp_index == 0
 
 
+def test_a_boundary_return_records_the_outward_action() -> None:
+    cartridge = Cartridge()
+    cartridge.add(0, warps=((1, 1, 0, 2),))
+    cartridge.add(
+        2,
+        size=(4, 5),
+        tileset=1,
+        warps=((7, 3, 0, RETURN_TO_LAST_MAP),),
+    )
+
+    graph = read_map_graph(cartridge.bytes())
+
+    (return_warp,) = graph[2].passages
+    assert return_warp.at == (7, 3)
+    assert return_warp.exit_action == "down"
+
+
 def test_a_nested_interior_return_keeps_the_outdoor_map() -> None:
     """The immediate previous map is not what ``LAST_MAP`` means."""
 

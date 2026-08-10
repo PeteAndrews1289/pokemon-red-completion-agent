@@ -252,6 +252,9 @@ class Passage:
     kind: PassageKind
     #: Set for a connection: which edge to leave by.
     heading: Heading | None = None
+    #: Set for a boundary return: which direction walks out after reaching the
+    #: warp coordinate. Entering that coordinate alone does not trigger Red.
+    exit_action: str | None = None
     #: Set for a warp: the ``(y, x)`` block the player must stand on.
     at: tuple[int, int] | None = None
     #: Exact coordinate reached after an ordinary warp.
@@ -473,6 +476,7 @@ def _assemble(
                         to_map=None,
                         kind=PassageKind.RETURN,
                         at=door.at,
+                        exit_action=_boundary_return_action(headers[map_id], door.at),
                         destination_warp_index=door.destination_warp_index,
                     )
                 )
@@ -498,6 +502,25 @@ def _assemble(
                 )
             )
     return passages
+
+
+def _boundary_return_action(header: _Header, at: tuple[int, int]) -> str | None:
+    """Return the outward action for a non-corner map-edge warp."""
+
+    y, x = at
+    maximum_y = header.height * 2 - 1
+    maximum_x = header.width * 2 - 1
+    candidates = tuple(
+        action
+        for condition, action in (
+            (y == 0, "up"),
+            (y == maximum_y, "down"),
+            (x == 0, "left"),
+            (x == maximum_x, "right"),
+        )
+        if condition
+    )
+    return candidates[0] if len(candidates) == 1 else None
 
 
 def _verify_connection_transitions_are_reciprocal(
@@ -653,6 +676,7 @@ def macro_graph_from_nodes(graph: Mapping[int, MapNode]) -> MacroGraph:
                     at=passage.at,
                     arrival_at=passage.arrival_at,
                     heading=passage.heading.value if passage.heading is not None else None,
+                    exit_action=passage.exit_action,
                     coordinate_transitions=passage.coordinate_transitions,
                     destination_warp_index=passage.destination_warp_index,
                 )

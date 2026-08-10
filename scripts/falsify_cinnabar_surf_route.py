@@ -25,6 +25,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
+from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING  # noqa: E402
 from pokemon_red_completion.captured_progress import load_captured_progress  # noqa: E402
 from pokemon_red_completion.collection_protocol import (  # noqa: E402
     committed_source_bundle_sha256,
@@ -268,7 +269,13 @@ def main(argv: list[str] | None = None) -> int:
         if SURF_CAPABILITY not in capabilities:
             raise CinnabarSurfProbeError(f"capture lacks live Surf capability: {permission.reason}")
 
-        controller = FrameSafeExecutor(emulator)
+        # Red polls the joypad on its own cadence. The repository's proven
+        # 8/16-frame pulse cannot phase-lock between the game's polls the way
+        # the executor's deliberately minimal 1/1 default can.
+        controller = FrameSafeExecutor(
+            emulator,
+            DEFAULT_NEW_GAME_TIMING.controller_timing(),
+        )
         counted = CountingExecutor(controller)
         field_actions = Gen1FieldMovePort(counted, reader, emulator)
         observer = Gen1TraversalObserver(reader)

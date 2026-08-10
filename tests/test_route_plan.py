@@ -95,6 +95,34 @@ def test_a_return_resolves_its_arrival_after_its_map_target() -> None:
     assert plan.actions == ("right",)
 
 
+def test_a_boundary_return_walks_out_and_lands_beyond_the_destination_door() -> None:
+    edge = MacroEdge(
+        None,
+        kind="return",
+        at=(7, 3),
+        exit_action="down",
+        destination_warp_index=1,
+    )
+    path = MacroPath((2, 0), (edge,))
+    graph = MacroGraph(
+        {2: (edge,)},
+        warp_locations={0: ((8, 8), (9, 4))},
+    )
+
+    plan = compose_route(
+        graph,
+        path,
+        {2: line((6, 3), (7, 3))},
+        (7, 3),
+    )
+
+    assert plan.actions == ("down",)
+    assert plan.terminal_at == (10, 4)
+    assert not plan.segments[0].transition_action_in_approach
+    assert plan.steps[-1].source_at == (7, 3)
+    assert plan.steps[-1].expected_at == (10, 4)
+
+
 def test_composition_refuses_to_invent_how_to_retrigger_a_warp() -> None:
     edge = MacroEdge(2, kind="warp", at=(0, 0), arrival_at=(1, 1))
 
