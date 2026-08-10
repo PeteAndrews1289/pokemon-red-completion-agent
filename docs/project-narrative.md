@@ -2450,6 +2450,11 @@ The new contract revives Dugtrio, heals it to the existing 60-HP switch floor, p
 consumption, and preserves the downstream reserve. A route branch had now propagated from the
 first battle to the penultimate League specialist without being rerolled.
 
+The clean published replay closed that loop: one Revive, two Hyper Potions, all five Agatha roles,
+Lance, Champion, and Hall of Fame. Seed `990027` completed 74/74 scheduled battles and all 36
+observed objectives with a healthy 66/55/55/55/55/55 party. A loss in the first battle had become a
+different but complete curriculum rather than a reason to discard the root.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

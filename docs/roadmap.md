@@ -1503,3 +1503,9 @@ scheduled battles before Dugtrio fainted at Agatha while three Revives remained.
 spends at most one Revive there, restores the specialist above the existing switch floor, and
 protects two for Lance. CI passed; replay exact `56e9be5`, followed by a fresh uncounted perturbation
 if it completes. V95 stays sealed at 0/10 until those source-bound gates pass.
+
+Exact published-source seed `990027` subsequently completed 21/21 selected objectives, 36/36
+observed objectives, 74/74 scheduled battles, Champion, and Hall of Fame. Agatha consumed the one
+newly bounded Revive, restored its specialist, and left the complete party healthy for Lance and
+Champion. The next gate is one fresh uncounted derived-timing root under unchanged source. If it
+passes, freeze and decide whether to open v95; counted roots remain 0/10.

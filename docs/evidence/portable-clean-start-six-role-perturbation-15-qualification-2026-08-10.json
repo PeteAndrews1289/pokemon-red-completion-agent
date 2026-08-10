@@ -1,0 +1,90 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-qualification-v1",
+  "recorded_on": "2026-08-10",
+  "status": "passed_uncounted_perturbation_after_authenticated_lab_rival_loss",
+  "promotion_eligible": false,
+  "claim": "Published clean source completed derived-timing seed 990027 from a legitimate lab-rival loss through all 36 observed objectives, all 74 scheduled battles, Champion, and Hall of Fame. This is a second uncounted perturbation success, not a counted v95 result.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990027,
+    "initial_wait_frames": 48,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "1052d749759ddba2b2811c9138511158d5103f686f537e0db0cbcb596dca7c63"
+  },
+  "source": {
+    "git_commit": "1bcbadc7b0a564fabd0850fc0a67d3925ae617cc",
+    "worktree_dirty": false,
+    "published": true,
+    "repair_commit": "56e9be5f72e9a6a3bc8a1efd10a71455a28591ce",
+    "registry_sha256": "91ee64aa12e70df57b2ad7d443557b05086bb4bff865492198d818f25a7ff341",
+    "raw_report_sha256": "1048811e9d728b0f6e906c1860341fa0a84e4a7677777538d68df1b62bf38df6"
+  },
+  "run": {
+    "frames_executed": 47317703,
+    "actions_executed": 664751,
+    "selected_objectives_completed": 21,
+    "observed_objectives_completed": 36,
+    "scheduled_battles_completed": 74,
+    "scheduled_battles_total": 74,
+    "replans": 0,
+    "controller_released": true,
+    "hall_of_fame": true,
+    "expected_route_labels": 0,
+    "fixed_objective_dispatches": 0,
+    "human_input": false,
+    "save_state_loaded": false,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0
+  },
+  "objective_policy": {
+    "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+    "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "decisions": 21,
+    "learned_choice_decisions": 21,
+    "branching_decisions": 1,
+    "singleton_decisions": 20,
+    "mean_confidence": 0.9982892732687004,
+    "minimum_confidence": 0.9640747386427077,
+    "teacher_fallbacks": 0
+  },
+  "loss_recovery": {
+    "lab_rival_loss_authenticated": true,
+    "route_1_recovery_lessons": 13,
+    "viridian_center_heals": 13,
+    "brock_defeated": true,
+    "required_route_3_trainers_defeated": 4,
+    "zubat_weakened_before_capture": true,
+    "wartortle_evolution_accepted": true,
+    "level_24_bite_preserved": true
+  },
+  "agatha_recovery": {
+    "revives_used": 1,
+    "hyper_potions_used": 2,
+    "full_restores_used": 0,
+    "x_specials_used": 1,
+    "team_switches": 4,
+    "participating_members": 2,
+    "terminal_party_hp": [200, 140, 125, 135, 265, 159],
+    "terminal_party_status": [0, 0, 0, 0, 0, 0]
+  },
+  "terminal": {
+    "champion_event": true,
+    "hall_of_fame": true,
+    "party_levels": [66, 55, 55, 55, 55, 55],
+    "party_hp": [206, 140, 125, 135, 265, 159],
+    "party_status": [0, 0, 0, 0, 0, 0]
+  },
+  "limitations": [
+    "uncounted_single_root",
+    "teacher_authored_bounded_mechanic_skills",
+    "early_game_is_one_fourteen_objective_composite",
+    "twenty_singleton_objective_dispatches_do_not_measure_ranking_quality",
+    "battle_and_training_models_not_executed_in_this_replay",
+    "not_cross_title_transfer"
+  ],
+  "next_gate": "Run one fresh uncounted derived-timing root under unchanged source. If it passes, freeze the source and decide whether to open the prospective v95 campaign. Counted v95 remains 0/10.",
+  "counted_v95": {
+    "consumed": 0,
+    "total": 10
+  }
+}

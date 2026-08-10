@@ -24,6 +24,19 @@ clean-power replay.
 Counted v95 remains deliberately unopened at **0/10**. Crystal, cross-title transfer, and a living
 Pokedex remain future milestones.
 
+## Final result of this session
+
+The exact clean-power replay passed. Published source `1bcbadc` completed seed `990027` in
+47,317,703 frames and 664,751 actions with 21/21 selected objectives, 36/36 observed objectives,
+74/74 scheduled battles, Champion, Hall of Fame, zero teacher query/fallback, and released
+controls. Agatha used exactly one Revive and two Hyper Potions, then returned a fully healthy party;
+Lance and Champion completed with a healthy terminal 66/55/55/55/55/55 team. The source-bound
+receipt is [perturbation 15](evidence/portable-clean-start-six-role-perturbation-15-qualification-2026-08-10.json).
+
+This closes the known `990027` loss branch. It does not qualify the six learned control models,
+because this replay loaded only the objective model and authored mechanic skills. The next test is
+one fresh uncounted root with unchanged source, followed by a freeze/open-v95 decision.
+
 ## Strongest result this session
 
 Seed `990026` completed the full game from power-on under its derived timing schedule:
@@ -139,9 +152,8 @@ replay.
 
 ## Recommended next sequence
 
-1. Replay `990027` from clean power and exact committed source until it either completes or exposes
-   a later causal boundary. Preserve every failure and its source identity.
-2. If it completes, run at least one fresh uncounted root. Only then freeze and open v95.
+1. Run one fresh uncounted derived-timing root under unchanged source.
+2. If it completes, freeze the source and decide whether to open v95.
 3. Run the ten-root v95 campaign without code or model changes. Eight valid successes are the
    minimum promotion gate.
 4. After Red reliability closes, build the thin Crystal observer/mechanics adapter and run the

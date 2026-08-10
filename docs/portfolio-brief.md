@@ -113,7 +113,10 @@ documentation, privacy, and source-registry gates. The traced run continued to 1
 71/74 battles before Agatha exposed a missing specialist revive. Commit `56e9be5` permits exactly
 one, protects two Revives for Lance, and passes 2,228 ROM-free tests plus the same static gates. The
 extended runtime result remains explicitly diagnostic until the exact committed source completes a
-clean-power replay.
+clean-power replay. That replay now passes: 47,317,703 frames, 21/21 selected objectives, 36/36
+observed objectives, 74/74 battles, Champion, and Hall of Fame with a healthy
+66/55/55/55/55/55 party. It is strong teacher/objective integration evidence, not a claim that all
+six learned control heads were active.
 
 - How to separate an expert teacher, learned actor, safety referee, and game-specific executor.
 - Why a 100% model score can be meaningless when the legal candidate set already determines the

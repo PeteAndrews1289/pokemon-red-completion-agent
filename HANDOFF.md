@@ -14,6 +14,19 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Superseding terminal checkpoint — 2026-08-10
+
+**Seed `990027` now completes Red from its legitimate lab-rival loss.** Published clean source
+`1bcbadc` ran from power-on through 21/21 selected objectives, 36/36 observed objectives, 74/74
+scheduled battles, Champion, and Hall of Fame in 47,317,703 frames and 664,751 actions. Agatha used
+exactly one Revive and two Hyper Potions, restored the full healthy party, and left Lance and
+Champion able to complete. The terminal party was healthy at 66/55/55/55/55/55. The exact public
+receipt is [perturbation 15](docs/evidence/portable-clean-start-six-role-perturbation-15-qualification-2026-08-10.json).
+
+This is uncounted objective-model-plus-authored-skills evidence, not a six-model learned-stack run
+and not v95. The next gate is one **fresh** uncounted derived-timing root under unchanged source.
+If that also passes, freeze the source and decide whether to open v95. Counted v95 remains 0/10.
+
 ## Superseding late checkpoint — 2026-08-10
 
 This section supersedes the earlier 2026-08-10 next-step statement below.

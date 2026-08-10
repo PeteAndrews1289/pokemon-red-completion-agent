@@ -646,9 +646,10 @@ reset after each; follow the same starter through Brock, the sole-ball weakened 
 Wartortle evolution, Misty, and the level-24 Bite lesson. Overlay the changing cash ledger and the
 conditional Bide sale. Fast-forward the same run to Agatha: 18/19 objectives and 71/74 battles,
 then freeze on fainted Dugtrio beside three unused Revives. Show one Revive moving to Agatha while
-two remain locked for Lance. End the montage with two cards: **“dirty diagnostic: reached
-Agatha”** and **“clean committed replay: still required.”** That distinction is the scientific
-point of the sequence, not production trivia.
+two remain locked for Lance. End the montage by replacing **“dirty diagnostic: reached Agatha”**
+with the clean receipt: **47,317,703 frames; 74/74 battles; 36/36 objectives; Hall of Fame.** Keep
+**“uncounted objective model + authored skills”** visible. That distinction is the scientific point
+of the sequence, not production trivia.
 
 The first transfer benchmark should be small enough to fail clearly: one battle and one local
 navigation task in Pokémon Crystal. Compare zero-shot performance, few-shot adaptation, and
