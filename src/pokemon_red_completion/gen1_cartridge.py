@@ -148,7 +148,14 @@ def internal_to_dex(rom: bytes) -> dict[int, int]:
     return {internal: dex for internal, dex in mapping.items() if 1 <= dex <= SPECIES_COUNT}
 
 
-def _bank_offset(bank: int, address: int) -> int:
+def bank_offset(bank: int, address: int) -> int:
+    """Where a banked address lands in the flat ROM image.
+
+    Public because every structure in a Generation I cartridge is addressed this
+    way, and a second copy of this arithmetic in a sibling module is exactly the
+    kind of drift this repository has already paid for three times.
+    """
+
     return bank * 0x4000 + (address - 0x4000)
 
 
@@ -166,7 +173,7 @@ def wild_tables(rom: bytes) -> dict[int, list[tuple[int, int]]]:
         address = int.from_bytes(rom[at : at + 2], "little")
         if not 0x4000 <= address <= 0x7FFF:
             continue
-        cursor = _bank_offset(WILD_DATA_BANK, address)
+        cursor = bank_offset(WILD_DATA_BANK, address)
         slots: list[tuple[int, int]] = []
         for _ in range(2):
             rate = rom[cursor]
@@ -218,7 +225,7 @@ def evolution_graph(rom: bytes) -> dict[int, tuple[Evolution, ...]]:
         address = int.from_bytes(rom[at : at + 2], "little")
         if not 0x4000 <= address <= 0x7FFF:
             continue
-        cursor = _bank_offset(EVOLUTION_DATA_BANK, address)
+        cursor = bank_offset(EVOLUTION_DATA_BANK, address)
         found: list[Evolution] = []
         while rom[cursor] != 0:
             kind = rom[cursor]
@@ -318,7 +325,7 @@ class FishingTables:
 
 
 def _fishing_offset(address: int) -> int:
-    return _bank_offset(FISHING_BANK, address)
+    return bank_offset(FISHING_BANK, address)
 
 
 def _operand_address(rom: bytes, at: int, opcode: int, what: str) -> int:
@@ -449,7 +456,7 @@ def _maps_with_water(rom: bytes) -> set[int]:
         address = int.from_bytes(rom[at : at + 2], "little")
         if not 0x4000 <= address <= 0x7FFF:
             continue
-        cursor = _bank_offset(WILD_DATA_BANK, address)
+        cursor = bank_offset(WILD_DATA_BANK, address)
         grass_rate = rom[cursor]
         cursor += 1
         if grass_rate:
