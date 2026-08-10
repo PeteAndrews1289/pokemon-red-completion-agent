@@ -32,7 +32,7 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
 | Reserve-aware controller | Four complete lineages; 98.2394% / 94.7537% held-out class metrics; 17/17 fresh offline targets; 13/13 isolated causal bindings; combined canonical Hall of Fame with 21/21 targets | Paired timing root exposed a deterministic early-game referee defect before model decisions; perturbation qualification remains |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
-| Repository gate | 2,198 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
+| Repository gate | 2,199 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
 
 ## Architecture in one minute
 
@@ -194,6 +194,11 @@ search in Mt. Moon. When a later ordinary wild interrupted another 1F segment, t
 deliberately widened to a single cave-wide, report-visible flee/retry ledger spanning every floor,
 detour, and return path. This demonstrates the central engineering progression: use each changed
 run to replace a local timing assumption with a scoped, reusable, evidence-bearing capability.
+That ledger then qualified sixteen incidental cave encounters with no attrition. When the required
+Rocket still won narrowly, the repair reused the already-collected TM01 instead of weakening the
+economy contract; Mega Punch won, and a strict verifier caught the next defect when a fixed
+switch-decline sequence canceled evolution. This is a compact example of why UI actions need
+semantic intent and postconditions.
 
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
 [current audit](current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
@@ -209,7 +214,7 @@ until the now-canonical-qualified reserve-aware stack also passes a perturbation
 - Qualified a strategic trainee/venue controller inside a portable objective loop across 114,831
   live choices and 400 executed teacher disagreements, completing 1,803 development battles with no
   fallback before fresh emulator observation verified the Volcano Badge.
-- Hardened a 143k-line Python research system with 2,198 tests, Ruff, mypy, documentation/privacy
+- Hardened a 143k-line Python research system with 2,199 tests, Ruff, mypy, documentation/privacy
   gates, deterministic source registries, and at least 19 consecutive green GitHub Actions runs after
   diagnosing one derived-artifact CI regression.
 - Built a prospective one-attempt 8-of-10 clean-start evaluator and used its strict rehearsal to

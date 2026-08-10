@@ -18,7 +18,7 @@ going stale is exactly the failure this project keeps having.
 
 This section supersedes every older “next” statement below.
 
-**Late audit and runtime checkpoint:** the full repository gate now passes **2,198 tests with 3
+**Late audit and runtime checkpoint:** the full repository gate now passes **2,199 tests with 3
 integration tests deselected and 1 expected failure**, plus Ruff, mypy, documentation,
 public-artifact, and regenerated source-registry checks. The audit repaired three silent contract
 errors before the next emulator run: Red and Blue now derive reciprocal eleven-species version gaps
@@ -161,9 +161,13 @@ restoration, all four required Route 3 trainers, and the shared east-Route-3 inc
 traversal. Replay 18 then showed that Mt. Moon's named Zubat lesson was only a fixed frame wait.
 Replay 19 semantically found species `0x6B` at level seven on the reversible `(14,32) ↔ (14,31)`
 edge, captured it with the sole Poké Ball, and restored `(14,31)`. A later ordinary wild on 1F
-stopped the authored cave route before TM01 step 10. Do not patch only that coordinate: build one
-cumulative, report-visible Mt. Moon flee/retry ledger across 1F, B1F, B2F, item detours, and return
-paths, then replay the same `990026` root. Counted v95 remains 0/10.
+stopped the authored cave route before TM01 step 10. Commit `7052b03` replaced that local boundary
+with one 64-encounter ledger across the target search, all floors, TM01 detours, trainer approaches,
+and exits. Replay 20 crossed the cave with sixteen first-attempt, zero-attrition flee receipts, then
+lost the required Rocket with its final Zubat at 6 HP. Commit `fd6da86` teaches the already-collected
+TM01 before that battle without changing cash or Potion floors; replay 21 won but returned a
+healthy level-16 Squirtle because the fixed post-KO CANCEL schedule declined evolution. Next make
+switch-prompt versus evolution handling semantic, then replay `990026`. Counted v95 remains 0/10.
 
 **Branch and current code:** `agent/balanced-team-curriculum`, draft PR #8. Commit `93beb1b` is the
 source of the passed canonical receipt and `4f5f870` qualified the lab-rival repair through the next
@@ -192,7 +196,8 @@ Commit `70b4f22` semantically searches a reversible `(14,32) ↔ (14,31)` edge f
 at level seven, records bounded non-target flees/attempts/retries, and restores `(14,31)` after the
 sole-ball capture. Its public-artifact, docs, registry, Ruff, mypy, and 2,198-test gate is green and
 published. Replay 19 qualified that lesson, then stopped on an ordinary wild in a later 1F segment.
-The next lane is the cave-wide cumulative traversal ledger described above.
+The cave ledger is published at `7052b03`; the early Mega Punch lesson and 2,199-test gate are
+published at `fd6da86`. The current boundary is semantic post-KO evolution cleanup described above.
 Only Codex
 pushes this branch; do not create a second worktree or force-push it.
 

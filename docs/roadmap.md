@@ -167,7 +167,12 @@ Replay 19 qualified that exact level-seven Zubat search, sole-ball capture, and 
 rejoin. An ordinary wild then interrupted a later 1F route before TM01 step 10. The next unit of
 work is one cumulative, report-visible incidental-wild ledger across all Mt. Moon 1F/B1F/B2F
 segments, item detours, and return paths, followed by the full gate and the same `990026` replay.
-Do not spend a fresh root or open counted v95; it remains 0/10.
+Commit `7052b03` implemented that ledger. Replay 20 recorded sixteen first-attempt, zero-attrition
+flees and reached the required Rocket, where the final Zubat survived at 6 HP. Commit `fd6da86`
+taught the already-collected TM01 before the battle without changing the economy; replay 21 won but
+the fixed post-KO CANCEL schedule also declined Squirtle's level-16 evolution. Replace that count
+with semantic switch-prompt/evolution handling, then repeat `990026`. Do not spend a fresh root or
+open counted v95; it remains 0/10.
 
 Seed `990024` qualified incidental Forest travel but the fixed first-Kakuna frame wait produced no
 battle. The [ninth perturbation failure](evidence/portable-clean-start-six-role-perturbation-09-failure-2026-08-09.json)

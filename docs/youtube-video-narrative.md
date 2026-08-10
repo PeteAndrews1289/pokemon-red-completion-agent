@@ -237,6 +237,12 @@ them. Caption it: **“A fix becomes knowledge only when its scope is explicit.�
 stopping point for the episode: the counterexample is understood, the local lesson is proven, and
 the next implementation is a cave mechanic rather than another coordinate patch.
 
+Pay that setup off with sixteen authenticated cave flees and no attrition, then let the required
+Rocket survive with 6 HP on its final Zubat. Show the rejected option—one more Potion breaks the
+later cash ledger—then move TM01 earlier and win with Mega Punch. End on the surprise: the same
+fixed CANCEL sequence used to decline trainer switches also cancels Squirtle's evolution. Caption
+it: **“A button is not an intent.”**
+
 This is the strongest transition into Crystal. The transferable asset is not Red's route; it is the
 semantic vocabulary for matchup value, recovery, switching, setup, and evidence-bearing intent.
 Crystal then tests whether that vocabulary survives new species, Dark and Steel types, a different

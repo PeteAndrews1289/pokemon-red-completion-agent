@@ -198,8 +198,12 @@ Zubat trigger produced no encounter. Capture now semantically searches a reversi
 observed level-seven Zubat, authenticates bounded non-target flees, and restores the exact route
 coordinate before continuing. Replay 19 qualified that exact search, captured Zubat with the sole
 Poké Ball, and rejoined the route at `(14,31)` before an ordinary wild interrupted a later 1F
-segment. The next repair is therefore one cumulative, report-visible Mt. Moon traversal ledger
-covering 1F, B1F, B2F, item detours, and return paths—not another local exception;
+segment. A single 64-encounter ledger now covers the target search, 1F, B1F, B2F, TM01 detours,
+trainer approaches, and exits. Replay 20 qualified sixteen first-attempt, zero-attrition flees but
+lost the required Rocket with its final Zubat at 6 HP. Teaching the already-collected TM01 before
+that battle removed the faint; replay 21 won and returned a healthy level-16 Squirtle because the
+fixed switch-decline schedule also canceled evolution. Semantic switch-prompt versus evolution
+handling is now the exact next gate;
 see the
 [eleventh perturbation failure](docs/evidence/portable-clean-start-six-role-perturbation-11-failure-2026-08-09.json).
 Navigation, menus, chapter mechanics, and resource execution remain authored. The counted v95

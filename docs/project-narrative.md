@@ -2379,6 +2379,13 @@ must cover every 1F/B1F/B2F segment, item detour, and return path. The lesson is
 robustness comes from giving a mechanic explicit scope, budgets, and evidence—not from extending a
 route one failed coordinate at a time.
 
+The cave-wide replay proved that design with sixteen first-attempt, zero-attrition flee receipts,
+then lost the required Rocket with its last Zubat at 6 HP. Buying another Potion would have made a
+later cash contract negative, so the teacher used the lesson it had already earned: teach TM01
+immediately and attack with Mega Punch. The next replay won without changing the economy, but a
+fixed post-KO CANCEL count also declined Squirtle's evolution. Once again, success exposed the next
+abstraction boundary: trainer switch prompts and evolution prompts need semantic identities.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

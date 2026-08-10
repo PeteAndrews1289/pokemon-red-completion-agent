@@ -299,9 +299,12 @@ species `0x6B` at level seven, authenticates non-target flees, publishes attempt
 restores the exact route coordinate. Commit `70b4f22` passed the complete 2,198-test gate and was
 published. Replay 19 qualified the level-seven Zubat capture with the sole Poké Ball and restored
 the route at `(14,31)`, then an ordinary wild interrupted a later 1F segment before TM01 step 10.
-The next repair must be one cumulative, report-visible Mt. Moon flee/retry ledger shared by 1F,
-B1F, B2F, item detours, and return paths. A coordinate-local exception would merely preserve the
-same chapter-level defect.
+One cumulative 64-encounter ledger now covers 1F, B1F, B2F, item detours, trainer approaches, and
+return paths. Replay 20 crossed the former boundary with sixteen first-attempt, zero-attrition flee
+receipts, then lost the required Rocket with the final Zubat at 6 HP. Teaching the already-collected
+TM01 before that battle removed the faint without changing the economy. Replay 21 won and returned
+a healthy level-16 Squirtle because the fixed post-KO CANCEL schedule also declined evolution. The
+next repair is semantic switch-prompt versus evolution handling.
 
 The audit also found and repaired three foundations that would have invalidated later transfer and
 living-Pokédex claims. The Red target omitted Pinsir, the Blue target omitted Scyther, and the shared
@@ -329,7 +332,7 @@ silently acting at night.
 ## Code and test health
 
 - 128 source modules and 135 test modules cover roughly 89,900 source lines and 53,700 test lines.
-- The current full gate passes **2,198 tests** with 3 emulator-integration tests deselected and 1
+- The current full gate passes **2,199 tests** with 3 emulator-integration tests deselected and 1
   expected failure, plus
   Ruff, source mypy, public-artifact scanning, documentation links, and collection-registry
   regeneration.
@@ -369,9 +372,8 @@ owned each decision and which deterministic component executed it.
 
 ## Dependency-ordered next steps
 
-1. Implement one cumulative, report-visible incidental-wild traversal ledger for every Mt. Moon
-   route segment, item detour, and return path; consolidate the duplicated Kakuna/Zubat encounter
-   search mechanics behind a shared semantic helper where their contracts truly match.
+1. Replace the fixed post-KO CANCEL count with observed switch-prompt versus evolution handling;
+   preserve both reserve-switch decline and the level-16 evolution.
 2. Pass the complete ROM-free gate, publish the source and registry, then replay the exact
    uncounted `990026` root before assigning another seed.
 3. Preserve the next counterexample without weakening its semantic contract. Only after a complete

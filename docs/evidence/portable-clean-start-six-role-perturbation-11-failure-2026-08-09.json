@@ -34,14 +34,15 @@
     "model_boundary": "The failure remained inside the authored first composite. Objective selection made one singleton choice; all learned battle, target, and training counters were zero."
   },
   "repair": {
-    "status": "mt_moon_zubat_capture_qualified_cave_traversal_pending_design",
-    "behavior": "The Forest exit still requires the exact level-9 lead, at least 19 HP, at least four Bubble PP, and either healthy or poison status; every other status remains fatal. The independent progress referee admits poison only at the Forest north gate, upper Route 2 return, and Pewter south edge. The teacher takes the direct finite Pewter route to the Pokémon Center, proves full HP, clear status, and positive PP for every learned move, withdraws exactly RED's guaranteed PC Potion, exits, and follows the measured finite route to the Gym. After the first required Route 3 trainer, it consumes exactly that Potion under map, HP, inventory, and field-control gates before the 51-step return. During trainer one it may consume one further Potion only at a verified MAIN menu at or below 13 HP and above a twelve-Potion floor. Cerulean purchases the original four from a measured 12–14 starting window; the rival accepts 16–18, and the existing cleanup still protects six, so downstream reserves and total spend are unchanged.",
+    "status": "mt_moon_traversal_and_rocket_strategy_qualified_evolution_cleanup_pending",
+    "behavior": "The Forest exit still requires the exact level-9 lead, at least 19 HP, at least four Bubble PP, and either healthy or poison status; every other status remains fatal. The independent progress referee admits poison only at the Forest north gate, upper Route 2 return, and Pewter south edge. The teacher takes the direct finite Pewter route to the Pokémon Center, proves full HP, clear status, and positive PP for every learned move, withdraws exactly RED's guaranteed PC Potion, exits, and follows the measured finite route to the Gym. After the first required Route 3 trainer, it consumes exactly that Potion under map, HP, inventory, and field-control gates before the 51-step return. During trainer one it may consume one further Potion only at a verified MAIN menu at or below 13 HP and above a twelve-Potion floor. Cerulean purchases the original four from a measured 12–14 starting window; the rival accepts 16–18, and the existing cleanup still protects six, so downstream reserves and total spend are unchanged. Mt. Moon now carries one report-visible 64-encounter flee/retry ledger across its target search, all three floors, TM01 detours, trainer approaches, and exits. TM01 is taught immediately after pickup and Mega Punch is verified before the required Rocket without changing the economy.",
     "bounds": {
       "center_route_inputs": 15,
       "nurse_approach_inputs": 4,
       "heal_dialogue_pulses": 9,
       "center_exit_inputs": 5,
-      "center_to_gym_inputs": 40
+      "center_to_gym_inputs": 40,
+      "mt_moon_maximum_incidental_flees": 64
     },
     "same_root_probe": {
       "source_commit": "0773d75df57663f52269e14684732f879ea89d84",
@@ -145,7 +146,23 @@
       "message": "Unexpected battle interrupted Mt. Moon 1F route before TM01 step 10 at step 1.",
       "finding": "The semantic search found and captured the exact level-seven Zubat with the sole Ball, restored the route coordinate, and continued. A later ordinary wild exposed the remaining cave-wide zero-encounter movement assumption. The next repair must use one cumulative Mt. Moon flee/retry ledger across 1F, B1F, B2F, TM01 detours, and return paths rather than patching this single step."
     },
-    "rom_free_gate": "The bounded Zubat semantic search passes public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,198 tests; three integration tests are deselected and one expected failure remains expected. Its source-bound v95 registry is SHA-256 5a7f3faf0853841424f4642a8cdd456cdafa640c7e82ad0b36da1bcb0521c3d1 and source bundle SHA-256 b7eb7ae70081ca224276792147edc35d32f6469bd6f0af0c8b154d3c229ebe35.",
-    "next_gate": "Design one cumulative, report-visible Mt. Moon incidental-wild ledger across every cave segment; complete the full ROM-free gate, commit and push, then replay seed 990026 causally before assigning a fresh uncounted root. Counted v95 remains unopened."
+    "same_root_cave_traversal_qualification": {
+      "source_commit": "7052b03e4040062844f7d38876bd095613e85ece",
+      "raw_report_sha256": "43f21c2aa4a563dfcf50cf1613eedd0b90304d2c38a6d49933c5bd8c283bf721",
+      "frames_executed": 353339,
+      "exception_type": "CeruleanChapterError",
+      "message": "Squirtle's lineage fainted during Mt. Moon required Rocket.",
+      "finding": "The cave-wide ledger crossed the former failure, TM01 detour, B1F, and B2F. Read-only same-root instrumentation recorded sixteen first-attempt flees with zero HP, PP, status, or party loss. Wartortle entered the Rocket at 39/39 and fainted with the final level-13 Zubat at 6 HP, isolating an authored move-strategy defect rather than traversal attrition."
+    },
+    "same_root_rocket_strategy_qualification": {
+      "source_commit": "fd6da86377be2e565f52f0e64146a982d5a74d9f",
+      "raw_report_sha256": "b6ddb765093fd908a9c18f8c3ec2fabf370354b66b0fa9532f4859eafe80faeb",
+      "frames_executed": 355295,
+      "exception_type": "CeruleanChapterError",
+      "message": "The required Rocket victory or Squirtle evolution did not persist.",
+      "finding": "Teaching the already-collected TM01 before the Rocket eliminated the faint and completed the battle. The returned state was a healthy level-16 Squirtle at 16/41 with Mega Punch installed; the fixed post-KO CANCEL schedule had declined the evolution. The next repair is semantic switch-prompt versus evolution handling, not another combat or resource allowance."
+    },
+    "rom_free_gate": "The cave-wide traversal and early TM01 lesson pass public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,199 tests; three integration tests are deselected and one expected failure remains expected. Its source-bound v95 registry is SHA-256 53e60ac7b9d21c44e76e4863162b5bc6c63f5d394c6b511c26bb15b963cc76d5 and source bundle SHA-256 213290efd0b772fd44250fb6cc58f5ccb36c1c46d695ca2e40282d546df6c99e.",
+    "next_gate": "Replace the fixed post-KO CANCEL count with a semantic distinction between trainer switch prompts and the level-16 evolution, pass the full gate, publish, and replay seed 990026 causally before assigning a fresh uncounted root. Counted v95 remains unopened."
   }
 }
