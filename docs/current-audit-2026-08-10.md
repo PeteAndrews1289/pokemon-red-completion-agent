@@ -1,5 +1,10 @@
 # Current capability audit — 2026-08-10
 
+> **Navigation addendum:** the later cartridge traversal implementation and its ranked next steps
+> are audited separately in the
+> [knowledge-to-action audit](traversal-audit-2026-08-10.md). It supersedes this file wherever this
+> earlier audit describes map traversal as entirely absent.
+
 ## Executive verdict
 
 The project has crossed two important lines. First, one noncanonical, derived-timing clean start

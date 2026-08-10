@@ -2,15 +2,16 @@
 
 > **Working on this repository?** Start with [HANDOFF.md](HANDOFF.md).
 
-> **Latest verified result (August 10, 2026):** the six-role learned stack completed an uncounted
-> derived-timing clean start through Hall of Fame: 74/74 scheduled battles, 36/36 semantic
-> objectives, 3,165 high-level battle decisions, 3,110 learned move decisions, 12/12 learned
-> switch targets, both training heads in live authority, and zero battle-teacher query or fallback.
-> The next fresh seed legitimately lost the lab rival and exposed an early-game recovery/PP boundary,
-> so the official ten-root campaign remains unopened at **0/10**. See the
-> [August 10 audit](docs/current-audit-2026-08-10.md),
-> [passing receipt](docs/evidence/portable-clean-start-six-role-perturbation-12-qualification-2026-08-10.json),
-> and [next failure receipt](docs/evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json).
+> **Latest verified results (August 10, 2026):** the six-role learned stack completed one uncounted
+> derived-timing clean start through Hall of Fame. A second root legitimately lost the lab rival,
+> recovered without a reroll, and later completed under the objective model plus authored skills.
+> The newest navigation layer reads complete static land traversal from Red and Blue; a clean,
+> source-bound live probe generated thirteen Route 1 inputs, crossed a one-way ledge and proved the
+> reverse input was blocked. Counted v95 remains unopened at **0/10**, and generated routing is not
+> yet authorized inside a completion run. See the
+> [capability audit](docs/current-audit-2026-08-10.md),
+> [navigation audit](docs/traversal-audit-2026-08-10.md), and
+> [live ledge evidence](docs/evidence/route1-cartridge-ledge-probe-2026-08-10.json).
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -20,6 +21,13 @@
 control, and progressively trained specialists.**
 
 ## Current position
+
+Cartridge knowledge now covers 220 reachable maps, 48,216 standable coordinates and 154,653
+directed static land edges. Red and Blue agree on the full decoded topology, terrain and traversal
+rules. The immediate engineering gate is exact multi-map composition: retain warp-arrival and
+connection-alignment geometry, add live dynamic-object overlays, and prove one continuous generated
+route from Pallet through Route 1 to Viridian Center. Surf, Cut and Strength remain stateful future
+adapters rather than pretend-open edges.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

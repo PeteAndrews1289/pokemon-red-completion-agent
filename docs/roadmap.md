@@ -3,35 +3,44 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-10): turn cartridge knowledge into safe action
+## Current focus (2026-08-10): compose cartridge knowledge into a route
 
-The hardened Red/Blue extraction pass is complete. Full evolution graphs, fishing tables and map
-nodes agree. Every decoded terrain grid and grass/passability rule agrees too; nine Blue tilesets
-use different raw blockset addresses, which are now reported separately instead of being mistaken
-for a traversal difference. The public records are reproducible from exact-fingerprint private
-cartridges without publishing their paths or bytes.
+The first static traversal layer is complete. Red and Blue produce the same eight ledge rules,
+eleven land elevation-pair restrictions, three water-pair restrictions, nine Cut block swaps, 25
+initial boulders and complete static local graphs. The graph retains exact controller actions and
+distinguishes an ordinary walk from a directed ledge. Across each cartridge it contains 154,653
+directed land edges over 48,216 standable coordinates. See
+[the complete traversal record](evidence/traversal-rules-2026-08-10.json).
 
-The first live route falsification also passed. An existing qualified boot/house sequence established
-Pallet Town `(y=6, x=5)`; the cartridge graph selected Oak's Lab, terrain search produced fourteen
-movements to its `(11, 12)` warp, every one of the thirteen intermediate coordinates matched live
-memory, and the last input entered Oak's Lab. No adjacent save artifact changed. See
-[the live route record](evidence/pallet-cartridge-route-probe-2026-08-10.json).
+A clean source-bound live probe generated thirteen Route 1 approach inputs, crossed the selected
+ledge two squares downward to `(28, 10)`, and confirmed the reverse input was blocked. This closes
+one-way ledges under live authority; it does not make Cut, Surf or Strength static capabilities. See
+[the ledge probe](evidence/route1-cartridge-ledge-probe-2026-08-10.json).
 
-The ordered knowledge-layer gates are now:
+The code audit changed the immediate order. The macro graph knows which map comes next, while the
+local graph knows which controller input moves between coordinates, but they cannot yet form one
+continuous plan. Warp decoding drops the destination warp index, connection decoding drops arrival
+alignment, and initial object tables are not live NPC positions. The ordered gates are now:
 
-1. Decode traversal requirements—Cut, Surf, Strength, ledges and story-gated passages—without
-   promoting static connectivity into executable authority.
-2. Represent dynamic obstruction separately from permanent terrain, with observed-coordinate retry
-   and fail-closed bounds rather than assuming NPC-free paths.
-3. Reproduce a normal story route with generated local steps behind an explicitly uncounted probe;
-   only then consider replacing one authored completion-run corridor.
-4. Read the remaining acquisition routes: starters, gifts, fossils, static encounters and Game
-   Corner prizes, so parsed reachability becomes complete rather than a lower bound.
-5. Expose a game-neutral knowledge interface before beginning Crystal cartridge extraction. The
-   point is transfer, not a second title-specific teacher hidden behind a shared command.
+1. Retain both endpoints of ordinary warps and the exact source/arrival geometry of connections;
+   independently fixture every byte and compare the full structures across Red and Blue.
+2. Compose macro passages and local edges into one game-neutral `RoutePlan`. Add a short-prefix
+   observe/act/reobserve executor with dynamic blockers and bounded wild-interruption handling.
+3. Prove Pallet → Route 1 → Viridian → Pokémon Center from clean source with no typed route
+   directions. This exercises both a border connection and a door warp.
+4. Add Surf as a stateful movement mode, then Cut as a block mutation, then Strength as a boulder
+   puzzle state space. Each receives a separate live falsification before completion-run authority.
+5. Filter story-gated passages with observed semantic predicates; unknown requirements fail closed.
+6. Read the remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
+   prizes—so one-cartridge reachability becomes complete rather than a lower bound.
+7. Record semantic route decisions and interruptions for learning. Do not train a model to imitate
+   repeated shortest-path steps that an exact graph search already solves better.
+8. Add Crystal's thin adapter only after the route-plan and traversal-observation contracts are
+   title-neutral, then run the defined battle/navigation/training microbenchmarks.
 
-None of this opens v95. Counted v95 remains 0/10, and the existing source-bound reliability gates
-retain their own ordering.
+The full reasoning, risks and admission criteria are in the
+[knowledge-to-action audit](traversal-audit-2026-08-10.md). None of this opens v95; counted v95
+remains 0/10.
 
 ## Current focus (2026-08-10)
 

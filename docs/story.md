@@ -313,6 +313,41 @@ eventually survive a different seed—and, more importantly, a different Pokémo
 
 ---
 
+## Act IX: the ground has rules
+
+A passable square is not always reachable. A ledge can be crossed in one direction and not the
+other. Two floor tiles can each support the player while the change in elevation between them is
+forbidden. Surf changes movement mode. Cut replaces part of the map. Strength moves an object and
+therefore changes the puzzle the next decision sees.
+
+The cartridge contains those distinctions too. Red and Blue agree on eight directed ledge rules,
+eleven land elevation-pair restrictions, three water-pair exceptions, nine Cut block replacements
+and 25 initial boulders. Projected honestly, the static land world contains 154,653 directed edges:
+153,904 ordinary walks and 749 directed coordinate ledge transitions. Another 1,152 transitions
+that a flat passability grid would allow are closed by elevation rules.
+
+The first router draft made a revealing mistake. It labeled a ledge action `hop_ledge`. That
+described what the action meant and erased what the controller had to press. The fix separated
+mechanism from semantics: `action="down"`, `kind="ledge"`. Every route edge now has to retain both.
+That tiny distinction is the same boundary the whole project keeps rediscovering—a model can choose
+an intention only if the adapter still knows how to make it real.
+
+Route 1 supplied the live test. From the verified post-Pokédex entrance, cartridge data generated
+thirteen approach inputs and selected the nearest reachable ledge. `Down` moved the player two
+squares to `(28, 10)`. `Up` did nothing. The first attempt actually crossed the ledge and then
+failed because the probe named the wrong retry-timing field; the corrected harness was committed,
+bound to a clean source hash, and rerun from power-on. The second record passed and changed no save
+artifact.
+
+The restraint matters as much as the result. Cut, Surf and Strength were decoded but not turned into
+magic permission flags. The next audit found that even ordinary multi-map routing still lacks exact
+arrival geometry: warps have destination indices and border connections have alignment fields that
+the first macro graph discarded. The next job is to join map-level intention to coordinate-level
+action, then reobserve every step. A truthful partial player is more useful than another complete
+answer key.
+
+---
+
 ## Why a living Pokédex
 
 Every failure in this story has the same shape: a fixed sequence standing in where a decision should

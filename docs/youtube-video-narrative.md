@@ -638,7 +638,28 @@ fallback, and Hall of Fame in one process**. The party leaves development fully 
 strategy survives the entire route around it. Keep the boundary equally large on screen:
 **“uncounted single root; fixed objective sequence and mechanics; not 8/10 autonomy.”**
 
-### Act VII: the Crystal test — 10:10–11:15
+### Act VII: when a map becomes an action — 10:10–10:50
+
+Replace the fixed route strings with a zoom from cartridge bytes to a map graph, then to a tile
+grid. Put **220 maps**, **917 warps** and **48,216 standable coordinates** on screen, but immediately
+break the flat-grid picture: animate Red jumping down a ledge while the reverse arrow turns red.
+Add the static result card: **154,653 directed land edges; 749 directed coordinate ledge
+transitions; 1,152 elevation-pair transitions refused**.
+
+Show the implementation mistake rather than sanding it out. The first edge says `hop_ledge` and the
+controller asks, “which button?” Split the card into `action=down` and `kind=ledge`. Then play the
+source-bound Route 1 probe with all thirteen generated approach inputs visible. Red lands at
+`(28, 10)`; the reverse `up` input is blocked. Keep **“one uncounted probe; no completion-run
+authority”** on screen.
+
+End the beat on what the code refused to fake. Put Cut, Surf and Strength beside three different
+state transitions—map block, movement mode and boulder position—not three green capability flags.
+Then reveal the next missing bridge: the map graph knows the next map, and the local graph knows the
+next input, but discarded warp-arrival and connection-alignment fields still prevent one continuous
+multi-map plan. That is a clean cliffhanger because the next engineering step follows from evidence,
+not ambition.
+
+### Act VIII: the Crystal test — 10:50–11:30
 
 Before leaving Red, add one short failure-to-recovery montage. Show fresh seed `990027` losing the
 lab rival, then refuse the tempting reroll. Count thirteen Route 1 lessons with a Viridian Center
@@ -656,7 +677,7 @@ navigation task in Pokémon Crystal. Compare zero-shot performance, few-shot ada
 from-scratch training. The point is not to claim universal Pokémon intelligence after one test; it
 is to discover which Red abstractions were real and which were accidental details of one cartridge.
 
-### Ending: why the Pokédex matters — 11:15–12:00
+### Ending: why the Pokédex matters — 11:30–12:00
 
 A living Pokédex is not merely a completion trophy. It forces the player to explore, capture,
 store, withdraw, evolve, manage scarce items, assemble parties, and train many different Pokémon.
@@ -697,6 +718,9 @@ version has to prove the model learned something worth carrying into a game it h
 - The uncounted clean-power strategic rehearsal: boot, 312/312 checkpoint counter, the same
   114,831-choice / 400-disagreement authority receipt, balanced party, and Hall of Fame. Keep
   “fixed route, one uncounted root” visible rather than presenting it as end-to-end learned play.
+- A cartridge-to-graph-to-tile animation, followed by the Route 1 generated path overlay and live
+  two-square ledge hop. Show `action=down` beside `kind=ledge`, the blocked reverse input, the clean
+  source commit, and “Cut/Surf/Strength not yet executable” at the same time.
 - The portable clean-start baseline card: 21 selected composites, 15 automatic effects, 638,520
   actions, 45,766,774 frames, no expected labels, fixed dispatches, fallbacks, or replans.
 - The strict four-model contrast: 63/55/55/55/55/55 at Lorelei, 3,220 model moves, zero teacher

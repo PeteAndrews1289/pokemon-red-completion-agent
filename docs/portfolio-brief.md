@@ -2,19 +2,25 @@
 
 ## August 10 headline
 
-The combined six-role learned stack now has a complete uncounted derived-timing run through Hall of
-Fame: 74/74 scheduled battles, all 36 semantic objectives, 3,165 high-level battle decisions, 3,110
+The combined six-role learned stack has a complete uncounted derived-timing run through Hall of Fame:
+74/74 scheduled battles, all 36 semantic objectives, 3,165 high-level battle decisions, 3,110
 learned move decisions, 12/12 learned switch targets, both training models in live authority, and
-zero battle-teacher query or fallback. The next fresh seed legitimately lost the lab rival and
-exposed a teacher-side recovery and encounter-availability gap before any learned head acted. The
-published branch now authenticates the loss and completes four recovery/training battles before
-rejecting an unsafe final target. The project preserved the failure instead of rerolling it; the
-official ten-root campaign remains 0/10.
+zero battle-teacher query or fallback. The next root legitimately lost the lab rival; rather than
+reroll, the system learned a bounded recovery branch and later completed that altered run under the
+objective model plus authored skills. The official ten-root campaign remains 0/10.
+
+The newest engineering milestone attacks the largest portability problem: fixed navigation. Red
+and Blue now produce the same complete static land graph—154,653 directed edges over 48,216
+coordinates—and a clean source-bound live probe generated thirteen Route 1 inputs, crossed a
+one-way ledge and proved the reverse input was blocked. The implementation keeps controller action
+(`down`) separate from transition meaning (`ledge`) and refuses to flatten Surf, Cut or Strength
+into fake static permissions.
 
 That pair is the best interview story in the repository. It demonstrates causal evaluation,
 calibration against rare actions, separation of model errors from executor errors, source-bound
 experiment lineage, and honest negative evidence. See the
 [current audit](current-audit-2026-08-10.md),
+[navigation audit](traversal-audit-2026-08-10.md),
 [passing receipt](evidence/portable-clean-start-six-role-perturbation-12-qualification-2026-08-10.json),
 and [failure receipt](evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json).
 
@@ -50,7 +56,8 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
 | Reserve-aware controller | Four complete lineages; 98.2394% / 94.7537% held-out class metrics; 17/17 fresh offline targets; 13/13 isolated causal bindings; combined canonical Hall of Fame with 21/21 targets | Paired timing root exposed a deterministic early-game referee defect before model decisions; perturbation qualification remains |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
-| Repository gate | 2,199 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | 44 legacy modules remain in the explicit mypy debt register |
+| Cartridge-derived navigation | Red/Blue static graphs agree; one generated Pallet route and one source-bound one-way-ledge probe pass live | Multi-map composition, dynamic objects and field capabilities remain outside completion-run authority |
+| Repository gate | More than 2,300 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | Runtime ROM tests remain private and explicitly separated from CI |
 
 ## Architecture in one minute
 
@@ -126,8 +133,10 @@ six learned control heads were active.
 - Why shadow agreement cannot substitute for causal authority, and why causal authority can still
   prove integration without proving feature value.
 - How the candidate scorer remains permutation-equivariant and excludes title-specific identity.
-- How an emulator-scale system is tested without redistributing the ROM: 2,198 ROM-free tests plus
+- How an emulator-scale system is tested without redistributing the ROM: more than 2,300 ROM-free tests plus
   private authenticated runtime receipts.
+- Why exact graph search should own geometry while a learned policy owns destination, capability,
+  recovery and interruption decisions.
 
 ## Honest limitations
 
@@ -249,9 +258,11 @@ until the now-canonical-qualified reserve-aware stack also passes a perturbation
 - Qualified a strategic trainee/venue controller inside a portable objective loop across 114,831
   live choices and 400 executed teacher disagreements, completing 1,803 development battles with no
   fallback before fresh emulator observation verified the Volcano Badge.
-- Hardened a 143k-line Python research system with 2,199 tests, Ruff, mypy, documentation/privacy
+- Hardened a large Python research system with 2,300+ tests, Ruff, mypy, documentation/privacy
   gates, deterministic source registries, and at least 19 consecutive green GitHub Actions runs after
   diagnosing one derived-artifact CI regression.
+- Replaced hand-written map sketches with cartridge-derived Red/Blue topology and traversal,
+  preserving exact controller actions and proving generated routes against live emulator memory.
 - Built a prospective one-attempt 8-of-10 clean-start evaluator and used its strict rehearsal to
   reject a mechanically successful Lorelei battle when the model failed the declared team-role
   curriculum, localizing the next representation gap before any counted root was consumed.
@@ -267,7 +278,9 @@ until the now-canonical-qualified reserve-aware stack also passes a perturbation
    the agreement-no-op regression test.
 5. Show the clean-start baseline reaching Hall of Fame, then contrast the strict run's Lorelei win
    with `[19, 0, 0, 0, 0, 0]` and the verifier's red result.
-6. End on the causal staircase: `990007: 17/17 prospective`, `990009: 13/13 shadow`, and
+6. Animate cartridge bytes becoming a map graph and local action graph, then show the generated
+   Route 1 ledge approach, two-square hop, and blocked reverse input.
+7. End on the causal staircase: `990007: 17/17 prospective`, `990009: 13/13 shadow`, and
    `990010: 13/13 causal + Hall of Fame`. Then show `990011` removing the S.S. Anne teacher-class
    check, `990012` replacing a static Route 11 capability claim with live resource authority, and
    `990013` turning a 59-HP Lorelei attack into an explicit legal-action boundary.

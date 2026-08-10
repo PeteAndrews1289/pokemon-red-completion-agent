@@ -14,6 +14,36 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Static traversal became live action — 2026-08-10
+
+The first traversal-requirements layer is implemented and falsified live. Exact-fingerprint Red and
+Blue decode to the same eight directed ledge rules, eleven land elevation-pair restrictions, three
+water-pair restrictions, nine Cut block replacements, 25 initial boulders across nine maps, and
+complete static local land graphs. Each graph has 48,216 coordinate nodes and 154,653 directed
+edges: 153,904 ordinary walks and 749 directed coordinate ledge transitions. The elevation rules
+remove 1,152 directed transitions that a flat passability grid would incorrectly allow. Record:
+[traversal-rules-2026-08-10.json](docs/evidence/traversal-rules-2026-08-10.json).
+
+The routing seam is game-neutral. A local edge retains the exact controller action, semantic
+transition kind, capability requirements and cost. The Generation I adapter projects only ordinary
+land, ledges and elevation restrictions. Cut, Surf and Strength remain inventories rather than
+fictional executable flags because they change block, movement-mode or object state.
+
+The source-bound live probe passed at clean commit `64625135fb114a9df978ab51f242b1931c1beb1e`.
+After the qualified teacher established the post-Pokédex Route 1 state, the cartridge graph generated
+thirteen approach inputs, selected `down` at the nearest reachable ledge, landed two squares away at
+`(28, 10)`, and confirmed that `up` could not cross the same ledge backward. It changed no adjacent
+RAM, RTC or state artifact and released all controls. Record:
+[route1-cartridge-ledge-probe-2026-08-10.json](docs/evidence/route1-cartridge-ledge-probe-2026-08-10.json).
+
+Do not wire this into a completion run yet. The audit found a more immediate composition gap: warp
+records currently discard their destination warp index, and connection records retain a heading but
+not the alignment needed to determine the next map's arrival coordinate. Initial ROM objects also
+are not current NPC or boulder positions. The next gate is complete passage geometry plus one
+closed-loop Pallet → Route 1 → Viridian → Pokémon Center route, not Surf or another fixed-route Red
+replay. The full ranked review is
+[knowledge-to-action audit](docs/traversal-audit-2026-08-10.md). Counted v95 remains sealed at 0/10.
+
 ## The first cartridge-computed live route — 2026-08-10
 
 The hardened evidence was regenerated from exact-fingerprint US revision-0 Red and Blue cartridges.

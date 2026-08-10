@@ -23,6 +23,8 @@ flowchart LR
     Skills --> Strategy["Learned trainee / venue ranker"]
     Skills --> Control["Learned seek / fight / flee / heal / stop controller"]
     Skills --> Mechanics["Fixed navigation, menus, recovery, battle mechanics"]
+    Cartridge["Cartridge map + traversal adapter"] --> Router["Game-neutral macro + local search"]
+    Router --> Mechanics
     Strategy --> Mechanics
     Control --> Mechanics
     Mechanics --> Executor["Sole frame-safe button executor"]
@@ -49,7 +51,7 @@ referee then reobserves the cartridge instead of trusting a skill's success clai
 | Battle action ranking | Learned policy with legal-action masks | Model-controlled Red battle qualifications with no disagreement fallback | Authored curriculum and Red battle executor |
 | Training action control | Learned five-action controller | Portable Blaine proof: 57,548 controlled battle/overworld decisions, 1,796 development battles, zero fallback | Candidate masks, hard safety gates, navigation and menu execution |
 | Trainee and venue strategy | Shared identity-free candidate scorer | 99.9004% sealed validation; isolated causal completion with 191 disagreements; portable Blaine completion and one clean-power Hall-of-Fame rehearsal with 400 disagreements | Still one uncounted fixed-route Red root; candidate eligibility and mechanics remain fixed |
-| Navigation, menus and recovery | Deterministic bounded skills | Full Red completion and captured-state portable-loop receipts | Not yet replaced by a learned cross-title controller |
+| Navigation, menus and recovery | Deterministic bounded skills plus cartridge-derived search | One live generated Pallet route and one source-bound directed-ledge probe | Macro/local composition, dynamic objects and stateful field mechanics are not yet completion-run ready |
 | Collection planning | Typed deterministic planner | Red living-set targets, storage/evolution directives and multi-run coverage planning | No autonomous living-Pokédex execution yet |
 
 This table is the claim boundary. A model choosing an objective does not mean it navigated to the
@@ -166,7 +168,7 @@ The following contracts are intentionally game-neutral:
 The following remain Pokémon Red implementations:
 
 - memory addresses and event interpretation;
-- map traversal and collision knowledge;
+- cartridge table offsets, dynamic traversal state and field-capability compilation;
 - dialogue and menu compilation;
 - item, move, encounter, and trainer catalogs;
 - chapter recovery paths; and
@@ -182,6 +184,8 @@ scratch under the same metrics.
 | Concern | Primary modules |
 | --- | --- |
 | Semantic state and emulator boundary | `observation.py`, `emulator.py`, `red_player_observer.py` |
+| Cartridge topology and traversal | `gen1_maps.py`, `gen1_terrain.py`, `gen1_traversal.py` |
+| Game-neutral route search | `global_router.py`, `local_router.py` |
 | Quest planning and portable loop | `quest.py`, `player_loop.py`, `learned_planner_policy.py` |
 | Bounded skill contracts and Red adapters | `objective_skills.py`, `red_objective_skills.py` |
 | Battle learning | `battle_policy.py`, `battle_runtime.py`, `battle_model.py` |
@@ -201,6 +205,7 @@ outcomes, build and train a full party, and pursue a living Pokédex rather than
 answer key. Red is the teacher and first evaluation platform. Cross-title competence begins only
 when the same learned interfaces produce measured value on a title they were not written around.
 
-For current measurements and risks, see the [capability audit](current-audit-2026-08-08.md). For
-the dependency order, see the [roadmap](roadmap.md). For the experiment story, see the
-[project narrative](project-narrative.md).
+For the newest navigation measurements and risks, see the
+[knowledge-to-action audit](traversal-audit-2026-08-10.md). For the full capability ledger, see the
+[current audit](current-audit-2026-08-10.md). For the dependency order, see the
+[roadmap](roadmap.md). For the experiment story, see the [project narrative](project-narrative.md).

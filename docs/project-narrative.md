@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 10: the map learned which way was down
+
+The first cartridge-generated Pallet route proved that Red's own map and terrain could replace one
+typed direction string. The next layer asked a harder question: when does a passable tile still
+refuse movement? Red and Blue agree on directed ledges, elevation-pair restrictions, water-pair
+exceptions, Cut block replacements and initial boulder objects. Their complete static land graphs
+also agree: 154,653 directed edges over 48,216 coordinates, including 749 directed coordinate ledge
+transitions and excluding 1,152 elevation-pair transitions a flat grid would allow.
+
+The live Route 1 test generated thirteen approach inputs from the cartridge, pressed `down` at the
+selected ledge, landed two squares away, and confirmed `up` could not reverse it. The evidence is
+bound to clean committed source and changed no save artifact. The implementation preserved an
+important distinction that the first draft lost: `action="down"` tells the controller what to do;
+`kind="ledge"` tells the planner what the transition means.
+
+The result is deliberately partial. Surf changes movement mode, Cut mutates a map block, and
+Strength moves a puzzle object; none has been disguised as a static “capability unlocked” edge. The
+audit also found that the macro map graph still discards destination-warp and connection-alignment
+geometry, so the next milestone is a continuous multi-map plan with closed-loop reobservation—not a
+neural network trained to memorize shortest-path steps. The model should learn where to go and how
+to recover; the cartridge and a search algorithm can supply honest geometry.
+
 ## August 10: the model completed a perturbed run; the teacher did not know how to lose
 
 The feature-v5 battle-control dataset removed raw active-slot identity and passed a party-permutation
