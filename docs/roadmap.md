@@ -84,17 +84,24 @@ routes are now composed from each floor's live post-switch terrain and exact war
 derived puzzle steps and 65 pushes/drop receipts. See the
 [composed resource receipt](evidence/victory-road-composed-resource-chain-probe-2026-08-10.json).
 
+Joint macro/local pricing is now closed at source `758ab6d`. The search state carries map, exact
+coordinate, locomotion mode and retained outside map; every connection endpoint remains available
+until downstream local cost is known. Batched multi-target local searches made the real-cartridge
+search practical. On both Red and Blue, topology alone selected an uncomposable direct Route
+2→Pewter border, while the joint planner derived the south gate→Viridian Forest→north gate route
+at combined cost 317 with 314 acknowledgement contracts. See the
+[joint pricing audit](evidence/joint-route-pricing-audit-2026-08-11.json). It is static route
+evidence, not live completion-run authority.
+
 This closes one real story predicate and the named Victory Road resource/inter-room gaps, not every
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
 completion teacher's post-final-switch exit remains authored. The ordered gates are now:
 
-1. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
-   selecting a macro path before local cost is known.
-2. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
+1. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
    prizes—so one-cartridge reachability becomes complete rather than a lower bound.
-3. Record strategic destination choices, replans and interruption outcomes for learning. Exact
+2. Record strategic destination choices, replans and interruption outcomes for learning. Exact
    arrow sequences remain planner outputs, not imitation labels.
-4. Add Crystal's thin adapter now that direct occupancy, one story predicate and resource renewal
+3. Add Crystal's thin adapter now that direct occupancy, one story predicate and resource renewal
    preserve the neutral
    executor contract, then run the
    defined zero-shot/few-shot/from-scratch navigation benchmark.

@@ -138,6 +138,21 @@ new candidate appearing at `(32,35)`. Put the two receipts side by side: **`$35 
 route movements, one ordinary return replan, zero durable Cut edges, exact Center return**. The
 visual point is the loop—observe, choose one mutation, verify, rebuild—not a memorized pair of trees.
 
+## August 11 route-pricing episode: the shortest map list was a dead end
+
+Draw the old architecture as two separate decisions: first choose map names, then try to walk their
+floors. Use the real Pallet-to-Pewter result. Topology draws a neat five-map line ending in a direct
+Route 2→Pewter connection; the local layer marks its border **UNREACHABLE**. Do not describe this as
+a random runtime failure—the planner asked the wrong question in the wrong order.
+
+Merge the two cards into one frontier labeled **map + coordinate + movement mode + return context**.
+Let the rejected border fade and reveal the actual nine-state route through the south gate,
+Viridian Forest and the north gate. Put Red and Blue side by side with identical route facts:
+**combined cost 317; 314 acknowledgement contracts**. Briefly show the engineering trap too: the
+first correct version made 30,892 local searches and took about 12.3 seconds for a longer query;
+batching all exits per entry state reduced it to about 0.17 seconds. End with **static planner
+evidence—not live completion authority**.
+
 The transfer point is stronger than “the AI can use Cut.” The planner owns intent, the title adapter
 owns menus and cartridge layout, and current game state owns truth. Close by replacing the single
 tree with a Strength boulder: now the obstacle moves too, so the next planner must search player and

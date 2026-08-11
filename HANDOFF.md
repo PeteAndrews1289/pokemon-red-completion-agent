@@ -196,9 +196,33 @@ return, ended at `(3,3)`, released controls and changed no ROM-adjacent artifact
 
 This closes repeated/multi-tree Cut under the observed-mutation contract, not general navigation
 authority. Cut grass remains an optional strategic action, generated routing remains outside the
-completion run, and counted v95 stays sealed at **0/10**. The next navigation gate is joint
-macro/local path pricing rather than selecting a map sequence before its actual passage cost is
-known.
+completion run, and counted v95 stays sealed at **0/10**.
+
+## Macro and local routing are now one priced search — 2026-08-11
+
+Clean source `758ab6dedc8fd492c641a174f9da4376d3656ca6` removes the old ordering error in
+`plan_route`. The former implementation chose a map sequence using only `MacroEdge.cost`, then
+attempted to compose local approaches. A topologically cheap edge could therefore be locally
+impossible, and an early cheap border coordinate could lead to a much more expensive next room.
+
+The joint frontier is `(map, coordinate, movement mode, retained outside map)`. It expands every
+reachable exact connection endpoint and warp, prices local edges plus declared passage cost, keeps
+terminal-coordinate cost inside the same optimization, and retains alternate entries until their
+downstream cost is known. The shared `advance_macro_state` prevents topology-only and composed
+searches from drifting on nested returns. Local targets are solved in batches and cached by entry
+state: an initial correct implementation made 30,892 separate local searches and needed about
+12.3 seconds for Pallet→Celadon; the batched version completed the same query in about 0.17 seconds
+on this machine.
+
+Red and Blue provide the cartridge falsification. Topology alone chooses map ids
+`0→12→1→13→2`, attempting a direct Route 2→Pewter border that has no locally reachable exact
+coordinate. Joint search rejects it and derives
+`0→12→1→13→50→51→47→13→2`: Route 2 south gate, Viridian Forest, north gate, then the reachable
+Pewter border. Both cartridges agree on combined cost 317 and 314 executable acknowledgement
+steps. The [public audit](docs/evidence/joint-route-pricing-audit-2026-08-11.json) is static
+cartridge evidence with no dynamic blockers or live-execution authority. The next navigation lane
+is acquisition-route coverage, followed by strategic navigation records; generated routing remains
+outside the completion teacher and v95 remains **0/10**.
 
 ## Visible occupancy is observed before the route acts — 2026-08-10
 

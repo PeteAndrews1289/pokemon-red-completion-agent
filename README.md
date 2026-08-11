@@ -35,6 +35,11 @@
 > rebuilt and crossed both distinct trees from successive live RAM grids. The two different block
 > replacements completed 110/110 route movements and returned to the Center; no predicted Cut
 > continuation became execution authority and no durable Cut edge was added.
+> The composer now prices map choices and exact local approaches in one search. On both Red and
+> Blue, topology alone proposed an impossible Route 2 shortcut from Pallet to Pewter; joint pricing
+> rejected it and derived the nine-map Viridian Forest route with cost 317 and 314 acknowledgement
+> steps. Batched local targets reduced a representative Pallet→Celadon planning query from roughly
+> 12.3 seconds to 0.17 seconds on the audit machine. This remains static planning evidence.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
 > [capability audit](docs/current-audit-2026-08-10.md),
@@ -49,7 +54,8 @@
 > and [full Strength chain](docs/evidence/victory-road-strength-chain-probe-2026-08-10.json), plus
 > the [trainer-sight route](docs/evidence/victory-road-trainer-sight-route-probe-2026-08-10.json)
 > and [Saffron story gate](docs/evidence/saffron-story-gate-route-probe-2026-08-10.json), plus the
-> [composed resource chain](docs/evidence/victory-road-composed-resource-chain-probe-2026-08-10.json).
+> [composed resource chain](docs/evidence/victory-road-composed-resource-chain-probe-2026-08-10.json),
+> and the [joint route-pricing audit](docs/evidence/joint-route-pricing-audit-2026-08-11.json).
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)

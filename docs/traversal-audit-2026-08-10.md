@@ -81,7 +81,7 @@ The route acknowledged 60/60 movements and returned to Center `(3,3)`.
 | Passage geometry | 1,484 exact connection transitions, 558 ordinary warp arrivals, 242 indexed dynamic returns and 2 scripted lift exits; full Red/Blue structures agree | Boundary returns need a separate outward action and adjacent exterior arrival; lifts remain menu-scripted |
 | Static terrain | 48,216 standable coordinates and 154,653 directed land edges, including 749 ledge transitions | Initial land geometry, not current object or script state |
 | Stateful mechanics | 8 ledge rules, 11 land-pair rules and 3 water-pair rules feed executable land/water mode graphs; 9 Cut swaps drive staged live block replacement; 25 initial boulders remain decoded inventory | Surf, repeated Cut and the full five-phase Victory Road Strength chain are live-qualified; optional Cut grass and other story-specific mutations remain strategic policy work |
-| Route composition | Game-neutral `RoutePlan` selects reachable endpoints and flattens every edge into exact source/expected state | Macro path cost is still selected before local path cost |
+| Route composition | Joint Dijkstra carries map, coordinate, mode and retained outside state; all reachable exact endpoints are priced with local movement plus passage cost before the path is selected | Static composition still needs live story, occupancy and resource observations before execution |
 | Closed-loop execution | Game-neutral runtime acknowledges coordinates and map transitions, bounds readiness/retries/interruptions, projects current visible occupancy, discovers remaining blockers and replans | Visible occupancy is viewport-bounded; hidden/off-screen and unclassified obstacles still rely on failed-step fallback |
 | Live falsification | Center: 86/86 steps, 3 wilds, 0 replans. Mart: 108 acknowledged steps/112 requests, 1 wild, 2 replans. Surf: 13/13 steps, exact land→water→land round trip. Visible-object route: 43/43 movement requests, one pre-input replan. Repeated Cut: 110/110 route movements, two distinct one-block mutations, fresh planning after each. Strength: five phases and 267 derived puzzle steps. Saffron: closed/unknown rejection plus 11/11 open movements | Clean uncounted Red probes with source-bound receipts; broad completion-run routing authority remains unopened |
 
@@ -92,7 +92,8 @@ The public records are [the complete map extraction](evidence/map-graph-2026-08-
 [the Surf round trip](evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json), and
 [the visible-object route](evidence/cinnabar-visible-object-route-probe-2026-08-10.json), and
 [the staged Cut crossing](evidence/celadon-staged-cut-route-probe-2026-08-10.json), and
-[the repeated Cut route](evidence/celadon-repeated-cut-route-probe-2026-08-11.json).
+[the repeated Cut route](evidence/celadon-repeated-cut-route-probe-2026-08-11.json), and
+[the joint route-pricing audit](evidence/joint-route-pricing-audit-2026-08-11.json).
 
 ## Corrections made during this milestone
 

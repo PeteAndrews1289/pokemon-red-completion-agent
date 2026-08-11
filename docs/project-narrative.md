@@ -175,6 +175,17 @@ loop acknowledged 110/110 route movements, returned to the Center, and added zer
 edges. The [repeated receipt](evidence/celadon-repeated-cut-route-probe-2026-08-11.json) turns Cut
 from a one-shot demonstration into a reusable observe–mutate–replan loop.
 
+The next routing defect was architectural rather than title-specific. The macro planner chose maps
+before the local planner priced the walk between their doors. On the real cartridges, its shortest
+Pallet-to-Pewter sketch tried to step directly from Route 2 into Pewter across a border whose exact
+coordinates were unreachable. The replacement search carries map, coordinate, locomotion mode and
+return context together, retaining every reachable border endpoint until downstream cost is known.
+It rejected the shortcut and derived the real south gate→Viridian Forest→north gate route on both
+Red and Blue: combined cost 317 and 314 acknowledgement contracts. Batching all local targets also
+turned the representative Pallet-to-Celadon query from roughly 12.3 seconds into 0.17 seconds. The
+[joint-pricing audit](evidence/joint-route-pricing-audit-2026-08-11.json) is deliberately labeled
+static evidence; live observation still decides whether a generated segment may execute now.
+
 This is the architecture the later games need. A model can decide *why* a blocked destination is
 worth opening; a cartridge adapter handles how that title expresses Cut; the live world—not the
 model and not the static map—decides whether the passage actually changed. Strength is next because

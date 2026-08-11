@@ -1,0 +1,376 @@
+{
+  "schema": "joint-route-pricing-audit-v1",
+  "recorded_on": "2026-08-11",
+  "status": "ok",
+  "source": {
+    "git_commit": "758ab6dedc8fd492c641a174f9da4376d3656ca6",
+    "worktree_dirty": false
+  },
+  "executable_source_bundle_sha256": "c415ffaeee59010255acc15aa90f072c9840d81beb98dd1708d8cf2054b9539e",
+  "scope": {
+    "start_map_id": 0,
+    "start_yx": [
+      12,
+      12
+    ],
+    "goal_map_id": 2,
+    "terrain": "cartridge_initial",
+    "capabilities": [],
+    "dynamic_blockers": "not_projected",
+    "live_execution_authority": false
+  },
+  "cartridges": [
+    {
+      "title_ref": "red",
+      "rom": {
+        "title": "POKEMON RED",
+        "size_bytes": 1048576,
+        "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+        "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+      },
+      "topology_only": {
+        "map_ids": [
+          0,
+          12,
+          1,
+          13,
+          2
+        ],
+        "map_names": [
+          "PALLET_TOWN",
+          "ROUTE_1",
+          "VIRIDIAN_CITY",
+          "ROUTE_2",
+          "PEWTER_CITY"
+        ],
+        "composable": false,
+        "failure": "no decoded connection coordinate is locally reachable"
+      },
+      "joint": {
+        "map_ids": [
+          0,
+          12,
+          1,
+          13,
+          50,
+          51,
+          47,
+          13,
+          2
+        ],
+        "map_names": [
+          "PALLET_TOWN",
+          "ROUTE_1",
+          "VIRIDIAN_CITY",
+          "ROUTE_2",
+          "VIRIDIAN_FOREST_SOUTH_GATE",
+          "VIRIDIAN_FOREST",
+          "VIRIDIAN_FOREST_NORTH_GATE",
+          "ROUTE_2",
+          "PEWTER_CITY"
+        ],
+        "combined_cost": 317,
+        "acknowledgement_contract_steps": 314,
+        "segments": [
+          {
+            "source_map_id": 0,
+            "target_map_id": 12,
+            "passage_kind": "connection",
+            "local_approach_cost": 16,
+            "exit_yx": [
+              0,
+              10
+            ],
+            "arrival_yx": [
+              35,
+              10
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 12,
+            "target_map_id": 1,
+            "passage_kind": "connection",
+            "local_approach_cost": 52,
+            "exit_yx": [
+              0,
+              11
+            ],
+            "arrival_yx": [
+              35,
+              21
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 1,
+            "target_map_id": 13,
+            "passage_kind": "connection",
+            "local_approach_cost": 38,
+            "exit_yx": [
+              0,
+              18
+            ],
+            "arrival_yx": [
+              71,
+              8
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 13,
+            "target_map_id": 50,
+            "passage_kind": "warp",
+            "local_approach_cost": 41,
+            "exit_yx": [
+              43,
+              3
+            ],
+            "arrival_yx": [
+              7,
+              4
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 50,
+            "target_map_id": 51,
+            "passage_kind": "warp",
+            "local_approach_cost": 8,
+            "exit_yx": [
+              0,
+              5
+            ],
+            "arrival_yx": [
+              47,
+              17
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 51,
+            "target_map_id": 47,
+            "passage_kind": "warp",
+            "local_approach_cost": 131,
+            "exit_yx": [
+              0,
+              1
+            ],
+            "arrival_yx": [
+              7,
+              4
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 47,
+            "target_map_id": 13,
+            "passage_kind": "return",
+            "local_approach_cost": 8,
+            "exit_yx": [
+              0,
+              5
+            ],
+            "arrival_yx": [
+              10,
+              3
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 13,
+            "target_map_id": 2,
+            "passage_kind": "connection",
+            "local_approach_cost": 15,
+            "exit_yx": [
+              0,
+              8
+            ],
+            "arrival_yx": [
+              35,
+              18
+            ],
+            "passage_cost": 1
+          }
+        ]
+      }
+    },
+    {
+      "title_ref": "blue",
+      "rom": {
+        "title": "POKEMON BLUE",
+        "size_bytes": 1048576,
+        "sha1": "d7037c83e1ae5b39bde3c30787637ba1d4c48ce2",
+        "sha256": "2a951313c2640e8c2cb21f25d1db019ae6245d9c7121f754fa61afd7bee6452d"
+      },
+      "topology_only": {
+        "map_ids": [
+          0,
+          12,
+          1,
+          13,
+          2
+        ],
+        "map_names": [
+          "PALLET_TOWN",
+          "ROUTE_1",
+          "VIRIDIAN_CITY",
+          "ROUTE_2",
+          "PEWTER_CITY"
+        ],
+        "composable": false,
+        "failure": "no decoded connection coordinate is locally reachable"
+      },
+      "joint": {
+        "map_ids": [
+          0,
+          12,
+          1,
+          13,
+          50,
+          51,
+          47,
+          13,
+          2
+        ],
+        "map_names": [
+          "PALLET_TOWN",
+          "ROUTE_1",
+          "VIRIDIAN_CITY",
+          "ROUTE_2",
+          "VIRIDIAN_FOREST_SOUTH_GATE",
+          "VIRIDIAN_FOREST",
+          "VIRIDIAN_FOREST_NORTH_GATE",
+          "ROUTE_2",
+          "PEWTER_CITY"
+        ],
+        "combined_cost": 317,
+        "acknowledgement_contract_steps": 314,
+        "segments": [
+          {
+            "source_map_id": 0,
+            "target_map_id": 12,
+            "passage_kind": "connection",
+            "local_approach_cost": 16,
+            "exit_yx": [
+              0,
+              10
+            ],
+            "arrival_yx": [
+              35,
+              10
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 12,
+            "target_map_id": 1,
+            "passage_kind": "connection",
+            "local_approach_cost": 52,
+            "exit_yx": [
+              0,
+              11
+            ],
+            "arrival_yx": [
+              35,
+              21
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 1,
+            "target_map_id": 13,
+            "passage_kind": "connection",
+            "local_approach_cost": 38,
+            "exit_yx": [
+              0,
+              18
+            ],
+            "arrival_yx": [
+              71,
+              8
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 13,
+            "target_map_id": 50,
+            "passage_kind": "warp",
+            "local_approach_cost": 41,
+            "exit_yx": [
+              43,
+              3
+            ],
+            "arrival_yx": [
+              7,
+              4
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 50,
+            "target_map_id": 51,
+            "passage_kind": "warp",
+            "local_approach_cost": 8,
+            "exit_yx": [
+              0,
+              5
+            ],
+            "arrival_yx": [
+              47,
+              17
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 51,
+            "target_map_id": 47,
+            "passage_kind": "warp",
+            "local_approach_cost": 131,
+            "exit_yx": [
+              0,
+              1
+            ],
+            "arrival_yx": [
+              7,
+              4
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 47,
+            "target_map_id": 13,
+            "passage_kind": "return",
+            "local_approach_cost": 8,
+            "exit_yx": [
+              0,
+              5
+            ],
+            "arrival_yx": [
+              10,
+              3
+            ],
+            "passage_cost": 1
+          },
+          {
+            "source_map_id": 13,
+            "target_map_id": 2,
+            "passage_kind": "connection",
+            "local_approach_cost": 15,
+            "exit_yx": [
+              0,
+              8
+            ],
+            "arrival_yx": [
+              35,
+              18
+            ],
+            "passage_cost": 1
+          }
+        ]
+      }
+    }
+  ],
+  "red_blue_route_facts_identical": true,
+  "finding": "Topology alone selects an uncomposable Route 2 border. Joint pricing rejects it and carries exact coordinates through both Viridian Forest gates."
+}
