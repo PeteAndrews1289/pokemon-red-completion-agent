@@ -1,0 +1,41 @@
+{
+  "candidate_count_counts": {
+    "2": 21,
+    "3": 22,
+    "4": 3,
+    "5": 2
+  },
+  "claim": "Forty-eight graph-legal strategic situations are prospectively assigned before live route measurement or model fitting; they are not yet authenticated policy contexts or training rows.",
+  "collection_open": false,
+  "live_policy_contexts_authenticated": 0,
+  "objective_graph": {
+    "branching_states": 129,
+    "reachable_states": 166,
+    "sha256": "7ffd735c8a3dffdfa35fa60932bae79f8a52908cf7085fc96e0e4fbdc395cdeb"
+  },
+  "partition_counts": {
+    "test": 12,
+    "train": 24,
+    "validation": 12
+  },
+  "registry_sha256": "c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7",
+  "scenario_count": 48,
+  "schema": "pokemon-strategic-navigation-scenario-design-evidence-v1",
+  "teacher_objective_counts": {
+    "clear_rocket_hideout": 3,
+    "defeat_erika": 6,
+    "defeat_koga": 5,
+    "defeat_misty": 2,
+    "defeat_sabrina": 3,
+    "help_bill": 1,
+    "liberate_silph": 3,
+    "obtain_strength": 7,
+    "obtain_surf": 7,
+    "reach_fuchsia": 4,
+    "reach_saffron": 3,
+    "rescue_fuji": 4
+  },
+  "teacher_order_sha256": "b4b0292a38a062a33fd7449aecf8eca01433a19297558476ee2b8aa9fbeb8cf8",
+  "test_scenarios_sealed": 12,
+  "validation_cost_baseline_challenge_hypotheses": 6
+}

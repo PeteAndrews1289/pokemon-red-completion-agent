@@ -45,12 +45,18 @@ cost baseline: **PERFECT 6/6 → p = 0.0878**. Then try the apparently smarter p
 baseline loses on only the Tower context, so after clustering duplicates there is one independent
 discordance. Stamp the campaign **CANNOT SUPPORT ITS CLAIM** before another root starts.
 
-Replace the full-game counter with a context registry: **24 TRAIN / 12 VALIDATION / 12 SEALED
-TEST**, three-to-five genuine candidates, candidate-order-invariant fingerprints, and at least six
-predeclared validation contexts that challenge the cost baseline. Show short authenticated scenario
-episodes branching from real boundaries, while one full-game run remains above them as causal
-qualification. End with: **“The expensive part should prove the agent survives the game—not repeat
-the same label.”**
+Replace the full-game counter with the implemented context registry: **24 TRAIN / 12 VALIDATION /
+12 SEALED TEST**. Zoom out from the fixed route's 14 branch states to the quest graph's 129, then
+deal 48 selected cards across twelve teacher goals. Put the real candidate distribution on screen:
+**21 TWO-WAY / 22 THREE-WAY / 3 FOUR-WAY / 2 FIVE-WAY**. Say why the binary cards remain: **“A
+fake third option adds entropy to the chart, not experience to the agent.”**
+
+Highlight six validation cards staged near a tempting non-teacher goal, but stamp them
+**BASELINE-CHALLENGE HYPOTHESES — NOT YET MEASURED**. Finish the reveal with the most important
+counter: **48 PLANNED / 0 LIVE-AUTHENTICATED / COLLECTION CLOSED**. The next shot is the future
+short-scenario executor branching from real private captures, while one full clean-power game stays
+above the grid as causal qualification. End with: **“The expensive part should prove the agent
+survives the game—not repeat the same label.”**
 
 ### Payoff: six roots, three different kinds of truth
 

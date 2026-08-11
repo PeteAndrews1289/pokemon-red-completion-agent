@@ -1,5 +1,22 @@
 # Current capability and code audit — 2026-08-11
 
+## Scenario redesign implementation update
+
+The experiment-design gate now exists in code. Candidate-order-invariant fingerprints collapse
+replicates, partition admission rejects exact context overlap or conflicting teacher targets, and
+the paired capability audit requires at least 24 unique train contexts, 12 unique validation
+contexts and six unique validation cases where the teacher disagrees with the cost-only baseline.
+
+A canonical v2 scenario registry now fixes 48 graph-legal frontiers at 24 train, 12 validation and
+12 sealed test. It covers twelve teacher objectives and 27 three-to-five-way choices; 21 genuine
+binary frontiers remain binary. Six validation situations are preregistered baseline-challenge
+hypotheses by placing the origin in a region with a legal non-teacher goal.
+
+This is prospective design evidence only. Live authenticated scenario contexts remain zero and
+collection remains closed. The next code boundary is a source/capture/episode-bound scenario
+executor, followed by one uncounted 48-scenario rehearsal. See the
+[scenario registry audit](strategic-scenario-registry-audit-2026-08-11.md).
+
 ## Experiment-design stop after the repaired rehearsal
 
 The qualified repair does not authorize the newly regenerated counted campaign. A canonical

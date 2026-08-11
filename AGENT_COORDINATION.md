@@ -1,5 +1,15 @@
 # Three-agent coordination
 
+> **2026-08-11 Lane A/C scenario-design checkpoint:** the duplicate whole-root campaign remains
+> closed. Candidate-order-invariant fingerprints and paired unique-context admission are
+> implemented. The new v2 scenario registry prospectively fixes 48 graph-legal situations at
+> 24 train / 12 validation / 12 sealed test, across twelve teacher objectives; six validation rows
+> are cost-baseline challenge hypotheses. This is zero live scenario data. Next build a committed
+> source + private capture digest + one-attempt episode assignment and run an uncounted scenario
+> suite. Do not execute train, validation or test until that rehearsal proves distinct live contexts
+> and six measured validation baseline disagreements. See
+> `docs/strategic-scenario-registry-audit-2026-08-11.md`.
+
 > **2026-08-11 Lane A Mt. Moon/Cerulean checkpoint:** preserve a third source-bound uncounted
 > partial from `c1e5d11`. It proved both earlier repairs, all four required Route 3 trainers and
 > Mt. Moon entry before stopping at checkpoint 28 with zero strategic decisions. Its 5,301 records
@@ -444,6 +454,8 @@ A capture is one starting point, not a substitute for a run. Iterate against it;
 .venv/bin/python scripts/check_public_artifacts.py
 .venv/bin/python scripts/check_docs.py
 .venv/bin/python scripts/regenerate_collection_registry.py --check
+.venv/bin/python scripts/regenerate_strategic_navigation_registry.py --check
+.venv/bin/python scripts/regenerate_strategic_navigation_scenario_registry.py --check
 .venv/bin/ruff check .
 .venv/bin/python -m mypy
 .venv/bin/pytest -m "not integration"

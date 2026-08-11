@@ -97,3 +97,15 @@ the baseline if the effect exists.
 The already qualified 703,275-record rehearsal is preserved. It proved the teacher, recorder,
 planner and full-game route can complete together. It is not relabeled as evidence that the current
 six-row validation design is adequate.
+
+## Implementation update
+
+Items 1–3 now have a tested prospective implementation. The collection audit clusters exact
+candidate-order-invariant contexts and fails overlap, conflicting labels, underpowered partitions
+or fewer than six validation baseline disagreements. The v2 scenario registry fixes 48 graph-legal
+frontiers at 24/12/12 before live measurement and keeps ordinary test access closed.
+
+The distinction remains strict: a graph-legal registry situation is not yet an authenticated policy
+context. The next gate is the short execution assignment and uncounted scenario-suite rehearsal
+described in the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). Counted
+collection remains closed.

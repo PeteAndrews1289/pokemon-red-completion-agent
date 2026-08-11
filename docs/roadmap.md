@@ -28,6 +28,26 @@ Only after an uncounted scenario-suite rehearsal proves those gates may a counte
 open. The earlier 5-train/2-validation full-game registry remains a preserved protocol artifact, not
 an authorized collection plan.
 
+Implementation status:
+
+1. **Complete:** permutation-invariant context/target fingerprints, unique-context counts,
+   train/validation overlap rejection and conflicting-target rejection.
+2. **Complete:** paired unique-context cost-baseline capability audit. At least six validation
+   disagreements are mandatory; five fails even for a perfect scorer.
+3. **Complete:** graph inventory. The source contains 166 dependency-reachable states, 129 branch
+   states, 14 branch states on the qualified route and only three currently instrumented live
+   choices.
+4. **Complete:** canonical v2 scenario registry with 24 train, 12 validation and 12 sealed test
+   situations across twelve teacher objectives. Twenty-seven situations contain three to five
+   genuine graph-legal candidates; no unreachable filler was added to the 21 binary frontiers.
+5. **In progress:** bind each scenario to a committed source, authenticated private capture,
+   one-attempt trajectory and measured route outcome.
+6. **Pending:** uncounted 48-scenario live rehearsal, followed by the diversity and baseline audit.
+
+See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The registry still reports
+zero authenticated live contexts and `collection_open: false`; prospective rows do not satisfy the
+admission gate by themselves.
+
 ## Qualified repair checkpoint (2026-08-11): attempts 1–6 and rehearsal
 
 Attempts 1–6 have now run once under frozen source `5a8617e`. Three train roots completed and
@@ -53,9 +73,11 @@ Ordered gates from here:
 7. Expand strategic density and completion authority: generated story routing, recovery/resupply, party construction, acquisition/storage/evolution/trade scheduling and a living-Pokédex curriculum.
 8. Add a thin Crystal adapter and run preregistered Red-frozen zero-shot, fixed few-shot and from-scratch comparisons before authoring a full Gen II teacher.
 
-The repaired rehearsal is now qualified. The nearest honest milestone is therefore **one complete
-fresh 5-train/2-validation campaign**, not “the model is trained.” The first strategic model follows
-that campaign's admission audit.
+The repaired full-game rehearsal is qualified, but the old 5-train/2-validation design is retired.
+The nearest honest milestone is now **one complete uncounted 48-scenario rehearsal** proving that
+the prospective situations become distinct live policy inputs with at least six measured
+validation baseline disagreements. The first strategic model follows a one-attempt scenario
+train/validation collection and its admission audit.
 
 ## Previous focus (2026-08-11): collect genuine strategic navigation lineages
 

@@ -18,6 +18,7 @@ from pokemon_red_completion.strategic_navigation_dataset import (
 StrategicNavigationLineage = (
     StrategicNavigationDataset | CollectedStrategicNavigationDataset
 )
+STRATEGIC_MINIMUM_VALIDATION_BASELINE_DISAGREEMENTS = 6
 
 
 @dataclass(frozen=True, slots=True)
@@ -42,13 +43,23 @@ class StrategicNavigationCollectionAudit:
     route_cost_unique_minimum_cases: int
     route_cost_unique_minimum_matches: int
     route_cost_ties_excluded: int
+    unique_teacher_choice_context_count: int
+    replicated_teacher_choice_example_count: int
+    unique_context_route_cost_cases: int
+    unique_context_route_cost_matches: int
+    unique_context_route_cost_ties_excluded: int
+    validation_unique_context_route_cost_cases: int
+    validation_unique_context_route_cost_matches: int
+    validation_unique_context_route_cost_disagreements: int
+    perfect_scorer_minimum_two_sided_exact_p: float
+    statistical_design_reasons: tuple[str, ...]
     training_shape_selected_indexes: tuple[tuple[str, int, int], ...]
     validation_shape_baseline_cases: int
     validation_shape_baseline_matches: int
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "strategic-navigation-collection-audit-v1",
+            "schema": "strategic-navigation-collection-audit-v2",
             "partition_audit": self.partition_audit.public_dict(),
             "example_count": self.example_count,
             "partition_example_counts": dict(self.partition_example_counts),
@@ -77,6 +88,35 @@ class StrategicNavigationCollectionAudit:
                 "matches": self.route_cost_unique_minimum_matches,
                 "ties_excluded": self.route_cost_ties_excluded,
             },
+            "unique_contexts": {
+                "teacher_choice_contexts": self.unique_teacher_choice_context_count,
+                "replicated_teacher_choice_examples": (
+                    self.replicated_teacher_choice_example_count
+                ),
+            },
+            "unique_context_route_cost_baseline": {
+                "unique_minimum_cases": self.unique_context_route_cost_cases,
+                "matches": self.unique_context_route_cost_matches,
+                "ties_excluded": self.unique_context_route_cost_ties_excluded,
+            },
+            "paired_evaluation_capability": {
+                "minimum_validation_disagreements_required": (
+                    STRATEGIC_MINIMUM_VALIDATION_BASELINE_DISAGREEMENTS
+                ),
+                "validation_unique_context_cases": (
+                    self.validation_unique_context_route_cost_cases
+                ),
+                "validation_baseline_matches": (
+                    self.validation_unique_context_route_cost_matches
+                ),
+                "validation_baseline_disagreements": (
+                    self.validation_unique_context_route_cost_disagreements
+                ),
+                "perfect_scorer_minimum_two_sided_exact_p": (
+                    self.perfect_scorer_minimum_two_sided_exact_p
+                ),
+                "reasons": list(self.statistical_design_reasons),
+            },
             "candidate_shape_baseline": {
                 "training_selected_indexes": {
                     f"{need_tags}/{candidate_count}": selected_index
@@ -90,6 +130,7 @@ class StrategicNavigationCollectionAudit:
             "numeric_feature_schema_frozen": False,
             "model_development_admitted": (
                 self.partition_audit.ready_for_model_development
+                and not self.statistical_design_reasons
             ),
         }
 
@@ -117,6 +158,8 @@ def audit_strategic_navigation_collection(
     route_cost_cases = 0
     route_cost_matches = 0
     route_cost_ties = 0
+    context_cost_results: dict[str, bool | None] = {}
+    validation_context_cost_results: dict[str, bool | None] = {}
     for example in examples:
         candidates = example.candidates
         selected_indexes[example.selected_candidate_index] += 1
@@ -145,11 +188,49 @@ def audit_strategic_navigation_collection(
         if example.teacher_choice_target is not None:
             minimum = min(cost for _, cost in available)
             minima = tuple(index for index, cost in available if cost == minimum)
+            result: bool | None = None
             if len(minima) == 1:
                 route_cost_cases += 1
-                route_cost_matches += example.selected_candidate_index == minima[0]
+                result = example.selected_candidate_index == minima[0]
+                route_cost_matches += result
             else:
                 route_cost_ties += 1
+            context_cost_results.setdefault(example.policy_context_sha256, result)
+            if example.partition == "validation":
+                validation_context_cost_results.setdefault(
+                    example.policy_context_sha256,
+                    result,
+                )
+
+    unique_context_cases = sum(
+        result is not None for result in context_cost_results.values()
+    )
+    unique_context_matches = sum(
+        result is True for result in context_cost_results.values()
+    )
+    unique_context_ties = sum(
+        result is None for result in context_cost_results.values()
+    )
+    validation_context_cases = sum(
+        result is not None for result in validation_context_cost_results.values()
+    )
+    validation_context_matches = sum(
+        result is True for result in validation_context_cost_results.values()
+    )
+    validation_context_disagreements = sum(
+        result is False for result in validation_context_cost_results.values()
+    )
+    best_case_p = _perfect_scorer_two_sided_exact_p(
+        validation_context_disagreements
+    )
+    statistical_design_reasons: list[str] = []
+    if (
+        validation_context_disagreements
+        < STRATEGIC_MINIMUM_VALIDATION_BASELINE_DISAGREEMENTS
+    ):
+        statistical_design_reasons.append(
+            "insufficient_validation_cost_baseline_disagreements"
+        )
 
     shape_counts: defaultdict[tuple[str, int], Counter[int]] = defaultdict(Counter)
     for example in examples:
@@ -210,7 +291,33 @@ def audit_strategic_navigation_collection(
         route_cost_unique_minimum_cases=route_cost_cases,
         route_cost_unique_minimum_matches=route_cost_matches,
         route_cost_ties_excluded=route_cost_ties,
+        unique_teacher_choice_context_count=(
+            partition_audit.unique_teacher_choice_context_count
+        ),
+        replicated_teacher_choice_example_count=(
+            partition_audit.replicated_teacher_choice_example_count
+        ),
+        unique_context_route_cost_cases=unique_context_cases,
+        unique_context_route_cost_matches=unique_context_matches,
+        unique_context_route_cost_ties_excluded=unique_context_ties,
+        validation_unique_context_route_cost_cases=validation_context_cases,
+        validation_unique_context_route_cost_matches=validation_context_matches,
+        validation_unique_context_route_cost_disagreements=(
+            validation_context_disagreements
+        ),
+        perfect_scorer_minimum_two_sided_exact_p=best_case_p,
+        statistical_design_reasons=tuple(statistical_design_reasons),
         training_shape_selected_indexes=shape_rules,
         validation_shape_baseline_cases=validation_cases,
         validation_shape_baseline_matches=validation_matches,
     )
+
+
+def _perfect_scorer_two_sided_exact_p(discordant_wins: int) -> float:
+    """Best-case exact paired p when the scorer has no discordant losses."""
+
+    if type(discordant_wins) is not int or discordant_wins < 0:  # noqa: E721
+        raise ValueError("discordant_wins must be a non-negative integer")
+    if discordant_wins == 0:
+        return 1.0
+    return min(1.0, 2.0 ** (1 - discordant_wins))

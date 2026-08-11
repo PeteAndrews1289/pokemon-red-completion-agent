@@ -18,6 +18,7 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Protocol
 
+from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.strategic_navigation import (
     DestinationAvailability,
     DestinationUnavailableReason,
@@ -49,6 +50,8 @@ from pokemon_red_completion.strategic_navigation_trajectory import (
 )
 
 _PARTITIONS = frozenset({"train", "validation", "test", "unassigned"})
+STRATEGIC_MINIMUM_TRAIN_CONTEXTS = 24
+STRATEGIC_MINIMUM_VALIDATION_CONTEXTS = 12
 
 
 class EpisodeReader(Protocol):
@@ -161,6 +164,24 @@ class StrategicNavigationExample:
         """Return the validated portable need vocabulary for this decision."""
 
         return _need_tags(self)
+
+    @property
+    def ordered_policy_input_sha256(self) -> str:
+        """Hash the exact model-facing candidate order for diagnostics."""
+
+        return strategic_ordered_policy_input_sha256(self.policy_input)
+
+    @property
+    def policy_context_sha256(self) -> str:
+        """Hash the model-facing question independently of candidate order."""
+
+        return strategic_policy_context_sha256(self.policy_input)
+
+    @property
+    def selected_candidate_sha256(self) -> str:
+        """Hash the selected identity-free candidate independently of its slot."""
+
+        return strategic_selected_candidate_sha256(self)
 
 
 @dataclass(frozen=True, slots=True)
@@ -294,6 +315,13 @@ class StrategicNavigationDataset:
             "teacher_choice_examples": sum(
                 item.teacher_choice_target is not None for item in examples
             ),
+            "unique_teacher_choice_contexts": len(
+                {
+                    item.policy_context_sha256
+                    for item in examples
+                    if item.teacher_choice_target is not None
+                }
+            ),
             "outcome_examples": sum(item.outcome_target is not None for item in examples),
             "censored_examples": sum(item.outcome_target is None for item in examples),
             "replan_reason_counts": dict(sorted(replan_reasons.items())),
@@ -371,6 +399,13 @@ class CollectedStrategicNavigationDataset:
             "semantic_need_tag_counts": dict(sorted(need_tags.items())),
             "teacher_choice_examples": sum(
                 item.teacher_choice_target is not None for item in self.examples
+            ),
+            "unique_teacher_choice_contexts": len(
+                {
+                    item.policy_context_sha256
+                    for item in self.examples
+                    if item.teacher_choice_target is not None
+                }
             ),
             "outcome_examples": sum(
                 item.outcome_target is not None for item in self.examples
@@ -774,6 +809,70 @@ def _need_tags(example: StrategicNavigationExample) -> tuple[str, ...]:
     return tags
 
 
+def strategic_ordered_policy_input_sha256(value: Mapping[str, object]) -> str:
+    """Hash one validated policy input while retaining candidate order."""
+
+    return canonical_sha256(
+        _policy_input(
+            _thaw_policy_input(value),
+            subject="strategic ordered policy input",
+        )
+    )
+
+
+def strategic_policy_context_sha256(value: Mapping[str, object]) -> str:
+    """Hash the portable strategic question without assignment order.
+
+    ``binding_index`` exists only to connect a selected public row back to its
+    private route plan.  Candidate order is assignment-permuted to prevent a
+    slot shortcut.  Neither property creates a new strategic context, so both
+    are removed before canonical hashing.
+    """
+
+    canonical = _policy_input(
+        _thaw_policy_input(value),
+        subject="strategic policy context",
+    )
+    raw_candidates = canonical["candidates"]
+    assert isinstance(raw_candidates, list)
+    candidates: list[dict[str, object]] = []
+    for raw_candidate in raw_candidates:
+        assert isinstance(raw_candidate, dict)
+        candidate = dict(raw_candidate)
+        candidate.pop("binding_index")
+        candidates.append(candidate)
+    candidates.sort(key=canonical_sha256)
+    return canonical_sha256(
+        {
+            "candidates": candidates,
+            "origin_semantic_tags": canonical["origin_semantic_tags"],
+            "schema": "strategic-navigation-policy-context-v1",
+            "semantic_need_tags": canonical["semantic_need_tags"],
+        }
+    )
+
+
+def strategic_selected_candidate_sha256(
+    example: StrategicNavigationExample,
+) -> str:
+    """Hash the selected portable candidate without its permuted slot."""
+
+    canonical = _policy_input(
+        _thaw_policy_input(example.policy_input),
+        subject="strategic selected candidate",
+    )
+    raw_candidates = canonical["candidates"]
+    assert isinstance(raw_candidates, list)
+    candidate = dict(raw_candidates[example.selected_candidate_index])
+    candidate.pop("binding_index")
+    return canonical_sha256(
+        {
+            "candidate": candidate,
+            "schema": "strategic-navigation-selected-candidate-v1",
+        }
+    )
+
+
 def _validated_outcome(
     payload: Mapping[str, object],
     *,
@@ -948,16 +1047,36 @@ class StrategicNavigationPartitionAudit:
     lineage_count: int
     partition_counts: tuple[tuple[str, int], ...]
     decision_overlap_count: int
+    teacher_choice_example_count: int
+    unique_teacher_choice_context_count: int
+    replicated_teacher_choice_example_count: int
+    partition_unique_teacher_choice_context_counts: tuple[tuple[str, int], ...]
+    train_validation_context_overlap_count: int
+    context_target_conflict_count: int
     validation_need_tags_missing_from_training: tuple[str, ...]
     ready_for_model_development: bool
     reasons: tuple[str, ...]
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "strategic-navigation-partition-audit-v1",
+            "schema": "strategic-navigation-partition-audit-v2",
             "lineage_count": self.lineage_count,
             "partition_counts": dict(self.partition_counts),
             "decision_overlap_count": self.decision_overlap_count,
+            "teacher_choice_example_count": self.teacher_choice_example_count,
+            "unique_teacher_choice_context_count": (
+                self.unique_teacher_choice_context_count
+            ),
+            "replicated_teacher_choice_example_count": (
+                self.replicated_teacher_choice_example_count
+            ),
+            "partition_unique_teacher_choice_context_counts": dict(
+                self.partition_unique_teacher_choice_context_counts
+            ),
+            "train_validation_context_overlap_count": (
+                self.train_validation_context_overlap_count
+            ),
+            "context_target_conflict_count": self.context_target_conflict_count,
             "validation_need_tags_missing_from_training": list(
                 self.validation_need_tags_missing_from_training
             ),
@@ -994,6 +1113,27 @@ def audit_strategic_navigation_partitions(
     overlap = len(decision_ids) - len(set(decision_ids))
     if overlap:
         reasons.append("decision_overlap_across_lineages")
+    teacher_examples = tuple(
+        example
+        for dataset in rows
+        for example in dataset.examples
+        if example.teacher_choice_target is not None
+    )
+    partition_contexts: defaultdict[str, set[str]] = defaultdict(set)
+    context_targets: defaultdict[str, set[str]] = defaultdict(set)
+    for example in teacher_examples:
+        context = example.policy_context_sha256
+        partition_contexts[example.partition].add(context)
+        context_targets[context].add(example.selected_candidate_sha256)
+    unique_contexts = set(context_targets)
+    train_validation_overlap = len(
+        partition_contexts["train"] & partition_contexts["validation"]
+    )
+    if train_validation_overlap:
+        reasons.append("train_validation_policy_context_overlap")
+    target_conflicts = sum(len(targets) > 1 for targets in context_targets.values())
+    if target_conflicts:
+        reasons.append("policy_context_has_conflicting_teacher_target")
     training_tags = {
         tag
         for dataset in rows
@@ -1018,10 +1158,30 @@ def audit_strategic_navigation_partitions(
         ]
         if not any(item.teacher_choice_target is not None for item in partition_examples):
             reasons.append(f"{partition}_has_no_successful_teacher_choice")
+    if len(partition_contexts["train"]) < STRATEGIC_MINIMUM_TRAIN_CONTEXTS:
+        reasons.append("insufficient_unique_train_contexts")
+    if (
+        len(partition_contexts["validation"])
+        < STRATEGIC_MINIMUM_VALIDATION_CONTEXTS
+    ):
+        reasons.append("insufficient_unique_validation_contexts")
     return StrategicNavigationPartitionAudit(
         lineage_count=len(rows),
         partition_counts=tuple(sorted(partitions.items())),
         decision_overlap_count=overlap,
+        teacher_choice_example_count=len(teacher_examples),
+        unique_teacher_choice_context_count=len(unique_contexts),
+        replicated_teacher_choice_example_count=(
+            len(teacher_examples) - len(unique_contexts)
+        ),
+        partition_unique_teacher_choice_context_counts=tuple(
+            sorted(
+                (partition, len(contexts))
+                for partition, contexts in partition_contexts.items()
+            )
+        ),
+        train_validation_context_overlap_count=train_validation_overlap,
+        context_target_conflict_count=target_conflicts,
         validation_need_tags_missing_from_training=missing,
         ready_for_model_development=not reasons,
         reasons=tuple(reasons),

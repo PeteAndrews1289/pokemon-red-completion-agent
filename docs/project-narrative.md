@@ -1,5 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 11: forty-eight questions, zero answers observed
+
+Stopping the duplicate campaign was useful only if the replacement could be made concrete. The
+quest graph supplied the missing inventory: 166 legal progress states, 129 real branch states, but
+only 14 visited by the fixed completion order and three recorded by the strategic route seam. The
+data shortage was not a shortage of game decisions. It was a shortage of places where the teacher
+was allowed to expose them.
+
+The new registry freezes 48 alternate progress frontiers before any model result or short-route
+outcome exists: 24 train, 12 validation and 12 sealed test. It covers twelve different teacher
+goals, from Bill and Misty through Silph and Sabrina. Twenty-seven questions have three to five
+legal objectives; the remaining 21 stay binary because adding unreachable choices would improve a
+chart while making the lesson less real.
+
+Six validation questions are staged beside a tempting wrong goal. In one, the player is in
+Vermilion while the teacher still prefers Misty; in others, Celadon's nearby Gym competes with
+Fuji, Surf or Strength, and Saffron's local challenge competes with Koga. These are hypotheses about
+the shortest-route baseline, not measured wins. Cartridge routing must confirm all six in an
+uncounted rehearsal before a single training row is collected.
+
+That last zero is the point: the registry reports **48 planned situations / 0 authenticated live
+contexts / collection closed**. A prospective benchmark should be capable of proving the model
+wrong before it is allowed to produce a flattering score.
+
 ## August 11: nine rows became three questions
 
 The repaired rehearsal earned a clean green ending, but the next audit asked a more uncomfortable

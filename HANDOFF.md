@@ -14,6 +14,45 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenario registry and powered admission gate implemented — 2026-08-11
+
+The design stop below is now executable rather than aspirational. Strategic examples have a
+candidate-order-invariant policy-context hash and selected-candidate hash. The partition audit
+collapses replicates, rejects exact train/validation context overlap, rejects one context carrying
+conflicting teacher targets, and requires at least 24 unique train plus 12 unique validation
+contexts. The collection audit evaluates the route-cost baseline again at the unique-context unit
+and requires at least six validation disagreements. Five disagreements leave the best possible
+two-sided exact value at 0.0625 and cannot admit a model; six give 0.03125.
+
+The new canonical
+[scenario registry](configs/red-strategic-navigation-scenarios-v2.json) prospectively assigns 48
+graph-legal quest frontiers: 24 train, 12 validation and 12 sealed test. It spans twelve teacher
+objectives and candidate counts `{2: 21, 3: 22, 4: 3, 5: 2}`. Six validation rows are staged in a
+region containing a tempting non-teacher objective and are explicitly labeled cost-baseline
+challenge *hypotheses*. Live cartridge routing must confirm those disagreements before collection;
+the registry does not claim them as measured facts.
+
+This is still **zero collected scenario rows**. The parser verifies exact graph frontiers, teacher
+order, automatic Hideout→Silph Scope and Champion→Hall-of-Fame effects, content commitments,
+partition counts and family isolation. The normal accessor refuses test. “Sealed” means no test
+scenario has been executed or had an outcome observed; their prospective specifications are public,
+as the earlier sealed root seeds were.
+
+The immediate next engineering task is an authenticated short-scenario execution assignment. It
+must bind one registry row to a committed source, a private state digest, one trajectory episode and
+one attempt, then record the live identity-free context and measured outcome. After that, run an
+uncounted 48-scenario rehearsal and require the collected audit—not the registry—to prove 24/12
+unique contexts and six validation baseline disagreements. Do not open train, validation or test
+before the rehearsal passes. See the
+[scenario audit](docs/strategic-scenario-registry-audit-2026-08-11.md) and
+[design receipt](docs/evidence/strategic-scenario-registry-design-2026-08-11.json).
+
+Working prospective identities after this source change are scenario registry
+`c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7`, source bundle
+`a70a0bef34c0810c637f85a5f658f3ef04430ba748ed19fba206c026ca591802`, battle registry
+`2939bf9a06fb1b61e44f2369ae4de3d305d0914a971736f2774a921a40e26b85` and historical strategic
+whole-root registry `2d6a71d22cb87ea107911b33e78a6a8a6bdbf621762fd0f9a5ffa0d31818d0ed`.
+
 ## Counted collection paused: three roots contained only three unique contexts — 2026-08-11
 
 Do **not** open the repaired registry's first train root yet. A post-qualification experiment audit

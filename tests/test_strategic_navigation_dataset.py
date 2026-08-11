@@ -102,7 +102,35 @@ def _record(
     need_tags: tuple[StrategicNavigationTag, ...] = (
         StrategicNavigationTag.ADVANCE_STORY,
     ),
+    context_offset: int = 0,
+    reverse_candidates: bool = False,
+    select_minimum: bool = False,
 ) -> StrategicNavigationRecord:
+    first_candidate = NavigationDestinationCandidate(
+        destination_ref=f"pokemon.test:destination:{root}:{index}:a",
+        semantic_tags=(StrategicNavigationTag.STORY_PROGRESS,),
+        availability=DestinationAvailability.AVAILABLE,
+        route_cost=12 + context_offset,
+        route_steps=10,
+        map_transitions=2,
+        field_actions=0,
+        mode_changes=0,
+    )
+    second_candidate = NavigationDestinationCandidate(
+        destination_ref=f"pokemon.test:destination:{root}:{index}:b",
+        semantic_tags=(StrategicNavigationTag.SAFE_HUB,),
+        availability=DestinationAvailability.AVAILABLE,
+        route_cost=7 + context_offset,
+        route_steps=6,
+        map_transitions=1,
+        field_actions=0,
+        mode_changes=0,
+    )
+    candidates = (
+        (second_candidate, first_candidate)
+        if reverse_candidates
+        else (first_candidate, second_candidate)
+    )
     decision = StrategicNavigationDecision(
         episode_id=episode_id or f"episode-{root}",
         decision_index=index,
@@ -113,29 +141,12 @@ def _record(
         semantic_need_tags=need_tags,
         origin_semantic_tags=(StrategicNavigationTag.OVERWORLD,),
         origin_region_ref=f"pokemon.test:region:{root}",
-        candidates=(
-            NavigationDestinationCandidate(
-                destination_ref=f"pokemon.test:destination:{root}:{index}:a",
-                semantic_tags=(StrategicNavigationTag.STORY_PROGRESS,),
-                availability=DestinationAvailability.AVAILABLE,
-                route_cost=12,
-                route_steps=10,
-                map_transitions=2,
-                field_actions=0,
-                mode_changes=0,
-            ),
-            NavigationDestinationCandidate(
-                destination_ref=f"pokemon.test:destination:{root}:{index}:b",
-                semantic_tags=(StrategicNavigationTag.SAFE_HUB,),
-                availability=DestinationAvailability.AVAILABLE,
-                route_cost=7,
-                route_steps=6,
-                map_transitions=1,
-                field_actions=0,
-                mode_changes=0,
-            ),
+        candidates=candidates,
+        selected_destination_ref=(
+            second_candidate.destination_ref
+            if select_minimum
+            else first_candidate.destination_ref
         ),
-        selected_destination_ref=f"pokemon.test:destination:{root}:{index}:a",
     )
     failure_reason = (
         None
@@ -255,6 +266,7 @@ def test_dataset_separates_successful_imitation_failure_and_censoring() -> None:
         "candidate_count_counts": {"2": 3},
         "semantic_need_tag_counts": {"advance_story": 3},
         "teacher_choice_examples": 1,
+        "unique_teacher_choice_contexts": 1,
         "outcome_examples": 2,
         "censored_examples": 1,
         "replan_reason_counts": {},
@@ -298,26 +310,44 @@ def test_dataset_rejects_mixed_provenance_and_out_of_order_episode_indexes() -> 
 
 def test_partition_audit_accepts_distinct_train_and_validation_lineages() -> None:
     training = StrategicNavigationDataset.from_records(
-        (_record(0, NavigationOutcomeStatus.SUCCEEDED),)
+        tuple(
+            _record(
+                index,
+                NavigationOutcomeStatus.SUCCEEDED,
+                context_offset=index,
+            )
+            for index in range(24)
+        )
     )
     validation = StrategicNavigationDataset.from_records(
-        (
+        tuple(
             _record(
-                0,
+                index,
                 NavigationOutcomeStatus.SUCCEEDED,
                 root="root-validation-001",
                 partition="validation",
-            ),
+                context_offset=100 + index,
+            )
+            for index in range(12)
         )
     )
 
     audit = audit_strategic_navigation_partitions((training, validation))
 
     assert audit.public_dict() == {
-        "schema": "strategic-navigation-partition-audit-v1",
+        "schema": "strategic-navigation-partition-audit-v2",
         "lineage_count": 2,
         "partition_counts": {"train": 1, "validation": 1},
         "decision_overlap_count": 0,
+        "teacher_choice_example_count": 36,
+        "unique_teacher_choice_context_count": 36,
+        "replicated_teacher_choice_example_count": 0,
+        "partition_unique_teacher_choice_context_counts": {
+            "train": 24,
+            "validation": 12,
+        },
+        "train_validation_context_overlap_count": 0,
+        "context_target_conflict_count": 0,
         "validation_need_tags_missing_from_training": [],
         "ready_for_model_development": True,
         "reasons": [],
@@ -349,8 +379,65 @@ def test_partition_audit_fails_closed_on_coverage_and_provenance_gaps() -> None:
         "validation_need_tag_absent_from_training",
         "train_has_no_successful_teacher_choice",
         "validation_has_no_successful_teacher_choice",
+        "insufficient_unique_train_contexts",
+        "insufficient_unique_validation_contexts",
     }
     assert audit.validation_need_tags_missing_from_training == ("complete_collection",)
+
+
+def test_context_fingerprint_ignores_candidate_order_but_not_features() -> None:
+    original = StrategicNavigationDataset.from_records(
+        (_record(0, NavigationOutcomeStatus.SUCCEEDED),)
+    ).examples[0]
+    reordered = StrategicNavigationDataset.from_records(
+        (
+            _record(
+                0,
+                NavigationOutcomeStatus.SUCCEEDED,
+                root="root-reordered-001",
+                reverse_candidates=True,
+            ),
+        )
+    ).examples[0]
+    changed = StrategicNavigationDataset.from_records(
+        (
+            _record(
+                0,
+                NavigationOutcomeStatus.SUCCEEDED,
+                root="root-changed-001",
+                context_offset=1,
+            ),
+        )
+    ).examples[0]
+
+    assert original.ordered_policy_input_sha256 != reordered.ordered_policy_input_sha256
+    assert original.policy_context_sha256 == reordered.policy_context_sha256
+    assert original.selected_candidate_sha256 == reordered.selected_candidate_sha256
+    assert original.policy_context_sha256 != changed.policy_context_sha256
+
+
+def test_partition_audit_rejects_context_overlap_and_conflicting_target() -> None:
+    training = StrategicNavigationDataset.from_records(
+        (_record(0, NavigationOutcomeStatus.SUCCEEDED),)
+    )
+    validation = StrategicNavigationDataset.from_records(
+        (
+            _record(
+                0,
+                NavigationOutcomeStatus.SUCCEEDED,
+                root="root-validation-001",
+                partition="validation",
+                select_minimum=True,
+            ),
+        )
+    )
+
+    audit = audit_strategic_navigation_partitions((training, validation))
+
+    assert audit.train_validation_context_overlap_count == 1
+    assert audit.context_target_conflict_count == 1
+    assert "train_validation_policy_context_overlap" in audit.reasons
+    assert "policy_context_has_conflicting_teacher_target" in audit.reasons
 
 
 def test_duplicate_decision_cannot_cross_lineage_audit() -> None:
@@ -436,6 +523,7 @@ def test_authenticated_episode_reader_joins_decisions_to_consumed_outcomes() -> 
         "candidate_count_counts": {"2": 3},
         "semantic_need_tag_counts": {"advance_story": 3},
         "teacher_choice_examples": 1,
+        "unique_teacher_choice_contexts": 1,
         "outcome_examples": 2,
         "censored_examples": 1,
         "replan_reason_counts": {},
@@ -571,15 +659,28 @@ def test_authenticated_lineages_feed_partition_coverage_and_baseline_audit() -> 
     audit = audit_strategic_navigation_collection((training, validation))
 
     assert audit.public_dict() == {
-        "schema": "strategic-navigation-collection-audit-v1",
+        "schema": "strategic-navigation-collection-audit-v2",
         "partition_audit": {
-            "schema": "strategic-navigation-partition-audit-v1",
+            "schema": "strategic-navigation-partition-audit-v2",
             "lineage_count": 2,
             "partition_counts": {"train": 1, "validation": 1},
             "decision_overlap_count": 0,
+            "teacher_choice_example_count": 2,
+            "unique_teacher_choice_context_count": 1,
+            "replicated_teacher_choice_example_count": 1,
+            "partition_unique_teacher_choice_context_counts": {
+                "train": 1,
+                "validation": 1,
+            },
+            "train_validation_context_overlap_count": 1,
+            "context_target_conflict_count": 0,
             "validation_need_tags_missing_from_training": [],
-            "ready_for_model_development": True,
-            "reasons": [],
+            "ready_for_model_development": False,
+            "reasons": [
+                "train_validation_policy_context_overlap",
+                "insufficient_unique_train_contexts",
+                "insufficient_unique_validation_contexts",
+            ],
         },
         "example_count": 4,
         "partition_example_counts": {"train": 3, "validation": 1},
@@ -601,14 +702,76 @@ def test_authenticated_lineages_feed_partition_coverage_and_baseline_audit() -> 
             "matches": 0,
             "ties_excluded": 0,
         },
+        "unique_contexts": {
+            "teacher_choice_contexts": 1,
+            "replicated_teacher_choice_examples": 1,
+        },
+        "unique_context_route_cost_baseline": {
+            "unique_minimum_cases": 1,
+            "matches": 0,
+            "ties_excluded": 0,
+        },
+        "paired_evaluation_capability": {
+            "minimum_validation_disagreements_required": 6,
+            "validation_unique_context_cases": 1,
+            "validation_baseline_matches": 0,
+            "validation_baseline_disagreements": 1,
+            "perfect_scorer_minimum_two_sided_exact_p": 1.0,
+            "reasons": [
+                "insufficient_validation_cost_baseline_disagreements"
+            ],
+        },
         "candidate_shape_baseline": {
             "training_selected_indexes": {"advance_story/2": 0},
             "validation_cases": 1,
             "matches": 1,
         },
         "numeric_feature_schema_frozen": False,
-        "model_development_admitted": True,
+        "model_development_admitted": False,
     }
+
+
+@pytest.mark.parametrize(
+    ("disagreements", "admitted", "minimum_p"),
+    ((5, False, 0.0625), (6, True, 0.03125)),
+)
+def test_collection_admission_requires_six_unique_paired_disagreements(
+    disagreements: int,
+    admitted: bool,
+    minimum_p: float,
+) -> None:
+    training = StrategicNavigationDataset.from_records(
+        tuple(
+            _record(
+                index,
+                NavigationOutcomeStatus.SUCCEEDED,
+                context_offset=index,
+            )
+            for index in range(24)
+        )
+    )
+    validation = StrategicNavigationDataset.from_records(
+        tuple(
+            _record(
+                index,
+                NavigationOutcomeStatus.SUCCEEDED,
+                root="root-validation-001",
+                partition="validation",
+                context_offset=100 + index,
+                select_minimum=index >= disagreements,
+            )
+            for index in range(12)
+        )
+    )
+
+    payload = audit_strategic_navigation_collection(
+        (training, validation)
+    ).public_dict()
+    capability = payload["paired_evaluation_capability"]
+    assert isinstance(capability, dict)
+    assert capability["validation_baseline_disagreements"] == disagreements
+    assert capability["perfect_scorer_minimum_two_sided_exact_p"] == minimum_p
+    assert payload["model_development_admitted"] is admitted
 
 
 def test_episode_reader_rejects_identity_leakage_and_outcome_join_tampering() -> None:

@@ -12,6 +12,7 @@
 - [ ] `python scripts/check_docs.py`
 - [ ] `python scripts/regenerate_collection_registry.py --check`
 - [ ] `python scripts/regenerate_strategic_navigation_registry.py --check`
+- [ ] `python scripts/regenerate_strategic_navigation_scenario_registry.py --check`
 - [ ] `ruff check .`
 - [ ] `python -m mypy`
 - [ ] `pytest -m "not integration"`
