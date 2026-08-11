@@ -31,6 +31,10 @@
 > Repel-expiry setup: 107/107 composed route movements crossed both exact warps, one trainer-sight
 > replan stayed battle-free, and a Max Repel renewed from observed zero inside the third Strength
 > search. All five puzzles still settled, now from the natural 3F arrival rather than a staged walk.
+> Repeated Cut now closes the other named traversal gap: one clean Celadon run selected, verified,
+> rebuilt and crossed both distinct trees from successive live RAM grids. The two different block
+> replacements completed 110/110 route movements and returned to the Center; no predicted Cut
+> continuation became execution authority and no durable Cut edge was added.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
 > [capability audit](docs/current-audit-2026-08-10.md),
@@ -40,6 +44,7 @@
 > plus the [Surf round trip](docs/evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json) and
 > [visible-object route](docs/evidence/cinnabar-visible-object-route-probe-2026-08-10.json), and the
 > [staged Cut crossing](docs/evidence/celadon-staged-cut-route-probe-2026-08-10.json), plus the
+> [repeated Cut route](docs/evidence/celadon-repeated-cut-route-probe-2026-08-11.json), plus the
 > [Strength state search](docs/evidence/victory-road-strength-state-search-probe-2026-08-11.json)
 > and [full Strength chain](docs/evidence/victory-road-strength-chain-probe-2026-08-10.json), plus
 > the [trainer-sight route](docs/evidence/victory-road-trainer-sight-route-probe-2026-08-10.json)

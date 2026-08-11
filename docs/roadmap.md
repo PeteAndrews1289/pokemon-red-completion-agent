@@ -38,12 +38,13 @@ stationary `(6,14)` NPC from `(6,15)`, caused one zero-input replan, and the rou
 before returning to `(12,11)`. All 43 movements were acknowledged from 43 requests. See the
 [visible-object receipt](evidence/cinnabar-visible-object-route-probe-2026-08-10.json).
 
-Cut is now closed at clean source `8a0b794`. The planner walks only to a candidate stance; the
+Cut is now closed across repeated mutations at clean source `b449caf`. The planner walks only to a candidate stance; the
 Generation I adapter requires a Cascade Badge, living Cut holder, exact live block/tile mutation
-and restored input. Terrain is rebuilt from the reread RAM grid before a crossing is planned. The
-Celadon probe observed block `$35 → $4C`, tile `$3D → $2C`, crossed former tree `(20,47)`, and
-returned to Center `(3,3)` after 60/60 acknowledged route movements. See the
-[staged Cut receipt](evidence/celadon-staged-cut-route-probe-2026-08-10.json).
+and restored input. Terrain is rebuilt from the reread RAM grid before every next selection or
+crossing. The repeated Celadon probe observed distinct blocks `$35 → $4C` and `$32 → $6D`, crossed
+former trees `(20,47)` and `(32,35)`, acknowledged 110/110 route movements and returned to Center
+`(3,3)`. No predicted continuation became execution authority and no durable Cut edge was added.
+See the [repeated Cut receipt](evidence/celadon-repeated-cut-route-probe-2026-08-11.json).
 
 Strength is now live-qualified across the full Victory Road puzzle chain at clean executable source
 `8dbee6f`. Five bounded searches explored 44,525 states and acknowledged 247/247 derived
@@ -87,14 +88,13 @@ This closes one real story predicate and the named Victory Road resource/inter-r
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
 completion teacher's post-final-switch exit remains authored. The ordered gates are now:
 
-1. Qualify repeated and multi-tree Cut planning without weakening the live mutation receipt.
-2. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
+1. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
    selecting a macro path before local cost is known.
-3. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
+2. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
    prizes—so one-cartridge reachability becomes complete rather than a lower bound.
-4. Record strategic destination choices, replans and interruption outcomes for learning. Exact
+3. Record strategic destination choices, replans and interruption outcomes for learning. Exact
    arrow sequences remain planner outputs, not imitation labels.
-5. Add Crystal's thin adapter now that direct occupancy, one story predicate and resource renewal
+4. Add Crystal's thin adapter now that direct occupancy, one story predicate and resource renewal
    preserve the neutral
    executor contract, then run the
    defined zero-shot/few-shot/from-scratch navigation benchmark.

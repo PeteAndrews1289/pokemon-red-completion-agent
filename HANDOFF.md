@@ -183,11 +183,22 @@ route movements; the full field-menu run used 80 actions / 3,576 frames, returne
 released every control and changed no ROM-adjacent artifact. Record:
 [celadon-staged-cut-route-probe-2026-08-10.json](docs/evidence/celadon-staged-cut-route-probe-2026-08-10.json).
 
-This proves one transferable Cut contract, not general navigation authority. Cut grass is optional
-rather than a blocked passage; repeated/multi-tree route planning still needs broader coverage.
-Strength requires player/boulder state search, and story-gated passages need independently observed
-closed/open predicates. Do those next, preserve failed-step fallback for off-screen unknowns, keep
-generated routing outside the completion run, and leave counted v95 sealed at **0/10**.
+Clean source `b449caf37c74b6e39f0760f5907bc369ea0a1f42` extends that contract across every
+tree in the same live Celadon map. A reusable selector chooses only one reachable mutation from the
+current grid. The caller must execute and verify it, reread RAM, rebuild terrain, and call again;
+there is no speculative Cut sequence and no durable Cut edge. The first iteration repeated block
+`$35 → $4C` at tree `(20,47)`. The second began from the newly observed grid, selected distinct
+block `(16,17)`, observed `$32 → $6D`, and crossed tree `(32,35)`. Both field actions independently
+proved one changed block, tile `$3D → $2C`, stationary player, preserved state, and restored input.
+The complete run acknowledged **110/110** route movements, safely replanned once on the Center
+return, ended at `(3,3)`, released controls and changed no ROM-adjacent artifact. Record:
+[celadon-repeated-cut-route-probe-2026-08-11.json](docs/evidence/celadon-repeated-cut-route-probe-2026-08-11.json).
+
+This closes repeated/multi-tree Cut under the observed-mutation contract, not general navigation
+authority. Cut grass remains an optional strategic action, generated routing remains outside the
+completion run, and counted v95 stays sealed at **0/10**. The next navigation gate is joint
+macro/local path pricing rather than selecting a map sequence before its actual passage cost is
+known.
 
 ## Visible occupancy is observed before the route acts — 2026-08-10
 

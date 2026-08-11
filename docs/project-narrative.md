@@ -166,6 +166,15 @@ field-menu probe used 80 actions / 3,576 frames and returned to `(3,3)` without 
 The [public receipt](evidence/celadon-staged-cut-route-probe-2026-08-10.json) binds the result to
 clean source.
 
+The next falsification removed the single-tree shortcut. Celadon contains two passage trees with
+different cartridge replacements. Starting from the first observed city grid, the planner cleared
+and crossed `(20,47)`, discarded its prediction, reread the entire mutable grid, and only then
+selected `(32,35)`. Live memory independently acknowledged `$35 → $4C` and `$32 → $6D`; each
+changed exactly one block while the player remained stationary and control returned. The closed
+loop acknowledged 110/110 route movements, returned to the Center, and added zero permanent Cut
+edges. The [repeated receipt](evidence/celadon-repeated-cut-route-probe-2026-08-11.json) turns Cut
+from a one-shot demonstration into a reusable observe–mutate–replan loop.
+
 This is the architecture the later games need. A model can decide *why* a blocked destination is
 worth opening; a cartridge adapter handles how that title expresses Cut; the live world—not the
 model and not the static map—decides whether the passage actually changed. Strength is next because

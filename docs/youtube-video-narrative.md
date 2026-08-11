@@ -131,6 +131,13 @@ Only then let the new path appear through `(20,47)` to `(20,48)`. End on the pro
 **60/60 route movements acknowledged, 80 total actions, 3,576 frames, exact Center return, no save
 write**.
 
+Then refuse to end on the easy tree. Celadon has another one, with a different block replacement.
+Show the first predicted continuation being thrown away, the entire live grid being reread, and a
+new candidate appearing at `(32,35)`. Put the two receipts side by side: **`$35 → $4C`** and
+**`$32 → $6D`**, each exactly one block. The upgraded proof card is **two distinct trees, 110/110
+route movements, one ordinary return replan, zero durable Cut edges, exact Center return**. The
+visual point is the loop—observe, choose one mutation, verify, rebuild—not a memorized pair of trees.
+
 The transfer point is stronger than “the AI can use Cut.” The planner owns intent, the title adapter
 owns menus and cartridge layout, and current game state owns truth. Close by replacing the single
 tree with a Strength boulder: now the obstacle moves too, so the next planner must search player and
