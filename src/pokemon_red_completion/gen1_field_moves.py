@@ -321,6 +321,7 @@ class Gen1FieldMovePort:
                 blocks_after.map_id == source_map
                 and blocks_after.rows == expected_blocks_after
                 and target_tile_after != target_tile_before
+                and self.reader.read_input_readiness().ready
             ):
                 _require_protected_field_state("Cut", before, after)
                 return Gen1CutReceipt(

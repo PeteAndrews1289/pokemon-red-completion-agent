@@ -21,6 +21,7 @@ from pokemon_red_completion.gen1_traversal import CUT_MOVE_ID, SURF_MOVE_ID
 from pokemon_red_completion.observation import (
     Badge,
     CurrentMapBlocks,
+    InputReadiness,
     OverworldMovementMode,
     PokemonRedStateReader,
     RamAddress,
@@ -154,6 +155,9 @@ class CutMenuWorld:
 
     def read_current_map_blocks(self) -> CurrentMapBlocks:
         return self.blocks
+
+    def read_input_readiness(self) -> InputReadiness:
+        return InputReadiness(0, 0, 0, 0, 0)
 
     def read_u8(self, address: int) -> int:
         if address == RamAddress.CURRENT_MAP_TILESET:
