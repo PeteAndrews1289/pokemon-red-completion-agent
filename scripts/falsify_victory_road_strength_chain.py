@@ -24,10 +24,6 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from pokemon_red_completion.trainer_sight import (  # noqa: E402
-    Gen1TrainerSightProjector,
-)
-
 from pokemon_red_completion.actions import MacroAction, MacroActionKind  # noqa: E402
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING  # noqa: E402
 from pokemon_red_completion.captured_progress import load_captured_progress  # noqa: E402
@@ -68,6 +64,9 @@ from pokemon_red_completion.gen1_terrain import (  # noqa: E402
     tilesets,
     walkable_world,
     water_tilesets,
+)
+from pokemon_red_completion.gen1_trainer_sight import (  # noqa: E402
+    Gen1TrainerSightProjector,
 )
 from pokemon_red_completion.gen1_traversal import (  # noqa: E402
     TraversalRules,
