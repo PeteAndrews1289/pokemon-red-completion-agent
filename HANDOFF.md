@@ -14,6 +14,54 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Attempts 1–6 completed; campaign retired for two bounded repairs — 2026-08-11
+
+The first counted strategic campaign ran once through its first five train assignments and first
+validation assignment under frozen source `5a8617e`. Do not rerun, overwrite or relabel those
+roots. Results were:
+
+| Attempt | Partition | Game result | Promoted strategic episode |
+| --- | --- | --- | --- |
+| 1 | train | failed at Diglett capture, checkpoint 87/88 | no |
+| 2 | train | 312/312, 36/36, Hall of Fame | yes; 753,248 records |
+| 3 | train | failed before Forest restock: ₽3,915 available, ₽4,200 required | no |
+| 4 | train | 312/312, 36/36, Hall of Fame | yes; 759,275 records |
+| 5 | train | 312/312, 36/36, Hall of Fame | yes; 791,502 records |
+| 6 | validation | game passed 312/312 and Hall of Fame; final promotion refused after three lost battle-instrumentation records | no |
+
+A strict read-only audit opened only attempts 1–6. The three authenticated train episodes contain
+nine successful strategic examples and eighteen available candidates. Selected indexes are
+`{0: 5, 1: 4}`, route costs span 21–178 and the route-cost-only baseline matches 6/9. The observed
+training shape is internally consistent: story/next-challenge selects index 0,
+story/remove-blocker selects index 1, and collection/improve-team selects index 0 after assignment
+permutation. There is no train/validation decision overlap. The campaign is nevertheless **not
+admitted for model development**: train is 3/5 promoted and validation is 0/2 promoted. The five
+test roots remain sealed and were not inspected.
+
+The failures exposed two bounded source defects. Direct Diglett capture could consume too many
+balls, occasionally end without acquisition and leave the later 30-ball Forest reserve ₽285 short.
+The teacher now uses the freshly caught Ground-immune Spearow for one bounded Peck before throwing
+balls, and retains the target only after observing an HP decrease. Separately, a capture/training
+battle that exited outside the shared runtime could leave a stale observer intent. The next battle
+then produced one callback failure followed by lost move decisions—the exact 1+2 signature from
+attempt 6. A fresh runtime entry now rolls that stale state into a new battle instance; same-intent
+bounded reentry is unchanged.
+
+Those repairs deliberately create a new campaign identity. Current source bundle is
+`40c171b7d199faeb97217907067808e05a83074d178993ca5af0dcbf9c1274bd`; battle registry is
+`7a1d73a44946c6c5a938668034d404aeb9d32dc677d59da88e86be66abe2503a`; strategic registry is
+`8de74d114ce681af1681f395f0bd16c571d1954a928bc1a0b083ace4dfd8674e`; strategic teacher execution
+is `7907b2a18b4092f7f565d0917ab1f8119f53273b0c932937338c4c5830d6c3b0`; and the new uncounted
+rehearsal assignment is
+`0450466c244197e95c41d3163b7ac8f1a56e835c1c99c91bf24cc671b6c6eb84`.
+
+Immediate next sequence: publish the repaired source and require green CI; run only the new
+uncounted rehearsal; strictly authenticate its game completion and complete record stream; then
+open a fresh 5-train/2-validation campaign once each. Do not mix the three historical train
+episodes with new-registry roots, do not edit `src/` during emulator execution, and do not open a
+test root. Only after a complete coverage audit should the numeric feature schema be frozen and
+the first shared candidate scorer trained.
+
 ## Three-choice rehearsal passed; counted launcher now needs its exact replay — 2026-08-11
 
 Published source `0640743` passed CI and completed a clean-power strategic rehearsal at 312/312

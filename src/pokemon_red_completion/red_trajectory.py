@@ -281,10 +281,19 @@ class PokemonRedBattleDecisionObserver:
 
         if not isinstance(intent, BattleIntent):
             raise ValueError("battle intent is required when recording starts")
-        if self._active_battle_instance_id is not None:
-            if intent != self._active_battle_intent:
-                raise ValueError("battle intent changed while resuming an active battle")
+        if (
+            self._active_battle_instance_id is not None
+            and intent == self._active_battle_intent
+        ):
             return
+        # A fresh adaptive-runtime entry with a different declared intent is
+        # authoritative evidence of a new encounter.  Some external capture
+        # and training exits prove the old battle in chapter code before the
+        # shared runtime can observe battle_state == 0.  Keeping that stale
+        # observer state poisons the next encounter: the start callback fails
+        # once and every move label then fails the intent check.  Roll the
+        # observational identity forward here; scheduled trainer ordering is
+        # still enforced independently by BattleStartScheduleController.
         battle_index = self._next_battle_index
         self._next_battle_index += 1
         self._active_battle_instance_id = f"{self.recorder.episode_id}:battle:{battle_index}"

@@ -33,6 +33,30 @@ complete; catching, storage, evolution scheduling and trade orchestration are no
 
 ## Learning-boundary episode: do not train the shortest path
 
+### Payoff: six roots, three different kinds of truth
+
+After the qualified rehearsal, put six preregistered cards on screen and reveal them only once.
+Attempts 2, 4 and 5 turn green at **312/312 / HALL OF FAME**. Attempt 1 stops at **DIGLETT NOT
+ACQUIRED**. Attempt 3 stops at **RESTOCK: ₽3,915 / ₽4,200**. Attempt 6 reaches Hall of Fame, then
+turns amber instead of green: **GAME COMPLETE / DATA REJECTED — 3 RECORDS LOST**.
+
+Now total only the admitted training roots: **2,304,025 RECORDS / 9 STRATEGIC CHOICES / 18
+CANDIDATES / ANSWER POSITION 5:4 / COST BASELINE 6:9**. Keep validation at zero. The narration is:
+**“The game passed. The experiment failed closed. Those are different results.”** Show the five
+test cards face down throughout.
+
+Join the two apparent early-game failures into one cause. Animate full-health Diglett consuming the
+ball budget; draw one arrow to immediate capture failure and another to the later ₽285 deficit.
+Then introduce the Ground-immune Spearow and one measured Peck before the bounded ball loop. For the
+validation failure, show an external battle ending while the observer still holds its old intent;
+the next battle loses one callback and two move records. Advance the stale battle instance and make
+all three warning lights disappear.
+
+End by changing every source-bound identity on screen. Do not “resume at attempt 7.” Retire the old
+campaign, preserve its three authenticated train roots as historical evidence, and unlock only a
+new **UNCOUNTED REHEARSAL**. The line is: **“A fixed teacher creates a new experiment. It does not
+rewrite the old one.”**
+
 Start with a wall of arrow labels from a successful route. Feed them toward a model, then stop and
 delete them. Replace the training target with one card: **WHY GO THERE NEXT?** Place two or more
 semantic destinations beneath it, each with availability, route cost, transitions, field actions

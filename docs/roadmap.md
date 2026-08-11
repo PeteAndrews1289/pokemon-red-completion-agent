@@ -3,7 +3,35 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-11): collect genuine strategic navigation lineages
+## Current focus (2026-08-11): requalify after attempts 1–6
+
+Attempts 1–6 have now run once under frozen source `5a8617e`. Three train roots completed and
+authenticated, two train roots failed, and the first validation root completed the game but failed
+closed during final recording promotion. The resulting old-source dataset has nine successful
+strategic examples, balanced answer positions (`{0: 5, 1: 4}`) and a non-perfect route-cost
+baseline (6/9), but **zero promoted validation examples**. It is useful experiment evidence, not an
+admitted model-development dataset. Test remains sealed.
+
+The failure clusters are now repaired at their shared boundaries: Diglett capture uses a bounded,
+Ground-safe weakening action before ball expenditure, and a fresh battle-runtime entry can roll a
+stale observer intent left by an external capture/training exit. Because both are executable-source
+changes, the old campaign is retired and the registries have new identities.
+
+Ordered gates from here:
+
+1. Pass the complete ROM-free gate, publish the repair and require green exact-commit CI.
+2. Execute only uncounted rehearsal assignment `0450466c244197e95c41d3163b7ac8f1a56e835c1c99c91bf24cc671b6c6eb84` from clean power. Preserve any failure and never edit source during the run.
+3. Strictly reload the completed rehearsal and audit all 312 checkpoints, 36 objectives, 74 scheduled battle starts, three strategic joins and zero recording loss.
+4. If qualified, execute the new registry's five train roots and two validation roots once each. Never use a learning root to debug the harness and keep all five test roots sealed.
+5. Audit lineage separation, semantic coverage, answer-position balance, route-cost/shape baselines, interruptions, failures and censoring before selecting features.
+6. Freeze normalization and train the first permutation-equivariant candidate scorer. Compare against cost-only and shape baselines, then require shadow and bounded causal evaluation without a teacher fallback hiding disagreements.
+7. Expand strategic density and completion authority: generated story routing, recovery/resupply, party construction, acquisition/storage/evolution/trade scheduling and a living-Pokédex curriculum.
+8. Add a thin Crystal adapter and run preregistered Red-frozen zero-shot, fixed few-shot and from-scratch comparisons before authoring a full Gen II teacher.
+
+The nearest honest milestone is therefore **a qualified repaired rehearsal**, not “training has
+started.” The first model follows one complete fresh train/validation campaign.
+
+## Previous focus (2026-08-11): collect genuine strategic navigation lineages
 
 The game-neutral route executor is implemented and live-qualified at source `6b2cf65`. It requires
 exact acknowledgement after every movement, tolerates Gen I's staggered map/coordinate transition,

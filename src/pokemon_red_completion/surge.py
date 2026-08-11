@@ -89,6 +89,8 @@ DIGLETT_SPECIES_ID = 0x3B
 # without adding a brittle sacrifice or a trainer-specific menu exception.
 DIGLETT_CAPTURE_LEVELS = frozenset({21, 22})
 DIGLETT_CAPTURE_THROW_LIMIT = 30
+DIGLETT_CAPTURE_HELPER_PARTY_INDEX = 1
+DIGLETT_CAPTURE_HELPER_MOVE_INDEX = 0
 DIGLETT_SEARCH_SEED_WAIT_FRAMES = 199
 WARTORTLE_SPECIES_ID = 0xB3
 PIDGEY_SPECIES_ID = 0x24
@@ -1357,7 +1359,24 @@ def _catch_diglett_chapter(
             and encounter.enemy_level in DIGLETT_CAPTURE_LEVELS
             and (encounter.enemy_hp or 0) > 0
         ):
-            break
+            # The level-17 Spearow's first move is Peck.  One bounded hit both
+            # lowers the number of balls needed for the later Forest reserve and
+            # moves the fragile capture off Wartortle.  Spearow is immune to
+            # Diglett's Ground attack; the shared weakening primitive safely
+            # abandons a miss or knockout and lets this bounded search find a new
+            # source-valid target instead of turning bad RNG into a party wipe.
+            prepared = _prepare_diglett_capture_target(
+                emulator,
+                executor,
+                reader,
+                encounter,
+            )
+            if prepared is not None:
+                encounter = prepared
+                break
+            encounter = reader.read()
+            bounce_direction = None
+            continue
         rejected_encounters.append((encounter.enemy_species_id, encounter.enemy_level))
         _flee(emulator, executor, reader, encounter)
         encounter = reader.read()
@@ -1409,6 +1428,43 @@ def _catch_diglett_chapter(
     )
     _wait(executor, timing.transition_frames)
     return reader.read() if returned.map_id == MapId.ROUTE_11 else returned
+
+
+def _prepare_diglett_capture_target(
+    emulator: EmulatorState,
+    executor: CountingExecutor,
+    reader: PokemonRedStateReader,
+    encounter: RawGameState,
+) -> RawGameState | None:
+    """Apply one safe Peck and retain only the proven live Diglett encounter."""
+
+    if (
+        encounter.battle_state != 1
+        or encounter.enemy_species_id != DIGLETT_SPECIES_ID
+        or encounter.enemy_level not in DIGLETT_CAPTURE_LEVELS
+        or (encounter.enemy_hp or 0) <= 0
+    ):
+        raise SurgeChapterError("Diglett weakening received an invalid encounter.")
+    weakened = _weaken_wild_capture_once(
+        emulator,
+        executor,
+        reader,
+        DIGLETT_CAPTURE_HELPER_PARTY_INDEX,
+        DIGLETT_CAPTURE_HELPER_MOVE_INDEX,
+        "Diglett capture",
+    )
+    current = reader.read()
+    if not weakened:
+        return None
+    if (
+        current.battle_state != 1
+        or current.enemy_species_id != DIGLETT_SPECIES_ID
+        or current.enemy_level not in DIGLETT_CAPTURE_LEVELS
+        or (current.enemy_hp or 0) <= 0
+        or current.enemy_hp >= encounter.enemy_hp
+    ):
+        raise SurgeChapterError("Diglett weakening lost its source-valid live target.")
+    return current
 
 
 def _run_route_1_collection_detour(

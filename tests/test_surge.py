@@ -915,6 +915,8 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert DIG_MOVE_ID == 0x5B
     assert frozenset({21, 22}) == DIGLETT_CAPTURE_LEVELS
     assert DIGLETT_CAPTURE_THROW_LIMIT == COLLECTION_POKE_BALL_TARGET
+    assert surge_module.DIGLETT_CAPTURE_HELPER_PARTY_INDEX == 1
+    assert surge_module.DIGLETT_CAPTURE_HELPER_MOVE_INDEX == 0
     assert DIGLETT_SEARCH_SEED_WAIT_FRAMES == 199
     assert frozenset({17}) == SPEAROW_CAPTURE_LEVELS
     assert SPEAROW_DIRECT_THROW_LEVEL_FLOOR == 30
@@ -948,6 +950,48 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
         KAKUNA_SPECIES_ID,
         PIKACHU_SPECIES_ID,
     ) == (0x7B, 0x7C, 0x71, 0x54)
+
+
+def test_diglett_capture_preparation_uses_spearow_peck_and_requires_damage(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    encounter = replace(
+        _raw(),
+        battle_state=1,
+        enemy_species_id=surge_module.DIGLETT_SPECIES_ID,
+        enemy_level=21,
+        enemy_hp=40,
+    )
+    weakened = replace(encounter, enemy_hp=24, active_party_index=1)
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return weakened
+
+    calls: list[tuple[int, int, str]] = []
+
+    def prepare(
+        _emulator: object,
+        _executor: object,
+        _reader: object,
+        party_index: int,
+        move_index: int,
+        label: str,
+    ) -> bool:
+        calls.append((party_index, move_index, label))
+        return True
+
+    monkeypatch.setattr(surge_module, "_weaken_wild_capture_once", prepare)
+
+    result = surge_module._prepare_diglett_capture_target(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        Reader(),  # type: ignore[arg-type]
+        encounter,
+    )
+
+    assert result is weakened
+    assert calls == [(1, 0, "Diglett capture")]
 
 
 def test_surge_money_decodes_exact_bcd_ledger() -> None:

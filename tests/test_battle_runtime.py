@@ -1696,7 +1696,7 @@ def test_recorded_battle_without_explicit_intent_fails_closed() -> None:
     assert len(sink.executions) == len(runtime.actions)
 
 
-def test_reentry_intent_mismatch_is_counted_even_without_another_decision() -> None:
+def test_new_runtime_intent_rolls_stale_observer_without_losing_a_record() -> None:
     runtime = ImmediateBattleExitRuntime()
     encoder = PokemonRedObservationEncoder(runtime)
     sink = InMemoryTrajectorySink()
@@ -1724,7 +1724,7 @@ def test_reentry_intent_mismatch_is_counted_even_without_another_decision() -> N
 
     assert final.battle_state == 0
     assert sink.decisions == ()
-    assert recorder.recording_failures == 1
+    assert recorder.recording_failures == 0
     assert runtime.actions == []
 
 

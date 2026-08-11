@@ -639,7 +639,7 @@ def test_battle_observer_records_move_selected_by_switched_active_battler() -> N
     }
 
 
-def test_battle_observer_rejects_changed_intent_during_reentry() -> None:
+def test_battle_observer_rolls_forward_after_changed_intent_at_new_runtime_entry() -> None:
     raw = replace(
         _raw(),
         battle_state=2,
@@ -652,21 +652,35 @@ def test_battle_observer_rejects_changed_intent_during_reentry() -> None:
             BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0),
         )
     )
+    sink = InMemoryTrajectorySink()
     recorder = RecordingExecutor(
         delegate=_UnusedExecutor(),
         snapshot_provider=encoder,
-        sink=InMemoryTrajectorySink(),
+        sink=sink,
         episode_id="intent-reentry-test",
     )
     observer = PokemonRedBattleDecisionObserver(
         encoder=encoder,
         recorder=recorder,
     )
-    observer.battle_started(intent=BattleIntent("defeat_rival", TEST_BATTLE_PLAN_ID))
+    first = BattleIntent("defeat_rival", TEST_BATTLE_PLAN_ID)
+    second = BattleIntent("defeat_rival", "battle-002-test")
+    observer.battle_started(intent=first)
+    observer.battle_started(intent=second)
 
-    with pytest.raises(ValueError, match="intent changed"):
-        observer.battle_started(intent=BattleIntent("defeat_rival", "battle-002-test"))
+    with observer.decision_scope(
+        policy_state=raw,
+        policy_menu=BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0),
+        selected_slot=1,
+        intent=second,
+    ):
+        recorder.execute(MacroAction(MacroActionKind.WAIT))
+
     assert recorder.recording_failures == 0
+    assert sink.decisions[0].context.metadata["battle_instance_id"] == (
+        "intent-reentry-test:battle:1"
+    )
+    assert sink.decisions[0].context.metadata["battle_plan_id"] == "battle-002-test"
 
 
 def test_battle_observer_assigns_a_new_ordinal_after_observed_finish() -> None:

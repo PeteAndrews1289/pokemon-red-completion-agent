@@ -56,13 +56,17 @@
 > indexes 0/1 in a 2:1 mix and a route-cost-only baseline of only 2/3 because the Tower choice
 > correctly rejects the cost-60 minimum for the cost-178 story route. This remains unassigned,
 > explicitly uncounted qualification evidence—not training data or a learned model.
-> The density audit admitted the prospective campaign: five train roots, two validation roots and
-> five sealed test roots. The official counted launcher now accepts only a committed train or
-> validation assignment through `--strategic-collection-run`, strictly reloads the completed
-> episode, and relies on the private one-shot episode identity to preserve failures and power loss.
-> Adding that final launcher changed executable source, so both registries were regenerated and its
-> new exact rehearsal must pass before attempt 1 opens. Honest counts remain **train 0/5,
-> validation 0/2, test 0/5**; no numeric feature schema is frozen and no navigation model is claimed.
+> The first campaign then ran attempts 1–6 once under frozen source `5a8617e`. Three train roots
+> completed and authenticated 2,304,025 records with nine successful strategic choices; two train
+> roots failed, and validation attempt 6 completed Hall of Fame but failed closed during promotion
+> after three battle-instrumentation records were lost. Answer positions were balanced 5:4 and the
+> route-cost baseline matched only 6/9, but zero validation examples were promoted. Honest status is
+> therefore **historical train 3/5, validation 0/2, test sealed**—not admitted for model training.
+> The shared failure boundaries are now repaired: Diglett is weakened once by Ground-immune
+> Spearow before the ball loop, and a fresh battle-runtime entry can roll forward stale observer
+> state left by an external capture/training exit. Those source changes create a new registry and
+> campaign. The next gate is its fresh uncounted rehearsal, followed by a new 5-train/2-validation
+> collection; no numeric feature schema is frozen and no navigation model is claimed.
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),

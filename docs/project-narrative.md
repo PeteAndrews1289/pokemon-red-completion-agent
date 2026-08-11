@@ -1,5 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 11: the first six roots turned failure into an experiment
+
+The first counted campaign finally replaced “almost ready to train” with six immutable outcomes.
+Three of five training roots reached Hall of Fame and authenticated 2.3 million trajectory records.
+Together they contributed nine successful strategic choices, balanced the correct answer across
+both candidate positions and beat the shortest-route baseline three times. That is the first real
+learning-shaped corpus in the project.
+
+It is not yet a training-ready corpus. One training root failed while catching Diglett. Another
+arrived at a later restock ₽285 short. The validation game itself reached Hall of Fame, but the
+recorder refused to promote it after losing three battle-instrumentation records. The project kept
+all three failures, left the test roots sealed and reported the honest split: **train 3/5,
+validation 0/2**. Passing the game and producing admissible evidence are deliberately different
+claims.
+
+The failures also told a coherent engineering story. Diglett was being caught at full health, so
+the same ball variance could cause either the immediate capture failure or the later money
+shortfall. The repair uses a newly caught, Ground-immune Spearow for one measured weakening move
+before the ball loop. The validation signature was equally specific: a capture or training battle
+could end outside the shared runtime and leave the observer holding the old battle intent. The next
+battle then lost one callback and two decision writes. A fresh runtime can now advance that stale
+state without weakening the schedule checks that guard the counted trainer battles.
+
+Because the fixes change the teacher, the project does not quietly patch and continue the old
+split. The source hash, registry, assignments and rehearsal all change together. The three good
+roots stay as historical proof; the next campaign starts only after a fresh uncounted rehearsal
+qualifies the repaired source. This is slower than treating every green Hall of Fame as data, but it
+is exactly the discipline that makes a future Red-to-Crystal transfer result believable.
+
 ## August 11: three choices made the rehearsal worth collecting
 
 The first qualified strategic rehearsal completed 312/312 checkpoints, all 36 objectives and Hall

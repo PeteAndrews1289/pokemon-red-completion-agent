@@ -1,5 +1,43 @@
 # Current capability and code audit — 2026-08-11
 
+## Attempts 1–6 audit update
+
+The first counted strategic campaign is no longer prospective. Attempts 1–6 ran once under frozen
+source `5a8617e`: train attempts 2, 4 and 5 completed 312/312 checkpoints, 36/36 objectives and Hall
+of Fame; train attempt 1 failed during Diglett capture; train attempt 3 reached the later Forest
+restock with ₽3,915 against a required ₽4,200; validation attempt 6 completed the game but promotion
+failed closed after one observer callback and two battle-decision records were lost. No failed root
+was overwritten or relabeled, and no test root was opened.
+
+Only the six assigned roots were audited. The three promoted train episodes strictly authenticate
+and contain 2,304,025 trajectory records in total. Their nine strategic decisions all have joined
+successful outcomes, with eighteen available candidates, selected-index counts `{0: 5, 1: 4}` and
+route costs from 21 to 178. The minimum-route-cost baseline matches 6/9. There is no decision
+overlap between train and validation. The training-shape rules are stable across assignment
+permutation, but there is no promoted validation example. Admission therefore remains false:
+**train 3/5, validation 0/2, test unopened**.
+
+Attempt 6's failed partial still contains all three strategic decisions and outcomes, all 36
+objective decisions, 318 checkpoint events, all 74 battle-schedule attestations, one terminal event
+and 2,813 battle decisions. The missing records are battle instrumentation, not strategic
+navigation. The exact 1+2 loss pattern identifies a stale battle-observer intent: an external
+capture/training exit can bypass the shared runtime's finish hook, after which the next runtime
+entry rejects one callback and two move labels. Fresh different-intent entry now advances to a new
+battle instance, while same-intent bounded reentry remains idempotent.
+
+Attempts 1 and 3 share the other repair. An unweakened Diglett can consume enough balls to fail the
+capture or leave the later fixed 30-ball reserve underfunded. The teacher now gives the freshly
+caught Ground-immune Spearow one bounded Peck, verifies that live Diglett HP decreased, and only
+then begins the existing bounded ball loop. A miss or knockout abandons that encounter safely.
+This preserves the reserve invariant rather than lowering it.
+
+The repaired source has a new source bundle
+`40c171b7d199faeb97217907067808e05a83074d178993ca5af0dcbf9c1274bd`, battle registry
+`7a1d73a44946c6c5a938668034d404aeb9d32dc677d59da88e86be66abe2503a` and strategic registry
+`8de74d114ce681af1681f395f0bd16c571d1954a928bc1a0b083ace4dfd8674e`. Old-source completed roots
+remain immutable historical evidence but cannot be combined with the new campaign. The new source
+must pass its uncounted rehearsal before any new counted root opens.
+
 ## Executive verdict
 
 The project has a strong deterministic Pokémon Red teacher, several learned decision components,
