@@ -33,6 +33,19 @@ class TraversalSnapshot:
     interruption: str | None = None
     mode: str | None = None
     occupied: frozenset[Coordinate] = frozenset()
+    hazards: tuple[TraversalHazard, ...] = ()
+
+
+@dataclass(frozen=True, slots=True)
+class TraversalHazard:
+    """A temporary semantic route constraint that is not solid occupancy."""
+
+    at: Coordinate
+    kind: str
+
+    def __post_init__(self) -> None:
+        if not self.kind:
+            raise ValueError("a traversal hazard needs a kind")
 
 
 @dataclass(frozen=True, slots=True)
@@ -216,10 +229,31 @@ def execute_route(
             replacement, replan_receipt = _request_replacement(
                 plan,
                 current,
-                _with_visible_blockers(blocked, current),
+                _with_live_constraints(blocked, current),
                 ordinal,
                 step.expected_at,
                 "visible_object",
+                replanner,
+            )
+            replans.append(replan_receipt)
+            pending = list(replacement.steps)
+            continue
+
+        hazard = _hazard_at(current, step.expected_at)
+        if (
+            step.can_discover_blocker
+            and hazard is not None
+            and replanner is not None
+            and len(replans) < limits.max_replans
+        ):
+            ordinal = len(replans) + 1
+            replacement, replan_receipt = _request_replacement(
+                plan,
+                current,
+                _with_live_constraints(blocked, current),
+                ordinal,
+                step.expected_at,
+                hazard.kind,
                 replanner,
             )
             replans.append(replan_receipt)
@@ -362,10 +396,32 @@ def execute_route(
                 replacement, replan_receipt = _request_replacement(
                     plan,
                     current,
-                    _with_visible_blockers(blocked, current),
+                    _with_live_constraints(blocked, current),
                     ordinal,
                     step.expected_at,
                     "visible_object",
+                    replanner,
+                )
+                replans.append(replan_receipt)
+                pending = list(replacement.steps)
+                replaced = True
+                break
+
+            hazard = _hazard_at(current, step.expected_at)
+            if (
+                step.can_discover_blocker
+                and hazard is not None
+                and replanner is not None
+                and len(replans) < limits.max_replans
+            ):
+                ordinal = len(replans) + 1
+                replacement, replan_receipt = _request_replacement(
+                    plan,
+                    current,
+                    _with_live_constraints(blocked, current),
+                    ordinal,
+                    step.expected_at,
+                    hazard.kind,
                     replanner,
                 )
                 replans.append(replan_receipt)
@@ -389,7 +445,7 @@ def execute_route(
                 replacement, replan_receipt = _request_replacement(
                     plan,
                     current,
-                    _with_visible_blockers(blocked, current),
+                    _with_live_constraints(blocked, current),
                     ordinal,
                     step.expected_at,
                     "settled_failed_step",
@@ -440,14 +496,21 @@ def execute_route(
     return report
 
 
-def _with_visible_blockers(
+def _with_live_constraints(
     durable: Mapping[int, frozenset[Coordinate]],
     current: TraversalSnapshot,
 ) -> dict[int, frozenset[Coordinate]]:
     combined = dict(durable)
-    if current.occupied:
-        combined[current.map_id] = combined.get(current.map_id, frozenset()) | current.occupied
+    current_constraints = current.occupied | frozenset(item.at for item in current.hazards)
+    if current_constraints:
+        combined[current.map_id] = (
+            combined.get(current.map_id, frozenset()) | current_constraints
+        )
     return combined
+
+
+def _hazard_at(snapshot: TraversalSnapshot, at: Coordinate) -> TraversalHazard | None:
+    return next((item for item in snapshot.hazards if item.at == at), None)
 
 
 def _request_replacement(

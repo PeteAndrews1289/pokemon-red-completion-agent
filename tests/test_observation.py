@@ -249,6 +249,7 @@ def test_current_map_objects_keep_dynamic_offscreen_coordinates_and_exclude_hidd
                 0xC110: 6,
                 0xC111: 1,
                 0xC112: 0x20,
+                0xC119: 0x0C,
                 0xC214: 9,
                 0xC215: 11,
                 0xC120: 7,
@@ -268,13 +269,27 @@ def test_current_map_objects_keep_dynamic_offscreen_coordinates_and_exclude_hidd
     )
 
     assert reader.read_current_map_objects() == (
-        CurrentMapObject(1, 6, (5, 7), 1, 0x20),
+        CurrentMapObject(1, 6, (5, 7), 1, 0x20, 0x0C),
         CurrentMapObject(2, 7, (3, 3), 3, 0xFF),
     )
     assert reader.read_current_map_objects()[0].visible
     assert not reader.read_current_map_objects()[1].visible
     assert reader.read_current_map_objects()[1].moving
     assert reader.read_current_object_coordinates() == frozenset({(5, 7), (3, 3)})
+
+
+def test_trainer_engagement_requires_seen_flag_and_script_control() -> None:
+    stale_field_success = PokemonRedStateReader(RecordingMemory({0xCD60: 0x01}))
+    scripted_trainer = PokemonRedStateReader(
+        RecordingMemory({0xCD60: 0x01, 0xCD6B: 0xF0})
+    )
+    movement_without_seen_flag = PokemonRedStateReader(
+        RecordingMemory({0xCC57: 0x02, 0xCD6B: 0xF0})
+    )
+
+    assert not stale_field_success.trainer_engagement_active()
+    assert scripted_trainer.trainer_engagement_active()
+    assert not movement_without_seen_flag.trainer_engagement_active()
 
 
 def test_current_map_objects_refuse_duplicate_active_coordinates() -> None:

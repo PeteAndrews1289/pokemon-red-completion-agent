@@ -12,6 +12,7 @@ from pokemon_red_completion.route_executor import (
     ReplanRequest,
     RouteExecutionError,
     RouteExecutionLimits,
+    TraversalHazard,
     TraversalSnapshot,
     execute_route,
 )
@@ -25,6 +26,7 @@ class FakeWorld:
     ready: bool = True
     interruption: str | None = None
     occupied: frozenset[tuple[int, int]] = frozenset()
+    hazards: tuple[TraversalHazard, ...] = ()
     transitions: dict[tuple[int, tuple[int, int], str], tuple[int, tuple[int, int]]] = field(
         default_factory=dict
     )
@@ -41,6 +43,9 @@ class FakeWorld:
     occupancy_after_waits: dict[int, frozenset[tuple[int, int]]] = field(
         default_factory=dict
     )
+    hazards_after_waits: dict[int, tuple[TraversalHazard, ...]] = field(
+        default_factory=dict
+    )
     wait_count: int = 0
 
     def execute(self, action: MacroAction) -> object:
@@ -49,6 +54,8 @@ class FakeWorld:
             self.wait_count += 1
             if self.wait_count in self.occupancy_after_waits:
                 self.occupied = self.occupancy_after_waits[self.wait_count]
+            if self.wait_count in self.hazards_after_waits:
+                self.hazards = self.hazards_after_waits[self.wait_count]
             if self.pending_arrival is not None:
                 self.map_id, self.at = self.pending_arrival
                 self.pending_arrival = None
@@ -83,6 +90,7 @@ class FakeWorld:
             ready=self.ready and self.interruption is None,
             interruption=self.interruption,
             occupied=self.occupied,
+            hazards=self.hazards,
         )
 
 
@@ -446,6 +454,34 @@ def test_a_visible_object_replans_before_requesting_its_square() -> None:
     assert world.actions[0] == MacroAction(MacroActionKind.MOVE, "down")
 
 
+def test_a_semantic_hazard_replans_without_becoming_visible_occupancy() -> None:
+    initial, macro, local = _visible_blocker_fixture()
+    world = _visible_blocker_world(
+        hazards=(TraversalHazard((0, 1), "trainer_sight"),),
+    )
+    requests: list[ReplanRequest] = []
+
+    def replan(request: ReplanRequest) -> RoutePlan:
+        requests.append(request)
+        world.hazards = ()
+        return plan_route(
+            macro,
+            local,
+            request.current.map_id,
+            request.current.at,
+            request.goal_map,
+            goal_at=request.goal_at,
+            blocked=request.blocked,
+        )
+
+    report = execute_route(initial, world, world, replanner=replan)
+
+    assert requests[0].blocked == {1: frozenset({(0, 1)})}
+    assert report.replans[0].reason == "trainer_sight"
+    assert report.movement_requests == 4
+    assert world.actions[0] == MacroAction(MacroActionKind.MOVE, "down")
+
+
 def test_an_object_seen_during_settle_replans_before_a_retry() -> None:
     initial, macro, local = _visible_blocker_fixture()
     world = _visible_blocker_world(
@@ -477,6 +513,30 @@ def test_an_object_seen_during_settle_replans_before_a_retry() -> None:
         MacroAction(MacroActionKind.MOVE, "right"),
         MacroAction(MacroActionKind.MOVE, "down"),
     ]
+
+
+def test_a_hazard_seen_during_settle_is_not_inferred_as_a_blocked_edge() -> None:
+    initial, macro, local = _visible_blocker_fixture()
+    world = _visible_blocker_world(
+        hazards_after_waits={1: (TraversalHazard((0, 1), "trainer_sight"),)},
+    )
+
+    def replan(request: ReplanRequest) -> RoutePlan:
+        world.hazards = ()
+        return plan_route(
+            macro,
+            local,
+            request.current.map_id,
+            request.current.at,
+            request.goal_map,
+            goal_at=request.goal_at,
+            blocked=request.blocked,
+        )
+
+    report = execute_route(initial, world, world, replanner=replan)
+
+    assert report.replans[0].reason == "trainer_sight"
+    assert report.movement_requests == 5, "one request preceded the observed semantic hazard"
 
 
 def test_a_departed_visible_object_does_not_become_a_durable_blocker() -> None:

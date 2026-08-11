@@ -26,6 +26,7 @@ class FakeReader:
     ready: bool = True
     occupied: frozenset[tuple[int, int]] = frozenset()
     occupancy_reads: int = 0
+    trainer_engagement: bool = False
 
     def read(self) -> RawGameState:
         return self.raw
@@ -45,6 +46,9 @@ class FakeReader:
     def read_visible_object_coordinates(self) -> frozenset[tuple[int, int]]:
         self.occupancy_reads += 1
         return self.occupied
+
+    def trainer_engagement_active(self) -> bool:
+        return self.trainer_engagement
 
 
 @dataclass
@@ -116,6 +120,17 @@ def test_nonwild_battles_are_typed_but_not_dismissed() -> None:
     assert interruption.interruption == "battle:2"
     with pytest.raises(RouteExecutionError, match="cannot dismiss"):
         handler.handle(interruption)
+
+
+def test_trainer_walkup_is_typed_before_battle_ram_changes() -> None:
+    fake = FakeReader(raw(), trainer_engagement=True)
+
+    observed = Gen1TraversalObserver(reader_as_real(fake)).observe()
+
+    assert observed.interruption == "trainer_engagement"
+    assert not observed.ready
+    assert observed.occupied == frozenset()
+    assert fake.occupancy_reads == 0
 
 
 def test_wild_handler_publishes_the_existing_authenticated_receipt(

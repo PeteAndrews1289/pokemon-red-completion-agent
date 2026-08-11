@@ -131,6 +131,9 @@ class MapObjectEvent:
     movement: int
     direction_or_range: int
     text_id: int
+    object_index: int = 0
+    trainer_class: int | None = None
+    trainer_set: int | None = None
 
     @property
     def at(self) -> tuple[int, int]:
@@ -143,6 +146,10 @@ class MapObjectEvent:
     @property
     def is_strength_boulder(self) -> bool:
         return self.is_boulder and self.direction_or_range == STRENGTH_BOULDER_MOVEMENT
+
+    @property
+    def is_trainer(self) -> bool:
+        return bool(self.text_id & TRAINER_TEXT_BIT)
 
 
 @dataclass(frozen=True, slots=True)
@@ -276,10 +283,12 @@ def _objects_for_map(rom: bytes, map_id: int) -> tuple[MapObjectEvent, ...]:
         raise CartridgeReadError(f"map {map_id} has too many object events")
 
     events: list[MapObjectEvent] = []
-    for _ in range(object_count):
+    for object_index in range(1, object_count + 1):
         sprite, stored_y, stored_x, movement, direction, text_id = rom[cursor : cursor + 6]
         if stored_y < 4 or stored_x < 4:
             raise CartridgeReadError(f"map {map_id} has an object outside its coordinate frame")
+        trainer_class = rom[cursor + 6] if text_id & TRAINER_TEXT_BIT else None
+        trainer_set = rom[cursor + 7] if text_id & TRAINER_TEXT_BIT else None
         events.append(
             MapObjectEvent(
                 map_id=map_id,
@@ -289,6 +298,9 @@ def _objects_for_map(rom: bytes, map_id: int) -> tuple[MapObjectEvent, ...]:
                 movement=movement,
                 direction_or_range=direction,
                 text_id=text_id,
+                object_index=object_index,
+                trainer_class=trainer_class,
+                trainer_set=trainer_set,
             )
         )
         cursor += 6

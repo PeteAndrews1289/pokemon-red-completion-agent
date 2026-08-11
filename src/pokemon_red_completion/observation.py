@@ -1351,6 +1351,7 @@ class CurrentMapObject:
     at: tuple[int, int]
     movement_status: int
     image_index: int
+    facing_direction: int = 0
 
     def __post_init__(self) -> None:
         if not 1 <= self.sprite_index <= 15:
@@ -4130,12 +4131,31 @@ class PokemonRedStateReader:
                     at=at,
                     movement_status=self._memory.read_u8(state_1 + 1),
                     image_index=self._memory.read_u8(state_1 + 2),
+                    facing_direction=self._memory.read_u8(state_1 + 9),
                 )
             )
         return tuple(found)
 
     def read_current_object_coordinates(self) -> frozenset[tuple[int, int]]:
         return frozenset(item.at for item in self.read_current_map_objects())
+
+    def trainer_engagement_active(self) -> bool:
+        """Recognize the field interval between sight and trainer battle.
+
+        ``wMiscFlags`` bit zero is overloaded by field actions, so it is not
+        sufficient by itself.  A sight engagement also owns movement input or
+        runs the engine's scripted NPC walk; requiring both sides avoids
+        treating a stale successful-item flag as an encounter.
+        """
+
+        if not self._memory.read_u8(RamAddress.MISC_FLAGS) & 0x01:
+            return False
+        readiness = self.read_input_readiness()
+        return bool(
+            readiness.joy_ignore & JOY_IGNORE_MOVEMENT_MASK
+            or readiness.npc_movement_script_table
+            or readiness.status_flags_5 & 0x01
+        )
 
     def read_current_strength_boulders(self) -> tuple[CurrentStrengthBoulder, ...]:
         """Read every pushable boulder from the current map's live sprite slots.
