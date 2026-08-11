@@ -184,6 +184,12 @@ def test_dataset_separates_successful_imitation_failure_and_censoring() -> None:
 
     assert tuple(item.teacher_choice_target for item in dataset.examples) == (0, None, None)
     assert tuple(item.outcome_target for item in dataset.examples) == (True, False, None)
+    with pytest.raises(TypeError):
+        dataset.examples[0].policy_input["schema"] = "tampered"  # type: ignore[index]
+    frozen_candidates = dataset.examples[0].policy_input["candidates"]
+    assert isinstance(frozen_candidates, tuple)
+    with pytest.raises(TypeError):
+        frozen_candidates[0]["route_cost"] = 999  # type: ignore[index]
     assert dataset.public_summary() == {
         "schema": "strategic-navigation-dataset-summary-v1",
         "root_lineage_id": "root-train-001",

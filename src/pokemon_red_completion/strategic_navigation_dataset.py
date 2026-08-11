@@ -15,6 +15,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Iterator, Mapping
 from dataclasses import dataclass
+from types import MappingProxyType
 from typing import Protocol
 
 from pokemon_red_completion.strategic_navigation import (
@@ -65,9 +66,27 @@ class StrategicNavigationExample:
     decision_index: int
     root_lineage_id: str
     partition: str
-    policy_input: dict[str, object]
+    policy_input: Mapping[str, object]
     selected_candidate_index: int
     outcome_status: NavigationOutcomeStatus
+
+    def __post_init__(self) -> None:
+        for name in ("decision_id", "episode_id", "root_lineage_id", "partition"):
+            if not isinstance(getattr(self, name), str) or not getattr(self, name):
+                raise StrategicNavigationDatasetError(f"{name} must be non-empty")
+        if type(self.decision_index) is not int or self.decision_index < 0:  # noqa: E721
+            raise StrategicNavigationDatasetError("decision index is invalid")
+        if not isinstance(self.outcome_status, NavigationOutcomeStatus):
+            raise StrategicNavigationDatasetError("example outcome status is invalid")
+        canonical = _policy_input(
+            _thaw_policy_input(self.policy_input),
+            subject="strategic example policy input",
+        )
+        candidates = canonical["candidates"]
+        assert isinstance(candidates, list)
+        if self.selected_candidate_index not in range(len(candidates)):
+            raise StrategicNavigationDatasetError("example selected index is invalid")
+        object.__setattr__(self, "policy_input", _freeze_policy_input(canonical))
 
     @property
     def teacher_choice_target(self) -> int | None:
@@ -99,9 +118,9 @@ class StrategicNavigationDataset:
     records: tuple[StrategicNavigationRecord, ...]
 
     def __post_init__(self) -> None:
-        if not self.records:
+        if not isinstance(self.records, tuple) or not self.records:
             raise StrategicNavigationDatasetError(
-                "a strategic navigation dataset needs at least one record"
+                "a strategic navigation dataset needs an immutable non-empty record tuple"
             )
         expected = (
             self.root_lineage_id,
@@ -234,9 +253,9 @@ class CollectedStrategicNavigationDataset:
     examples: tuple[StrategicNavigationExample, ...]
 
     def __post_init__(self) -> None:
-        if not self.examples:
+        if not isinstance(self.examples, tuple) or not self.examples:
             raise StrategicNavigationDatasetError(
-                "a collected navigation dataset needs at least one example"
+                "a collected navigation dataset needs an immutable non-empty example tuple"
             )
         if any(
             (
@@ -515,6 +534,59 @@ def _policy_input(value: object, *, subject: str) -> dict[str, object]:
         "origin_semantic_tags": [item.value for item in origin_tags],
         "candidates": candidates,
     }
+
+
+def _thaw_policy_input(value: object) -> dict[str, object]:
+    """Copy either fresh JSON or an already-frozen example into parser form."""
+
+    raw = _mapping(value, subject="strategic example policy input")
+    candidate_values = raw.get("candidates")
+    if not isinstance(candidate_values, (list, tuple)):
+        raise StrategicNavigationDatasetError("strategic candidate collection is invalid")
+    candidates: list[dict[str, object]] = []
+    for value_candidate in candidate_values:
+        candidate = dict(_mapping(value_candidate, subject="strategic candidate"))
+        semantic_tags = candidate.get("semantic_tags")
+        if isinstance(semantic_tags, tuple):
+            candidate["semantic_tags"] = list(semantic_tags)
+        candidates.append(candidate)
+    need_tags = raw.get("semantic_need_tags")
+    origin_tags = raw.get("origin_semantic_tags")
+    return {
+        "schema": raw.get("schema"),
+        "semantic_need_tags": list(need_tags) if isinstance(need_tags, tuple) else need_tags,
+        "origin_semantic_tags": (
+            list(origin_tags) if isinstance(origin_tags, tuple) else origin_tags
+        ),
+        "candidates": candidates,
+    }
+
+
+def _freeze_policy_input(value: dict[str, object]) -> Mapping[str, object]:
+    """Make model input recursively immutable after canonical validation."""
+
+    candidates = value["candidates"]
+    need_tags = value["semantic_need_tags"]
+    origin_tags = value["origin_semantic_tags"]
+    assert isinstance(candidates, list)
+    assert isinstance(need_tags, list)
+    assert isinstance(origin_tags, list)
+    frozen_candidates = []
+    for candidate_value in candidates:
+        assert isinstance(candidate_value, dict)
+        candidate = dict(candidate_value)
+        tags = candidate["semantic_tags"]
+        assert isinstance(tags, list)
+        candidate["semantic_tags"] = tuple(tags)
+        frozen_candidates.append(MappingProxyType(candidate))
+    return MappingProxyType(
+        {
+            "schema": value["schema"],
+            "semantic_need_tags": tuple(need_tags),
+            "origin_semantic_tags": tuple(origin_tags),
+            "candidates": tuple(frozen_candidates),
+        }
+    )
 
 
 def _outcome_status(
