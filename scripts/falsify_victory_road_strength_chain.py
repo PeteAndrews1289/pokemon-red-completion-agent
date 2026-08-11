@@ -52,6 +52,7 @@ from pokemon_red_completion.gen1_terrain import (  # noqa: E402
 )
 from pokemon_red_completion.gen1_traversal import (  # noqa: E402
     TraversalRules,
+    local_graph,
     map_object_events,
     traversal_rules,
 )
@@ -59,6 +60,7 @@ from pokemon_red_completion.lavender import (  # noqa: E402
     DEFAULT_LAVENDER_TIMING,
     _use_bag_item,
 )
+from pokemon_red_completion.local_router import find_local_path  # noqa: E402
 from pokemon_red_completion.observation import (  # noqa: E402
     EventFlag,
     ItemId,
@@ -73,8 +75,6 @@ from pokemon_red_completion.provenance import (  # noqa: E402
 from pokemon_red_completion.rom import verify_rom  # noqa: E402
 from pokemon_red_completion.route_executor import RouteActionPort  # noqa: E402
 from pokemon_red_completion.victory_road import (  # noqa: E402
-    VR1_TO_2F,
-    VR2_TO_3F,
     VictoryRoadProgress,
     _directions,
     _move,
@@ -249,6 +249,38 @@ def _solve_phase(
     return _SolvedPhase(phase_id, raw.map_id, event, goal, plan, execution)
 
 
+def _derive_walk_route(
+    goal: tuple[int, int],
+    rom: bytes,
+    sets: Mapping[int, Tileset],
+    surf_tileset_ids: frozenset[int],
+    rules: TraversalRules,
+    occupancy: dict[int, frozenset[tuple[int, int]]],
+    reader: PokemonRedStateReader,
+) -> tuple[str, ...]:
+    raw = reader.read()
+    if raw.map_id is None or raw.player_y is None or raw.player_x is None:
+        raise VictoryRoadStrengthChainProbeError("derived walk lacks a live position")
+    blocks = reader.read_current_map_blocks()
+    terrain = terrain_from_blocks(
+        rom,
+        raw.map_id,
+        blocks.rows,
+        sets,
+        water_set_ids=surf_tileset_ids,
+    )
+    boulders = reader.read_current_strength_boulders()
+    blocked = occupancy[raw.map_id] | frozenset(item.at for item in boulders)
+    path = find_local_path(
+        local_graph(terrain, rules, blocked=blocked),
+        (raw.player_y, raw.player_x),
+        goal,
+    )
+    if any(edge.action_kind is not MacroActionKind.MOVE for edge in path.edges):
+        raise VictoryRoadStrengthChainProbeError("derived walk needs a non-movement edge")
+    return tuple(edge.action for edge in path.edges)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--rom", type=Path, required=True)
@@ -327,6 +359,7 @@ def main(argv: list[str] | None = None) -> int:
         field = Gen1FieldMovePort(counted, reader, emulator)
         activations: list[Gen1StrengthReceipt] = []
         phases: list[_SolvedPhase] = []
+        derived_inter_phase_routes: list[int] = []
 
         _use_bag_item(
             counted,
@@ -352,7 +385,11 @@ def main(argv: list[str] | None = None) -> int:
                 emulator,
             )
         )
-        _move(counted, reader, VR1_TO_2F, "planned Strength probe 2F entry")
+        route = _derive_walk_route(
+            (1, 1), rom, sets, surf_tileset_ids, rules, occupancy, reader
+        )
+        derived_inter_phase_routes.append(len(route))
+        _move(counted, reader, route, "planned Strength probe 2F entry")
 
         field.execute(MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate"))
         activations.append(field.strength_receipts[-1])
@@ -371,7 +408,11 @@ def main(argv: list[str] | None = None) -> int:
                 emulator,
             )
         )
-        _move(counted, reader, VR2_TO_3F, "planned Strength probe 3F entry")
+        route = _derive_walk_route(
+            (7, 23), rom, sets, surf_tileset_ids, rules, occupancy, reader
+        )
+        derived_inter_phase_routes.append(len(route))
+        _move(counted, reader, route, "planned Strength probe 3F entry")
 
         field.execute(MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate"))
         activations.append(field.strength_receipts[-1])
@@ -486,6 +527,7 @@ def main(argv: list[str] | None = None) -> int:
             "derived_phase_pushes": sum(
                 len(phase.execution.pushes) for phase in phases
             ),
+            "derived_inter_phase_route_steps": derived_inter_phase_routes,
             "actions_executed_after_boundary": counted.actions_executed,
             "frames_executed": frames_executed,
             "controller_released": controller_released,
