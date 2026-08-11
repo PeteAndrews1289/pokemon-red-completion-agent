@@ -14,7 +14,7 @@ import argparse
 import hashlib
 import json
 import sys
-from collections.abc import Collection, Mapping
+from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -51,10 +51,7 @@ from pokemon_red_completion.gen1_terrain import (  # noqa: E402
     water_tilesets,
 )
 from pokemon_red_completion.gen1_traversal import (  # noqa: E402
-    Direction,
-    MapObjectEvent,
     TraversalRules,
-    local_graph,
     map_object_events,
     traversal_rules,
 )
@@ -62,7 +59,6 @@ from pokemon_red_completion.lavender import (  # noqa: E402
     DEFAULT_LAVENDER_TIMING,
     _use_bag_item,
 )
-from pokemon_red_completion.local_router import LocalGraph, find_local_path  # noqa: E402
 from pokemon_red_completion.observation import (  # noqa: E402
     EventFlag,
     ItemId,
@@ -77,7 +73,8 @@ from pokemon_red_completion.provenance import (  # noqa: E402
 from pokemon_red_completion.rom import verify_rom  # noqa: E402
 from pokemon_red_completion.route_executor import RouteActionPort  # noqa: E402
 from pokemon_red_completion.victory_road import (  # noqa: E402
-    VictoryRoadChapterError,
+    VR1_TO_2F,
+    VR2_TO_3F,
     VictoryRoadProgress,
     _directions,
     _move,
@@ -100,14 +97,6 @@ VR3_SWITCH_YX = (5, 3)
 VR3_HOLE_YX = (15, 23)
 VR2_SWITCH_2_YX = (16, 9)
 VR3_REPEL_BOUNDARY = _directions("UUULUURULLLLL")
-TRAINER_TEXT_MASK = 1 << 6
-MAX_CONSERVATIVE_TRAINER_SIGHT = 5
-OBJECT_FACING_DIRECTIONS = {
-    0xD0: Direction.DOWN,
-    0xD1: Direction.UP,
-    0xD2: Direction.LEFT,
-    0xD3: Direction.RIGHT,
-}
 
 
 class VictoryRoadStrengthChainProbeError(RuntimeError):
@@ -126,13 +115,6 @@ class _SolvedPhase:
     goal: StrengthGoal
     plan: StrengthPlan
     execution: StrengthExecutionReport
-
-
-@dataclass(frozen=True, slots=True)
-class _DerivedWalkReceipt:
-    acknowledged_steps: int
-    replans: int
-    rejected_edges: int
 
 
 def _stop_at_strength_boundary(progress: VictoryRoadProgress) -> None:
@@ -219,26 +201,6 @@ def _phase_payload(phase: _SolvedPhase) -> dict[str, object]:
     }
 
 
-def _conservative_object_occupancy(
-    map_id: int,
-    object_events: Collection[MapObjectEvent],
-) -> frozenset[tuple[int, int]]:
-    occupied: set[tuple[int, int]] = set()
-    for value in object_events:
-        if value.map_id != map_id or value.is_boulder:
-            continue
-        occupied.add(value.at)
-        direction = OBJECT_FACING_DIRECTIONS.get(value.direction_or_range)
-        if not value.text_id & TRAINER_TEXT_MASK or direction is None:
-            continue
-        dy, dx = direction.delta
-        occupied.update(
-            (value.y + distance * dy, value.x + distance * dx)
-            for distance in range(1, MAX_CONSERVATIVE_TRAINER_SIGHT + 1)
-        )
-    return frozenset(occupied)
-
-
 def _solve_phase(
     phase_id: str,
     event: EventFlag,
@@ -290,135 +252,6 @@ def _solve_phase(
     return _SolvedPhase(phase_id, raw.map_id, event, goal, plan, execution)
 
 
-def _derive_walk_route(
-    goal: tuple[int, int],
-    rom: bytes,
-    sets: Mapping[int, Tileset],
-    surf_tileset_ids: frozenset[int],
-    rules: TraversalRules,
-    occupancy: dict[int, frozenset[tuple[int, int]]],
-    reader: PokemonRedStateReader,
-    *,
-    rejected_edges: Collection[
-        tuple[tuple[int, int], tuple[int, int]]
-    ] = (),
-) -> tuple[str, ...]:
-    raw = reader.read()
-    if raw.map_id is None or raw.player_y is None or raw.player_x is None:
-        raise VictoryRoadStrengthChainProbeError("derived walk lacks a live position")
-    blocks = reader.read_current_map_blocks()
-    terrain = terrain_from_blocks(
-        rom,
-        raw.map_id,
-        blocks.rows,
-        sets,
-        water_set_ids=surf_tileset_ids,
-    )
-    blocked = occupancy[raw.map_id] | reader.read_current_object_coordinates()
-    graph = local_graph(terrain, rules, blocked=blocked)
-    rejected = frozenset(rejected_edges)
-    if rejected:
-        graph = LocalGraph(
-            {
-                source: tuple(
-                    edge
-                    for edge in outgoing
-                    if (source, edge.target) not in rejected
-                )
-                for source, outgoing in graph.edges.items()
-            }
-        )
-    path = find_local_path(
-        graph,
-        (raw.player_y, raw.player_x),
-        goal,
-    )
-    if any(edge.action_kind is not MacroActionKind.MOVE for edge in path.edges):
-        raise VictoryRoadStrengthChainProbeError("derived walk needs a non-movement edge")
-    return tuple(edge.action for edge in path.edges)
-
-
-def _execute_derived_walk(
-    goal: tuple[int, int],
-    expected_map: MapId,
-    label: str,
-    rom: bytes,
-    sets: Mapping[int, Tileset],
-    surf_tileset_ids: frozenset[int],
-    rules: TraversalRules,
-    occupancy: dict[int, frozenset[tuple[int, int]]],
-    actions: RouteActionPort,
-    reader: PokemonRedStateReader,
-    *,
-    max_replans: int = 16,
-) -> _DerivedWalkReceipt:
-    start = reader.read()
-    if start.map_id is None:
-        raise VictoryRoadStrengthChainProbeError(f"{label} lacks a source map")
-    source_map = start.map_id
-    acknowledged = 0
-    replans = 0
-    rejected_edges: set[tuple[tuple[int, int], tuple[int, int]]] = set()
-    while replans <= max_replans:
-        route = _derive_walk_route(
-            goal,
-            rom,
-            sets,
-            surf_tileset_ids,
-            rules,
-            occupancy,
-            reader,
-            rejected_edges=rejected_edges,
-        )
-        blocked = False
-        for direction in route:
-            before = reader.read()
-            try:
-                _step(actions, reader, direction, label)
-            except VictoryRoadChapterError:
-                current = reader.read()
-                if current.map_id != source_map or current.battle_state not in {0, None}:
-                    raise
-                if not reader.read_input_readiness().ready:
-                    raise
-                if (
-                    before.player_y is None
-                    or before.player_x is None
-                    or current.player_y != before.player_y
-                    or current.player_x != before.player_x
-                ):
-                    raise
-                dy, dx = Direction(direction).delta
-                rejected_edges.add(
-                    (
-                        (before.player_y, before.player_x),
-                        (before.player_y + dy, before.player_x + dx),
-                    )
-                )
-                replans += 1
-                blocked = True
-                break
-            acknowledged += 1
-            if reader.read().map_id != source_map:
-                if reader.read().map_id != expected_map:
-                    raise VictoryRoadStrengthChainProbeError(
-                        f"{label} entered the wrong map"
-                    )
-                return _DerivedWalkReceipt(
-                    acknowledged, replans, len(rejected_edges)
-                )
-        if not blocked:
-            current = reader.read()
-            if current.map_id == expected_map:
-                return _DerivedWalkReceipt(
-                    acknowledged, replans, len(rejected_edges)
-                )
-            raise VictoryRoadStrengthChainProbeError(
-                f"{label} reached {goal} without its map transition"
-            )
-    raise VictoryRoadStrengthChainProbeError(f"{label} exhausted its replan budget")
-
-
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--rom", type=Path, required=True)
@@ -454,7 +287,11 @@ def main(argv: list[str] | None = None) -> int:
     surf_tileset_ids = water_tilesets(rom)
     object_events = map_object_events(rom, VICTORY_ROAD_MAPS)
     occupancy = {
-        map_id: _conservative_object_occupancy(map_id, object_events)
+        map_id: frozenset(
+            event.at
+            for event in object_events
+            if event.map_id == map_id and not event.is_boulder
+        )
         for map_id in VICTORY_ROAD_MAPS
     }
     before_artifacts = _adjacent_artifacts(args.rom)
@@ -493,7 +330,6 @@ def main(argv: list[str] | None = None) -> int:
         field = Gen1FieldMovePort(counted, reader, emulator)
         activations: list[Gen1StrengthReceipt] = []
         phases: list[_SolvedPhase] = []
-        derived_inter_phase_routes: list[_DerivedWalkReceipt] = []
 
         _use_bag_item(
             counted,
@@ -508,7 +344,11 @@ def main(argv: list[str] | None = None) -> int:
             _solve_phase(
                 "victory_road_1f_switch",
                 EventFlag.VICTORY_ROAD_1F_BOULDER_ON_SWITCH,
-                StrengthGoal(VR1_SWITCH_YX, boulder_index=5),
+                StrengthGoal(
+                    VR1_SWITCH_YX,
+                    boulder_index=5,
+                    player_at=(12, 17),
+                ),
                 rom,
                 sets,
                 surf_tileset_ids,
@@ -519,20 +359,7 @@ def main(argv: list[str] | None = None) -> int:
                 emulator,
             )
         )
-        derived_inter_phase_routes.append(
-            _execute_derived_walk(
-                (1, 1),
-                MapId.VICTORY_ROAD_2F,
-                "planned Strength probe 2F entry",
-                rom,
-                sets,
-                surf_tileset_ids,
-                rules,
-                occupancy,
-                counted,
-                reader,
-            )
-        )
+        _move(counted, reader, VR1_TO_2F, "planned Strength probe 2F entry")
 
         field.execute(MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate"))
         activations.append(field.strength_receipts[-1])
@@ -551,20 +378,7 @@ def main(argv: list[str] | None = None) -> int:
                 emulator,
             )
         )
-        derived_inter_phase_routes.append(
-            _execute_derived_walk(
-                (7, 23),
-                MapId.VICTORY_ROAD_3F,
-                "planned Strength probe 3F entry",
-                rom,
-                sets,
-                surf_tileset_ids,
-                rules,
-                occupancy,
-                counted,
-                reader,
-            )
-        )
+        _move(counted, reader, VR2_TO_3F, "planned Strength probe 3F entry")
 
         field.execute(MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate"))
         activations.append(field.strength_receipts[-1])
@@ -679,13 +493,9 @@ def main(argv: list[str] | None = None) -> int:
             "derived_phase_pushes": sum(
                 len(phase.execution.pushes) for phase in phases
             ),
-            "derived_inter_phase_routes": [
-                {
-                    "acknowledged_steps": item.acknowledged_steps,
-                    "replans": item.replans,
-                    "rejected_edges": item.rejected_edges,
-                }
-                for item in derived_inter_phase_routes
+            "authored_inter_phase_route_steps": [
+                len(VR1_TO_2F),
+                len(VR2_TO_3F),
             ],
             "actions_executed_after_boundary": counted.actions_executed,
             "frames_executed": frames_executed,
