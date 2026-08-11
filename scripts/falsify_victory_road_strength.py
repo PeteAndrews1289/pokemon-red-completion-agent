@@ -4,8 +4,8 @@ An authenticated post-Giovanni capture supplies the origin. The existing
 qualified teacher reaches Victory Road but is stopped before its hand-authored
 boulder route. From there this probe reads every live boulder, decodes current
 terrain, computes a bounded player-and-boulder state search, activates Strength
-through the field compiler, and executes each push only when both engine input
-attempts and the exact resulting RAM state are acknowledged.
+through the field compiler, and executes each held push pulse only when the
+engine's resulting boulder flag and exact RAM state are acknowledged.
 
 The capture and ROM are private inputs and never appear in the public receipt.
 """
@@ -267,7 +267,7 @@ def main(argv: list[str] | None = None) -> int:
             "steps": len(plan.steps),
             "walks": sum(step.kind == "walk" for step in plan.steps),
             "pushes": sum(step.kind == "push" for step in plan.steps),
-            "push_cost": 2,
+            "push_engine_attempt_cost": 2,
             "initial": _public_state(plan.states[0]),
             "terminal": _public_state(plan.states[-1]),
         },
@@ -285,8 +285,9 @@ def main(argv: list[str] | None = None) -> int:
                     "player_after_yx": list(receipt.player_after),
                     "boulder_before_yx": list(receipt.boulder_before),
                     "boulder_after_yx": list(receipt.boulder_after),
-                    "first_attempt_unchanged": receipt.first_attempt_unchanged,
-                    "first_attempt_flag_observed": receipt.first_attempt_flag_observed,
+                    "player_stationary": receipt.player_stationary,
+                    "pushed_flag_observed": receipt.pushed_flag_observed,
+                    "engine_attempt_cost": receipt.engine_attempt_cost,
                 }
                 for receipt in execution.pushes
             ],

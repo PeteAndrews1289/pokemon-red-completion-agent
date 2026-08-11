@@ -87,7 +87,7 @@ def test_planner_routes_around_a_boulder_then_prices_each_push_as_two_inputs() -
         "left",
     ]
     assert plan.cost == 4 + STRENGTH_PUSH_COST
-    assert plan.states[-1].player_at == (1, 2)
+    assert plan.states[-1].player_at == (1, 3)
     assert plan.states[-1].boulders == (StrengthBoulder(4, (1, 1)),)
 
 
@@ -168,9 +168,9 @@ class StrengthWorld:
     raw: RawGameState = field(default_factory=lambda: raw((0, 0)))
     boulders: dict[int, tuple[int, int]] = field(default_factory=lambda: {1: (0, 2)})
     status_flags_1: int = 1
-    tried_push: bool = False
-    suppress_tried_flag: bool = False
-    move_on_first_push: bool = False
+    pushed: bool = False
+    suppress_pushed_flag: bool = False
+    move_player_on_push: bool = False
     actions: list[MacroAction] = field(default_factory=list)
 
     def read(self) -> RawGameState:
@@ -189,7 +189,7 @@ class StrengthWorld:
         if address == RamAddress.STATUS_FLAGS_1:
             return self.status_flags_1
         if address == RamAddress.MISC_FLAGS:
-            return (1 << 6) if self.tried_push and not self.suppress_tried_flag else 0
+            return (1 << 7) if self.pushed and not self.suppress_pushed_flag else 0
         return 0
 
     def execute(self, action: MacroAction) -> object:
@@ -213,17 +213,15 @@ class StrengthWorld:
         if pushed is None:
             self.raw = replace(self.raw, player_y=adjacent[0], player_x=adjacent[1])
             return action
-        if not self.tried_push and not self.move_on_first_push:
-            self.tried_push = True
-            return action
         beyond = adjacent[0] + dy, adjacent[1] + dx
         self.boulders[pushed] = beyond
-        self.raw = replace(self.raw, player_y=adjacent[0], player_x=adjacent[1])
-        self.tried_push = False
+        if self.move_player_on_push:
+            self.raw = replace(self.raw, player_y=adjacent[0], player_x=adjacent[1])
+        self.pushed = True
         return action
 
 
-def test_executor_requires_the_two_attempt_engine_handshake_and_exact_result() -> None:
+def test_executor_requires_the_held_pulse_engine_flag_and_exact_result() -> None:
     world_map = terrain((".....", "....."))
     initial = StrengthState((0, 0), (StrengthBoulder(1, (0, 2)),))
     plan = plan_strength(
@@ -243,17 +241,18 @@ def test_executor_requires_the_two_attempt_engine_handshake_and_exact_result() -
     report = executor.execute(plan)
 
     assert report.passed
-    assert report.controller_inputs == 3  # one approach walk, then two push attempts
+    assert report.controller_inputs == 2  # one approach walk and one held push pulse
     assert len(report.pushes) == 1
-    assert report.pushes[0].first_attempt_unchanged
-    assert report.pushes[0].first_attempt_flag_observed
+    assert report.pushes[0].player_stationary
+    assert report.pushes[0].pushed_flag_observed
+    assert report.pushes[0].engine_attempt_cost == 2
     assert (report.pushes[0].boulder_before, report.pushes[0].boulder_after) == (
         (0, 2),
         (0, 3),
     )
 
 
-def test_executor_fails_closed_if_the_first_attempt_moves_or_lacks_engine_flag() -> None:
+def test_executor_fails_closed_if_a_push_moves_the_player_or_lacks_engine_flag() -> None:
     world_map = terrain((".....",))
     initial = StrengthState((0, 0), (StrengthBoulder(1, (0, 1)),))
     plan = plan_strength(
@@ -264,16 +263,16 @@ def test_executor_fails_closed_if_the_first_attempt_moves_or_lacks_engine_flag()
         raw((0, 0)),
     )
 
-    moved = StrengthWorld(boulders={1: (0, 1)}, move_on_first_push=True)
-    with pytest.raises(StrengthPlanningError, match="first Strength attempt changed"):
+    moved = StrengthWorld(boulders={1: (0, 1)}, move_player_on_push=True)
+    with pytest.raises(StrengthPlanningError, match="exact state transition"):
         Gen1StrengthExecutor(
             cast(RouteActionPort, moved),
             cast(PokemonRedStateReader, moved),
             cast(ReadOnlyMemory, moved),
         ).execute(plan)
 
-    no_flag = StrengthWorld(boulders={1: (0, 1)}, suppress_tried_flag=True)
-    with pytest.raises(StrengthPlanningError, match="lacked the engine tried-push flag"):
+    no_flag = StrengthWorld(boulders={1: (0, 1)}, suppress_pushed_flag=True)
+    with pytest.raises(StrengthPlanningError, match="lacked the engine pushed-boulder flag"):
         Gen1StrengthExecutor(
             cast(RouteActionPort, no_flag),
             cast(PokemonRedStateReader, no_flag),

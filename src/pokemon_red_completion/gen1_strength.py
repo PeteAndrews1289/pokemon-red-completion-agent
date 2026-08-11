@@ -1,9 +1,10 @@
 """Bounded Generation I planning over player-and-boulder state.
 
 Strength does not unlock a durable map edge. Each push changes the puzzle, and
-Red's engine requires the same directional attempt twice before it moves the
-boulder. This module therefore searches explicit ``(player, boulders)`` states
-and prices a push as two controller inputs.
+Red's engine requires two internal directional checks before it moves the
+boulder. One frame-safe held pulse spans both checks: the boulder advances one
+square while the player stays put. This module therefore searches explicit
+``(player, boulders)`` states and retains the engine's two-attempt push cost.
 """
 
 from __future__ import annotations
@@ -35,7 +36,7 @@ Coordinate = tuple[int, int]
 STAIRS_TILE = 0x15
 STRENGTH_PUSH_COST = 2
 STRENGTH_ACTIVE_MASK = 1 << 0
-TRIED_PUSH_BOULDER_MASK = 1 << 6
+PUSHED_BOULDER_MASK = 1 << 7
 
 
 class StrengthPlanningError(RuntimeError):
@@ -141,7 +142,9 @@ class StrengthPlan:
 
 @dataclass(frozen=True, slots=True)
 class StrengthExecutionTiming:
-    settle_frames: int = 60
+    # One push includes the engine's dust animation. At 60 frames the target
+    # boulder is transiently unavailable; 120 reaches restored sprite state.
+    settle_frames: int = 120
     max_step_attempts: int = 4
     max_readiness_waits: int = 12
 
@@ -167,8 +170,9 @@ class StrengthPushReceipt:
     player_after: Coordinate
     boulder_before: Coordinate
     boulder_after: Coordinate
-    first_attempt_unchanged: bool
-    first_attempt_flag_observed: bool
+    player_stationary: bool
+    pushed_flag_observed: bool
+    engine_attempt_cost: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -209,10 +213,11 @@ class Gen1StrengthExecutor:
         for ordinal, step in enumerate(plan.steps, start=1):
             self._wait_ready(map_id, step.source, protected)
             if step.kind == "walk":
-                self._execute_walk(map_id, step, protected)
+                self._execute_walk(map_id, ordinal, step, protected)
             else:
                 self._execute_push(map_id, ordinal, step, protected)
         terminal = self._observe_state(map_id)
+        self._wait_terminal_ready(map_id, terminal, protected)
         return StrengthExecutionReport(
             plan=plan,
             terminal=terminal,
@@ -225,6 +230,7 @@ class Gen1StrengthExecutor:
     def _execute_walk(
         self,
         map_id: int,
+        ordinal: int,
         step: StrengthStep,
         protected: tuple[object, ...],
     ) -> None:
@@ -235,7 +241,10 @@ class Gen1StrengthExecutor:
                 return
             if current != step.source:
                 raise StrengthPlanningError("walk changed a different Strength state")
-        raise StrengthPlanningError("walk exhausted its acknowledgement budget")
+        raise StrengthPlanningError(
+            f"walk step {ordinal} {step.direction.value} from {step.source.player_at} "
+            "exhausted its acknowledgement budget"
+        )
 
     def _execute_push(
         self,
@@ -249,19 +258,18 @@ class Gen1StrengthExecutor:
         after_boulder = _boulder_at(step.result, step.boulder_index)
 
         self._pulse_direction(step.direction)
-        after_first = self._checked_state(map_id, protected)
-        first_flag = bool(
-            self.memory.read_u8(RamAddress.MISC_FLAGS) & TRIED_PUSH_BOULDER_MASK
+        after_push = self._checked_state(map_id, protected)
+        pushed_flag = bool(
+            self.memory.read_u8(RamAddress.MISC_FLAGS) & PUSHED_BOULDER_MASK
         )
-        if after_first != step.source:
-            raise StrengthPlanningError("first Strength attempt changed the puzzle")
-        if not first_flag:
-            raise StrengthPlanningError("first Strength attempt lacked the engine tried-push flag")
-
-        self._pulse_direction(step.direction)
-        after_second = self._checked_state(map_id, protected)
-        if after_second != step.result:
-            raise StrengthPlanningError("second Strength attempt did not make the exact push")
+        if after_push != step.result:
+            raise StrengthPlanningError(
+                f"Strength push step {ordinal} did not make the exact state transition"
+            )
+        if not pushed_flag:
+            raise StrengthPlanningError(
+                f"Strength push step {ordinal} lacked the engine pushed-boulder flag"
+            )
         self.push_receipts.append(
             StrengthPushReceipt(
                 ordinal=ordinal,
@@ -271,8 +279,9 @@ class Gen1StrengthExecutor:
                 player_after=step.result.player_at,
                 boulder_before=before_boulder,
                 boulder_after=after_boulder,
-                first_attempt_unchanged=True,
-                first_attempt_flag_observed=True,
+                player_stationary=step.source.player_at == step.result.player_at,
+                pushed_flag_observed=True,
+                engine_attempt_cost=STRENGTH_PUSH_COST,
             )
         )
 
@@ -304,6 +313,26 @@ class Gen1StrengthExecutor:
             )
             self._waits += 1
         raise StrengthPlanningError("Strength execution exhausted its readiness budget")
+
+    def _wait_terminal_ready(
+        self,
+        map_id: int,
+        expected: StrengthState,
+        protected: tuple[object, ...],
+    ) -> None:
+        for _ in range(self.timing.max_readiness_waits + 1):
+            current = self._checked_state(map_id, protected)
+            if current != expected:
+                raise StrengthPlanningError(
+                    "Strength terminal state changed while waiting for readiness"
+                )
+            if self.reader.read_input_readiness().ready:
+                return
+            self.actions.execute(
+                MacroAction(MacroActionKind.WAIT, repeat=self.timing.settle_frames)
+            )
+            self._waits += 1
+        raise StrengthPlanningError("Strength terminal state did not restore input readiness")
 
     def _checked_state(
         self,
@@ -435,7 +464,9 @@ def _neighbors(
                 for item in state.boulders
             )
         )
-        following = StrengthState(adjacent, moved)
+        # Red moves the boulder but not the player. A repeated push therefore
+        # needs a separate ordinary walk into the newly vacated square.
+        following = StrengthState(state.player_at, moved)
         found.append(
             StrengthStep("push", direction, state, following, boulder.sprite_index)
         )

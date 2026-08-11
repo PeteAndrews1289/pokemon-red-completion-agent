@@ -64,6 +64,10 @@ _DIRECTION_DELTAS = {
     "left": (0, -1),
 }
 STRENGTH_ACTIVE_MASK = 1 << 0
+# The flag is set before Red has dismissed both Strength text boxes. Ordinary
+# input-readiness bytes are already clear at that point, so two acknowledged A
+# pulses are part of the live activation boundary rather than optional delay.
+STRENGTH_POST_FLAG_CONFIRMATIONS = 2
 
 
 class Gen1FieldMoveError(RuntimeError):
@@ -261,6 +265,7 @@ class Gen1FieldMovePort:
                 raise Gen1FieldMoveError("Strength changed the player's activation position")
             if (
                 self.memory.read_u8(RamAddress.STATUS_FLAGS_1) & STRENGTH_ACTIVE_MASK
+                and confirmations >= STRENGTH_POST_FLAG_CONFIRMATIONS
                 and self.reader.read_input_readiness().ready
             ):
                 _require_protected_field_state("Strength", before, after)

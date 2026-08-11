@@ -433,7 +433,7 @@ def test_field_port_activates_strength_and_acknowledges_the_exact_live_flag() ->
     assert receipt.source_at == (0, 1)
     assert receipt.party_index == 0
     assert receipt.submenu_row == 1
-    assert receipt.confirmation_count == 1
+    assert receipt.confirmation_count == 2
     assert not receipt.already_active
     assert world.status_flags_1 & 1
     assert port.strength_receipts == [receipt]
