@@ -521,7 +521,7 @@ def main(argv: list[str] | None = None) -> int:
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     print(
-        f"wrote {args.out}: Cut {candidate.block_before:#04x}->{candidate.block_after:#04x} "
+        f"wrote {args.out}: Cut {candidate.before_block:#04x}->{candidate.after_block:#04x} "
         f"at {candidate.block_at}, crossed {candidate.target_at}, returned to Celadon Center"
     )
     return 0
