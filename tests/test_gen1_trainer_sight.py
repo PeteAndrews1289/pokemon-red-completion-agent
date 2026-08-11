@@ -85,6 +85,14 @@ def test_object_and_header_reads_join_independent_cartridge_structures() -> None
     )
 
 
+def test_scripted_trainer_objects_do_not_require_sight_headers() -> None:
+    rom = trainer_cartridge()
+    for direction_offset in (8, 16, 24):
+        rom[OBJECTS + direction_offset] = 0xFF
+
+    assert trainer_headers(bytes(rom), {0}) == ()
+
+
 def test_header_candidate_requires_the_real_stride_and_sentinel() -> None:
     mutated = trainer_cartridge()
     mutated[TRAINERS + 24] = 0

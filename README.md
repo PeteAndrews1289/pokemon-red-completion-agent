@@ -75,9 +75,11 @@
 > reruns. No numeric feature schema is frozen and no navigation model is claimed. See the
 > [experiment-design audit](docs/strategic-experiment-design-audit-2026-08-11.md).
 > The short-scenario harness is now implemented: exact capture/source assignment, read-only
-> all-candidate preflight, record-before-movement execution and strict one-decision reload. It has
-> not yet run live, so authenticated scenario rows remain **0** and collection stays closed. The 12
-> test situations remain sealed.
+> all-candidate preflight, record-before-movement execution and strict one-decision reload.
+> Published source `2f3199e` produced the first exact private checkpoint at Cerulean, but its
+> read-only preflight correctly opened no episode when a scripted rival exposed a missing
+> trainer-sight distinction. That repair is pending publication and exact-commit CI; authenticated
+> scenario rows remain **0**, collection stays closed, and the 12 test situations remain sealed.
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),

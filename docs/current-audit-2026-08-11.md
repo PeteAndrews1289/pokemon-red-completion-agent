@@ -1,5 +1,22 @@
 # Current capability and code audit — 2026-08-11
 
+## First live short-scenario boundary
+
+Published source `2f3199e` passed CI, and the proven teacher produced a private authenticated
+checkpoint at 36/312, “Reached Cerulean City.” Its seven verified objectives exactly equal scenario
+001's preregistered frontier. The state was not opened as an episode.
+
+The read-only preflight then found a real adapter error before any route choice: Cerulean's scripted
+rival has the object trainer bit but no standard line-of-sight header. The cartridge distinguishes
+it with special facing/movement byte `$FF`. The repaired projector requests headers only for the
+four ordinary trainer facings and leaves special encounters to map scripts; a mutation-resistant
+regression covers the all-scripted case. Cartridge read errors are also contained by the command's
+path-withholding failure boundary.
+
+This is useful live falsification, not a scenario row. The repair must be committed, pushed and
+green before the same frozen checkpoint may be retried. Authenticated live contexts remain zero,
+collection is closed, and all 12 test situations remain sealed.
+
 ## Scenario redesign implementation update
 
 The experiment-design gate now exists in code. Candidate-order-invariant fingerprints collapse

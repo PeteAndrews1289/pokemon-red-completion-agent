@@ -37,6 +37,7 @@ from pokemon_red_completion.executor import (  # noqa: E402
     CountingExecutor,
     FrameSafeExecutor,
 )
+from pokemon_red_completion.gen1_cartridge import CartridgeReadError  # noqa: E402
 from pokemon_red_completion.gen1_field_moves import (  # noqa: E402
     Gen1FieldMoveError,
     Gen1FieldMovePort,
@@ -372,6 +373,7 @@ def main(argv: list[str] | None = None) -> int:
         payload = _run(args)
     except (
         CapturedProgressError,
+        CartridgeReadError,
         CollectionProtocolError,
         EmulatorError,
         EvaluationIdentityError,

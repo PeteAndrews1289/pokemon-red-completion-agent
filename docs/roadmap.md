@@ -45,10 +45,13 @@ Implementation status:
    to the exact registry row, committed source/execution, private checkpoint envelope and state
    digest. The one-shot recorder writes the choice before movement, permits one outcome, and
    immediately reloads the sealed artifact to require exactly one successful decision.
-6. **Pending live evidence:** publish the source, run one read-only checkpoint preflight and one
-   uncounted learning-scenario execution, then build the remaining train/validation capture
-   inventory. Audit the 36 learning situations for uniqueness and the six validation baseline
-   disagreements. Keep all 12 test situations sealed until the final preregistered evaluation.
+6. **In live preflight:** published source `2f3199e` produced an authenticated private checkpoint at
+   scenario 001's exact Cerulean frontier. The first read-only attempt exposed a legitimate scripted
+   rival with no ordinary trainer-sight header; it opened no episode and consumed no assignment.
+   Publish the special-trainer repair, require green CI, rerun both candidate plans and execute one
+   uncounted learning scenario only if preflight is ready. Then build the remaining train/validation
+   capture inventory and audit the 36 learning situations for uniqueness and the six validation
+   baseline disagreements. Keep all 12 test situations sealed until final evaluation.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The registry still reports
 zero authenticated live contexts and `collection_open: false`; prospective rows do not satisfy the

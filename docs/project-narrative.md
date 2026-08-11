@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 11: the first short run stopped before taking a step
+
+The first exact scenario state came from the same proven teacher, stopped at checkpoint 36 of 312
+as Red entered Cerulean. Its authenticated progress contained precisely the seven facts scenario
+001 had committed to—no retrospective relabeling and no later Misty or Bill progress smuggled into
+the starting point.
+
+The read-only rehearsal still did not turn green. Cerulean's rival looks like a trainer in the map
+object table, but the cartridge marks it as a scripted encounter rather than an ordinary
+line-of-sight trainer. The new hazard projector had tested standard trainer tables thoroughly and
+had never asked what a legitimate trainer object with no such table meant. Live Red supplied the
+answer before the system moved or wrote an episode.
+
+The repair separates script-driven encounters from sight hazards using the cartridge's own facing
+encoding, adds the missing counterexample, and forces another published-source gate before retry.
+The scoreboard stays deliberately unchanged: **one exact private checkpoint, zero authenticated
+scenario rows, zero test scenarios opened**. The first useful result of the short-run harness was
+not a label. It was proving that “preflight” really meant the game could veto the abstraction.
+
 ## August 11: forty-eight questions, zero answers observed
 
 Stopping the duplicate campaign was useful only if the replacement could be made concrete. The

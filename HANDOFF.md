@@ -14,6 +14,36 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## First short-scenario checkpoint captured; preflight found a special-trainer gap — 2026-08-11
+
+Published commit `2f3199e` passed exact-commit CI. The qualified teacher was then replayed only to
+checkpoint 36/312, “Reached Cerulean City,” and wrote a private authenticated state whose objective
+frontier exactly matches scenario `red-strategic-scenario-v2-001-train`. No scenario episode was
+opened or consumed.
+
+The first read-only preflight failed before planning. Cerulean's scripted rival carries the object
+trainer bit but uses special movement/facing byte `$FF` and has no ordinary line-of-sight trainer
+header. The trainer-sight decoder treated that legitimate script-driven encounter as a corrupt
+zero-table result. The repair now asks for sight headers only from trainer objects whose cartridge
+facing is one of the four supported line-of-sight directions; scripted trainer objects remain for
+their map script rather than becoming route hazards. A regression turns every fixture trainer into
+the scripted form and requires an empty header set. The command also now catches cartridge-decoder
+errors at its privacy boundary instead of exposing a private traceback.
+
+Because the repair changes executable source, the read-only preflight cannot be retried from a
+dirty checkout. Regenerated prospective identities are source bundle
+`24db34ae9a9c5c4618899fe62758813b85df9732a0a99559c503f4d80406eb34`, battle registry
+`b4e16d8d45b588809782b6ee0e597bd39b64561242ba4d33f8e91619680686e6`, historical strategic
+registry `e984a74d8b64272a5f2001a4d9f0d65ac2bee6e2a65dbf30fc1a7e5de4f0fae6` and historical
+strategic teacher execution `0fd75b19c0dd718c5cc98114c4ee2ad690be8e51ed66d109a0c5a1c53f78071a`.
+The v2 scenario registry remains
+`c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7`.
+
+Immediate sequence: pass the complete local gate, commit and push this repair, require exact-commit
+green CI, rerun scenario 001 in read-only mode from the existing private capture, and execute the
+one-shot uncounted rehearsal only if both candidate routes pass. Authenticated live contexts remain
+zero, collection remains closed and all 12 test scenarios remain sealed.
+
 ## Short-scenario rehearsal boundary implemented — 2026-08-11
 
 The next execution boundary is implemented but not live-qualified. A new uncounted rehearsal

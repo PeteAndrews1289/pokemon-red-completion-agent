@@ -118,7 +118,16 @@ def trainer_headers(rom: bytes, map_ids: Collection[int]) -> tuple[TrainerHeader
 
     found: list[TrainerHeader] = []
     for map_id in sorted(set(map_ids)):
-        events = tuple(event for event in map_object_events(rom, {map_id}) if event.is_trainer)
+        # The trainer bit also marks scripted encounters such as the Cerulean
+        # rival.  Those objects use a special movement/facing byte and are
+        # engaged by map script, not by an ordinary line-of-sight header.
+        # Only cartridge facings understood by the sight engine can therefore
+        # require a trainer-header table.
+        events = tuple(
+            event
+            for event in map_object_events(rom, {map_id})
+            if event.is_trainer and event.direction_or_range in _OBJECT_FACING
+        )
         if not events:
             continue
         found.extend(_trainer_headers_for_map(rom, map_id, events))

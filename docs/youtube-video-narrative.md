@@ -41,6 +41,16 @@ and an immediate manifest reload. Keep the twelve test cards face down. The line
 is useful only if it is as hard to relabel or rerun as the full experiment.”** Until a live episode
 passes, label this panel **HARNESS BUILT / LIVE ROWS 0**.
 
+### First live beat: zero steps was the correct result
+
+Show the teacher stopping at **36/312 — REACHED CERULEAN CITY**, then lock the exact seven-objective
+frontier to scenario 001. On the candidate-planning screen, stop before either route appears. Zoom
+into the rival object: **TRAINER BIT / SCRIPTED FACING `$FF` / NO SIGHT HEADER**. The hazard decoder
+had assumed every trainer-marked object used the ordinary line-of-sight system; the cartridge
+disagreed. Keep the episode counter at zero and say: **“The safest run was the one that refused to
+take its first step.”** Then show the special-trainer regression, a new source fingerprint and CI
+gate before the same frozen checkpoint can be retried.
+
 ### Twist: nine labels were only three questions
 
 After celebrating the repaired rehearsal, stack the three successful historical train roots. Show
