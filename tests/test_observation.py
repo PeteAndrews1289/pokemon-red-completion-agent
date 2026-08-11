@@ -95,6 +95,15 @@ class BankedRecordingMemory(RecordingMemory):
         return self.cartridge_values.get((bank, address), 0)
 
 
+def test_retained_outside_map_uses_the_engine_wlastmap_byte() -> None:
+    # Literal address is independent of RamAddress so a shifted production
+    # constant cannot change both the implementation and fixture together.
+    memory = RecordingMemory({0xD365: MapId.ROUTE_7})
+
+    assert PokemonRedStateReader(memory).read_retained_outside_map() == MapId.ROUTE_7
+    assert memory.reads == [0xD365]
+
+
 def test_visible_map_objects_use_the_engine_unavailable_marker_and_live_coordinates() -> None:
     # Literal upstream addresses are intentional: deriving this fixture from
     # RamAddress would let a wrong production constant change both sides of

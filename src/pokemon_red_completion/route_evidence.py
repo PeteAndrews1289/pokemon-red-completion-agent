@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from collections.abc import Callable
 from pathlib import Path
 
@@ -99,6 +100,51 @@ def public_route_execution(report: RouteExecutionReport) -> dict[str, object]:
         "terminal_map_id": report.terminal.map_id,
         "terminal_yx": list(report.terminal.at),
         "terminal_ready": report.terminal.ready,
+        "terminal_last_outside_map_id": report.terminal.last_outside_map,
+    }
+
+
+def public_route_plan_summary(
+    plan: RoutePlan,
+    *,
+    map_name: Callable[[int], str],
+) -> dict[str, object]:
+    """Compact a long plan while retaining a digest of its full projection."""
+
+    full = public_route_plan(plan, map_name=map_name)
+    return {
+        "schema": "route-plan-summary-v1",
+        "maps": full["maps"],
+        "map_ids": full["map_ids"],
+        "start_yx": full["start_yx"],
+        "terminal_yx": full["terminal_yx"],
+        "route_cost": plan.cost,
+        "route_steps": len(plan.steps),
+        "map_transitions": len(plan.segments),
+        "full_projection_sha256": _canonical_sha256(full),
+    }
+
+
+def public_route_execution_summary(
+    report: RouteExecutionReport,
+) -> dict[str, object]:
+    """Compact a long execution while retaining hashes of all acknowledgements."""
+
+    full = public_route_execution(report)
+    return {
+        "schema": "route-execution-summary-v1",
+        "passed": full["passed"],
+        "movement_requests": full["movement_requests"],
+        "wait_actions": full["wait_actions"],
+        "acknowledged_steps": full["acknowledged_steps"],
+        "interruptions": full["interruptions"],
+        "replans": full["replans"],
+        "terminal_map_id": full["terminal_map_id"],
+        "terminal_yx": full["terminal_yx"],
+        "terminal_ready": full["terminal_ready"],
+        "terminal_last_outside_map_id": full["terminal_last_outside_map_id"],
+        "executed_steps_sha256": _canonical_sha256(full["steps"]),
+        "full_projection_sha256": _canonical_sha256(full),
     }
 
 
@@ -106,3 +152,13 @@ def _artifact_identity(path: Path) -> tuple[bool, str | None]:
     if not path.exists():
         return False, None
     return True, hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _canonical_sha256(value: object) -> str:
+    encoded = json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=True,
+    ).encode("ascii")
+    return hashlib.sha256(encoded).hexdigest()

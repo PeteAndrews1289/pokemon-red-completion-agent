@@ -63,6 +63,7 @@ class Gen1TraversalObserver:
             hazards=hazards,
             capabilities=gen1_story_capabilities(raw),
             resources=(gen1_repel_resource(raw),),
+            last_outside_map=self.reader.read_retained_outside_map(),
         )
 
 

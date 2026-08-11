@@ -30,6 +30,7 @@ class FakeWorld:
     occupied: frozenset[tuple[int, int]] = frozenset()
     hazards: tuple[TraversalHazard, ...] = ()
     resources: tuple[TraversalResource, ...] = ()
+    last_outside_map: int | None = None
     transitions: dict[tuple[int, tuple[int, int], str], tuple[int, tuple[int, int]]] = field(
         default_factory=dict
     )
@@ -95,6 +96,7 @@ class FakeWorld:
             occupied=self.occupied,
             hazards=self.hazards,
             resources=self.resources,
+            last_outside_map=self.last_outside_map,
         )
 
 
@@ -480,6 +482,7 @@ def test_repeated_live_blocking_replans_around_the_discovered_square() -> None:
     }
     initial = plan_route(macro, local, 1, (0, 0), 2)
     world = FakeWorld(
+        last_outside_map=9,
         transitions={
             (1, (0, 0), "down"): (1, (1, 0)),
             (1, (1, 0), "right"): (1, (1, 1)),
@@ -490,6 +493,7 @@ def test_repeated_live_blocking_replans_around_the_discovered_square() -> None:
     )
 
     def replan(request: ReplanRequest) -> RoutePlan:
+        assert request.current.last_outside_map == 9
         return plan_route(
             macro,
             local,
@@ -497,6 +501,7 @@ def test_repeated_live_blocking_replans_around_the_discovered_square() -> None:
             request.current.at,
             request.goal_map,
             blocked=request.blocked,
+            last_outside=request.current.last_outside_map,
         )
 
     report = execute_route(initial, world, world, replanner=replan)

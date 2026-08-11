@@ -239,6 +239,7 @@ def _replanner(macro: MacroGraph, local_graphs: dict[int, LocalGraph]):
             request.current.at,
             request.goal_map,
             blocked=request.blocked,
+            last_outside=request.current.last_outside_map,
             start_mode=request.current.mode,
             goal_at=request.goal_at,
             goal_mode=LAND_MODE,

@@ -108,6 +108,7 @@ class RamAddress(IntEnum):
     PLAYER_X = 0xD362
     Y_BLOCK_COORD = 0xD363
     X_BLOCK_COORD = 0xD364
+    LAST_MAP = 0xD365
     CURRENT_MAP_TILESET = 0xD367
     CURRENT_MAP_HEIGHT = 0xD368
     CURRENT_MAP_WIDTH = 0xD369
@@ -4279,6 +4280,16 @@ class PokemonRedStateReader:
             raise OverworldMovementModeError(
                 f"unsupported overworld movement mode {raw}"
             ) from error
+
+    def read_retained_outside_map(self) -> int:
+        """Read Gen I's live ``wLastMap`` return-warp context.
+
+        Despite the historical name, this byte is retained across nested
+        interiors and records the outside map to which a ``$FF`` warp returns.
+        It is therefore route state, not merely diagnostic previous-map data.
+        """
+
+        return self._memory.read_u8(RamAddress.LAST_MAP)
 
     def read_pewter_chapter_state(self, raw: RawGameState) -> PewterChapterState:
         """Translate route, script, battle, and badge evidence into one phase."""

@@ -6,7 +6,9 @@ from pokemon_red_completion.global_router import MacroGraph
 from pokemon_red_completion.local_router import LocalEdge, LocalGraph
 from pokemon_red_completion.route_evidence import (
     public_route_execution,
+    public_route_execution_summary,
     public_route_plan,
+    public_route_plan_summary,
     rom_adjacent_artifacts,
 )
 from pokemon_red_completion.route_executor import (
@@ -72,6 +74,44 @@ def test_public_route_projection_preserves_plan_and_acknowledgement_contract() -
         "terminal_map_id": 7,
         "terminal_yx": [0, 1],
         "terminal_ready": True,
+        "terminal_last_outside_map_id": None,
+    }
+    plan_summary = public_route_plan_summary(
+        plan,
+        map_name=lambda value: f"map-{value}",
+    )
+    assert plan_summary == {
+        "schema": "route-plan-summary-v1",
+        "maps": ["map-7"],
+        "map_ids": [7],
+        "start_yx": [0, 0],
+        "terminal_yx": [0, 1],
+        "route_cost": 1,
+        "route_steps": 1,
+        "map_transitions": 0,
+        "full_projection_sha256": (
+            "a410da5fe6cdb459022e1de5745c062e7efcbbffaaa7f360885b114c97534c9a"
+        ),
+    }
+    execution_summary = public_route_execution_summary(report)
+    assert execution_summary == {
+        "schema": "route-execution-summary-v1",
+        "passed": True,
+        "movement_requests": 1,
+        "wait_actions": 2,
+        "acknowledged_steps": 1,
+        "interruptions": [],
+        "replans": [],
+        "terminal_map_id": 7,
+        "terminal_yx": [0, 1],
+        "terminal_ready": True,
+        "terminal_last_outside_map_id": None,
+        "executed_steps_sha256": (
+            "f9f6fd75015dc7d523481539d30cadf56abce917076df8dc5b07574147b2dcf8"
+        ),
+        "full_projection_sha256": (
+            "a628a077619c252c0f2a7562cc7010db0ca275714759d59eba758e230c8795db"
+        ),
     }
 
 

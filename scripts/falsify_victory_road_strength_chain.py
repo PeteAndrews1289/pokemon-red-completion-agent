@@ -367,7 +367,7 @@ def _compose_live_passage(
             goal_at=request.goal_at,
             blocked=request.blocked,
             capabilities=request.current.capabilities,
-            last_outside=int(MapId.ROUTE_23),
+            last_outside=request.current.last_outside_map,
         )
 
     return plan, replan

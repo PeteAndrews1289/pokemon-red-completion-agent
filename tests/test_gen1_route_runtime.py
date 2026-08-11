@@ -32,6 +32,7 @@ class FakeReader:
     occupied: frozenset[tuple[int, int]] = frozenset()
     occupancy_reads: int = 0
     trainer_engagement: bool = False
+    retained_outside_map: int = MapId.VIRIDIAN_CITY
 
     def read(self) -> RawGameState:
         return self.raw
@@ -54,6 +55,9 @@ class FakeReader:
 
     def trainer_engagement_active(self) -> bool:
         return self.trainer_engagement
+
+    def read_retained_outside_map(self) -> int:
+        return self.retained_outside_map
 
 
 @dataclass
@@ -92,6 +96,7 @@ def test_observer_keeps_coordinates_game_neutral_and_marks_wild_battle() -> None
         mode="land",
         occupied=frozenset(),
         resources=(TraversalResource("encounter_suppression", 0, 0),),
+        last_outside_map=MapId.VIRIDIAN_CITY,
     )
     assert fake.occupancy_reads == 0, "overworld sprite RAM is not decoded during battle"
 
@@ -103,6 +108,14 @@ def test_observer_projects_current_visible_object_occupancy() -> None:
 
     assert observed.occupied == frozenset({(7, 7), (9, 8)})
     assert fake.occupancy_reads == 1
+
+
+def test_observer_projects_live_nested_return_context() -> None:
+    fake = FakeReader(raw(), retained_outside_map=MapId.ROUTE_7)
+
+    observed = Gen1TraversalObserver(reader_as_real(fake)).observe()
+
+    assert observed.last_outside_map == MapId.ROUTE_7
 
 
 def test_observer_projects_only_observed_open_story_capabilities() -> None:

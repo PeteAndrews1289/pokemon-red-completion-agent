@@ -55,6 +55,7 @@ class TraversalSnapshot:
     hazards: tuple[TraversalHazard, ...] = ()
     capabilities: frozenset[str] = frozenset()
     resources: tuple[TraversalResource, ...] = ()
+    last_outside_map: int | None = None
 
 
 @dataclass(frozen=True, slots=True)

@@ -174,7 +174,6 @@ def _replanner(
     local_graphs: dict[int, LocalGraph],
     *,
     capabilities: frozenset[str],
-    last_outside: int | None = None,
     goal_mode: str | None = None,
 ):
     def replan(request: ReplanRequest) -> RoutePlan:
@@ -186,7 +185,7 @@ def _replanner(
             request.goal_map,
             blocked=request.blocked,
             capabilities=capabilities,
-            last_outside=last_outside,
+            last_outside=request.current.last_outside_map,
             start_mode=request.current.mode,
             goal_at=request.goal_at,
             goal_mode=goal_mode,
@@ -305,7 +304,6 @@ def main(argv: list[str] | None = None) -> int:
                 macro,
                 local_graphs,
                 capabilities=frozenset(),
-                last_outside=island,
                 goal_mode=LAND_MODE,
             ),
             limits=limits,
