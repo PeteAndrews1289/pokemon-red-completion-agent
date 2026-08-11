@@ -106,25 +106,32 @@ Strategic navigation now has a durable, fail-closed data seam at source `f43219d
 deterministic planner retains exact directions. The model-facing view contains a reviewed
 cross-title tag vocabulary, candidate
 availability and route costs, but no map ids, coordinates, destination names or arrow labels.
-Every decision must join to exactly one outcome. Successful teacher choices can become imitation
-targets, route failures remain negative outcome evidence, and external power loss remains censored
-rather than being rerun or mislabeled. Whole-lineage split audits and the authenticated private
-trajectory writer/reader are implemented. The honest dataset count is still **zero collected
-train/validation strategic decisions**. One unassigned live calibration now proves the binding
-seam: two real safe hubs cost 15 and 87, the lower-cost Pallet route reached home after 14/14
-acknowledged movements, and its model-facing record contains no route identity or arrow label. See
-the [calibration receipt](evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json). The
-numeric feature schema is deliberately not frozen.
+Every decision must join to exactly one outcome. Only successful deterministic-teacher choices can
+become imitation targets; successful learned actions and route failures remain outcome evidence,
+and external power loss remains censored rather than being rerun or mislabeled. Whole-lineage split
+audits, authenticated private trajectory loading, semantic outcome retention, coverage summaries,
+and route-cost/shape baselines are implemented. The honest dataset count is still **zero collected
+train/validation strategic decisions**. Two unassigned live calibrations now prove the binding seam.
+The first offered two safe hubs at costs 15/87 and reached home after 14/14 acknowledged movements.
+The second offered Koga's Gym (`challenge`) and the Warden/Strength objective (`acquire_resource`)
+at costs 21/24; qualified completion order selected the Gym and reached it after 20/20 acknowledged
+movements with zero replans. See the
+[safe-hub receipt](evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json) and
+[genuine-branch receipt](evidence/fuchsia-strategic-objective-route-probe-2026-08-11.json). Both are
+promotion-ineligible, the second still agrees with minimum route cost, and the numeric feature
+schema is deliberately not frozen.
 
 This closes one real story predicate and the named Victory Road resource/inter-room gaps, not every
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
 completion teacher's post-final-switch exit remains authored. The ordered gates are now:
 
-1. Instrument real multi-candidate destination branches in generated teacher routes and collect
-   separate train and validation lineages. Keep successes, route failures and external
-   interruptions; never invent a choice merely to increase the denominator.
-2. Audit candidate/tag/outcome coverage, selected-index shape baselines and split leakage. Freeze a
-   normalized numeric feature schema only after the observed data proves which distinctions exist.
+1. Instrument real multi-candidate destination branches across independent generated-teacher roots,
+   deliberately including cases where semantic value makes the teacher reject the cheapest route.
+   Assign whole roots to train or untouched validation before collection. Keep successes, route
+   failures and external interruptions; never invent a choice merely to increase the denominator.
+2. Run the implemented candidate/tag/outcome, selected-index shape, route-cost and split-leakage
+   audits on those authenticated episodes. Freeze a normalized numeric feature schema only after
+   the observed data proves which distinctions exist.
 3. Train and compare a shared candidate scorer against route-cost and candidate-shape baselines,
    then require shadow and fresh causal qualifications with no teacher fallback.
 4. Close the remaining completion-routing admission gaps: shared menu/script recovery, additional

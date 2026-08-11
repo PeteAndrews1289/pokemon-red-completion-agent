@@ -1,0 +1,975 @@
+{
+  "schema": "fuchsia-strategic-objective-route-probe-v1",
+  "recorded_on": "2026-08-11",
+  "status": "ok",
+  "source": {
+    "git_commit": "ba2c224f89d621fca6ef45a88fcff2e0d0880738",
+    "worktree_dirty": false
+  },
+  "executable_source_bundle_sha256": "beb4bbd8151886588953f085d82dcc09423a02279fd0f6754b60656014f2e4c8",
+  "rom": {
+    "title": "POKEMON RED",
+    "size_bytes": 1048576,
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+  },
+  "capture": {
+    "schema": "pokemon-private-captured-progress-v1",
+    "state_sha256": "432255cb0eaa9c7abdf4238570defe1e9497d7d03cd1ff03af201808d72cf7ee",
+    "checkpoint_id": "portable_loop_obtain_surf_terminal",
+    "checkpoint_label": "Portable loop completed obtain_surf",
+    "checkpoints_completed": 198,
+    "checkpoints_total": 312,
+    "verified_objective_ids": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter",
+      "receive_pokedex",
+      "reach_pewter",
+      "defeat_brock",
+      "reach_cerulean",
+      "help_bill",
+      "defeat_misty",
+      "reach_vermilion",
+      "obtain_cut",
+      "defeat_surge",
+      "reach_lavender",
+      "reach_celadon",
+      "clear_rocket_hideout",
+      "obtain_silph_scope",
+      "rescue_fuji",
+      "reach_fuchsia",
+      "obtain_surf"
+    ]
+  },
+  "authority_under_test": "The qualified teacher selected between two executable progression destinations. Cartridge-derived geometry bound the selected destination to an exact plan, and the game-neutral executor required live acknowledgement for every movement.",
+  "selection_rule": "qualified completion-teacher objective order",
+  "candidate_plans": {
+    "pokemon.red:destination:fuchsia_gym": {
+      "maps": [
+        "FUCHSIA_POKECENTER",
+        "FUCHSIA_CITY",
+        "FUCHSIA_GYM"
+      ],
+      "map_ids": [
+        154,
+        7,
+        157
+      ],
+      "start_yx": [
+        3,
+        3
+      ],
+      "terminal_yx": [
+        17,
+        4
+      ],
+      "actions": [
+        "down",
+        "down",
+        "down",
+        "down",
+        "down",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "up"
+      ],
+      "segments": [
+        {
+          "source_map": "FUCHSIA_POKECENTER",
+          "source_map_id": 154,
+          "target_map": "FUCHSIA_CITY",
+          "target_map_id": 7,
+          "approach_coordinates_yx": [
+            [
+              3,
+              3
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              7,
+              3
+            ]
+          ],
+          "actions": [
+            "down",
+            "down",
+            "down",
+            "down",
+            "down"
+          ],
+          "transition": {
+            "exit_yx": [
+              7,
+              3
+            ],
+            "arrival_yx": [
+              28,
+              19
+            ],
+            "action": "down",
+            "action_in_approach": false
+          }
+        },
+        {
+          "source_map": "FUCHSIA_CITY",
+          "source_map_id": 7,
+          "target_map": "FUCHSIA_GYM",
+          "target_map_id": 157,
+          "approach_coordinates_yx": [
+            [
+              28,
+              19
+            ],
+            [
+              28,
+              18
+            ],
+            [
+              28,
+              17
+            ],
+            [
+              28,
+              16
+            ],
+            [
+              28,
+              15
+            ],
+            [
+              28,
+              14
+            ],
+            [
+              28,
+              13
+            ],
+            [
+              28,
+              12
+            ],
+            [
+              28,
+              11
+            ],
+            [
+              28,
+              10
+            ],
+            [
+              28,
+              9
+            ],
+            [
+              28,
+              8
+            ],
+            [
+              28,
+              7
+            ],
+            [
+              28,
+              6
+            ],
+            [
+              28,
+              5
+            ],
+            [
+              27,
+              5
+            ]
+          ],
+          "actions": [
+            "left",
+            "left",
+            "left",
+            "left",
+            "left",
+            "left",
+            "left",
+            "left",
+            "left",
+            "left",
+            "left",
+            "left",
+            "left",
+            "left",
+            "up"
+          ],
+          "transition": {
+            "exit_yx": [
+              27,
+              5
+            ],
+            "arrival_yx": [
+              17,
+              4
+            ],
+            "action": "up",
+            "action_in_approach": true
+          }
+        }
+      ]
+    },
+    "pokemon.red:destination:warden_house": {
+      "maps": [
+        "FUCHSIA_POKECENTER",
+        "FUCHSIA_CITY",
+        "WARDENS_HOUSE"
+      ],
+      "map_ids": [
+        154,
+        7,
+        155
+      ],
+      "start_yx": [
+        3,
+        3
+      ],
+      "terminal_yx": [
+        7,
+        4
+      ],
+      "actions": [
+        "down",
+        "down",
+        "down",
+        "down",
+        "down",
+        "down",
+        "down",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "up",
+        "up",
+        "left",
+        "left",
+        "left",
+        "up"
+      ],
+      "segments": [
+        {
+          "source_map": "FUCHSIA_POKECENTER",
+          "source_map_id": 154,
+          "target_map": "FUCHSIA_CITY",
+          "target_map_id": 7,
+          "approach_coordinates_yx": [
+            [
+              3,
+              3
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              7,
+              3
+            ]
+          ],
+          "actions": [
+            "down",
+            "down",
+            "down",
+            "down",
+            "down"
+          ],
+          "transition": {
+            "exit_yx": [
+              7,
+              3
+            ],
+            "arrival_yx": [
+              28,
+              19
+            ],
+            "action": "down",
+            "action_in_approach": false
+          }
+        },
+        {
+          "source_map": "FUCHSIA_CITY",
+          "source_map_id": 7,
+          "target_map": "WARDENS_HOUSE",
+          "target_map_id": 155,
+          "approach_coordinates_yx": [
+            [
+              28,
+              19
+            ],
+            [
+              29,
+              19
+            ],
+            [
+              30,
+              19
+            ],
+            [
+              30,
+              20
+            ],
+            [
+              30,
+              21
+            ],
+            [
+              30,
+              22
+            ],
+            [
+              30,
+              24
+            ],
+            [
+              30,
+              25
+            ],
+            [
+              30,
+              26
+            ],
+            [
+              30,
+              27
+            ],
+            [
+              30,
+              28
+            ],
+            [
+              30,
+              29
+            ],
+            [
+              30,
+              30
+            ],
+            [
+              29,
+              30
+            ],
+            [
+              28,
+              30
+            ],
+            [
+              28,
+              29
+            ],
+            [
+              28,
+              28
+            ],
+            [
+              28,
+              27
+            ],
+            [
+              27,
+              27
+            ]
+          ],
+          "actions": [
+            "down",
+            "down",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "right",
+            "up",
+            "up",
+            "left",
+            "left",
+            "left",
+            "up"
+          ],
+          "transition": {
+            "exit_yx": [
+              27,
+              27
+            ],
+            "arrival_yx": [
+              7,
+              4
+            ],
+            "action": "up",
+            "action_in_approach": true
+          }
+        }
+      ]
+    }
+  },
+  "selected_destination": "pokemon.red:destination:fuchsia_gym",
+  "selected_execution": {
+    "passed": true,
+    "movement_requests": 20,
+    "wait_actions": 2,
+    "acknowledged_steps": 20,
+    "steps": [
+      {
+        "source_map_id": 154,
+        "source_yx": [
+          3,
+          3
+        ],
+        "action": "down",
+        "expected_map_id": 154,
+        "expected_yx": [
+          4,
+          3
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 154,
+        "source_yx": [
+          4,
+          3
+        ],
+        "action": "down",
+        "expected_map_id": 154,
+        "expected_yx": [
+          5,
+          3
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 154,
+        "source_yx": [
+          5,
+          3
+        ],
+        "action": "down",
+        "expected_map_id": 154,
+        "expected_yx": [
+          6,
+          3
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 154,
+        "source_yx": [
+          6,
+          3
+        ],
+        "action": "down",
+        "expected_map_id": 154,
+        "expected_yx": [
+          7,
+          3
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 154,
+        "source_yx": [
+          7,
+          3
+        ],
+        "action": "down",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          19
+        ],
+        "kind": "return",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          19
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          18
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          18
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          17
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          17
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          16
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          16
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          15
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          15
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          14
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          14
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          13
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          13
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          12
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          12
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          11
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          11
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          10
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          10
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          9
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          9
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          8
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          8
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          7
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          7
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          6
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          6
+        ],
+        "action": "left",
+        "expected_map_id": 7,
+        "expected_yx": [
+          28,
+          5
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 7,
+        "source_yx": [
+          28,
+          5
+        ],
+        "action": "up",
+        "expected_map_id": 157,
+        "expected_yx": [
+          17,
+          4
+        ],
+        "kind": "warp",
+        "movement_requests": 1,
+        "interruption_count": 0
+      }
+    ],
+    "interruptions": [],
+    "replans": [],
+    "terminal_map_id": 157,
+    "terminal_yx": [
+      17,
+      4
+    ],
+    "terminal_ready": true
+  },
+  "final_map": {
+    "id": 157,
+    "name": "FUCHSIA_GYM"
+  },
+  "final_yx": [
+    17,
+    4
+  ],
+  "frames_executed": 720,
+  "controller_released": true,
+  "private_capture_unchanged": true,
+  "rom_adjacent_artifacts_unchanged": true,
+  "strategic_navigation": {
+    "scope": "unassigned genuine-branch calibration; excluded from model development",
+    "record": {
+      "schema": "strategic-navigation-record-v1",
+      "decision": {
+        "schema": "strategic-navigation-decision-v1",
+        "decision_id": "8016879f1105040995a15cfcc58ddedc9c0e23bce52eba7d9e015d9bd3c0a0a5",
+        "episode_id": "fuchsia-objective-branch-calibration-2026-08-11",
+        "decision_index": 0,
+        "root_lineage_id": "fuchsia-objective-branch-diagnostic-root",
+        "partition": "unassigned",
+        "provenance": {
+          "actor": "deterministic_teacher",
+          "policy_id": "qualified-objective-order-v1"
+        },
+        "semantic_need_tags": [
+          "advance_story",
+          "reach_next_challenge"
+        ],
+        "origin_semantic_tags": [
+          "overworld",
+          "safe_hub"
+        ],
+        "origin_region_ref": "pokemon.red:region:fuchsia",
+        "candidates": [
+          {
+            "destination_ref": "pokemon.red:destination:fuchsia_gym",
+            "binding_index": 0,
+            "semantic_tags": [
+              "challenge",
+              "story_progress"
+            ],
+            "availability": "available",
+            "route_cost": 21,
+            "route_steps": 20,
+            "map_transitions": 2,
+            "field_actions": 0,
+            "mode_changes": 0,
+            "unavailability_reason": null
+          },
+          {
+            "destination_ref": "pokemon.red:destination:warden_house",
+            "binding_index": 1,
+            "semantic_tags": [
+              "acquire_resource",
+              "story_progress"
+            ],
+            "availability": "available",
+            "route_cost": 24,
+            "route_steps": 23,
+            "map_transitions": 2,
+            "field_actions": 0,
+            "mode_changes": 0,
+            "unavailability_reason": null
+          }
+        ],
+        "selected_destination_ref": "pokemon.red:destination:fuchsia_gym",
+        "selected_index": 0
+      },
+      "outcome": {
+        "schema": "strategic-navigation-outcome-v1",
+        "decision_id": "8016879f1105040995a15cfcc58ddedc9c0e23bce52eba7d9e015d9bd3c0a0a5",
+        "selected_destination_ref": "pokemon.red:destination:fuchsia_gym",
+        "status": "succeeded",
+        "terminal_reached": true,
+        "movement_requests": 20,
+        "acknowledged_steps": 20,
+        "wait_actions": 2,
+        "replans": [],
+        "interruptions": [],
+        "resource_renewals": [],
+        "failure_reason": null
+      }
+    },
+    "identity_free_trajectory_decision": {
+      "schema_version": 1,
+      "decision_id": "8016879f1105040995a15cfcc58ddedc9c0e23bce52eba7d9e015d9bd3c0a0a5",
+      "episode_id": "fuchsia-objective-branch-calibration-2026-08-11",
+      "step_index": 0,
+      "snapshot": {
+        "schema_version": 1,
+        "game_id": "pokemon.red",
+        "mode": "overworld",
+        "location": null,
+        "facts": [
+          "need:advance_story",
+          "need:reach_next_challenge"
+        ],
+        "features": {
+          "candidate_count": 2
+        }
+      },
+      "snapshot_sha256": "158d05fb7cb79b2fd85f6bfb9b6a0bd9a0013a32dcf447efeba0c959d26bd0d7",
+      "context": {
+        "schema_version": 1,
+        "objective_id": null,
+        "policy_id": "qualified-objective-order-v1",
+        "actor": "deterministic_teacher",
+        "metadata": {
+          "skill_id": "pokemon.core.strategic-navigation.v1",
+          "root_lineage_id": "fuchsia-objective-branch-diagnostic-root",
+          "partition": "unassigned",
+          "strategic_decision_index": 0,
+          "policy_input": {
+            "schema": "strategic-navigation-policy-input-v1",
+            "semantic_need_tags": [
+              "advance_story",
+              "reach_next_challenge"
+            ],
+            "origin_semantic_tags": [
+              "overworld",
+              "safe_hub"
+            ],
+            "candidates": [
+              {
+                "binding_index": 0,
+                "semantic_tags": [
+                  "challenge",
+                  "story_progress"
+                ],
+                "availability": "available",
+                "route_cost": 21,
+                "route_steps": 20,
+                "map_transitions": 2,
+                "field_actions": 0,
+                "mode_changes": 0,
+                "unavailability_reason": null
+              },
+              {
+                "binding_index": 1,
+                "semantic_tags": [
+                  "acquire_resource",
+                  "story_progress"
+                ],
+                "availability": "available",
+                "route_cost": 24,
+                "route_steps": 23,
+                "map_transitions": 2,
+                "field_actions": 0,
+                "mode_changes": 0,
+                "unavailability_reason": null
+              }
+            ]
+          }
+        }
+      },
+      "decision_type": "strategic_navigation_selection",
+      "action": {
+        "kind": "select_destination",
+        "selected_candidate_index": 0
+      }
+    },
+    "identity_free_trajectory_outcome": {
+      "schema_version": 1,
+      "event_id": "8016879f1105040995a15cfcc58ddedc9c0e23bce52eba7d9e015d9bd3c0a0a5:outcome",
+      "episode_id": "fuchsia-objective-branch-calibration-2026-08-11",
+      "step_index": 20,
+      "kind": "strategic_navigation_outcome",
+      "payload": {
+        "decision_id": "8016879f1105040995a15cfcc58ddedc9c0e23bce52eba7d9e015d9bd3c0a0a5",
+        "selected_candidate_index": 0,
+        "status": "succeeded",
+        "terminal_reached": true,
+        "movement_requests": 20,
+        "acknowledged_steps": 20,
+        "wait_actions": 2,
+        "replans": [],
+        "interruptions": [],
+        "resource_renewals": [],
+        "failure_reason": null
+      }
+    },
+    "numeric_feature_schema_frozen": false,
+    "promotion_eligible": false
+  }
+}

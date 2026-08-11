@@ -48,13 +48,17 @@
 > semantic destinations from availability and route cost while the deterministic planner owns exact
 > movement. Decisions and outcomes survive in authenticated private trajectories; failures remain
 > negative evidence and power loss remains censored. No strategic navigation records have been
-> collected into train or validation yet. One unassigned live safe-hub calibration proves the
-> binding/recording seam; no numeric feature schema is frozen and no navigation model is claimed.
+> collected into train or validation yet. Two unassigned live calibrations prove the
+> binding/recording seam: a safe-hub plumbing check and a genuine Koga-vs-Strength progression
+> branch. The latter reached Fuchsia Gym after 20/20 acknowledged movements, but it is still one
+> promotion-ineligible root whose choice agrees with minimum route cost. No numeric feature schema
+> is frozen and no navigation model is claimed.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),
 > [navigation audit](docs/traversal-audit-2026-08-10.md), and
-> [strategic calibration](docs/evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json), plus the
+> [safe-hub calibration](docs/evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json) and
+> [genuine-branch calibration](docs/evidence/fuchsia-strategic-objective-route-probe-2026-08-11.json), plus the
 > [control route](docs/evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
 > [replanning route](docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json),
 > plus the [Surf round trip](docs/evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json) and
@@ -123,10 +127,12 @@ Acquisition knowledge now covers every ordinary retail route in Red and Blue: wi
 evolution, ten in-game trades and 30 scripted opportunities in each title. Either cartridge can
 reach 135 species alone or 139 with a trade partner. The new strategic-navigation data seam is
 ready to record genuine destination choices and their consumed outcomes without copying map
-identity or movement actions into policy input. One unassigned live calibration compared two
-safe-hub routes, selected cost 15 over cost 87 and acknowledged all 14 selected-plan movements.
-Train and validation still contain **0 strategic navigation decisions**; no numeric feature schema
-or navigation model exists.
+identity or movement actions into policy input. Two unassigned live calibrations now exercise it.
+The first compared safe-hub routes, selected cost 15 over 87 and acknowledged all 14 movements. The
+second compared a challenge route with an acquire-resource route, selected Koga's Gym at cost 21
+over the Warden at cost 24 and acknowledged all 20 selected-plan movements. Train and validation
+still contain **0 strategic navigation decisions**; no numeric feature schema or navigation model
+exists.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

@@ -52,7 +52,7 @@ referee then reobserves the cartridge instead of trusting a skill's success clai
 | Training action control | Learned five-action controller | Portable Blaine proof: 57,548 controlled battle/overworld decisions, 1,796 development battles, zero fallback | Candidate masks, hard safety gates, navigation and menu execution |
 | Trainee and venue strategy | Shared identity-free candidate scorer | 99.9004% sealed validation; isolated causal completion with 191 disagreements; portable Blaine completion and one clean-power Hall-of-Fame rehearsal with 400 disagreements | Still one uncounted fixed-route Red root; candidate eligibility and mechanics remain fixed |
 | Navigation mechanics | Deterministic cartridge-derived planner, title adapter and closed-loop executor | Multi-map land routes; Surf mode; live occupancy; repeated Cut; full Strength chain; trainer sight; one closed/open story gate; resource renewal; joint local/macro pricing | Completion teacher still owns most route invocation, menu/script recovery, special story objects and the final Indigo exit |
-| Strategic navigation choice | Data contract plus deterministic calibration teacher | Identity-free schema, reviewed vocabulary, authenticated join/lineage audit, and one unassigned live 2-candidate/14-step calibration | 0 train/validation choices; no frozen numeric features, model, shadow result or causal authority |
+| Strategic navigation choice | Data contract plus deterministic calibration teacher | Identity-free schema, reviewed vocabulary, authenticated join/lineage audit, collection baselines, and two unassigned live calibrations—one safe-hub plumbing check and one genuine 2-candidate/20-step progression branch | 0 train/validation choices; no frozen numeric features, model, shadow result or causal authority |
 | Collection planning | Typed deterministic planner plus cartridge-derived reachability | Exact ordinary retail reach: 135 species solo / 139 with a trade partner on each Red or Blue cartridge | No autonomous living-Pokédex execution, storage rotation, multi-save or trade orchestration yet |
 
 This table is the claim boundary. A model choosing an objective does not mean it navigated to the
@@ -106,10 +106,11 @@ Learned components are small authenticated artifacts loaded behind typed interfa
 Strategic *navigation* is the next learned seam, not an existing model. Its implemented contract
 ranks at least two semantic destinations from a reviewed cross-title vocabulary and route metrics.
 The authenticated trajectory stores the choice and one consumed outcome, but exact button actions,
-map ids, coordinates and destination bindings are excluded from policy input. Successful teacher
-routes may become imitation targets, route failures remain outcome evidence, and external power
-loss remains censored. One unassigned live safe-hub calibration proves binding and recording, but
-train and validation contain zero records, so a numeric feature schema would be premature.
+map ids, coordinates and destination bindings are excluded from policy input. Only successful
+deterministic-teacher routes may become imitation targets; learned-policy successes and route
+failures remain outcome evidence, and external power loss remains censored. Two unassigned live
+calibrations prove binding and recording, including a genuine Koga-vs-Strength branch, but train and
+validation contain zero records, so a numeric feature schema would be premature.
 
 The candidate ranker is deliberately permutation-equivariant. Its 27 normalized features exclude
 species IDs, move IDs, party-slot identity, map IDs, area names, memory addresses, and route

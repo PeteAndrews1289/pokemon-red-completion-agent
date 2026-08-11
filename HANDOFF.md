@@ -38,6 +38,13 @@ contained a mutable nested policy dictionary. Policy inputs and every candidate 
 recursively immutable after canonical parsing, with regressions that reject top-level and nested
 mutation.
 
+Collection-audit checkpoint `92a8b80` makes authenticated loaded episodes directly auditable,
+retains replan/interruption/resource/failure semantics after parsing, and reports partition
+leakage, coverage, outcomes, route-cost ranges and two simple baselines. It also closes a more
+important provenance bug: only a successful `deterministic_teacher` action can become a positive
+imitation target. A successful learned-policy action remains outcome evidence and cannot label
+itself as the teacher answer.
+
 Clean source `bf3fc76d8c571fd56acdb81da7aaed4fa97e5255` then proved the complete binding
 seam with one explicitly unassigned live calibration. From post-Pokédex Pallet, home and Viridian
 Center were both available safe hubs at costs 15/87 and 14/86 route steps. The lowest-cost teacher
@@ -46,15 +53,30 @@ and changed no ROM-adjacent artifact. The identity-free trajectory retained only
 metrics and selected index. Record:
 [pallet-strategic-safe-hub-route-probe-2026-08-11.json](docs/evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json).
 
+Clean source `ba2c224f89d621fca6ef45a88fcff2e0d0880738` then extracted the common route
+evidence projection and recorded the first genuine semantic branch from an authenticated
+post-Safari state. The two available candidates were Koga's Gym (`challenge`, `story_progress`,
+cost 21, 20 steps) and the Warden/Strength objective (`acquire_resource`, `story_progress`, cost 24,
+23 steps). Qualified completion order chose the Gym; the generic executor reached `FUCHSIA_GYM`
+after 20/20 acknowledged movements with zero replans, interruptions or resource renewals. The
+identity-free projection contains semantic needs, candidate metrics and selected index, but no
+destination binding, map id, coordinate or arrow action. Record:
+[fuchsia-strategic-objective-route-probe-2026-08-11.json](docs/evidence/fuchsia-strategic-objective-route-probe-2026-08-11.json).
+
 Do not overstate this milestone. There are **0 train/validation strategic navigation records**,
-one unassigned route-cost calibration, no frozen numeric feature schema and no strategic navigation
-model. The old `navigation_dataset.py` contains
+two unassigned calibrations (one trivial plumbing check and one genuine branch), no frozen numeric
+feature schema and no strategic navigation model. The Fuchsia choice also agrees with the
+minimum-route-cost baseline, so it cannot establish useful feature value by itself. The old
+`navigation_dataset.py` contains
 individual direction traces for control diagnostics only; its public summary now says so and stays
 `promotion_eligible: false`. The next work is to instrument genuine multi-destination branches in
-teacher/generated routes, preserve successes/failures/interruptions, then inspect coverage before
-choosing a numeric representation. Current prospective registry SHA is
-`defc6f4d4388140633b438c64fd49ebd25ec99c7e8b37c2170e6b4e906cd971f`; source bundle is
-`098b7004f6bf822164cf66d8d15b353313f95cb6e49681e4e38762d64233fd0e`.
+independent teacher/generated roots—especially decisions that reject the cheapest route—preserve
+successes/failures/interruptions, then inspect coverage before choosing a numeric representation.
+Current prospective registry SHA is
+`c7f5fc87371a0c3fc2fcf545dbd44d6626fd4b06fa5b1f02021dc17cde539f95`; source bundle is
+`beb4bbd8151886588953f085d82dcc09423a02279fd0f6754b60656014f2e4c8`; teacher execution is
+`4218e4318d5df03769d33a6f945ed58e3462a016d329a7730fb3bc3863f6783c`; slot assignment is
+`049c57918437a2000f4c7a5c87cfa56a709e4c75dc6bfa2e4125eb3f781b2809`.
 
 ## Ordinary Red/Blue acquisition reach is cartridge-complete — 2026-08-11
 

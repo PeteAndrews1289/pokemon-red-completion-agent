@@ -43,13 +43,18 @@ Show the three outcome lanes. Green: **SUCCESS → teacher-choice label + positi
 NOT RERUN**. Then show the dataset guardrails rejecting `viridian_city`, an extra destination
 identity field, a duplicated outcome and a split lineage that appears in both train and validation.
 
-End with the most important counter: **UNASSIGNED CALIBRATIONS: 1 / TRAIN: 0 / VALIDATION: 0**.
-Show the calibration choosing a cost-15 safe hub over a cost-87 one, then reaching home with 14/14
-movements acknowledged. Label it **PLUMBING PROOF — NOT TRAINING DATA**. The line is:
+End with the most important counter: **UNASSIGNED CALIBRATIONS: 2 / TRAIN: 0 / VALIDATION: 0**.
+Show the first calibration choosing a cost-15 safe hub over a cost-87 one, then reaching home with
+14/14 movements acknowledged. Label it **PLUMBING PROOF — NOT TRAINING DATA**. Then show the real
+branch: **KOGA'S GYM — CHALLENGE — COST 21** versus **WARDEN — ACQUIRE RESOURCE — COST 24**. The
+qualified teacher chooses the Gym and the generic executor reaches it after 20/20 acknowledged
+movements with zero replans. Label it **GENUINE BRANCH — STILL UNASSIGNED** and show that the choice
+also matches the cheapest-route baseline. The line is:
 **“This is not the navigation model. This is the point where I finally know what the navigation
 model should be asked to learn.”** The next episode collects genuine multi-destination choices,
-measures route-cost and candidate-shape baselines, freezes features only after observing coverage,
-then attempts shadow and causal control.
+especially cases where the right answer is not the cheapest route, measures route-cost and
+candidate-shape baselines, freezes features only after observing coverage, then attempts shadow and
+causal control.
 
 ## Resource episode: the route outlived its Repel
 

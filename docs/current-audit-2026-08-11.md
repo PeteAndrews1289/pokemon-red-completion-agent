@@ -11,10 +11,11 @@ two important knowledge/data boundaries:
    sequences.
 
 The agent is **not** yet a learned open-world Pokémon player. The completion teacher still owns most
-navigation invocation and title-specific mechanics. One explicitly unassigned live calibration now
-proves the strategic binding and recording seam, but train and validation still contain zero
-strategic navigation records. No numeric navigation feature schema is frozen, and no strategic
-navigation model has shadow or causal authority. Counted v95 remains **0/10**.
+navigation invocation and title-specific mechanics. Two explicitly unassigned live calibrations now
+prove the strategic binding and recording seam: one trivial safe-hub plumbing check and one genuine
+progression branch. Train and validation still contain zero strategic navigation records. No numeric
+navigation feature schema is frozen, and no strategic navigation model has shadow or causal
+authority. Counted v95 remains **0/10**.
 
 That claim boundary is healthy. The next highest-value work is no longer another isolated route
 mechanic; it is collecting genuine multi-destination decisions across independent roots and using
@@ -58,8 +59,8 @@ did not merely replay a route.
 
 ### Strategic navigation data boundary
 
-Source checkpoints `33dd0d8`, `f43219d`, hardening commit `bcd9935` and route-binding commit
-`bf3fc76` implement:
+Source checkpoints `33dd0d8`, `f43219d`, hardening commit `bcd9935`, route-binding commit
+`bf3fc76`, collection-audit commit `92a8b80` and shared-evidence commit `ba2c224` implement:
 
 - genuine candidate sets of at least two destinations;
 - a reviewed cross-title vocabulary for need, origin and destination semantics;
@@ -68,12 +69,16 @@ Source checkpoints `33dd0d8`, `f43219d`, hardening commit `bcd9935` and route-bi
 - exact selected-plan/report consistency checks;
 - typed replan, interruption, renewal and failure outcomes;
 - one consumed outcome per decision;
-- successful-choice imitation targets separated from failed-choice outcome evidence;
+- deterministic-teacher success labels separated from learned-policy outcomes and failed-choice
+  evidence, so a learned action can never certify its own imitation target;
 - external interruption censoring, including power loss;
 - authenticated private trajectory decision/outcome records;
 - a strict reader that rejects identity leakage, schema drift and join tampering;
 - recursively immutable in-memory policy examples after canonical parsing; and
-- whole-root split and semantic-coverage audits.
+- whole-root split and semantic-coverage audits;
+- authenticated loaded-episode auditing without discarding replan, interruption, resource or
+  failure semantics; and
+- route-cost-only plus semantic-need/candidate-shape baselines before feature freezing.
 
 The first end-to-end live calibration starts from post-Pokédex Pallet with two real safe-hub
 destinations. Home costs 15 with 14 route steps; Viridian Center costs 87 with 86 route steps. A
@@ -83,30 +88,40 @@ no route binding, map id, coordinate or arrow label. The source-bound
 [calibration receipt](evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json) is explicitly
 unassigned and ineligible for model development. It proves plumbing, not useful supervision.
 
+The second calibration starts from an authenticated post-Safari state with two real progression
+destinations. Koga's Gym carries `challenge`/`story_progress` semantics at cost 21 and 20 route
+steps; the Warden/Strength objective carries `acquire_resource`/`story_progress` at cost 24 and 23
+steps. The qualified completion order selected the Gym, exact binding reached `FUCHSIA_GYM` after
+20/20 acknowledged movements, and the run recorded zero replans, interruptions or renewals. Its
+[genuine-branch receipt](evidence/fuchsia-strategic-objective-route-probe-2026-08-11.json) is also
+unassigned and promotion-ineligible. It proves that semantic branches can be captured live, but a
+single choice that also agrees with minimum route cost is not a train/validation dataset.
+
 The older `navigation_dataset.py` is explicitly labeled individual-direction control diagnostics,
 reports zero strategic decisions and remains ineligible for promotion.
 
 ## Code and CI audit
 
-At this checkpoint the repository contains 149 source modules and 169 test modules. The local CI
+At this checkpoint the repository contains 151 source modules and 171 test modules. The local CI
 equivalent produced:
 
-- **2,545 passed, 3 deselected integration tests, 1 expected failure**;
+- **2,551 passed, 3 deselected integration tests, 1 expected failure**;
 - public-artifact scanning with no ROM, private path or secret leakage;
 - documentation link validation;
 - exact prospective-registry regeneration;
 - Ruff clean;
 - mypy clean under the declared scope; and
-- GitHub Actions green through the route-binding source checkpoint; the evidence commit was then
-  subjected to the same local gate before publication.
+- GitHub Actions green through the preceding published checkpoints; the final evidence/documentation
+  commit was subjected to the same local gate before publication.
 
 The prospective v95 identities after the strategic data seam are:
 
 | Field | Value |
 | --- | --- |
-| Registry SHA-256 | `defc6f4d4388140633b438c64fd49ebd25ec99c7e8b37c2170e6b4e906cd971f` |
-| Source bundle SHA-256 | `098b7004f6bf822164cf66d8d15b353313f95cb6e49681e4e38762d64233fd0e` |
-| Teacher execution SHA-256 | `704d7ad79b7afada760d27c82aa7d41b1f534c691faa20813fbecd59665a59a6` |
+| Registry SHA-256 | `c7f5fc87371a0c3fc2fcf545dbd44d6626fd4b06fa5b1f02021dc17cde539f95` |
+| Source bundle SHA-256 | `beb4bbd8151886588953f085d82dcc09423a02279fd0f6754b60656014f2e4c8` |
+| Teacher execution SHA-256 | `4218e4318d5df03769d33a6f945ed58e3462a016d329a7730fb3bc3863f6783c` |
+| Slot assignment SHA-256 | `049c57918437a2000f4c7a5c87cfa56a709e4c75dc6bfa2e4125eb3f781b2809` |
 
 The collection registry remains prospective. Regeneration caused by source changes does not open or
 consume v95; counted runs remain 0/10.
@@ -115,12 +130,14 @@ consume v95; counted runs remain 0/10.
 
 ### P0 — no train/validation strategic navigation data exists
 
-The schema and live binding are ready, but the useful dataset denominator remains zero. The one
-unassigned safe-hub calibration deliberately answers an easy route-cost question and cannot enter
-training or validation. Synthetic choices such as selecting between two arbitrary Viridian
-buildings would make the counter rise without teaching a real decision. Instrument branches where
-the teacher genuinely weighs progression, recovery, resupply, training, collection or optional
-reward destinations.
+The schema, live binding and audit are ready, but the useful dataset denominator remains zero. The
+safe-hub calibration deliberately answers an easy route-cost question. The Fuchsia calibration is
+a genuine progression branch, but it is still one unassigned root and its teacher choice agrees
+with the minimum-cost baseline. Neither can enter training or validation. Synthetic choices such as
+selecting between two arbitrary Viridian buildings would make the counter rise without teaching a
+real decision. Instrument branches where the teacher genuinely weighs progression, recovery,
+resupply, training, collection or optional reward destinations, especially cases where it rejects
+the cheapest route.
 
 Do not freeze numeric features first. Collect the semantic/raw route projections, inspect their
 coverage and correlations, then preregister normalization and baselines. Otherwise the schema will
