@@ -65,6 +65,8 @@ SURF_MOVE_ID = 0x39
 SURF_CAPABILITY = "move:surf"
 CUT_MOVE_ID = 0x0F
 CUT_CAPABILITY = "move:cut"
+STRENGTH_MOVE_ID = 0x46
+STRENGTH_CAPABILITY = "move:strength"
 LAND_MODE = "land"
 WATER_MODE = "water"
 SURF_MODE_CHANGE_COST = 4
@@ -374,6 +376,23 @@ def cut_capabilities(raw: RawGameState) -> frozenset[str]:
         for current_hp, known in zip(hp, moves, strict=True)
     ):
         return frozenset({CUT_CAPABILITY})
+    return frozenset()
+
+
+def strength_capabilities(raw: RawGameState) -> frozenset[str]:
+    """Derive field Strength from Rainbow Badge and a living observed holder."""
+
+    if not (int(raw.badge_bits or 0) & int(Badge.RAINBOW)):
+        return frozenset()
+    hp = raw.party_hp or ()
+    moves = raw.party_moves or ()
+    if raw.party_count is None or raw.party_count != len(hp) or len(hp) != len(moves):
+        return frozenset()
+    if any(
+        current_hp > 0 and STRENGTH_MOVE_ID in known
+        for current_hp, known in zip(hp, moves, strict=True)
+    ):
+        return frozenset({STRENGTH_CAPABILITY})
     return frozenset()
 
 

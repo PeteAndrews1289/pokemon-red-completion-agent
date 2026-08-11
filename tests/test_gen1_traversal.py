@@ -11,6 +11,8 @@ from pokemon_red_completion.gen1_traversal import (
     CUT_CAPABILITY,
     CUT_MOVE_ID,
     LAND_MODE,
+    STRENGTH_CAPABILITY,
+    STRENGTH_MOVE_ID,
     SURF_CAPABILITY,
     SURF_MOVE_ID,
     WATER_MODE,
@@ -26,6 +28,7 @@ from pokemon_red_completion.gen1_traversal import (
     ledge_rules,
     local_graph,
     map_object_events,
+    strength_capabilities,
     surf_capabilities,
     surf_local_graph,
     water_pair_restrictions,
@@ -349,6 +352,34 @@ def test_cut_requires_the_badge_and_a_complete_living_observed_holder() -> None:
     assert not cut_capabilities(observed(hp=(0,)))
     assert not cut_capabilities(observed(moves=((SURF_MOVE_ID,),)))
     assert not cut_capabilities(observed(hp=(20, 20), moves=((CUT_MOVE_ID,),)))
+
+
+def test_strength_requires_the_badge_and_a_complete_living_observed_holder() -> None:
+    def observed(
+        *,
+        badges: Badge = Badge.RAINBOW,
+        hp: tuple[int, ...] = (20,),
+        moves: tuple[tuple[int, ...], ...] = ((STRENGTH_MOVE_ID,),),
+    ) -> RawGameState:
+        return RawGameState(
+            game_started=True,
+            map_id=0,
+            player_x=0,
+            player_y=0,
+            party_count=len(hp),
+            battle_state=0,
+            badge_bits=int(badges),
+            party_hp=hp,
+            party_moves=moves,
+        )
+
+    assert strength_capabilities(observed()) == frozenset({STRENGTH_CAPABILITY})
+    assert not strength_capabilities(observed(badges=Badge.CASCADE))
+    assert not strength_capabilities(observed(hp=(0,)))
+    assert not strength_capabilities(observed(moves=((SURF_MOVE_ID,),)))
+    assert not strength_capabilities(
+        observed(hp=(20, 20), moves=((STRENGTH_MOVE_ID,),))
+    )
 
 
 def test_surf_graph_keeps_land_and_water_as_explicit_search_modes() -> None:

@@ -26,6 +26,8 @@ from pokemon_red_completion.observation import (
     Badge,
     CurrentMapBlocks,
     CurrentMapBlocksError,
+    CurrentStrengthBoulder,
+    CurrentStrengthBoulderError,
     EventFlag,
     InputReadiness,
     ItemId,
@@ -136,6 +138,67 @@ def test_visible_map_object_read_refuses_impossible_count_and_coordinates() -> N
         PokemonRedStateReader(
             RecordingMemory({0xD4E1: 16})
         ).read_visible_map_objects()
+
+
+def test_strength_boulders_keep_offscreen_slots_and_use_map_sprite_movement_bytes() -> None:
+    # Independent literals: state tables C100/C200, sprite count D4E1, and
+    # wMapSpriteData D4E4. Slot 2 is deliberately off-screen but still blocks.
+    reader = PokemonRedStateReader(
+        RecordingMemory(
+            {
+                0xD4E1: 3,
+                0xC110: 0x3F,
+                0xC111: 1,
+                0xC112: 0x10,
+                0xC214: 19,
+                0xC215: 9,
+                0xD4E4: 0x10,
+                0xC120: 0x3F,
+                0xC121: 0,
+                0xC122: 0xFF,
+                0xC224: 6,
+                0xC225: 18,
+                0xD4E6: 0x10,
+                0xC130: 0x3F,
+                0xC234: 14,
+                0xC235: 6,
+                0xD4E8: 0x00,
+            }
+        )
+    )
+
+    assert reader.read_current_strength_boulders() == (
+        CurrentStrengthBoulder(1, (15, 5), 1, 0x10, 0x10),
+        CurrentStrengthBoulder(2, (2, 14), 0, 0xFF, 0x10),
+    )
+    assert reader.read_current_strength_boulders()[0].visible
+    assert not reader.read_current_strength_boulders()[1].visible
+
+
+def test_strength_boulder_read_refuses_impossible_coordinates_and_duplicates() -> None:
+    with pytest.raises(CurrentStrengthBoulderError, match="invalid padded coordinate"):
+        PokemonRedStateReader(
+            RecordingMemory(
+                {0xD4E1: 1, 0xC110: 0x3F, 0xC214: 3, 0xC215: 9, 0xD4E4: 0x10}
+            )
+        ).read_current_strength_boulders()
+
+    with pytest.raises(CurrentStrengthBoulderError, match="multiple Strength boulders"):
+        PokemonRedStateReader(
+            RecordingMemory(
+                {
+                    0xD4E1: 2,
+                    0xC110: 0x3F,
+                    0xC214: 8,
+                    0xC215: 9,
+                    0xD4E4: 0x10,
+                    0xC120: 0x3F,
+                    0xC224: 8,
+                    0xC225: 9,
+                    0xD4E6: 0x10,
+                }
+            )
+        ).read_current_strength_boulders()
 
     slot_state_1 = 0xC110
     slot_state_2 = 0xC210

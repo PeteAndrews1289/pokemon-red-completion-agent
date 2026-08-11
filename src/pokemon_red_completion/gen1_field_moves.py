@@ -19,8 +19,10 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.gen1_cut import CUT_PASSAGE_TILES
 from pokemon_red_completion.gen1_traversal import (
     CUT_MOVE_ID,
+    STRENGTH_MOVE_ID,
     SURF_MOVE_ID,
     cut_capabilities,
+    strength_capabilities,
     surf_capabilities,
 )
 from pokemon_red_completion.observation import (
@@ -33,7 +35,6 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.route_executor import RouteActionPort
 
 FLY_MOVE_ID = 0x13
-STRENGTH_MOVE_ID = 0x46
 DIG_MOVE_ID = 0x5B
 FLASH_MOVE_ID = 0x94
 TELEPORT_MOVE_ID = 0x64
@@ -62,6 +63,7 @@ _DIRECTION_DELTAS = {
     "down": (1, 0),
     "left": (0, -1),
 }
+STRENGTH_ACTIVE_MASK = 1 << 0
 
 
 class Gen1FieldMoveError(RuntimeError):
@@ -129,6 +131,16 @@ class Gen1CutReceipt:
     block_after: int
 
 
+@dataclass(frozen=True, slots=True)
+class Gen1StrengthReceipt:
+    source_map: int
+    source_at: tuple[int, int]
+    party_index: int
+    submenu_row: int
+    confirmation_count: int
+    already_active: bool
+
+
 def surf_permission(memory: ReadOnlyMemory, raw: RawGameState) -> SurfPermission:
     """Observe the restrictions needed before the Surf menu may be opened."""
 
@@ -149,6 +161,12 @@ def cut_menu_indices(raw: RawGameState) -> tuple[int, int]:
     """Return a living Cut holder and Cut's row among its field moves."""
 
     return _field_move_menu_indices(raw, CUT_MOVE_ID, "Cut")
+
+
+def strength_menu_indices(raw: RawGameState) -> tuple[int, int]:
+    """Return a living Strength holder and Strength's row among field moves."""
+
+    return _field_move_menu_indices(raw, STRENGTH_MOVE_ID, "Strength")
 
 
 def _field_move_menu_indices(
@@ -179,17 +197,22 @@ class Gen1FieldMovePort:
     cut_block_swaps: Mapping[int, int] = field(default_factory=dict)
     receipts: list[Gen1SurfReceipt] = field(default_factory=list, init=False)
     cut_receipts: list[Gen1CutReceipt] = field(default_factory=list, init=False)
+    strength_receipts: list[Gen1StrengthReceipt] = field(default_factory=list, init=False)
 
     def execute(self, action: MacroAction) -> object:
         if action.kind is not MacroActionKind.FIELD_MOVE:
             return self.delegate.execute(action)
         if not isinstance(action.value, str):
             raise Gen1FieldMoveError("a Gen I field action needs a semantic value")
+        if action.repeat != 1:
+            raise Gen1FieldMoveError("a field action cannot be repeated implicitly")
+        if action.value == "strength:activate":
+            strength_receipt = self._strength()
+            self.strength_receipts.append(strength_receipt)
+            return strength_receipt
         move, separator, direction = action.value.partition(":")
         if separator != ":" or direction not in _DIRECTION_DELTAS:
             raise Gen1FieldMoveError(f"unsupported Gen I field action {action.value!r}")
-        if action.repeat != 1:
-            raise Gen1FieldMoveError("a field action cannot be repeated implicitly")
         if move == "surf":
             surf_receipt = self._surf(direction)
             self.receipts.append(surf_receipt)
@@ -199,6 +222,60 @@ class Gen1FieldMovePort:
             self.cut_receipts.append(cut_receipt)
             return cut_receipt
         raise Gen1FieldMoveError(f"unsupported Gen I field action {action.value!r}")
+
+    def _strength(self) -> Gen1StrengthReceipt:
+        before = self.reader.read()
+        source_map, source_at = _require_overworld(before, "Strength source")
+        if not strength_capabilities(before):
+            raise Gen1FieldMoveError(
+                "Strength requires Rainbow Badge and a living move holder"
+            )
+        if self.reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING:
+            raise Gen1FieldMoveError("Strength requires ordinary walking mode")
+        party_index, submenu_row = strength_menu_indices(before)
+        if self.memory.read_u8(RamAddress.STATUS_FLAGS_1) & STRENGTH_ACTIVE_MASK:
+            if not self.reader.read_input_readiness().ready:
+                raise Gen1FieldMoveError("active Strength boundary is not ready for input")
+            return Gen1StrengthReceipt(
+                source_map,
+                source_at,
+                party_index,
+                submenu_row,
+                0,
+                True,
+            )
+
+        self._pulse(MacroAction(MacroActionKind.OPEN_MENU), self.timing.menu_frames)
+        self._select_cursor(1, "START-menu POKEMON")
+        self._pulse(MacroAction(MacroActionKind.CONFIRM), self.timing.menu_frames)
+        self._select_cursor(party_index, "party Strength holder")
+        self._pulse(MacroAction(MacroActionKind.CONFIRM), self.timing.menu_frames)
+        self._select_cursor(submenu_row, "Strength field command")
+        self._pulse(MacroAction(MacroActionKind.CONFIRM), self.timing.settle_frames)
+
+        for confirmations in range(self.timing.max_confirmations + 1):
+            after = self.reader.read()
+            if after.battle_state not in {0, None}:
+                raise Gen1FieldMoveError("Strength field macro entered a battle")
+            if _overworld_position(after) != (source_map, source_at):
+                raise Gen1FieldMoveError("Strength changed the player's activation position")
+            if (
+                self.memory.read_u8(RamAddress.STATUS_FLAGS_1) & STRENGTH_ACTIVE_MASK
+                and self.reader.read_input_readiness().ready
+            ):
+                _require_protected_field_state("Strength", before, after)
+                return Gen1StrengthReceipt(
+                    source_map,
+                    source_at,
+                    party_index,
+                    submenu_row,
+                    confirmations,
+                    False,
+                )
+            if confirmations == self.timing.max_confirmations:
+                break
+            self._pulse(MacroAction(MacroActionKind.CONFIRM), self.timing.settle_frames)
+        raise Gen1FieldMoveError("Strength did not acknowledge its active field flag")
 
     def _surf(self, direction: str) -> Gen1SurfReceipt:
         before = self.reader.read()

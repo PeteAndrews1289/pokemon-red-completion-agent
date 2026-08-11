@@ -14,10 +14,15 @@ from pokemon_red_completion.gen1_field_moves import (
     Gen1FieldMoveError,
     Gen1FieldMovePort,
     cut_menu_indices,
+    strength_menu_indices,
     surf_menu_indices,
     surf_permission,
 )
-from pokemon_red_completion.gen1_traversal import CUT_MOVE_ID, SURF_MOVE_ID
+from pokemon_red_completion.gen1_traversal import (
+    CUT_MOVE_ID,
+    STRENGTH_MOVE_ID,
+    SURF_MOVE_ID,
+)
 from pokemon_red_completion.observation import (
     Badge,
     CurrentMapBlocks,
@@ -202,6 +207,63 @@ class CutMenuWorld:
         raise AssertionError(f"unexpected action {action!r} in {self.stage}")
 
 
+@dataclass
+class StrengthMenuWorld:
+    raw: RawGameState = field(
+        default_factory=lambda: replace(
+            cut_state(moves=((FLASH_MOVE_ID, STRENGTH_MOVE_ID),)),
+            badge_bits=int(Badge.RAINBOW),
+        )
+    )
+    mode: OverworldMovementMode = OverworldMovementMode.WALKING
+    stage: str = "field"
+    cursor: int = 0
+    status_flags_1: int = 0
+    actions: list[MacroAction] = field(default_factory=list)
+
+    def read(self) -> RawGameState:
+        return self.raw
+
+    def read_overworld_movement_mode(self) -> OverworldMovementMode:
+        return self.mode
+
+    def read_input_readiness(self) -> InputReadiness:
+        return InputReadiness(0, 0, 0, 0, 0)
+
+    def read_u8(self, address: int) -> int:
+        if address == RamAddress.STATUS_FLAGS_1:
+            return self.status_flags_1
+        if address == RamAddress.CURRENT_MENU_ITEM:
+            return self.cursor
+        if address == RamAddress.MAX_MENU_ITEM:
+            return {"start": 5, "party": 0, "submenu": 2}.get(self.stage, 0)
+        return 0
+
+    def execute(self, action: MacroAction) -> object:
+        self.actions.append(action)
+        if action.kind is MacroActionKind.WAIT:
+            return action
+        if self.stage == "field" and action.kind is MacroActionKind.OPEN_MENU:
+            self.stage, self.cursor = "start", 0
+            return action
+        if action.kind is MacroActionKind.MOVE:
+            assert isinstance(action.value, str)
+            self.cursor += 1 if action.value == "down" else -1
+            return action
+        if action.kind is MacroActionKind.CONFIRM:
+            if self.stage == "start" and self.cursor == 1:
+                self.stage, self.cursor = "party", 0
+            elif self.stage == "party" and self.cursor == 0:
+                self.stage, self.cursor = "submenu", 0
+            elif self.stage == "submenu" and self.cursor == 1:
+                self.stage = "strength_dialogue"
+            elif self.stage == "strength_dialogue":
+                self.status_flags_1 |= 1
+                self.stage = "field"
+            return action
+        raise AssertionError(f"unexpected action {action!r} in {self.stage}")
+
+
 def real_reader(world: MenuWorld) -> PokemonRedStateReader:
     return cast(PokemonRedStateReader, world)
 
@@ -221,6 +283,15 @@ def test_surf_row_counts_every_real_field_move_before_it() -> None:
 
 def test_cut_row_counts_the_holder_field_moves_in_observed_order() -> None:
     assert cut_menu_indices(cut_state()) == (0, 1)
+
+
+def test_strength_row_counts_the_holder_field_moves_in_observed_order() -> None:
+    assert strength_menu_indices(
+        replace(
+            cut_state(moves=((FLASH_MOVE_ID, STRENGTH_MOVE_ID),)),
+            badge_bits=int(Badge.RAINBOW),
+        )
+    ) == (0, 1)
 
 
 def test_surf_menu_selection_skips_a_fainted_holder() -> None:
@@ -347,3 +418,47 @@ def test_field_port_cut_refuses_any_second_block_mutation() -> None:
     with pytest.raises(Gen1FieldMoveError, match="other than its exact replacement"):
         port.execute(MacroAction(MacroActionKind.FIELD_MOVE, "cut:right"))
     assert port.cut_receipts == []
+
+
+def test_field_port_activates_strength_and_acknowledges_the_exact_live_flag() -> None:
+    world = StrengthMenuWorld()
+    port = Gen1FieldMovePort(
+        cast(RouteActionPort, world),
+        cast(PokemonRedStateReader, world),
+        cast(ReadOnlyMemory, world),
+    )
+
+    receipt = port.execute(MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate"))
+
+    assert receipt.source_at == (0, 1)
+    assert receipt.party_index == 0
+    assert receipt.submenu_row == 1
+    assert receipt.confirmation_count == 1
+    assert not receipt.already_active
+    assert world.status_flags_1 & 1
+    assert port.strength_receipts == [receipt]
+
+
+def test_field_port_strength_is_idempotent_but_still_checks_capability() -> None:
+    active = StrengthMenuWorld(status_flags_1=1)
+    port = Gen1FieldMovePort(
+        cast(RouteActionPort, active),
+        cast(PokemonRedStateReader, active),
+        cast(ReadOnlyMemory, active),
+    )
+    receipt = port.execute(MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate"))
+    assert receipt.already_active
+    assert active.actions == []
+
+    missing_badge = StrengthMenuWorld(
+        raw=replace(StrengthMenuWorld().raw, badge_bits=0),
+        status_flags_1=1,
+    )
+    port = Gen1FieldMovePort(
+        cast(RouteActionPort, missing_badge),
+        cast(PokemonRedStateReader, missing_badge),
+        cast(ReadOnlyMemory, missing_badge),
+    )
+    with pytest.raises(Gen1FieldMoveError, match="Rainbow Badge"):
+        port.execute(MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate"))
+    assert missing_badge.actions == []

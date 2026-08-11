@@ -53,6 +53,7 @@ class RamAddress(IntEnum):
     ENGAGED_TRAINER_CLASS = 0xCD2D
     ENGAGED_TRAINER_SET = 0xCD2E
     SIMULATED_JOYPAD_INDEX = 0xCD38
+    MISC_FLAGS = 0xCD60
     JOY_IGNORE = 0xCD6B
     BATTLE_RESULT = 0xCF0B
     SHOP_SELECTED_ITEM = 0xCF91
@@ -111,6 +112,7 @@ class RamAddress(IntEnum):
     CURRENT_MAP_HEIGHT = 0xD368
     CURRENT_MAP_WIDTH = 0xD369
     NUM_SPRITES = 0xD4E1
+    MAP_SPRITE_DATA = 0xD4E4
     CURRENT_BOX_NUMBER = 0xD5A0
     PLAYER_MOVING_DIRECTION = 0xD528
     TOGGLEABLE_OBJECT_FLAGS = 0xD5A6
@@ -1308,6 +1310,31 @@ class VisibleMapObject:
     @property
     def moving(self) -> bool:
         return self.movement_status == 3
+
+
+class CurrentStrengthBoulderError(ValueError):
+    """Raised when revision-pinned live boulder state is internally impossible."""
+
+
+@dataclass(frozen=True, slots=True)
+class CurrentStrengthBoulder:
+    """One currently pushable boulder, including objects outside the viewport."""
+
+    sprite_index: int
+    at: tuple[int, int]
+    movement_status: int
+    image_index: int
+    movement_byte_2: int
+
+    def __post_init__(self) -> None:
+        if not 1 <= self.sprite_index <= 15:
+            raise ValueError("a boulder sprite index must be between 1 and 15")
+        if self.movement_byte_2 != 0x10:
+            raise ValueError("a Strength boulder needs the engine's pushable movement byte")
+
+    @property
+    def visible(self) -> bool:
+        return self.image_index != 0xFF
 
 
 class CurrentMapBlocksError(ValueError):
@@ -4033,6 +4060,56 @@ class PokemonRedStateReader:
 
     def read_visible_object_coordinates(self) -> frozenset[tuple[int, int]]:
         return frozenset(item.at for item in self.read_visible_map_objects())
+
+    def read_current_strength_boulders(self) -> tuple[CurrentStrengthBoulder, ...]:
+        """Read every pushable boulder from the current map's live sprite slots.
+
+        Unlike :meth:`read_visible_map_objects`, this observation deliberately
+        retains ``image_index == 0xff`` entries. Red keeps off-screen boulders'
+        map coordinates in state data 2, and a puzzle planner must not turn
+        those temporarily unrendered objects into empty floor.
+        """
+
+        count = self._memory.read_u8(RamAddress.NUM_SPRITES)
+        if count > 15:
+            raise CurrentStrengthBoulderError(
+                f"current map exposes impossible sprite count {count}"
+            )
+        found: list[CurrentStrengthBoulder] = []
+        occupied: set[tuple[int, int]] = set()
+        for sprite_index in range(1, count + 1):
+            state_1 = int(RamAddress.SPRITE_STATE_DATA_1) + sprite_index * 0x10
+            if self._memory.read_u8(state_1) != 0x3F:
+                continue
+            movement_byte_2 = self._memory.read_u8(
+                int(RamAddress.MAP_SPRITE_DATA) + 2 * (sprite_index - 1)
+            )
+            if movement_byte_2 != 0x10:
+                continue
+            state_2 = int(RamAddress.SPRITE_STATE_DATA_2) + sprite_index * 0x10
+            padded_y = self._memory.read_u8(state_2 + 4)
+            padded_x = self._memory.read_u8(state_2 + 5)
+            if padded_y < 4 or padded_x < 4:
+                raise CurrentStrengthBoulderError(
+                    f"Strength boulder {sprite_index} has invalid padded coordinate "
+                    f"{(padded_y, padded_x)}"
+                )
+            at = padded_y - 4, padded_x - 4
+            if at in occupied:
+                raise CurrentStrengthBoulderError(
+                    f"multiple Strength boulders occupy coordinate {at}"
+                )
+            occupied.add(at)
+            found.append(
+                CurrentStrengthBoulder(
+                    sprite_index=sprite_index,
+                    at=at,
+                    movement_status=self._memory.read_u8(state_1 + 1),
+                    image_index=self._memory.read_u8(state_1 + 2),
+                    movement_byte_2=movement_byte_2,
+                )
+            )
+        return tuple(found)
 
     def read_current_map_blocks(self) -> CurrentMapBlocks:
         """Read the active mutable block grid from Red's bordered map buffer.
