@@ -53,26 +53,31 @@ off-screen from absent objects, so hidden 2F boulder 13 does not enter the first
 settled state acknowledges 3F pushes even though that room consumes the persistent pushed flag.
 See the [full Strength receipt](evidence/victory-road-strength-chain-probe-2026-08-10.json).
 
-This closes the stateful Strength puzzle mechanics, not general Victory Road navigation. The two
-inter-room routes and repel-expiry setup remain authored. A shortest-path experiment exposed trainer
-sight as the next missing semantic predicate: a trainer can enter engagement movement after the
-route is planned, which is neither a wall nor an ordinary moving-object replan. The ordered gates
-are now:
+Trainer sight is now live-qualified at corrected source `95e8b82`. Cartridge object events provide
+trainer identity/position/facing, trainer headers provide view range and defeated event, and current
+sprite RAM may override facing only while rendered. Active sight lanes are temporary semantic
+hazards, not occupied tiles; a triggered walk-up is separately typed as `trainer_engagement`. The
+adversarial 1F proof began with a 50-step candidate crossing male trainer squares `(4,3)` and
+`(3,3)`. At `(5,3)` it sent zero inputs toward the first hazard, replanned once to a five-step safe
+suffix, acknowledged 50/50 movements and reached `(1,2)` with no engagement, battle, wait or save
+write. See the [trainer-sight receipt](evidence/victory-road-trainer-sight-route-probe-2026-08-10.json).
 
-1. Model trainer facing, engage distance and defeated/active state; prove one route avoids or
-   intentionally resolves a sight line without confusing scripted movement with a blocked edge.
-2. Filter one story-gated passage from observed semantic predicates, independently prove its closed
+This closes standard fighting-map trainer-sight avoidance, not general Victory Road navigation.
+Special scripted trainer-like objects remain separate, the exit proof stops adjacent to the warp,
+and the second inter-room route plus repel-expiry setup remain authored. The ordered gates are now:
+
+1. Filter one story-gated passage from observed semantic predicates, independently prove its closed
    and open states, and keep unknown predicates unavailable.
-3. Replace Victory Road's two authored inter-room routes and repel-boundary setup only after trainer
-   sight and resource renewal are first-class route state.
-4. Qualify repeated and multi-tree Cut planning without weakening the live mutation receipt.
-5. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
+2. Make resource renewal first-class, then replace Victory Road's authored inter-room routes and
+   repel-boundary setup with composed execution through their exact warp/resource boundaries.
+3. Qualify repeated and multi-tree Cut planning without weakening the live mutation receipt.
+4. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
    selecting a macro path before local cost is known.
-6. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
+5. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
    prizes—so one-cartridge reachability becomes complete rather than a lower bound.
-7. Record strategic destination choices, replans and interruption outcomes for learning. Exact
+6. Record strategic destination choices, replans and interruption outcomes for learning. Exact
    arrow sequences remain planner outputs, not imitation labels.
-8. Add Crystal's thin adapter after direct occupancy and one story predicate preserve the neutral
+7. Add Crystal's thin adapter after direct occupancy and one story predicate preserve the neutral
    executor contract, then run the
    defined zero-shot/few-shot/from-scratch navigation benchmark.
 

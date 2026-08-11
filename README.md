@@ -20,7 +20,11 @@
 > 44,525 player-and-boulder states and executed 247/247 derived transitions: 189 walks, 57 ordinary
 > pushes, and one cross-floor drop. Toggle flags distinguish a merely off-screen boulder from one
 > removed on 3F and shown on 2F; all four switch/hole events settled from the authenticated
-> post-Giovanni checkpoint. Travel between puzzle rooms and the repel-expiry boundary remain
+> post-Giovanni checkpoint. A sixth source-bound probe now derives Victory Road trainer facing,
+> view range and defeated state from cartridge data. Its deliberately unsafe 50-step candidate
+> entered the male trainer's sight line; the live executor sent no input toward `(4,3)`, replanned
+> once to a five-step safe suffix, and reached `(1,2)` after 50/50 acknowledged movements with no
+> engagement or battle. Travel through the room warp and the repel-expiry boundary remain
 > explicitly authored rather than being misreported as generated navigation.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
@@ -32,7 +36,8 @@
 > [visible-object route](docs/evidence/cinnabar-visible-object-route-probe-2026-08-10.json), and the
 > [staged Cut crossing](docs/evidence/celadon-staged-cut-route-probe-2026-08-10.json), plus the
 > [Strength state search](docs/evidence/victory-road-strength-state-search-probe-2026-08-11.json)
-> and [full Strength chain](docs/evidence/victory-road-strength-chain-probe-2026-08-10.json).
+> and [full Strength chain](docs/evidence/victory-road-strength-chain-probe-2026-08-10.json), plus
+> the [trainer-sight route](docs/evidence/victory-road-trainer-sight-route-probe-2026-08-10.json).
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -68,8 +73,13 @@ chain. The authenticated proof retained off-screen objects but excluded toggle-h
 five live phases under a 100,000-state bound apiece, and acknowledged 247/247 transitions including
 the 3F hole and the returned 2F boulder. The 3F room consumes the engine's persistent pushed flag,
 so the executor now accepts the transient boulder-dust bit plus the exact settled state as the
-independent engine receipt. Story gates, trainer sight, and inter-room navigation remain separate
-adapters rather than hidden inside the Strength claim.
+independent engine receipt. Trainer sight remains separate from the Strength claim and now has its
+own adapter: object events and trainer headers derive active facing/range/event lanes, current
+rendered state may override facing, and the generic executor treats those lanes as temporary
+semantic hazards rather than walls. The authenticated 1F probe replanned before entering `(4,3)`
+and reached the exit approach with 50/50 movements and no encounter. Story gates, special scripted
+trainer-like objects, resource renewal and the remaining inter-room boundaries are still explicit
+open work.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

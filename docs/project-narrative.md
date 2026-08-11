@@ -1,5 +1,35 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 10: the shortest route woke the trainer
+
+The full Strength chain ended by exposing a different kind of obstacle. The generated exit route
+did not hit a wall. It entered a trainer's view, gave control to a scripted walk-up, and made the old
+movement loop report a blocked step. Those are three different facts: the tile is traversable, an
+encounter is beginning, and the player temporarily does not own movement.
+
+Red stores the missing semantics in two places. The map object identifies the trainer's sprite
+slot, class/set, coordinate and facing. A twelve-byte header reached through the map script names
+the view range and defeated-event byte/bit. Joining them makes defeat matter: an active trainer
+projects a bounded directional line; the same trainer after victory projects nothing. The neutral
+route snapshot carries that line as `trainer_sight`, not solid occupancy, while an actual walk-up
+becomes a typed interruption.
+
+The proof starts adversarially. After the first 58-step Strength solution ends at `(12,17)`, the
+planner receives no sight constraints and chooses a 50-step route to the 1F exit approach. It
+crosses the undefeated male trainer's two-square line at `(4,3)` and `(3,3)`. At player `(5,3)`,
+the live semantic overlay catches the first square before Up is sent. One replan replaces the unsafe
+tail with five safe steps. The run acknowledges 50 movements from 50 requests, reaches `(1,2)`, and
+sees neither engagement nor battle. The
+[trainer-sight receipt](evidence/victory-road-trainer-sight-route-probe-2026-08-10.json) binds that
+claim to corrected clean source.
+
+The correction is part of the story. The first live receipt showed an off-screen female trainer
+facing down even though the cartridge says right. Off-screen state preserves coordinates but not a
+trustworthy live facing byte. The final rule uses live facing only while rendered and cartridge
+facing otherwise, then reruns the emulator proof. The result is a reusable distinction—occupancy,
+hazard, and interruption—rather than another Victory Road direction string. Story gates and
+resource renewal are the next semantic boundaries.
+
 ## August 10: the same boulder state survived three floors
 
 The first Strength proof ended with an honest limitation: one switch is not a transferable puzzle

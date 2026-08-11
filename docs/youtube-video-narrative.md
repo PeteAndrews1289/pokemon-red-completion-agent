@@ -15,6 +15,28 @@ Follow an evidence-driven attempt to turn a reliable Pokémon Red speed-running 
 learned player that can make decisions, recover from surprises, and eventually transfer what it
 learns to other Pokémon games.
 
+## Trainer-sight episode: the route was open, but control was not
+
+Open on the generated Victory Road route failing at `(5,3)`. Freeze the frame as the trainer moves
+down and put three labels on screen: **NOT A WALL → ENCOUNTER STARTING → SCRIPT OWNS INPUT**. The
+line is: **“The shortest path was legal. It was also strategically unsafe.”**
+
+Split the cartridge into two cards. The object card shows trainer slot, class/set, coordinate and
+facing. The header card shows a two-tile view range and defeated event. Join them into the male
+trainer's red line at `(3,3)` and `(4,3)`. Then show the defeated event switching that line off.
+Keep solid NPC occupancy a different color so the audience can see this is a hazard, not a wall.
+
+Run the adversarial proof. The unprotected planner chooses 50 steps and crosses both red squares.
+At player `(5,3)`, turn off the Up arrow before it is pressed; label the receipt
+**`trainer_sight`, zero-input replan**. Draw the five-step safe suffix and end at `(1,2)` with the
+counter **50 requests / 50 acknowledged / 0 engagements / 0 battles / 0 waits**.
+
+Use the off-screen-facing bug as the engineering turn. The first live receipt says the female faces
+down because her unrendered slot retained a default byte; the cartridge says right. Cross out the
+receipt, change the rule to **LIVE FACING ONLY WHEN RENDERED**, and rerun. Say: **“Evidence is not
+decoration. If it exposes a wrong assumption, the evidence itself must be replaced.”** End on the
+next card: **STORY GATES: OPEN FLOOR, CLOSED WORLD**.
+
 ## Full Victory Road follow-up: off-screen, hidden, and on another floor
 
 Reopen the 1F proof card and ask the obvious challenge: **“Did this learn Strength, or one room?”**

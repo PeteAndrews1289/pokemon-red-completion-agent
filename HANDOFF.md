@@ -14,6 +14,37 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Trainer sight is route state, not a blocked edge — 2026-08-10
+
+Clean executable source `95e8b827668a165b6ca707dceb594460a5bf2d42` joins two independent
+cartridge structures. Map object events supply each trainer's sprite slot, class/set, coordinate
+and initial facing; the map script's twelve-byte trainer headers supply engage distance and the
+defeated-event address. Live current-map objects then supply rendered facing and moved coordinates.
+An undefeated trainer's bounded line is projected as a temporary `trainer_sight` hazard, distinct
+from solid occupancy. A defeated trainer exposes no line, unknown event memory stays conservatively
+active, and a triggered walk-up is a typed `trainer_engagement` interruption rather than evidence
+that the requested movement edge is blocked.
+
+The first authenticated probe deliberately asks for the unsafe route. From the post-Giovanni
+capture, the teacher reaches Victory Road 1F and the Strength search again executes its 58-step
+switch plan, ending at `(12,17)`. Both 1F trainers are undefeated and off-screen. Cartridge data
+correctly reserves the female trainer's right-facing `(5,8)–(5,9)` line and the male trainer's
+down-facing `(3,3)–(4,3)` line. The unprotected 50-step exit approach enters the male line. At
+player `(5,3)`, before sending Up toward `(4,3)`, the executor records exactly one
+`trainer_sight` replan and selects a five-step safe suffix. It acknowledges **50/50** movements,
+reaches 1F `(1,2)`, observes no engagement or battle, performs no retry wait, releases controls,
+and changes no ROM-adjacent artifact. Record:
+[victory-road-trainer-sight-route-probe-2026-08-10.json](docs/evidence/victory-road-trainer-sight-route-probe-2026-08-10.json).
+
+Live falsification corrected one subtle first draft before publication: an off-screen sprite slot
+retains a stale/default facing byte. Live facing is therefore authoritative only while the trainer
+is rendered; otherwise the cartridge object's facing is used. The final receipt is bound to that
+corrected source. Standard fighting-map trainer headers are now represented; special scripted
+trainer-like objects such as rivals, bosses and quiz-selected fights remain separate fail-closed
+semantics. The next gate is one independently observed story passage in both closed and open state,
+then resource renewal and replacement of the remaining authored Victory Road travel. Counted v95
+remains sealed at **0/10**.
+
 ## Strength now survives switches, hiding and a cross-floor drop — 2026-08-10
 
 Clean executable source `8dbee6f4235273eb2b04c45b457ac53ad2d260b0` extends the bounded
@@ -37,9 +68,9 @@ The evidence is deliberately narrower than “generated Victory Road.” The old
 (51 and 56 steps) and the 14-direction repel-expiry setup remain authored. An attempted shortest
 generated exit exposed the next real navigation gap: trainer sight is viewport- and script-state
 dependent, so static collision plus current coordinates is insufficient. Do not fold that failure
-into Strength. Next implement trainer engagement/sight and one story-gated passage as explicit
-semantic state, then replace the authored room-to-room travel. Generated navigation remains outside
-the counted completion run, and v95 remains sealed at **0/10**.
+into Strength. The newer checkpoint above closes standard trainer sight; one story-gated passage
+and the authored room-to-room travel remain. Generated navigation stays outside the counted
+completion run, and v95 remains sealed at **0/10**.
 
 ## Strength is bounded player-and-boulder search — 2026-08-11
 
