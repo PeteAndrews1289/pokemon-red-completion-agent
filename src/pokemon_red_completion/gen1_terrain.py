@@ -122,6 +122,10 @@ class Terrain:
     #: The exact tile under each step. Traversal rules such as ledges and
     #: elevation-pair collisions depend on tile identity, not passability alone.
     tiles: tuple[tuple[int, ...], ...]
+    #: Mutable map block ids when this terrain was built from live RAM. Keeping
+    #: the source grid makes a verified Cut replacement reconstructible without
+    #: silently falling back to the cartridge's initial map.
+    blocks: tuple[tuple[int, ...], ...] | None = None
 
     def __post_init__(self) -> None:
         shape = tuple(len(row) for row in self.walkable)
@@ -134,6 +138,14 @@ class Terrain:
         ):
             if len(grid) != len(self.walkable) or tuple(len(row) for row in grid) != shape:
                 raise ValueError(f"terrain {label} must match the walkability grid")
+        if self.blocks is not None:
+            block_shape = tuple(len(row) for row in self.blocks)
+            if not block_shape or not block_shape[0] or len(set(block_shape)) != 1:
+                raise ValueError("terrain blocks must form a non-empty rectangular grid")
+            if len(self.blocks) * STEPS_PER_BLOCK != len(self.walkable) or (
+                block_shape[0] * STEPS_PER_BLOCK != shape[0]
+            ):
+                raise ValueError("terrain blocks must match the step-grid dimensions")
 
     @property
     def height(self) -> int:
@@ -230,6 +242,40 @@ def terrain_for(
     """One map's walkable grid."""
 
     tileset_id, height, width, blocks, _ = _map_header(rom, map_id)
+    block_rows = tuple(
+        tuple(rom[blocks + y * width + x] for x in range(width)) for y in range(height)
+    )
+    return terrain_from_blocks(
+        rom,
+        map_id,
+        block_rows,
+        sets,
+        water_set_ids=water_set_ids,
+    )
+
+
+def terrain_from_blocks(
+    rom: bytes,
+    map_id: int,
+    block_rows: tuple[tuple[int, ...], ...],
+    sets: Mapping[int, Tileset],
+    *,
+    water_set_ids: frozenset[int] | None = None,
+) -> Terrain:
+    """Decode one map from an explicit current block grid.
+
+    Cartridge map blocks describe only the initial state. Field actions such as
+    Cut replace entries in Red's live ``wOverworldMap`` buffer, so execution
+    must supply the observed post-action grid here before planning a crossing.
+    """
+
+    tileset_id, height, width, _, _ = _map_header(rom, map_id)
+    shape = tuple(len(row) for row in block_rows)
+    if len(block_rows) != height or shape != (width,) * height:
+        raise ValueError(
+            f"map {map_id} needs a {height}x{width} block grid, got "
+            f"{len(block_rows)}x{shape[0] if shape else 0}"
+        )
     tileset = sets[tileset_id]
     blockset = bank_offset(tileset.bank, tileset.blockset)
 
@@ -244,7 +290,7 @@ def terrain_for(
         row_water: list[bool] = []
         row_tiles: list[int] = []
         for x in range(width * STEPS_PER_BLOCK):
-            block = rom[blocks + (y // STEPS_PER_BLOCK) * width + (x // STEPS_PER_BLOCK)]
+            block = block_rows[y // STEPS_PER_BLOCK][x // STEPS_PER_BLOCK]
             row = (y % STEPS_PER_BLOCK) * STEPS_PER_BLOCK + FEET_ROW
             column = (x % STEPS_PER_BLOCK) * STEPS_PER_BLOCK + FEET_COLUMN
             tile = rom[blockset + BLOCK_TILES * block + BLOCK_SIDE * row + column]
@@ -272,6 +318,40 @@ def terrain_for(
         grass=tuple(grass),
         water=tuple(water),
         tiles=tuple(tile_rows),
+        blocks=block_rows,
+    )
+
+
+def terrain_with_block(
+    rom: bytes,
+    terrain: Terrain,
+    block_at: tuple[int, int],
+    block_id: int,
+    sets: Mapping[int, Tileset],
+    *,
+    water_set_ids: frozenset[int] | None = None,
+) -> Terrain:
+    """Predict one block replacement while retaining the exact source grid.
+
+    This is suitable for candidate selection. Live execution must still read
+    the mutated grid from RAM and call :func:`terrain_from_blocks` afterward.
+    """
+
+    if terrain.blocks is None:
+        raise ValueError("a block replacement needs terrain built from explicit blocks")
+    block_y, block_x = block_at
+    if not (0 <= block_y < len(terrain.blocks) and 0 <= block_x < len(terrain.blocks[0])):
+        raise ValueError(f"block coordinate {block_at} is outside map {terrain.map_id}")
+    if not 0 <= block_id <= 0xFF:
+        raise ValueError("a block id must fit in one byte")
+    changed = [list(row) for row in terrain.blocks]
+    changed[block_y][block_x] = block_id
+    return terrain_from_blocks(
+        rom,
+        terrain.map_id,
+        tuple(tuple(row) for row in changed),
+        sets,
+        water_set_ids=water_set_ids,
     )
 
 

@@ -24,6 +24,8 @@ from pokemon_red_completion.observation import (
     SCRIPTED_MOVEMENT_STATUS_MASK,
     SQUIRTLE_SPECIES_ID,
     Badge,
+    CurrentMapBlocks,
+    CurrentMapBlocksError,
     EventFlag,
     InputReadiness,
     ItemId,
@@ -149,6 +151,41 @@ def test_visible_map_object_read_refuses_impossible_count_and_coordinates() -> N
                 }
             )
         ).read_visible_map_objects()
+
+
+def test_current_map_blocks_read_the_unpadded_live_grid_with_the_engine_stride() -> None:
+    # Independent source literals: map id D35E, height/width D368/D369,
+    # wOverworldMap C6E8, and a three-block border on every side.
+    width = 3
+    stride = width + 6
+    origin = 0xC6E8 + 3 * stride + 3
+    reader = PokemonRedStateReader(
+        RecordingMemory(
+            {
+                0xD35E: 6,
+                0xD368: 2,
+                0xD369: width,
+                origin: 0x10,
+                origin + 1: 0x11,
+                origin + 2: 0x12,
+                origin + stride: 0x20,
+                origin + stride + 1: 0x21,
+                origin + stride + 2: 0x22,
+            }
+        )
+    )
+
+    assert reader.read_current_map_blocks() == CurrentMapBlocks(
+        6,
+        ((0x10, 0x11, 0x12), (0x20, 0x21, 0x22)),
+    )
+
+
+def test_current_map_blocks_refuse_dimensions_that_overrun_the_live_buffer() -> None:
+    with pytest.raises(CurrentMapBlocksError, match="impossible block dimensions"):
+        PokemonRedStateReader(
+            RecordingMemory({0xD35E: 6, 0xD368: 255, 0xD369: 255})
+        ).read_current_map_blocks()
 
 
 def _saved_box_banks(

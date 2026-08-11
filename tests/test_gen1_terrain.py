@@ -15,11 +15,13 @@ under the lower-left reading, against 34.7%, 34.4% and 62.5% for the others.
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
 
 from pokemon_red_completion.gen1_cartridge import CartridgeReadError
+from pokemon_red_completion.gen1_cut import CutTraversalError, plan_cut_candidate
 from pokemon_red_completion.gen1_maps import MAP_HEADER_BANKS, MAP_HEADER_POINTERS
 from pokemon_red_completion.gen1_terrain import (
     TILESET_COUNT,
@@ -28,9 +30,17 @@ from pokemon_red_completion.gen1_terrain import (
     Terrain,
     steps_between,
     terrain_for,
+    terrain_from_blocks,
+    terrain_with_block,
     tilesets,
     water_tilesets,
 )
+from pokemon_red_completion.gen1_traversal import (
+    CUT_MOVE_ID,
+    CutBlockSwap,
+    TraversalRules,
+)
+from pokemon_red_completion.observation import Badge, RawGameState
 
 RECORD = Path("docs/evidence/terrain-2026-08-10.json")
 
@@ -139,6 +149,7 @@ def test_the_player_stands_on_the_lower_left_tile_of_a_cell() -> None:
         (WALKABLE_TILE, SOLID_TILE),
         (SOLID_TILE, SOLID_TILE),
     )
+    assert terrain.blocks == ((0,),)
 
 
 def test_a_block_id_selects_which_sixteen_tiles_are_used() -> None:
@@ -170,6 +181,104 @@ def test_block_rows_are_laid_out_across_then_down() -> None:
     assert terrain.can_stand(0, 4), "and ends on one"
     assert not terrain.can_stand(2, 0), "row one is solid all the way across"
     assert not terrain.can_stand(2, 4)
+
+
+def test_live_block_replacement_rebuilds_the_exact_affected_step_cell() -> None:
+    before_block = block(
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+    )
+    after_block = block(
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (WALKABLE_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+    )
+    open_block = block(*([(WALKABLE_TILE,) * 4] * 4))
+    # These literal ids are independent fixture data, not the production Cut
+    # swap table. The decoder only receives the observed replacement id.
+    rom = cartridge(
+        block_ids=[[7, 3]],
+        blocks={7: before_block, 9: after_block, 3: open_block},
+    )
+    original = terrain_from_blocks(rom, 0, ((7, 3),), tilesets(rom))
+
+    changed = terrain_with_block(rom, original, (0, 0), 9, tilesets(rom))
+
+    assert original.blocks == ((7, 3),)
+    assert changed.blocks == ((9, 3),)
+    assert not original.can_stand(0, 0)
+    assert changed.can_stand(0, 0)
+    assert changed.walkable[0][1:] == original.walkable[0][1:]
+    assert changed.walkable[1] == original.walkable[1]
+
+
+def test_live_block_grid_must_match_the_cartridge_header_dimensions() -> None:
+    rom = cartridge(block_ids=[[0, 0]], blocks={0: CORNERS})
+
+    with pytest.raises(ValueError, match="needs a 1x2 block grid"):
+        terrain_from_blocks(rom, 0, ((0,),), tilesets(rom))
+
+    without_source_blocks = open_terrain(["..", ".."])
+    with pytest.raises(ValueError, match="explicit blocks"):
+        terrain_with_block(rom, without_source_blocks, (0, 0), 1, tilesets(rom))
+
+
+def test_cut_candidate_stages_approach_before_a_predicted_block_replacement() -> None:
+    open_block = block(*([(WALKABLE_TILE,) * 4] * 4))
+    tree_block = block(
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (0x3D, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+    )
+    cut_block = block(
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (WALKABLE_TILE, SOLID_TILE, WALKABLE_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+    )
+    rom = cartridge(
+        block_ids=[[3, 7, 3]],
+        blocks={3: open_block, 7: tree_block, 9: cut_block},
+    )
+    sets = tilesets(rom)
+    current = terrain_from_blocks(rom, 0, ((3, 7, 3),), sets)
+    rules = TraversalRules((), (), (), (CutBlockSwap(7, 9),), ())
+    raw = RawGameState(
+        game_started=True,
+        map_id=0,
+        player_y=0,
+        player_x=0,
+        party_count=1,
+        battle_state=0,
+        badge_bits=int(Badge.CASCADE),
+        party_hp=(20,),
+        party_moves=((CUT_MOVE_ID,),),
+    )
+
+    candidate = plan_cut_candidate(rom, current, rules, sets, (0, 0), (0, 4), raw)
+
+    assert candidate.source_at == (0, 1)
+    assert candidate.target_at == (0, 2)
+    assert candidate.direction.value == "right"
+    assert candidate.block_at == (0, 1)
+    assert (candidate.before_block, candidate.after_block) == (7, 9)
+    assert candidate.approach.coordinates == ((0, 0), (0, 1))
+    assert candidate.predicted_continuation.coordinates == ((0, 1), (0, 2), (0, 3), (0, 4))
+
+    with pytest.raises(CutTraversalError, match="living move holder"):
+        plan_cut_candidate(
+            rom,
+            current,
+            rules,
+            sets,
+            (0, 0),
+            (0, 4),
+            replace(raw, party_hp=(0,)),
+        )
 
 
 def test_tall_grass_is_found_where_the_tileset_says_it_is() -> None:

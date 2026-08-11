@@ -8,6 +8,8 @@ import pytest
 from pokemon_red_completion.gen1_cartridge import CartridgeReadError
 from pokemon_red_completion.gen1_terrain import Terrain
 from pokemon_red_completion.gen1_traversal import (
+    CUT_CAPABILITY,
+    CUT_MOVE_ID,
     LAND_MODE,
     SURF_CAPABILITY,
     SURF_MOVE_ID,
@@ -19,6 +21,7 @@ from pokemon_red_completion.gen1_traversal import (
     TraversalRules,
     boulder_events,
     cut_block_swaps,
+    cut_capabilities,
     land_pair_restrictions,
     ledge_rules,
     local_graph,
@@ -320,6 +323,32 @@ def test_surf_requires_the_badge_and_a_living_observed_move_holder() -> None:
         observed(hp=(20, 20), moves=((SURF_MOVE_ID,),)),
         surf_allowed=True,
     )
+
+
+def test_cut_requires_the_badge_and_a_complete_living_observed_holder() -> None:
+    def observed(
+        *,
+        badges: Badge = Badge.CASCADE,
+        hp: tuple[int, ...] = (20,),
+        moves: tuple[tuple[int, ...], ...] = ((CUT_MOVE_ID,),),
+    ) -> RawGameState:
+        return RawGameState(
+            game_started=True,
+            map_id=0,
+            player_x=0,
+            player_y=0,
+            party_count=len(hp),
+            battle_state=0,
+            badge_bits=int(badges),
+            party_hp=hp,
+            party_moves=moves,
+        )
+
+    assert cut_capabilities(observed()) == frozenset({CUT_CAPABILITY})
+    assert not cut_capabilities(observed(badges=Badge.SOUL))
+    assert not cut_capabilities(observed(hp=(0,)))
+    assert not cut_capabilities(observed(moves=((SURF_MOVE_ID,),)))
+    assert not cut_capabilities(observed(hp=(20, 20), moves=((CUT_MOVE_ID,),)))
 
 
 def test_surf_graph_keeps_land_and_water_as_explicit_search_modes() -> None:

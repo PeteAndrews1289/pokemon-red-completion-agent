@@ -63,6 +63,8 @@ TRAINER_TEXT_BIT = 0x40
 ITEM_TEXT_BIT = 0x80
 SURF_MOVE_ID = 0x39
 SURF_CAPABILITY = "move:surf"
+CUT_MOVE_ID = 0x0F
+CUT_CAPABILITY = "move:cut"
 LAND_MODE = "land"
 WATER_MODE = "water"
 SURF_MODE_CHANGE_COST = 4
@@ -355,6 +357,23 @@ def surf_capabilities(
         for current_hp, known in zip(hp, moves, strict=True)
     ):
         return frozenset({SURF_CAPABILITY})
+    return frozenset()
+
+
+def cut_capabilities(raw: RawGameState) -> frozenset[str]:
+    """Derive field Cut from Cascade Badge and a living observed holder."""
+
+    if not (int(raw.badge_bits or 0) & int(Badge.CASCADE)):
+        return frozenset()
+    hp = raw.party_hp or ()
+    moves = raw.party_moves or ()
+    if raw.party_count is None or raw.party_count != len(hp) or len(hp) != len(moves):
+        return frozenset()
+    if any(
+        current_hp > 0 and CUT_MOVE_ID in known
+        for current_hp, known in zip(hp, moves, strict=True)
+    ):
+        return frozenset({CUT_CAPABILITY})
     return frozenset()
 
 

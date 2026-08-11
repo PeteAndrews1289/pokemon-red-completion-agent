@@ -35,6 +35,7 @@ class RamAddress(IntEnum):
     SPRITE_STATE_DATA_1 = 0xC100
     SPRITE_STATE_DATA_2 = 0xC200
     TILE_MAP = 0xC3A0
+    OVERWORLD_MAP = 0xC6E8
     PLAYER_FACING_DIRECTION = 0xC109
     TOP_MENU_ITEM_Y = 0xCC24
     TOP_MENU_ITEM_X = 0xCC25
@@ -101,8 +102,14 @@ class RamAddress(IntEnum):
     BAG_ITEMS = 0xD31E
     OBTAINED_BADGES = 0xD356
     CURRENT_MAP = 0xD35E
+    CURRENT_TILE_BLOCK_MAP_VIEW_POINTER = 0xD35F
     PLAYER_Y = 0xD361
     PLAYER_X = 0xD362
+    Y_BLOCK_COORD = 0xD363
+    X_BLOCK_COORD = 0xD364
+    CURRENT_MAP_TILESET = 0xD367
+    CURRENT_MAP_HEIGHT = 0xD368
+    CURRENT_MAP_WIDTH = 0xD369
     NUM_SPRITES = 0xD4E1
     CURRENT_BOX_NUMBER = 0xD5A0
     PLAYER_MOVING_DIRECTION = 0xD528
@@ -1301,6 +1308,34 @@ class VisibleMapObject:
     @property
     def moving(self) -> bool:
         return self.movement_status == 3
+
+
+class CurrentMapBlocksError(ValueError):
+    """Raised when Red's live bordered block buffer is internally impossible."""
+
+
+@dataclass(frozen=True, slots=True)
+class CurrentMapBlocks:
+    """The current map's mutable block ids, excluding its three-block border."""
+
+    map_id: int
+    rows: tuple[tuple[int, ...], ...]
+
+    def __post_init__(self) -> None:
+        widths = tuple(len(row) for row in self.rows)
+        if not widths or not widths[0] or len(set(widths)) != 1:
+            raise ValueError("current map blocks must form a non-empty rectangular grid")
+
+    @property
+    def height(self) -> int:
+        return len(self.rows)
+
+    @property
+    def width(self) -> int:
+        return len(self.rows[0])
+
+    def at(self, y: int, x: int) -> int:
+        return self.rows[y][x]
 
 
 class OverworldMovementModeError(ValueError):
@@ -3998,6 +4033,30 @@ class PokemonRedStateReader:
 
     def read_visible_object_coordinates(self) -> frozenset[tuple[int, int]]:
         return frozenset(item.at for item in self.read_visible_map_objects())
+
+    def read_current_map_blocks(self) -> CurrentMapBlocks:
+        """Read the active mutable block grid from Red's bordered map buffer.
+
+        The engine copies a map into ``wOverworldMap`` with three connection
+        blocks of padding on every side. Cut mutates that buffer rather than
+        cartridge data, so current traversal must read the inner grid back
+        before it claims a tree changed the map.
+        """
+
+        map_id = self._memory.read_u8(RamAddress.CURRENT_MAP)
+        height = self._memory.read_u8(RamAddress.CURRENT_MAP_HEIGHT)
+        width = self._memory.read_u8(RamAddress.CURRENT_MAP_WIDTH)
+        stride = width + 6
+        if height == 0 or width == 0 or (height + 6) * stride > 1300:
+            raise CurrentMapBlocksError(
+                f"current map exposes impossible block dimensions {(height, width)}"
+            )
+        origin = int(RamAddress.OVERWORLD_MAP) + 3 * stride + 3
+        rows = tuple(
+            tuple(self._memory.read_u8(origin + y * stride + x) for x in range(width))
+            for y in range(height)
+        )
+        return CurrentMapBlocks(map_id, rows)
 
     def read_overworld_movement_mode(self) -> OverworldMovementMode:
         raw = self._memory.read_u8(RamAddress.WALK_BIKE_SURF_STATE)
