@@ -20,6 +20,9 @@ from pokemon_red_completion.strategic_navigation import (
     StrategicNavigationRecord,
     StrategicNavigationTag,
 )
+from pokemon_red_completion.strategic_navigation_audit import (
+    audit_strategic_navigation_collection,
+)
 from pokemon_red_completion.strategic_navigation_dataset import (
     StrategicNavigationDataset,
     StrategicNavigationDatasetError,
@@ -38,22 +41,32 @@ from pokemon_red_completion.trajectory import InMemoryTrajectorySink, SemanticSn
 class _Reader:
     manifest_sha256 = "a" * 64
 
-    def __init__(self, streams: dict[str, list[dict[str, object]]]) -> None:
+    def __init__(
+        self,
+        streams: dict[str, list[dict[str, object]]],
+        *,
+        episode_id: str = "episode-root-train-001",
+        root_lineage_id: str = "root-train-001",
+        partition: str = "train",
+    ) -> None:
         self.streams = streams
+        self.episode_id = episode_id
+        self.root_lineage_id = root_lineage_id
+        self.partition = partition
 
     def read_header(self) -> dict[str, object]:
         return {
             "record_type": "episode",
             "trajectory_schema": "pokemon.trajectory.v1",
-            "episode_id": "episode-root-train-001",
+            "episode_id": self.episode_id,
             "metadata": {
                 "policy": {
                     "actor": "deterministic_teacher",
                     "policy_id": "strategic-teacher-v1",
                 },
                 "split": {
-                    "root_lineage_id": "root-train-001",
-                    "partition": "train",
+                    "root_lineage_id": self.root_lineage_id,
+                    "partition": self.partition,
                 },
             },
         }
@@ -141,16 +154,24 @@ def _record(
     return StrategicNavigationRecord(decision, outcome)
 
 
-def _reader() -> _Reader:
+def _reader(
+    *,
+    root: str = "root-train-001",
+    partition: str = "train",
+    statuses: tuple[NavigationOutcomeStatus, ...] = (
+        NavigationOutcomeStatus.SUCCEEDED,
+        NavigationOutcomeStatus.FAILED,
+        NavigationOutcomeStatus.INTERRUPTED,
+    ),
+) -> _Reader:
     snapshot = SemanticSnapshot(
         game_id="pokemon.test",
         mode="overworld",
         location="pokemon.test:area:origin",
     )
-    records = (
-        _record(0, NavigationOutcomeStatus.SUCCEEDED),
-        _record(1, NavigationOutcomeStatus.FAILED),
-        _record(2, NavigationOutcomeStatus.INTERRUPTED),
+    records = tuple(
+        _record(index, status, root=root, partition=partition)
+        for index, status in enumerate(statuses)
     )
     return _Reader(
         {
@@ -169,7 +190,10 @@ def _reader() -> _Reader:
                 ).to_dict()
                 for index, record in enumerate(records)
             ],
-        }
+        },
+        episode_id=f"episode-{root}",
+        root_lineage_id=root,
+        partition=partition,
     )
 
 
@@ -365,12 +389,69 @@ def test_authenticated_episode_reader_joins_decisions_to_consumed_outcomes() -> 
         },
         "examples": 3,
         "outcomes": {"failed": 1, "interrupted": 1, "succeeded": 1},
+        "candidate_count_counts": {"2": 3},
+        "semantic_need_tag_counts": {"advance_story": 3},
         "teacher_choice_examples": 1,
         "outcome_examples": 2,
         "censored_examples": 1,
+        "replan_reason_counts": {},
+        "interruption_kind_counts": {"external_power_loss": 1},
         "movement_action_labels": 0,
         "numeric_feature_schema_frozen": False,
         "promotion_eligible": False,
+    }
+
+
+def test_authenticated_lineages_feed_partition_coverage_and_baseline_audit() -> None:
+    training = load_strategic_navigation_episode(_reader())
+    validation = load_strategic_navigation_episode(
+        _reader(
+            root="root-validation-001",
+            partition="validation",
+            statuses=(NavigationOutcomeStatus.SUCCEEDED,),
+        )
+    )
+
+    audit = audit_strategic_navigation_collection((training, validation))
+
+    assert audit.public_dict() == {
+        "schema": "strategic-navigation-collection-audit-v1",
+        "partition_audit": {
+            "schema": "strategic-navigation-partition-audit-v1",
+            "lineage_count": 2,
+            "partition_counts": {"train": 1, "validation": 1},
+            "decision_overlap_count": 0,
+            "validation_need_tags_missing_from_training": [],
+            "ready_for_model_development": True,
+            "reasons": [],
+        },
+        "example_count": 4,
+        "partition_example_counts": {"train": 3, "validation": 1},
+        "outcomes": {"failed": 1, "interrupted": 1, "succeeded": 2},
+        "candidate_count_counts": {"2": 4},
+        "candidate_availability_counts": {"available": 8},
+        "semantic_need_tag_counts": {"advance_story": 4},
+        "selected_index_counts": {"0": 4},
+        "replan_reason_counts": {},
+        "interruption_kind_counts": {"external_power_loss": 1},
+        "resource_renewal_counts": {},
+        "failure_reason_counts": {
+            "external_power_loss": 1,
+            "replan_budget_exhausted": 1,
+        },
+        "available_route_cost": {"count": 8, "min": 7, "max": 12},
+        "route_cost_only_baseline": {
+            "unique_minimum_cases": 2,
+            "matches": 0,
+            "ties_excluded": 0,
+        },
+        "candidate_shape_baseline": {
+            "training_selected_indexes": {"advance_story/2": 0},
+            "validation_cases": 1,
+            "matches": 1,
+        },
+        "numeric_feature_schema_frozen": False,
+        "model_development_admitted": True,
     }
 
 

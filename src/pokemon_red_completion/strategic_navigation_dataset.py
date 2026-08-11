@@ -7,7 +7,7 @@ a power loss cannot quietly become either success or failure.
 
 The dataset carries the identity-free policy projection from
 ``strategic_navigation``. It does not freeze a numeric feature vocabulary or
-claim that any records have been collected; those are later admission gates.
+infer collection status from the schema itself; those are later admission gates.
 """
 
 from __future__ import annotations
@@ -69,6 +69,10 @@ class StrategicNavigationExample:
     policy_input: Mapping[str, object]
     selected_candidate_index: int
     outcome_status: NavigationOutcomeStatus
+    replan_reasons: tuple[StrategicReplanReason, ...] = ()
+    interruption_kinds: tuple[StrategicInterruptionKind, ...] = ()
+    resource_renewals: tuple[StrategicResourceKind, ...] = ()
+    failure_reason: NavigationFailureReason | None = None
 
     def __post_init__(self) -> None:
         for name in ("decision_id", "episode_id", "root_lineage_id", "partition"):
@@ -78,6 +82,27 @@ class StrategicNavigationExample:
             raise StrategicNavigationDatasetError("decision index is invalid")
         if not isinstance(self.outcome_status, NavigationOutcomeStatus):
             raise StrategicNavigationDatasetError("example outcome status is invalid")
+        for name, expected_type in (
+            ("replan_reasons", StrategicReplanReason),
+            ("interruption_kinds", StrategicInterruptionKind),
+            ("resource_renewals", StrategicResourceKind),
+        ):
+            values = getattr(self, name)
+            if not isinstance(values, tuple) or any(
+                not isinstance(value, expected_type) for value in values
+            ):
+                raise StrategicNavigationDatasetError(
+                    f"example {name} must use an immutable semantic vocabulary"
+                )
+        if self.outcome_status is NavigationOutcomeStatus.SUCCEEDED:
+            if self.failure_reason is not None:
+                raise StrategicNavigationDatasetError(
+                    "a successful example cannot carry a failure reason"
+                )
+        elif not isinstance(self.failure_reason, NavigationFailureReason):
+            raise StrategicNavigationDatasetError(
+                "a failed or interrupted example needs a semantic failure reason"
+            )
         canonical = _policy_input(
             _thaw_policy_input(self.policy_input),
             subject="strategic example policy input",
@@ -105,6 +130,18 @@ class StrategicNavigationExample:
         if self.outcome_status is NavigationOutcomeStatus.FAILED:
             return False
         return None
+
+    @property
+    def candidates(self) -> tuple[Mapping[str, object], ...]:
+        """Return the validated immutable identity-free candidate rows."""
+
+        return _candidate_rows(self)
+
+    @property
+    def semantic_need_tags(self) -> tuple[str, ...]:
+        """Return the validated portable need vocabulary for this decision."""
+
+        return _need_tags(self)
 
 
 @dataclass(frozen=True, slots=True)
@@ -183,6 +220,12 @@ class StrategicNavigationDataset:
                 policy_input=record.decision.policy_input(),
                 selected_candidate_index=record.decision.selected_index,
                 outcome_status=record.outcome.status,
+                replan_reasons=tuple(item.reason for item in record.outcome.replans),
+                interruption_kinds=tuple(
+                    item.kind for item in record.outcome.interruptions
+                ),
+                resource_renewals=record.outcome.resource_renewals,
+                failure_reason=record.outcome.failure_reason,
             )
             for record in self.records
         )
@@ -272,6 +315,18 @@ class CollectedStrategicNavigationDataset:
 
     def public_summary(self) -> dict[str, object]:
         outcomes = Counter(item.outcome_status.value for item in self.examples)
+        candidate_counts = Counter(
+            len(_candidate_rows(item)) for item in self.examples
+        )
+        need_tags = Counter(
+            tag for item in self.examples for tag in _need_tags(item)
+        )
+        replan_reasons = Counter(
+            reason.value for item in self.examples for reason in item.replan_reasons
+        )
+        interruption_kinds = Counter(
+            kind.value for item in self.examples for kind in item.interruption_kinds
+        )
         return {
             "schema": "collected-strategic-navigation-dataset-summary-v1",
             "episode_id": self.episode_id,
@@ -281,6 +336,10 @@ class CollectedStrategicNavigationDataset:
             "provenance": {"actor": self.actor, "policy_id": self.policy_id},
             "examples": len(self.examples),
             "outcomes": dict(sorted(outcomes.items())),
+            "candidate_count_counts": {
+                str(count): total for count, total in sorted(candidate_counts.items())
+            },
+            "semantic_need_tag_counts": dict(sorted(need_tags.items())),
             "teacher_choice_examples": sum(
                 item.teacher_choice_target is not None for item in self.examples
             ),
@@ -290,10 +349,18 @@ class CollectedStrategicNavigationDataset:
             "censored_examples": sum(
                 item.outcome_target is None for item in self.examples
             ),
+            "replan_reason_counts": dict(sorted(replan_reasons.items())),
+            "interruption_kind_counts": dict(sorted(interruption_kinds.items())),
             "movement_action_labels": 0,
             "numeric_feature_schema_frozen": False,
             "promotion_eligible": False,
         }
+
+    @property
+    def semantic_need_tags(self) -> frozenset[str]:
+        return frozenset(
+            tag for example in self.examples for tag in _need_tags(example)
+        )
 
 
 def load_strategic_navigation_episode(
@@ -402,7 +469,7 @@ def load_strategic_navigation_episode(
             raise StrategicNavigationDatasetError(
                 "strategic decision has no consumed outcome"
             ) from error
-        status = _outcome_status(
+        outcome = _validated_outcome(
             outcome_payload,
             decision_id=decision_id,
             selected_index=selected_index,
@@ -416,7 +483,13 @@ def load_strategic_navigation_episode(
                 partition=partition,
                 policy_input=policy_input,
                 selected_candidate_index=selected_index,
-                outcome_status=status,
+                outcome_status=outcome.status,
+                replan_reasons=tuple(item.reason for item in outcome.replans),
+                interruption_kinds=tuple(
+                    item.kind for item in outcome.interruptions
+                ),
+                resource_renewals=outcome.resource_renewals,
+                failure_reason=outcome.failure_reason,
             )
         )
     if events_by_decision:
@@ -589,12 +662,32 @@ def _freeze_policy_input(value: dict[str, object]) -> Mapping[str, object]:
     )
 
 
-def _outcome_status(
+def _candidate_rows(
+    example: StrategicNavigationExample,
+) -> tuple[Mapping[str, object], ...]:
+    rows = example.policy_input.get("candidates")
+    if not isinstance(rows, tuple) or any(not isinstance(row, Mapping) for row in rows):
+        raise StrategicNavigationDatasetError(
+            "validated strategic example lost its immutable candidate rows"
+        )
+    return rows
+
+
+def _need_tags(example: StrategicNavigationExample) -> tuple[str, ...]:
+    tags = example.policy_input.get("semantic_need_tags")
+    if not isinstance(tags, tuple) or any(not isinstance(tag, str) for tag in tags):
+        raise StrategicNavigationDatasetError(
+            "validated strategic example lost its semantic need tags"
+        )
+    return tags
+
+
+def _validated_outcome(
     payload: Mapping[str, object],
     *,
     decision_id: str,
     selected_index: int,
-) -> NavigationOutcomeStatus:
+) -> StrategicNavigationOutcome:
     if set(payload) != {
         "decision_id",
         "selected_candidate_index",
@@ -652,7 +745,7 @@ def _outcome_status(
     except (TypeError, ValueError) as error:
         raise StrategicNavigationDatasetError("strategic failure reason is invalid") from error
     try:
-        StrategicNavigationOutcome(
+        outcome = StrategicNavigationOutcome(
             decision_id=decision_id,
             selected_destination_ref=f"binding:{selected_index}",
             status=status,
@@ -671,7 +764,7 @@ def _outcome_status(
         )
     except StrategicNavigationError as error:
         raise StrategicNavigationDatasetError(str(error)) from error
-    return status
+    return outcome
 
 
 def _replan(value: object) -> StrategicReplanOutcome:
@@ -782,9 +875,11 @@ class StrategicNavigationPartitionAudit:
 
 
 def audit_strategic_navigation_partitions(
-    datasets: Iterable[StrategicNavigationDataset],
+    datasets: Iterable[
+        StrategicNavigationDataset | CollectedStrategicNavigationDataset
+    ],
 ) -> StrategicNavigationPartitionAudit:
-    """Audit whole-lineage splits without claiming model promotion readiness."""
+    """Audit in-memory or authenticated whole-lineage splits."""
 
     rows = tuple(datasets)
     reasons: list[str] = []
@@ -802,7 +897,7 @@ def audit_strategic_navigation_partitions(
         reasons.append("mixed_policy")
 
     decision_ids = [
-        record.decision.decision_id for dataset in rows for record in dataset.records
+        example.decision_id for dataset in rows for example in dataset.examples
     ]
     overlap = len(decision_ids) - len(set(decision_ids))
     if overlap:
