@@ -20,6 +20,13 @@ holder, and delegates only the title-specific menu sequence. The live round trip
 Center, boarded at `(13,11)`, crossed two genuine water-travel edges to `(16,11)`, disembarked and
 returned to `(12,11)` in land mode. It acknowledged all 13 route steps.
 
+Direct visible occupancy is now proved by a fourth source-bound route. The Generation I adapter
+decodes currently rendered non-player sprite slots into temporary neutral coordinates. An
+adversarial Cinnabar candidate received no ROM object blockers and crossed the stationary `(6,14)`
+NPC. Live state exposed it from `(6,15)`; the executor replanned before input, reached `(6,13)` by
+an alternate suffix, and returned to `(12,11)`. All 43 movement requests were acknowledged. A
+visible object is not stored as permanent terrain; only the settled failed-step fallback is durable.
+
 ## What is proved now
 
 | Layer | Current evidence | Authority boundary |
@@ -29,14 +36,15 @@ returned to `(12,11)` in land mode. It acknowledged all 13 route steps.
 | Static terrain | 48,216 standable coordinates and 154,653 directed land edges, including 749 ledge transitions | Initial land geometry, not current object or script state |
 | Stateful mechanics | 8 ledge rules, 11 land-pair rules and 3 water-pair rules feed executable land/water mode graphs; 9 Cut swaps and 25 initial boulders remain decoded inventory | Surf is live-qualified; Cut and Strength are not yet executable state transitions |
 | Route composition | Game-neutral `RoutePlan` selects reachable endpoints and flattens every edge into exact source/expected state | Macro path cost is still selected before local path cost |
-| Closed-loop execution | Game-neutral runtime acknowledges coordinates and map transitions, bounds readiness/retries/interruptions, discovers blockers and replans | Blockers are inferred from failed movement, not read as a complete visible-object overlay |
-| Live falsification | Center: 86/86 steps, 3 wilds, 0 replans. Mart: 108 acknowledged steps/112 requests, 1 wild, 2 replans. Surf: 13/13 steps, exact land→water→land round trip | Three clean uncounted Red probes; current objects, Cut, Strength and story gates remain outside authority |
+| Closed-loop execution | Game-neutral runtime acknowledges coordinates and map transitions, bounds readiness/retries/interruptions, projects current visible occupancy, discovers remaining blockers and replans | Visible occupancy is viewport-bounded; hidden/off-screen and unclassified obstacles still rely on failed-step fallback |
+| Live falsification | Center: 86/86 steps, 3 wilds, 0 replans. Mart: 108 acknowledged steps/112 requests, 1 wild, 2 replans. Surf: 13/13 steps, exact land→water→land round trip. Visible-object route: 43/43 movement requests, one pre-input replan | Four clean uncounted Red probes; Cut, Strength and story gates remain outside authority |
 
 The public records are [the complete map extraction](evidence/map-graph-2026-08-10.json),
 [the traversal extraction](evidence/traversal-rules-2026-08-10.json),
 [the control route](evidence/pallet-viridian-composed-route-probe-2026-08-10.json), and
 [the replanning route](evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json), and
-[the Surf round trip](evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json).
+[the Surf round trip](evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json), and
+[the visible-object route](evidence/cinnabar-visible-object-route-probe-2026-08-10.json).
 
 ## Corrections made during this milestone
 
@@ -92,6 +100,20 @@ coordinate, and only then infers a blocker. The live probe also showed that 1/1-
 pulses can phase-lock between joypad polls, so the field-route harness uses the repository's proven
 8/16-frame timing.
 
+### An initial object event is not current occupancy
+
+ROM object events describe starting positions. They do not say whether a flag hid an object, where
+a wandering sprite stands now, or where a movable object has gone. The observer now reads the
+pinned live sprite tables, excludes player slot zero and the engine's hidden/off-screen marker, and
+publishes only currently rendered coordinates. The executor supplies those coordinates to the
+planner before an ordinary walk and sends no input when its next target is occupied.
+
+The overlay is temporary by design. A regression first observes an NPC blocking the preferred route,
+then removes it and forces a second replan; the departed coordinate is absent from that second
+request. This prevents a moving person from becoming a wall. Another regression makes an object
+appear during the post-input settle and proves it redirects the retry. The live probe leaves ROM
+object positions unblocked, so success cannot be explained by the old static shortcut.
+
 ## Code strengths
 
 1. **The search and composition cores are game-neutral.** `global_router.py`, `local_router.py` and
@@ -113,17 +135,18 @@ pulses can phase-lock between joypad polls, so the field-route harness uses the 
 7. **Interruption policy stays outside the router.** The neutral runtime sees a typed interruption;
    the Gen I adapter authenticates and flees only wild battles. Trainers and unknown battle states
    remain fatal rather than becoming a hidden navigation policy.
+8. **Dynamic occupancy stays dynamic.** The title adapter supplies visible coordinates; the neutral
+   executor uses them for the current replacement only, while independently settled failure remains
+   the durable fallback.
 
 ## Ranked gaps and risks
 
-### P0 — visible objects are still inferred rather than observed
+### P0 — visible occupancy is not passage semantics
 
-`map_object_events` gives ROM initial positions. It does not say which objects are hidden by flags,
-where a wandering NPC stands now, or where a boulder has moved. The planner currently blocks every
-initial event, then treats two unconsumed movement requests as evidence that the requested target is
-currently unavailable. That recovered from Route 1's youngster, but it cannot distinguish a moving
-person from a closed gate or permanent collision. Add direct visible-object projection where the
-revision exposes it, while retaining bounded failed-step discovery as a safe fallback.
+The live overlay closes currently rendered sprite occupancy, not omniscience. Hidden and off-screen
+objects can still appear later, and a failed input still cannot classify an NPC, a closed story gate,
+or a permanent collision by itself. Preserve bounded fallback discovery, but add explicit semantic
+predicates before generated routing receives broader authority.
 
 ### P1 — passage availability lacks semantic predicates
 
@@ -151,17 +174,19 @@ and composition layer. Add that before completion-run authority.
 
 ## Ordered next milestones
 
-1. **Project visible dynamic objects.** Prefer observed occupancy over failed-input inference where
-   revision-decoded state supports it, and separately classify permanent/story-gated blocks.
-2. **Implement Cut and Strength separately.** Rebuild after Cut; search bounded push state for
-   Strength; never conflate possession with an open passage.
-3. **Filter one closed/open story gate.** Establish both states independently and prove the same
+1. **Implement Cut as observed mutation.** Rebuild the local graph only after the live block
+   replacement is acknowledged; possession alone must not open the edge.
+2. **Implement Strength as bounded push search.** Search player/boulder state rather than treating
+   possession as puzzle completion.
+3. **Classify permanent and story-gated blocks.** Preserve visible occupancy and failed-step fallback,
+   but do not infer passage meaning from either one.
+4. **Filter one closed/open story gate.** Establish both states independently and prove the same
    passage changes availability without changing static topology.
-4. **Jointly price macro alternatives.** Compare local approach plus passage cost before selecting
+5. **Jointly price macro alternatives.** Compare local approach plus passage cost before selecting
    the map path; the current layered optimizer can miss a cheaper recovery detour.
-5. **Collect strategic navigation examples.** Store candidate destinations, semantic need, route
+6. **Collect strategic navigation examples.** Store candidate destinations, semantic need, route
    cost, interruption and outcome. Do not label every shortest-path frame as a learned decision.
-6. **Run the Crystal microbenchmark.** Add a thin adapter only after the executor contract is title
+7. **Run the Crystal microbenchmark.** Add a thin adapter only after the executor contract is title
    neutral, then compare frozen-Red zero-shot, preregistered few-shot and from-scratch baselines.
 
 ## Admission gate for completion-run routing
@@ -173,7 +198,7 @@ Generated routing remains experimental until all of the following are true:
 - every action is acknowledged from live coordinates/map state before the plan advances (met for
   those routes);
 - current blockers trigger bounded replanning rather than permanent-terrain assumptions (met by
-  failed-step discovery; direct occupancy remains open);
+  direct visible occupancy plus failed-step fallback);
 - wild and menu/script interruptions use shared bounded semantic recovery (wild met; menu/script
   remains open);
 - required Surf capability and land/water mode come from observed badge, party and locomotion state

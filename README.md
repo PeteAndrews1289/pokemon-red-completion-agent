@@ -11,13 +11,16 @@
 > moving youngster without a typed corridor fallback. A third source-bound probe now exited
 > Cinnabar Center, selected a water target from cartridge terrain, boarded through a living Surf
 > holder, traveled in observed water mode, and returned to the exact shore origin in land mode.
+> A fourth source-bound probe deliberately left ROM object positions unblocked, observed a live
+> Cinnabar NPC at `(6,14)`, and replanned before sending the input that would enter its square.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
 > [capability audit](docs/current-audit-2026-08-10.md),
 > [navigation audit](docs/traversal-audit-2026-08-10.md), and
 > [control route](docs/evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
 > [replanning route](docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json),
-> plus the [Surf round trip](docs/evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json).
+> plus the [Surf round trip](docs/evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json) and
+> [visible-object route](docs/evidence/cinnabar-visible-object-route-probe-2026-08-10.json).
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -40,8 +43,12 @@ around the naturally moving Route 1 youngster, and authenticated a wild interrup
 executor now owns step acknowledgement, bounded retries, typed interruptions and replanning.
 The stateful local graph now distinguishes land, Surf boarding, water travel and disembarking; a
 live post-Blaine round trip acknowledged all 13 planned steps and returned to `(12, 11)` in land
-mode. Direct visible-object observation is still absent, while Cut and Strength remain stateful
-future adapters rather than pretend-open edges.
+mode. The same revision-pinned observer now projects only currently rendered non-player sprites as
+temporary planner constraints. A live adversarial route saw Cinnabar's stationary NPC from
+`(6,15)`, replanned before pressing toward `(6,14)`, reached its goal by the alternate path, and
+returned to the exact shore origin. Failed-step discovery remains the fallback for off-screen or
+otherwise unclassified obstacles; Cut and Strength remain stateful future adapters rather than
+pretend-open edges.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

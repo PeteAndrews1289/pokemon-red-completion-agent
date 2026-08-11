@@ -1,5 +1,16 @@
 # Three-agent coordination
 
+> **2026-08-10 Lane A visible-object checkpoint:** direct current occupancy is live-qualified at
+> source `1c6eb31`. The Gen I adapter reads visible non-player sprite slots and the neutral executor
+> treats them as temporary replan constraints before input; settled failed steps remain the durable
+> fallback. The adversarial Cinnabar probe used no ROM object positions as blockers, observed the
+> stationary `(6,14)` NPC from `(6,15)`, sent no input toward it, replaced the suffix, reached
+> `(6,13)`, and returned to `(12,11)`: 43/43 acknowledged movement requests, no interruption,
+> released controls and no ROM-adjacent writes. Record:
+> `docs/evidence/cinnabar-visible-object-route-probe-2026-08-10.json`. Next: Cut as an observed map
+> mutation, then Strength and one closed/open story gate. Generated routing remains outside
+> completion-run authority and counted v95 remains sealed at 0/10.
+
 > **2026-08-10 Lane A Surf checkpoint:** stateful cartridge routing is live-qualified at source
 > `0d1fc43`. The planner now searches `(coordinate, movement mode)`, enables boarding only from an
 > observed Soul Badge plus a complete party with a living Surf holder, and compiles the field move

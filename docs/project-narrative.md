@@ -1,5 +1,32 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 10: the route looked before it walked
+
+Failed movement had already taught the router how to recover, but only after it pressed into the
+world twice. That is useful fallback evidence, not perception. Red already maintains a more direct
+answer: fifteen non-player sprite slots, a hidden/off-screen marker, and live map coordinates.
+
+The title adapter now turns those revision-pinned bytes into temporary occupancy in the otherwise
+game-neutral traversal snapshot. Before an ordinary walk, the executor checks whether its target is
+currently occupied. If so, the planner receives the visible overlay and replaces the route without
+sending the input. The constraint is intentionally temporary; when a person walks away, the tile is
+not remembered as a wall. A separately settled failed movement remains the bounded fallback for
+objects beyond the visible window and for obstacles the adapter cannot yet classify.
+
+The live test was designed to defeat a superficial implementation. Cinnabar's graph was built with
+no ROM object positions blocked. The cartridge merely selected a stationary NPC at `(6,14)` and a
+goal whose preferred 18-step route crossed it. At `(6,15)`, live memory exposed the NPC and another
+sprite. The executor recorded a visible-object replan, sent no Left input, took a four-step alternate
+suffix, reached `(6,13)`, and returned to `(12,11)`. Across the full probe, 43 movement requests
+produced 43 acknowledgements; the emulator released every control and changed no adjacent save
+artifact. The [public receipt](evidence/cinnabar-visible-object-route-probe-2026-08-10.json) binds
+that claim to clean source.
+
+This is a small but important transfer boundary. The route does not memorize where one Cinnabar NPC
+started; it asks the current game which space is occupied. It still does not understand why a guard
+blocks a passage, how Cut changes a block, or how Strength changes a boulder state. Those are the
+next distinct state transitions, beginning with Cut.
+
 ## August 10: water became state, not scenery
 
 The land router could already choose a destination, cross maps and recover when the world refused a

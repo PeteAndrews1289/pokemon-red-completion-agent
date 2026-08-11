@@ -418,9 +418,31 @@ artifact.
 
 This is the kind of structure that can transfer. The learned layer can decide that a water route
 serves healing, capture or exploration. It does not need to rediscover how a particular cartridge
-stores shore collisions or which menu row means Surf. The next honest gaps are visible moving
-objects, Cut's map mutation, Strength's pushed-object state and story gates that change whether the
-same passage exists.
+stores shore collisions or which menu row means Surf.
+
+---
+
+## Act XII: look before you walk
+
+The first closed-loop route recovered from people by pressing into them twice. That was honest—the
+game did refuse the inputs—but it was still reactive in the clumsiest possible way. The cartridge
+already knew which non-player sprites were rendered and where they stood.
+
+The new adapter reads that live overlay. The neutral executor checks it before an ordinary walk and
+asks for a replacement route without pressing toward an occupied square. It also forgets the
+constraint when the object leaves; a moving person is not promoted into permanent terrain. Failed
+steps remain the bounded fallback beyond the visible window.
+
+The proof deliberately denied the planner Red's initial object positions. ROM data selected a
+stationary Cinnabar NPC at `(6,14)` and a goal at `(6,13)` whose preferred route crossed the NPC,
+but it did not mark the square blocked. From `(6,15)`, live RAM exposed the person. The last Left
+input disappeared before it was sent, a four-step suffix went around, and the route returned to its
+exact shore origin. Forty-three requests, forty-three acknowledged movements, one replan caused by
+perception rather than collision.
+
+A map says where someone started. Perception says where they are. The next honest gaps are Cut's
+map mutation, Strength's pushed-object state and story gates that change whether the same passage
+exists.
 
 ---
 
@@ -476,8 +498,9 @@ Being precise about this matters more than the story sounding finished.
   Viridian Center and Mart live while acknowledging every movement, handling four wild encounters,
   and replanning around both a disclosed artificial blocker and a naturally moving NPC. A third
   generated route has boarded, traversed and exited Surf from observed movement mode, then returned
-  to its exact shore origin. Cut, Strength, direct visible-object projection and story gates remain
-  outside authority.
+  to its exact shore origin. A fourth generated route directly observed a Cinnabar NPC, replanned
+  before sending an input into its occupied square, and returned to its origin. Cut, Strength and
+  story gates remain outside authority.
 - A member that is too weak for where the run happens to be is now routed somewhere that suits it,
   travels there, and gains levels. That is new, and it is the mechanism the rest depends on.
 - A clean-power teacher run reaches its 60/55/55/55/55/55 readiness gate and completes the game;

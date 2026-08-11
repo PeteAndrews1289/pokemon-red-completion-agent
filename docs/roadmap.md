@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-10): advance from proved Surf to dynamic traversal
+## Current focus (2026-08-10): advance from visible occupancy to map mutation
 
 The game-neutral route executor is implemented and live-qualified at source `6b2cf65`. It requires
 exact acknowledgement after every movement, tolerates Gen I's staggered map/coordinate transition,
@@ -30,25 +30,30 @@ one action after reaching their warp coordinate, and one-frame controller pulses
 between Red's joypad polls. See the
 [Surf receipt](evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json).
 
-This closes the Surf gate, but not general navigation. Current blocker discovery is causal—two
-settled, unconsumed requests mark the target square unavailable—not a complete observation of
-visible moving objects. Cut mutations, Strength pushes and story flags remain unavailable. The
-ordered gates are now:
+Direct visible occupancy is now closed at clean source `1c6eb31`. The Gen I adapter projects
+currently rendered non-player sprite slots into the neutral traversal snapshot, and the executor
+uses that overlay as a temporary replan constraint before sending an ordinary walk. An adversarial
+Cinnabar route intentionally left all ROM object positions unblocked; live RAM exposed the
+stationary `(6,14)` NPC from `(6,15)`, caused one zero-input replan, and the route reached `(6,13)`
+before returning to `(12,11)`. All 43 movements were acknowledged from 43 requests. See the
+[visible-object receipt](evidence/cinnabar-visible-object-route-probe-2026-08-10.json).
 
-1. Add direct visible-object projection where revision-decoded state can support it. Keep failed-step
-   discovery as the fallback, but do not infer that every permanent block is an NPC.
-2. Add Cut as an observed block replacement and recompute the local graph after use.
-3. Add Strength as bounded player/boulder search over observed push state; do not reduce it to a
+This closes currently rendered occupancy, not general navigation. Hidden/off-screen objects still
+need bounded failed-step discovery; Cut mutations, Strength pushes and story flags remain
+unavailable. The ordered gates are now:
+
+1. Add Cut as an observed block replacement and recompute the local graph after use.
+2. Add Strength as bounded player/boulder search over observed push state; do not reduce it to a
    possession flag.
-4. Filter one story-gated passage from observed semantic predicates, independently prove its closed
+3. Filter one story-gated passage from observed semantic predicates, independently prove its closed
    and open states, and keep unknown predicates unavailable.
-5. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
+4. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
    selecting a macro path before local cost is known.
-6. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
+5. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
    prizes—so one-cartridge reachability becomes complete rather than a lower bound.
-7. Record strategic destination choices, replans and interruption outcomes for learning. Exact
+6. Record strategic destination choices, replans and interruption outcomes for learning. Exact
    arrow sequences remain planner outputs, not imitation labels.
-8. Add Crystal's thin adapter after direct occupancy and one story predicate preserve the neutral
+7. Add Crystal's thin adapter after direct occupancy and one story predicate preserve the neutral
    executor contract, then run the
    defined zero-shot/few-shot/from-scratch navigation benchmark.
 

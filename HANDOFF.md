@@ -14,6 +14,38 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Visible occupancy is observed before the route acts — 2026-08-10
+
+Clean source `1c6eb31fc61f40e440c8c33482f88bb3c0dd9fbe` closes the direct visible-object
+gate. The revision-pinned Red/Blue adapter reads `wNumSprites` plus the parallel 16-byte sprite-state
+tables, excludes player slot zero and the engine's `$FF` hidden/off-screen image marker, and projects
+each remaining sprite's live map coordinate into the neutral traversal snapshot. Battle state never
+decodes overworld sprite RAM.
+
+The executor checks that temporary overlay before an ordinary same-map walk. If the candidate target
+is occupied, it requests a replacement without sending the movement. Visible objects are deliberately
+not copied into the durable blocker set: an NPC that leaves may become traversable again. Only an
+input that remains unconsumed after the existing bounded settle becomes durable fallback evidence.
+ROM-free regressions cover pre-input observation, an object appearing during settle, and a departed
+object disappearing from the next replan request. The address fixture uses literal upstream values,
+not constants derived from the implementation under test.
+
+The authenticated post-Blaine falsification intentionally built Cinnabar's local graph with **no ROM
+object positions blocked**. Cartridge events selected a stationary object at `(6,14)` and a goal at
+`(6,13)` whose 18-step preferred candidate crossed it. Live state exposed both current sprites as
+the player reached `(6,15)`; the executor recorded `reason=visible_object`, sent no Left input into
+the occupied square, replaced the suffix with four steps, reached the goal, and returned to the exact
+`(12,11)` shore origin. Across Center exit, outbound and return it acknowledged **43/43** movements
+from 43 requests, used one transition wait, released all controls and changed no ROM-adjacent
+artifact. Record:
+[cinnabar-visible-object-route-probe-2026-08-10.json](docs/evidence/cinnabar-visible-object-route-probe-2026-08-10.json).
+
+This proves currently rendered occupancy, not omniscient object state. Hidden/off-screen objects,
+closed story passages, Cut mutations and Strength pushes still require their own semantics; bounded
+failed-step discovery remains necessary. Next implement Cut as an observed block replacement, then
+Strength and one independently proved closed/open story gate. Generated routing stays outside the
+completion run and counted v95 remains sealed at **0/10**.
+
 ## Stateful Surf is a live cartridge-derived route — 2026-08-10
 
 Surf is now an explicit movement-mode transition rather than a static permission bit. The shared

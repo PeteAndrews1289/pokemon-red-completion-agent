@@ -1,0 +1,760 @@
+{
+  "schema": "cinnabar-visible-object-route-probe-v1",
+  "recorded_on": "2026-08-10",
+  "status": "ok",
+  "rom": {
+    "title": "POKEMON RED",
+    "size_bytes": 1048576,
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+  },
+  "source": {
+    "git_commit": "1c6eb31fc61f40e440c8c33482f88bb3c0dd9fbe",
+    "worktree_dirty": false
+  },
+  "executable_source_bundle_sha256": "c106f581e47cfe9a1e35950f6235b526e260eb0ce9068b708ab13e0efbeeec4c",
+  "private_capture_precondition": {
+    "authenticated": true,
+    "checkpoint_id": "portable_loop_defeat_blaine_terminal",
+    "checkpoint_label": "Portable loop completed defeat_blaine",
+    "required_verified_objective": "defeat_blaine"
+  },
+  "authority_under_test": "ROM object events selected an adversarial stationary object and route goal but did not block planner coordinates. Revision-decoded live sprite state supplied temporary occupancy; exact live map/coordinate state acknowledged every step.",
+  "selection": {
+    "start_yx": [
+      12,
+      11
+    ],
+    "goal_yx": [
+      6,
+      13
+    ],
+    "stationary_object_initial_yx": [
+      6,
+      14
+    ],
+    "unblocked_candidate_steps": 18,
+    "avoiding_candidate_steps": 18,
+    "unblocked_candidate_crosses_object": true,
+    "rom_object_positions_used_as_planner_blockers": false
+  },
+  "visible_decision": {
+    "player_yx": [
+      6,
+      15
+    ],
+    "occupied_yx": [
+      [
+        5,
+        12
+      ],
+      [
+        6,
+        14
+      ]
+    ],
+    "sprite_index": 2,
+    "picture_id": 11,
+    "movement_status": 2,
+    "image_index": 100,
+    "object_yx": [
+      6,
+      14
+    ],
+    "input_sent_toward_occupied_square": false
+  },
+  "plans": {
+    "center_exit": {
+      "map_ids": [
+        171,
+        8
+      ],
+      "start_yx": [
+        3,
+        3
+      ],
+      "terminal_yx": [
+        12,
+        11
+      ],
+      "steps": [
+        {
+          "source_map_id": 171,
+          "source_yx": [
+            3,
+            3
+          ],
+          "action": "down",
+          "expected_map_id": 171,
+          "expected_yx": [
+            4,
+            3
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 171,
+          "source_yx": [
+            4,
+            3
+          ],
+          "action": "down",
+          "expected_map_id": 171,
+          "expected_yx": [
+            5,
+            3
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 171,
+          "source_yx": [
+            5,
+            3
+          ],
+          "action": "down",
+          "expected_map_id": 171,
+          "expected_yx": [
+            6,
+            3
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 171,
+          "source_yx": [
+            6,
+            3
+          ],
+          "action": "down",
+          "expected_map_id": 171,
+          "expected_yx": [
+            7,
+            3
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 171,
+          "source_yx": [
+            7,
+            3
+          ],
+          "action": "down",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            11
+          ],
+          "kind": "return"
+        }
+      ]
+    },
+    "outbound_initial": {
+      "map_ids": [
+        8
+      ],
+      "start_yx": [
+        12,
+        11
+      ],
+      "terminal_yx": [
+        6,
+        13
+      ],
+      "steps": [
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            11
+          ],
+          "action": "right",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            12
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            12
+          ],
+          "action": "right",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            13
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            13
+          ],
+          "action": "right",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            14
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            14
+          ],
+          "action": "right",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            15
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            15
+          ],
+          "action": "right",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            16
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            16
+          ],
+          "action": "right",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            17
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            17
+          ],
+          "action": "right",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            18
+          ],
+          "action": "up",
+          "expected_map_id": 8,
+          "expected_yx": [
+            11,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            11,
+            18
+          ],
+          "action": "up",
+          "expected_map_id": 8,
+          "expected_yx": [
+            10,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            10,
+            18
+          ],
+          "action": "up",
+          "expected_map_id": 8,
+          "expected_yx": [
+            9,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            9,
+            18
+          ],
+          "action": "up",
+          "expected_map_id": 8,
+          "expected_yx": [
+            8,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            8,
+            18
+          ],
+          "action": "up",
+          "expected_map_id": 8,
+          "expected_yx": [
+            7,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            7,
+            18
+          ],
+          "action": "up",
+          "expected_map_id": 8,
+          "expected_yx": [
+            6,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            6,
+            18
+          ],
+          "action": "left",
+          "expected_map_id": 8,
+          "expected_yx": [
+            6,
+            17
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            6,
+            17
+          ],
+          "action": "left",
+          "expected_map_id": 8,
+          "expected_yx": [
+            6,
+            16
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            6,
+            16
+          ],
+          "action": "left",
+          "expected_map_id": 8,
+          "expected_yx": [
+            6,
+            15
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            6,
+            15
+          ],
+          "action": "left",
+          "expected_map_id": 8,
+          "expected_yx": [
+            6,
+            14
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            6,
+            14
+          ],
+          "action": "left",
+          "expected_map_id": 8,
+          "expected_yx": [
+            6,
+            13
+          ],
+          "kind": "walk"
+        }
+      ]
+    },
+    "return": {
+      "map_ids": [
+        8
+      ],
+      "start_yx": [
+        6,
+        13
+      ],
+      "terminal_yx": [
+        12,
+        11
+      ],
+      "steps": [
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            6,
+            13
+          ],
+          "action": "down",
+          "expected_map_id": 8,
+          "expected_yx": [
+            7,
+            13
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            7,
+            13
+          ],
+          "action": "right",
+          "expected_map_id": 8,
+          "expected_yx": [
+            7,
+            14
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            7,
+            14
+          ],
+          "action": "right",
+          "expected_map_id": 8,
+          "expected_yx": [
+            7,
+            15
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            7,
+            15
+          ],
+          "action": "right",
+          "expected_map_id": 8,
+          "expected_yx": [
+            7,
+            16
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            7,
+            16
+          ],
+          "action": "right",
+          "expected_map_id": 8,
+          "expected_yx": [
+            7,
+            17
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            7,
+            17
+          ],
+          "action": "right",
+          "expected_map_id": 8,
+          "expected_yx": [
+            7,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            7,
+            18
+          ],
+          "action": "down",
+          "expected_map_id": 8,
+          "expected_yx": [
+            8,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            8,
+            18
+          ],
+          "action": "down",
+          "expected_map_id": 8,
+          "expected_yx": [
+            9,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            9,
+            18
+          ],
+          "action": "down",
+          "expected_map_id": 8,
+          "expected_yx": [
+            10,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            10,
+            18
+          ],
+          "action": "down",
+          "expected_map_id": 8,
+          "expected_yx": [
+            11,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            11,
+            18
+          ],
+          "action": "down",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            18
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            18
+          ],
+          "action": "left",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            17
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            17
+          ],
+          "action": "left",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            16
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            16
+          ],
+          "action": "left",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            15
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            15
+          ],
+          "action": "left",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            14
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            14
+          ],
+          "action": "left",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            13
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            13
+          ],
+          "action": "left",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            12
+          ],
+          "kind": "walk"
+        },
+        {
+          "source_map_id": 8,
+          "source_yx": [
+            12,
+            12
+          ],
+          "action": "left",
+          "expected_map_id": 8,
+          "expected_yx": [
+            12,
+            11
+          ],
+          "kind": "walk"
+        }
+      ]
+    }
+  },
+  "execution": {
+    "center_exit": {
+      "passed": true,
+      "movement_requests": 5,
+      "wait_actions": 1,
+      "acknowledged_steps": 5,
+      "interruption_count": 0,
+      "replans": [],
+      "terminal_map_id": 8,
+      "terminal_yx": [
+        12,
+        11
+      ],
+      "terminal_ready": true
+    },
+    "outbound": {
+      "passed": true,
+      "movement_requests": 20,
+      "wait_actions": 0,
+      "acknowledged_steps": 20,
+      "interruption_count": 0,
+      "replans": [
+        {
+          "ordinal": 1,
+          "map_id": 8,
+          "at_yx": [
+            6,
+            15
+          ],
+          "candidate_blocker_yx": [
+            6,
+            14
+          ],
+          "replacement_steps": 4,
+          "reason": "visible_object"
+        }
+      ],
+      "terminal_map_id": 8,
+      "terminal_yx": [
+        6,
+        13
+      ],
+      "terminal_ready": true
+    },
+    "return": {
+      "passed": true,
+      "movement_requests": 18,
+      "wait_actions": 0,
+      "acknowledged_steps": 18,
+      "interruption_count": 0,
+      "replans": [],
+      "terminal_map_id": 8,
+      "terminal_yx": [
+        12,
+        11
+      ],
+      "terminal_ready": true
+    }
+  },
+  "wild_flees": [],
+  "final": {
+    "map_id": 8,
+    "yx": [
+      12,
+      11
+    ],
+    "ready": true
+  },
+  "actions_executed": 44,
+  "frames_executed": 1212,
+  "controller_released": true,
+  "rom_adjacent_artifacts_unchanged": true
+}

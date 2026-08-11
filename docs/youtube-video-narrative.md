@@ -15,6 +15,25 @@ Follow an evidence-driven attempt to turn a reliable Pokémon Red speed-running 
 learned player that can make decisions, recover from surprises, and eventually transfer what it
 learns to other Pokémon games.
 
+## August 10 visible-object episode: look before you press
+
+Open on the old recovery loop pressing Left twice into an NPC before the route changes. Then rewind
+and freeze one square earlier. Put Red's live sprite table beside the screen: player `(6,15)`,
+occupied `(6,14)`, and the engine's `$FF` hidden/off-screen marker. The new route changes before the
+button is pressed.
+
+Make the adversarial setup explicit. The graph receives **zero ROM object blockers**. Cartridge
+events choose a stationary Cinnabar NPC and a goal whose preferred 18-step candidate crosses that
+NPC, but only current RAM may say whether the square is occupied now. Animate the original final
+Left arrow turning off, then the four-step alternate suffix appearing. End the proof card with
+**43/43 movements acknowledged, one visible-object replan, zero inputs into the occupied square,
+exact return to `(12,11)`, no save write**.
+
+The narrative line is: **“A map says where someone started. Perception says where they are.”** Show
+the limitation beside it: the overlay covers currently rendered sprites, not off-screen objects,
+Cut blocks, Strength puzzles, or story gates. The next episode begins when Cut changes the map
+itself.
+
 ## August 10 navigation episode: delete 86 directions
 
 Open with an 86-arrow route from Pallet Town to the Viridian Pokémon Center. Then delete it.
