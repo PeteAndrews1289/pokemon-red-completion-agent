@@ -2845,6 +2845,11 @@ def _trajectory_progress_bridge(
                     (),
                 )
                 for objective_id in completed_at_boundary:
+                    # Long-running chapter work may emit several progress updates
+                    # without advancing the qualified checkpoint count.  A repeated
+                    # update at an objective boundary is not fresh verifier evidence.
+                    if objective_id in objective_observer.completed_ids:
+                        continue
                     objective_observer.complete(objective_id)
                     completed_count = len(objective_observer.completed_ids)
                     if completed_count < len(QUALIFIED_OBJECTIVE_SEQUENCE):
@@ -2861,6 +2866,8 @@ def _objective_model_fixed_dispatch_bridge(
 ) -> ProgressSink:
     """Advance facts and score every fixed segment outside the learned denominator."""
 
+    completed_objectives: set[str] = set()
+
     def emit(progress: QualifiedPlayProgress) -> None:
         if downstream is not None:
             downstream(progress)
@@ -2868,7 +2875,10 @@ def _objective_model_fixed_dispatch_bridge(
             progress.completed,
             (),
         ):
+            if objective_id in completed_objectives:
+                continue
             policy.complete(objective_id)
+            completed_objectives.add(objective_id)
             completed_count = policy.completed_objective_count
             if completed_count < len(QUALIFIED_OBJECTIVE_SEQUENCE):
                 policy.dispatch_fixed(QUALIFIED_OBJECTIVE_SEQUENCE[completed_count])

@@ -1305,15 +1305,18 @@ def test_qualified_progress_emits_one_legal_label_for_every_completion_objective
     )
 
     for completed, _ in dict(QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS).items():
-        emit(
-            QualifiedPlayProgress(
-                checkpoint_id=f"checkpoint_{completed}",
-                label=f"Checkpoint {completed}",
-                completed=completed,
-                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
-                frames_executed=completed,
-            )
+        progress = QualifiedPlayProgress(
+            checkpoint_id=f"checkpoint_{completed}",
+            label=f"Checkpoint {completed}",
+            completed=completed,
+            total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+            frames_executed=completed,
         )
+        emit(progress)
+        if completed == 275:
+            # Team-training milestones report progress at the Secret Key
+            # boundary without completing that objective a second time.
+            emit(replace(progress, label="Balanced team training: 250 battles"))
 
     planner_decisions = [
         decision for decision in sink.decisions if decision.decision_type == "objective_selection"
@@ -1351,15 +1354,16 @@ def test_objective_model_progress_scores_every_fixed_boundary_without_answer_lab
     policy.dispatch_fixed(QUALIFIED_OBJECTIVE_SEQUENCE[0])
     emit = _objective_model_progress_bridge(None, policy)  # type: ignore[arg-type]
     for completed, _ in dict(QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS).items():
-        emit(
-            QualifiedPlayProgress(
-                checkpoint_id=f"checkpoint_{completed}",
-                label=f"Checkpoint {completed}",
-                completed=completed,
-                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
-                frames_executed=completed,
-            )
+        progress = QualifiedPlayProgress(
+            checkpoint_id=f"checkpoint_{completed}",
+            label=f"Checkpoint {completed}",
+            completed=completed,
+            total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+            frames_executed=completed,
         )
+        emit(progress)
+        if completed == 275:
+            emit(replace(progress, label="Balanced team training: 250 battles"))
 
     assert tuple(policy.dispatched) == QUALIFIED_OBJECTIVE_SEQUENCE
     assert tuple(policy.completed) == QUALIFIED_OBJECTIVE_SEQUENCE
