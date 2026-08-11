@@ -30,6 +30,7 @@ from pokemon_red_completion.strategic_navigation_protocol import (
 )
 from pokemon_red_completion.strategic_navigation_trajectory import (
     StrategicNavigationTrajectoryObserver,
+    _assignment_ordered_bindings,
 )
 from pokemon_red_completion.trajectory import (
     InMemoryTrajectorySink,
@@ -83,6 +84,22 @@ def _bindings() -> tuple[DestinationRouteBinding, ...]:
             (StrategicNavigationTag.CHALLENGE, StrategicNavigationTag.STORY_PROGRESS),
             long,
         ),
+    )
+
+
+def test_assignment_ordering_is_deterministic_and_breaks_fixed_answer_position() -> None:
+    bindings = _bindings()
+
+    first = _assignment_ordered_bindings("a" * 64, 0, bindings)
+    repeated = _assignment_ordered_bindings("a" * 64, 0, bindings)
+    second_root = _assignment_ordered_bindings("b" * 64, 0, bindings)
+
+    assert first == repeated
+    assert {item.destination_ref for item in first} == {
+        item.destination_ref for item in bindings
+    }
+    assert tuple(item.destination_ref for item in first) != tuple(
+        item.destination_ref for item in second_root
     )
 
 

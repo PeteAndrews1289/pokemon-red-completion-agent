@@ -8,6 +8,7 @@ coordinates, destination names and movement actions.
 
 from __future__ import annotations
 
+import hashlib
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from typing import Protocol, cast
@@ -42,6 +43,26 @@ from pokemon_red_completion.trajectory import (
 STRATEGIC_NAVIGATION_SKILL_ID = "pokemon.core.strategic-navigation.v1"
 STRATEGIC_NAVIGATION_DECISION_TYPE = "strategic_navigation_selection"
 STRATEGIC_NAVIGATION_OUTCOME_KIND = "strategic_navigation_outcome"
+
+
+def _assignment_ordered_bindings(
+    assignment_id: str,
+    decision_index: int,
+    bindings: tuple[DestinationRouteBinding, ...],
+) -> tuple[DestinationRouteBinding, ...]:
+    """Permute candidates without using outcome, split, or destination features.
+
+    A fixed teacher declaration would otherwise put the correct answer in the
+    same candidate slot in every whole-game root.  The source-bound assignment
+    provides a deterministic nonce, while the destination reference is used
+    only inside the private binding layer and remains absent from policy input.
+    """
+
+    def order_key(binding: DestinationRouteBinding) -> bytes:
+        value = f"{assignment_id}:{decision_index}:{binding.destination_ref}".encode()
+        return hashlib.sha256(value).digest()
+
+    return tuple(sorted(bindings, key=order_key))
 
 
 def _validated_json_mapping(value: dict[str, object]) -> Mapping[str, JSONValue]:
@@ -175,6 +196,11 @@ class StrategicNavigationTrajectoryObserver:
             raise StrategicNavigationError(
                 "a strategic decision still awaits its consumed outcome"
             )
+        ordered_bindings = _assignment_ordered_bindings(
+            self.assignment.assignment_id,
+            self._next_decision_index,
+            bindings,
+        )
         bound = bind_strategic_navigation_decision(
             episode_id=self.assignment.episode_id,
             decision_index=self._next_decision_index,
@@ -185,7 +211,7 @@ class StrategicNavigationTrajectoryObserver:
             semantic_need_tags=semantic_need_tags,
             origin_semantic_tags=origin_semantic_tags,
             origin_region_ref=origin_region_ref,
-            bindings=bindings,
+            bindings=ordered_bindings,
             selected_destination_ref=selected_destination_ref,
             collection_assignment=self.assignment,
         )

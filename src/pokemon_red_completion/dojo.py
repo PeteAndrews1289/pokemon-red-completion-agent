@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
@@ -26,6 +27,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.route_executor import RouteExecutionReport
 from pokemon_red_completion.silph import (
     CENTER_EXIT,
     DEFAULT_SILPH_TIMING,
@@ -88,6 +90,12 @@ DOJO_BATTLE_TIMING = BattleRuntimeTiming(
 
 class DojoChapterError(RuntimeError):
     """Raised when Fighting Dojo evidence violates its contract."""
+
+
+class DojoStrategicApproach(Protocol):
+    """Generated strategic route allowed to own only the Dojo approach."""
+
+    def execute(self, executor: ChapterExecutor) -> RouteExecutionReport: ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -216,6 +224,7 @@ def run_dojo_chapter(
     *,
     timing: SilphTiming = DEFAULT_SILPH_TIMING,
     progress: ProgressSink | None = None,
+    strategic_approach: DojoStrategicApproach | None = None,
 ) -> DojoChapterReport:
     start_frames = emulator.frame_count
     actions = CountingExecutor(executor)
@@ -235,9 +244,16 @@ def run_dojo_chapter(
         raise DojoChapterError("Fighting Dojo input boundary is not pristine.")
     _checkpoint(records, progress, emulator, initial, "dojo_ready", "Fighting Dojo plan ready")
 
-    _move_verified_safe(actions, reader, CENTER_EXIT, timing, "Saffron Center exit")
-    _navigate_safe(actions, reader, timing, DOJO_CITY_APPROACH, "Fighting Dojo")
-    _move_verified_safe(actions, reader, ("up",), timing, "Fighting Dojo entry")
+    if strategic_approach is None:
+        _move_verified_safe(actions, reader, CENTER_EXIT, timing, "Saffron Center exit")
+        _navigate_safe(actions, reader, timing, DOJO_CITY_APPROACH, "Fighting Dojo")
+        _move_verified_safe(actions, reader, ("up",), timing, "Fighting Dojo entry")
+    else:
+        approach = strategic_approach.execute(actions)
+        if not approach.passed:
+            raise DojoChapterError("Strategic Dojo approach returned a failed route report.")
+        if reader.read().party_species_ids != party_before:
+            raise DojoChapterError("Strategic Dojo approach changed the protected party.")
     _require(reader.read(), MapId.FIGHTING_DOJO, (4, 11), "Fighting Dojo entrance")
     _checkpoint(records, progress, emulator, reader.read(), "dojo_entered", "Entered Fighting Dojo")
 

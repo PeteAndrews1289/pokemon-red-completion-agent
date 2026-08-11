@@ -189,6 +189,14 @@ from pokemon_red_completion.post_hideout_strategic_route import (
     PostHideoutStrategicApproach,
     PostHideoutStrategicRouteError,
 )
+from pokemon_red_completion.post_safari_strategic_route import (
+    PostSafariStrategicApproach,
+    PostSafariStrategicRouteError,
+)
+from pokemon_red_completion.post_silph_strategic_route import (
+    PostSilphStrategicApproach,
+    PostSilphStrategicRouteError,
+)
 from pokemon_red_completion.red_collection import (
     RedCollectionProgress,
     summarize_red_collection,
@@ -1240,6 +1248,8 @@ def run_qualified_play(
         objective_observer: SemanticObjectiveDecisionObserver | None = None
         strategic_navigation_observer: StrategicNavigationTrajectoryObserver | None = None
         strategic_tower_approach: PostHideoutStrategicApproach | None = None
+        strategic_koga_approach: PostSafariStrategicApproach | None = None
+        strategic_dojo_approach: PostSilphStrategicApproach | None = None
         objective_policy: ModelObjectivePolicy | None = None
         training_candidate_audit = (
             TrainingCandidateShadowAudit(training_candidate_model)
@@ -1300,8 +1310,19 @@ def run_qualified_play(
                     recorder=recording_executor,
                     sink=trajectory_sink,
                 )
+                strategic_rom = Path(rom_path).read_bytes()
                 strategic_tower_approach = PostHideoutStrategicApproach(
-                    rom=Path(rom_path).read_bytes(),
+                    rom=strategic_rom,
+                    reader=reader,
+                    trajectory=strategic_navigation_observer,
+                )
+                strategic_koga_approach = PostSafariStrategicApproach(
+                    rom=strategic_rom,
+                    reader=reader,
+                    trajectory=strategic_navigation_observer,
+                )
+                strategic_dojo_approach = PostSilphStrategicApproach(
+                    rom=strategic_rom,
                     reader=reader,
                     trajectory=strategic_navigation_observer,
                 )
@@ -1502,8 +1523,15 @@ def run_qualified_play(
                 reader,
                 executor,
                 progress=_koga_progress_bridge(progress),
+                strategic_approach=strategic_koga_approach,
             )
-        except KogaChapterError as error:
+        except (
+            KogaChapterError,
+            PostSafariStrategicRouteError,
+            RouteExecutionError,
+            RoutePlanningError,
+            StrategicNavigationError,
+        ) as error:
             raise QualifiedPlayError(str(error)) from error
 
         try:
@@ -1552,8 +1580,15 @@ def run_qualified_play(
                 reader,
                 executor,
                 progress=_dojo_progress_bridge(progress),
+                strategic_approach=strategic_dojo_approach,
             )
-        except DojoChapterError as error:
+        except (
+            DojoChapterError,
+            PostSilphStrategicRouteError,
+            RouteExecutionError,
+            RoutePlanningError,
+            StrategicNavigationError,
+        ) as error:
             raise QualifiedPlayError(str(error)) from error
 
         try:

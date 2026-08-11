@@ -46,6 +46,7 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+from pokemon_red_completion.route_executor import RouteExecutionReport
 from pokemon_red_completion.tower import party_core_intact
 
 KOGA_CHECKPOINT_COUNT = 11
@@ -104,6 +105,12 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
+
+
+class KogaStrategicApproach(Protocol):
+    """Generated strategic route allowed to own only the Gym approach."""
+
+    def execute(self, executor: ChapterExecutor) -> RouteExecutionReport: ...
 
 
 class KogaChapterError(RuntimeError):
@@ -301,6 +308,7 @@ def run_koga_chapter(
     *,
     timing: KogaTiming = DEFAULT_KOGA_TIMING,
     progress: ProgressSink | None = None,
+    strategic_approach: KogaStrategicApproach | None = None,
 ) -> KogaChapterReport:
     start_frames = emulator.frame_count
     actions = CountingExecutor(executor)
@@ -320,7 +328,19 @@ def run_koga_chapter(
         raise KogaChapterError("TM06 was already present at chapter start.")
     _checkpoint(records, progress, emulator, initial, "koga_ready", "Surf-ready Fuchsia boundary")
 
-    _move(actions, reader, CENTER_TO_GYM, timing, "Fuchsia Gym entry")
+    if strategic_approach is None:
+        _move(actions, reader, CENTER_TO_GYM, timing, "Fuchsia Gym entry")
+    else:
+        approach = strategic_approach.execute(actions)
+        if not approach.passed:
+            raise KogaChapterError("Strategic Koga approach returned a failed route report.")
+        after_approach = reader.read()
+        if (
+            after_approach.party_species_ids != initial.party_species_ids
+            or _bag_tuple(emulator) != initial_bag
+            or _money(emulator) != initial_money
+        ):
+            raise KogaChapterError("Strategic Koga approach changed protected resources.")
     _require(reader.read(), MapId.FUCHSIA_GYM, (4, 17), "Fuchsia Gym entry")
     _checkpoint(records, progress, emulator, reader.read(), "gym_entry", "Entered Fuchsia Gym")
 
