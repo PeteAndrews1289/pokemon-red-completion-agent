@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 11: three choices made the rehearsal worth collecting
+
+The first qualified strategic rehearsal completed 312/312 checkpoints, all 36 objectives and Hall
+of Fame, but its important result was smaller: three decisions entered the trajectory before their
+routes and three outcomes joined afterward. The teacher chose Pokémon Tower over Eevee, Koga before
+the Warden, and the Fighting Dojo/Hitmonlee before Sabrina. One route handled a trainer engagement;
+all three reached their selected destination.
+
+This changed the experiment from one memorized example per game to three different semantic
+contexts. Candidate order is derived from the preregistered root rather than declaration order, so
+the correct answer occupies both positions. The shortest-route baseline scores only 2/3 because the
+story-critical Tower is 118 cost units farther than Eevee. The episode is still explicitly
+uncounted. Its value is proving that the prospective train/validation roots can contain meaningful,
+identity-free supervision rather than a hidden “always select slot zero” rule.
+
+The audit then found an orchestration omission: there was a safe command for the rehearsal but no
+official command for the counted strategic assignments. The project refused to consume one-shot
+data through an ad-hoc script. A counted launcher now accepts only committed train/validation roots,
+keeps test sealed and reloads the finished episode through the strict assignment gate. Because that
+changes executable source, it must earn a fresh rehearsal before the first training root opens.
+
 ## August 11: the cartridge closed the Pokédex arithmetic
 
 The old acquisition total was a lower bound wearing a precise number. Wild tables and evolution

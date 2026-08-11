@@ -198,7 +198,9 @@ scripts remain unsupported.
 
 This closes one real story predicate and the named Victory Road resource/inter-room gaps, not every
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
-completion teacher's post-final-switch exit remains authored. The ordered gates are now:
+completion teacher's post-final-switch exit remains authored. The ordered gates are now. Steps
+1–4 passed for source `0640743`; adding the official counted launcher changed executable source,
+so its regenerated rehearsal must repeat step 2 before step 5:
 
 1. Publish the bidirectional Zubat search and acknowledged Cerulean handoff with regenerated
    registries, then require a fresh green CI run for that commit.
@@ -207,9 +209,9 @@ completion teacher's post-final-switch exit remains authored. The ordered gates 
    execution, or open train/validation/test to debug it.
 3. Load a completed rehearsal through the assigned-episode gate and audit its join, candidate
    coverage, interruption evidence, cost baseline and candidate-shape baseline.
-4. Decide whether one strategic choice per whole root can support the intended scorer. If not,
-   instrument additional genuine recovery, resupply, training, collection and optional-reward
-   branches and preregister a fresh campaign before consuming learning roots.
+4. **Completed:** expand to three genuine choices per root (Tower/Eevee, Koga/Warden and
+   Dojo/Sabrina), permute candidate order from assignment identity, and verify the cost baseline is
+   not perfect.
 5. If rehearsal coverage is adequate, execute the five train and two validation roots once. Keep
    the five test roots sealed and preserve failures or external censoring exactly as observed.
 6. Freeze numeric normalization only after the observed train/validation coverage audit. Train a

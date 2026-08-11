@@ -14,6 +14,38 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Three-choice rehearsal passed; counted launcher now needs its exact replay — 2026-08-11
+
+Published source `0640743` passed CI and completed a clean-power strategic rehearsal at 312/312
+checkpoints, 36/36 objectives and Hall of Fame. Episode
+`red-strat-reh-9d25c3a4e6af4bb1aba6560615cd7615c2d55f7bd9e868b7aa08afbeee84122f`
+has manifest `52652a78a2109c4150463558271418e933910bc2715d97a09f2c62d0ccd14bff`,
+711,601 records and three joined strategic choices. All three succeeded: Tower over Eevee, Koga
+before Warden, and Fighting Dojo/Hitmonlee before Sabrina. The Tower route handled one trainer
+engagement. Candidate order was assignment-permuted; selected indexes were `(1, 0, 0)`. The
+cost-only baseline matched only 2/3 because the teacher deliberately rejected the shorter Eevee
+route. This episode is unassigned and uncounted; never relabel it.
+
+The audit resolved the earlier density question in favor of collection: three semantic contexts
+per root, six available candidates, both answer positions, and a non-perfect cost baseline are
+adequate for the small first scorer. The next obstacle was orchestration, not Pokémon behavior:
+the CLI exposed only `--strategic-rehearsal`; `--collection-run` belongs to the older battle
+campaign. The working source now adds `--strategic-collection-run`, accepts only committed train or
+validation assignments, refuses sealed test roots, records with the exact strategic assignment and
+strictly reloads the finished episode before reporting success. Private episode identity is
+one-shot, so complete, failed and interrupted attempts cannot be silently overwritten.
+
+Because that launcher changes `src/`, the qualified `0640743` rehearsal cannot authorize the new
+counted campaign. Both registries have been regenerated. Current strategic registry is
+`76807c8906c0a60150c3fde8ea44523c0edd437664abb35e378837042d7b6bc2`; source bundle is
+`521b119a067a1ea6072291656ee9c7547b6933d288bb3d03617a8d7b83c82c24`; teacher execution is
+`2a44de89969d8aafe08a3c3ed7efc4116b7cdcd62dbfbc177836637ffe2de313`; rehearsal assignment is
+`39b951dc031656ab53d3c1cc0dbdf0bb850f4ff96520d568740000dbd3ea19f0`; first train assignment is
+`5a41f61d9bf41ad7ebbe1917cc7ab58cd84312d65775dac2a056457939df704f`.
+Immediate next action: finish tests, commit, push, require green CI, then run that new rehearsal.
+Only after it passes may `red-strategic-v1-01-train` open. Counts remain train 0/5, validation 0/2,
+test 0/5. Do not edit `src/` during any emulator run.
+
 ## The third rehearsal reached Mt. Moon and exposed a bidirectional search defect — 2026-08-11
 
 Published source `c1e5d11` passed the exhausted-move Forest repair and the all-required-trainers

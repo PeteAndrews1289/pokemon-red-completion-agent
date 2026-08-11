@@ -350,6 +350,23 @@ RAM values. The new strategic dataset module is also large because it contains t
 private-episode reader and strict canonical parser. If it expands during collection, split parsing
 from dataset/split audits before adding model code.
 
+## Latest qualification and launcher gate
+
+Published source `0640743` resolved the density decision before opening data. Its uncounted
+clean-power rehearsal completed 312/312 checkpoints, 36/36 objectives and Hall of Fame, producing
+three joined strategic choices and three successful outcomes. The exact dataset has three
+two-candidate cases, six available route costs from 21 to 178, selected-index counts `{0: 2, 1: 1}`
+and one handled trainer engagement. The route-cost-only baseline matched 2/3; the Tower choice is
+the required counterexample. There were no replans, failures, censored outcomes or movement labels.
+
+That audit admitted learning-root collection but exposed a missing counted CLI lane. The rehearsal
+flag existed; the older `--collection-run` selected only battle-campaign roots. The new
+`--strategic-collection-run` lane accepts only committed train/validation assignments, supplies the
+exact assignment to recording, strictly reloads the completed dataset and refuses test roots. This
+source change regenerates the campaign, so the earlier qualified rehearsal remains valid evidence
+for `0640743` but cannot authorize the new source. The new exact rehearsal is the gate before slot
+01. Counted status remains train 0/5, validation 0/2, test 0/5.
+
 ## Ordered roadmap
 
 1. **Publish the current repair.** Commit and push the bidirectional search, acknowledged Cerulean
@@ -359,9 +376,9 @@ from dataset/split audits before adding model code.
 3. **Audit before opening learning roots.** Authenticate the episode, verify its decision/outcome
    join, and measure candidate coverage, route-cost and shape baselines, interruptions and terminal
    state.
-4. **Resolve the density decision.** One Tower-versus-Eevee choice per whole run may be too little
-   supervision. If so, add genuine recovery, resupply, training, collection and optional-reward
-   branches, then preregister a fresh campaign instead of changing the current one after exposure.
+4. **Resolve the density decision.** **Completed for source `0640743`:** add Koga/Warden and
+   Dojo/Sabrina branches, assignment-permute candidate positions and require a non-perfect cost
+   baseline before preregistering the fresh campaign.
 5. **Collect the learning roots only if coverage is adequate.** Execute all five train roots and
    both validation roots once. Preserve failures and censor external interruption; do not open the
    five test roots.

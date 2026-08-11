@@ -123,6 +123,19 @@ actual private writer in the test suite, and say: **“A protocol is not end-to-
 through the door.”** This is a clean, relatable engineering beat between the preflight and the real
 rehearsal.
 
+Then pay off the density question. Show the qualified full-game receipt:
+**312/312 / 36/36 / HALL OF FAME / 3 DECISIONS / 3 OUTCOMES**. Cut between the three cards:
+Tower over Eevee, Koga before Warden, and Hitmonlee before Sabrina. Shuffle each pair before it
+reaches the model so the highlighted answer is not always candidate zero. Put the cheapest-route
+baseline beside the result: **2/3**. The line is: **“The shortest route is useful—but it is not a
+strategy.”** Keep the counter at **TRAIN 0 / VALIDATION 0** because this is still uncounted.
+
+The next engineering beat is deliberately mundane and important: the rehearsal button exists, but
+the counted strategic button does not. Refuse an ad-hoc Python shortcut. Add
+`--strategic-collection-run`, lock it to committed train/validation assignments, reject test, and
+strictly reload the completed private episode before printing success. Regenerate the identities
+and replay the rehearsal. The line is: **“Irreplaceable data deserves a boring, official door.”**
+
 ## Resource episode: the route outlived its Repel
 
 Put three remaining handwritten strings over Victory Road: **51 ROOM STEPS**, **56 ROOM STEPS** and

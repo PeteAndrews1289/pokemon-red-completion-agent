@@ -108,6 +108,10 @@ from pokemon_red_completion.schedule_audit import (
     ScheduleAttestationError,
     audit_schedule_attestations,
 )
+from pokemon_red_completion.strategic_navigation_dataset import (
+    StrategicNavigationDatasetError,
+    load_assigned_strategic_navigation_episode,
+)
 from pokemon_red_completion.strategic_navigation_protocol import (
     StrategicNavigationEpisodeAssignment,
     StrategicNavigationExecution,
@@ -612,6 +616,13 @@ def _parser() -> argparse.ArgumentParser:
         help=(
             "Run the committed, explicitly uncounted strategic-navigation rehearsal; "
             "no train, validation, or test slot is consumed."
+        ),
+    )
+    recording_mode.add_argument(
+        "--strategic-collection-run",
+        help=(
+            "Declared train or validation run ID from the committed strategic-navigation "
+            "registry; each exact episode identity is one-shot and test roots remain sealed."
         ),
     )
     recording_mode.add_argument(
@@ -2208,6 +2219,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
             registry = None
             strategic_assignment = None
             strategic_registry = None
+            strategic_dataset_summary = None
             diagnostic_offsets = None
             diagnostic_schedule_sha256 = None
             if args.collection_run is not None or args.schedule_dry_run:
@@ -2220,11 +2232,17 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 diagnostic_offsets, diagnostic_schedule_sha256 = _diagnostic_schedule(
                     args.diagnostic_schedule_seed
                 )
-            elif args.strategic_rehearsal:
+            elif args.strategic_rehearsal or args.strategic_collection_run is not None:
                 strategic_registry = load_committed_strategic_navigation_registry(
                     REPOSITORY_ROOT
                 )
-                strategic_assignment = strategic_registry.rehearsal_assignment()
+                strategic_assignment = (
+                    strategic_registry.rehearsal_assignment()
+                    if args.strategic_rehearsal
+                    else strategic_registry.learning_assignment(
+                        args.strategic_collection_run
+                    )
+                )
             episode_id = (
                 strategic_assignment.episode_id
                 if strategic_assignment is not None
@@ -2360,6 +2378,15 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     battle_start_offsets=battle_start_offsets,
                     strategic_navigation_assignment=strategic_assignment,
                 )
+                if (
+                    strategic_assignment is not None
+                    and strategic_assignment.partition != "unassigned"
+                ):
+                    strategic_dataset = load_assigned_strategic_navigation_episode(
+                        private_root.open_episode(episode_id),
+                        assignment=strategic_assignment,
+                    )
+                    strategic_dataset_summary = strategic_dataset.public_summary()
             _print_qualified_summary(qualified_report)
             public_play = qualified_report.public_dict()
             payload = {
@@ -2371,12 +2398,17 @@ def main(arguments: Sequence[str] | None = None) -> int:
             if dry_run_qualification is not None:
                 payload["dry_run_qualification"] = dry_run_qualification.public_dict()
             if strategic_assignment is not None:
-                payload["strategic_rehearsal"] = {
+                strategic_identity = {
                     "assignment_id": strategic_assignment.assignment_id,
-                    "counted": False,
+                    "counted": strategic_assignment.partition != "unassigned",
                     "partition": strategic_assignment.partition,
                     "registry_sha256": strategic_assignment.registry_sha256,
                 }
+                if strategic_dataset_summary is None:
+                    payload["strategic_rehearsal"] = strategic_identity
+                else:
+                    strategic_identity["dataset"] = strategic_dataset_summary
+                    payload["strategic_collection"] = strategic_identity
     except (
         BootstrapError,
         BattleControlModelError,
@@ -2395,6 +2427,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
         RuntimeIdentityError,
         ScheduleAttestationError,
         StrategicNavigationProtocolError,
+        StrategicNavigationDatasetError,
         TrainingCandidateModelError,
     ) as error:
         parser.error(

@@ -2366,6 +2366,171 @@ def test_recording_modes_keep_strategic_rehearsal_mutually_exclusive() -> None:
             ]
         )
 
+    with pytest.raises(SystemExit):
+        parser.parse_args(
+            [
+                "record",
+                "--private-root",
+                "/private/external/trajectories",
+                "--strategic-rehearsal",
+                "--strategic-collection-run",
+                "red-strategic-v1-01-train",
+            ]
+        )
+
+
+def test_strategic_collection_run_uses_one_committed_learning_assignment(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    registry = _strategic_registry()
+    registry = replace(
+        registry,
+        execution=replace(registry.execution, source_commit="a" * 40),
+    )
+    assignment = registry.learning_assignment("red-strategic-v1-01-train")
+    offsets = registry.schedule.offsets(assignment.harness_seed)
+    private_path = Path("/private/Pokemon Red.gb")
+    private_root_path = Path("/private/external/trajectories")
+    observed: dict[str, object] = {}
+
+    class FakeReport:
+        verified_objectives = tuple(objective.id for objective in cli.COMPLETION_QUEST)
+        next_objective = None
+
+        def public_dict(self) -> dict[str, object]:
+            return {"game_complete": True}
+
+    class FakeDataset:
+        def public_summary(self) -> dict[str, object]:
+            return {"examples": 3, "partition": "train"}
+
+    class FakePrivateRoot:
+        def open_episode(self, episode_id: str) -> object:
+            observed["opened_episode"] = episode_id
+            return object()
+
+    private_root = FakePrivateRoot()
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda _argument: private_path)
+    monkeypatch.setattr(
+        cli,
+        "load_committed_strategic_navigation_registry",
+        lambda _root: registry,
+    )
+    monkeypatch.setattr(
+        cli,
+        "_strategic_recording_metadata",
+        lambda path, *, episode_id, watch, speed, assignment, execution, offsets: (
+            observed.update(
+                metadata_path=path,
+                metadata_episode_id=episode_id,
+                metadata_assignment=assignment,
+                metadata_execution=execution,
+                metadata_offsets=offsets,
+            )
+            or {"strategic": True}
+        ),
+    )
+    monkeypatch.setattr(cli, "open_private_root", lambda *args, **kwargs: private_root)
+    monkeypatch.setattr(
+        cli,
+        "_capture_private_recording",
+        lambda root, **kwargs: (
+            observed.update(capture_root=root, capture=kwargs)
+            or (
+                FakeReport(),
+                {
+                    "episode_id": kwargs["episode_id"],
+                    "manifest_sha256": "b" * 64,
+                    "schema": "private-episode-summary-v1",
+                    "status": "complete",
+                    "stream_records": {"episode": 1},
+                    "total_bytes": 1,
+                    "total_records": 1,
+                },
+            )
+        ),
+    )
+    monkeypatch.setattr(
+        cli,
+        "load_assigned_strategic_navigation_episode",
+        lambda reader, *, assignment: (
+            observed.update(dataset_reader=reader, dataset_assignment=assignment)
+            or FakeDataset()
+        ),
+    )
+
+    assert (
+        cli.main(
+            [
+                "record",
+                "--private-root",
+                str(private_root_path),
+                "--rom",
+                str(private_path),
+                "--strategic-collection-run",
+                "red-strategic-v1-01-train",
+            ]
+        )
+        == 0
+    )
+
+    payload = json.loads(capsys.readouterr().out)
+    assert observed["metadata_episode_id"] == assignment.episode_id
+    assert observed["metadata_assignment"] == assignment
+    assert observed["metadata_execution"] == registry.execution
+    assert observed["metadata_offsets"] == offsets
+    assert observed["capture_root"] is private_root
+    capture = observed["capture"]
+    assert isinstance(capture, dict)
+    assert capture["strategic_navigation_assignment"] == assignment
+    assert capture["battle_start_offsets"] == offsets
+    assert observed["opened_episode"] == assignment.episode_id
+    assert observed["dataset_assignment"] == assignment
+    assert payload["strategic_collection"] == {
+        "assignment_id": assignment.assignment_id,
+        "counted": True,
+        "dataset": {"examples": 3, "partition": "train"},
+        "partition": "train",
+        "registry_sha256": registry.registry_sha256,
+    }
+
+
+def test_strategic_collection_run_keeps_test_roots_sealed(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    registry = _strategic_registry()
+    registry = replace(
+        registry,
+        execution=replace(registry.execution, source_commit="a" * 40),
+    )
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda _argument: Path("/private/red.gb"))
+    monkeypatch.setattr(
+        cli,
+        "load_committed_strategic_navigation_registry",
+        lambda _root: registry,
+    )
+    monkeypatch.setattr(
+        cli,
+        "open_private_root",
+        lambda *args, **kwargs: pytest.fail("sealed test must fail before private storage"),
+    )
+
+    with pytest.raises(SystemExit):
+        cli.main(
+            [
+                "record",
+                "--private-root",
+                "/private/external/trajectories",
+                "--rom",
+                "/private/red.gb",
+                "--strategic-collection-run",
+                "red-strategic-v1-08-test",
+            ]
+        )
+    assert "must remain unopened" in capsys.readouterr().err
+
 
 def test_record_rejects_an_unknown_collection_run_without_echoing_it(
     monkeypatch: pytest.MonkeyPatch,

@@ -191,16 +191,14 @@ Fame, but many choices are affordance-masked and the strict battle model fails t
 role contract. There is no Crystal benchmark, clean-start 8/10 learned-stack series, or autonomous
 living-Pokédex result yet.
 
-The strategic navigation collection seam is implemented and has three live unassigned calibrations,
-but it contains zero train/validation records. All demonstrate exact decision-to-plan binding,
-outcome capture and identity-free projection. The third now proves a story choice can reject a route
-118 cost units shorter and still execute 174 steps through a trainer interruption. Exact route
-mechanics are substantially stronger than the older paragraph implies; what remains authored is
-when the completion teacher invokes them and how unsupported story/menu boundaries recover. The
-next credible navigation claim requires collecting the preassigned, disjoint train/validation lineages, a frozen
-numeric representation, shadow evaluation and fresh causal authority—not one more successful Red
-development route. The split is now preassigned; connecting and qualifying the one rehearsal root
-is the remaining gate before train root 01 may open.
+The strategic navigation collection seam contains zero train/validation records, but it now has one
+qualified uncounted three-choice clean-power rehearsal. It completed 312/312 checkpoints and Hall of
+Fame with three joined successes: Tower over Eevee, Koga before Warden, and Hitmonlee before
+Sabrina. Candidate order is assignment-permuted, identity is excluded, and the shortest-route
+baseline scores only 2/3. That is enough coverage to open the small prospective campaign after the
+new official counted launcher passes its own regenerated rehearsal. The next credible navigation
+claim still requires the disjoint train/validation lineages, a frozen numeric representation,
+shadow evaluation and fresh causal authority—not one more development route.
 
 The immediate modeling gap is no longer vague. The old battle controller could not observe reserve
 matchups. Feature schema v3 now can, and it binds the chosen semantic candidate to switch execution.

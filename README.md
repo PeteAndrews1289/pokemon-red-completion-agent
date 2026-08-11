@@ -44,43 +44,25 @@
 > evolution, ten in-game trades and 30 scripted opportunities per title derive exact existential
 > reach: 135 species on one cartridge, or 139 with a trade partner. The remaining gaps are the other
 > title's eleven exclusives, four trade evolutions without a partner, and Mew.
-> The strategic-navigation collection seam is also implemented. A future model will rank genuine
-> semantic destinations from availability and route cost while the deterministic planner owns exact
-> movement. Decisions and outcomes survive in authenticated private trajectories; failures remain
-> negative evidence and power loss remains censored. No strategic navigation records have been
-> collected into train or validation yet. Three unassigned live calibrations prove the
-> binding/recording seam. The newest is the first that rejects the shortest route: after Team
-> Rocket's Celadon Hideout, the teacher selected the story-critical Pokémon Tower at cost 178 over
-> a cost-60 optional Eevee pickup. The generic executor acknowledged 174/174 movements across nine
-> maps, resumed after one unavoidable trainer battle and reached Tower 1F with zero replans. This is
-> still promotion-ineligible calibration evidence, not training data. No numeric feature schema is
-> frozen and no navigation model is claimed.
-> A separate prospective collection registry now preassigns five whole power-on train roots, two
-> validation roots and five sealed test roots, plus one uncounted rehearsal. Distinct timing
-> schedules are frozen before outcomes; counted decision binding rejects invented partitions or
-> lineage IDs. The assigned-episode loader also verifies the exact collection, source, split and
-> policy header before accepting an output, and keeps test episodes sealed by default. The rehearsal
-> now has a distinct committed-but-unassigned identity, and choices are recorded before route
-> execution so failures cannot vanish from the stream. No slot has been executed, so the honest
-> collected count remains zero.
-> The first clean-power integration slice is now implemented: an exact rehearsal assignment makes
-> the full teacher record the post-Hideout Tower-versus-Eevee choice before acting, execute the
-> bound cartridge-derived route, and record measured success or typed failure before the Tower
-> chapter continues. A private checkpoint preflight completed the generated approach plus all 28
-> Tower checkpoints and ten required battles with one joined strategic decision/outcome and zero
-> recording failures. It did not execute the rehearsal root and is not training evidence.
-> The first published invocation then exposed a namespace mismatch before the emulator started:
-> strategic episode IDs could exceed the private store's 80-character limit. No episode or game
-> outcome was created. Both counted and rehearsal IDs are now bounded at 78 characters and tested
-> through the real private writer boundary; the rehearsal therefore remains unopened.
-> Three source-bound rehearsal partials are now preserved. The newest passed Forest, Brock and all
-> required Route 3 trainers, then stopped in Mt. Moon after the search automatically fled the exact
-> level-seven Zubat on its return step. Search now observes and qualifies encounters in both
-> directions. An exact-schedule in-memory replay proved the complete Mt. Moon/Cerulean chapter,
-> then replaced a Cerulean wall collision used as an implicit timing wait with acknowledged
-> movement on the actual route. It continued through checkpoint 275/312 and 1,250 balanced-team
-> battles before a deliberate diagnostic stop. This is repair evidence, not a completed strategic
-> episode; train and validation remain empty.
+> The strategic-navigation collection seam now records three real destination choices per full
+> game while a deterministic planner owns exact movement: Pokémon Tower versus Eevee, Koga's Gym
+> versus the Warden, and Fighting Dojo/Hitmonlee versus Sabrina. Candidate order is deterministically
+> permuted from the preregistered root and decision number, so a model cannot learn that the teacher
+> answer always occupies one slot; destination identity never enters policy input.
+> Published source `0640743` completed the first qualified three-choice clean-power rehearsal:
+> **312/312 checkpoints**, **36/36 objectives**, Champion and Hall of Fame, with three joined
+> decisions/outcomes, three successes, one handled trainer interruption and zero censored examples.
+> Its authenticated episode contains 711,601 records. The pre-featurization audit found selected
+> indexes 0/1 in a 2:1 mix and a route-cost-only baseline of only 2/3 because the Tower choice
+> correctly rejects the cost-60 minimum for the cost-178 story route. This remains unassigned,
+> explicitly uncounted qualification evidence—not training data or a learned model.
+> The density audit admitted the prospective campaign: five train roots, two validation roots and
+> five sealed test roots. The official counted launcher now accepts only a committed train or
+> validation assignment through `--strategic-collection-run`, strictly reloads the completed
+> episode, and relies on the private one-shot episode identity to preserve failures and power loss.
+> Adding that final launcher changed executable source, so both registries were regenerated and its
+> new exact rehearsal must pass before attempt 1 opens. Honest counts remain **train 0/5,
+> validation 0/2, test 0/5**; no numeric feature schema is frozen and no navigation model is claimed.
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),
@@ -1081,6 +1063,12 @@ pokemon-red-completion record \
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
   --strategic-rehearsal
+
+# After that exact source-bound rehearsal and coverage audit pass, consume one
+# preregistered strategic train or validation root exactly once (test is refused):
+pokemon-red-completion record \
+  --private-root /absolute/private/trajectory-directory \
+  --strategic-collection-run red-strategic-v1-01-train
 
 # Before freezing another campaign, fuzz arbitrary uncounted timing schedules:
 pokemon-red-completion record \
