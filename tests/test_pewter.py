@@ -12,6 +12,8 @@ from pokemon_red_completion.observation import (
     BROCK_TRAINER_CLASS_ID,
     BUBBLE_MOVE_ID,
     SQUIRTLE_SPECIES_ID,
+    BattleMenuPhase,
+    BattleMenuState,
     InputReadiness,
     ItemId,
     MapId,
@@ -43,7 +45,9 @@ from pokemon_red_completion.pewter import (
     PewterChapterReport,
     PewterProgress,
     PewterTiming,
+    _bug_catcher_continuation_move,
     _expect_brock_transit_ready,
+    _finish_battle,
     _is_healed_rival_loss_party,
     _seek_forest_training_battle,
     _seek_route_1_training_battle,
@@ -103,6 +107,80 @@ def _pokedex() -> OaksErrandState:
         map_id=MapId.OAKS_LAB,
         battle_state=0,
     )
+
+
+def test_bug_catcher_continuation_uses_tackle_then_falls_back_to_bubble() -> None:
+    battle = _raw(
+        MapId.VIRIDIAN_FOREST,
+        1,
+        18,
+        level=8,
+        battle_state=2,
+    )
+
+    assert (
+        _bug_catcher_continuation_move(replace(battle, first_party_pp=(1, 30, 29, 0)))
+        == 0x21
+    )
+    assert (
+        _bug_catcher_continuation_move(replace(battle, first_party_pp=(0, 30, 29, 0)))
+        == BUBBLE_MOVE_ID
+    )
+    with pytest.raises(PewterChapterError, match="no usable Tackle or Bubble"):
+        _bug_catcher_continuation_move(replace(battle, first_party_pp=(0, 30, 0, 0)))
+    with pytest.raises(PewterChapterError, match="ended before continuation"):
+        _bug_catcher_continuation_move(replace(battle, battle_state=0))
+
+
+@pytest.mark.parametrize(
+    ("phase", "expected_continuations"),
+    ((BattleMenuPhase.MOVE, 1), (BattleMenuPhase.UNKNOWN, 0)),
+)
+def test_battle_continuation_runs_only_at_an_actionable_menu(
+    phase: BattleMenuPhase,
+    expected_continuations: int,
+) -> None:
+    class Reader:
+        state = _raw(MapId.VIRIDIAN_FOREST, 1, 18, battle_state=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(phase, selected_move_slot=1)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return InputReadiness(0, 0, 0, 0, 0, 0)
+
+    reader = Reader()
+
+    class Executor:
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.CONFIRM and reader.state.battle_state == 2:
+                reader.state = replace(reader.state, battle_state=0)
+            return object()
+
+    calls = 0
+
+    def continuation(*args: object) -> None:
+        nonlocal calls
+        del args
+        calls += 1
+        reader.state = replace(reader.state, battle_state=0)
+
+    final = _finish_battle(
+        Executor(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        expected_battle_state=2,
+        max_pulses=4,
+        timing=DEFAULT_PEWTER_TIMING,
+        label="unit adaptive battle",
+        continuation=continuation,  # type: ignore[arg-type]
+    )
+
+    assert final.battle_state == 0
+    assert calls == expected_continuations
 
 
 def _gym_ready() -> PewterChapterState:
@@ -270,10 +348,13 @@ def test_pewter_timing_defaults_are_positive_bounded_integers() -> None:
     )
 
 
-@pytest.mark.parametrize("status", (0, 0x08))
-def test_brock_transit_accepts_only_healthy_or_poisoned_ready_party(status: int) -> None:
+@pytest.mark.parametrize(("hp", "status"), ((1, 0), (19, 0x08)))
+def test_brock_transit_accepts_living_healthy_or_resourced_poisoned_party(
+    hp: int,
+    status: int,
+) -> None:
     _expect_brock_transit_ready(
-        replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=19), first_party_status=status),
+        replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=hp), first_party_status=status),
         "unit Forest exit",
     )
 
@@ -281,7 +362,8 @@ def test_brock_transit_accepts_only_healthy_or_poisoned_ready_party(status: int)
 @pytest.mark.parametrize(
     "raw",
     (
-        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=18),
+        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=0),
+        replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=18), first_party_status=0x08),
         replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=19), first_party_status=0x40),
         _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=19, bubble_pp=3),
     ),
@@ -291,9 +373,9 @@ def test_brock_transit_rejects_unsafe_resource_or_status_boundary(raw: RawGameSt
         _expect_brock_transit_ready(raw, "unit Forest exit")
 
 
-def test_brock_transit_accepts_authenticated_loss_recovery_at_healthy_18_hp() -> None:
+def test_brock_transit_accepts_living_status_free_authenticated_loss_recovery() -> None:
     _expect_brock_transit_ready(
-        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=18),
+        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=1),
         "unit Forest exit",
         authenticated_loss_recovery=True,
     )
@@ -302,8 +384,8 @@ def test_brock_transit_accepts_authenticated_loss_recovery_at_healthy_18_hp() ->
 @pytest.mark.parametrize(
     "raw",
     (
-        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=17),
-        replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=18), first_party_status=0x08),
+        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=0),
+        replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=19), first_party_status=0x08),
     ),
 )
 def test_brock_transit_rejects_unsafe_authenticated_loss_recovery(

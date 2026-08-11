@@ -24,12 +24,14 @@ non-unassigned partition. The assignment is now connected to one deliberately na
 branch: the post-Hideout teacher records Tower versus Eevee before acting, executes the exact bound
 generated route, and consumes its measured outcome before the Tower interior continues. A private
 checkpoint preflight passed that generated approach and the complete Tower chapter, but it was not
-a clean-power root and cannot become data. All strategic slots remain unopened.
+a clean-power root and cannot become data. The first genuine clean-power rehearsal then failed at
+checkpoint 16, before any strategic decision, and is retained as uncounted negative harness
+evidence. All train, validation and test slots remain unopened.
 
-That claim boundary is healthy. The next highest-value work is no longer another isolated route
-mechanic or another registry. It is qualifying the one rehearsal, auditing whether its sparse
-decision coverage can support learning, and only then deciding whether the preassigned learning
-roots should open or the campaign should be expanded first.
+That claim boundary is healthy. The exact failed schedule now clears its former Viridian Forest
+gate after a trace-derived repair. The next highest-value work is publishing that source, qualifying
+its regenerated rehearsal identity, auditing whether its sparse decision coverage can support
+learning, and only then deciding whether learning roots should open or the campaign should expand.
 
 ## What is now proved
 
@@ -149,8 +151,9 @@ must all agree. The learning accessor refuses test roots. This prevents the coll
 being increased by changing a string in a calibration script. After collection, the assigned
 episode loader independently matches the header's collection, source bundle, source commit, split,
 actor and policy to that assignment before applying the strict decision/outcome join. It refuses
-local-only assignments and keeps test episodes sealed by default. Current status is **train 0/5,
-validation 0/2, test 0/5, rehearsal 0/1**.
+local-only assignments and keeps test episodes sealed by default. Current counted status is **train
+0/5, validation 0/2, test 0/5**. One earlier source-bound rehearsal failed before the strategic
+branch; the repaired-source prospective rehearsal identity remains unopened.
 
 The registry's rehearsal declaration is now executable as an authenticated identity rather than
 just a seed. Its derived episode and lineage stay `unassigned`, its attempt is explicitly
@@ -179,30 +182,48 @@ episode name exceeded the private root's intentionally stricter 80-character dir
 No private episode, partial artifact or game outcome was created. The same audit revealed that the
 86-character counted strategic prefix would also have failed later. Both forms now derive
 78-character names, enforce the storage ceiling in the strategic protocol and cross the actual
-private `begin_episode` boundary in tests. The rehearsal remains 0/1 because no game run began.
+private `begin_episode` boundary in tests. At that checkpoint no game run had begun.
+
+The corrected namespace at published source `ab69be7` allowed the next command to create the
+uncounted episode and start from clean power. It failed at checkpoint 16/312 in Viridian Forest,
+long before Tower versus Eevee. The retained partial contains 2,086 records: 5 objective-selection
+decisions, 1,508 executions, 16 events and 556 snapshots. It contains no strategic navigation
+decision and cannot enter training. The failure is still useful because it is an authenticated
+record of the teacher that would have produced the dataset.
+
+The trace showed Weedle at 6/27 HP after the scripted sequence, while Squirtle was level 8 at 14/25
+HP and Tackle had zero PP. The generic battle finisher kept confirming the exhausted move. A
+one-shot Bubble fallback reproduced the failure because subsequent turns returned to Tackle. The
+durable repair selects a usable attack on every actionable battle-menu turn and leaves transient
+faint/victory dialogue to bounded confirmation. The final state was level 9, 15/27 HP, status-free,
+with 28 Bubble PP; the historical gate nevertheless required 19 HP. That gate now expresses the
+real safety invariant: a living status-free lead may traverse the authenticated HP-preserving
+corridor to Pewter's mandatory heal, while poison still requires the conservative reserve. An exact
+in-memory replay under schedule `1710001` now clears checkpoint 17 with 5 decisions, 1,340
+executions and 16 events. It opens no episode and consumes no split.
 
 ## Code and CI audit
 
 At this checkpoint the repository contains 152 source modules and 176 test modules. The local CI
 equivalent produced:
 
-- **2,600 passed, 3 deselected integration tests, 1 expected failure**;
+- **2,604 passed, 3 deselected integration tests, 1 expected failure**;
 - public-artifact scanning with no ROM, private path or secret leakage;
 - documentation link validation;
 - exact prospective-registry regeneration;
 - Ruff clean;
 - mypy clean across its declared 154-source-file scope; and
 - GitHub Actions green through the preceding published checkpoint; exact-commit CI remains a
-  required publication gate for the bridge in addition to this local result.
+  required publication gate for the repaired rehearsal in addition to this local result.
 
 The prospective v95 identities after the strategic data seam are:
 
 | Field | Value |
 | --- | --- |
-| Registry SHA-256 | `465323b544d3837f47ced7f49af01ddda12b07132ef387e348a06c3d1b48f969` |
-| Source bundle SHA-256 | `25dc1e45e8d46a6e829ef6c38057c0d36484c9404c9c44d1ad7639ad265dbfcc` |
-| Teacher execution SHA-256 | `9b61c9fff90cb5fc9da9f8b14d603295a0651f5ad0565395633ab9477ed12610` |
-| Slot assignment SHA-256 | `0165b4609408a068f305f1cee81cf84fd463be18f184b7ccbea217cdd3f468bc` |
+| Registry SHA-256 | `094457e55949e2845b0c9c615803f18300b9740b93695a5f768a89ed869b26cd` |
+| Source bundle SHA-256 | `32e04b678bb6c940fe793cbb83df6ceb5c9ab07b23c2226ef5adf39a0d5b2ae9` |
+| Teacher execution SHA-256 | `4a174d2a0bcefd49ef44e1b618b108b70ea98b6b690eead67e780d07c10fcfcf` |
+| Slot assignment SHA-256 | `0b18eb2f4b6728148925983e781512772c6c138cda46b5766bf381d677c62215` |
 
 The collection registry remains prospective. Regeneration caused by source changes does not open or
 consume v95; counted runs remain 0/10.
@@ -211,15 +232,15 @@ The separate strategic registry is also prospective:
 
 | Field | Value |
 | --- | --- |
-| Strategic registry SHA-256 | `df5da4f3eecf189d5da33ce4b9601f90e6e0cbe5c4e689c11d32c9bd2eb34624` |
+| Strategic registry SHA-256 | `0b2fceb76b33d09cd6b01041417fc33b476142d76c8fd6110cca1e526fd1fdcb` |
 | Decision-contract SHA-256 | `d62f16a23ad54742c97a52ffaa50b0617042d5e35518af4ae61b623631e539a6` |
-| Strategic teacher execution SHA-256 | `0b11d43f7ddd9fc13525232d07faea022d95624624096450b5ba9e61b5e24d17` |
-| Rehearsal assignment SHA-256 | `56482706ad693557c5296cf0ed9fbf056cbc5c50b3e0a8e0a499fbafcd509e1c` |
-| First train assignment SHA-256 | `12c91d19c702af3e1d016d23d76ad246b7f7631cb9bbae86d530e3480d5c6115` |
+| Strategic teacher execution SHA-256 | `ed4117cbef706348ded249e3d7b5aac6f567006b0e78dac4e5f4a871ddb45e6a` |
+| Rehearsal assignment SHA-256 | `4c9d467e7bcaeeb871fc070e8becec0209bf123c6f0d112c48d4e5626e46381c` |
+| First train assignment SHA-256 | `da8e4f0b0c28997c2c850053b89e091a3f288ad6dd89db66efd127318492d94d` |
 
 ## Ranked gaps
 
-### P0 — the rehearsal is executable but has not run
+### P0 — the repaired rehearsal must reach and exercise the strategic branch
 
 The schema, live binding, split registry, strict assigned-episode loader, pre-execution observer and
 audit are ready, but the useful dataset denominator remains zero. The
@@ -230,15 +251,18 @@ validation. Synthetic choices such as selecting between two arbitrary Viridian b
 make the counter rise without teaching a real decision. Use the preassigned whole roots to
 instrument branches where the teacher genuinely weighs progression, recovery, resupply, training,
 collection or optional reward destinations. Preassignment and output authentication are complete;
-one full-run branch is instrumented, and the one allowed rehearsal is next.
+one full-run branch is instrumented. The first clean-power attempt failed before that branch and
+taught the teacher how to handle exhausted PP safely. Publish the repair and run only its
+regenerated uncounted assignment next.
 
 The execution-side failure prerequisite is now closed. `execute_route` attaches a typed semantic
 reason and measured partial trace to its error, including the acknowledged prefix before a
 replanner fails. The strategic conversion verifies the failed initial plan against the selected
-binding, retains portable counts/receipts, and excludes the last map and coordinate. The remaining
-P0 bridge now calls this seam around Tower versus Eevee and consumes the success or failure before
-the chapter continues or raises. The remaining risk is empirical: a complete clean-power root may
-reach that branch in a state not represented by the captured-state preflight.
+binding, retains portable counts/receipts, and excludes the last map and coordinate. The bridge
+calls this seam around Tower versus Eevee and consumes the success or failure before the chapter
+continues or raises. The remaining risk is empirical: the repaired clean-power root must first
+survive the complete teacher and reach that branch in a state compatible with the captured-state
+preflight.
 
 Do not freeze numeric features first. Collect the semantic/raw route projections, inspect their
 coverage and correlations, then preregister normalization and baselines. Otherwise the schema will

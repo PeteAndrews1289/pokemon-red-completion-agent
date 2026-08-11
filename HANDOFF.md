@@ -14,7 +14,7 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
-## The strategic rehearsal now reaches the clean-power teacher — 2026-08-11
+## The first clean-power rehearsal found a real early-teacher defect — 2026-08-11
 
 The prospective protocol is no longer waiting for a call site. An exact
 `StrategicNavigationEpisodeAssignment` can now enter `run_qualified_play` only beside the same
@@ -40,20 +40,36 @@ battle collection.
 A private captured-state preflight exercised the same new approach followed by the entire Tower
 chapter: 28/28 checkpoints, ten required Tower battles, one strategic decision, one outcome, zero
 recording failures, and a passing chapter report. This was a fast integration check against an
-already-opened development state; it did **not** execute root `1710001`, was not source-bound public
-evidence, and cannot enter training. The clean-power rehearsal is still **0/1**, strategic train is
-**0/5**, validation **0/2**, and test **0/5**.
+already-opened development state; it was not a clean-power root and cannot enter training.
 
 The first invocation of the published bridge at `ef7ad72` stopped before private episode creation
 or emulator startup. The strategic protocol allowed 96-character identifiers, while the private
 store deliberately caps episode directory names at 80. Both the counted strategic prefix (86
 characters with its digest) and rehearsal prefix (96) were therefore structurally unwriteable.
-There was no episode, partial artifact or observed game outcome, so the root remains unopened. The
+There was no episode, partial artifact or observed game outcome. The
 protocol now derives 78-character counted and rehearsal episode names, enforces the storage ceiling,
 and tests both assignment kinds through the real `PrivateArtifactRoot.begin_episode` boundary.
 This is a harness qualification failure, not a Pokémon-run failure.
 
-Immediate next action after this exact source is committed, pushed and green is:
+The next published source, `ab69be7`, reached the emulator under the exact rehearsal schedule. It
+created an explicitly uncounted private episode, then failed at checkpoint 16/312 before the
+post-Hideout strategic branch: the mandatory Viridian Forest Bug Catcher never cleared its bounded
+battle gate. The retained failed episode contains 2,086 records (5 objective decisions, 1,508
+executions, 16 events and 556 snapshots). It contains **zero strategic decisions** and cannot enter
+training. Preserve it; never overwrite or relabel that source-bound identity.
+
+The trace made the cause concrete. After the prescribed attacks, Weedle still had 6/27 HP,
+Squirtle had exhausted Tackle, and the generic finisher kept confirming the empty move. A one-time
+Bubble fallback was also insufficient because the cursor later returned to Tackle. The repair now
+selects a live usable attack on every actionable battle-menu turn, leaves faint/victory dialogue on
+the original bounded confirmation path, and replaces a historical 19-HP constant with the actual
+transit contract: a living status-free lead may continue through HP-preserving flee corridors to the
+Pewter heal; poison still requires the conservative reserve. The exact `1710001` schedule now clears
+Viridian Forest at checkpoint 17 with 5 decisions, 1,340 executions and 16 events in an in-memory,
+uncounted diagnostic. That replay opened no private episode or learning slot.
+
+The repair regenerates a new source-bound prospective rehearsal assignment. Immediate next action
+after this exact source is committed, pushed and green is:
 
 ```bash
 pokemon-red-completion record \
@@ -62,17 +78,18 @@ pokemon-red-completion record \
   --strategic-rehearsal
 ```
 
-Do not edit `src/` while that run is active. If it fails, preserve the `.failed.partial` episode
-and inspect whether the strategic decision has its measured outcome; do not relabel a development
-checkpoint or open a train/validation/test root. If it passes, load it through
+Do not edit `src/` while that run is active. Keep the earlier failed partial. If the repaired-source
+rehearsal fails, preserve that partial too and inspect whether the strategic decision has its
+measured outcome; do not relabel a development checkpoint or open a train/validation/test root. If
+it passes, load it through
 `load_assigned_strategic_navigation_episode`, run coverage and cost/shape baselines, then decide
 whether one genuine choice per whole root is enough before opening train root 1.
 
 Current prospective v95 identity is registry
-`465323b544d3837f47ced7f49af01ddda12b07132ef387e348a06c3d1b48f969`, source bundle
-`25dc1e45e8d46a6e829ef6c38057c0d36484c9404c9c44d1ad7639ad265dbfcc`, teacher execution
-`9b61c9fff90cb5fc9da9f8b14d603295a0651f5ad0565395633ab9477ed12610`, and first assignment
-`0165b4609408a068f305f1cee81cf84fd463be18f184b7ccbea217cdd3f468bc`. It remains 0/10.
+`094457e55949e2845b0c9c615803f18300b9740b93695a5f768a89ed869b26cd`, source bundle
+`32e04b678bb6c940fe793cbb83df6ceb5c9ab07b23c2226ef5adf39a0d5b2ae9`, teacher execution
+`4a174d2a0bcefd49ef44e1b618b108b70ea98b6b690eead67e780d07c10fcfcf`, and first assignment
+`0b18eb2f4b6728148925983e781512772c6c138cda46b5766bf381d677c62215`. It remains 0/10.
 
 ## Strategic collection roots are preassigned but unopened — 2026-08-11
 
@@ -122,19 +139,20 @@ outcome, and omits the last map/coordinate. This closes the temptation to fabric
 failures. The clean-power generated-route bridge now consumes either the success report or this
 typed failure before propagating control failure.
 
-No strategic slot has been consumed. The current counts remain **train 0/5, validation 0/2, test
-0/5, rehearsal 0/1**. Existing Pallet, Fuchsia and Celadon checkpoints remain opened development
+No counted strategic slot has been consumed. The current counts remain **train 0/5, validation
+0/2, test 0/5**. One older source-bound rehearsal failed before reaching a strategic decision; the
+repaired-source prospective rehearsal remains unopened. Existing Pallet, Fuchsia and Celadon checkpoints remain opened development
 calibrations and cannot be relabeled. Strategic decision/outcome recording is complete for one
 branch; next run the single rehearsal, audit its genuine candidate
 coverage, and only then decide whether to open train root 01. Do not start from the held-out test
 roots while building that harness.
 
 Registry SHA is
-`df5da4f3eecf189d5da33ce4b9601f90e6e0cbe5c4e689c11d32c9bd2eb34624`; strategic teacher
-execution is `0b11d43f7ddd9fc13525232d07faea022d95624624096450b5ba9e61b5e24d17`; source bundle is
-`25dc1e45e8d46a6e829ef6c38057c0d36484c9404c9c44d1ad7639ad265dbfcc`; rehearsal assignment is
-`56482706ad693557c5296cf0ed9fbf056cbc5c50b3e0a8e0a499fbafcd509e1c`; first train assignment is
-`12c91d19c702af3e1d016d23d76ad246b7f7631cb9bbae86d530e3480d5c6115`.
+`0b2fceb76b33d09cd6b01041417fc33b476142d76c8fd6110cca1e526fd1fdcb`; strategic teacher
+execution is `ed4117cbef706348ded249e3d7b5aac6f567006b0e78dac4e5f4a871ddb45e6a`; source bundle is
+`32e04b678bb6c940fe793cbb83df6ceb5c9ab07b23c2226ef5adf39a0d5b2ae9`; rehearsal assignment is
+`4c9d467e7bcaeeb871fc070e8becec0209bf123c6f0d112c48d4e5626e46381c`; first train assignment is
+`da8e4f0b0c28997c2c850053b89e091a3f288ad6dd89db66efd127318492d94d`.
 
 ## The teacher rejected the shortest route and reached Pokémon Tower — 2026-08-11
 

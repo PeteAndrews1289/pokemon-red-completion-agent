@@ -132,8 +132,7 @@ two validation and five sealed test roots plus one uncounted rehearsal before an
 observed. Each root has a distinct 74-battle timing schedule and an assignment derived from the
 registry, source bundle, teacher execution and partition. Counted decision binding no longer
 accepts arbitrary `train`/`validation` strings; the exact committed assignment must match episode,
-lineage, partition, actor and policy. All strategic counts remain zero because no slot—including
-the rehearsal—has run.
+lineage, partition, actor and policy. Train remains 0/5, validation 0/2 and sealed test 0/5.
 
 The rehearsal is now a first-class assignment too, not merely a declared seed. Its content-derived
 episode and lineage remain `unassigned`, its attempt is explicitly uncounted, and a counted
@@ -154,12 +153,21 @@ existing Tower interior. Ordinary runs retain the authored approach. The CLI exp
 only as the committed, explicitly uncounted `record --strategic-rehearsal` lane. A private
 captured-state preflight then completed the generated approach plus all 28 Tower checkpoints and
 ten required battles with one joined strategic decision/outcome and zero recording failures. That
-preflight is not a clean-power root or dataset row; root `1710001` remains unopened.
+preflight is not a clean-power root or dataset row.
 
 The first published command found a separate harness defect before emulator startup: the derived
 episode name exceeded the private store's 80-character safety limit. No artifact or game outcome
 was created. Counted and rehearsal names are now both 78 characters, the protocol enforces that
 ceiling, and a regression crosses the real private writer boundary before another publication.
+
+The next published source reached clean power under the exact `1710001` schedule and failed at
+checkpoint 16/312, before any strategic decision. Its retained uncounted episode contains 2,086
+records but no strategic row: the mandatory Bug Catcher survived the prescribed sequence with 6/27
+HP after Tackle reached zero, and the generic finisher kept selecting the exhausted move. The repair
+now selects a usable move on every actionable menu turn, keeps victory dialogue separate, and
+accepts a living status-free party for the HP-preserving transit to Pewter's mandatory heal. The
+exact failed schedule now clears checkpoint 17 in an in-memory diagnostic. The failed source-bound
+episode stays failed; source regeneration creates a distinct repaired rehearsal identity.
 
 That long route also corrected the traversal substrate rather than hiding exceptions in a Python
 route. Six tunnel entrances now derive retained outside-map context from bounded cartridge scripts
@@ -173,10 +181,12 @@ This closes one real story predicate and the named Victory Road resource/inter-r
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
 completion teacher's post-final-switch exit remains authored. The ordered gates are now:
 
-1. Publish the exact bridge source and require a fresh green CI run for that commit.
-2. Execute only rehearsal root `1710001`. Preserve any failed partial episode; do not edit source
-   during execution, retry it under another identity, or open train/validation/test to debug it.
-3. Load the completed rehearsal through the assigned-episode gate and audit its join, candidate
+1. Publish the exact early-battle repair and regenerated registries, then require a fresh green CI
+   run for that commit.
+2. Execute only the repaired source's regenerated rehearsal identity under schedule `1710001`.
+   Preserve both failed partials if it fails again; never overwrite an identity, edit source during
+   execution, or open train/validation/test to debug it.
+3. Load a completed rehearsal through the assigned-episode gate and audit its join, candidate
    coverage, interruption evidence, cost baseline and candidate-shape baseline.
 4. Decide whether one strategic choice per whole root can support the intended scorer. If not,
    instrument additional genuine recovery, resupply, training, collection and optional-reward

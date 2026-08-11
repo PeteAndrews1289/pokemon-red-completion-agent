@@ -739,6 +739,7 @@ def run_pewter_chapter(
         max_pulses=timing.max_battle_pulses,
         timing=timing,
         label="Viridian Forest Bug Catcher",
+        continuation=_select_bug_catcher_continuation,
     )
     _expect_brock_transit_ready(
         reader.read(),
@@ -1523,6 +1524,34 @@ def _select_third_move(
     )
 
 
+def _bug_catcher_continuation_move(raw: RawGameState) -> int:
+    """Select a usable attack for every remaining turn of the mandatory battle."""
+
+    if raw.battle_state != 2:
+        raise PewterChapterError("Viridian Forest Bug Catcher battle ended before continuation.")
+    tackle_pp = _move_pp(raw, TACKLE_MOVE_ID)
+    if tackle_pp is not None and tackle_pp > 0:
+        return TACKLE_MOVE_ID
+    bubble_pp = _move_pp(raw, BUBBLE_MOVE_ID)
+    if bubble_pp is not None and bubble_pp > 0:
+        return BUBBLE_MOVE_ID
+    raise PewterChapterError(
+        "Viridian Forest Bug Catcher has no usable Tackle or Bubble continuation."
+    )
+
+
+def _select_bug_catcher_continuation(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: PewterTiming,
+) -> None:
+    move_id = _bug_catcher_continuation_move(reader.read())
+    if move_id == TACKLE_MOVE_ID:
+        _select_first_move(executor, reader, timing, "Bug Catcher usable Tackle continuation")
+        return
+    _select_third_move(executor, reader, timing, "Bug Catcher usable Bubble continuation")
+
+
 def _finish_battle(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
@@ -1531,6 +1560,10 @@ def _finish_battle(
     max_pulses: int,
     timing: PewterTiming,
     label: str,
+    continuation: Callable[
+        [_CountingChapterExecutor, PokemonRedStateReader, PewterTiming], None
+    ]
+    | None = None,
 ) -> RawGameState:
     saw_expected_battle = False
     stable_reads = 0
@@ -1539,11 +1572,21 @@ def _finish_battle(
         if before.battle_state not in {0, expected_battle_state}:
             raise PewterChapterError(f"{label} changed to an unexpected battle type.")
         saw_expected_battle = saw_expected_battle or (before.battle_state == expected_battle_state)
-        executor.execute(MacroAction(MacroActionKind.CONFIRM))
-        _wait(
-            executor,
-            timing.battle_wait_frames if before.battle_state else timing.dialogue_wait_frames,
+        continuation_ready = (
+            before.battle_state == expected_battle_state
+            and continuation is not None
+            and reader.read_battle_menu_state(before).phase
+            in {BattleMenuPhase.MAIN, BattleMenuPhase.MOVE}
         )
+        if continuation_ready:
+            assert continuation is not None
+            continuation(executor, reader, timing)
+        else:
+            executor.execute(MacroAction(MacroActionKind.CONFIRM))
+            _wait(
+                executor,
+                timing.battle_wait_frames if before.battle_state else timing.dialogue_wait_frames,
+            )
         after = reader.read()
         if after.first_party_hp == 0:
             raise PewterChapterError(f"Squirtle fainted during {label}.")
@@ -1693,8 +1736,8 @@ def _expect_brock_transit_ready(
     authenticated_loss_recovery: bool = False,
 ) -> None:
     bubble_pp = _move_pp(raw, BUBBLE_MOVE_ID)
-    minimum_hp = 18 if authenticated_loss_recovery else 19
     accepted_statuses = {0} if authenticated_loss_recovery else {0, 0x08}
+    minimum_hp = 19 if raw.first_party_status == 0x08 else 1
     if (
         raw.party_count != 1
         or raw.first_party_level != 9
@@ -1703,7 +1746,11 @@ def _expect_brock_transit_ready(
         or bubble_pp is None
         or bubble_pp < 4
     ):
-        raise PewterChapterError(f"{label} failed the Brock-transit party gate.")
+        raise PewterChapterError(
+            f"{label} failed the Brock-transit party gate: "
+            f"level={raw.first_party_level!r}, hp={raw.first_party_hp!r}, "
+            f"status={raw.first_party_status!r}, bubble_pp={bubble_pp!r}."
+        )
 
 
 def _is_healed_brock_party(raw: RawGameState) -> bool:

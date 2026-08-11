@@ -170,15 +170,19 @@ each root to an exact source bundle, teacher execution, portable semantic contra
 battle-timing schedule. Non-unassigned strategic decisions cannot be constructed without the exact
 committed assignment. Recorded outputs must independently match that assignment's collection,
 source, split and policy identity; the learning path refuses the test partition. All 12 counted
-slots and the rehearsal remain unopened. The uncounted rehearsal now has its own derived episode
-and lineage, while a one-pending-choice observer writes each decision before execution and joins its
+slots remain unopened. The uncounted rehearsal has its own derived episode and lineage, while a
+one-pending-choice observer writes each decision before execution and joins its
 single consumed outcome afterward. Route exceptions now retain typed, measured partial progress and
 convert to portable negative evidence instead of a zero-filled placeholder. The full teacher now
 has one deliberately narrow invocation after the Celadon Hideout: a committed
 `--strategic-rehearsal` recording substitutes the generated Tower-versus-Eevee approach, while
 ordinary play and every other chapter retain their existing authority. A private checkpoint
-preflight passed the generated approach and complete Tower chapter, but the sole clean-power
-rehearsal remains unopened.
+preflight passed the generated approach and complete Tower chapter. The first clean-power rehearsal
+then failed honestly at checkpoint 16, before any strategic choice: its early Bug Catcher battle
+exhausted Tackle and the teacher kept selecting it. The retained uncounted episode cannot enter
+training. Its exact schedule now clears checkpoint 17 after a trace-derived per-turn usable-move
+repair and a semantic transit gate; train remains 0/5, validation 0/2 and test 0/5. The repaired,
+regenerated rehearsal identity must pass before any learning root opens.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of
