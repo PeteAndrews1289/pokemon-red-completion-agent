@@ -55,6 +55,7 @@ class RouteStep:
     action_kind: MacroActionKind
     source_mode: TraversalMode
     expected_mode: TraversalMode
+    transient_at: Coordinate | None = None
 
     def __post_init__(self) -> None:
         if not self.action:
@@ -63,6 +64,8 @@ class RouteStep:
             raise ValueError("a route step needs a transition kind")
         if not isinstance(self.action_kind, MacroActionKind):
             raise TypeError("a route step action kind must be a MacroActionKind")
+        if self.transient_at in {self.source_at, self.expected_at}:
+            raise ValueError("a route-step transient must differ from both endpoints")
 
     @property
     def macro_action(self) -> MacroAction:
@@ -638,6 +641,7 @@ def _local_steps(map_id: int, path: LocalPath) -> tuple[RouteStep, ...]:
             action_kind=edge.action_kind,
             source_mode=path.modes[index],
             expected_mode=path.modes[index + 1],
+            transient_at=edge.transient,
         )
         for index, edge in enumerate(path.edges)
     )

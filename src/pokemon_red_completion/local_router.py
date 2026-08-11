@@ -26,6 +26,7 @@ class LocalEdge:
     action_kind: MacroActionKind = MacroActionKind.MOVE
     required_mode: str | None = None
     result_mode: str | None = None
+    transient: Coordinate | None = None
 
     def __post_init__(self) -> None:
         if not self.action:
@@ -42,6 +43,8 @@ class LocalEdge:
         ):
             if mode is not None and not mode:
                 raise ValueError(f"{label} cannot be empty")
+        if self.transient == self.target:
+            raise ValueError("a local edge transient cannot equal its target")
 
     @property
     def macro_action(self) -> MacroAction:

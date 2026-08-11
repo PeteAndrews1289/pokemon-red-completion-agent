@@ -446,6 +446,7 @@ def _local_graph(
                                 action=direction.value,
                                 kind="ledge",
                                 required_mode=LAND_MODE if include_surf else None,
+                                transient=adjacent,
                             )
                         )
                     continue

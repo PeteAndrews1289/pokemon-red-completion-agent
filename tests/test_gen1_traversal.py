@@ -275,7 +275,9 @@ def test_a_ledge_is_one_directed_action_that_skips_the_ledge_tile() -> None:
     )
 
     down = graph.neighbors((0, 0))
-    assert [(edge.target, edge.action, edge.kind) for edge in down] == [((2, 0), "down", "ledge")]
+    assert [(edge.target, edge.action, edge.kind, edge.transient) for edge in down] == [
+        ((2, 0), "down", "ledge", (1, 0))
+    ]
 
 
 def test_an_elevation_pair_blocks_two_otherwise_walkable_tiles() -> None:

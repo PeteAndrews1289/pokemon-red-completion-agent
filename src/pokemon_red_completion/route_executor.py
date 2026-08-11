@@ -357,11 +357,21 @@ def execute_route(
                         "interruption receipt disagrees with resumed observation"
                     )
 
-            if not step.stays_on_map and observed.map_id == step.expected_map:
-                # Gen I may publish the destination map before it refreshes the
-                # player coordinates.  The map change is evidence that the
-                # input was consumed, but the transition is not acknowledged
-                # until a bounded settling wait exposes the exact arrival.
+            crossed_map_before_coordinates = (
+                not step.stays_on_map and observed.map_id == step.expected_map
+            )
+            declared_transient = (
+                step.transient_at is not None
+                and observed.map_id == step.source_map
+                and observed.at == step.transient_at
+                and observed.mode == step.source_mode
+            )
+            if crossed_map_before_coordinates or declared_transient:
+                # A title adapter may declare an intermediate coordinate for a
+                # single input (Gen I ledges publish the jumped tile first).
+                # Map transitions can likewise publish the destination map
+                # before coordinates settle. Neither is an acknowledgement
+                # until one bounded wait exposes the exact terminal state.
                 _wait(actions, limits.transition_settle_frames)
                 wait_actions += 1
                 observed = observer.observe()

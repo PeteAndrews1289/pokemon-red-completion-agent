@@ -64,6 +64,7 @@ def test_public_route_projection_preserves_plan_and_acknowledgement_contract() -
                 "action": "right",
                 "expected_map_id": 7,
                 "expected_yx": [0, 1],
+                "transient_yx": None,
                 "kind": "walk",
                 "movement_requests": 1,
                 "interruption_count": 0,
@@ -107,10 +108,10 @@ def test_public_route_projection_preserves_plan_and_acknowledgement_contract() -
         "terminal_ready": True,
         "terminal_last_outside_map_id": None,
         "executed_steps_sha256": (
-            "f9f6fd75015dc7d523481539d30cadf56abce917076df8dc5b07574147b2dcf8"
+            "042a071cec14865806188995d98a335a103a0d88a0fc12ab881d562bb5dda76d"
         ),
         "full_projection_sha256": (
-            "a628a077619c252c0f2a7562cc7010db0ca275714759d59eba758e230c8795db"
+            "918c3b061d4911511849a2eb4f7cf95e3b8421b4e7eba6d55b2d30ad3057865a"
         ),
     }
 

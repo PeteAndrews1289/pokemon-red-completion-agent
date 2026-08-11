@@ -439,6 +439,43 @@ def test_a_map_change_waits_for_staggered_destination_coordinates() -> None:
     assert report.wait_actions == 1
 
 
+def test_one_ledge_input_waits_for_its_declared_intermediate_coordinate() -> None:
+    local = LocalGraph(
+        {
+            (0, 0): (
+                LocalEdge(
+                    (2, 0),
+                    action="down",
+                    kind="ledge",
+                    transient=(1, 0),
+                ),
+            ),
+            (2, 0): (),
+        }
+    )
+    plan = plan_route(
+        MacroGraph({1: ()}),
+        {1: local},
+        1,
+        (0, 0),
+        1,
+        goal_at=(2, 0),
+    )
+    world = FakeWorld(
+        staged_transitions={
+            (1, (0, 0), "down"): (1, (1, 0), (2, 0)),
+        }
+    )
+
+    report = execute_route(plan, world, world)
+
+    assert plan.steps[0].transient_at == (1, 0)
+    assert report.passed
+    assert report.movement_requests == 1
+    assert report.wait_actions == 1
+    assert report.terminal.at == (2, 0)
+
+
 def test_an_interruption_does_not_consume_a_same_coordinate_step() -> None:
     plan, _, _ = connection_plan()
     world = FakeWorld(

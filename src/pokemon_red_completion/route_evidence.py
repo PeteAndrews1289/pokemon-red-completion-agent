@@ -72,6 +72,11 @@ def public_route_execution(report: RouteExecutionReport) -> dict[str, object]:
                 "action": receipt.step.action,
                 "expected_map_id": receipt.step.expected_map,
                 "expected_yx": list(receipt.step.expected_at),
+                "transient_yx": (
+                    None
+                    if receipt.step.transient_at is None
+                    else list(receipt.step.transient_at)
+                ),
                 "kind": receipt.step.kind,
                 "movement_requests": receipt.movement_requests,
                 "interruption_count": receipt.interruption_count,
